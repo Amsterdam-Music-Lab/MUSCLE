@@ -10,23 +10,15 @@
 
 # production
 /build
+/public
 
 # misc
 .DS_Store
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
 .env
-.env.prod
-.env.backup
+
 
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
 src/index.css
-
-deploy.sh
-
-yarn.lock
