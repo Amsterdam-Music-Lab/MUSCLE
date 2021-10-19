@@ -1,7 +1,6 @@
 env/
 __pycache__/
 .vscode/
-requirements/*
 logs/*
 !logs/.gitkeep
 *.pid
