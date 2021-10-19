@@ -1,0 +1,15 @@
+env/
+__pycache__/
+.vscode/
+requirements/*
+logs/*
+!logs/.gitkeep
+*.pid
+.DS_Store
+db.sqlite3
+.env
+.env.prod
+.env.dev
+static/*
+upload/*
+!upload/example.mp3

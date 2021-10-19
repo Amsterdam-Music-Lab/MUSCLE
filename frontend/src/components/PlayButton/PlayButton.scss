@@ -1,0 +1,36 @@
+$playButtonSize: 120px;
+$playIconSize: 30px;
+
+.aha__play-button {
+    transition: background-color 0.3s ease-out;
+    outline: none;
+    width: $playButtonSize;
+    height: $playButtonSize;
+    border-radius: $playButtonSize;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 30px;
+
+    &::before {
+        content: "";
+        transition: border 0.1s ease-out, margin 0.1s ease-out;
+        width: 0;
+        height: 0;
+        margin-left: $playIconSize * 0.33;
+        border-right: 0 solid transparent;
+        border-top: $playIconSize * 0.66 solid transparent;
+        border-bottom: $playIconSize * 0.66 solid transparent;
+        border-left: $playIconSize solid white;
+    }
+
+    &.stop {
+        &::before {
+            margin-left: 0;
+            border-left: $playIconSize * 1.14 solid white;
+            border-top: $playIconSize * 0.57 solid white;
+            border-bottom: $playIconSize * 0.57 solid white;
+        }
+    }
+}

@@ -1,0 +1,7 @@
+FROM python:3.8
+ENV PYTHONUNBUFFERED 1
+
+WORKDIR /server
+COPY requirements/dev.txt /server/
+RUN pip install -r dev.txt
+

@@ -1,0 +1,33 @@
+$app-bar-height: 45px;
+.aha__app-bar {
+    background: $black;
+    height: $app-bar-height;
+    padding: 0;
+
+    .title {
+        text-transform: uppercase;
+        font-size: 13px;
+        letter-spacing: 2px;
+        margin: 0;
+    }
+
+    .logo {
+        display: inline-block;
+        width: 83px;
+        height: $app-bar-height;
+        background-image: $logo;
+        background-position: center center;
+        background-repeat: no-repeat;
+        background-size: contain;
+        margin-left: 15px;
+        font-size: 0;
+        color: transparent;
+    }
+
+    .action-right {
+        display: inline-block;
+        width: 83px;
+        margin-right: 15px;
+        height: $app-bar-height;
+    }
+}

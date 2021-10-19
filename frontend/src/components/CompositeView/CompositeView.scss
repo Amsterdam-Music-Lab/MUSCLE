@@ -1,0 +1,27 @@
+.aha__composite{
+    display: flex;
+    flex-direction: column;
+}
+
+.ti-headphone{
+    font-size:80px;
+}
+
+.circle {
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.circle-content {
+    top: 55px;
+    position: absolute;
+}
+
+.feedback-form {
+
+}

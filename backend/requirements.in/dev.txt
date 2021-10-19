@@ -1,0 +1,16 @@
+-r base.txt
+
+# Debug toolbar for development
+django-debug-toolbar
+
+# Codebase checker
+pylint
+
+# Improve django code analysis
+pylint-django
+
+# Autoformatter
+autopep8
+
+# reading audio files
+audioread

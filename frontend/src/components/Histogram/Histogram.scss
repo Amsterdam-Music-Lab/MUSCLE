@@ -1,0 +1,17 @@
+.aha__histogram {
+    display: flex;
+    transform: scaleY(-1);
+    margin-bottom: 5px;
+    margin-top: -10px;
+    div {
+        border-radius: 1.5px;
+        background: white;
+        transition: height 1s ease-out;
+    }
+
+    &.active {
+        div {
+            transition: height 0.3s ease-out;
+        }
+    }
+}

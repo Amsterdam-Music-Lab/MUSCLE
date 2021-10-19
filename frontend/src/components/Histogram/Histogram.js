@@ -1,0 +1,48 @@
+import React, { useEffect, useState } from "react";
+import classnames from "classnames";
+
+// Histogram with random bar movement for decoration
+const Histogram = ({
+    bars = 7,
+    width = 6,
+    spacing = 6,
+    height = 40,
+    interval = 100,
+    running = true,
+}) => {
+    const [pulse, setPulse] = useState(true);
+
+    useEffect(() => {
+        const id = setTimeout(() => {
+            setPulse(!pulse);
+        }, interval);
+
+        return () => {
+            clearTimeout(id);
+        };
+    });
+
+    const _bars = Array.from(Array(bars)).map((_, index) => (
+        <div
+            key={index}
+            style={{
+                width,
+                height: running
+                    ? Math.random() * (height - width) + width
+                    : width,
+                marginRight: index < bars - 1 ? spacing : 0,
+            }}
+        />
+    ));
+
+    return (
+        <div
+            className={classnames("aha__histogram", { active: running })}
+            style={{ height }}
+        >
+            {_bars}
+        </div>
+    );
+};
+
+export default Histogram;

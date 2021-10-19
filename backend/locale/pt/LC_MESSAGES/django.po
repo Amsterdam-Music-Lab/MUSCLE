@@ -1,0 +1,1610 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-07-27 14:18+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: experiment/api/experiment.py:38
+msgid "Loading"
+msgstr ""
+
+#: experiment/api/participant.py:35 experiment/rules/views/final_score.py:33
+msgid "My profile"
+msgstr ""
+
+#: experiment/api/participant.py:37
+#, python-format
+msgid ""
+"You have participated in %(count)d Amsterdam Music Lab experiment. Your best "
+"score is:"
+msgid_plural ""
+"You have partcipated in %(count)d Amsterdam Music Lab experiments. Your best "
+"scores are:"
+msgstr[0] ""
+msgstr[1] ""
+
+#: experiment/api/participant.py:40 experiment/rules/views/final_score.py:30
+msgid "points"
+msgstr ""
+
+#: experiment/api/participant.py:41
+msgid ""
+"Use the following link to continue with your profile at another moment or on "
+"another device."
+msgstr ""
+
+#: experiment/api/participant.py:42
+msgid "copy"
+msgstr ""
+
+#: experiment/rules/consent_forms/consent_huang2021.html:3
+#, fuzzy
+#| msgid ""
+#| "\n"
+#| "    You are about to take part in the ‘Cross-Linguistic Investigation of "
+#| "the Speech-to-Song Illusion’ research project\n"
+#| "    conducted by Gustav-Hein Frieberg (MSc student) under supervision of "
+#| "Dr. Makiko Sadakata at the University of\n"
+#| "    Amsterdam Musicology Department. Before the research project can "
+#| "begin, it is important that you read about the\n"
+#| "    procedures we will be applying. Make sure to read the following "
+#| "information carefully.\n"
+#| "    "
+msgid ""
+"\n"
+"    You will be taking part in the experiment on Music: China research project "
+"conducted by a PhD student Xuan Huang of the\n"
+"    Music Cognition Group at the University of Amsterdam’s Institute for "
+"Logic, Language, and Computation. Before the\n"
+"    research project can begin, it is important that you read about the "
+"procedures we will be applying. Make sure to\n"
+"    read this information carefully.\n"
+"    "
+msgstr ""
+"\n"
+"Você está prestes a participar do projecto de pesquisa 'Investigação "
+"Translinguística da Ilusão 'Fala Para Canto‘‘, conduzido por Gustav-Hein "
+"Frieberg (estudante de mestrado), sob supervisão de Makiko Sadakata do "
+"Departamento de Musicologia da Universidade de Amsterdão. Antes do início da "
+"pesquisa, é importante que você leia atentamente as informações referentes "
+"ao procedimento do experimento."
+
+#: experiment/rules/consent_forms/consent_huang2021.html:11
+#: experiment/rules/consent_forms/consent_speech2song.html:11
+msgid "Purpose of the research project"
+msgstr "Propósito da Pesquisa"
+
+#: experiment/rules/consent_forms/consent_huang2021.html:14
+msgid ""
+"\n"
+"    What makes music memorable? Why do we not only remember some pieces of "
+"music, but can also recall them after a long\n"
+"    period of time, or even a few years later? What makes music remain in "
+"our memories for the long term? Are there some\n"
+"    musical characters that make it easier to remember Chinese music in the "
+"long run or does it depend on a person? Do\n"
+"    we collectively use the same features to recognize music?\n"
+"    "
+msgstr ""
+
+#: experiment/rules/consent_forms/consent_huang2021.html:22
+msgid ""
+" This project will help us answer these questions and better understand how "
+"we remember music\n"
+"    over the long term.\n"
+"    Musical memory could be affected by our listening history, listening "
+"experience, and the musical cultural where we\n"
+"    grew up. Understanding musical memory can help streaming services to "
+"find and recommend music their users will\n"
+"    enjoy, YouTubers and TikTokers to create new videos with the best choice "
+"of music, composers write new music, and\n"
+"    music therapists develop new approaches for working and living with "
+"memory disorders.\n"
+"    "
+msgstr ""
+
+#: experiment/rules/consent_forms/consent_huang2021.html:30
+msgid "Who can take part in this research?"
+msgstr ""
+
+#: experiment/rules/consent_forms/consent_huang2021.html:31
+msgid ""
+"\n"
+"    Anybody with sufficiently good hearing, natural or corrected, to enjoy "
+"music listening is welcome to participate in\n"
+"    this research. Your device must be able to play audio, and you must have "
+"a sufficiently strong data connection to be\n"
+"    able to stream short MP3 files. Headphones are recommended for the best "
+"results, but you may also use either\n"
+"    internal or external loudspeakers. You should adjust the volume of your "
+"device so that it is comfortable for you.\n"
+"    "
+msgstr ""
+
+#: experiment/rules/consent_forms/consent_huang2021.html:39
+#: experiment/rules/consent_forms/consent_speech2song.html:19
+msgid "Instructions and procedure"
+msgstr "Instruções e Procedimento"
+
+#: experiment/rules/consent_forms/consent_huang2021.html:41
+msgid ""
+"\n"
+"    You will be presented with short fragments of music and asked whether "
+"you recognise them. Try to answer as quickly\n"
+"    as\n"
+"    you can, but only at the moment that you find yourself able to ‘sing "
+"along’ in your head. When you tell us that you\n"
+"    recognise a piece of music, the music will keep playing, but the sound "
+"will be muted for a few seconds. Keep\n"
+"    following along with the music in your head, until the music comes back. "
+"Sometimes it will come back in the right\n"
+"    place, but at other times, we will have skipped forward or backward "
+"within the same piece of music during the\n"
+"    silence. We will ask you whether you think the music came back in the "
+"right place or not. In between fragments, we\n"
+"    will ask you some simple survey questions to better\n"
+"    understand your musical background and how you engage with music in your "
+"daily life. In a second phase of the\n"
+"    experiment, you will also be presented with short fragments of music, "
+"but instead of being asked whether you\n"
+"    recognise them, you will be asked whether you heard them before while "
+"participating in the first phase of the\n"
+"    experiment. Again, in between these fragments, we will ask you simple "
+"survey questions about your musical background\n"
+"    and how you engage with music in your daily life."
+msgstr ""
+
+#: experiment/rules/consent_forms/consent_huang2021.html:56
+#: experiment/rules/consent_forms/consent_speech2song.html:28
+msgid "Voluntary participation"
+msgstr "Participação Voluntária"
+
+#: experiment/rules/consent_forms/consent_huang2021.html:58
+#, fuzzy
+#| msgid ""
+#| "\n"
+#| "    You will be participating in this research project on a voluntary "
+#| "basis. This means you are free to stop taking part\n"
+#| "    at any stage. This will not have any personal consequences and you "
+#| "will not be obliged to finish the procedures\n"
+#| "    described above. You can also decide to withdraw your participation "
+#| "up to 8 days after the research has ended. If\n"
+#| "    you decide to stop or withdraw your consent, all the information "
+#| "gathered up until then will be permanently deleted.\n"
+#| "    "
+msgid ""
+" You will be participating in this research project on a voluntary basis. "
+"This means you are free\n"
+"    to stop taking part\n"
+"    at any stage. This will not have any personal consequences and you will "
+"not be obliged to finish the procedures\n"
+"    described above. You can also decide to withdraw your participation. If "
+"you decide to stop or withdraw your consent,\n"
+"    all the information gathered up until then will be permanently deleted. "
+msgstr ""
+"\n"
+"A sua participação neste projeto de pesquisa é voluntária. Isso significa "
+"que você tem direito a terminar a sua participação a qualquer momento. Isso "
+"não terá quaisquer consequências e você não é obrigado a finalizar o "
+"procedimento descrito acima. Você também tem direito a retirar a sua "
+"participação até oito dias após o término do experimento. Se você decidir "
+"terminar ou retirar a sua participação, toas as informações coletadas até "
+"então serão excluídas permanentemente."
+
+#: experiment/rules/consent_forms/consent_huang2021.html:64
+#: experiment/rules/consent_forms/consent_speech2song.html:37
+msgid "Discomfort, Risks & Insurance"
+msgstr "Desconforto, Riscos e Seguros"
+
+#: experiment/rules/consent_forms/consent_huang2021.html:66
+#, fuzzy
+#| msgid ""
+#| "\n"
+#| "    The risks of participating in this research are no greater than in "
+#| "everyday situations at home. Previous experience\n"
+#| "    in similar research has shown that no or hardly any discomfort is to "
+#| "be expected for participants. For all research\n"
+#| "    at the University of Amsterdam, a standard liability insurance "
+#| "applies.\n"
+#| "    "
+msgid ""
+" The risks of participating in this research are no greater than in everyday "
+"situations at home.\n"
+"    Previous experience\n"
+"    in similar research has shown that no or hardly any discomfort is to be "
+"expected for participants. For all research\n"
+"    at the University of Amsterdam, a standard liability insurance applies. "
+msgstr ""
+"\n"
+"Os riscos da participação neste projeto não são maiores do que quaisquer "
+"situações do dia-a-dia. Experiências prévias em pesquisas semelhantes "
+"demonstraram que nenhum ou quase nenhum desconforto é esperado por parte dos "
+"participantes. Para todas as pequisas conduzidas pela Universidade de "
+"Amsterdão, aplica-se um seguro de responsabilidade."
+
+#: experiment/rules/consent_forms/consent_huang2021.html:71
+#: experiment/rules/consent_forms/consent_speech2song.html:45
+msgid "Confidential treatment of your details"
+msgstr "Tratamento Confidencial dos Seus Dados"
+
+#: experiment/rules/consent_forms/consent_huang2021.html:73
+msgid ""
+" The information gathered over the course of this research will be used for "
+"further analysis and\n"
+"    publication in\n"
+"    scientific journals only. Fully anonymised data collected during the "
+"experiment (e.g., whether each musical fragment\n"
+"    was recognised and how long it took) may be made available online in "
+"tandem with these scientific publications. Your\n"
+"    personal details will not be used in these publications, and we "
+"guarantee that you will remain anonymous under all\n"
+"    circumstances. "
+msgstr ""
+
+#: experiment/rules/consent_forms/consent_huang2021.html:80
+#: experiment/rules/consent_forms/consent_speech2song.html:62
+msgid "Further Information"
+msgstr "Informações Suplementares"
+
+#: experiment/rules/consent_forms/consent_huang2021.html:82
+#, fuzzy
+#| msgid ""
+#| "\n"
+#| "    For further information on the research project, please contact "
+#| "Gustav-Hein Frieberg (phone number: +31 6 83 676\n"
+#| "    490; email: gusfrieberg@gmail.com).\n"
+#| "    If you have any complaints regarding this research project, you can "
+#| "contact the secretary of the Ethics Committee of\n"
+#| "    the Faculty of Humanities of the University of Amsterdam (phone "
+#| "number: +31 20 525 3054; email:\n"
+#| "    commissie-ethiek-fgw@uva.nl; address: Kloveniersburgwal 48, 1012 CX "
+#| "Amsterdam)\n"
+#| "    "
+msgid ""
+" For further information on the research project, please contact Xuan Huang "
+"(e-mail:\n"
+"    x.huang@uva.nl; Science Park 107,\n"
+"    1098 GE Amsterdam) or John\n"
+"    Ashley Burgoyne (phone\n"
+"    number: +31 20 525 7034; e-mail: j.a.burgoyne@uva.nl; Science Park 107, "
+"1098 GE\n"
+"    Amsterdam).\n"
+"    If you have any complaints regarding this research project, you can "
+"contact the secretary of the Ethics Committee of\n"
+"    the Faculty of Humanities of the University of Amsterdam (phone number: "
+"+31 20 525 3054; e-mail:\n"
+"    commissie-ethiek-fgw@uva.nl; Kloveniersburgwal 48, 1012 CX Amsterdam)."
+msgstr ""
+"\n"
+"Para obter mais informações, favor entrar em contato com Gustav-Hein "
+"Frieberg (número de celular: +31 6 83 676 490; e-mail: gusfrieberg@gmail."
+"com).Em caso de queixas sobre este projeto de pesquisa, favor contatar o "
+"secretariado da Commissão Ética das Ciências Humanas da Universidade de "
+"Amsterdão (número de telefone: +31 20 525 3053; e-mail: commissie-ethiek-"
+"fgw@uva.nl; endereço: Kloveniersburgwal 48, 1012 CX Amsterdão)."
+
+#: experiment/rules/consent_forms/consent_huang2021.html:92
+#: experiment/rules/huang_2021.py:48 experiment/rules/speech2song.py:40
+msgid "Informed consent"
+msgstr "Consentimento livre"
+
+#: experiment/rules/consent_forms/consent_huang2021.html:94
+msgid ""
+" I hereby declare that I have been clearly informed about the research "
+"project experiment on Music:\n"
+"    China at the\n"
+"    University of Amsterdam, Institute for Logic, Language and Computation, "
+"conducted by Xuan Huang as described above.\n"
+"    "
+msgstr ""
+
+#: experiment/rules/consent_forms/consent_huang2021.html:100
+#, fuzzy
+#| msgid ""
+#| "\n"
+#| "    I consent to participate in this research on an entirely voluntary "
+#| "basis. I retain the right to revoke this consent\n"
+#| "    without having to provide any reasons for my decision. I am aware "
+#| "that I am entitled to discontinue the research at\n"
+#| "    any time and can withdraw my participation up to 8 days after the "
+#| "research has ended. If I decide to stop or\n"
+#| "    withdraw my consent, all the information gathered up until then will "
+#| "be permanently deleted.\n"
+#| "    "
+msgid ""
+" I consent to participate in this research on an entirely voluntary basis. I "
+"retain the right to\n"
+"    revoke this consent\n"
+"    without having to provide any reasons for my decision. I am aware that I "
+"am entitled to discontinue the research at\n"
+"    any time and can withdraw my participation.\n"
+"    If I decide to stop or withdraw my consent, all the information gathered "
+"up until then will be permanently deleted.\n"
+"    If my research results are used in scientific publications or made "
+"public in any other way, they will be fully\n"
+"    anonymised. My personal information may not be viewed by third parties "
+"without my express permission.\n"
+"    "
+msgstr ""
+"\n"
+"Concordo em participar desta pesquisa de modo voluntário. Retenho o o "
+"direito a revogar o meu consentimento sem a necessidade de fornecer "
+"quaisquer motivos para a minha decisão. Estou ciênte de que tenho o direito "
+"a descontinuar o experimento a qualquer momento e de que posso retirar a "
+"participação até oito dias após o término do experimento. Caso que decida "
+"parar ou retirar o meu consentimento, todas as informações coletadas até "
+"então serão excluídas permanentemente."
+
+#: experiment/rules/consent_forms/consent_speech2song.html:2
+msgid "Introduction"
+msgstr "Introdução"
+
+#: experiment/rules/consent_forms/consent_speech2song.html:4
+msgid ""
+"\n"
+"    You are about to take part in the ‘Cross-Linguistic Investigation of the "
+"Speech-to-Song Illusion’ research project\n"
+"    conducted by Gustav-Hein Frieberg (MSc student) under supervision of Dr. "
+"Makiko Sadakata at the University of\n"
+"    Amsterdam Musicology Department. Before the research project can begin, "
+"it is important that you read about the\n"
+"    procedures we will be applying. Make sure to read the following "
+"information carefully.\n"
+"    "
+msgstr ""
+"\n"
+"Você está prestes a participar do projecto de pesquisa 'Investigação "
+"Translinguística da Ilusão 'Fala Para Canto‘‘, conduzido por Gustav-Hein "
+"Frieberg (estudante de mestrado), sob supervisão de Makiko Sadakata do "
+"Departamento de Musicologia da Universidade de Amsterdão. Antes do início da "
+"pesquisa, é importante que você leia atentamente as informações referentes "
+"ao procedimento do experimento."
+
+#: experiment/rules/consent_forms/consent_speech2song.html:13
+msgid ""
+"\n"
+"    The Speech-to-Song Illusion is a perceptual illusion whereby the "
+"repetition of a speech segment induces a perceptual\n"
+"    transformation from the impression of speech to the impression of "
+"signing. The present project aims at investigating\n"
+"    the influence of linguistic experience upon the strength of the "
+"illusion.\n"
+"    "
+msgstr ""
+"\n"
+"A ilusão 'fala para canto' é uma ilusão sensorial que ocorre quando um "
+"segmento de fala é repetido várias vezes, o que acarreta uma transformação "
+"sensorial fazendo com que ele seja percebido como canto ao invés de fala. O "
+"presente projeto visa investigar a influência que a experiência linguística "
+"exerce na manifestação da ilusão."
+
+#: experiment/rules/consent_forms/consent_speech2song.html:21
+msgid ""
+"\n"
+"    The experiment will last about 10 minutes. After filling out a brief "
+"questionnaire inquiring about your age, gender,\n"
+"    native language(s), and experience with three languages, you will be "
+"presented with short speech segments in those\n"
+"    languages as well as short environmental sounds. Your task will be to "
+"rate each segment on a scale from 1 to 5 in\n"
+"    terms of its musicality.\n"
+"    "
+msgstr ""
+"\n"
+"O experimento durará cerca de 10 minutos. Após preencher um curto "
+"questionário referente a informações básicas, como a sua idade, o seu "
+"gênero, lingua(s) materna(s) e exposição às três línguas sob investigação, "
+"você ouvirá curtos segmentos da fala nessas três línguas (que você pode ou "
+"não falar), bem como sons do ambiente. Sua tarefa consistirá em avaliar casa "
+"segmento numa escala de 1 a 5 quanto à sua musicalidade."
+
+#: experiment/rules/consent_forms/consent_speech2song.html:30
+msgid ""
+"\n"
+"    You will be participating in this research project on a voluntary basis. "
+"This means you are free to stop taking part\n"
+"    at any stage. This will not have any personal consequences and you will "
+"not be obliged to finish the procedures\n"
+"    described above. You can also decide to withdraw your participation up "
+"to 8 days after the research has ended. If\n"
+"    you decide to stop or withdraw your consent, all the information "
+"gathered up until then will be permanently deleted.\n"
+"    "
+msgstr ""
+"\n"
+"A sua participação neste projeto de pesquisa é voluntária. Isso significa "
+"que você tem direito a terminar a sua participação a qualquer momento. Isso "
+"não terá quaisquer consequências e você não é obrigado a finalizar o "
+"procedimento descrito acima. Você também tem direito a retirar a sua "
+"participação até oito dias após o término do experimento. Se você decidir "
+"terminar ou retirar a sua participação, toas as informações coletadas até "
+"então serão excluídas permanentemente."
+
+#: experiment/rules/consent_forms/consent_speech2song.html:39
+msgid ""
+"\n"
+"    The risks of participating in this research are no greater than in "
+"everyday situations at home. Previous experience\n"
+"    in similar research has shown that no or hardly any discomfort is to be "
+"expected for participants. For all research\n"
+"    at the University of Amsterdam, a standard liability insurance applies.\n"
+"    "
+msgstr ""
+"\n"
+"Os riscos da participação neste projeto não são maiores do que quaisquer "
+"situações do dia-a-dia. Experiências prévias em pesquisas semelhantes "
+"demonstraram que nenhum ou quase nenhum desconforto é esperado por parte dos "
+"participantes. Para todas as pequisas conduzidas pela Universidade de "
+"Amsterdão, aplica-se um seguro de responsabilidade."
+
+#: experiment/rules/consent_forms/consent_speech2song.html:47
+msgid ""
+"\n"
+"    The information gathered over the course of this research will be used "
+"for further analysis and publication in\n"
+"    scientific journals only. No personal details will not be used in these "
+"publications, and we guarantee that you will\n"
+"    remain anonymous under all circumstances.\n"
+"    The data gathered during the research will be encrypted and stored "
+"separately from your personal details. These\n"
+"    personal details and the encryption key are only accessible to members "
+"of the research staff.\n"
+"    "
+msgstr ""
+"\n"
+"Os dados coletados durante o experimento serão usados apenas para efeitos de "
+"análise subsequente e publicação em jornais científicos. Nenhum dado dos "
+"participantes será usado em qualquer publicação, garantindo que você "
+"permaneça anônimo em qualquer circunstância. Os dados coletados durante o "
+"experimento serão encriptados e armanezados em locais separados dos seus "
+"dados pessoais. Os deus dados pessoais e a chave de encriptação são "
+"accesíveis apenas aos membros do grupo de pesquisa."
+
+#: experiment/rules/consent_forms/consent_speech2song.html:55
+msgid "Reimbursement"
+msgstr "Reembolso"
+
+#: experiment/rules/consent_forms/consent_speech2song.html:57
+msgid ""
+"\n"
+"    There will not be any monetary reimbursement for taking part in the "
+"research project. If you wish, we can send you a\n"
+"    summary of the general research results at a later stage.\n"
+"    "
+msgstr ""
+"\n"
+"Não haverá reembolso monetário para a sua participação neste projeto de "
+"pesquisa. Caso queira, enviaremos para você um resumo dos resultados gerias "
+"numa fase posterior."
+
+#: experiment/rules/consent_forms/consent_speech2song.html:64
+msgid ""
+"\n"
+"    For further information on the research project, please contact Gustav-"
+"Hein Frieberg (phone number: +31 6 83 676\n"
+"    490; email: gusfrieberg@gmail.com).\n"
+"    If you have any complaints regarding this research project, you can "
+"contact the secretary of the Ethics Committee of\n"
+"    the Faculty of Humanities of the University of Amsterdam (phone number: "
+"+31 20 525 3054; email:\n"
+"    commissie-ethiek-fgw@uva.nl; address: Kloveniersburgwal 48, 1012 CX "
+"Amsterdam)\n"
+"    "
+msgstr ""
+"\n"
+"Para obter mais informações, favor entrar em contato com Gustav-Hein "
+"Frieberg (número de celular: +31 6 83 676 490; e-mail: gusfrieberg@gmail."
+"com).Em caso de queixas sobre este projeto de pesquisa, favor contatar o "
+"secretariado da Commissão Ética das Ciências Humanas da Universidade de "
+"Amsterdão (número de telefone: +31 20 525 3053; e-mail: commissie-ethiek-"
+"fgw@uva.nl; endereço: Kloveniersburgwal 48, 1012 CX Amsterdão)."
+
+#: experiment/rules/consent_forms/consent_speech2song.html:72
+msgid "Informed consent form"
+msgstr "Termo de Consentimento Livre"
+
+#: experiment/rules/consent_forms/consent_speech2song.html:75
+msgid ""
+"\n"
+"    ‘I hereby declare that I have been clearly informed about the research "
+"project Cross-Linguistic Investigation of the\n"
+"    Speech-to-Song Illusion at the University of Amsterdam, Musicology "
+"department, conducted by Gustav-Hein Frieberg\n"
+"    under supervision of Dr. Makiko Sadakata as described in the information "
+"brochure. My questions have been answered\n"
+"    to my satisfaction.\n"
+"    "
+msgstr ""
+"\n"
+"Deixo assim claro que fui informado sobre o projeto de pesquisa "
+"'Investigação Translinguística da Ilusão 'Fala Para Canto', conduzido por "
+"Gustav-Hein Frieberg, sob a supervisão de Makiko Sadakata do Departamento de "
+"Musicologia da Universidade de Amsterdão, conforme descrito na brochura de "
+"informações. Minhas perguntas foram respondidas satisfatoriamente."
+
+#: experiment/rules/consent_forms/consent_speech2song.html:83
+msgid ""
+"\n"
+"    I consent to participate in this research on an entirely voluntary "
+"basis. I retain the right to revoke this consent\n"
+"    without having to provide any reasons for my decision. I am aware that I "
+"am entitled to discontinue the research at\n"
+"    any time and can withdraw my participation up to 8 days after the "
+"research has ended. If I decide to stop or\n"
+"    withdraw my consent, all the information gathered up until then will be "
+"permanently deleted.\n"
+"    "
+msgstr ""
+"\n"
+"Concordo em participar desta pesquisa de modo voluntário. Retenho o o "
+"direito a revogar o meu consentimento sem a necessidade de fornecer "
+"quaisquer motivos para a minha decisão. Estou ciênte de que tenho o direito "
+"a descontinuar o experimento a qualquer momento e de que posso retirar a "
+"participação até oito dias após o término do experimento. Caso que decida "
+"parar ou retirar o meu consentimento, todas as informações coletadas até "
+"então serão excluídas permanentemente."
+
+#: experiment/rules/consent_forms/consent_speech2song.html:91
+msgid ""
+"\n"
+"    If my research results are used in scientific publications or made "
+"public in any other way, they will be fully\n"
+"    anonymised. My personal information may not be viewed by third parties "
+"without my express permission.\n"
+"    "
+msgstr ""
+"\n"
+"Caso os meus resultados de pesquisa sejam usados em publicações científicas "
+"ou publicada de qualquer outra forma, serão inteiramente anonimizados. Os "
+"meus dados pessoais não devem ser vistos por terceiros sem a minha permissão "
+"explícita."
+
+#: experiment/rules/consent_forms/consent_speech2song.html:97
+msgid ""
+"\n"
+"    If I need any further information on the research, now or in the future, "
+"I can contact Gustav-Hein Frieberg (phone\n"
+"    no: +31 6 83 676 490, e-mail: gusfrieberg@gmail.com).\n"
+"    "
+msgstr ""
+"\n"
+"Caso eu precise de mais informações sobre a pesquisa, agora ou no futuro, "
+"posso contatar Gustav-Hein Frieberg (número de celular: +31 6 83 676 490; e-"
+"mail: gusfrieberg@gmail.com)."
+
+#: experiment/rules/consent_forms/consent_speech2song.html:103
+msgid ""
+"\n"
+"    If I have any complaints regarding this research, I can contact the "
+"secretary of the Ethics Committee of the Faculty\n"
+"    of Humanities of the University of Amsterdam (phone no: +31 20 525 3054; "
+"email: commissie-ethiek-fgw@uva.nl;\n"
+"    address: Kloveniersburgwal 48, 1012 CX Amsterdam).\n"
+"    "
+msgstr ""
+"\n"
+"Em caso de qualquer queixa relacionada a esta pesquisa, posso contatar o "
+"secretariado da Comissão Ética da Faculudade das Ciências Humanas da "
+"Universidade de Amsterdão (número de telefone: +31 20 525 3054; e-mail: "
+"commissie-ethiek-fgw@uva.nl; endereço: Kloveniersburgwal 48, 1012 CX "
+"Amsterdão)."
+
+#: experiment/rules/huang_2021.py:23
+msgid "How to Play"
+msgstr ""
+
+#: experiment/rules/huang_2021.py:27
+msgid ""
+"Do you recognise the song? Try to sing along. The faster you recognise "
+"songs, the more points you can earn."
+msgstr ""
+
+#: experiment/rules/huang_2021.py:32
+msgid ""
+"Do you really know the song? Keep singing or imagining the music while the "
+"sound is muted. The music is still playing: you just can’t hear it!"
+msgstr ""
+
+#: experiment/rules/huang_2021.py:37
+msgid ""
+"Was the music in the right place when the sound came back? Or did we jump to "
+"a different spot during the silence?"
+msgstr ""
+
+#: experiment/rules/huang_2021.py:41
+msgid "Let's go!"
+msgstr ""
+
+#: experiment/rules/huang_2021.py:48 experiment/rules/speech2song.py:40
+msgid "I agree"
+msgstr "Concordo"
+
+#: experiment/rules/huang_2021.py:48 experiment/rules/speech2song.py:40
+msgid "Stop"
+msgstr "Parar"
+
+#: experiment/rules/huang_2021.py:51
+msgid ""
+"You can use your smartphone, computer or tablet to participate in this "
+"experiment. Please choose the best network in your area to participate in "
+"the experiment, such as wireless network (WIFI), mobile data network signal "
+"(4G or above) or wired network. If the network is poor, it may cause the "
+"music to fail to load or the experiment may fail to run properly. You can "
+"access the experiment page through the following channels:"
+msgstr ""
+
+#: experiment/rules/huang_2021.py:55
+msgid ""
+"Directly click the link on WeChat (smart phone or PC version, or WeChat Web);"
+msgstr ""
+
+#: experiment/rules/huang_2021.py:60
+msgid ""
+"If the link to load the experiment page through the WeChat app on your cell "
+"phone fails, you can copy and paste the link in the browser of your cell "
+"phone or computer to participate in the experiment. You can use any of the "
+"currently available browsers, such as Safari, Firefox, 360, Google Chrome, "
+"Quark, etc."
+msgstr ""
+
+#: experiment/rules/huang_2021.py:64 experiment/rules/huang_2021.py:305
+#: experiment/rules/speech2song.py:89 experiment/rules/speech2song.py:99
+#: experiment/rules/speech2song.py:125 experiment/rules/views/question.py:14
+#: experiment/rules/views/question.py:35 experiment/rules/views/question.py:52
+#: experiment/rules/views/question.py:70 experiment/rules/views/question.py:88
+#: experiment/rules/views/question.py:105 experiment/rules/views/question.py:123
+#: experiment/rules/views/question.py:146 experiment/rules/views/question.py:169
+#: experiment/rules/views/question.py:186
+msgid "Continue"
+msgstr "Continue"
+
+#: experiment/rules/huang_2021.py:293
+msgid "Bonus Rounds"
+msgstr ""
+
+#: experiment/rules/huang_2021.py:296
+msgid "Listen carefully to the music."
+msgstr ""
+
+#: experiment/rules/huang_2021.py:301
+msgid "Did you hear the same song during previous rounds?"
+msgstr ""
+
+#: experiment/rules/huang_2021.py:332
+msgid "Did you hear this song in previous rounds?"
+msgstr ""
+
+#: experiment/rules/huang_2021.py:367
+msgid "Well done!"
+msgstr ""
+
+#: experiment/rules/huang_2021.py:367
+msgid "Too bad!"
+msgstr ""
+
+#: experiment/rules/huang_2021.py:369
+msgid "You did not recognise any songs at first."
+msgstr ""
+
+#: experiment/rules/huang_2021.py:371
+#, python-format
+msgid ""
+"It took you %(n_seconds)d s to recognise a song on average,                 "
+"and you correctly identified %(n_correct)d out of the %(n_total)d songs you "
+"thought you knew."
+msgstr ""
+
+#: experiment/rules/huang_2021.py:377
+#, python-format
+msgid ""
+"During the bonus rounds, you remembered %(n_correct)d of the %(n_total)d "
+"songs that came back."
+msgstr ""
+
+#: experiment/rules/huang_2021.py:427
+msgid ""
+"In which region did you spend the most formative years of your childhood and "
+"youth?"
+msgstr ""
+
+#: experiment/rules/huang_2021.py:435
+#, fuzzy
+#| msgid "With which gender do you currently most identify?"
+msgid "In which region do you currently reside?"
+msgstr "Qual é a sua identidade de gênero?"
+
+#: experiment/rules/huang_2021.py:444 experiment/rules/util/questions.py:60
+msgid "To which group of musical genres do you currently listen most?"
+msgstr ""
+
+#: experiment/rules/huang_2021.py:446 experiment/rules/util/questions.py:63
+msgid "Pop/Country/Religious"
+msgstr ""
+
+#: experiment/rules/huang_2021.py:447
+msgid "Folk/Mountain songs"
+msgstr ""
+
+#: experiment/rules/huang_2021.py:448
+msgid "Western classical music/Jazz/Opera/Musical"
+msgstr ""
+
+#: experiment/rules/huang_2021.py:449
+msgid "Chinese opera"
+msgstr ""
+
+#: experiment/rules/huang_2021.py:450 experiment/rules/util/questions.py:65
+msgid "Rock/Punk/Metal"
+msgstr ""
+
+#: experiment/rules/huang_2021.py:451 experiment/rules/util/questions.py:62
+msgid "Dance/Electronic/New Age"
+msgstr ""
+
+#: experiment/rules/huang_2021.py:452 experiment/rules/util/questions.py:66
+msgid "Hip-hop/R&B/Funk"
+msgstr ""
+
+#: experiment/rules/speech2song.py:27
+msgid "This is an experiment about an auditory illusion."
+msgstr "Este é um experimento sobre uma ilusão auditiva."
+
+#: experiment/rules/speech2song.py:30
+msgid ""
+"Please wear headphones (earphones) during the experiment to maximise the "
+"experience of the illusion, if possible."
+msgstr ""
+"Por favor, se possível, use fone de ouvido para maximar a experiência da "
+"ilusão."
+
+#: experiment/rules/speech2song.py:33
+msgid "Start"
+msgstr "Início"
+
+#: experiment/rules/speech2song.py:66
+msgid "Thank you for answering these questions about your background!"
+msgstr "Obrigado por responder essas perguntas!"
+
+#: experiment/rules/speech2song.py:70
+msgid "Now you will hear a sound repeated multiple times."
+msgstr "Você está prestes a ouvir um segmento de fala repetido várias vezes."
+
+#: experiment/rules/speech2song.py:74
+msgid ""
+"Please listen to the following segment carefully, if possible with "
+"headphones."
+msgstr "Ouça atentamente usando fone de ouvido, se possível."
+
+#: experiment/rules/speech2song.py:77
+msgid "OK"
+msgstr "OK"
+
+#: experiment/rules/speech2song.py:87
+msgid ""
+"Previous studies have shown that many people perceive the segment you just "
+"heard as song-like after repetition, but it is no problem if you do not "
+"share that perception because there is a wide range of individual "
+"differences."
+msgstr ""
+"Estudos anteriores demonstraram que o segmento que você acabou de ouvir é "
+"percebido como canto depois dele ser repetito, mas não tem problema se você "
+"não teve essa impressão porque existe uma ampla gama de diferenças "
+"individuais. "
+
+#: experiment/rules/speech2song.py:92
+msgid "Part 1"
+msgstr "Parte 1"
+
+#: experiment/rules/speech2song.py:95
+msgid ""
+"In the first part of the experiment, you will be presented with speech "
+"segments like the one just now in different languages which you may or may "
+"not speak."
+msgstr ""
+"Nesta primeira parte do experimento, você ouvirá segmentos de fala igual ao "
+"que você acabou de ouvir em línguas diferentes que você pode ou não falar. "
+
+#: experiment/rules/speech2song.py:97
+msgid "Your task is to rate each segment on a scale from 1 to 5."
+msgstr "A sua tarefa consistirá em avaliar cada segmento num escala de 1 a 5."
+
+#: experiment/rules/speech2song.py:112
+msgid "Part2"
+msgstr "Parte 2"
+
+#: experiment/rules/speech2song.py:116
+msgid ""
+"In the following part of the experiment, you will be presented with segments "
+"of environmental sounds as opposed to speech sounds."
+msgstr ""
+"Na parte seguinte do experimento, você ouvirá segmentos de sons do ambiente "
+"ao invés de segmentos de fala."
+
+#: experiment/rules/speech2song.py:119
+msgid "Environmental sounds are sounds that are not speech nor music."
+msgstr "Sons do ambiente são sons que não são nem fala nem música."
+
+#: experiment/rules/speech2song.py:122
+msgid ""
+"Like the speech segments, your task is to rate each segment on a scale from "
+"1 to 5."
+msgstr ""
+"Como os segmentos de fala, a sua tarefa consistirá em avaliar cada segmento "
+"numa escala de 1 a 5."
+
+#: experiment/rules/speech2song.py:140
+msgid "End of experiment"
+msgstr "Fim do experimento"
+
+#: experiment/rules/speech2song.py:143
+msgid "Thank you for contributing your time to science!"
+msgstr "Obrigado por dedicar o seu tempo à ciência!"
+
+#: experiment/rules/speech2song.py:188
+msgid "Does this sound like song or speech to you?"
+msgstr "Esse som soa como fala ou como canto?"
+
+#: experiment/rules/speech2song.py:190
+msgid "sounds exactly like speech"
+msgstr "soa exatamento como fala"
+
+#: experiment/rules/speech2song.py:191
+msgid "sounds somewhat like speech"
+msgstr "soa mais como fala do que canto"
+
+#: experiment/rules/speech2song.py:192
+msgid "sounds neither like speech nor like song"
+msgstr "não soa nem como fala nem como canto"
+
+#: experiment/rules/speech2song.py:193
+msgid "sounds somewhat like song"
+msgstr "soa mais como canto do que fala"
+
+#: experiment/rules/speech2song.py:194
+msgid "sounds exactly like song"
+msgstr "soa exatamento como canto"
+
+#: experiment/rules/speech2song.py:203
+msgid "Does this sound like music or an environmental sound to you?"
+msgstr "Esse som soa como música ou como som do ambiente?"
+
+#: experiment/rules/speech2song.py:205
+msgid "sounds exactly like an environmental sound"
+msgstr "soa exatamente como som do ambiente"
+
+#: experiment/rules/speech2song.py:206
+msgid "sounds somewhat like an environmental sound"
+msgstr "soa mais como som do ambiente do que como música"
+
+#: experiment/rules/speech2song.py:207
+msgid "sounds neither like an environmental sound nor like music"
+msgstr "não soa nem como som do ambiente nem como música"
+
+#: experiment/rules/speech2song.py:208
+msgid "sounds somewhat like music"
+msgstr "soa mais como música do que som do ambiente"
+
+#: experiment/rules/speech2song.py:209
+msgid "sounds exactly like music"
+msgstr "soa exatamente como música"
+
+#: experiment/rules/speech2song.py:228
+msgid "English"
+msgstr "inglês"
+
+#: experiment/rules/speech2song.py:229
+msgid "Brazilian Portuguese"
+msgstr "português brasileiro"
+
+#: experiment/rules/speech2song.py:230
+msgid "Mandarin Chinese"
+msgstr "chinês mandarim"
+
+#: experiment/rules/speech2song.py:235
+msgid "Listen carefully"
+msgstr "Ouça atentamente"
+
+#: experiment/rules/util/goldsmiths.py:12
+msgid "I spend a lot of my free time doing music-related activities."
+msgstr ""
+
+#: experiment/rules/util/goldsmiths.py:16
+msgid "I enjoy writing about music, for example on blogs and forums."
+msgstr ""
+
+#: experiment/rules/util/goldsmiths.py:20
+msgid "If somebody starts singing a song I don’t know, I can usually join in."
+msgstr ""
+
+#: experiment/rules/util/goldsmiths.py:23
+msgid "I can sing or play music from memory."
+msgstr ""
+
+#: experiment/rules/util/goldsmiths.py:27
+msgid "I am able to hit the right notes when I sing along with a recording."
+msgstr ""
+
+#: experiment/rules/util/goldsmiths.py:31
+msgid ""
+"I can compare and discuss differences between two performances or versions "
+"of the same piece of music."
+msgstr ""
+
+#: experiment/rules/util/goldsmiths.py:36
+msgid "I have never been complimented for my talents as a musical performer."
+msgstr ""
+
+#: experiment/rules/util/goldsmiths.py:40
+msgid "I often read or search the internet for things related to music."
+msgstr ""
+
+#: experiment/rules/util/goldsmiths.py:44
+msgid ""
+"I am not able to sing in harmony when somebody is singing a familiar tune."
+msgstr ""
+
+#: experiment/rules/util/goldsmiths.py:48
+msgid "I am able to identify what is special about a given musical piece."
+msgstr ""
+
+#: experiment/rules/util/goldsmiths.py:51
+msgid "When I sing, I have no idea whether I’m in tune or not."
+msgstr ""
+
+#: experiment/rules/util/goldsmiths.py:55
+msgid "Music is kind of an addiction for me: I couldn’t live without it."
+msgstr ""
+
+#: experiment/rules/util/goldsmiths.py:59
+msgid ""
+"I don’t like singing in public because I’m afraid that I would sing wrong "
+"notes."
+msgstr ""
+
+#: experiment/rules/util/goldsmiths.py:62
+msgid "I would not consider myself a musician."
+msgstr ""
+
+#: experiment/rules/util/goldsmiths.py:66
+msgid ""
+"After hearing a new song two or three times, I can usually sing it by myself."
+msgstr ""
+
+#: experiment/rules/util/goldsmiths.py:70
+msgid ""
+"I engaged in regular, daily practice of a musical instrument (including "
+"voice) for:"
+msgstr ""
+
+#: experiment/rules/util/goldsmiths.py:72
+msgid "0 years"
+msgstr ""
+
+#: experiment/rules/util/goldsmiths.py:73
+msgid "1 year"
+msgstr ""
+
+#: experiment/rules/util/goldsmiths.py:74
+msgid "2 years"
+msgstr ""
+
+#: experiment/rules/util/goldsmiths.py:75
+msgid "3 years"
+msgstr ""
+
+#: experiment/rules/util/goldsmiths.py:76
+msgid "4–5 years"
+msgstr ""
+
+#: experiment/rules/util/goldsmiths.py:77
+msgid "6–9 years"
+msgstr ""
+
+#: experiment/rules/util/goldsmiths.py:78
+msgid "10 or more years"
+msgstr ""
+
+#: experiment/rules/util/goldsmiths.py:84
+msgid ""
+"At the peak of my interest, I practiced on my primary instrument each day "
+"for:"
+msgstr ""
+
+#: experiment/rules/util/goldsmiths.py:86
+msgid "0 hours"
+msgstr ""
+
+#: experiment/rules/util/goldsmiths.py:87
+msgid "1 hour"
+msgstr ""
+
+#: experiment/rules/util/goldsmiths.py:88
+msgid "2 hours"
+msgstr ""
+
+#: experiment/rules/util/goldsmiths.py:89
+msgid "3 hours"
+msgstr ""
+
+#: experiment/rules/util/goldsmiths.py:90
+msgid "4–5 hours"
+msgstr ""
+
+#: experiment/rules/util/goldsmiths.py:91
+msgid "6–9 hours"
+msgstr ""
+
+#: experiment/rules/util/goldsmiths.py:92
+msgid "10 or more hours"
+msgstr ""
+
+#: experiment/rules/util/goldsmiths.py:97
+msgid "How many musical instruments can you play?"
+msgstr ""
+
+#: experiment/rules/util/goldsmiths.py:99 experiment/rules/util/goldsmiths.py:131
+#: experiment/rules/util/goldsmiths.py:200 experiment/rules/util/goldsmiths.py:215
+msgid "0"
+msgstr ""
+
+#: experiment/rules/util/goldsmiths.py:100 experiment/rules/util/goldsmiths.py:132
+#: experiment/rules/util/goldsmiths.py:202 experiment/rules/util/goldsmiths.py:217
+msgid "1"
+msgstr ""
+
+#: experiment/rules/util/goldsmiths.py:101 experiment/rules/util/goldsmiths.py:133
+#: experiment/rules/util/goldsmiths.py:203 experiment/rules/util/goldsmiths.py:218
+msgid "2"
+msgstr ""
+
+#: experiment/rules/util/goldsmiths.py:102 experiment/rules/util/goldsmiths.py:134
+#: experiment/rules/util/goldsmiths.py:204 experiment/rules/util/goldsmiths.py:219
+msgid "3"
+msgstr ""
+
+#: experiment/rules/util/goldsmiths.py:103
+msgid "4–5"
+msgstr ""
+
+#: experiment/rules/util/goldsmiths.py:104
+msgid "6–9"
+msgstr ""
+
+#: experiment/rules/util/goldsmiths.py:105
+msgid "10 or more"
+msgstr ""
+
+#: experiment/rules/util/goldsmiths.py:116
+msgid ""
+"I’m intrigued by musical styles I’m not familiar with and want to find out "
+"more."
+msgstr ""
+
+#: experiment/rules/util/goldsmiths.py:120
+msgid "I don’t spend much of my disposable income on music."
+msgstr ""
+
+#: experiment/rules/util/goldsmiths.py:125
+msgid ""
+" I keep track of new music that I come across (e.g. new artists or "
+"recordings)."
+msgstr ""
+
+#: experiment/rules/util/goldsmiths.py:129
+msgid ""
+"How many live music events have you attended as an audience member in the "
+"past twelve months?"
+msgstr ""
+
+#: experiment/rules/util/goldsmiths.py:135 experiment/rules/util/goldsmiths.py:205
+#: experiment/rules/util/goldsmiths.py:220
+msgid "4-6"
+msgstr ""
+
+#: experiment/rules/util/goldsmiths.py:136
+msgid "7-10"
+msgstr ""
+
+#: experiment/rules/util/goldsmiths.py:137
+msgid "11 or more"
+msgstr ""
+
+#: experiment/rules/util/goldsmiths.py:143
+msgid "How much time per day do you spend listening to music attentively?"
+msgstr ""
+
+#: experiment/rules/util/goldsmiths.py:145
+msgid "0-15 min"
+msgstr ""
+
+#: experiment/rules/util/goldsmiths.py:146
+msgid "15-30 min"
+msgstr ""
+
+#: experiment/rules/util/goldsmiths.py:147
+msgid "30-60 min"
+msgstr ""
+
+#: experiment/rules/util/goldsmiths.py:148
+msgid "60-90 min"
+msgstr ""
+
+#: experiment/rules/util/goldsmiths.py:149
+msgid "2 hrs"
+msgstr ""
+
+#: experiment/rules/util/goldsmiths.py:150
+msgid "2-3 hrs"
+msgstr ""
+
+#: experiment/rules/util/goldsmiths.py:151
+msgid "4 hrs or more"
+msgstr ""
+
+#: experiment/rules/util/goldsmiths.py:159
+msgid "I am able to judge whether someone is a good singer or not."
+msgstr ""
+
+#: experiment/rules/util/goldsmiths.py:162
+msgid "I usually know when I’m hearing a song for the first time."
+msgstr ""
+
+#: experiment/rules/util/goldsmiths.py:165
+msgid ""
+"I find it difficult to spot mistakes in a performance of a song even if I "
+"know the tune."
+msgstr ""
+
+#: experiment/rules/util/goldsmiths.py:170
+msgid ""
+"I have trouble recognising a familiar song when played in a different way or "
+"by a different performer."
+msgstr ""
+
+#: experiment/rules/util/goldsmiths.py:175
+msgid "I can tell when people sing or play out of time with the beat."
+msgstr ""
+
+#: experiment/rules/util/goldsmiths.py:179
+msgid "I can tell when people sing or play out of tune."
+msgstr ""
+
+#: experiment/rules/util/goldsmiths.py:185
+msgid "When I hear a piece of music I can usually identify its genre."
+msgstr ""
+
+#: experiment/rules/util/goldsmiths.py:197
+msgid "How many years of formal training have you had in music theory?"
+msgstr ""
+
+#: experiment/rules/util/goldsmiths.py:201 experiment/rules/util/goldsmiths.py:216
+msgid "0.5"
+msgstr ""
+
+#: experiment/rules/util/goldsmiths.py:206 experiment/rules/util/goldsmiths.py:221
+msgid "7 or more"
+msgstr ""
+
+#: experiment/rules/util/goldsmiths.py:212
+msgid ""
+"How many years of formal training have you had on a musical instrument "
+"(including voice) during your lifetime?"
+msgstr ""
+
+#: experiment/rules/util/goldsmiths.py:237
+msgid "I only need to hear a new tune once and I can sing it back hours later."
+msgstr ""
+
+#: experiment/rules/util/goldsmiths.py:245
+msgid "I sometimes choose music that can trigger shivers down my spine."
+msgstr ""
+
+#: experiment/rules/util/goldsmiths.py:249
+msgid "Pieces of music rarely evoke emotions for me."
+msgstr ""
+
+#: experiment/rules/util/goldsmiths.py:253
+msgid "I often pick certain music to motivate or excite me."
+msgstr ""
+
+#: experiment/rules/util/goldsmiths.py:259
+msgid ""
+"I am able to talk about the emotions that a piece of music evokes for me."
+msgstr ""
+
+#: experiment/rules/util/goldsmiths.py:263
+msgid "Music can evoke my memories of past people and places."
+msgstr ""
+
+#: experiment/rules/util/languages.py:8
+msgid "Please rate your previous experience:"
+msgstr "Por favor indique a sua experiência prévia:"
+
+#: experiment/rules/util/languages.py:10 experiment/rules/util/languages.py:40
+msgid "fluent"
+msgstr "fluente"
+
+#: experiment/rules/util/languages.py:11 experiment/rules/util/languages.py:41
+msgid "intermediate"
+msgstr "intermediário"
+
+#: experiment/rules/util/languages.py:12 experiment/rules/util/languages.py:42
+msgid "beginner"
+msgstr "iniciante"
+
+#: experiment/rules/util/languages.py:13 experiment/rules/util/languages.py:43
+msgid "some exposure"
+msgstr "alguma exposição"
+
+#: experiment/rules/util/languages.py:14 experiment/rules/util/languages.py:44
+msgid "no exposure"
+msgstr "nenhuma exposição"
+
+#: experiment/rules/util/languages.py:19
+msgid "What is your mother tongue?"
+msgstr "Qual é a sua língua materna"
+
+#: experiment/rules/util/languages.py:23
+msgid "What is your second language, if applicable?"
+msgstr "Qual é a sua segunda língua, se houver?"
+
+#: experiment/rules/util/languages.py:27
+msgid "What is your third language, if applicable?"
+msgstr "Qual é a sua terceira língua, se houver?"
+
+#: experiment/rules/util/languages.py:37
+msgid "Please rate your previous experience with {}"
+msgstr "Por favor, indique a sua experiência prévia com {}"
+
+#: experiment/rules/util/languages.py:55
+msgid "Exposure to {}"
+msgstr "Exposição a {}"
+
+#: experiment/rules/util/questions.py:10
+msgid "With which gender do you currently most identify?"
+msgstr "Qual é a sua identidade de gênero?"
+
+#: experiment/rules/util/questions.py:12
+msgid "Man"
+msgstr "Homen"
+
+#: experiment/rules/util/questions.py:13
+msgid "Transgender man"
+msgstr "Homen transgênero"
+
+#: experiment/rules/util/questions.py:14
+msgid "Transgender woman"
+msgstr "Mulher transgênero"
+
+#: experiment/rules/util/questions.py:15
+msgid "Woman"
+msgstr "Mulher"
+
+#: experiment/rules/util/questions.py:16
+msgid "Non-conforming or questioning"
+msgstr "Gênero não-binário"
+
+#: experiment/rules/util/questions.py:17
+msgid "Intersex or two-spirit"
+msgstr "Intersexual ou dois-espíritos"
+
+#: experiment/rules/util/questions.py:18
+msgid "Prefer not to answer"
+msgstr "Prefiro não dizer"
+
+#: experiment/rules/util/questions.py:23
+msgid "When were you born?"
+msgstr ""
+
+#: experiment/rules/util/questions.py:25
+msgid "1943 or earlier"
+msgstr ""
+
+#: experiment/rules/util/questions.py:26
+msgid "1946–1964"
+msgstr ""
+
+#: experiment/rules/util/questions.py:27
+msgid "1965-1980"
+msgstr ""
+
+#: experiment/rules/util/questions.py:28
+msgid "1981–1996"
+msgstr ""
+
+#: experiment/rules/util/questions.py:29
+msgid "1997 or later"
+msgstr ""
+
+#: experiment/rules/util/questions.py:35 experiment/rules/util/questions.py:84
+msgid ""
+"In which country did you spend the most formative years of your childhood "
+"and youth?"
+msgstr ""
+"Em que país você passou os anos mais formativos da sua infância e "
+"adolescência?"
+
+#: experiment/rules/util/questions.py:41
+msgid "What is the highest educational qualification that you have attained?"
+msgstr ""
+
+#: experiment/rules/util/questions.py:43
+msgid "Have not (yet) completed any school qualification"
+msgstr ""
+
+#: experiment/rules/util/questions.py:44
+msgid "Vocational qualification at about 16 years of age (GCSE)"
+msgstr ""
+
+#: experiment/rules/util/questions.py:45
+msgid "Secondary diploma (A-levels/high school)"
+msgstr ""
+
+#: experiment/rules/util/questions.py:46
+msgid "Associate's degree or 2-year professional diploma"
+msgstr ""
+
+#: experiment/rules/util/questions.py:47
+msgid "Bachelor's degree or equivalent"
+msgstr ""
+
+#: experiment/rules/util/questions.py:48
+msgid "Master's degree or equivalent"
+msgstr ""
+
+#: experiment/rules/util/questions.py:49
+msgid "Doctoral degree or equivalent"
+msgstr ""
+
+#: experiment/rules/util/questions.py:54 experiment/rules/util/questions.py:88
+msgid "In which country do you currently reside?"
+msgstr "Em que país você reside atualmente?"
+
+#: experiment/rules/util/questions.py:64
+msgid "Jazz/Folk/Classical"
+msgstr ""
+
+#: experiment/rules/util/questions.py:71
+msgid "The instrument I play best, including voice (or none), is:"
+msgstr ""
+
+#: experiment/rules/util/questions.py:79
+msgid "What is your age?"
+msgstr "Qual é a sua idade?"
+
+#: experiment/rules/util/questions.py:93
+msgid ""
+"If you are still in education, what is the highest qualification you expect "
+"to obtain?"
+msgstr ""
+
+#: experiment/rules/util/questions.py:95
+msgid "First school qualification (A-levels/ High school"
+msgstr ""
+
+#: experiment/rules/util/questions.py:96
+msgid "Post-16 vocational course"
+msgstr ""
+
+#: experiment/rules/util/questions.py:97
+msgid "Second school qualification (A-levels/high school)"
+msgstr ""
+
+#: experiment/rules/util/questions.py:98
+msgid "Undergraduate degree or professional qualification"
+msgstr ""
+
+#: experiment/rules/util/questions.py:99
+msgid "Postgraduate degree"
+msgstr ""
+
+#: experiment/rules/util/questions.py:100
+msgid "Not applicable"
+msgstr ""
+
+#: experiment/rules/util/questions.py:105
+msgid "Occupational status"
+msgstr ""
+
+#: experiment/rules/util/questions.py:107
+msgid "Still at School"
+msgstr ""
+
+#: experiment/rules/util/questions.py:108
+msgid "At University"
+msgstr ""
+
+#: experiment/rules/util/questions.py:109
+msgid "In Full-time employment"
+msgstr ""
+
+#: experiment/rules/util/questions.py:110
+msgid "In Part-time employment"
+msgstr ""
+
+#: experiment/rules/util/questions.py:111
+msgid "Self-employed"
+msgstr ""
+
+#: experiment/rules/util/questions.py:112
+msgid "Homemaker/full time parent"
+msgstr ""
+
+#: experiment/rules/util/questions.py:113
+msgid "Unemployed"
+msgstr ""
+
+#: experiment/rules/util/questions.py:114
+msgid "Retired"
+msgstr ""
+
+#: experiment/rules/views/composite_view.py:4 experiment/rules/views/song_sync.py:59
+msgid "Do you recognise this song?"
+msgstr ""
+
+#: experiment/rules/views/composite_view.py:5 experiment/rules/views/song_sync.py:60
+msgid "Keep imagining the music"
+msgstr ""
+
+#: experiment/rules/views/composite_view.py:6 experiment/rules/views/song_sync.py:61
+msgid "Did the track come back in the right place?"
+msgstr ""
+
+#: experiment/rules/views/composite_view.py:7 experiment/rules/views/song_sync.py:62
+msgid "Get ready!"
+msgstr ""
+
+#: experiment/rules/views/final_score.py:14
+msgid "plastic"
+msgstr ""
+
+#: experiment/rules/views/final_score.py:15
+msgid "bronze"
+msgstr ""
+
+#: experiment/rules/views/final_score.py:16
+msgid "silver"
+msgstr ""
+
+#: experiment/rules/views/final_score.py:17
+msgid "gold"
+msgstr ""
+
+#: experiment/rules/views/final_score.py:18
+msgid "platinum"
+msgstr ""
+
+#: experiment/rules/views/final_score.py:19
+msgid "diamond"
+msgstr ""
+
+#: experiment/rules/views/final_score.py:32
+msgid "Play again"
+msgstr ""
+
+#: experiment/rules/views/final_score.py:34
+#, fuzzy
+#| msgid "End of experiment"
+msgid "All experiments"
+msgstr "Fim do experimento"
+
+#: experiment/rules/views/final_score.py:36
+msgid "Final score"
+msgstr ""
+
+#: experiment/rules/views/question.py:14 experiment/rules/views/question.py:35
+#: experiment/rules/views/question.py:52 experiment/rules/views/question.py:70
+#: experiment/rules/views/question.py:88 experiment/rules/views/question.py:105
+#: experiment/rules/views/question.py:123 experiment/rules/views/question.py:146
+#: experiment/rules/views/question.py:169 experiment/rules/views/question.py:186
+msgid "Skip"
+msgstr "Pular"
+
+#: experiment/rules/views/question.py:123
+msgid "How much do you agree or disagree?"
+msgstr ""
+
+#: experiment/rules/views/question.py:129 experiment/rules/views/question.py:152
+msgid "Completely Disagree"
+msgstr ""
+
+#: experiment/rules/views/question.py:130 experiment/rules/views/question.py:153
+msgid "Strongly Disagree"
+msgstr ""
+
+#: experiment/rules/views/question.py:131 experiment/rules/views/question.py:154
+#, fuzzy
+#| msgid "I agree"
+msgid "Disagree"
+msgstr "Concordo"
+
+#: experiment/rules/views/question.py:132 experiment/rules/views/question.py:155
+msgid "Neither Agree nor Disagree"
+msgstr ""
+
+#: experiment/rules/views/question.py:133 experiment/rules/views/question.py:156
+#, fuzzy
+#| msgid "I agree"
+msgid "Agree"
+msgstr "Concordo"
+
+#: experiment/rules/views/question.py:134 experiment/rules/views/question.py:157
+msgid "Strongly Agree"
+msgstr ""
+
+#: experiment/rules/views/question.py:135 experiment/rules/views/question.py:158
+msgid "Completely Agree"
+msgstr ""
+
+#: experiment/rules/views/question.py:146
+msgid "How much do you agree?"
+msgstr ""
+
+#: experiment/rules/views/question.py:186
+msgid "How certain are you of this answer?"
+msgstr ""
+
+#: experiment/rules/views/question.py:192
+msgid "I guessed"
+msgstr ""
+
+#: experiment/rules/views/question.py:193
+msgid "I think I know"
+msgstr ""
+
+#: experiment/rules/views/question.py:194
+msgid "I am sure I know"
+msgstr ""
+
+#: experiment/rules/views/score.py:22 experiment/rules/views/song_bool.py:56
+#: experiment/rules/views/song_sync.py:57
+#: experiment/rules/views/two_alternative_forced.py:104
+#: experiment/rules/views/two_song.py:78
+msgid "Round {} / {}"
+msgstr ""
+
+#: experiment/rules/views/score.py:28
+msgid "Score"
+msgstr ""
+
+#: experiment/rules/views/score.py:29
+msgid "Next"
+msgstr ""
+
+#: experiment/rules/views/score.py:30
+msgid "You listened to:"
+msgstr ""
+
+#: experiment/rules/views/score.py:41
+msgid "No points"
+msgstr ""
+
+#: experiment/rules/views/score.py:44
+msgid "Incorrect"
+msgstr ""
+
+#: experiment/rules/views/score.py:47
+msgid "Correct"
+msgstr ""
+
+#: experiment/rules/views/song_bool.py:59 experiment/rules/views/song_sync.py:65
+msgid "Yes"
+msgstr ""
+
+#: experiment/rules/views/song_bool.py:60 experiment/rules/views/song_sync.py:66
+msgid "No"
+msgstr ""

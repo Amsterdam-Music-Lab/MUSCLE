@@ -1,0 +1,54 @@
+"""Settings for production environment"""
+
+import os
+from aml.base_settings import *
+
+# Database
+# https://docs.djangoproject.com/en/3.0/ref/settings/#databases
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.getenv('SQL_DATABASE'),
+        'USER': os.getenv('SQL_USER'),
+        'PASSWORD': os.getenv('SQL_PASSWORD'),
+        'HOST': os.getenv('SQL_HOST'),
+        'PORT': os.getenv('SQL_PORT'),
+    }
+}
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'standard': {
+            'format': '\n --> %(asctime)s %(levelname)s in '
+            '%(pathname)s:%(lineno)d\n%(message)s',
+        },
+    },
+    'handlers': {
+        'file': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': '/server/logs/aml-experiments.log',
+            'formatter': 'standard',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['file'],
+            'level': 'WARNING',
+            'propagate': True,
+        },
+        'aml': {
+            'handlers': ['file'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+        'experiment': {
+            'handlers': ['file'],
+            'level': 'DEBUG',
+            'propagate': True,
+        }
+    }
+}

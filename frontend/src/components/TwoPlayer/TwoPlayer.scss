@@ -1,0 +1,25 @@
+.aha__two-player {
+    .players {
+        max-width: 350px;
+    }
+
+    .buttons {
+        max-width: 390px;
+
+        .aha__button {
+            margin-bottom: 10px;
+            margin-right: 5px;
+            margin-left: 5px;
+        }
+    }
+
+    .instruction {
+        min-height: 55px;
+        h3 {
+            margin: 0;
+        }
+    }
+    .buttons {
+        max-width: 350px;
+    }
+}

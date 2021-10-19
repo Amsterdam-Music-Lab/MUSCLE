@@ -1,0 +1,16 @@
+.aha__final {
+    
+    h2 {
+        padding: 20px;
+    }
+
+    .home {
+        padding: 10px;
+        color: white;
+        opacity: 0.5;
+        cursor: pointer;
+        &:hover {
+            text-decoration: underline;
+        }
+    }
+}

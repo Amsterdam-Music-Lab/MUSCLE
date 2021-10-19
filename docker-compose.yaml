@@ -1,0 +1,56 @@
+# Docker-compose definition for development
+
+version: '2.4'
+
+services:
+    db:
+        image: postgres
+        environment:
+          - POSTGRES_DB=${SQL_DATABASE}
+          - POSTGRES_USER=${SQL_USER}
+          - POSTGRES_PASSWORD=${SQL_PASSWORD}
+        volumes:
+          - db_data:/var/lib/postgresql/data/
+    ip2country:
+        image: extrawurst/ip2country:latest
+        ports: 
+         - 8854:5000
+    server:
+        build:
+          context: ../aml-experiments/backend
+          dockerfile: DockerfileDevelop
+        depends_on:
+            - db
+            - ip2country
+        volumes:
+          - type: bind
+            source: ../aml-experiments/backend
+            target: /server
+        environment:
+          - AML_DEBUG=${AML_DEBUG}
+          - DJANGO_SETTINGS_MODULE=${DJANGO_SETTINGS_MODULE}
+          - AML_LOCATION_PROVIDER=${AML_LOCATION_PROVIDER}
+          - SQL_DATABASE=${SQL_DATABASE}
+          - SQL_USER=${SQL_USER}
+          - SQL_PASSWORD=${SQL_PASSWORD}
+          - SQL_HOST=${SQL_HOST}
+        ports:
+          - 8000:8000
+        command: bash -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
+    client:
+        build:
+          context: ../aml-experiments/frontend
+          dockerfile: DockerfileDevelop
+        volumes:
+          - type: bind
+            source: ../aml-experiments/frontend
+            target: /client
+        environment:
+          - REACT_APP_API_ROOT=${REACT_APP_API_ROOT}
+          - REACT_APP_EXPERIMENT_SLUG=${REACT_APP_EXPERIMENT_SLUG}
+          - REACT_APP_AML_HOME=${REACT_APP_AML_HOME}
+        ports:
+          - 3000:3000
+        command: yarn start
+volumes:
+    db_data:

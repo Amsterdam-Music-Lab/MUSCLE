@@ -1,0 +1,30 @@
+.aha__player-small {
+    position: relative;
+    padding-bottom: 80px;
+    width: 120px;
+    height: 180px;
+
+    .aha__play-button {
+        position: absolute;
+        z-index: 1;
+    }
+
+    .banner {
+        z-index: 0;
+        position: absolute;
+        opacity: 0.5;
+        width: 60px;
+        height: 120px;
+        border-radius: 60px;
+        left: 50%;
+        margin-left: -30px;
+        top: 60px;
+    }
+
+    .label {
+        position: absolute;
+        top: 135px;
+        width: 100%;
+        text-align: center;
+    }
+}
