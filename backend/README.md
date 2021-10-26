@@ -1,33 +1,11 @@
-# Hooked server
+# AML experiment server
 
-The Hooked server consists of:
+The AML experiment server consists of:
 
 - Django admin that can be used to manage all experiment/playlist/participant data
 - Experiment rules and views that enable server-side construction and configuration of experiments
-- API endpoints for Hooked client
+- API endpoints for AML experiment client
 
-## Development install
-
-### Prerequisites
-
-- Install dependencies on your local system (Linux, Ubuntu): `sudo apt-get install python3 python3-venv python3-pip python3-mysqldb python3-dev default-libmysqlclient-dev`
-
-### Install and configure
-
-- Create python virtual environment: `./install.sh`
-- Activate environment: `source env/bin/activate`
-- Install development dependencies: `./env-dev.sh`
-- Copy `src/.env.dist` to `src/.env` and adapt to your config
-
-* Goto src folder: `cd src`
-* Migrate DB: `./manage.py migrate`
-* Collect static assets: `./manage.py collectstatic`
-* Create superuser: `./manage.py createsuperuser`
-
-### Run
-
-- Run devserver at localhost:8000: `manage.py runserver localhost:8000`
-  - Tip: use `./run-dev-server.py` to quickly start the server without manually activating the virtual env
 
 ## Create a new experiment
 
@@ -109,107 +87,6 @@ from .views import MyView
 ```
 
 Check the client documentation for instructions for adding the view to the client.
-
-## Production install
-
-### Prerequisites
-
-- Install dependencies on your server (Linux, Ubuntu): `sudo apt-get install python3 python3-venv python3-pip python3-mysqldb python3-dev default-libmysqlclient-dev`
-- Install MySQL (production database)
-- Install Apache (proxy and serving static/media files)
-
-### Install and configure
-
-#### App
-
-- Create python virtual environment: `./install.sh`
-- Activate environment: `source env/bin/activate`
-- Install production dependencies: `./env_prod.sh`
-- Copy `src/.env.prod` to `src/.env` and adapt to your config
-
-* Goto src folder: `cd src`
-* Migrate DB: `./manage.py migrate`
-* Collect static assets: `./manage.py collectstatic`
-* Create superuser: `./manage.py createsuperuser`
-* Run the WSGI server (Gunicorn) at 127.0.0.1:8000: `./run-dev-server.py`
-  - Make sure the server is restarted on reboot
-* Tip: The server PID is stored in `gunicorn.pid` which you can use to restart (or kill) the server, e.g.: `PID=$(cat gunicorn.pid); kill $PID; ./run-prod-server.sh`
-
-#### IP2Country
-
-- Run the ip2country service in serve mode: `/util/ip2country/ip2country serve`
-- Make this service restart on reboot
-- Check if the service is running: `curl http://localhost:8854?ip=172.217.168.238` - should return `{"status":"ok","country":"US"}`
-
-#### MySQL
-
-- Create user and database matching settings in .env
-  - Database collation: utf8_general_ci
-
-#### Apache
-
-- Enable `mod_wsgi` and `mod_ssl`
-- Create a new virtual host, temporary on port 80
-  - Proxy requests to http://127.0.0.1:8000/
-  - Pass `static` and `upload` folder
-
-```
-<VirtualHost *:80>
-    DocumentRoot /srv/aml/hooked-on-music-server/src
-    ServerName api.hooked.amsterdammusiclab.nl
-    ServerAdmin contact@amsterdammusiclab.nl
-
-    LogLevel warn
-    CustomLog /var/log/apache2/hooked_api_access.log combined
-    ErrorLog /var/log/apache2/hooked_api_error.log
-
-    <Directory /srv/aml/hooked-on-music-server/src>
-       AllowOverride  None
-       Require all granted
-    </Directory>
-
-    ProxyRequests Off
-    ProxyVia Off
-    ProxyPreserveHost On
-
-    <Location />
-       Header unset Server
-       ProxyPass http://127.0.0.1:8000/
-       ProxyPassReverse http://127.0.0.1:8000/
-    </Location>
-
-    # Pass static folder
-    <Location /static/>
-       ProxyPass !
-    </Location>
-
-    # Pass media/upload folder
-    <Location /upload/>
-       ProxyPass !
-    </Location>
-
-</VirtualHost>
-```
-
-- Use Let's Encrypt `certbot` to get a SSL certificate for your domain
-  - Always redirect all requests to https
-
-Your virtual host now looks like
-
-```
-<VirtualHost *:443>
-
-    ..... Code from previous block ........
-
-    # Installed SSL certificate using letsencrypt/certbot
-    SSLCertificateFile /etc/letsencrypt/live/api.hooked.amsterdammusiclab.nl/fullchain.pem
-    SSLCertificateKeyFile /etc/letsencrypt/live/api.hooked.amsterdammusiclab.nl/privkey.pem
-    Include /etc/letsencrypt/options-ssl-apache.conf
-
-</VirtualHost>
-```
-
-- If you use a proxy different from Apache, you should create a config that matches the one given above
 
 ## Troubleshooting
 
