@@ -1,7 +1,7 @@
 from django.utils.translation import gettext as _
 
 from experiment.models import Section
-from .views import CompositeView, Explainer
+from .views import CompositeView, Explainer, Final
 from .views.form import ChoiceQuestion, Form
 
 from .base import Base

@@ -6,7 +6,7 @@ from django.utils.translation import gettext as _
 
 from .base import Base
 from experiment.models import Section
-from .views import CompositeView, Final, FinalScore, Score, Explainer, Consent, StartSession, Playlist, Question
+from .views import CompositeView, Consent, Final, Explainer, StartSession, Playlist
 from .views.form import ChoiceQuestion, Form
 from .util.actions import combine_actions
 from .util.score import get_average_difference
