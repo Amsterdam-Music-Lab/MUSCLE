@@ -142,8 +142,8 @@ def next_trial_actions(session, round_number):
     )
     config = {
             'listen_first': True,
-            'decision_time': section.duration
-        }
+            'decision_time': section.duration + .5
+    }
     actions.append(view.action(config))
     return actions
 

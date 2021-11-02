@@ -130,6 +130,7 @@ const CompositeView = ({ instructions, view, section, feedback_form, config, onR
                         instruction={instructions.during_presentation}
                         className=""
                     />
+                    {feedback_form && (
                     <FeedbackForm
                         formActive={formActive}
                         form={feedback_form.form}
@@ -142,7 +143,7 @@ const CompositeView = ({ instructions, view, section, feedback_form, config, onR
                                 given_result: feedback_form.form,
                             })
                         }}
-                    />
+                    />)}
                 </div>
             );
         default:

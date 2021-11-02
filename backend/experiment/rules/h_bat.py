@@ -110,7 +110,11 @@ class HBat(Base):
             instructions=instructions,
             title=_('Beat acceleration')
         )
-        return view.action()
+        config = {
+            'listen_first': True,
+            'decision_time': section.duration + .5
+        }
+        return view.action(config)
 
     @classmethod
     def intro_explainer(cls):
@@ -222,4 +226,7 @@ def staircasing(session, trial_action_callback, previous_results):
             level = get_previous_level(last_result) 
             action = trial_action_callback(
                 session, trial_condition, level)
+    if not action:
+        # action is None if the audio file doesn't exist
+        return finalize_experiment(session)
     return action

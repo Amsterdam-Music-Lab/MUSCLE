@@ -51,6 +51,6 @@ services:
           - REACT_APP_AML_HOME=${REACT_APP_AML_HOME}
         ports:
           - 3000:3000
-        command: yarn start
+        command: sh -c "yarn scss && yarn start"
 volumes:
     db_data:

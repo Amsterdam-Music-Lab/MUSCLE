@@ -29,11 +29,11 @@ def get_practice_views(
     results_count = session.result_set.count()
     trial_condition = get_trial_condition_block(results_count, session.id, 2)
     previous_results = session.result_set.order_by('-created_at')
-    if not previous_results.count():
+    if not results_count:
         # first practice trial
         return trial_callback(session, trial_condition, 1.0, start_diff)
     last_result = previous_results.first()
-    if previous_results.count() < 4:
+    if results_count < 4:
         # practice trial
         correct = last_result.score > 0
         previous_condition = check_previous_condition(last_result)
@@ -42,14 +42,15 @@ def get_practice_views(
             session, trial_condition, 1.0, start_diff)
         return combine_actions(response_explainer, trial)
     else:
-        # after last practice trial 
+        # after last practice trial
+        session.result_set.all().delete()
+        session.save()
         if last_result.score > 0 and previous_results.all()[1].score > 0:
             # Practice went successfully, start experiment
             previous_condition = check_previous_condition(last_result)
             response_explainer = response_callback(
                 True, previous_condition)
             session.final_score = 1
-            session.result_set.all().delete()
             session.save()
             start_explainer = start_experiment_explainer()
             trial = trial_callback(

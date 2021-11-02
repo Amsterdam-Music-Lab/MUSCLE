@@ -77,7 +77,11 @@ class BST(HBat):
             instructions=instructions,
             title=_('Meter detection')
         )
-        return view.action()
+        config = {
+            'listen_first': True,
+            'decision_time': section.duration + .5
+        }
+        return view.action(config)
 
     @classmethod
     def response_explainer(cls, correct, in2, button_label=_('Next fragment')):

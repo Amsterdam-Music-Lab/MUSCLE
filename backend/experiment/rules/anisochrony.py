@@ -186,9 +186,9 @@ def next_trial_action(session, trial_condition, multiplier, previous_difference)
     )
     config = {
         'listen_first': True,
-        'decision_time': section.duration
+        'decision_time': section.duration + .5
     }
-    action = view.action(config=config)
+    action = view.action(config)
     return action
 
 def get_previous_condition(last_result):

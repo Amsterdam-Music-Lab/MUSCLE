@@ -151,7 +151,7 @@ class DurationDiscrimination(Base):
         )
         config = {
             'listen_first': True,
-            'decision_time': section.duration
+            'decision_time': section.duration + .5
         }
         action = view.action(config)
         return action
@@ -237,7 +237,7 @@ def staircasing_blocks(session, trial_action_callback, condition='interval'):
                 counter += 1
                 previous_difference = int(previous_results.all()[
                                           counter].section.name)
-        return trial_action_callback(
+        action = trial_action_callback(
             session,
             trial_condition,
             1.0,
@@ -273,7 +273,7 @@ def staircasing_blocks(session, trial_action_callback, condition='interval'):
                 0.5,
                 previous_difference)
         else:
-            return trial_action_callback(
+            action = trial_action_callback(
                 session,
                 trial_condition,
                 1.0,
