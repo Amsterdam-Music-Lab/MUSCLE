@@ -27,9 +27,6 @@ def get(request, slug):
 
     if experiment.language:
         activate(experiment.language)
-
-    from django.urls import get_resolver
-    print(get_resolver().url_patterns)
     
     # create data
     experiment_data = {

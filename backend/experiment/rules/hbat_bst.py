@@ -1,7 +1,7 @@
 from django.utils.translation import gettext as _
 
 from experiment.models import Section
-from .views import CompositeView, Explainer
+from .views import CompositeView, Explainer, Final
 from .views.form import ChoiceQuestion, Form
 
 from .base import Base
@@ -77,7 +77,11 @@ class BST(HBat):
             instructions=instructions,
             title=_('Meter detection')
         )
-        return view.action()
+        config = {
+            'listen_first': True,
+            'decision_time': section.duration + .5
+        }
+        return view.action(config)
 
     @classmethod
     def response_explainer(cls, correct, in2, button_label=_('Next fragment')):

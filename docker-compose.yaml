@@ -43,14 +43,14 @@ services:
           dockerfile: DockerfileDevelop
         volumes:
           - type: bind
-            source: ../aml-experiments/frontend
-            target: /client
+            source: ../aml-experiments/frontend/src
+            target: /client/src
         environment:
           - REACT_APP_API_ROOT=${REACT_APP_API_ROOT}
           - REACT_APP_EXPERIMENT_SLUG=${REACT_APP_EXPERIMENT_SLUG}
           - REACT_APP_AML_HOME=${REACT_APP_AML_HOME}
         ports:
           - 3000:3000
-        command: yarn start
+        command: sh -c "yarn start"
 volumes:
     db_data:

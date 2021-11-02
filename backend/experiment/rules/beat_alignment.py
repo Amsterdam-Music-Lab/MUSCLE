@@ -133,9 +133,9 @@ class BeatAlignment(Base):
         )
         config = {
             'listen_first': True,
-            'decision_time': section.duration
+            'decision_time': section.duration + .5
         }
-        return view.action(config=config)
+        return view.action(config)
 
     @staticmethod
     def next_trial_action(session, this_round):
