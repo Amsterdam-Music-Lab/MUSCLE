@@ -43,8 +43,6 @@ def get_practice_views(
         return combine_actions(response_explainer, trial)
     else:
         # after last practice trial
-        session.result_set.all().delete()
-        session.save()
         if last_result.score > 0 and previous_results.all()[1].score > 0:
             # Practice went successfully, start experiment
             previous_condition = check_previous_condition(last_result)
@@ -55,19 +53,22 @@ def get_practice_views(
             start_explainer = start_experiment_explainer()
             trial = trial_callback(
                 session, first_trial_condition, 1.0, start_diff)
-            return combine_actions(response_explainer, start_explainer, trial)
+            continue_actions = combine_actions(response_explainer, start_explainer, trial)
         else:
             # need more practice, start over
             response_explainer = response_callback(False, check_previous_condition(last_result))
             next_trial = trial_callback(
                 session, trial_condition, 1.0, start_diff)
-            return combine_actions(
+            continue_actions = combine_actions(
                 response_explainer,
                 practice_again_explainer(),
                 intro_explainer,
                 practice_explainer(),
                 next_trial
             )
+        session.result_set.all().delete()
+        session.save()
+        return continue_actions
 
 
 def practice_explainer():
