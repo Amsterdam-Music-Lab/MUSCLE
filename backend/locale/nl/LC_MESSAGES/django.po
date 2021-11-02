@@ -1522,29 +1522,29 @@ msgstr ""
 
 #: experiment/rules/util/practice.py:86
 msgid "You have answered 1 or more practice trials incorrectly."
-msgstr ""
+msgstr "Je hebt 1 of meer oefentrials incorrect beantwoord. "
 
 #: experiment/rules/util/practice.py:88
 msgid "We will therefore practice again."
-msgstr ""
+msgstr "We gaan daarom nog een keer oefenen."
 
 #: experiment/rules/util/practice.py:93
 msgid "But first, you can read the instructions again."
-msgstr ""
+msgstr "Lees eerst nogmaals de instructie."
 
 #: experiment/rules/util/practice.py:103
 msgid "Now we will start the real experiment."
-msgstr ""
+msgstr "We gaan nu beginnen met het echte experiment."
 
 #: experiment/rules/util/practice.py:107
 msgid ""
 "Pay attention! During the experiment it will become more difficult to hear "
 "the difference between the tones."
-msgstr ""
+msgstr "Let op! Tijdens het experiment zal het steeds moeilijker zijn om het verschil te horen tussen de tonen."
 
 #: experiment/rules/util/practice.py:117
 msgid "Remember that you don't move along or tap during the test."
-msgstr ""
+msgstr "Denk eraan dat je niet meebeweegt of meetikt tijdens het testje."
 
 #: experiment/rules/util/questions.py:10
 msgid "With which gender do you currently most identify?"
