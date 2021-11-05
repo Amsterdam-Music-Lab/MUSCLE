@@ -15,6 +15,8 @@ class ModelFormFieldAsJSON(ModelMultipleChoiceField):
         return value
 
 class ExperimentForm(ModelForm):
+    # TO DO: add "clean_slug" method which checks that slug is NOT 
+    # "experiment", "participant", "profile"
 
     def __init__(self, *args, **kwargs):
         super(ModelForm, self).__init__(*args, **kwargs)
