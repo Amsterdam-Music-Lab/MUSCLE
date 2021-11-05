@@ -1,3 +1,5 @@
+import json
+
 from django.db import models
 from django.utils import timezone
 from experiment.rules import EXPERIMENT_RULES
@@ -19,6 +21,7 @@ class Experiment(models.Model):
     rules = models.CharField(default="", max_length=64)
     language = models.CharField(
         default="", blank=True, choices=language_choices, max_length=2)
+    nested_experiments = models.JSONField(blank=True, null=True, default='')
 
     class Meta:
         ordering = ['name']

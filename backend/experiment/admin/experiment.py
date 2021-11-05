@@ -1,13 +1,18 @@
 import csv
+import json
 
 from django.contrib import admin
 from django.db import models
-from django.forms import CheckboxSelectMultiple, ModelForm, ChoiceField
+from django.forms import CheckboxSelectMultiple, ModelForm, ModelMultipleChoiceField, ChoiceField
 from django.http import HttpResponse, JsonResponse
 from inline_actions.admin import InlineActionsModelAdminMixin
 from experiment.models import Experiment
 from experiment.rules import EXPERIMENT_RULES
 
+class ModelFormFieldAsJSON(ModelMultipleChoiceField):
+    """ override clean method to prevent pk lookup to save querysets """
+    def clean(self, value):
+        return value
 
 class ExperimentForm(ModelForm):
 
@@ -21,6 +26,8 @@ class ExperimentForm(ModelForm):
         self.fields['rules'] = ChoiceField(
             choices=choices
         )
+        experiments = Experiment.objects.all()
+        self.fields['nested_experiments'] = ModelFormFieldAsJSON(queryset=experiments, required=False)
 
     class Meta:
         model = Experiment
@@ -35,7 +42,7 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
     search_fields = ['name']
     inline_actions = ['export', 'export_csv']
     fields = ['name', 'slug', 'language', 'active', 'rules',
-              'rounds', 'bonus_points', 'playlists']
+              'rounds', 'bonus_points', 'playlists', 'nested_experiments']
     form = ExperimentForm
 
     # make playlists fields a list of checkboxes
