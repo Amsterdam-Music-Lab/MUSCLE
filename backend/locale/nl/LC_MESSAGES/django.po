@@ -652,8 +652,7 @@ msgstr ""
 #: experiment/rules/duration_discrimination.py:135
 msgid "Is the second %(type)s LONGER than the first %(type)s or EQUALLY LONG?"
 msgstr ""
-"Het is jouw taak om te beslissen of het 2e %(type)s LANGER is dan het 1e "
-"%(type)s, of EVEN LANG."
+"Is de 2e %(type)s LANGER dan of EVEN LANG als de 1e %(type)s?"
 
 #: experiment/rules/duration_discrimination.py:138
 msgid "LONGER"
