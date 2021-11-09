@@ -16,7 +16,9 @@ logger = logging.getLogger(__name__)
 
 START_DIFF = 400000
 MAX_TURNPOINTS = 8
-
+BLOCK_SIZE = 5
+increase_difficulty_multiplier = .5
+decrease_difficulty_multiplier = 1.5
 
 class DurationDiscrimination(Base):
     """ 
@@ -24,6 +26,7 @@ class DurationDiscrimination(Base):
     """
     ID = 'DURATION_DISCRIMINATION'
     condition = _('interval')
+    
 
     @classmethod
     def first_round(cls, experiment):
@@ -51,7 +54,14 @@ class DurationDiscrimination(Base):
 
         elif session.final_score == 0:
             # we are practicing
-            actions = get_practice_views(session, intro_explanation(_('interval')), get_trial_condition_block(0, session.id, 2), cls.next_trial_action, cls.get_response_explainer, get_previous_condition)
+            actions = get_practice_views(
+                session,
+                intro_explanation(cls.condition),
+                staircasing_blocks,
+                cls.next_trial_action,
+                cls.get_response_explainer,
+                get_previous_condition,
+                get_difficulty(session))
             return actions
 
         else:
@@ -103,23 +113,19 @@ class DurationDiscrimination(Base):
         )
     
     @classmethod
-    def next_trial_action(cls, session, trial_condition, multiplier, previous_difference):
+    def next_trial_action(cls, session, trial_condition, difficulty):
         """
         Provide the next trial action
         Arguments:
         - session: the session
         - trial_condition: 1 for catch trial, 0 for normal trial
-        - multiplier: 
-            1.5 multiplier for difference *increase*
-            1 if difference should stay the same
-            0.5 for difference *decrease*
-        - previous difference: difference of previous trial
+        - difficulty: difficulty of the trial (translates to file name)
         """
         if trial_condition == 1:
             # catch trial
             difference = 0
         else:
-            difference = int(previous_difference * multiplier)
+            difference = difficulty
         try:
             section = session.playlist.section_set.get(name=difference)
         except Section.DoesNotExist:
@@ -160,9 +166,9 @@ def finalize_experiment(session, condition):
     ''' After 8 turnpoints, finalize experiment
     Give participant feedback
     '''
-    milliseconds = get_average_difference(session, 4)
+    milliseconds = round(get_average_difference(session, 4) / 1000)
     if condition=='interval':
-        percentage = (milliseconds / 600) * 100
+        percentage = round((milliseconds / 600) * 100, 1)
         score_message = _(
             'Well done! You heard the difference between two intervals that \
             differed only {} percent in duration. When we research timing in \
@@ -210,75 +216,84 @@ def intro_explanation(condition):
 def get_previous_condition(last_result):
     return last_result.expected_response == 'LONGER'
 
-def staircasing_blocks(session, trial_action_callback, condition='interval'):
+def staircasing_blocks(session, trial_action_callback, condition=_('interval')):
     """ Calculate staircasing procedure in blocks of 5 trials with one catch trial 
     Arguments:
     - session: the session
     - trial_action_callback: function to build a trial action
     """
     previous_results = session.result_set.order_by('-created_at')
-    trial_condition = get_trial_condition_block(
-        previous_results.count(), session.id, 5)
+    trial_condition = get_trial_condition_block(session, BLOCK_SIZE)
+    # trial_condition = get_trial_condition_block(
+    #     previous_results.count(), session.id, 5)
     if not previous_results.count():
         # first trial
-        return trial_action_callback(session, trial_condition, 1.0, START_DIFF)
-    previous_difference = int(previous_results.first().section.name)
-    if previous_difference == 0:
+        difficulty = get_difficulty(session)
+        return trial_action_callback(session, trial_condition, difficulty)
+    previous_condition = previous_results.first().expected_response
+    if previous_condition == 'EQUAL':
         # last trial was catch trial, don't calculate turnpoints
-        # find pre-catch difference and don't manipulate duration
-        if previous_results.count() == 1:
-            # this is the second trial, so the difference is still at initial value
-            previous_difference = START_DIFF
-        else:
-            counter = 0
-            while(previous_difference == 0):
-                # search for last non-catch difference
-                # this could be as far as 2 trials back (one block ends, another one starts with catch trial)
-                counter += 1
-                previous_difference = int(previous_results.all()[
-                                          counter].section.name)
+        # don't manipulate duration
+        difficulty = get_difficulty(session)
         action = trial_action_callback(
             session,
             trial_condition,
-            1.0,
-            previous_difference)
-    if previous_results.first().score == 0:
-        # the previous response was incorrect
-        # set previous score to 4, to mark the turnpoint
-        last_result = previous_results.first()
-        last_result.score = 4
-        last_result.save()
-        # register turnpoint and increase difference
-        session.final_score += 1
-        session.save()
-        action = trial_action_callback(
-            session,
-            trial_condition,
-            1.5,
-            previous_difference)
+            difficulty)
     else:
-        # the previous response was correct
-        if previous_results.count() > 1 and previous_results.all()[1].score == 1:
-            # the previous two responses were correct
+        if previous_results.first().score == 0:
+            # the previous response was incorrect
             # set previous score to 4, to mark the turnpoint
-            last_correct_result = previous_results.first()
-            last_correct_result.score = 4
-            last_correct_result.save()
-            # register turnpoint and decrease difference
+            last_result = previous_results.first()
+            last_result.score = 4
+            last_result.save()
+            # register turnpoint and increase difference
             session.final_score += 1
             session.save()
+            difficulty = get_difficulty(session, decrease_difficulty_multiplier)
             action = trial_action_callback(
                 session,
                 trial_condition,
-                0.5,
-                previous_difference)
+                difficulty)
         else:
-            action = trial_action_callback(
-                session,
-                trial_condition,
-                1.0,
-                previous_difference)
+            # the previous response was correct
+            if previous_results.count() > 1 and previous_results.all()[1].score == 1:
+                # the previous two responses were correct and non-catch
+                # set previous score to 4, to mark the turnpoint
+                last_correct_result = previous_results.first()
+                last_correct_result.score = 4
+                last_correct_result.save()
+                # register turnpoint and decrease difference
+                session.final_score += 1
+                session.save()
+                difficulty = get_difficulty(session, increase_difficulty_multiplier)
+                action = trial_action_callback(
+                    session,
+                    trial_condition,
+                    difficulty)
+            else:
+                difficulty = get_difficulty(session)
+                action = trial_action_callback(
+                    session,
+                    trial_condition,
+                    difficulty)
     if not action:
         # action is None if the audio file doesn't exist
         return finalize_experiment(session, condition)
     return action
+
+def get_difficulty(session, multiplier=1.0):
+    '''
+     - multiplier: 
+        1.5 multiplier for difference *increase*
+        1 if difference should stay the same
+        0.5 for difference *decrease*
+    '''
+    json_data = session.load_json_data()
+    difficulty = json_data.get('difficulty')
+    if not difficulty:
+        current_difficulty = START_DIFF
+    else:
+        current_difficulty = int(difficulty * multiplier)
+    session.merge_json_data({'difficulty': current_difficulty})
+    session.save()
+    return current_difficulty

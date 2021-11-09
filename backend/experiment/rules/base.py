@@ -43,7 +43,6 @@ class Base(object):
                 result = Result.objects.get(pk=form_element['result_id'])
             except Result.DoesNotExist:
                 # Create new result
-                logger.warning('result object with id {} not found'.format(form_element['result_id']))
                 result = Result(session=session)
             # Calculate score
             score = session.experiment_rules().calculate_score(result, form_element)

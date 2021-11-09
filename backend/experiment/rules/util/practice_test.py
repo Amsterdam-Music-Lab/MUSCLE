@@ -22,9 +22,8 @@ class PracticeTest(TestCase):
             counter += 1
             try:
                 next_round = exp.get_rules().next_round(session)
-            except:
-                except Exception as e:
-                    print(e)
+            except Exception as e:
+                print(e)
             result = Result(session=session)
             result.score = 1
         assert counter == 4

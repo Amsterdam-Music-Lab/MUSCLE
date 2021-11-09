@@ -9,6 +9,7 @@ from .views.form import ChoiceQuestion, Form
 
 from .util.practice import get_practice_views, practice_explainer, get_trial_condition, get_trial_condition_block
 from .util.actions import combine_actions
+from .util.score import get_average_difference_level_based
 
 logger = logging.getLogger(__name__)
 
@@ -23,7 +24,15 @@ class HBat(Base):
             return cls.finalize_experiment(session)
         elif session.final_score == 0:
             # we are practicing
-            actions = get_practice_views(session, cls.intro_explainer(), get_trial_condition(2), cls.next_trial_action, cls.response_explainer, get_previous_condition)
+            actions = get_practice_views(
+                session,
+                cls.intro_explainer(),
+                staircasing,
+                cls.next_trial_action,
+                cls.response_explainer,
+                get_previous_condition,
+                1
+            )
             return actions
         # actual experiment
         previous_results = session.result_set.order_by('-created_at')
@@ -33,7 +42,7 @@ class HBat(Base):
             return cls.next_trial_action(session, trial_condition, 1)
 
         else:
-            action = staircasing(session, cls.next_trial_action, previous_results)
+            action = staircasing(session, cls.next_trial_action)
             if not action:
                 # action is None if the audio file doesn't exist
                 return cls.finalize_experiment(session)
@@ -167,13 +176,11 @@ class HBat(Base):
         """ if either the max_turnpoints have been reached,
         or if the section couldn't be found (outlier), stop the experiment
         """
-        percentage = 42
+        percentage = (get_average_difference_level_based(session, 4) / 500) * 100
         score_message = _("Well done! You heard the difference when the rhythm was \
             speeding up or slowing down with only {} percent!").format(percentage)
         session.finish()
         session.save()
-        # Return a score and final score action
-        # TODO: add stats from the session (20 * 0.5^max_level-1)
         return Final.action(
             title=_('End'),
             session=session,
@@ -188,10 +195,15 @@ def get_previous_condition(previous_result):
 def get_previous_level(previous_result):
     return previous_result.section.group_id
 
-def staircasing(session, trial_action_callback, previous_results):
+def staircasing(session, trial_action_callback):
     trial_condition = get_trial_condition(2)
+    previous_results = session.result_set.order_by('-created_at')
     last_result = previous_results.first()
-    if previous_results.first().score == 0:
+    if not last_result:
+        # first trial
+        action = trial_action_callback(
+            session, trial_condition, 1)
+    elif last_result.score == 0:
         # the previous response was incorrect
         # set previous score to 4, to mark the turnpoint
         last_result.score = 4

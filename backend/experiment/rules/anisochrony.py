@@ -44,7 +44,15 @@ class Anisochrony(Base):
 
         elif session.final_score == 0:
             # we are practicing
-            actions = get_practice_views(session, intro_explanation(), get_trial_condition_block(0, session.id, 5), next_trial_action, get_response_explainer, get_previous_condition, cls.start_diff)
+            actions = get_practice_views(
+                session,
+                intro_explanation(),
+                staircasing_blocks,
+                trial_action_callback,
+                get_response_explainer,
+                get_previous_condition,
+                difficulty
+            )
             return actions
 
         ##### Actual trials ####    
@@ -97,7 +105,7 @@ def get_response_explainer(correct, irregular, button_label=_('Next fragment')):
 
 def finalize_experiment(session):
     # we had 8 turnpoints (we start adding to 1), so finish session
-    milliseconds = get_average_difference(session, 4)
+    milliseconds = int(get_average_difference(session, 4)/1000)
     session.finish()
     session.save()
     # Return a score and final score action
@@ -134,7 +142,7 @@ def intro_explanation():
         button_label='Ok'
     )
 
-def next_trial_action(session, trial_condition, multiplier, previous_difference):
+def next_trial_action(session, trial_condition, difficulty):
     """
     Provide the next trial action
     Arguments:
