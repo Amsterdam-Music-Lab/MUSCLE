@@ -4,7 +4,7 @@ from django.utils.translation import gettext as _
 
 from .base import Base
 from experiment.models import Section
-from .views import CompositeView, Explainer, Consent, StartSession, Playlist
+from .views import CompositeView, Consent, Explainer, Final, Playlist, StartSession
 from .views.form import ChoiceQuestion, Form
 
 from .util.practice import get_practice_views, practice_explainer, get_trial_condition, get_trial_condition_block

@@ -25,7 +25,7 @@ def get_practice_views(
     - first_trial_callback: function to generate the first trial after practice
     - trial_callback: function to return the data for a trial
     - response_callback: function to generate explainer about correctness of response
-    - check_previous_condition: function to determine the condition of previous practice trial
+    - check_previous_condition: function to determine the condition of previous practice trial (returns Boolean)
     - difficulty: difficulty of the current practice trial
     '''
     results_count = session.result_set.count()
@@ -39,6 +39,7 @@ def get_practice_views(
         # practice trial
         correct = last_result.score > 0
         previous_condition = check_previous_condition(last_result)
+        print(previous_condition)
         response_explainer = response_callback(correct, previous_condition)
         trial = trial_callback(
             session, trial_condition, difficulty)
@@ -56,24 +57,24 @@ def get_practice_views(
                 True, previous_condition)
             session.final_score = 1
             # remove any data saved for practice purposes
-            session.json_data = ''
+            session.merge_json_data({'block': []})
             session.save()
             start_explainer = start_experiment_explainer()
             trial = first_trial_callback(session, trial_callback)
-            continue_actions = combine_actions(response_explainer, start_explainer, trial)
+            print(trial)
+            return combine_actions(response_explainer, start_explainer, trial)
         else:
             # need more practice, start over
             response_explainer = response_callback(False, check_previous_condition(last_result))
             next_trial = trial_callback(
                 session, trial_condition, difficulty)
-            continue_actions = combine_actions(
+            return combine_actions(
                 response_explainer,
                 practice_again_explainer(),
                 intro_explainer,
                 practice_explainer(),
                 next_trial
             )
-        return continue_actions
 
 
 def practice_explainer():
