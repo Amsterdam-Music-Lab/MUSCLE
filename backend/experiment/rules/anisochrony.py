@@ -1,5 +1,5 @@
 import logging
-from django.utils.translation import gettext as _
+from django.utils.translation import gettext_lazy as _
 
 from experiment.models import Section
 from .views import CompositeView, Final, Explainer, Consent, StartSession, Playlist

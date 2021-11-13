@@ -2,7 +2,7 @@ import math
 import logging
 
 import numpy as np
-from django.utils.translation import gettext as _
+from django.utils.translation import gettext_lazy as _
 
 from .base import Base
 from experiment.models import Section
@@ -107,7 +107,7 @@ class DurationDiscrimination(Base):
                 'The second interval was %(correct_response)s %(preposition)s the first interval. Your answer was correct.') % {'correct_response': correct_response, 'preposition': preposition}
         else:
             instruction = _(
-                'The second interval was %(correct_response)s  %(preposition)s the first interval. Your answer was incorrect.') % {'correct_response': correct_response, 'preposition': preposition}
+                'The second interval was %(correct_response)s %(preposition)s the first interval. Your answer was incorrect.') % {'correct_response': correct_response, 'preposition': preposition}
         return Explainer.action(
             instruction=instruction,
             steps=[],
