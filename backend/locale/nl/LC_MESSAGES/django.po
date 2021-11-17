@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-11-17 10:23+0100\n"
+"POT-Creation-Date: 2021-11-17 10:27+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -95,7 +95,7 @@ msgstr ""
 "Het is jouw taak om te beslissen of het ritme REGELMATIG of ONREGELMATIG is. "
 
 #: experiment/rules/anisochrony.py:100
-#: experiment/rules/duration_discrimination.py:186
+#: experiment/rules/duration_discrimination.py:185
 #: experiment/rules/h_bat.py:141 experiment/rules/hbat_bst.py:34
 msgid ""
 "During the experiment it will become more difficult to hear the difference."
@@ -104,7 +104,7 @@ msgstr ""
 "horen."
 
 #: experiment/rules/anisochrony.py:105
-#: experiment/rules/duration_discrimination.py:191
+#: experiment/rules/duration_discrimination.py:190
 #: experiment/rules/h_bat.py:146 experiment/rules/hbat_bst.py:39
 #: experiment/rules/util/practice.py:119
 msgid "Try to answer as accurately as possible, even if you're uncertain."
@@ -633,7 +633,7 @@ msgstr "dan"
 msgid "as"
 msgstr "als"
 
-#: experiment/rules/duration_discrimination.py:108
+#: experiment/rules/duration_discrimination.py:107
 #, python-format
 msgid ""
 "The second interval was %(correct_response)s %(preposition)s the first "
@@ -642,7 +642,7 @@ msgstr ""
 "Het 2e interval was %(correct_response)s %(preposition)s het 1e interval. Je "
 "antwoord was correct."
 
-#: experiment/rules/duration_discrimination.py:111
+#: experiment/rules/duration_discrimination.py:110
 #, python-format
 msgid ""
 "The second interval was %(correct_response)s %(preposition)s the first "
@@ -651,24 +651,24 @@ msgstr ""
 "Het 2e interval was %(correct_response)s %(preposition)s het 1e interval. Je "
 "antwoord was incorrect."
 
-#: experiment/rules/duration_discrimination.py:148
+#: experiment/rules/duration_discrimination.py:147
 msgid "LONGER"
 msgstr "LANGER"
 
-#: experiment/rules/duration_discrimination.py:149
+#: experiment/rules/duration_discrimination.py:148
 msgid "EQUALLY LONG"
 msgstr "EVEN LANG"
 
-#: experiment/rules/duration_discrimination.py:160
+#: experiment/rules/duration_discrimination.py:159
 #, python-format
 msgid "%(title)s duration discrimination"
 msgstr "%(title)slengteverschillen"
 
-#: experiment/rules/duration_discrimination.py:171
+#: experiment/rules/duration_discrimination.py:170
 msgid "Is the second interval LONGER than the first interval or EQUALLY LONG?"
 msgstr "Is de 2e interval LANGER dan of EVEN LANG als de 1e interval?"
 
-#: experiment/rules/duration_discrimination.py:178
+#: experiment/rules/duration_discrimination.py:177
 msgid ""
 "In this test you will hear two time durations for each trial, which are "
 "marked by two tones."
@@ -676,7 +676,7 @@ msgstr ""
 "In deze test krijg je steeds twee tijdsduren te horen, die elk door twee "
 "tonen gemarkeerd worden."
 
-#: experiment/rules/duration_discrimination.py:199
+#: experiment/rules/duration_discrimination.py:198
 msgid ""
 "It's your job to decide if the second interval is LONGER than the first "
 "interval, or EQUALLY LONG."
@@ -684,11 +684,11 @@ msgstr ""
 "Het is jouw taak om te beslissen of het 2e interval LANGER is dan het 1e "
 "interval, of EVEN LANG."
 
-#: experiment/rules/duration_discrimination.py:213
+#: experiment/rules/duration_discrimination.py:212
 msgid "End of this experiment"
 msgstr "Einde van dit experiment"
 
-#: experiment/rules/duration_discrimination.py:222
+#: experiment/rules/duration_discrimination.py:221
 msgid ""
 "Well done! You heard the difference between two intervals that             "
 "differed only {} percent in duration. When we research timing in             "
