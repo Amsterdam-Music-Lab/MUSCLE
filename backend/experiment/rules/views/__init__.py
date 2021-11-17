@@ -11,4 +11,5 @@ from .consent import Consent
 from .playlist import Playlist
 from .start_session import StartSession
 from .practice_round import PracticeRound
+from .redirect import Redirect
 from .composite_view import CompositeView

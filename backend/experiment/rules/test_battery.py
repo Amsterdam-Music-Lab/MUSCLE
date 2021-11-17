@@ -1,11 +1,11 @@
 import random
 
 from django.utils.translation import gettext as _
+from django.http import HttpResponseRedirect
 
 from .base import Base
 from .util.actions import combine_actions
-from .views import Consent, Explainer, CompositeView, Final, StartSession
-
+from .views import Consent, Explainer, CompositeView, Final, Redirect, StartSession
 
 class TestBattery(Base):
     ID = 'TEST_BATTERY'
@@ -67,16 +67,49 @@ class TestBattery(Base):
     
     @staticmethod
     def next_round(session):
-        if not session.json_data:
-            plan_tests(session)
+        this_round = session.get_next_round()
+        if session.final_score == 0:
+            prepare_experiments(session)
+        elif session.final_score == session.experiment.rounds:
+            print("Finalize experiment battery")
+        data = session.load_json_data()
+        experiment_data = data.get('experiments')
+        slug = experiment_data.pop()
+        session.merge_json_data({'experiments': experiment_data})
+        session.final_score +=1
+        session.save()
+        return Redirect.action(slug)
 
-def plan_tests(session):
+
+def prepare_experiments(session):
     """ Given the session and a list of experiments, generate a random order of experiments 
     merge this into the session data.
     """
-    pk_list = session.experiment.nested_experiments
-    random.shuffle(pk_list)
-    experiments = [{'slug': Experiment.objects.all().get(pk=int(pk)), 'complete': False} for pk in pk_list]
-    session.merge_json_data({'experiments': experiments})
+    experiment_list = get_experiment_list(session)
+    register_consent(session, experiment_list)
+    random.shuffle(experiment_list)
+    session.merge_json_data({'experiments': experiment_list})
     session.save()
+
+def register_consent(session, experiment_list):
+    from ..models import Profile
+    participant = session.participant
+    for slug in experiment_list:
+        question = 'consent_{}'.format(slug)
+        answer = True
+        try:
+            profile = Profile.objects.get(
+                participant=participant, question=question)
+            profile.answer = answer
+        except Profile.DoesNotExist:
+            profile = Profile(participant=participant,
+                question=question, answer=answer)
+        profile.save()
+
+def get_experiment_list(session):
+    from ..models import Experiment
+    pk_list = session.experiment.nested_experiments
+    experiments = [Experiment.objects.get(pk=pk).slug for pk in pk_list]
+    return experiments
+    
         

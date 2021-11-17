@@ -241,6 +241,12 @@ const Experiment = ({ match }) => {
                         }}
                     />
                 );
+            case "REDIRECT":
+                return (
+                    <div>
+                    "Redirect to " {{attrs}}
+                    </div>
+                );
             default:
                 return (
                     <div className="text-white bg-danger">
