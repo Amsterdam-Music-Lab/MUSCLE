@@ -17,6 +17,8 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Language: nl_NL\n"
+"X-Source-Language: C\n"
 
 #: experiment/api/experiment.py:43
 msgid "Loading"
@@ -61,11 +63,11 @@ msgstr "Volgende fragment"
 
 #: experiment/rules/anisochrony.py:26
 msgid "The tones were {}. Your answer was correct."
-msgstr "De tonen waren REGELMATIG. Je antwoord was correct."
+msgstr "De tonen waren {}. Je antwoord was correct."
 
 #: experiment/rules/anisochrony.py:29
 msgid "The tones were {}. Your answer was incorrect."
-msgstr "De tonen waren REGELMATIG. Je antwoord was incorrect."
+msgstr "De tonen waren {}. Je antwoord was incorrect."
 
 #: experiment/rules/anisochrony.py:64
 msgid "Were the tones REGULAR or IRREGULAR?"
@@ -116,6 +118,9 @@ msgid ""
 "at hearing these small differences in durations, which is             very "
 "handy if we want to be able to process rhythm in music."
 msgstr ""
+"Goed gedaan! Je kon het verschil horen tussen tonen die maar {} milliseconde "
+"van elkaar verschilden. Mensen zijn heel goed in het horen van deze kleine "
+"verschillen, wat goed van pas komt als we naar ritmes in muziek luisteren."
 
 #: experiment/rules/beat_alignment.py:26
 msgid ""
@@ -173,7 +178,7 @@ msgstr ""
 #: experiment/rules/beat_alignment.py:63 experiment/rules/speech2song.py:33
 #: experiment/rules/util/practice.py:129
 msgid "Start"
-msgstr ""
+msgstr "Start"
 
 #: experiment/rules/beat_alignment.py:91 experiment/rules/h_bat.py:185
 #: experiment/rules/hbat_bst.py:121
@@ -183,7 +188,7 @@ msgstr "Einde"
 
 #: experiment/rules/beat_alignment.py:93
 msgid "Well done! You’ve answered {} percent correctly!"
-msgstr ""
+msgstr "Goed gedaan! Je hebt {} procent goed beantwoord!"
 
 #: experiment/rules/beat_alignment.py:103
 msgid "How certain are you of your answer?"
@@ -541,8 +546,8 @@ msgstr ""
 #: experiment/rules/consent_forms/consent_speech2song.html:64
 msgid ""
 "\n"
-"    For further information on the research project, please contact Gustav-"
-"Hein Frieberg (phone number: +31 6 83 676\n"
+"    For further information on the research project, please contact "
+"Gustav-Hein Frieberg (phone number: +31 6 83 676\n"
 "    490; email: gusfrieberg@gmail.com).\n"
 "    If you have any complaints regarding this research project, you can "
 "contact the secretary of the Ethics Committee of\n"
@@ -690,6 +695,10 @@ msgid ""
 "humans, we often find that for shorter durations, people can "
 "hear             even smaller differences than for longer durations."
 msgstr ""
+"Goed gedaan! Je hoorde het verschil tussen tijdsintervallen die maar {} "
+"procent van elkaar verschilden. Uit onderzoek blijkt dat mensen gevoeliger "
+"zijn voor kleine verschillen tussen korte tijdsintervallen vergeleken met "
+"lange intervallen."
 
 #: experiment/rules/duration_discrimination_tone.py:7
 msgid "tone"
@@ -703,6 +712,10 @@ msgid ""
 "which is very handy                 if we want to be able to process rhythm "
 "in music."
 msgstr ""
+"Goed gedaan! Je hoorde het verschil tussen tonen die maar {} procent van "
+"elkaar verschilden in tijdsduur. Mensen zijn heel goed in het horen van deze "
+"kleine verschillen in tijdsduur, wat goed van pas komt wanneer we naar "
+"ritmes luisteren in muziek."
 
 #: experiment/rules/duration_discrimination_tone.py:21
 msgid ""
@@ -771,6 +784,8 @@ msgid ""
 "Well done! You heard the difference when the rhythm was             speeding "
 "up or slowing down with only {} percent!"
 msgstr ""
+"Goed gedaan! Je hoorde het verschil al als het ritme met maar {} procent "
+"vertraagde of versnelde!"
 
 #: experiment/rules/hbat_bst.py:21
 msgid ""
@@ -779,8 +794,8 @@ msgstr "In deze test krijg je steeds een reeks regelmatige geluiden te horen."
 
 #: experiment/rules/hbat_bst.py:25
 msgid ""
-"It's your job to decide if the rhythm has a 2-QUARTER BEAT (a march) or a 3-"
-"QUARTER BEAT (a waltz)."
+"It's your job to decide if the rhythm has a 2-QUARTER BEAT (a march) or a "
+"3-QUARTER BEAT (a waltz)."
 msgstr ""
 "Het is jouw taak om te beslissen of het ritme een TWEEDELIGE MAAT (een mars) "
 "of een DRIEDELIGE MAAT (een wals) is."
@@ -830,6 +845,8 @@ msgid ""
 "Well done! You heard the difference             when the accented tone was "
 "only {} dB louder!"
 msgstr ""
+"Goed gedaan! Je hoorde het verschil al wanneer de geaccentueerde tonen maar "
+"{} decibel luider waren!"
 
 #: experiment/rules/huang_2021.py:23
 msgid "How to Play"
@@ -1039,7 +1056,7 @@ msgstr "Het derde ritme is ANDERS. Je antwoord is incorrect."
 
 #: experiment/rules/rhythm_discrimination.py:220
 msgid "Well done! You've answered {} percent correctly!"
-msgstr ""
+msgstr "Goed gedaan! Je hebt {} procent goed beantwoord!"
 
 #: experiment/rules/speech2song.py:27
 msgid "This is an experiment about an auditory illusion."
