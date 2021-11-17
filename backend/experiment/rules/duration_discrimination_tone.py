@@ -1,5 +1,6 @@
 from django.utils.translation import gettext_lazy as _
 
+from .views import Explainer
 from .duration_discrimination import DurationDiscrimination
 
 class DurationDiscriminationTone(DurationDiscrimination):
@@ -16,6 +17,7 @@ class DurationDiscriminationTone(DurationDiscrimination):
     @classmethod
     def get_response_explainer(cls, correct, correct_response, button_label=_('Next fragment')):
         preposition = _('than') if correct_response=='LONGER' else _('as')
+        correct_response = _('LONGER') if correct_response=='LONGER' else _('EQUAL')
         if correct:
             instruction = _(
                 'The second tone was %(correct_response)s %(preposition)s the first tone. Your answer was correct.') % {'correct_response': correct_response, 'preposition': preposition}

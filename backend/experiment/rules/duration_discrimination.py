@@ -102,6 +102,7 @@ class DurationDiscrimination(Base):
     @classmethod
     def get_response_explainer(cls, correct, correct_response, button_label=_('Next fragment')):
         preposition = _('than') if correct_response=='LONGER' else _('as')
+        correct_response = _('LONGER') if correct_response=='LONGER' else _('EQUAL')
         if correct:
             instruction = _(
                 'The second interval was %(correct_response)s %(preposition)s the first interval. Your answer was correct.') % {'correct_response': correct_response, 'preposition': preposition}

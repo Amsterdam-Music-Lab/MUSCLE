@@ -21,6 +21,7 @@ class Anisochrony(DurationDiscrimination):
     
     @classmethod
     def get_response_explainer(cls, correct, correct_response, button_label=_('Next fragment')):
+        correct_response = _('REGULAR') if correct_response=='REGULAR' else _('IRREGULAR')
         if correct:
             instruction = _(
                     'The tones were {}. Your answer was correct.').format(correct_response)

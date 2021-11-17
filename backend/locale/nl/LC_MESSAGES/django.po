@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-11-17 10:27+0100\n"
+"POT-Creation-Date: 2021-11-17 10:32+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -61,41 +61,41 @@ msgstr ""
 msgid "Next fragment"
 msgstr "Volgende fragment"
 
-#: experiment/rules/anisochrony.py:26
-msgid "The tones were {}. Your answer was correct."
-msgstr "De tonen waren {}. Je antwoord was correct."
-
-#: experiment/rules/anisochrony.py:29
-msgid "The tones were {}. Your answer was incorrect."
-msgstr "De tonen waren {}. Je antwoord was incorrect."
-
-#: experiment/rules/anisochrony.py:64
-msgid "Were the tones REGULAR or IRREGULAR?"
-msgstr "Waren de tonen REGELMATIG of ONREGELMATIG?"
-
-#: experiment/rules/anisochrony.py:66
+#: experiment/rules/anisochrony.py:24 experiment/rules/anisochrony.py:67
 msgid "REGULAR"
 msgstr "REGELMATIG"
 
-#: experiment/rules/anisochrony.py:67
+#: experiment/rules/anisochrony.py:24 experiment/rules/anisochrony.py:68
 msgid "IRREGULAR"
 msgstr "ONREGELMATIG"
 
-#: experiment/rules/anisochrony.py:78
+#: experiment/rules/anisochrony.py:27
+msgid "The tones were {}. Your answer was correct."
+msgstr "De tonen waren {}. Je antwoord was correct."
+
+#: experiment/rules/anisochrony.py:30
+msgid "The tones were {}. Your answer was incorrect."
+msgstr "De tonen waren {}. Je antwoord was incorrect."
+
+#: experiment/rules/anisochrony.py:65
+msgid "Were the tones REGULAR or IRREGULAR?"
+msgstr "Waren de tonen REGELMATIG of ONREGELMATIG?"
+
+#: experiment/rules/anisochrony.py:79
 msgid "Anisochrony"
 msgstr "Anisochronie"
 
-#: experiment/rules/anisochrony.py:91 experiment/rules/h_bat.py:132
+#: experiment/rules/anisochrony.py:92 experiment/rules/h_bat.py:132
 msgid "In this test you will hear a series of tones for each trial."
 msgstr "In deze test krijg je steeds een reeks tonen te horen."
 
-#: experiment/rules/anisochrony.py:95
+#: experiment/rules/anisochrony.py:96
 msgid "It's your job to decide of the tones sounds REGULAR or IRREGULAR"
 msgstr ""
 "Het is jouw taak om te beslissen of het ritme REGELMATIG of ONREGELMATIG is. "
 
-#: experiment/rules/anisochrony.py:100
-#: experiment/rules/duration_discrimination.py:185
+#: experiment/rules/anisochrony.py:101
+#: experiment/rules/duration_discrimination.py:186
 #: experiment/rules/h_bat.py:141 experiment/rules/hbat_bst.py:34
 msgid ""
 "During the experiment it will become more difficult to hear the difference."
@@ -103,15 +103,15 @@ msgstr ""
 "Tijdens het experiment zal het steeds moeilijker zijn om het verschil te "
 "horen."
 
-#: experiment/rules/anisochrony.py:105
-#: experiment/rules/duration_discrimination.py:190
+#: experiment/rules/anisochrony.py:106
+#: experiment/rules/duration_discrimination.py:191
 #: experiment/rules/h_bat.py:146 experiment/rules/hbat_bst.py:39
 #: experiment/rules/util/practice.py:119
 msgid "Try to answer as accurately as possible, even if you're uncertain."
 msgstr ""
 "Probeer ook als je het niet zeker weet zo accuraat mogelijk te antwoorden."
 
-#: experiment/rules/anisochrony.py:131
+#: experiment/rules/anisochrony.py:132
 msgid ""
 "Well done! You managed to hear the difference between tones             that "
 "differed only {} milliseconds in length. Humans are really             good "
@@ -633,7 +633,18 @@ msgstr "dan"
 msgid "as"
 msgstr "als"
 
-#: experiment/rules/duration_discrimination.py:107
+#: experiment/rules/duration_discrimination.py:105
+#: experiment/rules/duration_discrimination.py:148
+#: experiment/rules/duration_discrimination_tone.py:19
+msgid "LONGER"
+msgstr "LANGER"
+
+#: experiment/rules/duration_discrimination.py:105
+#: experiment/rules/duration_discrimination_tone.py:19
+msgid "EQUAL"
+msgstr ""
+
+#: experiment/rules/duration_discrimination.py:108
 #, python-format
 msgid ""
 "The second interval was %(correct_response)s %(preposition)s the first "
@@ -642,7 +653,7 @@ msgstr ""
 "Het 2e interval was %(correct_response)s %(preposition)s het 1e interval. Je "
 "antwoord was correct."
 
-#: experiment/rules/duration_discrimination.py:110
+#: experiment/rules/duration_discrimination.py:111
 #, python-format
 msgid ""
 "The second interval was %(correct_response)s %(preposition)s the first "
@@ -651,24 +662,20 @@ msgstr ""
 "Het 2e interval was %(correct_response)s %(preposition)s het 1e interval. Je "
 "antwoord was incorrect."
 
-#: experiment/rules/duration_discrimination.py:147
-msgid "LONGER"
-msgstr "LANGER"
-
-#: experiment/rules/duration_discrimination.py:148
+#: experiment/rules/duration_discrimination.py:149
 msgid "EQUALLY LONG"
 msgstr "EVEN LANG"
 
-#: experiment/rules/duration_discrimination.py:159
+#: experiment/rules/duration_discrimination.py:160
 #, python-format
 msgid "%(title)s duration discrimination"
 msgstr "%(title)slengteverschillen"
 
-#: experiment/rules/duration_discrimination.py:170
+#: experiment/rules/duration_discrimination.py:171
 msgid "Is the second interval LONGER than the first interval or EQUALLY LONG?"
 msgstr "Is de 2e interval LANGER dan of EVEN LANG als de 1e interval?"
 
-#: experiment/rules/duration_discrimination.py:177
+#: experiment/rules/duration_discrimination.py:178
 msgid ""
 "In this test you will hear two time durations for each trial, which are "
 "marked by two tones."
@@ -676,7 +683,7 @@ msgstr ""
 "In deze test krijg je steeds twee tijdsduren te horen, die elk door twee "
 "tonen gemarkeerd worden."
 
-#: experiment/rules/duration_discrimination.py:198
+#: experiment/rules/duration_discrimination.py:199
 msgid ""
 "It's your job to decide if the second interval is LONGER than the first "
 "interval, or EQUALLY LONG."
@@ -684,11 +691,11 @@ msgstr ""
 "Het is jouw taak om te beslissen of het 2e interval LANGER is dan het 1e "
 "interval, of EVEN LANG."
 
-#: experiment/rules/duration_discrimination.py:212
+#: experiment/rules/duration_discrimination.py:213
 msgid "End of this experiment"
 msgstr "Einde van dit experiment"
 
-#: experiment/rules/duration_discrimination.py:221
+#: experiment/rules/duration_discrimination.py:222
 msgid ""
 "Well done! You heard the difference between two intervals that             "
 "differed only {} percent in duration. When we research timing in             "
@@ -717,7 +724,7 @@ msgstr ""
 "kleine verschillen in tijdsduur, wat goed van pas komt wanneer we naar "
 "ritmes luisteren in muziek."
 
-#: experiment/rules/duration_discrimination_tone.py:21
+#: experiment/rules/duration_discrimination_tone.py:22
 #, python-format
 msgid ""
 "The second tone was %(correct_response)s %(preposition)s the first tone. "
@@ -726,7 +733,7 @@ msgstr ""
 "De 2e toon was %(correct_response)s %(preposition)s dan de 1e toon. Je "
 "antwoord was correct."
 
-#: experiment/rules/duration_discrimination_tone.py:24
+#: experiment/rules/duration_discrimination_tone.py:25
 #, python-format
 msgid ""
 "The second tone was %(correct_response)s %(preposition)s the first tone. "
@@ -735,11 +742,11 @@ msgstr ""
 "De 2e toon was %(correct_response)s %(preposition)s dan het 1e toon. Je "
 "antwoord was incorrect."
 
-#: experiment/rules/duration_discrimination_tone.py:33
+#: experiment/rules/duration_discrimination_tone.py:34
 msgid "Is the second tone LONGER than the first tone or EQUALLY LONG?"
 msgstr "Is de 2e toon LANGER dan of EVEN LANG als de 1e toon?"
 
-#: experiment/rules/duration_discrimination_tone.py:37
+#: experiment/rules/duration_discrimination_tone.py:38
 msgid ""
 "It's your job to decide if the second tone is LONGER than the first tone, or "
 "EQUALLY LONG."
