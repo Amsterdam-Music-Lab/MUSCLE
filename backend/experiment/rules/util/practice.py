@@ -39,7 +39,6 @@ def get_practice_views(
         # practice trial
         correct = last_result.score > 0
         previous_condition = check_previous_condition(last_result)
-        print(previous_condition)
         response_explainer = response_callback(correct, previous_condition)
         trial = trial_callback(
             session, trial_condition, difficulty)
