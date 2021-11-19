@@ -91,7 +91,7 @@ class Session(models.Model):
 
     def is_finished(self):
         """Determine if the session is finished"""
-        return self.finished_at or self.rounds_complete()
+        return self.finished_at
 
     def rounds_complete(self):
         """Determine if there are results for each experiment round"""

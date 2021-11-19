@@ -103,7 +103,8 @@ class BeatAlignment(Base):
             question=_('How certain are you of your answer?'),
             choices=[_('I guessed'), _('I think I know'), _('I am sure')],
             view=Question.ID_RESULT_QUESTION,
-            button_label=_('Next fragment')
+            button_label=_('Next fragment'),
+            skip_label=None
         ))
         return combine_actions(*actions)
     
@@ -145,7 +146,7 @@ class BeatAlignment(Base):
         condition = section.filename.split('_')[-1][:-4]
         expected_result = 'ON' if condition=='on' else 'OFF'
         result_pk = Base.prepare_result(session, section, expected_result)
-        question = question = ChoiceQuestion(
+        question = ChoiceQuestion(
             question=_("Are the beeps ALIGNED TO THE BEAT or NOT ALIGNED TO THE BEAT?"),
             key='aligned',
             choices={

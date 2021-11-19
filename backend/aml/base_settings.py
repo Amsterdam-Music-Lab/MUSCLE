@@ -154,3 +154,5 @@ CORS_ALLOW_CREDENTIALS = True
 
 
 LOCALE_PATHS = [os.path.join(BASE_DIR, 'locale')]
+
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
