@@ -38,9 +38,9 @@ class Anisochrony(Base):
         )
     
     @classmethod
-    def next_round(cls, session):
+    def next_round(cls, session, series=None):
         if session.final_score == cls.max_turnpoints+1:
-            return finalize_experiment(session)
+            return finalize_experiment(session, series)
 
         elif session.final_score == 0:
             # we are practicing
@@ -95,7 +95,7 @@ def get_response_explainer(correct, irregular, button_label=_('Next fragment')):
         button_label=button_label
     )
 
-def finalize_experiment(session):
+def finalize_experiment(session, series):
     # we had 8 turnpoints (we start adding to 1), so finish session
     milliseconds = get_average_difference(session, 4)
     session.finish()

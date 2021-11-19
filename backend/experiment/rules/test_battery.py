@@ -1,11 +1,12 @@
 import random
 
+from django.conf import settings
 from django.utils.translation import gettext as _
 from django.http import HttpResponseRedirect
 
 from .base import Base
 from .util.actions import combine_actions
-from .views import Consent, Explainer, CompositeView, Final, Redirect, StartSession
+from .views import Consent, Explainer, CompositeView, Final, StartSession
 
 class TestBattery(Base):
     ID = 'TEST_BATTERY'
@@ -50,7 +51,7 @@ class TestBattery(Base):
                     description=_("Please use headphones, and turn off sound notifications from other devices and applications (e.g., e-mail, phone messages)."),
                     number=2
                 )],
-            button_label=_('Start!')
+            button_label=_('OK')
         )
     
     @classmethod
@@ -74,11 +75,16 @@ class TestBattery(Base):
             print("Finalize experiment battery")
         data = session.load_json_data()
         experiment_data = data.get('experiments')
+        print(experiment_data)
         slug = experiment_data.pop()
         session.merge_json_data({'experiments': experiment_data})
         session.final_score +=1
         session.save()
-        return Redirect.action(slug)
+        button = {
+            'text': _('Start'),
+            'link': '{}/{}'.format(settings.CORS_ORIGIN_WHITELIST[0], slug)
+        }
+        return Final.action(session, title=_('Next experiment'), button=button)
 
 
 def prepare_experiments(session):

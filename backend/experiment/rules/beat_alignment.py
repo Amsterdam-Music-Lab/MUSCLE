@@ -74,7 +74,7 @@ class BeatAlignment(Base):
 
 
     @staticmethod
-    def next_round(session):
+    def next_round(session, series=None):
         """Get action data for the next round"""
 
         # If the number of results equals the number of experiment.rounds

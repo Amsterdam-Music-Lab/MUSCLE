@@ -53,6 +53,14 @@ def create(request):
 
     # Save session
     session.save()
+
+    if experiment.nested_experiments:
+        # save session id to local storage if this experiment contains nested experiments
+        request.session.update({'experiment_series': {
+            'session_id': session.id,
+            'slug': experiment.slug}
+        })
+    
     data = {
         'session': {
             'id': session.id,
@@ -111,6 +119,9 @@ def result(request):
     except ValueError:
         return HttpResponseServerError("Invalid data")
 
+    series = request.session.get('experiment_series')
+    if series:
+        action = session.experiment_rules().next_round(session, series)
     # Get next round for given session
     action = session.experiment_rules().next_round(session)
     return JsonResponse(action, json_dumps_params={'indent': 4})

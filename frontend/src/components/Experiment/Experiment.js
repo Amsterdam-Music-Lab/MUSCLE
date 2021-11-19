@@ -233,19 +233,7 @@ const Experiment = ({ match }) => {
                 );
             case "FINAL":
                 return (
-                    <Final
-                        {...attrs}
-                        onNext={() => {
-                            setSession(null);
-                            loadState(experiment.first_round);
-                        }}
-                    />
-                );
-            case "REDIRECT":
-                return (
-                    <div>
-                    "Redirect to " {{attrs}}
-                    </div>
+                    <Final {...attrs} />
                 );
             default:
                 return (

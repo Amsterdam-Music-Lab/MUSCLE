@@ -106,7 +106,7 @@ class BST(HBat):
         )
     
     @classmethod
-    def finalize_experiment(cls, session):
+    def finalize_experiment(cls, session, series):
         """ if either the max_turnpoints have been reached,
         or if the section couldn't be found (outlier), stop the experiment
         """

@@ -18,7 +18,7 @@ class HBat(Base):
     ID = 'H_BAT'
 
     @classmethod
-    def next_round(cls, session):
+    def next_round(cls, session, series=None):
         if session.final_score == MAX_TURNPOINTS+1:
             return cls.finalize_experiment(session)
         elif session.final_score == 0:
@@ -36,7 +36,7 @@ class HBat(Base):
             action = staircasing(session, cls.next_trial_action, previous_results)
             if not action:
                 # action is None if the audio file doesn't exist
-                return cls.finalize_experiment(session)
+                return cls.finalize_experiment(session, series)
             else:
                 return action
         
@@ -163,7 +163,7 @@ class HBat(Base):
             )
         
     @classmethod
-    def finalize_experiment(cls, session):
+    def finalize_experiment(cls, session, series):
         """ if either the max_turnpoints have been reached,
         or if the section couldn't be found (outlier), stop the experiment
         """

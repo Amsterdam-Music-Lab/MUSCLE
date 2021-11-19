@@ -45,7 +45,7 @@ class DurationDiscrimination(Base):
         )
 
     @classmethod
-    def next_round(cls, session):
+    def next_round(cls, session, series=None):
         if session.final_score == MAX_TURNPOINTS+1:
             return finalize_experiment(session, cls.condition)
 
