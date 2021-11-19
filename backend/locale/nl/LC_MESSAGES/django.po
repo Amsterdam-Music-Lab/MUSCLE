@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-11-17 10:32+0100\n"
+"POT-Creation-Date: 2021-11-19 21:16+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -55,8 +55,8 @@ msgstr ""
 
 #: experiment/rules/anisochrony.py:23 experiment/rules/beat_alignment.py:106
 #: experiment/rules/duration_discrimination.py:103
-#: experiment/rules/duration_discrimination_tone.py:17
-#: experiment/rules/h_bat.py:153 experiment/rules/hbat_bst.py:89
+#: experiment/rules/duration_discrimination_tone.py:18
+#: experiment/rules/h_bat.py:152 experiment/rules/hbat_bst.py:88
 #: experiment/rules/rhythm_discrimination.py:189
 msgid "Next fragment"
 msgstr "Volgende fragment"
@@ -85,7 +85,7 @@ msgstr "Waren de tonen REGELMATIG of ONREGELMATIG?"
 msgid "Anisochrony"
 msgstr "Anisochronie"
 
-#: experiment/rules/anisochrony.py:92 experiment/rules/h_bat.py:132
+#: experiment/rules/anisochrony.py:92 experiment/rules/h_bat.py:131
 msgid "In this test you will hear a series of tones for each trial."
 msgstr "In deze test krijg je steeds een reeks tonen te horen."
 
@@ -96,7 +96,7 @@ msgstr ""
 
 #: experiment/rules/anisochrony.py:101
 #: experiment/rules/duration_discrimination.py:186
-#: experiment/rules/h_bat.py:141 experiment/rules/hbat_bst.py:34
+#: experiment/rules/h_bat.py:140 experiment/rules/hbat_bst.py:34
 msgid ""
 "During the experiment it will become more difficult to hear the difference."
 msgstr ""
@@ -105,7 +105,7 @@ msgstr ""
 
 #: experiment/rules/anisochrony.py:106
 #: experiment/rules/duration_discrimination.py:191
-#: experiment/rules/h_bat.py:146 experiment/rules/hbat_bst.py:39
+#: experiment/rules/h_bat.py:145 experiment/rules/hbat_bst.py:39
 #: experiment/rules/util/practice.py:119
 msgid "Try to answer as accurately as possible, even if you're uncertain."
 msgstr ""
@@ -180,8 +180,8 @@ msgstr ""
 msgid "Start"
 msgstr "Start"
 
-#: experiment/rules/beat_alignment.py:91 experiment/rules/h_bat.py:185
-#: experiment/rules/hbat_bst.py:121
+#: experiment/rules/beat_alignment.py:91 experiment/rules/h_bat.py:184
+#: experiment/rules/hbat_bst.py:120
 #: experiment/rules/rhythm_discrimination.py:217
 msgid "End"
 msgstr "Einde"
@@ -208,7 +208,7 @@ msgstr "Ik denk het te weten"
 msgid "I am sure"
 msgstr "Ik weet het zeker"
 
-#: experiment/rules/beat_alignment.py:118
+#: experiment/rules/beat_alignment.py:120
 msgid ""
 "In this example the beeps are ALIGNED TO THE BEAT of the music. The correct "
 "answer was ALIGNED TO THE BEAT."
@@ -216,7 +216,7 @@ msgstr ""
 "In dit voorbeeld zijn de piepjes IN DE MAAT van de muziek. Het juiste "
 "antwoord zou 'in de maat' zijn."
 
-#: experiment/rules/beat_alignment.py:121
+#: experiment/rules/beat_alignment.py:123
 msgid ""
 "In this example the beeps are NOT ALIGNED TO THE BEAT of the music. The "
 "correct answer was NOT ALIGNED TO THE BEAT."
@@ -224,23 +224,23 @@ msgstr ""
 "In dit voorbeeld zijn de piepjes UIT DE MAAT van de muziek. Het juiste "
 "antwoord zou 'uit de maat' zijn."
 
-#: experiment/rules/beat_alignment.py:132
+#: experiment/rules/beat_alignment.py:134
 msgid "Example {}"
 msgstr "Voorbeeld {}"
 
-#: experiment/rules/beat_alignment.py:149
+#: experiment/rules/beat_alignment.py:151
 msgid "Are the beeps ALIGNED TO THE BEAT or NOT ALIGNED TO THE BEAT?"
 msgstr "Zijn de piepjes IN DE MAAT of UIT DE MAAT?"
 
-#: experiment/rules/beat_alignment.py:152
+#: experiment/rules/beat_alignment.py:154
 msgid "ALIGNED TO THE BEAT"
 msgstr "IN DE MAAT"
 
-#: experiment/rules/beat_alignment.py:153
+#: experiment/rules/beat_alignment.py:155
 msgid "NOT ALIGNED TO THE BEAT"
 msgstr "UIT DE MAAT"
 
-#: experiment/rules/beat_alignment.py:168
+#: experiment/rules/beat_alignment.py:170
 msgid "Beat alignment"
 msgstr "Beat alignment"
 
@@ -624,25 +624,25 @@ msgid "interval"
 msgstr "interval"
 
 #: experiment/rules/duration_discrimination.py:104
-#: experiment/rules/duration_discrimination_tone.py:18
+#: experiment/rules/duration_discrimination_tone.py:19
 msgid "than"
 msgstr "dan"
 
 #: experiment/rules/duration_discrimination.py:104
-#: experiment/rules/duration_discrimination_tone.py:18
+#: experiment/rules/duration_discrimination_tone.py:19
 msgid "as"
 msgstr "als"
 
 #: experiment/rules/duration_discrimination.py:105
-#: experiment/rules/duration_discrimination.py:148
-#: experiment/rules/duration_discrimination_tone.py:19
+#: experiment/rules/duration_discrimination.py:149
+#: experiment/rules/duration_discrimination_tone.py:20
 msgid "LONGER"
 msgstr "LANGER"
 
 #: experiment/rules/duration_discrimination.py:105
-#: experiment/rules/duration_discrimination_tone.py:19
+#: experiment/rules/duration_discrimination_tone.py:20
 msgid "EQUAL"
-msgstr ""
+msgstr "EVEN LANG"
 
 #: experiment/rules/duration_discrimination.py:108
 #, python-format
@@ -662,7 +662,7 @@ msgstr ""
 "Het 2e interval was %(correct_response)s %(preposition)s het 1e interval. Je "
 "antwoord was incorrect."
 
-#: experiment/rules/duration_discrimination.py:149
+#: experiment/rules/duration_discrimination.py:148
 msgid "EQUALLY LONG"
 msgstr "EVEN LANG"
 
@@ -707,11 +707,11 @@ msgstr ""
 "zijn voor kleine verschillen tussen korte tijdsintervallen vergeleken met "
 "lange intervallen."
 
-#: experiment/rules/duration_discrimination_tone.py:7
+#: experiment/rules/duration_discrimination_tone.py:8
 msgid "tone"
 msgstr "toon"
 
-#: experiment/rules/duration_discrimination_tone.py:11
+#: experiment/rules/duration_discrimination_tone.py:12
 msgid ""
 "Well done! You managed to hear the difference between tones "
 "that                 differed only {} milliseconds in length. Humans are "
@@ -724,7 +724,7 @@ msgstr ""
 "kleine verschillen in tijdsduur, wat goed van pas komt wanneer we naar "
 "ritmes luisteren in muziek."
 
-#: experiment/rules/duration_discrimination_tone.py:22
+#: experiment/rules/duration_discrimination_tone.py:23
 #, python-format
 msgid ""
 "The second tone was %(correct_response)s %(preposition)s the first tone. "
@@ -733,7 +733,7 @@ msgstr ""
 "De 2e toon was %(correct_response)s %(preposition)s dan de 1e toon. Je "
 "antwoord was correct."
 
-#: experiment/rules/duration_discrimination_tone.py:25
+#: experiment/rules/duration_discrimination_tone.py:26
 #, python-format
 msgid ""
 "The second tone was %(correct_response)s %(preposition)s the first tone. "
@@ -742,11 +742,11 @@ msgstr ""
 "De 2e toon was %(correct_response)s %(preposition)s dan het 1e toon. Je "
 "antwoord was incorrect."
 
-#: experiment/rules/duration_discrimination_tone.py:34
+#: experiment/rules/duration_discrimination_tone.py:35
 msgid "Is the second tone LONGER than the first tone or EQUALLY LONG?"
 msgstr "Is de 2e toon LANGER dan of EVEN LANG als de 1e toon?"
 
-#: experiment/rules/duration_discrimination_tone.py:38
+#: experiment/rules/duration_discrimination_tone.py:39
 msgid ""
 "It's your job to decide if the second tone is LONGER than the first tone, or "
 "EQUALLY LONG."
@@ -770,27 +770,27 @@ msgstr "VERSNELT"
 msgid "Beat acceleration"
 msgstr "Versnelling horen"
 
-#: experiment/rules/h_bat.py:136
+#: experiment/rules/h_bat.py:135
 msgid "It's your job to decide if the rhythm goes SLOWER of FASTER."
 msgstr "Het is jouw taak om te beslissen of het ritme VERTRAAGT of VERSNELT."
 
-#: experiment/rules/h_bat.py:157
+#: experiment/rules/h_bat.py:156
 msgid "The rhythm went SLOWER. Your response was correct."
 msgstr "Het ritme VERTRAAGDE. Je antwoord was correct."
 
-#: experiment/rules/h_bat.py:160
+#: experiment/rules/h_bat.py:159
 msgid "The rhythm went FASTER. Your response was correct."
 msgstr "Het ritme VERSNELDE. Je antwoord was correct."
 
-#: experiment/rules/h_bat.py:164
+#: experiment/rules/h_bat.py:163
 msgid "The rhythm went FASTER. Your response was incorrect."
 msgstr "Het ritme VERSNELDE. Je antwoord was incorrect."
 
-#: experiment/rules/h_bat.py:167
+#: experiment/rules/h_bat.py:166
 msgid "The rhythm went SLOWER. Your response was incorrect."
 msgstr "Het ritme VERTRAAGDE. Je antwoord was incorrect."
 
-#: experiment/rules/h_bat.py:180
+#: experiment/rules/h_bat.py:179
 msgid ""
 "Well done! You heard the difference when the rhythm was             speeding "
 "up or slowing down with only {} percent!"
@@ -835,23 +835,23 @@ msgstr "DRIEDELIGE MAAT"
 msgid "Meter detection"
 msgstr "Maatherkenning"
 
-#: experiment/rules/hbat_bst.py:93
+#: experiment/rules/hbat_bst.py:92
 msgid "The rhythm was a 2-QUARTER BEAT. Your answer was correct."
 msgstr "Het was een TWEEDELIGE MAAT. Je antwoord was correct."
 
-#: experiment/rules/hbat_bst.py:96
+#: experiment/rules/hbat_bst.py:95
 msgid "The rhythm was a 3-QUARTER BEAT. Your answer was correct."
 msgstr "Het was een DRIEDELIGE MAAT. Je antwoord was correct."
 
-#: experiment/rules/hbat_bst.py:100
+#: experiment/rules/hbat_bst.py:99
 msgid "The rhythm was a 2-QUARTER BEAT. Your answer was incorrect."
 msgstr "Het was een TWEEDELIGE MAAT. Je antwoord was incorrect."
 
-#: experiment/rules/hbat_bst.py:103
+#: experiment/rules/hbat_bst.py:102
 msgid "The rhythm was a 3-QUARTER BEAT. Your response was incorrect."
 msgstr "Het was een DRIEDELIGE MAAT. Je antwoord was incorrect."
 
-#: experiment/rules/hbat_bst.py:116
+#: experiment/rules/hbat_bst.py:115
 msgid ""
 "Well done! You heard the difference             when the accented tone was "
 "only {} dB louder!"

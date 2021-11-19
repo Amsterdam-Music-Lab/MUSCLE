@@ -114,13 +114,14 @@ class BeatAlignment(Base):
         section = playlist.section_set.filter(name__startswith='ex{}'.format(count)).first()
         if not section:
             return None
+        
         if count==1:
             presentation_text = _(
                 "In this example the beeps are ALIGNED TO THE BEAT of the music. The correct answer was ALIGNED TO THE BEAT.")
         else:
             presentation_text = _(
                 "In this example the beeps are NOT ALIGNED TO THE BEAT of the music. The correct answer was NOT ALIGNED TO THE BEAT.")
-
+        
         instructions = {
             'preload': '',
             'during_presentation': presentation_text

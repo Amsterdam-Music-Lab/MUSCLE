@@ -80,7 +80,6 @@ class BST(HBat):
             title=_('Meter detection')
         )
         config = {
-            'listen_first': True,
             'decision_time': section.duration + .5
         }
         return view.action(config)
@@ -112,7 +111,7 @@ class BST(HBat):
         """ if either the max_turnpoints have been reached,
         or if the section couldn't be found (outlier), stop the experiment
         """
-        loudness_diff = get_average_difference_level_based(session, 6)
+        loudness_diff = int(get_average_difference_level_based(session, 6))
         score_message = _("Well done! You heard the difference \
             when the accented tone was only {} dB louder!").format(loudness_diff)
         session.finish()

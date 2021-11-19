@@ -120,7 +120,6 @@ class HBat(Base):
             title=_('Beat acceleration')
         )
         config = {
-            'listen_first': True,
             'decision_time': section.duration + .5
         }
         return view.action(config)

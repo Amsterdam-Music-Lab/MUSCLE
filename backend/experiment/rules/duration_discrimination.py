@@ -145,8 +145,8 @@ class DurationDiscrimination(Base):
             question=question_text,
             key='longer_or_equal',
             choices={
-                'LONGER': _('LONGER'),
-                'EQUAL': _('EQUALLY LONG')
+                'EQUAL': _('EQUALLY LONG'),
+                'LONGER': _('LONGER')
             },
             view='BUTTON_ARRAY',
             result_id=result_pk,
