@@ -1,7 +1,7 @@
 import random
 import logging
 
-from django.utils.translation import gettext as _
+from django.utils.translation import gettext_lazy as _
 
 from .base import Base
 from .views import CompositeView, Final, Explainer, Consent, StartSession, Question
@@ -103,7 +103,8 @@ class BeatAlignment(Base):
             question=_('How certain are you of your answer?'),
             choices=[_('I guessed'), _('I think I know'), _('I am sure')],
             view=Question.ID_RESULT_QUESTION,
-            button_label=_('Next fragment')
+            button_label=_('Next fragment'),
+            skip_label=None
         ))
         return combine_actions(*actions)
     
@@ -113,13 +114,14 @@ class BeatAlignment(Base):
         section = playlist.section_set.filter(name__startswith='ex{}'.format(count)).first()
         if not section:
             return None
+        
         if count==1:
             presentation_text = _(
                 "In this example the beeps are ALIGNED TO THE BEAT of the music. The correct answer was ALIGNED TO THE BEAT.")
         else:
             presentation_text = _(
                 "In this example the beeps are NOT ALIGNED TO THE BEAT of the music. The correct answer was NOT ALIGNED TO THE BEAT.")
-
+        
         instructions = {
             'preload': '',
             'during_presentation': presentation_text
@@ -145,7 +147,7 @@ class BeatAlignment(Base):
         condition = section.filename.split('_')[-1][:-4]
         expected_result = 'ON' if condition=='on' else 'OFF'
         result_pk = Base.prepare_result(session, section, expected_result)
-        question = question = ChoiceQuestion(
+        question = ChoiceQuestion(
             question=_("Are the beeps ALIGNED TO THE BEAT or NOT ALIGNED TO THE BEAT?"),
             key='aligned',
             choices={

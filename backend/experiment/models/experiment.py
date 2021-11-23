@@ -71,7 +71,6 @@ class Experiment(models.Model):
             profile = session.participant.export_admin()
             session_finished = session.finished_at.isoformat() if session.finished_at else None
             for result in session.result_set.all():
-                result_details = result.export_admin()['details']
                 row = {
                     'experiment_id': self.id, 
                     'experiment_name': self.name,
@@ -79,13 +78,13 @@ class Experiment(models.Model):
                     'participant_country': profile['country_code'],
                     'session_start': session.started_at.isoformat(),
                     'session_end': session_finished,
+                    'section_name': result.section.name,
                     'result_created_at': result.created_at.isoformat(),
                     'result_score': result.score,
-                    'experiment_view': result_details.pop('view', None)
+                    'expected_response': result.expected_response,
+                    'given_response': result.given_response
                 }
                 row.update(profile['profile'])
-                for key in result_details.keys():
-                    row.update({'{}_{}'.format(key, detail_key): result_details[key][detail_key] for detail_key in result_details[key].keys()})
                 rows.append(row)
                 fieldnames.update(row.keys())
         return rows, list(fieldnames)

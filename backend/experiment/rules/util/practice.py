@@ -1,3 +1,5 @@
+import json
+import random
 import numpy as np
 
 from django.utils.translation import gettext as _
@@ -9,29 +11,29 @@ from .actions import combine_actions
 def get_practice_views(
     session, 
     intro_explainer,
-    first_trial_condition,
+    first_trial_callback,
     trial_callback,
     response_callback,
     check_previous_condition,
-    start_diff=400000
+    difficulty
 ):
     ''' Present practice views, in blocks of 2
     Give feedback on the correctness of the response,
     and repeat practice if necessary.
     - session: session
     - intro_explainer: introduction explainer for the experiment
-    - first_trial_condition: condition for the first trial after practice
+    - first_trial_callback: function to generate the first trial after practice
     - trial_callback: function to return the data for a trial
     - response_callback: function to generate explainer about correctness of response
-    - check_previous_condition: function to determine the condition of previous practice trial
-    - start_diff: if applicable, "easiest" difference between stimuli
+    - check_previous_condition: function to determine the condition of previous practice trial (returns Boolean)
+    - difficulty: difficulty of the current practice trial
     '''
     results_count = session.result_set.count()
-    trial_condition = get_trial_condition_block(results_count, session.id, 2)
+    trial_condition = get_trial_condition_block(session, 2)
     previous_results = session.result_set.order_by('-created_at')
     if not results_count:
-        # first practice trial
-        return trial_callback(session, trial_condition, 1.0, start_diff)
+        # first practice trial 
+        return trial_callback(session, trial_condition, difficulty)
     last_result = previous_results.first()
     if results_count < 4:
         # practice trial
@@ -39,36 +41,39 @@ def get_practice_views(
         previous_condition = check_previous_condition(last_result)
         response_explainer = response_callback(correct, previous_condition)
         trial = trial_callback(
-            session, trial_condition, 1.0, start_diff)
+            session, trial_condition, difficulty)
         return combine_actions(response_explainer, trial)
     else:
         # after last practice trial
-        if last_result.score > 0 and previous_results.all()[1].score > 0:
+        penultimate_score = previous_results.all()[1].score
+        # delete previous practice sessions
+        session.result_set.all().delete()
+        session.save()
+        if last_result.score > 0 and penultimate_score > 0:
             # Practice went successfully, start experiment
             previous_condition = check_previous_condition(last_result)
             response_explainer = response_callback(
                 True, previous_condition)
             session.final_score = 1
+            # remove any data saved for practice purposes
+            session.merge_json_data({'block': []})
             session.save()
             start_explainer = start_experiment_explainer()
-            trial = trial_callback(
-                session, first_trial_condition, 1.0, start_diff)
-            continue_actions = combine_actions(response_explainer, start_explainer, trial)
+            trial = first_trial_callback(session, trial_callback)
+            print(trial)
+            return combine_actions(response_explainer, start_explainer, trial)
         else:
             # need more practice, start over
             response_explainer = response_callback(False, check_previous_condition(last_result))
             next_trial = trial_callback(
-                session, trial_condition, 1.0, start_diff)
-            continue_actions = combine_actions(
+                session, trial_condition, difficulty)
+            return combine_actions(
                 response_explainer,
                 practice_again_explainer(),
                 intro_explainer,
                 practice_explainer(),
                 next_trial
             )
-        session.result_set.all().delete()
-        session.save()
-        return continue_actions
 
 
 def practice_explainer():
@@ -123,20 +128,21 @@ def start_experiment_explainer():
         button_label=_('Start')
     )
 
+def get_trial_condition_block(session, n_trials_per_block):
+    """ make a list of n_trials_per_blocks conditions, of which one is catch (=1) 
+    store updates in the session.json_data field
+    """
+    json_data = session.load_json_data()
+    block = json_data.get('block')
+    if not block:
+        block = [0] * n_trials_per_block
+        catch_index = random.randrange(0, n_trials_per_block)
+        block[catch_index] = 1
+    condition = block.pop()
+    session.merge_json_data({'block': block})
+    session.save()
+    return condition
 
-def get_trial_condition_block(results_count, session_id, n_trials_per_block):
-    """
-    for each block of trials, initialize an array with one catch trial
-    shuffle the array, based on a seed that changes every n_trials_per_block
-    return the condition of the current trial
-    """
-    seed = int(results_count / n_trials_per_block) + session_id
-    np.random.seed(seed)
-    trial_block = np.zeros(n_trials_per_block)
-    trial_block[0] = 1
-    np.random.shuffle(trial_block)
-    trial_number = results_count % n_trials_per_block
-    return trial_block[trial_number]
 
 def get_trial_condition(n_choices):
     """ get randomized trial condition 

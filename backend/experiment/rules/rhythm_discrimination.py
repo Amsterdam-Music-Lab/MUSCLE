@@ -1,7 +1,7 @@
 import random
 import logging
 
-from django.utils.translation import gettext as _
+from django.utils.translation import gettext_lazy as _
 
 from .util.actions import combine_actions
 from .util.practice import practice_explainer, practice_again_explainer, start_experiment_explainer

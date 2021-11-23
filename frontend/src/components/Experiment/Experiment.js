@@ -142,7 +142,7 @@ const Experiment = ({ match }) => {
             // 100ms for fadeout
             setTimeout(() => {
                 audio.load(MEDIA_ROOT + preloadUrl);
-            }, 100);
+            }, 20);
         }
 
         // Init new state from action

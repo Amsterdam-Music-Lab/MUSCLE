@@ -1,5 +1,8 @@
+import logging
+
 from .views import SongSync, SongBool, TwoAlternativeForced, FinalScore, Score, CompositeView
 
+logger = logging.getLogger(__name__)
 
 class Base(object):
     """Base class for other rules classes"""
@@ -36,8 +39,9 @@ class Base(object):
         from experiment.models import Result
 
         for form_element in data['result']['given_result']:
-            result = Result.objects.get(pk=form_element['result_id'])
-            if not result:
+            try:
+                result = Result.objects.get(pk=form_element['result_id'])
+            except Result.DoesNotExist:
                 # Create new result
                 result = Result(session=session)
             # Calculate score

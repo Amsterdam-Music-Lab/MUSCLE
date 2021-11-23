@@ -1,4 +1,4 @@
-from django.utils.translation import gettext as _
+from django.utils.translation import gettext_lazy as _
 
 from experiment.models import Section
 from .views import CompositeView, Explainer, Final
@@ -6,6 +6,8 @@ from .views.form import ChoiceQuestion, Form
 
 from .base import Base
 from .h_bat import HBat
+
+from .util.score import get_average_difference_level_based
 
 class BST(HBat):
     """ Rules for the BST experiment, which follow closely
@@ -41,7 +43,7 @@ class BST(HBat):
         )
 
     @classmethod
-    def next_trial_action(cls, session, trial_condition, level=1, *kwargs):
+    def next_trial_action(cls, session, trial_condition, level=1):
         """
         Get the next actions for the experiment
         trial_condition is either 1 or 0
@@ -78,7 +80,6 @@ class BST(HBat):
             title=_('Meter detection')
         )
         config = {
-            'listen_first': True,
             'decision_time': section.duration + .5
         }
         return view.action(config)
@@ -110,13 +111,11 @@ class BST(HBat):
         """ if either the max_turnpoints have been reached,
         or if the section couldn't be found (outlier), stop the experiment
         """
-        loudness_diff = 42
+        loudness_diff = int(get_average_difference_level_based(session, 6))
         score_message = _("Well done! You heard the difference \
             when the accented tone was only {} dB louder!").format(loudness_diff)
         session.finish()
         session.save()
-        # Return a score and final score action
-        # TODO: add stats from the session (20 * 0.5^max_level-1)
         return Final.action(
             title=_('End'),
             session=session,
