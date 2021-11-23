@@ -119,11 +119,12 @@ def result(request):
     except ValueError:
         return HttpResponseServerError("Invalid data")
 
+    # Get next round for given session
     series = request.session.get('experiment_series')
     if series:
         action = session.experiment_rules().next_round(session, series)
-    # Get next round for given session
-    action = session.experiment_rules().next_round(session)
+    else:
+        action = session.experiment_rules().next_round(session)
     return JsonResponse(action, json_dumps_params={'indent': 4})
 
 

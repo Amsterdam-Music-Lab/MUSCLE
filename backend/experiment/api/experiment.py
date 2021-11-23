@@ -15,7 +15,6 @@ logger = logging.getLogger(__name__)
 def get(request, slug):
     """Get experiment data from active experiment with given :slug"""
     # get experiment
-
     try:
         experiment = Experiment.objects.get(slug=slug, active=True)
     except Experiment.DoesNotExist:

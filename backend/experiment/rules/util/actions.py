@@ -1,3 +1,6 @@
+from django.conf import settings
+from django.utils.translation import gettext_lazy as _
+
 from experiment.rules.views import Final
 
 def combine_actions(*argv):
@@ -25,7 +28,7 @@ def final_action_with_optional_button(session, score_message, series):
             score_message=score_message,
             button={
                 'text': _('Continue'),
-                'link': '{}/continue/{}'.format(settings.CORS_ORIGIN_WHITELIST[0], series.get('session_id'))
+                'link': '{}/session/continue/{}'.format(settings.CORS_ORIGIN_WHITELIST[0], series.get('session_id'))
             }
         )
     else:

@@ -13,6 +13,7 @@ export const URLS = {
     experiment: {
         get: (slug) => "/id/" + slug + "/",
         consent: (slug) => "/profile/consent_" + slug + "/",
+        continue: (slug) => "/continue/" + slug + "/",
     },
     participant: {
         current: "/participant/",
@@ -29,7 +30,6 @@ export const URLS = {
         create: "/session/create/",
         result: "/session/result/",
         next_round: (id) => "/session/" + id + "/next_round/",
-        continue: "session/continue/" + id
     },
 };
 
