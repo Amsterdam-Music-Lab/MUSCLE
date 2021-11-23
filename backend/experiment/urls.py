@@ -9,7 +9,6 @@ app_name = 'experiment'
 urlpatterns = [
     # Experiment
     path('id/<slug:slug>/', api.experiment.get, name='experiment'),
-    path('continue/<int:session_id>', api.experiment.continue_experiment, name='continue_experiment'),
 
     # Section
     path('section/<int:section_id>/<int:code>/',
@@ -22,6 +21,9 @@ urlpatterns = [
          api.session.result, name='session_result'),
     path('session/<int:session_id>/next_round/',
          api.next_round, name='session_next_round'),
+    path('session/continue/<int:session_id>', 
+        api.session.continue_session, name='continue_session'),
+
 
     # Participant
     path('participant/', api.participant.current,

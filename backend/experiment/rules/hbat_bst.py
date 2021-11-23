@@ -1,12 +1,13 @@
 from django.utils.translation import gettext_lazy as _
 
 from experiment.models import Section
-from .views import CompositeView, Explainer, Final
+from .views import CompositeView, Explainer
 from .views.form import ChoiceQuestion, Form
 
 from .base import Base
 from .h_bat import HBat
 
+from .util.actions import final_action_with_optional_button
 from .util.score import get_average_difference_level_based
 
 class BST(HBat):
@@ -116,8 +117,4 @@ class BST(HBat):
             when the accented tone was only {} dB louder!").format(loudness_diff)
         session.finish()
         session.save()
-        return Final.action(
-            title=_('End'),
-            session=session,
-            score_message=score_message
-        )
+        return final_action_with_optional_button(session, score_message, series)

@@ -29,6 +29,7 @@ export const URLS = {
         create: "/session/create/",
         result: "/session/result/",
         next_round: (id) => "/session/" + id + "/next_round/",
+        continue: "session/continue/" + id
     },
 };
 

@@ -127,6 +127,18 @@ def result(request):
     return JsonResponse(action, json_dumps_params={'indent': 4})
 
 
+def continue_session(request, session_id):
+    """ given a session_id, continue where we left off """
+    try:
+        session = Session.objects.get(pk=session_id)
+    except Session.DoesNotExist:
+        raise Http404("Session does not exist")
+    
+    # Get next round for given session
+    action = session.experiment_rules().next_round(session)
+    return JsonResponse(action, json_dumps_params={'indent': 4})
+
+
 def next_round(request, session_id):
     """
     Fall back to continue an experiment is case next_round data is missing

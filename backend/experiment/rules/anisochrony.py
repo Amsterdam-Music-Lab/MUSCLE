@@ -2,7 +2,7 @@ import logging
 from django.utils.translation import gettext_lazy as _
 
 from experiment.models import Section
-from .views import CompositeView, Final, Explainer, Consent, StartSession, Playlist
+from .views import CompositeView, Explainer, Consent, StartSession, Playlist
 from .views.form import ChoiceQuestion, Form
 from .base import Base
 from .duration_discrimination import DurationDiscrimination
@@ -35,19 +35,6 @@ class Anisochrony(DurationDiscrimination):
         )
     
     @classmethod
-<<<<<<< HEAD
-    def next_round(cls, session, series=None):
-        if session.final_score == cls.max_turnpoints+1:
-            return finalize_experiment(session, series)
-
-        elif session.final_score == 0:
-            # we are practicing
-            actions = get_practice_views(session, intro_explanation(), get_trial_condition_block(0, session.id, 5), next_trial_action, get_response_explainer, get_previous_condition, cls.start_diff)
-            return actions
-
-        ##### Actual trials ####    
-        action = staircasing_blocks(session, next_trial_action)
-=======
     def next_trial_action(cls, session, trial_condition, difficulty):
         """
         Provide the next trial action
@@ -96,7 +83,6 @@ class Anisochrony(DurationDiscrimination):
             'decision_time': section.duration + .5
         }
         action = view.action(config)
->>>>>>> main
         return action
     
     @classmethod
@@ -139,46 +125,10 @@ class Anisochrony(DurationDiscrimination):
                 return 2
         else:
             return 0
-<<<<<<< HEAD
-
-
-def get_response_explainer(correct, irregular, button_label=_('Next fragment')):
-    if correct:
-        if irregular:
-            instruction = _(
-                'The tones were IRREGULAR. Your answer was correct.')
-        else:
-            instruction = _(
-                'The tones were REGULAR. Your answer was correct.')
-    else:
-        if irregular:
-            instruction = _(
-                'The tones were IRREGULAR. Your answer was incorrect.')
-        else:
-            instruction = _(
-                'The tones were REGULAR. Your answer was incorrect.')
-    return Explainer.action(
-        instruction=instruction,
-        steps=[],
-        button_label=button_label
-    )
-
-def finalize_experiment(session, series):
-    # we had 8 turnpoints (we start adding to 1), so finish session
-    milliseconds = get_average_difference(session, 4)
-    session.finish()
-    session.save()
-    # Return a score and final score action
-    return Final.action(
-        title=_('End'),
-        session=session,
-        score_message=_(
-=======
     
     @classmethod
     def get_score_message(cls, milliseconds):
         return _(
->>>>>>> main
             "Well done! You managed to hear the difference between tones \
             that differed only {} milliseconds in length. Humans are really \
             good at hearing these small differences in durations, which is \

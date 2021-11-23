@@ -3,7 +3,7 @@ import logging
 
 from django.utils.translation import gettext_lazy as _
 
-from .util.actions import combine_actions
+from .util.actions import combine_actions, final_action_with_optional_button
 from .util.practice import practice_explainer, practice_again_explainer, start_experiment_explainer
 from .views import CompositeView, Consent, Final, Explainer, StartSession, Playlist
 from .views.form import ChoiceQuestion, Form
@@ -212,10 +212,5 @@ def finalize_experiment(session, series):
     percentage = (sum([res.score for res in session.result_set.all()]) / session.experiment.rounds) * 100
     session.finish()
     session.save()
-    # Return a score and final score action
-    return Final.action(
-        title=_('End'),
-        session=session,
-        score_message=_(
-            "Well done! You've answered {} percent correctly!").format(percentage)
-    )
+    score_message = _("Well done! You've answered {} percent correctly!").format(percentage)
+    return final_action_with_optional_button(session, score_message, series)

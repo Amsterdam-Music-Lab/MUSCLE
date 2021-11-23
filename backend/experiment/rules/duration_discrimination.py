@@ -8,7 +8,7 @@ from .base import Base
 from experiment.models import Section
 from .views import CompositeView, Consent, Final, Explainer, StartSession, Playlist
 from .views.form import ChoiceQuestion, Form
-from .util.actions import combine_actions
+from .util.actions import combine_actions, final_action_with_optional_button
 from .util.score import get_average_difference
 from .util.practice import get_trial_condition_block, get_practice_views, practice_explainer
 
@@ -199,7 +199,7 @@ class DurationDiscrimination(Base):
         return _("It's your job to decide if the second interval is LONGER than the first interval, or EQUALLY LONG.")
 
     @classmethod
-    def finalize_experiment(cls, session):
+    def finalize_experiment(cls, session, series):
         ''' After 8 turnpoints, finalize experiment
         Give participant feedback
         '''
@@ -207,19 +207,7 @@ class DurationDiscrimination(Base):
         score_message = cls.get_score_message(milliseconds)
         session.finish()
         session.save()
-
-        if series:
-            button = {
-                'text': _('Continue'),
-                'link': '{}/continue/{}'.format(settings.CORS_ORIGIN_WHITELIST[0], series.get('session_id'))
-            }
-
-        # Return a score and final score action
-        return Final.action(
-            title=_('End of this experiment'),
-            session=session,
-            score_message=score_message
-        )
+        return final_action_with_optional_button(session, score_message, series)
     
     @classmethod
     def get_score_message(cls, milliseconds):

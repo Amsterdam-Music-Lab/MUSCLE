@@ -50,18 +50,3 @@ def get(request, slug):
         # avoid carrying over language cookie from other experiments
         response.set_cookie(settings.LANGUAGE_COOKIE_NAME, None)
     return response
-
-def continue_experiment(request, session_id):
-    try:
-        session = Session.objects.get(pk=session_id)
-    except Session.DoesNotExist:
-        raise Http404("Session does not exist")
-    data = {
-        'session': {
-            'id': session.id,
-            'playlist': session.playlist.id,
-            'json_data': session.load_json_data(),
-        },
-        'next_round': session.experiment_rules().next_round(session)
-    }
-    return JsonResponse(data, json_dumps_params={'indent': 4})
