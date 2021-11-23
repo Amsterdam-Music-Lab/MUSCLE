@@ -20,7 +20,7 @@ class HBat(Base):
     @classmethod
     def next_round(cls, session, series=None):
         if session.final_score == MAX_TURNPOINTS+1:
-            return cls.finalize_experiment(session)
+            return cls.finalize_experiment(session, series)
         elif session.final_score == 0:
             # we are practicing
             actions = get_practice_views(session, cls.intro_explainer(), get_trial_condition(2), cls.next_trial_action, cls.response_explainer, get_previous_condition)

@@ -47,7 +47,7 @@ class DurationDiscrimination(Base):
     @classmethod
     def next_round(cls, session, series=None):
         if session.final_score == MAX_TURNPOINTS+1:
-            return finalize_experiment(session, cls.condition)
+            return finalize_experiment(session, cls.condition, series)
 
         elif session.final_score == 0:
             # we are practicing
@@ -156,7 +156,7 @@ class DurationDiscrimination(Base):
         action = view.action(config)
         return action
 
-def finalize_experiment(session, condition):
+def finalize_experiment(session, condition, series):
     ''' After 8 turnpoints, finalize experiment
     Give participant feedback
     '''
@@ -178,6 +178,12 @@ def finalize_experiment(session, condition):
     session.save()
     
     # Return a score and final score action
+    if series:
+        button = {
+            'text': _('Continue'),
+            'link': '{}/continue/{}'.format(settings.CORS_ORIGIN_WHITELIST[0], series.get('session_id'))
+        }
+
     return Final.action(
         title=_('End of this experiment'),
         session=session,

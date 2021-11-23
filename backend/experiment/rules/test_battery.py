@@ -68,7 +68,6 @@ class TestBattery(Base):
     
     @staticmethod
     def next_round(session):
-        this_round = session.get_next_round()
         if session.final_score == 0:
             prepare_experiments(session)
         elif session.final_score == session.experiment.rounds:
@@ -81,7 +80,7 @@ class TestBattery(Base):
         session.final_score +=1
         session.save()
         button = {
-            'text': _('Start'),
+            'text': _('Continue'),
             'link': '{}/{}'.format(settings.CORS_ORIGIN_WHITELIST[0], slug)
         }
         return Final.action(session, title=_('Next experiment'), button=button)
