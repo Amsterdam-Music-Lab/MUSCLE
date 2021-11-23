@@ -46,6 +46,13 @@ And then, in the resulting shell:
 `./manage.py exportexperiment your_slug` or
 `./manage.py exportplaycount playlist_id`
 
+### Debugging
+If all containers are running via docker-compose, it is not possible to interact with the debug shell. Therefore, you need to do the following:
+`docker ps` to list all running containers
+`docker rm -f name_of_server_container`
+`docker-compose run --rm --service-ports server`
+After that, if you place a `breakpoint()` anywhere in the code, you can step through and inspect values of variables.
+
 
 ## Production build
 A production build should define its own `docker-compose.yaml`, making use of the `Dockerfile` of the `backend` and `frontend` environments. Instead of mounting the entire backend and frontend directory and using the development servers, the backend should serve with gunicorn, and the frontend should build its files. An example of this setup can be found in the aml-deployment repository.
