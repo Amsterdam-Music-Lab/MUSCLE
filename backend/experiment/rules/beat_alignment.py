@@ -1,5 +1,6 @@
 import random
 import logging
+import copy
 
 from django.utils.translation import gettext_lazy as _
 
@@ -47,7 +48,10 @@ class BeatAlignment(Base):
 
         # 3. Practice rounds
         practice_list = experiment.playlists.first()
-        practice_rounds = [BeatAlignment.next_practice_action(practice_list, i) for i in range(1,4)]
+        practice_rounds = []
+        for i in range(1,4):
+            this_round = BeatAlignment.next_practice_action(practice_list, i)
+            practice_rounds.append(copy.deepcopy(this_round))
         practice_rounds.append(Explainer.action(
             instruction=_('You will now hear 17 music fragments.'),
             steps=[
@@ -117,10 +121,10 @@ class BeatAlignment(Base):
         
         if count==1:
             presentation_text = _(
-                "In this example the beeps are ALIGNED TO THE BEAT of the music. The correct answer was ALIGNED TO THE BEAT.")
+                "In this example the beeps are ALIGNED TO THE BEAT of the music.")
         else:
             presentation_text = _(
-                "In this example the beeps are NOT ALIGNED TO THE BEAT of the music. The correct answer was NOT ALIGNED TO THE BEAT.")
+                "In this example the beeps are NOT ALIGNED TO THE BEAT of the music.")
         
         instructions = {
             'preload': '',

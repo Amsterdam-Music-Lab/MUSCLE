@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-11-19 21:16+0100\n"
+"POT-Creation-Date: 2021-11-23 21:16+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -53,7 +53,7 @@ msgstr ""
 msgid "copy"
 msgstr ""
 
-#: experiment/rules/anisochrony.py:23 experiment/rules/beat_alignment.py:106
+#: experiment/rules/anisochrony.py:23 experiment/rules/beat_alignment.py:110
 #: experiment/rules/duration_discrimination.py:103
 #: experiment/rules/duration_discrimination_tone.py:18
 #: experiment/rules/h_bat.py:152 experiment/rules/hbat_bst.py:88
@@ -122,12 +122,12 @@ msgstr ""
 "van elkaar verschilden. Mensen zijn heel goed in het horen van deze kleine "
 "verschillen, wat goed van pas komt als we naar ritmes in muziek luisteren."
 
-#: experiment/rules/beat_alignment.py:26
+#: experiment/rules/beat_alignment.py:27
 msgid ""
 "This test measures your ability to recognize the beat in a piece of music."
 msgstr "Deze test meet je vermogen om de maat te herkennen in een muziekstuk."
 
-#: experiment/rules/beat_alignment.py:30
+#: experiment/rules/beat_alignment.py:31
 msgid ""
 "Listen to the following music fragments. In each fragment you hear a series "
 "of beeps."
@@ -135,7 +135,7 @@ msgstr ""
 "Luister naar de volgende muziekfragmenten. In elk fragment hoor je muziek "
 "samen met een serie piepjes."
 
-#: experiment/rules/beat_alignment.py:34
+#: experiment/rules/beat_alignment.py:35
 msgid ""
 "It's you job to decide if the beeps are ALIGNED TO THE BEAT or NOT ALIGNED "
 "TO THE BEAT of the music."
@@ -143,7 +143,7 @@ msgstr ""
 "Jouw taak is om te beslissen of de piepjes IN DE MAAT of UIT DE MAAT van de "
 "muziek zijn."
 
-#: experiment/rules/beat_alignment.py:39
+#: experiment/rules/beat_alignment.py:40
 msgid ""
 "Listen carefully to this. Pay close attention to the description that "
 "accompanies each example."
@@ -151,15 +151,15 @@ msgstr ""
 "Luister hier aandachtig naar. Let goed op de beschrijving die bij elk "
 "voorbeeld staat."
 
-#: experiment/rules/beat_alignment.py:42
+#: experiment/rules/beat_alignment.py:43
 msgid "Ok"
 msgstr "Oké"
 
-#: experiment/rules/beat_alignment.py:52
+#: experiment/rules/beat_alignment.py:56
 msgid "You will now hear 17 music fragments."
 msgstr "Je krijgt nu 17 muziekfragmenten te horen."
 
-#: experiment/rules/beat_alignment.py:56
+#: experiment/rules/beat_alignment.py:60
 msgid ""
 "With each fragment you have to decide if the beeps are ALIGNED TO THE BEAT, "
 "or NOT ALIGNED TO THE BEAT of the music."
@@ -167,7 +167,7 @@ msgstr ""
 "Bij elk fragment moet je bepalen of de piepjes IN DE MAAT of UIT DE MAAT van "
 "de muziek zijn."
 
-#: experiment/rules/beat_alignment.py:60
+#: experiment/rules/beat_alignment.py:64
 msgid ""
 "We will also ask you how certain you are of your answer. Pay attention: a "
 "music fragment can occur several times."
@@ -175,72 +175,66 @@ msgstr ""
 "Ook vragen we je hoe zeker je van je antwoord bent. Let op: een "
 "muziekfragment kan meerdere keren voorkomen."
 
-#: experiment/rules/beat_alignment.py:63 experiment/rules/speech2song.py:33
+#: experiment/rules/beat_alignment.py:67 experiment/rules/speech2song.py:33
 #: experiment/rules/util/practice.py:128
 msgid "Start"
 msgstr "Start"
 
-#: experiment/rules/beat_alignment.py:91 experiment/rules/h_bat.py:184
+#: experiment/rules/beat_alignment.py:95 experiment/rules/h_bat.py:184
 #: experiment/rules/hbat_bst.py:120
 #: experiment/rules/rhythm_discrimination.py:217
 msgid "End"
 msgstr "Einde"
 
-#: experiment/rules/beat_alignment.py:93
+#: experiment/rules/beat_alignment.py:97
 msgid "Well done! You’ve answered {} percent correctly!"
 msgstr "Goed gedaan! Je hebt {} procent goed beantwoord!"
 
-#: experiment/rules/beat_alignment.py:103
+#: experiment/rules/beat_alignment.py:107
 msgid "How certain are you of your answer?"
 msgstr "Hoe zeker ben je van dit antwoord?"
 
-#: experiment/rules/beat_alignment.py:104
+#: experiment/rules/beat_alignment.py:108
 #: experiment/rules/views/question.py:211
 msgid "I guessed"
 msgstr "Ik heb gegokt"
 
-#: experiment/rules/beat_alignment.py:104
+#: experiment/rules/beat_alignment.py:108
 #: experiment/rules/views/question.py:212
 msgid "I think I know"
 msgstr "Ik denk het te weten"
 
-#: experiment/rules/beat_alignment.py:104
+#: experiment/rules/beat_alignment.py:108
 msgid "I am sure"
 msgstr "Ik weet het zeker"
 
-#: experiment/rules/beat_alignment.py:120
-msgid ""
-"In this example the beeps are ALIGNED TO THE BEAT of the music. The correct "
-"answer was ALIGNED TO THE BEAT."
+#: experiment/rules/beat_alignment.py:124
+msgid "In this example the beeps are ALIGNED TO THE BEAT of the music."
 msgstr ""
-"In dit voorbeeld zijn de piepjes IN DE MAAT van de muziek. Het juiste "
-"antwoord zou 'in de maat' zijn."
+"In dit voorbeeld zijn de piepjes IN DE MAAT van de muziek."
 
-#: experiment/rules/beat_alignment.py:123
-msgid ""
-"In this example the beeps are NOT ALIGNED TO THE BEAT of the music. The "
-"correct answer was NOT ALIGNED TO THE BEAT."
+#: experiment/rules/beat_alignment.py:127
+msgid "In this example the beeps are NOT ALIGNED TO THE BEAT of the music."
 msgstr ""
-"In dit voorbeeld zijn de piepjes UIT DE MAAT van de muziek. Het juiste "
-"antwoord zou 'uit de maat' zijn."
+"In dit voorbeeld zijn de piepjes UIT DE MAAT van de muziek."
 
-#: experiment/rules/beat_alignment.py:134
+#: experiment/rules/beat_alignment.py:138
 msgid "Example {}"
 msgstr "Voorbeeld {}"
 
-#: experiment/rules/beat_alignment.py:151
+#: experiment/rules/beat_alignment.py:155
 msgid "Are the beeps ALIGNED TO THE BEAT or NOT ALIGNED TO THE BEAT?"
 msgstr "Zijn de piepjes IN DE MAAT of UIT DE MAAT?"
 
-#: experiment/rules/beat_alignment.py:154
+#: experiment/rules/beat_alignment.py:158
 msgid "ALIGNED TO THE BEAT"
 msgstr "IN DE MAAT"
 
-#: experiment/rules/beat_alignment.py:155
+#: experiment/rules/beat_alignment.py:159
 msgid "NOT ALIGNED TO THE BEAT"
 msgstr "UIT DE MAAT"
 
-#: experiment/rules/beat_alignment.py:170
+#: experiment/rules/beat_alignment.py:174
 msgid "Beat alignment"
 msgstr "Beat alignment"
 
