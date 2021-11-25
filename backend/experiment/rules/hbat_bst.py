@@ -22,11 +22,11 @@ class BST(HBat):
             steps=[
                 Explainer.step(
                     description=_(
-                        "It's your job to decide if the rhythm has a 2-QUARTER BEAT (a MARCH) or a 3-QUARTER BEAT (a WALTZ)."),
+                        "It's your job to decide if the rhythm has a DUPLE METER (a MARCH) or a TRIPLE METER (a WALTZ)."),
                     number=1
                 ),
                 Explainer.step(
-                    description=_("Every second tone in a 2-quarter beat (march) is louder and every third tone in a 3-quarter beat (waltz) is louder."),
+                    description=_("Every SECOND tone in a DUPLE meter (march) is louder and every THIRD tone in a TRIPLE meter (waltz) is louder."),
                     number=2
                 ),
                 Explainer.step(
@@ -41,8 +41,18 @@ class BST(HBat):
                 ),
                 Explainer.step(
                     description=_(
-                        'This test will take around 4 minutes to complete. Try to stay focused for the entire test!'),
+                        "In this test, you can answer as soon as you feel you know the answer."),
                     number=5
+                ),
+                Explainer.step(
+                    description=_(
+                        "NOTE: Please wait with answering until you are either sure, or the sound has stopped."),
+                    number=6
+                ),
+                Explainer.step(
+                    description=_(
+                        'This test will take around 4 minutes to complete. Try to stay focused for the entire test!'),
+                    number=7
                 )],
             button_label='Ok'
         )
@@ -68,10 +78,10 @@ class BST(HBat):
         question = ChoiceQuestion(
             key='longer_or_equal',
             question=_(
-                "Is the rhythm a 2-QUARTER BEAT or a 3-QUARTER BEAT?"),
+                "Is the rhythm a DUPLE METER (MARCH) or a TRIPLE METER (WALTZ)?"),
             choices={
-                'in2': _('2-QUARTER BEAT'),
-                'in3': _('3-QUARTER BEAT')
+                'in2': _('DUPLE METER'),
+                'in3': _('TRIPLE METER')
             },
             view='BUTTON_ARRAY',
             result_id=result_pk,
@@ -94,17 +104,17 @@ class BST(HBat):
         if correct:
             if in2:
                 instruction = _(
-                    'The rhythm was a 2-QUARTER BEAT. Your answer was CORRECT.')
+                    'The rhythm was a DUPLE METER. Your answer was CORRECT.')
             else:
                 instruction = _(
-                    'The rhythm was a 3-QUARTER BEAT. Your answer was CORRECT.')
+                    'The rhythm was a TRIPLE METER. Your answer was CORRECT.')
         else:
             if in2:
                 instruction = _(
-                    'The rhythm was a 2-QUARTER BEAT. Your answer was INCORRECT.')
+                    'The rhythm was a DUPLE METER. Your answer was INCORRECT.')
             else:
                 instruction = _(
-                    'The rhythm was a 3-QUARTER BEAT. Your response was INCORRECT.')
+                    'The rhythm was a TRIPLE METER. Your response was INCORRECT.')
         return Explainer.action(
             instruction=instruction,
             steps=[],

@@ -147,8 +147,18 @@ class HBat(Base):
                 ),
                 Explainer.step(
                     description=_(
-                        'This test will take around 4 minutes to complete. Try to stay focused for the entire test!'),
+                        "In this test, you can answer as soon as you feel you know the answer."),
                     number=4
+                ),
+                Explainer.step(
+                    description=_(
+                        "NOTE: Please wait with answering until you are either sure, or the sound has stopped."),
+                    number=5
+                ),
+                Explainer.step(
+                    description=_(
+                        'This test will take around 4 minutes to complete. Try to stay focused for the entire test!'),
+                    number=6
                 )],
             button_label='Ok'
         )
