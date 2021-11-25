@@ -61,7 +61,7 @@ class BeatAlignment(Base):
                     ),
                 Explainer.step(
                     description=_(
-                        'We will also ask you how certain you are of your answer. Pay attention: a music fragment can occur several times.')
+                        'Pay attention: a music fragment can occur several times. In total, this test will take around 6 minutes to complete. Try to stay focused for the entire duration!')
                     )
             ],
             button_label=_('Start'))
@@ -94,7 +94,7 @@ class BeatAlignment(Base):
             return Final.action(
                 title=_('End'),
                     session=session,
-                score_message=_('Well done! You’ve answered {} percent correctly!').format(percentage)
+                score_message=_('Well done! You’ve answered {} percent correctly! Did you know that in the UK, over 140.000 people did this test when it was first developed?').format(percentage)
                 )
 
         # Next round number, can be used to return different actions

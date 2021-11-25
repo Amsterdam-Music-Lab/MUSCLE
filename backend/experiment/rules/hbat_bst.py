@@ -22,11 +22,11 @@ class BST(HBat):
             steps=[
                 Explainer.step(
                     description=_(
-                        "It's your job to decide if the rhythm has a 2-QUARTER BEAT (a march) or a 3-QUARTER BEAT (a waltz)."),
+                        "It's your job to decide if the rhythm has a 2-QUARTER BEAT (a MARCH) or a 3-QUARTER BEAT (a WALTZ)."),
                     number=1
                 ),
                 Explainer.step(
-                    description=_("Every second tone in a 2-quarter beat is louder and every third tone in a 3-quarter beat is louder."),
+                    description=_("Every second tone in a 2-quarter beat (march) is louder and every third tone in a 3-quarter beat (waltz) is louder."),
                     number=2
                 ),
                 Explainer.step(
@@ -38,6 +38,11 @@ class BST(HBat):
                     description=_(
                         "Try to answer as accurately as possible, even if you're uncertain."),
                     number=4
+                ),
+                Explainer.step(
+                    description=_(
+                        'This test will take around 4 minutes to complete. Try to stay focused for the entire test!'),
+                    number=5
                 )],
             button_label='Ok'
         )
@@ -89,17 +94,17 @@ class BST(HBat):
         if correct:
             if in2:
                 instruction = _(
-                    'The rhythm was a 2-QUARTER BEAT. Your answer was correct.')
+                    'The rhythm was a 2-QUARTER BEAT. Your answer was CORRECT.')
             else:
                 instruction = _(
-                    'The rhythm was a 3-QUARTER BEAT. Your answer was correct.')
+                    'The rhythm was a 3-QUARTER BEAT. Your answer was CORRECT.')
         else:
             if in2:
                 instruction = _(
-                    'The rhythm was a 2-QUARTER BEAT. Your answer was incorrect.')
+                    'The rhythm was a 2-QUARTER BEAT. Your answer was INCORRECT.')
             else:
                 instruction = _(
-                    'The rhythm was a 3-QUARTER BEAT. Your response was incorrect.')
+                    'The rhythm was a 3-QUARTER BEAT. Your response was INCORRECT.')
         return Explainer.action(
             instruction=instruction,
             steps=[],
@@ -113,7 +118,7 @@ class BST(HBat):
         """
         loudness_diff = int(get_average_difference_level_based(session, 6))
         score_message = _("Well done! You heard the difference \
-            when the accented tone was only {} dB louder!").format(loudness_diff)
+            when the accented tone was only {} dB louder. A march and a waltz are very common meters in Western music, but in other cultures, much more complex meters also exist!").format(loudness_diff)
         session.finish()
         session.save()
         return Final.action(
