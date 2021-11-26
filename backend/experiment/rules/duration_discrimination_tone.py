@@ -20,10 +20,10 @@ class DurationDiscriminationTone(DurationDiscrimination):
         correct_response = _('LONGER') if correct_response=='LONGER' else _('EQUAL')
         if correct:
             instruction = _(
-                'The second tone was %(correct_response)s %(preposition)s the first tone. Your answer was correct.') % {'correct_response': correct_response, 'preposition': preposition}
+                'The second tone was %(correct_response)s %(preposition)s the first tone. Your answer was CORRECT.') % {'correct_response': correct_response, 'preposition': preposition}
         else:
             instruction = _(
-                'The second tone was %(correct_response)s %(preposition)s the first tone. Your answer was incorrect.') % {'correct_response': correct_response, 'preposition': preposition}
+                'The second tone was %(correct_response)s %(preposition)s the first tone. Your answer was INCORRECT.') % {'correct_response': correct_response, 'preposition': preposition}
         return Explainer.action(
             instruction=instruction,
             steps=[],

@@ -182,6 +182,12 @@ def intro_explainer():
             Explainer.step(
                 description=_(
                     "Your task is to decide whether this third rhythm is the SAME as the first two rhythms or DIFFERENT."),
+		number=1
+            ),
+            Explainer.step(
+                description=_(
+                    'This test will take around 6 minutes to complete. Try to stay focused for the entire test!'),
+                number=2
             )],
         button_label='Ok'
     )
@@ -190,17 +196,17 @@ def response_explainer(correct, same, button_label=_('Next fragment')):
     if correct:
         if same:
             instruction = _(
-                'The third rhythm is the SAME. Your response was correct.')
+                'The third rhythm is the SAME. Your response was CORRECT.')
         else:
             instruction = _(
-                'The third rhythm is DIFFERENT. Your response was correct.')
+                'The third rhythm is DIFFERENT. Your response was CORRECT.')
     else:
         if same:
             instruction = _(
-                'The third rhythm is the SAME. Your response was incorrect.')
+                'The third rhythm is the SAME. Your response was INCORRECT.')
         else:
             instruction = _(
-                'The third rhythm is DIFFERENT. Your response was incorrect.')
+                'The third rhythm is DIFFERENT. Your response was INCORRECT.')
     return Explainer.action(
         instruction=instruction,
         steps=[],
@@ -217,5 +223,5 @@ def finalize_experiment(session):
         title=_('End'),
         session=session,
         score_message=_(
-            "Well done! You've answered {} percent correctly!").format(percentage)
+            "Well done! You've answered {} percent correctly! One reason for the weird beep-tones in this test (instead of some nice drum-sound) is that it is used very often in brain scanners, which make a lot of noise. The beep-sound helps people in the scanner to hear the rhythm really well. ").format(percentage)
     )
