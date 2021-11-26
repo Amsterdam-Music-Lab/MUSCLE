@@ -224,10 +224,10 @@ class DurationDiscrimination(Base):
     def get_score_message(cls, milliseconds):
         percentage = round((milliseconds / 600) * 100, 1)
         return _(
-            'Well done! You heard the difference between two intervals that \
+            "Well done! You heard the difference between two intervals that \
             differed only {} percent in duration. When we research timing in \
             humans, we often find that people's accuracy in this task scales: \
-            for shorter durations, people can hear even smaller differences than for longer durations.').format(percentage)
+            for shorter durations, people can hear even smaller differences than for longer durations.").format(percentage)
 
     @classmethod
     def staircasing_blocks(cls, session, trial_action_callback):
