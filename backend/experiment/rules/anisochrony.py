@@ -15,7 +15,8 @@ logger = logging.getLogger(__name__)
 
 class Anisochrony(DurationDiscrimination):
     ID = 'ANISOCHRONY'
-    start_diff = 270000
+    start_diff = 180000
+    practice_diff = 270000
     max_turnpoints = 8
     catch_condition = 'REGULAR'
     
@@ -136,4 +137,11 @@ class Anisochrony(DurationDiscrimination):
         return _(
             "Well done! You heard the difference when we shifted a tone by {} percent. \
             Many sounds in nature have regularity like a metronome. \
-	    Our brains use this to process rhythm even better!").format(milliseconds)
+            Our brains use this to process rhythm even better!").format(milliseconds)
+    
+    @classmethod
+    def get_difficulty(cls, session, multiplier=1.0):
+        if session.final_score == 0:
+            return cls.practice_diff
+        else:
+            return super(Anisochrony, cls).get_difficulty(cls, session, multiplier)
