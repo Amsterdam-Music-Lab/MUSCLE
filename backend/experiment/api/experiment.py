@@ -5,7 +5,7 @@ from django.conf import settings
 from django.utils.translation import gettext_lazy as _
 from django.utils.translation import activate
 
-from experiment.models import Experiment
+from experiment.models import Experiment, Session
 
 logger = logging.getLogger(__name__)
 
@@ -19,6 +19,24 @@ def get(request, slug):
         experiment = Experiment.objects.get(slug=slug, active=True)
     except Experiment.DoesNotExist:
         raise Http404("Experiment does not exist")
+    
+    if experiment.nested_experiments:
+        # we are in the middle of a test battery
+        series_data = request.session.get('experiment_series')
+        try:
+            session = Session.objects.get(pk=series_data.get('session_id'))
+        except Session.DoesNotExist:
+            raise Http404("Session does not exist")
+        # TODO: if participant did not complete any experiment in nested_experiments but not in experiment json_data, add these to the top of the stack
+        data = {
+            'session': {
+                'id': session.id,
+                'playlist': session.playlist.id,
+                'json_data': session.load_json_data(),
+            },
+            'next_round': session.experiment_rules().next_round(session)
+        }
+        return JsonResponse(data, json_dumps_params={'indent': 4})
 
     class_name = ''
     if request.LANGUAGE_CODE.startswith('zh'):

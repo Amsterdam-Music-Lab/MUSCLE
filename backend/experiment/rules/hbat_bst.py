@@ -108,7 +108,7 @@ class BST(HBat):
         )
     
     @classmethod
-    def finalize_experiment(cls, session, series):
+    def finalize_experiment(cls, session, request_session):
         """ if either the max_turnpoints have been reached,
         or if the section couldn't be found (outlier), stop the experiment
         """
@@ -117,4 +117,4 @@ class BST(HBat):
             when the accented tone was only {} dB louder!").format(loudness_diff)
         session.finish()
         session.save()
-        return final_action_with_optional_button(session, score_message, series)
+        return final_action_with_optional_button(session, score_message, request_session)

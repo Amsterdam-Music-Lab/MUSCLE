@@ -120,9 +120,9 @@ def result(request):
         return HttpResponseServerError("Invalid data")
 
     # Get next round for given session
-    series = request.session.get('experiment_series')
-    if series:
-        action = session.experiment_rules().next_round(session, series)
+    if request.session.get('experiment_series'):
+        # we are in the middle of an experiment series - need to pass in request.session object
+        action = session.experiment_rules().next_round(session, request.session)
     else:
         action = session.experiment_rules().next_round(session)
     return JsonResponse(action, json_dumps_params={'indent': 4})

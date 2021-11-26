@@ -43,9 +43,9 @@ class RhythmDiscrimination(Base):
         )
     
     @classmethod
-    def next_round(cls, session, series=None):
+    def next_round(cls, session, request_session=None):
         if session.rounds_complete():
-            return finalize_experiment(session, series)
+            return finalize_experiment(session, request_session)
         
         next_round_number = session.get_next_round()
 
@@ -207,10 +207,10 @@ def response_explainer(correct, same, button_label=_('Next fragment')):
         button_label=button_label
     )
 
-def finalize_experiment(session, series):
+def finalize_experiment(session, request_session):
     # we had 4 practice trials and 60 experiment trials
     percentage = (sum([res.score for res in session.result_set.all()]) / session.experiment.rounds) * 100
     session.finish()
     session.save()
     score_message = _("Well done! You've answered {} percent correctly!").format(percentage)
-    return final_action_with_optional_button(session, score_message, series)
+    return final_action_with_optional_button(session, score_message, request_session)

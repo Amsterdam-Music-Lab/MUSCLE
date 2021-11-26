@@ -68,7 +68,10 @@ const Experiment = ({ match }) => {
         if (!loadingExperiment && !loadingParticipant) {
             // Loading succeeded
             if (experiment && participant) {
-                loadState(experiment.first_round);
+                if (experiment.next_round) {
+                    loadState(experiment.next_round);
+                }
+                else loadState(experiment.first_round);
             } else {
                 // Loading error
                 setError("Could not load experiment");

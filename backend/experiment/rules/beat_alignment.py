@@ -74,7 +74,7 @@ class BeatAlignment(Base):
 
 
     @staticmethod
-    def next_round(session, series=None):
+    def next_round(session, request_session=None):
         """Get action data for the next round"""
 
         # If the number of results equals the number of experiment.rounds
@@ -86,7 +86,7 @@ class BeatAlignment(Base):
 
             percentage = (sum([r.score for r in session.result_set.all()]) / session.experiment.rounds) * 100
             score_message=_('Well done! You’ve answered {} percent correctly!').format(percentage)
-            return final_action_with_optional_button(session, score_message, series)
+            return final_action_with_optional_button(session, score_message, request_session)
 
         # Next round number, can be used to return different actions
         next_round_number = session.get_next_round()

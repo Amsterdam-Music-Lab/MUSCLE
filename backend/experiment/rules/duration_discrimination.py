@@ -47,9 +47,9 @@ class DurationDiscrimination(Base):
         )
 
     @classmethod
-    def next_round(cls, session, series=None):
+    def next_round(cls, session, request_session=None):
         if session.final_score == cls.max_turnpoints+1:
-            return cls.finalize_experiment(session, series)
+            return cls.finalize_experiment(session, request_session)
 
         elif session.final_score == 0:
             cls.register_difficulty(session)
@@ -199,7 +199,7 @@ class DurationDiscrimination(Base):
         return _("It's your job to decide if the second interval is LONGER than the first interval, or EQUALLY LONG.")
 
     @classmethod
-    def finalize_experiment(cls, session, series):
+    def finalize_experiment(cls, session, request_session):
         ''' After 8 turnpoints, finalize experiment
         Give participant feedback
         '''
@@ -207,7 +207,7 @@ class DurationDiscrimination(Base):
         score_message = cls.get_score_message(milliseconds)
         session.finish()
         session.save()
-        return final_action_with_optional_button(session, score_message, series)
+        return final_action_with_optional_button(session, score_message, request_session)
     
     @classmethod
     def get_score_message(cls, milliseconds):

@@ -13,7 +13,6 @@ export const URLS = {
     experiment: {
         get: (slug) => "/id/" + slug + "/",
         consent: (slug) => "/profile/consent_" + slug + "/",
-        continue: (slug) => "/continue/" + slug + "/",
     },
     participant: {
         current: "/participant/",
