@@ -144,4 +144,4 @@ class Anisochrony(DurationDiscrimination):
         if session.final_score == 0:
             return cls.practice_diff
         else:
-            return super(Anisochrony, cls).get_difficulty(cls, session, multiplier)
+            return super(Anisochrony, cls).get_difficulty(session, multiplier)

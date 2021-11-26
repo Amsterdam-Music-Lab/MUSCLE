@@ -60,7 +60,6 @@ def get_practice_views(
             session.save()
             start_explainer = start_experiment_explainer()
             trial = first_trial_callback(session, trial_callback)
-            print(trial)
             return combine_actions(response_explainer, start_explainer, trial)
         else:
             # need more practice, start over
