@@ -54,10 +54,11 @@ class CompositeView:  # pylint: disable=too-few-public-methods
         }
 
         # Section
-        action['section'] = {
-            'id': self.section.id,
-            'url': self.section.absolute_url(),
-        }
+        if self.section:
+            action['section'] = {
+                'id': self.section.id,
+                'url': self.section.absolute_url(),
+            }
         
         # advance automatically if there is no form, i.e., no user interaction
         auto_advance = False if self.feedback_form else True

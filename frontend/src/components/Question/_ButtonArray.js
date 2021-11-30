@@ -6,13 +6,17 @@ import Button from "../Button/Button";
 const ButtonArray = ({ question, value, active, onChange }) => {
     
     return (
-        <div className="aha__buttons buttons d-flex flex-wrap justify-content-around p-3 w-100">
+        <div className="aha__buttons buttons btn-group btn-group-toggle d-flex flex-wrap justify-content-around p-3 w-100" data-toggle="buttons">
             {question.explainer && (
                 <p className="explainer">{question.explainer}</p>
             )}
             <h3 className="title">{question.question}</h3>
             {Object.keys(question.choices).map((val, index) => (
-                <Button
+                <label class="btn btn-secondary">
+                    <input className={val} type="radio" name={question.key} id={index}/>
+                    {question.choices[val]}
+                </label>))}
+                {/* <Button
                     key={index}
                     name={question.key}
                     title={question.choices[val]}
@@ -22,7 +26,7 @@ const ButtonArray = ({ question, value, active, onChange }) => {
                     active={active}
                 />
             )
-            )}
+            )} */}
         </div>
     )
 }
