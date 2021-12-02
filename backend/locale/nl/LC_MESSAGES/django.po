@@ -114,9 +114,12 @@ msgstr ""
 #: experiment/rules/anisochrony.py:111
 #: experiment/rules/duration_discrimination.py:196
 #: experiment/rules/h_bat.py:160 experiment/rules/hbat_bst.py:54
-msgid "This test will take around 4 minutes to complete. Try to stay focused for the entire test!"
+msgid ""
+"This test will take around 4 minutes to complete. Try to stay focused for "
+"the entire test!"
 msgstr ""
-"Deze test duurt ongeveer 4 minuten. Probeer tijdens de hele test geconcentreerd te blijven!"
+"Deze test duurt ongeveer 4 minuten. Probeer tijdens de hele test "
+"geconcentreerd te blijven!"
 
 #: experiment/rules/h_bat.py:150 experiment/rules/hbat_bst.py:44
 msgid "In this test, you can answer as soon as you feel you know the answer."
@@ -124,24 +127,30 @@ msgstr ""
 "Bij deze test kun je antwoorden zodra je denkt het goede antwoord te weten."
 
 #: experiment/rules/h_bat.py:155 experiment/rules/hbat_bst.py:49
-msgid "NOTE: Please wait with answering until you are either sure, or the sound has stopped."
+msgid ""
+"NOTE: Please wait with answering until you are either sure, or the sound has "
+"stopped."
 msgstr ""
-"LET OP: Wacht met antwoorden tot je het antwoord zeker weet, of tot het fragment afgelopen is."
+"LET OP: Wacht met antwoorden tot je het antwoord zeker weet, of tot het "
+"fragment afgelopen is."
 
 #: experiment/rules/rhythm_discrimination.py:189
-msgid "This test will take around 6 minutes to complete. Try to stay focused for the entire test!"
+msgid ""
+"This test will take around 6 minutes to complete. Try to stay focused for "
+"the entire test!"
 msgstr ""
-"Deze test duurt ongeveer 6 minuten. Probeer tijdens de hele test geconcentreerd te blijven!"
+"Deze test duurt ongeveer 6 minuten. Probeer tijdens de hele test "
+"geconcentreerd te blijven!"
 
 #: experiment/rules/anisochrony.py:137
 msgid ""
 "Well done! You heard the difference when we shifted a tone by {} percent. "
-"Many sounds in nature have regularity like a metronome. "
-"Our brains use this to process rhythm even better!"
+"Many sounds in nature have regularity like a metronome. Our brains use this "
+"to process rhythm even better!"
 msgstr ""
-"Goed gedaan! Je kon het verschil horen wanneer we een toon {} procent opschoven. "
-"Veel dingen in de natuur hebben regelmaat zoals een metronoom."
-"Onze hersenen gebruiken dit om ritme nog beter te verwerken!"
+"Goed gedaan! Je kon het verschil horen wanneer we een toon {} procent "
+"opschoven. Veel dingen in de natuur hebben regelmaat zoals een "
+"metronoom.Onze hersenen gebruiken dit om ritme nog beter te verwerken!"
 
 #: experiment/rules/beat_alignment.py:27
 msgid ""
@@ -190,11 +199,12 @@ msgstr ""
 
 #: experiment/rules/beat_alignment.py:64
 msgid ""
-"Pay attention: a music fragment can occur several times. In total, "
-"this test will take around 6 minutes to complete. Try to stay focused for the entire duration!"
+"Pay attention: a music fragment can occur several times. In total, this test "
+"will take around 6 minutes to complete. Try to stay focused for the entire "
+"duration!"
 msgstr ""
-"Let op: een muziekfragment kan meerdere keren voorkomen. In totaal "
-"duurt deze test ongeveer 6 minuten. Probeer de hele test geconcentreerd te blijven!"
+"Let op: een muziekfragment kan meerdere keren voorkomen. In totaal duurt "
+"deze test ongeveer 6 minuten. Probeer de hele test geconcentreerd te blijven!"
 
 #: experiment/rules/beat_alignment.py:67 experiment/rules/speech2song.py:33
 #: experiment/rules/util/practice.py:128
@@ -208,8 +218,13 @@ msgid "End"
 msgstr "Einde"
 
 #: experiment/rules/beat_alignment.py:97
-msgid "Well done! You’ve answered {} percent correctly! Did you know that in the UK, over 140.000 people did this test when it was first developed?"
-msgstr "Goed gedaan! Je hebt {} procent goed beantwoord! Wist je dat in Engeland meer dan 140.000 mensen deze test hebben gedaan toen deze in ontwikkeling was?"
+msgid ""
+"Well done! You’ve answered {} percent correctly! Did you know that in the "
+"UK, over 140.000 people did this test when it was first developed?"
+msgstr ""
+"Goed gedaan! Je hebt {} procent goed beantwoord! Wist je dat in Engeland "
+"meer dan 140.000 mensen deze test hebben gedaan toen deze in ontwikkeling "
+"was?"
 
 #: experiment/rules/beat_alignment.py:107
 msgid "How certain are you of your answer?"
@@ -231,13 +246,11 @@ msgstr "Ik weet het zeker"
 
 #: experiment/rules/beat_alignment.py:124
 msgid "In this example the beeps are ALIGNED TO THE BEAT of the music."
-msgstr ""
-"In dit voorbeeld zijn de piepjes IN DE MAAT van de muziek."
+msgstr "In dit voorbeeld zijn de piepjes IN DE MAAT van de muziek."
 
 #: experiment/rules/beat_alignment.py:127
 msgid "In this example the beeps are NOT ALIGNED TO THE BEAT of the music."
-msgstr ""
-"In dit voorbeeld zijn de piepjes UIT DE MAAT van de muziek."
+msgstr "In dit voorbeeld zijn de piepjes UIT DE MAAT van de muziek."
 
 #: experiment/rules/beat_alignment.py:138
 msgid "Example {}"
@@ -561,8 +574,8 @@ msgstr ""
 #: experiment/rules/consent_forms/consent_speech2song.html:64
 msgid ""
 "\n"
-"    For further information on the research project, please contact Gustav-"
-"Hein Frieberg (phone number: +31 6 83 676\n"
+"    For further information on the research project, please contact "
+"Gustav-Hein Frieberg (phone number: +31 6 83 676\n"
 "    490; email: gusfrieberg@gmail.com).\n"
 "    If you have any complaints regarding this research project, you can "
 "contact the secretary of the Ethics Committee of\n"
@@ -712,15 +725,16 @@ msgstr "Einde van dit experiment"
 
 #: experiment/rules/duration_discrimination.py:227
 msgid ""
-"Well done! You heard the difference between two intervals that "
-"differed only {} percent in duration. When we research timing in "
-"humans, we often find that people's accuracy in this task scales: "
-"for shorter durations, people can hear even smaller differences than for longer durations."
+"Well done! You heard the difference between two intervals that differed only "
+"{} percent in duration. When we research timing in humans, we often find "
+"that people's accuracy in this task scales: for shorter durations, people "
+"can hear even smaller differences than for longer durations."
 msgstr ""
 "Goed gedaan! Je hoorde het verschil tussen tijdsintervallen die maar {} "
-"procent van elkaar verschilden. Uit onderzoek blijkt dat je prestatie op deze taak "
-"af kan hangen van de lengte van het interval: voor korte tijdsintervallen kan je nog kleinere "
-"verschillen horen dan voor lange intervallen."
+"procent van elkaar verschilden. Uit onderzoek blijkt dat je prestatie op "
+"deze taak af kan hangen van de lengte van het interval: voor korte "
+"tijdsintervallen kan je nog kleinere verschillen horen dan voor lange "
+"intervallen."
 
 #: experiment/rules/duration_discrimination_tone.py:8
 msgid "tone"
@@ -728,11 +742,10 @@ msgstr "toon"
 
 #: experiment/rules/duration_discrimination_tone.py:12
 msgid ""
-"Well done! You managed to hear the difference between tones "
-"that                 differed only {} milliseconds in length. Humans are "
-"really good at                 hearing these small differences in durations, "
-"which is very handy                 if we want to be able to process rhythm "
-"in music."
+"Well done! You managed to hear the difference between tones that             "
+"    differed only {} milliseconds in length. Humans are really good at       "
+"          hearing these small differences in durations, which is very handy  "
+"               if we want to be able to process rhythm in music."
 msgstr ""
 "Goed gedaan! Je hoorde het verschil tussen tonen die maar {} procent van "
 "elkaar verschilden in tijdsduur. Mensen zijn heel goed in het horen van deze "
@@ -820,19 +833,19 @@ msgstr "In deze test krijg je steeds een reeks regelmatige geluiden te horen."
 
 #: experiment/rules/hbat_bst.py:25
 msgid ""
-"It's your job to decide if the rhythm has a DUPLE METER (a MARCH) or a TRIPLE METER"
-" (a WALTZ)."
+"It's your job to decide if the rhythm has a DUPLE METER (a MARCH) or a "
+"TRIPLE METER (a WALTZ)."
 msgstr ""
 "Het is jouw taak om te beslissen of het ritme een TWEEDELIGE MAAT (een MARS) "
 "of een DRIEDELIGE MAAT (een WALS) is."
 
 #: experiment/rules/hbat_bst.py:29
 msgid ""
-"Every SECOND tone in a DUPLE METER (march) is louder and every THIRD tone in a 3-"
-"quarter beat (waltz) is louder."
+"Every SECOND tone in a DUPLE METER (march) is louder and every THIRD tone in "
+"a 3-quarter beat (waltz) is louder."
 msgstr ""
-"In de TWEEdelige maat (mars) is elke TWEEDE toon luider en in de DRIEdelige maat (wals) is "
-"elke DERDE toon luider."
+"In de TWEEdelige maat (mars) is elke TWEEDE toon luider en in de DRIEdelige "
+"maat (wals) is elke DERDE toon luider."
 
 #: experiment/rules/hbat_bst.py:81
 msgid "Is the rhythm a DUPLE METER (MARCH) or a TRIPLE METER (WALTZ)?"
@@ -868,11 +881,14 @@ msgstr "Het was een DRIEDELIGE MAAT. Je antwoord was INCORRECT."
 
 #: experiment/rules/hbat_bst.py:130
 msgid ""
-"Well done! You heard the difference when the accented tone was "
-"only {} dB louder. A march and a waltz are very common meters in Western music, but in other cultures, much more complex meters also exist!"
+"Well done! You heard the difference when the accented tone was only {} dB "
+"louder. A march and a waltz are very common meters in Western music, but in "
+"other cultures, much more complex meters also exist!"
 msgstr ""
 "Goed gedaan! Je hoorde het verschil al wanneer de geaccentueerde tonen maar "
-"{} decibel luider waren. Een mars en een wals zijn maatsoorten die veel in Westerse culturen voorkomen, maar in andere culturen bestaan ook veel complexere maatsoorten!"
+"{} decibel luider waren. Een mars en een wals zijn maatsoorten die veel in "
+"Westerse culturen voorkomen, maar in andere culturen bestaan ook veel "
+"complexere maatsoorten!"
 
 #: experiment/rules/huang_2021.py:23
 msgid "How to Play"
@@ -1002,7 +1018,7 @@ msgstr ""
 
 #: experiment/rules/huang_2021.py:444 experiment/rules/util/questions.py:60
 msgid "To which group of musical genres do you currently listen most?"
-msgstr ""
+msgstr "Naar welk muziekgenre luistert u meestal?"
 
 #: experiment/rules/huang_2021.py:446 experiment/rules/util/questions.py:63
 msgid "Pop/Country/Religious"
@@ -1081,14 +1097,17 @@ msgid "The third rhythm is DIFFERENT. Your response was INCORRECT."
 msgstr "Het derde ritme is ANDERS. Je antwoord is INCORRECT."
 
 #: experiment/rules/rhythm_discrimination.py:226
-msgid "Well done! You've answered {} percent correctly! "
-"One reason for the weird beep-tones in this test (instead of some nice drum-sound) "
-"is that it is used very often in brain scanners, which make a lot of noise. "
-"The beep-sound helps people in the scanner to hear the rhythm really well."
-msgstr "Goed gedaan! Je hebt {} procent goed beantwoord! "
-"Eén van de redenen om piepjes te gebruiken in deze test (in plaats van een leuk drum geluid) "
-"is dat deze test veel wordt gebruikt in hersenscanners, en die maken veel lawaai. "
-"Het piepgeluid helpt mensen in de scanner om het ritme goed te kunnen horen."
+msgid ""
+"Well done! You've answered {} percent correctly! One reason for the weird "
+"beep-tones in this test (instead of some nice drum-sound) is that it is used "
+"very often in brain scanners, which make a lot of noise. The beep-sound "
+"helps people in the scanner to hear the rhythm really well."
+msgstr ""
+"Goed gedaan! Je hebt {} procent goed beantwoord! Eén van de redenen om "
+"piepjes te gebruiken in deze test (in plaats van een leuk drum geluid) is "
+"dat deze test veel wordt gebruikt in hersenscanners, en die maken veel "
+"lawaai. Het piepgeluid helpt mensen in de scanner om het ritme goed te "
+"kunnen horen."
 
 #: experiment/rules/speech2song.py:27
 msgid "This is an experiment about an auditory illusion."
@@ -1236,325 +1255,358 @@ msgstr ""
 #: experiment/rules/util/goldsmiths.py:12
 msgid "I spend a lot of my free time doing music-related activities."
 msgstr ""
+"Ik besteed veel van mijn vrije tijd aan muziekgerelateerde activiteiten."
 
 #: experiment/rules/util/goldsmiths.py:16
 msgid "I enjoy writing about music, for example on blogs and forums."
-msgstr ""
+msgstr "Ik schrijf graag over muziek, bijvoorbeeld op blogs of fora."
 
 #: experiment/rules/util/goldsmiths.py:20
 msgid "If somebody starts singing a song I don’t know, I can usually join in."
 msgstr ""
+"Als iemand een lied begint te zingen dat ik niet ken, kan ik meestal "
+"meezingen."
 
 #: experiment/rules/util/goldsmiths.py:23
 msgid "I can sing or play music from memory."
-msgstr ""
+msgstr "Ik kan muziek uit mijn hoofd zingen of spelen."
 
 #: experiment/rules/util/goldsmiths.py:27
 msgid "I am able to hit the right notes when I sing along with a recording."
-msgstr ""
+msgstr "Ik kan de juiste tonen treffen als ik meezing met een opname."
 
 #: experiment/rules/util/goldsmiths.py:31
 msgid ""
 "I can compare and discuss differences between two performances or versions "
 "of the same piece of music."
 msgstr ""
+"Ik kan twee uitvoeringen of versies van hetzelfde muziekstuk vergelijken en "
+"de verschillen bespreken."
 
 #: experiment/rules/util/goldsmiths.py:36
 msgid "I have never been complimented for my talents as a musical performer."
 msgstr ""
+"Ik heb nog nooit complimenten gekregen voor mijn talenten als muzikant."
 
 #: experiment/rules/util/goldsmiths.py:40
 msgid "I often read or search the internet for things related to music."
 msgstr ""
+"Ik lees vaak dingen die te maken hebben met muziek of zoek ernaar op "
+"internet."
 
 #: experiment/rules/util/goldsmiths.py:44
 msgid ""
 "I am not able to sing in harmony when somebody is singing a familiar tune."
-msgstr ""
+msgstr "Ik kan niet harmonieus meezingen als iemand een bekend liedje zingt."
 
 #: experiment/rules/util/goldsmiths.py:48
 msgid "I am able to identify what is special about a given musical piece."
-msgstr ""
+msgstr "Ik kan onderscheiden wat er bijzonder is aan een bepaald muziekstuk."
 
 #: experiment/rules/util/goldsmiths.py:51
 msgid "When I sing, I have no idea whether I’m in tune or not."
-msgstr ""
+msgstr "Als ik zing, heb ik geen idee of ik zuiver zing of niet."
 
 #: experiment/rules/util/goldsmiths.py:55
 msgid "Music is kind of an addiction for me: I couldn’t live without it."
-msgstr ""
+msgstr "Muziek is een soort verslaving voor mij, ik zou niet zonder kunnen."
 
 #: experiment/rules/util/goldsmiths.py:59
 msgid ""
 "I don’t like singing in public because I’m afraid that I would sing wrong "
 "notes."
 msgstr ""
+"Ik houd er niet van om in het openbaar te zingen, want ik ben bang dat ik de "
+"verkeerde noten zing."
 
 #: experiment/rules/util/goldsmiths.py:62
 msgid "I would not consider myself a musician."
-msgstr ""
+msgstr "Ik zou mezelf geen muzikant of musicus noemen."
 
 #: experiment/rules/util/goldsmiths.py:66
 msgid ""
 "After hearing a new song two or three times, I can usually sing it by myself."
 msgstr ""
+"Als ik een nieuw nummer twee of drie keer gehoord heb, kan ik het meestal "
+"wel alleen zingen."
 
 #: experiment/rules/util/goldsmiths.py:70
 msgid ""
 "I engaged in regular, daily practice of a musical instrument (including "
 "voice) for:"
 msgstr ""
+"Ik heb vrijwel dagelijks geoefend op een instrument (stem inbegrepen) "
+"gedurende:"
 
 #: experiment/rules/util/goldsmiths.py:72
 msgid "0 years"
-msgstr ""
+msgstr "0 jaar"
 
 #: experiment/rules/util/goldsmiths.py:73
 msgid "1 year"
-msgstr ""
+msgstr "1 jaar"
 
 #: experiment/rules/util/goldsmiths.py:74
 msgid "2 years"
-msgstr ""
+msgstr "2 jaar"
 
 #: experiment/rules/util/goldsmiths.py:75
 msgid "3 years"
-msgstr ""
+msgstr "3 jaar"
 
 #: experiment/rules/util/goldsmiths.py:76
 msgid "4–5 years"
-msgstr ""
+msgstr "4-5 jaar"
 
 #: experiment/rules/util/goldsmiths.py:77
 msgid "6–9 years"
-msgstr ""
+msgstr "6-9 jaar"
 
 #: experiment/rules/util/goldsmiths.py:78
 msgid "10 or more years"
-msgstr ""
+msgstr "10 of meer jaar"
 
 #: experiment/rules/util/goldsmiths.py:84
 msgid ""
 "At the peak of my interest, I practiced on my primary instrument each day "
 "for:"
 msgstr ""
+"Op het hoogtepunt van mijn muziekstudie studeerde ik op mijn hoofdinstrument "
+"per dag:"
 
 #: experiment/rules/util/goldsmiths.py:86
 msgid "0 hours"
-msgstr ""
+msgstr "0 uur"
 
 #: experiment/rules/util/goldsmiths.py:87
 msgid "1 hour"
-msgstr ""
+msgstr "1 uur"
 
 #: experiment/rules/util/goldsmiths.py:88
 msgid "2 hours"
-msgstr ""
+msgstr "2 uur"
 
 #: experiment/rules/util/goldsmiths.py:89
 msgid "3 hours"
-msgstr ""
+msgstr "3 uur"
 
 #: experiment/rules/util/goldsmiths.py:90
 msgid "4–5 hours"
-msgstr ""
+msgstr "4-5 uur"
 
 #: experiment/rules/util/goldsmiths.py:91
 msgid "6–9 hours"
-msgstr ""
+msgstr "6-8 uur"
 
 #: experiment/rules/util/goldsmiths.py:92
 msgid "10 or more hours"
-msgstr ""
+msgstr "10 of meer uur"
 
 #: experiment/rules/util/goldsmiths.py:97
 msgid "How many musical instruments can you play?"
-msgstr ""
+msgstr "Hoeveel muziekinstrumenten kun je bespelen?"
 
 #: experiment/rules/util/goldsmiths.py:99
 #: experiment/rules/util/goldsmiths.py:131
 #: experiment/rules/util/goldsmiths.py:200
 #: experiment/rules/util/goldsmiths.py:215
 msgid "0"
-msgstr ""
+msgstr "0"
 
 #: experiment/rules/util/goldsmiths.py:100
 #: experiment/rules/util/goldsmiths.py:132
 #: experiment/rules/util/goldsmiths.py:202
 #: experiment/rules/util/goldsmiths.py:217
 msgid "1"
-msgstr ""
+msgstr "1"
 
 #: experiment/rules/util/goldsmiths.py:101
 #: experiment/rules/util/goldsmiths.py:133
 #: experiment/rules/util/goldsmiths.py:203
 #: experiment/rules/util/goldsmiths.py:218
 msgid "2"
-msgstr ""
+msgstr "2"
 
 #: experiment/rules/util/goldsmiths.py:102
 #: experiment/rules/util/goldsmiths.py:134
 #: experiment/rules/util/goldsmiths.py:204
 #: experiment/rules/util/goldsmiths.py:219
 msgid "3"
-msgstr ""
+msgstr "3"
 
 #: experiment/rules/util/goldsmiths.py:103
 msgid "4–5"
-msgstr ""
+msgstr "4-5"
 
 #: experiment/rules/util/goldsmiths.py:104
 msgid "6–9"
-msgstr ""
+msgstr "6-9"
 
 #: experiment/rules/util/goldsmiths.py:105
 msgid "10 or more"
-msgstr ""
+msgstr "10 of meer"
 
 #: experiment/rules/util/goldsmiths.py:116
 msgid ""
 "I’m intrigued by musical styles I’m not familiar with and want to find out "
 "more."
 msgstr ""
+"Ik ben geïntrigeerd door muziekstijlen die ik niet goed ken en wil daar meer "
+"over weten."
 
 #: experiment/rules/util/goldsmiths.py:120
 msgid "I don’t spend much of my disposable income on music."
 msgstr ""
+"Ik geef maar een klein deel van mijn vrij besteedbaar inkomen uit aan muziek."
 
 #: experiment/rules/util/goldsmiths.py:125
 msgid ""
 " I keep track of new music that I come across (e.g. new artists or "
 "recordings)."
 msgstr ""
+"Ik ben alert op nieuwe muziek die ik tegenkom (bijvoorbeeld nieuwe artiesten "
+"of opnames)."
 
 #: experiment/rules/util/goldsmiths.py:129
 msgid ""
 "How many live music events have you attended as an audience member in the "
 "past twelve months?"
 msgstr ""
+"Hoeveel live-muziekoptredens of muziektheatervoorstellingen heb je bezocht "
+"als toehoorder in de afgelopen 12 maanden?"
 
 #: experiment/rules/util/goldsmiths.py:135
 #: experiment/rules/util/goldsmiths.py:205
 #: experiment/rules/util/goldsmiths.py:220
 msgid "4-6"
-msgstr ""
+msgstr "4-6"
 
 #: experiment/rules/util/goldsmiths.py:136
 msgid "7-10"
-msgstr ""
+msgstr "7-10"
 
 #: experiment/rules/util/goldsmiths.py:137
 msgid "11 or more"
-msgstr ""
+msgstr "11 of meer"
 
 #: experiment/rules/util/goldsmiths.py:143
 msgid "How much time per day do you spend listening to music attentively?"
-msgstr ""
+msgstr "Hoeveel tijd per dag luister je aandachtig naar muziek?"
 
 #: experiment/rules/util/goldsmiths.py:145
 msgid "0-15 min"
-msgstr ""
+msgstr "0-15 min"
 
 #: experiment/rules/util/goldsmiths.py:146
 msgid "15-30 min"
-msgstr ""
+msgstr "15-30 min"
 
 #: experiment/rules/util/goldsmiths.py:147
 msgid "30-60 min"
-msgstr ""
+msgstr "30-60 min"
 
 #: experiment/rules/util/goldsmiths.py:148
 msgid "60-90 min"
-msgstr ""
+msgstr "60-90 min"
 
 #: experiment/rules/util/goldsmiths.py:149
 msgid "2 hrs"
-msgstr ""
+msgstr "2 uur"
 
 #: experiment/rules/util/goldsmiths.py:150
 msgid "2-3 hrs"
-msgstr ""
+msgstr "2-3 uur"
 
 #: experiment/rules/util/goldsmiths.py:151
 msgid "4 hrs or more"
-msgstr ""
+msgstr "4 uur of langer"
 
 #: experiment/rules/util/goldsmiths.py:159
 msgid "I am able to judge whether someone is a good singer or not."
-msgstr ""
+msgstr "Ik kan beoordelen of iemand goed kan zingen of niet."
 
 #: experiment/rules/util/goldsmiths.py:162
 msgid "I usually know when I’m hearing a song for the first time."
-msgstr ""
+msgstr "Meestal weet ik of ik een nummer voor de eerste keer hoor of niet."
 
 #: experiment/rules/util/goldsmiths.py:165
 msgid ""
 "I find it difficult to spot mistakes in a performance of a song even if I "
 "know the tune."
 msgstr ""
+"Ik vind het moeilijk om fouten op te merken in de uitvoering van een nummer, "
+"ook al ken ik de melodie."
 
 #: experiment/rules/util/goldsmiths.py:170
 msgid ""
 "I have trouble recognising a familiar song when played in a different way or "
 "by a different performer."
 msgstr ""
+"Ik vind het moeilijk een bekend nummer te herkennen als het op een andere "
+"manier of door een andere artiest wordt uitgevoerd."
 
 #: experiment/rules/util/goldsmiths.py:175
 msgid "I can tell when people sing or play out of time with the beat."
-msgstr ""
+msgstr "Ik kan het horen als iemand uit de maat zingt of speelt."
 
 #: experiment/rules/util/goldsmiths.py:179
 msgid "I can tell when people sing or play out of tune."
-msgstr ""
+msgstr "Ik kan het horen wanneer iemand vals zingt of speelt."
 
 #: experiment/rules/util/goldsmiths.py:185
 msgid "When I hear a piece of music I can usually identify its genre."
-msgstr ""
+msgstr "Als ik een muziekstuk hoor, weet ik meestal wel welk genre het is."
 
 #: experiment/rules/util/goldsmiths.py:197
 msgid "How many years of formal training have you had in music theory?"
-msgstr ""
+msgstr "Hoeveel jaar heb je muziektheorieles gehad?"
 
 #: experiment/rules/util/goldsmiths.py:201
 #: experiment/rules/util/goldsmiths.py:216
 msgid "0.5"
-msgstr ""
+msgstr "0.5"
 
 #: experiment/rules/util/goldsmiths.py:206
 #: experiment/rules/util/goldsmiths.py:221
 msgid "7 or more"
-msgstr ""
+msgstr "7 of meer"
 
 #: experiment/rules/util/goldsmiths.py:212
 msgid ""
 "How many years of formal training have you had on a musical instrument "
 "(including voice) during your lifetime?"
 msgstr ""
+"Hoeveel jaar heb je les gehad in het bespelen van een instrument (stem "
+"inbegrepen) in je leven?"
 
 #: experiment/rules/util/goldsmiths.py:237
 msgid "I only need to hear a new tune once and I can sing it back hours later."
 msgstr ""
+"Ik hoef een nieuwe melodie maar één keer te horen, en dan kan ik die uren "
+"later zo zingen."
 
 #: experiment/rules/util/goldsmiths.py:245
 msgid "I sometimes choose music that can trigger shivers down my spine."
 msgstr ""
+"Soms kies ik voor muziek waarvan ik rillingen over mijn rug kan krijgen."
 
 #: experiment/rules/util/goldsmiths.py:249
 msgid "Pieces of music rarely evoke emotions for me."
-msgstr ""
+msgstr "Muziek roept zelden emoties bij mij op."
 
 #: experiment/rules/util/goldsmiths.py:253
 msgid "I often pick certain music to motivate or excite me."
-msgstr ""
+msgstr "Ik kies vaak bepaalde muziek om mijzelf te motiveren of te prikkelen."
 
 #: experiment/rules/util/goldsmiths.py:259
 msgid ""
 "I am able to talk about the emotions that a piece of music evokes for me."
-msgstr ""
+msgstr "Ik kan praten over de emoties die een muziekstuk bij mij oproept."
 
 #: experiment/rules/util/goldsmiths.py:263
 msgid "Music can evoke my memories of past people and places."
 msgstr ""
+"Muziek kan bij mij herinneringen oproepen aan mensen en plaatsen van vroeger."
 
 #: experiment/rules/util/languages.py:8
 msgid "Please rate your previous experience:"
@@ -1614,7 +1666,7 @@ msgstr ""
 
 #: experiment/rules/util/practice.py:93
 msgid "You have answered 1 or more practice trials incorrectly."
-msgstr "Je hebt 1 of meer oefentrials incorrect beantwoord. "
+msgstr "Je hebt 1 of meer oefentrials incorrect beantwoord."
 
 #: experiment/rules/util/practice.py:95
 msgid "We will therefore practice again."
@@ -1642,35 +1694,35 @@ msgstr "Denk eraan dat je niet meebeweegt of meetikt tijdens het testje."
 
 #: experiment/rules/util/questions.py:10
 msgid "With which gender do you currently most identify?"
-msgstr ""
+msgstr "Met welke gender identificeer je je het meest?"
 
 #: experiment/rules/util/questions.py:12
 msgid "Man"
-msgstr ""
+msgstr "Man"
 
 #: experiment/rules/util/questions.py:13
 msgid "Transgender man"
-msgstr ""
+msgstr "Transgender man"
 
 #: experiment/rules/util/questions.py:14
 msgid "Transgender woman"
-msgstr ""
+msgstr "Transgender vrouw"
 
 #: experiment/rules/util/questions.py:15
 msgid "Woman"
-msgstr ""
+msgstr "vrouw"
 
 #: experiment/rules/util/questions.py:16
 msgid "Non-conforming or questioning"
-msgstr ""
+msgstr "Non-conform"
 
 #: experiment/rules/util/questions.py:17
 msgid "Intersex or two-spirit"
-msgstr ""
+msgstr "Intersekse of two-spirit"
 
 #: experiment/rules/util/questions.py:18
 msgid "Prefer not to answer"
-msgstr ""
+msgstr "Zeg ik liever niet"
 
 #: experiment/rules/util/questions.py:23
 msgid "When were you born?"
@@ -1704,11 +1756,11 @@ msgstr ""
 
 #: experiment/rules/util/questions.py:41
 msgid "What is the highest educational qualification that you have attained?"
-msgstr ""
+msgstr "Wat is uw hoogste afgeronde opleiding?"
 
 #: experiment/rules/util/questions.py:43
 msgid "Have not (yet) completed any school qualification"
-msgstr ""
+msgstr "Geen diploma"
 
 #: experiment/rules/util/questions.py:44
 msgid "Vocational qualification at about 16 years of age (GCSE)"
@@ -1724,15 +1776,15 @@ msgstr ""
 
 #: experiment/rules/util/questions.py:47
 msgid "Bachelor's degree or equivalent"
-msgstr ""
+msgstr "Hbo/bachelor WO"
 
 #: experiment/rules/util/questions.py:48
 msgid "Master's degree or equivalent"
-msgstr ""
+msgstr "Doctoraal/Master WO"
 
 #: experiment/rules/util/questions.py:49
 msgid "Doctoral degree or equivalent"
-msgstr ""
+msgstr "Doctoraat/PhD"
 
 #: experiment/rules/util/questions.py:54 experiment/rules/util/questions.py:88
 msgid "In which country do you currently reside?"
@@ -1744,77 +1796,79 @@ msgstr ""
 
 #: experiment/rules/util/questions.py:71
 msgid "The instrument I play best, including voice (or none), is:"
-msgstr ""
+msgstr "Het instrument dat ik het best bespeel (stem inbegrepen) is:"
 
 #: experiment/rules/util/questions.py:79
 msgid "What is your age?"
-msgstr ""
+msgstr "Wat is je leeftijd?"
 
 #: experiment/rules/util/questions.py:93
 msgid ""
 "If you are still in education, what is the highest qualification you expect "
 "to obtain?"
 msgstr ""
+"Als u nog in opleiding bent, op welk opleidingsniveau denkt u dan te "
+"eindigen?"
 
 #: experiment/rules/util/questions.py:95
 msgid "First school qualification (A-levels/ High school"
-msgstr ""
+msgstr "Vmbo"
 
 #: experiment/rules/util/questions.py:96
 msgid "Post-16 vocational course"
-msgstr ""
+msgstr "HAVO"
 
 #: experiment/rules/util/questions.py:97
 msgid "Second school qualification (A-levels/high school)"
-msgstr ""
+msgstr "VWO"
 
 #: experiment/rules/util/questions.py:98
 msgid "Undergraduate degree or professional qualification"
-msgstr ""
+msgstr "HBO"
 
 #: experiment/rules/util/questions.py:99
 msgid "Postgraduate degree"
-msgstr ""
+msgstr "Master WO"
 
 #: experiment/rules/util/questions.py:100
 msgid "Not applicable"
-msgstr ""
+msgstr "Doctoraat/PhD"
 
 #: experiment/rules/util/questions.py:105
 msgid "Occupational status"
-msgstr ""
+msgstr "Dagelijkse bezigheden"
 
 #: experiment/rules/util/questions.py:107
 msgid "Still at School"
-msgstr ""
+msgstr "Nog op school"
 
 #: experiment/rules/util/questions.py:108
 msgid "At University"
-msgstr ""
+msgstr "Studerend (mbo, hbo of universiteit)"
 
 #: experiment/rules/util/questions.py:109
 msgid "In Full-time employment"
-msgstr ""
+msgstr "Voltijds in loondienst"
 
 #: experiment/rules/util/questions.py:110
 msgid "In Part-time employment"
-msgstr ""
+msgstr "Parttime in loondienst"
 
 #: experiment/rules/util/questions.py:111
 msgid "Self-employed"
-msgstr ""
+msgstr "Eigen baas/zzp'er"
 
 #: experiment/rules/util/questions.py:112
 msgid "Homemaker/full time parent"
-msgstr ""
+msgstr "Huisman/huisvrouw/full time ouder"
 
 #: experiment/rules/util/questions.py:113
 msgid "Unemployed"
-msgstr ""
+msgstr "Werkloos"
 
 #: experiment/rules/util/questions.py:114
 msgid "Retired"
-msgstr ""
+msgstr "Gepensioneerd"
 
 #: experiment/rules/views/composite_view.py:4
 #: experiment/rules/views/song_sync.py:59
