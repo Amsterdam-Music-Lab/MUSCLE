@@ -67,6 +67,7 @@ class ListeningConditions(Base):
                     You can then adjust the volume to as high a level as possible without it being uncomfortable. \
                     Please keep the eventual sound level the same over the course of the experiment."),
             }
+            feedback_form = None
             view = CompositeView(section, feedback_form, instructions)
             return view.action()
 

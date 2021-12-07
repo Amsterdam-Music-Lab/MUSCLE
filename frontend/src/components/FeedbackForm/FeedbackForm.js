@@ -6,7 +6,10 @@ import Button from "../Button/Button";
 // FeedbackForm
 const FeedbackForm = ({ formActive, form, buttonLabel, skipLabel, onResult }) => {
 
-    const showSubmitButtons = form.filter( formElement => formElement.submits).length == 0;
+    const showSubmitButtons = form.filter( formElement => formElement.submits).length === 0;
+    
+    // if the form is longer than one question, disable the submit button until all form questions have been filled
+    const [submitActive, setSubmitActive] = useState(form.length<2);
     
     const onSubmit = (form) => {
         // Callback onResult with question data
@@ -17,6 +20,9 @@ const FeedbackForm = ({ formActive, form, buttonLabel, skipLabel, onResult }) =>
 
     const onChange = (value, question_key) => {
         form[question_key].value = value;
+        if (form.filter( formElement => formElement.value).length === form.length) {
+            setSubmitActive(true);
+        }
         if (form[question_key].submits) {
             onSubmit(form);
         }
@@ -37,13 +43,15 @@ const FeedbackForm = ({ formActive, form, buttonLabel, skipLabel, onResult }) =>
                 )
                 )}
                 {/* Continue button */}
+                <center>
                 {showSubmitButtons && (
                 <Button
                     onClick={() => {
-                        onSubmit();
+                        onSubmit(form);
                     }}
-                    className={"btn-primary anim anim-fade-in anim-speed-500"}
+                    className={"btn-primary"}
                     title={buttonLabel}
+                    active={submitActive}
                 />)}
 
                 {/* Skip button */}
@@ -57,6 +65,7 @@ const FeedbackForm = ({ formActive, form, buttonLabel, skipLabel, onResult }) =>
                         title={skipLabel}
                     />
                 )}
+                </center>
             </form>
         </div>
     )
