@@ -121,7 +121,7 @@ def next_round(request, session_id):
     Fall back to continue an experiment is case next_round data is missing
     This data is normally provided in: result()
     """
-
+    print(" in next round ")
     # Current participant
     participant = current_participant(request)
 

@@ -210,6 +210,13 @@ class Session(models.Model):
     def question_bonus(self, bonus=100, skip_penalty=5):
         """Get the question bonus, given by the bonus reduced with number of skipped questions times the skip_penalty"""
         return bonus + self.skipped_questions() * skip_penalty
+    
+    def total_questions(self):
+        """ Get total number of profile questions in this session """
+        try:
+            return Profile.objects.filter(session_id=self.id).count()
+        except Profile.DoesNotExist:
+            return 0
 
     def skipped_questions(self):
         """Get number of skipped (empty) profile questions for this session"""
