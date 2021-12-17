@@ -27,7 +27,7 @@ class ExperimentForm(ModelForm):
     class Meta:
         model = Experiment
         fields = ['name', 'slug', 'active', 'rules',
-                  'rounds', 'bonus_points', 'playlists']
+                  'rounds', 'bonus_points', 'playlists', 'test_series']
 
 
 class ExperimentAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
@@ -37,7 +37,7 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
     search_fields = ['name']
     inline_actions = ['export', 'export_csv']
     fields = ['name', 'slug', 'language', 'active', 'rules',
-              'rounds', 'bonus_points', 'playlists', 'nested_experiments']
+              'rounds', 'bonus_points', 'playlists', 'test_series']
     form = ExperimentForm
 
     # make playlists fields a list of checkboxes
