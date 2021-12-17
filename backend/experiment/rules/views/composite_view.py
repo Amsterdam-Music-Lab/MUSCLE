@@ -22,8 +22,8 @@ class CompositeView:  # pylint: disable=too-few-public-methods
 
     ID = 'COMPOSITE_VIEW'
 
-    def __init__(self, section, feedback_form, instructions=None, title=''):
-        self.section = section
+    def __init__(self, players, feedback_form, instructions=None, title=''):
+        self.players = players
         self.feedback_form = feedback_form
         self.instructions = INSTRUCTIONS_DEFAULT
         if instructions:
@@ -48,13 +48,14 @@ class CompositeView:  # pylint: disable=too-few-public-methods
         # Create action
         action = {
             'view': CompositeView.ID,
+            'players': self.players,
             'feedback_form': self.feedback_form,
             'title': self.title,
             'instructions': self.instructions
         }
 
         # Section
-        if self.section:
+        if self.sections:
             action['section'] = {
                 'id': self.section.id,
                 'url': self.section.absolute_url(),

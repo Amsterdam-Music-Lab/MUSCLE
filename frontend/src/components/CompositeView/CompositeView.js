@@ -1,15 +1,12 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useRef } from "react";
 import * as audio from "../../util/audio";
 import { getCurrentTime, getTimeSince } from "../../util/time";
 import { createProfile, createResult } from "../../API.js";
 import { MEDIA_ROOT } from "../../config";
 import Preload from "../Preload/Preload";
-import ListenStripped from '../Listen/ListenStripped';
-import Circle from '../Circle/Circle';
 import FeedbackForm from "../FeedbackForm/FeedbackForm";
+import Playback from "../Playback/Playback";
 
-const PRELOAD = "PRELOAD";
-const RECOGNIZE = "RECOGNIZE";
 
 // CompositeView is an experiment view, that preloads a song, shows an explanation and plays audio
 // Optionally, it can show an animation during playback
@@ -208,7 +205,6 @@ const getSectionUrl = (action) => {
                 </div>
             );
         case RECOGNIZE:
-
             const formActive =
                 (started && !config.listen_first) ||
                 (started && config.listen_first && !running);
@@ -216,40 +212,14 @@ const getSectionUrl = (action) => {
             return (
                 <div className="aha__composite">
                     {section && (
-                        <div>
-                            <div className="circle">
-                                <Circle
-                                    key={instructions.during_presentation + config.decision_time}
-                                    running={running}
-                                    duration={config.decision_time}
-                                    onTick={onCircleTimerTick}
-                                    color="white"
-                                    animateCircle={config.show_animation}
-                                    onFinish={() => {
-                                        if (config.auto_advance) {
-                                            // Create a time_passed result
-                                            makeResult({
-                                                type: "time_passed",
-                                            });
-                                        } else {
-                                            // Stop audio
-                                            audio.pause();
-                                            setRunning(false);
-                                        }
-                                    }}
-                                />
-                                <div className="circle-content">
-                                    <div className="stationary">
-                                        <span className="ti-headphone"></span>
-                                    </div>
-                                </div>
-                            </div>
-                            <ListenStripped
-                                instruction={instructions.during_presentation}
-                                className=""
-                            />
-                        </div>
-                    )}
+                    <Playback
+                        instructions={instructions}
+                        config={config}
+                        section={section}
+                        onCircleTimerTick={onCircleTimerTick}
+                        audio={audio}
+                        createResult={createResult}
+                    />)}
                     {feedback_form && (
                     <FeedbackForm
                         formActive={formActive}

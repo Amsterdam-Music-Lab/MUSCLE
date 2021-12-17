@@ -761,6 +761,8 @@ h3.title {
     background-color: #39d7b8; }
   .aha__buttons .btn:nth-of-type(2) {
     background-color: #0cc7f1; }
+  .aha__buttons .btn:nth-of-type(3) {
+    background-color: #ffb14c; }
   .aha__buttons .title {
     flex: 0 0 100%; }
 
@@ -1251,4 +1253,5 @@ h3.title {
 .aha__feedback {
   position: relative; }
   .aha__feedback .btn {
+    position: relative;
     margin-top: 20px; }

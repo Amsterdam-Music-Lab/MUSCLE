@@ -15,6 +15,7 @@ from .duration_discrimination_tone import DurationDiscriminationTone
 from .anisochrony import Anisochrony
 from .h_bat import HBat
 from .hbat_bst import BST
+from .listening_conditions import ListeningConditions
 from .rhythm_discrimination import RhythmDiscrimination
 from .test_battery import TestBattery
 from .gold_msi import GoldMSI
@@ -45,4 +46,5 @@ EXPERIMENT_RULES = {
     RhythmDiscrimination.ID: RhythmDiscrimination,
     TestBattery.ID: TestBattery,
     GoldMSI.ID: GoldMSI,
+    ListeningConditions.ID: ListeningConditions,
 }
