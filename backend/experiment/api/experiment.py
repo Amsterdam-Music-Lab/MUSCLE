@@ -20,9 +20,9 @@ def get(request, slug):
     except Experiment.DoesNotExist:
         raise Http404("Experiment does not exist")
     
-    if experiment.nested_experiments:
+    series_data = request.session.get('test_series')
+    if experiment.test_series and series_data:
         # we are in the middle of a test battery
-        series_data = request.session.get('experiment_series')
         try:
             session = Session.objects.get(pk=series_data.get('session_id'))
         except Session.DoesNotExist:

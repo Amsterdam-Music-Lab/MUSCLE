@@ -76,7 +76,8 @@ MSI_FG_GENERAL = [
             '4-5': _('4–5 years'),
             '6-9': _('6–9 years'),
             'msi_10_or_more': _('10 or more years'),
-        }
+        },
+        view='RADIOS'
     ),
     ChoiceQuestion(
         key='msi_33_practice_daily',
@@ -90,7 +91,8 @@ MSI_FG_GENERAL = [
             '4-5': _('4–5 hours'),
             '6-9': _('6–9 hours'),
             'msi_10_or_more': _('10 or more hours'),
-        }
+        },
+        view='RADIOS'
     ),
     ChoiceQuestion(
         key='msi_37_play_instruments',
@@ -103,7 +105,8 @@ MSI_FG_GENERAL = [
             '4-5': _('4–5'),
             '6-9': _('6–9'),
             'msi_10_or_more': _('10 or more'),
-        }
+        },
+        view='RADIOS'
     )
 ]
 
@@ -135,7 +138,8 @@ MSI_F1_ACTIVE_ENGAGEMENT = [
             '4-6': _('4-6'),
             '7-10': _('7-10'),
             'msi_11_or_more': _('11 or more'),
-        }
+        },
+        view='RADIOS'
     ),
     ChoiceQuestion(
         key='msi_38_listen_music',
@@ -149,7 +153,8 @@ MSI_F1_ACTIVE_ENGAGEMENT = [
             '2h': _('2 hrs'),
             '2-3h': _('2-3 hrs'),
             '4h_or_more': _('4 hrs or more'),
-        }
+        },
+        view='RADIOS'
     )
 ]
 
@@ -204,7 +209,8 @@ MSI_F3_MUSICAL_TRAINING = [
             '3': _('3'),
             '4-6': _('4-6'),
             '7+': _('7 or more'),
-        }
+        },
+        view='RADIOS'
     ),
     ChoiceQuestion(
         key='msi_36_instrumental_training',
@@ -219,7 +225,8 @@ MSI_F3_MUSICAL_TRAINING = [
             '3': _('3'),
             '4-6': _('4-6'),
             '7+': _('7 or more'),
-        }
+        },
+        view='RADIOS'
     ),
     question_by_key('msi_37_play_instruments', MSI_FG_GENERAL)
 ]

@@ -68,13 +68,13 @@ class TestBattery(Base):
     
     @staticmethod
     def next_round(session):
-        if session.final_score == 0:
-            prepare_experiments(session)
-        elif session.final_score == session.experiment.rounds:
-            print("Finalize experiment battery")
         data = session.load_json_data()
         experiment_data = data.get('experiments')
-        print(experiment_data)
+        if not experiment_data:
+            prepare_experiments(session)
+        if len(experiment_data)==0:
+            return Final.action(session, title=_("Made it!"))
+        experiment_data = data.get('experiments')
         slug = experiment_data.pop()
         session.merge_json_data({'experiments': experiment_data})
         session.final_score +=1
@@ -83,17 +83,18 @@ class TestBattery(Base):
             'text': _('Continue'),
             'link': '{}/{}'.format(settings.CORS_ORIGIN_WHITELIST[0], slug)
         }
-        return Final.action(session, title=_('Next experiment'), button=button)
+        return Final.action(session, title=_('Next experiment (%d to go!)' % (len(experiment_data)+1)), button=button)
 
 
 def prepare_experiments(session):
     """ Given the session and a list of experiments, generate a random order of experiments 
     merge this into the session data.
     """
-    experiment_list = get_experiment_list(session)
-    
+    lists = get_experiment_lists(session)
+    random_list = lists['random']
+    random.shuffle(random_list)
+    experiment_list = lists['first'] + random_list + lists['last']
     register_consent(session, experiment_list)
-    random.shuffle(experiment_list)
     session.merge_json_data({'experiments': experiment_list})
     session.save()
 
@@ -112,10 +113,19 @@ def register_consent(session, experiment_list):
                 question=question, answer=answer)
         profile.save()
 
-def get_experiment_list(session):
-    from ..models import Experiment
-    pk_list = session.experiment.nested_experiments
-    experiments = [Experiment.objects.get(pk=pk).slug for pk in pk_list]
+def get_experiment_lists(session):
+    series = session.experiment.test_series
+    first_list = get_associated_experiments(series.first_experiments)
+    random_list = get_associated_experiments(series.random_experiments)
+    last_list = get_associated_experiments(series.last_experiments)
+    experiments = {
+        'first': first_list,
+        'random': random_list,
+        'last': last_list
+    }
     return experiments
+
+def get_associated_experiments(pk_list):
+    from ..models import Experiment
+    return [Experiment.objects.get(pk=pk).slug for pk in pk_list]
     
-        

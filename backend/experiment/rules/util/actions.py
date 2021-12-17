@@ -22,7 +22,7 @@ def final_action_with_optional_button(session, score_message, request_session):
     return a Final.action, which has a button to continue to the next experiment if series is defined
     """
     if request_session:
-        series_slug = request_session.get('experiment_series').get('slug')
+        series_slug = request_session.get('test_series').get('slug')
         this_slug = session.experiment.slug
         request_session.update({'completed': {this_slug: True}})
         return Final.action(
