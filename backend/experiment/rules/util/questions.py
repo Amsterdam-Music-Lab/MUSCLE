@@ -1,12 +1,13 @@
 from django.utils.translation import gettext_lazy as _
 
-from experiment.rules.views import Question
+from experiment.rules.views.form import ChoiceQuestion, Question
 from .iso_countries import ISO_COUNTRIES
 
 # List of all available profile questions
 DEMOGRAPHICS = [
-    Question.radios(
+    ChoiceQuestion(
         key='dgf_gender_identity',
+        view='RADIOS',
         question=_("With which gender do you currently most identify?"),
         choices={
             'male': _("Man"),
@@ -18,8 +19,9 @@ DEMOGRAPHICS = [
             'non_answer': _("Prefer not to answer")
         }
     ),
-    Question.radios(
+    ChoiceQuestion(
         key='dgf_generation',
+        view='RADIOS',
         question=_("When were you born?"),
         choices={
             'silent': _('1943 or earlier'),
@@ -29,14 +31,16 @@ DEMOGRAPHICS = [
             'gen_z': _('1997 or later')
         }
     ),
-    Question.dropdown(
+    ChoiceQuestion(
         key='dgf_country_of_origin',
+        view='DROPDOWN',
         question=_(
             "In which country did you spend the most formative years of your childhood and youth?"),
         choices=ISO_COUNTRIES
     ),
-    Question.radios(
+    ChoiceQuestion(
         key='dgf_education',
+        view='RADIOS',
         question=_(
             "What is the highest educational qualification that you have attained?"),
         choices={
@@ -49,13 +53,15 @@ DEMOGRAPHICS = [
             'isced-8': _("Doctoral degree or equivalent")
         }
     ),
-    Question.dropdown(
+    ChoiceQuestion(
         key='dgf_country_of_residence',
+        view='DROPDOWN',
         question=_("In which country do you currently reside?"),
         choices=ISO_COUNTRIES
     ),
-    Question.radios(
+    ChoiceQuestion(
         key='dgf_genre_preference',
+        view='RADIOS',
         question=_(
             "To which group of musical genres do you currently listen most?"),
         choices={
@@ -66,29 +72,34 @@ DEMOGRAPHICS = [
             'contemporary': _("Hip-hop/R&B/Funk")
         }
     ),
-    Question.string(
+    Question(
         key='msi_39_best_instrument',
+        view='STRING',
         question=_("The instrument I play best, including voice (or none), is:")
     ),
 ]
 
 
 EXTRA_DEMOGRAPHICS = [
-    Question.string(
+    Question(
         key='dgf_age',
+        view='STRING',
         question=_("What is your age?")
     ),
-    Question.string(
+    Question(
         key='dgf_country_of_origin_open',
+        view='STRING',
         question=_(
             "In which country did you spend the most formative years of your childhood and youth?"),
     ),
-    Question.string(
+    Question(
         key='dgf_country_of_residence_open',
+        view='STRING',
         question=_("In which country do you currently reside?")
     ),
-    Question.radios(
+    ChoiceQuestion(
         key='dgf_highest_qualification_expectation',
+        view='RADIOS',
         question=_(
             "If you are still in education, what is the highest qualification you expect to obtain?"),
         choices={
@@ -100,8 +111,9 @@ EXTRA_DEMOGRAPHICS = [
             'isced-7': _("Not applicable"),
         }
     ),
-    Question.radios(
+    ChoiceQuestion(
         key='dgf_occupational_status',
+        view='RADIOS',
         question=_("Occupational status"),
         choices={
             'student': _("Still at School"),
@@ -121,10 +133,10 @@ def question_by_key(key, questions=DEMOGRAPHICS, is_skippable=None):
     """Return question by given key"""
     try:
         for question in questions:
-            if question['question']['key'] == key:
+            if question.key == key:
                 # Set is_skippable
                 if is_skippable is not None:
-                    question['question']['is_skippable'] = is_skippable
+                    question.is_skippable = is_skippable
 
                 return question
 

@@ -144,6 +144,21 @@ class HBat(Base):
                     description=_(
                         "Try to answer as accurately as possible, even if you're uncertain."),
                     number=3
+                ),
+                Explainer.step(
+                    description=_(
+                        "In this test, you can answer as soon as you feel you know the answer."),
+                    number=4
+                ),
+                Explainer.step(
+                    description=_(
+                        "NOTE: Please wait with answering until you are either sure, or the sound has stopped."),
+                    number=5
+                ),
+                Explainer.step(
+                    description=_(
+                        'This test will take around 4 minutes to complete. Try to stay focused for the entire test!'),
+                    number=6
                 )],
             button_label='Ok'
         )
@@ -153,17 +168,17 @@ class HBat(Base):
             if correct:
                 if slower:
                     instruction = _(
-                        'The rhythm went SLOWER. Your response was correct.')
+                        'The rhythm went SLOWER. Your response was CORRECT.')
                 else:
                     instruction = _(
-                        'The rhythm went FASTER. Your response was correct.')
+                        'The rhythm went FASTER. Your response was CORRECT.')
             else:
                 if slower:
                     instruction = _(
-                        'The rhythm went FASTER. Your response was incorrect.')
+                        'The rhythm went FASTER. Your response was INCORRECT.')
                 else:
                     instruction = _(
-                        'The rhythm went SLOWER. Your response was incorrect.')
+                        'The rhythm went SLOWER. Your response was INCORRECT.')
             return Explainer.action(
                 instruction=instruction,
                 steps=[],

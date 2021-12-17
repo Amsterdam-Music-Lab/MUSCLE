@@ -105,10 +105,10 @@ class DurationDiscrimination(Base):
         correct_response = _('LONGER') if correct_response=='LONGER' else _('EQUAL')
         if correct:
             instruction = _(
-                'The second interval was %(correct_response)s %(preposition)s the first interval. Your answer was correct.') % {'correct_response': correct_response, 'preposition': preposition}
+                'The second interval was %(correct_response)s %(preposition)s the first interval. Your answer was CORRECT.') % {'correct_response': correct_response, 'preposition': preposition}
         else:
             instruction = _(
-                'The second interval was %(correct_response)s %(preposition)s the first interval. Your answer was incorrect.') % {'correct_response': correct_response, 'preposition': preposition}
+                'The second interval was %(correct_response)s %(preposition)s the first interval. Your answer was INCORRECT.') % {'correct_response': correct_response, 'preposition': preposition}
         return Explainer.action(
             instruction=instruction,
             steps=[],
@@ -190,6 +190,11 @@ class DurationDiscrimination(Base):
                     description=_(
                         "Try to answer as accurately as possible, even if you're uncertain."),
                     number=3
+                ),
+                Explainer.step(
+                    description=_(
+                        'This test will take around 4 minutes to complete. Try to stay focused for the entire test!'),
+                    number=4
                 )],
             button_label='Ok'
         )
@@ -213,10 +218,10 @@ class DurationDiscrimination(Base):
     def get_score_message(cls, milliseconds):
         percentage = round((milliseconds / 600) * 100, 1)
         return _(
-            'Well done! You heard the difference between two intervals that \
+            "Well done! You heard the difference between two intervals that \
             differed only {} percent in duration. When we research timing in \
-            humans, we often find that for shorter durations, people can hear \
-            even smaller differences than for longer durations.').format(percentage)
+            humans, we often find that people's accuracy in this task scales: \
+            for shorter durations, people can hear even smaller differences than for longer durations.").format(percentage)
 
     @classmethod
     def staircasing_blocks(cls, session, trial_action_callback):

@@ -1,5 +1,6 @@
 import random
 import logging
+import copy
 
 from django.utils.translation import gettext_lazy as _
 
@@ -47,7 +48,10 @@ class BeatAlignment(Base):
 
         # 3. Practice rounds
         practice_list = experiment.playlists.first()
-        practice_rounds = [BeatAlignment.next_practice_action(practice_list, i) for i in range(1,4)]
+        practice_rounds = []
+        for i in range(1,4):
+            this_round = BeatAlignment.next_practice_action(practice_list, i)
+            practice_rounds.append(copy.deepcopy(this_round))
         practice_rounds.append(Explainer.action(
             instruction=_('You will now hear 17 music fragments.'),
             steps=[
@@ -57,7 +61,7 @@ class BeatAlignment(Base):
                     ),
                 Explainer.step(
                     description=_(
-                        'We will also ask you how certain you are of your answer. Pay attention: a music fragment can occur several times.')
+                        'Pay attention: a music fragment can occur several times. In total, this test will take around 6 minutes to complete. Try to stay focused for the entire duration!')
                     )
             ],
             button_label=_('Start'))
@@ -85,7 +89,8 @@ class BeatAlignment(Base):
             session.save()
 
             percentage = (sum([r.score for r in session.result_set.all()]) / session.experiment.rounds) * 100
-            score_message=_('Well done! You’ve answered {} percent correctly!').format(percentage)
+            score_message=_('Well done! You’ve answered {} percent correctly! Did you know that in the UK, over 140.000 people did \
+                this test when it was first developed?').format(percentage)
             return final_action_with_optional_button(session, score_message, request_session)
 
         # Next round number, can be used to return different actions
@@ -112,10 +117,10 @@ class BeatAlignment(Base):
         
         if count==1:
             presentation_text = _(
-                "In this example the beeps are ALIGNED TO THE BEAT of the music. The correct answer was ALIGNED TO THE BEAT.")
+                "In this example the beeps are ALIGNED TO THE BEAT of the music.")
         else:
             presentation_text = _(
-                "In this example the beeps are NOT ALIGNED TO THE BEAT of the music. The correct answer was NOT ALIGNED TO THE BEAT.")
+                "In this example the beeps are NOT ALIGNED TO THE BEAT of the music.")
         
         instructions = {
             'preload': '',

@@ -53,8 +53,12 @@ export const createConsent = async ({ experiment, participant }) => {
         const response = await axios.post(
             API_BASE_URL + URLS.profile.create,
             qs.stringify({
-                question: "consent_" + experiment.slug,
-                answer: true,
+                result: JSON.stringify([
+                    {
+                        question: "consent_" + experiment.slug,
+                        value: true,
+                    }
+                ]),
                 csrfmiddlewaretoken: participant.csrf_token,
             },
             )
@@ -116,8 +120,7 @@ export const createResult = async ({
 
 // Store Profile question/answer
 export const createProfile = async ({
-    question,
-    answer,
+    result,
     session,
     participant,
 }) => {
@@ -125,8 +128,7 @@ export const createProfile = async ({
         const response = await axios.post(
             API_BASE_URL + URLS.profile.create,
             qs.stringify({
-                question,
-                answer,
+                json_data: JSON.stringify(result),
                 session_id: session,
                 csrfmiddlewaretoken: participant.csrf_token,
             })
@@ -141,7 +143,7 @@ export const createProfile = async ({
 // Get next_round from server
 export const getNextRound = async ({ session }) => {
     try {
-        const response = await axios.get(URLS.session.next_round(session.id));
+        const response = await axios.get( API_BASE_URL + URLS.session.next_round(session.id));
         return response.data;
     } catch (err) {
         console.error(err);

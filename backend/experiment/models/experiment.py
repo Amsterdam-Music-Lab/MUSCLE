@@ -4,7 +4,7 @@ from django.db import models
 from django.utils import timezone
 from experiment.rules import EXPERIMENT_RULES
 from experiment.rules.util.iso_languages import ISO_LANGUAGES
-from . import Playlist
+from . import Playlist, TestSeries
 
 language_choices = [(key, ISO_LANGUAGES[key]) for key in ISO_LANGUAGES.keys()]
 language_choices[0] = ('', 'Unset')
@@ -21,7 +21,9 @@ class Experiment(models.Model):
     rules = models.CharField(default="", max_length=64)
     language = models.CharField(
         default="", blank=True, choices=language_choices, max_length=2)
-    nested_experiments = models.JSONField(blank=True, null=True, default='')
+    test_series = models.ForeignKey(TestSeries, on_delete=models.SET_NULL,
+                                 blank=True, null=True)
+    
 
     class Meta:
         ordering = ['name']

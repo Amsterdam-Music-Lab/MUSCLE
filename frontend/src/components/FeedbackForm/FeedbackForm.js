@@ -8,7 +8,7 @@ const FeedbackForm = ({ formActive, form, buttonLabel, skipLabel, onResult }) =>
 
     const showSubmitButtons = form.filter( formElement => formElement.submits).length == 0;
     
-    const onSubmit = (form) => {
+    const onSubmit = () => {
         // Callback onResult with question data
         onResult({
             form

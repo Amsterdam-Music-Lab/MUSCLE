@@ -39,7 +39,6 @@ const Experiment = ({ match }) => {
     const [state, setState] = useState(startState);
     const [playlist, setPlaylist] = useState(null);
     const [session, setSession] = useState(null);
-    const resultBuffer = useRef([]);
 
     // API hooks
     const [experiment, loadingExperiment] = useExperiment(match.params.slug);
@@ -86,72 +85,6 @@ const Experiment = ({ match }) => {
         loadState,
     ]);
 
-    // Session result
-    const onResult = async (result) => {
-        // Add data to result buffer
-        resultBuffer.current.push(result || {});
-
-        // When time_pass_break is set true on the current state and result type
-        // indicates that time has passed; skip any next rounds
-
-        const timePassBreak =
-            state &&
-            state.time_pass_break &&
-            result.result?.type === "time_passed";
-
-        // Check if there is another round data available
-        // if so, store the result data and call onNext
-        if (state && state.next_round && !timePassBreak) {
-            onNext();
-            return;
-        }
-
-        // Merge result data with data from resultBuffer
-        // NB: result data with same properties will be overwritten by later results
-        const mergedResults = Object.assign(
-            {},
-            ...resultBuffer.current,
-            result
-        );
-
-        // Create result data
-        const data = {
-            session,
-            participant,
-            result: mergedResults,
-        };
-
-        // Optionally add section to result data
-        if (mergedResults.section) {
-            data.section = mergedResults.section;
-        }
-
-        // Send data to API
-        const action = await createResult(data);
-
-        // Fallback: Call onNext, try to reload round
-        if (!action) {
-            onNext();
-            return;
-        }
-
-        // Clear resultBuffer
-        resultBuffer.current = [];
-
-        // Check for preload_section_url in (nested) action
-        const preloadUrl = getSectionUrl(action);
-
-        if (preloadUrl) {
-            // 100ms for fadeout
-            setTimeout(() => {
-                audio.load(MEDIA_ROOT + preloadUrl);
-            }, 20);
-        }
-
-        // Init new state from action
-        loadState(action);
-    };
-
     // Load next round, stored in nextRound
     const onNext = async () => {
         if (state && state.next_round) {
@@ -161,7 +94,7 @@ const Experiment = ({ match }) => {
             // Fallback in case a server response/async call went wrong
             // Try to get next_round data from server again
             const round = await getNextRound({
-                session: session.current,
+                session: session,
                 participant,
             });
             if (round) {
@@ -188,7 +121,6 @@ const Experiment = ({ match }) => {
             setError,
             setSession,
             onNext,
-            onResult,
             ...state,
         };
 
@@ -282,21 +214,6 @@ const Experiment = ({ match }) => {
     );
 };
 
-// Get a section url from given (nested) action
-const getSectionUrl = (action) => {
-    if (!action) {
-        return "";
-    }
 
-    if (action.section && action.section.url) {
-        return action.section.url;
-    }
-
-    if (action.next_round) {
-        return getSectionUrl(action.next_round);
-    }
-
-    return "";
-};
 
 export default withRouter(Experiment);

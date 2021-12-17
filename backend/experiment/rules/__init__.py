@@ -17,6 +17,7 @@ from .h_bat import HBat
 from .hbat_bst import BST
 from .rhythm_discrimination import RhythmDiscrimination
 from .test_battery import TestBattery
+from .gold_msi import GoldMSI
 
 # Rules available to this application
 # If you create new Rules, add them to the list
@@ -42,5 +43,6 @@ EXPERIMENT_RULES = {
     HBat.ID: HBat,
     BST.ID: BST,
     RhythmDiscrimination.ID: RhythmDiscrimination,
-    TestBattery.ID: TestBattery
+    TestBattery.ID: TestBattery,
+    GoldMSI.ID: GoldMSI,
 }

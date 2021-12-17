@@ -91,6 +91,7 @@ def prepare_experiments(session):
     merge this into the session data.
     """
     experiment_list = get_experiment_list(session)
+    
     register_consent(session, experiment_list)
     random.shuffle(experiment_list)
     session.merge_json_data({'experiments': experiment_list})

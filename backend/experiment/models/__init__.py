@@ -1,4 +1,5 @@
 from .playlist import Playlist
+from .test_series import TestSeries
 from .section import Section
 from .experiment import Experiment
 from .participant import Participant
@@ -7,4 +8,4 @@ from .session import Session
 from .result import Result
 
 __all__ = ["Playlist", "Section", "Experiment",
-           "Participant", "Profile", "Session", "Result"]
+           "Participant", "Profile", "Session", "Result", "TestSeries"]

@@ -15,7 +15,8 @@ logger = logging.getLogger(__name__)
 
 class Anisochrony(DurationDiscrimination):
     ID = 'ANISOCHRONY'
-    start_diff = 270000
+    start_diff = 180000
+    practice_diff = 270000
     max_turnpoints = 8
     catch_condition = 'REGULAR'
     
@@ -24,10 +25,10 @@ class Anisochrony(DurationDiscrimination):
         correct_response = _('REGULAR') if correct_response=='REGULAR' else _('IRREGULAR')
         if correct:
             instruction = _(
-                    'The tones were {}. Your answer was correct.').format(correct_response)
+                    'The tones were {}. Your answer was CORRECT.').format(correct_response)
         else:
             instruction = _(
-                    'The tones were {}. Your answer was incorrect.').format(correct_response)
+                    'The tones were {}. Your answer was INCORRECT.').format(correct_response)
         return Explainer.action(
             instruction=instruction,
             steps=[],
@@ -105,6 +106,11 @@ class Anisochrony(DurationDiscrimination):
                     description=_(
                         "Try to answer as accurately as possible, even if you're uncertain."),
                     number=3
+                ),
+                Explainer.step(
+                    description=_(
+                        'This test will take around 4 minutes to complete. Try to stay focused for the entire test!'),
+                    number=4
                 )],
             button_label='Ok'
         )
@@ -129,7 +135,13 @@ class Anisochrony(DurationDiscrimination):
     @classmethod
     def get_score_message(cls, milliseconds):
         return _(
-            "Well done! You managed to hear the difference between tones \
-            that differed only {} milliseconds in length. Humans are really \
-            good at hearing these small differences in durations, which is \
-            very handy if we want to be able to process rhythm in music.").format(milliseconds)
+            "Well done! You heard the difference when we shifted a tone by {} percent. \
+            Many sounds in nature have regularity like a metronome. \
+            Our brains use this to process rhythm even better!").format(milliseconds)
+    
+    @classmethod
+    def get_difficulty(cls, session, multiplier=1.0):
+        if session.final_score == 0:
+            return cls.practice_diff
+        else:
+            return super(Anisochrony, cls).get_difficulty(session, multiplier)

@@ -3,16 +3,11 @@ import json
 
 from django.contrib import admin
 from django.db import models
-from django.forms import CheckboxSelectMultiple, ModelForm, ModelMultipleChoiceField, ChoiceField
+from django.forms import CheckboxSelectMultiple, ModelForm, ChoiceField
 from django.http import HttpResponse, JsonResponse
 from inline_actions.admin import InlineActionsModelAdminMixin
 from experiment.models import Experiment
 from experiment.rules import EXPERIMENT_RULES
-
-class ModelFormFieldAsJSON(ModelMultipleChoiceField):
-    """ override clean method to prevent pk lookup to save querysets """
-    def clean(self, value):
-        return value
 
 class ExperimentForm(ModelForm):
     # TO DO: add "clean_slug" method which checks that slug is NOT 
@@ -28,8 +23,6 @@ class ExperimentForm(ModelForm):
         self.fields['rules'] = ChoiceField(
             choices=choices
         )
-        experiments = Experiment.objects.all()
-        self.fields['nested_experiments'] = ModelFormFieldAsJSON(queryset=experiments, required=False)
 
     class Meta:
         model = Experiment
