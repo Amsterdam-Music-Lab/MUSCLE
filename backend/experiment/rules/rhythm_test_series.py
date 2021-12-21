@@ -8,7 +8,7 @@ from .base import Base
 from .util.actions import combine_actions
 from .views import Consent, Explainer, CompositeView, Final, StartSession
 
-class TestBattery(Base):
+class RhythmTestSeries(Base):
     ID = 'TEST_BATTERY'
 
     @classmethod

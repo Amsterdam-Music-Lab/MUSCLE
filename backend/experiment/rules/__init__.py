@@ -16,7 +16,7 @@ from .anisochrony import Anisochrony
 from .h_bat import HBat
 from .hbat_bst import BST
 from .rhythm_discrimination import RhythmDiscrimination
-from .test_battery import TestBattery
+from .rhythm_test_series import RhythmTestSeries
 from .gold_msi import GoldMSI
 
 # Rules available to this application
@@ -43,6 +43,6 @@ EXPERIMENT_RULES = {
     HBat.ID: HBat,
     BST.ID: BST,
     RhythmDiscrimination.ID: RhythmDiscrimination,
-    TestBattery.ID: TestBattery,
+    RhythmTestSeries.ID: RhythmTestSeries,
     GoldMSI.ID: GoldMSI,
 }
