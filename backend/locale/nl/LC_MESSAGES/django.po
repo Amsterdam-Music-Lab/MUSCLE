@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-11-26 11:18+0100\n"
+"POT-Creation-Date: 2021-12-21 13:16+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -53,7 +53,7 @@ msgstr ""
 msgid "copy"
 msgstr ""
 
-#: experiment/rules/anisochrony.py:23 experiment/rules/beat_alignment.py:110
+#: experiment/rules/anisochrony.py:24 experiment/rules/beat_alignment.py:110
 #: experiment/rules/duration_discrimination.py:103
 #: experiment/rules/duration_discrimination_tone.py:18
 #: experiment/rules/h_bat.py:167 experiment/rules/hbat_bst.py:103
@@ -61,40 +61,40 @@ msgstr ""
 msgid "Next fragment"
 msgstr "Volgende fragment"
 
-#: experiment/rules/anisochrony.py:24 experiment/rules/anisochrony.py:67
+#: experiment/rules/anisochrony.py:25 experiment/rules/anisochrony.py:68
 msgid "REGULAR"
 msgstr "REGELMATIG"
 
-#: experiment/rules/anisochrony.py:24 experiment/rules/anisochrony.py:68
+#: experiment/rules/anisochrony.py:25 experiment/rules/anisochrony.py:69
 msgid "IRREGULAR"
 msgstr "ONREGELMATIG"
 
-#: experiment/rules/anisochrony.py:27
+#: experiment/rules/anisochrony.py:28
 msgid "The tones were {}. Your answer was CORRECT."
 msgstr "De tonen waren {}. Je antwoord was CORRECT."
 
-#: experiment/rules/anisochrony.py:30
+#: experiment/rules/anisochrony.py:31
 msgid "The tones were {}. Your answer was INCORRECT."
 msgstr "De tonen waren {}. Je antwoord was INCORRECT."
 
-#: experiment/rules/anisochrony.py:65
+#: experiment/rules/anisochrony.py:66
 msgid "Were the tones REGULAR or IRREGULAR?"
 msgstr "Waren de tonen REGELMATIG of ONREGELMATIG?"
 
-#: experiment/rules/anisochrony.py:79
+#: experiment/rules/anisochrony.py:80
 msgid "Anisochrony"
 msgstr "Anisochronie"
 
-#: experiment/rules/anisochrony.py:92 experiment/rules/h_bat.py:131
+#: experiment/rules/anisochrony.py:93 experiment/rules/h_bat.py:131
 msgid "In this test you will hear a series of tones for each trial."
 msgstr "In deze test krijg je steeds een reeks tonen te horen."
 
-#: experiment/rules/anisochrony.py:96
+#: experiment/rules/anisochrony.py:97
 msgid "It's your job to decide of the tones sounds REGULAR or IRREGULAR"
 msgstr ""
 "Het is jouw taak om te beslissen of het ritme REGELMATIG of ONREGELMATIG is. "
 
-#: experiment/rules/anisochrony.py:101
+#: experiment/rules/anisochrony.py:102
 #: experiment/rules/duration_discrimination.py:186
 #: experiment/rules/h_bat.py:140 experiment/rules/hbat_bst.py:34
 msgid ""
@@ -103,15 +103,15 @@ msgstr ""
 "Tijdens het experiment zal het steeds moeilijker zijn om het verschil te "
 "horen."
 
-#: experiment/rules/anisochrony.py:106
+#: experiment/rules/anisochrony.py:107
 #: experiment/rules/duration_discrimination.py:191
 #: experiment/rules/h_bat.py:145 experiment/rules/hbat_bst.py:39
-#: experiment/rules/util/practice.py:119
+#: experiment/rules/util/practice.py:118
 msgid "Try to answer as accurately as possible, even if you're uncertain."
 msgstr ""
 "Probeer ook als je het niet zeker weet zo accuraat mogelijk te antwoorden."
 
-#: experiment/rules/anisochrony.py:111
+#: experiment/rules/anisochrony.py:112
 #: experiment/rules/duration_discrimination.py:196
 #: experiment/rules/h_bat.py:160 experiment/rules/hbat_bst.py:54
 msgid ""
@@ -121,7 +121,7 @@ msgstr ""
 "Deze test duurt ongeveer 4 minuten. Probeer tijdens de hele test "
 "geconcentreerd te blijven!"
 
-#: experiment/rules/anisochrony.py:137
+#: experiment/rules/anisochrony.py:138
 msgid ""
 "Well done! You heard the difference when we shifted a tone by {} "
 "percent.             Many sounds in nature have regularity like a "
@@ -186,7 +186,7 @@ msgstr ""
 "deze test ongeveer 6 minuten. Probeer de hele test geconcentreerd te blijven!"
 
 #: experiment/rules/beat_alignment.py:67 experiment/rules/speech2song.py:33
-#: experiment/rules/util/practice.py:128
+#: experiment/rules/util/practice.py:127
 msgid "Start"
 msgstr "Start"
 
@@ -944,8 +944,8 @@ msgstr ""
 
 #: experiment/rules/huang_2021.py:64 experiment/rules/huang_2021.py:305
 #: experiment/rules/speech2song.py:89 experiment/rules/speech2song.py:99
-#: experiment/rules/speech2song.py:125 experiment/rules/util/practice.py:104
-#: experiment/rules/views/form.py:45 experiment/rules/views/question.py:14
+#: experiment/rules/speech2song.py:125 experiment/rules/util/practice.py:103
+#: experiment/rules/views/form.py:69 experiment/rules/views/question.py:14
 #: experiment/rules/views/question.py:35 experiment/rules/views/question.py:54
 #: experiment/rules/views/question.py:71 experiment/rules/views/question.py:89
 #: experiment/rules/views/question.py:107
@@ -1010,11 +1010,11 @@ msgstr ""
 msgid "In which region do you currently reside?"
 msgstr ""
 
-#: experiment/rules/huang_2021.py:444 experiment/rules/util/questions.py:60
+#: experiment/rules/huang_2021.py:444 experiment/rules/util/questions.py:66
 msgid "To which group of musical genres do you currently listen most?"
 msgstr ""
 
-#: experiment/rules/huang_2021.py:446 experiment/rules/util/questions.py:63
+#: experiment/rules/huang_2021.py:446 experiment/rules/util/questions.py:69
 msgid "Pop/Country/Religious"
 msgstr ""
 
@@ -1030,15 +1030,15 @@ msgstr ""
 msgid "Chinese opera"
 msgstr ""
 
-#: experiment/rules/huang_2021.py:450 experiment/rules/util/questions.py:65
+#: experiment/rules/huang_2021.py:450 experiment/rules/util/questions.py:71
 msgid "Rock/Punk/Metal"
 msgstr ""
 
-#: experiment/rules/huang_2021.py:451 experiment/rules/util/questions.py:62
+#: experiment/rules/huang_2021.py:451 experiment/rules/util/questions.py:68
 msgid "Dance/Electronic/New Age"
 msgstr ""
 
-#: experiment/rules/huang_2021.py:452 experiment/rules/util/questions.py:66
+#: experiment/rules/huang_2021.py:452 experiment/rules/util/questions.py:72
 msgid "Hip-hop/R&B/Funk"
 msgstr ""
 
@@ -1621,35 +1621,35 @@ msgstr ""
 msgid "Exposure to {}"
 msgstr ""
 
-#: experiment/rules/util/practice.py:81
+#: experiment/rules/util/practice.py:80
 msgid "We will now practice first."
 msgstr "We gaan nu eerst oefenen."
 
-#: experiment/rules/util/practice.py:84
+#: experiment/rules/util/practice.py:83
 msgid "First you will hear 4 practice trials."
 msgstr "Je krijgt 4 oefentrials te horen."
 
-#: experiment/rules/util/practice.py:87
+#: experiment/rules/util/practice.py:86
 msgid "Begin experiment"
 msgstr ""
 
-#: experiment/rules/util/practice.py:93
+#: experiment/rules/util/practice.py:92
 msgid "You have answered 1 or more practice trials incorrectly."
 msgstr "Je hebt 1 of meer oefentrials incorrect beantwoord. "
 
-#: experiment/rules/util/practice.py:95
+#: experiment/rules/util/practice.py:94
 msgid "We will therefore practice again."
 msgstr "We gaan daarom nog een keer oefenen."
 
-#: experiment/rules/util/practice.py:100
+#: experiment/rules/util/practice.py:99
 msgid "But first, you can read the instructions again."
 msgstr "Lees eerst nogmaals de instructie."
 
-#: experiment/rules/util/practice.py:110
+#: experiment/rules/util/practice.py:109
 msgid "Now we will start the real experiment."
 msgstr "We gaan nu beginnen met het echte experiment."
 
-#: experiment/rules/util/practice.py:114
+#: experiment/rules/util/practice.py:113
 msgid ""
 "Pay attention! During the experiment it will become more difficult to hear "
 "the difference between the tones."
@@ -1657,183 +1657,183 @@ msgstr ""
 "Let op! Tijdens het experiment zal het steeds moeilijker zijn om het "
 "verschil te horen tussen de tonen."
 
-#: experiment/rules/util/practice.py:124
+#: experiment/rules/util/practice.py:123
 msgid "Remember that you don't move along or tap during the test."
 msgstr "Denk eraan dat je niet meebeweegt of meetikt tijdens het testje."
 
-#: experiment/rules/util/questions.py:10
+#: experiment/rules/util/questions.py:11
 msgid "With which gender do you currently most identify?"
 msgstr ""
 
-#: experiment/rules/util/questions.py:12
+#: experiment/rules/util/questions.py:13
 msgid "Man"
 msgstr ""
 
-#: experiment/rules/util/questions.py:13
+#: experiment/rules/util/questions.py:14
 msgid "Transgender man"
 msgstr ""
 
-#: experiment/rules/util/questions.py:14
+#: experiment/rules/util/questions.py:15
 msgid "Transgender woman"
 msgstr ""
 
-#: experiment/rules/util/questions.py:15
+#: experiment/rules/util/questions.py:16
 msgid "Woman"
 msgstr ""
 
-#: experiment/rules/util/questions.py:16
+#: experiment/rules/util/questions.py:17
 msgid "Non-conforming or questioning"
 msgstr ""
 
-#: experiment/rules/util/questions.py:17
+#: experiment/rules/util/questions.py:18
 msgid "Intersex or two-spirit"
 msgstr ""
 
-#: experiment/rules/util/questions.py:18
+#: experiment/rules/util/questions.py:19
 msgid "Prefer not to answer"
 msgstr ""
 
-#: experiment/rules/util/questions.py:23
+#: experiment/rules/util/questions.py:25
 msgid "When were you born?"
 msgstr ""
 
-#: experiment/rules/util/questions.py:25
+#: experiment/rules/util/questions.py:27
 msgid "1943 or earlier"
 msgstr ""
 
-#: experiment/rules/util/questions.py:26
+#: experiment/rules/util/questions.py:28
 msgid "1946–1964"
 msgstr ""
 
-#: experiment/rules/util/questions.py:27
+#: experiment/rules/util/questions.py:29
 msgid "1965-1980"
 msgstr ""
 
-#: experiment/rules/util/questions.py:28
+#: experiment/rules/util/questions.py:30
 msgid "1981–1996"
 msgstr ""
 
-#: experiment/rules/util/questions.py:29
+#: experiment/rules/util/questions.py:31
 msgid "1997 or later"
 msgstr ""
 
-#: experiment/rules/util/questions.py:35 experiment/rules/util/questions.py:84
+#: experiment/rules/util/questions.py:38 experiment/rules/util/questions.py:93
 msgid ""
 "In which country did you spend the most formative years of your childhood "
 "and youth?"
 msgstr ""
 
-#: experiment/rules/util/questions.py:41
+#: experiment/rules/util/questions.py:45
 msgid "What is the highest educational qualification that you have attained?"
 msgstr ""
 
-#: experiment/rules/util/questions.py:43
+#: experiment/rules/util/questions.py:47
 msgid "Have not (yet) completed any school qualification"
 msgstr ""
 
-#: experiment/rules/util/questions.py:44
+#: experiment/rules/util/questions.py:48
 msgid "Vocational qualification at about 16 years of age (GCSE)"
 msgstr ""
 
-#: experiment/rules/util/questions.py:45
+#: experiment/rules/util/questions.py:49
 msgid "Secondary diploma (A-levels/high school)"
 msgstr ""
 
-#: experiment/rules/util/questions.py:46
+#: experiment/rules/util/questions.py:50
 msgid "Associate's degree or 2-year professional diploma"
 msgstr ""
 
-#: experiment/rules/util/questions.py:47
+#: experiment/rules/util/questions.py:51
 msgid "Bachelor's degree or equivalent"
 msgstr ""
 
-#: experiment/rules/util/questions.py:48
+#: experiment/rules/util/questions.py:52
 msgid "Master's degree or equivalent"
 msgstr ""
 
-#: experiment/rules/util/questions.py:49
+#: experiment/rules/util/questions.py:53
 msgid "Doctoral degree or equivalent"
 msgstr ""
 
-#: experiment/rules/util/questions.py:54 experiment/rules/util/questions.py:88
+#: experiment/rules/util/questions.py:59 experiment/rules/util/questions.py:98
 msgid "In which country do you currently reside?"
 msgstr ""
 
-#: experiment/rules/util/questions.py:64
+#: experiment/rules/util/questions.py:70
 msgid "Jazz/Folk/Classical"
 msgstr ""
 
-#: experiment/rules/util/questions.py:71
+#: experiment/rules/util/questions.py:78
 msgid "The instrument I play best, including voice (or none), is:"
 msgstr ""
 
-#: experiment/rules/util/questions.py:79
+#: experiment/rules/util/questions.py:87
 msgid "What is your age?"
 msgstr ""
 
-#: experiment/rules/util/questions.py:93
+#: experiment/rules/util/questions.py:104
 msgid ""
 "If you are still in education, what is the highest qualification you expect "
 "to obtain?"
 msgstr ""
 
-#: experiment/rules/util/questions.py:95
+#: experiment/rules/util/questions.py:106
 msgid "First school qualification (A-levels/ High school"
 msgstr ""
 
-#: experiment/rules/util/questions.py:96
+#: experiment/rules/util/questions.py:107
 msgid "Post-16 vocational course"
 msgstr ""
 
-#: experiment/rules/util/questions.py:97
+#: experiment/rules/util/questions.py:108
 msgid "Second school qualification (A-levels/high school)"
 msgstr ""
 
-#: experiment/rules/util/questions.py:98
+#: experiment/rules/util/questions.py:109
 msgid "Undergraduate degree or professional qualification"
 msgstr ""
 
-#: experiment/rules/util/questions.py:99
+#: experiment/rules/util/questions.py:110
 msgid "Postgraduate degree"
 msgstr ""
 
-#: experiment/rules/util/questions.py:100
+#: experiment/rules/util/questions.py:111
 msgid "Not applicable"
 msgstr ""
 
-#: experiment/rules/util/questions.py:105
+#: experiment/rules/util/questions.py:117
 msgid "Occupational status"
 msgstr ""
 
-#: experiment/rules/util/questions.py:107
+#: experiment/rules/util/questions.py:119
 msgid "Still at School"
 msgstr ""
 
-#: experiment/rules/util/questions.py:108
+#: experiment/rules/util/questions.py:120
 msgid "At University"
 msgstr ""
 
-#: experiment/rules/util/questions.py:109
+#: experiment/rules/util/questions.py:121
 msgid "In Full-time employment"
 msgstr ""
 
-#: experiment/rules/util/questions.py:110
+#: experiment/rules/util/questions.py:122
 msgid "In Part-time employment"
 msgstr ""
 
-#: experiment/rules/util/questions.py:111
+#: experiment/rules/util/questions.py:123
 msgid "Self-employed"
 msgstr ""
 
-#: experiment/rules/util/questions.py:112
+#: experiment/rules/util/questions.py:124
 msgid "Homemaker/full time parent"
 msgstr ""
 
-#: experiment/rules/util/questions.py:113
+#: experiment/rules/util/questions.py:125
 msgid "Unemployed"
 msgstr ""
 
-#: experiment/rules/util/questions.py:114
+#: experiment/rules/util/questions.py:126
 msgid "Retired"
 msgstr ""
 
@@ -1893,7 +1893,47 @@ msgstr ""
 msgid "Final score"
 msgstr ""
 
-#: experiment/rules/views/form.py:45 experiment/rules/views/question.py:14
+#: experiment/rules/views/form.py:44 experiment/rules/views/question.py:148
+#: experiment/rules/views/question.py:171
+msgid "Completely Disagree"
+msgstr ""
+
+#: experiment/rules/views/form.py:45 experiment/rules/views/form.py:54
+#: experiment/rules/views/question.py:149
+#: experiment/rules/views/question.py:172
+msgid "Strongly Disagree"
+msgstr ""
+
+#: experiment/rules/views/form.py:46 experiment/rules/views/form.py:55
+#: experiment/rules/views/question.py:150
+#: experiment/rules/views/question.py:173
+msgid "Disagree"
+msgstr ""
+
+#: experiment/rules/views/form.py:47 experiment/rules/views/form.py:56
+#: experiment/rules/views/question.py:151
+#: experiment/rules/views/question.py:174
+msgid "Neither Agree nor Disagree"
+msgstr ""
+
+#: experiment/rules/views/form.py:48 experiment/rules/views/form.py:57
+#: experiment/rules/views/question.py:152
+#: experiment/rules/views/question.py:175
+msgid "Agree"
+msgstr ""
+
+#: experiment/rules/views/form.py:49 experiment/rules/views/form.py:58
+#: experiment/rules/views/question.py:153
+#: experiment/rules/views/question.py:176
+msgid "Strongly Agree"
+msgstr ""
+
+#: experiment/rules/views/form.py:50 experiment/rules/views/question.py:154
+#: experiment/rules/views/question.py:177
+msgid "Completely Agree"
+msgstr ""
+
+#: experiment/rules/views/form.py:69 experiment/rules/views/question.py:14
 #: experiment/rules/views/question.py:35 experiment/rules/views/question.py:54
 #: experiment/rules/views/question.py:71 experiment/rules/views/question.py:89
 #: experiment/rules/views/question.py:107
@@ -1907,41 +1947,6 @@ msgstr ""
 
 #: experiment/rules/views/question.py:142
 msgid "How much do you agree or disagree?"
-msgstr ""
-
-#: experiment/rules/views/question.py:148
-#: experiment/rules/views/question.py:171
-msgid "Completely Disagree"
-msgstr ""
-
-#: experiment/rules/views/question.py:149
-#: experiment/rules/views/question.py:172
-msgid "Strongly Disagree"
-msgstr ""
-
-#: experiment/rules/views/question.py:150
-#: experiment/rules/views/question.py:173
-msgid "Disagree"
-msgstr ""
-
-#: experiment/rules/views/question.py:151
-#: experiment/rules/views/question.py:174
-msgid "Neither Agree nor Disagree"
-msgstr ""
-
-#: experiment/rules/views/question.py:152
-#: experiment/rules/views/question.py:175
-msgid "Agree"
-msgstr ""
-
-#: experiment/rules/views/question.py:153
-#: experiment/rules/views/question.py:176
-msgid "Strongly Agree"
-msgstr ""
-
-#: experiment/rules/views/question.py:154
-#: experiment/rules/views/question.py:177
-msgid "Completely Agree"
 msgstr ""
 
 #: experiment/rules/views/question.py:165

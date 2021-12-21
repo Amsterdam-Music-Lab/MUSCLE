@@ -256,6 +256,7 @@ const getSectionUrl = (action) => {
                         form={feedback_form.form}
                         buttonLabel={feedback_form.submit_label}
                         skipLabel={feedback_form.skip_label}
+                        isSkippable={feedback_form.is_skippable}
                         onResult={makeResult}
                     />)}
                 </div>

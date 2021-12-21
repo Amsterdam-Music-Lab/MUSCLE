@@ -18,6 +18,7 @@ from .hbat_bst import BST
 from .rhythm_discrimination import RhythmDiscrimination
 from .rhythm_test_series import RhythmTestSeries
 from .gold_msi import GoldMSI
+from .listening_conditions import ListeningConditions
 
 # Rules available to this application
 # If you create new Rules, add them to the list
@@ -45,4 +46,5 @@ EXPERIMENT_RULES = {
     RhythmDiscrimination.ID: RhythmDiscrimination,
     RhythmTestSeries.ID: RhythmTestSeries,
     GoldMSI.ID: GoldMSI,
+    ListeningConditions.ID: ListeningConditions,
 }
