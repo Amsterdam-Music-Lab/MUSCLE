@@ -23,7 +23,8 @@ class ListeningConditions(Base):
                         'YES': _('YES'),
                         'NO': _('NO')
                     },
-                    view='BUTTON_ARRAY'
+                    view='BUTTON_ARRAY',
+                    submits=True
             )])
         elif round_number == 2:
             feedback_form = Form([ChoiceQuestion(
@@ -35,7 +36,8 @@ class ListeningConditions(Base):
                         'MODERATELY': _('MODERATELY'),
                         'NO': _('NO')
                     },
-                    view='BUTTON_ARRAY'
+                    view='BUTTON_ARRAY',
+                    submits=True
             )])
         elif round_number == 3:
             feedback_form = Form([
@@ -47,7 +49,8 @@ class ListeningConditions(Base):
                         'YES': _('YES'),
                         'NO': _('NO')
                     },
-                    view='BUTTON_ARRAY'
+                    view='BUTTON_ARRAY',
+                    submits=True
                 )
             ])
         elif round_number == 4:
@@ -60,12 +63,14 @@ class ListeningConditions(Base):
                         'YES': _('YES'),
                         'NO': _('NO')
                     },
-                    view='BUTTON_ARRAY'
+                    view='BUTTON_ARRAY',
+                    submits=True
                 ),
             ])
         elif round_number == 5:
             section = session.playlist.section_set.first()
             instructions = {
+                'preload': "",
                 'during_presentation': _("You can now set the sound to a comfortable level. \
                     You can then adjust the volume to as high a level as possible without it being uncomfortable. \
                     Please keep the eventual sound level the same over the course of the experiment. \
