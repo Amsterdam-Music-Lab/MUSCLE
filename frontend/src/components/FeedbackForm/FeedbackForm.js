@@ -24,7 +24,7 @@ const FeedbackForm = ({ formActive, form, buttonLabel, skipLabel, isSkippable, o
 
 
     return (
-        <div className="aha__feedback">
+        <div className="aha__feedback d-flex justify-content-center">
             <form>
                 {Object.keys(form).map((index) => (
                     <Question

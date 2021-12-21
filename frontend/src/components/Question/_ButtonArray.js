@@ -9,7 +9,7 @@ const ButtonArray = ({ question, value, active, onChange }) => {
     // }
     
     return (
-        <div className="aha__buttons buttons d-flex flex-wrap justify-content-around p-3 w-100">
+        <div className="aha__buttons buttons d-flex flex-wrap justify-content-left p-3 w-100">
             {question.explainer && (
                 <p className="explainer">{question.explainer}</p>
             )}
