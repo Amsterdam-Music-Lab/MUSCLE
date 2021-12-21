@@ -3,6 +3,7 @@ import React, { useState, useEffect, useRef } from "react";
 import * as audio from "../../util/audio";
 import { getCurrentTime } from "../../util/time";
 import { MEDIA_ROOT } from "../../config";
+import { createResult } from "../../API.js";
 
 import Circle from "../Circle/Circle";
 import ListenCircle from "../ListenCircle/ListenCircle";
@@ -11,7 +12,7 @@ import Preload from "../Preload/Preload";
 const PRELOAD = "PRELOAD";
 const RECOGNIZE = "RECOGNIZE";
 
-const Playback = ({instructions, config, section, onCircleTimerTick, audio, createResult, className=''}) => {
+const Playback = ({instructions, config, section, onCircleTimerTick, submitResult, className=''}) => {
     // player state
     const [state, setState] = useState({ view: PRELOAD });
     const [running, setRunning] = useState(config.auto_play);
@@ -67,16 +68,15 @@ const Playback = ({instructions, config, section, onCircleTimerTick, audio, crea
                             color="white"
                             animateCircle={config.show_animation}
                             onFinish={() => {
+                                // Stop audio
+                                audio.pause();
+                                setRunning(false);
                                 if (config.auto_advance) {
                                     // Create a time_passed result
-                                    createResult({
+                                    submitResult({
                                         type: "time_passed",
                                         decision_time: config.decision_time,
                                     });
-                                } else {
-                                    // Stop audio
-                                    audio.pause();
-                                    setRunning(false);
                                 }
                             }}
                         />

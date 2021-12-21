@@ -1,15 +1,19 @@
-import React, { useState, useRef } from "react";
-import * as audio from "../../util/audio";
+import React, { useState, useEffect, useRef } from "react";
+
 import { getCurrentTime, getTimeSince } from "../../util/time";
+import { createProfile, createResult } from "../../API.js";
+import { MEDIA_ROOT } from "../../config";
 import FeedbackForm from "../FeedbackForm/FeedbackForm";
 import Playback from "../Playback/Playback";
-
 
 // CompositeView is an experiment view, that preloads a song, shows an explanation and plays audio
 // Optionally, it can show an animation during playback
 // Optionally, it can show a form during or after playback
-const CompositeView = ({ instructions, view, section, feedback_form, config, onResult }) => {
-    const [running, setRunning] = useState(config.auto_play);
+const CompositeView = ({ instructions, view, participant, players, session, feedback_form, config, onNext, loadState }) => {
+    // Main component state
+    const resultBuffer = useRef([]);
+
+    const [running, setRunning] = useState(players.config.auto_play);
     const [started, setStarted] = useState(running);
 
     const submitted = useRef(false);
@@ -36,45 +40,63 @@ const CompositeView = ({ instructions, view, section, feedback_form, config, onR
         audio.pause();
 
         setRunning(false);
-
-        // Result callback
-        onResult({
-            view,
-            section,
-            config,
-            result,
-        });
+        
+        if (feedback_form.is_profile) {
+            submitProfile({
+                result
+            })
+        }
+        else {
+                submitResult({
+                view,
+                decision_time,
+                players,
+                result,
+            });
+        }
     };
+
+    // Get a section url from given (nested) action
+const getSectionUrl = (action) => {
+    if (!action) {
+        return "";
+    }
+
+    if (action.section && action.section.url) {
+        return action.section.url;
+    }
+
+    if (action.next_round) {
+        return getSectionUrl(action.next_round);
+    }
+
+    return "";
+};
+
 
     const formActive =
         (started && !config.listen_first) ||
-        (started && config.listen_first && !running)
-    
+        (started && config.listen_first && !running);
+
     return (
         <div className="aha__composite">
-            {section &&
+            {players && (
             <Playback
                 instructions={instructions}
                 config={config}
-                section={section}
+                players={players}
                 onCircleTimerTick={onCircleTimerTick}
                 audio={audio}
-                createResult={createResult}
-            />
-            }
+                submitResult={submitResult}
+            />)}
             {feedback_form && (
             <FeedbackForm
                 formActive={formActive}
                 form={feedback_form.form}
                 buttonLabel={feedback_form.submit_label}
                 skipLabel={feedback_form.skip_label}
-                onResult={() => {
-                    createResult({
-                        type: "form",
-                        decision_time: getTimeSince(startTime.current),
-                        given_result: feedback_form.form,
-                    })
-                }}
+                isSkippable={feedback_form.is_skippable}
+                onResult={makeResult}
             />)}
         </div>
     );

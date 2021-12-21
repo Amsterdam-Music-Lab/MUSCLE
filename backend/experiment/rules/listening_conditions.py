@@ -3,6 +3,7 @@ from django.utils.translation import gettext_lazy as _
 
 from .base import Base
 from .views import CompositeView, Consent, Explainer, Final, Playlist, StartSession
+from .views.players import Player, Players
 from .views.form import ChoiceQuestion, Form
 from .util.actions import combine_actions
 
@@ -68,7 +69,9 @@ class ListeningConditions(Base):
                     Please keep the eventual sound level the same over the course of the experiment."),
             }
             feedback_form = None
-            view = CompositeView(section, feedback_form, instructions)
+            player = Player(section,'SMALL_PLAYER')
+            players = Players([player])
+            view = CompositeView(players.action(), feedback_form, instructions)
             return view.action()
 
 
