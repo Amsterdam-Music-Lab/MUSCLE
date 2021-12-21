@@ -72,9 +72,10 @@ class RhythmTestSeries(Base):
         experiment_data = data.get('experiments')
         if not experiment_data:
             prepare_experiments(session)
-        if len(experiment_data)==0:
+        if experiment_data and len(experiment_data)==0:
             return Final.action(session, title=_("Made it!"))
         experiment_data = data.get('experiments')
+        print(experiment_data)
         slug = experiment_data.pop()
         session.merge_json_data({'experiments': experiment_data})
         session.final_score +=1

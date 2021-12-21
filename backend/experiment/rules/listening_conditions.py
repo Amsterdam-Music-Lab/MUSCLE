@@ -4,14 +4,14 @@ from django.utils.translation import gettext_lazy as _
 from .base import Base
 from .views import CompositeView, Consent, Explainer, Final, Playlist, StartSession
 from .views.form import ChoiceQuestion, Form
-from .util.actions import combine_actions
+from .util.actions import final_action_with_optional_button
 
 
 class ListeningConditions(Base):
     ID = 'LISTENING_CONDITIONS'
 
     @classmethod
-    def next_round(cls, session):
+    def next_round(cls, session, request_session=None):
         round_number = session.get_next_round()
         if round_number == 1:
             feedback_form = Form([
@@ -73,14 +73,14 @@ class ListeningConditions(Base):
                 'preload': "",
                 'during_presentation': _("You can now set the sound to a comfortable level. \
                     You can then adjust the volume to as high a level as possible without it being uncomfortable. \
-                    Please keep the eventual sound level the same over the course of the experiment. \
                     When you are satisfied with the sound level, click Continue"),
             }
             feedback_form = Form([])
             view = CompositeView(section, feedback_form.action(), instructions)
             return view.action()
         else:
-            return Final.action()
+            message = _("Please keep the eventual sound level the same over the course of the experiment.")
+            return final_action_with_optional_button(session, message, request_session)
         view = CompositeView(None, feedback_form.action())
         return view.action()
         
