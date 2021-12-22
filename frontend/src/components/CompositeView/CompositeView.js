@@ -136,7 +136,7 @@ const CompositeView = ({ instructions, view, participant, section, session, feed
 
         setRunning(false);
         
-        if (feedback_form.is_profile) {
+        if (feedback_form && feedback_form.is_profile) {
             submitProfile({
                 result
             })

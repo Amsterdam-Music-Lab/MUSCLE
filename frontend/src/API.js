@@ -53,15 +53,14 @@ export const createConsent = async ({ experiment, participant }) => {
         const response = await axios.post(
             API_BASE_URL + URLS.profile.create,
             qs.stringify({
-                result: JSON.stringify([
+                json_data: JSON.stringify({result: {form: [
                     {
                         question: "consent_" + experiment.slug,
                         value: true,
                     }
-                ]),
+                ]}}),
                 csrfmiddlewaretoken: participant.csrf_token,
-            },
-            )
+            }),
         );
         return response.data;
     } catch (err) {
