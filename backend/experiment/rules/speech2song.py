@@ -50,7 +50,7 @@ class Speech2Song(Base):
             start_session
         )
 
-    @ staticmethod
+    @staticmethod
     def next_round(session):
         next_round = session.get_next_round()
         blocks = [1, 2, 3]

@@ -1,4 +1,5 @@
 import csv
+import json
 
 from django.contrib import admin
 from django.db import models
@@ -8,8 +9,9 @@ from inline_actions.admin import InlineActionsModelAdminMixin
 from experiment.models import Experiment
 from experiment.rules import EXPERIMENT_RULES
 
-
 class ExperimentForm(ModelForm):
+    # TO DO: add "clean_slug" method which checks that slug is NOT 
+    # "experiment", "participant", "profile"
 
     def __init__(self, *args, **kwargs):
         super(ModelForm, self).__init__(*args, **kwargs)
@@ -25,7 +27,7 @@ class ExperimentForm(ModelForm):
     class Meta:
         model = Experiment
         fields = ['name', 'slug', 'active', 'rules',
-                  'rounds', 'bonus_points', 'playlists']
+                  'rounds', 'bonus_points', 'playlists', 'test_series']
 
 
 class ExperimentAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
@@ -35,7 +37,7 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
     search_fields = ['name']
     inline_actions = ['export', 'export_csv']
     fields = ['name', 'slug', 'language', 'active', 'rules',
-              'rounds', 'bonus_points', 'playlists']
+              'rounds', 'bonus_points', 'playlists', 'test_series']
     form = ExperimentForm
 
     # make playlists fields a list of checkboxes

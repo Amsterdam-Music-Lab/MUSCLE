@@ -2,7 +2,7 @@ import logging
 from django.utils.translation import gettext_lazy as _
 
 from experiment.models import Section
-from .views import CompositeView, Final, Explainer, Consent, StartSession, Playlist
+from .views import CompositeView, Explainer, Consent, StartSession, Playlist
 from .views.form import ChoiceQuestion, Form
 from .base import Base
 from .duration_discrimination import DurationDiscrimination

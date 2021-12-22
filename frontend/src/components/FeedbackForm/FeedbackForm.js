@@ -4,11 +4,11 @@ import Button from "../Button/Button";
 
 
 // FeedbackForm
-const FeedbackForm = ({ formActive, form, buttonLabel, skipLabel, onResult }) => {
+const FeedbackForm = ({ formActive, form, buttonLabel, skipLabel, isSkippable, onResult }) => {
 
     const showSubmitButtons = form.filter( formElement => formElement.submits).length == 0;
     
-    const onSubmit = (form) => {
+    const onSubmit = () => {
         // Callback onResult with question data
         onResult({
             form
@@ -24,7 +24,7 @@ const FeedbackForm = ({ formActive, form, buttonLabel, skipLabel, onResult }) =>
 
 
     return (
-        <div className="aha__feedback">
+        <div className="aha__feedback d-flex justify-content-center">
             <form>
                 {Object.keys(form).map((index) => (
                     <Question
@@ -48,7 +48,7 @@ const FeedbackForm = ({ formActive, form, buttonLabel, skipLabel, onResult }) =>
 
                 {/* Skip button */}
                 {/* Only show skip-button when there is no value */}
-                {skipLabel && showSubmitButtons && (
+                {isSkippable && showSubmitButtons && (
                     <Button
                         onClick={() => {
                             onSubmit("");

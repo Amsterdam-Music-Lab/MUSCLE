@@ -4,11 +4,11 @@ from django.utils.translation import gettext_lazy as _
 
 from .base import Base
 from experiment.models import Section
-from .views import CompositeView, Consent, Explainer, Final, Playlist, StartSession
+from .views import CompositeView, Consent, Explainer, Playlist, StartSession
 from .views.form import ChoiceQuestion, Form
 
 from .util.practice import get_practice_views, practice_explainer, get_trial_condition, get_trial_condition_block
-from .util.actions import combine_actions
+from .util.actions import combine_actions, final_action_with_optional_button
 from .util.score import get_average_difference_level_based
 
 logger = logging.getLogger(__name__)
@@ -19,9 +19,9 @@ class HBat(Base):
     ID = 'H_BAT'
 
     @classmethod
-    def next_round(cls, session):
+    def next_round(cls, session, request_session=None):
         if session.final_score == MAX_TURNPOINTS+1:
-            return cls.finalize_experiment(session)
+            return cls.finalize_experiment(session, request_session)
         elif session.final_score == 0:
             # we are practicing
             actions = get_practice_views(
@@ -45,7 +45,7 @@ class HBat(Base):
             action = staircasing(session, cls.next_trial_action)
             if not action:
                 # action is None if the audio file doesn't exist
-                return cls.finalize_experiment(session)
+                return cls.finalize_experiment(session, request_session)
             else:
                 return action
         
@@ -186,7 +186,7 @@ class HBat(Base):
             )
         
     @classmethod
-    def finalize_experiment(cls, session):
+    def finalize_experiment(cls, session, request_session):
         """ if either the max_turnpoints have been reached,
         or if the section couldn't be found (outlier), stop the experiment
         """
@@ -195,11 +195,7 @@ class HBat(Base):
             speeding up or slowing down with only {} percent!").format(percentage)
         session.finish()
         session.save()
-        return Final.action(
-            title=_('End'),
-            session=session,
-            score_message=score_message
-        )
+        return final_action_with_optional_button(session, score_message, request_session)
 
 
 def get_previous_condition(previous_result):

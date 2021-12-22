@@ -3,7 +3,7 @@ import logging
 
 from django.utils.translation import gettext_lazy as _
 
-from .util.actions import combine_actions
+from .util.actions import combine_actions, final_action_with_optional_button
 from .util.practice import practice_explainer, practice_again_explainer, start_experiment_explainer
 from .views import CompositeView, Consent, Final, Explainer, StartSession, Playlist
 from .views.form import ChoiceQuestion, Form
@@ -43,9 +43,9 @@ class RhythmDiscrimination(Base):
         )
     
     @classmethod
-    def next_round(cls, session):
+    def next_round(cls, session, request_session=None):
         if session.rounds_complete():
-            return finalize_experiment(session)
+            return finalize_experiment(session, request_session)
         
         next_round_number = session.get_next_round()
 
@@ -213,15 +213,14 @@ def response_explainer(correct, same, button_label=_('Next fragment')):
         button_label=button_label
     )
 
-def finalize_experiment(session):
+def finalize_experiment(session, request_session):
     # we had 4 practice trials and 60 experiment trials
     percentage = (sum([res.score for res in session.result_set.all()]) / session.experiment.rounds) * 100
     session.finish()
     session.save()
-    # Return a score and final score action
-    return Final.action(
-        title=_('End'),
-        session=session,
-        score_message=_(
-            "Well done! You've answered {} percent correctly! One reason for the weird beep-tones in this test (instead of some nice drum-sound) is that it is used very often in brain scanners, which make a lot of noise. The beep-sound helps people in the scanner to hear the rhythm really well. ").format(percentage)
-    )
+    score_message =_("Well done! You've answered {} percent correctly! One reason for the \
+        weird beep-tones in this test (instead of some nice drum-sound) is that it is used very often\
+        in brain scanners, which make a lot of noise. The beep-sound helps people in the scanner \
+        to hear the rhythm really well.").format(percentage)
+    return final_action_with_optional_button(session, score_message, request_session)
+

@@ -8,11 +8,12 @@ class Final:  # pylint: disable=too-few-public-methods
     ID = 'FINAL'
 
     @staticmethod
-    def action(session, title, score_message=None):
-        """Get data for final_score action"""
+    def action(session, title, score_message=None, button=None):
+        """Get data for final action"""
         return {
             'view': Final.ID,
             'score': session.total_score(),
             'score_message': score_message,
-            'title': title
+            'title': title,
+            'button': button
         }

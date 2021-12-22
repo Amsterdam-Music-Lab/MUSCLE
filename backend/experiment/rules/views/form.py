@@ -11,7 +11,7 @@ class Question(object):
     - submits: whether changing this form element can submit the form
     '''
 
-    def __init__(self, key, view, result_id=None, explainer='', question='', is_skippable=False, submits=False):
+    def __init__(self, key, view='STRING', result_id=None, explainer='', question='', is_skippable=False, submits=False):
         self.key = key
         self.view = view
         self.explainer = explainer,
@@ -30,10 +30,33 @@ class ChoiceQuestion(Question):
         self.choices = choices
 
 class RangeQuestion(Question):
-    def __init__(self, min_value, max_value, *args):
-        super().__init__(*args)
+    def __init__(self, min_value, max_value, **kwargs):
+        super().__init__(**kwargs)
         self.min_value = min_value
-        selfmax_value = max_value
+        self.max_value = max_value
+
+class LikertQuestion(Question):
+    def __init__(self, scale_steps=7, likert_view='TEXT_RANGE', **kwargs):
+        super().__init__(**kwargs)
+        self.view = likert_view
+        if scale_steps == 7:
+            self.choices = [
+                _("Completely Disagree"),
+                _("Strongly Disagree"),
+                _("Disagree"),
+                _("Neither Agree nor Disagree"),  # Undecided
+                _("Agree"),
+                _("Strongly Agree"),
+                _("Completely Agree"),
+            ]
+        elif scale_steps == 5:
+            self.choices = [
+                _("Strongly Disagree"),
+                _("Disagree"),
+                _("Neither Agree nor Disagree"),  # Undecided
+                _("Agree"),
+                _("Strongly Agree"),
+            ]
 
 class Form(object):
     ''' Form is a view which brings together an array of questions with submit and optional skip button 
@@ -41,12 +64,14 @@ class Form(object):
     - button_label: label of submit button
     - skip_label: label of skip button
     - is_skippable: can this question form be skipped
+    - is_profile: should the answers be saved to the user profile
     '''
-    def __init__(self, form, submit_label=_('Continue'), skip_label=_('Skip'), is_skippable=False):
+    def __init__(self, form, submit_label=_('Continue'), skip_label=_('Skip'), is_skippable=False, is_profile=False):
         self.form = form
         self.submit_label = submit_label
         self.skip_label = skip_label
         self.is_skippable = is_skippable
+        self.is_profile = is_profile
     
     def action(self):
         serialized_form = [question.action() for question in self.form]
@@ -54,5 +79,6 @@ class Form(object):
             'form': serialized_form,
             'submit_label': self.submit_label,
             'skip_label': self.skip_label,
-            'is_skippable': self.is_skippable
+            'is_skippable': self.is_skippable,
+            'is_profile': self.is_profile,
         }
