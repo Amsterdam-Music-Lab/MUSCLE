@@ -66,3 +66,4 @@ def get(request, slug):
         # avoid carrying over language cookie from other experiments
         response.set_cookie(settings.LANGUAGE_COOKIE_NAME, None)
     return response
+    

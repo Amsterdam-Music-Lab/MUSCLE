@@ -94,3 +94,4 @@ class ListeningConditions(Base):
             playlist,
             start_session
         )
+        

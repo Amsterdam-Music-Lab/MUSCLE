@@ -127,4 +127,4 @@ def get_experiment_lists(session):
 def get_associated_experiments(pk_list):
     from ..models import Experiment
     return [Experiment.objects.get(pk=pk).slug for pk in pk_list]
-    
+ 
