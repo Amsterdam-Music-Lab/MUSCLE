@@ -4,7 +4,7 @@ from django.utils.translation import gettext_lazy as _
 from .base import Base
 from .views import CompositeView, Consent, Explainer, Final, Playlist, StartSession
 from .views.form import ChoiceQuestion, Form
-from .util.actions import final_action_with_optional_button
+from .util.actions import combine_actions, final_action_with_optional_button
 
 
 class ListeningConditions(Base):

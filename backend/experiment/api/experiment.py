@@ -27,7 +27,6 @@ def get(request, slug):
             session = Session.objects.get(pk=series_data.get('session_id'))
         except Session.DoesNotExist:
             raise Http404("Session does not exist")
-        # TODO: if participant did not complete any experiment in nested_experiments but not in experiment json_data, add these to the top of the stack
         data = {
             'session': {
                 'id': session.id,

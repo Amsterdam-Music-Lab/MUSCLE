@@ -32,7 +32,6 @@ def create(request):
     """Store a profile question/answer to current participant"""
     # Current participant
     participant = current_participant(request)
-
     # Get question
     result = json.loads(request.POST.get("json_data")).get('result')
 
@@ -40,7 +39,7 @@ def create(request):
         return HttpResponseBadRequest("Missing required parameter: result")
 
     for form_element in result['form']:
-        question =form_element['question'] 
+        question = form_element['question'] 
         try:
             profile = Profile.objects.get(
                 participant=participant, question=question)

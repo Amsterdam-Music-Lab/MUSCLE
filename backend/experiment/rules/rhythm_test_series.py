@@ -66,25 +66,22 @@ class RhythmTestSeries(Base):
             start_session
         )
     
-    @staticmethod
-    def next_round(session):
+    @classmethod
+    def next_round(cls, session):
         data = session.load_json_data()
         experiment_data = data.get('experiments')
+        experiment_number = int(session.final_score)
         if not experiment_data:
-            prepare_experiments(session)
-        if experiment_data and len(experiment_data)==0:
+            experiment_data = prepare_experiments(session)
+        if experiment_number == len(experiment_data):
             return Final.action(session, title=_("Made it!"))
-        experiment_data = data.get('experiments')
-        print(experiment_data)
-        slug = experiment_data.pop()
-        session.merge_json_data({'experiments': experiment_data})
-        session.final_score +=1
+        slug = experiment_data[experiment_number]
         session.save()
         button = {
             'text': _('Continue'),
             'link': '{}/{}'.format(settings.CORS_ORIGIN_WHITELIST[0], slug)
         }
-        return Final.action(session, title=_('Next experiment (%d to go!)' % (len(experiment_data)+1)), button=button)
+        return Final.action(session, title=_('Next experiment (%d to go!)' % (len(experiment_data)-experiment_number)), button=button)
 
 
 def prepare_experiments(session):
@@ -98,6 +95,7 @@ def prepare_experiments(session):
     register_consent(session, experiment_list)
     session.merge_json_data({'experiments': experiment_list})
     session.save()
+    return experiment_list
 
 def register_consent(session, experiment_list):
     from ..models import Profile
