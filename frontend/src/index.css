@@ -757,6 +757,8 @@ h3.title {
 .aha__buttons {
   display: flex;
   flex-direction: row; }
+  .aha__buttons .btn.disabled {
+    opacity: .3; }
   .aha__buttons .btn:nth-of-type(1) {
     background-color: #39d7b8; }
   .aha__buttons .btn:nth-of-type(2) {
