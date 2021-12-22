@@ -81,7 +81,7 @@ class RhythmTestSeries(Base):
             'text': _('Continue'),
             'link': '{}/{}'.format(settings.CORS_ORIGIN_WHITELIST[0], slug)
         }
-        return Final.action(session, title=_('Next experiment (%d to go!)' % (len(experiment_data)-experiment_number)), button=button)
+        return Final.action(session, title=_('Next experiment (%d to go!)' % (len(experiment_data) - experiment_number)), button=button)
 
 
 def prepare_experiments(session):
