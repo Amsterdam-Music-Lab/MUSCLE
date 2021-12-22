@@ -12,12 +12,64 @@ from .base import Base
 logger = logging.getLogger(__name__)
 
 STIMULI = {
-    'nonmetric': [
-        '1 1  3.5  4.5  3.5', '1 3.5  1.4  4.5  1.4', '1.4  3.5  1.4  4.5 1', '3.5  3.5 1 4.5 1', '4.5  1 1  3.5  3.5', '4.5 1 1.4  3.5  1.4', '1 1.4 1 1.4  3.5  3.5', '1 1.4  1.4 1 4.5  1.4', '1 1.4  4.5  1 1  3.5', '1 3.5  1.4  3.5  1.4 1', '1.4 1 4.5  1.4  1.4 1', '1.4 1 4.5  3.5  1 1', '1.4  1.4 1 1.4  4.5 1', '1.4  3.5  1 1  1.4  3.5', '3.5  1.4 1 4.5  1 1', '3.5  1.4  3.5  1.4  1 1', '4.5 1 1.4  1.4 1 1.4', '4.5  1.4 1 3.5  1 1', '1 1 1 1.4  4.5 1 1.4', '1 1  3.5  1.4 1 3.5 1', '1 1  3.5  1.4  1.4 1 1.4', '1 3.5 1 4.5  1 1 1', '1 4.5  1 1  3.5  1 1', '1.4 1 1.4  3.5  1.4  1 1', '1.4 1 4.5 1 1.4  1 1', '1.4  3.5  3.5  1 1  1 1', '3.5  1 1  3.5 1 1.4 1', '3.5  1 1  4.5  1 1 1', '3.5  1.4  1.4  1 1 1 1.4', '4.5  1 1 1 1.4  1.4 1'
-    ],
-    'metric': [
-        '2 2 4 1 3', '3 1 4 1 3', '3 1 4 2 2', '4 1 3 3 1', '4 3 1 1 3', '4 3 1 2 2', '1 1 2 3 1 4', '1 1 2 4 2 2', '2 1 1 1 3 4', '2 1 1 2 2 4', '2 1 1 4 1 3', '2 2 1 3 3 1', '2 2 2 1 1 4', '2 2 3 1 1 3', '3 1 1 3 2 2', '3 1 2 2 1 3', '4 1 1 2 3 1', '4 2 2 1 1 2', '1 1 1 1 4 3 1', '1 1 2 2 1 1 4', '1 1 2 3 1 1 3', '1 1 2 3 1 2 2', '2 1 1 2 2 3 1', '2 1 1 3 1 1 3', '2 2 1 1 1 1 4', '3 1 2 1 1 1 3', '3 1 2 2 1 1 2', '3 1 4 1 1 1 1', '4 1 1 1 1 3 1', '4 2 2 1 1 1 1'
-    ]
+    'practice': {
+        'metric': {
+            'standard': '4 1 1 1 1 3 1',
+            'deviant': '1 1 2 4 2 2', 
+        },
+        'nonmetric': {
+            'standard': '4.5  1 1  3.5  3.5',
+            'deviant': '4.5 1 1.4  1.4 1 1.4'
+        }
+    },
+    'nonmetric':  {
+        'standard': [
+            '1 1  3.5  4.5  3.5',
+            '1 3.5  1.4  4.5  1.4',
+            '1 3.5  1.4  3.5  1.4 1',
+            '3.5  1.4  3.5  1.4  1 1',
+            '4.5  1.4 1 3.5  1 1',
+            '1 3.5 1 4.5  1 1 1',
+            '1.4  3.5  3.5  1 1  1 1',
+            '1.4 1 4.5 1 1.4  1 1',
+            '3.5  1 1  4.5  1 1 1'
+        ],
+        'deviant': [
+            '1.4  3.5  1.4  4.5 1',
+            '3.5  3.5 1 4.5 1',
+            '1 1.4  1.4 1 4.5  1.4',
+            '1 1.4  4.5  1 1  3.5',
+            '1 1.4 1 1.4  3.5  3.5',
+            '1.4  1.4 1 1.4  4.5 1',
+            '1 1  3.5  1.4 1 3.5 1',
+            '1 4.5  1 1  3.5  1 1',
+            '1.4 1 1.4  3.5  1.4  1 1'
+        ]
+    },
+    'metric': {
+        'standard': [
+            '3 1 4 2 2',
+            '4 3 1 2 2',
+            '2 1 1 2 2 4',
+            '2 2 2 1 1 4',
+            '4 2 2 1 1 2',
+            '1 1 2 2 1 1 4',
+            '1 1 2 3 1 2 2',
+            '2 2 1 1 1 1 4',
+            '3 1 4 1 1 1 1'
+        ],
+        'deviant': [
+            '2 2 4 1 3',
+            '3 1 4 1 3',
+            '1 1 2 3 1 4',
+            '2 1 1 1 3 4',
+            '2 2 3 1 1 3',
+            '3 1 1 3 2 2',
+            '1 1 2 3 1 1 3',
+            '2 1 1 3 1 1 3',
+            '4 2 2 1 1 1 1'
+        ]
+    }
 }
 
 class RhythmDiscrimination(Base):
@@ -93,7 +145,7 @@ def next_trial_actions(session, round_number):
             )
         if round_number == 5:
             total_score = sum([res.score for res in previous_results.all()[:4]])
-            if total_score < 3:
+            if total_score < 2:
                 # start practice over
                 actions.append(practice_again_explainer())
                 actions.append(intro_explainer())
@@ -134,11 +186,15 @@ def next_trial_actions(session, round_number):
         submits=True
     )
     form = Form([question])
+    if round_number < 5:
+        title = _('practice')
+    else:
+        title = _('trial %d of %d' % (round_number - 4, len(plan) - 4))
     view = CompositeView(
         section=section,
         feedback_form=form.action(),
         instructions=instructions,
-        title=_('Ryhthm discrimination')
+        title=_('Ryhthm discrimination: %s' %(title))
     )
     config = {
             'listen_first': True,
@@ -155,18 +211,16 @@ def plan_stimuli(session):
     """
     metric = STIMULI['metric']
     nonmetric = STIMULI['nonmetric']
-    random.shuffle(metric)
-    random.shuffle(nonmetric)
     tempi = [150, 160, 170, 180, 190, 200]
-    metric_deviants = [{'rhythm': m, 'tag_id': random.choice(tempi), 'group_id': 0} for m in metric[:15]]
-    metric_standard = [{'rhythm': m, 'tag_id': random.choice(tempi), 'group_id': 1} for m in metric[15:]]
-    nonmetric_deviants = [{'rhythm': m, 'tag_id': random.choice(tempi), 'group_id': 0} for m in nonmetric[:15]]
-    nonmetric_standard = [{'rhythm': m, 'tag_id': random.choice(tempi), 'group_id': 1} for m in nonmetric[15:]]
+    metric_deviants = [{'rhythm': m, 'tag_id': random.choice(tempi), 'group_id': 0} for m in metric['standard']]
+    metric_standard = [{'rhythm': m, 'tag_id': random.choice(tempi), 'group_id': 1} for m in metric['deviant']]
+    nonmetric_deviants = [{'rhythm': m, 'tag_id': random.choice(tempi), 'group_id': 0} for m in nonmetric['standard']]
+    nonmetric_standard = [{'rhythm': m, 'tag_id': random.choice(tempi), 'group_id': 1} for m in nonmetric['deviant']]
     practice = [
-        random.choice(metric_deviants),
-        random.choice(metric_standard),
-        random.choice(nonmetric_deviants),
-        random.choice(nonmetric_standard)
+        {'rhythm': STIMULI['practice']['metric']['standard'], 'tag_id': random.choice(tempi), 'group_id': 1},
+        {'rhythm': STIMULI['practice']['metric']['deviant'], 'tag_id': random.choice(tempi), 'group_id': 0},
+        {'rhythm': STIMULI['practice']['nonmetric']['standard'], 'tag_id': random.choice(tempi), 'group_id': 1},
+        {'rhythm': STIMULI['practice']['nonmetric']['deviant'], 'tag_id': random.choice(tempi), 'group_id': 0},
     ]
     experiment = metric_deviants + metric_standard + nonmetric_deviants + nonmetric_standard
     random.shuffle(experiment)
