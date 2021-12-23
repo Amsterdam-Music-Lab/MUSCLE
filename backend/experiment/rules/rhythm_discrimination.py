@@ -96,9 +96,6 @@ class RhythmDiscrimination(Base):
     
     @classmethod
     def next_round(cls, session, request_session=None):
-        if session.rounds_complete():
-            return finalize_experiment(session, request_session)
-        
         next_round_number = session.get_next_round()
 
         if next_round_number == 1:
@@ -133,6 +130,9 @@ def next_trial_actions(session, round_number):
     except KeyError as error:
         print('Missing plan key: %s' % str(error))
         return actions
+    
+    if len(plan)==round_number:
+        return finalize_experiment(session, request_session)
     
     condition = plan[round_number]
 
@@ -189,7 +189,7 @@ def next_trial_actions(session, round_number):
     if round_number < 5:
         title = _('practice')
     else:
-        title = _('trial %d of %d' % (round_number - 4, len(plan) - 4))
+        title = _('trial %(index)d of %(total)d') % ({'index': round_number - 4, 'total': len(plan) - 4})
     view = CompositeView(
         section=section,
         feedback_form=form.action(),

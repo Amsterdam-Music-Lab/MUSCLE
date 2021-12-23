@@ -215,12 +215,16 @@ def staircasing(session, trial_action_callback):
             session, trial_condition, 1)
     elif last_result.score == 0:
         # the previous response was incorrect
-        # set previous score to 4, to mark the turnpoint
-        last_result.score = 4
-        last_result.save()
-        # register turnpoint and increase difference
-        session.final_score += 1
-        session.save()
+        json_data = session.load_json_data()
+        direction = json_data.get('direction')
+        if not direction or direction == 'increase':
+            # set previous score to 4, to mark the turnpoint
+            last_result.score = 4
+            last_result.save()
+            # register turnpoint
+            session.final_score += 1
+            session.merge_json_data({'direction': 'decrease'})
+            session.save()
         level = get_previous_level(last_result) - 1 # decrease difficulty
         action = trial_action_callback(
             session, trial_condition, level)
@@ -231,14 +235,18 @@ def staircasing(session, trial_action_callback):
                 session, trial_condition, 1)
         # previous response was correct
         elif previous_results.all()[1].score == 1:
-            # set previous score to 4, to mark the turnpoint
             # the previous two responses were correct
-            last_result = previous_results.first()
-            last_result.score = 4
-            last_result.save()
-            # register turnpoint and decrease difference
-            session.final_score += 1
-            session.save()
+            json_data = session.load_json_data()
+            direction = json_data.get('direction')
+            if not direction or direction == 'decrease':
+                # set previous score to 4, to mark the turnpoint
+                last_result = previous_results.first()
+                last_result.score = 4
+                last_result.save()
+                # register turnpoint and decrease difference
+                session.merge_json_data({'direction': 'increase'})
+                session.final_score += 1
+                session.save()
             level = get_previous_level(last_result) + 1 # increase difficulty
             action = trial_action_callback(
                 session, trial_condition, level)

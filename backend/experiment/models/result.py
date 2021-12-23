@@ -14,7 +14,7 @@ class Result(models.Model):
     created_at = models.DateTimeField(default=timezone.now)
     expected_response = models.CharField(max_length=100, blank=True)
     given_response = models.CharField(max_length=100, blank=True)
-    score = models.FloatField(default=0)
+    score = models.FloatField(null=True, blank=True)
 
     # Contains data in json_format
     json_data = models.TextField(blank=True)

@@ -32,8 +32,8 @@ class DurationDiscriminationTone(DurationDiscrimination):
     
     @classmethod
     def get_question_text(cls):
-        return _("Is the second tone LONGER than the first tone or EQUALLY LONG?")
+        return _("Is the second tone EQUALLY LONG as the first tone or LONGER?")
 
     @classmethod
     def get_task_explanation(cls):
-        return _("It's your job to decide if the second tone is LONGER than the first tone, or EQUALLY LONG.")
+        return _("It's your job to decide if the second tone is EQUALLY LONG as the first tone, or LONGER.")
