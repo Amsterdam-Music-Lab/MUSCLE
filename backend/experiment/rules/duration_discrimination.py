@@ -275,9 +275,9 @@ class DurationDiscrimination(Base):
                     direction = json_data.get('direction')
                     if not direction or direction == 'decrease':
                         # register turnpoint
+                        last_correct_result = previous_results.first()
                         last_correct_result.score = 4
                         last_correct_result.save()
-                        last_correct_result = previous_results.first()
                         session.final_score += 1
                         session.merge_json_data({'direction': 'increase'})
                         session.save()

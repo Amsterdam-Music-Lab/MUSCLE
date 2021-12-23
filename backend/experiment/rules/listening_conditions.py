@@ -77,7 +77,7 @@ class ListeningConditions(Base):
             }
             feedback_form = Form([])
             view = CompositeView(section, feedback_form.action(), instructions)
-            return view.action()
+            return view.action({'decision_time': 120})
         else:
             message = _("Please keep the eventual sound level the same over the course of the experiment.")
             return final_action_with_optional_button(session, message, request_session)
