@@ -190,7 +190,7 @@ class HBat(Base):
         """ if either the max_turnpoints have been reached,
         or if the section couldn't be found (outlier), stop the experiment
         """
-        percentage = (get_average_difference_level_based(session, 4) / 500) * 100
+        percentage = int((get_average_difference_level_based(session, 4) / 500) * 100)
         score_message = _("Well done! You heard the difference when the rhythm was \
             speeding up or slowing down with only {} percent!").format(percentage)
         session.finish()
