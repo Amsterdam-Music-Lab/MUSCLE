@@ -948,7 +948,7 @@ msgstr ""
 #: experiment/rules/views/question.py:188
 #: experiment/rules/views/question.py:205
 msgid "Continue"
-msgstr ""
+msgstr "Verder"
 
 #: experiment/rules/huang_2021.py:293
 msgid "Bonus Rounds"
@@ -1037,37 +1037,37 @@ msgstr ""
 
 #: experiment/rules/listening_conditions.py:21
 msgid "Are you in a quiet room?"
-msgstr ""
+msgstr "Ben je in een stille ruimte?"
 
 #: experiment/rules/listening_conditions.py:23
 #: experiment/rules/listening_conditions.py:35
 #: experiment/rules/listening_conditions.py:49
 #: experiment/rules/listening_conditions.py:63
 msgid "YES"
-msgstr ""
+msgstr "JA"
 
 #: experiment/rules/listening_conditions.py:24
 #: experiment/rules/listening_conditions.py:37
 #: experiment/rules/listening_conditions.py:50
 #: experiment/rules/listening_conditions.py:64
 msgid "NO"
-msgstr ""
+msgstr "NEE"
 
 #: experiment/rules/listening_conditions.py:33
 msgid "Do you have a stable internet connection?"
-msgstr ""
+msgstr "Heb je een stabiele internetverbinding?"
 
 #: experiment/rules/listening_conditions.py:36
 msgid "MODERATELY"
-msgstr ""
+msgstr "REDELIJK"
 
 #: experiment/rules/listening_conditions.py:47
 msgid "Are you wearing headphones?"
-msgstr ""
+msgstr "Heb je een koptelefoon op?"
 
 #: experiment/rules/listening_conditions.py:61
 msgid "Do you have sound notifications from other devices turned off?"
-msgstr ""
+msgstr "Heb je geluidsmeldingen van andere apparaten uitgezet?"
 
 #: experiment/rules/listening_conditions.py:74
 msgid ""
@@ -1075,13 +1075,13 @@ msgid ""
 "can then adjust the volume to as high a level as possible without it being "
 "uncomfortable.                     When you are satisfied with the sound "
 "level, click Continue"
-msgstr ""
+msgstr "Je kunt het volume nu aanpassen naar een comfortabel niveau. Zet het volume zo luid mogelijk, zonder dat het oncomfortabel is. Wanneer je tevreden bent, klik dan op Verder."
 
 #: experiment/rules/listening_conditions.py:82
 msgid ""
 "Please keep the eventual sound level the same over the course of the "
 "experiment."
-msgstr ""
+msgstr "Houd het geluidsniveau hetzelfde tijdens het hele experiment."
 
 #: experiment/rules/rhythm_discrimination.py:179
 msgid "Is the third rhythm the SAME or DIFFERENT?"
@@ -1165,23 +1165,23 @@ msgstr ""
 
 #: experiment/rules/rhythm_test_series.py:17
 msgid "You are about to take part in an experiment about rhythm perception."
-msgstr ""
+msgstr "Je gaat meedoen aan een experiment over ritmegevoel."
 
 #: experiment/rules/rhythm_test_series.py:21
 msgid ""
 "We want to find out what the best way is to test whether someone has a good "
 "sense of rhythm!"
-msgstr ""
+msgstr "We willen weten wat de beste manier is om erachter te komen of iemand een goed ritmegevoel heeft!"
 
 #: experiment/rules/rhythm_test_series.py:25
 msgid ""
 "You will be doing many little tasks that have something to do with rhythm."
-msgstr ""
+msgstr "Je gaat verschillende taakjes doen die iets met ritme te maken hebben."
 
 #: experiment/rules/rhythm_test_series.py:29
 msgid ""
 "You will get a short explanation and a practice trial for each little task."
-msgstr ""
+msgstr "Voor elk taakje krijg je eerst een korte uitleg en de mogelijkheid om te oefenen."
 
 #: experiment/rules/rhythm_test_series.py:33
 msgid ""
@@ -1189,36 +1189,39 @@ msgid ""
 "earning 5 euros, or by getting study credit (for psychology students at UvA "
 "only). You will get instructions for how to get paid or how to get your "
 "credit at the end of the experiment."
-msgstr ""
+msgstr "Je kunt een vergoeding ontvangen als je het hele experiment hebt "
+"afgerond! De vergoeding bestaat uit 5 euro of studiepunten (alleen voor psychologie "
+"studenten van de UvA). Op het eind van het experiment krijg je instructies over hoe je "
+"de vergoeding kunt ontvangen."
 
 #: experiment/rules/rhythm_test_series.py:43
 msgid "General listening instructions:"
-msgstr ""
+msgstr "Algemene luisterinstructies:"
 
 #: experiment/rules/rhythm_test_series.py:47
 msgid ""
 "To make sure that you can do the experiment as well as possible, please do "
 "it a quiet room with a stable internet connection."
-msgstr ""
+msgstr "Om het experiment zo goed mogelijk te doen, vragen we je het in een stille kamer met stabiel internet te doen."
 
 #: experiment/rules/rhythm_test_series.py:51
 msgid ""
 "Please use headphones, and turn off sound notifications from other devices "
 "and applications (e.g., e-mail, phone messages)."
-msgstr ""
+msgstr "Gebruik een koptelefoon en zet geluidsmeldingen van andere apparaten en programma's uit (bijvoorbeeld meldingen van je telefoon of e-mail)."
 
 #: experiment/rules/rhythm_test_series.py:54 experiment/rules/speech2song.py:77
 msgid "OK"
-msgstr ""
+msgstr "OK"
 
 #: experiment/rules/rhythm_test_series.py:77
 msgid "Made it!"
-msgstr ""
+msgstr "Je hebt het gehaald!"
 
 #: experiment/rules/rhythm_test_series.py:84
 #, python-format
 msgid "Next experiment (%d to go!)"
-msgstr ""
+msgstr "Volgende experiment (nog %d te gaan!)"
 
 #: experiment/rules/speech2song.py:27
 msgid "This is an experiment about an auditory illusion."
@@ -1821,7 +1824,7 @@ msgstr "Transgender vrouw"
 
 #: experiment/rules/util/questions.py:16
 msgid "Woman"
-msgstr "vrouw"
+msgstr "Vrouw"
 
 #: experiment/rules/util/questions.py:17
 msgid "Non-conforming or questioning"
