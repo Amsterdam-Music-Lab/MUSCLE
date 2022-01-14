@@ -6,7 +6,7 @@
 #
 asgiref==3.4.1
     # via django
-django==3.2.8
+django==3.2.11
     # via
     #   -r requirements.in/base.txt
     #   django-cors-headers
