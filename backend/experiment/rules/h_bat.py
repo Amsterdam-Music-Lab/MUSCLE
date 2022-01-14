@@ -190,12 +190,17 @@ class HBat(Base):
         """ if either the max_turnpoints have been reached,
         or if the section couldn't be found (outlier), stop the experiment
         """
-        percentage = int((get_average_difference_level_based(session, 4) / 500) * 100)
+        percentage = int((get_average_difference_level_based(session, 6) / 500) * 100)
         score_message = _("Well done! You heard the difference when the rhythm was \
-            speeding up or slowing down with only {} percent!").format(percentage)
+            speeding up or slowing down with only %(percent)d percent!\n\n %(trivia)s") % {'percent': percentage, 'trivia': cls.get_trivia()}
         session.finish()
         session.save()
         return final_action_with_optional_button(session, score_message, request_session)
+    
+    @classmethod
+    def get_trivia(cls):
+        return _("When people listen to music, they often perceive an underlying regular pulse, like the woodblock \
+            in this task. This allows us to clap along with the music at a concert and dance together in synchrony.")
 
 
 def get_previous_condition(previous_result):

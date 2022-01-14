@@ -14,6 +14,7 @@ from .duration_discrimination import DurationDiscrimination
 from .duration_discrimination_tone import DurationDiscriminationTone
 from .anisochrony import Anisochrony
 from .h_bat import HBat
+from .h_bat_bfit import HBatBFIT
 from .hbat_bst import BST
 from .rhythm_discrimination import RhythmDiscrimination
 from .rhythm_test_series import RhythmTestSeries
@@ -42,6 +43,7 @@ EXPERIMENT_RULES = {
     DurationDiscriminationTone.ID: DurationDiscriminationTone,
     Anisochrony.ID: Anisochrony,
     HBat.ID: HBat,
+    HBatBFIT.ID: HBatBFIT,
     BST.ID: BST,
     RhythmDiscrimination.ID: RhythmDiscrimination,
     RhythmTestSeries.ID: RhythmTestSeries,
