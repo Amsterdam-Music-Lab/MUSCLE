@@ -61,6 +61,7 @@ h3.title {
     @include btn-style($indigo);
 }
 
+.btn-download,
 .btn-gray {
     @include btn-style($gray);
 }
