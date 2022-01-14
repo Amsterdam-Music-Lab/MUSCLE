@@ -89,7 +89,7 @@ class BeatAlignment(Base):
             session.save()
 
             percentage = int((sum([r.score for r in session.result_set.all()]) / session.experiment.rounds) * 100)
-            score_message=_('Well done! You’ve answered {} percent correctly! Did you know that in the UK, over 140.000 people did \
+            score_message=_('Well done! You’ve answered {} percent correctly!\n\nDid you know that in the UK, over 140.000 people did \
                 this test when it was first developed?').format(percentage)
             return final_action_with_optional_button(session, score_message, request_session)
 

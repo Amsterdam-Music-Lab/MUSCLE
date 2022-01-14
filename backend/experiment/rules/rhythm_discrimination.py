@@ -272,7 +272,7 @@ def finalize_experiment(session, request_session):
     percentage = (sum([res.score for res in session.result_set.all()]) / session.experiment.rounds) * 100
     session.finish()
     session.save()
-    score_message =_("Well done! You've answered {} percent correctly! One reason for the \
+    score_message =_("Well done! You've answered {} percent correctly!\n\nOne reason for the \
         weird beep-tones in this test (instead of some nice drum-sound) is that it is used very often\
         in brain scanners, which make a lot of noise. The beep-sound helps people in the scanner \
         to hear the rhythm really well.").format(percentage)

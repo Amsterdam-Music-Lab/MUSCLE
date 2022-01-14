@@ -161,7 +161,7 @@ class DurationDiscrimination(Base):
         )
         config = {
             'listen_first': True,
-            'decision_time': section.duration + .5
+            'decision_time': section.duration + .1
         }
         action = view.action(config)
         return action
@@ -219,7 +219,7 @@ class DurationDiscrimination(Base):
         percentage = round((milliseconds / 600) * 100, 1)
         return _(
             "Well done! You heard the difference between two intervals that \
-            differed only {} percent in duration. When we research timing in \
+            differed only {} percent in duration.\n\nWhen we research timing in \
             humans, we often find that people's accuracy in this task scales: \
             for shorter durations, people can hear even smaller differences than for longer durations.").format(percentage)
 
@@ -315,10 +315,18 @@ class DurationDiscrimination(Base):
     
     @classmethod
     def last_non_catch_correct(cls, previous_results):
+        """ check if previous responses (before the current one, which is correct)
+        have been catch or non-catch, and if non-catch, if they were correct
+        """
+        n_results = len(previous_results)
         if previous_results[1].score == 1:
             return True
-        elif previous_results[1].expected_response == cls.catch_condition and previous_results[2].score == 1:
-            return True
+        elif previous_results[1].expected_response == cls.catch_condition:
+            if n_results < 3:
+                # we didn't have more than 2 trials yet, so cannot check previous response
+                return False
+            elif previous_results[2].score == 1:
+                return True
         elif previous_results[2].expected_response == cls.catch_condition and previous_results[3].score == 1:
             return True
         else:

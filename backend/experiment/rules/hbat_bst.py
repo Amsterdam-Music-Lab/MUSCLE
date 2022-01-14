@@ -129,7 +129,7 @@ class BST(HBat):
         """
         loudness_diff = int(get_average_difference_level_based(session, 6))
         score_message = _("Well done! You heard the difference \
-            when the accented tone was only {} dB louder. A march and a waltz are very common meters in Western music, but in other cultures, much more complex meters also exist!").format(loudness_diff)
+            when the accented tone was only {} dB louder.\n\nA march and a waltz are very common meters in Western music, but in other cultures, much more complex meters also exist!").format(loudness_diff)
         session.finish()
         session.save()
         return final_action_with_optional_button(session, score_message, request_session)

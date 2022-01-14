@@ -136,7 +136,7 @@ class Anisochrony(DurationDiscrimination):
     def get_score_message(cls, milliseconds):
         return _(
             "Well done! You heard the difference when we shifted a tone by {} percent. \
-            Many sounds in nature have regularity like a metronome. \
+            \n\nMany sounds in nature have regularity like a metronome. \
             Our brains use this to process rhythm even better!").format(milliseconds)
     
     @classmethod

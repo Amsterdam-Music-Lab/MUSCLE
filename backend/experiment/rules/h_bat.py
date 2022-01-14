@@ -263,5 +263,5 @@ def staircasing(session, trial_action_callback):
                 session, trial_condition, level)
     if not action:
         # action is None if the audio file doesn't exist
-        return finalize_experiment(session)
+        return None
     return action
