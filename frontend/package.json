@@ -10,6 +10,7 @@
     "axios": ">=0.21.1",
     "classnames": "^2.2.6",
     "email-validator": "^2.0.4",
+    "file-saver": "^2.0.5",
     "node-sass": "^4.13.1",
     "qs": "^6.9.1",
     "react": "^16.13.0",

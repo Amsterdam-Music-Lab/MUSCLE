@@ -199,14 +199,18 @@ h3.title {
   .btn-indigo.border-outside {
     box-shadow: 0 0 0 0.2em rgba(43, 43, 238, 0.5); }
 
+.btn-download,
 .btn-gray {
   background-color: #bdbebf;
   color: white; }
+  .btn-download:hover,
   .btn-gray:hover {
     background-color: #a3a5a6;
     color: white; }
+  .btn-download:focus,
   .btn-gray:focus {
     box-shadow: 0 0 0 0.2rem rgba(189, 190, 191, 0.5); }
+  .btn-download.border-outside,
   .btn-gray.border-outside {
     box-shadow: 0 0 0 0.2em rgba(189, 190, 191, 0.5); }
 
@@ -506,7 +510,8 @@ h3.title {
       max-width: 500px;
       margin: -15px auto; } }
   .aha__consent h3 {
-    color: #212529;
+    color: #212529; }
+  .aha__consent .aha__consent-header {
     border-bottom: 1px solid #bdbebf;
     padding: 15px;
     margin-bottom: 0; }
