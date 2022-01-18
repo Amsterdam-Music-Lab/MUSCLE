@@ -101,7 +101,7 @@ class RhythmDiscrimination(Base):
         if next_round_number == 1:
             plan_stimuli(session)
         
-        return combine_actions(*next_trial_actions(session, next_round_number))
+        return combine_actions(*next_trial_actions(session, next_round_number, request_session))
     
     @staticmethod
     def calculate_score(result, form_element):
@@ -120,7 +120,7 @@ class RhythmDiscrimination(Base):
         return Base.handle_results(session, section, data)
 
 
-def next_trial_actions(session, round_number):
+def next_trial_actions(session, round_number, request_session):
     """
     Get the next trial action, depending on the round number
     """
