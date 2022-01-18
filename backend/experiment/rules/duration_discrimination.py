@@ -252,14 +252,15 @@ class DurationDiscrimination(Base):
                 # set previous score to 4, to mark the turnpoint
                 json_data = session.load_json_data()
                 direction = json_data.get('direction')
-                if not direction or direction == 'increase':
+                if direction == 'increase':
                     # register turnpoint
                     last_result = previous_results.first()
                     last_result.score = 4
                     last_result.save()
                     session.final_score += 1
-                    session.merge_json_data({'direction': 'decrease'})
-                    session.save()
+                # register decreasing difficulty
+                session.merge_json_data({'direction': 'decrease'})
+                session.save()
                 # decrease difficulty
                 difficulty = cls.get_difficulty(session, cls.decrease_difficulty_multiplier)
                 action = trial_action_callback(
@@ -272,15 +273,16 @@ class DurationDiscrimination(Base):
                     # the previous two responses were correct
                     # set previous score to 4, to mark the turnpoint
                     json_data = session.load_json_data()
-                    direction = json_data.get('direction')
-                    if not direction or direction == 'decrease':
+                    direction = json_data.get('direction')    
+                    if direction == 'decrease':
                         # register turnpoint
                         last_correct_result = previous_results.first()
                         last_correct_result.score = 4
                         last_correct_result.save()
                         session.final_score += 1
-                        session.merge_json_data({'direction': 'increase'})
-                        session.save()
+                    # register increasing difficulty
+                    session.merge_json_data({'direction': 'increase'})
+                    session.save()
                     # increase difficulty
                     difficulty = cls.get_difficulty(session, cls.increase_difficulty_multiplier)
                     action = trial_action_callback(
