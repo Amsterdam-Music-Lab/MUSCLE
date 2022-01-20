@@ -53,6 +53,14 @@ def create(request):
 
     # Save session
     session.save()
+
+    if experiment.test_series:
+        # save session id to local storage if this experiment contains nested experiments
+        request.session.update({'test_series': {
+            'session_id': session.id,
+            'slug': experiment.slug}
+        })
+    
     data = {
         'session': {
             'id': session.id,
@@ -112,6 +120,22 @@ def result(request):
         return HttpResponseServerError("Invalid data")
 
     # Get next round for given session
+    if request.session.get('test_series'):
+        # we are in the middle of an experiment series - need to pass in request.session object
+        action = session.experiment_rules().next_round(session, request.session)
+    else:
+        action = session.experiment_rules().next_round(session)
+    return JsonResponse(action, json_dumps_params={'indent': 4})
+
+
+def continue_session(request, session_id):
+    """ given a session_id, continue where we left off """
+    try:
+        session = Session.objects.get(pk=session_id)
+    except Session.DoesNotExist:
+        raise Http404("Session does not exist")
+    
+    # Get next round for given session
     action = session.experiment_rules().next_round(session)
     return JsonResponse(action, json_dumps_params={'indent': 4})
 
@@ -121,7 +145,6 @@ def next_round(request, session_id):
     Fall back to continue an experiment is case next_round data is missing
     This data is normally provided in: result()
     """
-
     # Current participant
     participant = current_participant(request)
 

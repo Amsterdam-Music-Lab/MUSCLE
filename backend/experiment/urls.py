@@ -21,6 +21,9 @@ urlpatterns = [
          api.session.result, name='session_result'),
     path('session/<int:session_id>/next_round/',
          api.next_round, name='session_next_round'),
+    path('session/continue/<int:session_id>', 
+        api.session.continue_session, name='continue_session'),
+
 
     # Participant
     path('participant/', api.participant.current,

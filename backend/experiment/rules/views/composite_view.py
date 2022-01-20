@@ -22,8 +22,13 @@ class CompositeView:  # pylint: disable=too-few-public-methods
 
     ID = 'COMPOSITE_VIEW'
 
+<<<<<<< HEAD
     def __init__(self, players, feedback_form, listen_first=False, instructions=None, title=''):
         self.players = players
+=======
+    def __init__(self, section, feedback_form, instructions=None, title=''):
+        self.section = section
+>>>>>>> develop
         self.feedback_form = feedback_form
         self.instructions = INSTRUCTIONS_DEFAULT
         if instructions:
@@ -49,14 +54,32 @@ class CompositeView:  # pylint: disable=too-few-public-methods
         # Create action
         action = {
             'view': CompositeView.ID,
-            'players': self.players,
             'feedback_form': self.feedback_form,
             'title': self.title,
             'instructions': self.instructions
         }
 
+<<<<<<< HEAD
         self.config = {
             'auto_advance': False,
+=======
+        # Section
+        if self.section:
+            action['section'] = {
+                'id': self.section.id,
+                'url': self.section.absolute_url(),
+            }
+        
+        # advance automatically if there is no form, i.e., no user interaction
+        auto_advance = False if self.feedback_form else True
+
+        # Config
+        action['config'] = {
+            'ready_time': 0,
+            'decision_time': 5,
+            'auto_advance': auto_advance,
+            'auto_play': True,
+>>>>>>> develop
             'listen_first': False,
         }
         self.config.update(config)

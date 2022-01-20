@@ -1,12 +1,13 @@
 from django.utils.translation import gettext_lazy as _
 
 from experiment.models import Section
-from .views import CompositeView, Explainer, Final
+from .views import CompositeView, Explainer
 from .views.form import ChoiceQuestion, Form
 
 from .base import Base
 from .h_bat import HBat
 
+from .util.actions import final_action_with_optional_button
 from .util.score import get_average_difference_level_based
 
 class BST(HBat):
@@ -122,17 +123,13 @@ class BST(HBat):
         )
     
     @classmethod
-    def finalize_experiment(cls, session):
+    def finalize_experiment(cls, session, request_session):
         """ if either the max_turnpoints have been reached,
         or if the section couldn't be found (outlier), stop the experiment
         """
         loudness_diff = int(get_average_difference_level_based(session, 6))
         score_message = _("Well done! You heard the difference \
-            when the accented tone was only {} dB louder. A march and a waltz are very common meters in Western music, but in other cultures, much more complex meters also exist!").format(loudness_diff)
+            when the accented tone was only {} dB louder.\n\nA march and a waltz are very common meters in Western music, but in other cultures, much more complex meters also exist!").format(loudness_diff)
         session.finish()
         session.save()
-        return Final.action(
-            title=_('End'),
-            session=session,
-            score_message=score_message
-        )
+        return final_action_with_optional_button(session, score_message, request_session)

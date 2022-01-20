@@ -6,12 +6,9 @@ import Button from "../Button/Button";
 // FeedbackForm
 const FeedbackForm = ({ formActive, form, buttonLabel, skipLabel, isSkippable, onResult }) => {
 
-    const showSubmitButtons = form.filter( formElement => formElement.submits).length === 0;
+    const showSubmitButtons = form.filter( formElement => formElement.submits).length == 0;
     
-    // if the form is longer than one question, disable the submit button until all form questions have been filled
-    const [submitActive, setSubmitActive] = useState(form.length<2);
-    
-    const onSubmit = (form) => {
+    const onSubmit = () => {
         // Callback onResult with question data
         onResult({
             form
@@ -20,9 +17,6 @@ const FeedbackForm = ({ formActive, form, buttonLabel, skipLabel, isSkippable, o
 
     const onChange = (value, question_key) => {
         form[question_key].value = value;
-        if (form.filter( formElement => formElement.value).length === form.length) {
-            setSubmitActive(true);
-        }
         if (form[question_key].submits) {
             onSubmit(form);
         }
@@ -30,7 +24,7 @@ const FeedbackForm = ({ formActive, form, buttonLabel, skipLabel, isSkippable, o
 
 
     return (
-        <div className="aha__feedback">
+        <div className="aha__feedback d-flex justify-content-center">
             <form>
                 {Object.keys(form).map((index) => (
                     <Question
@@ -43,15 +37,13 @@ const FeedbackForm = ({ formActive, form, buttonLabel, skipLabel, isSkippable, o
                 )
                 )}
                 {/* Continue button */}
-                <center>
                 {showSubmitButtons && (
                 <Button
                     onClick={() => {
-                        onSubmit(form);
+                        onSubmit();
                     }}
-                    className={"btn-primary"}
+                    className={"btn-primary anim anim-fade-in anim-speed-500"}
                     title={buttonLabel}
-                    active={submitActive}
                 />)}
 
                 {/* Skip button */}
@@ -65,7 +57,6 @@ const FeedbackForm = ({ formActive, form, buttonLabel, skipLabel, isSkippable, o
                         title={skipLabel}
                     />
                 )}
-                </center>
             </form>
         </div>
     )

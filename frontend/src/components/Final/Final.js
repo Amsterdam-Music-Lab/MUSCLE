@@ -3,7 +3,7 @@ import { withRouter } from "react-router-dom";
 
 // FinalScore is an experiment view that shows the final scores of the experiment
 // It can only be the last view of an experiment
-const Final= ({ score, score_message, onNext, history }) => {
+const Final= ({ score, score_message, button, onNext, history }) => {
     const [showScore, setShowScore] = useState(0);
 
     // Use a ref to prevent doing multiple increments
@@ -40,6 +40,13 @@ const Final= ({ score, score_message, onNext, history }) => {
             <div className="text-center">
                 <h5>{score_message}</h5>
             </div>
+            {button && (
+                <a className="text-center" href={button.link}>
+                    <button className='btn btn-primary btn-lg'>
+                        {button.text}
+                    </button>
+                </a>
+            )}
         </div>
     );
 };

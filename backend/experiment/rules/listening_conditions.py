@@ -5,14 +5,14 @@ from .base import Base
 from .views import CompositeView, Consent, Explainer, Final, Playlist, StartSession
 from .views.players import Player, Players
 from .views.form import ChoiceQuestion, Form
-from .util.actions import combine_actions
+from .util.actions import combine_actions, final_action_with_optional_button
 
 
 class ListeningConditions(Base):
     ID = 'LISTENING_CONDITIONS'
 
     @classmethod
-    def next_round(cls, session):
+    def next_round(cls, session, request_session=None):
         round_number = session.get_next_round()
         if round_number == 1:
             feedback_form = Form([
@@ -24,9 +24,11 @@ class ListeningConditions(Base):
                         'YES': _('YES'),
                         'NO': _('NO')
                     },
-                    view='BUTTON_ARRAY'
-                ),
-                ChoiceQuestion(
+                    view='BUTTON_ARRAY',
+                    submits=True
+            )])
+        elif round_number == 2:
+            feedback_form = Form([ChoiceQuestion(
                     key='internet_connection',
                     question=_(
                         "Do you have a stable internet connection?"),
@@ -35,8 +37,11 @@ class ListeningConditions(Base):
                         'MODERATELY': _('MODERATELY'),
                         'NO': _('NO')
                     },
-                    view='BUTTON_ARRAY'
-                ),
+                    view='BUTTON_ARRAY',
+                    submits=True
+            )])
+        elif round_number == 3:
+            feedback_form = Form([
                 ChoiceQuestion(
                     key='headphones',
                     question=_(
@@ -45,8 +50,12 @@ class ListeningConditions(Base):
                         'YES': _('YES'),
                         'NO': _('NO')
                     },
-                    view='BUTTON_ARRAY'
-                ),
+                    view='BUTTON_ARRAY',
+                    submits=True
+                )
+            ])
+        elif round_number == 4:
+            feedback_form = Form([
                 ChoiceQuestion(
                     key='notifications_off',
                     question=_(
@@ -55,18 +64,17 @@ class ListeningConditions(Base):
                         'YES': _('YES'),
                         'NO': _('NO')
                     },
-                    view='BUTTON_ARRAY'
+                    view='BUTTON_ARRAY',
+                    submits=True
                 ),
             ])
-            view = CompositeView(None, feedback_form.action())
-            return view.action()
-        elif round_number==2:
+        elif round_number == 5:
             section = session.playlist.section_set.first()
             instructions = {
+                'preload': "",
                 'during_presentation': _("You can now set the sound to a comfortable level. \
-                    When you click the button below, you will hear a sound. \
                     You can then adjust the volume to as high a level as possible without it being uncomfortable. \
-                    Please keep the eventual sound level the same over the course of the experiment."),
+                    When you are satisfied with the sound level, click Continue"),
             }
             feedback_form = None
             player = Player(section,'SMALL_PLAYER')
@@ -85,3 +93,4 @@ class ListeningConditions(Base):
             playlist,
             start_session
         )
+        

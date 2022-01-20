@@ -30,6 +30,8 @@ const App = () => {
                     <Profile slug={EXPERIMENT_SLUG} />
                 </Route>
 
+                <Route path={URLS.session} />
+
                 {/* Store profile */}
                 <Route
                     path={URLS.storeProfile}

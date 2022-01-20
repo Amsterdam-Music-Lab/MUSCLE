@@ -13,7 +13,7 @@ class Playlist(models.Model):
     process_csv = models.BooleanField(default=False, help_text=process_warning)
 
     default_csv_row = 'CSV Format: artist_name [string],\
-        song_name [string],start_position [float],duration [float],\
+        song_name [string], start_position [float], duration [float],\
         "path/filename.mp3" [string], restricted_to_nl [int 0=False 1=True], tag_id [int], group_id [int]'
     csv = models.TextField(blank=True, help_text=default_csv_row)
 

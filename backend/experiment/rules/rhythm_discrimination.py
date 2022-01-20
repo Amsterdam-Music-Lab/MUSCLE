@@ -3,7 +3,7 @@ import logging
 
 from django.utils.translation import gettext_lazy as _
 
-from .util.actions import combine_actions
+from .util.actions import combine_actions, final_action_with_optional_button
 from .util.practice import practice_explainer, practice_again_explainer, start_experiment_explainer
 from .views import CompositeView, Consent, Final, Explainer, StartSession, Playlist
 from .views.form import ChoiceQuestion, Form
@@ -12,12 +12,64 @@ from .base import Base
 logger = logging.getLogger(__name__)
 
 STIMULI = {
-    'nonmetric': [
-        '1 1  3.5  4.5  3.5', '1 3.5  1.4  4.5  1.4', '1.4  3.5  1.4  4.5 1', '3.5  3.5 1 4.5 1', '4.5  1 1  3.5  3.5', '4.5 1 1.4  3.5  1.4', '1 1.4 1 1.4  3.5  3.5', '1 1.4  1.4 1 4.5  1.4', '1 1.4  4.5  1 1  3.5', '1 3.5  1.4  3.5  1.4 1', '1.4 1 4.5  1.4  1.4 1', '1.4 1 4.5  3.5  1 1', '1.4  1.4 1 1.4  4.5 1', '1.4  3.5  1 1  1.4  3.5', '3.5  1.4 1 4.5  1 1', '3.5  1.4  3.5  1.4  1 1', '4.5 1 1.4  1.4 1 1.4', '4.5  1.4 1 3.5  1 1', '1 1 1 1.4  4.5 1 1.4', '1 1  3.5  1.4 1 3.5 1', '1 1  3.5  1.4  1.4 1 1.4', '1 3.5 1 4.5  1 1 1', '1 4.5  1 1  3.5  1 1', '1.4 1 1.4  3.5  1.4  1 1', '1.4 1 4.5 1 1.4  1 1', '1.4  3.5  3.5  1 1  1 1', '3.5  1 1  3.5 1 1.4 1', '3.5  1 1  4.5  1 1 1', '3.5  1.4  1.4  1 1 1 1.4', '4.5  1 1 1 1.4  1.4 1'
-    ],
-    'metric': [
-        '2 2 4 1 3', '3 1 4 1 3', '3 1 4 2 2', '4 1 3 3 1', '4 3 1 1 3', '4 3 1 2 2', '1 1 2 3 1 4', '1 1 2 4 2 2', '2 1 1 1 3 4', '2 1 1 2 2 4', '2 1 1 4 1 3', '2 2 1 3 3 1', '2 2 2 1 1 4', '2 2 3 1 1 3', '3 1 1 3 2 2', '3 1 2 2 1 3', '4 1 1 2 3 1', '4 2 2 1 1 2', '1 1 1 1 4 3 1', '1 1 2 2 1 1 4', '1 1 2 3 1 1 3', '1 1 2 3 1 2 2', '2 1 1 2 2 3 1', '2 1 1 3 1 1 3', '2 2 1 1 1 1 4', '3 1 2 1 1 1 3', '3 1 2 2 1 1 2', '3 1 4 1 1 1 1', '4 1 1 1 1 3 1', '4 2 2 1 1 1 1'
-    ]
+    'practice': {
+        'metric': {
+            'standard': '4 1 1 1 1 3 1',
+            'deviant': '1 1 2 4 2 2', 
+        },
+        'nonmetric': {
+            'standard': '4.5  1 1  3.5  3.5',
+            'deviant': '4.5 1 1.4  1.4 1 1.4'
+        }
+    },
+    'nonmetric':  {
+        'standard': [
+            '1 1  3.5  4.5  3.5',
+            '1 3.5  1.4  4.5  1.4',
+            '1 3.5  1.4  3.5  1.4 1',
+            '3.5  1.4  3.5  1.4  1 1',
+            '4.5  1.4 1 3.5  1 1',
+            '1 3.5 1 4.5  1 1 1',
+            '1.4  3.5  3.5  1 1  1 1',
+            '1.4 1 4.5 1 1.4  1 1',
+            '3.5  1 1  4.5  1 1 1'
+        ],
+        'deviant': [
+            '1.4  3.5  1.4  4.5 1',
+            '3.5  3.5 1 4.5 1',
+            '1 1.4  1.4 1 4.5  1.4',
+            '1 1.4  4.5  1 1  3.5',
+            '1 1.4 1 1.4  3.5  3.5',
+            '1.4  1.4 1 1.4  4.5 1',
+            '1 1  3.5  1.4 1 3.5 1',
+            '1 4.5  1 1  3.5  1 1',
+            '1.4 1 1.4  3.5  1.4  1 1'
+        ]
+    },
+    'metric': {
+        'standard': [
+            '3 1 4 2 2',
+            '4 3 1 2 2',
+            '2 1 1 2 2 4',
+            '2 2 2 1 1 4',
+            '4 2 2 1 1 2',
+            '1 1 2 2 1 1 4',
+            '1 1 2 3 1 2 2',
+            '2 2 1 1 1 1 4',
+            '3 1 4 1 1 1 1'
+        ],
+        'deviant': [
+            '2 2 4 1 3',
+            '3 1 4 1 3',
+            '1 1 2 3 1 4',
+            '2 1 1 1 3 4',
+            '2 2 3 1 1 3',
+            '3 1 1 3 2 2',
+            '1 1 2 3 1 1 3',
+            '2 1 1 3 1 1 3',
+            '4 2 2 1 1 1 1'
+        ]
+    }
 }
 
 class RhythmDiscrimination(Base):
@@ -43,16 +95,13 @@ class RhythmDiscrimination(Base):
         )
     
     @classmethod
-    def next_round(cls, session):
-        if session.rounds_complete():
-            return finalize_experiment(session)
-        
+    def next_round(cls, session, request_session=None):
         next_round_number = session.get_next_round()
 
         if next_round_number == 1:
             plan_stimuli(session)
         
-        return combine_actions(*next_trial_actions(session, next_round_number))
+        return combine_actions(*next_trial_actions(session, next_round_number, request_session))
     
     @staticmethod
     def calculate_score(result, form_element):
@@ -71,7 +120,7 @@ class RhythmDiscrimination(Base):
         return Base.handle_results(session, section, data)
 
 
-def next_trial_actions(session, round_number):
+def next_trial_actions(session, round_number, request_session):
     """
     Get the next trial action, depending on the round number
     """
@@ -81,6 +130,9 @@ def next_trial_actions(session, round_number):
     except KeyError as error:
         print('Missing plan key: %s' % str(error))
         return actions
+    
+    if len(plan)==round_number:
+        return finalize_experiment(session, request_session)
     
     condition = plan[round_number]
 
@@ -93,7 +145,7 @@ def next_trial_actions(session, round_number):
             )
         if round_number == 5:
             total_score = sum([res.score for res in previous_results.all()[:4]])
-            if total_score < 3:
+            if total_score < 2:
                 # start practice over
                 actions.append(practice_again_explainer())
                 actions.append(intro_explainer())
@@ -134,11 +186,15 @@ def next_trial_actions(session, round_number):
         submits=True
     )
     form = Form([question])
+    if round_number < 5:
+        title = _('practice')
+    else:
+        title = _('trial %(index)d of %(total)d') % ({'index': round_number - 4, 'total': len(plan) - 4})
     view = CompositeView(
         section=section,
         feedback_form=form.action(),
         instructions=instructions,
-        title=_('Ryhthm discrimination')
+        title=_('Ryhthm discrimination: %s' %(title))
     )
     config = {
             'listen_first': True,
@@ -155,18 +211,16 @@ def plan_stimuli(session):
     """
     metric = STIMULI['metric']
     nonmetric = STIMULI['nonmetric']
-    random.shuffle(metric)
-    random.shuffle(nonmetric)
     tempi = [150, 160, 170, 180, 190, 200]
-    metric_deviants = [{'rhythm': m, 'tag_id': random.choice(tempi), 'group_id': 0} for m in metric[:15]]
-    metric_standard = [{'rhythm': m, 'tag_id': random.choice(tempi), 'group_id': 1} for m in metric[15:]]
-    nonmetric_deviants = [{'rhythm': m, 'tag_id': random.choice(tempi), 'group_id': 0} for m in nonmetric[:15]]
-    nonmetric_standard = [{'rhythm': m, 'tag_id': random.choice(tempi), 'group_id': 1} for m in nonmetric[15:]]
+    metric_deviants = [{'rhythm': m, 'tag_id': random.choice(tempi), 'group_id': 0} for m in metric['standard']]
+    metric_standard = [{'rhythm': m, 'tag_id': random.choice(tempi), 'group_id': 1} for m in metric['deviant']]
+    nonmetric_deviants = [{'rhythm': m, 'tag_id': random.choice(tempi), 'group_id': 0} for m in nonmetric['standard']]
+    nonmetric_standard = [{'rhythm': m, 'tag_id': random.choice(tempi), 'group_id': 1} for m in nonmetric['deviant']]
     practice = [
-        random.choice(metric_deviants),
-        random.choice(metric_standard),
-        random.choice(nonmetric_deviants),
-        random.choice(nonmetric_standard)
+        {'rhythm': STIMULI['practice']['metric']['standard'], 'tag_id': random.choice(tempi), 'group_id': 1},
+        {'rhythm': STIMULI['practice']['metric']['deviant'], 'tag_id': random.choice(tempi), 'group_id': 0},
+        {'rhythm': STIMULI['practice']['nonmetric']['standard'], 'tag_id': random.choice(tempi), 'group_id': 1},
+        {'rhythm': STIMULI['practice']['nonmetric']['deviant'], 'tag_id': random.choice(tempi), 'group_id': 0},
     ]
     experiment = metric_deviants + metric_standard + nonmetric_deviants + nonmetric_standard
     random.shuffle(experiment)
@@ -213,15 +267,14 @@ def response_explainer(correct, same, button_label=_('Next fragment')):
         button_label=button_label
     )
 
-def finalize_experiment(session):
+def finalize_experiment(session, request_session):
     # we had 4 practice trials and 60 experiment trials
     percentage = (sum([res.score for res in session.result_set.all()]) / session.experiment.rounds) * 100
     session.finish()
     session.save()
-    # Return a score and final score action
-    return Final.action(
-        title=_('End'),
-        session=session,
-        score_message=_(
-            "Well done! You've answered {} percent correctly! One reason for the weird beep-tones in this test (instead of some nice drum-sound) is that it is used very often in brain scanners, which make a lot of noise. The beep-sound helps people in the scanner to hear the rhythm really well. ").format(percentage)
-    )
+    score_message =_("Well done! You've answered {} percent correctly!\n\nOne reason for the \
+        weird beep-tones in this test (instead of some nice drum-sound) is that it is used very often\
+        in brain scanners, which make a lot of noise. The beep-sound helps people in the scanner \
+        to hear the rhythm really well.").format(percentage)
+    return final_action_with_optional_button(session, score_message, request_session)
+

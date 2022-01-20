@@ -1,15 +1,22 @@
 import React from "react";
 
-import Button from "../Button/Button";
+import classNames from "classnames";
 
 // ButtonArray is a question view for selecting a single option from a list of buttons
-const ButtonArray = ({ question, value, active, onChange }) => {
-    // const changeSelection = (value) => {
-    //     console.log(value);
-    // }
+const ButtonArray = ({ question, active, onChange }) => {
+
+    const buttonPress = (value) => {
+        if (!active) {
+            return;
+        }
+        else {
+            onChange(value)
+        }      
+    }
+    
     
     return (
-        <div className="aha__buttons buttons d-flex flex-wrap justify-content-around p-3 w-100">
+        <div className="aha__buttons buttons d-flex flex-wrap justify-content-center p-3 w-100">
             {question.explainer && (
                 <p className="explainer">{question.explainer}</p>
             )}
@@ -22,7 +29,8 @@ const ButtonArray = ({ question, value, active, onChange }) => {
                         index={index}
                         name={question.key}
                         key={question.key+index}
-                        onChange={onChange}
+                        onChange={buttonPress}
+                        active={active}
                     />
                 ))}
             </div>
@@ -30,10 +38,11 @@ const ButtonArray = ({ question, value, active, onChange }) => {
     )
 }
 
-const ToggleButton = ({ label, value, index, name, onChange }) => {
+const ToggleButton = ({ label, value, index, name, active, onChange }) => {
+    const disabled = active? '' : 'disabled';
     return (
         <label 
-            className="btn btn-secondary btn-lg"
+            className={classNames("btn btn-secondary btn-lg", disabled)}
             onClick={() => {
                 onChange(value);
             }}

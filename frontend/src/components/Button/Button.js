@@ -45,7 +45,6 @@ const Button = ({
                 clickOnce();
             }}
             {...touchEvent}
-            disabled={!active}
         >
             {title}
         </div>

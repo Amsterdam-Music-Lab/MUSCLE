@@ -1,4 +1,6 @@
 import React, { useEffect } from "react";
+import { saveAs } from 'file-saver';
+
 import { URLS } from "../../config";
 import Button from "../Button/Button";
 import Loading from "../Loading/Loading";
@@ -24,6 +26,14 @@ const Consent = ({ title, text, experiment, participant, onNext, confirm, deny }
         onNext();
     };
 
+    const onDownload = async () => {
+        const doc = new DOMParser().parseFromString(text, 'text/html');
+        const txt = doc.body.textContent.split('  ').join('');
+        const blob = new Blob([txt], {type: "text/plain;charset=utf-8"});
+        saveAs(blob, 'consent.txt');
+        
+    }
+
     // Loader in case consent is being loaded
     // or it was already given
     if (loadingConsent || consent) {
@@ -48,7 +58,18 @@ const Consent = ({ title, text, experiment, participant, onNext, confirm, deny }
     // Show consent
     return (
         <div className="aha__consent">
-            <h3>{title}</h3>
+            <div className="aha__consent-header d-flex">
+                <div className="flex-fill">
+                    <h3>{title}</h3>
+                </div>
+                <div className="flex-fill">
+                    <button 
+                        className="btn btn-download ti-download"
+                        onClick={onDownload}
+                    >
+                    </button>
+                </div>
+            </div>
 
             <div
                 className="consent-text"
@@ -66,6 +87,7 @@ const Consent = ({ title, text, experiment, participant, onNext, confirm, deny }
                     onClick={onAgree}
                     title={confirm}
                 />
+
             </div>
         </div>
     );

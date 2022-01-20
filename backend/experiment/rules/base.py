@@ -37,8 +37,7 @@ class Base(object):
         """
 
         from experiment.models import Result
-
-        for form_element in data['result']['given_result']:
+        for form_element in data['result']['form']:
             try:
                 result = Result.objects.get(pk=form_element['result_id'])
             except Result.DoesNotExist:

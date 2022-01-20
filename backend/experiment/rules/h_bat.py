@@ -4,11 +4,11 @@ from django.utils.translation import gettext_lazy as _
 
 from .base import Base
 from experiment.models import Section
-from .views import CompositeView, Consent, Explainer, Final, Playlist, StartSession
+from .views import CompositeView, Consent, Explainer, Playlist, StartSession
 from .views.form import ChoiceQuestion, Form
 
 from .util.practice import get_practice_views, practice_explainer, get_trial_condition, get_trial_condition_block
-from .util.actions import combine_actions
+from .util.actions import combine_actions, final_action_with_optional_button
 from .util.score import get_average_difference_level_based
 
 logger = logging.getLogger(__name__)
@@ -19,9 +19,9 @@ class HBat(Base):
     ID = 'H_BAT'
 
     @classmethod
-    def next_round(cls, session):
+    def next_round(cls, session, request_session=None):
         if session.final_score == MAX_TURNPOINTS+1:
-            return cls.finalize_experiment(session)
+            return cls.finalize_experiment(session, request_session)
         elif session.final_score == 0:
             # we are practicing
             actions = get_practice_views(
@@ -45,7 +45,7 @@ class HBat(Base):
             action = staircasing(session, cls.next_trial_action)
             if not action:
                 # action is None if the audio file doesn't exist
-                return cls.finalize_experiment(session)
+                return cls.finalize_experiment(session, request_session)
             else:
                 return action
         
@@ -186,20 +186,21 @@ class HBat(Base):
             )
         
     @classmethod
-    def finalize_experiment(cls, session):
+    def finalize_experiment(cls, session, request_session):
         """ if either the max_turnpoints have been reached,
         or if the section couldn't be found (outlier), stop the experiment
         """
-        percentage = (get_average_difference_level_based(session, 4) / 500) * 100
+        percentage = int((get_average_difference_level_based(session, 6) / 500) * 100)
         score_message = _("Well done! You heard the difference when the rhythm was \
-            speeding up or slowing down with only {} percent!").format(percentage)
+            speeding up or slowing down with only %(percent)d percent!\n\n %(trivia)s") % {'percent': percentage, 'trivia': cls.get_trivia()}
         session.finish()
         session.save()
-        return Final.action(
-            title=_('End'),
-            session=session,
-            score_message=score_message
-        )
+        return final_action_with_optional_button(session, score_message, request_session)
+    
+    @classmethod
+    def get_trivia(cls):
+        return _("When people listen to music, they often perceive an underlying regular pulse, like the woodblock \
+            in this task. This allows us to clap along with the music at a concert and dance together in synchrony.")
 
 
 def get_previous_condition(previous_result):
@@ -219,11 +220,16 @@ def staircasing(session, trial_action_callback):
             session, trial_condition, 1)
     elif last_result.score == 0:
         # the previous response was incorrect
-        # set previous score to 4, to mark the turnpoint
-        last_result.score = 4
-        last_result.save()
-        # register turnpoint and increase difference
-        session.final_score += 1
+        json_data = session.load_json_data()
+        direction = json_data.get('direction')
+        if direction == 'increase':
+            # set previous score to 4, to mark the turnpoint
+            last_result.score = 4
+            last_result.save()
+            # register turnpoint
+            session.final_score += 1
+        # register decreasing difficulty
+        session.merge_json_data({'direction': 'decrease'})
         session.save()
         level = get_previous_level(last_result) - 1 # decrease difficulty
         action = trial_action_callback(
@@ -235,13 +241,17 @@ def staircasing(session, trial_action_callback):
                 session, trial_condition, 1)
         # previous response was correct
         elif previous_results.all()[1].score == 1:
-            # set previous score to 4, to mark the turnpoint
             # the previous two responses were correct
-            last_result = previous_results.first()
-            last_result.score = 4
-            last_result.save()
-            # register turnpoint and decrease difference
-            session.final_score += 1
+            json_data = session.load_json_data()
+            direction = json_data.get('direction')
+            if direction == 'decrease':
+                # set previous score to 4, to mark the turnpoint
+                last_result = previous_results.first()
+                last_result.score = 4
+                last_result.save()
+                session.final_score += 1
+            # register increasing difficulty
+            session.merge_json_data({'direction': 'increase'})
             session.save()
             level = get_previous_level(last_result) + 1 # increase difficulty
             action = trial_action_callback(
@@ -254,5 +264,5 @@ def staircasing(session, trial_action_callback):
                 session, trial_condition, level)
     if not action:
         # action is None if the audio file doesn't exist
-        return finalize_experiment(session)
+        return None
     return action

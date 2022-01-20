@@ -1,3 +1,5 @@
+import json
+
 from django.http import JsonResponse, HttpResponseBadRequest, Http404, HttpResponseForbidden
 from django.views.decorators.http import require_POST
 from experiment.models import Profile, Session
@@ -30,43 +32,40 @@ def create(request):
     """Store a profile question/answer to current participant"""
     # Current participant
     participant = current_participant(request)
-
     # Get question
-    question = request.POST.get("question")
+    result = json.loads(request.POST.get("json_data")).get('result')
 
-    if not question:
-        return HttpResponseBadRequest("Missing required parameter: question")
+    if not result:
+        return HttpResponseBadRequest("Missing required parameter: result")
 
-    # Get answer
-    answer = request.POST.get("answer")
-    if answer is None:
-        return HttpResponseBadRequest("Missing required parameter: answer")
-
-    try:
-        profile = Profile.objects.get(
-            participant=participant, question=question)
-        # Existing profile value
-        profile.answer = answer
-
-    except Profile.DoesNotExist:
-        # Create new profile value
-        profile = Profile(participant=participant,
-                          question=question, answer=answer)
-
-    # Session ID, defaults to 0
-    session_id = int(request.POST.get("session_id", 0))
-
-    if session_id > 0:
+    for form_element in result['form']:
+        question = form_element['question'] 
         try:
-            # Validate the session belongs to current participant
-            session = Session.objects.get(
-                participant=participant, pk=session_id)
-            profile.session_id = session.id
+            profile = Profile.objects.get(
+                participant=participant, question=question)
+            # Existing profile value
 
-        except Session.DoesNotExist:
-            return HttpResponseForbidden("No access to given session")
+        except Profile.DoesNotExist:
+            # Create new profile value
+            profile = Profile(participant=participant,
+                              question=question)
+        profile.answer = form_element['value']
+        profile.save()
 
-    profile.save()
+        # Session ID, defaults to 0
+        session_id = int(request.POST.get("session_id", 0))
+
+        if session_id > 0:
+            try:
+                # Validate the session belongs to current participant
+                session = Session.objects.get(
+                    participant=participant, pk=session_id)
+                profile.session_id = session.id
+
+            except Session.DoesNotExist:
+                return HttpResponseForbidden("No access to given session")
+
+        profile.save()
 
     return JsonResponse({
         'status': 'ok'

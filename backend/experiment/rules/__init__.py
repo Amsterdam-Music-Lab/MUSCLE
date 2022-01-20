@@ -14,9 +14,12 @@ from .duration_discrimination import DurationDiscrimination
 from .duration_discrimination_tone import DurationDiscriminationTone
 from .anisochrony import Anisochrony
 from .h_bat import HBat
+from .h_bat_bfit import HBatBFIT
 from .hbat_bst import BST
-from .listening_conditions import ListeningConditions
 from .rhythm_discrimination import RhythmDiscrimination
+from .rhythm_test_series import RhythmTestSeries
+from .gold_msi import GoldMSI
+from .listening_conditions import ListeningConditions
 
 # Rules available to this application
 # If you create new Rules, add them to the list
@@ -40,7 +43,10 @@ EXPERIMENT_RULES = {
     DurationDiscriminationTone.ID: DurationDiscriminationTone,
     Anisochrony.ID: Anisochrony,
     HBat.ID: HBat,
+    HBatBFIT.ID: HBatBFIT,
     BST.ID: BST,
     RhythmDiscrimination.ID: RhythmDiscrimination,
-    ListeningConditions.ID: ListeningConditions
+    RhythmTestSeries.ID: RhythmTestSeries,
+    GoldMSI.ID: GoldMSI,
+    ListeningConditions.ID: ListeningConditions,
 }

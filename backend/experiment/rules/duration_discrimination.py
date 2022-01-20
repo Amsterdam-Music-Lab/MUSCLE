@@ -8,7 +8,7 @@ from .base import Base
 from experiment.models import Section
 from .views import CompositeView, Consent, Final, Explainer, StartSession, Playlist
 from .views.form import ChoiceQuestion, Form
-from .util.actions import combine_actions
+from .util.actions import combine_actions, final_action_with_optional_button
 from .util.score import get_average_difference
 from .util.practice import get_trial_condition_block, get_practice_views, practice_explainer
 
@@ -47,9 +47,9 @@ class DurationDiscrimination(Base):
         )
 
     @classmethod
-    def next_round(cls, session):
+    def next_round(cls, session, request_session=None):
         if session.final_score == cls.max_turnpoints+1:
-            return cls.finalize_experiment(session)
+            return cls.finalize_experiment(session, request_session)
 
         elif session.final_score == 0:
             cls.register_difficulty(session)
@@ -66,7 +66,7 @@ class DurationDiscrimination(Base):
 
         else:
             ##### Actual trials ####
-            action = cls.staircasing_blocks(session, cls.next_trial_action)
+            action = cls.staircasing_blocks(session, cls.next_trial_action, request_session)
             return action
 
     @staticmethod
@@ -161,14 +161,14 @@ class DurationDiscrimination(Base):
         )
         config = {
             'listen_first': True,
-            'decision_time': section.duration + .5
+            'decision_time': section.duration + .1
         }
         action = view.action(config)
         return action
     
     @classmethod
     def get_question_text(cls):
-        return _("Is the second interval LONGER than the first interval or EQUALLY LONG?")
+        return _("Is the second interval EQUALLY LONG as the first interval or LONGER?")
 
     @classmethod
     def intro_explanation(cls):
@@ -201,10 +201,10 @@ class DurationDiscrimination(Base):
     
     @classmethod
     def get_task_explanation(cls):
-        return _("It's your job to decide if the second interval is LONGER than the first interval, or EQUALLY LONG.")
+        return _("It's your job to decide if the second interval is EQUALLY LONG as the first interval, or LONGER.")
 
     @classmethod
-    def finalize_experiment(cls, session):
+    def finalize_experiment(cls, session, request_session):
         ''' After 8 turnpoints, finalize experiment
         Give participant feedback
         '''
@@ -212,25 +212,19 @@ class DurationDiscrimination(Base):
         score_message = cls.get_score_message(milliseconds)
         session.finish()
         session.save()
-
-        # Return a score and final score action
-        return Final.action(
-            title=_('End of this experiment'),
-            session=session,
-            score_message=score_message
-        )
+        return final_action_with_optional_button(session, score_message, request_session)
     
     @classmethod
     def get_score_message(cls, milliseconds):
         percentage = round((milliseconds / 600) * 100, 1)
         return _(
             "Well done! You heard the difference between two intervals that \
-            differed only {} percent in duration. When we research timing in \
+            differed only {} percent in duration.\n\nWhen we research timing in \
             humans, we often find that people's accuracy in this task scales: \
             for shorter durations, people can hear even smaller differences than for longer durations.").format(percentage)
 
     @classmethod
-    def staircasing_blocks(cls, session, trial_action_callback):
+    def staircasing_blocks(cls, session, trial_action_callback, request_session=None):
         """ Calculate staircasing procedure in blocks of 5 trials with one catch trial 
         Arguments:
         - session: the session
@@ -239,8 +233,6 @@ class DurationDiscrimination(Base):
         """
         previous_results = session.result_set.order_by('-created_at')
         trial_condition = get_trial_condition_block(session, cls.block_size)
-        # trial_condition = get_trial_condition_block(
-        #     previous_results.count(), session.id, 5)
         if not previous_results.count():
             # first trial
             difficulty = cls.get_difficulty(session)
@@ -258,28 +250,40 @@ class DurationDiscrimination(Base):
             if previous_results.first().score == 0:
                 # the previous response was incorrect
                 # set previous score to 4, to mark the turnpoint
-                last_result = previous_results.first()
-                last_result.score = 4
-                last_result.save()
-                # register turnpoint and increase difference
-                session.final_score += 1
+                json_data = session.load_json_data()
+                direction = json_data.get('direction')
+                if direction == 'increase':
+                    # register turnpoint
+                    last_result = previous_results.first()
+                    last_result.score = 4
+                    last_result.save()
+                    session.final_score += 1
+                # register decreasing difficulty
+                session.merge_json_data({'direction': 'decrease'})
                 session.save()
+                # decrease difficulty
                 difficulty = cls.get_difficulty(session, cls.decrease_difficulty_multiplier)
                 action = trial_action_callback(
                     session,
                     trial_condition,
                     difficulty)
             else:
-                # the previous response was correct
-                if previous_results.count() > 1 and previous_results.all()[1].score == 1:
-                    # the previous two responses were correct and non-catch
+                # the previous response was correct - check if previous non-catch trial was 1
+                if previous_results.count() > 1 and cls.last_non_catch_correct(previous_results.all()):
+                    # the previous two responses were correct
                     # set previous score to 4, to mark the turnpoint
-                    last_correct_result = previous_results.first()
-                    last_correct_result.score = 4
-                    last_correct_result.save()
-                    # register turnpoint and decrease difference
-                    session.final_score += 1
+                    json_data = session.load_json_data()
+                    direction = json_data.get('direction')    
+                    if direction == 'decrease':
+                        # register turnpoint
+                        last_correct_result = previous_results.first()
+                        last_correct_result.score = 4
+                        last_correct_result.save()
+                        session.final_score += 1
+                    # register increasing difficulty
+                    session.merge_json_data({'direction': 'increase'})
                     session.save()
+                    # increase difficulty
                     difficulty = cls.get_difficulty(session, cls.increase_difficulty_multiplier)
                     action = trial_action_callback(
                         session,
@@ -293,7 +297,7 @@ class DurationDiscrimination(Base):
                         difficulty)
         if not action:
             # action is None if the audio file doesn't exist
-            return cls.finalize_experiment(session)
+            return cls.finalize_experiment(session, request_session)
         return action
 
     @classmethod
@@ -310,3 +314,22 @@ class DurationDiscrimination(Base):
         session.merge_json_data({'difficulty': current_difficulty})
         session.save()
         return current_difficulty
+    
+    @classmethod
+    def last_non_catch_correct(cls, previous_results):
+        """ check if previous responses (before the current one, which is correct)
+        have been catch or non-catch, and if non-catch, if they were correct
+        """
+        n_results = len(previous_results)
+        if previous_results[1].score == 1:
+            return True
+        elif previous_results[1].expected_response == cls.catch_condition:
+            if n_results < 3:
+                # we didn't have more than 2 trials yet, so cannot check previous response
+                return False
+            elif previous_results[2].score == 1:
+                return True
+        elif previous_results[2].expected_response == cls.catch_condition and previous_results[3].score == 1:
+            return True
+        else:
+            return False

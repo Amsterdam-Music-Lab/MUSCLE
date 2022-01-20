@@ -5,7 +5,6 @@ import Button from "../Button/Button";
 const Explainer = ({ instruction, button_label, steps = [], onNext }) => {
     return (
         <div className="aha__explainer">
-            
             <h3 className="title">{instruction}</h3>
 
             <ul>
