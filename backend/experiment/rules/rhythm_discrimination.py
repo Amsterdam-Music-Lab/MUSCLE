@@ -101,7 +101,10 @@ class RhythmDiscrimination(Base):
         if next_round_number == 1:
             plan_stimuli(session)
         
-        return combine_actions(*next_trial_actions(session, next_round_number, request_session))
+        actions = next_trial_actions(session, next_round_number, request_session)
+        if isinstance(actions, dict):
+            return actions
+        return combine_actions(*actions)
     
     @staticmethod
     def calculate_score(result, form_element):
@@ -131,17 +134,17 @@ def next_trial_actions(session, round_number, request_session):
         print('Missing plan key: %s' % str(error))
         return actions
     
-    if len(plan)==round_number:
+    if len(plan)==round_number-1:
         return finalize_experiment(session, request_session)
     
-    condition = plan[round_number]
+    condition = plan[round_number-1]
 
     if session.final_score == 0:
         # practice: add feedback on previous result
         previous_results = session.result_set.order_by('-created_at')
         if previous_results.count():
             actions.append(
-                response_explainer(previous_results.first().score, plan[round_number-1]['group_id'])
+                response_explainer(previous_results.first().score, plan[round_number-2]['group_id'])
             )
         if round_number == 5:
             total_score = sum([res.score for res in previous_results.all()[:4]])
