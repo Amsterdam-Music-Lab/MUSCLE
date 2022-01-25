@@ -25,7 +25,6 @@ import TwoSong from "../TwoSong/TwoSong";
 import ProfileQuestion from "../ProfileQuestion/ProfileQuestion";
 import ResultQuestion from "../ResultQuestion/ResultQuestion";
 import FinalScore from "../FinalScore/FinalScore";
-import PracticeRound from "../PracticeRound/PracticeRound";
 import Final from "../Final/Final";
 
 // Experiment handles the main experiment flow:
@@ -148,8 +147,6 @@ const Experiment = ({ match }) => {
                 return <TwoAlternativeForced {...attrs} />;
             case "TWO_SONG":
                 return <TwoSong {...attrs} />;
-            case "PRACTICE_ROUND":
-                return <PracticeRound {...attrs} />
             case "COMPOSITE_VIEW":
                 return <CompositeView {...attrs} />
             case "PROFILE_QUESTION":

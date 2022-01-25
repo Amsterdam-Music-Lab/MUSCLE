@@ -4,16 +4,17 @@ import { getCurrentTime, getTimeSince } from "../../util/time";
 import { createProfile, createResult } from "../../API.js";
 import { MEDIA_ROOT } from "../../config";
 import FeedbackForm from "../FeedbackForm/FeedbackForm";
+import Playback from "../Playback/Playback";
 
 // CompositeView is an experiment view, that preloads a song, shows an explanation and plays audio
 // Optionally, it can show an animation during playback
 // Optionally, it can show a form during or after playback
-const CompositeView = ({ instructions, view, participant, players, session, feedback_form, config, onNext, loadState }) => {
+const CompositeView = ({ instructions, view, participant, session, playback, feedback_form, config, onNext, loadState }) => {
     // Main component state
     const resultBuffer = useRef([]);
 
-    const [running, setRunning] = useState(players.config.auto_play);
-    const [started, setStarted] = useState(running);
+    const [running, setRunning] = useState(playback.config.auto_play);
+    // const [started, setStarted] = useState(running);
 
     const submitted = useRef(false);
 
@@ -22,20 +23,20 @@ const CompositeView = ({ instructions, view, participant, players, session, feed
         // Add data to result buffer
         resultBuffer.current.push(result || {});
 
-        // When time_pass_break is set true on the current state and result type
-        // indicates that time has passed; skip any next rounds
+        // // When time_pass_break is set true on the current state and result type
+        // // indicates that time has passed; skip any next rounds
 
-        const timePassBreak =
-            state &&
-            state.time_pass_break &&
-            result.type === "time_passed";
+        // const timePassBreak =
+        //     state &&
+        //     state.time_pass_break &&
+        //     result.type === "time_passed";
 
-        // Check if there is another round data available
-        // if so, store the result data and call onNext
-        if (state && state.next_round && !timePassBreak) {
-            onNext();
-            return;
-        }
+        // // Check if there is another round data available
+        // // if so, store the result data and call onNext
+        // if (state && state.next_round && !timePassBreak) {
+        //     onNext();
+        //     return;
+        // }
 
         // Merge result data with data from resultBuffer
         // NB: result data with same properties will be overwritten by later results
@@ -69,15 +70,15 @@ const CompositeView = ({ instructions, view, participant, players, session, feed
         // Clear resultBuffer
         resultBuffer.current = [];
 
-        // Check for preload_section_url in (nested) action
-        const preloadUrl = getSectionUrl(action);
+        // // Check for preload_section_url in (nested) action
+        // const preloadUrl = getSectionUrl(action);
 
-        if (preloadUrl) {
-            // 100ms for fadeout
-            setTimeout(() => {
-                audio.load(MEDIA_ROOT + preloadUrl);
-            }, 20);
-        }
+        // if (preloadUrl) {
+        //     // 100ms for fadeout
+        //     setTimeout(() => {
+        //         audio.load(MEDIA_ROOT + preloadUrl);
+        //     }, 20);
+        // }
 
         // Init new state from action
         loadState(action);
@@ -103,7 +104,7 @@ const CompositeView = ({ instructions, view, participant, players, session, feed
 
     // Create result data in this wrapper function
     const makeResult = (result) => {
-        const decision_time = result.type=='time_passed'? config.decision_time : getTimeSince(startTime.current);
+        // const decision_time = result.type=='time_passed'? config.decision_time : getTimeSince(startTime.current);
         // Prevent multiple submissions
         if (submitted.current) {
             return;
@@ -111,7 +112,7 @@ const CompositeView = ({ instructions, view, participant, players, session, feed
         submitted.current = true;
 
         // Stop audio
-        audio.pause();
+        // audio.pause();
 
         setRunning(false);
         
@@ -123,44 +124,26 @@ const CompositeView = ({ instructions, view, participant, players, session, feed
         else {
                 submitResult({
                 view,
-                decision_time,
-                players,
+                // decision_time,
+                playback,
                 result,
             });
         }
     };
 
-    // Get a section url from given (nested) action
-const getSectionUrl = (action) => {
-    if (!action) {
-        return "";
-    }
 
-    if (action.section && action.section.url) {
-        return action.section.url;
-    }
-
-    if (action.next_round) {
-        return getSectionUrl(action.next_round);
-    }
-
-    return "";
-};
-
-
-    const formActive =
-        (started && !config.listen_first) ||
-        (started && config.listen_first && !running);
+    const formActive = false;
+        // (started && !config.listen_first) ||
+        // (started && config.listen_first && !running);
 
     return (
         <div className="aha__composite">
-            {players && (
+            {playback && (
             <Playback
-                instructions={instructions}
-                config={config}
-                players={players}
-                onCircleTimerTick={onCircleTimerTick}
-                audio={audio}
+                playerType={playback.player_type}
+                instructions={playback.instructions}
+                config={playback.config}
+                sections={playback.sections}
                 submitResult={submitResult}
             />)}
             {feedback_form && (

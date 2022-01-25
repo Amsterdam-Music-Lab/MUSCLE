@@ -20,6 +20,13 @@ const AutoPlay = ({instructions, config, section, submitResult, className=''}) =
     }
 
     const startTime = useRef(getCurrentTime());
+
+    // Time ref, stores the time without updating the view
+    const time = useRef(0);
+
+    const onCircleTimerTick = (t) => {
+        time.current = t;
+    };
     
 
     // Handle view logic
@@ -64,6 +71,7 @@ const AutoPlay = ({instructions, config, section, submitResult, className=''}) =
                             duration={config.decision_time}
                             color="white"
                             animateCircle={config.show_animation}
+                            onTick={onCircleTimerTick}
                             onFinish={() => {
                                 // Stop audio
                                 audio.pause();

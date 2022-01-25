@@ -4,7 +4,7 @@ body {
   overflow: hidden;
   user-select: none;
   font-size: 16px;
-  background-image: url("../public/images/background.jpg");
+  background-image: url("/public/images/background.jpg");
   background-size: cover;
   background-position: center center;
   background-repeat: no-repeat;
@@ -253,7 +253,7 @@ h3.title {
   overflow-y: auto;
   overflow-x: hidden;
   color: white;
-  background-image: url("../public/images/background.jpg");
+  background-image: url("/public/images/background.jpg");
   background-size: cover;
   background-position: center center;
   background-repeat: no-repeat; }
@@ -758,6 +758,24 @@ h3.title {
     top: 135px;
     width: 100%;
     text-align: center; }
+
+.aha__multiplayer .players {
+  max-width: 350px; }
+
+.aha__multiplayer .buttons {
+  max-width: 390px; }
+  .aha__multiplayer .buttons .aha__button {
+    margin-bottom: 10px;
+    margin-right: 5px;
+    margin-left: 5px; }
+
+.aha__multiplayer .instruction {
+  min-height: 55px; }
+  .aha__multiplayer .instruction h3 {
+    margin: 0; }
+
+.aha__multiplayer .buttons {
+  max-width: 350px; }
 
 .aha__buttons {
   display: flex;

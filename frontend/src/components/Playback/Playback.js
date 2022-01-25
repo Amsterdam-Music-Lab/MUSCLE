@@ -2,14 +2,14 @@ import React, { useState, useEffect, useRef } from "react";
 
 
 import AutoPlay from "./Autoplay";
-import PlayButton from "./PlayButton/PlayButton";
+import PlayButton from "../PlayButton/PlayButton";
 import MultiPlayer from "./MultiPlayer";
 
 const AUTOPLAY = "AUTOPLAY";
 const BUTTON = "BUTTON";
 const MULTIPLE = "MULTIPLE";
 
-const Playback = ({player_type, sections, instructions, config}) => {
+const Playback = ({playerType, sections, instructions, config}) => {
 
     // render view
     const render = (view) => {
@@ -33,7 +33,7 @@ const Playback = ({player_type, sections, instructions, config}) => {
 
     return (
         <div className="aha__playback">
-            <div className="playback">{render(player_type)}</div>
+            <div className="playback">{render(playerType)}</div>
         </div>
     );
 }   

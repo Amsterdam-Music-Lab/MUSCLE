@@ -135,7 +135,7 @@ class DemoTAF(Base):
                 view=Question.ID_RESULT_QUESTION
             ))
 
-        elif next_round >= 2:
+        elif next_round_number >= 2:
             # Example data
             expected_result = random.randint(1, 2)
             # Or use the section group_id to get an expected result, e.g.
@@ -178,7 +178,7 @@ class DemoTAF(Base):
                 button_label="Start question"
             ))
 
-        if next_round > 1:
+        if next_round_number > 1:
             # Add a Profile Question to the actions actions list (after the score action at position 0)
             actions.insert(1, next_question(session, DEMOGRAPHICS, True))
 
