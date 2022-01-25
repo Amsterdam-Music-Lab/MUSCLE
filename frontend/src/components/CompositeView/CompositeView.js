@@ -17,16 +17,6 @@ const CompositeView = ({ instructions, view, participant, players, session, feed
 
     const submitted = useRef(false);
 
-    // Track time
-    const startTime = useRef(getCurrentTime());
-
-    // Time ref, stores the time without updating the view
-    const time = useRef(0);
-
-    const onCircleTimerTick = (t) => {
-        time.current = t;
-    };
-
     // Session result
     const submitResult = async (result) => {
         // Add data to result buffer

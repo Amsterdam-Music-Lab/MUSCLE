@@ -60,7 +60,7 @@ class Anisochrony(DurationDiscrimination):
             'preload': '',
             'during_presentation': ''
         }
-        question = question = ChoiceQuestion(
+        question = ChoiceQuestion(
             key='if_regular',
             question=_(
                     "Were the tones REGULAR or IRREGULAR?"),

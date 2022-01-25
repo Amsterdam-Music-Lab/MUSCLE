@@ -6,15 +6,19 @@ const Circle = ({
     startTime = 0,
     duration = 0,
     color = "white",
-    onTick,
     onFinish,
     radius = 85,
     strokeWidth = 7,
     running = true,
     animateCircle = true
 }) => {
-    // automatic timer
+    // Track time
+    const startTime = useRef(getCurrentTime());
     const [time, setTime] = useState(startTime);
+
+    const onTick = (t) => {
+        time.current = t;
+    };
 
     // Time animation
     useEffect(() => {
