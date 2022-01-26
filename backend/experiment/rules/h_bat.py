@@ -6,6 +6,7 @@ from .base import Base
 from experiment.models import Section
 from .views import CompositeView, Consent, Explainer, Playlist, StartSession
 from .views.form import ChoiceQuestion, Form
+from .views.playback import Playback
 
 from .util.practice import get_practice_views, practice_explainer, get_trial_condition, get_trial_condition_block
 from .util.actions import combine_actions, final_action_with_optional_button
@@ -112,17 +113,17 @@ class HBat(Base):
             result_id=result_pk,
             submits=True
         )
-        form = Form([question])
-        view = CompositeView(
-            section=section,
-            feedback_form=form.action(),
-            instructions=instructions,
-            title=_('Beat acceleration')
-        )
-        config = {
+        play_config = {
             'decision_time': section.duration + .5
         }
-        return view.action(config)
+        playback = Playback('AUTOPLAY', [section], instructions, play_config)
+        form = Form([question])
+        view = CompositeView(
+            playback=playback,
+            feedback_form=form,
+            title=_('Beat acceleration')
+        )
+        return view.action()
 
     @classmethod
     def intro_explainer(cls):

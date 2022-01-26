@@ -186,21 +186,21 @@ def next_trial_actions(session, round_number, request_session):
         submits=True
     )
     form = Form([question])
+    play_config = {
+        'decision_time': section.duration + .5
+    }
+    playback = Playback('AUTOPLAY', [section], instructions, config)
     if round_number < 5:
         title = _('practice')
     else:
         title = _('trial %(index)d of %(total)d') % ({'index': round_number - 4, 'total': len(plan) - 4})
     view = CompositeView(
-        section=section,
-        feedback_form=form.action(),
-        instructions=instructions,
-        title=_('Ryhthm discrimination: %s' %(title))
+        playback=playback,
+        feedback_form=form,
+        title=_('Ryhthm discrimination: %s' %(title)),
+        config={'listen_first': True}
     )
-    config = {
-            'listen_first': True,
-            'decision_time': section.duration + .5
-    }
-    actions.append(view.action(config))
+    actions.append(view.action())
     return actions
 
 def plan_stimuli(session):

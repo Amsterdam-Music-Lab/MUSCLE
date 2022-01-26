@@ -6,7 +6,7 @@ from django.http import HttpResponseRedirect
 
 from .base import Base
 from .util.actions import combine_actions
-from .views import Consent, Explainer, CompositeView, Final, StartSession
+from .views import Consent, Explainer, Final, StartSession
 
 class RhythmTestSeries(Base):
     ID = 'TEST_BATTERY'

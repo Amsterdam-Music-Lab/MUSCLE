@@ -3,6 +3,7 @@ from django.utils.translation import gettext_lazy as _
 from experiment.models import Section
 from .views import CompositeView, Explainer
 from .views.form import ChoiceQuestion, Form
+from .views.playback import Playback
 
 from .base import Base
 from .h_bat import HBat
@@ -88,17 +89,17 @@ class BST(HBat):
             result_id=result_pk,
             submits=True
         )
-        form = Form([question])
-        view = CompositeView(
-            section=section,
-            feedback_form=form.action(),
-            instructions=instructions,
-            title=_('Meter detection')
-        )
-        config = {
+        play_config = {
             'decision_time': section.duration + .5
         }
-        return view.action(config)
+        playback = Playback('AUTOPLAY', [section], instructions, play_config)
+        form = Form([question])
+        view = CompositeView(
+            playback=playback,
+            feedback_form=form,
+            title=_('Meter detection')
+        )
+        return view.action()
 
     @classmethod
     def response_explainer(cls, correct, in2, button_label=_('Next fragment')):

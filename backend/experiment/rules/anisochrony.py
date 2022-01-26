@@ -4,6 +4,7 @@ from django.utils.translation import gettext_lazy as _
 from experiment.models import Section
 from .views import CompositeView, Explainer, Consent, StartSession, Playlist
 from .views.form import ChoiceQuestion, Form
+from .views.playback import Playback
 from .base import Base
 from .duration_discrimination import DurationDiscrimination
 
@@ -72,19 +73,18 @@ class Anisochrony(DurationDiscrimination):
             result_id=result_pk,
             submits=True
         )
+        play_config = {
+                'decision_time': section.duration + .5
+        }
+        playback = Playback('AUTOPLAY', [section], instructions, play_config)
         form = Form([question])
         view = CompositeView(
-            section=section,
-            feedback_form=form.action(),
-            instructions=instructions,
-            title=_('Anisochrony')
+            playback=playback,
+            feedback_form=form,
+            title=_('Anisochrony'),
+            config={'listen_first': True }
         )
-        config = {
-            'listen_first': True,
-            'decision_time': section.duration + .5
-        }
-        action = view.action(config)
-        return action
+        return view.action()
     
     @classmethod
     def intro_explanation(cls, *args):

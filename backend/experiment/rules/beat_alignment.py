@@ -7,6 +7,7 @@ from django.utils.translation import gettext_lazy as _
 from .base import Base
 from .views import CompositeView, Explainer, Consent, StartSession, Question
 from .views.form import ChoiceQuestion, Form
+from .views.playback import Playback
 from .util.questions import question_by_key
 from .util.actions import combine_actions, final_action_with_optional_button
 
@@ -126,18 +127,17 @@ class BeatAlignment(Base):
             'preload': '',
             'during_presentation': presentation_text
         }
-
-        view = CompositeView(
-            section=section,
-            feedback_form=None,
-            instructions=instructions,
-            title=_('Example {}').format(count)
-        )
-        config = {
-            'listen_first': True,
-            'decision_time': section.duration + .5
+        play_config = {
+            'decision_time': section.duration + .1,
         }
-        return view.action(config)
+        playback = Playback('AUTOPLAY', [section], instructions, play_config)
+        view = CompositeView(
+            playback=playback,
+            feedback_form=None,
+            title=_('Example {}').format(count),
+            config={'listen_first': True }
+        )
+        return view.action()
 
     @staticmethod
     def next_trial_action(session, this_round):
