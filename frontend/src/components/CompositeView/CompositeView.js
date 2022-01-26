@@ -9,12 +9,11 @@ import Playback from "../Playback/Playback";
 // CompositeView is an experiment view, that preloads a song, shows an explanation and plays audio
 // Optionally, it can show an animation during playback
 // Optionally, it can show a form during or after playback
-const CompositeView = ({ instructions, view, participant, session, playback, feedback_form, config, onNext, loadState }) => {
+const CompositeView = ({ view, participant, session, playback, feedback_form, config, onNext, loadState }) => {
     // Main component state
     const resultBuffer = useRef([]);
 
-    const [running, setRunning] = useState(playback.config.auto_play);
-    // const [started, setStarted] = useState(running);
+    const [formActive, setFormActive] = useState(!config.listen_first);
 
     const submitted = useRef(false);
 
@@ -110,11 +109,6 @@ const CompositeView = ({ instructions, view, participant, session, playback, fee
             return;
         }
         submitted.current = true;
-
-        // Stop audio
-        // audio.pause();
-
-        setRunning(false);
         
         if (feedback_form.is_profile) {
             submitProfile({
@@ -131,11 +125,6 @@ const CompositeView = ({ instructions, view, participant, session, playback, fee
         }
     };
 
-
-    const formActive = false;
-        // (started && !config.listen_first) ||
-        // (started && config.listen_first && !running);
-
     return (
         <div className="aha__composite">
             {playback && (
@@ -145,6 +134,7 @@ const CompositeView = ({ instructions, view, participant, session, playback, fee
                 config={playback.config}
                 sections={playback.sections}
                 submitResult={submitResult}
+                finishedPlaying={setFormActive}
             />)}
             {feedback_form && (
             <FeedbackForm

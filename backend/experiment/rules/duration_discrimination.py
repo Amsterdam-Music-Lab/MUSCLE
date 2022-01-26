@@ -8,6 +8,7 @@ from .base import Base
 from experiment.models import Section
 from .views import CompositeView, Consent, Final, Explainer, StartSession, Playlist
 from .views.form import ChoiceQuestion, Form
+from .views.playback import Playback
 from .util.actions import combine_actions, final_action_with_optional_button
 from .util.score import get_average_difference
 from .util.practice import get_trial_condition_block, get_practice_views, practice_explainer
@@ -151,20 +152,19 @@ class DurationDiscrimination(Base):
             view='BUTTON_ARRAY',
             result_id=result_pk,
             submits=True
-        )   
-        form = Form([question])
-        view = CompositeView(
-            section=section,
-            feedback_form=form.action(),
-            instructions=instructions,
-            title=_('%(title)s duration discrimination') % {'title': cls.condition}
         )
         config = {
-            'listen_first': True,
-            'decision_time': section.duration + .1
+            'decision_time': section.duration + .1,
         }
-        action = view.action(config)
-        return action
+        playback = Playback('AUTOPLAY', [section], instructions, config)
+        form = Form([question])
+        view = CompositeView(
+            playback=playback,
+            feedback_form=form,
+            title=_('%(title)s duration discrimination') % {'title': cls.condition},
+            config = {'listen_first': True}
+        )
+        return view.action()
     
     @classmethod
     def get_question_text(cls):

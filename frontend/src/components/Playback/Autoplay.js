@@ -11,13 +11,15 @@ import Preload from "../Preload/Preload";
 const PRELOAD = "PRELOAD";
 const RECOGNIZE = "RECOGNIZE";
 
-const AutoPlay = ({instructions, config, section, submitResult, className=''}) => {
+const AutoPlay = ({instructions, config, sections, finishedPlaying, submitResult, className=''}) => {
     // player state
     const [state, setState] = useState({ view: PRELOAD });
     const [running, setRunning] = useState(config.auto_play);
     const setView = (view, data = {}) => {
         setState({ view, ...data });
     }
+
+    const section = sections[0];
 
     const startTime = useRef(getCurrentTime());
 
@@ -76,6 +78,7 @@ const AutoPlay = ({instructions, config, section, submitResult, className=''}) =
                                 // Stop audio
                                 audio.pause();
                                 setRunning(false);
+                                finishedPlaying(true);
                                 if (config.auto_advance) {
                                     // Create a time_passed result
                                     submitResult({

@@ -9,14 +9,15 @@ const AUTOPLAY = "AUTOPLAY";
 const BUTTON = "BUTTON";
 const MULTIPLE = "MULTIPLE";
 
-const Playback = ({playerType, sections, instructions, config}) => {
+const Playback = ({playerType, sections, instructions, config, finishedPlaying}) => {
 
     // render view
     const render = (view) => {
         const attrs = {
             sections,
             instructions,
-            config
+            config,
+            finishedPlaying
         };
 
         switch (view) {
