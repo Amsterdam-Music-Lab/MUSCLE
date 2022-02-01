@@ -48,10 +48,7 @@ class DurationDiscrimination(Base):
 
     @classmethod
     def next_round(cls, session, request_session=None):
-        if session.final_score == cls.max_turnpoints+1:
-            return cls.finalize_experiment(session, request_session)
-
-        elif session.final_score == 0:
+        if session.final_score == 0:
             cls.register_difficulty(session)
             # we are practicing
             actions = get_practice_views(
@@ -255,18 +252,20 @@ class DurationDiscrimination(Base):
                 if direction == 'increase':
                     # register turnpoint
                     last_result = previous_results.first()
-                    last_result.score = 4
-                    last_result.save()
-                    session.final_score += 1
-                # register decreasing difficulty
-                session.merge_json_data({'direction': 'decrease'})
-                session.save()
-                # decrease difficulty
-                difficulty = cls.get_difficulty(session, cls.decrease_difficulty_multiplier)
-                action = trial_action_callback(
-                    session,
-                    trial_condition,
-                    difficulty)
+                    cls.register_turnpoint(session, last_result)
+                if session.final_score == cls.max_turnpoints + 1:
+                    # experiment is finished, None will be replaced by final view
+                    action = None
+                else:
+                    # register decreasing difficulty
+                    session.merge_json_data({'direction': 'decrease'})
+                    session.save()
+                    # decrease difficulty
+                    difficulty = cls.get_difficulty(session, cls.decrease_difficulty_multiplier)
+                    action = trial_action_callback(
+                        session,
+                        trial_condition,
+                        difficulty)
             else:
                 # the previous response was correct - check if previous non-catch trial was 1
                 if previous_results.count() > 1 and cls.last_non_catch_correct(previous_results.all()):
@@ -277,18 +276,20 @@ class DurationDiscrimination(Base):
                     if direction == 'decrease':
                         # register turnpoint
                         last_correct_result = previous_results.first()
-                        last_correct_result.score = 4
-                        last_correct_result.save()
-                        session.final_score += 1
-                    # register increasing difficulty
-                    session.merge_json_data({'direction': 'increase'})
-                    session.save()
-                    # increase difficulty
-                    difficulty = cls.get_difficulty(session, cls.increase_difficulty_multiplier)
-                    action = trial_action_callback(
-                        session,
-                        trial_condition,
-                        difficulty)
+                        cls.register_turnpoint(session, last_correct_result)
+                    if session.final_score == cls.max_turnpoints + 1:
+                        # experiment is finished, None will be replaced by final view   
+                        action = None
+                    else:
+                        # register increasing difficulty
+                        session.merge_json_data({'direction': 'increase'})
+                        session.save()
+                        # increase difficulty
+                        difficulty = cls.get_difficulty(session, cls.increase_difficulty_multiplier)
+                        action = trial_action_callback(
+                            session,
+                            trial_condition,
+                            difficulty)
                 else:
                     difficulty = cls.get_difficulty(session)
                     action = trial_action_callback(
@@ -321,15 +322,23 @@ class DurationDiscrimination(Base):
         have been catch or non-catch, and if non-catch, if they were correct
         """
         n_results = len(previous_results)
-        if previous_results[1].score == 1:
-            return True
-        elif previous_results[1].expected_response == cls.catch_condition:
-            if n_results < 3:
-                # we didn't have more than 2 trials yet, so cannot check previous response
-                return False
-            elif previous_results[2].score == 1:
-                return True
-        elif previous_results[2].expected_response == cls.catch_condition and previous_results[3].score == 1:
-            return True
-        else:
-            return False
+        scores = [previous_results[r].score for r in range(1, n_results)]
+        conditions = [previous_results[r].expected_response for r in range(1, n_results)]
+        answer = False
+        while scores:
+            score = scores.pop()
+            condition = conditions.pop()
+            if score == 1:
+                answer = True
+            if condition == cls.catch_condition:
+                continue
+            else:
+                break
+        return answer
+    
+    @classmethod
+    def register_turnpoint(cls, session, last_result):
+        last_result.score = 4
+        last_result.save()
+        session.final_score += 1
+        session.save()

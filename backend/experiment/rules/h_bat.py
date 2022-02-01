@@ -20,9 +20,7 @@ class HBat(Base):
 
     @classmethod
     def next_round(cls, session, request_session=None):
-        if session.final_score == MAX_TURNPOINTS+1:
-            return cls.finalize_experiment(session, request_session)
-        elif session.final_score == 0:
+        if session.final_score == 0:
             # we are practicing
             actions = get_practice_views(
                 session,
@@ -45,6 +43,8 @@ class HBat(Base):
             action = staircasing(session, cls.next_trial_action)
             if not action:
                 # action is None if the audio file doesn't exist
+                return cls.finalize_experiment(session, request_session)
+            elif session.final_score == MAX_TURNPOINTS+1:
                 return cls.finalize_experiment(session, request_session)
             else:
                 return action
@@ -190,7 +190,7 @@ class HBat(Base):
         """ if either the max_turnpoints have been reached,
         or if the section couldn't be found (outlier), stop the experiment
         """
-        percentage = int((get_average_difference_level_based(session, 6) / 500) * 100)
+        percentage = round((get_average_difference_level_based(session, 6) / 500) * 100, 1)
         score_message = _("Well done! You heard the difference when the rhythm was \
             speeding up or slowing down with only %(percent)d percent!\n\n %(trivia)s") % {'percent': percentage, 'trivia': cls.get_trivia()}
         session.finish()
@@ -223,11 +223,7 @@ def staircasing(session, trial_action_callback):
         json_data = session.load_json_data()
         direction = json_data.get('direction')
         if direction == 'increase':
-            # set previous score to 4, to mark the turnpoint
-            last_result.score = 4
-            last_result.save()
-            # register turnpoint
-            session.final_score += 1
+            register_turnpoint(session, last_result)
         # register decreasing difficulty
         session.merge_json_data({'direction': 'decrease'})
         session.save()
@@ -245,11 +241,8 @@ def staircasing(session, trial_action_callback):
             json_data = session.load_json_data()
             direction = json_data.get('direction')
             if direction == 'decrease':
-                # set previous score to 4, to mark the turnpoint
-                last_result = previous_results.first()
-                last_result.score = 4
-                last_result.save()
-                session.final_score += 1
+                # mark the turnpoint
+                register_turnpoint(session, last_result)
             # register increasing difficulty
             session.merge_json_data({'direction': 'increase'})
             session.save()
@@ -266,3 +259,12 @@ def staircasing(session, trial_action_callback):
         # action is None if the audio file doesn't exist
         return None
     return action
+
+def register_turnpoint(session, last_result):
+    """ register turnpoint:
+        - set previous result to 4
+        - increase final_score (used as counter for turnpoints) """
+    last_result.score = 4
+    last_result.save()
+    session.final_score += 1
+    session.save()
