@@ -836,8 +836,7 @@ msgid ""
 "Musicians often speed up or slow down rhythms to convey a particular feeling "
 "or groove. We call this ‘expressive timing’."
 msgstr ""
-"Goed gedaan! Je hoorde het verschil al wanneer het ritme met maar X procent "
-"versnelde of vertraagde! Muzikanten versnellen of vertragen ritmes vaak om "
+"Muzikanten versnellen of vertragen ritmes vaak om "
 "een specifiek gevoel over te brengen. We noemen dit ‘expressieve timing’."
 
 #: experiment/rules/hbat_bst.py:22

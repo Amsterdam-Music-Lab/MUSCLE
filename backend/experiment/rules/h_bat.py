@@ -193,7 +193,7 @@ class HBat(Base):
         """ if either the max_turnpoints have been reached,
         or if the section couldn't be found (outlier), stop the experiment
         """
-        percentage = round((get_average_difference_level_based(session, 6) / 500) * 100, 1)
+        percentage = round((get_average_difference_level_based(session, 6) / 500) * 100, 2)
         score_message = _("Well done! You heard the difference when the rhythm was \
             speeding up or slowing down with only %(percent)d percent!\n\n %(trivia)s") % {'percent': percentage, 'trivia': cls.get_trivia()}
         session.finish()
