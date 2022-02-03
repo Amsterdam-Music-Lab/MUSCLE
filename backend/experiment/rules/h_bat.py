@@ -10,6 +10,7 @@ from .views.form import ChoiceQuestion, Form
 from .util.practice import get_practice_views, practice_explainer, get_trial_condition, get_trial_condition_block
 from .util.actions import combine_actions, final_action_with_optional_button
 from .util.score import get_average_difference_level_based
+from .util.staircasing import register_turnpoint
 
 logger = logging.getLogger(__name__)
 
@@ -45,6 +46,8 @@ class HBat(Base):
                 # action is None if the audio file doesn't exist
                 return cls.finalize_experiment(session, request_session)
             elif session.final_score == MAX_TURNPOINTS+1:
+                # delete result created before this check
+                previous_results.first().delete()
                 return cls.finalize_experiment(session, request_session)
             else:
                 return action
@@ -222,6 +225,8 @@ def staircasing(session, trial_action_callback):
         # the previous response was incorrect
         json_data = session.load_json_data()
         direction = json_data.get('direction')
+        last_result.comment = 'decrease difficulty'
+        last_result.save()
         if direction == 'increase':
             register_turnpoint(session, last_result)
         # register decreasing difficulty
@@ -235,11 +240,12 @@ def staircasing(session, trial_action_callback):
             # this is the second trial, so the level is still 1
             action = trial_action_callback(
                 session, trial_condition, 1)
-        # previous response was correct
-        elif previous_results.all()[1].score == 1:
+        elif previous_results.all()[1].score == 1 and not previous_results.all()[1].comment:
             # the previous two responses were correct
             json_data = session.load_json_data()
             direction = json_data.get('direction')
+            last_result.comment = 'increase difficulty'
+            last_result.save()
             if direction == 'decrease':
                 # mark the turnpoint
                 register_turnpoint(session, last_result)
@@ -259,12 +265,3 @@ def staircasing(session, trial_action_callback):
         # action is None if the audio file doesn't exist
         return None
     return action
-
-def register_turnpoint(session, last_result):
-    """ register turnpoint:
-        - set previous result to 4
-        - increase final_score (used as counter for turnpoints) """
-    last_result.score = 4
-    last_result.save()
-    session.final_score += 1
-    session.save()

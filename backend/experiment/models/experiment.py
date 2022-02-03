@@ -87,6 +87,7 @@ class Experiment(models.Model):
                     'section_name': section_name,
                     'result_created_at': result.created_at.isoformat(),
                     'result_score': result.score,
+                    'result_comment': result.comment,
                     'expected_response': result.expected_response,
                     'given_response': result.given_response
                 }

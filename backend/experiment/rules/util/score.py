@@ -14,6 +14,6 @@ def get_last_n_turnpoints(session, num_turnpoints):
     select all results associated with turnpoints in the result set
     return the last num_turnpoints results, or all turnpoint results if fewer than num_turnpoints
     """
-    all_results = session.result_set.filter(score=4).order_by('-created_at').all()
+    all_results = session.result_set.filter(comment__iendswith='turnpoint').order_by('-created_at').all()
     cutoff = min(all_results.count(), num_turnpoints)
     return all_results[:cutoff]

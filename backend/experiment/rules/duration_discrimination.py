@@ -11,6 +11,7 @@ from .views.form import ChoiceQuestion, Form
 from .util.actions import combine_actions, final_action_with_optional_button
 from .util.score import get_average_difference
 from .util.practice import get_trial_condition_block, get_practice_views, practice_explainer
+from .util.staircasing import register_turnpoint
 
 logger = logging.getLogger(__name__)
 
@@ -246,13 +247,14 @@ class DurationDiscrimination(Base):
         else:
             if previous_results.first().score == 0:
                 # the previous response was incorrect
-                # set previous score to 4, to mark the turnpoint
                 json_data = session.load_json_data()
                 direction = json_data.get('direction')
+                last_result = previous_results.first()
+                last_result.comment = 'decrease difficulty'
+                last_result.save()
                 if direction == 'increase':
                     # register turnpoint
-                    last_result = previous_results.first()
-                    cls.register_turnpoint(session, last_result)
+                    register_turnpoint(session, last_result)
                 if session.final_score == cls.max_turnpoints + 1:
                     # experiment is finished, None will be replaced by final view
                     action = None
@@ -270,13 +272,14 @@ class DurationDiscrimination(Base):
                 # the previous response was correct - check if previous non-catch trial was 1
                 if previous_results.count() > 1 and cls.last_non_catch_correct(previous_results.all()):
                     # the previous two responses were correct
-                    # set previous score to 4, to mark the turnpoint
                     json_data = session.load_json_data()
-                    direction = json_data.get('direction')    
+                    direction = json_data.get('direction')
+                    last_correct_result = previous_results.first()
+                    last_correct_result.comment = 'increase difficulty'
+                    last_correct_result.save()
                     if direction == 'decrease':
                         # register turnpoint
-                        last_correct_result = previous_results.first()
-                        cls.register_turnpoint(session, last_correct_result)
+                        register_turnpoint(session, last_correct_result)
                     if session.final_score == cls.max_turnpoints + 1:
                         # experiment is finished, None will be replaced by final view   
                         action = None
@@ -322,23 +325,21 @@ class DurationDiscrimination(Base):
         have been catch or non-catch, and if non-catch, if they were correct
         """
         n_results = len(previous_results)
-        scores = [previous_results[r].score for r in range(1, n_results)]
-        conditions = [previous_results[r].expected_response for r in range(1, n_results)]
+        # get the previous scores and conditions, from most to least recent
+        results = [previous_results[r] for r in range(1, n_results)]
         answer = False
-        while scores:
-            score = scores.pop()
-            condition = conditions.pop()
-            if score == 1:
-                answer = True
-            if condition == cls.catch_condition:
+        while results:
+            result = results.pop(0)
+            if result.score == 1:
+                if result.comment:
+                    # a comment on the second-to-last result indicates that difficulty changed there;
+                    # we need to wait for another correct response before changing again
+                    break
+                else:
+                    answer = True
+                    break
+            elif result.expected_response == cls.catch_condition:
                 continue
             else:
                 break
         return answer
-    
-    @classmethod
-    def register_turnpoint(cls, session, last_result):
-        last_result.score = 4
-        last_result.save()
-        session.final_score += 1
-        session.save()
