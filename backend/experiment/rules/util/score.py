@@ -7,7 +7,7 @@ def get_average_difference(session, num_turnpoints):
 
 def get_average_difference_level_based(session, num_turnpoints):
     last_turnpoints = get_last_n_turnpoints(session, num_turnpoints)
-    return sum([20 / int(result.section.name.split('_')[-1]) for result in last_turnpoints]) / last_turnpoints.count()
+    return sum([20 / (2^(int(result.section.name.split('_')[-1])-1)) for result in last_turnpoints]) / last_turnpoints.count() # Difference by level starts at 20 (which is level 1, so 20/(2^0)) and then halves for every next level
 
 def get_last_n_turnpoints(session, num_turnpoints):
     """
