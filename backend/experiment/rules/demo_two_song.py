@@ -94,10 +94,7 @@ class DemoTwoSong(Base):
 
         
         # TwoSong action, with just the default options
-        sections = [
-            {'id': section1.id, 'url': section1.absolute_url()},
-            {'id': section2.id, 'url': section2.absolute_url()}
-        ]
+        sections = [section1, section2]
         playback = Playback('MULTIPLE', sections)
         view = CompositeView(playback, None, 'Testing')
         actions.append(view.action())

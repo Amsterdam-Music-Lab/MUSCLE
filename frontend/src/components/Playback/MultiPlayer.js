@@ -31,7 +31,7 @@ const MultiPlayer = ({sections, instructions, config}) => {
     };
 
     return (
-        <div className="aha__multiplayer d-flex justify-content-center">
+        <div className="aha__multiplayer d-flex justify-content-between">
         {Object.keys(sections).map((index) => (
             <PlayerSmall onClick={() => {
                 playMedia(sections[index].url);
