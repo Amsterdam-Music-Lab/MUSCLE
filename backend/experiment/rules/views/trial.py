@@ -1,5 +1,7 @@
 from django.utils.translation import gettext_lazy as _
 
+from .form import ChoiceQuestion, Form
+
 INSTRUCTIONS_DEFAULT = {
     'during_presentation': _('Do you recognise this song?'),
     'during_silence': _('Keep imagining the music'),
@@ -9,8 +11,7 @@ INSTRUCTIONS_DEFAULT = {
 
 class Trial(object):  # pylint: disable=too-few-public-methods
     """
-    Provide data for a view that plays a section, and shows a form
-
+    A view that may include Playback and/or a Form
     Relates to client component: Trial.js
 
     Parameters:
@@ -59,3 +60,22 @@ class Trial(object):  # pylint: disable=too-few-public-methods
             action['feedback_form'] = self.feedback_form.action()
         
         return action
+    
+class Hooked(Trial):
+    """ A Trial type that shows a ButtonArray with YES / NO,
+    and calculates the score of participants based on recognition time
+    """
+    def __init__(self, *kwargs):
+        super(Hooked, self).__init__(self, *kwargs)
+        question = ChoiceQuestion(
+            question=question_text,
+            key='recognize',
+            choices={
+                'YES': _('YES'),
+                'NO': _('NO')
+            },
+            view='BUTTON_ARRAY',
+            result_id=result_pk,
+            submits=True
+        )
+        self.feedback_form = Form([question])
