@@ -4,7 +4,7 @@ from django.utils.translation import gettext_lazy as _
 
 from .base import Base
 from experiment.models import Section
-from .views import CompositeView, Consent, Explainer, Playlist, StartSession
+from .views import Trial, Consent, Explainer, Playlist, StartSession
 from .views.form import ChoiceQuestion, Form
 from .views.playback import Playback
 
@@ -118,7 +118,7 @@ class HBat(Base):
         }
         playback = Playback('AUTOPLAY', [section], instructions, play_config)
         form = Form([question])
-        view = CompositeView(
+        view = Trial(
             playback=playback,
             feedback_form=form,
             title=_('Beat acceleration')

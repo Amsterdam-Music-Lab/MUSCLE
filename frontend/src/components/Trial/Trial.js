@@ -6,10 +6,10 @@ import { MEDIA_ROOT } from "../../config";
 import FeedbackForm from "../FeedbackForm/FeedbackForm";
 import Playback from "../Playback/Playback";
 
-// CompositeView is an experiment view, that preloads a song, shows an explanation and plays audio
+// Trial is an experiment view, that preloads a song, shows an explanation and plays audio
 // Optionally, it can show an animation during playback
 // Optionally, it can show a form during or after playback
-const CompositeView = ({ view, participant, session, playback, feedback_form, config, onNext, loadState }) => {
+const Trial = ({ view, participant, session, playback, feedback_form, config, onNext, loadState }) => {
     // Main component state
     const resultBuffer = useRef([]);
 
@@ -126,7 +126,7 @@ const CompositeView = ({ view, participant, session, playback, feedback_form, co
     };
 
     return (
-        <div className="aha__composite">
+        <div className="aha__trial">
             {playback && (
             <Playback
                 playerType={playback.player_type}
@@ -149,4 +149,4 @@ const CompositeView = ({ view, participant, session, playback, feedback_form, co
     );
 };
 
-export default CompositeView;
+export default Trial;

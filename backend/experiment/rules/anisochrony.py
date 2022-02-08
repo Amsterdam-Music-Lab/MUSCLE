@@ -2,7 +2,7 @@ import logging
 from django.utils.translation import gettext_lazy as _
 
 from experiment.models import Section
-from .views import CompositeView, Explainer, Consent, StartSession, Playlist
+from .views import Trial, Explainer, Consent, StartSession, Playlist
 from .views.form import ChoiceQuestion, Form
 from .views.playback import Playback
 from .base import Base
@@ -78,7 +78,7 @@ class Anisochrony(DurationDiscrimination):
         }
         playback = Playback('AUTOPLAY', [section], instructions, play_config)
         form = Form([question])
-        view = CompositeView(
+        view = Trial(
             playback=playback,
             feedback_form=form,
             title=_('Anisochrony'),

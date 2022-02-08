@@ -5,7 +5,7 @@ from django.utils.translation import gettext_lazy as _
 
 from .util.actions import combine_actions, final_action_with_optional_button
 from .util.practice import practice_explainer, practice_again_explainer, start_experiment_explainer
-from .views import CompositeView, Consent, Final, Explainer, StartSession, Playlist
+from .views import Trial, Consent, Final, Explainer, StartSession, Playlist
 from .views.form import ChoiceQuestion, Form
 from .base import Base
 
@@ -194,7 +194,7 @@ def next_trial_actions(session, round_number, request_session):
         title = _('practice')
     else:
         title = _('trial %(index)d of %(total)d') % ({'index': round_number - 4, 'total': len(plan) - 4})
-    view = CompositeView(
+    view = Trial(
         playback=playback,
         feedback_form=form,
         title=_('Ryhthm discrimination: %s' %(title)),

@@ -1,6 +1,6 @@
 import random
 from .base import Base
-from .views import CompositeView, FinalScore, Score, Explainer, Consent, StartSession, Playlist, Question
+from .views import Trial, FinalScore, Score, Explainer, Consent, StartSession, Playlist, Question
 from .views.form import Form
 from .views.playback import Playback
 from .util.questions import next_question, DEMOGRAPHICS
@@ -96,7 +96,7 @@ class DemoTwoSong(Base):
         # TwoSong action, with just the default options
         sections = [section1, section2]
         playback = Playback('MULTIPLE', sections)
-        view = CompositeView(playback, None, 'Testing')
+        view = Trial(playback, None, 'Testing')
         actions.append(view.action())
 
         return combine_actions(*actions)

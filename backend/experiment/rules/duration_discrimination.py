@@ -6,7 +6,7 @@ from django.utils.translation import gettext_lazy as _
 
 from .base import Base
 from experiment.models import Section
-from .views import CompositeView, Consent, Final, Explainer, StartSession, Playlist
+from .views import Trial, Consent, Final, Explainer, StartSession, Playlist
 from .views.form import ChoiceQuestion, Form
 from .views.playback import Playback
 from .util.actions import combine_actions, final_action_with_optional_button
@@ -158,7 +158,7 @@ class DurationDiscrimination(Base):
         }
         playback = Playback('AUTOPLAY', [section], instructions, play_config)
         form = Form([question])
-        view = CompositeView(
+        view = Trial(
             playback=playback,
             feedback_form=form,
             title=_('%(title)s duration discrimination') % {'title': cls.condition},

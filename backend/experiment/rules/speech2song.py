@@ -7,7 +7,7 @@ from django.template.loader import render_to_string
 
 from .base import Base
 
-from .views import Consent, Explainer, Final, Question, Playlist, CompositeView, StartSession
+from .views import Consent, Explainer, Final, Question, Playlist, Trial, StartSession
 from .util.actions import combine_actions
 from .util.questions import question_by_key, EXTRA_DEMOGRAPHICS
 from .util.languages import LANGUAGE, LanguageQuestion
@@ -237,7 +237,7 @@ def sound(section, n_representation=None):
         'preload': '',
         'during_representation': ''
     }
-    view = CompositeView(
+    view = Trial(
             section=section,
             feedback_form=None,
             instructions=instructions,

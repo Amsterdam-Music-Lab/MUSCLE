@@ -7,11 +7,11 @@ INSTRUCTIONS_DEFAULT = {
     'preload': _('Get ready!')
 }
 
-class CompositeView:  # pylint: disable=too-few-public-methods
+class Trial(object):  # pylint: disable=too-few-public-methods
     """
     Provide data for a view that plays a section, and shows a form
 
-    Relates to client component: CompositeView.js
+    Relates to client component: Trial.js
 
     Parameters:
     - section: section to be played in this view
@@ -20,7 +20,7 @@ class CompositeView:  # pylint: disable=too-few-public-methods
     - title: page title - defaults to empty
     """
 
-    ID = 'COMPOSITE_VIEW'
+    ID = 'TRIAL_VIEW'
 
     def __init__(self, playback, feedback_form, title='', config=None):
         '''
@@ -49,7 +49,7 @@ class CompositeView:  # pylint: disable=too-few-public-methods
         """
         # Create action
         action = {
-            'view': CompositeView.ID,
+            'view': Trial.ID,
             'title': self.title,
             'config': self.config
         }

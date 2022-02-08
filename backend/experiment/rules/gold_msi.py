@@ -1,7 +1,7 @@
 import logging
 
 from django.utils.translation import gettext_lazy as _
-from .views import CompositeView, Consent, Explainer, Final, Playlist, StartSession
+from .views import Trial, Consent, Explainer, Final, Playlist, StartSession
 from .views.form import Form
 from .util.goldsmiths import MSI_F3_MUSICAL_TRAINING
 from .util.actions import combine_actions
@@ -29,5 +29,5 @@ class GoldMSI(Base):
         feedback_form = Form([
             question,
         ], is_profile=True)
-        view = CompositeView(None, feedback_form.action())
+        view = Trial(None, feedback_form.action())
         return view.action()

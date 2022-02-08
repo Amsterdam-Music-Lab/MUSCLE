@@ -1,6 +1,6 @@
 import logging
 
-from .views import SongSync, SongBool, TwoAlternativeForced, FinalScore, Score, CompositeView
+from .views import SongSync, SongBool, TwoAlternativeForced, FinalScore, Score, Trial
 
 logger = logging.getLogger(__name__)
 

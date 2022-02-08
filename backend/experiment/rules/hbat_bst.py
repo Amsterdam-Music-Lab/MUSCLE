@@ -1,7 +1,7 @@
 from django.utils.translation import gettext_lazy as _
 
 from experiment.models import Section
-from .views import CompositeView, Explainer
+from .views import Trial, Explainer
 from .views.form import ChoiceQuestion, Form
 from .views.playback import Playback
 
@@ -94,7 +94,7 @@ class BST(HBat):
         }
         playback = Playback('AUTOPLAY', [section], instructions, play_config)
         form = Form([question])
-        view = CompositeView(
+        view = Trial(
             playback=playback,
             feedback_form=form,
             title=_('Meter detection')
