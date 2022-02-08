@@ -10,6 +10,9 @@ import Preload from "../Preload/Preload";
 
 const PRELOAD = "PRELOAD";
 const RECOGNIZE = "RECOGNIZE";
+const SILENCE = "SILENCE";
+const SYNC = "SYNC";
+
 
 const AutoPlay = ({instructions, config, sections, finishedPlaying, submitResult, className=''}) => {
     // player state
@@ -37,6 +40,17 @@ const AutoPlay = ({instructions, config, sections, finishedPlaying, submitResult
             case RECOGNIZE:
                 // Play audio at start time
                 audio.playFrom(0);
+                startTime.current = getCurrentTime();
+                break;
+            case SYNC:
+                // Play audio from sync start time
+                const syncStart = Math.max(
+                    0,
+                    state.result.recognition_time +
+                        config.silence_time +
+                        config.continuation_offset
+                );
+                audio.playFrom(syncStart);
                 startTime.current = getCurrentTime();
                 break;
             default:
