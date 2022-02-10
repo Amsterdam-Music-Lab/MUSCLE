@@ -314,10 +314,10 @@ class DurationDiscrimination(Base):
         '''
         json_data = session.load_json_data()
         difficulty = json_data.get('difficulty')
-        current_difficulty = round(difficulty * multiplier)
+        current_difficulty = difficulty * multiplier
         session.merge_json_data({'difficulty': current_difficulty})
         session.save()
-        return current_difficulty
+        return round(current_difficulty)
     
     @classmethod
     def last_non_catch_correct(cls, previous_results):
