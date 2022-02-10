@@ -65,8 +65,8 @@ class Hooked(Trial):
     """ A Trial type that shows a ButtonArray with YES / NO,
     and calculates the score of participants based on recognition time
     """
-    def __init__(self, *kwargs):
-        super(Hooked, self).__init__(self, *kwargs)
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
         question = ChoiceQuestion(
             question=question_text,
             key='recognize',
