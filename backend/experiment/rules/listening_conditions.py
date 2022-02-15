@@ -21,6 +21,7 @@ class ListeningConditions(Base):
                         "Are you in a quiet room?"),
                     choices={
                         'YES': _('YES'),
+                        'MODERATELY': _('MODERATELY'),
                         'NO': _('NO')
                     },
                     view='BUTTON_ARRAY',

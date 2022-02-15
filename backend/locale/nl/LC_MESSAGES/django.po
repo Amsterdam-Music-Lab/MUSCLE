@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-02-15 09:31+0100\n"
+"POT-Creation-Date: 2022-02-15 10:15+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -56,7 +56,7 @@ msgstr ""
 #: experiment/rules/anisochrony.py:24 experiment/rules/beat_alignment.py:106
 #: experiment/rules/duration_discrimination.py:101
 #: experiment/rules/duration_discrimination_tone.py:19
-#: experiment/rules/h_bat.py:170 experiment/rules/hbat_bst.py:104
+#: experiment/rules/h_bat.py:171 experiment/rules/hbat_bst.py:104
 #: experiment/rules/rhythm_discrimination.py:252
 msgid "Next fragment"
 msgstr "Volgende fragment"
@@ -85,7 +85,7 @@ msgstr "Waren de tonen REGELMATIG of ONREGELMATIG?"
 msgid "Anisochrony"
 msgstr "Anisochronie"
 
-#: experiment/rules/anisochrony.py:93 experiment/rules/h_bat.py:134
+#: experiment/rules/anisochrony.py:93 experiment/rules/h_bat.py:135
 msgid "In this test you will hear a series of tones for each trial."
 msgstr "In deze test krijg je steeds een reeks tonen te horen."
 
@@ -96,7 +96,7 @@ msgstr ""
 
 #: experiment/rules/anisochrony.py:102
 #: experiment/rules/duration_discrimination.py:184
-#: experiment/rules/h_bat.py:143 experiment/rules/hbat_bst.py:35
+#: experiment/rules/h_bat.py:144 experiment/rules/hbat_bst.py:35
 msgid ""
 "During the experiment it will become more difficult to hear the difference."
 msgstr ""
@@ -105,7 +105,7 @@ msgstr ""
 
 #: experiment/rules/anisochrony.py:107
 #: experiment/rules/duration_discrimination.py:189
-#: experiment/rules/h_bat.py:148 experiment/rules/hbat_bst.py:40
+#: experiment/rules/h_bat.py:149 experiment/rules/hbat_bst.py:40
 #: experiment/rules/util/practice.py:118
 msgid "Try to answer as accurately as possible, even if you're uncertain."
 msgstr ""
@@ -113,7 +113,7 @@ msgstr ""
 
 #: experiment/rules/anisochrony.py:112
 #: experiment/rules/duration_discrimination.py:194
-#: experiment/rules/h_bat.py:163 experiment/rules/hbat_bst.py:55
+#: experiment/rules/h_bat.py:164 experiment/rules/hbat_bst.py:55
 msgid ""
 "This test will take around 4 minutes to complete. Try to stay focused for "
 "the entire test!"
@@ -761,32 +761,32 @@ msgstr ""
 "Het is jouw taak om te beslissen of de 2e toon EVEN LANG is als de 1e toon, "
 "of LANGER."
 
-#: experiment/rules/h_bat.py:109
+#: experiment/rules/h_bat.py:110
 msgid "Is the rhythm going SLOWER or FASTER?"
 msgstr "VERTRAAGT of VERSNELT het ritme?"
 
-#: experiment/rules/h_bat.py:111
+#: experiment/rules/h_bat.py:112
 msgid "SLOWER"
 msgstr "VERTRAAGT"
 
-#: experiment/rules/h_bat.py:112
+#: experiment/rules/h_bat.py:113
 msgid "FASTER"
 msgstr "VERSNELT"
 
-#: experiment/rules/h_bat.py:123
+#: experiment/rules/h_bat.py:124
 msgid "Beat acceleration"
 msgstr "Versnelling horen"
 
-#: experiment/rules/h_bat.py:138
+#: experiment/rules/h_bat.py:139
 msgid "It's your job to decide if the rhythm goes SLOWER of FASTER."
 msgstr "Het is jouw taak om te beslissen of het ritme VERTRAAGT of VERSNELT."
 
-#: experiment/rules/h_bat.py:153 experiment/rules/hbat_bst.py:45
+#: experiment/rules/h_bat.py:154 experiment/rules/hbat_bst.py:45
 msgid "In this test, you can answer as soon as you feel you know the answer."
 msgstr ""
 "Bij deze test kun je antwoorden zodra je denkt het goede antwoord te weten."
 
-#: experiment/rules/h_bat.py:158 experiment/rules/hbat_bst.py:50
+#: experiment/rules/h_bat.py:159 experiment/rules/hbat_bst.py:50
 msgid ""
 "NOTE: Please wait with answering until you are either sure, or the sound has "
 "stopped."
@@ -794,23 +794,23 @@ msgstr ""
 "LET OP: Wacht met antwoorden tot je het antwoord zeker weet, of tot het "
 "fragment afgelopen is."
 
-#: experiment/rules/h_bat.py:174
+#: experiment/rules/h_bat.py:175
 msgid "The rhythm went SLOWER. Your response was CORRECT."
 msgstr "Het ritme VERTRAAGDE. Je antwoord was CORRECT."
 
-#: experiment/rules/h_bat.py:177
+#: experiment/rules/h_bat.py:178
 msgid "The rhythm went FASTER. Your response was CORRECT."
 msgstr "Het ritme VERSNELDE. Je antwoord was CORRECT."
 
-#: experiment/rules/h_bat.py:181
+#: experiment/rules/h_bat.py:182
 msgid "The rhythm went FASTER. Your response was INCORRECT."
 msgstr "Het ritme VERSNELDE. Je antwoord was INCORRECT."
 
-#: experiment/rules/h_bat.py:184
+#: experiment/rules/h_bat.py:185
 msgid "The rhythm went SLOWER. Your response was INCORRECT."
 msgstr "Het ritme VERTRAAGDE. Je antwoord was INCORRECT."
 
-#: experiment/rules/h_bat.py:197
+#: experiment/rules/h_bat.py:198
 #, python-format
 msgid ""
 "Well done! You heard the difference when the rhythm was             speeding "
@@ -823,7 +823,7 @@ msgstr ""
 "\n"
 "%(trivia)s"
 
-#: experiment/rules/h_bat.py:205
+#: experiment/rules/h_bat.py:206
 msgid ""
 "When people listen to music, they often perceive an underlying regular "
 "pulse, like the woodblock             in this task. This allows us to clap "
@@ -1073,36 +1073,37 @@ msgid "Are you in a quiet room?"
 msgstr "Ben je in een stille ruimte?"
 
 #: experiment/rules/listening_conditions.py:23
-#: experiment/rules/listening_conditions.py:35
-#: experiment/rules/listening_conditions.py:49
-#: experiment/rules/listening_conditions.py:63
+#: experiment/rules/listening_conditions.py:36
+#: experiment/rules/listening_conditions.py:50
+#: experiment/rules/listening_conditions.py:64
 msgid "YES"
 msgstr "JA"
 
 #: experiment/rules/listening_conditions.py:24
 #: experiment/rules/listening_conditions.py:37
-#: experiment/rules/listening_conditions.py:50
-#: experiment/rules/listening_conditions.py:64
-msgid "NO"
-msgstr "NEE"
-
-#: experiment/rules/listening_conditions.py:33
-msgid "Do you have a stable internet connection?"
-msgstr "Heb je een stabiele internetverbinding?"
-
-#: experiment/rules/listening_conditions.py:36
 msgid "MODERATELY"
 msgstr "REDELIJK"
 
-#: experiment/rules/listening_conditions.py:47
+#: experiment/rules/listening_conditions.py:25
+#: experiment/rules/listening_conditions.py:38
+#: experiment/rules/listening_conditions.py:51
+#: experiment/rules/listening_conditions.py:65
+msgid "NO"
+msgstr "NEE"
+
+#: experiment/rules/listening_conditions.py:34
+msgid "Do you have a stable internet connection?"
+msgstr "Heb je een stabiele internetverbinding?"
+
+#: experiment/rules/listening_conditions.py:48
 msgid "Are you wearing headphones?"
 msgstr "Heb je een koptelefoon op?"
 
-#: experiment/rules/listening_conditions.py:61
+#: experiment/rules/listening_conditions.py:62
 msgid "Do you have sound notifications from other devices turned off?"
 msgstr "Heb je geluidsmeldingen van andere apparaten uitgezet?"
 
-#: experiment/rules/listening_conditions.py:74
+#: experiment/rules/listening_conditions.py:75
 msgid ""
 "You can now set the sound to a comfortable level.                     You "
 "can then adjust the volume to as high a level as possible without it being "
@@ -1113,7 +1114,7 @@ msgstr ""
 "zo luid mogelijk, zonder dat het oncomfortabel is. Wanneer je tevreden bent, "
 "klik dan op Verder."
 
-#: experiment/rules/listening_conditions.py:82
+#: experiment/rules/listening_conditions.py:83
 msgid ""
 "Please keep the eventual sound level the same over the course of the "
 "experiment."
