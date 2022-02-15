@@ -38,19 +38,20 @@ class HBat(Base):
         trial_condition = get_trial_condition(2)
         if not previous_results.count():
             # first trial
-            return cls.next_trial_action(session, trial_condition, 1)
-
+            action = cls.next_trial_action(session, trial_condition, 1)
+            if not action:
+                # participant answered first trial incorrectly (outlier)
+                action = cls.finalize_experiment(session, request_session)
         else:
             action = staircasing(session, cls.next_trial_action)
             if not action:
                 # action is None if the audio file doesn't exist
-                return cls.finalize_experiment(session, request_session)
-            elif session.final_score == MAX_TURNPOINTS+1:
+                action = cls.finalize_experiment(session, request_session)
+            if session.final_score == MAX_TURNPOINTS+1:
                 # delete result created before this check
                 previous_results.first().delete()
-                return cls.finalize_experiment(session, request_session)
-            else:
-                return action
+                action = cls.finalize_experiment(session, request_session)
+            return action
         
     @classmethod
     def first_round(cls, experiment):
