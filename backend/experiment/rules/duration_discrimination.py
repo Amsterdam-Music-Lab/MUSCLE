@@ -206,18 +206,18 @@ class DurationDiscrimination(Base):
         ''' After 8 turnpoints, finalize experiment
         Give participant feedback
         '''
-        milliseconds = round(get_average_difference(session, 4) / 1000)
-        score_message = cls.get_score_message(milliseconds)
+        difference = get_average_difference(session, 4)
+        score_message = cls.get_score_message(difference)
         session.finish()
         session.save()
         return final_action_with_optional_button(session, score_message, request_session)
     
     @classmethod
-    def get_score_message(cls, milliseconds):
-        percentage = round((milliseconds / 600) * 100, 1)
+    def get_score_message(cls, difference):
+        percentage = round(difference / 6000, 2)
         return _(
             "Well done! You heard the difference between two intervals that \
-            differed only {} percent in duration.\n\nWhen we research timing in \
+            differed only {} percent in duration. When we research timing in \
             humans, we often find that people's accuracy in this task scales: \
             for shorter durations, people can hear even smaller differences than for longer durations.").format(percentage)
 
