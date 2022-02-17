@@ -133,11 +133,12 @@ class Anisochrony(DurationDiscrimination):
             return 0
     
     @classmethod
-    def get_score_message(cls, milliseconds):
+    def get_score_message(cls, difference):
+        percentage = round(difference / 6000, 2)
         return _(
             "Well done! You heard the difference when we shifted a tone by {} percent. \
             \n\nMany sounds in nature have regularity like a metronome. \
-            Our brains use this to process rhythm even better!").format(milliseconds)
+            Our brains use this to process rhythm even better!").format(percentage)
     
     @classmethod
     def get_difficulty(cls, session, multiplier=1.0):
