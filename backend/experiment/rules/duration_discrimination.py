@@ -206,7 +206,7 @@ class DurationDiscrimination(Base):
         ''' After 8 turnpoints, finalize experiment
         Give participant feedback
         '''
-        difference = get_average_difference(session, 4)
+        difference = get_average_difference(session, 4, cls.start_diff)
         score_message = cls.get_score_message(difference)
         session.finish()
         session.save()

@@ -7,10 +7,6 @@ from .views.form import ChoiceQuestion, Form
 from .base import Base
 from .duration_discrimination import DurationDiscrimination
 
-from .util.practice import get_practice_views, get_trial_condition_block, practice_explainer
-from .util.actions import combine_actions
-from .util.score import get_average_difference
-
 logger = logging.getLogger(__name__)
 
 class Anisochrony(DurationDiscrimination):
