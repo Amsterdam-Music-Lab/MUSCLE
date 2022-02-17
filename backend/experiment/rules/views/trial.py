@@ -25,7 +25,10 @@ class Trial(object):  # pylint: disable=too-few-public-methods
 
     def __init__(self, playback, feedback_form, title='', config=None):
         '''
-        Override the following settings with a config dictionary:
+        - playback: Playback object (may be None)
+        - feedback_form: Form object (may be None)
+        - title: string setting title in header of experiment
+        - config: dictionary with following settings
             - auto_advance: proceed to next view after player has stopped
             - listen_first: whether participant can submit before end of sound
             - time_pass_break: when time has passed, submit the result immediately; skipping any subsequent actions (e.g. a certainty question)
@@ -52,7 +55,7 @@ class Trial(object):  # pylint: disable=too-few-public-methods
         action = {
             'view': Trial.ID,
             'title': self.title,
-            'config': self.config
+            'config': self.config,
         }
         if self.playback:
             action['playback'] = self.playback.action()
@@ -61,21 +64,22 @@ class Trial(object):  # pylint: disable=too-few-public-methods
         
         return action
     
-class Hooked(Trial):
+class Boolean(Trial):
     """ A Trial type that shows a ButtonArray with YES / NO,
-    and calculates the score of participants based on recognition time
+    and with a playback animation
     """
-    def __init__(self, **kwargs):
+    def __init__(self, question_text, question_key, **kwargs):
         super().__init__(**kwargs)
         question = ChoiceQuestion(
             question=question_text,
-            key='recognize',
+            key=question_key,
             choices={
                 'YES': _('YES'),
                 'NO': _('NO')
             },
             view='BUTTON_ARRAY',
             result_id=result_pk,
-            submits=True
+            submits=True,
         )
         self.feedback_form = Form([question])
+        self.playback = playback

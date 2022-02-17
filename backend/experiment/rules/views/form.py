@@ -11,14 +11,14 @@ class Question(object):
     - submits: whether changing this form element can submit the form
     '''
 
-    def __init__(self, key, view='STRING', result_id=None, explainer='', question='', is_skippable=False, submits=False):
+    def __init__(self, key, view='STRING', result_id=None, explainer='', question='', is_skippable=False, submits=False, interaction=None):
         self.key = key
         self.view = view
         self.explainer = explainer,
         self.question = question,
         self.result_id = result_id
         self.is_skippable = is_skippable
-        self.submits = submits # self.interaction = 'submit' or 'advance_state'
+        self.submits = submits
     
     def action(self):
         return self.__dict__
