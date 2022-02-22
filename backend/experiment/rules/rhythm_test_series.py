@@ -74,7 +74,10 @@ class RhythmTestSeries(Base):
         if not experiment_data:
             experiment_data = prepare_experiments(session)
         if experiment_number == len(experiment_data):
-            return Final.action(session, title=_("Made it!"))
+            return Final.action(
+                session,
+                title=_("Thank you very much for participating!"),
+                score_message=_(""))
         slug = experiment_data[experiment_number]
         session.save()
         button = {
