@@ -4,7 +4,7 @@ from django.utils.translation import gettext_lazy as _
 
 from .base import Base
 from experiment.models import Section
-from .views import CompositeView, Consent, Explainer, Playlist, StartSession
+from .views import CompositeView, Consent, Explainer, Step, Playlist, StartSession
 from .views.form import ChoiceQuestion, Form
 
 from .util.practice import get_practice_views, practice_explainer, get_trial_condition, get_trial_condition_block
@@ -56,9 +56,9 @@ class HBat(Base):
         
     @classmethod
     def first_round(cls, experiment):
-        explainer = cls.intro_explainer()
+        explainer = cls.intro_explainer().action(True)
         consent = Consent.action()
-        explainer2 = practice_explainer()
+        explainer2 = practice_explainer().action()
         playlist = Playlist.action(experiment.playlists.all())
         start_session = StartSession.action()
         return combine_actions(
@@ -131,40 +131,23 @@ class HBat(Base):
 
     @classmethod
     def intro_explainer(cls):
-        return Explainer.action(
+        return Explainer(
             instruction=_(
                 'In this test you will hear a series of tones for each trial.'),
             steps=[
-                Explainer.step(
-                    description=_(
-                        "It's your job to decide if the rhythm goes SLOWER of FASTER."),
-                    number=1
-                ),
-                Explainer.step(
-                    description=_(
-                        'During the experiment it will become more difficult to hear the difference.'),
-                    number=2
-                ),
-                Explainer.step(
-                    description=_(
-                        "Try to answer as accurately as possible, even if you're uncertain."),
-                    number=3
-                ),
-                Explainer.step(
-                    description=_(
-                        "In this test, you can answer as soon as you feel you know the answer."),
-                    number=4
-                ),
-                Explainer.step(
-                    description=_(
-                        "NOTE: Please wait with answering until you are either sure, or the sound has stopped."),
-                    number=5
-                ),
-                Explainer.step(
-                    description=_(
-                        'This test will take around 4 minutes to complete. Try to stay focused for the entire test!'),
-                    number=6
-                )],
+                Step(_(
+                        "It's your job to decide if the rhythm goes SLOWER of FASTER.")),
+                Step(_(
+                        'During the experiment it will become more difficult to hear the difference.')),
+                Step(_(
+                        "Try to answer as accurately as possible, even if you're uncertain.")),
+                Step(_(
+                        "In this test, you can answer as soon as you feel you know the answer.")),
+                Step(_(
+                        "NOTE: Please wait with answering until you are either sure, or the sound has stopped.")),
+                Step(_(
+                        'This test will take around 4 minutes to complete. Try to stay focused for the entire test!'))
+                ],
             button_label='Ok'
         )
 
@@ -184,7 +167,7 @@ class HBat(Base):
                 else:
                     instruction = _(
                         'The rhythm went SLOWER. Your response was INCORRECT.')
-            return Explainer.action(
+            return Explainer(
                 instruction=instruction,
                 steps=[],
                 button_label=button_label

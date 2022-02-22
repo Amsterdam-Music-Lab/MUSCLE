@@ -5,7 +5,7 @@ from django.utils.translation import gettext_lazy as _
 
 from .util.actions import combine_actions, final_action_with_optional_button
 from .util.practice import practice_explainer, practice_again_explainer, start_experiment_explainer
-from .views import CompositeView, Consent, Final, Explainer, StartSession, Playlist
+from .views import CompositeView, Consent, Final, Explainer, Step, StartSession, Playlist
 from .views.form import ChoiceQuestion, Form
 from .base import Base
 
@@ -78,12 +78,12 @@ class RhythmDiscrimination(Base):
     @classmethod
     def first_round(cls, experiment):
         """Create data for the first experiment rounds"""
-        explainer = intro_explainer()
+        explainer = intro_explainer().action(True)
 
         # 2. Consent with default text
         consent = Consent.action()
 
-        explainer2 = practice_explainer()
+        explainer2 = practice_explainer().action()
 
         start_session = StartSession.action()
 
@@ -158,7 +158,9 @@ def next_trial_actions(session, round_number, request_session):
                 # experiment starts
                 session.final_score = 1
                 session.save()
-                actions.append(start_experiment_explainer())
+                explainer = start_experiment_explainer()
+                explainer.steps.pop(0)
+                actions.append(explainer.action(True))
     
     try:
         section = session.playlist.section_set.filter(
@@ -232,20 +234,15 @@ def plan_stimuli(session):
     session.save()
 
 def intro_explainer():
-    return Explainer.action(
+    return Explainer(
         instruction=_(
             'In this test you will hear the same rhythm twice. After that, you will hear a third rhythm.'),
         steps=[
-            Explainer.step(
-                description=_(
-                    "Your task is to decide whether this third rhythm is the SAME as the first two rhythms or DIFFERENT."),
-		number=1
-            ),
-            Explainer.step(
-                description=_(
-                    'This test will take around 6 minutes to complete. Try to stay focused for the entire test!'),
-                number=2
-            )],
+            Step(_(
+                    "Your task is to decide whether this third rhythm is the SAME as the first two rhythms or DIFFERENT.")),
+            Step(_(
+                    'This test will take around 6 minutes to complete. Try to stay focused for the entire test!'))
+        ],
         button_label='Ok'
     )
     
@@ -264,11 +261,11 @@ def response_explainer(correct, same, button_label=_('Next fragment')):
         else:
             instruction = _(
                 'The third rhythm is DIFFERENT. Your response was INCORRECT.')
-    return Explainer.action(
+    return Explainer(
         instruction=instruction,
         steps=[],
         button_label=button_label
-    )
+    ).action()
 
 def finalize_experiment(session, request_session):
     # we had 4 practice trials and 60 experiment trials

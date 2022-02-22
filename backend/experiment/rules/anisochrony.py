@@ -2,7 +2,7 @@ import logging
 from django.utils.translation import gettext_lazy as _
 
 from experiment.models import Section
-from .views import CompositeView, Explainer, Consent, StartSession, Playlist
+from .views import CompositeView, Explainer, Step, Consent, StartSession, Playlist
 from .views.form import ChoiceQuestion, Form
 from .base import Base
 from .duration_discrimination import DurationDiscrimination
@@ -25,7 +25,7 @@ class Anisochrony(DurationDiscrimination):
         else:
             instruction = _(
                     'The tones were {}. Your answer was INCORRECT.').format(correct_response)
-        return Explainer.action(
+        return Explainer(
             instruction=instruction,
             steps=[],
             button_label=button_label
@@ -85,30 +85,19 @@ class Anisochrony(DurationDiscrimination):
     
     @classmethod
     def intro_explanation(cls, *args):
-        return Explainer.action(
+        return Explainer(
             instruction=_(
                 'In this test you will hear a series of tones for each trial.'),
             steps=[
-                Explainer.step(
-                    description=_(
-                        "It's your job to decide of the tones sounds REGULAR or IRREGULAR"),
-                    number=1
-                ),
-                Explainer.step(
-                    description=_(
-                        'During the experiment it will become more difficult to hear the difference.'),
-                    number=2
-                ),
-                Explainer.step(
-                    description=_(
-                        "Try to answer as accurately as possible, even if you're uncertain."),
-                    number=3
-                ),
-                Explainer.step(
-                    description=_(
-                        'This test will take around 4 minutes to complete. Try to stay focused for the entire test!'),
-                    number=4
-                )],
+                Step(_(
+                        "It's your job to decide of the tones sounds REGULAR or IRREGULAR")),
+                Step(_(
+                        'During the experiment it will become more difficult to hear the difference.')),
+                Step(_(
+                        "Try to answer as accurately as possible, even if you're uncertain.")),
+                Step(_(
+                        'This test will take around 4 minutes to complete. Try to stay focused for the entire test!'))
+            ],
             button_label='Ok'
         )
 

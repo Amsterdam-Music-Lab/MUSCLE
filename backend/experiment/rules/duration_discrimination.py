@@ -6,7 +6,7 @@ from django.utils.translation import gettext_lazy as _
 
 from .base import Base
 from experiment.models import Section
-from .views import CompositeView, Consent, Final, Explainer, StartSession, Playlist
+from .views import CompositeView, Consent, Final, Explainer, Step, StartSession, Playlist
 from .views.form import ChoiceQuestion, Form
 from .util.actions import combine_actions, final_action_with_optional_button
 from .util.score import get_average_difference
@@ -31,12 +31,12 @@ class DurationDiscrimination(Base):
     @classmethod
     def first_round(cls, experiment):
         """Create data for the first experiment rounds"""
-        explainer = cls.intro_explanation()
+        explainer = cls.intro_explanation().action(True)
 
         # 2. Consent with default text
         consent = Consent.action()
 
-        explainer2 = practice_explainer()
+        explainer2 = practice_explainer().action()
 
         start_session = StartSession.action()
 
@@ -107,7 +107,7 @@ class DurationDiscrimination(Base):
         else:
             instruction = _(
                 'The second interval was %(correct_response)s %(preposition)s the first interval. Your answer was INCORRECT.') % {'correct_response': correct_response, 'preposition': preposition}
-        return Explainer.action(
+        return Explainer(
             instruction=instruction,
             steps=[],
             button_label=button_label
@@ -171,29 +171,18 @@ class DurationDiscrimination(Base):
     @classmethod
     def intro_explanation(cls):
         task_explanation = cls.get_task_explanation()
-        return Explainer.action(
+        return Explainer(
             instruction=_(
                 'In this test you will hear two time durations for each trial, which are marked by two tones.'),
             steps=[
-                Explainer.step(
-                    description=task_explanation,
-                    number=1
-                ),
-                Explainer.step(
-                    description=_(
-                        'During the experiment it will become more difficult to hear the difference.'),
-                    number=2
-                ),
-                Explainer.step(
-                    description=_(
-                        "Try to answer as accurately as possible, even if you're uncertain."),
-                    number=3
-                ),
-                Explainer.step(
-                    description=_(
-                        'This test will take around 4 minutes to complete. Try to stay focused for the entire test!'),
-                    number=4
-                )],
+                Step(task_explanation),
+                Step(_(
+                        'During the experiment it will become more difficult to hear the difference.')),
+                Step(_(
+                        "Try to answer as accurately as possible, even if you're uncertain.")),
+                Step(_(
+                        'This test will take around 4 minutes to complete. Try to stay focused for the entire test!'))
+            ],
             button_label='Ok'
         )
     

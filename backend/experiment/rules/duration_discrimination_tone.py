@@ -25,7 +25,7 @@ class DurationDiscriminationTone(DurationDiscrimination):
         else:
             instruction = _(
                 'The second tone was %(correct_response)s %(preposition)s the first tone. Your answer was INCORRECT.') % {'correct_response': correct_response, 'preposition': preposition}
-        return Explainer.action(
+        return Explainer(
             instruction=instruction,
             steps=[],
             button_label=button_label

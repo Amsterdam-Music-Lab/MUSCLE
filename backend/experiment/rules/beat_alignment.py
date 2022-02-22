@@ -5,7 +5,7 @@ import copy
 from django.utils.translation import gettext_lazy as _
 
 from .base import Base
-from .views import CompositeView, Explainer, Consent, StartSession, Question
+from .views import CompositeView, Explainer, Step, Consent, StartSession, Question
 from .views.form import ChoiceQuestion, Form
 from .util.questions import question_by_key
 from .util.actions import combine_actions, final_action_with_optional_button
@@ -22,26 +22,19 @@ class BeatAlignment(Base):
         """Create data for the first experiment rounds"""
 
         # 1. General explainer
-        explainer = Explainer.action(
+        explainer = Explainer(
             instruction=_(
                 "This test measures your ability to recognize the beat in a piece of music."),
             steps=[
-                Explainer.step(
-                    description=_(
-                        "Listen to the following music fragments. In each fragment you hear a series of beeps."),
-                    number=1),
-                Explainer.step(
-                    description=_(
-                        "It's you job to decide if the beeps are ALIGNED TO THE BEAT or NOT ALIGNED TO THE BEAT of the music."),
-                    number=2
-                ),
-                Explainer.step(
-                    description=_(
-                        "Listen carefully to this. Pay close attention to the description that accompanies each example."),
-                    number=3
-                )
-            ], button_label=_('Ok')
-            )
+                Step(_(
+                        "Listen to the following music fragments. In each fragment you hear a series of beeps.")),
+                Step(_(
+                        "It's you job to decide if the beeps are ALIGNED TO THE BEAT or NOT ALIGNED TO THE BEAT of the music.")),
+                Step(_(
+                        "Listen carefully to this. Pay close attention to the description that accompanies each example."))
+            ],
+            button_label=_('Ok')
+            ).action(True)
 
         # 2. Consent with default text
         consent = Consent.action()
@@ -52,19 +45,17 @@ class BeatAlignment(Base):
         for i in range(1,4):
             this_round = BeatAlignment.next_practice_action(practice_list, i)
             practice_rounds.append(copy.deepcopy(this_round))
-        practice_rounds.append(Explainer.action(
+        practice_rounds.append(Explainer(
             instruction=_('You will now hear 17 music fragments.'),
             steps=[
-                Explainer.step(
-                    description=_(
-                        'With each fragment you have to decide if the beeps are ALIGNED TO THE BEAT, or NOT ALIGNED TO THE BEAT of the music.')
-                    ),
-                Explainer.step(
-                    description=_(
-                        'Pay attention: a music fragment can occur several times. In total, this test will take around 6 minutes to complete. Try to stay focused for the entire duration!')
-                    )
+                Step(_(
+                        'With each fragment you have to decide if the beeps are ALIGNED TO THE BEAT, or NOT ALIGNED TO THE BEAT of the music.')),
+                Step(_(
+                        'Pay attention: a music fragment can occur several times.')),
+                Step(_('In total, this test will take around 6 minutes to complete.')),
+                Step(_('Try to stay focused for the entire duration!'))
             ],
-            button_label=_('Start'))
+            button_label=_('Start')).action(True)
         )
 
         # 5. Start session

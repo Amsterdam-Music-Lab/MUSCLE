@@ -1,7 +1,7 @@
 from django.utils.translation import gettext_lazy as _
 
 from experiment.models import Section
-from .views import CompositeView, Explainer
+from .views import CompositeView, Explainer, Step
 from .views.form import ChoiceQuestion, Form
 
 from .base import Base
@@ -17,44 +17,23 @@ class BST(HBat):
 
     @classmethod
     def intro_explainer(cls):
-        return Explainer.action(
+        return Explainer(
             instruction=_(
                 'In this test you will hear a number of rhythms which have a regular beat.'),
             steps=[
-                Explainer.step(
-                    description=_(
-                        "It's your job to decide if the rhythm has a DUPLE METER (a MARCH) or a TRIPLE METER (a WALTZ)."),
-                    number=1
-                ),
-                Explainer.step(
-                    description=_("Every SECOND tone in a DUPLE meter (march) is louder and every THIRD tone in a TRIPLE meter (waltz) is louder."),
-                    number=2
-                ),
-                Explainer.step(
-                    description=_(
-                        'During the experiment it will become more difficult to hear the difference.'),
-                    number=3
-                ),
-                Explainer.step(
-                    description=_(
-                        "Try to answer as accurately as possible, even if you're uncertain."),
-                    number=4
-                ),
-                Explainer.step(
-                    description=_(
-                        "In this test, you can answer as soon as you feel you know the answer."),
-                    number=5
-                ),
-                Explainer.step(
-                    description=_(
-                        "NOTE: Please wait with answering until you are either sure, or the sound has stopped."),
-                    number=6
-                ),
-                Explainer.step(
-                    description=_(
-                        'This test will take around 4 minutes to complete. Try to stay focused for the entire test!'),
-                    number=7
-                )],
+                Step(_(
+                        "It's your job to decide if the rhythm has a DUPLE METER (a MARCH) or a TRIPLE METER (a WALTZ).")),
+                Step(_("Every SECOND tone in a DUPLE meter (march) is louder and every THIRD tone in a TRIPLE meter (waltz) is louder.")),
+                Step(_(
+                        'During the experiment it will become more difficult to hear the difference.')),
+                Step(_(
+                        "Try to answer as accurately as possible, even if you're uncertain.")),
+                Step(_(
+                        "In this test, you can answer as soon as you feel you know the answer.")),
+                Step(_(
+                        "NOTE: Please wait with answering until you are either sure, or the sound has stopped.")),
+                Step(_(
+                        'This test will take around 4 minutes to complete. Try to stay focused for the entire test!'))],
             button_label='Ok'
         )
 
@@ -116,7 +95,7 @@ class BST(HBat):
             else:
                 instruction = _(
                     'The rhythm was a TRIPLE METER. Your response was INCORRECT.')
-        return Explainer.action(
+        return Explainer(
             instruction=instruction,
             steps=[],
             button_label=button_label
