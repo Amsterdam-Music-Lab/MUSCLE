@@ -197,7 +197,7 @@ def next_trial_actions(session, round_number, request_session):
         section=section,
         feedback_form=form.action(),
         instructions=instructions,
-        title=_('Ryhthm discrimination: %s' %(title))
+        title=_('Rhythm discrimination: %s' %(title))
     )
     config = {
             'listen_first': True,
