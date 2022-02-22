@@ -6,7 +6,7 @@ def get_average_difference(session, num_turnpoints, initial_value):
     if last_turnpoints.count() == 0:
         last_result = get_fallback_result(session)
         if last_result:
-            return last_result.section.name
+            return float(last_result.section.name)
         else:
             # this cannot happen in DurationDiscrimination style experiments
             # for future compatibility, still catch the condition that there may be no results                 
