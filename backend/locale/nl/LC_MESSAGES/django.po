@@ -199,8 +199,8 @@ msgid ""
 "Did you know that in the UK, over 140.000 people did                 this "
 "test when it was first developed?"
 msgstr ""
-"Goed gedaan! Je hebt {} procent goed beantwoord!\n\nWist je dat in Engeland "
-"meer dan 140.000 mensen deze test hebben gedaan toen deze in ontwikkeling "
+"Goed gedaan! Je hebt {} procent goed beantwoord!\n\nWist je dat meer dan 140.000 mensen "
+"in Engeland deze test hebben gedaan toen deze in ontwikkeling "
 "was?"
 
 #: experiment/rules/beat_alignment.py:103
@@ -1193,7 +1193,7 @@ msgid ""
 "scanner         to hear the rhythm really well."
 msgstr ""
 "Goed gedaan! Je hebt {} procent goed beantwoord!\n\nEén van de redenen om "
-"piepjes te gebruiken in deze test (in plaats van een leuk drum geluid) is "
+"piepjes te gebruiken in deze test (in plaats van een leuk drumgeluid) is "
 "dat deze test veel wordt gebruikt in hersenscanners, en die maken veel "
 "lawaai. Het piepgeluid helpt mensen in de scanner om het ritme goed te "
 "kunnen horen."
@@ -2087,42 +2087,42 @@ msgstr ""
 #: experiment/rules/views/form.py:44 experiment/rules/views/question.py:148
 #: experiment/rules/views/question.py:171
 msgid "Completely Disagree"
-msgstr ""
+msgstr "Helemaal mee oneens"
 
 #: experiment/rules/views/form.py:45 experiment/rules/views/form.py:54
 #: experiment/rules/views/question.py:149
 #: experiment/rules/views/question.py:172
 msgid "Strongly Disagree"
-msgstr ""
+msgstr "Zeer mee oneens"
 
 #: experiment/rules/views/form.py:46 experiment/rules/views/form.py:55
 #: experiment/rules/views/question.py:150
 #: experiment/rules/views/question.py:173
 msgid "Disagree"
-msgstr ""
+msgstr "Mee oneens"
 
 #: experiment/rules/views/form.py:47 experiment/rules/views/form.py:56
 #: experiment/rules/views/question.py:151
 #: experiment/rules/views/question.py:174
 msgid "Neither Agree nor Disagree"
-msgstr ""
+msgstr "Niet mee eens of oneens"
 
 #: experiment/rules/views/form.py:48 experiment/rules/views/form.py:57
 #: experiment/rules/views/question.py:152
 #: experiment/rules/views/question.py:175
 msgid "Agree"
-msgstr ""
+msgstr "Mee eens"
 
 #: experiment/rules/views/form.py:49 experiment/rules/views/form.py:58
 #: experiment/rules/views/question.py:153
 #: experiment/rules/views/question.py:176
 msgid "Strongly Agree"
-msgstr ""
+msgstr "Zeer mee eens"
 
 #: experiment/rules/views/form.py:50 experiment/rules/views/question.py:154
 #: experiment/rules/views/question.py:177
 msgid "Completely Agree"
-msgstr ""
+msgstr "Helemaal mee eens"
 
 #: experiment/rules/views/form.py:69 experiment/rules/views/question.py:14
 #: experiment/rules/views/question.py:35 experiment/rules/views/question.py:54
