@@ -35,28 +35,17 @@ class RhythmTestSeries(Base):
         ).action()
     
     @classmethod
-    def listening_explainer(cls):
-        return Explainer(
-            instruction=_(
-                'General listening instructions:'),
-            steps=[
-                Step(_(
-                        "To make sure that you can do the experiment as well as possible, please do it a quiet room with a stable internet connection."),
-                ),
-                Step(_("Please use headphones, and turn off sound notifications from other devices and applications (e.g., e-mail, phone messages)."),
-                )],
-            button_label=_('OK')
-        ).action(True)
-    
-    @classmethod
     def first_round(cls, experiment):
         """Create data for the first experiment rounds."""
-        consent = Consent.action()
+                # read consent form from file
+        rendered = render_to_string(
+            'consent/consent_rhythm.html')
+        consent = Consent.action(rendered, title=_(
+            'Informed consent'), confirm=_('I agree'), deny=_('Stop'))
         start_session = StartSession.action()
         return combine_actions(
-            cls.intro_explainer(),
-            cls.listening_explainer(),
             consent,
+            cls.intro_explainer(),
             start_session
         )
     

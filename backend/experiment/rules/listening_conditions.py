@@ -2,7 +2,7 @@
 from django.utils.translation import gettext_lazy as _
 
 from .base import Base
-from .views import CompositeView, Consent, Explainer, Final, Playlist, StartSession
+from .views import CompositeView, Consent, Explainer, Step, Final, Playlist, StartSession
 from .views.form import ChoiceQuestion, Form
 from .util.actions import combine_actions, final_action_with_optional_button
 
@@ -88,10 +88,22 @@ class ListeningConditions(Base):
     @classmethod
     def first_round(cls, experiment):
         consent = Consent.action()
+        explainer = Explainer(
+            instruction=_(
+                'General listening instructions:'),
+            steps=[
+                Step(_(
+                        "To make sure that you can do the experiment as well as possible, please do it a quiet room with a stable internet connection."),
+                ),
+                Step(_("Please use headphones, and turn off sound notifications from other devices and applications (e.g., e-mail, phone messages)."),
+                )],
+            button_label=_('OK')
+        ).action(True)
         playlist = Playlist.action(experiment.playlists.all())
         start_session = StartSession.action()
         return combine_actions(
             consent,
+            explainer,
             playlist,
             start_session
         )
