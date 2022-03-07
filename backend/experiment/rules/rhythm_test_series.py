@@ -61,22 +61,21 @@ class RhythmTestSeries(Base):
             score_template=rendered,
             show_profile=True
         )
-        # )
-        # experiment_number = int(session.final_score)
-        # if not experiment_data:
-        #     experiment_data = prepare_experiments(session)
-        # if experiment_number == len(experiment_data):
-        #     return Final.action(
-        #         session,
-        #         title=_("Thank you very much for participating!"),
-        #         score_message=_(""))
-        # slug = experiment_data[experiment_number]
-        # session.save()
-        # button = {
-        #     'text': _('Continue'),
-        #     'link': '{}/{}'.format(settings.CORS_ORIGIN_WHITELIST[0], slug)
-        # }
-        # return Final.action(session, title=_('Next experiment (%d to go!)' % (len(experiment_data) - experiment_number)), button=button)
+        experiment_number = int(session.final_score)
+        if not experiment_data:
+            experiment_data = prepare_experiments(session)
+        if experiment_number == len(experiment_data):
+            return Final.action(
+                session,
+                title=_("Thank you very much for participating!"),
+                score_message=_(""))
+        slug = experiment_data[experiment_number]
+        session.save()
+        button = {
+            'text': _('Continue'),
+            'link': '{}/{}'.format(settings.CORS_ORIGIN_WHITELIST[0], slug)
+        }
+        return Final.action(session, title=_('Next experiment (%d to go!)' % (len(experiment_data) - experiment_number)), button=button)
 
 
 def prepare_experiments(session):
