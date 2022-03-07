@@ -1,9 +1,14 @@
 import React, { useState, useEffect, useRef } from "react";
 import { withRouter } from "react-router-dom";
 
+import Rank from "../Rank/Rank";
+import Social from "../Social/Social";
+
+import { URLS } from "../../config";
+
 // FinalScore is an experiment view that shows the final scores of the experiment
 // It can only be the last view of an experiment
-const Final= ({ score, score_message, button, onNext, history }) => {
+const Final= ({ score, score_template, action_texts, button, onNext, history, show_profile, show_social, points, rank }) => {
     const [showScore, setShowScore] = useState(0);
 
     // Use a ref to prevent doing multiple increments
@@ -37,8 +42,15 @@ const Final= ({ score, score_message, button, onNext, history }) => {
 
     return (
         <div className="aha__final d-flex flex-column justify-content-center">
+            {rank && (
             <div className="text-center">
-                <h5>{score_message}</h5>
+                <Rank rank={rank} />
+                <h1 className="total-score title">{showScore} {points}</h1>
+                <h5>{score_template}</h5>
+            </div>
+            )}
+            <div className="text-center">
+                <div dangerouslySetInnerHTML={{ __html: score_template }} />
             </div>
             {button && (
                 <a className="text-center" href={button.link}>
@@ -46,6 +58,25 @@ const Final= ({ score, score_message, button, onNext, history }) => {
                         {button.text}
                     </button>
                 </a>
+            )}
+            {show_social && (<Social
+                score={score}
+            />
+            )}
+            {show_profile && (
+                <div className=" mt-2 d-flex justify-content-center">
+                <a className="home text-center" href={URLS.AMLHome}>
+                    {action_texts.all_experiments}
+                </a>
+                <div
+                    className="home text-center"
+                    onClick={() => {
+                        history.push(URLS.profile);
+                    }}
+                >
+                    {action_texts.profile}
+                </div>
+            </div>
             )}
         </div>
     );

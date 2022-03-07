@@ -1,8 +1,10 @@
 import random
+from os.path import join
 
 from django.conf import settings
 from django.utils.translation import gettext as _
 from django.http import HttpResponseRedirect
+from django.template.loader import render_to_string
 
 from .base import Base
 from .util.actions import combine_actions
@@ -49,6 +51,7 @@ class RhythmTestSeries(Base):
     @classmethod
     def first_round(cls, experiment):
         """Create data for the first experiment rounds."""
+        print('in first roound')
         consent = Consent.action()
         start_session = StartSession.action()
         return combine_actions(
@@ -62,21 +65,30 @@ class RhythmTestSeries(Base):
     def next_round(cls, session):
         data = session.load_json_data()
         experiment_data = data.get('experiments')
-        experiment_number = int(session.final_score)
-        if not experiment_data:
-            experiment_data = prepare_experiments(session)
-        if experiment_number == len(experiment_data):
-            return Final.action(
-                session,
-                title=_("Thank you very much for participating!"),
-                score_message=_(""))
-        slug = experiment_data[experiment_number]
-        session.save()
-        button = {
-            'text': _('Continue'),
-            'link': '{}/{}'.format(settings.CORS_ORIGIN_WHITELIST[0], slug)
-        }
-        return Final.action(session, title=_('Next experiment (%d to go!)' % (len(experiment_data) - experiment_number)), button=button)
+        rendered = render_to_string(join('final', 
+            'test_series.html'))
+        return Final.action(
+            session, 
+            title='testing',
+            score_template=rendered,
+            show_profile=True
+        )
+        # )
+        # experiment_number = int(session.final_score)
+        # if not experiment_data:
+        #     experiment_data = prepare_experiments(session)
+        # if experiment_number == len(experiment_data):
+        #     return Final.action(
+        #         session,
+        #         title=_("Thank you very much for participating!"),
+        #         score_message=_(""))
+        # slug = experiment_data[experiment_number]
+        # session.save()
+        # button = {
+        #     'text': _('Continue'),
+        #     'link': '{}/{}'.format(settings.CORS_ORIGIN_WHITELIST[0], slug)
+        # }
+        # return Final.action(session, title=_('Next experiment (%d to go!)' % (len(experiment_data) - experiment_number)), button=button)
 
 
 def prepare_experiments(session):
