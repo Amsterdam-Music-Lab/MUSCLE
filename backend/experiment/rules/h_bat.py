@@ -50,7 +50,7 @@ class HBat(Base):
                 action = cls.finalize_experiment(session, request_session)
             if session.final_score == MAX_TURNPOINTS+1:
                 # delete result created before this check
-                previous_results.first().delete()
+                session.result_set.order_by('-created_at').first().delete()
                 action = cls.finalize_experiment(session, request_session)
             return action
         
