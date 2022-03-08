@@ -67,7 +67,7 @@ def link(request):
     participant = current_participant(request)
 
     # Build url (hard coded server url)
-    url = 'https://participate.amsterdammusiclab.nl/experiment/participant/reload/{}/{}/'.format(
+    url = 'https://app.amsterdammusiclab.nl/experiment/participant/reload/{}/{}/'.format(
         participant.id, participant.unique_hash)
 
     # This is the original solution, but doesn't work with Nginx in production

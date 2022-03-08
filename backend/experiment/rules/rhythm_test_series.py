@@ -71,7 +71,7 @@ class RhythmTestSeries(Base):
             session, 
             title='testing',
             score_template=rendered,
-            show_profile=True
+            show_participant_link=True
         )
         # )
         # experiment_number = int(session.final_score)

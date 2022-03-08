@@ -5,10 +5,11 @@ import Rank from "../Rank/Rank";
 import Social from "../Social/Social";
 
 import { URLS } from "../../config";
+import ParticipantLink from "../ParticipantLink/ParticipantLink";
 
 // FinalScore is an experiment view that shows the final scores of the experiment
 // It can only be the last view of an experiment
-const Final= ({ score, score_template, action_texts, button, onNext, history, show_profile, show_social, points, rank }) => {
+const Final= ({ score, score_template, action_texts, button, onNext, history, show_participant_link, show_profile, show_social, points, rank }) => {
     const [showScore, setShowScore] = useState(0);
 
     // Use a ref to prevent doing multiple increments
@@ -49,7 +50,7 @@ const Final= ({ score, score_template, action_texts, button, onNext, history, sh
                 <h5>{score_template}</h5>
             </div>
             )}
-            <div className="text-center">
+            <div>
                 <div dangerouslySetInnerHTML={{ __html: score_template }} />
             </div>
             {button && (
@@ -65,18 +66,21 @@ const Final= ({ score, score_template, action_texts, button, onNext, history, sh
             )}
             {show_profile && (
                 <div className=" mt-2 d-flex justify-content-center">
-                <a className="home text-center" href={URLS.AMLHome}>
-                    {action_texts.all_experiments}
-                </a>
-                <div
-                    className="home text-center"
-                    onClick={() => {
-                        history.push(URLS.profile);
-                    }}
-                >
-                    {action_texts.profile}
+                    <a className="home text-center" href={URLS.AMLHome}>
+                        {action_texts.all_experiments}
+                    </a>
+                    <div
+                        className="home text-center"
+                        onClick={() => {
+                            history.push(URLS.profile);
+                        }}
+                    >
+                        {action_texts.profile}
+                    </div>
                 </div>
-            </div>
+            )}
+            {show_participant_link && (
+                <ParticipantLink></ParticipantLink>
             )}
         </div>
     );

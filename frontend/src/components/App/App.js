@@ -3,7 +3,7 @@ import {
     BrowserRouter as Router,
     Switch,
     Route,
-    Redirect,
+    Redirect
 } from "react-router-dom";
 import { URLS, EXPERIMENT_SLUG } from "../../config";
 import Experiment from "../Experiment/Experiment";
@@ -21,14 +21,14 @@ const App = () => {
                         to={URLS.experiment.replace(":slug", EXPERIMENT_SLUG)}
                     />
                 </Route>
-
-                {/* Experiment */}
-                <Route path={URLS.experiment} component={Experiment} />
-
+                
                 {/* Profile */}
                 <Route path={URLS.profile} exact>
                     <Profile slug={EXPERIMENT_SLUG} />
                 </Route>
+
+                {/* Experiment */}
+                <Route path={URLS.experiment} component={Experiment} />
 
                 <Route path={URLS.session} />
 
