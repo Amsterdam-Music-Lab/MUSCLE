@@ -9,7 +9,7 @@ import ParticipantLink from "../ParticipantLink/ParticipantLink";
 
 // FinalScore is an experiment view that shows the final scores of the experiment
 // It can only be the last view of an experiment
-const Final= ({ score, score_template, action_texts, button, onNext, history, show_participant_link, show_profile, show_social, points, rank }) => {
+const Final= ({ score, score_template, action_texts, button, onNext, history, show_participant_link, show_profile_link, show_social, points, rank }) => {
     const [showScore, setShowScore] = useState(0);
 
     // Use a ref to prevent doing multiple increments
@@ -64,7 +64,7 @@ const Final= ({ score, score_template, action_texts, button, onNext, history, sh
                 score={score}
             />
             )}
-            {show_profile && (
+            {show_profile_link && (
                 <div className=" mt-2 d-flex justify-content-center">
                     <a className="home text-center" href={URLS.AMLHome}>
                         {action_texts.all_experiments}
