@@ -53,14 +53,6 @@ class RhythmTestSeries(Base):
     def next_round(cls, session):
         data = session.load_json_data()
         experiment_data = data.get('experiments')
-        rendered = render_to_string(join('final', 
-            'test_series.html'))
-        return Final.action(
-            session, 
-            title='testing',
-            score_template=rendered,
-            show_profile=True
-        )
         experiment_number = int(session.final_score)
         if not experiment_data:
             experiment_data = prepare_experiments(session)
