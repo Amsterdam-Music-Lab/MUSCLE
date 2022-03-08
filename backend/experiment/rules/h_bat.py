@@ -1,4 +1,5 @@
 import logging
+from decimal import Decimal, ROUND_HALF_UP
 
 from django.utils.translation import gettext_lazy as _
 
@@ -178,7 +179,8 @@ class HBat(Base):
         """ if either the max_turnpoints have been reached,
         or if the section couldn't be found (outlier), stop the experiment
         """
-        percentage = round(get_average_difference_level_based(session, 6, cls.start_diff) / 5, 2)
+        average_diff = get_average_difference_level_based(session, 6, cls.start_diff)
+        percentage = float(Decimal(average_diff/ 5).quantize(Decimal('.01'), rounding=ROUND_HALF_UP))
         score_message = _("Well done! You heard the difference when the rhythm was \
             speeding up or slowing down with only %(percent)d percent!\n\n %(trivia)s") % {'percent': percentage, 'trivia': cls.get_trivia()}
         session.finish()
