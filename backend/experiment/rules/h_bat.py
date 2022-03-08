@@ -180,7 +180,7 @@ class HBat(Base):
         or if the section couldn't be found (outlier), stop the experiment
         """
         average_diff = get_average_difference_level_based(session, 6, cls.start_diff)
-        percentage = float(Decimal(average_diff/ 5).quantize(Decimal('.01'), rounding=ROUND_HALF_UP))
+        percentage = float(Decimal(str(average_diff / 5)).quantize(Decimal('.01'), rounding=ROUND_HALF_UP))
         score_message = _("Well done! You heard the difference when the rhythm was \
             speeding up or slowing down with only %(percent)d percent!\n\n %(trivia)s") % {'percent': percentage, 'trivia': cls.get_trivia()}
         session.finish()
