@@ -1,5 +1,6 @@
 import math
 import logging
+from decimal import Decimal, ROUND_HALF_UP
 
 import numpy as np
 from django.utils.translation import gettext_lazy as _
@@ -306,7 +307,9 @@ class DurationDiscrimination(Base):
         current_difficulty = difficulty * multiplier
         session.merge_json_data({'difficulty': current_difficulty})
         session.save()
-        return round(current_difficulty)
+        # return rounded difficulty
+        # this uses the decimal module, since round() does not work entirely as expected
+        return int(Decimal(str(current_difficulty)).quantize(Decimal('0'), rounding=ROUND_HALF_UP))
     
     @classmethod
     def last_non_catch_correct(cls, previous_results):
