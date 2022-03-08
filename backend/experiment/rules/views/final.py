@@ -10,7 +10,8 @@ class Final:  # pylint: disable=too-few-public-methods
     ID = 'FINAL'
 
     @staticmethod
-    def action(session, title, score_template=None, button=None, rank=None, show_social=False, show_profile=False, show_participant_link=False):
+    def action(session, title, score_template=None, button=None, rank=None,
+        show_social=False, show_profile_link=False, show_participant_link=False):
         """Get data for final action"""
         return {
             'view': Final.ID,
@@ -25,6 +26,6 @@ class Final:  # pylint: disable=too-few-public-methods
             },
             'title': _("Final score"),
             'show_social': show_social,
-            'show_profile': show_profile,
+            'show_profile_link': show_profile_link,
             'show_participant_link': show_participant_link
         }

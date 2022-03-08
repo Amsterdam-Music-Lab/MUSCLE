@@ -1,10 +1,9 @@
 import React, { useRef } from "react";
 
-import { useParticipantScores, useParticipantLink } from "../../API";
+import { useParticipantLink } from "../../API";
 import Loading from "../Loading/Loading";
 
 const ParticipantLink = () => {
-    const [data, loadingData] = useParticipantScores();
     const [link, loadingLink] = useParticipantLink();
     const linkInput = useRef();
 
@@ -13,25 +12,25 @@ const ParticipantLink = () => {
             return;
         }
 
-        // Select text
+        // mark text in input box
         linkInput.current.select();
 
         // For mobile
         linkInput.current.setSelectionRange(0, 99999);
-
         // Copy
-        navigator.clipboard.writeText(linkInput.current);
+        navigator.clipboard.writeText(linkInput.current.value);
     };
+
     switch (true) {
-        case loadingData || loadingLink:
+        case loadingLink:
             return <Loading />;
         default:
             return (
                 <div className="aha__participant_link">
                     <div className="copy">
-                        <input ref={linkInput} value={link.url} readonly />
+                        <input ref={linkInput} value={link.url} readOnly />
                         <button onClick={copyLink} onKeyPress={copyLink}>
-                            COPY
+                            {link.copy_message}
                         </button>
                     </div>
                 </div>

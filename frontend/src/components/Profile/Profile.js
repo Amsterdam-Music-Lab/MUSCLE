@@ -5,12 +5,12 @@ import Loading from "../Loading/Loading";
 import Rank from "../Rank/Rank";
 import { useParticipantScores, useParticipantLink } from "../../API";
 import { URLS } from "../../config";
+import ParticipantLink from "../ParticipantLink/ParticipantLink";
 
 // Profile loads and shows the profile of a participant for a given experiment
 const Profile = () => {
     // API hooks
     const [data, loadingData] = useParticipantScores();
-    const [link, loadingLink] = useParticipantLink();
     const linkInput = useRef();
 
     const copyLink = () => {
@@ -31,7 +31,7 @@ const Profile = () => {
     // View
     let view = null;
     switch (true) {
-        case loadingData || loadingLink:
+        case loadingData:
             view = <Loading />;
             break;
         case data === null:
@@ -92,12 +92,7 @@ const Profile = () => {
                         <p>
                             {data.messages.continue}
                         </p>
-                        <div className="copy">
-                            <input ref={linkInput} value={link.url} readonly />
-                            <button onClick={copyLink} onKeyPress={copyLink}>
-                                {data.messages.copy}
-                            </button>
-                        </div>
+                        <ParticipantLink></ParticipantLink>
                     </div>
                 </>
             );

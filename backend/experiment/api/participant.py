@@ -42,7 +42,6 @@ def scores(request):
                 len(scores)) % {'count': len(scores)},
             'points': _('points'),
             'continue': _('Use the following link to continue with your profile at another moment or on another device.'),
-            'copy': _('copy')
         },
         'scores': scores
     }, json_dumps_params={'indent': 4})
@@ -75,7 +74,8 @@ def link(request):
     # request.build_absolute_uri(reverse('experiment:participant_reload', args=(participant.id, participant.unique_hash)))
 
     return JsonResponse({
-        'url': url
+        'url': url,
+        'copy_message': _('copy')
     }, json_dumps_params={'indent': 4})
 
 
@@ -116,5 +116,5 @@ def share(request):
         return HttpResponseServerError("An error occured while sending the email")
 
     return JsonResponse({
-        'status': 'ok'
+        'status': 'ok',
     }, json_dumps_params={'indent': 4})
