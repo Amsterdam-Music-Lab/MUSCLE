@@ -9,7 +9,7 @@ import ParticipantLink from "../ParticipantLink/ParticipantLink";
 
 // FinalScore is an experiment view that shows the final scores of the experiment
 // It can only be the last view of an experiment
-const Final= ({ score, score_template, action_texts, button, onNext, history, show_participant_link, show_profile_link, show_social, points, rank }) => {
+const Final= ({ score, final_text, action_texts, button, onNext, history, show_participant_link, show_profile_link, show_social, points, rank }) => {
     const [showScore, setShowScore] = useState(0);
 
     // Use a ref to prevent doing multiple increments
@@ -47,11 +47,11 @@ const Final= ({ score, score_template, action_texts, button, onNext, history, sh
             <div className="text-center">
                 <Rank rank={rank} />
                 <h1 className="total-score title">{showScore} {points}</h1>
-                <h5>{score_template}</h5>
+                <h5>{final_text}</h5>
             </div>
             )}
             <div>
-                <div dangerouslySetInnerHTML={{ __html: score_template }} />
+                <div dangerouslySetInnerHTML={{ __html: final_text }} />
             </div>
             {button && (
                 <a className="text-center" href={button.link}>

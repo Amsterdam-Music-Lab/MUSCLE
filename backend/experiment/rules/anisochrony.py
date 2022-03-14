@@ -4,6 +4,7 @@ from django.utils.translation import gettext_lazy as _
 from experiment.models import Section
 from .views import CompositeView, Explainer, Step, Consent, StartSession, Playlist
 from .views.form import ChoiceQuestion, Form
+from .util.actions import render_feedback_trivia
 from .base import Base
 from .duration_discrimination import DurationDiscrimination
 
@@ -119,12 +120,13 @@ class Anisochrony(DurationDiscrimination):
             return 0
     
     @classmethod
-    def get_score_message(cls, difference):
+    def get_final_text(cls, difference):
         percentage = round(difference / 6000, 2)
-        return _(
-            "Well done! You heard the difference when we shifted a tone by {} percent. \
-            \n\nMany sounds in nature have regularity like a metronome. \
-            Our brains use this to process rhythm even better!").format(percentage)
+        feedback = _(
+            "Well done! You heard the difference when we shifted a tone by {} percent.").format(percentage)
+        trivia = _("Many sounds in nature have regularity like a metronome. \
+            Our brains use this to process rhythm even better!")
+        return render_feedback_trivia(feedback, trivia)
     
     @classmethod
     def get_difficulty(cls, session, multiplier=1.0):

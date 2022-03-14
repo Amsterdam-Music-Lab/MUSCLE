@@ -1,5 +1,8 @@
+from os.path import join
+
 from django.conf import settings
 from django.utils.translation import gettext_lazy as _
+from django.template.loader import render_to_string
 
 from experiment.rules.views import Final
 
@@ -17,7 +20,7 @@ def combine_actions(*argv):
     # Action stored in last is actually the first action
     return last
 
-def final_action_with_optional_button(session, score_message, request_session):
+def final_action_with_optional_button(session, final_text, request_session):
     """ given a session, a score message and an optional session dictionary from an experiment series,
     return a Final.action, which has a button to continue to the next experiment if series is defined
     """
@@ -31,7 +34,7 @@ def final_action_with_optional_button(session, score_message, request_session):
         return Final.action(
             title=_('End'),
             session=session,
-            score_message=score_message,
+            final_text=final_text,
             button={
                 'text': _('Continue'),
                 'link': '{}/{}'.format(settings.CORS_ORIGIN_WHITELIST[0], series_slug)
@@ -41,5 +44,12 @@ def final_action_with_optional_button(session, score_message, request_session):
         return Final.action(
             title=_('End'),
             session=session,
-            score_message=score_message
+            final_text=final_text,
         )
+
+def render_feedback_trivia(feedback, trivia):
+    ''' Given two texts of feedback and trivia,
+    render them in the final/feedback_trivia.html template.'''
+    context = {'feedback': feedback, 'trivia': trivia}
+    return render_to_string(join('final', 
+        'feedback_trivia.html'), context)

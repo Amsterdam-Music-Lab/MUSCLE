@@ -8,7 +8,7 @@ from .base import Base
 from .views import CompositeView, Explainer, Step, Consent, StartSession, Question
 from .views.form import ChoiceQuestion, Form
 from .util.questions import question_by_key
-from .util.actions import combine_actions, final_action_with_optional_button
+from .util.actions import combine_actions, final_action_with_optional_button, render_feedback_trivia
 
 logger = logging.getLogger(__name__)
 
@@ -78,11 +78,12 @@ class BeatAlignment(Base):
             # Finish session
             session.finish()
             session.save()
-
             percentage = int((sum([r.score for r in session.result_set.all()]) / session.experiment.rounds) * 100)
-            score_message=_('Well done! You’ve answered {} percent correctly!\n\nDid you know that in the UK, over 140.000 people did \
-                this test when it was first developed?').format(percentage)
-            return final_action_with_optional_button(session, score_message, request_session)
+            feedback = _('Well done! You’ve answered {} percent correctly!').format(percentage)
+            trivia = _('Did you know that in the UK, over 140.000 people did \
+                this test when it was first developed?')
+            final_text = render_feedback_trivia(feedback, trivia)
+            return final_action_with_optional_button(session, final_text, request_session)
 
         # Next round number, can be used to return different actions
         next_round_number = session.get_next_round()

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-02-22 16:10+0100\n"
+"POT-Creation-Date: 2022-03-14 14:11+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -24,7 +24,8 @@ msgstr ""
 msgid "Loading"
 msgstr ""
 
-#: experiment/api/participant.py:38 experiment/rules/views/final_score.py:33
+#: experiment/api/participant.py:38 experiment/rules/views/final.py:25
+#: experiment/rules/views/final_score.py:33
 msgid "My profile"
 msgstr ""
 
@@ -39,7 +40,8 @@ msgid_plural ""
 msgstr[0] ""
 msgstr[1] ""
 
-#: experiment/api/participant.py:43 experiment/rules/views/final_score.py:30
+#: experiment/api/participant.py:43 experiment/rules/views/final.py:22
+#: experiment/rules/views/final_score.py:30
 msgid "points"
 msgstr ""
 
@@ -49,52 +51,52 @@ msgid ""
 "another device."
 msgstr ""
 
-#: experiment/api/participant.py:45
+#: experiment/api/participant.py:78
 msgid "copy"
 msgstr ""
 
-#: experiment/rules/anisochrony.py:20 experiment/rules/beat_alignment.py:97
+#: experiment/rules/anisochrony.py:21 experiment/rules/beat_alignment.py:98
 #: experiment/rules/duration_discrimination.py:101
-#: experiment/rules/duration_discrimination_tone.py:19
+#: experiment/rules/duration_discrimination_tone.py:22
 #: experiment/rules/h_bat.py:155 experiment/rules/hbat_bst.py:83
 #: experiment/rules/rhythm_discrimination.py:249
 msgid "Next fragment"
 msgstr "Volgende fragment"
 
-#: experiment/rules/anisochrony.py:21 experiment/rules/anisochrony.py:64
+#: experiment/rules/anisochrony.py:22 experiment/rules/anisochrony.py:65
 msgid "REGULAR"
 msgstr "REGELMATIG"
 
-#: experiment/rules/anisochrony.py:21 experiment/rules/anisochrony.py:65
+#: experiment/rules/anisochrony.py:22 experiment/rules/anisochrony.py:66
 msgid "IRREGULAR"
 msgstr "ONREGELMATIG"
 
-#: experiment/rules/anisochrony.py:24
+#: experiment/rules/anisochrony.py:25
 msgid "The tones were {}. Your answer was CORRECT."
 msgstr "De tonen waren {}. Je antwoord was CORRECT."
 
-#: experiment/rules/anisochrony.py:27
+#: experiment/rules/anisochrony.py:28
 msgid "The tones were {}. Your answer was INCORRECT."
 msgstr "De tonen waren {}. Je antwoord was INCORRECT."
 
-#: experiment/rules/anisochrony.py:62
+#: experiment/rules/anisochrony.py:63
 msgid "Were the tones REGULAR or IRREGULAR?"
 msgstr "Waren de tonen REGELMATIG of ONREGELMATIG?"
 
-#: experiment/rules/anisochrony.py:76
+#: experiment/rules/anisochrony.py:77
 msgid "Anisochrony"
 msgstr "Anisochronie"
 
-#: experiment/rules/anisochrony.py:90 experiment/rules/h_bat.py:136
+#: experiment/rules/anisochrony.py:91 experiment/rules/h_bat.py:136
 msgid "In this test you will hear a series of tones for each trial."
 msgstr "In deze test krijg je steeds een reeks tonen te horen."
 
-#: experiment/rules/anisochrony.py:93
+#: experiment/rules/anisochrony.py:94
 msgid "It's your job to decide of the tones sounds REGULAR or IRREGULAR"
 msgstr ""
 "Het is jouw taak om te beslissen of het ritme REGELMATIG of ONREGELMATIG is. "
 
-#: experiment/rules/anisochrony.py:95
+#: experiment/rules/anisochrony.py:96
 #: experiment/rules/duration_discrimination.py:180
 #: experiment/rules/h_bat.py:141 experiment/rules/hbat_bst.py:28
 msgid ""
@@ -103,7 +105,7 @@ msgstr ""
 "Tijdens het experiment zal het steeds moeilijker zijn om het verschil te "
 "horen."
 
-#: experiment/rules/anisochrony.py:97
+#: experiment/rules/anisochrony.py:98
 #: experiment/rules/duration_discrimination.py:182
 #: experiment/rules/h_bat.py:143 experiment/rules/hbat_bst.py:30
 #: experiment/rules/util/practice.py:109
@@ -111,7 +113,7 @@ msgid "Try to answer as accurately as possible, even if you're uncertain."
 msgstr ""
 "Probeer ook als je het niet zeker weet zo accuraat mogelijk te antwoorden."
 
-#: experiment/rules/anisochrony.py:99
+#: experiment/rules/anisochrony.py:100
 #: experiment/rules/duration_discrimination.py:184
 #: experiment/rules/h_bat.py:149 experiment/rules/hbat_bst.py:36
 msgid ""
@@ -121,17 +123,18 @@ msgstr ""
 "Deze test duurt ongeveer 4 minuten. Probeer tijdens de hele test "
 "geconcentreerd te blijven!"
 
-#: experiment/rules/anisochrony.py:125
+#: experiment/rules/anisochrony.py:126
 msgid ""
-"Well done! You heard the difference when we shifted a tone by {} "
-"percent.             \n"
-"\n"
+"Well done! You heard the difference when we shifted a tone by {} percent."
+msgstr ""
+"Goed gedaan! Je kon het verschil horen wanneer we een toon {} procent "
+"opschoven."
+
+#: experiment/rules/anisochrony.py:127
+msgid ""
 "Many sounds in nature have regularity like a metronome.             Our "
 "brains use this to process rhythm even better!"
 msgstr ""
-"Goed gedaan! Je kon het verschil horen wanneer we een toon {} procent "
-"opschoven.\n"
-"\n"
 "Veel dingen in de natuur hebben regelmaat zoals een metronoom. Onze hersenen "
 "gebruiken dit om ritme nog beter te verwerken!"
 
@@ -186,470 +189,95 @@ msgstr "Let op: een muziekfragment kan meerdere keren voorkomen."
 
 #: experiment/rules/beat_alignment.py:55
 msgid "In total, this test will take around 6 minutes to complete."
-msgstr ""
-"Deze test duurt ongeveer 6 minuten."
+msgstr "Deze test duurt ongeveer 6 minuten."
 
 #: experiment/rules/beat_alignment.py:56
 msgid "Try to stay focused for the entire duration!"
-msgstr "Probeer tijdens de hele test "
-"geconcentreerd te blijven!"
+msgstr "Probeer tijdens de hele test geconcentreerd te blijven!"
 
 #: experiment/rules/beat_alignment.py:58 experiment/rules/speech2song.py:33
 #: experiment/rules/util/practice.py:113
 msgid "Start"
 msgstr "Start"
 
+#: experiment/rules/beat_alignment.py:82
+msgid "Well done! You’ve answered {} percent correctly!"
+msgstr "Goed gedaan! Je hebt {} procent goed beantwoord!"
+
 #: experiment/rules/beat_alignment.py:83
 msgid ""
-"Well done! You’ve answered {} percent correctly! "
 "Did you know that in the UK, over 140.000 people did                 this "
 "test when it was first developed?"
 msgstr ""
-"Goed gedaan! Je hebt {} procent goed beantwoord! "
 "Wist je dat in Engeland meer dan 140.000 mensen deze test hebben gedaan toen "
 "deze in ontwikkeling was?"
 
-#: experiment/rules/beat_alignment.py:94
+#: experiment/rules/beat_alignment.py:95
 msgid "How certain are you of your answer?"
 msgstr "Hoe zeker ben je van dit antwoord?"
 
-#: experiment/rules/beat_alignment.py:95 experiment/rules/views/question.py:211
+#: experiment/rules/beat_alignment.py:96 experiment/rules/views/question.py:211
 msgid "I guessed"
 msgstr "Ik heb gegokt"
 
-#: experiment/rules/beat_alignment.py:95 experiment/rules/views/question.py:212
+#: experiment/rules/beat_alignment.py:96 experiment/rules/views/question.py:212
 msgid "I think I know"
 msgstr "Ik denk het te weten"
 
-#: experiment/rules/beat_alignment.py:95
+#: experiment/rules/beat_alignment.py:96
 msgid "I am sure"
 msgstr "Ik weet het zeker"
 
-#: experiment/rules/beat_alignment.py:111
+#: experiment/rules/beat_alignment.py:112
 msgid "In this example the beeps are ALIGNED TO THE BEAT of the music."
 msgstr "In dit voorbeeld zijn de piepjes IN DE MAAT van de muziek."
 
-#: experiment/rules/beat_alignment.py:114
+#: experiment/rules/beat_alignment.py:115
 msgid "In this example the beeps are NOT ALIGNED TO THE BEAT of the music."
 msgstr "In dit voorbeeld zijn de piepjes UIT DE MAAT van de muziek."
 
-#: experiment/rules/beat_alignment.py:125
+#: experiment/rules/beat_alignment.py:126
 msgid "Example {}"
 msgstr "Voorbeeld {}"
 
-#: experiment/rules/beat_alignment.py:142
+#: experiment/rules/beat_alignment.py:143
 msgid "Are the beeps ALIGNED TO THE BEAT or NOT ALIGNED TO THE BEAT?"
 msgstr "Zijn de piepjes IN DE MAAT of UIT DE MAAT?"
 
-#: experiment/rules/beat_alignment.py:145
+#: experiment/rules/beat_alignment.py:146
 msgid "ALIGNED TO THE BEAT"
 msgstr "IN DE MAAT"
 
-#: experiment/rules/beat_alignment.py:146
+#: experiment/rules/beat_alignment.py:147
 msgid "NOT ALIGNED TO THE BEAT"
 msgstr "UIT DE MAAT"
 
-#: experiment/rules/beat_alignment.py:161
+#: experiment/rules/beat_alignment.py:162
 msgid "Beat alignment"
 msgstr "Beat alignment"
-
-#: experiment/rules/consent_forms/consent_huang2021.html:3
-msgid ""
-"\n"
-"    You will be taking part in the Hooked on Music: China research project "
-"conducted by a PhD student Xuan Huang of the\n"
-"    Music Cognition Group at the University of Amsterdam’s Institute for "
-"Logic, Language, and Computation. Before the\n"
-"    research project can begin, it is important that you read about the "
-"procedures we will be applying. Make sure to\n"
-"    read this information carefully.\n"
-"    "
-msgstr ""
-
-#: experiment/rules/consent_forms/consent_huang2021.html:11
-#: experiment/rules/consent_forms/consent_speech2song.html:11
-msgid "Purpose of the research project"
-msgstr ""
-
-#: experiment/rules/consent_forms/consent_huang2021.html:14
-msgid ""
-"\n"
-"    What makes music memorable? Why do we not only remember some pieces of "
-"music, but can also recall them after a long\n"
-"    period of time, or even a few years later? What makes music remain in "
-"our memories for the long term? Are there some\n"
-"    musical characters that make it easier to remember Chinese music in the "
-"long run or does it depend on a person? Do\n"
-"    we collectively use the same features to recognize music?\n"
-"    "
-msgstr ""
-
-#: experiment/rules/consent_forms/consent_huang2021.html:22
-msgid ""
-" This project will help us answer these questions and better understand how "
-"we remember music\n"
-"    over the long term.\n"
-"    Musical memory could be affected by our listening history, listening "
-"experience, and the musical cultural where we\n"
-"    grew up. Understanding musical memory can help streaming services to "
-"find and recommend music their users will\n"
-"    enjoy, YouTubers and TikTokers to create new videos with the best choice "
-"of music, composers write new music, and\n"
-"    music therapists develop new approaches for working and living with "
-"memory disorders.\n"
-"    "
-msgstr ""
-
-#: experiment/rules/consent_forms/consent_huang2021.html:30
-msgid "Who can take part in this research?"
-msgstr ""
-
-#: experiment/rules/consent_forms/consent_huang2021.html:31
-msgid ""
-"\n"
-"    Anybody with sufficiently good hearing, natural or corrected, to enjoy "
-"music listening is welcome to participate in\n"
-"    this research. Your device must be able to play audio, and you must have "
-"a sufficiently strong data connection to be\n"
-"    able to stream short MP3 files. Headphones are recommended for the best "
-"results, but you may also use either\n"
-"    internal or external loudspeakers. You should adjust the volume of your "
-"device so that it is comfortable for you.\n"
-"    "
-msgstr ""
-
-#: experiment/rules/consent_forms/consent_huang2021.html:39
-#: experiment/rules/consent_forms/consent_speech2song.html:19
-msgid "Instructions and procedure"
-msgstr ""
-
-#: experiment/rules/consent_forms/consent_huang2021.html:41
-msgid ""
-"\n"
-"    You will be presented with short fragments of music and asked whether "
-"you recognise them. Try to answer as quickly\n"
-"    as\n"
-"    you can, but only at the moment that you find yourself able to ‘sing "
-"along’ in your head. When you tell us that you\n"
-"    recognise a piece of music, the music will keep playing, but the sound "
-"will be muted for a few seconds. Keep\n"
-"    following along with the music in your head, until the music comes back. "
-"Sometimes it will come back in the right\n"
-"    place, but at other times, we will have skipped forward or backward "
-"within the same piece of music during the\n"
-"    silence. We will ask you whether you think the music came back in the "
-"right place or not. In between fragments, we\n"
-"    will ask you some simple survey questions to better\n"
-"    understand your musical background and how you engage with music in your "
-"daily life. In a second phase of the\n"
-"    experiment, you will also be presented with short fragments of music, "
-"but instead of being asked whether you\n"
-"    recognise them, you will be asked whether you heard them before while "
-"participating in the first phase of the\n"
-"    experiment. Again, in between these fragments, we will ask you simple "
-"survey questions about your musical background\n"
-"    and how you engage with music in your daily life."
-msgstr ""
-
-#: experiment/rules/consent_forms/consent_huang2021.html:56
-#: experiment/rules/consent_forms/consent_speech2song.html:28
-msgid "Voluntary participation"
-msgstr ""
-
-#: experiment/rules/consent_forms/consent_huang2021.html:58
-msgid ""
-" You will be participating in this research project on a voluntary basis. "
-"This means you are free\n"
-"    to stop taking part\n"
-"    at any stage. This will not have any personal consequences and you will "
-"not be obliged to finish the procedures\n"
-"    described above. You can also decide to withdraw your participation. If "
-"you decide to stop or withdraw your consent,\n"
-"    all the information gathered up until then will be permanently deleted. "
-msgstr ""
-
-#: experiment/rules/consent_forms/consent_huang2021.html:64
-#: experiment/rules/consent_forms/consent_speech2song.html:37
-msgid "Discomfort, Risks & Insurance"
-msgstr ""
-
-#: experiment/rules/consent_forms/consent_huang2021.html:66
-msgid ""
-" The risks of participating in this research are no greater than in everyday "
-"situations at home.\n"
-"    Previous experience\n"
-"    in similar research has shown that no or hardly any discomfort is to be "
-"expected for participants. For all research\n"
-"    at the University of Amsterdam, a standard liability insurance applies. "
-msgstr ""
-
-#: experiment/rules/consent_forms/consent_huang2021.html:71
-#: experiment/rules/consent_forms/consent_speech2song.html:45
-msgid "Confidential treatment of your details"
-msgstr ""
-
-#: experiment/rules/consent_forms/consent_huang2021.html:73
-msgid ""
-" The information gathered over the course of this research will be used for "
-"further analysis and\n"
-"    publication in\n"
-"    scientific journals only. Fully anonymised data collected during the "
-"experiment (e.g., whether each musical fragment\n"
-"    was recognised and how long it took) may be made available online in "
-"tandem with these scientific publications. Your\n"
-"    personal details will not be used in these publications, and we "
-"guarantee that you will remain anonymous under all\n"
-"    circumstances. "
-msgstr ""
-
-#: experiment/rules/consent_forms/consent_huang2021.html:80
-#: experiment/rules/consent_forms/consent_speech2song.html:62
-msgid "Further Information"
-msgstr ""
-
-#: experiment/rules/consent_forms/consent_huang2021.html:82
-msgid ""
-" For further information on the research project, please contact Xuan Huang "
-"(e-mail:\n"
-"    x.huang@uva.nl; Science Park 107,\n"
-"    1098 GE Amsterdam) or John\n"
-"    Ashley Burgoyne (phone\n"
-"    number: +31 20 525 7034; e-mail: j.a.burgoyne@uva.nl; Science Park 107, "
-"1098 GE\n"
-"    Amsterdam).\n"
-"    If you have any complaints regarding this research project, you can "
-"contact the secretary of the Ethics Committee of\n"
-"    the Faculty of Humanities of the University of Amsterdam (phone number: "
-"+31 20 525 3054; e-mail:\n"
-"    commissie-ethiek-fgw@uva.nl; Kloveniersburgwal 48, 1012 CX Amsterdam)."
-msgstr ""
-
-#: experiment/rules/consent_forms/consent_huang2021.html:92
-#: experiment/rules/huang_2021.py:48 experiment/rules/speech2song.py:40
-msgid "Informed consent"
-msgstr ""
-
-#: experiment/rules/consent_forms/consent_huang2021.html:94
-msgid ""
-" I hereby declare that I have been clearly informed about the research "
-"project Hooked on Music:\n"
-"    China at the\n"
-"    University of Amsterdam, Institute for Logic, Language and Computation, "
-"conducted by Xuan Huang as described above.\n"
-"    "
-msgstr ""
-
-#: experiment/rules/consent_forms/consent_huang2021.html:100
-msgid ""
-" I consent to participate in this research on an entirely voluntary basis. I "
-"retain the right to\n"
-"    revoke this consent\n"
-"    without having to provide any reasons for my decision. I am aware that I "
-"am entitled to discontinue the research at\n"
-"    any time and can withdraw my participation.\n"
-"    If I decide to stop or withdraw my consent, all the information gathered "
-"up until then will be permanently deleted.\n"
-"    If my research results are used in scientific publications or made "
-"public in any other way, they will be fully\n"
-"    anonymised. My personal information may not be viewed by third parties "
-"without my express permission.\n"
-"    "
-msgstr ""
-
-#: experiment/rules/consent_forms/consent_speech2song.html:2
-msgid "Introduction"
-msgstr ""
-
-#: experiment/rules/consent_forms/consent_speech2song.html:4
-msgid ""
-"\n"
-"    You are about to take part in the ‘Cross-Linguistic Investigation of the "
-"Speech-to-Song Illusion’ research project\n"
-"    conducted by Gustav-Hein Frieberg (MSc student) under supervision of Dr. "
-"Makiko Sadakata at the University of\n"
-"    Amsterdam Musicology Department. Before the research project can begin, "
-"it is important that you read about the\n"
-"    procedures we will be applying. Make sure to read the following "
-"information carefully.\n"
-"    "
-msgstr ""
-
-#: experiment/rules/consent_forms/consent_speech2song.html:13
-msgid ""
-"\n"
-"    The Speech-to-Song Illusion is a perceptual illusion whereby the "
-"repetition of a speech segment induces a perceptual\n"
-"    transformation from the impression of speech to the impression of "
-"signing. The present project aims at investigating\n"
-"    the influence of linguistic experience upon the strength of the "
-"illusion.\n"
-"    "
-msgstr ""
-
-#: experiment/rules/consent_forms/consent_speech2song.html:21
-msgid ""
-"\n"
-"    The experiment will last about 10 minutes. After filling out a brief "
-"questionnaire inquiring about your age, gender,\n"
-"    native language(s), and experience with three languages, you will be "
-"presented with short speech segments in those\n"
-"    languages as well as short environmental sounds. Your task will be to "
-"rate each segment on a scale from 1 to 5 in\n"
-"    terms of its musicality.\n"
-"    "
-msgstr ""
-
-#: experiment/rules/consent_forms/consent_speech2song.html:30
-msgid ""
-"\n"
-"    You will be participating in this research project on a voluntary basis. "
-"This means you are free to stop taking part\n"
-"    at any stage. This will not have any personal consequences and you will "
-"not be obliged to finish the procedures\n"
-"    described above. You can also decide to withdraw your participation up "
-"to 8 days after the research has ended. If\n"
-"    you decide to stop or withdraw your consent, all the information "
-"gathered up until then will be permanently deleted.\n"
-"    "
-msgstr ""
-
-#: experiment/rules/consent_forms/consent_speech2song.html:39
-msgid ""
-"\n"
-"    The risks of participating in this research are no greater than in "
-"everyday situations at home. Previous experience\n"
-"    in similar research has shown that no or hardly any discomfort is to be "
-"expected for participants. For all research\n"
-"    at the University of Amsterdam, a standard liability insurance applies.\n"
-"    "
-msgstr ""
-
-#: experiment/rules/consent_forms/consent_speech2song.html:47
-msgid ""
-"\n"
-"    The information gathered over the course of this research will be used "
-"for further analysis and publication in\n"
-"    scientific journals only. No personal details will not be used in these "
-"publications, and we guarantee that you will\n"
-"    remain anonymous under all circumstances.\n"
-"    The data gathered during the research will be encrypted and stored "
-"separately from your personal details. These\n"
-"    personal details and the encryption key are only accessible to members "
-"of the research staff.\n"
-"    "
-msgstr ""
-
-#: experiment/rules/consent_forms/consent_speech2song.html:55
-msgid "Reimbursement"
-msgstr ""
-
-#: experiment/rules/consent_forms/consent_speech2song.html:57
-msgid ""
-"\n"
-"    There will not be any monetary reimbursement for taking part in the "
-"research project. If you wish, we can send you a\n"
-"    summary of the general research results at a later stage.\n"
-"    "
-msgstr ""
-
-#: experiment/rules/consent_forms/consent_speech2song.html:64
-msgid ""
-"\n"
-"    For further information on the research project, please contact Gustav-"
-"Hein Frieberg (phone number: +31 6 83 676\n"
-"    490; email: gusfrieberg@gmail.com).\n"
-"    If you have any complaints regarding this research project, you can "
-"contact the secretary of the Ethics Committee of\n"
-"    the Faculty of Humanities of the University of Amsterdam (phone number: "
-"+31 20 525 3054; email:\n"
-"    commissie-ethiek-fgw@uva.nl; address: Kloveniersburgwal 48, 1012 CX "
-"Amsterdam)\n"
-"    "
-msgstr ""
-
-#: experiment/rules/consent_forms/consent_speech2song.html:72
-msgid "Informed consent form"
-msgstr ""
-
-#: experiment/rules/consent_forms/consent_speech2song.html:75
-msgid ""
-"\n"
-"    ‘I hereby declare that I have been clearly informed about the research "
-"project Cross-Linguistic Investigation of the\n"
-"    Speech-to-Song Illusion at the University of Amsterdam, Musicology "
-"department, conducted by Gustav-Hein Frieberg\n"
-"    under supervision of Dr. Makiko Sadakata as described in the information "
-"brochure. My questions have been answered\n"
-"    to my satisfaction.\n"
-"    "
-msgstr ""
-
-#: experiment/rules/consent_forms/consent_speech2song.html:83
-msgid ""
-"\n"
-"    I consent to participate in this research on an entirely voluntary "
-"basis. I retain the right to revoke this consent\n"
-"    without having to provide any reasons for my decision. I am aware that I "
-"am entitled to discontinue the research at\n"
-"    any time and can withdraw my participation up to 8 days after the "
-"research has ended. If I decide to stop or\n"
-"    withdraw my consent, all the information gathered up until then will be "
-"permanently deleted.\n"
-"    "
-msgstr ""
-
-#: experiment/rules/consent_forms/consent_speech2song.html:91
-msgid ""
-"\n"
-"    If my research results are used in scientific publications or made "
-"public in any other way, they will be fully\n"
-"    anonymised. My personal information may not be viewed by third parties "
-"without my express permission.\n"
-"    "
-msgstr ""
-
-#: experiment/rules/consent_forms/consent_speech2song.html:97
-msgid ""
-"\n"
-"    If I need any further information on the research, now or in the future, "
-"I can contact Gustav-Hein Frieberg (phone\n"
-"    no: +31 6 83 676 490, e-mail: gusfrieberg@gmail.com).\n"
-"    "
-msgstr ""
-
-#: experiment/rules/consent_forms/consent_speech2song.html:103
-msgid ""
-"\n"
-"    If I have any complaints regarding this research, I can contact the "
-"secretary of the Ethics Committee of the Faculty\n"
-"    of Humanities of the University of Amsterdam (phone no: +31 20 525 3054; "
-"email: commissie-ethiek-fgw@uva.nl;\n"
-"    address: Kloveniersburgwal 48, 1012 CX Amsterdam).\n"
-"    "
-msgstr ""
 
 #: experiment/rules/duration_discrimination.py:23
 msgid "interval"
 msgstr "interval"
 
 #: experiment/rules/duration_discrimination.py:102
-#: experiment/rules/duration_discrimination_tone.py:20
+#: experiment/rules/duration_discrimination_tone.py:23
 msgid "than"
 msgstr "dan"
 
 #: experiment/rules/duration_discrimination.py:102
-#: experiment/rules/duration_discrimination_tone.py:20
+#: experiment/rules/duration_discrimination_tone.py:23
 msgid "as"
 msgstr "als"
 
 #: experiment/rules/duration_discrimination.py:103
 #: experiment/rules/duration_discrimination.py:147
-#: experiment/rules/duration_discrimination_tone.py:21
+#: experiment/rules/duration_discrimination_tone.py:24
 msgid "LONGER"
 msgstr "LANGER"
 
 #: experiment/rules/duration_discrimination.py:103
-#: experiment/rules/duration_discrimination_tone.py:21
+#: experiment/rules/duration_discrimination_tone.py:24
 msgid "EQUAL"
 msgstr "EVEN LANG"
 
@@ -703,36 +331,41 @@ msgstr ""
 #: experiment/rules/duration_discrimination.py:208
 msgid ""
 "Well done! You heard the difference between two intervals that             "
-"differed only {} percent in duration. When we research timing in             "
-"humans, we often find that people's accuracy in this task "
-"scales:             for shorter durations, people can hear even smaller "
-"differences than for longer durations."
+"differed only {} percent in duration."
 msgstr ""
-"Goed gedaan! Je hoorde het verschil tussen tijdsintervallen die maar {} "
-"procent van elkaar verschilden.Uit onderzoek blijkt dat je prestatie op deze "
-"taak af kan hangen van de lengte van het interval: voor korte "
-"tijdsintervallen kan je nog kleinere verschillen horen dan voor lange "
-"intervallen."
+"Goed gedaan! Je hoorde het verschil al als het ritme met maar {} procent "
+"vertraagde of versnelde!"
 
-#: experiment/rules/duration_discrimination_tone.py:8
+#: experiment/rules/duration_discrimination.py:210
+msgid ""
+"When we research timing in             humans, we often find that people's "
+"accuracy in this task scales:             for shorter durations, people can "
+"hear even smaller differences than for longer durations."
+msgstr ""
+"Uit onderzoek blijkt dat je prestatie op deze taak af kan hangen van de "
+"lengte van het interval: voor korte tijdsintervallen kan je nog kleinere "
+"verschillen horen dan voor lange intervallen."
+
+#: experiment/rules/duration_discrimination_tone.py:9
 msgid "tone"
 msgstr "toon"
 
-#: experiment/rules/duration_discrimination_tone.py:13
+#: experiment/rules/duration_discrimination_tone.py:14
 msgid ""
 "Well done! You managed to hear the difference between tones "
-"that                 differed only {} milliseconds in length. Humans are "
-"really good at                 hearing these small differences in durations, "
-"which is very handy                 if we want to be able to process rhythm "
-"in music."
-msgstr ""
-"Goed gedaan! Je hoorde het verschil tussen tonen die maar {} milliseconden "
-"van elkaar verschilden in tijdsduur.Uit onderzoek blijkt dat je prestatie op "
-"deze taak af kan hangen van de lengte van het interval: voor korte "
-"tijdsintervallen kan je nog kleinere verschillen horen dan voor lange "
-"intervallen."
+"that                 differed only {} milliseconds in length."
+msgstr "Goed gedaan! Je hoorde het verschil al bij maar {} milliseconden."
 
-#: experiment/rules/duration_discrimination_tone.py:24
+#: experiment/rules/duration_discrimination_tone.py:16
+msgid ""
+"Humans are really good at                 hearing these small differences in "
+"durations, which is very handy                 if we want to be able to "
+"process rhythm in music."
+msgstr ""
+" Mensen zijn heel goed in het horen van deze kleine verschillen in "
+"tijdsduur, wat goed van pas komt wanneer we naar ritmes luisteren in muziek."
+
+#: experiment/rules/duration_discrimination_tone.py:27
 #, python-format
 msgid ""
 "The second tone was %(correct_response)s %(preposition)s the first tone. "
@@ -741,7 +374,7 @@ msgstr ""
 "De 2e toon was %(correct_response)s %(preposition)s dan de 1e toon. Je "
 "antwoord was CORRECT."
 
-#: experiment/rules/duration_discrimination_tone.py:27
+#: experiment/rules/duration_discrimination_tone.py:30
 #, python-format
 msgid ""
 "The second tone was %(correct_response)s %(preposition)s the first tone. "
@@ -750,11 +383,11 @@ msgstr ""
 "De 2e toon was %(correct_response)s %(preposition)s dan het 1e toon. Je "
 "antwoord was INCORRECT."
 
-#: experiment/rules/duration_discrimination_tone.py:36
+#: experiment/rules/duration_discrimination_tone.py:39
 msgid "Is the second tone EQUALLY LONG as the first tone or LONGER?"
 msgstr "Is de 2e toon EVEN LANG als of LANGER dan de 1e toon?"
 
-#: experiment/rules/duration_discrimination_tone.py:40
+#: experiment/rules/duration_discrimination_tone.py:43
 msgid ""
 "It's your job to decide if the second tone is EQUALLY LONG as the first "
 "tone, or LONGER."
@@ -812,19 +445,14 @@ msgid "The rhythm went SLOWER. Your response was INCORRECT."
 msgstr "Het ritme VERTRAAGDE. Je antwoord was INCORRECT."
 
 #: experiment/rules/h_bat.py:182
-#, python-format
 msgid ""
-"Well done! You heard the difference when the rhythm was             speeding "
-"up or slowing down with only %(percent)d percent!\n"
-"\n"
-" %(trivia)s"
+"Well done! You heard the difference when the rhythm was                     "
+"speeding up or slowing down with only {} percent!"
 msgstr ""
-"Goed gedaan! Je hoorde het verschil al als het ritme met maar %(percent)d "
-"procent vertraagde of versnelde!\n"
-"\n"
-"%(trivia)s"
+"Goed gedaan! Je hoorde het verschil al als het ritme met maar {} procent "
+"vertraagde of versnelde!"
 
-#: experiment/rules/h_bat.py:190
+#: experiment/rules/h_bat.py:192
 msgid ""
 "When people listen to music, they often perceive an underlying regular "
 "pulse, like the woodblock             in this task. This allows us to clap "
@@ -898,14 +526,16 @@ msgstr "Het was een DRIEDELIGE MAAT. Je antwoord was INCORRECT."
 #: experiment/rules/hbat_bst.py:110
 msgid ""
 "Well done! You heard the difference             when the accented tone was "
-"only {} dB louder.\n"
-"\n"
+"only {} dB louder."
+msgstr ""
+"Goed gedaan! Je hoorde het verschil al wanneer de geaccentueerde tonen maar "
+"{} decibel luider waren."
+
+#: experiment/rules/hbat_bst.py:112
+msgid ""
 "A march and a waltz are very common meters in Western music, but in other "
 "cultures, much more complex meters also exist!"
 msgstr ""
-"Goed gedaan! Je hoorde het verschil al wanneer de geaccentueerde tonen maar "
-"{} decibel luider waren.\n"
-"\n"
 "Een mars en een wals zijn maatsoorten die veel in Westerse culturen "
 "voorkomen, maar in andere culturen bestaan ook veel complexere maatsoorten!"
 
@@ -933,6 +563,11 @@ msgstr ""
 
 #: experiment/rules/huang_2021.py:41
 msgid "Let's go!"
+msgstr ""
+
+#: experiment/rules/huang_2021.py:48 experiment/rules/speech2song.py:40
+#: experiment/templates/consent/consent_huang2021.html:92
+msgid "Informed consent"
 msgstr ""
 
 #: experiment/rules/huang_2021.py:48 experiment/rules/speech2song.py:40
@@ -968,10 +603,10 @@ msgid ""
 msgstr ""
 
 #: experiment/rules/huang_2021.py:64 experiment/rules/huang_2021.py:305
-#: experiment/rules/rhythm_test_series.py:36
-#: experiment/rules/rhythm_test_series.py:81 experiment/rules/speech2song.py:89
+#: experiment/rules/rhythm_test_series.py:34
+#: experiment/rules/rhythm_test_series.py:82 experiment/rules/speech2song.py:89
 #: experiment/rules/speech2song.py:99 experiment/rules/speech2song.py:125
-#: experiment/rules/util/actions.py:36 experiment/rules/util/practice.py:99
+#: experiment/rules/util/actions.py:39 experiment/rules/util/practice.py:99
 #: experiment/rules/views/form.py:69 experiment/rules/views/question.py:14
 #: experiment/rules/views/question.py:35 experiment/rules/views/question.py:54
 #: experiment/rules/views/question.py:71 experiment/rules/views/question.py:89
@@ -1188,26 +823,26 @@ msgid "The third rhythm is DIFFERENT. Your response was INCORRECT."
 msgstr "Het derde ritme is ANDERS. Je antwoord is INCORRECT."
 
 #: experiment/rules/rhythm_discrimination.py:275
+msgid "Well done! You've answered {} percent correctly!"
+msgstr "Goed gedaan! Je hebt {} procent goed beantwoord!"
+
+#: experiment/rules/rhythm_discrimination.py:276
 msgid ""
-"Well done! You've answered {} percent correctly!\n"
-"\n"
 "One reason for the         weird beep-tones in this test (instead of some "
 "nice drum-sound) is that it is used very often        in brain scanners, "
 "which make a lot of noise. The beep-sound helps people in the "
 "scanner         to hear the rhythm really well."
 msgstr ""
-"Goed gedaan! Je hebt {} procent goed beantwoord!\n"
-"\n"
 "Eén van de redenen om piepjes te gebruiken in deze test (in plaats van een "
 "leuk drum geluid) is dat deze test veel wordt gebruikt in hersenscanners, en "
 "die maken veel lawaai. Het piepgeluid helpt mensen in de scanner om het "
 "ritme goed te kunnen horen."
 
-#: experiment/rules/rhythm_test_series.py:17
+#: experiment/rules/rhythm_test_series.py:19
 msgid "You are about to take part in an experiment about rhythm perception."
 msgstr "Je gaat meedoen aan een experiment over ritmegevoel."
 
-#: experiment/rules/rhythm_test_series.py:21
+#: experiment/rules/rhythm_test_series.py:22
 msgid ""
 "We want to find out what the best way is to test whether someone has a good "
 "sense of rhythm!"
@@ -1220,14 +855,14 @@ msgid ""
 "You will be doing many little tasks that have something to do with rhythm."
 msgstr "Je gaat verschillende taakjes doen die iets met ritme te maken hebben."
 
-#: experiment/rules/rhythm_test_series.py:29
+#: experiment/rules/rhythm_test_series.py:28
 msgid ""
 "You will get a short explanation and a practice trial for each little task."
 msgstr ""
 "Voor elk taakje krijg je eerst een korte uitleg en de mogelijkheid om te "
 "oefenen."
 
-#: experiment/rules/rhythm_test_series.py:33
+#: experiment/rules/rhythm_test_series.py:31
 msgid ""
 "You can get reimbursed for completing the entire experiment! Either by "
 "earning 5 euros, or by getting study credit (for psychology students at UvA "
@@ -1239,11 +874,11 @@ msgstr ""
 "studenten van de UvA). Op het eind van het experiment krijg je instructies "
 "over hoe je de vergoeding kunt ontvangen."
 
-#: experiment/rules/rhythm_test_series.py:43
+#: experiment/rules/rhythm_test_series.py:41
 msgid "General listening instructions:"
 msgstr "Algemene luisterinstructies:"
 
-#: experiment/rules/rhythm_test_series.py:47
+#: experiment/rules/rhythm_test_series.py:44
 msgid ""
 "To make sure that you can do the experiment as well as possible, please do "
 "it a quiet room with a stable internet connection."
@@ -1251,7 +886,7 @@ msgstr ""
 "Om het experiment zo goed mogelijk te doen, vragen we je het in een stille "
 "kamer met stabiel internet te doen."
 
-#: experiment/rules/rhythm_test_series.py:51
+#: experiment/rules/rhythm_test_series.py:46
 msgid ""
 "Please use headphones, and turn off sound notifications from other devices "
 "and applications (e.g., e-mail, phone messages)."
@@ -1259,15 +894,15 @@ msgstr ""
 "Gebruik een koptelefoon en zet geluidsmeldingen van andere apparaten en "
 "programma's uit (bijvoorbeeld meldingen van je telefoon of e-mail)."
 
-#: experiment/rules/rhythm_test_series.py:54 experiment/rules/speech2song.py:77
+#: experiment/rules/rhythm_test_series.py:48 experiment/rules/speech2song.py:77
 msgid "OK"
 msgstr "OK"
 
-#: experiment/rules/rhythm_test_series.py:77
-msgid "Made it!"
-msgstr "Je hebt het gehaald!"
+#: experiment/rules/rhythm_test_series.py:75
+msgid "Thank you very much for participating!"
+msgstr ""
 
-#: experiment/rules/rhythm_test_series.py:84
+#: experiment/rules/rhythm_test_series.py:85
 #, python-format
 msgid "Next experiment (%d to go!)"
 msgstr "Volgende experiment (nog %d te gaan!)"
@@ -1411,7 +1046,7 @@ msgstr ""
 msgid "Listen carefully"
 msgstr ""
 
-#: experiment/rules/util/actions.py:32 experiment/rules/util/actions.py:42
+#: experiment/rules/util/actions.py:35 experiment/rules/util/actions.py:45
 msgid "End"
 msgstr "Einde"
 
@@ -2053,6 +1688,18 @@ msgstr ""
 msgid "Get ready!"
 msgstr ""
 
+#: experiment/rules/views/final.py:24 experiment/rules/views/final_score.py:32
+msgid "Play again"
+msgstr ""
+
+#: experiment/rules/views/final.py:26 experiment/rules/views/final_score.py:34
+msgid "All experiments"
+msgstr ""
+
+#: experiment/rules/views/final.py:28 experiment/rules/views/final_score.py:36
+msgid "Final score"
+msgstr ""
+
 #: experiment/rules/views/final_score.py:14
 msgid "plastic"
 msgstr ""
@@ -2075,18 +1722,6 @@ msgstr ""
 
 #: experiment/rules/views/final_score.py:19
 msgid "diamond"
-msgstr ""
-
-#: experiment/rules/views/final_score.py:32
-msgid "Play again"
-msgstr ""
-
-#: experiment/rules/views/final_score.py:34
-msgid "All experiments"
-msgstr ""
-
-#: experiment/rules/views/final_score.py:36
-msgid "Final score"
 msgstr ""
 
 #: experiment/rules/views/form.py:44 experiment/rules/views/question.py:148
@@ -2197,6 +1832,430 @@ msgstr ""
 #: experiment/rules/views/song_sync.py:66
 msgid "No"
 msgstr ""
+
+#: experiment/templates/consent/consent_huang2021.html:3
+msgid ""
+"\n"
+"    You will be taking part in the Hooked on Music: China research project "
+"conducted by a PhD student Xuan Huang of the\n"
+"    Music Cognition Group at the University of Amsterdam’s Institute for "
+"Logic, Language, and Computation. Before the\n"
+"    research project can begin, it is important that you read about the "
+"procedures we will be applying. Make sure to\n"
+"    read this information carefully.\n"
+"    "
+msgstr ""
+
+#: experiment/templates/consent/consent_huang2021.html:11
+#: experiment/templates/consent/consent_speech2song.html:11
+msgid "Purpose of the research project"
+msgstr ""
+
+#: experiment/templates/consent/consent_huang2021.html:14
+msgid ""
+"\n"
+"    What makes music memorable? Why do we not only remember some pieces of "
+"music, but can also recall them after a long\n"
+"    period of time, or even a few years later? What makes music remain in "
+"our memories for the long term? Are there some\n"
+"    musical characters that make it easier to remember Chinese music in the "
+"long run or does it depend on a person? Do\n"
+"    we collectively use the same features to recognize music?\n"
+"    "
+msgstr ""
+
+#: experiment/templates/consent/consent_huang2021.html:22
+msgid ""
+" This project will help us answer these questions and better understand how "
+"we remember music\n"
+"    over the long term.\n"
+"    Musical memory could be affected by our listening history, listening "
+"experience, and the musical cultural where we\n"
+"    grew up. Understanding musical memory can help streaming services to "
+"find and recommend music their users will\n"
+"    enjoy, YouTubers and TikTokers to create new videos with the best choice "
+"of music, composers write new music, and\n"
+"    music therapists develop new approaches for working and living with "
+"memory disorders.\n"
+"    "
+msgstr ""
+
+#: experiment/templates/consent/consent_huang2021.html:30
+msgid "Who can take part in this research?"
+msgstr ""
+
+#: experiment/templates/consent/consent_huang2021.html:31
+msgid ""
+"\n"
+"    Anybody with sufficiently good hearing, natural or corrected, to enjoy "
+"music listening is welcome to participate in\n"
+"    this research. Your device must be able to play audio, and you must have "
+"a sufficiently strong data connection to be\n"
+"    able to stream short MP3 files. Headphones are recommended for the best "
+"results, but you may also use either\n"
+"    internal or external loudspeakers. You should adjust the volume of your "
+"device so that it is comfortable for you.\n"
+"    "
+msgstr ""
+
+#: experiment/templates/consent/consent_huang2021.html:39
+#: experiment/templates/consent/consent_speech2song.html:19
+msgid "Instructions and procedure"
+msgstr ""
+
+#: experiment/templates/consent/consent_huang2021.html:41
+msgid ""
+"\n"
+"    You will be presented with short fragments of music and asked whether "
+"you recognise them. Try to answer as quickly\n"
+"    as\n"
+"    you can, but only at the moment that you find yourself able to ‘sing "
+"along’ in your head. When you tell us that you\n"
+"    recognise a piece of music, the music will keep playing, but the sound "
+"will be muted for a few seconds. Keep\n"
+"    following along with the music in your head, until the music comes back. "
+"Sometimes it will come back in the right\n"
+"    place, but at other times, we will have skipped forward or backward "
+"within the same piece of music during the\n"
+"    silence. We will ask you whether you think the music came back in the "
+"right place or not. In between fragments, we\n"
+"    will ask you some simple survey questions to better\n"
+"    understand your musical background and how you engage with music in your "
+"daily life. In a second phase of the\n"
+"    experiment, you will also be presented with short fragments of music, "
+"but instead of being asked whether you\n"
+"    recognise them, you will be asked whether you heard them before while "
+"participating in the first phase of the\n"
+"    experiment. Again, in between these fragments, we will ask you simple "
+"survey questions about your musical background\n"
+"    and how you engage with music in your daily life."
+msgstr ""
+
+#: experiment/templates/consent/consent_huang2021.html:56
+#: experiment/templates/consent/consent_speech2song.html:28
+msgid "Voluntary participation"
+msgstr ""
+
+#: experiment/templates/consent/consent_huang2021.html:58
+msgid ""
+" You will be participating in this research project on a voluntary basis. "
+"This means you are free\n"
+"    to stop taking part\n"
+"    at any stage. This will not have any personal consequences and you will "
+"not be obliged to finish the procedures\n"
+"    described above. You can also decide to withdraw your participation. If "
+"you decide to stop or withdraw your consent,\n"
+"    all the information gathered up until then will be permanently deleted. "
+msgstr ""
+
+#: experiment/templates/consent/consent_huang2021.html:64
+#: experiment/templates/consent/consent_speech2song.html:37
+msgid "Discomfort, Risks & Insurance"
+msgstr ""
+
+#: experiment/templates/consent/consent_huang2021.html:66
+msgid ""
+" The risks of participating in this research are no greater than in everyday "
+"situations at home.\n"
+"    Previous experience\n"
+"    in similar research has shown that no or hardly any discomfort is to be "
+"expected for participants. For all research\n"
+"    at the University of Amsterdam, a standard liability insurance applies. "
+msgstr ""
+
+#: experiment/templates/consent/consent_huang2021.html:71
+#: experiment/templates/consent/consent_speech2song.html:45
+msgid "Confidential treatment of your details"
+msgstr ""
+
+#: experiment/templates/consent/consent_huang2021.html:73
+msgid ""
+" The information gathered over the course of this research will be used for "
+"further analysis and\n"
+"    publication in\n"
+"    scientific journals only. Fully anonymised data collected during the "
+"experiment (e.g., whether each musical fragment\n"
+"    was recognised and how long it took) may be made available online in "
+"tandem with these scientific publications. Your\n"
+"    personal details will not be used in these publications, and we "
+"guarantee that you will remain anonymous under all\n"
+"    circumstances. "
+msgstr ""
+
+#: experiment/templates/consent/consent_huang2021.html:80
+#: experiment/templates/consent/consent_speech2song.html:62
+msgid "Further Information"
+msgstr ""
+
+#: experiment/templates/consent/consent_huang2021.html:82
+msgid ""
+" For further information on the research project, please contact Xuan Huang "
+"(e-mail:\n"
+"    x.huang@uva.nl; Science Park 107,\n"
+"    1098 GE Amsterdam) or John\n"
+"    Ashley Burgoyne (phone\n"
+"    number: +31 20 525 7034; e-mail: j.a.burgoyne@uva.nl; Science Park 107, "
+"1098 GE\n"
+"    Amsterdam).\n"
+"    If you have any complaints regarding this research project, you can "
+"contact the secretary of the Ethics Committee of\n"
+"    the Faculty of Humanities of the University of Amsterdam (phone number: "
+"+31 20 525 3054; e-mail:\n"
+"    commissie-ethiek-fgw@uva.nl; Kloveniersburgwal 48, 1012 CX Amsterdam)."
+msgstr ""
+
+#: experiment/templates/consent/consent_huang2021.html:94
+msgid ""
+" I hereby declare that I have been clearly informed about the research "
+"project Hooked on Music:\n"
+"    China at the\n"
+"    University of Amsterdam, Institute for Logic, Language and Computation, "
+"conducted by Xuan Huang as described above.\n"
+"    "
+msgstr ""
+
+#: experiment/templates/consent/consent_huang2021.html:100
+msgid ""
+" I consent to participate in this research on an entirely voluntary basis. I "
+"retain the right to\n"
+"    revoke this consent\n"
+"    without having to provide any reasons for my decision. I am aware that I "
+"am entitled to discontinue the research at\n"
+"    any time and can withdraw my participation.\n"
+"    If I decide to stop or withdraw my consent, all the information gathered "
+"up until then will be permanently deleted.\n"
+"    If my research results are used in scientific publications or made "
+"public in any other way, they will be fully\n"
+"    anonymised. My personal information may not be viewed by third parties "
+"without my express permission.\n"
+"    "
+msgstr ""
+
+#: experiment/templates/consent/consent_speech2song.html:2
+msgid "Introduction"
+msgstr ""
+
+#: experiment/templates/consent/consent_speech2song.html:4
+msgid ""
+"\n"
+"    You are about to take part in the ‘Cross-Linguistic Investigation of the "
+"Speech-to-Song Illusion’ research project\n"
+"    conducted by Gustav-Hein Frieberg (MSc student) under supervision of Dr. "
+"Makiko Sadakata at the University of\n"
+"    Amsterdam Musicology Department. Before the research project can begin, "
+"it is important that you read about the\n"
+"    procedures we will be applying. Make sure to read the following "
+"information carefully.\n"
+"    "
+msgstr ""
+
+#: experiment/templates/consent/consent_speech2song.html:13
+msgid ""
+"\n"
+"    The Speech-to-Song Illusion is a perceptual illusion whereby the "
+"repetition of a speech segment induces a perceptual\n"
+"    transformation from the impression of speech to the impression of "
+"signing. The present project aims at investigating\n"
+"    the influence of linguistic experience upon the strength of the "
+"illusion.\n"
+"    "
+msgstr ""
+
+#: experiment/templates/consent/consent_speech2song.html:21
+msgid ""
+"\n"
+"    The experiment will last about 10 minutes. After filling out a brief "
+"questionnaire inquiring about your age, gender,\n"
+"    native language(s), and experience with three languages, you will be "
+"presented with short speech segments in those\n"
+"    languages as well as short environmental sounds. Your task will be to "
+"rate each segment on a scale from 1 to 5 in\n"
+"    terms of its musicality.\n"
+"    "
+msgstr ""
+
+#: experiment/templates/consent/consent_speech2song.html:30
+msgid ""
+"\n"
+"    You will be participating in this research project on a voluntary basis. "
+"This means you are free to stop taking part\n"
+"    at any stage. This will not have any personal consequences and you will "
+"not be obliged to finish the procedures\n"
+"    described above. You can also decide to withdraw your participation up "
+"to 8 days after the research has ended. If\n"
+"    you decide to stop or withdraw your consent, all the information "
+"gathered up until then will be permanently deleted.\n"
+"    "
+msgstr ""
+
+#: experiment/templates/consent/consent_speech2song.html:39
+msgid ""
+"\n"
+"    The risks of participating in this research are no greater than in "
+"everyday situations at home. Previous experience\n"
+"    in similar research has shown that no or hardly any discomfort is to be "
+"expected for participants. For all research\n"
+"    at the University of Amsterdam, a standard liability insurance applies.\n"
+"    "
+msgstr ""
+
+#: experiment/templates/consent/consent_speech2song.html:47
+msgid ""
+"\n"
+"    The information gathered over the course of this research will be used "
+"for further analysis and publication in\n"
+"    scientific journals only. No personal details will not be used in these "
+"publications, and we guarantee that you will\n"
+"    remain anonymous under all circumstances.\n"
+"    The data gathered during the research will be encrypted and stored "
+"separately from your personal details. These\n"
+"    personal details and the encryption key are only accessible to members "
+"of the research staff.\n"
+"    "
+msgstr ""
+
+#: experiment/templates/consent/consent_speech2song.html:55
+msgid "Reimbursement"
+msgstr ""
+
+#: experiment/templates/consent/consent_speech2song.html:57
+msgid ""
+"\n"
+"    There will not be any monetary reimbursement for taking part in the "
+"research project. If you wish, we can send you a\n"
+"    summary of the general research results at a later stage.\n"
+"    "
+msgstr ""
+
+#: experiment/templates/consent/consent_speech2song.html:64
+msgid ""
+"\n"
+"    For further information on the research project, please contact Gustav-"
+"Hein Frieberg (phone number: +31 6 83 676\n"
+"    490; email: gusfrieberg@gmail.com).\n"
+"    If you have any complaints regarding this research project, you can "
+"contact the secretary of the Ethics Committee of\n"
+"    the Faculty of Humanities of the University of Amsterdam (phone number: "
+"+31 20 525 3054; email:\n"
+"    commissie-ethiek-fgw@uva.nl; address: Kloveniersburgwal 48, 1012 CX "
+"Amsterdam)\n"
+"    "
+msgstr ""
+
+#: experiment/templates/consent/consent_speech2song.html:72
+msgid "Informed consent form"
+msgstr ""
+
+#: experiment/templates/consent/consent_speech2song.html:75
+msgid ""
+"\n"
+"    ‘I hereby declare that I have been clearly informed about the research "
+"project Cross-Linguistic Investigation of the\n"
+"    Speech-to-Song Illusion at the University of Amsterdam, Musicology "
+"department, conducted by Gustav-Hein Frieberg\n"
+"    under supervision of Dr. Makiko Sadakata as described in the information "
+"brochure. My questions have been answered\n"
+"    to my satisfaction.\n"
+"    "
+msgstr ""
+
+#: experiment/templates/consent/consent_speech2song.html:83
+msgid ""
+"\n"
+"    I consent to participate in this research on an entirely voluntary "
+"basis. I retain the right to revoke this consent\n"
+"    without having to provide any reasons for my decision. I am aware that I "
+"am entitled to discontinue the research at\n"
+"    any time and can withdraw my participation up to 8 days after the "
+"research has ended. If I decide to stop or\n"
+"    withdraw my consent, all the information gathered up until then will be "
+"permanently deleted.\n"
+"    "
+msgstr ""
+
+#: experiment/templates/consent/consent_speech2song.html:91
+msgid ""
+"\n"
+"    If my research results are used in scientific publications or made "
+"public in any other way, they will be fully\n"
+"    anonymised. My personal information may not be viewed by third parties "
+"without my express permission.\n"
+"    "
+msgstr ""
+
+#: experiment/templates/consent/consent_speech2song.html:97
+msgid ""
+"\n"
+"    If I need any further information on the research, now or in the future, "
+"I can contact Gustav-Hein Frieberg (phone\n"
+"    no: +31 6 83 676 490, e-mail: gusfrieberg@gmail.com).\n"
+"    "
+msgstr ""
+
+#: experiment/templates/consent/consent_speech2song.html:103
+msgid ""
+"\n"
+"    If I have any complaints regarding this research, I can contact the "
+"secretary of the Ethics Committee of the Faculty\n"
+"    of Humanities of the University of Amsterdam (phone no: +31 20 525 3054; "
+"email: commissie-ethiek-fgw@uva.nl;\n"
+"    address: Kloveniersburgwal 48, 1012 CX Amsterdam).\n"
+"    "
+msgstr ""
+
+#: experiment/templates/final/test_series.html:3
+msgid ""
+"If you want to get your money or credit, make sure to follow these steps:"
+msgstr ""
+
+#: experiment/templates/final/test_series.html:5
+msgid "If you have not done the following steps already:"
+msgstr ""
+
+#: experiment/templates/final/test_series.html:7
+msgid "Make an account at "
+msgstr ""
+
+#: experiment/templates/final/test_series.html:8
+msgid "Look up the experiment. It is called: “Testing your sense of rhythm”"
+msgstr ""
+
+#: experiment/templates/final/test_series.html:9
+msgid "Click on “participate” "
+msgstr ""
+
+#: experiment/templates/final/test_series.html:10
+msgid ""
+"Click on the experiment link in the browser (NOTE: it is really important "
+"that you do this, if you do not go to the AML website via the UvA lab "
+"portal, it does not register you as a participant)."
+msgstr ""
+
+#: experiment/templates/final/test_series.html:11
+msgid ""
+"You can now close the tab again, as you have already finished the experiment!"
+msgstr ""
+
+#: experiment/templates/final/test_series.html:14
+msgid ""
+"VERY IMPORTANT: Make sure to copy-paste the code below and save it "
+"somewhere. NOTE: Without the code, you will not be able to earn your "
+"reimbursement!"
+msgstr ""
+
+#: experiment/templates/final/test_series.html:15
+msgid "Email the code to"
+msgstr ""
+
+#: experiment/templates/final/test_series.html:15
+msgid ""
+", using the same email-address you used to register on the UvA lab website. "
+"If you are a student, add your student number. We will now make sure you get "
+"your reimbursement!"
+msgstr ""
+
+#~ msgid "Made it!"
+#~ msgstr "Je hebt het gehaald!"
 
 #~ msgid ""
 #~ "Pay attention: a music fragment can occur several times. In total, this "
