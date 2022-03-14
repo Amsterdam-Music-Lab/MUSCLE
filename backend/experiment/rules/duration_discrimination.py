@@ -9,7 +9,7 @@ from .base import Base
 from experiment.models import Section
 from .views import CompositeView, Consent, Final, Explainer, Step, StartSession, Playlist
 from .views.form import ChoiceQuestion, Form
-from .util.actions import combine_actions, final_action_with_optional_button
+from .util.actions import combine_actions, final_action_with_optional_button, render_feedback_trivia
 from .util.score import get_average_difference
 from .util.practice import get_trial_condition_block, get_practice_views, practice_explainer
 from .util.staircasing import register_turnpoint
@@ -197,19 +197,21 @@ class DurationDiscrimination(Base):
         Give participant feedback
         '''
         difference = get_average_difference(session, 4, cls.start_diff)
-        score_message = cls.get_score_message(difference)
+        final_text = cls.get_final_text(difference)
         session.finish()
         session.save()
-        return final_action_with_optional_button(session, score_message, request_session)
+        return final_action_with_optional_button(session, final_text, request_session)
     
     @classmethod
-    def get_score_message(cls, difference):
+    def get_final_text(cls, difference):
         percentage = round(difference / 6000, 2)
-        return _(
+        feedback = _(
             "Well done! You heard the difference between two intervals that \
-            differed only {} percent in duration. When we research timing in \
+            differed only {} percent in duration.").format(percentage)
+        trivia = _("When we research timing in \
             humans, we often find that people's accuracy in this task scales: \
-            for shorter durations, people can hear even smaller differences than for longer durations.").format(percentage)
+            for shorter durations, people can hear even smaller differences than for longer durations.")
+        return render_feedback_trivia(feedback, trivia)
 
     @classmethod
     def staircasing_blocks(cls, session, trial_action_callback, request_session=None):

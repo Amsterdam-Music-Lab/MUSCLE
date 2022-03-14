@@ -1,8 +1,10 @@
 import random
+from os.path import join
 
 from django.conf import settings
 from django.utils.translation import gettext as _
 from django.http import HttpResponseRedirect
+from django.template.loader import render_to_string
 
 from .base import Base
 from .util.actions import combine_actions
@@ -66,7 +68,14 @@ class RhythmTestSeries(Base):
         if not experiment_data:
             experiment_data = prepare_experiments(session)
         if experiment_number == len(experiment_data):
-            return Final.action(session, title=_("Made it!"))
+            rendered = render_to_string(join('final', 
+            'test_series.html'))
+            return Final.action(
+                session, 
+                title==_("Thank you very much for participating!"),
+                score_template=rendered,
+                show_participant_link=True,
+            )
         slug = experiment_data[experiment_number]
         session.save()
         button = {

@@ -172,7 +172,7 @@ class Beijaert2021(Base):
             return combine_actions(
                 FinalScore.action(
                     session = session,
-                    score_message = "Thank you for participating in our experiment! This one isn't a game, but we'll give you 30 points for every question you answered.",
+                    final_text = "Thank you for participating in our experiment! This one isn't a game, but we'll give you 30 points for every question you answered.",
                     rank = FinalScore.RANKS['SILVER']
                 )
             )

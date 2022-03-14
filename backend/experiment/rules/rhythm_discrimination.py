@@ -3,7 +3,7 @@ import logging
 
 from django.utils.translation import gettext_lazy as _
 
-from .util.actions import combine_actions, final_action_with_optional_button
+from .util.actions import combine_actions, final_action_with_optional_button, render_feedback_trivia
 from .util.practice import practice_explainer, practice_again_explainer, start_experiment_explainer
 from .views import CompositeView, Consent, Final, Explainer, Step, StartSession, Playlist
 from .views.form import ChoiceQuestion, Form
@@ -272,9 +272,11 @@ def finalize_experiment(session, request_session):
     percentage = (sum([res.score for res in session.result_set.all()]) / session.experiment.rounds) * 100
     session.finish()
     session.save()
-    score_message =_("Well done! You've answered {} percent correctly!\n\nOne reason for the \
+    feedback = _("Well done! You've answered {} percent correctly!").format(percentage)
+    trivia = _("One reason for the \
         weird beep-tones in this test (instead of some nice drum-sound) is that it is used very often\
         in brain scanners, which make a lot of noise. The beep-sound helps people in the scanner \
-        to hear the rhythm really well.").format(percentage)
-    return final_action_with_optional_button(session, score_message, request_session)
+        to hear the rhythm really well.")
+    final_text = render_feedback_trivia(feedback, trivia)
+    return final_action_with_optional_button(session, final_text, request_session)
 

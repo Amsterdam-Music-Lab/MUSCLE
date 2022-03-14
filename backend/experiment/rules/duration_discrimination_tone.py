@@ -1,6 +1,7 @@
 from django.utils.translation import gettext_lazy as _
 
 from .views import Explainer
+from .util.actions import render_feedback_trivia
 from .duration_discrimination import DurationDiscrimination
 
 class DurationDiscriminationTone(DurationDiscrimination):
@@ -8,12 +9,14 @@ class DurationDiscriminationTone(DurationDiscrimination):
     condition = _('tone')
 
     @classmethod
-    def get_score_message(cls, difference):
+    def get_final_text(cls, difference):
         milliseconds = round(difference / 1000)
-        return _('Well done! You managed to hear the difference between tones that \
-                differed only {} milliseconds in length. Humans are really good at \
+        feedback = _('Well done! You managed to hear the difference between tones that \
+                differed only {} milliseconds in length.').format(milliseconds)
+        trivia = _('Humans are really good at \
                 hearing these small differences in durations, which is very handy \
-                if we want to be able to process rhythm in music.').format(milliseconds)
+                if we want to be able to process rhythm in music.')
+        return render_feedback_trivia(feedback, trivia)
     
     @classmethod
     def get_response_explainer(cls, correct, correct_response, button_label=_('Next fragment')):

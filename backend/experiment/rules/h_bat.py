@@ -9,7 +9,7 @@ from .views import CompositeView, Consent, Explainer, Step, Playlist, StartSessi
 from .views.form import ChoiceQuestion, Form
 
 from .util.practice import get_practice_views, practice_explainer, get_trial_condition, get_trial_condition_block
-from .util.actions import combine_actions, final_action_with_optional_button
+from .util.actions import combine_actions, final_action_with_optional_button, render_feedback_trivia
 from .util.score import get_average_difference_level_based
 from .util.staircasing import register_turnpoint
 
@@ -181,11 +181,13 @@ class HBat(Base):
         """
         average_diff = get_average_difference_level_based(session, 6, cls.start_diff)
         percentage = float(Decimal(str(average_diff / 5)).quantize(Decimal('.01'), rounding=ROUND_HALF_UP))
-        score_message = _("Well done! You heard the difference when the rhythm was \
-            speeding up or slowing down with only %(percent)d percent!\n\n %(trivia)s") % {'percent': percentage, 'trivia': cls.get_trivia()}
+        feedback = _("Well done! You heard the difference when the rhythm was \
+                    speeding up or slowing down with only {} percent!").format(percentage)
+        trivia = cls.get_trivia()
+        final_text = render_feedback_trivia(feedback, trivia)
         session.finish()
         session.save()
-        return final_action_with_optional_button(session, score_message, request_session)
+        return final_action_with_optional_button(session, final_text, request_session)
     
     @classmethod
     def get_trivia(cls):
