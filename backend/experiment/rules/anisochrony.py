@@ -78,8 +78,7 @@ class Anisochrony(DurationDiscrimination):
         )
         config = {
             'listen_first': True,
-            'ready_time': .5,
-            'decision_time': section.duration + .5
+            'decision_time': section.duration + .7
         }
         action = view.action(config)
         return action
