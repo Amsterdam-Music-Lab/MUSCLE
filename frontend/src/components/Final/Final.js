@@ -47,7 +47,6 @@ const Final= ({ score, final_text, action_texts, button, onNext, history, show_p
             <div className="text-center">
                 <Rank rank={rank} />
                 <h1 className="total-score title">{showScore} {points}</h1>
-                <h5>{final_text}</h5>
             </div>
             )}
             <div>
