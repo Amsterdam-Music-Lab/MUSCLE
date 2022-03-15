@@ -10,13 +10,18 @@ INSTRUCTIONS_DEFAULT = {
 
 class Playback(object):
     ''' A playback wrapper for different kinds of players
-        pass in a config dictionary to override the following values:
-        - ready_time: time before presentation of sound
-        - decision_time: maximum time that participant can take (only relevant when auto_advance=True)
-        - auto_advance: whether the view will switch to next view after decision_time
-        - auto_play: whether sound will start automatically
-
-        - show_animdation: whether to show an animation during playback '''
+        - player_type: can be one of the following:
+            - 'AUTOPLAY' - player starts automatically
+            - 'BUTTON' - display one play button
+            - 'MULTIPLAYER' - display multiple small play buttons, one per section
+        - sections: a list of sections (in many cases, will only contain *one* section)
+        - instructions: any text to display during preload or presentation
+        - config: define to override the following values:
+            - ready_time: time before presentation of sound
+            - decision_time: maximum time that participant can take (only relevant when auto_advance=True)
+            - auto_advance: whether the view will switch to next view after decision_time
+            - auto_play: whether sound will start automatically
+            - show_animdation: whether to show an animation during playback '''
     def __init__(self, player_type, sections, instructions=None, config=None):
         self.player_type = player_type
         self.sections = [{'id': s.id, 'url': s.absolute_url()} for s in sections]

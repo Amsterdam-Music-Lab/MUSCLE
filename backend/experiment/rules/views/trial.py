@@ -63,23 +63,3 @@ class Trial(object):  # pylint: disable=too-few-public-methods
             action['feedback_form'] = self.feedback_form.action()
         
         return action
-    
-class Boolean(Trial):
-    """ A Trial type that shows a ButtonArray with YES / NO,
-    and with a playback animation
-    """
-    def __init__(self, question_text, question_key, **kwargs):
-        super().__init__(**kwargs)
-        question = ChoiceQuestion(
-            question=question_text,
-            key=question_key,
-            choices={
-                'YES': _('YES'),
-                'NO': _('NO')
-            },
-            view='BUTTON_ARRAY',
-            result_id=result_pk,
-            submits=True,
-        )
-        self.feedback_form = Form([question])
-        self.playback = playback

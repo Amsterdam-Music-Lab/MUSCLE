@@ -71,22 +71,20 @@ class Anisochrony(DurationDiscrimination):
             submits=True
         )
         play_config = {
-                'decision_time': section.duration + .5
+            'decision_time': section.duration + .7
         }
         playback = Playback('AUTOPLAY', [section], instructions, play_config)
         form = Form([question])
+        config = {
+            'listen_first': True,
+        }
         view = Trial(
             playback=playback,
             feedback_form=form,
             title=_('Anisochrony'),
-            config={'listen_first': True }
+            config=config
         )
-        config = {
-            'listen_first': True,
-            'decision_time': section.duration + .7
-        }
-        action = view.action(config)
-        return action
+        return view.action()
     
     @classmethod
     def intro_explanation(cls, *args):

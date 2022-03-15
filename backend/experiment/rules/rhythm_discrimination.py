@@ -6,6 +6,7 @@ from django.utils.translation import gettext_lazy as _
 from .util.actions import combine_actions, final_action_with_optional_button, render_feedback_trivia
 from .util.practice import practice_explainer, practice_again_explainer, start_experiment_explainer
 from .views import Trial, Consent, Final, Explainer, StartSession, Step, Playlist
+from .views.playback import Playback
 from .views.form import ChoiceQuestion, Form
 from .base import Base
 
@@ -194,7 +195,7 @@ def next_trial_actions(session, round_number, request_session):
     play_config = {
         'decision_time': section.duration + .5
     }
-    playback = Playback('AUTOPLAY', [section], instructions, config)
+    playback = Playback('AUTOPLAY', [section], instructions, play_config)
     if round_number < 5:
         title = _('practice')
     else:
