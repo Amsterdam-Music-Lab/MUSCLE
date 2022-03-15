@@ -24,10 +24,18 @@ class Question(object):
         return self.__dict__
 
 
+class BooleanQuestion(Question):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.choices = [_('YES'), _('NO')]
+        self.view = 'BUTTON_ARRAY'
+
+
 class ChoiceQuestion(Question):
     def __init__(self, choices, **kwargs):
         super().__init__(**kwargs)
         self.choices = choices
+
 
 class RangeQuestion(Question):
     def __init__(self, min_value, max_value, **kwargs):
@@ -57,6 +65,7 @@ class LikertQuestion(Question):
                 _("Agree"),
                 _("Strongly Agree"),
             ]
+
 
 class Form(object):
     ''' Form is a view which brings together an array of questions with submit and optional skip button 
