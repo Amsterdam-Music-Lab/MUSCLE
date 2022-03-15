@@ -4,7 +4,7 @@ import numpy as np
 
 from django.utils.translation import gettext as _
 
-from ..views import Explainer
+from ..views import Explainer, Step
 from .actions import combine_actions
 
 
@@ -21,10 +21,10 @@ def get_practice_views(
     Give feedback on the correctness of the response,
     and repeat practice if necessary.
     - session: session
-    - intro_explainer: introduction explainer for the experiment
+    - intro_explainer: explainer object to introduce the experiment
     - first_trial_callback: function to generate the first trial after practice
     - trial_callback: function to return the data for a trial
-    - response_callback: function to generate explainer about correctness of response
+    - response_callback: function to generate explainer object about correctness of response
     - check_previous_condition: function to determine the condition of previous practice trial (returns Boolean)
     - difficulty: difficulty of the current practice trial
     '''
@@ -42,7 +42,7 @@ def get_practice_views(
         response_explainer = response_callback(correct, previous_condition)
         trial = trial_callback(
             session, trial_condition, difficulty)
-        return combine_actions(response_explainer, trial)
+        return combine_actions(response_explainer.action(), trial)
     else:
         # after last practice trial
         penultimate_score = previous_results.all()[1].score
@@ -58,71 +58,57 @@ def get_practice_views(
             # remove any data saved for practice purposes
             session.merge_json_data({'block': []})
             session.save()
-            start_explainer = start_experiment_explainer()
             trial = first_trial_callback(session, trial_callback)
-            return combine_actions(response_explainer, start_explainer, trial)
+            return combine_actions(
+                response_explainer.action(),
+                start_experiment_explainer().action(True),
+                trial
+            )
         else:
             # need more practice, start over
             response_explainer = response_callback(False, check_previous_condition(last_result))
             next_trial = trial_callback(
                 session, trial_condition, difficulty)
             return combine_actions(
-                response_explainer,
-                practice_again_explainer(),
-                intro_explainer,
-                practice_explainer(),
+                response_explainer.action(),
+                practice_again_explainer().action(),
+                intro_explainer.action(True),
+                practice_explainer().action(True),
                 next_trial
             )
 
 
 def practice_explainer():
-    return Explainer.action(
+    return Explainer(
         instruction=_('We will now practice first.'),
         steps=[
-            Explainer.step(
-                description=_('First you will hear 4 practice trials.'),
-            )
+            Step(description=_('First you will hear 4 practice trials.')),
         ],
         button_label=_('Begin experiment')
     )
 
 def practice_again_explainer():
-    return Explainer.action(
+    return Explainer(
         instruction=_(
             "You have answered 1 or more practice trials incorrectly."),
-        steps=[Explainer.step(
-            description=_("We will therefore practice again."),
-            number=1
-        ),
-            Explainer.step(
-            description=_(
-                'But first, you can read the instructions again.'),
-            number=2
-        ),
+        steps=[
+            Step(_("We will therefore practice again.")),
+            Step(_(
+                'But first, you can read the instructions again.')),
         ],
         button_label=_('Continue')
     )
 
 def start_experiment_explainer():
-    return Explainer.action(
+    return Explainer(
         instruction=_(
             'Now we will start the real experiment.'),
         steps=[
-            Explainer.step(
-                description=_(
-                    'Pay attention! During the experiment it will become more difficult to hear the difference between the tones.'),
-                number=1
-            ),
-            Explainer.step(
-                description=_(
-                    "Try to answer as accurately as possible, even if you're uncertain."),
-                number=2
-            ),
-            Explainer.step(
-                description=_(
-                    "Remember that you don't move along or tap during the test."),
-                number=3
-            ),
+            Step(_('Pay attention! During the experiment it will become more difficult to hear the difference between the tones.')),
+            Step(_(
+                    "Try to answer as accurately as possible, even if you're uncertain.")),
+            Step(_(
+                    "Remember that you don't move along or tap during the test.")),
         ],
         button_label=_('Start')
     )

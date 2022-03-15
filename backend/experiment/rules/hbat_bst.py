@@ -1,14 +1,14 @@
 from django.utils.translation import gettext_lazy as _
 
 from experiment.models import Section
-from .views import Trial, Explainer
+from .views import Trial, Explainer, Step
 from .views.form import ChoiceQuestion, Form
 from .views.playback import Playback
 
 from .base import Base
 from .h_bat import HBat
 
-from .util.actions import final_action_with_optional_button
+from .util.actions import final_action_with_optional_button, render_feedback_trivia
 from .util.score import get_average_difference_level_based
 
 class BST(HBat):
@@ -18,44 +18,23 @@ class BST(HBat):
 
     @classmethod
     def intro_explainer(cls):
-        return Explainer.action(
+        return Explainer(
             instruction=_(
                 'In this test you will hear a number of rhythms which have a regular beat.'),
             steps=[
-                Explainer.step(
-                    description=_(
-                        "It's your job to decide if the rhythm has a DUPLE METER (a MARCH) or a TRIPLE METER (a WALTZ)."),
-                    number=1
-                ),
-                Explainer.step(
-                    description=_("Every SECOND tone in a DUPLE meter (march) is louder and every THIRD tone in a TRIPLE meter (waltz) is louder."),
-                    number=2
-                ),
-                Explainer.step(
-                    description=_(
-                        'During the experiment it will become more difficult to hear the difference.'),
-                    number=3
-                ),
-                Explainer.step(
-                    description=_(
-                        "Try to answer as accurately as possible, even if you're uncertain."),
-                    number=4
-                ),
-                Explainer.step(
-                    description=_(
-                        "In this test, you can answer as soon as you feel you know the answer."),
-                    number=5
-                ),
-                Explainer.step(
-                    description=_(
-                        "NOTE: Please wait with answering until you are either sure, or the sound has stopped."),
-                    number=6
-                ),
-                Explainer.step(
-                    description=_(
-                        'This test will take around 4 minutes to complete. Try to stay focused for the entire test!'),
-                    number=7
-                )],
+                Step(_(
+                        "It's your job to decide if the rhythm has a DUPLE METER (a MARCH) or a TRIPLE METER (a WALTZ).")),
+                Step(_("Every SECOND tone in a DUPLE meter (march) is louder and every THIRD tone in a TRIPLE meter (waltz) is louder.")),
+                Step(_(
+                        'During the experiment it will become more difficult to hear the difference.')),
+                Step(_(
+                        "Try to answer as accurately as possible, even if you're uncertain.")),
+                Step(_(
+                        "In this test, you can answer as soon as you feel you know the answer.")),
+                Step(_(
+                        "NOTE: Please wait with answering until you are either sure, or the sound has stopped.")),
+                Step(_(
+                        'This test will take around 4 minutes to complete. Try to stay focused for the entire test!'))],
             button_label='Ok'
         )
 
@@ -117,7 +96,7 @@ class BST(HBat):
             else:
                 instruction = _(
                     'The rhythm was a TRIPLE METER. Your response was INCORRECT.')
-        return Explainer.action(
+        return Explainer(
             instruction=instruction,
             steps=[],
             button_label=button_label
@@ -128,9 +107,11 @@ class BST(HBat):
         """ if either the max_turnpoints have been reached,
         or if the section couldn't be found (outlier), stop the experiment
         """
-        loudness_diff = int(get_average_difference_level_based(session, 6))
-        score_message = _("Well done! You heard the difference \
-            when the accented tone was only {} dB louder.\n\nA march and a waltz are very common meters in Western music, but in other cultures, much more complex meters also exist!").format(loudness_diff)
+        loudness_diff = int(get_average_difference_level_based(session, 6, cls.start_diff))
+        feedback = _("Well done! You heard the difference \
+            when the accented tone was only {} dB louder.").format(loudness_diff)
+        trivia = _("A march and a waltz are very common meters in Western music, but in other cultures, much more complex meters also exist!")
+        final_text = render_feedback_trivia(feedback, trivia)
         session.finish()
         session.save()
-        return final_action_with_optional_button(session, score_message, request_session)
+        return final_action_with_optional_button(session, final_text, request_session)

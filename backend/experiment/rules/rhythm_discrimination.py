@@ -3,9 +3,9 @@ import logging
 
 from django.utils.translation import gettext_lazy as _
 
-from .util.actions import combine_actions, final_action_with_optional_button
+from .util.actions import combine_actions, final_action_with_optional_button, render_feedback_trivia
 from .util.practice import practice_explainer, practice_again_explainer, start_experiment_explainer
-from .views import Trial, Consent, Final, Explainer, StartSession, Playlist
+from .views import Trial, Consent, Final, Explainer, StartSession, Step, Playlist
 from .views.form import ChoiceQuestion, Form
 from .base import Base
 
@@ -78,12 +78,12 @@ class RhythmDiscrimination(Base):
     @classmethod
     def first_round(cls, experiment):
         """Create data for the first experiment rounds"""
-        explainer = intro_explainer()
+        explainer = intro_explainer().action(True)
 
         # 2. Consent with default text
         consent = Consent.action()
 
-        explainer2 = practice_explainer()
+        explainer2 = practice_explainer().action()
 
         start_session = StartSession.action()
 
@@ -101,7 +101,10 @@ class RhythmDiscrimination(Base):
         if next_round_number == 1:
             plan_stimuli(session)
         
-        return combine_actions(*next_trial_actions(session, next_round_number, request_session))
+        actions = next_trial_actions(session, next_round_number, request_session)
+        if isinstance(actions, dict):
+            return actions
+        return combine_actions(*actions)
     
     @staticmethod
     def calculate_score(result, form_element):
@@ -131,17 +134,17 @@ def next_trial_actions(session, round_number, request_session):
         print('Missing plan key: %s' % str(error))
         return actions
     
-    if len(plan)==round_number:
+    if len(plan)==round_number-1:
         return finalize_experiment(session, request_session)
     
-    condition = plan[round_number]
+    condition = plan[round_number-1]
 
     if session.final_score == 0:
         # practice: add feedback on previous result
         previous_results = session.result_set.order_by('-created_at')
         if previous_results.count():
             actions.append(
-                response_explainer(previous_results.first().score, plan[round_number-1]['group_id'])
+                response_explainer(previous_results.first().score, plan[round_number-2]['group_id'])
             )
         if round_number == 5:
             total_score = sum([res.score for res in previous_results.all()[:4]])
@@ -155,7 +158,9 @@ def next_trial_actions(session, round_number, request_session):
                 # experiment starts
                 session.final_score = 1
                 session.save()
-                actions.append(start_experiment_explainer())
+                explainer = start_experiment_explainer()
+                explainer.steps.pop(0)
+                actions.append(explainer.action(True))
     
     try:
         section = session.playlist.section_set.filter(
@@ -229,20 +234,15 @@ def plan_stimuli(session):
     session.save()
 
 def intro_explainer():
-    return Explainer.action(
+    return Explainer(
         instruction=_(
             'In this test you will hear the same rhythm twice. After that, you will hear a third rhythm.'),
         steps=[
-            Explainer.step(
-                description=_(
-                    "Your task is to decide whether this third rhythm is the SAME as the first two rhythms or DIFFERENT."),
-		number=1
-            ),
-            Explainer.step(
-                description=_(
-                    'This test will take around 6 minutes to complete. Try to stay focused for the entire test!'),
-                number=2
-            )],
+            Step(_(
+                    "Your task is to decide whether this third rhythm is the SAME as the first two rhythms or DIFFERENT.")),
+            Step(_(
+                    'This test will take around 6 minutes to complete. Try to stay focused for the entire test!'))
+        ],
         button_label='Ok'
     )
     
@@ -261,20 +261,22 @@ def response_explainer(correct, same, button_label=_('Next fragment')):
         else:
             instruction = _(
                 'The third rhythm is DIFFERENT. Your response was INCORRECT.')
-    return Explainer.action(
+    return Explainer(
         instruction=instruction,
         steps=[],
         button_label=button_label
-    )
+    ).action()
 
 def finalize_experiment(session, request_session):
     # we had 4 practice trials and 60 experiment trials
     percentage = (sum([res.score for res in session.result_set.all()]) / session.experiment.rounds) * 100
     session.finish()
     session.save()
-    score_message =_("Well done! You've answered {} percent correctly!\n\nOne reason for the \
+    feedback = _("Well done! You've answered {} percent correctly!").format(percentage)
+    trivia = _("One reason for the \
         weird beep-tones in this test (instead of some nice drum-sound) is that it is used very often\
         in brain scanners, which make a lot of noise. The beep-sound helps people in the scanner \
-        to hear the rhythm really well.").format(percentage)
-    return final_action_with_optional_button(session, score_message, request_session)
+        to hear the rhythm really well.")
+    final_text = render_feedback_trivia(feedback, trivia)
+    return final_action_with_optional_button(session, final_text, request_session)
 

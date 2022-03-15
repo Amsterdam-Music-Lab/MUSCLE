@@ -14,6 +14,7 @@ class Result(models.Model):
     created_at = models.DateTimeField(default=timezone.now)
     expected_response = models.CharField(max_length=100, blank=True)
     given_response = models.CharField(max_length=100, blank=True)
+    comment = models.CharField(max_length=100, default='')
     score = models.FloatField(null=True, blank=True)
 
     # Contains data in json_format
@@ -35,5 +36,6 @@ class Result(models.Model):
             'score': self.score,
             'expected_response': self.expected_response,
             'given_response': self.given_response,
+            'comment': self.comment,
             'details': self.load_json_data(),
         }
