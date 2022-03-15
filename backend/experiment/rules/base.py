@@ -30,7 +30,7 @@ class Base(object):
 
     
     @staticmethod
-    def handle_results(session, section, data):
+    def handle_results(session, data):
         """ 
         if the given_result is an array of results, retrieve and save results for all of them
         to use, override hande_result and call this method
@@ -48,7 +48,6 @@ class Base(object):
             if not score:
                 score = 0
             result.given_response = form_element['value']
-            result.section = section
             result.save_json_data(data)
             result.score = score
             result.save()

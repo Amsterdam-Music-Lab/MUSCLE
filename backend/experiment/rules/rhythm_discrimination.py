@@ -118,10 +118,6 @@ class RhythmDiscrimination(Base):
             return 1
         else:
             return 0
-    
-    @staticmethod
-    def handle_result(session, section, data):
-        return Base.handle_results(session, section, data)
 
 
 def next_trial_actions(session, round_number, request_session):
@@ -280,4 +276,3 @@ def finalize_experiment(session, request_session):
         to hear the rhythm really well.")
     final_text = render_feedback_trivia(feedback, trivia)
     return final_action_with_optional_button(session, final_text, request_session)
-

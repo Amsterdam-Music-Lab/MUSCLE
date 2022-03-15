@@ -84,10 +84,6 @@ class HBat(Base):
             return 1
         else:
             return 0
-    
-    @staticmethod
-    def handle_result(session, section, data):
-        return Base.handle_results(session, section, data)
 
     @classmethod
     def next_trial_action(cls, session, trial_condition, level=1, *kwargs):

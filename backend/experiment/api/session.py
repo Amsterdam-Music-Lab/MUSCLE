@@ -93,17 +93,6 @@ def result(request):
     if session.is_finished():
         return HttpResponseServerError("Session has already finished")
 
-    # Get optional section
-    section_id = request.POST.get("section_id")
-    if section_id:
-        try:
-            section = Section.objects.get(
-                pk=section_id, playlist__id=session.playlist.id)
-        except Section.DoesNotExist:
-            raise Http404("Section does not exist")
-    else:
-        section = None
-
     # Create result based on POST data
     json_data = request.POST.get("json_data")
     if not json_data:
@@ -112,7 +101,7 @@ def result(request):
     try:
         result_data = json.loads(json_data)
         # Create a result from the data
-        result = session.experiment_rules().handle_result(session, section, result_data)
+        result = session.experiment_rules().handle_results(session, result_data)
         if not result:
             return HttpResponseServerError("Could not create result from data")
 

@@ -119,7 +119,6 @@ const Trial = ({ view, participant, session, playback, feedback_form, config, on
                 submitResult({
                 view,
                 // decision_time,
-                playback,
                 result,
             });
         }

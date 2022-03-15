@@ -98,6 +98,7 @@ const AutoPlay = ({instructions, config, sections, finishedPlaying, submitResult
                                     submitResult({
                                         type: "time_passed",
                                         decision_time: config.decision_time,
+                                        section: section.id
                                     });
                                 }
                             }}

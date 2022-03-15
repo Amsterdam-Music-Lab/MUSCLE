@@ -94,10 +94,6 @@ class DurationDiscrimination(Base):
     @classmethod
     def get_previous_condition(cls, last_result):
         return last_result.expected_response
-    
-    @staticmethod
-    def handle_result(session, section, data):
-        return Base.handle_results(session, section, data)
 
     @classmethod
     def get_response_explainer(cls, correct, correct_response, button_label=_('Next fragment')):

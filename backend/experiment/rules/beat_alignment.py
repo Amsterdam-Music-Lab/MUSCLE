@@ -181,7 +181,3 @@ class BeatAlignment(Base):
             return 1
         else:
             return 0
-    
-    @staticmethod
-    def handle_result(session, section, data):
-        return Base.handle_results(session, section, data)
