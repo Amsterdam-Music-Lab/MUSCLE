@@ -217,10 +217,10 @@ def plan_stimuli(session):
     metric = STIMULI['metric']
     nonmetric = STIMULI['nonmetric']
     tempi = [150, 160, 170, 180, 190, 200]
-    metric_deviants = [{'rhythm': m, 'tag_id': random.choice(tempi), 'group_id': 0} for m in metric['standard']]
-    metric_standard = [{'rhythm': m, 'tag_id': random.choice(tempi), 'group_id': 1} for m in metric['deviant']]
-    nonmetric_deviants = [{'rhythm': m, 'tag_id': random.choice(tempi), 'group_id': 0} for m in nonmetric['standard']]
-    nonmetric_standard = [{'rhythm': m, 'tag_id': random.choice(tempi), 'group_id': 1} for m in nonmetric['deviant']]
+    metric_deviants = [{'rhythm': m, 'tag_id': random.choice(tempi), 'group_id': 0} for m in metric['deviant']]
+    metric_standard = [{'rhythm': m, 'tag_id': random.choice(tempi), 'group_id': 1} for m in metric['standard']]
+    nonmetric_deviants = [{'rhythm': m, 'tag_id': random.choice(tempi), 'group_id': 0} for m in nonmetric['deviant']]
+    nonmetric_standard = [{'rhythm': m, 'tag_id': random.choice(tempi), 'group_id': 1} for m in nonmetric['standard']]
     practice = [
         {'rhythm': STIMULI['practice']['metric']['standard'], 'tag_id': random.choice(tempi), 'group_id': 1},
         {'rhythm': STIMULI['practice']['metric']['deviant'], 'tag_id': random.choice(tempi), 'group_id': 0},
