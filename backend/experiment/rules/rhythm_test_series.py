@@ -30,7 +30,7 @@ class RhythmTestSeries(Base):
                 ),
                 Explainer.step(
                     description=_(
-                        "You can get reimbursed for completing the entire experiment! Either by earning 5 euros, or by getting study credit (for psychology students at UvA only). You will get instructions for how to get paid or how to get your credit at the end of the experiment."),
+                        "You can get reimbursed for completing the entire experiment! Either by earning 6 euros, or by getting 1 research credit (for psychology students at UvA only). You will get instructions for how to get paid or how to get your credit at the end of the experiment."),
                 )
             ],
             button_label=_("Continue")
