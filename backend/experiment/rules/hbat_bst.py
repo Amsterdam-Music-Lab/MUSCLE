@@ -32,28 +32,23 @@ class BST(HBat):
                 ),
                 Explainer.step(
                     description=_(
-                        'During the experiment it will become more difficult to hear the difference.'),
+                        "Try to answer as accurately as possible, even if you're uncertain."),
                     number=3
                 ),
                 Explainer.step(
                     description=_(
-                        "Try to answer as accurately as possible, even if you're uncertain."),
+                        "Remember: try not to move or tap along with the sounds"),
                     number=4
                 ),
                 Explainer.step(
                     description=_(
-                        "In this test, you can answer as soon as you feel you know the answer."),
+                        "In this test, you can answer as soon as you feel you know the answer, but please wait until you are sure or the sound has stopped."),
                     number=5
                 ),
                 Explainer.step(
                     description=_(
-                        "NOTE: Please wait with answering until you are either sure, or the sound has stopped."),
-                    number=6
-                ),
-                Explainer.step(
-                    description=_(
                         'This test will take around 4 minutes to complete. Try to stay focused for the entire test!'),
-                    number=7
+                    number=6
                 )],
             button_label='Ok'
         )
