@@ -2347,53 +2347,53 @@ msgstr ""
 #: experiment/templates/final/test_series.html:3
 msgid ""
 "If you want to get your money or credit, make sure to follow these steps:"
-msgstr ""
+msgstr "Volg de volgende stappen om een vergoeding of proefpersoonpunt te ontvangen:"
 
 #: experiment/templates/final/test_series.html:5
 msgid "If you have not done the following steps already:"
-msgstr ""
+msgstr "Als je de volgende stappen nog niet hebt gedaan:"
 
 #: experiment/templates/final/test_series.html:7
 msgid "Make an account at "
-msgstr ""
+msgstr "Maak een account op "
 
 #: experiment/templates/final/test_series.html:8
 msgid "Look up the experiment. It is called: “Testing your sense of rhythm”"
-msgstr ""
+msgstr "Zoek het huidige experiment op: "Testing your sense of rhythm"."
 
 #: experiment/templates/final/test_series.html:9
 msgid "Click on “participate” "
-msgstr ""
+msgstr "Klik op "Ik wil meedoen!""
 
 #: experiment/templates/final/test_series.html:10
 msgid ""
 "Click on the experiment link in the browser (NOTE: it is really important "
 "that you do this, if you do not go to the AML website via the UvA lab "
 "portal, it does not register you as a participant)."
-msgstr ""
+msgstr "Klik op de link van het experiment in de browser (N.B.: Dit is heel belangrijk, omdat je niet als proefpersoon geregistreerd wordt als je niet via het UvA lab portaal naar de AML website gaat.)"
 
 #: experiment/templates/final/test_series.html:11
 msgid ""
 "You can now close the tab again, as you have already finished the experiment!"
-msgstr ""
+msgstr "Je kunt de site nu weer afsluiten, omdat je het experiment al hebt gedaan!"
 
 #: experiment/templates/final/test_series.html:14
 msgid ""
 "VERY IMPORTANT: Make sure to copy-paste the code below and save it "
 "somewhere. NOTE: Without the code, you will not be able to earn your "
 "reimbursement!"
-msgstr ""
+msgstr "BELANGRIJK: Kopieer de onderstaande code en sla hem ergens op. Zonder deze code kun je geen vergoeding krijgen!"
 
 #: experiment/templates/final/test_series.html:15
 msgid "Email the code to"
-msgstr ""
+msgstr "E-mail de code naar"
 
 #: experiment/templates/final/test_series.html:15
 msgid ""
 ", using the same email-address you used to register on the UvA lab website. "
 "If you are a student, add your student number. We will now make sure you get "
 "your reimbursement!"
-msgstr ""
+msgstr " met hetzelfde e-mailadres waarmee je geregistreerd bent op de UvA lab website. Voeg je studentnummer toe als je student bent. We zorgen er dan voor dat je een vergoeding ontvangt!"
 
 #~ msgid "Made it!"
 #~ msgstr "Je hebt het gehaald!"
