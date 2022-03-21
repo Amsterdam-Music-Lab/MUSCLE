@@ -147,12 +147,12 @@ class HBat(Base):
                 ),
                 Explainer.step(
                     description=_(
-                        "In this test, you can answer as soon as you feel you know the answer."),
+                        "Remember: try not to move or tap along with the sounds"),
                     number=4
                 ),
                 Explainer.step(
                     description=_(
-                        "NOTE: Please wait with answering until you are either sure, or the sound has stopped."),
+                        "In this test, you can answer as soon as you feel you know the answer, but please wait until you are sure or the sound has stopped."),
                     number=5
                 ),
                 Explainer.step(
