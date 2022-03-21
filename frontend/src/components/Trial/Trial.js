@@ -132,7 +132,7 @@ const Trial = ({ view, participant, session, playback, feedback_form, config, on
                 instructions={playback.instructions}
                 config={playback.config}
                 sections={playback.sections}
-                submitResult={submitResult}
+                submitResult={makeResult}
                 finishedPlaying={setFormActive}
             />)}
             {feedback_form && (

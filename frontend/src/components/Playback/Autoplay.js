@@ -82,7 +82,7 @@ const AutoPlay = ({instructions, config, sections, finishedPlaying, submitResult
                 <div>
                     <div className="circle">
                         <Circle
-                            key={instructions.during_presentation + config.decision_time}
+                            // key={instructions.during_presentation + config.decision_time}
                             running={running}
                             duration={config.decision_time}
                             color="white"
@@ -122,9 +122,9 @@ const AutoPlay = ({instructions, config, sections, finishedPlaying, submitResult
                     }
                     >
                     {/* Instruction */}
-                    <div className="instruction d-flex justify-content-center align-items-center">
+                    {/* <div className="instruction d-flex justify-content-center align-items-center">
                         <h3 className="text-center">{instructions.during_presentation}</h3>
-                    </div>
+                    </div> */}
                 </div>
             </div>
             )

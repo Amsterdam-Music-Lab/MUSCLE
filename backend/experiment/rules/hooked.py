@@ -3,13 +3,19 @@ from os.path import join
 from django.utils.translation import gettext_lazy as _
 from django.template.loader import render_to_string
 
+from .views.form import ChoiceQuestion, Form
+from .views import Trial, Consent, Final, Explainer, StartSession, Step, Playlist
+from .views.playback import Playback
 from .base import Base
+from .util.actions import combine_actions
 
 
 class Hooked(Base):
     """ Inherit from these rules to set up a variant
     of the Hooked on Music game
     """
+    ID = 'HOOKED'
+
     experiment_name = 'Hooked on Music'
     researcher = 'Dr John Ashley Burgoyne'
     researcher_contact = 'John Ashley Burgoyne (phone number: +31 20 525 7034; \
@@ -20,15 +26,14 @@ class Hooked(Base):
         """Create data for the first experiment rounds."""
 
         # 1. Explain game.
-        explainer = Explainer.action(
+        explainer = Explainer(
             instruction="How to Play",
             steps=[
                 Step(_("Do you recognise the song? Try to sing along. The faster you recognise songs, the more points you can earn.",)),
                 Step(_("Do you really know the song? Keep singing or imagining the music while the sound is muted. The music is still playing: you just can’t hear it!")),
                 Step(_("Was the music in the right place when the sound came back? Or did we jump to a different spot during the silence?"))
-            ],
-            step_numbers=True
-        )
+            ],   
+        ).action(step_numbers=True)
 
         # 2. Get informed consent.
         context = {
@@ -76,9 +81,35 @@ class Hooked(Base):
             )
         
         else:
-            result = Base.prepare_result(session, section)
+            last_result = session.result_set.order_by('-created_at').first()
+            section = session.section_from_unused_song()
+            result_pk = Base.prepare_result(session, section)
+            question = ChoiceQuestion(
+                question=_('Do you recognise this song?'),
+                key='recognize',
+                choices={
+                    'YES': _('YES'),
+                    'NO': _('NO')
+                },
+                view='BUTTON_ARRAY',
+                result_id=result_pk,
+                submits=True
+            )
+            form = Form([question])
+            play_config = {
+                'decision_time': 2,
+                'show_animation': True,
+                'auto_advance': True
+            }
+            playback = Playback('AUTOPLAY', [section], config=play_config)
+            view = Trial(
+                playback=playback,
+                feedback_form=form,
+                title=_('Hooked on Music')
+            )
+            return view.action()
     
-    def calculate_score(self, session, data):
+    def calculate_score(result, form_element):
         """Calculate score for given result data"""
         score = 0
 
