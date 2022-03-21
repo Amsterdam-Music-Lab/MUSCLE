@@ -2359,11 +2359,11 @@ msgstr "Maak een account op "
 
 #: experiment/templates/final/test_series.html:8
 msgid "Look up the experiment. It is called: “Testing your sense of rhythm”"
-msgstr "Zoek het huidige experiment op: "Testing your sense of rhythm"."
+msgstr "Zoek het huidige experiment op: “Testing your sense of rhythm”."
 
 #: experiment/templates/final/test_series.html:9
 msgid "Click on “participate” "
-msgstr "Klik op "Ik wil meedoen!""
+msgstr "Klik op “Ik wil meedoen!”"
 
 #: experiment/templates/final/test_series.html:10
 msgid ""
