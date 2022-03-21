@@ -99,21 +99,21 @@ class BeatAlignment(Base):
             skip_label=None
         ))
         return combine_actions(*actions)
-    
+
     @staticmethod
     def next_practice_action(playlist, count):
         """Get action data for the next practice round"""
         section = playlist.section_set.filter(name__startswith='ex{}'.format(count)).first()
         if not section:
             return None
-        
+
         if count==1:
             presentation_text = _(
                 "In this example the beeps are ALIGNED TO THE BEAT of the music.")
         else:
             presentation_text = _(
                 "In this example the beeps are NOT ALIGNED TO THE BEAT of the music.")
-        
+
         instructions = {
             'preload': '',
             'during_presentation': presentation_text
@@ -127,7 +127,7 @@ class BeatAlignment(Base):
         )
         config = {
             'listen_first': True,
-            'decision_time': section.duration + .5
+            'decision_time': section.duration + .7
         }
         return view.action(config)
 
@@ -149,7 +149,7 @@ class BeatAlignment(Base):
             view='BUTTON_ARRAY',
             result_id=result_pk,
             submits=True
-        )   
+        )
         form = Form([question])
         instructions = {
             'preload': '',
@@ -167,7 +167,7 @@ class BeatAlignment(Base):
         }
         action = view.action(config=config)
         return action
-    
+
     @staticmethod
     def calculate_score(result, form_element):
         # a result's score is used to keep track of how many correct results were in a row
@@ -181,7 +181,7 @@ class BeatAlignment(Base):
             return 1
         else:
             return 0
-    
+
     @staticmethod
     def handle_result(session, section, data):
         return Base.handle_results(session, section, data)

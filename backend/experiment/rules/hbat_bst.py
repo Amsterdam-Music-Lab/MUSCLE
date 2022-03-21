@@ -75,7 +75,7 @@ class BST(HBat):
             title=_('Meter detection')
         )
         config = {
-            'decision_time': section.duration + .5
+            'decision_time': section.duration + .7
         }
         return view.action(config)
 
@@ -100,7 +100,7 @@ class BST(HBat):
             steps=[],
             button_label=button_label
         )
-    
+
     @classmethod
     def finalize_experiment(cls, session, request_session):
         """ if either the max_turnpoints have been reached,

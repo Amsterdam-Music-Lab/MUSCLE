@@ -15,7 +15,7 @@ STIMULI = {
     'practice': {
         'metric': {
             'standard': '4 1 1 1 1 3 1',
-            'deviant': '1 1 2 4 2 2', 
+            'deviant': '1 1 2 4 2 2',
         },
         'nonmetric': {
             'standard': '4.5  1 1  3.5  3.5',
@@ -93,19 +93,19 @@ class RhythmDiscrimination(Base):
             explainer2,
             start_session
         )
-    
+
     @classmethod
     def next_round(cls, session, request_session=None):
         next_round_number = session.get_next_round()
 
         if next_round_number == 1:
             plan_stimuli(session)
-        
+
         actions = next_trial_actions(session, next_round_number, request_session)
         if isinstance(actions, dict):
             return actions
         return combine_actions(*actions)
-    
+
     @staticmethod
     def calculate_score(result, form_element):
         try:
@@ -117,7 +117,7 @@ class RhythmDiscrimination(Base):
             return 1
         else:
             return 0
-    
+
     @staticmethod
     def handle_result(session, section, data):
         return Base.handle_results(session, section, data)
@@ -133,10 +133,10 @@ def next_trial_actions(session, round_number, request_session):
     except KeyError as error:
         print('Missing plan key: %s' % str(error))
         return actions
-    
+
     if len(plan)==round_number-1:
         return finalize_experiment(session, request_session)
-    
+
     condition = plan[round_number-1]
 
     if session.final_score == 0:
@@ -161,7 +161,7 @@ def next_trial_actions(session, round_number, request_session):
                 explainer = start_experiment_explainer()
                 explainer.steps.pop(0)
                 actions.append(explainer.action(True))
-    
+
     try:
         section = session.playlist.section_set.filter(
             name__startswith=condition['rhythm']).filter(
@@ -203,7 +203,7 @@ def next_trial_actions(session, round_number, request_session):
     )
     config = {
             'listen_first': True,
-            'decision_time': section.duration + .5
+            'decision_time': section.duration + .7
     }
     actions.append(view.action(config))
     return actions
@@ -245,7 +245,7 @@ def intro_explainer():
         ],
         button_label='Ok'
     )
-    
+
 def response_explainer(correct, same, button_label=_('Next fragment')):
     if correct:
         if same:
