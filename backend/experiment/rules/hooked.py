@@ -74,6 +74,9 @@ class Hooked(Base):
                     rank=cls.rank(session)
                 )
             )
+        
+        else:
+            result = Base.prepare_result(session, section)
     
     def calculate_score(self, session, data):
         """Calculate score for given result data"""
