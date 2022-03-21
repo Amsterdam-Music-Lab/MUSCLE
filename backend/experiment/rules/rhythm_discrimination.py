@@ -243,8 +243,13 @@ def intro_explainer():
             ),
             Explainer.step(
                 description=_(
+                    "Remember: try not to move or tap along with the sounds"),
+                number=3
+            ),
+            Explainer.step(
+                description=_(
                     'This test will take around 6 minutes to complete. Try to stay focused for the entire test!'),
-                number=2
+                number=4
             )],
         button_label='Ok'
     )
@@ -275,7 +280,7 @@ def finalize_experiment(session, request_session):
     percentage = (sum([res.score for res in session.result_set.all()]) / session.experiment.rounds) * 100
     session.finish()
     session.save()
-    score_message =_("Well done! You've answered {} percent correctly!\n\nOne reason for the \
+    score_message =_("Well done! You've answered {} percent correctly!\n\nDid you know...\n\nOne reason for the \
         weird beep-tones in this test (instead of some nice drum-sound) is that it is used very often\
         in brain scanners, which make a lot of noise. The beep-sound helps people in the scanner \
         to hear the rhythm really well.").format(percentage)

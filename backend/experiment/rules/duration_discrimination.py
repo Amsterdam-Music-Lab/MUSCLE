@@ -193,8 +193,13 @@ class DurationDiscrimination(Base):
                 ),
                 Explainer.step(
                     description=_(
-                        'This test will take around 4 minutes to complete. Try to stay focused for the entire test!'),
+                        "Remember: try not to move or tap along with the sounds"),
                     number=4
+                ),
+                Explainer.step(
+                    description=_(
+                        'This test will take around 4 minutes to complete. Try to stay focused for the entire test!'),
+                    number=5
                 )],
             button_label='Ok'
         )
@@ -219,7 +224,7 @@ class DurationDiscrimination(Base):
         percentage = round((milliseconds / 600) * 100, 1)
         return _(
             "Well done! You heard the difference between two intervals that \
-            differed only {} percent in duration.\n\nWhen we research timing in \
+            differed only {} percent in duration.\n\nDid you know...\n\nWhen we research timing in \
             humans, we often find that people's accuracy in this task scales: \
             for shorter durations, people can hear even smaller differences than for longer durations.").format(percentage)
 

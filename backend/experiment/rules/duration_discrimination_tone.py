@@ -10,7 +10,7 @@ class DurationDiscriminationTone(DurationDiscrimination):
     @classmethod
     def get_score_message(cls, milliseconds):
         return _('Well done! You managed to hear the difference between tones that \
-                differed only {} milliseconds in length.\n\nHumans are really good at \
+                differed only {} milliseconds in length.\n\nDid you know... \n\nHumans are really good at \
                 hearing these small differences in durations, which is very handy \
                 if we want to be able to process rhythm in music.').format(milliseconds)
     

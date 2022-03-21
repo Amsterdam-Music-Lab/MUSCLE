@@ -37,8 +37,13 @@ class BeatAlignment(Base):
                 ),
                 Explainer.step(
                     description=_(
-                        "Listen carefully to this. Pay close attention to the description that accompanies each example."),
+                        "Remember: try not to move or tap along with the sounds"),
                     number=3
+                ),
+                Explainer.step(
+                    description=_(
+                        "Listen carefully to the following examples. Pay close attention to the description that accompanies each example."),
+                    number=4
                 )
             ], button_label=_('Ok')
             )
@@ -61,7 +66,7 @@ class BeatAlignment(Base):
                     ),
                 Explainer.step(
                     description=_(
-                        'Pay attention: a music fragment can occur several times. In total, this test will take around 6 minutes to complete. Try to stay focused for the entire duration!')
+                        'Note: a music fragment can occur several times. In total, this test will take around 6 minutes to complete. Try to stay focused for the entire duration, and remember not to tap or move along to the music!')
                     )
             ],
             button_label=_('Start'))
@@ -89,8 +94,8 @@ class BeatAlignment(Base):
             session.save()
 
             percentage = int((sum([r.score for r in session.result_set.all()]) / session.experiment.rounds) * 100)
-            score_message=_('Well done! You’ve answered {} percent correctly!\n\nDid you know that in the UK, over 140.000 people did \
-                this test when it was first developed?').format(percentage)
+            score_message=_('Well done! You’ve answered {} percent correctly!\n\nDid you know...\n\n In the UK, over 140.000 people did \
+                this test when it was first developed!').format(percentage)
             return final_action_with_optional_button(session, score_message, request_session)
 
         # Next round number, can be used to return different actions

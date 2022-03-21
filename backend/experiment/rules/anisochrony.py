@@ -109,8 +109,13 @@ class Anisochrony(DurationDiscrimination):
                 ),
                 Explainer.step(
                     description=_(
-                        'This test will take around 4 minutes to complete. Try to stay focused for the entire test!'),
+                        "Remember: try not to move or tap along with the sounds"),
                     number=4
+                ),
+                Explainer.step(
+                    description=_(
+                        'This test will take around 4 minutes to complete. Try to stay focused for the entire test!'),
+                    number=5
                 )],
             button_label='Ok'
         )
@@ -136,7 +141,7 @@ class Anisochrony(DurationDiscrimination):
     def get_score_message(cls, milliseconds):
         return _(
             "Well done! You heard the difference when we shifted a tone by {} percent. \
-            \n\nMany sounds in nature have regularity like a metronome. \
+            \n\nDid you know... \n\nMany sounds in nature have regularity like a metronome. \
             Our brains use this to process rhythm even better!").format(milliseconds)
     
     @classmethod
