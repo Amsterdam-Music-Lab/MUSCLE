@@ -8,4 +8,4 @@ class HBatBFIT(HBat):
 
     @classmethod
     def get_trivia(cls):
-        return _("Musicians often speed up or slow down rhythms to convey a particular feeling or groove. We call this ‘expressive timing’.")
+        return _("Did you know... \n\nMusicians often speed up or slow down rhythms to convey a particular feeling or groove. We call this ‘expressive timing’.")
