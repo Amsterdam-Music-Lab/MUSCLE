@@ -18,7 +18,7 @@ from .util.staircasing import register_turnpoint
 logger = logging.getLogger(__name__)
 
 class DurationDiscrimination(Base):
-    """ 
+    """
     These rules make use of the session's final_score to register turnpoints
     """
     ID = 'DURATION_DISCRIMINATION'
@@ -85,7 +85,7 @@ class DurationDiscrimination(Base):
                 return 2
         else:
             return 0
-    
+
     @classmethod
     def register_difficulty(cls, session):
         session.merge_json_data({'difficulty': cls.start_diff})
@@ -110,7 +110,7 @@ class DurationDiscrimination(Base):
             steps=[],
             button_label=button_label
         )
-    
+
     @classmethod
     def next_trial_action(cls, session, trial_condition, difficulty):
         """
@@ -149,7 +149,7 @@ class DurationDiscrimination(Base):
             submits=True
         )
         play_config = {
-            'decision_time': section.duration + .1,
+            'decision_time': section.duration + .7,
         }
         playback = Playback('AUTOPLAY', [section], instructions, play_config)
         form = Form([question])
@@ -160,7 +160,7 @@ class DurationDiscrimination(Base):
             config={'listen_first': True}
         )
         return view.action()
-    
+
     @classmethod
     def get_question_text(cls):
         return _("Is the second interval EQUALLY LONG as the first interval or LONGER?")
@@ -182,7 +182,7 @@ class DurationDiscrimination(Base):
             ],
             button_label='Ok'
         )
-    
+
     @classmethod
     def get_task_explanation(cls):
         return _("It's your job to decide if the second interval is EQUALLY LONG as the first interval, or LONGER.")
@@ -197,7 +197,7 @@ class DurationDiscrimination(Base):
         session.finish()
         session.save()
         return final_action_with_optional_button(session, final_text, request_session)
-    
+
     @classmethod
     def get_final_text(cls, difference):
         percentage = round(difference / 6000, 2)
@@ -211,7 +211,7 @@ class DurationDiscrimination(Base):
 
     @classmethod
     def staircasing_blocks(cls, session, trial_action_callback, request_session=None):
-        """ Calculate staircasing procedure in blocks of 5 trials with one catch trial 
+        """ Calculate staircasing procedure in blocks of 5 trials with one catch trial
         Arguments:
         - session: the session
         - trial_action_callback: function to build a trial action
@@ -269,7 +269,7 @@ class DurationDiscrimination(Base):
                         # register turnpoint
                         register_turnpoint(session, last_correct_result)
                     if session.final_score == cls.max_turnpoints + 1:
-                        # experiment is finished, None will be replaced by final view   
+                        # experiment is finished, None will be replaced by final view
                         action = None
                     else:
                         # register increasing difficulty
@@ -295,7 +295,7 @@ class DurationDiscrimination(Base):
     @classmethod
     def get_difficulty(cls, session, multiplier=1.0):
         '''
-         - multiplier: 
+         - multiplier:
             1.5 multiplier for difference *increase*
             1 if difference should stay the same
             0.5 for difference *decrease*
@@ -308,7 +308,7 @@ class DurationDiscrimination(Base):
         # return rounded difficulty
         # this uses the decimal module, since round() does not work entirely as expected
         return int(Decimal(str(current_difficulty)).quantize(Decimal('0'), rounding=ROUND_HALF_UP))
-    
+
     @classmethod
     def last_non_catch_correct(cls, previous_results):
         """ check if previous responses (before the current one, which is correct)

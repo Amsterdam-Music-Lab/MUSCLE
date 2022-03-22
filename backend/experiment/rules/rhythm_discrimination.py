@@ -16,7 +16,7 @@ STIMULI = {
     'practice': {
         'metric': {
             'standard': '4 1 1 1 1 3 1',
-            'deviant': '1 1 2 4 2 2', 
+            'deviant': '1 1 2 4 2 2',
         },
         'nonmetric': {
             'standard': '4.5  1 1  3.5  3.5',
@@ -94,19 +94,19 @@ class RhythmDiscrimination(Base):
             explainer2,
             start_session
         )
-    
+
     @classmethod
     def next_round(cls, session, request_session=None):
         next_round_number = session.get_next_round()
 
         if next_round_number == 1:
             plan_stimuli(session)
-        
+
         actions = next_trial_actions(session, next_round_number, request_session)
         if isinstance(actions, dict):
             return actions
         return combine_actions(*actions)
-    
+
     @staticmethod
     def calculate_score(result, form_element, data):
         try:
@@ -130,10 +130,10 @@ def next_trial_actions(session, round_number, request_session):
     except KeyError as error:
         print('Missing plan key: %s' % str(error))
         return actions
-    
+
     if len(plan)==round_number-1:
         return finalize_experiment(session, request_session)
-    
+
     condition = plan[round_number-1]
 
     if session.final_score == 0:
@@ -158,7 +158,7 @@ def next_trial_actions(session, round_number, request_session):
                 explainer = start_experiment_explainer()
                 explainer.steps.pop(0)
                 actions.append(explainer.action(True))
-    
+
     try:
         section = session.playlist.section_set.filter(
             name__startswith=condition['rhythm']).filter(
@@ -202,7 +202,11 @@ def next_trial_actions(session, round_number, request_session):
         title=_('Ryhthm discrimination: %s' %(title)),
         config={'listen_first': True}
     )
-    actions.append(view.action())
+    config = {
+            'listen_first': True,
+            'decision_time': section.duration + .7
+    }
+    actions.append(view.action(config))
     return actions
 
 def plan_stimuli(session):
@@ -214,10 +218,10 @@ def plan_stimuli(session):
     metric = STIMULI['metric']
     nonmetric = STIMULI['nonmetric']
     tempi = [150, 160, 170, 180, 190, 200]
-    metric_deviants = [{'rhythm': m, 'tag_id': random.choice(tempi), 'group_id': 0} for m in metric['standard']]
-    metric_standard = [{'rhythm': m, 'tag_id': random.choice(tempi), 'group_id': 1} for m in metric['deviant']]
-    nonmetric_deviants = [{'rhythm': m, 'tag_id': random.choice(tempi), 'group_id': 0} for m in nonmetric['standard']]
-    nonmetric_standard = [{'rhythm': m, 'tag_id': random.choice(tempi), 'group_id': 1} for m in nonmetric['deviant']]
+    metric_deviants = [{'rhythm': m, 'tag_id': random.choice(tempi), 'group_id': 0} for m in metric['deviant']]
+    metric_standard = [{'rhythm': m, 'tag_id': random.choice(tempi), 'group_id': 1} for m in metric['standard']]
+    nonmetric_deviants = [{'rhythm': m, 'tag_id': random.choice(tempi), 'group_id': 0} for m in nonmetric['deviant']]
+    nonmetric_standard = [{'rhythm': m, 'tag_id': random.choice(tempi), 'group_id': 1} for m in nonmetric['standard']]
     practice = [
         {'rhythm': STIMULI['practice']['metric']['standard'], 'tag_id': random.choice(tempi), 'group_id': 1},
         {'rhythm': STIMULI['practice']['metric']['deviant'], 'tag_id': random.choice(tempi), 'group_id': 0},
@@ -242,7 +246,7 @@ def intro_explainer():
         ],
         button_label='Ok'
     )
-    
+
 def response_explainer(correct, same, button_label=_('Next fragment')):
     if correct:
         if same:

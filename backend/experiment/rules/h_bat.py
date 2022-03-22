@@ -55,7 +55,7 @@ class HBat(Base):
                 session.result_set.order_by('-created_at').first().delete()
                 action = cls.finalize_experiment(session, request_session)
             return action
-        
+
     @classmethod
     def first_round(cls, experiment):
         explainer = cls.intro_explainer().action(True)
@@ -70,7 +70,7 @@ class HBat(Base):
             playlist,
             start_session
         )
-    
+
     @staticmethod
     def calculate_score(result, form_element, data):
         # a result's score is used to keep track of how many correct results were in a row
@@ -125,7 +125,10 @@ class HBat(Base):
             feedback_form=form,
             title=_('Beat acceleration')
         )
-        return view.action()
+        config = {
+            'decision_time': section.duration + .7
+        }
+        return view.action(config)
 
     @classmethod
     def intro_explainer(cls):
@@ -170,7 +173,7 @@ class HBat(Base):
                 steps=[],
                 button_label=button_label
             )
-        
+
     @classmethod
     def finalize_experiment(cls, session, request_session):
         """ if either the max_turnpoints have been reached,
@@ -185,7 +188,7 @@ class HBat(Base):
         session.finish()
         session.save()
         return final_action_with_optional_button(session, final_text, request_session)
-    
+
     @classmethod
     def get_trivia(cls):
         return _("When people listen to music, they often perceive an underlying regular pulse, like the woodblock \
@@ -244,7 +247,7 @@ def staircasing(session, trial_action_callback):
         else:
             # previous answer was correct
             # but we didn't yet get two correct in a row
-            level = get_previous_level(last_result) 
+            level = get_previous_level(last_result)
             action = trial_action_callback(
                 session, trial_condition, level)
     if not action:

@@ -78,7 +78,10 @@ class BST(HBat):
             feedback_form=form,
             title=_('Meter detection')
         )
-        return view.action()
+        config = {
+            'decision_time': section.duration + .7
+        }
+        return view.action(config)
 
     @classmethod
     def response_explainer(cls, correct, in2, button_label=_('Next fragment')):
@@ -101,7 +104,7 @@ class BST(HBat):
             steps=[],
             button_label=button_label
         )
-    
+
     @classmethod
     def finalize_experiment(cls, session, request_session):
         """ if either the max_turnpoints have been reached,

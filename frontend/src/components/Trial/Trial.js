@@ -1,8 +1,7 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useRef } from "react";
 
 import { getCurrentTime, getTimeSince } from "../../util/time";
 import { createProfile, createResult } from "../../API.js";
-import { MEDIA_ROOT } from "../../config";
 import FeedbackForm from "../FeedbackForm/FeedbackForm";
 import Playback from "../Playback/Playback";
 
@@ -105,7 +104,7 @@ const Trial = ({ view, participant, session, playback, feedback_form, config, on
         const decision_time = getTimeSince(startTime.current);
         const form = feedback_form.form;
 
-        if (result.type == 'time_passed') {
+        if (result.type === 'time_passed') {
             form.map( formElement => formElement.value = 'TIMEOUT')
         }
         
