@@ -17,25 +17,28 @@ const Trial = ({ view, participant, session, playback, feedback_form, config, on
 
     const submitted = useRef(false);
 
+    // This is used to keep track of the time a participant spends in this Trial view
+    const startTime = useRef(getCurrentTime());
+
+    // Time ref, stores the time without updating the view
+    const time = useRef(0);
+
+    const startTimer = () => {
+        startTime.current = getCurrentTime();
+    }
+
+    const getNextAction = () => {
+        if (config.auto_advance) {
+            onNext();
+        }
+        setFormActive(true);
+        return;
+    }
+
     // Session result
     const submitResult = async (result) => {
         // Add data to result buffer
         resultBuffer.current.push(result || {});
-
-        // // When time_pass_break is set true on the current state and result type
-        // // indicates that time has passed; skip any next rounds
-
-        // const timePassBreak =
-        //     state &&
-        //     state.time_pass_break &&
-        //     result.type === "time_passed";
-
-        // // Check if there is another round data available
-        // // if so, store the result data and call onNext
-        // if (state && state.next_round && !timePassBreak) {
-        //     onNext();
-        //     return;
-        // }
 
         // Merge result data with data from resultBuffer
         // NB: result data with same properties will be overwritten by later results
@@ -69,16 +72,6 @@ const Trial = ({ view, participant, session, playback, feedback_form, config, on
         // Clear resultBuffer
         resultBuffer.current = [];
 
-        // // Check for preload_section_url in (nested) action
-        // const preloadUrl = getSectionUrl(action);
-
-        // if (preloadUrl) {
-        //     // 100ms for fadeout
-        //     setTimeout(() => {
-        //         audio.load(MEDIA_ROOT + preloadUrl);
-        //     }, 20);
-        // }
-
         // Init new state from action
         loadState(action);
     };
@@ -103,23 +96,28 @@ const Trial = ({ view, participant, session, playback, feedback_form, config, on
 
     // Create result data in this wrapper function
     const makeResult = (result) => {
-        // const decision_time = result.type=='time_passed'? config.decision_time : getTimeSince(startTime.current);
         // Prevent multiple submissions
         if (submitted.current) {
             return;
         }
         submitted.current = true;
+
+        const decision_time = getTimeSince(startTime.current);
+        const form = feedback_form.form;
+
+        if (result.type == 'time_passed') {
+            form.map( formElement => formElement.value = 'TIMEOUT')
+        }
         
-        if (feedback_form.is_profile) {
+        if (feedback_form.is_profile) {            
             submitProfile({
-                result
+                form
             })
         }
         else {
-                submitResult({
-                view,
-                // decision_time,
-                result,
+            submitResult({
+                decision_time,
+                form,
             });
         }
     };
@@ -132,8 +130,10 @@ const Trial = ({ view, participant, session, playback, feedback_form, config, on
                 instructions={playback.instructions}
                 config={playback.config}
                 sections={playback.sections}
+                time={time}
                 submitResult={makeResult}
-                finishedPlaying={setFormActive}
+                startedPlaying={startTimer}
+                finishedPlaying={getNextAction}
             />)}
             {feedback_form && (
             <FeedbackForm

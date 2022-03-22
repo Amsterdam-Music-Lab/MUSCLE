@@ -1,4 +1,6 @@
 from os.path import join
+import random
+import math
 
 from django.utils.translation import gettext_lazy as _
 from django.template.loader import render_to_string
@@ -15,6 +17,8 @@ class Hooked(Base):
     of the Hooked on Music game
     """
     ID = 'HOOKED'
+    decision_time = 2
+    silence_time = 2
 
     experiment_name = 'Hooked on Music'
     researcher = 'Dr John Ashley Burgoyne'
@@ -82,62 +86,98 @@ class Hooked(Base):
         
         else:
             last_result = session.result_set.order_by('-created_at').first()
-            section = session.section_from_unused_song()
-            result_pk = Base.prepare_result(session, section)
-            question = ChoiceQuestion(
-                question=_('Do you recognise this song?'),
-                key='recognize',
-                choices={
-                    'YES': _('YES'),
-                    'NO': _('NO')
-                },
-                view='BUTTON_ARRAY',
-                result_id=result_pk,
-                submits=True
-            )
-            form = Form([question])
-            play_config = {
-                'decision_time': 2,
-                'show_animation': True,
-                'auto_advance': True
-            }
-            playback = Playback('AUTOPLAY', [section], config=play_config)
-            view = Trial(
-                playback=playback,
-                feedback_form=form,
-                title=_('Hooked on Music')
-            )
-            return view.action()
-    
-    def calculate_score(result, form_element):
-        """Calculate score for given result data"""
-        score = 0
-
-        # Calculate from the data object
-        # If requested keys don't exist, return None
-        try:
-
-            config = data['config']
-            result = data['result']
-
-            # Calculate scores based on result type
-            if result['type'] == 'time_passed':
-                score = math.ceil(-result['recognition_time'])
-
-            elif result['type'] == 'not_recognized':
-                score = 0
-
-            elif result['type'] == 'recognized':
-                # Get score
-                score = math.ceil(
-                    config['recognition_time'] - result['recognition_time']
+            if last_result and last_result.comment == 'recognized':
+                section = last_result.section
+                question = ChoiceQuestion(
+                    question=_('Did the track come back in the right place?'),
+                    key='sync',
+                    choices={
+                        'YES': _('YES'),
+                        'NO': _('NO')
+                    },
+                    view='BUTTON_ARRAY',
+                    result_id=last_result.id,
+                    submits=True
                 )
+                form = Form([question])
+                silence_config = {
+                    'decision_time': cls.silence_time,
+                    'show_animation': False,
+                    'auto_advance': True,
+                    'mute': True
+                }
+                playback = Playback('AUTOPLAY', [section])
+                silence_view = Trial(
+                    playback=playback,
+                    feedback_form=None,
+                    title=_('Hooked on Music')
+                )
+                continuation_correctness = random.randint(0, 1) == 1
+                last_result.expected_response = continuation_correctness
+                last_result.save()
+                continuation_offset = random.randint(100, 150) / 10 if not continuation_correctness else 0
+                playhead = cls.decision_time + cls.silence_time + continuation_offset
+                sync_config = {
+                    'decision_time': cls.decision_time,
+                    'show_animation': True,
+                    'auto_advance': True,
+                    'playhead': playhead
+                }
+                sync_view = Trial(
+                    playback=playback,
+                    feedback_form=form,
+                    title=_('Hooked on Music')
+                )
+                return combine_actions(silence_view.action(), sync_view.action())
+            else:    
+                section = session.section_from_unused_song()
+                result_pk = Base.prepare_result(session, section)
+                question = ChoiceQuestion(
+                    question=_('Do you recognise this song?'),
+                    key='recognize',
+                    choices={
+                        'YES': _('YES'),
+                        'NO': _('NO')
+                    },
+                    view='BUTTON_ARRAY',
+                    result_id=result_pk,
+                    submits=True
+                )
+                form = Form([question])
+                play_config = {
+                    'decision_time': cls.decision_time,
+                    'show_animation': True,
+                    'auto_advance': True
+                }
+                playback = Playback('AUTOPLAY', [section], config=play_config)
+                view = Trial(
+                    playback=playback,
+                    feedback_form=form,
+                    title=_('Hooked on Music')
+                )
+                return view.action()
+    
+    @classmethod
+    def calculate_score(cls, result, form_element, data):
+        """Calculate score for given result data"""
+        score = result.score
 
-                if config['continuation_correctness'] != result['continuation_correctness']:
-                    score *= -1
-
-        except KeyError as error:
-            print('KeyError: %s' % str(error))
-            return None
-
+        # Calculate from the form_element
+        if form_element.get('key') == 'recognize':
+            value = form_element.get('value')
+            if value == 'TIMEOUT':
+                score = math.ceil(-cls.decision_time)
+            elif value == 'NO':
+                score = 0
+            elif value == 'YES':
+                score = math.ceil(
+                    cls.decision_time - data.get('decision_time')
+                )
+                result.comment = 'recognized'
+                
+        else:
+            result.comment = 'synced'
+            if result.expected_response != form_element.value:
+                score *= -1
+        result.save()
         return score

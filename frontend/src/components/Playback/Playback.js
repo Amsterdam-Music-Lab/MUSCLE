@@ -9,7 +9,7 @@ const AUTOPLAY = "AUTOPLAY";
 const BUTTON = "BUTTON";
 const MULTIPLE = "MULTIPLE";
 
-const Playback = ({playerType, sections, instructions, config, submitResult, finishedPlaying}) => {
+const Playback = ({playerType, sections, instructions, config, time, submitResult, startedPlaying, finishedPlaying}) => {
 
     // render view
     const render = (view) => {
@@ -17,7 +17,9 @@ const Playback = ({playerType, sections, instructions, config, submitResult, fin
             sections,
             instructions,
             config,
+            time,
             submitResult,
+            startedPlaying,
             finishedPlaying
         };
 

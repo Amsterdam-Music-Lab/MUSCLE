@@ -14,7 +14,7 @@ const SILENCE = "SILENCE";
 const SYNC = "SYNC";
 
 
-const AutoPlay = ({instructions, config, sections, finishedPlaying, submitResult, className=''}) => {
+const AutoPlay = ({instructions, config, sections, time, startedPlaying, finishedPlaying, submitResult, className=''}) => {
     // player state
     const [state, setState] = useState({ view: PRELOAD });
     const [running, setRunning] = useState(config.auto_play);
@@ -23,11 +23,6 @@ const AutoPlay = ({instructions, config, sections, finishedPlaying, submitResult
     }
 
     const section = sections[0];
-
-    const startTime = useRef(getCurrentTime());
-
-    // Time ref, stores the time without updating the view
-    const time = useRef(0);
 
     const onCircleTimerTick = (t) => {
         time.current = t;
@@ -39,19 +34,10 @@ const AutoPlay = ({instructions, config, sections, finishedPlaying, submitResult
         switch (state.view) {
             case RECOGNIZE:
                 // Play audio at start time
-                audio.playFrom(0);
-                startTime.current = getCurrentTime();
-                break;
-            case SYNC:
-                // Play audio from sync start time
-                const syncStart = Math.max(
-                    0,
-                    state.result.recognition_time +
-                        config.silence_time +
-                        config.continuation_offset
-                );
-                audio.playFrom(syncStart);
-                startTime.current = getCurrentTime();
+                if (!config.mute) {
+                    audio.playFrom(Math.max(0, config.playhead));
+                }          
+                startedPlaying();
                 break;
             default:
             // nothing
@@ -92,7 +78,7 @@ const AutoPlay = ({instructions, config, sections, finishedPlaying, submitResult
                                 // Stop audio
                                 audio.pause();
                                 setRunning(false);
-                                finishedPlaying(true);
+                                finishedPlaying();
                                 if (config.auto_advance) {
                                     // Create a time_passed result
                                     submitResult({

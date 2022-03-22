@@ -19,9 +19,11 @@ class Playback(object):
         - config: define to override the following values:
             - ready_time: time before presentation of sound
             - decision_time: maximum time that participant can take (only relevant when auto_advance=True)
+            - playhead: from where the audio file should play (offset in seconds from start)
+            - mute: whether audio should be muted
             - auto_advance: whether the view will switch to next view after decision_time
             - auto_play: whether sound will start automatically
-            - show_animdation: whether to show an animation during playback '''
+            - show_animation: whether to show an animation during playback '''
     def __init__(self, player_type, sections, instructions=None, config=None):
         self.player_type = player_type
         self.sections = [{'id': s.id, 'url': s.absolute_url()} for s in sections]
@@ -31,7 +33,9 @@ class Playback(object):
         self.config = {
             'ready_time': 0,
             'decision_time': 5,
-            'show_animation': False
+            'playhead': 0,
+            'show_animation': False,
+            'mute': True
         }
         if config:
             self.config.update(config)

@@ -37,14 +37,15 @@ class Base(object):
         """
 
         from experiment.models import Result
-        for form_element in data['result']['form']:
+        form = data.pop('form')
+        for form_element in form:
             try:
                 result = Result.objects.get(pk=form_element['result_id'])
             except Result.DoesNotExist:
                 # Create new result
                 result = Result(session=session)
             # Calculate score
-            score = session.experiment_rules().calculate_score(result, form_element)
+            score = session.experiment_rules().calculate_score(result, form_element, data)
             if not score:
                 score = 0
             result.given_response = form_element['value']
