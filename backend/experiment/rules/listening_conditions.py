@@ -2,7 +2,7 @@
 from django.utils.translation import gettext_lazy as _
 
 from .base import Base
-from .views import CompositeView, Consent, Explainer, Step, Final, Playlist, StartSession
+from .views import Consent, Explainer, Step, Final, Playlist, StartSession, Trial
 from .views.form import ChoiceQuestion, Form
 from .util.actions import combine_actions, final_action_with_optional_button
 
