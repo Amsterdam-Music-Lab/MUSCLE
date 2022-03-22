@@ -171,12 +171,10 @@ class DurationDiscrimination(Base):
 
     @classmethod
     def intro_explanation(cls):
-        task_explanation = cls.get_task_explanation()
         return Explainer(
-            instruction=_(
-                'In this test you will hear two time durations for each trial, which are marked by two tones.'),
+            instruction=cls.get_introduction(),
             steps=[
-                Step(task_explanation),
+                Step(cls.get_task_explanation()),
                 Step(_(
                         'During the experiment it will become more difficult to hear the difference.')),
                 Step(_(
@@ -190,6 +188,10 @@ class DurationDiscrimination(Base):
     @classmethod
     def get_task_explanation(cls):
         return _("It's your job to decide if the second interval is EQUALLY LONG as the first interval, or LONGER.")
+
+    @classmethod
+    def get_introduction(cls):
+        return _('In this test you will hear two time durations for each trial, which are marked by two tones.')
 
     @classmethod
     def finalize_experiment(cls, session, request_session):
