@@ -6,7 +6,7 @@ from django.utils.translation import gettext_lazy as _
 from django.template.loader import render_to_string
 
 from .views.form import ChoiceQuestion, Form
-from .views import Trial, Consent, Final, Explainer, StartSession, Step, Playlist
+from .views import Trial, Consent, Final, Explainer, StartSession, Step, Playlist, Score
 from .views.playback import Playback
 from .base import Base
 from .util.actions import combine_actions
@@ -17,8 +17,8 @@ class Hooked(Base):
     of the Hooked on Music game
     """
     ID = 'HOOKED'
-    decision_time = 2
-    silence_time = 2
+    decision_time = 5
+    silence_time = 5
 
     experiment_name = 'Hooked on Music'
     researcher = 'Dr John Ashley Burgoyne'
@@ -36,7 +36,7 @@ class Hooked(Base):
                 Step(_("Do you recognise the song? Try to sing along. The faster you recognise songs, the more points you can earn.",)),
                 Step(_("Do you really know the song? Keep singing or imagining the music while the sound is muted. The music is still playing: you just can’t hear it!")),
                 Step(_("Was the music in the right place when the sound came back? Or did we jump to a different spot during the silence?"))
-            ],   
+            ],
         ).action(step_numbers=True)
 
         # 2. Get informed consent.
@@ -45,10 +45,10 @@ class Hooked(Base):
             'researcher': cls.researcher,
             'resarcher_contact': cls.researcher_contact
         }
-        consent_text = render_to_string(join('consent', 
+        consent_text = render_to_string(join('consent',
             'consent_hooked.html'), context=context)
         consent = Consent.action(consent_text)
-        
+
         # 3. Choose playlist.
         playlist = Playlist.action(experiment.playlists.all())
 
@@ -61,7 +61,7 @@ class Hooked(Base):
             playlist,
             start_session
         )
-    
+
     @classmethod
     def next_round(cls, session):
         """Get action data for the next round"""
@@ -83,11 +83,30 @@ class Hooked(Base):
                     rank=cls.rank(session)
                 )
             )
-        
+
         else:
             last_result = session.result_set.order_by('-created_at').first()
-            if last_result and last_result.comment == 'recognized':
+            if not last_result:
+                return cls.get_recognize_view(session)
+            if last_result.comment == 'recognized':
                 section = last_result.section
+                silence_config = {
+                    'decision_time': cls.silence_time,
+                    'show_animation': False,
+                    'mute': True
+                }
+                silence_playback = Playback('AUTOPLAY', [section], config=silence_config, instruction=_('Keep imagining the music'))
+                silence_view = Trial(
+                    playback=silence_playback,
+                    feedback_form=None,
+                    title=_('Hooked on Music'),
+                    config = {
+                        'auto_advance': True
+                    }
+                )
+                continuation_correctness = random.randint(0, 1) == 1
+                last_result.expected_response = continuation_correctness
+                last_result.save()
                 question = ChoiceQuestion(
                     question=_('Did the track come back in the right place?'),
                     key='sync',
@@ -100,63 +119,29 @@ class Hooked(Base):
                     submits=True
                 )
                 form = Form([question])
-                silence_config = {
-                    'decision_time': cls.silence_time,
-                    'show_animation': False,
-                    'auto_advance': True,
-                    'mute': True
-                }
-                playback = Playback('AUTOPLAY', [section])
-                silence_view = Trial(
-                    playback=playback,
-                    feedback_form=None,
-                    title=_('Hooked on Music')
-                )
-                continuation_correctness = random.randint(0, 1) == 1
-                last_result.expected_response = continuation_correctness
-                last_result.save()
                 continuation_offset = random.randint(100, 150) / 10 if not continuation_correctness else 0
                 playhead = cls.decision_time + cls.silence_time + continuation_offset
                 sync_config = {
                     'decision_time': cls.decision_time,
                     'show_animation': True,
-                    'auto_advance': True,
                     'playhead': playhead
                 }
+                sync_playback = Playback('AUTOPLAY', [section], config=sync_config)
                 sync_view = Trial(
-                    playback=playback,
+                    playback=sync_playback,
                     feedback_form=form,
-                    title=_('Hooked on Music')
+                    title=_('Hooked on Music'),
+                    config = {
+                        'auto_advance': True
+                    }
                 )
                 return combine_actions(silence_view.action(), sync_view.action())
-            else:    
-                section = session.section_from_unused_song()
-                result_pk = Base.prepare_result(session, section)
-                question = ChoiceQuestion(
-                    question=_('Do you recognise this song?'),
-                    key='recognize',
-                    choices={
-                        'YES': _('YES'),
-                        'NO': _('NO')
-                    },
-                    view='BUTTON_ARRAY',
-                    result_id=result_pk,
-                    submits=True
-                )
-                form = Form([question])
-                play_config = {
-                    'decision_time': cls.decision_time,
-                    'show_animation': True,
-                    'auto_advance': True
-                }
-                playback = Playback('AUTOPLAY', [section], config=play_config)
-                view = Trial(
-                    playback=playback,
-                    feedback_form=form,
-                    title=_('Hooked on Music')
-                )
-                return view.action()
-    
+            return combine_actions(
+                Score.action(session),
+                cls.get_recognize_view(session)
+            )
+
+
     @classmethod
     def calculate_score(cls, result, form_element, data):
         """Calculate score for given result data"""
@@ -174,10 +159,40 @@ class Hooked(Base):
                     cls.decision_time - data.get('decision_time')
                 )
                 result.comment = 'recognized'
-                
         else:
             result.comment = 'synced'
-            if result.expected_response != form_element.value:
+            if result.expected_response != form_element.get('value'):
                 score *= -1
         result.save()
         return score
+
+    @classmethod
+    def get_recognize_view(cls, session):
+        section = session.section_from_unused_song()
+        result_pk = Base.prepare_result(session, section)
+        question = ChoiceQuestion(
+            question=_('Do you recognise this song?'),
+            key='recognize',
+            choices={
+                'YES': _('YES'),
+                'NO': _('NO')
+            },
+            view='BUTTON_ARRAY',
+            result_id=result_pk,
+            submits=True
+        )
+        form = Form([question])
+        play_config = {
+            'decision_time': cls.decision_time,
+            'show_animation': True
+        }
+        playback = Playback('AUTOPLAY', [section], config=play_config, preload_message=_('Get ready!'))
+        view = Trial(
+            playback=playback,
+            feedback_form=form,
+            title=_('Hooked on Music'),
+            config={
+                'auto_advance': True
+            }
+        )
+        return view.action()

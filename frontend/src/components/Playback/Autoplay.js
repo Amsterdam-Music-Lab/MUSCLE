@@ -14,7 +14,7 @@ const SILENCE = "SILENCE";
 const SYNC = "SYNC";
 
 
-const AutoPlay = ({instructions, config, sections, time, startedPlaying, finishedPlaying, submitResult, className=''}) => {
+const AutoPlay = ({instruction, preloadMessage, config, sections, time, startedPlaying, finishedPlaying, submitResult, autoAdvance, className=''}) => {
     // player state
     const [state, setState] = useState({ view: PRELOAD });
     const [running, setRunning] = useState(config.auto_play);
@@ -27,7 +27,7 @@ const AutoPlay = ({instructions, config, sections, time, startedPlaying, finishe
     const onCircleTimerTick = (t) => {
         time.current = t;
     };
-    
+
 
     // Handle view logic
     useEffect(() => {
@@ -36,7 +36,7 @@ const AutoPlay = ({instructions, config, sections, time, startedPlaying, finishe
                 // Play audio at start time
                 if (!config.mute) {
                     audio.playFrom(Math.max(0, config.playhead));
-                }          
+                }
                 startedPlaying();
                 break;
             default:
@@ -55,7 +55,7 @@ const AutoPlay = ({instructions, config, sections, time, startedPlaying, finishe
         case PRELOAD:
             return (
                 <Preload
-                    instruction={instructions.preload}
+                    instruction={preloadMessage}
                     duration={config.ready_time}
                     url={MEDIA_ROOT + section.url}
                     onNext={() => {
@@ -68,7 +68,6 @@ const AutoPlay = ({instructions, config, sections, time, startedPlaying, finishe
                 <div>
                     <div className="circle">
                         <Circle
-                            // key={instructions.during_presentation + config.decision_time}
                             running={running}
                             duration={config.decision_time}
                             color="white"
@@ -79,7 +78,7 @@ const AutoPlay = ({instructions, config, sections, time, startedPlaying, finishe
                                 audio.pause();
                                 setRunning(false);
                                 finishedPlaying();
-                                if (config.auto_advance) {
+                                if (autoAdvance) {
                                     // Create a time_passed result
                                     submitResult({
                                         type: "time_passed",
@@ -90,7 +89,7 @@ const AutoPlay = ({instructions, config, sections, time, startedPlaying, finishe
                             }}
                         />
                         <div className="circle-content">
-                            {config.show_animation 
+                            {config.show_animation
                                 ? <ListenCircle
                                     duration={config.decision_time}
                                     histogramRunning={running}
@@ -108,14 +107,14 @@ const AutoPlay = ({instructions, config, sections, time, startedPlaying, finishe
                     }
                     >
                     {/* Instruction */}
-                    {/* <div className="instruction d-flex justify-content-center align-items-center">
-                        <h3 className="text-center">{instructions.during_presentation}</h3>
-                    </div> */}
+                    {instruction && (<div className="instruction d-flex justify-content-center align-items-center">
+                        <h3 className="text-center">{instruction}</h3>
+                    </div>)}
                 </div>
             </div>
             )
             default:
                 return <div>Unknown view: {state.view}</div>;
         }
-}   
+}
 export default AutoPlay;

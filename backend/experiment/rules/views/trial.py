@@ -1,13 +1,4 @@
-from django.utils.translation import gettext_lazy as _
-
 from .form import ChoiceQuestion, Form
-
-INSTRUCTIONS_DEFAULT = {
-    'during_presentation': _('Do you recognise this song?'),
-    'during_silence': _('Keep imagining the music'),
-    'after_trial': _('Did the track come back in the right place?'),
-    'preload': _('Get ready!')
-}
 
 class Trial(object):  # pylint: disable=too-few-public-methods
     """
@@ -44,12 +35,12 @@ class Trial(object):  # pylint: disable=too-few-public-methods
         }
         if config:
             self.config.update(config)
-                    
+
 
     def action(self):
         """
         Serialize data for experiment action
-        
+
         """
         # Create action
         action = {
@@ -61,5 +52,5 @@ class Trial(object):  # pylint: disable=too-few-public-methods
             action['playback'] = self.playback.action()
         if self.feedback_form:
             action['feedback_form'] = self.feedback_form.action()
-        
+
         return action

@@ -6,7 +6,7 @@ import PlayerSmall from "../PlayButton/PlayerSmall";
 import { MEDIA_ROOT } from "../../config";
 
 
-const MultiPlayer = ({sections, instructions, config}) => {
+const MultiPlayer = ({sections, instruction, config}) => {
     const cancelEvents = useRef(null);
     const [playing, setPlaying] = useState(0);
 
@@ -17,7 +17,7 @@ const MultiPlayer = ({sections, instructions, config}) => {
             cancelEvents.current = null;
         }
     };
-    
+
     const playMedia = (url) => {
         audio.pause();
 
