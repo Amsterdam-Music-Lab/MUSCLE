@@ -55,7 +55,7 @@ export const createConsent = async ({ experiment, participant }) => {
             qs.stringify({
                 json_data: JSON.stringify({result: {form: [
                     {
-                        question: "consent_" + experiment.slug,
+                        key: "consent_" + experiment.slug,
                         value: true,
                     }
                 ]}}),
