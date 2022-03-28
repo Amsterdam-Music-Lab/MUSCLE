@@ -104,17 +104,11 @@ class BST(HBat):
         """ if either the max_turnpoints have been reached,
         or if the section couldn't be found (outlier), stop the experiment
         """
-<<<<<<< HEAD
         loudness_diff = int(get_average_difference_level_based(session, 6, cls.start_diff))
         feedback = _("Well done! You heard the difference \
             when the accented tone was only {} dB louder.").format(loudness_diff)
         trivia = _("A march and a waltz are very common meters in Western music, but in other cultures, much more complex meters also exist!")
         final_text = render_feedback_trivia(feedback, trivia)
-=======
-        loudness_diff = int(get_average_difference_level_based(session, 6))
-        score_message = _("Well done! You heard the difference \
-            when the accented tone was only {} dB louder.\n\nDid you know... \n\nA march and a waltz are very common meters in Western music, but in other cultures, much more complex meters also exist!").format(loudness_diff)
->>>>>>> atserdamsma-patch-1-1
         session.finish()
         session.save()
         return final_action_with_optional_button(session, final_text, request_session)
