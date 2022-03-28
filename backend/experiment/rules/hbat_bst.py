@@ -25,15 +25,13 @@ class BST(HBat):
                         "It's your job to decide if the rhythm has a DUPLE METER (a MARCH) or a TRIPLE METER (a WALTZ).")),
                 Step(_("Every SECOND tone in a DUPLE meter (march) is louder and every THIRD tone in a TRIPLE meter (waltz) is louder.")),
                 Step(_(
-                        'During the experiment it will become more difficult to hear the difference.')),
-                Step(_(
                         "Try to answer as accurately as possible, even if you're uncertain.")),
+                Step(_("Remember: try not to move or tap along with the sounds")),
                 Step(_(
-                        "In this test, you can answer as soon as you feel you know the answer.")),
+                        "In this test, you can answer as soon as you feel you know the answer, but please wait until you are sure or the sound has stopped.")),
                 Step(_(
-                        "NOTE: Please wait with answering until you are either sure, or the sound has stopped.")),
-                Step(_(
-                        'This test will take around 4 minutes to complete. Try to stay focused for the entire test!'))],
+                        'This test will take around 4 minutes to complete. Try to stay focused for the entire test!'))
+            ],
             button_label='Ok'
         )
 
@@ -106,11 +104,17 @@ class BST(HBat):
         """ if either the max_turnpoints have been reached,
         or if the section couldn't be found (outlier), stop the experiment
         """
+<<<<<<< HEAD
         loudness_diff = int(get_average_difference_level_based(session, 6, cls.start_diff))
         feedback = _("Well done! You heard the difference \
             when the accented tone was only {} dB louder.").format(loudness_diff)
         trivia = _("A march and a waltz are very common meters in Western music, but in other cultures, much more complex meters also exist!")
         final_text = render_feedback_trivia(feedback, trivia)
+=======
+        loudness_diff = int(get_average_difference_level_based(session, 6))
+        score_message = _("Well done! You heard the difference \
+            when the accented tone was only {} dB louder.\n\nDid you know... \n\nA march and a waltz are very common meters in Western music, but in other cultures, much more complex meters also exist!").format(loudness_diff)
+>>>>>>> atserdamsma-patch-1-1
         session.finish()
         session.save()
         return final_action_with_optional_button(session, final_text, request_session)
