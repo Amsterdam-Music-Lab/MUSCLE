@@ -49,23 +49,12 @@ class BeatAlignment(Base):
         practice_rounds.append(Explainer(
             instruction=_('You will now hear 17 music fragments.'),
             steps=[
-<<<<<<< HEAD
                 Step(_(
                         'With each fragment you have to decide if the beeps are ALIGNED TO THE BEAT, or NOT ALIGNED TO THE BEAT of the music.')),
                 Step(_(
-                        'Pay attention: a music fragment can occur several times.')),
-                Step(_('In total, this test will take around 6 minutes to complete.')),
-                Step(_('Try to stay focused for the entire duration!'))
-=======
-                Explainer.step(
-                    description=_(
-                        'With each fragment you have to decide if the beeps are ALIGNED TO THE BEAT, or NOT ALIGNED TO THE BEAT of the music.')
-                    ),
-                Explainer.step(
-                    description=_(
-                        'Note: a music fragment can occur several times. In total, this test will take around 6 minutes to complete. Try to stay focused for the entire duration, and remember not to tap or move along to the music!')
-                    )
->>>>>>> atserdamsma-patch-1
+                        'Note: a music fragment can occur several times.')),
+                Step(_("Remember: try not to move or tap along with the sounds")),
+                Step(_('In total, this test will take around 6 minutes to complete. Try to stay focused for the entire duration!'))
             ],
             button_label=_('Start')).action(True)
         )
