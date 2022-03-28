@@ -73,6 +73,10 @@ class Experiment(models.Model):
             profile = session.participant.export_admin()
             session_finished = session.finished_at.isoformat() if session.finished_at else None
             for result in session.result_set.all():
+                try:
+                    section_name = result.section.name
+                except:
+                    section_name = None
                 row = {
                     'experiment_id': self.id, 
                     'experiment_name': self.name,
@@ -80,9 +84,10 @@ class Experiment(models.Model):
                     'participant_country': profile['country_code'],
                     'session_start': session.started_at.isoformat(),
                     'session_end': session_finished,
-                    'section_name': result.section.name,
+                    'section_name': section_name,
                     'result_created_at': result.created_at.isoformat(),
                     'result_score': result.score,
+                    'result_comment': result.comment,
                     'expected_response': result.expected_response,
                     'given_response': result.given_response
                 }

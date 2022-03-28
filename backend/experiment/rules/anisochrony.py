@@ -2,14 +2,11 @@ import logging
 from django.utils.translation import gettext_lazy as _
 
 from experiment.models import Section
-from .views import CompositeView, Explainer, Consent, StartSession, Playlist
+from .views import CompositeView, Explainer, Step, Consent, StartSession, Playlist
 from .views.form import ChoiceQuestion, Form
+from .util.actions import render_feedback_trivia
 from .base import Base
 from .duration_discrimination import DurationDiscrimination
-
-from .util.practice import get_practice_views, get_trial_condition_block, practice_explainer
-from .util.actions import combine_actions
-from .util.score import get_average_difference
 
 logger = logging.getLogger(__name__)
 
@@ -29,7 +26,7 @@ class Anisochrony(DurationDiscrimination):
         else:
             instruction = _(
                     'The tones were {}. Your answer was INCORRECT.').format(correct_response)
-        return Explainer.action(
+        return Explainer(
             instruction=instruction,
             steps=[],
             button_label=button_label
@@ -81,37 +78,26 @@ class Anisochrony(DurationDiscrimination):
         )
         config = {
             'listen_first': True,
-            'decision_time': section.duration + .5
+            'decision_time': section.duration + .7
         }
         action = view.action(config)
         return action
     
     @classmethod
     def intro_explanation(cls, *args):
-        return Explainer.action(
+        return Explainer(
             instruction=_(
                 'In this test you will hear a series of tones for each trial.'),
             steps=[
-                Explainer.step(
-                    description=_(
-                        "It's your job to decide of the tones sounds REGULAR or IRREGULAR"),
-                    number=1
-                ),
-                Explainer.step(
-                    description=_(
-                        'During the experiment it will become more difficult to hear the difference.'),
-                    number=2
-                ),
-                Explainer.step(
-                    description=_(
-                        "Try to answer as accurately as possible, even if you're uncertain."),
-                    number=3
-                ),
-                Explainer.step(
-                    description=_(
-                        'This test will take around 4 minutes to complete. Try to stay focused for the entire test!'),
-                    number=4
-                )],
+                Step(_(
+                        "It's your job to decide of the tones sounds REGULAR or IRREGULAR")),
+                Step(_(
+                        'During the experiment it will become more difficult to hear the difference.')),
+                Step(_(
+                        "Try to answer as accurately as possible, even if you're uncertain.")),
+                Step(_(
+                        'This test will take around 4 minutes to complete. Try to stay focused for the entire test!'))
+            ],
             button_label='Ok'
         )
 
@@ -133,11 +119,13 @@ class Anisochrony(DurationDiscrimination):
             return 0
     
     @classmethod
-    def get_score_message(cls, milliseconds):
-        return _(
-            "Well done! You heard the difference when we shifted a tone by {} percent. \
-            \n\nMany sounds in nature have regularity like a metronome. \
-            Our brains use this to process rhythm even better!").format(milliseconds)
+    def get_final_text(cls, difference):
+        percentage = round(difference / 6000, 2)
+        feedback = _(
+            "Well done! You heard the difference when we shifted a tone by {} percent.").format(percentage)
+        trivia = _("Many sounds in nature have regularity like a metronome. \
+            Our brains use this to process rhythm even better!")
+        return render_feedback_trivia(feedback, trivia)
     
     @classmethod
     def get_difficulty(cls, session, multiplier=1.0):

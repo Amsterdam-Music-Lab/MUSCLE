@@ -5,10 +5,10 @@ import copy
 from django.utils.translation import gettext_lazy as _
 
 from .base import Base
-from .views import CompositeView, Explainer, Consent, StartSession, Question
+from .views import CompositeView, Explainer, Step, Consent, StartSession, Question
 from .views.form import ChoiceQuestion, Form
 from .util.questions import question_by_key
-from .util.actions import combine_actions, final_action_with_optional_button
+from .util.actions import combine_actions, final_action_with_optional_button, render_feedback_trivia
 
 logger = logging.getLogger(__name__)
 
@@ -22,26 +22,19 @@ class BeatAlignment(Base):
         """Create data for the first experiment rounds"""
 
         # 1. General explainer
-        explainer = Explainer.action(
+        explainer = Explainer(
             instruction=_(
                 "This test measures your ability to recognize the beat in a piece of music."),
             steps=[
-                Explainer.step(
-                    description=_(
-                        "Listen to the following music fragments. In each fragment you hear a series of beeps."),
-                    number=1),
-                Explainer.step(
-                    description=_(
-                        "It's you job to decide if the beeps are ALIGNED TO THE BEAT or NOT ALIGNED TO THE BEAT of the music."),
-                    number=2
-                ),
-                Explainer.step(
-                    description=_(
-                        "Listen carefully to this. Pay close attention to the description that accompanies each example."),
-                    number=3
-                )
-            ], button_label=_('Ok')
-            )
+                Step(_(
+                        "Listen to the following music fragments. In each fragment you hear a series of beeps.")),
+                Step(_(
+                        "It's you job to decide if the beeps are ALIGNED TO THE BEAT or NOT ALIGNED TO THE BEAT of the music.")),
+                Step(_(
+                        "Listen carefully to this. Pay close attention to the description that accompanies each example."))
+            ],
+            button_label=_('Ok')
+            ).action(True)
 
         # 2. Consent with default text
         consent = Consent.action()
@@ -52,19 +45,17 @@ class BeatAlignment(Base):
         for i in range(1,4):
             this_round = BeatAlignment.next_practice_action(practice_list, i)
             practice_rounds.append(copy.deepcopy(this_round))
-        practice_rounds.append(Explainer.action(
+        practice_rounds.append(Explainer(
             instruction=_('You will now hear 17 music fragments.'),
             steps=[
-                Explainer.step(
-                    description=_(
-                        'With each fragment you have to decide if the beeps are ALIGNED TO THE BEAT, or NOT ALIGNED TO THE BEAT of the music.')
-                    ),
-                Explainer.step(
-                    description=_(
-                        'Pay attention: a music fragment can occur several times. In total, this test will take around 6 minutes to complete. Try to stay focused for the entire duration!')
-                    )
+                Step(_(
+                        'With each fragment you have to decide if the beeps are ALIGNED TO THE BEAT, or NOT ALIGNED TO THE BEAT of the music.')),
+                Step(_(
+                        'Pay attention: a music fragment can occur several times.')),
+                Step(_('In total, this test will take around 6 minutes to complete.')),
+                Step(_('Try to stay focused for the entire duration!'))
             ],
-            button_label=_('Start'))
+            button_label=_('Start')).action(True)
         )
 
         # 5. Start session
@@ -87,11 +78,12 @@ class BeatAlignment(Base):
             # Finish session
             session.finish()
             session.save()
-
             percentage = int((sum([r.score for r in session.result_set.all()]) / session.experiment.rounds) * 100)
-            score_message=_('Well done! You’ve answered {} percent correctly!\n\nDid you know that in the UK, over 140.000 people did \
-                this test when it was first developed?').format(percentage)
-            return final_action_with_optional_button(session, score_message, request_session)
+            feedback = _('Well done! You’ve answered {} percent correctly!').format(percentage)
+            trivia = _('Did you know that in the UK, over 140.000 people did \
+                this test when it was first developed?')
+            final_text = render_feedback_trivia(feedback, trivia)
+            return final_action_with_optional_button(session, final_text, request_session)
 
         # Next round number, can be used to return different actions
         next_round_number = session.get_next_round()
@@ -107,21 +99,21 @@ class BeatAlignment(Base):
             skip_label=None
         ))
         return combine_actions(*actions)
-    
+
     @staticmethod
     def next_practice_action(playlist, count):
         """Get action data for the next practice round"""
         section = playlist.section_set.filter(name__startswith='ex{}'.format(count)).first()
         if not section:
             return None
-        
+
         if count==1:
             presentation_text = _(
                 "In this example the beeps are ALIGNED TO THE BEAT of the music.")
         else:
             presentation_text = _(
                 "In this example the beeps are NOT ALIGNED TO THE BEAT of the music.")
-        
+
         instructions = {
             'preload': '',
             'during_presentation': presentation_text
@@ -135,7 +127,7 @@ class BeatAlignment(Base):
         )
         config = {
             'listen_first': True,
-            'decision_time': section.duration + .5
+            'decision_time': section.duration + .7
         }
         return view.action(config)
 
@@ -157,7 +149,7 @@ class BeatAlignment(Base):
             view='BUTTON_ARRAY',
             result_id=result_pk,
             submits=True
-        )   
+        )
         form = Form([question])
         instructions = {
             'preload': '',
@@ -175,7 +167,7 @@ class BeatAlignment(Base):
         }
         action = view.action(config=config)
         return action
-    
+
     @staticmethod
     def calculate_score(result, form_element):
         # a result's score is used to keep track of how many correct results were in a row
@@ -189,7 +181,7 @@ class BeatAlignment(Base):
             return 1
         else:
             return 0
-    
+
     @staticmethod
     def handle_result(session, section, data):
         return Base.handle_results(session, section, data)

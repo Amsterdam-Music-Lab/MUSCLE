@@ -1,15 +1,17 @@
 import logging
+from decimal import Decimal, ROUND_HALF_UP
 
 from django.utils.translation import gettext_lazy as _
 
 from .base import Base
 from experiment.models import Section
-from .views import CompositeView, Consent, Explainer, Playlist, StartSession
+from .views import CompositeView, Consent, Explainer, Step, Playlist, StartSession
 from .views.form import ChoiceQuestion, Form
 
 from .util.practice import get_practice_views, practice_explainer, get_trial_condition, get_trial_condition_block
-from .util.actions import combine_actions, final_action_with_optional_button
+from .util.actions import combine_actions, final_action_with_optional_button, render_feedback_trivia
 from .util.score import get_average_difference_level_based
+from .util.staircasing import register_turnpoint
 
 logger = logging.getLogger(__name__)
 
@@ -17,12 +19,11 @@ MAX_TURNPOINTS = 6
 
 class HBat(Base):
     ID = 'H_BAT'
+    start_diff = 20
 
     @classmethod
     def next_round(cls, session, request_session=None):
-        if session.final_score == MAX_TURNPOINTS+1:
-            return cls.finalize_experiment(session, request_session)
-        elif session.final_score == 0:
+        if session.final_score == 0:
             # we are practicing
             actions = get_practice_views(
                 session,
@@ -39,21 +40,26 @@ class HBat(Base):
         trial_condition = get_trial_condition(2)
         if not previous_results.count():
             # first trial
-            return cls.next_trial_action(session, trial_condition, 1)
-
+            action = cls.next_trial_action(session, trial_condition, 1)
+            if not action:
+                # participant answered first trial incorrectly (outlier)
+                action = cls.finalize_experiment(session, request_session)
         else:
             action = staircasing(session, cls.next_trial_action)
             if not action:
                 # action is None if the audio file doesn't exist
-                return cls.finalize_experiment(session, request_session)
-            else:
-                return action
-        
+                action = cls.finalize_experiment(session, request_session)
+            if session.final_score == MAX_TURNPOINTS+1:
+                # delete result created before this check
+                session.result_set.order_by('-created_at').first().delete()
+                action = cls.finalize_experiment(session, request_session)
+            return action
+
     @classmethod
     def first_round(cls, experiment):
-        explainer = cls.intro_explainer()
+        explainer = cls.intro_explainer().action(True)
         consent = Consent.action()
-        explainer2 = practice_explainer()
+        explainer2 = practice_explainer().action()
         playlist = Playlist.action(experiment.playlists.all())
         start_session = StartSession.action()
         return combine_actions(
@@ -63,7 +69,7 @@ class HBat(Base):
             playlist,
             start_session
         )
-    
+
     @staticmethod
     def calculate_score(result, form_element):
         # a result's score is used to keep track of how many correct results were in a row
@@ -77,7 +83,7 @@ class HBat(Base):
             return 1
         else:
             return 0
-    
+
     @staticmethod
     def handle_result(session, section, data):
         return Base.handle_results(session, section, data)
@@ -120,46 +126,29 @@ class HBat(Base):
             title=_('Beat acceleration')
         )
         config = {
-            'decision_time': section.duration + .5
+            'decision_time': section.duration + .7
         }
         return view.action(config)
 
     @classmethod
     def intro_explainer(cls):
-        return Explainer.action(
+        return Explainer(
             instruction=_(
                 'In this test you will hear a series of tones for each trial.'),
             steps=[
-                Explainer.step(
-                    description=_(
-                        "It's your job to decide if the rhythm goes SLOWER of FASTER."),
-                    number=1
-                ),
-                Explainer.step(
-                    description=_(
-                        'During the experiment it will become more difficult to hear the difference.'),
-                    number=2
-                ),
-                Explainer.step(
-                    description=_(
-                        "Try to answer as accurately as possible, even if you're uncertain."),
-                    number=3
-                ),
-                Explainer.step(
-                    description=_(
-                        "In this test, you can answer as soon as you feel you know the answer."),
-                    number=4
-                ),
-                Explainer.step(
-                    description=_(
-                        "NOTE: Please wait with answering until you are either sure, or the sound has stopped."),
-                    number=5
-                ),
-                Explainer.step(
-                    description=_(
-                        'This test will take around 4 minutes to complete. Try to stay focused for the entire test!'),
-                    number=6
-                )],
+                Step(_(
+                        "It's your job to decide if the rhythm goes SLOWER of FASTER.")),
+                Step(_(
+                        'During the experiment it will become more difficult to hear the difference.')),
+                Step(_(
+                        "Try to answer as accurately as possible, even if you're uncertain.")),
+                Step(_(
+                        "In this test, you can answer as soon as you feel you know the answer.")),
+                Step(_(
+                        "NOTE: Please wait with answering until you are either sure, or the sound has stopped.")),
+                Step(_(
+                        'This test will take around 4 minutes to complete. Try to stay focused for the entire test!'))
+                ],
             button_label='Ok'
         )
 
@@ -179,24 +168,27 @@ class HBat(Base):
                 else:
                     instruction = _(
                         'The rhythm went SLOWER. Your response was INCORRECT.')
-            return Explainer.action(
+            return Explainer(
                 instruction=instruction,
                 steps=[],
                 button_label=button_label
             )
-        
+
     @classmethod
     def finalize_experiment(cls, session, request_session):
         """ if either the max_turnpoints have been reached,
         or if the section couldn't be found (outlier), stop the experiment
         """
-        percentage = int((get_average_difference_level_based(session, 6) / 500) * 100)
-        score_message = _("Well done! You heard the difference when the rhythm was \
-            speeding up or slowing down with only %(percent)d percent!\n\n %(trivia)s") % {'percent': percentage, 'trivia': cls.get_trivia()}
+        average_diff = get_average_difference_level_based(session, 6, cls.start_diff)
+        percentage = float(Decimal(str(average_diff / 5)).quantize(Decimal('.01'), rounding=ROUND_HALF_UP))
+        feedback = _("Well done! You heard the difference when the rhythm was \
+                    speeding up or slowing down with only {} percent!").format(percentage)
+        trivia = cls.get_trivia()
+        final_text = render_feedback_trivia(feedback, trivia)
         session.finish()
         session.save()
-        return final_action_with_optional_button(session, score_message, request_session)
-    
+        return final_action_with_optional_button(session, final_text, request_session)
+
     @classmethod
     def get_trivia(cls):
         return _("When people listen to music, they often perceive an underlying regular pulse, like the woodblock \
@@ -222,12 +214,10 @@ def staircasing(session, trial_action_callback):
         # the previous response was incorrect
         json_data = session.load_json_data()
         direction = json_data.get('direction')
+        last_result.comment = 'decrease difficulty'
+        last_result.save()
         if direction == 'increase':
-            # set previous score to 4, to mark the turnpoint
-            last_result.score = 4
-            last_result.save()
-            # register turnpoint
-            session.final_score += 1
+            register_turnpoint(session, last_result)
         # register decreasing difficulty
         session.merge_json_data({'direction': 'decrease'})
         session.save()
@@ -239,17 +229,15 @@ def staircasing(session, trial_action_callback):
             # this is the second trial, so the level is still 1
             action = trial_action_callback(
                 session, trial_condition, 1)
-        # previous response was correct
-        elif previous_results.all()[1].score == 1:
+        elif previous_results.all()[1].score == 1 and not previous_results.all()[1].comment:
             # the previous two responses were correct
             json_data = session.load_json_data()
             direction = json_data.get('direction')
+            last_result.comment = 'increase difficulty'
+            last_result.save()
             if direction == 'decrease':
-                # set previous score to 4, to mark the turnpoint
-                last_result = previous_results.first()
-                last_result.score = 4
-                last_result.save()
-                session.final_score += 1
+                # mark the turnpoint
+                register_turnpoint(session, last_result)
             # register increasing difficulty
             session.merge_json_data({'direction': 'increase'})
             session.save()
@@ -259,7 +247,7 @@ def staircasing(session, trial_action_callback):
         else:
             # previous answer was correct
             # but we didn't yet get two correct in a row
-            level = get_previous_level(last_result) 
+            level = get_previous_level(last_result)
             action = trial_action_callback(
                 session, trial_condition, level)
     if not action:
