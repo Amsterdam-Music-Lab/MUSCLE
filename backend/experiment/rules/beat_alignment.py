@@ -30,8 +30,9 @@ class BeatAlignment(Base):
                         "Listen to the following music fragments. In each fragment you hear a series of beeps.")),
                 Step(_(
                         "It's you job to decide if the beeps are ALIGNED TO THE BEAT or NOT ALIGNED TO THE BEAT of the music.")),
+                Step(_("Remember: try not to move or tap along with the sounds")),
                 Step(_(
-                        "Listen carefully to this. Pay close attention to the description that accompanies each example."))
+                        "Listen carefully to the following examples. Pay close attention to the description that accompanies each example."))
             ],
             button_label=_('Ok')
             ).action(True)
@@ -48,12 +49,23 @@ class BeatAlignment(Base):
         practice_rounds.append(Explainer(
             instruction=_('You will now hear 17 music fragments.'),
             steps=[
+<<<<<<< HEAD
                 Step(_(
                         'With each fragment you have to decide if the beeps are ALIGNED TO THE BEAT, or NOT ALIGNED TO THE BEAT of the music.')),
                 Step(_(
                         'Pay attention: a music fragment can occur several times.')),
                 Step(_('In total, this test will take around 6 minutes to complete.')),
                 Step(_('Try to stay focused for the entire duration!'))
+=======
+                Explainer.step(
+                    description=_(
+                        'With each fragment you have to decide if the beeps are ALIGNED TO THE BEAT, or NOT ALIGNED TO THE BEAT of the music.')
+                    ),
+                Explainer.step(
+                    description=_(
+                        'Note: a music fragment can occur several times. In total, this test will take around 6 minutes to complete. Try to stay focused for the entire duration, and remember not to tap or move along to the music!')
+                    )
+>>>>>>> atserdamsma-patch-1
             ],
             button_label=_('Start')).action(True)
         )
@@ -80,7 +92,7 @@ class BeatAlignment(Base):
             session.save()
             percentage = int((sum([r.score for r in session.result_set.all()]) / session.experiment.rounds) * 100)
             feedback = _('Well done! You’ve answered {} percent correctly!').format(percentage)
-            trivia = _('Did you know that in the UK, over 140.000 people did \
+            trivia = _('In the UK, over 140.000 people did \
                 this test when it was first developed?')
             final_text = render_feedback_trivia(feedback, trivia)
             return final_action_with_optional_button(session, final_text, request_session)

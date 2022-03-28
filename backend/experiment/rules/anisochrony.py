@@ -16,7 +16,7 @@ class Anisochrony(DurationDiscrimination):
     practice_diff = 270000
     max_turnpoints = 8
     catch_condition = 'REGULAR'
-    
+
     @classmethod
     def get_response_explainer(cls, correct, correct_response, button_label=_('Next fragment')):
         correct_response = _('REGULAR') if correct_response=='REGULAR' else _('IRREGULAR')
@@ -31,7 +31,7 @@ class Anisochrony(DurationDiscrimination):
             steps=[],
             button_label=button_label
         )
-    
+
     @classmethod
     def next_trial_action(cls, session, trial_condition, difficulty):
         """
@@ -82,7 +82,7 @@ class Anisochrony(DurationDiscrimination):
         }
         action = view.action(config)
         return action
-    
+
     @classmethod
     def intro_explanation(cls, *args):
         return Explainer(
@@ -95,6 +95,8 @@ class Anisochrony(DurationDiscrimination):
                         'During the experiment it will become more difficult to hear the difference.')),
                 Step(_(
                         "Try to answer as accurately as possible, even if you're uncertain.")),
+                Step(_(
+                        "Remember: try not to move or tap along with the sounds")),
                 Step(_(
                         'This test will take around 4 minutes to complete. Try to stay focused for the entire test!'))
             ],
@@ -117,7 +119,7 @@ class Anisochrony(DurationDiscrimination):
                 return 2
         else:
             return 0
-    
+
     @classmethod
     def get_final_text(cls, difference):
         percentage = round(difference / 6000, 2)
@@ -126,7 +128,7 @@ class Anisochrony(DurationDiscrimination):
         trivia = _("Many sounds in nature have regularity like a metronome. \
             Our brains use this to process rhythm even better!")
         return render_feedback_trivia(feedback, trivia)
-    
+
     @classmethod
     def get_difficulty(cls, session, multiplier=1.0):
         if session.final_score == 0:

@@ -199,7 +199,7 @@ def next_trial_actions(session, round_number, request_session):
         section=section,
         feedback_form=form.action(),
         instructions=instructions,
-        title=_('Ryhthm discrimination: %s' %(title))
+        title=_('Rhythm discrimination: %s' %(title))
     )
     config = {
             'listen_first': True,
@@ -240,6 +240,7 @@ def intro_explainer():
         steps=[
             Step(_(
                     "Your task is to decide whether this third rhythm is the SAME as the first two rhythms or DIFFERENT.")),
+            Step(_("Remember: try not to move or tap along with the sounds")),
             Step(_(
                     'This test will take around 6 minutes to complete. Try to stay focused for the entire test!'))
         ],

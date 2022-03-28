@@ -179,6 +179,7 @@ class DurationDiscrimination(Base):
                         'During the experiment it will become more difficult to hear the difference.')),
                 Step(_(
                         "Try to answer as accurately as possible, even if you're uncertain.")),
+                Step(_("Remember: try not to move or tap along with the sounds")),
                 Step(_(
                         'This test will take around 4 minutes to complete. Try to stay focused for the entire test!'))
             ],

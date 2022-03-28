@@ -28,12 +28,12 @@ class RhythmTestSeries(Base):
                         "You will get a short explanation and a practice trial for each little task."),
                 ),
                 Step(_(
-                        "You can get reimbursed for completing the entire experiment! Either by earning 5 euros, or by getting study credit (for psychology students at UvA only). You will get instructions for how to get paid or how to get your credit at the end of the experiment."),
+                        "You can get reimbursed for completing the entire experiment! Either by earning 6 euros, or by getting 1 research credit (for psychology students at UvA only). You will get instructions for how to get paid or how to get your credit at the end of the experiment."),
                 )
             ],
             button_label=_("Continue")
         ).action()
-    
+
     @classmethod
     def first_round(cls, experiment):
         """Create data for the first experiment rounds."""
@@ -48,7 +48,7 @@ class RhythmTestSeries(Base):
             cls.intro_explainer(),
             start_session
         )
-    
+
     @classmethod
     def next_round(cls, session):
         data = session.load_json_data()
@@ -57,10 +57,10 @@ class RhythmTestSeries(Base):
         if not experiment_data:
             experiment_data = prepare_experiments(session)
         if experiment_number == len(experiment_data):
-            rendered = render_to_string(join('final', 
+            rendered = render_to_string(join('final',
             'test_series.html'))
             return Final.action(
-                session, 
+                session,
                 title==_("Thank you very much for participating!"),
                 score_template=rendered,
                 show_participant_link=True,
@@ -75,7 +75,7 @@ class RhythmTestSeries(Base):
 
 
 def prepare_experiments(session):
-    """ Given the session and a list of experiments, generate a random order of experiments 
+    """ Given the session and a list of experiments, generate a random order of experiments
     merge this into the session data.
     """
     lists = get_experiment_lists(session)
@@ -117,4 +117,3 @@ def get_experiment_lists(session):
 def get_associated_experiments(pk_list):
     from ..models import Experiment
     return [Experiment.objects.get(pk=pk).slug for pk in pk_list]
- 

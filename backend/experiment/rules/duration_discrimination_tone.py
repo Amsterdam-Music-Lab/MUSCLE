@@ -40,7 +40,7 @@ class DurationDiscriminationTone(DurationDiscrimination):
 
     @classmethod
     def get_introduction(cls):
-        return _('In this test you will hear two time durations for each trial, which are marked by two tones.')
+        return _('In this test you will hear two tones on each trial.')
 
     @classmethod
     def get_task_explanation(cls):

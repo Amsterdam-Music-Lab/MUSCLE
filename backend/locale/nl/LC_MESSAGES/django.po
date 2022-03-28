@@ -862,7 +862,7 @@ msgid ""
 "scanner         to hear the rhythm really well."
 msgstr ""
 "Eén van de redenen om piepjes te gebruiken in deze test (in plaats van een "
-"leuk drum geluid) is dat deze test veel wordt gebruikt in hersenscanners, en "
+"leuk drumgeluid) is dat deze test veel wordt gebruikt in hersenscanners, en "
 "die maken veel lawaai. Het piepgeluid helpt mensen in de scanner om het "
 "ritme goed te kunnen horen."
 
@@ -2189,6 +2189,45 @@ msgid ""
 "information carefully.\n"
 "    "
 msgstr ""
+#: experiment/rules/views/form.py:44 experiment/rules/views/question.py:148
+#: experiment/rules/views/question.py:171
+msgid "Completely Disagree"
+msgstr "Helemaal mee oneens"
+
+#: experiment/rules/views/form.py:45 experiment/rules/views/form.py:54
+#: experiment/rules/views/question.py:149
+#: experiment/rules/views/question.py:172
+msgid "Strongly Disagree"
+msgstr "Zeer mee oneens"
+
+#: experiment/rules/views/form.py:46 experiment/rules/views/form.py:55
+#: experiment/rules/views/question.py:150
+#: experiment/rules/views/question.py:173
+msgid "Disagree"
+msgstr "Mee oneens"
+
+#: experiment/rules/views/form.py:47 experiment/rules/views/form.py:56
+#: experiment/rules/views/question.py:151
+#: experiment/rules/views/question.py:174
+msgid "Neither Agree nor Disagree"
+msgstr "Niet mee eens of oneens"
+
+#: experiment/rules/views/form.py:48 experiment/rules/views/form.py:57
+#: experiment/rules/views/question.py:152
+#: experiment/rules/views/question.py:175
+msgid "Agree"
+msgstr "Mee eens"
+
+#: experiment/rules/views/form.py:49 experiment/rules/views/form.py:58
+#: experiment/rules/views/question.py:153
+#: experiment/rules/views/question.py:176
+msgid "Strongly Agree"
+msgstr "Zeer mee eens"
+
+#: experiment/rules/views/form.py:50 experiment/rules/views/question.py:154
+#: experiment/rules/views/question.py:177
+msgid "Completely Agree"
+msgstr "Helemaal mee eens"
 
 #: experiment/templates/consent/consent_speech2song.html:13
 msgid ""
