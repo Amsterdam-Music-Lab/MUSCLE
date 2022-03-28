@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-03-28 09:55+0200\n"
+"POT-Creation-Date: 2022-03-28 10:16+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -55,7 +55,7 @@ msgstr ""
 msgid "copy"
 msgstr ""
 
-#: experiment/rules/anisochrony.py:21 experiment/rules/beat_alignment.py:110
+#: experiment/rules/anisochrony.py:21 experiment/rules/beat_alignment.py:99
 #: experiment/rules/duration_discrimination.py:102
 #: experiment/rules/duration_discrimination_tone.py:22
 #: experiment/rules/h_bat.py:155 experiment/rules/hbat_bst.py:81
@@ -114,6 +114,7 @@ msgstr ""
 "Probeer ook als je het niet zeker weet zo accuraat mogelijk te antwoorden."
 
 #: experiment/rules/anisochrony.py:99 experiment/rules/beat_alignment.py:33
+#: experiment/rules/beat_alignment.py:56
 #: experiment/rules/duration_discrimination.py:182
 #: experiment/rules/h_bat.py:145 experiment/rules/hbat_bst.py:29
 #: experiment/rules/rhythm_discrimination.py:243
@@ -188,7 +189,7 @@ msgstr "Oké"
 msgid "You will now hear 17 music fragments."
 msgstr "Je krijgt nu 17 muziekfragmenten te horen."
 
-#: experiment/rules/beat_alignment.py:54 experiment/rules/beat_alignment.py:62
+#: experiment/rules/beat_alignment.py:53
 msgid ""
 "With each fragment you have to decide if the beeps are ALIGNED TO THE BEAT, "
 "or NOT ALIGNED TO THE BEAT of the music."
@@ -196,42 +197,34 @@ msgstr ""
 "Bij elk fragment moet je bepalen of de piepjes IN DE MAAT of UIT DE MAAT van "
 "de muziek zijn."
 
-#: experiment/rules/beat_alignment.py:56
-msgid "Pay attention: a music fragment can occur several times."
+#: experiment/rules/beat_alignment.py:55
+#, fuzzy
+#| msgid "Pay attention: a music fragment can occur several times."
+msgid "Note: a music fragment can occur several times."
 msgstr "Let op: een muziekfragment kan meerdere keren voorkomen."
 
 #: experiment/rules/beat_alignment.py:57
-msgid "In total, this test will take around 6 minutes to complete."
-msgstr "Deze test duurt ongeveer 6 minuten."
-
-#: experiment/rules/beat_alignment.py:58
-msgid "Try to stay focused for the entire duration!"
-msgstr "Probeer tijdens de hele test geconcentreerd te blijven!"
-
-#: experiment/rules/beat_alignment.py:66
 #, fuzzy
 #| msgid ""
-#| "Pay attention: a music fragment can occur several times. In total, this "
-#| "test will take around 6 minutes to complete. Try to stay focused for the "
-#| "entire duration!"
+#| "This test will take around 6 minutes to complete. Try to stay focused for "
+#| "the entire test!"
 msgid ""
-"Note: a music fragment can occur several times. In total, this test will "
-"take around 6 minutes to complete. Try to stay focused for the entire "
-"duration, and remember not to tap or move along to the music!"
+"In total, this test will take around 6 minutes to complete. Try to stay "
+"focused for the entire duration!"
 msgstr ""
-"Let op: een muziekfragment kan meerdere keren voorkomen. In totaal duurt "
-"deze test ongeveer 6 minuten. Probeer de hele test geconcentreerd te blijven!"
+"Deze test duurt ongeveer 6 minuten. Probeer tijdens de hele test "
+"geconcentreerd te blijven!"
 
-#: experiment/rules/beat_alignment.py:70 experiment/rules/speech2song.py:33
+#: experiment/rules/beat_alignment.py:59 experiment/rules/speech2song.py:33
 #: experiment/rules/util/practice.py:113
 msgid "Start"
 msgstr "Start"
 
-#: experiment/rules/beat_alignment.py:94
+#: experiment/rules/beat_alignment.py:83
 msgid "Well done! You’ve answered {} percent correctly!"
 msgstr "Goed gedaan! Je hebt {} procent goed beantwoord!"
 
-#: experiment/rules/beat_alignment.py:95
+#: experiment/rules/beat_alignment.py:84
 #, fuzzy
 #| msgid ""
 #| "Did you know that in the UK, over 140.000 people did                 this "
@@ -243,49 +236,47 @@ msgstr ""
 "Wist je dat in Engeland meer dan 140.000 mensen deze test hebben gedaan toen "
 "deze in ontwikkeling was?"
 
-#: experiment/rules/beat_alignment.py:107
+#: experiment/rules/beat_alignment.py:96
 msgid "How certain are you of your answer?"
 msgstr "Hoe zeker ben je van dit antwoord?"
 
-#: experiment/rules/beat_alignment.py:108
-#: experiment/rules/views/question.py:211
+#: experiment/rules/beat_alignment.py:97 experiment/rules/views/question.py:211
 msgid "I guessed"
 msgstr "Ik heb gegokt"
 
-#: experiment/rules/beat_alignment.py:108
-#: experiment/rules/views/question.py:212
+#: experiment/rules/beat_alignment.py:97 experiment/rules/views/question.py:212
 msgid "I think I know"
 msgstr "Ik denk het te weten"
 
-#: experiment/rules/beat_alignment.py:108
+#: experiment/rules/beat_alignment.py:97
 msgid "I am sure"
 msgstr "Ik weet het zeker"
 
-#: experiment/rules/beat_alignment.py:124
+#: experiment/rules/beat_alignment.py:113
 msgid "In this example the beeps are ALIGNED TO THE BEAT of the music."
 msgstr "In dit voorbeeld zijn de piepjes IN DE MAAT van de muziek."
 
-#: experiment/rules/beat_alignment.py:127
+#: experiment/rules/beat_alignment.py:116
 msgid "In this example the beeps are NOT ALIGNED TO THE BEAT of the music."
 msgstr "In dit voorbeeld zijn de piepjes UIT DE MAAT van de muziek."
 
-#: experiment/rules/beat_alignment.py:138
+#: experiment/rules/beat_alignment.py:127
 msgid "Example {}"
 msgstr "Voorbeeld {}"
 
-#: experiment/rules/beat_alignment.py:155
+#: experiment/rules/beat_alignment.py:144
 msgid "Are the beeps ALIGNED TO THE BEAT or NOT ALIGNED TO THE BEAT?"
 msgstr "Zijn de piepjes IN DE MAAT of UIT DE MAAT?"
 
-#: experiment/rules/beat_alignment.py:158
+#: experiment/rules/beat_alignment.py:147
 msgid "ALIGNED TO THE BEAT"
 msgstr "IN DE MAAT"
 
-#: experiment/rules/beat_alignment.py:159
+#: experiment/rules/beat_alignment.py:148
 msgid "NOT ALIGNED TO THE BEAT"
 msgstr "UIT DE MAAT"
 
-#: experiment/rules/beat_alignment.py:174
+#: experiment/rules/beat_alignment.py:163
 msgid "Beat alignment"
 msgstr "Beat alignment"
 
@@ -2515,6 +2506,26 @@ msgstr ""
 " met hetzelfde e-mailadres waarmee je geregistreerd bent op de UvA lab "
 "website. Voeg je studentnummer toe als je student bent. We zorgen er dan "
 "voor dat je een vergoeding ontvangt!"
+
+#~ msgid "In total, this test will take around 6 minutes to complete."
+#~ msgstr "Deze test duurt ongeveer 6 minuten."
+
+#~ msgid "Try to stay focused for the entire duration!"
+#~ msgstr "Probeer tijdens de hele test geconcentreerd te blijven!"
+
+#, fuzzy
+#~| msgid ""
+#~| "Pay attention: a music fragment can occur several times. In total, this "
+#~| "test will take around 6 minutes to complete. Try to stay focused for the "
+#~| "entire duration!"
+#~ msgid ""
+#~ "Note: a music fragment can occur several times. In total, this test will "
+#~ "take around 6 minutes to complete. Try to stay focused for the entire "
+#~ "duration, and remember not to tap or move along to the music!"
+#~ msgstr ""
+#~ "Let op: een muziekfragment kan meerdere keren voorkomen. In totaal duurt "
+#~ "deze test ongeveer 6 minuten. Probeer de hele test geconcentreerd te "
+#~ "blijven!"
 
 #~ msgid ""
 #~ "NOTE: Please wait with answering until you are either sure, or the sound "
