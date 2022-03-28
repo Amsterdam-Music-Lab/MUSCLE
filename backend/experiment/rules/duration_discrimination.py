@@ -160,7 +160,7 @@ class DurationDiscrimination(Base):
         )
         config = {
             'listen_first': True,
-            'decision_time': section.duration + .7
+            'decision_time': section.duration + .5
         }
         action = view.action(config)
         return action
