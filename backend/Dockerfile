@@ -1,7 +1,5 @@
 FROM python:3.8
 ENV PYTHONUNBUFFERED 1
-RUN apt-get -y update
-RUN apt-get install -y ffmpeg
 
 WORKDIR /server
 COPY requirements/prod.txt /server/
