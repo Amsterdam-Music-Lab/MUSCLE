@@ -37,9 +37,8 @@ def create(request):
 
     if not result:
         return HttpResponseBadRequest("Missing required parameter: result")
-
     for form_element in result['form']:
-        question = form_element['question']
+        question = form_element['key']
         try:
             profile = Profile.objects.get(
                 participant=participant, question=question)
@@ -51,7 +50,6 @@ def create(request):
                               question=question)
         profile.answer = form_element['value']
         profile.save()
-
         # Session ID, defaults to 0
         session_id = int(request.POST.get("session_id", 0))
 

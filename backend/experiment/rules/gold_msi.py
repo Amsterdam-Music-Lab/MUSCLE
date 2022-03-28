@@ -12,7 +12,7 @@ class GoldMSI(Base):
     """ an experiment view that implements the GoldMSI questionnaire """
     ID = 'GOLD_MSI'
     questions = MSI_F3_MUSICAL_TRAINING
-    
+
     @classmethod
     def first_round(cls, experiment):
         consent = Consent.action()
@@ -21,7 +21,7 @@ class GoldMSI(Base):
             consent,
             start_session
         )
-    
+
     @classmethod
     def next_round(cls, session, request_session=None):
         round_number = session.total_questions()

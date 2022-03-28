@@ -19,7 +19,7 @@ class Question(object):
         self.result_id = result_id
         self.is_skippable = is_skippable
         self.submits = submits
-    
+
     def action(self):
         return self.__dict__
 
@@ -59,7 +59,7 @@ class LikertQuestion(Question):
             ]
 
 class Form(object):
-    ''' Form is a view which brings together an array of questions with submit and optional skip button 
+    ''' Form is a view which brings together an array of questions with submit and optional skip button
     - form: array of questions
     - button_label: label of submit button
     - skip_label: label of skip button
@@ -72,7 +72,7 @@ class Form(object):
         self.skip_label = skip_label
         self.is_skippable = is_skippable
         self.is_profile = is_profile
-    
+
     def action(self):
         serialized_form = [question.action() for question in self.form]
         return {
