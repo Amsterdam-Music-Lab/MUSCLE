@@ -171,10 +171,6 @@ def next_trial_actions(session, round_number, request_session):
     expected_result = 'SAME' if condition['group_id'] == 1 else 'DIFFERENT'
     # create Result object and save expected result to database
     result_pk = Base.prepare_result(session, section, expected_result)
-    instructions = {
-        'preload': '',
-        'during_presentation': ''
-    }
     question = ChoiceQuestion(
         key='same',
         question=_(
@@ -191,7 +187,7 @@ def next_trial_actions(session, round_number, request_session):
     play_config = {
         'decision_time': section.duration + .5
     }
-    playback = Playback('AUTOPLAY', [section], instructions, play_config)
+    playback = Playback('AUTOPLAY', [section], play_config=play_config)
     if round_number < 5:
         title = _('practice')
     else:
@@ -202,11 +198,8 @@ def next_trial_actions(session, round_number, request_session):
         title=_('Ryhthm discrimination: %s' %(title)),
         config={'listen_first': True}
     )
-    config = {
-            'listen_first': True,
-            'decision_time': section.duration + .7
-    }
-    actions.append(view.action(config))
+
+    actions.append(view.action())
     return actions
 
 def plan_stimuli(session):

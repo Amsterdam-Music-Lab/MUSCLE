@@ -115,14 +115,10 @@ class BeatAlignment(Base):
             presentation_text = _(
                 "In this example the beeps are NOT ALIGNED TO THE BEAT of the music.")
 
-        instructions = {
-            'preload': '',
-            'during_presentation': presentation_text
-        }
         play_config = {
             'decision_time': section.duration + .1,
         }
-        playback = Playback('AUTOPLAY', [section], instructions, play_config)
+        playback = Playback('AUTOPLAY', [section], instruction=presentation_text, play_config=play_config)
         view = Trial(
             playback=playback,
             feedback_form=None,

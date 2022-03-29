@@ -52,10 +52,6 @@ class BST(HBat):
         expected_result = 'in2' if trial_condition else 'in3'
         # create Result object and save expected result to database
         result_pk = Base.prepare_result(session, section, expected_result)
-        instructions = {
-            'preload': '',
-            'during_presentation': ''
-        }
         question = ChoiceQuestion(
             key='longer_or_equal',
             question=_(
@@ -71,17 +67,14 @@ class BST(HBat):
         play_config = {
             'decision_time': section.duration + .5
         }
-        playback = Playback('AUTOPLAY', [section], instructions, play_config)
+        playback = Playback('AUTOPLAY', [section], play_config=play_config)
         form = Form([question])
         view = Trial(
             playback=playback,
             feedback_form=form,
             title=_('Meter detection')
         )
-        config = {
-            'decision_time': section.duration + .7
-        }
-        return view.action(config)
+        return view.action()
 
     @classmethod
     def response_explainer(cls, correct, in2, button_label=_('Next fragment')):

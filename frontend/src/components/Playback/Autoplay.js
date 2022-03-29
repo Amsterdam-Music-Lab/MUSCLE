@@ -1,7 +1,6 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 
 import * as audio from "../../util/audio";
-import { getCurrentTime } from "../../util/time";
 import { MEDIA_ROOT } from "../../config";
 
 import Circle from "../Circle/Circle";
@@ -10,14 +9,12 @@ import Preload from "../Preload/Preload";
 
 const PRELOAD = "PRELOAD";
 const RECOGNIZE = "RECOGNIZE";
-const SILENCE = "SILENCE";
-const SYNC = "SYNC";
 
 
-const AutoPlay = ({instruction, preloadMessage, config, sections, time, startedPlaying, finishedPlaying, submitResult, autoAdvance, className=''}) => {
+const AutoPlay = ({instruction, preloadMessage, playConfig, sections, time, startedPlaying, finishedPlaying, submitResult, autoAdvance, className=''}) => {
     // player state
     const [state, setState] = useState({ view: PRELOAD });
-    const [running, setRunning] = useState(config.auto_play);
+    const [running, setRunning] = useState(playConfig.auto_play);
     const setView = (view, data = {}) => {
         setState({ view, ...data });
     }
@@ -34,8 +31,8 @@ const AutoPlay = ({instruction, preloadMessage, config, sections, time, startedP
         switch (state.view) {
             case RECOGNIZE:
                 // Play audio at start time
-                if (!config.mute) {
-                    audio.playFrom(Math.max(0, config.playhead));
+                if (!playConfig.mute) {
+                    audio.playFrom(Math.max(0, playConfig.playhead));
                 }
                 startedPlaying();
                 break;
@@ -47,7 +44,7 @@ const AutoPlay = ({instruction, preloadMessage, config, sections, time, startedP
         return () => {
             audio.pause();
         };
-    }, [state, config]);
+    }, [state, playConfig]);
 
 
     // Render component based on view
@@ -56,7 +53,7 @@ const AutoPlay = ({instruction, preloadMessage, config, sections, time, startedP
             return (
                 <Preload
                     instruction={preloadMessage}
-                    duration={config.ready_time}
+                    duration={playConfig.ready_time}
                     url={MEDIA_ROOT + section.url}
                     onNext={() => {
                         setView(RECOGNIZE);
@@ -69,9 +66,9 @@ const AutoPlay = ({instruction, preloadMessage, config, sections, time, startedP
                     <div className="circle">
                         <Circle
                             running={running}
-                            duration={config.decision_time}
+                            duration={playConfig.decision_time}
                             color="white"
-                            animateCircle={config.show_animation}
+                            animateCircle={playConfig.show_animation}
                             onTick={onCircleTimerTick}
                             onFinish={() => {
                                 // Stop audio
@@ -82,16 +79,16 @@ const AutoPlay = ({instruction, preloadMessage, config, sections, time, startedP
                                     // Create a time_passed result
                                     submitResult({
                                         type: "time_passed",
-                                        decision_time: config.decision_time,
+                                        decision_time: playConfig.decision_time,
                                         section: section.id
                                     });
                                 }
                             }}
                         />
                         <div className="circle-content">
-                            {config.show_animation
+                            {playConfig.show_animation
                                 ? <ListenCircle
-                                    duration={config.decision_time}
+                                    duration={playConfig.decision_time}
                                     histogramRunning={running}
                                     countDownRunning={running}
                                 />

@@ -6,7 +6,7 @@ import PlayerSmall from "../PlayButton/PlayerSmall";
 import { MEDIA_ROOT } from "../../config";
 
 
-const MultiPlayer = ({sections, instruction, config}) => {
+const MultiPlayer = ({sections, instruction, playConfig}) => {
     const cancelEvents = useRef(null);
     const [playing, setPlaying] = useState(0);
 

@@ -17,7 +17,7 @@ class Anisochrony(DurationDiscrimination):
     practice_diff = 270000
     max_turnpoints = 8
     catch_condition = 'REGULAR'
-    
+
     @classmethod
     def get_response_explainer(cls, correct, correct_response, button_label=_('Next fragment')):
         correct_response = _('REGULAR') if correct_response=='REGULAR' else _('IRREGULAR')
@@ -32,7 +32,7 @@ class Anisochrony(DurationDiscrimination):
             steps=[],
             button_label=button_label
         )
-    
+
     @classmethod
     def next_trial_action(cls, session, trial_condition, difficulty):
         """
@@ -54,10 +54,6 @@ class Anisochrony(DurationDiscrimination):
         expected_result = 'REGULAR' if difference == 0 else 'IRREGULAR'
         # create Result object and save expected result to database
         result_pk = Base.prepare_result(session, section, expected_result)
-        instructions = {
-            'preload': '',
-            'during_presentation': ''
-        }
         question = ChoiceQuestion(
             key='if_regular',
             question=_(
@@ -73,7 +69,7 @@ class Anisochrony(DurationDiscrimination):
         play_config = {
             'decision_time': section.duration + .7
         }
-        playback = Playback('AUTOPLAY', [section], instructions, play_config)
+        playback = Playback('AUTOPLAY', [section], play_config=play_config)
         form = Form([question])
         config = {
             'listen_first': True,
@@ -85,7 +81,7 @@ class Anisochrony(DurationDiscrimination):
             config=config
         )
         return view.action()
-    
+
     @classmethod
     def intro_explanation(cls, *args):
         return Explainer(
@@ -120,7 +116,7 @@ class Anisochrony(DurationDiscrimination):
                 return 2
         else:
             return 0
-    
+
     @classmethod
     def get_final_text(cls, difference):
         percentage = round(difference / 6000, 2)
@@ -129,7 +125,7 @@ class Anisochrony(DurationDiscrimination):
         trivia = _("Many sounds in nature have regularity like a metronome. \
             Our brains use this to process rhythm even better!")
         return render_feedback_trivia(feedback, trivia)
-    
+
     @classmethod
     def get_difficulty(cls, session, multiplier=1.0):
         if session.final_score == 0:

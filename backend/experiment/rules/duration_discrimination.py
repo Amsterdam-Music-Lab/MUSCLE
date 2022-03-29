@@ -132,10 +132,6 @@ class DurationDiscrimination(Base):
         expected_result = 'EQUAL' if difference == 0 else 'LONGER'
         # create Result object and save expected result to database
         result_pk = Base.prepare_result(session, section, expected_result)
-        instructions = {
-            'preload': '',
-            'during_presentation': ''
-        }
         question_text = cls.get_question_text()
         question = ChoiceQuestion(
             question=question_text,
@@ -151,7 +147,7 @@ class DurationDiscrimination(Base):
         play_config = {
             'decision_time': section.duration + .7,
         }
-        playback = Playback('AUTOPLAY', [section], instructions, play_config)
+        playback = Playback('AUTOPLAY', [section], play_config=play_config)
         form = Form([question])
         view = Trial(
             playback=playback,
