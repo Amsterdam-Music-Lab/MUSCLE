@@ -10,7 +10,7 @@ from .base import Base
 from .util.actions import combine_actions
 from .views import Consent, Explainer, Final, StartSession, Step
 
-class RhythmTestSeries(Base):
+class RhythmExperimentSeries(Base):
     ID = 'TEST_BATTERY'
 
     @classmethod
@@ -33,7 +33,7 @@ class RhythmTestSeries(Base):
             ],
             button_label=_("Continue")
         ).action()
-    
+
     @classmethod
     def first_round(cls, experiment):
         """Create data for the first experiment rounds."""
@@ -48,7 +48,7 @@ class RhythmTestSeries(Base):
             cls.intro_explainer(),
             start_session
         )
-    
+
     @classmethod
     def next_round(cls, session):
         data = session.load_json_data()
@@ -57,10 +57,10 @@ class RhythmTestSeries(Base):
         if not experiment_data:
             experiment_data = prepare_experiments(session)
         if experiment_number == len(experiment_data):
-            rendered = render_to_string(join('final', 
-            'test_series.html'))
+            rendered = render_to_string(join('final',
+            'experiment_series.html'))
             return Final.action(
-                session, 
+                session,
                 title==_("Thank you very much for participating!"),
                 score_template=rendered,
                 show_participant_link=True,
@@ -75,7 +75,7 @@ class RhythmTestSeries(Base):
 
 
 def prepare_experiments(session):
-    """ Given the session and a list of experiments, generate a random order of experiments 
+    """ Given the session and a list of experiments, generate a random order of experiments
     merge this into the session data.
     """
     lists = get_experiment_lists(session)
@@ -103,7 +103,7 @@ def register_consent(session, experiment_list):
         profile.save()
 
 def get_experiment_lists(session):
-    series = session.experiment.test_series
+    series = session.experiment.experiment_series
     first_list = get_associated_experiments(series.first_experiments)
     random_list = get_associated_experiments(series.random_experiments)
     last_list = get_associated_experiments(series.last_experiments)
@@ -117,4 +117,3 @@ def get_experiment_lists(session):
 def get_associated_experiments(pk_list):
     from ..models import Experiment
     return [Experiment.objects.get(pk=pk).slug for pk in pk_list]
- 
