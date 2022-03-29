@@ -14,9 +14,9 @@ class Playback(object):
             - auto_advance: whether the view will switch to next view after decision_time
             - auto_play: whether sound will start automatically
             - show_animation: whether to show an animation during playback '''
-    def __init__(self, player_type, sections, preload_message='', instruction='', play_config=None):
-        self.player_type = player_type
+    def __init__(self, sections, player_type='AUTOPLAY', preload_message='', instruction='', play_config=None):
         self.sections = [{'id': s.id, 'url': s.absolute_url()} for s in sections]
+        self.player_type = player_type
         self.preload_message = preload_message
         self.instruction = instruction
         self.play_config = {
