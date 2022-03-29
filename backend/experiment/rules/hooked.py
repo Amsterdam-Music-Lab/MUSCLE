@@ -17,8 +17,8 @@ class Hooked(Base):
     of the Hooked on Music game
     """
     ID = 'HOOKED'
-    decision_time = 5
-    silence_time = 5
+    decision_time = 15
+    silence_time = 4
 
     experiment_name = 'Hooked on Music'
     researcher = 'Dr John Ashley Burgoyne'
@@ -63,7 +63,7 @@ class Hooked(Base):
         )
 
     @classmethod
-    def next_round(cls, session):
+    def next_round(cls, session, request_session=None):
         """Get action data for the next round"""
 
         # If the number of results equals the number of experiment.rounds,
@@ -105,7 +105,7 @@ class Hooked(Base):
                     }
                 )
                 continuation_correctness = random.randint(0, 1) == 1
-                last_result.expected_response = continuation_correctness
+                last_result.expected_response = 'YES' if continuation_correctness else 'NO'
                 last_result.save()
                 question = ChoiceQuestion(
                     question=_('Did the track come back in the right place?'),
