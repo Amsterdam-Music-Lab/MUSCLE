@@ -48,7 +48,6 @@ class Experiment(models.Model):
         participants = {}
         for session in self.session_set.all():
             participants[session.participant.id] = session.participant
-
         return participants.values()
 
     def export_admin(self):
@@ -72,28 +71,31 @@ class Experiment(models.Model):
         for session in self.session_set.all():
             profile = session.participant.export_admin()
             session_finished = session.finished_at.isoformat() if session.finished_at else None
-            for result in session.result_set.all():
-                try:
-                    section_name = result.section.name
-                except:
-                    section_name = None
-                row = {
+            row = {
                     'experiment_id': self.id,
                     'experiment_name': self.name,
                     'participant_id': profile['id'],
                     'participant_country': profile['country_code'],
                     'session_start': session.started_at.isoformat(),
-                    'session_end': session_finished,
-                    'section_name': section_name,
+                    'session_end': session_finished
+            }
+            row.update(profile['profile'])
+            fieldnames.update(row.keys())
+            if session.result_set.count() == 0:
+                # some experiments may have only profile questions
+                return [row], list(fieldnames)
+            for result in session.result_set.all():
+                result_data = {
+                    'section_name': result.section.name if result.section else None,
                     'result_created_at': result.created_at.isoformat(),
                     'result_score': result.score,
                     'result_comment': result.comment,
                     'expected_response': result.expected_response,
                     'given_response': result.given_response
                 }
-                row.update(profile['profile'])
+                row.update(result_data)
+                fieldnames.update(result_data.keys())
                 rows.append(row)
-                fieldnames.update(row.keys())
         return rows, list(fieldnames)
 
     def get_rules(self):

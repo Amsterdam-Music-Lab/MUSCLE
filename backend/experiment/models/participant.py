@@ -47,7 +47,6 @@ class Participant(models.Model):
         profile_object = {}
         for profile in self.profile():
             profile_object[profile.question] = profile.answer
-
         return profile_object
 
     def is_dutch(self):

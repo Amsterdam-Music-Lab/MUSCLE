@@ -135,10 +135,9 @@ class HBat(Base):
                         'During the experiment it will become more difficult to hear the difference.')),
                 Step(_(
                         "Try to answer as accurately as possible, even if you're uncertain.")),
+                Step(_("Remember: try not to move or tap along with the sounds")),
                 Step(_(
-                        "In this test, you can answer as soon as you feel you know the answer.")),
-                Step(_(
-                        "NOTE: Please wait with answering until you are either sure, or the sound has stopped.")),
+                        "In this test, you can answer as soon as you feel you know the answer, but please wait until you are sure or the sound has stopped.")),
                 Step(_(
                         'This test will take around 4 minutes to complete. Try to stay focused for the entire test!'))
                 ],

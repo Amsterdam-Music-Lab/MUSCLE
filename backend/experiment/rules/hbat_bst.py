@@ -26,15 +26,13 @@ class BST(HBat):
                         "It's your job to decide if the rhythm has a DUPLE METER (a MARCH) or a TRIPLE METER (a WALTZ).")),
                 Step(_("Every SECOND tone in a DUPLE meter (march) is louder and every THIRD tone in a TRIPLE meter (waltz) is louder.")),
                 Step(_(
-                        'During the experiment it will become more difficult to hear the difference.')),
-                Step(_(
                         "Try to answer as accurately as possible, even if you're uncertain.")),
+                Step(_("Remember: try not to move or tap along with the sounds")),
                 Step(_(
-                        "In this test, you can answer as soon as you feel you know the answer.")),
+                        "In this test, you can answer as soon as you feel you know the answer, but please wait until you are sure or the sound has stopped.")),
                 Step(_(
-                        "NOTE: Please wait with answering until you are either sure, or the sound has stopped.")),
-                Step(_(
-                        'This test will take around 4 minutes to complete. Try to stay focused for the entire test!'))],
+                        'This test will take around 4 minutes to complete. Try to stay focused for the entire test!'))
+            ],
             button_label='Ok'
         )
 

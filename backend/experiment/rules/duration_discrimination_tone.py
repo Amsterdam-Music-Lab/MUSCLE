@@ -17,7 +17,7 @@ class DurationDiscriminationTone(DurationDiscrimination):
                 hearing these small differences in durations, which is very handy \
                 if we want to be able to process rhythm in music.')
         return render_feedback_trivia(feedback, trivia)
-    
+
     @classmethod
     def get_response_explainer(cls, correct, correct_response, button_label=_('Next fragment')):
         preposition = _('than') if correct_response=='LONGER' else _('as')
@@ -33,10 +33,14 @@ class DurationDiscriminationTone(DurationDiscrimination):
             steps=[],
             button_label=button_label
         )
-    
+
     @classmethod
     def get_question_text(cls):
         return _("Is the second tone EQUALLY LONG as the first tone or LONGER?")
+
+    @classmethod
+    def get_introduction(cls):
+        return _('In this test you will hear two tones on each trial.')
 
     @classmethod
     def get_task_explanation(cls):
