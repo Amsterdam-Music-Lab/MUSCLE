@@ -1,8 +1,20 @@
 # AML Experiment application
 This application is a combination of the Hooked server and Hooked client of the Amsterdam Music Lab, generalized for use in a wide variety of experiments.
 
+## Install Docker
+To run the application locally, you will need to install Docker.
+
+### Mac OS X or Windows 10
+Install [Docker Desktop](https://docs.docker.com/desktop/).
+
+### Linux
+* Install [Docker Engine](https://docs.docker.com/engine/install/)
+* Install [Docker Compose](https://docs.docker.com/compose/install/)
+
+As of April 2022, [Docker Desktop for Linux](https://docs.docker.com/desktop/linux/) is still in Beta and have not been tested by us.
+
 ## Development build
-To run locally on Mac OS X, Linux or Windows 10, install [Docker Desktop](https://docs.docker.com/desktop/). Make a file called .env next in this directory, with the following settings. Change database name and user and passwords as appropriate. The only setting that you'll have to set later is the slug, which depends on the slug (short name) of an existing experiment in your database.
+Make a file called .env next in this directory, with the following settings. Change database name and user and passwords as appropriate. The only setting that you'll have to set later is the slug, which depends on the slug (short name) of an existing experiment in your database.
 ```
 SQL_DATABASE=aml
 SQL_USER=aml
@@ -20,7 +32,7 @@ REACT_APP_EXPERIMENT_SLUG=your_slug
 REACT_APP_AML_HOME=https://www.amsterdammusiclab.nl
 ```
 Then, open a console and run
-`docker-compose up`
+`docker-compose up` (add `sudo` on Linux).
 This command makes use of the `docker-compose.yaml`, which defines four containers:
 - a PostgreSQL container, for storing experiment/user/playlist data, saved on the host machine in the Docker user data, represented in the volume `db_data`. Data added to the database will persist if the container is shut down.
 - a ip2country container, which provides country codes for ip addresses. This container is mainly interesting for running tests during development.
