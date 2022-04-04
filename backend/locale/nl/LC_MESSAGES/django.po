@@ -233,7 +233,7 @@ msgid ""
 "In the UK, over 140.000 people did                 this test when it was "
 "first developed?"
 msgstr ""
-"Wist je dat in Engeland meer dan 140.000 mensen deze test hebben gedaan toen "
+"Meer dan 140.000 mensen in Engeland deze test hebben gedaan toen "
 "deze in ontwikkeling was?"
 
 #: experiment/rules/beat_alignment.py:96
@@ -386,7 +386,7 @@ msgid ""
 "durations, which is very handy                 if we want to be able to "
 "process rhythm in music."
 msgstr ""
-" Mensen zijn heel goed in het horen van deze kleine verschillen in "
+"Mensen zijn heel goed in het horen van deze kleine verschillen in "
 "tijdsduur, wat goed van pas komt wanneer we naar ritmes luisteren in muziek."
 
 #: experiment/rules/duration_discrimination_tone.py:27
@@ -453,7 +453,7 @@ msgid ""
 "In this test, you can answer as soon as you feel you know the answer, but "
 "please wait until you are sure or the sound has stopped."
 msgstr ""
-"Bij deze test kun je antwoorden zodra je denkt het goede antwoord te weten."
+"Bij deze test kun je antwoorden zodra je het goede antwoord denkt te weten, maar wacht tot je het zeker weet of het geluid is gestopt."
 
 #: experiment/rules/h_bat.py:159
 msgid "The rhythm went SLOWER. Your response was CORRECT."
@@ -889,7 +889,7 @@ msgid ""
 "which make a lot of noise. The beep-sound helps people in the "
 "scanner         to hear the rhythm really well."
 msgstr ""
-"Eén van de redenen om piepjes te gebruiken in deze test (in plaats van een "
+"Eén van de redenen om piepjes te gebruiken (in plaats van een "
 "leuk drumgeluid) is dat deze test veel wordt gebruikt in hersenscanners, en "
 "die maken veel lawaai. Het piepgeluid helpt mensen in de scanner om het "
 "ritme goed te kunnen horen."
@@ -932,13 +932,13 @@ msgid ""
 "credit at the end of the experiment."
 msgstr ""
 "Je kunt een vergoeding ontvangen als je het hele experiment hebt afgerond! "
-"De vergoeding bestaat uit 5 euro of studiepunten (alleen voor psychologie "
+"De vergoeding bestaat uit 6 euro of 1 proefpersoonpunt (alleen voor psychologie "
 "studenten van de UvA). Op het eind van het experiment krijg je instructies "
 "over hoe je de vergoeding kunt ontvangen."
 
 #: experiment/rules/rhythm_test_series.py:64
 msgid "Thank you very much for participating!"
-msgstr ""
+msgstr "Hartelijk dank voor je deelname!"
 
 #: experiment/rules/rhythm_test_series.py:74
 #, python-format
@@ -2078,7 +2078,7 @@ msgid ""
 "the procedures we will be applying. Make sure to read this information "
 "carefully. "
 msgstr ""
-"Je gaat meedoen aan het experiment “Who’s got rhythm?” uitgevoerd door Dr "
+"U gaat meedoen aan het experiment “Who’s got rhythm?” uitgevoerd door Dr "
 "Fleur Bouwer van de afdeling Psychologie aan de Universiteit van Amsterdam. "
 "Voordat het onderzoek begint, is het belangrijk dat u op de hoogte bent van "
 "de procedure die in dit onderzoek wordt gevolgd. Lees daarom onderstaande "
@@ -2211,7 +2211,7 @@ msgid ""
 "(if you are a student at the UvA) or 6 euros. To receive this compensation, "
 "make sure to register your participation on the lab.uva.nl website! "
 msgstr ""
-"Ter compensatie van uw deelname kunt u 1 proefpersoon punt (voor UvA "
+"Ter compensatie van uw deelname kunt u 1 proefpersoonpunt (voor UvA "
 "studenten) of 6 euro ontvangen. Om deze compensatie te ontvangen moet u als "
 "proefpersoon registreren op de lab.uva.nl website!"
 
@@ -2427,7 +2427,7 @@ msgstr ""
 
 #: experiment/templates/final/feedback_trivia.html:6
 msgid "Did you know..."
-msgstr ""
+msgstr "Wist je dat..."
 
 #: experiment/templates/final/test_series.html:3
 msgid ""
