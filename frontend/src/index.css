@@ -495,6 +495,51 @@ h3.title {
         letter-spacing: 0.1em;
         font-weight: 500; }
 
+.aha__participant_link {
+  padding-top: 10px; }
+  .aha__participant_link .copy {
+    width: 100%;
+    display: flex;
+    justify-content: stretch; }
+    .aha__participant_link .copy input {
+      width: 100%;
+      border-top-left-radius: 3px;
+      border-bottom-left-radius: 3px;
+      border: 0;
+      padding: 6px;
+      font-size: 0.9em; }
+    .aha__participant_link .copy button {
+      padding: 6px;
+      color: white;
+      background-color: #39d7b8;
+      border: 0;
+      border-top-right-radius: 3px;
+      border-bottom-right-radius: 3px;
+      text-transform: uppercase;
+      font-size: 0.9em;
+      letter-spacing: 0.1em;
+      font-weight: 500; }
+
+.share a {
+  display: inline-block;
+  width: 55px;
+  height: 55px;
+  border-radius: 50%;
+  line-height: 55px;
+  text-align: center;
+  background-color: #39d7b8;
+  color: white;
+  margin: 0 10px;
+  font-size: 0; }
+  .share a::before {
+    font-size: 26px; }
+  .share a:hover {
+    text-decoration: none; }
+  .share a.ti-facebook {
+    background-color: #4267b2; }
+  .share a.ti-twitter-alt {
+    background-color: #1da1f2; }
+
 .aha__store-profile input {
   width: 100%;
   padding: 5px;

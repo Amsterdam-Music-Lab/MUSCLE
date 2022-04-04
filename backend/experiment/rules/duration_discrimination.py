@@ -144,7 +144,6 @@ class DurationDiscrimination(Base):
             result_id=result_pk,
             submits=True
         )
-        print(section)
         playback = Playback([section])
         form = Form([question])
         view = Trial(

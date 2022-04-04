@@ -11,4 +11,5 @@ from .playback import Playback
 from .playlist import Playlist
 from .start_session import StartSession
 from .practice_round import PracticeRound
-from .trial import Trial, TwoAlternativeForced
+from .trial import Trial
+from .two_alternative_forced import TwoAlternativeForced

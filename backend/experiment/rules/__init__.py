@@ -21,6 +21,7 @@ from .rhythm_experiment_series import RhythmExperimentSeries
 from .gold_msi import GoldMSI
 from .listening_conditions import ListeningConditions
 from .hooked import Hooked
+from .categorization import Categorization
 
 # Rules available to this application
 # If you create new Rules, add them to the list
@@ -51,4 +52,5 @@ EXPERIMENT_RULES = {
     GoldMSI.ID: GoldMSI,
     ListeningConditions.ID: ListeningConditions,
     Hooked.ID: Hooked,
+    Categorization.ID: Categorization,
 }
