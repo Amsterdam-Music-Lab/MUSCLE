@@ -25,9 +25,7 @@ class ListeningConditions(Base):
                         'NO': _('NO')
                     },
                     view='BUTTON_ARRAY',
-                    question_config={
-                        'submits': True
-                    }
+                    submits=True
             )])
         elif round_number == 2:
             feedback_form = Form([ChoiceQuestion(
@@ -40,9 +38,7 @@ class ListeningConditions(Base):
                         'NO': _('NO')
                     },
                     view='BUTTON_ARRAY',
-                    question_config={
-                        'submits': True
-                    }
+                    submits=True
             )])
         elif round_number == 3:
             feedback_form = Form([
@@ -55,9 +51,7 @@ class ListeningConditions(Base):
                         'NO': _('NO')
                     },
                     view='BUTTON_ARRAY',
-                    question_config={
-                        'submits': True
-                    }
+                    submits=True
                 )
             ])
         elif round_number == 4:
@@ -71,9 +65,7 @@ class ListeningConditions(Base):
                         'NO': _('NO')
                     },
                     view='BUTTON_ARRAY',
-                    question_config={
-                        'submits': True
-                    }
+                    submits=True
                 ),
             ])
         elif round_number == 5:

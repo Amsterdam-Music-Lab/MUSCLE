@@ -60,11 +60,9 @@ class BST(HBat):
             },
             view='BUTTON_ARRAY',
             result_id=result_pk,
-            question_config={
-                'submits': True
-            }
+            submits=True
         )
-        playback = Playback('AUTOPLAY', [section])
+        playback = Playback([section])
         form = Form([question])
         view = Trial(
             playback=playback,

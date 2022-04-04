@@ -181,9 +181,7 @@ def next_trial_actions(session, round_number, request_session):
         },
         view='BUTTON_ARRAY',
         result_id=result_pk,
-        question_config={
-            'submits': True
-        }
+        submits=True
     )
     form = Form([question])
     playback = Playback([section])

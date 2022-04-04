@@ -92,10 +92,10 @@ class DemoTwoSong(Base):
         section1 = session.playlist.section_set.all()[0]
         section2 = session.playlist.section_set.all()[1]
 
-        
+
         # TwoSong action, with just the default options
         sections = [section1, section2]
-        playback = Playback('MULTIPLE', sections)
+        playback = Playback(sections, 'MULTIPLE')
         view = Trial(playback, None, 'Testing')
         actions.append(view.action())
 

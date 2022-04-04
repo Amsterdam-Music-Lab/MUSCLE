@@ -13,19 +13,14 @@ class Question(object):
         - show_labels: whether the labels of the answers should be shown
     '''
 
-    def __init__(self, key, view='STRING', result_id=None, explainer='', question='', question_config=None):
+    def __init__(self, key, view='STRING', result_id=None, explainer='', question='', is_skippable=False, submits=False):
         self.key = key
         self.view = view
-        self.explainer = explainer,
+        self.explainer = explainer
         self.question = question,
         self.result_id = result_id
-        self.question_config = {
-            'is_skippable': False,
-            'submits': False,
-            'show_labels': True
-        }
-        if question_config:
-            self.question_config.update(question_config)
+        self.is_skippable = is_skippable
+        self.submits = submits
 
     def action(self):
         return self.__dict__

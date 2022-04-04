@@ -5,6 +5,7 @@ from .views.trial import Trial
 class Categorization(Base):
 
     def first_round():
+        pass
         # Consent
         # StartSession
         # check which group participant belongs to
@@ -15,7 +16,7 @@ class Categorization(Base):
         # logic for retrieving sections
         section = session.playlists.all().get()
         # during debugging: display the filename
-        playback = Playback('BUTTON', [section])
+        playback = Playback([section], 'BUTTON')
         # retrieve expected response from json_data
         result_pk = Result(expected_response='A')
         # during debugging: display correct / incorrect on buttons
