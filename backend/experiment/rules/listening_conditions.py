@@ -2,7 +2,7 @@
 from django.utils.translation import gettext_lazy as _
 
 from .base import Base
-from .views import Consent, Explainer, Step, Final, Playlist, StartSession, Trial
+from .views import Consent, Explainer, Step, Final, Playback, Playlist, StartSession, Trial
 from .views.form import ChoiceQuestion, Form
 from .util.actions import combine_actions, final_action_with_optional_button
 
@@ -25,7 +25,9 @@ class ListeningConditions(Base):
                         'NO': _('NO')
                     },
                     view='BUTTON_ARRAY',
-                    submits=True
+                    question_config={
+                        'submits': True
+                    }
             )])
         elif round_number == 2:
             feedback_form = Form([ChoiceQuestion(
@@ -38,7 +40,9 @@ class ListeningConditions(Base):
                         'NO': _('NO')
                     },
                     view='BUTTON_ARRAY',
-                    submits=True
+                    question_config={
+                        'submits': True
+                    }
             )])
         elif round_number == 3:
             feedback_form = Form([
@@ -51,7 +55,9 @@ class ListeningConditions(Base):
                         'NO': _('NO')
                     },
                     view='BUTTON_ARRAY',
-                    submits=True
+                    question_config={
+                        'submits': True
+                    }
                 )
             ])
         elif round_number == 4:
@@ -65,7 +71,9 @@ class ListeningConditions(Base):
                         'NO': _('NO')
                     },
                     view='BUTTON_ARRAY',
-                    submits=True
+                    question_config={
+                        'submits': True
+                    }
                 ),
             ])
         elif round_number == 5:
@@ -76,8 +84,10 @@ class ListeningConditions(Base):
                     You can then adjust the volume to as high a level as possible without it being uncomfortable. \
                     When you are satisfied with the sound level, click Continue"),
             }
-            feedback_form = None
-            view = Trial(feedback_form, instructions)
+            playback = Playback([section], instruction=_("You can now set the sound to a comfortable level. \
+                    You can then adjust the volume to as high a level as possible without it being uncomfortable. \
+                    When you are satisfied with the sound level, click Continue"))
+            view = Trial(playback=playback)
             return view.action()
 
 

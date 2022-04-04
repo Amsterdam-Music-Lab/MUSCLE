@@ -64,15 +64,13 @@ class Anisochrony(DurationDiscrimination):
             },
             view='BUTTON_ARRAY',
             result_id=result_pk,
-            submits=True
+            question_config={'submits': True}
         )
-        play_config = {
-            'decision_time': section.duration + .7
-        }
-        playback = Playback('AUTOPLAY', [section], play_config=play_config)
+        playback = Playback('AUTOPLAY', [section])
         form = Form([question])
         config = {
             'listen_first': True,
+            'decision_time': section.duration + .7
         }
         view = Trial(
             playback=playback,

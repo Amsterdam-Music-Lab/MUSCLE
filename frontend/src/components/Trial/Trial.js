@@ -130,6 +130,7 @@ const Trial = ({ view, participant, session, playback, feedback_form, config, on
                 instruction={playback.instruction}
                 preloadMessage={playback.preload_message}
                 autoAdvance={config.auto_advance}
+                decisionTime={config.decision_time}
                 playConfig={playback.play_config}
                 sections={playback.sections}
                 time={time}

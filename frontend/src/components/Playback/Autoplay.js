@@ -11,7 +11,7 @@ const PRELOAD = "PRELOAD";
 const RECOGNIZE = "RECOGNIZE";
 
 
-const AutoPlay = ({instruction, preloadMessage, playConfig, sections, time, startedPlaying, finishedPlaying, submitResult, autoAdvance, className=''}) => {
+const AutoPlay = ({instruction, preloadMessage, playConfig, sections, time, startedPlaying, finishedPlaying, submitResult, autoAdvance, decisionTime, className=''}) => {
     // player state
     const [state, setState] = useState({ view: PRELOAD });
     const [running, setRunning] = useState(playConfig.auto_play);
@@ -66,7 +66,7 @@ const AutoPlay = ({instruction, preloadMessage, playConfig, sections, time, star
                     <div className="circle">
                         <Circle
                             running={running}
-                            duration={playConfig.decision_time}
+                            duration={decisionTime}
                             color="white"
                             animateCircle={playConfig.show_animation}
                             onTick={onCircleTimerTick}
@@ -79,7 +79,7 @@ const AutoPlay = ({instruction, preloadMessage, playConfig, sections, time, star
                                     // Create a time_passed result
                                     submitResult({
                                         type: "time_passed",
-                                        decision_time: playConfig.decision_time,
+                                        decision_time: decisionTime,
                                         section: section.id
                                     });
                                 }
@@ -88,7 +88,7 @@ const AutoPlay = ({instruction, preloadMessage, playConfig, sections, time, star
                         <div className="circle-content">
                             {playConfig.show_animation
                                 ? <ListenCircle
-                                    duration={playConfig.decision_time}
+                                    duration={decisionTime}
                                     histogramRunning={running}
                                     countDownRunning={running}
                                 />

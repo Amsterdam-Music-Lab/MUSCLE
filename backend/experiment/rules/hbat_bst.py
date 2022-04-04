@@ -60,17 +60,19 @@ class BST(HBat):
             },
             view='BUTTON_ARRAY',
             result_id=result_pk,
-            submits=True
+            question_config={
+                'submits': True
+            }
         )
-        play_config = {
-            'decision_time': section.duration + .5
-        }
-        playback = Playback('AUTOPLAY', [section], play_config=play_config)
+        playback = Playback('AUTOPLAY', [section])
         form = Form([question])
         view = Trial(
             playback=playback,
             feedback_form=form,
-            title=_('Meter detection')
+            title=_('Meter detection'),
+            config={
+                'decision_time': section.duration + .5
+            }
         )
         return view.action()
 

@@ -21,7 +21,6 @@ class Playback(object):
         self.instruction = instruction
         self.play_config = {
             'ready_time': 0,
-            'decision_time': 5,
             'playhead': 0,
             'show_animation': False,
             'mute': False
@@ -34,6 +33,7 @@ class Playback(object):
             'player_type': self.player_type,
             'sections': self.sections,
             'instruction': self.instruction,
+            'preload_message': self.preload_message,
             'play_config': self.play_config
         }
         return action

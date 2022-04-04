@@ -181,13 +181,12 @@ def next_trial_actions(session, round_number, request_session):
         },
         view='BUTTON_ARRAY',
         result_id=result_pk,
-        submits=True
+        question_config={
+            'submits': True
+        }
     )
     form = Form([question])
-    play_config = {
-        'decision_time': section.duration + .5
-    }
-    playback = Playback('AUTOPLAY', [section], play_config=play_config)
+    playback = Playback([section])
     if round_number < 5:
         title = _('practice')
     else:
@@ -196,7 +195,10 @@ def next_trial_actions(session, round_number, request_session):
         playback=playback,
         feedback_form=form,
         title=_('Ryhthm discrimination: %s' %(title)),
-        config={'listen_first': True}
+        config={
+            'listen_first': True,
+            'decision_time': section.duration + .5
+        }
     )
 
     actions.append(view.action())

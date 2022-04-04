@@ -109,17 +109,19 @@ class HBat(Base):
             },
             view='BUTTON_ARRAY',
             result_id=result_pk,
-            submits=True
+            question_config={
+                'submits': True
+            }
         )
-        play_config = {
-            'decision_time': section.duration + .5
-        }
-        playback = Playback('AUTOPLAY', [section], play_config=play_config)
+        playback = Playback('AUTOPLAY', [section])
         form = Form([question])
         view = Trial(
             playback=playback,
             feedback_form=form,
-            title=_('Beat acceleration')
+            title=_('Beat acceleration'),
+            config={
+                'decision_time': section.duration + .5
+            }
         )
         return view.action()
 
