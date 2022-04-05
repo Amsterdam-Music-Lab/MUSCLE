@@ -23,11 +23,12 @@ class Categorization(Base):
     def next_round(cls, session):
         # logic for retrieving sections
         # for now: get first 2 sections
-        sections = session.playlist.section_set.all()[:2]
+        section = session.playlist.section_set.all()[0]
         # retrieve expected response from json_data
-        # for now: set expected response to first section
-        result_pk = Base.prepare_result(session, sections[0], sections[0].id)
-        view = TwoAlternativeForced(sections, result_pk)
+        # for now: set it arbitrarily to "up"
+        result_pk = Base.prepare_result(session, section, 'up')
+        choices = {'A': 'A', 'B': 'B'}
+        view = TwoAlternativeForced(section, choices, result_pk)
         return view.action()
 
     @classmethod

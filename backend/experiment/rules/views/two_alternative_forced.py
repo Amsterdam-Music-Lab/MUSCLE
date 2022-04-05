@@ -11,15 +11,15 @@ class TwoAlternativeForced(Trial):
     Provide data for a TwoAlternativeForced view that (auto)plays a section,
     shows a question and has two customizable buttons
     """
-    def __init__(self, sections, result_pk, **kwargs):
+    def __init__(self, section, choices, result_pk, **kwargs):
         super().__init__(**kwargs)
         self.playback = Playback(
-            sections,
-            'MULTIPLE'
+            [section],
+            'BUTTON'
         )
         question = ChoiceQuestion(
             key='choice',
-            choices={section.id: section.name for section in sections},
+            choices=choices,
             view='BUTTON_ARRAY',
             result_id=result_pk,
             submits=True
