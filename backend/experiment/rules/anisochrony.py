@@ -2,8 +2,9 @@ import logging
 from django.utils.translation import gettext_lazy as _
 
 from experiment.models import Section
-from .views import CompositeView, Explainer, Step, Consent, StartSession, Playlist
+from .views import Trial, Explainer, Step, Consent, StartSession, Playlist
 from .views.form import ChoiceQuestion, Form
+from .views.playback import Playback
 from .util.actions import render_feedback_trivia
 from .base import Base
 from .duration_discrimination import DurationDiscrimination
@@ -53,11 +54,7 @@ class Anisochrony(DurationDiscrimination):
         expected_result = 'REGULAR' if difference == 0 else 'IRREGULAR'
         # create Result object and save expected result to database
         result_pk = Base.prepare_result(session, section, expected_result)
-        instructions = {
-            'preload': '',
-            'during_presentation': ''
-        }
-        question = question = ChoiceQuestion(
+        question = ChoiceQuestion(
             key='if_regular',
             question=_(
                     "Were the tones REGULAR or IRREGULAR?"),
@@ -69,19 +66,21 @@ class Anisochrony(DurationDiscrimination):
             result_id=result_pk,
             submits=True
         )
-        form = Form([question])
-        view = CompositeView(
-            section=section,
-            feedback_form=form.action(),
-            instructions=instructions,
-            title=_('Anisochrony')
-        )
-        config = {
-            'listen_first': True,
+        play_config = {
             'decision_time': section.duration + .7
         }
-        action = view.action(config)
-        return action
+        playback = Playback('AUTOPLAY', [section], play_config=play_config)
+        form = Form([question])
+        config = {
+            'listen_first': True,
+        }
+        view = Trial(
+            playback=playback,
+            feedback_form=form,
+            title=_('Anisochrony'),
+            config=config
+        )
+        return view.action()
 
     @classmethod
     def intro_explanation(cls, *args):
@@ -90,7 +89,7 @@ class Anisochrony(DurationDiscrimination):
                 'In this test you will hear a series of tones for each trial.'),
             steps=[
                 Step(_(
-                        "It's your job to decide of the tones sounds REGULAR or IRREGULAR")),
+                        "It's your job to decide of the tones sounds REGULAR or IRREGULAR.")),
                 Step(_(
                         'During the experiment it will become more difficult to hear the difference.')),
                 Step(_(
@@ -104,7 +103,7 @@ class Anisochrony(DurationDiscrimination):
         )
 
     @staticmethod
-    def calculate_score(result, form_element):
+    def calculate_score(result, form_element, data):
         # a result's score is used to keep track of how many correct results were in a row
         # for catch trial, set score to 2 -> not counted for calculating turnpoints
         try:

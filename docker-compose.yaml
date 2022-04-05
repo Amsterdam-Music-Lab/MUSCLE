@@ -13,7 +13,7 @@ services:
           - db_data:/var/lib/postgresql/data/
     ip2country:
         image: extrawurst/ip2country:latest
-        ports: 
+        ports:
          - 8854:5000
     server:
         build:

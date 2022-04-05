@@ -1,6 +1,6 @@
 import logging
 
-from .views import SongSync, SongBool, TwoAlternativeForced, FinalScore, Score, CompositeView
+from .views import SongSync, SongBool, TwoAlternativeForced, FinalScore, Score, Trial
 
 logger = logging.getLogger(__name__)
 
@@ -30,25 +30,25 @@ class Base(object):
 
     
     @staticmethod
-    def handle_results(session, section, data):
+    def handle_results(session, data):
         """ 
         if the given_result is an array of results, retrieve and save results for all of them
         to use, override hande_result and call this method
         """
 
         from experiment.models import Result
-        for form_element in data['result']['form']:
+        form = data.pop('form')
+        for form_element in form:
             try:
                 result = Result.objects.get(pk=form_element['result_id'])
             except Result.DoesNotExist:
                 # Create new result
                 result = Result(session=session)
             # Calculate score
-            score = session.experiment_rules().calculate_score(result, form_element)
+            score = session.experiment_rules().calculate_score(result, form_element, data)
             if not score:
                 score = 0
             result.given_response = form_element['value']
-            result.section = section
             result.save_json_data(data)
             result.score = score
             result.save()

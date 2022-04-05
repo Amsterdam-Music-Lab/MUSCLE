@@ -19,9 +19,9 @@ def get(request, slug):
         experiment = Experiment.objects.get(slug=slug, active=True)
     except Experiment.DoesNotExist:
         raise Http404("Experiment does not exist")
-    
-    series_data = request.session.get('test_series')
-    if experiment.test_series and series_data:
+
+    series_data = request.session.get('experiment_series')
+    if experiment.experiment_series and series_data:
         # we are in the middle of a test battery
         try:
             session = Session.objects.get(pk=series_data.get('session_id'))
@@ -43,7 +43,7 @@ def get(request, slug):
 
     if experiment.language:
         activate(experiment.language)
-    
+
     # create data
     experiment_data = {
         'id': experiment.id,
@@ -66,4 +66,3 @@ def get(request, slug):
         # avoid carrying over language cookie from other experiments
         response.set_cookie(settings.LANGUAGE_COOKIE_NAME, None)
     return response
-    

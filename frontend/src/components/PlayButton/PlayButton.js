@@ -6,7 +6,8 @@ const PlayButton = ({ onClick, className = "", colorClass = "pink" }) => {
         <div
             className={classNames(
                 "aha__play-button border-outside",
-                "btn-" + colorClass,
+                "btn",
+                // "btn-" + colorClass,
                 className
             )}
             onClick={onClick}

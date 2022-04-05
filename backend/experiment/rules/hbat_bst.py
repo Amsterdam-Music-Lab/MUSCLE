@@ -1,8 +1,9 @@
 from django.utils.translation import gettext_lazy as _
 
 from experiment.models import Section
-from .views import CompositeView, Explainer, Step
+from .views import Trial, Explainer, Step
 from .views.form import ChoiceQuestion, Form
+from .views.playback import Playback
 
 from .base import Base
 from .h_bat import HBat
@@ -49,10 +50,6 @@ class BST(HBat):
         expected_result = 'in2' if trial_condition else 'in3'
         # create Result object and save expected result to database
         result_pk = Base.prepare_result(session, section, expected_result)
-        instructions = {
-            'preload': '',
-            'during_presentation': ''
-        }
         question = ChoiceQuestion(
             key='longer_or_equal',
             question=_(
@@ -65,17 +62,17 @@ class BST(HBat):
             result_id=result_pk,
             submits=True
         )
+        play_config = {
+            'decision_time': section.duration + .5
+        }
+        playback = Playback('AUTOPLAY', [section], play_config=play_config)
         form = Form([question])
-        view = CompositeView(
-            section=section,
-            feedback_form=form.action(),
-            instructions=instructions,
+        view = Trial(
+            playback=playback,
+            feedback_form=form,
             title=_('Meter detection')
         )
-        config = {
-            'decision_time': section.duration + .7
-        }
-        return view.action(config)
+        return view.action()
 
     @classmethod
     def response_explainer(cls, correct, in2, button_label=_('Next fragment')):

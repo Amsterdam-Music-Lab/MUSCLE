@@ -10,7 +10,7 @@ import * as audio from "../../util/audio";
 import { TransitionGroup, CSSTransition } from "react-transition-group";
 import { withRouter } from "react-router-dom";
 
-import CompositeView from '../CompositeView/CompositeView';
+import Trial from '../Trial/Trial';
 import DefaultPage from "../Page/DefaultPage";
 import Loading from "../Loading/Loading";
 import Explainer from "../Explainer/Explainer";
@@ -25,7 +25,6 @@ import TwoSong from "../TwoSong/TwoSong";
 import ProfileQuestion from "../ProfileQuestion/ProfileQuestion";
 import ResultQuestion from "../ResultQuestion/ResultQuestion";
 import FinalScore from "../FinalScore/FinalScore";
-import PracticeRound from "../PracticeRound/PracticeRound";
 import Final from "../Final/Final";
 
 // Experiment handles the main experiment flow:
@@ -148,10 +147,8 @@ const Experiment = ({ match }) => {
                 return <TwoAlternativeForced {...attrs} />;
             case "TWO_SONG":
                 return <TwoSong {...attrs} />;
-            case "PRACTICE_ROUND":
-                return <PracticeRound {...attrs} />
-            case "COMPOSITE_VIEW":
-                return <CompositeView {...attrs} />
+            case "TRIAL_VIEW":
+                return <Trial {...attrs} />
             case "PROFILE_QUESTION":
                 return <ProfileQuestion {...attrs} />;
             case "RESULT_QUESTION":

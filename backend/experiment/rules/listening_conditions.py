@@ -2,7 +2,7 @@
 from django.utils.translation import gettext_lazy as _
 
 from .base import Base
-from .views import CompositeView, Consent, Explainer, Step, Final, Playlist, StartSession
+from .views import Consent, Explainer, Step, Final, Playlist, StartSession, Trial
 from .views.form import ChoiceQuestion, Form
 from .util.actions import combine_actions, final_action_with_optional_button
 
@@ -76,15 +76,11 @@ class ListeningConditions(Base):
                     You can then adjust the volume to as high a level as possible without it being uncomfortable. \
                     When you are satisfied with the sound level, click Continue"),
             }
-            feedback_form = Form([])
-            view = CompositeView(section, feedback_form.action(), instructions)
-            return view.action({'decision_time': 120})
-        else:
-            message = _("Please keep the eventual sound level the same over the course of the experiment.")
-            return final_action_with_optional_button(session, message, request_session)
-        view = CompositeView(None, feedback_form.action())
-        return view.action()
-        
+            feedback_form = None
+            view = Trial(feedback_form, instructions)
+            return view.action()
+
+
     @classmethod
     def first_round(cls, experiment):
         consent = Consent.action()
@@ -107,4 +103,3 @@ class ListeningConditions(Base):
             playlist,
             start_session
         )
-        

@@ -5,7 +5,8 @@ from django.utils.translation import gettext_lazy as _
 
 from .util.actions import combine_actions, final_action_with_optional_button, render_feedback_trivia
 from .util.practice import practice_explainer, practice_again_explainer, start_experiment_explainer
-from .views import CompositeView, Consent, Final, Explainer, Step, StartSession, Playlist
+from .views import Trial, Consent, Final, Explainer, StartSession, Step, Playlist
+from .views.playback import Playback
 from .views.form import ChoiceQuestion, Form
 from .base import Base
 
@@ -107,7 +108,7 @@ class RhythmDiscrimination(Base):
         return combine_actions(*actions)
 
     @staticmethod
-    def calculate_score(result, form_element):
+    def calculate_score(result, form_element, data):
         try:
             expected_response = result.expected_response
         except Exception as e:
@@ -117,10 +118,6 @@ class RhythmDiscrimination(Base):
             return 1
         else:
             return 0
-
-    @staticmethod
-    def handle_result(session, section, data):
-        return Base.handle_results(session, section, data)
 
 
 def next_trial_actions(session, round_number, request_session):
@@ -174,10 +171,6 @@ def next_trial_actions(session, round_number, request_session):
     expected_result = 'SAME' if condition['group_id'] == 1 else 'DIFFERENT'
     # create Result object and save expected result to database
     result_pk = Base.prepare_result(session, section, expected_result)
-    instructions = {
-        'preload': '',
-        'during_presentation': ''
-    }
     question = ChoiceQuestion(
         key='same',
         question=_(
@@ -191,21 +184,22 @@ def next_trial_actions(session, round_number, request_session):
         submits=True
     )
     form = Form([question])
+    play_config = {
+        'decision_time': section.duration + .5
+    }
+    playback = Playback('AUTOPLAY', [section], play_config=play_config)
     if round_number < 5:
         title = _('practice')
     else:
         title = _('trial %(index)d of %(total)d') % ({'index': round_number - 4, 'total': len(plan) - 4})
-    view = CompositeView(
-        section=section,
-        feedback_form=form.action(),
-        instructions=instructions,
-        title=_('Rhythm discrimination: %s' %(title))
+    view = Trial(
+        playback=playback,
+        feedback_form=form,
+        title=_('Ryhthm discrimination: %s' %(title)),
+        config={'listen_first': True}
     )
-    config = {
-            'listen_first': True,
-            'decision_time': section.duration + .7
-    }
-    actions.append(view.action(config))
+
+    actions.append(view.action())
     return actions
 
 def plan_stimuli(session):
@@ -280,4 +274,3 @@ def finalize_experiment(session, request_session):
         to hear the rhythm really well.")
     final_text = render_feedback_trivia(feedback, trivia)
     return final_action_with_optional_button(session, final_text, request_session)
-

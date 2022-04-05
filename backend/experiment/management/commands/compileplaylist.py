@@ -27,16 +27,17 @@ class Command(BaseCommand):
         parser.add_argument('--tag_group',
                             type=str,
                             help='Process tags and groups for sections')
-    
+
     def handle(self, *args, **options):
         directory = options.get('directory')
         name = options.get('artist_default')
 
         upload_dir = settings.MEDIA_ROOT
         playlist_dir = join(upload_dir, directory)
+        search_critera = glob('{}/*.wav'.format(playlist_dir)) + glob('{}/*.mp3'.format(playlist_dir))
         with open(join(playlist_dir, 'audiofiles.csv'), 'w+') as f:
             csv_writer = csv.writer(f)
-            for audio_file in glob('{}/*.wav'.format(playlist_dir)):
+            for audio_file in search_critera:
                 artist_name = name
                 filename = join(directory,basename(audio_file))
                 song_name = splitext(basename(audio_file))[0]
@@ -47,14 +48,14 @@ class Command(BaseCommand):
                 group_tag_option = options.get('tag_group')
                 if group_tag_option:
                     group_id, tag_id = calculate_group_tag(filename, group_tag_option)
-                else: 
+                else:
                     group_id = tag_id = 0
                 row = [artist_name, song_name,
                     start_position, duration, filename, restrict_to_nl,
                     tag_id, group_id]
                 csv_writer.writerow(row)
 
-    
+
 def calculate_group_tag(filename, experiment):
     identifier = splitext(pathsplit(filename)[-1])[0]
     parts = identifier.split('_')

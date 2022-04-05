@@ -7,8 +7,9 @@ from django.utils.translation import gettext_lazy as _
 
 from .base import Base
 from experiment.models import Section
-from .views import CompositeView, Consent, Final, Explainer, Step, StartSession, Playlist
+from .views import Trial, Consent, Final, Explainer, StartSession, Step, Playlist
 from .views.form import ChoiceQuestion, Form
+from .views.playback import Playback
 from .util.actions import combine_actions, final_action_with_optional_button, render_feedback_trivia
 from .util.score import get_average_difference
 from .util.practice import get_trial_condition_block, get_practice_views, practice_explainer
@@ -69,7 +70,7 @@ class DurationDiscrimination(Base):
             return action
 
     @staticmethod
-    def calculate_score(result, form_element):
+    def calculate_score(result, form_element, data):
         # a result's score is used to keep track of how many correct results were in a row
         # for catch trial, set score to 2 -> not counted for calculating turnpoints
         try:
@@ -93,10 +94,6 @@ class DurationDiscrimination(Base):
     @classmethod
     def get_previous_condition(cls, last_result):
         return last_result.expected_response
-
-    @staticmethod
-    def handle_result(session, section, data):
-        return Base.handle_results(session, section, data)
 
     @classmethod
     def get_response_explainer(cls, correct, correct_response, button_label=_('Next fragment')):
@@ -135,10 +132,6 @@ class DurationDiscrimination(Base):
         expected_result = 'EQUAL' if difference == 0 else 'LONGER'
         # create Result object and save expected result to database
         result_pk = Base.prepare_result(session, section, expected_result)
-        instructions = {
-            'preload': '',
-            'during_presentation': ''
-        }
         question_text = cls.get_question_text()
         question = ChoiceQuestion(
             question=question_text,
@@ -151,19 +144,18 @@ class DurationDiscrimination(Base):
             result_id=result_pk,
             submits=True
         )
-        form = Form([question])
-        view = CompositeView(
-            section=section,
-            feedback_form=form.action(),
-            instructions=instructions,
-            title=_('%(title)s duration discrimination') % {'title': cls.condition}
-        )
-        config = {
-            'listen_first': True,
-            'decision_time': section.duration + .5
+        play_config = {
+            'decision_time': section.duration + .7,
         }
-        action = view.action(config)
-        return action
+        playback = Playback('AUTOPLAY', [section], play_config=play_config)
+        form = Form([question])
+        view = Trial(
+            playback=playback,
+            feedback_form=form,
+            title=_('%(title)s duration discrimination') % {'title': cls.condition},
+            config={'listen_first': True}
+        )
+        return view.action()
 
     @classmethod
     def get_question_text(cls):

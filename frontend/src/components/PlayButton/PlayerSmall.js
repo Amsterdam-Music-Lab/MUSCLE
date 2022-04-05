@@ -1,5 +1,5 @@
 import React from "react";
-import PlayButton from "../PlayButton/PlayButton";
+import PlayButton from "./PlayButton";
 import classNames from "classnames";
 
 const PlayerSmall = ({ colorClass, label, onClick, playing }) => (

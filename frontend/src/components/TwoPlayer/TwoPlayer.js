@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import * as audio from "../../util/audio";
 import Button from "../Button/Button";
-import PlayerSmall from "../PlayerSmall/PlayerSmall";
+import PlayerSmall from "../PlayButton/PlayerSmall";
 import { MEDIA_ROOT } from "../../config";
 
 // TwoPlayer is a base view for experiment views with 2 buttons
