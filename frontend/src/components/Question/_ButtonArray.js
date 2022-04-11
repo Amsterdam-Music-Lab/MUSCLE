@@ -11,10 +11,10 @@ const ButtonArray = ({ question, active, onChange }) => {
         }
         else {
             onChange(value)
-        }      
+        }
     }
-    
-    
+
+
     return (
         <div className="aha__buttons buttons d-flex flex-wrap justify-content-center p-3 w-100">
             {question.explainer && (
@@ -41,8 +41,8 @@ const ButtonArray = ({ question, active, onChange }) => {
 const ToggleButton = ({ label, value, index, name, active, onChange }) => {
     const disabled = active? '' : 'disabled';
     return (
-        <label 
-            className={classNames("btn btn-secondary btn-lg", disabled)}
+        <label
+            className={classNames("btn btn-secondary btn-lg", "neutral", disabled)}
             onClick={() => {
                 onChange(value);
             }}
