@@ -5,6 +5,7 @@ import { createProfile, createResult } from "../../API.js";
 import FeedbackForm from "../FeedbackForm/FeedbackForm";
 import Playback from "../Playback/Playback";
 import { play } from "../../util/audio";
+import classNames from "classnames";
 
 // Trial is an experiment view, that preloads a song, shows an explanation and plays audio
 // Optionally, it can show an animation during playback
@@ -123,7 +124,7 @@ const Trial = ({ view, participant, session, playback, feedback_form, config, on
     };
 
     return (
-        <div className="aha__trial">
+        <div className={classNames("aha__trial", config.style)}>
             {playback && (
             <Playback
                 playerType={playback.player_type}
@@ -132,7 +133,6 @@ const Trial = ({ view, participant, session, playback, feedback_form, config, on
                 autoAdvance={config.auto_advance}
                 playConfig={playback.play_config}
                 sections={playback.sections}
-                style={config.style}
                 time={time}
                 submitResult={makeResult}
                 startedPlaying={startTimer}
@@ -141,7 +141,6 @@ const Trial = ({ view, participant, session, playback, feedback_form, config, on
             {feedback_form && (
             <FeedbackForm
                 formActive={formActive}
-                style={config.style}
                 form={feedback_form.form}
                 buttonLabel={feedback_form.submit_label}
                 skipLabel={feedback_form.skip_label}

@@ -3,7 +3,7 @@ import React from "react";
 import classNames from "classnames";
 
 // ButtonArray is a question view for selecting a single option from a list of buttons
-const ButtonArray = ({ question, active, style, onChange }) => {
+const ButtonArray = ({ question, active, onChange }) => {
 
     const buttonPress = (value) => {
         if (!active) {
@@ -29,7 +29,6 @@ const ButtonArray = ({ question, active, style, onChange }) => {
                         index={index}
                         name={question.key}
                         key={question.key+index}
-                        style={style}
                         onChange={buttonPress}
                         active={active}
                     />
@@ -39,11 +38,11 @@ const ButtonArray = ({ question, active, style, onChange }) => {
     )
 }
 
-const ToggleButton = ({ label, value, index, name, active, style, onChange }) => {
+const ToggleButton = ({ label, value, index, name, active, onChange }) => {
     const disabled = active? '' : 'disabled';
     return (
         <label
-            className={classNames("btn btn-secondary btn-lg", style, disabled)}
+            className={classNames("btn btn-secondary btn-lg", disabled)}
             onClick={() => {
                 onChange(value);
             }}

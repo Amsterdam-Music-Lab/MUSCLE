@@ -8,7 +8,7 @@ const PlayerSmall = ({ colorClass, style, label, onClick, playing }) => (
         <div className="banner"></div>
         <h3 className="label">{label}</h3>
         <PlayButton
-            className={classNames({ stop: playing }, style)}
+            className={classNames({ stop: playing })}
         />
     </div>
 );
