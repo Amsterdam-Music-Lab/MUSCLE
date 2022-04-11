@@ -6,7 +6,7 @@ import PlayerSmall from "../PlayButton/PlayerSmall";
 import { MEDIA_ROOT } from "../../config";
 
 
-const MultiPlayer = ({sections, instruction, playConfig}) => {
+const MultiPlayer = ({sections, instruction, playConfig, style}) => {
     const cancelEvents = useRef(null);
     const [playing, setPlaying] = useState(0);
 
@@ -33,9 +33,12 @@ const MultiPlayer = ({sections, instruction, playConfig}) => {
     return (
         <div className="aha__multiplayer d-flex justify-content-between">
         {Object.keys(sections).map((index) => (
-            <PlayerSmall onClick={() => {
-                playMedia(sections[index].url);
-            }}/>
+            <PlayerSmall
+                style={style}
+                onClick={() => {
+                    playMedia(sections[index].url);
+                }}
+            />
         ))}
         </div>
     )

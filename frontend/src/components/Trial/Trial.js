@@ -132,6 +132,7 @@ const Trial = ({ view, participant, session, playback, feedback_form, config, on
                 autoAdvance={config.auto_advance}
                 playConfig={playback.play_config}
                 sections={playback.sections}
+                style={config.style}
                 time={time}
                 submitResult={makeResult}
                 startedPlaying={startTimer}
@@ -140,6 +141,7 @@ const Trial = ({ view, participant, session, playback, feedback_form, config, on
             {feedback_form && (
             <FeedbackForm
                 formActive={formActive}
+                style={config.style}
                 form={feedback_form.form}
                 buttonLabel={feedback_form.submit_label}
                 skipLabel={feedback_form.skip_label}

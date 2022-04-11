@@ -4,10 +4,10 @@ import Button from "../Button/Button";
 
 
 // FeedbackForm
-const FeedbackForm = ({ formActive, form, buttonLabel, skipLabel, isSkippable, onResult }) => {
+const FeedbackForm = ({ formActive, style, form, buttonLabel, skipLabel, isSkippable, onResult }) => {
 
     const showSubmitButtons = form.filter( formElement => formElement.submits).length == 0;
-    
+
     const onSubmit = () => {
         // Callback onResult with question data
         onResult({
@@ -31,6 +31,7 @@ const FeedbackForm = ({ formActive, form, buttonLabel, skipLabel, isSkippable, o
                         key={index}
                         id={index}
                         active={formActive}
+                        style={style}
                         question={form[index]}
                         onChange={onChange}
                     />
