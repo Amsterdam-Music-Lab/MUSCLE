@@ -1,4 +1,5 @@
 import json
+import copy
 
 from django.db import models
 from django.utils import timezone
@@ -85,6 +86,7 @@ class Experiment(models.Model):
                 # some experiments may have only profile questions
                 return [row], list(fieldnames)
             for result in session.result_set.all():
+                this_row = copy.deepcopy(row)
                 result_data = {
                     'section_name': result.section.name if result.section else None,
                     'result_created_at': result.created_at.isoformat(),
@@ -93,9 +95,9 @@ class Experiment(models.Model):
                     'expected_response': result.expected_response,
                     'given_response': result.given_response
                 }
-                row.update(result_data)
+                this_row.update(result_data)
                 fieldnames.update(result_data.keys())
-                rows.append(row)
+                rows.append(this_row)
         return rows, list(fieldnames)
 
     def get_rules(self):
