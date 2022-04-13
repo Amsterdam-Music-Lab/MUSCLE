@@ -9,6 +9,7 @@ from . import Playlist, ExperimentSeries
 language_choices = [(key, ISO_LANGUAGES[key]) for key in ISO_LANGUAGES.keys()]
 language_choices[0] = ('', 'Unset')
 
+
 class Experiment(models.Model):
     """Root entity for configuring experiments"""
 
@@ -22,8 +23,7 @@ class Experiment(models.Model):
     language = models.CharField(
         default="", blank=True, choices=language_choices, max_length=2)
     experiment_series = models.ForeignKey(ExperimentSeries, on_delete=models.SET_NULL,
-                                 blank=True, null=True)
-
+                                          blank=True, null=True)
 
     class Meta:
         ordering = ['name']
@@ -36,6 +36,10 @@ class Experiment(models.Model):
         return self.session_set.count()
 
     session_count.short_description = "Sessions"
+
+    def session_count_groups(self, filter_by={}):
+        """Number of sessions belonging to a certain group"""
+        return self.session_set.filter(json_data__contains={'group': filter_by}).count()
 
     def playlist_count(self):
         """Number of playlists"""
@@ -66,18 +70,18 @@ class Experiment(models.Model):
 
     def export_table(self):
         """Export tabular data for admin"""
-        rows = [] # a list of dictionaries
-        fieldnames = set() # keep track of all potential fieldnames
+        rows = []  # a list of dictionaries
+        fieldnames = set()  # keep track of all potential fieldnames
         for session in self.session_set.all():
             profile = session.participant.export_admin()
             session_finished = session.finished_at.isoformat() if session.finished_at else None
             row = {
-                    'experiment_id': self.id,
-                    'experiment_name': self.name,
-                    'participant_id': profile['id'],
-                    'participant_country': profile['country_code'],
-                    'session_start': session.started_at.isoformat(),
-                    'session_end': session_finished
+                'experiment_id': self.id,
+                'experiment_name': self.name,
+                'participant_id': profile['id'],
+                'participant_country': profile['country_code'],
+                'session_start': session.started_at.isoformat(),
+                'session_end': session_finished
             }
             row.update(profile['profile'])
             fieldnames.update(row.keys())
