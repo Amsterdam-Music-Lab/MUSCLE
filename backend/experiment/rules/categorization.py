@@ -5,6 +5,8 @@ from .views import Consent, StartSession, TwoAlternativeForced
 from .util.actions import combine_actions
 
 from .base import Base
+import random
+
 
 class Categorization(Base):
     ID = 'CATEGORIZATION'
@@ -13,7 +15,7 @@ class Categorization(Base):
     def first_round(cls, experiment):
         consent = Consent.action()
         start_session = StartSession.action()
-        cls.plan_experiment()
+
         return combine_actions(
             consent,
             start_session
@@ -21,9 +23,16 @@ class Categorization(Base):
 
     @classmethod
     def next_round(cls, session):
+        next_round_number = session.get_next_round()
+
+        if next_round_number == 1:
+            cls.plan_experiment(session)
+            section = session.playlist.section_set.all()[0]
+        else:
+            section = session.playlist.section_set.all()[next_round_number]
         # logic for retrieving sections
         # for now: get first 2 sections
-        section = session.playlist.section_set.all()[0]
+
         # retrieve expected response from json_data
         # for now: set it arbitrarily to "up"
         result_pk = Base.prepare_result(session, section, 'up')
@@ -32,11 +41,27 @@ class Categorization(Base):
         return view.action()
 
     @classmethod
-    def plan_experiment(cls):
-        # check which group participant belongs to
-        # set assignment blue / orange etc.
-        # save to session.json_data
-        pass
+    def plan_experiment(cls, session):
+        """
+        Randomly assign one of four (equal sized) groups to participants        
+        SB = Same direction, Blue is true
+        SO = Same direction, Orange is true
+        CB = Crossed direction, Blue is true
+        CO = Crossed direction, Orange is true
+        """
+
+        # Set total size per group
+        group_count = 2
+
+        if session.experiment.session_count() <= (group_count * 4):
+            group = None
+            # Assign a group, if that group is full try again
+            while group_count >= 2:
+                group = random.choice(['SB', 'SO', 'CB', 'CO'])
+                group_count = session.experiment.session_count_groups(group)
+            session.json_data = {'group': group}
+            session.save()
+        return
 
     def get_trial_with_feedback(session):
         explainer = Explainer()
