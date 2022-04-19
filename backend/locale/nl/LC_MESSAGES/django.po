@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-05 08:55+0200\n"
+"POT-Creation-Date: 2022-04-11 10:13+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -91,10 +91,8 @@ msgstr "Anisochronie"
 msgid "In this test you will hear a series of tones for each trial."
 msgstr "In deze test krijg je steeds een reeks tonen te horen."
 
-#: experiment/rules/anisochrony.py:92
-#, fuzzy
-#| msgid "It's your job to decide of the tones sounds REGULAR or IRREGULAR"
-msgid "It's your job to decide of the tones sounds REGULAR or IRREGULAR."
+#: experiment/rules/anisochrony.py:93
+msgid "It's your job to decide if the tones sound REGULAR or IRREGULAR"
 msgstr ""
 "Het is jouw taak om te beslissen of het ritme REGELMATIG of ONREGELMATIG is. "
 
@@ -115,13 +113,11 @@ msgid "Try to answer as accurately as possible, even if you're uncertain."
 msgstr ""
 "Probeer ook als je het niet zeker weet zo accuraat mogelijk te antwoorden."
 
-#: experiment/rules/anisochrony.py:98 experiment/rules/beat_alignment.py:34
-#: experiment/rules/beat_alignment.py:57
-#: experiment/rules/duration_discrimination.py:174
-#: experiment/rules/h_bat.py:138 experiment/rules/hbat_bst.py:30
-#: experiment/rules/rhythm_discrimination.py:237
-#, fuzzy
-#| msgid "Remember that you don't move along or tap during the test."
+#: experiment/rules/anisochrony.py:99 experiment/rules/beat_alignment.py:33
+#: experiment/rules/beat_alignment.py:56
+#: experiment/rules/duration_discrimination.py:182
+#: experiment/rules/h_bat.py:145 experiment/rules/hbat_bst.py:29
+#: experiment/rules/rhythm_discrimination.py:243
 msgid "Remember: try not to move or tap along with the sounds"
 msgstr "Denk eraan dat je niet meebeweegt of meetikt tijdens het testje."
 
@@ -171,11 +167,7 @@ msgstr ""
 "Jouw taak is om te beslissen of de piepjes IN DE MAAT of UIT DE MAAT van de "
 "muziek zijn."
 
-#: experiment/rules/beat_alignment.py:36
-#, fuzzy
-#| msgid ""
-#| "Listen carefully to this. Pay close attention to the description that "
-#| "accompanies each example."
+#: experiment/rules/beat_alignment.py:35
 msgid ""
 "Listen carefully to the following examples. Pay close attention to the "
 "description that accompanies each example."
@@ -199,13 +191,11 @@ msgstr ""
 "Bij elk fragment moet je bepalen of de piepjes IN DE MAAT of UIT DE MAAT van "
 "de muziek zijn."
 
-#: experiment/rules/beat_alignment.py:56
-#, fuzzy
-#| msgid "Pay attention: a music fragment can occur several times."
+#: experiment/rules/beat_alignment.py:55
 msgid "Note: a music fragment can occur several times."
 msgstr "Let op: een muziekfragment kan meerdere keren voorkomen."
 
-#: experiment/rules/beat_alignment.py:58
+#: experiment/rules/beat_alignment.py:57
 msgid ""
 "In total, this test will take around 6 minutes to complete. Try to stay "
 "focused for the entire duration!"
@@ -222,13 +212,21 @@ msgstr "Start"
 msgid "Well done! You’ve answered {} percent correctly!"
 msgstr "Goed gedaan! Je hebt {} procent goed beantwoord!"
 
-#: experiment/rules/beat_alignment.py:85
+#: experiment/rules/beat_alignment.py:84
 msgid ""
 "In the UK, over 140.000 people did                 this test when it was "
 "first developed?"
 msgstr ""
 "Meer dan 140.000 mensen in Engeland deze test hebben gedaan toen deze in "
 "ontwikkeling was?"
+
+#: experiment/rules/beat_alignment.py:96
+msgid "How certain are you of your answer?"
+msgstr "Hoe zeker ben je van dit antwoord?"
+
+#: experiment/rules/beat_alignment.py:97 experiment/rules/views/question.py:211
+msgid "I guessed"
+msgstr "Ik heb gegokt"
 
 #: experiment/rules/beat_alignment.py:103
 msgid "In this example the beeps are ALIGNED TO THE BEAT of the music."
@@ -390,8 +388,6 @@ msgid "Is the second tone EQUALLY LONG as the first tone or LONGER?"
 msgstr "Is de 2e toon EVEN LANG als of LANGER dan de 1e toon?"
 
 #: experiment/rules/duration_discrimination_tone.py:43
-#, fuzzy
-#| msgid "In this test you will hear a series of tones for each trial."
 msgid "In this test you will hear two tones on each trial."
 msgstr "In deze test krijg je steeds een reeks tonen te horen."
 
@@ -423,7 +419,7 @@ msgstr "Versnelling horen"
 msgid "It's your job to decide if the rhythm goes SLOWER of FASTER."
 msgstr "Het is jouw taak om te beslissen of het ritme VERTRAAGT of VERSNELT."
 
-#: experiment/rules/h_bat.py:140 experiment/rules/hbat_bst.py:32
+#: experiment/rules/h_bat.py:147 experiment/rules/hbat_bst.py:31
 msgid ""
 "In this test, you can answer as soon as you feel you know the answer, but "
 "please wait until you are sure or the sound has stopped."
@@ -838,10 +834,9 @@ msgstr "oefenen"
 msgid "trial %(index)d of %(total)d"
 msgstr "test %(index)d van %(total)d"
 
-#: experiment/rules/rhythm_discrimination.py:198
-#, fuzzy, python-format
-#| msgid "Ryhthm discrimination: %s"
-msgid "Ryhthm discrimination: %s"
+#: experiment/rules/rhythm_discrimination.py:202
+#, python-format
+msgid "Rhythm discrimination: %s"
 msgstr "Ritmeverschillen: %s"
 
 #: experiment/rules/rhythm_discrimination.py:233
@@ -924,7 +919,7 @@ msgstr ""
 "Voor elk taakje krijg je eerst een korte uitleg en de mogelijkheid om te "
 "oefenen."
 
-#: experiment/rules/rhythm_experiment_series.py:31
+#: experiment/rules/rhythm_test_series.py:31
 msgid ""
 "You can get reimbursed for completing the entire experiment! Either by "
 "earning 6 euros, or by getting 1 research credit (for psychology students at "
@@ -1806,10 +1801,6 @@ msgstr ""
 msgid "How certain are you of this answer?"
 msgstr ""
 
-#: experiment/rules/views/question.py:211
-msgid "I guessed"
-msgstr "Ik heb gegokt"
-
 #: experiment/rules/views/question.py:212
 msgid "I think I know"
 msgstr "Ik denk het te weten"
@@ -2529,7 +2520,3 @@ msgstr ""
 " met hetzelfde e-mailadres waarmee je geregistreerd bent op de UvA lab "
 "website. Voeg je studentnummer toe als je student bent. We zorgen er dan "
 "voor dat je een vergoeding ontvangt!"
-
-#: experiment/templates/final/feedback_trivia.html:6
-msgid "Did you know..."
-msgstr "Wist je dat..."

@@ -89,7 +89,7 @@ class Anisochrony(DurationDiscrimination):
                 'In this test you will hear a series of tones for each trial.'),
             steps=[
                 Step(_(
-                        "It's your job to decide of the tones sounds REGULAR or IRREGULAR.")),
+                        "It's your job to decide if the tones sound REGULAR or IRREGULAR")),
                 Step(_(
                         'During the experiment it will become more difficult to hear the difference.')),
                 Step(_(

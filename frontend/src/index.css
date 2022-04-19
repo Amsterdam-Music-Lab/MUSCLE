@@ -984,6 +984,7 @@ h3.title:after {
   width: 100%;
   text-align: center;
 }
+<<<<<<< HEAD
 
 .aha__multiplayer .players {
   max-width: 350px;
@@ -1014,6 +1015,8 @@ h3.title:after {
 .aha__multiplayer .buttons {
   max-width: 350px;
 }
+=======
+>>>>>>> main
 
 .aha__buttons {
   display: flex;
