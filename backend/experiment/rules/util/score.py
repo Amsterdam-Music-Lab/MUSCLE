@@ -21,13 +21,13 @@ def get_average_difference_level_based(session, num_turnpoints, initial_value):
         # outliers
         last_result = get_fallback_result(session)
         if last_result:
-            return initial_value / (2^(int(last_result.section.name.split('_')[-1]) - 1))
+            return initial_value / (2 ** (int(last_result.section.name.split('_')[-1]) - 1))
         else:
             # participant didn't pay attention,
             # no results right after the practice rounds
             return initial_value
     # Difference by level starts at initial value (which is level 1, so 20/(2^0)) and then halves for every next level
-    return sum([initial_value / (2^(int(result.section.name.split('_')[-1]) - 1)) for result in last_turnpoints]) / last_turnpoints.count() 
+    return sum([initial_value / (2 ** (int(result.section.name.split('_')[-1]) - 1)) for result in last_turnpoints]) / last_turnpoints.count() 
 
 def get_fallback_result(session):
     """ if there were no turnpoints (outliers):
