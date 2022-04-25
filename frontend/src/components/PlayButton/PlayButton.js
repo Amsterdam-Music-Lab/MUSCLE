@@ -1,7 +1,7 @@
 import React from "react";
 import classNames from "classnames";
 
-const PlayButton = ({ onClick, className = "", colorClass = "pink" }) => {
+const PlayButton = ({ playSection, className = "", colorClass = "pink" }) => {
     return (
         <div
             className={classNames(
@@ -10,10 +10,10 @@ const PlayButton = ({ onClick, className = "", colorClass = "pink" }) => {
                 // "btn-" + colorClass,
                 className
             )}
-            onClick={onClick}
+            onClick={() => playSection(0)}
             tabIndex="0"
             onKeyPress={(e) => {
-                onClick();
+                playSection(0);
             }}
         ></div>
     );

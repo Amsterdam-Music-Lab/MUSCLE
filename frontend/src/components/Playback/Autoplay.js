@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 
-import * as audio from "../../util/audio";
 import { MEDIA_ROOT } from "../../config";
 
 import Circle from "../Circle/Circle";
@@ -26,25 +25,25 @@ const AutoPlay = ({instruction, preloadMessage, playConfig, sections, time, star
     };
 
 
-    // Handle view logic
-    useEffect(() => {
-        switch (state.view) {
-            case RECOGNIZE:
-                // Play audio at start time
-                if (!playConfig.mute) {
-                    audio.playFrom(Math.max(0, playConfig.playhead));
-                }
-                startedPlaying();
-                break;
-            default:
-            // nothing
-        }
+    // // Handle view logic
+    // useEffect(() => {
+    //     switch (state.view) {
+    //         case RECOGNIZE:
+    //             // Play audio at start time
+    //             if (!playConfig.mute) {
+    //                 audio.playFrom(Math.max(0, playConfig.playhead));
+    //             }
+    //             startedPlaying();
+    //             break;
+    //         default:
+    //         // nothing
+    //     }
 
-        // Clean up
-        return () => {
-            audio.pause();
-        };
-    }, [state, playConfig]);
+    //     // Clean up
+    //     return () => {
+    //         audio.pause();
+    //     };
+    // }, [state, playConfig]);
 
 
     // Render component based on view
@@ -72,17 +71,7 @@ const AutoPlay = ({instruction, preloadMessage, playConfig, sections, time, star
                             onTick={onCircleTimerTick}
                             onFinish={() => {
                                 // Stop audio
-                                audio.pause();
-                                setRunning(false);
                                 finishedPlaying();
-                                if (autoAdvance) {
-                                    // Create a time_passed result
-                                    submitResult({
-                                        type: "time_passed",
-                                        decision_time: decisionTime,
-                                        section: section.id
-                                    });
-                                }
                             }}
                         />
                         <div className="circle-content">

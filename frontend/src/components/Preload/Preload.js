@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 
 import ListenFeedback from "../Listen/ListenFeedback";
 import CountDown from "../CountDown/CountDown";
-import * as audio from "../../util/audio";
+// import * as audio from "../../util/audio";
 import classNames from "classnames";
 
 // Preload is an experiment screen that continues after a given time or after an audio file has been preloaded
@@ -21,17 +21,7 @@ const Preload = ({ instruction, pageTitle, duration, url, onNext }) => {
         }
     };
 
-    // Audio preloader
-    useEffect(() => {
-        // Load audio until available
-        // Return remove listener
-        return audio.loadUntilAvailable(url, () => {
-            audioIsAvailable.current = true;
-            if (timeHasPassed.current) {
-                onNext();
-            }
-        });
-    }, [url, onNext]);
+
 
     return (
         <ListenFeedback
