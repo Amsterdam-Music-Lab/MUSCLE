@@ -8,12 +8,13 @@ class Base(object):
     """Base class for other rules classes"""
 
     @staticmethod
-    def prepare_result(session, section, expected_response=None):
+    def prepare_result(session, section=None, expected_response=None):
         # Prevent circular dependency errors
         from experiment.models import Result
 
         result = Result(session=session)
-        result.section = section
+        if section:
+            result.section = section
         if expected_response:
             result.expected_response = expected_response
         result.save()

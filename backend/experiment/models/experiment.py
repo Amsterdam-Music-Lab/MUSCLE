@@ -84,7 +84,8 @@ class Experiment(models.Model):
             fieldnames.update(row.keys())
             if session.result_set.count() == 0:
                 # some experiments may have only profile questions
-                return [row], list(fieldnames)
+                rows.append(row)
+                continue
             for result in session.result_set.all():
                 this_row = copy.deepcopy(row)
                 result_data = {
