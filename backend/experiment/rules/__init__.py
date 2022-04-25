@@ -2,8 +2,6 @@ from .song_sync_only import SongSyncOnly
 from .short_long import ShortLong
 # from .short_long_tags import ShortLongTags
 # from .demo import Demo
-from .demo_taf import DemoTAF
-from .demo_two_song import DemoTwoSong
 from .eurovision_2020 import Eurovision2020
 from .kuiper_2020 import Kuiper2020
 from .beijaert_2021 import Beijaert2021
@@ -29,9 +27,6 @@ from .categorization import Categorization
 
 EXPERIMENT_RULES = {
     # Demo.ID: Demo,
-    DemoTAF.ID: DemoTAF,
-    DemoTwoSong.ID: DemoTwoSong,
-
     SongSyncOnly.ID: SongSyncOnly,
     ShortLong.ID: ShortLong,
     # ShortLongTags.ID: ShortLongTags,
