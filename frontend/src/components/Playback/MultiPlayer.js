@@ -1,13 +1,11 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useRef } from "react";
 
 import PlayerSmall from "../PlayButton/PlayerSmall";
 
-import { MEDIA_ROOT } from "../../config";
 
 
 const MultiPlayer = ({playSection, sections, instruction, playConfig}) => {
     const cancelEvents = useRef(null);
-    const [playing, setPlaying] = useState(0);
 
     const cancelActiveEvents = () => {
         // cancel events

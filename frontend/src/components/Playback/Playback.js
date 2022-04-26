@@ -16,7 +16,7 @@ const Playback = ({playerType, sections, instruction, preloadMessage, autoAdvanc
     const audioIsAvailable = useRef(false);
     const timeHasPassed = useRef(false);
 
-    const [url, setUrl] = useState(sections[0].url)
+    const [url, setUrl] = useState(MEDIA_ROOT + sections[0].url)
 
     useEffect(() => {
         // Load audio until available
@@ -30,16 +30,15 @@ const Playback = ({playerType, sections, instruction, preloadMessage, autoAdvanc
     }, [[url]]);
 
     const playSection = (index=0) => {
-        const url = MEDIA_ROOT + sections[index].url
+        if (sections[index].url !== url) {
+            setUrl(MEDIA_ROOT + sections[index].url);
+        }
         audio.pause();
-
-        audio.loadUntilAvailable(url, () => {
-            audio.setVolume(1);
-            if (!playConfig.mute) {
-                audio.playFrom(Math.max(0, playConfig.playhead));
-                startedPlaying();
-            }
-        });  
+        audio.setVolume(1);
+        if (!playConfig.mute) {
+            audio.playFrom(Math.max(0, playConfig.playhead));
+            startedPlaying();
+        } 
     };
 
     // if (autoAdvance) {
