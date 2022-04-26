@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 
 import * as audio from "../../util/audio";
-import { MEDIA_ROOT } from "../../config";
+import { MEDIA_ROOT, SILENT_MP3 } from "../../config";
 
 import AutoPlay from "./Autoplay";
 import PlayButton from "../PlayButton/PlayButton";
@@ -16,7 +16,7 @@ const Playback = ({playerType, sections, instruction, preloadMessage, autoAdvanc
     const audioIsAvailable = useRef(false);
     const timeHasPassed = useRef(false);
 
-    const initialUrl = MEDIA_ROOT + sections[0].url;
+    const initialUrl = SILENT_MP3;
 
     const [url, setUrl] = useState(initialUrl);
 
