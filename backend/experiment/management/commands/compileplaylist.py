@@ -94,7 +94,6 @@ def calculate_group_tag(filename, experiment):
         # categorization experiment
         # Pair1: 1A(1) 1B(2), Pair2: 2A(3), 2B(4) gets encodes as tag_id
         # Same direction (1), Crossed direction (2) gets encoded as group_id
-        print(identifier[-2:])
         if identifier[-2:] == '1A':
             tag = 1
         elif identifier[-2:] == '1B':
