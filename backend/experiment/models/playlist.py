@@ -14,7 +14,7 @@ class Playlist(models.Model):
 
     default_csv_row = 'CSV Format: artist_name [string],\
         song_name [string], start_position [float], duration [float],\
-        "path/filename.mp3" [string], restricted_to_nl [int 0=False 1=True], tag_id [int], group_id [int]'
+        "path/filename.mp3" [string], restricted_to_nl [int 0=False 1=True], tag_id [string], group_id [string]'
     csv = models.TextField(blank=True, help_text=default_csv_row)
 
     class Meta:
@@ -89,9 +89,7 @@ class Playlist(models.Model):
             # check for valid numbers
             if not (is_number(row['start_time'])
                     and is_number(row['duration'])
-                    and is_number(row['restrict_to_nl'])
-                    and is_number(row['tag_id'])
-                    and is_number(row['group_id'])):
+                    and is_number(row['restrict_to_nl'])):
                 return {
                     'status': self.CSV_ERROR,
                     'message': "Error: Expected number fields on line: " + str(lines)
@@ -105,8 +103,8 @@ class Playlist(models.Model):
                               duration=float(row['duration']),
                               filename=row['filename'],
                               restrict_to_nl=(int(row['restrict_to_nl']) == 1),
-                              tag_id=int(row['tag_id']),
-                              group_id=int(row['group_id']),
+                              tag_id=row['tag_id'],
+                              group_id=row['group_id'],
                               )
 
             # if same section already exists, update it with new info

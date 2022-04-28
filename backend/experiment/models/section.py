@@ -21,8 +21,8 @@ class Section(models.Model):
     restrict_to_nl = models.BooleanField(default=False)
     play_count = models.PositiveIntegerField(default=0)
     code = models.PositiveIntegerField(default=random_code)
-    tag_id = models.PositiveIntegerField(default=0)
-    group_id = models.PositiveIntegerField(default=0)
+    tag_id = models.CharField(max_length=128, default='0')
+    group_id = models.CharField(max_length=128, default='0')
 
     class Meta:
         ordering = ['artist', 'name', 'start_time']
