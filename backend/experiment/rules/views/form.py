@@ -1,5 +1,6 @@
-from django.utils.translation import gettext_lazy as _
 import json
+
+from django.utils.translation import gettext_lazy as _
 
 class Question(object):
     ''' Question is part of a form.
