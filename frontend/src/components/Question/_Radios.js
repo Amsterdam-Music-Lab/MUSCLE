@@ -9,7 +9,7 @@ const Radios = ({ question, value, onChange }) => {
                 <p className="explainer">{question.explainer}</p>
             )}
             <h3 className="title">{question.question}</h3>
-            {Object.keys(question.choices).sort().map((val, index) => (
+            {Object.keys(question.choices).sort((a,b) => a-b).map((val, index) => (
                 <Radio
                     key={index}
                     name={question.key}
