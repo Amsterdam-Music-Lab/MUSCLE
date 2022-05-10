@@ -11,6 +11,23 @@ class Score:  # pylint: disable=too-few-public-methods
 
     ID = 'SCORE'
 
+    def __init__(session, score_message, config=None, icon=None):
+        self.score = session.last_score()
+        self.score_message = score_message
+        self.config = {
+            'advance_after': None,
+            'show_song': False,
+            'show_total_score': False
+        }
+        if config:
+            self.config.update(config)
+        self.icon = icon
+        self.texts = {
+            'score': _('Score'),
+            'next': _('Next'),
+            'listen_explainer': _('You listened to:')
+        }
+
     @staticmethod
     def action(session, include_section=True):
         """Get data for score action"""
@@ -32,7 +49,6 @@ class Score:  # pylint: disable=too-few-public-methods
         }
         return action
 
-    @staticmethod
     def score_message(score):
         """Generate a message for the given score"""
         # Zero
