@@ -12,7 +12,7 @@ from .base import Base
 class GoldMSI(Base):
     """ an experiment view that implements the GoldMSI questionnaire """
     ID = 'GOLD_MSI'
-        demographics = [
+    demographics = [
         question_by_key('dgf_gender_identity'),
         question_by_key('dgf_age', EXTRA_DEMOGRAPHICS),
         question_by_key('dgf_education'),
