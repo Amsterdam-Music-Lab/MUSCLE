@@ -1449,35 +1449,31 @@ msgstr ""
 
 #: experiment/rules/util/isced_education.py:4
 msgid "Vocational qualification at about 16 years of age (GCSE)"
-msgstr ""
+msgstr "VMBO (of gelijkwaardig)"
 
 #: experiment/rules/util/isced_education.py:5
 msgid "Secondary diploma (A-levels/high school)"
-msgstr ""
+msgstr "HAVO/VWO/Gymnasium (of gelijkwaardig)"
 
 #: experiment/rules/util/isced_education.py:6
 msgid "Post-16 vocational course"
-msgstr "HAVO"
+msgstr "MBO (of gelijkwaardig)"
 
 #: experiment/rules/util/isced_education.py:7
 msgid "Associate's degree or 2-year professional diploma"
-msgstr ""
+msgstr "Associate degree opleiding (of gelijkwaardig)"
 
 #: experiment/rules/util/isced_education.py:8
-#, fuzzy
-#| msgid "Bachelor's degree or equivalent"
 msgid "Bachelor or equivalent"
-msgstr "Hbo/bachelor WO"
+msgstr "HBO of WO bacheloropleiding (of gelijkwaardig)"
 
 #: experiment/rules/util/isced_education.py:9
-#, fuzzy
-#| msgid "Master's degree or equivalent"
 msgid "Master or equivalent"
-msgstr "Doctoraal/Master WO"
+msgstr "HBO of WO masteropleiding (of gelijkwaardig)"
 
 #: experiment/rules/util/isced_education.py:10
 msgid "Doctoral degree or equivalent"
-msgstr "Doctoraat/PhD"
+msgstr "Doctoraal/PhD (of gelijkwaardig)"
 
 #: experiment/rules/util/languages.py:8
 msgid "Please rate your previous experience:"
@@ -1659,7 +1655,7 @@ msgstr ""
 
 #: experiment/rules/util/questions.py:98
 msgid "Not applicable"
-msgstr "Doctoraat/PhD"
+msgstr "Niet van toepassing"
 
 #: experiment/rules/util/questions.py:103
 msgid "Occupational status"
