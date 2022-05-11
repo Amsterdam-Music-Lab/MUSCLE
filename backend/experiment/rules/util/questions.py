@@ -5,6 +5,16 @@ from .iso_countries import ISO_COUNTRIES
 from .isced_education import ISCED_EDUCATION_LEVELS
 
 # List of all available profile questions
+
+ATTAINED_EDUCATION_CHOICES = dict(
+    ISCED_EDUCATION_LEVELS, 
+    **{'none':  _('Have not (yet) completed any school qualification')}
+)
+EXPECTED_EDUCATION_CHOICES = dict(
+    ISCED_EDUCATION_LEVELS,
+    **{'none': _('Not applicable')}
+)
+
 DEMOGRAPHICS = [
     ChoiceQuestion(
         key='dgf_gender_identity',
@@ -44,7 +54,7 @@ DEMOGRAPHICS = [
         view='RADIOS',
         question=_(
             "What is the highest educational qualification that you have attained?"),
-        choices=ISCED_EDUCATION_LEVELS.update({'none': _('Have not (yet) completed any school qualification')})
+        choices=ATTAINED_EDUCATION_CHOICES
     ),
     ChoiceQuestion(
         key='dgf_country_of_residence',
@@ -95,7 +105,7 @@ EXTRA_DEMOGRAPHICS = [
         view='RADIOS',
         question=_(
             "If you are still in education, what is the highest qualification you expect to obtain?"),
-        choices=ISCED_EDUCATION_LEVELS.update({'none': _('Not applicable')})
+        choices=EXPECTED_EDUCATION_CHOICES
     ),
     ChoiceQuestion(
         key='dgf_occupational_status',

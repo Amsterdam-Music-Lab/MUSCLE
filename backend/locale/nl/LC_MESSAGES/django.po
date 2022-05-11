@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-11 09:19+0200\n"
+"POT-Creation-Date: 2022-05-11 10:06+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -712,11 +712,11 @@ msgstr ""
 msgid "In which region do you currently reside?"
 msgstr ""
 
-#: experiment/rules/huang_2021.py:444 experiment/rules/util/questions.py:59
+#: experiment/rules/huang_2021.py:444 experiment/rules/util/questions.py:69
 msgid "To which group of musical genres do you currently listen most?"
 msgstr "Naar welk muziekgenre luistert u meestal?"
 
-#: experiment/rules/huang_2021.py:446 experiment/rules/util/questions.py:62
+#: experiment/rules/huang_2021.py:446 experiment/rules/util/questions.py:72
 msgid "Pop/Country/Religious"
 msgstr ""
 
@@ -732,15 +732,15 @@ msgstr ""
 msgid "Chinese opera"
 msgstr ""
 
-#: experiment/rules/huang_2021.py:450 experiment/rules/util/questions.py:64
+#: experiment/rules/huang_2021.py:450 experiment/rules/util/questions.py:74
 msgid "Rock/Punk/Metal"
 msgstr ""
 
-#: experiment/rules/huang_2021.py:451 experiment/rules/util/questions.py:61
+#: experiment/rules/huang_2021.py:451 experiment/rules/util/questions.py:71
 msgid "Dance/Electronic/New Age"
 msgstr ""
 
-#: experiment/rules/huang_2021.py:452 experiment/rules/util/questions.py:65
+#: experiment/rules/huang_2021.py:452 experiment/rules/util/questions.py:75
 msgid "Hip-hop/R&B/Funk"
 msgstr ""
 
@@ -1559,93 +1559,97 @@ msgstr ""
 msgid "Remember that you don't move along or tap during the test."
 msgstr "Denk eraan dat je niet meebeweegt of meetikt tijdens het testje."
 
-#: experiment/rules/util/questions.py:12
-msgid "With which gender do you currently most identify?"
-msgstr "Met welke gender identificeer je je het meest?"
-
-#: experiment/rules/util/questions.py:14
-msgid "Man"
-msgstr "Man"
-
-#: experiment/rules/util/questions.py:15
-msgid "Transgender man"
-msgstr "Transgender man"
-
-#: experiment/rules/util/questions.py:16
-msgid "Transgender woman"
-msgstr "Transgender vrouw"
-
-#: experiment/rules/util/questions.py:17
-msgid "Woman"
-msgstr "Vrouw"
-
-#: experiment/rules/util/questions.py:18
-msgid "Non-conforming or questioning"
-msgstr "Non-conform"
-
-#: experiment/rules/util/questions.py:19
-msgid "Intersex or two-spirit"
-msgstr "Intersekse of two-spirit"
-
-#: experiment/rules/util/questions.py:20
-msgid "Prefer not to answer"
-msgstr "Zeg ik liever niet"
-
-#: experiment/rules/util/questions.py:26
-msgid "When were you born?"
-msgstr ""
-
-#: experiment/rules/util/questions.py:28
-msgid "1943 or earlier"
-msgstr ""
-
-#: experiment/rules/util/questions.py:29
-msgid "1946–1964"
-msgstr ""
-
-#: experiment/rules/util/questions.py:30
-msgid "1965-1980"
-msgstr ""
-
-#: experiment/rules/util/questions.py:31
-msgid "1981–1996"
-msgstr ""
-
-#: experiment/rules/util/questions.py:32
-msgid "1997 or later"
-msgstr ""
-
-#: experiment/rules/util/questions.py:39 experiment/rules/util/questions.py:86
-msgid ""
-"In which country did you spend the most formative years of your childhood "
-"and youth?"
-msgstr ""
-
-#: experiment/rules/util/questions.py:46
-msgid "What is the highest educational qualification that you have attained?"
-msgstr "Wat is uw hoogste afgeronde opleiding?"
-
-#: experiment/rules/util/questions.py:47
+#: experiment/rules/util/questions.py:11
 msgid "Have not (yet) completed any school qualification"
 msgstr "Geen diploma"
 
-#: experiment/rules/util/questions.py:52 experiment/rules/util/questions.py:91
-msgid "In which country do you currently reside?"
+#: experiment/rules/util/questions.py:15
+msgid "Not applicable"
+msgstr "Niet van toepassing"
+
+#: experiment/rules/util/questions.py:22
+msgid "With which gender do you currently most identify?"
+msgstr "Met welke gender identificeer je je het meest?"
+
+#: experiment/rules/util/questions.py:24
+msgid "Man"
+msgstr "Man"
+
+#: experiment/rules/util/questions.py:25
+msgid "Transgender man"
+msgstr "Transgender man"
+
+#: experiment/rules/util/questions.py:26
+msgid "Transgender woman"
+msgstr "Transgender vrouw"
+
+#: experiment/rules/util/questions.py:27
+msgid "Woman"
+msgstr "Vrouw"
+
+#: experiment/rules/util/questions.py:28
+msgid "Non-conforming or questioning"
+msgstr "Non-conform"
+
+#: experiment/rules/util/questions.py:29
+msgid "Intersex or two-spirit"
+msgstr "Intersekse of two-spirit"
+
+#: experiment/rules/util/questions.py:30
+msgid "Prefer not to answer"
+msgstr "Zeg ik liever niet"
+
+#: experiment/rules/util/questions.py:36
+msgid "When were you born?"
 msgstr ""
 
-#: experiment/rules/util/questions.py:63
+#: experiment/rules/util/questions.py:38
+msgid "1943 or earlier"
+msgstr ""
+
+#: experiment/rules/util/questions.py:39
+msgid "1946–1964"
+msgstr ""
+
+#: experiment/rules/util/questions.py:40
+msgid "1965-1980"
+msgstr ""
+
+#: experiment/rules/util/questions.py:41
+msgid "1981–1996"
+msgstr ""
+
+#: experiment/rules/util/questions.py:42
+msgid "1997 or later"
+msgstr ""
+
+#: experiment/rules/util/questions.py:49 experiment/rules/util/questions.py:96
+msgid ""
+"In which country did you spend the most formative years of your childhood "
+"and youth?"
+msgstr "In welk land heeft u de vormende jaren van uw jeugd doorgebracht?"
+
+#: experiment/rules/util/questions.py:56
+msgid "What is the highest educational qualification that you have attained?"
+msgstr "Wat is uw hoogste afgeronde opleiding?"
+
+#: experiment/rules/util/questions.py:62 experiment/rules/util/questions.py:101
+msgid "In which country do you currently reside?"
+msgstr "In welk land woont u tegenwoordig?"
+
+#: experiment/rules/util/questions.py:73
 msgid "Jazz/Folk/Classical"
 msgstr ""
 
-#: experiment/rules/util/questions.py:71
+#: experiment/rules/util/questions.py:81
 msgid "The instrument I play best, including voice (or none), is:"
 msgstr "Het instrument dat ik het best bespeel (stem inbegrepen) is:"
 
-#: experiment/rules/util/questions.py:80
+#: experiment/rules/util/questions.py:90
 msgid "What is your age?"
 msgstr "Wat is je leeftijd?"
 
-#: experiment/rules/util/questions.py:97
+#: experiment/rules/util/questions.py:107
 msgid ""
 "If you are still in education, what is the highest qualification you expect "
 "to obtain?"
@@ -1653,43 +1657,39 @@ msgstr ""
 "Als u nog in opleiding bent, op welk opleidingsniveau denkt u dan te "
 "eindigen?"
 
-#: experiment/rules/util/questions.py:98
-msgid "Not applicable"
-msgstr "Niet van toepassing"
-
-#: experiment/rules/util/questions.py:103
+#: experiment/rules/util/questions.py:113
 msgid "Occupational status"
 msgstr "Dagelijkse bezigheden"
 
-#: experiment/rules/util/questions.py:105
+#: experiment/rules/util/questions.py:115
 msgid "Still at School"
 msgstr "Nog op school"
 
-#: experiment/rules/util/questions.py:106
+#: experiment/rules/util/questions.py:116
 msgid "At University"
 msgstr "Studerend (mbo, hbo of universiteit)"
 
-#: experiment/rules/util/questions.py:107
+#: experiment/rules/util/questions.py:117
 msgid "In Full-time employment"
 msgstr "Voltijds in loondienst"
 
-#: experiment/rules/util/questions.py:108
+#: experiment/rules/util/questions.py:118
 msgid "In Part-time employment"
 msgstr "Parttime in loondienst"
 
-#: experiment/rules/util/questions.py:109
+#: experiment/rules/util/questions.py:119
 msgid "Self-employed"
 msgstr "Eigen baas/zzp'er"
 
-#: experiment/rules/util/questions.py:110
+#: experiment/rules/util/questions.py:120
 msgid "Homemaker/full time parent"
 msgstr "Huisman/huisvrouw/full time ouder"
 
-#: experiment/rules/util/questions.py:111
+#: experiment/rules/util/questions.py:121
 msgid "Unemployed"
 msgstr "Werkloos"
 
-#: experiment/rules/util/questions.py:112
+#: experiment/rules/util/questions.py:122
 msgid "Retired"
 msgstr "Gepensioneerd"
 
