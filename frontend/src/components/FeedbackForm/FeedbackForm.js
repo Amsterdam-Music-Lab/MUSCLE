@@ -18,7 +18,6 @@ const FeedbackForm = ({ formActive, form, buttonLabel, skipLabel, isSkippable, o
     };
 
     const onChange = (value, question_key) => {
-        console.log(form[question_key].value);
         form[question_key].value = value;
         if (form[question_key].submits) {
             onSubmit(form);
