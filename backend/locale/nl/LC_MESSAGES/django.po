@@ -771,6 +771,7 @@ msgid ""
 "Please keep the eventual sound level the same over the course of the "
 "experiment."
 msgstr ""
+"Houd het volume gelijk gedurende het hele experiment."
 
 #: experiment/rules/listening_conditions.py:105
 msgid "General listening instructions:"
