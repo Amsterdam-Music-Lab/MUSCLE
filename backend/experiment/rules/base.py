@@ -74,8 +74,8 @@ class Base(object):
         return result
 
     @staticmethod
-    def calculate_score(session, form_element, data):
-        """Calculate score depending on view"""
+    def calculate_score(result, form_element, data):
+        """fallback for calculate score"""
         return None
 
     @staticmethod

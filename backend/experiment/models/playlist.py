@@ -59,11 +59,11 @@ class Playlist(models.Model):
 
         # Add new sections from csv
         try:
-            reader = csv.reader(self.csv.splitlines())
+            reader = csv.DictReader(self.csv.splitlines(), fieldnames = ('artist','name','start_time','duration','filename','restrict_to_nl','tag_id','group_id'))
         except csv.Error:
             return {
                 'status': self.CSV_ERROR,
-                'message': "Error: could not initialize csv reader"
+                'message': "Error: could not initialize csv.DictReader"
             }
 
         def is_number(string):
@@ -79,19 +79,19 @@ class Playlist(models.Model):
         for row in reader:
             lines += 1
 
-            # check for valid row length
-            if len(row) < 8:
+            # Check for valid row length in csv. If it has less than 8 entries, csv.DictReader will assign None to values of missing keys
+            if None in row.values():
                 return {
                     'status': self.CSV_ERROR,
                     'message': "Error: Invalid row length, line: " + str(lines)
                 }
 
             # check for valid numbers
-            if not (is_number(row[2])
-                    and is_number(row[3])
-                    and is_number(row[5])
-                    and is_number(row[6])
-                    and is_number(row[7])):
+            if not (is_number(row['start_time'])
+                    and is_number(row['duration'])
+                    and is_number(row['restrict_to_nl'])
+                    and is_number(row['tag_id'])
+                    and is_number(row['group_id'])):
                 return {
                     'status': self.CSV_ERROR,
                     'message': "Error: Expected number fields on line: " + str(lines)
@@ -99,14 +99,14 @@ class Playlist(models.Model):
 
             # create new section
             section = Section(playlist=self,
-                              artist=row[0],
-                              name=row[1],
-                              start_time=float(row[2]),
-                              duration=float(row[3]),
-                              filename=row[4],
-                              restrict_to_nl=(int(row[5]) == 1),
-                              tag_id=int(row[6]),
-                              group_id=int(row[7]),
+                              artist=row['artist'],
+                              name=row['name'],
+                              start_time=float(row['start_time']),
+                              duration=float(row['duration']),
+                              filename=row['filename'],
+                              restrict_to_nl=(int(row['restrict_to_nl']) == 1),
+                              tag_id=int(row['tag_id']),
+                              group_id=int(row['group_id']),
                               )
 
             # if same section already exists, update it with new info

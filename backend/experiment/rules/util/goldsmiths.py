@@ -75,7 +75,7 @@ MSI_FG_GENERAL = [
             '3': _('3 years'),
             '4-5': _('4–5 years'),
             '6-9': _('6–9 years'),
-            'msi_10_or_more': _('10 or more years'),
+            '10+': _('10 or more years'),
         },
         view='RADIOS'
     ),
@@ -85,12 +85,12 @@ MSI_FG_GENERAL = [
             "At the peak of my interest, I practiced on my primary instrument each day for:"),
         choices={
             '0': _('0 hours'),
+            '0.5': _('0.5 hours'),
             '1': _('1 hour'),
+            '1.5': _('1.5 hours'),
             '2': _('2 hours'),
-            '3': _('3 hours'),
-            '4-5': _('4–5 hours'),
-            '6-9': _('6–9 hours'),
-            'msi_10_or_more': _('10 or more hours'),
+            '3-4': _('3-4 hours'),
+            '5+': _('5 or more hours'),
         },
         view='RADIOS'
     ),
@@ -102,9 +102,9 @@ MSI_FG_GENERAL = [
             '1': _('1'),
             '2': _('2'),
             '3': _('3'),
-            '4-5': _('4–5'),
-            '6-9': _('6–9'),
-            'msi_10_or_more': _('10 or more'),
+            '4': _('4'),
+            '5': _('5'),
+            '6+': _('6 or more'),
         },
         view='RADIOS'
     )
@@ -137,7 +137,7 @@ MSI_F1_ACTIVE_ENGAGEMENT = [
             '3.0': _('3'),
             '4-6': _('4-6'),
             '7-10': _('7-10'),
-            'msi_11_or_more': _('11 or more'),
+            '11+': _('11 or more'),
         },
         view='RADIOS'
     ),
@@ -152,7 +152,7 @@ MSI_F1_ACTIVE_ENGAGEMENT = [
             '60-90': _('60-90 min'),
             '2h': _('2 hrs'),
             '2-3h': _('2-3 hrs'),
-            '4h_or_more': _('4 hrs or more'),
+            '4h+': _('4 hrs or more'),
         },
         view='RADIOS'
     )
@@ -222,9 +222,9 @@ MSI_F3_MUSICAL_TRAINING = [
             '0.5': _('0.5'),
             '1': _('1'),
             '2': _('2'),
-            '3': _('3'),
-            '4-6': _('4-6'),
-            '7+': _('7 or more'),
+            '3-5': _('3-5'),
+            '6-9': _('6-9'),
+            '10+': _('10 or more'),
         },
         view='RADIOS'
     ),
