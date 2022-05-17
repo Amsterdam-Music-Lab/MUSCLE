@@ -1,12 +1,9 @@
-import React, { useState, useRef, useEffect, useCallback } from "react";
-import { MEDIA_ROOT } from "../../config";
+import React, { useState, useEffect, useCallback } from "react";
 import {
     useExperiment,
     useParticipant,
-    createResult,
     getNextRound,
 } from "../../API";
-import * as audio from "../../util/audio";
 import { TransitionGroup, CSSTransition } from "react-transition-group";
 import { withRouter } from "react-router-dom";
 
