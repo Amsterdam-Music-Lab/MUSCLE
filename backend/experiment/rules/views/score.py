@@ -11,12 +11,23 @@ class Score:  # pylint: disable=too-few-public-methods
 
     ID = 'SCORE'
 
-    def __init__(session, score_message, config=None, icon=None):
+    def __init__(session, score_message=default_score_message, config=None, icon=None):
+        """ Score presents feedback to a participant after a Trial
+        - session: a Session object
+        - score_message: a function which constructs feedback text based on the score
+        - config: a dict with the following settings:
+            - advance_after: int or None. If defined, advance to next view after n seconds
+            - show_section: whether metadata of the section should be shown
+            - show_total_score: whether the total score should be shown
+        - icon: the name of a themify-icon shown with the view or None
+        """
+        
+        self.session = session
         self.score = session.last_score()
         self.score_message = score_message
         self.config = {
             'advance_after': None,
-            'show_song': False,
+            'show_section': False,
             'show_total_score': False
         }
         if config:
@@ -28,29 +39,24 @@ class Score:  # pylint: disable=too-few-public-methods
             'listen_explainer': _('You listened to:')
         }
 
-    @staticmethod
-    def action(session, include_section=True):
-        """Get data for score action"""
-
+    def action(self):
+        """Serialize score data"""
+        
         # Create action
-        score = session.last_score()
         action = {
-            'view': Score.ID,
+            'view': self.ID,
             'title': _('Round {} / {}').format(session.rounds_passed(), session.experiment.rounds),
-            'last_song': session.last_song() if include_section else None,
-            'score': score,
-            'score_message': Score.score_message(score),
-            'total_score': session.total_score(),
-            'texts': {
-                'score': _('Score'),
-                'next': _('Next'),
-                'listen_explainer': _('You listened to:')
-            }
+            'score': self.score,
+            'score_message': self.score_message(self.score),
+            'total_score': self.session.total_score(),
+            'texts': self.texts
         }
+        if self.config.get('show_section'):
+            action['last_song'] = self.session.last_song()
         return action
 
-    def score_message(score):
-        """Generate a message for the given score"""
+    def default_score_message(score):
+        """Fallback to generate a message for the given score"""
         # Zero
         if score == 0:
             # "Too bad!", "Come on!", "Try another!", "Try again!"
