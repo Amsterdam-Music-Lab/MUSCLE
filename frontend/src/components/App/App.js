@@ -8,6 +8,7 @@ import {
 import { URLS, EXPERIMENT_SLUG } from "../../config";
 import Experiment from "../Experiment/Experiment";
 import Profile from "../Profile/Profile";
+import Reload from "../Reload/Reload";
 import StoreProfile from "../StoreProfile/StoreProfile.js";
 
 // App is the root component of our application
@@ -15,6 +16,11 @@ const App = () => {
     return (
         <Router className="aha__app">
             <Switch>
+                {/* Request reload for given participant */}
+                <Route path={URLS.reloadParticipant}>
+                    <Reload/>
+                </Route>
+
                 {/* Default experiment */}
                 <Route path="/" exact>
                     <Redirect
@@ -39,11 +45,7 @@ const App = () => {
                     component={StoreProfile}
                 />
 
-                {/* Load experiment for given participant */}
-                <Route 
-                    path={URLS.reloadParticipant}
-                    component={Reload}
-                />
+
             </Switch>
         </Router>
     );

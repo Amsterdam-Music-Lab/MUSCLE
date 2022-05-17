@@ -1,9 +1,14 @@
-import React, { useRef } from "react";
+import React, { useEffect } from "react";
+import { useLocation } from 'react-router-dom';
 
-import { useReloadParticipant } from "../../API";
+import { API_BASE_URL } from "../../config";
 
 const Reload = () => {
-    const [link, reloadLink] = useReloadParticipant(id, hash);
+    const location = useLocation();
+
+    useEffect( () => {
+        window.location.href = API_BASE_URL + location.pathname;
+    });
 
     return (
         <div className="aha__reload">

@@ -4,6 +4,7 @@ export const EXPERIMENT_SLUG =
         ? document.location.hash.split("slug=")[1]
         : process.env.REACT_APP_EXPERIMENT_SLUG;
 
+
 // Base url the API
 // Make sure your app url is set in the CORS_ORIGIN_WHITELIST in
 // the API's base_settings.py
