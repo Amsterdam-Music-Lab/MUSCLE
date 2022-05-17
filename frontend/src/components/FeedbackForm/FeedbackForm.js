@@ -22,7 +22,7 @@ const FeedbackForm = ({ formActive, form, buttonLabel, skipLabel, isSkippable, o
         if (form[question_key].submits) {
             onSubmit(form);
         }
-        if (form.filter( formElement => formElement.value ) === form.length) {
+        if (form.filter( formElement => formElement.value ).length === form.length) {
             setFormValid(true);
         }
     };
