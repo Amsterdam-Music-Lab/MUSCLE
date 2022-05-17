@@ -38,6 +38,12 @@ const App = () => {
                     exact
                     component={StoreProfile}
                 />
+
+                {/* Load experiment for given participant */}
+                <Route 
+                    path={URLS.reloadParticipant}
+                    component={Reload}
+                />
             </Switch>
         </Router>
     );
