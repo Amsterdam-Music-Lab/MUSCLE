@@ -141,7 +141,7 @@ def next_trial_actions(session, round_number, request_session):
         previous_results = session.result_set.order_by('-created_at')
         if previous_results.count():
             actions.append(
-                response_explainer(previous_results.first().score, plan[round_number-2]['group_id'])
+                response_explainer(previous_results.first().score, plan[round_number-2]['group'])
             )
         if round_number == 5:
             total_score = sum([res.score for res in previous_results.all()[:4]])
@@ -162,13 +162,13 @@ def next_trial_actions(session, round_number, request_session):
     try:
         section = session.playlist.section_set.filter(
             name__startswith=condition['rhythm']).filter(
-            tag_id=condition['tag_id']).get(
-            group_id=condition['group_id']
+            tag=condition['tag']).get(
+            group=condition['group']
         )
     except Section.DoesNotExist:
         return actions
 
-    expected_result = 'SAME' if condition['group_id'] == '1' else 'DIFFERENT'
+    expected_result = 'SAME' if condition['group'] == '1' else 'DIFFERENT'
     # create Result object and save expected result to database
     result_pk = Base.prepare_result(session, section, expected_result)
     question = ChoiceQuestion(
@@ -205,22 +205,22 @@ def next_trial_actions(session, round_number, request_session):
 def plan_stimuli(session):
     """ select 60 stimuli, of which 30 are standard, 30 deviant.
     rhythm refers to the type of rhythm,
-    tag_id refers to the tempo,
-    group_id refers to the condition (0 is deviant, 1 is standard)
+    tag refers to the tempo,
+    group refers to the condition (0 is deviant, 1 is standard)
     """
     metric = STIMULI['metric']
     nonmetric = STIMULI['nonmetric']
     tempi = [150, 160, 170, 180, 190, 200]
     tempi = [str(t) for t in tempi]
-    metric_deviants = [{'rhythm': m, 'tag_id': random.choice(tempi), 'group_id': '0'} for m in metric['deviant']]
-    metric_standard = [{'rhythm': m, 'tag_id': random.choice(tempi), 'group_id': '1'} for m in metric['standard']]
-    nonmetric_deviants = [{'rhythm': m, 'tag_id': random.choice(tempi), 'group_id': '0'} for m in nonmetric['deviant']]
-    nonmetric_standard = [{'rhythm': m, 'tag_id': random.choice(tempi), 'group_id': '1'} for m in nonmetric['standard']]
+    metric_deviants = [{'rhythm': m, 'tag': random.choice(tempi), 'group': '0'} for m in metric['deviant']]
+    metric_standard = [{'rhythm': m, 'tag': random.choice(tempi), 'group': '1'} for m in metric['standard']]
+    nonmetric_deviants = [{'rhythm': m, 'tag': random.choice(tempi), 'group': '0'} for m in nonmetric['deviant']]
+    nonmetric_standard = [{'rhythm': m, 'tag': random.choice(tempi), 'group': '1'} for m in nonmetric['standard']]
     practice = [
-        {'rhythm': STIMULI['practice']['metric']['standard'], 'tag_id': random.choice(tempi), 'group_id': '1'},
-        {'rhythm': STIMULI['practice']['metric']['deviant'], 'tag_id': random.choice(tempi), 'group_id': '0'},
-        {'rhythm': STIMULI['practice']['nonmetric']['standard'], 'tag_id': random.choice(tempi), 'group_id': '1'},
-        {'rhythm': STIMULI['practice']['nonmetric']['deviant'], 'tag_id': random.choice(tempi), 'group_id': '0'},
+        {'rhythm': STIMULI['practice']['metric']['standard'], 'tag': random.choice(tempi), 'group': '1'},
+        {'rhythm': STIMULI['practice']['metric']['deviant'], 'tag': random.choice(tempi), 'group': '0'},
+        {'rhythm': STIMULI['practice']['nonmetric']['standard'], 'tag': random.choice(tempi), 'group': '1'},
+        {'rhythm': STIMULI['practice']['nonmetric']['deviant'], 'tag': random.choice(tempi), 'group': '0'},
     ]
     experiment = metric_deviants + metric_standard + nonmetric_deviants + nonmetric_standard
     random.shuffle(experiment)

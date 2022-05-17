@@ -93,7 +93,7 @@ class HBat(Base):
         level can be 1 (20 ms) or higher (10, 5, 2.5 ms...)
         """
         try:
-            section = session.playlist.section_set.filter(group_id=str(level)).get(tag_id=str(trial_condition))
+            section = session.playlist.section_set.filter(group=str(level)).get(tag=str(trial_condition))
         except Section.DoesNotExist:
             return None
         expected_result = 'SLOWER' if trial_condition else 'FASTER'
@@ -189,10 +189,10 @@ class HBat(Base):
 
 def get_previous_condition(previous_result):
     """ check if previous section was slower / in 2 (1) or faster / in 3 (0) """
-    return previous_result.section.tag_id
+    return previous_result.section.tag
 
 def get_previous_level(previous_result):
-    return previous_result.section.group_id
+    return previous_result.section.group
 
 def staircasing(session, trial_action_callback):
     trial_condition = get_trial_condition(2)

@@ -14,7 +14,7 @@ class CompilePlaylistTest(TestCase):
         filename = join(settings.MEDIA_ROOT,'tests','compileplaylist','audiofiles.csv')
         try:
             with open(filename) as csv_file:
-                rows = csv.DictReader(csv_file, fieldnames = ('artist','name','start_time','duration','filename','restrict_to_nl','tag_id','group_id'))
+                rows = csv.DictReader(csv_file, fieldnames = ('artist','name','start_time','duration','filename','restrict_to_nl','tag','group'))
                 for row in rows:
                     if row['filename'] == 'tests/compileplaylist/silence_20sec.wav':
                         self.assertEqual(row['artist'], 'default')
@@ -22,8 +22,8 @@ class CompilePlaylistTest(TestCase):
                         self.assertEqual(row['start_time'], '0.0')
                         self.assertEqual(row['duration'], '20.025850340136053')
                         self.assertEqual(row['restrict_to_nl'], '0')
-                        self.assertEqual(row['tag_id'], '0')
-                        self.assertEqual(row['group_id'], '0')
+                        self.assertEqual(row['tag'], '0')
+                        self.assertEqual(row['group'], '0')
         finally:        
             remove(filename)  # Make sure csv file is deleted even if tests fail
 

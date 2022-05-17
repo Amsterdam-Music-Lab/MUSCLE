@@ -120,7 +120,7 @@ class BeatAlignment(Base):
     @classmethod
     def next_trial_action(cls, session, this_round):
         """Get next section for given session"""
-        filter_by = {'tag_id': '0'}
+        filter_by = {'tag': '0'}
         section = session.section_from_unused_song(filter_by)
         condition = section.filename.split('_')[-1][:-4]
         expected_result = 'ON' if condition=='on' else 'OFF'
