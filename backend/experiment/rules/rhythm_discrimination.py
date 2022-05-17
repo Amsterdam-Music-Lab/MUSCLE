@@ -168,7 +168,7 @@ def next_trial_actions(session, round_number, request_session):
     except Section.DoesNotExist:
         return actions
 
-    expected_result = 'SAME' if condition['group_id'] == 1 else 'DIFFERENT'
+    expected_result = 'SAME' if condition['group_id'] == '1' else 'DIFFERENT'
     # create Result object and save expected result to database
     result_pk = Base.prepare_result(session, section, expected_result)
     question = ChoiceQuestion(
@@ -211,15 +211,16 @@ def plan_stimuli(session):
     metric = STIMULI['metric']
     nonmetric = STIMULI['nonmetric']
     tempi = [150, 160, 170, 180, 190, 200]
-    metric_deviants = [{'rhythm': m, 'tag_id': random.choice(tempi), 'group_id': 0} for m in metric['deviant']]
-    metric_standard = [{'rhythm': m, 'tag_id': random.choice(tempi), 'group_id': 1} for m in metric['standard']]
-    nonmetric_deviants = [{'rhythm': m, 'tag_id': random.choice(tempi), 'group_id': 0} for m in nonmetric['deviant']]
-    nonmetric_standard = [{'rhythm': m, 'tag_id': random.choice(tempi), 'group_id': 1} for m in nonmetric['standard']]
+    tempi = [str(t) for t in tempi]
+    metric_deviants = [{'rhythm': m, 'tag_id': random.choice(tempi), 'group_id': '0'} for m in metric['deviant']]
+    metric_standard = [{'rhythm': m, 'tag_id': random.choice(tempi), 'group_id': '1'} for m in metric['standard']]
+    nonmetric_deviants = [{'rhythm': m, 'tag_id': random.choice(tempi), 'group_id': '0'} for m in nonmetric['deviant']]
+    nonmetric_standard = [{'rhythm': m, 'tag_id': random.choice(tempi), 'group_id': '1'} for m in nonmetric['standard']]
     practice = [
-        {'rhythm': STIMULI['practice']['metric']['standard'], 'tag_id': random.choice(tempi), 'group_id': 1},
-        {'rhythm': STIMULI['practice']['metric']['deviant'], 'tag_id': random.choice(tempi), 'group_id': 0},
-        {'rhythm': STIMULI['practice']['nonmetric']['standard'], 'tag_id': random.choice(tempi), 'group_id': 1},
-        {'rhythm': STIMULI['practice']['nonmetric']['deviant'], 'tag_id': random.choice(tempi), 'group_id': 0},
+        {'rhythm': STIMULI['practice']['metric']['standard'], 'tag_id': random.choice(tempi), 'group_id': '1'},
+        {'rhythm': STIMULI['practice']['metric']['deviant'], 'tag_id': random.choice(tempi), 'group_id': '0'},
+        {'rhythm': STIMULI['practice']['nonmetric']['standard'], 'tag_id': random.choice(tempi), 'group_id': '1'},
+        {'rhythm': STIMULI['practice']['nonmetric']['deviant'], 'tag_id': random.choice(tempi), 'group_id': '0'},
     ]
     experiment = metric_deviants + metric_standard + nonmetric_deviants + nonmetric_standard
     random.shuffle(experiment)

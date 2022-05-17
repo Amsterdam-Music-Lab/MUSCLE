@@ -44,7 +44,7 @@ class BST(HBat):
         level can be 1 (? dB difference) or higher (smaller differences)
         """
         try:
-            section = session.playlist.section_set.filter(group_id=level).get(tag_id=trial_condition)
+            section = session.playlist.section_set.filter(group_id=str(level)).get(tag_id=str(trial_condition))
         except Section.DoesNotExist:
             return None
         expected_result = 'in2' if trial_condition else 'in3'

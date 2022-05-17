@@ -93,7 +93,7 @@ class HBat(Base):
         level can be 1 (20 ms) or higher (10, 5, 2.5 ms...)
         """
         try:
-            section = session.playlist.section_set.filter(group_id=level).get(tag_id=trial_condition)
+            section = session.playlist.section_set.filter(group_id=str(level)).get(tag_id=str(trial_condition))
         except Section.DoesNotExist:
             return None
         expected_result = 'SLOWER' if trial_condition else 'FASTER'
