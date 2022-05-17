@@ -19,6 +19,7 @@ export const URLS = {
         link: "/participant/link/",
         score: "/participant/scores/",
         share: "/participant/share/",
+        reload: (id, hash) => "/participant/reload/" + id + "/" + hash,
     },
     profile: {
         get: (question) => "/profile/" + question + "/",
@@ -43,6 +44,9 @@ export const useParticipantScores = () =>
 
 export const useParticipantLink = () =>
     useGet(API_BASE_URL + URLS.participant.link);
+
+export const useReloadParticipant = (id, hash) =>
+    useGet(API_BASE_URL + URLS.participant.reload(id, hash));
 
 export const useConsent = (slug) =>
     useGet(API_BASE_URL + URLS.experiment.consent(slug));
