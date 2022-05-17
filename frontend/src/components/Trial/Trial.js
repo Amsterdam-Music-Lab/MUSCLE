@@ -152,6 +152,7 @@ const Trial = ({ view, participant, session, playback, feedback_form, config, on
             <Button
                 title={config.continue_label}
                 className={"btn-primary anim anim-fade-in anim-speed-500"}
+                onClick={onNext}
             />
             )}
         </div>
