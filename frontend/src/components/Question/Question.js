@@ -17,7 +17,7 @@ const TEXT_RANGE = "TEXT_RANGE";
 const STRING = "STRING";
 
 // Question is an experiment view that shows a question and handles storing the answer
-const Question = ({ question, onChange, id, active }) => {
+const Question = ({ question, onChange, id, active, style }) => {
     const [value, setValue] = useState(question.value || "");
 
     const registerChange = (value) => {
@@ -31,6 +31,7 @@ const Question = ({ question, onChange, id, active }) => {
             value,
             question,
             active,
+            style,
             onChange: registerChange,
         };
 
