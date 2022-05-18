@@ -4,13 +4,13 @@ class Final:  # pylint: disable=too-few-public-methods
     """
     Provide data for a final view
 
-    Relates to client component: Final.js    
+    Relates to client component: Final.js
     """
 
     ID = 'FINAL'
 
     @staticmethod
-    def action(session, title, final_text=None, button=None, rank=None,
+    def action(session, title=_("Final score"), final_text=None, button=None, rank=None,
         show_social=False, show_profile_link=False, show_participant_link=False):
         """Get data for final action"""
         return {
@@ -25,7 +25,7 @@ class Final:  # pylint: disable=too-few-public-methods
                 'profile': _('My profile'),
                 'all_experiments': _('All experiments')
             },
-            'title': _("Final score"),
+            'title': title,
             'show_social': show_social,
             'show_profile_link': show_profile_link,
             'show_participant_link': show_participant_link

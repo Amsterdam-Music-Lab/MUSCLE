@@ -23,6 +23,10 @@ class Trial(object):  # pylint: disable=too-few-public-methods
             - decision_time: how long to wait until stopping the player / proceeding to the next view
             - auto_advance: proceed to next view after player has stopped
             - listen_first: whether participant can submit before end of sound
+            - style: style class to add to elements in form and playback
+                - neutral: first element is blue, second is yellow, third is teal
+                - neutral-inverted: first element is yellow, second is blue, third is teal
+                - boolean: first element is green, second is red
             - time_pass_break: when time has passed, submit the result immediately; skipping any subsequent actions (e.g. a certainty question)
                 - Can not be combined with listen_first (True)
                 - Can not be combined with auto_advance (False)
@@ -34,6 +38,7 @@ class Trial(object):  # pylint: disable=too-few-public-methods
             'decision_time': 5,
             'auto_advance': False,
             'listen_first': False,
+            'style': 'neutral'
         }
         if config:
             self.config.update(config)

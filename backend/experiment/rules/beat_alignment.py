@@ -18,8 +18,8 @@ class BeatAlignment(Base):
 
     ID = 'BEAT_ALIGNMENT'
 
-    @staticmethod
-    def first_round(experiment):
+    @classmethod
+    def first_round(cls, experiment):
         """Create data for the first experiment rounds"""
 
         # 1. General explainer
@@ -45,7 +45,7 @@ class BeatAlignment(Base):
         practice_list = experiment.playlists.first()
         practice_rounds = []
         for i in range(1,4):
-            this_round = BeatAlignment.next_practice_action(practice_list, i)
+            this_round = cls.next_practice_action(practice_list, i)
             practice_rounds.append(copy.deepcopy(this_round))
         practice_rounds.append(Explainer(
             instruction=_('You will now hear 17 music fragments.'),
@@ -70,8 +70,8 @@ class BeatAlignment(Base):
         )
 
 
-    @staticmethod
-    def next_round(session, request_session=None):
+    @classmethod
+    def next_round(cls, session, request_session=None):
         """Get action data for the next round"""
 
         # If the number of results equals the number of experiment.rounds
@@ -89,21 +89,10 @@ class BeatAlignment(Base):
 
         # Next round number, can be used to return different actions
         next_round_number = session.get_next_round()
-        actions = []
+        return cls.next_trial_action(session, next_round_number)
 
-        actions.append(BeatAlignment.next_trial_action(session, next_round_number))
-        actions.append(Question.radios(
-            key='certainty',
-            question=_('How certain are you of your answer?'),
-            choices=[_('I guessed'), _('I think I know'), _('I am sure')],
-            view=Question.ID_RESULT_QUESTION,
-            button_label=_('Next fragment'),
-            skip_label=None
-        ))
-        return combine_actions(*actions)
-
-    @staticmethod
-    def next_practice_action(playlist, count):
+    @classmethod
+    def next_practice_action(cls, playlist, count):
         """Get action data for the next practice round"""
         section = playlist.section_set.filter(name__startswith='ex{}'.format(count)).first()
         if not section:
@@ -124,15 +113,12 @@ class BeatAlignment(Base):
             playback=playback,
             feedback_form=None,
             title=_('Example {}').format(count),
-            config={'listen_first': True }
+            config={'listen_first': True, 'auto_advance': True}
         )
-        config = {
-            'decision_time': section.duration + .7
-        }
-        return view.action(config)
+        return view.action()
 
-    @staticmethod
-    def next_trial_action(session, this_round):
+    @classmethod
+    def next_trial_action(cls, session, this_round):
         """Get next section for given session"""
         filter_by = {'tag_id': 0}
         section = session.section_from_unused_song(filter_by)
@@ -151,27 +137,22 @@ class BeatAlignment(Base):
             submits=True
         )
         form = Form([question])
-        instructions = {
-            'preload': '',
-            'during_presentation': ''
+        play_config = {
+            'decision_time': section.duration + .1,
         }
+        playback = Playback('AUTOPLAY', [section], play_config=play_config)
         view = Trial(
-            section=section,
-            feedback_form=form.action(),
-            instructions=instructions,
-            title=_('Beat alignment')
+            playback=playback,
+            feedback_form=form,
+            title=_('Beat alignment'),
+            config={
+                'listen_first': True
+            }
         )
-        config = {
-            'listen_first': True,
-            'decision_time': section.duration
-        }
-        action = view.action(config=config)
-        return action
+        return view.action()
 
     @staticmethod
     def calculate_score(result, form_element, data):
-        # a result's score is used to keep track of how many correct results were in a row
-        # for catch trial, set score to 2 -> not counted for calculating turnpoints
         try:
             expected_response = result.expected_response
         except Exception as e:

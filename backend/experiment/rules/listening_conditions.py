@@ -4,6 +4,7 @@ from django.utils.translation import gettext_lazy as _
 from .base import Base
 from .views import Consent, Explainer, Step, Final, Playback, Playlist, StartSession, Trial
 from .views.form import ChoiceQuestion, Form
+from .views.playback import Playback
 from .util.actions import combine_actions, final_action_with_optional_button
 
 
@@ -13,6 +14,8 @@ class ListeningConditions(Base):
     @classmethod
     def next_round(cls, session, request_session=None):
         round_number = session.get_next_round()
+        feedback_form = None
+        playback = None
         if round_number == 1:
             feedback_form = Form([
                 ChoiceQuestion(
@@ -70,17 +73,11 @@ class ListeningConditions(Base):
             ])
         elif round_number == 5:
             section = session.playlist.section_set.first()
-            instructions = {
-                'preload': "",
-                'during_presentation': _("You can now set the sound to a comfortable level. \
-                    You can then adjust the volume to as high a level as possible without it being uncomfortable. \
-                    When you are satisfied with the sound level, click Continue"),
-            }
             playback = Playback([section], instruction=_("You can now set the sound to a comfortable level. \
                     You can then adjust the volume to as high a level as possible without it being uncomfortable. \
                     When you are satisfied with the sound level, click Continue"))
-            view = Trial(playback=playback)
-            return view.action()
+        view = Trial(playback, feedback_form)
+        return view.action()
 
 
     @classmethod

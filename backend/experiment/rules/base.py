@@ -74,15 +74,8 @@ class Base(object):
         return result
 
     @staticmethod
-    def calculate_score(session, data):
-        """Calculate score depending on view"""
-
-        if data['view'] == SongSync.ID:
-            return SongSync.calculate_score(session, data)
-        elif data['view'] == SongBool.ID:
-            return SongBool.calculate_score(session, data)
-        elif data['view'] == TwoAlternativeForced.ID:
-            return TwoAlternativeForced.calculate_score(session, data)
+    def calculate_score(result, form_element, data):
+        """fallback for calculate score"""
         return None
 
     @staticmethod

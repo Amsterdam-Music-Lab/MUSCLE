@@ -125,7 +125,7 @@ const Trial = ({ view, participant, session, playback, feedback_form, config, on
     };
 
     return (
-        <div className="aha__trial">
+        <div className={classNames("aha__trial", config.style)}>
             {playback && (
             <Playback
                 playerType={playback.player_type}

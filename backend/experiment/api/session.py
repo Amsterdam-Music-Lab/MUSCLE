@@ -145,6 +145,11 @@ def next_round(request, session_id):
         raise Http404("Session does not exist")
 
     # Get next round for given session
-    action = session.experiment_rules().next_round(session)
+    if request.session.get('experiment_series'):
+        # we are in the middle of an experiment series - need to pass in request.session object
+        action = session.experiment_rules().next_round(session, request.session)
+    else:
+        # Get next round for given session
+        action = session.experiment_rules().next_round(session)
 
     return JsonResponse(action, json_dumps_params={'indent': 4})
