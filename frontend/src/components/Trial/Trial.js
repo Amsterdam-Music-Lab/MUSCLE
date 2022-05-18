@@ -26,9 +26,12 @@ const Trial = ({ view, participant, session, playback, feedback_form, config, on
         startTime.current = getCurrentTime();
     }
 
-    const getNextAction = () => {
+    const finishedPlaying = () => {
         if (config.auto_advance) {
-            onNext();
+        // Create a time_passed result
+            makeResult({
+                type: "time_passed"
+            });
         }
         setFormActive(true);
         return;
@@ -135,7 +138,7 @@ const Trial = ({ view, participant, session, playback, feedback_form, config, on
                 time={time}
                 submitResult={makeResult}
                 startedPlaying={startTimer}
-                finishedPlaying={getNextAction}
+                finishedPlaying={finishedPlaying}
             />)}
             {feedback_form && (
             <FeedbackForm

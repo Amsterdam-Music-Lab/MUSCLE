@@ -39,15 +39,6 @@ const Playback = ({ playerType, sections, instruction, preloadMessage, autoAdvan
         }
     };
 
-    // if (autoAdvance) {
-    //    // Create a time_passed result
-    //    submitResult({
-    //        type: "time_passed",
-    //        decision_time: decisionTime,
-    //        section: section.id
-    //    });
-    // }
-
     // render view
     const render = (view) => {
         const attrs = {
