@@ -1,7 +1,7 @@
 import React from "react";
 import classNames from "classnames";
 
-const PlayButton = ({ onClick, className = ""}) => {
+const PlayButton = ({ playSection, className = ""}) => {
     return (
         <div
             className={classNames(

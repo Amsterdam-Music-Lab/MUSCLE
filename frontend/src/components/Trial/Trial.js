@@ -1,4 +1,5 @@
 import React, { useState, useRef } from "react";
+import classNames from "classnames";
 
 import { getCurrentTime, getTimeSince } from "../../util/time";
 import { createProfile, createResult } from "../../API.js";
@@ -8,7 +9,7 @@ import Playback from "../Playback/Playback";
 // Trial is an experiment view, that preloads a song, shows an explanation and plays audio
 // Optionally, it can show an animation during playback
 // Optionally, it can show a form during or after playback
-const Trial = ({ view, participant, session, playback, feedback_form, config, onNext, loadState }) => {
+const Trial = ({ participant, session, playback, feedback_form, config, onNext, loadState }) => {
     // Main component state
     const resultBuffer = useRef([]);
 
