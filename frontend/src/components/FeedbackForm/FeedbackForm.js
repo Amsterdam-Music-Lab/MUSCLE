@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState } from "react";
 import Question from "../Question/Question";
 import Button from "../Button/Button";
 
@@ -7,6 +7,8 @@ import Button from "../Button/Button";
 const FeedbackForm = ({ formActive, form, buttonLabel, skipLabel, isSkippable, onResult }) => {
 
     const showSubmitButtons = form.filter( formElement => formElement.submits).length == 0;
+
+    const [formValid, setFormValid] = useState(false);
     
     const onSubmit = () => {
         // Callback onResult with question data
@@ -19,6 +21,9 @@ const FeedbackForm = ({ formActive, form, buttonLabel, skipLabel, isSkippable, o
         form[question_key].value = value;
         if (form[question_key].submits) {
             onSubmit(form);
+        }
+        if (form.filter( formElement => formElement.value ).length === form.length) {
+            setFormValid(true);
         }
     };
 
@@ -37,7 +42,7 @@ const FeedbackForm = ({ formActive, form, buttonLabel, skipLabel, isSkippable, o
                 )
                 )}
                 {/* Continue button */}
-                {showSubmitButtons && (
+                {showSubmitButtons && formValid && (
                 <Button
                     onClick={() => {
                         onSubmit();
