@@ -1,3 +1,5 @@
+from django.utils.translation import gettext_lazy as _
+
 from .form import ChoiceQuestion, Form
 
 class Trial(object):  # pylint: disable=too-few-public-methods
@@ -30,6 +32,7 @@ class Trial(object):  # pylint: disable=too-few-public-methods
             - time_pass_break: when time has passed, submit the result immediately; skipping any subsequent actions (e.g. a certainty question)
                 - Can not be combined with listen_first (True)
                 - Can not be combined with auto_advance (False)
+            - continue_label: if there is no form, how to label a button to proceed to next view
         '''
         self.playback = playback
         self.feedback_form = feedback_form
@@ -38,6 +41,7 @@ class Trial(object):  # pylint: disable=too-few-public-methods
             'decision_time': 5,
             'auto_advance': False,
             'listen_first': False,
+            'continue_label': _('Continue'),
             'style': 'neutral'
         }
         if config:

@@ -14,8 +14,8 @@ class ListeningConditions(Base):
     @classmethod
     def next_round(cls, session, request_session=None):
         round_number = session.get_next_round()
-        feedback_form = None
         playback = None
+        feedback_form = None
         if round_number == 1:
             feedback_form = Form([
                 ChoiceQuestion(
@@ -73,9 +73,16 @@ class ListeningConditions(Base):
             ])
         elif round_number == 5:
             section = session.playlist.section_set.first()
-            playback = Playback([section], instruction=_("You can now set the sound to a comfortable level. \
+            instruction = _("You can now set the sound to a comfortable level. \
                     You can then adjust the volume to as high a level as possible without it being uncomfortable. \
-                    When you are satisfied with the sound level, click Continue"))
+                    When you are satisfied with the sound level, click Continue")
+            playback = Playback('AUTOPLAY', [section], instruction=instruction)
+            message = _("Please keep the eventual sound level the same over the course of the experiment.")
+            actions = [
+                Trial(playback, feedback_form).action(),
+                final_action_with_optional_button(session, message, request_session)
+            ]
+            return combine_actions(*actions)
         view = Trial(playback, feedback_form)
         return view.action()
 

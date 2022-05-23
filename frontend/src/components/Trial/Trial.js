@@ -5,6 +5,7 @@ import { getCurrentTime, getTimeSince } from "../../util/time";
 import { createProfile, createResult } from "../../API.js";
 import FeedbackForm from "../FeedbackForm/FeedbackForm";
 import Playback from "../Playback/Playback";
+import Button from "../Button/Button";
 
 // Trial is an experiment view, that preloads a song, shows an explanation and plays audio
 // Optionally, it can show an animation during playback
@@ -150,6 +151,13 @@ const Trial = ({ participant, session, playback, feedback_form, config, onNext, 
                 isSkippable={feedback_form.is_skippable}
                 onResult={makeResult}
             />)}
+            {!feedback_form && (
+            <Button
+                title={config.continue_label}
+                className={"btn-primary anim anim-fade-in anim-speed-500"}
+                onClick={onNext}
+            />
+            )}
         </div>
     );
 };
