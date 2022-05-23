@@ -77,9 +77,12 @@ class ListeningConditions(Base):
                     You can then adjust the volume to as high a level as possible without it being uncomfortable. \
                     When you are satisfied with the sound level, click Continue")
             playback = Playback('AUTOPLAY', [section], instruction=instruction)
-        else:
             message = _("Please keep the eventual sound level the same over the course of the experiment.")
-            return final_action_with_optional_button(session, message, request_session)
+            actions = [
+                Trial(playback, feedback_form).action(),
+                final_action_with_optional_button(session, message, request_session)
+            ]
+            return combine_actions(*actions)
         view = Trial(playback, feedback_form)
         return view.action()
 

@@ -5,13 +5,12 @@ import { createProfile, createResult } from "../../API.js";
 import FeedbackForm from "../FeedbackForm/FeedbackForm";
 import Playback from "../Playback/Playback";
 import Button from "../Button/Button";
-import { play } from "../../util/audio";
 import classNames from "classnames";
 
 // Trial is an experiment view, that preloads a song, shows an explanation and plays audio
 // Optionally, it can show an animation during playback
 // Optionally, it can show a form during or after playback
-const Trial = ({ view, participant, session, playback, feedback_form, config, onNext, loadState }) => {
+const Trial = ({ participant, session, playback, feedback_form, config, onNext, loadState }) => {
     // Main component state
     const resultBuffer = useRef([]);
 
