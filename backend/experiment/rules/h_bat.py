@@ -19,6 +19,8 @@ logger = logging.getLogger(__name__)
 MAX_TURNPOINTS = 6
 
 class HBat(Base):
+    """ section.group (and possibly section.tag) must be convertable to int"""
+
     ID = 'H_BAT'
     start_diff = 20
 
@@ -189,10 +191,10 @@ class HBat(Base):
 
 def get_previous_condition(previous_result):
     """ check if previous section was slower / in 2 (1) or faster / in 3 (0) """
-    return previous_result.section.tag
+    return int(previous_result.section.tag)
 
 def get_previous_level(previous_result):
-    return previous_result.section.group
+    return int(previous_result.section.group)
 
 def staircasing(session, trial_action_callback):
     trial_condition = get_trial_condition(2)
