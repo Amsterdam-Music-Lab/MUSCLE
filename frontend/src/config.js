@@ -22,7 +22,7 @@ export const URLS = {
     about: "/about",
     profile: "/profile",
     storeProfile: "/profile/store",
-    experiment: "/experiment/:slug",
+    experiment: "/:slug",
     reloadParticipant: "/participant/reload/:id/:hash",
     AMLHome:
         process.env.REACT_APP_AML_HOME || "https://www.amsterdammusiclab.nl",
