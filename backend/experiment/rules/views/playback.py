@@ -5,7 +5,8 @@ class Playback(object):
             - 'BUTTON' - display one play button
             - 'MULTIPLAYER' - display multiple small play buttons, one per section
         - sections: a list of sections (in many cases, will only contain *one* section)
-        - instructions: any text to display during preload or presentation
+        - preload_message: text to display during preload
+        - instruction: text to display during presentation of the sound
         - config: define to override the following values:
             - ready_time: time before presentation of sound
             - decision_time: maximum time that participant can take (only relevant when auto_advance=True)
