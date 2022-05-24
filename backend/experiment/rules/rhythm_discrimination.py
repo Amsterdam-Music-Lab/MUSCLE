@@ -264,7 +264,8 @@ def response_explainer(correct, same, button_label=_('Next fragment')):
 
 def finalize_experiment(session, request_session):
     # we had 4 practice trials and 60 experiment trials
-    percentage = (sum([res.score for res in session.result_set.all()]) / session.experiment.rounds) * 100
+    percentage = (sum([res.score for res in session.result_set.all()]) / session.result_set.count()) * 100
+    print(sum([res.score for res in session.result_set.all()]))
     session.finish()
     session.save()
     feedback = _("Well done! You've answered {} percent correctly!").format(percentage)
