@@ -16,7 +16,7 @@ class Score:  # pylint: disable=too-few-public-methods
         - session: a Session object
         - score_message: a function which constructs feedback text based on the score
         - config: a dict with the following settings:
-            - advance_after: int or None. If defined, advance to next view after n seconds
+            - timer: int or None. If defined, advance to next view after n seconds
             - show_section: whether metadata of the section should be shown
             - show_total_score: whether the total score should be shown
         - icon: the name of a themify-icon shown with the view or None
@@ -26,7 +26,7 @@ class Score:  # pylint: disable=too-few-public-methods
         self.score = session.last_score()
         self.score_message = score_message
         self.config = {
-            'advance_after': None,
+            'timer': None,
             'show_section': False,
             'show_total_score': False
         }
