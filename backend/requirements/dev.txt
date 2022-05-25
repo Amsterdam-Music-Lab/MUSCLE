@@ -12,7 +12,7 @@ audioread==2.1.9
     # via -r requirements.in/dev.txt
 autopep8==1.5.7
     # via -r requirements.in/dev.txt
-django==3.2.12
+django==3.2.13
     # via
     #   -r requirements.in/base.txt
     #   django-cors-headers

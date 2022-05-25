@@ -26,41 +26,41 @@ const AutoPlay = ({instruction, preloadMessage, playConfig, sections, time, star
     };
 
 
-    // Handle view logic
-    useEffect(() => {
-        switch (state.view) {
-            case RECOGNIZE:
-                // Play audio at start time
-                if (!playConfig.mute) {
-                    audio.playFrom(Math.max(0, playConfig.playhead));
-                }
-                startedPlaying();
-                break;
-            default:
-            // nothing
-        }
+     // Handle view logic
+     useEffect(() => {
+         switch (state.view) {
+             case RECOGNIZE:
+                 // Play audio at start time            
+                 if (!playConfig.mute) {
+                     audio.playFrom(Math.max(0, playConfig.playhead));
+                 }
+                 startedPlaying();
+                 break;
+             default:
+             // nothing
+         }
 
-        // Clean up
-        return () => {
-            audio.pause();
-        };
-    }, [state, playConfig]);
+         // Clean up
+         return () => {
+             audio.pause();
+         };
+     }, [state, playConfig]);
 
 
     // Render component based on view
     switch (state.view) {
-        case PRELOAD:
+        case PRELOAD:           
             return (
                 <Preload
                     instruction={preloadMessage}
                     duration={playConfig.ready_time}
                     url={MEDIA_ROOT + section.url}
-                    onNext={() => {
+                    onNext={() => {                        
                         setView(RECOGNIZE);
                     }}
                 />
             );
-        case RECOGNIZE:
+        case RECOGNIZE:            
             return (
                 <div>
                     <div className="circle">
@@ -72,17 +72,7 @@ const AutoPlay = ({instruction, preloadMessage, playConfig, sections, time, star
                             onTick={onCircleTimerTick}
                             onFinish={() => {
                                 // Stop audio
-                                audio.pause();
-                                setRunning(false);
                                 finishedPlaying();
-                                if (autoAdvance) {
-                                    // Create a time_passed result
-                                    submitResult({
-                                        type: "time_passed",
-                                        decision_time: decisionTime,
-                                        section: section.id
-                                    });
-                                }
                             }}
                         />
                         <div className="circle-content">

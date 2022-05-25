@@ -1,6 +1,6 @@
 import random
 from .base import Base
-from .views import Trial, FinalScore, Score, Explainer, Consent, StartSession, Playlist, Question
+from .views import Trial, FinalScore, Score, Explainer, Step, Consent, StartSession, Playlist, Question
 from .views.form import Form
 from .views.playback import Playback
 from .util.questions import next_question, DEMOGRAPHICS
@@ -21,19 +21,13 @@ class DemoTwoSong(Base):
         """Create data for the first experiment rounds"""
 
         # 1. General explainer
-        explainer = Explainer.action(
+        explainer = Explainer(
             instruction="How to play",
             steps=[
-                Explainer.step(
-                    description="Read the instructions",
-                    number=1),
-                Explainer.step(
-                    description="Optionally start the music",
-                    number=2),
-                Explainer.step(
-                    description="Give an answer",
-                    number=3),
-            ])
+                Step("Read the instructions"),
+                Step("Optionally start the music"),
+                Step("Give an answer")
+            ]).action(True)
 
         # 2. Consent with default text
         consent = Consent.action()
@@ -95,7 +89,7 @@ class DemoTwoSong(Base):
 
         # TwoSong action, with just the default options
         sections = [section1, section2]
-        playback = Playback(sections, 'MULTIPLE')
+        playback = Playback('MULTIPLE', sections)
         view = Trial(playback, None, 'Testing')
         actions.append(view.action())
 

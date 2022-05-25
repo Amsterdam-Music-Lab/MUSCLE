@@ -19,7 +19,6 @@ logger = logging.getLogger(__name__)
 def current(request):
     """Current participant data from session"""
     participant = current_participant(request)
-    logger.error(participant.id)
     return JsonResponse({
         'id': participant.id,
         'hash': participant.unique_hash,

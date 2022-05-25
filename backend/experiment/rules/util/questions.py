@@ -2,8 +2,19 @@ from django.utils.translation import gettext_lazy as _
 
 from experiment.rules.views.form import ChoiceQuestion, Question
 from .iso_countries import ISO_COUNTRIES
+from .isced_education import ISCED_EDUCATION_LEVELS
 
 # List of all available profile questions
+
+ATTAINED_EDUCATION_CHOICES = dict(
+    ISCED_EDUCATION_LEVELS, 
+    **{'none':  _('Have not (yet) completed any school qualification')}
+)
+EXPECTED_EDUCATION_CHOICES = dict(
+    ISCED_EDUCATION_LEVELS,
+    **{'none': _('Not applicable')}
+)
+
 DEMOGRAPHICS = [
     ChoiceQuestion(
         key='dgf_gender_identity',
@@ -43,15 +54,7 @@ DEMOGRAPHICS = [
         view='RADIOS',
         question=_(
             "What is the highest educational qualification that you have attained?"),
-        choices={
-            'none': _("Have not (yet) completed any school qualification"),
-            'isced-2': _("Vocational qualification at about 16 years of age (GCSE)"),
-            'isced-3-4': _("Secondary diploma (A-levels/high school)"),
-            'isced-5': _("Associate's degree or 2-year professional diploma"),
-            'isced-6': _("Bachelor's degree or equivalent"),
-            'isced-7': _("Master's degree or equivalent"),
-            'isced-8': _("Doctoral degree or equivalent")
-        }
+        choices=ATTAINED_EDUCATION_CHOICES
     ),
     ChoiceQuestion(
         key='dgf_country_of_residence',
@@ -102,14 +105,7 @@ EXTRA_DEMOGRAPHICS = [
         view='RADIOS',
         question=_(
             "If you are still in education, what is the highest qualification you expect to obtain?"),
-        choices={
-            'none': _("First school qualification (A-levels/ High school"),
-            'isced-2': _("Post-16 vocational course"),
-            'isced-3-4': _("Second school qualification (A-levels/high school)"),
-            'isced-5': _("Undergraduate degree or professional qualification"),
-            'isced-6': _("Postgraduate degree"),
-            'isced-7': _("Not applicable"),
-        }
+        choices=EXPECTED_EDUCATION_CHOICES
     ),
     ChoiceQuestion(
         key='dgf_occupational_status',
