@@ -92,15 +92,15 @@ def calculate_group_tag(filename, experiment):
         tag = int(parts[-1])
     elif experiment == 'cat':
         # categorization experiment
-        # Pair1: 1A(1) 1B(2), Pair2: 2A(3), 2B(4) gets encodes as tag_id
-        # Same direction (1), Crossed direction (2) gets encoded as group_id
+        # Pair1: 1A, 1B / Pair2: 2A, 2B gets encodes as tag
+        # Same direction: SAME, Crossed direction: CROSSED gets encoded as group
         if identifier[-2:] == '1A':
-            tag = 1
+            tag = '1A'
         elif identifier[-2:] == '1B':
-            tag = 2
+            tag = '1B'
         elif identifier[-2:] == '2A':
-            tag = 3
+            tag = '2A'
         elif identifier[-2:] == '2B':
-            tag = 4
-        group = 1 if identifier[0] == 'S' else 2
+            tag = '2B'
+        group = 'SAME' if identifier[0] == 'S' else 'CROSSED'
     return group, tag
