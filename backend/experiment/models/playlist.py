@@ -14,7 +14,7 @@ class Playlist(models.Model):
 
     default_csv_row = 'CSV Format: artist_name [string],\
         song_name [string], start_position [float], duration [float],\
-        "path/filename.mp3" [string], restricted_to_nl [int 0=False 1=True], tag_id [int], group_id [int]'
+        "path/filename.mp3" [string], restricted_to_nl [int 0=False 1=True], tag [string], group [string]'
     csv = models.TextField(blank=True, help_text=default_csv_row)
 
     class Meta:
@@ -59,7 +59,7 @@ class Playlist(models.Model):
 
         # Add new sections from csv
         try:
-            reader = csv.DictReader(self.csv.splitlines(), fieldnames = ('artist','name','start_time','duration','filename','restrict_to_nl','tag_id','group_id'))
+            reader = csv.DictReader(self.csv.splitlines(), fieldnames = ('artist','name','start_time','duration','filename','restrict_to_nl','tag','group'))
         except csv.Error:
             return {
                 'status': self.CSV_ERROR,
@@ -89,9 +89,7 @@ class Playlist(models.Model):
             # check for valid numbers
             if not (is_number(row['start_time'])
                     and is_number(row['duration'])
-                    and is_number(row['restrict_to_nl'])
-                    and is_number(row['tag_id'])
-                    and is_number(row['group_id'])):
+                    and is_number(row['restrict_to_nl'])):
                 return {
                     'status': self.CSV_ERROR,
                     'message': "Error: Expected number fields on line: " + str(lines)
@@ -105,8 +103,8 @@ class Playlist(models.Model):
                               duration=float(row['duration']),
                               filename=row['filename'],
                               restrict_to_nl=(int(row['restrict_to_nl']) == 1),
-                              tag_id=int(row['tag_id']),
-                              group_id=int(row['group_id']),
+                              tag=row['tag'],
+                              group=row['group'],
                               )
 
             # if same section already exists, update it with new info
@@ -114,8 +112,8 @@ class Playlist(models.Model):
                 if (ex_section.artist == section.artist
                     and ex_section.name == section.name
                     and ex_section.start_time - section.start_time == 0
-                    and ex_section.tag_id == section.tag_id
-                    and ex_section.group_id == section.group_id):
+                    and ex_section.tag == section.tag
+                    and ex_section.group == section.group):
 
                     # Update if necessary
                     if ex_section.filename != section.filename or ex_section.restrict_to_nl != section.restrict_to_nl:
