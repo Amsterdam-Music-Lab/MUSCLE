@@ -103,6 +103,10 @@ Check if your server is in the .env `AML_ALLOWED_HOST` and `AML_CORS_ORIGIN_WHIT
 
 - Make sure the `/upload/` folder is ProxyPassed in your Apache virtual host file and if the folder is served correctly
 
+#### Wave files not playing in firefox
+
+- Make sure to only use 8bit or 16bit wave files, else firefox will fail silently 
+
 #### ip2country not working
 
 - Check if the ip2country service is running: `curl http://localhost:8854?ip=172.217.168.238` - should return `{"status":"ok","country":"US"}`
