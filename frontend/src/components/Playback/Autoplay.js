@@ -11,7 +11,7 @@ const PRELOAD = "PRELOAD";
 const RECOGNIZE = "RECOGNIZE";
 
 
-const AutoPlay = ({instruction, preloadMessage, playConfig, sections, time, startedPlaying, finishedPlaying, className=''}) => {
+const AutoPlay = ({instruction, preloadMessage, playConfig, sections, time, startedPlaying, finishedPlaying, decisionTime, className=''}) => {
     // player state
     const [state, setState] = useState({ view: PRELOAD });
     const running = useRef(playConfig.auto_play);
@@ -44,7 +44,7 @@ const AutoPlay = ({instruction, preloadMessage, playConfig, sections, time, star
         return () => {
             audio.pause();
         };
-    }, [state, playConfig, startedPlaying]);
+    }, [state, playConfig]);
 
 
     // Render component based on view
@@ -66,7 +66,7 @@ const AutoPlay = ({instruction, preloadMessage, playConfig, sections, time, star
                     <div className="circle">
                         <Circle
                             running={running}
-                            duration={playConfig.decision_time}
+                            duration={decisionTime}
                             color="white"
                             animateCircle={playConfig.show_animation}
                             onTick={onCircleTimerTick}
@@ -78,7 +78,7 @@ const AutoPlay = ({instruction, preloadMessage, playConfig, sections, time, star
                         <div className="circle-content">
                             {playConfig.show_animation
                                 ? <ListenCircle
-                                    duration={playConfig.decision_time}
+                                    duration={decisionTime}
                                     histogramRunning={running}
                                     countDownRunning={running}
                                 />
