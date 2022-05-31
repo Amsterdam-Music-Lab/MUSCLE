@@ -35,7 +35,7 @@ class Categorization(Base):
 
         # retrieve expected response from json_data
         # for now: set it arbitrarily to "up"
-        result_pk = Base.prepare_result(session, section, 'up')
+        result_pk = Base.prepare_result(session, section, 'B')
         choices = {'A': 'A', 'B': 'B'}
         view = TwoAlternativeForced(section, choices, result_pk)
         return view.action()
@@ -44,10 +44,10 @@ class Categorization(Base):
     def plan_experiment(cls, session):
         """
         Randomly assign one of four (equal sized) groups to participants        
-        SB = Same direction, Blue is true
-        SO = Same direction, Orange is true
-        CB = Crossed direction, Blue is true
-        CO = Crossed direction, Orange is true
+        S1 = Same direction, Pair 1
+        S2 = Same direction, Pair 2
+        C1 = Crossed direction, Pair 1
+        C2 = Crossed direction, Pair 2
         """
 
         # Set total size per group
@@ -57,9 +57,11 @@ class Categorization(Base):
             group = None
             # Assign a group, if that group is full try again
             while group_count >= 2:
-                group = random.choice(['SB', 'SO', 'CB', 'CO'])
+                group = random.choice(['S1', 'S2', 'C1', 'C2'])
                 group_count = session.experiment.session_count_groups(group)
-            session.json_data = {'group': group}
+            stimuli_a = random.choice(['BLUE', 'ORANGE'])
+            session.json_data = {'group': group,
+                                 'stimuli_a': stimuli_a}
             session.save()
         return
 
