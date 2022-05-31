@@ -6,6 +6,8 @@ from aml.base_settings import *
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
+STATIC_URL = '/django_static/'
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
