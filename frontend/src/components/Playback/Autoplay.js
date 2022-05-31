@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useRef, useState, useEffect } from "react";
 
 import * as audio from "../../util/audio";
 import { MEDIA_ROOT } from "../../config";
@@ -11,10 +11,10 @@ const PRELOAD = "PRELOAD";
 const RECOGNIZE = "RECOGNIZE";
 
 
-const AutoPlay = ({instruction, preloadMessage, playConfig, sections, time, startedPlaying, finishedPlaying, submitResult, autoAdvance, decisionTime, className=''}) => {
+const AutoPlay = ({instruction, preloadMessage, playConfig, sections, time, startedPlaying, finishedPlaying, className=''}) => {
     // player state
     const [state, setState] = useState({ view: PRELOAD });
-    const [running, setRunning] = useState(playConfig.auto_play);
+    const running = useRef(playConfig.auto_play);
     const setView = (view, data = {}) => {
         setState({ view, ...data });
     }
@@ -26,25 +26,25 @@ const AutoPlay = ({instruction, preloadMessage, playConfig, sections, time, star
     };
 
 
-     // Handle view logic
-     useEffect(() => {
-         switch (state.view) {
-             case RECOGNIZE:
-                 // Play audio at start time            
-                 if (!playConfig.mute) {
-                     audio.playFrom(Math.max(0, playConfig.playhead));
-                 }
-                 startedPlaying();
-                 break;
-             default:
-             // nothing
-         }
+    // Handle view logic
+    useEffect(() => {
+        switch (state.view) {
+            case RECOGNIZE:
+                // Play audio at start time            
+                if (!playConfig.mute) {
+                    audio.playFrom(Math.max(0, playConfig.playhead));
+                }
+                startedPlaying();
+                break;
+            default:
+            // nothing
+        }
 
-         // Clean up
-         return () => {
-             audio.pause();
-         };
-     }, [state, playConfig]);
+        // Clean up
+        return () => {
+            audio.pause();
+        };
+    }, [state, playConfig, startedPlaying]);
 
 
     // Render component based on view
@@ -66,7 +66,7 @@ const AutoPlay = ({instruction, preloadMessage, playConfig, sections, time, star
                     <div className="circle">
                         <Circle
                             running={running}
-                            duration={decisionTime}
+                            duration={playConfig.decision_time}
                             color="white"
                             animateCircle={playConfig.show_animation}
                             onTick={onCircleTimerTick}
@@ -78,7 +78,7 @@ const AutoPlay = ({instruction, preloadMessage, playConfig, sections, time, star
                         <div className="circle-content">
                             {playConfig.show_animation
                                 ? <ListenCircle
-                                    duration={decisionTime}
+                                    duration={playConfig.decision_time}
                                     histogramRunning={running}
                                     countDownRunning={running}
                                 />

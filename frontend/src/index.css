@@ -277,46 +277,49 @@ h3.title:after {
 }
 
 .boolean .btn:nth-of-type(1) {
-  background-color: #00b612; }
-
+  background-color: #00b612;
+}
 .boolean .btn:nth-of-type(2) {
-  background-color: #fa5577; }
+  background-color: #fa5577;
+}
 
 .neutral .aha__player-small:nth-of-type(1) .btn {
-  background-color: #0cc7f1; }
-
+  background-color: #0cc7f1;
+}
 .neutral .aha__player-small:nth-of-type(2) .btn {
-  background-color: #ffb14c; }
-
+  background-color: #ffb14c;
+}
 .neutral .aha__player-small:nth-of-type(3) .btn {
-  background-color: #39d7b8; }
-
+  background-color: #39d7b8;
+}
 .neutral .btn:nth-of-type(1) {
-  background-color: #0cc7f1; }
-
+  background-color: #0cc7f1;
+}
 .neutral .btn:nth-of-type(2) {
-  background-color: #ffb14c; }
-
+  background-color: #ffb14c;
+}
 .neutral .btn:nth-of-type(3) {
-  background-color: #39d7b8; }
+  background-color: #39d7b8;
+}
 
 .neutral-inverted .aha__player-small:nth-of-type(1) .btn {
-  background-color: #ffb14c; }
-
+  background-color: #ffb14c;
+}
 .neutral-inverted .aha__player-small:nth-of-type(2) .btn {
-  background-color: #0cc7f1; }
-
+  background-color: #0cc7f1;
+}
 .neutral-inverted .aha__player-small:nth-of-type(3) .btn {
-  background-color: #39d7b8; }
-
+  background-color: #39d7b8;
+}
 .neutral-inverted .btn:nth-of-type(1) {
-  background-color: #ffb14c; }
-
+  background-color: #ffb14c;
+}
 .neutral-inverted .btn:nth-of-type(2) {
-  background-color: #0cc7f1; }
-
+  background-color: #0cc7f1;
+}
 .neutral-inverted .btn:nth-of-type(3) {
-  background-color: #39d7b8; }
+  background-color: #39d7b8;
+}
 
 /* Components */
 .aha__app {
@@ -716,96 +719,6 @@ h3.title:after {
   background-color: #1da1f2;
 }
 
-.aha__participant_link {
-  padding-top: 10px; }
-  .aha__participant_link .copy {
-    width: 100%;
-    display: flex;
-    justify-content: stretch; }
-    .aha__participant_link .copy input {
-      width: 100%;
-      border-top-left-radius: 3px;
-      border-bottom-left-radius: 3px;
-      border: 0;
-      padding: 6px;
-      font-size: 0.9em; }
-    .aha__participant_link .copy button {
-      padding: 6px;
-      color: white;
-      background-color: #39d7b8;
-      border: 0;
-      border-top-right-radius: 3px;
-      border-bottom-right-radius: 3px;
-      text-transform: uppercase;
-      font-size: 0.9em;
-      letter-spacing: 0.1em;
-      font-weight: 500; }
-
-.share a {
-  display: inline-block;
-  width: 55px;
-  height: 55px;
-  border-radius: 50%;
-  line-height: 55px;
-  text-align: center;
-  background-color: #39d7b8;
-  color: white;
-  margin: 0 10px;
-  font-size: 0; }
-  .share a::before {
-    font-size: 26px; }
-  .share a:hover {
-    text-decoration: none; }
-  .share a.ti-facebook {
-    background-color: #4267b2; }
-  .share a.ti-twitter-alt {
-    background-color: #1da1f2; }
-
-.aha__participant_link {
-  padding-top: 10px; }
-  .aha__participant_link .copy {
-    width: 100%;
-    display: flex;
-    justify-content: stretch; }
-    .aha__participant_link .copy input {
-      width: 100%;
-      border-top-left-radius: 3px;
-      border-bottom-left-radius: 3px;
-      border: 0;
-      padding: 6px;
-      font-size: 0.9em; }
-    .aha__participant_link .copy button {
-      padding: 6px;
-      color: white;
-      background-color: #39d7b8;
-      border: 0;
-      border-top-right-radius: 3px;
-      border-bottom-right-radius: 3px;
-      text-transform: uppercase;
-      font-size: 0.9em;
-      letter-spacing: 0.1em;
-      font-weight: 500; }
-
-.share a {
-  display: inline-block;
-  width: 55px;
-  height: 55px;
-  border-radius: 50%;
-  line-height: 55px;
-  text-align: center;
-  background-color: #39d7b8;
-  color: white;
-  margin: 0 10px;
-  font-size: 0; }
-  .share a::before {
-    font-size: 26px; }
-  .share a:hover {
-    text-decoration: none; }
-  .share a.ti-facebook {
-    background-color: #4267b2; }
-  .share a.ti-twitter-alt {
-    background-color: #1da1f2; }
-
 .aha__store-profile input {
   width: 100%;
   padding: 5px;
@@ -1149,11 +1062,14 @@ h3.title:after {
 
 .aha__buttons {
   display: flex;
-  flex-direction: row; }
-  .aha__buttons .btn.disabled {
-    opacity: .3; }
-  .aha__buttons .title {
-    flex: 0 0 100%; }
+  flex-direction: row;
+}
+.aha__buttons .btn.disabled {
+  opacity: 0.3;
+}
+.aha__buttons .title {
+  flex: 0 0 100%;
+}
 
 .aha__checkboxes {
   display: flex;
@@ -1666,27 +1582,6 @@ h3.title:after {
     fill: #fa5577;
   }
 }
-.aha__two-player .players {
-  max-width: 350px;
-}
-.aha__two-player .buttons {
-  max-width: 390px;
-}
-.aha__two-player .buttons .aha__button {
-  margin-bottom: 10px;
-  margin-right: 5px;
-  margin-left: 5px;
-}
-.aha__two-player .instruction {
-  min-height: 55px;
-}
-.aha__two-player .instruction h3 {
-  margin: 0;
-}
-.aha__two-player .buttons {
-  max-width: 350px;
-}
-
 .aha__trial {
   display: flex;
   flex-direction: column;

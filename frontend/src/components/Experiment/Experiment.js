@@ -130,8 +130,8 @@ const Experiment = ({ match }) => {
                 return <Playlist {...attrs} />;
             case "START_SESSION":
                 return <StartSession {...attrs} />;
-            // case "SONG_SYNC":
-            //     return <SongSync {...attrs} />;
+            case "SONG_SYNC":
+                return <SongSync {...attrs} />;
             case "SCORE":
                 return <Score {...attrs} />;
             case "TRIAL_VIEW":
