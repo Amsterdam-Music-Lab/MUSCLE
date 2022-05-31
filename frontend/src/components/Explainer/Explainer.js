@@ -2,7 +2,13 @@ import React from "react";
 import Button from "../Button/Button";
 
 // Explainer is an experiment view that shows a list of steps
-const Explainer = ({ instruction, button_label, steps = [], onNext }) => {
+const Explainer = ({ instruction, button_label, steps = [], timer, onNext }) => {
+    useEffect(() => {
+        setTimeout( 
+            onNext, timer
+        )
+    })
+    
     return (
         <div className="aha__explainer">
             <h3 className="title">{instruction}</h3>
