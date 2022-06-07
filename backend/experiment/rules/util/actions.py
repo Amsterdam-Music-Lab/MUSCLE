@@ -41,11 +41,11 @@ def final_action_with_optional_button(session, final_text, request_session):
             }
         ).action()
     else:
-        return Final.action(
+        return Final(
             title=_('End'),
             session=session,
             final_text=final_text,
-        )
+        ).action()
 
 def render_feedback_trivia(feedback, trivia):
     ''' Given two texts of feedback and trivia,
