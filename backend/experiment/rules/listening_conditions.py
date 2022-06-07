@@ -76,7 +76,7 @@ class ListeningConditions(Base):
             instruction = _("You can now set the sound to a comfortable level. \
                     You can then adjust the volume to as high a level as possible without it being uncomfortable. \
                     When you are satisfied with the sound level, click Continue")
-            playback = Playback('AUTOPLAY', [section], instruction=instruction)
+            playback = Playback([section], instruction=instruction)
             message = _("Please keep the eventual sound level the same over the course of the experiment.")
             actions = [
                 Trial(playback, feedback_form).action(),
