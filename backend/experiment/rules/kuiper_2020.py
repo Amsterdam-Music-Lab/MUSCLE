@@ -316,7 +316,7 @@ class Kuiper2020(Base):
         play_config = {
             'decision_time': 15
         }
-        playback = Playback('AUTOPLAY', [section], instructions, play_config)
+        playback = Playback([section], instructions, play_config)
         form = Form(question)
         view = Trial(
             playback=playback,

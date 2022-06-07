@@ -15,12 +15,7 @@ import Consent from "../Consent/Consent";
 import Playlist from "../Playlist/Playlist";
 import StartSession from "../StartSession/StartSession";
 import SongSync from "../SongSync/SongSync";
-import SongBool from "../SongBool/SongBool";
 import Score from "../Score/Score";
-import TwoAlternativeForced from "../TwoAlternativeForced/TwoAlternativeForced";
-import TwoSong from "../TwoSong/TwoSong";
-import ProfileQuestion from "../ProfileQuestion/ProfileQuestion";
-import ResultQuestion from "../ResultQuestion/ResultQuestion";
 import FinalScore from "../FinalScore/FinalScore";
 import Final from "../Final/Final";
 
@@ -136,20 +131,10 @@ const Experiment = ({ match }) => {
                 return <StartSession {...attrs} />;
             case "SONG_SYNC":
                 return <SongSync {...attrs} />;
-            case "SONG_BOOL":
-                return <SongBool {...attrs} />;
             case "SCORE":
                 return <Score {...attrs} />;
-            case "TWO_ALTERNATIVE_FORCED":
-                return <TwoAlternativeForced {...attrs} />;
-            case "TWO_SONG":
-                return <TwoSong {...attrs} />;
             case "TRIAL_VIEW":
                 return <Trial {...attrs} />
-            case "PROFILE_QUESTION":
-                return <ProfileQuestion {...attrs} />;
-            case "RESULT_QUESTION":
-                return <ResultQuestion {...attrs} />;
             case "FINAL_SCORE":
                 return (
                     <FinalScore

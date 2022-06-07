@@ -1,11 +1,11 @@
 import React, { useState, useRef } from "react";
+import classNames from "classnames";
 
 import { getCurrentTime, getTimeSince } from "../../util/time";
 import { createProfile, createResult } from "../../API.js";
 import FeedbackForm from "../FeedbackForm/FeedbackForm";
 import Playback from "../Playback/Playback";
 import Button from "../Button/Button";
-import classNames from "classnames";
 
 // Trial is an experiment view, that preloads a song, shows an explanation and plays audio
 // Optionally, it can show an animation during playback
@@ -28,9 +28,12 @@ const Trial = ({ participant, session, playback, feedback_form, config, onNext, 
         startTime.current = getCurrentTime();
     }
 
-    const getNextAction = () => {
+    const finishedPlaying = () => {
         if (config.auto_advance) {
-            onNext();
+        // Create a time_passed result
+            makeResult({
+                type: "time_passed"
+            });
         }
         setFormActive(true);
         return;
@@ -131,12 +134,13 @@ const Trial = ({ participant, session, playback, feedback_form, config, onNext, 
                 instruction={playback.instruction}
                 preloadMessage={playback.preload_message}
                 autoAdvance={config.auto_advance}
+                decisionTime={config.decision_time}
                 playConfig={playback.play_config}
                 sections={playback.sections}
                 time={time}
                 submitResult={makeResult}
                 startedPlaying={startTimer}
-                finishedPlaying={getNextAction}
+                finishedPlaying={finishedPlaying}
             />)}
             {feedback_form && (
             <FeedbackForm

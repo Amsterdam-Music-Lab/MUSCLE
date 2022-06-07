@@ -144,16 +144,16 @@ class DurationDiscrimination(Base):
             result_id=result_pk,
             submits=True
         )
-        play_config = {
-            'decision_time': section.duration + .7,
-        }
-        playback = Playback('AUTOPLAY', [section], play_config=play_config)
+        playback = Playback([section])
         form = Form([question])
         view = Trial(
             playback=playback,
             feedback_form=form,
             title=_('%(title)s duration discrimination') % {'title': cls.condition},
-            config={'listen_first': True}
+            config={
+                'listen_first': True,
+                'decision_time': section.duration + .5
+            }
         )
         return view.action()
 

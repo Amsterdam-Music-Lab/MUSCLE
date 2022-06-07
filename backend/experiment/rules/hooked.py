@@ -95,7 +95,7 @@ class Hooked(Base):
                     'show_animation': False,
                     'mute': True
                 }
-                silence_playback = Playback('AUTOPLAY', [section], play_config=silence_config, instruction=_('Keep imagining the music'))
+                silence_playback = Playback([section], play_config=silence_config, instruction=_('Keep imagining the music'))
                 silence_view = Trial(
                     playback=silence_playback,
                     feedback_form=None,
@@ -126,7 +126,7 @@ class Hooked(Base):
                     'show_animation': True,
                     'playhead': playhead
                 }
-                sync_playback = Playback('AUTOPLAY', [section], play_config=sync_config)
+                sync_playback = Playback([section], play_config=sync_config)
                 sync_view = Trial(
                     playback=sync_playback,
                     feedback_form=form,
@@ -186,7 +186,7 @@ class Hooked(Base):
             'decision_time': cls.decision_time,
             'show_animation': True
         }
-        playback = Playback('AUTOPLAY', [section], play_config=play_config, preload_message=_('Get ready!'))
+        playback = Playback([section], play_config=play_config, preload_message=_('Get ready!'))
         view = Trial(
             playback=playback,
             feedback_form=form,
