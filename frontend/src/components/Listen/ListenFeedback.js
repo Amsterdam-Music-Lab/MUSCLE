@@ -43,11 +43,14 @@ const ListenFeedback = ({
             </div>
 
             {/* Instruction */}
+            {instruction && (
             <div className="instruction d-flex justify-content-center align-items-center">
                 <h3 className="text-center">{instruction}</h3>
             </div>
+            )}
 
             {/* Buttons */}
+            {buttons && (
             <div className="buttons d-flex justify-content-around p-3 w-100">
                 {/* No-button */}
                 {onNoClick && (
@@ -69,6 +72,7 @@ const ListenFeedback = ({
                     />
                 )}
             </div>
+            )}
         </div>
     );
 };
