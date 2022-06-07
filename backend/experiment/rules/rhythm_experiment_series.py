@@ -8,9 +8,9 @@ from django.template.loader import render_to_string
 
 from .base import Base
 from .util.actions import combine_actions
-from .views import Consent, Explainer, Step, CompositeView, Final, StartSession
+from .views import Consent, Explainer, Final, StartSession, Step
 
-class RhythmTestSeries(Base):
+class RhythmExperimentSeries(Base):
     ID = 'TEST_BATTERY'
 
     @classmethod
@@ -58,10 +58,10 @@ class RhythmTestSeries(Base):
             experiment_data = prepare_experiments(session)
         if experiment_number == len(experiment_data):
             rendered = render_to_string(join('final',
-            'test_series.html'))
+            'experiment_series.html'))
             return Final.action(
                 session,
-                title==_("Thank you very much for participating!"),
+                title=_("Thank you very much for participating!"),
                 score_template=rendered,
                 show_participant_link=True,
             )
@@ -103,7 +103,7 @@ def register_consent(session, experiment_list):
         profile.save()
 
 def get_experiment_lists(session):
-    series = session.experiment.test_series
+    series = session.experiment.experiment_series
     first_list = get_associated_experiments(series.first_experiments)
     random_list = get_associated_experiments(series.random_experiments)
     last_list = get_associated_experiments(series.last_experiments)

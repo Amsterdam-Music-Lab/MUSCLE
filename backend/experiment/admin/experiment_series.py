@@ -2,28 +2,28 @@ from django.contrib import admin
 from django.forms import ModelForm, ModelMultipleChoiceField
 from inline_actions.admin import InlineActionsModelAdminMixin
 
-from experiment.models import TestSeries
+from experiment.models import ExperimentSeries
 
 class ModelFormFieldAsJSON(ModelMultipleChoiceField):
     """ override clean method to prevent pk lookup to save querysets """
     def clean(self, value):
         return value
 
-class TestSeriesForm(ModelForm):
+class ExperimentSeriesForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super(ModelForm, self).__init__(*args, **kwargs)
         from . import Experiment
-        experiments = Experiment.objects.all().filter(test_series=None)
+        experiments = Experiment.objects.all().filter(experiment_series=None)
         self.fields['first_experiments'] = ModelFormFieldAsJSON(queryset=experiments, required=False)
         self.fields['random_experiments'] = ModelFormFieldAsJSON(queryset=experiments, required=False)
         self.fields['last_experiments'] = ModelFormFieldAsJSON(queryset=experiments, required=False)
-    
+
     class Meta:
-        model = TestSeries
+        model = ExperimentSeries
         fields = ['name', 'first_experiments', 'random_experiments', 'last_experiments']
 
-class TestSeriesAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
+class ExperimentSeriesAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
     fields = ['name', 'first_experiments', 'random_experiments', 'last_experiments']
-    form = TestSeriesForm
+    form = ExperimentSeriesForm
 
-admin.site.register(TestSeries, TestSeriesAdmin)
+admin.site.register(ExperimentSeries, ExperimentSeriesAdmin)

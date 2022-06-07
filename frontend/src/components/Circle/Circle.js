@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Timer from "../../util/timer";
 
 // Circle shows a counterclockwise circular animation
@@ -11,8 +11,9 @@ const Circle = ({
     radius = 85,
     strokeWidth = 7,
     running = true,
-    animateCircle = true
+    animateCircle = true,
 }) => {
+
     // automatic timer
     const [time, setTime] = useState(startTime);
 

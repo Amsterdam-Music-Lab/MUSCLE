@@ -5,8 +5,9 @@ from django.utils.translation import gettext_lazy as _
 
 from .base import Base
 from experiment.models import Section
-from .views import CompositeView, Consent, Explainer, Step, Playlist, StartSession
+from .views import Trial, Consent, Explainer, Playlist, Step, StartSession
 from .views.form import ChoiceQuestion, Form
+from .views.playback import Playback
 
 from .util.practice import get_practice_views, practice_explainer, get_trial_condition, get_trial_condition_block
 from .util.actions import combine_actions, final_action_with_optional_button, render_feedback_trivia
@@ -18,6 +19,8 @@ logger = logging.getLogger(__name__)
 MAX_TURNPOINTS = 6
 
 class HBat(Base):
+    """ section.group (and possibly section.tag) must be convertable to int"""
+
     ID = 'H_BAT'
     start_diff = 20
 
@@ -71,7 +74,7 @@ class HBat(Base):
         )
 
     @staticmethod
-    def calculate_score(result, form_element):
+    def calculate_score(result, form_element, data):
         # a result's score is used to keep track of how many correct results were in a row
         # for catch trial, set score to 2 -> not counted for calculating turnpoints
         try:
@@ -84,10 +87,6 @@ class HBat(Base):
         else:
             return 0
 
-    @staticmethod
-    def handle_result(session, section, data):
-        return Base.handle_results(session, section, data)
-
     @classmethod
     def next_trial_action(cls, session, trial_condition, level=1, *kwargs):
         """
@@ -96,16 +95,12 @@ class HBat(Base):
         level can be 1 (20 ms) or higher (10, 5, 2.5 ms...)
         """
         try:
-            section = session.playlist.section_set.filter(group_id=level).get(tag_id=trial_condition)
+            section = session.playlist.section_set.filter(group=str(level)).get(tag=str(trial_condition))
         except Section.DoesNotExist:
             return None
         expected_result = 'SLOWER' if trial_condition else 'FASTER'
         # create Result object and save expected result to database
         result_pk = Base.prepare_result(session, section, expected_result)
-        instructions = {
-            'preload': '',
-            'during_presentation': ''
-        }
         question = ChoiceQuestion(
             key='longer_or_equal',
             question=_(
@@ -118,17 +113,17 @@ class HBat(Base):
             result_id=result_pk,
             submits=True
         )
+        playback = Playback([section])
         form = Form([question])
-        view = CompositeView(
-            section=section,
-            feedback_form=form.action(),
-            instructions=instructions,
-            title=_('Beat acceleration')
+        view = Trial(
+            playback=playback,
+            feedback_form=form,
+            title=_('Beat acceleration'),
+            config={
+                'decision_time': section.duration + .5
+            }
         )
-        config = {
-            'decision_time': section.duration + .7
-        }
-        return view.action(config)
+        return view.action()
 
     @classmethod
     def intro_explainer(cls):
@@ -196,10 +191,10 @@ class HBat(Base):
 
 def get_previous_condition(previous_result):
     """ check if previous section was slower / in 2 (1) or faster / in 3 (0) """
-    return previous_result.section.tag_id
+    return int(previous_result.section.tag)
 
 def get_previous_level(previous_result):
-    return previous_result.section.group_id
+    return int(previous_result.section.group)
 
 def staircasing(session, trial_action_callback):
     trial_condition = get_trial_condition(2)

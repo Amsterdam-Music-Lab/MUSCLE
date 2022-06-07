@@ -1,6 +1,16 @@
-.aha__two-player {
+.aha__multiplayer {
     .players {
         max-width: 350px;
+    }
+
+    btn:nth-of-type(1) {
+        background-color: $teal;
+    }
+    .btn:nth-of-type(2){
+        background-color: $blue;
+    }
+    .btn:nth-of-type(3){
+        background-color: $yellow;
     }
 
     .buttons {

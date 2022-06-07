@@ -1,6 +1,10 @@
 import random
+
+from django.utils.translation import gettext_lazy as _
+
 from .base import Base
-from .views import SongSync, SongBool, FinalScore, Score, Explainer, Consent, StartSession, Playlist
+from .views import SongSync, SongBool, FinalScore, Score, Explainer, Consent, Playlist, StartSession, Step, Trial
+from .views.form import BooleanQuestion, Form
 from .util.questions import DEMOGRAPHICS, next_question
 from .util.goldsmiths import MSI_FG_GENERAL, MSI_ALL
 from .util.stomp import STOMP20
@@ -24,19 +28,11 @@ class Kuiper2020(Base):
         explainer = Explainer.action(
             instruction="How to Play",
             steps=[
-                Explainer.step(
-                    description="Do you recognise the song? Try to sing along. The faster you recognise songs, the more points you can earn.",
-                    number=1
-                ),
-                Explainer.step(
-                    description="Do you really know the song? Keep singing or imagining the music while the sound is muted. The music is still playing: you just can’t hear it!",
-                    number=2
-                ),
-                Explainer.step(
-                    description="Was the music in the right place when the sound came back? Or did we jump to a different spot during the silence?",
-                    number=3
-                )
-            ]
+                Step(_("Do you recognise the song? Try to sing along. The faster you recognise songs, the more points you can earn.",)),
+                Step(_("Do you really know the song? Keep singing or imagining the music while the sound is muted. The music is still playing: you just can’t hear it!")),
+                Step(_("Was the music in the right place when the sound came back? Or did we jump to a different spot during the silence?"))
+            ],
+            step_numbers=True
         )
 
         # 2. Get informed consent.
@@ -312,11 +308,22 @@ class Kuiper2020(Base):
         if not section:
             print("Warning: no next_song_sync section found")
             section = session.section_from_any_song()
-
-        return SongSync.action(
-            session=session,
-            section=section
+        result_pk = Base.prepare_result(session, section, expected_result)
+        question = BooleanQuestion(
+            result_id=result_pk,
+            submits=True
         )
+        play_config = {
+            'decision_time': 15
+        }
+        playback = Playback([section], instructions, play_config)
+        form = Form(question)
+        view = Trial(
+            playback=playback,
+            feedback_form=form,
+            title=_('Do you recognize this song?')
+        )
+        return view.action()
 
     @staticmethod
     def heard_before_explainer():

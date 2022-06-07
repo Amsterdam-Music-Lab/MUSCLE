@@ -118,7 +118,7 @@ FILE_UPLOAD_MAX_MEMORY_SIZE = 512000000
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
-STATIC_URL = '/django_static/'
+STATIC_URL = '/static/'
 
 # Added to run : python manage.py collectstatic
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
@@ -143,10 +143,7 @@ CORS_ORIGIN_ALLOW_ALL = False
 CORS_ALLOW_CREDENTIALS = True
 
 
-SESSION_COOKIE_SAMESITE = 'None'
-CSRF_COOKIE_SAMESITE = 'None'
-SESSION_COOKIE_SECURE = True
-CSRF_COOKIE_SECURE = True
+
 SESSION_SAVE_EVERY_REQUEST = True
 
 CSRF_USE_SESSIONS = False

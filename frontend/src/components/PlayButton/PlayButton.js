@@ -1,18 +1,18 @@
 import React from "react";
 import classNames from "classnames";
 
-const PlayButton = ({ onClick, className = "", colorClass = "pink" }) => {
+const PlayButton = ({ playSection, className = ""}) => {
     return (
         <div
             className={classNames(
                 "aha__play-button border-outside",
-                "btn-" + colorClass,
+                "btn",
                 className
             )}
-            onClick={onClick}
+            onClick={() => playSection(0)}
             tabIndex="0"
             onKeyPress={(e) => {
-                onClick();
+                playSection(0);
             }}
         ></div>
     );

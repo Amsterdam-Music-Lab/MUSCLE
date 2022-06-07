@@ -5,10 +5,11 @@ from .question import Question
 from .score import Score
 from .song_sync import SongSync
 from .song_bool import SongBool
-from .two_alternative_forced import TwoAlternativeForced
 from .two_song import TwoSong
 from .consent import Consent
+from .playback import Playback
 from .playlist import Playlist
 from .start_session import StartSession
 from .practice_round import PracticeRound
-from .composite_view import CompositeView
+from .trial import Trial
+from .two_alternative_forced import TwoAlternativeForced

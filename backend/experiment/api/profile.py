@@ -33,7 +33,7 @@ def create(request):
     # Current participant
     participant = current_participant(request)
     # Get question
-    result = json.loads(request.POST.get("json_data")).get('result')
+    result = json.loads(request.POST.get("json_data"))
 
     if not result:
         return HttpResponseBadRequest("Missing required parameter: result")

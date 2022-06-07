@@ -1,16 +1,14 @@
-import React, { useState, useRef, useEffect, useCallback } from "react";
-import { MEDIA_ROOT } from "../../config";
+import React, { useState, useEffect, useCallback } from "react";
 import {
     useExperiment,
     useParticipant,
-    createResult,
     getNextRound,
 } from "../../API";
-import * as audio from "../../util/audio";
+
 import { TransitionGroup, CSSTransition } from "react-transition-group";
 import { withRouter } from "react-router-dom";
 
-import CompositeView from '../CompositeView/CompositeView';
+import Trial from '../Trial/Trial';
 import DefaultPage from "../Page/DefaultPage";
 import Loading from "../Loading/Loading";
 import Explainer from "../Explainer/Explainer";
@@ -18,14 +16,8 @@ import Consent from "../Consent/Consent";
 import Playlist from "../Playlist/Playlist";
 import StartSession from "../StartSession/StartSession";
 import SongSync from "../SongSync/SongSync";
-import SongBool from "../SongBool/SongBool";
 import Score from "../Score/Score";
-import TwoAlternativeForced from "../TwoAlternativeForced/TwoAlternativeForced";
-import TwoSong from "../TwoSong/TwoSong";
-import ProfileQuestion from "../ProfileQuestion/ProfileQuestion";
-import ResultQuestion from "../ResultQuestion/ResultQuestion";
 import FinalScore from "../FinalScore/FinalScore";
-import PracticeRound from "../PracticeRound/PracticeRound";
 import Final from "../Final/Final";
 
 // Experiment handles the main experiment flow:
@@ -140,22 +132,10 @@ const Experiment = ({ match }) => {
                 return <StartSession {...attrs} />;
             case "SONG_SYNC":
                 return <SongSync {...attrs} />;
-            case "SONG_BOOL":
-                return <SongBool {...attrs} />;
             case "SCORE":
                 return <Score {...attrs} />;
-            case "TWO_ALTERNATIVE_FORCED":
-                return <TwoAlternativeForced {...attrs} />;
-            case "TWO_SONG":
-                return <TwoSong {...attrs} />;
-            case "PRACTICE_ROUND":
-                return <PracticeRound {...attrs} />
-            case "COMPOSITE_VIEW":
-                return <CompositeView {...attrs} />
-            case "PROFILE_QUESTION":
-                return <ProfileQuestion {...attrs} />;
-            case "RESULT_QUESTION":
-                return <ResultQuestion {...attrs} />;
+            case "TRIAL_VIEW":
+                return <Trial {...attrs} />
             case "FINAL_SCORE":
                 return (
                     <FinalScore

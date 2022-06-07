@@ -40,7 +40,7 @@ export const init = () => {
 // init audio after first user action on page
 export const initAudioListener = () => {
     const initOnce = () => {
-        document.removeEventListener("click", initOnce);
+        document.removeEventListener("click", initOnce);       
         init();
     };
     document.addEventListener("click", initOnce);

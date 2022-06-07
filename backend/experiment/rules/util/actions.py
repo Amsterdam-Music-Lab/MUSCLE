@@ -26,7 +26,7 @@ def final_action_with_optional_button(session, final_text, request_session):
     """
     if request_session:
         from experiment.models import Session
-        series_data = request_session.get('test_series')
+        series_data = request_session.get('experiment_series')
         series_slug = series_data.get('slug')
         series_session = Session.objects.get(pk=series_data.get('session_id'))
         series_session.final_score += 1
@@ -51,5 +51,5 @@ def render_feedback_trivia(feedback, trivia):
     ''' Given two texts of feedback and trivia,
     render them in the final/feedback_trivia.html template.'''
     context = {'feedback': feedback, 'trivia': trivia}
-    return render_to_string(join('final', 
+    return render_to_string(join('final',
         'feedback_trivia.html'), context)

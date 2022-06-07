@@ -1,6 +1,8 @@
 import random
 from .base import Base
-from .views import TwoSong, FinalScore, Score, Explainer, Consent, StartSession, Playlist, Question
+from .views import Trial, FinalScore, Score, Explainer, Step, Consent, StartSession, Playlist, Question
+from .views.form import Form
+from .views.playback import Playback
 from .util.questions import next_question, DEMOGRAPHICS
 from .util.actions import combine_actions
 
@@ -19,19 +21,13 @@ class DemoTwoSong(Base):
         """Create data for the first experiment rounds"""
 
         # 1. General explainer
-        explainer = Explainer.action(
+        explainer = Explainer(
             instruction="How to play",
             steps=[
-                Explainer.step(
-                    description="Read the instructions",
-                    number=1),
-                Explainer.step(
-                    description="Optionally start the music",
-                    number=2),
-                Explainer.step(
-                    description="Give an answer",
-                    number=3),
-            ])
+                Step("Read the instructions"),
+                Step("Optionally start the music"),
+                Step("Give an answer")
+            ]).action(True)
 
         # 2. Consent with default text
         consent = Consent.action()
@@ -87,62 +83,15 @@ class DemoTwoSong(Base):
         actions = []
 
         # Get sections for the next round
-        section1 = DemoTwoSong.next_section(session)
-        section2 = DemoTwoSong.next_section(session)
+        section1 = session.playlist.section_set.all()[0]
+        section2 = session.playlist.section_set.all()[1]
 
-        # Default TwoSong options
-        two_song_options = {
-            'session': session,
-            'section1': section1,
-            'section2': section2,
-            'introduction': "Listen to these musical fragments:",
-            'instruction': "Which of the fragments sounds catchier to you?",
-            'expected_result': 2,  # 1 or 2
-        }
 
-        # Build up this experiment per round
-        if next_round_number == 1:
-            # TwoSong action, with just the default options
-            actions.append(
-                DemoTwoSong.create_two_song_action(two_song_options))
-
-        elif next_round_number == 2:
-            # TwoSong action, with modified parameters
-            actions.append(
-                DemoTwoSong.create_two_song_action(two_song_options,
-                                                   section1_color="pink",
-                                                   section1_label="I",
-                                                   section2_color="yellow",
-                                                   section2_label="II",
-                                                   button1_label="Snippet I",
-                                                   button2_label="Snippet II",
-                                                   button1_color="red",
-                                                   button2_color="blue",
-                                                   introduction="",
-                                                   instruction="Parameters are customizable",
-                                                   ))
-
-        elif next_round >= 3:
-            # Default TwoSong action
-            actions.append(
-                DemoTwoSong.create_two_song_action(two_song_options))
-
-        # Example for alternate question introduction using the Explainer
-        if next_round_number == 3:
-            actions.insert(0, Explainer.action(
-                instruction="How to play",
-                steps=[
-                    Explainer.step(
-                        "Click on the play buttons to listen to a short fragment", number=1),
-                    Explainer.step(
-                        "Let us know which of the fragments sounds catchier to you", number=2)
-                ],
-                button_label="Continue"
-            ))
-
-        if next_round > 1:
-            # Add a Profile Question to the actions list
-            actions.insert(0, next_question(session, DEMOGRAPHICS, True))
+        # TwoSong action, with just the default options
+        sections = [section1, section2]
+        playback = Playback('MULTIPLE', sections)
+        view = Trial(playback, None, 'Testing')
+        actions.append(view.action())
 
         return combine_actions(*actions)
 

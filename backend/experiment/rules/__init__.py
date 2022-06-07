@@ -2,8 +2,6 @@ from .song_sync_only import SongSyncOnly
 from .short_long import ShortLong
 # from .short_long_tags import ShortLongTags
 # from .demo import Demo
-from .demo_taf import DemoTAF
-from .demo_two_song import DemoTwoSong
 from .eurovision_2020 import Eurovision2020
 from .kuiper_2020 import Kuiper2020
 from .beijaert_2021 import Beijaert2021
@@ -17,9 +15,11 @@ from .h_bat import HBat
 from .h_bat_bfit import HBatBFIT
 from .hbat_bst import BST
 from .rhythm_discrimination import RhythmDiscrimination
-from .rhythm_test_series import RhythmTestSeries
+from .rhythm_experiment_series import RhythmExperimentSeries
 from .gold_msi import GoldMSI
 from .listening_conditions import ListeningConditions
+from .hooked import Hooked
+from .categorization import Categorization
 
 # Rules available to this application
 # If you create new Rules, add them to the list
@@ -27,9 +27,6 @@ from .listening_conditions import ListeningConditions
 
 EXPERIMENT_RULES = {
     # Demo.ID: Demo,
-    DemoTAF.ID: DemoTAF,
-    DemoTwoSong.ID: DemoTwoSong,
-
     SongSyncOnly.ID: SongSyncOnly,
     ShortLong.ID: ShortLong,
     # ShortLongTags.ID: ShortLongTags,
@@ -46,7 +43,9 @@ EXPERIMENT_RULES = {
     HBatBFIT.ID: HBatBFIT,
     BST.ID: BST,
     RhythmDiscrimination.ID: RhythmDiscrimination,
-    RhythmTestSeries.ID: RhythmTestSeries,
+    RhythmExperimentSeries.ID: RhythmExperimentSeries,
     GoldMSI.ID: GoldMSI,
     ListeningConditions.ID: ListeningConditions,
+    Hooked.ID: Hooked,
+    Categorization.ID: Categorization,
 }

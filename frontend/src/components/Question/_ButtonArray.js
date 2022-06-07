@@ -11,17 +11,17 @@ const ButtonArray = ({ question, active, onChange }) => {
         }
         else {
             onChange(value)
-        }      
+        }
     }
-    
-    
+
+
     return (
         <div className="aha__buttons buttons d-flex flex-wrap justify-content-center p-3 w-100">
             {question.explainer && (
                 <p className="explainer">{question.explainer}</p>
             )}
             <h3 className="title">{question.question}</h3>
-            <div className="btn-group btn-group-toggle" role="group" data-toggle="buttons" aria-label="Button Array">
+            <div className="btn-group-toggle" role="group" data-toggle="buttons" aria-label="Button Array">
                 {Object.keys(question.choices).map((val, index) => (
                     <ToggleButton
                         label={question.choices[val]}
@@ -41,7 +41,7 @@ const ButtonArray = ({ question, active, onChange }) => {
 const ToggleButton = ({ label, value, index, name, active, onChange }) => {
     const disabled = active? '' : 'disabled';
     return (
-        <label 
+        <label
             className={classNames("btn btn-secondary btn-lg", disabled)}
             onClick={() => {
                 onChange(value);

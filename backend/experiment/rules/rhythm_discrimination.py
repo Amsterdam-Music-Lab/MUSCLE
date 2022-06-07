@@ -5,7 +5,8 @@ from django.utils.translation import gettext_lazy as _
 
 from .util.actions import combine_actions, final_action_with_optional_button, render_feedback_trivia
 from .util.practice import practice_explainer, practice_again_explainer, start_experiment_explainer
-from .views import CompositeView, Consent, Final, Explainer, Step, StartSession, Playlist
+from .views import Trial, Consent, Final, Explainer, StartSession, Step, Playlist
+from .views.playback import Playback
 from .views.form import ChoiceQuestion, Form
 from .base import Base
 
@@ -107,7 +108,7 @@ class RhythmDiscrimination(Base):
         return combine_actions(*actions)
 
     @staticmethod
-    def calculate_score(result, form_element):
+    def calculate_score(result, form_element, data):
         try:
             expected_response = result.expected_response
         except Exception as e:
@@ -117,10 +118,6 @@ class RhythmDiscrimination(Base):
             return 1
         else:
             return 0
-
-    @staticmethod
-    def handle_result(session, section, data):
-        return Base.handle_results(session, section, data)
 
 
 def next_trial_actions(session, round_number, request_session):
@@ -144,7 +141,7 @@ def next_trial_actions(session, round_number, request_session):
         previous_results = session.result_set.order_by('-created_at')
         if previous_results.count():
             actions.append(
-                response_explainer(previous_results.first().score, plan[round_number-2]['group_id'])
+                response_explainer(previous_results.first().score, plan[round_number-2]['group'])
             )
         if round_number == 5:
             total_score = sum([res.score for res in previous_results.all()[:4]])
@@ -165,19 +162,15 @@ def next_trial_actions(session, round_number, request_session):
     try:
         section = session.playlist.section_set.filter(
             name__startswith=condition['rhythm']).filter(
-            tag_id=condition['tag_id']).get(
-            group_id=condition['group_id']
+            tag=condition['tag']).get(
+            group=condition['group']
         )
     except Section.DoesNotExist:
         return actions
 
-    expected_result = 'SAME' if condition['group_id'] == 1 else 'DIFFERENT'
+    expected_result = 'SAME' if condition['group'] == '1' else 'DIFFERENT'
     # create Result object and save expected result to database
     result_pk = Base.prepare_result(session, section, expected_result)
-    instructions = {
-        'preload': '',
-        'during_presentation': ''
-    }
     question = ChoiceQuestion(
         key='same',
         question=_(
@@ -191,41 +184,43 @@ def next_trial_actions(session, round_number, request_session):
         submits=True
     )
     form = Form([question])
+    playback = Playback([section])
     if round_number < 5:
         title = _('practice')
     else:
         title = _('trial %(index)d of %(total)d') % ({'index': round_number - 4, 'total': len(plan) - 4})
-    view = CompositeView(
-        section=section,
-        feedback_form=form.action(),
-        instructions=instructions,
-        title=_('Rhythm discrimination: %s' %(title))
-    )
-    config = {
+    view = Trial(
+        playback=playback,
+        feedback_form=form,
+        title=_('Ryhthm discrimination: %s' %(title)),
+        config={
             'listen_first': True,
-            'decision_time': section.duration + .7
-    }
-    actions.append(view.action(config))
+            'decision_time': section.duration + .5
+        }
+    )
+
+    actions.append(view.action())
     return actions
 
 def plan_stimuli(session):
     """ select 60 stimuli, of which 30 are standard, 30 deviant.
     rhythm refers to the type of rhythm,
-    tag_id refers to the tempo,
-    group_id refers to the condition (0 is deviant, 1 is standard)
+    tag refers to the tempo,
+    group refers to the condition (0 is deviant, 1 is standard)
     """
     metric = STIMULI['metric']
     nonmetric = STIMULI['nonmetric']
     tempi = [150, 160, 170, 180, 190, 200]
-    metric_deviants = [{'rhythm': m, 'tag_id': random.choice(tempi), 'group_id': 0} for m in metric['deviant']]
-    metric_standard = [{'rhythm': m, 'tag_id': random.choice(tempi), 'group_id': 1} for m in metric['standard']]
-    nonmetric_deviants = [{'rhythm': m, 'tag_id': random.choice(tempi), 'group_id': 0} for m in nonmetric['deviant']]
-    nonmetric_standard = [{'rhythm': m, 'tag_id': random.choice(tempi), 'group_id': 1} for m in nonmetric['standard']]
+    tempi = [str(t) for t in tempi]
+    metric_deviants = [{'rhythm': m, 'tag': random.choice(tempi), 'group': '0'} for m in metric['deviant']]
+    metric_standard = [{'rhythm': m, 'tag': random.choice(tempi), 'group': '1'} for m in metric['standard']]
+    nonmetric_deviants = [{'rhythm': m, 'tag': random.choice(tempi), 'group': '0'} for m in nonmetric['deviant']]
+    nonmetric_standard = [{'rhythm': m, 'tag': random.choice(tempi), 'group': '1'} for m in nonmetric['standard']]
     practice = [
-        {'rhythm': STIMULI['practice']['metric']['standard'], 'tag_id': random.choice(tempi), 'group_id': 1},
-        {'rhythm': STIMULI['practice']['metric']['deviant'], 'tag_id': random.choice(tempi), 'group_id': 0},
-        {'rhythm': STIMULI['practice']['nonmetric']['standard'], 'tag_id': random.choice(tempi), 'group_id': 1},
-        {'rhythm': STIMULI['practice']['nonmetric']['deviant'], 'tag_id': random.choice(tempi), 'group_id': 0},
+        {'rhythm': STIMULI['practice']['metric']['standard'], 'tag': random.choice(tempi), 'group': '1'},
+        {'rhythm': STIMULI['practice']['metric']['deviant'], 'tag': random.choice(tempi), 'group': '0'},
+        {'rhythm': STIMULI['practice']['nonmetric']['standard'], 'tag': random.choice(tempi), 'group': '1'},
+        {'rhythm': STIMULI['practice']['nonmetric']['deviant'], 'tag': random.choice(tempi), 'group': '0'},
     ]
     experiment = metric_deviants + metric_standard + nonmetric_deviants + nonmetric_standard
     random.shuffle(experiment)
@@ -270,7 +265,8 @@ def response_explainer(correct, same, button_label=_('Next fragment')):
 
 def finalize_experiment(session, request_session):
     # we had 4 practice trials and 60 experiment trials
-    percentage = (sum([res.score for res in session.result_set.all()]) / session.experiment.rounds) * 100
+    percentage = (sum([res.score for res in session.result_set.all()]) / session.result_set.count()) * 100
+    print(sum([res.score for res in session.result_set.all()]))
     session.finish()
     session.save()
     feedback = _("Well done! You've answered {} percent correctly!").format(percentage)
@@ -280,4 +276,3 @@ def finalize_experiment(session, request_session):
         to hear the rhythm really well.")
     final_text = render_feedback_trivia(feedback, trivia)
     return final_action_with_optional_button(session, final_text, request_session)
-
