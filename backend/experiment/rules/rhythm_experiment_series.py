@@ -59,19 +59,21 @@ class RhythmExperimentSeries(Base):
             experiment_data = prepare_experiments(session)
         if experiment_number == len(experiment_data):
             rendered = render_to_string(cls.debrief_form)
-            return Final.action(
+            return Final(
                 session,
-                title==_("Thank you very much for participating!"),
-                score_template=rendered,
+                title=_("Thank you very much for participating!"),
+                final_text=rendered,
                 show_participant_link=True,
-            )
+            ).action()
         slug = experiment_data[experiment_number]
         session.save()
         button = {
             'text': _('Continue'),
             'link': '{}/{}'.format(settings.CORS_ORIGIN_WHITELIST[0], slug)
         }
-        return Final.action(session, title=_('Next experiment (%d to go!)' % (len(experiment_data) - experiment_number)), button=button)
+        return Final(session,
+            title=_('Next experiment (%d to go!)' % (len(experiment_data) - experiment_number)),
+            button=button).action()
 
 
 def prepare_experiments(session):
