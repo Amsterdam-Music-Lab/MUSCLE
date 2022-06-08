@@ -7,10 +7,11 @@ class Explainer(object):
 
     ID = "EXPLAINER"
 
-    def __init__(self, instruction, steps, button_label="Let's go!"):
+    def __init__(self, instruction, steps, button_label="Let's go!", timer = 5000):
         self.instruction = instruction
         self.steps = steps
         self.button_label = button_label
+        self.timer = timer
 
     def action(self, step_numbers=False):
         """Get data for explainer action"""
@@ -23,6 +24,7 @@ class Explainer(object):
             'instruction': self.instruction,
             'button_label': self.button_label,
             'steps': serialized_steps,
+            'timer': self.timer,
         }
 
 

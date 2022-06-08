@@ -1,12 +1,15 @@
-import React from "react";
+import React, {useEffect} from "react";
 import Button from "../Button/Button";
 
 // Explainer is an experiment view that shows a list of steps
-const Explainer = ({ instruction, button_label, steps = [], timer, onNext }) => {
-    useEffect(() => {
-        setTimeout( 
-            onNext, timer
-        )
+// If the button has not been clicked, onNext will be called automatically after the timer expires (in milliseconds). If timer == null, onNext will only be called after the button is clicked.
+const Explainer = ({ instruction, button_label, steps = [], onNext, timer }) => {
+    
+    useEffect( () => {
+        if (timer != null) {
+            const id = setTimeout(onNext, timer);
+            return () => {clearTimeout(id)}; // if button has been clicked, clear timeout
+        }
     })
     
     return (

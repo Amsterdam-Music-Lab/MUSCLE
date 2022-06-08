@@ -239,7 +239,8 @@ def intro_explainer():
             Step(_(
                     'This test will take around 6 minutes to complete. Try to stay focused for the entire test!'))
         ],
-        button_label='Ok'
+        button_label='Ok',
+        timer = None
     )
 
 def response_explainer(correct, same, button_label=_('Next fragment')):
