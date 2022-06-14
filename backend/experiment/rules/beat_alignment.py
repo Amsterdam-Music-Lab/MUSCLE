@@ -35,8 +35,7 @@ class BeatAlignment(Base):
                 Step(_(
                         "Listen carefully to the following examples. Pay close attention to the description that accompanies each example."))
             ],
-            button_label=_('Ok'),
-            timer = None
+            button_label=_('Ok')
             ).action(True)
 
         # 2. Consent with default text

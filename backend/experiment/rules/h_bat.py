@@ -143,8 +143,7 @@ class HBat(Base):
                 Step(_(
                         'This test will take around 4 minutes to complete. Try to stay focused for the entire test!'))
                 ],
-            button_label='Ok',
-            timer = None
+            button_label='Ok'
         )
 
     @classmethod
