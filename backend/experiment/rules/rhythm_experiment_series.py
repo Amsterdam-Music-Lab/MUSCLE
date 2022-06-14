@@ -12,6 +12,8 @@ from .views import Consent, Explainer, Final, StartSession, Step
 
 class RhythmExperimentSeries(Base):
     ID = 'TEST_BATTERY'
+    consent_form = 'consent/consent_rhythm.html'
+    debrief_form = 'final/experiment_series.html'
 
     @classmethod
     def intro_explainer(cls):
@@ -38,8 +40,7 @@ class RhythmExperimentSeries(Base):
     def first_round(cls, experiment):
         """Create data for the first experiment rounds."""
                 # read consent form from file
-        rendered = render_to_string(
-            'consent/consent_rhythm.html')
+        rendered = render_to_string(cls.consent_form)
         consent = Consent.action(rendered, title=_(
             'Informed consent'), confirm=_('I agree'), deny=_('Stop'))
         start_session = StartSession.action()
@@ -57,8 +58,7 @@ class RhythmExperimentSeries(Base):
         if not experiment_data:
             experiment_data = prepare_experiments(session)
         if experiment_number == len(experiment_data):
-            rendered = render_to_string(join('final',
-            'experiment_series.html'))
+            rendered = render_to_string(cls.debrief_form)
             return Final(
                 session,
                 title=_("Thank you very much for participating!"),
@@ -71,8 +71,7 @@ class RhythmExperimentSeries(Base):
             'text': _('Continue'),
             'link': '{}/{}'.format(settings.CORS_ORIGIN_WHITELIST[0], slug)
         }
-        return Final(
-            session, 
+        return Final(session,
             title=_('Next experiment (%d to go!)' % (len(experiment_data) - experiment_number)),
             button=button).action()
 
