@@ -16,6 +16,7 @@ from .h_bat_bfit import HBatBFIT
 from .hbat_bst import BST
 from .rhythm_discrimination import RhythmDiscrimination
 from .rhythm_experiment_series import RhythmExperimentSeries
+from .rhythm_experiment_series_mri import RhythmExperimentSeriesMRI
 from .gold_msi import GoldMSI
 from .listening_conditions import ListeningConditions
 from .hooked import Hooked
@@ -44,6 +45,7 @@ EXPERIMENT_RULES = {
     BST.ID: BST,
     RhythmDiscrimination.ID: RhythmDiscrimination,
     RhythmExperimentSeries.ID: RhythmExperimentSeries,
+    RhythmExperimentSeriesMRI.ID: RhythmExperimentSeriesMRI,
     GoldMSI.ID: GoldMSI,
     ListeningConditions.ID: ListeningConditions,
     Hooked.ID: Hooked,

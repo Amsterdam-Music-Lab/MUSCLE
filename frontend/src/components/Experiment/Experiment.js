@@ -4,7 +4,6 @@ import {
     useParticipant,
     getNextRound,
 } from "../../API";
-
 import { TransitionGroup, CSSTransition } from "react-transition-group";
 import { withRouter } from "react-router-dom";
 

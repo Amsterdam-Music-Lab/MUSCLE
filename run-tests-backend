@@ -1,0 +1,1 @@
+sudo docker-compose run server bash -c "python manage.py test"
