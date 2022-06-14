@@ -2,7 +2,7 @@
 from django.utils.translation import gettext_lazy as _
 
 from .base import Base
-from .views import Consent, Explainer, Step, Final, Playlist, StartSession, Trial
+from .views import Consent, Explainer, Step, Final, Playback, Playlist, StartSession, Trial
 from .views.form import ChoiceQuestion, Form
 from .views.playback import Playback
 from .util.actions import combine_actions, final_action_with_optional_button
@@ -76,7 +76,7 @@ class ListeningConditions(Base):
             instruction = _("You can now set the sound to a comfortable level. \
                     You can then adjust the volume to as high a level as possible without it being uncomfortable. \
                     When you are satisfied with the sound level, click Continue")
-            playback = Playback('AUTOPLAY', [section], instruction=instruction)
+            playback = Playback([section], instruction=instruction)
             message = _("Please keep the eventual sound level the same over the course of the experiment.")
             actions = [
                 Trial(playback, feedback_form).action(),

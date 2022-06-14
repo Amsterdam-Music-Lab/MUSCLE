@@ -21,7 +21,7 @@ const ButtonArray = ({ question, active, onChange }) => {
                 <p className="explainer">{question.explainer}</p>
             )}
             <h3 className="title">{question.question}</h3>
-            <div className="btn-group btn-group-toggle" role="group" data-toggle="buttons" aria-label="Button Array">
+            <div className="btn-group-toggle" role="group" data-toggle="buttons" aria-label="Button Array">
                 {Object.keys(question.choices).map((val, index) => (
                     <ToggleButton
                         label={question.choices[val]}

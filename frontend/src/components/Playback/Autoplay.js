@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useRef, useState, useEffect } from "react";
 
 import * as audio from "../../util/audio";
 import { MEDIA_ROOT } from "../../config";
@@ -11,10 +11,10 @@ const PRELOAD = "PRELOAD";
 const RECOGNIZE = "RECOGNIZE";
 
 
-const AutoPlay = ({instruction, preloadMessage, playConfig, sections, time, startedPlaying, finishedPlaying, submitResult, autoAdvance, className=''}) => {
+const AutoPlay = ({instruction, preloadMessage, playConfig, sections, time, startedPlaying, finishedPlaying, decisionTime, className=''}) => {
     // player state
     const [state, setState] = useState({ view: PRELOAD });
-    const [running, setRunning] = useState(playConfig.auto_play);
+    const running = useRef(playConfig.auto_play);
     const setView = (view, data = {}) => {
         setState({ view, ...data });
     }
@@ -30,7 +30,7 @@ const AutoPlay = ({instruction, preloadMessage, playConfig, sections, time, star
     useEffect(() => {
         switch (state.view) {
             case RECOGNIZE:
-                // Play audio at start time
+                // Play audio at start time            
                 if (!playConfig.mute) {
                     audio.playFrom(Math.max(0, playConfig.playhead));
                 }
@@ -49,46 +49,36 @@ const AutoPlay = ({instruction, preloadMessage, playConfig, sections, time, star
 
     // Render component based on view
     switch (state.view) {
-        case PRELOAD:
+        case PRELOAD:           
             return (
                 <Preload
                     instruction={preloadMessage}
                     duration={playConfig.ready_time}
                     url={MEDIA_ROOT + section.url}
-                    onNext={() => {
+                    onNext={() => {                        
                         setView(RECOGNIZE);
                     }}
                 />
             );
-        case RECOGNIZE:
+        case RECOGNIZE:            
             return (
                 <div>
                     <div className="circle">
                         <Circle
                             running={running}
-                            duration={playConfig.decision_time}
+                            duration={decisionTime}
                             color="white"
                             animateCircle={playConfig.show_animation}
                             onTick={onCircleTimerTick}
                             onFinish={() => {
                                 // Stop audio
-                                audio.pause();
-                                setRunning(false);
                                 finishedPlaying();
-                                if (autoAdvance) {
-                                    // Create a time_passed result
-                                    submitResult({
-                                        type: "time_passed",
-                                        decision_time: playConfig.decision_time,
-                                        section: section.id
-                                    });
-                                }
                             }}
                         />
                         <div className="circle-content">
                             {playConfig.show_animation
                                 ? <ListenCircle
-                                    duration={playConfig.decision_time}
+                                    duration={decisionTime}
                                     histogramRunning={running}
                                     countDownRunning={running}
                                 />

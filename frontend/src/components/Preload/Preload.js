@@ -20,7 +20,6 @@ const Preload = ({ instruction, pageTitle, duration, url, onNext }) => {
             onNext();
         }
     };
-
     // Audio preloader
     useEffect(() => {
         // Load audio until available
@@ -32,6 +31,7 @@ const Preload = ({ instruction, pageTitle, duration, url, onNext }) => {
             }
         });
     }, [url, onNext]);
+
 
     return (
         <ListenFeedback
