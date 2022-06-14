@@ -2,7 +2,7 @@ import random
 
 from django.utils.translation import gettext as _
 
-class Score:  # pylint: disable=too-few-public-methods
+class Score(object):  # pylint: disable=too-few-public-methods
     """
     Provide data for an intermediate score view
 
@@ -11,7 +11,7 @@ class Score:  # pylint: disable=too-few-public-methods
 
     ID = 'SCORE'
 
-    def __init__(session, score_message=default_score_message, config=None, icon=None):
+    def __init__(self, session, score_message=None, config=None, icon=None):
         """ Score presents feedback to a participant after a Trial
         - session: a Session object
         - score_message: a function which constructs feedback text based on the score
@@ -21,10 +21,9 @@ class Score:  # pylint: disable=too-few-public-methods
             - show_total_score: whether the total score should be shown
         - icon: the name of a themify-icon shown with the view or None
         """
-        
         self.session = session
         self.score = session.last_score()
-        self.score_message = score_message
+        self.score_message = score_message or self.default_score_message
         self.config = {
             'timer': None,
             'show_section': False,
@@ -45,17 +44,19 @@ class Score:  # pylint: disable=too-few-public-methods
         # Create action
         action = {
             'view': self.ID,
-            'title': _('Round {} / {}').format(session.rounds_passed(), session.experiment.rounds),
+            'title': _('Round {} / {}').format(
+                self.session.rounds_passed(), self.session.experiment.rounds),
             'score': self.score,
             'score_message': self.score_message(self.score),
             'total_score': self.session.total_score(),
-            'texts': self.texts
+            'texts': self.texts,
+            'icon': self.icon
         }
         if self.config.get('show_section'):
             action['last_song'] = self.session.last_song()
         return action
 
-    def default_score_message(score):
+    def default_score_message(self, score):
         """Fallback to generate a message for the given score"""
         # Zero
         if score == 0:
