@@ -52,6 +52,12 @@ const Experiment = ({ match }) => {
         [loadState]
     );
 
+    function stateNextRound(state) {
+        let newState = state.next_round.shift()
+        newState.next_round = state.next_round
+        return newState
+    }
+
     // Start first_round when experiment and partipant have been loaded
     useEffect(() => {
         // Check if done loading
@@ -59,7 +65,7 @@ const Experiment = ({ match }) => {
             // Loading succeeded
             if (experiment && participant) {
                 if (experiment.next_round) {
-                    loadState(experiment.next_round);
+                    loadState(stateNextRound(experiment));
                 }
                 else loadState(experiment.first_round);
             } else {
@@ -79,7 +85,7 @@ const Experiment = ({ match }) => {
     // Load next round, stored in nextRound
     const onNext = async () => {
         if (state && state.next_round) {
-            loadState(state.next_round);
+            loadState(stateNextRound(state));
         } else {
             console.log("No next-round data available");
             // Fallback in case a server response/async call went wrong

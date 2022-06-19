@@ -31,7 +31,10 @@ const StartSession = ({
             setSession(data.session);
 
             // Start next round
-            loadState(data.next_round);
+            let newState = data.next_round.shift() //could reuse stateNextRound() in Experiment.js
+            newState.next_round = data.next_round
+            loadState(newState);
+
         };
         init();
     }, [experiment, participant, playlist, setError, setSession, loadState]);
