@@ -104,19 +104,17 @@ class BeatAlignment(Base):
         else:
             presentation_text = _(
                 "In this example the beeps are NOT ALIGNED TO THE BEAT of the music.")
-
-        play_config = {
-            'decision_time': section.duration + .1,
-        }
         playback = Playback([section], 
             instruction=presentation_text,
             preload_message=presentation_text,
-            play_config=play_config)
+        )
         view = Trial(
             playback=playback,
             feedback_form=None,
             title=_('Example {}').format(count),
-            config={'listen_first': True, 'auto_advance': True}
+            config={
+                'decision_time': section.duration + .1,
+                'listen_first': True, 'auto_advance': True}
         )
         return view.action()
 
@@ -140,15 +138,13 @@ class BeatAlignment(Base):
             submits=True
         )
         form = Form([question])
-        play_config = {
-            'decision_time': section.duration + .1,
-        }
-        playback = Playback([section], play_config=play_config)
+        playback = Playback([section])
         view = Trial(
             playback=playback,
             feedback_form=form,
             title=_('Beat alignment'),
             config={
+                'decision_time': section.duration + .1,
                 'listen_first': True
             }
         )

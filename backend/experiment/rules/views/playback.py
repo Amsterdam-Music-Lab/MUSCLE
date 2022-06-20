@@ -9,10 +9,8 @@ class Playback(object):
         - instruction: text to display during presentation of the sound
         - config: define to override the following values:
             - ready_time: time before presentation of sound
-            - decision_time: maximum time that participant can take (only relevant when auto_advance=True)
             - playhead: from where the audio file should play (offset in seconds from start)
             - mute: whether audio should be muted
-            - auto_advance: whether the view will switch to next view after decision_time
             - auto_play: whether sound will start automatically
             - show_animation: whether to show an animation during playback '''
     def __init__(self, sections, player_type='AUTOPLAY', preload_message='', instruction='', play_config=None):
