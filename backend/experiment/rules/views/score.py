@@ -17,7 +17,7 @@ class Score(object):  # pylint: disable=too-few-public-methods
         - score_message: a function which constructs feedback text based on the score
         - config: a dict with the following settings:
             - timer: int or None. If defined, advance to next view after n seconds
-            - show_section: whether metadata of the section should be shown
+            - show_section: whether metadata of the previous section should be shown
             - show_total_score: whether the total score should be shown
         - icon: the name of a themify-icon shown with the view or None
         """
