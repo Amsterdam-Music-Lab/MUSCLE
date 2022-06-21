@@ -11,7 +11,7 @@ class Score(object):  # pylint: disable=too-few-public-methods
 
     ID = 'SCORE'
 
-    def __init__(self, session, score_message=None, config=None, icon=None):
+    def __init__(self, session, score_message=None, config=None, icon=None, timer=None):
         """ Score presents feedback to a participant after a Trial
         - session: a Session object
         - score_message: a function which constructs feedback text based on the score
@@ -20,6 +20,7 @@ class Score(object):  # pylint: disable=too-few-public-methods
             - show_section: whether metadata of the previous section should be shown
             - show_total_score: whether the total score should be shown
         - icon: the name of a themify-icon shown with the view or None
+        - timer: int or None. If int, wait for as many seconds until showing the next view
         """
         self.session = session
         self.score = session.last_score()
@@ -37,6 +38,7 @@ class Score(object):  # pylint: disable=too-few-public-methods
             'next': _('Next'),
             'listen_explainer': _('You listened to:')
         }
+        self.timer = timer
 
     def action(self):
         """Serialize score data"""
@@ -50,7 +52,8 @@ class Score(object):  # pylint: disable=too-few-public-methods
             'score_message': self.score_message(self.score),
             'total_score': self.session.total_score(),
             'texts': self.texts,
-            'icon': self.icon
+            'icon': self.icon,
+            'timer': self.timer
         }
         if self.config.get('show_section'):
             action['last_song'] = self.session.last_song()

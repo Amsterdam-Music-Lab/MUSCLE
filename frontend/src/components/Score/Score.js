@@ -4,7 +4,7 @@ import Circle from "../Circle/Circle";
 import Button from "../Button/Button";
 
 // Score is an experiment view that shows an intermediate and total score
-const Score = ({ last_song, score, score_message, total_score, texts, icon, onNext }) => {
+const Score = ({ last_song, score, score_message, total_score, texts, icon, timer, onNext }) => {
     const [showScore, setShowScore] = useState(0);
     // Use a ref to prevent doing multiple increments
     // when the render is skipped
@@ -21,12 +21,16 @@ const Score = ({ last_song, score, score_message, total_score, texts, icon, onNe
                 setShowScore(scoreValue.current);
             }
         }
-        const id = setTimeout(() => {
-           onNext(); 
-        }, 2000);
-        return () => {
-            clearTimeout(id);
-        };
+        if (timer) {
+            const id = setTimeout(() => {
+                onNext(); 
+            }, timer * 1000);
+            return () => {
+                clearTimeout(id);
+            };
+        }
+        
+        
     }, [score, showScore]);
 
     return (
@@ -56,6 +60,7 @@ const Score = ({ last_song, score, score_message, total_score, texts, icon, onNe
                 {texts.score}: {total_score - score + showScore}
             </h4>
 
+            {!timer && (
             <div className="d-flex flex-column justify-content-center align-items-center mt-3">
                 <Button
                     key={"yes"}
@@ -64,6 +69,7 @@ const Score = ({ last_song, score, score_message, total_score, texts, icon, onNe
                     title={texts.next}
                 />
             </div>
+            )}
 
             {last_song && (
                 <div className="previous-song">

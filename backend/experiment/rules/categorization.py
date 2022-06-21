@@ -21,7 +21,6 @@ class Categorization(Base):
 
     @classmethod
     def next_round(cls, session):
-        print(session.get_next_round())
         if session.get_next_round()==0:
             # logic for retrieving sections
             # for now: get first 2 sections
@@ -43,7 +42,7 @@ class Categorization(Base):
         pass
 
     def get_trial_with_feedback(session):
-        score = Score(session, icon='ti-face-smile').action()
+        score = Score(session, icon='ti-face-smile', timer=5).action()
         section = session.playlist.section_set.all()[0]
         # retrieve expected response from json_data
         # for now: set it arbitrarily to "up"
