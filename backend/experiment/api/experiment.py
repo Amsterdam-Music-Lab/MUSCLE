@@ -55,7 +55,7 @@ def get(request, slug):
             {'id': playlist.id, 'name': playlist.name}
             for playlist in experiment.playlists.all()
         ],
-        'first_round': experiment.get_rules().first_round(experiment),
+        'next_round': experiment.get_rules().first_round(experiment),
         'loading_text': _('Loading')
     }
 

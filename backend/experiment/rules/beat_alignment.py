@@ -62,12 +62,12 @@ class BeatAlignment(Base):
 
         # 5. Start session
         start_session = StartSession.action()
-        return combine_actions(
+        return [
             explainer,
             consent,
             *practice_rounds,
             start_session
-        )
+        ]
 
 
     @classmethod

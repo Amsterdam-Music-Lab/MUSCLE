@@ -64,10 +64,7 @@ const Experiment = ({ match }) => {
         if (!loadingExperiment && !loadingParticipant) {
             // Loading succeeded
             if (experiment && participant) {
-                if (experiment.next_round) {
-                    loadState(stateNextRound(experiment));
-                }
-                else loadState(experiment.first_round);
+                loadState(stateNextRound(experiment));
             } else {
                 // Loading error
                 setError("Could not load experiment");
@@ -118,6 +115,7 @@ const Experiment = ({ match }) => {
             setError,
             setSession,
             onNext,
+            stateNextRound,
             ...state,
         };
 
@@ -147,7 +145,7 @@ const Experiment = ({ match }) => {
                         {...attrs}
                         onNext={() => {
                             setSession(null);
-                            loadState(experiment.first_round);
+                            loadState(stateNextRound(experiment));
                         }}
                     />
                 );

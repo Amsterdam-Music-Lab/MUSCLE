@@ -12,6 +12,7 @@ const StartSession = ({
     setError,
     setSession,
     loadState,
+    stateNextRound,
 }) => {
     // Create a new session, and set state to next_round
     useEffect(() => {
@@ -31,9 +32,7 @@ const StartSession = ({
             setSession(data.session);
 
             // Start next round
-            let newState = data.next_round.shift() //could reuse stateNextRound() in Experiment.js
-            newState.next_round = data.next_round
-            loadState(newState);
+            loadState(stateNextRound(data));
 
         };
         init();
