@@ -31,7 +31,7 @@ const Score = ({ last_song, score, score_message, total_score, texts, icon, time
         }
         
         
-    }, [score, showScore]);
+    }, [score, showScore, timer, onNext]);
 
     return (
         <div className="aha__score d-flex flex-column justify-content-center">
