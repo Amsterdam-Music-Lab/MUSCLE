@@ -74,9 +74,9 @@ class Categorization(Base):
         # as the creation of groups looks at the sessions to balance out the participants 
         # Set total size per group:
         group_count = 20
+        group = None
 
-        if session.experiment.session_count() <= (group_count * 4):
-            group = None
+        if session.experiment.session_count() <= (group_count * 4):            
             # Assign a group, if that group is full try again
             while group_count >= 2:
                 group = random.choice(['S1', 'S2', 'C1', 'C2'])
