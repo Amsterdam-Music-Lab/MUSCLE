@@ -7,7 +7,7 @@ import Social from "../Social/Social";
 import { URLS } from "../../config";
 import ParticipantLink from "../ParticipantLink/ParticipantLink";
 
-// FinalScore is an experiment view that shows the final scores of the experiment
+// Final is an experiment view that shows the final scores of the experiment
 // It can only be the last view of an experiment
 const Final= ({ score, final_text, action_texts, button, onNext, history, show_participant_link, show_profile_link, show_social, points, rank }) => {
     const [showScore, setShowScore] = useState(0);

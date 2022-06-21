@@ -810,10 +810,10 @@ h3.title:after {
   margin-bottom: 0;
 }
 
-.aha__final-score .aha__rank {
+.aha__final .aha__rank {
   margin-top: 15px;
 }
-.aha__final-score .share a {
+.aha__final .share a {
   display: inline-block;
   width: 55px;
   height: 55px;
@@ -825,25 +825,25 @@ h3.title:after {
   margin: 0 10px;
   font-size: 0;
 }
-.aha__final-score .share a::before {
+.aha__final .share a::before {
   font-size: 26px;
 }
-.aha__final-score .share a:hover {
+.aha__final .share a:hover {
   text-decoration: none;
 }
-.aha__final-score .share a.ti-facebook {
+.aha__final .share a.ti-facebook {
   background-color: #4267b2;
 }
-.aha__final-score .share a.ti-twitter-alt {
+.aha__final .share a.ti-twitter-alt {
   background-color: #1da1f2;
 }
-.aha__final-score .home {
+.aha__final .home {
   padding: 10px;
   color: white;
   opacity: 0.5;
   cursor: pointer;
 }
-.aha__final-score .home:hover {
+.aha__final .home:hover {
   text-decoration: underline;
 }
 

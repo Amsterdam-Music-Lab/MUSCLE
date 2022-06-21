@@ -1,5 +1,14 @@
 from django.utils.translation import gettext as _
 
+RANKS = {
+    'PLASTIC': {'text': _('plastic'), 'class': 'plastic'},
+    'BRONZE':  {'text': _('bronze'), 'class': 'bronze'},
+    'SILVER': {'text': _('silver'), 'class': 'silver'},
+    'GOLD': {'text': _('gold'), 'class': 'gold'},
+    'PLATINUM': {'text': _('platinum'), 'class': 'platinum'},
+    'DIAMOND': {'text': _('diamond'), 'class': 'diamond'}
+}
+
 class Final:  # pylint: disable=too-few-public-methods
     """
     Provide data for a final view

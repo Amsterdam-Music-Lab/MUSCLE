@@ -1,6 +1,6 @@
 import logging
 
-from .views import SongSync, SongBool, TwoAlternativeForced, FinalScore, Score, Trial
+from .views import SongSync, Final, Score, Trial
 
 logger = logging.getLogger(__name__)
 
@@ -55,25 +55,6 @@ class Base(object):
         return result
 
     @staticmethod
-    def handle_result(session, section, data):
-        """Create a result for given session, based on the result data and section_id"""
-        from experiment.models import Result
-        # Calculate score
-        score = session.experiment_rules().calculate_score(session, data)
-        if not score:
-            score = 0
-        
-        result = Result(session=session)
-        result.section = section
-        result.save_json_data(data)
-        result.score = score
-
-        # Save the result
-        result.save()
-
-        return result
-
-    @staticmethod
     def calculate_score(result, form_element, data):
         """fallback for calculate score"""
         return None
@@ -105,7 +86,7 @@ class Base(object):
     def rank(session):
         """Get rank based on session score"""
         score = session.final_score
-        ranks = FinalScore.RANKS
+        ranks = Final.RANKS
 
         # Few or negative points or no score, always return lowest plastic score
         if score <= 0 or not score:
