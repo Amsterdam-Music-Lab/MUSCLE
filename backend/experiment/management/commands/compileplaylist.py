@@ -30,7 +30,7 @@ class Command(BaseCommand):
                             help='Process tags and groups for sections')
         parser.add_argument('--song_names',
                             type=str,
-                            help='Read JSON file with songnames for filenames')
+                            help='Read JSON file with song names for file names {<file-name>: <song-name>}')
 
     def handle(self, *args, **options):
         directory = options.get('directory')

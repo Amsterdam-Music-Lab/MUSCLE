@@ -69,9 +69,10 @@ class Categorization(Base):
         C2 = Crossed direction, Pair 2
 
         BLUE / ORANGE = Correct response for Pair 1A, Pair 2A
-        """
-
-        # Set total size per group
+        """        
+        # Make sure to delete existing sessions before starting the real experiment
+        # as the creation of groups looks at the sessions to balance out the participants 
+        # Set total size per group:
         group_count = 20
 
         if session.experiment.session_count() <= (group_count * 4):
