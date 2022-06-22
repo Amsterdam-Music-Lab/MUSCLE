@@ -7,7 +7,7 @@ logger = logging.getLogger(__name__)
 class Base(object):
     """Base class for other rules classes"""
 
-    @staticmethod
+    @classmethod
     def prepare_result(session, section, expected_response=None):
         # Prevent circular dependency errors
         from experiment.models import Result

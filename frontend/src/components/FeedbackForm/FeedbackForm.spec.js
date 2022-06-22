@@ -48,5 +48,5 @@ it("can deactivate the form", () => {
             container
         );
     });
-    expect(container.getElementsByTagName('input')[0].getAttribute('active').toEqual(false));
+    expect(document.querySelector('input').getAttribute('active').toEqual(false));
 });
