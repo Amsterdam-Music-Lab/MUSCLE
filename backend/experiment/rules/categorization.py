@@ -35,10 +35,12 @@ class Categorization(Base):
         """
         next_round_number = session.get_next_round()
         # Determine the group for this session
+        json_data = session.load_json_data()
         if next_round_number == 1:
             assigned_group = cls.plan_experiment(session)
         else:
-            assigned_group = session.json_data.get('group')
+            assigned_group = json_data["group"]
+
         # Retrieve secions for the assigned group
         if assigned_group == 'S1':
             section = session.playlist.section_set.filter(
@@ -69,22 +71,22 @@ class Categorization(Base):
         C2 = Crossed direction, Pair 2
 
         BLUE / ORANGE = Correct response for Pair 1A, Pair 2A
-        """        
+        """
         # Make sure to delete existing sessions before starting the real experiment
-        # as the creation of groups looks at the sessions to balance out the participants 
+        # as the creation of groups looks at the sessions to balance out the participants
         # Set total size per group:
         group_count = 20
         group = None
 
-        if session.experiment.session_count() <= (group_count * 4):            
+        if session.experiment.session_count() <= (group_count * 4):
             # Assign a group, if that group is full try again
             while group_count >= 2:
                 group = random.choice(['S1', 'S2', 'C1', 'C2'])
                 group_count = session.experiment.session_count_groups(group)
             # assign a correct response for 1A, 2A
             stimuli_a = random.choice(['BLUE', 'ORANGE'])
-            session.json_data = {'group': group,
-                                 'stimuli_a': stimuli_a}
+            session.json_data = '{"group": "'+group + \
+                '", "stimuli_a": '+'"+stimuli_a'+'"}'
             session.save()
         return group
 
