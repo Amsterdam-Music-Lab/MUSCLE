@@ -55,12 +55,12 @@ class Hooked(Base):
         # 4. Start session.
         start_session = StartSession.action()
 
-        return combine_actions(
+        return [
             explainer,
             consent,
             playlist,
             start_session
-        )
+        ]
 
     @classmethod
     def next_round(cls, session, request_session=None):
