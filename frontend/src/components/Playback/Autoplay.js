@@ -44,7 +44,7 @@ const AutoPlay = ({instruction, preloadMessage, playConfig, sections, time, star
         return () => {
             audio.pause();
         };
-    }, [state, playConfig]);
+    }, [state, playConfig, startedPlaying]);
 
 
     // Render component based on view

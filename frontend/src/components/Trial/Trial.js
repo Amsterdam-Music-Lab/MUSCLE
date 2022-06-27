@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useCallback } from "react";
 import classNames from "classnames";
 
 import { getCurrentTime, getTimeSince } from "../../util/time";
@@ -24,9 +24,9 @@ const Trial = ({ participant, session, playback, feedback_form, config, onNext, 
     // Time ref, stores the time without updating the view
     const time = useRef(0);
 
-    const startTimer = () => {
+    const startTimer = useCallback(() => {
         startTime.current = getCurrentTime();
-    }
+    },[]);
 
     const finishedPlaying = () => {
         if (config.auto_advance) {
