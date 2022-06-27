@@ -53,9 +53,9 @@ const Experiment = ({ match }) => {
     );
 
     function stateNextRound(state) {
-        let newState = state.next_round.shift()
-        newState.next_round = state.next_round
-        return newState
+        let newState = state.next_round.shift();
+        newState.next_round = state.next_round;
+        return newState;
     }
 
     // Start first_round when experiment and partipant have been loaded
