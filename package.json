@@ -1,4 +1,9 @@
 {
     "name": "aml-experiments",
-    "version": "0.8.0"
+    "version": "0.8.0",
+    
+    "scripts": {
+        "testfront": "sudo docker-compose run client yarn test --watchAll=false",
+        "testback": "sudo docker-compose run server bash -c 'python manage.py test'"
+  }
 }
