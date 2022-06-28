@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-07 14:30+0200\n"
+"POT-Creation-Date: 2022-06-28 10:28+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -228,23 +228,23 @@ msgstr "In dit voorbeeld zijn de piepjes IN DE MAAT van de muziek."
 msgid "In this example the beeps are NOT ALIGNED TO THE BEAT of the music."
 msgstr "In dit voorbeeld zijn de piepjes UIT DE MAAT van de muziek."
 
-#: experiment/rules/beat_alignment.py:118
+#: experiment/rules/beat_alignment.py:114
 msgid "Example {}"
 msgstr "Voorbeeld {}"
 
-#: experiment/rules/beat_alignment.py:132
+#: experiment/rules/beat_alignment.py:130
 msgid "Are the beeps ALIGNED TO THE BEAT or NOT ALIGNED TO THE BEAT?"
 msgstr "Zijn de piepjes IN DE MAAT of UIT DE MAAT?"
 
-#: experiment/rules/beat_alignment.py:135
+#: experiment/rules/beat_alignment.py:133
 msgid "ALIGNED TO THE BEAT"
 msgstr "IN DE MAAT"
 
-#: experiment/rules/beat_alignment.py:136
+#: experiment/rules/beat_alignment.py:134
 msgid "NOT ALIGNED TO THE BEAT"
 msgstr "UIT DE MAAT"
 
-#: experiment/rules/beat_alignment.py:150
+#: experiment/rules/beat_alignment.py:145
 msgid "Beat alignment"
 msgstr "Beat alignment"
 
@@ -565,19 +565,19 @@ msgid "Did the track come back in the right place?"
 msgstr ""
 
 #: experiment/rules/hooked.py:114 experiment/rules/hooked.py:177
-#: experiment/rules/listening_conditions.py:28
-#: experiment/rules/listening_conditions.py:44
-#: experiment/rules/listening_conditions.py:61
-#: experiment/rules/listening_conditions.py:78
+#: experiment/rules/listening_conditions.py:26
+#: experiment/rules/listening_conditions.py:39
+#: experiment/rules/listening_conditions.py:53
+#: experiment/rules/listening_conditions.py:67
 #: experiment/rules/views/form.py:33
 msgid "YES"
 msgstr "JA"
 
 #: experiment/rules/hooked.py:115 experiment/rules/hooked.py:178
-#: experiment/rules/listening_conditions.py:30
-#: experiment/rules/listening_conditions.py:46
-#: experiment/rules/listening_conditions.py:62
-#: experiment/rules/listening_conditions.py:79
+#: experiment/rules/listening_conditions.py:28
+#: experiment/rules/listening_conditions.py:41
+#: experiment/rules/listening_conditions.py:54
+#: experiment/rules/listening_conditions.py:68
 #: experiment/rules/views/form.py:33
 msgid "NO"
 msgstr "NEE"
@@ -646,7 +646,7 @@ msgstr ""
 #: experiment/rules/rhythm_experiment_series.py:36
 #: experiment/rules/rhythm_experiment_series.py:71
 #: experiment/rules/speech2song.py:89 experiment/rules/speech2song.py:99
-#: experiment/rules/speech2song.py:125 experiment/rules/util/actions.py:39
+#: experiment/rules/speech2song.py:125 experiment/rules/util/actions.py:31
 #: experiment/rules/util/practice.py:99 experiment/rules/views/form.py:81
 #: experiment/rules/views/question.py:14 experiment/rules/views/question.py:35
 #: experiment/rules/views/question.py:54 experiment/rules/views/question.py:71
@@ -748,28 +748,28 @@ msgstr ""
 msgid "Do you recognize this song?"
 msgstr ""
 
-#: experiment/rules/listening_conditions.py:26
+#: experiment/rules/listening_conditions.py:24
 msgid "Are you in a quiet room?"
 msgstr "Ben je in een stille ruimte?"
 
-#: experiment/rules/listening_conditions.py:29
-#: experiment/rules/listening_conditions.py:45
+#: experiment/rules/listening_conditions.py:27
+#: experiment/rules/listening_conditions.py:40
 msgid "MODERATELY"
 msgstr "REDELIJK"
 
-#: experiment/rules/listening_conditions.py:42
+#: experiment/rules/listening_conditions.py:37
 msgid "Do you have a stable internet connection?"
 msgstr "Heb je een stabiele internetverbinding?"
 
-#: experiment/rules/listening_conditions.py:59
+#: experiment/rules/listening_conditions.py:51
 msgid "Are you wearing headphones?"
 msgstr "Heb je een koptelefoon op?"
 
-#: experiment/rules/listening_conditions.py:76
+#: experiment/rules/listening_conditions.py:65
 msgid "Do you have sound notifications from other devices turned off?"
 msgstr "Heb je geluidsmeldingen van andere apparaten uitgezet?"
 
-#: experiment/rules/listening_conditions.py:88
+#: experiment/rules/listening_conditions.py:76
 msgid ""
 "You can now set the sound to a comfortable level.                     You "
 "can then adjust the volume to as high a level as possible without it being "
@@ -780,17 +780,17 @@ msgstr ""
 "zo luid mogelijk, zonder dat het oncomfortabel is. Wanneer je tevreden bent, "
 "klik dan op Verder."
 
-#: experiment/rules/listening_conditions.py:92
+#: experiment/rules/listening_conditions.py:80
 msgid ""
 "Please keep the eventual sound level the same over the course of the "
 "experiment."
 msgstr "Houd het volume gelijk gedurende het hele experiment."
 
-#: experiment/rules/listening_conditions.py:107
+#: experiment/rules/listening_conditions.py:95
 msgid "General listening instructions:"
 msgstr "Algemene luisterinstructies:"
 
-#: experiment/rules/listening_conditions.py:110
+#: experiment/rules/listening_conditions.py:98
 msgid ""
 "To make sure that you can do the experiment as well as possible, please do "
 "it a quiet room with a stable internet connection."
@@ -798,7 +798,7 @@ msgstr ""
 "Om het experiment zo goed mogelijk te doen, vragen we je het in een stille "
 "kamer met stabiel internet te doen."
 
-#: experiment/rules/listening_conditions.py:112
+#: experiment/rules/listening_conditions.py:100
 msgid ""
 "Please use headphones, and turn off sound notifications from other devices "
 "and applications (e.g., e-mail, phone messages)."
@@ -806,7 +806,7 @@ msgstr ""
 "Gebruik een koptelefoon en zet geluidsmeldingen van andere apparaten en "
 "programma's uit (bijvoorbeeld meldingen van je telefoon of e-mail)."
 
-#: experiment/rules/listening_conditions.py:114
+#: experiment/rules/listening_conditions.py:102
 #: experiment/rules/speech2song.py:77
 msgid "OK"
 msgstr "OK"
@@ -933,7 +933,7 @@ msgstr ""
 msgid "Thank you very much for participating!"
 msgstr "Hartelijk dank voor je deelname!"
 
-#: experiment/rules/rhythm_experiment_series.py:76
+#: experiment/rules/rhythm_experiment_series.py:75
 #, python-format
 msgid "Next experiment (%d to go!)"
 msgstr "Volgende experiment (nog %d te gaan!)"
@@ -1077,7 +1077,7 @@ msgstr ""
 msgid "Listen carefully"
 msgstr ""
 
-#: experiment/rules/util/actions.py:35 experiment/rules/util/actions.py:45
+#: experiment/rules/util/actions.py:27 experiment/rules/util/actions.py:37
 msgid "End"
 msgstr "Einde"
 
@@ -1851,7 +1851,6 @@ msgid ""
 "can begin, it is important that you read about the procedures we will be "
 "applying. Make sure to read this information carefully. "
 msgstr ""
-""
 
 #: experiment/templates/consent/consent_MRI.html:3
 #: experiment/templates/consent/consent_rhythm.html:3
@@ -1877,20 +1876,6 @@ msgstr ""
 #: experiment/templates/consent/consent_rhythm.html:5
 msgid "Who Can Take Part in This Research?"
 msgstr "Wie kan meedoen met dit onderzoek?"
-
-#: experiment/templates/consent/consent_MRI.html:7
-msgid ""
-" Anybody aged 16 or older with no hearing problems is welcome to participate "
-"in this research. Your device must be able to play audio, and you must have "
-"a sufficiently strong data connection to be able to stream short sound "
-"files. Headphones are recommended for the best results, but you may also use "
-"either internal or external loudspeakers. "
-msgstr ""
-"U kunt meedoen aan dit onderzoek als u geen gehoorproblemen heeft en ouder "
-"bent dan 16 jaar. Uw apparaat moet geluid kunnen afspelen, en uw "
-"internetverbinding moet goed genoeg zijn om korte MP3 files te kunnen "
-"streamen. We raden aan het experiment met een koptelefoon te doen, maar het "
-"is ook mogelijk om luidsprekers te gebruiken."
 
 #: experiment/templates/consent/consent_MRI.html:8
 #: experiment/templates/consent/consent_rhythm.html:7
@@ -1991,8 +1976,9 @@ msgid ""
 "this compensation, make sure to register your participation on the lab.uva."
 "nl website! "
 msgstr ""
-"Ter compensatie van uw deelname kunt u 15 euro ontvangen. Om deze compensatie te ontvangen moet u als "
-"proefpersoon registreren op de lab.uva.nl website!"
+"Ter compensatie van uw deelname kunt u 15 euro ontvangen. Om deze "
+"compensatie te ontvangen moet u als proefpersoon registreren op de lab.uva."
+"nl website!"
 
 #: experiment/templates/consent/consent_MRI.html:18
 #: experiment/templates/consent/consent_hooked.html:80
@@ -2011,7 +1997,6 @@ msgid ""
 "the processing of your personal data you can also contact the data "
 "protection officer of the University of Amsterdam via fg@uva.nl. "
 msgstr ""
-""
 
 #: experiment/templates/consent/consent_MRI.html:20
 #: experiment/templates/consent/consent_rhythm.html:19
@@ -2027,7 +2012,6 @@ msgid ""
 "collected; I reserve the right to withdraw my participation from the study "
 "at any moment without providing any reason. "
 msgstr ""
-""
 
 #: experiment/templates/consent/consent_hooked.html:3
 #, python-format
@@ -2294,17 +2278,19 @@ msgstr ""
 
 #: experiment/templates/consent/consent_rhythm.html:6
 msgid ""
-" Anybody aged 16 or older with no hearing problems is welcome to participate "
-"in this research. Your device must be able to play audio, and you must have "
-"a sufficiently strong data connection to be able to stream short MP3 files. "
-"Headphones are recommended for the best results, but you may also use either "
-"internal or external loudspeakers. "
+" Anybody aged 16 or older with no hearing problems and no psychiatric or "
+"neurological disorders is welcome to participate in this research. Your "
+"device must be able to play audio, and you must have a sufficiently strong "
+"data connection to be able to stream short MP3 files. Headphones are "
+"recommended for the best results, but you may also use either internal or "
+"external loudspeakers. "
 msgstr ""
-"U kunt meedoen aan dit onderzoek als u geen gehoorproblemen heeft en ouder "
-"bent dan 16 jaar. Uw apparaat moet geluid kunnen afspelen, en uw "
-"internetverbinding moet goed genoeg zijn om korte MP3 files te kunnen "
-"streamen. We raden aan het experiment met een koptelefoon te doen, maar het "
-"is ook mogelijk om luidsprekers te gebruiken."
+"U kunt meedoen aan dit onderzoek als u geen gehoorproblemen heeft, geen "
+"psychiatrische of neurologische stoornis, en ouder bent dan 16 jaar. Uw "
+"apparaat moet geluid kunnen afspelen, en uw internetverbinding moet goed "
+"genoeg zijn om korte MP3 files te kunnen streamen. We raden aan het "
+"experiment met een koptelefoon te doen, maar het is ook mogelijk om "
+"luidsprekers te gebruiken."
 
 #: experiment/templates/consent/consent_rhythm.html:16
 msgid ""
@@ -2571,7 +2557,6 @@ msgid ""
 "Let us know that you have completed the experiment by replying to the "
 "invitation email (X). We will now make sure you get your reimbursement!"
 msgstr ""
-""
 
 #: experiment/templates/final/experiment_series.html:3
 msgid ""
