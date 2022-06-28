@@ -103,9 +103,9 @@ class ListeningConditions(Base):
         ).action(True)
         playlist = Playlist.action(experiment.playlists.all())
         start_session = StartSession.action()
-        return combine_actions(
+        return [
             consent,
             explainer,
             playlist,
             start_session
-        )
+        ]

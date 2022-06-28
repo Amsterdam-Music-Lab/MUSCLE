@@ -65,13 +65,13 @@ class HBat(Base):
         explainer2 = practice_explainer().action()
         playlist = Playlist.action(experiment.playlists.all())
         start_session = StartSession.action()
-        return combine_actions(
+        return [
             explainer,
             consent,
             explainer2,
             playlist,
             start_session
-        )
+        ]
 
     @staticmethod
     def calculate_score(result, form_element, data):

@@ -88,12 +88,12 @@ class RhythmDiscrimination(Base):
 
         start_session = StartSession.action()
 
-        return combine_actions(
+        return [
             explainer,
             consent,
             explainer2,
             start_session
-        )
+        ]
 
     @classmethod
     def next_round(cls, session, request_session=None):
