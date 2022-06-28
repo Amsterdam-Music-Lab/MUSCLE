@@ -1,7 +1,7 @@
 from .views.playback import Playback
 from .views.form import Form, Question
 from .views import Consent, StartSession, TwoAlternativeForced
-
+from django.http import Http404
 from .util.actions import combine_actions
 
 from .base import Base
@@ -75,18 +75,19 @@ class Categorization(Base):
         # Make sure to delete existing sessions before starting the real experiment
         # as the creation of groups looks at the sessions to balance out the participants
         # Set total size per group:
-        group_count = 20
+        group_size = 20
+        group_count = group_size
         group = None
 
-        if session.experiment.session_count() <= (group_count * 4):
+        if session.experiment.session_count() <= (group_size * 4):
             # Assign a group, if that group is full try again
-            while group_count >= 2:
+            while group_count >= group_size:
                 group = random.choice(['S1', 'S2', 'C1', 'C2'])
                 group_count = session.experiment.session_count_groups(group)
             # assign a correct response for 1A, 2A
             stimuli_a = random.choice(['BLUE', 'ORANGE'])
-            session.json_data = '{"group": "'+group + \
-                '", "stimuli_a": '+'"+stimuli_a'+'"}'
+            session.merge_json_data({'group': group,
+                                     'stimuli_a': stimuli_a})
             session.save()
         return group
 

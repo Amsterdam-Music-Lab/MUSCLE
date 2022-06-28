@@ -40,7 +40,7 @@ class Experiment(models.Model):
 
     def session_count_groups(self, filter_by={}):
         """Number of sessions belonging to a certain group"""
-        return self.session_set.filter(json_data__contains={'group': filter_by}).count()
+        return self.session_set.filter(json_data__contains=filter_by).count()
 
     def playlist_count(self):
         """Number of playlists"""
