@@ -6,4 +6,5 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - run: echo "SUCCESS"
-      - run: sudo docker-compose run server bash -c "python manage.py test"
+      - run: docker-compose --version
+      
