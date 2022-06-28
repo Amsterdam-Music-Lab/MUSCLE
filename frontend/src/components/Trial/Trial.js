@@ -6,11 +6,12 @@ import { createProfile, createResult } from "../../API.js";
 import FeedbackForm from "../FeedbackForm/FeedbackForm";
 import Playback from "../Playback/Playback";
 import Button from "../Button/Button";
+import SongSync from "../SongSync/SongSync";
 
 // Trial is an experiment view, that preloads a song, shows an explanation and plays audio
 // Optionally, it can show an animation during playback
 // Optionally, it can show a form during or after playback
-const Trial = ({ participant, session, playback, feedback_form, config, onNext, loadState }) => {
+const Trial = ({ participant, session, playback, feedback_form, song_sync, config, onNext, loadState }) => {
     // Main component state
     const resultBuffer = useRef([]);
 
@@ -151,7 +152,16 @@ const Trial = ({ participant, session, playback, feedback_form, config, onNext, 
                 isSkippable={feedback_form.is_skippable}
                 onResult={makeResult}
             />)}
-            {!feedback_form && (
+            {song_sync && (
+            <SongSync
+                instructions={song_sync.instructions}
+                section={song_sync.section}
+                buttons={song_sync.buttons}
+                config={song_sync.config}
+                resultId={song_sync.result_id}
+                onResult={submitResult}
+            />)}
+            {!feedback_form && !song_sync && (
             <Button
                 title={config.continue_label}
                 className={"btn-primary anim anim-fade-in anim-speed-500"}

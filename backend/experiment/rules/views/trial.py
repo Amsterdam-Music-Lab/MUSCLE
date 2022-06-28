@@ -16,10 +16,11 @@ class Trial(object):  # pylint: disable=too-few-public-methods
 
     ID = 'TRIAL_VIEW'
 
-    def __init__(self, playback=None, feedback_form=None, title='', config=None):
+    def __init__(self, playback=None, feedback_form=None, song_sync=None, title='', config=None):
         '''
         - playback: Playback object (may be None)
         - feedback_form: Form object (may be None)
+        - song_sync: SongSync object (may be None)
         - title: string setting title in header of experiment
         - config: dictionary with following settings
             - decision_time: how long to wait until stopping the player / proceeding to the next view
@@ -29,6 +30,7 @@ class Trial(object):  # pylint: disable=too-few-public-methods
                 - neutral: first element is blue, second is yellow, third is teal
                 - neutral-inverted: first element is yellow, second is blue, third is teal
                 - boolean: first element is green, second is red
+                - boolean-negative-first: first element is red, second is green
             - time_pass_break: when time has passed, submit the result immediately; skipping any subsequent actions (e.g. a certainty question)
                 - Can not be combined with listen_first (True)
                 - Can not be combined with auto_advance (False)
@@ -36,6 +38,7 @@ class Trial(object):  # pylint: disable=too-few-public-methods
         '''
         self.playback = playback
         self.feedback_form = feedback_form
+        self.song_sync = song_sync
         self.title = title
         self.config = {
             'decision_time': 5,
@@ -63,5 +66,7 @@ class Trial(object):  # pylint: disable=too-few-public-methods
             action['playback'] = self.playback.action()
         if self.feedback_form:
             action['feedback_form'] = self.feedback_form.action()
+        if self.song_sync:
+            action['song_sync'] = self.song_sync.action()
 
         return action

@@ -5,7 +5,7 @@ from .short_long import ShortLong
 from .eurovision_2020 import Eurovision2020
 from .kuiper_2020 import Kuiper2020
 from .beijaert_2021 import Beijaert2021
-from .huang_2021 import Huang2021
+from .huang_2022 import Huang2022
 from .beat_alignment import BeatAlignment
 from .speech2song import Speech2Song
 from .duration_discrimination import DurationDiscrimination
@@ -34,7 +34,6 @@ EXPERIMENT_RULES = {
     Eurovision2020.ID: Eurovision2020,
     Kuiper2020.ID: Kuiper2020,
     Beijaert2021.ID: Beijaert2021,
-    Huang2021.ID: Huang2021,
     BeatAlignment.ID: BeatAlignment,
     Speech2Song.ID: Speech2Song,
     DurationDiscrimination.ID: DurationDiscrimination,
@@ -49,5 +48,6 @@ EXPERIMENT_RULES = {
     GoldMSI.ID: GoldMSI,
     ListeningConditions.ID: ListeningConditions,
     Hooked.ID: Hooked,
+    Huang2022.ID: Huang2022,
     Categorization.ID: Categorization,
 }

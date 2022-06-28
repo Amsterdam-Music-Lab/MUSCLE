@@ -29,23 +29,17 @@ class Base(object):
         return result.expected_response
 
     
-    @staticmethod
-    def handle_results(session, data):
+    @classmethod
+    def handle_results(cls, session, data):
         """ 
         if the given_result is an array of results, retrieve and save results for all of them
         to use, override hande_result and call this method
         """
-
-        from experiment.models import Result
         form = data.pop('form')
         for form_element in form:
-            try:
-                result = Result.objects.get(pk=form_element['result_id'])
-            except Result.DoesNotExist:
-                # Create new result
-                result = Result(session=session)
+            cls.get_result(session, form_element['result_id'])
             # Calculate score
-            score = session.experiment_rules().calculate_score(result, form_element, data)
+            score = session.experiment_rules().calculate_score(result, data, form_element)
             if not score:
                 score = 0
             result.given_response = form_element['value']
@@ -53,28 +47,20 @@ class Base(object):
             result.score = score
             result.save()
         return result
-
-    @staticmethod
-    def handle_result(session, section, data):
-        """Create a result for given session, based on the result data and section_id"""
+    
+    @classmethod
+    def get_result(cls, session, result_id):
         from experiment.models import Result
-        # Calculate score
-        score = session.experiment_rules().calculate_score(session, data)
-        if not score:
-            score = 0
         
-        result = Result(session=session)
-        result.section = section
-        result.save_json_data(data)
-        result.score = score
-
-        # Save the result
-        result.save()
-
+        try:
+            result = Result.objects.get(pk=result_id)
+        except Result.DoesNotExist:
+            # Create new result
+            result = Result(session=session)
         return result
 
     @staticmethod
-    def calculate_score(result, form_element, data):
+    def calculate_score(result, data, form_element):
         """fallback for calculate score"""
         return None
 
