@@ -10,7 +10,6 @@ from .util.questions import DEMOGRAPHICS, EXTRA_DEMOGRAPHICS, next_question, que
 from .util.goldsmiths import MSI_FG_GENERAL, MSI_ALL
 from .util.actions import combine_actions
 
-
 class Huang2022(Base):
     """Rules for the Chinese version of the Hooked experiment."""
 
@@ -57,13 +56,13 @@ class Huang2022(Base):
         # 4. Start session.
         start_session = StartSession.action()
 
-        return combine_actions(
+        return [
             explainer,
             consent,
             explainer_devices,
             playlist,
             start_session
-        )
+        ]
 
     @classmethod
     def plan_sections(cls, session):
@@ -169,7 +168,7 @@ class Huang2022(Base):
             session.save()
 
             # Return a score and final score action.
-            return combine_actions(
+            return [
                 Score.action(session),
                 FinalScore.action(
                     session=session,
@@ -177,7 +176,7 @@ class Huang2022(Base):
                     rank=Huang2022.rank(session),
                     show_social=False
                 )
-            )
+            ]
 
         # Get next round number and initialise actions list. Two thirds of
         # rounds will be song_sync; the remainder heard_before.
@@ -204,18 +203,19 @@ class Huang2022(Base):
                     heard_before_offset
             except KeyError as error:
                 print('Missing plan key: %s' % str(error))
-                return combine_actions(*actions)
+                return actions
 
+            print(next_round_number, heard_before_offset)
             # SongSync rounds
             if next_round_number in range(2, heard_before_offset):
                 actions.append(Huang2022.next_song_sync_action(session))
-
             # HeardBefore rounds
             elif next_round_number == heard_before_offset:
                 # Introduce new round type with Explainer.
                 actions.append(Huang2022.heard_before_explainer())
                 actions.append(
                     Huang2022.next_heard_before_action(session))
+                print(actions)
             elif heard_before_offset < next_round_number < question_offset:
                 actions.append(
                     Huang2022.next_heard_before_action(session))
