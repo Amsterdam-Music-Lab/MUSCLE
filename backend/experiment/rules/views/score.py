@@ -17,6 +17,7 @@ class Score:  # pylint: disable=too-few-public-methods
 
         # Create action
         score = session.last_score()
+        print(score)
         action = {
             'view': Score.ID,
             'title': _('Round {} / {}').format(session.rounds_passed(), session.experiment.rounds),

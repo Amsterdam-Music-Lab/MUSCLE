@@ -205,7 +205,6 @@ class Huang2022(Base):
                 print('Missing plan key: %s' % str(error))
                 return actions
 
-            print(next_round_number, heard_before_offset)
             # SongSync rounds
             if next_round_number in range(2, heard_before_offset):
                 actions.append(Huang2022.next_song_sync_action(session))
@@ -215,7 +214,6 @@ class Huang2022(Base):
                 actions.append(Huang2022.heard_before_explainer())
                 actions.append(
                     Huang2022.next_heard_before_action(session))
-                print(actions)
             elif heard_before_offset < next_round_number < question_offset:
                 actions.append(
                     Huang2022.next_heard_before_action(session))
@@ -245,7 +243,7 @@ class Huang2022(Base):
         if not section:
             print("Warning: no next_song_sync section found")
             section = session.section_from_any_song()
-        result_pk = result_pk = cls.prepare_result(session, section)
+        result_pk = cls.prepare_result(session, section)
         song_sync = SongSync(
             section=section,
             result_id=result_pk
@@ -276,14 +274,15 @@ class Huang2022(Base):
         try:
             plan = session.load_json_data()['plan']
             sections = plan['heard_before_sections']
+            heard_before_offset = len(plan['song_sync_sections'])
         except KeyError as error:
             print('Missing plan key: %s' % str(error))
             return None
 
         # Get section.
         section = None
-        if next_round_number <= len(sections):
-            this_section_info = sections[next_round_number - 1]
+        if next_round_number - heard_before_offset  <= len(sections):
+            this_section_info = sections[next_round_number - heard_before_offset - 1]
             section = session.section_from_any_song(
                     {'id': this_section_info.get('id')})
         else:
@@ -296,13 +295,15 @@ class Huang2022(Base):
         # create Result object and save expected result to database
         result_pk = cls.prepare_result(session, section, expected_result)
         form = Form([BooleanQuestion(
-            explainer=_("Did you hear this song in previous rounds?"),
-            result_pk=result_pk,
+            key='heard_before',
+            question=_("Did you hear this song in previous rounds?"),
+            result_id=result_pk,
             submits=True)])
         trial = Trial(
             playback=playback,
             feedback_form=form,
         )
+        return trial.action()
 
     @classmethod
     def final_score_message(cls, session):
@@ -377,6 +378,7 @@ class Huang2022(Base):
             form_element = None
             result_id = data['result']['id']
         result = cls.get_result(session, result_id)
+        print(result.expected_response)
         score = cls.calculate_score(result, data, form_element)
         result.save_json_data(data)
         result.score = score
