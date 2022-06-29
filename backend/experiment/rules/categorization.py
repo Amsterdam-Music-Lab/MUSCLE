@@ -1,7 +1,8 @@
+
 from .views.playback import Playback
-from .views.form import Form, Question
-from .views import Consent, StartSession, TwoAlternativeForced
-from django.http import Http404
+from .views.form import Form, Question, ChoiceQuestion
+from .views import Consent, StartSession, TwoAlternativeForced, Trial
+from django.http import Http404, HttpResponseServerError
 from .util.actions import combine_actions
 
 from .base import Base
@@ -34,31 +35,40 @@ class Categorization(Base):
         Get the next action for the experiment
         """
         next_round_number = session.get_next_round()
-        # Determine the group for this session
-        json_data = session.load_json_data()
+        # Determine or retrieve the group data for this session
         if next_round_number == 1:
-            assigned_group = cls.plan_experiment(session)
+            json_data = cls.plan_experiment(session)
         else:
-            assigned_group = json_data["group"]
-
-        # Retrieve secions for the assigned group
-        if assigned_group == 'S1':
-            section = session.playlist.section_set.filter(
-                group='SAME', tag='1A')[next_round_number-1]
-        elif assigned_group == 'S2':
-            section = session.playlist.section_set.filter(
-                group='SAME', tag='2A')[next_round_number-1]
-        elif assigned_group == 'C1':
-            section = session.playlist.section_set.filter(
-                group='CROSSED', tag='1A')[next_round_number-1]
-        elif assigned_group == 'C2':
-            section = session.playlist.section_set.filter(
-                group='CROSSED', tag='2A')[next_round_number-1]
-        # retrieve expected response from json_data
-        # for now: set it arbitrarily to "B"
-        result_pk = Base.prepare_result(session, section, 'B')
-        choices = {'A': 'A', 'B': 'B'}
-        view = TwoAlternativeForced(section, choices, result_pk)
+            json_data = session.load_json_data()
+        # Retrieve random section for the assigned group
+        if json_data["group"] == 'S1':
+            section = session.section_from_unused_song(
+                {'group': 'SAME', 'tag__contains': '1'})
+        elif json_data["group"] == 'S2':
+            section = session.section_from_unused_song(
+                {'group': 'SAME', 'tag__contains': '2'})
+        elif json_data["group"] == 'C1':
+            section = session.section_from_unused_song(
+                {'group': 'CROSSED', 'tag__contains': '1'})
+        elif json_data["group"] == 'C2':
+            section = session.section_from_unused_song(
+                {'group': 'CROSSED', 'tag__contains': '2'})
+        # Determine expected response
+        if section.tag == '1A' or section.tag == '2A':
+            expected_response = 'A'
+        else:
+            expected_response = 'B'
+        print(expected_response)
+        result_pk = Base.prepare_result(session, section, expected_response)
+        choices = json_data["choices"]
+        config = {
+            'decision_time': 5,
+            'auto_advance': False,
+            'listen_first': True,
+            'style': json_data["button_order"],
+            'time_pass_break': False
+        }
+        view = TwoAlternativeForced(section, choices, result_pk, config=config)
         return view.action()
 
     @classmethod
@@ -84,12 +94,27 @@ class Categorization(Base):
             while group_count >= group_size:
                 group = random.choice(['S1', 'S2', 'C1', 'C2'])
                 group_count = session.experiment.session_count_groups(group)
-            # assign a correct response for 1A, 2A
+            # Assign a random correct response color for 1A, 2A
             stimuli_a = random.choice(['BLUE', 'ORANGE'])
-            session.merge_json_data({'group': group,
-                                     'stimuli_a': stimuli_a})
+            # Determine which button is orange and which is blue
+            button_order = random.choice(['neutral', 'neutral-inverted'])
+            # Set expected resonse accordingly
+            # in the final version the buttons won't show the A/B
+            if button_order == 'neutral':
+                choices = {'A': 'A', 'B': 'B'}
+            else:
+                choices = {'B': 'B', 'A': 'A'}
+            json_data = {'group': group,
+                         'stimuli_a': stimuli_a,
+                         'button_order': button_order,
+                         'choices': choices
+                         }
+            session.merge_json_data(json_data)
             session.save()
-        return group
+        else:
+            raise Http404(
+                "The maximum number of participants for this experiment has been reached")
+        return json_data
 
     def get_trial_with_feedback(session):
         explainer = Explainer()
