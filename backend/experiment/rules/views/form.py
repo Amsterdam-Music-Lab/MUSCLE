@@ -2,6 +2,7 @@ import json
 
 from django.utils.translation import gettext_lazy as _
 
+
 class Question(object):
     ''' Question is part of a form.
     - key: description of question in results table
@@ -40,11 +41,19 @@ class ChoiceQuestion(Question):
         self.choices = choices
 
 
+class DropdownQuestion(Question):
+    def __init__(self, choices, **kwargs):
+        super().__init__(**kwargs)
+        self.choices = choices
+        self.view = 'DROPDOWN'
+
+
 class RangeQuestion(Question):
     def __init__(self, min_value, max_value, **kwargs):
         super().__init__(**kwargs)
         self.min_value = min_value
         self.max_value = max_value
+
 
 class LikertQuestion(Question):
     def __init__(self, scale_steps=7, likert_view='TEXT_RANGE', **kwargs):
@@ -78,6 +87,7 @@ class Form(object):
     - is_skippable: can this question form be skipped
     - is_profile: should the answers be saved to the user profile
     '''
+
     def __init__(self, form, submit_label=_('Continue'), skip_label=_('Skip'), is_skippable=False, is_profile=False):
         self.form = form
         self.submit_label = submit_label
