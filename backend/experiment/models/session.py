@@ -137,6 +137,31 @@ class Session(models.Model):
         # Return a random section
         return self.playlist.section_set.get(pk=random.choice(pks))
 
+    def all_sections(self, filter_by={}):
+        """Get all section with a Dutch IP check.
+
+        To ensure appropriate IP restrictions, most rules should this
+        method instead of operating on the playlist directly.
+        """
+
+        # Get pks from sections with given filter and song_id
+        pks = self.playlist.section_set.filter(
+            # IP checking is overridable in filter_by.
+            **(
+                {}
+                if self.participant.is_dutch()
+                else {'restrict_to_nl': False}
+            ),
+            **filter_by
+        ).values_list('pk', flat=True)
+
+        # Return None if nothing matches
+        if len(pks) == 0:
+            return None
+
+        # Return a random section
+        return self.playlist.section_set.all()
+
     def section_from_song(self, song_id, filter_by={}):
         """Get a random section from a particular song"""
         return self.section_from_any_song({**filter_by, 'pk': song_id})
@@ -210,7 +235,7 @@ class Session(models.Model):
     def question_bonus(self, bonus=100, skip_penalty=5):
         """Get the question bonus, given by the bonus reduced with number of skipped questions times the skip_penalty"""
         return bonus + self.skipped_questions() * skip_penalty
-    
+
     def total_questions(self):
         """ Get total number of profile questions in this session """
         try:
