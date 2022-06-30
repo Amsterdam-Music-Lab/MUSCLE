@@ -35,6 +35,9 @@ class Section(models.Model):
             self.end_time_str()
         )
 
+    def song_label(self):
+        return "{} - {}".format(self.artist, self.name)
+
     def start_time_str(self):
         """Create start time string 0:01:01.nn"""
         return str(datetime.timedelta(seconds=self.start_time)).rstrip('0')
