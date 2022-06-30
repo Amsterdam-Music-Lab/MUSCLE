@@ -89,7 +89,7 @@ class DemoTwoSong(Base):
 
         # TwoSong action, with just the default options
         sections = [section1, section2]
-        playback = Playback('MULTIPLE', sections)
+        playback = Playback('MULTIPLAYER', sections)
         view = Trial(playback, None, 'Testing')
         actions.append(view.action())
 

@@ -9,7 +9,7 @@ import MultiPlayer from "./MultiPlayer";
 
 const AUTOPLAY = "AUTOPLAY";
 const BUTTON = "BUTTON";
-const MULTIPLE = "MULTIPLE";
+const MULTIPLAYER = "MULTIPLAYER";
 
 const Playback = ({ playerType, sections, instruction, preloadMessage, autoAdvance, decisionTime, playConfig, time, submitResult, startedPlaying, finishedPlaying }) => {
 
@@ -61,7 +61,7 @@ const Playback = ({ playerType, sections, instruction, preloadMessage, autoAdvan
             case BUTTON:
                 return <PlayButton {...attrs }
                 />;
-            case MULTIPLE:
+            case MULTIPLAYER:
                 return <MultiPlayer {...attrs }
                 />;
             default:

@@ -13,6 +13,11 @@ class Playback(object):
             - mute: whether audio should be muted
             - auto_play: whether sound will start automatically
             - show_animation: whether to show an animation during playback '''
+
+    TYPE_AUTOPLAY='AUTOPLAY'
+    TYPE_BUTTON='BUTTON'
+    TYPE_MULTIPLAYER='MULTIPLAYER'
+
     def __init__(self, sections, player_type='AUTOPLAY', preload_message='', instruction='', play_config=None):
         self.sections = [{'id': s.id, 'url': s.absolute_url()} for s in sections]
         self.player_type = player_type
