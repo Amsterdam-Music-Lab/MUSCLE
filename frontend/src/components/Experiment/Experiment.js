@@ -8,13 +8,13 @@ import { TransitionGroup, CSSTransition } from "react-transition-group";
 import { withRouter } from "react-router-dom";
 
 import Trial from '../Trial/Trial';
+import CustomTrial from "../CustomTrial/CustomTrial";
 import DefaultPage from "../Page/DefaultPage";
 import Loading from "../Loading/Loading";
 import Explainer from "../Explainer/Explainer";
 import Consent from "../Consent/Consent";
 import Playlist from "../Playlist/Playlist";
 import StartSession from "../StartSession/StartSession";
-import SongSync from "../SongSync/SongSync";
 import Score from "../Score/Score";
 import FinalScore from "../FinalScore/FinalScore";
 import Final from "../Final/Final";
@@ -129,12 +129,15 @@ const Experiment = ({ match }) => {
                 return <Playlist {...attrs} />;
             case "START_SESSION":
                 return <StartSession {...attrs} />;
-            case "SONG_SYNC":
-                return <SongSync {...attrs} />;
-            case "SCORE":
-                return <Score {...attrs} />;
             case "TRIAL_VIEW":
                 return <Trial {...attrs} />
+            case "SCORE":
+                    return <Score {...attrs} />;
+            // Custom Trial
+            case "SONG_SYNC":
+            // case "MY_CUSTOM_VIEW":
+                return <CustomTrial state={state} {...attrs} />;
+                    
             case "FINAL_SCORE":
                 return (
                     <FinalScore

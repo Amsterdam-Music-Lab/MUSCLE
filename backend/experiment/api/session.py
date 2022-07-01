@@ -101,7 +101,11 @@ def result(request):
     try:
         result_data = json.loads(json_data)
         # Create a result from the data
-        result = session.experiment_rules().handle_results(session, result_data)
+        if 'form' in result_data:
+            result = session.experiment_rules().handle_results(session, result_data)
+        else:
+            result = session.experiment_rules().handle_result(session, result_data)
+            
         if not result:
             return HttpResponseServerError("Could not create result from data")
 

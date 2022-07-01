@@ -5,6 +5,7 @@ import ListenCircle from "../ListenCircle/ListenCircle";
 import Preload from "../Preload/Preload";
 import { MEDIA_ROOT } from "../../config";
 import { getCurrentTime, getTimeSince } from "../../util/time";
+import { createResult } from "../../API.js";
 
 const PRELOAD = "PRELOAD";
 const RECOGNIZE = "RECOGNIZE";
@@ -16,7 +17,17 @@ const SYNC = "SYNC";
 // - RECOGNIZE: Play audio, ask if participant recognizes the song
 // - SILENCE: Silence audio
 // - SYNC: Continue audio, ask is position is in sync
-const SongSync = ({ view, section, instructions, buttons, config, onResult }) => {
+const SongSync = ({
+    view,
+    session,
+    section,
+    instructions,
+    buttons,
+    config,
+    participant,
+    onNext,
+    loadState,
+}) => {
     // Main component state
     const [state, setState] = useState({ view: PRELOAD });
     const [running, setRunning] = useState(true);
@@ -30,8 +41,52 @@ const SongSync = ({ view, section, instructions, buttons, config, onResult }) =>
     // Track time
     const startTime = useRef(getCurrentTime());
 
+    // Main component state
+    const resultBuffer = useRef([]);
+
+    // Session result
+    const sessionResult = async (result) => {
+        // Add data to result buffer
+        resultBuffer.current.push(result || {});
+
+        // Merge result data with data from resultBuffer
+        // NB: result data with same properties will be overwritten by later results
+        const mergedResults = Object.assign(
+            {},
+            ...resultBuffer.current,
+            result
+        );
+
+        // Create result data
+        const data = {
+            session,
+            participant,
+            result: mergedResults,
+        };
+
+        // Optionally add section to result data
+        if (mergedResults.section) {
+            data.section = mergedResults.section;
+        }
+
+        // Send data to API
+        const action = await createResult(data);
+
+        // Fallback: Call onNext, try to reload round
+        if (!action) {
+            onNext();
+            return;
+        }
+
+        // Clear resultBuffer
+        resultBuffer.current = [];
+
+        // Init new state from action
+        loadState(action);
+    };
+
     // Create result data in this wrapper function
-    const createResult = (result) => {
+    const addResult = (result) => {
         // Prevent multiple submissions
         if (submitted.current) {
             return;
@@ -44,7 +99,7 @@ const SongSync = ({ view, section, instructions, buttons, config, onResult }) =>
         setRunning(false);
 
         // Result callback
-        onResult({
+        sessionResult({
             view,
             section,
             config,
@@ -109,13 +164,13 @@ const SongSync = ({ view, section, instructions, buttons, config, onResult }) =>
                     }
                     instruction={instructions.recognize}
                     onFinish={() => {
-                        createResult({
+                        addResult({
                             type: "time_passed",
                             recognition_time: config.recognition_time,
                         });
                     }}
                     onNoClick={() => {
-                        createResult({
+                        addResult({
                             type: "not_recognized",
                             recognition_time: getTimeSince(startTime.current),
                         });
@@ -165,16 +220,17 @@ const SongSync = ({ view, section, instructions, buttons, config, onResult }) =>
                     }
                     instruction={instructions.correct}
                     onFinish={() => {
-                        createResult(
+                        addResult(
                             Object.assign({}, state.result, {
                                 sync_time: config.sync_time,
                                 // Always the wrong answer!
-                                continuation_correctness: !config.continuation_correctness,
+                                continuation_correctness:
+                                    !config.continuation_correctness,
                             })
                         );
                     }}
                     onNoClick={() => {
-                        createResult(
+                        addResult(
                             Object.assign({}, state.result, {
                                 sync_time: getTimeSince(startTime.current),
                                 continuation_correctness: false,
@@ -182,7 +238,7 @@ const SongSync = ({ view, section, instructions, buttons, config, onResult }) =>
                         );
                     }}
                     onYesClick={() => {
-                        createResult(
+                        addResult(
                             Object.assign({}, state.result, {
                                 sync_time: getTimeSince(startTime.current),
                                 continuation_correctness: true,
