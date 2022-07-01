@@ -1,7 +1,9 @@
 .aha__multiplayer {
-    .players {
-        max-width: 350px;
-    }
+    display: flex;
+    column-gap: 25px;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    max-width: 100%;
 
     btn:nth-of-type(1) {
         background-color: $teal;

@@ -15,6 +15,7 @@ const Trial = ({ participant, session, playback, feedback_form, config, onNext, 
     const resultBuffer = useRef([]);
 
     const [formActive, setFormActive] = useState(!config.listen_first);
+    const [preloadReady, setPreloadReady] = useState(!(playback.play_config.ready_time))
 
     const submitted = useRef(false);
 
@@ -132,6 +133,7 @@ const Trial = ({ participant, session, playback, feedback_form, config, onNext, 
             <Playback
                 playerType={playback.player_type}
                 instruction={playback.instruction}
+                onPreloadReady={()=>{setPreloadReady(true);}}
                 preloadMessage={playback.preload_message}
                 autoAdvance={config.auto_advance}
                 decisionTime={config.decision_time}
@@ -142,7 +144,7 @@ const Trial = ({ participant, session, playback, feedback_form, config, onNext, 
                 startedPlaying={startTimer}
                 finishedPlaying={finishedPlaying}
             />)}
-            {feedback_form && (
+            {preloadReady && feedback_form && (
             <FeedbackForm
                 formActive={formActive}
                 form={feedback_form.form}
@@ -152,7 +154,7 @@ const Trial = ({ participant, session, playback, feedback_form, config, onNext, 
                 onResult={makeResult}
                 emphasizeTitle={!playback}
             />)}
-            {!feedback_form && (
+            {preloadReady && !feedback_form && (
             <Button
                 title={config.continue_label}
                 className={"btn-primary anim anim-fade-in anim-speed-500"}

@@ -11,7 +11,7 @@ const PRELOAD = "PRELOAD";
 const RECOGNIZE = "RECOGNIZE";
 
 
-const AutoPlay = ({instruction, preloadMessage, playConfig, sections, time, startedPlaying, finishedPlaying, decisionTime, className=''}) => {
+const AutoPlay = ({instruction, preloadMessage, onPreloadReady, playConfig, sections, time, startedPlaying, finishedPlaying, decisionTime, className=''}) => {
     // player state
     const [state, setState] = useState({ view: PRELOAD });
     const running = useRef(playConfig.auto_play);
@@ -57,6 +57,7 @@ const AutoPlay = ({instruction, preloadMessage, playConfig, sections, time, star
                     url={MEDIA_ROOT + section.url}
                     onNext={() => {                        
                         setView(RECOGNIZE);
+                        onPreloadReady();
                     }}
                 />
             );

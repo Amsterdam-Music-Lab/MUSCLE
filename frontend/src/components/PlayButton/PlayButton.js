@@ -9,7 +9,7 @@ const PlayButton = ({ playSection, className = ""}) => {
                 "btn",
                 className
             )}
-            onClick={() => playSection(0)}
+            onClick={playSection ? () => playSection(0) : undefined}
             tabIndex="0"
             onKeyPress={(e) => {
                 playSection(0);

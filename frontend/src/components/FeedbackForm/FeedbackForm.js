@@ -26,8 +26,7 @@ const FeedbackForm = ({ formActive, form, buttonLabel, skipLabel, isSkippable, o
             setFormValid(true);
         }
     };
-
-
+    
     return (
         <div className="aha__feedback d-flex justify-content-center">
             <form>
@@ -59,7 +58,7 @@ const FeedbackForm = ({ formActive, form, buttonLabel, skipLabel, isSkippable, o
                     <div className="center">
                         <Button
                         onClick={() => {
-                            onSubmit("");
+                            onSubmit();
                         }}
                         className={"btn-gray anim anim-fade-in anim-speed-500"}
                         title={skipLabel}
