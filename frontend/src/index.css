@@ -986,8 +986,12 @@ h3.title:after {
   text-align: center;
 }
 
-.aha__multiplayer .players {
-  max-width: 350px;
+.aha__multiplayer {
+  display: flex;
+  column-gap: 25px;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  max-width: 100%;
 }
 .aha__multiplayer btn:nth-of-type(1) {
   background-color: #39d7b8;
@@ -1602,47 +1606,33 @@ h3.title:after {
 .aha__trial.boolean .btn:nth-of-type(2).border-outside {
   box-shadow: 0 0 0 0.2em rgba(250, 85, 119, 0.5);
 }
-.aha__trial.neutral .aha__player-small:nth-of-type(1) .btn {
+.aha__trial.neutral .aha__player-small:nth-of-type(1) .btn, .aha__trial.neutral .aha__player-small:nth-of-type(1) .banner {
   background-color: #0cc7f1;
   color: white;
 }
-.aha__trial.neutral .aha__player-small:nth-of-type(1) .btn:hover {
+.aha__trial.neutral .aha__player-small:nth-of-type(1) .btn:hover, .aha__trial.neutral .aha__player-small:nth-of-type(1) .banner:hover {
   background-color: #0a9fc0;
   color: white;
 }
-.aha__trial.neutral .aha__player-small:nth-of-type(1) .btn:focus {
+.aha__trial.neutral .aha__player-small:nth-of-type(1) .btn:focus, .aha__trial.neutral .aha__player-small:nth-of-type(1) .banner:focus {
   box-shadow: 0 0 0 0.2rem rgba(12, 199, 241, 0.5);
 }
-.aha__trial.neutral .aha__player-small:nth-of-type(1) .btn.border-outside {
+.aha__trial.neutral .aha__player-small:nth-of-type(1) .btn.border-outside, .aha__trial.neutral .aha__player-small:nth-of-type(1) .banner.border-outside {
   box-shadow: 0 0 0 0.2em rgba(12, 199, 241, 0.5);
 }
-.aha__trial.neutral .aha__player-small:nth-of-type(2) .btn {
+.aha__trial.neutral .aha__player-small:nth-of-type(2) .btn, .aha__trial.neutral .aha__player-small:nth-of-type(2) .banner {
   background-color: #ffb14c;
   color: white;
 }
-.aha__trial.neutral .aha__player-small:nth-of-type(2) .btn:hover {
+.aha__trial.neutral .aha__player-small:nth-of-type(2) .btn:hover, .aha__trial.neutral .aha__player-small:nth-of-type(2) .banner:hover {
   background-color: #ff9b19;
   color: white;
 }
-.aha__trial.neutral .aha__player-small:nth-of-type(2) .btn:focus {
+.aha__trial.neutral .aha__player-small:nth-of-type(2) .btn:focus, .aha__trial.neutral .aha__player-small:nth-of-type(2) .banner:focus {
   box-shadow: 0 0 0 0.2rem rgba(255, 177, 76, 0.5);
 }
-.aha__trial.neutral .aha__player-small:nth-of-type(2) .btn.border-outside {
+.aha__trial.neutral .aha__player-small:nth-of-type(2) .btn.border-outside, .aha__trial.neutral .aha__player-small:nth-of-type(2) .banner.border-outside {
   box-shadow: 0 0 0 0.2em rgba(255, 177, 76, 0.5);
-}
-.aha__trial.neutral .aha__player-small:nth-of-type(3) .btn {
-  background-color: #39d7b8;
-  color: white;
-}
-.aha__trial.neutral .aha__player-small:nth-of-type(3) .btn:hover {
-  background-color: #25b89b;
-  color: white;
-}
-.aha__trial.neutral .aha__player-small:nth-of-type(3) .btn:focus {
-  box-shadow: 0 0 0 0.2rem rgba(57, 215, 184, 0.5);
-}
-.aha__trial.neutral .aha__player-small:nth-of-type(3) .btn.border-outside {
-  box-shadow: 0 0 0 0.2em rgba(57, 215, 184, 0.5);
 }
 .aha__trial.neutral .btn:nth-of-type(1) {
   background-color: #0cc7f1;
@@ -1672,61 +1662,33 @@ h3.title:after {
 .aha__trial.neutral .btn:nth-of-type(2).border-outside {
   box-shadow: 0 0 0 0.2em rgba(255, 177, 76, 0.5);
 }
-.aha__trial.neutral .btn:nth-of-type(3) {
-  background-color: #39d7b8;
-  color: white;
-}
-.aha__trial.neutral .btn:nth-of-type(3):hover {
-  background-color: #25b89b;
-  color: white;
-}
-.aha__trial.neutral .btn:nth-of-type(3):focus {
-  box-shadow: 0 0 0 0.2rem rgba(57, 215, 184, 0.5);
-}
-.aha__trial.neutral .btn:nth-of-type(3).border-outside {
-  box-shadow: 0 0 0 0.2em rgba(57, 215, 184, 0.5);
-}
-.aha__trial.neutral-inverted .aha__player-small:nth-of-type(1) .btn {
+.aha__trial.neutral-inverted .aha__player-small:nth-of-type(1) .btn, .aha__trial.neutral-inverted .aha__player-small:nth-of-type(1) .banner {
   background-color: #ffb14c;
   color: white;
 }
-.aha__trial.neutral-inverted .aha__player-small:nth-of-type(1) .btn:hover {
+.aha__trial.neutral-inverted .aha__player-small:nth-of-type(1) .btn:hover, .aha__trial.neutral-inverted .aha__player-small:nth-of-type(1) .banner:hover {
   background-color: #ff9b19;
   color: white;
 }
-.aha__trial.neutral-inverted .aha__player-small:nth-of-type(1) .btn:focus {
+.aha__trial.neutral-inverted .aha__player-small:nth-of-type(1) .btn:focus, .aha__trial.neutral-inverted .aha__player-small:nth-of-type(1) .banner:focus {
   box-shadow: 0 0 0 0.2rem rgba(255, 177, 76, 0.5);
 }
-.aha__trial.neutral-inverted .aha__player-small:nth-of-type(1) .btn.border-outside {
+.aha__trial.neutral-inverted .aha__player-small:nth-of-type(1) .btn.border-outside, .aha__trial.neutral-inverted .aha__player-small:nth-of-type(1) .banner.border-outside {
   box-shadow: 0 0 0 0.2em rgba(255, 177, 76, 0.5);
 }
-.aha__trial.neutral-inverted .aha__player-small:nth-of-type(2) .btn {
+.aha__trial.neutral-inverted .aha__player-small:nth-of-type(2) .btn, .aha__trial.neutral-inverted .aha__player-small:nth-of-type(2) .banner {
   background-color: #0cc7f1;
   color: white;
 }
-.aha__trial.neutral-inverted .aha__player-small:nth-of-type(2) .btn:hover {
+.aha__trial.neutral-inverted .aha__player-small:nth-of-type(2) .btn:hover, .aha__trial.neutral-inverted .aha__player-small:nth-of-type(2) .banner:hover {
   background-color: #0a9fc0;
   color: white;
 }
-.aha__trial.neutral-inverted .aha__player-small:nth-of-type(2) .btn:focus {
+.aha__trial.neutral-inverted .aha__player-small:nth-of-type(2) .btn:focus, .aha__trial.neutral-inverted .aha__player-small:nth-of-type(2) .banner:focus {
   box-shadow: 0 0 0 0.2rem rgba(12, 199, 241, 0.5);
 }
-.aha__trial.neutral-inverted .aha__player-small:nth-of-type(2) .btn.border-outside {
+.aha__trial.neutral-inverted .aha__player-small:nth-of-type(2) .btn.border-outside, .aha__trial.neutral-inverted .aha__player-small:nth-of-type(2) .banner.border-outside {
   box-shadow: 0 0 0 0.2em rgba(12, 199, 241, 0.5);
-}
-.aha__trial.neutral-inverted .aha__player-small:nth-of-type(3) .btn {
-  background-color: #39d7b8;
-  color: white;
-}
-.aha__trial.neutral-inverted .aha__player-small:nth-of-type(3) .btn:hover {
-  background-color: #25b89b;
-  color: white;
-}
-.aha__trial.neutral-inverted .aha__player-small:nth-of-type(3) .btn:focus {
-  box-shadow: 0 0 0 0.2rem rgba(57, 215, 184, 0.5);
-}
-.aha__trial.neutral-inverted .aha__player-small:nth-of-type(3) .btn.border-outside {
-  box-shadow: 0 0 0 0.2em rgba(57, 215, 184, 0.5);
 }
 .aha__trial.neutral-inverted .btn:nth-of-type(1) {
   background-color: #ffb14c;
@@ -1756,19 +1718,61 @@ h3.title:after {
 .aha__trial.neutral-inverted .btn:nth-of-type(2).border-outside {
   box-shadow: 0 0 0 0.2em rgba(12, 199, 241, 0.5);
 }
-.aha__trial.neutral-inverted .btn:nth-of-type(3) {
+.aha__trial.neutral .aha__player-small:nth-of-type(3) .btn, .aha__trial.neutral .aha__player-small:nth-of-type(3) .banner, .aha__trial.neutral-inverted .aha__player-small:nth-of-type(3) .btn, .aha__trial.neutral-inverted .aha__player-small:nth-of-type(3) .banner {
   background-color: #39d7b8;
   color: white;
 }
-.aha__trial.neutral-inverted .btn:nth-of-type(3):hover {
+.aha__trial.neutral .aha__player-small:nth-of-type(3) .btn:hover, .aha__trial.neutral .aha__player-small:nth-of-type(3) .banner:hover, .aha__trial.neutral-inverted .aha__player-small:nth-of-type(3) .btn:hover, .aha__trial.neutral-inverted .aha__player-small:nth-of-type(3) .banner:hover {
   background-color: #25b89b;
   color: white;
 }
-.aha__trial.neutral-inverted .btn:nth-of-type(3):focus {
+.aha__trial.neutral .aha__player-small:nth-of-type(3) .btn:focus, .aha__trial.neutral .aha__player-small:nth-of-type(3) .banner:focus, .aha__trial.neutral-inverted .aha__player-small:nth-of-type(3) .btn:focus, .aha__trial.neutral-inverted .aha__player-small:nth-of-type(3) .banner:focus {
   box-shadow: 0 0 0 0.2rem rgba(57, 215, 184, 0.5);
 }
-.aha__trial.neutral-inverted .btn:nth-of-type(3).border-outside {
+.aha__trial.neutral .aha__player-small:nth-of-type(3) .btn.border-outside, .aha__trial.neutral .aha__player-small:nth-of-type(3) .banner.border-outside, .aha__trial.neutral-inverted .aha__player-small:nth-of-type(3) .btn.border-outside, .aha__trial.neutral-inverted .aha__player-small:nth-of-type(3) .banner.border-outside {
   box-shadow: 0 0 0 0.2em rgba(57, 215, 184, 0.5);
+}
+.aha__trial.neutral .aha__player-small:nth-of-type(4) .btn, .aha__trial.neutral .aha__player-small:nth-of-type(4) .banner, .aha__trial.neutral-inverted .aha__player-small:nth-of-type(4) .btn, .aha__trial.neutral-inverted .aha__player-small:nth-of-type(4) .banner {
+  background-color: #d843e2;
+  color: white;
+}
+.aha__trial.neutral .aha__player-small:nth-of-type(4) .btn:hover, .aha__trial.neutral .aha__player-small:nth-of-type(4) .banner:hover, .aha__trial.neutral-inverted .aha__player-small:nth-of-type(4) .btn:hover, .aha__trial.neutral-inverted .aha__player-small:nth-of-type(4) .banner:hover {
+  background-color: #c720d2;
+  color: white;
+}
+.aha__trial.neutral .aha__player-small:nth-of-type(4) .btn:focus, .aha__trial.neutral .aha__player-small:nth-of-type(4) .banner:focus, .aha__trial.neutral-inverted .aha__player-small:nth-of-type(4) .btn:focus, .aha__trial.neutral-inverted .aha__player-small:nth-of-type(4) .banner:focus {
+  box-shadow: 0 0 0 0.2rem rgba(216, 67, 226, 0.5);
+}
+.aha__trial.neutral .aha__player-small:nth-of-type(4) .btn.border-outside, .aha__trial.neutral .aha__player-small:nth-of-type(4) .banner.border-outside, .aha__trial.neutral-inverted .aha__player-small:nth-of-type(4) .btn.border-outside, .aha__trial.neutral-inverted .aha__player-small:nth-of-type(4) .banner.border-outside {
+  box-shadow: 0 0 0 0.2em rgba(216, 67, 226, 0.5);
+}
+.aha__trial.neutral .btn:nth-of-type(3), .aha__trial.neutral-inverted .btn:nth-of-type(3) {
+  background-color: #39d7b8;
+  color: white;
+}
+.aha__trial.neutral .btn:nth-of-type(3):hover, .aha__trial.neutral-inverted .btn:nth-of-type(3):hover {
+  background-color: #25b89b;
+  color: white;
+}
+.aha__trial.neutral .btn:nth-of-type(3):focus, .aha__trial.neutral-inverted .btn:nth-of-type(3):focus {
+  box-shadow: 0 0 0 0.2rem rgba(57, 215, 184, 0.5);
+}
+.aha__trial.neutral .btn:nth-of-type(3).border-outside, .aha__trial.neutral-inverted .btn:nth-of-type(3).border-outside {
+  box-shadow: 0 0 0 0.2em rgba(57, 215, 184, 0.5);
+}
+.aha__trial.neutral .btn:nth-of-type(3), .aha__trial.neutral-inverted .btn:nth-of-type(3) {
+  background-color: #d843e2;
+  color: white;
+}
+.aha__trial.neutral .btn:nth-of-type(3):hover, .aha__trial.neutral-inverted .btn:nth-of-type(3):hover {
+  background-color: #c720d2;
+  color: white;
+}
+.aha__trial.neutral .btn:nth-of-type(3):focus, .aha__trial.neutral-inverted .btn:nth-of-type(3):focus {
+  box-shadow: 0 0 0 0.2rem rgba(216, 67, 226, 0.5);
+}
+.aha__trial.neutral .btn:nth-of-type(3).border-outside, .aha__trial.neutral-inverted .btn:nth-of-type(3).border-outside {
+  box-shadow: 0 0 0 0.2em rgba(216, 67, 226, 0.5);
 }
 
 .aha__feedback {
