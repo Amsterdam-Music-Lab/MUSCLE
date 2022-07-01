@@ -3,7 +3,7 @@ import React from "react";
 import classNames from "classnames";
 
 // ButtonArray is a question view for selecting a single option from a list of buttons
-const ButtonArray = ({ question, active, onChange }) => {
+const ButtonArray = ({ question, active, onChange, emphasizeTitle = true }) => {
 
     const buttonPress = (value) => {
         if (!active) {
@@ -20,8 +20,8 @@ const ButtonArray = ({ question, active, onChange }) => {
             {question.explainer && (
                 <p className="explainer">{question.explainer}</p>
             )}
-            <h3 className="title">{question.question}</h3>
-            <div className="btn-group-toggle" role="group" data-toggle="buttons" aria-label="Button Array">
+            <h3 className={classNames({title: emphasizeTitle})}>{question.question}</h3>
+            <div className="btn-group-toggle-custom" role="group" data-toggle="buttons" aria-label="Button Array">
                 {Object.keys(question.choices).map((val, index) => (
                     <ToggleButton
                         label={question.choices[val]}

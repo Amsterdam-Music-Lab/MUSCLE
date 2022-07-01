@@ -4,7 +4,7 @@ import Button from "../Button/Button";
 
 
 // FeedbackForm
-const FeedbackForm = ({ formActive, form, buttonLabel, skipLabel, isSkippable, onResult }) => {
+const FeedbackForm = ({ formActive, form, buttonLabel, skipLabel, isSkippable, onResult, emphasizeTitle = true }) => {
 
     const showSubmitButtons = form.filter( formElement => formElement.submits).length === 0;
 
@@ -38,6 +38,7 @@ const FeedbackForm = ({ formActive, form, buttonLabel, skipLabel, isSkippable, o
                         active={formActive}
                         question={form[index]}
                         onChange={onChange}
+                        emphasizeTitle={emphasizeTitle}
                     />
                 )
                 )}

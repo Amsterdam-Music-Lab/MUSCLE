@@ -150,6 +150,7 @@ const Trial = ({ participant, session, playback, feedback_form, config, onNext, 
                 skipLabel={feedback_form.skip_label}
                 isSkippable={feedback_form.is_skippable}
                 onResult={makeResult}
+                emphasizeTitle={!playback}
             />)}
             {!feedback_form && (
             <Button

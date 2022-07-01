@@ -276,51 +276,6 @@ h3.title:after {
   box-shadow: 0 0 0 0.2em rgba(189, 190, 191, 0.5);
 }
 
-.boolean .btn:nth-of-type(1) {
-  background-color: #00b612;
-}
-.boolean .btn:nth-of-type(2) {
-  background-color: #fa5577;
-}
-
-.neutral .aha__player-small:nth-of-type(1) .btn {
-  background-color: #0cc7f1;
-}
-.neutral .aha__player-small:nth-of-type(2) .btn {
-  background-color: #ffb14c;
-}
-.neutral .aha__player-small:nth-of-type(3) .btn {
-  background-color: #39d7b8;
-}
-.neutral .btn:nth-of-type(1) {
-  background-color: #0cc7f1;
-}
-.neutral .btn:nth-of-type(2) {
-  background-color: #ffb14c;
-}
-.neutral .btn:nth-of-type(3) {
-  background-color: #39d7b8;
-}
-
-.neutral-inverted .aha__player-small:nth-of-type(1) .btn {
-  background-color: #ffb14c;
-}
-.neutral-inverted .aha__player-small:nth-of-type(2) .btn {
-  background-color: #0cc7f1;
-}
-.neutral-inverted .aha__player-small:nth-of-type(3) .btn {
-  background-color: #39d7b8;
-}
-.neutral-inverted .btn:nth-of-type(1) {
-  background-color: #ffb14c;
-}
-.neutral-inverted .btn:nth-of-type(2) {
-  background-color: #0cc7f1;
-}
-.neutral-inverted .btn:nth-of-type(3) {
-  background-color: #39d7b8;
-}
-
 /* Components */
 .aha__app {
   position: relative;
@@ -413,6 +368,7 @@ h3.title:after {
   font-size: 65px;
   margin: 0;
   color: #bdbebf;
+  text-align: center;
 }
 .aha__count-down.active {
   color: white;
@@ -1070,6 +1026,13 @@ h3.title:after {
 .aha__buttons .title {
   flex: 0 0 100%;
 }
+.aha__buttons .btn-group-toggle-custom {
+  display: flex;
+  column-gap: 20px;
+}
+.aha__buttons .btn-group-toggle-custom input {
+  display: none;
+}
 
 .aha__checkboxes {
   display: flex;
@@ -1586,12 +1549,13 @@ h3.title:after {
   display: flex;
   flex-direction: column;
 }
-
-.ti-headphone {
+.aha__trial .ti-headphone {
   font-size: 80px;
 }
-
-.circle {
+.aha__trial .stationary {
+  margin-top: 20px;
+}
+.aha__trial .circle {
   top: 0;
   left: 0;
   width: 100%;
@@ -1600,10 +1564,205 @@ h3.title:after {
   align-items: center;
   justify-content: center;
 }
-
-.circle-content {
-  top: 55px;
+.aha__trial .circle-content {
+  top: 43px;
   position: absolute;
+}
+.aha__trial.boolean .btn:nth-of-type(1) {
+  background-color: #00b612;
+  color: white;
+}
+.aha__trial.boolean .btn:nth-of-type(1):hover {
+  background-color: #00830d;
+  color: white;
+}
+.aha__trial.boolean .btn:nth-of-type(1):focus {
+  box-shadow: 0 0 0 0.2rem rgba(0, 182, 18, 0.5);
+}
+.aha__trial.boolean .btn:nth-of-type(1).border-outside {
+  box-shadow: 0 0 0 0.2em rgba(0, 182, 18, 0.5);
+}
+.aha__trial.boolean .btn:nth-of-type(2) {
+  background-color: #fa5577;
+  color: white;
+}
+.aha__trial.boolean .btn:nth-of-type(2):hover {
+  background-color: #f9234f;
+  color: white;
+}
+.aha__trial.boolean .btn:nth-of-type(2):focus {
+  box-shadow: 0 0 0 0.2rem rgba(250, 85, 119, 0.5);
+}
+.aha__trial.boolean .btn:nth-of-type(2).border-outside {
+  box-shadow: 0 0 0 0.2em rgba(250, 85, 119, 0.5);
+}
+.aha__trial.neutral .aha__player-small:nth-of-type(1) .btn {
+  background-color: #0cc7f1;
+  color: white;
+}
+.aha__trial.neutral .aha__player-small:nth-of-type(1) .btn:hover {
+  background-color: #0a9fc0;
+  color: white;
+}
+.aha__trial.neutral .aha__player-small:nth-of-type(1) .btn:focus {
+  box-shadow: 0 0 0 0.2rem rgba(12, 199, 241, 0.5);
+}
+.aha__trial.neutral .aha__player-small:nth-of-type(1) .btn.border-outside {
+  box-shadow: 0 0 0 0.2em rgba(12, 199, 241, 0.5);
+}
+.aha__trial.neutral .aha__player-small:nth-of-type(2) .btn {
+  background-color: #ffb14c;
+  color: white;
+}
+.aha__trial.neutral .aha__player-small:nth-of-type(2) .btn:hover {
+  background-color: #ff9b19;
+  color: white;
+}
+.aha__trial.neutral .aha__player-small:nth-of-type(2) .btn:focus {
+  box-shadow: 0 0 0 0.2rem rgba(255, 177, 76, 0.5);
+}
+.aha__trial.neutral .aha__player-small:nth-of-type(2) .btn.border-outside {
+  box-shadow: 0 0 0 0.2em rgba(255, 177, 76, 0.5);
+}
+.aha__trial.neutral .aha__player-small:nth-of-type(3) .btn {
+  background-color: #39d7b8;
+  color: white;
+}
+.aha__trial.neutral .aha__player-small:nth-of-type(3) .btn:hover {
+  background-color: #25b89b;
+  color: white;
+}
+.aha__trial.neutral .aha__player-small:nth-of-type(3) .btn:focus {
+  box-shadow: 0 0 0 0.2rem rgba(57, 215, 184, 0.5);
+}
+.aha__trial.neutral .aha__player-small:nth-of-type(3) .btn.border-outside {
+  box-shadow: 0 0 0 0.2em rgba(57, 215, 184, 0.5);
+}
+.aha__trial.neutral .btn:nth-of-type(1) {
+  background-color: #0cc7f1;
+  color: white;
+}
+.aha__trial.neutral .btn:nth-of-type(1):hover {
+  background-color: #0a9fc0;
+  color: white;
+}
+.aha__trial.neutral .btn:nth-of-type(1):focus {
+  box-shadow: 0 0 0 0.2rem rgba(12, 199, 241, 0.5);
+}
+.aha__trial.neutral .btn:nth-of-type(1).border-outside {
+  box-shadow: 0 0 0 0.2em rgba(12, 199, 241, 0.5);
+}
+.aha__trial.neutral .btn:nth-of-type(2) {
+  background-color: #ffb14c;
+  color: white;
+}
+.aha__trial.neutral .btn:nth-of-type(2):hover {
+  background-color: #ff9b19;
+  color: white;
+}
+.aha__trial.neutral .btn:nth-of-type(2):focus {
+  box-shadow: 0 0 0 0.2rem rgba(255, 177, 76, 0.5);
+}
+.aha__trial.neutral .btn:nth-of-type(2).border-outside {
+  box-shadow: 0 0 0 0.2em rgba(255, 177, 76, 0.5);
+}
+.aha__trial.neutral .btn:nth-of-type(3) {
+  background-color: #39d7b8;
+  color: white;
+}
+.aha__trial.neutral .btn:nth-of-type(3):hover {
+  background-color: #25b89b;
+  color: white;
+}
+.aha__trial.neutral .btn:nth-of-type(3):focus {
+  box-shadow: 0 0 0 0.2rem rgba(57, 215, 184, 0.5);
+}
+.aha__trial.neutral .btn:nth-of-type(3).border-outside {
+  box-shadow: 0 0 0 0.2em rgba(57, 215, 184, 0.5);
+}
+.aha__trial.neutral-inverted .aha__player-small:nth-of-type(1) .btn {
+  background-color: #ffb14c;
+  color: white;
+}
+.aha__trial.neutral-inverted .aha__player-small:nth-of-type(1) .btn:hover {
+  background-color: #ff9b19;
+  color: white;
+}
+.aha__trial.neutral-inverted .aha__player-small:nth-of-type(1) .btn:focus {
+  box-shadow: 0 0 0 0.2rem rgba(255, 177, 76, 0.5);
+}
+.aha__trial.neutral-inverted .aha__player-small:nth-of-type(1) .btn.border-outside {
+  box-shadow: 0 0 0 0.2em rgba(255, 177, 76, 0.5);
+}
+.aha__trial.neutral-inverted .aha__player-small:nth-of-type(2) .btn {
+  background-color: #0cc7f1;
+  color: white;
+}
+.aha__trial.neutral-inverted .aha__player-small:nth-of-type(2) .btn:hover {
+  background-color: #0a9fc0;
+  color: white;
+}
+.aha__trial.neutral-inverted .aha__player-small:nth-of-type(2) .btn:focus {
+  box-shadow: 0 0 0 0.2rem rgba(12, 199, 241, 0.5);
+}
+.aha__trial.neutral-inverted .aha__player-small:nth-of-type(2) .btn.border-outside {
+  box-shadow: 0 0 0 0.2em rgba(12, 199, 241, 0.5);
+}
+.aha__trial.neutral-inverted .aha__player-small:nth-of-type(3) .btn {
+  background-color: #39d7b8;
+  color: white;
+}
+.aha__trial.neutral-inverted .aha__player-small:nth-of-type(3) .btn:hover {
+  background-color: #25b89b;
+  color: white;
+}
+.aha__trial.neutral-inverted .aha__player-small:nth-of-type(3) .btn:focus {
+  box-shadow: 0 0 0 0.2rem rgba(57, 215, 184, 0.5);
+}
+.aha__trial.neutral-inverted .aha__player-small:nth-of-type(3) .btn.border-outside {
+  box-shadow: 0 0 0 0.2em rgba(57, 215, 184, 0.5);
+}
+.aha__trial.neutral-inverted .btn:nth-of-type(1) {
+  background-color: #ffb14c;
+  color: white;
+}
+.aha__trial.neutral-inverted .btn:nth-of-type(1):hover {
+  background-color: #ff9b19;
+  color: white;
+}
+.aha__trial.neutral-inverted .btn:nth-of-type(1):focus {
+  box-shadow: 0 0 0 0.2rem rgba(255, 177, 76, 0.5);
+}
+.aha__trial.neutral-inverted .btn:nth-of-type(1).border-outside {
+  box-shadow: 0 0 0 0.2em rgba(255, 177, 76, 0.5);
+}
+.aha__trial.neutral-inverted .btn:nth-of-type(2) {
+  background-color: #0cc7f1;
+  color: white;
+}
+.aha__trial.neutral-inverted .btn:nth-of-type(2):hover {
+  background-color: #0a9fc0;
+  color: white;
+}
+.aha__trial.neutral-inverted .btn:nth-of-type(2):focus {
+  box-shadow: 0 0 0 0.2rem rgba(12, 199, 241, 0.5);
+}
+.aha__trial.neutral-inverted .btn:nth-of-type(2).border-outside {
+  box-shadow: 0 0 0 0.2em rgba(12, 199, 241, 0.5);
+}
+.aha__trial.neutral-inverted .btn:nth-of-type(3) {
+  background-color: #39d7b8;
+  color: white;
+}
+.aha__trial.neutral-inverted .btn:nth-of-type(3):hover {
+  background-color: #25b89b;
+  color: white;
+}
+.aha__trial.neutral-inverted .btn:nth-of-type(3):focus {
+  box-shadow: 0 0 0 0.2rem rgba(57, 215, 184, 0.5);
+}
+.aha__trial.neutral-inverted .btn:nth-of-type(3).border-outside {
+  box-shadow: 0 0 0 0.2em rgba(57, 215, 184, 0.5);
 }
 
 .aha__feedback {

@@ -17,7 +17,7 @@ const TEXT_RANGE = "TEXT_RANGE";
 const STRING = "STRING";
 
 // Question is an experiment view that shows a question and handles storing the answer
-const Question = ({ question, onChange, id, active, style }) => {
+const Question = ({ question, onChange, id, active, style,emphasizeTitle }) => {
     const [value, setValue] = useState(question.value || "");
 
     const registerChange = (value) => {
@@ -32,12 +32,13 @@ const Question = ({ question, onChange, id, active, style }) => {
             question,
             active,
             style,
+            emphasizeTitle,
             onChange: registerChange,
         };
 
         switch (view) {
             case BUTTON_ARRAY:
-                return <ButtonArray {...attrs} />;
+            return <ButtonArray {...attrs} />;
             case CHECKBOXES:
                 return <Checkboxes {...attrs} />;
             case DROPDOWN:
