@@ -49,7 +49,7 @@ const Final= ({ score, final_text, action_texts, button, onNext, history, show_p
                 <h1 className="total-score title">{showScore} {points}</h1>
             </div>
             )}
-            <div>
+            <div className="text-center">
                 <div dangerouslySetInnerHTML={{ __html: final_text }} />
             </div>
             {button && (

@@ -1016,6 +1016,13 @@ h3.title:after {
   max-width: 350px;
 }
 
+.aha__playback {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 0 25px;
+}
+
 .aha__buttons {
   display: flex;
   flex-direction: row;
@@ -1423,7 +1430,6 @@ h3.title:after {
 }
 
 .aha__question {
-  min-height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -1767,6 +1773,10 @@ h3.title:after {
 
 .aha__feedback {
   position: relative;
+}
+.aha__feedback .center {
+  display: flex;
+  justify-content: center;
 }
 .aha__feedback .btn {
   margin-top: 20px;

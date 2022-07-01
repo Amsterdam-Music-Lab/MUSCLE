@@ -1,5 +1,11 @@
 .aha__feedback {
     position: relative;
+    
+    .center{
+        display: flex;
+        justify-content: center;
+    }
+
     .btn {
         margin-top: 20px;
     }

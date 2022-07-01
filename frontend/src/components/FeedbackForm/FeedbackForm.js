@@ -44,24 +44,27 @@ const FeedbackForm = ({ formActive, form, buttonLabel, skipLabel, isSkippable, o
                 )}
                 {/* Continue button */}
                 {showSubmitButtons && formValid && (
+                     <div className="center">
                 <Button
                     onClick={() => {
                         onSubmit();
                     }}
                     className={"btn-primary anim anim-fade-in anim-speed-500"}
                     title={buttonLabel}
-                />)}
+                /></div>)}
 
                 {/* Skip button */}
                 {/* Only show skip-button when there is no value */}
                 {isSkippable && showSubmitButtons && (
-                    <Button
+                    <div className="center">
+                        <Button
                         onClick={() => {
                             onSubmit("");
                         }}
                         className={"btn-gray anim anim-fade-in anim-speed-500"}
                         title={skipLabel}
                     />
+                    </div>
                 )}
             </form>
         </div>
