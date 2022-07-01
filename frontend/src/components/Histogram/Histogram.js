@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import classnames from "classnames";
+import classNames from "classnames";
 
 // Histogram with random bar movement for decoration
 const Histogram = ({
@@ -37,7 +37,7 @@ const Histogram = ({
 
     return (
         <div
-            className={classnames("aha__histogram", { active: running })}
+            className={classNames("aha__histogram", { active: running })}
             style={{ height }}
         >
             {_bars}

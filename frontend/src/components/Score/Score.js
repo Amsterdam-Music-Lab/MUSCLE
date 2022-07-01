@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import classnames from "classnames";
+import classNames from "classnames";
 import Circle from "../Circle/Circle";
 import Button from "../Button/Button";
 
@@ -31,7 +31,7 @@ const Score = ({ last_song, score, score_message, total_score, texts, onNext }) 
     return (
         <div className="aha__score d-flex flex-column justify-content-center">
             <div
-                className={classnames("score", {
+                className={classNames("score", {
                     zero: score === 0,
                     positive: score > 0,
                     negative: score < 0,
