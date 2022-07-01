@@ -3,6 +3,7 @@ import classNames from 'classnames';
 
 // DropDown is a question view for selecting a single option from a dropdown list
 const DropDown = ({ question, value, onChange, emphasizeTitle = true }) => {
+
     return (
         <div className="aha__dropdown">
             {question.explainer && (
@@ -16,6 +17,7 @@ const DropDown = ({ question, value, onChange, emphasizeTitle = true }) => {
                     onChange(e.target.value);
                 }}
                 tabIndex="0"
+                name={question.key}
             >
                 <option value=""></option>
                 {Object.keys(question.choices).map((val, index) => (
