@@ -15,4 +15,14 @@
         flex-grow: 1;
         width: 100%;
     }
+
+    h3{
+        width: 100%;        
+
+        &:not(.title){
+            text-align: center;
+        }
+    }
+
+    
 }
