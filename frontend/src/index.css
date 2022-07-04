@@ -1945,18 +1945,18 @@ h3.title:after {
 .aha__trial.neutral form .btn:nth-of-type(3).border-outside, .aha__trial.neutral-inverted form .btn:nth-of-type(3).border-outside {
   box-shadow: 0 0 0 0.2em rgba(57, 215, 184, 0.5);
 }
-.aha__trial.neutral form .btn:nth-of-type(3), .aha__trial.neutral-inverted form .btn:nth-of-type(3) {
+.aha__trial.neutral form .btn:nth-of-type(4), .aha__trial.neutral-inverted form .btn:nth-of-type(4) {
   background-color: #d843e2;
   color: white;
 }
-.aha__trial.neutral form .btn:nth-of-type(3):hover, .aha__trial.neutral-inverted form .btn:nth-of-type(3):hover {
+.aha__trial.neutral form .btn:nth-of-type(4):hover, .aha__trial.neutral-inverted form .btn:nth-of-type(4):hover {
   background-color: #c720d2;
   color: white;
 }
-.aha__trial.neutral form .btn:nth-of-type(3):focus, .aha__trial.neutral-inverted form .btn:nth-of-type(3):focus {
+.aha__trial.neutral form .btn:nth-of-type(4):focus, .aha__trial.neutral-inverted form .btn:nth-of-type(4):focus {
   box-shadow: 0 0 0 0.2rem rgba(216, 67, 226, 0.5);
 }
-.aha__trial.neutral form .btn:nth-of-type(3).border-outside, .aha__trial.neutral-inverted form .btn:nth-of-type(3).border-outside {
+.aha__trial.neutral form .btn:nth-of-type(4).border-outside, .aha__trial.neutral-inverted form .btn:nth-of-type(4).border-outside {
   box-shadow: 0 0 0 0.2em rgba(216, 67, 226, 0.5);
 }
 
