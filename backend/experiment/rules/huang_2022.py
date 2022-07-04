@@ -166,10 +166,12 @@ class Huang2022(Base):
             # Finish session.
             session.finish()
             session.save()
+            config = {'show_section': True, 'show_total_score': True}
+            score = Score(session, config=config)
 
             # Return a score and final score action.
             return [
-                Score.action(session),
+                score.action(),
                 FinalScore.action(
                     session=session,
                     score_message=Huang2022.final_score_message(session),
@@ -193,7 +195,9 @@ class Huang2022(Base):
             actions.append(Huang2022.next_song_sync_action(session))
         else:
             # Create a score action.
-            actions.append(Score.action(session))
+            config = {'show_section': True, 'show_total_score': True}
+            score = Score(session, config=config)
+            actions.append(score.action())
 
             # Load the heard_before offset.
             try:
@@ -291,8 +295,7 @@ class Huang2022(Base):
             print("Warning: no heard_before section found")
             section = session.section_from_any_song()
         playback = Playback([section])
-        expected_result = int(this_section_info.get('novelty')=='old')
-        print(expected_result)
+        expected_result = this_section_info.get('novelty')
         # create Result object and save expected result to database
         result_pk = cls.prepare_result(session, section, expected_result)
         form = Form([BooleanQuestion(
@@ -362,6 +365,7 @@ class Huang2022(Base):
             logger.log(e)
             expected_response = None
         if expected_response:
+            print(form_element['value'])
             if expected_response == form_element['value']:
                 return 1
             else:
@@ -381,7 +385,6 @@ class Huang2022(Base):
             form_element = None
             result_id = data['result']['id']
         result = cls.get_result(session, result_id)
-        print(result.expected_response)
         score = cls.calculate_score(result, data, form_element)
         result.save_json_data(data)
         result.score = score
