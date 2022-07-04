@@ -49,7 +49,7 @@ class ToontjeHoger6Relative(Base):
         """Get action data for the next round"""
 
         rounds_passed = session.rounds_passed();
-
+        print(rounds_passed)
         # End of the game
         if rounds_passed == 3:
 
@@ -194,11 +194,13 @@ class ToontjeHoger6Relative(Base):
         
         # Question
         question = ChoiceQuestion(
-            question=_('Zijn deze twee melodieën hetzelfde?'),
+            question=_('Welke van deze melodieën is anders dan de rest?'),
             key='dontknow',
             choices={
-                'YES': _('YES'),
-                'NO': _('NO'),
+                'A': _('A'),
+                'B': _('B'),
+                'C': _('C'),
+                'D': _('D'),
             },
             view='BUTTON_ARRAY',
             result_id=result_pk,
@@ -213,7 +215,7 @@ class ToontjeHoger6Relative(Base):
         playback = Playback([section, section2, section3, section4], player_type=Playback.TYPE_MULTIPLAYER, play_config=play_config)
 
         # Trial
-        trial_config = {'style': 'boolean blue-players'}
+        trial_config = {'style': 'neutral blue-players'}
 
         trial = Trial(
             config=trial_config,
