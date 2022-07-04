@@ -6,5 +6,5 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - run: echo "SUCCESS"
-      - run: docker-compose up -d
+      - run: pwd
       
