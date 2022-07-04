@@ -158,10 +158,10 @@ class HBat(Base):
             else:
                 if slower:
                     instruction = _(
-                        'The rhythm went FASTER. Your response was INCORRECT.')
+                        'The rhythm went SLOWER. Your response was INCORRECT.')
                 else:
                     instruction = _(
-                        'The rhythm went SLOWER. Your response was INCORRECT.')
+                        'The rhythm went FASTER. Your response was INCORRECT.')
             return Explainer(
                 instruction=instruction,
                 steps=[],

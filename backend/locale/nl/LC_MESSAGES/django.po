@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-28 10:28+0200\n"
+"POT-Creation-Date: 2022-07-04 11:17+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -24,7 +24,7 @@ msgstr ""
 msgid "Loading"
 msgstr ""
 
-#: experiment/api/participant.py:37 experiment/rules/views/final.py:36
+#: experiment/api/participant.py:37 experiment/rules/views/final.py:38
 #: experiment/rules/views/final_score.py:33
 msgid "My profile"
 msgstr ""
@@ -40,7 +40,7 @@ msgid_plural ""
 msgstr[0] ""
 msgstr[1] ""
 
-#: experiment/api/participant.py:42 experiment/rules/views/final.py:33
+#: experiment/api/participant.py:42 experiment/rules/views/final.py:35
 #: experiment/rules/views/final_score.py:30
 msgid "points"
 msgstr ""
@@ -59,7 +59,7 @@ msgstr ""
 #: experiment/rules/duration_discrimination.py:99
 #: experiment/rules/duration_discrimination_tone.py:22
 #: experiment/rules/h_bat.py:150 experiment/rules/hbat_bst.py:78
-#: experiment/rules/rhythm_discrimination.py:245
+#: experiment/rules/rhythm_discrimination.py:246
 msgid "Next fragment"
 msgstr "Volgende fragment"
 
@@ -117,7 +117,7 @@ msgstr ""
 #: experiment/rules/beat_alignment.py:57
 #: experiment/rules/duration_discrimination.py:174
 #: experiment/rules/h_bat.py:140 experiment/rules/hbat_bst.py:30
-#: experiment/rules/rhythm_discrimination.py:238
+#: experiment/rules/rhythm_discrimination.py:239
 msgid "Remember: try not to move or tap along with the sounds"
 msgstr "Denk eraan dat je niet meebeweegt of meetikt tijdens het testje."
 
@@ -232,19 +232,19 @@ msgstr "In dit voorbeeld zijn de piepjes UIT DE MAAT van de muziek."
 msgid "Example {}"
 msgstr "Voorbeeld {}"
 
-#: experiment/rules/beat_alignment.py:130
+#: experiment/rules/beat_alignment.py:132
 msgid "Are the beeps ALIGNED TO THE BEAT or NOT ALIGNED TO THE BEAT?"
 msgstr "Zijn de piepjes IN DE MAAT of UIT DE MAAT?"
 
-#: experiment/rules/beat_alignment.py:133
+#: experiment/rules/beat_alignment.py:135
 msgid "ALIGNED TO THE BEAT"
 msgstr "IN DE MAAT"
 
-#: experiment/rules/beat_alignment.py:134
+#: experiment/rules/beat_alignment.py:136
 msgid "NOT ALIGNED TO THE BEAT"
 msgstr "UIT DE MAAT"
 
-#: experiment/rules/beat_alignment.py:145
+#: experiment/rules/beat_alignment.py:147
 msgid "Beat alignment"
 msgstr "Beat alignment"
 
@@ -428,12 +428,12 @@ msgid "The rhythm went FASTER. Your response was CORRECT."
 msgstr "Het ritme VERSNELDE. Je antwoord was CORRECT."
 
 #: experiment/rules/h_bat.py:161
-msgid "The rhythm went FASTER. Your response was INCORRECT."
-msgstr "Het ritme VERSNELDE. Je antwoord was INCORRECT."
-
-#: experiment/rules/h_bat.py:164
 msgid "The rhythm went SLOWER. Your response was INCORRECT."
 msgstr "Het ritme VERTRAAGDE. Je antwoord was INCORRECT."
+
+#: experiment/rules/h_bat.py:164
+msgid "The rhythm went FASTER. Your response was INCORRECT."
+msgstr "Het ritme VERSNELDE. Je antwoord was INCORRECT."
 
 #: experiment/rules/h_bat.py:178
 msgid ""
@@ -655,7 +655,7 @@ msgstr ""
 #: experiment/rules/views/question.py:142
 #: experiment/rules/views/question.py:165
 #: experiment/rules/views/question.py:188
-#: experiment/rules/views/question.py:205 experiment/rules/views/trial.py:44
+#: experiment/rules/views/question.py:205 experiment/rules/views/trial.py:45
 msgid "Continue"
 msgstr "Verder"
 
@@ -811,33 +811,33 @@ msgstr ""
 msgid "OK"
 msgstr "OK"
 
-#: experiment/rules/rhythm_discrimination.py:177
+#: experiment/rules/rhythm_discrimination.py:178
 msgid "Is the third rhythm the SAME or DIFFERENT?"
 msgstr "Is het derde ritme HETZELFDE of ANDERS?"
 
-#: experiment/rules/rhythm_discrimination.py:179
+#: experiment/rules/rhythm_discrimination.py:180
 msgid "SAME"
 msgstr "HETZELFDE"
 
-#: experiment/rules/rhythm_discrimination.py:180
+#: experiment/rules/rhythm_discrimination.py:181
 msgid "DIFFERENT"
 msgstr "ANDERS"
 
-#: experiment/rules/rhythm_discrimination.py:189
+#: experiment/rules/rhythm_discrimination.py:190
 msgid "practice"
 msgstr "oefenen"
 
-#: experiment/rules/rhythm_discrimination.py:191
+#: experiment/rules/rhythm_discrimination.py:192
 #, python-format
 msgid "trial %(index)d of %(total)d"
 msgstr "test %(index)d van %(total)d"
 
-#: experiment/rules/rhythm_discrimination.py:195
+#: experiment/rules/rhythm_discrimination.py:196
 #, python-format
 msgid "Ryhthm discrimination: %s"
 msgstr "Ritmeverschillen: %s"
 
-#: experiment/rules/rhythm_discrimination.py:234
+#: experiment/rules/rhythm_discrimination.py:235
 msgid ""
 "In this test you will hear the same rhythm twice. After that, you will hear "
 "a third rhythm."
@@ -845,7 +845,7 @@ msgstr ""
 "In deze test hoor je twee keer hetzelfde ritme achter elkaar. Dan volgt een "
 "derde ritme. "
 
-#: experiment/rules/rhythm_discrimination.py:237
+#: experiment/rules/rhythm_discrimination.py:238
 msgid ""
 "Your task is to decide whether this third rhythm is the SAME as the first "
 "two rhythms or DIFFERENT."
@@ -853,7 +853,7 @@ msgstr ""
 "Het is jouw taak om te beslissen of dit derde ritme HETZELFDE is als of "
 "ANDERS is dan de eerste twee."
 
-#: experiment/rules/rhythm_discrimination.py:240
+#: experiment/rules/rhythm_discrimination.py:241
 msgid ""
 "This test will take around 6 minutes to complete. Try to stay focused for "
 "the entire test!"
@@ -861,27 +861,27 @@ msgstr ""
 "Deze test duurt ongeveer 6 minuten. Probeer tijdens de hele test "
 "geconcentreerd te blijven!"
 
-#: experiment/rules/rhythm_discrimination.py:249
+#: experiment/rules/rhythm_discrimination.py:250
 msgid "The third rhythm is the SAME. Your response was CORRECT."
 msgstr "Het derde ritme is HETZELFDE. Je antwoord is CORRECT."
 
-#: experiment/rules/rhythm_discrimination.py:252
+#: experiment/rules/rhythm_discrimination.py:253
 msgid "The third rhythm is DIFFERENT. Your response was CORRECT."
 msgstr "Het derde ritme is ANDERS. Je antwoord is CORRECT."
 
-#: experiment/rules/rhythm_discrimination.py:256
+#: experiment/rules/rhythm_discrimination.py:257
 msgid "The third rhythm is the SAME. Your response was INCORRECT."
 msgstr "Het derde ritme is HETZELFDE. Je antwoord is INCORRECT."
 
-#: experiment/rules/rhythm_discrimination.py:259
+#: experiment/rules/rhythm_discrimination.py:260
 msgid "The third rhythm is DIFFERENT. Your response was INCORRECT."
 msgstr "Het derde ritme is ANDERS. Je antwoord is INCORRECT."
 
-#: experiment/rules/rhythm_discrimination.py:272
+#: experiment/rules/rhythm_discrimination.py:273
 msgid "Well done! You've answered {} percent correctly!"
 msgstr "Goed gedaan! Je hebt {} procent goed beantwoord!"
 
-#: experiment/rules/rhythm_discrimination.py:273
+#: experiment/rules/rhythm_discrimination.py:274
 msgid ""
 "One reason for the         weird beep-tones in this test (instead of some "
 "nice drum-sound) is that it is used very often        in brain scanners, "
@@ -1696,11 +1696,11 @@ msgstr "Gepensioneerd"
 msgid "Final score"
 msgstr ""
 
-#: experiment/rules/views/final.py:35 experiment/rules/views/final_score.py:32
+#: experiment/rules/views/final.py:37 experiment/rules/views/final_score.py:32
 msgid "Play again"
 msgstr ""
 
-#: experiment/rules/views/final.py:37 experiment/rules/views/final_score.py:34
+#: experiment/rules/views/final.py:39 experiment/rules/views/final_score.py:34
 msgid "All experiments"
 msgstr ""
 
@@ -1876,6 +1876,29 @@ msgstr ""
 #: experiment/templates/consent/consent_rhythm.html:5
 msgid "Who Can Take Part in This Research?"
 msgstr "Wie kan meedoen met dit onderzoek?"
+
+#: experiment/templates/consent/consent_MRI.html:7
+#, fuzzy
+#| msgid ""
+#| " Anybody aged 16 or older with no hearing problems and no psychiatric or "
+#| "neurological disorders is welcome to participate in this research. Your "
+#| "device must be able to play audio, and you must have a sufficiently "
+#| "strong data connection to be able to stream short MP3 files. Headphones "
+#| "are recommended for the best results, but you may also use either "
+#| "internal or external loudspeakers. "
+msgid ""
+" Anybody aged 16 or older with no hearing problems is welcome to participate "
+"in this research. Your device must be able to play audio, and you must have "
+"a sufficiently strong data connection to be able to stream short sound "
+"files. Headphones are recommended for the best results, but you may also use "
+"either internal or external loudspeakers. "
+msgstr ""
+"U kunt meedoen aan dit onderzoek als u geen gehoorproblemen heeft, geen "
+"psychiatrische of neurologische stoornis, en ouder bent dan 16 jaar. Uw "
+"apparaat moet geluid kunnen afspelen, en uw internetverbinding moet goed "
+"genoeg zijn om korte MP3 files te kunnen streamen. We raden aan het "
+"experiment met een koptelefoon te doen, maar het is ook mogelijk om "
+"luidsprekers te gebruiken."
 
 #: experiment/templates/consent/consent_MRI.html:8
 #: experiment/templates/consent/consent_rhythm.html:7
