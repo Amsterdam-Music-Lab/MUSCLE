@@ -12,7 +12,9 @@ class Playback(object):
             - playhead: from where the audio file should play (offset in seconds from start)
             - mute: whether audio should be muted
             - auto_play: whether sound will start automatically
-            - show_animation: whether to show an animation during playback '''
+            - show_animation: whether to show an animation during playback 
+            - (multiplayer) label_style: player index number style: NUMERIC, ALPHABETIC, ROMAN or empty (no label)
+    '''
 
     TYPE_AUTOPLAY='AUTOPLAY'
     TYPE_BUTTON='BUTTON'

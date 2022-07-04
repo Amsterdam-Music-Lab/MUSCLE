@@ -763,7 +763,8 @@ h3.title:after {
   border-radius: 17.5px;
   font-size: 18.4210526316px;
   line-height: 33px;
-  margin-bottom: 0;
+  margin-bottom: 2px;
+  margin-top: 2px;
 }
 
 .aha__final-score .aha__rank {
@@ -962,6 +963,9 @@ h3.title:after {
   position: relative;
   padding-bottom: 80px;
   width: 120px;
+  height: 120px;
+}
+.aha__player-small.hasLabel {
   height: 180px;
 }
 .aha__player-small .aha__play-button {
@@ -990,20 +994,16 @@ h3.title:after {
   display: flex;
   column-gap: 25px;
   flex-wrap: wrap;
-  justify-content: space-between;
   max-width: 100%;
 }
-.aha__multiplayer btn:nth-of-type(1) {
-  background-color: #39d7b8;
+.aha__multiplayer.player-count-2 {
+  column-gap: 50px;
 }
-.aha__multiplayer .btn:nth-of-type(2) {
-  background-color: #0cc7f1;
-}
-.aha__multiplayer .btn:nth-of-type(3) {
-  background-color: #ffb14c;
+.aha__multiplayer.player-count-2 {
+  column-gap: 30px;
 }
 .aha__multiplayer .buttons {
-  max-width: 390px;
+  max-width: 350px;
 }
 .aha__multiplayer .buttons .aha__button {
   margin-bottom: 10px;
@@ -1015,9 +1015,6 @@ h3.title:after {
 }
 .aha__multiplayer .instruction h3 {
   margin: 0;
-}
-.aha__multiplayer .buttons {
-  max-width: 350px;
 }
 
 .aha__playback {
@@ -1578,200 +1575,388 @@ h3.title:after {
   top: 43px;
   position: absolute;
 }
-.aha__trial.boolean .btn:nth-of-type(1) {
-  background-color: #00b612;
+.aha__trial.boolean .aha__player-small:nth-of-type(1) .btn,
+.aha__trial.boolean .aha__player-small:nth-of-type(1) .banner {
+  background-color: #ffb14c;
   color: white;
 }
-.aha__trial.boolean .btn:nth-of-type(1):hover {
-  background-color: #00830d;
+.aha__trial.boolean .aha__player-small:nth-of-type(1) .btn:hover,
+.aha__trial.boolean .aha__player-small:nth-of-type(1) .banner:hover {
+  background-color: #ff9b19;
   color: white;
 }
-.aha__trial.boolean .btn:nth-of-type(1):focus {
-  box-shadow: 0 0 0 0.2rem rgba(0, 182, 18, 0.5);
+.aha__trial.boolean .aha__player-small:nth-of-type(1) .btn:focus,
+.aha__trial.boolean .aha__player-small:nth-of-type(1) .banner:focus {
+  box-shadow: 0 0 0 0.2rem rgba(255, 177, 76, 0.5);
 }
-.aha__trial.boolean .btn:nth-of-type(1).border-outside {
-  box-shadow: 0 0 0 0.2em rgba(0, 182, 18, 0.5);
+.aha__trial.boolean .aha__player-small:nth-of-type(1) .btn.border-outside,
+.aha__trial.boolean .aha__player-small:nth-of-type(1) .banner.border-outside {
+  box-shadow: 0 0 0 0.2em rgba(255, 177, 76, 0.5);
 }
-.aha__trial.boolean .btn:nth-of-type(2) {
+.aha__trial.boolean .aha__player-small:nth-of-type(2) .btn,
+.aha__trial.boolean .aha__player-small:nth-of-type(2) .banner {
+  background-color: #0cc7f1;
+  color: white;
+}
+.aha__trial.boolean .aha__player-small:nth-of-type(2) .btn:hover,
+.aha__trial.boolean .aha__player-small:nth-of-type(2) .banner:hover {
+  background-color: #0a9fc0;
+  color: white;
+}
+.aha__trial.boolean .aha__player-small:nth-of-type(2) .btn:focus,
+.aha__trial.boolean .aha__player-small:nth-of-type(2) .banner:focus {
+  box-shadow: 0 0 0 0.2rem rgba(12, 199, 241, 0.5);
+}
+.aha__trial.boolean .aha__player-small:nth-of-type(2) .btn.border-outside,
+.aha__trial.boolean .aha__player-small:nth-of-type(2) .banner.border-outside {
+  box-shadow: 0 0 0 0.2em rgba(12, 199, 241, 0.5);
+}
+.aha__trial.boolean .aha__player-small:nth-of-type(3) .btn,
+.aha__trial.boolean .aha__player-small:nth-of-type(3) .banner {
+  background-color: #39d7b8;
+  color: white;
+}
+.aha__trial.boolean .aha__player-small:nth-of-type(3) .btn:hover,
+.aha__trial.boolean .aha__player-small:nth-of-type(3) .banner:hover {
+  background-color: #25b89b;
+  color: white;
+}
+.aha__trial.boolean .aha__player-small:nth-of-type(3) .btn:focus,
+.aha__trial.boolean .aha__player-small:nth-of-type(3) .banner:focus {
+  box-shadow: 0 0 0 0.2rem rgba(57, 215, 184, 0.5);
+}
+.aha__trial.boolean .aha__player-small:nth-of-type(3) .btn.border-outside,
+.aha__trial.boolean .aha__player-small:nth-of-type(3) .banner.border-outside {
+  box-shadow: 0 0 0 0.2em rgba(57, 215, 184, 0.5);
+}
+.aha__trial.boolean .aha__player-small:nth-of-type(4) .btn,
+.aha__trial.boolean .aha__player-small:nth-of-type(4) .banner {
+  background-color: #d843e2;
+  color: white;
+}
+.aha__trial.boolean .aha__player-small:nth-of-type(4) .btn:hover,
+.aha__trial.boolean .aha__player-small:nth-of-type(4) .banner:hover {
+  background-color: #c720d2;
+  color: white;
+}
+.aha__trial.boolean .aha__player-small:nth-of-type(4) .btn:focus,
+.aha__trial.boolean .aha__player-small:nth-of-type(4) .banner:focus {
+  box-shadow: 0 0 0 0.2rem rgba(216, 67, 226, 0.5);
+}
+.aha__trial.boolean .aha__player-small:nth-of-type(4) .btn.border-outside,
+.aha__trial.boolean .aha__player-small:nth-of-type(4) .banner.border-outside {
+  box-shadow: 0 0 0 0.2em rgba(216, 67, 226, 0.5);
+}
+.aha__trial.boolean form .btn:nth-of-type(1) {
+  background-color: #39d7b8;
+  color: white;
+}
+.aha__trial.boolean form .btn:nth-of-type(1):hover {
+  background-color: #25b89b;
+  color: white;
+}
+.aha__trial.boolean form .btn:nth-of-type(1):focus {
+  box-shadow: 0 0 0 0.2rem rgba(57, 215, 184, 0.5);
+}
+.aha__trial.boolean form .btn:nth-of-type(1).border-outside {
+  box-shadow: 0 0 0 0.2em rgba(57, 215, 184, 0.5);
+}
+.aha__trial.boolean form .btn:nth-of-type(2) {
   background-color: #fa5577;
   color: white;
 }
-.aha__trial.boolean .btn:nth-of-type(2):hover {
+.aha__trial.boolean form .btn:nth-of-type(2):hover {
   background-color: #f9234f;
   color: white;
 }
-.aha__trial.boolean .btn:nth-of-type(2):focus {
+.aha__trial.boolean form .btn:nth-of-type(2):focus {
   box-shadow: 0 0 0 0.2rem rgba(250, 85, 119, 0.5);
 }
-.aha__trial.boolean .btn:nth-of-type(2).border-outside {
+.aha__trial.boolean form .btn:nth-of-type(2).border-outside {
   box-shadow: 0 0 0 0.2em rgba(250, 85, 119, 0.5);
 }
-.aha__trial.neutral .aha__player-small:nth-of-type(1) .btn, .aha__trial.neutral .aha__player-small:nth-of-type(1) .banner {
+.aha__trial.blue-players .aha__player-small:nth-of-type(1) .btn,
+.aha__trial.blue-players .aha__player-small:nth-of-type(1) .banner,
+.aha__trial.blue-players .aha__player-small:nth-of-type(2) .btn,
+.aha__trial.blue-players .aha__player-small:nth-of-type(2) .banner,
+.aha__trial.blue-players .aha__player-small:nth-of-type(3) .btn,
+.aha__trial.blue-players .aha__player-small:nth-of-type(3) .banner,
+.aha__trial.blue-players .aha__player-small:nth-of-type(4) .btn,
+.aha__trial.blue-players .aha__player-small:nth-of-type(4) .banner {
   background-color: #0cc7f1;
   color: white;
 }
-.aha__trial.neutral .aha__player-small:nth-of-type(1) .btn:hover, .aha__trial.neutral .aha__player-small:nth-of-type(1) .banner:hover {
+.aha__trial.blue-players .aha__player-small:nth-of-type(1) .btn:hover,
+.aha__trial.blue-players .aha__player-small:nth-of-type(1) .banner:hover,
+.aha__trial.blue-players .aha__player-small:nth-of-type(2) .btn:hover,
+.aha__trial.blue-players .aha__player-small:nth-of-type(2) .banner:hover,
+.aha__trial.blue-players .aha__player-small:nth-of-type(3) .btn:hover,
+.aha__trial.blue-players .aha__player-small:nth-of-type(3) .banner:hover,
+.aha__trial.blue-players .aha__player-small:nth-of-type(4) .btn:hover,
+.aha__trial.blue-players .aha__player-small:nth-of-type(4) .banner:hover {
   background-color: #0a9fc0;
   color: white;
 }
-.aha__trial.neutral .aha__player-small:nth-of-type(1) .btn:focus, .aha__trial.neutral .aha__player-small:nth-of-type(1) .banner:focus {
+.aha__trial.blue-players .aha__player-small:nth-of-type(1) .btn:focus,
+.aha__trial.blue-players .aha__player-small:nth-of-type(1) .banner:focus,
+.aha__trial.blue-players .aha__player-small:nth-of-type(2) .btn:focus,
+.aha__trial.blue-players .aha__player-small:nth-of-type(2) .banner:focus,
+.aha__trial.blue-players .aha__player-small:nth-of-type(3) .btn:focus,
+.aha__trial.blue-players .aha__player-small:nth-of-type(3) .banner:focus,
+.aha__trial.blue-players .aha__player-small:nth-of-type(4) .btn:focus,
+.aha__trial.blue-players .aha__player-small:nth-of-type(4) .banner:focus {
   box-shadow: 0 0 0 0.2rem rgba(12, 199, 241, 0.5);
 }
-.aha__trial.neutral .aha__player-small:nth-of-type(1) .btn.border-outside, .aha__trial.neutral .aha__player-small:nth-of-type(1) .banner.border-outside {
+.aha__trial.blue-players .aha__player-small:nth-of-type(1) .btn.border-outside,
+.aha__trial.blue-players .aha__player-small:nth-of-type(1) .banner.border-outside,
+.aha__trial.blue-players .aha__player-small:nth-of-type(2) .btn.border-outside,
+.aha__trial.blue-players .aha__player-small:nth-of-type(2) .banner.border-outside,
+.aha__trial.blue-players .aha__player-small:nth-of-type(3) .btn.border-outside,
+.aha__trial.blue-players .aha__player-small:nth-of-type(3) .banner.border-outside,
+.aha__trial.blue-players .aha__player-small:nth-of-type(4) .btn.border-outside,
+.aha__trial.blue-players .aha__player-small:nth-of-type(4) .banner.border-outside {
   box-shadow: 0 0 0 0.2em rgba(12, 199, 241, 0.5);
 }
-.aha__trial.neutral .aha__player-small:nth-of-type(2) .btn, .aha__trial.neutral .aha__player-small:nth-of-type(2) .banner {
-  background-color: #ffb14c;
-  color: white;
-}
-.aha__trial.neutral .aha__player-small:nth-of-type(2) .btn:hover, .aha__trial.neutral .aha__player-small:nth-of-type(2) .banner:hover {
-  background-color: #ff9b19;
-  color: white;
-}
-.aha__trial.neutral .aha__player-small:nth-of-type(2) .btn:focus, .aha__trial.neutral .aha__player-small:nth-of-type(2) .banner:focus {
-  box-shadow: 0 0 0 0.2rem rgba(255, 177, 76, 0.5);
-}
-.aha__trial.neutral .aha__player-small:nth-of-type(2) .btn.border-outside, .aha__trial.neutral .aha__player-small:nth-of-type(2) .banner.border-outside {
-  box-shadow: 0 0 0 0.2em rgba(255, 177, 76, 0.5);
-}
-.aha__trial.neutral .btn:nth-of-type(1) {
-  background-color: #0cc7f1;
-  color: white;
-}
-.aha__trial.neutral .btn:nth-of-type(1):hover {
-  background-color: #0a9fc0;
-  color: white;
-}
-.aha__trial.neutral .btn:nth-of-type(1):focus {
-  box-shadow: 0 0 0 0.2rem rgba(12, 199, 241, 0.5);
-}
-.aha__trial.neutral .btn:nth-of-type(1).border-outside {
-  box-shadow: 0 0 0 0.2em rgba(12, 199, 241, 0.5);
-}
-.aha__trial.neutral .btn:nth-of-type(2) {
-  background-color: #ffb14c;
-  color: white;
-}
-.aha__trial.neutral .btn:nth-of-type(2):hover {
-  background-color: #ff9b19;
-  color: white;
-}
-.aha__trial.neutral .btn:nth-of-type(2):focus {
-  box-shadow: 0 0 0 0.2rem rgba(255, 177, 76, 0.5);
-}
-.aha__trial.neutral .btn:nth-of-type(2).border-outside {
-  box-shadow: 0 0 0 0.2em rgba(255, 177, 76, 0.5);
-}
-.aha__trial.neutral-inverted .aha__player-small:nth-of-type(1) .btn, .aha__trial.neutral-inverted .aha__player-small:nth-of-type(1) .banner {
-  background-color: #ffb14c;
-  color: white;
-}
-.aha__trial.neutral-inverted .aha__player-small:nth-of-type(1) .btn:hover, .aha__trial.neutral-inverted .aha__player-small:nth-of-type(1) .banner:hover {
-  background-color: #ff9b19;
-  color: white;
-}
-.aha__trial.neutral-inverted .aha__player-small:nth-of-type(1) .btn:focus, .aha__trial.neutral-inverted .aha__player-small:nth-of-type(1) .banner:focus {
-  box-shadow: 0 0 0 0.2rem rgba(255, 177, 76, 0.5);
-}
-.aha__trial.neutral-inverted .aha__player-small:nth-of-type(1) .btn.border-outside, .aha__trial.neutral-inverted .aha__player-small:nth-of-type(1) .banner.border-outside {
-  box-shadow: 0 0 0 0.2em rgba(255, 177, 76, 0.5);
-}
-.aha__trial.neutral-inverted .aha__player-small:nth-of-type(2) .btn, .aha__trial.neutral-inverted .aha__player-small:nth-of-type(2) .banner {
-  background-color: #0cc7f1;
-  color: white;
-}
-.aha__trial.neutral-inverted .aha__player-small:nth-of-type(2) .btn:hover, .aha__trial.neutral-inverted .aha__player-small:nth-of-type(2) .banner:hover {
-  background-color: #0a9fc0;
-  color: white;
-}
-.aha__trial.neutral-inverted .aha__player-small:nth-of-type(2) .btn:focus, .aha__trial.neutral-inverted .aha__player-small:nth-of-type(2) .banner:focus {
-  box-shadow: 0 0 0 0.2rem rgba(12, 199, 241, 0.5);
-}
-.aha__trial.neutral-inverted .aha__player-small:nth-of-type(2) .btn.border-outside, .aha__trial.neutral-inverted .aha__player-small:nth-of-type(2) .banner.border-outside {
-  box-shadow: 0 0 0 0.2em rgba(12, 199, 241, 0.5);
-}
-.aha__trial.neutral-inverted .btn:nth-of-type(1) {
-  background-color: #ffb14c;
-  color: white;
-}
-.aha__trial.neutral-inverted .btn:nth-of-type(1):hover {
-  background-color: #ff9b19;
-  color: white;
-}
-.aha__trial.neutral-inverted .btn:nth-of-type(1):focus {
-  box-shadow: 0 0 0 0.2rem rgba(255, 177, 76, 0.5);
-}
-.aha__trial.neutral-inverted .btn:nth-of-type(1).border-outside {
-  box-shadow: 0 0 0 0.2em rgba(255, 177, 76, 0.5);
-}
-.aha__trial.neutral-inverted .btn:nth-of-type(2) {
-  background-color: #0cc7f1;
-  color: white;
-}
-.aha__trial.neutral-inverted .btn:nth-of-type(2):hover {
-  background-color: #0a9fc0;
-  color: white;
-}
-.aha__trial.neutral-inverted .btn:nth-of-type(2):focus {
-  box-shadow: 0 0 0 0.2rem rgba(12, 199, 241, 0.5);
-}
-.aha__trial.neutral-inverted .btn:nth-of-type(2).border-outside {
-  box-shadow: 0 0 0 0.2em rgba(12, 199, 241, 0.5);
-}
-.aha__trial.neutral .aha__player-small:nth-of-type(3) .btn, .aha__trial.neutral .aha__player-small:nth-of-type(3) .banner, .aha__trial.neutral-inverted .aha__player-small:nth-of-type(3) .btn, .aha__trial.neutral-inverted .aha__player-small:nth-of-type(3) .banner {
-  background-color: #39d7b8;
-  color: white;
-}
-.aha__trial.neutral .aha__player-small:nth-of-type(3) .btn:hover, .aha__trial.neutral .aha__player-small:nth-of-type(3) .banner:hover, .aha__trial.neutral-inverted .aha__player-small:nth-of-type(3) .btn:hover, .aha__trial.neutral-inverted .aha__player-small:nth-of-type(3) .banner:hover {
-  background-color: #25b89b;
-  color: white;
-}
-.aha__trial.neutral .aha__player-small:nth-of-type(3) .btn:focus, .aha__trial.neutral .aha__player-small:nth-of-type(3) .banner:focus, .aha__trial.neutral-inverted .aha__player-small:nth-of-type(3) .btn:focus, .aha__trial.neutral-inverted .aha__player-small:nth-of-type(3) .banner:focus {
-  box-shadow: 0 0 0 0.2rem rgba(57, 215, 184, 0.5);
-}
-.aha__trial.neutral .aha__player-small:nth-of-type(3) .btn.border-outside, .aha__trial.neutral .aha__player-small:nth-of-type(3) .banner.border-outside, .aha__trial.neutral-inverted .aha__player-small:nth-of-type(3) .btn.border-outside, .aha__trial.neutral-inverted .aha__player-small:nth-of-type(3) .banner.border-outside {
-  box-shadow: 0 0 0 0.2em rgba(57, 215, 184, 0.5);
-}
-.aha__trial.neutral .aha__player-small:nth-of-type(4) .btn, .aha__trial.neutral .aha__player-small:nth-of-type(4) .banner, .aha__trial.neutral-inverted .aha__player-small:nth-of-type(4) .btn, .aha__trial.neutral-inverted .aha__player-small:nth-of-type(4) .banner {
+.aha__trial.pink-players .aha__player-small:nth-of-type(1) .btn,
+.aha__trial.pink-players .aha__player-small:nth-of-type(1) .banner,
+.aha__trial.pink-players .aha__player-small:nth-of-type(2) .btn,
+.aha__trial.pink-players .aha__player-small:nth-of-type(2) .banner,
+.aha__trial.pink-players .aha__player-small:nth-of-type(3) .btn,
+.aha__trial.pink-players .aha__player-small:nth-of-type(3) .banner,
+.aha__trial.pink-players .aha__player-small:nth-of-type(4) .btn,
+.aha__trial.pink-players .aha__player-small:nth-of-type(4) .banner {
   background-color: #d843e2;
   color: white;
 }
-.aha__trial.neutral .aha__player-small:nth-of-type(4) .btn:hover, .aha__trial.neutral .aha__player-small:nth-of-type(4) .banner:hover, .aha__trial.neutral-inverted .aha__player-small:nth-of-type(4) .btn:hover, .aha__trial.neutral-inverted .aha__player-small:nth-of-type(4) .banner:hover {
+.aha__trial.pink-players .aha__player-small:nth-of-type(1) .btn:hover,
+.aha__trial.pink-players .aha__player-small:nth-of-type(1) .banner:hover,
+.aha__trial.pink-players .aha__player-small:nth-of-type(2) .btn:hover,
+.aha__trial.pink-players .aha__player-small:nth-of-type(2) .banner:hover,
+.aha__trial.pink-players .aha__player-small:nth-of-type(3) .btn:hover,
+.aha__trial.pink-players .aha__player-small:nth-of-type(3) .banner:hover,
+.aha__trial.pink-players .aha__player-small:nth-of-type(4) .btn:hover,
+.aha__trial.pink-players .aha__player-small:nth-of-type(4) .banner:hover {
   background-color: #c720d2;
   color: white;
 }
-.aha__trial.neutral .aha__player-small:nth-of-type(4) .btn:focus, .aha__trial.neutral .aha__player-small:nth-of-type(4) .banner:focus, .aha__trial.neutral-inverted .aha__player-small:nth-of-type(4) .btn:focus, .aha__trial.neutral-inverted .aha__player-small:nth-of-type(4) .banner:focus {
+.aha__trial.pink-players .aha__player-small:nth-of-type(1) .btn:focus,
+.aha__trial.pink-players .aha__player-small:nth-of-type(1) .banner:focus,
+.aha__trial.pink-players .aha__player-small:nth-of-type(2) .btn:focus,
+.aha__trial.pink-players .aha__player-small:nth-of-type(2) .banner:focus,
+.aha__trial.pink-players .aha__player-small:nth-of-type(3) .btn:focus,
+.aha__trial.pink-players .aha__player-small:nth-of-type(3) .banner:focus,
+.aha__trial.pink-players .aha__player-small:nth-of-type(4) .btn:focus,
+.aha__trial.pink-players .aha__player-small:nth-of-type(4) .banner:focus {
   box-shadow: 0 0 0 0.2rem rgba(216, 67, 226, 0.5);
 }
-.aha__trial.neutral .aha__player-small:nth-of-type(4) .btn.border-outside, .aha__trial.neutral .aha__player-small:nth-of-type(4) .banner.border-outside, .aha__trial.neutral-inverted .aha__player-small:nth-of-type(4) .btn.border-outside, .aha__trial.neutral-inverted .aha__player-small:nth-of-type(4) .banner.border-outside {
+.aha__trial.pink-players .aha__player-small:nth-of-type(1) .btn.border-outside,
+.aha__trial.pink-players .aha__player-small:nth-of-type(1) .banner.border-outside,
+.aha__trial.pink-players .aha__player-small:nth-of-type(2) .btn.border-outside,
+.aha__trial.pink-players .aha__player-small:nth-of-type(2) .banner.border-outside,
+.aha__trial.pink-players .aha__player-small:nth-of-type(3) .btn.border-outside,
+.aha__trial.pink-players .aha__player-small:nth-of-type(3) .banner.border-outside,
+.aha__trial.pink-players .aha__player-small:nth-of-type(4) .btn.border-outside,
+.aha__trial.pink-players .aha__player-small:nth-of-type(4) .banner.border-outside {
   box-shadow: 0 0 0 0.2em rgba(216, 67, 226, 0.5);
 }
-.aha__trial.neutral .btn:nth-of-type(3), .aha__trial.neutral-inverted .btn:nth-of-type(3) {
+.aha__trial.neutral .aha__player-small:nth-of-type(1) .btn,
+.aha__trial.neutral .aha__player-small:nth-of-type(1) .banner {
+  background-color: #0cc7f1;
+  color: white;
+}
+.aha__trial.neutral .aha__player-small:nth-of-type(1) .btn:hover,
+.aha__trial.neutral .aha__player-small:nth-of-type(1) .banner:hover {
+  background-color: #0a9fc0;
+  color: white;
+}
+.aha__trial.neutral .aha__player-small:nth-of-type(1) .btn:focus,
+.aha__trial.neutral .aha__player-small:nth-of-type(1) .banner:focus {
+  box-shadow: 0 0 0 0.2rem rgba(12, 199, 241, 0.5);
+}
+.aha__trial.neutral .aha__player-small:nth-of-type(1) .btn.border-outside,
+.aha__trial.neutral .aha__player-small:nth-of-type(1) .banner.border-outside {
+  box-shadow: 0 0 0 0.2em rgba(12, 199, 241, 0.5);
+}
+.aha__trial.neutral .aha__player-small:nth-of-type(2) .btn,
+.aha__trial.neutral .aha__player-small:nth-of-type(2) .banner {
+  background-color: #ffb14c;
+  color: white;
+}
+.aha__trial.neutral .aha__player-small:nth-of-type(2) .btn:hover,
+.aha__trial.neutral .aha__player-small:nth-of-type(2) .banner:hover {
+  background-color: #ff9b19;
+  color: white;
+}
+.aha__trial.neutral .aha__player-small:nth-of-type(2) .btn:focus,
+.aha__trial.neutral .aha__player-small:nth-of-type(2) .banner:focus {
+  box-shadow: 0 0 0 0.2rem rgba(255, 177, 76, 0.5);
+}
+.aha__trial.neutral .aha__player-small:nth-of-type(2) .btn.border-outside,
+.aha__trial.neutral .aha__player-small:nth-of-type(2) .banner.border-outside {
+  box-shadow: 0 0 0 0.2em rgba(255, 177, 76, 0.5);
+}
+.aha__trial.neutral form .btn:nth-of-type(1) {
+  background-color: #0cc7f1;
+  color: white;
+}
+.aha__trial.neutral form .btn:nth-of-type(1):hover {
+  background-color: #0a9fc0;
+  color: white;
+}
+.aha__trial.neutral form .btn:nth-of-type(1):focus {
+  box-shadow: 0 0 0 0.2rem rgba(12, 199, 241, 0.5);
+}
+.aha__trial.neutral form .btn:nth-of-type(1).border-outside {
+  box-shadow: 0 0 0 0.2em rgba(12, 199, 241, 0.5);
+}
+.aha__trial.neutral form .btn:nth-of-type(2) {
+  background-color: #ffb14c;
+  color: white;
+}
+.aha__trial.neutral form .btn:nth-of-type(2):hover {
+  background-color: #ff9b19;
+  color: white;
+}
+.aha__trial.neutral form .btn:nth-of-type(2):focus {
+  box-shadow: 0 0 0 0.2rem rgba(255, 177, 76, 0.5);
+}
+.aha__trial.neutral form .btn:nth-of-type(2).border-outside {
+  box-shadow: 0 0 0 0.2em rgba(255, 177, 76, 0.5);
+}
+.aha__trial.neutral-inverted .aha__player-small:nth-of-type(1) .btn,
+.aha__trial.neutral-inverted .aha__player-small:nth-of-type(1) .banner {
+  background-color: #ffb14c;
+  color: white;
+}
+.aha__trial.neutral-inverted .aha__player-small:nth-of-type(1) .btn:hover,
+.aha__trial.neutral-inverted .aha__player-small:nth-of-type(1) .banner:hover {
+  background-color: #ff9b19;
+  color: white;
+}
+.aha__trial.neutral-inverted .aha__player-small:nth-of-type(1) .btn:focus,
+.aha__trial.neutral-inverted .aha__player-small:nth-of-type(1) .banner:focus {
+  box-shadow: 0 0 0 0.2rem rgba(255, 177, 76, 0.5);
+}
+.aha__trial.neutral-inverted .aha__player-small:nth-of-type(1) .btn.border-outside,
+.aha__trial.neutral-inverted .aha__player-small:nth-of-type(1) .banner.border-outside {
+  box-shadow: 0 0 0 0.2em rgba(255, 177, 76, 0.5);
+}
+.aha__trial.neutral-inverted .aha__player-small:nth-of-type(2) .btn,
+.aha__trial.neutral-inverted .aha__player-small:nth-of-type(2) .banner {
+  background-color: #0cc7f1;
+  color: white;
+}
+.aha__trial.neutral-inverted .aha__player-small:nth-of-type(2) .btn:hover,
+.aha__trial.neutral-inverted .aha__player-small:nth-of-type(2) .banner:hover {
+  background-color: #0a9fc0;
+  color: white;
+}
+.aha__trial.neutral-inverted .aha__player-small:nth-of-type(2) .btn:focus,
+.aha__trial.neutral-inverted .aha__player-small:nth-of-type(2) .banner:focus {
+  box-shadow: 0 0 0 0.2rem rgba(12, 199, 241, 0.5);
+}
+.aha__trial.neutral-inverted .aha__player-small:nth-of-type(2) .btn.border-outside,
+.aha__trial.neutral-inverted .aha__player-small:nth-of-type(2) .banner.border-outside {
+  box-shadow: 0 0 0 0.2em rgba(12, 199, 241, 0.5);
+}
+.aha__trial.neutral-inverted form .btn:nth-of-type(1) {
+  background-color: #ffb14c;
+  color: white;
+}
+.aha__trial.neutral-inverted form .btn:nth-of-type(1):hover {
+  background-color: #ff9b19;
+  color: white;
+}
+.aha__trial.neutral-inverted form .btn:nth-of-type(1):focus {
+  box-shadow: 0 0 0 0.2rem rgba(255, 177, 76, 0.5);
+}
+.aha__trial.neutral-inverted form .btn:nth-of-type(1).border-outside {
+  box-shadow: 0 0 0 0.2em rgba(255, 177, 76, 0.5);
+}
+.aha__trial.neutral-inverted form .btn:nth-of-type(2) {
+  background-color: #0cc7f1;
+  color: white;
+}
+.aha__trial.neutral-inverted form .btn:nth-of-type(2):hover {
+  background-color: #0a9fc0;
+  color: white;
+}
+.aha__trial.neutral-inverted form .btn:nth-of-type(2):focus {
+  box-shadow: 0 0 0 0.2rem rgba(12, 199, 241, 0.5);
+}
+.aha__trial.neutral-inverted form .btn:nth-of-type(2).border-outside {
+  box-shadow: 0 0 0 0.2em rgba(12, 199, 241, 0.5);
+}
+.aha__trial.neutral .aha__player-small:nth-of-type(3) .btn,
+.aha__trial.neutral .aha__player-small:nth-of-type(3) .banner, .aha__trial.neutral-inverted .aha__player-small:nth-of-type(3) .btn,
+.aha__trial.neutral-inverted .aha__player-small:nth-of-type(3) .banner {
   background-color: #39d7b8;
   color: white;
 }
-.aha__trial.neutral .btn:nth-of-type(3):hover, .aha__trial.neutral-inverted .btn:nth-of-type(3):hover {
+.aha__trial.neutral .aha__player-small:nth-of-type(3) .btn:hover,
+.aha__trial.neutral .aha__player-small:nth-of-type(3) .banner:hover, .aha__trial.neutral-inverted .aha__player-small:nth-of-type(3) .btn:hover,
+.aha__trial.neutral-inverted .aha__player-small:nth-of-type(3) .banner:hover {
   background-color: #25b89b;
   color: white;
 }
-.aha__trial.neutral .btn:nth-of-type(3):focus, .aha__trial.neutral-inverted .btn:nth-of-type(3):focus {
+.aha__trial.neutral .aha__player-small:nth-of-type(3) .btn:focus,
+.aha__trial.neutral .aha__player-small:nth-of-type(3) .banner:focus, .aha__trial.neutral-inverted .aha__player-small:nth-of-type(3) .btn:focus,
+.aha__trial.neutral-inverted .aha__player-small:nth-of-type(3) .banner:focus {
   box-shadow: 0 0 0 0.2rem rgba(57, 215, 184, 0.5);
 }
-.aha__trial.neutral .btn:nth-of-type(3).border-outside, .aha__trial.neutral-inverted .btn:nth-of-type(3).border-outside {
+.aha__trial.neutral .aha__player-small:nth-of-type(3) .btn.border-outside,
+.aha__trial.neutral .aha__player-small:nth-of-type(3) .banner.border-outside, .aha__trial.neutral-inverted .aha__player-small:nth-of-type(3) .btn.border-outside,
+.aha__trial.neutral-inverted .aha__player-small:nth-of-type(3) .banner.border-outside {
   box-shadow: 0 0 0 0.2em rgba(57, 215, 184, 0.5);
 }
-.aha__trial.neutral .btn:nth-of-type(3), .aha__trial.neutral-inverted .btn:nth-of-type(3) {
+.aha__trial.neutral .aha__player-small:nth-of-type(4) .btn,
+.aha__trial.neutral .aha__player-small:nth-of-type(4) .banner, .aha__trial.neutral-inverted .aha__player-small:nth-of-type(4) .btn,
+.aha__trial.neutral-inverted .aha__player-small:nth-of-type(4) .banner {
   background-color: #d843e2;
   color: white;
 }
-.aha__trial.neutral .btn:nth-of-type(3):hover, .aha__trial.neutral-inverted .btn:nth-of-type(3):hover {
+.aha__trial.neutral .aha__player-small:nth-of-type(4) .btn:hover,
+.aha__trial.neutral .aha__player-small:nth-of-type(4) .banner:hover, .aha__trial.neutral-inverted .aha__player-small:nth-of-type(4) .btn:hover,
+.aha__trial.neutral-inverted .aha__player-small:nth-of-type(4) .banner:hover {
   background-color: #c720d2;
   color: white;
 }
-.aha__trial.neutral .btn:nth-of-type(3):focus, .aha__trial.neutral-inverted .btn:nth-of-type(3):focus {
+.aha__trial.neutral .aha__player-small:nth-of-type(4) .btn:focus,
+.aha__trial.neutral .aha__player-small:nth-of-type(4) .banner:focus, .aha__trial.neutral-inverted .aha__player-small:nth-of-type(4) .btn:focus,
+.aha__trial.neutral-inverted .aha__player-small:nth-of-type(4) .banner:focus {
   box-shadow: 0 0 0 0.2rem rgba(216, 67, 226, 0.5);
 }
-.aha__trial.neutral .btn:nth-of-type(3).border-outside, .aha__trial.neutral-inverted .btn:nth-of-type(3).border-outside {
+.aha__trial.neutral .aha__player-small:nth-of-type(4) .btn.border-outside,
+.aha__trial.neutral .aha__player-small:nth-of-type(4) .banner.border-outside, .aha__trial.neutral-inverted .aha__player-small:nth-of-type(4) .btn.border-outside,
+.aha__trial.neutral-inverted .aha__player-small:nth-of-type(4) .banner.border-outside {
+  box-shadow: 0 0 0 0.2em rgba(216, 67, 226, 0.5);
+}
+.aha__trial.neutral form .btn:nth-of-type(3), .aha__trial.neutral-inverted form .btn:nth-of-type(3) {
+  background-color: #39d7b8;
+  color: white;
+}
+.aha__trial.neutral form .btn:nth-of-type(3):hover, .aha__trial.neutral-inverted form .btn:nth-of-type(3):hover {
+  background-color: #25b89b;
+  color: white;
+}
+.aha__trial.neutral form .btn:nth-of-type(3):focus, .aha__trial.neutral-inverted form .btn:nth-of-type(3):focus {
+  box-shadow: 0 0 0 0.2rem rgba(57, 215, 184, 0.5);
+}
+.aha__trial.neutral form .btn:nth-of-type(3).border-outside, .aha__trial.neutral-inverted form .btn:nth-of-type(3).border-outside {
+  box-shadow: 0 0 0 0.2em rgba(57, 215, 184, 0.5);
+}
+.aha__trial.neutral form .btn:nth-of-type(3), .aha__trial.neutral-inverted form .btn:nth-of-type(3) {
+  background-color: #d843e2;
+  color: white;
+}
+.aha__trial.neutral form .btn:nth-of-type(3):hover, .aha__trial.neutral-inverted form .btn:nth-of-type(3):hover {
+  background-color: #c720d2;
+  color: white;
+}
+.aha__trial.neutral form .btn:nth-of-type(3):focus, .aha__trial.neutral-inverted form .btn:nth-of-type(3):focus {
+  box-shadow: 0 0 0 0.2rem rgba(216, 67, 226, 0.5);
+}
+.aha__trial.neutral form .btn:nth-of-type(3).border-outside, .aha__trial.neutral-inverted form .btn:nth-of-type(3).border-outside {
   box-shadow: 0 0 0 0.2em rgba(216, 67, 226, 0.5);
 }
 
