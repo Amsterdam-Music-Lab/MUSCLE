@@ -32,12 +32,13 @@ class Explainer(object):
 
 class Step(object):
 
-    def __init__(self, description):
+    def __init__(self, description, number=None):
         self.description = description
+        self.number = number;
 
     def action(self, number=None):
         """Create an explainer step, with description and optional number"""
         return {
-            'number': number,
+            'number': self.number if self.number else number,
             'description': self.description
         }
