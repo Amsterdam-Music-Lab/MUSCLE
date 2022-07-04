@@ -105,7 +105,7 @@ class ToontjeHoger6Relative(Base):
 
         # Player
         play_config = {
-            'label_style': 'ALPHABETIC',
+            'label_style': '',
         }
         playback = Playback([section, section2], player_type=Playback.TYPE_MULTIPLAYER, play_config=play_config)
 
@@ -215,7 +215,7 @@ class ToontjeHoger6Relative(Base):
         playback = Playback([section, section2, section3, section4], player_type=Playback.TYPE_MULTIPLAYER, play_config=play_config)
 
         # Trial
-        trial_config = {'style': 'neutral blue-players'}
+        trial_config = {'style': 'neutral'}
 
         trial = Trial(
             config=trial_config,
