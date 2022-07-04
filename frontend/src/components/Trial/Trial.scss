@@ -6,7 +6,7 @@
         font-size: 80px;
     }
 
-    .stationary{
+    .stationary {
         margin-top: 20px;
     }
 
@@ -25,77 +25,137 @@
         position: absolute;
     }
 
-    &.boolean {
-        .btn:nth-of-type(1) {
-            @include btn-style($green);
-        }
-        .btn:nth-of-type(2) {
-            @include btn-style($red);
-        }
-    }
-
     // Color schemes
     // ------------------------
-    
-    &.neutral {
-        .aha__player-small:nth-of-type(1) {
-            .btn, .banner {
-                @include btn-style($blue);
-            }
-        }
-        .aha__player-small:nth-of-type(2) {
-            .btn, .banner {
-                @include btn-style($yellow);
-            }
-        }
-       
 
-        .btn:nth-of-type(1) {
-            @include btn-style($blue);
-        }
-        .btn:nth-of-type(2) {
-            @include btn-style($yellow);
-        }
-    }
-    &.neutral-inverted {
+    &.boolean {
         .aha__player-small:nth-of-type(1) {
-            .btn, .banner {
+            .btn,
+            .banner {
                 @include btn-style($yellow);
             }
         }
         .aha__player-small:nth-of-type(2) {
-            .btn, .banner {
+            .btn,
+            .banner {
                 @include btn-style($blue);
             }
         }
-
-        .btn:nth-of-type(1) {
-            @include btn-style($yellow);
-        }
-        .btn:nth-of-type(2) {
-            @include btn-style($blue);
-        }
-    }
-
-    &.neutral, &.neutral-inverted {
         .aha__player-small:nth-of-type(3) {
-            .btn, .banner {
+            .btn,
+            .banner {
                 @include btn-style($teal);
             }
-        }        
+        }
         .aha__player-small:nth-of-type(4) {
-            .btn, .banner {
+            .btn,
+            .banner {
                 @include btn-style($pink);
             }
         }
 
-        .btn:nth-of-type(3) {
-            @include btn-style($teal);
-        }
-        .btn:nth-of-type(3) {
-            @include btn-style($pink);
+        form {
+            .btn:nth-of-type(1) {
+                @include btn-style($teal);
+            }
+            .btn:nth-of-type(2) {
+                @include btn-style($red);
+            }
         }
     }
 
+    &.blue-players {
+        .aha__player-small:nth-of-type(1),
+        .aha__player-small:nth-of-type(2),
+        .aha__player-small:nth-of-type(3),
+        .aha__player-small:nth-of-type(4) {
+            .btn,
+            .banner {
+                @include btn-style($blue);
+            }
+        }
+    }
 
+    &.pink-players {
+        .aha__player-small:nth-of-type(1),
+        .aha__player-small:nth-of-type(2),
+        .aha__player-small:nth-of-type(3),
+        .aha__player-small:nth-of-type(4) {
+            .btn,
+            .banner {
+                @include btn-style($pink);
+            }
+        }
+    }
+
+    &.neutral {
+        .aha__player-small:nth-of-type(1) {
+            .btn,
+            .banner {
+                @include btn-style($blue);
+            }
+        }
+        .aha__player-small:nth-of-type(2) {
+            .btn,
+            .banner {
+                @include btn-style($yellow);
+            }
+        }
+
+        form {
+            .btn:nth-of-type(1) {
+                @include btn-style($blue);
+            }
+            .btn:nth-of-type(2) {
+                @include btn-style($yellow);
+            }
+        }
+    }
+
+    &.neutral-inverted {
+        .aha__player-small:nth-of-type(1) {
+            .btn,
+            .banner {
+                @include btn-style($yellow);
+            }
+        }
+        .aha__player-small:nth-of-type(2) {
+            .btn,
+            .banner {
+                @include btn-style($blue);
+            }
+        }
+        form {
+            .btn:nth-of-type(1) {
+                @include btn-style($yellow);
+            }
+            .btn:nth-of-type(2) {
+                @include btn-style($blue);
+            }
+        }
+    }
+
+    &.neutral,
+    &.neutral-inverted {
+        .aha__player-small:nth-of-type(3) {
+            .btn,
+            .banner {
+                @include btn-style($teal);
+            }
+        }
+        .aha__player-small:nth-of-type(4) {
+            .btn,
+            .banner {
+                @include btn-style($pink);
+            }
+        }
+        form {
+            .btn:nth-of-type(3) {
+                @include btn-style($teal);
+            }
+            .btn:nth-of-type(3) {
+                @include btn-style($pink);
+            }
+        }
+    }
 }
