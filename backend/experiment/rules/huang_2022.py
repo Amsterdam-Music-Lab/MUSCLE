@@ -292,6 +292,7 @@ class Huang2022(Base):
             section = session.section_from_any_song()
         playback = Playback([section])
         expected_result = int(this_section_info.get('novelty')=='old')
+        print(expected_result)
         # create Result object and save expected result to database
         result_pk = cls.prepare_result(session, section, expected_result)
         form = Form([BooleanQuestion(
@@ -299,9 +300,11 @@ class Huang2022(Base):
             question=_("Did you hear this song in previous rounds?"),
             result_id=result_pk,
             submits=True)])
+        config = {'style': 'boolean-negative-first'}
         trial = Trial(
             playback=playback,
             feedback_form=form,
+            config=config,
         )
         return trial.action()
 

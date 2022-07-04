@@ -140,8 +140,9 @@ def next_trial_actions(session, round_number, request_session):
         # practice: add feedback on previous result
         previous_results = session.result_set.order_by('-created_at')
         if previous_results.count():
+            same = previous_results.first().expected_response == 'SAME'
             actions.append(
-                response_explainer(previous_results.first().score, plan[round_number-2]['group'])
+                response_explainer(previous_results.first().score, same)
             )
         if round_number == 5:
             total_score = sum([res.score for res in previous_results.all()[:4]])

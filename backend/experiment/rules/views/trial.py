@@ -44,8 +44,9 @@ class Trial(object):  # pylint: disable=too-few-public-methods
             'decision_time': 5,
             'auto_advance': False,
             'listen_first': False,
+            'show_continue_button': True,
             'continue_label': _('Continue'),
-            'style': 'neutral'
+            'style': 'neutral',
         }
         if config:
             self.config.update(config)

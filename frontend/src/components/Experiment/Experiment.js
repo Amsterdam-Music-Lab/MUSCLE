@@ -80,7 +80,7 @@ const Experiment = ({ match }) => {
 
     // Load next round, stored in nextRound
     const onNext = async () => {
-        if (state && state.next_round.length) {
+        if (state.next_round && state.next_round.length) {
             loadState(stateNextRound(state));
         } else {
             console.log("No next-round data available");
