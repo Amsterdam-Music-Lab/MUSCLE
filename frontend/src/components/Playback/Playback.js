@@ -18,7 +18,7 @@ const Playback = ({ playerType, sections, instruction, onPreloadReady, preloadMe
     // Preload first section
     useEffect(()=>{
         return audio.loadUntilAvailable(MEDIA_ROOT + sections[0].url, () => {});
-    },[])
+    },[sections])
 
     // Play section with given index
     const playSection = (index = 0) => {
