@@ -6,5 +6,5 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - run: echo "SUCCESS"
-      - run: ls -l
+      - run: docker-compose up -d --env-file ./.env
       
