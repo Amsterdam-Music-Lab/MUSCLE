@@ -1,23 +1,20 @@
 import React, { useState, useEffect, useCallback } from "react";
-import {
-    useExperiment,
-    useParticipant,
-    getNextRound,
-} from "../../API";
+import { useExperiment, useParticipant, getNextRound } from "../../API";
 import { TransitionGroup, CSSTransition } from "react-transition-group";
 import { withRouter } from "react-router-dom";
 
-import Trial from '../Trial/Trial';
-import CustomTrial from "../CustomTrial/CustomTrial";
-import DefaultPage from "../Page/DefaultPage";
-import Loading from "../Loading/Loading";
-import Explainer from "../Explainer/Explainer";
 import Consent from "../Consent/Consent";
-import Playlist from "../Playlist/Playlist";
-import StartSession from "../StartSession/StartSession";
-import Score from "../Score/Score";
-import FinalScore from "../FinalScore/FinalScore";
+import DefaultPage from "../Page/DefaultPage";
+import Explainer from "../Explainer/Explainer";
 import Final from "../Final/Final";
+import FinalScore from "../FinalScore/FinalScore";
+import Loading from "../Loading/Loading";
+import Playlist from "../Playlist/Playlist";
+import Score from "../Score/Score";
+import SongSync from "../SongSync/SongSync";
+import StartSession from "../StartSession/StartSession";
+import Trial from "../Trial/Trial";
+import useResultHandler from "../../hooks/useResultHandler";
 
 // Experiment handles the main experiment flow:
 // - Loads the experiment and participant
@@ -35,8 +32,8 @@ const Experiment = ({ match }) => {
     const [experiment, loadingExperiment] = useExperiment(match.params.slug);
     const [participant, loadingParticipant] = useParticipant();
 
-    const loadingText = experiment ? experiment.loading_text : '';
-    const className = experiment ? experiment.class_name : '';
+    const loadingText = experiment ? experiment.loading_text : "";
+    const className = experiment ? experiment.class_name : "";
 
     // Load state, set random key
     const loadState = useCallback((state) => {
@@ -60,8 +57,9 @@ const Experiment = ({ match }) => {
             if (experiment && participant) {
                 if (experiment.next_round) {
                     loadState(experiment.next_round);
+                } else {
+                    loadState(experiment.first_round);
                 }
-                else loadState(experiment.first_round);
             } else {
                 // Loading error
                 setError("Could not load experiment");
@@ -98,6 +96,14 @@ const Experiment = ({ match }) => {
         }
     };
 
+    const onResult = useResultHandler({
+        session,
+        participant,
+        loadState,
+        onNext,
+        state,
+    });
+
     // Render experiment state
     const render = (view) => {
         // Default attributes for every view
@@ -111,33 +117,26 @@ const Experiment = ({ match }) => {
             setPlaylist,
             setError,
             setSession,
+            onResult,
             onNext,
             ...state,
         };
 
         // Show view, based on the unique view ID:
         switch (view) {
-            case "LOADING":
-                return <Loading {...attrs} />;
-            case "ERROR":
-                return <div>Error: {state.error}</div>;
+            // Experiment views
+            // -------------------------
+            case "TRIAL_VIEW":
+                return <Trial {...attrs} />;
+            case "SONG_SYNC":
+                return <SongSync {...attrs} />;
+
+            // Information & Scoring
+            // -------------------------
             case "EXPLAINER":
                 return <Explainer {...attrs} />;
-            case "CONSENT":
-                return <Consent {...attrs} />;
-            case "PLAYLIST":
-                return <Playlist {...attrs} />;
-            case "START_SESSION":
-                return <StartSession {...attrs} />;
-            case "TRIAL_VIEW":
-                return <Trial {...attrs} />
             case "SCORE":
-                    return <Score {...attrs} />;
-            // Custom Trial
-            case "SONG_SYNC":
-            // case "MY_CUSTOM_VIEW":
-                return <CustomTrial state={state} {...attrs} />;
-                    
+                return <Score {...attrs} />;
             case "FINAL_SCORE":
                 return (
                     <FinalScore
@@ -149,9 +148,21 @@ const Experiment = ({ match }) => {
                     />
                 );
             case "FINAL":
-                return (
-                    <Final {...attrs} />
-                );
+                return <Final {...attrs} />;
+
+            // Generic / helpers
+            // -------------------------
+            case "PLAYLIST":
+                return <Playlist {...attrs} />;
+            case "START_SESSION":
+                return <StartSession {...attrs} />;
+            case "LOADING":
+                return <Loading {...attrs} />;
+            case "ERROR":
+                return <div>Error: {state.error}</div>;
+            case "CONSENT":
+                return <Consent {...attrs} />;
+
             default:
                 return (
                     <div className="text-white bg-danger">
@@ -195,7 +206,5 @@ const Experiment = ({ match }) => {
         </TransitionGroup>
     );
 };
-
-
 
 export default withRouter(Experiment);
