@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from "react";
 import { useExperiment, useParticipant, getNextRound } from "../../API";
 import { TransitionGroup, CSSTransition } from "react-transition-group";
 import { withRouter } from "react-router-dom";
+import { stateNextRound } from "../../util/nextRound";
 
 import Consent from "../Consent/Consent";
 import DefaultPage from "../Page/DefaultPage";
@@ -49,18 +50,13 @@ const Experiment = ({ match }) => {
         [loadState]
     );
 
-    function stateNextRound(state) {
-        let newState = state.next_round.shift();
-        newState.next_round = state.next_round;
-        return newState;
-    }
-
     // Start first_round when experiment and partipant have been loaded
     useEffect(() => {
         // Check if done loading
         if (!loadingExperiment && !loadingParticipant) {
             // Loading succeeded
             if (experiment && participant) {
+                console.log(experiment);
                 loadState(stateNextRound(experiment));
             } else {
                 // Loading error
@@ -73,12 +69,14 @@ const Experiment = ({ match }) => {
         participant,
         loadingParticipant,
         setError,
-        loadState,
+        loadState
     ]);
 
     // Load next round, stored in nextRound
     const onNext = async () => {
+        console.log(state);
         if (state.next_round && state.next_round.length) {
+            console.log(state);
             loadState(stateNextRound(state));
         } else {
             console.log("No next-round data available");
@@ -120,11 +118,11 @@ const Experiment = ({ match }) => {
             setError,
             setSession,
             onResult,
-            onNext,
-            stateNextRound,
+            onNext,            
             ...state,
         };
 
+        console.log(view, attrs);
         // Show view, based on the unique view ID:
         switch (view) {
             // Experiment views
