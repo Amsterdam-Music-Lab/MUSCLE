@@ -33,7 +33,7 @@ def get(request, slug):
                 'playlist': session.playlist.id,
                 'json_data': session.load_json_data(),
             },
-            'next_round': session.experiment_rules().next_round(session)
+            'next_round': [session.experiment_rules().next_round(session)]
         }
         return JsonResponse(data, json_dumps_params={'indent': 4})
 
@@ -55,7 +55,7 @@ def get(request, slug):
             {'id': playlist.id, 'name': playlist.name}
             for playlist in experiment.playlists.all()
         ],
-        'first_round': experiment.get_rules().first_round(experiment),
+        'next_round': experiment.get_rules().first_round(experiment),
         'loading_text': _('Loading')
     }
 

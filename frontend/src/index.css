@@ -1537,6 +1537,9 @@ h3.title:after {
   font-size: 22px;
   line-height: 30px;
 }
+.aha__score .score .content span {
+  font-size: 80px;
+}
 .aha__score .total-score {
   color: white;
   margin-bottom: 0;

@@ -1,6 +1,6 @@
 from .views.playback import Playback
 from .views.form import Form, Question
-from .views import Consent, StartSession, TwoAlternativeForced
+from .views import Consent, Score, StartSession, TwoAlternativeForced
 
 from .util.actions import combine_actions
 
@@ -14,22 +14,25 @@ class Categorization(Base):
         consent = Consent.action()
         start_session = StartSession.action()
         cls.plan_experiment()
-        return combine_actions(
+        return [
             consent,
             start_session
-        )
+        ]
 
     @classmethod
     def next_round(cls, session):
-        # logic for retrieving sections
-        # for now: get first 2 sections
-        section = session.playlist.section_set.all()[0]
-        # retrieve expected response from json_data
-        # for now: set it arbitrarily to "up"
-        result_pk = Base.prepare_result(session, section, 'up')
-        choices = {'A': 'A', 'B': 'B'}
-        view = TwoAlternativeForced(section, choices, result_pk)
-        return view.action()
+        if session.get_next_round()==0:
+            # logic for retrieving sections
+            # for now: get first 2 sections
+            section = session.playlist.section_set.all()[0]
+            # retrieve expected response from json_data
+            # for now: set it arbitrarily to "up"
+            result_pk = Base.prepare_result(session, section, 'up')
+            choices = {'A': 'A', 'B': 'B'}
+            view = TwoAlternativeForced(section, choices, result_pk)
+            return view.action()
+        else:
+            return cls.get_trial_with_feedback(session)
 
     @classmethod
     def plan_experiment(cls):
@@ -39,6 +42,11 @@ class Categorization(Base):
         pass
 
     def get_trial_with_feedback(session):
-        explainer = Explainer()
-        trial = Trial()
-        return combine_actions(explainer, trial)
+        score = Score(session, icon='ti-face-smile', timer=5).action()
+        section = session.playlist.section_set.all()[0]
+        # retrieve expected response from json_data
+        # for now: set it arbitrarily to "up"
+        result_pk = Base.prepare_result(session, section, 'up')
+        choices = {'A': 'A', 'B': 'B'}
+        trial = TwoAlternativeForced(section, choices, result_pk).action()
+        return combine_actions(score, trial)
