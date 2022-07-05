@@ -49,6 +49,7 @@ class RangeQuestion(Question):
         self.min_value = min_value
         self.max_value = max_value
 
+        
 class LikertQuestion(Question):
     def __init__(self, scale_steps=7, likert_view='TEXT_RANGE', **kwargs):
         super().__init__(**kwargs)
