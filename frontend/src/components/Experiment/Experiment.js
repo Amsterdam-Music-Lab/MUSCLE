@@ -16,7 +16,6 @@ import Playlist from "../Playlist/Playlist";
 import StartSession from "../StartSession/StartSession";
 import SongSync from "../SongSync/SongSync";
 import Score from "../Score/Score";
-import FinalScore from "../FinalScore/FinalScore";
 import Final from "../Final/Final";
 
 // Experiment handles the main experiment flow:
@@ -139,16 +138,6 @@ const Experiment = ({ match }) => {
                 return <Score {...attrs} />;
             case "TRIAL_VIEW":
                 return <Trial {...attrs} />
-            case "FINAL_SCORE":
-                return (
-                    <FinalScore
-                        {...attrs}
-                        onNext={() => {
-                            setSession(null);
-                            loadState(stateNextRound(experiment));
-                        }}
-                    />
-                );
             case "FINAL":
                 return (
                     <Final {...attrs} />
