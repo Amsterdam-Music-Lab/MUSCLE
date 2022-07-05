@@ -35,12 +35,12 @@ class Demo(Base):
         # 4. Start session
         start_session = StartSession.action()
 
-        return combine_actions(
+        return [
             explainer,
             consent,
             playlist,
             start_session
-        )
+        ]
 
     @staticmethod
     def next_round(session):

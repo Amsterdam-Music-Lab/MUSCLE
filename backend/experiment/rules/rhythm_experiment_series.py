@@ -44,11 +44,11 @@ class RhythmExperimentSeries(Base):
         consent = Consent.action(rendered, title=_(
             'Informed consent'), confirm=_('I agree'), deny=_('Stop'))
         start_session = StartSession.action()
-        return combine_actions(
+        return [
             consent,
             cls.intro_explainer(),
             start_session
-        )
+        ]
 
     @classmethod
     def next_round(cls, session):

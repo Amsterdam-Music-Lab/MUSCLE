@@ -43,12 +43,12 @@ class Speech2Song(Base):
 
         start_session = StartSession.action()
 
-        return combine_actions(
+        return [
             explainer,
             consent,
             playlist,
             start_session
-        )
+        ]
 
     @staticmethod
     def next_round(session):

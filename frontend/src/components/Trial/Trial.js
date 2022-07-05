@@ -108,13 +108,13 @@ const Trial = ({ participant, session, playback, feedback_form, config, onNext, 
         submitted.current = true;
 
         const decision_time = getTimeSince(startTime.current);
-        const form = feedback_form.form;
+        const form = feedback_form ? feedback_form.form : [new Object()];
 
         if (result.type === 'time_passed') {
             form.map( formElement => formElement.value = 'TIMEOUT')
         }
 
-        if (feedback_form.is_profile) {
+        if (feedback_form && feedback_form.is_profile) {
             submitProfile({
                 form
             })
@@ -154,12 +154,13 @@ const Trial = ({ participant, session, playback, feedback_form, config, onNext, 
                 onResult={makeResult}
                 emphasizeTitle={!playback}
             />)}
-            {preloadReady && !feedback_form && (
+            {preloadReady && !feedback_form && config.show_continue_button && (
                 <div className="text-center">
                     <Button
                         title={config.continue_label}
                         className={"btn-primary anim anim-fade-in anim-speed-500"}
                         onClick={onNext}
+                        active={formActive}
                     />
                 </div>
             )}

@@ -7,18 +7,10 @@ from django.template.loader import render_to_string
 from experiment.rules.views import Final
 
 def combine_actions(*argv):
-    """Combine actions, make them next_round of each predecessor"""
-    last = None
-    for action in reversed(argv):
-        # Skip empty actions
-        if not action:
-            continue
-        if last:
-            action['next_round'] = last
-        last = action
-
-    # Action stored in last is actually the first action
-    return last
+    """Return the first action with the rest of the actions as an array under key 'next_round'"""
+    actions = argv[0]
+    actions['next_round'] = argv[1:]
+    return actions
 
 def final_action_with_optional_button(session, final_text, request_session):
     """ given a session, a score message and an optional session dictionary from an experiment series,

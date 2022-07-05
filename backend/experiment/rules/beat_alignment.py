@@ -62,12 +62,12 @@ class BeatAlignment(Base):
 
         # 5. Start session
         start_session = StartSession.action()
-        return combine_actions(
+        return [
             explainer,
             consent,
             *practice_rounds,
             start_session
-        )
+        ]
 
 
     @classmethod
@@ -104,7 +104,7 @@ class BeatAlignment(Base):
         else:
             presentation_text = _(
                 "In this example the beeps are NOT ALIGNED TO THE BEAT of the music.")
-        playback = Playback([section], 
+        playback = Playback([section],
             instruction=presentation_text,
             preload_message=presentation_text,
         )
@@ -114,7 +114,9 @@ class BeatAlignment(Base):
             title=_('Example {}').format(count),
             config={
                 'decision_time': section.duration + .1,
-                'listen_first': True, 'auto_advance': True}
+                'listen_first': True, 'auto_advance': True,
+                'show_continue_button': False
+            }
         )
         return view.action()
 
