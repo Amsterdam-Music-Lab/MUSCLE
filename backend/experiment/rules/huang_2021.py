@@ -69,13 +69,13 @@ class Huang2021(Base):
         # 4. Start session.
         start_session = StartSession.action()
 
-        return combine_actions(
+        return [
             explainer,
             consent,
             explainer_devices,
             playlist,
             start_session
-        )
+        ]
 
     @staticmethod
     def plan_sections(session):

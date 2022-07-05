@@ -44,7 +44,7 @@ class BST(HBat):
         level can be 1 (? dB difference) or higher (smaller differences)
         """
         try:
-            section = session.playlist.section_set.filter(group_id=level).get(tag_id=trial_condition)
+            section = session.playlist.section_set.filter(group=str(level)).get(tag=str(trial_condition))
         except Section.DoesNotExist:
             return None
         expected_result = 'in2' if trial_condition else 'in3'
@@ -62,15 +62,15 @@ class BST(HBat):
             result_id=result_pk,
             submits=True
         )
-        play_config = {
-            'decision_time': section.duration + .5
-        }
-        playback = Playback('AUTOPLAY', [section], play_config=play_config)
+        playback = Playback([section])
         form = Form([question])
         view = Trial(
             playback=playback,
             feedback_form=form,
-            title=_('Meter detection')
+            title=_('Meter detection'),
+            config={
+                'decision_time': section.duration + .5
+            }
         )
         return view.action()
 

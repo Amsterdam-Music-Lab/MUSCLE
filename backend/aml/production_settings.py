@@ -6,6 +6,8 @@ from aml.base_settings import *
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
+STATIC_URL = '/django_static/'
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
@@ -16,6 +18,11 @@ DATABASES = {
         'PORT': os.getenv('SQL_PORT'),
     }
 }
+
+SESSION_COOKIE_SAMESITE = 'None'
+CSRF_COOKIE_SAMESITE = 'None'
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
 
 LOGGING = {
     'version': 1,
@@ -52,3 +59,5 @@ LOGGING = {
         }
     }
 }
+
+RELOAD_PARTICIPANT_TARGET = 'http://app.amsterdammusiclab.nl/rhythm_mri'

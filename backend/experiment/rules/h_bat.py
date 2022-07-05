@@ -19,6 +19,8 @@ logger = logging.getLogger(__name__)
 MAX_TURNPOINTS = 6
 
 class HBat(Base):
+    """ section.group (and possibly section.tag) must be convertable to int"""
+
     ID = 'H_BAT'
     start_diff = 20
 
@@ -63,13 +65,13 @@ class HBat(Base):
         explainer2 = practice_explainer().action()
         playlist = Playlist.action(experiment.playlists.all())
         start_session = StartSession.action()
-        return combine_actions(
+        return [
             explainer,
             consent,
             explainer2,
             playlist,
             start_session
-        )
+        ]
 
     @staticmethod
     def calculate_score(result, form_element, data):
@@ -93,7 +95,7 @@ class HBat(Base):
         level can be 1 (20 ms) or higher (10, 5, 2.5 ms...)
         """
         try:
-            section = session.playlist.section_set.filter(group_id=level).get(tag_id=trial_condition)
+            section = session.playlist.section_set.filter(group=str(level)).get(tag=str(trial_condition))
         except Section.DoesNotExist:
             return None
         expected_result = 'SLOWER' if trial_condition else 'FASTER'
@@ -111,15 +113,15 @@ class HBat(Base):
             result_id=result_pk,
             submits=True
         )
-        play_config = {
-            'decision_time': section.duration + .5
-        }
-        playback = Playback('AUTOPLAY', [section], play_config=play_config)
+        playback = Playback([section])
         form = Form([question])
         view = Trial(
             playback=playback,
             feedback_form=form,
-            title=_('Beat acceleration')
+            title=_('Beat acceleration'),
+            config={
+                'decision_time': section.duration + .5
+            }
         )
         return view.action()
 
@@ -156,10 +158,10 @@ class HBat(Base):
             else:
                 if slower:
                     instruction = _(
-                        'The rhythm went FASTER. Your response was INCORRECT.')
+                        'The rhythm went SLOWER. Your response was INCORRECT.')
                 else:
                     instruction = _(
-                        'The rhythm went SLOWER. Your response was INCORRECT.')
+                        'The rhythm went FASTER. Your response was INCORRECT.')
             return Explainer(
                 instruction=instruction,
                 steps=[],
@@ -189,10 +191,10 @@ class HBat(Base):
 
 def get_previous_condition(previous_result):
     """ check if previous section was slower / in 2 (1) or faster / in 3 (0) """
-    return previous_result.section.tag_id
+    return int(previous_result.section.tag)
 
 def get_previous_level(previous_result):
-    return previous_result.section.group_id
+    return int(previous_result.section.group)
 
 def staircasing(session, trial_action_callback):
     trial_condition = get_trial_condition(2)

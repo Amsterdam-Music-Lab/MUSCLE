@@ -1,9 +1,9 @@
-import React, { useRef } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 import DefaultPage from "../Page/DefaultPage";
 import Loading from "../Loading/Loading";
 import Rank from "../Rank/Rank";
-import { useParticipantScores, useParticipantLink } from "../../API";
+import { useParticipantScores } from "../../API";
 import { URLS } from "../../config";
 import ParticipantLink from "../ParticipantLink/ParticipantLink";
 
@@ -11,22 +11,6 @@ import ParticipantLink from "../ParticipantLink/ParticipantLink";
 const Profile = () => {
     // API hooks
     const [data, loadingData] = useParticipantScores();
-    const linkInput = useRef();
-
-    const copyLink = () => {
-        if (!linkInput.current) {
-            return;
-        }
-
-        // Select text
-        linkInput.current.select();
-
-        // For mobile
-        linkInput.current.setSelectionRange(0, 99999);
-
-        // Copy
-        document.execCommand("copy");
-    };
 
     // View
     let view = null;

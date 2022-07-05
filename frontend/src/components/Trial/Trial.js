@@ -1,11 +1,11 @@
 import React, { useState, useRef } from "react";
+import classNames from "classnames";
 
 import { getCurrentTime, getTimeSince } from "../../util/time";
 import { createProfile, createResult } from "../../API.js";
 import FeedbackForm from "../FeedbackForm/FeedbackForm";
 import Playback from "../Playback/Playback";
 import Button from "../Button/Button";
-import classNames from "classnames";
 
 // Trial is an experiment view, that preloads a song, shows an explanation and plays audio
 // Optionally, it can show an animation during playback
@@ -28,9 +28,12 @@ const Trial = ({ participant, session, playback, feedback_form, config, onNext, 
         startTime.current = getCurrentTime();
     }
 
-    const getNextAction = () => {
+    const finishedPlaying = () => {
         if (config.auto_advance) {
-            onNext();
+        // Create a time_passed result
+            makeResult({
+                type: "time_passed"
+            });
         }
         setFormActive(true);
         return;
@@ -104,13 +107,13 @@ const Trial = ({ participant, session, playback, feedback_form, config, onNext, 
         submitted.current = true;
 
         const decision_time = getTimeSince(startTime.current);
-        const form = feedback_form.form;
+        const form = feedback_form ? feedback_form.form : [new Object()];
 
         if (result.type === 'time_passed') {
             form.map( formElement => formElement.value = 'TIMEOUT')
         }
 
-        if (feedback_form.is_profile) {
+        if (feedback_form && feedback_form.is_profile) {
             submitProfile({
                 form
             })
@@ -131,12 +134,13 @@ const Trial = ({ participant, session, playback, feedback_form, config, onNext, 
                 instruction={playback.instruction}
                 preloadMessage={playback.preload_message}
                 autoAdvance={config.auto_advance}
+                decisionTime={config.decision_time}
                 playConfig={playback.play_config}
                 sections={playback.sections}
                 time={time}
                 submitResult={makeResult}
                 startedPlaying={startTimer}
-                finishedPlaying={getNextAction}
+                finishedPlaying={finishedPlaying}
             />)}
             {feedback_form && (
             <FeedbackForm
@@ -147,10 +151,11 @@ const Trial = ({ participant, session, playback, feedback_form, config, onNext, 
                 isSkippable={feedback_form.is_skippable}
                 onResult={makeResult}
             />)}
-            {!feedback_form && (
+            {!feedback_form && config.show_continue_button && (        
             <Button
                 title={config.continue_label}
                 className={"btn-primary anim anim-fade-in anim-speed-500"}
+                active={formActive}
                 onClick={onNext}
             />
             )}

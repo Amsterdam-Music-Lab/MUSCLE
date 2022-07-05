@@ -47,12 +47,12 @@ class Command(BaseCommand):
                 restrict_to_nl = 0
                 group_tag_option = options.get('tag_group')
                 if group_tag_option:
-                    group_id, tag_id = calculate_group_tag(filename, group_tag_option)
+                    group, tag = calculate_group_tag(filename, group_tag_option)
                 else:
-                    group_id = tag_id = 0
+                    group = tag = '0'
                 row = [artist_name, song_name,
                     start_position, duration, filename, restrict_to_nl,
-                    tag_id, group_id]
+                    tag, group]
                 csv_writer.writerow(row)
 
 

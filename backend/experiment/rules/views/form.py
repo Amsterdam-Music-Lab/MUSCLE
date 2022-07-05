@@ -8,14 +8,16 @@ class Question(object):
     - explainer: optional instructions for this specific question
     - question: the question text
     - result_pk: identifier of result object, created prior to sending next_round data to client
-    - is_skippable: whether a value has to be set on the question before form can be submitted
-    - submits: whether changing this form element can submit the form
+    - form_config: dictionary to set the following:
+        - is_skippable: whether a value has to be set on the question before form can be submitted
+        - submits: whether changing this form element can submit the form
+        - show_labels: whether the labels of the answers should be shown
     '''
 
-    def __init__(self, key, view='STRING', result_id=None, explainer='', question='', is_skippable=False, submits=False, interaction=None):
+    def __init__(self, key, view='STRING', result_id=None, explainer='', question='', is_skippable=False, submits=False):
         self.key = key
         self.view = view
-        self.explainer = explainer,
+        self.explainer = explainer
         self.question = question,
         self.result_id = result_id
         self.is_skippable = is_skippable

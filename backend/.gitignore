@@ -12,3 +12,4 @@ db.sqlite3
 static/*
 upload/*
 !upload/example.mp3
+!upload/tests/

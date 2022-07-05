@@ -1,12 +1,9 @@
-import React, { useState, useRef, useEffect, useCallback } from "react";
-import { MEDIA_ROOT } from "../../config";
+import React, { useState, useEffect, useCallback } from "react";
 import {
     useExperiment,
     useParticipant,
-    createResult,
     getNextRound,
 } from "../../API";
-import * as audio from "../../util/audio";
 import { TransitionGroup, CSSTransition } from "react-transition-group";
 import { withRouter } from "react-router-dom";
 
@@ -18,12 +15,7 @@ import Consent from "../Consent/Consent";
 import Playlist from "../Playlist/Playlist";
 import StartSession from "../StartSession/StartSession";
 import SongSync from "../SongSync/SongSync";
-import SongBool from "../SongBool/SongBool";
 import Score from "../Score/Score";
-import TwoAlternativeForced from "../TwoAlternativeForced/TwoAlternativeForced";
-import TwoSong from "../TwoSong/TwoSong";
-import ProfileQuestion from "../ProfileQuestion/ProfileQuestion";
-import ResultQuestion from "../ResultQuestion/ResultQuestion";
 import FinalScore from "../FinalScore/FinalScore";
 import Final from "../Final/Final";
 
@@ -60,16 +52,19 @@ const Experiment = ({ match }) => {
         [loadState]
     );
 
+    function stateNextRound(state) {
+        let newState = state.next_round.shift();
+        newState.next_round = state.next_round;
+        return newState;
+    }
+
     // Start first_round when experiment and partipant have been loaded
     useEffect(() => {
         // Check if done loading
         if (!loadingExperiment && !loadingParticipant) {
             // Loading succeeded
             if (experiment && participant) {
-                if (experiment.next_round) {
-                    loadState(experiment.next_round);
-                }
-                else loadState(experiment.first_round);
+                loadState(stateNextRound(experiment));
             } else {
                 // Loading error
                 setError("Could not load experiment");
@@ -86,8 +81,8 @@ const Experiment = ({ match }) => {
 
     // Load next round, stored in nextRound
     const onNext = async () => {
-        if (state && state.next_round) {
-            loadState(state.next_round);
+        if (state.next_round && state.next_round.length) {
+            loadState(stateNextRound(state));
         } else {
             console.log("No next-round data available");
             // Fallback in case a server response/async call went wrong
@@ -120,6 +115,7 @@ const Experiment = ({ match }) => {
             setError,
             setSession,
             onNext,
+            stateNextRound,
             ...state,
         };
 
@@ -139,27 +135,17 @@ const Experiment = ({ match }) => {
                 return <StartSession {...attrs} />;
             case "SONG_SYNC":
                 return <SongSync {...attrs} />;
-            case "SONG_BOOL":
-                return <SongBool {...attrs} />;
             case "SCORE":
                 return <Score {...attrs} />;
-            case "TWO_ALTERNATIVE_FORCED":
-                return <TwoAlternativeForced {...attrs} />;
-            case "TWO_SONG":
-                return <TwoSong {...attrs} />;
             case "TRIAL_VIEW":
                 return <Trial {...attrs} />
-            case "PROFILE_QUESTION":
-                return <ProfileQuestion {...attrs} />;
-            case "RESULT_QUESTION":
-                return <ResultQuestion {...attrs} />;
             case "FINAL_SCORE":
                 return (
                     <FinalScore
                         {...attrs}
                         onNext={() => {
                             setSession(null);
-                            loadState(experiment.first_round);
+                            loadState(stateNextRound(experiment));
                         }}
                     />
                 );

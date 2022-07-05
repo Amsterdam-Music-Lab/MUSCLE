@@ -15,6 +15,8 @@ class Profile(models.Model):
 
     session_id = models.PositiveIntegerField(default=0)
 
+    score = models.FloatField(null=True, blank=True)
+
     class Meta:
         # Add index on participant/session_id and answer, as these
         # will be queried often together

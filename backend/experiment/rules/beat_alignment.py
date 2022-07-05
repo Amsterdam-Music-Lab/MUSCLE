@@ -62,12 +62,12 @@ class BeatAlignment(Base):
 
         # 5. Start session
         start_session = StartSession.action()
-        return combine_actions(
+        return [
             explainer,
             consent,
             *practice_rounds,
             start_session
-        )
+        ]
 
 
     @classmethod
@@ -104,23 +104,26 @@ class BeatAlignment(Base):
         else:
             presentation_text = _(
                 "In this example the beeps are NOT ALIGNED TO THE BEAT of the music.")
-
-        play_config = {
-            'decision_time': section.duration + .1,
-        }
-        playback = Playback('AUTOPLAY', [section], instruction=presentation_text, play_config=play_config)
+        playback = Playback([section],
+            instruction=presentation_text,
+            preload_message=presentation_text,
+        )
         view = Trial(
             playback=playback,
             feedback_form=None,
             title=_('Example {}').format(count),
-            config={'listen_first': True, 'auto_advance': True}
+            config={
+                'decision_time': section.duration + .1,
+                'listen_first': True, 'auto_advance': True,
+                'show_continue_button': False
+            }
         )
         return view.action()
 
     @classmethod
     def next_trial_action(cls, session, this_round):
         """Get next section for given session"""
-        filter_by = {'tag_id': 0}
+        filter_by = {'tag': '0'}
         section = session.section_from_unused_song(filter_by)
         condition = section.filename.split('_')[-1][:-4]
         expected_result = 'ON' if condition=='on' else 'OFF'
@@ -137,15 +140,13 @@ class BeatAlignment(Base):
             submits=True
         )
         form = Form([question])
-        play_config = {
-            'decision_time': section.duration + .1,
-        }
-        playback = Playback('AUTOPLAY', [section], play_config=play_config)
+        playback = Playback([section])
         view = Trial(
             playback=playback,
             feedback_form=form,
             title=_('Beat alignment'),
             config={
+                'decision_time': section.duration + .1,
                 'listen_first': True
             }
         )

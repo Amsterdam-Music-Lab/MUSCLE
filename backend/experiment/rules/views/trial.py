@@ -16,12 +16,13 @@ class Trial(object):  # pylint: disable=too-few-public-methods
 
     ID = 'TRIAL_VIEW'
 
-    def __init__(self, playback, feedback_form, title='', config=None):
+    def __init__(self, playback=None, feedback_form=None, title='', config=None):
         '''
         - playback: Playback object (may be None)
         - feedback_form: Form object (may be None)
         - title: string setting title in header of experiment
         - config: dictionary with following settings
+            - decision_time: how long to wait until stopping the player / proceeding to the next view
             - auto_advance: proceed to next view after player has stopped
             - listen_first: whether participant can submit before end of sound
             - style: style class to add to elements in form and playback
@@ -37,10 +38,12 @@ class Trial(object):  # pylint: disable=too-few-public-methods
         self.feedback_form = feedback_form
         self.title = title
         self.config = {
+            'decision_time': 5,
             'auto_advance': False,
             'listen_first': False,
+            'show_continue_button': True,
             'continue_label': _('Continue'),
-            'style': 'neutral'
+            'style': 'neutral',
         }
         if config:
             self.config.update(config)
