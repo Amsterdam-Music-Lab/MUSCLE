@@ -23,7 +23,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
+    "build": "sass src/index.scss src/index.css; react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "scss": "sass src/index.scss src/index.css; sass --watch src/index.scss src/index.css"
