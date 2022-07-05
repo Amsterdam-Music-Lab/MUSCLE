@@ -87,6 +87,9 @@ const Playback = ({ playerType, sections, instruction, onPreloadReady, preloadMe
         cancelAudioListeners();
     },[cancelAudioListeners])
 
+    // Stop audio on unmount
+    useEffect(()=>(()=>{audio.stop();}),[]);
+
     const render = (view) => {
         const attrs = {
             sections,
