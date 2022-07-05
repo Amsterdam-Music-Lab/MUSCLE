@@ -1,5 +1,5 @@
 import React from "react";
-import { cleanup, render, screen } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 
 import FeedbackForm from "./FeedbackForm";
@@ -14,7 +14,6 @@ const form = [
 ]
 
 describe('FeedbackForm', () => {
-    afterEach(cleanup);
 
     it('renders a heading, and a group of radio buttons', () => {
         render(<FeedbackForm

@@ -1,5 +1,5 @@
 import React from "react";
-import { cleanup, render, screen } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
 
 import Trial from "./Trial";
@@ -19,7 +19,6 @@ let config = {
 }
 
 describe('Trial', () => {
-    afterEach(cleanup);
 
     it("can render itself", () => { 
         render(<Trial
