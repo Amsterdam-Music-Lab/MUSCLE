@@ -108,7 +108,7 @@ const Trial = ({ participant, session, playback, feedback_form, config, onNext, 
         submitted.current = true;
 
         const decision_time = getTimeSince(startTime.current);
-        const form = feedback_form ? feedback_form.form : [new Object()];
+        const form = feedback_form ? feedback_form.form : [{}];
 
         if (result.type === 'time_passed') {
             form.map( formElement => formElement.value = 'TIMEOUT')
