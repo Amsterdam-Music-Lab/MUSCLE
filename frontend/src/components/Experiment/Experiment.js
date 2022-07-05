@@ -8,7 +8,6 @@ import Consent from "../Consent/Consent";
 import DefaultPage from "../Page/DefaultPage";
 import Explainer from "../Explainer/Explainer";
 import Final from "../Final/Final";
-import FinalScore from "../FinalScore/FinalScore";
 import Loading from "../Loading/Loading";
 import Playlist from "../Playlist/Playlist";
 import Score from "../Score/Score";
@@ -138,16 +137,6 @@ const Experiment = ({ match }) => {
                 return <Explainer {...attrs} />;
             case "SCORE":
                 return <Score {...attrs} />;
-            case "FINAL_SCORE":
-                return (
-                    <FinalScore
-                        {...attrs}
-                        onNext={() => {
-                            setSession(null);
-                            loadState(stateNextRound(experiment));
-                        }}
-                    />
-                );
             case "FINAL":
                 return <Final {...attrs} />;
 

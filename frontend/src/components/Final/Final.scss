@@ -1,11 +1,37 @@
 .aha__final {
-    
-    h2 {
-        padding: 20px;
-    }
-
     .aha__rank {
         margin-top: 15px;
+    }
+    .share {
+        a {
+            $size: 55px;
+            display: inline-block;
+            width: $size;
+            height: $size;
+            border-radius: 50%;
+            line-height: $size;
+            text-align: center;
+            background-color: $teal;
+            color: white;
+            margin: 0 10px;
+            font-size: 0;
+
+            &::before {
+                font-size: 26px;
+            }
+
+            &:hover {
+                text-decoration: none;
+            }
+
+            &.ti-facebook {
+                background-color: $facebook-blue;
+            }
+
+            &.ti-twitter-alt {
+                background-color: $twitter-blue;
+            }
+        }
     }
 
     .home {

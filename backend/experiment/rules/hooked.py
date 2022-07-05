@@ -169,7 +169,7 @@ class Hooked(Base):
     @classmethod
     def get_recognize_view(cls, session):
         section = session.section_from_unused_song()
-        result_pk = Base.prepare_result(session, section)
+        result_pk = cls.prepare_result(session, section)
         question = ChoiceQuestion(
             question=_('Do you recognise this song?'),
             key='recognize',
