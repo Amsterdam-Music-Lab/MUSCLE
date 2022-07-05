@@ -6,18 +6,19 @@ import classnames from "classnames";
 const TextRange = ({ question, value, onChange }) => {
     const emptyValue = !value;
 
+    const keys = Object.keys(question.choices);
     const choices = Object.values(question.choices);
 
     const onSliderChange = (index) => {
-        onChange(choices[index]);
+        onChange(keys[index]);
     };
 
 
     let sliderValue = 0;
     if (emptyValue) {
-        sliderValue = Math.round(choices.length / 2) - 1;
+        sliderValue = Math.round(keys.length / 2) - 1;
     } else {
-        sliderValue = choices.indexOf(value);
+        sliderValue = keys.indexOf(value);
     }
 
     return (
@@ -28,7 +29,7 @@ const TextRange = ({ question, value, onChange }) => {
 
             <h3 className="title">{question.question}</h3>
 
-            <h4 className="current-value">{emptyValue ? "↔" : value}</h4>
+            <h4 className="current-value">{emptyValue ? "↔" : question.choices[value]}</h4>
 
             <Slider
                 value={sliderValue}
