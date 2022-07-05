@@ -18,6 +18,5 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - run: echo "SUCCESS"
-      - run: docker-compose up
+      - run: sudo docker-compose run server bash -c "python manage.py test"
       
