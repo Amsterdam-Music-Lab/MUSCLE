@@ -10,7 +10,7 @@ class Base(object):
     def prepare_result(cls, session, section, expected_response=None):
         # Prevent circular dependency errors
         from experiment.models import Result
-        print("{}".format(session))
+
         result = Result(session=session)
         result.section = section
         if expected_response:
