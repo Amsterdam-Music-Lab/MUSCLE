@@ -28,9 +28,12 @@ class Question(object):
 
 
 class BooleanQuestion(Question):
-    def __init__(self, **kwargs):
+    def __init__(self, choices=None, **kwargs):
         super().__init__(**kwargs)
-        self.choices = [_('YES'), _('NO')]
+        self.choices = choices or {
+            'yes': _('YES'), 
+            'no': _('NO')
+        }
         self.view = 'BUTTON_ARRAY'
 
 
@@ -51,23 +54,23 @@ class LikertQuestion(Question):
         super().__init__(**kwargs)
         self.view = likert_view
         if scale_steps == 7:
-            self.choices = [
-                _("Completely Disagree"),
-                _("Strongly Disagree"),
-                _("Disagree"),
-                _("Neither Agree nor Disagree"),  # Undecided
-                _("Agree"),
-                _("Strongly Agree"),
-                _("Completely Agree"),
-            ]
+            self.choices = {
+                1: _("Completely Disagree"),
+                2: _("Strongly Disagree"),
+                3: _("Disagree"),
+                4: _("Neither Agree nor Disagree"),  # Undecided
+                5: _("Agree"),
+                6: _("Strongly Agree"),
+                7: _("Completely Agree"),
+            }
         elif scale_steps == 5:
-            self.choices = [
-                _("Strongly Disagree"),
-                _("Disagree"),
-                _("Neither Agree nor Disagree"),  # Undecided
-                _("Agree"),
-                _("Strongly Agree"),
-            ]
+            self.choices = {
+                1: _("Strongly Disagree"),
+                2: _("Disagree"),
+                3: _("Neither Agree nor Disagree"),  # Undecided
+                4: _("Agree"),
+                5: _("Strongly Agree"),
+            }
 
 
 class Form(object):

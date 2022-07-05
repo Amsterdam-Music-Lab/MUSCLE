@@ -6,15 +6,18 @@ import classnames from "classnames";
 const TextRange = ({ question, value, onChange }) => {
     const emptyValue = !value;
 
+    const choices = Object.values(question.choices);
+
     const onSliderChange = (index) => {
-        onChange(question.choices[index]);
+        onChange(choices[index]);
     };
+
 
     let sliderValue = 0;
     if (emptyValue) {
-        sliderValue = Math.round(question.choices.length / 2) - 1;
+        sliderValue = Math.round(choices.length / 2) - 1;
     } else {
-        sliderValue = question.choices.indexOf(value);
+        sliderValue = choices.indexOf(value);
     }
 
     return (
@@ -31,14 +34,14 @@ const TextRange = ({ question, value, onChange }) => {
                 value={sliderValue}
                 onChange={onSliderChange}
                 min={0}
-                max={question.choices.length - 1}
+                max={choices.length - 1}
                 tooltip={false}
             />
 
             <div className="limits">
-                <span className="min">{question.choices[0]}</span>
+                <span className="min">{choices[0]}</span>
                 <span className="max">
-                    {question.choices[question.choices.length - 1]}
+                    {choices[choices.length - 1]}
                 </span>
             </div>
         </div>
