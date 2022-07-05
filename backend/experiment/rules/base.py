@@ -1,5 +1,4 @@
 import logging
-from pprint import pprint
 from .views import SongSync, SongBool, TwoAlternativeForced, FinalScore, Score, Trial
 
 logger = logging.getLogger(__name__)
