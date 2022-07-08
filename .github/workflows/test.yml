@@ -19,5 +19,5 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - run: echo $SQL_DATABASE
-      - run: sudo docker-compose run server bash -c "python manage.py test"
+      - run: sudo docker-compose --env-file .env-github-actions run server bash -c "python manage.py test"
       
