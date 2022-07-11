@@ -34,7 +34,6 @@ class GoldMSI(Base):
     @classmethod
     def next_round(cls, session, request_session=None):
         round_number = session.total_questions()
-        print(round_number, len(cls.questions))
         if round_number == len(cls.questions):
             return final_action_with_optional_button(session, '', request_session)
         question = cls.questions[round_number]
