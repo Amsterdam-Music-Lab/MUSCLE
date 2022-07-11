@@ -1,13 +1,13 @@
 import logging
 
-from .views import SongSync, SongBool, TwoAlternativeForced, FinalScore, Score, Trial
+from .views import SongSync, Final, Score, Trial
 
 logger = logging.getLogger(__name__)
 
 class Base(object):
     """Base class for other rules classes"""
 
-    @staticmethod
+    @classmethod
     def prepare_result(session, section, expected_response=None):
         # Prevent circular dependency errors
         from experiment.models import Result
@@ -91,7 +91,7 @@ class Base(object):
     def rank(session):
         """Get rank based on session score"""
         score = session.final_score
-        ranks = FinalScore.RANKS
+        ranks = Final.RANKS
 
         # Few or negative points or no score, always return lowest plastic score
         if score <= 0 or not score:

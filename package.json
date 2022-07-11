@@ -1,4 +1,11 @@
 {
     "name": "aml-experiments",
-    "version": "0.8.0"
+    "version": "0.8.0",
+    "private": true,
+    "__comment1__": "private set to true to suppress 'warning package.json: No license field'",
+    
+    "scripts": {
+        "test-front": "sudo docker-compose run client yarn test --watchAll=false",
+        "test-back": "sudo docker-compose run server bash -c 'python manage.py test'"
+  }
 }
