@@ -33,7 +33,7 @@ const useResultHandler = ({ session, participant, loadState, onNext, state }) =>
             const data = {
                 session,
                 participant,
-                result: { form: mergedResults },
+                result: mergedResults,
             };
 
             // Optionally add section to result data
