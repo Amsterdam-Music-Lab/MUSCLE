@@ -55,7 +55,6 @@ const Experiment = ({ match }) => {
         if (!loadingExperiment && !loadingParticipant) {
             // Loading succeeded
             if (experiment && participant) {
-                console.log(experiment);
                 loadState(stateNextRound(experiment));
             } else {
                 // Loading error
@@ -73,12 +72,10 @@ const Experiment = ({ match }) => {
 
     // Load next round, stored in nextRound
     const onNext = async () => {
-        console.log(state);
         if (state.next_round && state.next_round.length) {
-            console.log(state);
             loadState(stateNextRound(state));
         } else {
-            console.log("No next-round data available");
+            console.error("No next-round data available");
             // Fallback in case a server response/async call went wrong
             // Try to get next_round data from server again
             const round = await getNextRound({
@@ -121,7 +118,6 @@ const Experiment = ({ match }) => {
             ...state,
         };
 
-        console.log(view, attrs);
         // Show view, based on the unique view ID:
         switch (view) {
             // Experiment views
