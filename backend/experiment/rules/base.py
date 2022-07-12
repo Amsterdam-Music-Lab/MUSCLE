@@ -8,7 +8,7 @@ class Base(object):
     """Base class for other rules classes"""
 
     @classmethod
-    def prepare_result(session, section, expected_response=None):
+    def prepare_result(cls, session, section, expected_response=None):
         # Prevent circular dependency errors
         from experiment.models import Result
 
