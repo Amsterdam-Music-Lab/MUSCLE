@@ -21,8 +21,7 @@ class Huang2022(Base):
 
         # 1. Explain game.
         explainer = Explainer(
-            instruction=_(
-                'In this test you will hear a series of tones for each trial.'),
+            instruction=_("How to Play"),
             steps=[
                 Step(_(
                     "Do you recognise the song? Try to sing along. The faster you recognise songs, the more points you can earn.")),
@@ -334,7 +333,7 @@ class Huang2022(Base):
                     n_old_new_expected += 1
                     if result.score > 0:
                         n_old_new_correct += 1
-
+        thanks_message = _("Thank you for your contribution to science!")
         score_message = _(
             "Well done!") if session.final_score > 0 else _("Too bad!")
         if n_sync_guessed == 0:
@@ -350,7 +349,12 @@ class Huang2022(Base):
             'n_correct': n_old_new_correct,
             'n_total': n_old_new_expected
         }
-        return " ".join([score_message, song_sync_message, heard_before_message])
+        return " ".join([
+            thanks_message,
+            score_message,
+            song_sync_message,
+            heard_before_message
+        ])
 
     @staticmethod
     def calculate_score(result, data, form_element=None):
