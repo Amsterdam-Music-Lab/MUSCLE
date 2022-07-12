@@ -209,7 +209,8 @@ class Huang2022(Base):
                     Huang2022.next_heard_before_action(session))
             elif next_round_number == question_offset:
                 actions.append(Explainer(
-                    instruction=_("Please answer some questions on your musical and demographic background"),
+                    instruction=_("Please answer some questions \
+                    on your musical (Goldsmiths-MSI) and demographic background"),
                     steps=[],
                     button_label=_("Let's go!")).action()
                 )
@@ -387,40 +388,14 @@ class Huang2022(Base):
 
 
 region_choices = {
-    'BJ': '北京',
-    'TJ': '天津',
-    'HB': '河北',
-    'SHX': '山西',
-    'NMG': '内蒙古',
-    'LN': '辽宁',
-    'JL': '吉林',
-    'HLJ': '黑龙江',
-    'SH': '上海',
-    'JS': '江苏',
-    'ZJ': '浙江',
-    'AH': '安徽',
-    'FJ': '福建',
-    'JX': '江西',
-    'SD': '山东',
-    'HEN': '河南',
-    'HUB': '湖北',
-    'HUN': '湖南',
-    'GD': '广东',
-    'GX': '广西',
-    'HN': '海南',
-    'CQ': '重庆',
-    'SC': '四川',
-    'GZ': '贵州',
-    'YN': '云南',
-    'XZ': '西藏',
-    'SX': '陕西',
-    'GS': '甘肃',
-    'QH': '青海',
-    'NX': '宁夏',
-    'XJ': '新疆',
-    'HK': '香港',
-    'MC': '澳门',
-    'TW': '台湾',
+    'HD': '华东（山东、江苏、安徽、浙江、福建、江西、上海）',
+    'HN': '华南（广东、广西、海南）',
+    'HZ': '华中（湖北、湖南、河南、江西）',
+    'HB': '华北（北京、天津、河北、山西、内蒙古）',
+    'XB': '西北（宁夏、新疆、青海、陕西、甘肃）',
+    'XN': '西南（四川、云南、贵州、西藏、重庆）',
+    'DB': '东北（辽宁、吉林、黑龙江）',
+    'GAT': '港澳台（香港、澳门、台湾）',
     'QT': '国外'
 }
 
