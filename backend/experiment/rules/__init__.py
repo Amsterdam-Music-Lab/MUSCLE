@@ -11,7 +11,6 @@ from .rhythm_experiment_series import RhythmExperimentSeries
 from .rhythm_experiment_series_mri import RhythmExperimentSeriesMRI
 from .gold_msi import GoldMSI
 from .listening_conditions import ListeningConditions
-from .hooked import Hooked
 from .huang_2022 import Huang2022
 from .categorization import Categorization
 
@@ -33,7 +32,6 @@ EXPERIMENT_RULES = {
     RhythmExperimentSeriesMRI.ID: RhythmExperimentSeriesMRI,
     GoldMSI.ID: GoldMSI,
     ListeningConditions.ID: ListeningConditions,
-    Hooked.ID: Hooked,
     Huang2022.ID: Huang2022,
     Categorization.ID: Categorization,
 }
