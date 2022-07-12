@@ -54,7 +54,6 @@ class SongSync(object):  # pylint: disable=too-few-public-methods
         # Calculate from the data object
         # If requested keys don't exist, return None
         try:
-
             config = data['config']
             result = data['result']
 

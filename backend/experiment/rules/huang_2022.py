@@ -3,8 +3,8 @@ from django.template.loader import render_to_string
 
 import random
 from .base import Base
-from .views import SongSync, FinalScore, Score, Explainer, Step, Consent, StartSession, Playlist, Question, Trial
-from .views.form import BooleanQuestion, Form
+from .views import SongSync, Final, Score, Explainer, Step, Consent, StartSession, Playlist, Question, Trial
+from .views.form import BooleanQuestion, ChoiceQuestion, Form
 from .views.playback import Playback
 from .util.questions import DEMOGRAPHICS, EXTRA_DEMOGRAPHICS, next_question, question_by_key
 from .util.goldsmiths import MSI_FG_GENERAL, MSI_ALL
@@ -77,7 +77,7 @@ class Huang2022(Base):
         random.shuffle(songs)
 
         # How many sections do we need?
-        # 2/3 of the rounds are SongSync, of which 1/4 old songs
+        # 2/3 of the rounds are SongSync, of which 1/4 old songs, 3/4 "free"
         # 1/3 of the rounds are "heard before", of which 1/2 old songs
         # e.g. 30 rounds -> 20 SongSync with 5 songs to be repeated later
         n_rounds = session.experiment.rounds
@@ -122,7 +122,7 @@ class Huang2022(Base):
         """
 
         # 1. Demographic questions (9 questions)
-        questions = MSI_GENERAL + MSI_ALL + [        
+        questions = MSI_FG_GENERAL + MSI_ALL + [        
             question_by_key('msi_39_best_instrument'),
             genre_question(),
             question_by_key('dgf_generation'),
@@ -134,26 +134,12 @@ class Huang2022(Base):
             residence_question(),
             gender_question()
         ]
-        return questions
-
-        # 2. General music sophistication (18 questions)
-        if question is None:
-            question = \
-                next_question(
-                    session,
-                    random.sample(MSI_FG_GENERAL, len(MSI_FG_GENERAL)),
-                )
-
-        # 3. Complete music sophistication (20 questions)
-        if question is None:
-            # next_question() will skip the FG questions from before
-            question = \
-                next_question(
-                    session,
-                    random.sample(MSI_ALL, len(MSI_ALL)),
-                )
-
-        return question
+        return [
+            Trial(
+                title=_("Questionnaire"),
+                feedback_form=Form([question], is_profile=True)).action() 
+            for question in questions
+        ]
 
     @staticmethod
     def next_round(session, request_session=None):
@@ -166,19 +152,15 @@ class Huang2022(Base):
             # Finish session.
             session.finish()
             session.save()
-            config = {'show_section': True, 'show_total_score': True}
-            score = Score(session, config=config)
+            final = Final(
+                session=session,
+                final_text=Huang2022.final_score_message(session),
+                rank=Huang2022.rank(session),
+                show_social=False,
+                show_profile_link=True
+            ).action()
 
-            # Return a score and final score action.
-            return [
-                score.action(),
-                FinalScore.action(
-                    session=session,
-                    score_message=Huang2022.final_score_message(session),
-                    rank=Huang2022.rank(session),
-                    show_social=False
-                )
-            ]
+            return final
 
         # Get next round number and initialise actions list. Two thirds of
         # rounds will be song_sync; the remainder heard_before.
@@ -196,15 +178,19 @@ class Huang2022(Base):
         else:
             # Create a score action.
             config = {'show_section': True, 'show_total_score': True}
-            score = Score(session, config=config)
+            score = Score(
+                session,
+                config=config,
+                title=Huang2022.get_trial_title(session, next_round_number-1)
+            )
             actions.append(score.action())
 
             # Load the heard_before offset.
             try:
                 plan = session.load_json_data().get('plan')
                 heard_before_offset = len(plan['song_sync_sections']) + 1
-                question_offset = len(plan['heard_before_sections']) + \
-                    heard_before_offset
+                question_offset = heard_before_offset + len(
+                    plan['heard_before_sections']) - 1
             except KeyError as error:
                 print('Missing plan key: %s' % str(error))
                 return actions
@@ -221,8 +207,13 @@ class Huang2022(Base):
             elif heard_before_offset < next_round_number < question_offset:
                 actions.append(
                     Huang2022.next_heard_before_action(session))
-            else:
-                actions = Huang2022.get_questions(session)
+            elif next_round_number == question_offset:
+                actions.append(Explainer(
+                    instruction=_("Please answer some questions on your musical and demographic background"),
+                    steps=[],
+                    button_label=_("Let's go!")).action()
+                )
+                actions.extend(Huang2022.get_questions(session))
         return combine_actions(*actions)
 
     @classmethod
@@ -254,8 +245,7 @@ class Huang2022(Base):
         )
         config = {'style': 'boolean-negative-first'}
         trial = Trial(
-            song_sync=song_sync, title=_("Round {} of {}".format(
-            next_round_number, session.experiment.rounds)), config=config)
+            song_sync=song_sync, title=cls.get_trial_title(session, next_round_number), config=config)
         return trial.action()
 
     @classmethod
@@ -300,16 +290,26 @@ class Huang2022(Base):
         result_pk = cls.prepare_result(session, section, expected_result)
         form = Form([BooleanQuestion(
             key='heard_before',
+            choices={
+                'old': _("YES"),
+                'new': _("NO")
+            },
             question=_("Did you hear this song in previous rounds?"),
             result_id=result_pk,
             submits=True)])
         config = {'style': 'boolean-negative-first'}
         trial = Trial(
+            title=cls.get_trial_title(session, next_round_number),
             playback=playback,
             feedback_form=form,
             config=config,
         )
         return trial.action()
+    
+    @classmethod
+    def get_trial_title(cls, session, next_round_number):
+        return _("Round {} / {}".format(
+            next_round_number, session.experiment.rounds-1))
 
     @classmethod
     def final_score_message(cls, session):
@@ -323,21 +323,16 @@ class Huang2022(Base):
 
         for result in session.result_set.all():
             json_data = result.load_json_data()
-            try:
-                if json_data['view'] == 'SONG_SYNC':
-                    if json_data['result']['type'] == 'recognized':
-                        n_sync_guessed += 1
-                        sync_time += json_data['result']['recognition_time']
-                        if result.score > 0:
-                            n_sync_correct += 1
-                else:
-                    if result.expected_response == 1:
-                        n_old_new_expected += 1
-                        if result.score > 0:
-                            n_old_new_correct += 1
-            except KeyError as error:
-                print('KeyError: %s' % str(error))
-                continue
+            if json_data.get('result') and json_data['result']['type'] == 'recognized':
+                    n_sync_guessed += 1
+                    sync_time += json_data['result']['recognition_time']
+                    if result.score > 0:
+                        n_sync_correct += 1
+            else:
+                if result.expected_response == 'old':
+                    n_old_new_expected += 1
+                    if result.score > 0:
+                        n_old_new_correct += 1
 
         score_message = _(
             "Well done!") if session.final_score > 0 else _("Too bad!")
@@ -365,7 +360,6 @@ class Huang2022(Base):
             logger.log(e)
             expected_response = None
         if expected_response:
-            print(form_element['value'])
             if expected_response == form_element['value']:
                 return 1
             else:
@@ -432,8 +426,9 @@ region_choices = {
 
 
 def origin_question():
-    return Question.dropdown(
+    return ChoiceQuestion(
         key='dgf_region_of_origin',
+        view='DROPDOWN',
         question=_(
             "In which region did you spend the most formative years of your childhood and youth?"),
         choices=region_choices
@@ -441,15 +436,30 @@ def origin_question():
 
 
 def residence_question():
-    return Question.dropdown(
+    return ChoiceQuestion(
+        view='DROPDOWN',
         key='dgf_region_of_residence',
         question=_("In which region do you currently reside?"),
         choices=region_choices
     )
 
+def gender_question():
+    return ChoiceQuestion(
+        key='dgf_gender_identity',
+        view='RADIOS',
+        question="您目前对自己的性别认识?",
+        choices={
+            'male': "男",
+            'Female': "女",
+            'Others': "其他",
+            'no_answer': "不想回答"
+        },
+        is_skippable=True
+    )
+
 
 def genre_question():
-    return Question.radios(
+    return ChoiceQuestion(
         key='dgf_genre_preference',
         question=_(
             "To which group of musical genres do you currently listen most?"),
