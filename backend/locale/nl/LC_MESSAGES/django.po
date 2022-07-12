@@ -2616,31 +2616,4 @@ msgstr ""
 
 #: experiment/templates/final/feedback_trivia.html:6
 msgid "Did you know..."
-msgstr ""
-
-#~ msgid "First school qualification (A-levels/ High school"
-#~ msgstr "Vmbo"
-
-#~ msgid "Second school qualification (A-levels/high school)"
-#~ msgstr "VWO"
-
-#~ msgid "Undergraduate degree or professional qualification"
-#~ msgstr "HBO"
-
-#~ msgid "Postgraduate degree"
-#~ msgstr "Master WO"
-
-#~ msgid "How certain are you of your answer?"
-#~ msgstr "Hoe zeker ben je van dit antwoord?"
-
-#~ msgid "4–5 hours"
-#~ msgstr "4-5 uur"
-
-#~ msgid "6–9 hours"
-#~ msgstr "6-8 uur"
-
-#~ msgid "4–5"
-#~ msgstr "4-5"
-
-#~ msgid "6–9"
-#~ msgstr "6-9"
+msgstr "Wist je dat..."
