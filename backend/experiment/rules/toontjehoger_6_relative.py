@@ -117,8 +117,8 @@ class ToontjeHoger6Relative(Base):
         # Section 2, is equal to section 1 if melodies are the same
         # Else get a section with the same group, but with different tags
         # e.g.
-        # section1: code=12345, tag=0, group=1
-        # section2: code=12345, tag=1, group=1
+        # section1: artist=a, name=b, tag=original, group=1
+        # section2: artist=a, name=b, tag=variation, group=1
         section2 = section1 if same_melodies else session.section_from_any_song(filter_by={'artist': section1.artist, 'name': section1.name, 'tag': 'variation'})
         if section2 == None:
             raise Exception("Error: could not find section2 for round 1")
