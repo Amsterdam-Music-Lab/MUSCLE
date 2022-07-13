@@ -67,11 +67,11 @@ class ToontjeHoger3PLINK(Base):
                 ).action()
             )
 
-        last_result = session.result_set.order_by('-created_at').first()
+        last_result = session.last_result()
 
         # First round
         if not last_result:
-            return combine_actions(cls.get_button_view(session))
+            return combine_actions(cls.get_song_sync_view(session));
 
         # Other rounds
         return combine_actions(
