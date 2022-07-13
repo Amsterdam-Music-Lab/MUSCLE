@@ -67,7 +67,7 @@ def create(request):
             'playlist': session.playlist.id,
             'json_data': session.load_json_data(),
         },
-        'next_round': [session.experiment_rules().next_round(session)]
+        'next_round': [*session.experiment_rules().next_round(session)]
     }
     return JsonResponse(data, json_dumps_params={'indent': 4})
 
