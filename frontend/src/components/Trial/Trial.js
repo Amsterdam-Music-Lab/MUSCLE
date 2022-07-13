@@ -114,16 +114,20 @@ const Trial = ({ participant, session, playback, feedback_form, config, onNext, 
             form.map( formElement => formElement.value = 'TIMEOUT')
         }
 
-        if (feedback_form && feedback_form.is_profile) {
-            submitProfile({
-                form
-            })
-        }
-        else {
-            submitResult({
-                decision_time,
-                form,
-            });
+        if (feedback_form){
+            if (feedback_form.is_profile) {
+                submitProfile({
+                    form
+                })
+            }
+            else {
+                submitResult({
+                    decision_time,
+                    form,
+                });
+            }
+        } else{
+            onNext();
         }
     };
 
