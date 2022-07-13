@@ -46,7 +46,7 @@ class Session(models.Model):
 
     def last_result(self):
         """Get last result"""
-        self.result_set.last()
+        return self.result_set.last()
 
     def last_song(self):
         """Return artist and name of previous song, 
@@ -163,7 +163,7 @@ class Session(models.Model):
         if len(pks) == 0:
             return None
 
-        # Return a random section
+        # Return all sections
         return self.playlist.section_set.all()
 
     def section_from_song(self, song_id, filter_by={}):
