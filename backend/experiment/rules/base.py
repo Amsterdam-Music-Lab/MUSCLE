@@ -45,11 +45,14 @@ class Base(object):
             except Result.DoesNotExist:
                 # Create new result
                 result = Result(session=session)
+            
+            result.given_response = form_element['value']
+            
             # Calculate score
             score = session.experiment_rules().calculate_score(result, form_element, data)
             if not score:
                 score = 0
-            result.given_response = form_element['value']
+            
             result.save_json_data(data)
             result.score = score
             result.save()
@@ -70,10 +73,9 @@ class Base(object):
             result = Result(session=session)
 
         # Calculate score
-        score = session.experiment_rules().calculate_score(session, None, data)
+        score = session.experiment_rules().calculate_score(result, None, data)
         if not score:
             score = 0
-
 
         # Populate and save the result
         result.save_json_data(data)
