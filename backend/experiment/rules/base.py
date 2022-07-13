@@ -13,7 +13,7 @@ class Base(object):
 
         result = Result(session=session)
         result.section = section
-        if expected_response:
+        if expected_response is not None:
             result.expected_response = expected_response
         result.save()
         return result.pk
