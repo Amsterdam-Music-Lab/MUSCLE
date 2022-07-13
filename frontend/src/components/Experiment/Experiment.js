@@ -15,6 +15,7 @@ import StartSession from "../StartSession/StartSession";
 import Trial from "../Trial/Trial";
 import useResultHandler from "../../hooks/useResultHandler";
 import { stateNextRound } from "../../util/nextRound";
+import Info from "../Info/Info";
 
 // Experiment handles the main experiment flow:
 // - Loads the experiment and participant
@@ -148,6 +149,8 @@ const Experiment = ({ match }) => {
                 return <div>Error: {state.error}</div>;
             case "CONSENT":
                 return <Consent {...attrs} />;
+            case "INFO":
+                return <Info {...attrs} />;
 
             default:
                 return (

@@ -1,0 +1,36 @@
+.aha__info{
+    width: calc(100% + 10px);
+    margin-left: -5px;
+    color: white;
+
+    @media (min-width: 720px) {
+        max-width: 500px;
+        margin: -15px auto;
+    }
+
+    .aha__info-header {
+        padding: 15px;
+        margin-bottom: 0;
+    }
+
+    .info-body {
+        overflow-y: auto;
+        overflow-x: hidden;
+        max-height: calc(100vh - 250px);
+        margin-bottom: 0;
+        position: relative;
+        padding: 5px 15px 5px; 
+        @media (min-width: 720px) {
+            max-height: calc(100vh - 300px);
+        }
+
+        > *{
+          max-width: 100%;
+          margin-bottom: 1rem;
+        }
+    }
+
+    .buttons {
+      padding: 15px;
+    }
+}

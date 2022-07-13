@@ -1,0 +1,61 @@
+import React, { useEffect, useState } from "react";
+
+import Button from "../Button/Button";
+
+// Info is an experiment view that shows the Info text, and handles agreement/stop actions
+const Info = ({ heading, body, continue_button, onNext }) => {
+    const [maxHeight, setMaxHeight] = useState(getMaxHeight());
+
+    useEffect(()=>{
+        const onResize = ()=>{
+            setMaxHeight(getMaxHeight());
+        }
+        window.addEventListener('resize', onResize);
+
+        return ()=>{
+            window.removeEventListener('resize', onResize);
+        }
+    },[])
+
+    // Show Info
+    return (
+        <div className="aha__info">
+            {heading && (
+                <div className="aha__info-header d-flex">
+                    <div className="flex-fill">
+                        <h3 className="title">{heading}</h3>
+                    </div>
+                </div>
+            )}
+
+            <div
+                className="info-body"
+                style={{ maxHeight }}
+                dangerouslySetInnerHTML={{ __html: body }}
+            />
+
+            {continue_button && (
+                <div className="buttons d-flex justify-content-center pt-3">
+                    <Button
+                        className="btn-primary"
+                        onClick={onNext}
+                        title={continue_button}
+                    />
+                </div>
+            )}
+        </div>
+    );
+};
+
+const getMaxHeight = () => {
+    // Calculate height for Info text to prevent overlapping browser chrome
+    const height = document.documentElement?.clientHeight || window.innerHeight;
+
+    const width = document.documentElement?.clientWidth || window.innerWidth;
+
+    const correction = width > 720 ? 280 : 200;
+
+    return height - correction;
+};
+
+export default Info;
