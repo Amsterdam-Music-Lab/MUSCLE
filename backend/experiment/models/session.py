@@ -44,6 +44,10 @@ class Session(models.Model):
 
         return 0
 
+    def last_result(self):
+        """Get last result"""
+        self.result_set.last()
+
     def last_song(self):
         """Return artist and name of previous song, 
         or return empty string if no scores are set
