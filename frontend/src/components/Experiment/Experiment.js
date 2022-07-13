@@ -14,6 +14,7 @@ import SongSync from "../SongSync/SongSync";
 import StartSession from "../StartSession/StartSession";
 import Trial from "../Trial/Trial";
 import useResultHandler from "../../hooks/useResultHandler";
+import { stateNextRound } from "../../util/nextRound";
 
 // Experiment handles the main experiment flow:
 // - Loads the experiment and participant
@@ -47,12 +48,6 @@ const Experiment = ({ match }) => {
         },
         [loadState]
     );
-
-    function stateNextRound(state) {
-        let newState = state.next_round.shift();
-        newState.next_round = state.next_round;
-        return newState;
-    }
 
     // Start first_round when experiment and partipant have been loaded
     useEffect(() => {
@@ -120,7 +115,6 @@ const Experiment = ({ match }) => {
             setSession,
             onResult,
             onNext,
-            stateNextRound,
             ...state,
         };
 
