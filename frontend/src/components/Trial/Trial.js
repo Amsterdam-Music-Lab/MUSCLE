@@ -15,7 +15,7 @@ const Trial = ({ participant, session, playback, feedback_form, config, onNext, 
     const resultBuffer = useRef([]);
 
     const [formActive, setFormActive] = useState(!config.listen_first);
-    const [preloadReady, setPreloadReady] = useState(!(playback.play_config.ready_time))
+    const [preloadReady, setPreloadReady] = useState(!(playback?.play_config?.ready_time))
 
     const submitted = useRef(false);
 
