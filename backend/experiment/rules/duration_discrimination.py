@@ -131,7 +131,7 @@ class DurationDiscrimination(Base):
             return None
         expected_result = 'EQUAL' if difference == 0 else 'LONGER'
         # create Result object and save expected result to database
-        result_pk = Base.prepare_result(session, section, expected_result)
+        result_pk = cls.prepare_result(session, section, expected_result)
         question_text = cls.get_question_text()
         question = ChoiceQuestion(
             question=question_text,

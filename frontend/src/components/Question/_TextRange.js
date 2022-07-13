@@ -6,15 +6,19 @@ import classNames from "classnames";
 const TextRange = ({ question, value, onChange, emphasizeTitle = true }) => {
     const emptyValue = !value;
 
+    const keys = Object.keys(question.choices);
+    const choices = Object.values(question.choices);
+
     const onSliderChange = (index) => {
-        onChange(question.choices[index]);
+        onChange(keys[index]);
     };
+
 
     let sliderValue = 0;
     if (emptyValue) {
-        sliderValue = Math.round(question.choices.length / 2) - 1;
+        sliderValue = Math.round(keys.length / 2) - 1;
     } else {
-        sliderValue = question.choices.indexOf(value);
+        sliderValue = keys.indexOf(value);
     }
 
     return (
@@ -25,20 +29,20 @@ const TextRange = ({ question, value, onChange, emphasizeTitle = true }) => {
 
             <h3 className={classNames({title: emphasizeTitle})}>{question.question}</h3>
 
-            <h4 className="current-value">{emptyValue ? "↔" : value}</h4>
+            <h4 className="current-value">{emptyValue ? "↔" : question.choices[value]}</h4>
 
             <Slider
                 value={sliderValue}
                 onChange={onSliderChange}
                 min={0}
-                max={question.choices.length - 1}
+                max={choices.length - 1}
                 tooltip={false}
             />
 
             <div className="limits">
-                <span className="min">{question.choices[0]}</span>
+                <span className="min">{choices[0]}</span>
                 <span className="max">
-                    {question.choices[question.choices.length - 1]}
+                    {choices[choices.length - 1]}
                 </span>
             </div>
         </div>
