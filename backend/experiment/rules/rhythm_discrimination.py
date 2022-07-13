@@ -171,7 +171,7 @@ def next_trial_actions(session, round_number, request_session):
 
     expected_result = 'SAME' if condition['group'] == '1' else 'DIFFERENT'
     # create Result object and save expected result to database
-    result_pk = cls.prepare_result(session, section, expected_result)
+    result_pk = RhythmDiscrimination.prepare_result(session, section, expected_result)
     question = ChoiceQuestion(
         key='same',
         question=_(
