@@ -186,7 +186,7 @@ const Experiment = ({ match }) => {
                 <DefaultPage
                     title={state.title}
                     logoClickConfirm={
-                        ["FINAL_SCORE", "ERROR"].includes(key)
+                        ["FINAL", "ERROR"].includes(key)
                             ? null
                             : "Are you sure you want to stop this experiment?"
                     }
