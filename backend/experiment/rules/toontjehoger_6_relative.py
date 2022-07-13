@@ -1,11 +1,10 @@
 import logging
 from django.utils.translation import gettext_lazy as _
-
+from random import randint
 from experiment.models import Section
 from .views import Trial, Explainer, Step, Score, Final, StartSession, Playlist, SongSync
 from .views.form import ChoiceQuestion, Form, DropdownQuestion
 from .views.playback import Playback
-from .util.actions import render_feedback_trivia
 from .base import Base
 from .util.actions import combine_actions
 
@@ -13,6 +12,9 @@ logger = logging.getLogger(__name__)
 
 class ToontjeHoger6Relative(Base):
     ID = 'TOONTJE_HOGER_6_RELATIVE'
+    TITLE = _("Toontje Hoger")
+    SCORE_CORRECT = 50
+    SCORE_WRONG = 0
 
     @classmethod
     def first_round(cls, experiment):
@@ -23,35 +25,34 @@ class ToontjeHoger6Relative(Base):
             instruction="Uitleg",
             steps=[
                 Step(
-                    _("Luister naar een aantal muziekfragmenten."), number=1),
+                    _("In dit experiment testen we het relatief gehoor"), number=1),
                 Step(
-                    _("Hoor jij welke melodieën hetzelfde zijn?"), number=2),
-                Step(_("Heel veel succes met dit experiment!")),
+                    _("Er volgen nu 3 vragen"), number=2),
             ],
             button_label=_("Start")
 
         ).action(step_numbers=False)
 
-        # 3. Choose playlist.
+        # 2. Choose playlist.
         playlist = Playlist.action(experiment.playlists.all())
 
-        # 4. Start session.
+        # 3. Start session.
         start_session = StartSession.action()
 
-        return combine_actions(
+        return [
             explainer,
             playlist,
             start_session
-        )
+        ]
 
     @classmethod
     def next_round(cls, session, request_session=None):
         """Get action data for the next round"""
 
         rounds_passed = session.rounds_passed();
-        print(rounds_passed)
+
         # End of the game
-        if rounds_passed == 3:
+        if rounds_passed >= 3:
 
             # Finish session.
             session.finish()
@@ -59,6 +60,7 @@ class ToontjeHoger6Relative(Base):
 
             # Return a score and final score action.
             return combine_actions(
+                *cls.get_score(session),
                 Final(
                     session=session,
                     final_text=cls.final_score_message(session),
@@ -68,31 +70,103 @@ class ToontjeHoger6Relative(Base):
 
         # Round 1
         if rounds_passed == 0:
+            # No combine_actions because of inconsistent next_round array wrapping in first round
             return cls.get_round1(session)
 
         # Round 2
         if rounds_passed == 1:
-            return cls.get_round2(session)
-
+            return combine_actions(*cls.get_score(session), *cls.get_round2(session))
+        
         # Round 3
         if rounds_passed == 2:
-            return cls.get_round3(session)
+            return combine_actions(*cls.get_score(session), *cls.get_round3(session))
 
         # Should not happen
         return None
 
+
+    @classmethod
+    def get_score(cls, session):
+        # Return score view
+        config = { 'show_total_score': True }
+        return [Score(session,config=config).action()]
+
     @classmethod
     def get_round1(cls, session):
-        # TODO: Get section from tag
-        section = session.section_from_unused_song()
-        section2 = session.section_from_unused_song()
 
-        result_pk = Base.prepare_result(session, section)
+        # Explain round
+        # -----------------
+        explainer = Explainer(
+            instruction="Vraag 1",
+            steps=[
+                Step(
+                    _("Luister naar de twee melodieën"), number=1),
+                Step(
+                    _("Hoor jij of deze hetzelfde zijn?"), number=2),
+            ],
+            button_label=_("Start")
+        ).action(step_numbers=False)
+
+        # Config
+        # -----------------
+        same_melodies = randint(0, 1) == 1
+        section1 = session.section_from_unused_song(filter_by={'group': '1', 'tag': 'original'})
+        
+        if section1 == None:
+            raise Exception("Error: could not find section1 for round 1")
+        # Section 2, is equal to section 1 if melodies are the same
+        # Else get a section with the same group, but with different tags
+        # e.g.
+        # section1: code=12345, tag=0, group=1
+        # section2: code=12345, tag=1, group=1
+        section2 = section1 if same_melodies else session.section_from_any_song(filter_by={'artist': section1.artist, 'name': section1.name, 'tag': 'variation'})
+        if section2 == None:
+            raise Exception("Error: could not find section2 for round 1")
+
+        expected_response= 'YES' if same_melodies else 'NO'
+        result_pk = Base.prepare_result(session, section=section1,expected_response=expected_response)
+        
+        # Play section 1
+        # -----------------
+        # Player 1
+        play_config = {
+            'label_style': '',
+        }
+        playback1 = Playback([section1], player_type=Playback.TYPE_AUTOPLAY, play_config=play_config)
+
+        # Trial 1
+        trial_config = {
+           'auto_advance':True, 
+           'show_continue_button':True # False
+        }
+
+        play_trial1 = Trial(
+            config=trial_config,
+            playback=playback1,
+            title=cls.TITLE,
+        ).action()
+
+        # Play section 2
+        # -----------------
+        # Player 2
+        play_config = {
+            'label_style': '',
+        }
+        playback2 = Playback([section2], player_type=Playback.TYPE_AUTOPLAY, play_config=play_config)
+
+        play_trial2 = Trial(
+            config=trial_config,
+            playback=playback2,
+            title=cls.TITLE,
+        ).action()
+
+        # Ask question
+        # -----------------
 
         # Question
         question = ChoiceQuestion(
             question=_('Zijn deze twee melodieën hetzelfde?'),
-            key='dontknow',
+            key='equal_melodies',
             choices={
                 'YES': _('YES'),
                 'NO': _('NO'),
@@ -103,30 +177,30 @@ class ToontjeHoger6Relative(Base):
         )
         form = Form([question])
 
-        # Player
-        play_config = {
-            'label_style': '',
-        }
-        playback = Playback([section, section2], player_type=Playback.TYPE_MULTIPLAYER, play_config=play_config)
-
         # Trial
-        trial_config = {'style': 'boolean blue-players'}
-
         trial = Trial(
-            config=trial_config,
-            playback=playback,
+            playback=None,
             feedback_form=form,
-            title=_('Toontje Hoger'),
-        )
-        return combine_actions(trial.action())
+            title=cls.TITLE,
+        ).action()
+
+
+        return [explainer, play_trial1, play_trial2, trial]
     
     @classmethod
     def get_round2(cls, session):
-        # TODO: Get section from tag
-        section = session.section_from_unused_song()
-        section2 = session.section_from_unused_song()
+        # Config
+        # -----------------
+        section1 = session.section_from_unused_song(filter_by={'group':'2', 'tag': 'original'})
+        if section1 == None:
+            raise Exception( "Error: could not find section1 for round 2")
+        section2 = session.section_from_unused_song(filter_by={'artist': section1.artist, 'name': section1.name, 'tag': 'variation'})
+        if section2 == None:
+            raise Exception( "Error: could not find section2 for round 2")
 
-        result_pk = Base.prepare_result(session, section)
+        correct_section = section1 if randint(0, 1) == 1 else section2
+        expected_response= correct_section.pk
+        result_pk = Base.prepare_result(session, section=correct_section,expected_response=expected_response)
 
         # Step 1
         # --------------------
@@ -134,16 +208,16 @@ class ToontjeHoger6Relative(Base):
         # Listen
         play_config = {
         }
-        playback = Playback([section], play_config=play_config, preload_message=_('Get ready!'), player_type=Playback.TYPE_AUTOPLAY);
+        playback = Playback([correct_section], play_config=play_config, preload_message=_('Get ready!'), player_type=Playback.TYPE_AUTOPLAY);
 
         listen_config = {
-            'auto_advance': True
+            'auto_advance': False
         }
         
         listen = Trial(
             config=listen_config,
             playback=playback,
-            title=_('Toontje Hoger'),
+            title=cls.TITLE,
         )
 
         # Step 2
@@ -152,10 +226,10 @@ class ToontjeHoger6Relative(Base):
         # Question
         question = ChoiceQuestion(
             question=_('Welke van deze twee melodieën is hetzelfde als de vorige melodie?'),
-            key='dontknow',
+            key='same_melodie',
             choices={
-                'A': _('Melodie A'),
-                'B': _('Melodie B'),
+                section1.pk : _('Melodie A'),
+                section2.pk : _('Melodie B'),
             },
             view='BUTTON_ARRAY',
             result_id=result_pk,
@@ -167,7 +241,7 @@ class ToontjeHoger6Relative(Base):
         play_config = {
             'label_style': 'ALPHABETIC',
         }
-        playback = Playback([section, section2], player_type=Playback.TYPE_MULTIPLAYER, play_config=play_config)
+        playback = Playback([section1, section2], player_type=Playback.TYPE_MULTIPLAYER, play_config=play_config)
 
         # Trial
         trial_config = {'style': 'boolean blue-players'}
@@ -176,31 +250,38 @@ class ToontjeHoger6Relative(Base):
             config=trial_config,
             playback=playback,
             feedback_form=form,
-            title=_('Toontje Hoger'),
+            title=cls.TITLE,
         )
-        return combine_actions(listen.action(), trial.action())
-
+        return [listen.action(), trial.action()]
+    
     @classmethod
     def get_round3(cls, session):
-        # TODO: Get section from tag
-        section = session.section_from_unused_song()
-        section2 = session.section_from_unused_song()
-        section3 = session.section_from_unused_song()
-        section4 = session.section_from_unused_song()
+        # Configuration
+        # --------------------
+        different_melody = randint(0,3)
+        
+        section_default = session.section_from_unused_song(filter_by={'group': '3','tag': 'original'})
+        if section_default == None:
+            raise Exception("Error: could not find section_default for round 3")
 
-        result_pk = Base.prepare_result(session, section)
+        section_different = session.section_from_unused_song(filter_by={'artist': section_default.artist, 'name': section_default.name, 'tag': 'variation'})
+        if section_different == None:
+            raise Exception("Error: could not find section_different for round 3")
 
-
+        sections = [section_default,section_default,section_default,section_default]
+        sections[different_melody] = section_different
+        
+        result_pk = Base.prepare_result(session, section_default, expected_response=different_melody)
         
         # Question
         question = ChoiceQuestion(
             question=_('Welke van deze melodieën is anders dan de rest?'),
-            key='dontknow',
+            key='different_melodie',
             choices={
-                'A': _('A'),
-                'B': _('B'),
-                'C': _('C'),
-                'D': _('D'),
+                '0': _('A'),
+                '1': _('B'),
+                '2': _('C'),
+                '3': _('D'),
             },
             view='BUTTON_ARRAY',
             result_id=result_pk,
@@ -212,7 +293,7 @@ class ToontjeHoger6Relative(Base):
         play_config = {
             'label_style': 'ALPHABETIC',
         }
-        playback = Playback([section, section2, section3, section4], player_type=Playback.TYPE_MULTIPLAYER, play_config=play_config)
+        playback = Playback(sections, player_type=Playback.TYPE_MULTIPLAYER, play_config=play_config)
 
         # Trial
         trial_config = {'style': 'neutral'}
@@ -221,13 +302,10 @@ class ToontjeHoger6Relative(Base):
             config=trial_config,
             playback=playback,
             feedback_form=form,
-            title=_('Toontje Hoger'),
+            title=cls.TITLE,
         )
-        return combine_actions(trial.action())
+        return [trial.action()]
 
-    @staticmethod
-    def calculate_score(result, form_element, data):
-        # a result's score is used to keep track of how many correct results were in a row
-        # for catch trial, set score to 2 -> not counted for calculating turnpoints
-        print("{}".format(result));
-        return None
+    @classmethod
+    def calculate_score(cls, result, form_element, data):
+        return cls.SCORE_CORRECT if result.expected_response == result.given_response else cls.SCORE_WRONG
