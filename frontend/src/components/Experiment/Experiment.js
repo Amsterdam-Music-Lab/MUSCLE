@@ -2,7 +2,6 @@ import React, { useState, useEffect, useCallback } from "react";
 import { useExperiment, useParticipant, getNextRound } from "../../API";
 import { TransitionGroup, CSSTransition } from "react-transition-group";
 import { withRouter } from "react-router-dom";
-import { stateNextRound } from "../../util/nextRound";
 
 import Consent from "../Consent/Consent";
 import DefaultPage from "../Page/DefaultPage";
@@ -49,6 +48,12 @@ const Experiment = ({ match }) => {
         [loadState]
     );
 
+    function stateNextRound(state) {
+        let newState = state.next_round.shift();
+        newState.next_round = state.next_round;
+        return newState;
+    }
+
     // Start first_round when experiment and partipant have been loaded
     useEffect(() => {
         // Check if done loading
@@ -67,7 +72,7 @@ const Experiment = ({ match }) => {
         participant,
         loadingParticipant,
         setError,
-        loadState
+        loadState,
     ]);
 
     // Load next round, stored in nextRound
@@ -114,7 +119,8 @@ const Experiment = ({ match }) => {
             setError,
             setSession,
             onResult,
-            onNext,            
+            onNext,
+            stateNextRound,
             ...state,
         };
 
