@@ -53,7 +53,7 @@ const Final= ({ score, final_text, action_texts, button, onNext, history, show_p
                 <div dangerouslySetInnerHTML={{ __html: final_text }} />
             </div>
             {button && (
-                <a className="text-center" href={button.link}>
+                <a className="text-center pt-4" href={button.link}>
                     <button className='btn btn-primary btn-lg'>
                         {button.text}
                     </button>
