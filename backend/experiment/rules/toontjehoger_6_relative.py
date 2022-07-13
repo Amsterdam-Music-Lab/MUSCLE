@@ -124,7 +124,7 @@ class ToontjeHoger6Relative(Base):
             raise Exception("Error: could not find section2 for round 1")
 
         expected_response= 'YES' if same_melodies else 'NO'
-        result_pk = Base.prepare_result(session, section=section1,expected_response=expected_response)
+        result_pk = cls.prepare_result(session, section=section1,expected_response=expected_response)
         
         # Play section 1
         # -----------------
@@ -200,7 +200,7 @@ class ToontjeHoger6Relative(Base):
 
         correct_section = section1 if randint(0, 1) == 1 else section2
         expected_response= correct_section.pk
-        result_pk = Base.prepare_result(session, section=correct_section,expected_response=expected_response)
+        result_pk = cls.prepare_result(session, section=correct_section,expected_response=expected_response)
 
         # Step 1
         # --------------------
@@ -271,7 +271,7 @@ class ToontjeHoger6Relative(Base):
         sections = [section_default,section_default,section_default,section_default]
         sections[different_melody] = section_different
         
-        result_pk = Base.prepare_result(session, section_default, expected_response=different_melody)
+        result_pk = cls.prepare_result(session, section_default, expected_response=different_melody)
         
         # Question
         question = ChoiceQuestion(

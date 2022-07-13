@@ -90,7 +90,7 @@ class ToontjeHoger3PLINK(Base):
     def get_recognize_view(cls, session):
         section = session.section_from_unused_song()
         section2 = session.section_from_unused_song()
-        result_pk = Base.prepare_result(session, section)
+        result_pk = cls.prepare_result(session, section)
 
         # Get song sections
         all_sections = session.all_sections()
@@ -126,7 +126,7 @@ class ToontjeHoger3PLINK(Base):
     def get_button_view(cls, session):
         section = session.section_from_unused_song()
         section2 = session.section_from_unused_song()
-        result_pk = Base.prepare_result(session, section)
+        result_pk = cls.prepare_result(session, section)
         print("{}".format(result_pk))
         # Get song sections
         all_sections = session.all_sections()
