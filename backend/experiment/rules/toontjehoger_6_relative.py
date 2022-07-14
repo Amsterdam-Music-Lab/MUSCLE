@@ -114,7 +114,7 @@ class ToontjeHoger6Relative(Base):
         # Trial 1
         trial_config = {
             'auto_advance': True,
-            'show_continue_button': True  # False
+            'show_continue_button': False
         }
 
         play_trial1 = Trial(
@@ -171,7 +171,7 @@ class ToontjeHoger6Relative(Base):
         explainer = Explainer(
             instruction="Vraag 2",
             steps=[
-                 Step(_("Je krijgt eenmalig een melodie te horen.")),
+                Step(_("Je krijgt eenmalig een melodie te horen.")),
                 Step(
                     _("Luister goed, want er volgt weer een vraag!")),
             ],
@@ -205,7 +205,8 @@ class ToontjeHoger6Relative(Base):
             'Get ready!'), player_type=Playback.TYPE_AUTOPLAY)
 
         listen_config = {
-            'auto_advance': False
+            'auto_advance': True,
+            'show_continue_button': False
         }
 
         listen = Trial(
@@ -240,7 +241,9 @@ class ToontjeHoger6Relative(Base):
             [section1, section2], player_type=Playback.TYPE_MULTIPLAYER, play_config=play_config)
 
         # Trial
-        trial_config = {'style': 'boolean blue-players'}
+        trial_config = {
+            'style': 'boolean blue-players',            
+        }
 
         trial = Trial(
             config=trial_config,
