@@ -10,3 +10,4 @@ from .start_session import StartSession
 from .trial import Trial
 from .two_alternative_forced import TwoAlternativeForced
 from .info import Info
+from .plink import Plink
