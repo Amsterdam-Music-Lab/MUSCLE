@@ -10,7 +10,7 @@ const FeedbackForm = ({
     skipLabel,
     isSkippable,
     onResult,
-    emphasizeTitle = true,
+    emphasizeTitle = false,
 }) => {
     const showSubmitButtons =
         form.filter((formElement) => formElement.submits).length === 0;
