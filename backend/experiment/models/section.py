@@ -54,6 +54,9 @@ class Section(models.Model):
         """Return absolute url for this section"""
         return reverse('experiment:section', args=[self.pk, self.code])
 
+    def simple_object(self):
+        return {'id': self.id, 'url': self.absolute_url()}
+
     def export_admin(self):
         """Export data for admin"""
         return {
