@@ -72,7 +72,7 @@ class ToontjeHoger3Plink(Base):
         last_result = session.last_result()
 
         if not last_result:
-            logging.error("No last result")
+            logger.error("No last result")
             return ""
 
         data = last_result.load_json_data()
@@ -80,7 +80,7 @@ class ToontjeHoger3Plink(Base):
         # Section
         section = last_result.section
         if not section:
-            logging.error("Result without section")
+            logger.error("Result without section")
             return ""
 
         # Main question
@@ -223,7 +223,7 @@ class ToontjeHoger3Plink(Base):
         if extra_questions:
             section = result.section
             if section is None:
-                logging.error("Error: No section on result")
+                logger.error("Error: No section on result")
                 return 0
 
             score = 0
@@ -236,7 +236,7 @@ class ToontjeHoger3Plink(Base):
             return score
 
         # Should not happen
-        logging.error("Error: could not calculate score")
+        logger.error("Error: could not calculate score")
         return 0
 
     @classmethod
