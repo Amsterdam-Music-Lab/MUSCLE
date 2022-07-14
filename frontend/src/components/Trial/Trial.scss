@@ -68,6 +68,10 @@
     
 
     &.neutral {
+        .aha__play-button{
+            @include btn-style($blue);
+        }
+
         .aha__player-small:nth-of-type(1){
             .btn,
             .banner {
