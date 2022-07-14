@@ -156,7 +156,7 @@ const Trial = ({ participant, session, playback, feedback_form, config, onNext, 
                 skipLabel={feedback_form.skip_label}
                 isSkippable={feedback_form.is_skippable}
                 onResult={makeResult}
-                emphasizeTitle={!playback}
+                emphasizeTitle={feedback_form.is_profile}
             />)}
             {preloadReady && !feedback_form && config.show_continue_button && (
                 <div className="text-center">
