@@ -191,8 +191,12 @@ class ToontjeHoger3Plink(Base):
 
             score = 0
             extra_questions = data['extra_questions']
-            # Check if the given answers are substring of the section.group field
-            # e.g section.group = 60s,vrolijk
+            if not isinstance(extra_questions,list):
+                logging.error("Error: extra_questions is not an array")
+                return 0
+                
+            # Check if the given answers
+            # e.g section.group = 60s;vrolijk (time_period;emotion)
             for answer in extra_questions:
                 score += cls.SCORE_EXTRA_CORRECT if answer in section.group else cls.SCORE_EXTRA_WRONG
             
