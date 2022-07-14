@@ -50,6 +50,11 @@ class DropdownQuestion(Question):
         self.choices = choices
         self.view = 'DROPDOWN'
 
+class RadiosQuestion(Question):
+    def __init__(self, choices, **kwargs):
+        super().__init__(**kwargs)
+        self.choices = choices
+        self.view = 'RADIOS'
 
 class RangeQuestion(Question):
     def __init__(self, min_value, max_value, **kwargs):
