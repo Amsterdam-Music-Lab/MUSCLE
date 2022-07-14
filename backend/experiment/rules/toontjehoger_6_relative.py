@@ -93,7 +93,7 @@ class ToontjeHoger6Relative(Base):
             ],
             button_label=_("Start")
         ).action(step_numbers=False)
-
+        
         # Config
         # -----------------
         same_melodies = randint(0, 1) == 1
@@ -157,7 +157,7 @@ class ToontjeHoger6Relative(Base):
 
         # Question
         question = ChoiceQuestion(
-            question=_('Zijn deze twee melodieën hetzelfde?'),
+            question=_('Waren deze twee melodieën hetzelfde?'),
             key='equal_melodies',
             choices={
                 'YES': _('YES'),
