@@ -22,11 +22,11 @@ const Score = ({
     useEffect(() => {
         const id = setTimeout(() => {
             if (score !== scoreValue.current) {
-                // lower
                 if (scoreValue.current < score) {
                     scoreValue.current += 1;
                     setShowScore(scoreValue.current);
-                } else {
+                } 
+                if (scoreValue.current > score){
                     scoreValue.current -= 1;
                     setShowScore(scoreValue.current);
                 }
