@@ -1,14 +1,12 @@
 import logging
 from django.utils.translation import gettext_lazy as _
 from django.template.loader import render_to_string
-from random import randint
-from .views import  Trial, Explainer, Step, Score, Final, StartSession, Playlist, Info
+from .views import  Plink, Explainer, Step, Score, Final, StartSession, Playlist, Info
 from .views.form import ChoiceQuestion, RadiosQuestion, Form, DropdownQuestion, RadiosQuestion
 from .views.playback import Playback
 from .base import Base
 from os.path import join
 from .util.actions import combine_actions
-from pprint import pprint
 
 logger = logging.getLogger(__name__)
 
@@ -16,8 +14,10 @@ logger = logging.getLogger(__name__)
 class ToontjeHoger3Plink(Base):
     ID = 'TOONTJE_HOGER_3_PLINK'
     TITLE = _("Toontje Hoger")
-    SCORE_CORRECT = 50
-    SCORE_WRONG = 0
+    SCORE_MAIN_CORRECT = 50
+    SCORE_MAIN_WRONG = -10
+    SCORE_EXTRA_CORRECT = 15
+    SCORE_EXTRA_WRONG = 0
 
     @classmethod
     def first_round(cls, experiment):
@@ -59,11 +59,11 @@ class ToontjeHoger3Plink(Base):
         # Round 1
         if rounds_passed == 0:
             # No combine_actions because of inconsistent next_round array wrapping in first round
-            return cls.get_main_question(session) + cls.get_optional_question1(session) + cls.get_optional_question2(session)
+            return cls.get_plink_round(session)
 
         # Round 2-6
         if rounds_passed <= 5:
-            return combine_actions(*cls.get_score(session), *cls.get_main_question(session))
+            return combine_actions(*cls.get_score(session), *cls.get_plink_round(session))
 
         # Final
         return combine_actions(*cls.get_final_round(session))
@@ -77,7 +77,7 @@ class ToontjeHoger3Plink(Base):
         return [score]
 
     @classmethod
-    def get_main_question(cls, session):
+    def get_plink_round(cls, session):
 
         # Config
         # -----------------
@@ -98,43 +98,22 @@ class ToontjeHoger3Plink(Base):
         result_pk = cls.prepare_result(
             session, section=section, expected_response=expected_response)
 
-        # Main question
+        # Plink round
         # --------------------
+        extra_questions = [cls.get_optional_question1(session), cls.get_optional_question2(session)]
 
-        # Question
-        question = DropdownQuestion(
-            question=_('Noem de artiest en de titel van het nummer'),
-            key='recognize',
-            choices=choices,
-            result_id=result_pk,
-            submits=False
-        )
-        button = ChoiceQuestion(
-            key='dont_know',
-            choices={
-                'skip': _("Ik weet het niet"),
-            },
-            view='BUTTON_ARRAY',
-            result_id=result_pk,
-            submits=True
-        )
-        form = Form([question,button])
-
-        # Player
-        play_config = {'auto_play': True}
-        playback = Playback(
-            [section], player_type=Playback.TYPE_BUTTON, play_config=play_config)
-
-        # Trial
-        trial_config = {}
-        trial = Trial(
-            config=trial_config,
-            playback=playback,
-            feedback_form=form,
+        plink = Plink(
+            section=section, 
             title=cls.TITLE,
+            result_id=result_pk,
+            main_question=_('Noem de artiest en de titel van het nummer'),
+            choices=choices,
+            submit_label=_("Volgende"),
+            dont_know_label=_("Ik weet het niet"),
+            extra_questions=extra_questions,
         ).action()
 
-        return [trial]
+        return [plink]
 
     @classmethod
     def get_optional_question1(cls, session):
@@ -146,7 +125,7 @@ class ToontjeHoger3Plink(Base):
         periods = ["60's", "70's", "80's", "90's", "00's", "10's", "20's"]
         period_choices = {}
         for period in periods:
-            period_choices[period.replace("'", "")] = period.capitalize()
+            period_choices[period] = period
 
         question = RadiosQuestion(
             question=_('Wanneer is het nummer uitgebracht?'),
@@ -154,15 +133,8 @@ class ToontjeHoger3Plink(Base):
             choices=period_choices,
             submits=False
         )
-        form = Form([question])
 
-        # Trial question 1
-        trial = Trial(
-            feedback_form=form,
-            title=cls.TITLE,
-        ).action()
-
-        return [trial]
+        return question.action()
 
     @classmethod
     def get_optional_question2(cls, session):
@@ -175,23 +147,61 @@ class ToontjeHoger3Plink(Base):
 
         question = RadiosQuestion(
             question=_('Welke emotie past bij dit nummer?'),
-            key='time_period',
+            key='emotion',
             choices=emotion_choices,
             submits=True
         )
-        form = Form([question])
 
-        # Trial
-        trial = Trial(
-            feedback_form=form,
-            title=cls.TITLE,
-        ).action()
-
-        return [trial]
+        return question.action()
 
     @classmethod
     def calculate_score(cls, result, form_element, data):
-        return cls.SCORE_CORRECT if result.expected_response == result.given_response else cls.SCORE_WRONG
+        """
+        Calculate score, based on the data field
+
+        e.g. only main question answered
+        {
+            main_question: "100",
+            extra_questions: []
+        }
+
+        e.g. only main question answered
+        {
+            main_question: "",
+            extra_questions: ["60s","vrolijk"]
+        }
+        
+        """
+        main_question = ""
+        if 'main_question' in data:
+            main_question = data['main_question']
+
+        # Participant guessed the artist/title:
+        if main_question != "":
+            result.given_response = main_question
+            result.save()
+            return cls.SCORE_MAIN_CORRECT if result.expected_response == result.given_response else cls.SCORE_MAIN_WRONG
+
+        # Handle extra questions data
+        if 'extra_questions' in data:
+            section = result.section
+            if section is None:
+                logging.error("Error: No section on result")
+                return 0
+
+            score = 0
+            extra_questions = data['extra_questions']
+            # Check if the given answers are substring of the section.group field
+            # e.g section.group = 60s,vrolijk
+            for answer in extra_questions:
+                score += cls.SCORE_EXTRA_CORRECT if answer in section.group else cls.SCORE_EXTRA_WRONG
+            
+            return score
+
+        # Should not happen
+        logging.error("Error: could not calculate score")
+        return 0
+
 
     @classmethod
     def get_final_round(cls, session):
