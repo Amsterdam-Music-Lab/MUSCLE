@@ -28,9 +28,10 @@ class ToontjeHoger6Relative(Base):
             instruction="Uitleg",
             steps=[
                 Step(
-                    _("In dit experiment testen we het relatief gehoor"), number=1),
+                    _("In deze minigame kan je testen hoe goed jouw relatieve gehoor is! Relatief gehoor is het vermogen om verschil of gelijkenis tussen tonen te kunnen herkennen.")),
+                Step(_("Je krijgt zo eerst twee melodieën te horen."), number=1),
                 Step(
-                    _("Er volgen nu 3 vragen"), number=2),
+                    _("Geef aan of deze melodieën hetzelfde zijn!"), number=2),
             ],
             button_label=_("Start")
 
@@ -79,19 +80,6 @@ class ToontjeHoger6Relative(Base):
 
     @classmethod
     def get_round1(cls, session):
-        # Explain round
-        # -----------------
-        explainer = Explainer(
-            instruction="Vraag 1",
-            steps=[
-                Step(
-                    _("Luister naar de twee melodieën"), number=1),
-                Step(
-                    _("Hoor jij of deze hetzelfde zijn?"), number=2),
-            ],
-            button_label=_("Start")
-        ).action(step_numbers=False)
-
         # Config
         # -----------------
         same_melodies = randint(0, 1) == 1
@@ -174,10 +162,23 @@ class ToontjeHoger6Relative(Base):
             title=cls.TITLE,
         ).action()
 
-        return [explainer, play_trial1, play_trial2, trial]
+        return [play_trial1, play_trial2, trial]
 
     @classmethod
     def get_round2(cls, session):
+        # Explainer
+        # -----------------
+        explainer = Explainer(
+            instruction="Vraag 2",
+            steps=[
+                 Step(_("Je krijgt eenmalig een melodie te horen."), number=1),
+                Step(
+                    _("Luister goed, want er volgt weer een vraag!"), number=2),
+            ],
+            button_label=_("Start")
+
+        ).action(step_numbers=False)
+
         # Config
         # -----------------
         section1 = session.section_from_unused_song(
@@ -247,7 +248,7 @@ class ToontjeHoger6Relative(Base):
             feedback_form=form,
             title=cls.TITLE,
         ).action()
-        return [listen, trial]
+        return [explainer, listen, trial]
 
     @classmethod
     def get_round3(cls, session):
