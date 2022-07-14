@@ -74,7 +74,8 @@ class ToontjeHoger6Relative(Base):
     def get_score(cls, session):
         # Return score view
         config = {'show_total_score': True}
-        return [Score(session, config=config).action()]
+        score = Score(session, config=config).action()
+        return [score]
 
     @classmethod
     def get_round1(cls, session):
@@ -210,7 +211,7 @@ class ToontjeHoger6Relative(Base):
             config=listen_config,
             playback=playback,
             title=cls.TITLE,
-        )
+        ).action()
 
         # Step 2
         # --------------------
@@ -245,8 +246,8 @@ class ToontjeHoger6Relative(Base):
             playback=playback,
             feedback_form=form,
             title=cls.TITLE,
-        )
-        return [listen.action(), trial.action()]
+        ).action()
+        return [listen, trial]
 
     @classmethod
     def get_round3(cls, session):
@@ -304,8 +305,8 @@ class ToontjeHoger6Relative(Base):
             playback=playback,
             feedback_form=form,
             title=cls.TITLE,
-        )
-        return [trial.action()]
+        ).action()
+        return [trial]
 
     @classmethod
     def calculate_score(cls, result, form_element, data):
