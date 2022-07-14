@@ -48,14 +48,11 @@ class ToontjeHoger6Relative(Base):
             start_session
         ]
 
-
     @classmethod
     def next_round(cls, session, request_session=None):
         """Get action data for the next round"""
 
         rounds_passed = session.rounds_passed()
-
-       
 
         # Round 1
         if rounds_passed == 0:
@@ -70,7 +67,7 @@ class ToontjeHoger6Relative(Base):
         if rounds_passed == 2:
             return combine_actions(*cls.get_score(session), *cls.get_round3(session))
 
-        # Final 
+        # Final
         return combine_actions(*cls.get_final_round(session))
 
     @classmethod
@@ -93,7 +90,7 @@ class ToontjeHoger6Relative(Base):
             ],
             button_label=_("Start")
         ).action(step_numbers=False)
-        
+
         # Config
         # -----------------
         same_melodies = randint(0, 1) == 1
@@ -313,29 +310,32 @@ class ToontjeHoger6Relative(Base):
     @classmethod
     def calculate_score(cls, result, form_element, data):
         return cls.SCORE_CORRECT if result.expected_response == result.given_response else cls.SCORE_WRONG
-    
+
     @classmethod
     def get_final_round(cls, session):
-    
+
         # Finish session.
         session.finish()
         session.save()
-        
+
         # Score
         score = cls.get_score(session)
 
         # Info page
-        body = render_to_string(join('info','toontjehoger','experiment6.html'))
-        info = Info(body=body, heading=_("Relatief gehoor"), continue_button=_("Volgende")).action()
+        body = render_to_string(
+            join('info', 'toontjehoger', 'experiment6.html'))
+        info = Info(body=body, heading=_("Relatief gehoor"),
+                    continue_button=_("Volgende")).action()
 
         # Final
-        final_text = _("Goed gedaan, jouw relatief gehoor is uitstekend!") if session.final_score >= 2 * cls.SCORE_CORRECT else _("Wellicht nog een poging wagen? Er is ruimte voor verbetering.")
+        final_text = _("Goed gedaan, jouw relatief gehoor is uitstekend!") if session.final_score >= 2 * \
+            cls.SCORE_CORRECT else _("Wellicht nog een poging wagen? Er is ruimte voor verbetering.")
         final = Final(
             session=session,
             final_text=final_text,
             rank=cls.rank(session),
-            button={'link':'https://www.amsterdammusiclab.nl', 'text':'Terug naar ToontjeHoger'}
+            button={'link': 'https://www.amsterdammusiclab.nl',
+                    'text': 'Terug naar ToontjeHoger'}
         ).action()
 
         return [*score, info, final]
-    
