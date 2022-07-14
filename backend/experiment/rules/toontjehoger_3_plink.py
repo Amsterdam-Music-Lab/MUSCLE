@@ -2,13 +2,13 @@ import logging
 from django.utils.translation import gettext_lazy as _
 from django.template.loader import render_to_string
 from random import randint
-from experiment.models import Section
-from .views import Trial, Explainer, Step, Score, Final, StartSession, Playlist, Info
-from .views.form import RadiosQuestion, Form, DropdownQuestion, RadiosQuestion
+from .views import  Trial, Explainer, Step, Score, Final, StartSession, Playlist, Info
+from .views.form import ChoiceQuestion, RadiosQuestion, Form, DropdownQuestion, RadiosQuestion
 from .views.playback import Playback
 from .base import Base
 from os.path import join
 from .util.actions import combine_actions
+from pprint import pprint
 
 logger = logging.getLogger(__name__)
 
@@ -52,6 +52,7 @@ class ToontjeHoger3Plink(Base):
     @classmethod
     def next_round(cls, session, request_session=None):
         """Get action data for the next round"""
+
 
         rounds_passed = session.rounds_passed()
 
@@ -108,7 +109,16 @@ class ToontjeHoger3Plink(Base):
             result_id=result_pk,
             submits=False
         )
-        form = Form([question])
+        button = ChoiceQuestion(
+            key='dont_know',
+            choices={
+                'skip': _("Ik weet het niet"),
+            },
+            view='BUTTON_ARRAY',
+            result_id=result_pk,
+            submits=True
+        )
+        form = Form([question,button])
 
         # Player
         play_config = {'auto_play': True}
