@@ -11,6 +11,7 @@ const Score = ({
     total_score,
     texts,
     icon,
+    feedback,
     timer,
     onNext,
 }) => {
@@ -85,7 +86,7 @@ const Score = ({
                 ))}
 
             {!timer && (
-                <div className="d-flex flex-column justify-content-center align-items-center mt-3">
+                <div className="d-flex flex-column justify-content-center align-items-center mt-3 mb-4">
                     <Button
                         key={"yes"}
                         className="btn-primary"
@@ -100,6 +101,10 @@ const Score = ({
                     <h4>{texts.listen_explainer}</h4>
                     <p>{last_song}</p>
                 </div>
+            )}
+
+            {feedback && (
+                <p className="feedback">{feedback}</p>
             )}
         </div>
     );
