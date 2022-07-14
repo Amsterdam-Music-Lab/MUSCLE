@@ -53,7 +53,7 @@ const getMaxHeight = () => {
 
     const width = document.documentElement?.clientWidth || window.innerWidth;
 
-    const correction = width > 720 ? 280 : 200;
+    const correction = width > 720 ? 280 : 250;
 
     return height - correction;
 };
