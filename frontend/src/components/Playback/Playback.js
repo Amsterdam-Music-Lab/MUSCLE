@@ -19,7 +19,7 @@ const Playback = ({
     preloadMessage,
     autoAdvance,
     decisionTime,
-    playConfig,
+    playConfig = {},
     time,
     submitResult,
     startedPlaying,
@@ -41,8 +41,15 @@ const Playback = ({
 
     // Cancel all events when component unmounts
     useEffect(() => {
-        cancelAudioListeners();
+        return () => {
+            cancelAudioListeners();
+        };
     }, [cancelAudioListeners]);
+
+    // Audio ended playing
+    const onAudioEnded = useCallback(() => {
+        setPlayerIndex(-1);
+    }, []);
 
     // Play audio
     const playAudio = useCallback(
@@ -69,14 +76,15 @@ const Playback = ({
             );
 
             // Play audio
-            audio.playFrom(Math.max(0, playConfig.playhead));
-            startedPlaying();
+            audio.playFrom(Math.max(0, playConfig.playhead || 0));
+            startedPlaying && startedPlaying();
         },
         [
             cancelAudioListeners,
             playConfig.mute,
             playConfig.playhead,
             startedPlaying,
+            onAudioEnded,
         ]
     );
 
@@ -117,11 +125,6 @@ const Playback = ({
         setPlayerIndex(-1);
         finishedPlaying && finishedPlaying();
     }, [finishedPlaying]);
-
-    // Audio ended playing
-    const onAudioEnded = useCallback(() => {
-        setPlayerIndex(-1);
-    }, []);
 
     // Stop audio on unmount
     useEffect(
