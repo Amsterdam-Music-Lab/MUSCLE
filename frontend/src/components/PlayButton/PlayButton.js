@@ -1,12 +1,12 @@
 import React from "react";
 import classNames from "classnames";
 
-const PlayButton = ({ playSection, isPlaying }) => {
+const PlayButton = ({ playSection, isPlaying, className="" }) => {
     return (
         <div
             className={classNames("aha__play-button border-outside", "btn", {
                 stop: isPlaying,
-            })}
+            },className)}
             onClick={playSection ? () => playSection(0) : undefined}
             tabIndex="0"
             onKeyPress={(e) => {
