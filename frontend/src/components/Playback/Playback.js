@@ -7,9 +7,9 @@ import AutoPlay from "./Autoplay";
 import PlayButton from "../PlayButton/PlayButton";
 import MultiPlayer from "./MultiPlayer";
 
-const AUTOPLAY = "AUTOPLAY";
-const BUTTON = "BUTTON";
-const MULTIPLAYER = "MULTIPLAYER";
+export const AUTOPLAY = "AUTOPLAY";
+export const BUTTON = "BUTTON";
+export const MULTIPLAYER = "MULTIPLAYER";
 
 const Playback = ({
     playerType,
