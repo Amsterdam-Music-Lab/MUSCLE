@@ -2,7 +2,7 @@ import React from "react";
 import classNames from "classnames";
 
 // Checkboxes is a question view for selecting multiple options from a list
-const Checkboxes = ({ question, value, onChange, emphasizeTitle = true }) => {
+const Checkboxes = ({ question, value, onChange, emphasizeTitle = false }) => {
     const values = value ? value.split(",") : [];
 
     // Add/remove value

@@ -2,7 +2,7 @@ import React, { useRef, useEffect } from "react";
 import classNames from 'classnames';
 
 // String is a question view that lets you input text
-const String = ({ question, value = "", onChange, emphasizeTitle = true }) => {
+const String = ({ question, value = "", onChange, emphasizeTitle = false }) => {
     const input = useRef(null);
 
     const handleChange = () => {

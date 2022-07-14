@@ -3,7 +3,7 @@ import React from "react";
 import classNames from "classnames";
 
 // ButtonArray is a question view for selecting a single option from a list of buttons
-const ButtonArray = ({ question, active, onChange, emphasizeTitle = true }) => {
+const ButtonArray = ({ question, active, onChange, emphasizeTitle = false }) => {
 
     const buttonPress = (value) => {
         if (!active) {

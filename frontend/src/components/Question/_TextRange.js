@@ -3,7 +3,7 @@ import Slider from "react-rangeslider";
 import classNames from "classnames";
 
 // TextRange is a question view that makes you select a value within the given range, using a slider from a list of choices
-const TextRange = ({ question, value, onChange, emphasizeTitle = true }) => {
+const TextRange = ({ question, value, onChange, emphasizeTitle = false }) => {
     const emptyValue = !value;
 
     const keys = Object.keys(question.choices);

@@ -2,7 +2,7 @@ import React from "react";
 import classNames from "classnames";
 
 // Radios is a question view for selecting a single option from a list
-const Radios = ({ question, value, onChange, emphasizeTitle = true }) => {
+const Radios = ({ question, value, onChange, emphasizeTitle = false }) => {
     return (
         <div className="aha__radios">
             {question.explainer && (

@@ -2,7 +2,7 @@ import React from "react";
 import classNames from 'classnames';
 
 // DropDown is a question view for selecting a single option from a dropdown list
-const DropDown = ({ question, value, onChange, emphasizeTitle = true }) => {
+const DropDown = ({ question, value, onChange, emphasizeTitle = false }) => {
 
     return (
         <div className="aha__dropdown">
