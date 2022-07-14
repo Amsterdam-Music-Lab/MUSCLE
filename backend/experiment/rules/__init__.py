@@ -9,7 +9,7 @@ from .hbat_bst import BST
 from .rhythm_discrimination import RhythmDiscrimination
 from .rhythm_experiment_series import RhythmExperimentSeries
 from .rhythm_experiment_series_mri import RhythmExperimentSeriesMRI
-from .toontjehoger_3_PLINK import ToontjeHoger3PLINK
+from .toontjehoger_3_plink import ToontjeHoger3Plink
 from .toontjehoger_6_relative import ToontjeHoger6Relative
 from .gold_msi import GoldMSI
 from .listening_conditions import ListeningConditions
@@ -36,6 +36,6 @@ EXPERIMENT_RULES = {
     ListeningConditions.ID: ListeningConditions,
     Hooked.ID: Hooked,
     Categorization.ID: Categorization,
-    ToontjeHoger3PLINK.ID: ToontjeHoger3PLINK,
+    ToontjeHoger3Plink.ID: ToontjeHoger3Plink,
     ToontjeHoger6Relative.ID: ToontjeHoger6Relative
 }
