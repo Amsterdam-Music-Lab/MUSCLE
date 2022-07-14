@@ -171,13 +171,13 @@ class ToontjeHoger6Relative(Base):
         explainer = Explainer(
             instruction="Vraag 2",
             steps=[
-                 Step(_("Je krijgt eenmalig een melodie te horen."), number=1),
+                 Step(_("Je krijgt eenmalig een melodie te horen.")),
                 Step(
-                    _("Luister goed, want er volgt weer een vraag!"), number=2),
+                    _("Luister goed, want er volgt weer een vraag!")),
             ],
             button_label=_("Start")
 
-        ).action(step_numbers=False)
+        ).action(step_numbers=True)
 
         # Config
         # -----------------
