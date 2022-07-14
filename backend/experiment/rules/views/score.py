@@ -60,6 +60,10 @@ class Score(object):  # pylint: disable=too-few-public-methods
 
     def default_score_message(self, score):
         """Fallback to generate a message for the given score"""
+        
+        # None
+        if score == None:
+            score = 0
         # Zero
         if score == 0:
             # "Too bad!", "Come on!", "Try another!", "Try again!"
