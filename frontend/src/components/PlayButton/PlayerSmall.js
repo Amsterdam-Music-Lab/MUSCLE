@@ -9,7 +9,7 @@ const PlayerSmall = ({ colorClass, style, label, onClick, playing }) => (
             <h3 className="label">{label}</h3>
         </>}
         <PlayButton
-            className={classNames({ stop: playing })}
+            isPlaying={playing}
         />
     </div>
 );
