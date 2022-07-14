@@ -104,7 +104,7 @@ const Score = ({
             )}
 
             {feedback && (
-                <p className="feedback">{feedback}</p>
+                <p className="feedback text-center">{feedback}</p>
             )}
         </div>
     );
