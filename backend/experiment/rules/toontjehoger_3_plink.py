@@ -1,7 +1,7 @@
 import logging
 from django.utils.translation import gettext_lazy as _
 from django.template.loader import render_to_string
-from .views import  Plink, Explainer, Step, Score, Final, StartSession, Playlist, Info
+from .views import Plink, Explainer, Step, Score, Final, StartSession, Playlist, Info
 from .views.form import ChoiceQuestion, RadiosQuestion, Form, DropdownQuestion, RadiosQuestion
 from .views.playback import Playback
 from .base import Base
@@ -29,9 +29,9 @@ class ToontjeHoger3Plink(Base):
             steps=[
                 Step(_("Luister naar een heel kort muziekfragment.")),
                 Step(
-                    _("Ken je het nummer? Noem de juiste artiest en titel.")),
+                    _("Ken je het nummer? Noem de juiste artiest en titel!")),
                 Step(
-                    _("Weet je het niet? Beantwoord dan extra vragen over tijdsperiode en emotie."))
+                    _("Weet je het niet? Beantwoord dan extra vragen over de tijdsperiode en emotie van het nummer."))
             ],
             button_label=_("Start")
 
@@ -53,7 +53,6 @@ class ToontjeHoger3Plink(Base):
     def next_round(cls, session, request_session=None):
         """Get action data for the next round"""
 
-
         rounds_passed = session.rounds_passed()
 
         # Round 1
@@ -69,10 +68,48 @@ class ToontjeHoger3Plink(Base):
         return combine_actions(*cls.get_final_round(session))
 
     @classmethod
+    def get_score_message(cls, session):
+        last_result = session.last_result()
+
+        if not last_result:
+            logging.error("No last result")
+            return ""
+
+        data = last_result.load_json_data()
+
+        # Section
+        section = last_result.section
+        if not section:
+            logging.error("Result without section")
+            return ""
+
+        # Main question
+        main_question = Plink.extract_main_question(data)
+
+        if main_question:
+            if main_question == last_result.expected_response:
+                return "Je hoorde inderdaad {} van {}".format(section.name, section.artist)
+            
+            return "Helaas, volgende keer beter"
+
+        extra_questions = Plink.extract_extra_questions(data)
+        if extra_questions:
+            # Section details
+            section_details = section.group.split(";")
+            time_period = section_details[0] if len(section_details) >= 1 else "?"
+            emotion = section_details[1] if len(section_details) >= 2 else "?"
+            feedback = "Het nummer komt uit de {} en de emotie is {}.".format(time_period, emotion)
+            return feedback
+
+        return ""
+
+    @classmethod
     def get_score(cls, session):
+        feedback = cls.get_score_message(session)
+
         # Return score view
-        config = {'show_total_score': True, 'show_section': True}
-        score = Score(session, config=config).action()
+        config = {'show_total_score': True}
+        score = Score(session, config=config, feedback=feedback).action()
 
         return [score]
 
@@ -100,10 +137,11 @@ class ToontjeHoger3Plink(Base):
 
         # Plink round
         # --------------------
-        extra_questions = [cls.get_optional_question1(session), cls.get_optional_question2(session)]
+        extra_questions = [cls.get_optional_question1(
+            session), cls.get_optional_question2(session)]
 
         plink = Plink(
-            section=section, 
+            section=section,
             title=cls.TITLE,
             result_id=result_pk,
             main_question=_('Noem de artiest en de titel van het nummer'),
@@ -120,7 +158,7 @@ class ToontjeHoger3Plink(Base):
 
         # Config
         # -----------------
-        
+
         # Question
         periods = ["60's", "70's", "80's", "90's", "00's", "10's", "20's"]
         period_choices = {}
@@ -170,11 +208,9 @@ class ToontjeHoger3Plink(Base):
             main_question: "",
             extra_questions: ["60s","vrolijk"]
         }
-        
+
         """
-        main_question = ""
-        if 'main_question' in data:
-            main_question = data['main_question']
+        main_question = Plink.extract_main_question(data)
 
         # Participant guessed the artist/title:
         if main_question != "":
@@ -183,29 +219,25 @@ class ToontjeHoger3Plink(Base):
             return cls.SCORE_MAIN_CORRECT if result.expected_response == result.given_response else cls.SCORE_MAIN_WRONG
 
         # Handle extra questions data
-        if 'extra_questions' in data:
+        extra_questions = Plink.extract_extra_questions(data)
+        if extra_questions:
             section = result.section
             if section is None:
                 logging.error("Error: No section on result")
                 return 0
 
             score = 0
-            extra_questions = data['extra_questions']
-            if not isinstance(extra_questions,list):
-                logging.error("Error: extra_questions is not an array")
-                return 0
-                
+
             # Check if the given answers
             # e.g section.group = 60s;vrolijk (time_period;emotion)
             for answer in extra_questions:
                 score += cls.SCORE_EXTRA_CORRECT if answer in section.group else cls.SCORE_EXTRA_WRONG
-            
+
             return score
 
         # Should not happen
         logging.error("Error: could not calculate score")
         return 0
-
 
     @classmethod
     def get_final_round(cls, session):
@@ -224,8 +256,8 @@ class ToontjeHoger3Plink(Base):
                     continue_button=_("Volgende")).action()
 
         # Final
-        final_text = _("Goed gedaan, jouw muziekherkenning is uitstekend!") if session.final_score >= 2 * \
-            cls.SCORE_CORRECT else _("Wellicht nog een poging wagen? Er is ruimte voor verbetering.")
+        final_text = _("Goed gedaan, jouw muziekherkenning is uitstekend!") if session.final_score >= 4 * \
+            cls.SCORE_MAIN_CORRECT else _("Wellicht nog een poging wagen? Er is ruimte voor verbetering.")
         final = Final(
             session=session,
             final_text=final_text,
@@ -235,3 +267,4 @@ class ToontjeHoger3Plink(Base):
         ).action()
 
         return [*score, info, final]
+
