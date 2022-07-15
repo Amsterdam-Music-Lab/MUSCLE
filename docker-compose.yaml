@@ -45,6 +45,9 @@ services:
           - type: bind
             source: ../aml-experiments/frontend/src
             target: /client/src
+          - type: bind
+            source: ./frontend/public
+            target: /client/public
         environment:
           - REACT_APP_API_ROOT=${REACT_APP_API_ROOT}
           - REACT_APP_EXPERIMENT_SLUG=${REACT_APP_EXPERIMENT_SLUG}
