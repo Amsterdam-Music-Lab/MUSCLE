@@ -17,14 +17,14 @@ services:
          - 8854:5000
     server:
         build:
-          context: ../aml-experiments/backend
+          context: ./backend
           dockerfile: DockerfileDevelop
         depends_on:
             - db
             - ip2country
         volumes:
           - type: bind
-            source: ../aml-experiments/backend
+            source: ./backend
             target: /server
         environment:
           - AML_DEBUG=${AML_DEBUG}
@@ -39,11 +39,11 @@ services:
         command: bash -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
     client:
         build:
-          context: ../aml-experiments/frontend
+          context: ./frontend
           dockerfile: DockerfileDevelop
         volumes:
           - type: bind
-            source: ../aml-experiments/frontend/src
+            source: ./frontend/src
             target: /client/src
           - type: bind
             source: ./frontend/public
