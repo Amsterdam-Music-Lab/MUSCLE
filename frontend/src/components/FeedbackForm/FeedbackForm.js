@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import Question from "../Question/Question";
 import Button from "../Button/Button";
 
@@ -12,12 +12,20 @@ const FeedbackForm = ({
     onResult,
     emphasizeTitle = false,
 }) => {
+    const isSubmitted = useRef(false);
     const showSubmitButtons =
         form.filter((formElement) => formElement.submits).length === 0;
 
     const [formValid, setFormValid] = useState(false);
 
     const onSubmit = () => {
+        // Prevent double submit
+        if (isSubmitted.current){
+            console.warning("Multiple submits detected");
+            return;
+        }
+        isSubmitted.current = true;
+
         // Callback onResult with question data
         onResult({
             form,
