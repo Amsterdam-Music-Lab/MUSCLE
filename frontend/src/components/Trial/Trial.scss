@@ -96,7 +96,7 @@
     }
 
     &.neutral-inverted {
-        .aha__player-small:nth-of-type(1),{
+        .aha__player-small:nth-of-type(1) {
             .btn,
             .banner {
                 @include btn-style($yellow);
