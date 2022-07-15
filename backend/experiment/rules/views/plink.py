@@ -11,7 +11,7 @@ class Plink(object):  # pylint: disable=too-few-public-methods
     ID = 'PLINK'
 
     def __init__(self, section, main_question, choices, submit_label, dont_know_label, extra_questions=[], title='', result_id=''):
-        '''
+        """
         - section: A section
         - main_question: Main question
         - choices: Question choices
@@ -19,7 +19,8 @@ class Plink(object):  # pylint: disable=too-few-public-methods
         - submit_label: Submit button labvel
         - extra_questions: A list of additional questions
         - title: Page title
-        '''
+        - result_id: Result id
+        """
         self.section = section.simple_object()
         self.title = title
         self.main_question = main_question
