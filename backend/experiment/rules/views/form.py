@@ -56,6 +56,12 @@ class RadiosQuestion(Question):
         self.choices = choices
         self.view = 'RADIOS'
 
+class ButtonArrayQuestion(Question):
+    def __init__(self, choices, **kwargs):
+        super().__init__(**kwargs)
+        self.choices = choices
+        self.view = 'BUTTON_ARRAY'
+
 class RangeQuestion(Question):
     def __init__(self, min_value, max_value, **kwargs):
         super().__init__(**kwargs)
