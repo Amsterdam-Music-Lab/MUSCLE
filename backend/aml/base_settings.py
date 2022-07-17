@@ -25,7 +25,7 @@ SECRET_KEY = os.getenv("AML_SECRET_KEY", 'topsecret')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv('AML_DEBUG', '') != 'False'
 
-ALLOWED_HOSTS = os.getenv("AML_ALLOWED_HOSTS", "localhost,127.0.0.1").split(",")
+ALLOWED_HOSTS = os.getenv("AML_ALLOWED_HOSTS", "localhost").split(",")
 
 # Application definition
 
