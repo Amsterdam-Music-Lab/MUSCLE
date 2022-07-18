@@ -53,11 +53,11 @@ const Final= ({ score, final_text, action_texts, button, onNext, history, show_p
                 <div dangerouslySetInnerHTML={{ __html: final_text }} />
             </div>
             {button && (
-                <a className="text-center pt-4" href={button.link}>
-                    <button className='btn btn-primary btn-lg'>
+                <div className="text-center pt-4">
+                    <a className='btn btn-primary btn-lg' href={button.link} onClick={button.link ? undefined : onNext}>
                         {button.text}
-                    </button>
-                </a>
+                    </a>
+                </div>
             )}
             {show_social && (<Social
                 score={score}
