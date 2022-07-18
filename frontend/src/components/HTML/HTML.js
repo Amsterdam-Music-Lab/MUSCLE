@@ -9,7 +9,7 @@ const HTML = ({ html, form, style, onResult }) => {
         (result) => {
             onResult(result);
         },
-        [onResult, form]
+        [onResult]
     );
 
     return (
