@@ -7,7 +7,9 @@ import TextRange from "./_TextRange";
 import String from "./_String";
 import Checkboxes from "./_Checkboxes";
 import DropDown from "./_DropDown";
+import AutoComplete from "./_AutoComplete";
 
+export const AUTOCOMPLETE = "AUTOCOMPLETE";
 export const BUTTON_ARRAY = "BUTTON_ARRAY";
 export const CHECKBOXES = "CHECKBOXES";
 export const DROPDOWN = "DROPDOWN";
@@ -17,13 +19,20 @@ export const TEXT_RANGE = "TEXT_RANGE";
 export const STRING = "STRING";
 
 // Question is an experiment view that shows a question and handles storing the answer
-const Question = ({ question, onChange, id, active, style,emphasizeTitle }) => {
+const Question = ({
+    question,
+    onChange,
+    id,
+    active,
+    style,
+    emphasizeTitle,
+}) => {
     const [value, setValue] = useState(question.value || "");
 
     const registerChange = (value) => {
         onChange(value, id);
         setValue(value);
-    }
+    };
 
     // render view
     const render = (view) => {
@@ -38,11 +47,13 @@ const Question = ({ question, onChange, id, active, style,emphasizeTitle }) => {
 
         switch (view) {
             case BUTTON_ARRAY:
-            return <ButtonArray {...attrs} />;
+                return <ButtonArray {...attrs} />;
             case CHECKBOXES:
                 return <Checkboxes {...attrs} />;
             case DROPDOWN:
                 return <DropDown {...attrs} />;
+            case AUTOCOMPLETE:
+                return <AutoComplete {...attrs} />;
             case RADIOS:
                 return <Radios {...attrs} />;
             case RANGE:

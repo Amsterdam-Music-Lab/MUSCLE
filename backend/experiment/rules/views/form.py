@@ -50,6 +50,12 @@ class DropdownQuestion(Question):
         self.choices = choices
         self.view = 'DROPDOWN'
 
+class AutoCompleteQuestion(Question):
+    def __init__(self, choices, **kwargs):
+        super().__init__(**kwargs)
+        self.choices = choices
+        self.view = 'AUTOCOMPLETE'
+
 class RadiosQuestion(Question):
     def __init__(self, choices, **kwargs):
         super().__init__(**kwargs)
