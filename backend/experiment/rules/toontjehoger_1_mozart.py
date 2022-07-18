@@ -18,7 +18,7 @@ class ToontjeHoger1Mozart(Base):
     TITLE = _("Toontje Hoger")
     SCORE_CORRECT = 50
     SCORE_WRONG = 0
-    LISTEN_DURATION = 5 # 20
+    LISTEN_DURATION = 5  # 20
 
     @classmethod
     def first_round(cls, experiment):
@@ -54,15 +54,24 @@ class ToontjeHoger1Mozart(Base):
 
         # Round 1
         if rounds_passed == 0:
-            round = cls.get_image_trial(session, section_group='1',image_url="/images/experiments/toontjehoger/mozart1.png", expected_response='B')
+            round = cls.get_image_trial(session,
+                                        section_group='1',
+                                        image_url="/images/experiments/toontjehoger/mozart-effect1.webp",
+                                        question='Welke vorm ontstaat er na het afknippen van de hoekjes?',
+                                        expected_response='B'
+                                        )
             # No combine_actions because of inconsistent next_round array wrapping in first round
             return round
 
         # Round 2
         if rounds_passed == 1:
             score = cls.get_score(session)
-            # TODO: adapt image and response
-            round = cls.get_image_trial(session, section_group='2',image_url="/images/experiments/toontjehoger/mozart1.png", expected_response='C')
+            round = cls.get_image_trial(session,
+                                        section_group='2',
+                                        image_url="/images/experiments/toontjehoger/mozart-effect2.webp",
+                                        question='Welke vorm ontstaat er na het afknippen van het hoekje?',
+                                        expected_response='B'
+                                        )
             return combine_actions(*score, *round)
 
         # Final
@@ -72,15 +81,16 @@ class ToontjeHoger1Mozart(Base):
     def get_score(cls, session):
         # Feedback message
         last_result = session.last_result()
-        feedback = "Goed gedaan! Het juiste antwoord was inderdaad {}.".format(last_result.expected_response) if last_result.score else "Helaas, antwoord {} is niet goed! Volgende keer beter".format(last_result.given_response)
-            
+        feedback = "Goed gedaan! Het juiste antwoord was inderdaad {}.".format(
+            last_result.expected_response) if last_result.score else "Helaas, antwoord {} is niet goed! Volgende keer beter".format(last_result.given_response)
+
         # Return score view
         config = {'show_total_score': True}
         score = Score(session, config=config, feedback=feedback).action()
         return [score]
 
     @classmethod
-    def get_image_trial(cls, session, section_group, image_url, expected_response):
+    def get_image_trial(cls, session, section_group, image_url, question, expected_response):
         # Config
         # -----------------
         section = session.section_from_unused_song(
@@ -97,9 +107,9 @@ class ToontjeHoger1Mozart(Base):
         # Listen
         play_config = {'show_animation': True}
         playback = Playback([section],
-            player_type=Playback.TYPE_AUTOPLAY,
-            play_config=play_config
-        )
+                            player_type=Playback.TYPE_AUTOPLAY,
+                            play_config=play_config
+                            )
 
         listen_config = {
             'auto_advance': True,
@@ -118,8 +128,7 @@ class ToontjeHoger1Mozart(Base):
 
         # Question
         question = ButtonArrayQuestion(
-            question=_(
-                'Welke vorm ontstaat er na het afknippen van dit hoekje?'),
+            question=question,
             key='expected_shape',
             choices={
                 'A': 'A',
@@ -135,14 +144,14 @@ class ToontjeHoger1Mozart(Base):
         form = Form([question])
 
         image_trial = HTML(
-            html='<img src="{}" style="height:calc(100% - 260px);max-height:326px;max-width: 100%;"/>'.format(image_url),
+            html='<img src="{}" style="height:calc(100% - 260px);max-height:326px;max-width: 100%;"/>'.format(
+                image_url),
             form=form,
             title=cls.TITLE,
             result_id=result_pk
         ).action()
 
         return [listen, image_trial]
-
 
     @classmethod
     def calculate_score(cls, result, form_element, data):
