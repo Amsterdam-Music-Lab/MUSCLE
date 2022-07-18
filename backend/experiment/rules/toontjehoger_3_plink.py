@@ -29,7 +29,8 @@ class ToontjeHoger3Plink(Base):
             steps=[
                 Step("Luister naar een heel kort muziekfragment."),
                 Step("Ken je het nummer? Noem de juiste artiest en titel!"),
-                Step("Weet je het niet? Beantwoord dan extra vragen over de tijdsperiode en emotie van het nummer.")
+                Step(
+                    "Weet je het niet? Beantwoord dan extra vragen over de tijdsperiode en emotie van het nummer.")
             ],
             button_label="Start"
 
@@ -144,7 +145,7 @@ class ToontjeHoger3Plink(Base):
             section=section,
             title=cls.TITLE,
             result_id=result_pk,
-            main_question='Noem de artiest en de titel van het nummer',
+            main_question="Noem de artiest en de titel van het nummer",
             choices=choices,
             submit_label="Volgende",
             dont_know_label="Ik weet het niet",
@@ -166,7 +167,7 @@ class ToontjeHoger3Plink(Base):
             period_choices[period] = period
 
         question = RadiosQuestion(
-            question='Wanneer is het nummer uitgebracht?',
+            question="Wanneer is het nummer uitgebracht?",
             key='time_period',
             choices=period_choices,
             submits=False
@@ -184,7 +185,7 @@ class ToontjeHoger3Plink(Base):
             emotion_choices[emotion] = emotion.capitalize()
 
         question = RadiosQuestion(
-            question='Welke emotie past bij dit nummer?',
+            question="Welke emotie past bij dit nummer?",
             key='emotion',
             choices=emotion_choices,
             submits=True

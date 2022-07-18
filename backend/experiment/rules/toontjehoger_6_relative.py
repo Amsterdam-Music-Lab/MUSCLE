@@ -141,7 +141,7 @@ class ToontjeHoger6Relative(Base):
 
         # Question
         question = ChoiceQuestion(
-            question='Waren deze twee melodieën hetzelfde?',
+            question="Waren deze twee melodieën hetzelfde?",
             key='equal_melodies',
             choices={
                 'YES': 'Ja',
@@ -197,7 +197,8 @@ class ToontjeHoger6Relative(Base):
         # Listen
         play_config = {
         }
-        playback = Playback([correct_section], play_config=play_config, player_type=Playback.TYPE_AUTOPLAY)
+        playback = Playback(
+            [correct_section], play_config=play_config, player_type=Playback.TYPE_AUTOPLAY)
 
         listen_config = {
             'auto_advance': True,
@@ -236,7 +237,7 @@ class ToontjeHoger6Relative(Base):
 
         # Trial
         trial_config = {
-            'style': 'boolean blue-players',            
+            'style': 'boolean blue-players',
         }
 
         trial = Trial(
@@ -274,7 +275,7 @@ class ToontjeHoger6Relative(Base):
 
         # Question
         question = ChoiceQuestion(
-            question='Welke van deze melodieën is anders dan de rest?',
+            question="Welke van deze melodieën is anders dan de rest?",
             key='different_melodie',
             choices={
                 '0': 'A',

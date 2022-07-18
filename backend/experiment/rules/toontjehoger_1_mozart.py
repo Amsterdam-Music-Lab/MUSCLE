@@ -29,8 +29,7 @@ class ToontjeHoger1Mozart(Base):
             instruction="Uitleg",
             steps=[
                 Step("Je krijgt zo eerst een muziekfragment van 20 seconden te horen."),
-                Step(
-                    "Hierna verschijnt een kort spelletje."),
+                Step("Hierna verschijnt een kort spelletje."),
             ],
             button_label="Start"
         ).action(step_numbers=True)
@@ -57,7 +56,7 @@ class ToontjeHoger1Mozart(Base):
             round = cls.get_image_trial(session,
                                         section_group='1',
                                         image_url="/images/experiments/toontjehoger/mozart-effect1.webp",
-                                        question='Welke vorm ontstaat er na het afknippen van de hoekjes?',
+                                        question="Welke vorm ontstaat er na het afknippen van de hoekjes?",
                                         expected_response='B'
                                         )
             # No combine_actions because of inconsistent next_round array wrapping in first round
@@ -69,7 +68,7 @@ class ToontjeHoger1Mozart(Base):
             round = cls.get_image_trial(session,
                                         section_group='2',
                                         image_url="/images/experiments/toontjehoger/mozart-effect2.webp",
-                                        question='Welke vorm ontstaat er na het afknippen van het hoekje?',
+                                        question="Welke vorm ontstaat er na het afknippen van het hoekje?",
                                         expected_response='B'
                                         )
             return combine_actions(*score, *round)
