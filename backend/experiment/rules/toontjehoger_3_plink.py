@@ -89,16 +89,18 @@ class ToontjeHoger3Plink(Base):
         if main_question:
             if main_question == last_result.expected_response:
                 return "Je hoorde inderdaad {} van {}".format(section.name, section.artist)
-            
+
             return "Helaas, volgende keer beter"
 
         extra_questions = Plink.extract_extra_questions(data)
         if extra_questions:
             # Section details
             section_details = section.group.split(";")
-            time_period = section_details[0] if len(section_details) >= 1 else "?"
+            time_period = section_details[0] if len(
+                section_details) >= 1 else "?"
             emotion = section_details[1] if len(section_details) >= 2 else "?"
-            feedback = "Het nummer komt uit de {} en de emotie is {}.".format(time_period, emotion)
+            feedback = "Het nummer komt uit de {} en de emotie is {}.".format(
+                time_period, emotion)
             return feedback
 
         return ""
@@ -249,12 +251,6 @@ class ToontjeHoger3Plink(Base):
         # Score
         score = cls.get_score(session)
 
-        # Info page
-        body = render_to_string(
-            join('info', 'toontjehoger', 'experiment3.html'))
-        info = Info(body=body, heading=_("Muziekherkenning"),
-                    continue_button=_("Volgende")).action()
-
         # Final
         final_text = _("Goed gedaan, jouw muziekherkenning is uitstekend!") if session.final_score >= 4 * \
             cls.SCORE_MAIN_CORRECT else _("Wellicht nog een poging wagen? Er is ruimte voor verbetering.")
@@ -262,9 +258,17 @@ class ToontjeHoger3Plink(Base):
             session=session,
             final_text=final_text,
             rank=cls.rank(session),
-            button={'link': 'https://www.amsterdammusiclab.nl',
-                    'text': 'Terug naar ToontjeHoger'}
+            button={'text': 'Volgende'}
         ).action()
 
-        return [*score, info, final]
+        # Info page
+        body = render_to_string(
+            join('info', 'toontjehoger', 'experiment3.html'))
+        info = Info(
+            body=body,
+            heading=_("Muziekherkenning"),
+            button_label=_("Terug naar ToontjeHoger"),
+            button_link="https://www.amsterdammusiclab.nl"
+        ).action()
 
+        return [*score, final, info]

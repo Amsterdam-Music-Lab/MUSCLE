@@ -159,12 +159,6 @@ class ToontjeHoger1Mozart(Base):
         # Score
         score = cls.get_score(session)
 
-        # Info page
-        body = render_to_string(
-            join('info', 'toontjehoger', 'experiment1.html'))
-        info = Info(body=body, heading=_("Het Mozart effect"),
-                    continue_button=_("Volgende")).action()
-
         # Final
         final_text = _("Je hebt het uitstekend gedaan!") if session.final_score >= 2 * \
             cls.SCORE_CORRECT else _("Er is ruimte voor verbetering. Wellicht nog een poging wagen?")
@@ -172,8 +166,17 @@ class ToontjeHoger1Mozart(Base):
             session=session,
             final_text=final_text,
             rank=cls.rank(session),
-            button={'link': 'https://www.amsterdammusiclab.nl',
-                    'text': 'Terug naar ToontjeHoger'}
+            button={'text': 'Volgende'}
         ).action()
 
-        return [*score, info, final]
+        # Info page
+        body = render_to_string(
+            join('info', 'toontjehoger', 'experiment1.html'))
+        info = Info(
+            body=body,
+            heading=_("Het Mozart effect"),
+            button_label=_("Terug naar ToontjeHoger"),
+            button_link="https://www.amsterdammusiclab.nl"
+        ).action()
+
+        return [*score, final, info]
