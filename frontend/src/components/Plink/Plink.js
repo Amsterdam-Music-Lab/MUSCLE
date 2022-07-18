@@ -1,6 +1,6 @@
 import React, { useState, useRef, useCallback } from "react";
 import Playback, { BUTTON } from "../Playback/Playback";
-import Question, { DROPDOWN } from "../Question/Question";
+import Question, { AUTOCOMPLETE } from "../Question/Question";
 import Button from "../Button/Button";
 import useSingleToArray from "../../hooks/useSingleToArray";
 
@@ -99,7 +99,7 @@ const Plink = ({
                         />
                         <Question
                             question={{
-                                view: DROPDOWN,
+                                view: AUTOCOMPLETE,
                                 choices: choices,
                                 question: mainQuestion,
                             }}
