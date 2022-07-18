@@ -3,19 +3,19 @@ import React, { useEffect, useState } from "react";
 import Button from "../Button/Button";
 
 // Info is an experiment view that shows the Info text, and handles agreement/stop actions
-const Info = ({ heading, body, continue_button, onNext }) => {
+const Info = ({ heading, body, buttonLabel, buttonLink, onNext }) => {
     const [maxHeight, setMaxHeight] = useState(getMaxHeight());
 
-    useEffect(()=>{
-        const onResize = ()=>{
+    useEffect(() => {
+        const onResize = () => {
             setMaxHeight(getMaxHeight());
-        }
-        window.addEventListener('resize', onResize);
+        };
+        window.addEventListener("resize", onResize);
 
-        return ()=>{
-            window.removeEventListener('resize', onResize);
-        }
-    },[])
+        return () => {
+            window.removeEventListener("resize", onResize);
+        };
+    }, []);
 
     // Show Info
     return (
@@ -34,13 +34,24 @@ const Info = ({ heading, body, continue_button, onNext }) => {
                 dangerouslySetInnerHTML={{ __html: body }}
             />
 
-            {continue_button && (
+            {buttonLabel && (
                 <div className="buttons d-flex justify-content-center pt-3">
-                    <Button
-                        className="btn-primary"
-                        onClick={onNext}
-                        title={continue_button}
-                    />
+                    {buttonLink ? (
+                        <a
+                            className="btn btn-primary"
+                            href={buttonLink}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
+                            {buttonLabel}
+                        </a>
+                    ) : (
+                        <Button
+                            className="btn-primary"
+                            onClick={onNext}
+                            title={buttonLabel}
+                        />
+                    )}
                 </div>
             )}
         </div>

@@ -7,12 +7,19 @@ class Info:  # pylint: disable=too-few-public-methods
 
     ID = "INFO"
 
-    def __init__(self,body,heading="", continue_button=None):
-        """ Info shows an formatted information page with an HTML body """
+    def __init__(self,body,heading="", button_label=None, button_link=None):
+        """
+        Info shows an formatted information page with an HTML body
+        body: html body
+        heading: title/heading on top
+        button_label: label of button on bottom
+        button_link: (optional) button link. If no link is set, 'onNext' is called
+        """
         
         self.body = body
         self.heading = heading
-        self.continue_button = continue_button
+        self.button_label = button_label
+        self.button_link = button_link
 
     def action(self):
         """Get data for info action"""
@@ -21,5 +28,6 @@ class Info:  # pylint: disable=too-few-public-methods
             'view': Info.ID,
             'heading': self.heading,
             'body': self.body,
-            'continue_button': self.continue_button,
+            'buttonLabel': self.button_label,
+            'buttonLink': self.button_link,
         }
