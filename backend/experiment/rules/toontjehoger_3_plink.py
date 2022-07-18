@@ -13,7 +13,7 @@ logger = logging.getLogger(__name__)
 
 class ToontjeHoger3Plink(Base):
     ID = 'TOONTJE_HOGER_3_PLINK'
-    TITLE = _("Toontje Hoger")
+    TITLE = "Toontje Hoger"
     SCORE_MAIN_CORRECT = 50
     SCORE_MAIN_WRONG = -10
     SCORE_EXTRA_CORRECT = 15
@@ -27,13 +27,11 @@ class ToontjeHoger3Plink(Base):
         explainer = Explainer(
             instruction="Uitleg",
             steps=[
-                Step(_("Luister naar een heel kort muziekfragment.")),
-                Step(
-                    _("Ken je het nummer? Noem de juiste artiest en titel!")),
-                Step(
-                    _("Weet je het niet? Beantwoord dan extra vragen over de tijdsperiode en emotie van het nummer."))
+                Step("Luister naar een heel kort muziekfragment."),
+                Step("Ken je het nummer? Noem de juiste artiest en titel!"),
+                Step("Weet je het niet? Beantwoord dan extra vragen over de tijdsperiode en emotie van het nummer.")
             ],
-            button_label=_("Start")
+            button_label="Start"
 
         ).action(step_numbers=True)
 
@@ -146,10 +144,10 @@ class ToontjeHoger3Plink(Base):
             section=section,
             title=cls.TITLE,
             result_id=result_pk,
-            main_question=_('Noem de artiest en de titel van het nummer'),
+            main_question='Noem de artiest en de titel van het nummer',
             choices=choices,
-            submit_label=_("Volgende"),
-            dont_know_label=_("Ik weet het niet"),
+            submit_label="Volgende",
+            dont_know_label="Ik weet het niet",
             extra_questions=extra_questions,
         ).action()
 
@@ -168,7 +166,7 @@ class ToontjeHoger3Plink(Base):
             period_choices[period] = period
 
         question = RadiosQuestion(
-            question=_('Wanneer is het nummer uitgebracht?'),
+            question='Wanneer is het nummer uitgebracht?',
             key='time_period',
             choices=period_choices,
             submits=False
@@ -186,7 +184,7 @@ class ToontjeHoger3Plink(Base):
             emotion_choices[emotion] = emotion.capitalize()
 
         question = RadiosQuestion(
-            question=_('Welke emotie past bij dit nummer?'),
+            question='Welke emotie past bij dit nummer?',
             key='emotion',
             choices=emotion_choices,
             submits=True
@@ -233,7 +231,8 @@ class ToontjeHoger3Plink(Base):
             # Check if the given answers
             # e.g section.group = 60s;vrolijk (time_period;emotion)
             for answer in extra_questions:
-                score += cls.SCORE_EXTRA_CORRECT if answer and (answer in section.group) else cls.SCORE_EXTRA_WRONG
+                score += cls.SCORE_EXTRA_CORRECT if answer and (
+                    answer in section.group) else cls.SCORE_EXTRA_WRONG
 
             return score
 
@@ -252,8 +251,8 @@ class ToontjeHoger3Plink(Base):
         score = cls.get_score(session)
 
         # Final
-        final_text = _("Goed gedaan, jouw muziekherkenning is uitstekend!") if session.final_score >= 4 * \
-            cls.SCORE_MAIN_CORRECT else _("Wellicht nog een poging wagen? Er is ruimte voor verbetering.")
+        final_text = "Goed gedaan, jouw muziekherkenning is uitstekend!" if session.final_score >= 4 * \
+            cls.SCORE_MAIN_CORRECT else "Wellicht nog een poging wagen? Er is ruimte voor verbetering."
         final = Final(
             session=session,
             final_text=final_text,
@@ -266,8 +265,8 @@ class ToontjeHoger3Plink(Base):
             join('info', 'toontjehoger', 'experiment3.html'))
         info = Info(
             body=body,
-            heading=_("Muziekherkenning"),
-            button_label=_("Terug naar ToontjeHoger"),
+            heading="Muziekherkenning",
+            button_label="Terug naar ToontjeHoger",
             button_link="https://www.amsterdammusiclab.nl"
         ).action()
 

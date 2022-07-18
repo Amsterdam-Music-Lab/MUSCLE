@@ -15,7 +15,7 @@ logger = logging.getLogger(__name__)
 
 class ToontjeHoger6Relative(Base):
     ID = 'TOONTJE_HOGER_6_RELATIVE'
-    TITLE = _("Toontje Hoger")
+    TITLE = "Toontje Hoger"
     SCORE_CORRECT = 50
     SCORE_WRONG = 0
 
@@ -27,13 +27,11 @@ class ToontjeHoger6Relative(Base):
         explainer = Explainer(
             instruction="Uitleg",
             steps=[
-                Step(
-                    _("In deze minigame kan je testen hoe goed jouw relatieve gehoor is! Relatief gehoor is het vermogen om verschil of gelijkenis tussen tonen te kunnen herkennen.")),
-                Step(_("Je krijgt zo eerst twee melodieën te horen."), number=1),
-                Step(
-                    _("Geef aan of deze melodieën hetzelfde zijn!"), number=2),
+                Step("In deze minigame kan je testen hoe goed jouw relatieve gehoor is! Relatief gehoor is het vermogen om verschil of gelijkenis tussen tonen te kunnen herkennen."),
+                Step("Je krijgt zo eerst twee melodieën te horen.", number=1),
+                Step("Geef aan of deze melodieën hetzelfde zijn!", number=2),
             ],
-            button_label=_("Start")
+            button_label="Start"
 
         ).action(step_numbers=False)
 
@@ -143,11 +141,11 @@ class ToontjeHoger6Relative(Base):
 
         # Question
         question = ChoiceQuestion(
-            question=_('Waren deze twee melodieën hetzelfde?'),
+            question='Waren deze twee melodieën hetzelfde?',
             key='equal_melodies',
             choices={
-                'YES': _('YES'),
-                'NO': _('NO'),
+                'YES': 'Ja',
+                'NO': 'Nee',
             },
             view='BUTTON_ARRAY',
             result_id=result_pk,
@@ -171,12 +169,10 @@ class ToontjeHoger6Relative(Base):
         explainer = Explainer(
             instruction="Vraag 2",
             steps=[
-                Step(_("Je krijgt eenmalig een melodie te horen.")),
-                Step(
-                    _("Luister goed, want er volgt weer een vraag!")),
+                Step("Je krijgt eenmalig een melodie te horen."),
+                Step("Luister goed, want er volgt weer een vraag!"),
             ],
-            button_label=_("Start")
-
+            button_label="Start"
         ).action(step_numbers=True)
 
         # Config
@@ -201,8 +197,7 @@ class ToontjeHoger6Relative(Base):
         # Listen
         play_config = {
         }
-        playback = Playback([correct_section], play_config=play_config, preload_message=_(
-            'Get ready!'), player_type=Playback.TYPE_AUTOPLAY)
+        playback = Playback([correct_section], play_config=play_config, player_type=Playback.TYPE_AUTOPLAY)
 
         listen_config = {
             'auto_advance': True,
@@ -220,12 +215,11 @@ class ToontjeHoger6Relative(Base):
 
         # Question
         question = ChoiceQuestion(
-            question=_(
-                'Welke van deze twee melodieën is hetzelfde als de vorige melodie?'),
+            question="Welke van deze twee melodieën is hetzelfde als de vorige melodie?",
             key='same_melodie',
             choices={
-                section1.pk: _('Melodie A'),
-                section2.pk: _('Melodie B'),
+                section1.pk: 'Melodie A',
+                section2.pk: 'Melodie B',
             },
             view='BUTTON_ARRAY',
             result_id=result_pk,
@@ -280,13 +274,13 @@ class ToontjeHoger6Relative(Base):
 
         # Question
         question = ChoiceQuestion(
-            question=_('Welke van deze melodieën is anders dan de rest?'),
+            question='Welke van deze melodieën is anders dan de rest?',
             key='different_melodie',
             choices={
-                '0': _('A'),
-                '1': _('B'),
-                '2': _('C'),
-                '3': _('D'),
+                '0': 'A',
+                '1': 'B',
+                '2': 'C',
+                '3': 'D',
             },
             view='BUTTON_ARRAY',
             result_id=result_pk,
@@ -327,8 +321,8 @@ class ToontjeHoger6Relative(Base):
         score = cls.get_score(session)
 
         # Final
-        final_text = _("Goed gedaan, jouw relatief gehoor is uitstekend!") if session.final_score >= 2 * \
-            cls.SCORE_CORRECT else _("Wellicht nog een poging wagen? Er is ruimte voor verbetering.")
+        final_text = "Goed gedaan, jouw relatief gehoor is uitstekend!" if session.final_score >= 2 * \
+            cls.SCORE_CORRECT else "Wellicht nog een poging wagen? Er is ruimte voor verbetering."
         final = Final(
             session=session,
             final_text=final_text,
@@ -341,8 +335,8 @@ class ToontjeHoger6Relative(Base):
             join('info', 'toontjehoger', 'experiment6.html'))
         info = Info(
             body=body,
-            heading=_("Relatief gehoor"),
-            button_label=_("Terug naar ToontjeHoger"),
+            heading="Relatief gehoor",
+            button_label="Terug naar ToontjeHoger",
             button_link="https://www.amsterdammusiclab.nl"
         ).action()
 

@@ -15,7 +15,7 @@ logger = logging.getLogger(__name__)
 
 class ToontjeHoger1Mozart(Base):
     ID = 'TOONTJE_HOGER_1_MOZART'
-    TITLE = _("Toontje Hoger")
+    TITLE = "Toontje Hoger"
     SCORE_CORRECT = 50
     SCORE_WRONG = 0
     LISTEN_DURATION = 5  # 20
@@ -28,11 +28,11 @@ class ToontjeHoger1Mozart(Base):
         explainer = Explainer(
             instruction="Uitleg",
             steps=[
-                Step(_("Je krijgt zo eerst een muziekfragment van 20 seconden te horen.")),
+                Step("Je krijgt zo eerst een muziekfragment van 20 seconden te horen."),
                 Step(
-                    _("Hierna verschijnt een kort spelletje.")),
+                    "Hierna verschijnt een kort spelletje."),
             ],
-            button_label=_("Start")
+            button_label="Start"
         ).action(step_numbers=True)
 
         # 2. Choose playlist.
@@ -169,8 +169,8 @@ class ToontjeHoger1Mozart(Base):
         score = cls.get_score(session)
 
         # Final
-        final_text = _("Je hebt het uitstekend gedaan!") if session.final_score >= 2 * \
-            cls.SCORE_CORRECT else _("Er is ruimte voor verbetering. Wellicht nog een poging wagen?")
+        final_text = "Je hebt het uitstekend gedaan!" if session.final_score >= 2 * \
+            cls.SCORE_CORRECT else "Er is ruimte voor verbetering. Wellicht nog een poging wagen?"
         final = Final(
             session=session,
             final_text=final_text,
@@ -183,8 +183,8 @@ class ToontjeHoger1Mozart(Base):
             join('info', 'toontjehoger', 'experiment1.html'))
         info = Info(
             body=body,
-            heading=_("Het Mozart effect"),
-            button_label=_("Terug naar ToontjeHoger"),
+            heading="Het Mozart effect",
+            button_label="Terug naar ToontjeHoger",
             button_link="https://www.amsterdammusiclab.nl"
         ).action()
 
