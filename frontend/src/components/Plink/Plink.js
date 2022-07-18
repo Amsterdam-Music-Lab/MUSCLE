@@ -136,6 +136,7 @@ const Plink = ({
                             emphasizeTitle={true}
                         />
                         <Button
+                            active={!!questionValue}
                             title={submitLabel}
                             className="btn-primary mt-4"
                             onClick={nextQuestion}

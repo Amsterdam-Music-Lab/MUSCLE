@@ -233,7 +233,7 @@ class ToontjeHoger3Plink(Base):
             # Check if the given answers
             # e.g section.group = 60s;vrolijk (time_period;emotion)
             for answer in extra_questions:
-                score += cls.SCORE_EXTRA_CORRECT if answer in section.group else cls.SCORE_EXTRA_WRONG
+                score += cls.SCORE_EXTRA_CORRECT if answer and (answer in section.group) else cls.SCORE_EXTRA_WRONG
 
             return score
 
