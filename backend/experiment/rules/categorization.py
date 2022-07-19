@@ -1,15 +1,11 @@
-import random
-from .base import Base
 from .util.actions import combine_actions
 from django.http import Http404, HttpResponseServerError
-from .views import Consent, StartSession, TwoAlternativeForced, Trial
 from .views.form import Form, Question, ChoiceQuestion
-from .views import Consent, Score, StartSession, TwoAlternativeForced
-from .views.form import Form, Question
+from .views import Consent, Score, StartSession, TwoAlternativeForced, Trial
 from .views.playback import Playback
-<< << << < HEAD
-== == == =
->>>>>> > categorization
+
+import random
+from .base import Base
 
 
 class Categorization(Base):
