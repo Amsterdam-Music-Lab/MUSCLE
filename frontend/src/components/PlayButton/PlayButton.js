@@ -13,6 +13,7 @@ const PlayButton = ({ playSection, className = ""}) => {
             tabIndex="0"
             onKeyPress={(e) => {
                 playSection(0);
+                finishedPlaying();
             }}
         ></div>
     );

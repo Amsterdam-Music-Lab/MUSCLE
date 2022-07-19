@@ -7,6 +7,7 @@ from django.core.management.base import BaseCommand, CommandError
 from django.conf import settings
 
 import audioread
+import json
 
 
 class Command(BaseCommand):
@@ -27,6 +28,9 @@ class Command(BaseCommand):
         parser.add_argument('--tag_group',
                             type=str,
                             help='Process tags and groups for sections')
+        parser.add_argument('--song_names',
+                            type=str,
+                            help='Read JSON file with song names for file names {<file-name>: <song-name>}')
 
     def handle(self, *args, **options):
         directory = options.get('directory')
@@ -34,25 +38,34 @@ class Command(BaseCommand):
 
         upload_dir = settings.MEDIA_ROOT
         playlist_dir = join(upload_dir, directory)
-        search_critera = glob('{}/*.wav'.format(playlist_dir)) + glob('{}/*.mp3'.format(playlist_dir))
+        search_critera = glob('{}/*.wav'.format(playlist_dir)) + \
+            glob('{}/*.mp3'.format(playlist_dir))
+        song_names_option = options.get('song_names')
+        if song_names_option:
+            with open(join(playlist_dir, song_names_option)) as json_file:
+                song_names = json.load(json_file)
         with open(join(playlist_dir, 'audiofiles.csv'), 'w+') as f:
             csv_writer = csv.writer(f)
             for audio_file in search_critera:
                 artist_name = name
-                filename = join(directory,basename(audio_file))
-                song_name = splitext(basename(audio_file))[0]
+                filename = join(directory, basename(audio_file))
+                if song_names_option:
+                    song_name = song_names[splitext(basename(audio_file))[0]]
+                else:
+                    song_name = splitext(basename(audio_file))[0]
                 start_position = 0.0
                 with audioread.audio_open(audio_file) as f:
                     duration = f.duration
                 restrict_to_nl = 0
                 group_tag_option = options.get('tag_group')
                 if group_tag_option:
-                    group, tag = calculate_group_tag(filename, group_tag_option)
+                    group, tag = calculate_group_tag(
+                        filename, group_tag_option)
                 else:
                     group = tag = '0'
                 row = [artist_name, song_name,
-                    start_position, duration, filename, restrict_to_nl,
-                    tag, group]
+                       start_position, duration, filename, restrict_to_nl,
+                       tag, group]
                 csv_writer.writerow(row)
 
 
@@ -77,11 +90,17 @@ def calculate_group_tag(filename, experiment):
         # tempo (160 - 200) gets encoded as tag
         group = 1 if parts[-2] == 'Standard' else 0
         tag = int(parts[-1])
+    elif experiment == 'cat':
+        # categorization experiment
+        # Pair1: 1A, 1B / Pair2: 2A, 2B gets encodes as tag
+        # Same direction: SAME, Crossed direction: CROSSED gets encoded as group
+        if identifier[-2:] == '1A':
+            tag = '1A'
+        elif identifier[-2:] == '1B':
+            tag = '1B'
+        elif identifier[-2:] == '2A':
+            tag = '2A'
+        elif identifier[-2:] == '2B':
+            tag = '2B'
+        group = 'SAME' if identifier[0] == 'S' else 'CROSSED'
     return group, tag
-
-
-
-
-
-
-
