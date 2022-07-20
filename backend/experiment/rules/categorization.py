@@ -109,7 +109,6 @@ class Categorization(Base):
             expected_response = 'A'
         else:
             expected_response = 'B'
-        print(expected_response)
         result_pk = cls.prepare_result(session, section, expected_response)
         choices = json_data["choices"]
         config = {
