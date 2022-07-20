@@ -17,15 +17,6 @@ class Base(object):
             result.expected_response = expected_response
         result.save()
         return result.pk
-    
-    @staticmethod
-    def save_result(result_data):    
-        from experiment.models import Result
-        # TODO: WARNING: make sure that the requested session is part of the current session
-        result = Result.objects.get(pk=result_data['result_id'])
-        result.given_response = result_data['value']
-        result.save()
-        return result.expected_response
 
     
     @classmethod
@@ -38,7 +29,8 @@ class Base(object):
         from experiment.models import Result
         # TODO: WARNING the following line removes all form data from the stored result; 
         # this way information about the given answer is lost
-        form = data.pop('form') 
+        # this would only be a concern if the data saved is profile data, but this is handled elsewhere
+        form = data.pop('form')
         for form_element in form:
             try:
                 result = Result.objects.get(pk=form_element['result_id'], session=session)
@@ -84,7 +76,7 @@ class Base(object):
             result = Result(session=session)
 
         # Calculate score
-        score = session.experiment_rules().calculate_score(result, None, data)
+        score = session.experiment_rules().calculate_score(result, data)
         if not score:
             score = 0
 
@@ -96,7 +88,7 @@ class Base(object):
         return result
 
     @staticmethod
-    def calculate_score(result, form_element, data):
+    def calculate_score(result, data, form_element=None):
         """fallback for calculate score"""
         return None
 

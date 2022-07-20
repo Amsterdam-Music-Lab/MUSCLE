@@ -239,14 +239,10 @@ class Huang2022(Base):
             print("Warning: no next_song_sync section found")
             section = session.section_from_any_song()
         result_pk = cls.prepare_result(session, section)
-        song_sync = SongSync(
+        return SongSync(
             section=section,
             result_id=result_pk
-        )
-        config = {'style': 'boolean-negative-first'}
-        trial = Trial(
-            song_sync=song_sync, title=cls.get_trial_title(session, next_round_number), config=config)
-        return trial.action()
+        ).action()
 
     @classmethod
     def heard_before_explainer(cls):
