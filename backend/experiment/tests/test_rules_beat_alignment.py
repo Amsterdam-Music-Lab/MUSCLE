@@ -30,12 +30,17 @@ class BeatAlignmentRuleTest(TestCase):
         experiment = Experiment.objects.create(rules='BEAT_ALIGNMENT', slug='ba') #rules is BeatAlignment.ID in beat_alignment.py
         experiment.playlists.add(playlist)
 
+
+    def load_json(self, response):
+        '''Asserts response status 200 OK, asserts content type json, loads and returns response.content json in a dictionary'''
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response['content-type'], 'application/json')
+        return json.loads(response.content)
+
     def test_experiment(self):
 
         response = self.client.get('/experiment/id/ba/')
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(response['content-type'], 'application/json')
-        response_json = json.loads(response.content)
+        response_json = self.load_json(response)
         self.assertTrue( {'id','slug','name','class_name','rounds','playlists','next_round','loading_text'} <= response_json.keys() )
         # 3 practice rounds (number hardcoded in BeatAlignment.first_round
         views_exp = ['EXPLAINER','CONSENT'] + ['TRIAL_VIEW']*3 + ['EXPLAINER','START_SESSION']
@@ -44,9 +49,7 @@ class BeatAlignmentRuleTest(TestCase):
             self.assertEquals(response_json['next_round'][i]['view'], views_exp[i])
 
         response = self.client.get('/experiment/participant/')
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(response['content-type'], 'application/json')
-        response_json = json.loads(response.content)
+        response_json = self.load_json(response)
         self.assertTrue( {'id','hash','csrf_token','country'} <= response_json.keys() )
         csrf_token = response_json['csrf_token']
 
@@ -55,17 +58,13 @@ class BeatAlignmentRuleTest(TestCase):
 
         data = {"json_data": "{\"form\":[{\"key\":\"consent_ba\",\"value\":true}]}", "csrfmiddlewaretoken": csrf_token}
         response = self.client.post('/experiment/profile/create/', data)
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(response['content-type'], 'application/json')
-        response_json = json.loads(response.content)
+        response_json = self.load_json(response)
         self.assertTrue(response_json['status'],'ok')
 
         # Can throw an error if some of the tags in playlist not zero, cannot find a section to play
         data =  {"experiment_id": "1", "playlist_id":"","json_data":"", "csrfmiddlewaretoken":csrf_token}
         response = self.client.post('/experiment/session/create/', data)
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(response['content-type'], 'application/json')
-        response_json = json.loads(response.content)
+        response_json = self.load_json(response)
         self.assertTrue( {'session','next_round'} <= response_json.keys() )
         self.assertEqual( len(response_json['next_round']), 1 )
         self.assertEqual( response_json['next_round'][0]['view'],'TRIAL_VIEW')
@@ -78,9 +77,7 @@ class BeatAlignmentRuleTest(TestCase):
             data = {"session_id": session_id,"json_data": "{\"decision_time\":2.5,\"form\":[{\"key\":\"aligned\",\"view\":\"BUTTON_ARRAY\",\"explainer\":\"\",\"question\":[\"Are the beeps ALIGNED TO THE BEAT or NOT ALIGNED TO THE BEAT?\"],\"result_id\":%s,\"is_skippable\":false,\"submits\":true,\"choices\":{\"ON\":\"ALIGNED TO THE BEAT\",\"OFF\":\"NOT ALIGNED TO THE BEAT\"},\"value\":\"ON\"}]}" %(result_id,),
                       "csrfmiddlewaretoken": csrf_token }
             response = self.client.post('/experiment/session/result/', data)
-            self.assertEqual(response.status_code, 200)
-            self.assertEqual(response['content-type'], 'application/json')
-            response_json = json.loads(response.content)
+            response_json = self.load_json(response)
             self.assertEqual(response_json['view'], views_exp[i])
             if i < len(views_exp)-1: # Last view 'FINAL' does not have result_id or feedback form
                 result_id = response_json['feedback_form']['form'][0]['result_id'] 
