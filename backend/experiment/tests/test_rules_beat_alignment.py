@@ -19,11 +19,11 @@ class BeatAlignmentRuleTest(TestCase):
                "Artist 8,Name 8,0.0,10.0,bat/artist8.mp3,0,0,0\n"
                "Artist 9,Name 9,0.0,10.0,bat/artist9.mp3,0,0,0\n"
                "Artist 10,Name 10,0.0,10.0,bat/artist10.mp3,0,0,0\n"
-               "Artist 11,Name 10,0.0,10.0,bat/artist10.mp3,0,0,0\n"
-               "Artist 12,Name 10,0.0,10.0,bat/artist10.mp3,0,0,0\n"
-               "Artist 1,ex1 Name 1,0.0,10.0,bat/artist1.mp3,0,0,0\n"
-               "Artist 2,ex2 Name 2,0.0,10.0,bat/artist2.mp3,0,0,0\n"
-               "Artist 3,ex3_Name 3,0.0,10.0,bat/artist3.mp3,0,0,0\n")
+               "Artist 11,Name 10,0.0,10.0,bat/artist11.mp3,0,0,0\n"
+               "Artist 12,Name 10,0.0,10.0,bat/artist12.mp3,0,0,0\n"
+               "Artist 1,ex1 Name 1,0.0,10.0,bat/exartist1.mp3,0,0,0\n"
+               "Artist 2,ex2 Name 2,0.0,10.0,bat/exartist2.mp3,0,0,0\n"
+               "Artist 3,ex3_Name 3,0.0,10.0,bat/exartist3.mp3,0,0,0\n")
 
         playlist = Playlist.objects.create(csv=csv)
         playlist.update_sections()
@@ -42,7 +42,7 @@ class BeatAlignmentRuleTest(TestCase):
         response = self.client.get('/experiment/id/ba/')
         response_json = self.load_json(response)
         self.assertTrue( {'id','slug','name','class_name','rounds','playlists','next_round','loading_text'} <= response_json.keys() )
-        # 3 practice rounds (number hardcoded in BeatAlignment.first_round
+        # 3 practice rounds (number hardcoded in BeatAlignment.first_round)
         views_exp = ['EXPLAINER','CONSENT'] + ['TRIAL_VIEW']*3 + ['EXPLAINER','START_SESSION']
         self.assertEquals(len(response_json['next_round']), len(views_exp))
         for i in range(len(views_exp)):
@@ -54,7 +54,7 @@ class BeatAlignmentRuleTest(TestCase):
         csrf_token = response_json['csrf_token']
 
         response = self.client.get('/experiment/profile/consent_ba/')
-        self.assertEqual(response.status_code, 404) # By design, returns 404 if no consent has been given so far
+        self.assertEqual(response.status_code, 404) # By design, returns 404 if no consent has been given so far :/
 
         data = {"json_data": "{\"form\":[{\"key\":\"consent_ba\",\"value\":true}]}", "csrfmiddlewaretoken": csrf_token}
         response = self.client.post('/experiment/profile/create/', data)
