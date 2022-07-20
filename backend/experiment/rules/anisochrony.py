@@ -53,7 +53,7 @@ class Anisochrony(DurationDiscrimination):
             return None
         expected_result = 'REGULAR' if difference == 0 else 'IRREGULAR'
         # create Result object and save expected result to database
-        result_pk = Base.prepare_result(session, section, expected_result)
+        result_pk = cls.prepare_result(session, section, expected_result)
         question = ChoiceQuestion(
             key='if_regular',
             question=_(

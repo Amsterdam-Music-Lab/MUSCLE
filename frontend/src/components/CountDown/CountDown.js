@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Timer from "../../util/timer";
-import classnames from "classnames";
+import classNames from "classnames";
 
 // CountDown to zero
 const CountDown = ({ duration, running = true }) => {
@@ -27,7 +27,7 @@ const CountDown = ({ duration, running = true }) => {
 
     return (
         <h1
-            className={classnames("aha__count-down", { active: running, zero })}
+            className={classNames("aha__count-down", { active: running, zero })}
         >
             {zero ? "0" : Math.ceil(duration - time)}
         </h1>

@@ -1,7 +1,8 @@
 import React, { useRef, useEffect } from "react";
+import classNames from 'classnames';
 
 // String is a question view that lets you input text
-const String = ({ question, value = "", onChange }) => {
+const String = ({ question, value = "", onChange, emphasizeTitle = false }) => {
     const input = useRef(null);
 
     const handleChange = () => {
@@ -16,7 +17,7 @@ const String = ({ question, value = "", onChange }) => {
 
     return (
         <div className="aha__string">
-            <h3 className="title">{question.question}</h3>
+            <h3 className={classNames({title: emphasizeTitle})}>{question.question}</h3>
             <input
                 type="text"
                 value={value}

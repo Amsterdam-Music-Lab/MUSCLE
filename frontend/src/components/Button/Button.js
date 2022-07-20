@@ -1,5 +1,5 @@
 import React, { useRef } from "react";
-import classnames from "classnames";
+import classNames from "classnames";
 import { audioInitialized } from "../../util/audio";
 
 // Button is a button that can only be clicked one time
@@ -30,7 +30,7 @@ const Button = ({
 
     return (
         <div
-            className={classnames(
+            className={classNames(
                 { active },
                 className,
                 padding,

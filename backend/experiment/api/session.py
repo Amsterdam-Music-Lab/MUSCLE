@@ -61,13 +61,18 @@ def create(request):
             'slug': experiment.slug}
         })
 
+    # convert non lists to list
+    next_round = session.experiment_rules().next_round(session)
+    if not isinstance(next_round, list): 
+        next_round = [next_round]
+
     data = {
         'session': {
             'id': session.id,
             'playlist': session.playlist.id,
             'json_data': session.load_json_data(),
         },
-        'next_round': [session.experiment_rules().next_round(session)]
+        'next_round': next_round
     }
     return JsonResponse(data, json_dumps_params={'indent': 4})
 
@@ -101,7 +106,11 @@ def result(request):
     try:
         result_data = json.loads(json_data)
         # Create a result from the data
-        result = session.experiment_rules().handle_results(session, result_data)
+        if 'form' in result_data:
+            result = session.experiment_rules().handle_results(session, result_data)
+        else:
+            result = session.experiment_rules().handle_result(session, result_data)
+            
         if not result:
             return HttpResponseServerError("Could not create result from data")
 

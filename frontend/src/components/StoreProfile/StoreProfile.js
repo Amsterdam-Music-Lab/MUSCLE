@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import classnames from "classnames";
+import classNames from "classnames";
 import { Link, withRouter } from "react-router-dom";
 import * as EmailValidator from "email-validator";
 import { URLS } from "../../config";
@@ -61,7 +61,7 @@ const StoreProfile = ({ history }) => {
                 {/* Send link */}
                 <div
                     key={Math.random()}
-                    className={classnames("btn btn-primary btn-lg", {
+                    className={classNames("btn btn-primary btn-lg", {
                         disabled: !validEmail,
                     })}
                     onClick={sendLink}

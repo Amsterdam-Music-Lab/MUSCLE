@@ -1,9 +1,9 @@
 import React from "react";
 import Slider from "react-rangeslider";
-import classnames from "classnames";
+import classNames from "classnames";
 
 // TextRange is a question view that makes you select a value within the given range, using a slider from a list of choices
-const TextRange = ({ question, value, onChange }) => {
+const TextRange = ({ question, value, onChange, emphasizeTitle = false }) => {
     const emptyValue = !value;
 
     const keys = Object.keys(question.choices);
@@ -22,12 +22,12 @@ const TextRange = ({ question, value, onChange }) => {
     }
 
     return (
-        <div className={classnames("aha__text-range", { empty: emptyValue })}>
+        <div className={classNames("aha__text-range", { empty: emptyValue })}>
             {question.explainer && (
                 <p className="explainer">{question.explainer}</p>
             )}
 
-            <h3 className="title">{question.question}</h3>
+            <h3 className={classNames({title: emphasizeTitle})}>{question.question}</h3>
 
             <h4 className="current-value">{emptyValue ? "↔" : question.choices[value]}</h4>
 

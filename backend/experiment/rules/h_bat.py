@@ -100,7 +100,7 @@ class HBat(Base):
             return None
         expected_result = 'SLOWER' if trial_condition else 'FASTER'
         # create Result object and save expected result to database
-        result_pk = Base.prepare_result(session, section, expected_result)
+        result_pk = cls.prepare_result(session, section, expected_result)
         question = ChoiceQuestion(
             key='longer_or_equal',
             question=_(

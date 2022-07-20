@@ -27,7 +27,7 @@ class Categorization(Base):
             section = session.playlist.section_set.all()[0]
             # retrieve expected response from json_data
             # for now: set it arbitrarily to "up"
-            result_pk = Base.prepare_result(session, section, 'up')
+            result_pk = cls.prepare_result(session, section, 'up')
             choices = {'A': 'A', 'B': 'B'}
             view = TwoAlternativeForced(section, choices, result_pk)
             return view.action()
@@ -46,7 +46,7 @@ class Categorization(Base):
         section = session.playlist.section_set.all()[0]
         # retrieve expected response from json_data
         # for now: set it arbitrarily to "up"
-        result_pk = Base.prepare_result(session, section, 'up')
+        result_pk = cls.prepare_result(session, section, 'up')
         choices = {'A': 'A', 'B': 'B'}
         trial = TwoAlternativeForced(section, choices, result_pk).action()
         return combine_actions(score, trial)

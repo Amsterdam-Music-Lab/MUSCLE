@@ -1,6 +1,5 @@
 import logging
-
-from .views import SongSync, Final, Score, Trial
+from .views import Final
 
 logger = logging.getLogger(__name__)
 
@@ -14,7 +13,7 @@ class Base(object):
 
         result = Result(session=session)
         result.section = section
-        if expected_response:
+        if expected_response is not None:
             result.expected_response = expected_response
         result.save()
         return result.pk
@@ -22,7 +21,7 @@ class Base(object):
     @staticmethod
     def save_result(result_data):    
         from experiment.models import Result
-
+        # TODO: WARNING: make sure that the requested session is part of the current session
         result = Result.objects.get(pk=result_data['result_id'])
         result.given_response = result_data['value']
         result.save()
@@ -35,14 +34,25 @@ class Base(object):
         if the given_result is an array of results, retrieve and save results for all of them
         to use, override hande_result and call this method
         """
-        form = data.pop('form')
+
+        from experiment.models import Result
+        # TODO: WARNING the following line removes all form data from the stored result; 
+        # this way information about the given answer is lost
+        form = data.pop('form') 
         for form_element in form:
-            cls.get_result(session, form_element['result_id'])
+            try:
+                result = Result.objects.get(pk=form_element['result_id'], session=session)
+            except Result.DoesNotExist:
+                # Create new result
+                result = Result(session=session)
+            
+            result.given_response = form_element['value']
+            
             # Calculate score
             score = session.experiment_rules().calculate_score(result, data, form_element)
             if not score:
                 score = 0
-            result.given_response = form_element['value']
+            
             result.save_json_data(data)
             result.score = score
             result.save()
@@ -60,7 +70,33 @@ class Base(object):
         return result
 
     @staticmethod
-    def calculate_score(result, data, form_element):
+    def handle_result(session, data):
+        """Create a result for given session, based on the result data and section_id"""
+        from experiment.models import Result
+        
+        # Get existing result or create a new
+        if "result_id" in data:
+            try:
+                result = Result.objects.get(pk=data['result_id'], session=session)
+            except Result.DoesNotExist:
+                result = Result(session=session)
+        else:
+            result = Result(session=session)
+
+        # Calculate score
+        score = session.experiment_rules().calculate_score(result, None, data)
+        if not score:
+            score = 0
+
+        # Populate and save the result
+        result.save_json_data(data)
+        result.score = score
+        result.save()
+
+        return result
+
+    @staticmethod
+    def calculate_score(result, form_element, data):
         """fallback for calculate score"""
         return None
 

@@ -2,7 +2,11 @@
     position: relative;
     padding-bottom: 80px;
     width: 120px;
-    height: 180px;
+    height: 120px;
+
+    &.hasLabel{
+        height: 180px;
+    }
 
     .aha__play-button {
         position: absolute;

@@ -1,6 +1,5 @@
 from django.utils.translation import gettext as _
 
-
 class Final:  # pylint: disable=too-few-public-methods
     """
     Provide data for a final view
