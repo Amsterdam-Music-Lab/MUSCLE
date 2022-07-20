@@ -15,10 +15,10 @@ class Categorization(Base):
     def first_round(cls, experiment):
         consent = Consent.action()
         start_session = StartSession.action()
-        return combine_actions(
+        return [
             consent,
             start_session
-        )
+        ]
 
     @classmethod
     def next_round(cls, session):
