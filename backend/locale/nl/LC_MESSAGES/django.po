@@ -596,7 +596,7 @@ msgstr ""
 
 #: experiment/rules/huang_2021.py:41
 msgid "Let's go!"
-msgstr ""
+msgstr "Start!"
 
 #: experiment/rules/huang_2021.py:48
 #: experiment/rules/rhythm_experiment_series.py:45

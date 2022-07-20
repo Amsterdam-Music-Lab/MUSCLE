@@ -11,7 +11,7 @@ class Score(object):  # pylint: disable=too-few-public-methods
 
     ID = 'SCORE'
 
-    def __init__(self, session, score_message=None, config=None, icon=None, timer=None):
+    def __init__(self, session, score_message=None, config=None, icon=None, timer=None, feedback=None):
         """ Score presents feedback to a participant after a Trial
         - session: a Session object
         - score_message: a function which constructs feedback text based on the score
@@ -20,10 +20,12 @@ class Score(object):  # pylint: disable=too-few-public-methods
             - show_total_score: whether the total score should be shown
         - icon: the name of a themify-icon shown with the view or None
         - timer: int or None. If int, wait for as many seconds until showing the next view
+        - feedback: An additional feedback text
         """
         self.session = session
         self.score = session.last_score()
         self.score_message = score_message or self.default_score_message
+        self.feedback = feedback
         self.config = {
             'show_section': False,
             'show_total_score': False
@@ -49,6 +51,7 @@ class Score(object):  # pylint: disable=too-few-public-methods
             'score': self.score,
             'score_message': self.score_message(self.score),
             'texts': self.texts,
+            'feedback': self.feedback,
             'icon': self.icon,
             'timer': self.timer
         }
@@ -60,6 +63,10 @@ class Score(object):  # pylint: disable=too-few-public-methods
 
     def default_score_message(self, score):
         """Fallback to generate a message for the given score"""
+        
+        # None
+        if score == None:
+            score = 0
         # Zero
         if score == 0:
             # "Too bad!", "Come on!", "Try another!", "Try again!"

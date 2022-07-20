@@ -27,13 +27,19 @@ def get(request, slug):
             session = Session.objects.get(pk=series_data.get('session_id'))
         except Session.DoesNotExist:
             raise Http404("Session does not exist")
+
+        # convert non lists to list
+        next_round = session.experiment_rules().next_round(session)
+        if not isinstance(next_round, list): 
+            next_round = [next_round]
+            
         data = {
             'session': {
                 'id': session.id,
                 'playlist': session.playlist.id,
                 'json_data': session.load_json_data(),
             },
-            'next_round': [session.experiment_rules().next_round(session)]
+            'next_round': next_round
         }
         return JsonResponse(data, json_dumps_params={'indent': 4})
 

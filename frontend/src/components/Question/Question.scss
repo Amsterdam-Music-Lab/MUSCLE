@@ -1,3 +1,4 @@
+@import "./_AutoComplete";
 @import "./_ButtonArray";
 @import "./_Checkboxes";
 @import "./_Radios";
@@ -6,13 +7,23 @@
 @import "./_String";
 
 .aha__question {
-    min-height: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: space-between;
+    
     .question {
         flex-grow: 1;
         width: 100%;
     }
+
+    h3{
+        width: 100%;        
+
+        &:not(.title){
+            text-align: center;
+        }
+    }
+
+    
 }

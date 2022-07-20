@@ -9,6 +9,9 @@ from .hbat_bst import BST
 from .rhythm_discrimination import RhythmDiscrimination
 from .rhythm_experiment_series import RhythmExperimentSeries
 from .rhythm_experiment_series_mri import RhythmExperimentSeriesMRI
+from .toontjehoger_1_mozart import ToontjeHoger1Mozart
+from .toontjehoger_3_plink import ToontjeHoger3Plink
+from .toontjehoger_6_relative import ToontjeHoger6Relative
 from .gold_msi import GoldMSI
 from .listening_conditions import ListeningConditions
 from .hooked import Hooked
@@ -34,4 +37,7 @@ EXPERIMENT_RULES = {
     ListeningConditions.ID: ListeningConditions,
     Hooked.ID: Hooked,
     Categorization.ID: Categorization,
+    ToontjeHoger1Mozart.ID: ToontjeHoger1Mozart,
+    ToontjeHoger3Plink.ID: ToontjeHoger3Plink,
+    ToontjeHoger6Relative.ID: ToontjeHoger6Relative
 }
