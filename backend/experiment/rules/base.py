@@ -23,37 +23,28 @@ class Base(object):
     def handle_results(cls, session, data):
         """ 
         if the given_result is an array of results, retrieve and save results for all of them
-        to use, override hande_result and call this method
         """
-
-        from experiment.models import Result
-        # TODO: WARNING the following line removes all form data from the stored result; 
-        # this way information about the given answer is lost
-        # this would only be a concern if the data saved is profile data, but this is handled elsewhere
         form = data.pop('form')
         for form_element in form:
-            try:
-                result = Result.objects.get(pk=form_element['result_id'], session=session)
-            except Result.DoesNotExist:
-                # Create new result
-                result = Result(session=session)
-            
-            result.given_response = form_element['value']
+            result = cls.get_result(session, form_element['result_id'])
             
             # Calculate score
             score = session.experiment_rules().calculate_score(result, data, form_element)
             if not score:
                 score = 0
-            
+
+            result.given_response = form_element['value']
             result.save_json_data(data)
             result.score = score
             result.save()
         return result
     
     @classmethod
-    def get_result(cls, session, result_id):
+    def get_result(cls, session, result_id=None):
         from experiment.models import Result
         
+        if not result_id:
+            result = Result(session=session)
         try:
             result = Result.objects.get(pk=result_id)
         except Result.DoesNotExist:
@@ -61,19 +52,11 @@ class Base(object):
             result = Result(session=session)
         return result
 
-    @staticmethod
-    def handle_result(session, data):
+    @classmethod
+    def handle_result(cls, session, data):
         """Create a result for given session, based on the result data and section_id"""
-        from experiment.models import Result
-        
-        # Get existing result or create a new
-        if "result_id" in data:
-            try:
-                result = Result.objects.get(pk=data['result_id'], session=session)
-            except Result.DoesNotExist:
-                result = Result(session=session)
-        else:
-            result = Result(session=session)
+        result_id = data.get('result_id')
+        result = cls.get_result(session, result_id)
 
         # Calculate score
         score = session.experiment_rules().calculate_score(result, data)

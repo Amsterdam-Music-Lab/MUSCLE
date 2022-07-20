@@ -308,7 +308,7 @@ class ToontjeHoger6Relative(Base):
         return [trial]
 
     @classmethod
-    def calculate_score(cls, result, form_element, data):
+    def calculate_score(cls, result, data, form_element):
         return cls.SCORE_CORRECT if result.expected_response == result.given_response else cls.SCORE_WRONG
 
     @classmethod
