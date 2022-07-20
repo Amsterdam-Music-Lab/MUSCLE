@@ -40,6 +40,10 @@ class Command(BaseCommand):
         playlist_dir = join(upload_dir, directory)
         search_critera = glob('{}/*.wav'.format(playlist_dir)) + \
             glob('{}/*.mp3'.format(playlist_dir))
+        song_names_option = options.get('song_names')
+        if song_names_option:
+            with open(join(playlist_dir, song_names_option)) as json_file:
+                song_names = json.load(json_file)
         with open(join(playlist_dir, 'audiofiles.csv'), 'w+') as f:
             csv_writer = csv.writer(f)
             for audio_file in search_critera:
