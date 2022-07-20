@@ -34,7 +34,7 @@ class Step(object):
 
     def __init__(self, description, number=None):
         self.description = description
-        self.number = number;
+        self.number = number
 
     def action(self, number=None):
         """Create an explainer step, with description and optional number"""
