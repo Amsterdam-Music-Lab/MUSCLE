@@ -21,7 +21,7 @@ const FeedbackForm = ({
     const onSubmit = () => {
         // Prevent double submit
         if (isSubmitted.current){
-            console.warning("Multiple submits detected");
+            console.error("Multiple submits detected");
             return;
         }
         isSubmitted.current = true;
