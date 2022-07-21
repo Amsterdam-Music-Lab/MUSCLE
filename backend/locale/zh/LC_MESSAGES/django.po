@@ -469,33 +469,33 @@ msgstr ""
 
 #: experiment/rules/huang_2022.py:24
 msgid "How to Play"
-msgstr "游戏介绍"
+msgstr "实验介绍"
 
 #: experiment/rules/huang_2022.py:27
 msgid ""
 "Do you recognise the song? Try to sing along. The faster you recognise "
 "songs, the more points you can earn."
 msgstr ""
-"首先您会听到一个15秒的音乐片段，请尝试在15秒内识别出该歌曲。您不需要知道该歌"
-"曲的名字，只需认出该歌曲即可。并且尝试跟着一起唱吧！您在15秒内识别出歌曲的速"
-"度越快，您就能获得更多的分数。"
+"首先您将听到一些简单的音乐片段，您不需要知道该歌曲的名字。请尝试尽快回答“是否能识别出该音乐”，"
+"同时请在大脑中跟唱这段音乐。您在15秒内识别出歌曲的速度越快，您就能获得更多的分数。"
+
 
 #: experiment/rules/huang_2022.py:29
 msgid ""
 "Do you really know the song? Keep singing or imagining the music while the "
 "sound is muted. The music is still playing: you just can’t hear it!"
 msgstr ""
-"当您识别出某首歌曲且按下'yes'键的瞬间，音乐声从这一秒开始会被静音。即使此时您"
-"听不见音乐，请您试着继续将静音前的音乐接唱下去或在大脑里想象歌曲仍在播放着。"
-"音乐仍在播放着，只是您现在听不见而已。"
+"当您识别出某首歌曲且点击'是'的瞬间，音乐声从这一秒开始会被静音。"
+"请您继续将静音前的音乐在脑海中接唱下去直到该音乐再次播放为止。"
+
 
 #: experiment/rules/huang_2022.py:31
 msgid ""
 "Was the music in the right place when the sound came back? Or did we jump to "
 "a different spot during the silence?"
 msgstr ""
-"当您再次听到声音时，请您判断此时播放器里的音乐和您脑海中的音乐同步了吗？还是"
-"在声音静音期间，我们脑海中的音乐“播放”到其他的地方？"
+"当您再次听到声音时，您需要判断出此音乐与您脑海中的音乐是否同步。"
+
 
 #: experiment/rules/huang_2022.py:33 experiment/rules/huang_2022.py:214
 msgid "Let's go!"
@@ -507,13 +507,13 @@ msgstr "开始吧！"
 #: experiment/templates/consent/consent_hooked.html:87
 #: experiment/templates/consent/consent_huang2021.html:92
 msgid "Informed consent"
-msgstr "知情同意书"
+msgstr "知情同意声明"
 
 #: experiment/rules/huang_2022.py:38
 #: experiment/rules/rhythm_experiment_series.py:45
 #: experiment/rules/speech2song.py:40
 msgid "I agree"
-msgstr "我同意"
+msgstr "同意"
 
 #: experiment/rules/huang_2022.py:38
 #: experiment/rules/rhythm_experiment_series.py:45
@@ -530,7 +530,7 @@ msgid ""
 "music to fail to load or the experiment may fail to run properly. You can "
 "access the experiment page through the following channels:"
 msgstr ""
-"  您可以使用智能手机、电脑或平板电脑来参与该实验。请选择您所在区域最优的网络"
+"  请你使用智能手机、电脑或平板电脑来参与该实验，并选择您所在区域最优的网络"
 "参与该实验，比如无线网络（WiFi）、移动数据网络信号（4G或以上）或有线网络。如"
 "果网络环境不佳，有可能会导致音乐加载失败或实验运行不流畅等情况出现。您可以通"
 "过以下的渠道打开实验页面："
@@ -548,9 +548,9 @@ msgid ""
 "currently available browsers, such as Safari, Firefox, 360, Google Chrome, "
 "Quark, etc."
 msgstr ""
-"如果通过手机微信的链接加载实验页面失败，您可以在手机或电脑的浏览器里复制黏贴"
-"该链接来参与实验。您可以使用市面上目前的任何一种浏览器，如Safari、火狐"
-"Firefox、360、谷歌Chrome、夸克Quark等等。"
+"通过复制黏贴实验链接到浏览器参与实验。您可以使用市面上目前的任何一种浏览器，如Safari、火狐"
+"360等等。"
+
 
 #: experiment/rules/huang_2022.py:50 experiment/rules/huang_2022.py:260
 #: experiment/rules/rhythm_experiment_series.py:36
@@ -572,6 +572,7 @@ msgstr "继续"
 #: experiment/rules/huang_2022.py:138
 msgid "Questionnaire"
 msgstr ""
+"问卷调查"
 
 #: experiment/rules/huang_2022.py:211
 msgid ""
@@ -620,7 +621,7 @@ msgstr "{} / {}轮"
 
 #: experiment/rules/huang_2022.py:336
 msgid "Thank you for your contribution to science!"
-msgstr "感谢您为科学研究贡献出宝贵的时间！"
+msgstr "感谢您的参与以及对科学的贡献！"
 
 #: experiment/rules/huang_2022.py:338
 msgid "Well done!"
@@ -632,7 +633,7 @@ msgstr "有点糟哦！"
 
 #: experiment/rules/huang_2022.py:340
 msgid "You did not recognise any songs at first."
-msgstr "你起初并没有识别出任何歌曲。"
+msgstr "您起初并没有识别出任何歌曲。"
 
 #: experiment/rules/huang_2022.py:342
 #, python-format
@@ -641,8 +642,8 @@ msgid ""
 "and you correctly identified %(n_correct)d out of the %(n_total)d songs you "
 "thought you knew."
 msgstr ""
-"你平均花了 %(n_seconds)d 秒识别出一首歌曲，并且在你认为你知道的 %(n_total)d "
-"首歌曲里, 你正确地识别出了 %(n_correct)d 首。"
+"您平均花了 %(n_seconds)d 秒识别出一首歌曲，并且在您认为您知道的 %(n_total)d "
+"首歌曲里, 您正确地识别出了 %(n_correct)d 首。"
 
 #: experiment/rules/huang_2022.py:348
 #, python-format
@@ -650,7 +651,7 @@ msgid ""
 "During the bonus rounds, you remembered %(n_correct)d of the %(n_total)d "
 "songs that came back."
 msgstr ""
-"在奖励环节里，你记住了之前播放过的 %(n_total)d 首歌里的 %(n_correct)d 首歌"
+"在奖励环节里，您记住了之前播放过的 %(n_total)d 首歌里的 %(n_correct)d 首歌"
 "曲。"
 
 #: experiment/rules/huang_2022.py:412
@@ -1192,7 +1193,7 @@ msgstr ""
 #, fuzzy
 #| msgid "7 or more"
 msgid "6 or more"
-msgstr "7或以上"
+msgstr "6或以上"
 
 #: experiment/rules/util/goldsmiths.py:119
 msgid ""
@@ -1360,10 +1361,15 @@ msgstr "高中/职高"
 #: experiment/rules/util/isced_education.py:6
 msgid "Post-16 vocational course"
 msgstr "初中/中专"
+##The pilot study did not have this msgid/option for the education-related questions. I dont think the Hooked on China needs this option. It ovelapps
+##py:4 and both options in the same translations show up in the experiment.
+
 
 #: experiment/rules/util/isced_education.py:7
 msgid "Associate's degree or 2-year professional diploma"
-msgstr "大专"
+msgstr "大专或成人本科"
+
+
 
 #: experiment/rules/util/isced_education.py:8
 #, fuzzy
@@ -1541,7 +1547,7 @@ msgstr "您所获得的最高学历："
 
 #: experiment/rules/util/questions.py:62 experiment/rules/util/questions.py:101
 msgid "In which country do you currently reside?"
-msgstr "你目前所在的国家："
+msgstr "您目前所在的国家："
 
 #: experiment/rules/util/questions.py:73
 msgid "Jazz/Folk/Classical"
@@ -1553,7 +1559,7 @@ msgstr "我演奏的最好的乐器，包括声乐（或没有），是："
 
 #: experiment/rules/util/questions.py:90
 msgid "What is your age?"
-msgstr "你的年龄是？"
+msgstr "您的年龄是？"
 
 #: experiment/rules/util/questions.py:107
 msgid ""
@@ -1719,7 +1725,7 @@ msgstr "下一首"
 
 #: experiment/rules/views/score.py:39
 msgid "You listened to:"
-msgstr "你听到的是: "
+msgstr "您听到的是: "
 
 #: experiment/rules/views/score.py:67
 msgid "No points"
@@ -1739,7 +1745,7 @@ msgstr "您是否认出了这首歌曲？"
 
 #: experiment/rules/views/song_sync.py:35
 msgid "Keep imagining the music"
-msgstr "想象着音乐仍在播放"
+msgstr "继续默唱音乐"
 
 #: experiment/rules/views/song_sync.py:36
 msgid "Did the track come back in the right place?"
@@ -1779,8 +1785,7 @@ msgstr ""
 "\n"
 "  您即将参加由阿姆斯特丹大学逻辑、语言和计算研究所（ILLC）音乐认知实验组的博"
 "士生Xuan Huang 主持的《“中国音乐饵”与记忆》（experiment on Music：China）的研"
-"究项目。在正式参与该项研究项目之前，请您务必先仔细阅读我们的信息手册以了解该"
-"实验的程序。"
+"究项目。在正式参与该研究项目之前，请您仔细阅读我们的信息手册以了解实验程序。"
 
 #: experiment/templates/consent/consent_MRI.html:3
 #: experiment/templates/consent/consent_rhythm.html:3
@@ -1832,7 +1837,7 @@ msgid ""
 "either internal or external loudspeakers. "
 msgstr ""
 "\n"
-"  欢迎任何听力良好与喜欢音乐的人来参加该实验，后天矫正听力良好也可参加。您的"
+"本研究的调查对象是拥有良好的先天听力条件或后天矫正欢迎任何听力良好与喜欢音乐的人来参加该实验，后天矫正听力良好也可参加。您的"
 "设备必须能够播放音频，且需具备良好的无限网络（WiFi）或移动数据网络信号以支持"
 "MP3格式的音频流文件。为了获得最佳效果，我们推荐您使用耳机参与实验，您也可以选"
 "择内置或外置扬声器。请注意调整设备音量以获得舒适体验感。"
@@ -1979,7 +1984,7 @@ msgid ""
 msgstr ""
 "\n"
 "  您即将参加由阿姆斯特丹大学逻辑、语言和计算研究所（ILLC）音乐认知实验组的博"
-"士生Xuan Huang 主持的《“中国音乐饵”与记忆》（experiment on Music：China）的研"
+"士研究生Xuan Huang 主持的《“中国音乐饵”与记忆》（experiment on Music：China）的研"
 "究项目。在正式参与该项研究项目之前，请您务必先仔细阅读我们的信息手册以了解该"
 "实验的程序。"
 
@@ -1987,7 +1992,7 @@ msgstr ""
 #: experiment/templates/consent/consent_huang2021.html:11
 #: experiment/templates/consent/consent_speech2song.html:11
 msgid "Purpose of the research project"
-msgstr "该研究目的"
+msgstr "本研究目的"
 
 #: experiment/templates/consent/consent_hooked.html:14
 #: experiment/templates/consent/consent_huang2021.html:14
@@ -2003,11 +2008,11 @@ msgid ""
 "    "
 msgstr ""
 "\n"
-"  我们知道有些音乐让人非常得印象深刻。是什么使得这些音乐令人印象深刻呢？为什"
+"我们知道有些音乐让人非常的印象深刻。是什么使得这些音乐令人印象深刻？为什"
 "么我们不仅能记住某首歌曲，而且在某段时间甚至是几年以后仍能够回忆起它？是什么"
-"让音乐一直存在我们的记忆里？是否有些音乐特征使人们更容易长期记住中国音乐呢？"
-"还是长期记住音乐取决于听众个人呢?我们是否共同地使用同样的音乐特征来识别音乐"
-"呢? "
+"让音乐一直存在我们的记忆里？是否有些音乐特征使人们更容易长期记住中国音乐？"
+"还是这种长期记忆取决于不同的听众?我们是否共同地使用同样的音乐特征来识别音乐？"
+"该研究项目旨在帮助我们回答以上问题。"
 
 #: experiment/templates/consent/consent_hooked.html:22
 #: experiment/templates/consent/consent_huang2021.html:22
@@ -2025,11 +2030,7 @@ msgid ""
 "memory disorders.\n"
 "    "
 msgstr ""
-"  该研究项目旨在帮助我们回答以上问题，并且帮助我们更好地了解作为听众是如何长"
-"期记住音乐的。音乐记忆可能会受到我们的聆听历史、聆听经历、以及我们成长的音乐"
-"文化有关。了解音乐记忆可以帮助流媒体音乐服务找到并给它们的用户推荐喜欢的音"
-"乐、短视频博主以最合适的音乐创作视频、作曲家创作新的音乐、音乐治疗师为记忆障"
-"碍患者的工作和生活开发新的方法等。"
+
 
 #: experiment/templates/consent/consent_hooked.html:30
 #: experiment/templates/consent/consent_huang2021.html:30
@@ -2051,10 +2052,10 @@ msgid ""
 "    "
 msgstr ""
 "\n"
-"  欢迎任何听力良好与喜欢音乐的人来参加该实验，后天矫正听力良好也可参加。您的"
-"设备必须能够播放音频，且需具备良好的无限网络（WiFi）或移动数据网络信号以支持"
-"MP3格式的音频流文件。为了获得最佳效果，我们推荐您使用耳机参与实验，您也可以选"
-"择内置或外置扬声器。请注意调整设备音量以获得舒适体验感。"
+"本研究的调查对象是拥有良好的先天听力或者通过矫正的听力来欣赏音乐的个体。"
+"您所使用的设备需满足以下条件：能够播放音频以及具有良好的无限网络（WiFi）"
+"或移动数据网络信号。为了获得最佳效果，我们建议您使用耳机参与实验，您也可以选"
+"择内置或外置扬声器。请注意调整设备音量。"
 
 #: experiment/templates/consent/consent_hooked.html:39
 #: experiment/templates/consent/consent_huang2021.html:39
@@ -2091,16 +2092,18 @@ msgid ""
 "    and how you engage with music in your daily life."
 msgstr ""
 "\n"
-"  该实验共有两阶段。在第一阶段，您将听到一些短的音乐片段并且请您回答‘是否能识"
-"别出该音乐’。请试着尽快回答问题，但必须同时能在大脑中一起唱这段音乐。当您告诉"
-"我们您识别出了一段音乐时，该音乐会继续播放，但是声音将会被静音几秒钟。请您此"
-"时继续在心里“默唱”该音乐直到您能再次听到声音为止。有时候音乐会回到正确的位"
-"置，但有时候在声音静音期间，我们会把同一段音乐往前或往后播放。当您在静音后再"
-"次听到音乐时，您需要判断出该音乐是否回到正确的位置。在聆听不同的音乐片段之"
-"间，我们会问您一些简单的问题，以便于更好地了解您的音乐背景以及您在日常生活中"
-"的音乐活动。在实验的第二阶段，您仍将听到一些短的音乐片段，此时您需要回答您是"
-"否在实验的第一阶段听过这些音乐。同样，在聆听不同的音乐片段之间，我们会问您一"
-"些简单的问题，涉及您的音乐背景以及您在日常生活中的音乐活动。"
+"  该实验包括两部分：一个音乐识别实验与一份《金史密斯音乐素养》水平测试。我们"
+"也将对人口统计特征进行一个简短的问卷调查。 该实验需要20-30分钟。在实验完成后,"
+"您将看到结果。"
+"\n"
+"  在音乐识别实验的第一个阶段，您将听到一些简短的音乐片段，请您尝试尽快回答‘是否能识别出该音乐‘。"
+"同时请在大脑中一起跟唱这段音乐。当您告诉我们您识别出了一段音乐时，该音乐会继续播放，"
+"但是声音将会被静音几秒钟。请您此时继续在心里“默唱”该音乐直到它再次播放为止。有时候"
+"音乐会回到正确的位置，但有时候在静音期间，同一段音乐会被向前或向后播放。当您在静音"
+"后再次听到音乐时，您需要判断出该音乐是否回到正确的位置。在实验的第二阶段，您仍将听"
+"到一些简短的音乐片段，此时您需要回答您是否在实验的第一阶段听过这些音乐。"
+
+
 
 #: experiment/templates/consent/consent_hooked.html:56
 #: experiment/templates/consent/consent_huang2021.html:56
@@ -2120,9 +2123,9 @@ msgid ""
 "you decide to stop or withdraw your consent,\n"
 "    all the information gathered up until then will be permanently deleted. "
 msgstr ""
-"  您将自愿参加此研究项目。这意味着您可以在任何阶段自由停止参与。这不会造成任"
-"何个人后果，并且您无须完成上述实验步骤。您也可以决定撤回您的参与。如果您决定"
-"停止参加该项研究或撤回您的参与，那么在此之前收集的所有信息将会被永久删除。"
+"  本实验秉承自愿参与的原则。您可以在任何阶段自由地停止参与实验，这不会造成任"
+"何个人后果。您也可以决定撤回您的参与。如果您决定停止参加该项研究或撤回您的参与，"
+"那么在此之前收集的所有信息将会被永久删除。"
 
 #: experiment/templates/consent/consent_hooked.html:64
 #: experiment/templates/consent/consent_huang2021.html:64
@@ -2140,14 +2143,14 @@ msgid ""
 "expected for participants. For all research\n"
 "    at the University of Amsterdam, a standard liability insurance applies. "
 msgstr ""
-"  参加本研究的风险非常低，和我们日常听音乐一样。相似研究的经验表明，参与者没"
-"有或几乎没有不适感。在阿姆斯特丹大学进行的所有研究都需要使用标准责任险。"
+"  参加本研究的风险非常低，与日常的听音乐活动相当。相似研究的经验表明，参与者没"
+"有或几乎没有不适感。荷兰阿姆斯特丹大学进行的所有研究都使用标准责任险。"
 
 #: experiment/templates/consent/consent_hooked.html:71
 #: experiment/templates/consent/consent_huang2021.html:71
 #: experiment/templates/consent/consent_speech2song.html:45
 msgid "Confidential treatment of your details"
-msgstr "信息保密处理"
+msgstr "信息匿名和保密性"
 
 #: experiment/templates/consent/consent_hooked.html:73
 #: experiment/templates/consent/consent_huang2021.html:73
@@ -2163,10 +2166,9 @@ msgid ""
 "guarantee that you will remain anonymous under all\n"
 "    circumstances. "
 msgstr ""
-"  在此研究过程中所搜集的信息将用于进一步的数据分析并仅在学术期刊上发表。实验"
-"期间所收集的数据完全匿名（例如是否识别出了每个音乐片段以及所花的时间），这些"
-"数据可能会随着学术出版物一起在线供。您的个人信息将不会被用于这些出版物，并且"
-"我们保证您在任何情况下都将保持匿名。"
+"  本研究使用完全匿名的方式，所有资料仅供学术之用，并且将仅对实验相关的工作人员开放。同时，您在"
+"任何情况下都保持匿名，请安心作答。"
+
 
 #: experiment/templates/consent/consent_hooked.html:82
 #, fuzzy, python-format
@@ -2215,9 +2217,10 @@ msgid ""
 "conducted by Xuan Huang as described above.\n"
 "    "
 msgstr ""
-"  本人在此声明本人已经清楚地了解由荷兰阿姆斯特丹大学逻辑、语言与计算研究所"
-"（ILLC）的音乐认知实验组博士生Xuan Huang所开展的《中国“音乐饵”与记忆》"
-"（experiment on Music：China）的研究项目。"
+"  我已经阅读了这份知情同意书，并知道我正在参加由荷兰阿姆斯特丹大学逻辑、语言与计算研究所"
+"（ILLC）的音乐认知实验组博士研究生Xuan Huang所主持的《中国“音乐饵”与记忆》"
+"的研究项目。我的个人资料会基于学术伦理的准则受到匿名和保密处理，这些资料仅供学术研究使用。"
+
 
 #: experiment/templates/consent/consent_hooked.html:95
 #: experiment/templates/consent/consent_huang2021.html:100
@@ -2236,9 +2239,9 @@ msgid ""
 "without my express permission.\n"
 "    "
 msgstr ""
-"  本人同意参与此研究属于完全自愿。本人保留撤销此同意的权利，而无需提供任何理"
-"由。本人知道本人有权利随时退出该项研究，并且可以撤销同意参与。如果本人决定终"
-"止或撤销本人的参与，那么在此之前收集的所有信息将会被永久删除。"
+"  我理解参加本项研究是自愿的。我可以选择不参加本项研究或随时退出，我也可以撤销我的参与，且"
+"无需说明任何理由。如果我决定终止或撤销我的参与，那么在此之前收集的所有我的资料将会被永久删除。"
+
 
 #: experiment/templates/consent/consent_huang2021.html:3
 #, fuzzy
@@ -2265,9 +2268,9 @@ msgid ""
 msgstr ""
 "\n"
 "  您即将参加由阿姆斯特丹大学逻辑、语言和计算研究所（ILLC）音乐认知实验组的博"
-"士生Xuan Huang 主持的《“中国音乐饵”与记忆》（experiment on Music：China）的研"
-"究项目。在正式参与该项研究项目之前，请您务必先仔细阅读我们的信息手册以了解该"
-"实验的程序。"
+"士研究生Xuan Huang 主持的《“中国音乐饵”与记忆》的研究项目。在正式参与该研究项目"
+"之前，请您仔细阅读我们的知情同意书以了解实验程序。"
+
 
 #: experiment/templates/consent/consent_huang2021.html:82
 msgid ""
@@ -2285,8 +2288,8 @@ msgid ""
 "+31 20 525 3054; e-mail:\n"
 "    commissie-ethiek-fgw@uva.nl; Kloveniersburgwal 48, 1012 CX Amsterdam)."
 msgstr ""
-"  如您需了解关于此研究项目的更多信息，请联系Xuan Huang(邮箱: x.huang@uva.nl; "
-"地址: Science Park 107, 1098 GE Amsterdam)或者您也可以联系John A. Burgoyne 博"
+"  如您需了解关于本研究项目的更多信息，请联系Xuan Huang(邮箱: x.huang@uva.nl; "
+"地址: Science Park 107, 1098 GE Amsterdam)或者John A. Burgoyne 博"
 "士 ( 电话: +31205257034；邮箱: j.a.burgoyne@uva.nl; 地址: Science Park 107, "
 "1098 GE Amsterdam)。如果您对此研究项目有任何投诉，请联系阿姆斯特丹大学人文学"
 "院伦理委员会秘书 (the secretary of the Ethics Committee of the Faculty of "
@@ -2314,9 +2317,9 @@ msgid ""
 msgstr ""
 "\n"
 "  您即将参加由阿姆斯特丹大学逻辑、语言和计算研究所（ILLC）音乐认知实验组的博"
-"士生Xuan Huang 主持的《“中国音乐饵”与记忆》（experiment on Music：China）的研"
-"究项目。在正式参与该项研究项目之前，请您务必先仔细阅读我们的信息手册以了解该"
-"实验的程序。"
+"士研究生Xuan Huang 主持的《“中国音乐饵”与记忆》的研"
+"究项目。在正式参与该研究项目之前，请您仔细阅读我们的信息手册以了解"
+"实验程序。"
 
 #: experiment/templates/consent/consent_rhythm.html:4
 msgid ""
