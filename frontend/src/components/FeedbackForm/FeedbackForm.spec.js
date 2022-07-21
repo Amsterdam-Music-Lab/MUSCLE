@@ -1,10 +1,9 @@
 import React from "react";
-import { render, unmountComponentAtNode } from "react-dom";
-import { act } from "react-dom/test-utils";
+import { render, screen } from '@testing-library/react';
+import '@testing-library/jest-dom';
 
 import FeedbackForm from "./FeedbackForm";
 
-let container = null;
 const form = [
     {
         key: 'test_question',
@@ -14,39 +13,15 @@ const form = [
     }
 ]
 
-beforeEach(() => {
-  // setup a DOM element as a render target
-  container = document.createElement("div");
-  document.body.appendChild(container);
-});
+describe('FeedbackForm', () => {
 
-afterEach(() => {
-  // cleanup on exiting
-  unmountComponentAtNode(container);
-  container.remove();
-  container = null;
-});
-
-it("can render itself", () => { 
-    act(() => {
+    it('renders a heading, and a group of radio buttons', () => {
         render(<FeedbackForm
             form={form}
-            />,
-            container
-        );
+        />)
+        expect(screen.getByRole('heading')).toHaveTextContent('What is the average speed of a Swallow?');
+        expect(screen.getByRole('group')).toBeInTheDocument();
+        expect(screen.queryAllByRole('radio')[0]).toBeInTheDocument();
     });
-    expect(container.getElementsByClassName('aha__feedback') !== null);
-});
 
-it("can deactivate the form", () => { 
-    const isActive = false;
-    act(() => {
-        render(<FeedbackForm
-            formActive={isActive}
-            form={form}
-            />,
-            container
-        );
-    });
-    expect(document.querySelector('input').getAttribute('active').toEqual(false));
 });

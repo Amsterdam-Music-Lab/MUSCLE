@@ -148,7 +148,7 @@ const Trial = ({
     }, [config.auto_advance, makeResult]);
 
     return (
-        <div className={classNames("aha__trial", config.style)}>
+        <div role='trial' className={classNames("aha__trial", config.style)}>
             {playback && (
                 <Playback
                     playerType={playback.player_type}
