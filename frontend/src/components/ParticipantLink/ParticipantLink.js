@@ -4,7 +4,7 @@ import { useParticipantLink } from "../../API";
 import Loading from "../Loading/Loading";
 
 const ParticipantLink = (participantIDOnly) => {
-    const [link, loadingLink] = useParticipantLink(participantIDOnly);
+    const [link, loadingLink] = useParticipantLink();
     const linkInput = useRef();
 
     const copyLink = () => {
@@ -21,6 +21,11 @@ const ParticipantLink = (participantIDOnly) => {
         navigator.clipboard.writeText(linkInput.current.value);
     };
 
+    const formatLink = (url) => {
+        const formatted = participantIDOnly ? url.split('/')[6] : url;
+        return formatted;
+    }
+
     switch (true) {
         case loadingLink:
             return <Loading />;
@@ -28,7 +33,7 @@ const ParticipantLink = (participantIDOnly) => {
             return (
                 <div className="aha__participant_link">
                     <div className="copy">
-                        <input ref={linkInput} value={link.url} readOnly />
+                        <input ref={linkInput} value={formatLink(link.url)} readOnly />
                         <button onClick={copyLink} onKeyPress={copyLink}>
                             {link.copy_message}
                         </button>

@@ -11,4 +11,13 @@
     .title {
         flex: 0 0 100%;
     }
+
+    .btn-group-toggle-custom{
+        display: flex;
+        column-gap: 20px;
+        
+        input{
+            display: none;
+        }
+    }
 }

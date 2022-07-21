@@ -7,23 +7,32 @@ import TextRange from "./_TextRange";
 import String from "./_String";
 import Checkboxes from "./_Checkboxes";
 import DropDown from "./_DropDown";
+import AutoComplete from "./_AutoComplete";
 
-const BUTTON_ARRAY = "BUTTON_ARRAY";
-const CHECKBOXES = "CHECKBOXES";
-const DROPDOWN = "DROPDOWN";
-const RADIOS = "RADIOS";
-const RANGE = "RANGE";
-const TEXT_RANGE = "TEXT_RANGE";
-const STRING = "STRING";
+export const AUTOCOMPLETE = "AUTOCOMPLETE";
+export const BUTTON_ARRAY = "BUTTON_ARRAY";
+export const CHECKBOXES = "CHECKBOXES";
+export const DROPDOWN = "DROPDOWN";
+export const RADIOS = "RADIOS";
+export const RANGE = "RANGE";
+export const TEXT_RANGE = "TEXT_RANGE";
+export const STRING = "STRING";
 
 // Question is an experiment view that shows a question and handles storing the answer
-const Question = ({ question, onChange, id, active, style }) => {
+const Question = ({
+    question,
+    onChange,
+    id,
+    active,
+    style,
+    emphasizeTitle,
+}) => {
     const [value, setValue] = useState(question.value || "");
 
     const registerChange = (value) => {
         onChange(value, id);
         setValue(value);
-    }
+    };
 
     // render view
     const render = (view) => {
@@ -32,6 +41,7 @@ const Question = ({ question, onChange, id, active, style }) => {
             question,
             active,
             style,
+            emphasizeTitle,
             onChange: registerChange,
         };
 
@@ -42,6 +52,8 @@ const Question = ({ question, onChange, id, active, style }) => {
                 return <Checkboxes {...attrs} />;
             case DROPDOWN:
                 return <DropDown {...attrs} />;
+            case AUTOCOMPLETE:
+                return <AutoComplete {...attrs} />;
             case RADIOS:
                 return <Radios {...attrs} />;
             case RANGE:

@@ -127,7 +127,7 @@ class BeatAlignment(Base):
         section = session.section_from_unused_song(filter_by)
         condition = section.filename.split('_')[-1][:-4]
         expected_result = 'ON' if condition=='on' else 'OFF'
-        result_pk = Base.prepare_result(session, section, expected_result)
+        result_pk = cls.prepare_result(session, section, expected_result)
         question = ChoiceQuestion(
             question=_("Are the beeps ALIGNED TO THE BEAT or NOT ALIGNED TO THE BEAT?"),
             key='aligned',
@@ -153,7 +153,7 @@ class BeatAlignment(Base):
         return view.action()
 
     @staticmethod
-    def calculate_score(result, form_element, data):
+    def calculate_score(result, data, form_element):
         try:
             expected_response = result.expected_response
         except Exception as e:

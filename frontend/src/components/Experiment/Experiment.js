@@ -1,23 +1,23 @@
 import React, { useState, useEffect, useCallback } from "react";
-import {
-    useExperiment,
-    useParticipant,
-    getNextRound,
-} from "../../API";
+import { useExperiment, useParticipant, getNextRound } from "../../API";
 import { TransitionGroup, CSSTransition } from "react-transition-group";
 import { withRouter } from "react-router-dom";
 
-import Trial from '../Trial/Trial';
-import DefaultPage from "../Page/DefaultPage";
-import Loading from "../Loading/Loading";
-import Explainer from "../Explainer/Explainer";
 import Consent from "../Consent/Consent";
-import Playlist from "../Playlist/Playlist";
-import StartSession from "../StartSession/StartSession";
-import SongSync from "../SongSync/SongSync";
-import Score from "../Score/Score";
-import FinalScore from "../FinalScore/FinalScore";
+import DefaultPage from "../Page/DefaultPage";
+import Explainer from "../Explainer/Explainer";
 import Final from "../Final/Final";
+import Loading from "../Loading/Loading";
+import Playlist from "../Playlist/Playlist";
+import Score from "../Score/Score";
+import SongSync from "../SongSync/SongSync";
+import Plink from "../Plink/Plink";
+import HTML from "../HTML/HTML";
+import StartSession from "../StartSession/StartSession";
+import Trial from "../Trial/Trial";
+import useResultHandler from "../../hooks/useResultHandler";
+import { stateNextRound } from "../../util/nextRound";
+import Info from "../Info/Info";
 
 // Experiment handles the main experiment flow:
 // - Loads the experiment and participant
@@ -35,8 +35,8 @@ const Experiment = ({ match }) => {
     const [experiment, loadingExperiment] = useExperiment(match.params.slug);
     const [participant, loadingParticipant] = useParticipant();
 
-    const loadingText = experiment ? experiment.loading_text : '';
-    const className = experiment ? experiment.class_name : '';
+    const loadingText = experiment ? experiment.loading_text : "";
+    const className = experiment ? experiment.class_name : "";
 
     // Load state, set random key
     const loadState = useCallback((state) => {
@@ -51,12 +51,6 @@ const Experiment = ({ match }) => {
         },
         [loadState]
     );
-
-    function stateNextRound(state) {
-        let newState = state.next_round.shift();
-        newState.next_round = state.next_round;
-        return newState;
-    }
 
     // Start first_round when experiment and partipant have been loaded
     useEffect(() => {
@@ -84,7 +78,7 @@ const Experiment = ({ match }) => {
         if (state.next_round && state.next_round.length) {
             loadState(stateNextRound(state));
         } else {
-            console.log("No next-round data available");
+            console.error("No next-round data available");
             // Fallback in case a server response/async call went wrong
             // Try to get next_round data from server again
             const round = await getNextRound({
@@ -101,6 +95,14 @@ const Experiment = ({ match }) => {
         }
     };
 
+    const onResult = useResultHandler({
+        session,
+        participant,
+        loadState,
+        onNext,
+        state,
+    });
+
     // Render experiment state
     const render = (view) => {
         // Default attributes for every view
@@ -114,45 +116,48 @@ const Experiment = ({ match }) => {
             setPlaylist,
             setError,
             setSession,
+            onResult,
             onNext,
-            stateNextRound,
             ...state,
         };
 
         // Show view, based on the unique view ID:
         switch (view) {
-            case "LOADING":
-                return <Loading {...attrs} />;
-            case "ERROR":
-                return <div>Error: {state.error}</div>;
+            // Experiment views
+            // -------------------------
+            case "TRIAL_VIEW":
+                return <Trial {...attrs} />;
+            case "SONG_SYNC":
+                return <SongSync {...attrs} />;
+            case "PLINK":
+                return <Plink {...attrs} />;
+            case "HTML":
+                return <HTML {...attrs} />;
+
+            // Information & Scoring
+            // -------------------------
             case "EXPLAINER":
                 return <Explainer {...attrs} />;
-            case "CONSENT":
-                return <Consent {...attrs} />;
+            case "SCORE":
+                return <Score {...attrs} />;
+            case "FINAL":
+                return <Final {...attrs} />;
+
+            // Generic / helpers
+            // -------------------------
             case "PLAYLIST":
                 return <Playlist {...attrs} />;
             case "START_SESSION":
                 return <StartSession {...attrs} />;
-            case "SONG_SYNC":
-                return <SongSync {...attrs} />;
-            case "SCORE":
-                return <Score {...attrs} />;
-            case "TRIAL_VIEW":
-                return <Trial {...attrs} />
-            case "FINAL_SCORE":
-                return (
-                    <FinalScore
-                        {...attrs}
-                        onNext={() => {
-                            setSession(null);
-                            loadState(stateNextRound(experiment));
-                        }}
-                    />
-                );
-            case "FINAL":
-                return (
-                    <Final {...attrs} />
-                );
+            case "LOADING":
+                return <Loading {...attrs} />;
+            case "ERROR":
+                return <div>Error: {state.error}</div>;
+            case "CONSENT":
+                return <Consent {...attrs} />;
+            case "INFO":
+                return <Info {...attrs} />;
+
             default:
                 return (
                     <div className="text-white bg-danger">
@@ -184,7 +189,7 @@ const Experiment = ({ match }) => {
                 <DefaultPage
                     title={state.title}
                     logoClickConfirm={
-                        ["FINAL_SCORE", "ERROR"].includes(key)
+                        ["FINAL", "ERROR"].includes(key)
                             ? null
                             : "Are you sure you want to stop this experiment?"
                     }
@@ -196,7 +201,5 @@ const Experiment = ({ match }) => {
         </TransitionGroup>
     );
 };
-
-
 
 export default withRouter(Experiment);

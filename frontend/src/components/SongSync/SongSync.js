@@ -16,7 +16,15 @@ const SYNC = "SYNC";
 // - RECOGNIZE: Play audio, ask if participant recognizes the song
 // - SILENCE: Silence audio
 // - SYNC: Continue audio, ask is position is in sync
-const SongSync = ({ view, section, instructions, buttons, config, onResult }) => {
+const SongSync = ({
+    view,
+    section,
+    instructions,
+    buttons,
+    config,
+    resultId,
+    onResult
+}) => {
     // Main component state
     const [state, setState] = useState({ view: PRELOAD });
     const [running, setRunning] = useState(true);
@@ -31,7 +39,7 @@ const SongSync = ({ view, section, instructions, buttons, config, onResult }) =>
     const startTime = useRef(getCurrentTime());
 
     // Create result data in this wrapper function
-    const createResult = (result) => {
+    const addResult = (result) => {
         // Prevent multiple submissions
         if (submitted.current) {
             return;
@@ -46,7 +54,6 @@ const SongSync = ({ view, section, instructions, buttons, config, onResult }) =>
         // Result callback
         onResult({
             view,
-            section,
             config,
             result,
         });
@@ -88,7 +95,7 @@ const SongSync = ({ view, section, instructions, buttons, config, onResult }) =>
                 <Preload
                     instruction={instructions.ready}
                     duration={config.ready_time}
-                    url={MEDIA_ROOT + section.url}
+                    url={MEDIA_ROOT + section}
                     onNext={() => {
                         setView(RECOGNIZE);
                     }}
@@ -109,13 +116,15 @@ const SongSync = ({ view, section, instructions, buttons, config, onResult }) =>
                     }
                     instruction={instructions.recognize}
                     onFinish={() => {
-                        createResult({
+                        addResult({
+                            result_id: resultId,
                             type: "time_passed",
                             recognition_time: config.recognition_time,
                         });
                     }}
                     onNoClick={() => {
-                        createResult({
+                        addResult({
+                            result_id: resultId,
                             type: "not_recognized",
                             recognition_time: getTimeSince(startTime.current),
                         });
@@ -123,6 +132,7 @@ const SongSync = ({ view, section, instructions, buttons, config, onResult }) =>
                     onYesClick={() => {
                         setView(SILENCE, {
                             result: {
+                                result_id: resultId,
                                 type: "recognized",
                                 recognition_time: getTimeSince(
                                     startTime.current
@@ -165,25 +175,29 @@ const SongSync = ({ view, section, instructions, buttons, config, onResult }) =>
                     }
                     instruction={instructions.correct}
                     onFinish={() => {
-                        createResult(
+                        addResult(
                             Object.assign({}, state.result, {
+                                result_id: resultId,
                                 sync_time: config.sync_time,
                                 // Always the wrong answer!
-                                continuation_correctness: !config.continuation_correctness,
+                                continuation_correctness:
+                                    !config.continuation_correctness,
                             })
                         );
                     }}
                     onNoClick={() => {
-                        createResult(
+                        addResult(
                             Object.assign({}, state.result, {
+                                result_id: resultId,
                                 sync_time: getTimeSince(startTime.current),
                                 continuation_correctness: false,
                             })
                         );
                     }}
                     onYesClick={() => {
-                        createResult(
+                        addResult(
                             Object.assign({}, state.result, {
+                                result_id: resultId,
                                 sync_time: getTimeSince(startTime.current),
                                 continuation_correctness: true,
                             })

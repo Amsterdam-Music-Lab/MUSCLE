@@ -9,6 +9,15 @@ class Final:  # pylint: disable=too-few-public-methods
 
     ID = 'FINAL'
 
+    RANKS = {
+        'PLASTIC': {'text': _('plastic'), 'class': 'plastic'},
+        'BRONZE':  {'text': _('bronze'), 'class': 'bronze'},
+        'SILVER': {'text': _('silver'), 'class': 'silver'},
+        'GOLD': {'text': _('gold'), 'class': 'gold'},
+        'PLATINUM': {'text': _('platinum'), 'class': 'platinum'},
+        'DIAMOND': {'text': _('diamond'), 'class': 'diamond'}
+    }
+
     def __init__(self, session, title=_("Final score"), final_text=None,
             button=None, rank=None, show_social=False, 
             show_profile_link=False, show_participant_link=False,

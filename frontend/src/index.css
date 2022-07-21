@@ -143,6 +143,7 @@ h3.title {
   position: relative;
   padding-bottom: 15px;
   margin-bottom: 15px;
+  text-align: left;
 }
 h2.title:after,
 h3.title:after {
@@ -276,51 +277,6 @@ h3.title:after {
   box-shadow: 0 0 0 0.2em rgba(189, 190, 191, 0.5);
 }
 
-.boolean .btn:nth-of-type(1) {
-  background-color: #00b612;
-}
-.boolean .btn:nth-of-type(2) {
-  background-color: #fa5577;
-}
-
-.neutral .aha__player-small:nth-of-type(1) .btn {
-  background-color: #0cc7f1;
-}
-.neutral .aha__player-small:nth-of-type(2) .btn {
-  background-color: #ffb14c;
-}
-.neutral .aha__player-small:nth-of-type(3) .btn {
-  background-color: #39d7b8;
-}
-.neutral .btn:nth-of-type(1) {
-  background-color: #0cc7f1;
-}
-.neutral .btn:nth-of-type(2) {
-  background-color: #ffb14c;
-}
-.neutral .btn:nth-of-type(3) {
-  background-color: #39d7b8;
-}
-
-.neutral-inverted .aha__player-small:nth-of-type(1) .btn {
-  background-color: #ffb14c;
-}
-.neutral-inverted .aha__player-small:nth-of-type(2) .btn {
-  background-color: #0cc7f1;
-}
-.neutral-inverted .aha__player-small:nth-of-type(3) .btn {
-  background-color: #39d7b8;
-}
-.neutral-inverted .btn:nth-of-type(1) {
-  background-color: #ffb14c;
-}
-.neutral-inverted .btn:nth-of-type(2) {
-  background-color: #0cc7f1;
-}
-.neutral-inverted .btn:nth-of-type(3) {
-  background-color: #39d7b8;
-}
-
 /* Components */
 .aha__app {
   position: relative;
@@ -413,6 +369,7 @@ h3.title:after {
   font-size: 65px;
   margin: 0;
   color: #bdbebf;
+  text-align: center;
 }
 .aha__count-down.active {
   color: white;
@@ -807,13 +764,14 @@ h3.title:after {
   border-radius: 17.5px;
   font-size: 18.4210526316px;
   line-height: 33px;
-  margin-bottom: 0;
+  margin-bottom: 2px;
+  margin-top: 2px;
 }
 
-.aha__final-score .aha__rank {
+.aha__final .aha__rank {
   margin-top: 15px;
 }
-.aha__final-score .share a {
+.aha__final .share a {
   display: inline-block;
   width: 55px;
   height: 55px;
@@ -825,26 +783,164 @@ h3.title:after {
   margin: 0 10px;
   font-size: 0;
 }
-.aha__final-score .share a::before {
+.aha__final .share a::before {
   font-size: 26px;
 }
-.aha__final-score .share a:hover {
+.aha__final .share a:hover {
   text-decoration: none;
 }
-.aha__final-score .share a.ti-facebook {
+.aha__final .share a.ti-facebook {
   background-color: #4267b2;
 }
-.aha__final-score .share a.ti-twitter-alt {
+.aha__final .share a.ti-twitter-alt {
   background-color: #1da1f2;
 }
-.aha__final-score .home {
+.aha__final .home {
   padding: 10px;
   color: white;
   opacity: 0.5;
   cursor: pointer;
 }
-.aha__final-score .home:hover {
+.aha__final .home:hover {
   text-decoration: underline;
+}
+
+.aha__HTML .html-content {
+  max-width: 100%;
+}
+.aha__HTML.neutral .aha__question .btn:nth-of-type(1) {
+  background-color: #0cc7f1;
+  color: white;
+}
+.aha__HTML.neutral .aha__question .btn:nth-of-type(1):hover {
+  background-color: #0a9fc0;
+  color: white;
+}
+.aha__HTML.neutral .aha__question .btn:nth-of-type(1):focus {
+  box-shadow: 0 0 0 0.2rem rgba(12, 199, 241, 0.5);
+}
+.aha__HTML.neutral .aha__question .btn:nth-of-type(1).border-outside {
+  box-shadow: 0 0 0 0.2em rgba(12, 199, 241, 0.5);
+}
+.aha__HTML.neutral .aha__question .btn:nth-of-type(2) {
+  background-color: #ffb14c;
+  color: white;
+}
+.aha__HTML.neutral .aha__question .btn:nth-of-type(2):hover {
+  background-color: #ff9b19;
+  color: white;
+}
+.aha__HTML.neutral .aha__question .btn:nth-of-type(2):focus {
+  box-shadow: 0 0 0 0.2rem rgba(255, 177, 76, 0.5);
+}
+.aha__HTML.neutral .aha__question .btn:nth-of-type(2).border-outside {
+  box-shadow: 0 0 0 0.2em rgba(255, 177, 76, 0.5);
+}
+.aha__HTML.neutral .aha__question .btn:nth-of-type(3) {
+  background-color: #39d7b8;
+  color: white;
+}
+.aha__HTML.neutral .aha__question .btn:nth-of-type(3):hover {
+  background-color: #25b89b;
+  color: white;
+}
+.aha__HTML.neutral .aha__question .btn:nth-of-type(3):focus {
+  box-shadow: 0 0 0 0.2rem rgba(57, 215, 184, 0.5);
+}
+.aha__HTML.neutral .aha__question .btn:nth-of-type(3).border-outside {
+  box-shadow: 0 0 0 0.2em rgba(57, 215, 184, 0.5);
+}
+.aha__HTML.neutral .aha__question .btn:nth-of-type(4) {
+  background-color: #d843e2;
+  color: white;
+}
+.aha__HTML.neutral .aha__question .btn:nth-of-type(4):hover {
+  background-color: #c720d2;
+  color: white;
+}
+.aha__HTML.neutral .aha__question .btn:nth-of-type(4):focus {
+  box-shadow: 0 0 0 0.2rem rgba(216, 67, 226, 0.5);
+}
+.aha__HTML.neutral .aha__question .btn:nth-of-type(4).border-outside {
+  box-shadow: 0 0 0 0.2em rgba(216, 67, 226, 0.5);
+}
+.aha__HTML.neutral .aha__question .btn:nth-of-type(5) {
+  background-color: #2b2bee;
+  color: white;
+}
+.aha__HTML.neutral .aha__question .btn:nth-of-type(5):hover {
+  background-color: #1111d5;
+  color: white;
+}
+.aha__HTML.neutral .aha__question .btn:nth-of-type(5):focus {
+  box-shadow: 0 0 0 0.2rem rgba(43, 43, 238, 0.5);
+}
+.aha__HTML.neutral .aha__question .btn:nth-of-type(5).border-outside {
+  box-shadow: 0 0 0 0.2em rgba(43, 43, 238, 0.5);
+}
+.aha__HTML.blue .aha__question .btn {
+  background-color: #0cc7f1;
+  color: white;
+}
+.aha__HTML.blue .aha__question .btn:hover {
+  background-color: #0a9fc0;
+  color: white;
+}
+.aha__HTML.blue .aha__question .btn:focus {
+  box-shadow: 0 0 0 0.2rem rgba(12, 199, 241, 0.5);
+}
+.aha__HTML.blue .aha__question .btn.border-outside {
+  box-shadow: 0 0 0 0.2em rgba(12, 199, 241, 0.5);
+}
+.aha__HTML.pink .aha__question .btn {
+  background-color: #d843e2;
+  color: white;
+}
+.aha__HTML.pink .aha__question .btn:hover {
+  background-color: #c720d2;
+  color: white;
+}
+.aha__HTML.pink .aha__question .btn:focus {
+  box-shadow: 0 0 0 0.2rem rgba(216, 67, 226, 0.5);
+}
+.aha__HTML.pink .aha__question .btn.border-outside {
+  box-shadow: 0 0 0 0.2em rgba(216, 67, 226, 0.5);
+}
+
+.aha__info {
+  width: calc(100% + 10px);
+  margin-left: -5px;
+  color: white;
+}
+@media (min-width: 720px) {
+  .aha__info {
+    max-width: 500px;
+    margin: -15px auto;
+  }
+}
+.aha__info .aha__info-header {
+  padding: 15px;
+  margin-bottom: 0;
+}
+.aha__info .info-body {
+  overflow-y: auto;
+  overflow-x: hidden;
+  max-height: calc(100vh - 250px);
+  margin-bottom: 0;
+  position: relative;
+  padding: 5px 15px 5px;
+}
+@media (min-width: 720px) {
+  .aha__info .info-body {
+    max-height: calc(100vh - 300px);
+  }
+}
+.aha__info .info-body > * {
+  max-width: 100%;
+  margin-bottom: 1rem;
+}
+.aha__info .buttons {
+  padding: 15px;
 }
 
 .aha__listen.wide-buttons .buttons {
@@ -1006,6 +1102,9 @@ h3.title:after {
   position: relative;
   padding-bottom: 80px;
   width: 120px;
+  height: 120px;
+}
+.aha__player-small.hasLabel {
   height: 180px;
 }
 .aha__player-small .aha__play-button {
@@ -1030,20 +1129,20 @@ h3.title:after {
   text-align: center;
 }
 
-.aha__multiplayer .players {
-  max-width: 350px;
+.aha__multiplayer {
+  display: flex;
+  column-gap: 25px;
+  flex-wrap: wrap;
+  max-width: 100%;
 }
-.aha__multiplayer btn:nth-of-type(1) {
-  background-color: #39d7b8;
+.aha__multiplayer.player-count-2 {
+  column-gap: 50px;
 }
-.aha__multiplayer .btn:nth-of-type(2) {
-  background-color: #0cc7f1;
-}
-.aha__multiplayer .btn:nth-of-type(3) {
-  background-color: #ffb14c;
+.aha__multiplayer.player-count-2 {
+  column-gap: 30px;
 }
 .aha__multiplayer .buttons {
-  max-width: 390px;
+  max-width: 350px;
 }
 .aha__multiplayer .buttons .aha__button {
   margin-bottom: 10px;
@@ -1056,8 +1155,49 @@ h3.title:after {
 .aha__multiplayer .instruction h3 {
   margin: 0;
 }
-.aha__multiplayer .buttons {
-  max-width: 350px;
+
+.aha__playback {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 0 25px;
+}
+
+.aha__plink .aha__play-button {
+  background-color: #0cc7f1;
+  color: white;
+}
+.aha__plink .aha__play-button:hover {
+  background-color: #0a9fc0;
+  color: white;
+}
+.aha__plink .aha__play-button:focus {
+  box-shadow: 0 0 0 0.2rem rgba(12, 199, 241, 0.5);
+}
+.aha__plink .aha__play-button.border-outside {
+  box-shadow: 0 0 0 0.2em rgba(12, 199, 241, 0.5);
+}
+
+.aha__autocomplete {
+  display: flex;
+  flex-direction: column;
+}
+.aha__autocomplete .explainer {
+  color: #bdbebf;
+  font-weight: 500;
+  font-size: 16px;
+  margin-bottom: 5px;
+}
+.aha__autocomplete h3 {
+  font-size: 1.65rem;
+}
+@media (max-width: 320px) {
+  .aha__autocomplete h3 {
+    font-size: 1.3em;
+  }
+}
+.aha__autocomplete .control {
+  color: #212529;
 }
 
 .aha__buttons {
@@ -1069,6 +1209,13 @@ h3.title:after {
 }
 .aha__buttons .title {
   flex: 0 0 100%;
+}
+.aha__buttons .btn-group-toggle-custom {
+  display: flex;
+  column-gap: 20px;
+}
+.aha__buttons .btn-group-toggle-custom input {
+  display: none;
 }
 
 .aha__checkboxes {
@@ -1460,7 +1607,6 @@ h3.title:after {
 }
 
 .aha__question {
-  min-height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -1470,19 +1616,23 @@ h3.title:after {
   flex-grow: 1;
   width: 100%;
 }
+.aha__question h3 {
+  width: 100%;
+}
+.aha__question h3:not(.title) {
+  text-align: center;
+}
 
 .aha__score {
   font-size: 16px;
 }
-.aha__score .previous-song {
-  margin-top: 20px;
+.aha__score .previous-song, .aha__score .feedback {
   font-weight: 500;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.25);
   border-top: 1px solid rgba(255, 255, 255, 0.25);
   padding-bottom: 10px;
   padding-top: 13px;
 }
-.aha__score .previous-song h4 {
+.aha__score .previous-song h4, .aha__score .feedback h4 {
   text-transform: uppercase;
   color: #bdbebf;
   font-weight: normal;
@@ -1490,7 +1640,7 @@ h3.title:after {
   font-size: 13px;
   letter-spacing: 2px;
 }
-.aha__score .previous-song p {
+.aha__score .previous-song p, .aha__score .feedback p {
   margin-bottom: 0;
 }
 .aha__score .score {
@@ -1589,12 +1739,13 @@ h3.title:after {
   display: flex;
   flex-direction: column;
 }
-
-.ti-headphone {
+.aha__trial .ti-headphone {
   font-size: 80px;
 }
-
-.circle {
+.aha__trial .stationary {
+  margin-top: 20px;
+}
+.aha__trial .circle {
   top: 0;
   left: 0;
   width: 100%;
@@ -1603,14 +1754,540 @@ h3.title:after {
   align-items: center;
   justify-content: center;
 }
-
-.circle-content {
-  top: 55px;
+.aha__trial .circle-content {
+  top: 43px;
   position: absolute;
+}
+.aha__trial.boolean .aha__player-small:nth-of-type(1) .btn,
+.aha__trial.boolean .aha__player-small:nth-of-type(1) .banner, .aha__trial.boolean .playback .btn,
+.aha__trial.boolean .playback .banner {
+  background-color: #ffb14c;
+  color: white;
+}
+.aha__trial.boolean .aha__player-small:nth-of-type(1) .btn:hover,
+.aha__trial.boolean .aha__player-small:nth-of-type(1) .banner:hover, .aha__trial.boolean .playback .btn:hover,
+.aha__trial.boolean .playback .banner:hover {
+  background-color: #ff9b19;
+  color: white;
+}
+.aha__trial.boolean .aha__player-small:nth-of-type(1) .btn:focus,
+.aha__trial.boolean .aha__player-small:nth-of-type(1) .banner:focus, .aha__trial.boolean .playback .btn:focus,
+.aha__trial.boolean .playback .banner:focus {
+  box-shadow: 0 0 0 0.2rem rgba(255, 177, 76, 0.5);
+}
+.aha__trial.boolean .aha__player-small:nth-of-type(1) .btn.border-outside,
+.aha__trial.boolean .aha__player-small:nth-of-type(1) .banner.border-outside, .aha__trial.boolean .playback .btn.border-outside,
+.aha__trial.boolean .playback .banner.border-outside {
+  box-shadow: 0 0 0 0.2em rgba(255, 177, 76, 0.5);
+}
+.aha__trial.boolean .aha__player-small:nth-of-type(2) .btn,
+.aha__trial.boolean .aha__player-small:nth-of-type(2) .banner {
+  background-color: #0cc7f1;
+  color: white;
+}
+.aha__trial.boolean .aha__player-small:nth-of-type(2) .btn:hover,
+.aha__trial.boolean .aha__player-small:nth-of-type(2) .banner:hover {
+  background-color: #0a9fc0;
+  color: white;
+}
+.aha__trial.boolean .aha__player-small:nth-of-type(2) .btn:focus,
+.aha__trial.boolean .aha__player-small:nth-of-type(2) .banner:focus {
+  box-shadow: 0 0 0 0.2rem rgba(12, 199, 241, 0.5);
+}
+.aha__trial.boolean .aha__player-small:nth-of-type(2) .btn.border-outside,
+.aha__trial.boolean .aha__player-small:nth-of-type(2) .banner.border-outside {
+  box-shadow: 0 0 0 0.2em rgba(12, 199, 241, 0.5);
+}
+.aha__trial.boolean .aha__player-small:nth-of-type(3) .btn,
+.aha__trial.boolean .aha__player-small:nth-of-type(3) .banner {
+  background-color: #39d7b8;
+  color: white;
+}
+.aha__trial.boolean .aha__player-small:nth-of-type(3) .btn:hover,
+.aha__trial.boolean .aha__player-small:nth-of-type(3) .banner:hover {
+  background-color: #25b89b;
+  color: white;
+}
+.aha__trial.boolean .aha__player-small:nth-of-type(3) .btn:focus,
+.aha__trial.boolean .aha__player-small:nth-of-type(3) .banner:focus {
+  box-shadow: 0 0 0 0.2rem rgba(57, 215, 184, 0.5);
+}
+.aha__trial.boolean .aha__player-small:nth-of-type(3) .btn.border-outside,
+.aha__trial.boolean .aha__player-small:nth-of-type(3) .banner.border-outside {
+  box-shadow: 0 0 0 0.2em rgba(57, 215, 184, 0.5);
+}
+.aha__trial.boolean .aha__player-small:nth-of-type(4) .btn,
+.aha__trial.boolean .aha__player-small:nth-of-type(4) .banner {
+  background-color: #d843e2;
+  color: white;
+}
+.aha__trial.boolean .aha__player-small:nth-of-type(4) .btn:hover,
+.aha__trial.boolean .aha__player-small:nth-of-type(4) .banner:hover {
+  background-color: #c720d2;
+  color: white;
+}
+.aha__trial.boolean .aha__player-small:nth-of-type(4) .btn:focus,
+.aha__trial.boolean .aha__player-small:nth-of-type(4) .banner:focus {
+  box-shadow: 0 0 0 0.2rem rgba(216, 67, 226, 0.5);
+}
+.aha__trial.boolean .aha__player-small:nth-of-type(4) .btn.border-outside,
+.aha__trial.boolean .aha__player-small:nth-of-type(4) .banner.border-outside {
+  box-shadow: 0 0 0 0.2em rgba(216, 67, 226, 0.5);
+}
+.aha__trial.boolean form .btn:nth-of-type(1) {
+  background-color: #39d7b8;
+  color: white;
+}
+.aha__trial.boolean form .btn:nth-of-type(1):hover {
+  background-color: #25b89b;
+  color: white;
+}
+.aha__trial.boolean form .btn:nth-of-type(1):focus {
+  box-shadow: 0 0 0 0.2rem rgba(57, 215, 184, 0.5);
+}
+.aha__trial.boolean form .btn:nth-of-type(1).border-outside {
+  box-shadow: 0 0 0 0.2em rgba(57, 215, 184, 0.5);
+}
+.aha__trial.boolean form .btn:nth-of-type(2) {
+  background-color: #fa5577;
+  color: white;
+}
+.aha__trial.boolean form .btn:nth-of-type(2):hover {
+  background-color: #f9234f;
+  color: white;
+}
+.aha__trial.boolean form .btn:nth-of-type(2):focus {
+  box-shadow: 0 0 0 0.2rem rgba(250, 85, 119, 0.5);
+}
+.aha__trial.boolean form .btn:nth-of-type(2).border-outside {
+  box-shadow: 0 0 0 0.2em rgba(250, 85, 119, 0.5);
+}
+.aha__trial.boolean-negative-first .aha__player-small:nth-of-type(1) .btn,
+.aha__trial.boolean-negative-first .aha__player-small:nth-of-type(1) .banner, .aha__trial.boolean-negative-first .playback .btn,
+.aha__trial.boolean-negative-first .playback .banner {
+  background-color: #ffb14c;
+  color: white;
+}
+.aha__trial.boolean-negative-first .aha__player-small:nth-of-type(1) .btn:hover,
+.aha__trial.boolean-negative-first .aha__player-small:nth-of-type(1) .banner:hover, .aha__trial.boolean-negative-first .playback .btn:hover,
+.aha__trial.boolean-negative-first .playback .banner:hover {
+  background-color: #ff9b19;
+  color: white;
+}
+.aha__trial.boolean-negative-first .aha__player-small:nth-of-type(1) .btn:focus,
+.aha__trial.boolean-negative-first .aha__player-small:nth-of-type(1) .banner:focus, .aha__trial.boolean-negative-first .playback .btn:focus,
+.aha__trial.boolean-negative-first .playback .banner:focus {
+  box-shadow: 0 0 0 0.2rem rgba(255, 177, 76, 0.5);
+}
+.aha__trial.boolean-negative-first .aha__player-small:nth-of-type(1) .btn.border-outside,
+.aha__trial.boolean-negative-first .aha__player-small:nth-of-type(1) .banner.border-outside, .aha__trial.boolean-negative-first .playback .btn.border-outside,
+.aha__trial.boolean-negative-first .playback .banner.border-outside {
+  box-shadow: 0 0 0 0.2em rgba(255, 177, 76, 0.5);
+}
+.aha__trial.boolean-negative-first .aha__player-small:nth-of-type(2) .btn,
+.aha__trial.boolean-negative-first .aha__player-small:nth-of-type(2) .banner {
+  background-color: #0cc7f1;
+  color: white;
+}
+.aha__trial.boolean-negative-first .aha__player-small:nth-of-type(2) .btn:hover,
+.aha__trial.boolean-negative-first .aha__player-small:nth-of-type(2) .banner:hover {
+  background-color: #0a9fc0;
+  color: white;
+}
+.aha__trial.boolean-negative-first .aha__player-small:nth-of-type(2) .btn:focus,
+.aha__trial.boolean-negative-first .aha__player-small:nth-of-type(2) .banner:focus {
+  box-shadow: 0 0 0 0.2rem rgba(12, 199, 241, 0.5);
+}
+.aha__trial.boolean-negative-first .aha__player-small:nth-of-type(2) .btn.border-outside,
+.aha__trial.boolean-negative-first .aha__player-small:nth-of-type(2) .banner.border-outside {
+  box-shadow: 0 0 0 0.2em rgba(12, 199, 241, 0.5);
+}
+.aha__trial.boolean-negative-first .aha__player-small:nth-of-type(3) .btn,
+.aha__trial.boolean-negative-first .aha__player-small:nth-of-type(3) .banner {
+  background-color: #39d7b8;
+  color: white;
+}
+.aha__trial.boolean-negative-first .aha__player-small:nth-of-type(3) .btn:hover,
+.aha__trial.boolean-negative-first .aha__player-small:nth-of-type(3) .banner:hover {
+  background-color: #25b89b;
+  color: white;
+}
+.aha__trial.boolean-negative-first .aha__player-small:nth-of-type(3) .btn:focus,
+.aha__trial.boolean-negative-first .aha__player-small:nth-of-type(3) .banner:focus {
+  box-shadow: 0 0 0 0.2rem rgba(57, 215, 184, 0.5);
+}
+.aha__trial.boolean-negative-first .aha__player-small:nth-of-type(3) .btn.border-outside,
+.aha__trial.boolean-negative-first .aha__player-small:nth-of-type(3) .banner.border-outside {
+  box-shadow: 0 0 0 0.2em rgba(57, 215, 184, 0.5);
+}
+.aha__trial.boolean-negative-first .aha__player-small:nth-of-type(4) .btn,
+.aha__trial.boolean-negative-first .aha__player-small:nth-of-type(4) .banner {
+  background-color: #d843e2;
+  color: white;
+}
+.aha__trial.boolean-negative-first .aha__player-small:nth-of-type(4) .btn:hover,
+.aha__trial.boolean-negative-first .aha__player-small:nth-of-type(4) .banner:hover {
+  background-color: #c720d2;
+  color: white;
+}
+.aha__trial.boolean-negative-first .aha__player-small:nth-of-type(4) .btn:focus,
+.aha__trial.boolean-negative-first .aha__player-small:nth-of-type(4) .banner:focus {
+  box-shadow: 0 0 0 0.2rem rgba(216, 67, 226, 0.5);
+}
+.aha__trial.boolean-negative-first .aha__player-small:nth-of-type(4) .btn.border-outside,
+.aha__trial.boolean-negative-first .aha__player-small:nth-of-type(4) .banner.border-outside {
+  box-shadow: 0 0 0 0.2em rgba(216, 67, 226, 0.5);
+}
+.aha__trial.boolean-negative-first form .btn:nth-of-type(1) {
+  background-color: #fa5577;
+  color: white;
+}
+.aha__trial.boolean-negative-first form .btn:nth-of-type(1):hover {
+  background-color: #f9234f;
+  color: white;
+}
+.aha__trial.boolean-negative-first form .btn:nth-of-type(1):focus {
+  box-shadow: 0 0 0 0.2rem rgba(250, 85, 119, 0.5);
+}
+.aha__trial.boolean-negative-first form .btn:nth-of-type(1).border-outside {
+  box-shadow: 0 0 0 0.2em rgba(250, 85, 119, 0.5);
+}
+.aha__trial.boolean-negative-first form .btn:nth-of-type(2) {
+  background-color: #39d7b8;
+  color: white;
+}
+.aha__trial.boolean-negative-first form .btn:nth-of-type(2):hover {
+  background-color: #25b89b;
+  color: white;
+}
+.aha__trial.boolean-negative-first form .btn:nth-of-type(2):focus {
+  box-shadow: 0 0 0 0.2rem rgba(57, 215, 184, 0.5);
+}
+.aha__trial.boolean-negative-first form .btn:nth-of-type(2).border-outside {
+  box-shadow: 0 0 0 0.2em rgba(57, 215, 184, 0.5);
+}
+.aha__trial.neutral .aha__play-button {
+  background-color: #0cc7f1;
+  color: white;
+}
+.aha__trial.neutral .aha__play-button:hover {
+  background-color: #0a9fc0;
+  color: white;
+}
+.aha__trial.neutral .aha__play-button:focus {
+  box-shadow: 0 0 0 0.2rem rgba(12, 199, 241, 0.5);
+}
+.aha__trial.neutral .aha__play-button.border-outside {
+  box-shadow: 0 0 0 0.2em rgba(12, 199, 241, 0.5);
+}
+.aha__trial.neutral .aha__player-small:nth-of-type(1) .btn,
+.aha__trial.neutral .aha__player-small:nth-of-type(1) .banner {
+  background-color: #0cc7f1;
+  color: white;
+}
+.aha__trial.neutral .aha__player-small:nth-of-type(1) .btn:hover,
+.aha__trial.neutral .aha__player-small:nth-of-type(1) .banner:hover {
+  background-color: #0a9fc0;
+  color: white;
+}
+.aha__trial.neutral .aha__player-small:nth-of-type(1) .btn:focus,
+.aha__trial.neutral .aha__player-small:nth-of-type(1) .banner:focus {
+  box-shadow: 0 0 0 0.2rem rgba(12, 199, 241, 0.5);
+}
+.aha__trial.neutral .aha__player-small:nth-of-type(1) .btn.border-outside,
+.aha__trial.neutral .aha__player-small:nth-of-type(1) .banner.border-outside {
+  box-shadow: 0 0 0 0.2em rgba(12, 199, 241, 0.5);
+}
+.aha__trial.neutral .aha__player-small:nth-of-type(2) .btn,
+.aha__trial.neutral .aha__player-small:nth-of-type(2) .banner {
+  background-color: #ffb14c;
+  color: white;
+}
+.aha__trial.neutral .aha__player-small:nth-of-type(2) .btn:hover,
+.aha__trial.neutral .aha__player-small:nth-of-type(2) .banner:hover {
+  background-color: #ff9b19;
+  color: white;
+}
+.aha__trial.neutral .aha__player-small:nth-of-type(2) .btn:focus,
+.aha__trial.neutral .aha__player-small:nth-of-type(2) .banner:focus {
+  box-shadow: 0 0 0 0.2rem rgba(255, 177, 76, 0.5);
+}
+.aha__trial.neutral .aha__player-small:nth-of-type(2) .btn.border-outside,
+.aha__trial.neutral .aha__player-small:nth-of-type(2) .banner.border-outside {
+  box-shadow: 0 0 0 0.2em rgba(255, 177, 76, 0.5);
+}
+.aha__trial.neutral form .btn:nth-of-type(1) {
+  background-color: #0cc7f1;
+  color: white;
+}
+.aha__trial.neutral form .btn:nth-of-type(1):hover {
+  background-color: #0a9fc0;
+  color: white;
+}
+.aha__trial.neutral form .btn:nth-of-type(1):focus {
+  box-shadow: 0 0 0 0.2rem rgba(12, 199, 241, 0.5);
+}
+.aha__trial.neutral form .btn:nth-of-type(1).border-outside {
+  box-shadow: 0 0 0 0.2em rgba(12, 199, 241, 0.5);
+}
+.aha__trial.neutral form .btn:nth-of-type(2) {
+  background-color: #ffb14c;
+  color: white;
+}
+.aha__trial.neutral form .btn:nth-of-type(2):hover {
+  background-color: #ff9b19;
+  color: white;
+}
+.aha__trial.neutral form .btn:nth-of-type(2):focus {
+  box-shadow: 0 0 0 0.2rem rgba(255, 177, 76, 0.5);
+}
+.aha__trial.neutral form .btn:nth-of-type(2).border-outside {
+  box-shadow: 0 0 0 0.2em rgba(255, 177, 76, 0.5);
+}
+.aha__trial.neutral-inverted .aha__player-small:nth-of-type(1) .btn,
+.aha__trial.neutral-inverted .aha__player-small:nth-of-type(1) .banner {
+  background-color: #ffb14c;
+  color: white;
+}
+.aha__trial.neutral-inverted .aha__player-small:nth-of-type(1) .btn:hover,
+.aha__trial.neutral-inverted .aha__player-small:nth-of-type(1) .banner:hover {
+  background-color: #ff9b19;
+  color: white;
+}
+.aha__trial.neutral-inverted .aha__player-small:nth-of-type(1) .btn:focus,
+.aha__trial.neutral-inverted .aha__player-small:nth-of-type(1) .banner:focus {
+  box-shadow: 0 0 0 0.2rem rgba(255, 177, 76, 0.5);
+}
+.aha__trial.neutral-inverted .aha__player-small:nth-of-type(1) .btn.border-outside,
+.aha__trial.neutral-inverted .aha__player-small:nth-of-type(1) .banner.border-outside {
+  box-shadow: 0 0 0 0.2em rgba(255, 177, 76, 0.5);
+}
+.aha__trial.neutral-inverted .aha__player-small:nth-of-type(2) .btn,
+.aha__trial.neutral-inverted .aha__player-small:nth-of-type(2) .banner {
+  background-color: #0cc7f1;
+  color: white;
+}
+.aha__trial.neutral-inverted .aha__player-small:nth-of-type(2) .btn:hover,
+.aha__trial.neutral-inverted .aha__player-small:nth-of-type(2) .banner:hover {
+  background-color: #0a9fc0;
+  color: white;
+}
+.aha__trial.neutral-inverted .aha__player-small:nth-of-type(2) .btn:focus,
+.aha__trial.neutral-inverted .aha__player-small:nth-of-type(2) .banner:focus {
+  box-shadow: 0 0 0 0.2rem rgba(12, 199, 241, 0.5);
+}
+.aha__trial.neutral-inverted .aha__player-small:nth-of-type(2) .btn.border-outside,
+.aha__trial.neutral-inverted .aha__player-small:nth-of-type(2) .banner.border-outside {
+  box-shadow: 0 0 0 0.2em rgba(12, 199, 241, 0.5);
+}
+.aha__trial.neutral-inverted form .btn:nth-of-type(1) {
+  background-color: #ffb14c;
+  color: white;
+}
+.aha__trial.neutral-inverted form .btn:nth-of-type(1):hover {
+  background-color: #ff9b19;
+  color: white;
+}
+.aha__trial.neutral-inverted form .btn:nth-of-type(1):focus {
+  box-shadow: 0 0 0 0.2rem rgba(255, 177, 76, 0.5);
+}
+.aha__trial.neutral-inverted form .btn:nth-of-type(1).border-outside {
+  box-shadow: 0 0 0 0.2em rgba(255, 177, 76, 0.5);
+}
+.aha__trial.neutral-inverted form .btn:nth-of-type(2) {
+  background-color: #0cc7f1;
+  color: white;
+}
+.aha__trial.neutral-inverted form .btn:nth-of-type(2):hover {
+  background-color: #0a9fc0;
+  color: white;
+}
+.aha__trial.neutral-inverted form .btn:nth-of-type(2):focus {
+  box-shadow: 0 0 0 0.2rem rgba(12, 199, 241, 0.5);
+}
+.aha__trial.neutral-inverted form .btn:nth-of-type(2).border-outside {
+  box-shadow: 0 0 0 0.2em rgba(12, 199, 241, 0.5);
+}
+.aha__trial.neutral .aha__player-small:nth-of-type(3) .btn,
+.aha__trial.neutral .aha__player-small:nth-of-type(3) .banner, .aha__trial.neutral-inverted .aha__player-small:nth-of-type(3) .btn,
+.aha__trial.neutral-inverted .aha__player-small:nth-of-type(3) .banner {
+  background-color: #39d7b8;
+  color: white;
+}
+.aha__trial.neutral .aha__player-small:nth-of-type(3) .btn:hover,
+.aha__trial.neutral .aha__player-small:nth-of-type(3) .banner:hover, .aha__trial.neutral-inverted .aha__player-small:nth-of-type(3) .btn:hover,
+.aha__trial.neutral-inverted .aha__player-small:nth-of-type(3) .banner:hover {
+  background-color: #25b89b;
+  color: white;
+}
+.aha__trial.neutral .aha__player-small:nth-of-type(3) .btn:focus,
+.aha__trial.neutral .aha__player-small:nth-of-type(3) .banner:focus, .aha__trial.neutral-inverted .aha__player-small:nth-of-type(3) .btn:focus,
+.aha__trial.neutral-inverted .aha__player-small:nth-of-type(3) .banner:focus {
+  box-shadow: 0 0 0 0.2rem rgba(57, 215, 184, 0.5);
+}
+.aha__trial.neutral .aha__player-small:nth-of-type(3) .btn.border-outside,
+.aha__trial.neutral .aha__player-small:nth-of-type(3) .banner.border-outside, .aha__trial.neutral-inverted .aha__player-small:nth-of-type(3) .btn.border-outside,
+.aha__trial.neutral-inverted .aha__player-small:nth-of-type(3) .banner.border-outside {
+  box-shadow: 0 0 0 0.2em rgba(57, 215, 184, 0.5);
+}
+.aha__trial.neutral .aha__player-small:nth-of-type(4) .btn,
+.aha__trial.neutral .aha__player-small:nth-of-type(4) .banner, .aha__trial.neutral-inverted .aha__player-small:nth-of-type(4) .btn,
+.aha__trial.neutral-inverted .aha__player-small:nth-of-type(4) .banner {
+  background-color: #d843e2;
+  color: white;
+}
+.aha__trial.neutral .aha__player-small:nth-of-type(4) .btn:hover,
+.aha__trial.neutral .aha__player-small:nth-of-type(4) .banner:hover, .aha__trial.neutral-inverted .aha__player-small:nth-of-type(4) .btn:hover,
+.aha__trial.neutral-inverted .aha__player-small:nth-of-type(4) .banner:hover {
+  background-color: #c720d2;
+  color: white;
+}
+.aha__trial.neutral .aha__player-small:nth-of-type(4) .btn:focus,
+.aha__trial.neutral .aha__player-small:nth-of-type(4) .banner:focus, .aha__trial.neutral-inverted .aha__player-small:nth-of-type(4) .btn:focus,
+.aha__trial.neutral-inverted .aha__player-small:nth-of-type(4) .banner:focus {
+  box-shadow: 0 0 0 0.2rem rgba(216, 67, 226, 0.5);
+}
+.aha__trial.neutral .aha__player-small:nth-of-type(4) .btn.border-outside,
+.aha__trial.neutral .aha__player-small:nth-of-type(4) .banner.border-outside, .aha__trial.neutral-inverted .aha__player-small:nth-of-type(4) .btn.border-outside,
+.aha__trial.neutral-inverted .aha__player-small:nth-of-type(4) .banner.border-outside {
+  box-shadow: 0 0 0 0.2em rgba(216, 67, 226, 0.5);
+}
+.aha__trial.neutral form .btn:nth-of-type(3), .aha__trial.neutral-inverted form .btn:nth-of-type(3) {
+  background-color: #39d7b8;
+  color: white;
+}
+.aha__trial.neutral form .btn:nth-of-type(3):hover, .aha__trial.neutral-inverted form .btn:nth-of-type(3):hover {
+  background-color: #25b89b;
+  color: white;
+}
+.aha__trial.neutral form .btn:nth-of-type(3):focus, .aha__trial.neutral-inverted form .btn:nth-of-type(3):focus {
+  box-shadow: 0 0 0 0.2rem rgba(57, 215, 184, 0.5);
+}
+.aha__trial.neutral form .btn:nth-of-type(3).border-outside, .aha__trial.neutral-inverted form .btn:nth-of-type(3).border-outside {
+  box-shadow: 0 0 0 0.2em rgba(57, 215, 184, 0.5);
+}
+.aha__trial.neutral form .btn:nth-of-type(4), .aha__trial.neutral-inverted form .btn:nth-of-type(4) {
+  background-color: #d843e2;
+  color: white;
+}
+.aha__trial.neutral form .btn:nth-of-type(4):hover, .aha__trial.neutral-inverted form .btn:nth-of-type(4):hover {
+  background-color: #c720d2;
+  color: white;
+}
+.aha__trial.neutral form .btn:nth-of-type(4):focus, .aha__trial.neutral-inverted form .btn:nth-of-type(4):focus {
+  box-shadow: 0 0 0 0.2rem rgba(216, 67, 226, 0.5);
+}
+.aha__trial.neutral form .btn:nth-of-type(4).border-outside, .aha__trial.neutral-inverted form .btn:nth-of-type(4).border-outside {
+  box-shadow: 0 0 0 0.2em rgba(216, 67, 226, 0.5);
+}
+.aha__trial.blue-players .playback .btn,
+.aha__trial.blue-players .playback .banner,
+.aha__trial.blue-players .aha__player-small:nth-of-type(1) .btn,
+.aha__trial.blue-players .aha__player-small:nth-of-type(1) .banner,
+.aha__trial.blue-players .aha__player-small:nth-of-type(2) .btn,
+.aha__trial.blue-players .aha__player-small:nth-of-type(2) .banner,
+.aha__trial.blue-players .aha__player-small:nth-of-type(3) .btn,
+.aha__trial.blue-players .aha__player-small:nth-of-type(3) .banner,
+.aha__trial.blue-players .aha__player-small:nth-of-type(4) .btn,
+.aha__trial.blue-players .aha__player-small:nth-of-type(4) .banner {
+  background-color: #0cc7f1;
+  color: white;
+}
+.aha__trial.blue-players .playback .btn:hover,
+.aha__trial.blue-players .playback .banner:hover,
+.aha__trial.blue-players .aha__player-small:nth-of-type(1) .btn:hover,
+.aha__trial.blue-players .aha__player-small:nth-of-type(1) .banner:hover,
+.aha__trial.blue-players .aha__player-small:nth-of-type(2) .btn:hover,
+.aha__trial.blue-players .aha__player-small:nth-of-type(2) .banner:hover,
+.aha__trial.blue-players .aha__player-small:nth-of-type(3) .btn:hover,
+.aha__trial.blue-players .aha__player-small:nth-of-type(3) .banner:hover,
+.aha__trial.blue-players .aha__player-small:nth-of-type(4) .btn:hover,
+.aha__trial.blue-players .aha__player-small:nth-of-type(4) .banner:hover {
+  background-color: #0a9fc0;
+  color: white;
+}
+.aha__trial.blue-players .playback .btn:focus,
+.aha__trial.blue-players .playback .banner:focus,
+.aha__trial.blue-players .aha__player-small:nth-of-type(1) .btn:focus,
+.aha__trial.blue-players .aha__player-small:nth-of-type(1) .banner:focus,
+.aha__trial.blue-players .aha__player-small:nth-of-type(2) .btn:focus,
+.aha__trial.blue-players .aha__player-small:nth-of-type(2) .banner:focus,
+.aha__trial.blue-players .aha__player-small:nth-of-type(3) .btn:focus,
+.aha__trial.blue-players .aha__player-small:nth-of-type(3) .banner:focus,
+.aha__trial.blue-players .aha__player-small:nth-of-type(4) .btn:focus,
+.aha__trial.blue-players .aha__player-small:nth-of-type(4) .banner:focus {
+  box-shadow: 0 0 0 0.2rem rgba(12, 199, 241, 0.5);
+}
+.aha__trial.blue-players .playback .btn.border-outside,
+.aha__trial.blue-players .playback .banner.border-outside,
+.aha__trial.blue-players .aha__player-small:nth-of-type(1) .btn.border-outside,
+.aha__trial.blue-players .aha__player-small:nth-of-type(1) .banner.border-outside,
+.aha__trial.blue-players .aha__player-small:nth-of-type(2) .btn.border-outside,
+.aha__trial.blue-players .aha__player-small:nth-of-type(2) .banner.border-outside,
+.aha__trial.blue-players .aha__player-small:nth-of-type(3) .btn.border-outside,
+.aha__trial.blue-players .aha__player-small:nth-of-type(3) .banner.border-outside,
+.aha__trial.blue-players .aha__player-small:nth-of-type(4) .btn.border-outside,
+.aha__trial.blue-players .aha__player-small:nth-of-type(4) .banner.border-outside {
+  box-shadow: 0 0 0 0.2em rgba(12, 199, 241, 0.5);
+}
+.aha__trial.pink-players .playback .btn,
+.aha__trial.pink-players .playback .banner,
+.aha__trial.pink-players .aha__player-small:nth-of-type(1) .btn,
+.aha__trial.pink-players .aha__player-small:nth-of-type(1) .banner,
+.aha__trial.pink-players .aha__player-small:nth-of-type(2) .btn,
+.aha__trial.pink-players .aha__player-small:nth-of-type(2) .banner,
+.aha__trial.pink-players .aha__player-small:nth-of-type(3) .btn,
+.aha__trial.pink-players .aha__player-small:nth-of-type(3) .banner,
+.aha__trial.pink-players .aha__player-small:nth-of-type(4) .btn,
+.aha__trial.pink-players .aha__player-small:nth-of-type(4) .banner {
+  background-color: #d843e2;
+  color: white;
+}
+.aha__trial.pink-players .playback .btn:hover,
+.aha__trial.pink-players .playback .banner:hover,
+.aha__trial.pink-players .aha__player-small:nth-of-type(1) .btn:hover,
+.aha__trial.pink-players .aha__player-small:nth-of-type(1) .banner:hover,
+.aha__trial.pink-players .aha__player-small:nth-of-type(2) .btn:hover,
+.aha__trial.pink-players .aha__player-small:nth-of-type(2) .banner:hover,
+.aha__trial.pink-players .aha__player-small:nth-of-type(3) .btn:hover,
+.aha__trial.pink-players .aha__player-small:nth-of-type(3) .banner:hover,
+.aha__trial.pink-players .aha__player-small:nth-of-type(4) .btn:hover,
+.aha__trial.pink-players .aha__player-small:nth-of-type(4) .banner:hover {
+  background-color: #c720d2;
+  color: white;
+}
+.aha__trial.pink-players .playback .btn:focus,
+.aha__trial.pink-players .playback .banner:focus,
+.aha__trial.pink-players .aha__player-small:nth-of-type(1) .btn:focus,
+.aha__trial.pink-players .aha__player-small:nth-of-type(1) .banner:focus,
+.aha__trial.pink-players .aha__player-small:nth-of-type(2) .btn:focus,
+.aha__trial.pink-players .aha__player-small:nth-of-type(2) .banner:focus,
+.aha__trial.pink-players .aha__player-small:nth-of-type(3) .btn:focus,
+.aha__trial.pink-players .aha__player-small:nth-of-type(3) .banner:focus,
+.aha__trial.pink-players .aha__player-small:nth-of-type(4) .btn:focus,
+.aha__trial.pink-players .aha__player-small:nth-of-type(4) .banner:focus {
+  box-shadow: 0 0 0 0.2rem rgba(216, 67, 226, 0.5);
+}
+.aha__trial.pink-players .playback .btn.border-outside,
+.aha__trial.pink-players .playback .banner.border-outside,
+.aha__trial.pink-players .aha__player-small:nth-of-type(1) .btn.border-outside,
+.aha__trial.pink-players .aha__player-small:nth-of-type(1) .banner.border-outside,
+.aha__trial.pink-players .aha__player-small:nth-of-type(2) .btn.border-outside,
+.aha__trial.pink-players .aha__player-small:nth-of-type(2) .banner.border-outside,
+.aha__trial.pink-players .aha__player-small:nth-of-type(3) .btn.border-outside,
+.aha__trial.pink-players .aha__player-small:nth-of-type(3) .banner.border-outside,
+.aha__trial.pink-players .aha__player-small:nth-of-type(4) .btn.border-outside,
+.aha__trial.pink-players .aha__player-small:nth-of-type(4) .banner.border-outside {
+  box-shadow: 0 0 0 0.2em rgba(216, 67, 226, 0.5);
 }
 
 .aha__feedback {
   position: relative;
+  width: 100%;
+}
+.aha__feedback .center {
+  display: flex;
+  justify-content: center;
 }
 .aha__feedback .btn {
   margin-top: 20px;

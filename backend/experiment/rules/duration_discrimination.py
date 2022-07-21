@@ -70,7 +70,7 @@ class DurationDiscrimination(Base):
             return action
 
     @staticmethod
-    def calculate_score(result, form_element, data):
+    def calculate_score(result, data, form_element):
         # a result's score is used to keep track of how many correct results were in a row
         # for catch trial, set score to 2 -> not counted for calculating turnpoints
         try:
@@ -131,7 +131,7 @@ class DurationDiscrimination(Base):
             return None
         expected_result = 'EQUAL' if difference == 0 else 'LONGER'
         # create Result object and save expected result to database
-        result_pk = Base.prepare_result(session, section, expected_result)
+        result_pk = cls.prepare_result(session, section, expected_result)
         question_text = cls.get_question_text()
         question = ChoiceQuestion(
             question=question_text,
