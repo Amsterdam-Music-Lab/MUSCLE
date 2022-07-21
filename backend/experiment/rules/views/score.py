@@ -11,7 +11,7 @@ class Score(object):  # pylint: disable=too-few-public-methods
 
     ID = 'SCORE'
 
-    def __init__(self, session, score_message=None, config=None, icon=None, timer=None, feedback=None):
+    def __init__(self, session, title=None, score_message=None, config=None, icon=None, timer=None, feedback=None):
         """ Score presents feedback to a participant after a Trial
         - session: a Session object
         - score_message: a function which constructs feedback text based on the score
@@ -23,6 +23,7 @@ class Score(object):  # pylint: disable=too-few-public-methods
         - feedback: An additional feedback text
         """
         self.session = session
+        self.title = title
         self.score = session.last_score()
         self.score_message = score_message or self.default_score_message
         self.feedback = feedback
@@ -46,7 +47,7 @@ class Score(object):  # pylint: disable=too-few-public-methods
         # Create action
         action = {
             'view': self.ID,
-            'title': _('Round {} / {}').format(
+            'title': self.title or _('Round {} / {}').format(
                 self.session.rounds_passed(), self.session.experiment.rounds),
             'score': self.score,
             'score_message': self.score_message(self.score),

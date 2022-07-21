@@ -14,7 +14,7 @@ from .toontjehoger_3_plink import ToontjeHoger3Plink
 from .toontjehoger_6_relative import ToontjeHoger6Relative
 from .gold_msi import GoldMSI
 from .listening_conditions import ListeningConditions
-from .hooked import Hooked
+from .huang_2022 import Huang2022
 from .categorization import Categorization
 
 # Rules available to this application
@@ -35,7 +35,7 @@ EXPERIMENT_RULES = {
     RhythmExperimentSeriesMRI.ID: RhythmExperimentSeriesMRI,
     GoldMSI.ID: GoldMSI,
     ListeningConditions.ID: ListeningConditions,
-    Hooked.ID: Hooked,
+    Huang2022.ID: Huang2022,
     Categorization.ID: Categorization,
     ToontjeHoger1Mozart.ID: ToontjeHoger1Mozart,
     ToontjeHoger3Plink.ID: ToontjeHoger3Plink,

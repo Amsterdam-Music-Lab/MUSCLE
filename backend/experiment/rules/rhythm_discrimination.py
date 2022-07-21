@@ -108,7 +108,7 @@ class RhythmDiscrimination(Base):
         return combine_actions(*actions)
 
     @staticmethod
-    def calculate_score(result, form_element, data):
+    def calculate_score(result, data, form_element):
         try:
             expected_response = result.expected_response
         except Exception as e:
