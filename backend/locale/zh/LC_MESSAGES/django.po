@@ -548,7 +548,7 @@ msgid ""
 "currently available browsers, such as Safari, Firefox, 360, Google Chrome, "
 "Quark, etc."
 msgstr ""
-"通过复制黏贴实验链接到浏览器参与实验。您可以使用市面上目前的任何一种浏览器，如Safari、火狐"
+"通过复制黏贴实验链接到浏览器参与实验。您可以使用市面上目前的任何一种浏览器，如Safari、火狐、"
 "360等等。"
 
 
