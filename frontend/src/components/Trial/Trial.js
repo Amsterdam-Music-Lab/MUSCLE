@@ -99,7 +99,7 @@ const Trial = ({
             // Continue
             onNext();
         },
-        [onNext, participant, session.id]
+        [onNext, participant, session]
     );
 
     // Create result data in this wrapper function
