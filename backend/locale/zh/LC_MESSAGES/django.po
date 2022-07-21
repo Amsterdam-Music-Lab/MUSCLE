@@ -578,6 +578,7 @@ msgid ""
 "Please answer some questions                     on your musical (Goldsmiths-"
 "MSI) and demographic background"
 msgstr ""
+"接下来是《金史密斯音乐素养》水平测试与人口统计特征问卷。"
 
 #: experiment/rules/huang_2022.py:255
 msgid "Bonus Rounds"
