@@ -23,6 +23,7 @@ class Score(object):  # pylint: disable=too-few-public-methods
         - feedback: An additional feedback text
         """
         self.session = session
+        self.title = title
         self.score = session.last_score()
         self.score_message = score_message or self.default_score_message
         self.feedback = feedback
@@ -32,8 +33,6 @@ class Score(object):  # pylint: disable=too-few-public-methods
         }
         if config:
             self.config.update(config)
-        self.title = title or _('Round {} / {}').format(
-            self.session.rounds_passed(), self.session.experiment.rounds)
         self.icon = icon
         self.texts = {
             'score': _('Score'),
@@ -48,7 +47,8 @@ class Score(object):  # pylint: disable=too-few-public-methods
         # Create action
         action = {
             'view': self.ID,
-            'title': self.title,
+            'title': self.title or _('Round {} / {}').format(
+                self.session.rounds_passed(), self.session.experiment.rounds),
             'score': self.score,
             'score_message': self.score_message(self.score),
             'texts': self.texts,

@@ -10,7 +10,7 @@ class SongSync(object):  # pylint: disable=too-few-public-methods
     """
     ID = 'SONG_SYNC'
 
-    def __init__(self, section, title=None, config=None, instructions=None, buttons=None):
+    def __init__(self, section, result_id, title=None, config=None, instructions=None, buttons=None):
         '''
         initialize SongSync, with the following arguments:
         - section: section to be played during the round
@@ -20,6 +20,7 @@ class SongSync(object):  # pylint: disable=too-few-public-methods
         - buttons: optional button labels to override the default labels
         '''
         self.section = section
+        self.result_id = result_id
         continuation_correctness = random.randint(0, 1) == 1
         self.config = {
             'ready_time': 3,
@@ -88,6 +89,7 @@ class SongSync(object):  # pylint: disable=too-few-public-methods
         action = {
             'view': self.ID,
             'section': self.section.absolute_url(),
+            'resultId': self.result_id,
             'config': self.config,
             'title': self.title,
             'instructions': self.instructions,

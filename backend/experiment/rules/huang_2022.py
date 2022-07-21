@@ -235,9 +235,11 @@ class Huang2022(Base):
         if not section:
             print("Warning: no next_song_sync section found")
             section = session.section_from_any_song()
+        result_id = cls.prepare_result(session, section)
         return SongSync(
             section=section,
-            title=cls.get_trial_title(session, next_round_number)
+            title=cls.get_trial_title(session, next_round_number),
+            result_id=result_id
         ).action()
 
     @classmethod

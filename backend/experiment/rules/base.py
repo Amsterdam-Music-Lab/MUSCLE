@@ -18,7 +18,19 @@ class Base(object):
         result.save()
         return result.pk
 
-    
+    @classmethod
+    def get_result(cls, session, result_id=None):
+        from experiment.models import Result
+        
+        if not result_id:
+            result = Result(session=session)
+        try:
+            result = Result.objects.get(pk=result_id)
+        except Result.DoesNotExist:
+            # Create new result
+            result = Result(session=session)
+        return result
+
     @classmethod
     def handle_results(cls, session, data):
         """ 
@@ -38,24 +50,12 @@ class Base(object):
             result.score = score
             result.save()
         return result
-    
-    @classmethod
-    def get_result(cls, session, result_id=None):
-        from experiment.models import Result
-        
-        if not result_id:
-            result = Result(session=session)
-        try:
-            result = Result.objects.get(pk=result_id)
-        except Result.DoesNotExist:
-            # Create new result
-            result = Result(session=session)
-        return result
 
     @classmethod
     def handle_result(cls, session, data):
         """Create a result for given session, based on the result data and section_id"""
-        result_id = data.get('result_id')
+        result_data = data.get('result')
+        result_id = result_data.get('result_id')
         result = cls.get_result(session, result_id)
 
         # Calculate score
