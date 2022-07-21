@@ -74,7 +74,7 @@ class HBat(Base):
         ]
 
     @staticmethod
-    def calculate_score(result, form_element, data):
+    def calculate_score(result, data, form_element):
         # a result's score is used to keep track of how many correct results were in a row
         # for catch trial, set score to 2 -> not counted for calculating turnpoints
         try:
@@ -100,7 +100,7 @@ class HBat(Base):
             return None
         expected_result = 'SLOWER' if trial_condition else 'FASTER'
         # create Result object and save expected result to database
-        result_pk = Base.prepare_result(session, section, expected_result)
+        result_pk = cls.prepare_result(session, section, expected_result)
         question = ChoiceQuestion(
             key='longer_or_equal',
             question=_(
@@ -158,10 +158,10 @@ class HBat(Base):
             else:
                 if slower:
                     instruction = _(
-                        'The rhythm went FASTER. Your response was INCORRECT.')
+                        'The rhythm went SLOWER. Your response was INCORRECT.')
                 else:
                     instruction = _(
-                        'The rhythm went SLOWER. Your response was INCORRECT.')
+                        'The rhythm went FASTER. Your response was INCORRECT.')
             return Explainer(
                 instruction=instruction,
                 steps=[],

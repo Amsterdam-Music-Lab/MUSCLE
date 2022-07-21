@@ -2,7 +2,7 @@ import random
 
 from django.utils.translation import gettext as _
 
-class Score:  # pylint: disable=too-few-public-methods
+class Score(object):  # pylint: disable=too-few-public-methods
     """
     Provide data for an intermediate score view
 
@@ -11,30 +11,63 @@ class Score:  # pylint: disable=too-few-public-methods
 
     ID = 'SCORE'
 
-    @staticmethod
-    def action(session, include_section=True):
-        """Get data for score action"""
-
-        # Create action
-        score = session.last_score()
-        action = {
-            'view': Score.ID,
-            'title': _('Round {} / {}').format(session.rounds_passed(), session.experiment.rounds),
-            'last_song': session.last_song() if include_section else None,
-            'score': score,
-            'score_message': Score.score_message(score),
-            'total_score': session.total_score(),
-            'texts': {
-                'score': _('Score'),
-                'next': _('Next'),
-                'listen_explainer': _('You listened to:')
-            }
+    def __init__(self, session, title=None, score_message=None, config=None, icon=None, timer=None, feedback=None):
+        """ Score presents feedback to a participant after a Trial
+        - session: a Session object
+        - score_message: a function which constructs feedback text based on the score
+        - config: a dict with the following settings:
+            - show_section: whether metadata of the previous section should be shown
+            - show_total_score: whether the total score should be shown
+        - icon: the name of a themify-icon shown with the view or None
+        - timer: int or None. If int, wait for as many seconds until showing the next view
+        - feedback: An additional feedback text
+        """
+        self.session = session
+        self.title = title
+        self.score = session.last_score()
+        self.score_message = score_message or self.default_score_message
+        self.feedback = feedback
+        self.config = {
+            'show_section': False,
+            'show_total_score': False
         }
+        if config:
+            self.config.update(config)
+        self.icon = icon
+        self.texts = {
+            'score': _('Score'),
+            'next': _('Next'),
+            'listen_explainer': _('You listened to:')
+        }
+        self.timer = timer
+
+    def action(self):
+        """Serialize score data"""
+        
+        # Create action
+        action = {
+            'view': self.ID,
+            'title': self.title or _('Round {} / {}').format(
+                self.session.rounds_passed(), self.session.experiment.rounds),
+            'score': self.score,
+            'score_message': self.score_message(self.score),
+            'texts': self.texts,
+            'feedback': self.feedback,
+            'icon': self.icon,
+            'timer': self.timer
+        }
+        if self.config.get('show_section'):
+            action['last_song'] = self.session.last_song()
+        if self.config.get('show_total_score'):
+            action['total_score'] = self.session.total_score()
         return action
 
-    @staticmethod
-    def score_message(score):
-        """Generate a message for the given score"""
+    def default_score_message(self, score):
+        """Fallback to generate a message for the given score"""
+        
+        # None
+        if score == None:
+            score = 0
         # Zero
         if score == 0:
             # "Too bad!", "Come on!", "Try another!", "Try again!"

@@ -108,7 +108,7 @@ class RhythmDiscrimination(Base):
         return combine_actions(*actions)
 
     @staticmethod
-    def calculate_score(result, form_element, data):
+    def calculate_score(result, data, form_element):
         try:
             expected_response = result.expected_response
         except Exception as e:
@@ -140,8 +140,9 @@ def next_trial_actions(session, round_number, request_session):
         # practice: add feedback on previous result
         previous_results = session.result_set.order_by('-created_at')
         if previous_results.count():
+            same = previous_results.first().expected_response == 'SAME'
             actions.append(
-                response_explainer(previous_results.first().score, plan[round_number-2]['group'])
+                response_explainer(previous_results.first().score, same)
             )
         if round_number == 5:
             total_score = sum([res.score for res in previous_results.all()[:4]])
@@ -170,7 +171,7 @@ def next_trial_actions(session, round_number, request_session):
 
     expected_result = 'SAME' if condition['group'] == '1' else 'DIFFERENT'
     # create Result object and save expected result to database
-    result_pk = Base.prepare_result(session, section, expected_result)
+    result_pk = RhythmDiscrimination.prepare_result(session, section, expected_result)
     question = ChoiceQuestion(
         key='same',
         question=_(
@@ -266,7 +267,6 @@ def response_explainer(correct, same, button_label=_('Next fragment')):
 def finalize_experiment(session, request_session):
     # we had 4 practice trials and 60 experiment trials
     percentage = (sum([res.score for res in session.result_set.all()]) / session.result_set.count()) * 100
-    print(sum([res.score for res in session.result_set.all()]))
     session.finish()
     session.save()
     feedback = _("Well done! You've answered {} percent correctly!").format(percentage)

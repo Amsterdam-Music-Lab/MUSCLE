@@ -2,6 +2,7 @@ import json
 
 from django.utils.translation import gettext_lazy as _
 
+
 class Question(object):
     ''' Question is part of a form.
     - key: description of question in results table
@@ -28,9 +29,12 @@ class Question(object):
 
 
 class BooleanQuestion(Question):
-    def __init__(self, **kwargs):
+    def __init__(self, choices=None, **kwargs):
         super().__init__(**kwargs)
-        self.choices = [_('YES'), _('NO')]
+        self.choices = choices or {
+            'yes': _('YES'), 
+            'no': _('NO')
+        }
         self.view = 'BUTTON_ARRAY'
 
 
@@ -40,35 +44,58 @@ class ChoiceQuestion(Question):
         self.choices = choices
 
 
+class DropdownQuestion(Question):
+    def __init__(self, choices, **kwargs):
+        super().__init__(**kwargs)
+        self.choices = choices
+        self.view = 'DROPDOWN'
+
+class AutoCompleteQuestion(Question):
+    def __init__(self, choices, **kwargs):
+        super().__init__(**kwargs)
+        self.choices = choices
+        self.view = 'AUTOCOMPLETE'
+
+class RadiosQuestion(Question):
+    def __init__(self, choices, **kwargs):
+        super().__init__(**kwargs)
+        self.choices = choices
+        self.view = 'RADIOS'
+
+class ButtonArrayQuestion(Question):
+    def __init__(self, choices, **kwargs):
+        super().__init__(**kwargs)
+        self.choices = choices
+        self.view = 'BUTTON_ARRAY'
+
 class RangeQuestion(Question):
     def __init__(self, min_value, max_value, **kwargs):
         super().__init__(**kwargs)
         self.min_value = min_value
         self.max_value = max_value
-
+        
 class LikertQuestion(Question):
     def __init__(self, scale_steps=7, likert_view='TEXT_RANGE', **kwargs):
         super().__init__(**kwargs)
         self.view = likert_view
         if scale_steps == 7:
-            self.choices = [
-                _("Completely Disagree"),
-                _("Strongly Disagree"),
-                _("Disagree"),
-                _("Neither Agree nor Disagree"),  # Undecided
-                _("Agree"),
-                _("Strongly Agree"),
-                _("Completely Agree"),
-            ]
+            self.choices = {
+                1: _("Completely Disagree"),
+                2: _("Strongly Disagree"),
+                3: _("Disagree"),
+                4: _("Neither Agree nor Disagree"),  # Undecided
+                5: _("Agree"),
+                6: _("Strongly Agree"),
+                7: _("Completely Agree"),
+            }
         elif scale_steps == 5:
-            self.choices = [
-                _("Strongly Disagree"),
-                _("Disagree"),
-                _("Neither Agree nor Disagree"),  # Undecided
-                _("Agree"),
-                _("Strongly Agree"),
-            ]
-
+            self.choices = {
+                1: _("Strongly Disagree"),
+                2: _("Disagree"),
+                3: _("Neither Agree nor Disagree"),  # Undecided
+                4: _("Agree"),
+                5: _("Strongly Agree"),
+            }
 
 class Form(object):
     ''' Form is a view which brings together an array of questions with submit and optional skip button
@@ -78,6 +105,7 @@ class Form(object):
     - is_skippable: can this question form be skipped
     - is_profile: should the answers be saved to the user profile
     '''
+
     def __init__(self, form, submit_label=_('Continue'), skip_label=_('Skip'), is_skippable=False, is_profile=False):
         self.form = form
         self.submit_label = submit_label

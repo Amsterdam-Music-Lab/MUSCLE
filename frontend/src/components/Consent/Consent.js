@@ -62,9 +62,9 @@ const Consent = ({ title, text, experiment, participant, onNext, confirm, deny }
                 <div className="flex-fill">
                     <h3>{title}</h3>
                 </div>
-                <div className="flex-fill">
+                <div className="flex-end">
                     <button 
-                        className="btn btn-download ti-download"
+                        className="btn btn-download ti-download font-weight-bold"
                         onClick={onDownload}
                     >
                     </button>

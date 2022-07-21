@@ -12,7 +12,14 @@ class Playback(object):
             - playhead: from where the audio file should play (offset in seconds from start)
             - mute: whether audio should be muted
             - auto_play: whether sound will start automatically
-            - show_animation: whether to show an animation during playback '''
+            - show_animation: whether to show an animation during playback 
+            - (multiplayer) label_style: player index number style: NUMERIC, ALPHABETIC, ROMAN or empty (no label)
+    '''
+
+    TYPE_AUTOPLAY='AUTOPLAY'
+    TYPE_BUTTON='BUTTON'
+    TYPE_MULTIPLAYER='MULTIPLAYER'
+
     def __init__(self, sections, player_type='AUTOPLAY', preload_message='', instruction='', play_config=None):
         self.sections = [{'id': s.id, 'url': s.absolute_url()} for s in sections]
         self.player_type = player_type

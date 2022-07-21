@@ -41,9 +41,9 @@ export const useParticipant = () =>
 export const useParticipantScores = () =>
     useGet(API_BASE_URL + URLS.participant.score);
 
-export const useParticipantLink = () =>
+export const useParticipantLink = () => 
     useGet(API_BASE_URL + URLS.participant.link);
-
+    
 export const useConsent = (slug) =>
     useGet(API_BASE_URL + URLS.experiment.consent(slug));
 

@@ -58,7 +58,12 @@ class Command(BaseCommand):
 
 def calculate_group_tag(filename, experiment):
     identifier = splitext(pathsplit(filename)[-1])[0]
-    parts = identifier.split('_')
+    if experiment == 'huang2022':
+        parts = identifier.split('.')
+        group = parts[-1]
+        tag = None
+    else:
+        parts = identifier.split('_')
     if experiment == 'hbat':
         # H-BAT style experiments:
         # level gets encoded as group
