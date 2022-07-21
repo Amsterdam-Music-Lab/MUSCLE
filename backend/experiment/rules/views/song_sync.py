@@ -8,17 +8,18 @@ class SongSync(object):  # pylint: disable=too-few-public-methods
     Provide data for a SongSync view that handles views for song recognition,
     a silence and in- or out-sync continuation of audio playback
     """
+    ID = 'SONG_SYNC'
 
-    def __init__(self, section, result_id, config=None, instructions=None, buttons=None):
+    def __init__(self, section, title=None, config=None, instructions=None, buttons=None):
         '''
         initialize SongSync, with the following arguments:
         - section: section to be played during the round
+        - title: title of the page
         - config: optional settings to override the default config
         - instructions: optional instructions to override the default instructions
         - buttons: optional button labels to override the default labels
         '''
         self.section = section
-        self.result_id = result_id
         continuation_correctness = random.randint(0, 1) == 1
         self.config = {
             'ready_time': 3,
@@ -42,6 +43,7 @@ class SongSync(object):  # pylint: disable=too-few-public-methods
             'yes': _('Yes'),
             'no': _('No')
         }
+        self.title = title
         if buttons:
             self.buttons.update(buttons)
         
@@ -84,9 +86,10 @@ class SongSync(object):  # pylint: disable=too-few-public-methods
 
         # Create action
         action = {
+            'view': self.ID,
             'section': self.section.absolute_url(),
-            'result_id': self.result_id,
             'config': self.config,
+            'title': self.title,
             'instructions': self.instructions,
             'buttons': self.buttons,
         }

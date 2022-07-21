@@ -88,7 +88,6 @@ class Huang2022(Base):
         old_songs = songs[:n_old]
         new_songs = songs[n_old:n_old+n_new]
         free_songs = songs[n_old+n_new:n_old+n_new+n_free]
-        print(len(old_songs), len(new_songs), len(free_songs))
 
         # Assign sections.
         old_sections = [session.section_from_song(s) for s in old_songs]
@@ -107,8 +106,6 @@ class Huang2022(Base):
             'song_sync_sections': song_sync_sections,
             'heard_before_sections': heard_before_sections
         }
-
-        print(plan)
 
         # Save, overwriting existing plan if one exists.
         session.merge_json_data({'plan': plan})
@@ -238,10 +235,9 @@ class Huang2022(Base):
         if not section:
             print("Warning: no next_song_sync section found")
             section = session.section_from_any_song()
-        result_pk = cls.prepare_result(session, section)
         return SongSync(
             section=section,
-            result_id=result_pk
+            title=cls.get_trial_title(session, next_round_number)
         ).action()
 
     @classmethod

@@ -11,7 +11,7 @@ class Score(object):  # pylint: disable=too-few-public-methods
 
     ID = 'SCORE'
 
-    def __init__(self, session, score_message=None, config=None, icon=None, timer=None, feedback=None):
+    def __init__(self, session, title=None, score_message=None, config=None, icon=None, timer=None, feedback=None):
         """ Score presents feedback to a participant after a Trial
         - session: a Session object
         - score_message: a function which constructs feedback text based on the score
