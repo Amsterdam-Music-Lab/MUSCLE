@@ -39,13 +39,15 @@ class Base(object):
         form = data.pop('form')
         for form_element in form:
             result = cls.get_result(session, form_element['result_id'])
+
+            # Set given_response here, so it can be used in calculate_score
+            result.given_response = form_element['value']
             
             # Calculate score
             score = session.experiment_rules().calculate_score(result, data, form_element)
             if not score:
                 score = 0
 
-            result.given_response = form_element['value']
             result.save_json_data(data)
             result.score = score
             result.save()
