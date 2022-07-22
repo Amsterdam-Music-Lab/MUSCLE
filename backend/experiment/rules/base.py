@@ -55,9 +55,20 @@ class Base(object):
 
     @classmethod
     def handle_result(cls, session, data):
-        """Create a result for given session, based on the result data and section_id"""
-        result_data = data.get('result')
-        result_id = result_data.get('result_id')
+        """
+        Create a result for given session, based on the result data and section_id
+
+        parameters:
+        session: a Session object
+        data: a dictionary, containing an optional result_id, and optional other params:
+        {
+            result_id: int [optional] 
+            ...
+            all other params in the custom result
+        }
+        """
+
+        result_id = data.get('result_id')
         result = cls.get_result(session, result_id)
 
         # Calculate score
