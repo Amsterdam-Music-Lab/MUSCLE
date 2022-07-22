@@ -194,7 +194,7 @@ class ToontjeHoger3Plink(Base):
         return question.action()
 
     @classmethod
-    def calculate_score(cls, result, data, form_element):
+    def calculate_score(cls, result, data):
         """
         Calculate score, based on the data field
 
