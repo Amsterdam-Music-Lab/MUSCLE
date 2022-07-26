@@ -1122,7 +1122,7 @@ msgstr "0小时"
 #, fuzzy
 #| msgid "0 hours"
 msgid "0.5 hours"
-msgstr "0小时"
+msgstr "0.5小时"
 
 #: experiment/rules/util/goldsmiths.py:89
 msgid "1 hour"
@@ -1132,7 +1132,7 @@ msgstr "1小时"
 #, fuzzy
 #| msgid "1 hour"
 msgid "1.5 hours"
-msgstr "1小时"
+msgstr "1.5小时"
 
 #: experiment/rules/util/goldsmiths.py:91
 msgid "2 hours"
@@ -1142,13 +1142,13 @@ msgstr "2小时"
 #, fuzzy
 #| msgid "3 hours"
 msgid "3-4 hours"
-msgstr "3小时"
+msgstr "3-4小时"
 
 #: experiment/rules/util/goldsmiths.py:93
 #, fuzzy
 #| msgid "10 or more hours"
 msgid "5 or more hours"
-msgstr "10小时或以上"
+msgstr "5小时或以上"
 
 #: experiment/rules/util/goldsmiths.py:99
 msgid "How many musical instruments can you play?"
@@ -1183,11 +1183,11 @@ msgstr "3"
 
 #: experiment/rules/util/goldsmiths.py:105
 msgid "4"
-msgstr ""
+msgstr "4"
 
 #: experiment/rules/util/goldsmiths.py:106
 msgid "5"
-msgstr ""
+msgstr "5"
 
 #: experiment/rules/util/goldsmiths.py:107
 #, fuzzy
@@ -1319,7 +1319,7 @@ msgstr ""
 
 #: experiment/rules/util/goldsmiths.py:226
 msgid "6-9"
-msgstr ""
+msgstr "6-9"
 
 #: experiment/rules/util/goldsmiths.py:227
 msgid "10 or more"
