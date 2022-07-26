@@ -1,4 +1,4 @@
-from django.utils.translation import gettext as _
+from django.utils.translation import gettext_lazy as _
 from django.template.loader import render_to_string
 
 import random
@@ -114,11 +114,10 @@ class Huang2022(Base):
 
     @classmethod
     def get_questions(cls, session):
-        """Get a random question from each question list, in priority completion order.
+        """Get a list of all questions for the experiment (MSI and demographic questions),
+        in fixed order
         """
-
-        # 1. Demographic questions (9 questions)
-        questions = MSI_FG_GENERAL + MSI_ALL + [        
+        questions = MSI_FG_GENERAL + MSI_ALL + [      
             question_by_key('msi_39_best_instrument'),
             genre_question(),
             question_by_key('dgf_generation'),
@@ -143,8 +142,8 @@ class Huang2022(Base):
 
         # If the number of results equals the number of experiment.rounds,
         # close the session and return data for the final_score view.
-        if session.rounds_complete():
-
+        json_data = session.load_json_data()
+        if json_data.get('complete'):
             # Finish session.
             session.finish()
             session.save()
@@ -174,23 +173,24 @@ class Huang2022(Base):
         else:
             # Create a score action.
             config = {'show_section': True, 'show_total_score': True}
+            title = Huang2022.get_trial_title(session, next_round_number - 1)
+            print(title)
             score = Score(
                 session,
                 config=config,
-                title=Huang2022.get_trial_title(session, next_round_number-1)
+                title=title
             )
             actions.append(score.action())
 
             # Load the heard_before offset.
             try:
-                plan = session.load_json_data().get('plan')
+                plan = json_data.get('plan')
                 heard_before_offset = len(plan['song_sync_sections']) + 1
                 question_offset = heard_before_offset + len(
                     plan['heard_before_sections']) - 1
             except KeyError as error:
                 print('Missing plan key: %s' % str(error))
                 return actions
-
             # SongSync rounds
             if next_round_number in range(2, heard_before_offset):
                 actions.append(Huang2022.next_song_sync_action(session))
@@ -200,10 +200,10 @@ class Huang2022(Base):
                 actions.append(Huang2022.heard_before_explainer())
                 actions.append(
                     Huang2022.next_heard_before_action(session))
-            elif heard_before_offset < next_round_number < question_offset:
+            elif heard_before_offset < next_round_number <= session.experiment.rounds:
                 actions.append(
                     Huang2022.next_heard_before_action(session))
-            elif next_round_number == question_offset:
+            else:
                 actions.append(Explainer(
                     instruction=_("Please answer some questions \
                     on your musical (Goldsmiths-MSI) and demographic background"),
@@ -211,6 +211,8 @@ class Huang2022(Base):
                     button_label=_("Let's go!")).action()
                 )
                 actions.extend(Huang2022.get_questions(session))
+                session.merge_json_data({'complete': True})
+                session.save()
         return combine_actions(*actions)
 
     @classmethod
@@ -302,8 +304,10 @@ class Huang2022(Base):
     
     @classmethod
     def get_trial_title(cls, session, next_round_number):
-        return _("Round {} / {}".format(
-            next_round_number, session.experiment.rounds-1))
+        title = _("Round %(number)d / %(total)d" %
+            {'number': next_round_number, 'total': session.experiment.rounds})
+        print(title)
+        return title
 
     @classmethod
     def final_score_message(cls, session):
@@ -343,12 +347,10 @@ class Huang2022(Base):
             'n_correct': n_old_new_correct,
             'n_total': n_old_new_expected
         }
-        return " ".join([
-            thanks_message,
-            score_message,
-            song_sync_message,
-            heard_before_message
-        ])
+        messages = [
+            thanks_message, score_message, song_sync_message, heard_before_message
+        ]
+        return " ".join([str(m) for m in messages])
 
     @staticmethod
     def calculate_score(result, data, form_element=None):
@@ -433,6 +435,7 @@ def gender_question():
 
 def genre_question():
     return ChoiceQuestion(
+        view='DROPDOWN',
         key='dgf_genre_preference',
         question=_(
             "To which group of musical genres do you currently listen most?"),
