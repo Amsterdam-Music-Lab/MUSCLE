@@ -1,3 +1,4 @@
+from operator import ne
 from .views.playback import Playback
 from .views.form import Form, Question, ChoiceQuestion
 from .views import Consent, Score, StartSession, TwoAlternativeForced, Trial
@@ -22,9 +23,16 @@ class Categorization(Base):
 
     @classmethod
     def next_round(cls, session):
-        # Get the next trial action
-        action = cls.next_trial_action(session)
-        return action
+        next_round_number = session.get_next_round()
+        if next_round_number == 1:
+            json_data = cls.plan_experiment(session)
+        if session.final_score <= 8:
+            # we are in the training phase
+            print('Training')
+        else:
+            # Testing phase: Get the next trial action
+            action = cls.next_trial_action(session)
+            return action
 
     @classmethod
     def plan_experiment(cls, session):
@@ -85,12 +93,8 @@ class Categorization(Base):
         """
         Get the next action for the experiment
         """
-        next_round_number = session.get_next_round()
-        # Determine or retrieve the group data for this session
-        if next_round_number == 1:
-            json_data = cls.plan_experiment(session)
-        else:
-            json_data = session.load_json_data()
+        # Retrieve the group data for this session
+        json_data = session.load_json_data()
         # Retrieve random section for the assigned group
         if json_data["group"] == 'S1':
             section = session.section_from_unused_song(
