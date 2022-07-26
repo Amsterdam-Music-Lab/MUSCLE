@@ -2,7 +2,6 @@ import math
 import logging
 from decimal import Decimal, ROUND_HALF_UP
 
-import numpy as np
 from django.utils.translation import gettext_lazy as _
 
 from .base import Base
