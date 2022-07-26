@@ -39,13 +39,15 @@ class Base(object):
         form = data.pop('form')
         for form_element in form:
             result = cls.get_result(session, form_element['result_id'])
+
+            # Set given_response here, so it can be used in calculate_score
+            result.given_response = form_element['value']
             
             # Calculate score
             score = session.experiment_rules().calculate_score(result, data, form_element)
             if not score:
                 score = 0
 
-            result.given_response = form_element['value']
             result.save_json_data(data)
             result.score = score
             result.save()
@@ -53,9 +55,20 @@ class Base(object):
 
     @classmethod
     def handle_result(cls, session, data):
-        """Create a result for given session, based on the result data and section_id"""
-        result_data = data.get('result')
-        result_id = result_data.get('result_id')
+        """
+        Create a result for given session, based on the result data and section_id
+
+        parameters:
+        session: a Session object
+        data: a dictionary, containing an optional result_id, and optional other params:
+        {
+            result_id: int [optional] 
+            ...
+            all other params in the custom result
+        }
+        """
+
+        result_id = data.get('result_id')
         result = cls.get_result(session, result_id)
 
         # Calculate score
