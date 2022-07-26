@@ -151,7 +151,7 @@ class DurationDiscrimination(Base):
             title=_('%(title)s duration discrimination') % {'title': cls.condition},
             config={
                 'listen_first': True,
-                'decision_time': section.duration + .5
+                'decision_time': section.duration + .1
             }
         )
         return view.action()
