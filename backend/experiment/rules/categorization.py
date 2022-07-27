@@ -26,7 +26,7 @@ class Categorization(Base):
         next_round_number = session.get_next_round()
         if next_round_number == 1:
             json_data = cls.plan_experiment(session)
-        if session.final_score <= 8:
+        if session.final_score == 1000:
             # we are in the training phase
             print('Training')
         else:
