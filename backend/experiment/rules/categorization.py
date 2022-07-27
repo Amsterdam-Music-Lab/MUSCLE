@@ -62,7 +62,9 @@ class Categorization(Base):
             button_order = random.choice(['neutral', 'neutral-inverted'])
             # Set expected resonse accordingly
             # in the final version the buttons won't show the A/B
-            if button_order == 'neutral':
+            if button_order == 'neutral' and stimuli_a == 'BLUE':
+                choices = {'A': 'A', 'B': 'B'}
+            elif button_order == 'neutral-inverted' and stimuli_a == 'ORANGE':
                 choices = {'A': 'A', 'B': 'B'}
             else:
                 choices = {'B': 'B', 'A': 'A'}
