@@ -1,9 +1,10 @@
 from operator import ne
 from .views.playback import Playback
 from .views.form import Form, Question, ChoiceQuestion
-from .views import Consent, Score, StartSession, TwoAlternativeForced, Trial
+from .views import Consent, Explainer, Score, StartSession, TwoAlternativeForced, Trial
 from django.http import Http404, HttpResponseServerError
 from .util.actions import combine_actions
+from django.utils.translation import gettext_lazy as _
 
 from .base import Base
 import random
@@ -14,18 +15,26 @@ class Categorization(Base):
 
     @classmethod
     def first_round(cls, experiment):
+        explainer = Explainer(
+            instruction=_("This is a listening experiment in which you have to categorize short sound fragments"),
+            steps = [],
+            button_label=_('Ok')
+            ).action()
         consent = Consent.action()
         start_session = StartSession.action()
-        return [
-            consent,
-            start_session
-        ]
+        return [explainer,consent] + questionaire + [start_session]
 
     @classmethod
     def next_round(cls, session):
+
+        if session.rounds_complete():
+            pass
+
         next_round_number = session.get_next_round()
+
         if next_round_number == 1:
             json_data = cls.plan_experiment(session)
+            
         if session.final_score == 1000:
             # we are in the training phase
             print('Training')
@@ -128,9 +137,10 @@ class Categorization(Base):
         return view.action()
 
     @staticmethod
-    def calculate_score(result, form_element, data):
+    def calculate_score(result, data, form_element):
         # a result's score is used to keep track of how many correct results were in a row
         # for catch trial, set score to 2 -> not counted for calculating turnpoints
+
         try:
             expected_response = result.expected_response
         except Exception as e:
@@ -140,3 +150,46 @@ class Categorization(Base):
             return 1
         else:
             return 0
+
+
+
+age_question = Question(
+    key='dgf_age',
+    view='STRING',
+    question=_('What is your age?')
+)
+
+gender_question = ChoiceQuestion(
+    key='dgf_gender_identity',
+    view='RADIOS',
+    question="What is your gender?",
+    choices={
+        'male': "Male",
+        'Female': "Female",
+        'Others': "Other",
+        'no_answer': "Prefer not to disclose"
+    },
+    is_skippable=True
+)
+
+musical_expertise_question = ChoiceQuestion(
+    key='dgf_musical_expertise',
+    view='RADIOS',
+    question="Please select your level of musical expertise:",
+    choices={
+        'none': "None",
+        'moderate': "Moderate",
+        'experienced': "Experienced",
+        'professional': "Professional"
+    },
+    is_skippable=True
+)
+
+questions = [age_question, gender_question, musical_expertise_question]
+questionaire = [ 
+    Trial(
+        title=_("Questionnaire"),
+        feedback_form=Form([question], is_profile=True)).action() 
+    for question in questions
+]
+

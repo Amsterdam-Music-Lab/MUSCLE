@@ -87,7 +87,7 @@ const Trial = ({
             // Send data to server
             const response = await createProfile({
                 result,
-                session: session.id,
+                session: (session ? session.id : 0),
                 participant,
             });
 
