@@ -1850,7 +1850,7 @@ msgid ""
 "and Computation at the University of Amsterdam. Before the research project "
 "can begin, it is important that you read about the procedures we will be "
 "applying. Make sure to read this information carefully. "
-msgstr ""
+msgstr "U gaat meedoen aan het experiment “Neural correlates of rhythmic abilities” uitgevoerd door Dr. Atser Damsma van de Institute for Logic, Language and Computation aan de Universiteit van Amsterdam. Voordat het onderzoek begint, is het belangrijk dat u op de hoogte bent van de procedure die in dit onderzoek wordt gevolgd. Lees daarom onderstaande tekst zorgvuldig door."
 
 #: experiment/templates/consent/consent_MRI.html:3
 #: experiment/templates/consent/consent_rhythm.html:3
@@ -1870,7 +1870,7 @@ msgid ""
 "neural differences underlying these individual differences are not yet "
 "understood. By measuring performance in several rhythm tasks, we will be "
 "able to test which brain mechanisms are involved in rhythm perception. "
-msgstr ""
+msgstr "In het verleden heeft u deelgenomen in MRI-onderzoek van onze onderzoeksgroep en aangeven dat u interesse heeft om aan toekomstig onderzoek mee te doen. In de huidige studie maken we gebruik van de eerder gemaakte MRI-scans en combineren we deze met gedragsdata die we online verzamelen. De huidige studie is daarom slechts een computertaak. Het doel van deze studie is om individuele verschillen in ritmegevoel te onderzoeken. Ritme is een fundamenteel aspect van muziek en muzikaliteit, maar de verschillen in ritmegevoel tussen mensen zijn groot. We weten nog niet welke hersenmechanismen ten grondslag liggen aan deze verschillen. Door vaardigheden in verschillende ritmetaakjes te meten, kunnen we testen welke hersenprocessen belangrijk zijn voor ritmegevoel."
 
 #: experiment/templates/consent/consent_MRI.html:6
 #: experiment/templates/consent/consent_rhythm.html:5
