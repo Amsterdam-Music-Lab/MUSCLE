@@ -22,7 +22,7 @@ const ParticipantLink = (participantIDOnly) => {
     };
 
     const formatLink = (url) => {
-        const formatted = participantIDOnly ? url.split('/')[6] : url;
+        const formatted = participantIDOnly===true ? url.split('/')[6] : url;
         return formatted;
     }
 
