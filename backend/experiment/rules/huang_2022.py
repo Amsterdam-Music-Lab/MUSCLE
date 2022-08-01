@@ -117,7 +117,7 @@ class Huang2022(Base):
         """Get a list of all questions for the experiment (MSI and demographic questions),
         in fixed order
         """
-        questions = MSI_FG_GENERAL + MSI_ALL + [      
+        questions = MSI_ALL + [      
             question_by_key('msi_39_best_instrument'),
             genre_question(),
             question_by_key('dgf_generation'),

@@ -13,6 +13,7 @@ class Playlist:  # pylint: disable=too-few-public-methods
         """Get data for playlist action"""
         return {
             'view': Playlist.ID,
+            'instruction': _('Select a Playlist'),
             'playlists': [
                 {'id': playlist.id, 'name': playlist.name}
                 for playlist in playlists

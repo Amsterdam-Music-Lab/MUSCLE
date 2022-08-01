@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-26 17:47+0200\n"
+"POT-Creation-Date: 2022-08-01 11:49+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -500,7 +500,7 @@ msgstr "开始吧！"
 #: experiment/rules/rhythm_experiment_series.py:45
 #: experiment/rules/speech2song.py:40
 #: experiment/templates/consent/consent_hooked.html:87
-#: experiment/templates/consent/consent_huang2021.html:92
+#: experiment/templates/consent/consent_huang2021.html:88
 msgid "Informed consent"
 msgstr "知情同意声明"
 
@@ -1665,6 +1665,10 @@ msgstr "完全同意"
 msgid "Skip"
 msgstr "跳过"
 
+#: experiment/rules/views/playlist.py:16
+msgid "Select a Playlist"
+msgstr "请选择一个曲库"
+
 #: experiment/rules/views/question.py:142
 msgid "How much do you agree or disagree?"
 msgstr "您是否同意或不同意？请左右移动圆圈按钮至对应的回答。"
@@ -1869,7 +1873,7 @@ msgstr ""
 
 #: experiment/templates/consent/consent_MRI.html:18
 #: experiment/templates/consent/consent_hooked.html:80
-#: experiment/templates/consent/consent_huang2021.html:80
+#: experiment/templates/consent/consent_huang2021.html:76
 #: experiment/templates/consent/consent_rhythm.html:17
 #: experiment/templates/consent/consent_speech2song.html:62
 msgid "Further Information"
@@ -1936,7 +1940,6 @@ msgid "Purpose of the research project"
 msgstr "本研究目的"
 
 #: experiment/templates/consent/consent_hooked.html:14
-#: experiment/templates/consent/consent_huang2021.html:14
 msgid ""
 "\n"
 "    What makes music memorable? Why do we not only remember some pieces of "
@@ -1956,7 +1959,6 @@ msgstr ""
 "项目旨在帮助我们回答以上问题。"
 
 #: experiment/templates/consent/consent_hooked.html:22
-#: experiment/templates/consent/consent_huang2021.html:22
 msgid ""
 " This project will help us answer these questions and better understand how "
 "we remember music\n"
@@ -1978,12 +1980,12 @@ msgstr ""
 "碍患者的工作和生活开发新的方法等。"
 
 #: experiment/templates/consent/consent_hooked.html:30
-#: experiment/templates/consent/consent_huang2021.html:30
+#: experiment/templates/consent/consent_huang2021.html:23
 msgid "Who can take part in this research?"
 msgstr "谁能参与这项研究？"
 
 #: experiment/templates/consent/consent_hooked.html:31
-#: experiment/templates/consent/consent_huang2021.html:31
+#: experiment/templates/consent/consent_huang2021.html:24
 msgid ""
 "\n"
 "    Anybody with sufficiently good hearing, natural or corrected, to enjoy "
@@ -2003,13 +2005,12 @@ msgstr ""
 "外置扬声器。请注意调整设备音量。"
 
 #: experiment/templates/consent/consent_hooked.html:39
-#: experiment/templates/consent/consent_huang2021.html:39
+#: experiment/templates/consent/consent_huang2021.html:32
 #: experiment/templates/consent/consent_speech2song.html:19
 msgid "Instructions and procedure"
 msgstr "实验说明与步骤"
 
 #: experiment/templates/consent/consent_hooked.html:41
-#: experiment/templates/consent/consent_huang2021.html:41
 msgid ""
 "\n"
 "    You will be presented with short fragments of music and asked whether "
@@ -2049,13 +2050,13 @@ msgstr ""
 "要回答您是否在实验的第一阶段听过这些音乐。"
 
 #: experiment/templates/consent/consent_hooked.html:56
-#: experiment/templates/consent/consent_huang2021.html:56
+#: experiment/templates/consent/consent_huang2021.html:52
 #: experiment/templates/consent/consent_speech2song.html:28
 msgid "Voluntary participation"
 msgstr "自愿参与"
 
 #: experiment/templates/consent/consent_hooked.html:58
-#: experiment/templates/consent/consent_huang2021.html:58
+#: experiment/templates/consent/consent_huang2021.html:54
 msgid ""
 " You will be participating in this research project on a voluntary basis. "
 "This means you are free\n"
@@ -2071,13 +2072,13 @@ msgstr ""
 "与，那么在此之前收集的所有信息将会被永久删除。"
 
 #: experiment/templates/consent/consent_hooked.html:64
-#: experiment/templates/consent/consent_huang2021.html:64
+#: experiment/templates/consent/consent_huang2021.html:60
 #: experiment/templates/consent/consent_speech2song.html:37
 msgid "Discomfort, Risks & Insurance"
 msgstr "不适、风险与保险"
 
 #: experiment/templates/consent/consent_hooked.html:66
-#: experiment/templates/consent/consent_huang2021.html:66
+#: experiment/templates/consent/consent_huang2021.html:62
 msgid ""
 " The risks of participating in this research are no greater than in everyday "
 "situations at home.\n"
@@ -2090,13 +2091,13 @@ msgstr ""
 "没有或几乎没有不适感。荷兰阿姆斯特丹大学进行的所有研究都使用标准责任险。"
 
 #: experiment/templates/consent/consent_hooked.html:71
-#: experiment/templates/consent/consent_huang2021.html:71
+#: experiment/templates/consent/consent_huang2021.html:67
 #: experiment/templates/consent/consent_speech2song.html:45
 msgid "Confidential treatment of your details"
 msgstr "信息匿名和保密性"
 
 #: experiment/templates/consent/consent_hooked.html:73
-#: experiment/templates/consent/consent_huang2021.html:73
+#: experiment/templates/consent/consent_huang2021.html:69
 msgid ""
 " The information gathered over the course of this research will be used for "
 "further analysis and\n"
@@ -2113,15 +2114,7 @@ msgstr ""
 "员开放。同时，您在任何情况下都保持匿名，请安心作答。"
 
 #: experiment/templates/consent/consent_hooked.html:82
-#, fuzzy, python-format
-#| msgid ""
-#| " For further information on the research project, please contact "
-#| "%(researcher_contact)s\n"
-#| "    If you have any complaints regarding this research project, you can "
-#| "contact the secretary of the Ethics Committee of\n"
-#| "    the Faculty of Humanities of the University of Amsterdam (phone "
-#| "number: +31 20 525 3054; e-mail:\n"
-#| "    commissie-ethiek-fgw@uva.nl; Kloveniersburgwal 48, 1012 CX Amsterdam)."
+#, python-format
 msgid ""
 " For further information on the research project, please contact "
 "%(researcher_contact)s\n"
@@ -2131,13 +2124,9 @@ msgid ""
 "+31 20 525 3054; e-mail:\n"
 "    commissie-ethiek-fgw@uva.nl; Kloveniersburgwal 48, 1012 CX Amsterdam)."
 msgstr ""
-"如果您想知道有关于实验项目的其他信息，请联系Gustav-Hein Frieberg (电话: +31 "
-"6 83 676 490; 邮件: gusfrieberg@gmail.com)。如果您对研究项目有投诉，请联系阿"
-"姆斯特丹大学人文学院伦理委员会秘书（电话：+31 20 525 3054；电子邮件："
-"commissie-ethiek-fgw@uva.nl; 地址：Kloveniersburgwal 48, 1012 CX Amsterdam)"
 
 #: experiment/templates/consent/consent_hooked.html:89
-#: experiment/templates/consent/consent_huang2021.html:94
+#: experiment/templates/consent/consent_huang2021.html:90
 msgid ""
 " I hereby declare that I have been clearly informed about the research "
 "project Hooked on Music:\n"
@@ -2152,7 +2141,7 @@ msgstr ""
 "些资料仅供学术研究使用。"
 
 #: experiment/templates/consent/consent_hooked.html:95
-#: experiment/templates/consent/consent_huang2021.html:100
+#: experiment/templates/consent/consent_huang2021.html:96
 msgid ""
 " I consent to participate in this research on an entirely voluntary basis. I "
 "retain the right to\n"
@@ -2189,7 +2178,71 @@ msgstr ""
 "士研究生Xuan Huang 主持的《“中国音乐饵”与记忆》的研究项目。在正式参与该研究项"
 "目之前，请您仔细阅读我们的知情同意书以了解实验程序。"
 
-#: experiment/templates/consent/consent_huang2021.html:82
+#: experiment/templates/consent/consent_huang2021.html:14
+msgid ""
+"\n"
+"    What makes music memorable? Why do we not only remember some pieces of "
+"music, but can also recall them after a long\n"
+"    period of time, or even a few years later? What makes music remain in "
+"our memories for the long term? Are there some\n"
+"    musical characters that make it easier to remember Chinese music in the "
+"long run or does it depend on a person? Do\n"
+"    we collectively use the same features to recognize music? This project "
+"will help us answer these questions and better \n"
+"    understand how we remember music over the long term.\n"
+"    "
+msgstr ""
+"\n"
+"我们知道有些音乐让人非常的印象深刻。是什么使得这些音乐令人印象深刻？为什么我"
+"们不仅能记住某首歌曲，而且在某段时间甚至是几年以后仍能够回忆起它？是什么让音"
+"乐一直存在我们的记忆里？是否有些音乐特征使人们更容易长期记住中国音乐？还是这"
+"种长期记忆取决于不同的听众?我们是否共同地使用同样的音乐特征来识别音乐？该研究"
+"项目旨在帮助我们回答以上问题。"
+
+#: experiment/templates/consent/consent_huang2021.html:34
+msgid ""
+"\n"
+"    This experiment consists of two parts: Hooked on Music game and The "
+"Goldsmiths Musical Sophistication Index. We \n"
+"    will as ask you to answer a few questions concerning demography about "
+"you. This helps us to understand your musical\n"
+"    activities, your personal listening history and the musical cultural "
+"where you grew up.\n"
+"    "
+msgstr ""
+
+#: experiment/templates/consent/consent_huang2021.html:41
+msgid ""
+" You will be presented with short fragments of music and asked whether you "
+"recognise them. \n"
+"    Try to answer as quickly you can, but only at the moment that you find "
+"yourself able to ‘sing along’ in your head. \n"
+"    When you tell us that you recognise a piece of music, the music will "
+"keep playing, but the sound will be muted for \n"
+"    a few seconds. Keep following along with the music in your head, until "
+"the music comes back. Sometimes it will come \n"
+"    back in the right place, but at other times, we will have skipped "
+"forward or backward within the same piece of music \n"
+"    during the silence. We will ask you whether you think the music came "
+"back in the right place or not. After the game \n"
+"    section, we will ask you some simple survey questions to better "
+"understand your musical background and how you engage with \n"
+"    music in your daily life.\n"
+"    "
+msgstr ""
+"\n"
+"  该实验包括两部分：一个音乐识别实验与一份《金史密斯音乐素养》水平测试。我们"
+"也将对人口统计特征进行一个简短的问卷调查。 该实验需要20-30分钟。在实验完成后,"
+"您将看到结果。\n"
+"  在音乐识别实验的第一个阶段，您将听到一些简短的音乐片段，请您尝试尽快回答‘是"
+"否能识别出该音乐‘。同时请在大脑中一起跟唱这段音乐。当您告诉我们您识别出了一段"
+"音乐时，该音乐会继续播放，但是声音将会被静音几秒钟。请您此时继续在心里“默"
+"唱”该音乐直到它再次播放为止。有时候音乐会回到正确的位置，但有时候在静音期间，"
+"同一段音乐会被向前或向后播放。当您在静音后再次听到音乐时，您需要判断出该音乐"
+"是否回到正确的位置。在实验的第二阶段，您仍将听到一些简短的音乐片段，此时您需"
+"要回答您是否在实验的第一阶段听过这些音乐。"
+
+#: experiment/templates/consent/consent_huang2021.html:78
 msgid ""
 " For further information on the research project, please contact Xuan Huang "
 "(e-mail:\n"
