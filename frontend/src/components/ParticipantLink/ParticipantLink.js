@@ -3,7 +3,7 @@ import React, { useRef } from "react";
 import { useParticipantLink } from "../../API";
 import Loading from "../Loading/Loading";
 
-const ParticipantLink = (participantIDOnly) => {
+const ParticipantLink = ({participantIDOnly}) => {
     const [link, loadingLink] = useParticipantLink();
     const linkInput = useRef();
 

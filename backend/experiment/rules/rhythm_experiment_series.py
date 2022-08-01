@@ -64,6 +64,7 @@ class RhythmExperimentSeries(Base):
                 title=_("Thank you very much for participating!"),
                 final_text=rendered,
                 show_participant_link=True,
+                show_participant_id_only=True,
             ).action()
         slug = experiment_data[experiment_number]
         session.save()
