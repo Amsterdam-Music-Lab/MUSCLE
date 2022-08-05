@@ -1,4 +1,5 @@
 import logging
+from django.conf import settings
 from django.utils.translation import gettext_lazy as _
 from django.template.loader import render_to_string
 from .views import Plink, Explainer, Step, Score, Final, StartSession, Playlist, Info
@@ -125,6 +126,14 @@ class ToontjeHoger3Plink(Base):
         for section in all_sections:
             label = section.song_label()
             choices[section.pk] = label
+        
+        # Add additional songs from static file
+        file = open(join(settings.BASE_DIR, 'experiment/static/toontjehoger/experiment3/extra-songs.txt'))
+        songs = file.read().splitlines()
+        for index, song in enumerate(songs):
+            label = section.song_label()
+            # Negative index for these songs to prevent overlap with sections
+            choices[-index] = song
 
         # Get section to recognize
         section = session.section_from_unused_song()
