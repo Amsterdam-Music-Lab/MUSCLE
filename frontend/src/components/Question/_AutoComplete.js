@@ -12,7 +12,7 @@ const AutoComplete = ({
     const options = Object.keys(question.choices).map((val, index) => ({
         value: val,
         label: question.choices[val],
-    }));
+    })).sort((a,b)=>(a.label.localeCompare(b.label)));
 
     return (
         <div className="aha__autocomplete">
