@@ -1,14 +1,18 @@
 from operator import ne
 from .views.playback import Playback
 from .views.form import Form, Question, ChoiceQuestion
-from .views import Consent, Explainer, Score, StartSession, TwoAlternativeForced, Trial
+from .views import Consent, Explainer, Score, StartSession, TwoAlternativeForced, Trial, Final
 from django.http import Http404, HttpResponseServerError
 from .util.actions import combine_actions
 from django.utils.translation import gettext_lazy as _
+from django.db.models import Avg
 
 from .base import Base
 import random
 
+
+N_ROUNDS_TRAINING = 5# 20
+SCORE_AVG_MIN_TRAINING = 0.8
 
 class Categorization(Base):
     ID = 'CATEGORIZATION'
@@ -27,21 +31,61 @@ class Categorization(Base):
     @classmethod
     def next_round(cls, session):
 
-        if session.rounds_complete():
-            pass
+        json_data = session.load_json_data()
 
-        next_round_number = session.get_next_round()
-
-        if next_round_number == 1:
+        # Plan experiment on the first call to next_round
+        if not json_data:
             json_data = cls.plan_experiment(session)
-            
-        if session.final_score == 1000:
-            # we are in the training phase
-            print('Training')
-        else:
-            # Testing phase: Get the next trial action
-            action = cls.next_trial_action(session)
-            return action
+
+        rounds_passed = session.rounds_passed()
+
+        if json_data['phase'] == 'training':
+            if rounds_passed < N_ROUNDS_TRAINING:
+                return cls.next_trial_action(session) if rounds_passed == 0 else cls.get_trial_with_feedback(session)
+            else:
+                # End of training?
+                score_avg = session.result_set.aggregate(Avg('score'))['score__avg']
+
+                if score_avg > SCORE_AVG_MIN_TRAINING:
+                    json_data['phase'] = "testing"
+                    session.merge_json_data(json_data)
+                    session.save()
+                    explainer = Explainer(
+                        instruction=_("You are entering the main phase of the experiment. From now on you will only occasionally get feedback on your responses. Simply try to keep on categorizing the sound sequences as you did before."),
+                        steps = [],
+                        button_label=_('Ok')
+                    ).action()
+                else:
+                    explainer = Explainer(
+                        instruction=_("<REPEAT TRAINING>"),
+                        steps = [],
+                        button_label=_('Ok')
+                    ).action()
+
+                feedback = cls.get_feedback(session)
+                session.result_set.all().delete()
+
+                return combine_actions(feedback, explainer)
+
+        elif json_data['phase'] == 'testing':
+            if session.rounds_complete():
+                session.final_score = session.result_set.aggregate(Avg('score'))['score__avg']
+                session.finish()
+                session.save()
+
+                final = Final(
+                    session=session,
+                    final_text="WOOHOO!",#Huang2022.final_score_message(session),
+                    rank=1,#Huang2022.rank(session),
+                    show_social=False,
+                    show_profile_link=True
+                ).action()
+
+                return final
+            else:
+                # To do: switch between trial with feedback and without
+                return cls.next_trial_action(session) if rounds_passed == 0 else cls.get_trial_with_feedback(session)
+
 
     @classmethod
     def plan_experiment(cls, session):
@@ -80,7 +124,8 @@ class Categorization(Base):
             json_data = {'group': group,
                          'stimuli_a': stimuli_a,
                          'button_order': button_order,
-                         'choices': choices
+                         'choices': choices,
+                         'phase': "training"
                          }
             session.merge_json_data(json_data)
             session.save()
@@ -89,21 +134,43 @@ class Categorization(Base):
                 "The maximum number of participants for this experiment has been reached")
         return json_data
 
-    def get_trial_with_feedback(session):
-        score = Score(session, icon='ti-face-smile', timer=5).action()
-        section = session.playlist.section_set.all()[0]
-        # retrieve expected response from json_data
-        # for now: set it arbitrarily to "up"
-        result_pk = cls.prepare_result(session, section, 'up')
-        choices = {'A': 'A', 'B': 'B'}
-        trial = TwoAlternativeForced(section, choices, result_pk).action()
+    @classmethod
+    def get_feedback(cls, session):
+
+        last_score = session.last_score()
+
+        if last_score == 1:
+            icon = 'ti-face-smile'
+        elif last_score == 0:
+            icon = 'ti-face-sad'
+        elif last_score == "nonresponse":
+            icon = "ti-alarm-clock"  # "ti-time"
+        else:
+            pass #throw error
+
+        return Score(session, icon=icon, timer=3).action()
+
+    @classmethod
+    def get_trial_with_feedback(cls, session):
+
+        score = cls.get_feedback(session)
+        trial = cls.next_trial_action(session)
+
         return combine_actions(score, trial)
 
     @classmethod
-    def next_trial_action(cls, session, *kwargs):
+    def next_trial_action(cls, session):
         """
         Get the next action for the experiment
         """
+        section = session.playlist.section_set.all()[0]
+        # retrieve expected response from json_data
+        # for now: set it arbitrarily to "up"
+        result_pk = cls.prepare_result(session, section, 'A')
+        choices = {'A': 'A', 'B': 'B'}
+        trial = TwoAlternativeForced(section, choices, result_pk).action()
+        return trial
+
         # Retrieve the group data for this session
         json_data = session.load_json_data()
         # Retrieve random section for the assigned group
@@ -154,13 +221,13 @@ class Categorization(Base):
 
 
 age_question = Question(
-    key='dgf_age',
+    key='age',
     view='STRING',
     question=_('What is your age?')
 )
 
 gender_question = ChoiceQuestion(
-    key='dgf_gender_identity',
+    key='gender_identity',
     view='RADIOS',
     question="What is your gender?",
     choices={
@@ -173,7 +240,7 @@ gender_question = ChoiceQuestion(
 )
 
 musical_expertise_question = ChoiceQuestion(
-    key='dgf_musical_expertise',
+    key='musical_expertise',
     view='RADIOS',
     question="Please select your level of musical expertise:",
     choices={
