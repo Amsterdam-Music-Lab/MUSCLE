@@ -139,12 +139,12 @@ class Categorization(Base):
 
         last_score = session.last_score()
 
-        if last_score == 1:
+        if session.last_result().given_response == "TIMEOUT":
+            icon = "ti-alarm-clock"  # "ti-time"
+        elif last_score == 1:
             icon = 'ti-face-smile'
         elif last_score == 0:
             icon = 'ti-face-sad'
-        elif last_score == "nonresponse":
-            icon = "ti-alarm-clock"  # "ti-time"
         else:
             pass #throw error
 
@@ -168,8 +168,12 @@ class Categorization(Base):
         # for now: set it arbitrarily to "up"
         result_pk = cls.prepare_result(session, section, 'A')
         choices = {'A': 'A', 'B': 'B'}
-        trial = TwoAlternativeForced(section, choices, result_pk).action()
-        return trial
+        trial = TwoAlternativeForced(section, choices, result_pk)
+        trial.config['listen_first'] = True
+        trial.config['auto_advance'] = True
+        trial.config['auto_advance_timer'] = 3000
+        #trial.config['show_continue_button'] = True
+        return trial.action()
 
         # Retrieve the group data for this session
         json_data = session.load_json_data()
