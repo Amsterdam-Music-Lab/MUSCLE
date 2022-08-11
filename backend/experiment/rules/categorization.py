@@ -27,8 +27,14 @@ class Categorization(Base):
             button_label=_('Ok')
         ).action()
         consent = Consent.action()
+        explainer2 = Explainer(
+            instruction=_(
+                "The experiment will now begin. Click to start a sound sequence."),
+            steps=[],
+            button_label=_('Ok')
+        ).action()
         start_session = StartSession.action()
-        return [explainer, consent] + questionaire + [start_session]
+        return [explainer, consent] + questionaire + [explainer2, start_session]
 
     @classmethod
     def next_round(cls, session):
@@ -161,7 +167,7 @@ class Categorization(Base):
         else:
             pass  # throw error
 
-        return Score(session, icon=icon, timer=3).action()
+        return Score(session, icon=icon, timer=3, title=cls.get_title(session)).action()
 
     @classmethod
     def get_trial_with_feedback(cls, session):
@@ -271,7 +277,7 @@ class Categorization(Base):
             expected_response = 'B'
         result_pk = cls.prepare_result(session, section, expected_response)
         choices = json_data["choices"]
-        trial = TwoAlternativeForced(section, choices, result_pk)
+        trial = TwoAlternativeForced(section, choices, result_pk, title=cls.get_title(session))
         trial.config['listen_first'] = True
         trial.config['auto_advance'] = True
         trial.config['auto_advance_timer'] = 3000
@@ -291,6 +297,10 @@ class Categorization(Base):
         else:
             return 0
 
+    @classmethod
+    def get_title(cls, session):
+        json_data = session.load_json_data()
+        return _('Round {} / {}').format(session.rounds_passed(), len(json_data['sequence']))
 
 age_question = Question(
     key='age',
