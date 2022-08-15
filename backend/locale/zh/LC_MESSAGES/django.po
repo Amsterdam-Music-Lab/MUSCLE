@@ -1343,11 +1343,11 @@ msgstr "初中/中专"
 
 #: experiment/rules/util/isced_education.py:6
 msgid "Secondary diploma (A-levels/high school)"
-msgstr "高中/职高"
+msgstr "高中"
 
 #: experiment/rules/util/isced_education.py:7
 msgid "Post-16 vocational course"
-msgstr "初中/中专"
+msgstr "职高"
 
 #: experiment/rules/util/isced_education.py:8
 msgid "Associate's degree or 2-year professional diploma"
@@ -1355,7 +1355,7 @@ msgstr "大专或成人本科"
 
 #: experiment/rules/util/isced_education.py:9
 msgid "Bachelor or equivalent"
-msgstr "学士或同等学历"
+msgstr "本科或同等学历(大专)"
 
 #: experiment/rules/util/isced_education.py:10
 msgid "Master or equivalent"
