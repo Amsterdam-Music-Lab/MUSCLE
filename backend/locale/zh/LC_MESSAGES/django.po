@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-08-01 11:49+0200\n"
+"POT-Creation-Date: 2022-08-15 15:30+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -21,7 +21,7 @@ msgstr ""
 msgid "Loading"
 msgstr "加载中"
 
-#: experiment/api/participant.py:37 experiment/rules/views/final.py:47
+#: experiment/api/participant.py:37 experiment/rules/views/final.py:48
 msgid "My profile"
 msgstr "我的结果"
 
@@ -36,7 +36,7 @@ msgid_plural ""
 msgstr[0] "你参加了阿姆斯特丹音乐实验室的 %(count)d 个实验。你最好的成绩是："
 msgstr[1] "你参加了阿姆斯特丹音乐实验室的 %(count)d 个实验。你最好的成绩是："
 
-#: experiment/api/participant.py:42 experiment/rules/views/final.py:44
+#: experiment/api/participant.py:42 experiment/rules/views/final.py:45
 msgid "points"
 msgstr "分"
 
@@ -548,7 +548,7 @@ msgstr ""
 
 #: experiment/rules/huang_2022.py:50 experiment/rules/huang_2022.py:256
 #: experiment/rules/rhythm_experiment_series.py:36
-#: experiment/rules/rhythm_experiment_series.py:71
+#: experiment/rules/rhythm_experiment_series.py:72
 #: experiment/rules/speech2song.py:89 experiment/rules/speech2song.py:99
 #: experiment/rules/speech2song.py:125 experiment/rules/util/actions.py:31
 #: experiment/rules/util/practice.py:99 experiment/rules/views/form.py:109
@@ -563,7 +563,7 @@ msgstr ""
 msgid "Continue"
 msgstr "继续"
 
-#: experiment/rules/huang_2022.py:134
+#: experiment/rules/huang_2022.py:135
 msgid "Questionnaire"
 msgstr "问卷调查"
 
@@ -612,23 +612,23 @@ msgstr "您是否在之前的识别环节里听到过这首歌曲？"
 msgid "Round %(number)d / %(total)d"
 msgstr "%(number)d / %(total)d轮"
 
-#: experiment/rules/huang_2022.py:334
+#: experiment/rules/huang_2022.py:333
 msgid "Thank you for your contribution to science!"
 msgstr "感谢您的参与以及对科学的贡献！"
 
-#: experiment/rules/huang_2022.py:336
+#: experiment/rules/huang_2022.py:335
 msgid "Well done!"
 msgstr "太棒了！"
 
-#: experiment/rules/huang_2022.py:336
+#: experiment/rules/huang_2022.py:335
 msgid "Too bad!"
 msgstr "有点糟哦！"
 
-#: experiment/rules/huang_2022.py:338
+#: experiment/rules/huang_2022.py:337
 msgid "You did not recognise any songs at first."
 msgstr "您起初并没有识别出任何歌曲。"
 
-#: experiment/rules/huang_2022.py:340
+#: experiment/rules/huang_2022.py:339
 #, python-format
 msgid ""
 "It took you %(n_seconds)d s to recognise a song on average,                 "
@@ -638,7 +638,7 @@ msgstr ""
 "您平均花了 %(n_seconds)d 秒识别出一首歌曲，并且在您认为您知道的 %(n_total)d "
 "首歌曲里, 您正确地识别出了 %(n_correct)d 首。"
 
-#: experiment/rules/huang_2022.py:346
+#: experiment/rules/huang_2022.py:345
 #, python-format
 msgid ""
 "During the bonus rounds, you remembered %(n_correct)d of the %(n_total)d "
@@ -647,45 +647,45 @@ msgstr ""
 "在奖励环节里，您记住了之前播放过的 %(n_total)d 首歌里的 %(n_correct)d 首歌"
 "曲。"
 
-#: experiment/rules/huang_2022.py:408
+#: experiment/rules/huang_2022.py:407
 msgid ""
 "In which region did you spend the most formative years of your childhood and "
 "youth?"
 msgstr "您的童年与青少年时期在哪个地区/省/市度过的？"
 
-#: experiment/rules/huang_2022.py:417
+#: experiment/rules/huang_2022.py:416
 msgid "In which region do you currently reside?"
 msgstr "您目前所在的地区/省/市或国家："
 
-#: experiment/rules/huang_2022.py:441 experiment/rules/util/questions.py:69
+#: experiment/rules/huang_2022.py:440 experiment/rules/util/questions.py:69
 msgid "To which group of musical genres do you currently listen most?"
 msgstr "以下哪种音乐类型是您目前最常听的？"
 
-#: experiment/rules/huang_2022.py:443 experiment/rules/util/questions.py:72
+#: experiment/rules/huang_2022.py:442 experiment/rules/util/questions.py:72
 msgid "Pop/Country/Religious"
 msgstr "流行音乐/民谣/乡村音乐"
 
-#: experiment/rules/huang_2022.py:444
+#: experiment/rules/huang_2022.py:443
 msgid "Folk/Mountain songs"
 msgstr "中国民乐/民歌类（如山歌、小调等）"
 
-#: experiment/rules/huang_2022.py:445
+#: experiment/rules/huang_2022.py:444
 msgid "Western classical music/Jazz/Opera/Musical"
 msgstr "西方古典音乐/爵士/歌剧/音乐剧"
 
-#: experiment/rules/huang_2022.py:446
+#: experiment/rules/huang_2022.py:445
 msgid "Chinese opera"
 msgstr "中国戏曲类（如京剧、粤剧、评弹等）"
 
-#: experiment/rules/huang_2022.py:447 experiment/rules/util/questions.py:74
+#: experiment/rules/huang_2022.py:446 experiment/rules/util/questions.py:74
 msgid "Rock/Punk/Metal"
 msgstr "摇滚乐/重金属/朋克"
 
-#: experiment/rules/huang_2022.py:448 experiment/rules/util/questions.py:71
+#: experiment/rules/huang_2022.py:447 experiment/rules/util/questions.py:71
 msgid "Dance/Electronic/New Age"
 msgstr "舞曲/电子乐/新潮音乐"
 
-#: experiment/rules/huang_2022.py:449 experiment/rules/util/questions.py:75
+#: experiment/rules/huang_2022.py:448 experiment/rules/util/questions.py:75
 msgid "Hip-hop/R&B/Funk"
 msgstr "嘻哈饶舌/R&B/Funk（放克）"
 
@@ -849,7 +849,7 @@ msgstr ""
 msgid "Thank you very much for participating!"
 msgstr ""
 
-#: experiment/rules/rhythm_experiment_series.py:75
+#: experiment/rules/rhythm_experiment_series.py:76
 #, python-format
 msgid "Next experiment (%d to go!)"
 msgstr ""
@@ -1334,32 +1334,34 @@ msgid "Music can evoke my memories of past people and places."
 msgstr "音乐可以唤起我对过去的人和地方的回忆。"
 
 #: experiment/rules/util/isced_education.py:4
+msgid "Primary school"
+msgstr "小学"
+
+#: experiment/rules/util/isced_education.py:5
 msgid "Vocational qualification at about 16 years of age (GCSE)"
 msgstr "初中/中专"
 
-#: experiment/rules/util/isced_education.py:5
+#: experiment/rules/util/isced_education.py:6
 msgid "Secondary diploma (A-levels/high school)"
 msgstr "高中/职高"
 
-#: experiment/rules/util/isced_education.py:6
+#: experiment/rules/util/isced_education.py:7
 msgid "Post-16 vocational course"
 msgstr "初中/中专"
 
-# #The pilot study did not have this msgid/option for the education-related questions. I dont think the Hooked on China needs this option. It ovelapps
-# #py:4 and both options in the same translations show up in the experiment.
-#: experiment/rules/util/isced_education.py:7
+#: experiment/rules/util/isced_education.py:8
 msgid "Associate's degree or 2-year professional diploma"
 msgstr "大专或成人本科"
 
-#: experiment/rules/util/isced_education.py:8
+#: experiment/rules/util/isced_education.py:9
 msgid "Bachelor or equivalent"
 msgstr "学士或同等学历"
 
-#: experiment/rules/util/isced_education.py:9
+#: experiment/rules/util/isced_education.py:10
 msgid "Master or equivalent"
 msgstr "硕士研究生或同等学历"
 
-#: experiment/rules/util/isced_education.py:10
+#: experiment/rules/util/isced_education.py:11
 msgid "Doctoral degree or equivalent"
 msgstr "博士研究生或同等学历"
 
@@ -1605,11 +1607,11 @@ msgstr "钻石"
 msgid "Final score"
 msgstr "最终得分"
 
-#: experiment/rules/views/final.py:46
+#: experiment/rules/views/final.py:47
 msgid "Play again"
 msgstr "再玩一次"
 
-#: experiment/rules/views/final.py:48
+#: experiment/rules/views/final.py:49
 msgid "All experiments"
 msgstr "实验结束"
 
@@ -1665,7 +1667,7 @@ msgstr "完全同意"
 msgid "Skip"
 msgstr "跳过"
 
-#: experiment/rules/views/playlist.py:16
+#: experiment/rules/views/playlist.py:18
 msgid "Select a Playlist"
 msgstr "请选择一个曲库"
 
@@ -2550,12 +2552,12 @@ msgid "In order to get your reimbursement, make sure to follow these steps:"
 msgstr ""
 
 #: experiment/templates/final/debrief_MRI.html:5
-#: experiment/templates/final/experiment_series.html:5
+#: experiment/templates/final/experiment_series.html:4
 msgid "If you have not done the following steps already:"
 msgstr ""
 
 #: experiment/templates/final/debrief_MRI.html:7
-#: experiment/templates/final/experiment_series.html:7
+#: experiment/templates/final/experiment_series.html:6
 msgid "Make an account at "
 msgstr ""
 
@@ -2566,12 +2568,12 @@ msgid ""
 msgstr ""
 
 #: experiment/templates/final/debrief_MRI.html:9
-#: experiment/templates/final/experiment_series.html:9
+#: experiment/templates/final/experiment_series.html:8
 msgid "Click on “participate” "
 msgstr ""
 
 #: experiment/templates/final/debrief_MRI.html:10
-#: experiment/templates/final/experiment_series.html:10
+#: experiment/templates/final/experiment_series.html:9
 msgid ""
 "Click on the experiment link in the browser (NOTE: it is really important "
 "that you do this, if you do not go to the AML website via the UvA lab "
@@ -2579,7 +2581,7 @@ msgid ""
 msgstr ""
 
 #: experiment/templates/final/debrief_MRI.html:11
-#: experiment/templates/final/experiment_series.html:11
+#: experiment/templates/final/experiment_series.html:10
 msgid ""
 "You can now close the tab again, as you have already finished the experiment!"
 msgstr ""
@@ -2590,27 +2592,27 @@ msgid ""
 "invitation email (X). We will now make sure you get your reimbursement!"
 msgstr ""
 
-#: experiment/templates/final/experiment_series.html:3
+#: experiment/templates/final/experiment_series.html:2
 msgid ""
 "If you want to get your money or credit, make sure to follow these steps:"
 msgstr ""
 
-#: experiment/templates/final/experiment_series.html:8
+#: experiment/templates/final/experiment_series.html:7
 msgid "Look up the experiment. It is called: “Testing your sense of rhythm”"
 msgstr ""
 
-#: experiment/templates/final/experiment_series.html:14
+#: experiment/templates/final/experiment_series.html:13
 msgid ""
 "VERY IMPORTANT: Make sure to copy-paste the code below and save it "
 "somewhere. NOTE: Without the code, you will not be able to earn your "
 "reimbursement!"
 msgstr ""
 
-#: experiment/templates/final/experiment_series.html:15
+#: experiment/templates/final/experiment_series.html:14
 msgid "Email the code to"
 msgstr ""
 
-#: experiment/templates/final/experiment_series.html:15
+#: experiment/templates/final/experiment_series.html:14
 msgid ""
 ", using the same email-address you used to register on the UvA lab website. "
 "If you are a student, add your student number. We will now make sure you get "

@@ -121,7 +121,7 @@ class Huang2022(Base):
             question_by_key('msi_39_best_instrument'),
             genre_question(),
             question_by_key('dgf_generation'),
-            question_by_key('dgf_education'),
+            question_by_key('dgf_education', drop_choices=['isced-5']),
             question_by_key(
                 'dgf_highest_qualification_expectation', EXTRA_DEMOGRAPHICS),
             question_by_key('dgf_occupational_status', EXTRA_DEMOGRAPHICS),
@@ -286,8 +286,8 @@ class Huang2022(Base):
         form = Form([BooleanQuestion(
             key='heard_before',
             choices={
+                'new': _("NO"),
                 'old': _("YES"),
-                'new': _("NO")
             },
             question=_("Did you hear this song in previous rounds?"),
             result_id=result_pk,
