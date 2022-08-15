@@ -11,7 +11,7 @@ from .base import Base
 import random
 
 
-N_ROUNDS_TRAINING = 20  # 20
+N_ROUNDS_TRAINING = 20
 SCORE_AVG_MIN_TRAINING = 0.8
 
 
@@ -52,8 +52,7 @@ class Categorization(Base):
                 return cls.next_trial_action(session) if rounds_passed == 0 else cls.get_trial_with_feedback(session)
             else:
                 # End of training?
-                score_avg = session.result_set.aggregate(Avg('score'))[
-                    'score__avg']
+                score_avg = session.result_set.aggregate(Avg('score'))['score__avg']
 
                 if score_avg > SCORE_AVG_MIN_TRAINING:
                     json_data['phase'] = "testing"
@@ -79,8 +78,7 @@ class Categorization(Base):
 
         elif json_data['phase'] == 'testing':
             if session.rounds_complete():
-                session.final_score = session.result_set.aggregate(Avg('score'))[
-                    'score__avg']
+                session.final_score = session.result_set.aggregate(Avg('score'))['score__avg']
                 session.finish()
                 session.save()
 
@@ -96,15 +94,10 @@ class Categorization(Base):
                 return final
             else:
                 # Determine wether this round has feedback
-                try:
-                    feedback_sequence = json_data['feedback_sequence']
-                    sequence = json_data['sequence']
-                    for position in feedback_sequence:
-                        if position == rounds_passed:
-                            return cls.get_trial_with_feedback(session)
-                except:
-                    pass
-                return cls.next_trial_action(session)
+                feedback_sequence = json_data.get('feedback_sequence')
+                if feedback_sequence and rounds_passed in feedback_sequence:
+                    return cls.get_trial_with_feedback(session)
+                else: return cls.next_trial_action(session)
 
     @classmethod
     def plan_experiment(cls, session):
@@ -189,16 +182,16 @@ class Categorization(Base):
                 # Retrieve training stimuli for the assigned group
                 if json_data["group"] == 'S1':
                     sections = session.playlist.section_set.filter(
-                        group='SAME', tag__contains='1', artist__contains='TRAINING')
+                        group='SAME', tag__contains='1', artist__contains='Training')
                 elif json_data["group"] == 'S2':
                     sections = session.playlist.section_set.filter(
-                        group='SAME', tag__contains='2', artist__contains='TRAINING')
+                        group='SAME', tag__contains='2', artist__contains='Training')
                 elif json_data["group"] == 'C1':
                     sections = session.playlist.section_set.filter(
-                        group='CROSSED', tag__contains='1', artist__contains='TRAINING')
+                        group='CROSSED', tag__contains='1', artist__contains='Training')
                 elif json_data["group"] == 'C2':
                     sections = session.playlist.section_set.filter(
-                        group='CROSSED', tag__contains='2', artist__contains='TRAINING')
+                        group='CROSSED', tag__contains='2', artist__contains='Training')
                 # Generate randomized sequence for the testing phase
                 section_sequence = []
                 # Add 10 x 2 training stimuli
@@ -215,24 +208,24 @@ class Categorization(Base):
                 # Retrieve test & training stimuli for the assigned group
                 if json_data["group"] == 'S1':
                     training_sections = session.playlist.section_set.filter(
-                        group='SAME', tag__contains='1', artist__contains='TRAINING')
+                        group='SAME', tag__contains='1', artist__contains='Training')
                     test_sections = session.playlist.section_set.filter(
-                        group='SAME', tag__contains='1').exclude(artist__contains='TRAINING')
+                        group='SAME', tag__contains='1').exclude(artist__contains='Training')
                 elif json_data["group"] == 'S2':
                     training_sections = session.playlist.section_set.filter(
-                        group='SAME', tag__contains='2', artist__contains='TRAINING')
+                        group='SAME', tag__contains='2', artist__contains='Training')
                     test_sections = session.playlist.section_set.filter(
-                        group='SAME', tag__contains='2').exclude(artist__contains='TRAINING')
+                        group='SAME', tag__contains='2').exclude(artist__contains='Training')
                 elif json_data["group"] == 'C1':
                     training_sections = session.playlist.section_set.filter(
-                        group='CROSSED', tag__contains='1', artist__contains='TRAINING')
+                        group='CROSSED', tag__contains='1', artist__contains='Training')
                     test_sections = session.playlist.section_set.filter(
-                        group='CROSSED', tag__contains='1').exclude(artist__contains='TRAINING')
+                        group='CROSSED', tag__contains='1').exclude(artist__contains='Training')
                 elif json_data["group"] == 'C2':
                     training_sections = session.playlist.section_set.filter(
-                        group='CROSSED', tag__contains='2', artist__contains='TRAINING')
+                        group='CROSSED', tag__contains='2', artist__contains='Training')
                     test_sections = session.playlist.section_set.filter(
-                        group='CROSSED', tag__contains='2').exclude(artist__contains='TRAINING')
+                        group='CROSSED', tag__contains='2').exclude(artist__contains='Training')
                 # Generate randomized sequence for the testing phase
                 section_sequence = []
                 # Add 10 x 2 training stimuli
