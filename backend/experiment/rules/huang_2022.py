@@ -174,7 +174,6 @@ class Huang2022(Base):
             # Create a score action.
             config = {'show_section': True, 'show_total_score': True}
             title = Huang2022.get_trial_title(session, next_round_number - 1)
-            print(title)
             score = Score(
                 session,
                 config=config,
