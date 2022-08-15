@@ -73,7 +73,7 @@ class RhythmExperimentSeries(Base):
             'link': '{}/{}'.format(settings.CORS_ORIGIN_WHITELIST[0], slug)
         }
         return Final(session,
-            title=_('Next experiment (%d to go!)' % (len(experiment_data) - experiment_number)),
+            title=_('Next experiment (%d to go!)') % (len(experiment_data) - experiment_number),
             button=button).action()
 
 
