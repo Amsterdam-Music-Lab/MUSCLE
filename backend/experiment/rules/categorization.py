@@ -55,7 +55,8 @@ class Categorization(Base):
                 return cls.next_trial_action(session) if rounds_passed == 0 else cls.get_trial_with_feedback(session)
             else:
                 # End of training?
-                score_avg = session.result_set.aggregate(Avg('score'))['score__avg']
+                score_avg = session.result_set.aggregate(Avg('score'))[
+                    'score__avg']
 
                 if score_avg > SCORE_AVG_MIN_TRAINING:
                     json_data['phase'] = "testing"
@@ -81,7 +82,8 @@ class Categorization(Base):
 
         elif json_data['phase'] == 'testing':
             if session.rounds_complete():
-                session.final_score = session.result_set.aggregate(Avg('score'))['score__avg']
+                session.final_score = session.result_set.aggregate(Avg('score'))[
+                    'score__avg']
                 session.finish()
                 session.save()
 
@@ -174,11 +176,9 @@ class Categorization(Base):
             # Generate randomized sequence for the testing phase
             section_sequence = []
             # Add 10 x 2 training stimuli
-            training_count = 0
-            for training_count in range(0, 10):
+            for _ in range(0, 10):
                 section_sequence.append(sections[0].id)
                 section_sequence.append(sections[1].id)
-                training_count += 1
             random.shuffle(section_sequence)
             json_data['sequence'] = section_sequence
 
@@ -207,28 +207,24 @@ class Categorization(Base):
             # Generate randomized sequence for the testing phase
             section_sequence = []
             # Add 10 x 2 training stimuli
-            training_count = 0
-            for training_count in range(0, 10):
+            for _ in range(0, 10):
                 section_sequence.append(training_sections[0].id)
                 section_sequence.append(training_sections[1].id)
-                training_count += 1
             # add 5 x 10 test stimuli
-            testing_count = 0
             length = len(test_sections)
-            for testing_count in range(0, 5):
+            for _ in range(0, 5):
                 for stimulus in range(length):
                     section_sequence.append(test_sections[stimulus].id)
-                testing_count += 1
             random.shuffle(section_sequence)
             # Randomly choose 2 x 5 training stimuli for feedback
             sequence_length = len(section_sequence)
             sequence_a = []
             sequence_b = []
-            for stimulus in range(sequence_length):
+            for stimulus in range(sequence_length-1):
                 if section_sequence[stimulus] == training_sections[0].id:
-                    sequence_a.append(stimulus)
+                    sequence_a.append(stimulus+1)
                 elif section_sequence[stimulus] == training_sections[1].id:
-                    sequence_b.append(stimulus)
+                    sequence_b.append(stimulus+1)
             random.shuffle(sequence_a)
             random.shuffle(sequence_b)
             feedback_sequence = sequence_a[0:5] + sequence_b[0:5]
@@ -239,7 +235,6 @@ class Categorization(Base):
         session.save()
 
         return json_data
-
 
     @classmethod
     def get_feedback(cls, session):
@@ -284,7 +279,8 @@ class Categorization(Base):
             expected_response = 'B'
         result_pk = cls.prepare_result(session, section, expected_response)
         choices = json_data["choices"]
-        trial = TwoAlternativeForced(section, choices, result_pk, title=cls.get_title(session))
+        trial = TwoAlternativeForced(
+            section, choices, result_pk, title=cls.get_title(session))
         trial.config['listen_first'] = True
         trial.config['auto_advance'] = True
         trial.config['auto_advance_timer'] = 3000
@@ -308,6 +304,7 @@ class Categorization(Base):
     def get_title(cls, session):
         json_data = session.load_json_data()
         return _('Round {} / {}').format(session.rounds_passed(), len(json_data['sequence']))
+
 
 age_question = Question(
     key='age',
