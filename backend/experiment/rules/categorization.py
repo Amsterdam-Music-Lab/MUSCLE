@@ -250,7 +250,7 @@ class Categorization(Base):
         else:
             pass  # throw error
 
-        return Score(session, icon=icon, timer=3, title=cls.get_title(session)).action()
+        return Score(session, icon=icon, timer=1.5, title=cls.get_title(session)).action()
 
     @classmethod
     def get_trial_with_feedback(cls, session):
