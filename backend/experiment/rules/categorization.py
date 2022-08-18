@@ -55,8 +55,7 @@ class Categorization(Base):
                 return cls.next_trial_action(session) if rounds_passed == 0 else cls.get_trial_with_feedback(session)
             else:
                 # End of training?
-                score_avg = session.result_set.aggregate(Avg('score'))[
-                    'score__avg']
+                score_avg = session.result_set.aggregate(Avg('score'))['score__avg']
 
                 if score_avg > SCORE_AVG_MIN_TRAINING:
                     json_data['phase'] = "testing"
@@ -82,8 +81,7 @@ class Categorization(Base):
 
         elif json_data['phase'] == 'testing':
             if session.rounds_complete():
-                session.final_score = session.result_set.aggregate(Avg('score'))[
-                    'score__avg']
+                session.final_score = session.result_set.aggregate(Avg('score'))['score__avg']
                 session.finish()
                 session.save()
 
@@ -279,8 +277,7 @@ class Categorization(Base):
             expected_response = 'B'
         result_pk = cls.prepare_result(session, section, expected_response)
         choices = json_data["choices"]
-        trial = TwoAlternativeForced(
-            section, choices, result_pk, title=cls.get_title(session))
+        trial = TwoAlternativeForced(section, choices, result_pk, title=cls.get_title(session))
         trial.config['listen_first'] = True
         trial.config['auto_advance'] = True
         trial.config['auto_advance_timer'] = 3000
