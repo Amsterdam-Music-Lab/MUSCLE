@@ -16,6 +16,7 @@ from .gold_msi import GoldMSI
 from .listening_conditions import ListeningConditions
 from .huang_2022 import Huang2022
 from .categorization import Categorization
+from .musical_preferences import MusicalPreferences
 
 # Rules available to this application
 # If you create new Rules, add them to the list
@@ -39,5 +40,6 @@ EXPERIMENT_RULES = {
     Categorization.ID: Categorization,
     ToontjeHoger1Mozart.ID: ToontjeHoger1Mozart,
     ToontjeHoger3Plink.ID: ToontjeHoger3Plink,
-    ToontjeHoger6Relative.ID: ToontjeHoger6Relative
+    ToontjeHoger6Relative.ID: ToontjeHoger6Relative,
+    MusicalPreferences.ID: MusicalPreferences,
 }
