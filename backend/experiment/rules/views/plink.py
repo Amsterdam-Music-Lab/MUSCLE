@@ -16,7 +16,7 @@ class Plink(object):  # pylint: disable=too-few-public-methods
         - main_question: Main question
         - choices: Question choices
         - dont_know_label: Don't know button label
-        - submit_label: Submit button labvel
+        - submit_label: Submit button label
         - extra_questions: A list of additional questions
         - title: Page title
         - result_id: Result id
