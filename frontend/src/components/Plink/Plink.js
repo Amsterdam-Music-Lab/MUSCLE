@@ -1,10 +1,12 @@
 import React, { useState, useRef, useCallback } from "react";
 import Playback, { BUTTON } from "../Playback/Playback";
-import Question, { AUTOCOMPLETE } from "../Question/Question";
+import Question, { AUTOCOMPLETE, DROPDOWN } from "../Question/Question";
+import Explainer from "../Explainer/Explainer";
 import Button from "../Button/Button";
 import useSingleToArray from "../../hooks/useSingleToArray";
 
 const RECOGNIZE = "MAIN";
+const QUESTION_INTRO = "QUESTION_INTRO";
 const QUESTION = "QUESTION";
 
 const defaultPlayConfig = {
@@ -13,21 +15,22 @@ const defaultPlayConfig = {
 
 // Plink is an experiment view, with two stages:
 // - RECOGNIZE: Play audio, ask if participant recognizes the song
+// - QUESTION_INTRO: A short introduction to the extra questions, shown once
 // - QUESTION: Optional questions when then participant doesnt know the song
 const Plink = ({
-    loadState,
     section,
     mainQuestion,
     choices,
     submitLabel,
     dontKnowLabel,
     extraQuestions,
+    extraQuestionsIntro,
     resultId,
     onResult,
 }) => {
     // Component view
     const [view, setView] = useState(RECOGNIZE);
-    
+
     // Sections array required for Playback component
     const sections = useSingleToArray(section);
 
@@ -58,6 +61,14 @@ const Plink = ({
             submitData();
             return;
         }
+
+        // Optionally show the extra question intro text
+        if (showExtraQuestionsIntroOnce()){
+            setView(QUESTION_INTRO);
+            return;
+        }
+
+        // Show questions
         setMainQuestionValue("");
         setView(QUESTION);
     }, [submitData, extraQuestions]);
@@ -123,22 +134,29 @@ const Plink = ({
                         </div>
                     </div>
                 );
+            case QUESTION_INTRO:
+                return (
+                    <Explainer instruction={extraQuestionsIntro} button_label={submitLabel} onNext={startQuestions} />
+                )
             case QUESTION:
                 return (
                     <div
                         key={extraQuestions[questionIndex].key}
                         className="d-flex flex-column align-items-center"
                     >
+                        <Playback
+                            playerType={BUTTON}
+                            sections={sections}
+                        />
                         <Question
-                            question={extraQuestions[questionIndex]}
+                            question={window.innerWidth > 500 ? extraQuestions[questionIndex] : Object.assign({}, extraQuestions[questionIndex], {"view": DROPDOWN})}
                             onChange={setQuestionValue}
                             id="sub"
-                            emphasizeTitle={true}
                         />
                         <Button
                             active={!!questionValue}
                             title={submitLabel}
-                            className="btn-primary mt-4"
+                            className="btn-primary mt-3"
                             onClick={nextQuestion}
                         />
                     </div>
@@ -150,5 +168,19 @@ const Plink = ({
 
     return <div className="aha__plink">{getView(view)}</div>;
 };
+
+
+// Retrieve if the extra questions intro should be shown
+// Also set the value so the intro only shows one time per session
+const showExtraQuestionsIntroOnce = ()=>{
+    const storageKey = 'aml_toontjehoger_plink_extra_question_intro'
+    const doShow = null === window.sessionStorage.getItem(storageKey);
+
+    if (doShow){
+        window.sessionStorage.setItem(storageKey, 'shown')
+    }
+
+    return doShow;
+}
 
 export default Plink;

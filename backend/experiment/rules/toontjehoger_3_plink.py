@@ -3,7 +3,7 @@ from django.conf import settings
 from django.utils.translation import gettext_lazy as _
 from django.template.loader import render_to_string
 from .views import Plink, Explainer, Step, Score, Final, StartSession, Playlist, Info
-from .views.form import RadiosQuestion, RadiosQuestion
+from .views.form import RadiosQuestion
 from .base import Base
 from os.path import join
 from .util.actions import combine_actions
@@ -82,7 +82,7 @@ class ToontjeHoger3Plink(Base):
             logger.error("Result without section")
             return ""
 
-        # Main question
+        # Option 1. Main question
         main_question = Plink.extract_main_question(data)
 
         if main_question:
@@ -91,18 +91,39 @@ class ToontjeHoger3Plink(Base):
 
             return "Helaas, je hoorde {} van {}".format(section.name, section.artist)
 
+        # Option 2. Extra questions
         extra_questions = Plink.extract_extra_questions(data)
-        if extra_questions:
-            # Section details
-            section_details = section.group.split(";")
-            time_period = section_details[0] if len(
-                section_details) >= 1 else "?"
-            emotion = section_details[1] if len(section_details) >= 2 else "?"
-            feedback = "Het nummer komt uit de {} en de emotie is {}.".format(
-                time_period, emotion)
-            return feedback
 
-        return ""
+        # No extra questions? Return just an empty string
+        if not extra_questions:
+            return ""
+
+        # Feedback prefix
+
+        # - All points
+        feedback_prefix = "Goedzo!"
+
+        # - Partial score or all questions wrong
+        only_half_score = cls.SCORE_EXTRA_CORRECT + cls.SCORE_MAIN_WRONG
+        all_wrong_score = 2 * cls.SCORE_MAIN_WRONG
+        print(last_result.score)
+        if last_result.score == all_wrong_score:
+            feedback_prefix = "Helaas!"
+        elif last_result.score == only_half_score:
+            feedback_prefix = "Deels goed!"
+
+        # Get section info
+        section_details = section.group.split(";")
+        time_period = section_details[0] if len(
+            section_details) >= 1 else "?"
+        emotion = section_details[1] if len(section_details) >= 2 else "?"
+
+        # Construct final feedback message
+        section_part = "Je hoorde {} van {}.".format(section.name, section.artist)
+        question_part = "Het nummer komt uit de {} en de emotie is {}.".format(
+            time_period, emotion)
+        feedback = "{} {} {}".format(feedback_prefix, section_part, question_part);
+        return feedback
 
     @classmethod
     def get_score(cls, session):
@@ -126,7 +147,7 @@ class ToontjeHoger3Plink(Base):
         for section in all_sections:
             label = section.song_label()
             choices[section.pk] = label
-        
+
         # Get section to recognize
         section = session.section_from_unused_song()
         if section == None:
@@ -150,6 +171,7 @@ class ToontjeHoger3Plink(Base):
             submit_label="Volgende",
             dont_know_label="Ik weet het niet",
             extra_questions=extra_questions,
+            extra_questions_intro="Verdien extra punten door enkele vragen te beantwoorden",
         ).action()
 
         return [plink]
