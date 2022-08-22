@@ -89,7 +89,7 @@ class ToontjeHoger3Plink(Base):
             if main_question == last_result.expected_response:
                 return "Je hoorde inderdaad {} van {}".format(section.name, section.artist)
 
-            return "Helaas, volgende keer beter"
+            return "Helaas, je hoorde {} van {}".format(section.name, section.artist)
 
         extra_questions = Plink.extract_extra_questions(data)
         if extra_questions:
@@ -127,14 +127,6 @@ class ToontjeHoger3Plink(Base):
             label = section.song_label()
             choices[section.pk] = label
         
-        # Add additional songs from static file
-        file = open(join(settings.BASE_DIR, 'experiment/static/toontjehoger/experiment3/extra-songs.txt'))
-        songs = file.read().splitlines()
-        for index, song in enumerate(songs):
-            label = section.song_label()
-            # Negative index for these songs to prevent overlap with sections
-            choices[-index] = song
-
         # Get section to recognize
         section = session.section_from_unused_song()
         if section == None:
