@@ -12,6 +12,9 @@ from .util.actions import combine_actions
 
 logger = logging.getLogger(__name__)
 
+IMAGE_URL1 = "/images/experiments/toontjehoger/mozart-effect1.webp"
+IMAGE_URL2 = "/images/experiments/toontjehoger/mozart-effect2.webp"
+
 
 class ToontjeHoger1Mozart(Base):
     ID = 'TOONTJE_HOGER_1_MOZART'
@@ -55,7 +58,7 @@ class ToontjeHoger1Mozart(Base):
         if rounds_passed == 0:
             round = cls.get_image_trial(session,
                                         section_group='1',
-                                        image_url="/images/experiments/toontjehoger/mozart-effect1.webp",
+                                        image_url=IMAGE_URL1,
                                         question="Welke vorm ontstaat er na het afknippen van de hoekjes?",
                                         expected_response='B'
                                         )
@@ -64,28 +67,49 @@ class ToontjeHoger1Mozart(Base):
 
         # Round 2
         if rounds_passed == 1:
+            answer_explainer = cls.get_answer_explainer(session)
             score = cls.get_score(session)
             round = cls.get_image_trial(session,
                                         section_group='2',
-                                        image_url="/images/experiments/toontjehoger/mozart-effect2.webp",
+                                        image_url=IMAGE_URL2,
                                         question="Welke vorm ontstaat er na het afknippen van het hoekje?",
                                         expected_response='B'
                                         )
-            return combine_actions(*score, *round)
+            return combine_actions(*answer_explainer, *score, *round)
 
         # Final
         return combine_actions(*cls.get_final_round(session))
 
     @classmethod
-    def get_score(cls, session):
-        # Feedback message
+    def get_answer_explainer(cls, session):
         last_result = session.last_result()
-        feedback = "Goed gedaan! Het juiste antwoord was inderdaad {}.".format(
-            last_result.expected_response) if last_result.score else "Helaas, antwoord {} is niet goed! Volgende keer beter".format(last_result.given_response)
 
+        correct_answer_given = last_result.score > 0
+
+        heading = "Goed gedaan!" if correct_answer_given else "Helaas!"
+
+        feedback_correct = "Het juiste antwoord was inderdaad {}.".format(
+            last_result.expected_response)
+        feedback_incorrect = "Antwoord {} is niet goed! Het juiste antwoord was {}".format(
+            last_result.given_response, last_result.expected_response)
+        feedback = feedback_correct if correct_answer_given else feedback_incorrect
+
+        body = '<div class="center"><div><img src="{}"></div><h4 style="margin-top: 15px;">{}</h4></div>'.format(
+            IMAGE_URL1, feedback)
+
+        # Return answer info view
+        info = Info(
+            body=body,
+            heading=heading,
+            button_label="Volgende",
+        ).action()
+        return [info]
+
+    @classmethod
+    def get_score(cls, session):
         # Return score view
         config = {'show_total_score': True}
-        score = Score(session, config=config, feedback=feedback).action()
+        score = Score(session, config=config).action()
         return [score]
 
     @classmethod
@@ -164,17 +188,20 @@ class ToontjeHoger1Mozart(Base):
         session.finish()
         session.save()
 
+        # Answer explainer
+        answer_explainer = cls.get_answer_explainer(session)
+
         # Score
         score = cls.get_score(session)
 
         # Final
         final_text = "Je hebt het uitstekend gedaan!" if session.final_score >= 2 * \
-            cls.SCORE_CORRECT else "Er is ruimte voor verbetering. Wellicht nog een poging wagen?"
+            cls.SCORE_CORRECT else "Dat bleek toch even lastig!"
         final = Final(
             session=session,
             final_text=final_text,
             rank=cls.rank(session),
-            button={'text': 'Volgende'}
+            button={'text': 'Wat hebben we getest?'}
         ).action()
 
         # Info page
@@ -187,4 +214,4 @@ class ToontjeHoger1Mozart(Base):
             button_link="https://www.amsterdammusiclab.nl"
         ).action()
 
-        return [*score, final, info]
+        return [*answer_explainer, *score, final, info]
