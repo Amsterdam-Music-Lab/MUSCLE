@@ -275,12 +275,12 @@ class ToontjeHoger3Plink(Base):
 
         # Final
         final_text = "Goed gedaan, jouw muziekherkenning is uitstekend!" if session.final_score >= 4 * \
-            cls.SCORE_MAIN_CORRECT else "Wellicht nog een poging wagen? Er is ruimte voor verbetering."
+            cls.SCORE_MAIN_CORRECT else "Dat bleek toch even lastig!"
         final = Final(
             session=session,
             final_text=final_text,
             rank=cls.rank(session),
-            button={'text': 'Volgende'}
+            button={'text': 'Wat hebben we getest?'}
         ).action()
 
         # Info page
