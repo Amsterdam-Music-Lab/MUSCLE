@@ -15,8 +15,8 @@ class ToontjeHoger3Plink(Base):
     ID = 'TOONTJE_HOGER_3_PLINK'
     TITLE = "Toontje Hoger"
     SCORE_MAIN_CORRECT = 50
-    SCORE_MAIN_WRONG = -10
-    SCORE_EXTRA_CORRECT = 15
+    SCORE_MAIN_WRONG = 0
+    SCORE_EXTRA_CORRECT = 20
     SCORE_EXTRA_WRONG = 0
 
     @classmethod
