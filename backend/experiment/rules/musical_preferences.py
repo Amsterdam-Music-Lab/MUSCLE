@@ -45,7 +45,7 @@ class MusicalPreferences(Base):
                 'unsure': '😕'
             }
         )
-        playback = Playback([section])
+        playback = Playback([section], play_config={'show_animation': True})
         form = Form([likert, know])
         view = Trial(
             playback=playback,
