@@ -21,23 +21,24 @@ const Score = ({
     const scoreValue = useRef(0);
 
     useEffect(() => {
+        const scoreStep = Math.max(
+            1,
+            Math.min(10, Math.ceil(Math.abs(scoreValue.current - score) / 4))
+        );
         const id = setTimeout(() => {
-            if (score !== scoreValue.current) {
-                if (scoreValue.current < score) {
-                    scoreValue.current += 1;
-                    setShowScore(scoreValue.current);
-                } 
-                if (scoreValue.current > score){
-                    scoreValue.current -= 1;
-                    setShowScore(scoreValue.current);
-                }
+            // Score are equal, stop
+            if (score === scoreValue.current) {
+                return;
             }
+            // Add / subtract score
+            scoreValue.current += Math.sign(score - scoreValue.current) * scoreStep;
+            setShowScore(scoreValue.current);
         }, 50);
 
         return () => {
             window.clearTimeout(id);
         };
-    }, [score,showScore]);
+    }, [score, showScore]);
 
     useEffect(() => {
         let id = -1;
@@ -103,9 +104,7 @@ const Score = ({
                 </div>
             )}
 
-            {feedback && (
-                <p className="feedback text-center">{feedback}</p>
-            )}
+            {feedback && <p className="feedback text-center">{feedback}</p>}
         </div>
     );
 };
