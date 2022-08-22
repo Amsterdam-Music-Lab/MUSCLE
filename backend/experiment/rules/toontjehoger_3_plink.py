@@ -7,6 +7,7 @@ from .views.form import RadiosQuestion
 from .base import Base
 from os.path import join
 from .util.actions import combine_actions
+from .util.strings import non_breaking
 
 logger = logging.getLogger(__name__)
 
@@ -87,9 +88,9 @@ class ToontjeHoger3Plink(Base):
 
         if main_question:
             if main_question == last_result.expected_response:
-                return "Je hoorde inderdaad {} van {}".format(section.name, section.artist)
+                return "Je hoorde inderdaad {} van {}".format(non_breaking(section.name), non_breaking(section.artist))
 
-            return "Helaas, je hoorde {} van {}".format(section.name, section.artist)
+            return "Helaas, je hoorde {} van {}".format(non_breaking(section.name), non_breaking(section.artist))
 
         # Option 2. Extra questions
         extra_questions = Plink.extract_extra_questions(data)
@@ -116,13 +117,17 @@ class ToontjeHoger3Plink(Base):
         section_details = section.group.split(";")
         time_period = section_details[0] if len(
             section_details) >= 1 else "?"
+        time_period = time_period.replace("s", "'s")
         emotion = section_details[1] if len(section_details) >= 2 else "?"
 
         # Construct final feedback message
-        section_part = "Je hoorde {} van {}.".format(section.name, section.artist)
+        
+        section_part = "Je hoorde {} van {}.".format(non_breaking(section.name), non_breaking(section.artist))
         question_part = "Het nummer komt uit de {} en de emotie is {}.".format(
             time_period, emotion)
-        feedback = "{} {} {}".format(feedback_prefix, section_part, question_part);
+        
+        # The \n results in a linebreak
+        feedback = "{} {} \n {}".format(feedback_prefix, section_part, question_part);
         return feedback
 
     @classmethod

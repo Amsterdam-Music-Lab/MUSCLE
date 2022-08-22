@@ -6,6 +6,8 @@
         border-top: 1px solid rgba(white, 0.25);
         padding-bottom: 10px;
         padding-top: 13px;
+        white-space: pre-line;
+
         h4 {
             text-transform: uppercase;
             color: $gray;
@@ -14,6 +16,7 @@
             font-size: 13px;
             letter-spacing: 2px;
         }
+        
         p {
             margin-bottom: 0;
         }
