@@ -164,7 +164,7 @@ class ToontjeHoger3Plink(Base):
         periods = ["60's", "70's", "80's", "90's", "00's", "10's", "20's"]
         period_choices = {}
         for period in periods:
-            period_choices[period] = period
+            period_choices[period.replace("'","")] = period
 
         question = RadiosQuestion(
             question="Wanneer is het nummer uitgebracht?",
