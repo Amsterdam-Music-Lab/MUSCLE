@@ -20,7 +20,7 @@ let config = {
 
 describe('Trial', () => {
 
-    it("can render itself", () => { 
+    it("can render itself", () => {
         render(<Trial
             feedback_form={feedback_form}
             config={config}
@@ -29,7 +29,7 @@ describe('Trial', () => {
     });
 
     it("can set the class of the trial element", () => {
-        config.style = 'boolean'
+        config.style = 'boolean';
         render(<Trial
             feedback_form={feedback_form}
             config={config}
