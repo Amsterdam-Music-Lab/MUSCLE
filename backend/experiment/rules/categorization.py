@@ -281,7 +281,9 @@ class Categorization(Base):
         trial.config['listen_first'] = True
         trial.config['auto_advance'] = True
         trial.config['auto_advance_timer'] = 3000
+        trial.config['style'] = json_data["button_order"]
         #trial.config['show_continue_button'] = True
+        trial.config['time_pass_break'] =  False
         return trial.action()
 
     @staticmethod
