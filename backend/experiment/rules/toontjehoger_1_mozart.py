@@ -12,9 +12,10 @@ from .util.actions import combine_actions
 
 logger = logging.getLogger(__name__)
 
-IMAGE_URL1 = "/images/experiments/toontjehoger/mozart-effect1.webp"
-IMAGE_URL2 = "/images/experiments/toontjehoger/mozart-effect2.webp"
-
+QUESTION_URL1 = "/images/experiments/toontjehoger/mozart-effect1.webp"
+QUESTION_URL2 = "/images/experiments/toontjehoger/mozart-effect2.webp"
+ANSWER_URL1 = "/images/experiments/toontjehoger/mozart-effect1-answer.webp"
+ANSWER_URL2 = "/images/experiments/toontjehoger/mozart-effect2-answer.webp"
 
 class ToontjeHoger1Mozart(Base):
     ID = 'TOONTJE_HOGER_1_MOZART'
@@ -58,7 +59,7 @@ class ToontjeHoger1Mozart(Base):
         if rounds_passed == 0:
             round = cls.get_image_trial(session,
                                         section_group='1',
-                                        image_url=IMAGE_URL1,
+                                        image_url=QUESTION_URL1,
                                         question="Welke vorm ontstaat er na het afknippen van de hoekjes?",
                                         expected_response='B'
                                         )
@@ -67,11 +68,11 @@ class ToontjeHoger1Mozart(Base):
 
         # Round 2
         if rounds_passed == 1:
-            answer_explainer = cls.get_answer_explainer(session)
+            answer_explainer = cls.get_answer_explainer(session, round=1)
             score = cls.get_score(session)
             round = cls.get_image_trial(session,
                                         section_group='2',
-                                        image_url=IMAGE_URL2,
+                                        image_url=QUESTION_URL2,
                                         question="Welke vorm ontstaat er na het afknippen van het hoekje?",
                                         expected_response='B'
                                         )
@@ -81,7 +82,7 @@ class ToontjeHoger1Mozart(Base):
         return combine_actions(*cls.get_final_round(session))
 
     @classmethod
-    def get_answer_explainer(cls, session):
+    def get_answer_explainer(cls, session, round):
         last_result = session.last_result()
 
         correct_answer_given = last_result.score > 0
@@ -94,8 +95,9 @@ class ToontjeHoger1Mozart(Base):
             last_result.given_response, last_result.expected_response)
         feedback = feedback_correct if correct_answer_given else feedback_incorrect
 
+        image_url = ANSWER_URL1 if round == 1 else ANSWER_URL2
         body = '<div class="center"><div><img src="{}"></div><h4 style="margin-top: 15px;">{}</h4></div>'.format(
-            IMAGE_URL1, feedback)
+            image_url, feedback)
 
         # Return answer info view
         info = Info(
@@ -189,7 +191,7 @@ class ToontjeHoger1Mozart(Base):
         session.save()
 
         # Answer explainer
-        answer_explainer = cls.get_answer_explainer(session)
+        answer_explainer = cls.get_answer_explainer(session, round=2)
 
         # Score
         score = cls.get_score(session)
