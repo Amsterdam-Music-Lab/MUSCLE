@@ -122,12 +122,12 @@ class ToontjeHoger3Plink(Base):
         emotion = section_details[1] if len(section_details) >= 2 else "?"
 
         # Construct final feedback message
-        section_part = "Je hoorde {} van {}.".format(non_breaking(section.name), non_breaking(section.artist))
         question_part = "Het nummer komt uit de {} en de emotie is {}.".format(
             time_period, emotion)
+        section_part = "Je hoorde {} van {}.".format(non_breaking(section.name), non_breaking(section.artist))
         
         # The \n results in a linebreak
-        feedback = "{} {} \n {}".format(feedback_prefix, section_part, question_part);
+        feedback = "{} {} \n {}".format(feedback_prefix, question_part, section_part);
         return feedback
 
     @classmethod
