@@ -11,6 +11,10 @@
     .aha__info-header {
         padding: 15px;
         margin-bottom: 0;
+
+        @media (max-width: 520px) {
+            padding-top: 0;
+        }
     }
 
     .info-body {
