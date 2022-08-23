@@ -15,9 +15,10 @@ logger = logging.getLogger(__name__)
 class ToontjeHoger3Plink(Base):
     ID = 'TOONTJE_HOGER_3_PLINK'
     TITLE = "Toontje Hoger"
-    SCORE_MAIN_CORRECT = 50
+    SCORE_MAIN_CORRECT = 4
     SCORE_MAIN_WRONG = 0
-    SCORE_EXTRA_CORRECT = 20
+    SCORE_EXTRA_1_CORRECT = 2
+    SCORE_EXTRA_2_CORRECT = 1
     SCORE_EXTRA_WRONG = 0
 
     @classmethod
@@ -26,7 +27,7 @@ class ToontjeHoger3Plink(Base):
 
         # 1. Explain game.
         explainer = Explainer(
-            instruction="Uitleg",
+            instruction="Muziekherkenning",
             steps=[
                 Step("Luister naar een heel kort muziekfragment."),
                 Step("Ken je het nummer? Noem de juiste artiest en titel!"),
@@ -60,8 +61,8 @@ class ToontjeHoger3Plink(Base):
             # No combine_actions because of inconsistent next_round array wrapping in first round
             return cls.get_plink_round(session)
 
-        # Round 2-6
-        if rounds_passed <= 5:
+        # Round 2-experiments.rounds
+        if rounds_passed < session.experiment.rounds:
             return combine_actions(*cls.get_score(session), *cls.get_plink_round(session))
 
         # Final
@@ -88,9 +89,9 @@ class ToontjeHoger3Plink(Base):
 
         if main_question:
             if main_question == last_result.expected_response:
-                return "Je hoorde inderdaad {} van {}".format(non_breaking(section.name), non_breaking(section.artist))
+                return "Goedzo! Je hoorde inderdaad {} van {}.".format(non_breaking(section.name), non_breaking(section.artist))
 
-            return "Helaas, je hoorde {} van {}".format(non_breaking(section.name), non_breaking(section.artist))
+            return "Helaas! Je hoorde {} van {}.".format(non_breaking(section.name), non_breaking(section.artist))
 
         # Option 2. Extra questions
         extra_questions = Plink.extract_extra_questions(data)
@@ -105,12 +106,12 @@ class ToontjeHoger3Plink(Base):
         feedback_prefix = "Goedzo!"
 
         # - Partial score or all questions wrong
-        only_half_score = cls.SCORE_EXTRA_CORRECT + cls.SCORE_MAIN_WRONG
-        all_wrong_score = 2 * cls.SCORE_MAIN_WRONG
-        print(last_result.score)
-        if last_result.score == all_wrong_score:
+        all_wrong_score = last_result.score == 2 * cls.SCORE_EXTRA_WRONG
+        only_half_score = last_result.score < cls.SCORE_EXTRA_1_CORRECT + cls.SCORE_EXTRA_2_CORRECT if not all_wrong_score else False
+
+        if all_wrong_score:
             feedback_prefix = "Helaas!"
-        elif last_result.score == only_half_score:
+        elif only_half_score:
             feedback_prefix = "Deels goed!"
 
         # Get section info
@@ -121,7 +122,6 @@ class ToontjeHoger3Plink(Base):
         emotion = section_details[1] if len(section_details) >= 2 else "?"
 
         # Construct final feedback message
-        
         section_part = "Je hoorde {} van {}.".format(non_breaking(section.name), non_breaking(section.artist))
         question_part = "Het nummer komt uit de {} en de emotie is {}.".format(
             time_period, emotion)
@@ -162,6 +162,18 @@ class ToontjeHoger3Plink(Base):
         result_pk = cls.prepare_result(
             session, section=section, expected_response=expected_response)
 
+        # Extra questions intro
+        # --------------------
+        extra_questions_intro = Explainer(
+            instruction="Tussenronde",
+            steps=[
+                Step("Jammer dat je de artiest en titel van dit nummer niet weet!"),
+                Step("Verdien extra punten door twee extra vragen over het nummer te beantwoorden."),                    
+            ],
+            button_label="Start"
+
+        ).action(step_numbers=False)
+
         # Plink round
         # --------------------
         extra_questions = [cls.get_optional_question1(
@@ -175,8 +187,8 @@ class ToontjeHoger3Plink(Base):
             choices=choices,
             submit_label="Volgende",
             dont_know_label="Ik weet het niet",
-            extra_questions=extra_questions,
-            extra_questions_intro="Verdien extra punten door enkele vragen te beantwoorden",
+            extra_questions=extra_questions,            
+            extra_questions_intro=extra_questions_intro
         ).action()
 
         return [plink]
@@ -258,8 +270,9 @@ class ToontjeHoger3Plink(Base):
 
             # Check if the given answers
             # e.g section.group = 60s;vrolijk (time_period;emotion)
-            for answer in extra_questions:
-                score += cls.SCORE_EXTRA_CORRECT if answer and (
+            for index, answer in enumerate(extra_questions):
+                points_correct = cls.SCORE_EXTRA_1_CORRECT if index == 0 else cls.SCORE_EXTRA_2_CORRECT 
+                score += points_correct if answer and (
                     answer in section.group) else cls.SCORE_EXTRA_WRONG
 
             return score

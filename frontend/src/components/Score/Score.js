@@ -21,11 +21,14 @@ const Score = ({
     const scoreValue = useRef(0);
 
     useEffect(() => {
-        const scoreStep = Math.max(
-            1,
-            Math.min(10, Math.ceil(Math.abs(scoreValue.current - score) / 4))
-        );
+        
         const id = setTimeout(() => {
+            // Score step
+            const scoreStep = Math.max(
+                1,
+                Math.min(10, Math.ceil(Math.abs(scoreValue.current - score) / 10))
+            );
+
             // Score are equal, stop
             if (score === scoreValue.current) {
                 return;

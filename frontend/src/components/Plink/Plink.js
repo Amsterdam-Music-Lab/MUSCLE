@@ -136,7 +136,7 @@ const Plink = ({
                 );
             case QUESTION_INTRO:
                 return (
-                    <Explainer instruction={extraQuestionsIntro} button_label={submitLabel} onNext={startQuestions} />
+                    <Explainer {...extraQuestionsIntro} onNext={startQuestions} />
                 )
             case QUESTION:
                 return (

@@ -10,7 +10,7 @@ class Plink(object):  # pylint: disable=too-few-public-methods
 
     ID = 'PLINK'
 
-    def __init__(self, section, main_question, choices, submit_label, dont_know_label, extra_questions=[], extra_questions_intro='', title='', result_id=''):
+    def __init__(self, section, main_question, choices, submit_label, dont_know_label, extra_questions=[], extra_questions_intro=None, title='', result_id=''):
         """
         - section: A section
         - main_question: Main question
@@ -18,7 +18,7 @@ class Plink(object):  # pylint: disable=too-few-public-methods
         - dont_know_label: Don't know button label
         - submit_label: Submit button label
         - extra_questions: A list of additional questions
-        - extra_questions_intro: Intro text shown before extra questions
+        - extra_questions_intro: Explainer view that explains the extra questions
         - title: Page title
         - result_id: Result id
         """
