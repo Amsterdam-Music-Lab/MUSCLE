@@ -29,6 +29,18 @@ const Playback = ({
     const lastPlayerIndex = useRef(-1);
     const activeAudioEndedListener = useRef(null);
 
+    // Keep track of which player has played, in a an array of player indices
+    const [hasPlayed, setHasPlayed] = useState([]);
+    const prevPlayerIndex = useRef(-1);
+
+    useEffect(()=>{
+        const index = prevPlayerIndex.current;
+        if (index !== -1){
+            setHasPlayed(hasPlayed => index === -1 || hasPlayed.includes(index) ? hasPlayed : [...hasPlayed, index]);
+        }
+        prevPlayerIndex.current = parseInt(playerIndex);;
+    },[playerIndex])
+
     // Preload first section
     useEffect(() => {
         return audio.loadUntilAvailable(MEDIA_ROOT + sections[0].url, () => {});
@@ -159,9 +171,9 @@ const Playback = ({
             case AUTOPLAY:
                 return <AutoPlay {...attrs} onPreloadReady={onPreloadReady} />;
             case BUTTON:
-                return <PlayButton {...attrs} isPlaying={playerIndex > -1} />;
+                return <PlayButton {...attrs} isPlaying={playerIndex > -1} disabled={playConfig.play_once && hasPlayed.includes(0)}/>;
             case MULTIPLAYER:
-                return <MultiPlayer {...attrs} />;
+                return <MultiPlayer {...attrs} disabledPlayers={playConfig.play_once ? hasPlayed : undefined}/>;
             default:
                 return <div> Unknown player view {view} </div>;
         }

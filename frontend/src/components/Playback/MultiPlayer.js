@@ -7,7 +7,7 @@ export const LABEL_NUMERIC = 'NUMERIC';
 export const LABEL_ALPHABETIC = 'ALPHABETIC';
 export const LABEL_ROMAN = 'ROMAN';
 
-const MultiPlayer = ({playSection, sections, playerIndex, playConfig}) => {
+const MultiPlayer = ({playSection, sections, playerIndex, playConfig, disabledPlayers }) => {
     return (
         <div className={classNames("aha__multiplayer d-flex justify-content-around", "player-count-" + sections.length)}>
         {Object.keys(sections).map((index) => (
@@ -16,6 +16,7 @@ const MultiPlayer = ({playSection, sections, playerIndex, playConfig}) => {
                 onClick={() => {
                     playSection(index);
                 }}
+                disabled={Array.isArray(disabledPlayers) && disabledPlayers.includes(parseInt(index))}
                 label={playConfig.label_style ? getLabel(index, playConfig.label_style) : ''}
                 playing={playerIndex === index}
             />

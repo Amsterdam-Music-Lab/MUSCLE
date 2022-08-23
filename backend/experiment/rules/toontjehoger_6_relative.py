@@ -25,9 +25,9 @@ class ToontjeHoger6Relative(Base):
 
         # 1. Explain game.
         explainer = Explainer(
-            instruction="Uitleg",
+            instruction="Relatief Gehoor",
             steps=[
-                Step("In deze minigame kan je testen hoe goed jouw relatieve gehoor is! Relatief gehoor is het vermogen om verschil of gelijkenis tussen tonen te kunnen herkennen."),
+                Step("In deze minigame kan je testen hoe goed jouw relatieve gehoor is! Dat is het vermogen om verschil of gelijkenis tussen tonen te kunnen herkennen."),
                 # Empty step adds some spacing between steps to improve readability
                 Step(""),
                 Step("Je kunt dadelijk twee melodieën luisteren.", number=1),
@@ -113,6 +113,7 @@ class ToontjeHoger6Relative(Base):
         # Player
         play_config = {
             'label_style': 'ALPHABETIC',
+            'play_once': True,
         }
         playback = Playback(
             [section1, section2], player_type=Playback.TYPE_MULTIPLAYER, play_config=play_config)

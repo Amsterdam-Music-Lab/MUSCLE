@@ -14,6 +14,7 @@ class Playback(object):
             - auto_play: whether sound will start automatically
             - show_animation: whether to show an animation during playback 
             - (multiplayer) label_style: player index number style: NUMERIC, ALPHABETIC, ROMAN or empty (no label)
+            - play_once: the sound can only be played once
     '''
 
     TYPE_AUTOPLAY='AUTOPLAY'
@@ -29,7 +30,8 @@ class Playback(object):
             'ready_time': 0,
             'playhead': 0,
             'show_animation': False,
-            'mute': False
+            'mute': False,
+            'play_once': False,
         }
         if play_config:
             self.play_config.update(play_config)
