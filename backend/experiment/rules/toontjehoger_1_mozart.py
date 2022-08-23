@@ -9,6 +9,7 @@ from .views.playback import Playback
 from .base import Base
 from os.path import join
 from .util.actions import combine_actions
+from .util.strings import non_breaking
 
 logger = logging.getLogger(__name__)
 
@@ -109,9 +110,14 @@ class ToontjeHoger1Mozart(Base):
 
     @classmethod
     def get_score(cls, session):
+        # Feedback message
+        last_result = session.last_result()
+        section = last_result.section
+        feedback = "Je hoorde {} van {}.".format(non_breaking(section.name), non_breaking(section.artist)) if section else ""
+        
         # Return score view
         config = {'show_total_score': True}
-        score = Score(session, config=config).action()
+        score = Score(session, config=config, feedback=feedback).action()
         return [score]
 
     @classmethod
