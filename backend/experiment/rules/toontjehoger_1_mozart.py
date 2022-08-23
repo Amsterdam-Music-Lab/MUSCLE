@@ -31,10 +31,11 @@ class ToontjeHoger1Mozart(Base):
 
         # 1. Explain game.
         explainer = Explainer(
-            instruction="Uitleg",
+            instruction="Het Mozart effect",
             steps=[
-                Step("Je krijgt zo eerst een muziekfragment van 20 seconden te horen."),
-                Step("Hierna verschijnt een kort spelletje."),
+                Step("Je krijgt een muziekfragment van 20 seconden te horen."),
+                Step("Hierna moet je een puzzel oplossen."),
+                Step("Lukt het dankzij de muziek het juiste antwoord te vinden?"),
             ],
             button_label="Start"
         ).action(step_numbers=True)
