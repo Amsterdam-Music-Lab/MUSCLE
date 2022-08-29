@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-08-29 10:33+0200\n"
+"POT-Creation-Date: 2022-08-29 11:25+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -603,7 +603,7 @@ msgstr ""
 #: experiment/rules/rhythm_experiment_series.py:72
 #: experiment/rules/speech2song.py:89 experiment/rules/speech2song.py:99
 #: experiment/rules/speech2song.py:125 experiment/rules/util/actions.py:31
-#: experiment/rules/util/practice.py:99 experiment/rules/views/form.py:109
+#: experiment/rules/util/practice.py:99 experiment/rules/views/form.py:110
 #: experiment/rules/views/question.py:14 experiment/rules/views/question.py:35
 #: experiment/rules/views/question.py:54 experiment/rules/views/question.py:71
 #: experiment/rules/views/question.py:89 experiment/rules/views/question.py:107
@@ -823,6 +823,7 @@ msgid "trial %(index)d of %(total)d"
 msgstr "test %(index)d van %(total)d"
 
 #: experiment/rules/rhythm_discrimination.py:196
+#, python-format
 msgid "Rhythm discrimination: %s"
 msgstr "Ritmeverschillen: %s"
 
@@ -1721,47 +1722,51 @@ msgstr ""
 msgid "All experiments"
 msgstr ""
 
-#: experiment/rules/views/form.py:83 experiment/rules/views/question.py:148
+#: experiment/rules/views/form.py:78 experiment/rules/views/question.py:142
+msgid "How much do you agree or disagree?"
+msgstr ""
+
+#: experiment/rules/views/form.py:84 experiment/rules/views/question.py:148
 #: experiment/rules/views/question.py:171
 msgid "Completely Disagree"
 msgstr "Helemaal mee oneens"
 
-#: experiment/rules/views/form.py:84 experiment/rules/views/form.py:93
+#: experiment/rules/views/form.py:85 experiment/rules/views/form.py:94
 #: experiment/rules/views/question.py:149
 #: experiment/rules/views/question.py:172
 msgid "Strongly Disagree"
 msgstr "Zeer mee oneens"
 
-#: experiment/rules/views/form.py:85 experiment/rules/views/form.py:94
+#: experiment/rules/views/form.py:86 experiment/rules/views/form.py:95
 #: experiment/rules/views/question.py:150
 #: experiment/rules/views/question.py:173
 msgid "Disagree"
 msgstr "Mee oneens"
 
-#: experiment/rules/views/form.py:86 experiment/rules/views/form.py:95
+#: experiment/rules/views/form.py:87 experiment/rules/views/form.py:96
 #: experiment/rules/views/question.py:151
 #: experiment/rules/views/question.py:174
 msgid "Neither Agree nor Disagree"
 msgstr "Niet mee eens of oneens"
 
-#: experiment/rules/views/form.py:87 experiment/rules/views/form.py:96
+#: experiment/rules/views/form.py:88 experiment/rules/views/form.py:97
 #: experiment/rules/views/question.py:152
 #: experiment/rules/views/question.py:175
 msgid "Agree"
 msgstr "Mee eens"
 
-#: experiment/rules/views/form.py:88 experiment/rules/views/form.py:97
+#: experiment/rules/views/form.py:89 experiment/rules/views/form.py:98
 #: experiment/rules/views/question.py:153
 #: experiment/rules/views/question.py:176
 msgid "Strongly Agree"
 msgstr "Zeer mee eens"
 
-#: experiment/rules/views/form.py:89 experiment/rules/views/question.py:154
+#: experiment/rules/views/form.py:90 experiment/rules/views/question.py:154
 #: experiment/rules/views/question.py:177
 msgid "Completely Agree"
 msgstr "Helemaal mee eens"
 
-#: experiment/rules/views/form.py:109 experiment/rules/views/question.py:14
+#: experiment/rules/views/form.py:110 experiment/rules/views/question.py:14
 #: experiment/rules/views/question.py:35 experiment/rules/views/question.py:54
 #: experiment/rules/views/question.py:71 experiment/rules/views/question.py:89
 #: experiment/rules/views/question.py:107
@@ -1775,10 +1780,6 @@ msgstr ""
 
 #: experiment/rules/views/playlist.py:18
 msgid "Select a Playlist"
-msgstr ""
-
-#: experiment/rules/views/question.py:142
-msgid "How much do you agree or disagree?"
 msgstr ""
 
 #: experiment/rules/views/question.py:165

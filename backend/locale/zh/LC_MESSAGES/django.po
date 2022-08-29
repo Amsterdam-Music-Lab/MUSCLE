@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-08-15 15:30+0200\n"
+"POT-Creation-Date: 2022-08-29 13:57+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -492,7 +492,7 @@ msgid ""
 "a different spot during the silence?"
 msgstr "当您再次听到声音时，您需要判断出此音乐与您脑海中的音乐是否同步。"
 
-#: experiment/rules/huang_2022.py:33 experiment/rules/huang_2022.py:211
+#: experiment/rules/huang_2022.py:33 experiment/rules/huang_2022.py:210
 msgid "Let's go!"
 msgstr "开始吧！"
 
@@ -546,12 +546,12 @@ msgstr ""
 "通过复制黏贴实验链接到浏览器参与实验。您可以使用市面上目前的任何一种浏览器，"
 "如Safari、火狐、360等等。"
 
-#: experiment/rules/huang_2022.py:50 experiment/rules/huang_2022.py:256
+#: experiment/rules/huang_2022.py:50 experiment/rules/huang_2022.py:255
 #: experiment/rules/rhythm_experiment_series.py:36
 #: experiment/rules/rhythm_experiment_series.py:72
 #: experiment/rules/speech2song.py:89 experiment/rules/speech2song.py:99
 #: experiment/rules/speech2song.py:125 experiment/rules/util/actions.py:31
-#: experiment/rules/util/practice.py:99 experiment/rules/views/form.py:109
+#: experiment/rules/util/practice.py:99 experiment/rules/views/form.py:110
 #: experiment/rules/views/question.py:14 experiment/rules/views/question.py:35
 #: experiment/rules/views/question.py:54 experiment/rules/views/question.py:71
 #: experiment/rules/views/question.py:89 experiment/rules/views/question.py:107
@@ -563,27 +563,36 @@ msgstr ""
 msgid "Continue"
 msgstr "继续"
 
-#: experiment/rules/huang_2022.py:135
+#: experiment/rules/huang_2022.py:134
 msgid "Questionnaire"
 msgstr "问卷调查"
 
-#: experiment/rules/huang_2022.py:208
+#: experiment/rules/huang_2022.py:207
 msgid ""
 "Please answer some questions                     on your musical (Goldsmiths-"
 "MSI) and demographic background"
 msgstr "接下来是《金史密斯音乐素养》水平测试与人口统计特征问卷。"
 
-#: experiment/rules/huang_2022.py:251
+#: experiment/rules/huang_2022.py:250
 msgid "Bonus Rounds"
 msgstr "奖励环节"
 
-#: experiment/rules/huang_2022.py:253
+#: experiment/rules/huang_2022.py:252
 msgid "Listen carefully to the music."
 msgstr "请仔细地听音乐。"
 
-#: experiment/rules/huang_2022.py:254
+#: experiment/rules/huang_2022.py:253
 msgid "Did you hear the same song during previous rounds?"
 msgstr "您是否在之前的音乐识别环节里听到过同一首歌曲？"
+
+#: experiment/rules/huang_2022.py:289
+#: experiment/rules/listening_conditions.py:28
+#: experiment/rules/listening_conditions.py:41
+#: experiment/rules/listening_conditions.py:54
+#: experiment/rules/listening_conditions.py:68
+#: experiment/rules/views/form.py:36
+msgid "NO"
+msgstr "否"
 
 #: experiment/rules/huang_2022.py:290
 #: experiment/rules/listening_conditions.py:26
@@ -594,41 +603,32 @@ msgstr "您是否在之前的音乐识别环节里听到过同一首歌曲？"
 msgid "YES"
 msgstr "是"
 
-#: experiment/rules/huang_2022.py:291
-#: experiment/rules/listening_conditions.py:28
-#: experiment/rules/listening_conditions.py:41
-#: experiment/rules/listening_conditions.py:54
-#: experiment/rules/listening_conditions.py:68
-#: experiment/rules/views/form.py:36
-msgid "NO"
-msgstr "否"
-
-#: experiment/rules/huang_2022.py:293
+#: experiment/rules/huang_2022.py:292
 msgid "Did you hear this song in previous rounds?"
 msgstr "您是否在之前的识别环节里听到过这首歌曲？"
 
-#: experiment/rules/huang_2022.py:307
+#: experiment/rules/huang_2022.py:306
 #, python-format
 msgid "Round %(number)d / %(total)d"
 msgstr "%(number)d / %(total)d轮"
 
-#: experiment/rules/huang_2022.py:333
+#: experiment/rules/huang_2022.py:332
 msgid "Thank you for your contribution to science!"
 msgstr "感谢您的参与以及对科学的贡献！"
 
-#: experiment/rules/huang_2022.py:335
+#: experiment/rules/huang_2022.py:334
 msgid "Well done!"
 msgstr "太棒了！"
 
-#: experiment/rules/huang_2022.py:335
+#: experiment/rules/huang_2022.py:334
 msgid "Too bad!"
 msgstr "有点糟哦！"
 
-#: experiment/rules/huang_2022.py:337
+#: experiment/rules/huang_2022.py:336
 msgid "You did not recognise any songs at first."
 msgstr "您起初并没有识别出任何歌曲。"
 
-#: experiment/rules/huang_2022.py:339
+#: experiment/rules/huang_2022.py:338
 #, python-format
 msgid ""
 "It took you %(n_seconds)d s to recognise a song on average,                 "
@@ -638,7 +638,7 @@ msgstr ""
 "您平均花了 %(n_seconds)d 秒识别出一首歌曲，并且在您认为您知道的 %(n_total)d "
 "首歌曲里, 您正确地识别出了 %(n_correct)d 首。"
 
-#: experiment/rules/huang_2022.py:345
+#: experiment/rules/huang_2022.py:344
 #, python-format
 msgid ""
 "During the bonus rounds, you remembered %(n_correct)d of the %(n_total)d "
@@ -647,45 +647,45 @@ msgstr ""
 "在奖励环节里，您记住了之前播放过的 %(n_total)d 首歌里的 %(n_correct)d 首歌"
 "曲。"
 
-#: experiment/rules/huang_2022.py:407
+#: experiment/rules/huang_2022.py:406
 msgid ""
 "In which region did you spend the most formative years of your childhood and "
 "youth?"
 msgstr "您的童年与青少年时期在哪个地区/省/市度过的？"
 
-#: experiment/rules/huang_2022.py:416
+#: experiment/rules/huang_2022.py:415
 msgid "In which region do you currently reside?"
 msgstr "您目前所在的地区/省/市或国家："
 
-#: experiment/rules/huang_2022.py:440 experiment/rules/util/questions.py:69
+#: experiment/rules/huang_2022.py:439 experiment/rules/util/questions.py:71
 msgid "To which group of musical genres do you currently listen most?"
 msgstr "以下哪种音乐类型是您目前最常听的？"
 
-#: experiment/rules/huang_2022.py:442 experiment/rules/util/questions.py:72
+#: experiment/rules/huang_2022.py:441 experiment/rules/util/questions.py:74
 msgid "Pop/Country/Religious"
 msgstr "流行音乐/民谣/乡村音乐"
 
-#: experiment/rules/huang_2022.py:443
+#: experiment/rules/huang_2022.py:442
 msgid "Folk/Mountain songs"
 msgstr "中国民乐/民歌类（如山歌、小调等）"
 
-#: experiment/rules/huang_2022.py:444
+#: experiment/rules/huang_2022.py:443
 msgid "Western classical music/Jazz/Opera/Musical"
 msgstr "西方古典音乐/爵士/歌剧/音乐剧"
 
-#: experiment/rules/huang_2022.py:445
+#: experiment/rules/huang_2022.py:444
 msgid "Chinese opera"
 msgstr "中国戏曲类（如京剧、粤剧、评弹等）"
 
-#: experiment/rules/huang_2022.py:446 experiment/rules/util/questions.py:74
+#: experiment/rules/huang_2022.py:445 experiment/rules/util/questions.py:76
 msgid "Rock/Punk/Metal"
 msgstr "摇滚乐/重金属/朋克"
 
-#: experiment/rules/huang_2022.py:447 experiment/rules/util/questions.py:71
+#: experiment/rules/huang_2022.py:446 experiment/rules/util/questions.py:73
 msgid "Dance/Electronic/New Age"
 msgstr "舞曲/电子乐/新潮音乐"
 
-#: experiment/rules/huang_2022.py:448 experiment/rules/util/questions.py:75
+#: experiment/rules/huang_2022.py:447 experiment/rules/util/questions.py:77
 msgid "Hip-hop/R&B/Funk"
 msgstr "嘻哈饶舌/R&B/Funk（放克）"
 
@@ -768,7 +768,7 @@ msgstr ""
 
 #: experiment/rules/rhythm_discrimination.py:196
 #, python-format
-msgid "Ryhthm discrimination: %s"
+msgid "Rhythm discrimination: %s"
 msgstr ""
 
 #: experiment/rules/rhythm_discrimination.py:235
@@ -1447,135 +1447,135 @@ msgstr ""
 msgid "Remember that you don't move along or tap during the test."
 msgstr ""
 
-#: experiment/rules/util/questions.py:11
+#: experiment/rules/util/questions.py:13
 msgid "Have not (yet) completed any school qualification"
 msgstr "尚未取得任何学历"
 
-#: experiment/rules/util/questions.py:15
+#: experiment/rules/util/questions.py:17
 msgid "Not applicable"
 msgstr "不适用"
 
-#: experiment/rules/util/questions.py:22
+#: experiment/rules/util/questions.py:24
 msgid "With which gender do you currently most identify?"
 msgstr "您目前对自己的性别认识?"
 
-#: experiment/rules/util/questions.py:24
+#: experiment/rules/util/questions.py:26
 msgid "Man"
 msgstr "男性"
 
-#: experiment/rules/util/questions.py:25
+#: experiment/rules/util/questions.py:27
 msgid "Transgender man"
 msgstr "跨性别男性"
 
-#: experiment/rules/util/questions.py:26
+#: experiment/rules/util/questions.py:28
 msgid "Transgender woman"
 msgstr "跨性别女性"
 
-#: experiment/rules/util/questions.py:27
+#: experiment/rules/util/questions.py:29
 msgid "Woman"
 msgstr "女性"
 
-#: experiment/rules/util/questions.py:28
+#: experiment/rules/util/questions.py:30
 msgid "Non-conforming or questioning"
 msgstr "没有符合的或在质疑中"
 
-#: experiment/rules/util/questions.py:29
+#: experiment/rules/util/questions.py:31
 msgid "Intersex or two-spirit"
 msgstr "双性"
 
-#: experiment/rules/util/questions.py:30
+#: experiment/rules/util/questions.py:32
 msgid "Prefer not to answer"
 msgstr "我选择不回答"
 
-#: experiment/rules/util/questions.py:36
+#: experiment/rules/util/questions.py:38
 msgid "When were you born?"
 msgstr "您的出生日期是？"
 
-#: experiment/rules/util/questions.py:38
+#: experiment/rules/util/questions.py:40
 msgid "1943 or earlier"
 msgstr "（早于）1943年"
 
-#: experiment/rules/util/questions.py:39
+#: experiment/rules/util/questions.py:41
 msgid "1946–1964"
 msgstr "1946-1964年之间"
 
-#: experiment/rules/util/questions.py:40
+#: experiment/rules/util/questions.py:42
 msgid "1965-1980"
 msgstr "1965-1980年之间"
 
-#: experiment/rules/util/questions.py:41
+#: experiment/rules/util/questions.py:43
 msgid "1981–1996"
 msgstr "1981-1996年之间"
 
-#: experiment/rules/util/questions.py:42
+#: experiment/rules/util/questions.py:44
 msgid "1997 or later"
 msgstr "（晚于）1997年"
 
-#: experiment/rules/util/questions.py:49 experiment/rules/util/questions.py:96
+#: experiment/rules/util/questions.py:51 experiment/rules/util/questions.py:98
 msgid ""
 "In which country did you spend the most formative years of your childhood "
 "and youth?"
 msgstr "您在哪个国家度过了童年和青年时代最有成长性的时期？"
 
-#: experiment/rules/util/questions.py:56
+#: experiment/rules/util/questions.py:58
 msgid "What is the highest educational qualification that you have attained?"
 msgstr "您所获得的最高学历："
 
-#: experiment/rules/util/questions.py:62 experiment/rules/util/questions.py:101
+#: experiment/rules/util/questions.py:64 experiment/rules/util/questions.py:103
 msgid "In which country do you currently reside?"
 msgstr "您目前所在的国家："
 
-#: experiment/rules/util/questions.py:73
+#: experiment/rules/util/questions.py:75
 msgid "Jazz/Folk/Classical"
 msgstr ""
 
-#: experiment/rules/util/questions.py:81
+#: experiment/rules/util/questions.py:83
 msgid "The instrument I play best, including voice (or none), is:"
 msgstr "我演奏的最好的乐器，包括声乐（或没有），是："
 
-#: experiment/rules/util/questions.py:90
+#: experiment/rules/util/questions.py:92
 msgid "What is your age?"
 msgstr "您的年龄是？"
 
-#: experiment/rules/util/questions.py:107
+#: experiment/rules/util/questions.py:109
 msgid ""
 "If you are still in education, what is the highest qualification you expect "
 "to obtain?"
 msgstr "如果您还在接受教育，您期望获得的最高学历是？"
 
-#: experiment/rules/util/questions.py:113
+#: experiment/rules/util/questions.py:115
 msgid "Occupational status"
 msgstr "您的职业状况"
 
-#: experiment/rules/util/questions.py:115
+#: experiment/rules/util/questions.py:117
 msgid "Still at School"
 msgstr "在校学生"
 
-#: experiment/rules/util/questions.py:116
+#: experiment/rules/util/questions.py:118
 msgid "At University"
 msgstr "大学生"
 
-#: experiment/rules/util/questions.py:117
+#: experiment/rules/util/questions.py:119
 msgid "In Full-time employment"
 msgstr "全职工作中"
 
-#: experiment/rules/util/questions.py:118
+#: experiment/rules/util/questions.py:120
 msgid "In Part-time employment"
 msgstr "兼职工作中"
 
-#: experiment/rules/util/questions.py:119
+#: experiment/rules/util/questions.py:121
 msgid "Self-employed"
 msgstr "自营职业者"
 
-#: experiment/rules/util/questions.py:120
+#: experiment/rules/util/questions.py:122
 msgid "Homemaker/full time parent"
 msgstr "全职父母"
 
-#: experiment/rules/util/questions.py:121
+#: experiment/rules/util/questions.py:123
 msgid "Unemployed"
 msgstr "待业中"
 
-#: experiment/rules/util/questions.py:122
+#: experiment/rules/util/questions.py:124
 msgid "Retired"
 msgstr "已退休"
 
@@ -1615,47 +1615,51 @@ msgstr "再玩一次"
 msgid "All experiments"
 msgstr "实验结束"
 
-#: experiment/rules/views/form.py:83 experiment/rules/views/question.py:148
+#: experiment/rules/views/form.py:78 experiment/rules/views/question.py:142
+msgid "How much do you agree or disagree?"
+msgstr "您是否同意或不同意？请左右移动圆圈按钮至对应的回答。"
+
+#: experiment/rules/views/form.py:84 experiment/rules/views/question.py:148
 #: experiment/rules/views/question.py:171
 msgid "Completely Disagree"
 msgstr "完全不同意"
 
-#: experiment/rules/views/form.py:84 experiment/rules/views/form.py:93
+#: experiment/rules/views/form.py:85 experiment/rules/views/form.py:94
 #: experiment/rules/views/question.py:149
 #: experiment/rules/views/question.py:172
 msgid "Strongly Disagree"
 msgstr "非常不同意"
 
-#: experiment/rules/views/form.py:85 experiment/rules/views/form.py:94
+#: experiment/rules/views/form.py:86 experiment/rules/views/form.py:95
 #: experiment/rules/views/question.py:150
 #: experiment/rules/views/question.py:173
 msgid "Disagree"
 msgstr "不同意"
 
-#: experiment/rules/views/form.py:86 experiment/rules/views/form.py:95
+#: experiment/rules/views/form.py:87 experiment/rules/views/form.py:96
 #: experiment/rules/views/question.py:151
 #: experiment/rules/views/question.py:174
 msgid "Neither Agree nor Disagree"
 msgstr "即不同意也不反对"
 
-#: experiment/rules/views/form.py:87 experiment/rules/views/form.py:96
+#: experiment/rules/views/form.py:88 experiment/rules/views/form.py:97
 #: experiment/rules/views/question.py:152
 #: experiment/rules/views/question.py:175
 msgid "Agree"
 msgstr "同意"
 
-#: experiment/rules/views/form.py:88 experiment/rules/views/form.py:97
+#: experiment/rules/views/form.py:89 experiment/rules/views/form.py:98
 #: experiment/rules/views/question.py:153
 #: experiment/rules/views/question.py:176
 msgid "Strongly Agree"
 msgstr "非常同意"
 
-#: experiment/rules/views/form.py:89 experiment/rules/views/question.py:154
+#: experiment/rules/views/form.py:90 experiment/rules/views/question.py:154
 #: experiment/rules/views/question.py:177
 msgid "Completely Agree"
 msgstr "完全同意"
 
-#: experiment/rules/views/form.py:109 experiment/rules/views/question.py:14
+#: experiment/rules/views/form.py:110 experiment/rules/views/question.py:14
 #: experiment/rules/views/question.py:35 experiment/rules/views/question.py:54
 #: experiment/rules/views/question.py:71 experiment/rules/views/question.py:89
 #: experiment/rules/views/question.py:107
@@ -1670,10 +1674,6 @@ msgstr "跳过"
 #: experiment/rules/views/playlist.py:18
 msgid "Select a Playlist"
 msgstr "请选择一个曲库"
-
-#: experiment/rules/views/question.py:142
-msgid "How much do you agree or disagree?"
-msgstr "您是否同意或不同意？请左右移动圆圈按钮至对应的回答。"
 
 #: experiment/rules/views/question.py:165
 msgid "How much do you agree?"
