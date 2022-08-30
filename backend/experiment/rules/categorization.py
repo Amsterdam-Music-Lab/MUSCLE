@@ -44,21 +44,29 @@ class Categorization(Base):
         if not json_data:
             json_data = cls.plan_experiment(session)
 
-        # session.result_count() is the same as session.rounds_passed()
-        if session.result_count() == 0:
+        # Calculate round number from passed training rounds
+        rounds_passed = (session.rounds_passed() - int(json_data['training_rounds']))
+                
+        if rounds_passed == 0:
             json_data = cls.plan_phase(session)
-
-        rounds_passed = session.rounds_passed()
 
         if json_data['phase'] == 'training':
             if rounds_passed < len(json_data['sequence']):
                 return cls.next_trial_action(session) if rounds_passed == 0 else cls.get_trial_with_feedback(session)
             else:
+                # Calculate first result for this training sequence
+                if int(json_data['training_rounds']) == 0:
+                    training_rounds = 0
+                else:
+                    training_rounds = (int(json_data['training_rounds'])-1)
+                # Get the training results for this sequence
+                training_results = session.result_set.all()[training_rounds:(training_rounds + 20)]
+                # calculate the score for this sequence
+                score_avg = training_results.aggregate(Avg('score'))['score__avg']
                 # End of training?
-                score_avg = session.result_set.aggregate(Avg('score'))['score__avg']
-
                 if score_avg > SCORE_AVG_MIN_TRAINING:
                     json_data['phase'] = "testing"
+                    json_data['training_rounds'] = session.rounds_passed()
                     session.merge_json_data(json_data)
                     session.save()
                     explainer = Explainer(
@@ -68,20 +76,29 @@ class Categorization(Base):
                         button_label=_('Ok')
                     ).action()
                 else:
+                    # Update passed training rounds and repeat training
+                    json_data['training_rounds'] = session.rounds_passed()
+                    session.merge_json_data(json_data)
+                    session.save()
                     explainer = Explainer(
                         instruction=_("<REPEAT TRAINING>"),
                         steps=[],
                         button_label=_('Ok')
                     ).action()
 
-                feedback = cls.get_feedback(session)
-                session.result_set.all().delete()
+                feedback = cls.get_feedback(session)                
 
                 return combine_actions(feedback, explainer)
 
         elif json_data['phase'] == 'testing':
-            if session.rounds_complete():
-                session.final_score = session.result_set.aggregate(Avg('score'))['score__avg']
+            if rounds_passed == 70:
+                # Calculate first result for the test sequence
+                training_rounds = (int(json_data['training_rounds'])-1)
+                # Get the test results for this sequence
+                test_results = session.result_set.all()[training_rounds:(training_rounds + 70)]
+                # calculate the final score for the test sequence
+                score_avg = test_results.aggregate(Avg('score'))['score__avg']
+                session.final_score = test_results.aggregate(Avg('score'))['score__avg']
                 session.finish()
                 session.save()
 
@@ -119,7 +136,7 @@ class Categorization(Base):
         group_count = group_size
         group = None
 
-        session.experiment.rounds = 70
+        # session.experiment.rounds = 70
         session.experiment.save()
 
         if session.experiment.session_count() <= (group_size * 4):
@@ -143,7 +160,8 @@ class Categorization(Base):
                          'stimuli_a': stimuli_a,
                          'button_order': button_order,
                          'choices': choices,
-                         'phase': "training"
+                         'phase': "training",
+                         'training_rounds' : "0"
                          }
             session.merge_json_data(json_data)
             session.save()
@@ -220,9 +238,9 @@ class Categorization(Base):
             sequence_b = []
             for stimulus in range(sequence_length-1):
                 if section_sequence[stimulus] == training_sections[0].id:
-                    sequence_a.append(stimulus+1)
+                    sequence_a.append((stimulus+1))
                 elif section_sequence[stimulus] == training_sections[1].id:
-                    sequence_b.append(stimulus+1)
+                    sequence_b.append((stimulus+1))
             random.shuffle(sequence_a)
             random.shuffle(sequence_b)
             feedback_sequence = sequence_a[0:5] + sequence_b[0:5]
@@ -266,7 +284,7 @@ class Categorization(Base):
         json_data = session.load_json_data()
 
         # Retrieve next section in the sequence
-        rounds_passed = session.rounds_passed()
+        rounds_passed = (session.rounds_passed() - int(json_data['training_rounds']))
         sequence = json_data['sequence']
         this_section = sequence[rounds_passed]
         section = session.section_from_song(this_section)
@@ -300,9 +318,10 @@ class Categorization(Base):
             return 0
 
     @classmethod
-    def get_title(cls, session):
+    def get_title(cls, session):        
         json_data = session.load_json_data()
-        return _('Round {} / {}').format(session.rounds_passed(), len(json_data['sequence']))
+        rounds_passed = (session.rounds_passed() - int(json_data['training_rounds']))
+        return _('Round {} / {}').format(rounds_passed, len(json_data['sequence']))
 
 
 age_question = Question(
