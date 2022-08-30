@@ -81,7 +81,7 @@ class Categorization(Base):
                     session.merge_json_data(json_data)
                     session.save()
                     explainer = Explainer(
-                        instruction=_("<REPEAT TRAINING>"),
+                        instruction=_("You seem to have difficulties reacting correctly to the sound sequences. Is your audio on? If you want to give it another try, click on Ok."),
                         steps=[],
                         button_label=_('Ok')
                     ).action()
@@ -191,7 +191,11 @@ class Categorization(Base):
             # Generate randomized sequence for the testing phase
             section_sequence = []
             # Add 10 x 2 training stimuli
-            for _ in range(0, 10):
+            if int(json_data['training_rounds']) == 0:
+                new_rounds = 10
+            else:
+                new_rounds = 5
+            for _ in range(0, new_rounds):
                 section_sequence.append(sections[0].id)
                 section_sequence.append(sections[1].id)
             random.shuffle(section_sequence)
