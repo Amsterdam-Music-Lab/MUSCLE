@@ -133,12 +133,13 @@ class Categorization(Base):
             button_order = random.choice(['neutral', 'neutral-inverted'])
             # Set expected resonse accordingly
             # in the final version the buttons won't show the A/B
+            ph = '___' # placeholder
             if button_order == 'neutral' and stimuli_a == 'BLUE':
-                choices = {'A': 'A', 'B': 'B'}
+                choices = {'A': ph, 'B': ph}
             elif button_order == 'neutral-inverted' and stimuli_a == 'ORANGE':
-                choices = {'A': 'A', 'B': 'B'}
+                choices = {'A': ph, 'B': ph}
             else:
-                choices = {'B': 'B', 'A': 'A'}
+                choices = {'B': ph, 'A': ph}
             json_data = {'group': group,
                          'stimuli_a': stimuli_a,
                          'button_order': button_order,

@@ -21,7 +21,7 @@ const ButtonArray = ({ question, active, onChange, emphasizeTitle = false }) => 
                 <p className="explainer">{question.explainer}</p>
             )}
             <h3 className={classNames({title: emphasizeTitle})}>{question.question}</h3>
-            <div className="btn-group-toggle-custom" role="group" data-toggle="buttons" aria-label="Button Array">
+            <div className="btn-group-toggle-custom invisible-text-two-alt" role="group" data-toggle="buttons" aria-label="Button Array">
                 {Object.keys(question.choices).map((val, index) => (
                     <ToggleButton
                         label={question.choices[val]}
@@ -43,7 +43,7 @@ const ToggleButton = ({ label, value, index, name, active, onChange }) => {
     return (
         <>
         <label
-            className={classNames("btn btn-secondary btn-lg", disabled)}
+            className={classNames("btn btn-secondary btn-lg invisible-text-two-alt", disabled)}
             onClick={() => {
                 onChange(value);
             }}
