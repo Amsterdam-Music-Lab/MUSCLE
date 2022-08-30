@@ -25,7 +25,6 @@ class Final:  # pylint: disable=too-few-public-methods
         ):
         self.session = session
         self.title = title
-        print(title)
         self.final_text = final_text
         self.button = button
         self.rank = rank

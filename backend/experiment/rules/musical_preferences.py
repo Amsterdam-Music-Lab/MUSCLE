@@ -1,7 +1,9 @@
 import json
+from typing import Final
 
 from django.db.models import Avg
 from django.utils.translation import gettext_lazy as _
+from django.template.loader import render_to_string
 
 from .views import Trial, Consent, Explainer, Playlist, Step, StartSession, Score
 from .views.form import ChoiceQuestion, Form, LikertQuestion
@@ -11,6 +13,7 @@ from .base import Base
 
 class MusicalPreferences(Base):
     ID = 'MUSICAL_PREFERENCES'
+    block_size = 4
 
     @classmethod
     def first_round(cls, experiment):
@@ -34,25 +37,16 @@ class MusicalPreferences(Base):
     @classmethod
     def next_round(cls, session, request_session=None):
         n_results = session.rounds_passed()
-        if int(n_results / 2) == session.experiment.rounds:
-            participant_results = session.result_set.filter(comment='like_song')
-            participant_pref = cls.get_preferred_songs(participant_results)
-            from experiment.models.result import Result 
-            all_results = [
-                ses.result_set.filter(comment='like_song') 
-                for ses in session.experiment.session_set.filter(
-                experiment__rules=cls.ID)
-            ]
-            all_results = Result.objects.filter(
-                comment='like_song'
-            )
-            all_pref = cls.get_preferred_songs(all_results)
-            view = Score(
-                session,
-                title='Preference overview',
-                feedback=json.dumps(all_pref)
-            ).action()
-            return view
+        if int(n_results / 2) % cls.block_size == 0:
+            if int(n_results / 2) == session.experiment.rounds:
+                return cls.get_final_view(session)
+
+            elif int(n_results / 2) == cls.block_size:
+                # display questionnaire
+                pass
+            # ask if participant wants to continue
+            pass     
+            
 
         section = session.playlist.random_section()
         result_id = cls.prepare_result(session, section)
@@ -93,6 +87,26 @@ class MusicalPreferences(Base):
             return int(form_element.get('value'))
         else:
             return None
+    
+    @classmethod
+    def get_final_view(cls, session):
+        # finalize experiment
+        participant_results = session.result_set.filter(comment='like_song')
+        participant_pref = cls.get_preferred_songs(participant_results)
+        from experiment.models.result import Result 
+        all_results = Result.objects.filter(
+            comment='like_song'
+        )
+        all_pref = cls.get_preferred_songs(all_results)
+        feedback = render_to_string('final/musical_preferences.html', 
+        {'top_all': all_pref, 'top_participant': participant_pref})
+        view = Final(
+            session,
+            title='Preference overview',
+            final_text=feedback,
+            show_social=True
+        ).action()
+        return view
     
     @classmethod
     def get_preferred_songs(cls, result_set, n=5):
