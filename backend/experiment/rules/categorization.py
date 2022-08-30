@@ -91,11 +91,11 @@ class Categorization(Base):
                 return combine_actions(feedback, explainer)
 
         elif json_data['phase'] == 'testing':
-            if rounds_passed == 70:
+            if rounds_passed == 80:
                 # Calculate first result for the test sequence
                 training_rounds = (int(json_data['training_rounds'])-1)
                 # Get the test results for this sequence
-                test_results = session.result_set.all()[training_rounds:(training_rounds + 70)]
+                test_results = session.result_set.all()[training_rounds:(training_rounds + 80)]
                 # calculate the final score for the test sequence
                 score_avg = test_results.aggregate(Avg('score'))['score__avg']
                 session.final_score = test_results.aggregate(Avg('score'))['score__avg']
@@ -135,8 +135,7 @@ class Categorization(Base):
         group_size = 20
         group_count = group_size
         group = None
-
-        # session.experiment.rounds = 70
+        
         session.experiment.save()
 
         if session.experiment.session_count() <= (group_size * 4):
@@ -222,8 +221,8 @@ class Categorization(Base):
                     group='CROSSED', tag__contains='2').exclude(artist__contains='Training')
             # Generate randomized sequence for the testing phase
             section_sequence = []
-            # Add 10 x 2 training stimuli
-            for _ in range(0, 10):
+            # Add 15 x 2 training stimuli
+            for _ in range(0, 15):
                 section_sequence.append(training_sections[0].id)
                 section_sequence.append(training_sections[1].id)
             # add 5 x 10 test stimuli
@@ -232,7 +231,7 @@ class Categorization(Base):
                 for stimulus in range(length):
                     section_sequence.append(test_sections[stimulus].id)
             random.shuffle(section_sequence)
-            # Randomly choose 2 x 5 training stimuli for feedback
+            # Randomly choose 2 x 10 training stimuli for feedback
             sequence_length = len(section_sequence)
             sequence_a = []
             sequence_b = []
@@ -243,7 +242,7 @@ class Categorization(Base):
                     sequence_b.append((stimulus+1))
             random.shuffle(sequence_a)
             random.shuffle(sequence_b)
-            feedback_sequence = sequence_a[0:5] + sequence_b[0:5]
+            feedback_sequence = sequence_a[0:10] + sequence_b[0:10]
             json_data['feedback_sequence'] = feedback_sequence
             json_data['sequence'] = section_sequence
 
