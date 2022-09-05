@@ -40,6 +40,7 @@ const ButtonArray = ({ question, active, onChange, emphasizeTitle = false }) => 
 
 const ToggleButton = ({ label, value, index, name, active, onChange }) => {
     const disabled = active? '' : 'disabled';
+    const labelIsIcon = label.startsWith('ti-') | label.startsWith('fa') ? true : false;
     return (
         <label
             className={classNames("btn btn-secondary btn-lg", disabled)}
@@ -52,7 +53,7 @@ const ToggleButton = ({ label, value, index, name, active, onChange }) => {
             }}
         >
             <input className={value} type="radio" name={name} id={index} value={value}/>
-            {label}
+            {labelIsIcon ? <span className={label}></span> : {label}}
         </label>)
 }
 
