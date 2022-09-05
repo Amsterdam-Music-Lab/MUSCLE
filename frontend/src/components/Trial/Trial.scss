@@ -56,10 +56,13 @@
         }
 
         form {
-            .btn:nth-of-type(1) {
+            .btn-secondary:nth-of-type(1) {
                 @include btn-style($teal);
             }
-            .btn:nth-of-type(2) {
+            .btn-secondary:nth-of-type(2) {
+                @include btn-style($yellow);
+            }
+            .btn-secondary:last-of-type {
                 @include btn-style($red);
             }
         }
