@@ -1,15 +1,16 @@
-import json
-from typing import Final
-
 from django.db.models import Avg
 from django.utils.translation import gettext_lazy as _
 from django.template.loader import render_to_string
 
-from .views import Trial, Consent, Explainer, Playlist, Step, StartSession, Score
-from .views.form import ChoiceQuestion, Form, LikertQuestion
+from .util.actions import combine_actions
+from .util.questions import question_by_key
+
+from .views import Consent, Explainer, Final, Playlist, Step, StartSession, Trial
+from .views.form import BooleanQuestion, ChoiceQuestion, Form, LikertQuestion
 from .views.playback import Playback
 
 from .base import Base
+
 
 class MusicalPreferences(Base):
     ID = 'MUSICAL_PREFERENCES'
@@ -36,17 +37,40 @@ class MusicalPreferences(Base):
 
     @classmethod
     def next_round(cls, session, request_session=None):
+        if session.last_result() and session.last_result().score == -1:
+            # last result was key='continue', value='no':
+            return cls.get_final_view(session)
         n_results = session.rounds_passed()
-        if int(n_results / 2) % cls.block_size == 0:
+        if (n_results > 0 and int(n_results / 2) % cls.block_size == 0):
+            # end of a block
+            actions = []
             if int(n_results / 2) == session.experiment.rounds:
                 return cls.get_final_view(session)
-
             elif int(n_results / 2) == cls.block_size:
-                # display questionnaire
-                pass
-            # ask if participant wants to continue
-            pass     
-            
+                # first time we hit the end of a block, present questionnaire
+                actions.append(Explainer(
+                    instruction=_("Please answer some questions \
+                    on your musical (Goldsmiths-MSI) and demographic background"),
+                    steps=[],
+                    button_label=_("Let's go!")).action()
+                )
+                actions.extend(cls.get_questions())
+            question = BooleanQuestion(
+                question=_("Would you like to listen to more songs?"),
+                choices={
+                    'yes': 'ti-thumb-up',
+                    'no': 'ti-thumb-down'
+                },
+                key='continue',
+                submits=True
+            )
+            actions.append(
+                Trial(
+                    feedback_form=Form([question]),
+                    config={'style': 'boolean'}
+                ).action()
+            )
+            return combine_actions(*actions)
 
         section = session.playlist.random_section()
         result_id = cls.prepare_result(session, section)
@@ -62,9 +86,9 @@ class MusicalPreferences(Base):
             result_id=result_id,
             view='BUTTON_ARRAY',
             choices={
-                'yes': '👌',
-                'no': '🙅',
-                'unsure': '😕'
+                'yes': 'ti-thumb-up',
+                'unsure': 'ti-help',
+                'no': 'ti-thumb-down',
             }
         )
         playback = Playback([section], play_config={'show_animation': True})
@@ -74,7 +98,8 @@ class MusicalPreferences(Base):
             feedback_form=form,
             title=_('Musical preference'),
             config={
-                'decision_time': section.duration + .1
+                'decision_time': section.duration + .1,
+                'style': 'boolean'
             }
         )
         return view.action()
@@ -85,6 +110,9 @@ class MusicalPreferences(Base):
         result.save()
         if form_element.get('key') == 'like_song':
             return int(form_element.get('value'))
+        elif form_element.get('key') == 'continue':
+            if form_element.get('value') == 'no':
+                return -1
         else:
             return None
     
@@ -116,6 +144,19 @@ class MusicalPreferences(Base):
         out_list = []
         for s in top_songs:
             section = Section.objects.get(pk=s.get('section'))
-            out_list.append({'artist': section.artist, 'name': section.name})
+            out_list.append({'name': section.name, 'score': s.get('avg_score')})
         return out_list
+    
+    @classmethod
+    def get_questions(cls):
+        questions = [
+            question_by_key('dgf_generation'),
+            question_by_key('dgf_education', drop_choices=['isced-5']),
+        ]
+        return [
+            Trial(
+                title=_("Questionnaire"),
+                feedback_form=Form([question], is_profile=True)).action() 
+            for question in questions
+        ]
 
