@@ -1,10 +1,13 @@
+from django.utils.translation import gettext_lazy as _
+from django.template.loader import render_to_string
+
 from operator import ne
 from .views.playback import Playback
 from .views.form import Form, Question, ChoiceQuestion
 from .views import Consent, Explainer, Score, StartSession, TwoAlternativeForced, Trial, Final
 from django.http import Http404, HttpResponseServerError
 from .util.actions import combine_actions
-from django.utils.translation import gettext_lazy as _
+
 from django.db.models import Avg
 
 from .base import Base
@@ -25,7 +28,11 @@ class Categorization(Base):
             steps=[],
             button_label=_('Ok')
         ).action()
-        consent = Consent.action()
+        # read consent form from file
+        rendered = render_to_string(
+            'consent/consent_categorization.html')
+        consent = Consent.action(rendered, title=_(
+            'Informed consent'), confirm=_('I agree'), deny=_('Stop'))        
         explainer2 = Explainer(
             instruction=_(
                 "The experiment will now begin. Click to start a sound sequence."),
