@@ -49,20 +49,21 @@ class Categorization(Base):
                 
         if rounds_passed == 0:
             json_data = cls.plan_phase(session)
-
+        
         if json_data['phase'] == 'training':
+            # Get next training action
             if rounds_passed < len(json_data['sequence']):
                 return cls.next_trial_action(session) if rounds_passed == 0 else cls.get_trial_with_feedback(session)
+            # Training phase completed
             else:
-                # Calculate first result for this training sequence
-                if int(json_data['training_rounds']) == 0:
-                    training_rounds = 0
-                else:
-                    training_rounds = (int(json_data['training_rounds'])-1)
-                # Get the training results for this sequence
-                training_results = session.result_set.all()[training_rounds:(training_rounds + 20)]
+                # Get first result for this training sequence               
+                first_result = int(json_data['training_rounds'])
+                # Get the results for this sequence
+                all_results = session.result_set.all()
+                this_results = all_results[first_result:(first_result + len(json_data['sequence']))]                
                 # calculate the score for this sequence
-                score_avg = training_results.aggregate(Avg('score'))['score__avg']
+                score_avg = this_results.aggregate(Avg('score'))['score__avg']
+
                 # End of training?
                 if score_avg > SCORE_AVG_MIN_TRAINING:
                     json_data['phase'] = "testing"
@@ -76,48 +77,59 @@ class Categorization(Base):
                         button_label=_('Ok')
                     ).action()
                 else:
-                    # Update passed training rounds and repeat training
+                    # Update passed training rounds            
                     json_data['training_rounds'] = session.rounds_passed()
                     session.merge_json_data(json_data)
                     session.save()
-                    explainer = Explainer(
-                        instruction=_("You seem to have difficulties reacting correctly to the sound sequences. Is your audio on? If you want to give it another try, click on Ok."),
-                        steps=[],
-                        button_label=_('Ok')
-                    ).action()
+                    # Failed the training? exit experiment
+                    if json_data['training_rounds'] == 40:
+                        final = Final(
+                        session=session,                    
+                        final_text="Thanks for your participation!",
+                        rank=cls.rank(session),
+                        show_social=False,
+                        show_profile_link=True
+                        ).action()
+                        return final
+                    else:
+                        # Repeat training
+                        explainer = Explainer(
+                            instruction=_("You seem to have difficulties reacting correctly to the sound sequences. Is your audio on? If you want to give it another try, click on Ok."),
+                            steps=[],
+                            button_label=_('Ok')
+                        ).action()
 
-                feedback = cls.get_feedback(session)                
-
+                feedback = cls.get_feedback(session)
                 return combine_actions(feedback, explainer)
 
         elif json_data['phase'] == 'testing':
-            if rounds_passed == 80:
-                # Calculate first result for the test sequence
-                training_rounds = (int(json_data['training_rounds'])-1)
-                # Get the test results for this sequence
-                test_results = session.result_set.all()[training_rounds:(training_rounds + 80)]
-                # calculate the final score for the test sequence
-                score_avg = test_results.aggregate(Avg('score'))['score__avg']
-                session.final_score = test_results.aggregate(Avg('score'))['score__avg']
-                session.finish()
-                session.save()
-
-                final = Final(
-                    session=session,
-                    # Huang2022.final_score_message(session),
-                    final_text="WOOHOO!",
-                    rank=1,  # Huang2022.rank(session),
-                    show_social=False,
-                    show_profile_link=True
-                ).action()
-
-                return final
-            else:
+            if rounds_passed < len(json_data['sequence']):
                 # Determine wether this round has feedback
                 if rounds_passed in json_data['feedback_sequence']:
                     return cls.get_trial_with_feedback(session)
                 else:
                     return cls.next_trial_action(session)
+            else:
+                # Calculate first result for the test sequence
+                first_result = int(json_data['training_rounds'])                
+                # Get the results for this sequence
+                all_results = session.result_set.all()
+                this_results = all_results[first_result:(first_result + len(json_data['sequence']))]                
+                # calculate the final score for the test sequence
+                final_score = sum([result.score for result in this_results])                
+                session.finish()
+                session.final_score = final_score
+                session.save()
+
+                final = Final(
+                    session=session,                    
+                    final_text="Thanks for your participation!",
+                    rank=cls.rank(session),
+                    show_social=False,
+                    show_profile_link=True
+                ).action()
+
+                return final
 
     @classmethod
     def plan_experiment(cls, session):
@@ -147,8 +159,7 @@ class Categorization(Base):
             stimuli_a = random.choice(['BLUE', 'ORANGE'])
             # Determine which button is orange and which is blue
             button_order = random.choice(['neutral', 'neutral-inverted'])
-            # Set expected resonse accordingly
-            # in the final version the buttons won't show the A/B
+            # Set expected resonse accordingly           
             ph = '___' # placeholder
             if button_order == 'neutral' and stimuli_a == 'BLUE':
                 choices = {'A': ph, 'B': ph}
@@ -262,7 +273,7 @@ class Categorization(Base):
         last_score = session.last_score()
 
         if session.last_result().given_response == "TIMEOUT":
-            icon = "ti-alarm-clock"  # "ti-time"
+            icon = "ti-help"  # "ti-time"
         elif last_score == 1:
             icon = 'ti-face-smile'
         elif last_score == 0:
@@ -270,7 +281,7 @@ class Categorization(Base):
         else:
             pass  # throw error
 
-        return Score(session, icon=icon, timer=1.5, title=cls.get_title(session)).action()
+        return Score(session, icon=icon, timer=.5, title=cls.get_title(session)).action()
 
     @classmethod
     def get_trial_with_feedback(cls, session):
