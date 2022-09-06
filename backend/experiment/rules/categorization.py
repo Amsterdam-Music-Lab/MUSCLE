@@ -24,7 +24,7 @@ class Categorization(Base):
     def first_round(cls, experiment):
         explainer = Explainer(
             instruction=_(
-                "This is a listening experiment in which you have to categorize short sound fragments"),
+                "This is a listening experiment in which you have to respond to short sound sequences."),
             steps=[],
             button_label=_('Ok')
         ).action()
@@ -79,7 +79,7 @@ class Categorization(Base):
                     session.save()
                     explainer = Explainer(
                         instruction=_(
-                            "You are entering the main phase of the experiment. From now on you will only occasionally get feedback on your responses. Simply try to keep on categorizing the sound sequences as you did before."),
+                            "You are entering the main phase of the experiment. From now on you will only occasionally get feedback on your responses. Simply try to keep responding to the sound sequences as you did before."),
                         steps=[],
                         button_label=_('Ok')
                     ).action()
