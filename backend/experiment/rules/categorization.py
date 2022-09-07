@@ -1,14 +1,14 @@
 from django.utils.translation import gettext_lazy as _
 from django.template.loader import render_to_string
-
+from django.http import Http404
+from django.db.models import Avg
 from operator import ne
-from .views.playback import Playback
+
 from .views.form import Form, Question, ChoiceQuestion
 from .views import Consent, Explainer, Score, StartSession, TwoAlternativeForced, Trial, Final
-from django.http import Http404, HttpResponseServerError
+
 from .util.actions import combine_actions
 
-from django.db.models import Avg
 
 from .base import Base
 import random
@@ -28,11 +28,11 @@ class Categorization(Base):
             steps=[],
             button_label=_('Ok')
         ).action()
-        # read consent form from file
+        # read consent from file
         rendered = render_to_string(
             'consent/consent_categorization.html')
         consent = Consent.action(rendered, title=_(
-            'Informed consent'), confirm=_('I agree'), deny=_('Stop'))        
+            'Informed consent'), confirm=_('I agree'), deny=_('Stop'))
         explainer2 = Explainer(
             instruction=_(
                 "The experiment will now begin. Click to start a sound sequence."),
@@ -52,91 +52,115 @@ class Categorization(Base):
             json_data = cls.plan_experiment(session)
 
         # Calculate round number from passed training rounds
-        rounds_passed = (session.rounds_passed() - int(json_data['training_rounds']))
-                
+        rounds_passed = (session.rounds_passed() -
+                         int(json_data['training_rounds']))
+
         if rounds_passed == 0:
+            # Check if participants wants to exit after failed traning
+            profiles = session.participant.profile()
+            for profile in profiles:
+                # Delete results and json from session and exit
+                if profile.answer == 'aborted':
+                    session.result_set.all().delete()
+                    session.json_data = ''
+                    session.save()
+                    final = Final(
+                        session=session,
+                        final_text="Thanks for your participation!",
+                        rank=None,
+                        show_social=False,
+                        show_profile_link=False
+                    ).action()
+                    return final
+            # Prepare sections for next phase
             json_data = cls.plan_phase(session)
-        
+
         if json_data['phase'] == 'training':
+
             # Get next training action
             if rounds_passed < len(json_data['sequence']):
                 return cls.next_trial_action(session) if rounds_passed == 0 else cls.get_trial_with_feedback(session)
-            # Training phase completed
-            else:
-                # Get first result for this training sequence               
-                first_result = int(json_data['training_rounds'])
-                # Get the results for this sequence
-                all_results = session.result_set.all()
-                this_results = all_results[first_result:(first_result + len(json_data['sequence']))]                
-                # calculate the score for this sequence
-                score_avg = this_results.aggregate(Avg('score'))['score__avg']
 
-                # End of training?
-                if score_avg > SCORE_AVG_MIN_TRAINING:
-                    json_data['phase'] = "testing"
-                    json_data['training_rounds'] = session.rounds_passed()
+            # Training phase completed, get the results
+            first_result = int(json_data['training_rounds'])
+            all_results = session.result_set.all()
+            this_results = all_results[first_result:(
+                first_result + len(json_data['sequence']))]
+
+            # calculate the score for this sequence
+            score_avg = this_results.aggregate(Avg('score'))['score__avg']
+
+            # End of training?
+            if score_avg > SCORE_AVG_MIN_TRAINING:
+                json_data['phase'] = "testing"
+                json_data['training_rounds'] = session.rounds_passed()
+                session.merge_json_data(json_data)
+                session.save()
+                explainer = Explainer(
+                    instruction=_(
+                        "You are entering the main phase of the experiment. From now on you will only occasionally get feedback on your responses. Simply try to keep responding to the sound sequences as you did before."),
+                    steps=[],
+                    button_label=_('Ok')
+                ).action()
+            else:
+                # Update passed training rounds for calc round_number
+                json_data['training_rounds'] = session.rounds_passed()
+                session.merge_json_data(json_data)
+                session.save()
+
+                # Failed the training? exit experiment
+                if json_data['training_rounds'] == 40:
+                    # Clear group from session for reuse
+                    json_data['group'] = ''
                     session.merge_json_data(json_data)
+                    session.final_score = 0
                     session.save()
-                    explainer = Explainer(
-                        instruction=_(
-                            "You are entering the main phase of the experiment. From now on you will only occasionally get feedback on your responses. Simply try to keep responding to the sound sequences as you did before."),
-                        steps=[],
-                        button_label=_('Ok')
-                    ).action()
-                else:
-                    # Update passed training rounds            
-                    json_data['training_rounds'] = session.rounds_passed()
-                    session.merge_json_data(json_data)
-                    session.save()
-                    # Failed the training? exit experiment
-                    if json_data['training_rounds'] == 40:
-                        final = Final(
-                        session=session,                    
+                    final = Final(
+                        session=session,
                         final_text="Thanks for your participation!",
-                        rank=cls.rank(session),
+                        rank=None,
                         show_social=False,
                         show_profile_link=True
-                        ).action()
-                        return final
-                    else:
-                        # Repeat training
-                        explainer = Explainer(
-                            instruction=_("You seem to have difficulties reacting correctly to the sound sequences. Is your audio on? If you want to give it another try, click on Ok."),
-                            steps=[],
-                            button_label=_('Ok')
-                        ).action()
+                    ).action()
+                    return final
+                else:
+                    # Show continue to next training phase or exit option
+                    config = {
+                        'style': 'boolean'
+                    }
+                    explainer = Trial(title=_("Training failed"), feedback_form=Form(
+                        [repeat_training_or_quit], is_profile=True), config=config).action()
 
-                feedback = cls.get_feedback(session)
-                return combine_actions(feedback, explainer)
+            feedback = cls.get_feedback(session)
+            return combine_actions(feedback, explainer)
 
         elif json_data['phase'] == 'testing':
             if rounds_passed < len(json_data['sequence']):
+
                 # Determine wether this round has feedback
                 if rounds_passed in json_data['feedback_sequence']:
                     return cls.get_trial_with_feedback(session)
-                else:
-                    return cls.next_trial_action(session)
-            else:
-                # Calculate first result for the test sequence
-                first_result = int(json_data['training_rounds'])                
-                # Get the results for this sequence
-                all_results = session.result_set.all()
-                this_results = all_results[first_result:(first_result + len(json_data['sequence']))]                
-                # calculate the final score for the test sequence
-                final_score = sum([result.score for result in this_results])                
-                session.finish()
-                session.final_score = final_score
-                session.save()
+                return cls.next_trial_action(session)
 
-                final = Final(
-                    session=session,                    
-                    final_text="Thanks for your participation!",
-                    rank=cls.rank(session),
-                    show_social=False,
-                    show_profile_link=True
-                ).action()
+            # Testing phase completed get results
+            first_result = int(json_data['training_rounds'])
+            all_results = session.result_set.all()
+            this_results = all_results[first_result:(
+                first_result + len(json_data['sequence']))]
+            # calculate the final score for the test sequence
+            final_score = sum([result.score for result in this_results])
+            session.finish()
+            session.final_score = final_score
+            session.save()
 
-                return final
+            final = Final(
+                session=session,
+                final_text="Thanks for your participation!",
+                rank=cls.rank(session),
+                show_social=False,
+                show_profile_link=True
+            ).action()
+            return final
 
     @classmethod
     def plan_experiment(cls, session):
@@ -154,7 +178,7 @@ class Categorization(Base):
         group_size = 20
         group_count = group_size
         group = None
-        
+
         session.experiment.save()
 
         if session.experiment.session_count() <= (group_size * 4):
@@ -166,21 +190,42 @@ class Categorization(Base):
             stimuli_a = random.choice(['BLUE', 'ORANGE'])
             # Determine which button is orange and which is blue
             button_order = random.choice(['neutral', 'neutral-inverted'])
-            # Set expected resonse accordingly           
-            ph = '___' # placeholder
+            # Set expected resonse accordingly
+            ph = '___'  # placeholder
             if button_order == 'neutral' and stimuli_a == 'BLUE':
                 choices = {'A': ph, 'B': ph}
             elif button_order == 'neutral-inverted' and stimuli_a == 'ORANGE':
                 choices = {'A': ph, 'B': ph}
             else:
                 choices = {'B': ph, 'A': ph}
-            json_data = {'group': group,
-                         'stimuli_a': stimuli_a,
-                         'button_order': button_order,
-                         'choices': choices,
-                         'phase': "training",
-                         'training_rounds' : "0"
-                         }
+            if group == 'S1':
+                assigned_group = 'Same direction, Pair 1'
+            elif group == 'S2':
+                assigned_group = 'Same direction, Pair 2'
+            elif group == 'C1':
+                assigned_group = 'Crossed direction, Pair 1'
+            else:
+                assigned_group = 'Crossed direction, Pair 2'
+            if button_order == 'neutral':
+                button_colors = 'Blue left, Orange right'
+            else:
+                button_colors = 'Orange left, Blue right'
+            if stimuli_a == 'BLUE':
+                pair_colors = 'A = Blue, B = Orange'
+            else:
+                pair_colors = 'A = Orange, B = Blue'
+            json_data = {
+                'assigned_group': assigned_group,
+                'button_colors': button_colors,
+                'pair_colors': pair_colors,
+                'group': group,
+                'stimuli_a': stimuli_a,
+                'button_order': button_order,
+                'choices': choices,
+                'phase': "training",
+                         'training_rounds': "0"
+            }
+
             session.merge_json_data(json_data)
             session.save()
         else:
@@ -306,7 +351,8 @@ class Categorization(Base):
         json_data = session.load_json_data()
 
         # Retrieve next section in the sequence
-        rounds_passed = (session.rounds_passed() - int(json_data['training_rounds']))
+        rounds_passed = (session.rounds_passed() -
+                         int(json_data['training_rounds']))
         sequence = json_data['sequence']
         this_section = sequence[rounds_passed]
         section = session.section_from_song(this_section)
@@ -317,13 +363,13 @@ class Categorization(Base):
             expected_response = 'B'
         result_pk = cls.prepare_result(session, section, expected_response)
         choices = json_data["choices"]
-        trial = TwoAlternativeForced(section, choices, result_pk, title=cls.get_title(session))
+        trial = TwoAlternativeForced(
+            section, choices, result_pk, title=cls.get_title(session))
         trial.config['listen_first'] = True
         trial.config['auto_advance'] = True
         trial.config['auto_advance_timer'] = 3000
         trial.config['style'] = json_data["button_order"]
-        #trial.config['show_continue_button'] = True
-        trial.config['time_pass_break'] =  False
+        trial.config['time_pass_break'] = False
         return trial.action()
 
     @staticmethod
@@ -340,9 +386,10 @@ class Categorization(Base):
             return 0
 
     @classmethod
-    def get_title(cls, session):        
+    def get_title(cls, session):
         json_data = session.load_json_data()
-        rounds_passed = (session.rounds_passed() - int(json_data['training_rounds']))
+        rounds_passed = (session.rounds_passed() -
+                         int(json_data['training_rounds']))
         return _('Round {} / {}').format(rounds_passed, len(json_data['sequence']))
 
 
@@ -385,3 +432,15 @@ questionaire = [
         feedback_form=Form([question], is_profile=True)).action()
     for question in questions
 ]
+
+repeat_training_or_quit = ChoiceQuestion(
+    key='failed_training',
+    view='BUTTON_ARRAY',
+    question='You seem to have difficulties reacting correctly to the sound sequences. Is your audio on? If you want to give it another try, click on Ok.',
+    choices={
+        'continued': "OK",
+        'aborted': "Exit"
+    },
+    submits=True,
+    is_skippable=False
+)
