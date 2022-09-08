@@ -51,6 +51,17 @@ class Categorization(Base):
         if not json_data:
             json_data = cls.plan_experiment(session)
 
+        # Total participants reached - Abort with message
+        if json_data == 'FULL':
+            final = Final(
+                session=session,
+                final_text="The maximimum number of participants has been reached.",
+                rank=None,
+                show_social=False,
+                show_profile_link=False
+            ).action()
+            return final
+
         # Calculate round number from passed training rounds
         rounds_passed = (session.rounds_passed() -
                          int(json_data['training_rounds']))
@@ -252,8 +263,7 @@ class Categorization(Base):
             session.merge_json_data(json_data)
             session.save()
         else:
-            raise Http404(
-                "The maximum number of participants for this experiment has been reached")
+            json_data = 'FULL'
         return json_data
 
     @classmethod
