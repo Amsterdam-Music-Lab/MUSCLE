@@ -147,16 +147,39 @@ class Categorization(Base):
             all_results = session.result_set.all()
             this_results = all_results[first_result:(
                 first_result + len(json_data['sequence']))]
-            # calculate the final score for the test sequence
-            final_score = sum([result.score for result in this_results])
+
+            # Calculate percentage of correct response to training stimuli
+            final_score = 0
+            for result in this_results:
+                if 'T' in result.section.name and result.score == 1:
+                    final_score += 1
+            score_percent = 100 * (final_score / 30)
+
+            # assign rank based on percentage of correct response to training stimuli
+            if score_percent > 90:
+                rank = 'GOLD'
+                final_text = "Congratulations, you correctly respond to above 90% of the trials."
+            elif score_percent > 80:
+                rank = 'SILVER'
+                final_text = "Congratulations, you correctly respond to above 80% of the trials."
+            elif score_percent > 70:
+                rank = 'BRONZE'
+                final_text = "Congratulations, you correctly respond to above 70% of the trials."
+            else:
+                rank = None
+                final_text = "Your score is below 70% correct answering. Thank you for your participation."
+
+            # calculate the final score for the entire test sequence
+            # final_score = sum([result.score for result in training_results])
+
             session.finish()
             session.final_score = final_score
             session.save()
 
             final = Final(
                 session=session,
-                final_text="Thanks for your participation!",
-                rank=cls.rank(session),
+                final_text=final_text,
+                rank=rank,
                 show_social=False,
                 show_profile_link=True
             ).action()
@@ -333,7 +356,7 @@ class Categorization(Base):
         else:
             pass  # throw error
 
-        return Score(session, icon=icon, timer=.5, title=cls.get_title(session)).action()
+        return Score(session, icon=icon, timer=1, title=cls.get_title(session)).action()
 
     @classmethod
     def get_trial_with_feedback(cls, session):
