@@ -15,7 +15,7 @@ logger = logging.getLogger(__name__)
 
 class ToontjeHoger6Relative(Base):
     ID = 'TOONTJE_HOGER_6_RELATIVE'
-    TITLE = "Toontje Hoger"
+    TITLE = ""
     SCORE_CORRECT = 50
     SCORE_WRONG = 0
 

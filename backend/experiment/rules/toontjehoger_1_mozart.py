@@ -20,7 +20,7 @@ ANSWER_URL2 = "/images/experiments/toontjehoger/mozart-effect2-answer.webp"
 
 class ToontjeHoger1Mozart(Base):
     ID = 'TOONTJE_HOGER_1_MOZART'
-    TITLE = "Toontje Hoger"
+    TITLE = ""
     SCORE_CORRECT = 50
     SCORE_WRONG = 0
     LISTEN_DURATION = 5  # 20
