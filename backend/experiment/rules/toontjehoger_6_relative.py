@@ -27,12 +27,12 @@ class ToontjeHoger6Relative(Base):
         explainer = Explainer(
             instruction="Relatief Gehoor",
             steps=[
-                Step("In deze minigame kan je testen hoe goed jouw relatieve gehoor is! Dat is het vermogen om verschil of gelijkenis tussen tonen te kunnen herkennen."),
+                Step("In deze mini-game kan je testen hoe goed jouw relatieve gehoor is! Relatief gehoor is het vermogen om een melodie te herkennen, ongeacht of die nu wat hoger of lager in toonhoogte wordt afgespeeld."),
                 # Empty step adds some spacing between steps to improve readability
                 Step(""),
-                Step("Je kunt dadelijk twee melodieën luisteren.", number=1),
+                Step("Je krijgt twee melodieën te horen, verschillend in toonhoogte.", number=1),
                 Step("Luister goed, want je kunt ze maar één keer afspelen!", number=2),
-                Step("Geef aan of de melodieën hetzelfde zijn", number=3),
+                Step("Aan jou de taak om te ontrafelen of deze melodieën hetzelfde zijn, ongeacht de toonhoogte! ", number=3),
             ],
             button_label="Start"
 
