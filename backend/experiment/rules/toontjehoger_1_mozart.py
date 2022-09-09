@@ -33,9 +33,9 @@ class ToontjeHoger1Mozart(Base):
         explainer = Explainer(
             instruction="Het Mozart effect",
             steps=[
-                Step("Je krijgt een muziekfragment van 20 seconden te horen."),
-                Step("Hierna moet je een puzzel oplossen."),
-                Step("Lukt het dankzij de muziek het juiste antwoord te vinden?"),
+                Step("Je hoort een muziekfragment van ongeveer 20 seconden."),
+                Step("Hierna verschijnt een korte puzzel."),
+                Step("Lukt het om het juiste antwoord te vinden?"),
             ],
             button_label="Start"
         ).action(step_numbers=True)
@@ -184,6 +184,20 @@ class ToontjeHoger1Mozart(Base):
         ).action()
 
         return [listen, image_trial]
+
+    @classmethod 
+    def get_explainer_round2():
+        explainer = Explainer(
+            instruction="Het Mozart effect",
+            steps=[
+                Step("Je krijgt nu een ander muziekfragment van 20 seconden te horen."),
+                Step("Hierna verschijnt weer een korte puzzel."),
+                Step("Lukt het nu om de juiste te kiezen?"),
+            ],
+            button_label="Start"
+        ).action(step_numbers=True)
+
+        return [explainer]
 
     @classmethod
     def calculate_score(cls, result, data, form_element):
