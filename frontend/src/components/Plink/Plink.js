@@ -103,11 +103,13 @@ const Plink = ({
             case RECOGNIZE:
                 return (
                     <div className="d-flex flex-column">
-                        <Playback
-                            playerType={BUTTON}
-                            sections={sections}
-                            playConfig={defaultPlayConfig}
-                        />
+                        <div className="mb-3">
+                            <Playback
+                                playerType={BUTTON}
+                                sections={sections}
+                                playConfig={defaultPlayConfig}
+                            />
+                        </div>
                         <Question
                             question={{
                                 view: AUTOCOMPLETE,
@@ -142,13 +144,15 @@ const Plink = ({
                 return (
                     <div
                         key={extraQuestions[questionIndex].key}
-                        className="d-flex flex-column align-items-center"
+                        className="plink-extra-questions d-flex flex-column align-items-center"
                     >
-                        <Playback
-                            playerType={BUTTON}
-                            sections={sections}
-                        />
-                        <Question
+                        <div className="mb-3">
+                            <Playback
+                                playerType={BUTTON}
+                                sections={sections}
+                            />
+                        </div>
+                        <Question                            
                             question={window.innerWidth > 500 ? extraQuestions[questionIndex] : Object.assign({}, extraQuestions[questionIndex], {"view": DROPDOWN})}
                             onChange={setQuestionValue}
                             id="sub"
