@@ -1,5 +1,5 @@
 import React from "react";
-import { URLS, LOGO_URL } from "../../config";
+import { URLS, LOGO_URL, LOGO_TITLE } from "../../config";
 
 // AppBar is a bar on top of the app, with navigation and title
 const AppBar = ({ title, logoClickConfirm = null }) => {
@@ -21,7 +21,7 @@ const AppBar = ({ title, logoClickConfirm = null }) => {
             aria-label="Logo"
             style={{backgroundImage: `url(${LOGO_URL})`, }}
         >
-            Amsterdam Music Lab
+            {LOGO_TITLE}
         </a>
     );
 

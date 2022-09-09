@@ -15,7 +15,10 @@ export const API_BASE_URL = API_ROOT + '/experiment';
 // Media
 export const MEDIA_ROOT = API_ROOT;
 export const SILENT_MP3 = MEDIA_ROOT + "/static/audio/silent.mp3";
+
+// Logo
 export const LOGO_URL = process.env.REACT_APP_LOGO_URL || '/images/logo-white.svg';
+export const LOGO_TITLE = process.env.REACT_APP_HTML_PAGE_TITLE || 'Amsterdam Music Lab';
 
 // Urls used by app
 export const URLS = {
