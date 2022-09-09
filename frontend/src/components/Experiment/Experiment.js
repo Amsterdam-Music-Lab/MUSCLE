@@ -5,6 +5,7 @@ import { withRouter } from "react-router-dom";
 
 import Consent from "../Consent/Consent";
 import DefaultPage from "../Page/DefaultPage";
+import ToontjeHoger from "../ToontjeHoger/ToontjeHoger";
 import Explainer from "../Explainer/Explainer";
 import Final from "../Final/Final";
 import Loading from "../Loading/Loading";
@@ -158,6 +159,11 @@ const Experiment = ({ match }) => {
             case "INFO":
                 return <Info {...attrs} />;
 
+            // Specials
+            // -------------------------
+            case "TOONTJEHOGER":
+                return <ToontjeHoger {...attrs} />
+
             default:
                 return (
                     <div className="text-white bg-danger">
@@ -189,7 +195,7 @@ const Experiment = ({ match }) => {
                 <DefaultPage
                     title={state.title}
                     logoClickConfirm={
-                        ["FINAL", "ERROR"].includes(key)
+                        ["FINAL", "ERROR", "TOONTJEHOGER"].includes(key)
                             ? null
                             : "Are you sure you want to stop this experiment?"
                     }
