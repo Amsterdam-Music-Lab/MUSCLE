@@ -1,7 +1,10 @@
+import random
+import logging
+import math
+
 from django.utils.translation import gettext_lazy as _
 from django.template.loader import render_to_string
 
-import random
 from .base import Base
 from .views import SongSync, Final, Score, Explainer, Step, Consent, StartSession, Playlist, Question, Trial
 from .views.form import BooleanQuestion, ChoiceQuestion, Form
@@ -10,10 +13,13 @@ from .util.questions import EXTRA_DEMOGRAPHICS, question_by_key
 from .util.goldsmiths import MSI_ALL
 from .util.actions import combine_actions
 
+logger = logging.getLogger(__name__)
+
 class Huang2022(Base):
     """Rules for the Chinese version of the Hooked experiment."""
 
     ID = 'HUANG_2022'
+    timeout = 15
 
     @classmethod
     def first_round(cls, experiment):
@@ -279,7 +285,10 @@ class Huang2022(Base):
         if not section:
             print("Warning: no heard_before section found")
             section = session.section_from_any_song()
-        playback = Playback([section])
+        playback = Playback(
+            [section],
+            play_config={'ready_time': 3, 'show_animation': True},
+            preload_message=_('Get ready!'))
         expected_result = this_section_info.get('novelty')
         # create Result object and save expected result to database
         result_pk = cls.prepare_result(session, section, expected_result)
@@ -292,7 +301,11 @@ class Huang2022(Base):
             question=_("Did you hear this song in previous rounds?"),
             result_id=result_pk,
             submits=True)])
-        config = {'style': 'boolean-negative-first'}
+        config = {
+            'style': 'boolean-negative-first',
+            'auto_advance': True,
+            'decision_time': cls.timeout
+        }
         trial = Trial(
             title=cls.get_trial_title(session, next_round_number),
             playback=playback,
@@ -350,8 +363,8 @@ class Huang2022(Base):
         ]
         return " ".join([str(m) for m in messages])
 
-    @staticmethod
-    def calculate_score(result, data, form_element=None):
+    @classmethod
+    def calculate_score(cls, result, data, form_element=None):
         # return 1 if correct, 0 if incorrect
         try:
             expected_response = result.expected_response
@@ -359,10 +372,11 @@ class Huang2022(Base):
             logger.log(e)
             expected_response = None
         if expected_response:
+            time = data.get('decision_time')
             if expected_response == form_element['value']:
-                return 1
+                return math.ceil(cls.timeout - time)
             else:
-                return 0
+                return math.floor(-time)
         else:
             # SongSync round
             return SongSync.calculate_score(data)
