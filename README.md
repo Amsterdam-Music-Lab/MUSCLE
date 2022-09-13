@@ -65,6 +65,9 @@ If all containers are running via docker-compose, it is not possible to interact
 `docker-compose run --rm --service-ports server`
 After that, if you place a `breakpoint()` anywhere in the code, you can step through and inspect values of variables.
 
+### Compile and watch scss files
+The frontend container will build .css and .css.map files from scss every time you restart the Docker containers. To watch for and immediately see changes during development, run an extra client container like so:
+`docker-compose run client yarn scss-watch`
 
 ## Production build
 A production build should define its own `docker-compose.yaml`, making use of the `Dockerfile` of the `backend` and `frontend` environments. Instead of mounting the entire backend and frontend directory and using the development servers, the backend should serve with gunicorn, and the frontend should build its files. An example of this setup can be found in the aml-deployment repository.
