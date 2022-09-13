@@ -11,6 +11,15 @@ import Profile from "../Profile/Profile";
 import Reload from "../Reload/Reload";
 import StoreProfile from "../StoreProfile/StoreProfile.js";
 
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { faThumbsDown, faThumbsUp, faQuestion } from '@fortawesome/free-solid-svg-icons';
+
+library.add(
+    faThumbsDown,
+    faThumbsUp,
+    faQuestion
+);
+
 // App is the root component of our application
 const App = () => {
     return (

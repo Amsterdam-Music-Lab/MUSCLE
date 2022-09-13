@@ -1,6 +1,7 @@
 import React from "react";
 
 import classNames from "classnames";
+import { renderLabel } from "../../util/label";
 
 // ButtonArray is a question view for selecting a single option from a list of buttons
 const ButtonArray = ({ question, active, onChange, emphasizeTitle = false }) => {
@@ -40,7 +41,6 @@ const ButtonArray = ({ question, active, onChange, emphasizeTitle = false }) => 
 
 const ToggleButton = ({ label, value, index, name, active, onChange }) => {
     const disabled = active? '' : 'disabled';
-    const labelIsIcon = label.startsWith('ti-') | label.startsWith('fa-') ? true : false;
     return (
         <label
             className={classNames("btn btn-secondary btn-lg", disabled)}
@@ -53,7 +53,7 @@ const ToggleButton = ({ label, value, index, name, active, onChange }) => {
             }}
         >
             <input className={value} type="radio" name={name} id={index} value={value}/>
-            {labelIsIcon ? <span className={label}></span> : {label}}
+            {renderLabel(label)}
         </label>)
 }
 

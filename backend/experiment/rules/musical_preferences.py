@@ -58,8 +58,8 @@ class MusicalPreferences(Base):
             question = BooleanQuestion(
                 question=_("Would you like to listen to more songs?"),
                 choices={
-                    'yes': 'ti-thumb-up',
-                    'no': 'ti-thumb-down'
+                    'yes': 'fa-thumbs-up',
+                    'no': 'fa-thumbs-down'
                 },
                 key='continue',
                 submits=True
@@ -86,9 +86,9 @@ class MusicalPreferences(Base):
             result_id=result_id,
             view='BUTTON_ARRAY',
             choices={
-                'yes': 'ti-thumb-up',
-                'unsure': 'ti-help',
-                'no': 'ti-thumb-down',
+                'yes': 'fa-thumbs-up',
+                'unsure': 'fa-question',
+                'no': 'fa-thumbs-down',
             }
         )
         playback = Playback([section], play_config={'show_animation': True})
