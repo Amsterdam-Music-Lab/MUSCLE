@@ -25,7 +25,7 @@ class Base(object):
         if not result_id:
             result = Result(session=session)
         try:
-            result = Result.objects.get(pk=result_id)
+            result = Result.objects.get(pk=result_id, session=session)
         except Result.DoesNotExist:
             # Create new result
             result = Result(session=session)

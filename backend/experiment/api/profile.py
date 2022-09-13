@@ -2,6 +2,7 @@ import json
 
 from django.http import JsonResponse, HttpResponseBadRequest, Http404, HttpResponseForbidden
 from django.views.decorators.http import require_POST
+from experiment.rules.util.score import SCORING_RULES
 from experiment.models import Profile, Session
 from .util.participant import current_participant
 
@@ -34,6 +35,8 @@ def create(request):
     participant = current_participant(request)
     # Get question
     result = json.loads(request.POST.get("json_data"))
+    # Session ID, defaults to 0
+    session_id = int(request.POST.get("session_id", 0))
 
     if not result:
         return HttpResponseBadRequest("Missing required parameter: result")
@@ -49,9 +52,10 @@ def create(request):
             profile = Profile(participant=participant,
                               question=question)
         profile.answer = form_element['value']
+        scoring_rule = SCORING_RULES.get(form_element['scoring_rule'], None)
+        if scoring_rule:
+            profile.score = scoring_rule(form_element, session_id)
         profile.save()
-        # Session ID, defaults to 0
-        session_id = int(request.POST.get("session_id", 0))
 
         if session_id > 0:
             try:
