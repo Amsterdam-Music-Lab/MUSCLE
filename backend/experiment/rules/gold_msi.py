@@ -15,7 +15,7 @@ class GoldMSI(Base):
     demographics = [
         question_by_key('dgf_gender_identity'),
         question_by_key('dgf_age', EXTRA_DEMOGRAPHICS),
-        question_by_key('dgf_education'),
+        question_by_key('dgf_education', drop_choices=['isced-1']),
         question_by_key('dgf_highest_qualification_expectation', EXTRA_DEMOGRAPHICS),
         question_by_key('dgf_country_of_residence'),
         question_by_key('dgf_country_of_origin'),

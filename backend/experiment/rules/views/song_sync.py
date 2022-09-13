@@ -84,7 +84,6 @@ class SongSync(object):  # pylint: disable=too-few-public-methods
 
     def action(self):
         """Serialize data for song_sync action"""
-
         # Create action
         action = {
             'view': self.ID,

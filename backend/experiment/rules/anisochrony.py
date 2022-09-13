@@ -70,7 +70,7 @@ class Anisochrony(DurationDiscrimination):
         form = Form([question])
         config = {
             'listen_first': True,
-            'decision_time': section.duration + .7
+            'decision_time': section.duration + .1
         }
         view = Trial(
             playback=playback,

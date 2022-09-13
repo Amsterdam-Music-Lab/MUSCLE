@@ -69,7 +69,7 @@ class BST(HBat):
             feedback_form=form,
             title=_('Meter detection'),
             config={
-                'decision_time': section.duration + .5
+                'decision_time': section.duration + .1
             }
         )
         return view.action()

@@ -193,10 +193,10 @@ def next_trial_actions(session, round_number, request_session):
     view = Trial(
         playback=playback,
         feedback_form=form,
-        title=_('Ryhthm discrimination: %s' %(title)),
+        title=_('Rhythm discrimination: %s' %(title)),
         config={
             'listen_first': True,
-            'decision_time': section.duration + .5
+            'decision_time': section.duration + .1
         }
     )
 

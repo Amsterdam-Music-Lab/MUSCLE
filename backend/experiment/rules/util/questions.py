@@ -1,3 +1,5 @@
+from copy import deepcopy
+
 from django.utils.translation import gettext_lazy as _
 
 from experiment.rules.views.form import ChoiceQuestion, Question
@@ -125,16 +127,22 @@ EXTRA_DEMOGRAPHICS = [
 ]
 
 
-def question_by_key(key, questions=DEMOGRAPHICS, is_skippable=None):
+def question_by_key(key, questions=DEMOGRAPHICS, is_skippable=None, drop_choices=[]):
     """Return question by given key"""
     try:
         for question in questions:
             if question.key == key:
+
+                q = deepcopy(question)
                 # Set is_skippable
                 if is_skippable is not None:
-                    question.is_skippable = is_skippable
+                    q.is_skippable = is_skippable
+                
+                if hasattr(question, 'choices') and len(drop_choices):
+                    for choice in drop_choices:
+                        q.choices.pop(choice, None)
 
-                return question
+                return q
 
     except KeyError as error:
         print('KeyError: %s' % str(error))

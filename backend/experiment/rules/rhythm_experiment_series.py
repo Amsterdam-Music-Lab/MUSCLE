@@ -64,6 +64,7 @@ class RhythmExperimentSeries(Base):
                 title=_("Thank you very much for participating!"),
                 final_text=rendered,
                 show_participant_link=True,
+                show_participant_id_only=True,
             ).action()
         slug = experiment_data[experiment_number]
         session.save()
@@ -72,7 +73,7 @@ class RhythmExperimentSeries(Base):
             'link': '{}/{}'.format(settings.CORS_ORIGIN_WHITELIST[0], slug)
         }
         return Final(session,
-            title=_('Next experiment (%d to go!)' % (len(experiment_data) - experiment_number)),
+            title=_('Next experiment (%d to go!)') % (len(experiment_data) - experiment_number),
             button=button).action()
 
 

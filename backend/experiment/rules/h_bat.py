@@ -120,7 +120,7 @@ class HBat(Base):
             feedback_form=form,
             title=_('Beat acceleration'),
             config={
-                'decision_time': section.duration + .5
+                'decision_time': section.duration + .1
             }
         )
         return view.action()

@@ -3,7 +3,7 @@ import React, { useRef } from "react";
 import { useParticipantLink } from "../../API";
 import Loading from "../Loading/Loading";
 
-const ParticipantLink = (participantIDOnly) => {
+const ParticipantLink = ({participantIDOnly}) => {
     const [link, loadingLink] = useParticipantLink();
     const linkInput = useRef();
 
@@ -22,7 +22,7 @@ const ParticipantLink = (participantIDOnly) => {
     };
 
     const formatLink = (url) => {
-        const formatted = participantIDOnly ? url.split('/')[6] : url;
+        const formatted = participantIDOnly===true ? url.split('/')[6] : url;
         return formatted;
     }
 

@@ -66,7 +66,7 @@ const FeedbackForm = ({
                                 onSubmit();
                             }}
                             className={
-                                "btn-primary anim anim-fade-in anim-speed-500"
+                                "btn-primary submit anim anim-fade-in anim-speed-500"
                             }
                             title={buttonLabel}
                         />
