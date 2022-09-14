@@ -183,12 +183,14 @@
             padding-top: 30px;
             padding-bottom: 30px;
             display: flex;
+            column-gap: 45px;
+            row-gap: 45px;
             flex-wrap: wrap;
             justify-content: center;
 
             a {
                 width: 400px;
-                max-width: 100%;
+                max-width: 80%;
                 display: block;
                 position: relative;
                 transition: opacity 0.3s ease-out;
@@ -200,6 +202,10 @@
 
                 img {
                     width: 100%;
+                }
+
+                &.aml {
+                    max-width: 100px;
                 }
             }
         }

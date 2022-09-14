@@ -30,6 +30,17 @@ const Supporters = ({ intro }) => (
                     alt="KNAW"
                 />
             </a>
+            <a
+                href="https://www.amsterdammusiclab.nl"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="aml"
+            >
+                <img
+                    src="/images/logo-full-white.svg"
+                    alt="Amsterdam Music Lab"
+                />
+            </a>
         </div>
     </div>
 );
