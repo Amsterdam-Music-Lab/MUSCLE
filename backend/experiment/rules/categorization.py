@@ -167,13 +167,13 @@ class Categorization(Base):
             score_percent = 100 * (final_score / 30)
 
             # assign rank based on percentage of correct response to training stimuli
-            if score_percent > 90:
+            if score_percent >= 90:
                 rank = 'GOLD'
                 final_text = "Congratulations, you correctly respond to above 90% of the trials."
-            elif score_percent > 80:
+            elif score_percent >= 80:
                 rank = 'SILVER'
                 final_text = "Congratulations, you correctly respond to above 80% of the trials."
-            elif score_percent > 70:
+            elif score_percent >= 70:
                 rank = 'BRONZE'
                 final_text = "Congratulations, you correctly respond to above 70% of the trials."
             else:
