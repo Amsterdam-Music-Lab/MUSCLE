@@ -12,7 +12,7 @@ class Categorization(Base):
     ID = 'CATEGORIZATION'
 
     @classmethod
-    def first_round(cls, experiment):
+    def first_round(cls, experiment, participant):
         consent = Consent.action()
         start_session = StartSession.action()
         return [

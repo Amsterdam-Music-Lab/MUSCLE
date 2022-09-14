@@ -16,6 +16,7 @@ from .util.staircasing import register_turnpoint
 
 logger = logging.getLogger(__name__)
 
+
 class DurationDiscrimination(Base):
     """
     These rules make use of the session's final_score to register turnpoints
@@ -30,7 +31,7 @@ class DurationDiscrimination(Base):
     decrease_difficulty_multiplier = 1.5
 
     @classmethod
-    def first_round(cls, experiment):
+    def first_round(cls, experiment, participant):
         """Create data for the first experiment rounds"""
         explainer = cls.intro_explanation().action(True)
 
@@ -65,7 +66,8 @@ class DurationDiscrimination(Base):
 
         else:
             ##### Actual trials ####
-            action = cls.staircasing_blocks(session, cls.next_trial_action, request_session)
+            action = cls.staircasing_blocks(
+                session, cls.next_trial_action, request_session)
             return action
 
     @staticmethod
@@ -96,8 +98,9 @@ class DurationDiscrimination(Base):
 
     @classmethod
     def get_response_explainer(cls, correct, correct_response, button_label=_('Next fragment')):
-        preposition = _('than') if correct_response=='LONGER' else _('as')
-        correct_response = _('LONGER') if correct_response=='LONGER' else _('EQUAL')
+        preposition = _('than') if correct_response == 'LONGER' else _('as')
+        correct_response = _(
+            'LONGER') if correct_response == 'LONGER' else _('EQUAL')
         if correct:
             instruction = _(
                 'The second interval was %(correct_response)s %(preposition)s the first interval. Your answer was CORRECT.') % {'correct_response': correct_response, 'preposition': preposition}
@@ -148,7 +151,8 @@ class DurationDiscrimination(Base):
         view = Trial(
             playback=playback,
             feedback_form=form,
-            title=_('%(title)s duration discrimination') % {'title': cls.condition},
+            title=_('%(title)s duration discrimination') % {
+                'title': cls.condition},
             config={
                 'listen_first': True,
                 'decision_time': section.duration + .1
@@ -167,12 +171,12 @@ class DurationDiscrimination(Base):
             steps=[
                 Step(cls.get_task_explanation()),
                 Step(_(
-                        'During the experiment it will become more difficult to hear the difference.')),
+                    'During the experiment it will become more difficult to hear the difference.')),
                 Step(_(
-                        "Try to answer as accurately as possible, even if you're uncertain.")),
+                    "Try to answer as accurately as possible, even if you're uncertain.")),
                 Step(_("Remember: try not to move or tap along with the sounds")),
                 Step(_(
-                        'This test will take around 4 minutes to complete. Try to stay focused for the entire test!'))
+                    'This test will take around 4 minutes to complete. Try to stay focused for the entire test!'))
             ],
             button_label='Ok'
         )
@@ -249,7 +253,8 @@ class DurationDiscrimination(Base):
                     session.merge_json_data({'direction': 'decrease'})
                     session.save()
                     # decrease difficulty
-                    difficulty = cls.get_difficulty(session, cls.decrease_difficulty_multiplier)
+                    difficulty = cls.get_difficulty(
+                        session, cls.decrease_difficulty_multiplier)
                     action = trial_action_callback(
                         session,
                         trial_condition,
@@ -274,7 +279,8 @@ class DurationDiscrimination(Base):
                         session.merge_json_data({'direction': 'increase'})
                         session.save()
                         # increase difficulty
-                        difficulty = cls.get_difficulty(session, cls.increase_difficulty_multiplier)
+                        difficulty = cls.get_difficulty(
+                            session, cls.increase_difficulty_multiplier)
                         action = trial_action_callback(
                             session,
                             trial_condition,

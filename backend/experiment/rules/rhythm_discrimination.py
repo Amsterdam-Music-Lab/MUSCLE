@@ -73,11 +73,12 @@ STIMULI = {
     }
 }
 
+
 class RhythmDiscrimination(Base):
     ID = 'RHYTHM_DISCRIMINATION'
 
     @classmethod
-    def first_round(cls, experiment):
+    def first_round(cls, experiment, participant):
         """Create data for the first experiment rounds"""
         explainer = intro_explainer().action(True)
 
@@ -102,7 +103,8 @@ class RhythmDiscrimination(Base):
         if next_round_number == 1:
             plan_stimuli(session)
 
-        actions = next_trial_actions(session, next_round_number, request_session)
+        actions = next_trial_actions(
+            session, next_round_number, request_session)
         if isinstance(actions, dict):
             return actions
         return combine_actions(*actions)
@@ -131,7 +133,7 @@ def next_trial_actions(session, round_number, request_session):
         print('Missing plan key: %s' % str(error))
         return actions
 
-    if len(plan)==round_number-1:
+    if len(plan) == round_number-1:
         return finalize_experiment(session, request_session)
 
     condition = plan[round_number-1]
@@ -145,7 +147,8 @@ def next_trial_actions(session, round_number, request_session):
                 response_explainer(previous_results.first().score, same)
             )
         if round_number == 5:
-            total_score = sum([res.score for res in previous_results.all()[:4]])
+            total_score = sum(
+                [res.score for res in previous_results.all()[:4]])
             if total_score < 2:
                 # start practice over
                 actions.append(practice_again_explainer())
@@ -171,7 +174,8 @@ def next_trial_actions(session, round_number, request_session):
 
     expected_result = 'SAME' if condition['group'] == '1' else 'DIFFERENT'
     # create Result object and save expected result to database
-    result_pk = RhythmDiscrimination.prepare_result(session, section, expected_result)
+    result_pk = RhythmDiscrimination.prepare_result(
+        session, section, expected_result)
     question = ChoiceQuestion(
         key='same',
         question=_(
@@ -189,11 +193,12 @@ def next_trial_actions(session, round_number, request_session):
     if round_number < 5:
         title = _('practice')
     else:
-        title = _('trial %(index)d of %(total)d') % ({'index': round_number - 4, 'total': len(plan) - 4})
+        title = _('trial %(index)d of %(total)d') % (
+            {'index': round_number - 4, 'total': len(plan) - 4})
     view = Trial(
         playback=playback,
         feedback_form=form,
-        title=_('Rhythm discrimination: %s' %(title)),
+        title=_('Rhythm discrimination: %s' % (title)),
         config={
             'listen_first': True,
             'decision_time': section.duration + .1
@@ -202,6 +207,7 @@ def next_trial_actions(session, round_number, request_session):
 
     actions.append(view.action())
     return actions
+
 
 def plan_stimuli(session):
     """ select 60 stimuli, of which 30 are standard, 30 deviant.
@@ -213,21 +219,31 @@ def plan_stimuli(session):
     nonmetric = STIMULI['nonmetric']
     tempi = [150, 160, 170, 180, 190, 200]
     tempi = [str(t) for t in tempi]
-    metric_deviants = [{'rhythm': m, 'tag': random.choice(tempi), 'group': '0'} for m in metric['deviant']]
-    metric_standard = [{'rhythm': m, 'tag': random.choice(tempi), 'group': '1'} for m in metric['standard']]
-    nonmetric_deviants = [{'rhythm': m, 'tag': random.choice(tempi), 'group': '0'} for m in nonmetric['deviant']]
-    nonmetric_standard = [{'rhythm': m, 'tag': random.choice(tempi), 'group': '1'} for m in nonmetric['standard']]
+    metric_deviants = [{'rhythm': m, 'tag': random.choice(
+        tempi), 'group': '0'} for m in metric['deviant']]
+    metric_standard = [{'rhythm': m, 'tag': random.choice(
+        tempi), 'group': '1'} for m in metric['standard']]
+    nonmetric_deviants = [{'rhythm': m, 'tag': random.choice(
+        tempi), 'group': '0'} for m in nonmetric['deviant']]
+    nonmetric_standard = [{'rhythm': m, 'tag': random.choice(
+        tempi), 'group': '1'} for m in nonmetric['standard']]
     practice = [
-        {'rhythm': STIMULI['practice']['metric']['standard'], 'tag': random.choice(tempi), 'group': '1'},
-        {'rhythm': STIMULI['practice']['metric']['deviant'], 'tag': random.choice(tempi), 'group': '0'},
-        {'rhythm': STIMULI['practice']['nonmetric']['standard'], 'tag': random.choice(tempi), 'group': '1'},
-        {'rhythm': STIMULI['practice']['nonmetric']['deviant'], 'tag': random.choice(tempi), 'group': '0'},
+        {'rhythm': STIMULI['practice']['metric']['standard'],
+            'tag': random.choice(tempi), 'group': '1'},
+        {'rhythm': STIMULI['practice']['metric']['deviant'],
+            'tag': random.choice(tempi), 'group': '0'},
+        {'rhythm': STIMULI['practice']['nonmetric']['standard'],
+            'tag': random.choice(tempi), 'group': '1'},
+        {'rhythm': STIMULI['practice']['nonmetric']['deviant'],
+            'tag': random.choice(tempi), 'group': '0'},
     ]
-    experiment = metric_deviants + metric_standard + nonmetric_deviants + nonmetric_standard
+    experiment = metric_deviants + metric_standard + \
+        nonmetric_deviants + nonmetric_standard
     random.shuffle(experiment)
-    plan =  practice + experiment
+    plan = practice + experiment
     session.merge_json_data({'plan': plan})
     session.save()
+
 
 def intro_explainer():
     return Explainer(
@@ -235,13 +251,14 @@ def intro_explainer():
             'In this test you will hear the same rhythm twice. After that, you will hear a third rhythm.'),
         steps=[
             Step(_(
-                    "Your task is to decide whether this third rhythm is the SAME as the first two rhythms or DIFFERENT.")),
+                "Your task is to decide whether this third rhythm is the SAME as the first two rhythms or DIFFERENT.")),
             Step(_("Remember: try not to move or tap along with the sounds")),
             Step(_(
-                    'This test will take around 6 minutes to complete. Try to stay focused for the entire test!'))
+                'This test will take around 6 minutes to complete. Try to stay focused for the entire test!'))
         ],
         button_label='Ok'
     )
+
 
 def response_explainer(correct, same, button_label=_('Next fragment')):
     if correct:
@@ -264,12 +281,15 @@ def response_explainer(correct, same, button_label=_('Next fragment')):
         button_label=button_label
     ).action()
 
+
 def finalize_experiment(session, request_session):
     # we had 4 practice trials and 60 experiment trials
-    percentage = (sum([res.score for res in session.result_set.all()]) / session.result_set.count()) * 100
+    percentage = (sum([res.score for res in session.result_set.all()]
+                      ) / session.result_set.count()) * 100
     session.finish()
     session.save()
-    feedback = _("Well done! You've answered {} percent correctly!").format(percentage)
+    feedback = _("Well done! You've answered {} percent correctly!").format(
+        percentage)
     trivia = _("One reason for the \
         weird beep-tones in this test (instead of some nice drum-sound) is that it is used very often\
         in brain scanners, which make a lot of noise. The beep-sound helps people in the scanner \

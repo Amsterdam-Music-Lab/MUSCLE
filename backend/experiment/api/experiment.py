@@ -4,6 +4,7 @@ from django.http import Http404, JsonResponse
 from django.conf import settings
 from django.utils.translation import gettext_lazy as _
 from django.utils.translation import activate
+from .util.participant import current_participant
 
 from experiment.models import Experiment, Session
 
@@ -30,9 +31,9 @@ def get(request, slug):
 
         # convert non lists to list
         next_round = session.experiment_rules().next_round(session)
-        if not isinstance(next_round, list): 
+        if not isinstance(next_round, list):
             next_round = [next_round]
-            
+
         data = {
             'session': {
                 'id': session.id,
@@ -50,6 +51,9 @@ def get(request, slug):
     if experiment.language:
         activate(experiment.language)
 
+    # get current participant
+    participant = current_participant(request)
+
     # create data
     experiment_data = {
         'id': experiment.id,
@@ -61,7 +65,7 @@ def get(request, slug):
             {'id': playlist.id, 'name': playlist.name}
             for playlist in experiment.playlists.all()
         ],
-        'next_round': experiment.get_rules().first_round(experiment),
+        'next_round': experiment.get_rules().first_round(experiment, participant),
         'loading_text': _('Loading')
     }
 

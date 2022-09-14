@@ -74,7 +74,7 @@ class ToontjeHogerHome(Base):
     ]
 
     @classmethod
-    def first_round(cls, experiment):
+    def first_round(cls, experiment, participant):
         """Create data for the first experiment round"""
 
         # Main button shows

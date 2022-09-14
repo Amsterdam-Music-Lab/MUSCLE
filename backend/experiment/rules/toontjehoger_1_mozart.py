@@ -18,6 +18,7 @@ QUESTION_URL2 = "/images/experiments/toontjehoger/mozart-effect2.webp"
 ANSWER_URL1 = "/images/experiments/toontjehoger/mozart-effect1-answer.webp"
 ANSWER_URL2 = "/images/experiments/toontjehoger/mozart-effect2-answer.webp"
 
+
 class ToontjeHoger1Mozart(Base):
     ID = 'TOONTJE_HOGER_1_MOZART'
     TITLE = ""
@@ -26,7 +27,7 @@ class ToontjeHoger1Mozart(Base):
     LISTEN_DURATION = 5  # 20
 
     @classmethod
-    def first_round(cls, experiment):
+    def first_round(cls, experiment, participant):
         """Create data for the first experiment rounds."""
 
         # 1. Explain game.
@@ -114,8 +115,9 @@ class ToontjeHoger1Mozart(Base):
         # Feedback message
         last_result = session.last_result()
         section = last_result.section
-        feedback = "Je hoorde {} van {}.".format(non_breaking(section.name), non_breaking(section.artist)) if section else ""
-        
+        feedback = "Je hoorde {} van {}.".format(non_breaking(
+            section.name), non_breaking(section.artist)) if section else ""
+
         # Return score view
         config = {'show_total_score': True}
         score = Score(session, config=config, feedback=feedback).action()
@@ -185,7 +187,7 @@ class ToontjeHoger1Mozart(Base):
 
         return [listen, image_trial]
 
-    @classmethod 
+    @classmethod
     def get_explainer_round2():
         explainer = Explainer(
             instruction="Het Mozart effect",

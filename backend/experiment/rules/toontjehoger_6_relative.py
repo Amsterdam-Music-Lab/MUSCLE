@@ -20,7 +20,7 @@ class ToontjeHoger6Relative(Base):
     SCORE_WRONG = 0
 
     @classmethod
-    def first_round(cls, experiment):
+    def first_round(cls, experiment, participant):
         """Create data for the first experiment rounds."""
 
         # 1. Explain game.
@@ -30,7 +30,8 @@ class ToontjeHoger6Relative(Base):
                 Step("In deze mini-game kan je testen hoe goed jouw relatieve gehoor is! Relatief gehoor is het vermogen om een melodie te herkennen, ongeacht of die nu wat hoger of lager in toonhoogte wordt afgespeeld."),
                 # Empty step adds some spacing between steps to improve readability
                 Step(""),
-                Step("Je krijgt twee melodieën te horen, verschillend in toonhoogte.", number=1),
+                Step(
+                    "Je krijgt twee melodieën te horen, verschillend in toonhoogte.", number=1),
                 Step("Luister goed, want je kunt ze maar één keer afspelen!", number=2),
                 Step("Aan jou de taak om te ontrafelen of deze melodieën hetzelfde zijn, ongeacht de toonhoogte! ", number=3),
             ],

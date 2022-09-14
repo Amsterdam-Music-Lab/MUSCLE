@@ -22,7 +22,7 @@ class ToontjeHoger3Plink(Base):
     SCORE_EXTRA_WRONG = 0
 
     @classmethod
-    def first_round(cls, experiment):
+    def first_round(cls, experiment, participant):
         """Create data for the first experiment rounds."""
 
         # 1. Explain game.
@@ -107,7 +107,8 @@ class ToontjeHoger3Plink(Base):
 
         # - Partial score or all questions wrong
         all_wrong_score = last_result.score == 2 * cls.SCORE_EXTRA_WRONG
-        only_half_score = last_result.score < cls.SCORE_EXTRA_1_CORRECT + cls.SCORE_EXTRA_2_CORRECT if not all_wrong_score else False
+        only_half_score = last_result.score < cls.SCORE_EXTRA_1_CORRECT + \
+            cls.SCORE_EXTRA_2_CORRECT if not all_wrong_score else False
 
         if all_wrong_score:
             feedback_prefix = "Helaas!"
@@ -124,10 +125,12 @@ class ToontjeHoger3Plink(Base):
         # Construct final feedback message
         question_part = "Het nummer komt uit de {} en de emotie is {}.".format(
             time_period, emotion)
-        section_part = "Je hoorde {} van {}.".format(non_breaking(section.name), non_breaking(section.artist))
-        
+        section_part = "Je hoorde {} van {}.".format(
+            non_breaking(section.name), non_breaking(section.artist))
+
         # The \n results in a linebreak
-        feedback = "{} {} \n {}".format(feedback_prefix, question_part, section_part);
+        feedback = "{} {} \n {}".format(
+            feedback_prefix, question_part, section_part)
         return feedback
 
     @classmethod
@@ -168,7 +171,8 @@ class ToontjeHoger3Plink(Base):
             instruction="Tussenronde",
             steps=[
                 Step("Jammer dat je de artiest en titel van dit nummer niet weet!"),
-                Step("Verdien extra punten door twee extra vragen over het nummer te beantwoorden."),                    
+                Step(
+                    "Verdien extra punten door twee extra vragen over het nummer te beantwoorden."),
             ],
             button_label="Start"
 
@@ -187,7 +191,7 @@ class ToontjeHoger3Plink(Base):
             choices=choices,
             submit_label="Volgende",
             dont_know_label="Ik weet het niet",
-            extra_questions=extra_questions,            
+            extra_questions=extra_questions,
             extra_questions_intro=extra_questions_intro
         ).action()
 
@@ -203,7 +207,7 @@ class ToontjeHoger3Plink(Base):
         periods = ["60's", "70's", "80's", "90's", "00's", "10's", "20's"]
         period_choices = {}
         for period in periods:
-            period_choices[period.replace("'","")] = period
+            period_choices[period.replace("'", "")] = period
 
         question = RadiosQuestion(
             question="Wanneer is het nummer uitgebracht?",
@@ -271,7 +275,7 @@ class ToontjeHoger3Plink(Base):
             # Check if the given answers
             # e.g section.group = 60s;vrolijk (time_period;emotion)
             for index, answer in enumerate(extra_questions):
-                points_correct = cls.SCORE_EXTRA_1_CORRECT if index == 0 else cls.SCORE_EXTRA_2_CORRECT 
+                points_correct = cls.SCORE_EXTRA_1_CORRECT if index == 0 else cls.SCORE_EXTRA_2_CORRECT
                 score += points_correct if answer and (
                     answer in section.group) else cls.SCORE_EXTRA_WRONG
 

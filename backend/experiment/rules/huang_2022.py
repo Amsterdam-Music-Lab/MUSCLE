@@ -15,6 +15,7 @@ from .util.actions import combine_actions
 
 logger = logging.getLogger(__name__)
 
+
 class Huang2022(Base):
     """Rules for the Chinese version of the Hooked experiment."""
 
@@ -22,7 +23,7 @@ class Huang2022(Base):
     timeout = 15
 
     @classmethod
-    def first_round(cls, experiment):
+    def first_round(cls, experiment, participant):
         """Create data for the first experiment rounds."""
 
         # 1. Explain game.
@@ -47,10 +48,10 @@ class Huang2022(Base):
             instruction=_("You can use your smartphone, computer or tablet to participate in this experiment. Please choose the best network in your area to participate in the experiment, such as wireless network (WIFI), mobile data network signal (4G or above) or wired network. If the network is poor, it may cause the music to fail to load or the experiment may fail to run properly. You can access the experiment page through the following channels:"),
             steps=[
                 Step(_(
-                        "Directly click the link on WeChat (smart phone or PC version, or WeChat Web)"),
+                    "Directly click the link on WeChat (smart phone or PC version, or WeChat Web)"),
                 ),
                 Step(_(
-                        "If the link to load the experiment page through the WeChat app on your cell phone fails, you can copy and paste the link in the browser of your cell phone or computer to participate in the experiment. You can use any of the currently available browsers, such as Safari, Firefox, 360, Google Chrome, Quark, etc."),
+                    "If the link to load the experiment page through the WeChat app on your cell phone fails, you can copy and paste the link in the browser of your cell phone or computer to participate in the experiment. You can use any of the currently available browsers, such as Safari, Firefox, 360, Google Chrome, Quark, etc."),
                 )
             ],
             button_label=_("Continue")
@@ -101,7 +102,8 @@ class Huang2022(Base):
         new_sections = [session.section_from_song(s) for s in new_songs]
 
         # Randomise.
-        old_section_info = [{'novelty': 'old', 'id': s.id} for s in old_sections]
+        old_section_info = [{'novelty': 'old', 'id': s.id}
+                            for s in old_sections]
         song_sync_sections = old_section_info + [
             {'novelty': 'free', 'id': s.id} for s in free_sections]
         random.shuffle(song_sync_sections)
@@ -123,7 +125,7 @@ class Huang2022(Base):
         """Get a list of all questions for the experiment (MSI and demographic questions),
         in fixed order
         """
-        questions = MSI_ALL + [      
+        questions = MSI_ALL + [
             question_by_key('msi_39_best_instrument'),
             genre_question(),
             question_by_key('dgf_generation'),
@@ -138,7 +140,7 @@ class Huang2022(Base):
         return [
             Trial(
                 title=_("Questionnaire"),
-                feedback_form=Form([question], is_profile=True)).action() 
+                feedback_form=Form([question], is_profile=True)).action()
             for question in questions
         ]
 
@@ -276,10 +278,11 @@ class Huang2022(Base):
 
         # Get section.
         section = None
-        if next_round_number - heard_before_offset  <= len(sections):
-            this_section_info = sections[next_round_number - heard_before_offset - 1]
+        if next_round_number - heard_before_offset <= len(sections):
+            this_section_info = sections[next_round_number -
+                                         heard_before_offset - 1]
             section = session.section_from_any_song(
-                    {'id': this_section_info.get('id')})
+                {'id': this_section_info.get('id')})
         else:
             return None
         if not section:
@@ -313,7 +316,7 @@ class Huang2022(Base):
             config=config,
         )
         return trial.action()
-    
+
     @classmethod
     def get_trial_title(cls, session, next_round_number):
         title = _("Round %(number)d / %(total)d") %\
@@ -333,10 +336,10 @@ class Huang2022(Base):
         for result in session.result_set.all():
             json_data = result.load_json_data()
             if json_data.get('result') and json_data['result']['type'] == 'recognized':
-                    n_sync_guessed += 1
-                    sync_time += json_data['result']['recognition_time']
-                    if result.score > 0:
-                        n_sync_correct += 1
+                n_sync_guessed += 1
+                sync_time += json_data['result']['recognition_time']
+                if result.score > 0:
+                    n_sync_correct += 1
             else:
                 if result.expected_response == 'old':
                     n_old_new_expected += 1
@@ -380,8 +383,7 @@ class Huang2022(Base):
         else:
             # SongSync round
             return SongSync.calculate_score(data)
-        
-    
+
     @classmethod
     def handle_results(cls, session, data):
         try:
@@ -429,6 +431,7 @@ def residence_question():
         question=_("In which region do you currently reside?"),
         choices=region_choices
     )
+
 
 def gender_question():
     return ChoiceQuestion(
