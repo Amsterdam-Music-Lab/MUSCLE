@@ -236,7 +236,7 @@ class ToontjeHoger1Mozart(Base):
             body=body,
             heading="Het Mozart effect",
             button_label="Terug naar ToontjeHoger",
-            button_link="https://www.amsterdammusiclab.nl"
+            button_link="/toontjehoger"
         ).action()
 
         return [*answer_explainer, *score, final, info]

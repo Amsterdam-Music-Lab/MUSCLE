@@ -312,7 +312,7 @@ class ToontjeHoger3Plink(Base):
             body=body,
             heading="Muziekherkenning",
             button_label="Terug naar ToontjeHoger",
-            button_link="https://www.amsterdammusiclab.nl"
+            button_link="/toontjehoger"
         ).action()
 
         return [*score, final, info]

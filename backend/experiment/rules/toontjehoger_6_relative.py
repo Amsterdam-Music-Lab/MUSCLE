@@ -163,7 +163,7 @@ class ToontjeHoger6Relative(Base):
             body=body,
             heading="Relatief gehoor",
             button_label="Terug naar ToontjeHoger",
-            button_link="https://www.amsterdammusiclab.nl"
+            button_link="/toontjehoger"
         ).action()
 
         return [*score, final, info]
