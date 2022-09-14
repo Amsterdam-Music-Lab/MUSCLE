@@ -75,6 +75,8 @@ class Categorization(Base):
                     session.result_set.all().delete()
                     session.json_data = ''
                     session.save()
+                    profile.answer = ''
+                    profile.save()
                     final = Final(
                         session=session,
                         final_text="Thanks for your participation!",
@@ -468,7 +470,7 @@ questionaire = [
 ]
 
 repeat_training_or_quit = ChoiceQuestion(
-    key='failed_training',
+    key='failed_categorization_training',
     view='BUTTON_ARRAY',
     question='You seem to have difficulties reacting correctly to the sound sequences. Is your audio on? If you want to give it another try, click on Ok.',
     choices={
