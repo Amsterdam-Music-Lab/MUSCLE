@@ -1,6 +1,8 @@
 import logging
+import random
 from django.utils.translation import gettext_lazy as _
 from django.template.loader import render_to_string
+
 from .views import ToontjeHoger
 from .base import Base
 from os.path import join
@@ -77,11 +79,17 @@ class ToontjeHogerHome(Base):
     def first_round(cls, experiment, participant):
         """Create data for the first experiment round"""
 
+        # Session history and score
+        sessions = cls.get_sessions(participant)
+        score = cls.get_score(sessions)
+        next_experiment_slug = cls.get_next_experiment_slug(sessions)
+
         # Main button shows
         # - 'next experiment' when user does not have completed all experiments yet
         # - 'random experiment' when user has completed all experiments
-        main_button_label = "Volgende experiment"
-        main_button_url = "/{}".format(cls.EXPERIMENT_DATA[0].slug)
+        main_button_label = "Volgende experiment" if next_experiment_slug else "Willekeurig experiment"
+        main_button_url = "/{}".format(next_experiment_slug) if next_experiment_slug else random.choice([
+            experiment.slug for experiment in cls.EXPERIMENT_DATA])
 
         # Home
         home = ToontjeHoger(
@@ -91,7 +99,7 @@ class ToontjeHogerHome(Base):
                 'intro_read_more': "Meer informatie",
                 'main_button_label': main_button_label,
                 'main_button_url': main_button_url,
-                'score': cls.get_score(),
+                'score': score,
                 'supporters_intro': "ToontjeHoger is mede mogelijk gemaakt door:"
             },
             experiments=cls.EXPERIMENT_DATA
@@ -102,7 +110,34 @@ class ToontjeHogerHome(Base):
         ]
 
     @classmethod
-    def get_score(cls):
-        return 100
+    def get_score(cls, sessions):
+        score = 0
+        for session in sessions:
+            score += session.final_score
+        return score
 
-    def get_results(cls):
+    @classmethod
+    def get_sessions(cls, participant):
+        from experiment.models import Session, Experiment
+
+        experiment_slugs = [
+            experiment.slug for experiment in cls.EXPERIMENT_DATA]
+
+        experiment_ids = Experiment.objects.filter(slug__in=experiment_slugs)
+
+        sessions = Session.objects.filter(participant=participant,
+                                          experiment_id__in=experiment_ids)
+        return sessions
+
+    @classmethod
+    def get_next_experiment_slug(cls, sessions):
+        experiment_slugs = [
+            experiment.slug for experiment in cls.EXPERIMENT_DATA]
+        for session in sessions:
+            if session.experiment.slug in experiment_slugs:
+                experiment_slugs.remove(session.experiment.slug)
+
+        if len(experiment_slugs) > 0:
+            return experiment_slugs[0]
+
+        return ''
