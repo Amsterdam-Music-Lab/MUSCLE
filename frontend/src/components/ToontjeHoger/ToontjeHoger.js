@@ -5,14 +5,19 @@ import {
     Switch,
     Route,
     Redirect,
+    Link,
 } from "react-router-dom";
 
 const LOGO_URL = "/images/experiments/toontjehoger/logo.svg";
 
-const Logo = () => (
-    <div className="logo" style={{ backgroundImage: `url(${LOGO_URL}` }}>
+const Logo = ({ homeUrl }) => (
+    <Link
+        to={homeUrl}
+        className="logo"
+        style={{ backgroundImage: `url(${LOGO_URL}` }}
+    >
         {LOGO_TITLE}
-    </div>
+    </Link>
 );
 
 const Supporters = ({ intro }) => (
@@ -35,10 +40,10 @@ const Supporters = ({ intro }) => (
 );
 
 // ToontjeHoger is an experiment view that shows the ToontjeHoger home
-const ToontjeHogerHome = ({ config, experiments }) => {
+const ToontjeHogerHome = ({ experiment, config, experiments }) => {
     return (
         <div className="aha__toontjehoger">
-            <Logo />
+            <Logo homeUrl={`/${experiment.slug}`} />
 
             {/* Hero */}
             <div className="hero">
@@ -99,10 +104,10 @@ const ToontjeHogerHome = ({ config, experiments }) => {
 };
 
 // ToontjeHoger is an experiment view that shows the ToontjeHoger home
-const ToontjeHogerAbout = ({ config, experiments }) => {
+const ToontjeHogerAbout = ({ experiment, config, experiments }) => {
     return (
         <div className="aha__toontjehoger">
-            <Logo />
+            <Logo homeUrl={`/${experiment.slug}`} />
 
             <h1 style={{ textAlign: "center" }}>TODO!</h1>
 
