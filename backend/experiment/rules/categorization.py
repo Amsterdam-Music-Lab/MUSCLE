@@ -192,7 +192,8 @@ class Categorization(Base):
                 final_text=final_text,
                 rank=rank,
                 show_social=False,
-                show_profile_link=True
+                show_profile_link=True,
+                total_score=final_score
             ).action()
             return final
 
