@@ -143,3 +143,17 @@
         }
     }
 }
+
+.experiment-toontjehoger {
+    // Hide app bar
+    .aha__app-bar {
+        display: none;
+    }
+    // Fix page width
+    @media (min-width: 800px) {
+        .aha__page .container {
+            max-width: calc(100% - 50px) !important;
+            padding-top: 0;
+        }
+    }
+}

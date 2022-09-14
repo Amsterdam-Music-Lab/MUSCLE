@@ -19,6 +19,7 @@ import Trial from "../Trial/Trial";
 import useResultHandler from "../../hooks/useResultHandler";
 import { stateNextRound } from "../../util/nextRound";
 import Info from "../Info/Info";
+import classNames from "classnames";
 
 // Experiment handles the main experiment flow:
 // - Loads the experiment and participant
@@ -162,7 +163,7 @@ const Experiment = ({ match }) => {
             // Specials
             // -------------------------
             case "TOONTJEHOGER":
-                return <ToontjeHoger {...attrs} />
+                return <ToontjeHoger {...attrs} />;
 
             default:
                 return (
@@ -186,7 +187,12 @@ const Experiment = ({ match }) => {
     }
 
     return (
-        <TransitionGroup className="aha__experiment">
+        <TransitionGroup
+            className={classNames(
+                "aha__experiment",
+                "experiment-" + match.params.slug
+            )}
+        >
             <CSSTransition
                 key={key}
                 timeout={{ enter: 300, exit: 300 }}

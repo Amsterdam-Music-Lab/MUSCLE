@@ -9,19 +9,10 @@ import {
 
 const LOGO_URL = "/images/experiments/toontjehoger/logo.svg";
 
-const CSSOverrides =
-    "" +
-    // Hide app bar
-    ".aha__app-bar {display: none} " +
-    // Fix page width
-    "@media (min-width: 800px){ .aha__page .container{ max-width: calc(100% - 50px) !important; padding-top: 0;} }";
-
 // ToontjeHoger is an experiment view that shows the ToontjeHoger home
 const ToontjeHogerHome = ({ config, experiments }) => {
     return (
         <div className="aha__toontjehoger">
-            <style>{CSSOverrides} </style>
-
             <div
                 className="logo"
                 style={{ backgroundImage: `url(${LOGO_URL}` }}
