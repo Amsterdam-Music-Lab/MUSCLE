@@ -1,0 +1,145 @@
+.aha__toontjehoger {
+    .logo {
+        height: 90px;
+        width: 100%;
+        max-width: 300px;
+        font-size: 0;
+        margin: 0 auto 30px;
+        background-size: contain;
+        background-position: center center;
+        background-repeat: no-repeat;
+    }
+
+    .hero {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding-bottom: 50px;
+
+        @media (max-width: 720px) {
+            flex-wrap: wrap;
+        }
+
+        .intro {
+            @media (min-width: 720px) {
+                width: 50%;
+                max-width: 650px;
+            }
+
+            .actions {
+                display: flex;
+                flex-wrap: wrap;
+                row-gap: 15px;
+                column-gap: 15px;
+            }
+        }
+    }
+
+    .experiments {
+        border-top: 12px solid rgba(white, 0.2);
+        border-bottom: 12px solid rgba(white, 0.2);
+        border-radius: 12px;
+        padding-top: 50px;
+        padding-bottom: 50px;
+        background-color: rgba(white, 0.2);
+
+        ul {
+            display: flex;
+            justify-content: center;
+            align-items: stretch;
+            flex-wrap: wrap;
+            column-gap: 15px;
+            row-gap: 15px;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+
+            &:hover {
+                li {
+                    opacity: 0.8;
+                }
+            }
+
+            li {
+                border-radius: 5px;
+                border: 1px solid rgba(black, 0.5);
+                transition: opacity 0.3s ease-out;
+                background-color: rgba($black, 0.5);
+
+                &:hover {
+                    opacity: 1;
+                }
+
+                a {
+                    display: block;
+                    text-decoration: none;
+                    color: white;
+                    width: 300px;
+                    max-width: 100%;
+                    min-height: 300px;
+
+                    @media (max-width: 420px) {
+                        width: 100%;
+                    }
+
+                    .image {
+                        height: 200px;
+                        background-color: $gray;
+                        border-top-left-radius: 5px;
+                        border-top-right-radius: 5px;
+                        background-size: cover;
+                        background-repeat: no-repeat;
+                        background-position: center center;
+                        position: relative;
+                        background-blend-mode: multiply;
+                    }
+
+                    h3 {
+                        padding: 15px 15px 10px;
+                        margin: 0;
+                    }
+                    p {
+                        margin: 0;
+                        padding: 0 15px 15px;
+                        opacity: 0.8;
+                    }
+                }
+            }
+        }
+    }
+
+    .supporters {
+        margin-top: 30px;
+        padding-top: 20px;
+        padding-bottom: 30px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+
+        .organizations {
+            padding-top: 30px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+
+            a {
+                width: 400px;
+                max-width: 100%;
+                display: block;
+                position: relative;
+                transition: opacity 0.3s ease-out;
+                opacity: 0.8;
+
+                &:hover {
+                    opacity: 1;
+                }
+
+                img {
+                    width: 100%;
+                }
+            }
+        }
+    }
+}

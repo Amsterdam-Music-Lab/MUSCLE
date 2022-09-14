@@ -20,7 +20,7 @@ $app-bar-height: 45px;
         color: transparent;
         width: 30%;
 
-        @media(max-width: 500px){
+        @media (max-width: 500px) {
             margin-left: 10px;
             height: $logo-height-mobile;
         }

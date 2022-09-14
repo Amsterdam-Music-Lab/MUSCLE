@@ -7,12 +7,19 @@ class ToontjeHoger:  # pylint: disable=too-few-public-methods
 
     ID = "TOONTJEHOGER"
 
-    def __init__(self,payoff="", slogan = "", experiments = []):
+    def __init__(self,config, experiments = []):
         """
         ToontjeHoger shows the ToontjeHoger homepage
+        
+        config: Object containing texts and other configuration
+            - payoff
+            - intro
+            - main_button_label
+            - main_button_url
+            - supporters_intro
+        experiments: A list of ExperimentData objects
         """
-        self.payoff = payoff
-        self.slogan = slogan
+        self.config = config
         self.experiments = experiments
 
     def action(self):
@@ -20,7 +27,7 @@ class ToontjeHoger:  # pylint: disable=too-few-public-methods
 
         return {
             'view': ToontjeHoger.ID,
-            'payoff': self.payoff,
-            'slogan': self.slogan,
-            'experiments': self.experiments,
+            'config': self.config,
+            'experiments': [vars(i) for i in self.experiments]
         }
+
