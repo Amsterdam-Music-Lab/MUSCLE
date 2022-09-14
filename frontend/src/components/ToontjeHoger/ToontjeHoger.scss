@@ -9,17 +9,27 @@
         background-position: center center;
         background-repeat: no-repeat;
         display: block;
+
+        @media (max-width: 720px) {
+            margin-bottom: 15px;
+        }
     }
 
     .hero {
         display: flex;
-        flex-direction: column;
         justify-content: center;
         align-items: center;
         padding-bottom: 50px;
+        position: relative;
 
         @media (max-width: 720px) {
             flex-wrap: wrap;
+            padding-bottom: 30px;
+            border-top: 2px solid rgba(white, 0.2);
+        }
+
+        @media (min-width: 1024px) {
+            min-height: 450px;
         }
 
         .intro {
@@ -28,11 +38,48 @@
                 max-width: 650px;
             }
 
+            @media (max-width: 720px) {
+                padding: 30px 15px 40px;
+            }
+
             .actions {
                 display: flex;
                 flex-wrap: wrap;
                 row-gap: 15px;
                 column-gap: 15px;
+            }
+        }
+
+        .results {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            @media (min-width: 720px) {
+                width: 50%;
+                max-width: 380px;
+            }
+
+            .score {
+                background: radial-gradient(
+                    circle at center,
+                    rgba(white, 0.6),
+                    rgba(white, 0.2),
+                    rgba(white, 0),
+                    rgba(white, 0)
+                );
+                width: 270px;
+                height: 270px;
+                text-align: center;
+                border-radius: 135px;
+
+                .aha__rank {
+                    margin-top: 35px;
+                }
+
+                h1 {
+                    line-height: 200px;
+                }
             }
         }
     }
@@ -44,17 +91,28 @@
         padding-top: 50px;
         padding-bottom: 50px;
         background-color: rgba(white, 0.2);
+        max-width: 1200px;
+        margin: 0 auto;
+
+        @media (max-width: 720px) {
+            padding: 15px 15px;
+        }
 
         ul {
             display: flex;
             justify-content: center;
             align-items: stretch;
             flex-wrap: wrap;
-            column-gap: 15px;
-            row-gap: 15px;
+            column-gap: 25px;
+            row-gap: 25px;
             list-style: none;
             margin: 0;
             padding: 0;
+
+            @media (max-width: 720px) {
+                column-gap: 15px;
+                row-gap: 15px;
+            }
 
             &:hover {
                 li {
@@ -65,11 +123,13 @@
             li {
                 border-radius: 5px;
                 border: 1px solid rgba(black, 0.5);
-                transition: opacity 0.3s ease-out;
+                transition: opacity 0.3s ease-out, box-shadow 0.3s ease-out;
                 background-color: rgba($black, 0.5);
+                box-shadow: 0 0 0 rgba(black, 0.5);
 
                 &:hover {
                     opacity: 1;
+                    box-shadow: 0 2px 15px rgba(black, 0.3);
                 }
 
                 a {
@@ -113,7 +173,7 @@
     .supporters {
         margin-top: 30px;
         padding-top: 20px;
-        padding-bottom: 30px;
+        padding-bottom: 50px;
         display: flex;
         justify-content: center;
         align-items: center;
@@ -121,6 +181,7 @@
 
         .organizations {
             padding-top: 30px;
+            padding-bottom: 30px;
             display: flex;
             flex-wrap: wrap;
             justify-content: center;

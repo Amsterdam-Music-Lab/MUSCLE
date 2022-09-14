@@ -79,10 +79,13 @@ class ToontjeHogerHome(Base):
     def first_round(cls, experiment, participant):
         """Create data for the first experiment round"""
 
-        # Session history and score
+        # Session history
         sessions = cls.get_sessions(participant)
-        score = cls.get_score(sessions)
         next_experiment_slug = cls.get_next_experiment_slug(sessions)
+
+        # Score
+        score = cls.get_score(sessions)
+        score_label = "punten" if len(sessions) > 0 else "Nog geen punten!"
 
         # Main button shows
         # - 'next experiment' when user does not have completed all experiments yet
@@ -99,6 +102,7 @@ class ToontjeHogerHome(Base):
                 'intro_read_more': "Meer informatie",
                 'main_button_label': main_button_label,
                 'main_button_url': main_button_url,
+                'score_label': score_label,
                 'score': score,
                 'supporters_intro': "ToontjeHoger is mede mogelijk gemaakt door:"
             },

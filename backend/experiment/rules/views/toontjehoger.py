@@ -7,15 +7,16 @@ class ToontjeHoger:  # pylint: disable=too-few-public-methods
 
     ID = "TOONTJEHOGER"
 
-    def __init__(self,config, experiments = []):
+    def __init__(self, config, experiments=[]):
         """
         ToontjeHoger shows the ToontjeHoger homepage
-        
+
         config: Object containing texts and other configuration
             - payoff
             - intro
             - main_button_label
             - main_button_url
+            - score_label
             - supporters_intro
         experiments: A list of ExperimentData objects
         """
@@ -30,4 +31,3 @@ class ToontjeHoger:  # pylint: disable=too-few-public-methods
             'config': self.config,
             'experiments': [vars(i) for i in self.experiments]
         }
-

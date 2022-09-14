@@ -103,7 +103,6 @@
     }
 
     > .cup {
-        margin-top: -20px;
         width: 85px;
         height: 85px;
         background-image: $cup;
@@ -114,5 +113,9 @@
         animation-name: bounce;
         animation-duration: 2.8s;
         animation-timing-function: ease-in-out;
+    }
+
+    &.offsetCup > .cup {
+        margin-top: -20px;
     }
 }

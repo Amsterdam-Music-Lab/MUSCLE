@@ -1,12 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { LOGO_TITLE } from "../../config";
-import {
-    BrowserRouter as Router,
-    Switch,
-    Route,
-    Redirect,
-    Link,
-} from "react-router-dom";
+import { Switch, Route, Link } from "react-router-dom";
+import Rank from "../Rank/Rank";
 
 const LOGO_URL = "/images/experiments/toontjehoger/logo.svg";
 
@@ -39,6 +34,82 @@ const Supporters = ({ intro }) => (
     </div>
 );
 
+const useAnimatedScore = (targetScore) => {
+    const [score, setScore] = useState(0);
+
+    const scoreValue = useRef(0);
+
+    useEffect(() => {
+        if (targetScore === 0) {
+            return;
+        }
+
+        let id = -1;
+
+        const nextStep = () => {
+            // Score step
+            const scoreStep = Math.max(
+                1,
+                Math.min(
+                    10,
+                    Math.ceil(Math.abs(scoreValue.current - targetScore) / 10)
+                )
+            );
+
+            // Scores are equal, stop
+            if (targetScore === scoreValue.current) {
+                return;
+            }
+
+            // Add / subtract score
+            scoreValue.current +=
+                Math.sign(targetScore - scoreValue.current) * scoreStep;
+            setScore(scoreValue.current);
+
+            id = setTimeout(nextStep, 50);
+        };
+        id = setTimeout(nextStep, 50);
+
+        return () => {
+            window.clearTimeout(id);
+        };
+    }, [targetScore]);
+
+    return score;
+};
+
+const Score = ({ score, label }) => {
+    const currentScore = useAnimatedScore(score);
+
+    let scoreClass = "";
+    switch (true) {
+        case score < 5:
+            scoreClass = "plastic";
+            break;
+        case score < 10:
+            scoreClass = "silver";
+            break;
+        case score < 30:
+            scoreClass = "gold";
+            break;
+        case score < 50:
+            scoreClass = "platinum";
+            break;
+        default:
+            scoreClass = "diamond";
+    }
+
+    return (
+        <div className="score">
+            <Rank rank={{ class: scoreClass }} />
+            <h3>
+                {currentScore ? currentScore + " " : ""}
+                {label}
+            </h3>
+        </div>
+    );
+};
+
 // ToontjeHoger is an experiment view that shows the ToontjeHoger home
 const ToontjeHogerHome = ({ experiment, config, experiments }) => {
     return (
@@ -52,22 +123,26 @@ const ToontjeHogerHome = ({ experiment, config, experiments }) => {
                     <p>{config.intro}</p>
                     <div className="actions">
                         {config.main_button_label && (
-                            <a
+                            <Link
                                 className="btn btn-lg btn-primary"
-                                href={config.main_button_url}
+                                to={config.main_button_url}
                             >
                                 {config.main_button_label}
-                            </a>
+                            </Link>
                         )}
                         {config.intro_read_more && (
-                            <a
+                            <Link
                                 className="btn btn-lg btn-outline-primary"
-                                href="#about"
+                                to={`/${experiment.slug}/about`}
                             >
                                 {config.intro_read_more}
-                            </a>
+                            </Link>
                         )}
                     </div>
+                </div>
+
+                <div className="results">
+                    <Score score={config.score} label={config.score_label} />
                 </div>
             </div>
 
@@ -81,7 +156,7 @@ const ToontjeHogerHome = ({ experiment, config, experiments }) => {
                                 borderBottom: `5px solid ${experiment.color}`,
                             }}
                         >
-                            <a href={"/" + experiment.slug}>
+                            <Link to={"/" + experiment.slug}>
                                 <div
                                     className="image"
                                     style={{
@@ -91,7 +166,7 @@ const ToontjeHogerHome = ({ experiment, config, experiments }) => {
                                 ></div>
                                 <h3>{experiment.title}</h3>
                                 <p>{experiment.description}</p>
-                            </a>
+                            </Link>
                         </li>
                     ))}
                 </ul>
@@ -118,7 +193,7 @@ const ToontjeHogerAbout = ({ experiment, config, experiments }) => {
 };
 
 const ToontjeHoger = (props) => {
-    return (
+    return props.experiment ? (
         <>
             <Switch>
                 <Route path={`/${props.experiment.slug}/about`} exact>
@@ -129,7 +204,7 @@ const ToontjeHoger = (props) => {
                 </Route>
             </Switch>
         </>
-    );
+    ) : null;
 };
 
 export default ToontjeHoger;
