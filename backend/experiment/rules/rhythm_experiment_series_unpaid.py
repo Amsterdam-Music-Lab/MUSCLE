@@ -8,7 +8,7 @@ class RhythmExperimentSeriesUnpaid(RhythmExperimentSeries):
     ID = 'RHYTHM_SERIES_UNPAID'
     consent_form = 'consent/consent_rhythm_unpaid.html'
     debrief_form = 'final/debrief_rhythm_unpaid.html'
-
+    show_participant_final = False
 
     @classmethod
     def intro_explainer(cls):
