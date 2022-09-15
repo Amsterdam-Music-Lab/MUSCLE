@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-15 09:16+0200\n"
+"POT-Creation-Date: 2022-09-15 21:15+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -601,6 +601,7 @@ msgstr ""
 #: experiment/rules/huang_2022.py:56 experiment/rules/huang_2022.py:261
 #: experiment/rules/rhythm_experiment_series.py:37
 #: experiment/rules/rhythm_experiment_series.py:73
+#: experiment/rules/rhythm_experiment_series_unpaid.py:31
 #: experiment/rules/speech2song.py:89 experiment/rules/speech2song.py:99
 #: experiment/rules/speech2song.py:125 experiment/rules/util/actions.py:31
 #: experiment/rules/util/practice.py:99 experiment/rules/views/form.py:109
@@ -888,10 +889,12 @@ msgstr ""
 "goed te kunnen horen."
 
 #: experiment/rules/rhythm_experiment_series.py:22
+#: experiment/rules/rhythm_experiment_series_unpaid.py:16
 msgid "You are about to take part in an experiment about rhythm perception."
 msgstr "Je gaat meedoen aan een experiment over ritmegevoel."
 
 #: experiment/rules/rhythm_experiment_series.py:25
+#: experiment/rules/rhythm_experiment_series_unpaid.py:19
 msgid ""
 "We want to find out what the best way is to test whether someone has a good "
 "sense of rhythm!"
@@ -900,11 +903,13 @@ msgstr ""
 "goed ritmegevoel heeft!"
 
 #: experiment/rules/rhythm_experiment_series.py:28
+#: experiment/rules/rhythm_experiment_series_unpaid.py:22
 msgid ""
 "You will be doing many little tasks that have something to do with rhythm."
 msgstr "Je gaat verschillende taakjes doen die iets met ritme te maken hebben."
 
 #: experiment/rules/rhythm_experiment_series.py:31
+#: experiment/rules/rhythm_experiment_series_unpaid.py:25
 msgid ""
 "You will get a short explanation and a practice trial for each little task."
 msgstr ""
@@ -931,6 +936,10 @@ msgstr "Hartelijk dank voor je deelname!"
 #, python-format
 msgid "Next experiment (%d to go!)"
 msgstr "Volgende experiment (nog %d te gaan!)"
+
+#: experiment/rules/rhythm_experiment_series_unpaid.py:28
+msgid "We are very grateful for your participation!"
+msgstr "Heel veel dank dat je mee wilt doen!"
 
 #: experiment/rules/speech2song.py:27
 msgid "This is an experiment about an auditory illusion."
@@ -1870,6 +1879,7 @@ msgstr ""
 
 #: experiment/templates/consent/consent_MRI.html:3
 #: experiment/templates/consent/consent_rhythm.html:3
+#: experiment/templates/consent/consent_rhythm_unpaid.html:3
 msgid "Purpose of the Research Project"
 msgstr "Doel van het onderzoek"
 
@@ -1901,6 +1911,7 @@ msgstr ""
 
 #: experiment/templates/consent/consent_MRI.html:6
 #: experiment/templates/consent/consent_rhythm.html:5
+#: experiment/templates/consent/consent_rhythm_unpaid.html:5
 msgid "Who Can Take Part in This Research?"
 msgstr "Wie kan meedoen met dit onderzoek?"
 
@@ -1929,11 +1940,13 @@ msgstr ""
 
 #: experiment/templates/consent/consent_MRI.html:8
 #: experiment/templates/consent/consent_rhythm.html:7
+#: experiment/templates/consent/consent_rhythm_unpaid.html:7
 msgid "Instructions and Procedure"
 msgstr "Gang van zaken tijdens het onderzoek"
 
 #: experiment/templates/consent/consent_MRI.html:9
 #: experiment/templates/consent/consent_rhythm.html:8
+#: experiment/templates/consent/consent_rhythm_unpaid.html:8
 msgid ""
 " In this study, you will perform 8 short tasks related to rhythm. In each "
 "task, you will be presented with short fragments of music and rhythms, and "
@@ -1958,11 +1971,13 @@ msgstr ""
 
 #: experiment/templates/consent/consent_MRI.html:10
 #: experiment/templates/consent/consent_rhythm.html:9
+#: experiment/templates/consent/consent_rhythm_unpaid.html:9
 msgid "Voluntary Participation"
 msgstr "Vrijwilligheid"
 
 #: experiment/templates/consent/consent_MRI.html:11
 #: experiment/templates/consent/consent_rhythm.html:10
+#: experiment/templates/consent/consent_rhythm_unpaid.html:10
 msgid ""
 " There are no consequences if you decide now not to participate in this "
 "study. During the experiment, you are free to stop participating at any "
@@ -1975,6 +1990,7 @@ msgstr ""
 
 #: experiment/templates/consent/consent_MRI.html:12
 #: experiment/templates/consent/consent_rhythm.html:11
+#: experiment/templates/consent/consent_rhythm_unpaid.html:11
 msgid "Discomfort, Risks, and Insurance"
 msgstr "Ongemak, risico’s en verzekering"
 
@@ -1995,11 +2011,13 @@ msgstr ""
 
 #: experiment/templates/consent/consent_MRI.html:14
 #: experiment/templates/consent/consent_rhythm.html:13
+#: experiment/templates/consent/consent_rhythm_unpaid.html:13
 msgid "Your privacy is guaranteed"
 msgstr "Uw privacy is gewaarborgd"
 
 #: experiment/templates/consent/consent_MRI.html:15
 #: experiment/templates/consent/consent_rhythm.html:14
+#: experiment/templates/consent/consent_rhythm_unpaid.html:14
 msgid ""
 " Your personal information (about who you are) remains confidential and will "
 "not be shared without your explicit consent. Your research data will be "
@@ -2034,6 +2052,7 @@ msgstr ""
 #: experiment/templates/consent/consent_hooked.html:80
 #: experiment/templates/consent/consent_huang2021.html:76
 #: experiment/templates/consent/consent_rhythm.html:17
+#: experiment/templates/consent/consent_rhythm_unpaid.html:15
 #: experiment/templates/consent/consent_speech2song.html:62
 msgid "Further Information"
 msgstr "Meer informatie"
@@ -2050,6 +2069,7 @@ msgstr ""
 
 #: experiment/templates/consent/consent_MRI.html:20
 #: experiment/templates/consent/consent_rhythm.html:19
+#: experiment/templates/consent/consent_rhythm_unpaid.html:17
 msgid "Informed Consent"
 msgstr "Toestemmingsverklaring"
 
@@ -2342,6 +2362,7 @@ msgid ""
 msgstr ""
 
 #: experiment/templates/consent/consent_rhythm.html:2
+#: experiment/templates/consent/consent_rhythm_unpaid.html:2
 msgid ""
 " You will be taking part in the experiment “Who’s got rhythm?” conducted by "
 "Dr Fleur Bouwer of the Psychology Department at the University of Amsterdam. "
@@ -2356,6 +2377,7 @@ msgstr ""
 "tekst zorgvuldig door."
 
 #: experiment/templates/consent/consent_rhythm.html:4
+#: experiment/templates/consent/consent_rhythm_unpaid.html:4
 msgid ""
 " Rhythm is a fundamental aspect of music and musicality. It is important to "
 "be able to measure rhythmic abilities accurately, to understand how "
@@ -2371,6 +2393,7 @@ msgstr ""
 "ontwerpen."
 
 #: experiment/templates/consent/consent_rhythm.html:6
+#: experiment/templates/consent/consent_rhythm_unpaid.html:6
 msgid ""
 " Anybody aged 16 or older with no hearing problems and no psychiatric or "
 "neurological disorders is welcome to participate in this research. Your "
@@ -2397,6 +2420,7 @@ msgstr ""
 "proefpersoon registreren op de lab.uva.nl website!"
 
 #: experiment/templates/consent/consent_rhythm.html:18
+#: experiment/templates/consent/consent_rhythm_unpaid.html:16
 msgid ""
 " Should you have questions about this study at any given moment, please "
 "contact the responsible researcher, Dr. Fleur Bouwer (bouwer@uva.nl). Formal "
@@ -2415,6 +2439,7 @@ msgstr ""
 "Amsterdam via fg@uva.nl."
 
 #: experiment/templates/consent/consent_rhythm.html:20
+#: experiment/templates/consent/consent_rhythm_unpaid.html:18
 msgid ""
 " I hereby declare that: I have been clearly informed about the research "
 "project “Who’s got rhythm?”, as described above; I am 16 or older; I have "
@@ -2429,6 +2454,14 @@ msgstr ""
 "en gebruik van de daarmee verkregen gegevens; het recht behoud om zonder "
 "opgaaf van reden deze instemming weer in te trekken; het recht behoud op "
 "ieder door mij gewenst moment te stoppen met het onderzoek."
+
+#: experiment/templates/consent/consent_rhythm_unpaid.html:12
+msgid ""
+" For all research at the University of Amsterdam, a standard liability "
+"insurance applies. "
+msgstr ""
+"Zoals bij elk onderzoek van de Universiteit van Amsterdam geldt een "
+"standaard aansprakelijkheidsverzekering."
 
 #: experiment/templates/consent/consent_speech2song.html:2
 msgid "Introduction"
@@ -2620,6 +2653,26 @@ msgstr ""
 "De vergoeding van 15 euro kunt u ontvangen door ons te laten weten dat u het "
 "experiment heeft afgerond. Dit kunt u doen door een e-mail te sturen naar "
 "Atser Damsma"
+
+#: experiment/templates/final/debrief_rhythm_unpaid.html:2
+msgid "Thank you very much for taking part in our experiment!"
+msgstr "Heel veel dank voor je deelname!”"
+
+#: experiment/templates/final/debrief_rhythm_unpaid.html:4
+msgid ""
+"We are very grateful for the time and effort you spent on helping us to find "
+"out how people perceive rhythm."
+msgstr ""
+"We zijn heel blij dat je de tijd hebt genomen om ons te helpen uit te zoeken "
+"hoe mensen ritme verwerken."
+
+#: experiment/templates/final/debrief_rhythm_unpaid.html:5
+msgid "If you want to know more about our research, check out"
+msgstr "Als je meer over ons onderzoek wilt weten, kijk dan op"
+
+#: experiment/templates/final/debrief_rhythm_unpaid.html:6
+msgid "and"
+msgstr "en"
 
 #: experiment/templates/final/experiment_series.html:2
 msgid ""
