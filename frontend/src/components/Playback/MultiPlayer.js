@@ -5,6 +5,7 @@ import { romanNumeral } from "../../util/roman";
 
 export const LABEL_NUMERIC = 'NUMERIC';
 export const LABEL_ALPHABETIC = 'ALPHABETIC';
+export const LABEL_CUSTOM = 'CUSTOM';
 export const LABEL_ROMAN = 'ROMAN';
 
 const MultiPlayer = ({playSection, sections, playerIndex, playConfig, disabledPlayers }) => {
@@ -17,7 +18,7 @@ const MultiPlayer = ({playSection, sections, playerIndex, playConfig, disabledPl
                     playSection(index);
                 }}
                 disabled={Array.isArray(disabledPlayers) && disabledPlayers.includes(parseInt(index))}
-                label={playConfig.label_style ? getLabel(index, playConfig.label_style) : ''}
+                label={playConfig.label_style ? getLabel(index, playConfig.label_style, playConfig.labels || []) : ''}
                 playing={playerIndex === index}
             />
         ))}
@@ -25,7 +26,7 @@ const MultiPlayer = ({playSection, sections, playerIndex, playConfig, disabledPl
     )
 }
 
-const getLabel = (index, labelStyle) =>{
+const getLabel = (index, labelStyle, customLabels) =>{
     index = parseInt(index)
 
     switch(labelStyle){
@@ -35,6 +36,8 @@ const getLabel = (index, labelStyle) =>{
             return String.fromCharCode(65+index)
         case LABEL_ROMAN:
             return romanNumeral(index+1);
+        case LABEL_CUSTOM:
+            return customLabels[index] || '';
         default:
             return '';
     }
