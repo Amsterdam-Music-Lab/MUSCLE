@@ -24,7 +24,6 @@ class ToontjeHoger1Mozart(Base):
     TITLE = ""
     SCORE_CORRECT = 50
     SCORE_WRONG = 0
-    LISTEN_DURATION = 5  # 20
 
     @classmethod
     def first_round(cls, experiment, participant):
@@ -34,7 +33,7 @@ class ToontjeHoger1Mozart(Base):
         explainer = Explainer(
             instruction="Het Mozart effect",
             steps=[
-                Step("Je hoort een muziekfragment van ongeveer 20 seconden."),
+                Step("Je hoort een muziekfragment van ongeveer 25 seconden."),
                 Step("Hierna verschijnt een korte puzzel."),
                 Step("Lukt het om het juiste antwoord te vinden?"),
             ],
@@ -127,10 +126,10 @@ class ToontjeHoger1Mozart(Base):
     def get_image_trial(cls, session, section_group, image_url, question, expected_response):
         # Config
         # -----------------
-        section = session.section_from_unused_song(
+        section = session.section_from_any_song(
             filter_by={'group': section_group})
         if section == None:
-            raise Exception("Error: could not find section for round 1")
+            raise Exception("Error: could not find section")
 
         result_pk = cls.prepare_result(
             session, section=section, expected_response=expected_response)
@@ -148,7 +147,7 @@ class ToontjeHoger1Mozart(Base):
         listen_config = {
             'auto_advance': True,
             'show_continue_button': False,
-            'decision_time': cls.LISTEN_DURATION
+            'decision_time': section.duration
         }
 
         listen = Trial(
