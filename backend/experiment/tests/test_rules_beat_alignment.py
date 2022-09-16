@@ -1,6 +1,6 @@
 
 from django.test import TestCase
-from experiment.models import Experiment, Playlist
+from experiment.models import Experiment, Playlist, Session
 import json
 
 class BeatAlignmentRuleTest(TestCase):
@@ -80,5 +80,8 @@ class BeatAlignmentRuleTest(TestCase):
             response_json = self.load_json(response)
             self.assertEqual(response_json['view'], views_exp[i])
             if i < len(views_exp)-1: # Last view 'FINAL' does not have result_id or feedback form
-                result_id = response_json['feedback_form']['form'][0]['result_id'] 
-            
+                result_id = response_json['feedback_form']['form'][0]['result_id']
+
+        # Number of Results
+        results = Session.objects.get(id=session_id).result_set.all()
+        self.assertEqual(len(results), rounds_n)
