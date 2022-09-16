@@ -60,46 +60,62 @@ class ToontjeHoger6Relative(Base):
         # Round 1
         if rounds_passed == 0:
             # No combine_actions because of inconsistent next_round array wrapping in first round
-            return cls.get_round(session)
+            return cls.get_round(rounds_passed, session)
 
         # Round 2
         if rounds_passed == 1:
-            return combine_actions(*cls.get_score(session), *cls.get_round(session))
+            return combine_actions(*cls.get_score(session), *cls.get_round(round, session))
 
         # Final
         return combine_actions(*cls.get_final_round(session))
 
     @classmethod
     def get_score(cls, session):
+        # Feedback
+        last_result = session.last_result()
+
+        if not last_result:
+            logger.error("No last result")
+            feedback = "Er is een fout opgetreden"
+        else:
+            if last_result.score == cls.SCORE_CORRECT:
+                feedback = "Dat is correct! De melodieën in de muziekfragmenten zijn inderdaad verschillend."
+            else:
+                feedback = "Helaas! De melodieën in de muziekfragmenten zijn toch echt verschillend."
+
         # Return score view
         config = {'show_total_score': True}
-        score = Score(session, config=config).action()
+        score = Score(session, config=config, feedback=feedback).action()
         return [score]
 
     @classmethod
-    def get_round(cls, session):
+    def get_round(cls, round, session):
 
         # Config
         # -----------------
-        section1 = session.section_from_unused_song(
-            filter_by={'group': '2', 'tag': 'original'})
+        # section 1 is always section 'a'
+        section1 = session.section_from_any_song(
+            filter_by={'tag': 'a'})
         if section1 == None:
-            raise Exception("Error: could not find section1 for round")
-        section2 = session.section_from_unused_song(
-            filter_by={'artist': section1.artist, 'name': section1.name, 'tag': 'variation'})
-        if section2 == None:
-            section2 = section1
-            # TODO: FIX
-            # raise Exception("Error: could not find section2 for round")
+            raise Exception(
+                "Error: could not find section1 for round {}".format(round))
 
-        correct_section = section1 if randint(0, 1) == 1 else section2
-        expected_response = correct_section.pk
+        # Get correct tag for round 0 or 1
+        tag = 'b' if round == 0 else 'c'
+        section2 = session.section_from_any_song(
+            filter_by={'tag': tag})
+        if section2 == None:
+            raise Exception(
+                "Error: could not find section2 for round {}".format(round))
+
+        # Fragments A,B,C are all different, so answer is always NO
+        expected_response = "NO"
         result_pk = cls.prepare_result(
-            session, section=correct_section, expected_response=expected_response)
+            session, section=section1, expected_response=expected_response)
 
         # Question
         question = ChoiceQuestion(
-            question="Waren deze twee melodieën hetzelfde?",
+            question="Zijn deze twee melodieën hetzelfde?",
             key='same_melodie',
             choices={
                 "YES": _('YES'),
@@ -113,7 +129,8 @@ class ToontjeHoger6Relative(Base):
 
         # Player
         play_config = {
-            'label_style': 'ALPHABETIC',
+            'label_style': 'CUSTOM',
+            'labels': ['A', 'B' if round == 0 else 'C'],
             'play_once': True,
         }
         playback = Playback(
