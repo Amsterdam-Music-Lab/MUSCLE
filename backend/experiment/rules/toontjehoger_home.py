@@ -86,6 +86,17 @@ class ToontjeHogerHome(Base):
         # Score
         score = cls.get_score(sessions)
         score_label = "punten" if len(sessions) > 0 else "Nog geen punten!"
+        score_class = ""
+        if score < 100:
+            score_class = "plastic"
+        elif score < 200:
+            score_class = "silver"
+        elif score < 300:
+            score_class = "gold"
+        elif score < 500:
+            score_class = "platinum"
+        else:
+            score_class = "diamond"
 
         # Main button shows
         # - 'next experiment' when user does not have completed all experiments yet
@@ -104,6 +115,7 @@ class ToontjeHogerHome(Base):
                 'main_button_url': main_button_url,
                 'score_label': score_label,
                 'score': score,
+                'score_class': score_class,
                 'supporters_intro': "ToontjeHoger is mede mogelijk gemaakt door:"
             },
             experiments=cls.EXPERIMENT_DATA

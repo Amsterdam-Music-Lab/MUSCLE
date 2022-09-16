@@ -89,26 +89,8 @@ const useAnimatedScore = (targetScore) => {
     return score;
 };
 
-const Score = ({ score, label }) => {
+const Score = ({ score, label, scoreClass }) => {
     const currentScore = useAnimatedScore(score);
-
-    let scoreClass = "";
-    switch (true) {
-        case score < 5:
-            scoreClass = "plastic";
-            break;
-        case score < 10:
-            scoreClass = "silver";
-            break;
-        case score < 30:
-            scoreClass = "gold";
-            break;
-        case score < 50:
-            scoreClass = "platinum";
-            break;
-        default:
-            scoreClass = "diamond";
-    }
 
     return (
         <div className="score">
@@ -153,7 +135,11 @@ const ToontjeHogerHome = ({ experiment, config, experiments }) => {
                 </div>
 
                 <div className="results">
-                    <Score score={config.score} label={config.score_label} />
+                    <Score
+                        score={config.score}
+                        scoreClass={config.score_class}
+                        label={config.score_label}
+                    />
                 </div>
             </div>
 
