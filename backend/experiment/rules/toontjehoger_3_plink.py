@@ -17,8 +17,8 @@ class ToontjeHoger3Plink(Base):
     TITLE = ""
     SCORE_MAIN_CORRECT = 10
     SCORE_MAIN_WRONG = 0
-    SCORE_EXTRA_1_CORRECT = 2
-    SCORE_EXTRA_2_CORRECT = 1
+    SCORE_EXTRA_1_CORRECT = 4
+    SCORE_EXTRA_2_CORRECT = 4
     SCORE_EXTRA_WRONG = 0
 
     @classmethod
