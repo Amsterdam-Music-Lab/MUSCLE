@@ -15,7 +15,7 @@ logger = logging.getLogger(__name__)
 class ToontjeHoger3Plink(Base):
     ID = 'TOONTJE_HOGER_3_PLINK'
     TITLE = ""
-    SCORE_MAIN_CORRECT = 4
+    SCORE_MAIN_CORRECT = 10
     SCORE_MAIN_WRONG = 0
     SCORE_EXTRA_1_CORRECT = 2
     SCORE_EXTRA_2_CORRECT = 1
