@@ -2066,6 +2066,14 @@ msgid ""
 "the processing of your personal data you can also contact the data "
 "protection officer of the University of Amsterdam via fg@uva.nl. "
 msgstr ""
+"Mocht u vragen hebben over dit onderzoek, vooraf of achteraf, dan "
+"kunt u zich wenden tot de verantwoordelijke onderzoeker, Dr. Atser Damsma "
+"(a.damsma@uva.nl). Voor eventuele formele klachten over dit onderzoek kunt "
+"u zich wenden tot het lid van de Facultaire Commissie Ethiek (FMG) van de "
+"Universiteit van Amsterdam, Dr. Yair Pinto (y.pinto@uva.nl). Voor vragen of "
+"klachten over de verwerking van uw persoonsgegevens kunt u tevens contact "
+"opnemen met de functionaris gegevensbescherming van de Universiteit van "
+"Amsterdam via fg@uva.nl."
 
 #: experiment/templates/consent/consent_MRI.html:20
 #: experiment/templates/consent/consent_rhythm.html:19
@@ -2082,6 +2090,12 @@ msgid ""
 "collected; I reserve the right to withdraw my participation from the study "
 "at any moment without providing any reason. "
 msgstr ""
+"Ik verklaar dat ik: duidelijke informatie heb gekregen over het experiment "
+"“Neural correlates of rhythmic abilities”, zoals hierboven beschreven; 16 "
+"jaar of ouder ben; de informatie gelezen en begrepen heb; toestem met "
+"deelname aan het onderzoek en gebruik van de daarmee verkregen gegevens; het "
+"recht behoud om zonder opgaaf van reden deze instemming weer in te trekken; het "
+"recht behoud op ieder door mij gewenst moment te stoppen met het onderzoek."
 
 #: experiment/templates/consent/consent_hooked.html:3
 #, python-format
