@@ -29,7 +29,8 @@ class ToontjeHoger3Plink(Base):
         explainer = Explainer(
             instruction="Muziekherkenning",
             steps=[
-                Step("Luister naar een zeer kort muziekfragment."),
+                Step("Je krijgt {} zeer korte muziekfragmenten te horen.".format(
+                    experiment.rounds)),
                 Step("Ken je het nummer? Noem de juiste artiest en titel!"),
                 Step(
                     "Weet je het niet? Beantwoord dan extra vragen over de tijdsperiode en emotie van het nummer.")
