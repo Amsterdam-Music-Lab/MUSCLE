@@ -44,32 +44,32 @@ class ToontjeHogerHome(Base):
                        ),
         ExperimentData(slug='toontjehoger_3_plink',
                        title="Muziekherkenning",
-                       description="Kun je met een heel kort muziekfragment een nummer herkennen?",
+                       description="Ken je dit korte muziekfragment? Noem de titel en artiest.",
                        image="/images/experiments/toontjehoger/experiment_3.webp",
                        color="#fa5577"
                        ),
         ExperimentData(slug='toontjehoger_6_relative',
                        title="Relatief gehoor",
-                       description="Hoor jij of de melodieën bij verschillende toonhoogte hetzelfde zijn?",
+                       description="Wanneer zijn twee melodieën hetzelfde?",
                        image="/images/experiments/toontjehoger/experiment_6.webp",
                        color="#39d7b8"
                        ),
         # Optional Experiments
         ExperimentData(slug='toontjehoger_2_first',
                        title="Het eerste luisteren",
-                       description="Klink het huilen van Franse en Duitse babies verschillend? [TODO]",
+                       description="Huilen Franse en Duitse baby's hetzelfde? [TODO]",
                        image="/images/experiments/toontjehoger/experiment_2.webp",
                        color="#d843e2"
                        ),
         ExperimentData(slug='toontjehoger_4_absolute',
                        title="Absoluut gehoor",
-                       description="Welke versie van het televisieprogramma intro heeft de juiste toonhoogte? [TODO]",
+                       description="Welke versie van het televisieprogramma-intro heeft de juiste toonhoogte? [TODO]",
                        image="/images/experiments/toontjehoger/experiment_4.webp",
                        color="#0cc7f1"
                        ),
         ExperimentData(slug='toontjehoger_5_tempo',
                        title="Timing en tempo",
-                       description="Kun je horen of welke muziekfragmenten hetzelfde tempo hebben? [TODO]",
+                       description="Kan jij aan de timing van de musicus horen welk fragment het origineel is? [TODO]",
                        image="/images/experiments/toontjehoger/experiment_5.webp",
                        color="#2b2bee"
                        ),
@@ -112,7 +112,7 @@ class ToontjeHogerHome(Base):
             config={
                 'payoff': "Je bent muzikaler dan je denkt!",
                 'intro': "Hoe snel herken jij een liedje? Heb je gevoel voor ritme en timing? Hoe goed is jouw absoluut gehoor? Doe de minigames op ToontjeHoger en ontdek meer over je eigen muzikaliteit én wat de wetenschap daarover weet.",
-                'intro_read_more': "Meer informatie",
+                'intro_read_more': "Over ons",
                 'main_button_label': main_button_label,
                 'main_button_url': main_button_url,
                 'score_label': score_label,
