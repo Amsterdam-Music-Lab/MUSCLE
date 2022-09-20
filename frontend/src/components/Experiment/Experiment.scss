@@ -2,21 +2,20 @@
     min-width: 100vw;
     min-height: 100vh;
 
-    .transition-enter {
+    .transition-enter .container {
         opacity: 0.01;
     }
 
-    .transition-enter.transition-enter-active {
+    .transition-enter.transition-enter-active .container {
         opacity: 1;
         transition: opacity 300ms ease-in;
     }
 
-    .transition-exit {
+    .transition-exit .container {
         opacity: 1;
     }
 
-    .transition-exit.transition-exit-active {
-        opacity: 0.01;
-        transition: opacity 300ms ease-in;
+    .transition-exit.transition-exit-active .container {
+        opacity: 0;
     }
 }

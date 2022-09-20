@@ -185,18 +185,16 @@ const Experiment = ({ match }) => {
     if (state.view === "QUESTION") {
         key = state.question.key;
     }
-
     return (
-        <TransitionGroup
-            className={classNames(
-                "aha__experiment",
-                "experiment-" + match.params.slug
-            )}
-        >
+        <TransitionGroup className={classNames("aha__experiment")}>
             <CSSTransition
                 key={key}
-                timeout={{ enter: 300, exit: 300 }}
-                classNames={"transition"}
+                timeout={{ enter: 300, exit: 0 }}
+                classNames={classNames(
+                    experiment ? "experiment-" + experiment.slug : "",
+                    // Last class is transition class
+                    "transition"
+                )}
             >
                 <DefaultPage
                     title={state.title}
