@@ -93,7 +93,7 @@ class ToontjeHoger1Mozart(Base):
 
         feedback_correct = "Het juiste antwoord was inderdaad {}.".format(
             last_result.expected_response)
-        feedback_incorrect = "Antwoord {} is niet goed! Het juiste antwoord was {}".format(
+        feedback_incorrect = "Antwoord {} is niet goed! Het juiste antwoord was {}.".format(
             last_result.given_response, last_result.expected_response)
         feedback = feedback_correct if correct_answer_given else feedback_incorrect
 
