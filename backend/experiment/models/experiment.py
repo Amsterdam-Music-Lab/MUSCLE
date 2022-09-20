@@ -82,7 +82,8 @@ class Experiment(models.Model):
                 'participant_id': profile['id'],
                 'participant_country': profile['country_code'],
                 'session_start': session.started_at.isoformat(),
-                'session_end': session_finished
+                'session_end': session_finished,
+                'json_data': session.load_json_data()
             }
             row.update(profile['profile'])
             fieldnames.update(row.keys())
