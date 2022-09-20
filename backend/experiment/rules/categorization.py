@@ -398,6 +398,10 @@ class Categorization(Base):
         else:
             expected_response = 'B'
         result_pk = cls.prepare_result(session, section, expected_response)
+        # Set the current phase in the result comment
+        this_result = session.last_result()
+        this_result.comment = json_data['phase']
+        this_result.save()
         choices = json_data["choices"]
         trial = TwoAlternativeForced(
             section, choices, result_pk, title=cls.get_title(session))
