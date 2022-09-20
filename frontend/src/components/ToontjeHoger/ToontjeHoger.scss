@@ -4,7 +4,7 @@
         width: 100%;
         max-width: 300px;
         font-size: 0;
-        margin: 0 auto 30px;
+        margin: 0 auto 15px;
         background-size: contain;
         background-position: center center;
         background-repeat: no-repeat;
@@ -19,7 +19,7 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        padding-bottom: 50px;
+        padding-bottom: 30px;
         position: relative;
 
         @media (max-width: 720px) {
@@ -29,7 +29,7 @@
         }
 
         @media (min-width: 1024px) {
-            min-height: 450px;
+            min-height: 430px;
         }
 
         .intro {
