@@ -27,7 +27,7 @@ class ToontjeHoger6Relative(Base):
         explainer = Explainer(
             instruction="Relatief Gehoor",
             steps=[
-                Step("In deze mini-game kan je testen hoe goed jouw relatieve gehoor is! Relatief gehoor is het vermogen om een melodie te herkennen, ongeacht of die nu wat hoger of lager in toonhoogte wordt afgespeeld."),
+                Step("In dit experiment kun je testen hoe goed jouw relatieve gehoor is! Relatief gehoor is het vermogen om een melodie te herkennen, ongeacht of deze nu wat hoger of lager in toonhoogte wordt afgespeeld."),
                 # Empty step adds some spacing between steps to improve readability
                 Step(""),
                 Step(
