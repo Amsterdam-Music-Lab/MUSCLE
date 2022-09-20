@@ -90,8 +90,10 @@ class ToontjeHogerHome(Base):
         if score < 100:
             score_class = "plastic"
         elif score < 200:
-            score_class = "silver"
+            score_class = "bronze"
         elif score < 300:
+            score_class = "silver"
+        elif score < 400:
             score_class = "gold"
         elif score < 500:
             score_class = "platinum"
