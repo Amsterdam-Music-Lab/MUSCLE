@@ -212,7 +212,7 @@
     }
 }
 
-.experiment-toontjehoger {
+.aha__experiment.experiment-toontjehoger {
     // Hide app bar
     .aha__app-bar {
         display: none;
@@ -224,6 +224,12 @@
             padding-top: 0;
         }
     }
+}
+
+body.toontjehoger
+    .aha__experiment:not(.experiment-toontjehoger)
+    .aha__toontjehoger {
+    display: none;
 }
 
 body.toontjehoger,
