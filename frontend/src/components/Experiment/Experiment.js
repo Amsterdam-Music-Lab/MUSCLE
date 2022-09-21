@@ -186,27 +186,34 @@ const Experiment = ({ match }) => {
         key = state.question.key;
     }
     return (
-        <TransitionGroup className={classNames("aha__experiment")}>
+        <TransitionGroup
+            className={classNames(
+                "aha__experiment",
+                "experiment-" + match.params.slug
+            )}
+        >
             <CSSTransition
                 key={key}
                 timeout={{ enter: 300, exit: 0 }}
-                classNames={classNames(
-                    experiment ? "experiment-" + experiment.slug : "",
-                    // Last class is transition class
-                    "transition"
-                )}
+                classNames={"transition"}
             >
-                <DefaultPage
-                    title={state.title}
-                    logoClickConfirm={
-                        ["FINAL", "ERROR", "TOONTJEHOGER"].includes(key)
-                            ? null
-                            : "Are you sure you want to stop this experiment?"
-                    }
-                    className={className}
-                >
-                    {render(state.view)}
-                </DefaultPage>
+                {!loadingExperiment && experiment ? (
+                    <DefaultPage
+                        title={state.title}
+                        logoClickConfirm={
+                            ["FINAL", "ERROR", "TOONTJEHOGER"].includes(key)
+                                ? null
+                                : "Are you sure you want to stop this experiment?"
+                        }
+                        className={className}
+                    >
+                        {render(state.view)}
+                    </DefaultPage>
+                ) : (
+                    <div className="loader-container">
+                        <Loading />
+                    </div>
+                )}
             </CSSTransition>
         </TransitionGroup>
     );

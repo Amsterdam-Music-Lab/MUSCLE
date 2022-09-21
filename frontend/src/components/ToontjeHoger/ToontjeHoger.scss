@@ -219,7 +219,7 @@
     }
     // Fix page width
     @media (min-width: 800px) {
-        > .container {
+        .aha__page .container {
             max-width: calc(100% - 50px) !important;
             padding-top: 0;
         }
