@@ -86,7 +86,7 @@ class Categorization(Base):
             # Prepare sections for next phase
             json_data = cls.plan_phase(session)
 
-        if json_data['phase'] == 'training':
+        if 'training' in json_data['phase']:
 
             # Get next training action
             if rounds_passed < len(json_data['sequence']):
@@ -276,7 +276,7 @@ class Categorization(Base):
 
         json_data = session.load_json_data()
 
-        if json_data['phase'] == 'training':
+        if 'training' in json_data['phase']:
             # Retrieve training stimuli for the assigned group
             if json_data["group"] == 'S1':
                 sections = session.playlist.section_set.filter(
@@ -295,7 +295,12 @@ class Categorization(Base):
             # Add 10 x 2 training stimuli
             if int(json_data['training_rounds']) == 0:
                 new_rounds = 10
+                json_data['phase'] = 'training-1'
+            elif int(json_data['training_rounds']) == 20:
+                json_data['phase'] = 'training-2'
+                new_rounds = 5
             else:
+                json_data['phase'] = 'training-3'
                 new_rounds = 5
             for _ in range(0, new_rounds):
                 section_sequence.append(sections[0].id)
