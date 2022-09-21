@@ -17,7 +17,11 @@ const Logo = ({ homeUrl }) => (
 
 const Supporters = ({ intro }) => (
     <div className="supporters">
-        <p>{intro}</p>
+        <p
+            dangerouslySetInnerHTML={{
+                __html: intro,
+            }}
+        />
         <div className="organizations">
             <a
                 href="https://www.knaw.nl"
@@ -200,10 +204,54 @@ const ToontjeHogerHome = ({ experiment, config, experiments }) => {
 // ToontjeHoger is an experiment view that shows the ToontjeHoger home
 const ToontjeHogerAbout = ({ experiment, config, experiments }) => {
     return (
-        <div className="aha__toontjehoger">
+        <div className="aha__toontjehoger about">
             <Logo homeUrl={`/${experiment.slug}`} />
 
-            <h1 style={{ textAlign: "center" }}>TODO!</h1>
+            {/* Project */}
+            <div className="project">
+                <h3 className="title">{config.about_title}</h3>
+                <p>{config.about_intro}</p>
+                <p
+                    dangerouslySetInnerHTML={{
+                        __html: config.about_description,
+                    }}
+                />
+            </div>
+
+            {/* Streamer */}
+            <div className="streamer">
+                <h3>
+                    <i>{config.about_streamer}</i>
+                </h3>
+            </div>
+
+            {/* Portrait */}
+            <div className="group-portrait">
+                <img
+                    src="/images/experiments/toontjehoger/mcg-group-portrait.webp"
+                    alt="Music Cognition Group"
+                />
+                <p>{config.portrait_description}</p>
+            </div>
+
+            {/* Credits */}
+            <div className="credits">
+                <p
+                    dangerouslySetInnerHTML={{
+                        __html: config.about_credits,
+                    }}
+                />
+            </div>
+
+            {/* Colofon */}
+            <div className="colofon">
+                <h3 className="title">{config.about_colofon_title}</h3>
+                <p
+                    dangerouslySetInnerHTML={{
+                        __html: config.about_colofon_description,
+                    }}
+                />
+            </div>
 
             {/* Supporters */}
             <Supporters intro={config.supporters_intro} />

@@ -1,12 +1,10 @@
 import logging
 import random
 from django.utils.translation import gettext_lazy as _
-from django.template.loader import render_to_string
 
 from .views import ToontjeHoger
 from .base import Base
-from os.path import join
-from .util.actions import combine_actions
+from .util.strings import external_url
 
 logger = logging.getLogger(__name__)
 
@@ -110,6 +108,7 @@ class ToontjeHogerHome(Base):
         # Home
         home = ToontjeHoger(
             config={
+                # Home
                 'payoff': "Je bent muzikaler dan je denkt!",
                 'intro': "Hoe snel herken jij een liedje? Heb je gevoel voor ritme en timing? Hoe goed is jouw absoluut gehoor? Doe de minigames op ToontjeHoger en ontdek meer over je eigen muzikaliteit én wat de wetenschap daarover weet.",
                 'intro_read_more': "Over ons",
@@ -118,7 +117,17 @@ class ToontjeHogerHome(Base):
                 'score_label': score_label,
                 'score': score,
                 'score_class': score_class,
-                'supporters_intro': "ToontjeHoger is mede mogelijk gemaakt door:"
+                'supporters_intro': "ToontjeHoger werd gemaakt door leden van muziekcognitiegroep ({}) en werd gesteund door {} en de Faculteit Geesteswetenschappen van de Universiteit van Amsterdam.".format(external_url("MCG", "https://www.mcg.uva.nl/"), external_url("KNAW Gewaardeerd!", "https://verrijkinggewaardeerd.nl/")),
+                # About
+                'about_title': "De ToontjeHoger website heeft als doel te laten zien dat luisteraars muzikaler zijn dan ze zelf denken én wat de wetenschap daar inmiddels over weet.",
+                'about_intro': "Wil je ontdekken hoe het zit met je absoluut en relatief gehoor, je gevoel voor ritme en timing en je geheugen voor muziek? Dan zijn de ToontjeHoger mini-games vast iets voor jou!",
+                'about_description': "Muziek speelt op een intrigerende manier met ons gehoor, ons geheugen, onze emoties en onze verwachtingen. Maar als luisteraar zijn we ons vaak niet bewust dat we zelf een actieve rol hebben in wat muziek zo spannend, troostend of opwindend maakt. De wetenschap heeft ontdekt dat dat luisteren zich niet afspeelt in de buitenwereld van de klinkende muziek, maar in de binnenwereld van ons hoofd en onze hersenen. Kortom: <b>iedereen is muzikaal!</b>",
+                'about_streamer': "Luisteraars zijn vaak muzikaler dan ze zelf denken!",
+                'about_more_title': "Meer weten?",
+                'about_more_description': "Bezoek {}, {} of onze blog Music Matters. Of lees meer over muziekcognitie in het publieksboek {}".format(external_url("AML", "https://www.amsterdammusiclab.nl"), external_url("MCG", "https://www.mcg.uva.nl/"), external_url("Music Matters", "https://musiccognition.blogspot.com/"), external_url("Iedereen is muzikaal", "https://henkjanhoning.nl/x/iedereen-is-muzikaal.html")),
+                'about_colofon_title': "Colofon",
+                'about_colofon_description': "<span><b>Organisatie:</b>Zwanet Young, Henkjan Honing</span><span><b>Curatoren:</b>Mariëlle Baelemans, Fleur Bouwer, Ashley Burgoyne, Atser Damsma en Henkjan Honing</span><span><b>Advies:</b>Makiko Sadakata, Berit Janssen, en de leden van MCG.</span><span><b>Realisatie:</b>Werner Helmich ({}), Berit Janssen (MUSCLE team).</span><span><b>Foto:</b>Bob Bronshoff</span>".format(external_url("SUDOX", "https://www.sudox.nl?utm_source=toontjehoger")),
+                'portrait_description': "Het ToontjeHoger team: Mariëlle Baelemans, Fleur Bouwer, Ashley Burgoyne, Atser Damsma, Berit Janssen, Makiko Sadakata, Henkjan Honing en Zwanet Young. (foto: Bob Bronshoff)"
             },
             experiments=cls.EXPERIMENT_DATA
         ).action()
@@ -127,14 +136,14 @@ class ToontjeHogerHome(Base):
             home,
         ]
 
-    @classmethod
+    @ classmethod
     def get_score(cls, sessions):
         score = 0
         for session in sessions:
             score += session.final_score
         return score
 
-    @classmethod
+    @ classmethod
     def get_sessions(cls, participant):
         from experiment.models import Session, Experiment
 
@@ -147,7 +156,7 @@ class ToontjeHogerHome(Base):
                                           experiment_id__in=experiment_ids)
         return sessions
 
-    @classmethod
+    @ classmethod
     def get_next_experiment_slug(cls, sessions):
         experiment_slugs = [
             experiment.slug for experiment in cls.EXPERIMENT_DATA]
