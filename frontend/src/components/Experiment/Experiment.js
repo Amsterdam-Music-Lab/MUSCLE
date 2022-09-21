@@ -198,8 +198,9 @@ const Experiment = ({ match }) => {
                 key={key}
                 timeout={{ enter: 300, exit: 0 }}
                 classNames={"transition"}
+                unmountOnExit
             >
-                {!loadingExperiment && experiment ? (
+                {(!loadingExperiment && experiment) || key == "ERROR" ? (
                     <DefaultPage
                         title={state.title}
                         logoClickConfirm={
