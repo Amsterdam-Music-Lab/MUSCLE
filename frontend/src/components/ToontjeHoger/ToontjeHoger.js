@@ -31,6 +31,28 @@ const Supporters = ({ intro }) => (
                 />
             </a>
             <a
+                href="https://www.uva.nl"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="uva"
+            >
+                <img
+                    src="/images/experiments/toontjehoger/logo-uva-white.svg"
+                    alt="UvA"
+                />
+            </a>
+            <a
+                href="https://www.mcg.uva.nl/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mcg"
+            >
+                <img
+                    src="/images/experiments/toontjehoger/logo-mcg-white.svg"
+                    alt="Music Cognition Group"
+                />
+            </a>
+            <a
                 href="https://www.amsterdammusiclab.nl"
                 target="_blank"
                 rel="noopener noreferrer"
