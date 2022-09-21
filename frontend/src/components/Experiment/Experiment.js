@@ -189,7 +189,9 @@ const Experiment = ({ match }) => {
         <TransitionGroup
             className={classNames(
                 "aha__experiment",
-                "experiment-" + match.params.slug
+                !loadingExperiment && experiment
+                    ? "experiment-" + experiment.slug
+                    : ""
             )}
         >
             <CSSTransition
