@@ -185,6 +185,7 @@ class Categorization(Base):
             # final_score = sum([result.score for result in training_results])
             json_data['sequence'] = ''
             json_data['feedback_sequence'] = ''
+            json_data['phase'] = 'finished'
             session.merge_json_data(json_data)
             session.finish()
             session.final_score = final_score
@@ -447,32 +448,32 @@ age_question = Question(
 )
 
 gender_question = ChoiceQuestion(
-    key='gender_identity',
+    key='gender',
     view='RADIOS',
     question="What is your gender?",
     choices={
-        'male': "Male",
-        'Female': "Female",
-        'Others': "Other",
-        'no_answer': "Prefer not to disclose"
+        'M': "Male",
+        'F': "Female",
+        'X': "Other",
+        'U': "Undisclosed"
     },
     is_skippable=True
 )
 
-musical_expertise_question = ChoiceQuestion(
-    key='musical_expertise',
+musical_experience_question = ChoiceQuestion(
+    key='musical_experience',
     view='RADIOS',
-    question="Please select your level of musical expertise:",
+    question="Please select your level of musical experience:",
     choices={
         'none': "None",
         'moderate': "Moderate",
-        'experienced': "Experienced",
+        'extensive': "Extensive",
         'professional': "Professional"
     },
     is_skippable=True
 )
 
-questions = [age_question, gender_question, musical_expertise_question]
+questions = [age_question, gender_question, musical_experience_question]
 questionaire = [
     Trial(
         title=_("Questionnaire"),
@@ -481,7 +482,7 @@ questionaire = [
 ]
 
 repeat_training_or_quit = ChoiceQuestion(
-    key='failed_categorization_training',
+    key='failed_training',
     view='BUTTON_ARRAY',
     question='You seem to have difficulties reacting correctly to the sound sequences. Is your audio on? If you want to give it another try, click on Ok.',
     choices={
