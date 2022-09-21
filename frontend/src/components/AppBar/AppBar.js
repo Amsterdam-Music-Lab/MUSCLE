@@ -1,5 +1,6 @@
 import React from "react";
 import { URLS, LOGO_URL, LOGO_TITLE } from "../../config";
+import { Link } from "react-router-dom";
 
 // AppBar is a bar on top of the app, with navigation and title
 const AppBar = ({ title, logoClickConfirm = null }) => {
@@ -14,15 +15,15 @@ const AppBar = ({ title, logoClickConfirm = null }) => {
     };
 
     const logo = (
-        <a
-            href={URLS.AMLHome}
+        <Link
+            to={URLS.AMLHome}
             onClick={onLogoClick}
             className="logo"
             aria-label="Logo"
-            style={{backgroundImage: `url(${LOGO_URL})`, }}
+            style={{ backgroundImage: `url(${LOGO_URL})` }}
         >
             {LOGO_TITLE}
-        </a>
+        </Link>
     );
 
     return (
