@@ -75,8 +75,6 @@ class Categorization(Base):
                     session.result_set.all().delete()
                     session.json_data = ''
                     session.save()
-                    profile.answer = ''
-                    profile.save()
                     final = Final(
                         session=session,
                         final_text="Thanks for your participation!",
@@ -125,6 +123,7 @@ class Categorization(Base):
                 if json_data['training_rounds'] == 40:
                     # Clear group from session for reuse
                     json_data['group'] = ''
+                    json_data['sequence'] = ''
                     session.merge_json_data(json_data)
                     session.final_score = 0
                     session.save()
@@ -184,7 +183,9 @@ class Categorization(Base):
 
             # calculate the final score for the entire test sequence
             # final_score = sum([result.score for result in training_results])
-
+            json_data['sequence'] = ''
+            json_data['feedback_sequence'] = ''
+            session.merge_json_data(json_data)
             session.finish()
             session.final_score = final_score
             session.save()
