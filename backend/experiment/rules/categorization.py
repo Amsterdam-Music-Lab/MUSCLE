@@ -94,6 +94,8 @@ class Categorization(Base):
 
             # Training phase completed, get the results
             first_result = int(json_data['training_rounds'])
+            if first_result == 0:
+                first_result += 10
             all_results = session.result_set.all()
             this_results = all_results[first_result:(
                 first_result + len(json_data['sequence']))]
