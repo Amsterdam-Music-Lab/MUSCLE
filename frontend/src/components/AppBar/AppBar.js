@@ -14,14 +14,20 @@ const AppBar = ({ title, logoClickConfirm = null }) => {
         }
     };
 
-    const logo = (
-        <Link
-            to={URLS.AMLHome}
-            onClick={onLogoClick}
-            className="logo"
-            aria-label="Logo"
-            style={{ backgroundImage: `url(${LOGO_URL})` }}
-        >
+    // Logo is a Link in case of relative url (/abc),
+    // and a-element for absolute urls (https://www.example.com/)
+    const logoProps = {
+        onClick: onLogoClick,
+        className: "logo",
+        "aria-label": "Logo",
+        style: { backgroundImage: `url(${LOGO_URL})` },
+    };
+    const logo = URLS.AMLHome.startsWith("http") ? (
+        <a href={URLS.AMLHome} {...logoProps}>
+            {LOGO_TITLE}
+        </a>
+    ) : (
+        <Link to={URLS.AMLHome} {...logoProps}>
             {LOGO_TITLE}
         </Link>
     );
