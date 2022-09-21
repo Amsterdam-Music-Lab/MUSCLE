@@ -192,15 +192,17 @@
             column-gap: 45px;
             row-gap: 45px;
             flex-wrap: wrap;
+            align-items: center;
             justify-content: center;
 
             a {
-                width: 400px;
                 max-width: 80%;
+                width: 330px;
                 display: block;
                 position: relative;
                 transition: opacity 0.3s ease-out;
                 opacity: 0.8;
+                padding: 15px;
 
                 &:hover {
                     opacity: 1;
@@ -211,7 +213,14 @@
                 }
 
                 &.aml {
-                    max-width: 100px;
+                    width: 140px;
+                }
+                &.uva {
+                    width: 250px;
+                }
+
+                &.mcg {
+                    width: 200px;
                 }
             }
         }

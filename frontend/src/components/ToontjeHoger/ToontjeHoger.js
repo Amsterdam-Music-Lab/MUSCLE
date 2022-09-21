@@ -52,7 +52,7 @@ const Supporters = ({ intro }) => (
                 className="mcg"
             >
                 <img
-                    src="/images/experiments/toontjehoger/logo-mcg-white.svg"
+                    src="/images/experiments/toontjehoger/logo-mcg-white.webp"
                     alt="Music Cognition Group"
                 />
             </a>
