@@ -8,7 +8,7 @@ from .views.form import Form, Question, ChoiceQuestion
 from .views import Consent, Explainer, Score, StartSession, TwoAlternativeForced, Trial, Final
 
 from .util.actions import combine_actions
-
+from .util.iso_languages import ISO_LANGUAGES
 
 from .base import Base
 import random
@@ -462,6 +462,14 @@ gender_question = ChoiceQuestion(
     is_skippable=True
 )
 
+language_question = ChoiceQuestion(
+    key='native_language',
+    view='DROPDOWN',
+    question="What is your native language?",
+    choices=ISO_LANGUAGES,
+    is_skippable=True
+)
+
 musical_experience_question = ChoiceQuestion(
     key='musical_experience',
     view='RADIOS',
@@ -475,7 +483,8 @@ musical_experience_question = ChoiceQuestion(
     is_skippable=True
 )
 
-questions = [age_question, gender_question, musical_experience_question]
+questions = [age_question, gender_question,
+             language_question, musical_experience_question]
 questionaire = [
     Trial(
         title=_("Questionnaire"),
