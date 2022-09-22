@@ -249,7 +249,7 @@ class ToontjeHoger2Preverbal(Base):
         score = cls.get_score(session, session.rounds_passed())
 
         # Final
-        final_text = "Goed gedaan! jouw relatief gehoor is uitstekend!" if session.final_score >= 2 * \
+        final_text = "Goed gedaan! Je hebt beide vragen correct beantwoord!" if session.final_score >= 2 * \
             cls.SCORE_CORRECT else "Dat bleek toch even lastig!"
         final = Final(
             session=session,
