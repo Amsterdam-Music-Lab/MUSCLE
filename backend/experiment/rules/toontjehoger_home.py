@@ -61,7 +61,7 @@ class ToontjeHogerHome(Base):
                        ),
         ExperimentData(slug='toontjehoger_4_absolute',
                        title="Absoluut gehoor",
-                       description="Welke versie van het televisieprogramma-intro heeft de juiste toonhoogte? [TODO]",
+                       description="Welke versie van het televisieprogramma-intro heeft de juiste toonhoogte?",
                        image="/images/experiments/toontjehoger/experiment_4.webp",
                        color="#0cc7f1"
                        ),
