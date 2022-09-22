@@ -417,7 +417,7 @@ class Categorization(Base):
             section, choices, result_pk, title=cls.get_title(session))
         trial.config['listen_first'] = True
         trial.config['auto_advance'] = True
-        trial.config['auto_advance_timer'] = 3000
+        trial.config['auto_advance_timer'] = 2500
         trial.config['style'] = json_data["button_order"]
         trial.config['time_pass_break'] = False
         return trial.action()
