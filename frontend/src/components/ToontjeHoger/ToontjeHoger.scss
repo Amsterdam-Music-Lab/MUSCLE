@@ -109,7 +109,7 @@
             margin: 0;
             padding: 0;
 
-            @media (max-width: 720px) {
+            @media (max-width: 420px) {
                 column-gap: 15px;
                 row-gap: 15px;
             }
@@ -127,7 +127,7 @@
                 background-color: rgba($black, 0.5);
                 box-shadow: 0 0 0 rgba(black, 0.5);
 
-                @media (max-width: 720px) {
+                @media (max-width: 350px) {
                     width: 100%;
                 }
 
