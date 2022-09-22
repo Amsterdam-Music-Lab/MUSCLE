@@ -1,4 +1,5 @@
 import json
+from venv import create
 
 from django.utils.translation import gettext_lazy as _
 
@@ -32,7 +33,7 @@ class BooleanQuestion(Question):
     def __init__(self, choices=None, **kwargs):
         super().__init__(**kwargs)
         self.choices = choices or {
-            'yes': _('YES'), 
+            'yes': _('YES'),
             'no': _('NO')
         }
         self.view = 'BUTTON_ARRAY'
@@ -50,11 +51,13 @@ class DropdownQuestion(Question):
         self.choices = choices
         self.view = 'DROPDOWN'
 
+
 class AutoCompleteQuestion(Question):
     def __init__(self, choices, **kwargs):
         super().__init__(**kwargs)
         self.choices = choices
         self.view = 'AUTOCOMPLETE'
+
 
 class RadiosQuestion(Question):
     def __init__(self, choices, **kwargs):
@@ -62,18 +65,21 @@ class RadiosQuestion(Question):
         self.choices = choices
         self.view = 'RADIOS'
 
+
 class ButtonArrayQuestion(Question):
     def __init__(self, choices, **kwargs):
         super().__init__(**kwargs)
         self.choices = choices
         self.view = 'BUTTON_ARRAY'
 
+
 class RangeQuestion(Question):
     def __init__(self, min_value, max_value, **kwargs):
         super().__init__(**kwargs)
         self.min_value = min_value
         self.max_value = max_value
-        
+
+
 class LikertQuestion(Question):
     def __init__(self, scale_steps=7, likert_view='TEXT_RANGE', **kwargs):
         super().__init__(**kwargs)
@@ -97,6 +103,7 @@ class LikertQuestion(Question):
                 5: _("Strongly Agree"),
             }
 
+
 class Form(object):
     ''' Form is a view which brings together an array of questions with submit and optional skip button
     - form: array of questions
@@ -104,14 +111,16 @@ class Form(object):
     - skip_label: label of skip button
     - is_skippable: can this question form be skipped
     - is_profile: should the answers be saved to the user profile
+    - create_result: create a result when submitting the form
     '''
 
-    def __init__(self, form, submit_label=_('Continue'), skip_label=_('Skip'), is_skippable=False, is_profile=False):
+    def __init__(self, form, submit_label=_('Continue'), skip_label=_('Skip'), is_skippable=False, is_profile=False, create_result=True):
         self.form = form
         self.submit_label = submit_label
         self.skip_label = skip_label
         self.is_skippable = is_skippable
         self.is_profile = is_profile
+        self.create_result = create_result
 
     def action(self):
         serialized_form = [question.action() for question in self.form]
@@ -121,4 +130,5 @@ class Form(object):
             'skip_label': self.skip_label,
             'is_skippable': self.is_skippable,
             'is_profile': self.is_profile,
+            'create_result': self.create_result
         }
