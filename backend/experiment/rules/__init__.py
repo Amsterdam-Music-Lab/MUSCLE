@@ -11,6 +11,7 @@ from .rhythm_experiment_series import RhythmExperimentSeries
 from .rhythm_experiment_series_mri import RhythmExperimentSeriesMRI
 from .toontjehoger_home import ToontjeHogerHome
 from .toontjehoger_1_mozart import ToontjeHoger1Mozart
+from .toontjehoger_2_preverbal import ToontjeHoger2Preverbal
 from .toontjehoger_3_plink import ToontjeHoger3Plink
 from .toontjehoger_6_relative import ToontjeHoger6Relative
 from .gold_msi import GoldMSI
@@ -40,6 +41,7 @@ EXPERIMENT_RULES = {
     Categorization.ID: Categorization,
     ToontjeHogerHome.ID: ToontjeHogerHome,
     ToontjeHoger1Mozart.ID: ToontjeHoger1Mozart,
+    ToontjeHoger2Preverbal.ID: ToontjeHoger2Preverbal,
     ToontjeHoger3Plink.ID: ToontjeHoger3Plink,
     ToontjeHoger6Relative.ID: ToontjeHoger6Relative
 }
