@@ -250,6 +250,10 @@
 
     .streamer {
         margin: 50px 30px;
+
+        @media (max-width: 720px) {
+            margin: 30px 20px;
+        }
     }
 
     .colofon {
