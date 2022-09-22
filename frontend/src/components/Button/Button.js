@@ -40,7 +40,6 @@ const Button = ({
         <div
             className={classNames({ active }, className, padding, "aha__button btn btn-lg")}
             onClick={(e) => {
-                e.stopPropagation();
                 clickOnce();
             }}
             style={style}
