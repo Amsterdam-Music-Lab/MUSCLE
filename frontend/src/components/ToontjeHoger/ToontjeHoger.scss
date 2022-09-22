@@ -127,6 +127,10 @@
                 background-color: rgba($black, 0.5);
                 box-shadow: 0 0 0 rgba(black, 0.5);
 
+                @media (max-width: 720px) {
+                    width: 100%;
+                }
+
                 &:hover {
                     opacity: 1;
                     box-shadow: 0 2px 15px rgba(black, 0.3);
@@ -302,9 +306,7 @@
     }
 }
 
-body.toontjehoger
-    .aha__experiment:not(.experiment-toontjehoger)
-    .aha__toontjehoger {
+body.toontjehoger .aha__experiment:not(.experiment-toontjehoger) .aha__toontjehoger {
     display: none;
 }
 
