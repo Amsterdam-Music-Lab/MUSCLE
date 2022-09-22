@@ -49,7 +49,14 @@ const Playback = ({
     // Audio ended playing
     const onAudioEnded = useCallback(() => {
         setPlayerIndex(-1);
-        finishedPlaying(); //AJ: added for categorization experiment for form activation after playback and auto_advance to work properly. Will it affect other experiments?
+
+        //AJ: added for categorization experiment for form activation after playback and auto_advance to work properly
+        if (playConfig.timeout_after_playback) {
+            setTimeout(finishedPlaying, playConfig.timeout_after_playback);
+        } else {
+            finishedPlaying();
+        }
+
     }, []);
 
     // Play audio

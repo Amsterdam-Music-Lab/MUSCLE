@@ -430,6 +430,8 @@ class Categorization(Base):
         trial.config['auto_advance_timer'] = 2500
         trial.config['style'] = json_data["button_order"]
         trial.config['time_pass_break'] = False
+        trial.playback.play_config['timeout_after_playback'] = 3000
+
         return trial.action()
 
     @staticmethod
