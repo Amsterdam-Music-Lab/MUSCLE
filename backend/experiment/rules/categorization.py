@@ -172,13 +172,13 @@ class Categorization(Base):
             # assign rank based on percentage of correct response to training stimuli
             if score_percent >= 90:
                 rank = 'GOLD'
-                final_text = "Congratulations, you correctly respond to above 90% of the trials."
+                final_text = "Congratulations, you correctly responded to more than 90% of the trials."
             elif score_percent >= 80:
                 rank = 'SILVER'
-                final_text = "Congratulations, you correctly respond to above 80% of the trials."
+                final_text = "Congratulations, you correctly responded to more than 80% of the trials."
             elif score_percent >= 70:
                 rank = 'BRONZE'
-                final_text = "Congratulations, you correctly respond to above 70% of the trials."
+                final_text = "Congratulations, you correctly responded to more than 70% of the trials."
             else:
                 rank = None
                 final_text = "Your score is below 70% correct answering. Thank you for your participation."
