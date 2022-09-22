@@ -124,9 +124,14 @@ class Categorization(Base):
                 # Failed the training? exit experiment
                 if json_data['training_rounds'] == 40:
                     # Clear group from session for reuse
-                    json_data['group'] = ''
-                    json_data['sequence'] = ''
-                    session.merge_json_data(json_data)
+                    end_data = {
+                        'assigned_group': json_data['assigned_group'],
+                        'button_colors': json_data['button_colors'],
+                        'pair_colors': json_data['pair_colors'],
+                        'phase': 'failed_training',
+                        'training_rounds': json_data['training_rounds'],
+                    }
+                    session.save_json_data(end_data)
                     session.final_score = 0
                     session.save()
                     final = Final(
@@ -185,10 +190,15 @@ class Categorization(Base):
 
             # calculate the final score for the entire test sequence
             # final_score = sum([result.score for result in training_results])
-            json_data['sequence'] = ''
-            json_data['feedback_sequence'] = ''
-            json_data['phase'] = 'finished'
-            session.merge_json_data(json_data)
+            end_data = {
+                'assigned_group': json_data['assigned_group'],
+                'button_colors': json_data['button_colors'],
+                'pair_colors': json_data['pair_colors'],
+                'phase': 'finished',
+                'training_rounds': json_data['training_rounds'],
+                'group': json_data['group']
+            }
+            session.save_json_data(end_data)
             session.finish()
             session.final_score = final_score
             session.save()
