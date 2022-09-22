@@ -83,12 +83,12 @@ class Experiment(models.Model):
                 'participant_country': profile['country_code'],
                 'session_start': session.started_at.isoformat(),
                 'session_end': session_finished,
-                'json_data': session.load_json_data()
+                'session_data': session.load_json_data()
             }
             row.update(profile['profile'])
             fieldnames.update(row.keys())
             if session.result_set.count() == 0:
-                # some experiments may have only profile questions                
+                # some sessions may have only profile questions
                 rows.append(row)
             else:
                 for result in session.result_set.all():
@@ -99,7 +99,8 @@ class Experiment(models.Model):
                         'result_score': result.score,
                         'result_comment': result.comment,
                         'expected_response': result.expected_response,
-                        'given_response': result.given_response
+                        'given_response': result.given_response,
+                        'result_data': result.load_json_data()
                     }
                     this_row.update(result_data)
                     fieldnames.update(result_data.keys())
