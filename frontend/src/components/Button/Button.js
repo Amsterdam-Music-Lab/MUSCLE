@@ -10,7 +10,7 @@ const Button = ({
     padding = "px-4",
     style = {},
     active = true,
-    value = ""
+    value = "",
 }) => {
     const clicked = useRef(false);
 
@@ -26,17 +26,21 @@ const Button = ({
     // Only support touch events as the audio is initialized
     // Otherwise iOS-Safari users can start the player (by a touchstart)
     // Without the browser having registered any user interaction (e.g. click)
-    const touchEvent = audioInitialized ? { onTouchStart: clickOnce } : {};
+    const touchEvent = audioInitialized
+        ? {
+              onTouchStart: (e) => {
+                  e.stopPropagation();
+                  clickOnce();
+                  return false;
+              },
+          }
+        : {};
 
     return (
         <div
-            className={classNames(
-                { active },
-                className,
-                padding,
-                "aha__button btn btn-lg"
-            )}
+            className={classNames({ active }, className, padding, "aha__button btn btn-lg")}
             onClick={(e) => {
+                e.stopPropagation();
                 clickOnce();
             }}
             style={style}
