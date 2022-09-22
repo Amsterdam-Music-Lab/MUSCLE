@@ -142,7 +142,9 @@ const Trial = ({
 
             // Create a time_passed result
             if (config.auto_advance_timer != null) {
-
+                if (playback.player_type == 'BUTTON') {
+                    startTime.current = getCurrentTime();
+                }
                 const id = setTimeout( () => {makeResult({type: "time_passed",});} , config.auto_advance_timer);
 
             } else {
