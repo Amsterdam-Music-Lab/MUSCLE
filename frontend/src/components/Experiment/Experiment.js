@@ -200,7 +200,7 @@ const Experiment = ({ match }) => {
                 classNames={"transition"}
                 unmountOnExit
             >
-                {(!loadingExperiment && experiment) || key == "ERROR" ? (
+                {(!loadingExperiment && experiment) || key === "ERROR" ? (
                     <DefaultPage
                         title={state.title}
                         logoClickConfirm={
