@@ -204,7 +204,10 @@ const Experiment = ({ match }) => {
                     <DefaultPage
                         title={state.title}
                         logoClickConfirm={
-                            ["FINAL", "ERROR", "TOONTJEHOGER"].includes(key)
+                            ["FINAL", "ERROR", "TOONTJEHOGER"].includes(key) ||
+                            // Info pages at end of experiment
+                            (key === "INFO" &&
+                                (!state.next_round || !state.next_round.length))
                                 ? null
                                 : "Are you sure you want to stop this experiment?"
                         }
