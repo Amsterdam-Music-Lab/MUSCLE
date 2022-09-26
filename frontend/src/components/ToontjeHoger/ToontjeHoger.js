@@ -212,10 +212,10 @@ const ToontjeHogerAbout = ({ experiment, config, experiments }) => {
     return (
         <div className="aha__toontjehoger about">
             <Logo homeUrl={`/${experiment.slug}`} />
-
             {/* Project */}
             <div className="project">
-                <h3 className="title">{config.about_title}</h3>
+                <h3 className="title">{config.intro_read_more}</h3>
+                <h5 className="mb-3">{config.about_title}</h5>
                 <p>{config.about_intro}</p>
                 <p
                     dangerouslySetInnerHTML={{
@@ -223,7 +223,6 @@ const ToontjeHogerAbout = ({ experiment, config, experiments }) => {
                     }}
                 />
             </div>
-
             {/* Streamer */}
             <div className="streamer">
                 <h3>
@@ -232,29 +231,11 @@ const ToontjeHogerAbout = ({ experiment, config, experiments }) => {
             </div>
 
             {/* More */}
-            <div className="project">
-                <h5>{config.about_more_title}</h5>
+            <div className="project mb-4">
+                <h3 className="title">{config.about_more_title}</h3>
                 <p
                     dangerouslySetInnerHTML={{
                         __html: config.about_more_description,
-                    }}
-                />
-            </div>
-
-            {/* Portrait */}
-            <div className="group-portrait">
-                <img
-                    src="/images/experiments/toontjehoger/mcg-group-portrait.webp"
-                    alt="Music Cognition Group"
-                />
-                <p>{config.portrait_description}</p>
-            </div>
-
-            {/* Credits */}
-            <div className="credits">
-                <p
-                    dangerouslySetInnerHTML={{
-                        __html: config.about_credits,
                     }}
                 />
             </div>
@@ -267,6 +248,15 @@ const ToontjeHogerAbout = ({ experiment, config, experiments }) => {
                         __html: config.about_colofon_description,
                     }}
                 />
+            </div>
+
+            {/* Portrait */}
+            <div className="group-portrait">
+                <img
+                    src="/images/experiments/toontjehoger/mcg-group-portrait.webp"
+                    alt="Music Cognition Group"
+                />
+                <p>{config.portrait_description}</p>
             </div>
 
             {/* Supporters */}

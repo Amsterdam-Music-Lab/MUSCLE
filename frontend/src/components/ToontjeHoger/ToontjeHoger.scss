@@ -85,16 +85,17 @@
 
             .share {
                 a {
+                    $shareSize: 50px;
                     font-size: 1.3em;
                     color: white;
                     display: inline-block;
-                    width: 45px;
-                    height: 45px;
+                    width: $shareSize;
+                    height: $shareSize;
                     border: 1px solid rgba(white, 0.3);
                     background-color: rgba(white, 0.1);
                     text-align: center;
-                    line-height: 45px;
-                    border-radius: 45px;
+                    line-height: $shareSize;
+                    border-radius: $shareSize;
                     margin: 0 5px;
                     text-decoration: none;
                     transition: background-color 0.3s ease-out;
@@ -273,6 +274,8 @@
 
     .streamer {
         margin: 50px 30px;
+        color: $pink;
+        text-shadow: 0 0 30px $pink;
 
         @media (max-width: 720px) {
             margin: 30px 20px;
@@ -306,12 +309,12 @@
             border-radius: 3px;
         }
         p {
+            font-size: 0.9em;
+            font-style: italic;
+            margin: 0 auto;
+            max-width: 700px;
             padding: 10px;
             opacity: 0.7;
-
-            span {
-                float: right;
-            }
         }
     }
 }
