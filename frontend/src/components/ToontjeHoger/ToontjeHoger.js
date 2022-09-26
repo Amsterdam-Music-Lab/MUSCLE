@@ -231,6 +231,16 @@ const ToontjeHogerAbout = ({ experiment, config, experiments }) => {
                 </h3>
             </div>
 
+            {/* More */}
+            <div className="project">
+                <h5>{config.about_more_title}</h5>
+                <p
+                    dangerouslySetInnerHTML={{
+                        __html: config.about_more_description,
+                    }}
+                />
+            </div>
+
             {/* Portrait */}
             <div className="group-portrait">
                 <img
