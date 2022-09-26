@@ -502,7 +502,7 @@ msgstr "开始吧！"
 #: experiment/templates/consent/consent_hooked.html:87
 #: experiment/templates/consent/consent_huang2021.html:88
 msgid "Informed consent"
-msgstr "知情同意声明"
+msgstr "知情同意声书"
 
 #: experiment/rules/huang_2022.py:44
 #: experiment/rules/rhythm_experiment_series.py:45
@@ -2211,7 +2211,6 @@ msgstr ""
 
 #: experiment/templates/consent/consent_huang2021.html:34
 msgid ""
-"\n"
 "    This experiment consists of two parts: Hooked on Music game and The "
 "Goldsmiths Musical Sophistication Index. We \n"
 "    will as ask you to answer a few questions concerning demography about "
@@ -2220,6 +2219,9 @@ msgid ""
 "where you grew up.\n"
 "    "
 msgstr ""
+"  该实验包括两部分：一个音乐识别实验与一份《金史密斯音乐素养》水平测试。我们"
+"也将对人口统计特征进行一个简短的问卷调查。 该实验需要20-30分钟。在实验完成后,"
+"您将看到结果。"
 
 #: experiment/templates/consent/consent_huang2021.html:41
 msgid ""
@@ -2240,9 +2242,6 @@ msgid ""
 "    music in your daily life.\n"
 "    "
 msgstr ""
-"  该实验包括两部分：一个音乐识别实验与一份《金史密斯音乐素养》水平测试。我们"
-"也将对人口统计特征进行一个简短的问卷调查。 该实验需要20-30分钟。在实验完成后,"
-"您将看到结果。\n"
 "  在音乐识别实验的第一个阶段，您将听到一些简短的音乐片段，请您尝试尽快回答‘是"
 "否能识别出该音乐‘。同时请在大脑中一起跟唱这段音乐。当您告诉我们您识别出了一段"
 "音乐时，该音乐会继续播放，但是声音将会被静音几秒钟。请您此时继续在心里“默"
