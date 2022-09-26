@@ -67,7 +67,7 @@ class ToontjeHogerHome(Base):
                        ),
         ExperimentData(slug='toontjehoger_5_tempo',
                        title="Timing en tempo",
-                       description="Kan jij aan de timing van de musicus horen welk fragment het origineel is? [TODO]",
+                       description="Kan jij aan de timing van de musicus horen welk fragment het origineel is?",
                        image="/images/experiments/toontjehoger/experiment_5.webp",
                        color="#2b2bee"
                        ),
