@@ -76,7 +76,6 @@ class ToontjeHoger4Absolute(Base):
         available_groups = list(map(str, range(1, cls.PLAYLIST_ITEMS)))
         for result in results:
             available_groups.remove(result.section.group)
-        print(available_groups)
 
         # Get sections
 
@@ -123,8 +122,6 @@ class ToontjeHoger4Absolute(Base):
             result_id=result_pk
         )
         form = Form([question])
-        print(sections[0].tag, sections[0].group,
-              sections[1].tag, sections[1].group)
 
         # Trial
         trial_config = {
