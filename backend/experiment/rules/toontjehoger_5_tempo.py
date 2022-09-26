@@ -27,7 +27,7 @@ class ToontjeHoger5Tempo(Base):
 
         # 1. Explain game.
         explainer = Explainer(
-            instruction="Tempo en timing",
+            instruction="Timing en tempo",
             steps=[
                 Step("Je krijgt dadelijk twee fragmenten te horen."),
                 Step("Eén wordt op de originele snelheid (tempo) afgespeeld, terwijl de ander iets is versneld of vertraagd."),
@@ -207,7 +207,7 @@ class ToontjeHoger5Tempo(Base):
             join('info', 'toontjehoger', 'experiment5.html'))
         info = Info(
             body=body,
-            heading="Timing en Tempo",
+            heading="Timing en tempo",
             button_label="Terug naar ToontjeHoger",
             button_link="/toontjehoger"
         ).action()
