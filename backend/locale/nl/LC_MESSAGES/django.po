@@ -1916,14 +1916,6 @@ msgid "Who Can Take Part in This Research?"
 msgstr "Wie kan meedoen met dit onderzoek?"
 
 #: experiment/templates/consent/consent_MRI.html:7
-#, fuzzy
-#| msgid ""
-#| " Anybody aged 16 or older with no hearing problems and no psychiatric or "
-#| "neurological disorders is welcome to participate in this research. Your "
-#| "device must be able to play audio, and you must have a sufficiently "
-#| "strong data connection to be able to stream short MP3 files. Headphones "
-#| "are recommended for the best results, but you may also use either "
-#| "internal or external loudspeakers. "
 msgid ""
 " Anybody aged 16 or older with no hearing problems is welcome to participate "
 "in this research. Your device must be able to play audio, and you must have "
