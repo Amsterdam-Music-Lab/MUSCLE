@@ -4,7 +4,7 @@ from django.utils.translation import gettext_lazy as _
 from django.template.loader import render_to_string
 from random import randint
 from .views import Trial, Explainer, Step, Score, Final, StartSession, Playlist, Info, HTML
-from .views.form import ChoiceQuestion, Form
+from .views.form import ButtonArrayQuestion, Form
 from .views.playback import Playback
 from .base import Base
 from os.path import join
@@ -93,7 +93,7 @@ class ToontjeHoger4Absolute(Base):
             filter_by={'tag': variant, 'group': section1.group})
         if not section2:
             raise Exception(
-                "Error: could not find section 2 for round")
+                "Error: could not find section 2")
 
         # Random section order
         sections = [section1, section2]
@@ -112,14 +112,13 @@ class ToontjeHoger4Absolute(Base):
             sections, player_type=Playback.TYPE_MULTIPLAYER, play_config=play_config)
 
         # Question
-        question = ChoiceQuestion(
+        question = ButtonArrayQuestion(
             question="Welk fragment heeft de juiste toonhoogte?",
             key='pitch',
             choices={
                 "A": "A",
                 "B": "B",
             },
-            view='BUTTON_ARRAY',
             submits=True,
             result_id=result_pk
         )
