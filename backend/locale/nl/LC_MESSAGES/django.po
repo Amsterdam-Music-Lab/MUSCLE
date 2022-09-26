@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-15 21:15+0200\n"
+"POT-Creation-Date: 2022-09-26 11:40+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,7 +20,7 @@ msgstr ""
 "X-Language: nl_NL\n"
 "X-Source-Language: C\n"
 
-#: experiment/api/experiment.py:65
+#: experiment/api/experiment.py:68
 msgid "Loading"
 msgstr ""
 
@@ -601,6 +601,7 @@ msgstr ""
 #: experiment/rules/huang_2022.py:56 experiment/rules/huang_2022.py:261
 #: experiment/rules/rhythm_experiment_series.py:37
 #: experiment/rules/rhythm_experiment_series.py:73
+#: experiment/rules/rhythm_experiment_series_mri.py:30
 #: experiment/rules/rhythm_experiment_series_unpaid.py:31
 #: experiment/rules/speech2song.py:89 experiment/rules/speech2song.py:99
 #: experiment/rules/speech2song.py:125 experiment/rules/util/actions.py:31
@@ -666,7 +667,7 @@ msgstr ""
 
 #: experiment/rules/huang_2022.py:319
 #, fuzzy, python-format
-#| msgid "trial %(index)d of %(total)d"
+#| msgid "Round %(number)d / %(total)d"
 msgid "Round %(number)d / %(total)d"
 msgstr "test %(index)d van %(total)d"
 
@@ -889,6 +890,7 @@ msgstr ""
 "goed te kunnen horen."
 
 #: experiment/rules/rhythm_experiment_series.py:22
+#: experiment/rules/rhythm_experiment_series_mri.py:15
 #: experiment/rules/rhythm_experiment_series_unpaid.py:16
 msgid "You are about to take part in an experiment about rhythm perception."
 msgstr "Je gaat meedoen aan een experiment over ritmegevoel."
@@ -903,12 +905,14 @@ msgstr ""
 "goed ritmegevoel heeft!"
 
 #: experiment/rules/rhythm_experiment_series.py:28
+#: experiment/rules/rhythm_experiment_series_mri.py:21
 #: experiment/rules/rhythm_experiment_series_unpaid.py:22
 msgid ""
 "You will be doing many little tasks that have something to do with rhythm."
 msgstr "Je gaat verschillende taakjes doen die iets met ritme te maken hebben."
 
 #: experiment/rules/rhythm_experiment_series.py:31
+#: experiment/rules/rhythm_experiment_series_mri.py:24
 #: experiment/rules/rhythm_experiment_series_unpaid.py:25
 msgid ""
 "You will get a short explanation and a practice trial for each little task."
@@ -936,6 +940,19 @@ msgstr "Hartelijk dank voor je deelname!"
 #, python-format
 msgid "Next experiment (%d to go!)"
 msgstr "Volgende experiment (nog %d te gaan!)"
+
+#: experiment/rules/rhythm_experiment_series_mri.py:18
+msgid ""
+"We want to find out which brain areas are involved in our sense of rhythm!"
+msgstr ""
+"Wij willen erachter komen welke gebieden in het brein betrokken zijn bij ons ritmegevoel!"
+
+#: experiment/rules/rhythm_experiment_series_mri.py:27
+msgid ""
+"You will receive 15 euros as compensation for your participation. You will "
+"get instructions for how to get paid at the end of the experiment."
+msgstr ""
+"Je kunt een vergoeding van 15 euro ontvangen als je het hele experiment hebt afgerond. Op het eind van het experiment krijg je instructies over hoe je de vergoeding kunt ontvangen."
 
 #: experiment/rules/rhythm_experiment_series_unpaid.py:28
 msgid "We are very grateful for your participation!"
@@ -2058,10 +2075,10 @@ msgid ""
 "the processing of your personal data you can also contact the data "
 "protection officer of the University of Amsterdam via fg@uva.nl. "
 msgstr ""
-"Mocht u vragen hebben over dit onderzoek, vooraf of achteraf, dan "
-"kunt u zich wenden tot de verantwoordelijke onderzoeker, Dr. Atser Damsma "
-"(a.damsma@uva.nl). Voor eventuele formele klachten over dit onderzoek kunt "
-"u zich wenden tot het lid van de Facultaire Commissie Ethiek (FMG) van de "
+"Mocht u vragen hebben over dit onderzoek, vooraf of achteraf, dan kunt u "
+"zich wenden tot de verantwoordelijke onderzoeker, Dr. Atser Damsma (a."
+"damsma@uva.nl). Voor eventuele formele klachten over dit onderzoek kunt u "
+"zich wenden tot het lid van de Facultaire Commissie Ethiek (FMG) van de "
 "Universiteit van Amsterdam, Dr. Yair Pinto (y.pinto@uva.nl). Voor vragen of "
 "klachten over de verwerking van uw persoonsgegevens kunt u tevens contact "
 "opnemen met de functionaris gegevensbescherming van de Universiteit van "
@@ -2086,8 +2103,9 @@ msgstr ""
 "“Neural correlates of rhythmic abilities”, zoals hierboven beschreven; 16 "
 "jaar of ouder ben; de informatie gelezen en begrepen heb; toestem met "
 "deelname aan het onderzoek en gebruik van de daarmee verkregen gegevens; het "
-"recht behoud om zonder opgaaf van reden deze instemming weer in te trekken; het "
-"recht behoud op ieder door mij gewenst moment te stoppen met het onderzoek."
+"recht behoud om zonder opgaaf van reden deze instemming weer in te trekken; "
+"het recht behoud op ieder door mij gewenst moment te stoppen met het "
+"onderzoek."
 
 #: experiment/templates/consent/consent_hooked.html:3
 #, python-format
