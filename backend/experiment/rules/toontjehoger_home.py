@@ -48,7 +48,7 @@ class ToontjeHogerHome(Base):
                        ),
         ExperimentData(slug='toontjehoger_6_relative',
                        title="Relatief gehoor",
-                       description="Wanneer zijn twee melodieën hetzelfde?",
+                       description="Wanneer zijn twee getransponeerde melodieën hetzelfde?",
                        image="/images/experiments/toontjehoger/experiment_6.webp",
                        color="#39d7b8"
                        ),
