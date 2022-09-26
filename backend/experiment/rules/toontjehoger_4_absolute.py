@@ -3,6 +3,8 @@ import random
 from django.utils.translation import gettext_lazy as _
 from django.template.loader import render_to_string
 from random import randint
+
+from .util.strings import non_breaking
 from .views import Trial, Explainer, Step, Score, Final, StartSession, Playlist, Info, HTML
 from .views.form import ButtonArrayQuestion, Form
 from .views.playback import Playback
@@ -157,7 +159,7 @@ class ToontjeHoger4Absolute(Base):
                     last_result.expected_response.upper())
 
             feedback += " Je luisterde naar de intro van {}.".format(
-                last_result.section.name)
+                non_breaking(last_result.section.name))
 
         # Return score view
         config = {'show_total_score': True}
