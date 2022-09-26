@@ -116,6 +116,7 @@ class ToontjeHogerHome(Base):
                 'score_label': score_label,
                 'score': score,
                 'score_class': score_class,
+                'share_message': "Ha! Ik ben muzikaler dan ik dacht - heb maar liefst %SCORE% punten! Speel mee met #ToontjeHoger",
                 'supporters_intro': "ToontjeHoger werd gemaakt door leden van muziekcognitiegroep ({}) en werd gesteund door {} en de Faculteit Geesteswetenschappen van de Universiteit van Amsterdam.".format(external_url("MCG", "https://www.mcg.uva.nl/"), external_url("KNAW Gewaardeerd!", "https://verrijkinggewaardeerd.nl/")),
                 # About
                 'about_title': "De ToontjeHoger website heeft als doel te laten zien dat luisteraars muzikaler zijn dan ze zelf denken én wat de wetenschap daar inmiddels over weet.",

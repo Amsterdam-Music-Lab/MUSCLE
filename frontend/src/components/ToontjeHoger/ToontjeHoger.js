@@ -6,14 +6,39 @@ import Rank from "../Rank/Rank";
 const LOGO_URL = "/images/experiments/toontjehoger/logo.svg";
 
 const Logo = ({ homeUrl }) => (
-    <Link
-        to={homeUrl}
-        className="logo"
-        style={{ backgroundImage: `url(${LOGO_URL}` }}
-    >
+    <Link to={homeUrl} className="logo" style={{ backgroundImage: `url(${LOGO_URL}` }}>
         {LOGO_TITLE}
     </Link>
 );
+
+const Share = ({ score, message }) => {
+    const getLink = (url) =>
+        url
+            .replace("%URL%", encodeURIComponent(window.location))
+            .replace(
+                "%TEXT%",
+                encodeURIComponent(
+                    message.replace("%SCORE%", score).replace("%URL%", window.location)
+                )
+            );
+
+    return (
+        <div className="share">
+            <a
+                href={getLink("http://twitter.com/share?url=%URL%&text=%TEXT%")}
+                className="twitter ti-twitter-alt"
+                target="_blank"
+                rel="noopener noreferer"
+            ></a>
+            <a
+                href={getLink("http://www.facebook.com/sharer.php?u=%URL%&t=%TEXT%")}
+                className="facebook ti-facebook"
+                target="_blank"
+                rel="noopener noreferer"
+            ></a>
+        </div>
+    );
+};
 
 const Supporters = ({ intro }) => (
     <div className="supporters">
@@ -29,21 +54,10 @@ const Supporters = ({ intro }) => (
                 rel="noopener noreferrer"
                 className="knaw"
             >
-                <img
-                    src="/images/experiments/toontjehoger/logo-knaw-white.svg"
-                    alt="KNAW"
-                />
+                <img src="/images/experiments/toontjehoger/logo-knaw-white.svg" alt="KNAW" />
             </a>
-            <a
-                href="https://www.uva.nl"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="uva"
-            >
-                <img
-                    src="/images/experiments/toontjehoger/logo-uva-white.svg"
-                    alt="UvA"
-                />
+            <a href="https://www.uva.nl" target="_blank" rel="noopener noreferrer" className="uva">
+                <img src="/images/experiments/toontjehoger/logo-uva-white.svg" alt="UvA" />
             </a>
             <a
                 href="https://www.mcg.uva.nl/"
@@ -62,10 +76,7 @@ const Supporters = ({ intro }) => (
                 rel="noopener noreferrer"
                 className="aml"
             >
-                <img
-                    src="/images/logo-full-white.svg"
-                    alt="Amsterdam Music Lab"
-                />
+                <img src="/images/logo-full-white.svg" alt="Amsterdam Music Lab" />
             </a>
         </div>
     </div>
@@ -87,10 +98,7 @@ const useAnimatedScore = (targetScore) => {
             // Score step
             const scoreStep = Math.max(
                 1,
-                Math.min(
-                    10,
-                    Math.ceil(Math.abs(scoreValue.current - targetScore) / 10)
-                )
+                Math.min(10, Math.ceil(Math.abs(scoreValue.current - targetScore) / 10))
             );
 
             // Scores are equal, stop
@@ -99,8 +107,7 @@ const useAnimatedScore = (targetScore) => {
             }
 
             // Add / subtract score
-            scoreValue.current +=
-                Math.sign(targetScore - scoreValue.current) * scoreStep;
+            scoreValue.current += Math.sign(targetScore - scoreValue.current) * scoreStep;
             setScore(scoreValue.current);
 
             id = setTimeout(nextStep, 50);
@@ -142,10 +149,7 @@ const ToontjeHogerHome = ({ experiment, config, experiments }) => {
                     <p>{config.intro}</p>
                     <div className="actions">
                         {config.main_button_label && (
-                            <Link
-                                className="btn btn-lg btn-primary"
-                                to={config.main_button_url}
-                            >
+                            <Link className="btn btn-lg btn-primary" to={config.main_button_url}>
                                 {config.main_button_label}
                             </Link>
                         )}
@@ -166,6 +170,8 @@ const ToontjeHogerHome = ({ experiment, config, experiments }) => {
                         scoreClass={config.score_class}
                         label={config.score_label}
                     />
+
+                    <Share score={config.score} message={config.share_message} />
                 </div>
             </div>
 
