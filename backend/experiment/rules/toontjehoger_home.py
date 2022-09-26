@@ -52,7 +52,6 @@ class ToontjeHogerHome(Base):
                        image="/images/experiments/toontjehoger/experiment_6.webp",
                        color="#39d7b8"
                        ),
-        # Optional Experiments
         ExperimentData(slug='toontjehoger_2_preverbal',
                        title="Het eerste luisteren",
                        description="Huilen Franse en Duitse baby's hetzelfde?",
