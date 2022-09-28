@@ -51,8 +51,25 @@ class Categorization(Base):
         if not json_data:
             json_data = cls.plan_experiment(session)
 
+        # Check if this participant already has a session
+        if json_data == 'REPEAT':
+            json_data = {'phase': 'REPEAT'}
+            session.merge_json_data(json_data)
+            session.save()
+            final = Final(
+                session=session,
+                final_text="You already have participated in this experiment.",
+                rank=None,
+                show_social=False,
+                show_profile_link=False
+            ).action()
+            return final
+
         # Total participants reached - Abort with message
         if json_data == 'FULL':
+            json_data = {'phase': 'FULL'}
+            session.merge_json_data(json_data)
+            session.save()
             final = Final(
                 session=session,
                 final_text="The maximimum number of participants has been reached.",
@@ -73,8 +90,11 @@ class Categorization(Base):
                 # Delete results and json from session and exit
                 if profile.answer == 'aborted':
                     session.result_set.all().delete()
-                    session.json_data = ''
+                    json_data = {'phase': 'ABORTED',
+                                 'training_rounds': json_data['training_rounds']}
+                    session.save_json_data(json_data)
                     session.save()
+                    profile.delete()
                     final = Final(
                         session=session,
                         final_text="Thanks for your participation!",
@@ -128,12 +148,17 @@ class Categorization(Base):
                         'assigned_group': json_data['assigned_group'],
                         'button_colors': json_data['button_colors'],
                         'pair_colors': json_data['pair_colors'],
-                        'phase': 'failed_training',
+                        'phase': 'FAILED_TRAINING',
                         'training_rounds': json_data['training_rounds'],
                     }
                     session.save_json_data(end_data)
                     session.final_score = 0
                     session.save()
+                    profiles = session.participant.profile()
+                    for profile in profiles:
+                        # Delete failed_training tag from profile
+                        if profile.question == 'failed_training':
+                            profile.delete()
                     final = Final(
                         session=session,
                         final_text="Thanks for your participation!",
@@ -194,7 +219,7 @@ class Categorization(Base):
                 'assigned_group': json_data['assigned_group'],
                 'button_colors': json_data['button_colors'],
                 'pair_colors': json_data['pair_colors'],
-                'phase': 'finished',
+                'phase': 'FINISHED',
                 'training_rounds': json_data['training_rounds'],
                 'group': json_data['group']
             }
@@ -202,7 +227,11 @@ class Categorization(Base):
             session.finish()
             session.final_score = final_score
             session.save()
-
+            profiles = session.participant.profile()
+            for profile in profiles:
+                # Delete failed_training tag from profile
+                if profile.question == 'failed_training':
+                    profile.delete()
             final = Final(
                 session=session,
                 final_text=final_text,
@@ -232,56 +261,63 @@ class Categorization(Base):
         group = None
 
         session.experiment.save()
+        current_sessions = session.experiment.session_set.filter(
+            participant=session.participant)
 
-        if session.experiment.session_count() <= (group_size * 4):
-            # Assign a group, if that group is full try again
-            while group_count >= group_size:
-                group = random.choice(['S1', 'S2', 'C1', 'C2'])
-                group_count = session.experiment.session_count_groups(group)
-            # Assign a random correct response color for 1A, 2A
-            stimuli_a = random.choice(['BLUE', 'ORANGE'])
-            # Determine which button is orange and which is blue
-            button_order = random.choice(['neutral', 'neutral-inverted'])
-            # Set expected resonse accordingly
-            ph = '___'  # placeholder
-            if button_order == 'neutral' and stimuli_a == 'BLUE':
-                choices = {'A': ph, 'B': ph}
-            elif button_order == 'neutral-inverted' and stimuli_a == 'ORANGE':
-                choices = {'A': ph, 'B': ph}
-            else:
-                choices = {'B': ph, 'A': ph}
-            if group == 'S1':
-                assigned_group = 'Same direction, Pair 1'
-            elif group == 'S2':
-                assigned_group = 'Same direction, Pair 2'
-            elif group == 'C1':
-                assigned_group = 'Crossed direction, Pair 1'
-            else:
-                assigned_group = 'Crossed direction, Pair 2'
-            if button_order == 'neutral':
-                button_colors = 'Blue left, Orange right'
-            else:
-                button_colors = 'Orange left, Blue right'
-            if stimuli_a == 'BLUE':
-                pair_colors = 'A = Blue, B = Orange'
-            else:
-                pair_colors = 'A = Orange, B = Blue'
-            json_data = {
-                'assigned_group': assigned_group,
-                'button_colors': button_colors,
-                'pair_colors': pair_colors,
-                'group': group,
-                'stimuli_a': stimuli_a,
-                'button_order': button_order,
-                'choices': choices,
-                'phase': "training",
-                         'training_rounds': "0"
-            }
-
-            session.merge_json_data(json_data)
-            session.save()
+        # Total participants reached - Abort with message
+        if current_sessions.count() > 1:
+            json_data = 'REPEAT'
         else:
-            json_data = 'FULL'
+            if session.experiment.session_count() <= (group_size * 4):
+                # Assign a group, if that group is full try again
+                while group_count >= group_size:
+                    group = random.choice(['S1', 'S2', 'C1', 'C2'])
+                    group_count = session.experiment.session_count_groups(
+                        group)
+                # Assign a random correct response color for 1A, 2A
+                stimuli_a = random.choice(['BLUE', 'ORANGE'])
+                # Determine which button is orange and which is blue
+                button_order = random.choice(['neutral', 'neutral-inverted'])
+                # Set expected resonse accordingly
+                ph = '___'  # placeholder
+                if button_order == 'neutral' and stimuli_a == 'BLUE':
+                    choices = {'A': ph, 'B': ph}
+                elif button_order == 'neutral-inverted' and stimuli_a == 'ORANGE':
+                    choices = {'A': ph, 'B': ph}
+                else:
+                    choices = {'B': ph, 'A': ph}
+                if group == 'S1':
+                    assigned_group = 'Same direction, Pair 1'
+                elif group == 'S2':
+                    assigned_group = 'Same direction, Pair 2'
+                elif group == 'C1':
+                    assigned_group = 'Crossed direction, Pair 1'
+                else:
+                    assigned_group = 'Crossed direction, Pair 2'
+                if button_order == 'neutral':
+                    button_colors = 'Blue left, Orange right'
+                else:
+                    button_colors = 'Orange left, Blue right'
+                if stimuli_a == 'BLUE':
+                    pair_colors = 'A = Blue, B = Orange'
+                else:
+                    pair_colors = 'A = Orange, B = Blue'
+                json_data = {
+                    'assigned_group': assigned_group,
+                    'button_colors': button_colors,
+                    'pair_colors': pair_colors,
+                    'group': group,
+                    'stimuli_a': stimuli_a,
+                    'button_order': button_order,
+                    'choices': choices,
+                    'phase': "training",
+                    'training_rounds': "0"
+                }
+
+                session.merge_json_data(json_data)
+                session.save()
+            else:
+                json_data = 'FULL'
         return json_data
 
     @classmethod
