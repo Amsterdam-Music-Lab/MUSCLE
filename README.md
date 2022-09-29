@@ -51,12 +51,16 @@ This lets you execute shell commands on the container.
 Then run `./manage.py createsuperuser`, and proceed to enter username, password and email address as prompted. After that, you can log into the admin interface to create a playlist and experiment. Make sure to adjust `REACT_APP_EXPERIMENT_SLUG` in your .env file accordingly.
 
 ### Compiling a playlist and other management commands
-In the same way as above, you can proceed to dump the database or compile the playlist:
-`docker exec -it aml-experiments_server_1 bash`
-And then, in the resulting shell:
-`./manage.py compileplaylist path_to_sound_folder` or
-`./manage.py exportexperiment your_slug` or
-`./manage.py exportplaycount playlist_id`
+You can run management commands, such as dump the database or compile the playlist, by using the management container, as specified in `docker-compose-manage.yaml`.
+
+For instance, to compile a playlist:
+`docker-compose -f docker-compose-manage.yaml run manage ./manage.py compileplaylist path_to_sound_folder`
+
+Other important management commands:
+- Export experiment data to json: `./manage.py exportexperiment your_slug`
+- Export how often sections have been played: `./manage.py exportplaycount playlist_id`
+- Update translation strings in .po file: `./manage.py makemessages -l nl` or `./manage.py makemessages --all`
+- Compile translations into binary .mo file: `./manage.py compilemessages`
 
 ### Debugging
 If all containers are running via docker-compose, it is not possible to interact with the debug shell. Therefore, you need to do the following:
