@@ -83,6 +83,12 @@ class Categorization(Base):
         rounds_passed = (session.rounds_passed() -
                          int(json_data['training_rounds']))
 
+        # Change phase to enable collecting results of second half of training-1
+        if session.rounds_passed() == 10:
+            json_data['phase'] = 'training-1B'
+            session.merge_json_data(json_data)
+            session.save()
+
         if rounds_passed == 0:
             # Check if participants wants to exit after failed traning
             profiles = session.participant.profile()
@@ -113,18 +119,19 @@ class Categorization(Base):
                 return cls.next_trial_action(session) if rounds_passed == 0 else cls.get_trial_with_feedback(session)
 
             # Training phase completed, get the results
-            first_result = int(json_data['training_rounds'])
-            if first_result == 0:
-                first_result += 10
-            all_results = session.result_set.all()
-            this_results = all_results[first_result:(
-                first_result + len(json_data['sequence']))]
+            training_rounds = int(json_data['training_rounds'])
 
+            if training_rounds == 0:
+                this_results = session.result_set.filter(comment='training-1B')
+            elif training_rounds == 20:
+                this_results = session.result_set.filter(comment='training-2')
+            elif training_rounds == 30:
+                this_results = session.result_set.filter(comment='training-3')
             # calculate the score for this sequence
             score_avg = this_results.aggregate(Avg('score'))['score__avg']
 
             # End of training?
-            if score_avg > SCORE_AVG_MIN_TRAINING:
+            if score_avg >= SCORE_AVG_MIN_TRAINING:
                 json_data['phase'] = "testing"
                 json_data['training_rounds'] = session.rounds_passed()
                 session.merge_json_data(json_data)
@@ -187,10 +194,7 @@ class Categorization(Base):
                 return cls.next_trial_action(session)
 
             # Testing phase completed get results
-            first_result = int(json_data['training_rounds'])
-            all_results = session.result_set.all()
-            this_results = all_results[first_result:(
-                first_result + len(json_data['sequence']))]
+            this_results = session.result_set.filter(comment='testing')
 
             # Calculate percentage of correct response to training stimuli
             final_score = 0
@@ -260,7 +264,6 @@ class Categorization(Base):
         group_count = group_size
         group = None
 
-        session.experiment.save()
         current_sessions = session.experiment.session_set.filter(
             participant=session.participant)
 
@@ -344,7 +347,7 @@ class Categorization(Base):
             # Add 10 x 2 training stimuli
             if int(json_data['training_rounds']) == 0:
                 new_rounds = 10
-                json_data['phase'] = 'training-1'
+                json_data['phase'] = 'training-1A'
             elif int(json_data['training_rounds']) == 20:
                 json_data['phase'] = 'training-2'
                 new_rounds = 5
