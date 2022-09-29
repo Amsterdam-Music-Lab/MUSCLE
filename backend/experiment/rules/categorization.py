@@ -204,18 +204,18 @@ class Categorization(Base):
             score_percent = 100 * (final_score / 30)
 
             # assign rank based on percentage of correct response to training stimuli
-            if score_percent >= 90:
-                rank = 'GOLD'
-                final_text = "Congratulations, you correctly responded to more than 90% of the trials."
+            if score_percent == 100:
+                rank = 'PLATINUM'
+                final_text = "Congratulations! You did great and won a platinum medal!"
             elif score_percent >= 80:
+                rank = 'GOLD'
+                final_text = "Congratulations! You did great and won a gold medal!"
+            elif score_percent >= 60:
                 rank = 'SILVER'
-                final_text = "Congratulations, you correctly responded to more than 80% of the trials."
-            elif score_percent >= 70:
-                rank = 'BRONZE'
-                final_text = "Congratulations, you correctly responded to more than 70% of the trials."
+                final_text = "Congratulations! You did very well and won a silver medal!"
             else:
-                rank = None
-                final_text = "Your score is below 70% correct answering. Thank you for your participation."
+                rank = 'BRONZE'
+                final_text = "Congratulations! You did well and won a bronze medal!"
 
             # calculate the final score for the entire test sequence
             # final_score = sum([result.score for result in training_results])
