@@ -152,6 +152,16 @@ const Score = ({ score, label, scoreClass }) => {
     );
 };
 
+const Privacy = ({ description }) => (
+    <div className="privacy">
+        <p
+            dangerouslySetInnerHTML={{
+                __html: description,
+            }}
+        />
+    </div>
+);
+
 // ToontjeHoger is an experiment view that shows the ToontjeHoger home
 const ToontjeHogerHome = ({ experiment, config, experiments }) => {
     return (
@@ -223,6 +233,9 @@ const ToontjeHogerHome = ({ experiment, config, experiments }) => {
 
             {/* Supporters */}
             <Supporters intro={config.supporters_intro} />
+
+            {/* Privacy */}
+            <Privacy description={config.privacy_description} />
         </div>
     );
 };
@@ -285,6 +298,9 @@ const ToontjeHogerAbout = ({ experiment, config, experiments }) => {
 
             {/* Supporters */}
             <Supporters intro={config.supporters_intro} />
+
+            {/* Privacy */}
+            <Privacy description={config.privacy_description} />
         </div>
     );
 };

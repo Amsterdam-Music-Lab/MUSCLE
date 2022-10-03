@@ -226,12 +226,11 @@
     .supporters {
         margin-top: 30px;
         padding-top: 20px;
-        padding-bottom: 50px;
+        padding-bottom: 30px;
         display: flex;
         justify-content: center;
         align-items: center;
         flex-direction: column;
-        border-top: 2px solid rgba(white, 0.2);
         text-align: center;
 
         p {
@@ -277,6 +276,14 @@
                 }
             }
         }
+    }
+
+    .privacy {
+        border-top: 2px solid rgba(white, 0.2);
+        width: 100%;
+        padding: 20px;
+        text-align: center;
+        font-size: 0.9em;
     }
 
     // About
@@ -328,6 +335,7 @@
         margin: 20px auto 0;
         width: 951px;
         max-width: 100%;
+        border-bottom: 2px solid rgba(white, 0.2);
 
         img {
             width: 100%;
