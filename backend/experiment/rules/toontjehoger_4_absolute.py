@@ -32,7 +32,7 @@ class ToontjeHoger4Absolute(Base):
             instruction="Absoluut gehoor",
             steps=[
                 Step(
-                    "Je gaat zo luisteren naar fragmenten muziek die je misschien herkent als de intro van een tv programma of serie."),
+                    "Je gaat zo luisteren naar fragmenten muziek die je misschien herkent als de intro van een tv-programma of serie."),
                 Step(
                     "Van ieder fragment kan je twee versies luisteren. Eén hiervan is het origineel. De andere hebben we een beetje hoger of lager gemaakt."),
                 Step("Kan jij horen welke van de twee versies precies zo hoog of laag is als je 'm kent? Welke is het origineel?"),
