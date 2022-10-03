@@ -25,7 +25,7 @@ const Share = ({ score, label, message }) => {
     return (
         <div className="share">
             <h5>{label}</h5>
-            <div class="social">
+            <div className="social">
                 <a
                     href={getLink("http://twitter.com/share?url=%URL%&text=%TEXT%")}
                     className="twitter ti-twitter-alt"
