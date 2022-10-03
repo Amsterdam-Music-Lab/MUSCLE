@@ -11,7 +11,7 @@ const Logo = ({ homeUrl }) => (
     </Link>
 );
 
-const Share = ({ score, message }) => {
+const Share = ({ score, label, message }) => {
     const getLink = (url) =>
         url
             .replace("%URL%", encodeURIComponent(window.location))
@@ -24,18 +24,25 @@ const Share = ({ score, message }) => {
 
     return (
         <div className="share">
-            <a
-                href={getLink("http://twitter.com/share?url=%URL%&text=%TEXT%")}
-                className="twitter ti-twitter-alt"
-                target="_blank"
-                rel="noopener noreferer"
-            ></a>
-            <a
-                href={getLink("http://www.facebook.com/sharer.php?u=%URL%&t=%TEXT%")}
-                className="facebook ti-facebook"
-                target="_blank"
-                rel="noopener noreferer"
-            ></a>
+            <h5>{label}</h5>
+            <div class="social">
+                <a
+                    href={getLink("http://twitter.com/share?url=%URL%&text=%TEXT%")}
+                    className="twitter ti-twitter-alt"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                >
+                    twitter
+                </a>
+                <a
+                    href={getLink("http://www.facebook.com/sharer.php?u=%URL%&t=%TEXT%")}
+                    className="facebook ti-facebook"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                >
+                    facebook
+                </a>
+            </div>
         </div>
     );
 };
@@ -171,7 +178,11 @@ const ToontjeHogerHome = ({ experiment, config, experiments }) => {
                         label={config.score_label}
                     />
 
-                    <Share score={config.score} message={config.share_message} />
+                    <Share
+                        score={config.score}
+                        label={config.share_label}
+                        message={config.share_message}
+                    />
                 </div>
             </div>
 
