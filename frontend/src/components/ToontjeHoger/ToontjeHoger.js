@@ -42,6 +42,15 @@ const Share = ({ score, label, message }) => {
                 >
                     facebook
                 </a>
+                <a
+                    href={getLink("whatsapp://send?text=%TEXT%%20%URL%")}
+                    data-action="share/whatsapp/share"
+                    className="whatsapp ti-whatsapp"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                >
+                    Whatsapp
+                </a>
             </div>
         </div>
     );

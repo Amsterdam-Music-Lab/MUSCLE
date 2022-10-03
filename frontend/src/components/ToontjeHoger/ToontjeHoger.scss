@@ -90,28 +90,43 @@
                     text-align: center;
                     font-size: 1.1em;
                 }
-                a {
-                    $shareSize: 50px;
-                    color: white;
-                    display: inline-block;
-                    width: $shareSize;
-                    height: $shareSize;
-                    border: 2px solid rgba(white, 0.1);
-                    background-color: rgba(white, 0.1);
-                    text-align: center;
-                    line-height: $shareSize - 2;
-                    border-radius: $shareSize;
-                    margin: 0 5px;
-                    text-decoration: none;
-                    transition: background-color 0.3s ease-out;
-                    font-size: 0;
+                .social {
+                    display: flex;
+                    a {
+                        $shareSize: 50px;
+                        color: white;
+                        display: inline-block;
+                        width: $shareSize;
+                        height: $shareSize;
+                        border: 2px solid rgba(white, 0.1);
+                        background-color: rgba(white, 0.1);
+                        text-align: center;
+                        line-height: $shareSize - 2;
+                        border-radius: $shareSize;
+                        margin: 0 5px;
+                        text-decoration: none;
+                        transition: background-color 0.3s ease-out;
+                        font-size: 0;
 
-                    &::before {
-                        font-size: 1.3rem;
-                    }
+                        &::before {
+                            font-size: 1.3rem;
+                        }
 
-                    &:hover {
-                        background-color: rgba(white, 0.3);
+                        &:hover {
+                            background-color: rgba(white, 0.3);
+                        }
+
+                        &.whatsapp {
+                            background-image: url("/public/images/experiments/toontjehoger/icon-whatsapp.svg");
+                            background-position: center;
+                            background-size: 23px;
+                            background-repeat: no-repeat;
+                            display: none;
+
+                            @media (max-width: 720px) and (hover: none) and (pointer: coarse) {
+                                display: block;
+                            }
+                        }
                     }
                 }
             }
