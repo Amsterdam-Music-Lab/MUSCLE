@@ -9,6 +9,7 @@ from .views.playback import Playback
 from .base import Base
 from os.path import join
 from .util.actions import combine_actions
+from .util.strings import non_breaking
 
 logger = logging.getLogger(__name__)
 
@@ -93,15 +94,21 @@ class ToontjeHoger5Tempo(Base):
             raise Exception(
                 "Error: could not find original section: {}".format(tag_original))
 
-        section_changed = session.section_from_any_song(
-            filter_by={'tag': tag_changed, 'group': "ch"})
-        if not section_changed:
-            raise Exception(
-                "Error: could not find changed section: {}".format(tag_changed))
+        section_changed = cls.get_section_changed(
+            session=session, tag=tag_changed)
 
         sections = [section_original, section_changed]
         random.shuffle(sections)
         return sections
+
+    @classmethod
+    def get_section_changed(cls, session, tag):
+        section_changed = session.section_from_any_song(
+            filter_by={'tag': tag, 'group': "ch"})
+        if not section_changed:
+            raise Exception(
+                "Error: could not find changed section: {}".format(tag))
+        return section_changed
 
     @classmethod
     def get_round(cls, session, round):
@@ -154,6 +161,25 @@ class ToontjeHoger5Tempo(Base):
         return cls.SCORE_CORRECT if result.expected_response == result.given_response else cls.SCORE_WRONG
 
     @classmethod
+    def get_section_pair_from_result(cls, result):
+        section_original = result.section
+
+        if section_original is None:
+            raise Exception(
+                "Error: could not get section from result")
+
+        tag_changed = section_original.tag.replace("OR", "CH")
+        section_changed = cls.get_section_changed(
+            session=result.session, tag=tag_changed)
+
+        if section_changed is None:
+            raise Exception(
+                "Error: could not get changed section for tag: {}".format(
+                    tag_changed))
+
+        return (section_original, section_changed)
+
+    @ classmethod
     def get_score(cls, session):
         # Feedback
         last_result = session.last_result()
@@ -169,16 +195,27 @@ class ToontjeHoger5Tempo(Base):
                 feedback = "Helaas! Het juiste antwoord was {}.".format(
                     last_result.expected_response.upper())
 
-            # Removed: No artist/track info available
-            # feedback += " Je luisterde naar {} van {}.".format(
-            #     last_result.section.name, last_result.section.artist)
+            section_original, section_changed = cls.get_section_pair_from_result(
+                last_result)
+
+            # Create feedback message
+            # - Track names are always the same
+            # - Artist could be different
+            if section_original.artist == section_changed.artist:
+                feedback += " Je hoorde {}, in beide fragmenten uitgevoerd door {}.".format(
+                    last_result.section.name, last_result.section.artist)
+            else:
+                section_a = section_original if last_result.expected_response == "A" else section_changed
+                section_b = section_changed if section_a.id == section_original.id else section_original
+                feedback += " Je hoorde {} uitgevoerd door A) {} en B) {}.".format(
+                    section_a.name, non_breaking(section_a.artist), non_breaking(section_b.artist))
 
         # Return score view
         config = {'show_total_score': True}
         score = Score(session, config=config, feedback=feedback).action()
         return [score]
 
-    @classmethod
+    @ classmethod
     def get_final_round(cls, session):
 
         # Finish session.
