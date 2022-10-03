@@ -276,7 +276,11 @@ const ToontjeHogerAbout = ({ experiment, config, experiments }) => {
                     src="/images/experiments/toontjehoger/mcg-group-portrait.webp"
                     alt="Music Cognition Group"
                 />
-                <p>{config.portrait_description}</p>
+                <p
+                    dangerouslySetInnerHTML={{
+                        __html: config.portrait_description,
+                    }}
+                />
             </div>
 
             {/* Supporters */}
