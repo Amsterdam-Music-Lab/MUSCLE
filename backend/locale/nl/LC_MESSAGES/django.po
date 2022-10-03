@@ -1757,7 +1757,7 @@ msgstr ""
 
 #: experiment/rules/views/form.py:78 experiment/rules/views/question.py:142
 msgid "How much do you agree or disagree?"
-msgstr "In hoeverre bent u het hiermee eens of oneens?"
+msgstr "In hoeverre ben je het hiermee eens of oneens?"
 
 #: experiment/rules/views/form.py:84 experiment/rules/views/question.py:148
 #: experiment/rules/views/question.py:171
