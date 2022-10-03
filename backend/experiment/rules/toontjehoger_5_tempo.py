@@ -16,9 +16,7 @@ logger = logging.getLogger(__name__)
 class ToontjeHoger5Tempo(Base):
     ID = 'TOONTJE_HOGER_5_TEMPO'
     TITLE = ""
-
-    # 100 / 6 (rounds) = ±17
-    SCORE_CORRECT = 17
+    SCORE_CORRECT = 20
     SCORE_WRONG = 0
 
     @classmethod
@@ -29,10 +27,12 @@ class ToontjeHoger5Tempo(Base):
         explainer = Explainer(
             instruction="Timing en tempo",
             steps=[
-                Step("Je krijgt dadelijk twee fragmenten te horen."),
+                Step(
+                    "Je krijgt dadelijk twee verschillende uitvoeringen van hetzelfde stuk te horen."),
                 Step("Eén wordt op de originele snelheid (tempo) afgespeeld, terwijl de ander iets is versneld of vertraagd."),
                 Step(
-                    "Kan jij horen welk fragment op het originele tempo wordt afgespeeld?"),
+                    "Kan jij horen welke het origineel is?"),
+                Step("Let hierbij vooral op de timing van de muzikanten.")
             ],
             button_label="Start"
 
