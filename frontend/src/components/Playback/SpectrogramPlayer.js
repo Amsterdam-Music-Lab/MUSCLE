@@ -11,23 +11,28 @@ const SpectrogramPlayer = (props) => {
             if (!spectrograms) {
                 return <p>Warning: No spectrograms found</p>;
             }
+            const labels = props.playConfig.spectrogram_labels;
 
             if (index >= 0 && index < spectrograms.length) {
                 return (
-                    <img
-                        className="spectrogram"
-                        src={spectrograms[index]}
-                        alt="Spectrogram"
-                        onClick={() => {
-                            playSection(index);
-                        }}
-                    />
+                    <div className="spectrogram">
+                        <img
+                            src={spectrograms[index]}
+                            alt="Spectrogram"
+                            onClick={() => {
+                                playSection(index);
+                            }}
+                        />
+                        {labels && Array.isArray(labels) && labels.length > index && (
+                            <span>{labels[index]}</span>
+                        )}
+                    </div>
                 );
             } else {
                 return <p>Warning: No spectrograms available for index {index}</p>;
             }
         },
-        [props.playConfig.spectrograms, playSection]
+        [props.playConfig.spectrograms, props.playConfig.spectrogram_labels, playSection]
     );
 
     return (

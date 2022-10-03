@@ -17,6 +17,7 @@
             transition: filter 0.2s ease-out;
             box-shadow: 0 0 15px rgba(black, 0.4);
             border-radius: 5px;
+            display: flex;
 
             &:hover {
                 filter: brightness(110%);
@@ -25,6 +26,23 @@
             @media (max-width: 720px) {
                 margin-left: -70px;
                 width: calc(100% - 90px);
+            }
+
+            img {
+                max-width: 100%;
+            }
+
+            span {
+                position: absolute;
+                top: 0;
+                right: 0;
+                background-color: rgba(black, 0.4);
+                font-size: 0.8em;
+                text-transform: uppercase;
+                letter-spacing: 0.1em;
+                margin-right: 5px;
+                padding: 0px 2px;
+                font-weight: 600;
             }
         }
 
