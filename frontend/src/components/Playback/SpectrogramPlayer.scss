@@ -1,5 +1,6 @@
 .aha__spectrogram-player {
     max-width: 100vw;
+
     .player-wrapper {
         display: flex;
         align-items: center;
@@ -24,7 +25,7 @@
             }
 
             @media (max-width: 720px) {
-                margin-left: -70px;
+                margin-left: -25px;
                 width: calc(100% - 90px);
             }
 
@@ -55,6 +56,11 @@
             .aha__play-button {
                 width: 100px;
                 height: 100px;
+            }
+
+            @media (max-width: 720px) {
+                transform: scale(0.7);
+                margin-left: -25px;
             }
 
             &.hasLabel {
