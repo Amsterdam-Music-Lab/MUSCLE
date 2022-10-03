@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-08-29 11:25+0200\n"
+"POT-Creation-Date: 2022-10-03 14:18+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1724,7 +1724,7 @@ msgstr ""
 
 #: experiment/rules/views/form.py:78 experiment/rules/views/question.py:142
 msgid "How much do you agree or disagree?"
-msgstr ""
+msgstr "In hoeverre bent u het hiermee eens of oneens?"
 
 #: experiment/rules/views/form.py:84 experiment/rules/views/question.py:148
 #: experiment/rules/views/question.py:171
