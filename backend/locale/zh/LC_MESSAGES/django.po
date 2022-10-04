@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-26 14:52+0200\n"
+"POT-Creation-Date: 2022-10-03 14:23+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -553,7 +553,7 @@ msgstr ""
 #: experiment/rules/rhythm_experiment_series_unpaid.py:31
 #: experiment/rules/speech2song.py:89 experiment/rules/speech2song.py:99
 #: experiment/rules/speech2song.py:125 experiment/rules/util/actions.py:31
-#: experiment/rules/util/practice.py:99 experiment/rules/views/form.py:109
+#: experiment/rules/util/practice.py:99 experiment/rules/views/form.py:110
 #: experiment/rules/views/question.py:14 experiment/rules/views/question.py:35
 #: experiment/rules/views/question.py:54 experiment/rules/views/question.py:71
 #: experiment/rules/views/question.py:89 experiment/rules/views/question.py:107
@@ -1643,47 +1643,51 @@ msgstr "再玩一次"
 msgid "All experiments"
 msgstr "实验结束"
 
-#: experiment/rules/views/form.py:83 experiment/rules/views/question.py:148
+#: experiment/rules/views/form.py:78 experiment/rules/views/question.py:142
+msgid "How much do you agree or disagree?"
+msgstr "您是否同意或不同意？请左右移动圆圈按钮至对应的回答。"
+
+#: experiment/rules/views/form.py:84 experiment/rules/views/question.py:148
 #: experiment/rules/views/question.py:171
 msgid "Completely Disagree"
 msgstr "完全不同意"
 
-#: experiment/rules/views/form.py:84 experiment/rules/views/form.py:93
+#: experiment/rules/views/form.py:85 experiment/rules/views/form.py:94
 #: experiment/rules/views/question.py:149
 #: experiment/rules/views/question.py:172
 msgid "Strongly Disagree"
 msgstr "非常不同意"
 
-#: experiment/rules/views/form.py:85 experiment/rules/views/form.py:94
+#: experiment/rules/views/form.py:86 experiment/rules/views/form.py:95
 #: experiment/rules/views/question.py:150
 #: experiment/rules/views/question.py:173
 msgid "Disagree"
 msgstr "不同意"
 
-#: experiment/rules/views/form.py:86 experiment/rules/views/form.py:95
+#: experiment/rules/views/form.py:87 experiment/rules/views/form.py:96
 #: experiment/rules/views/question.py:151
 #: experiment/rules/views/question.py:174
 msgid "Neither Agree nor Disagree"
 msgstr "即不同意也不反对"
 
-#: experiment/rules/views/form.py:87 experiment/rules/views/form.py:96
+#: experiment/rules/views/form.py:88 experiment/rules/views/form.py:97
 #: experiment/rules/views/question.py:152
 #: experiment/rules/views/question.py:175
 msgid "Agree"
 msgstr "同意"
 
-#: experiment/rules/views/form.py:88 experiment/rules/views/form.py:97
+#: experiment/rules/views/form.py:89 experiment/rules/views/form.py:98
 #: experiment/rules/views/question.py:153
 #: experiment/rules/views/question.py:176
 msgid "Strongly Agree"
 msgstr "非常同意"
 
-#: experiment/rules/views/form.py:89 experiment/rules/views/question.py:154
+#: experiment/rules/views/form.py:90 experiment/rules/views/question.py:154
 #: experiment/rules/views/question.py:177
 msgid "Completely Agree"
 msgstr "完全同意"
 
-#: experiment/rules/views/form.py:109 experiment/rules/views/question.py:14
+#: experiment/rules/views/form.py:110 experiment/rules/views/question.py:14
 #: experiment/rules/views/question.py:35 experiment/rules/views/question.py:54
 #: experiment/rules/views/question.py:71 experiment/rules/views/question.py:89
 #: experiment/rules/views/question.py:107
@@ -1698,10 +1702,6 @@ msgstr "跳过"
 #: experiment/rules/views/playlist.py:18
 msgid "Select a Playlist"
 msgstr "请选择一个曲库"
-
-#: experiment/rules/views/question.py:142
-msgid "How much do you agree or disagree?"
-msgstr "您是否同意或不同意？请左右移动圆圈按钮至对应的回答。"
 
 #: experiment/rules/views/question.py:165
 msgid "How much do you agree?"
@@ -1948,6 +1948,17 @@ msgid ""
 msgstr ""
 
 #: experiment/templates/consent/consent_hooked.html:3
+#, fuzzy, python-format
+#| msgid ""
+#| "\n"
+#| "    You will be taking part in the %(experiment_title)s research project "
+#| "conducted by %(researcher)s of the\n"
+#| "    Music Cognition Group at the University of Amsterdam’s Institute for "
+#| "Logic, Language, and Computation. Before the\n"
+#| "    research project can begin, it is important that you read about the "
+#| "procedures we will be applying. Make sure to\n"
+#| "    read this information carefully.\n"
+#| "    "
 msgid ""
 "\n"
 "    You will be taking part in the %(experiment_title)s research project "
