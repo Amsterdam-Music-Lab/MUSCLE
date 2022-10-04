@@ -300,6 +300,7 @@ class Huang2022(Base):
             },
             question=_("Did you hear this song in previous rounds?"),
             result_id=result_pk,
+            scoring_rule='CORRECTNESS',
             submits=True)])
         config = {
             'style': 'boolean-negative-first',

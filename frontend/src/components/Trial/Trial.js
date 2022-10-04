@@ -127,6 +127,7 @@ const Trial = ({
                     submitResult({
                         decision_time,
                         form,
+                        config
                     });
                 }
             } else {

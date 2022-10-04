@@ -84,13 +84,13 @@ class Base(object):
 
         return result
 
-    @staticmethod
-    def calculate_score(result, data, form_element=None):
+    @classmethod
+    def calculate_score(cls, result, data, form_element=None):
         """use scoring rule to calculate score
         If not scoring rule is defined, return None"""
         scoring_rule = SCORING_RULES.get(form_element['scoring_rule'], None)
         if scoring_rule:
-            return scoring_rule(form_element, result)
+            return scoring_rule(form_element, result, data)
         return None
 
     @staticmethod
