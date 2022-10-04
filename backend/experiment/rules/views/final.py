@@ -10,25 +10,27 @@ class Final:  # pylint: disable=too-few-public-methods
 
     ID = 'FINAL'
 
-    RANKS = {
-        'PLASTIC': {'text': _('plastic'), 'class': 'plastic'},
-        'BRONZE':  {'text': _('bronze'), 'class': 'bronze'},
-        'SILVER': {'text': _('silver'), 'class': 'silver'},
-        'GOLD': {'text': _('gold'), 'class': 'gold'},
-        'PLATINUM': {'text': _('platinum'), 'class': 'platinum'},
-        'DIAMOND': {'text': _('diamond'), 'class': 'diamond'}
-    }
-
     def __init__(self, session, title=_("Final score"), final_text=None,
                  button=None, points=None, rank=None, show_social=False,
                  show_profile_link=False, show_participant_link=False,
                  show_participant_id_only=False, total_score=None
                  ):
+        RANKS = {
+            'PLASTIC': {'text': _('plastic'), 'class': 'plastic'},
+            'BRONZE':  {'text': _('bronze'), 'class': 'bronze'},
+            'SILVER': {'text': _('silver'), 'class': 'silver'},
+            'GOLD': {'text': _('gold'), 'class': 'gold'},
+            'PLATINUM': {'text': _('platinum'), 'class': 'platinum'},
+            'DIAMOND': {'text': _('diamond'), 'class': 'diamond'}
+        }
         self.session = session
         self.title = title
         self.final_text = final_text
         self.button = button
-        self.rank = rank
+        if rank is not None:
+            self.rank = RANKS[rank]
+        else:
+            self.rank = rank
         self.show_social = show_social
         self.show_profile_link = show_profile_link
         self.show_participant_link = show_participant_link
@@ -40,7 +42,7 @@ class Final:  # pylint: disable=too-few-public-methods
         if points is None:
             self.points = _("points")
         else:
-            self.points = points 
+            self.points = points
 
     def action(self):
         """Get data for final action"""
