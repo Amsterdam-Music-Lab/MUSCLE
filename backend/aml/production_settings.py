@@ -38,7 +38,7 @@ LOGGING = {
             'level': 'DEBUG',
             'class': 'logging.handlers.RotatingFileHandler',
             'filename': '/server/logs/aml-experiments.log',
-            'maxBytes': 1024*1024*5, # 5 MB
+            'maxBytes': 1024*100, # 0.1 MB
             'backupCount': 5,
             'formatter': 'standard',
         },
