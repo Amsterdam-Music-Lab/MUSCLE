@@ -1,5 +1,6 @@
 import logging
 from .views import Final
+from .util.score import SCORING_RULES
 
 logger = logging.getLogger(__name__)
 
@@ -85,7 +86,11 @@ class Base(object):
 
     @staticmethod
     def calculate_score(result, data, form_element=None):
-        """fallback for calculate score"""
+        """use scoring rule to calculate score
+        If not scoring rule is defined, return None"""
+        scoring_rule = SCORING_RULES.get(form_element['scoring_rule'], None)
+        if scoring_rule:
+            return scoring_rule(form_element, result)
         return None
 
     @staticmethod

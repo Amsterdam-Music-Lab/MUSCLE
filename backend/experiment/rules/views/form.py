@@ -15,7 +15,7 @@ class Question(object):
         - show_labels: whether the labels of the answers should be shown
     '''
 
-    def __init__(self, key, view='STRING', result_id=None, score_rule='NONE', explainer='', question='', is_skippable=False, submits=False):
+    def __init__(self, key, view='STRING', result_id=None, scoring_rule='NONE', explainer='', question='', is_skippable=False, submits=False):
         self.key = key
         self.view = view
         self.explainer = explainer
@@ -23,7 +23,7 @@ class Question(object):
         self.result_id = result_id
         self.is_skippable = is_skippable
         self.submits = submits
-        self.score_rule = score_rule
+        self.scoring_rule = scoring_rule
 
     def action(self):
         return self.__dict__

@@ -73,20 +73,6 @@ class HBat(Base):
             start_session
         ]
 
-    @staticmethod
-    def calculate_score(result, data, form_element):
-        # a result's score is used to keep track of how many correct results were in a row
-        # for catch trial, set score to 2 -> not counted for calculating turnpoints
-        try:
-            expected_response = result.expected_response
-        except Exception as e:
-            logger.log(e)
-            expected_response = None
-        if expected_response and expected_response == form_element['value']:
-            return 1
-        else:
-            return 0
-
     @classmethod
     def next_trial_action(cls, session, trial_condition, level=1, *kwargs):
         """
@@ -110,6 +96,7 @@ class HBat(Base):
                 'FASTER': _('FASTER')
             },
             view='BUTTON_ARRAY',
+            scoring_rule='CORRECTNESS',
             result_id=result_pk,
             submits=True
         )

@@ -1,47 +1,38 @@
 import logging
+import math
 
 logger = logging.getLogger(__name__)
 
-
-def correctness_score(form_element, session_id):
-    result = get_result(session_id, form_element['result_id'])
+def check_expected_response(result):
     if not result:
         return None
     try:
-        expected_response = result.expected_response
+        return result.expected_response
     except Exception as e:
         logger.log(e)
-        expected_response = None
+        return None
+
+def correctness_score(form_element, result):
+    expected_response = check_expected_response(result)
     if expected_response and expected_response == form_element['value']:
         return 1
     else:
         return 0
 
-def likert_score(form_element, session_id):
+def likert_score(form_element, result=None):
     return form_element['value']
 
-def reverse_likert_score(form_element, session_id):
+def reverse_likert_score(form_element, result=None):
     return form_element['scale_steps'] + 1 - form_element['value']
 
-def reaction_time_score(form_element, session_id):
-    pass
-
-def get_result(session_id=None, result_id=None):
-    from experiment.models import Result, Session
-    try:
-        session = Session.objects.get(pk=session_id)
-    except Session.DoesNotExist:
-        return None
-
-    if result_id:
-        try:
-            result = Result.objects.get(pk=result_id, session=session)
-        except Result.DoesNotExist:
-            # Create new result
-            result = Result(session=session)
-    else:
-        result = Result(session=session)
-    return result
+def reaction_time_score(form_element, result, data):
+    expected_response = check_expected_response(result)
+    if expected_response:
+        time = data.get('decision_time')
+        if expected_response == form_element['value']:
+            return math.ceil(cls.timeout - time)
+        else:
+            return math.floor(-time)
 
 SCORING_RULES = {
     'CORRECTNESS': correctness_score,
