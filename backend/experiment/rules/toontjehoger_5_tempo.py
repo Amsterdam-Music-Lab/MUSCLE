@@ -80,14 +80,35 @@ class ToontjeHoger5Tempo(Base):
           We willen zowel de originele als de veranderde versie van het paar. Dus combineer
           bovenstaande met OR en CH (bijv. “C4_P1_OR”, “C4_P1_CH”, etc.)
         """
-        track = random.choice([1, 2, 3, 4, 5])
-        pair = random.choice([1, 2])
-        tag_base = "{}{}_P{}_".format(genre.upper(), track, pair, )
-        tag_original = tag_base + "OR"
+        # Previous tags
+        previous_tags = [
+            result.section.tag for result in session.result_set.all()]
+
+        # Get a random, unused track
+        # Loop until there is a valid tag
+        iterations = 0
+        valid_tag = False
+        tag_base = ""
+        tag_original = ""
+        while(not valid_tag):
+            track = random.choice([1, 2, 3, 4, 5])
+            pair = random.choice([1, 2])
+            tag_base = "{}{}_P{}_".format(genre.upper(), track, pair, )
+            tag_original = tag_base + "OR"
+            if not (tag_original in previous_tags):
+                valid_tag = True
+
+            # Failsafe: prevent infinite loop
+            # If this happens, just reuse a track
+            iterations += 1
+            if iterations > 10:
+                valid_tag = True
+
         tag_changed = tag_base + "CH"
 
-        section_original = session.section_from_unused_song(
+        section_original = session.section_from_any_song(
             filter_by={'tag': tag_original, 'group': "or"})
+
         if not section_original:
             raise Exception(
                 "Error: could not find original section: {}".format(tag_original))
