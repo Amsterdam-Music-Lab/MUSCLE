@@ -267,16 +267,17 @@ class Categorization(Base):
         current_sessions = session.experiment.session_set.filter(
             participant=session.participant)
 
+        # Count sessions with an assigned group
         used_group_count = 0
         used_group_count += session.experiment.session_count_groups('S1')
         used_group_count += session.experiment.session_count_groups('S2')
         used_group_count += session.experiment.session_count_groups('C1')
-        used_group_count += session.experiment.session_count_groups('C1')
+        used_group_count += session.experiment.session_count_groups('C2')
 
-        # Total participants reached - Abort with message
         if current_sessions.count() > 1:
             json_data = 'REPEAT'
         else:
+            # Total participants reached - Abort with message
             if used_group_count <= (group_size * 4):
                 # Assign a group, if that group is full try again
                 while group_count >= group_size:
