@@ -1,8 +1,7 @@
 import logging
-from django.utils.translation import gettext_lazy as _
 from django.template.loader import render_to_string
 from .views import Trial, Explainer, Step, Score, Final, StartSession, Playlist, Info, HTML
-from .views.form import ButtonArrayQuestion, ChoiceQuestion, Form, DropdownQuestion
+from .views.form import ButtonArrayQuestion, ChoiceQuestion, Form
 from .views.playback import Playback
 from .base import Base
 from os.path import join

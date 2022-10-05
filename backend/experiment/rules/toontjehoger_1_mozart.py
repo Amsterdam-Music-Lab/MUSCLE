@@ -1,13 +1,10 @@
 import logging
-from django.utils.translation import gettext_lazy as _
 from django.template.loader import render_to_string
-from random import randint
-from experiment.models import Section
+from os.path import join
 from .views import Trial, Explainer, Step, Score, Final, StartSession, Playlist, Info, HTML
 from .views.form import ButtonArrayQuestion, Form
 from .views.playback import Playback
 from .base import Base
-from os.path import join
 from .util.actions import combine_actions
 from .util.strings import non_breaking
 

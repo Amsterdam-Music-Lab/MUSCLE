@@ -1,7 +1,5 @@
 import logging
 import random
-from django.utils.translation import gettext_lazy as _
-
 from .views import ToontjeHoger
 from .base import Base
 from .util.strings import external_url
