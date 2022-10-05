@@ -1,7 +1,6 @@
 import logging
 from django.utils.translation import gettext_lazy as _
 from django.template.loader import render_to_string
-from random import randint
 from .views import Trial, Explainer, Step, Score, Final, StartSession, Playlist, Info, HTML
 from .views.form import ButtonArrayQuestion, ChoiceQuestion, Form, DropdownQuestion
 from .views.playback import Playback
@@ -27,27 +26,46 @@ class ToontjeHoger2Preverbal(Base):
             instruction="Het eerste luisteren",
             steps=[
                 Step(
-                    "Je krijgt drie spectrogrammen* te zien met de vraag: welk geluid is van een mens?", number=1),
+                    "Je krijgt drie spectrogrammen te zien met de vraag: welk geluid is van een mens?"),
                 Step(
-                    "Daarna krijg je twee geluiden te horen met de vraag: welke baby is in Frankrijk geboren?", number=2),
-                Step(""),
-                Step("* Een spectrogram is een visuele weergave van geluid, waarin je kan zien hoe een geluid verandert over de tijd. Hoe witter, hoe meer energie op die frequentie.")
+                    "Daarvoor eerst nog wat uitleg van wat een spectrogram is, natuurlijk."),
+                Step(
+                    "Tenslotte krijg je twee geluiden te horen met de vraag: welke baby is in Frankrijk geboren?"),
             ],
             button_label="Start"
 
-        ).action(step_numbers=False)
+        ).action(step_numbers=True)
 
-        # 2. Choose playlist.
+        # 2 Spectrogram information
+        spectrogram_info = cls.get_spectrogram_info()
+
+        # 3. Choose playlist.
         playlist = Playlist.action(experiment.playlists.all())
 
-        # 3. Start session.
+        # 4. Start session.
         start_session = StartSession.action()
 
         return [
             explainer,
+            spectrogram_info,
             playlist,
             start_session
         ]
+
+    @classmethod
+    def get_spectrogram_info(cls):
+        image_url = "/images/experiments/toontjehoger/spectrogram_info_nl.webp"
+        description = "Een spectrogram is een visuele weergave van geluid, waarin je kan zien hoe een geluid verandert over de tijd. Hoe witter, hoe meer energie op die frequentie."
+        body = '<div class="center"><img src="{}"></div><p>{}</p>'.format(
+            image_url, description)
+
+        # Return answer info view
+        info = Info(
+            body=body,
+            heading="Wat is een spectrogram?",
+            button_label="Volgende",
+        ).action()
+        return info
 
     @classmethod
     def next_round(cls, session, request_session=None):
