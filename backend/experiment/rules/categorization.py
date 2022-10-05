@@ -558,5 +558,6 @@ repeat_training_or_quit = ChoiceQuestion(
         'aborted': "Exit"
     },
     submits=True,
-    is_skippable=False
+    is_skippable=False,
+    config={'buttons_large_gap': True}
 )
