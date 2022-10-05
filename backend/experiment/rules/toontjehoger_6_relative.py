@@ -115,8 +115,8 @@ class ToontjeHoger6Relative(Base):
             question="Zijn deze twee melodieën hetzelfde?",
             key='same_melodie',
             choices={
-                "YES": _('YES'),
-                "NO": _('NO'),
+                "YES": "Ja",
+                "NO": "Nee",
             },
             view='BUTTON_ARRAY',
             result_id=result_pk,
