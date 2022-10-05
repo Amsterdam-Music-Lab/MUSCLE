@@ -21,7 +21,7 @@ const ButtonArray = ({ question, active, onChange, emphasizeTitle = false }) => 
                 <p className="explainer">{question.explainer}</p>
             )}
             <h3 className={classNames({title: emphasizeTitle})}>{question.question}</h3>
-            <div className="btn-group-toggle-custom invisible-text-two-alt" role="group" data-toggle="buttons" aria-label="Button Array">
+            <div className={classNames("btn-group-toggle-custom", question.config && question.config.buttons_large_gap ? "buttons-large-gap":"")} role="group" data-toggle="buttons" aria-label="Button Array">
                 {Object.keys(question.choices).map((val, index) => (
                     <ToggleButton
                         label={question.choices[val]}
@@ -31,6 +31,7 @@ const ButtonArray = ({ question, active, onChange, emphasizeTitle = false }) => 
                         key={question.key+index}
                         onChange={buttonPress}
                         active={active}
+                        config={question.config}
                     />
                 ))}
             </div>
@@ -38,12 +39,12 @@ const ButtonArray = ({ question, active, onChange, emphasizeTitle = false }) => 
     )
 }
 
-const ToggleButton = ({ label, value, index, name, active, onChange }) => {
+const ToggleButton = ({ label, value, index, name, active, onChange, config }) => {
     const disabled = active? '' : 'disabled';
     return (
         <>
         <label
-            className={classNames("btn btn-secondary btn-lg invisible-text-two-alt", disabled)}
+            className={classNames("btn btn-secondary btn-lg", config && config.button_text_invisible ? "invisible-text" : "", disabled)}
             onClick={() => {
                 onChange(value);
             }}

@@ -134,7 +134,7 @@
                 @include btn-style($yellow);
             }
 
-            .btn.invisible-text-two-alt, .btn.invisible-text-two-alt:hover {
+            .btn.invisible-text, .btn.invisible-text:hover {
                 color: rgba(0, 0, 0, 0);
             }
         }
@@ -161,7 +161,7 @@
                 @include btn-style($blue);
             }
 
-            .btn.invisible-text-two-alt, .btn.invisible-text-two-alt:hover {
+            .btn.invisible-text, .btn.invisible-text:hover {
                 color: rgba(0, 0, 0, 0);
             }
         }
