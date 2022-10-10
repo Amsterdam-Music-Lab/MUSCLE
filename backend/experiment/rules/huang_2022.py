@@ -246,7 +246,8 @@ class Huang2022(Base):
         return SongSync(
             section=section,
             title=cls.get_trial_title(session, next_round_number),
-            result_id=result_id
+            result_id=result_id,
+            scoring_rule='SONG_SYNC'
         ).action()
 
     @classmethod
@@ -363,25 +364,6 @@ class Huang2022(Base):
             thanks_message, score_message, song_sync_message, heard_before_message
         ]
         return " ".join([str(m) for m in messages])
-
-    @classmethod
-    def calculate_score(cls, result, data, form_element=None):
-        # return 1 if correct, 0 if incorrect
-        try:
-            expected_response = result.expected_response
-        except Exception as e:
-            logger.log(e)
-            expected_response = None
-        if expected_response:
-            time = data.get('decision_time')
-            if expected_response == form_element['value']:
-                return math.ceil(cls.timeout - time)
-            else:
-                return math.floor(-time)
-        else:
-            # SongSync round
-            return SongSync.calculate_score(data)
-        
     
     @classmethod
     def handle_results(cls, session, data):

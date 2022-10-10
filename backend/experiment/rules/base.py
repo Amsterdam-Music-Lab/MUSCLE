@@ -45,7 +45,8 @@ class Base(object):
             result.given_response = form_element['value']
             
             # Calculate score
-            score = session.experiment_rules().calculate_score(result, data, form_element)
+            scoring_rule = SCORING_RULES.get(form_element['scoring_rule'], None)
+            score = session.experiment_rules().calculate_score(result, data, scoring_rule, form_element)
             if not score:
                 score = 0
 
@@ -68,12 +69,12 @@ class Base(object):
             all other params in the custom result
         }
         """
-
         result_id = data.get('result_id')
         result = cls.get_result(session, result_id)
 
         # Calculate score
-        score = session.experiment_rules().calculate_score(result, data)
+        scoring_rule = SCORING_RULES.get(data['config'].get('scoring_rule', None))
+        score = session.experiment_rules().calculate_score(result, data, scoring_rule)
         if not score:
             score = 0
 
@@ -85,10 +86,9 @@ class Base(object):
         return result
 
     @classmethod
-    def calculate_score(cls, result, data, form_element=None):
+    def calculate_score(cls, result, data, scoring_rule, form_element=None):
         """use scoring rule to calculate score
         If not scoring rule is defined, return None"""
-        scoring_rule = SCORING_RULES.get(form_element['scoring_rule'], None)
         if scoring_rule:
             return scoring_rule(form_element, result, data)
         return None

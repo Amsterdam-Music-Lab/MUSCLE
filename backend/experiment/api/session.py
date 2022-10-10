@@ -80,12 +80,11 @@ def create(request):
 @require_POST
 def result(request):
     """Create a new result for the given session, and return followup action"""
-
     # Current participant
     participant = current_participant(request)
-
     # Get session for current participant
     session_id = request.POST.get("session_id")
+
     if not session_id:
         return HttpResponseBadRequest("session_id not defined")
     try:

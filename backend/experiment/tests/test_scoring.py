@@ -10,7 +10,7 @@ class ScoringTest(TestCase):
     @classmethod
     def setUpTestData(cls):
         cls.participant = Participant.objects.create(unique_hash=42)
-        experiment = Experiment.objects.create(rules='LISTENING_CONDITIONS', slug='test')
+        cls.experiment = Experiment.objects.create(rules='LISTENING_CONDITIONS', slug='test')
         playlist = Playlist.objects.create(name='test')
         cls.section = Section.objects.create(
             playlist=playlist,
@@ -20,7 +20,7 @@ class ScoringTest(TestCase):
             tag=0
         )
         cls.session = Session.objects.create(
-            experiment=experiment,
+            experiment=cls.experiment,
             participant=cls.participant,
             playlist=playlist
         )
@@ -51,7 +51,28 @@ class ScoringTest(TestCase):
             "value": value
             }
         ]}
-        return self.make_request(view)      
+        return self.make_request(view)
+
+    def song_sync_request(self, result_type, continuation_correctness):
+        result = Result.objects.create(
+            session = self.session,
+            section = self.section,
+        )
+        view = {
+            "result_id": result.pk,
+            "view": "SONG_SYNC",
+            "result": {
+                "type": result_type,
+                "continuation_correctness": continuation_correctness,
+                "recognition_time": 10
+            },
+            "config": {
+                "recognition_time": 15,
+                "continuation_correctness": True,
+                "scoring_rule": "SONG_SYNC"
+            }
+        }
+        return self.make_request(view)
     
     def make_request(self, view):
         """ set up the Django session data,
@@ -96,10 +117,21 @@ class ScoringTest(TestCase):
         assert response.status_code == 200
         assert self.session.result_set.count() == 2
         assert self.session.result_set.last().score == 0
-
-        
     
-    
-
-        
-
+    def test_song_sync(self):
+        client_request = self.song_sync_request('time_passed', False)
+        response = self.client.post('/experiment/session/result/', client_request)
+        assert response.status_code == 200
+        assert self.session.result_set.last().score == -15
+        client_request = self.song_sync_request('not_recognized', False)
+        response = self.client.post('/experiment/session/result/', client_request)
+        assert response.status_code == 200
+        assert self.session.result_set.last().score == 0
+        client_request = self.song_sync_request('recognized', False)
+        response = self.client.post('/experiment/session/result/', client_request)
+        assert response.status_code == 200
+        assert self.session.result_set.last().score == -5
+        client_request = self.song_sync_request('recognized', True)
+        response = self.client.post('/experiment/session/result/', client_request)
+        assert response.status_code == 200
+        assert self.session.result_set.last().score == 5

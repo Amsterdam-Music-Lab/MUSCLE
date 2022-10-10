@@ -52,11 +52,10 @@ def create(request):
             profile = Profile(participant=participant,
                               question=question)
         profile.answer = form_element['value']
-        scoring_rule = SCORING_RULES.get(form_element['scoring_rule'], None)
+        scoring_rule = SCORING_RULES.get(form_element.get('scoring_rule'))
         if scoring_rule:
-            profile.score = scoring_rule(form_element)
+            profile.score = scoring_rule(form_element, None, None)
         profile.save()
-        print(profile.score)
 
         if session_id > 0:
             try:
