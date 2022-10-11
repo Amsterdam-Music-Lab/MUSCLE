@@ -79,6 +79,7 @@ class LikertQuestion(Question):
     def __init__(self, scale_steps=7, likert_view='TEXT_RANGE', **kwargs):
         super().__init__(**kwargs)
         self.view = likert_view
+        self.scoring_rule = 'LIKERT'
         self.scale_steps = scale_steps
         if scale_steps == 7:
             self.choices = {
