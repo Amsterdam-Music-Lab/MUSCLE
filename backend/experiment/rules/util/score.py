@@ -44,7 +44,7 @@ def song_sync_score(form_element, result, data):
         result = data['result']
         # Calculate scores based on result type
         if result['type'] == 'time_passed':
-            score = -config['recognition_time']
+            score = 0
         elif result['type'] == 'not_recognized':
             score = 0
         elif result['type'] == 'recognized':
