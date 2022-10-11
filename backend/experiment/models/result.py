@@ -20,6 +20,9 @@ class Result(models.Model):
     # Contains data in json_format
     json_data = models.TextField(blank=True)
 
+    class Meta:
+        ordering = ['created_at']
+
     def save_json_data(self, data):
         """Store data (object) to json_data string"""
         self.json_data = json.dumps(data, indent=4) if data else ""
