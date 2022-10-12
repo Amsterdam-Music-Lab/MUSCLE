@@ -112,7 +112,7 @@ class ToontjeHogerHome(Base):
                 'main_button_label': main_button_label,
                 'main_button_url': main_button_url,
                 'score_label': score_label,
-                'score': score,
+                'score': int(score),
                 'score_class': score_class,
                 'share_label': "Deel je score!",
                 'share_message': "Ha! Ik ben muzikaler dan ik dacht - heb maar liefst {:d} punten! Speel mee met #ToontjeHoger".format(int(score)) if score > 0 else "Ha! Speel mee met #ToontjeHoger en laat je verrassen: je bent muzikaler dat je denkt!",
