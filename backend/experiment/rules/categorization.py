@@ -1,4 +1,5 @@
 from django.utils.translation import gettext_lazy as _
+from django.utils import timezone
 from django.template.loader import render_to_string
 from django.http import Http404
 from django.db.models import Avg
@@ -257,15 +258,28 @@ class Categorization(Base):
         C2 = Crossed direction, Pair 2
         BLUE / ORANGE = Correct response for Pair 1A, Pair 2A
         """
-        # Make sure to delete existing sessions before starting the real experiment
-        # as the creation of groups looks at the sessions to balance out the participants
+
         # Set total size per group:
         group_size = 20
         group_count = group_size
         group = None
 
-        current_sessions = session.experiment.session_set.filter(
-            participant=session.participant)
+        # Check for unfinished sessions older then 24 hours caused by closed browser
+        all_sessions = session.experiment.session_set.filter(
+            finished_at=None).filter(
+            started_at__lte=timezone.now()-timezone.timedelta(hours=24)).exclude(
+            json_data__contains='ABORTED').exclude(
+            json_data__contains='FAILED_TRAINING').exclude(
+            json_data__contains='REPEAT').exclude(
+            json_data__contains='FULL').exclude(
+            json_data__contains='CLOSED_BROWSER')
+        for closed_session in all_sessions:
+            # Release the group for assignment to a new participant
+            closed_json_data = {'phase': 'CLOSED_BROWSER'}
+            # Delete results
+            closed_session.save_json_data(closed_json_data)
+            closed_session.result_set.all().delete()
+            closed_session.save()
 
         # Count sessions with an assigned group
         used_group_count = 0
@@ -274,6 +288,11 @@ class Categorization(Base):
         used_group_count += session.experiment.session_count_groups('C1')
         used_group_count += session.experiment.session_count_groups('C2')
 
+        # Get sessions for current participant
+        current_sessions = session.experiment.session_set.filter(
+            participant=session.participant)
+
+        # Check if this participant already has a previous session
         if current_sessions.count() > 1:
             json_data = 'REPEAT'
         else:
