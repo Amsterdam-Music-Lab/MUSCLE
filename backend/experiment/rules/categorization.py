@@ -153,11 +153,11 @@ class Categorization(Base):
                 if json_data['training_rounds'] == 40:
                     # Clear group from session for reuse
                     end_data = {
+                        'phase': 'FAILED_TRAINING',
+                        'training_rounds': json_data['training_rounds'],
                         'assigned_group': json_data['assigned_group'],
                         'button_colors': json_data['button_colors'],
                         'pair_colors': json_data['pair_colors'],
-                        'phase': 'FAILED_TRAINING',
-                        'training_rounds': json_data['training_rounds'],
                     }
                     session.save_json_data(end_data)
                     session.final_score = 0
@@ -221,11 +221,11 @@ class Categorization(Base):
             # calculate the final score for the entire test sequence
             # final_score = sum([result.score for result in training_results])
             end_data = {
+                'phase': 'FINISHED',
+                'training_rounds': json_data['training_rounds'],
                 'assigned_group': json_data['assigned_group'],
                 'button_colors': json_data['button_colors'],
                 'pair_colors': json_data['pair_colors'],
-                'phase': 'FINISHED',
-                'training_rounds': json_data['training_rounds'],
                 'group': json_data['group']
             }
             session.save_json_data(end_data)
@@ -259,11 +259,6 @@ class Categorization(Base):
         BLUE / ORANGE = Correct response for Pair 1A, Pair 2A
         """
 
-        # Set total size per group:
-        group_size = 20
-        group_count = group_size
-        group = None
-
         # Check for unfinished sessions older then 24 hours caused by closed browser
         all_sessions = session.experiment.session_set.filter(
             finished_at=None).filter(
@@ -281,12 +276,17 @@ class Categorization(Base):
             closed_session.result_set.all().delete()
             closed_session.save()
 
-        # Count sessions with an assigned group
-        used_group_count = 0
-        used_group_count += session.experiment.session_count_groups('S1')
-        used_group_count += session.experiment.session_count_groups('S2')
-        used_group_count += session.experiment.session_count_groups('C1')
-        used_group_count += session.experiment.session_count_groups('C2')
+        # Count sessions per assigned group
+        used_groups = [
+            session.experiment.session_set.filter(
+                json_data__contains='S1').count(),
+            session.experiment.session_set.filter(
+                json_data__contains='S2').count(),
+            session.experiment.session_set.filter(
+                json_data__contains='C1').count(),
+            session.experiment.session_set.filter(
+                json_data__contains='C2').count()
+        ]
 
         # Get sessions for current participant
         current_sessions = session.experiment.session_set.filter(
@@ -296,57 +296,63 @@ class Categorization(Base):
         if current_sessions.count() > 1:
             json_data = 'REPEAT'
         else:
-            # Total participants reached - Abort with message
-            if used_group_count <= (group_size * 4):
-                # Assign a group, if that group is full try again
-                while group_count >= group_size:
-                    group = random.choice(['S1', 'S2', 'C1', 'C2'])
-                    group_count = session.experiment.session_count_groups(
-                        group)
-                # Assign a random correct response color for 1A, 2A
-                stimuli_a = random.choice(['BLUE', 'ORANGE'])
-                # Determine which button is orange and which is blue
-                button_order = random.choice(['neutral', 'neutral-inverted'])
-                # Set expected resonse accordingly
-                ph = '___'  # placeholder
-                if button_order == 'neutral' and stimuli_a == 'BLUE':
-                    choices = {'A': ph, 'B': ph}
-                elif button_order == 'neutral-inverted' and stimuli_a == 'ORANGE':
-                    choices = {'A': ph, 'B': ph}
-                else:
-                    choices = {'B': ph, 'A': ph}
-                if group == 'S1':
-                    assigned_group = 'Same direction, Pair 1'
-                elif group == 'S2':
-                    assigned_group = 'Same direction, Pair 2'
-                elif group == 'C1':
-                    assigned_group = 'Crossed direction, Pair 1'
-                else:
-                    assigned_group = 'Crossed direction, Pair 2'
-                if button_order == 'neutral':
-                    button_colors = 'Blue left, Orange right'
-                else:
-                    button_colors = 'Orange left, Blue right'
-                if stimuli_a == 'BLUE':
-                    pair_colors = 'A = Blue, B = Orange'
-                else:
-                    pair_colors = 'A = Orange, B = Blue'
-                json_data = {
-                    'assigned_group': assigned_group,
-                    'button_colors': button_colors,
-                    'pair_colors': pair_colors,
-                    'group': group,
-                    'stimuli_a': stimuli_a,
-                    'button_order': button_order,
-                    'choices': choices,
-                    'phase': "training",
-                    'training_rounds': "0"
-                }
-
-                session.merge_json_data(json_data)
-                session.save()
+            # Check wether a group falls behind in the count
+            if max(used_groups) - min(used_groups) > 1:
+                # assign the group that falls behind
+                group_index = used_groups.index(min(used_groups))
+                if group_index == 0:
+                    group = 'S1'
+                elif group_index == 1:
+                    group = 'S2'
+                elif group_index == 2:
+                    group = 'C1'
+                elif group_index == 3:
+                    group = 'C2'
             else:
-                json_data = 'FULL'
+                # Assign a random group
+                group = random.choice(['S1', 'S2', 'C1', 'C2'])
+            # Assign a random correct response color for 1A, 2A
+            stimuli_a = random.choice(['BLUE', 'ORANGE'])
+            # Determine which button is orange and which is blue
+            button_order = random.choice(['neutral', 'neutral-inverted'])
+            # Set expected resonse accordingly
+            ph = '___'  # placeholder
+            if button_order == 'neutral' and stimuli_a == 'BLUE':
+                choices = {'A': ph, 'B': ph}
+            elif button_order == 'neutral-inverted' and stimuli_a == 'ORANGE':
+                choices = {'A': ph, 'B': ph}
+            else:
+                choices = {'B': ph, 'A': ph}
+            if group == 'S1':
+                assigned_group = 'Same direction, Pair 1'
+            elif group == 'S2':
+                assigned_group = 'Same direction, Pair 2'
+            elif group == 'C1':
+                assigned_group = 'Crossed direction, Pair 1'
+            else:
+                assigned_group = 'Crossed direction, Pair 2'
+            if button_order == 'neutral':
+                button_colors = 'Blue left, Orange right'
+            else:
+                button_colors = 'Orange left, Blue right'
+            if stimuli_a == 'BLUE':
+                pair_colors = 'A = Blue, B = Orange'
+            else:
+                pair_colors = 'A = Orange, B = Blue'
+            json_data = {
+                'phase': "training",
+                'training_rounds': "0",
+                'assigned_group': assigned_group,
+                'button_colors': button_colors,
+                'pair_colors': pair_colors,
+                'group': group,
+                'stimuli_a': stimuli_a,
+                'button_order': button_order,
+                'choices': choices
+            }
+            session.merge_json_data(json_data)
+            session.save()
+
         return json_data
 
     @classmethod
