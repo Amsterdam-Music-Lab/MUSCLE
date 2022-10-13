@@ -1,4 +1,3 @@
-from django.utils.translation import gettext_lazy as _
 from django.utils import timezone
 from django.template.loader import render_to_string
 from django.http import Http404
@@ -24,21 +23,19 @@ class Categorization(Base):
     @classmethod
     def first_round(cls, experiment):
         explainer = Explainer(
-            instruction=_(
-                "This is a listening experiment in which you have to respond to short sound sequences."),
+            instruction="This is a listening experiment in which you have to respond to short sound sequences.",
             steps=[],
-            button_label=_('Ok')
+            button_label='Ok'
         ).action()
         # read consent from file
         rendered = render_to_string(
             'consent/consent_categorization.html')
-        consent = Consent.action(rendered, title=_(
-            'Informed consent'), confirm=_('I agree'), deny=_('Stop'))
+        consent = Consent.action(
+            rendered, title='Informed consent', confirm='I agree', deny='Stop')
         explainer2 = Explainer(
-            instruction=_(
-                "The experiment will now begin. Please don't close the browser during the experiment. You can only run it once. Click to start a sound sequence."),
+            instruction="The experiment will now begin. Please don't close the browser during the experiment. You can only run it once. Click to start a sound sequence.",
             steps=[],
-            button_label=_('Ok')
+            button_label='Ok'
         ).action()
         start_session = StartSession.action()
         return [explainer, consent] + questionaire + [explainer2, start_session]
@@ -138,10 +135,9 @@ class Categorization(Base):
                 session.merge_json_data(json_data)
                 session.save()
                 explainer = Explainer(
-                    instruction=_(
-                        "You are entering the main phase of the experiment. From now on you will only occasionally get feedback on your responses. Simply try to keep responding to the sound sequences as you did before."),
+                    instruction="You are entering the main phase of the experiment. From now on you will only occasionally get feedback on your responses. Simply try to keep responding to the sound sequences as you did before.",
                     steps=[],
-                    button_label=_('Ok')
+                    button_label='Ok'
                 ).action()
             else:
                 # Update passed training rounds for calc round_number
@@ -172,7 +168,7 @@ class Categorization(Base):
                         final_text="Thanks for your participation!",
                         rank=None,
                         show_social=False,
-                        show_profile_link=True
+                        show_profile_link=False
                     ).action()
                     return final
                 else:
@@ -180,7 +176,7 @@ class Categorization(Base):
                     config = {
                         'style': 'boolean'
                     }
-                    explainer = Trial(title=_("Training failed"), feedback_form=Form(
+                    explainer = Trial(title="Training failed", feedback_form=Form(
                         [repeat_training_or_quit], is_profile=True), config=config).action()
 
             feedback = cls.get_feedback(session)
@@ -251,7 +247,7 @@ class Categorization(Base):
     @classmethod
     def plan_experiment(cls, session):
         """
-        Randomly assign one of four (equal sized) groups to participants        
+        Randomly assign one of four (equal sized) groups to participants
         S1 = Same direction, Pair 1
         S2 = Same direction, Pair 2
         C1 = Crossed direction, Pair 1
@@ -522,13 +518,13 @@ class Categorization(Base):
         json_data = session.load_json_data()
         rounds_passed = (session.rounds_passed() -
                          int(json_data['training_rounds']))
-        return _('Round {} / {}').format(rounds_passed, len(json_data['sequence']))
+        return f"Round {rounds_passed} / {len(json_data['sequence'])}"
 
 
 age_question = Question(
     key='age',
     view='STRING',
-    question=_('What is your age?')
+    question='What is your age?'
 )
 
 gender_question = ChoiceQuestion(
@@ -569,8 +565,8 @@ questions = [age_question, gender_question,
              language_question, musical_experience_question]
 questionaire = [
     Trial(
-        title=_("Questionnaire"),
-        feedback_form=Form([question], is_profile=True)).action()
+        title="Questionnaire",
+        feedback_form=Form([question], submit_label='Continue', is_profile=True)).action()
     for question in questions
 ]
 
