@@ -36,7 +36,7 @@ class Categorization(Base):
             'Informed consent'), confirm=_('I agree'), deny=_('Stop'))
         explainer2 = Explainer(
             instruction=_(
-                "The experiment will now begin. Click to start a sound sequence."),
+                "The experiment will now begin. Please don't close the browser during the experiment. You can only run it once. Click to start a sound sequence."),
             steps=[],
             button_label=_('Ok')
         ).action()
