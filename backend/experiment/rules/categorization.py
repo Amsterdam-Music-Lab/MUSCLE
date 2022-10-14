@@ -484,19 +484,18 @@ class Categorization(Base):
             expected_response = 'A'
         else:
             expected_response = 'B'
-        result_pk = cls.prepare_result(session, section, expected_response)
-        # Set the current phase in the result comment
-        this_result = session.last_result()
-        this_result.comment = json_data['phase']
-        this_result.save()
+        result_pk = cls.prepare_result(
+            session, section, expected_response, json_data['phase'])
+
         choices = json_data["choices"]
+        config = {'listen_first': True,
+                  'auto_advance': True,
+                  'auto_advance_timer': 2500,
+                  'style': json_data["button_order"],
+                  'time_pass_break': False
+                  }
         trial = TwoAlternativeForced(
-            section, choices, result_pk, title=cls.get_title(session))
-        trial.config['listen_first'] = True
-        trial.config['auto_advance'] = True
-        trial.config['auto_advance_timer'] = 2500
-        trial.config['style'] = json_data["button_order"]
-        trial.config['time_pass_break'] = False
+            section, choices, result_pk, title=cls.get_title(session), config=config)
 
         return trial.action()
 
