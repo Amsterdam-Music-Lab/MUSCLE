@@ -6,7 +6,7 @@ from .util.actions import combine_actions
 from .util.questions import question_by_key
 
 from .views import Consent, Explainer, Final, Playlist, Step, StartSession, Trial
-from .views.form import BooleanQuestion, ChoiceQuestion, Form, LikertQuestion
+from .views.form import BooleanQuestion, ChoiceQuestion, Form, LikertQuestion, LikertQuestionIcon
 from .views.playback import Playback
 
 from .base import Base
@@ -74,7 +74,7 @@ class MusicalPreferences(Base):
 
         section = session.playlist.random_section()
         result_id = cls.prepare_result(session, section)
-        likert = LikertQuestion(
+        likert = LikertQuestionIcon(
             question=_('Do you like this song?'),
             key='like_song',
             result_id=result_id

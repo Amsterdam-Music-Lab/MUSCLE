@@ -12,12 +12,13 @@ import Reload from "../Reload/Reload";
 import StoreProfile from "../StoreProfile/StoreProfile.js";
 
 import { library } from '@fortawesome/fontawesome-svg-core';
-import { faThumbsDown, faThumbsUp, faQuestion } from '@fortawesome/free-solid-svg-icons';
+import { faThumbsDown, faThumbsUp, faQuestion, faFaceAngry,faFaceFrownOpen, faFaceFrown, faFaceMeh, faFaceSmile, faFaceGrin, faFaceGrinHearts, faArrowsLeftRight} from '@fortawesome/free-solid-svg-icons';
 
 library.add(
     faThumbsDown,
     faThumbsUp,
-    faQuestion
+    faQuestion,
+    faFaceAngry, faFaceFrownOpen, faFaceFrown, faFaceMeh, faFaceSmile, faFaceGrin, faFaceGrinHearts, faArrowsLeftRight
 );
 
 // App is the root component of our application

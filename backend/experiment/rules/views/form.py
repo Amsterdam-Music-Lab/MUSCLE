@@ -15,7 +15,7 @@ class Question(object):
         - show_labels: whether the labels of the answers should be shown
     '''
 
-    def __init__(self, key, view='STRING', result_id=None, explainer='', question='', is_skippable=False, submits=False):
+    def __init__(self, key, view='STRING', result_id=None, explainer='', question='', is_skippable=False, submits=False, config=None):
         self.key = key
         self.view = view
         self.explainer = explainer
@@ -23,6 +23,7 @@ class Question(object):
         self.result_id = result_id
         self.is_skippable = is_skippable
         self.submits = submits
+        self.config = config
 
     def action(self):
         return self.__dict__
@@ -88,6 +89,30 @@ class LikertQuestion(Question):
                 6: _("Strongly Agree"),
                 7: _("Completely Agree"),
             }
+        elif scale_steps == 5:
+            self.choices = {
+                1: _("Strongly Disagree"),
+                2: _("Disagree"),
+                3: _("Neither Agree nor Disagree"),  # Undecided
+                4: _("Agree"),
+                5: _("Strongly Agree"),
+            }
+
+class LikertQuestionIcon(Question):
+    def __init__(self, scale_steps=7, likert_view='TEXT_RANGE', **kwargs):
+        super().__init__(**kwargs)
+        self.view = likert_view
+        if scale_steps == 7:
+            self.choices = {
+                1: 'fa-face-angry',
+                2: 'fa-face-frown-open',
+                3: 'fa-face-frown',
+                4: 'fa-face-meh',  # Undecided
+                5: 'fa-face-smile',
+                6: 'fa-face-grin',
+                7: 'fa-face-grin-hearts',
+            }
+            self.config = {'icons':True, 'colors': ['#ff0000','#ff3a00','#ff6b00','#ffa500','#ffc000','#ffdb00','#ffff00']}
         elif scale_steps == 5:
             self.choices = {
                 1: _("Strongly Disagree"),
