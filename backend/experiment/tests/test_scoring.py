@@ -122,7 +122,7 @@ class ScoringTest(TestCase):
         client_request = self.song_sync_request('time_passed', False)
         response = self.client.post('/experiment/session/result/', client_request)
         assert response.status_code == 200
-        assert self.session.result_set.last().score == -15
+        assert self.session.result_set.last().score == 0
         client_request = self.song_sync_request('not_recognized', False)
         response = self.client.post('/experiment/session/result/', client_request)
         assert response.status_code == 200
