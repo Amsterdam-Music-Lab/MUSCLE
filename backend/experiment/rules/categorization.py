@@ -200,18 +200,20 @@ class Categorization(Base):
                     final_score += 1
             score_percent = 100 * (final_score / 30)
 
+            ranks = Final.RANKS
+
             # assign rank based on percentage of correct response to training stimuli
             if score_percent == 100:
-                rank = 'PLATINUM'
+                rank = ranks['PLATINUM']
                 final_text = "Congratulations! You did great and won a platinum medal!"
             elif score_percent >= 80:
-                rank = 'GOLD'
+                rank = ranks['GOLD']
                 final_text = "Congratulations! You did great and won a gold medal!"
             elif score_percent >= 60:
-                rank = 'SILVER'
+                rank = ranks['SILVER']
                 final_text = "Congratulations! You did very well and won a silver medal!"
             else:
-                rank = 'BRONZE'
+                rank = ranks['BRONZE']
                 final_text = "Congratulations! You did well and won a bronze medal!"
 
             # calculate the final score for the entire test sequence
