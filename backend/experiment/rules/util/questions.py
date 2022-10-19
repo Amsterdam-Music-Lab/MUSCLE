@@ -4,12 +4,13 @@ from django.utils.translation import gettext_lazy as _
 
 from experiment.rules.views.form import ChoiceQuestion, Question
 from .iso_countries import ISO_COUNTRIES
+from .iso_languages import ISO_LANGUAGES
 from .isced_education import ISCED_EDUCATION_LEVELS
 
 # List of all available profile questions
 
 ATTAINED_EDUCATION_CHOICES = dict(
-    ISCED_EDUCATION_LEVELS, 
+    ISCED_EDUCATION_LEVELS,
     **{'none':  _('Have not (yet) completed any school qualification')}
 )
 EXPECTED_EDUCATION_CHOICES = dict(
@@ -30,6 +31,17 @@ DEMOGRAPHICS = [
             'non_conforming': _("Non-conforming or questioning"),
             'intersex': _("Intersex or two-spirit"),
             'non_answer': _("Prefer not to answer")
+        }
+    ),
+    ChoiceQuestion(
+        key='dgf_gender_reduced',
+        view='RADIOS',
+        question=_("What is your gender?"),
+        choices={
+            'M': "Male",
+            'F': "Female",
+            'X': "Other",
+            'U': "Undisclosed"
         }
     ),
     ChoiceQuestion(
@@ -103,6 +115,12 @@ EXTRA_DEMOGRAPHICS = [
         question=_("In which country do you currently reside?")
     ),
     ChoiceQuestion(
+        key='dgf_native_language',
+        view='DROPDOWN',
+        question="What is your native language?",
+        choices=ISO_LANGUAGES
+    ),
+    ChoiceQuestion(
         key='dgf_highest_qualification_expectation',
         view='RADIOS',
         question=_(
@@ -137,7 +155,7 @@ def question_by_key(key, questions=DEMOGRAPHICS, is_skippable=None, drop_choices
                 # Set is_skippable
                 if is_skippable is not None:
                     q.is_skippable = is_skippable
-                
+
                 if hasattr(question, 'choices') and len(drop_choices):
                     for choice in drop_choices:
                         q.choices.pop(choice, None)
