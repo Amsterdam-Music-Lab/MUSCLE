@@ -4,12 +4,12 @@ from django.http import Http404
 from django.db.models import Avg
 from operator import ne
 
-from .views.form import Form, Question, ChoiceQuestion
+from .views.form import Form, ChoiceQuestion
 from .views import Consent, Explainer, Score, StartSession, TwoAlternativeForced, Trial, Final
 
 from .util.actions import combine_actions
-from .util.iso_languages import ISO_LANGUAGES
 
+from .util.questions import DEMOGRAPHICS, EXTRA_DEMOGRAPHICS, question_by_key
 from .base import Base
 import random
 
@@ -522,33 +522,6 @@ class Categorization(Base):
         return f"Round {rounds_passed} / {len(json_data['sequence'])}"
 
 
-age_question = Question(
-    key='age',
-    view='STRING',
-    question='What is your age?'
-)
-
-gender_question = ChoiceQuestion(
-    key='gender',
-    view='RADIOS',
-    question="What is your gender?",
-    choices={
-        'M': "Male",
-        'F': "Female",
-        'X': "Other",
-        'U': "Undisclosed"
-    },
-    is_skippable=True
-)
-
-language_question = ChoiceQuestion(
-    key='native_language',
-    view='DROPDOWN',
-    question="What is your native language?",
-    choices=ISO_LANGUAGES,
-    is_skippable=True
-)
-
 musical_experience_question = ChoiceQuestion(
     key='musical_experience',
     view='RADIOS',
@@ -562,8 +535,11 @@ musical_experience_question = ChoiceQuestion(
     is_skippable=True
 )
 
-questions = [age_question, gender_question,
-             language_question, musical_experience_question]
+questions = [question_by_key('dgf_age', EXTRA_DEMOGRAPHICS),
+             question_by_key('dgf_gender_reduced', DEMOGRAPHICS),
+             question_by_key('dgf_native_language', EXTRA_DEMOGRAPHICS),
+             musical_experience_question]
+
 questionaire = [
     Trial(
         title="Questionnaire",
