@@ -13,7 +13,8 @@ class ResultInline(admin.TabularInline):
     # To not load a huge list of sections
     raw_id_fields = ("section",)
 
-    fields = ['section', 'created_at', 'score', 'json_data', 'expected_response', 'given_response',]
+    fields = ['section', 'created_at', 'score', 'json_data',
+              'expected_response', 'given_response', 'comment']
 
 
 class SessionAdmin(admin.ModelAdmin):

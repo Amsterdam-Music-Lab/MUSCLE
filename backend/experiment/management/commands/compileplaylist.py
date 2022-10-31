@@ -50,7 +50,8 @@ class Command(BaseCommand):
                 artist_name = name
                 filename = join(directory, basename(audio_file))
                 if song_names_option:
-                    song_name = song_names[splitext(basename(audio_file))[0]]
+                    artist_name = song_names[splitext(basename(audio_file))[0]]
+                    song_name = basename(audio_file)[:-4]
                 else:
                     song_name = splitext(basename(audio_file))[0]
                 start_position = 0.0

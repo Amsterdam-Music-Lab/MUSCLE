@@ -1,0 +1,20 @@
+{% load i18n %}
+<h1>{% translate "Thank you for your participation and contribution to science!" %}</h1>
+<div class="row" style="display: table">
+    <div class="column" style="float: left; width: 50%">
+        <h3>{% translate "Your Top 5 favorite songs:" %}</h3>
+        <ul>
+            {% for song in top_participant %}
+                <li>{{song.name}} - {{song.score}} points</li>
+            {% endfor %}
+        </ul>
+    </div>
+    <div class="column" style="float: left; width: 50%">
+        <h3>{% translate "Top 5 favorite songs:" %}</h3>
+        <ul>
+            {% for song in top_all %}
+                <li>{{song.name}} - {{song.score}} points</li>
+            {% endfor %}
+        </ul>
+    </div>
+  </div>

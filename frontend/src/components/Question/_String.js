@@ -24,7 +24,7 @@ const String = ({ question, value = "", onChange, emphasizeTitle = false }) => {
                 ref={input}
                 maxLength={question.max_length}
                 onChange={handleChange}
-                onKeyPress={handleChange}
+                onKeyPress={(e) => { e.key === 'Enter' && e.preventDefault(); }}
             />
         </div>
     );

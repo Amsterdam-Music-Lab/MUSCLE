@@ -38,10 +38,6 @@ class Experiment(models.Model):
 
     session_count.short_description = "Sessions"
 
-    def session_count_groups(self, filter_by={}):
-        """Number of sessions belonging to a certain group"""
-        return self.session_set.filter(json_data__contains=filter_by).count()
-
     def playlist_count(self):
         """Number of playlists"""
         return self.playlists.count()
@@ -82,26 +78,29 @@ class Experiment(models.Model):
                 'participant_id': profile['id'],
                 'participant_country': profile['country_code'],
                 'session_start': session.started_at.isoformat(),
-                'session_end': session_finished
+                'session_end': session_finished,
+                'session_data': session.load_json_data()
             }
             row.update(profile['profile'])
             fieldnames.update(row.keys())
             if session.result_set.count() == 0:
-                # some experiments may have only profile questions
-                return [row], list(fieldnames)
-            for result in session.result_set.all():
-                this_row = copy.deepcopy(row)
-                result_data = {
-                    'section_name': result.section.name if result.section else None,
-                    'result_created_at': result.created_at.isoformat(),
-                    'result_score': result.score,
-                    'result_comment': result.comment,
-                    'expected_response': result.expected_response,
-                    'given_response': result.given_response
-                }
-                this_row.update(result_data)
-                fieldnames.update(result_data.keys())
-                rows.append(this_row)
+                # some sessions may have only profile questions
+                rows.append(row)
+            else:
+                for result in session.result_set.all():
+                    this_row = copy.deepcopy(row)
+                    result_data = {
+                        'section_name': result.section.name if result.section else None,
+                        'result_created_at': result.created_at.isoformat(),
+                        'result_score': result.score,
+                        'result_comment': result.comment,
+                        'expected_response': result.expected_response,
+                        'given_response': result.given_response,
+                        'result_data': result.load_json_data()
+                    }
+                    this_row.update(result_data)
+                    fieldnames.update(result_data.keys())
+                    rows.append(this_row)
         return rows, list(fieldnames)
 
     def get_rules(self):

@@ -14,6 +14,7 @@ class Score(object):  # pylint: disable=too-few-public-methods
     def __init__(self, session, title=None, score_message=None, config=None, icon=None, timer=None, feedback=None):
         """ Score presents feedback to a participant after a Trial
         - session: a Session object
+        - title: the title of the score page
         - score_message: a function which constructs feedback text based on the score
         - config: a dict with the following settings:
             - show_section: whether metadata of the previous section should be shown

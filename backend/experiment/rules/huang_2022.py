@@ -9,8 +9,8 @@ from .base import Base
 from .views import SongSync, Final, Score, Explainer, Step, Consent, StartSession, Playlist, Question, Trial
 from .views.form import BooleanQuestion, ChoiceQuestion, Form
 from .views.playback import Playback
-from .util.questions import DEMOGRAPHICS, EXTRA_DEMOGRAPHICS, next_question, question_by_key
-from .util.goldsmiths import MSI_FG_GENERAL, MSI_ALL
+from .util.questions import EXTRA_DEMOGRAPHICS, question_by_key
+from .util.goldsmiths import MSI_ALL
 from .util.actions import combine_actions
 
 logger = logging.getLogger(__name__)
