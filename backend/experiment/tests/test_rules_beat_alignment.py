@@ -74,23 +74,30 @@ class BeatAlignmentRuleTest(TestCase):
         rounds_n = Experiment.objects.get(pk=1).rounds # Default 10
         views_exp = ['TRIAL_VIEW']*(rounds_n-1) + ['FINAL'] 
         for i in range(len(views_exp)):
-            json_data = {
-                "decision_time": 2.5,
-                "form": [{
-                    "key": "aligned",
-                    "view": "BUTTON_ARRAY",
-                    "explainer": "",
-                    "question": ["Are the beeps ALIGNED TO THE BEAT or NOT ALIGNED TO THE BEAT?"],
-                    "result_id": result_id,
-                    "is_skippable": False,
-                    "submits": True,
-                    "choices": {"ON": "ALIGNED TO THE BEAT", "OFF": "NOT ALIGNED TO THE BEAT"},
-                    "value": "ON",
-                    "scoring_rule": "CORRECTNESS"
-            }]
+            data = {
+                "session_id": session_id,
+                "csrfmiddlewaretoken": csrf_token,
+                "json_data": json.dumps({
+                    "decision_time":2.5,
+                    "form":
+                        [{  
+                            "key": "aligned",
+                            "view": "BUTTON_ARRAY",
+                            "explainer": "",
+                            "question":
+                                ["Are the beeps ALIGNED TO THE BEAT or NOT ALIGNED TO THE BEAT?"],
+                            "result_id": result_id,
+                            "is_skippable": False,
+                            "submits": True,
+                            "scoring_rule": "CORRECTNESS",
+                            "choices": {
+                                "ON": "ALIGNED TO THE BEAT",
+                                "OFF": "NOT ALIGNED TO THE BEAT"
+                            },
+                            "value": "ON"
+                        }],
+                    })
             }
-            data = {"session_id": session_id, "json_data": json.dumps(json_data),
-                      "csrfmiddlewaretoken": csrf_token }
             response = self.client.post('/experiment/session/result/', data)
             response_json = self.load_json(response)
             self.assertEqual(response_json['view'], views_exp[i])

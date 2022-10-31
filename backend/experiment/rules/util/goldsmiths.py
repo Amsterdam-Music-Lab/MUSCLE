@@ -33,7 +33,9 @@ MSI_FG_GENERAL = [
     LikertQuestion(
         key='msi_14_never_complimented',
         question=_(
-            "I have never been complimented for my talents as a musical performer.")),
+            "I have never been complimented for my talents as a musical performer."),
+        scoring_rule='REVERSE_LIKERT'
+    ),
     LikertQuestion(
         key='msi_15_internet_search_music',
         question=_(
@@ -41,14 +43,18 @@ MSI_FG_GENERAL = [
     LikertQuestion(
         key='msi_17_not_sing_harmony',
         question=_(
-            "I am not able to sing in harmony when somebody is singing a familiar tune.")),
+            "I am not able to sing in harmony when somebody is singing a familiar tune."),
+        scoring_rule='REVERSE_LIKERT'
+    ),
     LikertQuestion(
         key='msi_19_identify_special',
         question=_(
             "I am able to identify what is special about a given musical piece.")),
     LikertQuestion(
         key='msi_23_no_idea_in_tune',
-        question=_("When I sing, I have no idea whether I’m in tune or not.")),
+        question=_("When I sing, I have no idea whether I’m in tune or not."),
+        scoring_rule='REVERSE_LIKERT'
+    ),
     LikertQuestion(
         key='msi_24_music_addiction',
         question=_(
@@ -56,10 +62,15 @@ MSI_FG_GENERAL = [
     LikertQuestion(
         key='msi_25_sing_public',
         question=_(
-            "I don’t like singing in public because I’m afraid that I would sing wrong notes.")),
+            "I don’t like singing in public because I’m afraid that I would sing wrong notes."
+        ),
+        scoring_rule='REVERSE_LIKERT'
+    ),
     LikertQuestion(
         key='msi_27_consider_musician',
-        question=_("I would not consider myself a musician.")),
+        question=_("I would not consider myself a musician."),
+        scoring_rule='REVERSE_LIKERT'
+    ),
     LikertQuestion(
         key='msi_29_sing_after_hearing',
         question=_(
@@ -77,7 +88,8 @@ MSI_FG_GENERAL = [
             '6-9': _('6–9 years'),
             '10+': _('10 or more years'),
         },
-        view='RADIOS'
+        view='RADIOS',
+        scoring_rule='CATEGORIES_TO_LIKERT'
     ),
     ChoiceQuestion(
         key='msi_33_practice_daily',
@@ -92,7 +104,8 @@ MSI_FG_GENERAL = [
             '3-4': _('3-4 hours'),
             '5+': _('5 or more hours'),
         },
-        view='RADIOS'
+        view='RADIOS',
+        scoring_rule='CATEGORIES_TO_LIKERT'
     ),
     ChoiceQuestion(
         key='msi_37_play_instruments',
@@ -106,7 +119,8 @@ MSI_FG_GENERAL = [
             '5': _('5'),
             '6+': _('6 or more'),
         },
-        view='RADIOS'
+        view='RADIOS',
+        scoring_rule='CATEGORIES_TO_LIKERT'
     )
 ]
 
@@ -120,7 +134,8 @@ MSI_F1_ACTIVE_ENGAGEMENT = [
     question_by_key('msi_15_internet_search_music', MSI_FG_GENERAL),
     LikertQuestion(
         key='msi_21_spend_income',
-        question=_("I don’t spend much of my disposable income on music.")),
+        question=_("I don’t spend much of my disposable income on music."),
+        scoring_rule='REVERSE_LIKERT'),
     question_by_key('msi_24_music_addiction', MSI_FG_GENERAL),
     LikertQuestion(
         key='msi_28_track_new',
@@ -139,7 +154,8 @@ MSI_F1_ACTIVE_ENGAGEMENT = [
             '7-10': _('7-10'),
             '11+': _('11 or more'),
         },
-        view='RADIOS'
+        view='RADIOS',
+        scoring_rule='CATEGORIES_TO_LIKERT'
     ),
     ChoiceQuestion(
         key='msi_38_listen_music',
@@ -154,7 +170,8 @@ MSI_F1_ACTIVE_ENGAGEMENT = [
             '2-3h': _('2-3 hrs'),
             '4h+': _('4 hrs or more'),
         },
-        view='RADIOS'
+        view='RADIOS',
+        scoring_rule='CATEGORIES_TO_LIKERT'
     )
 ]
 
@@ -167,12 +184,16 @@ MSI_F2_PERCEPTUAL_ABILITIES = [
         question=_("I usually know when I’m hearing a song for the first time.")),
     LikertQuestion(
         key='msi_11_spot_mistakes',
-        question=_("I find it difficult to spot mistakes in a performance of a song even if I know the tune.")),
+        question=_("I find it difficult to spot mistakes in a performance of a song even if I know the tune."),
+        scoring_rule='REVERSE_LIKERT'
+    ),
     question_by_key('msi_12_performance_diff', MSI_FG_GENERAL),
     LikertQuestion(
         key='msi_13_trouble_recognising',
         question=_(
-            "I have trouble recognising a familiar song when played in a different way or by a different performer."),
+            "I have trouble recognising a familiar song when played in a different way or by a different performer."
+            ),
+            scoring_rule='REVERSE_LIKERT'
         ),
     LikertQuestion(
         key='msi_18_out_of_beat',
@@ -210,7 +231,8 @@ MSI_F3_MUSICAL_TRAINING = [
             '4-6': _('4-6'),
             '7+': _('7 or more'),
         },
-        view='RADIOS'
+        view='RADIOS',
+        scoring_rule='CATEGORIES_TO_LIKERT'
     ),
     ChoiceQuestion(
         key='msi_36_instrumental_training',
@@ -226,7 +248,8 @@ MSI_F3_MUSICAL_TRAINING = [
             '6-9': _('6-9'),
             '10+': _('10 or more'),
         },
-        view='RADIOS'
+        view='RADIOS',
+        scoring_rule='CATEGORIES_TO_LIKERT'
     ),
     question_by_key('msi_37_play_instruments', MSI_FG_GENERAL)
 ]
@@ -254,6 +277,7 @@ MSI_F5_EMOTIONS = [
     LikertQuestion(
         key='msi_09_rarely_emotions',
         question=_("Pieces of music rarely evoke emotions for me."),
+        scoring_rule='REVERSE_LIKERT'
         ),
     LikertQuestion(
         key='msi_16_motivate',
