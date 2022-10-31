@@ -14,7 +14,7 @@ from .base import Base
 
 class MusicalPreferences(Base):
     ID = 'MUSICAL_PREFERENCES'
-    block_size = 4
+    block_size = 16
 
     @classmethod
     def first_round(cls, experiment):
