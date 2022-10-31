@@ -10,7 +10,7 @@ from .views.form import ChoiceQuestion, Form
 from .views.playback import Playback
 
 from .util.practice import get_practice_views, practice_explainer, get_trial_condition, get_trial_condition_block
-from .util.actions import combine_actions, final_action_with_optional_button, render_feedback_trivia
+from .util.actions import final_action_with_optional_button, render_feedback_trivia
 from .util.final_score import get_average_difference_level_based
 from .util.staircasing import register_turnpoint
 

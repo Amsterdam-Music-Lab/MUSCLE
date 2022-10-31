@@ -76,6 +76,7 @@ class BeatAlignmentRuleTest(TestCase):
         for i in range(len(views_exp)):
             data = {
                 "session_id": session_id,
+                "csrfmiddlewaretoken": csrf_token,
                 "json_data": json.dumps({
                     "decision_time":2.5,
                     "form":
@@ -95,7 +96,6 @@ class BeatAlignmentRuleTest(TestCase):
                             },
                             "value": "ON"
                         }],
-                        "csrfmiddlewaretoken": csrf_token 
                     })
             }
             response = self.client.post('/experiment/session/result/', data)
