@@ -1,5 +1,6 @@
 import logging
 from .views import Final
+from .util.score import SCORING_RULES
 
 logger = logging.getLogger(__name__)
 
@@ -27,7 +28,7 @@ class Base(object):
         if not result_id:
             result = Result(session=session)
         try:
-            result = Result.objects.get(pk=result_id)
+            result = Result.objects.get(pk=result_id, session=session)
         except Result.DoesNotExist:
             # Create new result
             result = Result(session=session)
@@ -46,7 +47,8 @@ class Base(object):
             result.given_response = form_element['value']
             
             # Calculate score
-            score = session.experiment_rules().calculate_score(result, data, form_element)
+            scoring_rule = SCORING_RULES.get(form_element['scoring_rule'], None)
+            score = session.experiment_rules().calculate_score(result, data, scoring_rule, form_element)
             if not score:
                 score = 0
 
@@ -69,12 +71,12 @@ class Base(object):
             all other params in the custom result
         }
         """
-
         result_id = data.get('result_id')
         result = cls.get_result(session, result_id)
 
         # Calculate score
-        score = session.experiment_rules().calculate_score(result, data)
+        scoring_rule = SCORING_RULES.get(data['config'].get('scoring_rule', None))
+        score = session.experiment_rules().calculate_score(result, data, scoring_rule)
         if not score:
             score = 0
 
@@ -85,9 +87,12 @@ class Base(object):
 
         return result
 
-    @staticmethod
-    def calculate_score(result, data, form_element=None):
-        """fallback for calculate score"""
+    @classmethod
+    def calculate_score(cls, result, data, scoring_rule, form_element=None):
+        """use scoring rule to calculate score
+        If not scoring rule is defined, return None"""
+        if scoring_rule:
+            return scoring_rule(form_element, result, data)
         return None
 
     @staticmethod

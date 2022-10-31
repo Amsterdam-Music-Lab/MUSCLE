@@ -10,7 +10,7 @@ from .views import Trial, Consent, Final, Explainer, StartSession, Step, Playlis
 from .views.form import ChoiceQuestion, Form
 from .views.playback import Playback
 from .util.actions import combine_actions, final_action_with_optional_button, render_feedback_trivia
-from .util.score import get_average_difference
+from .util.final_score import get_average_difference
 from .util.practice import get_trial_condition_block, get_practice_views, practice_explainer
 from .util.staircasing import register_turnpoint
 

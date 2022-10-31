@@ -11,7 +11,7 @@ from .views.playback import Playback
 
 from .util.practice import get_practice_views, practice_explainer, get_trial_condition, get_trial_condition_block
 from .util.actions import final_action_with_optional_button, render_feedback_trivia
-from .util.score import get_average_difference_level_based
+from .util.final_score import get_average_difference_level_based
 from .util.staircasing import register_turnpoint
 
 logger = logging.getLogger(__name__)
@@ -73,19 +73,6 @@ class HBat(Base):
             start_session
         ]
 
-    @staticmethod
-    def calculate_score(result, data, form_element):
-        # a result's score is used to keep track of how many correct results were in a row
-        try:
-            expected_response = result.expected_response
-        except Exception as e:
-            logger.log(e)
-            expected_response = None
-        if expected_response and expected_response == form_element['value']:
-            return 1
-        else:
-            return 0
-
     @classmethod
     def next_trial_action(cls, session, trial_condition, level=1, *kwargs):
         """
@@ -109,6 +96,7 @@ class HBat(Base):
                 'FASTER': _('FASTER')
             },
             view='BUTTON_ARRAY',
+            scoring_rule='CORRECTNESS',
             result_id=result_pk,
             submits=True
         )
