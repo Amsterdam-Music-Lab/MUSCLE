@@ -80,6 +80,7 @@ class LikertQuestion(Question):
     def __init__(self, scale_steps=7, explainer=_("How much do you agree or disagree?"), likert_view='TEXT_RANGE', **kwargs):
         super().__init__(**kwargs)
         self.view = likert_view
+        self.scoring_rule = 'LIKERT'
         self.scale_steps = scale_steps
         self.explainer = explainer
         if scale_steps == 7:

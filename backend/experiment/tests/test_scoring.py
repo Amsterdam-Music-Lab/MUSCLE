@@ -37,6 +37,27 @@ class ScoringTest(TestCase):
         ]}
         return self.make_request(view)
     
+    def choice_request(self):
+        view = {
+            "form": [
+                {
+                    "key": "test",
+                    "result_id": None,
+                    "view": "RADIOS",
+                    "choices": {
+                        "first": "Spam",
+                        "second": "Eggs and Spam",
+                        "third": "Eggs, Fried Beans and Spam",
+                        "fourth": "Spam, Fried Beans and Spam",
+                        "fifth": "Spam, Spam, Spam, Spam, Eggs and Spam"
+                    },
+                    "value": "second",
+                    "scoring_rule": "CATEGORIES_TO_LIKERT"
+                }
+            ],
+        }
+        return self.make_request(view)
+    
     def correctness_request(self, value):   
         result = Result.objects.create(
             session = self.session,
@@ -106,6 +127,12 @@ class ScoringTest(TestCase):
         assert response.status_code == 200
         assert self.participant.profile_set.count() == 1
         assert self.participant.profile_set.last().score == 6
+    
+    def test_categories_to_likert(self):
+        client_request = self.choice_request()
+        response = self.client.post('/experiment/session/result/', client_request)
+        assert response.status_code == 200
+        assert self.session.result_set.last().score == 2
     
     def test_correctness(self):
         client_request = self.correctness_request('spam')

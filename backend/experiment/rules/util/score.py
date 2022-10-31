@@ -25,6 +25,10 @@ def likert_score(form_element, result, data):
 def reverse_likert_score(form_element, result, data):
     return form_element['scale_steps'] + 1 - form_element['value']
 
+def categories_likert_score(form_element, result, data):
+    choices = list(form_element['choices'].keys())
+    return choices.index(form_element['value']) + 1
+
 def reaction_time_score(form_element, result, data):
     expected_response = check_expected_response(result)
     if expected_response:
@@ -66,4 +70,5 @@ SCORING_RULES = {
     'REVERSE_LIKERT': reverse_likert_score,
     'REACTION_TIME': reaction_time_score,
     'SONG_SYNC': song_sync_score,
+    'CATEGORIES_TO_LIKERT': categories_likert_score,
 }
