@@ -107,9 +107,11 @@
     
 
     &.neutral {
+        /*
         .aha__play-button{
             @include btn-style($blue);
         }
+        */
 
         .aha__player-small:nth-of-type(1){
             .btn,
@@ -134,6 +136,10 @@
             .btn:nth-of-type(2) {
                 @include btn-style($yellow);
             }
+
+            .btn.invisible-text, .btn.invisible-text:hover {
+                color: rgba(0, 0, 0, 0);
+            }
         }
     }
 
@@ -156,6 +162,10 @@
             }
             .btn:nth-of-type(2) {
                 @include btn-style($blue);
+            }
+
+            .btn.invisible-text, .btn.invisible-text:hover {
+                color: rgba(0, 0, 0, 0);
             }
         }
     }

@@ -7,7 +7,7 @@ class Base(object):
     """Base class for other rules classes"""
 
     @classmethod
-    def prepare_result(cls, session, section, expected_response=None):
+    def prepare_result(cls, session, section, expected_response=None, comment=None):
         # Prevent circular dependency errors
         from experiment.models import Result
 
@@ -15,6 +15,8 @@ class Base(object):
         result.section = section
         if expected_response is not None:
             result.expected_response = expected_response
+        if comment is not None:
+            result.comment = comment
         result.save()
         return result.pk
 

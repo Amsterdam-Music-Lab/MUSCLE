@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-08-29 15:28+0200\n"
+"POT-Creation-Date: 2022-10-03 14:23+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -21,7 +21,7 @@ msgstr ""
 msgid "Loading"
 msgstr "加载中"
 
-#: experiment/api/participant.py:37 experiment/rules/views/final.py:48
+#: experiment/api/participant.py:37 experiment/rules/views/final.py:52
 msgid "My profile"
 msgstr "我的结果"
 
@@ -36,7 +36,7 @@ msgid_plural ""
 msgstr[0] "你参加了阿姆斯特丹音乐实验室的 %(count)d 个实验。你最好的成绩是："
 msgstr[1] "你参加了阿姆斯特丹音乐实验室的 %(count)d 个实验。你最好的成绩是："
 
-#: experiment/api/participant.py:42 experiment/rules/views/final.py:45
+#: experiment/api/participant.py:42 experiment/rules/views/final.py:49
 msgid "points"
 msgstr "分"
 
@@ -497,21 +497,21 @@ msgid "Let's go!"
 msgstr "开始吧！"
 
 #: experiment/rules/huang_2022.py:44
-#: experiment/rules/rhythm_experiment_series.py:45
+#: experiment/rules/rhythm_experiment_series.py:46
 #: experiment/rules/speech2song.py:40
 #: experiment/templates/consent/consent_hooked.html:87
 #: experiment/templates/consent/consent_huang2021.html:88
 msgid "Informed consent"
-msgstr "知情同意声明"
+msgstr "知情同意声书"
 
 #: experiment/rules/huang_2022.py:44
-#: experiment/rules/rhythm_experiment_series.py:45
+#: experiment/rules/rhythm_experiment_series.py:46
 #: experiment/rules/speech2song.py:40
 msgid "I agree"
 msgstr "同意"
 
 #: experiment/rules/huang_2022.py:44
-#: experiment/rules/rhythm_experiment_series.py:45
+#: experiment/rules/rhythm_experiment_series.py:46
 #: experiment/rules/speech2song.py:40
 msgid "Stop"
 msgstr "停止"
@@ -547,11 +547,13 @@ msgstr ""
 "如Safari、火狐、360等等。"
 
 #: experiment/rules/huang_2022.py:56 experiment/rules/huang_2022.py:261
-#: experiment/rules/rhythm_experiment_series.py:36
-#: experiment/rules/rhythm_experiment_series.py:72
+#: experiment/rules/rhythm_experiment_series.py:37
+#: experiment/rules/rhythm_experiment_series.py:73
+#: experiment/rules/rhythm_experiment_series_mri.py:30
+#: experiment/rules/rhythm_experiment_series_unpaid.py:31
 #: experiment/rules/speech2song.py:89 experiment/rules/speech2song.py:99
 #: experiment/rules/speech2song.py:125 experiment/rules/util/actions.py:31
-#: experiment/rules/util/practice.py:99 experiment/rules/views/form.py:109
+#: experiment/rules/util/practice.py:99 experiment/rules/views/form.py:110
 #: experiment/rules/views/question.py:14 experiment/rules/views/question.py:35
 #: experiment/rules/views/question.py:54 experiment/rules/views/question.py:71
 #: experiment/rules/views/question.py:89 experiment/rules/views/question.py:107
@@ -821,27 +823,34 @@ msgid ""
 "scanner         to hear the rhythm really well."
 msgstr ""
 
-#: experiment/rules/rhythm_experiment_series.py:21
+#: experiment/rules/rhythm_experiment_series.py:22
+#: experiment/rules/rhythm_experiment_series_mri.py:15
+#: experiment/rules/rhythm_experiment_series_unpaid.py:16
 msgid "You are about to take part in an experiment about rhythm perception."
 msgstr ""
 
-#: experiment/rules/rhythm_experiment_series.py:24
+#: experiment/rules/rhythm_experiment_series.py:25
+#: experiment/rules/rhythm_experiment_series_unpaid.py:19
 msgid ""
 "We want to find out what the best way is to test whether someone has a good "
 "sense of rhythm!"
 msgstr ""
 
-#: experiment/rules/rhythm_experiment_series.py:27
+#: experiment/rules/rhythm_experiment_series.py:28
+#: experiment/rules/rhythm_experiment_series_mri.py:21
+#: experiment/rules/rhythm_experiment_series_unpaid.py:22
 msgid ""
 "You will be doing many little tasks that have something to do with rhythm."
 msgstr ""
 
-#: experiment/rules/rhythm_experiment_series.py:30
+#: experiment/rules/rhythm_experiment_series.py:31
+#: experiment/rules/rhythm_experiment_series_mri.py:24
+#: experiment/rules/rhythm_experiment_series_unpaid.py:25
 msgid ""
 "You will get a short explanation and a practice trial for each little task."
 msgstr ""
 
-#: experiment/rules/rhythm_experiment_series.py:33
+#: experiment/rules/rhythm_experiment_series.py:34
 msgid ""
 "You can get reimbursed for completing the entire experiment! Either by "
 "earning 6 euros, or by getting 1 research credit (for psychology students at "
@@ -849,13 +858,28 @@ msgid ""
 "credit at the end of the experiment."
 msgstr ""
 
-#: experiment/rules/rhythm_experiment_series.py:64
+#: experiment/rules/rhythm_experiment_series.py:65
 msgid "Thank you very much for participating!"
 msgstr ""
 
-#: experiment/rules/rhythm_experiment_series.py:76
+#: experiment/rules/rhythm_experiment_series.py:77
 #, python-format
 msgid "Next experiment (%d to go!)"
+msgstr ""
+
+#: experiment/rules/rhythm_experiment_series_mri.py:18
+msgid ""
+"We want to find out which brain areas are involved in our sense of rhythm!"
+msgstr ""
+
+#: experiment/rules/rhythm_experiment_series_mri.py:27
+msgid ""
+"You will receive 15 euros as compensation for your participation. You will "
+"get instructions for how to get paid at the end of the experiment."
+msgstr ""
+
+#: experiment/rules/rhythm_experiment_series_unpaid.py:28
+msgid "We are very grateful for your participation!"
 msgstr ""
 
 #: experiment/rules/speech2song.py:27
@@ -1583,83 +1607,87 @@ msgstr "待业中"
 msgid "Retired"
 msgstr "已退休"
 
-#: experiment/rules/views/final.py:13
+#: experiment/rules/views/final.py:14
 msgid "plastic"
 msgstr "塑料"
 
-#: experiment/rules/views/final.py:14
+#: experiment/rules/views/final.py:15
 msgid "bronze"
 msgstr "青铜"
 
-#: experiment/rules/views/final.py:15
+#: experiment/rules/views/final.py:16
 msgid "silver"
 msgstr "白银"
 
-#: experiment/rules/views/final.py:16
+#: experiment/rules/views/final.py:17
 msgid "gold"
 msgstr "黄金"
 
-#: experiment/rules/views/final.py:17
+#: experiment/rules/views/final.py:18
 msgid "platinum"
 msgstr "铂金"
 
-#: experiment/rules/views/final.py:18
+#: experiment/rules/views/final.py:19
 msgid "diamond"
 msgstr "钻石"
 
-#: experiment/rules/views/final.py:21
+#: experiment/rules/views/final.py:22
 msgid "Final score"
 msgstr "最终得分"
 
-#: experiment/rules/views/final.py:47
+#: experiment/rules/views/final.py:51
 msgid "Play again"
 msgstr "再玩一次"
 
-#: experiment/rules/views/final.py:49
+#: experiment/rules/views/final.py:53
 msgid "All experiments"
 msgstr "实验结束"
 
-#: experiment/rules/views/form.py:83 experiment/rules/views/question.py:148
+#: experiment/rules/views/form.py:78 experiment/rules/views/question.py:142
+msgid "How much do you agree or disagree?"
+msgstr "您是否同意或不同意？请左右移动圆圈按钮至对应的回答。"
+
+#: experiment/rules/views/form.py:84 experiment/rules/views/question.py:148
 #: experiment/rules/views/question.py:171
 msgid "Completely Disagree"
 msgstr "完全不同意"
 
-#: experiment/rules/views/form.py:84 experiment/rules/views/form.py:93
+#: experiment/rules/views/form.py:85 experiment/rules/views/form.py:94
 #: experiment/rules/views/question.py:149
 #: experiment/rules/views/question.py:172
 msgid "Strongly Disagree"
 msgstr "非常不同意"
 
-#: experiment/rules/views/form.py:85 experiment/rules/views/form.py:94
+#: experiment/rules/views/form.py:86 experiment/rules/views/form.py:95
 #: experiment/rules/views/question.py:150
 #: experiment/rules/views/question.py:173
 msgid "Disagree"
 msgstr "不同意"
 
-#: experiment/rules/views/form.py:86 experiment/rules/views/form.py:95
+#: experiment/rules/views/form.py:87 experiment/rules/views/form.py:96
 #: experiment/rules/views/question.py:151
 #: experiment/rules/views/question.py:174
 msgid "Neither Agree nor Disagree"
 msgstr "即不同意也不反对"
 
-#: experiment/rules/views/form.py:87 experiment/rules/views/form.py:96
+#: experiment/rules/views/form.py:88 experiment/rules/views/form.py:97
 #: experiment/rules/views/question.py:152
 #: experiment/rules/views/question.py:175
 msgid "Agree"
 msgstr "同意"
 
-#: experiment/rules/views/form.py:88 experiment/rules/views/form.py:97
+#: experiment/rules/views/form.py:89 experiment/rules/views/form.py:98
 #: experiment/rules/views/question.py:153
 #: experiment/rules/views/question.py:176
 msgid "Strongly Agree"
 msgstr "非常同意"
 
-#: experiment/rules/views/form.py:89 experiment/rules/views/question.py:154
+#: experiment/rules/views/form.py:90 experiment/rules/views/question.py:154
 #: experiment/rules/views/question.py:177
 msgid "Completely Agree"
 msgstr "完全同意"
 
-#: experiment/rules/views/form.py:109 experiment/rules/views/question.py:14
+#: experiment/rules/views/form.py:110 experiment/rules/views/question.py:14
 #: experiment/rules/views/question.py:35 experiment/rules/views/question.py:54
 #: experiment/rules/views/question.py:71 experiment/rules/views/question.py:89
 #: experiment/rules/views/question.py:107
@@ -1674,10 +1702,6 @@ msgstr "跳过"
 #: experiment/rules/views/playlist.py:18
 msgid "Select a Playlist"
 msgstr "请选择一个曲库"
-
-#: experiment/rules/views/question.py:142
-msgid "How much do you agree or disagree?"
-msgstr "您是否同意或不同意？请左右移动圆圈按钮至对应的回答。"
 
 #: experiment/rules/views/question.py:165
 msgid "How much do you agree?"
@@ -1758,6 +1782,7 @@ msgstr ""
 
 #: experiment/templates/consent/consent_MRI.html:3
 #: experiment/templates/consent/consent_rhythm.html:3
+#: experiment/templates/consent/consent_rhythm_unpaid.html:3
 msgid "Purpose of the Research Project"
 msgstr "该研究目的"
 
@@ -1778,6 +1803,7 @@ msgstr ""
 
 #: experiment/templates/consent/consent_MRI.html:6
 #: experiment/templates/consent/consent_rhythm.html:5
+#: experiment/templates/consent/consent_rhythm_unpaid.html:5
 msgid "Who Can Take Part in This Research?"
 msgstr "谁能参与这项研究？"
 
@@ -1797,11 +1823,13 @@ msgstr ""
 
 #: experiment/templates/consent/consent_MRI.html:8
 #: experiment/templates/consent/consent_rhythm.html:7
+#: experiment/templates/consent/consent_rhythm_unpaid.html:7
 msgid "Instructions and Procedure"
 msgstr "实验说明与步骤"
 
 #: experiment/templates/consent/consent_MRI.html:9
 #: experiment/templates/consent/consent_rhythm.html:8
+#: experiment/templates/consent/consent_rhythm_unpaid.html:8
 msgid ""
 " In this study, you will perform 8 short tasks related to rhythm. In each "
 "task, you will be presented with short fragments of music and rhythms, and "
@@ -1817,13 +1845,13 @@ msgstr ""
 
 #: experiment/templates/consent/consent_MRI.html:10
 #: experiment/templates/consent/consent_rhythm.html:9
-#, fuzzy
-#| msgid "Voluntary participation"
+#: experiment/templates/consent/consent_rhythm_unpaid.html:9
 msgid "Voluntary Participation"
 msgstr "自愿参与"
 
 #: experiment/templates/consent/consent_MRI.html:11
 #: experiment/templates/consent/consent_rhythm.html:10
+#: experiment/templates/consent/consent_rhythm_unpaid.html:10
 msgid ""
 " There are no consequences if you decide now not to participate in this "
 "study. During the experiment, you are free to stop participating at any "
@@ -1832,6 +1860,7 @@ msgstr ""
 
 #: experiment/templates/consent/consent_MRI.html:12
 #: experiment/templates/consent/consent_rhythm.html:11
+#: experiment/templates/consent/consent_rhythm_unpaid.html:11
 msgid "Discomfort, Risks, and Insurance"
 msgstr "不适、风险与保险"
 
@@ -1847,11 +1876,13 @@ msgstr ""
 
 #: experiment/templates/consent/consent_MRI.html:14
 #: experiment/templates/consent/consent_rhythm.html:13
+#: experiment/templates/consent/consent_rhythm_unpaid.html:13
 msgid "Your privacy is guaranteed"
 msgstr ""
 
 #: experiment/templates/consent/consent_MRI.html:15
 #: experiment/templates/consent/consent_rhythm.html:14
+#: experiment/templates/consent/consent_rhythm_unpaid.html:14
 msgid ""
 " Your personal information (about who you are) remains confidential and will "
 "not be shared without your explicit consent. Your research data will be "
@@ -1877,6 +1908,7 @@ msgstr ""
 #: experiment/templates/consent/consent_hooked.html:80
 #: experiment/templates/consent/consent_huang2021.html:76
 #: experiment/templates/consent/consent_rhythm.html:17
+#: experiment/templates/consent/consent_rhythm_unpaid.html:15
 #: experiment/templates/consent/consent_speech2song.html:62
 msgid "Further Information"
 msgstr "更多信息"
@@ -1890,9 +1922,18 @@ msgid ""
 "the processing of your personal data you can also contact the data "
 "protection officer of the University of Amsterdam via fg@uva.nl. "
 msgstr ""
+"Mocht u vragen hebben over dit onderzoek, vooraf of achteraf, dan kunt u "
+"zich wenden tot de verantwoordelijke onderzoeker, Dr. Atser Damsma (a."
+"damsma@uva.nl). Voor eventuele formele klachten over dit onderzoek kunt u "
+"zich wenden tot het lid van de Facultaire Commissie Ethiek (FMG) van de "
+"Universiteit van Amsterdam, Dr. Yair Pinto (y.pinto@uva.nl). Voor vragen of "
+"klachten over de verwerking van uw persoonsgegevens kunt u tevens contact "
+"opnemen met de functionaris gegevensbescherming van de Universiteit van "
+"Amsterdam via fg@uva.nl."
 
 #: experiment/templates/consent/consent_MRI.html:20
 #: experiment/templates/consent/consent_rhythm.html:19
+#: experiment/templates/consent/consent_rhythm_unpaid.html:17
 msgid "Informed Consent"
 msgstr "知情同意书"
 
@@ -2212,6 +2253,10 @@ msgid ""
 "where you grew up.\n"
 "    "
 msgstr ""
+"\n"
+"  该实验包括两部分：一个音乐识别实验与一份《金史密斯音乐素养》水平测试。我们"
+"也将对人口统计特征进行一个简短的问卷调查。 该实验需要20-30分钟。在实验完成后,"
+"您将看到结果。"
 
 #: experiment/templates/consent/consent_huang2021.html:41
 msgid ""
@@ -2232,9 +2277,6 @@ msgid ""
 "    music in your daily life.\n"
 "    "
 msgstr ""
-"  该实验包括两部分：一个音乐识别实验与一份《金史密斯音乐素养》水平测试。我们"
-"也将对人口统计特征进行一个简短的问卷调查。 该实验需要20-30分钟。在实验完成后,"
-"您将看到结果。\n"
 "  在音乐识别实验的第一个阶段，您将听到一些简短的音乐片段，请您尝试尽快回答‘是"
 "否能识别出该音乐‘。同时请在大脑中一起跟唱这段音乐。当您告诉我们您识别出了一段"
 "音乐时，该音乐会继续播放，但是声音将会被静音几秒钟。请您此时继续在心里“默"
@@ -2268,6 +2310,7 @@ msgstr ""
 "fgw@uva.nl; 地址: Kloveniersburgwal 48, 1012 CX Amsterdam。"
 
 #: experiment/templates/consent/consent_rhythm.html:2
+#: experiment/templates/consent/consent_rhythm_unpaid.html:2
 msgid ""
 " You will be taking part in the experiment “Who’s got rhythm?” conducted by "
 "Dr Fleur Bouwer of the Psychology Department at the University of Amsterdam. "
@@ -2277,6 +2320,7 @@ msgid ""
 msgstr ""
 
 #: experiment/templates/consent/consent_rhythm.html:4
+#: experiment/templates/consent/consent_rhythm_unpaid.html:4
 msgid ""
 " Rhythm is a fundamental aspect of music and musicality. It is important to "
 "be able to measure rhythmic abilities accurately, to understand how "
@@ -2286,6 +2330,7 @@ msgid ""
 msgstr ""
 
 #: experiment/templates/consent/consent_rhythm.html:6
+#: experiment/templates/consent/consent_rhythm_unpaid.html:6
 msgid ""
 " Anybody aged 16 or older with no hearing problems and no psychiatric or "
 "neurological disorders is welcome to participate in this research. Your "
@@ -2307,6 +2352,7 @@ msgid ""
 msgstr ""
 
 #: experiment/templates/consent/consent_rhythm.html:18
+#: experiment/templates/consent/consent_rhythm_unpaid.html:16
 msgid ""
 " Should you have questions about this study at any given moment, please "
 "contact the responsible researcher, Dr. Fleur Bouwer (bouwer@uva.nl). Formal "
@@ -2317,6 +2363,7 @@ msgid ""
 msgstr ""
 
 #: experiment/templates/consent/consent_rhythm.html:20
+#: experiment/templates/consent/consent_rhythm_unpaid.html:18
 msgid ""
 " I hereby declare that: I have been clearly informed about the research "
 "project “Who’s got rhythm?”, as described above; I am 16 or older; I have "
@@ -2324,6 +2371,12 @@ msgid ""
 "study and I agree with the use of the data that are collected; I reserve the "
 "right to withdraw my participation from the study at any moment without "
 "providing any reason. "
+msgstr ""
+
+#: experiment/templates/consent/consent_rhythm_unpaid.html:12
+msgid ""
+" For all research at the University of Amsterdam, a standard liability "
+"insurance applies. "
 msgstr ""
 
 #: experiment/templates/consent/consent_speech2song.html:2
@@ -2547,32 +2600,58 @@ msgstr ""
 "+31 20 525 3054；电子邮件：commissie-ethiek-fgw@uva.nl ;  地址："
 "Kloveniersburgwal 48, 1012 CX Amsterdam)。"
 
-#: experiment/templates/final/debrief_MRI.html:3
-msgid "In order to get your reimbursement, make sure to follow these steps:"
-msgstr ""
-
-#: experiment/templates/final/debrief_MRI.html:5
-#: experiment/templates/final/experiment_series.html:4
-msgid "If you have not done the following steps already:"
-msgstr ""
-
-#: experiment/templates/final/debrief_MRI.html:7
-#: experiment/templates/final/experiment_series.html:6
-msgid "Make an account at "
+#: experiment/templates/final/debrief_MRI.html:4
+msgid ""
+"You've made it! This is the end of the experiment. Thank you very much for "
+"participating! With your participation you've contributed to our "
+"understanding of how the brain processes rhythm."
 msgstr ""
 
 #: experiment/templates/final/debrief_MRI.html:8
 msgid ""
-"Look up the experiment. It is called: “Neural correlates of rhythmic "
-"abilities”"
+"In order to receive your 15 euro reimbursement, please let us know that you "
+"have completed the experiment by sending an email to Atser Damsma"
 msgstr ""
 
-#: experiment/templates/final/debrief_MRI.html:9
+#: experiment/templates/final/debrief_rhythm_unpaid.html:2
+msgid "Thank you very much for taking part in our experiment!"
+msgstr ""
+
+#: experiment/templates/final/debrief_rhythm_unpaid.html:4
+msgid ""
+"We are very grateful for the time and effort you spent on helping us to find "
+"out how people perceive rhythm."
+msgstr ""
+
+#: experiment/templates/final/debrief_rhythm_unpaid.html:5
+msgid "If you want to know more about our research, check out"
+msgstr ""
+
+#: experiment/templates/final/debrief_rhythm_unpaid.html:6
+msgid "and"
+msgstr "男性"
+
+#: experiment/templates/final/experiment_series.html:2
+msgid ""
+"If you want to get your money or credit, make sure to follow these steps:"
+msgstr ""
+
+#: experiment/templates/final/experiment_series.html:4
+msgid "If you have not done the following steps already:"
+msgstr ""
+
+#: experiment/templates/final/experiment_series.html:6
+msgid "Make an account at "
+msgstr ""
+
+#: experiment/templates/final/experiment_series.html:7
+msgid "Look up the experiment. It is called: “Testing your sense of rhythm”"
+msgstr ""
+
 #: experiment/templates/final/experiment_series.html:8
 msgid "Click on “participate” "
 msgstr ""
 
-#: experiment/templates/final/debrief_MRI.html:10
 #: experiment/templates/final/experiment_series.html:9
 msgid ""
 "Click on the experiment link in the browser (NOTE: it is really important "
@@ -2580,25 +2659,9 @@ msgid ""
 "portal, it does not register you as a participant)."
 msgstr ""
 
-#: experiment/templates/final/debrief_MRI.html:11
 #: experiment/templates/final/experiment_series.html:10
 msgid ""
 "You can now close the tab again, as you have already finished the experiment!"
-msgstr ""
-
-#: experiment/templates/final/debrief_MRI.html:14
-msgid ""
-"Let us know that you have completed the experiment by replying to the "
-"invitation email (X). We will now make sure you get your reimbursement!"
-msgstr ""
-
-#: experiment/templates/final/experiment_series.html:2
-msgid ""
-"If you want to get your money or credit, make sure to follow these steps:"
-msgstr ""
-
-#: experiment/templates/final/experiment_series.html:7
-msgid "Look up the experiment. It is called: “Testing your sense of rhythm”"
 msgstr ""
 
 #: experiment/templates/final/experiment_series.html:13

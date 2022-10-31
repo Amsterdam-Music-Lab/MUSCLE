@@ -9,6 +9,7 @@ class Playback(object):
         - instruction: text to display during presentation of the sound
         - play_config: define to override the following values:
             - ready_time: time before presentation of sound
+            - timeout_after_playback: pause in ms after playback has finished
             - playhead: from where the audio file should play (offset in seconds from start)
             - mute: whether audio should be muted
             - auto_play: whether sound will start automatically
