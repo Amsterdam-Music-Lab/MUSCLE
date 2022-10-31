@@ -7,7 +7,7 @@ class Playback(object):
         - sections: a list of sections (in many cases, will only contain *one* section)
         - preload_message: text to display during preload
         - instruction: text to display during presentation of the sound
-        - config: define to override the following values:
+        - play_config: define to override the following values:
             - ready_time: time before presentation of sound
             - timeout_after_playback: pause in ms after playback has finished
             - playhead: from where the audio file should play (offset in seconds from start)

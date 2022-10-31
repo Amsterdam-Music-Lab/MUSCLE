@@ -1,6 +1,7 @@
 import React from "react";
 
 import classNames from "classnames";
+import { renderLabel } from "../../util/label";
 
 // ButtonArray is a question view for selecting a single option from a list of buttons
 const ButtonArray = ({ question, active, onChange, emphasizeTitle = false }) => {
@@ -42,7 +43,6 @@ const ButtonArray = ({ question, active, onChange, emphasizeTitle = false }) => 
 const ToggleButton = ({ label, value, index, name, active, onChange, config }) => {
     const disabled = active? '' : 'disabled';
     return (
-        <>
         <label
             className={classNames("btn btn-secondary btn-lg", config && config.button_text_invisible ? "invisible-text" : "", disabled)}
             onClick={() => {
@@ -53,10 +53,9 @@ const ToggleButton = ({ label, value, index, name, active, onChange, config }) =
                 onChange(value);
             }}
         >
-            {label}
-        </label>
-        <input className={value} type="radio" name={name} id={index} value={value}/>
-        </>)
+            <input className={value} type="radio" name={name} id={index} value={value}/>
+            {renderLabel(label)}
+        </label>)
 }
 
 export default ButtonArray;
