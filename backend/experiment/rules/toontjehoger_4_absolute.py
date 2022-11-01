@@ -3,6 +3,7 @@ import random
 from os.path import join
 from django.template.loader import render_to_string
 from .util.strings import non_breaking
+from .toontjehoger_1_mozart import toontjehoger_ranks
 from .views import Trial, Explainer, Step, Score, Final, StartSession, Playlist, Info
 from .views.form import ButtonArrayQuestion, Form
 from .views.playback import Playback
@@ -183,7 +184,7 @@ class ToontjeHoger4Absolute(Base):
         final = Final(
             session=session,
             final_text=final_text,
-            rank=cls.rank(session),
+            rank=toontjehoger_ranks(session),
             button={'text': 'Wat hebben we getest?'}
         ).action()
 

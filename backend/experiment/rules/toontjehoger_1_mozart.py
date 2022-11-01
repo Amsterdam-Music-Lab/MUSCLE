@@ -15,6 +15,17 @@ QUESTION_URL2 = "/images/experiments/toontjehoger/mozart-effect2.webp"
 ANSWER_URL1 = "/images/experiments/toontjehoger/mozart-effect1-answer.webp"
 ANSWER_URL2 = "/images/experiments/toontjehoger/mozart-effect2-answer.webp"
 
+def toontjehoger_ranks(session):
+    score = session.final_score
+    if score < 25:
+        return 'PLASTIC'
+    elif score < 50:
+        return 'BRONZE'
+    elif score < 75:
+        return 'SILVER'
+    else:
+        return 'GOLD'
+
 
 class ToontjeHoger1Mozart(Base):
     ID = 'TOONTJE_HOGER_1_MOZART'
@@ -221,7 +232,7 @@ class ToontjeHoger1Mozart(Base):
         final = Final(
             session=session,
             final_text=final_text,
-            rank=cls.rank(session),
+            rank=toontjehoger_ranks(session),
             button={'text': 'Wat hebben we getest?'}
         ).action()
 

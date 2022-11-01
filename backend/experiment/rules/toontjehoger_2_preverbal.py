@@ -1,5 +1,7 @@
 import logging
 from django.template.loader import render_to_string
+
+from .toontjehoger_1_mozart import toontjehoger_ranks
 from .views import Trial, Explainer, Step, Score, Final, StartSession, Playlist, Info, HTML
 from .views.form import ButtonArrayQuestion, ChoiceQuestion, Form
 from .views.playback import Playback
@@ -270,7 +272,7 @@ class ToontjeHoger2Preverbal(Base):
         final = Final(
             session=session,
             final_text=final_text,
-            rank=cls.rank(session),
+            rank=toontjehoger_ranks(session),
             button={'text': 'Wat hebben we getest?'}
         ).action()
 

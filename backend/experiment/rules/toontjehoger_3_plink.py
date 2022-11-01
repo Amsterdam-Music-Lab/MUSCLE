@@ -1,5 +1,6 @@
 import logging
 from django.template.loader import render_to_string
+from .toontjehoger_1_mozart import toontjehoger_ranks
 from .views import Plink, Explainer, Step, Score, Final, StartSession, Playlist, Info
 from .views.form import RadiosQuestion
 from .base import Base
@@ -300,7 +301,7 @@ class ToontjeHoger3Plink(Base):
         final = Final(
             session=session,
             final_text=final_text,
-            rank=cls.rank(session),
+            rank=toontjehoger_ranks(session),
             button={'text': 'Wat hebben we getest?'}
         ).action()
 
