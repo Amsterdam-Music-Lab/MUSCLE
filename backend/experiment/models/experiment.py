@@ -90,10 +90,7 @@ class Experiment(models.Model):
             else:
                 for result in session.result_set.all():
                     this_row = copy.deepcopy(row)
-                    try:
-                        decision_time = result.load_json_data()['decision_time']
-                    except:
-                        decision_time = ''
+                    decision_time = result.load_json_data().get('decision_time', '')
                     result_data = {
                         'section_name': result.section.name if result.section else None,
                         'result_created_at': result.created_at.isoformat(),
