@@ -41,7 +41,7 @@ class MatchingPairs(Base):
     @staticmethod
     def next_round(session):
         sections = list(session.playlist.section_set.all())
-        player_sections = random.sample(sections, 4)*2
+        player_sections = random.sample(sections, 8)*2
         random.shuffle(player_sections)
         print(player_sections)
         playback = Playback(
