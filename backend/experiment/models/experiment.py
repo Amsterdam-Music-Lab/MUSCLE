@@ -79,8 +79,9 @@ class Experiment(models.Model):
                 'participant_country': profile['country_code'],
                 'session_start': session.started_at.isoformat(),
                 'session_end': session_finished,
-                'session_data': session.load_json_data()
             }
+            json_data = session.load_json_data()
+            row.update(json_data)
             row.update(profile['profile'])
             fieldnames.update(row.keys())
             if session.result_set.count() == 0:
@@ -89,6 +90,7 @@ class Experiment(models.Model):
             else:
                 for result in session.result_set.all():
                     this_row = copy.deepcopy(row)
+                    decision_time = result.load_json_data().get('decision_time', '')
                     result_data = {
                         'section_name': result.section.name if result.section else None,
                         'result_created_at': result.created_at.isoformat(),
@@ -96,7 +98,7 @@ class Experiment(models.Model):
                         'result_comment': result.comment,
                         'expected_response': result.expected_response,
                         'given_response': result.given_response,
-                        'result_data': result.load_json_data()
+                        'decision_time': decision_time
                     }
                     this_row.update(result_data)
                     fieldnames.update(result_data.keys())
