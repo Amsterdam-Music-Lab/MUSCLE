@@ -105,7 +105,7 @@ class MusicalPreferences(Base):
         return view.action()
     
     @classmethod
-    def calculate_score(cls, result, data, form_element):
+    def calculate_score(cls, result, data, scoring_rule, form_element):
         result.comment = form_element.get('key')
         result.save()
         if form_element.get('key') == 'like_song':
