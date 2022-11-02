@@ -69,7 +69,7 @@ class DurationDiscrimination(Base):
             return action
 
     @staticmethod
-    def calculate_score(result, data, form_element):
+    def calculate_score(result, data, scoring_rule, form_element):
         # a result's score is used to keep track of how many correct results were in a row
         # for catch trial, set score to 2 -> not counted for calculating turnpoints
         try:

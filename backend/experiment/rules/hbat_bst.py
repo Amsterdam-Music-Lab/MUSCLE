@@ -60,6 +60,7 @@ class BST(HBat):
             },
             view='BUTTON_ARRAY',
             result_id=result_pk,
+            scoring_rule='CORRECTNESS',
             submits=True
         )
         playback = Playback([section])
