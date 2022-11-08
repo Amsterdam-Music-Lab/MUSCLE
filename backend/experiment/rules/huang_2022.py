@@ -137,7 +137,7 @@ class Huang2022(Base):
         return [
             Trial(
                 title=_("Questionnaire"),
-                feedback_form=Form([question], is_profile=True)).action() 
+                feedback_form=Form([question], is_profile=True, is_skippable=question.is_skippable)).action() 
             for question in questions
         ]
 
@@ -188,7 +188,7 @@ class Huang2022(Base):
             actions.append(score.action())
             form = Form([ChoiceQuestion(
                 key='tech_problems',
-                view='DROPDOWN',
+                view='RADIOS',
                 choices={
                     'no': _("No"),
                     'stop': _("Music stopped playing"),
@@ -198,8 +198,9 @@ class Huang2022(Base):
                     'slow': _("Page loaded slowly"),
                     'other': _("Other")
                 },
-                question=_("Did you encounter technical problems? (More than one answer):"))
-                ]
+                question=_("Did you encounter technical problems? (More than one answer):"),
+                submits=True
+            )]
             )
             trial = Trial(playback=None, feedback_form=form)
             actions.append(trial.action())
@@ -400,7 +401,8 @@ def origin_question():
         view='DROPDOWN',
         question=_(
             "In which region did you spend the most formative years of your childhood and youth?"),
-        choices=region_choices
+        choices=region_choices,
+        is_skippable=True
     )
 
 
@@ -409,7 +411,8 @@ def residence_question():
         view='DROPDOWN',
         key='dgf_region_of_residence',
         question=_("In which region do you currently reside?"),
-        choices=region_choices
+        choices=region_choices,
+        is_skippable=True
     )
 
 def gender_question():
