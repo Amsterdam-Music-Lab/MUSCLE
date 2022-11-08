@@ -1,16 +1,9 @@
 .aha__multiplayer {
     display: flex;
     column-gap: 25px;
+    row-gap: 25px;
     flex-wrap: wrap;
     max-width: 100%;
-
-    &.player-count-2{
-        column-gap: 50px;
-    }
-
-    &.player-count-2{
-        column-gap: 30px;
-    }
 
     .buttons {
         max-width: 350px;

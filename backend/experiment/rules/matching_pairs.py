@@ -41,16 +41,19 @@ class MatchingPairs(Base):
     @staticmethod
     def next_round(session):
         sections = list(session.playlist.section_set.all())
-        player_sections = random.sample(sections, 8)*2
+        player_sections = random.sample(sections, 3)*2
         random.shuffle(player_sections)
-        print(player_sections)
         playback = Playback(
             sections=player_sections,
             player_type='MULTIPLAYER',
         )
+        config = {
+            "style": "blue-players"
+        }
         trial = Trial(
             title='Testing',
             playback=playback,
             feedback_form=None,
+            config=config
         )
         return trial.action()

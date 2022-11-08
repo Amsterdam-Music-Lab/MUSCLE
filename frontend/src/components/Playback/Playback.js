@@ -28,6 +28,7 @@ const Playback = ({
     const [playerIndex, setPlayerIndex] = useState(-1);
     const lastPlayerIndex = useRef(-1);
     const activeAudioEndedListener = useRef(null);
+    const chain = useRef(0);
 
     // Preload first section
     useEffect(() => {
@@ -104,6 +105,7 @@ const Playback = ({
     // Play section with given index
     const playSection = useCallback(
         (index = 0) => {
+
             // Load different audio
             if (index !== lastPlayerIndex.current) {
                 audio.loadUntilAvailable(
@@ -112,6 +114,21 @@ const Playback = ({
                         playAudio(index);
                     }
                 );
+
+                if (chain.current < 2) {
+                    chain.current += 1
+                    sections[index].colorClass = true;
+                }
+                else {
+                    chain.current = 0;
+                    sections.forEach(section => section.turned = false);
+                    sections[index].turned = true;
+                }
+
+                if (lastPlayerIndex.current >=0 && sections[lastPlayerIndex.current].id === sections[index].id) {
+                    sections[lastPlayerIndex.current].inactive = true;
+                    sections[index].inactive = true;
+                }
                 return;
             }
 

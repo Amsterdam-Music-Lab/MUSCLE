@@ -107,11 +107,6 @@
     
 
     &.neutral {
-        /*
-        .aha__play-button{
-            @include btn-style($blue);
-        }
-        */
 
         .aha__player-small:nth-of-type(1){
             .btn,
@@ -195,11 +190,7 @@
     }
 
     &.blue-players {
-        .playback,
-        .aha__player-small:nth-of-type(1),
-        .aha__player-small:nth-of-type(2),
-        .aha__player-small:nth-of-type(3),
-        .aha__player-small:nth-of-type(4) {
+        .playback {
             .btn,
             .banner {
                 @include btn-style($blue);
@@ -208,11 +199,7 @@
     }
 
     &.pink-players {
-        .playback,
-        .aha__player-small:nth-of-type(1),
-        .aha__player-small:nth-of-type(2),
-        .aha__player-small:nth-of-type(3),
-        .aha__player-small:nth-of-type(4) {
+        .playback {
             .btn,
             .banner {
                 @include btn-style($pink);

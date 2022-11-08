@@ -1,5 +1,6 @@
 import React from "react";
 import PlayerSmall from "../PlayButton/PlayerSmall";
+import PlayCard from "../PlayButton/PlayCard";
 import classNames from "classnames";
 import { romanNumeral } from "../../util/roman";
 
@@ -18,7 +19,16 @@ const MultiPlayer = ({playSection, sections, playerIndex, playConfig}) => {
                 }}
                 label={playConfig.label_style ? getLabel(index, playConfig.label_style) : ''}
                 playing={playerIndex === index}
+                inactive={sections[index].inactive}
+                turned={sections[index].turned}
             />
+            // <PlayCard 
+            //     key={index}
+            //     onClick={()=> playSection(index)}
+            //     playing={playerIndex === index}
+            //     inactive={sections[index].inactive}
+            //     turned={sections[index].turned}
+            // />
         ))}
         </div>
     )
