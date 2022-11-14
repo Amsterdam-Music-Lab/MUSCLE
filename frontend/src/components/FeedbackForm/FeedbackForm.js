@@ -40,7 +40,7 @@ const FeedbackForm = ({
         // for every non-skippable question, check that we have a value
         const validFormElements = form.map( formElement => {
             if (formElement.is_skippable) return formElement;
-            if (!formElement.isSkippable && formElement.value) return formElement;
+            else if (formElement.value) return formElement;
         });
         if (validFormElements.length === form.length) setFormValid(true);
         else setFormValid(false);
