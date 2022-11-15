@@ -27,6 +27,12 @@
         .max {
             float: right;
         }
+        .labels {
+            margin-left: 7px;
+            margin-right: 7px;
+            display: flex;
+            justify-content: space-between;
+        }
     }
 
     &.empty .rangeslider .rangeslider__handle {
