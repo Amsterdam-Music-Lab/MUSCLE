@@ -159,12 +159,11 @@ const Playback = ({
             // match
             sections[lastPlayerIndex.current].inactive = true;
             sections[index].inactive = true;
-            if (sections.filter(s => s.inactive).length = sections.length) {
+            if (sections.filter(s => s.inactive).length === sections.length) {
                 // all cards have been turned
-                console.log(resultBuffer);
+                submitResult(resultBuffer);
             }
         }
-        console.log(resultBuffer);
         return;
     }
 

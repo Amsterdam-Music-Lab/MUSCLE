@@ -176,7 +176,7 @@ const Trial = ({
                     playConfig={playback.play_config}
                     sections={playback.sections}
                     time={time}
-                    submitResult={makeResult}
+                    submitResult={submitResult}
                     startedPlaying={startTimer}
                     finishedPlaying={finishedPlaying}
                 />
