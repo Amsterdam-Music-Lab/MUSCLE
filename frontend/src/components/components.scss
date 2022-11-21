@@ -26,13 +26,16 @@
 @import "./Listen/Listen";
 @import "./Loading/Loading";
 @import "./Playlist/Playlist";
-@import "./PlayButton/PlayButton";
-@import "./PlayButton/PlayerSmall";
-@import "./Playback/Multiplayer";
-@import "./Playback/Playback";
 @import "./Plink/Plink";
 @import "./Question/Question";
 @import "./Score/Score";
 @import "./SongSync/SongSync";
 @import "./Trial/Trial";
 @import "./FeedbackForm/FeedbackForm";
+
+// Players
+@import "./PlayButton/PlayButton";
+@import "./PlayButton/PlayerSmall";
+@import "./Playback/Multiplayer";
+@import "./Playback/Playback";
+@import "./PlayButton/PlayCard";

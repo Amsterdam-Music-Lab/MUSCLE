@@ -12,23 +12,23 @@ const MultiPlayer = ({playSection, sections, playerIndex, playConfig}) => {
     return (
         <div className={classNames("aha__multiplayer d-flex justify-content-around", "player-count-" + sections.length)}>
         {Object.keys(sections).map((index) => (
-            <PlayerSmall 
-                key={index} 
-                onClick={() => {
-                    playSection(index);
-                }}
-                label={playConfig.label_style ? getLabel(index, playConfig.label_style) : ''}
-                playing={playerIndex === index}
-                inactive={sections[index].inactive}
-                turned={sections[index].turned}
-            />
-            // <PlayCard 
-            //     key={index}
-            //     onClick={()=> playSection(index)}
+            // <PlayerSmall 
+            //     key={index} 
+            //     onClick={() => {
+            //         playSection(index);
+            //     }}
+            //     label={playConfig.label_style ? getLabel(index, playConfig.label_style) : ''}
             //     playing={playerIndex === index}
             //     inactive={sections[index].inactive}
             //     turned={sections[index].turned}
             // />
+            <PlayCard 
+                key={index}
+                onClick={()=> playSection(index)}
+                playing={playerIndex === index}
+                inactive={sections[index].inactive}
+                turned={sections[index].turned}
+            />
         ))}
         </div>
     )

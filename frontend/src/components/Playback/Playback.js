@@ -115,9 +115,11 @@ const Playback = ({
                     }
                 );
 
+                // console.log(chain.current, sections, lastPlayerIndex.current, index);
+
                 if (chain.current < 2) {
                     chain.current += 1
-                    sections[index].colorClass = true;
+                    sections[index].turned = true;
                 }
                 else {
                     chain.current = 0;

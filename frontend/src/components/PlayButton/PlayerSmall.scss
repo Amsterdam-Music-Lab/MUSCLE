@@ -8,14 +8,6 @@
         height: 180px;
     }
 
-    &.inactive {
-        display: none;
-    }
-
-    &.turned {
-        background-image: $logo;
-    }
-
     .aha__play-button {
         position: absolute;
         z-index: 1;

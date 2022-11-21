@@ -1,0 +1,37 @@
+$playButtonSize: 120px;
+
+.aha__play-card {
+    position: relative;
+    width: $playButtonSize;
+    height: $playButtonSize;
+    display: block;
+    border-radius: 6px;
+
+    &.disabled {
+        pointer-events: none;
+            img {
+                opacity: 0;
+            }
+    }
+
+    .front {
+        transform: rotateY(90deg);
+        transition: all ease-in 0.2s;
+        position: absolute;
+    }
+
+    .back {
+        transition: all ease-in 0.2s;
+        transition-delay: 0.2s;
+    }
+
+    .turned.front {
+        transform: rotateY(0deg);
+        transition-delay: 0.2s
+    }
+
+    .turned.back{
+        transform: rotateY(90deg);
+        transition-delay: 0s;
+    }
+}
