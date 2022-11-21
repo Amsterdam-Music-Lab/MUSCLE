@@ -3,9 +3,12 @@ import classNames from "classnames";
 
 import Histogram from "../Histogram/Histogram";
 
-const PlayCard = ({ onClick, playing, inactive, turned }) => {
+const PlayCard = ({ onClick, registerUserClicks, playing, inactive, turned }) => {
     return (
-        <div className={classNames("aha__play-card anim anim-fade-in", {turned: turned}, {disabled: inactive})} onClick={onClick}>
+        <div className={classNames("aha__play-card", {turned: turned}, {disabled: inactive})} onClick={event => {
+            registerUserClicks(event.clientX, event.clientY);
+            onClick();
+        }}>
                 { turned && !inactive?
                     <Histogram 
                         className="front"

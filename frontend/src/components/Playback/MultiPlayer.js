@@ -8,7 +8,7 @@ export const LABEL_NUMERIC = 'NUMERIC';
 export const LABEL_ALPHABETIC = 'ALPHABETIC';
 export const LABEL_ROMAN = 'ROMAN';
 
-const MultiPlayer = ({playSection, sections, playerIndex, playConfig}) => {
+const MultiPlayer = ({playSection, registerUserClicks, sections, playerIndex, playConfig}) => {
     return (
         <div className={classNames("aha__multiplayer d-flex justify-content-around", "player-count-" + sections.length)}>
         {Object.keys(sections).map((index) => (
@@ -25,6 +25,7 @@ const MultiPlayer = ({playSection, sections, playerIndex, playConfig}) => {
             <PlayCard 
                 key={index}
                 onClick={()=> playSection(index)}
+                registerUserClicks={registerUserClicks}
                 playing={playerIndex === index}
                 inactive={sections[index].inactive}
                 turned={sections[index].turned}

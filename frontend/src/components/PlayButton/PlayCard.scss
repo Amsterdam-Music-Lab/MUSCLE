@@ -7,13 +7,6 @@ $playButtonSize: 120px;
     display: block;
     border-radius: 6px;
 
-    &.disabled {
-        pointer-events: none;
-            img {
-                opacity: 0;
-            }
-    }
-
     .front {
         transform: rotateY(90deg);
         transition: all ease-in 0.2s;
@@ -32,6 +25,16 @@ $playButtonSize: 120px;
 
     .turned.back{
         transform: rotateY(90deg);
-        transition-delay: 0s;
+        transition-delay: 0.2s;
     }
+
+    &.disabled {
+        pointer-events: none;
+            img {
+                opacity: 0;
+                transition-delay: 0.2;
+            }
+    }
+
+    
 }
