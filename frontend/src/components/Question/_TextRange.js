@@ -1,7 +1,6 @@
 import React from "react";
 import Slider from "react-rangeslider";
 import classNames from "classnames";
-import { renderLabel } from "../../util/label";
 
 import RangeLimits from "./_RangeLimits";
 import RangeTitle from "./_RangeTitle";
