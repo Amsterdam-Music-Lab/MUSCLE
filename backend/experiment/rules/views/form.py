@@ -15,7 +15,7 @@ class Question(object):
         - show_labels: whether the labels of the answers should be shown
     '''
 
-    def __init__(self, key, view='STRING', result_id=None, explainer='', question='', is_skippable=False, submits=False, config=None):
+    def __init__(self, key, view='STRING', result_id=None, scoring_rule='NONE', explainer='', question='', is_skippable=False, submits=False, config=None):
         self.key = key
         self.view = view
         self.explainer = explainer
@@ -23,6 +23,7 @@ class Question(object):
         self.result_id = result_id
         self.is_skippable = is_skippable
         self.submits = submits
+        self.scoring_rule = scoring_rule
         self.config = config
 
     def action(self):
@@ -79,6 +80,8 @@ class LikertQuestion(Question):
     def __init__(self, scale_steps=7, explainer=_("How much do you agree or disagree?"), likert_view='TEXT_RANGE', **kwargs):
         super().__init__(**kwargs)
         self.view = likert_view
+        self.scoring_rule = 'LIKERT'
+        self.scale_steps = scale_steps
         self.explainer = explainer
         if scale_steps == 7:
             self.choices = {
