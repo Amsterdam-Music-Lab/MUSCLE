@@ -21,7 +21,7 @@ const Playback = ({
     decisionTime,
     playConfig = {},
     time,
-    submitResult,
+    makeResult,
     startedPlaying,
     finishedPlaying,
 }) => {
@@ -161,7 +161,7 @@ const Playback = ({
             sections[index].inactive = true;
             if (sections.filter(s => s.inactive).length === sections.length) {
                 // all cards have been turned
-                submitResult(resultBuffer);
+                makeResult(resultBuffer);
             }
         }
         return;
@@ -195,7 +195,6 @@ const Playback = ({
             decisionTime,
             playConfig,
             time,
-            submitResult,
             startedPlaying,
             playerIndex,
             finishedPlaying: onFinishedPlaying,

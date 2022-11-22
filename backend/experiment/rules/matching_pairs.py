@@ -5,6 +5,7 @@ from django.utils.translation import gettext_lazy as _
 from .base import Base
 from .views import Consent, Explainer, Playlist, StartSession, Step, Trial
 from .views.playback import Playback
+from .views.form import Form
 
 class MatchingPairs(Base):
     ID = 'MATCHING_PAIRS'
@@ -47,13 +48,9 @@ class MatchingPairs(Base):
             sections=player_sections,
             player_type='MULTIPLAYER',
         )
-        config = {
-            "style": "blue-players"
-        }
         trial = Trial(
             title='Testing',
             playback=playback,
             feedback_form=None,
-            config=config
         )
         return trial.action()

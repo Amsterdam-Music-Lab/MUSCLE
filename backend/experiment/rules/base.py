@@ -75,7 +75,10 @@ class Base(object):
         result = cls.get_result(session, result_id)
 
         # Calculate score
-        scoring_rule = SCORING_RULES.get(data['config'].get('scoring_rule', None))
+        try:
+            scoring_rule = SCORING_RULES.get(data['config'].get('scoring_rule', None))
+        except:
+            scoring_rule = None
         score = session.experiment_rules().calculate_score(result, data, scoring_rule)
         if not score:
             score = 0

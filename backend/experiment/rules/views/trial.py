@@ -1,16 +1,13 @@
 from django.utils.translation import gettext_lazy as _
 
-from .form import ChoiceQuestion, Form
-
 class Trial(object):  # pylint: disable=too-few-public-methods
     """
     A view that may include Playback and/or a Form
     Relates to client component: Trial.js
 
     Parameters:
-    - section: section to be played in this view
+    - playback: player(s) to be displayed in this view
     - feedback_form: array of form elements
-    - instructions: messages to show during different stages - defaults to Hooked instructions
     - title: page title - defaults to empty
     """
 
