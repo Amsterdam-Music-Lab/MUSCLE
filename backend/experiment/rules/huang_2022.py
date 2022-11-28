@@ -187,16 +187,14 @@ class Huang2022(Base):
                 title=title
             )
             actions.append(score.action())
-            text = _('Did you encounter any technical problems? E.g., no sound, music stopped playing, page loaded slow, page freezes, etc. ')
-            html = HTML(
-                html='<h2>{}</h2>'.format(text)
-            )
             form = Form(
-                form=[Question(
-                key='tech_problems',
-                explainer=text,
-                question=_("Please report on these in the field below as elaborate as possible. This will help us improving this experiment."),
-            )],
+                form=[
+                    Question(
+                        key='tech_problems',
+                        explainer=_('Did you encounter any technical problems? E.g., no sound, music stopped playing, page loaded slow, page freezes, etc. '),
+                        question=_("Please report on these in the field below as elaborate as possible. This will help us improving this experiment."),
+                    )
+                ],
                 is_skippable=True
             )
             trial = Trial(feedback_form=form, title=title)
@@ -229,7 +227,7 @@ class Huang2022(Base):
                     button_label=_("Let's go!")).action()
                 )
                 actions.extend(Huang2022.get_questions(session))
-                actions.append(technical_questions())
+                actions.append(contact_question())
                 session.merge_json_data({'complete': True})
                 session.save()
         return combine_actions(*actions)
@@ -443,15 +441,13 @@ def genre_question():
         }
     )
 
-def technical_questions():
+def contact_question():
     form = Form([
         Question(
-            key='feedback',
-            question=_(
-                "Any suggestions/comments (optional):")
-            ),
-        Question(
             key='contact',
+            explainer=_(
+                "Thank you so much for your feedback! Feel free to include your contact information if you would like a reply or skip if you wish to remain anonymous."
+            ),
             question=_(
                 "Contact (optional):"
             )

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-07 13:54+0100\n"
+"POT-Creation-Date: 2022-11-28 15:52+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -465,11 +465,11 @@ msgid ""
 "cultures, much more complex meters also exist!"
 msgstr ""
 
-#: experiment/rules/huang_2022.py:29
+#: experiment/rules/huang_2022.py:30
 msgid "How to Play"
 msgstr "实验介绍"
 
-#: experiment/rules/huang_2022.py:32
+#: experiment/rules/huang_2022.py:33
 msgid ""
 "Do you recognise the song? Try to sing along. The faster you recognise "
 "songs, the more points you can earn."
@@ -478,7 +478,7 @@ msgstr ""
 "能识别出该音乐”，同时请在大脑中跟唱这段音乐。您在15秒内识别出歌曲的速度越快，"
 "您就能获得更多的分数。"
 
-#: experiment/rules/huang_2022.py:34
+#: experiment/rules/huang_2022.py:35
 msgid ""
 "Do you really know the song? Keep singing or imagining the music while the "
 "sound is muted. The music is still playing: you just can’t hear it!"
@@ -486,18 +486,18 @@ msgstr ""
 "当您识别出某首歌曲且点击'是'的瞬间，音乐声从这一秒开始会被静音。请您继续将静"
 "音前的音乐在脑海中接唱下去直到该音乐再次播放为止。"
 
-#: experiment/rules/huang_2022.py:36
+#: experiment/rules/huang_2022.py:37
 msgid ""
 "Was the music in the right place when the sound came back? Or did we jump to "
 "a different spot during the silence?"
 msgstr "当您再次听到声音时，您需要判断出此音乐与您脑海中的音乐是否同步。"
 
-#: experiment/rules/huang_2022.py:38 experiment/rules/huang_2022.py:232
+#: experiment/rules/huang_2022.py:39 experiment/rules/huang_2022.py:227
 #: experiment/rules/musical_preferences.py:55
 msgid "Let's go!"
 msgstr "开始吧！"
 
-#: experiment/rules/huang_2022.py:43
+#: experiment/rules/huang_2022.py:44
 #: experiment/rules/rhythm_experiment_series.py:46
 #: experiment/rules/speech2song.py:40
 #: experiment/templates/consent/consent_categorization.html:15
@@ -506,19 +506,19 @@ msgstr "开始吧！"
 msgid "Informed consent"
 msgstr "知情同意声书"
 
-#: experiment/rules/huang_2022.py:43
+#: experiment/rules/huang_2022.py:44
 #: experiment/rules/rhythm_experiment_series.py:46
 #: experiment/rules/speech2song.py:40
 msgid "I agree"
 msgstr "同意"
 
-#: experiment/rules/huang_2022.py:43
+#: experiment/rules/huang_2022.py:44
 #: experiment/rules/rhythm_experiment_series.py:46
 #: experiment/rules/speech2song.py:40
 msgid "Stop"
 msgstr "停止"
 
-#: experiment/rules/huang_2022.py:46
+#: experiment/rules/huang_2022.py:47
 msgid ""
 "You can use your smartphone, computer or tablet to participate in this "
 "experiment. Please choose the best network in your area to participate in "
@@ -532,12 +532,12 @@ msgstr ""
 "网络环境不佳，有可能会导致音乐加载失败或实验运行不流畅等情况出现。您可以通过"
 "以下的渠道打开实验页面："
 
-#: experiment/rules/huang_2022.py:49
+#: experiment/rules/huang_2022.py:50
 msgid ""
 "Directly click the link on WeChat (smart phone or PC version, or WeChat Web)"
 msgstr "通过手机微信或电脑微信客户端/网页版的链接直接点开进入到实验页面;"
 
-#: experiment/rules/huang_2022.py:52
+#: experiment/rules/huang_2022.py:53
 msgid ""
 "If the link to load the experiment page through the WeChat app on your cell "
 "phone fails, you can copy and paste the link in the browser of your cell "
@@ -548,14 +548,14 @@ msgstr ""
 "通过复制黏贴实验链接到浏览器参与实验。您可以使用市面上目前的任何一种浏览器，"
 "如Safari、火狐、360等等。"
 
-#: experiment/rules/huang_2022.py:55 experiment/rules/huang_2022.py:279
+#: experiment/rules/huang_2022.py:56 experiment/rules/huang_2022.py:274
 #: experiment/rules/rhythm_experiment_series.py:37
 #: experiment/rules/rhythm_experiment_series.py:73
 #: experiment/rules/rhythm_experiment_series_mri.py:30
 #: experiment/rules/rhythm_experiment_series_unpaid.py:31
 #: experiment/rules/speech2song.py:89 experiment/rules/speech2song.py:99
 #: experiment/rules/speech2song.py:125 experiment/rules/util/actions.py:31
-#: experiment/rules/util/practice.py:99 experiment/rules/views/form.py:138
+#: experiment/rules/util/practice.py:99 experiment/rules/views/form.py:137
 #: experiment/rules/views/question.py:14 experiment/rules/views/question.py:35
 #: experiment/rules/views/question.py:54 experiment/rules/views/question.py:71
 #: experiment/rules/views/question.py:89 experiment/rules/views/question.py:107
@@ -563,7 +563,7 @@ msgstr ""
 #: experiment/rules/views/question.py:142
 #: experiment/rules/views/question.py:165
 #: experiment/rules/views/question.py:188
-#: experiment/rules/views/question.py:205 experiment/rules/views/trial.py:46
+#: experiment/rules/views/question.py:205 experiment/rules/views/trial.py:45
 msgid "Continue"
 msgstr "继续"
 
@@ -572,105 +572,85 @@ msgstr "继续"
 msgid "Questionnaire"
 msgstr "问卷调查"
 
-#: experiment/rules/huang_2022.py:194 experiment/rules/views/song_sync.py:46
-msgid "No"
-msgstr "否"
+#: experiment/rules/huang_2022.py:194
+msgid ""
+"Did you encounter any technical problems? E.g., no sound, music stopped "
+"playing, page loaded slow, page freezes, etc. "
+msgstr "在参与实验期间，您是否遇到任何技术问题？如音乐突然停止播放、听不到音乐声，但有读秒数 、网页打开慢、界面加载意外停止等技术问题。"
 
 #: experiment/rules/huang_2022.py:195
-msgid "Music stopped playing"
-msgstr "音乐突然停止播放，无读秒数"
+msgid ""
+"Please report on these in the field below as elaborate as possible. This "
+"will help us improving this experiment."
+msgstr "请详细地描述问题，您的任何反馈都将帮助我们改善实验设计。"
 
-#: experiment/rules/huang_2022.py:196
-msgid "No sound at all"
-msgstr "听不到音乐声，但有读秒数"
-
-#: experiment/rules/huang_2022.py:197
-msgid "Page didn't load"
-msgstr "显示界面错误"
-
-#: experiment/rules/huang_2022.py:198
-msgid "Page froze"
-msgstr "界面加载意外停止"
-
-#: experiment/rules/huang_2022.py:199
-msgid "Page loaded slowly"
-msgstr "网页打开慢"
-
-#: experiment/rules/huang_2022.py:200
-msgid "Other"
-msgstr "其它（请于反馈页面说明"
-
-#: experiment/rules/huang_2022.py:202
-msgid "Did you encounter technical problems? (More than one answer):"
-msgstr "在参与实验期间，您有遇到任何技术故障/bug吗（可多选）："
-
-#: experiment/rules/huang_2022.py:229
+#: experiment/rules/huang_2022.py:224
 #: experiment/rules/musical_preferences.py:52
 msgid ""
 "Please answer some questions                     on your musical (Goldsmiths-"
 "MSI) and demographic background"
 msgstr "接下来是《金史密斯音乐素养》水平测试与人口统计特征问卷。"
 
-#: experiment/rules/huang_2022.py:274
+#: experiment/rules/huang_2022.py:269
 msgid "Bonus Rounds"
 msgstr "奖励环节"
 
-#: experiment/rules/huang_2022.py:276
+#: experiment/rules/huang_2022.py:271
 msgid "Listen carefully to the music."
 msgstr "请仔细地听音乐。"
 
-#: experiment/rules/huang_2022.py:277
+#: experiment/rules/huang_2022.py:272
 msgid "Did you hear the same song during previous rounds?"
 msgstr "您是否在之前的音乐识别环节里听到过同一首歌曲？"
 
-#: experiment/rules/huang_2022.py:307 experiment/rules/views/song_sync.py:40
+#: experiment/rules/huang_2022.py:302 experiment/rules/views/song_sync.py:40
 msgid "Get ready!"
 msgstr "准备"
 
-#: experiment/rules/huang_2022.py:314
+#: experiment/rules/huang_2022.py:309
 #: experiment/rules/listening_conditions.py:28
 #: experiment/rules/listening_conditions.py:41
 #: experiment/rules/listening_conditions.py:54
 #: experiment/rules/listening_conditions.py:68
-#: experiment/rules/views/form.py:38
+#: experiment/rules/views/form.py:37
 msgid "NO"
 msgstr "否"
 
-#: experiment/rules/huang_2022.py:315
+#: experiment/rules/huang_2022.py:310
 #: experiment/rules/listening_conditions.py:26
 #: experiment/rules/listening_conditions.py:39
 #: experiment/rules/listening_conditions.py:53
 #: experiment/rules/listening_conditions.py:67
-#: experiment/rules/views/form.py:37
+#: experiment/rules/views/form.py:36
 msgid "YES"
 msgstr "是"
 
-#: experiment/rules/huang_2022.py:317
+#: experiment/rules/huang_2022.py:312
 msgid "Did you hear this song in previous rounds?"
 msgstr "您是否在之前的识别环节里听到过这首歌曲？"
 
-#: experiment/rules/huang_2022.py:337
+#: experiment/rules/huang_2022.py:332
 #, python-format
 msgid "Round %(number)d / %(total)d"
 msgstr "%(number)d / %(total)d轮"
 
-#: experiment/rules/huang_2022.py:363
+#: experiment/rules/huang_2022.py:358
 msgid "Thank you for your contribution to science!"
 msgstr "感谢您的参与以及对科学的贡献！"
 
-#: experiment/rules/huang_2022.py:365
+#: experiment/rules/huang_2022.py:360
 msgid "Well done!"
 msgstr "太棒了！"
 
-#: experiment/rules/huang_2022.py:365
+#: experiment/rules/huang_2022.py:360
 msgid "Too bad!"
 msgstr "有点糟哦！"
 
-#: experiment/rules/huang_2022.py:367
+#: experiment/rules/huang_2022.py:362
 msgid "You did not recognise any songs at first."
 msgstr "您起初并没有识别出任何歌曲。"
 
-#: experiment/rules/huang_2022.py:369
+#: experiment/rules/huang_2022.py:364
 #, python-format
 msgid ""
 "It took you %(n_seconds)d s to recognise a song on average,                 "
@@ -680,7 +660,7 @@ msgstr ""
 "您平均花了 %(n_seconds)d 秒识别出一首歌曲，并且在您认为您知道的 %(n_total)d "
 "首歌曲里, 您正确地识别出了 %(n_correct)d 首。"
 
-#: experiment/rules/huang_2022.py:375
+#: experiment/rules/huang_2022.py:370
 #, python-format
 msgid ""
 "During the bonus rounds, you remembered %(n_correct)d of the %(n_total)d "
@@ -689,57 +669,60 @@ msgstr ""
 "在奖励环节里，您记住了之前播放过的 %(n_total)d 首歌里的 %(n_correct)d 首歌"
 "曲。"
 
-#: experiment/rules/huang_2022.py:403
+#: experiment/rules/huang_2022.py:398
 msgid ""
 "In which region did you spend the most formative years of your childhood and "
 "youth?"
 msgstr "您的童年与青少年时期在哪个地区/省/市度过的？"
 
-#: experiment/rules/huang_2022.py:412
+#: experiment/rules/huang_2022.py:408
 msgid "In which region do you currently reside?"
 msgstr "您目前所在的地区/省/市或国家："
 
-#: experiment/rules/huang_2022.py:435 experiment/rules/util/questions.py:83
+#: experiment/rules/huang_2022.py:432 experiment/rules/util/questions.py:83
 msgid "To which group of musical genres do you currently listen most?"
 msgstr "以下哪种音乐类型是您目前最常听的？"
 
-#: experiment/rules/huang_2022.py:437 experiment/rules/util/questions.py:86
+#: experiment/rules/huang_2022.py:434 experiment/rules/util/questions.py:86
 msgid "Pop/Country/Religious"
 msgstr "流行音乐/民谣/乡村音乐"
 
-#: experiment/rules/huang_2022.py:438
+#: experiment/rules/huang_2022.py:435
 msgid "Folk/Mountain songs"
 msgstr "中国民乐/民歌类（如山歌、小调等）"
 
-#: experiment/rules/huang_2022.py:439
+#: experiment/rules/huang_2022.py:436
 msgid "Western classical music/Jazz/Opera/Musical"
 msgstr "西方古典音乐/爵士/歌剧/音乐剧"
 
-#: experiment/rules/huang_2022.py:440
+#: experiment/rules/huang_2022.py:437
 msgid "Chinese opera"
 msgstr "中国戏曲类（如京剧、粤剧、评弹等）"
 
-#: experiment/rules/huang_2022.py:441 experiment/rules/util/questions.py:88
+#: experiment/rules/huang_2022.py:438 experiment/rules/util/questions.py:88
 msgid "Rock/Punk/Metal"
 msgstr "摇滚乐/重金属/朋克"
 
-#: experiment/rules/huang_2022.py:442 experiment/rules/util/questions.py:85
+#: experiment/rules/huang_2022.py:439 experiment/rules/util/questions.py:85
 msgid "Dance/Electronic/New Age"
 msgstr "舞曲/电子乐/新潮音乐"
 
-#: experiment/rules/huang_2022.py:443 experiment/rules/util/questions.py:89
+#: experiment/rules/huang_2022.py:440 experiment/rules/util/questions.py:89
 msgid "Hip-hop/R&B/Funk"
 msgstr "嘻哈饶舌/R&B/Funk（放克）"
 
-#: experiment/rules/huang_2022.py:452
-msgid "Any suggestions/comments (optional):"
-msgstr "请写下您的意见或建议："
+#: experiment/rules/huang_2022.py:449
+msgid ""
+"Thank you so much for your feedback! Feel free to include your contact "
+"information if you would like a reply or skip if you wish to remain "
+"anonymous."
+msgstr "感谢您对本实验的参与与支持！您可以写下你的联系方式，以便我们了解问题后及时反馈和沟通。"
 
-#: experiment/rules/huang_2022.py:457
+#: experiment/rules/huang_2022.py:452
 msgid "Contact (optional):"
 msgstr "微信号、手机、邮箱等（选填）："
 
-#: experiment/rules/huang_2022.py:462
+#: experiment/rules/huang_2022.py:457
 msgid "Help and feedback"
 msgstr "帮助与反馈"
 
@@ -1729,51 +1712,51 @@ msgstr "再玩一次"
 msgid "All experiments"
 msgstr "实验结束"
 
-#: experiment/rules/views/form.py:80 experiment/rules/views/question.py:142
+#: experiment/rules/views/form.py:79 experiment/rules/views/question.py:142
 msgid "How much do you agree or disagree?"
 msgstr "您是否同意或不同意？请左右移动圆圈按钮至对应的回答。"
 
-#: experiment/rules/views/form.py:88 experiment/rules/views/question.py:148
+#: experiment/rules/views/form.py:87 experiment/rules/views/question.py:148
 #: experiment/rules/views/question.py:171
 msgid "Completely Disagree"
 msgstr "完全不同意"
 
-#: experiment/rules/views/form.py:89 experiment/rules/views/form.py:98
-#: experiment/rules/views/form.py:122 experiment/rules/views/question.py:149
+#: experiment/rules/views/form.py:88 experiment/rules/views/form.py:97
+#: experiment/rules/views/form.py:121 experiment/rules/views/question.py:149
 #: experiment/rules/views/question.py:172
 msgid "Strongly Disagree"
 msgstr "非常不同意"
 
-#: experiment/rules/views/form.py:90 experiment/rules/views/form.py:99
-#: experiment/rules/views/form.py:123 experiment/rules/views/question.py:150
+#: experiment/rules/views/form.py:89 experiment/rules/views/form.py:98
+#: experiment/rules/views/form.py:122 experiment/rules/views/question.py:150
 #: experiment/rules/views/question.py:173
 msgid "Disagree"
 msgstr "不同意"
 
-#: experiment/rules/views/form.py:91 experiment/rules/views/form.py:100
-#: experiment/rules/views/form.py:124 experiment/rules/views/question.py:151
+#: experiment/rules/views/form.py:90 experiment/rules/views/form.py:99
+#: experiment/rules/views/form.py:123 experiment/rules/views/question.py:151
 #: experiment/rules/views/question.py:174
 msgid "Neither Agree nor Disagree"
 msgstr "即不同意也不反对"
 
-#: experiment/rules/views/form.py:92 experiment/rules/views/form.py:101
-#: experiment/rules/views/form.py:125 experiment/rules/views/question.py:152
+#: experiment/rules/views/form.py:91 experiment/rules/views/form.py:100
+#: experiment/rules/views/form.py:124 experiment/rules/views/question.py:152
 #: experiment/rules/views/question.py:175
 msgid "Agree"
 msgstr "同意"
 
-#: experiment/rules/views/form.py:93 experiment/rules/views/form.py:102
-#: experiment/rules/views/form.py:126 experiment/rules/views/question.py:153
+#: experiment/rules/views/form.py:92 experiment/rules/views/form.py:101
+#: experiment/rules/views/form.py:125 experiment/rules/views/question.py:153
 #: experiment/rules/views/question.py:176
 msgid "Strongly Agree"
 msgstr "非常同意"
 
-#: experiment/rules/views/form.py:94 experiment/rules/views/question.py:154
+#: experiment/rules/views/form.py:93 experiment/rules/views/question.py:154
 #: experiment/rules/views/question.py:177
 msgid "Completely Agree"
 msgstr "完全同意"
 
-#: experiment/rules/views/form.py:138 experiment/rules/views/question.py:14
+#: experiment/rules/views/form.py:137 experiment/rules/views/question.py:14
 #: experiment/rules/views/question.py:35 experiment/rules/views/question.py:54
 #: experiment/rules/views/question.py:71 experiment/rules/views/question.py:89
 #: experiment/rules/views/question.py:107
@@ -1852,6 +1835,10 @@ msgstr "歌曲回到正确的位置了吗？"
 #: experiment/rules/views/song_sync.py:45
 msgid "Yes"
 msgstr "是"
+
+#: experiment/rules/views/song_sync.py:46
+msgid "No"
+msgstr "否"
 
 #: experiment/templates/consent/consent_MRI.html:2
 msgid ""
@@ -2964,6 +2951,30 @@ msgstr ""
 #: experiment/templates/final/musical_preferences.html:13
 msgid "Top 5 favorite songs:"
 msgstr ""
+
+#~ msgid "Any suggestions/comments (optional):"
+#~ msgstr "请写下您的意见或建议："
+
+#~ msgid "Music stopped playing"
+#~ msgstr "音乐突然停止播放，无读秒数"
+
+#~ msgid "No sound at all"
+#~ msgstr "听不到音乐声，但有读秒数"
+
+#~ msgid "Page didn't load"
+#~ msgstr "显示界面错误"
+
+#~ msgid "Page froze"
+#~ msgstr "界面加载意外停止"
+
+#~ msgid "Page loaded slowly"
+#~ msgstr "网页打开慢"
+
+#~ msgid "Other"
+#~ msgstr "其它（请于反馈页面说明"
+
+#~ msgid "Did you encounter technical problems? (More than one answer):"
+#~ msgstr "在参与实验期间，您有遇到任何技术故障/bug吗（可多选）："
 
 #~ msgid "4–5 hours"
 #~ msgstr "4-5小时"
