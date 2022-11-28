@@ -114,6 +114,10 @@ const Trial = ({
             const decision_time = getTimeSince(startTime.current);
             const form = feedback_form ? feedback_form.form : [{}];
 
+            if (feedback_form.is_skippable) {
+                form.map((formElement => (formElement.value = formElement.value || '')))
+            }
+
             if (result.type === "time_passed") {
                 form.map((formElement) => (formElement.value = "TIMEOUT"));
             }
