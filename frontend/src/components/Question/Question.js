@@ -70,6 +70,9 @@ const Question = ({
 
     return (
         <div className="aha__question">
+            {question.explainer && (
+                <p className="explainer">{question.explainer}</p>
+            )}
             <div className="question">{render(question.view)}</div>
         </div>
     );

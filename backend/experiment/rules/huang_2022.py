@@ -8,6 +8,7 @@ from .base import Base
 from .views import SongSync, Final, Score, Explainer, Step, Consent, StartSession, Playlist, Trial
 from .views.form import BooleanQuestion, ChoiceQuestion, Form, Question
 from .views.playback import Playback
+from .views.html import HTML
 from .util.questions import EXTRA_DEMOGRAPHICS, question_by_key
 from .util.goldsmiths import MSI_ALL
 from .util.actions import combine_actions
@@ -186,23 +187,19 @@ class Huang2022(Base):
                 title=title
             )
             actions.append(score.action())
-            form = Form([ChoiceQuestion(
-                key='tech_problems',
-                view='RADIOS',
-                choices={
-                    'no': _("No"),
-                    'stop': _("Music stopped playing"),
-                    'no_sound': _("No sound at all"),
-                    'no_load': _("Page didn't load"),
-                    'freeze': _("Page froze"),
-                    'slow': _("Page loaded slowly"),
-                    'other': _("Other")
-                },
-                question=_("Did you encounter technical problems? (More than one answer):"),
-                submits=True
-            )]
+            text = _('Did you encounter any technical problems? E.g., no sound, music stopped playing, page loaded slow, page freezes, etc. ')
+            html = HTML(
+                html='<h2>{}</h2>'.format(text)
             )
-            trial = Trial(playback=None, feedback_form=form)
+            form = Form(
+                form=[Question(
+                key='tech_problems',
+                explainer=text,
+                question=_("Please report on these in the field below as elaborate as possible. This will help us improving this experiment."),
+            )],
+                is_skippable=True
+            )
+            trial = Trial(feedback_form=form, title=title)
             actions.append(trial.action())
         else:
             # Load the heard_before offset.
