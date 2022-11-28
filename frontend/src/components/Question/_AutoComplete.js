@@ -1,5 +1,4 @@
 import React from "react";
-import classNames from "classnames";
 import Select from "react-select";
 
 // AutoComplete is a question view for selecting a single option from a dropdown list with autocompletion
@@ -7,7 +6,6 @@ const AutoComplete = ({
     question,
     value,
     onChange,
-    emphasizeTitle = false,
 }) => {
     const options = Object.keys(question.choices).map((val, index) => ({
         value: val,
@@ -16,12 +14,6 @@ const AutoComplete = ({
 
     return (
         <div className="aha__autocomplete">
-            {question.explainer && (
-                <p className="explainer">{question.explainer}</p>
-            )}
-            <h3 className={classNames({ title: emphasizeTitle })}>
-                {question.question}
-            </h3>
             <div className="control">
                 <Select
                     options={options}

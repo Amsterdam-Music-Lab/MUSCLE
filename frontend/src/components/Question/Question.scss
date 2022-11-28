@@ -5,6 +5,7 @@
 @import "./_Range";
 @import "./_DropDown";
 @import "./_String";
+@import "./_TextRange";
 
 .aha__question {
     display: flex;
@@ -17,8 +18,14 @@
         width: 100%;
     }
 
-    h3{
-        width: 100%;        
+    h3 {
+        width: 100%;
+        margin-bottom: 25px;
+        font-size: 1.65rem;
+
+        @media (max-width: 320px) {
+            font-size: 1.3em;
+        }
 
         &:not(.title){
             text-align: center;

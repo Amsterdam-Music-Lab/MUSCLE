@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 
+import classNames from "classnames";
+
 import ButtonArray from "./_ButtonArray";
 import Radios from "./_Radios";
 import Range from "./_Range";
@@ -25,7 +27,7 @@ const Question = ({
     id,
     active,
     style,
-    emphasizeTitle,
+    emphasizeTitle = false,
 }) => {
     const [value, setValue] = useState(question.value || "");
 
@@ -73,6 +75,7 @@ const Question = ({
             {question.explainer && (
                 <p className="explainer">{question.explainer}</p>
             )}
+            <h3 className={classNames({title: emphasizeTitle})}>{question.question}</h3>
             <div className="question">{render(question.view)}</div>
         </div>
     );
