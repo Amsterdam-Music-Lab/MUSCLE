@@ -1,14 +1,14 @@
 import random
 import logging
-import math
 
 from django.utils.translation import gettext_lazy as _
 from django.template.loader import render_to_string
 
 from .base import Base
-from .views import SongSync, Final, Score, Explainer, Step, Consent, StartSession, Playlist, Question, Trial
-from .views.form import BooleanQuestion, ChoiceQuestion, Form
+from .views import SongSync, Final, Score, Explainer, Step, Consent, StartSession, Playlist, Trial
+from .views.form import BooleanQuestion, ChoiceQuestion, Form, Question
 from .views.playback import Playback
+from .views.html import HTML
 from .util.questions import EXTRA_DEMOGRAPHICS, question_by_key
 from .util.goldsmiths import MSI_ALL
 from .util.actions import combine_actions
@@ -135,12 +135,12 @@ class Huang2022(Base):
             question_by_key('dgf_occupational_status', EXTRA_DEMOGRAPHICS),
             origin_question(),
             residence_question(),
-            gender_question()
+            gender_question(),
         ]
         return [
             Trial(
                 title=_("Questionnaire"),
-                feedback_form=Form([question], is_profile=True)).action()
+                feedback_form=Form([question], is_profile=True, is_skippable=question.is_skippable)).action() 
             for question in questions
         ]
 
@@ -178,36 +178,47 @@ class Huang2022(Base):
 
             # Go to SongSync straight away.
             actions.append(Huang2022.next_song_sync_action(session))
-        else:
+        elif next_round_number % 2 == 0:
+            # even round, show score and investigate if there were technical problems
             # Create a score action.
             config = {'show_section': True, 'show_total_score': True}
-            title = Huang2022.get_trial_title(session, next_round_number - 1)
+            title = Huang2022.get_trial_title(session, next_round_number)
             score = Score(
                 session,
                 config=config,
                 title=title
             )
             actions.append(score.action())
-
+            form = Form(
+                form=[
+                    Question(
+                        key='tech_problems',
+                        explainer=_('Did you encounter any technical problems? E.g., no sound, music stopped playing, page loaded slow, page freezes, etc. '),
+                        question=_("Please report on these in the field below as elaborate as possible. This will help us improving this experiment."),
+                    )
+                ],
+                is_skippable=True
+            )
+            trial = Trial(feedback_form=form, title=title)
+            actions.append(trial.action())
+        else:
             # Load the heard_before offset.
             try:
                 plan = json_data.get('plan')
                 heard_before_offset = len(plan['song_sync_sections']) + 1
-                question_offset = heard_before_offset + len(
-                    plan['heard_before_sections']) - 1
             except KeyError as error:
                 print('Missing plan key: %s' % str(error))
                 return actions
             # SongSync rounds
-            if next_round_number in range(2, heard_before_offset):
+            if int(next_round_number / 2) + 1 in range(2, heard_before_offset):
                 actions.append(Huang2022.next_song_sync_action(session))
             # HeardBefore rounds
-            elif next_round_number == heard_before_offset:
+            elif int(next_round_number / 2) + 1  == heard_before_offset:
                 # Introduce new round type with Explainer.
                 actions.append(Huang2022.heard_before_explainer())
                 actions.append(
                     Huang2022.next_heard_before_action(session))
-            elif heard_before_offset < next_round_number <= session.experiment.rounds:
+            elif heard_before_offset < int(next_round_number / 2) + 1 <= session.experiment.rounds:
                 actions.append(
                     Huang2022.next_heard_before_action(session))
             else:
@@ -218,6 +229,7 @@ class Huang2022(Base):
                     button_label=_("Let's go!")).action()
                 )
                 actions.extend(Huang2022.get_questions(session))
+                actions.append(contact_question())
                 session.merge_json_data({'complete': True})
                 session.save()
         return combine_actions(*actions)
@@ -237,10 +249,10 @@ class Huang2022(Base):
 
         # Get section.
         section = None
-        if next_round_number <= len(sections):
+        if next_round_number / 2 <= len(sections):
             section = \
                 session.section_from_any_song(
-                    {'id': sections[next_round_number - 1].get('id')})
+                    {'id': sections[int(next_round_number / 2) - 1].get('id')})
         if not section:
             print("Warning: no next_song_sync section found")
             section = session.section_from_any_song()
@@ -279,13 +291,10 @@ class Huang2022(Base):
 
         # Get section.
         section = None
-        if next_round_number - heard_before_offset <= len(sections):
-            this_section_info = sections[next_round_number -
-                                         heard_before_offset - 1]
+        if int(next_round_number / 2) + 1 - heard_before_offset  <= len(sections):
+            this_section_info = sections[int(next_round_number / 2) - heard_before_offset]
             section = session.section_from_any_song(
-                {'id': this_section_info.get('id')})
-        else:
-            return None
+                    {'id': this_section_info.get('id')})
         if not section:
             print("Warning: no heard_before section found")
             section = session.section_from_any_song()
@@ -304,7 +313,7 @@ class Huang2022(Base):
             },
             question=_("Did you hear this song in previous rounds?"),
             result_id=result_pk,
-            scoring_rule='CORRECTNESS',
+            scoring_rule='REACTION_TIME',
             submits=True)])
         config = {
             'style': 'boolean-negative-first',
@@ -321,8 +330,9 @@ class Huang2022(Base):
 
     @classmethod
     def get_trial_title(cls, session, next_round_number):
+        round_number = int(next_round_number / 2) + next_round_number % 2
         title = _("Round %(number)d / %(total)d") %\
-            {'number': next_round_number, 'total': session.experiment.rounds}
+            {'number': round_number, 'total': session.experiment.rounds}
         return title
 
     @classmethod
@@ -367,22 +377,6 @@ class Huang2022(Base):
             thanks_message, score_message, song_sync_message, heard_before_message
         ]
         return " ".join([str(m) for m in messages])
-    
-    @classmethod
-    def handle_results(cls, session, data):
-        try:
-            form = data.pop('form')
-            form_element = form[0]
-            result_id = form_element['result_id']
-        except:
-            form_element = None
-            result_id = data['result']['id']
-        result = cls.get_result(session, result_id)
-        score = cls.calculate_score(result, data, form_element)
-        result.save_json_data(data)
-        result.score = score
-        result.save()
-        return result
 
 
 region_choices = {
@@ -404,7 +398,8 @@ def origin_question():
         view='DROPDOWN',
         question=_(
             "In which region did you spend the most formative years of your childhood and youth?"),
-        choices=region_choices
+        choices=region_choices,
+        is_skippable=True
     )
 
 
@@ -413,7 +408,8 @@ def residence_question():
         view='DROPDOWN',
         key='dgf_region_of_residence',
         question=_("In which region do you currently reside?"),
-        choices=region_choices
+        choices=region_choices,
+        is_skippable=True
     )
 
 
@@ -431,7 +427,6 @@ def gender_question():
         is_skippable=True
     )
 
-
 def genre_question():
     return ChoiceQuestion(
         view='DROPDOWN',
@@ -448,3 +443,18 @@ def genre_question():
             'contemporary': _("Hip-hop/R&B/Funk"),
         }
     )
+
+def contact_question():
+    form = Form([
+        Question(
+            key='contact',
+            explainer=_(
+                "Thank you so much for your feedback! Feel free to include your contact information if you would like a reply or skip if you wish to remain anonymous."
+            ),
+            question=_(
+                "Contact (optional):"
+            )
+        )
+    ],
+    is_skippable=True)
+    return Trial(playback=None, feedback_form=form, title=_("Help and feedback")).action()

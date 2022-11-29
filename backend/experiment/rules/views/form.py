@@ -9,14 +9,13 @@ class Question(object):
     - key: description of question in results table
     - explainer: optional instructions for this specific question
     - question: the question text
-    - result_pk: identifier of result object, created prior to sending next_round data to client
-    - form_config: dictionary to set the following:
-        - is_skippable: whether a value has to be set on the question before form can be submitted
-        - submits: whether changing this form element can submit the form
-        - show_labels: whether the labels of the answers should be shown
+    - result_id: identifier of result object, created prior to sending next_round data to client
+    - scoring_rule: specify with which scoring rule a score should be calculated
+    - is_skippable: whether the question can be skipped
+    - submits: whether entering a value for the question submits the form
     '''
 
-    def __init__(self, key, view='STRING', result_id=None, scoring_rule='NONE', explainer='', question='', is_skippable=False, submits=False, config=None):
+    def __init__(self, key, view='STRING', result_id=None, scoring_rule=None, explainer='', question='', is_skippable=False, submits=False, config=None):
         self.key = key
         self.view = view
         self.explainer = explainer

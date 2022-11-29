@@ -1,20 +1,5 @@
 .aha__range,
 .aha__text-range {
-    .explainer {
-        color: $gray;
-        font-weight: 500;
-        font-size: 16px;
-        margin-bottom: 5px;
-    }
-
-    h3 {
-        margin-bottom: 25px;
-        font-size: 1.65rem;
-
-        @media (max-width: 320px) {
-            font-size: 1.3em;
-        }
-    }
 
     .current-value {
         text-align: center;

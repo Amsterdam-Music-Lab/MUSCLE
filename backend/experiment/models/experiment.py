@@ -90,8 +90,7 @@ class Experiment(models.Model):
             else:
                 for result in session.result_set.all():
                     this_row = copy.deepcopy(row)
-                    if result.json_data:
-                        decision_time = result.load_json_data().get('decision_time', '')
+                    json_data = result.load_json_data()
                     result_data = {
                         'section_name': result.section.name if result.section else None,
                         'result_created_at': result.created_at.isoformat(),
@@ -99,7 +98,7 @@ class Experiment(models.Model):
                         'result_comment': result.comment,
                         'expected_response': result.expected_response,
                         'given_response': result.given_response,
-                        'decision_time': decision_time
+                        'decision_time': json_data.get('decision_time', '') if json_data else ''
                     }
                     this_row.update(result_data)
                     fieldnames.update(result_data.keys())

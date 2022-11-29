@@ -1,5 +1,4 @@
 import React from "react";
-import classNames from "classnames";
 import Select from "react-select";
 
 // When using Safari iOS the browser may scroll the page when using the react-select Select.
@@ -19,8 +18,6 @@ const AutoComplete = ({ question, value, onChange, emphasizeTitle = false }) => 
 
     return (
         <div className="aha__autocomplete">
-            {question.explainer && <p className="explainer">{question.explainer}</p>}
-            <h3 className={classNames({ title: emphasizeTitle })}>{question.question}</h3>
             <div className="control">
                 <Select
                     options={options}
