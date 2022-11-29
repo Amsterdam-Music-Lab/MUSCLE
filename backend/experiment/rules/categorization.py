@@ -21,7 +21,7 @@ class Categorization(Base):
     ID = 'CATEGORIZATION'
 
     @classmethod
-    def first_round(cls, experiment):
+    def first_round(cls, experiment, participant):
         explainer = Explainer(
             instruction="This is a listening experiment in which you have to respond to short sound sequences.",
             steps=[],
