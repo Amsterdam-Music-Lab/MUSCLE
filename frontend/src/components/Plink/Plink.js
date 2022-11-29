@@ -43,6 +43,7 @@ const Plink = ({
         onResult(
             {
                 result_id: resultId,
+                config: {},
                 main_question: mainQuestionValue,
                 extra_questions: extraQuestionValues.current,
             },
