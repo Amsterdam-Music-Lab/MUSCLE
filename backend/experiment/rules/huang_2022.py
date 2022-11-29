@@ -139,9 +139,9 @@ class Huang2022(Base):
         ]
         return [
             Trial(
-                title=_("Questionnaire"),
+                title=_("Questionnaire %(index)i/%(total)i") % {'index': index + 1, 'total': len(questions)},
                 feedback_form=Form([question], is_profile=True, is_skippable=question.is_skippable)).action() 
-            for question in questions
+            for index, question in enumerate(questions)
         ]
 
     @staticmethod
@@ -197,7 +197,7 @@ class Huang2022(Base):
                         question=_("Please report on these in the field below as elaborate as possible. This will help us improving this experiment."),
                     )
                 ],
-                is_skippable=True
+                is_skippable=True,
             )
             trial = Trial(feedback_form=form, title=title)
             actions.append(trial.action())
@@ -388,7 +388,8 @@ region_choices = {
     'XN': '西南（四川、云南、贵州、西藏、重庆）',
     'DB': '东北（辽宁、吉林、黑龙江）',
     'GAT': '港澳台（香港、澳门、台湾）',
-    'QT': '国外'
+    'QT': '国外',
+    'no_answer': '不想回答'
 }
 
 
@@ -399,7 +400,6 @@ def origin_question():
         question=_(
             "In which region did you spend the most formative years of your childhood and youth?"),
         choices=region_choices,
-        is_skippable=True
     )
 
 
@@ -409,7 +409,6 @@ def residence_question():
         key='dgf_region_of_residence',
         question=_("In which region do you currently reside?"),
         choices=region_choices,
-        is_skippable=True
     )
 
 
@@ -423,8 +422,7 @@ def gender_question():
             'Female': "女",
             'Others': "其他",
             'no_answer': "不想回答"
-        },
-        is_skippable=True
+        }
     )
 
 def genre_question():
