@@ -59,7 +59,8 @@ class Playlist(models.Model):
 
         # Add new sections from csv
         try:
-            reader = csv.DictReader(self.csv.splitlines(), fieldnames = ('artist','name','start_time','duration','filename','restrict_to_nl','tag','group'))
+            reader = csv.DictReader(self.csv.splitlines(), fieldnames=(
+                'artist', 'name', 'start_time', 'duration', 'filename', 'restrict_to_nl', 'tag', 'group'))
         except csv.Error:
             return {
                 'status': self.CSV_ERROR,
@@ -112,8 +113,9 @@ class Playlist(models.Model):
                 if (ex_section.artist == section.artist
                     and ex_section.name == section.name
                     and ex_section.start_time - section.start_time == 0
+                    and ex_section.duration == section.duration
                     and ex_section.tag == section.tag
-                    and ex_section.group == section.group):
+                        and ex_section.group == section.group):
 
                     # Update if necessary
                     if ex_section.filename != section.filename or ex_section.restrict_to_nl != section.restrict_to_nl:

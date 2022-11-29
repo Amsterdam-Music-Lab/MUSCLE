@@ -21,20 +21,21 @@ const Final= ({ score, final_text, action_texts, button, onNext, history, show_p
             return;
         }
 
-        const interval = Math.abs(2500 / score);
-
         const id = setTimeout(() => {
-            if (score !== scoreValue.current) {
-                // lower
-                if (scoreValue.current < score) {
-                    scoreValue.current += 1;
-                    setShowScore(scoreValue.current);
-                } else {
-                    scoreValue.current -= 1;
-                    setShowScore(scoreValue.current);
-                }
+            // Score step
+            const scoreStep = Math.max(
+                1,
+                Math.min(10, Math.ceil(Math.abs(scoreValue.current - score) / 10))
+            );
+
+            // Score are equal, stop
+            if (score === scoreValue.current) {
+                return;
             }
-        }, interval);
+            // Add / subtract score
+            scoreValue.current += Math.sign(score - scoreValue.current) * scoreStep;
+            setShowScore(scoreValue.current);
+        }, 50);
 
         return () => {
             clearTimeout(id);

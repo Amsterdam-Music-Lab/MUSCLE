@@ -40,7 +40,7 @@ const Info = ({ heading, body, buttonLabel, buttonLink, onNext }) => {
                         <a
                             className="btn btn-primary"
                             href={buttonLink}
-                            target="_blank"
+                            target={buttonLink.startsWith("http") ? "_blank" : undefined}
                             rel="noopener noreferrer"
                         >
                             {buttonLabel}
