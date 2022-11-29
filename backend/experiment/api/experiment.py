@@ -2,6 +2,7 @@ import logging
 
 from django.http import Http404, JsonResponse
 from django.conf import settings
+from django.shortcuts import redirect
 from django.utils.translation import gettext_lazy as _
 from django.utils.translation import activate
 from .util.participant import current_participant
@@ -25,9 +26,14 @@ def get(request, slug):
     if experiment.experiment_series and series_data:
         # we are in the middle of a test battery
         try:
-            session = Session.objects.get(pk=series_data.get('session_id'))
+            session = Session.objects.get(
+                pk=series_data.get('session_id'),
+                experiment=experiment
+            )
         except Session.DoesNotExist:
-            raise Http404("Session does not exist")
+            # delete session data and reload
+            del request.session['experiment_series']
+            return redirect('/experiment/id/{}/'.format(slug), request)
 
         # convert non lists to list
         next_round = session.experiment_rules().next_round(session)

@@ -1,4 +1,5 @@
 import { romanNumeral } from "./roman";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 export const LABEL_NUMERIC = "NUMERIC";
 export const LABEL_ALPHABETIC = "ALPHABETIC";
@@ -22,3 +23,9 @@ export const getPlayerLabel = (index, labelStyle, customLabels) => {
             return "";
     }
 };
+
+export const renderLabel = (label, size="1x") => {
+    if (label.startsWith('ti-')) return <span className={label}></span>
+    if (label.startsWith('fa-')) return <FontAwesomeIcon icon={label.substring(3)} size={size}/>
+    else return label
+}

@@ -5,7 +5,7 @@ from django.utils.translation import gettext_lazy as _
 
 from .util.actions import combine_actions, final_action_with_optional_button, render_feedback_trivia
 from .util.practice import practice_explainer, practice_again_explainer, start_experiment_explainer
-from .views import Trial, Consent, Final, Explainer, StartSession, Step, Playlist
+from .views import Trial, Consent, Explainer, StartSession, Step
 from .views.playback import Playback
 from .views.form import ChoiceQuestion, Form
 from .base import Base
@@ -109,18 +109,6 @@ class RhythmDiscrimination(Base):
             return actions
         return combine_actions(*actions)
 
-    @staticmethod
-    def calculate_score(result, data, form_element):
-        try:
-            expected_response = result.expected_response
-        except Exception as e:
-            logger.log(e)
-            expected_response = None
-        if expected_response and expected_response == form_element['value']:
-            return 1
-        else:
-            return 0
-
 
 def next_trial_actions(session, round_number, request_session):
     """
@@ -169,7 +157,7 @@ def next_trial_actions(session, round_number, request_session):
             tag=condition['tag']).get(
             group=condition['group']
         )
-    except Section.DoesNotExist:
+    except:
         return actions
 
     expected_result = 'SAME' if condition['group'] == '1' else 'DIFFERENT'
@@ -185,6 +173,7 @@ def next_trial_actions(session, round_number, request_session):
             'DIFFERENT': _('DIFFERENT')
         },
         view='BUTTON_ARRAY',
+        scoring_rule='CORRECTNESS',
         result_id=result_pk,
         submits=True
     )

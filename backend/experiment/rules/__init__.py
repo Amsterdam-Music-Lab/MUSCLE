@@ -9,6 +9,7 @@ from .hbat_bst import BST
 from .rhythm_discrimination import RhythmDiscrimination
 from .rhythm_experiment_series import RhythmExperimentSeries
 from .rhythm_experiment_series_mri import RhythmExperimentSeriesMRI
+from .rhythm_experiment_series_unpaid import RhythmExperimentSeriesUnpaid
 from .toontjehoger_home import ToontjeHogerHome
 from .toontjehoger_1_mozart import ToontjeHoger1Mozart
 from .toontjehoger_2_preverbal import ToontjeHoger2Preverbal
@@ -20,6 +21,7 @@ from .gold_msi import GoldMSI
 from .listening_conditions import ListeningConditions
 from .huang_2022 import Huang2022
 from .categorization import Categorization
+from .musical_preferences import MusicalPreferences
 
 # Rules available to this application
 # If you create new Rules, add them to the list
@@ -34,9 +36,11 @@ EXPERIMENT_RULES = {
     HBat.ID: HBat,
     HBatBFIT.ID: HBatBFIT,
     BST.ID: BST,
+    MusicalPreferences.ID: MusicalPreferences,
     RhythmDiscrimination.ID: RhythmDiscrimination,
     RhythmExperimentSeries.ID: RhythmExperimentSeries,
     RhythmExperimentSeriesMRI.ID: RhythmExperimentSeriesMRI,
+    RhythmExperimentSeriesUnpaid.ID: RhythmExperimentSeriesUnpaid,
     GoldMSI.ID: GoldMSI,
     ListeningConditions.ID: ListeningConditions,
     Huang2022.ID: Huang2022,

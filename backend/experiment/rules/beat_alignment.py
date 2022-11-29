@@ -141,6 +141,7 @@ class BeatAlignment(Base):
             },
             view='BUTTON_ARRAY',
             result_id=result_pk,
+            scoring_rule='CORRECTNESS',
             submits=True
         )
         form = Form([question])
@@ -155,15 +156,3 @@ class BeatAlignment(Base):
             }
         )
         return view.action()
-
-    @staticmethod
-    def calculate_score(result, data, form_element):
-        try:
-            expected_response = result.expected_response
-        except Exception as e:
-            logger.log(e)
-            expected_response = None
-        if expected_response and expected_response == form_element['value']:
-            return 1
-        else:
-            return 0

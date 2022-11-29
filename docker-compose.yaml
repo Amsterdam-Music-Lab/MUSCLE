@@ -62,6 +62,6 @@ services:
           - REACT_APP_HTML_BODY_CLASS=${REACT_APP_HTML_BODY_CLASS}
         ports:
           - 3000:3000
-        command: sh -c "yarn start"
+        command: sh -c "yarn scss && yarn start"
 volumes:
     db_data:

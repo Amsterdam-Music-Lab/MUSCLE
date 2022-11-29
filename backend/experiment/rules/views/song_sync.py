@@ -10,7 +10,7 @@ class SongSync(object):  # pylint: disable=too-few-public-methods
     """
     ID = 'SONG_SYNC'
 
-    def __init__(self, section, result_id, title=None, config=None, instructions=None, buttons=None):
+    def __init__(self, section, result_id, title=None, config=None, scoring_rule=None, instructions=None, buttons=None):
         '''
         initialize SongSync, with the following arguments:
         - section: section to be played during the round
@@ -28,7 +28,8 @@ class SongSync(object):  # pylint: disable=too-few-public-methods
             'silence_time': 4,
             'sync_time': 15,
             'continuation_offset': random.randint(100, 150) / 10 if not continuation_correctness else 0,
-            'continuation_correctness': continuation_correctness
+            'continuation_correctness': continuation_correctness,
+            'scoring_rule': scoring_rule
         }
         if config:
             self.config.update(config)
@@ -47,40 +48,6 @@ class SongSync(object):  # pylint: disable=too-few-public-methods
         self.title = title
         if buttons:
             self.buttons.update(buttons)
-        
-
-    @staticmethod
-    def calculate_score(data):
-        """Calculate score for given result data"""
-        score = 0
-
-        # Calculate from the data object
-        # If requested keys don't exist, return None
-        try:
-            config = data['config']
-            result = data['result']
-
-            # Calculate scores based on result type
-            if result['type'] == 'time_passed':
-                score = math.ceil(-result['recognition_time'])
-
-            elif result['type'] == 'not_recognized':
-                score = 0
-
-            elif result['type'] == 'recognized':
-                # Get score
-                score = math.ceil(
-                    config['recognition_time'] - result['recognition_time']
-                )
-
-                if config['continuation_correctness'] != result['continuation_correctness']:
-                    score *= -1
-
-        except KeyError as error:
-            print('KeyError: %s' % str(error))
-            return None
-
-        return score
 
     def action(self):
         """Serialize data for song_sync action"""

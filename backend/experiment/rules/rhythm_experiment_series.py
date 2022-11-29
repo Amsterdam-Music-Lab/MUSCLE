@@ -15,6 +15,7 @@ class RhythmExperimentSeries(Base):
     ID = 'TEST_BATTERY'
     consent_form = 'consent/consent_rhythm.html'
     debrief_form = 'final/experiment_series.html'
+    show_participant_final = True
 
     @classmethod
     def intro_explainer(cls):
@@ -65,8 +66,8 @@ class RhythmExperimentSeries(Base):
                 session,
                 title=_("Thank you very much for participating!"),
                 final_text=rendered,
-                show_participant_link=True,
-                show_participant_id_only=True,
+                show_participant_link=cls.show_participant_final,
+                show_participant_id_only=cls.show_participant_final,
             ).action()
         slug = experiment_data[experiment_number]
         session.save()

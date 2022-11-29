@@ -9,8 +9,8 @@ from .base import Base
 from .views import SongSync, Final, Score, Explainer, Step, Consent, StartSession, Playlist, Question, Trial
 from .views.form import BooleanQuestion, ChoiceQuestion, Form
 from .views.playback import Playback
-from .util.questions import DEMOGRAPHICS, EXTRA_DEMOGRAPHICS, next_question, question_by_key
-from .util.goldsmiths import MSI_FG_GENERAL, MSI_ALL
+from .util.questions import EXTRA_DEMOGRAPHICS, question_by_key
+from .util.goldsmiths import MSI_ALL
 from .util.actions import combine_actions
 
 logger = logging.getLogger(__name__)
@@ -248,7 +248,8 @@ class Huang2022(Base):
         return SongSync(
             section=section,
             title=cls.get_trial_title(session, next_round_number),
-            result_id=result_id
+            result_id=result_id,
+            scoring_rule='SONG_SYNC'
         ).action()
 
     @classmethod
@@ -303,6 +304,7 @@ class Huang2022(Base):
             },
             question=_("Did you hear this song in previous rounds?"),
             result_id=result_pk,
+            scoring_rule='CORRECTNESS',
             submits=True)])
         config = {
             'style': 'boolean-negative-first',
@@ -365,25 +367,7 @@ class Huang2022(Base):
             thanks_message, score_message, song_sync_message, heard_before_message
         ]
         return " ".join([str(m) for m in messages])
-
-    @classmethod
-    def calculate_score(cls, result, data, form_element=None):
-        # return 1 if correct, 0 if incorrect
-        try:
-            expected_response = result.expected_response
-        except Exception as e:
-            logger.log(e)
-            expected_response = None
-        if expected_response:
-            time = data.get('decision_time')
-            if expected_response == form_element['value']:
-                return math.ceil(cls.timeout - time)
-            else:
-                return math.floor(-time)
-        else:
-            # SongSync round
-            return SongSync.calculate_score(data)
-
+    
     @classmethod
     def handle_results(cls, session, data):
         try:

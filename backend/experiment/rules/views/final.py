@@ -1,5 +1,6 @@
 from django.utils.translation import gettext_lazy as _
 
+
 class Final:  # pylint: disable=too-few-public-methods
     """
     Provide data for a final view
@@ -19,12 +20,13 @@ class Final:  # pylint: disable=too-few-public-methods
     }
 
     def __init__(self, session, title=_("Final score"), final_text=None,
-            button=None, rank=None, show_social=False, 
-            show_profile_link=False, show_participant_link=False,
-            show_participant_id_only=False
-        ):
+                 button=None, points=None, rank=None, show_social=False,
+                 show_profile_link=False, show_participant_link=False,
+                 show_participant_id_only=False, total_score=None
+                 ):
+
         self.session = session
-        self.title = title        
+        self.title = title
         self.final_text = final_text
         self.button = button
         self.rank = rank
@@ -32,16 +34,24 @@ class Final:  # pylint: disable=too-few-public-methods
         self.show_profile_link = show_profile_link
         self.show_participant_link = show_participant_link
         self.show_participant_id_only = show_participant_id_only
+        if total_score is None:
+            self.total_score = self.session.total_score()
+        else:
+            self.total_score = total_score
+        if points is None:
+            self.points = _("points")
+        else:
+            self.points = points
 
     def action(self):
         """Get data for final action"""
         return {
             'view': Final.ID,
-            'score': self.session.total_score(),
+            'score': self.total_score,
             'rank': self.rank,
             'final_text': self.final_text,
             'button': self.button,
-            'points': _("points"),
+            'points': self.points,
             'action_texts': {
                 'play_again': _('Play again'),
                 'profile': _('My profile'),

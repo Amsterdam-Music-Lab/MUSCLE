@@ -9,7 +9,7 @@ from .base import Base
 from .h_bat import HBat
 
 from .util.actions import final_action_with_optional_button, render_feedback_trivia
-from .util.score import get_average_difference_level_based
+from .util.final_score import get_average_difference_level_based
 
 class BST(HBat):
     """ Rules for the BST experiment, which follow closely
@@ -60,6 +60,7 @@ class BST(HBat):
             },
             view='BUTTON_ARRAY',
             result_id=result_pk,
+            scoring_rule='CORRECTNESS',
             submits=True
         )
         playback = Playback([section])

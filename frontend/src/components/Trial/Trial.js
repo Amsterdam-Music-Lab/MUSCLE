@@ -73,7 +73,7 @@ const Trial = ({ participant, session, playback, feedback_form, config, onNext, 
             // Send data to server
             const response = await createProfile({
                 result,
-                session: session.id,
+                session: (session ? session.id : 0),
                 participant,
             });
 
@@ -113,6 +113,7 @@ const Trial = ({ participant, session, playback, feedback_form, config, onNext, 
                     submitResult({
                         decision_time,
                         form,
+                        config
                     });
                 }
             } else {
@@ -123,15 +124,28 @@ const Trial = ({ participant, session, playback, feedback_form, config, onNext, 
     );
 
     const finishedPlaying = useCallback(() => {
+
         if (config.auto_advance) {
+
             // Create a time_passed result
-            makeResult({
-                type: "time_passed",
-            });
+            if (config.auto_advance_timer != null) {
+                if (playback.player_type == 'BUTTON') {
+                    startTime.current = getCurrentTime();
+                }
+                const id = setTimeout( () => {makeResult({type: "time_passed",});} , config.auto_advance_timer);
+
+            } else {
+
+                makeResult({
+                    type: "time_passed",
+                });
+
+            }
         }
         setFormActive(true);
         return;
     }, [config.auto_advance, makeResult]);
+
 
     return (
         <div role="trial" className={classNames("aha__trial", config.style)}>
