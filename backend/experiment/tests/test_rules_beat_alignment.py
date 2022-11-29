@@ -47,8 +47,8 @@ class BeatAlignmentRuleTest(TestCase):
         self.assertEquals(len(response_json['next_round']), len(views_exp))
         for i in range(len(views_exp)):
             self.assertEquals(response_json['next_round'][i]['view'], views_exp[i])
-
-        response = self.client.get('/experiment/participant/')
+        header = {'HTTP_USER_AGENT':"Test device with test browser"}
+        response = self.client.get('/experiment/participant/', **header)
         response_json = self.load_json(response)
         self.assertTrue( {'id','hash','csrf_token','country'} <= response_json.keys() )
         csrf_token = response_json['csrf_token']
