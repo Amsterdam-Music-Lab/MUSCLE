@@ -131,7 +131,12 @@ const Trial = ({
                     });
                 }
             } else {
-                onNext();
+                if (result) {
+                    submitResult({
+                        decision_time,
+                        json_data: result
+                    });
+                } else onNext();
             }
         },
         [feedback_form, onNext, submitProfile, submitResult]

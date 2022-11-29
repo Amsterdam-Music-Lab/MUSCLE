@@ -54,3 +54,10 @@ class MatchingPairs(Base):
             feedback_form=None,
         )
         return trial.action()
+    
+    @classmethod
+    def handle_result(cls, session, data):
+        result = cls.get_result(session)
+        result.json_data = data.get('json_data')
+        result.score = data.get('decision_time')
+        result.save()
