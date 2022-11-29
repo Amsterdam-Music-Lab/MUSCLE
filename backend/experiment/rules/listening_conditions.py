@@ -29,19 +29,19 @@ class ListeningConditions(Base):
                     },
                     view='BUTTON_ARRAY',
                     submits=True
-            )])
+                )])
         elif round_number == 2:
             feedback_form = Form([ChoiceQuestion(
-                    key='internet_connection',
-                    question=_(
-                        "Do you have a stable internet connection?"),
-                    choices={
-                        'YES': _('YES'),
-                        'MODERATELY': _('MODERATELY'),
-                        'NO': _('NO')
-                    },
-                    view='BUTTON_ARRAY',
-                    submits=True
+                key='internet_connection',
+                question=_(
+                    "Do you have a stable internet connection?"),
+                choices={
+                    'YES': _('YES'),
+                    'MODERATELY': _('MODERATELY'),
+                    'NO': _('NO')
+                },
+                view='BUTTON_ARRAY',
+                submits=True
             )])
         elif round_number == 3:
             feedback_form = Form([
@@ -77,28 +77,29 @@ class ListeningConditions(Base):
                     You can then adjust the volume to as high a level as possible without it being uncomfortable. \
                     When you are satisfied with the sound level, click Continue")
             playback = Playback([section], instruction=instruction)
-            message = _("Please keep the eventual sound level the same over the course of the experiment.")
+            message = _(
+                "Please keep the eventual sound level the same over the course of the experiment.")
             actions = [
                 Trial(playback, feedback_form).action(),
-                final_action_with_optional_button(session, message, request_session)
+                final_action_with_optional_button(
+                    session, message, request_session)
             ]
             return combine_actions(*actions)
         view = Trial(playback, feedback_form)
         return view.action()
 
-
     @classmethod
-    def first_round(cls, experiment):
+    def first_round(cls, experiment, participant):
         consent = Consent.action()
         explainer = Explainer(
             instruction=_(
                 'General listening instructions:'),
             steps=[
                 Step(_(
-                        "To make sure that you can do the experiment as well as possible, please do it a quiet room with a stable internet connection."),
+                    "To make sure that you can do the experiment as well as possible, please do it a quiet room with a stable internet connection."),
                 ),
                 Step(_("Please use headphones, and turn off sound notifications from other devices and applications (e.g., e-mail, phone messages)."),
-                )],
+                     )],
             button_label=_('OK')
         ).action(True)
         playlist = Playlist.action(experiment.playlists.all())

@@ -14,9 +14,9 @@ language_choices[0] = ('', 'Unset')
 class Experiment(models.Model):
     """Root entity for configuring experiments"""
 
-    playlists = models.ManyToManyField(Playlist)
+    playlists = models.ManyToManyField(Playlist, blank=True)
     name = models.CharField(db_index=True, max_length=64)
-    slug = models.CharField(max_length=64, unique=True)
+    slug = models.CharField(db_index=True, max_length=64, unique=True)
     active = models.BooleanField(default=True)
     rounds = models.PositiveIntegerField(default=10)
     bonus_points = models.PositiveIntegerField(default=0)

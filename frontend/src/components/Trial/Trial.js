@@ -10,22 +10,12 @@ import Button from "../Button/Button";
 // Trial is an experiment view, that preloads a song, shows an explanation and plays audio
 // Optionally, it can show an animation during playback
 // Optionally, it can show a form during or after playback
-const Trial = ({
-    participant,
-    session,
-    playback,
-    feedback_form,
-    config,
-    onNext,
-    loadState,
-}) => {
+const Trial = ({ participant, session, playback, feedback_form, config, onNext, loadState }) => {
     // Main component state
     const resultBuffer = useRef([]);
 
     const [formActive, setFormActive] = useState(!config.listen_first);
-    const [preloadReady, setPreloadReady] = useState(
-        !playback?.play_config?.ready_time
-    );
+    const [preloadReady, setPreloadReady] = useState(!playback?.play_config?.ready_time);
 
     const submitted = useRef(false);
 
@@ -46,11 +36,7 @@ const Trial = ({
 
             // Merge result data with data from resultBuffer
             // NB: result data with same properties will be overwritten by later results
-            const mergedResults = Object.assign(
-                {},
-                ...resultBuffer.current,
-                result
-            );
+            const mergedResults = Object.assign({}, ...resultBuffer.current, result);
 
             // Create result data
             const data = {
@@ -64,8 +50,8 @@ const Trial = ({
                 data.section = mergedResults.section;
             }
 
-            // Send data to API
-            const action = await createResult(data);
+            // Send data to API when create_result is true
+            const action = feedback_form?.create_result && (await createResult(data));
 
             // Fallback: Call onNext, try to reload round
             if (!action) {
@@ -79,7 +65,7 @@ const Trial = ({
             // Init new state from action
             loadState(action);
         },
-        [loadState, onNext, participant, session]
+        [loadState, onNext, participant, session, feedback_form]
     );
 
     const submitProfile = useCallback(
@@ -104,7 +90,7 @@ const Trial = ({
 
     // Create result data in this wrapper function
     const makeResult = useCallback(
-        (result) => {            
+        (result) => {
             // Prevent multiple submissions
             if (submitted.current) {
                 return;
@@ -166,7 +152,7 @@ const Trial = ({
 
 
     return (
-        <div role='trial' className={classNames("aha__trial", config.style)}>
+        <div role="trial" className={classNames("aha__trial", config.style)}>
             {playback && (
                 <Playback
                     playerType={playback.player_type}
@@ -200,9 +186,7 @@ const Trial = ({
                 <div className="text-center">
                     <Button
                         title={config.continue_label}
-                        className={
-                            "btn-primary anim anim-fade-in anim-speed-500"
-                        }
+                        className={"btn-primary anim anim-fade-in anim-speed-500"}
                         onClick={onNext}
                         active={formActive}
                     />
