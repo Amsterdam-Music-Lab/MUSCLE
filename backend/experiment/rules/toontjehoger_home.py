@@ -80,7 +80,7 @@ class ToontjeHogerHome(Base):
 
         # Score
         score = cls.get_score(sessions)
-        score_label = "punten" if len(sessions) > 0 else "Nog geen punten!"
+        score_label = "punten" if len(sessions) > 0 and score > 0 else "Nog geen punten!"
         score_class = ""
         if score < 100:
             score_class = "plastic"
