@@ -3,7 +3,7 @@ import Slider from "react-rangeslider";
 import classNames from "classnames";
 
 // Range is a question view that makes you select a value within the given range, using a slider
-const Range = ({ question, value, onChange, emphasizeTitle = false }) => {
+const Range = ({ question, value, onChange}) => {
     const emptyValue = !value;
 
     if (emptyValue) {
@@ -11,11 +11,6 @@ const Range = ({ question, value, onChange, emphasizeTitle = false }) => {
     }
     return (
         <div className={classNames("aha__range", { empty: emptyValue })}>
-            {question.explainer && (
-                <p className="explainer">{question.explainer}</p>
-            )}
-            <h3 className={classNames({title: emphasizeTitle})}>{question.question}</h3>
-
             <h1 className="current-value">{emptyValue ? "↔" : value}</h1>
 
             <Slider

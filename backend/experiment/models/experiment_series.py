@@ -8,3 +8,6 @@ class ExperimentSeries(models.Model):
     random_experiments = models.JSONField(blank=True, null=True, default=dict)
     # last experiments in a test series, in fixed order
     last_experiments = models.JSONField(blank=True, null=True, default=dict)
+
+    def __str__(self):
+        return self.name

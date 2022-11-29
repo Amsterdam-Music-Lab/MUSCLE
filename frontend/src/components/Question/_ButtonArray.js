@@ -4,7 +4,7 @@ import classNames from "classnames";
 import { renderLabel } from "../../util/label";
 
 // ButtonArray is a question view for selecting a single option from a list of buttons
-const ButtonArray = ({ question, active, onChange, emphasizeTitle = false }) => {
+const ButtonArray = ({ question, active, onChange }) => {
 
     const buttonPress = (value) => {
         if (!active) {
@@ -18,10 +18,7 @@ const ButtonArray = ({ question, active, onChange, emphasizeTitle = false }) => 
 
     return (
         <div className="aha__buttons buttons d-flex flex-wrap justify-content-center p-3 w-100">
-            {question.explainer && (
-                <p className="explainer">{question.explainer}</p>
-            )}
-            <h3 className={classNames({title: emphasizeTitle})}>{question.question}</h3>
+            
             <div className={classNames("btn-group-toggle-custom", question.config && question.config.buttons_large_gap ? "buttons-large-gap":"")} role="group" data-toggle="buttons" aria-label="Button Array">
                 {Object.keys(question.choices).map((val, index) => (
                     <ToggleButton

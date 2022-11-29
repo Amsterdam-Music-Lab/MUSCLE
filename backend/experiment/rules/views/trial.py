@@ -10,7 +10,6 @@ class Trial(object):  # pylint: disable=too-few-public-methods
     Parameters:
     - section: section to be played in this view
     - feedback_form: array of form elements
-    - instructions: messages to show during different stages - defaults to Hooked instructions
     - title: page title - defaults to empty
     """
 
