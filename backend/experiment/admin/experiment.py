@@ -48,12 +48,12 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
             result_keys = []
             export_options = []
             # Get all export options
-            for session_key in request.POST.getlist('export_session_fields'):
-                session_keys.append(session_key)
-            for result_key in request.POST.getlist('export_result_fields'):
-                result_keys.append(result_key)
-            for export_option in request.POST.getlist('export_options'):
-                export_options.append(export_option)
+            session_keys = [key for key in request.POST.getlist(
+                'export_session_fields')]
+            result_keys = [key for key in request.POST.getlist(
+                'export_result_fields')]
+            export_options = [
+                key for key in request.POST.getlist('export_options')]
 
             response = HttpResponse(content_type='text/csv')
             response['Content-Disposition'] = 'attachment; filename="{}.csv"'.format(
