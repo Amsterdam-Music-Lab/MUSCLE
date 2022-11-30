@@ -5,6 +5,7 @@ import { withRouter } from "react-router-dom";
 
 import Consent from "../Consent/Consent";
 import DefaultPage from "../Page/DefaultPage";
+import ToontjeHoger from "../ToontjeHoger/ToontjeHoger";
 import Explainer from "../Explainer/Explainer";
 import Final from "../Final/Final";
 import Loading from "../Loading/Loading";
@@ -18,6 +19,7 @@ import Trial from "../Trial/Trial";
 import useResultHandler from "../../hooks/useResultHandler";
 import { stateNextRound } from "../../util/nextRound";
 import Info from "../Info/Info";
+import classNames from "classnames";
 
 // Experiment handles the main experiment flow:
 // - Loads the experiment and participant
@@ -158,6 +160,11 @@ const Experiment = ({ match }) => {
             case "INFO":
                 return <Info {...attrs} />;
 
+            // Specials
+            // -------------------------
+            case "TOONTJEHOGER":
+                return <ToontjeHoger {...attrs} />;
+
             default:
                 return (
                     <div className="text-white bg-danger">
@@ -178,25 +185,41 @@ const Experiment = ({ match }) => {
     if (state.view === "QUESTION") {
         key = state.question.key;
     }
-
     return (
-        <TransitionGroup className="aha__experiment">
+        <TransitionGroup
+            className={classNames(
+                "aha__experiment",
+                !loadingExperiment && experiment
+                    ? "experiment-" + experiment.slug
+                    : ""
+            )}
+        >
             <CSSTransition
                 key={key}
-                timeout={{ enter: 300, exit: 300 }}
+                timeout={{ enter: 300, exit: 0 }}
                 classNames={"transition"}
+                unmountOnExit
             >
-                <DefaultPage
-                    title={state.title}
-                    logoClickConfirm={
-                        ["FINAL", "ERROR"].includes(key)
-                            ? null
-                            : "Are you sure you want to stop this experiment?"
-                    }
-                    className={className}
-                >
-                    {render(state.view)}
-                </DefaultPage>
+                {(!loadingExperiment && experiment) || key === "ERROR" ? (
+                    <DefaultPage
+                        title={state.title}
+                        logoClickConfirm={
+                            ["FINAL", "ERROR", "TOONTJEHOGER"].includes(key) ||
+                            // Info pages at end of experiment
+                            (key === "INFO" &&
+                                (!state.next_round || !state.next_round.length))
+                                ? null
+                                : "Are you sure you want to stop this experiment?"
+                        }
+                        className={className}
+                    >
+                        {render(state.view)}
+                    </DefaultPage>
+                ) : (
+                    <div className="loader-container">
+                        <Loading />
+                    </div>
+                )}
             </CSSTransition>
         </TransitionGroup>
     );

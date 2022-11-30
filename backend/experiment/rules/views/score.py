@@ -44,7 +44,6 @@ class Score(object):  # pylint: disable=too-few-public-methods
 
     def action(self):
         """Serialize score data"""
-        
         # Create action
         action = {
             'view': self.ID,

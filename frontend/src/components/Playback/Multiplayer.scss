@@ -4,12 +4,16 @@
     flex-wrap: wrap;
     max-width: 100%;
 
-    &.player-count-2{
+    &.player-count-2 {
         column-gap: 50px;
     }
 
-    &.player-count-2{
+    &.player-count-2 {
         column-gap: 30px;
+    }
+
+    .player-wrapper {
+        position: relative;
     }
 
     .buttons {
@@ -22,12 +26,10 @@
         }
     }
 
-    
     .instruction {
         min-height: 55px;
         h3 {
             margin: 0;
         }
     }
-    
 }

@@ -1,16 +1,20 @@
-.aha__info{
+.aha__info {
     width: calc(100% + 10px);
     margin-left: -5px;
     color: white;
 
     @media (min-width: 720px) {
-        max-width: 500px;
+        max-width: 545px;
         margin: -15px auto;
     }
 
     .aha__info-header {
         padding: 15px;
         margin-bottom: 0;
+
+        @media (max-width: 520px) {
+            padding-top: 0;
+        }
     }
 
     .info-body {
@@ -19,18 +23,26 @@
         max-height: calc(100vh - 250px);
         margin-bottom: 0;
         position: relative;
-        padding: 5px 15px 5px; 
+        padding: 5px 15px 5px;
         @media (min-width: 720px) {
             max-height: calc(100vh - 300px);
         }
 
-        > *{
-          max-width: 100%;
-          margin-bottom: 1rem;
+        > * {
+            max-width: 100%;
+            margin-bottom: 1rem;
+        }
+
+        img {
+            max-width: 100%;
+        }
+
+        .center {
+            text-align: center;
         }
     }
 
     .buttons {
-      padding: 15px;
+        padding: 15px;
     }
 }

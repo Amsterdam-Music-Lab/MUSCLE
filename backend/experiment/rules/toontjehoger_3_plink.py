@@ -1,33 +1,35 @@
 import logging
-from django.utils.translation import gettext_lazy as _
 from django.template.loader import render_to_string
+from .toontjehoger_1_mozart import toontjehoger_ranks
 from .views import Plink, Explainer, Step, Score, Final, StartSession, Playlist, Info
-from .views.form import ChoiceQuestion, RadiosQuestion, Form, DropdownQuestion, RadiosQuestion
-from .views.playback import Playback
+from .views.form import RadiosQuestion
 from .base import Base
 from os.path import join
 from .util.actions import combine_actions
+from .util.strings import non_breaking
 
 logger = logging.getLogger(__name__)
 
 
 class ToontjeHoger3Plink(Base):
     ID = 'TOONTJE_HOGER_3_PLINK'
-    TITLE = "Toontje Hoger"
-    SCORE_MAIN_CORRECT = 50
-    SCORE_MAIN_WRONG = -10
-    SCORE_EXTRA_CORRECT = 15
+    TITLE = ""
+    SCORE_MAIN_CORRECT = 10
+    SCORE_MAIN_WRONG = 0
+    SCORE_EXTRA_1_CORRECT = 4
+    SCORE_EXTRA_2_CORRECT = 4
     SCORE_EXTRA_WRONG = 0
 
     @classmethod
-    def first_round(cls, experiment):
+    def first_round(cls, experiment, participant):
         """Create data for the first experiment rounds."""
 
         # 1. Explain game.
         explainer = Explainer(
-            instruction="Uitleg",
+            instruction="Muziekherkenning",
             steps=[
-                Step("Luister naar een heel kort muziekfragment."),
+                Step("Je krijgt {} zeer korte muziekfragmenten te horen.".format(
+                    experiment.rounds)),
                 Step("Ken je het nummer? Noem de juiste artiest en titel!"),
                 Step(
                     "Weet je het niet? Beantwoord dan extra vragen over de tijdsperiode en emotie van het nummer.")
@@ -59,8 +61,8 @@ class ToontjeHoger3Plink(Base):
             # No combine_actions because of inconsistent next_round array wrapping in first round
             return cls.get_plink_round(session)
 
-        # Round 2-6
-        if rounds_passed <= 5:
+        # Round 2-experiments.rounds
+        if rounds_passed < session.experiment.rounds:
             return combine_actions(*cls.get_score(session), *cls.get_plink_round(session))
 
         # Final
@@ -82,27 +84,54 @@ class ToontjeHoger3Plink(Base):
             logger.error("Result without section")
             return ""
 
-        # Main question
+        # Option 1. Main question
         main_question = Plink.extract_main_question(data)
 
         if main_question:
             if main_question == last_result.expected_response:
-                return "Je hoorde inderdaad {} van {}".format(section.name, section.artist)
+                return "Goedzo! Je hoorde inderdaad {} van {}.".format(non_breaking(section.name), non_breaking(section.artist))
 
-            return "Helaas, volgende keer beter"
+            return "Helaas! Je hoorde {} van {}.".format(non_breaking(section.name), non_breaking(section.artist))
 
+        # Option 2. Extra questions
         extra_questions = Plink.extract_extra_questions(data)
-        if extra_questions:
-            # Section details
-            section_details = section.group.split(";")
-            time_period = section_details[0] if len(
-                section_details) >= 1 else "?"
-            emotion = section_details[1] if len(section_details) >= 2 else "?"
-            feedback = "Het nummer komt uit de {} en de emotie is {}.".format(
-                time_period, emotion)
-            return feedback
 
-        return ""
+        # No extra questions? Return just an empty string
+        if not extra_questions:
+            return ""
+
+        # Feedback prefix
+
+        # - All points
+        feedback_prefix = "Goedzo!"
+
+        # - Partial score or all questions wrong
+        all_wrong_score = last_result.score == 2 * cls.SCORE_EXTRA_WRONG
+        only_half_score = last_result.score < cls.SCORE_EXTRA_1_CORRECT + \
+            cls.SCORE_EXTRA_2_CORRECT if not all_wrong_score else False
+
+        if all_wrong_score:
+            feedback_prefix = "Helaas!"
+        elif only_half_score:
+            feedback_prefix = "Deels goed!"
+
+        # Get section info
+        section_details = section.group.split(";")
+        time_period = section_details[0] if len(
+            section_details) >= 1 else "?"
+        time_period = time_period.replace("s", "'s")
+        emotion = section_details[1] if len(section_details) >= 2 else "?"
+
+        # Construct final feedback message
+        question_part = "Het nummer komt uit de {} en de emotie is {}.".format(
+            time_period, emotion)
+        section_part = "Je hoorde {} van {}.".format(
+            non_breaking(section.name), non_breaking(section.artist))
+
+        # The \n results in a linebreak
+        feedback = "{} {} \n {}".format(
+            feedback_prefix, question_part, section_part)
+        return feedback
 
     @classmethod
     def get_score(cls, session):
@@ -136,6 +165,19 @@ class ToontjeHoger3Plink(Base):
         result_pk = cls.prepare_result(
             session, section=section, expected_response=expected_response)
 
+        # Extra questions intro
+        # --------------------
+        extra_questions_intro = Explainer(
+            instruction="Tussenronde",
+            steps=[
+                Step("Jammer dat je de artiest en titel van dit nummer niet weet!"),
+                Step(
+                    "Verdien extra punten door twee extra vragen over het nummer te beantwoorden."),
+            ],
+            button_label="Start"
+
+        ).action(step_numbers=False)
+
         # Plink round
         # --------------------
         extra_questions = [cls.get_optional_question1(
@@ -150,6 +192,7 @@ class ToontjeHoger3Plink(Base):
             submit_label="Volgende",
             dont_know_label="Ik weet het niet",
             extra_questions=extra_questions,
+            extra_questions_intro=extra_questions_intro
         ).action()
 
         return [plink]
@@ -164,7 +207,7 @@ class ToontjeHoger3Plink(Base):
         periods = ["60's", "70's", "80's", "90's", "00's", "10's", "20's"]
         period_choices = {}
         for period in periods:
-            period_choices[period] = period
+            period_choices[period.replace("'", "")] = period
 
         question = RadiosQuestion(
             question="Wanneer is het nummer uitgebracht?",
@@ -194,7 +237,7 @@ class ToontjeHoger3Plink(Base):
         return question.action()
 
     @classmethod
-    def calculate_score(cls, result, data):
+    def calculate_score(cls, result, data, scoring_rule):
         """
         Calculate score, based on the data field
 
@@ -231,8 +274,9 @@ class ToontjeHoger3Plink(Base):
 
             # Check if the given answers
             # e.g section.group = 60s;vrolijk (time_period;emotion)
-            for answer in extra_questions:
-                score += cls.SCORE_EXTRA_CORRECT if answer and (
+            for index, answer in enumerate(extra_questions):
+                points_correct = cls.SCORE_EXTRA_1_CORRECT if index == 0 else cls.SCORE_EXTRA_2_CORRECT
+                score += points_correct if answer and (
                     answer in section.group) else cls.SCORE_EXTRA_WRONG
 
             return score
@@ -253,12 +297,12 @@ class ToontjeHoger3Plink(Base):
 
         # Final
         final_text = "Goed gedaan, jouw muziekherkenning is uitstekend!" if session.final_score >= 4 * \
-            cls.SCORE_MAIN_CORRECT else "Wellicht nog een poging wagen? Er is ruimte voor verbetering."
+            cls.SCORE_MAIN_CORRECT else "Dat bleek toch even lastig!"
         final = Final(
             session=session,
             final_text=final_text,
-            rank=cls.rank(session),
-            button={'text': 'Volgende'}
+            rank=toontjehoger_ranks(session),
+            button={'text': 'Wat hebben we getest?'}
         ).action()
 
         # Info page
@@ -268,7 +312,7 @@ class ToontjeHoger3Plink(Base):
             body=body,
             heading="Muziekherkenning",
             button_label="Terug naar ToontjeHoger",
-            button_link="https://www.amsterdammusiclab.nl"
+            button_link="/toontjehoger"
         ).action()
 
         return [*score, final, info]

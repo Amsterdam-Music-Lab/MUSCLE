@@ -2,7 +2,7 @@ import React from "react";
 import classNames from "classnames";
 
 // Checkboxes is a question view for selecting multiple options from a list
-const Checkboxes = ({ question, value, onChange, emphasizeTitle = false }) => {
+const Checkboxes = ({ question, value, onChange }) => {
     const values = value ? value.split(",") : [];
 
     // Add/remove value
@@ -18,10 +18,6 @@ const Checkboxes = ({ question, value, onChange, emphasizeTitle = false }) => {
 
     return (
         <div className="aha__checkboxes">
-            {question.explainer && (
-                <p className="explainer">{question.explainer}</p>
-            )}
-            <h3 className={classNames({title: emphasizeTitle})}>{question.question}</h3>
             {Object.keys(question.choices).map((val, index) => (
                 <Checkbox
                     key={index}
