@@ -7,23 +7,23 @@
         width: 50%;
         float: left;
     }
-    
+
     input[type='submit'] {
         margin-top: 1em;
     }
-    
+
     select {
         width: 96%;
         margin-top: 1em;
         margin-left: 2em;
     }
-    
+
     #back-button {
         position: absolute;
         bottom: 5em;
         right: 3em;
     }
-    
+
     #export-button {
         margin-top: 16em;
         width: 24em;
@@ -31,7 +31,7 @@
         font-weight: 400;
         background: var(--default-button-bg);
     }
-    
+
     #template-button {
         width: 12em;
         float: right;
@@ -40,7 +40,7 @@
 </style>
 <form action="" method="post">
     <div class="select-fields">
-        {% csrf_token %}
+        {% csrf_token %} 
         {{ form.as_p }} 
         {% render_inline_action_fields %}
         <input type="submit" name="_back" value="Go back" id="back-button" />
