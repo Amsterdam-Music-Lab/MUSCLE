@@ -83,6 +83,7 @@ class Experiment(models.Model):
                 'experiment_name': self.name,
                 'participant_id': profile['id'],
                 'participant_country': profile['country_code'],
+                'participant_access_info': profile['access_info'],
                 'session_start': session.started_at.isoformat(),
                 'session_end': session_finished,
                 'final_score': session.final_score

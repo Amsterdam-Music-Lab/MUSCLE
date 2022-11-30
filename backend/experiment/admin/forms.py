@@ -7,6 +7,7 @@ SESSION_CHOICES = [('experiment_id', 'Experiment ID'),
                    ('experiment_name', 'Experiment name'),
                    ('participant_id', 'Participant ID'),
                    ('participant_country', 'Participant Country'),
+                   ('participant_access_info', 'Participant access info'),
                    ('session_start', 'Session start time'),
                    ('session_end', 'Session end time'),
                    ('final_score', 'Final score')
@@ -34,14 +35,14 @@ EXPORT_OPTIONS = [('export_profile', "Include participants' profile Q&A"),
 # Export templates for Export CSV
 EXPORT_TEMPLATES = {'wide':
                     [['experiment_id', 'experiment_name', 'participant_id',
-                      'participant_country', 'session_start', 'session_end', 'final_score'],
+                      'participant_country', 'participant_access_info', 'session_start', 'session_end', 'final_score'],
                      ['section_name', 'result_created_at', 'result_score', 'result_comment',
                       'expected_response', 'given_response'],
                      ['export_profile', 'session_data', 'convert_session_json', 'decision_time', 'result_config',
                       'convert_result_json', 'wide_format']],
                     'wide_json':
                     [['experiment_id', 'experiment_name', 'participant_id',
-                      'participant_country', 'session_start', 'session_end', 'final_score'],
+                      'participant_country', 'participant_access_info', 'session_start', 'session_end', 'final_score'],
                      ['section_name', 'result_created_at', 'result_score', 'result_comment',
                       'expected_response', 'given_response'],
                      ['export_profile', 'session_data', 'decision_time', 'result_config', 'wide_format']],
@@ -58,20 +59,20 @@ EXPORT_TEMPLATES = {'wide':
                      ['session_data', 'decision_time', 'result_config', 'wide_format']],
                     'wide_profile':
                     [['experiment_name', 'participant_id',
-                      'participant_country'],
+                      'participant_country', 'participant_access_info'],
                      [],
                      ['export_profile', 'wide_format']],
 
                     'long':
                     [['experiment_id', 'experiment_name', 'participant_id',
-                      'participant_country', 'session_start', 'session_end', 'final_score'],
+                      'participant_country', 'participant_access_info', 'session_start', 'session_end', 'final_score'],
                      ['section_name', 'result_created_at', 'result_score', 'result_comment',
                       'expected_response', 'given_response'],
                      ['export_profile', 'session_data', 'convert_session_json', 'decision_time', 'result_config',
                       'convert_result_json']],
                     'long_json':
                     [['experiment_id', 'experiment_name', 'participant_id',
-                      'participant_country', 'session_start', 'session_end', 'final_score'],
+                      'participant_country', 'participant_access_info', 'session_start', 'session_end', 'final_score'],
                      ['section_name', 'result_created_at', 'result_score', 'result_comment',
                       'expected_response', 'given_response'],
                      ['export_profile', 'session_data', 'decision_time', 'result_config'
@@ -88,7 +89,7 @@ EXPORT_TEMPLATES = {'wide':
                      ['session_data', 'decision_time', 'result_config']],
                     'long_profile':
                     [['experiment_name', 'participant_id',
-                      'participant_country'],
+                      'participant_country', 'participant_access_info'],
                      [],
                      ['export_profile']]
                     }
