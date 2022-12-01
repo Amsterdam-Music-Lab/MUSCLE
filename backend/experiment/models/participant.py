@@ -36,6 +36,7 @@ class Participant(models.Model):
             "id": self.id,
             "unique_hash": self.unique_hash,
             "country_code": self.country_code,
+            "access_info": self.access_info,
             "profile": self.profile_object()
         }
 
@@ -49,7 +50,8 @@ class Participant(models.Model):
         for profile in self.profile():
             profile_object[profile.question] = profile.answer
             if profile.score:
-                profile_object['{}_score'.format(profile.question)] = profile.score
+                profile_object['{}_score'.format(
+                    profile.question)] = profile.score
         return profile_object
 
     def is_dutch(self):
