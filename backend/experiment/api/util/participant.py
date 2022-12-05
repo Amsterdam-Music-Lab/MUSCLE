@@ -18,9 +18,10 @@ def current_participant(request):
 
     if not participant:
         country_code = country(request)
+        access_info = request.META.get('HTTP_USER_AGENT')
 
         # Create a new Participant, store the country code once
-        participant = Participant(country_code=country_code)
+        participant = Participant(country_code=country_code, access_info=access_info)
         participant.save()
         set_participant(request, participant)
 

@@ -14,9 +14,9 @@ language_choices[0] = ('', 'Unset')
 class Experiment(models.Model):
     """Root entity for configuring experiments"""
 
-    playlists = models.ManyToManyField(Playlist)
+    playlists = models.ManyToManyField(Playlist, blank=True)
     name = models.CharField(db_index=True, max_length=64)
-    slug = models.CharField(max_length=64, unique=True)
+    slug = models.CharField(db_index=True, max_length=64, unique=True)
     active = models.BooleanField(default=True)
     rounds = models.PositiveIntegerField(default=10)
     bonus_points = models.PositiveIntegerField(default=0)
@@ -65,41 +65,100 @@ class Experiment(models.Model):
             },
         }
 
-    def export_table(self):
-        """Export tabular data for admin"""
+    def export_table(self, session_keys, result_keys, export_options):
+        """Export filtered tabular data for admin        
+            session_keys : session fieldnames to be included
+            result_keys : result fieldnames to be included
+            export_options : export options (see admin/forms.py)
+        """
         rows = []  # a list of dictionaries
         fieldnames = set()  # keep track of all potential fieldnames
+        result_prefix = ''
         for session in self.session_set.all():
             profile = session.participant.export_admin()
             session_finished = session.finished_at.isoformat() if session.finished_at else None
-            row = {
+            # Get data for all potential session fields
+            full_row = {
                 'experiment_id': self.id,
                 'experiment_name': self.name,
                 'participant_id': profile['id'],
                 'participant_country': profile['country_code'],
+                'participant_access_info': profile['access_info'],
                 'session_start': session.started_at.isoformat(),
                 'session_end': session_finished,
-                'session_data': session.load_json_data()
+                'final_score': session.final_score
             }
-            row.update(profile['profile'])
+            row = {}
+            # Add the selected sessions fields
+            for session_key in session_keys:
+                row[session_key] = full_row[session_key]
+            # Add profile data if selected
+            if 'export_profile' in export_options:
+                row.update(profile['profile'])
+            # Add session data
+            if session.json_data is not '':
+                if 'session_data' in export_options:
+                    # Convert json session data to csv columns if selected
+                    if 'convert_session_json' in export_options:
+                        row.update(session.load_json_data())
+                    else:
+                        row['session_data'] = session.load_json_data()
             fieldnames.update(row.keys())
             if session.result_set.count() == 0:
                 # some sessions may have only profile questions
                 rows.append(row)
             else:
-                for result in session.result_set.all():
+                result_counter = 1
+                # Create new row for each result
+                if 'wide_format' in export_options:
                     this_row = copy.deepcopy(row)
-                    result_data = {
+                for result in session.result_set.all():
+                    # Add all results to one row
+                    if not 'wide_format' in export_options:
+                        this_row = copy.deepcopy(row)
+                    # Get data for al potential result fields
+                    full_result_data = {
                         'section_name': result.section.name if result.section else None,
                         'result_created_at': result.created_at.isoformat(),
                         'result_score': result.score,
                         'result_comment': result.comment,
                         'expected_response': result.expected_response,
-                        'given_response': result.given_response,
-                        'result_data': result.load_json_data()
+                        'given_response': result.given_response
                     }
+                    result_data = {}
+                    # Add counter for single row / wide format
+                    if 'wide_format' in export_options:
+                        result_prefix = str(result_counter).zfill(3) + '-'
+                        # add the selected result fields
+                        for result_key in result_keys:
+                            result_data[(result_prefix + result_key)
+                                        ] = full_result_data[result_key]
+                    else:
+                        # add the selected result fields
+                        for result_key in result_keys:
+                            result_data[result_key] = full_result_data[result_key]
+                    # Add result data
+                    if result.json_data is not '':
+                        # convert result json data to csv columns if selected
+                        if 'convert_result_json' in export_options:
+                            if 'decision_time' in export_options:
+                                result_data[result_prefix + 'decision_time'] = result.load_json_data().get(
+                                    'decision_time', '')
+                            if 'result_config' in export_options:
+                                result_data[result_prefix + 'result_config'] = result.load_json_data().get(
+                                    'config', '')
+                        else:
+                            if 'result_config' in export_options:
+                                result_data[result_prefix +
+                                            'result_data'] = result.load_json_data()
                     this_row.update(result_data)
                     fieldnames.update(result_data.keys())
+                    result_counter += 1
+                    # Append row for long format
+                    if not 'wide_format' in export_options:
+                        rows.append(this_row)
+                # Append row for wide format
+                if 'wide_format' in export_options:
                     rows.append(this_row)
         return rows, list(fieldnames)
 

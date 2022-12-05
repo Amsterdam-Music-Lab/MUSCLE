@@ -13,7 +13,7 @@ const PlayButton = ({ playSection, isPlaying, className="" }) => {
             onClick={ (playSection && !clicked) ? () => {setClicked(true); playSection(0);} : undefined}
             tabIndex="0"
             onKeyPress={(e) => {
-                playSection(0);
+                playSection && playSection(0)
             }}
         ></div>
     );

@@ -21,7 +21,7 @@ class Categorization(Base):
     ID = 'CATEGORIZATION'
 
     @classmethod
-    def first_round(cls, experiment):
+    def first_round(cls, experiment, participant):
         explainer = Explainer(
             instruction="This is a listening experiment in which you have to respond to short sound sequences.",
             steps=[],
@@ -99,9 +99,11 @@ class Categorization(Base):
                     session.save_json_data(json_data)
                     session.save()
                     profile.delete()
+                    final_message = render_to_string(
+                        'final/categorization_final.html')
                     final = Final(
                         session=session,
-                        final_text="Thanks for your participation!",
+                        final_text="Thanks for your participation!" + final_message,
                         rank=None,
                         show_social=False,
                         show_profile_link=False
@@ -163,9 +165,11 @@ class Categorization(Base):
                         # Delete failed_training tag from profile
                         if profile.question == 'failed_training':
                             profile.delete()
+                    final_message = render_to_string(
+                        'final/categorization_final.html')
                     final = Final(
                         session=session,
-                        final_text="Thanks for your participation!",
+                        final_text="Thanks for your participation!" + final_message,
                         rank=None,
                         show_social=False,
                         show_profile_link=False
@@ -235,9 +239,11 @@ class Categorization(Base):
                 # Delete failed_training tag from profile
                 if profile.question == 'failed_training':
                     profile.delete()
+            final_message = render_to_string(
+                'final/categorization_final.html')
             final = Final(
                 session=session,
-                final_text=final_text,
+                final_text=final_text + final_message,
                 rank=rank,
                 show_social=False,
                 show_profile_link=False,
@@ -500,19 +506,6 @@ class Categorization(Base):
             section, choices, result_pk, title=cls.get_title(session), config=config)
 
         return trial.action()
-
-    @staticmethod
-    def calculate_score(result, data, form_element):
-        # a result's score is used to keep track of how many correct results were in a row
-        # for catch trial, set score to 2 -> not counted for calculating turnpoints
-        try:
-            expected_response = result.expected_response
-        except Exception as e:
-            expected_response = None
-        if expected_response and expected_response == form_element['value']:
-            return 1
-        else:
-            return 0
 
     @classmethod
     def get_title(cls, session):

@@ -3,31 +3,13 @@ import json
 
 from django.contrib import admin
 from django.db import models
-from django.forms import CheckboxSelectMultiple, ModelForm, ChoiceField
+from django.shortcuts import render, redirect
+from django.forms import CheckboxSelectMultiple
 from django.http import HttpResponse, JsonResponse
 from inline_actions.admin import InlineActionsModelAdminMixin
 from experiment.models import Experiment
-from experiment.rules import EXPERIMENT_RULES
 
-class ExperimentForm(ModelForm):
-    # TO DO: add "clean_slug" method which checks that slug is NOT
-    # "experiment", "participant", "profile"
-
-    def __init__(self, *args, **kwargs):
-        super(ModelForm, self).__init__(*args, **kwargs)
-
-        choices = tuple()
-        for i in EXPERIMENT_RULES:
-            choices += ((i, EXPERIMENT_RULES[i].__name__),)
-
-        self.fields['rules'] = ChoiceField(
-            choices=choices
-        )
-
-    class Meta:
-        model = Experiment
-        fields = ['name', 'slug', 'active', 'rules',
-                  'rounds', 'bonus_points', 'playlists', 'experiment_series']
+from experiment.admin.forms import ExperimentForm, ExportForm, TemplateForm, EXPORT_TEMPLATES
 
 
 class ExperimentAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
@@ -60,17 +42,53 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
 
     def export_csv(self, request, obj, parent_obj=None):
         """Export experiment data in CSV, force download"""
+        # Handle export command from intermediate form
+        if '_export' in request.POST:
+            session_keys = []
+            result_keys = []
+            export_options = []
+            # Get all export options
+            session_keys = [key for key in request.POST.getlist(
+                'export_session_fields')]
+            result_keys = [key for key in request.POST.getlist(
+                'export_result_fields')]
+            export_options = [
+                key for key in request.POST.getlist('export_options')]
 
-        response = HttpResponse(content_type='text/csv')
-        response['Content-Disposition'] = 'attachment; filename="{}.csv"'.format(obj.slug)
+            response = HttpResponse(content_type='text/csv')
+            response['Content-Disposition'] = 'attachment; filename="{}.csv"'.format(
+                obj.slug)
+            # Get filtered data
+            experiment_table, fieldnames = obj.export_table(
+                session_keys, result_keys, export_options)
+            fieldnames.sort()
+            writer = csv.DictWriter(response, fieldnames)
+            writer.writeheader()
+            writer.writerows(experiment_table)
+            return response
+        # Go back to admin experiment overview
+        if '_back' in request.POST:
+            return redirect('/admin/experiment/experiment')
+        # Load a template in the export form
+        if '_template' in request.POST:
+            selected_template = request.POST.get('select_template')
+        else:
+            selected_template = 'wide'
 
-        experiment_table, fieldnames = obj.export_table()
-        fieldnames.sort()
-        writer = csv.DictWriter(response, fieldnames)
-        writer.writeheader()
-        writer.writerows(experiment_table)
-
-        return response
+        initial_fields = {'export_session_fields': EXPORT_TEMPLATES[selected_template][0],
+                          'export_result_fields': EXPORT_TEMPLATES[selected_template][1],
+                          'export_options': EXPORT_TEMPLATES[selected_template][2]
+                          }
+        form = ExportForm(
+            initial=initial_fields)
+        template_form = TemplateForm(
+            initial={'select_template': selected_template})
+        return render(
+            request,
+            'csv-export.html',
+            context={'form': form,
+                     'template_form': template_form}
+        )
 
     export_csv.short_description = "Export CSV"
 

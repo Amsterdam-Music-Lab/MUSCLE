@@ -10,6 +10,7 @@ class Participant(models.Model):
     unique_hash = models.CharField(
         max_length=64, unique=True, default=uuid.uuid4)
     country_code = models.CharField(max_length=3, default="")
+    access_info = models.CharField(max_length=512, default="", null=True)
 
     def __str__(self):
         return "Participant {}".format(self.id)
@@ -35,6 +36,7 @@ class Participant(models.Model):
             "id": self.id,
             "unique_hash": self.unique_hash,
             "country_code": self.country_code,
+            "access_info": self.access_info,
             "profile": self.profile_object()
         }
 
@@ -48,7 +50,8 @@ class Participant(models.Model):
         for profile in self.profile():
             profile_object[profile.question] = profile.answer
             if profile.score:
-                profile_object['{}_score'.format(profile.question)] = profile.score
+                profile_object['{}_score'.format(
+                    profile.question)] = profile.score
         return profile_object
 
     def is_dutch(self):

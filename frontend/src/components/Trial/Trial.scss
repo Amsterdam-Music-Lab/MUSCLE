@@ -29,26 +29,26 @@
     // ------------------------
 
     &.boolean {
-        
-        .aha__player-small:nth-of-type(1), .playback {
+        .player-wrapper:nth-of-type(1).aha__player-small,
+        .playback {
             .btn,
             .banner {
                 @include btn-style($yellow);
             }
         }
-        .aha__player-small:nth-of-type(2) {
+        .player-wrapper:nth-of-type(2) .aha__player-small {
             .btn,
             .banner {
                 @include btn-style($blue);
             }
         }
-        .aha__player-small:nth-of-type(3) {
+        .player-wrapper:nth-of-type(3) .aha__player-small {
             .btn,
             .banner {
                 @include btn-style($teal);
             }
         }
-        .aha__player-small:nth-of-type(4) {
+        .player-wrapper:nth-of-type(4) .aha__player-small {
             .btn,
             .banner {
                 @include btn-style($pink);
@@ -68,26 +68,27 @@
         }
     }
 
-    &.boolean-negative-first{
-        .aha__player-small:nth-of-type(1), .playback {
+    &.boolean-negative-first {
+        .player-wrapper:nth-of-type(1).aha__player-small,
+        .playback {
             .btn,
             .banner {
                 @include btn-style($yellow);
             }
         }
-        .aha__player-small:nth-of-type(2) {
+        .player-wrapper:nth-of-type(2) .aha__player-small {
             .btn,
             .banner {
                 @include btn-style($blue);
             }
         }
-        .aha__player-small:nth-of-type(3) {
+        .player-wrapper:nth-of-type(3) .aha__player-small {
             .btn,
             .banner {
                 @include btn-style($teal);
             }
         }
-        .aha__player-small:nth-of-type(4) {
+        .player-wrapper:nth-of-type(4) .aha__player-small {
             .btn,
             .banner {
                 @include btn-style($pink);
@@ -104,17 +105,15 @@
         }
     }
 
-    
-
     &.neutral {
 
-        .aha__player-small:nth-of-type(1){
+        .player-wrapper:nth-of-type(1) .aha__player-small {
             .btn,
             .banner {
                 @include btn-style($blue);
             }
         }
-        .aha__player-small:nth-of-type(2) {
+        .player-wrapper:nth-of-type(2) .aha__player-small {
             .btn,
             .banner {
                 @include btn-style($yellow);
@@ -139,13 +138,13 @@
     }
 
     &.neutral-inverted {
-        .aha__player-small:nth-of-type(1) {
+        .player-wrapper:nth-of-type(1) .aha__player-small {
             .btn,
             .banner {
                 @include btn-style($yellow);
             }
         }
-        .aha__player-small:nth-of-type(2) {
+        .player-wrapper:nth-of-type(2) .aha__player-small {
             .btn,
             .banner {
                 @include btn-style($blue);
@@ -167,13 +166,13 @@
 
     &.neutral,
     &.neutral-inverted {
-        .aha__player-small:nth-of-type(3) {
+        .player-wrapper:nth-of-type(3) .aha__player-small {
             .btn,
             .banner {
                 @include btn-style($teal);
             }
         }
-        .aha__player-small:nth-of-type(4) {
+        .player-wrapper:nth-of-type(4) .aha__player-small {
             .btn,
             .banner {
                 @include btn-style($pink);
@@ -189,8 +188,20 @@
         }
     }
 
+    &.primary-form {
+        form {
+            .btn:nth-of-type(1) {
+                @include btn-style($pink);
+            }
+        }
+    }
+
     &.blue-players {
-        .playback {
+        .playback,
+        .player-wrapper:nth-of-type(1).aha__player-small,
+        .player-wrapper:nth-of-type(2).aha__player-small,
+        .player-wrapper:nth-of-type(3).aha__player-small,
+        .player-wrapper:nth-of-type(4) .aha__player-small {
             .btn,
             .banner {
                 @include btn-style($blue);
@@ -199,12 +210,15 @@
     }
 
     &.pink-players {
-        .playback {
+        .playback,
+        .player-wrapper:nth-of-type(1).aha__player-small,
+        .player-wrapper:nth-of-type(2).aha__player-small,
+        .player-wrapper:nth-of-type(3).aha__player-small,
+        .player-wrapper:nth-of-type(4) .aha__player-small {
             .btn,
             .banner {
                 @include btn-style($pink);
             }
         }
     }
-
 }

@@ -6,10 +6,12 @@ import { MEDIA_ROOT } from "../../config";
 import AutoPlay from "./Autoplay";
 import PlayButton from "../PlayButton/PlayButton";
 import MultiPlayer from "./MultiPlayer";
+import SpectrogramPlayer from "./SpectrogramPlayer";
 
 export const AUTOPLAY = "AUTOPLAY";
 export const BUTTON = "BUTTON";
 export const MULTIPLAYER = "MULTIPLAYER";
+export const SPECTROGRAM = "SPECTROGRAM";
 
 const Playback = ({
     playerType,
@@ -32,6 +34,20 @@ const Playback = ({
     const yPosition = useRef(-1);
 
     const resultBuffer = [];
+
+    // Keep track of which player has played, in a an array of player indices
+    const [hasPlayed, setHasPlayed] = useState([]);
+    const prevPlayerIndex = useRef(-1);
+
+    useEffect(() => {
+        const index = prevPlayerIndex.current;
+        if (index !== -1) {
+            setHasPlayed((hasPlayed) =>
+                index === -1 || hasPlayed.includes(index) ? hasPlayed : [...hasPlayed, index]
+            );
+        }
+        prevPlayerIndex.current = parseInt(playerIndex);
+    }, [playerIndex]);
 
     // Preload first section
     useEffect(() => {
@@ -82,22 +98,13 @@ const Playback = ({
             cancelAudioListeners();
 
             // listen for active audio events
-            activeAudioEndedListener.current = audio.listenOnce(
-                "ended",
-                onAudioEnded
-            );
+            activeAudioEndedListener.current = audio.listenOnce("ended", onAudioEnded);
 
             // Play audio
             audio.playFrom(Math.max(0, playConfig.playhead || 0));
             startedPlaying && startedPlaying();
         },
-        [
-            cancelAudioListeners,
-            playConfig.mute,
-            playConfig.playhead,
-            startedPlaying,
-            onAudioEnded,
-        ]
+        [cancelAudioListeners, playConfig.mute, playConfig.playhead, startedPlaying, onAudioEnded]
     );
 
     // Keep track of last player index
@@ -111,6 +118,7 @@ const Playback = ({
 
             // Load different audio
             if (index !== lastPlayerIndex.current) {
+<<<<<<< HEAD
                 audio.loadUntilAvailable(
                     MEDIA_ROOT + sections[index].url,
                     () => { 
@@ -119,6 +127,11 @@ const Playback = ({
                 );
                 checkMatchingPairs(index);
                 
+=======
+                audio.loadUntilAvailable(MEDIA_ROOT + sections[index].url, () => {
+                    playAudio(index);
+                });
+>>>>>>> develop
                 return;
             }
 
@@ -206,9 +219,27 @@ const Playback = ({
             case AUTOPLAY:
                 return <AutoPlay {...attrs} onPreloadReady={onPreloadReady} />;
             case BUTTON:
-                return <PlayButton {...attrs} isPlaying={playerIndex > -1} />;
+                return (
+                    <PlayButton
+                        {...attrs}
+                        isPlaying={playerIndex > -1}
+                        disabled={playConfig.play_once && hasPlayed.includes(0)}
+                    />
+                );
             case MULTIPLAYER:
-                return <MultiPlayer {...attrs} />;
+                return (
+                    <MultiPlayer
+                        {...attrs}
+                        disabledPlayers={playConfig.play_once ? hasPlayed : undefined}
+                    />
+                );
+            case SPECTROGRAM:
+                return (
+                    <SpectrogramPlayer
+                        {...attrs}
+                        disabledPlayers={playConfig.play_once ? hasPlayed : undefined}
+                    />
+                );
             default:
                 return <div> Unknown player view {view} </div>;
         }

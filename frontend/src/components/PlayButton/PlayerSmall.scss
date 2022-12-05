@@ -3,6 +3,13 @@
     padding-bottom: 80px;
     width: 120px;
     height: 120px;
+    transition: filter 0.3s ease-out;
+
+    &.disabled{
+        filter: grayscale(100%);
+        pointer-events: none;
+        opacity: 0.5 !important;
+    }
 
     &.hasLabel{
         height: 180px;

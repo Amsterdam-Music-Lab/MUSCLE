@@ -4,6 +4,7 @@ class Playback(object):
             - 'AUTOPLAY' - player starts automatically
             - 'BUTTON' - display one play button
             - 'MULTIPLAYER' - display multiple small play buttons, one per section
+            - 'SPECTROGRAM' - extends multiplayer with a list of spectrograms
         - sections: a list of sections (in many cases, will only contain *one* section)
         - preload_message: text to display during preload
         - instruction: text to display during presentation of the sound
@@ -15,14 +16,17 @@ class Playback(object):
             - auto_play: whether sound will start automatically
             - show_animation: whether to show an animation during playback 
             - (multiplayer) label_style: player index number style: NUMERIC, ALPHABETIC, ROMAN or empty (no label)
+            - play_once: the sound can only be played once
     '''
 
-    TYPE_AUTOPLAY='AUTOPLAY'
-    TYPE_BUTTON='BUTTON'
-    TYPE_MULTIPLAYER='MULTIPLAYER'
+    TYPE_AUTOPLAY = 'AUTOPLAY'
+    TYPE_BUTTON = 'BUTTON'
+    TYPE_MULTIPLAYER = 'MULTIPLAYER'
+    TYPE_SPECTROGRAM = 'SPECTROGRAM'
 
     def __init__(self, sections, player_type='AUTOPLAY', preload_message='', instruction='', play_config=None):
-        self.sections = [{'id': s.id, 'url': s.absolute_url()} for s in sections]
+        self.sections = [{'id': s.id, 'url': s.absolute_url()}
+                         for s in sections]
         self.player_type = player_type
         self.preload_message = preload_message
         self.instruction = instruction
@@ -30,7 +34,8 @@ class Playback(object):
             'ready_time': 0,
             'playhead': 0,
             'show_animation': False,
-            'mute': False
+            'mute': False,
+            'play_once': False,
         }
         if play_config:
             self.play_config.update(play_config)
