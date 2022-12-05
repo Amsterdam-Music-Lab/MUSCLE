@@ -365,21 +365,21 @@ class Huang2022(Base):
         ]
         return " ".join([str(m) for m in messages])
     
-    @classmethod
-    def handle_results(cls, session, data):
-        try:
-            form = data.pop('form')
-            form_element = form[0]
-            result_id = form_element['result_id']
-        except:
-            form_element = None
-            result_id = data['result']['id']
-        result = cls.get_result(session, result_id)
-        score = cls.calculate_score(result, data, form_element)
-        result.save_json_data(data)
-        result.score = score
-        result.save()
-        return result
+    # @classmethod
+    # def handle_results(cls, session, data):
+    #     try:
+    #         form = data.pop('form')
+    #         form_element = form[0]
+    #         result_id = form_element['result_id']
+    #     except:
+    #         form_element = None
+    #         result_id = data['result']['id']
+    #     result = cls.get_result(session, result_id)
+    #     score = cls.calculate_score(result, data, form_element)
+    #     result.save_json_data(data)
+    #     result.score = score
+    #     result.save()
+    #     return result
 
 
 region_choices = {

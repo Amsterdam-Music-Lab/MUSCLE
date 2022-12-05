@@ -22,9 +22,10 @@ class Base(object):
         return result.pk
 
     @classmethod
-    def get_result(cls, session, result_id=None):
+    def get_result(cls, session, data):
         from experiment.models import Result
         
+        result_id = data.get('result_id')
         if not result_id:
             result = Result(session=session)
         try:
@@ -38,47 +39,34 @@ class Base(object):
     def handle_results(cls, session, data):
         """ 
         if the given_result is an array of results, retrieve and save results for all of them
+        else, handle results at top level
         """
-        form = data.pop('form')
+        form = data.get('form')
+        if not form:
+            # handle results at top level
+            result = cls.score_result(session, data)
         for form_element in form:
-            result = cls.get_result(session, form_element['result_id'])
-
-            # Set given_response here, so it can be used in calculate_score
-            result.given_response = form_element['value']
-            
-            # Calculate score
-            scoring_rule = SCORING_RULES.get(form_element['scoring_rule'], None)
-            score = session.experiment_rules().calculate_score(result, data, scoring_rule, form_element)
-            if not score:
-                score = 0
-
-            result.save_json_data(data)
-            result.score = score
-            result.save()
+            result = cls.score_result(session, form_element)
         return result
 
     @classmethod
-    def handle_result(cls, session, data):
+    def score_result(cls, session, data):
         """
         Create a result for given session, based on the result data and section_id
 
         parameters:
         session: a Session object
-        data: a dictionary, containing an optional result_id, and optional other params:
+        data: a dictionary, containing an optional result_id, scoring_rule, and optional other params:
         {
             result_id: int [optional] 
-            ...
-            all other params in the custom result
+            scoring_rule: string [optional]
         }
         """
-        result_id = data.get('result_id')
-        result = cls.get_result(session, result_id)
+        result = cls.get_result(session, data)
+        result.given_response = data.get('value')
 
         # Calculate score
-        try:
-            scoring_rule = SCORING_RULES.get(data['config'].get('scoring_rule', None))
-        except:
-            scoring_rule = None
+        scoring_rule = SCORING_RULES.get(data.get('scoring_rule', 'undefined'))
         score = session.experiment_rules().calculate_score(result, data, scoring_rule)
         if not score:
             score = 0
@@ -91,11 +79,11 @@ class Base(object):
         return result
 
     @classmethod
-    def calculate_score(cls, result, data, scoring_rule, form_element=None):
+    def calculate_score(cls, result, data, scoring_rule):
         """use scoring rule to calculate score
         If not scoring rule is defined, return None"""
         if scoring_rule:
-            return scoring_rule(form_element, result, data)
+            return scoring_rule(result, data)
         return None
 
     @staticmethod

@@ -19,27 +19,27 @@ def correctness_score(form_element, result, data):
     else:
         return 0
 
-def likert_score(form_element, result, data):
-    return form_element['value']
+def likert_score(result, data):
+    return data['value']
 
-def reverse_likert_score(form_element, result, data):
-    return form_element['scale_steps'] + 1 - form_element['value']
+def reverse_likert_score(result, data):
+    return data['scale_steps'] + 1 - data['value']
 
-def categories_likert_score(form_element, result, data):
-    choices = list(form_element['choices'].keys())
-    return choices.index(form_element['value']) + 1
+def categories_likert_score(result, data):
+    choices = list(data['choices'].keys())
+    return choices.index(data['value']) + 1
 
-def reaction_time_score(form_element, result, data):
+def reaction_time_score(result, data):
     expected_response = check_expected_response(result)
     if expected_response:
         time = data.get('decision_time')
         timeout = data.get('config').get('decision_time')
-        if expected_response == form_element['value']:
+        if expected_response == data['value']:
             return math.ceil(timeout - time)
         else:
             return math.floor(-time)
 
-def song_sync_score(form_element, result, data):
+def song_sync_score(result, data):
     score = 0
     # Calculate from the data object
     # If requested keys don't exist, return None

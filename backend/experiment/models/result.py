@@ -12,8 +12,8 @@ class Result(models.Model):
         Section, on_delete=models.SET_NULL, null=True, blank=True)
 
     created_at = models.DateTimeField(default=timezone.now)
-    expected_response = models.CharField(max_length=100, blank=True)
-    given_response = models.CharField(max_length=100, blank=True)
+    expected_response = models.CharField(max_length=100, blank=True, null=True)
+    given_response = models.CharField(max_length=100, blank=True, null=True)
     comment = models.CharField(max_length=100, default='')
     score = models.FloatField(null=True, blank=True)
 
