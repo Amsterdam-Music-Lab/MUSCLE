@@ -44,7 +44,7 @@ class Base(object):
         form = data.get('form')
         if not form:
             # handle results at top level
-            result = cls.score_result(session, data)
+            return cls.score_result(session, data)
         for form_element in form:
             result = cls.score_result(session, form_element)
         return result
@@ -67,6 +67,7 @@ class Base(object):
 
         # Calculate score
         scoring_rule = SCORING_RULES.get(data.get('scoring_rule', 'undefined'))
+        print(scoring_rule)
         score = session.experiment_rules().calculate_score(result, data, scoring_rule)
         if not score:
             score = 0

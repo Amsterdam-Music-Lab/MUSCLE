@@ -46,6 +46,7 @@ def song_sync_score(result, data):
     try:
         config = data['config']
         result = data['result']
+        print(result['continuation_correctness'])
         # Calculate scores based on result type
         if result['type'] == 'time_passed':
             score = 0
