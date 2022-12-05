@@ -118,7 +118,6 @@ const Playback = ({
 
             // Load different audio
             if (index !== lastPlayerIndex.current) {
-<<<<<<< HEAD
                 audio.loadUntilAvailable(
                     MEDIA_ROOT + sections[index].url,
                     () => { 
@@ -127,11 +126,6 @@ const Playback = ({
                 );
                 checkMatchingPairs(index);
                 
-=======
-                audio.loadUntilAvailable(MEDIA_ROOT + sections[index].url, () => {
-                    playAudio(index);
-                });
->>>>>>> develop
                 return;
             }
 
