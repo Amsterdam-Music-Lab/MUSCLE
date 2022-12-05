@@ -37,7 +37,7 @@ class MusicalPreferences(Base):
 
     @classmethod
     def next_round(cls, session, request_session=None):
-        if session.last_result() and session.last_result().score == -1:
+        if session.last_result() and session.last_result().score_model.value == -1:
             # last result was key='continue', value='no':
             return cls.get_final_view(session)
         n_results = session.rounds_passed()

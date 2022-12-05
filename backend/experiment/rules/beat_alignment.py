@@ -81,7 +81,7 @@ class BeatAlignment(Base):
             session.finish()
             session.save()
             percentage = int(
-                (sum([r.score for r in session.result_set.all()]) / session.experiment.rounds) * 100)
+                (sum([r.score_model.value for r in session.result_set.all()]) / session.experiment.rounds) * 100)
             feedback = _('Well done! You’ve answered {} percent correctly!').format(
                 percentage)
             trivia = _('In the UK, over 140.000 people did \

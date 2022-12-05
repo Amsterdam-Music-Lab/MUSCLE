@@ -235,7 +235,7 @@ class DurationDiscrimination(Base):
                 trial_condition,
                 difficulty)
         else:
-            if previous_results.first().score == 0:
+            if previous_results.first().score_model.value == 0:
                 # the previous response was incorrect
                 json_data = session.load_json_data()
                 direction = json_data.get('direction')
@@ -324,7 +324,7 @@ class DurationDiscrimination(Base):
         answer = False
         while results:
             result = results.pop(0)
-            if result.score == 1:
+            if result.score_model.value == 1:
                 if result.comment:
                     # a comment on the second-to-last result indicates that difficulty changed there;
                     # we need to wait for another correct response before changing again

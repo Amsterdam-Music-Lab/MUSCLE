@@ -59,5 +59,5 @@ class MatchingPairs(Base):
     def handle_result(cls, session, data):
         result = cls.get_result(session)
         result.json_data = data.get('json_data')
-        result.score = data.get('decision_time')
+        result.score_model.value = data.get('decision_time')
         result.save()

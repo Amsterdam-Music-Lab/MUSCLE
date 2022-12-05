@@ -106,8 +106,8 @@ class ToontjeHoger3Plink(Base):
         feedback_prefix = "Goedzo!"
 
         # - Partial score or all questions wrong
-        all_wrong_score = last_result.score == 2 * cls.SCORE_EXTRA_WRONG
-        only_half_score = last_result.score < cls.SCORE_EXTRA_1_CORRECT + \
+        all_wrong_score = last_result.score_model.value == 2 * cls.SCORE_EXTRA_WRONG
+        only_half_score = last_result.score_model.value < cls.SCORE_EXTRA_1_CORRECT + \
             cls.SCORE_EXTRA_2_CORRECT if not all_wrong_score else False
 
         if all_wrong_score:

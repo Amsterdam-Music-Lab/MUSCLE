@@ -40,7 +40,7 @@ class Session(models.Model):
         """Get last score, or return 0 if no scores are set"""
 
         if self.result_set.count() > 0:
-            return self.result_set.last().score
+            return self.result_set.last().score_model.value
 
         return 0
 

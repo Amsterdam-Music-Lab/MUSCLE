@@ -74,7 +74,7 @@ class Base(object):
 
         # Populate and save the result
         result.save_json_data(data)
-        result.score = score
+        result.score_model.value = score
         result.save()
 
         return result
@@ -96,10 +96,10 @@ class Base(object):
 
         for result in session.result_set.all():
             # if a result has score != 0, it was recognized
-            if result.score:
+            if result.score_model.value:
                 total += 1
 
-                if result.score > 0:
+                if result.score_model.value > 0:
                     # if a result has score > 0, it was identified correctly
                     correct += 1
 

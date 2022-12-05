@@ -15,7 +15,7 @@ class Result(models.Model):
     expected_response = models.CharField(max_length=100, blank=True, null=True)
     given_response = models.CharField(max_length=100, blank=True, null=True)
     comment = models.CharField(max_length=100, default='')
-    score = models.FloatField(null=True, blank=True)
+    score_model = models.ForeignKey('Score', on_delete=models.CASCADE, null=True, blank=True)
 
     # Contains data in json_format
     json_data = models.TextField(blank=True)
@@ -36,7 +36,7 @@ class Result(models.Model):
         return {
             'created_at': self.created_at.isoformat(),
             'section': self.section.name if self.section else None,
-            'score': self.score,
+            'score': self.score_model.value,
             'expected_response': self.expected_response,
             'given_response': self.given_response,
             'comment': self.comment,

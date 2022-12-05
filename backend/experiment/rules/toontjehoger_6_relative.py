@@ -76,7 +76,7 @@ class ToontjeHoger6Relative(Base):
             logger.error("No last result")
             feedback = "Er is een fout opgetreden"
         else:
-            if last_result.score == cls.SCORE_CORRECT:
+            if last_result.score_model.value == cls.SCORE_CORRECT:
                 feedback = "Dat is correct! De melodieën in de muziekfragmenten zijn inderdaad verschillend."
             else:
                 feedback = "Helaas! De melodieën in de muziekfragmenten zijn toch echt verschillend."

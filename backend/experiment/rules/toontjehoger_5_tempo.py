@@ -208,7 +208,7 @@ class ToontjeHoger5Tempo(Base):
             logger.error("No last result")
             feedback = "Er is een fout opgetreden"
         else:
-            if last_result.score == cls.SCORE_CORRECT:
+            if last_result.score_model.value == cls.SCORE_CORRECT:
                 feedback = "Goedzo! Het was inderdaad antwoord {}!".format(
                     last_result.expected_response.upper())
             else:
