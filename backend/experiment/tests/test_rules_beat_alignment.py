@@ -70,6 +70,7 @@ class BeatAlignmentRuleTest(TestCase):
         self.assertEqual( response_json['next_round'][0]['view'],'TRIAL_VIEW')
         session_id = response_json['session']['id']
         result_id = response_json['next_round'][0]['feedback_form']['form'][0]['result_id']
+        results = Session.objects.get(id=session_id).result_set.all()
 
         rounds_n = Experiment.objects.get(pk=1).rounds # Default 10
         views_exp = ['TRIAL_VIEW']*(rounds_n-1) + ['FINAL'] 
@@ -89,7 +90,6 @@ class BeatAlignmentRuleTest(TestCase):
                             "result_id": result_id,
                             "is_skippable": False,
                             "submits": True,
-                            "scoring_rule": "CORRECTNESS",
                             "choices": {
                                 "ON": "ALIGNED TO THE BEAT",
                                 "OFF": "NOT ALIGNED TO THE BEAT"

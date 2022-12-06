@@ -33,8 +33,8 @@ class Session(models.Model):
 
     def total_score(self):
         """Sum of all result scores"""
-        score = self.result_set.aggregate(models.Sum('score'))
-        return self.experiment.bonus_points + (score['score__sum'] if score['score__sum'] else 0)
+        score = self.result_set.aggregate(score_sum=models.Sum('score_model__value'))
+        return self.experiment.bonus_points + (score['score_sum'] if score['score_sum'] else 0)
 
     def last_score(self):
         """Get last score, or return 0 if no scores are set"""

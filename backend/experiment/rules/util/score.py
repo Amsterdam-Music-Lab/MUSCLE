@@ -4,17 +4,15 @@ import math
 logger = logging.getLogger(__name__)
 
 def check_expected_response(result):
-    if not result:
-        return None
     try:
         return result.expected_response
     except Exception as e:
         logger.log(e)
         return None
 
-def correctness_score(form_element, result, data):
+def correctness_score(result, data):
     expected_response = check_expected_response(result)
-    if expected_response and expected_response == form_element['value']:
+    if expected_response and expected_response == result.given_response:
         return 1
     else:
         return 0
@@ -46,7 +44,6 @@ def song_sync_score(result, data):
     try:
         config = data['config']
         result = data['result']
-        print(result['continuation_correctness'])
         # Calculate scores based on result type
         if result['type'] == 'time_passed':
             score = 0

@@ -88,7 +88,7 @@ class HBat(Base):
             return None
         expected_result = 'SLOWER' if trial_condition else 'FASTER'
         # create Result object and save expected result to database
-        result_pk = cls.prepare_result(session, section, expected_result)
+        result_pk = cls.prepare_result(session, section, expected_result, scoring_rule='CORRECTNESS')
         question = ChoiceQuestion(
             key='longer_or_equal',
             question=_(
@@ -98,7 +98,6 @@ class HBat(Base):
                 'FASTER': _('FASTER')
             },
             view='BUTTON_ARRAY',
-            scoring_rule='CORRECTNESS',
             result_id=result_pk,
             submits=True
         )
