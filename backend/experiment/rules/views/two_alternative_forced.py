@@ -22,7 +22,6 @@ class TwoAlternativeForced(Trial):
             choices=choices,
             view='BUTTON_ARRAY',
             result_id=result_pk,
-            scoring_rule='CORRECTNESS',
             submits=True,
             config = {'button_text_invisible': True, 'buttons_large_gap': True}
         )

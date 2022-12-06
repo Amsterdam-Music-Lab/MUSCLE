@@ -81,7 +81,7 @@ class BeatAlignment(Base):
             session.finish()
             session.save()
             percentage = int(
-                (sum([r.score for r in session.result_set.all()]) / session.experiment.rounds) * 100)
+                (sum([r.score_model.value for r in session.result_set.all()]) / session.experiment.rounds) * 100)
             feedback = _('Well done! You’ve answered {} percent correctly!').format(
                 percentage)
             trivia = _('In the UK, over 140.000 people did \
@@ -130,7 +130,7 @@ class BeatAlignment(Base):
         section = session.section_from_unused_song(filter_by)
         condition = section.filename.split('_')[-1][:-4]
         expected_result = 'ON' if condition == 'on' else 'OFF'
-        result_pk = cls.prepare_result(session, section, expected_result)
+        result_pk = cls.prepare_result(session, section, expected_result, scoring_rule='CORRECTNESS')
         question = ChoiceQuestion(
             question=_(
                 "Are the beeps ALIGNED TO THE BEAT or NOT ALIGNED TO THE BEAT?"),
@@ -141,7 +141,6 @@ class BeatAlignment(Base):
             },
             view='BUTTON_ARRAY',
             result_id=result_pk,
-            scoring_rule='CORRECTNESS',
             submits=True
         )
         form = Form([question])

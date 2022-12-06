@@ -6,6 +6,7 @@ from .participant import Participant
 from .profile import Profile
 from .session import Session
 from .result import Result
+from .score import Score
 
 __all__ = ["Playlist", "Section", "Experiment",
-           "Participant", "Profile", "Session", "Result", "ExperimentSeries"]
+           "Participant", "Profile", "Session", "Result", "ExperimentSeries", "Score"]

@@ -95,7 +95,7 @@ class ToontjeHoger1Mozart(Base):
     def get_answer_explainer(cls, session, round):
         last_result = session.last_result()
 
-        correct_answer_given = last_result.score > 0
+        correct_answer_given = last_result.score_model.value > 0
 
         heading = "Goed gedaan!" if correct_answer_given else "Helaas!"
 
@@ -209,7 +209,7 @@ class ToontjeHoger1Mozart(Base):
         return [explainer]
 
     @classmethod
-    def calculate_score(cls, result, data, scoring_rule, form_element):
+    def calculate_score(cls, result, data):
         score = cls.SCORE_CORRECT if result.expected_response == result.given_response else cls.SCORE_WRONG
         return score
 

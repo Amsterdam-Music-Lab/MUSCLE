@@ -120,7 +120,7 @@ class Experiment(models.Model):
                     full_result_data = {
                         'section_name': result.section.name if result.section else None,
                         'result_created_at': result.created_at.isoformat(),
-                        'result_score': result.score,
+                        'result_score': result.score_model.value,
                         'result_comment': result.comment,
                         'expected_response': result.expected_response,
                         'given_response': result.given_response

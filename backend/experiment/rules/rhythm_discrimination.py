@@ -132,11 +132,11 @@ def next_trial_actions(session, round_number, request_session):
         if previous_results.count():
             same = previous_results.first().expected_response == 'SAME'
             actions.append(
-                response_explainer(previous_results.first().score, same)
+                response_explainer(previous_results.first().score_model.value, same)
             )
         if round_number == 5:
             total_score = sum(
-                [res.score for res in previous_results.all()[:4]])
+                [res.score_model.value for res in previous_results.all()[:4]])
             if total_score < 2:
                 # start practice over
                 actions.append(practice_again_explainer())
@@ -163,7 +163,7 @@ def next_trial_actions(session, round_number, request_session):
     expected_result = 'SAME' if condition['group'] == '1' else 'DIFFERENT'
     # create Result object and save expected result to database
     result_pk = RhythmDiscrimination.prepare_result(
-        session, section, expected_result)
+        session, section, expected_result, scoring_rule='CORRECTNESS')
     question = ChoiceQuestion(
         key='same',
         question=_(
@@ -173,7 +173,6 @@ def next_trial_actions(session, round_number, request_session):
             'DIFFERENT': _('DIFFERENT')
         },
         view='BUTTON_ARRAY',
-        scoring_rule='CORRECTNESS',
         result_id=result_pk,
         submits=True
     )
@@ -273,7 +272,7 @@ def response_explainer(correct, same, button_label=_('Next fragment')):
 
 def finalize_experiment(session, request_session):
     # we had 4 practice trials and 60 experiment trials
-    percentage = (sum([res.score for res in session.result_set.all()]
+    percentage = (sum([res.score_model.value for res in session.result_set.all()]
                       ) / session.result_set.count()) * 100
     session.finish()
     session.save()

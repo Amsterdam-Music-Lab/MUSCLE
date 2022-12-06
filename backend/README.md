@@ -70,7 +70,7 @@ from .song_sync import SongSync
 
 class CustomSongSync(SongSync):
     @staticmethod
-    def calculate_score(session, data):
+    def calculate_score(session, result, data):
         # Custom score calculation here
 ```
 

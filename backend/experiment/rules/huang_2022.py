@@ -256,12 +256,11 @@ class Huang2022(Base):
         if not section:
             print("Warning: no next_song_sync section found")
             section = session.section_from_any_song()
-        result_id = cls.prepare_result(session, section)
+        result_id = cls.prepare_result(session, section, scoring_rule='SONG_SYNC')
         return SongSync(
             section=section,
             title=cls.get_trial_title(session, next_round_number),
-            result_id=result_id,
-            scoring_rule='SONG_SYNC'
+            result_id=result_id
         ).action()
 
     @classmethod
@@ -304,7 +303,7 @@ class Huang2022(Base):
             preload_message=_('Get ready!'))
         expected_result = this_section_info.get('novelty')
         # create Result object and save expected result to database
-        result_pk = cls.prepare_result(session, section, expected_result)
+        result_pk = cls.prepare_result(session, section, expected_result, scoring_rule='REACTION_TIME')
         form = Form([BooleanQuestion(
             key='heard_before',
             choices={
@@ -313,7 +312,6 @@ class Huang2022(Base):
             },
             question=_("Did you hear this song in previous rounds?"),
             result_id=result_pk,
-            scoring_rule='REACTION_TIME',
             submits=True)])
         config = {
             'style': 'boolean-negative-first',
@@ -350,12 +348,12 @@ class Huang2022(Base):
             if json_data.get('result') and json_data['result']['type'] == 'recognized':
                 n_sync_guessed += 1
                 sync_time += json_data['result']['recognition_time']
-                if result.score > 0:
+                if result.score_model.value > 0:
                     n_sync_correct += 1
             else:
                 if result.expected_response == 'old':
                     n_old_new_expected += 1
-                    if result.score > 0:
+                    if result.score_model.value > 0:
                         n_old_new_correct += 1
         thanks_message = _("Thank you for your contribution to science!")
         score_message = _(

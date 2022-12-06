@@ -37,7 +37,7 @@ class MusicalPreferences(Base):
 
     @classmethod
     def next_round(cls, session, request_session=None):
-        if session.last_result() and session.last_result().score == -1:
+        if session.last_result() and session.last_result().score_model.value == -1:
             # last result was key='continue', value='no':
             return cls.get_final_view(session)
         n_results = session.rounds_passed()
@@ -105,13 +105,13 @@ class MusicalPreferences(Base):
         return view.action()
     
     @classmethod
-    def calculate_score(cls, result, data, scoring_rule, form_element):
-        result.comment = form_element.get('key')
+    def calculate_score(cls, result, data):
+        result.comment = data.get('key')
         result.save()
-        if form_element.get('key') == 'like_song':
-            return int(form_element.get('value'))
-        elif form_element.get('key') == 'continue':
-            if form_element.get('value') == 'no':
+        if data.get('key') == 'like_song':
+            return int(data.get('value'))
+        elif data.get('key') == 'continue':
+            if data.get('value') == 'no':
                 return -1
         else:
             return None
