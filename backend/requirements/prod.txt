@@ -13,6 +13,7 @@ django==3.2.16
     #   django-inline-actions
 django-cors-headers==3.10.0
     # via -r requirements.in/base.txt
+django-dbbackup==3.3.0
 django-inline-actions==2.4.0
     # via -r requirements.in/base.txt
 gunicorn==20.1.0

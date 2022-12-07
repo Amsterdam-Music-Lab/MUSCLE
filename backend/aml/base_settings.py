@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'inline_actions',
     'corsheaders',
     'experiment',
+    'dbbackup'
 ]
 
 MIDDLEWARE = [
@@ -125,6 +126,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 MEDIA_ROOT = os.path.join(BASE_DIR, 'upload')
 MEDIA_URL = '/upload/'
 
+
 # Geoip service
 LOCATION_PROVIDER = os.getenv("AML_LOCATION_PROVIDER", "")
 
@@ -143,7 +145,6 @@ CORS_ORIGIN_ALLOW_ALL = False
 CORS_ALLOW_CREDENTIALS = True
 
 
-
 SESSION_SAVE_EVERY_REQUEST = True
 
 CSRF_USE_SESSIONS = False
@@ -153,3 +154,6 @@ CORS_ALLOW_CREDENTIALS = True
 LOCALE_PATHS = [os.path.join(BASE_DIR, 'locale')]
 
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
+
+DBBACKUP_STORAGE = 'django.core.files.storage.FileSystemStorage'
+DBBACKUP_STORAGE_OPTIONS = {'location': os.path.join(BASE_DIR, 'backup')}

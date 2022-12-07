@@ -24,6 +24,7 @@ django==3.2.16
     #   django-inline-actions
 django-cors-headers==3.10.0
     # via -r backend/requirements.in/base.txt
+django-dbbackup==3.3.0
 django-debug-toolbar==3.2.2
     # via -r backend/requirements.in/dev.txt
 django-inline-actions==2.4.0
