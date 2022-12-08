@@ -5,10 +5,10 @@ from experiment.admin.experiment import ExperimentAdmin
 from experiment.models import Experiment, Session, Result, Participant
 
 # Expected field count per model
-EXPERIMENT_FIELDS = 10
-SESSION_FIELDS = 8
-RESULT_FIELDS = 9
-PARTICIPANT_FIELDS = 4
+EXPECTED_EXPERIMENT_FIELDS = 10
+EXPECTED_SESSION_FIELDS = 8
+EXPECTED_RESULT_FIELDS = 9
+EXPECTED_PARTICIPANT_FIELDS = 4
 
 
 class MockRequest:
@@ -48,22 +48,22 @@ class TestAdminExperiment(TestCase):
     def test_experiment_model_fields(self):
         experiment = model_to_dict(Experiment.objects.first())
         experiment_fields = [key for key in experiment]
-        self.assertEqual(len(experiment_fields), EXPERIMENT_FIELDS)
+        self.assertEqual(len(experiment_fields), EXPECTED_EXPERIMENT_FIELDS)
 
     def test_session_model_fields(self):
         session = model_to_dict(Session.objects.first())
         session_fields = [key for key in session]
-        self.assertEqual(len(session_fields), SESSION_FIELDS)
+        self.assertEqual(len(session_fields), EXPECTED_SESSION_FIELDS)
 
     def test_result_model_fields(self):
         result = model_to_dict(Result.objects.first())
         result_fields = [key for key in result]
-        self.assertEqual(len(result_fields), RESULT_FIELDS)
+        self.assertEqual(len(result_fields), EXPECTED_RESULT_FIELDS)
 
     def test_participant_model(self):
         participant = model_to_dict(Participant.objects.first())
         participant_fields = [key for key in participant]
-        self.assertEqual(len(participant_fields), PARTICIPANT_FIELDS)
+        self.assertEqual(len(participant_fields), EXPECTED_PARTICIPANT_FIELDS)
 
     def test_admin_export(self):
         experiment = Experiment.objects.first()
