@@ -100,8 +100,8 @@ class Anisochrony(DurationDiscrimination):
             button_label='Ok'
         )
 
-    @staticmethod
-    def calculate_score(result, data, scoring_rule, form_element):
+    @classmethod
+    def calculate_score(cls, result, data):
         # a result's score is used to keep track of how many correct results were in a row
         # for catch trial, set score to 2 -> not counted for calculating turnpoints
         try:
@@ -109,7 +109,7 @@ class Anisochrony(DurationDiscrimination):
         except Exception as e:
             logger.log(e)
             expected_response = None
-        if expected_response and expected_response == form_element['value']:
+        if expected_response and expected_response == result.given_response:
             if expected_response == 'IRREGULAR':
                 return 1
             else:

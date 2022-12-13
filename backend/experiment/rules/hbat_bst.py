@@ -49,7 +49,7 @@ class BST(HBat):
             return None
         expected_result = 'in2' if trial_condition else 'in3'
         # create Result object and save expected result to database
-        result_pk = cls.prepare_result(session, section, expected_result)
+        result_pk = cls.prepare_result(session, section, expected_result, scoring_rule='CORRECTNESS')
         question = ChoiceQuestion(
             key='longer_or_equal',
             question=_(
@@ -60,7 +60,6 @@ class BST(HBat):
             },
             view='BUTTON_ARRAY',
             result_id=result_pk,
-            scoring_rule='CORRECTNESS',
             submits=True
         )
         playback = Playback([section])

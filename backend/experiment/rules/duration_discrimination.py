@@ -70,8 +70,8 @@ class DurationDiscrimination(Base):
                 session, cls.next_trial_action, request_session)
             return action
 
-    @staticmethod
-    def calculate_score(result, data, scoring_rule, form_element):
+    @classmethod
+    def calculate_score(cls, result, data):
         # a result's score is used to keep track of how many correct results were in a row
         # for catch trial, set score to 2 -> not counted for calculating turnpoints
         try:
@@ -79,7 +79,7 @@ class DurationDiscrimination(Base):
         except Exception as e:
             logger.log(e)
             expected_response = None
-        if expected_response and expected_response == form_element['value']:
+        if expected_response and expected_response == result.given_response:
             if expected_response == 'LONGER':
                 return 1
             else:
@@ -235,7 +235,7 @@ class DurationDiscrimination(Base):
                 trial_condition,
                 difficulty)
         else:
-            if previous_results.first().score == 0:
+            if previous_results.first().scoring.value == 0:
                 # the previous response was incorrect
                 json_data = session.load_json_data()
                 direction = json_data.get('direction')
@@ -324,7 +324,7 @@ class DurationDiscrimination(Base):
         answer = False
         while results:
             result = results.pop(0)
-            if result.score == 1:
+            if result.scoring.value == 1:
                 if result.comment:
                     # a comment on the second-to-last result indicates that difficulty changed there;
                     # we need to wait for another correct response before changing again

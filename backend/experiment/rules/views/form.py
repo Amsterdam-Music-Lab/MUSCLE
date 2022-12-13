@@ -1,8 +1,4 @@
-import json
-from venv import create
-
 from django.utils.translation import gettext_lazy as _
-
 
 class Question(object):
     ''' Question is part of a form.
@@ -15,7 +11,7 @@ class Question(object):
     - submits: whether entering a value for the question submits the form
     '''
 
-    def __init__(self, key, view='STRING', result_id=None, scoring_rule=None, explainer='', question='', is_skippable=False, submits=False, config=None):
+    def __init__(self, key, view='STRING', result_id=None, scoring_rule='', explainer='', question='', is_skippable=False, submits=False, config=None):
         self.key = key
         self.view = view
         self.explainer = explainer
