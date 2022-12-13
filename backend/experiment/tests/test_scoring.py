@@ -125,8 +125,8 @@ class ScoringTest(TestCase):
         client_request = self.likert_request('LIKERT', 6)
         response = self.client.post('/experiment/profile/create/', client_request)
         assert response.status_code == 200
-        assert self.participant.profile_set.count() == 1
-        assert self.participant.profile_set.last().score == 6
+        assert self.session.result_set.count() == 1
+        assert self.session.result_set.last().score == 6
     
     def test_categories_to_likert(self):
         client_request = self.choice_request()

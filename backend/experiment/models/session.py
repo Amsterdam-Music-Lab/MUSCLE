@@ -11,7 +11,7 @@ from . import Profile
 class Session(models.Model):
     """Experiment session by a participant"""
 
-    experiment = models.ForeignKey(Experiment, on_delete=models.CASCADE)
+    experiment = models.ForeignKey(Experiment, on_delete=models.CASCADE, blank=True, null=True)
     participant = models.ForeignKey(Participant, on_delete=models.CASCADE)
     playlist = models.ForeignKey(Playlist, on_delete=models.SET_NULL,
                                  blank=True, null=True)
