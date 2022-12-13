@@ -12,6 +12,8 @@ class Result(models.Model):
         Section, on_delete=models.SET_NULL, null=True, blank=True)
 
     created_at = models.DateTimeField(default=timezone.now)
+    # Key of the question e.g.: AGE
+    question_key = models.CharField(max_length=64)
     expected_response = models.CharField(max_length=100, blank=True, null=True)
     given_response = models.CharField(max_length=100, blank=True, null=True)
     comment = models.CharField(max_length=100, default='')
