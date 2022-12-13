@@ -100,15 +100,14 @@ const Trial = ({ participant, session, playback, feedback_form, config, onNext, 
             const decision_time = getTimeSince(startTime.current);
             const form = feedback_form ? feedback_form.form : [{}];
 
-            if (feedback_form.is_skippable) {
-                form.map((formElement => (formElement.value = formElement.value || '')))
-            }
-
             if (result.type === "time_passed") {
                 form.map((formElement) => (formElement.value = "TIMEOUT"));
             }
 
             if (feedback_form) {
+                if (feedback_form.is_skippable) {
+                    form.map((formElement => (formElement.value = formElement.value || '')))
+                }
                 if (feedback_form.is_profile) {
                     submitProfile({
                         form,
