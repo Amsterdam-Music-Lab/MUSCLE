@@ -3,7 +3,7 @@ import json
 from django.http import JsonResponse, HttpResponseBadRequest, Http404
 from django.views.decorators.http import require_POST
 from experiment.rules.util.score import SCORING_RULES
-from experiment.models import Profile, Result, Session
+from experiment.models import Result, Session
 from .util.participant import current_participant
 
 
