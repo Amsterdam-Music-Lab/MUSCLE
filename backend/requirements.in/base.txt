@@ -16,3 +16,6 @@ IPToCC
 
 # PostgrSQL database client
 psycopg2
+
+# Database backup
+django-dbbackup
