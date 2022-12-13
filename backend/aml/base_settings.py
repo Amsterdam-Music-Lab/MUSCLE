@@ -157,3 +157,4 @@ DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 
 DBBACKUP_STORAGE = 'django.core.files.storage.FileSystemStorage'
 DBBACKUP_STORAGE_OPTIONS = {'location': os.path.join(BASE_DIR, 'backup')}
+DBBACKUP_CLEANUP_KEEP = 31
