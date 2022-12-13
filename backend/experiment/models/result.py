@@ -14,10 +14,13 @@ class Result(models.Model):
     created_at = models.DateTimeField(default=timezone.now)
     # Key of the question e.g.: AGE
     question_key = models.CharField(max_length=64)
+    is_profile = models.BooleanField(default=False)
+
     expected_response = models.CharField(max_length=100, blank=True, null=True)
     given_response = models.CharField(max_length=100, blank=True, null=True)
     comment = models.CharField(max_length=100, default='')
     score = models.FloatField(null=True, blank=True)
+    scoring_rule = models.CharField(default="", max_length=64)
 
     # Contains data in json_format
     json_data = models.TextField(blank=True)
