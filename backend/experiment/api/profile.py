@@ -18,10 +18,10 @@ def get(request, question):
     """Get specific answer from question from participant profile"""
     participant = current_participant(request)
 
-    result = Result.objects.filter(
-            question_key=question, session__participant=participant).first()
-
-    if not result:
+    try:
+        result = Result.objects.get(
+            question_key=question, is_profile=True, session__participant=participant)
+    except Result.DoesNotExist:
         raise Http404("Not found")
 
     return JsonResponse({"answer": result.given_response},
@@ -47,13 +47,14 @@ def create(request):
         question = form_element['key']
         try:
             result = Result.objects.get(
-                question_key=question, session__participant=participant)
+                question_key=question, is_profile=True, session__participant=participant)
         except Result.DoesNotExist:
             # Create new profile value, and session not linked to an experiment
             if not session:
                 session = Session(participant=participant)
                 session.save()
             result = Result(session=session,
+                is_profile=True,
                 question_key=question)
         result.given_response = form_element['value']
         scoring_rule = SCORING_RULES.get(form_element.get('scoring_rule'))

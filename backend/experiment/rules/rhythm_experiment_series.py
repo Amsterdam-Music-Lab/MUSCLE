@@ -103,13 +103,14 @@ def register_consent(session, experiment_list):
         answer = True
         try:
             result = Result.objects.get(
-                question_key=question, session__participant=participant)
+                question_key=question, is_profile=True, session__participant=participant)
             result.given_response = answer
         except Result.DoesNotExist:
             session = Session(participant=participant)
             session.save()
             result = Result(
                 session=session,
+                is_profile=True,
                 question_key=question, 
                 given_response=answer)
         result.save()
