@@ -174,11 +174,11 @@ def unasked_question(participant, questions=DEMOGRAPHICS, is_skippable=None, ski
     try:
         profile_questions = participant.profile_questions()
         for question in questions:
-            if not question['question']['key'] in profile_questions:
+            if not question.key in profile_questions:
                 if skip == 0:
                     # Set is_skippable
                     if is_skippable is not None:
-                        question['question']['is_skippable'] = is_skippable
+                        question.is_skippable = is_skippable
 
                     return question
                 skip = skip - 1
