@@ -37,7 +37,7 @@ class MusicalPreferences(Base):
 
     @classmethod
     def next_round(cls, session, request_session=None):
-        if session.last_result() and session.last_result().scoring.value == -1:
+        if session.last_result() and session.last_result().score == -1:
             # last result was key='continue', value='no':
             return cls.get_final_view(session)
         n_results = session.rounds_passed()
@@ -54,7 +54,7 @@ class MusicalPreferences(Base):
                     steps=[],
                     button_label=_("Let's go!")).action()
                 )
-                actions.extend(cls.get_questions())
+                actions.extend(cls.get_questions(session))
             question = BooleanQuestion(
                 question=_("Would you like to listen to more songs?"),
                 choices={
@@ -73,17 +73,14 @@ class MusicalPreferences(Base):
             return combine_actions(*actions)
 
         section = session.playlist.random_section()
-        result_id = cls.prepare_result(session, section)
         likert = LikertQuestionIcon(
             question=_('Do you like this song?'),
             key='like_song',
-            result_id=result_id
         )
-        result_id = cls.prepare_result(session, section)
+        likert.prepare_result(session, section)
         know = ChoiceQuestion(
             question=_('Do you know this song?'),
             key='know_song',
-            result_id=result_id,
             view='BUTTON_ARRAY',
             choices={
                 'yes': 'fa-thumbs-up',
@@ -91,6 +88,7 @@ class MusicalPreferences(Base):
                 'no': 'fa-thumbs-down',
             }
         )
+        know.prepare_result(session, section)
         playback = Playback([section], play_config={'show_animation': True})
         form = Form([likert, know])
         view = Trial(
@@ -148,10 +146,10 @@ class MusicalPreferences(Base):
         return out_list
     
     @classmethod
-    def get_questions(cls):
+    def get_questions(cls, session):
         questions = [
-            question_by_key('dgf_generation'),
-            question_by_key('dgf_education', drop_choices=['isced-5']),
+            question_by_key('dgf_generation').prepare_result(session),
+            question_by_key('dgf_education', drop_choices=['isced-5']).prepare_result(session),
         ]
         return [
             Trial(

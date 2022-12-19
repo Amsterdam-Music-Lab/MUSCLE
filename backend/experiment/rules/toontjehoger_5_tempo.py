@@ -136,11 +136,7 @@ class ToontjeHoger5Tempo(Base):
         genre = ["C", "J", "R"][round % 3]
 
         sections = cls.get_random_section_pair(session, genre)
-        section_original = sections[0] if sections[0].group == "or" else sections[1]
-
-        # Create result
-        result_pk = cls.prepare_result(
-            session, section=section_original, expected_response="A" if sections[0].id == section_original.id else "B")
+        section_original = sections[0] if sections[0].group == "or" else sections[1]  
 
         # Player
         play_config = {
@@ -159,7 +155,9 @@ class ToontjeHoger5Tempo(Base):
                 "B": "B",
             },
             submits=True,
-            result_id=result_pk
+        )
+        question.prepare_result(
+            session, section=section_original, expected_response="A" if sections[0].id == section_original.id else "B"
         )
         form = Form([question])
 
@@ -208,7 +206,7 @@ class ToontjeHoger5Tempo(Base):
             logger.error("No last result")
             feedback = "Er is een fout opgetreden"
         else:
-            if last_result.scoring.value == cls.SCORE_CORRECT:
+            if last_result.score == cls.SCORE_CORRECT:
                 feedback = "Goedzo! Het was inderdaad antwoord {}!".format(
                     last_result.expected_response.upper())
             else:

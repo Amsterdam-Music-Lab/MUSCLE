@@ -35,6 +35,16 @@ class Result(models.Model):
     def load_json_data(self):
         """Get json_data as object"""
         return json.loads(self.json_data) if self.json_data else None
+    
+    def merge_json_data(self, data):
+        """Convert json data object to string and merge with json_data, overwriting duplicate keys.
+
+        Only valid for JSON objects/Python dicts.
+        """
+        if data:
+            self.json_data = json.dumps(
+                {**self.load_json_data(), **data}, indent=4)
+
 
     def export_admin(self):
         """Export data for admin"""

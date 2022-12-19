@@ -37,7 +37,7 @@ def get_practice_views(
     last_result = previous_results.first()
     if results_count < 4:
         # practice trial
-        correct = last_result.scoring.value > 0
+        correct = last_result.score > 0
         previous_condition = check_previous_condition(last_result)
         response_explainer = response_callback(correct, previous_condition)
         trial = trial_callback(
@@ -45,11 +45,11 @@ def get_practice_views(
         return combine_actions(response_explainer.action(), trial)
     else:
         # after last practice trial
-        penultimate_score = previous_results.all()[1].scoring.value
+        penultimate_score = previous_results.all()[1].score
         # delete previous practice sessions
         session.result_set.all().delete()
         session.save()
-        if last_result.scoring.value > 0 and penultimate_score > 0:
+        if last_result.score > 0 and penultimate_score > 0:
             # Practice went successfully, start experiment
             previous_condition = check_previous_condition(last_result)
             response_explainer = response_callback(

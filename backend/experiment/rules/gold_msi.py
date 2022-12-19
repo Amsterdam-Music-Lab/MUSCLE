@@ -39,7 +39,7 @@ class GoldMSI(Base):
         if round_number == len(cls.questions):
             return final_action_with_optional_button(session, '', request_session)
         question = cls.questions[round_number]
-        cls.prepare_profile(session.participant, question.key, question.scoring_rule)
+        question.prepare_result(session)
         feedback_form = Form([
             question,
         ], is_profile=True)

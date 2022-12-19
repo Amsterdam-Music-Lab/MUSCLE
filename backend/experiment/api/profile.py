@@ -57,9 +57,9 @@ def create(request):
                 is_profile=True,
                 question_key=question)
         result.given_response = form_element['value']
-        scoring_rule = SCORING_RULES.get(form_element.get('scoring_rule'))
+        scoring_rule = SCORING_RULES.get(result.scoring_rule)
         if scoring_rule:
-            result.score = scoring_rule(form_element, None, None)
+            result.score = scoring_rule(result_data, form_element)
         result.save()
 
     return JsonResponse({

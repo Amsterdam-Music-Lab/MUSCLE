@@ -98,10 +98,6 @@ class ToontjeHoger4Absolute(Base):
         sections = [section1, section2]
         random.shuffle(sections)
 
-        # Create result
-        result_pk = cls.prepare_result(
-            session, section=section1, expected_response="A" if sections[0].id == section1.id else "B")
-
         # Player
         play_config = {
             'label_style': 'ALPHABETIC',
@@ -118,8 +114,10 @@ class ToontjeHoger4Absolute(Base):
                 "A": "A",
                 "B": "B",
             },
-            submits=True,
-            result_id=result_pk
+            submits=True
+        )
+        question.prepare_result(
+            session, section=section1, expected_response="A" if sections[0].id == section1.id else "B"
         )
         form = Form([question])
 
@@ -149,7 +147,7 @@ class ToontjeHoger4Absolute(Base):
             logger.error("No last result")
             feedback = "Er is een fout opgetreden"
         else:
-            if last_result.scoring.value == cls.SCORE_CORRECT:
+            if last_result.score == cls.SCORE_CORRECT:
                 feedback = "Goedzo! Het was inderdaad antwoord {}!".format(
                     last_result.expected_response.upper())
             else:

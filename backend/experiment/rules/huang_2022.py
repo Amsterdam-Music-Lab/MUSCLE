@@ -137,6 +137,8 @@ class Huang2022(Base):
             residence_question(),
             gender_question(),
         ]
+        for question in questions:
+            question.prepare_result(session)
         return [
             Trial(
                 title=_("Questionnaire %(index)i/%(total)i") % {'index': index + 1, 'total': len(questions)},
@@ -303,7 +305,6 @@ class Huang2022(Base):
             preload_message=_('Get ready!'))
         expected_result = this_section_info.get('novelty')
         # create Result object and save expected result to database
-        result_pk = cls.prepare_result(session, section, expected_result, scoring_rule='REACTION_TIME')
         form = Form([BooleanQuestion(
             key='heard_before',
             choices={
@@ -311,8 +312,8 @@ class Huang2022(Base):
                 'old': _("YES"),
             },
             question=_("Did you hear this song in previous rounds?"),
-            result_id=result_pk,
-            submits=True)])
+            scoring_rule='REACTION_TIME',
+            submits=True).prepare_result(session, section, expected_result)])
         config = {
             'style': 'boolean-negative-first',
             'auto_advance': True,
@@ -348,12 +349,12 @@ class Huang2022(Base):
             if json_data.get('result') and json_data['result']['type'] == 'recognized':
                 n_sync_guessed += 1
                 sync_time += json_data['result']['recognition_time']
-                if result.scoring.value > 0:
+                if result.score > 0:
                     n_sync_correct += 1
             else:
                 if result.expected_response == 'old':
                     n_old_new_expected += 1
-                    if result.scoring.value > 0:
+                    if result.score > 0:
                         n_old_new_correct += 1
         thanks_message = _("Thank you for your contribution to science!")
         score_message = _(

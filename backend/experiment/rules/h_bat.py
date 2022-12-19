@@ -87,8 +87,6 @@ class HBat(Base):
         except Section.DoesNotExist:
             return None
         expected_result = 'SLOWER' if trial_condition else 'FASTER'
-        # create Result object and save expected result to database
-        result_pk = cls.prepare_result(session, section, expected_result, scoring_rule='CORRECTNESS')
         question = ChoiceQuestion(
             key='longer_or_equal',
             question=_(
@@ -98,9 +96,11 @@ class HBat(Base):
                 'FASTER': _('FASTER')
             },
             view='BUTTON_ARRAY',
-            result_id=result_pk,
+            scoring_rule='CORRECTNESS',
             submits=True
         )
+         # create Result object and save expected result to database
+        question.prepare_result(session, section, expected_result)
         playback = Playback([section])
         form = Form([question])
         view = Trial(
@@ -196,7 +196,7 @@ def staircasing(session, trial_action_callback):
         # first trial
         action = trial_action_callback(
             session, trial_condition, 1)
-    elif last_result.scoring.value == 0:
+    elif last_result.score == 0:
         # the previous response was incorrect
         json_data = session.load_json_data()
         direction = json_data.get('direction')
@@ -215,7 +215,7 @@ def staircasing(session, trial_action_callback):
             # this is the second trial, so the level is still 1
             action = trial_action_callback(
                 session, trial_condition, 1)
-        elif previous_results.all()[1].scoring.value == 1 and not previous_results.all()[1].comment:
+        elif previous_results.all()[1].score == 1 and not previous_results.all()[1].comment:
             # the previous two responses were correct
             json_data = session.load_json_data()
             direction = json_data.get('direction')

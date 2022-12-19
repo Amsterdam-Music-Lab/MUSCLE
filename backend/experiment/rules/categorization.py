@@ -5,9 +5,10 @@ from django.db.models import Avg
 from operator import ne
 
 from .views.form import Form, ChoiceQuestion
-from .views import Consent, Explainer, Score, StartSession, TwoAlternativeForced, Trial, Final
+from .views import Consent, Explainer, Score, StartSession, Trial, Final
 
 from .util.actions import combine_actions
+from .util.view_helpers import two_alternative_forced
 
 from .util.questions import DEMOGRAPHICS, EXTRA_DEMOGRAPHICS, question_by_key
 from .base import Base
@@ -200,7 +201,7 @@ class Categorization(Base):
             # Calculate percentage of correct response to training stimuli
             final_score = 0
             for result in this_results:
-                if 'T' in result.section.name and result.scoring.value == 1:
+                if 'T' in result.section.name and result.score == 1:
                     final_score += 1
             score_percent = 100 * (final_score / 30)
 
@@ -221,7 +222,7 @@ class Categorization(Base):
                 final_text = "Congratulations! You did well and won a bronze medal!"
 
             # calculate the final score for the entire test sequence
-            # final_score = sum([result.scoring.value for result in training_results])
+            # final_score = sum([result.score for result in training_results])
             end_data = {
                 'phase': 'FINISHED',
                 'training_rounds': json_data['training_rounds'],
@@ -492,8 +493,6 @@ class Categorization(Base):
             expected_response = 'A'
         else:
             expected_response = 'B'
-        result_pk = cls.prepare_result(
-            session, section, expected_response, 'CORRECTNESS', json_data['phase'])
 
         choices = json_data["choices"]
         config = {'listen_first': True,
@@ -502,10 +501,9 @@ class Categorization(Base):
                   'style': json_data["button_order"],
                   'time_pass_break': False
                   }
-        trial = TwoAlternativeForced(
-            section, choices, result_pk, title=cls.get_title(session), config=config)
-
-        return trial.action()
+        trial = two_alternative_forced(session, section, choices, expected_response,
+            comment=json_data['phase'], scoring_rule='CORRECTNESS', config=config)
+        return trial
 
     @classmethod
     def get_title(cls, session):

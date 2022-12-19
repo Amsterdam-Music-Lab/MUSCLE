@@ -76,7 +76,7 @@ class ToontjeHoger6Relative(Base):
             logger.error("No last result")
             feedback = "Er is een fout opgetreden"
         else:
-            if last_result.scoring.value == cls.SCORE_CORRECT:
+            if last_result.score == cls.SCORE_CORRECT:
                 feedback = "Dat is correct! De melodieën in de muziekfragmenten zijn inderdaad verschillend."
             else:
                 feedback = "Helaas! De melodieën in de muziekfragmenten zijn toch echt verschillend."
@@ -108,8 +108,6 @@ class ToontjeHoger6Relative(Base):
 
         # Fragments A,B,C are all different, so answer is always NO
         expected_response = "NO"
-        result_pk = cls.prepare_result(
-            session, section=section1, expected_response=expected_response)
 
         # Question
         question = ChoiceQuestion(
@@ -120,8 +118,10 @@ class ToontjeHoger6Relative(Base):
                 "NO": "Nee",
             },
             view='BUTTON_ARRAY',
-            result_id=result_pk,
             submits=True
+        )
+        question.prepare_result(
+            session, section=section1, expected_response=expected_response
         )
         form = Form([question])
 

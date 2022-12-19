@@ -52,8 +52,6 @@ class Anisochrony(DurationDiscrimination):
         except Section.DoesNotExist:
             return None
         expected_result = 'REGULAR' if difference == 0 else 'IRREGULAR'
-        # create Result object and save expected result to database
-        result_pk = cls.prepare_result(session, section, expected_result)
         question = ChoiceQuestion(
             key='if_regular',
             question=_(
@@ -63,9 +61,10 @@ class Anisochrony(DurationDiscrimination):
                 'IRREGULAR': _('IRREGULAR')
             },
             view='BUTTON_ARRAY',
-            result_id=result_pk,
             submits=True
         )
+        # create Result object and save expected result to database
+        question.prepare_result(session, section, expected_result)
         playback = Playback([section])
         form = Form([question])
         config = {

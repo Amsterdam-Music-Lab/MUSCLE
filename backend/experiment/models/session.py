@@ -5,7 +5,6 @@ from django.utils import timezone
 from . import Experiment
 from . import Participant
 from . import Playlist
-from . import Profile
 
 
 class Session(models.Model):
@@ -242,23 +241,12 @@ class Session(models.Model):
 
     def total_questions(self):
         """ Get total number of profile questions in this session """
-        try:
-            return Profile.objects.filter(session_id=self.id).count()
-        except Profile.DoesNotExist:
-            return 0
+        return self.result_count()
 
     def skipped_questions(self):
         """Get number of skipped (empty) profile questions for this session"""
-        try:
-            return Profile.objects.filter(session_id=self.id, answer="").count()
-
-        except Profile.DoesNotExist:
-            return 0
+        return self.result_set.filter(answer="").count()
 
     def answered_questions(self):
         """Get number of answered (non-empty) profile questions for this session"""
-        try:
-            return Profile.objects.filter(session_id=self.id).exclude(answer="").count()
-
-        except Profile.DoesNotExist:
-            return 0
+        return self.result_set.exclude(answer="").count()

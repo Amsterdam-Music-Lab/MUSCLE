@@ -132,8 +132,6 @@ class DurationDiscrimination(Base):
         except Section.DoesNotExist:
             return None
         expected_result = 'EQUAL' if difference == 0 else 'LONGER'
-        # create Result object and save expected result to database
-        result_pk = cls.prepare_result(session, section, expected_result)
         question_text = cls.get_question_text()
         question = ChoiceQuestion(
             question=question_text,
@@ -143,9 +141,10 @@ class DurationDiscrimination(Base):
                 'LONGER': _('LONGER')
             },
             view='BUTTON_ARRAY',
-            result_id=result_pk,
             submits=True
         )
+        # create Result object and save expected result to database
+        question.prepare_result(session, section, expected_result)
         playback = Playback([section])
         form = Form([question])
         view = Trial(
@@ -235,7 +234,7 @@ class DurationDiscrimination(Base):
                 trial_condition,
                 difficulty)
         else:
-            if previous_results.first().scoring.value == 0:
+            if previous_results.first().score == 0:
                 # the previous response was incorrect
                 json_data = session.load_json_data()
                 direction = json_data.get('direction')
@@ -324,7 +323,7 @@ class DurationDiscrimination(Base):
         answer = False
         while results:
             result = results.pop(0)
-            if result.scoring.value == 1:
+            if result.score == 1:
                 if result.comment:
                     # a comment on the second-to-last result indicates that difficulty changed there;
                     # we need to wait for another correct response before changing again

@@ -95,7 +95,7 @@ class ToontjeHoger1Mozart(Base):
     def get_answer_explainer(cls, session, round):
         last_result = session.last_result()
 
-        correct_answer_given = last_result.scoring.value > 0
+        correct_answer_given = last_result.score > 0
 
         heading = "Goed gedaan!" if correct_answer_given else "Helaas!"
 
@@ -139,9 +139,6 @@ class ToontjeHoger1Mozart(Base):
         if section == None:
             raise Exception("Error: could not find section")
 
-        result_pk = cls.prepare_result(
-            session, section=section, expected_response=expected_response)
-
         # Step 1
         # --------------------
 
@@ -179,9 +176,10 @@ class ToontjeHoger1Mozart(Base):
                 'E': 'E',
             },
             view='BUTTON_ARRAY',
-            result_id=result_pk,
             submits=True
         )
+        question.prepare_result(
+            session, section=section, expected_response=expected_response)
         form = Form([question])
 
         image_trial = HTML(
@@ -189,7 +187,6 @@ class ToontjeHoger1Mozart(Base):
                 image_url),
             form=form,
             title=cls.TITLE,
-            result_id=result_pk
         ).action()
 
         return [listen, image_trial]

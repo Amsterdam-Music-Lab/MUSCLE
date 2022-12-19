@@ -8,16 +8,14 @@ class Base(object):
     """Base class for other rules classes"""
 
     @classmethod
-    def prepare_result(cls, session, section, expected_response=None, scoring_rule='', comment=None):
+    def prepare_result(cls, session, section, expected_response=None, scoring_rule='', comment='', question_key=''):
         # Prevent circular dependency errors
         from experiment.models import Result
 
-        result = Result(session=session, scoring_rule=scoring_rule)
+        result = Result(session=session, scoring_rule=scoring_rule, question_key=question_key, comment=comment)
         result.section = section
-        if expected_response != None:
-            result.expected_response = expected_response
-        if comment != None:
-            result.comment = comment
+        result.expected_response = expected_response
+        result.comment = comment
         result.save()
         return result.pk
 
@@ -85,8 +83,7 @@ class Base(object):
     def calculate_score(cls, result, data):
         """use scoring rule to calculate score
         If not scoring rule is defined, return None"""
-        score = result.scoring
-        scoring_rule = SCORING_RULES.get(score.rule)
+        scoring_rule = SCORING_RULES.get(result.scoring_rule)
         if scoring_rule:
             return scoring_rule(result, data)
         return None
@@ -100,10 +97,10 @@ class Base(object):
 
         for result in session.result_set.all():
             # if a result has score != 0, it was recognized
-            if result.scoring.value:
+            if result.score:
                 total += 1
 
-                if result.scoring.value > 0:
+                if result.score > 0:
                     # if a result has score > 0, it was identified correctly
                     correct += 1
 
