@@ -47,6 +47,7 @@ class Base(object):
             result = cls.score_result(session, form_element)
             # save any relevant data (except for the popped form)
             result.merge_json_data(data)
+            result.save()
         return result
 
     @classmethod

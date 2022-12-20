@@ -245,8 +245,8 @@ class Session(models.Model):
 
     def skipped_questions(self):
         """Get number of skipped (empty) profile questions for this session"""
-        return self.result_set.filter(answer="").count()
+        return self.result_set.filter(given_response="").count()
 
     def answered_questions(self):
         """Get number of answered (non-empty) profile questions for this session"""
-        return self.result_set.exclude(answer="").count()
+        return self.result_set.exclude(given_response="").count()

@@ -3,7 +3,7 @@ import json
 from django.test import TestCase
 from experiment.models.participant import Participant
 
-from experiment.models import Experiment, Participant, Playlist, Profile, Result, Section, Session
+from experiment.models import Experiment, Participant, Playlist, Result, Section, Session
 
 class ScoringTest(TestCase):
 
