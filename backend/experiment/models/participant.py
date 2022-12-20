@@ -1,5 +1,7 @@
 import random
 import uuid
+from itertools import chain
+
 from django.contrib.humanize.templatetags.humanize import naturalday
 from django.db import models
 
@@ -41,17 +43,20 @@ class Participant(models.Model):
         }
 
     def profile(self):
-        """Get full profile data"""
-        return self.profile_set.all()
+        """Get all profile type results of this participant"""
+        sessions =  list(self.session_set.all())
+        results = [s.result_set.filter(is_profile=True)
+            for s in sessions]
+        return list(chain(*results))
 
     def profile_object(self):
         """Get full profile data"""
         profile_object = {}
         for profile in self.profile():
-            profile_object[profile.question] = profile.answer
+            profile_object[profile.question_key] = profile.given_response
             if profile.score:
                 profile_object['{}_score'.format(
-                    profile.question)] = profile.score
+                    profile.question_key)] = profile.score
         return profile_object
 
     def is_dutch(self):

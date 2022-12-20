@@ -1,5 +1,4 @@
 from django.test import TestCase
-from experiment.models.participant import Participant
 
 from experiment.models import Experiment, Participant, Result, Session
 
