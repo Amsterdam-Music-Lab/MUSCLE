@@ -93,7 +93,7 @@ class Categorization(Base):
             profiles = session.participant.profile()
             for profile in profiles:
                 # Delete results and json from session and exit
-                if profile.answer == 'aborted':
+                if profile.given_response == 'aborted':
                     session.result_set.all().delete()
                     json_data = {'phase': 'ABORTED',
                                  'training_rounds': json_data['training_rounds']}

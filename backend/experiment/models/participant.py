@@ -44,10 +44,9 @@ class Participant(models.Model):
 
     def profile(self):
         """Get all profile type results of this participant"""
-        sessions =  list(self.session_set.all())
-        results = [s.result_set.filter(is_profile=True)
-            for s in sessions]
-        return list(chain(*results))
+        result_ids = self.session_set.values_list('result', flat=True)
+        from .result import Result
+        return Result.objects.filter(pk__in=result_ids, is_profile=True)
 
     def profile_object(self):
         """Get full profile data"""
@@ -93,15 +92,15 @@ class Participant(models.Model):
 
     def profile_question(self, question):
         """Get a profile question for given question key"""
-        return self.profile_set.filter(question=question).first()
+        return self.profile().filter(question_key=question).first()
 
     def profile_questions(self):
-        """Get a profile question for given question key"""
-        return self.profile_set.all().values_list('question', flat=True)
+        """Get all profile question answered by this participant"""
+        return self.profile().values_list('question_key', flat=True)
 
     def random_empty_profile_question(self):
         """Get a random profile question with empty answer"""
-        pks = self.profile_set.filter(answer="").values_list('pk', flat=True)
+        pks = self.profile().filter(given_response="").values_list('pk', flat=True)
         if len(pks) == 0:
             return None
-        return self.profile_set.get(pk=random.choice(pks))
+        return self.profile().get(pk=random.choice(pks))

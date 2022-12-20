@@ -203,10 +203,10 @@ def next_question(session, questions=DEMOGRAPHICS, is_skippable=None, skip=0):
         return question
 
     # Second: Suggest questions with empty answer at random
-    profile = session.participant.random_empty_profile_question()
-    if profile:
+    empty_result = session.participant.random_empty_profile_question()
+    if empty_result:
         return question_by_key(
-            key=profile.question,
+            key=empty_result.question_key,
             questions=questions,
             is_skippable=is_skippable
         )
