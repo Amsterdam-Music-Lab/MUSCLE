@@ -1,11 +1,10 @@
 from django.utils.translation import gettext_lazy as _
 
-from experiment.models import Section
+from section.models import Section
 from .views import Trial, Explainer, Step
 from .views.form import ChoiceQuestion, Form
 from .views.playback import Playback
 
-from .base import Base
 from .h_bat import HBat
 
 from .util.actions import final_action_with_optional_button, render_feedback_trivia

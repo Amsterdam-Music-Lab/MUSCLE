@@ -1,6 +1,6 @@
 from django.test import TestCase
 
-from experiment.models.playlist import Playlist
+from section.models import Playlist
 
 
 class PlaylistModelTest(TestCase):

@@ -6,9 +6,9 @@ from django.shortcuts import redirect
 from django.utils.translation import gettext_lazy as _
 from django.utils.translation import activate
 
-from participant.utils import current_participant
-from experiment.models import Experiment
+from .models import Experiment
 from session.models import Session
+from participant.utils import current_participant
 
 logger = logging.getLogger(__name__)
 

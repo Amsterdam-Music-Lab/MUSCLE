@@ -1,5 +1,6 @@
 from django.contrib import admin
-from experiment.models import Participant, Profile
+from .models import Participant
+from participant_profile.models import Profile
 
 
 class ProfileInline(admin.TabularInline):

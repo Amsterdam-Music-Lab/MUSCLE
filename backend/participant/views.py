@@ -10,8 +10,9 @@ from django.views.decorators.http import require_POST
 from django.middleware.csrf import get_token
 from django.utils.translation import ngettext_lazy as ngettext
 from django.utils.translation import gettext_lazy as _
-from experiment.models import Participant
-from .util.participant import current_participant, set_participant
+
+from .models import Participant
+from .utils import current_participant, set_participant
 
 logger = logging.getLogger(__name__)
 

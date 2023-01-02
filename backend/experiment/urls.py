@@ -10,33 +10,6 @@ urlpatterns = [
     # Experiment
     path('id/<slug:slug>/', api.experiment.get, name='experiment'),
 
-    # Section
-    path('section/<int:section_id>/<int:code>/',
-         api.section.get, name='section'),
-
-    # Session
-    path('session/create/',
-         api.session.create, name='session_create'),
-    path('session/result/',
-         api.session.result, name='session_result'),
-    path('session/<int:session_id>/next_round/',
-         api.next_round, name='session_next_round'),
-    path('session/continue/<int:session_id>', 
-        api.session.continue_session, name='continue_session'),
-
-
-    # Participant
-    path('participant/', api.participant.current,
-         name='participant_current'),
-    path('participant/scores/', api.participant.scores,
-         name='participant_score'),
-    path('participant/reload/<int:participant_id>/<slug:unique_hash>/',
-         api.participant.reload, name='participant_reload'),
-    path('participant/link/', api.participant.link,
-         name='participant_link'),
-    path('participant/share/', api.participant.share,
-         name='participant_share'),
-
     # Profile
     path('profile/', api.profile.current,
          name='profile_current'),

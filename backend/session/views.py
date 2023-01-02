@@ -1,8 +1,10 @@
 import json
 from django.http import Http404, HttpResponseServerError, JsonResponse, HttpResponseBadRequest
 from django.views.decorators.http import require_POST
-from experiment.models import Session, Experiment, Playlist, Section
-from .util.participant import current_participant
+
+from .models import Session
+from experiment.models import Experiment
+from participant.utils import current_participant
 
 
 @require_POST

@@ -3,9 +3,12 @@ import csv
 import json
 from django.shortcuts import render
 from django.http import HttpResponse, Http404
-from experiment.models import Experiment, Session, Result, Participant
-from .util import slugify
-from .util.participant import current_participant
+
+from ..models import Experiment, Result
+from session.models import Session
+from participant.models import Participant
+from ..utils import slugify
+from participant.utils import current_participant
 
 
 def test_sessions(request):

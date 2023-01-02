@@ -1,3 +1,7 @@
+from .models import Participant
+
+SESSION_KEY = 'participant_id'
+
 import json
 import urllib
 import urllib.request
@@ -7,7 +11,6 @@ from django.conf import settings
 def located_in_nl(request):
     """Return True if the requesting IP-address is located in NL"""
     return country(request) == 'nl'
-
 
 def country(request):
     """Get country code of requesting ip"""
@@ -34,7 +37,6 @@ def country(request):
 
     return country_code
 
-
 def get_country_code(ip_address):
     """Get country code from given ip address"""
 
@@ -57,7 +59,6 @@ def get_country_code(ip_address):
         except:
             return None
 
-
 def visitor_ip_address(request):
     """Get visitor ip address from request"""
 
@@ -68,3 +69,34 @@ def visitor_ip_address(request):
         return x_forwarded_for.split(',')[0]
 
     return request.META.get('REMOTE_ADDR')
+
+def current_participant(request):
+    """Get a participant from the session, or create/add a new one"""
+    participant = None
+
+    # get participant from session
+    if SESSION_KEY in request.session:
+        try:
+            participant = Participant.objects.get(
+                pk=int(request.session[SESSION_KEY]))
+        except Participant.DoesNotExist:
+            participant = None
+
+    if not participant:
+        country_code = country(request)
+        access_info = request.META.get('HTTP_USER_AGENT')
+
+        # Create a new Participant, store the country code once
+        participant = Participant(country_code=country_code, access_info=access_info)
+        participant.save()
+        set_participant(request, participant)
+
+    return participant
+
+
+def set_participant(request, participant):
+    """Set a participant to the session"""
+    if participant:
+        request.session[SESSION_KEY] = participant.id
+    else:
+        del request.session[SESSION_KEY]

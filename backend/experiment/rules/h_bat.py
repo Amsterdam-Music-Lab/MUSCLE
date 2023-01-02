@@ -4,7 +4,7 @@ from decimal import Decimal, ROUND_HALF_UP
 from django.utils.translation import gettext_lazy as _
 
 from .base import Base
-from experiment.models import Section
+from section.models import Section
 from .views import Trial, Consent, Explainer, Playlist, Step, StartSession
 from .views.form import ChoiceQuestion, Form
 from .views.playback import Playback

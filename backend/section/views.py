@@ -2,8 +2,9 @@ from django.http import Http404, FileResponse
 from django.core.exceptions import PermissionDenied
 from django.conf import settings
 from django.shortcuts import redirect
-from experiment.models import Section
-from .util.location import located_in_nl
+
+from .models import Section
+from participant.utils import located_in_nl
 
 
 def get(request, section_id, code):

@@ -1,6 +1,8 @@
 
 from django.test import TestCase
-from experiment.models import Experiment, Playlist, Session
+from experiment.models import Experiment
+from section.models import Playlist
+from session.models import Session
 import json
 
 class BeatAlignmentRuleTest(TestCase):

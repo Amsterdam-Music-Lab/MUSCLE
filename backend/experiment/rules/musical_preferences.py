@@ -6,7 +6,7 @@ from .util.actions import combine_actions
 from .util.questions import question_by_key
 
 from .views import Consent, Explainer, Final, Playlist, Step, StartSession, Trial
-from .views.form import BooleanQuestion, ChoiceQuestion, Form, LikertQuestion, LikertQuestionIcon
+from .views.form import BooleanQuestion, ChoiceQuestion, Form, LikertQuestionIcon
 from .views.playback import Playback
 
 from .base import Base
@@ -140,7 +140,7 @@ class MusicalPreferences(Base):
     def get_preferred_songs(cls, result_set, n=5):
         top_songs = result_set.values('section').annotate(
             avg_score=Avg('score')).order_by()[:n]
-        from experiment.models.section import Section
+        from section.models import Section
         out_list = []
         for s in top_songs:
             section = Section.objects.get(pk=s.get('section'))

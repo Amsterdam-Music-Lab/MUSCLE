@@ -145,7 +145,8 @@ class ToontjeHogerHome(Base):
 
     @ classmethod
     def get_sessions(cls, participant):
-        from experiment.models import Session, Experiment
+        from session.models import Session
+        from experiment.models import Experiment
 
         experiment_slugs = [
             experiment.slug for experiment in cls.EXPERIMENT_DATA]

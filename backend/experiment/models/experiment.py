@@ -1,11 +1,11 @@
-import json
 import copy
 
 from django.db import models
 from django.utils import timezone
 from experiment.rules import EXPERIMENT_RULES
 from experiment.rules.util.iso_languages import ISO_LANGUAGES
-from . import Playlist, ExperimentSeries
+from . import ExperimentSeries
+from section.models import Playlist
 
 language_choices = [(key, ISO_LANGUAGES[key]) for key in ISO_LANGUAGES.keys()]
 language_choices[0] = ('', 'Unset')

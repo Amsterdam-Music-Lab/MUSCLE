@@ -1,6 +1,6 @@
 from django.contrib import admin
-from experiment.models import Session, Result
-
+from .models import Session
+from experiment.models import Result
 
 class ResultInline(admin.TabularInline):
     """Result inline admin for SessionAdmin"""

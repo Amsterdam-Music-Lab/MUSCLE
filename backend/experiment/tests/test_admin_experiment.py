@@ -2,7 +2,9 @@ from django.test import Client, TestCase
 from django.forms.models import model_to_dict
 from django.contrib.admin.sites import AdminSite
 from experiment.admin.experiment import ExperimentAdmin
-from experiment.models import Experiment, Session, Result, Participant
+from experiment.models import Experiment, Result
+from session.models import Session, Result
+from session.models import Participant
 
 # Expected field count per model
 EXPECTED_EXPERIMENT_FIELDS = 10

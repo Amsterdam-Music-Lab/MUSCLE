@@ -1,8 +1,25 @@
 import csv
+
 from inline_actions.admin import InlineActionsModelAdminMixin
 from django.contrib import admin, messages
 from django.http import JsonResponse, HttpResponse
-from experiment.models import Playlist
+
+from .models import Section, Playlist
+
+
+class SectionAdmin(admin.ModelAdmin):
+    list_per_page = 50
+    list_display = ('artist', 'name', 'start_time',
+                    'play_count', 'playlist', 'code')
+    list_filter = [('playlist', admin.RelatedOnlyFieldListFilter)]
+    search_fields = ['artist', 'name', 'playlist__name']
+    readonly_fields = ('play_count', 'code')
+
+    # Prevent large inner join
+    list_select_related = ()
+
+
+admin.site.register(Section, SectionAdmin)
 
 
 class PlaylistAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):

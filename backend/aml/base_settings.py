@@ -40,6 +40,9 @@ INSTALLED_APPS = [
     'inline_actions',
     'corsheaders',
     'experiment',
+    'participant',
+    'session',
+    'section'
 ]
 
 MIDDLEWARE = [

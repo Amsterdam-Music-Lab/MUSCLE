@@ -17,7 +17,7 @@ def final_action_with_optional_button(session, final_text, request_session):
     return a Final.action, which has a button to continue to the next experiment if series is defined
     """
     if request_session:
-        from experiment.models import Session
+        from session.models import Session
         series_data = request_session.get('experiment_series')
         series_slug = series_data.get('slug')
         series_session = Session.objects.get(pk=series_data.get('session_id'))

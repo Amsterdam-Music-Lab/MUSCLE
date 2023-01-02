@@ -1,12 +1,11 @@
 import logging
 from django.utils.translation import gettext_lazy as _
 
-from experiment.models import Section
-from .views import Trial, Explainer, Step, Consent, StartSession, Playlist
+from section.models import Section
+from .views import Trial, Explainer, Step
 from .views.form import ChoiceQuestion, Form
 from .views.playback import Playback
 from .util.actions import render_feedback_trivia
-from .base import Base
 from .duration_discrimination import DurationDiscrimination
 
 logger = logging.getLogger(__name__)
