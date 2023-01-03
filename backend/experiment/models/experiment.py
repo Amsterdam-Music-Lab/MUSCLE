@@ -96,7 +96,7 @@ class Experiment(models.Model):
             if 'export_profile' in export_options:
                 row.update(profile['profile'])
             # Add session data
-            if session.json_data is not '':
+            if session.json_data != '':
                 if 'session_data' in export_options:
                     # Convert json session data to csv columns if selected
                     if 'convert_session_json' in export_options:
@@ -138,7 +138,7 @@ class Experiment(models.Model):
                         for result_key in result_keys:
                             result_data[result_key] = full_result_data[result_key]
                     # Add result data
-                    if result.json_data is not '':
+                    if result.json_data != '':
                         # convert result json data to csv columns if selected
                         if 'convert_result_json' in export_options:
                             if 'decision_time' in export_options:
