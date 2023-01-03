@@ -1,17 +1,17 @@
 from django.contrib import admin
 from .models import Participant
-from experiment.models.profile import Profile
+# from experiment.models.profile import Profile
 
 
-class ProfileInline(admin.TabularInline):
-    """Profile inline admin for SessionAdmin"""
+# class ProfileInline(admin.TabularInline):
+#     """Profile inline admin for SessionAdmin"""
 
-    model = Profile
-    extra = 0
+#     model = Profile
+#     extra = 0
 
 
 class ParticipantAdmin(admin.ModelAdmin):
-    inlines = [ProfileInline]
+    # inlines = [ProfileInline]
     list_per_page = 50
     search_fields = ['unique_hash', 'id', 'country_code']
     list_display = ('__str__',
