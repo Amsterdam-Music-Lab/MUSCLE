@@ -170,11 +170,10 @@ def next_trial_actions(session, round_number, request_session):
             'DIFFERENT': _('DIFFERENT')
         },
         view='BUTTON_ARRAY',
-        scoring_rule='CORRECTNESS',
         submits=True
     )
     # create Result object and save expected result to database
-    question.prepare_result(session, section, expected_result)
+    question.prepare_result(session, section, expected_result, scoring_rule='CORRECTNESS')
     form = Form([question])
     playback = Playback([section])
     if round_number < 5:

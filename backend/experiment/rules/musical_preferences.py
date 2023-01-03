@@ -77,7 +77,7 @@ class MusicalPreferences(Base):
             question=_('Do you like this song?'),
             key='like_song',
         )
-        likert.prepare_result(session, section)
+        likert.prepare_result(session, section, scoring_rule='LIKERT')
         know = ChoiceQuestion(
             question=_('Do you know this song?'),
             key='know_song',

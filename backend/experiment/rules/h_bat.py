@@ -96,11 +96,10 @@ class HBat(Base):
                 'FASTER': _('FASTER')
             },
             view='BUTTON_ARRAY',
-            scoring_rule='CORRECTNESS',
             submits=True
         )
          # create Result object and save expected result to database
-        question.prepare_result(session, section, expected_result)
+        question.prepare_result(session, section, expected_result, scoring_rule='CORRECTNESS')
         playback = Playback([section])
         form = Form([question])
         view = Trial(

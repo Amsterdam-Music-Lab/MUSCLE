@@ -49,7 +49,6 @@ class BST(HBat):
             return None
         expected_result = 'in2' if trial_condition else 'in3'
         # create Result object and save expected result to database
-        result_pk = cls.prepare_result(session, section, expected_result, scoring_rule='CORRECTNESS')
         question = ChoiceQuestion(
             key='longer_or_equal',
             question=_(
@@ -59,9 +58,9 @@ class BST(HBat):
                 'in3': _('TRIPLE METER')
             },
             view='BUTTON_ARRAY',
-            result_id=result_pk,
             submits=True
         )
+        question.prepare_result(session, section, expected_result, scoring_rule='CORRECTNESS')
         playback = Playback([section])
         form = Form([question])
         view = Trial(

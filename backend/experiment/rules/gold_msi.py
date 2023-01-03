@@ -3,7 +3,7 @@ import logging
 from django.utils.translation import gettext_lazy as _
 from .views import Trial, Consent, Explainer, Final, Playlist, StartSession
 from .views.form import Form
-from .util.goldsmiths import MSI_F3_MUSICAL_TRAINING
+from .util.goldsmiths import MSI_F3_MUSICAL_TRAINING, MSI_SCORING_RULES
 from .util.questions import EXTRA_DEMOGRAPHICS, question_by_key
 from .util.actions import combine_actions, final_action_with_optional_button
 
@@ -39,7 +39,7 @@ class GoldMSI(Base):
         if round_number == len(cls.questions):
             return final_action_with_optional_button(session, '', request_session)
         question = cls.questions[round_number]
-        question.prepare_result(session)
+        question.prepare_result(session, scoring_rule=MSI_SCORING_RULES.get(question.key, ''))
         feedback_form = Form([
             question,
         ], is_profile=True)

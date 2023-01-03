@@ -34,7 +34,6 @@ MSI_FG_GENERAL = [
         key='msi_14_never_complimented',
         question=_(
             "I have never been complimented for my talents as a musical performer."),
-        scoring_rule='REVERSE_LIKERT'
     ),
     LikertQuestion(
         key='msi_15_internet_search_music',
@@ -44,7 +43,6 @@ MSI_FG_GENERAL = [
         key='msi_17_not_sing_harmony',
         question=_(
             "I am not able to sing in harmony when somebody is singing a familiar tune."),
-        scoring_rule='REVERSE_LIKERT'
     ),
     LikertQuestion(
         key='msi_19_identify_special',
@@ -53,7 +51,6 @@ MSI_FG_GENERAL = [
     LikertQuestion(
         key='msi_23_no_idea_in_tune',
         question=_("When I sing, I have no idea whether I’m in tune or not."),
-        scoring_rule='REVERSE_LIKERT'
     ),
     LikertQuestion(
         key='msi_24_music_addiction',
@@ -64,12 +61,10 @@ MSI_FG_GENERAL = [
         question=_(
             "I don’t like singing in public because I’m afraid that I would sing wrong notes."
         ),
-        scoring_rule='REVERSE_LIKERT'
     ),
     LikertQuestion(
         key='msi_27_consider_musician',
         question=_("I would not consider myself a musician."),
-        scoring_rule='REVERSE_LIKERT'
     ),
     LikertQuestion(
         key='msi_29_sing_after_hearing',
@@ -89,7 +84,6 @@ MSI_FG_GENERAL = [
             '10+': _('10 or more years'),
         },
         view='RADIOS',
-        scoring_rule='CATEGORIES_TO_LIKERT'
     ),
     ChoiceQuestion(
         key='msi_33_practice_daily',
@@ -105,7 +99,6 @@ MSI_FG_GENERAL = [
             '5+': _('5 or more hours'),
         },
         view='RADIOS',
-        scoring_rule='CATEGORIES_TO_LIKERT'
     ),
     ChoiceQuestion(
         key='msi_37_play_instruments',
@@ -120,7 +113,6 @@ MSI_FG_GENERAL = [
             '6+': _('6 or more'),
         },
         view='RADIOS',
-        scoring_rule='CATEGORIES_TO_LIKERT'
     )
 ]
 
@@ -134,8 +126,7 @@ MSI_F1_ACTIVE_ENGAGEMENT = [
     question_by_key('msi_15_internet_search_music', MSI_FG_GENERAL),
     LikertQuestion(
         key='msi_21_spend_income',
-        question=_("I don’t spend much of my disposable income on music."),
-        scoring_rule='REVERSE_LIKERT'),
+        question=_("I don’t spend much of my disposable income on music."),),
     question_by_key('msi_24_music_addiction', MSI_FG_GENERAL),
     LikertQuestion(
         key='msi_28_track_new',
@@ -155,7 +146,6 @@ MSI_F1_ACTIVE_ENGAGEMENT = [
             '11+': _('11 or more'),
         },
         view='RADIOS',
-        scoring_rule='CATEGORIES_TO_LIKERT'
     ),
     ChoiceQuestion(
         key='msi_38_listen_music',
@@ -171,7 +161,6 @@ MSI_F1_ACTIVE_ENGAGEMENT = [
             '4h+': _('4 hrs or more'),
         },
         view='RADIOS',
-        scoring_rule='CATEGORIES_TO_LIKERT'
     )
 ]
 
@@ -185,7 +174,6 @@ MSI_F2_PERCEPTUAL_ABILITIES = [
     LikertQuestion(
         key='msi_11_spot_mistakes',
         question=_("I find it difficult to spot mistakes in a performance of a song even if I know the tune."),
-        scoring_rule='REVERSE_LIKERT'
     ),
     question_by_key('msi_12_performance_diff', MSI_FG_GENERAL),
     LikertQuestion(
@@ -193,7 +181,6 @@ MSI_F2_PERCEPTUAL_ABILITIES = [
         question=_(
             "I have trouble recognising a familiar song when played in a different way or by a different performer."
             ),
-            scoring_rule='REVERSE_LIKERT'
         ),
     LikertQuestion(
         key='msi_18_out_of_beat',
@@ -232,7 +219,6 @@ MSI_F3_MUSICAL_TRAINING = [
             '7+': _('7 or more'),
         },
         view='RADIOS',
-        scoring_rule='CATEGORIES_TO_LIKERT'
     ),
     ChoiceQuestion(
         key='msi_36_instrumental_training',
@@ -249,7 +235,6 @@ MSI_F3_MUSICAL_TRAINING = [
             '10+': _('10 or more'),
         },
         view='RADIOS',
-        scoring_rule='CATEGORIES_TO_LIKERT'
     ),
     question_by_key('msi_37_play_instruments', MSI_FG_GENERAL)
 ]
@@ -276,8 +261,7 @@ MSI_F5_EMOTIONS = [
         ),
     LikertQuestion(
         key='msi_09_rarely_emotions',
-        question=_("Pieces of music rarely evoke emotions for me."),
-        scoring_rule='REVERSE_LIKERT'
+        question=_("Pieces of music rarely evoke emotions for me.")
         ),
     LikertQuestion(
         key='msi_16_motivate',
@@ -302,3 +286,44 @@ MSI_ALL = (
     + MSI_F4_SINGING_ABILITIES
     + MSI_F5_EMOTIONS
 )
+
+MSI_SCORING_RULES = {
+    'msi_01_music_activities': 'LIKERT',
+    'msi_02_shivers': 'LIKERT',
+    'msi_03_writing': 'LIKERT',
+    'msi_04_sing_along': 'LIKERT',
+    'msi_05_good_singer': 'LIKERT',
+    'msi_06_song_first_time': 'LIKERT',
+    'msi_07_from_memory': 'LIKERT',
+    'msi_08_intrigued_styles': 'LIKERT',
+    'msi_09_rarely_emotions': 'REVERSE_LIKERT',
+    'msi_10_sing_with_recording': 'LIKERT',
+    'msi_11_spot_mistakes': 'REVERSE_LIKERT',
+    'msi_12_performance_diff': 'LIKERT',
+    'msi_13_trouble_recognising': 'REVERSE_LIKERT',
+    'msi_14_never_complimented': 'REVERSE_LIKERT',
+    'msi_15_internet_search_music': 'LIKERT',
+    'msi_16_motivate': 'LIKERT',
+    'msi_17_not_sing_harmony': 'REVERSE_LIKERT',
+    'msi_18_out_of_beat': 'LIKERT',
+    'msi_19_identify_special': 'LIKERT',
+    'msi_20_talk_emotions': 'LIKERT',
+    'msi_21_spend_income': 'REVERSE_LIKERT',
+    'msi_22_out_of_tune': 'LIKERT',
+    'msi_23_no_idea_in_tune': 'REVERSE_LIKERT',
+    'msi_24_music_addiction': 'LIKERT',
+    'msi_25_sing_public': 'REVERSE_LIKERT',
+    'msi_26_genre': 'LIKERT',
+    'msi_27_consider_musician': 'REVERSE_LIKERT',
+    'msi_28_track_new': 'LIKERT',
+    'msi_29_sing_after_hearing': 'LIKERT',
+    'msi_30_sing_back': 'LIKERT',
+    'msi_31_memories': 'LIKERT',
+    'msi_32_practice_years': 'CATEGORIES_TO_LIKERT',
+    'msi_33_practice_daily': 'CATEGORIES_TO_LIKERT',
+    'msi_34_attended_events': 'CATEGORIES_TO_LIKERT',
+    'msi_35_theory_training': 'CATEGORIES_TO_LIKERT',
+    'msi_36_instrumental_training': 'CATEGORIES_TO_LIKERT',
+    'msi_37_play_instruments': 'CATEGORIES_TO_LIKERT',
+    'msi_38_listen_music': 'CATEGORIES_TO_LIKERT',
+}

@@ -139,10 +139,9 @@ class BeatAlignment(Base):
                 'OFF': _('NOT ALIGNED TO THE BEAT')
             },
             view='BUTTON_ARRAY',
-            scoring_rule='CORRECTNESS',
             submits=True
         )
-        question.prepare_result(session, section, expected_result)
+        question.prepare_result(session, section, expected_result, scoring_rule='CORRECTNESS')
         form = Form([question])
         playback = Playback([section])
         view = Trial(

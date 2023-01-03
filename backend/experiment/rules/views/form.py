@@ -17,7 +17,6 @@ class Question(object):
         view='STRING',
         explainer='',
         question='',
-        scoring_rule='',
         is_skippable=False,
         submits=False,
         config=None
@@ -27,28 +26,30 @@ class Question(object):
         self.view = view
         self.explainer = explainer
         self.question = question
-        self.scoring_rule = scoring_rule
 
         self.is_skippable = is_skippable
         self.submits = submits
 
         self.config = config
     
-    def prepare_result(self, session, section=None, expected_response=None, comment=''):
+    def prepare_result(self, session, section=None, expected_response=None, comment='', scoring_rule=''):
         ''' Create a Result object, and provide its id to be serialized
         - session: the session on which the Result is going to be registered
         - section: optionally, provide a section to which the Result is going to be tied
         - expected_response: optionally, provide the correct answer, used for scoring  
         - comment: optionally, provide a comment to be saved in the database, e.g. "training phase"
+        - scoring_rule: optionally, provide a scoring rule
         '''     
         
         from experiment.models import Result
         
         result = Result(
-            session=session, section=section,
+            session=session,
+            section=section,
             question_key=self.key,
             expected_response=expected_response,
-            scoring_rule=self.scoring_rule, comment=comment
+            scoring_rule=scoring_rule,
+            comment=comment
         )
         result.save()
         self.result_id = result.pk

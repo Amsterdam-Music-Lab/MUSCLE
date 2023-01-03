@@ -10,7 +10,7 @@ from .views.form import BooleanQuestion, ChoiceQuestion, Form, Question
 from .views.playback import Playback
 from .views.html import HTML
 from .util.questions import EXTRA_DEMOGRAPHICS, question_by_key
-from .util.goldsmiths import MSI_ALL
+from .util.goldsmiths import MSI_ALL, MSI_SCORING_RULES
 from .util.actions import combine_actions
 
 logger = logging.getLogger(__name__)
@@ -138,7 +138,7 @@ class Huang2022(Base):
             gender_question(),
         ]
         for question in questions:
-            question.prepare_result(session)
+            question.prepare_result(session, scoring_rule=MSI_SCORING_RULES.get(question.key, ''))
         return [
             Trial(
                 title=_("Questionnaire %(index)i/%(total)i") % {'index': index + 1, 'total': len(questions)},

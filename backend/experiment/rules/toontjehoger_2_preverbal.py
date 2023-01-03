@@ -114,9 +114,6 @@ class ToontjeHoger2Preverbal(Base):
 
     @classmethod
     def get_round1(cls, session):
-        result_pk = cls.prepare_result(
-            session, section=None, expected_response="C")
-
         # Question
         question = ButtonArrayQuestion(
             question="Welk spectrogram toont het geluid van een mens?",
@@ -127,9 +124,10 @@ class ToontjeHoger2Preverbal(Base):
                 'C': 'C',
             },
             view='BUTTON_ARRAY',
-            result_id=result_pk,
             submits=True
         )
+        question.prepare_result(
+            session, section=None, expected_response="C")
         form = Form([question])
 
         image_trial = HTML(
@@ -137,7 +135,6 @@ class ToontjeHoger2Preverbal(Base):
                 "/images/experiments/toontjehoger/preverbal_1.webp"),
             form=form,
             title=cls.TITLE,
-            result_id=result_pk
         ).action()
 
         return [image_trial]
@@ -199,9 +196,6 @@ class ToontjeHoger2Preverbal(Base):
 
     @classmethod
     def get_round2(cls, round, session):
-        # Create result
-        result_pk = cls.prepare_result(
-            session, section=None, expected_response="A")
 
         # Get sections
         # French
@@ -235,8 +229,8 @@ class ToontjeHoger2Preverbal(Base):
             },
             view='BUTTON_ARRAY',
             submits=True,
-            result_id=result_pk
         )
+        question.prepare_result(session, section=None, expected_response="A")
         form = Form([question])
 
         # Trial
