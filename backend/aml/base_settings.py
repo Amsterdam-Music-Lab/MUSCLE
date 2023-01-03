@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'experiment',
     'participant',
+    'result',
     'session',
     'section'
 ]
