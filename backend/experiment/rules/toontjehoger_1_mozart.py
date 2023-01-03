@@ -1,12 +1,12 @@
 import logging
 from django.template.loader import render_to_string
 from os.path import join
-from .views import Trial, Explainer, Step, Score, Final, StartSession, Playlist, Info, HTML
-from .views.form import ButtonArrayQuestion, Form
-from .views.playback import Playback
+from experiment.actions import Trial, Explainer, Step, Score, Final, StartSession, Playlist, Info, HTML
+from experiment.actions.form import ButtonArrayQuestion, Form
+from experiment.actions.playback import Playback
 from .base import Base
-from .util.actions import combine_actions
-from .util.strings import non_breaking
+from experiment.util.actions import combine_actions
+from experiment.util.strings import non_breaking
 
 logger = logging.getLogger(__name__)
 

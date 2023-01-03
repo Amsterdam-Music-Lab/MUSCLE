@@ -2,7 +2,7 @@ from copy import deepcopy
 
 from django.utils.translation import gettext_lazy as _
 
-from experiment.rules.views.form import ChoiceQuestion, Question
+from experiment.actions.form import ChoiceQuestion, Question
 from .iso_countries import ISO_COUNTRIES
 from .iso_languages import ISO_LANGUAGES
 from .isced_education import ISCED_EDUCATION_LEVELS

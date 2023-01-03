@@ -1,12 +1,14 @@
 import logging
-from django.template.loader import render_to_string
-from .toontjehoger_1_mozart import toontjehoger_ranks
-from .views import Plink, Explainer, Step, Score, Final, StartSession, Playlist, Info
-from .views.form import RadiosQuestion
-from .base import Base
 from os.path import join
-from .util.actions import combine_actions
-from .util.strings import non_breaking
+from django.template.loader import render_to_string
+
+from .toontjehoger_1_mozart import toontjehoger_ranks
+from experiment.actions import Plink, Explainer, Step, Score, Final, StartSession, Playlist, Info
+from experiment.actions.form import RadiosQuestion
+from .base import Base
+
+from experiment.util.actions import combine_actions
+from experiment.util.strings import non_breaking
 
 logger = logging.getLogger(__name__)
 

@@ -5,13 +5,12 @@ from django.utils.translation import gettext_lazy as _
 from django.template.loader import render_to_string
 
 from .base import Base
-from .views import SongSync, Final, Score, Explainer, Step, Consent, StartSession, Playlist, Trial
-from .views.form import BooleanQuestion, ChoiceQuestion, Form, Question
-from .views.playback import Playback
-from .views.html import HTML
-from .util.questions import EXTRA_DEMOGRAPHICS, question_by_key
-from .util.goldsmiths import MSI_ALL
-from .util.actions import combine_actions
+from experiment.actions import SongSync, Final, Score, Explainer, Step, Consent, StartSession, Playlist, Trial
+from experiment.actions.form import BooleanQuestion, ChoiceQuestion, Form, Question
+from experiment.actions.playback import Playback
+from experiment.util.questions import EXTRA_DEMOGRAPHICS, question_by_key
+from experiment.util.goldsmiths import MSI_ALL
+from experiment.util.actions import combine_actions
 
 logger = logging.getLogger(__name__)
 

@@ -4,7 +4,7 @@ import numpy as np
 
 from django.utils.translation import gettext as _
 
-from ..views import Explainer, Step
+from experiment.actions import Explainer, Step
 from .actions import combine_actions
 
 

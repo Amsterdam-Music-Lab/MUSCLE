@@ -4,12 +4,12 @@ from django.http import Http404
 from django.db.models import Avg
 from operator import ne
 
-from .views.form import Form, ChoiceQuestion
-from .views import Consent, Explainer, Score, StartSession, TwoAlternativeForced, Trial, Final
+from experiment.actions.form import Form, ChoiceQuestion
+from experiment.actions import Consent, Explainer, Score, StartSession, TwoAlternativeForced, Trial, Final
 
-from .util.actions import combine_actions
+from experiment.util.actions import combine_actions
 
-from .util.questions import DEMOGRAPHICS, EXTRA_DEMOGRAPHICS, question_by_key
+from experiment.util.questions import DEMOGRAPHICS, EXTRA_DEMOGRAPHICS, question_by_key
 from .base import Base
 import random
 

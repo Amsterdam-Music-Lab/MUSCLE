@@ -1,6 +1,6 @@
 import logging
-from .views import Final
-from .util.score import SCORING_RULES
+from experiment.actions import Final
+from experiment.util.score import SCORING_RULES
 
 logger = logging.getLogger(__name__)
 

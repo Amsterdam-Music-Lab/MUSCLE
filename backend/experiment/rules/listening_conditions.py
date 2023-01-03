@@ -2,10 +2,10 @@
 from django.utils.translation import gettext_lazy as _
 
 from .base import Base
-from .views import Consent, Explainer, Step, Final, Playback, Playlist, StartSession, Trial
-from .views.form import ChoiceQuestion, Form
-from .views.playback import Playback
-from .util.actions import combine_actions, final_action_with_optional_button
+from experiment.actions import Consent, Explainer, Step, Playback, Playlist, StartSession, Trial
+from experiment.actions.form import ChoiceQuestion, Form
+from experiment.actions.playback import Playback
+from experiment.util.actions import combine_actions, final_action_with_optional_button
 
 
 class ListeningConditions(Base):

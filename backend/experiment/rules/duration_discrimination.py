@@ -6,13 +6,13 @@ from django.utils.translation import gettext_lazy as _
 
 from .base import Base
 from section.models import Section
-from .views import Trial, Consent, Explainer, StartSession, Step
-from .views.form import ChoiceQuestion, Form
-from .views.playback import Playback
-from .util.actions import final_action_with_optional_button, render_feedback_trivia
-from .util.final_score import get_average_difference
-from .util.practice import get_trial_condition_block, get_practice_views, practice_explainer
-from .util.staircasing import register_turnpoint
+from experiment.actions import Trial, Consent, Explainer, StartSession, Step
+from experiment.actions.form import ChoiceQuestion, Form
+from experiment.actions.playback import Playback
+from experiment.util.actions import final_action_with_optional_button, render_feedback_trivia
+from experiment.util.final_score import get_average_difference
+from experiment.util.practice import get_trial_condition_block, get_practice_views, practice_explainer
+from experiment.util.staircasing import register_turnpoint
 
 logger = logging.getLogger(__name__)
 

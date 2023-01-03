@@ -7,8 +7,8 @@ from django.http import HttpResponseRedirect
 from django.template.loader import render_to_string
 
 from .base import Base
-from .util.actions import combine_actions
-from .views import Consent, Explainer, Final, StartSession, Step
+from experiment.util.actions import combine_actions
+from experiment.actions import Consent, Explainer, Final, StartSession, Step
 
 
 class RhythmExperimentSeries(Base):

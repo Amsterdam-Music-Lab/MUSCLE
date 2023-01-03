@@ -1,8 +1,8 @@
 import logging
 import random
-from .views import ToontjeHoger
+from experiment.actions import ToontjeHoger
 from .base import Base
-from .util.strings import external_url
+from experiment.util.strings import external_url
 
 logger = logging.getLogger(__name__)
 

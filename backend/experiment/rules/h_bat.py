@@ -5,14 +5,14 @@ from django.utils.translation import gettext_lazy as _
 
 from .base import Base
 from section.models import Section
-from .views import Trial, Consent, Explainer, Playlist, Step, StartSession
-from .views.form import ChoiceQuestion, Form
-from .views.playback import Playback
+from experiment.actions import Trial, Consent, Explainer, Playlist, Step, StartSession
+from experiment.actions.form import ChoiceQuestion, Form
+from experiment.actions.playback import Playback
 
-from .util.practice import get_practice_views, practice_explainer, get_trial_condition, get_trial_condition_block
-from .util.actions import final_action_with_optional_button, render_feedback_trivia
-from .util.final_score import get_average_difference_level_based
-from .util.staircasing import register_turnpoint
+from experiment.util.practice import get_practice_views, practice_explainer, get_trial_condition, get_trial_condition_block
+from experiment.util.actions import final_action_with_optional_button, render_feedback_trivia
+from experiment.util.final_score import get_average_difference_level_based
+from experiment.util.staircasing import register_turnpoint
 
 logger = logging.getLogger(__name__)
 

@@ -1,4 +1,4 @@
-from experiment.rules.views import Question
+from experiment.actions import Question
 
 def tipi_question(key, trait):
     """Define a standard STOMP question for a genre"""

@@ -1,14 +1,13 @@
 from django.utils.translation import gettext_lazy as _
 
 from section.models import Section
-from .views import Trial, Explainer, Step
-from .views.form import ChoiceQuestion, Form
-from .views.playback import Playback
+from experiment.actions import Trial, Explainer, Step
+from experiment.actions.form import ChoiceQuestion, Form
+from experiment.actions.playback import Playback
+from experiment.util.actions import final_action_with_optional_button, render_feedback_trivia
+from experiment.util.final_score import get_average_difference_level_based
 
 from .h_bat import HBat
-
-from .util.actions import final_action_with_optional_button, render_feedback_trivia
-from .util.final_score import get_average_difference_level_based
 
 class BST(HBat):
     """ Rules for the BST experiment, which follow closely

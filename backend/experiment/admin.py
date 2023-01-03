@@ -1,16 +1,13 @@
 import csv
-import json
 
 from django.contrib import admin
 from django.db import models
 from django.shortcuts import render, redirect
-from django.forms import CheckboxSelectMultiple
+from django.forms import CheckboxSelectMultiple, ModelForm, ModelMultipleChoiceField
 from django.http import HttpResponse, JsonResponse
 from inline_actions.admin import InlineActionsModelAdminMixin
-from experiment.models import Experiment
-
-from experiment.admin.forms import ExperimentForm, ExportForm, TemplateForm, EXPORT_TEMPLATES
-
+from experiment.models import Experiment, ExperimentSeries
+from experiment.forms import ExperimentForm, ExportForm, TemplateForm, EXPORT_TEMPLATES
 
 class ExperimentAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
     list_display = ('name', 'rules', 'rounds', 'playlist_count',
@@ -94,3 +91,27 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
 
 
 admin.site.register(Experiment, ExperimentAdmin)
+
+class ModelFormFieldAsJSON(ModelMultipleChoiceField):
+    """ override clean method to prevent pk lookup to save querysets """
+    def clean(self, value):
+        return value
+
+class ExperimentSeriesForm(ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(ModelForm, self).__init__(*args, **kwargs)
+        from . import Experiment
+        experiments = Experiment.objects.all().filter(experiment_series=None)
+        self.fields['first_experiments'] = ModelFormFieldAsJSON(queryset=experiments, required=False)
+        self.fields['random_experiments'] = ModelFormFieldAsJSON(queryset=experiments, required=False)
+        self.fields['last_experiments'] = ModelFormFieldAsJSON(queryset=experiments, required=False)
+
+    class Meta:
+        model = ExperimentSeries
+        fields = ['name', 'first_experiments', 'random_experiments', 'last_experiments']
+
+class ExperimentSeriesAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
+    fields = ['name', 'first_experiments', 'random_experiments', 'last_experiments']
+    form = ExperimentSeriesForm
+
+admin.site.register(ExperimentSeries, ExperimentSeriesAdmin)

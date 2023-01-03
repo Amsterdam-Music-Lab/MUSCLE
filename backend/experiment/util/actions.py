@@ -4,7 +4,7 @@ from django.conf import settings
 from django.utils.translation import gettext_lazy as _
 from django.template.loader import render_to_string
 
-from experiment.rules.views import Final
+from experiment.actions import Final
 
 def combine_actions(*argv):
     """Return the first action with the rest of the actions as an array under key 'next_round'"""

@@ -4,7 +4,7 @@ from django.http import JsonResponse, HttpResponseBadRequest, Http404, HttpRespo
 from django.views.decorators.http import require_POST
 from experiment.rules.util.score import SCORING_RULES
 from experiment.models import Profile, Session
-from .util.participant import current_participant
+from participant.utils import current_participant
 
 
 def current(request):

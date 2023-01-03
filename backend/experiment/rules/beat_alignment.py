@@ -5,11 +5,10 @@ import copy
 from django.utils.translation import gettext_lazy as _
 
 from .base import Base
-from .views import Trial, Explainer, Consent, StartSession, Step, Question
-from .views.form import ChoiceQuestion, Form
-from .views.playback import Playback
-from .util.questions import question_by_key
-from .util.actions import combine_actions, final_action_with_optional_button, render_feedback_trivia
+from experiment.actions import Trial, Explainer, Consent, StartSession, Step, Question
+from experiment.actions.form import ChoiceQuestion, Form
+from experiment.actions.playback import Playback
+from experiment.util.actions import final_action_with_optional_button, render_feedback_trivia
 
 logger = logging.getLogger(__name__)
 

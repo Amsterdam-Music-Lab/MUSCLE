@@ -2,12 +2,12 @@ from django.db.models import Avg
 from django.utils.translation import gettext_lazy as _
 from django.template.loader import render_to_string
 
-from .util.actions import combine_actions
-from .util.questions import question_by_key
+from experiment.util.actions import combine_actions
+from experiment.util.questions import question_by_key
 
-from .views import Consent, Explainer, Final, Playlist, Step, StartSession, Trial
-from .views.form import BooleanQuestion, ChoiceQuestion, Form, LikertQuestionIcon
-from .views.playback import Playback
+from experiment.actions import Consent, Explainer, Final, Playlist, Step, StartSession, Trial
+from experiment.actions.form import BooleanQuestion, ChoiceQuestion, Form, LikertQuestionIcon
+from experiment.actions.playback import Playback
 
 from .base import Base
 

@@ -2,10 +2,10 @@ import logging
 from django.utils.translation import gettext_lazy as _
 
 from section.models import Section
-from .views import Trial, Explainer, Step
-from .views.form import ChoiceQuestion, Form
-from .views.playback import Playback
-from .util.actions import render_feedback_trivia
+from experiment.actions import Trial, Explainer, Step
+from experiment.actions.form import ChoiceQuestion, Form
+from experiment.actions.playback import Playback
+from experiment.util.actions import render_feedback_trivia
 from .duration_discrimination import DurationDiscrimination
 
 logger = logging.getLogger(__name__)

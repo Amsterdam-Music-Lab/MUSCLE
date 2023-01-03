@@ -2,12 +2,12 @@ import logging
 from django.template.loader import render_to_string
 
 from .toontjehoger_1_mozart import toontjehoger_ranks
-from .views import Trial, Explainer, Step, Score, Final, StartSession, Playlist, Info, HTML
-from .views.form import ButtonArrayQuestion, ChoiceQuestion, Form
-from .views.playback import Playback
+from experiment.actions import Trial, Explainer, Step, Score, Final, StartSession, Playlist, Info, HTML
+from experiment.actions.form import ButtonArrayQuestion, ChoiceQuestion, Form
+from experiment.actions.playback import Playback
 from .base import Base
 from os.path import join
-from .util.actions import combine_actions
+from experiment.util.actions import combine_actions
 
 logger = logging.getLogger(__name__)
 

@@ -7,10 +7,10 @@ from django.template.loader import render_to_string
 
 from .base import Base
 
-from .views import Consent, Explainer, Final, Question, Playlist, Trial, StartSession
-from .util.actions import combine_actions
-from .util.questions import question_by_key, EXTRA_DEMOGRAPHICS
-from .util.languages import LANGUAGE, LanguageQuestion
+from experiment.actions import Consent, Explainer, Final, Question, Playlist, Trial, StartSession
+from experiment.util.actions import combine_actions
+from experiment.util.questions import question_by_key, EXTRA_DEMOGRAPHICS
+from experiment.util.languages import LANGUAGE, LanguageQuestion
 
 n_representations = 8
 n_trials_per_block = 8

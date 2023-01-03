@@ -1,6 +1,6 @@
 from django.utils.translation import gettext_lazy as _
 
-from experiment.rules.views import Question
+from experiment.actions import Question
 
 LANGUAGE = [
     Question.radios(
