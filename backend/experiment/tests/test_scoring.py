@@ -27,24 +27,39 @@ class ScoringTest(TestCase):
             playlist=playlist
         )
     
-    def likert_request(self, rule, value):
-        view = { "form": [
-            {"key": "test",
-            "result_id": None,
-            "view": "TEXT_RANGE",
-            "scale_steps": 7,
-            "scoring_rule": rule,
-            "value": value
-            }
-        ]}
+    def likert_request(self, rule, value, profile=False):
+        result = Result.objects.create(
+            question_key="test",
+            session=self.session,
+            section=self.section,
+            is_profile=profile,
+            scoring_rule=rule
+        )
+        view = {
+            "form": [{
+                "key": "test",
+                "result_id": result.pk,
+                "view": "TEXT_RANGE",
+                "scale_steps": 7,
+                "value": value
+            }]
+        }
+        if profile:
+            view['is_profile'] = True
         return self.make_request(view)
     
     def choice_request(self):
+        result = Result.objects.create(
+            session=self.session,
+            section=self.section,
+            scoring_rule='CATEGORIES_TO_LIKERT',
+            question_key='test'
+        )
         view = {
             "form": [
                 {
                     "key": "test",
-                    "result_id": None,
+                    "result_id": result.pk,
                     "view": "RADIOS",
                     "choices": {
                         "first": "Spam",
@@ -53,24 +68,24 @@ class ScoringTest(TestCase):
                         "fourth": "Spam, Fried Beans and Spam",
                         "fifth": "Spam, Spam, Spam, Spam, Eggs and Spam"
                     },
-                    "value": "second",
-                    "scoring_rule": "CATEGORIES_TO_LIKERT"
+                    "value": "second"
                 }
             ],
         }
         return self.make_request(view)
     
-    def correctness_request(self, value):   
+    def correctness_request(self, value): 
         result = Result.objects.create(
             session = self.session,
             section = self.section,
-            expected_response = 'spam'
+            expected_response = 'spam',
+            scoring_rule='CORRECTNESS',
+            question_key='test'
         )
         view = { "form": [
             {"key": "test",
             "result_id": result.pk,
             "view": "BUTTON_ARRAY",
-            "scoring_rule": 'CORRECTNESS',
             "value": value
             }
         ]}
@@ -80,6 +95,8 @@ class ScoringTest(TestCase):
         result = Result.objects.create(
             session = self.session,
             section = self.section,
+            scoring_rule='SONG_SYNC',
+            question_key="song_sync"
         )
         view = {
             "result_id": result.pk,
@@ -92,7 +109,6 @@ class ScoringTest(TestCase):
             "config": {
                 "recognition_time": 15,
                 "continuation_correctness": True,
-                "scoring_rule": "SONG_SYNC"
             }
         }
         return self.make_request(view)
@@ -124,11 +140,11 @@ class ScoringTest(TestCase):
         assert self.session.result_set.last().score == 6
     
     def test_likert_profile(self):
-        client_request = self.likert_request('LIKERT', 6)
+        client_request = self.likert_request('LIKERT', 6, True)
         response = self.client.post('/experiment/profile/create/', client_request)
         assert response.status_code == 200
-        assert self.participant.profile_set.count() == 1
-        assert self.participant.profile_set.last().score == 6
+        assert self.session.result_set.count() == 1
+        assert self.session.result_set.last().score == 6
     
     def test_categories_to_likert(self):
         client_request = self.choice_request()

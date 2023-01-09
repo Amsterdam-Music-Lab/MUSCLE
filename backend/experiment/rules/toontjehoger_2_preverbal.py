@@ -97,12 +97,12 @@ class ToontjeHoger2Preverbal(Base):
         else:
             if rounds_passed == 1:
                 appendix = "Op het volgende scherm kun je de geluiden beluisteren."
-                if last_result.score == cls.SCORE_CORRECT:
+                if last_result.scoring.value == cls.SCORE_CORRECT:
                     feedback = "Dat is correct! Spectrogram C is inderdaad van een mens. " + appendix
                 else:
                     feedback = "Helaas! Je antwoord was onjuist. Het geluid van spectrogram C is van een mens. " + appendix
             elif rounds_passed == 2:
-                if last_result.score == cls.SCORE_CORRECT:
+                if last_result.scoring.value == cls.SCORE_CORRECT:
                     feedback = "Dat is correct! Geluid A is inderdaad de Franse baby."
                 else:
                     feedback = "Helaas! Geluid A is de Franse baby."
@@ -114,9 +114,6 @@ class ToontjeHoger2Preverbal(Base):
 
     @classmethod
     def get_round1(cls, session):
-        result_pk = cls.prepare_result(
-            session, section=None, expected_response="C")
-
         # Question
         question = ButtonArrayQuestion(
             question="Welk spectrogram toont het geluid van een mens?",
@@ -127,9 +124,10 @@ class ToontjeHoger2Preverbal(Base):
                 'C': 'C',
             },
             view='BUTTON_ARRAY',
-            result_id=result_pk,
             submits=True
         )
+        question.prepare_result(
+            session, section=None, expected_response="C")
         form = Form([question])
 
         image_trial = HTML(
@@ -137,7 +135,6 @@ class ToontjeHoger2Preverbal(Base):
                 "/images/experiments/toontjehoger/preverbal_1.webp"),
             form=form,
             title=cls.TITLE,
-            result_id=result_pk
         ).action()
 
         return [image_trial]
@@ -199,9 +196,6 @@ class ToontjeHoger2Preverbal(Base):
 
     @classmethod
     def get_round2(cls, round, session):
-        # Create result
-        result_pk = cls.prepare_result(
-            session, section=None, expected_response="A")
 
         # Get sections
         # French
@@ -235,8 +229,8 @@ class ToontjeHoger2Preverbal(Base):
             },
             view='BUTTON_ARRAY',
             submits=True,
-            result_id=result_pk
         )
+        question.prepare_result(session, section=None, expected_response="A")
         form = Form([question])
 
         # Trial
@@ -253,7 +247,7 @@ class ToontjeHoger2Preverbal(Base):
         return [trial]
 
     @classmethod
-    def calculate_score(cls, result, data, scoring_rule, form_element):
+    def calculate_score(cls, result, data):
         return cls.SCORE_CORRECT if result.expected_response == result.given_response else cls.SCORE_WRONG
 
     @classmethod

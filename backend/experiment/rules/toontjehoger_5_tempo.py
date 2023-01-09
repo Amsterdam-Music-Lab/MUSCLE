@@ -136,11 +136,7 @@ class ToontjeHoger5Tempo(Base):
         genre = ["C", "J", "R"][round % 3]
 
         sections = cls.get_random_section_pair(session, genre)
-        section_original = sections[0] if sections[0].group == "or" else sections[1]
-
-        # Create result
-        result_pk = cls.prepare_result(
-            session, section=section_original, expected_response="A" if sections[0].id == section_original.id else "B")
+        section_original = sections[0] if sections[0].group == "or" else sections[1]  
 
         # Player
         play_config = {
@@ -159,7 +155,9 @@ class ToontjeHoger5Tempo(Base):
                 "B": "B",
             },
             submits=True,
-            result_id=result_pk
+        )
+        question.prepare_result(
+            session, section=section_original, expected_response="A" if sections[0].id == section_original.id else "B"
         )
         form = Form([question])
 
@@ -177,7 +175,7 @@ class ToontjeHoger5Tempo(Base):
         return [trial]
 
     @classmethod
-    def calculate_score(cls, result, data, scoring_rule, form_element):
+    def calculate_score(cls, result, data):
         return cls.SCORE_CORRECT if result.expected_response == result.given_response else cls.SCORE_WRONG
 
     @classmethod

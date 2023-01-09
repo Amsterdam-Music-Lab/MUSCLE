@@ -108,8 +108,6 @@ class ToontjeHoger6Relative(Base):
 
         # Fragments A,B,C are all different, so answer is always NO
         expected_response = "NO"
-        result_pk = cls.prepare_result(
-            session, section=section1, expected_response=expected_response)
 
         # Question
         question = ChoiceQuestion(
@@ -120,8 +118,10 @@ class ToontjeHoger6Relative(Base):
                 "NO": "Nee",
             },
             view='BUTTON_ARRAY',
-            result_id=result_pk,
             submits=True
+        )
+        question.prepare_result(
+            session, section=section1, expected_response=expected_response
         )
         form = Form([question])
 
@@ -148,7 +148,7 @@ class ToontjeHoger6Relative(Base):
         return [trial]
 
     @classmethod
-    def calculate_score(cls, result, data, scoring_rule, form_element):
+    def calculate_score(cls, result, data):
         return cls.SCORE_CORRECT if result.expected_response == result.given_response else cls.SCORE_WRONG
 
     @classmethod

@@ -98,10 +98,6 @@ class ToontjeHoger4Absolute(Base):
         sections = [section1, section2]
         random.shuffle(sections)
 
-        # Create result
-        result_pk = cls.prepare_result(
-            session, section=section1, expected_response="A" if sections[0].id == section1.id else "B")
-
         # Player
         play_config = {
             'label_style': 'ALPHABETIC',
@@ -118,8 +114,10 @@ class ToontjeHoger4Absolute(Base):
                 "A": "A",
                 "B": "B",
             },
-            submits=True,
-            result_id=result_pk
+            submits=True
+        )
+        question.prepare_result(
+            session, section=section1, expected_response="A" if sections[0].id == section1.id else "B"
         )
         form = Form([question])
 
@@ -137,7 +135,7 @@ class ToontjeHoger4Absolute(Base):
         return [trial]
 
     @classmethod
-    def calculate_score(cls, result, data, scoring_rule, form_element):
+    def calculate_score(cls, result, data):
         return cls.SCORE_CORRECT if result.expected_response == result.given_response else cls.SCORE_WRONG
 
     @classmethod

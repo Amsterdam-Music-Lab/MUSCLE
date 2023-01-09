@@ -92,7 +92,7 @@ class Categorization(Base):
             profiles = session.participant.profile()
             for profile in profiles:
                 # Delete results and json from session and exit
-                if profile.answer == 'aborted':
+                if profile.given_response == 'aborted':
                     session.result_set.all().delete()
                     json_data = {'phase': 'ABORTED',
                                  'training_rounds': json_data['training_rounds']}
@@ -492,8 +492,6 @@ class Categorization(Base):
             expected_response = 'A'
         else:
             expected_response = 'B'
-        result_pk = cls.prepare_result(
-            session, section, expected_response, json_data['phase'])
 
         choices = json_data["choices"]
         config = {'listen_first': True,
@@ -502,10 +500,9 @@ class Categorization(Base):
                   'style': json_data["button_order"],
                   'time_pass_break': False
                   }
-        trial = TwoAlternativeForced(
-            section, choices, result_pk, title=cls.get_title(session), config=config)
-
-        return trial.action()
+        trial = two_alternative_forced(session, section, choices, expected_response,
+            comment=json_data['phase'], scoring_rule='CORRECTNESS', config=config)
+        return trial
 
     @classmethod
     def get_title(cls, session):

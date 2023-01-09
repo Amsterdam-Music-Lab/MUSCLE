@@ -153,7 +153,7 @@ def question_by_key(key, questions=DEMOGRAPHICS, is_skippable=None, drop_choices
 
                 q = deepcopy(question)
                 # Set is_skippable
-                if is_skippable is not None:
+                if is_skippable != None:
                     q.is_skippable = is_skippable
 
                 if hasattr(question, 'choices') and len(drop_choices):
@@ -177,7 +177,7 @@ def unasked_question(participant, questions=DEMOGRAPHICS, is_skippable=None, ski
             if not question['question']['key'] in profile_questions:
                 if skip == 0:
                     # Set is_skippable
-                    if is_skippable is not None:
+                    if is_skippable != None:
                         question['question']['is_skippable'] = is_skippable
 
                     return question
@@ -203,10 +203,10 @@ def next_question(session, questions=DEMOGRAPHICS, is_skippable=None, skip=0):
         return question
 
     # Second: Suggest questions with empty answer at random
-    profile = session.participant.random_empty_profile_question()
-    if profile:
+    empty_result = session.participant.random_empty_profile_question()
+    if empty_result:
         return question_by_key(
-            key=profile.question,
+            key=empty_result.question_key,
             questions=questions,
             is_skippable=is_skippable
         )

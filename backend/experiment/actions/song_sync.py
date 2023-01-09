@@ -21,6 +21,7 @@ class SongSync(object):  # pylint: disable=too-few-public-methods
         '''
         self.section = section
         self.result_id = result_id
+        self.scoring_rule = scoring_rule
         continuation_correctness = random.randint(0, 1) == 1
         self.config = {
             'ready_time': 3,
@@ -29,7 +30,6 @@ class SongSync(object):  # pylint: disable=too-few-public-methods
             'sync_time': 15,
             'continuation_offset': random.randint(100, 150) / 10 if not continuation_correctness else 0,
             'continuation_correctness': continuation_correctness,
-            'scoring_rule': scoring_rule
         }
         if config:
             self.config.update(config)
@@ -56,6 +56,7 @@ class SongSync(object):  # pylint: disable=too-few-public-methods
             'view': self.ID,
             'section': self.section.absolute_url(),
             'resultId': self.result_id,
+            'scoring_rule': self.scoring_rule,
             'config': self.config,
             'title': self.title,
             'instructions': self.instructions,

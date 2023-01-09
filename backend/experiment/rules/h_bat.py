@@ -87,8 +87,6 @@ class HBat(Base):
         except Section.DoesNotExist:
             return None
         expected_result = 'SLOWER' if trial_condition else 'FASTER'
-        # create Result object and save expected result to database
-        result_pk = cls.prepare_result(session, section, expected_result)
         question = ChoiceQuestion(
             key='longer_or_equal',
             question=_(
@@ -98,10 +96,10 @@ class HBat(Base):
                 'FASTER': _('FASTER')
             },
             view='BUTTON_ARRAY',
-            scoring_rule='CORRECTNESS',
-            result_id=result_pk,
             submits=True
         )
+         # create Result object and save expected result to database
+        question.prepare_result(session, section, expected_result, scoring_rule='CORRECTNESS')
         playback = Playback([section])
         form = Form([question])
         view = Trial(

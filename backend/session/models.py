@@ -12,7 +12,7 @@ from section.models import Playlist, Section
 class Session(models.Model):
     """Experiment session by a participant"""
 
-    experiment = models.ForeignKey(Experiment, on_delete=models.CASCADE)
+    experiment = models.ForeignKey(Experiment, on_delete=models.CASCADE, blank=True, null=True)
     participant = models.ForeignKey(Participant, on_delete=models.CASCADE)
     playlist = models.ForeignKey(Playlist, on_delete=models.SET_NULL,
                                  blank=True, null=True)
@@ -241,25 +241,14 @@ class Session(models.Model):
         """Get the question bonus, given by the bonus reduced with number of skipped questions times the skip_penalty"""
         return bonus + self.skipped_questions() * skip_penalty
 
-    # def total_questions(self):
-    #     """ Get total number of profile questions in this session """
-    #     try:
-    #         return Profile.objects.filter(session_id=self.id).count()
-    #     except Profile.DoesNotExist:
-    #         return 0
+    def total_questions(self):
+        """ Get total number of profile questions in this session """
+        return self.result_count()
 
-    # def skipped_questions(self):
-    #     """Get number of skipped (empty) profile questions for this session"""
-    #     try:
-    #         return Profile.objects.filter(session_id=self.id, answer="").count()
+    def skipped_questions(self):
+        """Get number of skipped (empty) profile questions for this session"""
+        return self.result_set.filter(given_response="").count()
 
-    #     except Profile.DoesNotExist:
-    #         return 0
-
-    # def answered_questions(self):
-    #     """Get number of answered (non-empty) profile questions for this session"""
-    #     try:
-    #         return Profile.objects.filter(session_id=self.id).exclude(answer="").count()
-
-    #     except Profile.DoesNotExist:
-    #         return 0
+    def answered_questions(self):
+        """Get number of answered (non-empty) profile questions for this session"""
+        return self.result_set.exclude(given_response="").count()

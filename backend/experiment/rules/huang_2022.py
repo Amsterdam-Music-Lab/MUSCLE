@@ -136,6 +136,8 @@ class Huang2022(Base):
             residence_question(),
             gender_question(),
         ]
+        for question in questions:
+            question.prepare_result(session, scoring_rule=MSI_SCORING_RULES.get(question.key, ''))
         return [
             Trial(
                 title=_("Questionnaire %(index)i/%(total)i") % {'index': index + 1, 'total': len(questions)},
@@ -255,12 +257,11 @@ class Huang2022(Base):
         if not section:
             print("Warning: no next_song_sync section found")
             section = session.section_from_any_song()
-        result_id = cls.prepare_result(session, section)
+        result_id = cls.prepare_result(session, section, scoring_rule='SONG_SYNC')
         return SongSync(
             section=section,
             title=cls.get_trial_title(session, next_round_number),
-            result_id=result_id,
-            scoring_rule='SONG_SYNC'
+            result_id=result_id
         ).action()
 
     @classmethod
@@ -303,7 +304,6 @@ class Huang2022(Base):
             preload_message=_('Get ready!'))
         expected_result = this_section_info.get('novelty')
         # create Result object and save expected result to database
-        result_pk = cls.prepare_result(session, section, expected_result)
         form = Form([BooleanQuestion(
             key='heard_before',
             choices={
@@ -311,9 +311,8 @@ class Huang2022(Base):
                 'old': _("YES"),
             },
             question=_("Did you hear this song in previous rounds?"),
-            result_id=result_pk,
             scoring_rule='REACTION_TIME',
-            submits=True)])
+            submits=True).prepare_result(session, section, expected_result)])
         config = {
             'style': 'boolean-negative-first',
             'auto_advance': True,

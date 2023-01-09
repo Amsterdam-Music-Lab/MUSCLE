@@ -139,9 +139,6 @@ class ToontjeHoger1Mozart(Base):
         if section == None:
             raise Exception("Error: could not find section")
 
-        result_pk = cls.prepare_result(
-            session, section=section, expected_response=expected_response)
-
         # Step 1
         # --------------------
 
@@ -179,9 +176,10 @@ class ToontjeHoger1Mozart(Base):
                 'E': 'E',
             },
             view='BUTTON_ARRAY',
-            result_id=result_pk,
             submits=True
         )
+        question.prepare_result(
+            session, section=section, expected_response=expected_response)
         form = Form([question])
 
         image_trial = HTML(
@@ -189,7 +187,6 @@ class ToontjeHoger1Mozart(Base):
                 image_url),
             form=form,
             title=cls.TITLE,
-            result_id=result_pk
         ).action()
 
         return [listen, image_trial]
@@ -209,7 +206,7 @@ class ToontjeHoger1Mozart(Base):
         return [explainer]
 
     @classmethod
-    def calculate_score(cls, result, data, scoring_rule, form_element):
+    def calculate_score(cls, result, data):
         score = cls.SCORE_CORRECT if result.expected_response == result.given_response else cls.SCORE_WRONG
         return score
 

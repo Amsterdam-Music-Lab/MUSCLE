@@ -1,30 +1,59 @@
-import json
-from venv import create
-
 from django.utils.translation import gettext_lazy as _
-
 
 class Question(object):
     ''' Question is part of a form.
     - key: description of question in results table
+    - view: which widget the question should use in the frontend
     - explainer: optional instructions for this specific question
     - question: the question text
-    - result_id: identifier of result object, created prior to sending next_round data to client
-    - scoring_rule: specify with which scoring rule a score should be calculated
+    - scoring_rule: optionally, specify a scoring rule which should be applied
     - is_skippable: whether the question can be skipped
     - submits: whether entering a value for the question submits the form
     '''
 
-    def __init__(self, key, view='STRING', result_id=None, scoring_rule=None, explainer='', question='', is_skippable=False, submits=False, config=None):
+    def __init__(
+        self,
+        key,
+        view='STRING',
+        explainer='',
+        question='',
+        is_skippable=False,
+        submits=False,
+        config=None
+        ):
+
         self.key = key
         self.view = view
         self.explainer = explainer
-        self.question = question,
-        self.result_id = result_id
+        self.question = question
+
         self.is_skippable = is_skippable
         self.submits = submits
-        self.scoring_rule = scoring_rule
+
         self.config = config
+    
+    def prepare_result(self, session, section=None, expected_response=None, comment='', scoring_rule=''):
+        ''' Create a Result object, and provide its id to be serialized
+        - session: the session on which the Result is going to be registered
+        - section: optionally, provide a section to which the Result is going to be tied
+        - expected_response: optionally, provide the correct answer, used for scoring  
+        - comment: optionally, provide a comment to be saved in the database, e.g. "training phase"
+        - scoring_rule: optionally, provide a scoring rule
+        '''     
+        
+        from experiment.models import Result
+        
+        result = Result(
+            session=session,
+            section=section,
+            question_key=self.key,
+            expected_response=expected_response,
+            scoring_rule=scoring_rule,
+            comment=comment
+        )
+        result.save()
+        self.result_id = result.pk
+        return self  
 
     def action(self):
         return self.__dict__

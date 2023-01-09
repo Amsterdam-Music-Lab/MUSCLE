@@ -161,9 +161,6 @@ def next_trial_actions(session, round_number, request_session):
         return actions
 
     expected_result = 'SAME' if condition['group'] == '1' else 'DIFFERENT'
-    # create Result object and save expected result to database
-    result_pk = RhythmDiscrimination.prepare_result(
-        session, section, expected_result)
     question = ChoiceQuestion(
         key='same',
         question=_(
@@ -173,10 +170,10 @@ def next_trial_actions(session, round_number, request_session):
             'DIFFERENT': _('DIFFERENT')
         },
         view='BUTTON_ARRAY',
-        scoring_rule='CORRECTNESS',
-        result_id=result_pk,
         submits=True
     )
+    # create Result object and save expected result to database
+    question.prepare_result(session, section, expected_result, scoring_rule='CORRECTNESS')
     form = Form([question])
     playback = Playback([section])
     if round_number < 5:
