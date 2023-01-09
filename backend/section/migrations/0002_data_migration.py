@@ -71,7 +71,7 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ('section', '0001_initial'),
-        ('experiment', '0012_participant_access_info'),
+        ('experiment', '0018_delete_profile'),
     ]
 
     operations = [
