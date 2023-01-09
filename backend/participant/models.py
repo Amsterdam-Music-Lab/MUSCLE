@@ -95,12 +95,12 @@ class Participant(models.Model):
         return self.profile().filter(question_key=question).first()
 
     def profile_questions(self):
-        """Get all profile question answered by this participant"""
+        """Get all profile questions answered by this participant"""
         return self.profile().values_list('question_key', flat=True)
 
     def random_empty_profile_question(self):
         """Get a random profile question with empty answer"""
-        pks = self.profile().filter(given_response="").values_list('pk', flat=True)
+        pks = self.profile().filter(given_response=None).values_list('pk', flat=True)
         if len(pks) == 0:
             return None
         return self.profile().get(pk=random.choice(pks))
