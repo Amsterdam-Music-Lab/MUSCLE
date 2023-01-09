@@ -22,7 +22,6 @@ class ParticipantTest(TestCase):
         cls.result2 = Result.objects.create(
             session=cls.session,
             question_key='test2',
-            given_response='',
             is_profile=True
         )
         cls.session_result = Result.objects.create(
@@ -37,7 +36,7 @@ class ParticipantTest(TestCase):
     def test_profile_object(self):
         po = self.participant.profile_object()
         assert len(po.keys()) == 3
-        assert po.get('test2') == ''
+        assert po.get('test2') == None
         assert po.get('test1_score') == 2.5
     
     def test_profile_question(self):
@@ -48,6 +47,9 @@ class ParticipantTest(TestCase):
         results = self.participant.profile_questions()
         assert len(results) == 2
         assert results.first() == 'test1'
+        Result.objects.all().delete()
+        results = self.participant.profile_questions()
+        assert len(results) == 0
     
     def test_empty_profile_question(self):
         empty_result = self.participant.random_empty_profile_question()

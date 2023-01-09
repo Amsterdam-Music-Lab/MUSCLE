@@ -527,7 +527,7 @@ musical_experience_question = ChoiceQuestion(
 )
 
 questions = [question_by_key('dgf_age', EXTRA_DEMOGRAPHICS),
-             question_by_key('dgf_gender_reduced', DEMOGRAPHICS),
+             question_by_key('dgf_gender_reduced', EXTRA_DEMOGRAPHICS),
              question_by_key('dgf_native_language', EXTRA_DEMOGRAPHICS),
              musical_experience_question]
 
