@@ -28,7 +28,7 @@ admin.site.index_title = "Welcome to AML Admin"
 urlpatterns = [
     path('experiment/', include('experiment.urls')),
     path('participant/', include('participant.urls')),
-    path('profile/', include('participant_profile.urls')),
+    path('result/', include('result.urls')),
     path('section/', include('section.urls')),
     path('session/', include('session.urls')),
     path('admin/', admin.site.urls),

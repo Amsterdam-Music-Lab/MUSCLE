@@ -5,8 +5,7 @@ from django.utils import timezone
 
 from experiment.models import Experiment
 from participant.models import Participant
-from section.models import Playlist, Section
-# from participant_profile.models import Profile
+from section.models import Playlist
 
 
 class Session(models.Model):

@@ -5,9 +5,11 @@ from django.http import Http404, HttpResponseServerError, JsonResponse, HttpResp
 
 from participant.utils import current_participant
 from session.models import Session
+from result.models import Result
+from result.utils import handle_results
 
 @require_POST
-def result(request):
+def create(request):
     """Create a new result for the given session, and return followup action"""
     # Current participant
     participant = current_participant(request)
@@ -34,10 +36,7 @@ def result(request):
     try:
         result_data = json.loads(json_data)
         # Create a result from the data
-        if 'form' in result_data:
-            result = session.experiment_rules().handle_results(session, result_data)
-        else:
-            result = session.experiment_rules().handle_result(session, result_data)
+        result = handle_results(session, result_data)
             
         if not result:
             return HttpResponseServerError("Could not create result from data")
@@ -52,3 +51,24 @@ def result(request):
     else:
         action = session.experiment_rules().next_round(session)
     return JsonResponse(action, json_dumps_params={'indent': 4})
+
+
+def current_profile(request):
+    """Get current participant profile"""
+    participant = current_participant(request)
+
+    return JsonResponse(participant.profile_object(), json_dumps_params={'indent': 4})
+
+
+def get(request, question):
+    """Get specific answer from question from participant profile"""
+    participant = current_participant(request)
+
+    try:
+        result = Result.objects.get(
+            question_key=question, is_profile=True, session__participant=participant)
+    except Result.DoesNotExist:
+        raise Http404("Not found")
+
+    return JsonResponse({"answer": result.given_response},
+                        json_dumps_params={'indent': 4})

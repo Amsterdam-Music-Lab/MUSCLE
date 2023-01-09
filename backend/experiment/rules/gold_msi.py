@@ -2,7 +2,7 @@ from django.utils.translation import gettext_lazy as _
 
 from experiment.actions import Trial, Consent, StartSession
 from experiment.actions.form import Form
-from experiment.util.goldsmiths import MSI_F3_MUSICAL_TRAINING
+from experiment.util.goldsmiths import MSI_F3_MUSICAL_TRAINING, MSI_SCORING_RULES
 from experiment.util.questions import EXTRA_DEMOGRAPHICS, question_by_key
 from experiment.util.actions import final_action_with_optional_button
 

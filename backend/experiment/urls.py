@@ -10,14 +10,6 @@ urlpatterns = [
     # Experiment
     path('id/<slug:slug>/', api.experiment.get, name='experiment'),
 
-    # Profile
-    path('profile/', api.profile.current,
-         name='profile_current'),
-    path('profile/create/', api.profile.create,
-         name='profile_create'),
-    path('profile/<slug:question>/', api.profile.get,
-         name='profile_get'),
-
     # Robots.txt
     path(
         "robots.txt",
