@@ -4,7 +4,8 @@ import json
 from django.shortcuts import render
 from django.http import HttpResponse, Http404
 
-from ..models import Experiment, Result
+from experiment.models import Experiment
+from result.models import Result
 from session.models import Session
 from participant.models import Participant
 from ..utils import slugify
