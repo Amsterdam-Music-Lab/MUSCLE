@@ -11,8 +11,7 @@ axios.defaults.withCredentials = true;
 // API endpoints
 export const URLS = {
     experiment: {
-        get: (slug) => "/id/" + slug + "/",
-        consent: (slug) => "/profile/consent_" + slug + "/",
+        get: (slug) => "/experiment/" + slug + "/",
     },
     participant: {
         current: "/participant/",
@@ -20,10 +19,11 @@ export const URLS = {
         score: "/participant/scores/",
         share: "/participant/share/",
     },
-    profile: {
-        get: (question) => "/profile/" + question + "/",
-        current: "/profile/",
-        create: "/profile/create/",
+    result: {
+        get: (question) => "/result/" + question + "/",
+        current: "/result/current_profile",
+        create: "/result/create/",
+        consent: (slug) => "/result/consent_" + slug + "/",
     },
     session: {
         create: "/session/create/",
@@ -45,7 +45,7 @@ export const useParticipantLink = () =>
     useGet(API_BASE_URL + URLS.participant.link);
     
 export const useConsent = (slug) =>
-    useGet(API_BASE_URL + URLS.experiment.consent(slug));
+    useGet(API_BASE_URL + URLS.result.consent(slug));
 
 // Create consent for given experiment
 export const createConsent = async ({ experiment, participant }) => {
@@ -107,30 +107,8 @@ export const createResult = async ({
         }
 
         const response = await axios.post(
-            API_BASE_URL + URLS.session.result,
+            API_BASE_URL + URLS.result.create,
             qs.stringify(vars)
-        );
-        return response.data;
-    } catch (err) {
-        console.error(err);
-        return null;
-    }
-};
-
-// Store Profile question/answer
-export const createProfile = async ({
-    result,
-    session,
-    participant,
-}) => {
-    try {
-        const response = await axios.post(
-            API_BASE_URL + URLS.profile.create,
-            qs.stringify({
-                json_data: JSON.stringify(result),
-                session_id: session,
-                csrfmiddlewaretoken: participant.csrf_token,
-            })
         );
         return response.data;
     } catch (err) {

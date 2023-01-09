@@ -2,7 +2,7 @@ import React, { useState, useRef, useCallback } from "react";
 import classNames from "classnames";
 
 import { getCurrentTime, getTimeSince } from "../../util/time";
-import { createProfile, createResult } from "../../API.js";
+import { createResult } from "../../API.js";
 import FeedbackForm from "../FeedbackForm/FeedbackForm";
 import Playback from "../Playback/Playback";
 import Button from "../Button/Button";
@@ -68,26 +68,6 @@ const Trial = ({ participant, session, playback, feedback_form, config, onNext, 
         [loadState, onNext, participant, session, feedback_form]
     );
 
-    const submitProfile = useCallback(
-        async (result) => {
-            // Send data to server
-            const response = await createProfile({
-                result,
-                session: (session ? session.id : 0),
-                participant,
-            });
-
-            // Log error when createProfile failed
-            if (!response || !response.status === "ok") {
-                console.error("Could not store question");
-            }
-
-            // Continue
-            onNext();
-        },
-        [onNext, participant, session]
-    );
-
     // Create result data in this wrapper function
     const makeResult = useCallback(
         (result) => {
@@ -108,22 +88,16 @@ const Trial = ({ participant, session, playback, feedback_form, config, onNext, 
                 if (feedback_form.is_skippable) {
                     form.map((formElement => (formElement.value = formElement.value || '')))
                 }
-                if (feedback_form.is_profile) {
-                    submitProfile({
-                        form,
-                    });
-                } else {
-                    submitResult({
-                        decision_time,
-                        form,
-                        config
-                    });
-                }
+                submitResult({
+                    decision_time,
+                    form,
+                    config
+                });
             } else {
                 onNext();
             }
         },
-        [feedback_form, onNext, submitProfile, submitResult]
+        [feedback_form, onNext, submitResult]
     );
 
     const finishedPlaying = useCallback(() => {
