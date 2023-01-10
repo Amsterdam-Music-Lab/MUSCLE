@@ -1,10 +1,11 @@
 from django.test import Client, TestCase
 from django.forms.models import model_to_dict
 from django.contrib.admin.sites import AdminSite
-from experiment.admin.experiment import ExperimentAdmin
-from experiment.models import Experiment, Result
-from session.models import Session, Result
+from experiment.admin import ExperimentAdmin
+from experiment.models import Experiment
 from session.models import Participant
+from result.models import Result
+from session.models import Session
 
 # Expected field count per model
 EXPECTED_EXPERIMENT_FIELDS = 10
@@ -16,33 +17,26 @@ EXPECTED_PARTICIPANT_FIELDS = 4
 class MockRequest:
     pass
 
-
 request = MockRequest()
 
 this_experiment_admin = ExperimentAdmin(
     model=Experiment, admin_site=AdminSite)
 
-
 class TestAdminExperiment(TestCase):
 
     def setUp(self):
-
         self.client = Client(
             HTTP_USER_AGENT='Agent 007'
         )
-
         Experiment.objects.create(
             name='test',
             slug='TEST'
         )
-
-        self.client.get('/experiment/participant/')
-
+        resp = self.client.get('/participant/')
         Session.objects.create(
             experiment=Experiment.objects.first(),
             participant=Participant.objects.first()
         )
-
         Result.objects.create(
             session=Session.objects.first()
         )

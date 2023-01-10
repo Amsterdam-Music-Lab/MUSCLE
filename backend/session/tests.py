@@ -1,6 +1,10 @@
 from django.test import TestCase
 
-from experiment.models import Experiment, Participant, Result, Session
+from experiment.models import Experiment
+from participant.models import Participant
+from section.models import Playlist
+from result.models import Result
+from session.models import Session
 
 class SessionTest(TestCase):
 
@@ -12,6 +16,18 @@ class SessionTest(TestCase):
             experiment=cls.experiment,
             participant=cls.participant,
         )
+        cls.playlist = Playlist.objects.create(
+            name='Test playlist'
+        )
+    
+    def test_create(self):
+        data = {
+            'experiment_id': self.experiment.pk,
+            'playlist_id': self.playlist.pk,
+            'participant_id': self.participant.pk
+        } 
+        response = self.client.post('/session/create', data)
+        assert response.status_code != 500
     
     def test_total_questions(self):   
         assert self.session.total_questions() == 0

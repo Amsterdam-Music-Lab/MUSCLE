@@ -2,8 +2,11 @@ import json
 
 from django.test import TestCase
 
-from experiment.models import Experiment, Participant, Session
-from ..rules.base import Base
+from experiment.models import Experiment
+from participant.models import Participant
+from session.models import Session
+from experiment.rules.base import Base
+from result.utils import handle_results
 
 class SessionTest(TestCase):
 
@@ -24,7 +27,7 @@ class SessionTest(TestCase):
             'config': {'something': 'registered as config'},
             'decision_time': 42
         }
-        Base.handle_results(self.session, data)
+        handle_results(self.session, data)
         assert self.session.result_count() == 2
         json_data = json.loads(self.session.result_set.first().json_data)
         assert json_data.get('config') != None

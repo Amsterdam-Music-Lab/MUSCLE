@@ -41,7 +41,7 @@ class BeatAlignmentRuleTest(TestCase):
 
     def test_experiment(self):
 
-        response = self.client.get('/experiment/id/ba/')
+        response = self.client.get('/experiment/ba/')
         response_json = self.load_json(response)
         self.assertTrue( {'id','slug','name','class_name','rounds','playlists','next_round','loading_text'} <= response_json.keys() )
         # 3 practice rounds (number hardcoded in BeatAlignment.first_round)
@@ -50,22 +50,22 @@ class BeatAlignmentRuleTest(TestCase):
         for i in range(len(views_exp)):
             self.assertEquals(response_json['next_round'][i]['view'], views_exp[i])
         header = {'HTTP_USER_AGENT':"Test device with test browser"}
-        response = self.client.get('/experiment/participant/', **header)
+        response = self.client.get('/participant/', **header)
         response_json = self.load_json(response)
         self.assertTrue( {'id','hash','csrf_token','country'} <= response_json.keys() )
         csrf_token = response_json['csrf_token']
 
-        response = self.client.get('/experiment/profile/consent_ba/')
+        response = self.client.get('/result/consent_ba/')
         self.assertEqual(response.status_code, 404) # By design, returns 404 if no consent has been given so far :/
 
         data = {"json_data": "{\"form\":[{\"key\":\"consent_ba\",\"value\":true}]}", "csrfmiddlewaretoken": csrf_token}
-        response = self.client.post('/experiment/profile/create/', data)
+        response = self.client.post('/result/create/', data)
         response_json = self.load_json(response)
         self.assertTrue(response_json['status'],'ok')
 
         # Can throw an error if some of the tags in playlist not zero, cannot find a section to play
         data =  {"experiment_id": "1", "playlist_id":"","json_data":"", "csrfmiddlewaretoken":csrf_token}
-        response = self.client.post('/experiment/session/create/', data)
+        response = self.client.post('/session/create/', data)
         response_json = self.load_json(response)
         self.assertTrue( {'session','next_round'} <= response_json.keys() )
         self.assertEqual( len(response_json['next_round']), 1 )
@@ -100,7 +100,7 @@ class BeatAlignmentRuleTest(TestCase):
                         }],
                     })
             }
-            response = self.client.post('/experiment/session/result/', data)
+            response = self.client.post('/result/create', data)
             response_json = self.load_json(response)
             self.assertEqual(response_json['view'], views_exp[i])
             if i < len(views_exp)-1: # Last view 'FINAL' does not have result_id or feedback form

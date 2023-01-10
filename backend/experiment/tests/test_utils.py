@@ -1,7 +1,10 @@
 from django.test import TestCase
 
-from experiment.models import Experiment, Participant, Result, Session
-from experiment.rules.util.questions import DEMOGRAPHICS, EXTRA_DEMOGRAPHICS, next_question, unasked_question
+from experiment.models import Experiment
+from participant.models import Participant
+from result.models import Result
+from session.models import Session
+from experiment.util.questions import DEMOGRAPHICS, next_question, unasked_question
 
 class UtilsTestCase(TestCase):
 

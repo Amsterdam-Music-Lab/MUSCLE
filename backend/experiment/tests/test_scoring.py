@@ -2,8 +2,9 @@ import json
 
 from django.test import TestCase
 
-from experiment.models import Experiment, Result
+from experiment.models import Experiment
 from participant.models import Participant
+from result.models import Result
 from section.models import Playlist, Section
 from session.models import Session
 
@@ -127,56 +128,56 @@ class ScoringTest(TestCase):
     
     def test_likert_score(self):
         client_request = self.likert_request('LIKERT', 2)
-        response = self.client.post('/experiment/session/result/', client_request)
+        response = self.client.post('/result/', client_request)
         assert response.status_code == 200
         assert self.session.result_set.count() == 1
         assert self.session.result_set.last().score == 2
     
     def test_likert_reversed(self):
         client_request = self.likert_request('REVERSE_LIKERT', 2)
-        response = self.client.post('/experiment/session/result/', client_request)
+        response = self.client.post('/result/', client_request)
         assert response.status_code == 200
         assert self.session.result_set.count() == 1
         assert self.session.result_set.last().score == 6
     
     def test_likert_profile(self):
         client_request = self.likert_request('LIKERT', 6, True)
-        response = self.client.post('/experiment/profile/create/', client_request)
+        response = self.client.post('/result/create/', client_request)
         assert response.status_code == 200
         assert self.session.result_set.count() == 1
         assert self.session.result_set.last().score == 6
     
     def test_categories_to_likert(self):
         client_request = self.choice_request()
-        response = self.client.post('/experiment/session/result/', client_request)
+        response = self.client.post('/result/', client_request)
         assert response.status_code == 200
         assert self.session.result_set.last().score == 2
     
     def test_correctness(self):
         client_request = self.correctness_request('spam')
-        response = self.client.post('/experiment/session/result/', client_request)
+        response = self.client.post('/result/', client_request)
         assert response.status_code == 200
         assert self.session.result_set.last().score == 1
         client_request = self.correctness_request('eggs')
-        response = self.client.post('/experiment/session/result/', client_request)
+        response = self.client.post('/result/', client_request)
         assert response.status_code == 200
         assert self.session.result_set.count() == 2
         assert self.session.result_set.last().score == 0
     
     def test_song_sync(self):
         client_request = self.song_sync_request('time_passed', False)
-        response = self.client.post('/experiment/session/result/', client_request)
+        response = self.client.post('/result/', client_request)
         assert response.status_code == 200
         assert self.session.result_set.last().score == 0
         client_request = self.song_sync_request('not_recognized', False)
-        response = self.client.post('/experiment/session/result/', client_request)
+        response = self.client.post('/result/', client_request)
         assert response.status_code == 200
         assert self.session.result_set.last().score == 0
         client_request = self.song_sync_request('recognized', False)
-        response = self.client.post('/experiment/session/result/', client_request)
+        response = self.client.post('/result/', client_request)
         assert response.status_code == 200
         assert self.session.result_set.last().score == -5
         client_request = self.song_sync_request('recognized', True)
-        response = self.client.post('/experiment/session/result/', client_request)
+        response = self.client.post('/result/', client_request)
         assert response.status_code == 200
         assert self.session.result_set.last().score == 5
