@@ -3,16 +3,12 @@ import json
 from django.db import models
 from django.utils import timezone
 
-from session.models import Session
-from section.models import Section
-
 # Create your models here.
 class Result(models.Model):
     """Score for each step in a session"""
-
-    session = models.ForeignKey(Session, on_delete=models.CASCADE)
+    session = models.ForeignKey('session.Session', on_delete=models.CASCADE, blank=True, null=True)
     section = models.ForeignKey(
-        Section, on_delete=models.SET_NULL, null=True, blank=True)
+        'section.Section', on_delete=models.SET_NULL, null=True, blank=True)
 
     created_at = models.DateTimeField(default=timezone.now)
     # Key of the question e.g.: AGE

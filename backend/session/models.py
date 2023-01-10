@@ -3,17 +3,13 @@ import random
 from django.db import models
 from django.utils import timezone
 
-from experiment.models import Experiment
-from participant.models import Participant
-from section.models import Playlist
-
 
 class Session(models.Model):
     """Experiment session by a participant"""
 
-    experiment = models.ForeignKey(Experiment, on_delete=models.CASCADE, blank=True, null=True)
-    participant = models.ForeignKey(Participant, on_delete=models.CASCADE)
-    playlist = models.ForeignKey(Playlist, on_delete=models.SET_NULL,
+    experiment = models.ForeignKey('experiment.Experiment', on_delete=models.CASCADE, blank=True, null=True)
+    participant = models.ForeignKey('participant.Participant', on_delete=models.CASCADE)
+    playlist = models.ForeignKey('section.Playlist', on_delete=models.SET_NULL,
                                  blank=True, null=True)
 
     started_at = models.DateTimeField(db_index=True, default=timezone.now)

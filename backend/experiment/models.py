@@ -4,7 +4,6 @@ from django.db import models
 from django.utils import timezone
 from experiment.rules import EXPERIMENT_RULES
 from experiment.util.iso_languages import ISO_LANGUAGES
-from section.models import Playlist
 
 language_choices = [(key, ISO_LANGUAGES[key]) for key in ISO_LANGUAGES.keys()]
 language_choices[0] = ('', 'Unset')
@@ -24,7 +23,7 @@ class ExperimentSeries(models.Model):
 class Experiment(models.Model):
     """Root entity for configuring experiments"""
 
-    playlists = models.ManyToManyField(Playlist, blank=True)
+    playlists = models.ManyToManyField('section.Playlist', blank=True)
     name = models.CharField(db_index=True, max_length=64)
     slug = models.CharField(db_index=True, max_length=64, unique=True)
     active = models.BooleanField(default=True)
