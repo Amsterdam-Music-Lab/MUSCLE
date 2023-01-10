@@ -2,16 +2,18 @@ from django.urls import path
 
 from .views import current, link, reload, scores,share
 
+app_name = 'participant'
+
 urlpatterns = [
     # Participant
-    path('participant/', current,
+    path('', current,
          name='participant_current'),
-    path('participant/scores/', scores,
+    path('scores/', scores,
          name='participant_score'),
-    path('participant/reload/<int:participant_id>/<slug:unique_hash>/',
+    path('reload/<int:participant_id>/<slug:unique_hash>/',
          reload, name='participant_reload'),
-    path('participant/link/', link,
+    path('link/', link,
          name='participant_link'),
-    path('participant/share/', share,
+    path('share/', share,
          name='participant_share'),
 ]

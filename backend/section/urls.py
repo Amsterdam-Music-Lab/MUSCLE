@@ -2,8 +2,10 @@ from django.urls import path
 
 from .views import get_section
 
+app_name = 'section'
+
 urlpatterns = [
 # Section
-    path('section/<int:section_id>/<int:code>/',
+    path('<int:section_id>/<int:code>/',
         get_section, name='section'),
 ]
