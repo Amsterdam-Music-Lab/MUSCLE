@@ -60,7 +60,7 @@ def current_profile(request):
     return JsonResponse(participant.profile_object(), json_dumps_params={'indent': 4})
 
 
-def get(request, question):
+def get_result(request, question):
     """Get specific answer from question from participant profile"""
     participant = current_participant(request)
 

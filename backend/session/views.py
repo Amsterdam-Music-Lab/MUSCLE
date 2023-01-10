@@ -8,7 +8,7 @@ from participant.utils import current_participant
 
 
 @require_POST
-def create(request):
+def create_session(request):
     """Create new session for given experiment for current participant"""
 
     # Current participant

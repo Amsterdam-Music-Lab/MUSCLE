@@ -7,7 +7,7 @@ from .models import Section
 from participant.utils import located_in_nl
 
 
-def get(request, section_id, code):
+def get_section(request, section_id, code):
     """Get section by given id, check location restrictions"""
     try:
         section = Section.objects.get(pk=section_id, code=code)

@@ -1,6 +1,6 @@
 from django.urls import path
 
-from result.views import current_profile, create, get
+from result.views import current_profile, create, get_result
 
 app_name = 'result'
 
@@ -10,6 +10,6 @@ urlpatterns = [
          name='current_profile'),
     path('result/create/', create,
          name='result_create'),
-    path('result/<slug:question>/', get,
+    path('result/<slug:question>/', get_result,
          name='result_get'),
 ]
