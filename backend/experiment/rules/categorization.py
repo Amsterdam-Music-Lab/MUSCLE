@@ -6,10 +6,9 @@ from operator import ne
 
 from experiment.actions.form import Form, ChoiceQuestion
 from experiment.actions import Consent, Explainer, Score, StartSession, TwoAlternativeForced, Trial, Final
-
 from experiment.util.actions import combine_actions
 
-from experiment.util.questions import DEMOGRAPHICS, EXTRA_DEMOGRAPHICS, question_by_key
+from experiment.util.questions import EXTRA_DEMOGRAPHICS, question_by_key
 from .base import Base
 import random
 

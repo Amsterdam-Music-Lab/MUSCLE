@@ -10,7 +10,9 @@ from experiment.actions.form import BooleanQuestion, ChoiceQuestion, Form, Quest
 from experiment.actions.playback import Playback
 from experiment.util.questions import EXTRA_DEMOGRAPHICS, question_by_key
 from experiment.util.goldsmiths import MSI_ALL
+from experiment.util.profile_scoring_rules import PROFILE_SCORING_RULES
 from experiment.util.actions import combine_actions
+from result.utils import prepare_result
 
 logger = logging.getLogger(__name__)
 
@@ -137,7 +139,7 @@ class Huang2022(Base):
             gender_question(),
         ]
         for question in questions:
-            question.prepare_result(session, scoring_rule=MSI_SCORING_RULES.get(question.key, ''))
+            prepare_result(session, scoring_rule=MSI_SCORING_RULES.get(question.key, ''), is_profile=True)
         return [
             Trial(
                 title=_("Questionnaire %(index)i/%(total)i") % {'index': index + 1, 'total': len(questions)},
@@ -257,7 +259,7 @@ class Huang2022(Base):
         if not section:
             print("Warning: no next_song_sync section found")
             section = session.section_from_any_song()
-        result_id = cls.prepare_result(session, section, scoring_rule='SONG_SYNC')
+        result_id = prepare_result(session, 'song_sync', section, scoring_rule='SONG_SYNC')
         return SongSync(
             section=section,
             title=cls.get_trial_title(session, next_round_number),
@@ -311,8 +313,10 @@ class Huang2022(Base):
                 'old': _("YES"),
             },
             question=_("Did you hear this song in previous rounds?"),
+            result_id=prepare_result(session, 'heard_before', section, expected_result),
             scoring_rule='REACTION_TIME',
-            submits=True).prepare_result(session, section, expected_result)])
+            submits=True)
+            ])
         config = {
             'style': 'boolean-negative-first',
             'auto_advance': True,

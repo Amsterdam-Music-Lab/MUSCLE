@@ -9,6 +9,7 @@ from experiment.actions.form import ButtonArrayQuestion, Form
 from experiment.actions.playback import Playback
 from .base import Base
 from experiment.util.actions import combine_actions
+from result.utils import prepare_result
 
 logger = logging.getLogger(__name__)
 
@@ -114,10 +115,10 @@ class ToontjeHoger4Absolute(Base):
                 "A": "A",
                 "B": "B",
             },
-            submits=True
+            submits=True,
+            result_id=prepare_result(
+            session, 'pitch', section=section1, expected_response="A" if sections[0].id == section1.id else "B"
         )
-        question.prepare_result(
-            session, section=section1, expected_response="A" if sections[0].id == section1.id else "B"
         )
         form = Form([question])
 

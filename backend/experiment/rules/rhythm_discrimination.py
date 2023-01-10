@@ -8,6 +8,9 @@ from experiment.util.practice import practice_explainer, practice_again_explaine
 from experiment.actions import Trial, Consent, Explainer, StartSession, Step
 from experiment.actions.playback import Playback
 from experiment.actions.form import ChoiceQuestion, Form
+
+from result.utils import prepare_result
+
 from .base import Base
 
 logger = logging.getLogger(__name__)
@@ -170,10 +173,9 @@ def next_trial_actions(session, round_number, request_session):
             'DIFFERENT': _('DIFFERENT')
         },
         view='BUTTON_ARRAY',
+        result_id=prepare_result(session, 'same', expected_result, scoring_rule='CORRECTNESS'),
         submits=True
     )
-    # create Result object and save expected result to database
-    question.prepare_result(session, section, expected_result, scoring_rule='CORRECTNESS')
     form = Form([question])
     playback = Playback([section])
     if round_number < 5:

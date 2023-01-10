@@ -1,6 +1,6 @@
 from .models import Participant
 
-SESSION_KEY = 'participant_id'
+PARTICIPANT_KEY = 'participant_id'
 
 import json
 import urllib
@@ -75,10 +75,10 @@ def current_participant(request):
     participant = None
 
     # get participant from session
-    if SESSION_KEY in request.session:
+    if PARTICIPANT_KEY in request.session:
         try:
             participant = Participant.objects.get(
-                pk=int(request.session[SESSION_KEY]))
+                pk=int(request.session[PARTICIPANT_KEY]))
         except Participant.DoesNotExist:
             participant = None
 
@@ -97,6 +97,6 @@ def current_participant(request):
 def set_participant(request, participant):
     """Set a participant to the session"""
     if participant:
-        request.session[SESSION_KEY] = participant.id
+        request.session[PARTICIPANT_KEY] = participant.id
     else:
-        del request.session[SESSION_KEY]
+        del request.session[PARTICIPANT_KEY]

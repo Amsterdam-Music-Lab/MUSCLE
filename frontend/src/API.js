@@ -51,7 +51,7 @@ export const useConsent = (slug) =>
 export const createConsent = async ({ experiment, participant }) => {
     try {
         const response = await axios.post(
-            API_BASE_URL + URLS.profile.create,
+            API_BASE_URL + URLS.result.create,
             qs.stringify({
                 json_data: JSON.stringify({form: [
                     {

@@ -8,6 +8,7 @@ from experiment.actions.playback import Playback
 from .base import Base
 from os.path import join
 from experiment.util.actions import combine_actions
+from result.utils import prepare_result
 
 logger = logging.getLogger(__name__)
 
@@ -124,10 +125,10 @@ class ToontjeHoger2Preverbal(Base):
                 'C': 'C',
             },
             view='BUTTON_ARRAY',
-            submits=True
+            submits=True,
+            result_id=prepare_result(
+            session, 'expected_spectogram', section=None, expected_response="C")
         )
-        question.prepare_result(
-            session, section=None, expected_response="C")
         form = Form([question])
 
         image_trial = HTML(
@@ -229,8 +230,8 @@ class ToontjeHoger2Preverbal(Base):
             },
             view='BUTTON_ARRAY',
             submits=True,
+            result_id=prepare_result(session, 'baby', section=None, expected_response="A")
         )
-        question.prepare_result(session, section=None, expected_response="A")
         form = Form([question])
 
         # Trial

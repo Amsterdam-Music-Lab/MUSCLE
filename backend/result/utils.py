@@ -27,6 +27,27 @@ def handle_results(session, data):
         result.save()
     return result
 
+def prepare_result(session, key, section=None, expected_response=None, comment='', scoring_rule='', is_profile=False):
+    ''' Create a Result object, and provide its id to be serialized
+    - session: the session on which the Result is going to be registered
+    - section: optionally, provide a section to which the Result is going to be tied
+    - expected_response: optionally, provide the correct answer, used for scoring  
+    - comment: optionally, provide a comment to be saved in the database, e.g. "training phase"
+    - scoring_rule: optionally, provide a scoring rule
+    - is_profile: optionally, flag that the Result is a profile type question
+    '''     
+    result = Result(
+        session=session,
+        section=section,
+        question_key=key,
+        expected_response=expected_response,
+        scoring_rule=scoring_rule,
+        comment=comment,
+        is_profile=is_profile
+    )
+    result.save()
+    return result.id 
+
 def score_result(session, data):
     """
     Create a result for given session, based on the result data 

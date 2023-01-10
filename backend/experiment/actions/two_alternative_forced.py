@@ -1,4 +1,3 @@
-import math
 from django.utils.translation import gettext as _
 
 from .form import ChoiceQuestion, Form

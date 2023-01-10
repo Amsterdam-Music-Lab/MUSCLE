@@ -8,6 +8,8 @@ from experiment.actions.playback import Playback
 from .base import Base
 from experiment.util.actions import combine_actions
 
+from result.utils import prepare_result
+
 logger = logging.getLogger(__name__)
 
 
@@ -112,16 +114,16 @@ class ToontjeHoger6Relative(Base):
         # Question
         question = ChoiceQuestion(
             question="Zijn deze twee melodieën hetzelfde?",
-            key='same_melodie',
+            key='same_melody',
             choices={
                 "YES": "Ja",
                 "NO": "Nee",
             },
             view='BUTTON_ARRAY',
-            submits=True
+            submits=True,
+            result_id=prepare_result(
+            session, 'same_melody', section=section1, expected_response=expected_response
         )
-        question.prepare_result(
-            session, section=section1, expected_response=expected_response
         )
         form = Form([question])
 

@@ -6,6 +6,9 @@ from experiment.actions.form import ChoiceQuestion, Question
 from .iso_countries import ISO_COUNTRIES
 from .iso_languages import ISO_LANGUAGES
 from .isced_education import ISCED_EDUCATION_LEVELS
+from experiment.util.profile_scoring_rules import PROFILE_SCORING_RULES
+
+from result.utils import prepare_result
 
 # List of all available profile questions
 
@@ -160,9 +163,9 @@ def question_by_key(key, questions=DEMOGRAPHICS, is_skippable=None, drop_choices
     return None
 
 
-def unasked_question(participant, questions=DEMOGRAPHICS, is_skippable=False):
+def unasked_question(session, questions=DEMOGRAPHICS, is_skippable=False):
     """Get unasked question, optionally skip results"""
-    profile_questions = participant.profile_questions()
+    profile_questions = session.participant.profile_questions()
     for question in questions:
         if not question.key in profile_questions:
             q = deepcopy(question)
@@ -181,14 +184,15 @@ def next_question(session, questions=DEMOGRAPHICS, continue_with_random=False, i
     """
     # First: Ask all questions once
     question = unasked_question(
-        participant=session.participant,
+        session=session,
         questions=questions,
         is_skippable=is_skippable
     )
     if question:
-        question.prepare_result(
+        question.result_id = prepare_result(
             session,
-            is_profile=True
+            question.key,
+            scoring_rule=PROFILE_SCORING_RULES.get(question.key, '')
         )
         return question
 

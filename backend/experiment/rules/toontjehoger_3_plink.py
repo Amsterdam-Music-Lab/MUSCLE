@@ -10,6 +10,8 @@ from .base import Base
 from experiment.util.actions import combine_actions
 from experiment.util.strings import non_breaking
 
+from result.utils import prepare_result
+
 logger = logging.getLogger(__name__)
 
 
@@ -164,8 +166,6 @@ class ToontjeHoger3Plink(Base):
             raise Exception("Error: could not find section")
 
         expected_response = section.pk
-        result_pk = cls.prepare_result(
-            session, section=section, expected_response=expected_response)
 
         # Extra questions intro
         # --------------------
@@ -188,7 +188,8 @@ class ToontjeHoger3Plink(Base):
         plink = Plink(
             section=section,
             title=cls.TITLE,
-            result_id=result_pk,
+            result_id=prepare_result(
+            session, 'plink', section=section, expected_response=expected_response),
             main_question="Noem de artiest en de titel van het nummer",
             choices=choices,
             submit_label="Volgende",

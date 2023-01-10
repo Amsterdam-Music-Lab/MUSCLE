@@ -13,6 +13,7 @@ from experiment.util.actions import final_action_with_optional_button, render_fe
 from experiment.util.final_score import get_average_difference
 from experiment.util.practice import get_trial_condition_block, get_practice_views, practice_explainer
 from experiment.util.staircasing import register_turnpoint
+from result.utils import prepare_result
 
 logger = logging.getLogger(__name__)
 
@@ -141,10 +142,11 @@ class DurationDiscrimination(Base):
                 'LONGER': _('LONGER')
             },
             view='BUTTON_ARRAY',
+            result_id=prepare_result(session, 'longer_or_equal', section, expected_result),
             submits=True
         )
         # create Result object and save expected result to database
-        question.prepare_result(session, section, expected_result)
+        
         playback = Playback([section])
         form = Form([question])
         view = Trial(

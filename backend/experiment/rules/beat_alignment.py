@@ -9,6 +9,7 @@ from experiment.actions import Trial, Explainer, Consent, StartSession, Step, Qu
 from experiment.actions.form import ChoiceQuestion, Form
 from experiment.actions.playback import Playback
 from experiment.util.actions import final_action_with_optional_button, render_feedback_trivia
+from result.utils import prepare_result
 
 logger = logging.getLogger(__name__)
 
@@ -138,9 +139,9 @@ class BeatAlignment(Base):
                 'OFF': _('NOT ALIGNED TO THE BEAT')
             },
             view='BUTTON_ARRAY',
+            result_id=prepare_result(session, 'aligned', section, expected_result, scoring_rule='CORRECTNESS'),
             submits=True
         )
-        question.prepare_result(session, section, expected_result, scoring_rule='CORRECTNESS')
         form = Form([question])
         playback = Playback([section])
         view = Trial(

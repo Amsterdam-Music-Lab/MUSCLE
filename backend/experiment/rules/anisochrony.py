@@ -41,6 +41,7 @@ class Anisochrony(DurationDiscrimination):
         - trial_condition: 1 for catch trial, 0 for normal trial
         - difficulty: the current difficulty (in ms) of the trial
         """
+        from result.utils import prepare_result
         if trial_condition == 1:
             # catch trial
             difference = 0
@@ -60,10 +61,10 @@ class Anisochrony(DurationDiscrimination):
                 'IRREGULAR': _('IRREGULAR')
             },
             view='BUTTON_ARRAY',
+            result_id=prepare_result(session, 'if_regular', section, expected_result),
             submits=True
         )
-        # create Result object and save expected result to database
-        question.prepare_result(session, section, expected_result)
+        
         playback = Playback([section])
         form = Form([question])
         config = {

@@ -9,6 +9,8 @@ from experiment.actions import Consent, Explainer, Final, Playlist, Step, StartS
 from experiment.actions.form import BooleanQuestion, ChoiceQuestion, Form, LikertQuestionIcon
 from experiment.actions.playback import Playback
 
+from result.utils import prepare_result
+
 from .base import Base
 
 
@@ -76,8 +78,8 @@ class MusicalPreferences(Base):
         likert = LikertQuestionIcon(
             question=_('Do you like this song?'),
             key='like_song',
+            result_id=prepare_result(session, 'like_song', section, scoring_rule='LIKERT')
         )
-        likert.prepare_result(session, section, scoring_rule='LIKERT')
         know = ChoiceQuestion(
             question=_('Do you know this song?'),
             key='know_song',
@@ -86,9 +88,9 @@ class MusicalPreferences(Base):
                 'yes': 'fa-thumbs-up',
                 'unsure': 'fa-question',
                 'no': 'fa-thumbs-down',
-            }
+            },
+            result_id=prepare_result(session, 'know_song', section)
         )
-        know.prepare_result(session, section)
         playback = Playback([section], play_config={'show_animation': True})
         form = Form([likert, know])
         view = Trial(

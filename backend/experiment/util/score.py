@@ -18,10 +18,10 @@ def correctness_score(result, data):
         return 0
 
 def likert_score(result, data):
-    return data['value']
+    return int(data['value'])
 
 def reverse_likert_score(result, data):
-    return data['scale_steps'] + 1 - data['value']
+    return int(data['scale_steps']) + 1 - int(data['value'])
 
 def categories_likert_score(result, data):
     choices = list(data['choices'].keys())

@@ -10,6 +10,8 @@ from .base import Base
 from experiment.util.actions import combine_actions
 from experiment.util.strings import non_breaking
 
+from result.utils import prepare_result
+
 logger = logging.getLogger(__name__)
 
 
@@ -155,9 +157,9 @@ class ToontjeHoger5Tempo(Base):
                 "B": "B",
             },
             submits=True,
+            result_id=prepare_result(
+            session, 'pitch', section=section_original, expected_response="A" if sections[0].id == section_original.id else "B"
         )
-        question.prepare_result(
-            session, section=section_original, expected_response="A" if sections[0].id == section_original.id else "B"
         )
         form = Form([question])
 

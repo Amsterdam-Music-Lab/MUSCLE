@@ -8,6 +8,8 @@ from .base import Base
 from experiment.util.actions import combine_actions
 from experiment.util.strings import non_breaking
 
+from result.utils import prepare_result
+
 logger = logging.getLogger(__name__)
 
 QUESTION_URL1 = "/images/experiments/toontjehoger/mozart-effect1.webp"
@@ -176,10 +178,10 @@ class ToontjeHoger1Mozart(Base):
                 'E': 'E',
             },
             view='BUTTON_ARRAY',
+            result_id=prepare_result(
+            session, 'expected_shape', section=section, expected_response=expected_response),
             submits=True
         )
-        question.prepare_result(
-            session, section=section, expected_response=expected_response)
         form = Form([question])
 
         image_trial = HTML(

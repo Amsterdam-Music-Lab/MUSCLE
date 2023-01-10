@@ -14,6 +14,7 @@ class Question(object):
     def __init__(
         self,
         key,
+        result_id=None,
         view='STRING',
         explainer='',
         question='',
@@ -26,36 +27,10 @@ class Question(object):
         self.view = view
         self.explainer = explainer
         self.question = question
-
+        self.result_id = result_id
         self.is_skippable = is_skippable
         self.submits = submits
-
         self.config = config
-    
-    def prepare_result(self, session, section=None, expected_response=None, comment='', scoring_rule='', is_profile=False):
-        ''' Create a Result object, and provide its id to be serialized
-        - session: the session on which the Result is going to be registered
-        - section: optionally, provide a section to which the Result is going to be tied
-        - expected_response: optionally, provide the correct answer, used for scoring  
-        - comment: optionally, provide a comment to be saved in the database, e.g. "training phase"
-        - scoring_rule: optionally, provide a scoring rule
-        - is_profile: optionally, flag that the Result is a profile type question
-        '''     
-        
-        from experiment.models import Result
-        
-        result = Result(
-            session=session,
-            section=section,
-            question_key=self.key,
-            expected_response=expected_response,
-            scoring_rule=scoring_rule,
-            comment=comment,
-            is_profile=is_profile
-        )
-        result.save()
-        self.result_id = result.pk
-        return self  
 
     def action(self):
         return self.__dict__
