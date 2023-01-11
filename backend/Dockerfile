@@ -2,6 +2,14 @@ FROM python:3.8
 ENV PYTHONUNBUFFERED 1
 
 WORKDIR /server
+
+# install postgres for dbbackup
+RUN apt install -y curl apt-transport-https
+RUN curl -fsSL https://www.postgresql.org/media/keys/ACCC4CF8.asc | gpg --dearmor -o /usr/share/keyrings/postgresql-keyring.gpg
+RUN echo "deb [signed-by=/usr/share/keyrings/postgresql-keyring.gpg] http://apt.postgresql.org/pub/repos/apt/ bullseye-pgdg main" | tee /etc/apt/sources.list.d/postgresql.list
+RUN apt update
+RUN apt install -y postgresql-14
+
 COPY requirements/prod.txt /server/
 RUN pip install -r prod.txt
 # We add remainig code later, so pip install won't need to rerun if source code changes
