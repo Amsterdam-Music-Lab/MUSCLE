@@ -6,24 +6,26 @@ from .views.playback import Playback
 from .views.form import BooleanQuestion, Form
 
 
-class Eurovision2020(Hooked):
-    """Rules for the Eurovision 2020 version of the Hooked experiment.
+class Kuiper2020(Hooked):
+    """Rules for the Christmas version of the Hooked experiment.
 
-    Based on the MBCS internship projects of Ada Orken and and Leanne Kuiper.
+    Based on the MBCS internship projects of Leanne Kuiper.
     """
 
-    ID = 'EUROVISION_2020'
+    ID = 'KUIPER_2020'
     consent_file = 'consent_eurovision_2020.html';
 
-    @classmethod
-    def plan_sections(cls, session):
+
+    @staticmethod
+    def plan_sections(session):
         """Set the plan of tracks for a session.
 
-        N.B. Assumes exactly one segment each of tags 1, 2, and 3 per song!
+           Assumes that all tags of 1 have a corresponding tag of 2
+           with the same group_id, and vice-versa.
         """
 
         # Which songs are available?
-        free_song_set = set(session.playlist.song_ids({'tag__lt': 3}))
+        free_song_set = set(session.playlist.song_ids())
         old_new_song_set = set(session.playlist.song_ids({'tag__gt': 0}))
 
         # How many sections do we need?
@@ -35,26 +37,28 @@ class Eurovision2020(Hooked):
         old_songs = random.sample(old_new_song_set, k=n_old)
         free_songs = random.sample(free_song_set - set(old_songs), k=n_free)
         new_songs = \
-            random.sample(
-                old_new_song_set - set(old_songs + free_songs),
-                k=n_new
-            )
+            random.sample(free_song_set - set(old_songs + free_songs), k=n_new)
 
-        # Assign tags for Block 2. Technically 1 and 2 are also OK for the
-        # 'free' sections in Block 1, but it is easier just to set tag 0.
-        free_tags = [0] * n_free
-        old_tags_1 = random.choices([1, 2], k=n_old)
-        condition = random.choice(['same', 'different', 'karaoke'])
-        if condition == 'karaoke':
-            old_tags_2 = [3] * n_old
-            new_tags = [3] * n_new
-        # Reverse tags 1 and 2 for the 'different' condition.
-        elif condition == 'different':
-            old_tags_2 = [3 - tag for tag in old_tags_1]
-            new_tags = random.choices([1, 2], k=n_new)
-        else:  # condition == 'same'
-            old_tags_2 = old_tags_1
-            new_tags = random.choices([1, 2], k=n_new)
+        # Assign sections.
+        condition = random.choice(['same', 'different'])
+        old_sections_1 = [session.section_from_song(s) for s in old_songs]
+        if condition == 'same':
+            old_sections_2 = old_sections_1
+        else:
+            old_sections_2 = \
+                [session.
+                 section_from_any_song(
+                     {'group': s.group, 'tag': 3 - s.tag}
+                 )
+                 for s in old_sections_1]
+        free_sections = [session.section_from_song(s) for s in free_songs]
+        new_sections = [session.section_from_song(s) for s in new_songs]
+
+        # Get IDs.
+        old_ids_1 = [s.id for s in old_sections_1]
+        old_ids_2 = [s.id for s in old_sections_2]
+        free_ids = [s.id for s in free_sections]
+        new_ids = [s.id for s in new_sections]
 
         # Randomise.
         permutation_1 = random.sample(range(n_free + n_old), n_free + n_old)
@@ -63,13 +67,9 @@ class Eurovision2020(Hooked):
             'n_song_sync': n_free + n_old,
             'n_heard_before': n_old + n_new,
             'condition': condition,
-            'songs': (
-                [(free_songs + old_songs)[i] for i in permutation_1]
-                + [(old_songs + new_songs)[i] for i in permutation_2]
-            ),
-            'tags': (
-                [(free_tags + old_tags_1)[i] for i in permutation_1]
-                + [(old_tags_2 + new_tags)[i] for i in permutation_2]
+            'sections': (
+                [(free_ids + old_ids_1)[i] for i in permutation_1]
+                + [(old_ids_2 + new_ids)[i] for i in permutation_2]
             ),
             'novelty': (
                 [(['free'] * n_free + ['old'] * n_old)[i]
@@ -78,6 +78,8 @@ class Eurovision2020(Hooked):
                    for i in permutation_2]
             )
         }
+
+        print(plan)
 
         # Save, overwriting existing plan if one exists.
         session.merge_json_data({'plan': plan})
@@ -93,20 +95,16 @@ class Eurovision2020(Hooked):
         next_round_number = session.get_next_round()
         try:
             plan = session.load_json_data()['plan']
-            songs = plan['songs']
-            tags = plan['tags']
+            sections = plan['sections']
         except KeyError as error:
             print('Missing plan key: %s' % str(error))
             return None
 
         # Get section.
         section = None
-        if next_round_number <= len(songs) and next_round_number <= len(tags):
+        if next_round_number <= len(sections):
             section = \
-                session.section_from_song(
-                    songs[next_round_number - 1],
-                    {'tag': tags[next_round_number - 1]}
-                )
+                session.section_from_any_song({'id': sections[next_round_number - 1]})
         if not section:
             print("Warning: no next_song_sync section found")
             section = session.section_from_any_song()
@@ -127,8 +125,7 @@ class Eurovision2020(Hooked):
         next_round_number = session.get_next_round()
         try:
             plan = session.load_json_data()['plan']
-            songs = plan['songs']
-            tags = plan['tags']
+            sections = plan['sections']
             novelty = plan['novelty']
         except KeyError as error:
             print('Missing plan key: %s' % str(error))
@@ -136,12 +133,9 @@ class Eurovision2020(Hooked):
 
         # Get section.
         section = None
-        if next_round_number <= len(songs) and next_round_number <= len(tags):
+        if next_round_number <= len(sections):
             section = \
-                session.section_from_song(
-                    songs[next_round_number - 1],
-                    {'tag': tags[next_round_number - 1]}
-                )
+                session.section_from_any_song({'id': sections[next_round_number - 1]})
         if not section:
             print("Warning: no heard_before section found")
             section = session.section_from_any_song()

@@ -23,6 +23,7 @@ from .huang_2022 import Huang2022
 from .categorization import Categorization
 from .musical_preferences import MusicalPreferences
 from .eurovision_2020 import Eurovision2020
+from .kuiper_2020 import Kuiper2020
 
 # Rules available to this application
 # If you create new Rules, add them to the list
@@ -53,5 +54,6 @@ EXPERIMENT_RULES = {
     ToontjeHoger4Absolute.ID: ToontjeHoger4Absolute,
     ToontjeHoger5Tempo.ID: ToontjeHoger5Tempo,
     ToontjeHoger6Relative.ID: ToontjeHoger6Relative,
-    Eurovision2020.ID: Eurovision2020
+    Eurovision2020.ID: Eurovision2020,
+    Kuiper2020.ID: Kuiper2020
 }
