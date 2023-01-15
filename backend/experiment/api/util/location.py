@@ -49,11 +49,13 @@ def get_country_code(ip_address):
     # Request location data
     with urllib.request.urlopen(location_url) as url:
         try:
-            data = json.loads(url.read().decode())
-            if data.get('status') == 'ok':
-                return data.get('country')
-            else:
-                return None
+            return url.read().decode()
+            # Old format?
+            # data = json.loads(url.read().decode())
+            # if data.get('status') == 'ok':
+            #     return data.get('country')
+            # else:
+            #     return None
         except:
             return None
 
