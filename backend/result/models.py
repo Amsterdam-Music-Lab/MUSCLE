@@ -3,17 +3,19 @@ import json
 from django.db import models
 from django.utils import timezone
 
+from django.core.exceptions import ValidationError
+
 # Create your models here.
 class Result(models.Model):
     """Score for each step in a session"""
     session = models.ForeignKey('session.Session', on_delete=models.CASCADE, blank=True, null=True)
+    participant = models.ForeignKey('participant.Participant', on_delete=models.CASCADE, blank=True, null=True)
     section = models.ForeignKey(
         'section.Section', on_delete=models.SET_NULL, null=True, blank=True)
 
     created_at = models.DateTimeField(default=timezone.now)
     # Key of the question e.g.: AGE
     question_key = models.CharField(max_length=64)
-    is_profile = models.BooleanField(default=False)
 
     expected_response = models.CharField(max_length=100, blank=True, null=True)
     given_response = models.CharField(max_length=100, blank=True, null=True)
@@ -23,6 +25,11 @@ class Result(models.Model):
 
     # Contains data in json_format
     json_data = models.TextField(blank=True)
+
+    def clean(self):
+        # Don't save if both session and participant field are null
+        if self.session is None and self.result is None:
+            raise ValidationError('Session or participant needed for valid result')
 
     class Meta:
         ordering = ['created_at']
