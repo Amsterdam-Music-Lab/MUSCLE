@@ -213,7 +213,7 @@ class Section(models.Model):
 
     def absolute_url(self):
         """Return absolute url for this section"""
-        return reverse('experiment:section', args=[self.pk, self.code])
+        return reverse('section:section', args=[self.pk, self.code])
 
     def simple_object(self):
         return {'id': self.id, 'url': self.absolute_url()}
