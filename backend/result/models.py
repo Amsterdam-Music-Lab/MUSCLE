@@ -15,7 +15,7 @@ class Result(models.Model):
 
     created_at = models.DateTimeField(default=timezone.now)
     # Key of the question e.g.: AGE
-    question_key = models.CharField(max_length=64)
+    question_key = models.CharField(max_length=64, default='')
 
     expected_response = models.CharField(max_length=100, blank=True, null=True)
     given_response = models.CharField(max_length=100, blank=True, null=True)
