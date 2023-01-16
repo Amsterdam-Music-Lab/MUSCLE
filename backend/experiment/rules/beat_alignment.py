@@ -129,7 +129,7 @@ class BeatAlignment(Base):
         filter_by = {'tag': '0'}
         section = session.section_from_unused_song(filter_by)
         condition = section.filename.split('_')[-1][:-4]
-        expected_result = 'ON' if condition == 'on' else 'OFF'
+        expected_response = 'ON' if condition == 'on' else 'OFF'
         question = ChoiceQuestion(
             question=_(
                 "Are the beeps ALIGNED TO THE BEAT or NOT ALIGNED TO THE BEAT?"),
@@ -139,7 +139,8 @@ class BeatAlignment(Base):
                 'OFF': _('NOT ALIGNED TO THE BEAT')
             },
             view='BUTTON_ARRAY',
-            result_id=prepare_result(session, 'aligned', section, expected_result, scoring_rule='CORRECTNESS'),
+            result_id=prepare_result(session, section=section,
+                expected_response=expected_response, scoring_rule='CORRECTNESS'),
             submits=True
         )
         form = Form([question])

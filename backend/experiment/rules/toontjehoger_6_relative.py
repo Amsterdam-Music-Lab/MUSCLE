@@ -122,7 +122,7 @@ class ToontjeHoger6Relative(Base):
             view='BUTTON_ARRAY',
             submits=True,
             result_id=prepare_result(
-            session, 'same_melody', section=section1, expected_response=expected_response
+            session, section=section1, expected_response=expected_response
         )
         )
         form = Form([question])

@@ -259,7 +259,7 @@ class Huang2022(Base):
         if not section:
             print("Warning: no next_song_sync section found")
             section = session.section_from_any_song()
-        result_id = prepare_result(session, 'song_sync', section, scoring_rule='SONG_SYNC')
+        result_id = prepare_result(session, section=section, scoring_rule='SONG_SYNC')
         return SongSync(
             section=section,
             title=cls.get_trial_title(session, next_round_number),
@@ -304,7 +304,7 @@ class Huang2022(Base):
             [section],
             play_config={'ready_time': 3, 'show_animation': True},
             preload_message=_('Get ready!'))
-        expected_result = this_section_info.get('novelty')
+        expected_response = this_section_info.get('novelty')
         # create Result object and save expected result to database
         form = Form([BooleanQuestion(
             key='heard_before',
@@ -313,7 +313,7 @@ class Huang2022(Base):
                 'old': _("YES"),
             },
             question=_("Did you hear this song in previous rounds?"),
-            result_id=prepare_result(session, 'heard_before', section, expected_result),
+            result_id=prepare_result(session, section=section, expected_response=expected_response),
             scoring_rule='REACTION_TIME',
             submits=True)
             ])

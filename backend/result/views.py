@@ -22,7 +22,7 @@ def create(request):
         session = Session.objects.get(
             pk=session_id, participant__id=participant.id)
     except Session.DoesNotExist:
-        raise Http404("Session does not exist")
+        return HttpResponseServerError("No session found")
 
     # Prevent creating results when session is finished
     if session.is_finished():
@@ -36,7 +36,7 @@ def create(request):
     try:
         result_data = json.loads(json_data)
         # Create a result from the data
-        result = handle_results(session, result_data)
+        result = handle_results(result_data, session)
             
         if not result:
             return HttpResponseServerError("Could not create result from data")

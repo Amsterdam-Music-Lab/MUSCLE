@@ -179,7 +179,7 @@ class ToontjeHoger1Mozart(Base):
             },
             view='BUTTON_ARRAY',
             result_id=prepare_result(
-            session, 'expected_shape', section=section, expected_response=expected_response),
+            session, section=section, expected_response=expected_response),
             submits=True
         )
         form = Form([question])

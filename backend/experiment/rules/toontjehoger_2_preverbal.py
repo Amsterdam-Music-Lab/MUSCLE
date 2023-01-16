@@ -127,7 +127,7 @@ class ToontjeHoger2Preverbal(Base):
             view='BUTTON_ARRAY',
             submits=True,
             result_id=prepare_result(
-            session, 'expected_spectogram', section=None, expected_response="C")
+            session, expected_response="C")
         )
         form = Form([question])
 
@@ -230,7 +230,7 @@ class ToontjeHoger2Preverbal(Base):
             },
             view='BUTTON_ARRAY',
             submits=True,
-            result_id=prepare_result(session, 'baby', section=None, expected_response="A")
+            result_id=prepare_result(session, expected_response="A")
         )
         form = Form([question])
 

@@ -163,7 +163,7 @@ def next_trial_actions(session, round_number, request_session):
     except:
         return actions
 
-    expected_result = 'SAME' if condition['group'] == '1' else 'DIFFERENT'
+    expected_response = 'SAME' if condition['group'] == '1' else 'DIFFERENT'
     question = ChoiceQuestion(
         key='same',
         question=_(
@@ -173,7 +173,7 @@ def next_trial_actions(session, round_number, request_session):
             'DIFFERENT': _('DIFFERENT')
         },
         view='BUTTON_ARRAY',
-        result_id=prepare_result(session, 'same', expected_result, scoring_rule='CORRECTNESS'),
+        result_id=prepare_result(session, expected_response=expected_response, scoring_rule='CORRECTNESS'),
         submits=True
     )
     form = Form([question])

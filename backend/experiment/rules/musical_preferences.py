@@ -78,7 +78,7 @@ class MusicalPreferences(Base):
         likert = LikertQuestionIcon(
             question=_('Do you like this song?'),
             key='like_song',
-            result_id=prepare_result(session, 'like_song', section, scoring_rule='LIKERT')
+            result_id=prepare_result(session, section=section, scoring_rule='LIKERT')
         )
         know = ChoiceQuestion(
             question=_('Do you know this song?'),
@@ -89,7 +89,7 @@ class MusicalPreferences(Base):
                 'unsure': 'fa-question',
                 'no': 'fa-thumbs-down',
             },
-            result_id=prepare_result(session, 'know_song', section)
+            result_id=prepare_result(session, section=section)
         )
         playback = Playback([section], play_config={'show_animation': True})
         form = Form([likert, know])
@@ -150,8 +150,8 @@ class MusicalPreferences(Base):
     @classmethod
     def get_questions(cls, session):
         questions = [
-            question_by_key('dgf_generation').prepare_result(session),
-            question_by_key('dgf_education', drop_choices=['isced-5']).prepare_result(session),
+            question_by_key('dgf_generation').prepare_result(session, is_profile=True),
+            question_by_key('dgf_education', drop_choices=['isced-5']).prepare_result(session, is_profile=True),
         ]
         return [
             Trial(

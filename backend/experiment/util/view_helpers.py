@@ -21,7 +21,12 @@ def two_alternative_forced(session, section, choices, expected_response=None, co
         submits=True,
         config = {'button_text_invisible': True, 'buttons_large_gap': True}
     )
-    question.prepare_result(session, section, expected_response, scoring_rule, comment)
+    question.prepare_result(session,
+        section=section,
+        expected_response=expected_response,
+        scoring_rule=scoring_rule,
+        comment=comment
+    )
     feedback_form = Form([question])
     trial = Trial(playback=playback, feedback_form=feedback_form, config=config)
     return trial.action()

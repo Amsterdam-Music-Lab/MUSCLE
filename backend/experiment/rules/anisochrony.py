@@ -51,7 +51,7 @@ class Anisochrony(DurationDiscrimination):
             section = session.playlist.section_set.get(name=difference)
         except Section.DoesNotExist:
             return None
-        expected_result = 'REGULAR' if difference == 0 else 'IRREGULAR'
+        expected_response = 'REGULAR' if difference == 0 else 'IRREGULAR'
         question = ChoiceQuestion(
             key='if_regular',
             question=_(
@@ -61,7 +61,7 @@ class Anisochrony(DurationDiscrimination):
                 'IRREGULAR': _('IRREGULAR')
             },
             view='BUTTON_ARRAY',
-            result_id=prepare_result(session, 'if_regular', section, expected_result),
+            result_id=prepare_result(session, section=section, expected_response=expected_response),
             submits=True
         )
         

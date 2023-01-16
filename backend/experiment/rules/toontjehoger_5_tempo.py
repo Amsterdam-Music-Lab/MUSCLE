@@ -158,7 +158,7 @@ class ToontjeHoger5Tempo(Base):
             },
             submits=True,
             result_id=prepare_result(
-            session, 'pitch', section=section_original, expected_response="A" if sections[0].id == section_original.id else "B"
+            session, section=section_original, expected_response="A" if sections[0].id == section_original.id else "B"
         )
         )
         form = Form([question])

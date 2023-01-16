@@ -3,7 +3,7 @@ from django.forms.models import model_to_dict
 from django.contrib.admin.sites import AdminSite
 from experiment.admin import ExperimentAdmin
 from experiment.models import Experiment
-from session.models import Participant
+from participant.models import Participant
 from result.models import Result
 from session.models import Session
 

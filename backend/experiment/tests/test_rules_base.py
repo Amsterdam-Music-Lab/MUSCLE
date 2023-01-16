@@ -27,7 +27,7 @@ class SessionTest(TestCase):
             'config': {'something': 'registered as config'},
             'decision_time': 42
         }
-        handle_results(self.session, data)
+        handle_results(data, self.session)
         assert self.session.result_count() == 2
         json_data = json.loads(self.session.result_set.first().json_data)
         assert json_data.get('config') != None

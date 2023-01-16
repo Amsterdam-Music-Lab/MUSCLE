@@ -45,7 +45,7 @@ class BST(HBat):
             section = session.playlist.section_set.filter(group=str(level)).get(tag=str(trial_condition))
         except Section.DoesNotExist:
             return None
-        expected_result = 'in2' if trial_condition else 'in3'
+        expected_response = 'in2' if trial_condition else 'in3'
         # create Result object and save expected result to database
         question = ChoiceQuestion(
             key='longer_or_equal',
@@ -58,7 +58,8 @@ class BST(HBat):
             view='BUTTON_ARRAY',
             submits=True
         )
-        question.prepare_result(session, section, expected_result, scoring_rule='CORRECTNESS')
+        question.prepare_result(session, section=section,
+            expected_response=expected_response, scoring_rule='CORRECTNESS')
         playback = Playback([section])
         form = Form([question])
         view = Trial(

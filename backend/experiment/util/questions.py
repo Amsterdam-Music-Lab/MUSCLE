@@ -191,7 +191,7 @@ def next_question(session, questions=DEMOGRAPHICS, continue_with_random=False, i
     if question:
         question.result_id = prepare_result(
             session,
-            question.key,
+            is_profile=True,
             scoring_rule=PROFILE_SCORING_RULES.get(question.key, '')
         )
         return question

@@ -117,7 +117,7 @@ class ToontjeHoger4Absolute(Base):
             },
             submits=True,
             result_id=prepare_result(
-            session, 'pitch', section=section1, expected_response="A" if sections[0].id == section1.id else "B"
+            session, section=section1, expected_response="A" if sections[0].id == section1.id else "B"
         )
         )
         form = Form([question])

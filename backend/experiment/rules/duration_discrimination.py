@@ -132,7 +132,7 @@ class DurationDiscrimination(Base):
             section = session.playlist.section_set.get(name=difference)
         except Section.DoesNotExist:
             return None
-        expected_result = 'EQUAL' if difference == 0 else 'LONGER'
+        expected_response = 'EQUAL' if difference == 0 else 'LONGER'
         question_text = cls.get_question_text()
         question = ChoiceQuestion(
             question=question_text,
@@ -142,7 +142,7 @@ class DurationDiscrimination(Base):
                 'LONGER': _('LONGER')
             },
             view='BUTTON_ARRAY',
-            result_id=prepare_result(session, 'longer_or_equal', section, expected_result),
+            result_id=prepare_result(session, section=section, expected_response=expected_response),
             submits=True
         )
         # create Result object and save expected result to database
