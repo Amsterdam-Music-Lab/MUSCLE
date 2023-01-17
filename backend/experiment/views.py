@@ -8,7 +8,7 @@ from django.utils.translation import activate
 
 from .models import Experiment
 from session.models import Session
-from participant.utils import current_participant
+from participant.utils import get_or_create_participant
 
 logger = logging.getLogger(__name__)
 
@@ -59,7 +59,7 @@ def get_experiment(request, slug):
         activate(experiment.language)
 
     # get current participant
-    participant = current_participant(request)
+    participant = get_or_create_participant(request)
 
     # create data
     experiment_data = {

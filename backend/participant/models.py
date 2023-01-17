@@ -44,9 +44,7 @@ class Participant(models.Model):
 
     def profile(self):
         """Get all profile type results of this participant"""
-        result_ids = self.session_set.values_list('result', flat=True)
-        from result.models import Result
-        return Result.objects.filter(pk__in=result_ids, is_profile=True)
+        return self.result_set.all()
 
     def profile_object(self):
         """Get full profile data"""

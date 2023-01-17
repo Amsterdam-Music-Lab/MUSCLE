@@ -8,8 +8,7 @@ import json
 class BeatAlignmentRuleTest(TestCase):
 
     @classmethod
-    def setUpTestData(cls):
-        
+    def setUpTestData(cls):        
         # ex* are practice rounds. No actual mp3 files are present or tested
         csv = ("Artist 1,Name 1,0.0,10.0,bat/artist1.mp3,0,0,0\n"
                "Artist 2,Name 2,0.0,10.0,bat/artist2.mp3,0,0,0\n"
@@ -40,7 +39,6 @@ class BeatAlignmentRuleTest(TestCase):
         return json.loads(response.content)
 
     def test_experiment(self):
-
         response = self.client.get('/experiment/ba/')
         response_json = self.load_json(response)
         self.assertTrue( {'id','slug','name','class_name','rounds','playlists','next_round','loading_text'} <= response_json.keys() )
@@ -58,8 +56,8 @@ class BeatAlignmentRuleTest(TestCase):
         response = self.client.get('/result/consent_ba/')
         self.assertEqual(response.status_code, 404) # By design, returns 404 if no consent has been given so far :/
 
-        data = {"json_data": "{\"form\":[{\"key\":\"consent_ba\",\"value\":true}]}", "csrfmiddlewaretoken": csrf_token}
-        response = self.client.post('/result/create/', data)
+        data = {"json_data": "{\"key\":\"consent_ba\",\"value\":true}", "csrfmiddlewaretoken": csrf_token}
+        response = self.client.post('/result/consent/', data)
         response_json = self.load_json(response)
         self.assertTrue(response_json['status'],'ok')
 
@@ -100,7 +98,7 @@ class BeatAlignmentRuleTest(TestCase):
                         }],
                     })
             }
-            response = self.client.post('/result/create', data)
+            response = self.client.post('/result/create/', data)
             response_json = self.load_json(response)
             self.assertEqual(response_json['view'], views_exp[i])
             if i < len(views_exp)-1: # Last view 'FINAL' does not have result_id or feedback form

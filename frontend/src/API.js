@@ -23,7 +23,7 @@ export const URLS = {
         get: (question) => "/result/" + question + "/",
         current: "/result/current_profile",
         create: "/result/create/",
-        consent: (slug) => "/result/consent_" + slug + "/",
+        consent: "/result/consent/"
     },
     session: {
         create: "/session/create/",
@@ -45,20 +45,20 @@ export const useParticipantLink = () =>
     useGet(API_BASE_URL + URLS.participant.link);
     
 export const useConsent = (slug) =>
-    useGet(API_BASE_URL + URLS.result.consent(slug));
+    useGet(API_BASE_URL + URLS.result.get('consent_' + slug));
 
 // Create consent for given experiment
 export const createConsent = async ({ experiment, participant }) => {
     try {
         const response = await axios.post(
-            API_BASE_URL + URLS.result.create,
+            API_BASE_URL + URLS.result.consent,
             qs.stringify({
-                json_data: JSON.stringify({form: [
+                json_data: JSON.stringify(
                     {
                         key: "consent_" + experiment.slug,
                         value: true,
                     }
-                ]}),
+                ),
                 csrfmiddlewaretoken: participant.csrf_token,
             }),
         );

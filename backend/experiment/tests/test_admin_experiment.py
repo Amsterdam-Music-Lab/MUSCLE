@@ -28,11 +28,12 @@ class TestAdminExperiment(TestCase):
         self.client = Client(
             HTTP_USER_AGENT='Agent 007'
         )
+        slug = 'TEST'
         Experiment.objects.create(
             name='test',
-            slug='TEST'
+            slug=slug
         )
-        resp = self.client.get('/participant/')
+        Participant.objects.create()
         Session.objects.create(
             experiment=Experiment.objects.first(),
             participant=Participant.objects.first()

@@ -5,8 +5,9 @@ from django.db.models import Avg
 from operator import ne
 
 from experiment.actions.form import Form, ChoiceQuestion
-from experiment.actions import Consent, Explainer, Score, StartSession, TwoAlternativeForced, Trial, Final
+from experiment.actions import Consent, Explainer, Score, StartSession, Trial, Final
 from experiment.util.actions import combine_actions
+from experiment.util.view_helpers import two_alternative_forced
 
 from experiment.util.questions import EXTRA_DEMOGRAPHICS, question_by_key
 from .base import Base
@@ -180,7 +181,7 @@ class Categorization(Base):
                         'style': 'boolean'
                     }
                     explainer = Trial(title="Training failed", feedback_form=Form(
-                        [repeat_training_or_quit], is_profile=True), config=config).action()
+                        [repeat_training_or_quit]), config=config).action()
 
             feedback = cls.get_feedback(session)
             return combine_actions(feedback, explainer)
@@ -532,7 +533,7 @@ questions = [question_by_key('dgf_age', EXTRA_DEMOGRAPHICS),
 questionaire = [
     Trial(
         title="Questionnaire",
-        feedback_form=Form([question], submit_label='Continue', is_profile=True)).action()
+        feedback_form=Form([question], submit_label='Continue')).action()
     for question in questions
 ]
 

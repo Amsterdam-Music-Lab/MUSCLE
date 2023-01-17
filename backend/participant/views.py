@@ -12,25 +12,26 @@ from django.utils.translation import ngettext_lazy as ngettext
 from django.utils.translation import gettext_lazy as _
 
 from .models import Participant
-from .utils import current_participant, set_participant
+from .utils import get_participant, set_participant
 
 logger = logging.getLogger(__name__)
 
 
 def current(request):
     """Current participant data from session"""
-    participant = current_participant(request)
-    return JsonResponse({
+    participant = get_participant(request)
+    response = JsonResponse({
         'id': participant.id,
         'hash': participant.unique_hash,
         'csrf_token': get_token(request),
         'country': participant.country_code
     }, json_dumps_params={'indent': 4})
+    return response
 
 
 def scores(request):
     """Current participant scores"""
-    participant = current_participant(request)
+    participant = get_participant(request)
     scores = participant.scores_per_experiment()
 
     return JsonResponse({
@@ -63,7 +64,7 @@ def link(request):
     """Get the participant reload url"""
 
     # Current participant
-    participant = current_participant(request)
+    participant = get_participant(request)
 
     # Build url (hard coded server url)
     url = 'https://app.amsterdammusiclab.nl/experiment/participant/reload/{}/{}/'.format(
@@ -84,7 +85,7 @@ def share(request):
     """Shares the participant reload url by email"""
 
     # Current participant
-    participant = current_participant(request)
+    participant = get_participant(request)
 
     # Get email address
     email = request.POST.get("email")

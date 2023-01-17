@@ -5,7 +5,7 @@ from django.views.decorators.http import require_POST
 from .models import Session
 from experiment.models import Experiment
 from section.models import Playlist
-from participant.utils import current_participant
+from participant.utils import get_or_create_participant, get_participant
 
 
 @require_POST
@@ -13,7 +13,7 @@ def create_session(request):
     """Create new session for given experiment for current participant"""
 
     # Current participant
-    participant = current_participant(request)
+    participant = get_or_create_participant(request)
 
     # Get experiment
     experiment_id = request.POST.get("experiment_id")
@@ -98,7 +98,7 @@ def next_round(request, session_id):
     This data is normally provided in: result()
     """
     # Current participant
-    participant = current_participant(request)
+    participant = get_participant(request)
 
     # Get session
     try:

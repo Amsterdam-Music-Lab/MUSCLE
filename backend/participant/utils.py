@@ -1,11 +1,13 @@
-from .models import Participant
-
-PARTICIPANT_KEY = 'participant_id'
-
 import json
+import logging
 import urllib
 import urllib.request
 from django.conf import settings
+
+from .models import Participant
+PARTICIPANT_KEY = 'participant_id'
+
+logger = logging.getLogger(__name__)
 
 
 def located_in_nl(request):
@@ -70,19 +72,20 @@ def visitor_ip_address(request):
 
     return request.META.get('REMOTE_ADDR')
 
-def current_participant(request):
-    """Get a participant from the session, or create/add a new one"""
-    participant = None
-
+def get_participant(request):
     # get participant from session
-    if PARTICIPANT_KEY in request.session:
-        try:
-            participant = Participant.objects.get(
+    try:
+        return Participant.objects.get(
                 pk=int(request.session[PARTICIPANT_KEY]))
-        except Participant.DoesNotExist:
-            participant = None
+    except:
+        raise Exception('Participant not found')
 
-    if not participant:
+def get_or_create_participant(request):
+    """Get a participant from the session, or create/add a new one"""
+    try:
+        participant = get_participant(request)
+    except:
+        # create new participant
         country_code = country(request)
         access_info = request.META.get('HTTP_USER_AGENT')
 

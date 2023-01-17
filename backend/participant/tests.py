@@ -1,18 +1,25 @@
 import json
+from importlib import import_module
 
 from django.test import Client, TestCase
+from django.test.client import RequestFactory
 
 from .models import Participant
+from .utils import get_or_create_participant
 from experiment.models import Experiment
 from session.models import Session
 from result.models import Result
 
 class ParticipantTest(TestCase):
-    @classmethod
-    def setUpTestData(cls):
-        cls.client = Client(
+
+    def setUp(self):
+        self.client = Client(
             HTTP_USER_AGENT='Agent 007'
         )
+        self.factory = RequestFactory()
+
+    @classmethod
+    def setUpTestData(cls):
         cls.participant = Participant.objects.create(unique_hash=42)
         cls.experiment = Experiment.objects.create(rules='LISTENING_CONDITIONS', slug='test')
         cls.session = Session.objects.create(
@@ -20,30 +27,24 @@ class ParticipantTest(TestCase):
             participant=cls.participant,
         )
         cls.result1 = Result.objects.create(
-            session=cls.session,
+            participant=cls.participant,
             question_key='test1',
             given_response='2 1/2',
-            score=2.5,
-            is_profile=True
+            score=2.5
         )
         cls.result2 = Result.objects.create(
-            session=cls.session,
-            question_key='test2',
-            is_profile=True
-        )
-        cls.session_result = Result.objects.create(
-            session=cls.session,
-            question_key='test_session',
-            given_response='42'
+            participant=cls.participant,
+            question_key='test2'
         )
     
     def test_current_view(self):
-        request = {
-            'participant_id': self.participant.pk
-        }
-        response = json.loads(self.client.get('/participant/', request).content)
+        # set participant_id to test session 
+        session = self.client.session
+        session['participant_id'] = self.participant.id
+        session.save()
+        response = json.loads(self.client.get('/participant/').content)
         assert response.get('id') == 1
-        assert response.get('hash') == 42
+        assert int(response.get('hash')) == 42
         assert response.get('csrf_token') != None
 
     def test_profile(self):
@@ -73,7 +74,7 @@ class ParticipantTest(TestCase):
 
     def test_access_info(self):
         self.client.get('/participant/')
-        participant = Participant.objects.first()
+        participant = Participant.objects.last()
         assert participant.access_info == 'Agent 007'
 
     def test_country_code(self):
@@ -83,3 +84,8 @@ class ParticipantTest(TestCase):
         self.client.get('/participant/')
         participant = Participant.objects.last()
         assert participant.country_code == 'BLA'
+    
+    def test_get_or_create_participant(self):
+        request = self.factory.get('/experiment/slug')
+        participant = get_or_create_participant(request)
+        assert participant != None

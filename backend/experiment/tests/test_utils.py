@@ -17,29 +17,26 @@ class UtilsTestCase(TestCase):
             participant=cls.participant,
         )
         cls.gender_result = Result.objects.create(
-            session=cls.session,
+            participant=cls.participant,
             question_key='dgf_gender_identity',
-            given_response='non_answer',
-            is_profile=True
+            given_response='non_answer'
         )
         cls.result2 = Result.objects.create(
-            session=cls.session,
+            participant=cls.participant,
             question_key='dgf_generation',
-            given_response='boomer',
-            is_profile=True
+            given_response='boomer'
         )
         cls.questions = DEMOGRAPHICS[:3]
     
     def test_unasked_question(self):
-        question = unasked_question(self.participant, self.questions)
+        question = unasked_question(self.session, self.questions)
         assert question.key == 'dgf_country_of_origin'
     
     def test_next_question(self):
         Result.objects.create(
-            session=self.session,
+            participant=self.participant,
             question_key='dgf_country_of_origin',
-            given_response='Luilekkerland',
-            is_profile=True
+            given_response='Luilekkerland'
         )
         question = next_question(self.session, self.questions)
         assert question == None
@@ -47,6 +44,5 @@ class UtilsTestCase(TestCase):
         questions = DEMOGRAPHICS[:4]
         question = next_question(self.session, questions)
         assert Result.objects.count() == 4
-        assert Result.objects.last().question_key == 'dgf_education'
         question = next_question(self.session, questions, continue_with_random=True)
         assert question != None

@@ -1,6 +1,6 @@
 from .models import Result
 
-from experiment.util.score import SCORING_RULES
+from .score import SCORING_RULES
 
 def get_result(session, data):
     result_id = data.get('result_id')
@@ -35,11 +35,12 @@ def handle_results(data, session):
 def prepare_result(session, is_profile=False, **kwargs):
     ''' Create a Result object, and provide its id to be serialized
     - session: the session on which the Result is going to be registered
-    - section: optionally, provide a section to which the Result is going to be tied
-    - expected_response: optionally, provide the correct answer, used for scoring  
-    - comment: optionally, provide a comment to be saved in the database, e.g. "training phase"
-    - scoring_rule: optionally, provide a scoring rule
     - is_profile: optionally, flag that the Result is a profile type question
+    possible kwargs: 
+        - section: optionally, provide a section to which the Result is going to be tied
+        - expected_response: optionally, provide the correct answer, used for scoring  
+        - comment: optionally, provide a comment to be saved in the database, e.g. "training phase"
+        - scoring_rule: optionally, provide a scoring rule
     '''
     if not is_profile:
         result = Result(
@@ -49,7 +50,7 @@ def prepare_result(session, is_profile=False, **kwargs):
     else:
         participant = session.participant
         result = Result(
-            participant=participant
+            participant=participant,
             **kwargs
         )
     result.save()

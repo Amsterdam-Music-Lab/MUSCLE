@@ -152,7 +152,9 @@ const Trial = ({ participant, session, playback, feedback_form, config, onNext, 
                     skipLabel={feedback_form.skip_label}
                     isSkippable={feedback_form.is_skippable}
                     onResult={makeResult}
-                    emphasizeTitle={feedback_form.is_profile}
+                    // emphasizeTitle={feedback_form.is_profile}
+                    // to do: if we want left-aligned text with a pink divider,
+                    // make this style option available again (used in Question.scss)
                 />
             )}
             {preloadReady && !feedback_form && config.show_continue_button && (

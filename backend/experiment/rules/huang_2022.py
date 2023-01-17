@@ -139,11 +139,11 @@ class Huang2022(Base):
             gender_question(),
         ]
         for question in questions:
-            prepare_result(session, scoring_rule=MSI_SCORING_RULES.get(question.key, ''), is_profile=True)
+            prepare_result(session, scoring_rule=PROFILE_SCORING_RULES.get(question.key, ''))
         return [
             Trial(
                 title=_("Questionnaire %(index)i/%(total)i") % {'index': index + 1, 'total': len(questions)},
-                feedback_form=Form([question], is_profile=True, is_skippable=question.is_skippable)).action() 
+                feedback_form=Form([question], is_skippable=question.is_skippable)).action() 
             for index, question in enumerate(questions)
         ]
 
@@ -263,6 +263,7 @@ class Huang2022(Base):
         return SongSync(
             section=section,
             title=cls.get_trial_title(session, next_round_number),
+            key='song_sync',
             result_id=result_id
         ).action()
 

@@ -156,7 +156,7 @@ class MusicalPreferences(Base):
         return [
             Trial(
                 title=_("Questionnaire"),
-                feedback_form=Form([question], is_profile=True)).action() 
+                feedback_form=Form([question])).action() 
             for question in questions
         ]
 

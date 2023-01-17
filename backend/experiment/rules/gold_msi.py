@@ -38,7 +38,7 @@ class GoldMSI(Base):
         if question:
             feedback_form = Form([
                 question,
-            ], is_profile=True)
+            ])
             view = Trial(None, feedback_form)
             return view.action()
         else:

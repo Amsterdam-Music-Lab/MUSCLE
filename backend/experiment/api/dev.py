@@ -9,7 +9,7 @@ from result.models import Result
 from session.models import Session
 from participant.models import Participant
 from ..utils import slugify
-from participant.utils import current_participant
+from participant.utils import get_or_create_participant
 
 
 def test_sessions(request):
@@ -18,7 +18,7 @@ def test_sessions(request):
     return render(request, 'dev/test_forms.html', {
         'experiment': experiment,
         'section_id': experiment.playlists.first().section_set.all().first().id,
-        'participant': current_participant(request)
+        'participant': get_or_create_participant(request)
     })
 
 
