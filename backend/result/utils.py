@@ -62,7 +62,7 @@ def score_result(data, session):
     (form element or top level data)
     parameters:
     session: a Session object
-    data: a dictionary, containing an optional result_id, and optional other params:
+    data: a dictionary, containing a result_id, and optional other params:
     {
         result_id: int [optional]
         params: ...

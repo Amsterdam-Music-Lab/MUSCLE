@@ -1,22 +1,13 @@
 import json
-from importlib import import_module
 
 from django.test import Client, TestCase
-from django.test.client import RequestFactory
 
 from .models import Participant
-from .utils import get_or_create_participant
 from experiment.models import Experiment
 from session.models import Session
 from result.models import Result
 
 class ParticipantTest(TestCase):
-
-    def setUp(self):
-        self.client = Client(
-            HTTP_USER_AGENT='Agent 007'
-        )
-        self.factory = RequestFactory()
 
     @classmethod
     def setUpTestData(cls):
@@ -36,12 +27,21 @@ class ParticipantTest(TestCase):
             participant=cls.participant,
             question_key='test2'
         )
+
+    def setUp(self):
+        self.client = Client(
+            HTTP_USER_AGENT='Agent 007'
+        )
+        self.session = self.client.session
+        self.session['country_code'] = 'BLA'
+        self.session.save()
+    
+    def set_participant(self):
+        self.session['participant_id'] = self.participant.id
+        self.session.save()
     
     def test_current_view(self):
-        # set participant_id to test session 
-        session = self.client.session
-        session['participant_id'] = self.participant.id
-        session.save()
+        self.set_participant()
         response = json.loads(self.client.get('/participant/').content)
         assert response.get('id') == 1
         assert int(response.get('hash')) == 42
@@ -73,19 +73,12 @@ class ParticipantTest(TestCase):
         assert empty_result.question_key == 'test2'
 
     def test_access_info(self):
-        self.client.get('/participant/')
+        # this will create a new participant and set the request.session variable
+        self.client.get('/experiment/test/')
         participant = Participant.objects.last()
         assert participant.access_info == 'Agent 007'
 
     def test_country_code(self):
-        session = self.client.session
-        session['country_code'] = 'BLA'
-        session.save()
-        self.client.get('/participant/')
+        self.client.get('/experiment/test/')
         participant = Participant.objects.last()
         assert participant.country_code == 'BLA'
-    
-    def test_get_or_create_participant(self):
-        request = self.factory.get('/experiment/slug')
-        participant = get_or_create_participant(request)
-        assert participant != None
