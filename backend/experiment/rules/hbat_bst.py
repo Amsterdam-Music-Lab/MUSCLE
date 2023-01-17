@@ -44,7 +44,7 @@ class BST(HBat):
         try:
             section = session.playlist.section_set.filter(group=str(level)).get(tag=str(trial_condition))
         except Section.DoesNotExist:
-            return None
+            raise
         expected_response = 'in2' if trial_condition else 'in3'
         # create Result object and save expected result to database
         question = ChoiceQuestion(

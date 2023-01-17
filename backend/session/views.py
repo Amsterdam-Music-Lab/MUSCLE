@@ -13,7 +13,7 @@ def create_session(request):
     """Create new session for given experiment for current participant"""
 
     # Current participant
-    participant = get_or_create_participant(request)
+    participant = get_participant(request)
 
     # Get experiment
     experiment_id = request.POST.get("experiment_id")

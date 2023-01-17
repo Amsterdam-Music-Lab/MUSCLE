@@ -14,6 +14,8 @@ from experiment.util.actions import final_action_with_optional_button, render_fe
 from experiment.util.final_score import get_average_difference_level_based
 from experiment.util.staircasing import register_turnpoint
 
+from result.utils import prepare_result
+
 logger = logging.getLogger(__name__)
 
 MAX_TURNPOINTS = 6
@@ -38,6 +40,7 @@ class HBat(Base):
                 get_previous_condition,
                 1
             )
+            print(actions)
             return actions
         # actual experiment
         previous_results = session.result_set.order_by('-created_at')
@@ -85,7 +88,7 @@ class HBat(Base):
             section = session.playlist.section_set.filter(
                 group=str(level)).get(tag=str(trial_condition))
         except Section.DoesNotExist:
-            return None
+            raise
         expected_response = 'SLOWER' if trial_condition else 'FASTER'
         question = ChoiceQuestion(
             key='longer_or_equal',
@@ -95,12 +98,15 @@ class HBat(Base):
                 'SLOWER': _('SLOWER'),
                 'FASTER': _('FASTER')
             },
+            result_id=prepare_result(
+                session,
+                section=section,
+                expected_response=expected_response,
+                scoring_rule='CORRECTNESS'
+            ),
             view='BUTTON_ARRAY',
             submits=True
         )
-         # create Result object and save expected result to database
-        question.prepare_result(session, section=section,
-            expected_response=expected_response, scoring_rule='CORRECTNESS')
         playback = Playback([section])
         form = Form([question])
         view = Trial(
