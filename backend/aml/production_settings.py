@@ -28,6 +28,7 @@ DBBACKUP_CONNECTORS = {
         'PASSWORD': os.getenv('SQL_PASSWORD'),
         'HOST': os.getenv('SQL_HOST'),
         'PORT': os.getenv('SQL_PORT'),
+        'DBBACKUP_HOSTNAME': os.getenv('SQL_HOST')
     }
 }
 
