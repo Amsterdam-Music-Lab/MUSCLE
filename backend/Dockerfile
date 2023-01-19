@@ -13,5 +13,5 @@ RUN apt install -y postgresql-14
 COPY requirements/prod.txt /server/
 RUN pip install -r prod.txt
 # We add remainig code later, so pip install won't need to rerun if source code changes
-COPY . /server/
+# COPY . /server/
 
