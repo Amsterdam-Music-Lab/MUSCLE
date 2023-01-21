@@ -20,6 +20,7 @@ class Hooked(Base):
     """Superclass for Hooked experiment rules"""
 
     timeout = 15
+    questions = True
 
     @classmethod
     def first_round(cls, experiment, participant):
@@ -178,7 +179,7 @@ class Hooked(Base):
             if next_round_number in range(2, 5):
                 actions.append(cls.next_song_sync_action(session))
             if next_round_number in range(5, heard_before_offset):
-                actions.append(cls.get_random_question(session))
+                actions.append(cls.get_random_question(session)) if cls.questions else None
                 actions.append(cls.next_song_sync_action(session))
 
             # HeardBefore rounds
@@ -188,7 +189,7 @@ class Hooked(Base):
                 actions.append(
                     cls.next_heard_before_action(session))
             if next_round_number > heard_before_offset:
-                actions.append(cls.get_random_question(session))
+                actions.append(cls.get_random_question(session)) if cls.questions else None
                 actions.append(
                     cls.next_heard_before_action(session))
 
