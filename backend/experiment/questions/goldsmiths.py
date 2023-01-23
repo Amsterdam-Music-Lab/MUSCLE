@@ -1,7 +1,7 @@
 from django.utils.translation import gettext_lazy as _
 
 from experiment.actions.form import LikertQuestion, ChoiceQuestion
-from .questions import question_by_key
+from .utils import question_by_key
 
 # Numbers before key relate to The Goldsmiths Musical Sophistication Index, v1.0
 

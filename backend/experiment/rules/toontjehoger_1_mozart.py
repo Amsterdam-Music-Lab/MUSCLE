@@ -5,8 +5,8 @@ from experiment.actions import Trial, Explainer, Step, Score, Final, StartSessio
 from experiment.actions.form import ButtonArrayQuestion, Form
 from experiment.actions.playback import Playback
 from .base import Base
-from experiment.util.actions import combine_actions
-from experiment.util.strings import non_breaking
+from experiment.actions.utils import combine_actions
+from experiment.utils import non_breaking_spaces
 
 from result.utils import prepare_result
 
@@ -125,7 +125,7 @@ class ToontjeHoger1Mozart(Base):
         last_result = session.last_result()
         section = last_result.section
         feedback = "Je hoorde {} van {}.".format(
-            section.name, non_breaking(section.artist)) if section else ""
+            section.name, non_breaking_spaces(section.artist)) if section else ""
 
         # Return score view
         config = {'show_total_score': True}

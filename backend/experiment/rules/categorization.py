@@ -1,15 +1,14 @@
 from django.utils import timezone
 from django.template.loader import render_to_string
-from django.http import Http404
 from django.db.models import Avg
-from operator import ne
 
 from experiment.actions.form import Form, ChoiceQuestion
 from experiment.actions import Consent, Explainer, Score, StartSession, Trial, Final
-from experiment.util.actions import combine_actions
-from experiment.util.view_helpers import two_alternative_forced
+from experiment.actions.utils import combine_actions
+from experiment.actions.wrappers import two_alternative_forced
 
-from experiment.util.questions import EXTRA_DEMOGRAPHICS, question_by_key
+from experiment.questions.demographics import EXTRA_DEMOGRAPHICS
+from experiment.questions.utils import question_by_key
 from .base import Base
 import random
 

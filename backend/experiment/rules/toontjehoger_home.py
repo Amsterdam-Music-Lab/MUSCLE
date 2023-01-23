@@ -2,7 +2,7 @@ import logging
 import random
 from experiment.actions import ToontjeHoger
 from .base import Base
-from experiment.util.strings import external_url
+from experiment.utils import external_url
 
 logger = logging.getLogger(__name__)
 

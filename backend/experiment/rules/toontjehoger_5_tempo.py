@@ -7,8 +7,8 @@ from experiment.actions import Trial, Explainer, Step, Score, Final, StartSessio
 from experiment.actions.form import ButtonArrayQuestion, Form
 from experiment.actions.playback import Playback
 from .base import Base
-from experiment.util.actions import combine_actions
-from experiment.util.strings import non_breaking
+from experiment.actions.utils import combine_actions
+from experiment.utils import non_breaking_spaces
 
 from result.utils import prepare_result
 
@@ -228,7 +228,7 @@ class ToontjeHoger5Tempo(Base):
                 section_a = section_original if last_result.expected_response == "A" else section_changed
                 section_b = section_changed if section_a.id == section_original.id else section_original
                 feedback += " Je hoorde {} uitgevoerd door A) {} en B) {}.".format(
-                    section_a.name, non_breaking(section_a.artist), non_breaking(section_b.artist))
+                    section_a.name, non_breaking_spaces(section_a.artist), non_breaking_spaces(section_b.artist))
 
         # Return score view
         config = {'show_total_score': True}

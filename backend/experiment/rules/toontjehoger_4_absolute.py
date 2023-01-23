@@ -2,13 +2,13 @@ import logging
 import random
 from os.path import join
 from django.template.loader import render_to_string
-from experiment.util.strings import non_breaking
+from experiment.utils import non_breaking_spaces
 from .toontjehoger_1_mozart import toontjehoger_ranks
 from experiment.actions import Trial, Explainer, Step, Score, Final, StartSession, Playlist, Info
 from experiment.actions.form import ButtonArrayQuestion, Form
 from experiment.actions.playback import Playback
 from .base import Base
-from experiment.util.actions import combine_actions
+from experiment.actions.utils import combine_actions
 from result.utils import prepare_result
 
 logger = logging.getLogger(__name__)
@@ -156,7 +156,7 @@ class ToontjeHoger4Absolute(Base):
                     last_result.expected_response.upper())
 
             feedback += " Je luisterde naar de intro van {}.".format(
-                non_breaking(last_result.section.name))
+                non_breaking_spaces(last_result.section.name))
 
         # Return score view
         config = {'show_total_score': True}

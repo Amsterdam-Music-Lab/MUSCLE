@@ -12,4 +12,3 @@ from .info import Info
 from .plink import Plink
 from .html import HTML
 from .toontjehoger import ToontjeHoger
-from .two_alternative_forced import TwoAlternativeForced

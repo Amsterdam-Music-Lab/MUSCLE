@@ -7,8 +7,8 @@ from experiment.actions import Plink, Explainer, Step, Score, Final, StartSessio
 from experiment.actions.form import RadiosQuestion
 from .base import Base
 
-from experiment.util.actions import combine_actions
-from experiment.util.strings import non_breaking
+from experiment.actions.utils import combine_actions
+from experiment.utils import non_breaking_spaces
 
 from result.utils import prepare_result
 
@@ -93,9 +93,9 @@ class ToontjeHoger3Plink(Base):
 
         if main_question:
             if main_question == last_result.expected_response:
-                return "Goedzo! Je hoorde inderdaad {} van {}.".format(non_breaking(section.name), non_breaking(section.artist))
+                return "Goedzo! Je hoorde inderdaad {} van {}.".format(non_breaking_spaces(section.name), non_breaking_spaces(section.artist))
 
-            return "Helaas! Je hoorde {} van {}.".format(non_breaking(section.name), non_breaking(section.artist))
+            return "Helaas! Je hoorde {} van {}.".format(non_breaking_spaces(section.name), non_breaking_spaces(section.artist))
 
         # Option 2. Extra questions
         extra_questions = Plink.extract_extra_questions(data)
@@ -130,7 +130,7 @@ class ToontjeHoger3Plink(Base):
         question_part = "Het nummer komt uit de {} en de emotie is {}.".format(
             time_period, emotion)
         section_part = "Je hoorde {} van {}.".format(
-            non_breaking(section.name), non_breaking(section.artist))
+            non_breaking_spaces(section.name), non_breaking_spaces(section.artist))
 
         # The \n results in a linebreak
         feedback = "{} {} \n {}".format(

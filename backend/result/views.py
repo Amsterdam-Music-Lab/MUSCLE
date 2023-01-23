@@ -35,6 +35,7 @@ def create(request):
 
     try:
         result_data = json.loads(json_data)
+        print()
         # Create a result from the data
         result = handle_results(result_data, session)
             

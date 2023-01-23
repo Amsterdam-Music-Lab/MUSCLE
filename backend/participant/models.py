@@ -1,6 +1,5 @@
 import random
 import uuid
-from itertools import chain
 
 from django.contrib.humanize.templatetags.humanize import naturalday
 from django.db import models

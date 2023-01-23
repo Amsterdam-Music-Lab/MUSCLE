@@ -1,11 +1,10 @@
-import json
 import random
 import numpy as np
 
 from django.utils.translation import gettext as _
 
 from experiment.actions import Explainer, Step
-from .actions import combine_actions
+from experiment.actions.utils import combine_actions
 
 
 def get_practice_views(

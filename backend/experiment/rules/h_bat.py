@@ -9,10 +9,10 @@ from experiment.actions import Trial, Consent, Explainer, Playlist, Step, StartS
 from experiment.actions.form import ChoiceQuestion, Form
 from experiment.actions.playback import Playback
 
-from experiment.util.practice import get_practice_views, practice_explainer, get_trial_condition, get_trial_condition_block
-from experiment.util.actions import final_action_with_optional_button, render_feedback_trivia
-from experiment.util.final_score import get_average_difference_level_based
-from experiment.util.staircasing import register_turnpoint
+from experiment.rules.util.practice import get_practice_views, practice_explainer, get_trial_condition, get_trial_condition_block
+from experiment.actions.utils import final_action_with_optional_button, render_feedback_trivia
+from experiment.actions.utils import get_average_difference_level_based
+from experiment.rules.util.staircasing import register_turnpoint
 
 from result.utils import prepare_result
 

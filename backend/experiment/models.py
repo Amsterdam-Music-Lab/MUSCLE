@@ -3,7 +3,7 @@ import copy
 from django.db import models
 from django.utils import timezone
 from experiment.rules import EXPERIMENT_RULES
-from experiment.util.iso_languages import ISO_LANGUAGES
+from experiment.standards.iso_languages import ISO_LANGUAGES
 
 language_choices = [(key, ISO_LANGUAGES[key]) for key in ISO_LANGUAGES.keys()]
 language_choices[0] = ('', 'Unset')

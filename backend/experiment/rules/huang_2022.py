@@ -8,10 +8,10 @@ from .base import Base
 from experiment.actions import SongSync, Final, Score, Explainer, Step, Consent, StartSession, Playlist, Trial
 from experiment.actions.form import BooleanQuestion, ChoiceQuestion, Form, Question
 from experiment.actions.playback import Playback
-from experiment.util.questions import EXTRA_DEMOGRAPHICS, question_by_key
-from experiment.util.goldsmiths import MSI_ALL
-from experiment.util.profile_scoring_rules import PROFILE_SCORING_RULES
-from experiment.util.actions import combine_actions
+from experiment.questions.demographics import EXTRA_DEMOGRAPHICS
+from experiment.questions.goldsmiths import MSI_ALL
+from experiment.questions.utils import question_by_key, unasked_question
+from experiment.actions.utils import combine_actions
 from result.utils import prepare_result
 
 logger = logging.getLogger(__name__)
@@ -138,12 +138,10 @@ class Huang2022(Base):
             residence_question(),
             gender_question(),
         ]
-        for question in questions:
-            prepare_result(session, scoring_rule=PROFILE_SCORING_RULES.get(question.key, ''))
         return [
             Trial(
                 title=_("Questionnaire %(index)i/%(total)i") % {'index': index + 1, 'total': len(questions)},
-                feedback_form=Form([question], is_skippable=question.is_skippable)).action() 
+                feedback_form=Form([unasked_question(question)], is_skippable=question.is_skippable)).action() 
             for index, question in enumerate(questions)
         ]
 
@@ -196,6 +194,7 @@ class Huang2022(Base):
                 form=[
                     Question(
                         key='tech_problems',
+                        result_id=prepare_result(session),
                         explainer=_('Did you encounter any technical problems? E.g., no sound, music stopped playing, page loaded slow, page freezes, etc. '),
                         question=_("Please report on these in the field below as elaborate as possible. This will help us improving this experiment."),
                     )

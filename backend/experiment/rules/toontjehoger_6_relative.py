@@ -6,7 +6,7 @@ from experiment.actions import Trial, Explainer, Step, Score, Final, StartSessio
 from experiment.actions.form import ChoiceQuestion, Form
 from experiment.actions.playback import Playback
 from .base import Base
-from experiment.util.actions import combine_actions
+from experiment.actions.utils import combine_actions
 
 from result.utils import prepare_result
 

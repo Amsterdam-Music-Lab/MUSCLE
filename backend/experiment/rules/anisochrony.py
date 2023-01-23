@@ -5,7 +5,7 @@ from section.models import Section
 from experiment.actions import Trial, Explainer, Step
 from experiment.actions.form import ChoiceQuestion, Form
 from experiment.actions.playback import Playback
-from experiment.util.actions import render_feedback_trivia
+from experiment.actions.utils import render_feedback_trivia
 from .duration_discrimination import DurationDiscrimination
 
 logger = logging.getLogger(__name__)

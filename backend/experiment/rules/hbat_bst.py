@@ -4,8 +4,8 @@ from section.models import Section
 from experiment.actions import Trial, Explainer, Step
 from experiment.actions.form import ChoiceQuestion, Form
 from experiment.actions.playback import Playback
-from experiment.util.actions import final_action_with_optional_button, render_feedback_trivia
-from experiment.util.final_score import get_average_difference_level_based
+from experiment.actions.utils import final_action_with_optional_button, render_feedback_trivia
+from experiment.actions.utils import get_average_difference_level_based
 
 from .h_bat import HBat
 

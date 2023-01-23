@@ -7,7 +7,7 @@ from experiment.actions.form import ButtonArrayQuestion, ChoiceQuestion, Form
 from experiment.actions.playback import Playback
 from .base import Base
 from os.path import join
-from experiment.util.actions import combine_actions
+from experiment.actions.utils import combine_actions
 from result.utils import prepare_result
 
 logger = logging.getLogger(__name__)

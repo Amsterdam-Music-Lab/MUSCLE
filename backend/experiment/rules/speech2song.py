@@ -8,9 +8,10 @@ from django.template.loader import render_to_string
 from .base import Base
 
 from experiment.actions import Consent, Explainer, Final, Question, Playlist, Trial, StartSession
-from experiment.util.actions import combine_actions
-from experiment.util.questions import question_by_key, EXTRA_DEMOGRAPHICS
-from experiment.util.languages import LANGUAGE, LanguageQuestion
+from experiment.actions.utils import combine_actions
+from experiment.questions.demographics import EXTRA_DEMOGRAPHICS
+from experiment.questions.languages import LANGUAGE, LanguageQuestion
+from experiment.questions.utils import question_by_key
 
 n_representations = 8
 n_trials_per_block = 8

@@ -2,8 +2,8 @@ from django.db.models import Avg
 from django.utils.translation import gettext_lazy as _
 from django.template.loader import render_to_string
 
-from experiment.util.actions import combine_actions
-from experiment.util.questions import question_by_key
+from experiment.actions.utils import combine_actions
+from experiment.questions.utils import question_by_key
 
 from experiment.actions import Consent, Explainer, Final, Playlist, Step, StartSession, Trial
 from experiment.actions.form import BooleanQuestion, ChoiceQuestion, Form, LikertQuestionIcon

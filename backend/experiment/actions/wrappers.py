@@ -1,8 +1,8 @@
 from django.utils.translation import gettext as _
 
-from ..actions.form import ChoiceQuestion, Form
-from ..actions.playback import Playback
-from ..actions.trial import Trial
+from .form import ChoiceQuestion, Form
+from .playback import Playback
+from .trial import Trial
 
 from result.utils import prepare_result
 
@@ -19,6 +19,7 @@ def two_alternative_forced(session, section, choices, expected_response=None, co
     question = ChoiceQuestion(
         key='choice',
         result_id=prepare_result(
+            session=session,
             section=section,
             expected_response=expected_response,
             scoring_rule=scoring_rule,

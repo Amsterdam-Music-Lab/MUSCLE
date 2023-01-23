@@ -1,16 +1,9 @@
-from copy import deepcopy
-
 from django.utils.translation import gettext_lazy as _
 
 from experiment.actions.form import ChoiceQuestion, Question
-from .iso_countries import ISO_COUNTRIES
-from .iso_languages import ISO_LANGUAGES
-from .isced_education import ISCED_EDUCATION_LEVELS
-from experiment.util.profile_scoring_rules import PROFILE_SCORING_RULES
-
-from result.utils import prepare_result
-
-# List of all available profile questions
+from experiment.standards.iso_countries import ISO_COUNTRIES
+from experiment.standards.iso_languages import ISO_LANGUAGES
+from experiment.standards.isced_education import ISCED_EDUCATION_LEVELS
 
 ATTAINED_EDUCATION_CHOICES = dict(
     ISCED_EDUCATION_LEVELS,
@@ -146,65 +139,3 @@ EXTRA_DEMOGRAPHICS = [
         }
     ),
 ]
-
-
-def question_by_key(key, questions=DEMOGRAPHICS, is_skippable=None, drop_choices=[]):
-    """Return question by given key"""
-    for question in questions:
-        if question.key == key:
-            q = deepcopy(question)
-            # Question is_skippable
-            if is_skippable != None:
-                q.is_skippable = is_skippable
-            if hasattr(question, 'choices') and len(drop_choices):
-                for choice in drop_choices:
-                    q.choices.pop(choice, None)
-            return q
-    return None
-
-
-def unasked_question(session, questions=DEMOGRAPHICS, is_skippable=False):
-    """Get unasked question, optionally skip results"""
-    profile_questions = session.participant.profile_questions()
-    for question in questions:
-        if not question.key in profile_questions:
-            q = deepcopy(question)
-            # Question is_skippable
-            if is_skippable != None:
-                q.is_skippable = is_skippable
-            return q
-    return None
-
-def next_question(session, questions=DEMOGRAPHICS, continue_with_random=False, is_skippable=False):
-    """Get next question of a list of questions for given session
-    - questions: list of questions to be asked
-    - is_skippable: set to True if a given question can be skipped
-    - continue_with_random: set to True if the function should return
-    random non-asked questions after initial list has been answered
-    """
-    # First: Ask all questions once
-    question = unasked_question(
-        session=session,
-        questions=questions,
-        is_skippable=is_skippable
-    )
-    if question:
-        question.result_id = prepare_result(
-            session,
-            is_profile=True,
-            scoring_rule=PROFILE_SCORING_RULES.get(question.key, '')
-        )
-        return question
-
-    if continue_with_random:
-    # Optionally, suggest questions with empty answer at random
-        empty_result = session.participant.random_empty_profile_question()
-        if empty_result:
-            return question_by_key(
-                key=empty_result.question_key,
-                questions=questions,
-                is_skippable=is_skippable
-            )
-
-    # Finally: return None if all questions have been completed
-    return None
