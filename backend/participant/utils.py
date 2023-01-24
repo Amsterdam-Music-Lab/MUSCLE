@@ -69,17 +69,18 @@ def visitor_ip_address(request):
 
 def get_participant(request):
     # get participant from session
+    participant_id = request.session.get(PARTICIPANT_KEY, -1)
     try:
         return Participant.objects.get(
-                pk=int(request.session[PARTICIPANT_KEY]))
-    except:
-        raise Exception('Participant not found')
+                pk=int(participant_id))
+    except Participant.DoesNotExist:
+        raise
 
 def get_or_create_participant(request):
     """Get a participant from the session, or create/add a new one"""
     try:
         participant = get_participant(request)
-    except:
+    except Participant.DoesNotExist:
         # create new participant
         country_code = country(request)
         access_info = request.META.get('HTTP_USER_AGENT')

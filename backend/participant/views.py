@@ -12,14 +12,14 @@ from django.utils.translation import ngettext_lazy as ngettext
 from django.utils.translation import gettext_lazy as _
 
 from .models import Participant
-from .utils import get_participant, set_participant
+from .utils import get_participant, get_or_create_participant, set_participant
 
 logger = logging.getLogger(__name__)
 
 
 def current(request):
     """Current participant data from session"""
-    participant = get_participant(request)
+    participant = get_or_create_participant(request)
     response = JsonResponse({
         'id': participant.id,
         'hash': participant.unique_hash,
