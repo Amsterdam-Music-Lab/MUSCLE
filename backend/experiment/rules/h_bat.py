@@ -40,7 +40,6 @@ class HBat(Base):
                 get_previous_condition,
                 1
             )
-            print(actions)
             return actions
         # actual experiment
         previous_results = session.result_set.order_by('-created_at')

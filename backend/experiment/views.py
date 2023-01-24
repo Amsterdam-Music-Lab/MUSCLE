@@ -14,7 +14,6 @@ logger = logging.getLogger(__name__)
 
 # Experiment
 
-
 def get_experiment(request, slug):
     """Get experiment data from active experiment with given :slug"""
     # get experiment
