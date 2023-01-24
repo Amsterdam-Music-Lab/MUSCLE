@@ -98,7 +98,7 @@ class MusicalPreferences(Base):
             feedback_form=form,
             title=_('Musical preference'),
             config={
-                'decision_time': section.duration + .1,
+                'response_time': section.duration + .1,
                 'style': 'boolean'
             }
         )

@@ -116,7 +116,7 @@ class BeatAlignment(Base):
             feedback_form=None,
             title=_('Example {}').format(count),
             config={
-                'decision_time': section.duration + .1,
+                'response_time': section.duration + .1,
                 'listen_first': True, 'auto_advance': True,
                 'show_continue_button': False
             }
@@ -150,7 +150,7 @@ class BeatAlignment(Base):
             feedback_form=form,
             title=_('Beat alignment'),
             config={
-                'decision_time': section.duration + .1,
+                'response_time': section.duration + .1,
                 'listen_first': True
             }
         )

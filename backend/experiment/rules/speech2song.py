@@ -250,7 +250,7 @@ def sound(section, n_representation=None):
         ready_time = 1
     config = {
         'ready_time': ready_time,
-        'decision_time': section.duration + .5,
+        'response_time': section.duration + .5,
         'show_animation': False
     }
     return view.action(config=config)

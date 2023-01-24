@@ -78,7 +78,7 @@ class BeatAlignmentRuleTest(TestCase):
                 "session_id": session_id,
                 "csrfmiddlewaretoken": csrf_token,
                 "json_data": json.dumps({
-                    "decision_time":2.5,
+                    "response_time":2.5,
                     "form":
                         [{  
                             "key": "aligned",

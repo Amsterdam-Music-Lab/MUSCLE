@@ -325,7 +325,7 @@ class Huang2022(Base):
         config = {
             'style': 'boolean-negative-first',
             'auto_advance': True,
-            'decision_time': cls.timeout
+            'response_time': cls.timeout
         }
         trial = Trial(
             title=cls.get_trial_title(session, next_round_number),

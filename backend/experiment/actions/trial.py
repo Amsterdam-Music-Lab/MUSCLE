@@ -19,7 +19,7 @@ class Trial(object):  # pylint: disable=too-few-public-methods
         - feedback_form: Form object (may be None)
         - title: string setting title in header of experiment
         - config: dictionary with following settings
-            - decision_time: how long to wait until stopping the player / proceeding to the next view
+            - response_time: how long to wait until stopping the player / proceeding to the next view
             - auto_advance: proceed to next view after player has stopped
             - listen_first: whether participant can submit before end of sound
             - style: style class to add to elements in form and playback
@@ -36,7 +36,7 @@ class Trial(object):  # pylint: disable=too-few-public-methods
         self.feedback_form = feedback_form
         self.title = title
         self.config = {
-            'decision_time': 5,
+            'response_time': 5,
             'auto_advance': False,
             'listen_first': False,
             'show_continue_button': True,

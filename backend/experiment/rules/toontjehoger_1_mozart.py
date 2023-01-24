@@ -154,7 +154,7 @@ class ToontjeHoger1Mozart(Base):
         listen_config = {
             'auto_advance': True,
             'show_continue_button': False,
-            'decision_time': section.duration
+            'response_time': section.duration
         }
 
         listen = Trial(
