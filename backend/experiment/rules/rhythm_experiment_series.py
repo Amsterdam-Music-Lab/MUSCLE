@@ -96,18 +96,18 @@ def prepare_experiments(session):
 
 
 def register_consent(session, experiment_list):
-    from ..models import Profile
+    from result.models import Result
     participant = session.participant
     for slug in experiment_list:
         question = 'consent_{}'.format(slug)
-        answer = True
+        answer = 'agreed'
         try:
-            profile = Profile.objects.get(
-                participant=participant, question=question)
-            profile.answer = answer
-        except Profile.DoesNotExist:
-            profile = Profile(participant=participant,
-                              question=question, answer=answer)
+            profile = Result.objects.get(
+                participant=participant, question_key=question)
+            profile.given_response = answer
+        except Result.DoesNotExist:
+            profile = Result(participant=participant,
+                              question_key=question, given_response=answer)
         profile.save()
 
 
