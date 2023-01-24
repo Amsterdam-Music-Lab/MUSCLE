@@ -90,7 +90,7 @@ class DurationDiscrimination(Base):
 
     @classmethod
     def register_difficulty(cls, session):
-        session.merge_json_data({'difficulty': cls.start_diff})
+        session.save_json_data({'difficulty': cls.start_diff})
         session.save()
 
     @classmethod
@@ -251,7 +251,7 @@ class DurationDiscrimination(Base):
                     action = None
                 else:
                     # register decreasing difficulty
-                    session.merge_json_data({'direction': 'decrease'})
+                    session.save_json_data({'direction': 'decrease'})
                     session.save()
                     # decrease difficulty
                     difficulty = cls.get_difficulty(
@@ -277,7 +277,7 @@ class DurationDiscrimination(Base):
                         action = None
                     else:
                         # register increasing difficulty
-                        session.merge_json_data({'direction': 'increase'})
+                        session.save_json_data({'direction': 'increase'})
                         session.save()
                         # increase difficulty
                         difficulty = cls.get_difficulty(
@@ -308,7 +308,7 @@ class DurationDiscrimination(Base):
         json_data = session.load_json_data()
         difficulty = json_data.get('difficulty')
         current_difficulty = difficulty * multiplier
-        session.merge_json_data({'difficulty': current_difficulty})
+        session.save_json_data({'difficulty': current_difficulty})
         session.save()
         # return rounded difficulty
         # this uses the decimal module, since round() does not work entirely as expected

@@ -117,7 +117,7 @@ class Huang2022(Base):
         }
 
         # Save, overwriting existing plan if one exists.
-        session.merge_json_data({'plan': plan})
+        session.save_json_data({'plan': plan})
         # session.save() is required for persistence
         session.save()
 
@@ -238,7 +238,7 @@ class Huang2022(Base):
                 )
                 actions.extend(Huang2022.get_questions(session))
                 actions.append(contact_question())
-                session.merge_json_data({'complete': True})
+                session.save_json_data({'complete': True})
                 session.save()
         return combine_actions(*actions)
 

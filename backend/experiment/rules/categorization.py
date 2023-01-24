@@ -51,7 +51,7 @@ class Categorization(Base):
         # Check if this participant already has a session
         if json_data == 'REPEAT':
             json_data = {'phase': 'REPEAT'}
-            session.merge_json_data(json_data)
+            session.save_json_data(json_data)
             session.save()
             final = Final(
                 session=session,
@@ -65,7 +65,7 @@ class Categorization(Base):
         # Total participants reached - Abort with message
         if json_data == 'FULL':
             json_data = {'phase': 'FULL'}
-            session.merge_json_data(json_data)
+            session.save_json_data(json_data)
             session.save()
             final = Final(
                 session=session,
@@ -83,7 +83,7 @@ class Categorization(Base):
         # Change phase to enable collecting results of second half of training-1
         if session.rounds_passed() == 10:
             json_data['phase'] = 'training-1B'
-            session.merge_json_data(json_data)
+            session.save_json_data(json_data)
             session.save()
 
         if rounds_passed == 0:
@@ -133,7 +133,7 @@ class Categorization(Base):
             if score_avg >= SCORE_AVG_MIN_TRAINING:
                 json_data['phase'] = "testing"
                 json_data['training_rounds'] = session.rounds_passed()
-                session.merge_json_data(json_data)
+                session.save_json_data(json_data)
                 session.save()
                 explainer = Explainer(
                     instruction="You are entering the main phase of the experiment. From now on you will only occasionally get feedback on your responses. Simply try to keep responding to the sound sequences as you did before.",
@@ -143,7 +143,7 @@ class Categorization(Base):
             else:
                 # Update passed training rounds for calc round_number
                 json_data['training_rounds'] = session.rounds_passed()
-                session.merge_json_data(json_data)
+                session.save_json_data(json_data)
                 session.save()
 
                 # Failed the training? exit experiment
@@ -353,7 +353,7 @@ class Categorization(Base):
                 'button_order': button_order,
                 'choices': choices
             }
-            session.merge_json_data(json_data)
+            session.save_json_data(json_data)
             session.save()
 
         return json_data
@@ -444,7 +444,7 @@ class Categorization(Base):
             json_data['feedback_sequence'] = feedback_sequence
             json_data['sequence'] = section_sequence
 
-        session.merge_json_data(json_data)
+        session.save_json_data(json_data)
         session.save()
 
         return json_data

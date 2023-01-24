@@ -55,7 +55,7 @@ def get_practice_views(
                 True, previous_condition)
             session.final_score = 1
             # remove any data saved for practice purposes
-            session.merge_json_data({'block': []})
+            session.save_json_data({'block': []})
             session.save()
             trial = first_trial_callback(session, trial_callback)
             return combine_actions(
@@ -123,7 +123,7 @@ def get_trial_condition_block(session, n_trials_per_block):
         catch_index = random.randrange(0, n_trials_per_block)
         block[catch_index] = 1
     condition = block.pop()
-    session.merge_json_data({'block': block})
+    session.save_json_data({'block': block})
     session.save()
     return condition
 

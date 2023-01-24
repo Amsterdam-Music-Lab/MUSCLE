@@ -211,7 +211,7 @@ def staircasing(session, trial_action_callback):
         if direction == 'increase':
             register_turnpoint(session, last_result)
         # register decreasing difficulty
-        session.merge_json_data({'direction': 'decrease'})
+        session.save_json_data({'direction': 'decrease'})
         session.save()
         level = get_previous_level(last_result) - 1  # decrease difficulty
         action = trial_action_callback(
@@ -231,7 +231,7 @@ def staircasing(session, trial_action_callback):
                 # mark the turnpoint
                 register_turnpoint(session, last_result)
             # register increasing difficulty
-            session.merge_json_data({'direction': 'increase'})
+            session.save_json_data({'direction': 'increase'})
             session.save()
             level = get_previous_level(last_result) + 1  # increase difficulty
             action = trial_action_callback(

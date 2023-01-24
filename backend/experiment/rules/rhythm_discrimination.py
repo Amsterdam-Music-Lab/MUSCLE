@@ -229,7 +229,7 @@ def plan_stimuli(session):
         nonmetric_deviants + nonmetric_standard
     random.shuffle(experiment)
     plan = practice + experiment
-    session.merge_json_data({'plan': plan})
+    session.save_json_data({'plan': plan})
     session.save()
 
 

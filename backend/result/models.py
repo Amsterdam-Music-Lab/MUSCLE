@@ -16,7 +16,6 @@ class Result(models.Model):
     created_at = models.DateTimeField(default=timezone.now)
     # Key of the question e.g.: AGE
     question_key = models.CharField(max_length=64, default='')
-
     expected_response = models.CharField(max_length=100, blank=True, null=True)
     given_response = models.CharField(max_length=100, blank=True, null=True)
     comment = models.CharField(max_length=100, default='')
@@ -34,23 +33,17 @@ class Result(models.Model):
     class Meta:
         ordering = ['created_at']
 
-    def save_json_data(self, data):
-        """Store data (object) to json_data string"""
-        self.json_data = json.dumps(data, indent=4) if data else ""
-
     def load_json_data(self):
         """Get json_data as object"""
-        return json.loads(self.json_data) if self.json_data else None
+        return json.loads(self.json_data) if self.json_data else {}
     
-    def merge_json_data(self, data):
+    def save_json_data(self, data):
         """Convert json data object to string and merge with json_data, overwriting duplicate keys.
 
         Only valid for JSON objects/Python dicts.
         """
-        if data:
-            self.json_data = json.dumps(
-                {**self.load_json_data(), **data}, indent=4)
-
+        updated_data = {**self.load_json_data(), **data}
+        self.json_data = json.dumps(updated_data)
 
     def export_admin(self):
         """Export data for admin"""

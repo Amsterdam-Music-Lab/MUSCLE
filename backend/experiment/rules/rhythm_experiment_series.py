@@ -90,7 +90,7 @@ def prepare_experiments(session):
     random.shuffle(random_list)
     experiment_list = lists['first'] + random_list + lists['last']
     register_consent(session, experiment_list)
-    session.merge_json_data({'experiments': experiment_list})
+    session.save_json_data({'experiments': experiment_list})
     session.save()
     return experiment_list
 

@@ -63,17 +63,12 @@ class Session(models.Model):
         return None
 
     def save_json_data(self, data):
-        """Convert json data object to string and store in json_data"""
-        self.json_data = json.dumps(data, indent=4) if data else "{}"
-
-    def merge_json_data(self, data):
         """Convert json data object to string and merge with json_data, overwriting duplicate keys.
 
         Only valid for JSON objects/Python dicts.
         """
-        if data:
-            self.json_data = json.dumps(
-                {**self.load_json_data(), **data}, indent=4)
+        updated_data = {**self.load_json_data(), **data}
+        self.json_data = json.dumps(updated_data)
 
     def load_json_data(self):
         """Get json data object from string json_data"""
