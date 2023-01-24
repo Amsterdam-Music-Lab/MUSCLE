@@ -30,12 +30,11 @@ def question_by_key(key, questions=DEMOGRAPHICS, is_skippable=None, drop_choices
             return q
     return None
 
-def unasked_question(session, questions=DEMOGRAPHICS, randomize=False, is_skippable=False):
-    """Get unasked question
+def unasked_question(session, questions=DEMOGRAPHICS, randomize=False):
+    """Get unasked question and prepare its result
     - session: session whose participant will be checked for unanswerd questions
     - questions: list of questions from which to select an unanswered question
     - optionally, randomize order of questions
-    - optionally, make question skipabble
     """
     if randomize:
         random.shuffle(questions)
@@ -43,9 +42,6 @@ def unasked_question(session, questions=DEMOGRAPHICS, randomize=False, is_skippa
     for question in questions:
         if not question.key in profile_questions:
             q = deepcopy(question)
-            # Question is_skippable
-            if is_skippable != None:
-                q.is_skippable = is_skippable
             try:
                 result_id = session.participant.profile().get(question_key=q.key)
             except Result.DoesNotExist:

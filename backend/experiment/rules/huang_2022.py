@@ -140,16 +140,9 @@ class Huang2022(Base):
         ]
         total = total_unanswered_questions(session, questions)
         return [
-            cls.create_question_trial(unasked_question(session, questions), index, total)
+            create_question_trial(unasked_question(session, questions), index, total)
             for index in range(1, total)
         ]
-    
-    def create_question_trial(self, question, index, total):
-        return Trial(
-            title=_("Questionnaire %(index)i/%(total)i") % {'index': index, 'total': total},
-            feedback_form=Form([question], is_skippable=question.is_skippable)
-        ).action()
-
 
     @staticmethod
     def next_round(session, request_session=None):
@@ -463,3 +456,9 @@ def contact_question():
     ],
     is_skippable=True)
     return Trial(playback=None, feedback_form=form, title=_("Help and feedback")).action()
+
+def create_question_trial(question, index, total):
+        return Trial(
+            title=_("Questionnaire %(index)i/%(total)i") % {'index': index, 'total': total},
+            feedback_form=Form([question], is_skippable=question.is_skippable)
+        ).action()
