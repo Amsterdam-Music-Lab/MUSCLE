@@ -35,7 +35,7 @@ class GoldMSI(Base):
 
     @classmethod
     def next_round(cls, session, request_session=None):
-        question = unasked_question(session, cls.questions)
+        question = unasked_question(session.participant, cls.questions)
         if question:
             feedback_form = Form([
                 question,

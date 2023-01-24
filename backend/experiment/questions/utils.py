@@ -7,9 +7,9 @@ from .demographics import DEMOGRAPHICS
 from result.utils import prepare_result
 from result.models import Result
 
-def total_unanswered_questions(session, questions=DEMOGRAPHICS):
+def total_unanswered_questions(participant, questions=DEMOGRAPHICS):
     """ Return how many questions have not been answered yet by the participant"""
-    profile_questions = session.participant.profile().exclude(
+    profile_questions = participant.profile().exclude(
         given_response=None
     ).values_list('question_key', flat=True)
     return len(list(set(profile_questions).difference(set([
@@ -30,7 +30,7 @@ def question_by_key(key, questions=DEMOGRAPHICS, is_skippable=None, drop_choices
             return q
     return None
 
-def unasked_question(session, questions=DEMOGRAPHICS, randomize=False):
+def unasked_question(participant, questions=DEMOGRAPHICS, randomize=False):
     """Get unasked question and prepare its result
     - session: session whose participant will be checked for unanswerd questions
     - questions: list of questions from which to select an unanswered question
@@ -38,16 +38,15 @@ def unasked_question(session, questions=DEMOGRAPHICS, randomize=False):
     """
     if randomize:
         random.shuffle(questions)
-    profile_questions = session.participant.profile_questions()
+    profile_questions = participant.profile_questions()
     for question in questions:
         if not question.key in profile_questions:
             q = deepcopy(question)
             try:
-                result_id = session.participant.profile().get(question_key=q.key)
+                result_id = participant.profile().get(question_key=q.key)
             except Result.DoesNotExist:
                 result_id = prepare_result(
-                    session,
-                    is_profile=True,
+                    participant=participant,
                     scoring_rule=PROFILE_SCORING_RULES.get(question.key, '')
                 )
             q.result_id = result_id

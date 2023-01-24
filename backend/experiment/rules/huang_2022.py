@@ -139,14 +139,14 @@ class Huang2022(Base):
             gender_question(),
             contact_question()
         ]
-        open_questions = total_unanswered_questions(session, questions)
+        open_questions = total_unanswered_questions(session.participant, questions)
         if not open_questions:
             return None
         total_questions = int(session.load_json_data().get('saved_total', '0'))
         if not total_questions:
             total_questions = open_questions     
             session.merge_json_data({'saved_total': open_questions})
-        question = unasked_question(session, questions)
+        question = unasked_question(session.participant, questions)
         if not question:
             return None
         index = total_questions - open_questions + 1

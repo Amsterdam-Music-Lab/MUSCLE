@@ -25,16 +25,16 @@ class UtilsTestCase(TestCase):
         cls.questions = DEMOGRAPHICS[:3]
     
     def test_unasked_question(self):
-        question = unasked_question(self.session, self.questions)
+        question = unasked_question(self.participant, self.questions)
         assert question.key == 'dgf_generation'
         Result.objects.create(
             participant=self.participant,
             question_key='dgf_generation',
             given_response='boomer'
         )
-        question = unasked_question(self.session, self.questions)
+        question = unasked_question(self.participant, self.questions)
         assert question.key == 'dgf_country_of_origin'
     
     def test_total_unanswered_questions(self):
-        number = total_unanswered_questions(self.session, self.questions)
+        number = total_unanswered_questions(self.participant, self.questions)
         assert number == 2

@@ -33,7 +33,7 @@ def handle_results(data, session):
         result = score_result(form_element, session)
     return result
 
-def prepare_result(session, is_profile=False, **kwargs):
+def prepare_result(session=None, participant=None, **kwargs):
     ''' Create a Result object, and provide its id to be serialized
     - session: the session on which the Result is going to be registered
     - is_profile: optionally, flag that the Result is a profile type question
@@ -43,17 +43,18 @@ def prepare_result(session, is_profile=False, **kwargs):
         - comment: optionally, provide a comment to be saved in the database, e.g. "training phase"
         - scoring_rule: optionally, provide a scoring rule
     '''
-    if not is_profile:
+    if session:
         result = Result(
             session=session,
             **kwargs
         )
-    else:
-        participant = session.participant
+    elif participant:
         result = Result(
             participant=participant,
             **kwargs
         )
+    else:
+        raise Exception('We need a session or participant to create a Result')
     result.save()
     return result.id 
 
