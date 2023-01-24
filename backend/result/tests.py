@@ -8,6 +8,8 @@ from result.models import Result
 from section.models import Playlist, Section
 from session.models import Session
 
+from result.utils import handle_results
+
 class ResultTest(TestCase):
 
     @classmethod
@@ -53,6 +55,26 @@ class ResultTest(TestCase):
         assert json.loads(response.content).get('answer') != None
         response = self.client.post('/result/create/', request)
         assert Result.objects.count() == 1
+    
+    def test_handle_results_with_form(self):
+        result1 = Result.objects.create(
+            session=self.session
+        )
+        result2 = Result.objects.create(
+            session=self.session
+        )
+        data = {
+            'form': [
+                {'key': 'silly_walk', 'value': 'very silly indeed', 'result_id': result1.pk},
+                {'key': 'tea', 'value': 'Ms Two Lumps', 'result_id': result2.pk}],
+            'config': {'something': 'registered as config'},
+            'decision_time': 42
+        }
+        handle_results(data, self.session)
+        assert self.session.result_count() == 2
+        json_data = json.loads(self.session.result_set.first().json_data)
+        assert json_data.get('config') != None
+        assert json_data.get('decision_time') == 42
 
 class ScoringTest(TestCase):
 
