@@ -122,7 +122,7 @@ class Huang2022(Base):
         session.save()
 
     @classmethod
-    def get_questions(cls, session):
+    def get_question(cls, session):
         """Get a list of all questions for the experiment (MSI and demographic questions),
         in fixed order
         """
@@ -137,12 +137,23 @@ class Huang2022(Base):
             origin_question(),
             residence_question(),
             gender_question(),
+            contact_question()
         ]
-        total = total_unanswered_questions(session, questions)
-        return [
-            create_question_trial(unasked_question(session, questions), index, total)
-            for index in range(1, total)
-        ]
+        open_questions = total_unanswered_questions(session, questions)
+        if not open_questions:
+            return None
+        total_questions = int(session.load_json_data().get('saved_total', '0'))
+        if not total_questions:
+            total_questions = open_questions     
+            session.merge_json_data({'saved_total': open_questions})
+        question = unasked_question(session, questions)
+        if not question:
+            return None
+        index = total_questions - open_questions + 1
+        return Trial(
+            title=_("Questionnaire %(index)i/%(total)i") % {'index': index, 'total': total_questions},
+            feedback_form=Form([question], is_skippable=question.is_skippable)
+        ).action()
 
     @staticmethod
     def next_round(session, request_session=None):
@@ -153,15 +164,7 @@ class Huang2022(Base):
         json_data = session.load_json_data()
         if json_data.get('complete'):
             # Finish session.
-            session.finish()
-            session.save()
-            final = Final(
-                session=session,
-                final_text=Huang2022.final_score_message(session),
-                rank=Huang2022.rank(session),
-                show_social=False,
-                show_profile_link=True
-            ).action()
+            
 
             return final
 
@@ -222,18 +225,34 @@ class Huang2022(Base):
             elif heard_before_offset < int(next_round_number / 2) + 1 <= session.experiment.rounds:
                 actions.append(
                     Huang2022.next_heard_before_action(session))
+            elif int(next_round_number / 2) + 1 == session.experiment.rounds + 1:
+                action = Huang2022.get_question(session)
+                if not action:
+                    actions.append(Huang2022.finalize())
+                else:
+                    actions.extend([Explainer(
+                        instruction=_("Please answer some questions \
+                        on your musical (Goldsmiths-MSI) and demographic background"),
+                        steps=[],
+                        button_label=_("Let's go!")).action(), action])
             else:
-                actions.append(Explainer(
-                    instruction=_("Please answer some questions \
-                    on your musical (Goldsmiths-MSI) and demographic background"),
-                    steps=[],
-                    button_label=_("Let's go!")).action()
-                )
-                actions.extend(Huang2022.get_questions(session))
-                actions.append(contact_question())
-                session.save_json_data({'complete': True})
-                session.save()
+                action = Huang2022.get_question(session)
+                if not action:
+                    action = Huang2022.finalize()
+                actions.append(action)
         return combine_actions(*actions)
+    
+    @classmethod
+    def finalize(cls, session):
+        session.finish()
+        session.save()
+        return Final(
+            session=session,
+            final_text=Huang2022.final_score_message(session),
+            rank=Huang2022.rank(session),
+            show_social=False,
+            show_profile_link=True
+        ).action()
 
     @classmethod
     def next_song_sync_action(cls, session):
@@ -456,9 +475,3 @@ def contact_question():
     ],
     is_skippable=True)
     return Trial(playback=None, feedback_form=form, title=_("Help and feedback")).action()
-
-def create_question_trial(question, index, total):
-        return Trial(
-            title=_("Questionnaire %(index)i/%(total)i") % {'index': index, 'total': total},
-            feedback_form=Form([question], is_skippable=question.is_skippable)
-        ).action()
