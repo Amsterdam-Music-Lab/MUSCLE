@@ -29,9 +29,10 @@ def categories_likert_score(result, data):
 
 def reaction_time_score(result, data):
     expected_response = check_expected_response(result)
-    if expected_response:
-        time = data.get('decision_time')
-        timeout = data.get('config').get('decision_time')
+    json_data = result.load_json_data()
+    if expected_response and json_data:
+        time = json_data.get('decision_time')
+        timeout = json_data.get('config').get('response_time')
         if expected_response == data['value']:
             return math.ceil(timeout - time)
         else:

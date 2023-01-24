@@ -26,10 +26,11 @@ def handle_results(data, session):
         result = score_result(data, session)
         return result
     for form_element in form:
-        result = score_result(form_element, session)
-        # save any relevant data (except for the popped form)
-        result.merge_json_data(data)
+        result = get_result(session, form_element)
+        # save relevant data such as config and decision time (except for the popped form)
+        result.save_json_data(data)
         result.save()
+        result = score_result(form_element, session)
     return result
 
 def prepare_result(session, is_profile=False, **kwargs):

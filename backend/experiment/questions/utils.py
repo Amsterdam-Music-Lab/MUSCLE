@@ -7,10 +7,6 @@ from .demographics import DEMOGRAPHICS
 from result.utils import prepare_result
 from result.models import Result
 
-# List of all available profile questions
-
-
-
 def total_unanswered_questions(session, questions=DEMOGRAPHICS):
     """ Return how many questions have not been answered yet by the participant"""
     profile_questions = session.participant.profile().exclude(
