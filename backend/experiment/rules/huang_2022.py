@@ -10,7 +10,7 @@ from experiment.actions.form import BooleanQuestion, ChoiceQuestion, Form, Quest
 from experiment.actions.playback import Playback
 from experiment.questions.demographics import EXTRA_DEMOGRAPHICS
 from experiment.questions.goldsmiths import MSI_ALL
-from experiment.questions.utils import question_by_key, unasked_question
+from experiment.questions.utils import question_by_key, unasked_question, total_unanswered_questions
 from experiment.actions.utils import combine_actions
 from result.utils import prepare_result
 
@@ -138,12 +138,18 @@ class Huang2022(Base):
             residence_question(),
             gender_question(),
         ]
+        total = total_unanswered_questions(session, questions)
         return [
-            Trial(
-                title=_("Questionnaire %(index)i/%(total)i") % {'index': index + 1, 'total': len(questions)},
-                feedback_form=Form([unasked_question(question)], is_skippable=question.is_skippable)).action() 
-            for index, question in enumerate(questions)
+            cls.create_question_trial(unasked_question(session, questions), index, total)
+            for index in range(1, total)
         ]
+    
+    def create_question_trial(self, question, index, total):
+        return Trial(
+            title=_("Questionnaire %(index)i/%(total)i") % {'index': index, 'total': total},
+            feedback_form=Form([question], is_skippable=question.is_skippable)
+        ).action()
+
 
     @staticmethod
     def next_round(session, request_session=None):
@@ -313,8 +319,7 @@ class Huang2022(Base):
                 'old': _("YES"),
             },
             question=_("Did you hear this song in previous rounds?"),
-            result_id=prepare_result(session, section=section, expected_response=expected_response),
-            scoring_rule='REACTION_TIME',
+            result_id=prepare_result(session, section=section, expected_response=expected_response, scoring_rule='REACTION_TIME',),
             submits=True)
             ])
         config = {
