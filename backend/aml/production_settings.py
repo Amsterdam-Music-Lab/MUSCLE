@@ -19,6 +19,18 @@ DATABASES = {
     }
 }
 
+DBBACKUP_CONNECTORS = {
+   'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'CONNECTOR': 'dbbackup.db.postgresql.PgDumpBinaryConnector',
+        'NAME': os.getenv('SQL_DATABASE'),
+        'USER': os.getenv('SQL_USER'),
+        'PASSWORD': os.getenv('SQL_PASSWORD'),
+        'HOST': os.getenv('SQL_HOST'),
+        'PORT': os.getenv('SQL_PORT'),
+    }
+}
+
 SESSION_COOKIE_SAMESITE = 'None'
 CSRF_COOKIE_SAMESITE = 'None'
 SESSION_COOKIE_SECURE = True
