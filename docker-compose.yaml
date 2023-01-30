@@ -16,7 +16,7 @@ services:
           - PGPASSWORD=${SQL_PASSWORD}
         volumes:
           - db_data:/var/lib/postgresql/data/
-        command: bash -c "docker-entrypoint.sh postgres && pg_dump aml > /var/lib/postgresql/data/backup-pre-migrate.sql" 
+        command: bash -c "docker-entrypoint.sh postgres && pg_dump aml -Fc > /var/lib/postgresql/data/backup-pre-migrate.sql" 
     ip2country:
         image: extrawurst/ip2country:latest
         ports:
