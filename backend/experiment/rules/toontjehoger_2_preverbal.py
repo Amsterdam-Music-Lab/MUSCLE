@@ -2,12 +2,13 @@ import logging
 from django.template.loader import render_to_string
 
 from .toontjehoger_1_mozart import toontjehoger_ranks
-from .views import Trial, Explainer, Step, Score, Final, StartSession, Playlist, Info, HTML
-from .views.form import ButtonArrayQuestion, ChoiceQuestion, Form
-from .views.playback import Playback
+from experiment.actions import Trial, Explainer, Step, Score, Final, StartSession, Playlist, Info, HTML
+from experiment.actions.form import ButtonArrayQuestion, ChoiceQuestion, Form
+from experiment.actions.playback import Playback
 from .base import Base
 from os.path import join
-from .util.actions import combine_actions
+from experiment.actions.utils import combine_actions
+from result.utils import prepare_result
 
 logger = logging.getLogger(__name__)
 
@@ -97,12 +98,12 @@ class ToontjeHoger2Preverbal(Base):
         else:
             if rounds_passed == 1:
                 appendix = "Op het volgende scherm kun je de geluiden beluisteren."
-                if last_result.score_model.value == cls.SCORE_CORRECT:
+                if last_result.score == cls.SCORE_CORRECT:
                     feedback = "Dat is correct! Spectrogram C is inderdaad van een mens. " + appendix
                 else:
                     feedback = "Helaas! Je antwoord was onjuist. Het geluid van spectrogram C is van een mens. " + appendix
             elif rounds_passed == 2:
-                if last_result.score_model.value == cls.SCORE_CORRECT:
+                if last_result.score == cls.SCORE_CORRECT:
                     feedback = "Dat is correct! Geluid A is inderdaad de Franse baby."
                 else:
                     feedback = "Helaas! Geluid A is de Franse baby."
@@ -114,9 +115,6 @@ class ToontjeHoger2Preverbal(Base):
 
     @classmethod
     def get_round1(cls, session):
-        result_pk = cls.prepare_result(
-            session, section=None, expected_response="C")
-
         # Question
         question = ButtonArrayQuestion(
             question="Welk spectrogram toont het geluid van een mens?",
@@ -127,8 +125,9 @@ class ToontjeHoger2Preverbal(Base):
                 'C': 'C',
             },
             view='BUTTON_ARRAY',
-            result_id=result_pk,
-            submits=True
+            submits=True,
+            result_id=prepare_result(
+            session, expected_response="C")
         )
         form = Form([question])
 
@@ -137,7 +136,6 @@ class ToontjeHoger2Preverbal(Base):
                 "/images/experiments/toontjehoger/preverbal_1.webp"),
             form=form,
             title=cls.TITLE,
-            result_id=result_pk
         ).action()
 
         return [image_trial]
@@ -199,9 +197,6 @@ class ToontjeHoger2Preverbal(Base):
 
     @classmethod
     def get_round2(cls, round, session):
-        # Create result
-        result_pk = cls.prepare_result(
-            session, section=None, expected_response="A")
 
         # Get sections
         # French
@@ -235,7 +230,7 @@ class ToontjeHoger2Preverbal(Base):
             },
             view='BUTTON_ARRAY',
             submits=True,
-            result_id=result_pk
+            result_id=prepare_result(session, expected_response="A")
         )
         form = Form([question])
 

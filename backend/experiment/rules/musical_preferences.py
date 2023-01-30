@@ -2,12 +2,14 @@ from django.db.models import Avg
 from django.utils.translation import gettext_lazy as _
 from django.template.loader import render_to_string
 
-from .util.actions import combine_actions
-from .util.questions import question_by_key
+from experiment.actions.utils import combine_actions
+from experiment.questions.utils import question_by_key
 
-from .views import Consent, Explainer, Final, Playlist, Step, StartSession, Trial
-from .views.form import BooleanQuestion, ChoiceQuestion, Form, LikertQuestion, LikertQuestionIcon
-from .views.playback import Playback
+from experiment.actions import Consent, Explainer, Final, Playlist, Step, StartSession, Trial
+from experiment.actions.form import BooleanQuestion, ChoiceQuestion, Form, LikertQuestionIcon
+from experiment.actions.playback import Playback
+
+from result.utils import prepare_result
 
 from .base import Base
 
@@ -37,7 +39,7 @@ class MusicalPreferences(Base):
 
     @classmethod
     def next_round(cls, session, request_session=None):
-        if session.last_result() and session.last_result().score_model.value == -1:
+        if session.last_result() and session.last_result().score == -1:
             # last result was key='continue', value='no':
             return cls.get_final_view(session)
         n_results = session.rounds_passed()
@@ -54,7 +56,7 @@ class MusicalPreferences(Base):
                     steps=[],
                     button_label=_("Let's go!")).action()
                 )
-                actions.extend(cls.get_questions())
+                actions.extend(cls.get_questions(session))
             question = BooleanQuestion(
                 question=_("Would you like to listen to more songs?"),
                 choices={
@@ -73,23 +75,21 @@ class MusicalPreferences(Base):
             return combine_actions(*actions)
 
         section = session.playlist.random_section()
-        result_id = cls.prepare_result(session, section)
         likert = LikertQuestionIcon(
             question=_('Do you like this song?'),
             key='like_song',
-            result_id=result_id
+            result_id=prepare_result(session, section=section, scoring_rule='LIKERT')
         )
-        result_id = cls.prepare_result(session, section)
         know = ChoiceQuestion(
             question=_('Do you know this song?'),
             key='know_song',
-            result_id=result_id,
             view='BUTTON_ARRAY',
             choices={
                 'yes': 'fa-thumbs-up',
                 'unsure': 'fa-question',
                 'no': 'fa-thumbs-down',
-            }
+            },
+            result_id=prepare_result(session, section=section)
         )
         playback = Playback([section], play_config={'show_animation': True})
         form = Form([likert, know])
@@ -98,7 +98,7 @@ class MusicalPreferences(Base):
             feedback_form=form,
             title=_('Musical preference'),
             config={
-                'decision_time': section.duration + .1,
+                'response_time': section.duration + .1,
                 'style': 'boolean'
             }
         )
@@ -140,7 +140,7 @@ class MusicalPreferences(Base):
     def get_preferred_songs(cls, result_set, n=5):
         top_songs = result_set.values('section').annotate(
             avg_score=Avg('score')).order_by()[:n]
-        from experiment.models.section import Section
+        from section.models import Section
         out_list = []
         for s in top_songs:
             section = Section.objects.get(pk=s.get('section'))
@@ -148,15 +148,15 @@ class MusicalPreferences(Base):
         return out_list
     
     @classmethod
-    def get_questions(cls):
+    def get_questions(cls, session):
         questions = [
-            question_by_key('dgf_generation'),
-            question_by_key('dgf_education', drop_choices=['isced-5']),
+            question_by_key('dgf_generation').prepare_result(session, is_profile=True),
+            question_by_key('dgf_education', drop_choices=['isced-5']).prepare_result(session, is_profile=True),
         ]
         return [
             Trial(
                 title=_("Questionnaire"),
-                feedback_form=Form([question], is_profile=True)).action() 
+                feedback_form=Form([question])).action() 
             for question in questions
         ]
 

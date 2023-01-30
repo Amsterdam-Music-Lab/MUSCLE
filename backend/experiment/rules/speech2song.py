@@ -7,10 +7,11 @@ from django.template.loader import render_to_string
 
 from .base import Base
 
-from .views import Consent, Explainer, Final, Question, Playlist, Trial, StartSession
-from .util.actions import combine_actions
-from .util.questions import question_by_key, EXTRA_DEMOGRAPHICS
-from .util.languages import LANGUAGE, LanguageQuestion
+from experiment.actions import Consent, Explainer, Final, Question, Playlist, Trial, StartSession
+from experiment.actions.utils import combine_actions
+from experiment.questions.demographics import EXTRA_DEMOGRAPHICS
+from experiment.questions.languages import LANGUAGE, LanguageQuestion
+from experiment.questions.utils import question_by_key
 
 n_representations = 8
 n_trials_per_block = 8
@@ -249,7 +250,7 @@ def sound(section, n_representation=None):
         ready_time = 1
     config = {
         'ready_time': ready_time,
-        'decision_time': section.duration + .5,
+        'response_time': section.duration + .5,
         'show_animation': False
     }
     return view.action(config=config)

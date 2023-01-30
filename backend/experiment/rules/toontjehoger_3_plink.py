@@ -1,12 +1,16 @@
 import logging
-from django.template.loader import render_to_string
-from .toontjehoger_1_mozart import toontjehoger_ranks
-from .views import Plink, Explainer, Step, Score, Final, StartSession, Playlist, Info
-from .views.form import RadiosQuestion
-from .base import Base
 from os.path import join
-from .util.actions import combine_actions
-from .util.strings import non_breaking
+from django.template.loader import render_to_string
+
+from .toontjehoger_1_mozart import toontjehoger_ranks
+from experiment.actions import Plink, Explainer, Step, Score, Final, StartSession, Playlist, Info
+from experiment.actions.form import RadiosQuestion
+from .base import Base
+
+from experiment.actions.utils import combine_actions
+from experiment.utils import non_breaking_spaces
+
+from result.utils import prepare_result
 
 logger = logging.getLogger(__name__)
 
@@ -89,9 +93,9 @@ class ToontjeHoger3Plink(Base):
 
         if main_question:
             if main_question == last_result.expected_response:
-                return "Goedzo! Je hoorde inderdaad {} van {}.".format(non_breaking(section.name), non_breaking(section.artist))
+                return "Goedzo! Je hoorde inderdaad {} van {}.".format(non_breaking_spaces(section.name), non_breaking_spaces(section.artist))
 
-            return "Helaas! Je hoorde {} van {}.".format(non_breaking(section.name), non_breaking(section.artist))
+            return "Helaas! Je hoorde {} van {}.".format(non_breaking_spaces(section.name), non_breaking_spaces(section.artist))
 
         # Option 2. Extra questions
         extra_questions = Plink.extract_extra_questions(data)
@@ -106,8 +110,8 @@ class ToontjeHoger3Plink(Base):
         feedback_prefix = "Goedzo!"
 
         # - Partial score or all questions wrong
-        all_wrong_score = last_result.score_model.value == 2 * cls.SCORE_EXTRA_WRONG
-        only_half_score = last_result.score_model.value < cls.SCORE_EXTRA_1_CORRECT + \
+        all_wrong_score = last_result.score == 2 * cls.SCORE_EXTRA_WRONG
+        only_half_score = last_result.score < cls.SCORE_EXTRA_1_CORRECT + \
             cls.SCORE_EXTRA_2_CORRECT if not all_wrong_score else False
 
         if all_wrong_score:
@@ -126,7 +130,7 @@ class ToontjeHoger3Plink(Base):
         question_part = "Het nummer komt uit de {} en de emotie is {}.".format(
             time_period, emotion)
         section_part = "Je hoorde {} van {}.".format(
-            non_breaking(section.name), non_breaking(section.artist))
+            non_breaking_spaces(section.name), non_breaking_spaces(section.artist))
 
         # The \n results in a linebreak
         feedback = "{} {} \n {}".format(
@@ -162,8 +166,6 @@ class ToontjeHoger3Plink(Base):
             raise Exception("Error: could not find section")
 
         expected_response = section.pk
-        result_pk = cls.prepare_result(
-            session, section=section, expected_response=expected_response)
 
         # Extra questions intro
         # --------------------
@@ -186,7 +188,8 @@ class ToontjeHoger3Plink(Base):
         plink = Plink(
             section=section,
             title=cls.TITLE,
-            result_id=result_pk,
+            result_id=prepare_result(
+            session, section=section, expected_response=expected_response),
             main_question="Noem de artiest en de titel van het nummer",
             choices=choices,
             submit_label="Volgende",

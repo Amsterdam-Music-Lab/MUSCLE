@@ -5,11 +5,11 @@ import copy
 from django.utils.translation import gettext_lazy as _
 
 from .base import Base
-from .views import Trial, Explainer, Consent, StartSession, Step, Question
-from .views.form import ChoiceQuestion, Form
-from .views.playback import Playback
-from .util.questions import question_by_key
-from .util.actions import combine_actions, final_action_with_optional_button, render_feedback_trivia
+from experiment.actions import Trial, Explainer, Consent, StartSession, Step, Question
+from experiment.actions.form import ChoiceQuestion, Form
+from experiment.actions.playback import Playback
+from experiment.actions.utils import final_action_with_optional_button, render_feedback_trivia
+from result.utils import prepare_result
 
 logger = logging.getLogger(__name__)
 
@@ -81,7 +81,7 @@ class BeatAlignment(Base):
             session.finish()
             session.save()
             percentage = int(
-                (sum([r.score_model.value for r in session.result_set.all()]) / session.experiment.rounds) * 100)
+                (sum([r.score for r in session.result_set.all()]) / session.experiment.rounds) * 100)
             feedback = _('Well done! You’ve answered {} percent correctly!').format(
                 percentage)
             trivia = _('In the UK, over 140.000 people did \
@@ -116,7 +116,7 @@ class BeatAlignment(Base):
             feedback_form=None,
             title=_('Example {}').format(count),
             config={
-                'decision_time': section.duration + .1,
+                'response_time': section.duration + .1,
                 'listen_first': True, 'auto_advance': True,
                 'show_continue_button': False
             }
@@ -129,8 +129,7 @@ class BeatAlignment(Base):
         filter_by = {'tag': '0'}
         section = session.section_from_unused_song(filter_by)
         condition = section.filename.split('_')[-1][:-4]
-        expected_result = 'ON' if condition == 'on' else 'OFF'
-        result_pk = cls.prepare_result(session, section, expected_result, scoring_rule='CORRECTNESS')
+        expected_response = 'ON' if condition == 'on' else 'OFF'
         question = ChoiceQuestion(
             question=_(
                 "Are the beeps ALIGNED TO THE BEAT or NOT ALIGNED TO THE BEAT?"),
@@ -140,7 +139,8 @@ class BeatAlignment(Base):
                 'OFF': _('NOT ALIGNED TO THE BEAT')
             },
             view='BUTTON_ARRAY',
-            result_id=result_pk,
+            result_id=prepare_result(session, section=section,
+                expected_response=expected_response, scoring_rule='CORRECTNESS'),
             submits=True
         )
         form = Form([question])
@@ -150,7 +150,7 @@ class BeatAlignment(Base):
             feedback_form=form,
             title=_('Beat alignment'),
             config={
-                'decision_time': section.duration + .1,
+                'response_time': section.duration + .1,
                 'listen_first': True
             }
         )

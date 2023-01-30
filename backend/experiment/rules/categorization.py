@@ -1,15 +1,14 @@
 from django.utils import timezone
 from django.template.loader import render_to_string
-from django.http import Http404
 from django.db.models import Avg
-from operator import ne
 
-from .views.form import Form, ChoiceQuestion
-from .views import Consent, Explainer, Score, StartSession, TwoAlternativeForced, Trial, Final
+from experiment.actions.form import Form, ChoiceQuestion
+from experiment.actions import Consent, Explainer, Score, StartSession, Trial, Final
+from experiment.actions.utils import combine_actions
+from experiment.actions.wrappers import two_alternative_forced
 
-from .util.actions import combine_actions
-
-from .util.questions import DEMOGRAPHICS, EXTRA_DEMOGRAPHICS, question_by_key
+from experiment.questions.demographics import EXTRA_DEMOGRAPHICS
+from experiment.questions.utils import question_by_key
 from .base import Base
 import random
 
@@ -52,7 +51,7 @@ class Categorization(Base):
         # Check if this participant already has a session
         if json_data == 'REPEAT':
             json_data = {'phase': 'REPEAT'}
-            session.merge_json_data(json_data)
+            session.save_json_data(json_data)
             session.save()
             final = Final(
                 session=session,
@@ -66,7 +65,7 @@ class Categorization(Base):
         # Total participants reached - Abort with message
         if json_data == 'FULL':
             json_data = {'phase': 'FULL'}
-            session.merge_json_data(json_data)
+            session.save_json_data(json_data)
             session.save()
             final = Final(
                 session=session,
@@ -84,7 +83,7 @@ class Categorization(Base):
         # Change phase to enable collecting results of second half of training-1
         if session.rounds_passed() == 10:
             json_data['phase'] = 'training-1B'
-            session.merge_json_data(json_data)
+            session.save_json_data(json_data)
             session.save()
 
         if rounds_passed == 0:
@@ -92,7 +91,7 @@ class Categorization(Base):
             profiles = session.participant.profile()
             for profile in profiles:
                 # Delete results and json from session and exit
-                if profile.answer == 'aborted':
+                if profile.given_response == 'aborted':
                     session.result_set.all().delete()
                     json_data = {'phase': 'ABORTED',
                                  'training_rounds': json_data['training_rounds']}
@@ -134,7 +133,7 @@ class Categorization(Base):
             if score_avg >= SCORE_AVG_MIN_TRAINING:
                 json_data['phase'] = "testing"
                 json_data['training_rounds'] = session.rounds_passed()
-                session.merge_json_data(json_data)
+                session.save_json_data(json_data)
                 session.save()
                 explainer = Explainer(
                     instruction="You are entering the main phase of the experiment. From now on you will only occasionally get feedback on your responses. Simply try to keep responding to the sound sequences as you did before.",
@@ -144,7 +143,7 @@ class Categorization(Base):
             else:
                 # Update passed training rounds for calc round_number
                 json_data['training_rounds'] = session.rounds_passed()
-                session.merge_json_data(json_data)
+                session.save_json_data(json_data)
                 session.save()
 
                 # Failed the training? exit experiment
@@ -181,7 +180,7 @@ class Categorization(Base):
                         'style': 'boolean'
                     }
                     explainer = Trial(title="Training failed", feedback_form=Form(
-                        [repeat_training_or_quit], is_profile=True), config=config).action()
+                        [repeat_training_or_quit]), config=config).action()
 
             feedback = cls.get_feedback(session)
             return combine_actions(feedback, explainer)
@@ -200,7 +199,7 @@ class Categorization(Base):
             # Calculate percentage of correct response to training stimuli
             final_score = 0
             for result in this_results:
-                if 'T' in result.section.name and result.score_model.value == 1:
+                if 'T' in result.section.name and result.score == 1:
                     final_score += 1
             score_percent = 100 * (final_score / 30)
 
@@ -221,7 +220,7 @@ class Categorization(Base):
                 final_text = "Congratulations! You did well and won a bronze medal!"
 
             # calculate the final score for the entire test sequence
-            # final_score = sum([result.score_model.value for result in training_results])
+            # final_score = sum([result.score for result in training_results])
             end_data = {
                 'phase': 'FINISHED',
                 'training_rounds': json_data['training_rounds'],
@@ -354,7 +353,7 @@ class Categorization(Base):
                 'button_order': button_order,
                 'choices': choices
             }
-            session.merge_json_data(json_data)
+            session.save_json_data(json_data)
             session.save()
 
         return json_data
@@ -445,7 +444,7 @@ class Categorization(Base):
             json_data['feedback_sequence'] = feedback_sequence
             json_data['sequence'] = section_sequence
 
-        session.merge_json_data(json_data)
+        session.save_json_data(json_data)
         session.save()
 
         return json_data
@@ -492,8 +491,6 @@ class Categorization(Base):
             expected_response = 'A'
         else:
             expected_response = 'B'
-        result_pk = cls.prepare_result(
-            session, section, expected_response, json_data['phase'])
 
         choices = json_data["choices"]
         config = {'listen_first': True,
@@ -502,10 +499,9 @@ class Categorization(Base):
                   'style': json_data["button_order"],
                   'time_pass_break': False
                   }
-        trial = TwoAlternativeForced(
-            section, choices, result_pk, title=cls.get_title(session), config=config)
-
-        return trial.action()
+        trial = two_alternative_forced(session, section, choices, expected_response,
+            comment=json_data['phase'], scoring_rule='CORRECTNESS', config=config)
+        return trial
 
     @classmethod
     def get_title(cls, session):
@@ -529,14 +525,14 @@ musical_experience_question = ChoiceQuestion(
 )
 
 questions = [question_by_key('dgf_age', EXTRA_DEMOGRAPHICS),
-             question_by_key('dgf_gender_reduced', DEMOGRAPHICS),
+             question_by_key('dgf_gender_reduced', EXTRA_DEMOGRAPHICS),
              question_by_key('dgf_native_language', EXTRA_DEMOGRAPHICS),
              musical_experience_question]
 
 questionaire = [
     Trial(
         title="Questionnaire",
-        feedback_form=Form([question], submit_label='Continue', is_profile=True)).action()
+        feedback_form=Form([question], submit_label='Continue')).action()
     for question in questions
 ]
 

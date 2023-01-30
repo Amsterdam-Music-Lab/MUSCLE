@@ -3,7 +3,7 @@
 from django.db import migrations, models
 import django.db.models.deletion
 import django.utils.timezone
-import experiment.models.section
+import section.models
 import uuid
 
 
@@ -75,7 +75,7 @@ class Migration(migrations.Migration):
                 ('filename', models.CharField(max_length=128)),
                 ('restrict_to_nl', models.BooleanField(default=False)),
                 ('play_count', models.PositiveIntegerField(default=0)),
-                ('code', models.PositiveIntegerField(default=experiment.models.section.Section.random_code)),
+                ('code', models.PositiveIntegerField(default=section.models.Section.random_code)),
                 ('tag_id', models.PositiveIntegerField(default=0)),
                 ('group_id', models.PositiveIntegerField(default=0)),
                 ('playlist', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='experiment.playlist')),

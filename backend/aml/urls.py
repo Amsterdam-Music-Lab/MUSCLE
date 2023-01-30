@@ -27,6 +27,10 @@ admin.site.index_title = "Welcome to AML Admin"
 # Urls patterns
 urlpatterns = [
     path('experiment/', include('experiment.urls')),
+    path('participant/', include('participant.urls')),
+    path('result/', include('result.urls')),
+    path('section/', include('section.urls')),
+    path('session/', include('session.urls')),
     path('admin/', admin.site.urls),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 #   ^ The static helper function only works in debug mode

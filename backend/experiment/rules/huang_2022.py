@@ -5,13 +5,14 @@ from django.utils.translation import gettext_lazy as _
 from django.template.loader import render_to_string
 
 from .base import Base
-from .views import SongSync, Final, Score, Explainer, Step, Consent, StartSession, Playlist, Trial
-from .views.form import BooleanQuestion, ChoiceQuestion, Form, Question
-from .views.playback import Playback
-from .views.html import HTML
-from .util.questions import EXTRA_DEMOGRAPHICS, question_by_key
-from .util.goldsmiths import MSI_ALL
-from .util.actions import combine_actions
+from experiment.actions import SongSync, Final, Score, Explainer, Step, Consent, StartSession, Playlist, Trial
+from experiment.actions.form import BooleanQuestion, ChoiceQuestion, Form, Question
+from experiment.actions.playback import Playback
+from experiment.questions.demographics import EXTRA_DEMOGRAPHICS
+from experiment.questions.goldsmiths import MSI_ALL
+from experiment.questions.utils import question_by_key, unasked_question, total_unanswered_questions
+from experiment.actions.utils import combine_actions
+from result.utils import prepare_result
 
 logger = logging.getLogger(__name__)
 
@@ -116,12 +117,12 @@ class Huang2022(Base):
         }
 
         # Save, overwriting existing plan if one exists.
-        session.merge_json_data({'plan': plan})
+        session.save_json_data({'plan': plan})
         # session.save() is required for persistence
         session.save()
 
     @classmethod
-    def get_questions(cls, session):
+    def get_question(cls, session):
         """Get a list of all questions for the experiment (MSI and demographic questions),
         in fixed order
         """
@@ -136,13 +137,23 @@ class Huang2022(Base):
             origin_question(),
             residence_question(),
             gender_question(),
+            contact_question()
         ]
-        return [
-            Trial(
-                title=_("Questionnaire %(index)i/%(total)i") % {'index': index + 1, 'total': len(questions)},
-                feedback_form=Form([question], is_profile=True, is_skippable=question.is_skippable)).action() 
-            for index, question in enumerate(questions)
-        ]
+        open_questions = total_unanswered_questions(session.participant, questions)
+        if not open_questions:
+            return None
+        total_questions = int(session.load_json_data().get('saved_total', '0'))
+        if not total_questions:
+            total_questions = open_questions     
+            session.merge_json_data({'saved_total': open_questions})
+        question = unasked_question(session.participant, questions)
+        if not question:
+            return None
+        index = total_questions - open_questions + 1
+        return Trial(
+            title=_("Questionnaire %(index)i/%(total)i") % {'index': index, 'total': total_questions},
+            feedback_form=Form([question], is_skippable=question.is_skippable)
+        ).action()
 
     @staticmethod
     def next_round(session, request_session=None):
@@ -153,15 +164,7 @@ class Huang2022(Base):
         json_data = session.load_json_data()
         if json_data.get('complete'):
             # Finish session.
-            session.finish()
-            session.save()
-            final = Final(
-                session=session,
-                final_text=Huang2022.final_score_message(session),
-                rank=Huang2022.rank(session),
-                show_social=False,
-                show_profile_link=True
-            ).action()
+            
 
             return final
 
@@ -193,6 +196,7 @@ class Huang2022(Base):
                 form=[
                     Question(
                         key='tech_problems',
+                        result_id=prepare_result(session),
                         explainer=_('Did you encounter any technical problems? E.g., no sound, music stopped playing, page loaded slow, page freezes, etc. '),
                         question=_("Please report on these in the field below as elaborate as possible. This will help us improving this experiment."),
                     )
@@ -221,18 +225,34 @@ class Huang2022(Base):
             elif heard_before_offset < int(next_round_number / 2) + 1 <= session.experiment.rounds:
                 actions.append(
                     Huang2022.next_heard_before_action(session))
+            elif int(next_round_number / 2) + 1 == session.experiment.rounds + 1:
+                action = Huang2022.get_question(session)
+                if not action:
+                    actions.append(Huang2022.finalize())
+                else:
+                    actions.extend([Explainer(
+                        instruction=_("Please answer some questions \
+                        on your musical (Goldsmiths-MSI) and demographic background"),
+                        steps=[],
+                        button_label=_("Let's go!")).action(), action])
             else:
-                actions.append(Explainer(
-                    instruction=_("Please answer some questions \
-                    on your musical (Goldsmiths-MSI) and demographic background"),
-                    steps=[],
-                    button_label=_("Let's go!")).action()
-                )
-                actions.extend(Huang2022.get_questions(session))
-                actions.append(contact_question())
-                session.merge_json_data({'complete': True})
-                session.save()
+                action = Huang2022.get_question(session)
+                if not action:
+                    action = Huang2022.finalize()
+                actions.append(action)
         return combine_actions(*actions)
+    
+    @classmethod
+    def finalize(cls, session):
+        session.finish()
+        session.save()
+        return Final(
+            session=session,
+            final_text=Huang2022.final_score_message(session),
+            rank=Huang2022.rank(session),
+            show_social=False,
+            show_profile_link=True
+        ).action()
 
     @classmethod
     def next_song_sync_action(cls, session):
@@ -256,10 +276,11 @@ class Huang2022(Base):
         if not section:
             print("Warning: no next_song_sync section found")
             section = session.section_from_any_song()
-        result_id = cls.prepare_result(session, section, scoring_rule='SONG_SYNC')
+        result_id = prepare_result(session, section=section, scoring_rule='SONG_SYNC')
         return SongSync(
             section=section,
             title=cls.get_trial_title(session, next_round_number),
+            key='song_sync',
             result_id=result_id
         ).action()
 
@@ -301,9 +322,8 @@ class Huang2022(Base):
             [section],
             play_config={'ready_time': 3, 'show_animation': True},
             preload_message=_('Get ready!'))
-        expected_result = this_section_info.get('novelty')
+        expected_response = this_section_info.get('novelty')
         # create Result object and save expected result to database
-        result_pk = cls.prepare_result(session, section, expected_result, scoring_rule='REACTION_TIME')
         form = Form([BooleanQuestion(
             key='heard_before',
             choices={
@@ -311,12 +331,13 @@ class Huang2022(Base):
                 'old': _("YES"),
             },
             question=_("Did you hear this song in previous rounds?"),
-            result_id=result_pk,
-            submits=True)])
+            result_id=prepare_result(session, section=section, expected_response=expected_response, scoring_rule='REACTION_TIME',),
+            submits=True)
+            ])
         config = {
             'style': 'boolean-negative-first',
             'auto_advance': True,
-            'decision_time': cls.timeout
+            'response_time': cls.timeout
         }
         trial = Trial(
             title=cls.get_trial_title(session, next_round_number),
@@ -348,12 +369,12 @@ class Huang2022(Base):
             if json_data.get('result') and json_data['result']['type'] == 'recognized':
                 n_sync_guessed += 1
                 sync_time += json_data['result']['recognition_time']
-                if result.score_model.value > 0:
+                if result.score > 0:
                     n_sync_correct += 1
             else:
                 if result.expected_response == 'old':
                     n_old_new_expected += 1
-                    if result.score_model.value > 0:
+                    if result.score > 0:
                         n_old_new_correct += 1
         thanks_message = _("Thank you for your contribution to science!")
         score_message = _(

@@ -3,9 +3,9 @@ import random
 from django.utils.translation import gettext_lazy as _
 
 from .base import Base
-from .views import Consent, Explainer, Playlist, StartSession, Step, Trial
-from .views.playback import Playback
-from .views.form import Form
+from experiment.actions import Consent, Explainer, Playlist, StartSession, Step, Trial
+from experiment.actions.playback import Playback
+from experiment.actions.form import Form
 
 class MatchingPairs(Base):
     ID = 'MATCHING_PAIRS'

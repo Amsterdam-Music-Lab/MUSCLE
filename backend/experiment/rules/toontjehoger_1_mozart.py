@@ -1,12 +1,14 @@
 import logging
 from django.template.loader import render_to_string
 from os.path import join
-from .views import Trial, Explainer, Step, Score, Final, StartSession, Playlist, Info, HTML
-from .views.form import ButtonArrayQuestion, Form
-from .views.playback import Playback
+from experiment.actions import Trial, Explainer, Step, Score, Final, StartSession, Playlist, Info, HTML
+from experiment.actions.form import ButtonArrayQuestion, Form
+from experiment.actions.playback import Playback
 from .base import Base
-from .util.actions import combine_actions
-from .util.strings import non_breaking
+from experiment.actions.utils import combine_actions
+from experiment.utils import non_breaking_spaces
+
+from result.utils import prepare_result
 
 logger = logging.getLogger(__name__)
 
@@ -95,7 +97,7 @@ class ToontjeHoger1Mozart(Base):
     def get_answer_explainer(cls, session, round):
         last_result = session.last_result()
 
-        correct_answer_given = last_result.score_model.value > 0
+        correct_answer_given = last_result.score > 0
 
         heading = "Goed gedaan!" if correct_answer_given else "Helaas!"
 
@@ -123,7 +125,7 @@ class ToontjeHoger1Mozart(Base):
         last_result = session.last_result()
         section = last_result.section
         feedback = "Je hoorde {} van {}.".format(
-            section.name, non_breaking(section.artist)) if section else ""
+            section.name, non_breaking_spaces(section.artist)) if section else ""
 
         # Return score view
         config = {'show_total_score': True}
@@ -139,9 +141,6 @@ class ToontjeHoger1Mozart(Base):
         if section == None:
             raise Exception("Error: could not find section")
 
-        result_pk = cls.prepare_result(
-            session, section=section, expected_response=expected_response)
-
         # Step 1
         # --------------------
 
@@ -155,7 +154,7 @@ class ToontjeHoger1Mozart(Base):
         listen_config = {
             'auto_advance': True,
             'show_continue_button': False,
-            'decision_time': section.duration
+            'response_time': section.duration
         }
 
         listen = Trial(
@@ -179,7 +178,8 @@ class ToontjeHoger1Mozart(Base):
                 'E': 'E',
             },
             view='BUTTON_ARRAY',
-            result_id=result_pk,
+            result_id=prepare_result(
+            session, section=section, expected_response=expected_response),
             submits=True
         )
         form = Form([question])
@@ -189,7 +189,6 @@ class ToontjeHoger1Mozart(Base):
                 image_url),
             form=form,
             title=cls.TITLE,
-            result_id=result_pk
         ).action()
 
         return [listen, image_trial]

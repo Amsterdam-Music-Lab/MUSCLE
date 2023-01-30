@@ -5,7 +5,7 @@ import { createResult } from "../API.js";
 // - collect results in a buffer
 // - handles advancing to next round
 // - finally submits the data to the API and loads the new state
-const useResultHandler = ({ session, participant, loadState, onNext, state }) => {
+const useResultHandler = ({ session, loadState, onNext, state }) => {
     const resultBuffer = useRef([]);
 
     const onResult = useCallback(
@@ -32,7 +32,6 @@ const useResultHandler = ({ session, participant, loadState, onNext, state }) =>
             // Create result data
             const data = {
                 session,
-                participant,
                 result: mergedResults,
             };
 
@@ -56,7 +55,7 @@ const useResultHandler = ({ session, participant, loadState, onNext, state }) =>
             // Init new state from action
             loadState(action);
         },
-        [session, participant, loadState, onNext, state]
+        [session, loadState, onNext, state]
     );
 
     return onResult;

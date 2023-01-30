@@ -1,11 +1,10 @@
-import json
 import random
 import numpy as np
 
 from django.utils.translation import gettext as _
 
-from ..views import Explainer, Step
-from .actions import combine_actions
+from experiment.actions import Explainer, Step
+from experiment.actions.utils import combine_actions
 
 
 def get_practice_views(
@@ -37,7 +36,7 @@ def get_practice_views(
     last_result = previous_results.first()
     if results_count < 4:
         # practice trial
-        correct = last_result.score_model.value > 0
+        correct = last_result.score > 0
         previous_condition = check_previous_condition(last_result)
         response_explainer = response_callback(correct, previous_condition)
         trial = trial_callback(
@@ -45,18 +44,18 @@ def get_practice_views(
         return combine_actions(response_explainer.action(), trial)
     else:
         # after last practice trial
-        penultimate_score = previous_results.all()[1].score_model.value
+        penultimate_score = previous_results.all()[1].score
         # delete previous practice sessions
         session.result_set.all().delete()
         session.save()
-        if last_result.score_model.value > 0 and penultimate_score > 0:
+        if last_result.score > 0 and penultimate_score > 0:
             # Practice went successfully, start experiment
             previous_condition = check_previous_condition(last_result)
             response_explainer = response_callback(
                 True, previous_condition)
             session.final_score = 1
             # remove any data saved for practice purposes
-            session.merge_json_data({'block': []})
+            session.save_json_data({'block': []})
             session.save()
             trial = first_trial_callback(session, trial_callback)
             return combine_actions(
@@ -124,7 +123,7 @@ def get_trial_condition_block(session, n_trials_per_block):
         catch_index = random.randrange(0, n_trials_per_block)
         block[catch_index] = 1
     condition = block.pop()
-    session.merge_json_data({'block': block})
+    session.save_json_data({'block': block})
     session.save()
     return condition
 

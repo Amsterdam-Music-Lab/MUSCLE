@@ -2,11 +2,13 @@ import logging
 from django.template.loader import render_to_string
 from os.path import join
 from .toontjehoger_1_mozart import toontjehoger_ranks
-from .views import Trial, Explainer, Step, Score, Final, StartSession, Playlist, Info
-from .views.form import ChoiceQuestion, Form
-from .views.playback import Playback
+from experiment.actions import Trial, Explainer, Step, Score, Final, StartSession, Playlist, Info
+from experiment.actions.form import ChoiceQuestion, Form
+from experiment.actions.playback import Playback
 from .base import Base
-from .util.actions import combine_actions
+from experiment.actions.utils import combine_actions
+
+from result.utils import prepare_result
 
 logger = logging.getLogger(__name__)
 
@@ -76,7 +78,7 @@ class ToontjeHoger6Relative(Base):
             logger.error("No last result")
             feedback = "Er is een fout opgetreden"
         else:
-            if last_result.score_model.value == cls.SCORE_CORRECT:
+            if last_result.score == cls.SCORE_CORRECT:
                 feedback = "Dat is correct! De melodieën in de muziekfragmenten zijn inderdaad verschillend."
             else:
                 feedback = "Helaas! De melodieën in de muziekfragmenten zijn toch echt verschillend."
@@ -108,20 +110,20 @@ class ToontjeHoger6Relative(Base):
 
         # Fragments A,B,C are all different, so answer is always NO
         expected_response = "NO"
-        result_pk = cls.prepare_result(
-            session, section=section1, expected_response=expected_response)
 
         # Question
         question = ChoiceQuestion(
             question="Zijn deze twee melodieën hetzelfde?",
-            key='same_melodie',
+            key='same_melody',
             choices={
                 "YES": "Ja",
                 "NO": "Nee",
             },
             view='BUTTON_ARRAY',
-            result_id=result_pk,
-            submits=True
+            submits=True,
+            result_id=prepare_result(
+            session, section=section1, expected_response=expected_response
+        )
         )
         form = Form([question])
 

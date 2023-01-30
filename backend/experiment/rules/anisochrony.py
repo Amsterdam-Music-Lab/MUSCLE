@@ -1,12 +1,11 @@
 import logging
 from django.utils.translation import gettext_lazy as _
 
-from experiment.models import Section
-from .views import Trial, Explainer, Step, Consent, StartSession, Playlist
-from .views.form import ChoiceQuestion, Form
-from .views.playback import Playback
-from .util.actions import render_feedback_trivia
-from .base import Base
+from section.models import Section
+from experiment.actions import Trial, Explainer, Step
+from experiment.actions.form import ChoiceQuestion, Form
+from experiment.actions.playback import Playback
+from experiment.actions.utils import render_feedback_trivia
 from .duration_discrimination import DurationDiscrimination
 
 logger = logging.getLogger(__name__)
@@ -42,6 +41,7 @@ class Anisochrony(DurationDiscrimination):
         - trial_condition: 1 for catch trial, 0 for normal trial
         - difficulty: the current difficulty (in ms) of the trial
         """
+        from result.utils import prepare_result
         if trial_condition == 1:
             # catch trial
             difference = 0
@@ -51,9 +51,7 @@ class Anisochrony(DurationDiscrimination):
             section = session.playlist.section_set.get(name=difference)
         except Section.DoesNotExist:
             return None
-        expected_result = 'REGULAR' if difference == 0 else 'IRREGULAR'
-        # create Result object and save expected result to database
-        result_pk = cls.prepare_result(session, section, expected_result)
+        expected_response = 'REGULAR' if difference == 0 else 'IRREGULAR'
         question = ChoiceQuestion(
             key='if_regular',
             question=_(
@@ -63,14 +61,15 @@ class Anisochrony(DurationDiscrimination):
                 'IRREGULAR': _('IRREGULAR')
             },
             view='BUTTON_ARRAY',
-            result_id=result_pk,
+            result_id=prepare_result(session, section=section, expected_response=expected_response),
             submits=True
         )
+        
         playback = Playback([section])
         form = Form([question])
         config = {
             'listen_first': True,
-            'decision_time': section.duration + .1
+            'response_time': section.duration + .1
         }
         view = Trial(
             playback=playback,
