@@ -25,7 +25,7 @@ const Plink = ({
     dontKnowLabel,
     extraQuestions,
     extraQuestionsIntro,
-    resultId,
+    result_id,
     onResult,
 }) => {
     // Component view
@@ -42,14 +42,14 @@ const Plink = ({
     const submitData = useCallback(() => {
         onResult(
             {
-                result_id: resultId,
+                result_id: result_id,
                 config: {},
                 main_question: mainQuestionValue,
                 extra_questions: extraQuestionValues.current,
             },
             true
         );
-    }, [mainQuestionValue, resultId, onResult]);
+    }, [mainQuestionValue, result_id, onResult]);
 
     // extra Questions mode
     // =================================

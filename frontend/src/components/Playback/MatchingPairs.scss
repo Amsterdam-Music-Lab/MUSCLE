@@ -1,0 +1,42 @@
+.aha__matching_pairs {
+    display: flex;
+    column-gap: 25px;
+    row-gap: 25px;
+    flex-wrap: wrap;
+    max-width: 100%;
+
+    &.player-count-2 {
+        column-gap: 50px;
+    }
+
+    &.player-count-2 {
+        column-gap: 30px;
+    }
+
+    .player-wrapper {
+        position: relative;
+    }
+
+    .buttons {
+        max-width: 350px;
+
+        .aha__button {
+            margin-bottom: 10px;
+            margin-right: 5px;
+            margin-left: 5px;
+        }
+    }
+
+    .instruction {
+        min-height: 55px;
+        h3 {
+            margin: 0;
+        }
+    }
+
+
+    .feedback {
+        padding-top: 50px;
+        font-size: large;
+    }
+}

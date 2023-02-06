@@ -12,6 +12,7 @@ const MultiPlayer = ({
     playConfig,
     disabledPlayers,
     extraContent,
+    registerUserClicks
 }) => {
     return (
         <div
@@ -21,14 +22,6 @@ const MultiPlayer = ({
             )}
         >
             {Object.keys(sections).map((index) => (
-            //     <PlayCard 
-            //     key={index}
-            //     onClick={()=> playSection(index)}
-            //     registerUserClicks={registerUserClicks}
-            //     playing={playerIndex === index}
-            //     inactive={sections[index].inactive}
-            //     turned={sections[index].turned}
-            // />
                 <div className="player-wrapper" key={index}>
                     <PlayerSmall
                         onClick={() => {
@@ -50,8 +43,8 @@ const MultiPlayer = ({
                         playing={playerIndex === index}
                     />
                     {extraContent && extraContent(index)}
-                </div>
-            ))}
+                </div>)
+            )}
         </div>
     );
 };

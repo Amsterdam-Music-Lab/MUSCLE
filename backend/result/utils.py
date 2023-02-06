@@ -71,7 +71,9 @@ def score_result(data, session):
     }
     """
     result = get_result(session, data)
-    result.question_key = data.get('key')
+    key = data.get('key')
+    if key:
+        result.question_key = key
     result.given_response = data.get('value')
     # Calculate score: by default, apply a scoring rule
     # Can be overridden by defining calculate_score in the rules file    

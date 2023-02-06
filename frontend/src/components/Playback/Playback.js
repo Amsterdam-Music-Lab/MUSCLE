@@ -7,11 +7,13 @@ import AutoPlay from "./Autoplay";
 import PlayButton from "../PlayButton/PlayButton";
 import MultiPlayer from "./MultiPlayer";
 import SpectrogramPlayer from "./SpectrogramPlayer";
+import MatchingPairs from "./MatchingPairs";
 
 export const AUTOPLAY = "AUTOPLAY";
 export const BUTTON = "BUTTON";
 export const MULTIPLAYER = "MULTIPLAYER";
 export const SPECTROGRAM = "SPECTROGRAM";
+export const MATCHINGPAIRS = "MATCHINGPAIRS";
 
 const Playback = ({
     playerType,
@@ -23,17 +25,13 @@ const Playback = ({
     responseTime,
     playConfig = {},
     time,
-    makeResult,
+    submitResult,
     startedPlaying,
     finishedPlaying,
 }) => {
     const [playerIndex, setPlayerIndex] = useState(-1);
     const lastPlayerIndex = useRef(-1);
     const activeAudioEndedListener = useRef(null);
-    const xPosition = useRef(-1);
-    const yPosition = useRef(-1);
-
-    const resultBuffer = [];
 
     // Keep track of which player has played, in a an array of player indices
     const [hasPlayed, setHasPlayed] = useState([]);
@@ -124,7 +122,6 @@ const Playback = ({
                         playAudio(index);
                     }
                 );
-                checkMatchingPairs(index);
                 
                 return;
             }
@@ -141,38 +138,6 @@ const Playback = ({
         },
         [playAudio, sections]
     );
-
-    const registerUserClicks = (posX, posY) => {
-        xPosition.current = posX;
-        yPosition.current = posY;
-    }
-
-    const checkMatchingPairs = (index) => {
-        resultBuffer.push({
-            selectedSection: sections[index],
-            xPosition: xPosition.current,
-            yPosition: yPosition.current
-        })
-        
-        if (sections.filter(s => s.turned).length < 2) {
-            sections[index].turned = true;
-        } else {
-            sections.forEach(section => section.turned = false);
-            sections[index].turned = true;
-            return;
-        }
-
-        if (lastPlayerIndex.current >=0 && sections[lastPlayerIndex.current].id === sections[index].id) {
-            // match
-            sections[lastPlayerIndex.current].inactive = true;
-            sections[index].inactive = true;
-            if (sections.filter(s => s.inactive).length === sections.length) {
-                // all cards have been turned
-                makeResult(resultBuffer);
-            }
-        }
-        return;
-    }
 
     // Local logic for onfinished playing
     const onFinishedPlaying = useCallback(() => {
@@ -206,7 +171,9 @@ const Playback = ({
             playerIndex,
             finishedPlaying: onFinishedPlaying,
             playSection,
-            registerUserClicks
+            lastPlayerIndex,
+            setPlayerIndex,
+            submitResult
         };
 
         switch (view) {
@@ -232,6 +199,12 @@ const Playback = ({
                     <SpectrogramPlayer
                         {...attrs}
                         disabledPlayers={playConfig.play_once ? hasPlayed : undefined}
+                    />
+                );
+            case MATCHINGPAIRS:
+                return (
+                    <MatchingPairs
+                        {...attrs}
                     />
                 );
             default:

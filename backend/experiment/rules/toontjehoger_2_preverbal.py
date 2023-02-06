@@ -180,7 +180,7 @@ class ToontjeHoger2Preverbal(Base):
             view='BUTTON_ARRAY',
             submits=True
         )
-        form = Form([question], create_result=False)
+        form = Form([question])
 
         # Trial
         trial_config = {
@@ -190,7 +190,7 @@ class ToontjeHoger2Preverbal(Base):
         trial = Trial(
             config=trial_config,
             playback=playback,
-            feedback_form=form,
+            feedback_form=None,
             title=cls.TITLE,
         ).action()
         return [trial]

@@ -37,7 +37,7 @@ class HTML(object):  # pylint: disable=too-few-public-methods
         action = {
             'view': HTML.ID,
             'title': self.title,
-            'resultId': self.result_id,
+            'result_id': self.result_id,
             'style': self.style,
             'html': self.html,
             'form': self.form.action(),

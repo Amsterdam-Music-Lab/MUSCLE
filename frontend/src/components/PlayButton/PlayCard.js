@@ -9,7 +9,7 @@ const PlayCard = ({ onClick, registerUserClicks, playing, inactive, turned }) =>
             registerUserClicks(event.clientX, event.clientY);
             onClick();
         }}>
-                { turned && !inactive?
+                { turned ?
                     <Histogram 
                         className="front"
                         running={playing}

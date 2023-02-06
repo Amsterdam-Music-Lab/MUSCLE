@@ -55,7 +55,7 @@ class SongSync(object):  # pylint: disable=too-few-public-methods
         action = {
             'view': self.ID,
             'section': self.section.absolute_url(),
-            'resultId': self.result_id,
+            'result_id': self.result_id,
             'config': self.config,
             'key': self.key,
             'title': self.title,

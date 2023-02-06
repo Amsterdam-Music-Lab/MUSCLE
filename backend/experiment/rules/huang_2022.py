@@ -162,12 +162,7 @@ class Huang2022(Base):
         # If the number of results equals the number of experiment.rounds,
         # close the session and return data for the final_score view.
         json_data = session.load_json_data()
-        if json_data.get('complete'):
-            # Finish session.
-            
-
-            return final
-
+        
         # Get next round number and initialise actions list. Two thirds of
         # rounds will be song_sync; the remainder heard_before.
         next_round_number = session.get_next_round()
@@ -238,7 +233,7 @@ class Huang2022(Base):
             else:
                 action = Huang2022.get_question(session)
                 if not action:
-                    action = Huang2022.finalize()
+                    action = Huang2022.finalize(session)
                 actions.append(action)
         return combine_actions(*actions)
     
