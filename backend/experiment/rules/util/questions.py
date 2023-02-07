@@ -95,27 +95,6 @@ DEMOGRAPHICS = [
         question=_("The instrument I play best, including voice (or none), is:")
     ),
 
-    ChoiceQuestion(
-        key='ST_01_age_instrument',
-        question=_("What age did you start to play an instrument?"),
-        choices={
-            '2 - 19': _('2 - 19'),
-            'I don’t play any instrument.': _('I don’t play any instrument.'),
-        },
-        view='RADIOS',
-        scoring_rule='CATEGORIES_TO_LIKERT'
-    ),
-
-    ChoiceQuestion(
-        key='AP_01_absolute_pitch',
-        question=_("Do you have absolute pitch? Absolute or perfect pitch is the ability to recognise and name an isolated musical tone without a reference tone, e.g. being able to say 'F#' if someone plays that note on the piano."),
-        choices={
-            'yes': _('yes'),
-            'no': _('no'),
-        },
-        view='RADIOS',
-        scoring_rule='CATEGORIES_TO_LIKERT'
-    )
 ]
 
 
