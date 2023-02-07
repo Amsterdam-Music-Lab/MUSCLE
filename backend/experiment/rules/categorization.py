@@ -6,6 +6,7 @@ from experiment.actions.form import Form, ChoiceQuestion
 from experiment.actions import Consent, Explainer, Score, StartSession, Trial, Final
 from experiment.actions.utils import combine_actions
 from experiment.actions.wrappers import two_alternative_forced
+from experiment.questions.utils import unasked_question
 
 from experiment.questions.demographics import EXTRA_DEMOGRAPHICS
 from experiment.questions.utils import question_by_key
@@ -31,17 +32,16 @@ class Categorization(Base):
             'consent/consent_categorization.html')
         consent = Consent.action(
             rendered, title='Informed consent', confirm='I agree', deny='Stop')
-        explainer2 = Explainer(
-            instruction="The experiment will now begin. Please don't close the browser during the experiment. You can only run it once. Click to start a sound sequence.",
-            steps=[],
-            button_label='Ok'
-        ).action()
+        
         start_session = StartSession.action()
-        return [explainer, consent] + questionaire + [explainer2, start_session]
+        return [explainer, consent, start_session]
 
     @classmethod
     def next_round(cls, session):
-
+        action = cls.get_question(session)
+        if action:
+            return action
+        
         json_data = session.load_json_data()
 
         # Plan experiment on the first call to next_round
@@ -112,10 +112,18 @@ class Categorization(Base):
             json_data = cls.plan_phase(session)
 
         if 'training' in json_data['phase']:
+            if rounds_passed == 0:
+                explainer2 = Explainer(
+                    instruction="The experiment will now begin. Please don't close the browser during the experiment. You can only run it once. Click to start a sound sequence.",
+                    steps=[],
+                    button_label='Ok'
+                ).action()
+                trial = cls.next_trial_action(session)
+                return combine_actions(explainer2, trial)
 
             # Get next training action
-            if rounds_passed < len(json_data['sequence']):
-                return cls.next_trial_action(session) if rounds_passed == 0 else cls.get_trial_with_feedback(session)
+            elif rounds_passed < len(json_data['sequence']):
+                return cls.get_trial_with_feedback(session)
 
             # Training phase completed, get the results
             training_rounds = int(json_data['training_rounds'])
@@ -360,7 +368,6 @@ class Categorization(Base):
 
     @classmethod
     def plan_phase(cls, session):
-
         json_data = session.load_json_data()
 
         if 'training' in json_data['phase']:
@@ -393,6 +400,7 @@ class Categorization(Base):
                 section_sequence.append(sections[0].id)
                 section_sequence.append(sections[1].id)
             random.shuffle(section_sequence)
+            print(section_sequence)
             json_data['sequence'] = section_sequence
 
         else:
@@ -509,6 +517,15 @@ class Categorization(Base):
         rounds_passed = (session.rounds_passed() -
                          int(json_data['training_rounds']))
         return f"Round {rounds_passed} / {len(json_data['sequence'])}"
+    
+    @classmethod
+    def get_question(cls, session):
+        question = unasked_question(session.participant, questions)
+        if not question:
+            return None
+        return Trial(
+            title="Questionnaire",
+            feedback_form=Form([question], submit_label='Continue')).action()
 
 
 musical_experience_question = ChoiceQuestion(
@@ -528,13 +545,6 @@ questions = [question_by_key('dgf_age', EXTRA_DEMOGRAPHICS),
              question_by_key('dgf_gender_reduced', EXTRA_DEMOGRAPHICS),
              question_by_key('dgf_native_language', EXTRA_DEMOGRAPHICS),
              musical_experience_question]
-
-questionaire = [
-    Trial(
-        title="Questionnaire",
-        feedback_form=Form([question], submit_label='Continue')).action()
-    for question in questions
-]
 
 repeat_training_or_quit = ChoiceQuestion(
     key='failed_training',

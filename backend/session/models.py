@@ -96,7 +96,7 @@ class Session(models.Model):
 
     def rounds_passed(self):
         """Get number of rounds passed"""
-        return self.result_set.count() + self.participant.result_set.count()
+        return self.result_set.count()
 
     def get_next_round(self):
         """Get next round number"""
