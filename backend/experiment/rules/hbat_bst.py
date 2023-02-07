@@ -6,6 +6,7 @@ from experiment.actions.form import ChoiceQuestion, Form
 from experiment.actions.playback import Playback
 from experiment.actions.utils import final_action_with_optional_button, render_feedback_trivia
 from experiment.actions.utils import get_average_difference_level_based
+from result.utils import prepare_result
 
 from .h_bat import HBat
 
@@ -47,8 +48,9 @@ class BST(HBat):
             raise
         expected_response = 'in2' if trial_condition else 'in3'
         # create Result object and save expected result to database
+        key = 'longer_or_equal'
         question = ChoiceQuestion(
-            key='longer_or_equal',
+            key=key,
             question=_(
                 "Is the rhythm a DUPLE METER (MARCH) or a TRIPLE METER (WALTZ)?"),
             choices={
@@ -56,10 +58,11 @@ class BST(HBat):
                 'in3': _('TRIPLE METER')
             },
             view='BUTTON_ARRAY',
+            result_id=prepare_result(
+                key, session, section=section,
+                expected_response=expected_response, scoring_rule='CORRECTNESS'),
             submits=True
         )
-        question.prepare_result(session, section=section,
-            expected_response=expected_response, scoring_rule='CORRECTNESS')
         playback = Playback([section])
         form = Form([question])
         view = Trial(

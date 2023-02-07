@@ -16,9 +16,11 @@ def two_alternative_forced(session, section, choices, expected_response=None, co
         [section],
         'BUTTON'
     )
+    key = 'choice'
     question = ChoiceQuestion(
-        key='choice',
+        key=key,
         result_id=prepare_result(
+            key,
             session=session,
             section=section,
             expected_response=expected_response,

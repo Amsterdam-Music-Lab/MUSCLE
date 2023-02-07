@@ -12,9 +12,7 @@ def total_unanswered_questions(participant, questions=DEMOGRAPHICS):
     profile_questions = participant.profile().exclude(
         given_response=None
     ).values_list('question_key', flat=True)
-    return len(list(set(profile_questions).difference(set([
-        question.key for question in questions
-    ]))))
+    return len([question for question in questions if question.key not in profile_questions])
 
 def question_by_key(key, questions=DEMOGRAPHICS, is_skippable=None, drop_choices=[]):
     """Return question by given key"""
@@ -46,6 +44,7 @@ def unasked_question(participant, questions=DEMOGRAPHICS, randomize=False):
                 result_id = participant.profile().get(question_key=q.key)
             except Result.DoesNotExist:
                 result_id = prepare_result(
+                    question.key,
                     participant=participant,
                     scoring_rule=PROFILE_SCORING_RULES.get(question.key, '')
                 )

@@ -164,8 +164,9 @@ def next_trial_actions(session, round_number, request_session):
         return actions
 
     expected_response = 'SAME' if condition['group'] == '1' else 'DIFFERENT'
+    key = 'same'
     question = ChoiceQuestion(
-        key='same',
+        key=key,
         question=_(
             "Is the third rhythm the SAME or DIFFERENT?"),
         choices={
@@ -173,7 +174,7 @@ def next_trial_actions(session, round_number, request_session):
             'DIFFERENT': _('DIFFERENT')
         },
         view='BUTTON_ARRAY',
-        result_id=prepare_result(session, expected_response=expected_response, scoring_rule='CORRECTNESS'),
+        result_id=prepare_result(key, session, expected_response=expected_response, scoring_rule='CORRECTNESS'),
         submits=True
     )
     form = Form([question])

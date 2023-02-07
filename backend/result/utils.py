@@ -33,7 +33,7 @@ def handle_results(data, session):
         result = score_result(form_element, session)
     return result
 
-def prepare_result(session=None, participant=None, **kwargs):
+def prepare_result(question_key, session=None, participant=None, **kwargs):
     ''' Create a Result object, and provide its id to be serialized
     - session: the session on which the Result is going to be registered
     - is_profile: optionally, flag that the Result is a profile type question
@@ -45,11 +45,13 @@ def prepare_result(session=None, participant=None, **kwargs):
     '''
     if session:
         result = Result(
+            question_key=question_key,
             session=session,
             **kwargs
         )
     elif participant:
         result = Result(
+            question_key=question_key,
             participant=participant,
             **kwargs
         )
@@ -71,7 +73,6 @@ def score_result(data, session):
     }
     """
     result = get_result(session, data)
-    result.question_key = data.get('key')
     result.given_response = data.get('value')
     # Calculate score: by default, apply a scoring rule
     # Can be overridden by defining calculate_score in the rules file    

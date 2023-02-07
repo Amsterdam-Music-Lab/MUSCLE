@@ -89,8 +89,9 @@ class HBat(Base):
         except Section.DoesNotExist:
             raise
         expected_response = 'SLOWER' if trial_condition else 'FASTER'
+        key = 'longer_or_equal'
         question = ChoiceQuestion(
-            key='longer_or_equal',
+            key=key,
             question=_(
                 "Is the rhythm going SLOWER or FASTER?"),
             choices={
@@ -98,6 +99,7 @@ class HBat(Base):
                 'FASTER': _('FASTER')
             },
             result_id=prepare_result(
+                key,
                 session,
                 section=section,
                 expected_response=expected_response,

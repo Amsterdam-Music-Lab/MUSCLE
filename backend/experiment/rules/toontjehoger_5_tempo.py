@@ -149,17 +149,19 @@ class ToontjeHoger5Tempo(Base):
             sections, player_type=Playback.TYPE_MULTIPLAYER, play_config=play_config)
 
         # Question
+        key = 'pitch'
         question = ButtonArrayQuestion(
             question="Welk fragment wordt in het originele tempo afgespeeld?",
-            key='pitch',
+            key=key,
             choices={
                 "A": "A",
                 "B": "B",
             },
             submits=True,
             result_id=prepare_result(
-            session, section=section_original, expected_response="A" if sections[0].id == section_original.id else "B"
-        )
+                key, session, section=section_original,
+                expected_response="A" if sections[0].id == section_original.id else "B"
+            )
         )
         form = Form([question])
 

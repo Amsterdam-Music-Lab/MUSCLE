@@ -116,9 +116,10 @@ class ToontjeHoger2Preverbal(Base):
     @classmethod
     def get_round1(cls, session):
         # Question
+        key = 'expected_spectrogram'
         question = ButtonArrayQuestion(
             question="Welk spectrogram toont het geluid van een mens?",
-            key='expected_spectrogram',
+            key=key,
             choices={
                 'A': 'A',
                 'B': 'B',
@@ -127,7 +128,8 @@ class ToontjeHoger2Preverbal(Base):
             view='BUTTON_ARRAY',
             submits=True,
             result_id=prepare_result(
-            session, expected_response="C")
+                key, session, expected_response="C"
+            )
         )
         form = Form([question])
 
@@ -221,16 +223,17 @@ class ToontjeHoger2Preverbal(Base):
             [sectionA, sectionB], player_type=Playback.TYPE_SPECTROGRAM, play_config=play_config)
 
         # Question
+        key = 'baby'
         question = ChoiceQuestion(
             question="Welke baby is in Frankrijk geboren?",
-            key='baby',
+            key=key,
             choices={
                 "A": "A",
                 "B": "B",
             },
             view='BUTTON_ARRAY',
             submits=True,
-            result_id=prepare_result(session, expected_response="A")
+            result_id=prepare_result(key, session, expected_response="A")
         )
         form = Form([question])
 
