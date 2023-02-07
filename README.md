@@ -44,6 +44,18 @@ Since the `docker-compose.yaml` defines bind mounts for `backend` and `frontend`
 To stop the containers, press `ctrl-c` or (in another console) run
 `docker-compose down`.
 
+### Backup the Postgresql database
+Run the following command in the console to back up the database:
+`docker-compose run db bash -c "pg_dump aml -Fc > /var/lib/postgresql/data/backup.sql"`
+
+Use this command to make daily backups, numbered by the day of the month.
+`docker-compose run db bash -c "pg_dump aml -Fc > /var/lib/postgresql/data/backup-$(date +"%d").sql"`
+
+To restore a database use:
+`docker-compose run db bash -c "pg_restore -c -d aml /var/lib/postgresql/data/<filename>.sql"`
+
+The backups are stored on the docker volume `db_data` which mirrors `/var/lib/postgresql/data` from the Postgresql container.
+
 ### Creating experiments and playlists
 The admin interface is accessible at `localhost:8000/admin`. Before logging in, create a superuser by logging into the container of the backend. To find out the name, run `docker ps`, it should list all running container names. The container of the backend is most likely called `aml-experiments_server_1` (check 'NAMES' column). To connect to it, run:
 `docker exec -it aml-experiments_server_1 bash`

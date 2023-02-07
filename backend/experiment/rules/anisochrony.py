@@ -52,8 +52,9 @@ class Anisochrony(DurationDiscrimination):
         except Section.DoesNotExist:
             return None
         expected_response = 'REGULAR' if difference == 0 else 'IRREGULAR'
+        key = 'if_regular'
         question = ChoiceQuestion(
-            key='if_regular',
+            key=key,
             question=_(
                     "Were the tones REGULAR or IRREGULAR?"),
             choices={
@@ -61,7 +62,7 @@ class Anisochrony(DurationDiscrimination):
                 'IRREGULAR': _('IRREGULAR')
             },
             view='BUTTON_ARRAY',
-            result_id=prepare_result(session, section=section, expected_response=expected_response),
+            result_id=prepare_result(key, session, section=section, expected_response=expected_response),
             submits=True
         )
         

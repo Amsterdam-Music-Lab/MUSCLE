@@ -108,17 +108,19 @@ class ToontjeHoger4Absolute(Base):
             sections, player_type=Playback.TYPE_MULTIPLAYER, play_config=play_config)
 
         # Question
+        key = 'pitch'
         question = ButtonArrayQuestion(
             question="Welk fragment heeft de juiste toonhoogte?",
-            key='pitch',
+            key=key,
             choices={
                 "A": "A",
                 "B": "B",
             },
             submits=True,
             result_id=prepare_result(
-            session, section=section1, expected_response="A" if sections[0].id == section1.id else "B"
-        )
+                key, session, section=section1,
+                expected_response="A" if sections[0].id == section1.id else "B"
+            )
         )
         form = Form([question])
 

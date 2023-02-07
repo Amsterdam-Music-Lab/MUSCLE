@@ -43,8 +43,8 @@ class ParticipantTest(TestCase):
     def test_current_view(self):
         self.set_participant()
         response = json.loads(self.client.get('/participant/').content)
-        assert response.get('id') == 1
-        assert int(response.get('hash')) == 42
+        assert response.get('id') == self.participant.id
+        assert int(response.get('hash')) == self.participant.unique_hash
         assert response.get('csrf_token') != None
 
     def test_profile(self):

@@ -1,13 +1,11 @@
 import numpy as np
-import sys
-from os.path import isdir
 
 from django.utils.translation import gettext as _
 from django.template.loader import render_to_string
 
 from .base import Base
 
-from experiment.actions import Consent, Explainer, Final, Question, Playlist, Trial, StartSession
+from experiment.actions import Consent, Explainer, Final, Playlist, Trial, StartSession
 from experiment.actions.utils import combine_actions
 from experiment.questions.demographics import EXTRA_DEMOGRAPHICS
 from experiment.questions.languages import LANGUAGE, LanguageQuestion

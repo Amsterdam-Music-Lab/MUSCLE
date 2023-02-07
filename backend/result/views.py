@@ -9,7 +9,7 @@ from result.models import Result
 from result.utils import handle_results
 
 @require_POST
-def create(request):
+def score(request):
     """Create a new result for the given session, and return followup action"""
     # Current participant
     participant = get_participant(request)
@@ -36,9 +36,11 @@ def create(request):
     try:
         result_data = json.loads(json_data)
         # Create a result from the data
-        result = handle_results(result_data, session)
-            
-        if not result:
+        result = handle_results(result_data, session)   
+        if result:
+            # increment the round number
+            session.increment_round()
+        else:
             return HttpResponseServerError("Could not create result from data")
 
     except ValueError:

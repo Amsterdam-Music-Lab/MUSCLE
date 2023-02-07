@@ -167,9 +167,10 @@ class ToontjeHoger1Mozart(Base):
         # --------------------
 
         # Question
+        key = 'expected_shape'
         question = ButtonArrayQuestion(
             question=question,
-            key='expected_shape',
+            key=key,
             choices={
                 'A': 'A',
                 'B': 'B',
@@ -179,7 +180,7 @@ class ToontjeHoger1Mozart(Base):
             },
             view='BUTTON_ARRAY',
             result_id=prepare_result(
-            session, section=section, expected_response=expected_response),
+            key, session, section=section, expected_response=expected_response),
             submits=True
         )
         form = Form([question])

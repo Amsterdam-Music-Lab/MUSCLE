@@ -134,15 +134,16 @@ class DurationDiscrimination(Base):
             raise
         expected_response = 'EQUAL' if difference == 0 else 'LONGER'
         question_text = cls.get_question_text()
+        key = 'longer_or_equal'
         question = ChoiceQuestion(
             question=question_text,
-            key='longer_or_equal',
+            key=key,
             choices={
                 'EQUAL': _('EQUALLY LONG'),
                 'LONGER': _('LONGER')
             },
             view='BUTTON_ARRAY',
-            result_id=prepare_result(session, section=section, expected_response=expected_response),
+            result_id=prepare_result(key, session, section=section, expected_response=expected_response),
             submits=True
         )
         # create Result object and save expected result to database

@@ -22,7 +22,7 @@ export const URLS = {
     result: {
         get: (question) => "/result/" + question + "/",
         current: "/result/current_profile",
-        create: "/result/create/",
+        score: "/result/score/",
         consent: "/result/consent/"
     },
     session: {
@@ -107,7 +107,7 @@ export const createResult = async ({
         }
 
         const response = await axios.post(
-            API_BASE_URL + URLS.result.create,
+            API_BASE_URL + URLS.result.score,
             qs.stringify(vars)
         );
         return response.data;

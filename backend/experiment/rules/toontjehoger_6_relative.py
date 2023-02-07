@@ -112,9 +112,10 @@ class ToontjeHoger6Relative(Base):
         expected_response = "NO"
 
         # Question
+        key = 'same_melody'
         question = ChoiceQuestion(
             question="Zijn deze twee melodieën hetzelfde?",
-            key='same_melody',
+            key=key,
             choices={
                 "YES": "Ja",
                 "NO": "Nee",
@@ -122,8 +123,9 @@ class ToontjeHoger6Relative(Base):
             view='BUTTON_ARRAY',
             submits=True,
             result_id=prepare_result(
-            session, section=section1, expected_response=expected_response
-        )
+                key, session, section=section1,
+                expected_response=expected_response
+            )
         )
         form = Form([question])
 

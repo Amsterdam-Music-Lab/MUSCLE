@@ -189,7 +189,8 @@ class ToontjeHoger3Plink(Base):
             section=section,
             title=cls.TITLE,
             result_id=prepare_result(
-            session, section=section, expected_response=expected_response),
+                'plink', session, section=section, expected_response=expected_response
+            ),
             main_question="Noem de artiest en de titel van het nummer",
             choices=choices,
             submit_label="Volgende",

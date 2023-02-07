@@ -99,7 +99,7 @@ const Experiment = ({ match }) => {
 
     const onResult = useResultHandler({
         session,
-        // participant,
+        participant,
         loadState,
         onNext,
         state,
