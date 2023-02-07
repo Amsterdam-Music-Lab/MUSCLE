@@ -12,7 +12,7 @@ class Migration(migrations.Migration):
     dependencies = [
         ('section', '0001_initial'),
         ('participant', '0001_initial'),
-        ('experiment', '0018_delete_profile'),
+        ('experiment', '0012_participant_access_info'),
     ]
 
     operations = [
@@ -27,6 +27,7 @@ class Migration(migrations.Migration):
                 ('experiment', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='experiment.experiment')),
                 ('participant', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='participant.participant')),
                 ('playlist', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, to='section.playlist')),
+                ('current_round', models.IntegerField(default=1))
             ],
         ),
     ]
