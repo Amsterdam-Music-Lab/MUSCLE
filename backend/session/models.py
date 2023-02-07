@@ -17,6 +17,7 @@ class Session(models.Model):
         db_index=True, default=None, null=True, blank=True)
     json_data = models.TextField(blank=True)
     final_score = models.FloatField(db_index=True, default=0.0)
+    current_round = models.IntegerField(default=1)
 
     def __str__(self):
         return "Session {}".format(self.id)
@@ -69,6 +70,7 @@ class Session(models.Model):
         """
         updated_data = {**self.load_json_data(), **data}
         self.json_data = json.dumps(updated_data)
+        self.save()
 
     def load_json_data(self):
         """Get json data object from string json_data"""
@@ -94,11 +96,18 @@ class Session(models.Model):
 
     def rounds_passed(self):
         """Get number of rounds passed"""
-        return self.result_set.count()
+        return self.result_set.count() + self.participant.result_set.count()
 
     def get_next_round(self):
         """Get next round number"""
         return self.rounds_passed() + 1
+    
+    def get_current_round(self):
+        return self.current_round
+    
+    def increment_round(self):
+        self.current_round += 1
+        self.save()
 
     def song_ids(self):
         """Get a list of song ids from the sections of this session's results"""
