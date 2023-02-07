@@ -13,7 +13,6 @@ class Eurovision2020(Hooked):
     """
 
     ID = 'EUROVISION_2020'
-    consent_file = 'consent_eurovision_2020.html';
 
     @classmethod
     def plan_sections(cls, session):

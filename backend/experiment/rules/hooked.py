@@ -19,6 +19,7 @@ from .util.actions import combine_actions
 class Hooked(Base):
     """Superclass for Hooked experiment rules"""
 
+    consent_file = 'consent_hooked.html';
     timeout = 15
     questions = True
 

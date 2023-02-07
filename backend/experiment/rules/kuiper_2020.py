@@ -13,8 +13,6 @@ class Kuiper2020(Hooked):
     """
 
     ID = 'KUIPER_2020'
-    consent_file = 'consent_eurovision_2020.html';
-
 
     @staticmethod
     def plan_sections(session):
