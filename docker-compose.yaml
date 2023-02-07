@@ -63,5 +63,13 @@ services:
         ports:
           - 3000:3000
         command: sh -c "yarn scss && yarn start"
+    selenium:
+        build:
+          context: ./selenium
+          dockerfile: DockerfileSelenium
+        volumes:
+          - type: bind
+            source: ./selenium
+            target: /selenium
 volumes:
     db_data:
