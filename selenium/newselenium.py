@@ -5,6 +5,7 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 from webdriver_manager.chrome import ChromeDriverManager
 import sys
+import time
 
 chrome_options = Options()
 chrome_options.add_argument("--headless")
@@ -28,9 +29,11 @@ driver = webdriver.Chrome(service=Service(
     ChromeDriverManager().install()), options=chrome_options)
 try:
     driver.get('http://client:3000/cat')
+    time.sleep(5)
     # driver.get('https://acc.amsterdammusiclab.nl/cat')
-    element = driver.find_element(By.TAG_NAME, "body")
-    print(element.text)
+    time.sleep(1)
+    print(driver.page_source)
+
     driver.close()
 except:  # pylint: disable=bare-except
     sys.exit('Something went wrong')
