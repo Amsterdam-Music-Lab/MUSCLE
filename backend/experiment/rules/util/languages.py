@@ -1,9 +1,9 @@
 from django.utils.translation import gettext_lazy as _
 
-from experiment.rules.views import Question
+from experiment.rules.views.form import Question, RadiosQuestion
 
 LANGUAGE = [
-    Question.radios(
+    RadiosQuestion(
         key='lang_experience',
         question=_("Please rate your previous experience:"),
         choices={
@@ -14,15 +14,18 @@ LANGUAGE = [
             'no_exp': _("no exposure")
         }
     ),
-    Question.string(
+    Question(
         key='lang_mother',
+        view='STRING',
         question=_('What is your mother tongue?')),
-    Question.string(
+    Question(
         key='lang_second',
+        view='STRING',
         # explainer='You can skip this question',
         question=_('What is your second language, if applicable?'), is_skippable=True),
-    Question.string(
+    Question(
         key='lang_third',
+        view='STRING',
         # explainer='You can skip this question',
         question=_('What is your third language, if applicable?'), is_skippable=True)
 ]
@@ -43,14 +46,8 @@ class LanguageQuestion(Question):
             'some_exp': _("some exposure"),
             'no_exp': _("no exposure")
         }
-        return Question.action(
-            question={
-                'view': 'RADIOS',
-                'key': key,
-                'question': question,
-                'explainer': '',
-                'choices': choices,
-                'is_skippable': False,
-            },
-            title=_('Exposure to {}').format(self.language)
+        return RadiosQuestion(
+            key=key,
+            question=question,
+            choices=choices
         )
