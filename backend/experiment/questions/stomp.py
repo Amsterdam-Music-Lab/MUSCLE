@@ -1,9 +1,9 @@
-from experiment.actions import Question
+from experiment.actions.form import LikertQuestion
 
 def stomp_question(key, genre):
     """Define a standard STOMP question for a genre"""
-    return Question.text_range(
-        key,
+    return LikertQuestion(
+        key = key,
         question = "How much do you like %s music?" % genre,
         choices = [
             "Dislike Strongly",

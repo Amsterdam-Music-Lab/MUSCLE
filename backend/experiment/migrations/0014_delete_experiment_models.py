@@ -6,7 +6,8 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('experiment', '0019_change_playlist_reference'),
+        ('experiment', '0013_change_playlist_reference'),
+        ('result', '0002_data_migration')
     ]
 
     operations = [
@@ -15,6 +16,9 @@ class Migration(migrations.Migration):
         ),
         migrations.DeleteModel(
             name='Playlist',
+        ),
+        migrations.DeleteModel(
+            name='Profile'
         ),
         migrations.DeleteModel(
             name='Result',

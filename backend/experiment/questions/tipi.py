@@ -1,10 +1,10 @@
-from experiment.actions import Question
+from experiment.actions.form import LikertQuestion
 
 def tipi_question(key, trait):
     """Define a standard STOMP question for a genre"""
-    return Question.likert(
-        key,
-        question = "I see myself as %s." % trait
+    return LikertQuestion(
+        key = key,
+        question = "I see myself as %s." % trait,
     )
 
 TIPI = [

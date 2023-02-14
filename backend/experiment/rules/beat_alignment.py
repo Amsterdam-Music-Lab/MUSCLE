@@ -5,7 +5,7 @@ import copy
 from django.utils.translation import gettext_lazy as _
 
 from .base import Base
-from experiment.actions import Trial, Explainer, Consent, StartSession, Step, Question
+from experiment.actions import Trial, Explainer, Consent, StartSession, Step
 from experiment.actions.form import ChoiceQuestion, Form
 from experiment.actions.playback import Playback
 from experiment.actions.utils import final_action_with_optional_button, render_feedback_trivia
