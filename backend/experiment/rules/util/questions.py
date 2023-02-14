@@ -89,6 +89,7 @@ DEMOGRAPHICS = [
             'contemporary': _("Hip-hop/R&B/Funk")
         }
     ),
+    # msi_39_best_instrument duplicate in goldsmiths.py
     Question(
         key='msi_39_best_instrument',
         view='STRING',

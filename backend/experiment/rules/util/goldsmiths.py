@@ -1,6 +1,6 @@
 from django.utils.translation import gettext_lazy as _
 
-from experiment.rules.views.form import LikertQuestion, ChoiceQuestion
+from experiment.rules.views.form import LikertQuestion, ChoiceQuestion, Question
 from .questions import question_by_key
 
 # Numbers before key relate to The Goldsmiths Musical Sophistication Index, v1.0
@@ -296,6 +296,13 @@ MSI_F5_EMOTIONS = [
 ]
 
 MSI_OTHER = [
+    # msi_39_best_instrument duplicate in questions.py
+    Question(
+        key='msi_39_best_instrument',
+        view='STRING',
+        question=_("The instrument I play best, including voice (or none), is:")
+    ),
+
     ChoiceQuestion(
         key='ST_01_age_instrument',
         question=_("What age did you start to play an instrument?"),
@@ -325,5 +332,4 @@ MSI_ALL = (
     + MSI_F3_MUSICAL_TRAINING
     + MSI_F4_SINGING_ABILITIES
     + MSI_F5_EMOTIONS
-    + MSI_OTHER
 )
