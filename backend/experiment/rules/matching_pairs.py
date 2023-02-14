@@ -20,27 +20,25 @@ class MatchingPairs(Base):
         rendered = render_to_string('consent/consent_rhythm.html')
         consent = Consent.action(rendered, title=_(
             'Informed consent'), confirm=_('I agree'), deny=_('Stop'))
-        # 3. Choose playlist.
+        # 2. Choose playlist.
         playlist = Playlist.action(experiment.playlists.all())
 
-        # 4. Start session.
+        # 3. Start session.
         start_session = StartSession.action()
 
         return [
             consent,
-            playlist,
             playlist,
             start_session
         ]
     
     @staticmethod
     def next_round(session):
-        if session.current_round < 4:
+        if session.rounds_passed() == 0:
             trial = MatchingPairs.get_question(session)
             if trial:
                 return trial
             else:
-                session.increment_round()
                 explainer = Explainer(
                 instruction=_('You are about to play a memory game. On the next page you will see 12 different cards. Your task is to try to find pairs of similar music.'),
                 steps=[
