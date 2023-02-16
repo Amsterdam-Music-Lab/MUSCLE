@@ -4,12 +4,15 @@ export const EXPERIMENT_SLUG =
         ? document.location.hash.split("slug=")[1]
         : process.env.REACT_APP_EXPERIMENT_SLUG;
 
-
 // Base url the API
 // Make sure your app url is set in the CORS_ORIGIN_WHITELIST in
 // the API's base_settings.py
 
-export const API_ROOT = process.env.REACT_APP_API_ROOT;
+const source = document.location.hostname;
+// Change api root when using docker service host names (required to run selenium locally)
+export const API_ROOT = source == 'client' ? 'http://server:8000' : process.env.REACT_APP_API_ROOT;
+
+// export const API_ROOT = process.env.REACT_APP_API_ROOT;
 export const API_BASE_URL = API_ROOT + '/experiment';
 
 // Media
