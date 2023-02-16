@@ -71,5 +71,8 @@ services:
           - type: bind
             source: ./selenium
             target: /selenium
+        environment:
+          - AML_DEBUG=${AML_DEBUG}
+          - API_ROOT=${REACT_APP_API_ROOT}
 volumes:
     db_data:
