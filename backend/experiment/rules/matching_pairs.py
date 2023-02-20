@@ -73,12 +73,13 @@ class MatchingPairs(Base):
                 config={'show_total_score': True},
                 title='Score'
             ).action()
+            key = 'play_again'
             cont = Trial(
                 playback=None,
                 feedback_form=Form([BooleanQuestion(
-                    key='play_again',
+                    key=key,
                     question='Do you want to play again?',
-                    result_id=prepare_result(session),
+                    result_id=prepare_result(key, session),
                     submits=True),
                 ])
             ).action()
@@ -125,5 +126,5 @@ class MatchingPairs(Base):
             moves = data.get('moves')
             score = round(sum([int(m['score']) for m in moves if m['score']>=0]) / len(moves) * 100)
         else:
-            return 0
+            score = 0
         return score
