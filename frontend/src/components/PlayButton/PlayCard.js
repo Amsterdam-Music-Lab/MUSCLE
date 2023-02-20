@@ -19,6 +19,7 @@ const PlayCard = ({ onClick, registerUserClicks, playing, inactive, turned }) =>
                         width={10}
                         spacing={10}
                         backgroundColor="purple"
+                        borderRadius="1rem"
                     />
                     :
                     <img 
