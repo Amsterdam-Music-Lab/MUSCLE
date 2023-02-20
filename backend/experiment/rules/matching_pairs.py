@@ -103,7 +103,7 @@ class MatchingPairs(Base):
     @classmethod
     def get_matching_pairs_trial(cls, session):
         sections = list(session.playlist.section_set.all())
-        player_sections = random.sample(sections, 2)*2
+        player_sections = random.sample(sections, 6)*2
         random.shuffle(player_sections)
         playback = Playback(
             sections=player_sections,
