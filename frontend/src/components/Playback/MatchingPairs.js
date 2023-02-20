@@ -11,11 +11,11 @@ const MatchingPairs = ({
     lastPlayerIndex,
     submitResult
 }) => {
-    let xPosition = useRef(-1);
-    let yPosition = useRef(-1);
-    let score = useRef(-1);
+    const xPosition = useRef(-1);
+    const yPosition = useRef(-1);
+    const score = useRef(-1);
 
-    let resultBuffer = [];
+    const resultBuffer = useRef([]);
 
     const setScoreMessage = (score) => {
         switch(score) {
@@ -33,7 +33,7 @@ const MatchingPairs = ({
 
     const checkMatchingPairs = (index) => {
         const currentCard = sections[index];
-        score.current = -1;
+        score.current = 0;
         if (sections.filter(s => s.turned).length < 2) {
             // we have two turned cards
             currentCard.turned = true;
@@ -58,7 +58,7 @@ const MatchingPairs = ({
         }
 
         const currentScore = score.current;
-        resultBuffer.push({
+        resultBuffer.current.push({
             selectedSection: currentCard.id,
             xPosition: xPosition.current,
             yPosition: yPosition.current,
@@ -69,7 +69,7 @@ const MatchingPairs = ({
 
         if (sections.filter(s => s.inactive).length === sections.length) {
             // all cards have been turned
-            submitResult({moves: resultBuffer});
+            submitResult({moves: resultBuffer.current});
         }
         
         return;
