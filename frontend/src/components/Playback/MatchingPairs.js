@@ -96,7 +96,7 @@ const MatchingPairs = ({
                 />
             )
             )}
-            <div className="feedback">{setScoreMessage(score)}</div>
+            <div className="feedback">{setScoreMessage(score.current)}</div>
         </div>  
     )
 }
