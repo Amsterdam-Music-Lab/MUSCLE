@@ -17,9 +17,11 @@ class ListeningConditions(Base):
         playback = None
         feedback_form = None
         if round_number == 1:
+            key = 'quiet_room'
+            result_pk = Base.prepare_result(session, expected_response=key)
             feedback_form = Form([
                 ChoiceQuestion(
-                    key='quiet_room',
+                    key=key,
                     question=_(
                         "Are you in a quiet room?"),
                     choices={
@@ -27,10 +29,13 @@ class ListeningConditions(Base):
                         'MODERATELY': _('MODERATELY'),
                         'NO': _('NO')
                     },
+                    result_id=result_pk,
                     view='BUTTON_ARRAY',
                     submits=True
                 )])
         elif round_number == 2:
+            key = 'internet_connection'
+            result_pk = Base.prepare_result(session, expected_response=key)
             feedback_form = Form([ChoiceQuestion(
                 key='internet_connection',
                 question=_(
@@ -44,9 +49,11 @@ class ListeningConditions(Base):
                 submits=True
             )])
         elif round_number == 3:
+            key = 'headphones'
+            result_pk = Base.prepare_result(session, expected_response=key)
             feedback_form = Form([
                 ChoiceQuestion(
-                    key='headphones',
+                    key=key,
                     question=_(
                         "Are you wearing headphones?"),
                     choices={
@@ -54,13 +61,16 @@ class ListeningConditions(Base):
                         'NO': _('NO')
                     },
                     view='BUTTON_ARRAY',
+                    result_id=result_pk,
                     submits=True
                 )
             ])
         elif round_number == 4:
+            key = 'notifications_off'
+            result_pk = Base.prepare_result(session, expected_response=key)
             feedback_form = Form([
                 ChoiceQuestion(
-                    key='notifications_off',
+                    key=key,
                     question=_(
                         "Do you have sound notifications from other devices turned off?"),
                     choices={
@@ -68,6 +78,7 @@ class ListeningConditions(Base):
                         'NO': _('NO')
                     },
                     view='BUTTON_ARRAY',
+                    result_id=result_pk,
                     submits=True
                 ),
             ])
