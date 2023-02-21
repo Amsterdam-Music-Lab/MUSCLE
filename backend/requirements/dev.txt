@@ -12,7 +12,7 @@ audioread==2.1.9
     # via -r backend/requirements.in/dev.txt
 autopep8==1.5.7
     # via -r backend/requirements.in/dev.txt
-certifi==2022.6.15
+certifi==2022.12.7
     # via requests
 charset-normalizer==2.1.0
     # via requests
