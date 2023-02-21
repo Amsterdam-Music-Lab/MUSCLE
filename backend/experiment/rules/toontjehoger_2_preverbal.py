@@ -98,12 +98,12 @@ class ToontjeHoger2Preverbal(Base):
         else:
             if rounds_passed == 1:
                 appendix = "Op het volgende scherm kun je de geluiden beluisteren."
-                if last_result.scoring.value == cls.SCORE_CORRECT:
+                if last_result.score == cls.SCORE_CORRECT:
                     feedback = "Dat is correct! Spectrogram C is inderdaad van een mens. " + appendix
                 else:
                     feedback = "Helaas! Je antwoord was onjuist. Het geluid van spectrogram C is van een mens. " + appendix
             elif rounds_passed == 2:
-                if last_result.scoring.value == cls.SCORE_CORRECT:
+                if last_result.score == cls.SCORE_CORRECT:
                     feedback = "Dat is correct! Geluid A is inderdaad de Franse baby."
                 else:
                     feedback = "Helaas! Geluid A is de Franse baby."
@@ -182,7 +182,7 @@ class ToontjeHoger2Preverbal(Base):
             view='BUTTON_ARRAY',
             submits=True
         )
-        form = Form([question], create_result=False)
+        form = Form([question])
 
         # Trial
         trial_config = {
@@ -192,7 +192,7 @@ class ToontjeHoger2Preverbal(Base):
         trial = Trial(
             config=trial_config,
             playback=playback,
-            feedback_form=form,
+            feedback_form=None,
             title=cls.TITLE,
         ).action()
         return [trial]

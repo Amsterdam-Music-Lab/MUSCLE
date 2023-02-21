@@ -22,7 +22,7 @@ const SongSync = ({
     instructions,
     buttons,
     config,
-    resultId,
+    result_id,
     onResult
 }) => {
     // Main component state
@@ -57,7 +57,7 @@ const SongSync = ({
             config,
             result,
             // Keep result_id in custom data root
-            result_id: resultId,
+            result_id: result_id,
         });
     };
 

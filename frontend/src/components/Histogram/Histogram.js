@@ -9,6 +9,11 @@ const Histogram = ({
     height = 40,
     interval = 100,
     running = true,
+    marginLeft = 0,
+    marginTop = 0,
+    backgroundColor = undefined,
+    histogramWidth = undefined,
+    borderRadius = '0.15rem',
 }) => {
     const [pulse, setPulse] = useState(true);
 
@@ -38,7 +43,7 @@ const Histogram = ({
     return (
         <div
             className={classNames("aha__histogram", { active: running })}
-            style={{ height }}
+            style={{ height, marginLeft, marginTop, backgroundColor, width: histogramWidth, borderRadius: borderRadius, border: backgroundColor? `10px solid ${backgroundColor}` : undefined}}
         >
             {_bars}
         </div>

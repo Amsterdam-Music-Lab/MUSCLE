@@ -40,7 +40,7 @@ class Plink(object):  # pylint: disable=too-few-public-methods
         action = {
             'view': Plink.ID,
             'title': self.title,
-            'resultId': self.result_id,
+            'result_id': self.result_id,
             'section': self.section,
             'mainQuestion': self.main_question,
             'choices': self.choices,

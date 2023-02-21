@@ -9,15 +9,17 @@ class Trial(object):  # pylint: disable=too-few-public-methods
     - playback: player(s) to be displayed in this view
     - feedback_form: array of form elements
     - title: page title - defaults to empty
+    - result_id: optional, a result_id with which the whole Trial is associated
     """
 
     ID = 'TRIAL_VIEW'
 
-    def __init__(self, playback=None, feedback_form=None, title='', config=None):
+    def __init__(self, playback=None, feedback_form=None, title='', config=None, result_id=None):
         '''
         - playback: Playback object (may be None)
         - feedback_form: Form object (may be None)
         - title: string setting title in header of experiment
+        - result_id: id of Result to handle (especially important if there's no feedback form)
         - config: dictionary with following settings
             - response_time: how long to wait until stopping the player / proceeding to the next view
             - auto_advance: proceed to next view after player has stopped
@@ -35,6 +37,7 @@ class Trial(object):  # pylint: disable=too-few-public-methods
         self.playback = playback
         self.feedback_form = feedback_form
         self.title = title
+        self.result_id = result_id
         self.config = {
             'response_time': 5,
             'auto_advance': False,
@@ -57,6 +60,7 @@ class Trial(object):  # pylint: disable=too-few-public-methods
             'view': Trial.ID,
             'title': self.title,
             'config': self.config,
+            'result_id': self.result_id
         }
         if self.playback:
             action['playback'] = self.playback.action()

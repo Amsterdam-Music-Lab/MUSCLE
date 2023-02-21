@@ -140,4 +140,15 @@ EXTRA_DEMOGRAPHICS = [
             'U': "Undisclosed"
         }
     ),
+    ChoiceQuestion(
+        key='dgf_musical_experience',
+        view='RADIOS',
+        question=_("Please select your level of musical experience:"),
+        choices={
+            'none': _("None"),
+            'moderate': _("Moderate"),
+            'extensive': _("Extensive"),
+            'professional': _("Professional")
+        }
+    )
 ]

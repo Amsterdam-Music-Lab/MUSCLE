@@ -148,15 +148,13 @@ class Form(object):
     - button_label: label of submit button
     - skip_label: label of skip button
     - is_skippable: can this question form be skipped
-    - create_result: create a result when submitting the form
     '''
 
-    def __init__(self, form, submit_label=_('Continue'), skip_label=_('Skip'), is_skippable=False, create_result=True):
+    def __init__(self, form, submit_label=_('Continue'), skip_label=_('Skip'), is_skippable=False):
         self.form = form
         self.submit_label = submit_label
         self.skip_label = skip_label
         self.is_skippable = is_skippable
-        self.create_result = create_result
 
     def action(self):
         serialized_form = [question.action() for question in self.form]
@@ -165,5 +163,4 @@ class Form(object):
             'submit_label': self.submit_label,
             'skip_label': self.skip_label,
             'is_skippable': self.is_skippable,
-            'create_result': self.create_result
         }
