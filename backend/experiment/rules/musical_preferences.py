@@ -87,9 +87,9 @@ class MusicalPreferences(Base):
             key=know_key,
             view='BUTTON_ARRAY',
             choices={
-                'yes': 'fa-thumbs-up',
-                'unsure': 'fa-question',
                 'no': 'fa-thumbs-down',
+                'unsure': 'fa-question',
+                'yes': 'fa-thumbs-up',
             },
             result_id=prepare_result(know_key, session, section=section)
         )
