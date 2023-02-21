@@ -9,7 +9,7 @@ from .base import Base
 from .h_bat import HBat
 
 from .util.actions import final_action_with_optional_button, render_feedback_trivia
-from .util.score import get_average_difference_level_based
+from .util.final_score import get_average_difference_level_based
 
 class BST(HBat):
     """ Rules for the BST experiment, which follow closely
@@ -49,7 +49,7 @@ class BST(HBat):
             return None
         expected_result = 'in2' if trial_condition else 'in3'
         # create Result object and save expected result to database
-        result_pk = Base.prepare_result(session, section, expected_result)
+        result_pk = cls.prepare_result(session, section, expected_result)
         question = ChoiceQuestion(
             key='longer_or_equal',
             question=_(
@@ -60,6 +60,7 @@ class BST(HBat):
             },
             view='BUTTON_ARRAY',
             result_id=result_pk,
+            scoring_rule='CORRECTNESS',
             submits=True
         )
         playback = Playback([section])
@@ -69,7 +70,7 @@ class BST(HBat):
             feedback_form=form,
             title=_('Meter detection'),
             config={
-                'decision_time': section.duration + .5
+                'decision_time': section.duration + .1
             }
         )
         return view.action()

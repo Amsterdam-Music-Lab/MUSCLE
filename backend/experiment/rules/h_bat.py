@@ -10,13 +10,14 @@ from .views.form import ChoiceQuestion, Form
 from .views.playback import Playback
 
 from .util.practice import get_practice_views, practice_explainer, get_trial_condition, get_trial_condition_block
-from .util.actions import combine_actions, final_action_with_optional_button, render_feedback_trivia
-from .util.score import get_average_difference_level_based
+from .util.actions import final_action_with_optional_button, render_feedback_trivia
+from .util.final_score import get_average_difference_level_based
 from .util.staircasing import register_turnpoint
 
 logger = logging.getLogger(__name__)
 
 MAX_TURNPOINTS = 6
+
 
 class HBat(Base):
     """ section.group (and possibly section.tag) must be convertable to int"""
@@ -59,33 +60,19 @@ class HBat(Base):
             return action
 
     @classmethod
-    def first_round(cls, experiment):
+    def first_round(cls, experiment, participant):
         explainer = cls.intro_explainer().action(True)
         consent = Consent.action()
         explainer2 = practice_explainer().action()
         playlist = Playlist.action(experiment.playlists.all())
         start_session = StartSession.action()
-        return combine_actions(
+        return [
             explainer,
             consent,
             explainer2,
             playlist,
             start_session
-        )
-
-    @staticmethod
-    def calculate_score(result, form_element, data):
-        # a result's score is used to keep track of how many correct results were in a row
-        # for catch trial, set score to 2 -> not counted for calculating turnpoints
-        try:
-            expected_response = result.expected_response
-        except Exception as e:
-            logger.log(e)
-            expected_response = None
-        if expected_response and expected_response == form_element['value']:
-            return 1
-        else:
-            return 0
+        ]
 
     @classmethod
     def next_trial_action(cls, session, trial_condition, level=1, *kwargs):
@@ -95,12 +82,13 @@ class HBat(Base):
         level can be 1 (20 ms) or higher (10, 5, 2.5 ms...)
         """
         try:
-            section = session.playlist.section_set.filter(group=str(level)).get(tag=str(trial_condition))
+            section = session.playlist.section_set.filter(
+                group=str(level)).get(tag=str(trial_condition))
         except Section.DoesNotExist:
             return None
         expected_result = 'SLOWER' if trial_condition else 'FASTER'
         # create Result object and save expected result to database
-        result_pk = Base.prepare_result(session, section, expected_result)
+        result_pk = cls.prepare_result(session, section, expected_result)
         question = ChoiceQuestion(
             key='longer_or_equal',
             question=_(
@@ -110,6 +98,7 @@ class HBat(Base):
                 'FASTER': _('FASTER')
             },
             view='BUTTON_ARRAY',
+            scoring_rule='CORRECTNESS',
             result_id=result_pk,
             submits=True
         )
@@ -120,7 +109,7 @@ class HBat(Base):
             feedback_form=form,
             title=_('Beat acceleration'),
             config={
-                'decision_time': section.duration + .5
+                'decision_time': section.duration + .1
             }
         )
         return view.action()
@@ -132,49 +121,51 @@ class HBat(Base):
                 'In this test you will hear a series of tones for each trial.'),
             steps=[
                 Step(_(
-                        "It's your job to decide if the rhythm goes SLOWER of FASTER.")),
+                    "It's your job to decide if the rhythm goes SLOWER of FASTER.")),
                 Step(_(
-                        'During the experiment it will become more difficult to hear the difference.')),
+                    'During the experiment it will become more difficult to hear the difference.')),
                 Step(_(
-                        "Try to answer as accurately as possible, even if you're uncertain.")),
+                    "Try to answer as accurately as possible, even if you're uncertain.")),
                 Step(_("Remember: try not to move or tap along with the sounds")),
                 Step(_(
-                        "In this test, you can answer as soon as you feel you know the answer, but please wait until you are sure or the sound has stopped.")),
+                    "In this test, you can answer as soon as you feel you know the answer, but please wait until you are sure or the sound has stopped.")),
                 Step(_(
-                        'This test will take around 4 minutes to complete. Try to stay focused for the entire test!'))
-                ],
+                    'This test will take around 4 minutes to complete. Try to stay focused for the entire test!'))
+            ],
             button_label='Ok'
         )
 
     @classmethod
     def response_explainer(cls, correct, slower, button_label=_('Next fragment')):
-            if correct:
-                if slower:
-                    instruction = _(
-                        'The rhythm went SLOWER. Your response was CORRECT.')
-                else:
-                    instruction = _(
-                        'The rhythm went FASTER. Your response was CORRECT.')
+        if correct:
+            if slower:
+                instruction = _(
+                    'The rhythm went SLOWER. Your response was CORRECT.')
             else:
-                if slower:
-                    instruction = _(
-                        'The rhythm went FASTER. Your response was INCORRECT.')
-                else:
-                    instruction = _(
-                        'The rhythm went SLOWER. Your response was INCORRECT.')
-            return Explainer(
-                instruction=instruction,
-                steps=[],
-                button_label=button_label
-            )
+                instruction = _(
+                    'The rhythm went FASTER. Your response was CORRECT.')
+        else:
+            if slower:
+                instruction = _(
+                    'The rhythm went SLOWER. Your response was INCORRECT.')
+            else:
+                instruction = _(
+                    'The rhythm went FASTER. Your response was INCORRECT.')
+        return Explainer(
+            instruction=instruction,
+            steps=[],
+            button_label=button_label
+        )
 
     @classmethod
     def finalize_experiment(cls, session, request_session):
         """ if either the max_turnpoints have been reached,
         or if the section couldn't be found (outlier), stop the experiment
         """
-        average_diff = get_average_difference_level_based(session, 6, cls.start_diff)
-        percentage = float(Decimal(str(average_diff / 5)).quantize(Decimal('.01'), rounding=ROUND_HALF_UP))
+        average_diff = get_average_difference_level_based(
+            session, 6, cls.start_diff)
+        percentage = float(Decimal(str(average_diff / 5)
+                                   ).quantize(Decimal('.01'), rounding=ROUND_HALF_UP))
         feedback = _("Well done! You heard the difference when the rhythm was \
                     speeding up or slowing down with only {} percent!").format(percentage)
         trivia = cls.get_trivia()
@@ -193,8 +184,10 @@ def get_previous_condition(previous_result):
     """ check if previous section was slower / in 2 (1) or faster / in 3 (0) """
     return int(previous_result.section.tag)
 
+
 def get_previous_level(previous_result):
     return int(previous_result.section.group)
+
 
 def staircasing(session, trial_action_callback):
     trial_condition = get_trial_condition(2)
@@ -215,7 +208,7 @@ def staircasing(session, trial_action_callback):
         # register decreasing difficulty
         session.merge_json_data({'direction': 'decrease'})
         session.save()
-        level = get_previous_level(last_result) - 1 # decrease difficulty
+        level = get_previous_level(last_result) - 1  # decrease difficulty
         action = trial_action_callback(
             session, trial_condition, level)
     else:
@@ -235,7 +228,7 @@ def staircasing(session, trial_action_callback):
             # register increasing difficulty
             session.merge_json_data({'direction': 'increase'})
             session.save()
-            level = get_previous_level(last_result) + 1 # increase difficulty
+            level = get_previous_level(last_result) + 1  # increase difficulty
             action = trial_action_callback(
                 session, trial_condition, level)
         else:

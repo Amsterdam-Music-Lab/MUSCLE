@@ -1,0 +1,10 @@
+.aha__autocomplete{
+  $color: $teal;
+  display: flex;
+  flex-direction: column;
+
+  .control{
+    color: $black;
+    margin-top: 10px;    
+  }
+}

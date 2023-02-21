@@ -1,13 +1,16 @@
+from copy import deepcopy
+
 from django.utils.translation import gettext_lazy as _
 
 from experiment.rules.views.form import ChoiceQuestion, Question
 from .iso_countries import ISO_COUNTRIES
+from .iso_languages import ISO_LANGUAGES
 from .isced_education import ISCED_EDUCATION_LEVELS
 
 # List of all available profile questions
 
 ATTAINED_EDUCATION_CHOICES = dict(
-    ISCED_EDUCATION_LEVELS, 
+    ISCED_EDUCATION_LEVELS,
     **{'none':  _('Have not (yet) completed any school qualification')}
 )
 EXPECTED_EDUCATION_CHOICES = dict(
@@ -28,6 +31,17 @@ DEMOGRAPHICS = [
             'non_conforming': _("Non-conforming or questioning"),
             'intersex': _("Intersex or two-spirit"),
             'non_answer': _("Prefer not to answer")
+        }
+    ),
+    ChoiceQuestion(
+        key='dgf_gender_reduced',
+        view='RADIOS',
+        question=_("What is your gender?"),
+        choices={
+            'M': "Male",
+            'F': "Female",
+            'X': "Other",
+            'U': "Undisclosed"
         }
     ),
     ChoiceQuestion(
@@ -75,11 +89,13 @@ DEMOGRAPHICS = [
             'contemporary': _("Hip-hop/R&B/Funk")
         }
     ),
+    # msi_39_best_instrument duplicate in goldsmiths.py
     Question(
         key='msi_39_best_instrument',
         view='STRING',
         question=_("The instrument I play best, including voice (or none), is:")
     ),
+
 ]
 
 
@@ -99,6 +115,12 @@ EXTRA_DEMOGRAPHICS = [
         key='dgf_country_of_residence_open',
         view='STRING',
         question=_("In which country do you currently reside?")
+    ),
+    ChoiceQuestion(
+        key='dgf_native_language',
+        view='DROPDOWN',
+        question="What is your native language?",
+        choices=ISO_LANGUAGES
     ),
     ChoiceQuestion(
         key='dgf_highest_qualification_expectation',
@@ -125,16 +147,22 @@ EXTRA_DEMOGRAPHICS = [
 ]
 
 
-def question_by_key(key, questions=DEMOGRAPHICS, is_skippable=None):
+def question_by_key(key, questions=DEMOGRAPHICS, is_skippable=None, drop_choices=[]):
     """Return question by given key"""
     try:
         for question in questions:
             if question.key == key:
+
+                q = deepcopy(question)
                 # Set is_skippable
                 if is_skippable is not None:
-                    question.is_skippable = is_skippable
+                    q.is_skippable = is_skippable
 
-                return question
+                if hasattr(question, 'choices') and len(drop_choices):
+                    for choice in drop_choices:
+                        q.choices.pop(choice, None)
+
+                return q
 
     except KeyError as error:
         print('KeyError: %s' % str(error))
@@ -148,11 +176,11 @@ def unasked_question(participant, questions=DEMOGRAPHICS, is_skippable=None, ski
     try:
         profile_questions = participant.profile_questions()
         for question in questions:
-            if not question['question']['key'] in profile_questions:
+            if not question.key in profile_questions:
                 if skip == 0:
                     # Set is_skippable
                     if is_skippable is not None:
-                        question['question']['is_skippable'] = is_skippable
+                        question.is_skippable = is_skippable
 
                     return question
                 skip = skip - 1

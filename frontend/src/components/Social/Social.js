@@ -7,7 +7,7 @@ const Social = ({ score }) => {
     if render_social is set to false, returns an empty diff
     */
     return (
-        <div className="share d-flex justify-content-center mt-4">
+        <div className="aha__share d-flex justify-content-center mt-4">
             <a
                 href={URLS.shareFacebook}
                 target="_blank"
@@ -25,7 +25,7 @@ const Social = ({ score }) => {
                 Share on Twitter
             </a>
         </div>
-    )
-}
+    );
+};
 
 export default Social;

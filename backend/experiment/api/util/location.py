@@ -16,8 +16,7 @@ def country(request):
     key = 'country_code'
 
     # Get country_code from session
-    if key in request.session:
-        country_code = request.session[key]
+    country_code = request.session.get(key)
 
     # If country code is missing, guess country by ip address
     if not country_code:
@@ -50,14 +49,9 @@ def get_country_code(ip_address):
     # Request location data
     with urllib.request.urlopen(location_url) as url:
         try:
-            data = json.loads(url.read().decode())
-            if data['status'] and data['status'] == 'ok' and data['country']:
-                return data['country']
-            else:
-                return None
+            return url.read().decode()
         except:
             return None
-    return None
 
 
 def visitor_ip_address(request):

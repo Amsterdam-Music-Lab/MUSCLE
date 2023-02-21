@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import Loading from "../Loading/Loading";
 
 // Playlist is an experiment view, that handles (auto)selection of a playlist
-const Playlist = ({ experiment, setPlaylist, onNext, setError }) => {
+const Playlist = ({ experiment, instruction, setPlaylist, onNext, setError }) => {
     const playlists = experiment.playlists;
 
     // Handle empty or single playlist
@@ -26,7 +26,7 @@ const Playlist = ({ experiment, setPlaylist, onNext, setError }) => {
         default:
             return (
                 <div className="aha__playlist">
-                    <h3 className="title">Select a Playlist</h3>
+                    <h3 className="title">{instruction}</h3>
 
                     <ul>
                         {playlists.map((playlist, index) => (

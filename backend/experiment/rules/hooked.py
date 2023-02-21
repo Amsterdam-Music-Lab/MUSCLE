@@ -1,53 +1,48 @@
-from os.path import join
 import random
-import math
+from django.conf import settings
 
 from django.utils.translation import gettext_lazy as _
 from django.template.loader import render_to_string
 
-from .views.form import ChoiceQuestion, Form
-from .views import Trial, Consent, Final, Explainer, StartSession, Step, Playlist, Score
-from .views.playback import Playback
 from .base import Base
+from .views import  Explainer, Consent, StartSession, Final, Score, Playlist, Step, Trial
+from .views.form import Form
+
+from .util.questions import DEMOGRAPHICS, next_question
+from .util.goldsmiths import MSI_FG_GENERAL, MSI_ALL
+from .util.stomp import STOMP20
+from .util.tipi import TIPI
+
 from .util.actions import combine_actions
 
 
 class Hooked(Base):
-    """ Inherit from these rules to set up a variant
-    of the Hooked on Music game
-    """
-    ID = 'HOOKED'
-    decision_time = 15
-    silence_time = 4
+    """Superclass for Hooked experiment rules"""
 
-    experiment_name = 'Hooked on Music'
-    researcher = 'Dr John Ashley Burgoyne'
-    researcher_contact = 'John Ashley Burgoyne (phone number: +31 20 525 7034; \
-        e-mail: j.a.burgoyne@uva.nl; Science Park 107, 1098 GE Amsterdam)'
+    consent_file = 'consent_hooked.html';
+    timeout = 15
+    questions = True
 
     @classmethod
-    def first_round(cls, experiment):
+    def first_round(cls, experiment, participant):
         """Create data for the first experiment rounds."""
-
+        
         # 1. Explain game.
         explainer = Explainer(
             instruction="How to Play",
             steps=[
-                Step(_("Do you recognise the song? Try to sing along. The faster you recognise songs, the more points you can earn.",)),
-                Step(_("Do you really know the song? Keep singing or imagining the music while the sound is muted. The music is still playing: you just can’t hear it!")),
-                Step(_("Was the music in the right place when the sound came back? Or did we jump to a different spot during the silence?"))
+                Step(_(
+                    "Do you recognise the song? Try to sing along. The faster you recognise songs, the more points you can earn.")),
+                Step(_(
+                    "Do you really know the song? Keep singing or imagining the music while the sound is muted. The music is still playing: you just can’t hear it!")),
+                Step(_(
+                    "Was the music in the right place when the sound came back? Or did we jump to a different spot during the silence?"))
             ],
-        ).action(step_numbers=True)
+            button_label=_("Let's go!")).action(True)
 
         # 2. Get informed consent.
-        context = {
-            'experiment_name': cls.experiment_name,
-            'researcher': cls.researcher,
-            'resarcher_contact': cls.researcher_contact
-        }
-        consent_text = render_to_string(join('consent',
-            'consent_hooked.html'), context=context)
-        consent = Consent.action(consent_text)
+        rendered = render_to_string('consent/{}'.format(cls.consent_file))
+        consent = Consent.action(rendered, title=_('Informed consent'), confirm=_('I agree'), deny=_('Stop'))
 
         # 3. Choose playlist.
         playlist = Playlist.action(experiment.playlists.all())
@@ -55,15 +50,73 @@ class Hooked(Base):
         # 4. Start session.
         start_session = StartSession.action()
 
-        return combine_actions(
+        return [
             explainer,
             consent,
             playlist,
             start_session
-        )
+        ]
+
 
     @classmethod
-    def next_round(cls, session, request_session=None):
+    def get_random_question(cls, session):
+        """Get a random question from each question list, in priority completion order.
+
+        Participants will not continue to the next question set until they
+        have completed their current one.
+        """
+
+        # Constantly re-randomising is mildly inefficient, but it's not
+        # worth the trouble to save blocked, randomised question lists persistently.
+
+        # 1. Demographic questions (7 questions)
+        question = \
+            next_question(
+                session,
+                random.sample(DEMOGRAPHICS, len(DEMOGRAPHICS)),
+            )
+
+        # 2. General music sophistication (18 questions)
+        if question is None:
+            question = \
+                next_question(
+                    session,
+                    random.sample(MSI_FG_GENERAL, len(MSI_FG_GENERAL)),
+                )
+
+        # 3. Complete music sophistication (20 questions)
+        if question is None:
+            # next_question() will skip the FG questions from before
+            question = \
+                next_question(
+                    session,
+                    random.sample(MSI_ALL, len(MSI_ALL)),
+                )
+
+        # 4. STOMP (20 questions)
+        if question is None:
+            question = \
+                next_question(
+                    session,
+                    random.sample(STOMP20, len(STOMP20)),
+                )
+
+        # 5. TIPI (10 questions)
+        if question is None:
+            question = \
+                next_question(
+                    session,
+                    random.sample(TIPI, len(TIPI)),
+                )
+
+        return Trial(
+                title=_("Questionnaire"),
+                feedback_form=Form([question], is_profile=True, is_skippable=question.is_skippable)).action()
+
+
+    
+    @classmethod
+    def next_round(cls, session):
         """Get action data for the next round"""
 
         # If the number of results equals the number of experiment.rounds,
@@ -75,124 +128,124 @@ class Hooked(Base):
             session.save()
 
             # Return a score and final score action.
+            next_round_number = session.get_next_round()
+            config = {'show_section': True, 'show_total_score': True}
+            title = cls.get_trial_title(session, next_round_number - 1)
             return combine_actions(
-                Score.action(session),
-                Final.action(
+                Score(session,
+                    config=config,
+                    title=title
+                ).action(),
+                Final(
                     session=session,
                     final_text=cls.final_score_message(session),
-                    rank=cls.rank(session)
-                )
+                    rank=cls.rank(session),
+                    show_social=True,
+                    show_profile_link=True,
+                    button={'text': _('Play again'), 'link': '{}/{}'.format(settings.CORS_ORIGIN_WHITELIST[0], session.experiment.slug)}
+                ).action()
             )
 
-        else:
-            last_result = session.result_set.order_by('-created_at').first()
-            if not last_result:
-                return cls.get_recognize_view(session)
-            if last_result.comment == 'recognized':
-                section = last_result.section
-                silence_config = {
-                    'decision_time': cls.silence_time,
-                    'show_animation': False,
-                    'mute': True
-                }
-                silence_playback = Playback([section], play_config=silence_config, instruction=_('Keep imagining the music'))
-                silence_view = Trial(
-                    playback=silence_playback,
-                    feedback_form=None,
-                    title=_('Hooked on Music'),
-                    config = {
-                        'auto_advance': True
-                    }
-                )
-                continuation_correctness = random.randint(0, 1) == 1
-                last_result.expected_response = 'YES' if continuation_correctness else 'NO'
-                last_result.save()
-                question = ChoiceQuestion(
-                    question=_('Did the track come back in the right place?'),
-                    key='sync',
-                    choices={
-                        'YES': _('YES'),
-                        'NO': _('NO')
-                    },
-                    view='BUTTON_ARRAY',
-                    result_id=last_result.id,
-                    submits=True
-                )
-                form = Form([question])
-                continuation_offset = random.randint(100, 150) / 10 if not continuation_correctness else 0
-                playhead = cls.decision_time + cls.silence_time + continuation_offset
-                sync_config = {
-                    'decision_time': cls.decision_time,
-                    'show_animation': True,
-                    'playhead': playhead
-                }
-                sync_playback = Playback([section], play_config=sync_config)
-                sync_view = Trial(
-                    playback=sync_playback,
-                    feedback_form=form,
-                    title=_('Hooked on Music'),
-                    config = {
-                        'auto_advance': True
-                    }
-                )
-                return combine_actions(silence_view.action(), sync_view.action())
-            return combine_actions(
-                Score.action(session),
-                cls.get_recognize_view(session)
-            )
+        # Get next round number and initialise actions list. Two thirds of
+        # rounds will be song_sync; the remainder heard_before.
+        next_round_number = session.get_next_round()
 
+        # Collect actions.
+        actions = []
+
+        if next_round_number == 1:
+            # Plan sections
+            cls.plan_sections(session)
+
+            # Go to SongSync straight away.
+            actions.append(cls.next_song_sync_action(session))
+        else:
+            # Create a score action.
+            config = {'show_section': True, 'show_total_score': True}
+            title = cls.get_trial_title(session, next_round_number - 1)
+            actions.append(Score(session,
+                config=config,
+                title=title
+            ).action())
+
+            # Load the heard_before offset.
+            try:
+                heard_before_offset = \
+                    session.load_json_data()['plan']['n_song_sync'] + 1
+            except KeyError as error:
+                print('Missing plan key: %s' % str(error))
+                return combine_actions(*actions)
+
+            # SongSync rounds. Skip questions until Round 5.
+            if next_round_number in range(2, 5):
+                actions.append(cls.next_song_sync_action(session))
+            if next_round_number in range(5, heard_before_offset):
+                actions.append(cls.get_random_question(session)) if cls.questions else None
+                actions.append(cls.next_song_sync_action(session))
+
+            # HeardBefore rounds
+            if next_round_number == heard_before_offset:
+                # Introduce new round type with Explainer.
+                actions.append(cls.heard_before_explainer())
+                actions.append(
+                    cls.next_heard_before_action(session))
+            if next_round_number > heard_before_offset:
+                actions.append(cls.get_random_question(session)) if cls.questions else None
+                actions.append(
+                    cls.next_heard_before_action(session))
+
+        return combine_actions(*actions)
+
+
+    @staticmethod
+    def heard_before_explainer():
+        """Explainer for heard-before rounds"""
+        return Explainer(
+            instruction=_("Bonus Rounds"),
+            steps=[
+                Step(_("Listen carefully to the music.")),
+                Step(_("Did you hear the same song during previous rounds?")),
+            ],
+            button_label=_("Continue")).action(True)
+
+    @staticmethod
+    def final_score_message(session):
+        """Create final score message for given session"""
+
+        n_sync_guessed = 0
+        sync_time = 0
+        n_sync_correct = 0
+        n_old_new_expected = 0
+        n_old_new_correct = 0
+
+        for result in session.result_set.all():
+            json_data = result.load_json_data()
+            try:
+                if json_data['view'] == 'SONG_SYNC':
+                    if json_data['result']['type'] == 'recognized':
+                        n_sync_guessed += 1
+                        sync_time += json_data['result']['recognition_time']
+                        if result.score > 0:
+                            n_sync_correct += 1
+                else:
+                    if json_data['config']['expected_result'] == 1:
+                        n_old_new_expected += 1
+                        if result.score > 0:
+                            n_old_new_correct += 1
+            except KeyError as error:
+                print('KeyError: %s' % str(error))
+                continue
+
+        score_message = "Well done!" if session.final_score > 0 else "Too bad!"
+        if n_sync_guessed == 0:
+            song_sync_message = "You did not recognise any songs at first."
+        else:
+            song_sync_message = "It took you {} s to recognise a song on average, and you correctly identified {} out of the {} songs you thought you knew.".format(
+                round(sync_time / n_sync_guessed, 1), n_sync_correct, n_sync_guessed)
+        heard_before_message = "During the bonus rounds, you remembered {} of the {} songs that came back.".format(
+            n_old_new_correct, n_old_new_expected)
+        return score_message + " " + song_sync_message + " " + heard_before_message
 
     @classmethod
-    def calculate_score(cls, result, form_element, data):
-        """Calculate score for given result data"""
-        score = result.score
-
-        # Calculate from the form_element
-        if form_element.get('key') == 'recognize':
-            value = form_element.get('value')
-            if value == 'TIMEOUT':
-                score = math.ceil(-cls.decision_time)
-            elif value == 'NO':
-                score = 0
-            elif value == 'YES':
-                score = math.ceil(
-                    cls.decision_time - data.get('decision_time')
-                )
-                result.comment = 'recognized'
-        else:
-            result.comment = 'synced'
-            if result.expected_response != form_element.get('value'):
-                score *= -1
-        result.save()
-        return score
-
-    @classmethod
-    def get_recognize_view(cls, session):
-        section = session.section_from_unused_song()
-        result_pk = Base.prepare_result(session, section)
-        question = ChoiceQuestion(
-            question=_('Do you recognise this song?'),
-            key='recognize',
-            choices={
-                'YES': _('YES'),
-                'NO': _('NO')
-            },
-            view='BUTTON_ARRAY',
-            result_id=result_pk,
-            submits=True
-        )
-        form = Form([question])
-        play_config = {
-            'decision_time': cls.decision_time,
-            'show_animation': True
-        }
-        playback = Playback([section], play_config=play_config, preload_message=_('Get ready!'))
-        view = Trial(
-            playback=playback,
-            feedback_form=form,
-            title=_('Hooked on Music'),
-            config={
-                'auto_advance': True
-            }
-        )
-        return view.action()
+    def get_trial_title(cls, session, next_round_number):
+        return _('Round {} / {}').format(next_round_number, session.experiment.rounds)

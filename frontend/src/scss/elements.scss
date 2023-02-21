@@ -3,6 +3,8 @@ h3.title {
     position: relative;
     padding-bottom: 15px;
     margin-bottom: 15px;
+    text-align: left;
+    
     &:after {
         content: "";
         position: absolute;

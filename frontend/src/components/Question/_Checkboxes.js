@@ -1,5 +1,5 @@
 import React from "react";
-import classnames from "classnames";
+import classNames from "classnames";
 
 // Checkboxes is a question view for selecting multiple options from a list
 const Checkboxes = ({ question, value, onChange }) => {
@@ -18,10 +18,6 @@ const Checkboxes = ({ question, value, onChange }) => {
 
     return (
         <div className="aha__checkboxes">
-            {question.explainer && (
-                <p className="explainer">{question.explainer}</p>
-            )}
-            <h3 className="title">{question.question}</h3>
             {Object.keys(question.choices).map((val, index) => (
                 <Checkbox
                     key={index}
@@ -39,7 +35,7 @@ const Checkboxes = ({ question, value, onChange }) => {
 const Checkbox = ({ label, value, checked, onChange }) => {
     return (
         <div
-            className={classnames("checkbox", { checked })}
+            className={classNames("checkbox", { checked })}
             onClick={() => {
                 onChange(value);
             }}

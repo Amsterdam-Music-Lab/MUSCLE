@@ -1,21 +1,16 @@
 import React from "react";
 import Slider from "react-rangeslider";
-import classnames from "classnames";
+import classNames from "classnames";
 
 // Range is a question view that makes you select a value within the given range, using a slider
-const Range = ({ question, value, onChange }) => {
+const Range = ({ question, value, onChange}) => {
     const emptyValue = !value;
 
     if (emptyValue) {
         value = (question.min_value + question.max_value) / 2;
     }
     return (
-        <div className={classnames("aha__range", { empty: emptyValue })}>
-            {question.explainer && (
-                <p className="explainer">{question.explainer}</p>
-            )}
-            <h3 className="title">{question.question}</h3>
-
+        <div className={classNames("aha__range", { empty: emptyValue })}>
             <h1 className="current-value">{emptyValue ? "↔" : value}</h1>
 
             <Slider

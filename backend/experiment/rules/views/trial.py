@@ -10,7 +10,6 @@ class Trial(object):  # pylint: disable=too-few-public-methods
     Parameters:
     - section: section to be played in this view
     - feedback_form: array of form elements
-    - instructions: messages to show during different stages - defaults to Hooked instructions
     - title: page title - defaults to empty
     """
 
@@ -29,6 +28,7 @@ class Trial(object):  # pylint: disable=too-few-public-methods
                 - neutral: first element is blue, second is yellow, third is teal
                 - neutral-inverted: first element is yellow, second is blue, third is teal
                 - boolean: first element is green, second is red
+                - boolean-negative-first: first element is red, second is green
             - time_pass_break: when time has passed, submit the result immediately; skipping any subsequent actions (e.g. a certainty question)
                 - Can not be combined with listen_first (True)
                 - Can not be combined with auto_advance (False)
@@ -41,8 +41,9 @@ class Trial(object):  # pylint: disable=too-few-public-methods
             'decision_time': 5,
             'auto_advance': False,
             'listen_first': False,
+            'show_continue_button': True,
             'continue_label': _('Continue'),
-            'style': 'neutral'
+            'style': 'neutral',
         }
         if config:
             self.config.update(config)

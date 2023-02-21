@@ -1,24 +1,25 @@
 import React, { useState, useEffect, useCallback } from "react";
-import {
-    useExperiment,
-    useParticipant,
-    getNextRound,
-} from "../../API";
-
+import { useExperiment, useParticipant, getNextRound } from "../../API";
 import { TransitionGroup, CSSTransition } from "react-transition-group";
 import { withRouter } from "react-router-dom";
 
-import Trial from '../Trial/Trial';
-import DefaultPage from "../Page/DefaultPage";
-import Loading from "../Loading/Loading";
-import Explainer from "../Explainer/Explainer";
 import Consent from "../Consent/Consent";
-import Playlist from "../Playlist/Playlist";
-import StartSession from "../StartSession/StartSession";
-import SongSync from "../SongSync/SongSync";
-import Score from "../Score/Score";
-import FinalScore from "../FinalScore/FinalScore";
+import DefaultPage from "../Page/DefaultPage";
+import ToontjeHoger from "../ToontjeHoger/ToontjeHoger";
+import Explainer from "../Explainer/Explainer";
 import Final from "../Final/Final";
+import Loading from "../Loading/Loading";
+import Playlist from "../Playlist/Playlist";
+import Score from "../Score/Score";
+import SongSync from "../SongSync/SongSync";
+import Plink from "../Plink/Plink";
+import HTML from "../HTML/HTML";
+import StartSession from "../StartSession/StartSession";
+import Trial from "../Trial/Trial";
+import useResultHandler from "../../hooks/useResultHandler";
+import { stateNextRound } from "../../util/nextRound";
+import Info from "../Info/Info";
+import classNames from "classnames";
 
 // Experiment handles the main experiment flow:
 // - Loads the experiment and participant
@@ -36,8 +37,8 @@ const Experiment = ({ match }) => {
     const [experiment, loadingExperiment] = useExperiment(match.params.slug);
     const [participant, loadingParticipant] = useParticipant();
 
-    const loadingText = experiment ? experiment.loading_text : '';
-    const className = experiment ? experiment.class_name : '';
+    const loadingText = experiment ? experiment.loading_text : "";
+    const className = experiment ? experiment.class_name : "";
 
     // Load state, set random key
     const loadState = useCallback((state) => {
@@ -59,10 +60,7 @@ const Experiment = ({ match }) => {
         if (!loadingExperiment && !loadingParticipant) {
             // Loading succeeded
             if (experiment && participant) {
-                if (experiment.next_round) {
-                    loadState(experiment.next_round);
-                }
-                else loadState(experiment.first_round);
+                loadState(stateNextRound(experiment));
             } else {
                 // Loading error
                 setError("Could not load experiment");
@@ -79,10 +77,10 @@ const Experiment = ({ match }) => {
 
     // Load next round, stored in nextRound
     const onNext = async () => {
-        if (state && state.next_round) {
-            loadState(state.next_round);
+        if (state.next_round && state.next_round.length) {
+            loadState(stateNextRound(state));
         } else {
-            console.log("No next-round data available");
+            console.error("No next-round data available");
             // Fallback in case a server response/async call went wrong
             // Try to get next_round data from server again
             const round = await getNextRound({
@@ -99,6 +97,14 @@ const Experiment = ({ match }) => {
         }
     };
 
+    const onResult = useResultHandler({
+        session,
+        participant,
+        loadState,
+        onNext,
+        state,
+    });
+
     // Render experiment state
     const render = (view) => {
         // Default attributes for every view
@@ -112,44 +118,53 @@ const Experiment = ({ match }) => {
             setPlaylist,
             setError,
             setSession,
+            onResult,
             onNext,
             ...state,
         };
 
         // Show view, based on the unique view ID:
         switch (view) {
-            case "LOADING":
-                return <Loading {...attrs} />;
-            case "ERROR":
-                return <div>Error: {state.error}</div>;
+            // Experiment views
+            // -------------------------
+            case "TRIAL_VIEW":
+                return <Trial {...attrs} />;
+            case "SONG_SYNC":
+                return <SongSync {...attrs} />;
+            case "PLINK":
+                return <Plink {...attrs} />;
+            case "HTML":
+                return <HTML {...attrs} />;
+
+            // Information & Scoring
+            // -------------------------
             case "EXPLAINER":
                 return <Explainer {...attrs} />;
-            case "CONSENT":
-                return <Consent {...attrs} />;
+            case "SCORE":
+                return <Score {...attrs} />;
+            case "FINAL":
+                return <Final {...attrs} />;
+
+            // Generic / helpers
+            // -------------------------
             case "PLAYLIST":
                 return <Playlist {...attrs} />;
             case "START_SESSION":
                 return <StartSession {...attrs} />;
-            case "SONG_SYNC":
-                return <SongSync {...attrs} />;
-            case "SCORE":
-                return <Score {...attrs} />;
-            case "TRIAL_VIEW":
-                return <Trial {...attrs} />
-            case "FINAL_SCORE":
-                return (
-                    <FinalScore
-                        {...attrs}
-                        onNext={() => {
-                            setSession(null);
-                            loadState(experiment.first_round);
-                        }}
-                    />
-                );
-            case "FINAL":
-                return (
-                    <Final {...attrs} />
-                );
+            case "LOADING":
+                return <Loading {...attrs} />;
+            case "ERROR":
+                return <div>Error: {state.error}</div>;
+            case "CONSENT":
+                return <Consent {...attrs} />;
+            case "INFO":
+                return <Info {...attrs} />;
+
+            // Specials
+            // -------------------------
+            case "TOONTJEHOGER":
+                return <ToontjeHoger {...attrs} />;
+
             default:
                 return (
                     <div className="text-white bg-danger">
@@ -170,30 +185,44 @@ const Experiment = ({ match }) => {
     if (state.view === "QUESTION") {
         key = state.question.key;
     }
-
     return (
-        <TransitionGroup className="aha__experiment">
+        <TransitionGroup
+            className={classNames(
+                "aha__experiment",
+                !loadingExperiment && experiment
+                    ? "experiment-" + experiment.slug
+                    : ""
+            )}
+        >
             <CSSTransition
                 key={key}
-                timeout={{ enter: 300, exit: 300 }}
+                timeout={{ enter: 300, exit: 0 }}
                 classNames={"transition"}
+                unmountOnExit
             >
-                <DefaultPage
-                    title={state.title}
-                    logoClickConfirm={
-                        ["FINAL_SCORE", "ERROR"].includes(key)
-                            ? null
-                            : "Are you sure you want to stop this experiment?"
-                    }
-                    className={className}
-                >
-                    {render(state.view)}
-                </DefaultPage>
+                {(!loadingExperiment && experiment) || key === "ERROR" ? (
+                    <DefaultPage
+                        title={state.title}
+                        logoClickConfirm={
+                            ["FINAL", "ERROR", "TOONTJEHOGER"].includes(key) ||
+                            // Info pages at end of experiment
+                            (key === "INFO" &&
+                                (!state.next_round || !state.next_round.length))
+                                ? null
+                                : "Are you sure you want to stop this experiment?"
+                        }
+                        className={className}
+                    >
+                        {render(state.view)}
+                    </DefaultPage>
+                ) : (
+                    <div className="loader-container">
+                        <Loading />
+                    </div>
+                )}
             </CSSTransition>
         </TransitionGroup>
     );
 };
-
-
 
 export default withRouter(Experiment);

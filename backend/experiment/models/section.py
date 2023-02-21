@@ -35,6 +35,9 @@ class Section(models.Model):
             self.end_time_str()
         )
 
+    def song_label(self):
+        return "{} - {}".format(self.artist, self.name)
+
     def start_time_str(self):
         """Create start time string 0:01:01.nn"""
         return str(datetime.timedelta(seconds=self.start_time)).rstrip('0')
@@ -50,6 +53,9 @@ class Section(models.Model):
     def absolute_url(self):
         """Return absolute url for this section"""
         return reverse('experiment:section', args=[self.pk, self.code])
+
+    def simple_object(self):
+        return {'id': self.id, 'url': self.absolute_url()}
 
     def export_admin(self):
         """Export data for admin"""

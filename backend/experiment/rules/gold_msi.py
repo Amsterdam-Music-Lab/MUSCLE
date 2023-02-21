@@ -9,32 +9,33 @@ from .util.actions import combine_actions, final_action_with_optional_button
 
 from .base import Base
 
+
 class GoldMSI(Base):
     """ an experiment view that implements the GoldMSI questionnaire """
     ID = 'GOLD_MSI'
     demographics = [
         question_by_key('dgf_gender_identity'),
         question_by_key('dgf_age', EXTRA_DEMOGRAPHICS),
-        question_by_key('dgf_education'),
-        question_by_key('dgf_highest_qualification_expectation', EXTRA_DEMOGRAPHICS),
+        question_by_key('dgf_education', drop_choices=['isced-1']),
+        question_by_key('dgf_highest_qualification_expectation',
+                        EXTRA_DEMOGRAPHICS),
         question_by_key('dgf_country_of_residence'),
         question_by_key('dgf_country_of_origin'),
     ]
     questions = MSI_F3_MUSICAL_TRAINING + demographics
 
     @classmethod
-    def first_round(cls, experiment):
+    def first_round(cls, experiment, participant):
         consent = Consent.action()
         start_session = StartSession.action()
-        return combine_actions(
+        return [
             consent,
             start_session
-        )
+        ]
 
     @classmethod
     def next_round(cls, session, request_session=None):
         round_number = session.total_questions()
-        print(round_number, len(cls.questions))
         if round_number == len(cls.questions):
             return final_action_with_optional_button(session, '', request_session)
         question = cls.questions[round_number]

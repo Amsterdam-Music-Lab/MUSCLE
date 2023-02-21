@@ -10,44 +10,48 @@ from .base import Base
 from .util.actions import combine_actions
 from .views import Consent, Explainer, Final, StartSession, Step
 
+
 class RhythmExperimentSeries(Base):
     ID = 'TEST_BATTERY'
+    consent_form = 'consent/consent_rhythm.html'
+    debrief_form = 'final/experiment_series.html'
+    show_participant_final = True
 
     @classmethod
     def intro_explainer(cls):
         return Explainer(
-            instruction=_("You are about to take part in an experiment about rhythm perception."),
+            instruction=_(
+                "You are about to take part in an experiment about rhythm perception."),
             steps=[
                 Step(_(
-                        "We want to find out what the best way is to test whether someone has a good sense of rhythm!"),
+                    "We want to find out what the best way is to test whether someone has a good sense of rhythm!"),
                 ),
                 Step(_(
-                        "You will be doing many little tasks that have something to do with rhythm."),
+                    "You will be doing many little tasks that have something to do with rhythm."),
                 ),
                 Step(_(
-                        "You will get a short explanation and a practice trial for each little task."),
+                    "You will get a short explanation and a practice trial for each little task."),
                 ),
                 Step(_(
-                        "You can get reimbursed for completing the entire experiment! Either by earning 6 euros, or by getting 1 research credit (for psychology students at UvA only). You will get instructions for how to get paid or how to get your credit at the end of the experiment."),
+                    "You can get reimbursed for completing the entire experiment! Either by earning 6 euros, or by getting 1 research credit (for psychology students at UvA only). You will get instructions for how to get paid or how to get your credit at the end of the experiment."),
                 )
             ],
             button_label=_("Continue")
         ).action()
 
     @classmethod
-    def first_round(cls, experiment):
+    def first_round(cls, experiment, participant):
         """Create data for the first experiment rounds."""
-                # read consent form from file
-        rendered = render_to_string(
-            'consent/consent_rhythm.html')
+        # read consent form from file
+        rendered = render_to_string(cls.consent_form)
         consent = Consent.action(rendered, title=_(
             'Informed consent'), confirm=_('I agree'), deny=_('Stop'))
         start_session = StartSession.action()
-        return combine_actions(
+        return [
             consent,
             cls.intro_explainer(),
             start_session
-        )
+        ]
 
     @classmethod
     def next_round(cls, session):
@@ -57,13 +61,13 @@ class RhythmExperimentSeries(Base):
         if not experiment_data:
             experiment_data = prepare_experiments(session)
         if experiment_number == len(experiment_data):
-            rendered = render_to_string(join('final',
-            'experiment_series.html'))
+            rendered = render_to_string(cls.debrief_form)
             return Final(
                 session,
                 title=_("Thank you very much for participating!"),
                 final_text=rendered,
-                show_participant_link=True,
+                show_participant_link=cls.show_participant_final,
+                show_participant_id_only=cls.show_participant_final,
             ).action()
         slug = experiment_data[experiment_number]
         session.save()
@@ -71,10 +75,10 @@ class RhythmExperimentSeries(Base):
             'text': _('Continue'),
             'link': '{}/{}'.format(settings.CORS_ORIGIN_WHITELIST[0], slug)
         }
-        return Final(
-            session, 
-            title=_('Next experiment (%d to go!)' % (len(experiment_data) - experiment_number)),
-            button=button).action()
+        return Final(session,
+                     title=_('Next experiment (%d to go!)') % (
+                         len(experiment_data) - experiment_number),
+                     button=button).action()
 
 
 def prepare_experiments(session):
@@ -90,6 +94,7 @@ def prepare_experiments(session):
     session.save()
     return experiment_list
 
+
 def register_consent(session, experiment_list):
     from ..models import Profile
     participant = session.participant
@@ -102,8 +107,9 @@ def register_consent(session, experiment_list):
             profile.answer = answer
         except Profile.DoesNotExist:
             profile = Profile(participant=participant,
-                question=question, answer=answer)
+                              question=question, answer=answer)
         profile.save()
+
 
 def get_experiment_lists(session):
     series = session.experiment.experiment_series
@@ -116,6 +122,7 @@ def get_experiment_lists(session):
         'last': last_list
     }
     return experiments
+
 
 def get_associated_experiments(pk_list):
     from ..models import Experiment

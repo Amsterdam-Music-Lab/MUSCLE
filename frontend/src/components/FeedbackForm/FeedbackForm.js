@@ -1,19 +1,34 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import Question from "../Question/Question";
 import Button from "../Button/Button";
 
-
 // FeedbackForm
-const FeedbackForm = ({ formActive, form, buttonLabel, skipLabel, isSkippable, onResult }) => {
-
-    const showSubmitButtons = form.filter( formElement => formElement.submits).length === 0;
+const FeedbackForm = ({
+    formActive,
+    form,
+    buttonLabel,
+    skipLabel,
+    isSkippable,
+    onResult,
+    emphasizeTitle = false,
+}) => {
+    const isSubmitted = useRef(false);
+    const showSubmitButtons =
+        form.filter((formElement) => formElement.submits).length === 0;
 
     const [formValid, setFormValid] = useState(false);
-    
+
     const onSubmit = () => {
+        // Prevent double submit
+        if (isSubmitted.current){
+            console.error("Multiple submits detected");
+            return;
+        }
+        isSubmitted.current = true;
+
         // Callback onResult with question data
         onResult({
-            form
+            form,
         });
     };
 
@@ -22,11 +37,14 @@ const FeedbackForm = ({ formActive, form, buttonLabel, skipLabel, isSkippable, o
         if (form[question_key].submits) {
             onSubmit(form);
         }
-        if (form.filter( formElement => formElement.value ).length === form.length) {
-            setFormValid(true);
-        }
+        // for every non-skippable question, check that we have a value
+        const validFormElements = form.map( formElement => {
+            if (formElement.is_skippable) return formElement;
+            else if (formElement.value) return formElement;
+        });
+        if (validFormElements.length === form.length) setFormValid(true);
+        else setFormValid(false);
     };
-
 
     return (
         <div className="aha__feedback d-flex justify-content-center">
@@ -38,33 +56,42 @@ const FeedbackForm = ({ formActive, form, buttonLabel, skipLabel, isSkippable, o
                         active={formActive}
                         question={form[index]}
                         onChange={onChange}
+                        emphasizeTitle={emphasizeTitle}
                     />
-                )
-                )}
+                ))}
                 {/* Continue button */}
                 {showSubmitButtons && formValid && (
-                <Button
-                    onClick={() => {
-                        onSubmit();
-                    }}
-                    className={"btn-primary anim anim-fade-in anim-speed-500"}
-                    title={buttonLabel}
-                />)}
+                    <div className="center">
+                        <Button
+                            onClick={() => {
+                                onSubmit();
+                            }}
+                            className={
+                                "btn-primary submit anim anim-fade-in anim-speed-500"
+                            }
+                            title={buttonLabel}
+                        />
+                    </div>
+                )}
 
                 {/* Skip button */}
                 {/* Only show skip-button when there is no value */}
                 {isSkippable && showSubmitButtons && (
-                    <Button
-                        onClick={() => {
-                            onSubmit("");
-                        }}
-                        className={"btn-gray anim anim-fade-in anim-speed-500"}
-                        title={skipLabel}
-                    />
+                    <div className="center">
+                        <Button
+                            onClick={() => {
+                                onSubmit();
+                            }}
+                            className={
+                                "btn-gray anim anim-fade-in anim-speed-500"
+                            }
+                            title={skipLabel}
+                        />
+                    </div>
                 )}
             </form>
         </div>
-    )
-}
+    );
+};
 
 export default FeedbackForm;

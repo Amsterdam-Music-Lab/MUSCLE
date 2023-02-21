@@ -7,6 +7,10 @@ export const useGet = (url) => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
+        setData(null);
+        setLoading(true);
+
+        const source = axios.CancelToken.source();
         const fetchData = async () => {
             try {
                 const response = await axios.get(url);
@@ -17,8 +21,13 @@ export const useGet = (url) => {
                 setLoading(false);
             }
         };
-
         fetchData();
+
+        return () => {
+            setData(null);
+            setLoading(false);
+            source.cancel();
+        };
     }, [url]);
 
     return [data, loading];

@@ -12,6 +12,7 @@
             margin-bottom: 10px;
             line-height: 1.4;
             font-size: 16px;
+            min-height: 10px;
 
             .number {
                 flex-shrink: 0;
@@ -28,7 +29,8 @@
                 border-radius: math.div($size, 2);
                 font-size: math.div($size, 1.9);
                 line-height: $size - 2;
-                margin-bottom: 0;
+                margin-bottom: 2px;
+                margin-top: 2px;
             }
         }
     }

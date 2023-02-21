@@ -6,7 +6,7 @@
 #
 asgiref==3.4.1
     # via django
-django==3.2.13
+django==3.2.16
     # via
     #   -r requirements.in/base.txt
     #   django-cors-headers
@@ -19,7 +19,7 @@ gunicorn==20.1.0
     # via -r requirements.in/prod.txt
 iptocc==2.1.2
     # via -r requirements.in/base.txt
-numpy==1.21.0
+numpy==1.22.0
     # via pandas
 pandas==1.1.5
     # via iptocc

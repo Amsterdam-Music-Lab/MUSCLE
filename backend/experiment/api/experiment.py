@@ -2,8 +2,10 @@ import logging
 
 from django.http import Http404, JsonResponse
 from django.conf import settings
+from django.shortcuts import redirect
 from django.utils.translation import gettext_lazy as _
 from django.utils.translation import activate
+from .util.participant import current_participant
 
 from experiment.models import Experiment, Session
 
@@ -24,16 +26,27 @@ def get(request, slug):
     if experiment.experiment_series and series_data:
         # we are in the middle of a test battery
         try:
-            session = Session.objects.get(pk=series_data.get('session_id'))
+            session = Session.objects.get(
+                pk=series_data.get('session_id'),
+                experiment=experiment
+            )
         except Session.DoesNotExist:
-            raise Http404("Session does not exist")
+            # delete session data and reload
+            del request.session['experiment_series']
+            return redirect('/experiment/id/{}/'.format(slug), request)
+
+        # convert non lists to list
+        next_round = session.experiment_rules().next_round(session)
+        if not isinstance(next_round, list):
+            next_round = [next_round]
+
         data = {
             'session': {
                 'id': session.id,
                 'playlist': session.playlist.id,
                 'json_data': session.load_json_data(),
             },
-            'next_round': session.experiment_rules().next_round(session)
+            'next_round': next_round
         }
         return JsonResponse(data, json_dumps_params={'indent': 4})
 
@@ -43,6 +56,9 @@ def get(request, slug):
 
     if experiment.language:
         activate(experiment.language)
+
+    # get current participant
+    participant = current_participant(request)
 
     # create data
     experiment_data = {
@@ -55,7 +71,7 @@ def get(request, slug):
             {'id': playlist.id, 'name': playlist.name}
             for playlist in experiment.playlists.all()
         ],
-        'first_round': experiment.get_rules().first_round(experiment),
+        'next_round': experiment.get_rules().first_round(experiment, participant),
         'loading_text': _('Loading')
     }
 

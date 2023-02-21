@@ -1,23 +1,229 @@
-.aha__trial{
+.aha__trial {
     display: flex;
     flex-direction: column;
-}
 
-.ti-headphone{
-    font-size:80px;
-}
+    .ti-headphone {
+        font-size: 80px;
+    }
 
-.circle {
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
+    .stationary {
+        margin-top: 20px;
+    }
 
-.circle-content {
-    top: 55px;
-    position: absolute;
+    .circle {
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .circle-content {
+        top: 43px;
+        position: absolute;
+    }
+
+    // Color schemes
+    // ------------------------
+
+    &.boolean {
+        .player-wrapper:nth-of-type(1).aha__player-small,
+        .playback {
+            .btn,
+            .banner {
+                @include btn-style($yellow);
+            }
+        }
+        .player-wrapper:nth-of-type(2) .aha__player-small {
+            .btn,
+            .banner {
+                @include btn-style($blue);
+            }
+        }
+        .player-wrapper:nth-of-type(3) .aha__player-small {
+            .btn,
+            .banner {
+                @include btn-style($teal);
+            }
+        }
+        .player-wrapper:nth-of-type(4) .aha__player-small {
+            .btn,
+            .banner {
+                @include btn-style($pink);
+            }
+        }
+
+        form {
+            .btn-secondary:nth-of-type(1) {
+                @include btn-style($teal);
+            }
+            .btn-secondary:nth-of-type(2) {
+                @include btn-style($yellow);
+            }
+            .btn-secondary:last-of-type {
+                @include btn-style($red);
+            }
+        }
+    }
+
+    &.boolean-negative-first {
+        .player-wrapper:nth-of-type(1).aha__player-small,
+        .playback {
+            .btn,
+            .banner {
+                @include btn-style($yellow);
+            }
+        }
+        .player-wrapper:nth-of-type(2) .aha__player-small {
+            .btn,
+            .banner {
+                @include btn-style($blue);
+            }
+        }
+        .player-wrapper:nth-of-type(3) .aha__player-small {
+            .btn,
+            .banner {
+                @include btn-style($teal);
+            }
+        }
+        .player-wrapper:nth-of-type(4) .aha__player-small {
+            .btn,
+            .banner {
+                @include btn-style($pink);
+            }
+        }
+
+        form {
+            .btn:nth-of-type(1) {
+                @include btn-style($red);
+            }
+            .btn:nth-of-type(2) {
+                @include btn-style($teal);
+            }
+        }
+    }
+
+    &.neutral {
+        /*
+        .aha__play-button{
+            @include btn-style($blue);
+        }
+        */
+
+        .player-wrapper:nth-of-type(1) .aha__player-small {
+            .btn,
+            .banner {
+                @include btn-style($blue);
+            }
+        }
+        .player-wrapper:nth-of-type(2) .aha__player-small {
+            .btn,
+            .banner {
+                @include btn-style($yellow);
+            }
+        }
+
+        form {
+            .btn:nth-of-type(1) {
+                @include btn-style($blue);
+                &.submit {
+                    @include btn-style($pink);
+                }
+            }
+            .btn:nth-of-type(2) {
+                @include btn-style($yellow);
+            }
+
+            .btn.invisible-text, .btn.invisible-text:hover {
+                color: rgba(0, 0, 0, 0);
+            }
+        }
+    }
+
+    &.neutral-inverted {
+        .player-wrapper:nth-of-type(1) .aha__player-small {
+            .btn,
+            .banner {
+                @include btn-style($yellow);
+            }
+        }
+        .player-wrapper:nth-of-type(2) .aha__player-small {
+            .btn,
+            .banner {
+                @include btn-style($blue);
+            }
+        }
+        form {
+            .btn:nth-of-type(1) {
+                @include btn-style($yellow);
+            }
+            .btn:nth-of-type(2) {
+                @include btn-style($blue);
+            }
+
+            .btn.invisible-text, .btn.invisible-text:hover {
+                color: rgba(0, 0, 0, 0);
+            }
+        }
+    }
+
+    &.neutral,
+    &.neutral-inverted {
+        .player-wrapper:nth-of-type(3) .aha__player-small {
+            .btn,
+            .banner {
+                @include btn-style($teal);
+            }
+        }
+        .player-wrapper:nth-of-type(4) .aha__player-small {
+            .btn,
+            .banner {
+                @include btn-style($pink);
+            }
+        }
+        form {
+            .btn:nth-of-type(3) {
+                @include btn-style($teal);
+            }
+            .btn:nth-of-type(4) {
+                @include btn-style($pink);
+            }
+        }
+    }
+
+    &.primary-form {
+        form {
+            .btn:nth-of-type(1) {
+                @include btn-style($pink);
+            }
+        }
+    }
+
+    &.blue-players {
+        .playback,
+        .player-wrapper:nth-of-type(1).aha__player-small,
+        .player-wrapper:nth-of-type(2).aha__player-small,
+        .player-wrapper:nth-of-type(3).aha__player-small,
+        .player-wrapper:nth-of-type(4) .aha__player-small {
+            .btn,
+            .banner {
+                @include btn-style($blue);
+            }
+        }
+    }
+
+    &.pink-players {
+        .playback,
+        .player-wrapper:nth-of-type(1).aha__player-small,
+        .player-wrapper:nth-of-type(2).aha__player-small,
+        .player-wrapper:nth-of-type(3).aha__player-small,
+        .player-wrapper:nth-of-type(4) .aha__player-small {
+            .btn,
+            .banner {
+                @include btn-style($pink);
+            }
+        }
+    }
 }

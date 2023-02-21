@@ -7,9 +7,9 @@ import Social from "../Social/Social";
 import { URLS } from "../../config";
 import ParticipantLink from "../ParticipantLink/ParticipantLink";
 
-// FinalScore is an experiment view that shows the final scores of the experiment
+// Final is an experiment view that shows the final scores of the experiment
 // It can only be the last view of an experiment
-const Final= ({ score, final_text, action_texts, button, onNext, history, show_participant_link, show_profile_link, show_social, points, rank }) => {
+const Final= ({ score, final_text, action_texts, button, onNext, history, show_participant_link, participant_id_only, show_profile_link, show_social, points, rank }) => {
     const [showScore, setShowScore] = useState(0);
 
     // Use a ref to prevent doing multiple increments
@@ -21,20 +21,21 @@ const Final= ({ score, final_text, action_texts, button, onNext, history, show_p
             return;
         }
 
-        const interval = Math.abs(2500 / score);
-
         const id = setTimeout(() => {
-            if (score !== scoreValue.current) {
-                // lower
-                if (scoreValue.current < score) {
-                    scoreValue.current += 1;
-                    setShowScore(scoreValue.current);
-                } else {
-                    scoreValue.current -= 1;
-                    setShowScore(scoreValue.current);
-                }
+            // Score step
+            const scoreStep = Math.max(
+                1,
+                Math.min(10, Math.ceil(Math.abs(scoreValue.current - score) / 10))
+            );
+
+            // Score are equal, stop
+            if (score === scoreValue.current) {
+                return;
             }
-        }, interval);
+            // Add / subtract score
+            scoreValue.current += Math.sign(score - scoreValue.current) * scoreStep;
+            setShowScore(scoreValue.current);
+        }, 50);
 
         return () => {
             clearTimeout(id);
@@ -49,15 +50,15 @@ const Final= ({ score, final_text, action_texts, button, onNext, history, show_p
                 <h1 className="total-score title">{showScore} {points}</h1>
             </div>
             )}
-            <div>
+            <div className="text-center">
                 <div dangerouslySetInnerHTML={{ __html: final_text }} />
             </div>
             {button && (
-                <a className="text-center" href={button.link}>
-                    <button className='btn btn-primary btn-lg'>
+                <div className="text-center pt-4">
+                    <a className='btn btn-primary btn-lg' href={button.link} onClick={button.link ? undefined : onNext}>
                         {button.text}
-                    </button>
-                </a>
+                    </a>
+                </div>
             )}
             {show_social && (<Social
                 score={score}
@@ -79,7 +80,9 @@ const Final= ({ score, final_text, action_texts, button, onNext, history, show_p
                 </div>
             )}
             {show_participant_link && (
-                <ParticipantLink></ParticipantLink>
+                <ParticipantLink
+                    participantIDOnly={participant_id_only}
+                />
             )}
         </div>
     );

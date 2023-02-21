@@ -53,7 +53,7 @@ class Anisochrony(DurationDiscrimination):
             return None
         expected_result = 'REGULAR' if difference == 0 else 'IRREGULAR'
         # create Result object and save expected result to database
-        result_pk = Base.prepare_result(session, section, expected_result)
+        result_pk = cls.prepare_result(session, section, expected_result)
         question = ChoiceQuestion(
             key='if_regular',
             question=_(
@@ -70,7 +70,7 @@ class Anisochrony(DurationDiscrimination):
         form = Form([question])
         config = {
             'listen_first': True,
-            'decision_time': section.duration + .7
+            'decision_time': section.duration + .1
         }
         view = Trial(
             playback=playback,
@@ -101,7 +101,7 @@ class Anisochrony(DurationDiscrimination):
         )
 
     @staticmethod
-    def calculate_score(result, form_element, data):
+    def calculate_score(result, data, scoring_rule, form_element):
         # a result's score is used to keep track of how many correct results were in a row
         # for catch trial, set score to 2 -> not counted for calculating turnpoints
         try:

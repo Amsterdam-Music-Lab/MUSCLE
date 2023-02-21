@@ -1,82 +1,98 @@
 import logging
-
-from .views import SongSync, SongBool, TwoAlternativeForced, FinalScore, Score, Trial
+from .views import Final
+from .util.score import SCORING_RULES
 
 logger = logging.getLogger(__name__)
 
 class Base(object):
     """Base class for other rules classes"""
 
-    @staticmethod
-    def prepare_result(session, section=None, expected_response=None):
+    @classmethod
+    def prepare_result(cls, session, section, expected_response=None, comment=None):
         # Prevent circular dependency errors
         from experiment.models import Result
 
         result = Result(session=session)
-        if section:
-            result.section = section
-        if expected_response:
+        result.section = section
+        if expected_response is not None:
             result.expected_response = expected_response
+        if comment is not None:
+            result.comment = comment
         result.save()
         return result.pk
-    
-    @staticmethod
-    def save_result(result_data):    
+
+    @classmethod
+    def get_result(cls, session, result_id=None):
         from experiment.models import Result
+        
+        if not result_id:
+            result = Result(session=session)
+        try:
+            result = Result.objects.get(pk=result_id, session=session)
+        except Result.DoesNotExist:
+            # Create new result
+            result = Result(session=session)
+        return result
 
-        result = Result.objects.get(pk=result_data['result_id'])
-        result.given_response = result_data['value']
-        result.save()
-        return result.expected_response
-
-    
-    @staticmethod
-    def handle_results(session, data):
+    @classmethod
+    def handle_results(cls, session, data):
         """ 
         if the given_result is an array of results, retrieve and save results for all of them
-        to use, override hande_result and call this method
         """
-
-        from experiment.models import Result
         form = data.pop('form')
         for form_element in form:
-            try:
-                result = Result.objects.get(pk=form_element['result_id'])
-            except Result.DoesNotExist:
-                # Create new result
-                result = Result(session=session)
+            result = cls.get_result(session, form_element['result_id'])
+
+            # Set given_response here, so it can be used in calculate_score
+            result.given_response = form_element['value']
+            
             # Calculate score
-            score = session.experiment_rules().calculate_score(result, form_element, data)
+            scoring_rule = SCORING_RULES.get(form_element['scoring_rule'], None)
+            score = session.experiment_rules().calculate_score(result, data, scoring_rule, form_element)
             if not score:
                 score = 0
-            result.given_response = form_element['value']
+
             result.save_json_data(data)
             result.score = score
             result.save()
         return result
 
-    @staticmethod
-    def handle_result(session, section, data):
-        """Create a result for given session, based on the result data and section_id"""
-        from experiment.models import Result
+    @classmethod
+    def handle_result(cls, session, data):
+        """
+        Create a result for given session, based on the result data and section_id
+
+        parameters:
+        session: a Session object
+        data: a dictionary, containing an optional result_id, and optional other params:
+        {
+            result_id: int [optional] 
+            ...
+            all other params in the custom result
+        }
+        """
+        result_id = data.get('result_id')
+        result = cls.get_result(session, result_id)
+
         # Calculate score
-        score = session.experiment_rules().calculate_score(session, data)
+        scoring_rule = SCORING_RULES.get(data['config'].get('scoring_rule', None))
+        score = session.experiment_rules().calculate_score(result, data, scoring_rule)
         if not score:
             score = 0
-        
-        result = Result(session=session)
-        result.section = section
+
+        # Populate and save the result
         result.save_json_data(data)
         result.score = score
-
-        # Save the result
         result.save()
 
         return result
 
-    @staticmethod
-    def calculate_score(result, form_element, data):
-        """fallback for calculate score"""
+    @classmethod
+    def calculate_score(cls, result, data, scoring_rule, form_element=None):
+        """use scoring rule to calculate score
+        If not scoring rule is defined, return None"""
+        if scoring_rule:
+            return scoring_rule(form_element, result, data)
         return None
 
     @staticmethod
@@ -106,7 +122,7 @@ class Base(object):
     def rank(session):
         """Get rank based on session score"""
         score = session.final_score
-        ranks = FinalScore.RANKS
+        ranks = Final.RANKS
 
         # Few or negative points or no score, always return lowest plastic score
         if score <= 0 or not score:

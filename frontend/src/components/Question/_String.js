@@ -16,14 +16,13 @@ const String = ({ question, value = "", onChange }) => {
 
     return (
         <div className="aha__string">
-            <h3 className="title">{question.question}</h3>
             <input
                 type="text"
                 value={value}
                 ref={input}
                 maxLength={question.max_length}
                 onChange={handleChange}
-                onKeyPress={handleChange}
+                onKeyPress={(e) => { e.key === 'Enter' && e.preventDefault(); }}
             />
         </div>
     );

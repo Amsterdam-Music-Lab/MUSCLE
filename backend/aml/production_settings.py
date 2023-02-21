@@ -36,8 +36,10 @@ LOGGING = {
     'handlers': {
         'file': {
             'level': 'DEBUG',
-            'class': 'logging.FileHandler',
+            'class': 'logging.handlers.RotatingFileHandler',
             'filename': '/server/logs/aml-experiments.log',
+            'maxBytes': 1024*100, # 0.1 MB
+            'backupCount': 5,
             'formatter': 'standard',
         },
     },
@@ -59,3 +61,5 @@ LOGGING = {
         }
     }
 }
+
+RELOAD_PARTICIPANT_TARGET = 'http://app.amsterdammusiclab.nl/rhythm_mri'

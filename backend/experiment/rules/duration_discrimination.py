@@ -2,7 +2,6 @@ import math
 import logging
 from decimal import Decimal, ROUND_HALF_UP
 
-import numpy as np
 from django.utils.translation import gettext_lazy as _
 
 from .base import Base
@@ -11,11 +10,12 @@ from .views import Trial, Consent, Final, Explainer, StartSession, Step, Playlis
 from .views.form import ChoiceQuestion, Form
 from .views.playback import Playback
 from .util.actions import combine_actions, final_action_with_optional_button, render_feedback_trivia
-from .util.score import get_average_difference
+from .util.final_score import get_average_difference
 from .util.practice import get_trial_condition_block, get_practice_views, practice_explainer
 from .util.staircasing import register_turnpoint
 
 logger = logging.getLogger(__name__)
+
 
 class DurationDiscrimination(Base):
     """
@@ -31,7 +31,7 @@ class DurationDiscrimination(Base):
     decrease_difficulty_multiplier = 1.5
 
     @classmethod
-    def first_round(cls, experiment):
+    def first_round(cls, experiment, participant):
         """Create data for the first experiment rounds"""
         explainer = cls.intro_explanation().action(True)
 
@@ -42,12 +42,12 @@ class DurationDiscrimination(Base):
 
         start_session = StartSession.action()
 
-        return combine_actions(
+        return [
             explainer,
             consent,
             explainer2,
             start_session
-        )
+        ]
 
     @classmethod
     def next_round(cls, session, request_session=None):
@@ -66,11 +66,12 @@ class DurationDiscrimination(Base):
 
         else:
             ##### Actual trials ####
-            action = cls.staircasing_blocks(session, cls.next_trial_action, request_session)
+            action = cls.staircasing_blocks(
+                session, cls.next_trial_action, request_session)
             return action
 
     @staticmethod
-    def calculate_score(result, form_element, data):
+    def calculate_score(result, data, scoring_rule, form_element):
         # a result's score is used to keep track of how many correct results were in a row
         # for catch trial, set score to 2 -> not counted for calculating turnpoints
         try:
@@ -97,8 +98,9 @@ class DurationDiscrimination(Base):
 
     @classmethod
     def get_response_explainer(cls, correct, correct_response, button_label=_('Next fragment')):
-        preposition = _('than') if correct_response=='LONGER' else _('as')
-        correct_response = _('LONGER') if correct_response=='LONGER' else _('EQUAL')
+        preposition = _('than') if correct_response == 'LONGER' else _('as')
+        correct_response = _(
+            'LONGER') if correct_response == 'LONGER' else _('EQUAL')
         if correct:
             instruction = _(
                 'The second interval was %(correct_response)s %(preposition)s the first interval. Your answer was CORRECT.') % {'correct_response': correct_response, 'preposition': preposition}
@@ -131,7 +133,7 @@ class DurationDiscrimination(Base):
             return None
         expected_result = 'EQUAL' if difference == 0 else 'LONGER'
         # create Result object and save expected result to database
-        result_pk = Base.prepare_result(session, section, expected_result)
+        result_pk = cls.prepare_result(session, section, expected_result)
         question_text = cls.get_question_text()
         question = ChoiceQuestion(
             question=question_text,
@@ -149,10 +151,11 @@ class DurationDiscrimination(Base):
         view = Trial(
             playback=playback,
             feedback_form=form,
-            title=_('%(title)s duration discrimination') % {'title': cls.condition},
+            title=_('%(title)s duration discrimination') % {
+                'title': cls.condition},
             config={
                 'listen_first': True,
-                'decision_time': section.duration + .5
+                'decision_time': section.duration + .1
             }
         )
         return view.action()
@@ -168,12 +171,12 @@ class DurationDiscrimination(Base):
             steps=[
                 Step(cls.get_task_explanation()),
                 Step(_(
-                        'During the experiment it will become more difficult to hear the difference.')),
+                    'During the experiment it will become more difficult to hear the difference.')),
                 Step(_(
-                        "Try to answer as accurately as possible, even if you're uncertain.")),
+                    "Try to answer as accurately as possible, even if you're uncertain.")),
                 Step(_("Remember: try not to move or tap along with the sounds")),
                 Step(_(
-                        'This test will take around 4 minutes to complete. Try to stay focused for the entire test!'))
+                    'This test will take around 4 minutes to complete. Try to stay focused for the entire test!'))
             ],
             button_label='Ok'
         )
@@ -250,7 +253,8 @@ class DurationDiscrimination(Base):
                     session.merge_json_data({'direction': 'decrease'})
                     session.save()
                     # decrease difficulty
-                    difficulty = cls.get_difficulty(session, cls.decrease_difficulty_multiplier)
+                    difficulty = cls.get_difficulty(
+                        session, cls.decrease_difficulty_multiplier)
                     action = trial_action_callback(
                         session,
                         trial_condition,
@@ -275,7 +279,8 @@ class DurationDiscrimination(Base):
                         session.merge_json_data({'direction': 'increase'})
                         session.save()
                         # increase difficulty
-                        difficulty = cls.get_difficulty(session, cls.increase_difficulty_multiplier)
+                        difficulty = cls.get_difficulty(
+                            session, cls.increase_difficulty_multiplier)
                         action = trial_action_callback(
                             session,
                             trial_condition,
