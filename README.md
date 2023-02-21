@@ -53,13 +53,23 @@ Use this command to make daily backups, numbered by the day of the month:
 
 `docker-compose run db bash -c "pg_dump aml -Fc > /backups/backup-$(date +"%d").dump"`
 
-To restore a database use:
+The backups are stored on the docker volume `db_backup` which mirrors `/backups` from the Postgresql container.
+
+### Restore the postgresq database
+
+Always stop the backend container first:
+
+`docker stop aml-experiments_server_1`
+
+Then drop, create and restore the database:
 
 `docker-compose run db bash -c "dropdb aml"`
 `docker-compose run db bash -c "createdb aml"`
 `docker-compose run db bash -c "pg_restore -d aml /backups/<filename>.dump"`
 
-The backups are stored on the docker volume `db_backup` which mirrors `/backups` from the Postgresql container.
+Restart the backend container: (or alternatively rebuilt the containers as descibed above) 
+
+`docker start aml-experiments_server_1`
 
 ### Creating experiments and playlists
 The admin interface is accessible at `localhost:8000/admin`. Before logging in, create a superuser by logging into the container of the backend. To find out the name, run `docker ps`, it should list all running container names. The container of the backend is most likely called `aml-experiments_server_1` (check 'NAMES' column). To connect to it, run:
