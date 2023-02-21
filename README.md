@@ -64,7 +64,9 @@ Always stop the backend container first:
 Then drop, create and restore the database:
 
 `docker-compose run db bash -c "dropdb aml"`
+
 `docker-compose run db bash -c "createdb aml"`
+
 `docker-compose run db bash -c "pg_restore -d aml /backups/<filename>.dump"`
 
 Restart the backend container: (or alternatively rebuilt the containers as descibed above) 
