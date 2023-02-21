@@ -80,13 +80,9 @@ def get_result(request, question):
     participant = get_participant(request)
     try:
         result = Result.objects.get(
-            question_key=question, session__participant=participant)
+            question_key=question, participant=participant)
     except Result.DoesNotExist:
-        try:
-            result = Result.objects.get(
-                question_key=question, participant=participant)
-        except Result.DoesNotExist:
-            raise Http404("Not found")
+        raise Http404("Not found")
 
     return JsonResponse({"answer": result.given_response},
                         json_dumps_params={'indent': 4})
