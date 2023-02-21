@@ -34,7 +34,8 @@ class MatchingPairs(Base):
     
     @staticmethod
     def next_round(session):
-        if session.rounds_passed() == 0:
+        print(session.rounds_passed())
+        if session.rounds_passed() <= 1:
             trial = MatchingPairs.get_question(session)
             if trial:
                 return trial
@@ -49,7 +50,7 @@ class MatchingPairs(Base):
                     Step(description=_('Try to get as high a score as possible!'))
                 ]).action(step_numbers=True)
                 trial = MatchingPairs.get_matching_pairs_trial(session)
-                return [explainer, trial]
+                return combine_actions(explainer, trial)
             
         last_result = session.result_set.last()
         if last_result and last_result.question_key == 'play_again':
