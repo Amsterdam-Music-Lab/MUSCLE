@@ -33,7 +33,7 @@ const MatchingPairs = ({
 
     const checkMatchingPairs = (index) => {
         const currentCard = sections[index];
-        score.current = 0;
+        score.current = -1;
         if (sections.filter(s => s.turned).length < 2) {
             // we have two turned cards
             currentCard.turned = true;
