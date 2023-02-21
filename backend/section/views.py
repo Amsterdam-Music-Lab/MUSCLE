@@ -27,11 +27,15 @@ def get_section(request, section_id, code):
         # Advantage: low server load
         # Disadvantage: exposes url
 
+        if section.filename.startswith('http'):
+            # external link, redirect
+            return redirect(section.filename)
+
         # We only do this in production, as the Django dev server not correctly supports
         # The range/seeking of audio files in Chrome
         if not settings.DEBUG:
             return redirect(settings.MEDIA_URL + section.filename)
-
+        
         # Option 2: stream file through Django
         # Advantage: keeps url secure, correct play_count value
         # Disadvantage: potential high server load
