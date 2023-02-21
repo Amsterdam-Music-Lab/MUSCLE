@@ -1,6 +1,6 @@
 from django.utils.translation import gettext_lazy as _
 
-from experiment.rules.views.form import LikertQuestion, ChoiceQuestion
+from experiment.rules.views.form import LikertQuestion, ChoiceQuestion, Question
 from .questions import question_by_key
 
 # Numbers before key relate to The Goldsmiths Musical Sophistication Index, v1.0
@@ -78,7 +78,7 @@ MSI_FG_GENERAL = [
     ChoiceQuestion(
         key='msi_32_practice_years',
         question=_(
-            "I engaged in regular, daily practice of a musical instrument (including voice) for:"),
+            "I engaged in regular, daily practice of a musical instrument (including voice) for _ years."),
         choices={
             '0': _('0 years'),
             '1': _('1 year'),
@@ -94,7 +94,7 @@ MSI_FG_GENERAL = [
     ChoiceQuestion(
         key='msi_33_practice_daily',
         question=_(
-            "At the peak of my interest, I practiced on my primary instrument each day for:"),
+            "At the peak of my interest, I practised my primary instrument for _ hours per day."),
         choices={
             '0': _('0 hours'),
             '0.5': _('0.5 hours'),
@@ -144,7 +144,7 @@ MSI_F1_ACTIVE_ENGAGEMENT = [
     ChoiceQuestion(
         key='msi_34_attended_events',
         question=_(
-            "How many live music events have you attended as an audience member in the past twelve months?"),
+            "I have attended _ live music events as an audience member in the past twelve months."),
         choices={
             '0.0': _('0'),
             '1.0': _('1'),
@@ -160,7 +160,7 @@ MSI_F1_ACTIVE_ENGAGEMENT = [
     ChoiceQuestion(
         key='msi_38_listen_music',
         question=_(
-            "How much time per day do you spend listening to music attentively?"),
+            "I listen attentively to music for _ per day."),
         choices={
             '0-15': _('0-15 min'),
             '15-30': _('15-30 min'),
@@ -220,7 +220,7 @@ MSI_F3_MUSICAL_TRAINING = [
     ChoiceQuestion(
         key='msi_35_theory_training',
         question=_(
-            "How many years of formal training have you had in music theory?"),
+            "I have had formal training in music theory for _ years."),
         choices={
             # use floats as key, to prevent int conversions while dumping json
             '0': _('0'),
@@ -237,7 +237,7 @@ MSI_F3_MUSICAL_TRAINING = [
     ChoiceQuestion(
         key='msi_36_instrumental_training',
         question=_(
-            "How many years of formal training have you had on a musical instrument (including voice) during your lifetime?"),
+            "I have had _ years of formal training on a musical instrument (including voice) during my lifetime."),
         choices={
             # use floats as key, to prevent int conversions while dumping json
             '0': _('0'),
@@ -293,6 +293,37 @@ MSI_F5_EMOTIONS = [
         key='msi_31_memories',
         question=_("Music can evoke my memories of past people and places."),
         )
+]
+
+MSI_OTHER = [
+    # msi_39_best_instrument duplicate in questions.py
+    Question(
+        key='msi_39_best_instrument',
+        view='STRING',
+        question=_("The instrument I play best, including voice (or none), is:")
+    ),
+
+    ChoiceQuestion(
+        key='ST_01_age_instrument',
+        question=_("What age did you start to play an instrument?"),
+        choices={
+            '2 - 19': _('2 - 19'),
+            'I don’t play any instrument.': _('I don’t play any instrument.'),
+        },
+        view='RADIOS',
+        scoring_rule='CATEGORIES_TO_LIKERT'
+    ),
+
+    ChoiceQuestion(
+        key='AP_01_absolute_pitch',
+        question=_("Do you have absolute pitch? Absolute or perfect pitch is the ability to recognise and name an isolated musical tone without a reference tone, e.g. being able to say 'F#' if someone plays that note on the piano."),
+        choices={
+            'yes': _('yes'),
+            'no': _('no'),
+        },
+        view='RADIOS',
+        scoring_rule='CATEGORIES_TO_LIKERT'
+    )
 ]
 
 MSI_ALL = (

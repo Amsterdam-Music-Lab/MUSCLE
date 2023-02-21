@@ -82,30 +82,35 @@ class RangeQuestion(Question):
 
 
 class LikertQuestion(Question):
-    def __init__(self, scale_steps=7, explainer=_("How much do you agree or disagree?"), likert_view='TEXT_RANGE', **kwargs):
+    def __init__(self, scale_steps=7, explainer=_("How much do you agree or disagree?"), likert_view='TEXT_RANGE', choices = {}, **kwargs):
         super().__init__(**kwargs)
         self.view = likert_view
         self.scoring_rule = 'LIKERT'
         self.scale_steps = scale_steps
         self.explainer = explainer
-        if scale_steps == 7:
-            self.choices = {
-                1: _("Completely Disagree"),
-                2: _("Strongly Disagree"),
-                3: _("Disagree"),
-                4: _("Neither Agree nor Disagree"),  # Undecided
-                5: _("Agree"),
-                6: _("Strongly Agree"),
-                7: _("Completely Agree"),
-            }
-        elif scale_steps == 5:
-            self.choices = {
-                1: _("Strongly Disagree"),
-                2: _("Disagree"),
-                3: _("Neither Agree nor Disagree"),  # Undecided
-                4: _("Agree"),
-                5: _("Strongly Agree"),
-            }
+
+        if choices:
+            self.choices = choices
+            self.scale_steps = len(self.choices)
+        else:
+            if scale_steps == 7:
+                self.choices = {
+                    1: _("Completely Disagree"),
+                    2: _("Strongly Disagree"),
+                    3: _("Disagree"),
+                    4: _("Neither Agree nor Disagree"),  # Undecided
+                    5: _("Agree"),
+                    6: _("Strongly Agree"),
+                    7: _("Completely Agree"),
+                }
+            elif scale_steps == 5:
+                self.choices = {
+                    1: _("Strongly Disagree"),
+                    2: _("Disagree"),
+                    3: _("Neither Agree nor Disagree"),  # Undecided
+                    4: _("Agree"),
+                    5: _("Strongly Agree"),
+                }
 
 class LikertQuestionIcon(Question):
     def __init__(self, scale_steps=7, likert_view='TEXT_RANGE', **kwargs):
