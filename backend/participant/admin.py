@@ -1,19 +1,19 @@
 from django.contrib import admin
 from participant.models import Participant
-from session.models import Session
+from result.models import Result
 
 
-class SessionInline(admin.TabularInline):
-    """Session inline admin for ParticipantAdmin
-    TO DO: show profile type results here instead
+class ResultInline(admin.TabularInline):
+    """Inline to show results linked to given participant
     """
 
-    model = Session
+    model = Result
+    fields = ['created_at', 'question_key', 'given_response']
     extra = 0
 
 
 class ParticipantAdmin(admin.ModelAdmin):
-    inlines = [SessionInline]
+    inlines = [ResultInline]
     list_per_page = 50
     search_fields = ['unique_hash', 'id', 'country_code']
     list_display = ('__str__',
