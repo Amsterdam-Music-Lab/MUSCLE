@@ -16,7 +16,7 @@ services:
           - PGPASSWORD=${SQL_PASSWORD}
         volumes:
           - db_data:/var/lib/postgresql/data/
-        command: bash -c "docker-entrypoint.sh postgres && pg_dump aml -Fc > /var/lib/postgresql/data/backup-pre-migrate.sql" 
+          - db_backup:/backups/       
     ip2country:
         image: extrawurst/ip2country:latest
         ports:
@@ -71,3 +71,4 @@ services:
         command: sh -c "yarn scss && yarn start"
 volumes:
     db_data:
+    db_backup:
