@@ -57,9 +57,9 @@ const Experiment = ({ match }) => {
     // Start first_round when experiment and partipant have been loaded
     useEffect(() => {
         // Check if done loading
-        if (!loadingExperiment && !loadingParticipant) {
+        if (!loadingExperiment) {
             // Loading succeeded
-            if (experiment && participant) {
+            if (experiment) {
                 loadState(stateNextRound(experiment));
             } else {
                 // Loading error
@@ -85,7 +85,7 @@ const Experiment = ({ match }) => {
             // Try to get next_round data from server again
             const round = await getNextRound({
                 session: session,
-                participant,
+                // participant,
             });
             if (round) {
                 loadState(round);

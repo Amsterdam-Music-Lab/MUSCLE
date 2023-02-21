@@ -1,15 +1,14 @@
 from django.utils.translation import gettext_lazy as _
 
-from experiment.models import Section
-from .views import Trial, Explainer, Step
-from .views.form import ChoiceQuestion, Form
-from .views.playback import Playback
+from section.models import Section
+from experiment.actions import Trial, Explainer, Step
+from experiment.actions.form import ChoiceQuestion, Form
+from experiment.actions.playback import Playback
+from experiment.actions.utils import final_action_with_optional_button, render_feedback_trivia
+from experiment.actions.utils import get_average_difference_level_based
+from result.utils import prepare_result
 
-from .base import Base
 from .h_bat import HBat
-
-from .util.actions import final_action_with_optional_button, render_feedback_trivia
-from .util.final_score import get_average_difference_level_based
 
 class BST(HBat):
     """ Rules for the BST experiment, which follow closely
@@ -46,12 +45,12 @@ class BST(HBat):
         try:
             section = session.playlist.section_set.filter(group=str(level)).get(tag=str(trial_condition))
         except Section.DoesNotExist:
-            return None
-        expected_result = 'in2' if trial_condition else 'in3'
+            raise
+        expected_response = 'in2' if trial_condition else 'in3'
         # create Result object and save expected result to database
-        result_pk = cls.prepare_result(session, section, expected_result)
+        key = 'longer_or_equal'
         question = ChoiceQuestion(
-            key='longer_or_equal',
+            key=key,
             question=_(
                 "Is the rhythm a DUPLE METER (MARCH) or a TRIPLE METER (WALTZ)?"),
             choices={
@@ -59,8 +58,9 @@ class BST(HBat):
                 'in3': _('TRIPLE METER')
             },
             view='BUTTON_ARRAY',
-            result_id=result_pk,
-            scoring_rule='CORRECTNESS',
+            result_id=prepare_result(
+                key, session, section=section,
+                expected_response=expected_response, scoring_rule='CORRECTNESS'),
             submits=True
         )
         playback = Playback([section])
@@ -70,7 +70,7 @@ class BST(HBat):
             feedback_form=form,
             title=_('Meter detection'),
             config={
-                'decision_time': section.duration + .1
+                'response_time': section.duration + .1
             }
         )
         return view.action()

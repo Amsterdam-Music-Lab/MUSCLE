@@ -3,12 +3,14 @@ import random
 from os.path import join
 from django.template.loader import render_to_string
 from .toontjehoger_1_mozart import toontjehoger_ranks
-from .views import Trial, Explainer, Step, Score, Final, StartSession, Playlist, Info
-from .views.form import ButtonArrayQuestion, Form
-from .views.playback import Playback
+from experiment.actions import Trial, Explainer, Step, Score, Final, StartSession, Playlist, Info
+from experiment.actions.form import ButtonArrayQuestion, Form
+from experiment.actions.playback import Playback
 from .base import Base
-from .util.actions import combine_actions
-from .util.strings import non_breaking
+from experiment.actions.utils import combine_actions
+from experiment.utils import non_breaking_spaces
+
+from result.utils import prepare_result
 
 logger = logging.getLogger(__name__)
 
@@ -136,11 +138,7 @@ class ToontjeHoger5Tempo(Base):
         genre = ["C", "J", "R"][round % 3]
 
         sections = cls.get_random_section_pair(session, genre)
-        section_original = sections[0] if sections[0].group == "or" else sections[1]
-
-        # Create result
-        result_pk = cls.prepare_result(
-            session, section=section_original, expected_response="A" if sections[0].id == section_original.id else "B")
+        section_original = sections[0] if sections[0].group == "or" else sections[1]  
 
         # Player
         play_config = {
@@ -151,15 +149,19 @@ class ToontjeHoger5Tempo(Base):
             sections, player_type=Playback.TYPE_MULTIPLAYER, play_config=play_config)
 
         # Question
+        key = 'pitch'
         question = ButtonArrayQuestion(
             question="Welk fragment wordt in het originele tempo afgespeeld?",
-            key='pitch',
+            key=key,
             choices={
                 "A": "A",
                 "B": "B",
             },
             submits=True,
-            result_id=result_pk
+            result_id=prepare_result(
+                key, session, section=section_original,
+                expected_response="A" if sections[0].id == section_original.id else "B"
+            )
         )
         form = Form([question])
 
@@ -177,7 +179,7 @@ class ToontjeHoger5Tempo(Base):
         return [trial]
 
     @classmethod
-    def calculate_score(cls, result, data, scoring_rule, form_element):
+    def calculate_score(cls, result, data):
         return cls.SCORE_CORRECT if result.expected_response == result.given_response else cls.SCORE_WRONG
 
     @classmethod
@@ -228,7 +230,7 @@ class ToontjeHoger5Tempo(Base):
                 section_a = section_original if last_result.expected_response == "A" else section_changed
                 section_b = section_changed if section_a.id == section_original.id else section_original
                 feedback += " Je hoorde {} uitgevoerd door A) {} en B) {}.".format(
-                    section_a.name, non_breaking(section_a.artist), non_breaking(section_b.artist))
+                    section_a.name, non_breaking_spaces(section_a.artist), non_breaking_spaces(section_b.artist))
 
         # Return score view
         config = {'show_total_score': True}

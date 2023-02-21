@@ -2,7 +2,7 @@ import React, { useState, useRef, useCallback } from "react";
 import classNames from "classnames";
 
 import { getCurrentTime, getTimeSince } from "../../util/time";
-import { createProfile, createResult } from "../../API.js";
+import { createResult } from "../../API.js";
 import FeedbackForm from "../FeedbackForm/FeedbackForm";
 import Playback from "../Playback/Playback";
 import Button from "../Button/Button";
@@ -68,26 +68,6 @@ const Trial = ({ participant, session, playback, feedback_form, config, onNext, 
         [loadState, onNext, participant, session, feedback_form]
     );
 
-    const submitProfile = useCallback(
-        async (result) => {
-            // Send data to server
-            const response = await createProfile({
-                result,
-                session: (session ? session.id : 0),
-                participant,
-            });
-
-            // Log error when createProfile failed
-            if (!response || !response.status === "ok") {
-                console.error("Could not store question");
-            }
-
-            // Continue
-            onNext();
-        },
-        [onNext, participant, session]
-    );
-
     // Create result data in this wrapper function
     const makeResult = useCallback(
         (result) => {
@@ -108,22 +88,16 @@ const Trial = ({ participant, session, playback, feedback_form, config, onNext, 
                 if (feedback_form.is_skippable) {
                     form.map((formElement => (formElement.value = formElement.value || '')))
                 }
-                if (feedback_form.is_profile) {
-                    submitProfile({
-                        form,
-                    });
-                } else {
-                    submitResult({
-                        decision_time,
-                        form,
-                        config
-                    });
-                }
+                submitResult({
+                    decision_time,
+                    form,
+                    config
+                });
             } else {
                 onNext();
             }
         },
-        [feedback_form, onNext, submitProfile, submitResult]
+        [feedback_form, onNext, submitResult]
     );
 
     const finishedPlaying = useCallback(() => {
@@ -161,7 +135,7 @@ const Trial = ({ participant, session, playback, feedback_form, config, onNext, 
                     }}
                     preloadMessage={playback.preload_message}
                     autoAdvance={config.auto_advance}
-                    decisionTime={config.decision_time}
+                    responseTime={config.response_time}
                     playConfig={playback.play_config}
                     sections={playback.sections}
                     time={time}
@@ -178,7 +152,9 @@ const Trial = ({ participant, session, playback, feedback_form, config, onNext, 
                     skipLabel={feedback_form.skip_label}
                     isSkippable={feedback_form.is_skippable}
                     onResult={makeResult}
-                    emphasizeTitle={feedback_form.is_profile}
+                    // emphasizeTitle={feedback_form.is_profile}
+                    // to do: if we want left-aligned text with a pink divider,
+                    // make this style option available again (used in Question.scss)
                 />
             )}
             {preloadReady && !feedback_form && config.show_continue_button && (

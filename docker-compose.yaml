@@ -9,8 +9,14 @@ services:
           - POSTGRES_DB=${SQL_DATABASE}
           - POSTGRES_USER=${SQL_USER}
           - POSTGRES_PASSWORD=${SQL_PASSWORD}
+          - PGHOST=${SQL_HOST}
+          - PGPORT=${SQL_PORT}
+          - PGUSER=${SQL_USER}
+          - PGDATABASE=${SQL_DATABASE}
+          - PGPASSWORD=${SQL_PASSWORD}
         volumes:
           - db_data:/var/lib/postgresql/data/
+          - db_backup:/backups/       
     ip2country:
         image: extrawurst/ip2country:latest
         ports:
@@ -65,3 +71,4 @@ services:
         command: sh -c "yarn scss && yarn start"
 volumes:
     db_data:
+    db_backup:

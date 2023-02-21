@@ -56,7 +56,7 @@ const useResultHandler = ({ session, participant, loadState, onNext, state }) =>
             // Init new state from action
             loadState(action);
         },
-        [session, participant, loadState, onNext, state]
+        [session, loadState, onNext, state]
     );
 
     return onResult;

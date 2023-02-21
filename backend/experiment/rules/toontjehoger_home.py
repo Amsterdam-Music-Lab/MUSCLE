@@ -1,8 +1,8 @@
 import logging
 import random
-from .views import ToontjeHoger
+from experiment.actions import ToontjeHoger
 from .base import Base
-from .util.strings import external_url
+from experiment.utils import external_url
 
 logger = logging.getLogger(__name__)
 
@@ -145,7 +145,8 @@ class ToontjeHogerHome(Base):
 
     @ classmethod
     def get_sessions(cls, participant):
-        from experiment.models import Session, Experiment
+        from session.models import Session
+        from experiment.models import Experiment
 
         experiment_slugs = [
             experiment.slug for experiment in cls.EXPERIMENT_DATA]
