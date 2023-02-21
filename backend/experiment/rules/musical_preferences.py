@@ -19,7 +19,7 @@ class MusicalPreferences(Base):
     block_size = 16
 
     @classmethod
-    def first_round(cls, experiment):
+    def first_round(cls, experiment, participant):
         explainer = Explainer(
             instruction=_('This experiment investigates musical preferences'),
             steps=[
@@ -101,7 +101,7 @@ class MusicalPreferences(Base):
             title=_('Musical preference'),
             config={
                 'response_time': section.duration + .1,
-                'style': 'boolean'
+                'style': 'boolean-negative-first'
             }
         )
         return view.action()

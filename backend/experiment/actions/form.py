@@ -119,7 +119,7 @@ class LikertQuestion(Question):
                 }
 
 class LikertQuestionIcon(Question):
-    def __init__(self, scale_steps=7, likert_view='TEXT_RANGE', **kwargs):
+    def __init__(self, scale_steps=7, likert_view='ICON_RANGE', **kwargs):
         super().__init__(**kwargs)
         self.view = likert_view
         if scale_steps == 7:
