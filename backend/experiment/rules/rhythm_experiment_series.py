@@ -7,8 +7,8 @@ from django.http import HttpResponseRedirect
 from django.template.loader import render_to_string
 
 from .base import Base
-from .util.actions import combine_actions
-from .views import Consent, Explainer, Final, StartSession, Step
+from experiment.actions.utils import combine_actions
+from experiment.actions import Consent, Explainer, Final, StartSession, Step
 
 
 class RhythmExperimentSeries(Base):
@@ -90,24 +90,24 @@ def prepare_experiments(session):
     random.shuffle(random_list)
     experiment_list = lists['first'] + random_list + lists['last']
     register_consent(session, experiment_list)
-    session.merge_json_data({'experiments': experiment_list})
+    session.save_json_data({'experiments': experiment_list})
     session.save()
     return experiment_list
 
 
 def register_consent(session, experiment_list):
-    from ..models import Profile
+    from result.models import Result
     participant = session.participant
     for slug in experiment_list:
         question = 'consent_{}'.format(slug)
-        answer = True
+        answer = 'agreed'
         try:
-            profile = Profile.objects.get(
-                participant=participant, question=question)
-            profile.answer = answer
-        except Profile.DoesNotExist:
-            profile = Profile(participant=participant,
-                              question=question, answer=answer)
+            profile = Result.objects.get(
+                participant=participant, question_key=question)
+            profile.given_response = answer
+        except Result.DoesNotExist:
+            profile = Result(participant=participant,
+                              question_key=question, given_response=answer)
         profile.save()
 
 

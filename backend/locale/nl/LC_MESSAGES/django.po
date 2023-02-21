@@ -750,20 +750,20 @@ msgstr ""
 msgid "Are you in a quiet room?"
 msgstr "Ben je in een stille ruimte?"
 
-#: experiment/rules/listening_conditions.py:27
-#: experiment/rules/listening_conditions.py:40
+#: experiment/rules/listening_conditions.py:29
+#: experiment/rules/listening_conditions.py:45
 msgid "MODERATELY"
 msgstr "REDELIJK"
 
-#: experiment/rules/listening_conditions.py:37
+#: experiment/rules/listening_conditions.py:42
 msgid "Do you have a stable internet connection?"
 msgstr "Heb je een stabiele internetverbinding?"
 
-#: experiment/rules/listening_conditions.py:51
+#: experiment/rules/listening_conditions.py:59
 msgid "Are you wearing headphones?"
 msgstr "Heb je een koptelefoon op?"
 
-#: experiment/rules/listening_conditions.py:65
+#: experiment/rules/listening_conditions.py:76
 msgid "Do you have sound notifications from other devices turned off?"
 msgstr "Heb je geluidsmeldingen van andere apparaten uitgezet?"
 

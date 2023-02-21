@@ -5,15 +5,15 @@ from django.utils.translation import gettext_lazy as _
 from django.template.loader import render_to_string
 
 from .base import Base
-from .views import  Explainer, Consent, StartSession, Final, Score, Playlist, Step, Trial
-from .views.form import Form
+from experiment.actions import  Explainer, Consent, StartSession, Final, Score, Playlist, Step, Trial
+from experiment.actions.form import Form
 
-from .util.questions import DEMOGRAPHICS, next_question
-from .util.goldsmiths import MSI_FG_GENERAL, MSI_ALL
-from .util.stomp import STOMP20
-from .util.tipi import TIPI
-
-from .util.actions import combine_actions
+from experiment.questions.demographics import DEMOGRAPHICS
+from experiment.questions.utils import unasked_question
+from experiment.questions.goldsmiths import MSI_FG_GENERAL, MSI_ALL
+from experiment.questions.stomp import STOMP20
+from experiment.questions.tipi import TIPI
+from experiment.actions.utils import combine_actions
 
 
 class Hooked(Base):
@@ -71,7 +71,7 @@ class Hooked(Base):
 
         # 1. Demographic questions (7 questions)
         question = \
-            next_question(
+            unasked_question(
                 session,
                 random.sample(DEMOGRAPHICS, len(DEMOGRAPHICS)),
             )
@@ -79,7 +79,7 @@ class Hooked(Base):
         # 2. General music sophistication (18 questions)
         if question is None:
             question = \
-                next_question(
+                unasked_question(
                     session,
                     random.sample(MSI_FG_GENERAL, len(MSI_FG_GENERAL)),
                 )
@@ -88,7 +88,7 @@ class Hooked(Base):
         if question is None:
             # next_question() will skip the FG questions from before
             question = \
-                next_question(
+                unasked_question(
                     session,
                     random.sample(MSI_ALL, len(MSI_ALL)),
                 )
@@ -96,7 +96,7 @@ class Hooked(Base):
         # 4. STOMP (20 questions)
         if question is None:
             question = \
-                next_question(
+                unasked_question(
                     session,
                     random.sample(STOMP20, len(STOMP20)),
                 )
@@ -104,7 +104,7 @@ class Hooked(Base):
         # 5. TIPI (10 questions)
         if question is None:
             question = \
-                next_question(
+                unasked_question(
                     session,
                     random.sample(TIPI, len(TIPI)),
                 )

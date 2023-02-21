@@ -1,7 +1,7 @@
 from django.utils.translation import gettext_lazy as _
 
-from .views import Explainer
-from .util.actions import render_feedback_trivia
+from experiment.actions import Explainer
+from experiment.actions.utils import render_feedback_trivia
 from .duration_discrimination import DurationDiscrimination
 
 class DurationDiscriminationTone(DurationDiscrimination):

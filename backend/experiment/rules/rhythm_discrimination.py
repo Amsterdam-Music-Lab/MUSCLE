@@ -3,11 +3,14 @@ import logging
 
 from django.utils.translation import gettext_lazy as _
 
-from .util.actions import combine_actions, final_action_with_optional_button, render_feedback_trivia
-from .util.practice import practice_explainer, practice_again_explainer, start_experiment_explainer
-from .views import Trial, Consent, Explainer, StartSession, Step
-from .views.playback import Playback
-from .views.form import ChoiceQuestion, Form
+from experiment.actions.utils import combine_actions, final_action_with_optional_button, render_feedback_trivia
+from experiment.rules.util.practice import practice_explainer, practice_again_explainer, start_experiment_explainer
+from experiment.actions import Trial, Consent, Explainer, StartSession, Step
+from experiment.actions.playback import Playback
+from experiment.actions.form import ChoiceQuestion, Form
+
+from result.utils import prepare_result
+
 from .base import Base
 
 logger = logging.getLogger(__name__)
@@ -160,12 +163,10 @@ def next_trial_actions(session, round_number, request_session):
     except:
         return actions
 
-    expected_result = 'SAME' if condition['group'] == '1' else 'DIFFERENT'
-    # create Result object and save expected result to database
-    result_pk = RhythmDiscrimination.prepare_result(
-        session, section, expected_result)
+    expected_response = 'SAME' if condition['group'] == '1' else 'DIFFERENT'
+    key = 'same'
     question = ChoiceQuestion(
-        key='same',
+        key=key,
         question=_(
             "Is the third rhythm the SAME or DIFFERENT?"),
         choices={
@@ -173,8 +174,7 @@ def next_trial_actions(session, round_number, request_session):
             'DIFFERENT': _('DIFFERENT')
         },
         view='BUTTON_ARRAY',
-        scoring_rule='CORRECTNESS',
-        result_id=result_pk,
+        result_id=prepare_result(key, session, expected_response=expected_response, scoring_rule='CORRECTNESS'),
         submits=True
     )
     form = Form([question])
@@ -190,7 +190,7 @@ def next_trial_actions(session, round_number, request_session):
         title=_('Rhythm discrimination: %s' % (title)),
         config={
             'listen_first': True,
-            'decision_time': section.duration + .1
+            'response_time': section.duration + .1
         }
     )
 
@@ -230,7 +230,7 @@ def plan_stimuli(session):
         nonmetric_deviants + nonmetric_standard
     random.shuffle(experiment)
     plan = practice + experiment
-    session.merge_json_data({'plan': plan})
+    session.save_json_data({'plan': plan})
     session.save()
 
 

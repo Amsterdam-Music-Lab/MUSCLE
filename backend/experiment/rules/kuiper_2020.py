@@ -1,10 +1,11 @@
-from .hooked import Hooked
 import random
 from django.utils.translation import gettext_lazy as _
-from .views import SongSync, Step, Trial
-from .views.playback import Playback
-from .views.form import BooleanQuestion, Form
 
+from experiment.actions import SongSync, Trial
+from experiment.actions.playback import Playback
+from experiment.actions.form import BooleanQuestion, Form
+from result.utils import prepare_result
+from .hooked import Hooked
 
 class Kuiper2020(Hooked):
     """Rules for the Christmas version of the Hooked experiment.
@@ -106,7 +107,7 @@ class Kuiper2020(Hooked):
         if not section:
             print("Warning: no next_song_sync section found")
             section = session.section_from_any_song()
-        result_id = cls.prepare_result(session, section)
+        result_id = prepare_result('song_sync', session, section=section)
         return SongSync(
             section=section,
             title=cls.get_trial_title(session, next_round_number),
@@ -144,7 +145,7 @@ class Kuiper2020(Hooked):
             preload_message=_('Get ready!'))
         expected_result=int(novelty[next_round_number - 1] == 'old')
         # create Result object and save expected result to database
-        result_pk = cls.prepare_result(session, section, expected_result)
+        result_pk = prepare_result('heard_before', session, section, expected_result)
         form = Form([BooleanQuestion(
             key='heard_before',
             choices={

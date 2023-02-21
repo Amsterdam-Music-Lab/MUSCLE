@@ -2,12 +2,14 @@ from django.db.models import Avg
 from django.utils.translation import gettext_lazy as _
 from django.template.loader import render_to_string
 
-from .util.actions import combine_actions
-from .util.questions import question_by_key
+from experiment.actions.utils import combine_actions
+from experiment.questions.utils import question_by_key
 
-from .views import Consent, Explainer, Final, Playlist, Step, StartSession, Trial
-from .views.form import BooleanQuestion, ChoiceQuestion, Form, LikertQuestion, LikertQuestionIcon
-from .views.playback import Playback
+from experiment.actions import Consent, Explainer, Final, Playlist, Step, StartSession, Trial
+from experiment.actions.form import BooleanQuestion, ChoiceQuestion, Form, LikertQuestionIcon
+from experiment.actions.playback import Playback
+
+from result.utils import prepare_result
 
 from .base import Base
 
@@ -54,7 +56,7 @@ class MusicalPreferences(Base):
                     steps=[],
                     button_label=_("Let's go!")).action()
                 )
-                actions.extend(cls.get_questions())
+                actions.extend(cls.get_questions(session))
             question = BooleanQuestion(
                 question=_("Would you like to listen to more songs?"),
                 choices={
@@ -73,23 +75,23 @@ class MusicalPreferences(Base):
             return combine_actions(*actions)
 
         section = session.playlist.random_section()
-        result_id = cls.prepare_result(session, section)
+        like_key = 'like_song'
         likert = LikertQuestionIcon(
             question=_('Do you like this song?'),
-            key='like_song',
-            result_id=result_id
+            key=like_key,
+            result_id=prepare_result(like_key, session, section=section, scoring_rule='LIKERT')
         )
-        result_id = cls.prepare_result(session, section)
+        know_key = 'know_song'
         know = ChoiceQuestion(
             question=_('Do you know this song?'),
-            key='know_song',
-            result_id=result_id,
+            key=know_key,
             view='BUTTON_ARRAY',
             choices={
                 'yes': 'fa-thumbs-up',
                 'unsure': 'fa-question',
                 'no': 'fa-thumbs-down',
-            }
+            },
+            result_id=prepare_result(know_key, session, section=section)
         )
         playback = Playback([section], play_config={'show_animation': True})
         form = Form([likert, know])
@@ -98,20 +100,20 @@ class MusicalPreferences(Base):
             feedback_form=form,
             title=_('Musical preference'),
             config={
-                'decision_time': section.duration + .1,
+                'response_time': section.duration + .1,
                 'style': 'boolean'
             }
         )
         return view.action()
     
     @classmethod
-    def calculate_score(cls, result, data, scoring_rule, form_element):
-        result.comment = form_element.get('key')
+    def calculate_score(cls, result, data):
+        result.comment = data.get('key')
         result.save()
-        if form_element.get('key') == 'like_song':
-            return int(form_element.get('value'))
-        elif form_element.get('key') == 'continue':
-            if form_element.get('value') == 'no':
+        if data.get('key') == 'like_song':
+            return int(data.get('value'))
+        elif data.get('key') == 'continue':
+            if data.get('value') == 'no':
                 return -1
         else:
             return None
@@ -140,7 +142,7 @@ class MusicalPreferences(Base):
     def get_preferred_songs(cls, result_set, n=5):
         top_songs = result_set.values('section').annotate(
             avg_score=Avg('score')).order_by()[:n]
-        from experiment.models.section import Section
+        from section.models import Section
         out_list = []
         for s in top_songs:
             section = Section.objects.get(pk=s.get('section'))
@@ -148,7 +150,7 @@ class MusicalPreferences(Base):
         return out_list
     
     @classmethod
-    def get_questions(cls):
+    def get_questions(cls, session):
         questions = [
             question_by_key('dgf_generation'),
             question_by_key('dgf_education', drop_choices=['isced-5']),
@@ -156,7 +158,7 @@ class MusicalPreferences(Base):
         return [
             Trial(
                 title=_("Questionnaire"),
-                feedback_form=Form([question], is_profile=True)).action() 
+                feedback_form=Form([question])).action() 
             for question in questions
         ]
 

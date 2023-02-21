@@ -56,7 +56,6 @@ const SongSync = ({
             view,
             config,
             result,
-            
             // Keep result_id in custom data root
             result_id: resultId,
         });

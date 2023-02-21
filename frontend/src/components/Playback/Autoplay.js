@@ -11,7 +11,7 @@ const PRELOAD = "PRELOAD";
 const RECOGNIZE = "RECOGNIZE";
 
 
-const AutoPlay = ({instruction, preloadMessage, onPreloadReady, playConfig, sections, time, startedPlaying, finishedPlaying, decisionTime, className=''}) => {
+const AutoPlay = ({instruction, preloadMessage, onPreloadReady, playConfig, sections, time, startedPlaying, finishedPlaying, responseTime, className=''}) => {
     // player state
     const [state, setState] = useState({ view: PRELOAD });
     const running = useRef(playConfig.auto_play);
@@ -67,7 +67,7 @@ const AutoPlay = ({instruction, preloadMessage, onPreloadReady, playConfig, sect
                     <div className="circle">
                         <Circle
                             running={running}
-                            duration={decisionTime}
+                            duration={responseTime}
                             color="white"
                             animateCircle={playConfig.show_animation}
                             onTick={onCircleTimerTick}
@@ -79,7 +79,7 @@ const AutoPlay = ({instruction, preloadMessage, onPreloadReady, playConfig, sect
                         <div className="circle-content">
                             {playConfig.show_animation
                                 ? <ListenCircle
-                                    duration={decisionTime}
+                                    duration={responseTime}
                                     histogramRunning={running}
                                     countDownRunning={running}
                                 />
