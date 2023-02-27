@@ -1,15 +1,22 @@
+import React, { useRef, useState, useEffect } from "react";
 import { SILENT_MP3 } from "../config.js";
 import Timer from "./timer";
 
 // Audio provides function around a shared audio object
 
+// Declare webaudio vars in the root scope
+let audioContext;
+let track;
+
 // Create a global audio object once
 // <audio /> docs: https://developer.mozilla.org/en-US/docs/Web/HTML/Element/audio
 const audio = document.createElement("audio");
+
 audio.id = "audio-player";
 audio.controls = "controls";
 audio.src = SILENT_MP3;
-audio.crossorigin = "use-credentials";
+// audio.crossorigin = "use-credentials";
+audio.crossOrigin = "anonymous";
 audio.disableRemotePlayback = true;
 audio.style.display = "none";
 
@@ -35,16 +42,31 @@ export const init = () => {
     load(SILENT_MP3);
     play();
     audioInitialized = true;
+    initWebAudio();
 };
+
+// init webaudio context and connect track to destination (output) 
+const initWebAudio = () => {
+    audioContext = new AudioContext();
+    track = audioContext.createMediaElementSource(audio);
+    track.connect(audioContext.destination);
+}
 
 // init audio after first user action on page
 export const initAudioListener = () => {
     const initOnce = () => {
-        document.removeEventListener("click", initOnce);       
+        document.removeEventListener("click", initOnce);
         init();
     };
     document.addEventListener("click", initOnce);
 };
+
+// Adjust gain
+export const changeGain = (level) => {
+    const gainNode = audioContext.createGain();
+    track.connect(gainNode).connect(audioContext.destination);
+    gainNode.gain.value = level;    
+}
 
 export const stopFadeTimer = () => {
     if (_stopFadeTimer) {
@@ -106,7 +128,9 @@ export const mute = () => {
 export const play = () => {
     stopFadeTimer();
     setVolume(1);
+
     audio.play();
+
 };
 
 // Play audio from given time
