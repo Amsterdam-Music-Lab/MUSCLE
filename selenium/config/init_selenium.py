@@ -10,12 +10,14 @@ api_root = os.getenv("API_ROOT")
 
 class InitSelenium():
     """Init Selenium
-
     attributes: driver, host
     """
 
-    driver = None
-    host = None
+    def __init__(self):
+        """set defaults
+        """
+        self.driver = self.setup_chrome()
+        self.host = self.get_host()
 
     def setup_chrome(self):
         """Initialize chrome driver        

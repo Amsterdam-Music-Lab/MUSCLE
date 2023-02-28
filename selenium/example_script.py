@@ -9,11 +9,15 @@ import time
 
 # slug of the experiment to run this script on
 SLUG = 'cat'
-# Determine current server host name
-HOST = InitSelenium().get_host()
-# initialize webdriver
-driver = InitSelenium().setup_chrome()
 
+# Initialize selenium
+selenium = InitSelenium()
+# Get current server host name
+HOST = selenium.host
+# Get the webdriver (defaults to chrome)
+driver = selenium.driver
+
+# Example code to test selenium setup
 try:
     driver.get(HOST + '/' + SLUG)
     time.sleep(1)
