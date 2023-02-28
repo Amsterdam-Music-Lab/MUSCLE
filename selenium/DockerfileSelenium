@@ -4,6 +4,12 @@ WORKDIR /selenium
 COPY requirements.txt /selenium/
 RUN pip install -r requirements.txt
 
+# Install selenium siderunner
+RUN apt install curl
+RUN curl -fsSL https://deb.nodesource.com/setup_lts.x | bash -
+RUN apt install nodejs
+RUN npm install -g selenium-side-runner
+
 COPY . /selenium/
 
 # Install Google Chrome
@@ -12,4 +18,5 @@ RUN sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable 
 RUN apt-get -y update
 RUN apt-get install -y google-chrome-stable
 
+# Set selenium GUI display to none 
 ENV DISPLAY=:99
