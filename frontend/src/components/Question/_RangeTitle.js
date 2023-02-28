@@ -4,10 +4,10 @@ import { renderLabel } from "../../util/label";
 
 const RangeTitle = ({question, value, sliderValue, emptyValue, changePosition=false}) => {
     const nChoices = Object.keys(question.choices).length - 1;
-    const position = - (nChoices - sliderValue * 2) / nChoices  * 115;
+    const position = - (nChoices - sliderValue * 2) / nChoices  * 44;
     return (
         <div>
-            <h4 className="current-value" style={{position: 'relative', left: changePosition? position : '50px'}}>
+            <h4 className="current-value" style={{position: 'relative', left: changePosition? `${position}%` : '0%'}}>
             { emptyValue ? (
                 renderLabel("fa-arrows-left-right", "2x")
             ) : (
