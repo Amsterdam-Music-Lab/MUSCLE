@@ -13,6 +13,8 @@ from experiment.questions.demographics import EXTRA_DEMOGRAPHICS
 from experiment.questions.languages import LANGUAGE, LanguageQuestion
 from experiment.questions.utils import question_by_key, unasked_question
 
+from result.utils import prepare_result
+
 n_representations = 8
 n_trials_per_block = 8
 n_rounds_per_block = n_trials_per_block * 2  # each trial has two rounds
@@ -180,9 +182,8 @@ def next_single_representation(session, is_speech, group_id):
     with a final question"""
     filter_by = {'group': group_id}
     section = session.section_from_unused_song(filter_by)
-    actions = [sound(section), speech_or_sound_question(is_speech)]
+    actions = [sound(section), speech_or_sound_question(session, section, is_speech)]
     return actions
-
 
 def next_repeated_representation(session, is_speech, group_id=-1):
     if group_id >= 0:
@@ -191,21 +192,22 @@ def next_repeated_representation(session, is_speech, group_id=-1):
     else:
         section = session.previous_section()
     actions = [sound(section, i) for i in range(1, n_representations+1)]
-    actions.append(speech_or_sound_question(is_speech))
+    actions.append(speech_or_sound_question(session, section, is_speech))
     return actions
 
 
-def speech_or_sound_question(is_speech):
+def speech_or_sound_question(session, section, is_speech):
     if is_speech:
-        question = question_speech()
+        question = question_speech(session, section)
     else:
-        question = question_sound()
+        question = question_sound(session, section)
     return Trial(playback=None, feedback_form=Form([question])).action()
 
 
-def question_speech():
+def question_speech(session, section):
+    key = 'speech2song'
     return RadiosQuestion(
-        key='speech2song',
+        key=key,
         question=_('Does this sound like song or speech to you?'),
         choices=[
             _('sounds exactly like speech'),
@@ -213,12 +215,14 @@ def question_speech():
             _('sounds neither like speech nor like song'),
             _('sounds somewhat like song'),
             _('sounds exactly like song')],
+        result_id=prepare_result(key, session, section=section)
     )
 
 
-def question_sound():
+def question_sound(session, section):
+    key = 'sound2music'
     return RadiosQuestion(
-        key='sound2music',
+        key=key,
         question=_(
             'Does this sound like music or an environmental sound to you?'),
         choices=[
@@ -227,6 +231,7 @@ def question_sound():
             _('sounds neither like an environmental sound nor like music'),
             _('sounds somewhat like music'),
             _('sounds exactly like music')],
+        result_id=prepare_result(key, session, section=section),
     )
 
 def sound(section, n_representation=None):

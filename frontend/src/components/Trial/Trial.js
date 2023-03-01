@@ -95,7 +95,7 @@ const Trial = ({
                 form.map((formElement) => (formElement.value = "TIMEOUT"));
             }
 
-            if (feedback_form.length) {
+            if (feedback_form) {
                 if (feedback_form.is_skippable) {
                     form.map((formElement => (formElement.value = formElement.value || '')))
                 }
