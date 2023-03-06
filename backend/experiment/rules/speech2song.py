@@ -62,7 +62,6 @@ class Speech2Song(Base):
         # group_ids for practice (0), or one of the speech blocks (1-3)
         actions = []
         is_speech = True
-
         if session.current_round == 1:
             question_trial = Speech2Song.get_question(session)
             if question_trial:
@@ -85,7 +84,7 @@ class Speech2Song(Base):
             ).action()
             return combine_actions(
                 explainer,
-                next_repeated_representation(session, is_speech, 0)
+                *next_repeated_representation(session, is_speech, 0)
             )
         if session.current_round == 2:
             e1 = Explainer(
@@ -241,7 +240,6 @@ def sound(section, n_representation=None):
         ready_time = 1
     config = {
         'ready_time': ready_time,
-        'response_time': section.duration + .5,
         'show_animation': False
     }
     title = _('Listen carefully')
@@ -253,7 +251,11 @@ def sound(section, n_representation=None):
     view = Trial(
             playback=playback,
             feedback_form=None,
-            title=title
+            title=title,
+            config={
+                'auto_advance': True,
+                'show_continue_button': False,
+                'response_time': section.duration+.5}
     )
 
     return view.action()
