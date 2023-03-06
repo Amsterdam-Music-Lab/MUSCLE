@@ -19,7 +19,7 @@ class MusicalPreferences(Base):
     block_size = 16
 
     @classmethod
-    def first_round(cls, experiment):
+    def first_round(cls, experiment, participant):
         explainer = Explainer(
             instruction=_('This experiment investigates musical preferences'),
             steps=[
@@ -87,9 +87,9 @@ class MusicalPreferences(Base):
             key=know_key,
             view='BUTTON_ARRAY',
             choices={
-                'yes': 'fa-thumbs-up',
-                'unsure': 'fa-question',
                 'no': 'fa-thumbs-down',
+                'unsure': 'fa-question',
+                'yes': 'fa-thumbs-up',
             },
             result_id=prepare_result(know_key, session, section=section)
         )
@@ -101,7 +101,7 @@ class MusicalPreferences(Base):
             title=_('Musical preference'),
             config={
                 'response_time': section.duration + .1,
-                'style': 'boolean'
+                'style': 'boolean-negative-first'
             }
         )
         return view.action()
