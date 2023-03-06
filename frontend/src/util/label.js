@@ -25,6 +25,7 @@ export const getPlayerLabel = (index, labelStyle, customLabels) => {
 };
 
 export const renderLabel = (label, size="1x") => {
+    if (!label) return label
     if (label.startsWith('ti-')) return <span className={label}></span>
     if (label.startsWith('fa-')) return <FontAwesomeIcon icon={label.substring(3)} size={size}/>
     else return label

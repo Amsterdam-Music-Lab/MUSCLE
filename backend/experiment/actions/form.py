@@ -119,7 +119,7 @@ class LikertQuestion(Question):
                 }
 
 class LikertQuestionIcon(Question):
-    def __init__(self, scale_steps=7, likert_view='TEXT_RANGE', **kwargs):
+    def __init__(self, scale_steps=7, likert_view='ICON_RANGE', **kwargs):
         super().__init__(**kwargs)
         self.view = likert_view
         if scale_steps == 7:
@@ -132,7 +132,7 @@ class LikertQuestionIcon(Question):
                 6: 'fa-face-grin',
                 7: 'fa-face-grin-hearts',
             }
-            self.config = {'icons':True, 'colors': ['#ff0000','#ff3a00','#ff6b00','#ffa500','#ffc000','#ffdb00','#ffff00']}
+            self.config = {'icons':True, 'colors': ['#0CC7F1', '#42b5ff',  '#8b9bfa', '#ab86f1', '#bb7ae9', '#c863e8', '#d843e2']}
         elif scale_steps == 5:
             self.choices = {
                 1: _("Strongly Disagree"),
