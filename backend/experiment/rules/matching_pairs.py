@@ -34,7 +34,6 @@ class MatchingPairs(Base):
     
     @staticmethod
     def next_round(session):
-        print(session.rounds_passed())
         if session.rounds_passed() <= 1:
             trial = MatchingPairs.get_question(session)
             if trial:
@@ -89,8 +88,8 @@ class MatchingPairs(Base):
     @classmethod
     def get_question(cls, session):
         questions = [
-            question_by_key('dgf_gender_reduced', EXTRA_DEMOGRAPHICS),
-            question_by_key('dgf_age', EXTRA_DEMOGRAPHICS),
+            question_by_key('dgf_gender_identity'),
+            question_by_key('dgf_generation'),
             question_by_key('dgf_musical_experience', EXTRA_DEMOGRAPHICS)
         ]
         question = unasked_question(session.participant, questions)
