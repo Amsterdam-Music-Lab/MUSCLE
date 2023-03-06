@@ -40,13 +40,11 @@ class MatchingPairs(Base):
                 return trial
             else:
                 explainer = Explainer(
-                instruction=_('You are about to play a memory game. On the next page you will see 12 different cards. Your task is to try to find pairs of similar music.'),
+                instruction='',
                 steps=[
-                    Step(description=_('On each turn, you can select two cards.')),
-                    Step(description=_('If the two cards you pick match, you will be awarded some points.')),
-                    Step(description=_('Once you find a match, we will clear those cards from the board!')),
-                    Step(description=_('If you are not able to find a match, you can try again.')),
-                    Step(description=_('Try to get as high a score as possible!'))
+                    Step(description=_('You are invited to play a memory game.')),
+                    Step(description=_('The more similar pairs you find, the more points you receive.')),
+                    Step(description=_('Try to get as many points as possible!'))
                 ]).action(step_numbers=True)
                 trial = MatchingPairs.get_matching_pairs_trial(session)
                 return combine_actions(explainer, trial)
