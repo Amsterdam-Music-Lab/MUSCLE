@@ -139,12 +139,12 @@ class Speech2Song(Base):
             session.finish()
             session.save()
             # Return a score and final score action
-            return Final.action(
+            return Final(
                 title=_('End of experiment'),
                 session=session,
                 score_message=_(
                     'Thank you for contributing your time to science!')
-            )
+            ).action()
         if session.current_round % 2 == 0:
             # even round: single representation (first round are questions only)
             actions.extend(next_single_representation(
