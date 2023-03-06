@@ -76,7 +76,7 @@ class MatchingPairs(Base):
                 playback=None,
                 feedback_form=Form([BooleanQuestion(
                     key=key,
-                    question='Do you want to play again?',
+                    question='Play again?',
                     result_id=prepare_result(key, session),
                     submits=True),
                 ])
