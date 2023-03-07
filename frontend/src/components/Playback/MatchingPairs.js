@@ -76,26 +76,24 @@ const MatchingPairs = ({
     };
     
     return (
-        <div
-            className={classNames(
-                "aha__matching_pairs d-flex justify-content-around",
-                "player-count-" + sections.length
-            )}
-        >
-            {Object.keys(sections).map((index) => (
-                <PlayCard 
-                key={index}
-                onClick={()=> {
-                    playSection(index);
-                    checkMatchingPairs(index);
-                }}
-                registerUserClicks={registerUserClicks}
-                playing={playerIndex === index}
-                inactive={sections[index].inactive}
-                turned={sections[index].turned}
-                />
-            )
-            )}
+        <div className="aha__matching_pairs container">
+            <div className="playing-board d-flex justify-content-center">
+                {Object.keys(sections).map((index) => (
+                    <PlayCard 
+                    key={index}
+                    onClick={()=> {
+                        playSection(index);
+                        checkMatchingPairs(index);
+                    }}
+                    registerUserClicks={registerUserClicks}
+                    playing={playerIndex === index}
+                    inactive={sections[index].inactive}
+                    turned={sections[index].turned}
+                    seen={sections[index].seen}
+                    />
+                )
+                )}
+            </div>
             <div className="feedback">{setScoreMessage(score.current)}</div>
         </div>  
     )
