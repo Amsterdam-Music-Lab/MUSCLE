@@ -62,7 +62,7 @@ class HBat(Base):
             return action
 
     @classmethod
-    def first_round(cls, experiment, participant):
+    def first_round(cls, experiment):
         explainer = cls.intro_explainer().action(True)
         consent = Consent.action()
         explainer2 = practice_explainer().action()

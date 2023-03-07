@@ -24,7 +24,7 @@ class Huang2022(Base):
     timeout = 15
 
     @classmethod
-    def first_round(cls, experiment, participant):
+    def first_round(cls, experiment):
         """Create data for the first experiment rounds."""
 
         # 1. Explain game.

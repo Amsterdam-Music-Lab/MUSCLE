@@ -57,9 +57,6 @@ def get_experiment(request, slug):
     if experiment.language:
         activate(experiment.language)
 
-    # get current participant
-    participant = get_or_create_participant(request)
-
     # create data
     experiment_data = {
         'id': experiment.id,
@@ -71,7 +68,7 @@ def get_experiment(request, slug):
             {'id': playlist.id, 'name': playlist.name}
             for playlist in experiment.playlists.all()
         ],
-        'next_round': experiment.get_rules().first_round(experiment, participant),
+        'next_round': experiment.get_rules().first_round(experiment),
         'loading_text': _('Loading')
     }
 

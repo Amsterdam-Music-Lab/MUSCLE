@@ -81,7 +81,7 @@ class RhythmDiscrimination(Base):
     ID = 'RHYTHM_DISCRIMINATION'
 
     @classmethod
-    def first_round(cls, experiment, participant):
+    def first_round(cls, experiment):
         """Create data for the first experiment rounds"""
         explainer = intro_explainer().action(True)
 

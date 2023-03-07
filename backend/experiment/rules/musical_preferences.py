@@ -19,7 +19,7 @@ class MusicalPreferences(Base):
     block_size = 16
 
     @classmethod
-    def first_round(cls, experiment, participant):
+    def first_round(cls, experiment):
         explainer = Explainer(
             instruction=_('This experiment investigates musical preferences'),
             steps=[
