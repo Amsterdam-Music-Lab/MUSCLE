@@ -39,8 +39,8 @@ const MatchingPairs = ({
 
     const checkMatchingPairs = (index) => {
         const currentCard = sections[index];
-        score.current = -1;
-        if (sections.filter(s => s.turned).length < 2) {
+        const turnedCards = sections.filter(s => s.turned);
+        if (turnedCards.length == 1) {
             // we have two turned cards
             currentCard.turned = true;
             // check for match
@@ -61,6 +61,7 @@ const MatchingPairs = ({
             lastPlayerIndex.current = -1;
             sections.forEach(section => section.turned = false);
             currentCard.turned = true;
+            score.current = undefined;
         }
 
         resultBuffer.current.push({
