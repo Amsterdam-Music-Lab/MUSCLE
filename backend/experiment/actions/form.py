@@ -29,12 +29,26 @@ class Question(object):
         self.question = question
         self.result_id = result_id
         self.is_skippable = is_skippable
-        self.submits = submits
+        self.submits = submits        
         self.config = config
 
     def action(self):
         return self.__dict__
 
+class NumberQuestion(Question):
+    def __init__(self, input_type='number', min_value=0, max_value=120, **kwargs):
+        super().__init__(**kwargs)
+        self.min_value = min_value
+        self.max_value = max_value
+        self.input_type = input_type
+        self.view = 'STRING'
+
+class TextQuestion(Question):
+    def __init__(self, input_type='text', max_length=None, **kwargs):
+        super().__init__(**kwargs)
+        self.max_length = max_length
+        self.input_type = input_type
+        self.view = 'STRING'
 
 class BooleanQuestion(Question):
     def __init__(self, choices=None, **kwargs):
