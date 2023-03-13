@@ -81,7 +81,7 @@ class Kuiper2020(Hooked):
         print(plan)
 
         # Save, overwriting existing plan if one exists.
-        session.merge_json_data({'plan': plan})
+        session.save_json_data({'plan': plan})
         # session.save() is required for persistence
         session.save()
 
