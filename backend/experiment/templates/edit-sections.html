@@ -1,0 +1,103 @@
+{% extends "admin/base_site.html" %} {% load inline_action_tags %} {% block content %}
+<style>
+    #content {
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    table {
+        width: 100%;
+    }
+
+    .select-fields {
+        width: 100%;
+    }
+
+    .module {
+        width: 100%;
+        background: var(--primary);
+    }
+
+    input[type='submit'],
+    input[type='file'] {
+        display: block;
+    }
+
+    .multiple-file-field {
+        width: 100%;
+    }
+
+    #back-button {
+        width: 22em;
+        float: right;
+    }
+
+    #file-button {
+        margin-top: 1em;
+        font-weight: 400;
+        float: right;
+    }
+
+    #add-button,
+    #update-button {
+        display: block;
+        margin-top: 2em;
+        margin-bottom: 2em;
+        width: 24em;
+        font-weight: 400;
+        background: var(--default-button-bg);
+    }
+</style>
+<h1>Edit sections for playlist: {{playlist.name}}</h1>
+<form action="" method="post">
+    <table>
+        <tr>
+            <th>Filename</th>
+            <th>Artist</th>
+            <th>Name</th>
+            <th>Start-time</th>
+            <th>Duration</th>
+            <th>Group</th>
+            <th>Tag</th>
+        </tr>
+
+        {% for section in sections %}
+        <tr>
+            <td>
+                <p>{{section.filename}}</p>
+            </td>
+            <td>
+                <input type="text" name="artist" maxlength="128" required="" id="id_artist_{{section.id}}"
+                    value="{{ section.artist}}">
+            </td>
+            <td>
+                <input type="text" name="name" maxlength="128" required="" id="id_name_{{section.id}}"
+                    value="{{ section.name}}">
+            </td>
+            <td>
+                <input type="text" name="start_time_{{section.id}}" maxlength="128" required=""
+                    id="id_start_time_{{section.id}}" value="{{ section.start_time}}">
+            </td>
+            <td>
+                <input type="text" name="duration_{{section.id}}" maxlength="128" required=""
+                    id="id_duration_{{section.id}}" value="{{ section.duration}}">
+            </td>
+            <td>
+                <input type="text" name="tag" maxlength="128" required="" id="id_tag_{{section.id}}"
+                    value="{{ section.tag}}">
+            </td>
+            <td>
+                <input type="text" name="group" maxlength="128" required="" id="id_group_{{section.id}}"
+                    value="{{ section.tag}}">
+            </td>
+
+        </tr>
+        {% endfor %}
+
+    </table>
+    <input type="submit" name="_update" value="Update sections" id="update-button" />
+</form>
+<form>
+    <input type="submit" name="_back" value="Go back" id="back-button" />
+</form>
+{% endblock %}
