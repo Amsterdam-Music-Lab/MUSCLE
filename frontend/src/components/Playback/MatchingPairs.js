@@ -9,6 +9,8 @@ const MatchingPairs = ({
     playerIndex,
     setPlayerIndex,
     lastPlayerIndex,
+    finishedPlaying,
+    stopAudioAfter,
     submitResult
 }) => {
     const xPosition = useRef(-1);
@@ -91,8 +93,9 @@ const MatchingPairs = ({
                 }}
                 registerUserClicks={registerUserClicks}
                 playing={playerIndex === index}
-                inactive={sections[index].inactive}
-                turned={sections[index].turned}
+                section={sections[index]}
+                onFinish={finishedPlaying}
+                stopAudioAfter={stopAudioAfter}
                 />
             )
             )}
