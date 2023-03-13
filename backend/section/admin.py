@@ -1,10 +1,14 @@
 import csv
+import audioread
 
 from inline_actions.admin import InlineActionsModelAdminMixin
 from django.contrib import admin, messages
+from django.shortcuts import render, redirect
 from django.http import JsonResponse, HttpResponse
+from django.conf import settings
 
 from .models import Section, Playlist
+from section.forms import AddSections
 
 
 class SectionAdmin(admin.ModelAdmin):
@@ -21,11 +25,14 @@ class SectionAdmin(admin.ModelAdmin):
 
 admin.site.register(Section, SectionAdmin)
 
+# @admin.register(Playlist)
+
 
 class PlaylistAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
     list_display = ('name', 'section_count', 'experiment_count')
     search_fields = ['name', 'section__artist', 'section__name']
-    inline_actions = ['export_json', 'export_csv']
+    inline_actions = ['add_sections',
+                      'edit_sections', 'export_json', 'export_csv']
 
     def save_model(self, request, obj, form, change):
 
@@ -48,6 +55,52 @@ class PlaylistAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
             elif csv_result['status'] == Playlist.CSV_OK:
                 messages.add_message(request, messages.INFO,
                                      csv_result['message'])
+
+    def add_sections(self, request, obj, parent_obj=None):
+        form = AddSections
+        sections = Section.objects.filter(playlist=obj)
+        if '_add' in request.POST:
+            this_artist = request.POST.get('artist')
+            this_name = request.POST.get('name')
+            this_tag = request.POST.get('tag')
+            this_group = request.POST.get('group')
+            new_sections = request.FILES.getlist('files')
+            for section in new_sections:
+                
+                new_section = Section.objects.create(playlist=obj,
+                                                     artist=this_artist,
+                                                     name=this_name,
+                                                     tag=this_tag,
+                                                     group=this_group,
+                                                     filename=section)                
+                new_section.save()
+                # with audioread.audio_open(new_section.filename.url) as f:
+                #     new_section.duration = f.duration                
+                # new_section.save()             
+         # Go back to admin experiment overview
+        if '_back' in request.POST:
+            return redirect('/admin/section/playlist')
+        return render(
+            request,
+            'add-sections.html',
+            context={'playlist': obj,
+                     'sections': sections,
+                     'form': form}
+        )
+
+    def edit_sections(self, request, obj, parent_obj=None):
+        sections = Section.objects.filter(playlist=obj)
+        if '_update' in request.POST:
+            this_artist = request.POST.get('artist')
+            this_name = request.POST.get('name')
+            this_tag = request.POST.get('tag')
+            this_group = request.POST.get('group')
+        return render(
+            request,
+            'edit-sections.html',
+            context={'playlist': obj,
+                     'sections': sections}
+        )
 
     def export_json(self, request, obj, parent_obj=None):
         """Export playlist data in JSON, force download"""
