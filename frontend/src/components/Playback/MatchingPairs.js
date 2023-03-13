@@ -94,6 +94,9 @@ const MatchingPairs = ({
         >
             <div className="running-score">
                 Your score: {calculateRunningScore()}
+                {" "}n: {sections.filter(s => !s.inactive).length / 2}
+                {" "}p: {sections.filter(s => s.inactive).length / 2}
+                {" "}k: {sections.filter(s => s.seen).length}
             </div>
             {Object.keys(sections).map((index) => (
                 <PlayCard 
