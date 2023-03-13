@@ -166,6 +166,7 @@ class Playlist(models.Model):
             },
         }
 
+
 class Section(models.Model):
     """A snippet/section of a song, belonging to a Playlist"""
 
@@ -178,7 +179,7 @@ class Section(models.Model):
     name = models.CharField(db_index=True, max_length=128)
     start_time = models.FloatField(db_index=True, default=0.0)  # sec
     duration = models.FloatField(default=0.0)  # sec
-    filename = models.CharField(max_length=128)
+    filename = models.FileField(upload_to='test-upload')
     restrict_to_nl = models.BooleanField(default=False)
     play_count = models.PositiveIntegerField(default=0)
     code = models.PositiveIntegerField(default=random_code)
