@@ -6,7 +6,7 @@ from django.template.loader import render_to_string
 
 from .base import Base
 from experiment.actions import SongSync, Final, Score, Explainer, Step, Consent, StartSession, Playlist, Trial
-from experiment.actions.form import BooleanQuestion, ChoiceQuestion, Form, Question
+from experiment.actions.form import BooleanQuestion, ChoiceQuestion, Form, Question, TextQuestion
 from experiment.actions.playback import Playback
 from experiment.questions.demographics import EXTRA_DEMOGRAPHICS
 from experiment.questions.goldsmiths import MSI_ALL
@@ -189,7 +189,7 @@ class Huang2022(Base):
                 key = 'tech_problems'
                 form = Form(
                     form=[
-                        Question(
+                        TextQuestion(
                             key=key,
                             result_id=prepare_result(key, session),
                             explainer=_('Did you encounter any technical problems? E.g., no sound, music stopped playing, page loaded slow, page freezes, etc. '),
