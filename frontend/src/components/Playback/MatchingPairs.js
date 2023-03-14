@@ -74,6 +74,16 @@ const MatchingPairs = ({
         
         return;
     };
+
+    const calculateRunningScore = () => {
+        const allScores = resultBuffer.current.filter(
+            r => r.score >= 0 ).map( r => r.score );
+        if (!allScores.length) return 0;
+        const initial = 0;
+        const score = allScores.reduce( 
+            (accumulator, s)  => accumulator + s, initial )
+        return Math.round(score / resultBuffer.current.length * 100)
+    }
     
     return (
         <div
@@ -82,6 +92,12 @@ const MatchingPairs = ({
                 "player-count-" + sections.length
             )}
         >
+            <div className="running-score">
+                Your score: {calculateRunningScore()}
+                {" "}n: {sections.filter(s => !s.inactive).length / 2}
+                {" "}p: {sections.filter(s => s.inactive).length / 2}
+                {" "}k: {sections.filter(s => s.seen).length}
+            </div>
             {Object.keys(sections).map((index) => (
                 <PlayCard 
                 key={index}
