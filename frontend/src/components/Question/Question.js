@@ -6,6 +6,7 @@ import ButtonArray from "./_ButtonArray";
 import Radios from "./_Radios";
 import Range from "./_Range";
 import TextRange from "./_TextRange";
+import IconRange from "./_IconRange";
 import String from "./_String";
 import Checkboxes from "./_Checkboxes";
 import DropDown from "./_DropDown";
@@ -18,6 +19,7 @@ export const DROPDOWN = "DROPDOWN";
 export const RADIOS = "RADIOS";
 export const RANGE = "RANGE";
 export const TEXT_RANGE = "TEXT_RANGE";
+export const ICON_RANGE = "ICON_RANGE";
 export const STRING = "STRING";
 
 // Question is an experiment view that shows a question and handles storing the answer
@@ -62,6 +64,8 @@ const Question = ({
                 return <Range {...attrs} />;
             case TEXT_RANGE:
                 return <TextRange {...attrs} />;
+            case ICON_RANGE:
+                return <IconRange {...attrs} />;
             case STRING:
                 return <String {...attrs} />;
 

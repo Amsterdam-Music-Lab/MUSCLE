@@ -34,7 +34,7 @@ DEMOGRAPHICS = [
         view='RADIOS',
         question=_("When were you born?"),
         choices={
-            'silent': _('1943 or earlier'),
+            'silent': _('1945 or earlier'),
             'boomer': _('1946–1964'),
             'gen_x': _('1965-1980'),
             'millenial': _('1981–1996'),

@@ -4,9 +4,9 @@ import classNames from "classnames";
 
 import RangeLimits from "./_RangeLimits";
 import RangeTitle from "./_RangeTitle";
+import { renderLabel } from "../../util/label";
 
-// TextRange is a question view that makes you select a value within the given range, using a slider from a list of choices
-const TextRange = ({ question, value, onChange, emphasizeTitle }) => {
+const IconRange = ({ question, value, onChange, emphasizeTitle }) => {
     const emptyValue = !value;
 
     const keys = Object.keys(question.choices);
@@ -25,13 +25,13 @@ const TextRange = ({ question, value, onChange, emphasizeTitle }) => {
 
     return (
         <div className={classNames("aha__text-range", { empty: emptyValue })}>
-
             <RangeTitle
                 emphasizeTitle={emphasizeTitle}
                 question={question}
                 value={value}
                 sliderValue={sliderValue}
                 emptyValue={emptyValue}
+                changePosition={true}
             />
 
             <Slider
@@ -41,14 +41,8 @@ const TextRange = ({ question, value, onChange, emphasizeTitle }) => {
                 max={choices.length - 1}
                 tooltip={false}
             />
-
-            <RangeLimits
-                minVal={choices[0]}
-                maxVal={choices[choices.length-1]}
-                labels={question.config.icons? choices : undefined}
-            />
         </div>
-    );
-};
+    )
+}
 
-export default TextRange;
+export default IconRange;
