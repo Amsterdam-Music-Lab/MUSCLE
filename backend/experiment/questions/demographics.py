@@ -87,8 +87,8 @@ DEMOGRAPHICS = [
 EXTRA_DEMOGRAPHICS = [
     NumberQuestion(
         key='dgf_age',
-        view='STRING',                
-        question=_("What is your age?")        
+        view='STRING',
+        question=_("What is your age?")
     ),
     TextQuestion(
         key='dgf_country_of_origin_open',
