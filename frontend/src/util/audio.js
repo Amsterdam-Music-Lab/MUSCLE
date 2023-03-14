@@ -15,8 +15,8 @@ const audio = document.createElement("audio");
 audio.id = "audio-player";
 audio.controls = "controls";
 audio.src = SILENT_MP3;
-// audio.crossorigin = "use-credentials";
-audio.crossOrigin = "anonymous";
+audio.crossorigin = "use-credentials";
+// audio.crossOrigin = "anonymous";
 audio.disableRemotePlayback = true;
 audio.style.display = "none";
 
