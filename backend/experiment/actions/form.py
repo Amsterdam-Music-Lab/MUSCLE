@@ -29,7 +29,7 @@ class Question(object):
         self.question = question
         self.result_id = result_id
         self.is_skippable = is_skippable
-        self.submits = submits        
+        self.submits = submits
         self.config = config
 
     def action(self):
