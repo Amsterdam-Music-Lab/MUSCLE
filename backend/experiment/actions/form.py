@@ -34,7 +34,7 @@ class Question(object):
         self.config = config
 
     def action(self):
-        if settings.DEBUG and self.result_id:
+        if settings.TESTING and self.result_id:
             from result.models import Result
             result = Result.objects.get(pk=self.result_id)
             if result and result.expected_response:
