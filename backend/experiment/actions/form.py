@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.utils.translation import gettext_lazy as _
 
 class Question(object):
@@ -20,7 +21,7 @@ class Question(object):
         question='',
         is_skippable=False,
         submits=False,
-        config=None
+        config=None,
         ):
 
         self.key = key
@@ -33,6 +34,11 @@ class Question(object):
         self.config = config
 
     def action(self):
+        if settings.TESTING and self.result_id:
+            from result.models import Result
+            result = Result.objects.get(pk=self.result_id)
+            if result and result.expected_response:
+                self.expected_response = result.expected_response
         return self.__dict__
 
 
