@@ -20,7 +20,7 @@ class BeatAlignment(Base):
     ID = 'BEAT_ALIGNMENT'
 
     @classmethod
-    def first_round(cls, experiment, participant):
+    def first_round(cls, experiment):
         """Create data for the first experiment rounds"""
 
         # 1. General explainer

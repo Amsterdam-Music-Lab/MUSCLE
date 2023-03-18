@@ -16,7 +16,7 @@ class MatchingPairs(Base):
     ID = 'MATCHING_PAIRS'
 
     @classmethod
-    def first_round(cls, experiment, participant):
+    def first_round(cls, experiment):
         rendered = render_to_string('consent/consent_rhythm.html')
         consent = Consent.action(rendered, title=_(
             'Informed consent'), confirm=_('I agree'), deny=_('Stop'))

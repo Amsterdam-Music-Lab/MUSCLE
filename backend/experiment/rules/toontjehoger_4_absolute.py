@@ -23,7 +23,7 @@ class ToontjeHoger4Absolute(Base):
     PLAYLIST_ITEMS = 13
 
     @classmethod
-    def first_round(cls, experiment, participant):
+    def first_round(cls, experiment):
         """Create data for the first experiment rounds."""
 
         # 1. Explain game.
