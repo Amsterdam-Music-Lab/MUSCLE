@@ -16,7 +16,6 @@ from result.utils import prepare_result
 
 logger = logging.getLogger(__name__)
 
-
 class Huang2022(Base):
     """Rules for the Chinese version of the Hooked experiment."""
 
@@ -160,7 +159,7 @@ class Huang2022(Base):
         # Get next round number and initialise actions list. Two thirds of
         # rounds will be song_sync; the remainder heard_before.
         next_round_number = session.get_current_round()
-        total_rounds = session.experiment.rounds * 2
+        total_rounds = session.experiment.rounds
 
         # Collect actions.
         actions = []
@@ -170,39 +169,23 @@ class Huang2022(Base):
             Huang2022.plan_sections(session)
             # Go to SongSync straight away.
             actions.append(Huang2022.next_song_sync_action(session))
-        elif next_round_number <= total_rounds:
+        elif next_round_number <= total_rounds + 1:
             # Load the heard_before offset.
             plan = json_data.get('plan')
-            heard_before_offset = len(plan['song_sync_sections']) * 2
+            heard_before_offset = len(plan['song_sync_sections']) + 1
 
-            if next_round_number % 2 == 0:
-                # even round, show score and investigate if there were technical problems
-                # Create a score action.
-                config = {'show_section': True, 'show_total_score': True}
-                title = Huang2022.get_trial_title(session, next_round_number)
-                score = Score(
-                    session,
-                    config=config,
-                    title=title
-                )
-                actions.append(score.action())
-                key = 'tech_problems'
-                form = Form(
-                    form=[
-                        Question(
-                            key=key,
-                            result_id=prepare_result(key, session),
-                            explainer=_('Did you encounter any technical problems? E.g., no sound, music stopped playing, page loaded slow, page freezes, etc. '),
-                            question=_("Please report on these in the field below as elaborate as possible. This will help us improving this experiment."),
-                        )
-                    ],
-                    is_skippable=True,
-                )
-                trial = Trial(feedback_form=form, title=title)
-                actions.append(trial.action())
+            # show score 
+            config = {'show_section': True, 'show_total_score': True}
+            title = Huang2022.get_trial_title(session, next_round_number - 1)
+            score = Score(
+                session,
+                config=config,
+                title=title
+            )
+            actions.append(score.action())
             
             # SongSync rounds
-            elif next_round_number < heard_before_offset:
+            if next_round_number < heard_before_offset:
                 actions.append(Huang2022.next_song_sync_action(session))
             # HeardBefore rounds
             elif next_round_number == heard_before_offset:
@@ -210,18 +193,19 @@ class Huang2022(Base):
                 actions.append(Huang2022.heard_before_explainer())
                 actions.append(
                     Huang2022.next_heard_before_action(session))
-            elif len(actions) == 0 and next_round_number > heard_before_offset:
+            elif heard_before_offset < next_round_number <= total_rounds:
                 actions.append(
-                    Huang2022.next_heard_before_action(session))
-        elif next_round_number == total_rounds + 1:
-            action = Huang2022.get_question(session)
-            if not action:
-                return Huang2022.finalize(session)
-            actions.extend([Explainer(
-                instruction=_("Please answer some questions \
-                on your musical (Goldsmiths-MSI) and demographic background"),
-                steps=[],
-                button_label=_("Let's go!")).action(), action])
+                    Huang2022.next_heard_before_action(session))   
+            else:
+                action = Huang2022.get_question(session)
+                if not action:
+                    actions.append(Huang2022.finalize(session))
+                actions.extend([Explainer(
+                    instruction=_("Please answer some questions \
+                    on your musical (Goldsmiths-MSI) and demographic background"),
+                    steps=[],
+                    button_label=_("Let's go!")).action(), action])
+                session.increment_round()
         else:
             action = Huang2022.get_question(session)
             if not action:
@@ -251,17 +235,17 @@ class Huang2022(Base):
             plan = session.load_json_data()['plan']
             sections = plan['song_sync_sections']
         except KeyError as error:
-            print('Missing plan key: %s' % str(error))
+            logger.error('Missing plan key: %s' % str(error))
             return None
 
         # Get section.
         section = None
-        if next_round_number / 2 <= len(sections):
+        if next_round_number <= len(sections):
             section = \
                 session.section_from_any_song(
-                    {'id': sections[int(next_round_number / 2) - 1].get('id')})
+                    {'id': sections[next_round_number-1].get('id')})
         if not section:
-            print("Warning: no next_song_sync section found")
+            logger.warning("Warning: no next_song_sync section found")
             section = session.section_from_any_song()
         key = 'song_sync'
         result_id = prepare_result(key, session, section=section, scoring_rule='SONG_SYNC')
@@ -292,19 +276,18 @@ class Huang2022(Base):
         try:
             plan = session.load_json_data()['plan']
             sections = plan['heard_before_sections']
-            heard_before_offset = len(plan['song_sync_sections'])
+            heard_before_offset = len(plan['song_sync_sections']) + 1
         except KeyError as error:
-            print('Missing plan key: %s' % str(error))
+            logger.error('Missing plan key: %s' % str(error))
             return None
-
         # Get section.
         section = None
-        if int(next_round_number / 2) + 1 - heard_before_offset  <= len(sections):
-            this_section_info = sections[int(next_round_number / 2) - heard_before_offset]
+        if next_round_number - heard_before_offset  <= len(sections):
+            this_section_info = sections[next_round_number - heard_before_offset]
             section = session.section_from_any_song(
                     {'id': this_section_info.get('id')})
         if not section:
-            print("Warning: no heard_before section found")
+            logger.warning("Warning: no heard_before section found")
             section = session.section_from_any_song()
         playback = Playback(
             [section],
@@ -337,10 +320,9 @@ class Huang2022(Base):
         return trial.action()
 
     @classmethod
-    def get_trial_title(cls, session, next_round_number):
-        round_number = int(next_round_number / 2) + next_round_number % 2
+    def get_trial_title(cls, session, next_round_number):    
         title = _("Round %(number)d / %(total)d") %\
-            {'number': round_number, 'total': session.experiment.rounds}
+            {'number': next_round_number, 'total': session.experiment.rounds}
         return title
 
     @classmethod
