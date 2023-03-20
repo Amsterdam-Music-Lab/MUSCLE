@@ -142,6 +142,7 @@ const Playback = ({
     // Local logic for onfinished playing
     const onFinishedPlaying = useCallback(() => {
         setPlayerIndex(-1);
+        audio.stop();
         finishedPlaying && finishedPlaying();
     }, [finishedPlaying]);
 
@@ -205,6 +206,7 @@ const Playback = ({
                 return (
                     <MatchingPairs
                         {...attrs}
+                        stopAudioAfter={playConfig.stop_audio_after}
                     />
                 );
             default:
