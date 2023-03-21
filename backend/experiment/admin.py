@@ -83,7 +83,8 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
         return render(
             request,
             'csv-export.html',
-            context={'form': form,
+            context={'experiment': obj,
+                     'form': form,
                      'template_form': template_form}
         )
 
