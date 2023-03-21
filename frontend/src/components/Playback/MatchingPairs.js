@@ -1,7 +1,7 @@
 import React, {useRef} from "react";
+import { getCurrentTime } from "../../util/audio";
 
 import PlayCard from "../PlayButton/PlayCard";
-import classNames from "classnames";
 
 const MatchingPairs = ({
     playSection,
@@ -19,6 +19,8 @@ const MatchingPairs = ({
 
     const resultBuffer = useRef([]);
 
+    const startTime = useRef(Date.now());
+
     const setScoreMessage = (score) => {
         switch(score) {
             case 0: return 'No match! 0 points';
@@ -33,10 +35,14 @@ const MatchingPairs = ({
         yPosition.current = posY;
     }
 
+    const formatTime = (time) => {
+        return time/1000;
+    }
+
     const checkMatchingPairs = (index) => {
         const currentCard = sections[index];
-        score.current = -1;
-        if (sections.filter(s => s.turned).length < 2) {
+        const turnedCards = sections.filter(s => s.turned);
+        if (turnedCards.length == 1) {
             // we have two turned cards
             currentCard.turned = true;
             // check for match
@@ -57,14 +63,15 @@ const MatchingPairs = ({
             lastPlayerIndex.current = -1;
             sections.forEach(section => section.turned = false);
             currentCard.turned = true;
+            score.current = undefined;
         }
 
-        const currentScore = score.current;
         resultBuffer.current.push({
             selectedSection: currentCard.id,
             xPosition: xPosition.current,
             yPosition: yPosition.current,
-            score: currentScore
+            score: score.current,
+            timestamp: formatTime(Date.now() - startTime.current)
         });
         
         currentCard.seen = true;

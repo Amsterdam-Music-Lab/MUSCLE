@@ -36,20 +36,17 @@ const PlayCard = ({ onClick, registerUserClicks, playing, section, onFinish, sto
                     <Histogram 
                         className="front"
                         running={playing}
-                        histogramWidth={130}
-                        height={130}
-                        bars={7}
+                        histogramWidth={90}
+                        height={90}
+                        bars={5}
                         width={10}
                         spacing={10}
                         backgroundColor="purple"
-                        borderRadius="1rem"
+                        borderRadius=".5rem"
                     />
                     :
-                    <img 
-                        className="back"
-                        src='favicon.ico' 
-                        alt="card back" 
-                    />
+                    <div className={classNames("back", {seen: seen})}>
+                    </div>
                 }
         </div>
     );

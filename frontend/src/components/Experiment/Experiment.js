@@ -42,6 +42,7 @@ const Experiment = ({ match }) => {
 
     // Load state, set random key
     const loadState = useCallback((state) => {
+        if (!state) return;
         state.key = Math.random();
         setState(state);
     }, []);
