@@ -1,10 +1,13 @@
 import datetime
 import random
 import csv
+import os
 
 from django.db import models
 from django.utils import timezone
 from django.urls import reverse
+from django.conf import settings
+import audioread
 
 class Playlist(models.Model):
     """List of sections to be used in an Experiment"""
@@ -166,6 +169,10 @@ class Playlist(models.Model):
             },
         }
 
+def audio_upload_path(instance, filename):
+    """Generate path to save audio based on playlist.name"""
+    folder_name = instance.playlist.name.replace(' ', '').lower()
+    return '{0}/{1}'.format(folder_name, filename)
 
 class Section(models.Model):
     """A snippet/section of a song, belonging to a Playlist"""
@@ -179,7 +186,7 @@ class Section(models.Model):
     name = models.CharField(db_index=True, max_length=128)
     start_time = models.FloatField(db_index=True, default=0.0)  # sec
     duration = models.FloatField(default=0.0)  # sec
-    filename = models.FileField(upload_to='test-upload')
+    filename = models.FileField(upload_to=audio_upload_path, max_length=128)
     restrict_to_nl = models.BooleanField(default=False)
     play_count = models.PositiveIntegerField(default=0)
     code = models.PositiveIntegerField(default=random_code)
