@@ -57,7 +57,7 @@ const Experiment = ({ match }) => {
     // Start first_round when experiment and partipant have been loaded
     useEffect(() => {
         // Check if done loading
-        if (!loadingExperiment) {
+        if (!loadingExperiment && !loadingParticipant) {
             // Loading succeeded
             if (experiment) {
                 loadState(stateNextRound(experiment));
