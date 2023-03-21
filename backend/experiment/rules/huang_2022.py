@@ -3,9 +3,10 @@ import logging
 
 from django.utils.translation import gettext_lazy as _
 from django.template.loader import render_to_string
+from django.conf import settings
 
 from .base import Base
-from experiment.actions import SongSync, Final, Score, Explainer, Step, Consent, StartSession, Playlist, Trial
+from experiment.actions import HTML, SongSync, Final, Score, Explainer, Step, Consent, StartSession, Playlist, Trial
 from experiment.actions.form import BooleanQuestion, ChoiceQuestion, Form, Question
 from experiment.actions.playback import Playback
 from experiment.questions.demographics import EXTRA_DEMOGRAPHICS
@@ -25,48 +26,16 @@ class Huang2022(Base):
     @classmethod
     def first_round(cls, experiment, participant):
         """Create data for the first experiment rounds."""
-
-        # 1. Explain game.
-        explainer = Explainer(
-            instruction=_("How to Play"),
-            steps=[
-                Step(_(
-                    "Do you recognise the song? Try to sing along. The faster you recognise songs, the more points you can earn.")),
-                Step(_(
-                    "Do you really know the song? Keep singing or imagining the music while the sound is muted. The music is still playing: you just can’t hear it!")),
-                Step(_(
-                    "Was the music in the right place when the sound came back? Or did we jump to a different spot during the silence?"))
-            ],
-            button_label=_("Let's go!")).action(True)
         # read consent form from file
         rendered = render_to_string(
             'consent/consent_huang2021.html')
         consent = Consent.action(rendered, title=_(
             'Informed consent'), confirm=_('I agree'), deny=_('Stop'))
-
-        explainer_devices = Explainer(
-            instruction=_("You can use your smartphone, computer or tablet to participate in this experiment. Please choose the best network in your area to participate in the experiment, such as wireless network (WIFI), mobile data network signal (4G or above) or wired network. If the network is poor, it may cause the music to fail to load or the experiment may fail to run properly. You can access the experiment page through the following channels:"),
-            steps=[
-                Step(_(
-                    "Directly click the link on WeChat (smart phone or PC version, or WeChat Web)"),
-                ),
-                Step(_(
-                    "If the link to load the experiment page through the WeChat app on your cell phone fails, you can copy and paste the link in the browser of your cell phone or computer to participate in the experiment. You can use any of the currently available browsers, such as Safari, Firefox, 360, Google Chrome, Quark, etc."),
-                )
-            ],
-            button_label=_("Continue")
-        ).action(True)
-        # 3. Choose playlist.
-        playlist = Playlist.action(experiment.playlists.all())
-
-        # 4. Start session.
+        # start session
         start_session = StartSession.action()
 
         return [
-            explainer,
             consent,
-            explainer_devices,
-            playlist,
             start_session
         ]
 
@@ -158,17 +127,76 @@ class Huang2022(Base):
         json_data = session.load_json_data()
         # Get next round number and initialise actions list. Two thirds of
         # rounds will be song_sync; the remainder heard_before.
-        next_round_number = session.get_current_round()
+        next_round_number = session.get_current_round() - 2 # two extra rounds for technical check
         total_rounds = session.experiment.rounds
 
         # Collect actions.
         actions = []
 
-        if next_round_number == 1:
-            # Plan sections
+        if next_round_number == -1:
+            playback = get_test_playback()
+            html = HTML(body='<h6>{}</h6>'.format(_('Do you hear the music?')))
+            form = Form(form=[BooleanQuestion(
+                key='audio_check1',
+                choices={'no': _('No'), 'yes': _('Yes')},
+                result_id=prepare_result('audio_check1', session, 
+                    scoring_rule='BOOLEAN'),
+                submits=True)])
+            return Trial(playback=playback, feedback_form=form, html=html,
+                         config={'response_time': 120},
+                         title=_("Audio check")).action()
+        elif next_round_number <= 1:
+            last_result = session.result_set.last()
+            if last_result.question_key == 'audio_check1':
+                if last_result.score == 0:
+                    playback = get_test_playback()                    
+                    html = HTML(body=render_to_string('html/huang_2022/audio_check.html'))
+                    form = Form(form=[BooleanQuestion(
+                        key='audio_check2',
+                        choices={'no': _('Quit'), 'yes': _('Try')},
+                        result_id=prepare_result('audio_check2', session, scoring_rule='BOOLEAN'),
+                        submits=True
+                    )])
+                    return Trial(playback=playback, html=html, feedback_form=form,
+                                 config={'response_time': 120},
+                                 title=_("Ready to experiment")).action()
+                else:
+                    session.increment_round() # adjust round numbering
+            elif last_result.question_key == 'audio_check2' and last_result.score == 0:
+                # participant had persistent audio problems, finish and redirect
+                session.finish()
+                session.save()
+                return {'redirect': settings.RELOAD_PARTICIPANT_TARGET}
+
+            # Start experiment: plan sections and show explainers
             Huang2022.plan_sections(session)
-            # Go to SongSync straight away.
-            actions.append(Huang2022.next_song_sync_action(session))
+            # Show explainers and go to SongSync
+            explainer = Explainer(
+            instruction=_("How to Play"),
+            steps=[
+                Step(_(
+                    "Do you recognise the song? Try to sing along. The faster you recognise songs, the more points you can earn.")),
+                Step(_(
+                    "Do you really know the song? Keep singing or imagining the music while the sound is muted. The music is still playing: you just can’t hear it!")),
+                Step(_(
+                    "Was the music in the right place when the sound came back? Or did we jump to a different spot during the silence?"))
+            ],
+            button_label=_("Let's go!")).action(True)
+            explainer_devices = Explainer(
+                instruction=_("You can use your smartphone, computer or tablet to participate in this experiment. Please choose the best network in your area to participate in the experiment, such as wireless network (WIFI), mobile data network signal (4G or above) or wired network. If the network is poor, it may cause the music to fail to load or the experiment may fail to run properly. You can access the experiment page through the following channels:"),
+                steps=[
+                    Step(_(
+                        "Directly click the link on WeChat (smart phone or PC version, or WeChat Web)"),
+                    ),
+                    Step(_(
+                        "If the link to load the experiment page through the WeChat app on your cell phone fails, you can copy and paste the link in the browser of your cell phone or computer to participate in the experiment. You can use any of the currently available browsers, such as Safari, Firefox, 360, Google Chrome, Quark, etc."),
+                    )
+                ],
+                button_label=_("Continue")
+            ).action(True)
+            # Choose playlist
+            playlist = Playlist.action(session.experiment.playlists.all())
+            actions.extend([explainer, explainer_devices, playlist, Huang2022.next_song_sync_action(session)])
         elif next_round_number <= total_rounds + 1:
             # Load the heard_before offset.
             plan = json_data.get('plan')
@@ -443,3 +471,11 @@ def contact_question():
             ),
             is_skippable=True
         )
+
+def get_test_playback():
+    from section.models import Section
+    test_section = Section.objects.get(name='LevelCheck')
+    playback = Playback(sections=[test_section],
+        play_config={'show_animation': True})
+    return playback
+    

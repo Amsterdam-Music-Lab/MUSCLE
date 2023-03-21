@@ -62,4 +62,4 @@ LOGGING = {
     }
 }
 
-RELOAD_PARTICIPANT_TARGET = 'http://app.amsterdammusiclab.nl/rhythm_mri'
+RELOAD_PARTICIPANT_TARGET = 'http://app.amsterdammusiclab.nl/'

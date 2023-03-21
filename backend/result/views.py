@@ -2,6 +2,7 @@ import json
 
 from django.views.decorators.http import require_POST
 from django.http import Http404, HttpResponseServerError, JsonResponse, HttpResponseBadRequest
+from django.shortcuts import redirect
 
 from participant.utils import get_participant
 from session.models import Session
@@ -52,6 +53,9 @@ def score(request):
         action = session.experiment_rules().next_round(session, request.session)
     else:
         action = session.experiment_rules().next_round(session)
+        
+    if action.get('redirect'):
+        return redirect(action.get('redirect'))
     return JsonResponse(action, json_dumps_params={'indent': 4})
 
 @require_POST

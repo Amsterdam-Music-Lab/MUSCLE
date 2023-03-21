@@ -26,5 +26,3 @@ INTERNAL_IPS = [
 
 
 CORS_ORIGIN_ALLOW_ALL = True
-
-RELOAD_PARTICIPANT_TARGET = 'http://localhost:3000/rhythm_mri'
