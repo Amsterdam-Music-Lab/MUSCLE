@@ -14,9 +14,10 @@ class Trial(object):  # pylint: disable=too-few-public-methods
 
     ID = 'TRIAL_VIEW'
 
-    def __init__(self, playback=None, feedback_form=None, title='', config=None, result_id=None):
+    def __init__(self, playback=None, html=None, feedback_form=None, title='', config=None, result_id=None):
         '''
         - playback: Playback object (may be None)
+        - html: HTML object (may be None)
         - feedback_form: Form object (may be None)
         - title: string setting title in header of experiment
         - result_id: id of Result to handle (especially important if there's no feedback form)
@@ -35,6 +36,7 @@ class Trial(object):  # pylint: disable=too-few-public-methods
             - continue_label: if there is no form, how to label a button to proceed to next view
         '''
         self.playback = playback
+        self.html = html
         self.feedback_form = feedback_form
         self.title = title
         self.result_id = result_id
@@ -64,6 +66,8 @@ class Trial(object):  # pylint: disable=too-few-public-methods
         }
         if self.playback:
             action['playback'] = self.playback.action()
+        if self.html:
+            action['html'] = self.html.action()
         if self.feedback_form:
             action['feedback_form'] = self.feedback_form.action()
 

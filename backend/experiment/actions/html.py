@@ -15,19 +15,11 @@ class HTML(object):  # pylint: disable=too-few-public-methods
 
     STYLES = [STYLE_NEUTRAL, STYLE_BLUE, STYLE_PINK]
 
-    def __init__(self, html, form, style='', title='', result_id=''):
+    def __init__(self, body):
         """
-        - html: HTML body
-        - form: Form view
-        - style: Style class, supports: STYLE_NEUTRAL, STYLE_BLUE, STYLE_PINK
-        - title: Page title
-        - result_id: Result id
+        - body: HTML body
         """
-        self.title = title
-        self.result_id = result_id
-        self.html = html
-        self.form = form
-        self.style = style if style in self.STYLES else self.STYLE_NEUTRAL
+        self.body = body
 
     def action(self):
         """
@@ -36,11 +28,7 @@ class HTML(object):  # pylint: disable=too-few-public-methods
         # Create action
         action = {
             'view': HTML.ID,
-            'title': self.title,
-            'result_id': self.result_id,
-            'style': self.style,
-            'html': self.html,
-            'form': self.form.action(),
+            'body': self.body,
         }
 
         return action
