@@ -1,44 +1,17 @@
 {% extends "admin/base_site.html" %} {% load inline_action_tags %} {% block content %}
 <style>
-    #content {
-        margin-left: auto;
-        margin-right: auto;
-    }
-
     table {
         width: 100%;
     }
-
-    .select-fields {
-        width: 100%;
+    td {
+        padding: 8px 2px;
     }
-
-    .module {
-        width: 100%;
-        background: var(--primary);
+    p.form-filename {
+        max-width: 200px;
     }
-
-    input[type='submit'],
-    input[type='file'] {
-        display: block;
-    }
-
-    .multiple-file-field {
-        width: 100%;
-    }
-
     #back-button {
-        width: 22em;
         float: right;
     }
-
-    #file-button {
-        margin-top: 1em;
-        font-weight: 400;
-        float: right;
-    }
-
-    #add-button,
     #update-button {
         display: block;
         margin-top: 2em;
@@ -50,8 +23,10 @@
 </style>
 <h1>Edit sections for playlist: {{playlist.name}}</h1>
 <form action="" method="post">
+    {% csrf_token %}{% render_inline_action_fields %}
     <table>
         <tr>
+            <th>Code</th>
             <th>Filename</th>
             <th>Artist</th>
             <th>Name</th>
@@ -59,38 +34,46 @@
             <th>Duration</th>
             <th>Group</th>
             <th>Tag</th>
+            <th>NL</th>
         </tr>
 
         {% for section in sections %}
         <tr>
             <td>
-                <p>{{section.filename}}</p>
+                <p>{{section.code}}</p>
             </td>
             <td>
-                <input type="text" name="artist" maxlength="128" required="" id="id_artist_{{section.id}}"
+                <p class="form-filename">{{section.filename}}</p>
+            </td>
+            <td>
+                <input type="text" name="{{section.id}}_artist" maxlength="128" required="" id="{{section.id}}_artist"
                     value="{{ section.artist}}">
+
             </td>
             <td>
-                <input type="text" name="name" maxlength="128" required="" id="id_name_{{section.id}}"
+                <input type="text" name="{{section.id}}_name" maxlength="128" required="" id="{{section.id}}_name"
                     value="{{ section.name}}">
             </td>
             <td>
-                <input type="text" name="start_time_{{section.id}}" maxlength="128" required=""
-                    id="id_start_time_{{section.id}}" value="{{ section.start_time}}">
+                <input type="number" name="{{section.id}}_start_time" maxlength="128" required=""
+                    id="{{section.id}}_start_time" value="{{ section.start_time}}">
             </td>
             <td>
-                <input type="text" name="duration_{{section.id}}" maxlength="128" required=""
-                    id="id_duration_{{section.id}}" value="{{ section.duration}}">
+                <input type="number" name="{{section.id}}_duration" maxlength="128" required=""
+                    id="{{section.id}}_duration" value="{{ section.duration}}">
             </td>
             <td>
-                <input type="text" name="tag" maxlength="128" required="" id="id_tag_{{section.id}}"
+                <input type="text" name="{{section.id}}_tag" maxlength="128" required="" id="{{section.id}}_tag"
                     value="{{ section.tag}}">
             </td>
             <td>
-                <input type="text" name="group" maxlength="128" required="" id="id_group_{{section.id}}"
+                <input type="text" name="{{section.id}}_group" maxlength="128" required="" id="{{section.id}}_group"
                     value="{{ section.tag}}">
             </td>
-
+            <td>
+                <input type="checkbox" name="{{section.id}}_restrict_to_nl" id="{{section.id}}_restrict_to_nl" 
+                    {% if section.restrict_to_nl %} checked {% endif %}>
+            </td>
         </tr>
         {% endfor %}
 
