@@ -5,7 +5,7 @@ from django.views.decorators.http import require_POST
 from .models import Session
 from experiment.models import Experiment
 from section.models import Playlist
-from participant.utils import get_or_create_participant, get_participant
+from participant.utils import get_participant
 
 
 @require_POST

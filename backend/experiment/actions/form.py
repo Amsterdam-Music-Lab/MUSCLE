@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.utils.translation import gettext_lazy as _
 
 class Question(object):
@@ -20,7 +21,7 @@ class Question(object):
         question='',
         is_skippable=False,
         submits=False,
-        config=None
+        config=None,
         ):
 
         self.key = key
@@ -33,8 +34,27 @@ class Question(object):
         self.config = config
 
     def action(self):
+        if settings.TESTING and self.result_id:
+            from result.models import Result
+            result = Result.objects.get(pk=self.result_id)
+            if result and result.expected_response:
+                self.expected_response = result.expected_response
         return self.__dict__
 
+class NumberQuestion(Question):
+    def __init__(self, input_type='number', min_value=0, max_value=120, **kwargs):
+        super().__init__(**kwargs)
+        self.min_value = min_value
+        self.max_value = max_value
+        self.input_type = input_type
+        self.view = 'STRING'
+
+class TextQuestion(Question):
+    def __init__(self, input_type='text', max_length=None, **kwargs):
+        super().__init__(**kwargs)
+        self.max_length = max_length
+        self.input_type = input_type
+        self.view = 'STRING'
 
 class BooleanQuestion(Question):
     def __init__(self, choices=None, **kwargs):

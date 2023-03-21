@@ -9,6 +9,8 @@ const MatchingPairs = ({
     playerIndex,
     setPlayerIndex,
     lastPlayerIndex,
+    finishedPlaying,
+    stopAudioAfter,
     submitResult
 }) => {
     const xPosition = useRef(-1);
@@ -81,26 +83,45 @@ const MatchingPairs = ({
         
         return;
     };
+
+    const calculateRunningScore = () => {
+        const allScores = resultBuffer.current.filter(
+            r => r.score >= 0 ).map( r => r.score );
+        if (!allScores.length) return 0;
+        const initial = 0;
+        const score = allScores.reduce( 
+            (accumulator, s)  => accumulator + s, initial )
+        return Math.round(score / resultBuffer.current.length * 100)
+    }
     
     return (
-        <div className="aha__matching_pairs container">
-            <div className="playing-board d-flex justify-content-center">
-                {Object.keys(sections).map((index) => (
-                    <PlayCard 
-                    key={index}
-                    onClick={()=> {
-                        playSection(index);
-                        checkMatchingPairs(index);
-                    }}
-                    registerUserClicks={registerUserClicks}
-                    playing={playerIndex === index}
-                    inactive={sections[index].inactive}
-                    turned={sections[index].turned}
-                    seen={sections[index].seen}
-                    />
-                )
-                )}
+        <div
+            className={classNames(
+                "aha__matching_pairs d-flex justify-content-around",
+                "player-count-" + sections.length
+            )}
+        >
+            <div className="running-score">
+                Your score: {calculateRunningScore()}
+                {" "}n: {sections.filter(s => !s.inactive).length / 2}
+                {" "}p: {sections.filter(s => s.inactive).length / 2}
+                {" "}k: {sections.filter(s => s.seen).length}
             </div>
+            {Object.keys(sections).map((index) => (
+                <PlayCard 
+                key={index}
+                onClick={()=> {
+                    playSection(index);
+                    checkMatchingPairs(index);
+                }}
+                registerUserClicks={registerUserClicks}
+                playing={playerIndex === index}
+                section={sections[index]}
+                onFinish={finishedPlaying}
+                stopAudioAfter={stopAudioAfter}
+                />
+            )
+            )}
             <div className="feedback">{setScoreMessage(score.current)}</div>
         </div>  
     )

@@ -1,6 +1,6 @@
 from django.utils.translation import gettext_lazy as _
 
-from experiment.actions.form import ChoiceQuestion, Question
+from experiment.actions.form import ChoiceQuestion, Question, NumberQuestion, TextQuestion
 from experiment.standards.iso_countries import ISO_COUNTRIES
 from experiment.standards.iso_languages import ISO_LANGUAGES
 from experiment.standards.isced_education import ISCED_EDUCATION_LEVELS
@@ -75,7 +75,7 @@ DEMOGRAPHICS = [
         }
     ),
     # msi_39_best_instrument duplicate in goldsmiths.py
-    Question(
+    TextQuestion(
         key='msi_39_best_instrument',
         view='STRING',
         question=_("The instrument I play best, including voice (or none), is:")
@@ -85,18 +85,18 @@ DEMOGRAPHICS = [
 
 
 EXTRA_DEMOGRAPHICS = [
-    Question(
+    NumberQuestion(
         key='dgf_age',
         view='STRING',
         question=_("What is your age?")
     ),
-    Question(
+    TextQuestion(
         key='dgf_country_of_origin_open',
         view='STRING',
         question=_(
             "In which country did you spend the most formative years of your childhood and youth?"),
     ),
-    Question(
+    TextQuestion(
         key='dgf_country_of_residence_open',
         view='STRING',
         question=_("In which country do you currently reside?")

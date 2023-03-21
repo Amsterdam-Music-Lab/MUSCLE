@@ -73,12 +73,12 @@ class ParticipantTest(TestCase):
         assert empty_result.question_key == 'test2'
 
     def test_access_info(self):
-        # this will create a new participant and set the request.session variable
-        self.client.get('/experiment/test/')
+        # this will create a new participant
+        self.client.get('/participant/')
         participant = Participant.objects.last()
         assert participant.access_info == 'Agent 007'
 
     def test_country_code(self):
-        self.client.get('/experiment/test/')
+        self.client.get('/participant/')
         participant = Participant.objects.last()
         assert participant.country_code == 'BLA'
