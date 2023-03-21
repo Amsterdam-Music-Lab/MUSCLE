@@ -9,12 +9,6 @@ class HTML(object):  # pylint: disable=too-few-public-methods
 
     ID = 'HTML'
 
-    STYLE_NEUTRAL = 'neutral'
-    STYLE_BLUE = 'blue'
-    STYLE_PINK = 'pink'
-
-    STYLES = [STYLE_NEUTRAL, STYLE_BLUE, STYLE_PINK]
-
     def __init__(self, body):
         """
         - body: HTML body

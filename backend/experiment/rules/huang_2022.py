@@ -13,6 +13,7 @@ from experiment.questions.demographics import EXTRA_DEMOGRAPHICS
 from experiment.questions.goldsmiths import MSI_ALL
 from experiment.questions.utils import question_by_key, unasked_question, total_unanswered_questions
 from experiment.actions.utils import combine_actions
+from experiment.actions.styles import STYLE_BOOLEAN_NEGATIVE_FIRST
 from result.utils import prepare_result
 
 logger = logging.getLogger(__name__)
@@ -22,6 +23,7 @@ class Huang2022(Base):
 
     ID = 'HUANG_2022'
     timeout = 15
+    round_modifier = 2
 
     @classmethod
     def first_round(cls, experiment, participant):
@@ -127,7 +129,7 @@ class Huang2022(Base):
         json_data = session.load_json_data()
         # Get next round number and initialise actions list. Two thirds of
         # rounds will be song_sync; the remainder heard_before.
-        next_round_number = session.get_current_round() - 2 # two extra rounds for technical check
+        next_round_number = session.get_current_round() - Huang2022.round_modifier 
         total_rounds = session.experiment.rounds
 
         # Collect actions.
@@ -135,13 +137,14 @@ class Huang2022(Base):
 
         if next_round_number == -1:
             playback = get_test_playback()
-            html = HTML(body='<h6>{}</h6>'.format(_('Do you hear the music?')))
+            html = HTML(body='<h4>{}</h4>'.format(_('Do you hear the music?')))
             form = Form(form=[BooleanQuestion(
                 key='audio_check1',
                 choices={'no': _('No'), 'yes': _('Yes')},
                 result_id=prepare_result('audio_check1', session, 
                     scoring_rule='BOOLEAN'),
-                submits=True)])
+                submits=True,
+                style=STYLE_BOOLEAN_NEGATIVE_FIRST)])
             return Trial(playback=playback, feedback_form=form, html=html,
                          config={'response_time': 120},
                          title=_("Audio check")).action()
@@ -155,7 +158,8 @@ class Huang2022(Base):
                         key='audio_check2',
                         choices={'no': _('Quit'), 'yes': _('Try')},
                         result_id=prepare_result('audio_check2', session, scoring_rule='BOOLEAN'),
-                        submits=True
+                        submits=True,
+                        style=STYLE_BOOLEAN_NEGATIVE_FIRST
                     )])
                     return Trial(playback=playback, html=html, feedback_form=form,
                                  config={'response_time': 120},
@@ -258,7 +262,7 @@ class Huang2022(Base):
         """Get next song_sync section for this session."""
 
         # Load plan.
-        next_round_number = session.get_current_round()
+        next_round_number = session.get_current_round() - cls.round_modifier
         try:
             plan = session.load_json_data()['plan']
             sections = plan['song_sync_sections']
@@ -300,7 +304,7 @@ class Huang2022(Base):
         """Get next heard_before action for this session."""
 
         # Load plan.
-        next_round_number = session.get_current_round()
+        next_round_number = session.get_current_round() - cls.round_modifier
         try:
             plan = session.load_json_data()['plan']
             sections = plan['heard_before_sections']
@@ -332,10 +336,10 @@ class Huang2022(Base):
             },
             question=_("Did you hear this song in previous rounds?"),
             result_id=prepare_result(key, session, section=section, expected_response=expected_response, scoring_rule='REACTION_TIME',),
-            submits=True)
+            submits=True,
+            style={STYLE_BOOLEAN_NEGATIVE_FIRST: True, 'buttons-large-gap': True})
             ])
         config = {
-            'style': 'boolean-negative-first',
             'auto_advance': True,
             'response_time': cls.timeout
         }

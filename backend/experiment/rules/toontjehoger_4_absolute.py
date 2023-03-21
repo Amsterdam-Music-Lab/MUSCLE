@@ -7,6 +7,7 @@ from .toontjehoger_1_mozart import toontjehoger_ranks
 from experiment.actions import Trial, Explainer, Step, Score, Final, StartSession, Playlist, Info
 from experiment.actions.form import ButtonArrayQuestion, Form
 from experiment.actions.playback import Playback
+from experiment.actions.styles import STYLE_NEUTRAL
 from .base import Base
 from experiment.actions.utils import combine_actions
 from result.utils import prepare_result
@@ -120,17 +121,12 @@ class ToontjeHoger4Absolute(Base):
             result_id=prepare_result(
                 key, session, section=section1,
                 expected_response="A" if sections[0].id == section1.id else "B"
-            )
+            ),
+            style=STYLE_NEUTRAL
         )
         form = Form([question])
 
-        # Trial
-        trial_config = {
-            'style': 'neutral',
-        }
-
         trial = Trial(
-            config=trial_config,
             playback=playback,
             feedback_form=form,
             title=cls.TITLE,
