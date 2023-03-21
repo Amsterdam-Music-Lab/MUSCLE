@@ -1,7 +1,7 @@
 {% extends "admin/base_site.html" %} {% load inline_action_tags %} {% block content %}
 <style>
     .select-fields {
-        width: 100vw;
+        width: 100%;
     }
 
     .select-fields p {
@@ -12,7 +12,7 @@
         display: block;
     }
 
-    input,
+    input[type="text"],
     select,
     label {
         width: 22vw;
@@ -23,14 +23,14 @@
 
     #back-button {
         position: absolute;
-        bottom: 5em;
+        bottom: 3em;
         right: 3em;
     }
 
-    #add-button,
-    #update-button {
+    #add-button {
+        margin-top: 2em;
         display: block;
-        width: 24em;
+        width: 22em;
         font-weight: 400;
         background: var(--default-button-bg);
     }
