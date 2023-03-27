@@ -100,7 +100,7 @@ class ListeningConditions(Base):
         return view.action()
 
     @classmethod
-    def first_round(cls, experiment, participant):
+    def first_round(cls, experiment):
         consent = Consent.action()
         explainer = Explainer(
             instruction=_(

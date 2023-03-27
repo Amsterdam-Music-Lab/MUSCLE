@@ -16,7 +16,7 @@ class MatchingPairs(Base):
     ID = 'MATCHING_PAIRS'
 
     @classmethod
-    def first_round(cls, experiment, participant):
+    def first_round(cls, experiment):
         rendered = render_to_string('consent/consent_rhythm.html')
         consent = Consent.action(rendered, title=_(
             'Informed consent'), confirm=_('I agree'), deny=_('Stop'))
@@ -34,20 +34,17 @@ class MatchingPairs(Base):
     
     @staticmethod
     def next_round(session):
-        print(session.rounds_passed())
         if session.rounds_passed() <= 1:
             trial = MatchingPairs.get_question(session)
             if trial:
                 return trial
             else:
                 explainer = Explainer(
-                instruction=_('You are about to play a memory game. On the next page you will see 12 different cards. Your task is to try to find pairs of similar music.'),
+                instruction='',
                 steps=[
-                    Step(description=_('On each turn, you can select two cards.')),
-                    Step(description=_('If the two cards you pick match, you will be awarded some points.')),
-                    Step(description=_('Once you find a match, we will clear those cards from the board!')),
-                    Step(description=_('If you are not able to find a match, you can try again.')),
-                    Step(description=_('Try to get as high a score as possible!'))
+                    Step(description=_('You are invited to play a memory game.')),
+                    Step(description=_('The more similar pairs you find, the more points you receive.')),
+                    Step(description=_('Try to get as many points as possible!'))
                 ]).action(step_numbers=True)
                 trial = MatchingPairs.get_matching_pairs_trial(session)
                 return combine_actions(explainer, trial)
@@ -79,7 +76,7 @@ class MatchingPairs(Base):
                 playback=None,
                 feedback_form=Form([BooleanQuestion(
                     key=key,
-                    question='Do you want to play again?',
+                    question='Play again?',
                     result_id=prepare_result(key, session),
                     submits=True),
                 ])
@@ -89,8 +86,8 @@ class MatchingPairs(Base):
     @classmethod
     def get_question(cls, session):
         questions = [
-            question_by_key('dgf_gender_reduced', EXTRA_DEMOGRAPHICS),
-            question_by_key('dgf_age', EXTRA_DEMOGRAPHICS),
+            question_by_key('dgf_gender_identity'),
+            question_by_key('dgf_generation'),
             question_by_key('dgf_musical_experience', EXTRA_DEMOGRAPHICS)
         ]
         question = unasked_question(session.participant, questions)
@@ -109,6 +106,7 @@ class MatchingPairs(Base):
         playback = Playback(
             sections=player_sections,
             player_type='MATCHINGPAIRS',
+            play_config={'stop_audio_after': 4}
         )
         trial = Trial(
             title='Matching pairs',
@@ -125,7 +123,8 @@ class MatchingPairs(Base):
             score = 1 if data.get('value') == 'yes' else 0
         elif result.question_key == 'matching_pairs':
             moves = data.get('moves')
-            score = round(sum([int(m['score']) for m in moves if m['score']>=0]) / len(moves) * 100)
+            score = round(sum([int(m['score']) for m in moves if 
+                               m.get('score') and m['score']>=0]) / len(moves) * 100)
         else:
             score = 0
         return score

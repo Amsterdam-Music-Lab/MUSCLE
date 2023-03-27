@@ -14,6 +14,7 @@ class Playback(object):
             - playhead: from where the audio file should play (offset in seconds from start)
             - mute: whether audio should be muted
             - auto_play: whether sound will start automatically
+            - stop_audio_after: after how many seconds playback audio should be stopped
             - show_animation: whether to show an animation during playback 
             - (multiplayer) label_style: player index number style: NUMERIC, ALPHABETIC, ROMAN or empty (no label)
             - play_once: the sound can only be played once

@@ -108,12 +108,13 @@ class Kuiper2020(Hooked):
         if not section:
             print("Warning: no next_song_sync section found")
             section = session.section_from_any_song()
-        result_id = prepare_result('song_sync', session, section=section)
+        key = 'song_sync'
+        result_id = prepare_result(key, session, section=section, scoring_rule='SONG_SYNC')
         return SongSync(
+            key=key,
             section=section,
             title=cls.get_trial_title(session, next_round_number),
-            result_id=result_id,
-            scoring_rule='SONG_SYNC'
+            result_id=result_id
         ).action()
 
 
@@ -146,7 +147,7 @@ class Kuiper2020(Hooked):
             preload_message=_('Get ready!'))
         expected_result=int(novelty[next_round_number - 1] == 'old')
         # create Result object and save expected result to database
-        result_pk = prepare_result('heard_before', session, section, expected_result)
+        result_pk = prepare_result('heard_before', session, section=section, expected_response=expected_result, scoring_rule='REACTION_TIME')
         form = Form([BooleanQuestion(
             key='heard_before',
             choices={

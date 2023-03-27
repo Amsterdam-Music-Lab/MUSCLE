@@ -40,7 +40,7 @@ class RhythmExperimentSeries(Base):
         ).action()
 
     @classmethod
-    def first_round(cls, experiment, participant):
+    def first_round(cls, experiment):
         """Create data for the first experiment rounds."""
         # read consent form from file
         rendered = render_to_string(cls.consent_form)

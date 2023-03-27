@@ -1,17 +1,14 @@
 .aha__matching_pairs {
+    margin: 0px auto;
+    max-width: 100%;
+}
+
+.playing-board {
     display: flex;
-    column-gap: 25px;
-    row-gap: 25px;
+    column-gap: 10px;
+    row-gap: 10px;
     flex-wrap: wrap;
     max-width: 100%;
-
-    &.player-count-2 {
-        column-gap: 50px;
-    }
-
-    &.player-count-2 {
-        column-gap: 30px;
-    }
 
     .player-wrapper {
         position: relative;
@@ -38,5 +35,11 @@
     .feedback {
         padding-top: 50px;
         font-size: large;
+    }
+
+    .running-score {
+        position: absolute;
+        margin-top: -7%;
+        font-size: x-large;
     }
 }

@@ -1,7 +1,7 @@
 import React, {useRef} from "react";
+import classNames from "classnames";
 
 import PlayCard from "../PlayButton/PlayCard";
-import classNames from "classnames";
 
 const MatchingPairs = ({
     playSection,
@@ -9,6 +9,8 @@ const MatchingPairs = ({
     playerIndex,
     setPlayerIndex,
     lastPlayerIndex,
+    finishedPlaying,
+    stopAudioAfter,
     submitResult
 }) => {
     const xPosition = useRef(-1);
@@ -16,6 +18,8 @@ const MatchingPairs = ({
     const score = useRef(-1);
 
     const resultBuffer = useRef([]);
+
+    const startTime = useRef(Date.now());
 
     const setScoreMessage = (score) => {
         switch(score) {
@@ -31,10 +35,14 @@ const MatchingPairs = ({
         yPosition.current = posY;
     }
 
+    const formatTime = (time) => {
+        return time/1000;
+    }
+
     const checkMatchingPairs = (index) => {
         const currentCard = sections[index];
-        score.current = -1;
-        if (sections.filter(s => s.turned).length < 2) {
+        const turnedCards = sections.filter(s => s.turned);
+        if (turnedCards.length == 1) {
             // we have two turned cards
             currentCard.turned = true;
             // check for match
@@ -55,14 +63,15 @@ const MatchingPairs = ({
             lastPlayerIndex.current = -1;
             sections.forEach(section => section.turned = false);
             currentCard.turned = true;
+            score.current = undefined;
         }
 
-        const currentScore = score.current;
         resultBuffer.current.push({
             selectedSection: currentCard.id,
             xPosition: xPosition.current,
             yPosition: yPosition.current,
-            score: currentScore
+            score: score.current,
+            timestamp: formatTime(Date.now() - startTime.current)
         });
         
         currentCard.seen = true;
@@ -74,14 +83,26 @@ const MatchingPairs = ({
         
         return;
     };
+
+    const calculateRunningScore = () => {
+        const allScores = resultBuffer.current.filter(
+            r => r.score >= 0 ).map( r => r.score );
+        if (!allScores.length) return 0;
+        const initial = 0;
+        const score = allScores.reduce( 
+            (accumulator, s)  => accumulator + s, initial )
+        return Math.round(score / resultBuffer.current.length * 100)
+    }
     
     return (
-        <div
-            className={classNames(
-                "aha__matching_pairs d-flex justify-content-around",
-                "player-count-" + sections.length
-            )}
-        >
+        <div className="aha__matching_pairs container">
+            <div className="running-score">
+                Your score: {calculateRunningScore()}
+                {" "}n: {sections.filter(s => !s.inactive).length / 2}
+                {" "}p: {sections.filter(s => s.inactive).length / 2}
+                {" "}k: {sections.filter(s => s.seen).length}
+            </div>
+            <div className="playing-board d-flex justify-content-center">
             {Object.keys(sections).map((index) => (
                 <PlayCard 
                 key={index}
@@ -91,11 +112,13 @@ const MatchingPairs = ({
                 }}
                 registerUserClicks={registerUserClicks}
                 playing={playerIndex === index}
-                inactive={sections[index].inactive}
-                turned={sections[index].turned}
+                section={sections[index]}
+                onFinish={finishedPlaying}
+                stopAudioAfter={stopAudioAfter}
                 />
             )
             )}
+            </div>
             <div className="feedback">{setScoreMessage(score.current)}</div>
         </div>  
     )

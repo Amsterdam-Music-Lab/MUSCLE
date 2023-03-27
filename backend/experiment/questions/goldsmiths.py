@@ -1,6 +1,6 @@
 from django.utils.translation import gettext_lazy as _
 
-from experiment.actions.form import LikertQuestion, ChoiceQuestion, Question
+from experiment.actions.form import LikertQuestion, ChoiceQuestion, TextQuestion
 from .utils import question_by_key
 
 # Numbers before key relate to The Goldsmiths Musical Sophistication Index, v1.0
@@ -281,7 +281,7 @@ MSI_F5_EMOTIONS = [
 
 MSI_OTHER = [
     # msi_39_best_instrument duplicate in questions.py
-    Question(
+    TextQuestion(
         key='msi_39_best_instrument',
         view='STRING',
         question=_("The instrument I play best, including voice (or none), is:")
