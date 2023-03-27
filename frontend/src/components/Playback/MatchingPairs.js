@@ -95,18 +95,14 @@ const MatchingPairs = ({
     }
     
     return (
-        <div
-            className={classNames(
-                "aha__matching_pairs d-flex justify-content-around",
-                "player-count-" + sections.length
-            )}
-        >
+        <div className="aha__matching_pairs container">
             <div className="running-score">
                 Your score: {calculateRunningScore()}
                 {" "}n: {sections.filter(s => !s.inactive).length / 2}
                 {" "}p: {sections.filter(s => s.inactive).length / 2}
                 {" "}k: {sections.filter(s => s.seen).length}
             </div>
+            <div className="playing-board d-flex justify-content-center">
             {Object.keys(sections).map((index) => (
                 <PlayCard 
                 key={index}
@@ -122,6 +118,7 @@ const MatchingPairs = ({
                 />
             )
             )}
+            </div>
             <div className="feedback">{setScoreMessage(score.current)}</div>
         </div>  
     )
