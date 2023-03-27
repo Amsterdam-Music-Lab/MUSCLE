@@ -45,7 +45,7 @@ const PlayCard = ({ onClick, registerUserClicks, playing, section, onFinish, sto
                         borderRadius=".5rem"
                     />
                     :
-                    <div className={classNames("back", {seen: seen})}>
+                    <div className={classNames("back", {seen: section.seen})}>
                     </div>
                 }
         </div>
