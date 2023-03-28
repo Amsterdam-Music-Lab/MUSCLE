@@ -28,7 +28,7 @@ const PlayCard = ({ onClick, registerUserClicks, playing, section, onFinish, sto
     }, [playing, stopAudioAfter, onFinish]);
     
     return (
-        <div className={classNames("aha__play-card", {turned: section.turned}, {disabled: section.inactive})} onClick={event => {
+        <div className={classNames("aha__play-card", {turned: section.turned}, {disabled: section.inactive}, { memory: section.memory }, { lucky: section.lucky }, { nomatch: section.nomatch })} onClick={event => {
             registerUserClicks(event.clientX, event.clientY);
             onClick();
         }}>
