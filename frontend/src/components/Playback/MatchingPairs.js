@@ -111,9 +111,9 @@ const MatchingPairs = ({
     }
     
     return (
-        <div className="aha__matching_pairs container">
-            <div className="running-score">
-                Your score: {calculateRunningScore()}
+        <div className="aha__matching-pairs container">
+            <h5 className="matching-pairs__score">Score: {calculateRunningScore()}</h5>
+            <div className="matching-pairs__debug">            
                 {" "}n: {sections.filter(s => !s.inactive).length / 2}
                 {" "}p: {sections.filter(s => s.inactive).length / 2}
                 {" "}k: {sections.filter(s => s.seen).length}
@@ -135,7 +135,7 @@ const MatchingPairs = ({
             )
             )}
             </div>
-            <div className="feedback">{setScoreMessage(score.current)}</div>
+            <div className="matching-pairs__feedback">{setScoreMessage(score.current)}</div>
         </div>  
     )
 }

@@ -8,6 +8,8 @@ const PlayCard = ({ onClick, registerUserClicks, playing, section, onFinish, sto
     // automatic timer
     const startTime = 0;
     const [time, setTime] = useState(startTime);
+
+    const cardSize = 100;
     
     useEffect(() => {
         if (!playing) {
@@ -36,8 +38,8 @@ const PlayCard = ({ onClick, registerUserClicks, playing, section, onFinish, sto
                     <Histogram 
                         className="front"
                         running={playing}
-                        histogramWidth={90}
-                        height={90}
+                        histogramWidth={cardSize}
+                        height={cardSize}
                         bars={5}
                         width={10}
                         spacing={10}

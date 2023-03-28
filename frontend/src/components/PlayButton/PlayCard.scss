@@ -1,4 +1,4 @@
-$playButtonSize: 90px;
+$playButtonSize: 100px;
 @keyframes memorymatch {
     20% {
         transform: scale(1.15);
@@ -105,7 +105,8 @@ $playButtonSize: 90px;
         pointer-events: none;
         opacity: 0;
     }
-    &.playing {
+
+    &.turned {
         pointer-events: none;
     }
 
@@ -119,8 +120,6 @@ $playButtonSize: 90px;
 
     .back {
         background-color: $gray;
-        transition: all ease-in 0.2s;
-        transition-delay: 0.2s;
         width: $playButtonSize;
         height: $playButtonSize;
         border-radius: .5rem;
@@ -129,19 +128,5 @@ $playButtonSize: 90px;
             background-color: $pink !important;
         }
     }
-
-    &.turned {
-        .front {
-            transform: rotateY(0deg);
-            transition-delay: 0.2s
-        }
-
-        .back{
-            transform: rotateY(90deg);
-            transition-delay: 0.2s;
-        }
-    }
-
-
     
 }
