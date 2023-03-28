@@ -24,6 +24,7 @@ class Huang2022(Base):
     ID = 'HUANG_2022'
     timeout = 15
     round_modifier = 2
+    contact_email = 'musicexp_china@163.com'
 
     @classmethod
     def first_round(cls, experiment):
@@ -40,6 +41,12 @@ class Huang2022(Base):
             consent,
             start_session
         ]
+
+    @classmethod
+    def feedback_info(cls):
+        info = super().feedback_info()
+        info['header'] = _("Any remarks or questions (optional):")
+        return info
 
     @classmethod
     def plan_sections(cls, session):
@@ -91,19 +98,20 @@ class Huang2022(Base):
         """Get a list of all questions for the experiment (MSI and demographic questions),
         in fixed order
         """
-        questions = MSI_ALL + [
-            question_by_key('msi_39_best_instrument'),
-            genre_question(),
-            question_by_key('dgf_generation'),
-            question_by_key('dgf_education', drop_choices=['isced-5']),
-            question_by_key(
-                'dgf_highest_qualification_expectation', EXTRA_DEMOGRAPHICS),
-            question_by_key('dgf_occupational_status', EXTRA_DEMOGRAPHICS),
-            origin_question(),
-            residence_question(),
-            gender_question(),
-            contact_question()
-        ]
+        # questions = MSI_ALL + [
+        #     question_by_key('msi_39_best_instrument'),
+        #     genre_question(),
+        #     question_by_key('dgf_generation'),
+        #     question_by_key('dgf_education', drop_choices=['isced-5']),
+        #     question_by_key(
+        #         'dgf_highest_qualification_expectation', EXTRA_DEMOGRAPHICS),
+        #     question_by_key('dgf_occupational_status', EXTRA_DEMOGRAPHICS),
+        #     origin_question(),
+        #     residence_question(),
+        #     gender_question(),
+        #     contact_question()
+        # ]
+        questions = [residence_question()]
         open_questions = total_unanswered_questions(session.participant, questions)
         if not open_questions:
             return None
@@ -170,7 +178,7 @@ class Huang2022(Base):
                 # participant had persistent audio problems, finish and redirect
                 session.finish()
                 session.save()
-                return {'redirect': settings.RELOAD_PARTICIPANT_TARGET}
+                return {'redirect': settings.HOMEPAGE}
 
             # Start experiment: plan sections and show explainers
             Huang2022.plan_sections(session)
