@@ -13,6 +13,7 @@ const MatchingPairs = ({
     stopAudioAfter,
     submitResult
 }) => {
+    const finishDelay = 1500;
     const xPosition = useRef(-1);
     const yPosition = useRef(-1);
     const score = useRef(-1);
@@ -93,7 +94,7 @@ const MatchingPairs = ({
             // all cards have been turned
             setTimeout(() => {
                 submitResult({moves: resultBuffer.current});
-              }, 1500);
+              }, finishDelay);
             
         }
         
