@@ -8,8 +8,8 @@ const PlayCard = ({ onClick, registerUserClicks, playing, section, onFinish, sto
     // automatic timer
     const startTime = 0;
     const [time, setTime] = useState(startTime);
-
-    const cardSize = 100;
+    
+    const cardSize = window.innerWidth > 768 ? 110 : 90;
     
     useEffect(() => {
         if (!playing) {

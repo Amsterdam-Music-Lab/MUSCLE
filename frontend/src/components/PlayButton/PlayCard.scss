@@ -1,4 +1,16 @@
-$playButtonSize: 100px;
+$playButtonSize: 110px;
+
+@media(max-width: 768px) {
+    .back {     
+        width: calc($playButtonSize - 20px)!important;
+        height: calc($playButtonSize - 20px)!important;
+    }
+    .aha__play-card {        
+        width: calc($playButtonSize - 20px)!important;
+        height: calc($playButtonSize - 20px)!important;
+    }
+}
+
 @keyframes memorymatch {
     20% {
         transform: scale(1.15);
