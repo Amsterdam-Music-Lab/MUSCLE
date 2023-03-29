@@ -13,6 +13,7 @@ const MatchingPairs = ({
     stopAudioAfter,
     submitResult
 }) => {
+    const finishDelay = 1500;
     const xPosition = useRef(-1);
     const yPosition = useRef(-1);
     const score = useRef(-1);
@@ -54,10 +55,23 @@ const MatchingPairs = ({
                 setPlayerIndex(-1);
                 if (currentCard.seen && lastCard.seen) {
                     score.current = 2;
+                    lastCard.memory = true;
+                    currentCard.memory = true;
                 } else {
                     score.current = 1;
+                    lastCard.lucky = true;
+                    currentCard.lucky = true;
                 }
-            } else { score.current = 0; };
+            } else {
+                score.current = 0;
+                lastCard.nomatch = true;
+                currentCard.nomatch = true;
+                setTimeout(() => {
+                    lastCard.nomatch = false;
+                    currentCard.nomatch = false;
+                  }, 700);
+                
+            };
         } else {
             // turn all cards back, turn current card
             lastPlayerIndex.current = -1;
@@ -78,7 +92,10 @@ const MatchingPairs = ({
 
         if (sections.filter(s => s.inactive).length === sections.length) {
             // all cards have been turned
-            submitResult({moves: resultBuffer.current});
+            setTimeout(() => {
+                submitResult({moves: resultBuffer.current});
+              }, finishDelay);
+            
         }
         
         return;
@@ -95,9 +112,9 @@ const MatchingPairs = ({
     }
     
     return (
-        <div className="aha__matching_pairs container">
-            <div className="running-score">
-                Your score: {calculateRunningScore()}
+        <div className="aha__matching-pairs container">
+            <h5 className="matching-pairs__score">Score: {calculateRunningScore()}</h5>
+            <div className="matching-pairs__debug">            
                 {" "}n: {sections.filter(s => !s.inactive).length / 2}
                 {" "}p: {sections.filter(s => s.inactive).length / 2}
                 {" "}k: {sections.filter(s => s.seen).length}
@@ -119,7 +136,7 @@ const MatchingPairs = ({
             )
             )}
             </div>
-            <div className="feedback">{setScoreMessage(score.current)}</div>
+            <div className="matching-pairs__feedback">{setScoreMessage(score.current)}</div>
         </div>  
     )
 }

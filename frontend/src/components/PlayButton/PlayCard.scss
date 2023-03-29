@@ -1,4 +1,84 @@
-$playButtonSize: 90px;
+$playButtonSize: 110px;
+
+@media(max-width: 768px) {
+    .back {     
+        width: calc($playButtonSize - 20px)!important;
+        height: calc($playButtonSize - 20px)!important;
+    }
+    .aha__play-card {        
+        width: calc($playButtonSize - 20px)!important;
+        height: calc($playButtonSize - 20px)!important;
+    }
+}
+
+@keyframes memorymatch {
+    20% {
+        transform: scale(1.15);
+    }
+    40% {
+        transform: scale(1);
+    }
+    60% {
+        transform: scale(1.1);
+    }
+    80% {
+        transform: scale(1);
+    }
+    95% {
+        transform: scale(1.05);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+@keyframes luckymatch {
+    40% {
+        transform: scale(1.15);
+    }
+    80% {
+        transform: scale(1);
+    }
+    95% {
+        transform: scale(1.05);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+@keyframes nomatch {
+    10% {
+        transform: rotate(13deg);
+    }
+    20% {
+        transform: rotate(-13deg);
+    }
+    30% {
+        transform: rotate(11deg);
+    }
+    40% {
+        transform: rotate(-11deg);
+    }
+    50% {
+        transform: rotate(10deg);
+    }
+    60% {
+        transform: rotate(-10deg);
+    }
+    70% {
+        transform: rotate(8deg);
+    }
+    80% {
+        transform: rotate(-8deg);
+    }
+    95% {
+        transform: rotate(5deg);
+    }
+    100% {
+        transform: rotate(0deg);
+    }
+}
 
 .aha__play-card {
     position: relative;
@@ -6,14 +86,39 @@ $playButtonSize: 90px;
     height: $playButtonSize;
     display: block;
     border-radius: 6px;
-
+    opacity: 1;
+    transition-property: opacity;
+    transition-delay: 0.6s;
+    transition-duration: 0.3s;
 
     &.disabled {
         pointer-events: none;
         opacity: 0;
     }
 
-    &.playing {
+    &.nomatch {
+        animation-duration: 0.7s;
+        animation-name: nomatch;
+        animation-iteration-count: 1;
+    }
+
+    &.lucky {
+        animation-duration: 0.55s;
+        animation-name: luckymatch;
+        animation-iteration-count: 1;
+        pointer-events: none;
+        opacity: 0;
+    }
+
+    &.memory {
+        animation-duration: 0.8s;
+        animation-name: memorymatch;
+        animation-iteration-count: 1;
+        pointer-events: none;
+        opacity: 0;
+    }
+
+    &.turned {
         pointer-events: none;
     }
 
@@ -27,8 +132,6 @@ $playButtonSize: 90px;
 
     .back {
         background-color: $gray;
-        transition: all ease-in 0.2s;
-        transition-delay: 0.2s;
         width: $playButtonSize;
         height: $playButtonSize;
         border-radius: .5rem;
@@ -37,19 +140,5 @@ $playButtonSize: 90px;
             background-color: $pink !important;
         }
     }
-
-    &.turned {
-        .front {
-            transform: rotateY(0deg);
-            transition-delay: 0.2s
-        }
-
-        .back{
-            transform: rotateY(90deg);
-            transition-delay: 0.2s;
-        }
-    }
-
-
     
 }
