@@ -4,16 +4,20 @@ import classNames from "classnames";
 import { getCurrentTime, getTimeSince } from "../../util/time";
 import { createResult } from "../../API.js";
 import FeedbackForm from "../FeedbackForm/FeedbackForm";
+import HTML from "../HTML/HTML";
 import Playback from "../Playback/Playback";
 import Button from "../Button/Button";
 
-// Trial is an experiment view, that preloads a song, shows an explanation and plays audio
-// Optionally, it can show an animation during playback
-// Optionally, it can show a form during or after playback
+/** Trial is an experiment view to present information to the user and/or collect user feedback
+If "playback" is provided, it will play audio through the Playback component
+If "html" is provided, it will show html content
+If "feedback_form" is provided, it will present a form of questions to the user
+**/
 const Trial = ({
     participant,
     session,
     playback,
+    html,
     feedback_form,
     config,
     result_id,
@@ -153,6 +157,11 @@ const Trial = ({
                     submitResult={submitResult}
                     startedPlaying={startTimer}
                     finishedPlaying={finishedPlaying}
+                />
+            )}
+            {html && (
+                <HTML
+                    body={html.body}
                 />
             )}
             {preloadReady && feedback_form && (

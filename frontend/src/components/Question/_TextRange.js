@@ -45,7 +45,6 @@ const TextRange = ({ question, value, onChange, emphasizeTitle }) => {
             <RangeLimits
                 minVal={choices[0]}
                 maxVal={choices[choices.length-1]}
-                labels={question.config.icons? choices : undefined}
             />
         </div>
     );

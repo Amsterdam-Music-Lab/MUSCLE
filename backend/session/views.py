@@ -1,5 +1,7 @@
 import json
+
 from django.http import Http404, JsonResponse, HttpResponseBadRequest
+from django.shortcuts import redirect
 from django.views.decorators.http import require_POST
 
 from .models import Session
@@ -114,5 +116,7 @@ def next_round(request, session_id):
     else:
         # Get next round for given session
         action = session.experiment_rules().next_round(session)
+    if action.get('redirect'):
+        return redirect(action.get('redirect'))
 
     return JsonResponse(action, json_dumps_params={'indent': 4})

@@ -185,10 +185,11 @@ class ToontjeHoger1Mozart(Base):
         )
         form = Form([question])
 
-        image_trial = HTML(
-            html='<img src="{}" style="height:calc(100% - 260px);max-height:326px;max-width: 100%;"/>'.format(
-                image_url),
-            form=form,
+        image_trial = Trial(
+            html=HTML(
+                body='<img src="{}" style="height:calc(100% - 260px);max-height:326px;max-width: 100%;"/>'.format(
+                image_url)),
+            feedback_form=form,
             title=cls.TITLE,
         ).action()
 

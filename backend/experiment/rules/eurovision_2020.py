@@ -4,6 +4,7 @@ from django.utils.translation import gettext_lazy as _
 from experiment.actions import SongSync, Trial
 from experiment.actions.playback import Playback
 from experiment.actions.form import BooleanQuestion, Form
+from experiment.actions.styles import STYLE_BOOLEAN_NEGATIVE_FIRST
 from result.utils import prepare_result
 
 
@@ -162,9 +163,11 @@ class Eurovision2020(Hooked):
             },
             question=_("Did you hear this song in previous rounds?"),
             result_id=result_pk,
+            scoring_rule='REACTION_TIME',
+            style=STYLE_BOOLEAN_NEGATIVE_FIRST,
             submits=True)])
         config = {
-            'style': 'boolean-negative-first',
+            
             'auto_advance': True,
             'decision_time': cls.timeout
         }
