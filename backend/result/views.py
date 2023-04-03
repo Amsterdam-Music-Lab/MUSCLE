@@ -2,6 +2,7 @@ import json
 
 from django.views.decorators.http import require_POST
 from django.http import Http404, HttpResponseServerError, JsonResponse, HttpResponseBadRequest
+from django.shortcuts import redirect
 
 from participant.utils import get_participant
 from session.models import Session

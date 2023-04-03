@@ -11,7 +11,7 @@ const RangeTitle = ({question, value, sliderValue, emptyValue, changePosition=fa
             { emptyValue ? (
                 renderLabel("fa-arrows-left-right", "2x")
             ) : (
-                <span style={{color: question.config.colors[sliderValue]}}> {renderLabel(question.choices[value], "2x")}</span>
+                <span style={{color: question.config && question.config.colors[sliderValue]}}> {renderLabel(question.choices[value], "2x")}</span>
             )
             }
             </h4>

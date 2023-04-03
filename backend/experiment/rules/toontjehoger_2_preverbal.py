@@ -5,6 +5,7 @@ from .toontjehoger_1_mozart import toontjehoger_ranks
 from experiment.actions import Trial, Explainer, Step, Score, Final, StartSession, Playlist, Info, HTML
 from experiment.actions.form import ButtonArrayQuestion, ChoiceQuestion, Form
 from experiment.actions.playback import Playback
+from experiment.actions.styles import STYLE_NEUTRAL
 from .base import Base
 from os.path import join
 from experiment.actions.utils import combine_actions
@@ -133,10 +134,11 @@ class ToontjeHoger2Preverbal(Base):
         )
         form = Form([question])
 
-        image_trial = HTML(
-            html='<img src="{}" style="height:calc(100% - 260px);max-height:326px;max-width: 100%;"/>'.format(
-                "/images/experiments/toontjehoger/preverbal_1.webp"),
-            form=form,
+        image_trial = Trial(
+            html=HTML(
+            body='<img src="{}" style="height:calc(100% - 260px);max-height:326px;max-width: 100%;"/>'.format(
+                "/images/experiments/toontjehoger/preverbal_1.webp")),
+            feedback_form=form,
             title=cls.TITLE,
         ).action()
 
@@ -172,28 +174,11 @@ class ToontjeHoger2Preverbal(Base):
         playback = Playback(
             [sectionA, sectionB, sectionC], player_type=Playback.TYPE_SPECTROGRAM, play_config=play_config)
 
-        # Question
-        question = ChoiceQuestion(
-            question="",
-            key='dummy',
-            choices={
-                "_": "Volgende",
-            },
-            view='BUTTON_ARRAY',
-            submits=True
-        )
-        form = Form([question])
-
-        # Trial
-        trial_config = {
-            'style': 'neutral primary-form',
-        }
-
         trial = Trial(
-            config=trial_config,
             playback=playback,
             feedback_form=None,
             title=cls.TITLE,
+            style='primary-form'
         ).action()
         return [trial]
 
@@ -233,17 +218,12 @@ class ToontjeHoger2Preverbal(Base):
             },
             view='BUTTON_ARRAY',
             submits=True,
-            result_id=prepare_result(key, session, expected_response="A")
+            result_id=prepare_result(key, session, expected_response="A"),
+            style=STYLE_NEUTRAL
         )
         form = Form([question])
 
-        # Trial
-        trial_config = {
-            'style': 'neutral',
-        }
-
         trial = Trial(
-            config=trial_config,
             playback=playback,
             feedback_form=form,
             title=cls.TITLE,

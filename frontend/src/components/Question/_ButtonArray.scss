@@ -19,10 +19,61 @@
         input{
             display: none;
         }
+
+        &.invisible-text {
+            .btn.btn-secondary {
+                color: rgba(0, 0, 0, 0);
+            }
+        }
     }
 
     .buttons-large-gap {
-        column-gap: 9.5em; //200px;
-        font-size: 1.3em;
+        column-gap: 5rem;
+        font-size: 1.3rem;
+    }
+}
+
+.boolean {
+    .btn-secondary:nth-of-type(1) {
+        @include btn-style($teal);
+    }
+    .btn-secondary:nth-of-type(2) {
+        @include btn-style($yellow);
+    }
+    .btn-secondary:last-of-type {
+        @include btn-style($red);
+    }
+}
+
+.boolean-negative-first {
+    .btn-secondary:nth-of-type(1) {
+        @include btn-style($red);
+    }
+    .btn-secondary:nth-of-type(2) {
+        @include btn-style($yellow);
+    }
+    .btn-secondary:last-of-type {
+        @include btn-style($teal);
+    }
+}
+
+.neutral {
+    .btn:nth-of-type(1) {
+        @include btn-style($blue);
+        &.submit {
+            @include btn-style($pink);
+        }
+    }
+    .btn:nth-of-type(2) {
+        @include btn-style($yellow);
+    }
+}
+
+.neutral-inverted {
+    .btn:nth-of-type(1) {
+        @include btn-style($yellow);
+    }
+    .btn:nth-of-type(2) {
+        @include btn-style($blue);
     }
 }

@@ -1,4 +1,4 @@
-.aha__matching_pairs {
+.aha__matching-pairs {
     margin: 0px auto;
     max-width: 100%;
 }
@@ -43,3 +43,14 @@
         font-size: x-large;
     }
 }
+
+.matching-pairs__score {
+    position: absolute;
+}
+
+.matching-pairs__debug, .matching-pairs__feedback {
+    text-align: center;
+    height: 1rem;
+    margin: .5rem;
+}
+

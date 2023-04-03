@@ -1,6 +1,8 @@
 from django.conf import settings
 from django.utils.translation import gettext_lazy as _
 
+from .styles import STYLE_NEUTRAL
+
 class Question(object):
     ''' Question is part of a form.
     - key: description of question in results table
@@ -10,6 +12,7 @@ class Question(object):
     - scoring_rule: optionally, specify a scoring rule which should be applied
     - is_skippable: whether the question can be skipped
     - submits: whether entering a value for the question submits the form
+    - style: one (string) or multiple (dict) class names to apply for styling the frontend component
     '''
 
     def __init__(
@@ -21,7 +24,7 @@ class Question(object):
         question='',
         is_skippable=False,
         submits=False,
-        config=None,
+        style=STYLE_NEUTRAL
         ):
 
         self.key = key
@@ -31,7 +34,7 @@ class Question(object):
         self.result_id = result_id
         self.is_skippable = is_skippable
         self.submits = submits
-        self.config = config
+        self.style = style
 
     def action(self):
         if settings.TESTING and self.result_id:
