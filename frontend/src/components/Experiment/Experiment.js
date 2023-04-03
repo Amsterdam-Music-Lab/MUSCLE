@@ -76,17 +76,14 @@ const Experiment = ({ match }) => {
         loadState,
     ]);
 
-    // Load next round, stored in nextRound
+    // trigger next action from next_round array, or call session/next_round
     const onNext = async () => {
         if (state.next_round && state.next_round.length) {
             loadState(stateNextRound(state));
         } else {
-            console.error("No next-round data available");
-            // Fallback in case a server response/async call went wrong
-            // Try to get next_round data from server again
+            // Try to get next_round data from server
             const round = await getNextRound({
                 session: session,
-                // participant,
             });
             if (round) {
                 loadState(round);

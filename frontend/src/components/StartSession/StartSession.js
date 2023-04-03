@@ -12,7 +12,7 @@ const StartSession = ({
     playlist,
     setError,
     setSession,
-    loadState,
+    onNext,
 }) => {
     // Create a new session, and set state to next_round
     useEffect(() => {
@@ -31,12 +31,12 @@ const StartSession = ({
             // Store session
             setSession(data.session);
 
-            // Start next round
-            loadState(stateNextRound(data));
-
+            // call next action
+            onNext();
+            
         };
         init();
-    }, [experiment, participant, playlist, setError, setSession, loadState]);
+    }, [experiment, participant, playlist]);
 
     return <Loading loadingText={experiment.loading_text} />;
 };

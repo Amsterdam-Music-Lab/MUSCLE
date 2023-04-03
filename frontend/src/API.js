@@ -88,8 +88,8 @@ export const createSession = async ({ experiment, participant, playlist }) => {
     }
 };
 
-// Create result for given session
-export const createResult = async ({
+// Score result for given session
+export const scoreResult = async ({
     session,
     section,
     participant,

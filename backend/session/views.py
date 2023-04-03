@@ -57,27 +57,7 @@ def create_session(request):
     # Save session
     session.save()
 
-    if experiment.experiment_series:
-        # save session id to local storage if this experiment contains nested experiments
-        request.session.update({'experiment_series': {
-            'session_id': session.id,
-            'slug': experiment.slug}
-        })
-
-    # convert non lists to list
-    next_round = session.experiment_rules().next_round(session)
-    if not isinstance(next_round, list): 
-        next_round = [next_round]
-
-    data = {
-        'session': {
-            'id': session.id,
-            'playlist': session.playlist.id,
-            'json_data': session.load_json_data(),
-        },
-        'next_round': next_round
-    }
-    return JsonResponse(data, json_dumps_params={'indent': 4})
+    return JsonResponse({'session': {'id': session.id}})
 
 
 def continue_session(request, session_id):

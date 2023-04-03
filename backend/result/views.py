@@ -46,13 +46,7 @@ def score(request):
     except ValueError:
         return HttpResponseServerError("Invalid data")
 
-    # Get next round for given session
-    if request.session.get('experiment_series'):
-        # we are in the middle of an experiment series - need to pass in request.session object
-        action = session.experiment_rules().next_round(session, request.session)
-    else:
-        action = session.experiment_rules().next_round(session)
-    return JsonResponse(action, json_dumps_params={'indent': 4})
+    return JsonResponse({'success': True})
 
 @require_POST
 def consent(request):
