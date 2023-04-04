@@ -63,13 +63,14 @@
                     id="{{section.id}}_duration" value="{{ section.duration}}">
             </td>
             <td>
+                <input type="text" name="{{section.id}}_group" maxlength="128" required="" id="{{section.id}}_group"
+                    value="{{ section.group}}">
+            </td>
+            <td>
                 <input type="text" name="{{section.id}}_tag" maxlength="128" required="" id="{{section.id}}_tag"
                     value="{{ section.tag}}">
             </td>
-            <td>
-                <input type="text" name="{{section.id}}_group" maxlength="128" required="" id="{{section.id}}_group"
-                    value="{{ section.tag}}">
-            </td>
+
             <td>
                 <input type="checkbox" name="{{section.id}}_restrict_to_nl" id="{{section.id}}_restrict_to_nl" 
                     {% if section.restrict_to_nl %} checked {% endif %}>
