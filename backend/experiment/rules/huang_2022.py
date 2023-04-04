@@ -167,7 +167,7 @@ class Huang2022(Base):
                 else:
                     session.increment_round() # adjust round numbering
             elif last_result.question_key == 'audio_check2' and last_result.score == 0:
-                # participant had persistent audio problems, finish and redirect
+                # participant had persistent audio problems, delete session and redirect
                 session.finish()
                 session.save()
                 return {'redirect': settings.RELOAD_PARTICIPANT_TARGET}

@@ -2,7 +2,6 @@ import React, { useState, useRef, useCallback } from "react";
 import classNames from "classnames";
 
 import { getCurrentTime, getTimeSince } from "../../util/time";
-import { createResult } from "../../API.js";
 import FeedbackForm from "../FeedbackForm/FeedbackForm";
 import HTML from "../HTML/HTML";
 import Playback from "../Playback/Playback";
@@ -65,7 +64,7 @@ const Trial = ({
                 onNext();
             }
         },
-        [feedback_form, onNext, onResult]
+        [feedback_form, config, onNext, onResult]
     );
 
     const finishedPlaying = useCallback(() => {
@@ -74,10 +73,9 @@ const Trial = ({
 
             // Create a time_passed result
             if (config.auto_advance_timer != null) {
-                if (playback.player_type == 'BUTTON') {
+                if (playback.player_type === 'BUTTON') {
                     startTime.current = getCurrentTime();
                 }
-                const id = setTimeout( () => {makeResult({type: "time_passed",});} , config.auto_advance_timer);
 
             } else {
 
@@ -89,11 +87,11 @@ const Trial = ({
         }
         setFormActive(true);
         return;
-    }, [config.auto_advance, makeResult]);
+    }, [config, playback, makeResult]);
 
 
     return (
-        <div role="trial" className={classNames("aha__trial", config.style)}>
+        <div className={classNames("aha__trial", config.style)}>
             {playback && (
                 <Playback
                     playerType={playback.player_type}

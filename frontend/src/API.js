@@ -88,7 +88,7 @@ export const createSession = async ({ experiment, participant, playlist }) => {
     }
 };
 
-// Score result for given session
+// Create result for given session
 export const scoreResult = async ({
     session,
     section,

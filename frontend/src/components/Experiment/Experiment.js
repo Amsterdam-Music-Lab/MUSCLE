@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import { useExperiment, useParticipant, getNextRound } from "../../API";
 import { TransitionGroup, CSSTransition } from "react-transition-group";
 import { withRouter } from "react-router-dom";
@@ -30,7 +30,7 @@ const Experiment = ({ match }) => {
     // Current experiment state
     const [state, setState] = useState(startState);
     const [playlist, setPlaylist] = useState(null);
-    const [session, setSession] = useState(null);
+    const session = useRef(null);
 
     // API hooks
     const [experiment, loadingExperiment] = useExperiment(match.params.slug);
@@ -82,7 +82,7 @@ const Experiment = ({ match }) => {
         } else {
             // Try to get next_round data from server
             const round = await getNextRound({
-                session: session,
+                session: session.current,
             });
             if (round) {
                 loadState(round);
@@ -114,7 +114,6 @@ const Experiment = ({ match }) => {
             loadingText,
             setPlaylist,
             setError,
-            setSession,
             onResult,
             onNext,
             ...state,
