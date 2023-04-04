@@ -59,7 +59,7 @@ const Experiment = ({ match }) => {
         const newState = newActions.shift();
         loadState(newState);
         setActions(newActions);
-    }, [setActions]);
+    }, [loadState, setActions]);
 
     // Start first_round when experiment and partipant have been loaded
     useEffect(() => {

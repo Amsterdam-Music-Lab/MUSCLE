@@ -91,7 +91,7 @@ const Trial = ({
 
 
     return (
-        <div className={classNames("aha__trial", config.style)}>
+        <div role="presentation" className={classNames("aha__trial", config.style)}>
             {playback && (
                 <Playback
                     playerType={playback.player_type}
