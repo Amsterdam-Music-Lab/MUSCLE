@@ -75,12 +75,12 @@ class Speech2Song(Base):
                 ],
                 button_label=_('OK')
             )
-            return combine_actions(
+            return [
                 *get_participant_info(),
                 *get_language_info(),
                 explainer,
                 # *next_repeated_representation(session, is_speech, 0)
-            )
+            ]
         elif next_round == 2:
             e1 = Explainer.action(
                 instruction=_('Previous studies have shown that many people perceive the segment you just heard as song-like after repetition, but it is no problem if you do not share that perception because there is a wide range of individual differences.'),
@@ -150,7 +150,7 @@ class Speech2Song(Base):
             # uneven round: repeated representation
             actions.extend(next_repeated_representation(
                 session, is_speech))
-        return combine_actions(*actions)
+        return [actions]
 
 
 def next_single_representation(session, is_speech, group_id):

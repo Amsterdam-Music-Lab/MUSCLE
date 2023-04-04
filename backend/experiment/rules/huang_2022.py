@@ -242,8 +242,8 @@ class Huang2022(Base):
             action = Huang2022.get_question(session)
             if not action:
                 action = Huang2022.finalize(session)
-            return action
-        return combine_actions(*actions)
+            return [action]
+        return actions
     
     @classmethod
     def finalize(cls, session):

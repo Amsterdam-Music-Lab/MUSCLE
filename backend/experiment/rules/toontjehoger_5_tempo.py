@@ -66,10 +66,10 @@ class ToontjeHoger5Tempo(Base):
 
         # Round 2
         if rounds_passed < session.experiment.rounds:
-            return combine_actions(*cls.get_score(session), *cls.get_round(session, rounds_passed))
+            return [*cls.get_score(session), *cls.get_round(session, rounds_passed)]
 
         # Final
-        return combine_actions(*cls.get_final_round(session))
+        return cls.get_final_round(session)
 
     @classmethod
     def get_random_section_pair(cls, session, genre):

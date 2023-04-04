@@ -92,11 +92,14 @@ def next_round(request, session_id):
     # Get next round for given session
     if request.session.get('experiment_series'):
         # we are in the middle of an experiment series - need to pass in request.session object
-        action = session.experiment_rules().next_round(session, request.session)
+        actions = session.experiment_rules().next_round(session, request.session)
     else:
         # Get next round for given session
-        action = session.experiment_rules().next_round(session)
-    if action.get('redirect'):
-        return redirect(action.get('redirect'))
+        actions = session.experiment_rules().next_round(session)
+    
+    if not isinstance(actions,  list):
+        if actions.get('redirect'):
+            return redirect(actions.get('redirect'))
+        actions = [actions]
 
-    return JsonResponse(action, json_dumps_params={'indent': 4})
+    return JsonResponse({'next_round': actions}, json_dumps_params={'indent': 4})

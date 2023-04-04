@@ -88,10 +88,10 @@ class ToontjeHoger1Mozart(Base):
                                         question="Welke vorm ontstaat er na het afknippen van het hoekje?",
                                         expected_response='B'
                                         )
-            return combine_actions(*answer_explainer, *score, *round)
+            return [*answer_explainer, *score, *round]
 
         # Final
-        return combine_actions(*cls.get_final_round(session))
+        return cls.get_final_round(session)
 
     @classmethod
     def get_answer_explainer(cls, session, round):

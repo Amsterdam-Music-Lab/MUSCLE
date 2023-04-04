@@ -73,7 +73,7 @@ class MusicalPreferences(Base):
                     feedback_form=Form([question]),
                 ).action()
             )
-            return combine_actions(*actions)
+            return actions
 
         section = session.playlist.random_section()
         like_key = 'like_song'

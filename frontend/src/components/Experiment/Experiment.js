@@ -16,7 +16,6 @@ import Plink from "../Plink/Plink";
 import StartSession from "../StartSession/StartSession";
 import Trial from "../Trial/Trial";
 import useResultHandler from "../../hooks/useResultHandler";
-import { stateNextRound } from "../../util/nextRound";
 import Info from "../Info/Info";
 import classNames from "classnames";
 
@@ -30,6 +29,7 @@ const Experiment = ({ match }) => {
     // Current experiment state
     const [state, setState] = useState(startState);
     const [playlist, setPlaylist] = useState(null);
+    const [actions, setActions] = useState([]);
     const session = useRef(null);
 
     // API hooks
@@ -54,13 +54,20 @@ const Experiment = ({ match }) => {
         [loadState]
     );
 
+    const updateActions = useCallback( (currentActions) => {
+        let newActions = currentActions;
+        const newState = newActions.shift();
+        loadState(newState);
+        setActions(newActions);
+    }, [setActions]);
+
     // Start first_round when experiment and partipant have been loaded
     useEffect(() => {
         // Check if done loading
         if (!loadingExperiment && !loadingParticipant) {
             // Loading succeeded
             if (experiment) {
-                loadState(stateNextRound(experiment));
+                updateActions(experiment.next_round);
             } else {
                 // Loading error
                 setError("Could not load experiment");
@@ -72,20 +79,21 @@ const Experiment = ({ match }) => {
         participant,
         loadingParticipant,
         setError,
+        updateActions,
         loadState,
     ]);
 
     // trigger next action from next_round array, or call session/next_round
     const onNext = async () => {
-        if (state.next_round && state.next_round.length) {
-            loadState(stateNextRound(state));
+        if (actions.length) {
+            updateActions(actions);
         } else {
             // Try to get next_round data from server
             const round = await getNextRound({
                 session: session.current,
             });
             if (round) {
-                loadState(round);
+                updateActions(round.next_round);
             } else {
                 setError(
                     "An error occured while loading the data, please try to reload the page. (Error: next_round data unavailable)"
