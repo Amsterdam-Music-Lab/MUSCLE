@@ -24,15 +24,12 @@ this_experiment_admin = ExperimentAdmin(
 
 class TestAdminExperiment(TestCase):
 
-    def setUp(self):
-        self.client = Client(
-            HTTP_USER_AGENT='Agent 007'
-        )
-        slug = 'TEST'
+    @classmethod
+    def setUpTestData(cls):
         Experiment.objects.create(
-            name='test',
-            slug=slug
-        )
+                    name='test',
+                    slug='TEST'
+                )
         Participant.objects.create()
         Session.objects.create(
             experiment=Experiment.objects.first(),
@@ -40,6 +37,11 @@ class TestAdminExperiment(TestCase):
         )
         Result.objects.create(
             session=Session.objects.first()
+        )
+
+    def setUp(self):
+        self.client = Client(
+            HTTP_USER_AGENT='Agent 007'
         )
 
     def test_experiment_model_fields(self):
