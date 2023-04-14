@@ -1,0 +1,366 @@
+{
+  "id": "2b8cd80b-1ac9-4498-87be-bb87e324281a",
+  "version": "2.0",
+  "name": "AML Experiments",
+  "url": "http://localhost:3000/ev",
+  "tests": [{
+    "id": "269b597e-fb85-40bf-b579-60d9d29192fb",
+    "name": "beat alignment",
+    "commands": [{
+      "id": "d18b2a7d-ddf2-4b86-801a-1b8ebd93d08a",
+      "comment": "Start experiment",
+      "command": "open",
+      "target": "/bat",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "203d1d14-e45a-4a7c-8a29-478f1a3e8145",
+      "comment": "",
+      "command": "setWindowSize",
+      "target": "1920x1056",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "1e9ebbf3-c6a4-408e-87d2-d900058741ee",
+      "comment": "Explainer, click OK",
+      "command": "click",
+      "target": "css=.active",
+      "targets": [
+        ["css=.active", "css:finder"],
+        ["xpath=//div[@id='root']/div/div/div/div/div/div/div/div", "xpath:idRelative"],
+        ["xpath=//div/div/div/div/div/div/div/div/div", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "df0a2e8d-8b3e-4fb7-ace1-731884640b83",
+      "comment": "If consent present...",
+      "command": "if",
+      "target": "document.getElementsByClassName('aha__consent-header').length > 0",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "6541b865-20db-4ae8-916a-99b7d33f2503",
+      "comment": "...agree",
+      "command": "click",
+      "target": "css=.active",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "12422184-376a-4166-97a1-6bcd86b245df",
+      "comment": "",
+      "command": "end",
+      "target": "",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "3f1dbd04-ee4a-4da0-a011-54697fe371c4",
+      "comment": "Wait for examples to end...",
+      "command": "waitForElementPresent",
+      "target": "css=.active",
+      "targets": [],
+      "value": "60000"
+    }, {
+      "id": "9f608b6a-445d-4609-b7fd-0cf2ffc31c16",
+      "comment": "...and click Start",
+      "command": "click",
+      "target": "css=.active",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "b0bded3c-7d2c-43cd-8b1d-f4e5b926349b",
+      "comment": "Button \"Aligned\"",
+      "command": "store",
+      "target": ".btn:nth-child(1):not(.disabled)",
+      "targets": [],
+      "value": "btn1"
+    }, {
+      "id": "d3442e2d-d16c-4c0a-8bf4-ef2eb43a6309",
+      "comment": "Button \"Not Aligned\"",
+      "command": "store",
+      "target": ".btn:nth-child(2):not(.disabled)",
+      "targets": [],
+      "value": "btn2"
+    }, {
+      "id": "da155dec-3f27-4f0a-812c-2a74b39c77a9",
+      "comment": "if not the end of experiment...",
+      "command": "while",
+      "target": "document.querySelector('h4').textContent !== \"End\"",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "32d0086d-6f4b-4d70-8c4f-e019f19a3e80",
+      "comment": "... randomly pick a button to click...",
+      "command": "executeScript",
+      "target": "return Math.random() < 0.5 ? ${btn1} : ${btn2}",
+      "targets": [],
+      "value": "btn"
+    }, {
+      "id": "be28e48a-76e3-4e38-8355-7ab5a3fea953",
+      "comment": "...wait for it to appear....",
+      "command": "waitForElementPresent",
+      "target": "css=${btn}",
+      "targets": [],
+      "value": "30000"
+    }, {
+      "id": "dd496af5-d9ad-4658-86c5-37f1168aee7c",
+      "comment": "...and click it",
+      "command": "click",
+      "target": "css=${btn}",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "65445709-14ac-4412-9d70-5fb4d6bea5ba",
+      "comment": "",
+      "command": "end",
+      "target": "",
+      "targets": [],
+      "value": ""
+    }]
+  }, {
+    "id": "f74c4656-5226-49f6-831a-79e0bac7e14c",
+    "name": "eurovision",
+    "commands": [{
+      "id": "08f65e50-15cd-4494-97c0-77837ba68834",
+      "comment": "",
+      "command": "open",
+      "target": "http://localhost:3000/ev",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "531dbc33-1c62-408b-a3ad-f038e8372d37",
+      "comment": "",
+      "command": "setWindowSize",
+      "target": "1920x1056",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "acc0ae88-d73c-49ce-ae85-696eec0634df",
+      "comment": "Explainer, click OK",
+      "command": "click",
+      "target": "css=.active",
+      "targets": [
+        ["css=.active", "css:finder"],
+        ["xpath=//div[@id='root']/div/div/div/div/div/div/div/div", "xpath:idRelative"],
+        ["xpath=//div/div/div/div/div/div/div/div/div", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "99ac1bda-ab42-468c-826b-a9ffbf14958a",
+      "comment": "If consent present...",
+      "command": "if",
+      "target": "document.getElementsByClassName('aha__consent-header').length > 0",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "c66ad362-eda8-4a5a-8aca-758cf1d1b21b",
+      "comment": "...agree",
+      "command": "click",
+      "target": "css=.active",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "8dac9c46-8a1a-42cc-a6d7-0ef81553c5cc",
+      "comment": "",
+      "command": "end",
+      "target": "",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "4e091635-d98c-4b8f-9fe1-c5673b3a6ef1",
+      "comment": "While not the end of experiment...",
+      "command": "while",
+      "target": "document.querySelector('h4').textContent !== \"Final score\"",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "e98c0fb7-ed79-4085-ae61-a106af326f4a",
+      "comment": "If questionnaire...",
+      "command": "if",
+      "target": "document.querySelector('h4').textContent == \"Questionnaire\"",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "395cb7b6-5d51-4800-b45c-4d4eb1aa2382",
+      "comment": "",
+      "command": "if",
+      "target": "document.getElementsByClassName('aha__radios').length > 0",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "82f4285c-c6e7-44b7-9810-1136548f9e12",
+      "comment": "",
+      "command": "click",
+      "target": "css=.radio:nth-child(1)",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "f4717a90-58ee-40d5-a660-fa7e893f28a8",
+      "comment": "",
+      "command": "end",
+      "target": "",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "3d0d5ff3-a72b-4f01-9171-1d9280d5e229",
+      "comment": "",
+      "command": "if",
+      "target": "document.getElementsByClassName('aha__dropdown').length > 0",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "faf68701-7485-446b-9c7b-ef8121e3f3dc",
+      "comment": "",
+      "command": "select",
+      "target": "css=select",
+      "targets": [],
+      "value": "index=1"
+    }, {
+      "id": "eef6757a-323d-4b35-a680-c4922cd417a3",
+      "comment": "",
+      "command": "end",
+      "target": "",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "2e192500-e03a-433e-859b-e5f2a5089f5e",
+      "comment": "",
+      "command": "if",
+      "target": "document.getElementsByClassName('aha__text-range').length > 0",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "4c064d0f-2752-4fd4-b821-efc2ba71c6c8",
+      "comment": "",
+      "command": "click",
+      "target": "css=.rangeslider",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "87b2b495-492e-4797-a2a6-faca601eb5fb",
+      "comment": "",
+      "command": "end",
+      "target": "",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "11faffa7-8219-4249-9243-9dd27e94444d",
+      "comment": "",
+      "command": "if",
+      "target": "document.getElementsByClassName('aha__string').length > 0",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "ec80c1a1-7bd9-4aa7-bc22-83192b8d94e1",
+      "comment": "",
+      "command": "//waitForElementEditable",
+      "target": "css=input",
+      "targets": [],
+      "value": "30000"
+    }, {
+      "id": "e715478b-8b7d-4816-aa41-0ce09f63f812",
+      "comment": "",
+      "command": "//click",
+      "target": "css=input",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "7f3f98d9-f240-401b-80f8-6849c6148e2c",
+      "comment": "",
+      "command": "//executeScript",
+      "target": "document.querySelector('input').setAttribute('value',\"Trumpet\")",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "d7d2bf61-2c52-4a81-94c7-fd6de056d17c",
+      "comment": "",
+      "command": "type",
+      "target": "css=input",
+      "targets": [],
+      "value": "Trumpet"
+    }, {
+      "id": "f2e11082-8b97-46ad-86d2-599b6007813d",
+      "comment": "",
+      "command": "end",
+      "target": "",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "a362a499-fb17-429a-86ed-6eeaa2027777",
+      "comment": "Click Continue after question answered",
+      "command": "click",
+      "target": "css=.active",
+      "targets": [
+        ["css=.active", "css:finder"],
+        ["xpath=//div[@id='root']/div/div/div/div/div/div/div[2]/div", "xpath:idRelative"],
+        ["xpath=//body/div/div/div/div/div/div/div/div[2]/div", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "ae01a3d2-2c30-482f-93ef-d9f85c287ab8",
+      "comment": "End questionaire",
+      "command": "end",
+      "target": "",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "9a2d9823-f894-4ece-ab07-a171827cf4d2",
+      "comment": "",
+      "command": "if",
+      "target": "document.querySelector('h4').textContent !== \"Bonus rounds\"",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "0164d02f-b5b5-40e8-8452-13e5b0ff4305",
+      "comment": "",
+      "command": "click",
+      "target": "css=.active",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "e5f3d5b1-e766-48f1-bf0d-00f69f3052e2",
+      "comment": "",
+      "command": "end",
+      "target": "",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "64a232b7-c81f-4985-800e-f5873929ce5d",
+      "comment": "",
+      "command": "//click",
+      "target": "css=.btn-negative,input",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "764d041f-3708-4cb0-a8d2-aea6e364d7e5",
+      "comment": "",
+      "command": "click",
+      "target": "css=.btn-negative,.btn:not(.active)",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "52b00785-5b12-4122-b956-ec76843b407b",
+      "comment": "",
+      "command": "click",
+      "target": "css=.active",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "fa390272-1c6f-4a74-8cf7-27c1a5949567",
+      "comment": "",
+      "command": "end",
+      "target": "",
+      "targets": [],
+      "value": ""
+    }]
+  }],
+  "suites": [{
+    "id": "38fd7947-8eaa-4aee-83d7-30f8ec980223",
+    "name": "Default Suite",
+    "persistSession": false,
+    "parallel": false,
+    "timeout": 300,
+    "tests": ["269b597e-fb85-40bf-b579-60d9d29192fb"]
+  }],
+  "urls": ["http://localhost:3000/", "http://localhost:3000/ev"],
+  "plugins": []
+}
