@@ -12,6 +12,7 @@ class Participant(models.Model):
         max_length=64, unique=True, default=uuid.uuid4)
     country_code = models.CharField(max_length=3, default="")
     access_info = models.CharField(max_length=512, default="", null=True)
+    json_data = models.JSONField(default=dict)
 
     def __str__(self):
         return "Participant {}".format(self.id)
