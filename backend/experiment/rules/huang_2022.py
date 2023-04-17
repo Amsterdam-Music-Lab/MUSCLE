@@ -99,20 +99,19 @@ class Huang2022(Base):
         """Get a list of all questions for the experiment (MSI and demographic questions),
         in fixed order
         """
-        # questions = MSI_ALL + [
-        #     question_by_key('msi_39_best_instrument'),
-        #     genre_question(),
-        #     question_by_key('dgf_generation'),
-        #     question_by_key('dgf_education', drop_choices=['isced-5']),
-        #     question_by_key(
-        #         'dgf_highest_qualification_expectation', EXTRA_DEMOGRAPHICS),
-        #     question_by_key('dgf_occupational_status', EXTRA_DEMOGRAPHICS),
-        #     origin_question(),
-        #     residence_question(),
-        #     gender_question(),
-        #     contact_question()
-        # ]
-        questions = [residence_question()]
+        questions = MSI_ALL + [
+            question_by_key('msi_39_best_instrument'),
+            genre_question(),
+            question_by_key('dgf_generation'),
+            question_by_key('dgf_education', drop_choices=['isced-5']),
+            question_by_key(
+                'dgf_highest_qualification_expectation', EXTRA_DEMOGRAPHICS),
+            question_by_key('dgf_occupational_status', EXTRA_DEMOGRAPHICS),
+            origin_question(),
+            residence_question(),
+            gender_question(),
+            contact_question()
+        ]
         open_questions = total_unanswered_questions(session.participant, questions)
         if not open_questions:
             return None
