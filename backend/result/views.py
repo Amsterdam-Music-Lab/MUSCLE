@@ -53,9 +53,7 @@ def score(request):
         action = session.experiment_rules().next_round(session, request.session)
     else:
         action = session.experiment_rules().next_round(session)
-        
-    if action.get('redirect'):
-        return redirect(action.get('redirect'))
+
     return JsonResponse(action, json_dumps_params={'indent': 4})
 
 @require_POST
