@@ -1,4 +1,4 @@
-import React, { useRef, useState} from 'react';
+import React, { useState} from 'react';
 
 import { postFeedback } from '../../API';
 import Button from '../Button/Button';
@@ -6,7 +6,7 @@ import HTML from '../HTML/HTML';
 
 const UserFeedback = ({experimentSlug, participant, feedbackInfo}) => {
     const [value, setValue] = useState('');
-    const showForm = useRef(true);
+    const [showForm, setShowForm] = useState(true);
 
     const giveFeedback = async () => {
         const data = {
@@ -15,7 +15,7 @@ const UserFeedback = ({experimentSlug, participant, feedbackInfo}) => {
             participant
         }
         await postFeedback(data);
-        showForm.current = false;
+        setShowForm(false);
         return;
     }
 
@@ -25,7 +25,7 @@ const UserFeedback = ({experimentSlug, participant, feedbackInfo}) => {
     
     return (
         <div className="aha__user-feedback">
-        {showForm.current === true ? (
+        {showForm === true ? (
             <div className='user-feedback__wrapper'>
                 <div className='user-feedback__header text-center'>{feedbackInfo.header}</div>
                 <div className="user-feedback__form d-flex justify-content-center">
