@@ -183,3 +183,7 @@ class Experiment(models.Model):
             return score['final_score__max']
 
         return 0
+    
+class Feedback(models.Model):
+    text = models.TextField()
+    experiment = models.ForeignKey(Experiment, on_delete=models.CASCADE)

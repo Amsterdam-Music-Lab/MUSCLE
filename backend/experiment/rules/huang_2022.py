@@ -46,6 +46,7 @@ class Huang2022(Base):
     def feedback_info(cls):
         info = super().feedback_info()
         info['header'] = _("Any remarks or questions (optional):")
+        info['thank_you'] = _("Thank you")
         return info
 
     @classmethod

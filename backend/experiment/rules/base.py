@@ -21,7 +21,8 @@ class Base(object):
         return {
             'header': _("Do you have any remarks or questions?"),
             'button': _("Submit"),
-            'contact_body': feedback_body
+            'contact_body': feedback_body,
+            'thank_you': _("We appreciate your feedback!")
         }
 
     @classmethod

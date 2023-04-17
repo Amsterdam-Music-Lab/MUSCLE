@@ -6,9 +6,8 @@ from django.shortcuts import redirect
 from django.utils.translation import gettext_lazy as _
 from django.utils.translation import activate
 
-from .models import Experiment
+from .models import Experiment, Feedback
 from session.models import Session
-from participant.utils import get_or_create_participant
 
 logger = logging.getLogger(__name__)
 
@@ -77,8 +76,10 @@ def get_experiment(request, slug):
     return response
 
 def post_feedback(request, slug):
+    text = request.POST.get('feedback')
     experiment = experiment_or_404(slug)
-    print(request.POST.get('feedback'))
+    feedback = Feedback(text=text, experiment=experiment)
+    feedback.save()
     return JsonResponse({'status': 'ok'})
 
 def experiment_or_404(slug):
