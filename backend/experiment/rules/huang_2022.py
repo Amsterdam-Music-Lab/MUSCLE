@@ -6,7 +6,7 @@ from django.template.loader import render_to_string
 from django.conf import settings
 
 from .base import Base
-from experiment.actions import HTML, SongSync, Final, Score, Explainer, Step, Consent, StartSession, Playlist, Trial
+from experiment.actions import HTML, SongSync, Final, Score, Explainer, Step, Consent, StartSession, Redirect, Playlist, Trial
 from experiment.actions.form import BooleanQuestion, ChoiceQuestion, Form, Question
 from experiment.actions.playback import Playback
 from experiment.questions.demographics import EXTRA_DEMOGRAPHICS
@@ -178,7 +178,7 @@ class Huang2022(Base):
                 # participant had persistent audio problems, finish and redirect
                 session.finish()
                 session.save()
-                return {'redirect': settings.HOMEPAGE}
+                return Redirect(settings.HOMEPAGE).action()
 
             # Start experiment: plan sections and show explainers
             Huang2022.plan_sections(session)
@@ -486,7 +486,7 @@ def contact_question():
 
 def get_test_playback():
     from section.models import Section
-    test_section = Section.objects.get(name='LevelCheck')
+    test_section = Section.objects.get(name='audiocheck')
     playback = Playback(sections=[test_section],
         play_config={'show_animation': True})
     return playback
