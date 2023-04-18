@@ -46,7 +46,7 @@ class Huang2022(Base):
     def feedback_info(cls):
         info = super().feedback_info()
         info['header'] = _("Any remarks or questions (optional):")
-        info['thank_you'] = _("Thank you")
+        info['thank_you'] = _("Thank you for your feedback!")
         return info
 
     @classmethod
@@ -124,7 +124,7 @@ class Huang2022(Base):
             return None
         index = total_questions - open_questions + 1
         return Trial(
-            title=_("Questionnaire %(index)i/%(total)i") % {'index': index, 'total': total_questions},
+            title=_("Questionnaire %(index)i / %(total)i") % {'index': index, 'total': total_questions},
             feedback_form=Form([question], is_skippable=question.is_skippable)
         ).action()
 
