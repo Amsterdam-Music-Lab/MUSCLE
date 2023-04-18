@@ -69,11 +69,10 @@ class PlaylistModelTest(TestCase):
 class MockRequest:
     pass
 
-request = MockRequest()
 this_playlist_admin = PlaylistAdmin(
     model=Playlist, admin_site=AdminSite)
     
-class TestAmdinSection(TestCase):
+class TestAmdinEditSection(TestCase):
 
     @classmethod
     def setUpTestData(cls):
@@ -82,14 +81,12 @@ class TestAmdinSection(TestCase):
                                 artist='default',
                                 name='default')
     
-    
     def setUp(self):
-        self.client = Client(
-            HTTP_USER_AGENT='Agent 007'
-        )
-
+        self.client = Client()
+        
 
     def test_edit_sections(self):
+        request = MockRequest()
         this_section = Section.objects.first()
         pre_fix = str(this_section.id)
         request.POST = {'_update': '',

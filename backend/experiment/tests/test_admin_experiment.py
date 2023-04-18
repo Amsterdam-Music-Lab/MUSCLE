@@ -40,9 +40,7 @@ class TestAdminExperiment(TestCase):
         )
 
     def setUp(self):
-        self.client = Client(
-            HTTP_USER_AGENT='Agent 007'
-        )
+        self.client = Client()
 
     def test_experiment_model_fields(self):
         experiment = model_to_dict(Experiment.objects.first())
