@@ -25,7 +25,10 @@ const MatchingPairs = ({
     let fbNomatch, fbLucky, fbMemory, fbMisremembered = false;
     
     const setScoreMessage = (score) => {
-        switch (score) {            
+        switch (score) {       
+            case -1:
+                fbMisremembered = true;
+                return '-1 <br />Misremembered'
             case 0:
                 fbNomatch = true;                
                 return '0 <br />No match';
@@ -34,7 +37,7 @@ const MatchingPairs = ({
                 return '+1 <br />Lucky match';
             case 2:
                 fbMemory = true;                
-                return '+2 <br />Good job';
+                return '+2 <br />Good job!';
             default:
                 fbNomatch = false;
                 fbLucky = false;
