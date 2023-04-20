@@ -22,28 +22,13 @@ const MatchingPairs = ({
 
     const startTime = useRef(Date.now());
     
-    let fbNomatch, fbLucky, fbMemory, fbMisremembered = false;
-    
     const setScoreMessage = (score) => {
         switch (score) {       
-            case -1:
-                fbMisremembered = true;
-                return '-1 <br />Misremembered'
-            case 0:
-                fbNomatch = true;                
-                return '0 <br />No match';
-            case 1:
-                fbLucky = true;
-                return '+1 <br />Lucky match';
-            case 2:
-                fbMemory = true;                
-                return '+2 <br />Good job!';
-            default:
-                fbNomatch = false;
-                fbLucky = false;
-                fbMemory = false;
-                fbMisremembered = false;                
-                return '';
+            case -1: return '-1 <br />Misremembered';
+            case 0: return '0 <br />No match';
+            case 1: return '+1 <br />Lucky match';
+            case 2: return '+2 <br />Good job!';
+            default: return '';
         }
     }
 
@@ -132,7 +117,12 @@ const MatchingPairs = ({
             <div className="row">
                 <div className="col-6">
                     <div dangerouslySetInnerHTML={{ __html: setScoreMessage(score.current) }}
-                        className={classNames("matching-pairs__feedback", { 'fbnomatch': fbNomatch, 'fblucky': fbLucky, 'fbmemory': fbMemory, 'fbmisremembered': fbMisremembered })}
+                        className={classNames("matching-pairs__feedback", {
+                            'fb-nomatch': score.current == 0,
+                            'fb-lucky': score.current == 1,
+                            'fb-memory': score.current == 2,
+                            'fb-misremembered': score.current == -1
+                        })}
                     />
                 </div>
                 <div className="col-6">

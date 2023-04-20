@@ -61,16 +61,16 @@
 .matching-pairs__feedback {
     float: left;
 
-    &.fbnomatch {
+    &.fb-nomatch {
         color: $gray;
     }
-    &.fblucky {
+    &.fb-lucky {
         color: $yellow;
     }
-    &.fbmemory {
+    &.fb-memory {
         color: $green;
     }
-    &.fbmisremembered {
+    &.fb-misremembered {
         color: $red;
     }
 } 
