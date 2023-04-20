@@ -21,13 +21,26 @@ const MatchingPairs = ({
     const resultBuffer = useRef([]);
 
     const startTime = useRef(Date.now());
-
+    
+    let fbNomatch, fbLucky, fbMemory, fbMisremembered = false;
+    
     const setScoreMessage = (score) => {
-        switch(score) {
-            case 0: return 'No match! 0 points';
-            case 1: return 'Lucky match! +1 points';
-            case 2: return 'Good memory! +2 points';
-            default: return '';
+        switch (score) {            
+            case 0:
+                fbNomatch = true;                
+                return '0 <br />No match';
+            case 1:
+                fbLucky = true;
+                return '+1 <br />Lucky match';
+            case 2:
+                fbMemory = true;                
+                return '+2 <br />Good job';
+            default:
+                fbNomatch = false;
+                fbLucky = false;
+                fbMemory = false;
+                fbMisremembered = false;                
+                return '';
         }
     }
 
@@ -113,30 +126,39 @@ const MatchingPairs = ({
     
     return (
         <div className="aha__matching-pairs container">
-            <h5 className="matching-pairs__score">Score: {calculateRunningScore()}</h5>
+            <div className="row">
+                <div className="col-6">
+                    <div dangerouslySetInnerHTML={{ __html: setScoreMessage(score.current) }}
+                        className={classNames("matching-pairs__feedback", { 'fbnomatch': fbNomatch, 'fblucky': fbLucky, 'fbmemory': fbMemory, 'fbmisremembered': fbMisremembered })}
+                    />
+                </div>
+                <div className="col-6">
+                    <div className="matching-pairs__score">Score: <br />{calculateRunningScore()}</div>        
+                </div>
+            </div>
+
+            <div className="playing-board d-flex justify-content-center">
+                {Object.keys(sections).map((index) => (
+                    <PlayCard 
+                        key={index}
+                        onClick={()=> {
+                            playSection(index);
+                            checkMatchingPairs(index);
+                        }}
+                        registerUserClicks={registerUserClicks}
+                        playing={playerIndex === index}
+                        section={sections[index]}
+                        onFinish={finishedPlaying}
+                        stopAudioAfter={stopAudioAfter}                    
+                    />
+                )
+                )}
+            </div>
             <div className="matching-pairs__debug">            
                 {" "}n: {sections.filter(s => !s.inactive).length / 2}
                 {" "}p: {sections.filter(s => s.inactive).length / 2}
                 {" "}k: {sections.filter(s => s.seen).length}
             </div>
-            <div className="playing-board d-flex justify-content-center">
-            {Object.keys(sections).map((index) => (
-                <PlayCard 
-                key={index}
-                onClick={()=> {
-                    playSection(index);
-                    checkMatchingPairs(index);
-                }}
-                registerUserClicks={registerUserClicks}
-                playing={playerIndex === index}
-                section={sections[index]}
-                onFinish={finishedPlaying}
-                stopAudioAfter={stopAudioAfter}
-                />
-            )
-            )}
-            </div>
-            <div className="matching-pairs__feedback">{setScoreMessage(score.current)}</div>
         </div>  
     )
 }
