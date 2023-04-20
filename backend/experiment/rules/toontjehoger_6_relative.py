@@ -65,10 +65,10 @@ class ToontjeHoger6Relative(Base):
 
         # Round 2
         if rounds_passed == 1:
-            return combine_actions(*cls.get_score(session), *cls.get_round(round, session))
+            return [*cls.get_score(session), *cls.get_round(round, session)]
 
         # Final
-        return combine_actions(*cls.get_final_round(session))
+        return cls.get_final_round(session)
 
     @classmethod
     def get_score(cls, session):

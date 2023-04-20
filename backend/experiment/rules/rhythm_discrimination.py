@@ -106,11 +106,8 @@ class RhythmDiscrimination(Base):
         if next_round_number == 1:
             plan_stimuli(session)
 
-        actions = next_trial_actions(
+        return next_trial_actions(
             session, next_round_number, request_session)
-        if isinstance(actions, dict):
-            return actions
-        return combine_actions(*actions)
 
 
 def next_trial_actions(session, round_number, request_session):
@@ -125,7 +122,7 @@ def next_trial_actions(session, round_number, request_session):
         return actions
 
     if len(plan) == round_number-1:
-        return finalize_experiment(session, request_session)
+        return [finalize_experiment(session, request_session)]
 
     condition = plan[round_number-1]
 

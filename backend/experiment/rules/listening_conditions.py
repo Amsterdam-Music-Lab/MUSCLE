@@ -95,9 +95,9 @@ class ListeningConditions(Base):
                 final_action_with_optional_button(
                     session, message, request_session)
             ]
-            return combine_actions(*actions)
+            return actions
         view = Trial(playback, feedback_form)
-        return view.action()
+        return [view.action()]
 
     @classmethod
     def first_round(cls, experiment):

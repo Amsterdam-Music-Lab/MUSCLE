@@ -66,10 +66,10 @@ class ToontjeHoger4Absolute(Base):
 
         # Round 2
         if rounds_passed < session.experiment.rounds:
-            return combine_actions(*cls.get_score(session), *cls.get_round(session))
+            return [*cls.get_score(session), *cls.get_round(session)]
 
         # Final
-        return combine_actions(*cls.get_final_round(session))
+        return cls.get_final_round(session)
 
     @classmethod
     def get_round(cls, session):

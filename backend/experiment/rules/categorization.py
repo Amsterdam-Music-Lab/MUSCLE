@@ -119,7 +119,7 @@ class Categorization(Base):
                     button_label='Ok'
                 ).action()
                 trial = cls.next_trial_action(session)
-                return combine_actions(explainer2, trial)
+                return [explainer2, trial]
 
             # Get next training action
             elif rounds_passed < len(json_data['sequence']):
@@ -188,7 +188,7 @@ class Categorization(Base):
                         [repeat_training_or_quit])).action()
 
             feedback = cls.get_feedback(session)
-            return combine_actions(feedback, explainer)
+            return [feedback, explainer]
 
         elif json_data['phase'] == 'testing':
             if rounds_passed < len(json_data['sequence']):
@@ -477,7 +477,7 @@ class Categorization(Base):
         score = cls.get_feedback(session)
         trial = cls.next_trial_action(session)
 
-        return combine_actions(score, trial)
+        return [score, trial]
 
     @classmethod
     def next_trial_action(cls, session):

@@ -25,7 +25,7 @@ describe('Trial', () => {
             feedback_form={feedback_form}
             config={config}
             />);
-        expect(screen.queryByRole('trial')).toBeInTheDocument();
+        expect(screen.queryByRole('presentation')).toBeInTheDocument();
     });
 
     it("can set the class of the trial element", () => {
@@ -35,6 +35,6 @@ describe('Trial', () => {
             config={config}
             />
         )
-        expect(screen.queryByRole('trial')).toHaveClass('boolean');
+        expect(screen.queryByRole('presentation')).toHaveClass('boolean');
     });
 });

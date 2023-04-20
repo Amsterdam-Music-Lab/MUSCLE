@@ -41,7 +41,7 @@ def get_practice_views(
         response_explainer = response_callback(correct, previous_condition)
         trial = trial_callback(
             session, trial_condition, difficulty)
-        return combine_actions(response_explainer.action(), trial)
+        return [response_explainer.action(), trial]
     else:
         # after last practice trial
         penultimate_score = previous_results.all()[1].score
@@ -58,23 +58,23 @@ def get_practice_views(
             session.save_json_data({'block': []})
             session.save()
             trial = first_trial_callback(session, trial_callback)
-            return combine_actions(
+            return [
                 response_explainer.action(),
                 start_experiment_explainer().action(True),
                 trial
-            )
+            ]
         else:
             # need more practice, start over
             response_explainer = response_callback(False, check_previous_condition(last_result))
             next_trial = trial_callback(
                 session, trial_condition, difficulty)
-            return combine_actions(
+            return [
                 response_explainer.action(),
                 practice_again_explainer().action(),
                 intro_explainer.action(True),
                 practice_explainer().action(True),
                 next_trial
-            )
+            ]
 
 
 def practice_explainer():
