@@ -1,5 +1,4 @@
 import React, {useRef} from "react";
-import classNames from "classnames";
 
 import PlayCard from "../PlayButton/PlayCard";
 
@@ -24,9 +23,10 @@ const MatchingPairs = ({
 
     const setScoreMessage = (score) => {
         switch(score) {
-            case 0: return 'No match! 0 points';
-            case 1: return 'Lucky match! +1 points';
-            case 2: return 'Good memory! +2 points';
+            case -1: return '-1 Misremembered!'
+            case 0: return '0';
+            case 1: return '+1 Lucky match!';
+            case 2: return '+2 Good job!';
             default: return '';
         }
     }
@@ -63,7 +63,8 @@ const MatchingPairs = ({
                     currentCard.lucky = true;
                 }
             } else {
-                score.current = 0;
+                if (lastCard.seen && currentCard.seen) { score.current = -1; }
+                else { score.current = 0; }
                 lastCard.nomatch = true;
                 currentCard.nomatch = true;
                 setTimeout(() => {
@@ -103,12 +104,12 @@ const MatchingPairs = ({
 
     const calculateRunningScore = () => {
         const allScores = resultBuffer.current.filter(
-            r => r.score >= 0 ).map( r => r.score );
-        if (!allScores.length) return 0;
+            r => r.score !== undefined ).map( r => r.score );
+        if (!allScores.length) return 100;
         const initial = 0;
         const score = allScores.reduce( 
             (accumulator, s)  => accumulator + s, initial )
-        return Math.round(score / resultBuffer.current.length * 100)
+        return 100 + score; //Math.round(score / resultBuffer.current.length * 100)
     }
     
     return (
