@@ -15,7 +15,7 @@ const MatchingPairs = ({
     const finishDelay = 1500;
     const xPosition = useRef(-1);
     const yPosition = useRef(-1);
-    const score = useRef(-1);
+    const score = useRef(undefined);
 
     const resultBuffer = useRef([]);
 
