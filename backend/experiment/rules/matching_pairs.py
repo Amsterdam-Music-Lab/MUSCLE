@@ -94,7 +94,9 @@ class MatchingPairs(Base):
         questions = [
             question_by_key('dgf_gender_identity'),
             question_by_key('dgf_generation'),
-            question_by_key('dgf_musical_experience', EXTRA_DEMOGRAPHICS)
+            question_by_key('dgf_musical_experience', EXTRA_DEMOGRAPHICS),
+            question_by_key('dgf_country_of_origin'),
+            question_by_key('dgf_education')
         ]
         question = unasked_question(session.participant, questions)
         if not question:
