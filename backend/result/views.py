@@ -38,8 +38,8 @@ def score(request):
         result_data = json.loads(json_data)
         # Create a result from the data
         result = handle_results(result_data, session)   
-        if result:
-            # increment the round number
+        if result and result.session:
+            # increment the round number if this was a session type result
             session.increment_round()
         else:
             return HttpResponseServerError("Could not create result from data")
