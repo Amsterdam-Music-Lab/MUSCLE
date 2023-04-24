@@ -123,8 +123,8 @@ class MatchingPairs(Base):
             score = 1 if data.get('value') == 'yes' else 0
         elif result.question_key == 'matching_pairs':
             moves = data.get('moves')
-            score = round(sum([int(m['score']) for m in moves if 
-                               m.get('score') and m['score']>=0]) / len(moves) * 100)
+            score = sum([int(m['score']) for m in moves if 
+                               m.get('score') and m['score']!= None]) + 100
         else:
             score = 0
         return score
