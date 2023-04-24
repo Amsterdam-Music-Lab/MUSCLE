@@ -1,7 +1,6 @@
 import React, { useEffect } from "react";
 import { createSession } from "../../API.js";
 import Loading from "../Loading/Loading";
-import { stateNextRound } from "../../util/nextRound";
 
 // StartSession is an experiment view that handles the creation of an experiment session
 // - It only shows a loader screen while the session is created
@@ -11,8 +10,8 @@ const StartSession = ({
     participant,
     playlist,
     setError,
-    setSession,
-    loadState,
+    session,
+    onNext,
 }) => {
     // Create a new session, and set state to next_round
     useEffect(() => {
@@ -29,14 +28,13 @@ const StartSession = ({
             }
 
             // Store session
-            setSession(data.session);
+            session.current = data.session;
 
-            // Start next round
-            loadState(stateNextRound(data));
-
+            onNext();
+            
         };
         init();
-    }, [experiment, participant, playlist, setError, setSession, loadState]);
+    }, [experiment, participant, playlist, session, setError, onNext]);
 
     return <Loading loadingText={experiment.loading_text} />;
 };

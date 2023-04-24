@@ -2,7 +2,6 @@ import React, { useState, useRef, useCallback } from "react";
 import classNames from "classnames";
 
 import { getCurrentTime, getTimeSince } from "../../util/time";
-import { createResult } from "../../API.js";
 import FeedbackForm from "../FeedbackForm/FeedbackForm";
 import HTML from "../HTML/HTML";
 import Playback from "../Playback/Playback";
@@ -14,19 +13,14 @@ If "html" is provided, it will show html content
 If "feedback_form" is provided, it will present a form of questions to the user
 **/
 const Trial = ({
-    participant,
-    session,
     playback,
     html,
     feedback_form,
     config,
-    result_id,
     onNext,
-    loadState
+    onResult,
 }) => {
     // Main component state
-    const resultBuffer = useRef([]);
-
     const [formActive, setFormActive] = useState(!config.listen_first);
     const [preloadReady, setPreloadReady] = useState(!playback?.play_config?.ready_time);
 
@@ -41,49 +35,7 @@ const Trial = ({
         startTime.current = getCurrentTime();
     }, []);
 
-    // Session result
-    const submitResult = useCallback(
-        async (result) => {
-            // Add data to result buffer
-            resultBuffer.current.push(result || {});
-
-            // Merge result data with data from resultBuffer
-            // NB: result data with same properties will be overwritten by later results
-            const mergedResults = Object.assign({}, ...resultBuffer.current, result);
-            if (result_id) {
-                mergedResults['result_id'] =  result_id;
-            }
-
-            // Create result data
-            const data = {
-                session,
-                participant,
-                result: mergedResults,
-            };
-
-            // Optionally add section to result data
-            if (mergedResults.section) {
-                data.section = mergedResults.section;
-            }
-
-            const action = await createResult(data);
-
-            // Fallback: Call onNext, try to reload round
-            if (!action) {
-                onNext();
-                return;
-            }
-
-            // Clear resultBuffer
-            resultBuffer.current = [];
-
-            // Init new state from action
-            loadState(action);
-        },
-        [loadState, onNext, participant, session, feedback_form]
-    );
-
-    // Create result data in this wrapper function
+    // Create result data
     const makeResult = useCallback(
         (result) => {
             // Prevent multiple submissions
@@ -103,7 +55,7 @@ const Trial = ({
                 if (feedback_form.is_skippable) {
                     form.map((formElement => (formElement.value = formElement.value || '')))
                 }
-                submitResult({
+                onResult({
                     decision_time,
                     form,
                     config
@@ -112,7 +64,7 @@ const Trial = ({
                 onNext();
             }
         },
-        [feedback_form, onNext, submitResult]
+        [feedback_form, config, onNext, onResult]
     );
 
     const finishedPlaying = useCallback(() => {
@@ -121,10 +73,9 @@ const Trial = ({
 
             // Create a time_passed result
             if (config.auto_advance_timer != null) {
-                if (playback.player_type == 'BUTTON') {
+                if (playback.player_type === 'BUTTON') {
                     startTime.current = getCurrentTime();
                 }
-                const id = setTimeout( () => {makeResult({type: "time_passed",});} , config.auto_advance_timer);
 
             } else {
 
@@ -136,11 +87,11 @@ const Trial = ({
         }
         setFormActive(true);
         return;
-    }, [config.auto_advance, makeResult]);
+    }, [config, playback, makeResult]);
 
 
     return (
-        <div role="trial" className={classNames("aha__trial", config.style)}>
+        <div role="presentation" className={classNames("aha__trial", config.style)}>
             {playback && (
                 <Playback
                     playerType={playback.player_type}
@@ -154,7 +105,7 @@ const Trial = ({
                     playConfig={playback.play_config}
                     sections={playback.sections}
                     time={time}
-                    submitResult={submitResult}
+                    submitResult={onResult}
                     startedPlaying={startTimer}
                     finishedPlaying={finishedPlaying}
                 />

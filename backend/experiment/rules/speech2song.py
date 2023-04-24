@@ -153,7 +153,7 @@ class Speech2Song(Base):
             # uneven round: repeated representation
             actions.extend(next_repeated_representation(
                 session, is_speech))
-        return combine_actions(*actions)
+        return [actions]
 
     def get_question(session):
         questions = [

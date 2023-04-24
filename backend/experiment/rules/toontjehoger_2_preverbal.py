@@ -83,10 +83,10 @@ class ToontjeHoger2Preverbal(Base):
 
         # Round 2
         if rounds_passed == 1:
-            return combine_actions(*cls.get_score(session, rounds_passed), *cls.get_round1_playback(session), *cls.get_round2(round, session))
+            return [*cls.get_score(session, rounds_passed), *cls.get_round1_playback(session), *cls.get_round2(round, session)]
 
         # Final
-        return combine_actions(*cls.get_final_round(session))
+        return cls.get_final_round(session)
 
     @classmethod
     def get_score(cls, session, rounds_passed):

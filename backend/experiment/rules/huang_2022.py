@@ -175,7 +175,7 @@ class Huang2022(Base):
                 else:
                     session.increment_round() # adjust round numbering
             elif last_result.question_key == 'audio_check2' and last_result.score == 0:
-                # participant had persistent audio problems, finish and redirect
+                # participant had persistent audio problems, delete session and redirect
                 session.finish()
                 session.save()
                 return Redirect(settings.HOMEPAGE).action()
@@ -250,8 +250,8 @@ class Huang2022(Base):
             action = Huang2022.get_question(session)
             if not action:
                 action = Huang2022.finalize(session)
-            return action
-        return combine_actions(*actions)
+            return [action]
+        return actions
     
     @classmethod
     def finalize(cls, session):

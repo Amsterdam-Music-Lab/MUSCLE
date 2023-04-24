@@ -47,7 +47,7 @@ class MatchingPairs(Base):
                     Step(description=_('Try to get as many points as possible!'))
                 ]).action(step_numbers=True)
                 trial = MatchingPairs.get_matching_pairs_trial(session)
-                return combine_actions(explainer, trial)
+                return [explainer, trial]
             
         last_result = session.result_set.last()
         if last_result and last_result.question_key == 'play_again':
@@ -81,7 +81,7 @@ class MatchingPairs(Base):
                     submits=True),
                 ])
             ).action()
-            return combine_actions(score, cont)
+            return [score, cont]
     
     @classmethod
     def get_question(cls, session):
