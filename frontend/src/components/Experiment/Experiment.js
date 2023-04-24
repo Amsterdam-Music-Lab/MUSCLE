@@ -161,6 +161,8 @@ const Experiment = ({ match }) => {
                 return <Consent {...attrs} />;
             case "INFO":
                 return <Info {...attrs} />;
+            case "REDIRECT":
+                return window.location.replace(state.url);
 
             // Specials
             // -------------------------
