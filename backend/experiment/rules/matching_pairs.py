@@ -106,7 +106,7 @@ class MatchingPairs(Base):
         playback = Playback(
             sections=player_sections,
             player_type='MATCHINGPAIRS',
-            play_config={'stop_audio_after': 4}
+            play_config={'stop_audio_after': 5}
         )
         trial = Trial(
             title='Matching pairs',
