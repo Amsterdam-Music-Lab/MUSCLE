@@ -7,7 +7,6 @@ from .base import Base
 from experiment.actions import Consent, Explainer, Final, Playlist, Score, StartSession, Step, Trial
 from experiment.actions.form import BooleanQuestion, Form
 from experiment.actions.playback import Playback
-from experiment.actions.utils import combine_actions
 from experiment.questions.demographics import EXTRA_DEMOGRAPHICS
 from experiment.questions.utils import question_by_key, unasked_question
 from result.utils import prepare_result
@@ -26,28 +25,35 @@ class MatchingPairs(Base):
         # 3. Start session.
         start_session = StartSession.action()
 
+        explainer = Explainer(
+            instruction='',
+            steps=[
+                Step(description=_('You are invited to play a memory game.')),
+                Step(description=_('The more similar pairs you find, the more points you receive.')),
+                Step(description=_('Try to get as many points as possible!'))
+            ]).action(step_numbers=True)
+
         return [
             consent,
             playlist,
+            explainer,
             start_session
         ]
     
     @staticmethod
     def next_round(session):
-        if session.rounds_passed() <= 1:
-            trial = MatchingPairs.get_question(session)
+        if session.rounds_passed() <= 1:       
+            trial, skip_explainer = MatchingPairs.get_question(session)
             if trial:
-                return trial
+                if not skip_explainer:
+                    intro_questions = Explainer(
+                        instruction='Before starting the game, we would like to ask you some demographic questions.',
+                        steps=[]
+                    ).action()
+                    return [intro_questions, trial]
             else:
-                explainer = Explainer(
-                instruction='',
-                steps=[
-                    Step(description=_('You are invited to play a memory game.')),
-                    Step(description=_('The more similar pairs you find, the more points you receive.')),
-                    Step(description=_('Try to get as many points as possible!'))
-                ]).action(step_numbers=True)
                 trial = MatchingPairs.get_matching_pairs_trial(session)
-                return [explainer, trial]
+            return trial
             
         last_result = session.result_set.last()
         if last_result and last_result.question_key == 'play_again':
@@ -92,11 +98,14 @@ class MatchingPairs(Base):
         ]
         question = unasked_question(session.participant, questions)
         if not question:
-            return None
+            return None, None
+        skip_explainer = session.load_json_data().get('explainer_shown')
+        if not skip_explainer:
+            session.save_json_data({'explainer_shown': True})
         return Trial(
             title=_("Questionnaire"),
             feedback_form=Form([question])
-        ).action()
+        ).action(), skip_explainer
 
     @classmethod
     def get_matching_pairs_trial(cls, session):
