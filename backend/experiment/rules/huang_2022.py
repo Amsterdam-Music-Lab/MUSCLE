@@ -12,7 +12,6 @@ from experiment.actions.playback import Playback
 from experiment.questions.demographics import EXTRA_DEMOGRAPHICS
 from experiment.questions.goldsmiths import MSI_ALL
 from experiment.questions.utils import question_by_key, unasked_question, total_unanswered_questions
-from experiment.actions.utils import combine_actions
 from experiment.actions.styles import STYLE_BOOLEAN_NEGATIVE_FIRST
 from result.utils import prepare_result
 
@@ -34,11 +33,13 @@ class Huang2022(Base):
             'consent/consent_huang2021.html')
         consent = Consent.action(rendered, title=_(
             'Informed consent'), confirm=_('I agree'), deny=_('Stop'))
+        playlist = Playlist.action(experiment.playlists.all())
         # start session
         start_session = StartSession.action()
 
         return [
             consent,
+            playlist,
             start_session
         ]
 
@@ -207,8 +208,7 @@ class Huang2022(Base):
                 button_label=_("Continue")
             ).action(True)
             # Choose playlist
-            playlist = Playlist.action(session.experiment.playlists.all())
-            actions.extend([explainer, explainer_devices, playlist, Huang2022.next_song_sync_action(session)])
+            actions.extend([explainer, explainer_devices, Huang2022.next_song_sync_action(session)])
         elif next_round_number <= total_rounds + 1:
             # Load the heard_before offset.
             plan = json_data.get('plan')
