@@ -24,6 +24,7 @@ class Huang2022(Base):
     ID = 'HUANG_2022'
     timeout = 15
     round_modifier = 2
+    contact_email = 'musicexp_china@163.com'
 
     @classmethod
     def first_round(cls, experiment):
@@ -40,6 +41,13 @@ class Huang2022(Base):
             consent,
             start_session
         ]
+
+    @classmethod
+    def feedback_info(cls):
+        info = super().feedback_info()
+        info['header'] = _("Any remarks or questions (optional):")
+        info['thank_you'] = _("Thank you")
+        return info
 
     @classmethod
     def plan_sections(cls, session):
@@ -170,7 +178,7 @@ class Huang2022(Base):
                 # participant had persistent audio problems, delete session and redirect
                 session.finish()
                 session.save()
-                return {'redirect': settings.RELOAD_PARTICIPANT_TARGET}
+                return {'redirect': settings.HOMEPAGE}
 
             # Start experiment: plan sections and show explainers
             Huang2022.plan_sections(session)
