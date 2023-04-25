@@ -1,13 +1,14 @@
 $playButtonSize: 110px;
 
 @media(max-width: 768px) {
-    .back {     
-        width: calc($playButtonSize - 20px)!important;
-        height: calc($playButtonSize - 20px)!important;
+    .back, 
+    .front {     
+        width: calc($playButtonSize - 40px)!important;
+        height: calc($playButtonSize - 40px)!important;
     }
     .aha__play-card {        
-        width: calc($playButtonSize - 20px)!important;
-        height: calc($playButtonSize - 20px)!important;
+        width: calc($playButtonSize - 40px)!important;
+        height: calc($playButtonSize - 40px)!important;
     }
 }
 
