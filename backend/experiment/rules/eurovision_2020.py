@@ -166,8 +166,7 @@ class Eurovision2020(Hooked):
             scoring_rule='REACTION_TIME',
             style=STYLE_BOOLEAN_NEGATIVE_FIRST,
             submits=True)])
-        config = {
-            
+        config = {      
             'auto_advance': True,
             'decision_time': cls.timeout
         }

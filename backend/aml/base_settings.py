@@ -134,9 +134,11 @@ LOCATION_PROVIDER = os.getenv("AML_LOCATION_PROVIDER", "")
 
 # From mail address, used for sending mails
 FROM_MAIL = 'name@example.com'
+CONTACT_MAIL = FROM_MAIL
 
 # Target url participants will be redirected to after reloading their user-session
 RELOAD_PARTICIPANT_TARGET = 'https://app.amsterdammusiclab.nl'
+HOMEPAGE = 'https://www.amsterdammusiclab.nl'
 
 # CORS origin white list from .env
 CORS_ORIGIN_WHITELIST = os.getenv(

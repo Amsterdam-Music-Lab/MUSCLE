@@ -6,13 +6,12 @@ from django.template.loader import render_to_string
 from django.conf import settings
 
 from .base import Base
-from experiment.actions import HTML, SongSync, Final, Score, Explainer, Step, Consent, StartSession, Playlist, Trial
+from experiment.actions import HTML, SongSync, Final, Score, Explainer, Step, Consent, StartSession, Redirect, Playlist, Trial
 from experiment.actions.form import BooleanQuestion, ChoiceQuestion, Form, Question
 from experiment.actions.playback import Playback
 from experiment.questions.demographics import EXTRA_DEMOGRAPHICS
 from experiment.questions.goldsmiths import MSI_ALL
 from experiment.questions.utils import question_by_key, unasked_question, total_unanswered_questions
-from experiment.actions.utils import combine_actions
 from experiment.actions.styles import STYLE_BOOLEAN_NEGATIVE_FIRST
 from result.utils import prepare_result
 
@@ -24,6 +23,7 @@ class Huang2022(Base):
     ID = 'HUANG_2022'
     timeout = 15
     round_modifier = 2
+    contact_email = 'musicexp_china@163.com'
 
     @classmethod
     def first_round(cls, experiment):
@@ -33,13 +33,22 @@ class Huang2022(Base):
             'consent/consent_huang2021.html')
         consent = Consent.action(rendered, title=_(
             'Informed consent'), confirm=_('I agree'), deny=_('Stop'))
+        playlist = Playlist.action(experiment.playlists.all())
         # start session
         start_session = StartSession.action()
 
         return [
             consent,
+            playlist,
             start_session
         ]
+
+    @classmethod
+    def feedback_info(cls):
+        info = super().feedback_info()
+        info['header'] = _("Any remarks or questions (optional):")
+        info['thank_you'] = _("Thank you for your feedback!")
+        return info
 
     @classmethod
     def plan_sections(cls, session):
@@ -116,7 +125,7 @@ class Huang2022(Base):
             return None
         index = total_questions - open_questions + 1
         return Trial(
-            title=_("Questionnaire %(index)i/%(total)i") % {'index': index, 'total': total_questions},
+            title=_("Questionnaire %(index)i / %(total)i") % {'index': index, 'total': total_questions},
             feedback_form=Form([question], is_skippable=question.is_skippable)
         ).action()
 
@@ -167,10 +176,10 @@ class Huang2022(Base):
                 else:
                     session.increment_round() # adjust round numbering
             elif last_result.question_key == 'audio_check2' and last_result.score == 0:
-                # participant had persistent audio problems, finish and redirect
+                # participant had persistent audio problems, delete session and redirect
                 session.finish()
                 session.save()
-                return {'redirect': settings.RELOAD_PARTICIPANT_TARGET}
+                return Redirect(settings.HOMEPAGE).action()
 
             # Start experiment: plan sections and show explainers
             Huang2022.plan_sections(session)
@@ -199,8 +208,7 @@ class Huang2022(Base):
                 button_label=_("Continue")
             ).action(True)
             # Choose playlist
-            playlist = Playlist.action(session.experiment.playlists.all())
-            actions.extend([explainer, explainer_devices, playlist, Huang2022.next_song_sync_action(session)])
+            actions.extend([explainer, explainer_devices, Huang2022.next_song_sync_action(session)])
         elif next_round_number <= total_rounds + 1:
             # Load the heard_before offset.
             plan = json_data.get('plan')
@@ -242,8 +250,8 @@ class Huang2022(Base):
             action = Huang2022.get_question(session)
             if not action:
                 action = Huang2022.finalize(session)
-            return action
-        return combine_actions(*actions)
+            return [action]
+        return actions
     
     @classmethod
     def finalize(cls, session):
@@ -478,7 +486,7 @@ def contact_question():
 
 def get_test_playback():
     from section.models import Section
-    test_section = Section.objects.get(name='LevelCheck')
+    test_section = Section.objects.get(name='audiocheck')
     playback = Playback(sections=[test_section],
         play_config={'show_animation': True})
     return playback
