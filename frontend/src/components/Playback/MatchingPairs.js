@@ -1,4 +1,5 @@
 import React, {useRef} from "react";
+import classNames from "classnames";
 
 import PlayCard from "../PlayButton/PlayCard";
 
@@ -20,13 +21,14 @@ const MatchingPairs = ({
     const resultBuffer = useRef([]);
 
     const startTime = useRef(Date.now());
-
+    
     const setScoreMessage = (score) => {
-        switch(score) {
-            case -1: return '-1 Misremembered!'
-            case 0: return '0';
-            case 1: return '+1 Lucky match!';
-            case 2: return '+2 Good job!';
+
+        switch (score) {       
+            case -1: return '-1 <br />Misremembered';
+            case 0: return '0 <br />No match';
+            case 1: return '+1 <br />Lucky match';
+            case 2: return '+2 <br />Good job!';
             default: return '';
         }
     }
@@ -114,25 +116,39 @@ const MatchingPairs = ({
     
     return (
         <div className="aha__matching-pairs container">
-            <h5 className="matching-pairs__score">Score: {calculateRunningScore()}</h5>
-            <div className="playing-board d-flex justify-content-center">
-            {Object.keys(sections).map((index) => (
-                <PlayCard 
-                key={index}
-                onClick={()=> {
-                    playSection(index);
-                    checkMatchingPairs(index);
-                }}
-                registerUserClicks={registerUserClicks}
-                playing={playerIndex === index}
-                section={sections[index]}
-                onFinish={finishedPlaying}
-                stopAudioAfter={stopAudioAfter}
-                />
-            )
-            )}
+            <div className="row">
+                <div className="col-6">
+                    <div dangerouslySetInnerHTML={{ __html: setScoreMessage(score.current) }}
+                        className={classNames("matching-pairs__feedback", {
+                            'fb-nomatch': score.current == 0,
+                            'fb-lucky': score.current == 1,
+                            'fb-memory': score.current == 2,
+                            'fb-misremembered': score.current == -1
+                        })}
+                    />
+                </div>
+                <div className="col-6">
+                    <div className="matching-pairs__score">Score: <br />{calculateRunningScore()}</div>        
+                </div>
             </div>
-            <div className="matching-pairs__feedback">{setScoreMessage(score.current)}</div>
+
+            <div className="playing-board d-flex justify-content-center">
+                {Object.keys(sections).map((index) => (
+                    <PlayCard 
+                        key={index}
+                        onClick={()=> {
+                            playSection(index);
+                            checkMatchingPairs(index);
+                        }}
+                        registerUserClicks={registerUserClicks}
+                        playing={playerIndex === index}
+                        section={sections[index]}
+                        onFinish={finishedPlaying}
+                        stopAudioAfter={stopAudioAfter}                    
+                    />
+                )
+                )}
+            </div>
         </div>  
     )
 }
