@@ -16,7 +16,7 @@ const MatchingPairs = ({
     const finishDelay = 1500;
     const xPosition = useRef(-1);
     const yPosition = useRef(-1);
-    const score = useRef(-1);
+    const score = useRef(undefined);
 
     const resultBuffer = useRef([]);
 
@@ -148,11 +148,6 @@ const MatchingPairs = ({
                     />
                 )
                 )}
-            </div>
-            <div className="matching-pairs__debug">            
-                {" "}n: {sections.filter(s => !s.inactive).length / 2}
-                {" "}p: {sections.filter(s => s.inactive).length / 2}
-                {" "}k: {sections.filter(s => s.seen).length}
             </div>
         </div>  
     )
