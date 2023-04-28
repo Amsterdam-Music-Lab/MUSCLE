@@ -45,44 +45,54 @@ const MatchingPairs = ({
     const checkMatchingPairs = (index) => {
         const currentCard = sections[index];
         const turnedCards = sections.filter(s => s.turned);
-        if (turnedCards.length == 1) {
-            // we have two turned cards
-            currentCard.turned = true;
-            // check for match
-            const lastCard = lastPlayerIndex.current >=0 ? sections[lastPlayerIndex.current] : undefined;
-            if (lastCard && lastCard.id === currentCard.id) {
-                // match
-                lastCard.inactive = true;
-                currentCard.inactive = true;
-                setPlayerIndex(-1);
-                if (currentCard.seen && lastCard.seen) {
-                    score.current = 2;
-                    lastCard.memory = true;
-                    currentCard.memory = true;
+        if (turnedCards.length < 2) {
+            if (turnedCards.length == 1) {
+                // we have two turned cards
+                currentCard.turned = true;
+                // set noevents for all but current
+                sections.forEach(section => section.noevents = true);
+                currentCard.noevents = false;
+                // check for match
+                const lastCard = lastPlayerIndex.current >= 0 ? sections[lastPlayerIndex.current] : undefined;                
+                if (lastCard && lastCard.id === currentCard.id) {
+                    // match
+                    lastCard.inactive = true;
+                    currentCard.inactive = true;
+                    setPlayerIndex(-1);
+                    if (currentCard.seen && lastCard.seen) {
+                        score.current = 2;
+                        lastCard.memory = true;
+                        currentCard.memory = true;
+                    } else {
+                        score.current = 1;
+                        lastCard.lucky = true;
+                        currentCard.lucky = true;
+                    }
                 } else {
-                    score.current = 1;
-                    lastCard.lucky = true;
-                    currentCard.lucky = true;
-                }
+                    if (lastCard.seen && currentCard.seen) { score.current = -1; }
+                    else { score.current = 0; }
+                    lastCard.nomatch = true;
+                    currentCard.nomatch = true;
+                    setTimeout(() => {
+                        lastCard.nomatch = false;
+                        currentCard.nomatch = false;
+                      }, 700);
+                    
+                };
             } else {
-                if (lastCard.seen && currentCard.seen) { score.current = -1; }
-                else { score.current = 0; }
-                lastCard.nomatch = true;
-                currentCard.nomatch = true;
-                setTimeout(() => {
-                    lastCard.nomatch = false;
-                    currentCard.nomatch = false;
-                  }, 700);
-                
-            };
+                // turn all cards back, turn current card
+                lastPlayerIndex.current = -1;
+                sections.forEach(section => section.turned = false);
+                sections.forEach(section => section.noevents = false);
+                currentCard.turned = true;
+                currentCard.noevents = true;
+                score.current = undefined;
+            }    
         } else {
-            // turn all cards back, turn current card
-            lastPlayerIndex.current = -1;
             sections.forEach(section => section.turned = false);
-            currentCard.turned = true;
-            score.current = undefined;
+            sections.forEach(section => section.noevents = false);            
         }
-
+        
         resultBuffer.current.push({
             selectedSection: currentCard.id,
             xPosition: xPosition.current,
