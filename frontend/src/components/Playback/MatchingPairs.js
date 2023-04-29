@@ -42,6 +42,38 @@ const MatchingPairs = ({
         return time/1000;
     }
 
+    const showFeedback = () => {        
+        finishedPlaying();
+        const turnedCards = sections.filter(s => s.turned);        
+        sections.forEach(section => section.noevents = false);        
+        if (turnedCards.length == 2) {
+            sections.forEach(section => section.turned = false);            
+            switch (score.current) {                                       
+                case 1:
+                    turnedCards[0].lucky = true;
+                    turnedCards[1].lucky = true;
+                    turnedCards[0].inactive = true;
+                    turnedCards[1].inactive = true;                    
+                    break;
+                case 2:
+                    turnedCards[0].memory = true;
+                    turnedCards[1].memory = true;
+                    turnedCards[0].inactive = true;
+                    turnedCards[1].inactive = true;                    
+                    break;
+                default:
+                    turnedCards[0].nomatch = true;
+                    turnedCards[1].nomatch = true;
+                    setTimeout(() => {
+                        turnedCards[0].nomatch = false;
+                        turnedCards[1].nomatch = false;                                               
+                      }, 700);
+                    break;  
+            }
+        }
+    }
+
+
     const checkMatchingPairs = (index) => {
         const currentCard = sections[index];
         const turnedCards = sections.filter(s => s.turned);
@@ -55,42 +87,28 @@ const MatchingPairs = ({
                 // check for match
                 const lastCard = lastPlayerIndex.current >= 0 ? sections[lastPlayerIndex.current] : undefined;                
                 if (lastCard && lastCard.id === currentCard.id) {
-                    // match
-                    lastCard.inactive = true;
-                    currentCard.inactive = true;
+                    // match                    
                     setPlayerIndex(-1);
                     if (currentCard.seen && lastCard.seen) {
-                        score.current = 2;
-                        lastCard.memory = true;
-                        currentCard.memory = true;
+                        score.current = 2;                        
                     } else {
-                        score.current = 1;
-                        lastCard.lucky = true;
-                        currentCard.lucky = true;
+                        score.current = 1;                        
                     }
                 } else {
                     if (lastCard.seen && currentCard.seen) { score.current = -1; }
                     else { score.current = 0; }
-                    lastCard.nomatch = true;
-                    currentCard.nomatch = true;
-                    setTimeout(() => {
-                        lastCard.nomatch = false;
-                        currentCard.nomatch = false;
-                      }, 700);
-                    
-                };
+                };                
             } else {
                 // turn all cards back, turn current card
                 lastPlayerIndex.current = -1;
                 sections.forEach(section => section.turned = false);
-                sections.forEach(section => section.noevents = false);
                 currentCard.turned = true;
                 currentCard.noevents = true;
                 score.current = undefined;
             }    
         } else {
-            sections.forEach(section => section.turned = false);
-            sections.forEach(section => section.noevents = false);            
+            // second click on second card
+            showFeedback();            
         }
         
         resultBuffer.current.push({
@@ -153,7 +171,7 @@ const MatchingPairs = ({
                         registerUserClicks={registerUserClicks}
                         playing={playerIndex === index}
                         section={sections[index]}
-                        onFinish={finishedPlaying}
+                        onFinish={showFeedback}
                         stopAudioAfter={stopAudioAfter}                    
                     />
                 )
