@@ -178,7 +178,7 @@ class Section(models.Model):
     name = models.CharField(db_index=True, max_length=128)
     start_time = models.FloatField(db_index=True, default=0.0)  # sec
     duration = models.FloatField(default=0.0)  # sec
-    filename = models.CharField(max_length=128)
+    filename = models.CharField(max_length=255)
     restrict_to_nl = models.BooleanField(default=False)
     play_count = models.PositiveIntegerField(default=0)
     code = models.PositiveIntegerField(default=random_code)
