@@ -163,8 +163,8 @@ MUSICGENS_17_W_VARIANTS = [
         }
     ),
     RadiosQuestion(
-        "P11_2",
-        "Do you have perfect pitch?",
+        key="P11_2",
+        question="Do you have perfect pitch?",
         choices = {
             1: "Yes",
             0: "No",
@@ -172,8 +172,8 @@ MUSICGENS_17_W_VARIANTS = [
         }
     ),
     RadiosQuestion(
-        "P11_3",
-        "If someone plays a note on an instrument and you can't see what note it is, can you still name it (e.g. say that is a 'C' or an 'F')?",
+        key="P11_3",
+        question="If someone plays a note on an instrument and you can't see what note it is, can you still name it (e.g. say that is a 'C' or an 'F')?",
         choices = {
             1: "Yes",
             0: "No",
