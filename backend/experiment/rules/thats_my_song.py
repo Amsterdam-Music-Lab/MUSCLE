@@ -4,9 +4,9 @@ from experiment.actions import Trial
 from experiment.actions.form import Form
 from experiment.questions.utils import question_by_key, unasked_question
 from experiment.questions.musicgens import MUSICGENS_17_W_VARIANTS
-from .hooked import Hooked
+from .eurovision_2020 import Eurovision2020
 
-class ThatsMySong(Hooked):
+class ThatsMySong(Eurovision2020):
 
 	ID = 'THATS_MY_SONG'
 
