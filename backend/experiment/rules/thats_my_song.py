@@ -30,4 +30,4 @@ class ThatsMySong(Eurovision2020):
 		
 		return Trial(
                 title=_("Questionnaire"),
-                feedback_form=Form([question], is_profile=True, is_skippable=question.is_skippable)).action()
+                feedback_form=Form([question], is_skippable=question.is_skippable)).action()

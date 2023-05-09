@@ -118,7 +118,7 @@ class Hooked(Base):
 
         return Trial(
                 title=_("Questionnaire"),
-                feedback_form=Form([question], is_profile=True, is_skippable=question.is_skippable)).action()
+                feedback_form=Form([question], is_skippable=question.is_skippable)).action()
 
 
     
@@ -163,7 +163,6 @@ class Hooked(Base):
         if next_round_number == 1:
             # Plan sections
             cls.plan_sections(session)
-            cls.first_play(session)
 
             # Go to SongSync straight away.
             actions.append(cls.next_song_sync_action(session))
