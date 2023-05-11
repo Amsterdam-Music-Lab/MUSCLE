@@ -102,10 +102,7 @@ const MatchingPairs = ({
         }
     }
 
-    const checkMatchingPairs = (index) => {
-        if (!resultBuffer.length) {
-            sections.forEach(section => section.seen = false);            
-        }
+    const checkMatchingPairs = (index) => {        
         const currentCard = sections[index];
         const turnedCards = sections.filter(s => s.turned);
         if (turnedCards.length < 2) {
@@ -113,11 +110,11 @@ const MatchingPairs = ({
                 // We have two turned cards
                 currentCard.turned = true;                
                 // set no mouse events for all but current
-                sections.forEach(section => section.noevents = true);
+                sections.forEach(section => section.noevents = true);                
                 currentCard.noevents = false;
                 // check for match
-                const lastCard = firstCard.current >=0 ? sections[firstCard.current] : undefined;                
-                if (lastCard && lastCard.id === currentCard.id) {
+                const lastCard = sections[firstCard.current];                
+                if (lastCard.id === currentCard.id) {
                     // match                                        
                     if (currentCard.seen && lastCard.seen) {
                         score.current = 2;                        
@@ -129,7 +126,7 @@ const MatchingPairs = ({
                     else { score.current = 0; }
                 };
                 currentCard.seen = true;
-                lastCard.seen = true;
+                lastCard.seen = true;                
             } else {
                 // first click of the turn
                 firstCard.current = index;
