@@ -108,6 +108,7 @@ const MatchingPairs = ({
             if (turnedCards.length == 1) {
                 // We have two turned cards
                 currentCard.turned = true;
+                
                 // set no mouse events for all but current
                 sections.forEach(section => section.noevents = true);
                 currentCard.noevents = false;
@@ -124,7 +125,9 @@ const MatchingPairs = ({
                 } else {
                     if (lastCard.seen && currentCard.seen) { score.current = -1; }
                     else { score.current = 0; }
-                };               
+                };
+                currentCard.seen = true;
+                lastCard.seen = true;
             } else {
                 // first click of the turn
                 lastPlayerIndex.current = -1;                
@@ -141,7 +144,7 @@ const MatchingPairs = ({
                 score: score.current,
                 timestamp: formatTime(Date.now() - startTime.current)
             });
-            currentCard.seen = true;
+            
         } else {
             // second click on second card
             showFeedback();            
