@@ -101,6 +101,7 @@ $playButtonSize: 110px;
         animation-duration: 0.7s;
         animation-name: nomatch;
         animation-iteration-count: 1;
+        pointer-events: none;
     }
 
     &.lucky {
