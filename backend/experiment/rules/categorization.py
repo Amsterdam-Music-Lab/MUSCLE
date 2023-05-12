@@ -119,7 +119,7 @@ class Categorization(Base):
                     button_label='Ok'
                 ).action()
                 trial = cls.next_trial_action(session)
-                return combine_actions(explainer2, trial)
+                return [explainer2, trial]
 
             # Get next training action
             elif rounds_passed < len(json_data['sequence']):
@@ -184,14 +184,11 @@ class Categorization(Base):
                     return final
                 else:
                     # Show continue to next training phase or exit option
-                    config = {
-                        'style': 'boolean'
-                    }
                     explainer = Trial(title="Training failed", feedback_form=Form(
-                        [repeat_training_or_quit]), config=config).action()
+                        [repeat_training_or_quit])).action()
 
             feedback = cls.get_feedback(session)
-            return combine_actions(feedback, explainer)
+            return [feedback, explainer]
 
         elif json_data['phase'] == 'testing':
             if rounds_passed < len(json_data['sequence']):
@@ -369,6 +366,7 @@ class Categorization(Base):
     @classmethod
     def plan_phase(cls, session):
         json_data = session.load_json_data()
+        print(json_data['group'], session.playlist.section_set.first().tag)
 
         if 'training' in json_data['phase']:
             # Retrieve training stimuli for the assigned group
@@ -479,7 +477,7 @@ class Categorization(Base):
         score = cls.get_feedback(session)
         trial = cls.next_trial_action(session)
 
-        return combine_actions(score, trial)
+        return [score, trial]
 
     @classmethod
     def next_trial_action(cls, session):
@@ -504,11 +502,11 @@ class Categorization(Base):
         config = {'listen_first': True,
                   'auto_advance': True,
                   'auto_advance_timer': 2500,
-                  'style': json_data["button_order"],
                   'time_pass_break': False
                   }
+        style = {json_data['button_order']: True}
         trial = two_alternative_forced(session, section, choices, expected_response,
-            comment=json_data['phase'], scoring_rule='CORRECTNESS', config=config)
+            style=style, comment=json_data['phase'], scoring_rule='CORRECTNESS', config=config)
         return trial
 
     @classmethod
@@ -556,5 +554,5 @@ repeat_training_or_quit = ChoiceQuestion(
     },
     submits=True,
     is_skippable=False,
-    config={'buttons_large_gap': True}
+    style={'buttons-large-gap': True, 'boolean': True}
 )

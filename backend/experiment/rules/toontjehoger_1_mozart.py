@@ -88,10 +88,10 @@ class ToontjeHoger1Mozart(Base):
                                         question="Welke vorm ontstaat er na het afknippen van het hoekje?",
                                         expected_response='B'
                                         )
-            return combine_actions(*answer_explainer, *score, *round)
+            return [*answer_explainer, *score, *round]
 
         # Final
-        return combine_actions(*cls.get_final_round(session))
+        return cls.get_final_round(session)
 
     @classmethod
     def get_answer_explainer(cls, session, round):
@@ -185,10 +185,11 @@ class ToontjeHoger1Mozart(Base):
         )
         form = Form([question])
 
-        image_trial = HTML(
-            html='<img src="{}" style="height:calc(100% - 260px);max-height:326px;max-width: 100%;"/>'.format(
-                image_url),
-            form=form,
+        image_trial = Trial(
+            html=HTML(
+                body='<img src="{}" style="height:calc(100% - 260px);max-height:326px;max-width: 100%;"/>'.format(
+                image_url)),
+            feedback_form=form,
             title=cls.TITLE,
         ).action()
 

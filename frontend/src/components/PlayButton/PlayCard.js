@@ -9,6 +9,8 @@ const PlayCard = ({ onClick, registerUserClicks, playing, section, onFinish, sto
     const startTime = 0;
     const [time, setTime] = useState(startTime);
     
+    const cardSize = window.innerWidth > 768 ? 110 : 70;
+    
     useEffect(() => {
         if (!playing) {
             return;
@@ -28,7 +30,7 @@ const PlayCard = ({ onClick, registerUserClicks, playing, section, onFinish, sto
     }, [playing, stopAudioAfter, onFinish]);
     
     return (
-        <div className={classNames("aha__play-card", {turned: section.turned}, {disabled: section.inactive})} onClick={event => {
+        <div className={classNames("aha__play-card", {turned: section.turned}, {disabled: section.inactive}, { memory: section.memory }, { lucky: section.lucky }, { nomatch: section.nomatch })} onClick={event => {
             registerUserClicks(event.clientX, event.clientY);
             onClick();
         }}>
@@ -36,8 +38,8 @@ const PlayCard = ({ onClick, registerUserClicks, playing, section, onFinish, sto
                     <Histogram 
                         className="front"
                         running={playing}
-                        histogramWidth={90}
-                        height={90}
+                        histogramWidth={cardSize}
+                        height={cardSize}
                         bars={5}
                         width={10}
                         spacing={10}

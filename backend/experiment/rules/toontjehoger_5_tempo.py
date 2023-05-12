@@ -6,6 +6,7 @@ from .toontjehoger_1_mozart import toontjehoger_ranks
 from experiment.actions import Trial, Explainer, Step, Score, Final, StartSession, Playlist, Info
 from experiment.actions.form import ButtonArrayQuestion, Form
 from experiment.actions.playback import Playback
+from experiment.actions.styles import STYLE_NEUTRAL
 from .base import Base
 from experiment.actions.utils import combine_actions
 from experiment.utils import non_breaking_spaces
@@ -65,10 +66,10 @@ class ToontjeHoger5Tempo(Base):
 
         # Round 2
         if rounds_passed < session.experiment.rounds:
-            return combine_actions(*cls.get_score(session), *cls.get_round(session, rounds_passed))
+            return [*cls.get_score(session), *cls.get_round(session, rounds_passed)]
 
         # Final
-        return combine_actions(*cls.get_final_round(session))
+        return cls.get_final_round(session)
 
     @classmethod
     def get_random_section_pair(cls, session, genre):
@@ -161,17 +162,12 @@ class ToontjeHoger5Tempo(Base):
             result_id=prepare_result(
                 key, session, section=section_original,
                 expected_response="A" if sections[0].id == section_original.id else "B"
-            )
+            ),
+            style=STYLE_NEUTRAL
         )
         form = Form([question])
 
-        # Trial
-        trial_config = {
-            'style': 'neutral',
-        }
-
         trial = Trial(
-            config=trial_config,
             playback=playback,
             feedback_form=form,
             title=cls.TITLE,

@@ -2,6 +2,7 @@ import json
 
 from django.views.decorators.http import require_POST
 from django.http import Http404, HttpResponseServerError, JsonResponse, HttpResponseBadRequest
+from django.shortcuts import redirect
 
 from participant.utils import get_participant
 from session.models import Session
@@ -37,22 +38,15 @@ def score(request):
         result_data = json.loads(json_data)
         # Create a result from the data
         result = handle_results(result_data, session)   
-        if result:
-            # increment the round number
-            session.increment_round()
-        else:
+        if not result:
             return HttpResponseServerError("Could not create result from data")
-
+        if result.session:
+            # increment the round number if this was a session type result
+            session.increment_round()
     except ValueError:
         return HttpResponseServerError("Invalid data")
 
-    # Get next round for given session
-    if request.session.get('experiment_series'):
-        # we are in the middle of an experiment series - need to pass in request.session object
-        action = session.experiment_rules().next_round(session, request.session)
-    else:
-        action = session.experiment_rules().next_round(session)
-    return JsonResponse(action, json_dumps_params={'indent': 4})
+    return JsonResponse({'success': True})
 
 @require_POST
 def consent(request):

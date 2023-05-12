@@ -7,7 +7,6 @@ from .base import Base
 from experiment.actions import Consent, Explainer, Final, Playlist, Score, StartSession, Step, Trial
 from experiment.actions.form import BooleanQuestion, Form
 from experiment.actions.playback import Playback
-from experiment.actions.utils import combine_actions
 from experiment.questions.demographics import EXTRA_DEMOGRAPHICS
 from experiment.questions.utils import question_by_key, unasked_question
 from result.utils import prepare_result
@@ -26,28 +25,35 @@ class MatchingPairs(Base):
         # 3. Start session.
         start_session = StartSession.action()
 
+        explainer = Explainer(
+            instruction='',
+            steps=[
+                Step(description=_('You are invited to play a memory game.')),
+                Step(description=_('The more similar pairs you find, the more points you receive.')),
+                Step(description=_('Try to get as many points as possible!'))
+            ]).action(step_numbers=True)
+
         return [
             consent,
             playlist,
+            explainer,
             start_session
         ]
     
     @staticmethod
     def next_round(session):
-        if session.rounds_passed() <= 1:
-            trial = MatchingPairs.get_question(session)
+        if session.rounds_passed() <= 1:       
+            trial, skip_explainer = MatchingPairs.get_question(session)
             if trial:
-                return trial
+                if not skip_explainer:
+                    intro_questions = Explainer(
+                        instruction='Before starting the game, we would like to ask you some demographic questions.',
+                        steps=[]
+                    ).action()
+                    return [intro_questions, trial]
             else:
-                explainer = Explainer(
-                instruction='',
-                steps=[
-                    Step(description=_('You are invited to play a memory game.')),
-                    Step(description=_('The more similar pairs you find, the more points you receive.')),
-                    Step(description=_('Try to get as many points as possible!'))
-                ]).action(step_numbers=True)
                 trial = MatchingPairs.get_matching_pairs_trial(session)
-                return combine_actions(explainer, trial)
+            return trial
             
         last_result = session.result_set.last()
         if last_result and last_result.question_key == 'play_again':
@@ -81,32 +87,37 @@ class MatchingPairs(Base):
                     submits=True),
                 ])
             ).action()
-            return combine_actions(score, cont)
+            return [score, cont]
     
     @classmethod
     def get_question(cls, session):
         questions = [
             question_by_key('dgf_gender_identity'),
             question_by_key('dgf_generation'),
-            question_by_key('dgf_musical_experience', EXTRA_DEMOGRAPHICS)
+            question_by_key('dgf_musical_experience', EXTRA_DEMOGRAPHICS),
+            question_by_key('dgf_country_of_origin'),
+            question_by_key('dgf_education')
         ]
         question = unasked_question(session.participant, questions)
         if not question:
-            return None
+            return None, None
+        skip_explainer = session.load_json_data().get('explainer_shown')
+        if not skip_explainer:
+            session.save_json_data({'explainer_shown': True})
         return Trial(
             title=_("Questionnaire"),
             feedback_form=Form([question])
-        ).action()
+        ).action(), skip_explainer
 
     @classmethod
     def get_matching_pairs_trial(cls, session):
         sections = list(session.playlist.section_set.all())
-        player_sections = random.sample(sections, 6)*2
+        player_sections = random.sample(sections, 8)*2
         random.shuffle(player_sections)
         playback = Playback(
             sections=player_sections,
             player_type='MATCHINGPAIRS',
-            play_config={'stop_audio_after': 4}
+            play_config={'stop_audio_after': 5}
         )
         trial = Trial(
             title='Matching pairs',
@@ -123,8 +134,8 @@ class MatchingPairs(Base):
             score = 1 if data.get('value') == 'yes' else 0
         elif result.question_key == 'matching_pairs':
             moves = data.get('moves')
-            score = round(sum([int(m['score']) for m in moves if 
-                               m.get('score') and m['score']>=0]) / len(moves) * 100)
+            score = sum([int(m['score']) for m in moves if 
+                               m.get('score') and m['score']!= None]) + 100
         else:
             score = 0
         return score

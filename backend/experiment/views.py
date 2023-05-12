@@ -6,9 +6,8 @@ from django.shortcuts import redirect
 from django.utils.translation import gettext_lazy as _
 from django.utils.translation import activate
 
-from .models import Experiment
+from .models import Experiment, Feedback
 from session.models import Session
-from participant.utils import get_or_create_participant
 
 logger = logging.getLogger(__name__)
 
@@ -16,12 +15,7 @@ logger = logging.getLogger(__name__)
 
 def get_experiment(request, slug):
     """Get experiment data from active experiment with given :slug"""
-    # get experiment
-    try:
-        experiment = Experiment.objects.get(slug=slug, active=True)
-    except Experiment.DoesNotExist:
-        raise Http404("Experiment does not exist")
-
+    experiment = experiment_or_404(slug)
     series_data = request.session.get('experiment_series')
     if experiment.experiment_series and series_data:
         # we are in the middle of a test battery
@@ -68,6 +62,7 @@ def get_experiment(request, slug):
             {'id': playlist.id, 'name': playlist.name}
             for playlist in experiment.playlists.all()
         ],
+        'feedback_info': experiment.get_rules().feedback_info(),
         'next_round': experiment.get_rules().first_round(experiment),
         'loading_text': _('Loading')
     }
@@ -79,3 +74,17 @@ def get_experiment(request, slug):
         # avoid carrying over language cookie from other experiments
         response.set_cookie(settings.LANGUAGE_COOKIE_NAME, None)
     return response
+
+def post_feedback(request, slug):
+    text = request.POST.get('feedback')
+    experiment = experiment_or_404(slug)
+    feedback = Feedback(text=text, experiment=experiment)
+    feedback.save()
+    return JsonResponse({'status': 'ok'})
+
+def experiment_or_404(slug):
+    # get experiment
+    try:
+        return Experiment.objects.get(slug=slug, active=True)
+    except Experiment.DoesNotExist:
+        raise Http404("Experiment does not exist")

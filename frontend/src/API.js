@@ -12,6 +12,7 @@ axios.defaults.withCredentials = true;
 export const URLS = {
     experiment: {
         get: (slug) => "/experiment/" + slug + "/",
+        feedback: (slug) => "/experiment/" + slug + "/feedback/",
     },
     participant: {
         current: "/participant/",
@@ -89,7 +90,7 @@ export const createSession = async ({ experiment, participant, playlist }) => {
 };
 
 // Create result for given session
-export const createResult = async ({
+export const scoreResult = async ({
     session,
     section,
     participant,
@@ -144,3 +145,21 @@ export const shareParticipant = async ({ email, participant }) => {
         return null;
     }
 };
+
+// Collect user feedback
+export const postFeedback = async({ experimentSlug, feedback, participant }) => {
+    const endpoint = API_BASE_URL + URLS.experiment.feedback(experimentSlug)
+    try {
+        const response = await axios.post(
+            endpoint,
+            qs.stringify({
+                feedback,
+                csrfmiddlewaretoken: participant.csrf_token,
+            })
+        );
+        return response.data;
+    } catch (err) {
+        console.error(err);
+        return null;
+    }
+}
