@@ -9,6 +9,7 @@ from .hooked import Hooked
 class ThatsMySong(Hooked):
 
 	ID = 'THATS_MY_SONG'
+	consent_file = None
 
 	
 	@classmethod

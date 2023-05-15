@@ -47,8 +47,12 @@ class Hooked(Base):
             button_label=_("Let's go!")).action(True)
 
         # 2. Get informed consent.
-        rendered = render_to_string('consent/{}'.format(cls.consent_file))
-        consent = Consent.action(rendered, title=_('Informed consent'), confirm=_('I agree'), deny=_('Stop'))
+        if  cls.consent_file:
+            rendered = render_to_string('consent/{}'.format(cls.consent_file))
+            consent = Consent.action(text=rendered, title=_('Informed consent'), confirm=_('I agree'), deny=_('Stop'))
+        else:
+            # fall back to lorem ipsum if no consent_file is defined
+            consent = Consent.action()
 
         # 3. Choose playlist.
         playlist = Playlist.action(experiment.playlists.all())
@@ -279,6 +283,7 @@ class Hooked(Base):
         n_old = round(0.17 * n_rounds)
         n_new = round(0.17 * n_rounds)
         n_free = n_rounds - 2 * n_old - n_new
+        print(n_old, n_new, n_free)
 
         # Assign songs.
         old_songs = songs[:n_old]
