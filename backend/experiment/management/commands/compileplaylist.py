@@ -3,11 +3,13 @@ import csv
 from os.path import basename, join, splitext
 from os.path import split as pathsplit
 
+import audioread
+import json
+
 from django.core.management.base import BaseCommand, CommandError
 from django.conf import settings
 
-import audioread
-import json
+from experiment.rules import EXPERIMENT_RULES
 
 
 class Command(BaseCommand):
@@ -21,6 +23,10 @@ class Command(BaseCommand):
         parser.add_argument('directory',
                             type=str,
                             help="Directory of audio files, relative to upload folder")
+        parser.add_argument('--experiment',
+                            type=str,
+                            default=None,
+                            help="Provide the ID of the experiment for which the playlist should be compiled")
         parser.add_argument('--artist_default',
                             type=str,
                             default='default',
@@ -35,7 +41,6 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         directory = options.get('directory')
         name = options.get('artist_default')
-
         upload_dir = settings.MEDIA_ROOT
         playlist_dir = join(upload_dir, directory)
         search_critera = glob('{}/*.wav'.format(playlist_dir)) + \
@@ -44,16 +49,28 @@ class Command(BaseCommand):
         if song_names_option:
             with open(join(playlist_dir, song_names_option)) as json_file:
                 song_names = json.load(json_file)
+        experiment_option = options.get('experiment')
         with open(join(playlist_dir, 'audiofiles.csv'), 'w+') as f:
             csv_writer = csv.writer(f)
-            for audio_file in search_critera:
+            for i, audio_file in enumerate(search_critera):
+                # set defaults
                 artist_name = name
+                song_name = name
+                tag = group = '0'
                 filename = join(directory, basename(audio_file))
+                audio_file_clean = splitext(basename(audio_file))[0]
                 if song_names_option:
-                    artist_name = song_names[splitext(basename(audio_file))[0]]
+                    artist_name = song_names[audio_file_clean]
                     song_name = basename(audio_file)[:-4]
+                elif experiment_option:
+                    rules = EXPERIMENT_RULES.get(experiment_option)
+                    info = rules.get_info_playlist(rules, audio_file_clean)
+                    artist_name = info.get('artist')
+                    song_name = info.get('song')
+                    tag = info.get('tag')
+                    group = info.get('group')
                 else:
-                    song_name = splitext(basename(audio_file))[0]
+                    song_name = audio_file_clean
                 start_position = 0.0
                 with audioread.audio_open(audio_file) as f:
                     duration = f.duration
@@ -61,16 +78,14 @@ class Command(BaseCommand):
                 group_tag_option = options.get('tag_group')
                 if group_tag_option:
                     group, tag = calculate_group_tag(
-                        filename, group_tag_option)
-                else:
-                    group = tag = '0'
+                        filename, group_tag_option, i)
                 row = [artist_name, song_name,
                        start_position, duration, filename, restrict_to_nl,
                        tag, group]
                 csv_writer.writerow(row)
 
 
-def calculate_group_tag(filename, experiment):
+def calculate_group_tag(filename, experiment, index):
     identifier = splitext(pathsplit(filename)[-1])[0]
     if experiment == 'huang2022':
         parts = identifier.split('.')
@@ -109,4 +124,7 @@ def calculate_group_tag(filename, experiment):
         elif identifier[-2:] == '2B':
             tag = '2B'
         group = 'SAME' if identifier[0] == 'S' else 'CROSSED'
+    elif experiment == 'matching_pairs':
+        group = index
+        tag = pathsplit(pathsplit(filename)[0])[1]
     return group, tag
