@@ -74,7 +74,7 @@ def get_participant(request):
 
     if participant_id_url:
         # get participant from query string
-        participant_qs = Participant.objects.filter(json_data__participant_id = participant_id_url)
+        participant_qs = Participant.objects.filter(participant_id_url = participant_id_url)
         if len(participant_qs) == 1:
             participant = participant_qs[0]
             set_participant(request, participant)
@@ -103,11 +103,10 @@ def get_or_create_participant(request):
         country_code = country(request)
         access_info = request.META.get('HTTP_USER_AGENT')
 
-        participant_id_url = request.GET.get("participant_id")
-        json_data = {'participant_id':participant_id_url} if participant_id_url else {}
+        participant_id_url = request.GET.get("participant_id") # can be None
 
         # Create a new Participant, store the country code once
-        participant = Participant(country_code=country_code, access_info=access_info, json_data=json_data)
+        participant = Participant(country_code=country_code, access_info=access_info, participant_id_url=participant_id_url)
         participant.save()
         set_participant(request, participant)
 
