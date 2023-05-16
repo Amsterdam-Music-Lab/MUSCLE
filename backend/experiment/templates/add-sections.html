@@ -40,7 +40,6 @@
 <form enctype="multipart/form-data" action="" method="post">
     <div class="select-fields">
         {% csrf_token %} {{ form.as_p }} {% render_inline_action_fields %}
-
     </div>
     <div class="button-container">
         <input type="submit" name="_add" value="Add sections" id="add-button" />

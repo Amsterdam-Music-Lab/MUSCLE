@@ -81,6 +81,7 @@ class PlaylistAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
                 with audioread.audio_open(file_path) as f:
                     new_section.duration = f.duration
                 new_section.save()
+                obj.save()
             return redirect('/admin/section/playlist')
         # Go back to admin playlist overview
         if '_back' in request.POST:
@@ -115,6 +116,7 @@ class PlaylistAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
                 else:
                     section.restrict_to_nl = True
                 section.save()
+                obj.save()
             return redirect('/admin/section/playlist')
         # Go back to admin playlist overview
         if '_back' in request.POST:
