@@ -52,7 +52,7 @@ const MatchingPairs = ({
         finishedPlaying();        
         const turnedCards = sections.filter(s => s.turned);
         // Check if this turn has finished
-        if (turnedCards.length == 2) {                        
+        if (turnedCards.length === 2) {                        
             // update total score & display current score
             setTotal(calculateRunningScore());
             setMessage(setScoreMessage(score.current));
@@ -106,7 +106,7 @@ const MatchingPairs = ({
         const currentCard = sections[index];
         const turnedCards = sections.filter(s => s.turned);
         if (turnedCards.length < 2) {
-            if (turnedCards.length == 1) {
+            if (turnedCards.length === 1) {
                 // We have two turned cards
                 currentCard.turned = true;                
                 // set no mouse events for all but current
@@ -165,7 +165,7 @@ const MatchingPairs = ({
             <div className="row">
                 <div className="col-6">
                     <div dangerouslySetInnerHTML={{ __html: message }}
-                         className={classNames("matching-pairs__feedback", {fbnomatch: score.current == 0}, {fblucky: score.current == 1}, {fbmemory: score.current == 2}, {fbmisremembered: score.current == -1})}
+                         className={classNames("matching-pairs__feedback", {fbnomatch: score.current === 0}, {fblucky: score.current === 1}, {fbmemory: score.current === 2}, {fbmisremembered: score.current === -1})}
                         
                     />
                 </div>
