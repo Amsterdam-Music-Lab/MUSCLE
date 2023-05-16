@@ -11,7 +11,7 @@ const MatchingPairs = ({
     lastPlayerIndex,
     finishedPlaying,
     stopAudioAfter,
-    submitResult
+    submitResult,
 }) => {
     const finishDelay = 1500;
     const xPosition = useRef(-1);
@@ -50,7 +50,7 @@ const MatchingPairs = ({
             currentCard.turned = true;
             // check for match
             const lastCard = lastPlayerIndex.current >=0 ? sections[lastPlayerIndex.current] : undefined;
-            if (lastCard && lastCard.id === currentCard.id) {
+            if (lastCard && lastCard.group === currentCard.group) {
                 // match
                 lastCard.inactive = true;
                 currentCard.inactive = true;
@@ -65,7 +65,7 @@ const MatchingPairs = ({
                     currentCard.lucky = true;
                 }
             } else {
-                if (lastCard.seen && currentCard.seen) { score.current = -1; }
+                if (lastCard && lastCard.seen && currentCard.seen) { score.current = -1; }
                 else { score.current = 0; }
                 lastCard.nomatch = true;
                 currentCard.nomatch = true;

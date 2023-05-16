@@ -111,8 +111,12 @@ class MatchingPairs(Base):
 
     @classmethod
     def get_matching_pairs_trial(cls, session):
-        sections = list(session.playlist.section_set.all())
-        player_sections = random.sample(sections, 8)*2
+        section_ids = session.playlist.section_set.order_by().distinct('group').values_list('group', flat=True)
+        sections = random.sample(list(section_ids), 8)
+        originals = session.playlist.section_set.filter(group__in=sections, tag='original')
+        degradation_type = random.choice(['1stDegradation', '2ndDegradation'])
+        degradations = session.playlist.section_set.filter(group__in=sections, tag=degradation_type)
+        player_sections = list(originals) + list(degradations)
         random.shuffle(player_sections)
         playback = Playback(
             sections=player_sections,
@@ -133,7 +137,7 @@ class MatchingPairs(Base):
         if result.question_key == 'play_again':
             score = 1 if data.get('value') == 'yes' else 0
         elif result.question_key == 'matching_pairs':
-            moves = data.get('moves')
+            moves = data.get('result').get('moves')
             score = sum([int(m['score']) for m in moves if 
                                m.get('score') and m['score']!= None]) + 100
         else:
