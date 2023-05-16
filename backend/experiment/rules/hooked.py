@@ -30,6 +30,10 @@ class Hooked(Base):
     round_modifier = 0
 
     @classmethod
+    def feedback_info(cls):
+        return None
+
+    @classmethod
     def first_round(cls, experiment):
         """Create data for the first experiment rounds."""
         
@@ -243,7 +247,7 @@ class Hooked(Base):
                         if result.score > 0:
                             n_sync_correct += 1
                 else:
-                    if json_data['config']['expected_result'] == 1:
+                    if result.expected_response == 'old':
                         n_old_new_expected += 1
                         if result.score > 0:
                             n_old_new_correct += 1
@@ -283,7 +287,6 @@ class Hooked(Base):
         n_old = round(0.17 * n_rounds)
         n_new = round(0.17 * n_rounds)
         n_free = n_rounds - 2 * n_old - n_new
-        print(n_old, n_new, n_free)
 
         # Assign songs.
         old_songs = songs[:n_old]
