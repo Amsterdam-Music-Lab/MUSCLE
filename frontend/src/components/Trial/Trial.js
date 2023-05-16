@@ -17,6 +17,7 @@ const Trial = ({
     html,
     feedback_form,
     config,
+    result_id,
     onNext,
     onResult,
 }) => {
@@ -61,7 +62,10 @@ const Trial = ({
                     config
                 });
             } else {
-                onNext();
+                onResult({
+                    result,
+                    result_id
+                })
             }
         },
         [feedback_form, config, onNext, onResult]
@@ -105,7 +109,7 @@ const Trial = ({
                     playConfig={playback.play_config}
                     sections={playback.sections}
                     time={time}
-                    submitResult={onResult}
+                    submitResult={makeResult}
                     startedPlaying={startTimer}
                     finishedPlaying={finishedPlaying}
                 />
