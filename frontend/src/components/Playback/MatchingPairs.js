@@ -1,4 +1,4 @@
-import React, {useRef} from "react";
+import React, {useRef, useState} from "react";
 import classNames from "classnames";
 
 import PlayCard from "../PlayButton/PlayCard";
@@ -7,8 +7,6 @@ const MatchingPairs = ({
     playSection,
     sections,
     playerIndex,
-    setPlayerIndex,
-    lastPlayerIndex,
     finishedPlaying,
     stopAudioAfter,
     submitResult,
@@ -17,13 +15,18 @@ const MatchingPairs = ({
     const xPosition = useRef(-1);
     const yPosition = useRef(-1);
     const score = useRef(undefined);
+    const firstCard = useRef(-1);
+    const [total, setTotal] = useState(100);
+    const [message, setMessage] = useState('')
+    
+    // Used to update the component without a click to apply changed classes
+    const [feedback, setFeedback] = useState(false)
 
     const resultBuffer = useRef([]);
 
     const startTime = useRef(Date.now());
     
     const setScoreMessage = (score) => {
-
         switch (score) {       
             case -1: return '-1 <br />Misremembered';
             case 0: return '0 <br />No match';
@@ -42,71 +45,112 @@ const MatchingPairs = ({
         return time/1000;
     }
 
-    const checkMatchingPairs = (index) => {
+    // Show (animated) feedback after second click on second card or finished playing
+    const showFeedback = () => {        
+        finishedPlaying();        
+        const turnedCards = sections.filter(s => s.turned);
+        // Check if this turn has finished
+        if (turnedCards.length === 2) {                        
+            // update total score & display current score
+            setTotal(calculateRunningScore());
+            setMessage(setScoreMessage(score.current));
+            // Turn all cards back and enable events after animations have finished
+            setTimeout(() => {
+                score.current = undefined;
+                sections.forEach(section => section.turned = false);
+                sections.forEach(section => section.noevents = false);
+                firstCard.current = -1;
+                setMessage('<br />Give it another try');
+                setFeedback(false);                
+            }, finishDelay);
+            // show end of turn animations
+            switch (score.current) {                                       
+                case 1:
+                    turnedCards[0].lucky = true;
+                    turnedCards[1].lucky = true;
+                    turnedCards[0].inactive = true;
+                    turnedCards[1].inactive = true;                    
+                    break;
+                case 2:
+                    turnedCards[0].memory = true;
+                    turnedCards[1].memory = true;                    
+                    turnedCards[0].inactive = true;
+                    turnedCards[1].inactive = true;                    
+                    break;
+                default:
+                    turnedCards[0].nomatch = true;
+                    turnedCards[1].nomatch = true;
+                    // reset nomatch cards for coming turns
+                    setTimeout(() => {
+                        turnedCards[0].nomatch = false;
+                        turnedCards[1].nomatch = false;                        
+                      }, 700);
+                    break;  
+            }   
+            // Update the component to show animations 
+            setFeedback(true);
+            // Check if the board is empty
+            if (sections.filter(s => s.inactive).length === sections.length) {
+                // all cards have been turned
+                setTimeout(() => {
+                    submitResult({moves: resultBuffer.current});
+                  }, finishDelay);            
+            }        
+            return;
+        }
+    }
+
+    const checkMatchingPairs = (index) => {        
         const currentCard = sections[index];
         const turnedCards = sections.filter(s => s.turned);
-        if (turnedCards.length == 1) {
-            // we have two turned cards
-            currentCard.turned = true;
-            // check for match
-            const lastCard = lastPlayerIndex.current >=0 ? sections[lastPlayerIndex.current] : undefined;
-            if (lastCard && lastCard.group === currentCard.group) {
-                // match
-                lastCard.inactive = true;
-                currentCard.inactive = true;
-                setPlayerIndex(-1);
-                if (currentCard.seen && lastCard.seen) {
-                    score.current = 2;
-                    lastCard.memory = true;
-                    currentCard.memory = true;
-                } else {
-                    score.current = 1;
-                    lastCard.lucky = true;
-                    currentCard.lucky = true;
-                }
+        if (turnedCards.length < 2) {
+            if (turnedCards.length === 1) {
+                // We have two turned cards
+                currentCard.turned = true;                
+                // set no mouse events for all but current
+                sections.forEach(section => section.noevents = true);                
+                currentCard.noevents = false;
+                // check for match
+                const lastCard = sections[firstCard.current];                
+                if (lastCard.id === currentCard.id) {
+                    // match                                        
+                    if (currentCard.seen && lastCard.seen) {
+                        score.current = 2;                        
+                    } else {
+                        score.current = 1;                        
+                    }
+                } else {                    
+                    if (lastCard.seen && currentCard.seen) { score.current = -1; }
+                    else { score.current = 0; }
+                };
+                currentCard.seen = true;
+                lastCard.seen = true;                
             } else {
-                if (lastCard && lastCard.seen && currentCard.seen) { score.current = -1; }
-                else { score.current = 0; }
-                lastCard.nomatch = true;
-                currentCard.nomatch = true;
-                setTimeout(() => {
-                    lastCard.nomatch = false;
-                    currentCard.nomatch = false;
-                  }, 700);
-                
-            };
-        } else {
-            // turn all cards back, turn current card
-            lastPlayerIndex.current = -1;
-            sections.forEach(section => section.turned = false);
-            currentCard.turned = true;
-            score.current = undefined;
-        }
-
-        resultBuffer.current.push({
-            selectedSection: currentCard.id,
-            xPosition: xPosition.current,
-            yPosition: yPosition.current,
-            score: score.current,
-            timestamp: formatTime(Date.now() - startTime.current)
-        });
-        
-        currentCard.seen = true;
-
-        if (sections.filter(s => s.inactive).length === sections.length) {
-            // all cards have been turned
-            setTimeout(() => {
-                submitResult({moves: resultBuffer.current});
-              }, finishDelay);
+                // first click of the turn
+                firstCard.current = index;
+                // turn first card, disable events
+                currentCard.turned = true;
+                currentCard.noevents = true;
+                // clear message
+                setMessage('');
+            }              
+            resultBuffer.current.push({            
+                selectedSection: currentCard.id,
+                xPosition: xPosition.current,
+                yPosition: yPosition.current,
+                score: score.current,
+                timestamp: formatTime(Date.now() - startTime.current)
+            });
             
+        } else {
+            // second click on second card
+            showFeedback();            
         }
-        
-        return;
     };
 
-    const calculateRunningScore = () => {
+    const calculateRunningScore = () => {        
         const allScores = resultBuffer.current.filter(
-            r => r.score !== undefined ).map( r => r.score );
+            r => r.score !== undefined).map(r => r.score);            
         if (!allScores.length) return 100;
         const initial = 0;
         const score = allScores.reduce( 
@@ -118,17 +162,13 @@ const MatchingPairs = ({
         <div className="aha__matching-pairs container">
             <div className="row">
                 <div className="col-6">
-                    <div dangerouslySetInnerHTML={{ __html: setScoreMessage(score.current) }}
-                        className={classNames("matching-pairs__feedback", {
-                            'fb-nomatch': score.current == 0,
-                            'fb-lucky': score.current == 1,
-                            'fb-memory': score.current == 2,
-                            'fb-misremembered': score.current == -1
-                        })}
+                    <div dangerouslySetInnerHTML={{ __html: message }}
+                         className={classNames("matching-pairs__feedback", {fbnomatch: score.current === 0}, {fblucky: score.current === 1}, {fbmemory: score.current === 2}, {fbmisremembered: score.current === -1})}
+                        
                     />
                 </div>
                 <div className="col-6">
-                    <div className="matching-pairs__score">Score: <br />{calculateRunningScore()}</div>        
+                    <div className="matching-pairs__score">Score: <br />{total}</div>        
                 </div>
             </div>
 
@@ -143,7 +183,7 @@ const MatchingPairs = ({
                         registerUserClicks={registerUserClicks}
                         playing={playerIndex === index}
                         section={sections[index]}
-                        onFinish={finishedPlaying}
+                        onFinish={showFeedback}
                         stopAudioAfter={stopAudioAfter}                    
                     />
                 )
