@@ -1,13 +1,12 @@
 import datetime
 import random
 import csv
-import os
 
 from django.db import models
 from django.utils import timezone
 from django.urls import reverse
-from django.conf import settings
-import audioread
+
+from .utils import CsvStringBuilder
 
 class Playlist(models.Model):
     """List of sections to be used in an Experiment"""
@@ -21,6 +20,11 @@ class Playlist(models.Model):
         song_name [string], start_position [float], duration [float],\
         "path/filename.mp3" [string], restricted_to_nl [int 0=False 1=True], tag [string], group [string]'
     csv = models.TextField(blank=True, help_text=default_csv_row)
+
+    def save(self, *args, **kwargs):
+        """Update playlist csv field on every save"""
+        self.csv = self.update_admin_csv()
+        super(Playlist, self).save(*args, **kwargs)
 
     class Meta:
         ordering = ['name']
@@ -168,6 +172,22 @@ class Playlist(models.Model):
                 'sections': [section.export_admin() for section in self.section_set.all()],
             },
         }
+
+    def update_admin_csv(self):
+        """Update csv data for admin"""
+        csvfile = CsvStringBuilder()
+        writer = csv.writer(csvfile)        
+        for section in self.section_set.all():
+            writer.writerow([section.artist,
+                            section.name,
+                            section.start_time,
+                            section.duration,
+                            section.filename,
+                            1 if section.restrict_to_nl else 0,            
+                            section.tag,
+                            section.group])
+        csv_string = csvfile.csv_string
+        return ''.join(csv_string)
 
 def audio_upload_path(instance, filename):
     """Generate path to save audio based on playlist.name"""
