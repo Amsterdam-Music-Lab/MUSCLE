@@ -1,5 +1,4 @@
 from django import forms
-from section.models import Playlist, Section
 
 class AddSections(forms.Form):
 
