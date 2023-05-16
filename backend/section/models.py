@@ -182,16 +182,16 @@ class Section(models.Model):
         return random.randint(10000, 99999)
 
     playlist = models.ForeignKey(Playlist, on_delete=models.CASCADE)
-    artist = models.CharField(db_index=True, max_length=128)
-    name = models.CharField(db_index=True, max_length=128)
+    artist = models.CharField(db_index=True, blank=True, default='', max_length=128)
+    name = models.CharField(db_index=True, blank=True, default='', max_length=128)
     start_time = models.FloatField(db_index=True, default=0.0)  # sec
     duration = models.FloatField(default=0.0)  # sec
     filename = models.FileField(upload_to=audio_upload_path, max_length=128)
     restrict_to_nl = models.BooleanField(default=False)
     play_count = models.PositiveIntegerField(default=0)
     code = models.PositiveIntegerField(default=random_code)
-    tag = models.CharField(max_length=128, default='0')
-    group = models.CharField(max_length=128, default='0')
+    tag = models.CharField(max_length=128, blank=True, default='0')
+    group = models.CharField(max_length=128, blank=True, default='0')
 
     class Meta:
         ordering = ['artist', 'name', 'start_time']
