@@ -125,7 +125,7 @@ class ToontjeHoger1Mozart(Base):
         last_result = session.last_result()
         section = last_result.section
         feedback = "Je hoorde {} van {}.".format(
-            section.name, non_breaking_spaces(section.artist)) if section else ""
+            section.song.name, non_breaking_spaces(section.song.artist)) if section else ""
 
         # Return score view
         config = {'show_total_score': True}

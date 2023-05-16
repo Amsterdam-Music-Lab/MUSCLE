@@ -85,11 +85,11 @@ const Final= ({ experiment, participant, score, final_text, action_texts, button
                     participantIDOnly={participant_id_only}
                 />
             )}
-            <UserFeedback
+            {experiment.feedback_info && (<UserFeedback
                 experimentSlug={experiment.slug}
                 participant={participant}
                 feedbackInfo={experiment.feedback_info}
-            />
+            />)}
                 
         </div>
     );

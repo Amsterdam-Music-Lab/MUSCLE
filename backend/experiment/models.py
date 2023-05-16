@@ -127,7 +127,7 @@ class Experiment(models.Model):
                         this_row = copy.deepcopy(row)
                     # Get data for al potential result fields
                     full_result_data = {
-                        'section_name': result.section.name if result.section else None,
+                        'section_name': result.section.song.name if result.section else None,
                         'result_created_at': result.created_at.isoformat(),
                         'result_score': result.score,
                         'result_comment': result.comment,
