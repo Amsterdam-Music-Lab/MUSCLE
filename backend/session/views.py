@@ -1,11 +1,13 @@
 import json
+
 from django.http import Http404, JsonResponse, HttpResponseBadRequest
+from django.shortcuts import redirect
 from django.views.decorators.http import require_POST
 
 from .models import Session
 from experiment.models import Experiment
 from section.models import Playlist
-from participant.utils import get_or_create_participant, get_participant
+from participant.utils import get_participant
 
 
 @require_POST
@@ -57,27 +59,7 @@ def create_session(request):
     # Save session
     session.save()
 
-    if experiment.experiment_series:
-        # save session id to local storage if this experiment contains nested experiments
-        request.session.update({'experiment_series': {
-            'session_id': session.id,
-            'slug': experiment.slug}
-        })
-
-    # convert non lists to list
-    next_round = session.experiment_rules().next_round(session)
-    if not isinstance(next_round, list): 
-        next_round = [next_round]
-
-    data = {
-        'session': {
-            'id': session.id,
-            'playlist': session.playlist.id,
-            'json_data': session.load_json_data(),
-        },
-        'next_round': next_round
-    }
-    return JsonResponse(data, json_dumps_params={'indent': 4})
+    return JsonResponse({'session': {'id': session.id}})
 
 
 def continue_session(request, session_id):
@@ -110,9 +92,14 @@ def next_round(request, session_id):
     # Get next round for given session
     if request.session.get('experiment_series'):
         # we are in the middle of an experiment series - need to pass in request.session object
-        action = session.experiment_rules().next_round(session, request.session)
+        actions = session.experiment_rules().next_round(session, request.session)
     else:
         # Get next round for given session
-        action = session.experiment_rules().next_round(session)
+        actions = session.experiment_rules().next_round(session)
+    
+    if not isinstance(actions,  list):
+        if actions.get('redirect'):
+            return redirect(actions.get('redirect'))
+        actions = [actions]
 
-    return JsonResponse(action, json_dumps_params={'indent': 4})
+    return JsonResponse({'next_round': actions}, json_dumps_params={'indent': 4})

@@ -1,6 +1,5 @@
 import React from "react";
 import PlayerSmall from "../PlayButton/PlayerSmall";
-import PlayCard from "../PlayButton/PlayCard";
 import classNames from "classnames";
 
 import { getPlayerLabel } from "../../util/label";
@@ -12,7 +11,6 @@ const MultiPlayer = ({
     playConfig,
     disabledPlayers,
     extraContent,
-    registerUserClicks
 }) => {
     return (
         <div

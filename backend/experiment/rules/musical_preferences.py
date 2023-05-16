@@ -8,6 +8,7 @@ from experiment.questions.utils import question_by_key
 from experiment.actions import Consent, Explainer, Final, Playlist, Step, StartSession, Trial
 from experiment.actions.form import BooleanQuestion, ChoiceQuestion, Form, LikertQuestionIcon
 from experiment.actions.playback import Playback
+from experiment.actions.styles import STYLE_BOOLEAN, STYLE_BOOLEAN_NEGATIVE_FIRST
 
 from result.utils import prepare_result
 
@@ -19,7 +20,7 @@ class MusicalPreferences(Base):
     block_size = 16
 
     @classmethod
-    def first_round(cls, experiment, participant):
+    def first_round(cls, experiment):
         explainer = Explainer(
             instruction=_('This experiment investigates musical preferences'),
             steps=[
@@ -64,15 +65,15 @@ class MusicalPreferences(Base):
                     'no': 'fa-thumbs-down'
                 },
                 key='continue',
+                style=STYLE_BOOLEAN,
                 submits=True
             )
             actions.append(
                 Trial(
                     feedback_form=Form([question]),
-                    config={'style': 'boolean'}
                 ).action()
             )
-            return combine_actions(*actions)
+            return actions
 
         section = session.playlist.random_section()
         like_key = 'like_song'
@@ -91,7 +92,8 @@ class MusicalPreferences(Base):
                 'unsure': 'fa-question',
                 'yes': 'fa-thumbs-up',
             },
-            result_id=prepare_result(know_key, session, section=section)
+            result_id=prepare_result(know_key, session, section=section),
+            style=STYLE_BOOLEAN_NEGATIVE_FIRST
         )
         playback = Playback([section], play_config={'show_animation': True})
         form = Form([likert, know])
@@ -101,7 +103,6 @@ class MusicalPreferences(Base):
             title=_('Musical preference'),
             config={
                 'response_time': section.duration + .1,
-                'style': 'boolean-negative-first'
             }
         )
         return view.action()

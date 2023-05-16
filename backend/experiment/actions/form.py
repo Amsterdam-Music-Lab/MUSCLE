@@ -1,4 +1,7 @@
+from django.conf import settings
 from django.utils.translation import gettext_lazy as _
+
+from .styles import STYLE_NEUTRAL
 
 class Question(object):
     ''' Question is part of a form.
@@ -9,6 +12,7 @@ class Question(object):
     - scoring_rule: optionally, specify a scoring rule which should be applied
     - is_skippable: whether the question can be skipped
     - submits: whether entering a value for the question submits the form
+    - style: one (string) or multiple (dict) class names to apply for styling the frontend component
     '''
 
     def __init__(
@@ -20,7 +24,7 @@ class Question(object):
         question='',
         is_skippable=False,
         submits=False,
-        config=None
+        style=STYLE_NEUTRAL
         ):
 
         self.key = key
@@ -30,11 +34,30 @@ class Question(object):
         self.result_id = result_id
         self.is_skippable = is_skippable
         self.submits = submits
-        self.config = config
+        self.style = style
 
     def action(self):
+        if settings.TESTING and self.result_id:
+            from result.models import Result
+            result = Result.objects.get(pk=self.result_id)
+            if result and result.expected_response:
+                self.expected_response = result.expected_response
         return self.__dict__
 
+class NumberQuestion(Question):
+    def __init__(self, input_type='number', min_value=0, max_value=120, **kwargs):
+        super().__init__(**kwargs)
+        self.min_value = min_value
+        self.max_value = max_value
+        self.input_type = input_type
+        self.view = 'STRING'
+
+class TextQuestion(Question):
+    def __init__(self, input_type='text', max_length=None, **kwargs):
+        super().__init__(**kwargs)
+        self.max_length = max_length
+        self.input_type = input_type
+        self.view = 'STRING'
 
 class BooleanQuestion(Question):
     def __init__(self, choices=None, **kwargs):

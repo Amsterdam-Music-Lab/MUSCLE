@@ -17,6 +17,12 @@ def correctness_score(result, data):
     else:
         return 0
 
+def boolean_score(result, data):
+    if result.given_response == 'yes':
+        return 1
+    else:
+        return 0
+
 def likert_score(result, data):
     return int(data['value'])
 
@@ -64,6 +70,7 @@ def song_sync_score(result, data):
 
 
 SCORING_RULES = {
+    'BOOLEAN': boolean_score,
     'CORRECTNESS': correctness_score,
     'LIKERT': likert_score,
     'REVERSE_LIKERT': reverse_likert_score,

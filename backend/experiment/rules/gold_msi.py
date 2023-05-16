@@ -25,7 +25,7 @@ class GoldMSI(Base):
     questions = MSI_F3_MUSICAL_TRAINING + demographics
 
     @classmethod
-    def first_round(cls, experiment, participant):
+    def first_round(cls, experiment):
         consent = Consent.action()
         start_session = StartSession.action()
         return [

@@ -6,8 +6,16 @@ from django.shortcuts import render, redirect
 from django.forms import CheckboxSelectMultiple, ModelForm, ModelMultipleChoiceField
 from django.http import HttpResponse, JsonResponse
 from inline_actions.admin import InlineActionsModelAdminMixin
-from experiment.models import Experiment, ExperimentSeries
+from experiment.models import Experiment, ExperimentSeries, Feedback
 from experiment.forms import ExperimentForm, ExportForm, TemplateForm, EXPORT_TEMPLATES
+
+class FeedbackInline(admin.TabularInline):
+    """Inline to show results linked to given participant
+    """
+
+    model = Feedback
+    fields = ['text']
+    extra = 0
 
 class ExperimentAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
     list_display = ('name', 'rules', 'rounds', 'playlist_count',
@@ -17,6 +25,7 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
     inline_actions = ['export', 'export_csv']
     fields = ['name', 'slug', 'language', 'active', 'rules',
               'rounds', 'bonus_points', 'playlists', 'experiment_series']
+    inlines = [FeedbackInline]
     form = ExperimentForm
 
     # make playlists fields a list of checkboxes

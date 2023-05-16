@@ -1,11 +1,29 @@
 import logging
+
+from django.template.loader import render_to_string
+from django.utils.translation import gettext_lazy as _
+from django.conf import settings
+
 from experiment.actions import Final
 from result.score import SCORING_RULES
+
 
 logger = logging.getLogger(__name__)
 
 class Base(object):
     """Base class for other rules classes"""
+
+    contact_email = settings.CONTACT_MAIL
+
+    @classmethod
+    def feedback_info(cls):
+        feedback_body = render_to_string('feedback/user_feedback.html', {'email': cls.contact_email})
+        return {
+            'header': _("Do you have any remarks or questions?"),
+            'button': _("Submit"),
+            'contact_body': feedback_body,
+            'thank_you': _("We appreciate your feedback!")
+        }
 
     @classmethod
     def calculate_score(cls, result, data):

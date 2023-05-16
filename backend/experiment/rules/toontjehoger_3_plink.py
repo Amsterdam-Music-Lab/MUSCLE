@@ -25,7 +25,7 @@ class ToontjeHoger3Plink(Base):
     SCORE_EXTRA_WRONG = 0
 
     @classmethod
-    def first_round(cls, experiment, participant):
+    def first_round(cls, experiment):
         """Create data for the first experiment rounds."""
 
         # 1. Explain game.
@@ -67,10 +67,10 @@ class ToontjeHoger3Plink(Base):
 
         # Round 2-experiments.rounds
         if rounds_passed < session.experiment.rounds:
-            return combine_actions(*cls.get_score(session), *cls.get_plink_round(session))
+            return [*cls.get_score(session), *cls.get_plink_round(session)]
 
         # Final
-        return combine_actions(*cls.get_final_round(session))
+        return cls.get_final_round(session)
 
     @classmethod
     def get_score_message(cls, session):

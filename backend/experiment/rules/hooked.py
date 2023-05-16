@@ -1,4 +1,3 @@
-import random
 from django.conf import settings
 
 from django.utils.translation import gettext_lazy as _
@@ -24,7 +23,7 @@ class Hooked(Base):
     questions = True
 
     @classmethod
-    def first_round(cls, experiment, participant):
+    def first_round(cls, experiment):
         """Create data for the first experiment rounds."""
         
         # 1. Explain game.
@@ -72,16 +71,18 @@ class Hooked(Base):
         # 1. Demographic questions (7 questions)
         question = \
             unasked_question(
-                session,
-                random.sample(DEMOGRAPHICS, len(DEMOGRAPHICS)),
+                session.participant,
+                DEMOGRAPHICS,
+                randomize=True
             )
 
         # 2. General music sophistication (18 questions)
         if question is None:
             question = \
                 unasked_question(
-                    session,
-                    random.sample(MSI_FG_GENERAL, len(MSI_FG_GENERAL)),
+                    session.participant,
+                    MSI_FG_GENERAL,
+                    randomize=True
                 )
 
         # 3. Complete music sophistication (20 questions)
@@ -89,29 +90,35 @@ class Hooked(Base):
             # next_question() will skip the FG questions from before
             question = \
                 unasked_question(
-                    session,
-                    random.sample(MSI_ALL, len(MSI_ALL)),
+                    session.participant,
+                    MSI_ALL,
+                    randomize=True
                 )
 
         # 4. STOMP (20 questions)
         if question is None:
             question = \
                 unasked_question(
-                    session,
-                    random.sample(STOMP20, len(STOMP20)),
+                    session.participant,
+                    STOMP20,
+                    randomize=True
                 )
 
         # 5. TIPI (10 questions)
         if question is None:
             question = \
                 unasked_question(
-                    session,
-                    random.sample(TIPI, len(TIPI)),
+                    session.participant,
+                    TIPI,
+                    randomize=True
                 )
+        
+        if question is None:
+            return None
 
         return Trial(
                 title=_("Questionnaire"),
-                feedback_form=Form([question], is_profile=True, is_skippable=question.is_skippable)).action()
+                feedback_form=Form([question], is_skippable=question.is_skippable)).action()
 
 
     
@@ -131,7 +138,7 @@ class Hooked(Base):
             next_round_number = session.get_next_round()
             config = {'show_section': True, 'show_total_score': True}
             title = cls.get_trial_title(session, next_round_number - 1)
-            return combine_actions(
+            return [
                 Score(session,
                     config=config,
                     title=title
@@ -144,7 +151,7 @@ class Hooked(Base):
                     show_profile_link=True,
                     button={'text': _('Play again'), 'link': '{}/{}'.format(settings.CORS_ORIGIN_WHITELIST[0], session.experiment.slug)}
                 ).action()
-            )
+            ]
 
         # Get next round number and initialise actions list. Two thirds of
         # rounds will be song_sync; the remainder heard_before.
@@ -174,7 +181,7 @@ class Hooked(Base):
                     session.load_json_data()['plan']['n_song_sync'] + 1
             except KeyError as error:
                 print('Missing plan key: %s' % str(error))
-                return combine_actions(*actions)
+                return actions
 
             # SongSync rounds. Skip questions until Round 5.
             if next_round_number in range(2, 5):
@@ -194,7 +201,7 @@ class Hooked(Base):
                 actions.append(
                     cls.next_heard_before_action(session))
 
-        return combine_actions(*actions)
+        return actions
 
 
     @staticmethod

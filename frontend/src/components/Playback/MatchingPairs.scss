@@ -1,17 +1,20 @@
-.aha__matching_pairs {
+@import url('https://fonts.googleapis.com/css2?family=Rajdhani&display=swap');
+
+.aha__page .container {
+    padding-top: 2vh;
+}
+
+.aha__matching-pairs {
+    margin: 0px auto;
+    max-width: 100%;
+}
+
+.playing-board {
     display: flex;
-    column-gap: 25px;
-    row-gap: 25px;
+    column-gap: 10px;
+    row-gap: 10px;
     flex-wrap: wrap;
     max-width: 100%;
-
-    &.player-count-2 {
-        column-gap: 50px;
-    }
-
-    &.player-count-2 {
-        column-gap: 30px;
-    }
 
     .player-wrapper {
         position: relative;
@@ -34,9 +37,45 @@
         }
     }
 
-
     .feedback {
         padding-top: 50px;
         font-size: large;
     }
+
+    .running-score {
+        position: absolute;
+        margin-top: -7%;
+        
+    }
+}
+
+.matching-pairs__debug, .matching-pairs__feedback, .matching-pairs__score {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: x-large;
+    text-align: center;   
+    padding-bottom: 1.5rem;    
+    font-weight: 700;
+    width: auto;    
+}
+
+.matching-pairs__feedback {
+    float: left;
+    color: white;
+    
+    &.fbnomatch {
+        color: $gray;
+    }
+    &.fblucky {
+        color: $yellow;
+    }
+    &.fbmemory {
+        color: $green;
+    }
+    &.fbmisremembered {
+        color: $red;
+    }
+} 
+
+.matching-pairs__score {
+    float: right;
 }
