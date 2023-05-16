@@ -89,8 +89,8 @@ $playButtonSize: 110px;
     border-radius: 6px;
     opacity: 1;
     transition-property: opacity;
-    transition-delay: 0.6s;
-    transition-duration: 0.3s;
+    transition-delay: 0.8s;
+    transition-duration: 0.7s;
 
     &.disabled {
         pointer-events: none;
@@ -101,6 +101,7 @@ $playButtonSize: 110px;
         animation-duration: 0.7s;
         animation-name: nomatch;
         animation-iteration-count: 1;
+        pointer-events: none;
     }
 
     &.lucky {
@@ -118,12 +119,13 @@ $playButtonSize: 110px;
         pointer-events: none;
         opacity: 0;
     }
-
-    &.turned {
+    
+    &.noevents {
         pointer-events: none;
     }
 
     .front {
+        opacity: 1;
         transform: rotateY(90deg);
         transition: all ease-in 0.2s;
         position: absolute;
