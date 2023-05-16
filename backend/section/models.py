@@ -150,7 +150,7 @@ class Playlist(models.Model):
     def song_ids(self, filter_by={}):
         """Get a list of distinct song ids"""
         # order_by is required to make distinct work with values_list
-        return self.section_set.filter(**filter_by).order_by('song').values_list('song', flat=True).distinct()
+        return self.section_set.filter(**filter_by).order_by('song').values_list('song_id', flat=True).distinct()
 
     def random_section(self, filter_by={}):
         """Get a random section from this playlist"""
@@ -201,8 +201,8 @@ class Section(models.Model):
 
     def __str__(self):
         return "{} - {} ({}-{})".format(
-            self.artist,
-            self.name,
+            self.song.artist,
+            self.song.name,
             self.start_time_str(),
             self.end_time_str()
         )
