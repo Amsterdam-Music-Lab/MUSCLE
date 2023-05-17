@@ -93,9 +93,9 @@ class ToontjeHoger3Plink(Base):
 
         if main_question:
             if main_question == last_result.expected_response:
-                return "Goedzo! Je hoorde inderdaad {} van {}.".format(non_breaking_spaces(section.name), non_breaking_spaces(section.artist))
+                return "Goedzo! Je hoorde inderdaad {} van {}.".format(non_breaking_spaces(section.song.name), non_breaking_spaces(section.song.artist))
 
-            return "Helaas! Je hoorde {} van {}.".format(non_breaking_spaces(section.name), non_breaking_spaces(section.artist))
+            return "Helaas! Je hoorde {} van {}.".format(non_breaking_spaces(section.song.name), non_breaking_spaces(section.song.artist))
 
         # Option 2. Extra questions
         extra_questions = Plink.extract_extra_questions(data)
@@ -130,7 +130,7 @@ class ToontjeHoger3Plink(Base):
         question_part = "Het nummer komt uit de {} en de emotie is {}.".format(
             time_period, emotion)
         section_part = "Je hoorde {} van {}.".format(
-            non_breaking_spaces(section.name), non_breaking_spaces(section.artist))
+            non_breaking_spaces(section.song.name), non_breaking_spaces(section.song.artist))
 
         # The \n results in a linebreak
         feedback = "{} {} \n {}".format(

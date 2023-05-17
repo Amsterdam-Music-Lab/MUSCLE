@@ -1,12 +1,10 @@
-import random
 import logging
 
 from django.utils.translation import gettext_lazy as _
 from django.template.loader import render_to_string
 from django.conf import settings
 
-from .base import Base
-from experiment.actions import HTML, SongSync, Final, Score, Explainer, Step, Consent, StartSession, Redirect, Playlist, Trial
+from experiment.actions import HTML, Final, Score, Explainer, Step, Consent, StartSession, Redirect, Playlist, Trial
 from experiment.actions.form import BooleanQuestion, ChoiceQuestion, Form, Question
 from experiment.actions.playback import Playback
 from experiment.questions.demographics import EXTRA_DEMOGRAPHICS
@@ -14,10 +12,11 @@ from experiment.questions.goldsmiths import MSI_ALL
 from experiment.questions.utils import question_by_key, unasked_question, total_unanswered_questions
 from experiment.actions.styles import STYLE_BOOLEAN_NEGATIVE_FIRST
 from result.utils import prepare_result
+from .hooked import Hooked
 
 logger = logging.getLogger(__name__)
 
-class Huang2022(Base):
+class Huang2022(Hooked):
     """Rules for the Chinese version of the Hooked experiment."""
 
     ID = 'HUANG_2022'
@@ -49,51 +48,6 @@ class Huang2022(Base):
         info['header'] = _("Any remarks or questions (optional):")
         info['thank_you'] = _("Thank you for your feedback!")
         return info
-
-    @classmethod
-    def plan_sections(cls, session):
-        """Set the plan of tracks for a session.
-        """
-
-        # Which songs are available?
-        songs = list(session.playlist.song_ids())
-        random.shuffle(songs)
-
-        # How many sections do we need?
-        # 2/3 of the rounds are SongSync, of which 1/4 old songs, 3/4 "free"
-        # 1/3 of the rounds are "heard before", of which 1/2 old songs
-        # e.g. 30 rounds -> 20 SongSync with 5 songs to be repeated later
-        n_rounds = session.experiment.rounds
-        n_old = round(0.17 * n_rounds)
-        n_new = round(0.17 * n_rounds)
-        n_free = n_rounds - 2 * n_old - n_new
-
-        # Assign songs.
-        old_songs = songs[:n_old]
-        new_songs = songs[n_old:n_old+n_new]
-        free_songs = songs[n_old+n_new:n_old+n_new+n_free]
-
-        # Assign sections.
-        old_sections = [session.section_from_song(s) for s in old_songs]
-        free_sections = [session.section_from_song(s) for s in free_songs]
-        new_sections = [session.section_from_song(s) for s in new_songs]
-
-        # Randomise.
-        old_section_info = [{'novelty': 'old', 'id': s.id}
-                            for s in old_sections]
-        song_sync_sections = old_section_info + [
-            {'novelty': 'free', 'id': s.id} for s in free_sections]
-        random.shuffle(song_sync_sections)
-        heard_before_sections = old_section_info + [
-            {'novelty': 'new', 'id': s.id} for s in new_sections]
-        random.shuffle(heard_before_sections)
-        plan = {
-            'song_sync_sections': song_sync_sections,
-            'heard_before_sections': heard_before_sections
-        }
-
-        # Save, overwriting existing plan if one exists.
-        session.save_json_data({'plan': plan})
 
     @classmethod
     def get_question(cls, session):
@@ -264,106 +218,6 @@ class Huang2022(Base):
             show_social=False,
             show_profile_link=True
         ).action()
-
-    @classmethod
-    def next_song_sync_action(cls, session):
-        """Get next song_sync section for this session."""
-
-        # Load plan.
-        next_round_number = session.get_current_round() - cls.round_modifier
-        try:
-            plan = session.load_json_data()['plan']
-            sections = plan['song_sync_sections']
-        except KeyError as error:
-            logger.error('Missing plan key: %s' % str(error))
-            return None
-
-        # Get section.
-        section = None
-        if next_round_number <= len(sections):
-            section = \
-                session.section_from_any_song(
-                    {'id': sections[next_round_number-1].get('id')})
-        if not section:
-            logger.warning("Warning: no next_song_sync section found")
-            section = session.section_from_any_song()
-        key = 'song_sync'
-        result_id = prepare_result(key, session, section=section, scoring_rule='SONG_SYNC')
-        return SongSync(
-            section=section,
-            title=cls.get_trial_title(session, next_round_number),
-            key=key,
-            result_id=result_id
-        ).action()
-
-    @classmethod
-    def heard_before_explainer(cls):
-        """Explainer for heard-before rounds"""
-        return Explainer(
-            instruction=_("Bonus Rounds"),
-            steps=[
-                Step(_("Listen carefully to the music.")),
-                Step(_("Did you hear the same song during previous rounds?")),
-            ],
-            button_label=_("Continue")).action(True)
-
-    @classmethod
-    def next_heard_before_action(cls, session):
-        """Get next heard_before action for this session."""
-
-        # Load plan.
-        next_round_number = session.get_current_round() - cls.round_modifier
-        try:
-            plan = session.load_json_data()['plan']
-            sections = plan['heard_before_sections']
-            heard_before_offset = len(plan['song_sync_sections']) + 1
-        except KeyError as error:
-            logger.error('Missing plan key: %s' % str(error))
-            return None
-        # Get section.
-        section = None
-        if next_round_number - heard_before_offset  <= len(sections):
-            this_section_info = sections[next_round_number - heard_before_offset]
-            section = session.section_from_any_song(
-                    {'id': this_section_info.get('id')})
-        if not section:
-            logger.warning("Warning: no heard_before section found")
-            section = session.section_from_any_song()
-        playback = Playback(
-            [section],
-            play_config={'ready_time': 3, 'show_animation': True},
-            preload_message=_('Get ready!'))
-        expected_response = this_section_info.get('novelty')
-        # create Result object and save expected result to database
-        key = 'heard_before'
-        form = Form([BooleanQuestion(
-            key=key,
-            choices={
-                'new': _("NO"),
-                'old': _("YES"),
-            },
-            question=_("Did you hear this song in previous rounds?"),
-            result_id=prepare_result(key, session, section=section, expected_response=expected_response, scoring_rule='REACTION_TIME',),
-            submits=True,
-            style={STYLE_BOOLEAN_NEGATIVE_FIRST: True, 'buttons-large-gap': True})
-            ])
-        config = {
-            'auto_advance': True,
-            'response_time': cls.timeout
-        }
-        trial = Trial(
-            title=cls.get_trial_title(session, next_round_number),
-            playback=playback,
-            feedback_form=form,
-            config=config,
-        )
-        return trial.action()
-
-    @classmethod
-    def get_trial_title(cls, session, next_round_number):    
-        title = _("Round %(number)d / %(total)d") %\
-            {'number': next_round_number, 'total': session.experiment.rounds}
-        return title
 
     @classmethod
     def final_score_message(cls, session):

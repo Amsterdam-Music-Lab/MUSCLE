@@ -14,10 +14,10 @@ import audioread
 
 class SectionAdmin(admin.ModelAdmin):
     list_per_page = 50
-    list_display = ('artist', 'name', 'start_time',
+    list_display = ('artist_name', 'song_name', 'start_time',
                     'play_count', 'playlist', 'code')
     list_filter = [('playlist', admin.RelatedOnlyFieldListFilter)]
-    search_fields = ['artist', 'name', 'playlist__name']
+    search_fields = ['song__artist', 'song__name', 'playlist__name']
     readonly_fields = ('play_count', 'code')
 
     # Prevent large inner join
@@ -31,7 +31,7 @@ admin.site.register(Section, SectionAdmin)
 
 class PlaylistAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
     list_display = ('name', 'section_count', 'experiment_count')
-    search_fields = ['name', 'section__artist', 'section__name']
+    search_fields = ['name', 'section__song__artist', 'section__song__name']
     inline_actions = ['add_sections',
                       'edit_sections', 'export_json', 'export_csv']
 

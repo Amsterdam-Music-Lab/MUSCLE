@@ -372,16 +372,16 @@ class Categorization(Base):
             # Retrieve training stimuli for the assigned group
             if json_data["group"] == 'S1':
                 sections = session.playlist.section_set.filter(
-                    group='SAME', tag__contains='1', artist__contains='Training')
+                    group='SAME', tag__contains='1', song_artist__contains='Training')
             elif json_data["group"] == 'S2':
                 sections = session.playlist.section_set.filter(
-                    group='SAME', tag__contains='2', artist__contains='Training')
+                    group='SAME', tag__contains='2', song_artist__contains='Training')
             elif json_data["group"] == 'C1':
                 sections = session.playlist.section_set.filter(
-                    group='CROSSED', tag__contains='1', artist__contains='Training')
+                    group='CROSSED', tag__contains='1', song_artist__contains='Training')
             elif json_data["group"] == 'C2':
                 sections = session.playlist.section_set.filter(
-                    group='CROSSED', tag__contains='2', artist__contains='Training')
+                    group='CROSSED', tag__contains='2', song_artist__contains='Training')
             # Generate randomized sequence for the testing phase
             section_sequence = []
             # Add 10 x 2 training stimuli
@@ -405,24 +405,24 @@ class Categorization(Base):
             # Retrieve test & training stimuli for the assigned group
             if json_data["group"] == 'S1':
                 training_sections = session.playlist.section_set.filter(
-                    group='SAME', tag__contains='1', artist__contains='Training')
+                    group='SAME', tag__contains='1', song_artist__contains='Training')
                 test_sections = session.playlist.section_set.filter(
-                    group='SAME', tag__contains='1').exclude(artist__contains='Training')
+                    group='SAME', tag__contains='1').exclude(song_artist__contains='Training')
             elif json_data["group"] == 'S2':
                 training_sections = session.playlist.section_set.filter(
-                    group='SAME', tag__contains='2', artist__contains='Training')
+                    group='SAME', tag__contains='2', song_artist__contains='Training')
                 test_sections = session.playlist.section_set.filter(
-                    group='SAME', tag__contains='2').exclude(artist__contains='Training')
+                    group='SAME', tag__contains='2').exclude(song_artist__contains='Training')
             elif json_data["group"] == 'C1':
                 training_sections = session.playlist.section_set.filter(
-                    group='CROSSED', tag__contains='1', artist__contains='Training')
+                    group='CROSSED', tag__contains='1', song_artist__contains='Training')
                 test_sections = session.playlist.section_set.filter(
-                    group='CROSSED', tag__contains='1').exclude(artist__contains='Training')
+                    group='CROSSED', tag__contains='1').exclude(song_artist__contains='Training')
             elif json_data["group"] == 'C2':
                 training_sections = session.playlist.section_set.filter(
-                    group='CROSSED', tag__contains='2', artist__contains='Training')
+                    group='CROSSED', tag__contains='2', song_artist__contains='Training')
                 test_sections = session.playlist.section_set.filter(
-                    group='CROSSED', tag__contains='2').exclude(artist__contains='Training')
+                    group='CROSSED', tag__contains='2').exclude(song_artist__contains='Training')
             # Generate randomized sequence for the testing phase
             section_sequence = []
             # Add 15 x 2 training stimuli

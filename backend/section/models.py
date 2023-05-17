@@ -102,21 +102,25 @@ class Playlist(models.Model):
                 }
 
             # create new section
+            song = None
+            if row['artist'] and row['name']:
+                song, created = Song.objects.get_or_create(artist=row['artist'], name=row['name'])
+            if int(row['restrict_to_nl']) == 1:
+                song.restricted = ['nl']
+                song.save()
             section = Section(playlist=self,
-                              artist=row['artist'],
-                              name=row['name'],
                               start_time=float(row['start_time']),
                               duration=float(row['duration']),
                               filename=row['filename'],
-                              restrict_to_nl=(int(row['restrict_to_nl']) == 1),
                               tag=row['tag'],
                               group=row['group'],
                               )
+            if song:
+                section.song = song
 
             # if same section already exists, update it with new info
             for ex_section in existing_sections:
-                if (ex_section.artist == section.artist
-                    and ex_section.name == section.name
+                if (ex_section.song == section.song
                     and ex_section.start_time - section.start_time == 0
                     and ex_section.duration == section.duration
                     and ex_section.tag == section.tag
@@ -153,7 +157,7 @@ class Playlist(models.Model):
     def song_ids(self, filter_by={}):
         """Get a list of distinct song ids"""
         # order_by is required to make distinct work with values_list
-        return self.section_set.filter(**filter_by).order_by('pk').values_list('pk', flat=True).distinct()
+        return self.section_set.filter(**filter_by).order_by('song').values_list('song_id', flat=True).distinct()
 
     def random_section(self, filter_by={}):
         """Get a random section from this playlist"""
@@ -172,6 +176,15 @@ class Playlist(models.Model):
                 'sections': [section.export_admin() for section in self.section_set.all()],
             },
         }
+    
+class Song(models.Model):
+    """ A Song object with an artist and name (unique together)"""
+    artist = models.CharField(db_index=True, max_length=128)
+    name = models.CharField(db_index=True, max_length=128)
+    restricted = models.JSONField(default=list)
+    
+    class Meta:
+        unique_together = ("artist", "name")
 
     def update_admin_csv(self):
         """Update csv data for admin"""
@@ -202,30 +215,40 @@ class Section(models.Model):
         return random.randint(10000, 99999)
 
     playlist = models.ForeignKey(Playlist, on_delete=models.CASCADE)
-    artist = models.CharField(db_index=True, blank=True, default='', max_length=128)
-    name = models.CharField(db_index=True, blank=True, default='', max_length=128)
+    song = models.ForeignKey(Song, on_delete=models.CASCADE, blank=True, null=True)
     start_time = models.FloatField(db_index=True, default=0.0)  # sec
     duration = models.FloatField(default=0.0)  # sec
-    filename = models.FileField(upload_to=audio_upload_path, max_length=128)
-    restrict_to_nl = models.BooleanField(default=False)
+    filename = models.CharField(max_length=255)
     play_count = models.PositiveIntegerField(default=0)
     code = models.PositiveIntegerField(default=random_code)
     tag = models.CharField(max_length=128, blank=True, default='0')
     group = models.CharField(max_length=128, blank=True, default='0')
 
     class Meta:
-        ordering = ['artist', 'name', 'start_time']
+        ordering = ['song__artist', 'song__name', 'start_time']
 
     def __str__(self):
         return "{} - {} ({}-{})".format(
-            self.artist,
-            self.name,
+            self.song.artist,
+            self.song.name,
             self.start_time_str(),
             self.end_time_str()
         )
 
+    def artist_name(self):
+        if self.song:
+            return self.song.artist
+        else:
+            return ''
+    
+    def song_name(self):
+        if self.song:
+            return self.song.name
+        else:
+            return ''
+
     def song_label(self):
-        return "{} - {}".format(self.artist, self.name)
+        return "{} - {}".format(self.artist_name(), self.song_name())
 
     def start_time_str(self):
         """Create start time string 0:01:01.nn"""
@@ -250,8 +273,8 @@ class Section(models.Model):
         """Export data for admin"""
         return {
             'id': self.id,
-            'artist': self.artist,
-            'name': self.name,
+            'artist': self.song.artist,
+            'name': self.song.name,
             'play_count': self.play_count
         }
 
@@ -260,12 +283,12 @@ class Section(models.Model):
         return [
             self.id,
             self.pk,
-            self.artist,
-            self.name,
+            self.song.artist,
+            self.song.name,
             self.start_time,
             self.duration,
             self.filename,
-            1 if self.restrict_to_nl else 0,
+            self.song.restricted,
             self.play_count,
             self.tag,
             self.group,
