@@ -12,6 +12,7 @@ class ThatsMySong(Hooked):
 
     ID = 'THATS_MY_SONG'
     consent_file = None
+    round_modifier = 1
     
     @classmethod
     def get_random_question(cls, session):
@@ -35,6 +36,7 @@ class ThatsMySong(Hooked):
                 feedback_form=Form([question], is_skippable=question.is_skippable)).action()
 
     def get_info_playlist(self, filename):
+        """ function used by `manage.py compileplaylist` to compile a csv with metadata """
         parts = filename.split(' - ')
         time_info = int(parts[0])
         if time_info < 1970:
@@ -75,7 +77,7 @@ class ThatsMySong(Hooked):
             # Return a score and final score action.
             next_round_number = session.get_next_round()
             config = {'show_section': True, 'show_total_score': True}
-            title = cls.get_trial_title(session, next_round_number - 1)
+            title = cls.get_trial_title(session, next_round_number - 1 - cls.round_modifier)
             return [
                 Score(session,
                     config=config,
@@ -119,12 +121,13 @@ class ThatsMySong(Hooked):
 
         # Go to SongSync
         elif next_round_number == 2:
-            cls.plan_sections(session) #, {'group__in': json_data.get('decades')})
+            decades = session.result_set.first().given_response.split(',')
+            cls.plan_sections(session, {'group__in': decades})
             actions.append(cls.next_song_sync_action(session))
         else:
             # Create a score action.
             config = {'show_section': True, 'show_total_score': True}
-            title = cls.get_trial_title(session, next_round_number - 1)
+            title = cls.get_trial_title(session, next_round_number - 1 - cls.round_modifier)
             actions.append(Score(session,
                 config=config,
                 title=title
@@ -153,13 +156,3 @@ class ThatsMySong(Hooked):
                     cls.next_heard_before_action(session))
 
         return actions
-    
-    @classmethod
-    def calculate_score(cls, result, data):
-        if result.question_key == 'playlist_decades':
-            session = result.session
-            session.save_json_data(
-                {'decades': data.get('value')}
-            )
-        else:
-            return super().calculate_score(result, data)
