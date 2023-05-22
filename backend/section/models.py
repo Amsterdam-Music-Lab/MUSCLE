@@ -120,9 +120,10 @@ class Playlist(models.Model):
                         and ex_section.group == section.group):
 
                     # Update if necessary
-                    if ex_section.filename != section.filename or ex_section.restrict_to_nl != section.restrict_to_nl:
+                    if ex_section.filename != section.filename or ex_section.song.restricted != section.restrict_to_nl:
                         ex_section.filename = section.filename
-                        ex_section.restrict_to_nl = section.restrict_to_nl
+                        ex_section.song.restricted = ['nl'] if section.restrict_to_nl else []
+                        ex_section.song.save()
                         ex_section.save()
                         updated += 1
 
