@@ -35,7 +35,7 @@ const Experiment = ({ match, location }) => {
 
     // API hooks
     const [experiment, loadingExperiment] = useExperiment(match.params.slug);
-    const url_query_string = location.search
+    const url_query_string = location.search // location.search is a part of URL after (and incuding) "?"
     const [participant, loadingParticipant] = useParticipant(url_query_string);
 
     const loadingText = experiment ? experiment.loading_text : "";
@@ -65,6 +65,12 @@ const Experiment = ({ match, location }) => {
 
     // Start first_round when experiment and partipant have been loaded
     useEffect(() => {
+
+        if (url_query_string && !(new URLSearchParams(url_query_string).has("participant_id"))) {
+            setError("Unknown URL parameter, use ?participant_id=");
+            return
+        }
+
         // Check if done loading
         if (!loadingExperiment && !loadingParticipant) {
             // Loading succeeded
