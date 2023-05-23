@@ -26,7 +26,7 @@ class Playback(object):
     TYPE_SPECTROGRAM = 'SPECTROGRAM'
 
     def __init__(self, sections, player_type='AUTOPLAY', preload_message='', instruction='', play_config=None):
-        self.sections = [{'id': s.id, 'url': s.absolute_url()}
+        self.sections = [{'id': s.id, 'url': s.absolute_url(), 'group': s.group}
                          for s in sections]
         self.player_type = player_type
         self.preload_message = preload_message
