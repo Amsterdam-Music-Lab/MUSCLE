@@ -79,10 +79,8 @@ def get_participant(request):
             participant = participant_qs[0]
             set_participant(request, participant)
             return participant
-        elif len(participant_qs) == 0:
-            raise Participant.DoesNotExist
         else:
-            raise RuntimeError("More than one Participant with this URL participant_id exists")
+            raise Participant.DoesNotExist
 
     else:
         # get participant from session
