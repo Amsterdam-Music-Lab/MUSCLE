@@ -112,7 +112,7 @@ const MatchingPairs = ({
                 currentCard.noevents = false;
                 // check for match
                 const lastCard = sections[firstCard.current];                
-                if (lastCard.id === currentCard.id) {
+                if (lastCard.group === currentCard.group) {
                     // match                                        
                     if (currentCard.seen && lastCard.seen) {
                         score.current = 2;                        
