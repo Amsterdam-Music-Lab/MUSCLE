@@ -12,7 +12,7 @@ class Migration(migrations.Migration):
         for section in Section.objects.all():
             if section.name and section.artist:
                 song, created = Song.objects.get_or_create(artist=section.artist, name=section.name)
-                if section.restricted_to_nl:
+                if section.restrict_to_nl:
                     song.restricted = ['nl']
                 section.song = song
                 section.save()
