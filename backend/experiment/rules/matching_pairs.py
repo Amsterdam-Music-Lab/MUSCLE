@@ -8,7 +8,7 @@ from experiment.actions import Consent, Explainer, Final, Playlist, Score, Start
 from experiment.actions.form import BooleanQuestion, Form
 from experiment.actions.playback import Playback
 from experiment.questions.demographics import EXTRA_DEMOGRAPHICS
-from experiment.questions.utils import question_by_key, unasked_question
+from experiment.questions.utils import question_by_key, total_unanswered_questions, unasked_question
 from result.utils import prepare_result
 
 class MatchingPairs(Base):
@@ -98,21 +98,37 @@ class MatchingPairs(Base):
             question_by_key('dgf_country_of_origin'),
             question_by_key('dgf_education')
         ]
-        question = unasked_question(session.participant, questions)
-        if not question:
+        open_questions = total_unanswered_questions(session.participant, questions)
+        if not open_questions:
             return None, None
+        total_questions = int(session.load_json_data().get('saved_total', '0'))
+        if not total_questions:
+            total_questions = open_questions     
+            session.save_json_data({'saved_total': open_questions})
+        question = unasked_question(session.participant, questions)
         skip_explainer = session.load_json_data().get('explainer_shown')
         if not skip_explainer:
             session.save_json_data({'explainer_shown': True})
+        index = total_questions - open_questions + 1
         return Trial(
-            title=_("Questionnaire"),
+            title=_("Questionnaire %(index)i / %(total)i") % {'index': index, 'total': total_questions},
             feedback_form=Form([question])
         ).action(), skip_explainer
 
     @classmethod
     def get_matching_pairs_trial(cls, session):
-        sections = list(session.playlist.section_set.all())
-        player_sections = random.sample(sections, 8)*2
+        section_ids = session.playlist.section_set.order_by().distinct('group').values_list('group', flat=True)
+        sections = random.sample(list(section_ids), 8)
+        originals = session.playlist.section_set.filter(group__in=sections, tag='original')
+        json_data = session.load_json_data()
+        degradation_type = json_data.get('degradation')
+        if not degradation_type:
+            degradation_options = ['1stDegradation', '2ndDegradation']
+            random.shuffle(degradation_options)
+            degradation_type = degradation_options[0]
+            session.save_json_data({'degradation': degradation_options[1]})
+        degradations = session.playlist.section_set.filter(group__in=sections, tag=degradation_type)
+        player_sections = list(originals) + list(degradations)
         random.shuffle(player_sections)
         playback = Playback(
             sections=player_sections,
@@ -133,7 +149,7 @@ class MatchingPairs(Base):
         if result.question_key == 'play_again':
             score = 1 if data.get('value') == 'yes' else 0
         elif result.question_key == 'matching_pairs':
-            moves = data.get('moves')
+            moves = data.get('result').get('moves')
             score = sum([int(m['score']) for m in moves if 
                                m.get('score') and m['score']!= None]) + 100
         else:

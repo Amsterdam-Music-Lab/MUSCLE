@@ -120,18 +120,20 @@ class Playlist(models.Model):
 
             # if same section already exists, update it with new info
             for ex_section in existing_sections:
-                if (ex_section.song == section.song
-                    and ex_section.start_time - section.start_time == 0
-                    and ex_section.duration == section.duration
-                    and ex_section.tag == section.tag
-                        and ex_section.group == section.group):
-
-                    # Update if necessary
-                    if ex_section.filename != section.filename or ex_section.restrict_to_nl != section.restrict_to_nl:
-                        ex_section.filename = section.filename
-                        ex_section.restrict_to_nl = section.restrict_to_nl
-                        ex_section.save()
-                        updated += 1
+                if ex_section.filename == section.filename:
+                    if song:
+                        if not ex_section.song:
+                            ex_section.song = song
+                            ex_section.save()
+                        elif ex_section.song.restricted != song.restricted:
+                            ex_section.song.restricted = song.restricted
+                            ex_section.song.save()
+                    ex_section.start_time = section.start_time
+                    ex_section.duration = section.duration
+                    ex_section.tag = section.tag
+                    ex_section.group = section.group
+                    ex_section.save()
+                    updated += 1
 
                     # Remove from existing sections list
                     existing_sections.remove(ex_section)

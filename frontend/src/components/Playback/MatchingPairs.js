@@ -7,11 +7,9 @@ const MatchingPairs = ({
     playSection,
     sections,
     playerIndex,
-    setPlayerIndex,
-    lastPlayerIndex,
     finishedPlaying,
     stopAudioAfter,
-    submitResult
+    submitResult,
 }) => {
     const finishDelay = 1500;
     const xPosition = useRef(-1);
@@ -114,7 +112,7 @@ const MatchingPairs = ({
                 currentCard.noevents = false;
                 // check for match
                 const lastCard = sections[firstCard.current];                
-                if (lastCard.id === currentCard.id) {
+                if (lastCard.group === currentCard.group) {
                     // match                                        
                     if (currentCard.seen && lastCard.seen) {
                         score.current = 2;                        
