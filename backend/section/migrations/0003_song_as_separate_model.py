@@ -13,7 +13,7 @@ class Migration(migrations.Migration):
             if section.name and section.artist:
                 song, created = Song.objects.get_or_create(artist=section.artist, name=section.name)
                 if section.restrict_to_nl:
-                    song.restricted = ['nl']
+                    song.restricted = [{"nl": "The Netherlands"}]
                 section.song = song
                 section.save()
     
@@ -41,7 +41,7 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('artist', models.CharField(db_index=True, max_length=128)),
                 ('name', models.CharField(db_index=True, max_length=128)),
-                ('restricted', models.JSONField(default=list))
+                ('restricted', models.JSONField(default=list, blank=True))
             ],
             options={
                 'unique_together': {('artist', 'name')},

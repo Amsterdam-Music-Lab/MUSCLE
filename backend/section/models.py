@@ -106,7 +106,7 @@ class Playlist(models.Model):
             if row['artist'] and row['name']:
                 song, created = Song.objects.get_or_create(artist=row['artist'], name=row['name'])
             if int(row['restrict_to_nl']) == 1:
-                song.restricted = ['nl']
+                song.restricted = [{"nl": "The Netherlands"}]
                 song.save()
             section = Section(playlist=self,
                               start_time=float(row['start_time']),
