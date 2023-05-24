@@ -7,7 +7,13 @@
     .select-fields p {
         display: inline-block;
     }
-
+    .song-help {
+        position: relative;
+        top: 7.3rem;                
+        color: var(--body-quiet-color);        
+        margin-left: 5rem;
+        font-size: 12px;        
+    }
     p label {
         display: block;
     }
@@ -37,13 +43,18 @@
 </style>
 
 <h1>Add sections to playlist: {{playlist.name}}</h1>
+
 <form enctype="multipart/form-data" action="" method="post">
     <div class="select-fields">
+        <div class="song-help mini">* Fill out both the artist and name fields to create a new song object</div>
         {% csrf_token %} {{ form.as_p }} {% render_inline_action_fields %}
+        
     </div>
+    
     <div class="button-container">
         <input type="submit" name="_add" value="Add sections" id="add-button" />
     </div>
+
 </form>
 <form>
     <input type="submit" name="_back" value="Go back" id="back-button" />

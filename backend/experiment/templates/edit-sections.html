@@ -3,11 +3,22 @@
     table {
         width: 100%;
     }
+
     td {
-        padding: 8px 2px;
+        padding: 8px 2px;        
     }
     p.form-filename {
         max-width: 200px;
+    }
+    .song-padding {
+        height: 2rem;
+    }
+    .song-help {
+        position: absolute;        
+        overflow-x:visible;
+        color: var(--body-quiet-color);        
+        margin-left: 2.5rem;
+        font-size: 12px;        
     }
     #back-button {
         float: right;
@@ -35,10 +46,9 @@
             <th>Group</th>
             <th>Tag</th>
             <th>NL</th>
-        </tr>
-
+        </tr>        
         {% for section in sections %}
-        <tr>
+        <tr {% if not section.song %} class="song-padding" {% endif %}>
             <td>
                 <p>{{section.code}}</p>
             </td>
@@ -47,12 +57,11 @@
             </td>
             <td>
                 <input type="text" name="{{section.id}}_artist" maxlength="128" id="{{section.id}}_artist"
-                    value="{{ section.artist}}">
-
+                    value="{{ section.song.artist}}" {% if not section.song %} placeholder="*" {% endif %} >
             </td>
             <td>
                 <input type="text" name="{{section.id}}_name" maxlength="128" id="{{section.id}}_name"
-                    value="{{ section.name}}">
+                    value="{{ section.song.name}}" {% if not section.song %} placeholder="*" {% endif %}>
             </td>
             <td>
                 <input type="text" name="{{section.id}}_start_time" maxlength="128" required=""
@@ -72,12 +81,18 @@
             </td>
 
             <td>
-                <input type="checkbox" name="{{section.id}}_restrict_to_nl" id="{{section.id}}_restrict_to_nl" 
-                    {% if section.restrict_to_nl %} checked {% endif %}>
+                {% if section.song %}                
+                <input type="checkbox" name="{{section.id}}_restricted" id="{{section.id}}_restricted" 
+                    {% if section.song.restricted %} checked {% endif %}>
+                {% endif %}
             </td>
         </tr>
         {% endfor %}
-
+        <tr class="song-padding">
+            <td></td>
+            <td></td>
+            <td><div class="song-help">* Fill out both fields to create a new song object</div></td>
+        </tr>
     </table>
     <input type="submit" name="_update" value="Update sections" id="update-button" />
 </form>

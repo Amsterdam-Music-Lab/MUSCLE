@@ -8,7 +8,7 @@ from django.shortcuts import render, redirect
 from django.http import JsonResponse, HttpResponse
 from django.conf import settings
 
-from .models import Section, Playlist
+from .models import Section, Playlist, Song
 from section.forms import AddSections
 import audioread
 
@@ -28,6 +28,15 @@ admin.site.register(Section, SectionAdmin)
 
 # @admin.register(Playlist)
 
+class SongAdmin(admin.ModelAdmin):
+    list_per_page = 50
+    list_display = ('artist', 'name')    
+    search_fields = ['artist', 'name']   
+
+    # Prevent large inner join
+    list_select_related = ()
+
+admin.site.register(Song, SongAdmin)
 
 class PlaylistAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
     list_display = ('name', 'section_count', 'experiment_count')
@@ -69,14 +78,15 @@ class PlaylistAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
             this_group = request.POST.get('group')
             new_sections = request.FILES.getlist('files')
             # Create section object for each file
-            for section in new_sections:                
+            for section in new_sections:
+                
                 new_section = Section.objects.create(playlist=obj,
-                                                     artist=this_artist,
-                                                     name=this_name,
                                                      tag=this_tag,
                                                      group=this_group,
                                                      filename=section)
-                new_section.save()                
+                if this_artist and this_name:
+                    this_song, created = Song.objects.get_or_create(artist=this_artist, name=this_name)
+                    new_section.song = this_song                
                 file_path = settings.MEDIA_ROOT + '/' + str(new_section.filename)      
                 with audioread.audio_open(file_path) as f:
                     new_section.duration = f.duration
@@ -104,17 +114,23 @@ class PlaylistAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
             for section in sections:
                 # Create pre fix to get the right section fields
                 pre_fix = str(section.id)
-                # Get data and update section
-                section.artist = request.POST.get(pre_fix + '_artist')
-                section.name = request.POST.get(pre_fix + '_name')
+                # Get data and update section                                 
+                this_artist = request.POST.get(pre_fix + '_artist')
+                this_name = request.POST.get(pre_fix + '_name')
+                if this_artist and this_name:
+                    this_song, created = Song.objects.get_or_create(artist=this_artist, name=this_name)
+                    if created:
+                        section.song = this_song
+                    else:                                                
+                        if request.POST.get(pre_fix + '_restricted'):
+                            section.song.restricted = [{"nl": "The Netherlands"}]
+                        else:
+                            section.song.restricted = []
+                        section.song.save()
                 section.start_time = request.POST.get(pre_fix + '_start_time')
                 section.duration = request.POST.get(pre_fix + '_duration')
                 section.tag = request.POST.get(pre_fix + '_tag')
-                section.group = request.POST.get(pre_fix + '_group')                
-                if request.POST.get(pre_fix + '_restrict_to_nl') is None:
-                    section.restrict_to_nl = False
-                else:
-                    section.restrict_to_nl = True
+                section.group = request.POST.get(pre_fix + '_group')                                
                 section.save()
                 obj.save()
             return redirect('/admin/section/playlist')

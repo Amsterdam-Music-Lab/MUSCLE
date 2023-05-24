@@ -177,30 +177,38 @@ class Playlist(models.Model):
             },
         }
     
-class Song(models.Model):
-    """ A Song object with an artist and name (unique together)"""
-    artist = models.CharField(db_index=True, max_length=128)
-    name = models.CharField(db_index=True, max_length=128)
-    restricted = models.JSONField(default=list)
-    
-    class Meta:
-        unique_together = ("artist", "name")
-
     def update_admin_csv(self):
         """Update csv data for admin"""
         csvfile = CsvStringBuilder()
         writer = csv.writer(csvfile)        
         for section in self.section_set.all():
-            writer.writerow([section.artist,
-                            section.name,
+            if section.song:
+                this_artist = section.song.artist
+                this_name = section.song.name
+                this_restricted = '1' if section.song.restricted else '' 
+            else:
+                this_artist = ''
+                this_name = '',
+                this_restricted = ''
+            writer.writerow([this_artist,
+                            this_name,
                             section.start_time,
                             section.duration,
                             section.filename,
-                            1 if section.restrict_to_nl else 0,            
+                            this_restricted,
                             section.tag,
                             section.group])
         csv_string = csvfile.csv_string
         return ''.join(csv_string)
+    
+class Song(models.Model):
+    """ A Song object with an artist and name (unique together)"""
+    artist = models.CharField(db_index=True, blank=True, default='', max_length=128)
+    name = models.CharField(db_index=True, blank=True, default='' ,max_length=128)
+    restricted = models.JSONField(default=list, blank=True)
+    
+    class Meta:
+        unique_together = ("artist", "name")
 
 def audio_upload_path(instance, filename):
     """Generate path to save audio based on playlist.name"""
@@ -218,11 +226,11 @@ class Section(models.Model):
     song = models.ForeignKey(Song, on_delete=models.CASCADE, blank=True, null=True)
     start_time = models.FloatField(db_index=True, default=0.0)  # sec
     duration = models.FloatField(default=0.0)  # sec
-    filename = models.CharField(max_length=255)
+    filename = models.FileField(upload_to=audio_upload_path, max_length=255)
     play_count = models.PositiveIntegerField(default=0)
-    code = models.PositiveIntegerField(default=random_code)
-    tag = models.CharField(max_length=128, blank=True, default='0')
-    group = models.CharField(max_length=128, blank=True, default='0')
+    code = models.PositiveIntegerField(default=random_code)    
+    tag = models.CharField(max_length=128, default='0')
+    group = models.CharField(max_length=128, default='0')
 
     class Meta:
         ordering = ['song__artist', 'song__name', 'start_time']
