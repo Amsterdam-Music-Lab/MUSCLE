@@ -190,7 +190,7 @@ class Playlist(models.Model):
                 this_restricted = '1' if section.song.restricted else '' 
             else:
                 this_artist = ''
-                this_name = '',
+                this_name = ''
                 this_restricted = ''
             writer.writerow([this_artist,
                             this_name,
