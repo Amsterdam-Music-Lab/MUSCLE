@@ -121,7 +121,8 @@ class PlaylistAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
                     this_song, created = Song.objects.get_or_create(artist=this_artist, name=this_name)
                     if created:
                         section.song = this_song
-                    else:                                                
+                    else:
+                        section.song = this_song                                                
                         if request.POST.get(pre_fix + '_restricted'):
                             section.song.restricted = [{"nl": "The Netherlands"}]
                         else:
