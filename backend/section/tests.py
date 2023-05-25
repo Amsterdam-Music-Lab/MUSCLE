@@ -1,7 +1,7 @@
 from django.test import Client, TestCase
 from django.contrib.admin.sites import AdminSite
 from section.admin import PlaylistAdmin
-from section.models import Playlist, Section
+from section.models import Playlist, Section, Song
 
 
 class PlaylistModelTest(TestCase):
@@ -53,7 +53,7 @@ class PlaylistModelTest(TestCase):
         self.assertEqual(sections[2].start_time, 0.0)
         self.assertEqual(sections[2].duration, 10.0)
         self.assertEqual(sections[2].filename,"bat/netta.mp3")
-        self.assertEqual(sections[2].song.restricted, ["nl"])
+        self.assertEqual(sections[2].song.restricted, [{"restricted": "nl"}])
         self.assertEqual(sections[2].tag, "tag")
         self.assertEqual(sections[2].group, "group")
 
@@ -62,7 +62,7 @@ class PlaylistModelTest(TestCase):
         self.assertEqual(sections[3].start_time, 0.0)
         self.assertEqual(sections[3].duration, 10.0)
         self.assertEqual(sections[3].filename,"bat/sobral.mp3")
-        self.assertEqual(sections[3].song.restricted, ["nl"])
+        self.assertEqual(sections[3].song.restricted, [{"restricted": "nl"}])
         self.assertEqual(sections[3].tag, "0")
         self.assertEqual(sections[3].group, '0')
         
@@ -77,10 +77,12 @@ class TestAmdinEditSection(TestCase):
     @classmethod
     def setUpTestData(cls):
         Playlist.objects.create()
+        Song.objects.create(artist='default',
+                            name='default',
+                            restricted = [{"restricted": "nl"}])
         Section.objects.create(playlist=Playlist.objects.first(),
-                                artist='default',
-                                name='default')
-    
+                               song = Song.objects.first())
+            
     def setUp(self):
         self.client = Client()
         
@@ -96,15 +98,15 @@ class TestAmdinEditSection(TestCase):
                         pre_fix + '_duration': '1.1',
                         pre_fix + '_tag': 'edited',
                         pre_fix + '_group': 'edited',
-                        pre_fix + '_retsrict_to_nl': '0'}
+                        pre_fix + '_restricted': '0'}
         this_playlist = Playlist.objects.first()            
         response = this_playlist_admin.edit_sections(request, this_playlist)
         edit_section = Section.objects.first()
-        self.assertEqual(edit_section.artist, 'edited')
-        self.assertEqual(edit_section.name, 'edited')
+        self.assertEqual(edit_section.song.artist, 'edited')
+        self.assertEqual(edit_section.song.name, 'edited')
         self.assertEqual(edit_section.start_time, 1.1)
         self.assertEqual(edit_section.duration, 1.1)
         self.assertEqual(edit_section.tag, 'edited')
         self.assertEqual(edit_section.group, 'edited')
-        self.assertEqual(edit_section.restrict_to_nl, False)
+        self.assertEqual(edit_section.song.restricted, [])
         self.assertEqual(response.status_code, 302)

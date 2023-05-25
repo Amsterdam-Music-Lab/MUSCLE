@@ -124,7 +124,7 @@ class PlaylistAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
                     else:
                         section.song = this_song                                                
                         if request.POST.get(pre_fix + '_restricted'):
-                            section.song.restricted = [{"nl": "The Netherlands"}]
+                            section.song.restricted = [{"restricted": "nl"}]                            
                         else:
                             section.song.restricted = []
                         section.song.save()
