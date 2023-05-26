@@ -12,7 +12,7 @@ class Migration(migrations.Migration):
         for section in Section.objects.all():
             if section.name and section.artist:
                 song, created = Song.objects.get_or_create(artist=section.artist, name=section.name)
-                if section.restricted_to_nl:
+                if section.restrict_to_nl:
                     song.restricted = ['nl']
                 section.song = song
                 section.save()
@@ -25,7 +25,7 @@ class Migration(migrations.Migration):
             if section.song:
                 section.name = section.song.name
                 section.artist = section.song.artist
-                if section.song.restricted.length:
+                if len(section.song.restricted):
                     section.restrict_to_nl = 1
             section.save()          
 
@@ -57,9 +57,19 @@ class Migration(migrations.Migration):
             options={'ordering': ['song__artist', 'song__name', 'start_time']},
         ),
         migrations.RunPython(move_songs,  move_songs_backwards),
+        migrations.AlterField(
+            model_name='section',
+            name='artist',
+            field=models.CharField(db_index=True, max_length=128, default=''),
+        ),
         migrations.RemoveField(
             model_name='section',
             name='artist',
+        ),
+        migrations.AlterField(
+            model_name='section',
+            name='name',
+            field=models.CharField(db_index=True, max_length=128, default=''),
         ),
         migrations.RemoveField(
             model_name='section',
