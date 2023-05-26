@@ -120,7 +120,7 @@ class Session(models.Model):
             **(
                 {}
                 if self.participant.is_dutch()
-                else {'song_restricted': []}
+                else {'song.restricted': []}
             ),
             **filter_by
         ).values_list('song_id', flat=True)
