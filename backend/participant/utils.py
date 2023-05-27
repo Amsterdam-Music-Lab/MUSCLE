@@ -68,40 +68,38 @@ def visitor_ip_address(request):
     return request.META.get('REMOTE_ADDR')
 
 def get_participant(request):
+    # get participant from session
+    participant_id = request.session.get(PARTICIPANT_KEY, -1)
+    try:
+        return Participant.objects.get(
+                pk=int(participant_id))
+    except Participant.DoesNotExist:
+        raise
+
+def get_or_create_participant(request):
+    """Get a participant from URL, the session, or create/add a new one"""
 
     # check if query string contains  participant
-    participant_id_url = request.GET.get("participant_id")
+    participant_id_url = request.GET.get("participant_id") # can be None
 
-    if participant_id_url:
-        # get participant from query string
-        participant_qs = Participant.objects.filter(participant_id_url = participant_id_url)
-        if len(participant_qs) == 1:
-            participant = participant_qs[0]
+    try:
+        if participant_id_url:
+            # get participant from query string
+            participant = Participant.objects.get(participant_id_url = participant_id_url)
             set_participant(request, participant)
             return participant
         else:
-            raise Participant.DoesNotExist
+            # Get participant from session
+            participant = get_participant(request)
 
-    else:
-        # get participant from session
-        participant_id = request.session.get(PARTICIPANT_KEY, -1)
+            # if no participant_id URL parameter in request, but previous participant was created from URL, do not use it and create a new participant
+            if participant.participant_id_url:
+                raise Participant.DoesNotExist
 
-        try:
-            return Participant.objects.get(
-                    pk=int(participant_id))
-        except Participant.DoesNotExist:
-            raise
-
-def get_or_create_participant(request):
-    """Get a participant from the session, or create/add a new one"""
-    try:
-        participant = get_participant(request)
     except Participant.DoesNotExist:
         # create new participant
         country_code = country(request)
         access_info = request.META.get('HTTP_USER_AGENT')
-
-        participant_id_url = request.GET.get("participant_id") # can be None
 
         # Create a new Participant, store the country code once
         participant = Participant(country_code=country_code, access_info=access_info, participant_id_url=participant_id_url)
