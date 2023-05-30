@@ -13,6 +13,7 @@ from result.utils import prepare_result
 
 class MatchingPairs(Base):
     ID = 'MATCHING_PAIRS'
+    num_pairs = 8
 
     @classmethod
     def first_round(cls, experiment):
@@ -117,18 +118,25 @@ class MatchingPairs(Base):
 
     @classmethod
     def get_matching_pairs_trial(cls, session):
-        section_ids = session.playlist.section_set.order_by().distinct('group').values_list('group', flat=True)
-        sections = random.sample(list(section_ids), 8)
-        originals = session.playlist.section_set.filter(group__in=sections, tag='original')
         json_data = session.load_json_data()
-        degradation_type = json_data.get('degradation')
-        if not degradation_type:
-            degradation_options = ['1stDegradation', '2ndDegradation']
-            random.shuffle(degradation_options)
-            degradation_type = degradation_options[0]
-            session.save_json_data({'degradation': degradation_options[1]})
-        degradations = session.playlist.section_set.filter(group__in=sections, tag=degradation_type)
-        player_sections = list(originals) + list(degradations)
+        pairs = json_data.get('pairs', [])
+        if len(pairs) < cls.num_pairs:
+            pairs = list(session.playlist.section_set.order_by().distinct('group').values_list('group', flat=True))
+            random.shuffle(pairs)
+        selected_pairs = pairs[:cls.num_pairs]
+        session.save_json_data({'pairs': pairs[cls.num_pairs:]})
+        originals = session.playlist.section_set.filter(group__in=selected_pairs, tag='original')  
+        degradations = json_data.get('degradations')
+        if not degradations:
+            degradations = ['Original', '1stDegradation', '2ndDegradation']
+            random.shuffle(degradations)
+        degradation_type = degradations.pop()
+        session.save_json_data({'degradations': degradations})
+        if degradation_type == 'Original':
+            player_sections = player_sections = list(originals) * 2
+        else:
+            degradations = session.playlist.section_set.filter(group__in=selected_pairs, tag=degradation_type)
+            player_sections = list(originals) + list(degradations)
         random.shuffle(player_sections)
         playback = Playback(
             sections=player_sections,
