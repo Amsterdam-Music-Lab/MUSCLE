@@ -4,3 +4,4 @@ class CsvStringBuilder(object):
 
     def write(self, row):
         self.csv_string.append(row)
+ 
