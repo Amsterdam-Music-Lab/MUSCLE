@@ -1,0 +1,62 @@
+{% extends "admin/base_site.html" %} {% load inline_action_tags %} {% block content %}
+<style>
+    .select-fields {
+        width: 100%;
+    }
+
+    .select-fields p {
+        display: inline-block;
+    }
+    .song-help {
+        position: relative;
+        top: 7.3rem;                
+        color: var(--body-quiet-color);        
+        margin-left: 5rem;
+        font-size: 12px;        
+    }
+    p label {
+        display: block;
+    }
+
+    input[type="text"],
+    select,
+    label {
+        width: 22vw;
+        margin-left: 0.45vw;
+        margin-top: 1em;
+        margin-bottom: 1em;
+    }
+
+    #back-button {
+        position: absolute;
+        bottom: 3em;
+        right: 3em;
+    }
+
+    #add-button {
+        margin-top: 2em;
+        display: block;
+        width: 22em;
+        font-weight: 400;
+        background: var(--default-button-bg);
+    }
+</style>
+
+<h1>Add sections to playlist: {{playlist.name}}</h1>
+
+<form enctype="multipart/form-data" action="" method="post">
+    <div class="select-fields">
+        <div class="song-help mini">* Fill out both the artist and name fields to create a new song object</div>
+        {% csrf_token %} {{ form.as_p }} {% render_inline_action_fields %}
+        
+    </div>
+    
+    <div class="button-container">
+        <input type="submit" name="_add" value="Add sections" id="add-button" />
+    </div>
+
+</form>
+<form>
+    <input type="submit" name="_back" value="Go back" id="back-button" />
+</form>
+{% endblock %}
