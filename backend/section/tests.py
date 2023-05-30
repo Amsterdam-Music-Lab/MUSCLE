@@ -82,10 +82,6 @@ class TestAmdinEditSection(TestCase):
                             restricted = [{"restricted": "nl"}])
         Section.objects.create(playlist=Playlist.objects.first(),
                                song = Song.objects.first())
-            
-    def setUp(self):
-        self.client = Client()
-        
 
     def test_edit_sections(self):
         request = MockRequest()
