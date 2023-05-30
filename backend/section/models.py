@@ -214,7 +214,7 @@ class Song(models.Model):
 
 def audio_upload_path(instance, filename):
     """Generate path to save audio based on playlist.name"""
-    folder_name = instance.playlist.name.replace(' ', '').lower()
+    folder_name = instance.playlist.name.replace(' ', '')
     return '{0}/{1}'.format(folder_name, filename)
 
 class Section(models.Model):
