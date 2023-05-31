@@ -97,7 +97,7 @@ class BeatAlignment(Base):
     def next_practice_action(cls, playlist, count):
         """Get action data for the next practice round"""
         section = playlist.section_set.filter(
-            name__startswith='ex{}'.format(count)).first()
+            song__name__startswith='ex{}'.format(count)).first()
         if not section:
             return None
 
