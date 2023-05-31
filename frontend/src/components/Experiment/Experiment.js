@@ -23,7 +23,8 @@ import classNames from "classnames";
 // - Loads the experiment and participant
 // - Renders the view based on the state that is provided by the server
 // - It handles sending results to the server
-const Experiment = ({ match }) => {
+// - Implements participant_id as URL parameter, e.g. http://localhost:3000/bat?participant_id=johnsmith34
+const Experiment = ({ match, location }) => {
     const startState = { view: "LOADING" };
 
     // Current experiment state
@@ -34,7 +35,8 @@ const Experiment = ({ match }) => {
 
     // API hooks
     const [experiment, loadingExperiment] = useExperiment(match.params.slug);
-    const [participant, loadingParticipant] = useParticipant();
+    const url_query_string = location.search // location.search is a part of URL after (and incuding) "?"
+    const [participant, loadingParticipant] = useParticipant(url_query_string);
 
     const loadingText = experiment ? experiment.loading_text : "";
     const className = experiment ? experiment.class_name : "";
@@ -63,6 +65,12 @@ const Experiment = ({ match }) => {
 
     // Start first_round when experiment and partipant have been loaded
     useEffect(() => {
+
+        if (url_query_string && !(new URLSearchParams(url_query_string).has("participant_id"))) {
+            setError("Unknown URL parameter, use ?participant_id=");
+            return
+        }
+
         // Check if done loading
         if (!loadingExperiment && !loadingParticipant) {
             // Loading succeeded

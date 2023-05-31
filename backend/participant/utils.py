@@ -77,16 +77,32 @@ def get_participant(request):
         raise
 
 def get_or_create_participant(request):
-    """Get a participant from the session, or create/add a new one"""
+    """Get a participant from URL, the session, or create/add a new one"""
+
+    # check if query string contains  participant
+    participant_id_url = request.GET.get("participant_id") # can be None
+
     try:
-        participant = get_participant(request)
+        if participant_id_url:
+            # get participant from query string
+            participant = Participant.objects.get(participant_id_url = participant_id_url)
+            set_participant(request, participant)
+            return participant
+        else:
+            # Get participant from session
+            participant = get_participant(request)
+
+            # if no participant_id URL parameter in request, but previous participant was created from URL, do not use it and create a new participant
+            if participant.participant_id_url:
+                raise Participant.DoesNotExist
+
     except Participant.DoesNotExist:
         # create new participant
         country_code = country(request)
         access_info = request.META.get('HTTP_USER_AGENT')
 
         # Create a new Participant, store the country code once
-        participant = Participant(country_code=country_code, access_info=access_info)
+        participant = Participant(country_code=country_code, access_info=access_info, participant_id_url=participant_id_url)
         participant.save()
         set_participant(request, participant)
 
