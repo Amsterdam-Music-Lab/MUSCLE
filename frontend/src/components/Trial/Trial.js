@@ -62,10 +62,15 @@ const Trial = ({
                     config
                 });
             } else {
-                onResult({
-                    result,
-                    result_id
-                })
+                if (result_id) {
+                    onResult({
+                        result,
+                        result_id
+                    });
+                } else {
+                    onNext();
+                }
+                
             }
         },
         [feedback_form, config, onNext, onResult]
