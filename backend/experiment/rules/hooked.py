@@ -15,7 +15,6 @@ from experiment.questions.goldsmiths import MSI_FG_GENERAL, MSI_ALL
 from experiment.questions.stomp import STOMP20
 from experiment.questions.tipi import TIPI
 from experiment.actions.styles import STYLE_BOOLEAN_NEGATIVE_FIRST
-from experiment.actions.utils import combine_actions
 from result.utils import prepare_result
 
 logger = logging.getLogger(__name__)
@@ -271,12 +270,12 @@ class Hooked(Base):
             {'number': next_round_number, 'total': session.experiment.rounds}
     
     @classmethod
-    def plan_sections(cls, session):
+    def plan_sections(cls, session, filter_by={}):
         """Set the plan of tracks for a session.
         """
 
         # Which songs are available?
-        songs = list(session.playlist.song_ids())
+        songs = list(session.playlist.song_ids(filter_by))
         random.shuffle(songs)
 
         # How many sections do we need?
