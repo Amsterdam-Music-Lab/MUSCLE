@@ -27,9 +27,10 @@ class BeatAlignmentRuleTest(TestCase):
                "Artist 2,ex2 Name 2,0.0,10.0,bat/exartist2.mp3,0,0,0\n"
                "Artist 3,ex3_Name 3,0.0,10.0,bat/exartist3.mp3,0,0,0\n")
 
-        playlist = Playlist.objects.create(csv=csv)
+        playlist = Playlist.objects.create(name='TestBAT')
+        playlist.csv = csv
         playlist.update_sections()
-        cls.experiment = Experiment.objects.create(rules='BEAT_ALIGNMENT', slug='ba', rounds=17) #rules is BeatAlignment.ID in beat_alignment.py
+        cls.experiment = Experiment.objects.create(rules='BEAT_ALIGNMENT', slug='ba', rounds=13) #rules is BeatAlignment.ID in beat_alignment.py
         cls.experiment.playlists.add(playlist)
 
 
@@ -76,17 +77,20 @@ class BeatAlignmentRuleTest(TestCase):
         assert len(rounds) == 4
         assert rounds[0].get('title') == 'Example 1'
         rounds_n = self.experiment.rounds # Default 10
-        views_exp = ['TRIAL_VIEW']*(rounds_n-1) + ['FINAL']
+        views_exp = ['TRIAL_VIEW']*(rounds_n)
         for i in range(len(views_exp)):
             response = self.client.post('/session/{}/next_round/'.format(session_id))
             response_json = self.load_json(response)
-            print(response_json['next_round'])
-            # Result.objects.create(
-            #     session=session,
-            #     section=
-            # )
-            self.assertEqual(response_json['next_round'][0]['view'], views_exp[i])
-            
+            result_id = response_json.get(
+                'next_round')[0]['feedback_form']['form'][0]['result_id']
+            result = Result.objects.get(pk=result_id)
+            result.score = 1
+            result.save()
+            self.assertEqual(response_json['next_round'][0]['view'], views_exp[i]) 
+        # final view
+        response = self.client.post('/session/{}/next_round/'.format(session_id))
+        response_json = self.load_json(response)
+        assert response_json.get('next_round')[0]['view'] == 'FINAL'
 
         # Number of Results
         results = Session.objects.get(id=session_id).result_set.all()
