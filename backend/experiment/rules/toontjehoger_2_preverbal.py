@@ -8,7 +8,6 @@ from experiment.actions.playback import Playback
 from experiment.actions.styles import STYLE_NEUTRAL
 from .base import Base
 from os.path import join
-from experiment.actions.utils import combine_actions
 from result.utils import prepare_result
 
 logger = logging.getLogger(__name__)

@@ -68,7 +68,6 @@ class BooleanQuestion(Question):
         }
         self.view = 'BUTTON_ARRAY'
 
-
 class ChoiceQuestion(Question):
     def __init__(self, choices, **kwargs):
         super().__init__(**kwargs)
