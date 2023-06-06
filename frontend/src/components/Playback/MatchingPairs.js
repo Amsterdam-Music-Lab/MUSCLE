@@ -60,7 +60,7 @@ const MatchingPairs = ({
                 sections.forEach(section => section.turned = false);
                 sections.forEach(section => section.noevents = false);
                 firstCard.current = -1;
-                setMessage('<br />Give it another try');
+                setMessage('</br> Try again');
                 setFeedback(false);                
             }, finishDelay);
             // show end of turn animations
@@ -160,14 +160,14 @@ const MatchingPairs = ({
     
     return (
         <div className="aha__matching-pairs container">
-            <div className="row">
-                <div className="col-6">
+            <div className="row justify-content-around">
+                <div className="col align-self-start">
                     <div dangerouslySetInnerHTML={{ __html: message }}
                          className={classNames("matching-pairs__feedback", {fbnomatch: score.current === 0}, {fblucky: score.current === 1}, {fbmemory: score.current === 2}, {fbmisremembered: score.current === -1})}
                         
                     />
                 </div>
-                <div className="col-6">
+                <div className="col align-self-end">
                     <div className="matching-pairs__score">Score: <br />{total}</div>        
                 </div>
             </div>
