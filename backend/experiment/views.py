@@ -14,7 +14,9 @@ logger = logging.getLogger(__name__)
 # Experiment
 
 def get_experiment(request, slug):
-    """Get experiment data from active experiment with given :slug"""
+    """Get experiment data from active experiment with given :slug
+    DO NOT modify session data here, it will break participant_id system
+       (/participant and /experiment/<slug> are called at the same time by the frontend)"""
     experiment = experiment_or_404(slug)
     series_data = request.session.get('experiment_series')
     if experiment.experiment_series and series_data:

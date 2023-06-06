@@ -52,7 +52,7 @@ class Session(models.Model):
 
         section = self.previous_section()
         if section:
-            return "{} - {}".format(section.artist, section.name)
+            return "{} - {}".format(section.song.artist, section.song.name)
         return ""
 
     def previous_section(self):
@@ -111,64 +111,52 @@ class Session(models.Model):
 
     def song_ids(self):
         """Get a list of song ids from the sections of this session's results"""
-        return list(map(
-            lambda result: result.section.pk if result.section else None,
-            self.result_set.filter(section__isnull=False)
-        ))
+        return (res.section.song.id for res in self.result_set.filter(section__isnull=False))
+    
+    def filter_songs(self, filter_by={}):
+        # Get pks from sections with given filter and song_id
+        pks = self.playlist.section_set.filter(
+            # IP checking is overridable in filter_by.
+            **(
+                {}
+                if self.participant.is_dutch()
+                else {'song__restricted': []}
+            ),
+            **filter_by
+        ).values_list('song_id', flat=True)
+
+        # Return None if nothing matches
+        if len(pks) == 0:
+            return None
+
+        return pks
 
     def section_from_any_song(self, filter_by={}):
         """Get a random section with a Dutch IP check.
 
-        To ensure appropriate IP restrictions, most rules should this
+        To ensure appropriate IP restrictions, most rules should use this
         method instead of operating on the playlist directly.
         """
-
-        # Get pks from sections with given filter and song_id
-        pks = self.playlist.section_set.filter(
-            # IP checking is overridable in filter_by.
-            **(
-                {}
-                if self.participant.is_dutch()
-                else {'restrict_to_nl': False}
-            ),
-            **filter_by
-        ).values_list('pk', flat=True)
-
-        # Return None if nothing matches
-        if len(pks) == 0:
-            return None
-
-        # Return a random section
-        return self.playlist.section_set.get(pk=random.choice(pks))
+        pks = self.filter_songs(filter_by)
+        if pks:
+            # Return a random section
+            sections = self.playlist.section_set.filter(song_id=random.choice(pks))
+            return random.choice(sections)
 
     def all_sections(self, filter_by={}):
         """Get all section with a Dutch IP check.
 
-        To ensure appropriate IP restrictions, most rules should this
+        To ensure appropriate IP restrictions, most rules should use this
         method instead of operating on the playlist directly.
         """
-
-        # Get pks from sections with given filter and song_id
-        pks = self.playlist.section_set.filter(
-            # IP checking is overridable in filter_by.
-            **(
-                {}
-                if self.participant.is_dutch()
-                else {'restrict_to_nl': False}
-            ),
-            **filter_by
-        ).values_list('pk', flat=True)
-
-        # Return None if nothing matches
-        if len(pks) == 0:
-            return None
-
+        pks = self.filter_songs(filter_by)
         # Return all sections
-        return self.playlist.section_set.all()
+        if pks:
+            return self.playlist.section_set.filter(song_id__in=pks)
 
     def section_from_song(self, song_id, filter_by={}):
         """Get a random section from a particular song"""
-        return self.section_from_any_song({**filter_by, 'pk': song_id})
+        return self.section_from_any_song({**filter_by, 'song_id': song_id})
 
     def unused_song_ids(self, filter_by={}):
         """Get a list of unused song ids from this session's playlist"""

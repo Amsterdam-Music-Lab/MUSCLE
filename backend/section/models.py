@@ -6,6 +6,8 @@ from django.db import models
 from django.utils import timezone
 from django.urls import reverse
 
+from .utils import CsvStringBuilder
+
 class Playlist(models.Model):
     """List of sections to be used in an Experiment"""
 
@@ -18,6 +20,11 @@ class Playlist(models.Model):
         song_name [string], start_position [float], duration [float],\
         "path/filename.mp3" [string], restricted_to_nl [int 0=False 1=True], tag [string], group [string]'
     csv = models.TextField(blank=True, help_text=default_csv_row)
+
+    def save(self, *args, **kwargs):
+        """Update playlist csv field on every save"""
+        self.csv = self.update_admin_csv()
+        super(Playlist, self).save(*args, **kwargs)
 
     class Meta:
         ordering = ['name']
@@ -95,32 +102,38 @@ class Playlist(models.Model):
                 }
 
             # create new section
+            song = None
+            if row['artist'] and row['name']:
+                song, created = Song.objects.get_or_create(artist=row['artist'], name=row['name'])
+            if int(row['restrict_to_nl']) == 1:
+                song.restricted = [{"restricted": "nl"}]
+                song.save()
             section = Section(playlist=self,
-                              artist=row['artist'],
-                              name=row['name'],
                               start_time=float(row['start_time']),
                               duration=float(row['duration']),
                               filename=row['filename'],
-                              restrict_to_nl=(int(row['restrict_to_nl']) == 1),
                               tag=row['tag'],
                               group=row['group'],
                               )
+            if song:
+                section.song = song
 
             # if same section already exists, update it with new info
             for ex_section in existing_sections:
-                if (ex_section.artist == section.artist
-                    and ex_section.name == section.name
-                    and ex_section.start_time - section.start_time == 0
-                    and ex_section.duration == section.duration
-                    and ex_section.tag == section.tag
-                        and ex_section.group == section.group):
-
-                    # Update if necessary
-                    if ex_section.filename != section.filename or ex_section.restrict_to_nl != section.restrict_to_nl:
-                        ex_section.filename = section.filename
-                        ex_section.restrict_to_nl = section.restrict_to_nl
-                        ex_section.save()
-                        updated += 1
+                if ex_section.filename == section.filename:
+                    if song:
+                        if not ex_section.song:
+                            ex_section.song = song
+                            ex_section.save()
+                        elif ex_section.song.restricted != song.restricted:
+                            ex_section.song.restricted = song.restricted
+                            ex_section.song.save()
+                    ex_section.start_time = section.start_time
+                    ex_section.duration = section.duration
+                    ex_section.tag = section.tag
+                    ex_section.group = section.group
+                    ex_section.save()
+                    updated += 1
 
                     # Remove from existing sections list
                     existing_sections.remove(ex_section)
@@ -146,7 +159,7 @@ class Playlist(models.Model):
     def song_ids(self, filter_by={}):
         """Get a list of distinct song ids"""
         # order_by is required to make distinct work with values_list
-        return self.section_set.filter(**filter_by).order_by('pk').values_list('pk', flat=True).distinct()
+        return self.section_set.filter(**filter_by).order_by('song').values_list('song_id', flat=True).distinct()
 
     def random_section(self, filter_by={}):
         """Get a random section from this playlist"""
@@ -165,6 +178,44 @@ class Playlist(models.Model):
                 'sections': [section.export_admin() for section in self.section_set.all()],
             },
         }
+    
+    def update_admin_csv(self):
+        """Update csv data for admin"""
+        csvfile = CsvStringBuilder()
+        writer = csv.writer(csvfile)        
+        for section in self.section_set.all():
+            if section.song:
+                this_artist = section.song.artist
+                this_name = section.song.name
+                this_restricted = '1' if section.song.restricted else '' 
+            else:
+                this_artist = ''
+                this_name = ''
+                this_restricted = ''
+            writer.writerow([this_artist,
+                            this_name,
+                            section.start_time,
+                            section.duration,
+                            section.filename,
+                            this_restricted,
+                            section.tag,
+                            section.group])
+        csv_string = csvfile.csv_string
+        return ''.join(csv_string)
+    
+class Song(models.Model):
+    """ A Song object with an artist and name (unique together)"""
+    artist = models.CharField(db_index=True, blank=True, default='', max_length=128)
+    name = models.CharField(db_index=True, blank=True, default='' ,max_length=128)
+    restricted = models.JSONField(default=list, blank=True)
+    
+    class Meta:
+        unique_together = ("artist", "name")
+
+def audio_upload_path(instance, filename):
+    """Generate path to save audio based on playlist.name"""
+    folder_name = instance.playlist.name.replace(' ', '')
+    return '{0}/{1}'.format(folder_name, filename)
 
 class Section(models.Model):
     """A snippet/section of a song, belonging to a Playlist"""
@@ -174,30 +225,40 @@ class Section(models.Model):
         return random.randint(10000, 99999)
 
     playlist = models.ForeignKey(Playlist, on_delete=models.CASCADE)
-    artist = models.CharField(db_index=True, max_length=128)
-    name = models.CharField(db_index=True, max_length=128)
+    song = models.ForeignKey(Song, on_delete=models.CASCADE, blank=True, null=True)
     start_time = models.FloatField(db_index=True, default=0.0)  # sec
     duration = models.FloatField(default=0.0)  # sec
-    filename = models.CharField(max_length=128)
-    restrict_to_nl = models.BooleanField(default=False)
+    filename = models.FileField(upload_to=audio_upload_path, max_length=255)
     play_count = models.PositiveIntegerField(default=0)
-    code = models.PositiveIntegerField(default=random_code)
+    code = models.PositiveIntegerField(default=random_code)    
     tag = models.CharField(max_length=128, default='0')
     group = models.CharField(max_length=128, default='0')
 
     class Meta:
-        ordering = ['artist', 'name', 'start_time']
+        ordering = ['song__artist', 'song__name', 'start_time']
 
     def __str__(self):
         return "{} - {} ({}-{})".format(
-            self.artist,
-            self.name,
+            self.song.artist,
+            self.song.name,
             self.start_time_str(),
             self.end_time_str()
         )
 
+    def artist_name(self):
+        if self.song:
+            return self.song.artist
+        else:
+            return ''
+    
+    def song_name(self):
+        if self.song:
+            return self.song.name
+        else:
+            return ''
+
     def song_label(self):
-        return "{} - {}".format(self.artist, self.name)
+        return "{} - {}".format(self.artist_name(), self.song_name())
 
     def start_time_str(self):
         """Create start time string 0:01:01.nn"""
@@ -222,8 +283,8 @@ class Section(models.Model):
         """Export data for admin"""
         return {
             'id': self.id,
-            'artist': self.artist,
-            'name': self.name,
+            'artist': self.song.artist,
+            'name': self.song.name,
             'play_count': self.play_count
         }
 
@@ -232,12 +293,12 @@ class Section(models.Model):
         return [
             self.id,
             self.pk,
-            self.artist,
-            self.name,
+            self.song.artist,
+            self.song.name,
             self.start_time,
             self.duration,
             self.filename,
-            1 if self.restrict_to_nl else 0,
+            self.song.restricted,
             self.play_count,
             self.tag,
             self.group,

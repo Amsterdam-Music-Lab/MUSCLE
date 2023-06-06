@@ -150,7 +150,7 @@ CORS_ALLOW_CREDENTIALS = True
 
 
 
-SESSION_SAVE_EVERY_REQUEST = True
+SESSION_SAVE_EVERY_REQUEST = False # Do not set to True, because it will break session-based participant_id
 
 CSRF_USE_SESSIONS = False
 CORS_ALLOW_CREDENTIALS = True

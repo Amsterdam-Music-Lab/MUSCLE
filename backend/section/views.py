@@ -13,7 +13,7 @@ def get_section(request, section_id, code):
         section = Section.objects.get(pk=section_id, code=code)
 
         # Check location restrictions
-        if section.restrict_to_nl and not located_in_nl(request):
+        if len(section.song.restricted) and not located_in_nl(request):
             raise PermissionDenied
 
         # Section will be served, so increase play count
@@ -27,20 +27,20 @@ def get_section(request, section_id, code):
         # Advantage: low server load
         # Disadvantage: exposes url
 
-        if section.filename.startswith('http'):
+        if str(section.filename).startswith('http'):
             # external link, redirect
             return redirect(section.filename)
 
         # We only do this in production, as the Django dev server not correctly supports
         # The range/seeking of audio files in Chrome
         if not settings.DEBUG:
-            return redirect(settings.MEDIA_URL + section.filename)
+            return redirect(settings.MEDIA_URL + str(section.filename))
         
         # Option 2: stream file through Django
         # Advantage: keeps url secure, correct play_count value
         # Disadvantage: potential high server load
 
-        filename = settings.BASE_DIR + settings.MEDIA_URL + section.filename
+        filename = settings.BASE_DIR + settings.MEDIA_URL + str(section.filename)
 
         # Uncomment to only use example file in development
         # if settings.DEBUG:
