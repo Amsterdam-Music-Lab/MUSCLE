@@ -53,6 +53,9 @@ const initWebAudio = () => {
     audioContext = new AudioContext();
     track = audioContext.createMediaElementSource(audio);
     track.connect(audioContext.destination);
+    console.log(audioContext.baseLatency);
+    console.log(audioContext.outputLatency);
+    console.log(audioContext.getOutputTimestamp());
 }
 
 // init audio after first user action on page
