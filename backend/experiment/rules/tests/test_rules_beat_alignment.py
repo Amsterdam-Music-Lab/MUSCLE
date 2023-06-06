@@ -1,6 +1,7 @@
 
 from django.test import TestCase
 from experiment.models import Experiment
+from result.models import Result
 from section.models import Playlist
 from session.models import Session
 import json
@@ -26,10 +27,11 @@ class BeatAlignmentRuleTest(TestCase):
                "Artist 2,ex2 Name 2,0.0,10.0,bat/exartist2.mp3,0,0,0\n"
                "Artist 3,ex3_Name 3,0.0,10.0,bat/exartist3.mp3,0,0,0\n")
 
-        playlist = Playlist.objects.create(csv=csv)
+        playlist = Playlist.objects.create(name='TestBAT')
+        playlist.csv = csv
         playlist.update_sections()
-        experiment = Experiment.objects.create(rules='BEAT_ALIGNMENT', slug='ba') #rules is BeatAlignment.ID in beat_alignment.py
-        experiment.playlists.add(playlist)
+        cls.experiment = Experiment.objects.create(rules='BEAT_ALIGNMENT', slug='ba', rounds=13) #rules is BeatAlignment.ID in beat_alignment.py
+        cls.experiment.playlists.add(playlist)
 
 
     def load_json(self, response):
@@ -43,7 +45,7 @@ class BeatAlignmentRuleTest(TestCase):
         response_json = self.load_json(response)
         self.assertTrue( {'id','slug','name','class_name','rounds','playlists','next_round','loading_text'} <= response_json.keys() )
         # 3 practice rounds (number hardcoded in BeatAlignment.first_round)
-        views_exp = ['EXPLAINER','CONSENT'] + ['TRIAL_VIEW']*3 + ['EXPLAINER','START_SESSION']
+        views_exp = ['EXPLAINER','CONSENT', 'START_SESSION']
         self.assertEquals(len(response_json['next_round']), len(views_exp))
         for i in range(len(views_exp)):
             self.assertEquals(response_json['next_round'][i]['view'], views_exp[i])
@@ -62,47 +64,33 @@ class BeatAlignmentRuleTest(TestCase):
         self.assertTrue(response_json['status'],'ok')
 
         # Can throw an error if some of the tags in playlist not zero, cannot find a section to play
-        data =  {"experiment_id": "1", "playlist_id":"","json_data":"", "csrfmiddlewaretoken":csrf_token}
+        data =  {"experiment_id": self.experiment.id, "playlist_id":"","json_data":"", "csrfmiddlewaretoken":csrf_token}
         response = self.client.post('/session/create/', data)
         response_json = self.load_json(response)
-        self.assertTrue( {'session','next_round'} <= response_json.keys() )
-        self.assertEqual( len(response_json['next_round']), 1 )
-        self.assertEqual( response_json['next_round'][0]['view'],'TRIAL_VIEW')
         session_id = response_json['session']['id']
-        result_id = response_json['next_round'][0]['feedback_form']['form'][0]['result_id']
-
-        rounds_n = Experiment.objects.get(pk=1).rounds # Default 10
-        views_exp = ['TRIAL_VIEW']*(rounds_n-1) + ['FINAL'] 
+        session = Session.objects.get(pk=session_id)
+        
+        # practice rounds
+        response = self.client.post('/session/{}/next_round/'.format(session_id))
+        response_json = self.load_json(response)
+        rounds = response_json.get('next_round')
+        assert len(rounds) == 4
+        assert rounds[0].get('title') == 'Example 1'
+        rounds_n = self.experiment.rounds # Default 10
+        views_exp = ['TRIAL_VIEW']*(rounds_n)
         for i in range(len(views_exp)):
-            data = {
-                "session_id": session_id,
-                "csrfmiddlewaretoken": csrf_token,
-                "json_data": json.dumps({
-                    "response_time":2.5,
-                    "form":
-                        [{  
-                            "key": "aligned",
-                            "view": "BUTTON_ARRAY",
-                            "explainer": "",
-                            "question":
-                                ["Are the beeps ALIGNED TO THE BEAT or NOT ALIGNED TO THE BEAT?"],
-                            "result_id": result_id,
-                            "is_skippable": False,
-                            "submits": True,
-                            "scoring_rule": "CORRECTNESS",
-                            "choices": {
-                                "ON": "ALIGNED TO THE BEAT",
-                                "OFF": "NOT ALIGNED TO THE BEAT"
-                            },
-                            "value": "ON"
-                        }],
-                    })
-            }
-            response = self.client.post('/result/create/', data)
+            response = self.client.post('/session/{}/next_round/'.format(session_id))
             response_json = self.load_json(response)
-            self.assertEqual(response_json['view'], views_exp[i])
-            if i < len(views_exp)-1: # Last view 'FINAL' does not have result_id or feedback form
-                result_id = response_json['feedback_form']['form'][0]['result_id']
+            result_id = response_json.get(
+                'next_round')[0]['feedback_form']['form'][0]['result_id']
+            result = Result.objects.get(pk=result_id)
+            result.score = 1
+            result.save()
+            self.assertEqual(response_json['next_round'][0]['view'], views_exp[i]) 
+        # final view
+        response = self.client.post('/session/{}/next_round/'.format(session_id))
+        response_json = self.load_json(response)
+        assert response_json.get('next_round')[0]['view'] == 'FINAL'
 
         # Number of Results
         results = Session.objects.get(id=session_id).result_set.all()
