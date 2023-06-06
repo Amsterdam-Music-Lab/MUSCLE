@@ -11,7 +11,7 @@ from session.models import Session
 EXPECTED_EXPERIMENT_FIELDS = 10
 EXPECTED_SESSION_FIELDS = 9
 EXPECTED_RESULT_FIELDS = 12
-EXPECTED_PARTICIPANT_FIELDS = 4
+EXPECTED_PARTICIPANT_FIELDS = 5
 
 
 class MockRequest:
@@ -24,15 +24,12 @@ this_experiment_admin = ExperimentAdmin(
 
 class TestAdminExperiment(TestCase):
 
-    def setUp(self):
-        self.client = Client(
-            HTTP_USER_AGENT='Agent 007'
-        )
-        slug = 'TEST'
+    @classmethod
+    def setUpTestData(cls):
         Experiment.objects.create(
-            name='test',
-            slug=slug
-        )
+                    name='test',
+                    slug='TEST'
+                )
         Participant.objects.create()
         Session.objects.create(
             experiment=Experiment.objects.first(),
@@ -41,6 +38,9 @@ class TestAdminExperiment(TestCase):
         Result.objects.create(
             session=Session.objects.first()
         )
+
+    def setUp(self):
+        self.client = Client()
 
     def test_experiment_model_fields(self):
         experiment = model_to_dict(Experiment.objects.first())
