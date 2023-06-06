@@ -50,7 +50,6 @@ class Playlist(models.Model):
 
     def update_sections(self):
         """Update the sections from the csv file"""
-        
         # CSV empty
         if len(self.csv) == 0:
             # Delete all existing sections
@@ -187,7 +186,9 @@ class Playlist(models.Model):
     def update_admin_csv(self):
         """Update csv data for admin"""
         csvfile = CsvStringBuilder()
-        writer = csv.writer(csvfile)        
+        writer = csv.writer(csvfile)
+        if not self.section_set.count():
+            return self.csv       
         for section in self.section_set.all():
             if section.song:
                 this_artist = section.song.artist
