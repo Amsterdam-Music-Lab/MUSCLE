@@ -154,7 +154,7 @@ class ToontjeHoger4Absolute(Base):
                     last_result.expected_response.upper())
 
             feedback += " Je luisterde naar de intro van {}.".format(
-                non_breaking_spaces(last_result.section.name))
+                non_breaking_spaces(last_result.section.song.name))
 
         # Return score view
         config = {'show_total_score': True}
