@@ -48,8 +48,7 @@ class PlaylistAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
 
         # store proces value
         process_csv = obj.process_csv
-        if process_csv:
-            obj.process_csv = False
+        
         # save playlist (so it sure has an id)
         super().save_model(request, obj, form, change)
 

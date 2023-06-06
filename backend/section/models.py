@@ -23,7 +23,8 @@ class Playlist(models.Model):
 
     def save(self, *args, **kwargs):
         """Update playlist csv field on every save"""
-        self.csv = self.update_admin_csv()
+        if self.process_csv is False:  
+            self.csv = self.update_admin_csv()            
         super(Playlist, self).save(*args, **kwargs)
 
     class Meta:
@@ -49,7 +50,6 @@ class Playlist(models.Model):
 
     def update_sections(self):
         """Update the sections from the csv file"""
-        
         # CSV empty
         if len(self.csv) == 0:
             # Delete all existing sections
@@ -151,6 +151,10 @@ class Playlist(models.Model):
         delete_ids = [ex_section.id for ex_section in existing_sections]
         self.section_set.filter(pk__in=delete_ids).delete()
 
+        # Reset process csv option and save playlist
+        self.process_csv = False        
+        self.save()        
+
         return {
             'status': self.CSV_OK,
             'message': "Sections processed from CSV. Added: " + str(len(sections)) + " - Updated: " + str(updated) + " - Removed: " + str(len(delete_ids))
@@ -182,12 +186,12 @@ class Playlist(models.Model):
     def update_admin_csv(self):
         """Update csv data for admin"""
         csvfile = CsvStringBuilder()
-        writer = csv.writer(csvfile)        
+        writer = csv.writer(csvfile)            
         for section in self.section_set.all():
             if section.song:
                 this_artist = section.song.artist
                 this_name = section.song.name
-                this_restricted = '1' if section.song.restricted else '' 
+                this_restricted = '1' if section.song.restricted else '0'
             else:
                 this_artist = ''
                 this_name = ''
