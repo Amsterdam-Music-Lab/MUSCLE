@@ -65,7 +65,7 @@ pytz==2021.3
     # via
     #   django
     #   pandas
-requests==2.28.1
+requests==2.31.0
     # via -r backend/requirements.in/dev.txt
 six==1.16.0
     # via python-dateutil
