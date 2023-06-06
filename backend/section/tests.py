@@ -8,17 +8,17 @@ class PlaylistModelTest(TestCase):
 
     @classmethod
     def setUpTestData(cls):
-        Playlist.objects.create()
+        Playlist.objects.create(name='TestPlaylist')
 
     def test_update_sections_csv_empty(self):
-        playlist = Playlist.objects.get(id = 1)
+        playlist = Playlist.objects.get(name='TestPlaylist')
         playlist.csv = ''
         s = playlist.update_sections()
         self.assertFalse(playlist.section_set.all())
         self.assertEqual(s['status'], playlist.CSV_OK)
 
     def test_update_sections_invalid_row_length(self):
-        playlist = Playlist.objects.get(id = 1)
+        playlist = Playlist.objects.get(name='TestPlaylist')
         # Third row invalid, len < 8
         playlist.csv = ("Måneskin,Zitti e buoni,0.0,10.0,bat/maneskin.mp3,0,0,0\n"
                         "Duncan Laurence,Arcade,0.0,10.0,bat/laurence.mp3,0,0,0\n"
@@ -28,7 +28,7 @@ class PlaylistModelTest(TestCase):
         self.assertEqual(s['status'], playlist.CSV_ERROR)
 
     def test_update_sections_not_number(self):
-        playlist = Playlist.objects.get(id = 1)
+        playlist = Playlist.objects.get(name='TestPlaylist')
         # Third row string is not a number 
         playlist.csv = ("Måneskin,Zitti e buoni,0.0,10.0,bat/maneskin.mp3,0,0,0\n"
                         "Duncan Laurence,Arcade,0.0,10.0,bat/laurence.mp3,0,0,0\n"
@@ -38,7 +38,7 @@ class PlaylistModelTest(TestCase):
         self.assertEqual(s['status'], playlist.CSV_ERROR)
 
     def test_valid_csv(self):
-        playlist = Playlist.objects.get(id = 1)    
+        playlist = Playlist.objects.get(name='TestPlaylist')    
         playlist.csv = ("Måneskin,Zitti e buoni,0.0,10.0,bat/maneskin.mp3,0,0,0\n"
                         "Duncan Laurence,Arcade,0.0,10.0,bat/laurence.mp3,0,1,2\n"
                         "Netta,Toy,0.0,10.0,bat/netta.mp3,1,tag,group\n"
