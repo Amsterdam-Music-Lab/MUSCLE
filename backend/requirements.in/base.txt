@@ -2,7 +2,7 @@
 audioread
 
 # Django Framework
-Django
+Django<4.0
 
 # Django inline actions, admin extension 
 django-inline-actions
