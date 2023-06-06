@@ -1,3 +1,6 @@
+# reading audio files
+audioread
+
 # Django Framework
 Django
 
@@ -16,3 +19,4 @@ IPToCC
 
 # PostgrSQL database client
 psycopg2
+
