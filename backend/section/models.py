@@ -186,9 +186,7 @@ class Playlist(models.Model):
     def update_admin_csv(self):
         """Update csv data for admin"""
         csvfile = CsvStringBuilder()
-        writer = csv.writer(csvfile)
-        if not self.section_set.count():
-            return self.csv       
+        writer = csv.writer(csvfile)            
         for section in self.section_set.all():
             if section.song:
                 this_artist = section.song.artist
