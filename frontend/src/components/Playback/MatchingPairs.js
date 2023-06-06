@@ -60,7 +60,7 @@ const MatchingPairs = ({
                 sections.forEach(section => section.turned = false);
                 sections.forEach(section => section.noevents = false);
                 firstCard.current = -1;
-                setMessage('</br> Try again');
+                setMessage('<br/> Try again');
                 setFeedback(false);                
             }, finishDelay);
             // show end of turn animations
