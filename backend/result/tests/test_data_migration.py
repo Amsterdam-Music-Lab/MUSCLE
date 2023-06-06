@@ -94,7 +94,6 @@ class TagsTestCase(TestMigrations):
             question='some_question'
         )
 
-    @skip
     def test_playlist_migrated(self):
         Playlist = self.apps.get_model('section', 'Playlist')
         Section = self.apps.get_model('section', 'Section')
@@ -103,8 +102,7 @@ class TagsTestCase(TestMigrations):
         assert playlists.count() == 1
         assert sections.count() == len(self.sections)
         assert sections.first().playlist.name == self.playlist.name
-    
-    @skip
+
     def test_participant_migrated(self):
         Participant = self.apps.get_model('participant', 'Participant')
         participant = Participant.objects.first()
@@ -116,8 +114,7 @@ class TagsTestCase(TestMigrations):
         session = Session.objects.first()
         assert session.experiment.slug == self.session.experiment.slug
         assert session.participant.unique_hash == self.participant.unique_hash
-    
-    @skip
+
     def test_result_migrated(self):
         Result = self.apps.get_model('result', 'Result')
         result = Result.objects.filter(session__isnull=False).first()
