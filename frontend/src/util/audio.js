@@ -3,11 +3,6 @@ import { API_ROOT, SILENT_MP3 } from "../config.js";
 import Timer from "./timer";
 
 // Audio provides function around a shared audio object
-
-// Declare webaudio vars in the root scope
-let audioContext;
-let track;
-
 // Create a global audio object once
 // <audio /> docs: https://developer.mozilla.org/en-US/docs/Web/HTML/Element/audio
 const audio = document.createElement("audio");
@@ -19,7 +14,6 @@ audio.src = SILENT_MP3;
 // switch to cors anonymous for local development 
 API_ROOT == 'http://localhost:8000' ? audio.crossOrigin = "anonymous" : audio.crossorigin = "use-credentials";
 
-// 
 audio.disableRemotePlayback = true;
 audio.style.display = "none";
 
@@ -38,6 +32,11 @@ window.audio = audio;
 let _stopFadeTimer = null;
 export let audioInitialized = false;
 
+// init audio in webaudio context and connect track to destination (output)
+const audioContext = new AudioContext();
+const track = audioContext.createMediaElementSource(audio);
+track.connect(audioContext.destination);
+
 // Play a silent mp3 to make the audio element play after a user action
 // after that other audio can be started programmatically
 // More info: https://developer.mozilla.org/en-US/docs/Web/Media/Autoplay_guide
@@ -45,18 +44,8 @@ export const init = () => {
     load(SILENT_MP3);
     play();
     audioInitialized = true;
-    initWebAudio();
+    audioContext.resume();
 };
-
-// init webaudio context and connect track to destination (output) 
-const initWebAudio = () => {
-    audioContext = new AudioContext();
-    track = audioContext.createMediaElementSource(audio);
-    track.connect(audioContext.destination);
-    console.log(audioContext.baseLatency);
-    console.log(audioContext.outputLatency);
-    console.log(audioContext.getOutputTimestamp());
-}
 
 // init audio after first user action on page
 export const initAudioListener = () => {
