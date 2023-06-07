@@ -56,6 +56,23 @@ export const initAudioListener = () => {
     document.addEventListener("click", initOnce);
 };
 
+// return total audio latency in seconds
+export const getTotalLatency = () => {
+    console.log(audioContext.outputLatency * 1000);
+    console.log(audioContext.baseLatency * 1000);
+    return audioContext.outputLatency + audioContext.baseLatency
+}
+
+// return base audio latency in seconds
+export const getBaseLatency = () => {
+    return audioContext.baseLatency
+}
+
+// return output audio latency in seconds
+export const getOutputLatency = () => {    
+    return audioContext.outputLatency
+}
+
 // Adjust gain
 export const changeGain = (level) => {
     const gainNode = audioContext.createGain();
@@ -161,6 +178,8 @@ export const setCurrentTime = (t) => {
 
 // Get current time
 export const getCurrentTime = () => {
+    console.log(audio.currentTime);
+    console.log(audioContext.currentTime);
     return audio.currentTime;
 };
 

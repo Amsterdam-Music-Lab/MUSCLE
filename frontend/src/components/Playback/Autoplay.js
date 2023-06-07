@@ -33,8 +33,8 @@ const AutoPlay = ({instruction, preloadMessage, onPreloadReady, playConfig, sect
                 // Play audio at start time            
                 if (!playConfig.mute) {
                     audio.playFrom(Math.max(0, playConfig.playhead));
-                }
-                startedPlaying();
+                }                             
+                setTimeout(startedPlaying(), audio.getTotalLatency() * 1000);
                 break;
             default:
             // nothing
