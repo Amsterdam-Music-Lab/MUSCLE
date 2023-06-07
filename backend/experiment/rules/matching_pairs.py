@@ -11,6 +11,8 @@ from experiment.questions.demographics import EXTRA_DEMOGRAPHICS
 from experiment.questions.utils import question_by_key, total_unanswered_questions, unasked_question
 from result.utils import prepare_result
 
+from section.models import Section
+
 class MatchingPairs(Base):
     ID = 'MATCHING_PAIRS'
     num_pairs = 8
@@ -125,7 +127,7 @@ class MatchingPairs(Base):
             random.shuffle(pairs)
         selected_pairs = pairs[:cls.num_pairs]
         session.save_json_data({'pairs': pairs[cls.num_pairs:]})
-        originals = session.playlist.section_set.filter(group__in=selected_pairs, tag='original')  
+        originals = session.playlist.section_set.filter(group__in=selected_pairs, tag='Original')  
         degradations = json_data.get('degradations')
         if not degradations:
             degradations = ['Original', '1stDegradation', '2ndDegradation']
@@ -158,6 +160,8 @@ class MatchingPairs(Base):
             score = 1 if data.get('value') == 'yes' else 0
         elif result.question_key == 'matching_pairs':
             moves = data.get('result').get('moves')
+            for m in moves:
+                m['filename'] = Section.objects.get(pk=m.get('selectedSection')).filename
             score = sum([int(m['score']) for m in moves if 
                                m.get('score') and m['score']!= None]) + 100
         else:
