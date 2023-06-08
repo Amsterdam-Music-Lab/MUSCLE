@@ -24,6 +24,7 @@ import classNames from "classnames";
 // - Renders the view based on the state that is provided by the server
 // - It handles sending results to the server
 // - Implements participant_id as URL parameter, e.g. http://localhost:3000/bat?participant_id=johnsmith34
+//   Empty URL parameter "participant_id" is the same as no URL parameter at all
 const Experiment = ({ match, location }) => {
     const startState = { view: "LOADING" };
 
@@ -132,6 +133,7 @@ const Experiment = ({ match, location }) => {
             setError,
             onResult,
             onNext,
+            url_query_string,
             ...state,
         };
 
