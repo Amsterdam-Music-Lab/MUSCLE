@@ -36,7 +36,7 @@ class Score(object):  # pylint: disable=too-few-public-methods
             self.config.update(config)
         self.icon = icon
         self.texts = {
-            'score': _('Score'),
+            'score': _('Total Score'),
             'next': _('Next'),
             'listen_explainer': _('You listened to:')
         }
