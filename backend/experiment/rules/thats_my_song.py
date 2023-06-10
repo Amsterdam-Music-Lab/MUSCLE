@@ -117,6 +117,7 @@ class ThatsMySong(Hooked):
                     '1990s': '1990s',
                     '2000s': '2000s'
                 },
+                min_values = 2,
                 result_id=prepare_result('playlist_decades', session=session)
             )
             actions.append(
