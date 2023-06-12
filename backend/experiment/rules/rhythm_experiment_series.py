@@ -3,11 +3,9 @@ from os.path import join
 
 from django.conf import settings
 from django.utils.translation import gettext as _
-from django.http import HttpResponseRedirect
 from django.template.loader import render_to_string
 
 from .base import Base
-from experiment.actions.utils import combine_actions
 from experiment.actions import Consent, Explainer, Final, StartSession, Step
 
 

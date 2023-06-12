@@ -5,7 +5,7 @@ from .base import Base
 from experiment.actions import Consent, Explainer, Step, Playback, Playlist, StartSession, Trial
 from experiment.actions.form import ChoiceQuestion, Form
 from experiment.actions.playback import Playback
-from experiment.actions.utils import combine_actions, final_action_with_optional_button
+from experiment.actions.utils import final_action_with_optional_button
 
 
 class ListeningConditions(Base):

@@ -37,7 +37,7 @@ class Eurovision2020(Hooked):
         free_songs = random.sample(free_song_set - set(old_songs), k=n_free)
         new_songs = \
             random.sample(
-                old_new_song_set - set(old_songs + free_songs),
+                free_song_set - set(old_songs + free_songs),
                 k=n_new
             )
 
@@ -163,7 +163,6 @@ class Eurovision2020(Hooked):
             },
             question=_("Did you hear this song in previous rounds?"),
             result_id=result_pk,
-            scoring_rule='REACTION_TIME',
             style=STYLE_BOOLEAN_NEGATIVE_FIRST,
             submits=True)])
         config = {      

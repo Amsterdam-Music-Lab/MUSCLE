@@ -129,7 +129,7 @@ class DurationDiscrimination(Base):
         else:
             difference = difficulty
         try:
-            section = session.playlist.section_set.get(name=difference)
+            section = session.playlist.section_set.get(song__name=difference)
         except Section.DoesNotExist:
             raise
         expected_response = 'EQUAL' if difference == 0 else 'LONGER'

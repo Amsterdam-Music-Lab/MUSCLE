@@ -147,7 +147,7 @@ class MusicalPreferences(Base):
         out_list = []
         for s in top_songs:
             section = Section.objects.get(pk=s.get('section'))
-            out_list.append({'name': section.name, 'score': s.get('avg_score')})
+            out_list.append({'name': section.song.name, 'score': s.get('avg_score')})
         return out_list
     
     @classmethod
