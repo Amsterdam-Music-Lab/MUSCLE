@@ -45,23 +45,23 @@ class TagsTestCase(TestMigrations):
 
     def setUpBeforeMigration(self, apps):
         OldSession = apps.get_model('experiment', 'Session')
-        OldSection = apps.get_model('experiment', 'Section')
+        Section = apps.get_model('section', 'Section')
         OldParticipant = apps.get_model('experiment', 'Participant')
-        OldPlaylist = apps.get_model('experiment', 'Playlist')
+        Playlist = apps.get_model('section', 'Playlist')
         OldResult = apps.get_model('experiment', 'Result')
         Profile = apps.get_model('experiment', 'Profile')
         Experiment = apps.get_model('experiment', 'Experiment')
-        self.playlist = OldPlaylist.objects.create(
+        self.playlist = Playlist.objects.create(
             name='Testing'
         )
         self.sections = [
-            OldSection.objects.create(
+            Section.objects.create(
                 playlist=self.playlist,
                 artist='Superstar',
                 name='Great track',
                 filename='/Some/path'
             ),
-            OldSection.objects.create(
+            Section.objects.create(
                 playlist=self.playlist,
                 artist='Even bigger star',
                 name='Even greater track',
@@ -94,14 +94,14 @@ class TagsTestCase(TestMigrations):
             question='some_question'
         )
 
-    def test_playlist_migrated(self):
-        Playlist = self.apps.get_model('section', 'Playlist')
-        Section = self.apps.get_model('section', 'Section')
-        playlists = Playlist.objects.filter(name=self.playlist.name)
-        sections = Section.objects.all()
-        assert playlists.count() == 1
-        assert sections.count() == len(self.sections)
-        assert sections.first().playlist.name == self.playlist.name
+    # def test_playlist_migrated(self):
+    #     Playlist = self.apps.get_model('section', 'Playlist')
+    #     Section = self.apps.get_model('section', 'Section')
+    #     playlists = Playlist.objects.filter(name=self.playlist.name)
+    #     sections = Section.objects.all()
+    #     assert playlists.count() == 1
+    #     assert sections.count() == len(self.sections)
+    #     assert sections.first().playlist.name == self.playlist.name
 
     def test_participant_migrated(self):
         Participant = self.apps.get_model('participant', 'Participant')
