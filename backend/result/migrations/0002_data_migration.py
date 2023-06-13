@@ -45,7 +45,7 @@ def backwards_populate_results(apps, schema_editor):
     ExperimentResult = apps.get_model('experiment', 'Result')
     Profile = apps.get_model('experiment', 'Profile')
     Result = apps.get_model('result', 'Result')
-    for result in Result.objects.all():
+    for result in tqdm(Result.objects.all()):
         session = result.session
         if session:
             participant = session.participant
