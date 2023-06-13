@@ -77,6 +77,8 @@ toml==0.10.2
     # via
     #   autopep8
     #   pylint
+tqdm==4.65.0
+    # via -r requirements.in/base.txt
 typing-extensions==3.10.0.2
     # via
     #   astroid

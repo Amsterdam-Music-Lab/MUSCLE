@@ -55,11 +55,11 @@ To stop the containers, press `ctrl-c` or (in another console) run
 ### Backup the Postgresql database
 Run the following command in the console to back up the database:
 
-`docker-compose run db bash -c "pg_dump aml -Fc > /backups/<filename>.dump"`
+`docker-compose run --rm db bash -c "pg_dump aml -Fc > /backups/<filename>.dump"`
 
 Use this command to make daily backups, numbered by the day of the month:
 
-`docker-compose run db bash -c "pg_dump aml -Fc > /backups/backup-$(date +"%d").dump"`
+`docker-compose run --rm db bash -c "pg_dump aml -Fc > /backups/backup-$(date +"%d").dump"`
 
 The backups are stored on the docker volume `db_backup` which mirrors `/backups` from the Postgresql container.
 
@@ -71,11 +71,11 @@ Always stop the backend container first:
 
 Then drop, create and restore the database:
 
-`docker-compose run db bash -c "dropdb aml"`
+`docker-compose run --rm db bash -c "dropdb aml"`
 
-`docker-compose run db bash -c "createdb aml"`
+`docker-compose run --rm db bash -c "createdb aml"`
 
-`docker-compose run db bash -c "pg_restore -d aml /backups/<filename>.dump"`
+`docker-compose run --rm db bash -c "pg_restore -d aml /backups/<filename>.dump"`
 
 Restart the backend container: (or alternatively rebuilt the containers as descibed above) 
 
@@ -91,7 +91,7 @@ Then run `./manage.py createsuperuser`, and proceed to enter username, password 
 You can run management commands, such as dump the database or compile the playlist, by using the management container, as specified in `docker-compose-manage.yaml`.
 
 For instance, to compile a playlist:
-`docker-compose -f docker-compose-manage.yaml run manage ./manage.py compileplaylist path_to_sound_folder`
+`docker-compose -f docker-compose-manage.yaml run --rm manage ./manage.py compileplaylist path_to_sound_folder`
 
 Other important management commands:
 - Export experiment data to json: `./manage.py exportexperiment your_slug`
