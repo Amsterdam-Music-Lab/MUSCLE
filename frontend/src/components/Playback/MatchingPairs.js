@@ -114,13 +114,13 @@ const MatchingPairs = ({
                 const lastCard = sections[firstCard.current];                
                 if (lastCard.group === currentCard.group) {
                     // match                                        
-                    if (currentCard.seen && lastCard.seen) {
+                    if (currentCard.seen) {
                         score.current = 2;                        
                     } else {
                         score.current = 1;                        
                     }
                 } else {                    
-                    if (lastCard.seen && currentCard.seen) { score.current = -1; }
+                    if (currentCard.seen) { score.current = -1; }
                     else { score.current = 0; }
                 };
                 currentCard.seen = true;
