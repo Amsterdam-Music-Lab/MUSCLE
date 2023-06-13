@@ -9,7 +9,7 @@ asgiref==3.4.1
 astroid==2.8.3
     # via pylint
 audioread==2.1.9
-    # via -r requirements.in/dev.txt
+    # via -r requirements.in/base.txt
 autopep8==1.5.7
     # via -r requirements.in/dev.txt
 certifi==2022.12.7

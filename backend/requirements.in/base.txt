@@ -1,3 +1,6 @@
+# reading audio files
+audioread
+
 # Django Framework
 Django<4.0
 

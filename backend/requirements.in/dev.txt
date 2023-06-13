@@ -12,8 +12,5 @@ pylint-django
 # Autoformatter
 autopep8
 
-# reading audio files
-audioread
-
 # for simulating http requests in tests
 requests
