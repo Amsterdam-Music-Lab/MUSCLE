@@ -13,6 +13,10 @@ class ThatsMySong(Hooked):
     ID = 'THATS_MY_SONG'
     consent_file = None
     round_modifier = 1
+
+    @classmethod
+    def feedback_info(cls):
+        return None
     
     @classmethod
     def get_random_question(cls, session):

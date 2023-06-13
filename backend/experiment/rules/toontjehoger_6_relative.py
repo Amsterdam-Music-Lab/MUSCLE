@@ -7,7 +7,6 @@ from experiment.actions.form import ChoiceQuestion, Form
 from experiment.actions.playback import Playback
 from experiment.actions.styles import STYLE_BOOLEAN
 from .base import Base
-from experiment.actions.utils import combine_actions
 
 from result.utils import prepare_result
 

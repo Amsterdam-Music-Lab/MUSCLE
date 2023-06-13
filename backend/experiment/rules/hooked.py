@@ -29,10 +29,6 @@ class Hooked(Base):
     round_modifier = 0
 
     @classmethod
-    def feedback_info(cls):
-        return None
-
-    @classmethod
     def first_round(cls, experiment):
         """Create data for the first experiment rounds."""
         
@@ -192,7 +188,7 @@ class Hooked(Base):
 
             # Load the heard_before offset.
             plan = json_data.get('plan')
-            heard_before_offset = len(plan['song_sync_sections']) + 1
+            heard_before_offset = plan['n_song_sync'] + 1
 
             # SongSync rounds. Skip questions until Round 5.
             if next_round_number in range(2, 5):
@@ -308,6 +304,7 @@ class Hooked(Base):
         random.shuffle(heard_before_sections)
         plan = {
             'song_sync_sections': song_sync_sections,
+            'n_song_sync': len(song_sync_sections),
             'heard_before_sections': heard_before_sections
         }
 

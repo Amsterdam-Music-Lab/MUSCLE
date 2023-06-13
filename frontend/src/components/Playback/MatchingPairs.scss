@@ -58,6 +58,11 @@
     width: auto;    
 }
 
+.col {
+    margin-left: 4vw;
+    margin-right: 4vw;
+}
+
 .matching-pairs__feedback {
     float: left;
     color: white;
@@ -69,7 +74,7 @@
         color: $yellow;
     }
     &.fbmemory {
-        color: $green;
+        color: $teal;
     }
     &.fbmisremembered {
         color: $red;
