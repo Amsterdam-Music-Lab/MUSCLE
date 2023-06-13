@@ -1,6 +1,9 @@
+import logging
 from tqdm import tqdm
 
 from django.db import migrations
+
+logger = logging.getLogger(__name__)
 
 def populate_results(apps, schema_editor):
     ExperimentResult = apps.get_model('experiment', 'Result')
@@ -13,7 +16,6 @@ def populate_results(apps, schema_editor):
         new_session = get_or_create_session(session, new_participant, apps)
         new_result = Result.objects.create(
             session=new_session,
-            section=result.section,
             created_at=result.created_at,
             question_key='',
             expected_response=result.expected_response,
@@ -23,6 +25,7 @@ def populate_results(apps, schema_editor):
             scoring_rule='',
             json_data=result.json_data
         )
+        attempt_set_section(new_result, result)
         new_result.save()
         result.delete()
     for profile in Profile.objects.all():
@@ -53,7 +56,6 @@ def backwards_populate_results(apps, schema_editor):
             new_session = get_or_create_session(session, new_participant, apps, 'experiment')
             new_result = ExperimentResult.objects.create(
                 session=new_session,
-                # section=result.section,
                 created_at=result.created_at,
                 expected_response=result.expected_response or '',
                 given_response=result.given_response or '',
@@ -61,6 +63,7 @@ def backwards_populate_results(apps, schema_editor):
                 score=result.score,
                 json_data=result.json_data
             )
+            attempt_set_section(new_result, result)
             new_result.save()
         participant = result.participant
         if participant:
@@ -78,6 +81,12 @@ def backwards_populate_results(apps, schema_editor):
     OldSession.objects.all().delete()
     OldParticipant = apps.get_model('participant', 'Participant')
     OldParticipant.objects.all().delete()
+
+def attempt_set_section(new_result, result):
+    try:
+        new_result.section = result.section
+    except:
+        logging.warning('result {} could not set section {}'.format(new_result.id, result.section.id))
 
 def get_or_create_participant(participant, apps, app_name='participant'):
     Participant = apps.get_model(app_name, 'Participant')
