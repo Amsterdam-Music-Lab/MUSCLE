@@ -57,14 +57,10 @@ class TagsTestCase(TestMigrations):
         self.sections = [
             Section.objects.create(
                 playlist=self.playlist,
-                artist='Superstar',
-                name='Great track',
                 filename='/Some/path'
             ),
             Section.objects.create(
                 playlist=self.playlist,
-                artist='Even bigger star',
-                name='Even greater track',
                 filename='/Another/path'
             )
         ]
