@@ -1,98 +1,38 @@
 import logging
-from .views import Final
-from .util.score import SCORING_RULES
+
+from django.template.loader import render_to_string
+from django.utils.translation import gettext_lazy as _
+from django.conf import settings
+
+from experiment.actions import Final
+from result.score import SCORING_RULES
+
 
 logger = logging.getLogger(__name__)
 
 class Base(object):
     """Base class for other rules classes"""
 
-    @classmethod
-    def prepare_result(cls, session, section, expected_response=None, comment=None):
-        # Prevent circular dependency errors
-        from experiment.models import Result
-
-        result = Result(session=session)
-        result.section = section
-        if expected_response is not None:
-            result.expected_response = expected_response
-        if comment is not None:
-            result.comment = comment
-        result.save()
-        return result.pk
+    contact_email = settings.CONTACT_MAIL
 
     @classmethod
-    def get_result(cls, session, result_id=None):
-        from experiment.models import Result
-        
-        if not result_id:
-            result = Result(session=session)
-        try:
-            result = Result.objects.get(pk=result_id, session=session)
-        except Result.DoesNotExist:
-            # Create new result
-            result = Result(session=session)
-        return result
-
-    @classmethod
-    def handle_results(cls, session, data):
-        """ 
-        if the given_result is an array of results, retrieve and save results for all of them
-        """
-        form = data.pop('form')
-        for form_element in form:
-            result = cls.get_result(session, form_element['result_id'])
-
-            # Set given_response here, so it can be used in calculate_score
-            result.given_response = form_element['value']
-            
-            # Calculate score
-            scoring_rule = SCORING_RULES.get(form_element['scoring_rule'], None)
-            score = session.experiment_rules().calculate_score(result, data, scoring_rule, form_element)
-            if not score:
-                score = 0
-
-            result.save_json_data(data)
-            result.score = score
-            result.save()
-        return result
-
-    @classmethod
-    def handle_result(cls, session, data):
-        """
-        Create a result for given session, based on the result data and section_id
-
-        parameters:
-        session: a Session object
-        data: a dictionary, containing an optional result_id, and optional other params:
-        {
-            result_id: int [optional] 
-            ...
-            all other params in the custom result
+    def feedback_info(cls):
+        feedback_body = render_to_string('feedback/user_feedback.html', {'email': cls.contact_email})
+        return {
+            'header': _("Do you have any remarks or questions?"),
+            'button': _("Submit"),
+            'contact_body': feedback_body,
+            'thank_you': _("We appreciate your feedback!")
         }
-        """
-        result_id = data.get('result_id')
-        result = cls.get_result(session, result_id)
-
-        # Calculate score
-        scoring_rule = SCORING_RULES.get(data['config'].get('scoring_rule', None))
-        score = session.experiment_rules().calculate_score(result, data, scoring_rule)
-        if not score:
-            score = 0
-
-        # Populate and save the result
-        result.save_json_data(data)
-        result.score = score
-        result.save()
-
-        return result
 
     @classmethod
-    def calculate_score(cls, result, data, scoring_rule, form_element=None):
+    def calculate_score(cls, result, data):
         """use scoring rule to calculate score
-        If not scoring rule is defined, return None"""
+        If not scoring rule is defined, return None
+        Override in rules file for other scoring schemes"""
+        scoring_rule = SCORING_RULES.get(result.scoring_rule)
         if scoring_rule:
-            return scoring_rule(form_element, result, data)
+            return scoring_rule(result, data)
         return None
 
     @staticmethod

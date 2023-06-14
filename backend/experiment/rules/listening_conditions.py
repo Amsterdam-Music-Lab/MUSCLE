@@ -2,10 +2,10 @@
 from django.utils.translation import gettext_lazy as _
 
 from .base import Base
-from .views import Consent, Explainer, Step, Final, Playback, Playlist, StartSession, Trial
-from .views.form import ChoiceQuestion, Form
-from .views.playback import Playback
-from .util.actions import combine_actions, final_action_with_optional_button
+from experiment.actions import Consent, Explainer, Step, Playback, Playlist, StartSession, Trial
+from experiment.actions.form import ChoiceQuestion, Form
+from experiment.actions.playback import Playback
+from experiment.actions.utils import final_action_with_optional_button
 
 
 class ListeningConditions(Base):
@@ -17,9 +17,11 @@ class ListeningConditions(Base):
         playback = None
         feedback_form = None
         if round_number == 1:
+            key = 'quiet_room'
+            result_pk = Base.prepare_result(session, expected_response=key)
             feedback_form = Form([
                 ChoiceQuestion(
-                    key='quiet_room',
+                    key=key,
                     question=_(
                         "Are you in a quiet room?"),
                     choices={
@@ -27,10 +29,13 @@ class ListeningConditions(Base):
                         'MODERATELY': _('MODERATELY'),
                         'NO': _('NO')
                     },
+                    result_id=result_pk,
                     view='BUTTON_ARRAY',
                     submits=True
                 )])
         elif round_number == 2:
+            key = 'internet_connection'
+            result_pk = Base.prepare_result(session, expected_response=key)
             feedback_form = Form([ChoiceQuestion(
                 key='internet_connection',
                 question=_(
@@ -44,9 +49,11 @@ class ListeningConditions(Base):
                 submits=True
             )])
         elif round_number == 3:
+            key = 'headphones'
+            result_pk = Base.prepare_result(session, expected_response=key)
             feedback_form = Form([
                 ChoiceQuestion(
-                    key='headphones',
+                    key=key,
                     question=_(
                         "Are you wearing headphones?"),
                     choices={
@@ -54,13 +61,16 @@ class ListeningConditions(Base):
                         'NO': _('NO')
                     },
                     view='BUTTON_ARRAY',
+                    result_id=result_pk,
                     submits=True
                 )
             ])
         elif round_number == 4:
+            key = 'notifications_off'
+            result_pk = Base.prepare_result(session, expected_response=key)
             feedback_form = Form([
                 ChoiceQuestion(
-                    key='notifications_off',
+                    key=key,
                     question=_(
                         "Do you have sound notifications from other devices turned off?"),
                     choices={
@@ -68,6 +78,7 @@ class ListeningConditions(Base):
                         'NO': _('NO')
                     },
                     view='BUTTON_ARRAY',
+                    result_id=result_pk,
                     submits=True
                 ),
             ])
@@ -84,12 +95,12 @@ class ListeningConditions(Base):
                 final_action_with_optional_button(
                     session, message, request_session)
             ]
-            return combine_actions(*actions)
+            return actions
         view = Trial(playback, feedback_form)
-        return view.action()
+        return [view.action()]
 
     @classmethod
-    def first_round(cls, experiment, participant):
+    def first_round(cls, experiment):
         consent = Consent.action()
         explainer = Explainer(
             instruction=_(

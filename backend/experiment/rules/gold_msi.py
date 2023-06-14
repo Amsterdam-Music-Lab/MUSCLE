@@ -1,11 +1,11 @@
-import logging
-
 from django.utils.translation import gettext_lazy as _
-from .views import Trial, Consent, Explainer, Final, Playlist, StartSession
-from .views.form import Form
-from .util.goldsmiths import MSI_F3_MUSICAL_TRAINING
-from .util.questions import EXTRA_DEMOGRAPHICS, question_by_key
-from .util.actions import combine_actions, final_action_with_optional_button
+
+from experiment.actions import Trial, Consent, StartSession
+from experiment.actions.form import Form
+from experiment.questions.goldsmiths import MSI_F3_MUSICAL_TRAINING
+from experiment.questions.demographics import EXTRA_DEMOGRAPHICS
+from experiment.questions.utils import question_by_key, unasked_question
+from experiment.actions.utils import final_action_with_optional_button
 
 from .base import Base
 
@@ -25,7 +25,7 @@ class GoldMSI(Base):
     questions = MSI_F3_MUSICAL_TRAINING + demographics
 
     @classmethod
-    def first_round(cls, experiment, participant):
+    def first_round(cls, experiment):
         consent = Consent.action()
         start_session = StartSession.action()
         return [
@@ -35,12 +35,12 @@ class GoldMSI(Base):
 
     @classmethod
     def next_round(cls, session, request_session=None):
-        round_number = session.total_questions()
-        if round_number == len(cls.questions):
+        question = unasked_question(session.participant, cls.questions)
+        if question:
+            feedback_form = Form([
+                question,
+            ])
+            view = Trial(None, feedback_form)
+            return view.action()
+        else:
             return final_action_with_optional_button(session, '', request_session)
-        question = cls.questions[round_number]
-        feedback_form = Form([
-            question,
-        ], is_profile=True)
-        view = Trial(None, feedback_form)
-        return view.action()

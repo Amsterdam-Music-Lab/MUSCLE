@@ -2,18 +2,26 @@ import React, { useState, useRef, useCallback } from "react";
 import classNames from "classnames";
 
 import { getCurrentTime, getTimeSince } from "../../util/time";
-import { createProfile, createResult } from "../../API.js";
 import FeedbackForm from "../FeedbackForm/FeedbackForm";
+import HTML from "../HTML/HTML";
 import Playback from "../Playback/Playback";
 import Button from "../Button/Button";
 
-// Trial is an experiment view, that preloads a song, shows an explanation and plays audio
-// Optionally, it can show an animation during playback
-// Optionally, it can show a form during or after playback
-const Trial = ({ participant, session, playback, feedback_form, config, onNext, loadState }) => {
+/** Trial is an experiment view to present information to the user and/or collect user feedback
+If "playback" is provided, it will play audio through the Playback component
+If "html" is provided, it will show html content
+If "feedback_form" is provided, it will present a form of questions to the user
+**/
+const Trial = ({
+    playback,
+    html,
+    feedback_form,
+    config,
+    result_id,
+    onNext,
+    onResult,
+}) => {
     // Main component state
-    const resultBuffer = useRef([]);
-
     const [formActive, setFormActive] = useState(!config.listen_first);
     const [preloadReady, setPreloadReady] = useState(!playback?.play_config?.ready_time);
 
@@ -28,67 +36,7 @@ const Trial = ({ participant, session, playback, feedback_form, config, onNext, 
         startTime.current = getCurrentTime();
     }, []);
 
-    // Session result
-    const submitResult = useCallback(
-        async (result) => {
-            // Add data to result buffer
-            resultBuffer.current.push(result || {});
-
-            // Merge result data with data from resultBuffer
-            // NB: result data with same properties will be overwritten by later results
-            const mergedResults = Object.assign({}, ...resultBuffer.current, result);
-
-            // Create result data
-            const data = {
-                session,
-                participant,
-                result: mergedResults,
-            };
-
-            // Optionally add section to result data
-            if (mergedResults.section) {
-                data.section = mergedResults.section;
-            }
-
-            // Send data to API when create_result is true
-            const action = feedback_form?.create_result && (await createResult(data));
-
-            // Fallback: Call onNext, try to reload round
-            if (!action) {
-                onNext();
-                return;
-            }
-
-            // Clear resultBuffer
-            resultBuffer.current = [];
-
-            // Init new state from action
-            loadState(action);
-        },
-        [loadState, onNext, participant, session, feedback_form]
-    );
-
-    const submitProfile = useCallback(
-        async (result) => {
-            // Send data to server
-            const response = await createProfile({
-                result,
-                session: (session ? session.id : 0),
-                participant,
-            });
-
-            // Log error when createProfile failed
-            if (!response || !response.status === "ok") {
-                console.error("Could not store question");
-            }
-
-            // Continue
-            onNext();
-        },
-        [onNext, participant, session]
-    );
-
-    // Create result data in this wrapper function
+    // Create result data
     const makeResult = useCallback(
         (result) => {
             // Prevent multiple submissions
@@ -100,31 +48,32 @@ const Trial = ({ participant, session, playback, feedback_form, config, onNext, 
             const decision_time = getTimeSince(startTime.current);
             const form = feedback_form ? feedback_form.form : [{}];
 
-            if (feedback_form.is_skippable) {
-                form.map((formElement => (formElement.value = formElement.value || '')))
-            }
-
             if (result.type === "time_passed") {
                 form.map((formElement) => (formElement.value = "TIMEOUT"));
             }
 
             if (feedback_form) {
-                if (feedback_form.is_profile) {
-                    submitProfile({
-                        form,
+                if (feedback_form.is_skippable) {
+                    form.map((formElement => (formElement.value = formElement.value || '')))
+                }
+                onResult({
+                    decision_time,
+                    form,
+                    config
+                });
+            } else {
+                if (result_id) {
+                    onResult({
+                        result,
+                        result_id
                     });
                 } else {
-                    submitResult({
-                        decision_time,
-                        form,
-                        config
-                    });
+                    onNext();
                 }
-            } else {
-                onNext();
+                
             }
         },
-        [feedback_form, onNext, submitProfile, submitResult]
+        [feedback_form, config, onNext, onResult]
     );
 
     const finishedPlaying = useCallback(() => {
@@ -133,10 +82,9 @@ const Trial = ({ participant, session, playback, feedback_form, config, onNext, 
 
             // Create a time_passed result
             if (config.auto_advance_timer != null) {
-                if (playback.player_type == 'BUTTON') {
+                if (playback.player_type === 'BUTTON') {
                     startTime.current = getCurrentTime();
                 }
-                const id = setTimeout( () => {makeResult({type: "time_passed",});} , config.auto_advance_timer);
 
             } else {
 
@@ -148,11 +96,11 @@ const Trial = ({ participant, session, playback, feedback_form, config, onNext, 
         }
         setFormActive(true);
         return;
-    }, [config.auto_advance, makeResult]);
+    }, [config, playback, makeResult]);
 
 
     return (
-        <div role="trial" className={classNames("aha__trial", config.style)}>
+        <div role="presentation" className={classNames("aha__trial", config.style)}>
             {playback && (
                 <Playback
                     playerType={playback.player_type}
@@ -162,13 +110,18 @@ const Trial = ({ participant, session, playback, feedback_form, config, onNext, 
                     }}
                     preloadMessage={playback.preload_message}
                     autoAdvance={config.auto_advance}
-                    decisionTime={config.decision_time}
+                    responseTime={config.response_time}
                     playConfig={playback.play_config}
                     sections={playback.sections}
                     time={time}
                     submitResult={makeResult}
                     startedPlaying={startTimer}
                     finishedPlaying={finishedPlaying}
+                />
+            )}
+            {html && (
+                <HTML
+                    body={html.body}
                 />
             )}
             {preloadReady && feedback_form && (
@@ -179,7 +132,9 @@ const Trial = ({ participant, session, playback, feedback_form, config, onNext, 
                     skipLabel={feedback_form.skip_label}
                     isSkippable={feedback_form.is_skippable}
                     onResult={makeResult}
-                    emphasizeTitle={feedback_form.is_profile}
+                    // emphasizeTitle={feedback_form.is_profile}
+                    // to do: if we want left-aligned text with a pink divider,
+                    // make this style option available again (used in Question.scss)
                 />
             )}
             {preloadReady && !feedback_form && config.show_continue_button && (

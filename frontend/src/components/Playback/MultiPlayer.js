@@ -41,8 +41,8 @@ const MultiPlayer = ({
                         playing={playerIndex === index}
                     />
                     {extraContent && extraContent(index)}
-                </div>
-            ))}
+                </div>)
+            )}
         </div>
     );
 };

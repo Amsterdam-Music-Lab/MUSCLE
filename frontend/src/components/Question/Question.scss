@@ -12,6 +12,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: space-between;
+    margin-bottom: 2rem;
     
     .question {
         flex-grow: 1;
@@ -20,7 +21,7 @@
 
     h3 {
         width: 100%;
-        margin-bottom: 25px;
+        margin-bottom: 1rem;
         font-size: 1.65rem;
 
         @media (max-width: 320px) {

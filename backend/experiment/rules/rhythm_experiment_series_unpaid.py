@@ -1,6 +1,6 @@
 from django.utils.translation import gettext as _
 
-from .views import Explainer, Step
+from experiment.actions import Explainer, Step
 
 from . import RhythmExperimentSeries
 

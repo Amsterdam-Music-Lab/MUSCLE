@@ -1,5 +1,8 @@
+# reading audio files
+audioread
+
 # Django Framework
-Django
+Django<4.0
 
 # Django inline actions, admin extension 
 django-inline-actions
@@ -16,3 +19,6 @@ IPToCC
 
 # PostgrSQL database client
 psycopg2
+
+# print progress
+tqdm

@@ -38,16 +38,16 @@ const FeedbackForm = ({
             onSubmit(form);
         }
         // for every non-skippable question, check that we have a value
-        const validFormElements = form.map( formElement => {
-            if (formElement.is_skippable) return formElement;
-            else if (formElement.value) return formElement;
+        const validFormElements = form.filter( formElement => {
+            if (formElement.is_skippable) return true;
+            else if (formElement.value) return true;
         });
         if (validFormElements.length === form.length) setFormValid(true);
         else setFormValid(false);
     };
 
     return (
-        <div className="aha__feedback d-flex justify-content-center">
+        <div className="aha__feedback justify-content-center">
             <form>
                 {Object.keys(form).map((index) => (
                     <Question

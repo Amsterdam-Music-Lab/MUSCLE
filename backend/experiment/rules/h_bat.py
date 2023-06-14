@@ -4,15 +4,17 @@ from decimal import Decimal, ROUND_HALF_UP
 from django.utils.translation import gettext_lazy as _
 
 from .base import Base
-from experiment.models import Section
-from .views import Trial, Consent, Explainer, Playlist, Step, StartSession
-from .views.form import ChoiceQuestion, Form
-from .views.playback import Playback
+from section.models import Section
+from experiment.actions import Trial, Consent, Explainer, Playlist, Step, StartSession
+from experiment.actions.form import ChoiceQuestion, Form
+from experiment.actions.playback import Playback
 
-from .util.practice import get_practice_views, practice_explainer, get_trial_condition, get_trial_condition_block
-from .util.actions import final_action_with_optional_button, render_feedback_trivia
-from .util.final_score import get_average_difference_level_based
-from .util.staircasing import register_turnpoint
+from experiment.rules.util.practice import get_practice_views, practice_explainer, get_trial_condition, get_trial_condition_block
+from experiment.actions.utils import final_action_with_optional_button, render_feedback_trivia
+from experiment.actions.utils import get_average_difference_level_based
+from experiment.rules.util.staircasing import register_turnpoint
+
+from result.utils import prepare_result
 
 logger = logging.getLogger(__name__)
 
@@ -60,7 +62,7 @@ class HBat(Base):
             return action
 
     @classmethod
-    def first_round(cls, experiment, participant):
+    def first_round(cls, experiment):
         explainer = cls.intro_explainer().action(True)
         consent = Consent.action()
         explainer2 = practice_explainer().action()
@@ -85,21 +87,25 @@ class HBat(Base):
             section = session.playlist.section_set.filter(
                 group=str(level)).get(tag=str(trial_condition))
         except Section.DoesNotExist:
-            return None
-        expected_result = 'SLOWER' if trial_condition else 'FASTER'
-        # create Result object and save expected result to database
-        result_pk = cls.prepare_result(session, section, expected_result)
+            raise
+        expected_response = 'SLOWER' if trial_condition else 'FASTER'
+        key = 'longer_or_equal'
         question = ChoiceQuestion(
-            key='longer_or_equal',
+            key=key,
             question=_(
                 "Is the rhythm going SLOWER or FASTER?"),
             choices={
                 'SLOWER': _('SLOWER'),
                 'FASTER': _('FASTER')
             },
+            result_id=prepare_result(
+                key,
+                session,
+                section=section,
+                expected_response=expected_response,
+                scoring_rule='CORRECTNESS'
+            ),
             view='BUTTON_ARRAY',
-            scoring_rule='CORRECTNESS',
-            result_id=result_pk,
             submits=True
         )
         playback = Playback([section])
@@ -109,7 +115,7 @@ class HBat(Base):
             feedback_form=form,
             title=_('Beat acceleration'),
             config={
-                'decision_time': section.duration + .1
+                'response_time': section.duration + .1
             }
         )
         return view.action()
@@ -206,7 +212,7 @@ def staircasing(session, trial_action_callback):
         if direction == 'increase':
             register_turnpoint(session, last_result)
         # register decreasing difficulty
-        session.merge_json_data({'direction': 'decrease'})
+        session.save_json_data({'direction': 'decrease'})
         session.save()
         level = get_previous_level(last_result) - 1  # decrease difficulty
         action = trial_action_callback(
@@ -226,7 +232,7 @@ def staircasing(session, trial_action_callback):
                 # mark the turnpoint
                 register_turnpoint(session, last_result)
             # register increasing difficulty
-            session.merge_json_data({'direction': 'increase'})
+            session.save_json_data({'direction': 'increase'})
             session.save()
             level = get_previous_level(last_result) + 1  # increase difficulty
             action = trial_action_callback(

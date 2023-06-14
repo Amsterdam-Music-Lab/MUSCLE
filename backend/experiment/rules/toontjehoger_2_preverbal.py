@@ -2,12 +2,13 @@ import logging
 from django.template.loader import render_to_string
 
 from .toontjehoger_1_mozart import toontjehoger_ranks
-from .views import Trial, Explainer, Step, Score, Final, StartSession, Playlist, Info, HTML
-from .views.form import ButtonArrayQuestion, ChoiceQuestion, Form
-from .views.playback import Playback
+from experiment.actions import Trial, Explainer, Step, Score, Final, StartSession, Playlist, Info, HTML
+from experiment.actions.form import ButtonArrayQuestion, ChoiceQuestion, Form
+from experiment.actions.playback import Playback
+from experiment.actions.styles import STYLE_NEUTRAL
 from .base import Base
 from os.path import join
-from .util.actions import combine_actions
+from result.utils import prepare_result
 
 logger = logging.getLogger(__name__)
 
@@ -19,7 +20,7 @@ class ToontjeHoger2Preverbal(Base):
     SCORE_WRONG = 0
 
     @classmethod
-    def first_round(cls, experiment, participant):
+    def first_round(cls, experiment):
         """Create data for the first experiment rounds."""
 
         # 1. Explain game.
@@ -81,10 +82,10 @@ class ToontjeHoger2Preverbal(Base):
 
         # Round 2
         if rounds_passed == 1:
-            return combine_actions(*cls.get_score(session, rounds_passed), *cls.get_round1_playback(session), *cls.get_round2(round, session))
+            return [*cls.get_score(session, rounds_passed), *cls.get_round1_playback(session), *cls.get_round2(round, session)]
 
         # Final
-        return combine_actions(*cls.get_final_round(session))
+        return cls.get_final_round(session)
 
     @classmethod
     def get_score(cls, session, rounds_passed):
@@ -114,30 +115,30 @@ class ToontjeHoger2Preverbal(Base):
 
     @classmethod
     def get_round1(cls, session):
-        result_pk = cls.prepare_result(
-            session, section=None, expected_response="C")
-
         # Question
+        key = 'expected_spectrogram'
         question = ButtonArrayQuestion(
             question="Welk spectrogram toont het geluid van een mens?",
-            key='expected_spectrogram',
+            key=key,
             choices={
                 'A': 'A',
                 'B': 'B',
                 'C': 'C',
             },
             view='BUTTON_ARRAY',
-            result_id=result_pk,
-            submits=True
+            submits=True,
+            result_id=prepare_result(
+                key, session, expected_response="C"
+            )
         )
         form = Form([question])
 
-        image_trial = HTML(
-            html='<img src="{}" style="height:calc(100% - 260px);max-height:326px;max-width: 100%;"/>'.format(
-                "/images/experiments/toontjehoger/preverbal_1.webp"),
-            form=form,
+        image_trial = Trial(
+            html=HTML(
+            body='<img src="{}" style="height:calc(100% - 260px);max-height:326px;max-width: 100%;"/>'.format(
+                "/images/experiments/toontjehoger/preverbal_1.webp")),
+            feedback_form=form,
             title=cls.TITLE,
-            result_id=result_pk
         ).action()
 
         return [image_trial]
@@ -172,36 +173,16 @@ class ToontjeHoger2Preverbal(Base):
         playback = Playback(
             [sectionA, sectionB, sectionC], player_type=Playback.TYPE_SPECTROGRAM, play_config=play_config)
 
-        # Question
-        question = ChoiceQuestion(
-            question="",
-            key='dummy',
-            choices={
-                "_": "Volgende",
-            },
-            view='BUTTON_ARRAY',
-            submits=True
-        )
-        form = Form([question], create_result=False)
-
-        # Trial
-        trial_config = {
-            'style': 'neutral primary-form',
-        }
-
         trial = Trial(
-            config=trial_config,
             playback=playback,
-            feedback_form=form,
+            feedback_form=None,
             title=cls.TITLE,
+            style='primary-form'
         ).action()
         return [trial]
 
     @classmethod
     def get_round2(cls, round, session):
-        # Create result
-        result_pk = cls.prepare_result(
-            session, section=None, expected_response="A")
 
         # Get sections
         # French
@@ -226,26 +207,22 @@ class ToontjeHoger2Preverbal(Base):
             [sectionA, sectionB], player_type=Playback.TYPE_SPECTROGRAM, play_config=play_config)
 
         # Question
+        key = 'baby'
         question = ChoiceQuestion(
             question="Welke baby is in Frankrijk geboren?",
-            key='baby',
+            key=key,
             choices={
                 "A": "A",
                 "B": "B",
             },
             view='BUTTON_ARRAY',
             submits=True,
-            result_id=result_pk
+            result_id=prepare_result(key, session, expected_response="A"),
+            style=STYLE_NEUTRAL
         )
         form = Form([question])
 
-        # Trial
-        trial_config = {
-            'style': 'neutral',
-        }
-
         trial = Trial(
-            config=trial_config,
             playback=playback,
             feedback_form=form,
             title=cls.TITLE,
@@ -253,7 +230,7 @@ class ToontjeHoger2Preverbal(Base):
         return [trial]
 
     @classmethod
-    def calculate_score(cls, result, data, scoring_rule, form_element):
+    def calculate_score(cls, result, data):
         return cls.SCORE_CORRECT if result.expected_response == result.given_response else cls.SCORE_WRONG
 
     @classmethod

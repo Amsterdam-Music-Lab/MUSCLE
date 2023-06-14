@@ -20,7 +20,7 @@
 
     #back-button {
         position: absolute;
-        bottom: 5em;
+        bottom: 3em;
         right: 3em;
     }
 
@@ -38,6 +38,7 @@
         margin-right: 2em;
     }
 </style>
+<h1>Export results for experiment: {{experiment.name}}</h1>
 <form action="" method="post">
     <div class="select-fields">
         {% csrf_token %} 

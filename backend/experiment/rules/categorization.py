@@ -1,15 +1,15 @@
 from django.utils import timezone
 from django.template.loader import render_to_string
-from django.http import Http404
 from django.db.models import Avg
-from operator import ne
 
-from .views.form import Form, ChoiceQuestion
-from .views import Consent, Explainer, Score, StartSession, TwoAlternativeForced, Trial, Final
+from experiment.actions.form import Form, ChoiceQuestion
+from experiment.actions import Consent, Explainer, Score, StartSession, Trial, Final
+from experiment.actions.utils import combine_actions
+from experiment.actions.wrappers import two_alternative_forced
+from experiment.questions.utils import unasked_question
 
-from .util.actions import combine_actions
-
-from .util.questions import DEMOGRAPHICS, EXTRA_DEMOGRAPHICS, question_by_key
+from experiment.questions.demographics import EXTRA_DEMOGRAPHICS
+from experiment.questions.utils import question_by_key
 from .base import Base
 import random
 
@@ -21,7 +21,7 @@ class Categorization(Base):
     ID = 'CATEGORIZATION'
 
     @classmethod
-    def first_round(cls, experiment, participant):
+    def first_round(cls, experiment):
         explainer = Explainer(
             instruction="This is a listening experiment in which you have to respond to short sound sequences.",
             steps=[],
@@ -32,17 +32,16 @@ class Categorization(Base):
             'consent/consent_categorization.html')
         consent = Consent.action(
             rendered, title='Informed consent', confirm='I agree', deny='Stop')
-        explainer2 = Explainer(
-            instruction="The experiment will now begin. Please don't close the browser during the experiment. You can only run it once. Click to start a sound sequence.",
-            steps=[],
-            button_label='Ok'
-        ).action()
+        
         start_session = StartSession.action()
-        return [explainer, consent] + questionaire + [explainer2, start_session]
+        return [explainer, consent, start_session]
 
     @classmethod
     def next_round(cls, session):
-
+        action = cls.get_question(session)
+        if action:
+            return action
+        
         json_data = session.load_json_data()
 
         # Plan experiment on the first call to next_round
@@ -52,7 +51,7 @@ class Categorization(Base):
         # Check if this participant already has a session
         if json_data == 'REPEAT':
             json_data = {'phase': 'REPEAT'}
-            session.merge_json_data(json_data)
+            session.save_json_data(json_data)
             session.save()
             final = Final(
                 session=session,
@@ -66,7 +65,7 @@ class Categorization(Base):
         # Total participants reached - Abort with message
         if json_data == 'FULL':
             json_data = {'phase': 'FULL'}
-            session.merge_json_data(json_data)
+            session.save_json_data(json_data)
             session.save()
             final = Final(
                 session=session,
@@ -84,7 +83,7 @@ class Categorization(Base):
         # Change phase to enable collecting results of second half of training-1
         if session.rounds_passed() == 10:
             json_data['phase'] = 'training-1B'
-            session.merge_json_data(json_data)
+            session.save_json_data(json_data)
             session.save()
 
         if rounds_passed == 0:
@@ -92,7 +91,7 @@ class Categorization(Base):
             profiles = session.participant.profile()
             for profile in profiles:
                 # Delete results and json from session and exit
-                if profile.answer == 'aborted':
+                if profile.given_response == 'aborted':
                     session.result_set.all().delete()
                     json_data = {'phase': 'ABORTED',
                                  'training_rounds': json_data['training_rounds']}
@@ -113,10 +112,18 @@ class Categorization(Base):
             json_data = cls.plan_phase(session)
 
         if 'training' in json_data['phase']:
+            if rounds_passed == 0:
+                explainer2 = Explainer(
+                    instruction="The experiment will now begin. Please don't close the browser during the experiment. You can only run it once. Click to start a sound sequence.",
+                    steps=[],
+                    button_label='Ok'
+                ).action()
+                trial = cls.next_trial_action(session)
+                return [explainer2, trial]
 
             # Get next training action
-            if rounds_passed < len(json_data['sequence']):
-                return cls.next_trial_action(session) if rounds_passed == 0 else cls.get_trial_with_feedback(session)
+            elif rounds_passed < len(json_data['sequence']):
+                return cls.get_trial_with_feedback(session)
 
             # Training phase completed, get the results
             training_rounds = int(json_data['training_rounds'])
@@ -134,7 +141,7 @@ class Categorization(Base):
             if score_avg >= SCORE_AVG_MIN_TRAINING:
                 json_data['phase'] = "testing"
                 json_data['training_rounds'] = session.rounds_passed()
-                session.merge_json_data(json_data)
+                session.save_json_data(json_data)
                 session.save()
                 explainer = Explainer(
                     instruction="You are entering the main phase of the experiment. From now on you will only occasionally get feedback on your responses. Simply try to keep responding to the sound sequences as you did before.",
@@ -144,7 +151,7 @@ class Categorization(Base):
             else:
                 # Update passed training rounds for calc round_number
                 json_data['training_rounds'] = session.rounds_passed()
-                session.merge_json_data(json_data)
+                session.save_json_data(json_data)
                 session.save()
 
                 # Failed the training? exit experiment
@@ -177,14 +184,11 @@ class Categorization(Base):
                     return final
                 else:
                     # Show continue to next training phase or exit option
-                    config = {
-                        'style': 'boolean'
-                    }
                     explainer = Trial(title="Training failed", feedback_form=Form(
-                        [repeat_training_or_quit], is_profile=True), config=config).action()
+                        [repeat_training_or_quit])).action()
 
             feedback = cls.get_feedback(session)
-            return combine_actions(feedback, explainer)
+            return [feedback, explainer]
 
         elif json_data['phase'] == 'testing':
             if rounds_passed < len(json_data['sequence']):
@@ -354,30 +358,30 @@ class Categorization(Base):
                 'button_order': button_order,
                 'choices': choices
             }
-            session.merge_json_data(json_data)
+            session.save_json_data(json_data)
             session.save()
 
         return json_data
 
     @classmethod
     def plan_phase(cls, session):
-
         json_data = session.load_json_data()
+        print(json_data['group'], session.playlist.section_set.first().tag)
 
         if 'training' in json_data['phase']:
             # Retrieve training stimuli for the assigned group
             if json_data["group"] == 'S1':
                 sections = session.playlist.section_set.filter(
-                    group='SAME', tag__contains='1', artist__contains='Training')
+                    group='SAME', tag__contains='1', song__artist__contains='Training')
             elif json_data["group"] == 'S2':
                 sections = session.playlist.section_set.filter(
-                    group='SAME', tag__contains='2', artist__contains='Training')
+                    group='SAME', tag__contains='2', song__artist__contains='Training')
             elif json_data["group"] == 'C1':
                 sections = session.playlist.section_set.filter(
-                    group='CROSSED', tag__contains='1', artist__contains='Training')
+                    group='CROSSED', tag__contains='1', song__artist__contains='Training')
             elif json_data["group"] == 'C2':
                 sections = session.playlist.section_set.filter(
-                    group='CROSSED', tag__contains='2', artist__contains='Training')
+                    group='CROSSED', tag__contains='2', song__artist__contains='Training')
             # Generate randomized sequence for the testing phase
             section_sequence = []
             # Add 10 x 2 training stimuli
@@ -394,30 +398,31 @@ class Categorization(Base):
                 section_sequence.append(sections[0].id)
                 section_sequence.append(sections[1].id)
             random.shuffle(section_sequence)
+            print(section_sequence)
             json_data['sequence'] = section_sequence
 
         else:
             # Retrieve test & training stimuli for the assigned group
             if json_data["group"] == 'S1':
                 training_sections = session.playlist.section_set.filter(
-                    group='SAME', tag__contains='1', artist__contains='Training')
+                    group='SAME', tag__contains='1', song__artist__contains='Training')
                 test_sections = session.playlist.section_set.filter(
-                    group='SAME', tag__contains='1').exclude(artist__contains='Training')
+                    group='SAME', tag__contains='1').exclude(song__artist__contains='Training')
             elif json_data["group"] == 'S2':
                 training_sections = session.playlist.section_set.filter(
-                    group='SAME', tag__contains='2', artist__contains='Training')
+                    group='SAME', tag__contains='2', song__artist__contains='Training')
                 test_sections = session.playlist.section_set.filter(
-                    group='SAME', tag__contains='2').exclude(artist__contains='Training')
+                    group='SAME', tag__contains='2').exclude(song__artist__contains='Training')
             elif json_data["group"] == 'C1':
                 training_sections = session.playlist.section_set.filter(
-                    group='CROSSED', tag__contains='1', artist__contains='Training')
+                    group='CROSSED', tag__contains='1', song__artist__contains='Training')
                 test_sections = session.playlist.section_set.filter(
-                    group='CROSSED', tag__contains='1').exclude(artist__contains='Training')
+                    group='CROSSED', tag__contains='1').exclude(song__artist__contains='Training')
             elif json_data["group"] == 'C2':
                 training_sections = session.playlist.section_set.filter(
-                    group='CROSSED', tag__contains='2', artist__contains='Training')
+                    group='CROSSED', tag__contains='2', song__artist__contains='Training')
                 test_sections = session.playlist.section_set.filter(
-                    group='CROSSED', tag__contains='2').exclude(artist__contains='Training')
+                    group='CROSSED', tag__contains='2').exclude(song__artist__contains='Training')
             # Generate randomized sequence for the testing phase
             section_sequence = []
             # Add 15 x 2 training stimuli
@@ -445,7 +450,7 @@ class Categorization(Base):
             json_data['feedback_sequence'] = feedback_sequence
             json_data['sequence'] = section_sequence
 
-        session.merge_json_data(json_data)
+        session.save_json_data(json_data)
         session.save()
 
         return json_data
@@ -472,7 +477,7 @@ class Categorization(Base):
         score = cls.get_feedback(session)
         trial = cls.next_trial_action(session)
 
-        return combine_actions(score, trial)
+        return [score, trial]
 
     @classmethod
     def next_trial_action(cls, session):
@@ -492,20 +497,17 @@ class Categorization(Base):
             expected_response = 'A'
         else:
             expected_response = 'B'
-        result_pk = cls.prepare_result(
-            session, section, expected_response, json_data['phase'])
 
         choices = json_data["choices"]
         config = {'listen_first': True,
                   'auto_advance': True,
                   'auto_advance_timer': 2500,
-                  'style': json_data["button_order"],
                   'time_pass_break': False
                   }
-        trial = TwoAlternativeForced(
-            section, choices, result_pk, title=cls.get_title(session), config=config)
-
-        return trial.action()
+        style = {json_data['button_order']: True}
+        trial = two_alternative_forced(session, section, choices, expected_response,
+            style=style, comment=json_data['phase'], scoring_rule='CORRECTNESS', config=config)
+        return trial
 
     @classmethod
     def get_title(cls, session):
@@ -513,6 +515,15 @@ class Categorization(Base):
         rounds_passed = (session.rounds_passed() -
                          int(json_data['training_rounds']))
         return f"Round {rounds_passed} / {len(json_data['sequence'])}"
+    
+    @classmethod
+    def get_question(cls, session):
+        question = unasked_question(session.participant, questions)
+        if not question:
+            return None
+        return Trial(
+            title="Questionnaire",
+            feedback_form=Form([question], submit_label='Continue')).action()
 
 
 musical_experience_question = ChoiceQuestion(
@@ -529,16 +540,9 @@ musical_experience_question = ChoiceQuestion(
 )
 
 questions = [question_by_key('dgf_age', EXTRA_DEMOGRAPHICS),
-             question_by_key('dgf_gender_reduced', DEMOGRAPHICS),
+             question_by_key('dgf_gender_reduced', EXTRA_DEMOGRAPHICS),
              question_by_key('dgf_native_language', EXTRA_DEMOGRAPHICS),
              musical_experience_question]
-
-questionaire = [
-    Trial(
-        title="Questionnaire",
-        feedback_form=Form([question], submit_label='Continue', is_profile=True)).action()
-    for question in questions
-]
 
 repeat_training_or_quit = ChoiceQuestion(
     key='failed_training',
@@ -550,5 +554,5 @@ repeat_training_or_quit = ChoiceQuestion(
     },
     submits=True,
     is_skippable=False,
-    config={'buttons_large_gap': True}
+    style={'buttons-large-gap': True, 'boolean': True}
 )

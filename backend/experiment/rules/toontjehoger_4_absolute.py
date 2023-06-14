@@ -2,13 +2,15 @@ import logging
 import random
 from os.path import join
 from django.template.loader import render_to_string
-from .util.strings import non_breaking
+from experiment.utils import non_breaking_spaces
 from .toontjehoger_1_mozart import toontjehoger_ranks
-from .views import Trial, Explainer, Step, Score, Final, StartSession, Playlist, Info
-from .views.form import ButtonArrayQuestion, Form
-from .views.playback import Playback
+from experiment.actions import Trial, Explainer, Step, Score, Final, StartSession, Playlist, Info
+from experiment.actions.form import ButtonArrayQuestion, Form
+from experiment.actions.playback import Playback
+from experiment.actions.styles import STYLE_NEUTRAL
 from .base import Base
-from .util.actions import combine_actions
+from experiment.actions.utils import combine_actions
+from result.utils import prepare_result
 
 logger = logging.getLogger(__name__)
 
@@ -22,7 +24,7 @@ class ToontjeHoger4Absolute(Base):
     PLAYLIST_ITEMS = 13
 
     @classmethod
-    def first_round(cls, experiment, participant):
+    def first_round(cls, experiment):
         """Create data for the first experiment rounds."""
 
         # 1. Explain game.
@@ -64,10 +66,10 @@ class ToontjeHoger4Absolute(Base):
 
         # Round 2
         if rounds_passed < session.experiment.rounds:
-            return combine_actions(*cls.get_score(session), *cls.get_round(session))
+            return [*cls.get_score(session), *cls.get_round(session)]
 
         # Final
-        return combine_actions(*cls.get_final_round(session))
+        return cls.get_final_round(session)
 
     @classmethod
     def get_round(cls, session):
@@ -98,10 +100,6 @@ class ToontjeHoger4Absolute(Base):
         sections = [section1, section2]
         random.shuffle(sections)
 
-        # Create result
-        result_pk = cls.prepare_result(
-            session, section=section1, expected_response="A" if sections[0].id == section1.id else "B")
-
         # Player
         play_config = {
             'label_style': 'ALPHABETIC',
@@ -111,25 +109,24 @@ class ToontjeHoger4Absolute(Base):
             sections, player_type=Playback.TYPE_MULTIPLAYER, play_config=play_config)
 
         # Question
+        key = 'pitch'
         question = ButtonArrayQuestion(
             question="Welk fragment heeft de juiste toonhoogte?",
-            key='pitch',
+            key=key,
             choices={
                 "A": "A",
                 "B": "B",
             },
             submits=True,
-            result_id=result_pk
+            result_id=prepare_result(
+                key, session, section=section1,
+                expected_response="A" if sections[0].id == section1.id else "B"
+            ),
+            style=STYLE_NEUTRAL
         )
         form = Form([question])
 
-        # Trial
-        trial_config = {
-            'style': 'neutral',
-        }
-
         trial = Trial(
-            config=trial_config,
             playback=playback,
             feedback_form=form,
             title=cls.TITLE,
@@ -137,7 +134,7 @@ class ToontjeHoger4Absolute(Base):
         return [trial]
 
     @classmethod
-    def calculate_score(cls, result, data, scoring_rule, form_element):
+    def calculate_score(cls, result, data):
         return cls.SCORE_CORRECT if result.expected_response == result.given_response else cls.SCORE_WRONG
 
     @classmethod
@@ -157,7 +154,7 @@ class ToontjeHoger4Absolute(Base):
                     last_result.expected_response.upper())
 
             feedback += " Je luisterde naar de intro van {}.".format(
-                non_breaking(last_result.section.name))
+                non_breaking_spaces(last_result.section.song.name))
 
         # Return score view
         config = {'show_total_score': True}

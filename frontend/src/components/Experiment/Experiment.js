@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import { useExperiment, useParticipant, getNextRound } from "../../API";
 import { TransitionGroup, CSSTransition } from "react-transition-group";
 import { withRouter } from "react-router-dom";
@@ -13,11 +13,9 @@ import Playlist from "../Playlist/Playlist";
 import Score from "../Score/Score";
 import SongSync from "../SongSync/SongSync";
 import Plink from "../Plink/Plink";
-import HTML from "../HTML/HTML";
 import StartSession from "../StartSession/StartSession";
 import Trial from "../Trial/Trial";
 import useResultHandler from "../../hooks/useResultHandler";
-import { stateNextRound } from "../../util/nextRound";
 import Info from "../Info/Info";
 import classNames from "classnames";
 
@@ -25,23 +23,27 @@ import classNames from "classnames";
 // - Loads the experiment and participant
 // - Renders the view based on the state that is provided by the server
 // - It handles sending results to the server
-const Experiment = ({ match }) => {
+// - Implements participant_id as URL parameter, e.g. http://localhost:3000/bat?participant_id=johnsmith34
+const Experiment = ({ match, location }) => {
     const startState = { view: "LOADING" };
 
     // Current experiment state
     const [state, setState] = useState(startState);
     const [playlist, setPlaylist] = useState(null);
-    const [session, setSession] = useState(null);
+    const [actions, setActions] = useState([]);
+    const session = useRef(null);
 
     // API hooks
     const [experiment, loadingExperiment] = useExperiment(match.params.slug);
-    const [participant, loadingParticipant] = useParticipant();
+    const url_query_string = location.search // location.search is a part of URL after (and incuding) "?"
+    const [participant, loadingParticipant] = useParticipant(url_query_string);
 
     const loadingText = experiment ? experiment.loading_text : "";
     const className = experiment ? experiment.class_name : "";
 
     // Load state, set random key
     const loadState = useCallback((state) => {
+        if (!state) return;
         state.key = Math.random();
         setState(state);
     }, []);
@@ -54,13 +56,26 @@ const Experiment = ({ match }) => {
         [loadState]
     );
 
+    const updateActions = useCallback( (currentActions) => {
+        let newActions = currentActions;
+        const newState = newActions.shift();
+        loadState(newState);
+        setActions(newActions);
+    }, [loadState, setActions]);
+
     // Start first_round when experiment and partipant have been loaded
     useEffect(() => {
+
+        if (url_query_string && !(new URLSearchParams(url_query_string).has("participant_id"))) {
+            setError("Unknown URL parameter, use ?participant_id=");
+            return
+        }
+
         // Check if done loading
         if (!loadingExperiment && !loadingParticipant) {
             // Loading succeeded
-            if (experiment && participant) {
-                loadState(stateNextRound(experiment));
+            if (experiment) {
+                updateActions(experiment.next_round);
             } else {
                 // Loading error
                 setError("Could not load experiment");
@@ -72,23 +87,21 @@ const Experiment = ({ match }) => {
         participant,
         loadingParticipant,
         setError,
+        updateActions,
         loadState,
     ]);
 
-    // Load next round, stored in nextRound
+    // trigger next action from next_round array, or call session/next_round
     const onNext = async () => {
-        if (state.next_round && state.next_round.length) {
-            loadState(stateNextRound(state));
+        if (actions.length) {
+            updateActions(actions);
         } else {
-            console.error("No next-round data available");
-            // Fallback in case a server response/async call went wrong
-            // Try to get next_round data from server again
+            // Try to get next_round data from server
             const round = await getNextRound({
-                session: session,
-                participant,
+                session: session.current,
             });
             if (round) {
-                loadState(round);
+                updateActions(round.next_round);
             } else {
                 setError(
                     "An error occured while loading the data, please try to reload the page. (Error: next_round data unavailable)"
@@ -117,7 +130,6 @@ const Experiment = ({ match }) => {
             loadingText,
             setPlaylist,
             setError,
-            setSession,
             onResult,
             onNext,
             ...state,
@@ -133,8 +145,6 @@ const Experiment = ({ match }) => {
                 return <SongSync {...attrs} />;
             case "PLINK":
                 return <Plink {...attrs} />;
-            case "HTML":
-                return <HTML {...attrs} />;
 
             // Information & Scoring
             // -------------------------
@@ -159,6 +169,8 @@ const Experiment = ({ match }) => {
                 return <Consent {...attrs} />;
             case "INFO":
                 return <Info {...attrs} />;
+            case "REDIRECT":
+                return window.location.replace(state.url);
 
             // Specials
             // -------------------------

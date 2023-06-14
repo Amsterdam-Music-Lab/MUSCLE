@@ -1,12 +1,14 @@
 import logging
 from django.template.loader import render_to_string
 from os.path import join
-from .views import Trial, Explainer, Step, Score, Final, StartSession, Playlist, Info, HTML
-from .views.form import ButtonArrayQuestion, Form
-from .views.playback import Playback
+from experiment.actions import Trial, Explainer, Step, Score, Final, StartSession, Playlist, Info, HTML
+from experiment.actions.form import ButtonArrayQuestion, Form
+from experiment.actions.playback import Playback
 from .base import Base
-from .util.actions import combine_actions
-from .util.strings import non_breaking
+from experiment.actions.utils import combine_actions
+from experiment.utils import non_breaking_spaces
+
+from result.utils import prepare_result
 
 logger = logging.getLogger(__name__)
 
@@ -34,7 +36,7 @@ class ToontjeHoger1Mozart(Base):
     SCORE_WRONG = 0
 
     @classmethod
-    def first_round(cls, experiment, participant):
+    def first_round(cls, experiment):
         """Create data for the first experiment rounds."""
 
         # 1. Explain game.
@@ -86,10 +88,10 @@ class ToontjeHoger1Mozart(Base):
                                         question="Welke vorm ontstaat er na het afknippen van het hoekje?",
                                         expected_response='B'
                                         )
-            return combine_actions(*answer_explainer, *score, *round)
+            return [*answer_explainer, *score, *round]
 
         # Final
-        return combine_actions(*cls.get_final_round(session))
+        return cls.get_final_round(session)
 
     @classmethod
     def get_answer_explainer(cls, session, round):
@@ -123,7 +125,7 @@ class ToontjeHoger1Mozart(Base):
         last_result = session.last_result()
         section = last_result.section
         feedback = "Je hoorde {} van {}.".format(
-            section.name, non_breaking(section.artist)) if section else ""
+            section.song.name, non_breaking_spaces(section.song.artist)) if section else ""
 
         # Return score view
         config = {'show_total_score': True}
@@ -139,9 +141,6 @@ class ToontjeHoger1Mozart(Base):
         if section == None:
             raise Exception("Error: could not find section")
 
-        result_pk = cls.prepare_result(
-            session, section=section, expected_response=expected_response)
-
         # Step 1
         # --------------------
 
@@ -155,7 +154,7 @@ class ToontjeHoger1Mozart(Base):
         listen_config = {
             'auto_advance': True,
             'show_continue_button': False,
-            'decision_time': section.duration
+            'response_time': section.duration
         }
 
         listen = Trial(
@@ -168,9 +167,10 @@ class ToontjeHoger1Mozart(Base):
         # --------------------
 
         # Question
+        key = 'expected_shape'
         question = ButtonArrayQuestion(
             question=question,
-            key='expected_shape',
+            key=key,
             choices={
                 'A': 'A',
                 'B': 'B',
@@ -179,17 +179,18 @@ class ToontjeHoger1Mozart(Base):
                 'E': 'E',
             },
             view='BUTTON_ARRAY',
-            result_id=result_pk,
+            result_id=prepare_result(
+            key, session, section=section, expected_response=expected_response),
             submits=True
         )
         form = Form([question])
 
-        image_trial = HTML(
-            html='<img src="{}" style="height:calc(100% - 260px);max-height:326px;max-width: 100%;"/>'.format(
-                image_url),
-            form=form,
+        image_trial = Trial(
+            html=HTML(
+                body='<img src="{}" style="height:calc(100% - 260px);max-height:326px;max-width: 100%;"/>'.format(
+                image_url)),
+            feedback_form=form,
             title=cls.TITLE,
-            result_id=result_pk
         ).action()
 
         return [listen, image_trial]
@@ -209,7 +210,7 @@ class ToontjeHoger1Mozart(Base):
         return [explainer]
 
     @classmethod
-    def calculate_score(cls, result, data, scoring_rule, form_element):
+    def calculate_score(cls, result, data):
         score = cls.SCORE_CORRECT if result.expected_response == result.given_response else cls.SCORE_WRONG
         return score
 

@@ -11,8 +11,8 @@ axios.defaults.withCredentials = true;
 // API endpoints
 export const URLS = {
     experiment: {
-        get: (slug) => "/id/" + slug + "/",
-        consent: (slug) => "/profile/consent_" + slug + "/",
+        get: (slug) => "/experiment/" + slug + "/",
+        feedback: (slug) => "/experiment/" + slug + "/feedback/",
     },
     participant: {
         current: "/participant/",
@@ -20,10 +20,11 @@ export const URLS = {
         score: "/participant/scores/",
         share: "/participant/share/",
     },
-    profile: {
-        get: (question) => "/profile/" + question + "/",
-        current: "/profile/",
-        create: "/profile/create/",
+    result: {
+        get: (question) => "/result/" + question + "/",
+        current: "/result/current_profile",
+        score: "/result/score/",
+        consent: "/result/consent/"
     },
     session: {
         create: "/session/create/",
@@ -35,8 +36,8 @@ export const URLS = {
 export const useExperiment = (slug) =>
     useGet(API_BASE_URL + URLS.experiment.get(slug));
 
-export const useParticipant = () =>
-    useGet(API_BASE_URL + URLS.participant.current);
+export const useParticipant = (url_query_string) =>
+    useGet(API_BASE_URL + URLS.participant.current + url_query_string);
 
 export const useParticipantScores = () =>
     useGet(API_BASE_URL + URLS.participant.score);
@@ -45,20 +46,20 @@ export const useParticipantLink = () =>
     useGet(API_BASE_URL + URLS.participant.link);
     
 export const useConsent = (slug) =>
-    useGet(API_BASE_URL + URLS.experiment.consent(slug));
+    useGet(API_BASE_URL + URLS.result.get('consent_' + slug));
 
 // Create consent for given experiment
 export const createConsent = async ({ experiment, participant }) => {
     try {
         const response = await axios.post(
-            API_BASE_URL + URLS.profile.create,
+            API_BASE_URL + URLS.result.consent,
             qs.stringify({
-                json_data: JSON.stringify({form: [
+                json_data: JSON.stringify(
                     {
                         key: "consent_" + experiment.slug,
                         value: true,
                     }
-                ]}),
+                ),
                 csrfmiddlewaretoken: participant.csrf_token,
             }),
         );
@@ -89,7 +90,7 @@ export const createSession = async ({ experiment, participant, playlist }) => {
 };
 
 // Create result for given session
-export const createResult = async ({
+export const scoreResult = async ({
     session,
     section,
     participant,
@@ -107,30 +108,8 @@ export const createResult = async ({
         }
 
         const response = await axios.post(
-            API_BASE_URL + URLS.session.result,
+            API_BASE_URL + URLS.result.score,
             qs.stringify(vars)
-        );
-        return response.data;
-    } catch (err) {
-        console.error(err);
-        return null;
-    }
-};
-
-// Store Profile question/answer
-export const createProfile = async ({
-    result,
-    session,
-    participant,
-}) => {
-    try {
-        const response = await axios.post(
-            API_BASE_URL + URLS.profile.create,
-            qs.stringify({
-                json_data: JSON.stringify(result),
-                session_id: session,
-                csrfmiddlewaretoken: participant.csrf_token,
-            })
         );
         return response.data;
     } catch (err) {
@@ -166,3 +145,21 @@ export const shareParticipant = async ({ email, participant }) => {
         return null;
     }
 };
+
+// Collect user feedback
+export const postFeedback = async({ experimentSlug, feedback, participant }) => {
+    const endpoint = API_BASE_URL + URLS.experiment.feedback(experimentSlug)
+    try {
+        const response = await axios.post(
+            endpoint,
+            qs.stringify({
+                feedback,
+                csrfmiddlewaretoken: participant.csrf_token,
+            })
+        );
+        return response.data;
+    } catch (err) {
+        console.error(err);
+        return null;
+    }
+}

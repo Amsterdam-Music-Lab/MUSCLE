@@ -10,7 +10,7 @@ export const EXPERIMENT_SLUG =
 // the API's base_settings.py
 
 export const API_ROOT = process.env.REACT_APP_API_ROOT;
-export const API_BASE_URL = API_ROOT + '/experiment';
+export const API_BASE_URL = API_ROOT;
 
 // Media
 export const MEDIA_ROOT = API_ROOT;

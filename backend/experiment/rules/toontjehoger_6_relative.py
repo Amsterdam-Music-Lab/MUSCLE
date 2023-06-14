@@ -2,11 +2,13 @@ import logging
 from django.template.loader import render_to_string
 from os.path import join
 from .toontjehoger_1_mozart import toontjehoger_ranks
-from .views import Trial, Explainer, Step, Score, Final, StartSession, Playlist, Info
-from .views.form import ChoiceQuestion, Form
-from .views.playback import Playback
+from experiment.actions import Trial, Explainer, Step, Score, Final, StartSession, Playlist, Info
+from experiment.actions.form import ChoiceQuestion, Form
+from experiment.actions.playback import Playback
+from experiment.actions.styles import STYLE_BOOLEAN
 from .base import Base
-from .util.actions import combine_actions
+
+from result.utils import prepare_result
 
 logger = logging.getLogger(__name__)
 
@@ -18,7 +20,7 @@ class ToontjeHoger6Relative(Base):
     SCORE_WRONG = 0
 
     @classmethod
-    def first_round(cls, experiment, participant):
+    def first_round(cls, experiment):
         """Create data for the first experiment rounds."""
 
         # 1. Explain game.
@@ -62,10 +64,10 @@ class ToontjeHoger6Relative(Base):
 
         # Round 2
         if rounds_passed == 1:
-            return combine_actions(*cls.get_score(session), *cls.get_round(round, session))
+            return [*cls.get_score(session), *cls.get_round(round, session)]
 
         # Final
-        return combine_actions(*cls.get_final_round(session))
+        return cls.get_final_round(session)
 
     @classmethod
     def get_score(cls, session):
@@ -108,20 +110,23 @@ class ToontjeHoger6Relative(Base):
 
         # Fragments A,B,C are all different, so answer is always NO
         expected_response = "NO"
-        result_pk = cls.prepare_result(
-            session, section=section1, expected_response=expected_response)
 
         # Question
+        key = 'same_melody'
         question = ChoiceQuestion(
             question="Zijn deze twee melodieën hetzelfde?",
-            key='same_melodie',
+            key=key,
             choices={
                 "YES": "Ja",
                 "NO": "Nee",
             },
             view='BUTTON_ARRAY',
-            result_id=result_pk,
-            submits=True
+            submits=True,
+            style=STYLE_BOOLEAN,
+            result_id=prepare_result(
+                key, session, section=section1,
+                expected_response=expected_response
+            )
         )
         form = Form([question])
 
@@ -134,21 +139,16 @@ class ToontjeHoger6Relative(Base):
         playback = Playback(
             [section1, section2], player_type=Playback.TYPE_MULTIPLAYER, play_config=play_config)
 
-        # Trial
-        trial_config = {
-            'style': 'boolean blue-players',
-        }
-
         trial = Trial(
-            config=trial_config,
             playback=playback,
             feedback_form=form,
             title=cls.TITLE,
+            style='blue-players'
         ).action()
         return [trial]
 
     @classmethod
-    def calculate_score(cls, result, data, scoring_rule, form_element):
+    def calculate_score(cls, result, data):
         return cls.SCORE_CORRECT if result.expected_response == result.given_response else cls.SCORE_WRONG
 
     @classmethod

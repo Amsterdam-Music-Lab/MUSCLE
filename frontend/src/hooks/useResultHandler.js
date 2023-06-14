@@ -1,11 +1,11 @@
 import { useRef, useCallback } from "react";
-import { createResult } from "../API.js";
+import { scoreResult } from "../API.js";
 
 // useResult provides a reusable function to handle experiment view data
 // - collect results in a buffer
 // - handles advancing to next round
 // - finally submits the data to the API and loads the new state
-const useResultHandler = ({ session, participant, loadState, onNext, state }) => {
+const useResultHandler = ({ session, participant, onNext, state }) => {
     const resultBuffer = useRef([]);
 
     const onResult = useCallback(
@@ -31,7 +31,7 @@ const useResultHandler = ({ session, participant, loadState, onNext, state }) =>
 
             // Create result data
             const data = {
-                session,
+                session: session.current,
                 participant,
                 result: mergedResults,
             };
@@ -42,21 +42,14 @@ const useResultHandler = ({ session, participant, loadState, onNext, state }) =>
             }
 
             // Send data to API
-            const action = await createResult(data);
-
-            // Fallback: Call onNext, try to reload round
-            if (!action) {
-                onNext();
-                return;
-            }
+            await scoreResult(data);
 
             // Clear resultBuffer
             resultBuffer.current = [];
+            onNext();
 
-            // Init new state from action
-            loadState(action);
         },
-        [session, participant, loadState, onNext, state]
+        [participant, session, onNext, state]
     );
 
     return onResult;

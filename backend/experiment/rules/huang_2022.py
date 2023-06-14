@@ -1,127 +1,56 @@
-import random
 import logging
 
 from django.utils.translation import gettext_lazy as _
 from django.template.loader import render_to_string
+from django.conf import settings
 
-from .base import Base
-from .views import SongSync, Final, Score, Explainer, Step, Consent, StartSession, Playlist, Trial
-from .views.form import BooleanQuestion, ChoiceQuestion, Form, Question
-from .views.playback import Playback
-from .views.html import HTML
-from .util.questions import EXTRA_DEMOGRAPHICS, question_by_key
-from .util.goldsmiths import MSI_ALL
-from .util.actions import combine_actions
+from experiment.actions import HTML, Final, Score, Explainer, Step, Consent, StartSession, Redirect, Playlist, Trial
+from experiment.actions.form import BooleanQuestion, ChoiceQuestion, Form, Question
+from experiment.actions.playback import Playback
+from experiment.questions.demographics import EXTRA_DEMOGRAPHICS
+from experiment.questions.goldsmiths import MSI_ALL
+from experiment.questions.utils import question_by_key, unasked_question, total_unanswered_questions
+from experiment.actions.styles import STYLE_BOOLEAN_NEGATIVE_FIRST
+from result.utils import prepare_result
+from .hooked import Hooked
 
 logger = logging.getLogger(__name__)
 
-
-class Huang2022(Base):
+class Huang2022(Hooked):
     """Rules for the Chinese version of the Hooked experiment."""
 
     ID = 'HUANG_2022'
     timeout = 15
+    round_modifier = 2
+    contact_email = 'musicexp_china@163.com'
 
     @classmethod
-    def first_round(cls, experiment, participant):
+    def first_round(cls, experiment):
         """Create data for the first experiment rounds."""
-
-        # 1. Explain game.
-        explainer = Explainer(
-            instruction=_("How to Play"),
-            steps=[
-                Step(_(
-                    "Do you recognise the song? Try to sing along. The faster you recognise songs, the more points you can earn.")),
-                Step(_(
-                    "Do you really know the song? Keep singing or imagining the music while the sound is muted. The music is still playing: you just can’t hear it!")),
-                Step(_(
-                    "Was the music in the right place when the sound came back? Or did we jump to a different spot during the silence?"))
-            ],
-            button_label=_("Let's go!")).action(True)
         # read consent form from file
         rendered = render_to_string(
             'consent/consent_huang2021.html')
         consent = Consent.action(rendered, title=_(
             'Informed consent'), confirm=_('I agree'), deny=_('Stop'))
-
-        explainer_devices = Explainer(
-            instruction=_("You can use your smartphone, computer or tablet to participate in this experiment. Please choose the best network in your area to participate in the experiment, such as wireless network (WIFI), mobile data network signal (4G or above) or wired network. If the network is poor, it may cause the music to fail to load or the experiment may fail to run properly. You can access the experiment page through the following channels:"),
-            steps=[
-                Step(_(
-                    "Directly click the link on WeChat (smart phone or PC version, or WeChat Web)"),
-                ),
-                Step(_(
-                    "If the link to load the experiment page through the WeChat app on your cell phone fails, you can copy and paste the link in the browser of your cell phone or computer to participate in the experiment. You can use any of the currently available browsers, such as Safari, Firefox, 360, Google Chrome, Quark, etc."),
-                )
-            ],
-            button_label=_("Continue")
-        ).action(True)
-        # 3. Choose playlist.
         playlist = Playlist.action(experiment.playlists.all())
-
-        # 4. Start session.
+        # start session
         start_session = StartSession.action()
 
         return [
-            explainer,
             consent,
-            explainer_devices,
             playlist,
             start_session
         ]
 
     @classmethod
-    def plan_sections(cls, session):
-        """Set the plan of tracks for a session.
-
-           Assumes that all tags of 1 have a corresponding tag of 2
-           with the same group_id, and vice-versa.
-        """
-
-        # Which songs are available?
-        songs = list(session.playlist.song_ids())
-        random.shuffle(songs)
-
-        # How many sections do we need?
-        # 2/3 of the rounds are SongSync, of which 1/4 old songs, 3/4 "free"
-        # 1/3 of the rounds are "heard before", of which 1/2 old songs
-        # e.g. 30 rounds -> 20 SongSync with 5 songs to be repeated later
-        n_rounds = session.experiment.rounds
-        n_old = round(0.17 * n_rounds)
-        n_new = round(0.17 * n_rounds)
-        n_free = n_rounds - 2 * n_old - n_new
-
-        # Assign songs.
-        old_songs = songs[:n_old]
-        new_songs = songs[n_old:n_old+n_new]
-        free_songs = songs[n_old+n_new:n_old+n_new+n_free]
-
-        # Assign sections.
-        old_sections = [session.section_from_song(s) for s in old_songs]
-        free_sections = [session.section_from_song(s) for s in free_songs]
-        new_sections = [session.section_from_song(s) for s in new_songs]
-
-        # Randomise.
-        old_section_info = [{'novelty': 'old', 'id': s.id}
-                            for s in old_sections]
-        song_sync_sections = old_section_info + [
-            {'novelty': 'free', 'id': s.id} for s in free_sections]
-        random.shuffle(song_sync_sections)
-        heard_before_sections = old_section_info + [
-            {'novelty': 'new', 'id': s.id} for s in new_sections]
-        random.shuffle(heard_before_sections)
-        plan = {
-            'song_sync_sections': song_sync_sections,
-            'heard_before_sections': heard_before_sections
-        }
-
-        # Save, overwriting existing plan if one exists.
-        session.merge_json_data({'plan': plan})
-        # session.save() is required for persistence
-        session.save()
+    def feedback_info(cls):
+        info = super().feedback_info()
+        info['header'] = _("Any remarks or questions (optional):")
+        info['thank_you'] = _("Thank you for your feedback!")
+        return info
 
     @classmethod
-    def get_questions(cls, session):
+    def get_question(cls, session):
         """Get a list of all questions for the experiment (MSI and demographic questions),
         in fixed order
         """
@@ -136,13 +65,23 @@ class Huang2022(Base):
             origin_question(),
             residence_question(),
             gender_question(),
+            contact_question()
         ]
-        return [
-            Trial(
-                title=_("Questionnaire %(index)i/%(total)i") % {'index': index + 1, 'total': len(questions)},
-                feedback_form=Form([question], is_profile=True, is_skippable=question.is_skippable)).action() 
-            for index, question in enumerate(questions)
-        ]
+        open_questions = total_unanswered_questions(session.participant, questions)
+        if not open_questions:
+            return None
+        total_questions = int(session.load_json_data().get('saved_total', '0'))
+        if not total_questions:
+            total_questions = open_questions     
+            session.save_json_data({'saved_total': open_questions})
+        question = unasked_question(session.participant, questions)
+        if not question:
+            return None
+        index = total_questions - open_questions + 1
+        return Trial(
+            title=_("Questionnaire %(index)i / %(total)i") % {'index': index, 'total': total_questions},
+            feedback_form=Form([question], is_skippable=question.is_skippable)
+        ).action()
 
     @staticmethod
     def next_round(session, request_session=None):
@@ -151,189 +90,134 @@ class Huang2022(Base):
         # If the number of results equals the number of experiment.rounds,
         # close the session and return data for the final_score view.
         json_data = session.load_json_data()
-        if json_data.get('complete'):
-            # Finish session.
-            session.finish()
-            session.save()
-            final = Final(
-                session=session,
-                final_text=Huang2022.final_score_message(session),
-                rank=Huang2022.rank(session),
-                show_social=False,
-                show_profile_link=True
-            ).action()
-
-            return final
-
         # Get next round number and initialise actions list. Two thirds of
         # rounds will be song_sync; the remainder heard_before.
-        next_round_number = session.get_next_round()
+        next_round_number = session.get_current_round() - Huang2022.round_modifier 
+        total_rounds = session.experiment.rounds
 
         # Collect actions.
         actions = []
 
-        if next_round_number == 1:
-            # Plan sections
-            Huang2022.plan_sections(session)
+        if next_round_number == -1:
+            playback = get_test_playback()
+            html = HTML(body='<h4>{}</h4>'.format(_('Do you hear the music?')))
+            form = Form(form=[BooleanQuestion(
+                key='audio_check1',
+                choices={'no': _('No'), 'yes': _('Yes')},
+                result_id=prepare_result('audio_check1', session, 
+                    scoring_rule='BOOLEAN'),
+                submits=True,
+                style=STYLE_BOOLEAN_NEGATIVE_FIRST)])
+            return Trial(playback=playback, feedback_form=form, html=html,
+                         config={'response_time': 120},
+                         title=_("Audio check")).action()
+        elif next_round_number <= 1:
+            last_result = session.result_set.last()
+            if last_result.question_key == 'audio_check1':
+                if last_result.score == 0:
+                    playback = get_test_playback()                    
+                    html = HTML(body=render_to_string('html/huang_2022/audio_check.html'))
+                    form = Form(form=[BooleanQuestion(
+                        key='audio_check2',
+                        choices={'no': _('Quit'), 'yes': _('Try')},
+                        result_id=prepare_result('audio_check2', session, scoring_rule='BOOLEAN'),
+                        submits=True,
+                        style=STYLE_BOOLEAN_NEGATIVE_FIRST
+                    )])
+                    return Trial(playback=playback, html=html, feedback_form=form,
+                                 config={'response_time': 120},
+                                 title=_("Ready to experiment")).action()
+                else:
+                    session.increment_round() # adjust round numbering
+            elif last_result.question_key == 'audio_check2' and last_result.score == 0:
+                # participant had persistent audio problems, delete session and redirect
+                session.finish()
+                session.save()
+                return Redirect(settings.HOMEPAGE).action()
 
-            # Go to SongSync straight away.
-            actions.append(Huang2022.next_song_sync_action(session))
-        elif next_round_number % 2 == 0:
-            # even round, show score and investigate if there were technical problems
-            # Create a score action.
+            # Start experiment: plan sections and show explainers
+            Huang2022.plan_sections(session)
+            # Show explainers and go to SongSync
+            explainer = Explainer(
+            instruction=_("How to Play"),
+            steps=[
+                Step(_(
+                    "Do you recognise the song? Try to sing along. The faster you recognise songs, the more points you can earn.")),
+                Step(_(
+                    "Do you really know the song? Keep singing or imagining the music while the sound is muted. The music is still playing: you just can’t hear it!")),
+                Step(_(
+                    "Was the music in the right place when the sound came back? Or did we jump to a different spot during the silence?"))
+            ],
+            button_label=_("Let's go!")).action(True)
+            explainer_devices = Explainer(
+                instruction=_("You can use your smartphone, computer or tablet to participate in this experiment. Please choose the best network in your area to participate in the experiment, such as wireless network (WIFI), mobile data network signal (4G or above) or wired network. If the network is poor, it may cause the music to fail to load or the experiment may fail to run properly. You can access the experiment page through the following channels:"),
+                steps=[
+                    Step(_(
+                        "Directly click the link on WeChat (smart phone or PC version, or WeChat Web)"),
+                    ),
+                    Step(_(
+                        "If the link to load the experiment page through the WeChat app on your cell phone fails, you can copy and paste the link in the browser of your cell phone or computer to participate in the experiment. You can use any of the currently available browsers, such as Safari, Firefox, 360, Google Chrome, Quark, etc."),
+                    )
+                ],
+                button_label=_("Continue")
+            ).action(True)
+            # Choose playlist
+            actions.extend([explainer, explainer_devices, Huang2022.next_song_sync_action(session)])
+        elif next_round_number <= total_rounds + 1:
+            # Load the heard_before offset.
+            plan = json_data.get('plan')
+            heard_before_offset = len(plan['song_sync_sections']) + 1
+
+            # show score 
             config = {'show_section': True, 'show_total_score': True}
-            title = Huang2022.get_trial_title(session, next_round_number)
+            title = Huang2022.get_trial_title(session, next_round_number - 1)
             score = Score(
                 session,
                 config=config,
                 title=title
             )
             actions.append(score.action())
-            form = Form(
-                form=[
-                    Question(
-                        key='tech_problems',
-                        explainer=_('Did you encounter any technical problems? E.g., no sound, music stopped playing, page loaded slow, page freezes, etc. '),
-                        question=_("Please report on these in the field below as elaborate as possible. This will help us improving this experiment."),
-                    )
-                ],
-                is_skippable=True,
-            )
-            trial = Trial(feedback_form=form, title=title)
-            actions.append(trial.action())
-        else:
-            # Load the heard_before offset.
-            try:
-                plan = json_data.get('plan')
-                heard_before_offset = len(plan['song_sync_sections']) + 1
-            except KeyError as error:
-                print('Missing plan key: %s' % str(error))
-                return actions
+            
             # SongSync rounds
-            if int(next_round_number / 2) + 1 in range(2, heard_before_offset):
+            if next_round_number < heard_before_offset:
                 actions.append(Huang2022.next_song_sync_action(session))
             # HeardBefore rounds
-            elif int(next_round_number / 2) + 1  == heard_before_offset:
+            elif next_round_number == heard_before_offset:
                 # Introduce new round type with Explainer.
                 actions.append(Huang2022.heard_before_explainer())
                 actions.append(
                     Huang2022.next_heard_before_action(session))
-            elif heard_before_offset < int(next_round_number / 2) + 1 <= session.experiment.rounds:
+            elif heard_before_offset < next_round_number <= total_rounds:
                 actions.append(
-                    Huang2022.next_heard_before_action(session))
+                    Huang2022.next_heard_before_action(session))   
             else:
-                actions.append(Explainer(
+                action = Huang2022.get_question(session)
+                if not action:
+                    actions.append(Huang2022.finalize(session))
+                actions.extend([Explainer(
                     instruction=_("Please answer some questions \
                     on your musical (Goldsmiths-MSI) and demographic background"),
                     steps=[],
-                    button_label=_("Let's go!")).action()
-                )
-                actions.extend(Huang2022.get_questions(session))
-                actions.append(contact_question())
-                session.merge_json_data({'complete': True})
-                session.save()
-        return combine_actions(*actions)
-
+                    button_label=_("Let's go!")).action(), action])
+                session.increment_round()
+        else:
+            action = Huang2022.get_question(session)
+            if not action:
+                action = Huang2022.finalize(session)
+            return [action]
+        return actions
+    
     @classmethod
-    def next_song_sync_action(cls, session):
-        """Get next song_sync section for this session."""
-
-        # Load plan.
-        next_round_number = session.get_next_round()
-        try:
-            plan = session.load_json_data()['plan']
-            sections = plan['song_sync_sections']
-        except KeyError as error:
-            print('Missing plan key: %s' % str(error))
-            return None
-
-        # Get section.
-        section = None
-        if next_round_number / 2 <= len(sections):
-            section = \
-                session.section_from_any_song(
-                    {'id': sections[int(next_round_number / 2) - 1].get('id')})
-        if not section:
-            print("Warning: no next_song_sync section found")
-            section = session.section_from_any_song()
-        result_id = cls.prepare_result(session, section)
-        return SongSync(
-            section=section,
-            title=cls.get_trial_title(session, next_round_number),
-            result_id=result_id,
-            scoring_rule='SONG_SYNC'
+    def finalize(cls, session):
+        session.finish()
+        session.save()
+        return Final(
+            session=session,
+            final_text=Huang2022.final_score_message(session),
+            rank=Huang2022.rank(session),
+            show_social=False,
+            show_profile_link=True
         ).action()
-
-    @classmethod
-    def heard_before_explainer(cls):
-        """Explainer for heard-before rounds"""
-        return Explainer(
-            instruction=_("Bonus Rounds"),
-            steps=[
-                Step(_("Listen carefully to the music.")),
-                Step(_("Did you hear the same song during previous rounds?")),
-            ],
-            button_label=_("Continue")).action(True)
-
-    @classmethod
-    def next_heard_before_action(cls, session):
-        """Get next heard_before action for this session."""
-
-        # Load plan.
-        next_round_number = session.get_next_round()
-        try:
-            plan = session.load_json_data()['plan']
-            sections = plan['heard_before_sections']
-            heard_before_offset = len(plan['song_sync_sections'])
-        except KeyError as error:
-            print('Missing plan key: %s' % str(error))
-            return None
-
-        # Get section.
-        section = None
-        if int(next_round_number / 2) + 1 - heard_before_offset  <= len(sections):
-            this_section_info = sections[int(next_round_number / 2) - heard_before_offset]
-            section = session.section_from_any_song(
-                    {'id': this_section_info.get('id')})
-        if not section:
-            print("Warning: no heard_before section found")
-            section = session.section_from_any_song()
-        playback = Playback(
-            [section],
-            play_config={'ready_time': 3, 'show_animation': True},
-            preload_message=_('Get ready!'))
-        expected_result = this_section_info.get('novelty')
-        # create Result object and save expected result to database
-        result_pk = cls.prepare_result(session, section, expected_result)
-        form = Form([BooleanQuestion(
-            key='heard_before',
-            choices={
-                'new': _("NO"),
-                'old': _("YES"),
-            },
-            question=_("Did you hear this song in previous rounds?"),
-            result_id=result_pk,
-            scoring_rule='REACTION_TIME',
-            submits=True)])
-        config = {
-            'style': 'boolean-negative-first',
-            'auto_advance': True,
-            'decision_time': cls.timeout
-        }
-        trial = Trial(
-            title=cls.get_trial_title(session, next_round_number),
-            playback=playback,
-            feedback_form=form,
-            config=config,
-        )
-        return trial.action()
-
-    @classmethod
-    def get_trial_title(cls, session, next_round_number):
-        round_number = int(next_round_number / 2) + next_round_number % 2
-        title = _("Round %(number)d / %(total)d") %\
-            {'number': round_number, 'total': session.experiment.rounds}
-        return title
 
     @classmethod
     def final_score_message(cls, session):
@@ -443,16 +327,21 @@ def genre_question():
     )
 
 def contact_question():
-    form = Form([
-        Question(
+    return Question(
             key='contact',
             explainer=_(
                 "Thank you so much for your feedback! Feel free to include your contact information if you would like a reply or skip if you wish to remain anonymous."
             ),
             question=_(
                 "Contact (optional):"
-            )
+            ),
+            is_skippable=True
         )
-    ],
-    is_skippable=True)
-    return Trial(playback=None, feedback_form=form, title=_("Help and feedback")).action()
+
+def get_test_playback():
+    from section.models import Section
+    test_section = Section.objects.get(song__name='audiocheck')
+    playback = Playback(sections=[test_section],
+        play_config={'show_animation': True})
+    return playback
+    

@@ -5,14 +5,15 @@ from decimal import Decimal, ROUND_HALF_UP
 from django.utils.translation import gettext_lazy as _
 
 from .base import Base
-from experiment.models import Section
-from .views import Trial, Consent, Final, Explainer, StartSession, Step, Playlist
-from .views.form import ChoiceQuestion, Form
-from .views.playback import Playback
-from .util.actions import combine_actions, final_action_with_optional_button, render_feedback_trivia
-from .util.final_score import get_average_difference
-from .util.practice import get_trial_condition_block, get_practice_views, practice_explainer
-from .util.staircasing import register_turnpoint
+from section.models import Section
+from experiment.actions import Trial, Consent, Explainer, StartSession, Step
+from experiment.actions.form import ChoiceQuestion, Form
+from experiment.actions.playback import Playback
+from experiment.actions.utils import final_action_with_optional_button, render_feedback_trivia
+from experiment.actions.utils import get_average_difference
+from experiment.rules.util.practice import get_trial_condition_block, get_practice_views, practice_explainer
+from experiment.rules.util.staircasing import register_turnpoint
+from result.utils import prepare_result
 
 logger = logging.getLogger(__name__)
 
@@ -31,7 +32,7 @@ class DurationDiscrimination(Base):
     decrease_difficulty_multiplier = 1.5
 
     @classmethod
-    def first_round(cls, experiment, participant):
+    def first_round(cls, experiment):
         """Create data for the first experiment rounds"""
         explainer = cls.intro_explanation().action(True)
 
@@ -70,8 +71,8 @@ class DurationDiscrimination(Base):
                 session, cls.next_trial_action, request_session)
             return action
 
-    @staticmethod
-    def calculate_score(result, data, scoring_rule, form_element):
+    @classmethod
+    def calculate_score(cls, result, data):
         # a result's score is used to keep track of how many correct results were in a row
         # for catch trial, set score to 2 -> not counted for calculating turnpoints
         try:
@@ -79,7 +80,7 @@ class DurationDiscrimination(Base):
         except Exception as e:
             logger.log(e)
             expected_response = None
-        if expected_response and expected_response == form_element['value']:
+        if expected_response and expected_response == result.given_response:
             if expected_response == 'LONGER':
                 return 1
             else:
@@ -89,7 +90,7 @@ class DurationDiscrimination(Base):
 
     @classmethod
     def register_difficulty(cls, session):
-        session.merge_json_data({'difficulty': cls.start_diff})
+        session.save_json_data({'difficulty': cls.start_diff})
         session.save()
 
     @classmethod
@@ -128,24 +129,25 @@ class DurationDiscrimination(Base):
         else:
             difference = difficulty
         try:
-            section = session.playlist.section_set.get(name=difference)
+            section = session.playlist.section_set.get(song__name=difference)
         except Section.DoesNotExist:
-            return None
-        expected_result = 'EQUAL' if difference == 0 else 'LONGER'
-        # create Result object and save expected result to database
-        result_pk = cls.prepare_result(session, section, expected_result)
+            raise
+        expected_response = 'EQUAL' if difference == 0 else 'LONGER'
         question_text = cls.get_question_text()
+        key = 'longer_or_equal'
         question = ChoiceQuestion(
             question=question_text,
-            key='longer_or_equal',
+            key=key,
             choices={
                 'EQUAL': _('EQUALLY LONG'),
                 'LONGER': _('LONGER')
             },
             view='BUTTON_ARRAY',
-            result_id=result_pk,
+            result_id=prepare_result(key, session, section=section, expected_response=expected_response),
             submits=True
         )
+        # create Result object and save expected result to database
+        
         playback = Playback([section])
         form = Form([question])
         view = Trial(
@@ -155,7 +157,7 @@ class DurationDiscrimination(Base):
                 'title': cls.condition},
             config={
                 'listen_first': True,
-                'decision_time': section.duration + .1
+                'response_time': section.duration + .1
             }
         )
         return view.action()
@@ -250,7 +252,7 @@ class DurationDiscrimination(Base):
                     action = None
                 else:
                     # register decreasing difficulty
-                    session.merge_json_data({'direction': 'decrease'})
+                    session.save_json_data({'direction': 'decrease'})
                     session.save()
                     # decrease difficulty
                     difficulty = cls.get_difficulty(
@@ -276,7 +278,7 @@ class DurationDiscrimination(Base):
                         action = None
                     else:
                         # register increasing difficulty
-                        session.merge_json_data({'direction': 'increase'})
+                        session.save_json_data({'direction': 'increase'})
                         session.save()
                         # increase difficulty
                         difficulty = cls.get_difficulty(
@@ -307,7 +309,7 @@ class DurationDiscrimination(Base):
         json_data = session.load_json_data()
         difficulty = json_data.get('difficulty')
         current_difficulty = difficulty * multiplier
-        session.merge_json_data({'difficulty': current_difficulty})
+        session.save_json_data({'difficulty': current_difficulty})
         session.save()
         # return rounded difficulty
         # this uses the decimal module, since round() does not work entirely as expected

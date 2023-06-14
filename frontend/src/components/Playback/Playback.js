@@ -7,11 +7,13 @@ import AutoPlay from "./Autoplay";
 import PlayButton from "../PlayButton/PlayButton";
 import MultiPlayer from "./MultiPlayer";
 import SpectrogramPlayer from "./SpectrogramPlayer";
+import MatchingPairs from "./MatchingPairs";
 
 export const AUTOPLAY = "AUTOPLAY";
 export const BUTTON = "BUTTON";
 export const MULTIPLAYER = "MULTIPLAYER";
 export const SPECTROGRAM = "SPECTROGRAM";
+export const MATCHINGPAIRS = "MATCHINGPAIRS";
 
 const Playback = ({
     playerType,
@@ -20,7 +22,7 @@ const Playback = ({
     onPreloadReady,
     preloadMessage,
     autoAdvance,
-    decisionTime,
+    responseTime,
     playConfig = {},
     time,
     submitResult,
@@ -111,11 +113,16 @@ const Playback = ({
     // Play section with given index
     const playSection = useCallback(
         (index = 0) => {
+
             // Load different audio
             if (index !== lastPlayerIndex.current) {
-                audio.loadUntilAvailable(MEDIA_ROOT + sections[index].url, () => {
-                    playAudio(index);
-                });
+                audio.loadUntilAvailable(
+                    MEDIA_ROOT + sections[index].url,
+                    () => { 
+                        playAudio(index);
+                    }
+                );
+                
                 return;
             }
 
@@ -126,7 +133,7 @@ const Playback = ({
                 return;
             }
 
-            // Start plback
+            // Start playback
             playAudio(index);
         },
         [playAudio, sections]
@@ -135,6 +142,7 @@ const Playback = ({
     // Local logic for onfinished playing
     const onFinishedPlaying = useCallback(() => {
         setPlayerIndex(-1);
+        audio.stop();
         finishedPlaying && finishedPlaying();
     }, [finishedPlaying]);
 
@@ -157,14 +165,16 @@ const Playback = ({
             instruction,
             preloadMessage,
             autoAdvance,
-            decisionTime,
+            responseTime,
             playConfig,
             time,
-            submitResult,
             startedPlaying,
             playerIndex,
             finishedPlaying: onFinishedPlaying,
             playSection,
+            lastPlayerIndex,
+            setPlayerIndex,
+            submitResult
         };
 
         switch (view) {
@@ -190,6 +200,13 @@ const Playback = ({
                     <SpectrogramPlayer
                         {...attrs}
                         disabledPlayers={playConfig.play_once ? hasPlayed : undefined}
+                    />
+                );
+            case MATCHINGPAIRS:
+                return (
+                    <MatchingPairs
+                        {...attrs}
+                        stopAudioAfter={playConfig.stop_audio_after}
                     />
                 );
             default:
