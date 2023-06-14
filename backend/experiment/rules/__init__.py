@@ -26,6 +26,7 @@ from .toontjehoger_3_plink import ToontjeHoger3Plink
 from .toontjehoger_4_absolute import ToontjeHoger4Absolute
 from .toontjehoger_5_tempo import ToontjeHoger5Tempo
 from .toontjehoger_6_relative import ToontjeHoger6Relative
+from .rules_template import RulesTemplate
 
 # Rules available to this application
 # If you create new Rules, add them to the list

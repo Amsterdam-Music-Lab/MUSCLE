@@ -34,12 +34,13 @@ from django.template.loader import render_to_string
 
 from django.db.models import Avg
 
-from .views.form import Form, ChoiceQuestion
-from .views import Consent, Explainer, StartSession, Trial, Final, Playback
+from experiment.actions.form import Form, ChoiceQuestion
+from experiment.actions import Consent, Explainer, StartSession, Trial, Final, Playback
 
-from .util.actions import combine_actions
+from experiment.actions.utils import combine_actions
 
-from .util.questions import DEMOGRAPHICS, EXTRA_DEMOGRAPHICS, question_by_key
+from experiment.questions.demographics import DEMOGRAPHICS, EXTRA_DEMOGRAPHICS
+from experiment.questions.utils import question_by_key
 
 from .base import Base
 
