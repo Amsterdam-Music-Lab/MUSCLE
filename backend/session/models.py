@@ -211,18 +211,15 @@ class Session(models.Model):
 
     def percentile_rank(self):
         """Get session percentile rank based on final_score, within current experiment"""
-        if self.is_finished():
-            finished_set = \
-                self.experiment.session_set.filter(finished_at__isnull=False)
-            n_finished = finished_set.count()
-            if n_finished == 0:
-                return 0.0  # Should be impossible but avoids x/0
-            n_lte = \
-                finished_set.filter(final_score__lte=self.final_score).count()
-            n_eq = finished_set.filter(final_score=self.final_score).count()
-            return 100.0 * (n_lte - (0.5 * n_eq)) / n_finished
-        else:
-            return 0.0
+        finished_set = \
+            self.experiment.session_set.filter(finished_at__isnull=False)
+        n_finished = finished_set.count()
+        if n_finished == 0:
+            return 0.0  # Should be impossible but avoids x/0
+        n_lte = \
+            finished_set.filter(final_score__lte=self.final_score).count()
+        n_eq = finished_set.filter(final_score=self.final_score).count()
+        return 100.0 * (n_lte - (0.5 * n_eq)) / n_finished
 
     def question_bonus(self, bonus=100, skip_penalty=5):
         """Get the question bonus, given by the bonus reduced with number of skipped questions times the skip_penalty"""
