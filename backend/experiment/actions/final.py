@@ -20,37 +20,35 @@ class Final:  # pylint: disable=too-few-public-methods
     }
 
     def __init__(self, session, title=_("Final score"), final_text=None,
-                 button=None, points=None, rank=None, show_social=False,
-                 show_profile_link=False, show_participant_link=False,
-                 show_participant_id_only=False, total_score=None
+                 button=None, stop_button=None, points=None, rank=None,
+                 show_social=False, show_profile_link=False, show_participant_link=False,
+                 show_participant_id_only=False, show_feedback_prompt=False,
+                 total_score=None,
                  ):
 
         self.session = session
         self.title = title
         self.final_text = final_text
         self.button = button
+        self.stop_button = stop_button
         self.rank = rank
         self.show_social = show_social
         self.show_profile_link = show_profile_link
         self.show_participant_link = show_participant_link
         self.show_participant_id_only = show_participant_id_only
-        if total_score is None:
-            self.total_score = self.session.total_score()
-        else:
-            self.total_score = total_score
-        if points is None:
-            self.points = _("points")
-        else:
-            self.points = points
+        self.show_feedback_prompt = show_feedback_prompt
+        self.total_score = total_score or self.session.total_score()
+        self.points = points or  _("points")
 
     def action(self):
         """Get data for final action"""
         return {
             'view': Final.ID,
             'score': self.total_score,
-            'rank': self.rank,
+            'rank': self.RANKS.get(self.rank),
             'final_text': self.final_text,
             'button': self.button,
+            'stop_button': self.stop_button,
             'points': self.points,
             'action_texts': {
                 'play_again': _('Play again'),
@@ -61,5 +59,6 @@ class Final:  # pylint: disable=too-few-public-methods
             'show_social': self.show_social,
             'show_profile_link': self.show_profile_link,
             'show_participant_link': self.show_participant_link,
-            'participant_id_only': self.show_participant_id_only
+            'participant_id_only': self.show_participant_id_only,
+            'show_feedback_prompt': self.show_feedback_prompt,
         }

@@ -4,7 +4,6 @@ from django.template.loader import render_to_string
 from django.utils.translation import gettext_lazy as _
 from django.conf import settings
 
-from experiment.actions import Final
 from result.score import SCORING_RULES
 
 
@@ -62,24 +61,23 @@ class Base(object):
     def rank(session):
         """Get rank based on session score"""
         score = session.final_score
-        ranks = Final.RANKS
 
         # Few or negative points or no score, always return lowest plastic score
         if score <= 0 or not score:
-            return ranks['PLASTIC']
+            return 'PLASTIC'
 
         # Buckets for positive scores:
         # rank: starts percentage
         buckets = [
             # ~ stanines 1-3
-            {'rank': ranks['BRONZE'],   'min_percentile':   0.0},
+            {'rank': 'BRONZE',   'min_percentile':   0.0},
             # ~ stanines 4-6
-            {'rank': ranks['SILVER'],   'min_percentile':  25.0},
+            {'rank': 'SILVER',   'min_percentile':  25.0},
             # ~ stanine 7
-            {'rank': ranks['GOLD'],     'min_percentile':  75.0},
-            {'rank': ranks['PLATINUM'],
+            {'rank': 'GOLD',     'min_percentile':  75.0},
+            {'rank': 'PLATINUM',
                 'min_percentile':  90.0},   # ~ stanine 8
-            {'rank': ranks['DIAMOND'],
+            {'rank': 'DIAMOND',
                 'min_percentile':  95.0},   # ~ stanine 9
         ]
 
@@ -93,4 +91,4 @@ class Base(object):
                 return bucket['rank']
 
         # Default return, in case score isn't in the buckets
-        return ranks['PLASTIC']
+        return 'PLASTIC'
