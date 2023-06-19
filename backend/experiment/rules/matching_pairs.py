@@ -161,7 +161,7 @@ class MatchingPairs(Base):
         elif result.question_key == 'matching_pairs':
             moves = data.get('result').get('moves')
             for m in moves:
-                m['filename'] = Section.objects.get(pk=m.get('selectedSection')).filename
+                m['filename'] = str(Section.objects.get(pk=m.get('selectedSection')).filename)
             score = sum([int(m['score']) for m in moves if 
                                m.get('score') and m['score']!= None]) + 100
         else:
