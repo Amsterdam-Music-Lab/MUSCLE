@@ -100,6 +100,7 @@ const Playback = ({
 
             // Play audio
             audio.playFrom(Math.max(0, playConfig.playhead || 0));
+            // Compensate for audio latency and set state to playing
             setTimeout(startedPlaying && startedPlaying(), audio.getTotalLatency() * 1000);            
         },
         [cancelAudioListeners, playConfig.mute, playConfig.playhead, startedPlaying, onAudioEnded]
