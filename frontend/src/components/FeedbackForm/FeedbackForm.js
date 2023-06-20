@@ -40,10 +40,18 @@ const FeedbackForm = ({
         // for every non-skippable question, check that we have a value
         const validFormElements = form.filter( formElement => {
             if (formElement.is_skippable) return true;
-            else if (formElement.value) return true;
+            else if (formElement.value && validateFormElement(formElement)) return true;
         });
         if (validFormElements.length === form.length) setFormValid(true);
         else setFormValid(false);
+    };
+
+    function validateFormElement(formElement) {
+        // For multiple choices in CHECKBOXES view, formElement.value is a string of comma-separated values
+        if (formElement.view == "CHECKBOXES" && formElement.min_values && (formElement.value.split(",").length < formElement.min_values)) {
+            return false;
+        }
+        return true;
     };
 
     return (
