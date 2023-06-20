@@ -1,4 +1,3 @@
-import React, { useRef, useState, useEffect } from "react";
 import { API_ROOT, SILENT_MP3 } from "../config.js";
 import Timer from "./timer";
 
