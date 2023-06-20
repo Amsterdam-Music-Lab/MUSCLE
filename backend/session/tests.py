@@ -1,3 +1,5 @@
+import json
+
 from django.test import TestCase
 
 from experiment.models import Experiment
@@ -10,6 +12,7 @@ class SessionTest(TestCase):
 
     @classmethod
     def setUpTestData(cls):
+        
         cls.participant = Participant.objects.create(unique_hash=42)
         cls.experiment = Experiment.objects.create(rules='LISTENING_CONDITIONS', slug='test')
         cls.session = Session.objects.create(
@@ -28,7 +31,22 @@ class SessionTest(TestCase):
         } 
         response = self.client.post('/session/create', data)
         assert response.status_code != 500
-    
+
+    def test_finalize(self):
+        response = self.client.get('/participant/')
+        response_data = json.loads(response.content)
+        csrf_token = response_data.get('csrf_token')
+        participant = Participant.objects.get(pk=response_data.get('id'))
+        session = Session.objects.create(
+            experiment=self.experiment,
+            participant=participant)
+        data = {
+            'csrfmiddlewaretoken:': csrf_token
+        }
+        response = self.client.post('/session/{}/finalize/'.format(session.pk), data)
+        assert response.status_code == 200
+        assert Session.objects.filter(finished_at__isnull=False).count() == 1
+
     def test_total_questions(self):   
         assert self.session.total_questions() == 0
         Result.objects.create(

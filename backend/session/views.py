@@ -105,4 +105,4 @@ def finalize_session(request, session_id):
     session = get_object_or_404(Session, pk=session_id, participant__id=participant.id)
     session.finish()
     session.save()
-    return redirect(settings.HOMEPAGE)
+    return JsonResponse({'status': 'ok'})

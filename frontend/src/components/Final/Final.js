@@ -46,6 +46,10 @@ const Final= ({ experiment, participant, session, score, final_text, action_text
         };
     }, [score, showScore]);
 
+    const finalize = () => {
+        finalizeSession({ session, participant });
+    }
+
     return (
         <div className="aha__final d-flex flex-column justify-content-center">
             {rank && (
@@ -66,9 +70,9 @@ const Final= ({ experiment, participant, session, score, final_text, action_text
             )}
             {stop_button && (
                  <div className="text-center pt-4">
-                 <div className='btn btn-secondary btn-lg' onClick={() => finalizeSession({ session, participant })}>
+                 <a className='btn btn-secondary btn-lg' href={URLS.AMLHome} onClick={ finalize }>
                      {stop_button.text}
-                 </div>
+                 </a>
              </div>
             )}
             {show_social && (<Social
