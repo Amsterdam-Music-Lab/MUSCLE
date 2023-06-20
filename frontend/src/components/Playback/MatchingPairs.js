@@ -19,9 +19,6 @@ const MatchingPairs = ({
     const secondCard = useRef(-1);
     const [total, setTotal] = useState(100);
     const [message, setMessage] = useState('')
-    
-    // Used to update the component without a click to apply changed classes
-    const [feedback, setFeedback] = useState(false)
 
     const resultBuffer = useRef([]);
 
@@ -29,10 +26,10 @@ const MatchingPairs = ({
     
     const setScoreMessage = (score) => {
         switch (score) {       
-            case -1: return '-1 <br />Misremembered';
+            case -10: return '-10 <br />Misremembered';
             case 0: return '0 <br />No match';
-            case 1: return '+1 <br />Lucky match';
-            case 2: return '+2 <br />Good job!';
+            case 10: return '+10 <br />Lucky match';
+            case 20: return '+20 <br />Good job!';
             default: return '';
         }
     }
@@ -57,11 +54,11 @@ const MatchingPairs = ({
             setMessage(setScoreMessage(score.current));            
             // show end of turn animations
             switch (score.current) {                                       
-                case 1:
+                case 10:
                     turnedCards[0].lucky = true;
                     turnedCards[1].lucky = true;                                        
                     break;
-                case 2:
+                case 20:
                     turnedCards[0].memory = true;
                     turnedCards[1].memory = true;                                        
                     break;
@@ -75,8 +72,7 @@ const MatchingPairs = ({
                       }, finishDelay);
                     break;  
             }   
-            // Update the component to show animations 
-            setFeedback(true);
+
             // add third click event to finish the turn
             document.getElementById('root').addEventListener('click', finishTurn);
             return;
@@ -99,12 +95,12 @@ const MatchingPairs = ({
                 if (lastCard.group === currentCard.group) {
                     // match                                        
                     if (currentCard.seen) {
-                        score.current = 2;                        
+                        score.current = 20;                        
                     } else {
-                        score.current = 1;                        
+                        score.current = 10;                        
                     }
                 } else {                    
-                    if (currentCard.seen) { score.current = -1; }
+                    if (currentCard.seen) { score.current = -10; }
                     else { score.current = 0; }
                 };
                 currentCard.seen = true;
@@ -133,7 +129,7 @@ const MatchingPairs = ({
     const finishTurn = () => {
         finishedPlaying();
         // remove matched cards from the board
-        if (score.current === 1 || score.current === 2) {            
+        if (score.current === 10 || score.current === 20) {            
             sections[firstCard.current].inactive = true;
             sections[secondCard.current].inactive = true;            
         }
@@ -151,8 +147,7 @@ const MatchingPairs = ({
             setTimeout(() => {
                 submitResult({moves: resultBuffer.current});
               }, finishDelay);            
-        } else { setMessage('<br/> Try again'); }         
-        setFeedback(false);                        
+        } else { setMessage('<br/> Try again'); }                      
     }
 
     const calculateRunningScore = () => {        
@@ -170,7 +165,7 @@ const MatchingPairs = ({
             <div className="row justify-content-around">
                 <div className="col-6 align-self-start">
                     <div dangerouslySetInnerHTML={{ __html: message }}
-                         className={classNames("matching-pairs__feedback", {fbnomatch: score.current === 0}, {fblucky: score.current === 1}, {fbmemory: score.current === 2}, {fbmisremembered: score.current === -1})}
+                         className={classNames("matching-pairs__feedback", {fbnomatch: score.current === 0}, {fblucky: score.current === 10}, {fbmemory: score.current === 20}, {fbmisremembered: score.current === -10})}
                         
                     />
                 </div>
