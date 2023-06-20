@@ -340,7 +340,7 @@ def contact_question():
 
 def get_test_playback():
     from section.models import Section
-    test_section = Section.objects.get(name='audiocheck')
+    test_section = Section.objects.get(song__name='audiocheck')
     playback = Playback(sections=[test_section],
         play_config={'show_animation': True})
     return playback

@@ -153,7 +153,7 @@ def next_trial_actions(session, round_number, request_session):
 
     try:
         section = session.playlist.section_set.filter(
-            name__startswith=condition['rhythm']).filter(
+            song__name__startswith=condition['rhythm']).filter(
             tag=condition['tag']).get(
             group=condition['group']
         )

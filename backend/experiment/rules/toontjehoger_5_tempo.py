@@ -8,7 +8,6 @@ from experiment.actions.form import ButtonArrayQuestion, Form
 from experiment.actions.playback import Playback
 from experiment.actions.styles import STYLE_NEUTRAL
 from .base import Base
-from experiment.actions.utils import combine_actions
 from experiment.utils import non_breaking_spaces
 
 from result.utils import prepare_result

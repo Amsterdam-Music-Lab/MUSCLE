@@ -48,7 +48,7 @@ class Anisochrony(DurationDiscrimination):
         else:
             difference = difficulty
         try:
-            section = session.playlist.section_set.get(name=difference)
+            section = session.playlist.section_set.get(song__name=difference)
         except Section.DoesNotExist:
             return None
         expected_response = 'REGULAR' if difference == 0 else 'IRREGULAR'

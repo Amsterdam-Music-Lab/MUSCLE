@@ -20,3 +20,5 @@ IPToCC
 # PostgrSQL database client
 psycopg2
 
+# print progress
+tqdm
