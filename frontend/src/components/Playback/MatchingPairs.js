@@ -19,9 +19,6 @@ const MatchingPairs = ({
     const secondCard = useRef(-1);
     const [total, setTotal] = useState(100);
     const [message, setMessage] = useState('')
-    
-    // Used to update the component without a click to apply changed classes
-    const [feedback, setFeedback] = useState(false)
 
     const resultBuffer = useRef([]);
 
@@ -75,8 +72,7 @@ const MatchingPairs = ({
                       }, finishDelay);
                     break;  
             }   
-            // Update the component to show animations 
-            setFeedback(true);
+
             // add third click event to finish the turn
             document.getElementById('root').addEventListener('click', finishTurn);
             return;
@@ -155,8 +151,7 @@ const MatchingPairs = ({
             setTimeout(() => {
                 submitResult({moves: resultBuffer.current});
               }, finishDelay);            
-        } else { setMessage('<br/> Try again'); }         
-        setFeedback(false);                        
+        } else { setMessage('<br/> Try again'); }                      
     }
 
     const calculateRunningScore = () => {        
