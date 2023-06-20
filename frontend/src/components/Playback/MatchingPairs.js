@@ -136,10 +136,6 @@ const MatchingPairs = ({
         if (score.current === 1 || score.current === 2) {            
             sections[firstCard.current].inactive = true;
             sections[secondCard.current].inactive = true;            
-        } else {
-            // reset nomatch state
-            sections[firstCard.current].nomatch = false;
-            sections[secondCard.current].nomatch = false;            
         }
         firstCard.current = -1;
         secondCard.current = -1;
@@ -172,13 +168,13 @@ const MatchingPairs = ({
     return (
         <div className="aha__matching-pairs container">
             <div className="row justify-content-around">
-                <div className="col align-self-start">
+                <div className="col-6 align-self-start">
                     <div dangerouslySetInnerHTML={{ __html: message }}
                          className={classNames("matching-pairs__feedback", {fbnomatch: score.current === 0}, {fblucky: score.current === 1}, {fbmemory: score.current === 2}, {fbmisremembered: score.current === -1})}
                         
                     />
                 </div>
-                <div className="col align-self-end">
+                <div className="col-6 align-self-end">
                     <div className="matching-pairs__score">Score: <br />{total}</div>        
                 </div>
             </div>
