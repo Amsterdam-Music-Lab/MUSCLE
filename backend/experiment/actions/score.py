@@ -55,10 +55,10 @@ class Score(object):  # pylint: disable=too-few-public-methods
             'feedback': self.feedback,
             'icon': self.icon,
             'timer': self.timer
-        }
-        if self.config.get('show_section'):
+        }        
+        if self.config['show_section']:
             action['last_song'] = self.session.last_song()
-        if self.config.get('show_total_score'):
+        if self.config['show_total_score']:
             action['total_score'] = self.session.total_score()
         return action
 

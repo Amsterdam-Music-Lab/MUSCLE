@@ -57,7 +57,7 @@ const Score = ({
             }
         };
     }, [timer, onNext]);
-
+    
     return (
         <div className="aha__score d-flex flex-column justify-content-center">
             <div
@@ -82,8 +82,8 @@ const Score = ({
                     )}
                 </div>
             </div>
-
-            {total_score !== null && (
+            
+            {total_score !== undefined && (
                 <h4 className="total-score">
                     {texts.score}: {total_score - score + showScore}
                 </h4>
