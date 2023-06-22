@@ -32,19 +32,13 @@ window.audio = audio;
 let _stopFadeTimer = null;
 export let audioInitialized = false;
 
-// init audio in webaudio context and connect track to destination (output)
-const audioContext = new AudioContext();
-const track = audioContext.createMediaElementSource(audio);
-track.connect(audioContext.destination);
-
 // Play a silent mp3 to make the audio element play after a user action
 // after that other audio can be started programmatically
 // More info: https://developer.mozilla.org/en-US/docs/Web/Media/Autoplay_guide
 export const init = () => {
     load(SILENT_MP3);
     play();
-    audioInitialized = true;
-    audioContext.resume();
+    audioInitialized = true;   
 };
 
 // init audio after first user action on page
@@ -55,30 +49,6 @@ export const initAudioListener = () => {
     };
     document.addEventListener("click", initOnce);
 };
-
-// return total audio latency in seconds
-export const getTotalLatency = () => {
-    console.log(audioContext.outputLatency * 1000);
-    console.log(audioContext.baseLatency * 1000);
-    return audioContext.outputLatency + audioContext.baseLatency
-}
-
-// return base audio latency in seconds
-export const getBaseLatency = () => {
-    return audioContext.baseLatency
-}
-
-// return output audio latency in seconds
-export const getOutputLatency = () => {    
-    return audioContext.outputLatency
-}
-
-// Adjust gain
-export const changeGain = (level) => {
-    const gainNode = audioContext.createGain();
-    track.connect(gainNode).connect(audioContext.destination);
-    gainNode.gain.value = level;    
-}
 
 export const stopFadeTimer = () => {
     if (_stopFadeTimer) {
@@ -177,9 +147,7 @@ export const setCurrentTime = (t) => {
 };
 
 // Get current time
-export const getCurrentTime = () => {
-    console.log(audio.currentTime);
-    console.log(audioContext.currentTime);
+export const getCurrentTime = () => {  
     return audio.currentTime;
 };
 
