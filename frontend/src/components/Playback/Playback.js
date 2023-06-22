@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 
 import * as audio from "../../util/audio";
+import * as webAudio from "../../util/webAudio";
 import { MEDIA_ROOT } from "../../config";
 
 import AutoPlay from "./Autoplay";
@@ -60,7 +61,7 @@ const Playback = ({
     // Cancel all events when component unmounts
     useEffect(() => {
         return () => {
-            cancelAudioListeners();
+            cancelAudioListeners();            
         };
     }, [cancelAudioListeners]);
 
@@ -80,6 +81,10 @@ const Playback = ({
     // Play audio
     const playAudio = useCallback(
         (index) => {
+            // Only initialize webaudio if section is local
+            if (!sections[index]['url'].startsWith('http')) {
+                webAudio.initWebAudio();
+            }
             // Store player index
             setPlayerIndex(index);
 
@@ -101,7 +106,7 @@ const Playback = ({
             // Play audio
             audio.playFrom(Math.max(0, playConfig.playhead || 0));
             // Compensate for audio latency and set state to playing
-            setTimeout(startedPlaying && startedPlaying(), audio.getTotalLatency() * 1000);            
+            setTimeout(startedPlaying && startedPlaying(), webAudio.getTotalLatency() * 1000);            
         },
         [cancelAudioListeners, playConfig.mute, playConfig.playhead, startedPlaying, onAudioEnded]
     );
@@ -112,9 +117,9 @@ const Playback = ({
     }, [playerIndex]);
 
     // Play section with given index
-    const playSection = useCallback(
+    const playSection = useCallback(        
         (index = 0) => {
-
+            
             // Load different audio
             if (index !== lastPlayerIndex.current) {
                 audio.loadUntilAvailable(

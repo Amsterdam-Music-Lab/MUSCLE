@@ -1,6 +1,7 @@
 import React, { useRef, useState, useEffect } from "react";
 
 import * as audio from "../../util/audio";
+import * as webAudio from "../../util/webAudio";
 import { MEDIA_ROOT } from "../../config";
 
 import Circle from "../Circle/Circle";
@@ -29,12 +30,16 @@ const AutoPlay = ({instruction, preloadMessage, onPreloadReady, playConfig, sect
     // Handle view logic
     useEffect(() => {
         switch (state.view) {
-            case RECOGNIZE:
+            case RECOGNIZE:              
+                // Only initialize webaudio if section is local    
+                if (!section['url'].startsWith('http')) {
+                    webAudio.initWebAudio();
+                }
                 // Play audio at start time            
                 if (!playConfig.mute) {
                     audio.playFrom(Math.max(0, playConfig.playhead));
                 }                             
-                setTimeout(startedPlaying(), audio.getTotalLatency() * 1000);
+                setTimeout(startedPlaying(), webAudio.getTotalLatency() * 1000);
                 break;
             default:
             // nothing
@@ -73,7 +78,7 @@ const AutoPlay = ({instruction, preloadMessage, onPreloadReady, playConfig, sect
                             onTick={onCircleTimerTick}
                             onFinish={() => {
                                 // Stop audio
-                                finishedPlaying();
+                                finishedPlaying();                                
                             }}
                         />
                         <div className="circle-content">
