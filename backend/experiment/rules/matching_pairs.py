@@ -31,9 +31,9 @@ class MatchingPairs(Base):
         explainer = Explainer(
             instruction='',
             steps=[
-                Step(description=_('You are invited to play a memory game.')),
-                Step(description=_('The more similar pairs you find, the more points you receive.')),
-                Step(description=_('Try to get as many points as possible!'))
+                Step(description=_('On the next page, you will find a board with 16 music cards.')),
+                Step(description=_('Two cards are tune twins, but one sound may be distorted.')),
+                Step(description=_('Your task is to find all the tune twins on the board.'))
             ]).action(step_numbers=True)
 
         return [
@@ -146,7 +146,7 @@ class MatchingPairs(Base):
             play_config={'stop_audio_after': 5}
         )
         trial = Trial(
-            title='Matching pairs',
+            title='Tune twins',
             playback=playback,
             feedback_form=None,
             result_id=prepare_result('matching_pairs', session),
@@ -161,7 +161,7 @@ class MatchingPairs(Base):
         elif result.question_key == 'matching_pairs':
             moves = data.get('result').get('moves')
             for m in moves:
-                m['filename'] = Section.objects.get(pk=m.get('selectedSection')).filename
+                m['filename'] = str(Section.objects.get(pk=m.get('selectedSection')).filename)
             score = sum([int(m['score']) for m in moves if 
                                m.get('score') and m['score']!= None]) + 100
         else:

@@ -69,9 +69,10 @@ class BooleanQuestion(Question):
         self.view = 'BUTTON_ARRAY'
 
 class ChoiceQuestion(Question):
-    def __init__(self, choices, **kwargs):
+    def __init__(self, choices, min_values=1, **kwargs):
         super().__init__(**kwargs)
         self.choices = choices
+        self.min_values = min_values # minimal number of values to be selected, 1 or more
 
 
 class DropdownQuestion(Question):
