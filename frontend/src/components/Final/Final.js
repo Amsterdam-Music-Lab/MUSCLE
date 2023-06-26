@@ -13,7 +13,7 @@ import UserFeedback from "../UserFeedback/UserFeedback";
 // It can only be the last view of an experiment
 const Final= ({ experiment, participant, session, score, final_text, action_texts, button, stop_button, 
             onNext, history, show_participant_link, participant_id_only,
-            show_profile_link, show_social, show_feedback_info, points, rank }) => {
+            show_profile_link, show_social, show_feedback_info, points, rank, logo }) => {
     const [showScore, setShowScore] = useState(0);
 
     // Use a ref to prevent doing multiple increments
@@ -68,12 +68,12 @@ const Final= ({ experiment, participant, session, score, final_text, action_text
                     </a>
                 </div>
             )}
-            {stop_button && (
-                 <div className="text-center pt-4">
-                 <a className='btn btn-secondary btn-lg' href={URLS.AMLHome} onClick={ finalize }>
-                     {stop_button.text}
-                 </a>
-             </div>
+            {logo && (
+                <div className="text-center pt-4">
+                    <a href={logo.link}>
+                        <img src={logo.image} width="100%" />
+                    </a>
+                </div>
             )}
             {show_social && (<Social
                 score={score}

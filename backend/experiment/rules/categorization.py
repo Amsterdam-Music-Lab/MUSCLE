@@ -78,8 +78,7 @@ class Categorization(Base):
 
         # Calculate round number from passed training rounds
         rounds_passed = (session.rounds_passed() -
-                         int(json_data['training_rounds']))
-
+                         int(json_data['training_rounds']))            
         # Change phase to enable collecting results of second half of training-1
         if session.rounds_passed() == 10:
             json_data['phase'] = 'training-1B'
@@ -170,7 +169,7 @@ class Categorization(Base):
                     profiles = session.participant.profile()
                     for profile in profiles:
                         # Delete failed_training tag from profile
-                        if profile.question == 'failed_training':
+                        if profile.question_key == 'failed_training':
                             profile.delete()
                     final_message = render_to_string(
                         'final/categorization_final.html')
@@ -190,9 +189,8 @@ class Categorization(Base):
             feedback = cls.get_feedback(session)
             return [feedback, explainer]
 
-        elif json_data['phase'] == 'testing':
-            if rounds_passed < len(json_data['sequence']):
-
+        elif json_data['phase'] == 'testing':           
+            if rounds_passed < len(json_data['sequence']):                
                 # Determine wether this round has feedback
                 if rounds_passed in json_data['feedback_sequence']:
                     return cls.get_trial_with_feedback(session)
@@ -204,7 +202,7 @@ class Categorization(Base):
             # Calculate percentage of correct response to training stimuli
             final_score = 0
             for result in this_results:
-                if 'T' in result.section.name and result.score == 1:
+                if 'T' in result.section.song.name and result.score == 1:
                     final_score += 1
             score_percent = 100 * (final_score / 30)
 
@@ -241,7 +239,7 @@ class Categorization(Base):
             profiles = session.participant.profile()
             for profile in profiles:
                 # Delete failed_training tag from profile
-                if profile.question == 'failed_training':
+                if profile.question_key == 'failed_training':
                     profile.delete()
             final_message = render_to_string(
                 'final/categorization_final.html')
@@ -367,7 +365,6 @@ class Categorization(Base):
     def plan_phase(cls, session):
         json_data = session.load_json_data()
         print(json_data['group'], session.playlist.section_set.first().tag)
-
         if 'training' in json_data['phase']:
             # Retrieve training stimuli for the assigned group
             if json_data["group"] == 'S1':
@@ -395,8 +392,8 @@ class Categorization(Base):
                 json_data['phase'] = 'training-3'
                 new_rounds = 5
             for _ in range(0, new_rounds):
-                section_sequence.append(sections[0].id)
-                section_sequence.append(sections[1].id)
+                section_sequence.append(sections[0].song_id)
+                section_sequence.append(sections[1].song_id)
             random.shuffle(section_sequence)
             print(section_sequence)
             json_data['sequence'] = section_sequence
@@ -427,22 +424,22 @@ class Categorization(Base):
             section_sequence = []
             # Add 15 x 2 training stimuli
             for _ in range(0, 15):
-                section_sequence.append(training_sections[0].id)
-                section_sequence.append(training_sections[1].id)
+                section_sequence.append(training_sections[0].song_id)
+                section_sequence.append(training_sections[1].song_id)
             # add 5 x 10 test stimuli
             length = len(test_sections)
             for _ in range(0, 5):
                 for stimulus in range(length):
-                    section_sequence.append(test_sections[stimulus].id)
+                    section_sequence.append(test_sections[stimulus].song_id)
             random.shuffle(section_sequence)
             # Randomly choose 2 x 10 training stimuli for feedback
             sequence_length = len(section_sequence)
             sequence_a = []
             sequence_b = []
             for stimulus in range(sequence_length-1):
-                if section_sequence[stimulus] == training_sections[0].id:
+                if section_sequence[stimulus] == training_sections[0].song_id:
                     sequence_a.append((stimulus+1))
-                elif section_sequence[stimulus] == training_sections[1].id:
+                elif section_sequence[stimulus] == training_sections[1].song_id:
                     sequence_b.append((stimulus+1))
             random.shuffle(sequence_a)
             random.shuffle(sequence_b)
@@ -506,14 +503,14 @@ class Categorization(Base):
                   }
         style = {json_data['button_order']: True}
         trial = two_alternative_forced(session, section, choices, expected_response,
-            style=style, comment=json_data['phase'], scoring_rule='CORRECTNESS', config=config)
+            style=style, comment=json_data['phase'], scoring_rule='CORRECTNESS', title=cls.get_title(session), config=config)
         return trial
 
     @classmethod
     def get_title(cls, session):
         json_data = session.load_json_data()
         rounds_passed = (session.rounds_passed() -
-                         int(json_data['training_rounds']))
+                         int(json_data['training_rounds'])+1)
         return f"Round {rounds_passed} / {len(json_data['sequence'])}"
     
     @classmethod
