@@ -16,7 +16,7 @@ from section.models import Section
 
 class MatchingPairs(Base):
     ID = 'MATCHING_PAIRS'
-    num_pairs = 2
+    num_pairs = 8
 
     @classmethod
     def feedback_info(cls):
