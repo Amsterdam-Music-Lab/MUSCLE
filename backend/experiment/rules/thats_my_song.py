@@ -20,17 +20,12 @@ class ThatsMySong(Hooked):
     
     @classmethod
     def get_random_question(cls, session):
-        demographics = [question_by_key('dgf_generation'), question_by_key('dgf_gender_identity')]
+
         question = unasked_question(
-                session.participant,
-                demographics
-            )
-        if question is None:
-            question = unasked_question(
-                session.participant,
-                MUSICGENS_17_W_VARIANTS,
-                randomize=True
-            )
+            session.participant,
+            MUSICGENS_17_W_VARIANTS,
+            randomize=True
+        )
         
         if question is None:
             return None
@@ -104,6 +99,17 @@ class ThatsMySong(Hooked):
         # Collect actions.
         actions = []
         if next_round_number == 1:
+
+            demographics = [question_by_key('dgf_generation'), question_by_key('dgf_gender_identity')]
+            for i in range(len(demographics)):
+                question = unasked_question(session.participant, demographics)
+                if question:
+                    actions.append(
+                        Trial(
+                        title=_("Questionnaire"),
+                        feedback_form=Form([question], is_skippable=question.is_skippable)).action()
+                )
+
             question = ChoiceQuestion(
                 key='playlist_decades',
                 view='CHECKBOXES',
@@ -115,6 +121,7 @@ class ThatsMySong(Hooked):
                     '1990s': '1990s',
                     '2000s': '2000s'
                 },
+                min_values = 2,
                 result_id=prepare_result('playlist_decades', session=session)
             )
             actions.append(
