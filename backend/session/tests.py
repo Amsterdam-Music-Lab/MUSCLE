@@ -1,6 +1,7 @@
 import json
 
 from django.test import TestCase
+from django.utils import timezone
 
 from experiment.models import Experiment
 from participant.models import Participant
@@ -71,3 +72,29 @@ class SessionTest(TestCase):
             given_response=''
         )
         assert self.session.skipped_questions() == 2
+    
+    def test_percentile_rank(self):
+        # create one session with relatively low score
+        Session.objects.create(
+            experiment=self.experiment,
+            participant=self.participant,
+            final_score=24,
+            finished_at=timezone.now()
+        )
+        # create one unfinished session with relatively high score
+        Session.objects.create(
+            experiment=self.experiment,
+            participant=self.participant,
+            final_score=180
+        )
+        finished_session = Session.objects.create(
+            experiment=self.experiment,
+            participant=self.participant,
+            final_score=42,
+            finished_at=timezone.now()
+        )
+        rank = finished_session.percentile_rank(exclude_unfinished=True)
+        assert rank == 75.0
+        rank = finished_session.percentile_rank(exclude_unfinished=False)
+        assert rank == 62.5
+

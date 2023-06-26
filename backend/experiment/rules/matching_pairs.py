@@ -5,8 +5,8 @@ from django.template.loader import render_to_string
 from django.conf import settings
 
 from .base import Base
-from experiment.actions import Consent, Explainer, Final, Playlist, Score, StartSession, Step, Trial
-from experiment.actions.form import BooleanQuestion, Form
+from experiment.actions import Consent, Explainer, Final, Playlist, StartSession, Step, Trial
+from experiment.actions.form import Form
 from experiment.actions.playback import Playback
 from experiment.questions.demographics import EXTRA_DEMOGRAPHICS
 from experiment.questions.utils import question_by_key, total_unanswered_questions, unasked_question
@@ -73,10 +73,7 @@ class MatchingPairs(Base):
                 button={
                     'text': 'Play again',
                 },
-                stop_button={
-                    'text': 'Stop'
-                },
-                rank=MatchingPairs.rank(session),
+                rank=MatchingPairs.rank(session, exclude_unfinished=False),
                 show_social=True,
             ).action()
             cont = MatchingPairs.get_matching_pairs_trial(session)

@@ -59,7 +59,7 @@ class Base(object):
         return score_message + " " + message
 
     @staticmethod
-    def rank(session):
+    def rank(session, exclude_unfinished=True):
         """Get rank based on session score"""
         score = session.final_score
         ranks = Final.RANKS
@@ -83,7 +83,7 @@ class Base(object):
                 'min_percentile':  95.0},   # ~ stanine 9
         ]
 
-        percentile = session.percentile_rank()
+        percentile = session.percentile_rank(exclude_unfinished)
 
         # Check the buckets in reverse order
         # If the percentile rank is higher than the min_percentile
