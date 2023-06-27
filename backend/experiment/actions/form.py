@@ -2,8 +2,9 @@ from django.conf import settings
 from django.utils.translation import gettext_lazy as _
 
 from .styles import STYLE_NEUTRAL
+from .base_action import BaseAction
 
-class Question(object):
+class Question(BaseAction):
     ''' Question is part of a form.
     - key: description of question in results table
     - view: which widget the question should use in the frontend
@@ -165,7 +166,7 @@ class LikertQuestionIcon(Question):
                 5: _("Strongly Agree"),
             }
 
-class Form(object):
+class Form(BaseAction):
     ''' Form is a view which brings together an array of questions with submit and optional skip button
     - form: array of questions
     - button_label: label of submit button

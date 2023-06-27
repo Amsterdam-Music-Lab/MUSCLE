@@ -1,6 +1,8 @@
 from django.utils.translation import gettext_lazy as _
 
-class Playlist:  # pylint: disable=too-few-public-methods
+from .base_action import BaseAction
+
+class Playlist(BaseAction):  # pylint: disable=too-few-public-methods
     """
     Provide data for playlist selection view
 
@@ -10,14 +12,9 @@ class Playlist:  # pylint: disable=too-few-public-methods
 
     ID = "PLAYLIST"
 
-    @staticmethod
-    def action(playlists):
-        """Get data for playlist action"""
-        return {
-            'view': Playlist.ID,
-            'instruction': _('Select a Playlist'),
-            'playlists': [
-                {'id': playlist.id, 'name': playlist.name}
-                for playlist in playlists
-            ],
-        }
+    def __init__(self, playlists):
+        self.instruction:  _('Select a Playlist')
+        self.playlists = [
+            {'id': playlist.id, 'name': playlist.name}
+            for playlist in playlists
+        ]

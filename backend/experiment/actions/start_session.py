@@ -1,4 +1,6 @@
-class StartSession:  # pylint: disable=too-few-public-methods
+from .base_action import BaseAction
+
+class StartSession(BaseAction):  # pylint: disable=too-few-public-methods
     """
     Provide data for a StartSession view
     - This is a required view in each experiment that handles the creation of a new session
@@ -9,10 +11,3 @@ class StartSession:  # pylint: disable=too-few-public-methods
     """
 
     ID = "START_SESSION"
-
-    @staticmethod
-    def action():
-        """Get data for start_session action"""
-        return {
-            'view': StartSession.ID,
-        }

@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import Button from "../Button/Button";
 
 // Info is an experiment view that shows the Info text, and handles agreement/stop actions
-const Info = ({ heading, body, buttonLabel, buttonLink, onNext }) => {
+const Info = ({ heading, body, button_label, button_link, onNext }) => {
     const [maxHeight, setMaxHeight] = useState(getMaxHeight());
 
     useEffect(() => {
@@ -34,22 +34,22 @@ const Info = ({ heading, body, buttonLabel, buttonLink, onNext }) => {
                 dangerouslySetInnerHTML={{ __html: body }}
             />
 
-            {buttonLabel && (
+            {button_label && (
                 <div className="buttons d-flex justify-content-center pt-3">
-                    {buttonLink ? (
+                    {button_link ? (
                         <a
                             className="btn btn-primary"
-                            href={buttonLink}
-                            target={buttonLink.startsWith("http") ? "_blank" : undefined}
+                            href={button_link}
+                            target={button_link.startsWith("http") ? "_blank" : undefined}
                             rel="noopener noreferrer"
                         >
-                            {buttonLabel}
+                            {button_label}
                         </a>
                     ) : (
                         <Button
                             className="btn-primary"
                             onClick={onNext}
-                            title={buttonLabel}
+                            title={button_label}
                         />
                     )}
                 </div>

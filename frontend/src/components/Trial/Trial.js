@@ -103,7 +103,7 @@ const Trial = ({
         <div role="presentation" className={classNames("aha__trial", config.style)}>
             {playback && (
                 <Playback
-                    playerType={playback.player_type}
+                    playerType={playback.view}
                     instruction={playback.instruction}
                     onPreloadReady={() => {
                         setPreloadReady(true);

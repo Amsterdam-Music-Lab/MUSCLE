@@ -2,7 +2,9 @@ import random
 
 from django.utils.translation import gettext as _
 
-class Score(object):  # pylint: disable=too-few-public-methods
+from .base_action import BaseAction
+
+class Score(BaseAction):  # pylint: disable=too-few-public-methods
     """
     Provide data for an intermediate score view
 

@@ -1,7 +1,8 @@
 from django.utils.translation import gettext_lazy as _
 
+from .base_action import BaseAction
 
-class Final:  # pylint: disable=too-few-public-methods
+class Final(BaseAction):  # pylint: disable=too-few-public-methods
     """
     Provide data for a final view
 
@@ -47,7 +48,7 @@ class Final:  # pylint: disable=too-few-public-methods
     def action(self):
         """Get data for final action"""
         return {
-            'view': Final.ID,
+            'view': self.ID,
             'score': self.total_score,
             'rank': self.rank,
             'final_text': self.final_text,
