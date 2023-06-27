@@ -84,11 +84,13 @@ class ThatsMySong(Hooked):
                 ).action(),
                 Final(
                     session=session,
-                    final_text=cls.final_score_message(session),
+                    final_text=cls.final_score_message(session) + " For more information about this experiment, visit the Vanderbilt University Medical Center Music Cognition Lab.",
                     rank=cls.rank(session),
                     show_social=True,
                     show_profile_link=True,
-                    button={'text': _('Play again'), 'link': '{}/{}'.format(settings.CORS_ORIGIN_WHITELIST[0], session.experiment.slug)}
+                    button={'text': _('Play again'), 'link': '{}/{}{}'.format(settings.CORS_ORIGIN_WHITELIST[0], session.experiment.slug,
+                        '?participant_id='+session.participant.participant_id_url if session.participant.participant_id_url else '')},
+                    logo={'image': '/images/vumc_mcl_logo.png', 'link':'https://www.vumc.org/music-cognition-lab/welcome'}
                 ).action()
             ]
 

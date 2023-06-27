@@ -10,7 +10,7 @@ import UserFeedback from "../UserFeedback/UserFeedback";
 
 // Final is an experiment view that shows the final scores of the experiment
 // It can only be the last view of an experiment
-const Final= ({ experiment, participant, score, final_text, action_texts, button, onNext, history, show_participant_link, participant_id_only, show_profile_link, show_social, points, rank }) => {
+const Final= ({ experiment, participant, score, final_text, action_texts, button, onNext, history, show_participant_link, participant_id_only, show_profile_link, show_social, points, rank, logo }) => {
     const [showScore, setShowScore] = useState(0);
 
     // Use a ref to prevent doing multiple increments
@@ -58,6 +58,13 @@ const Final= ({ experiment, participant, score, final_text, action_texts, button
                 <div className="text-center pt-4">
                     <a className='btn btn-primary btn-lg' href={button.link} onClick={button.link ? undefined : onNext}>
                         {button.text}
+                    </a>
+                </div>
+            )}
+            {logo && (
+                <div className="text-center pt-4">
+                    <a href={logo.link}>
+                        <img src={logo.image} width="100%" />
                     </a>
                 </div>
             )}
