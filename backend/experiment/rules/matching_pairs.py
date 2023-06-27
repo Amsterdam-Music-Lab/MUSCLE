@@ -2,10 +2,11 @@ import random
 
 from django.utils.translation import gettext_lazy as _
 from django.template.loader import render_to_string
+from django.conf import settings
 
 from .base import Base
-from experiment.actions import Consent, Explainer, Final, Playlist, Score, StartSession, Step, Trial
-from experiment.actions.form import BooleanQuestion, Form
+from experiment.actions import Consent, Explainer, Final, Playlist, StartSession, Step, Trial
+from experiment.actions.form import Form
 from experiment.actions.playback import Playback
 from experiment.questions.demographics import EXTRA_DEMOGRAPHICS
 from experiment.questions.utils import question_by_key, total_unanswered_questions, unasked_question
@@ -16,6 +17,10 @@ from section.models import Section
 class MatchingPairs(Base):
     ID = 'MATCHING_PAIRS'
     num_pairs = 8
+
+    @classmethod
+    def feedback_info(cls):
+        pass
 
     @classmethod
     def first_round(cls, experiment):
@@ -45,7 +50,7 @@ class MatchingPairs(Base):
     
     @staticmethod
     def next_round(session):
-        if session.rounds_passed() <= 1:       
+        if session.rounds_passed() < 1:       
             trial, skip_explainer = MatchingPairs.get_question(session)
             if trial:
                 if not skip_explainer:
@@ -57,39 +62,21 @@ class MatchingPairs(Base):
             else:
                 trial = MatchingPairs.get_matching_pairs_trial(session)
             return trial
-            
-        last_result = session.result_set.last()
-        if last_result and last_result.question_key == 'play_again':
-            if last_result.score == 1:
-                return MatchingPairs.get_matching_pairs_trial(session)
-            else:
-                session.finish()
-                session.save()
-                return Final(
-                    session=session,
-                    final_text='Thank you for playing!',
-                    show_social=False,
-                    show_profile_link=True
-                ).action()
         else:
             session.final_score += session.result_set.filter(
                 question_key='matching_pairs').last().score
             session.save()
-            score = Score(
+            score = Final(
                 session,
-                config={'show_total_score': True},
-                title='Score'
+                title='Score',
+                final_text='Can you score higher than your friends and family? Share and let them try!',
+                button={
+                    'text': 'Play again',
+                },
+                rank=MatchingPairs.rank(session, exclude_unfinished=False),
+                show_social=True,
             ).action()
-            key = 'play_again'
-            cont = Trial(
-                playback=None,
-                feedback_form=Form([BooleanQuestion(
-                    key=key,
-                    question='Play again?',
-                    result_id=prepare_result(key, session),
-                    submits=True),
-                ])
-            ).action()
+            cont = MatchingPairs.get_matching_pairs_trial(session)
             return [score, cont]
     
     @classmethod
@@ -156,14 +143,9 @@ class MatchingPairs(Base):
 
     @classmethod
     def calculate_score(cls, result, data):
-        if result.question_key == 'play_again':
-            score = 1 if data.get('value') == 'yes' else 0
-        elif result.question_key == 'matching_pairs':
-            moves = data.get('result').get('moves')
-            for m in moves:
-                m['filename'] = str(Section.objects.get(pk=m.get('selectedSection')).filename)
-            score = sum([int(m['score']) for m in moves if 
-                               m.get('score') and m['score']!= None]) + 100
-        else:
-            score = 0
+        moves = data.get('result').get('moves')
+        for m in moves:
+            m['filename'] = str(Section.objects.get(pk=m.get('selectedSection')).filename)
+        score = sum([int(m['score']) for m in moves if 
+                           m.get('score') and m['score']!= None]) + 100
         return score
