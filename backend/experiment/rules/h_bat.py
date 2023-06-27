@@ -63,11 +63,11 @@ class HBat(Base):
 
     @classmethod
     def first_round(cls, experiment):
-        explainer = cls.intro_explainer().action(True)
-        consent = Consent.action()
-        explainer2 = practice_explainer().action()
-        playlist = Playlist.action(experiment.playlists.all())
-        start_session = StartSession.action()
+        explainer = cls.intro_explainer()
+        consent = Consent()
+        explainer2 = practice_explainer()
+        playlist = Playlist(experiment.playlists.all())
+        start_session = StartSession()
         return [
             explainer,
             consent,
@@ -118,7 +118,7 @@ class HBat(Base):
                 'response_time': section.duration + .1
             }
         )
-        return view.action()
+        return view
 
     @classmethod
     def intro_explainer(cls):
@@ -138,6 +138,7 @@ class HBat(Base):
                 Step(_(
                     'This test will take around 4 minutes to complete. Try to stay focused for the entire test!'))
             ],
+            step_numbers=True,
             button_label='Ok'
         )
 

@@ -118,7 +118,7 @@ class Eurovision2020(Hooked):
             section=section,
             title=cls.get_trial_title(session, next_round_number),
             result_id=result_id
-        ).action()
+        )
 
 
     @classmethod
@@ -175,5 +175,5 @@ class Eurovision2020(Hooked):
             feedback_form=form,
             config=config,
         )
-        return trial.action()
+        return trial
 

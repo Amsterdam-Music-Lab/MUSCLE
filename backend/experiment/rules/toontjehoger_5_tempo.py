@@ -36,15 +36,15 @@ class ToontjeHoger5Tempo(Base):
                     "Kan jij horen welke het origineel is?"),
                 Step("Let hierbij vooral op de timing van de muzikanten.")
             ],
+            step_numbers=True,
             button_label="Start"
-
-        ).action(step_numbers=True)
+        )
 
         # 2. Choose playlist.
-        playlist = Playlist.action(experiment.playlists.all())
+        playlist = Playlist(experiment.playlists.all())
 
         # 3. Start session.
-        start_session = StartSession.action()
+        start_session = StartSession()
 
         return [
             explainer,
@@ -170,7 +170,7 @@ class ToontjeHoger5Tempo(Base):
             playback=playback,
             feedback_form=form,
             title=cls.TITLE,
-        ).action()
+        )
         return [trial]
 
     @classmethod
@@ -229,7 +229,7 @@ class ToontjeHoger5Tempo(Base):
 
         # Return score view
         config = {'show_total_score': True}
-        score = Score(session, config=config, feedback=feedback).action()
+        score = Score(session, config=config, feedback=feedback)
         return [score]
 
     @ classmethod
@@ -254,7 +254,7 @@ class ToontjeHoger5Tempo(Base):
             final_text=final_text,
             rank=toontjehoger_ranks(session),
             button={'text': 'Wat hebben we getest?'}
-        ).action()
+        )
 
         # Info page
         body = render_to_string(
@@ -264,6 +264,6 @@ class ToontjeHoger5Tempo(Base):
             heading="Timing en tempo",
             button_label="Terug naar ToontjeHoger",
             button_link="/toontjehoger"
-        ).action()
+        )
 
         return [*score, final, info]

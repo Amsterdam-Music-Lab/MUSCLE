@@ -130,7 +130,7 @@ class ToontjeHogerHome(Base):
                 'privacy_description': "Deze website verwerkt uitsluitend geanomiseerde gegevens. Voor aanvullende informatie zie {}.".format(external_url("UvA Privacy Statement", "https://www.uva.nl/home/disclaimers/privacy.html"))
             },
             experiments=cls.EXPERIMENT_DATA
-        ).action()
+        )
 
         return [
             home,

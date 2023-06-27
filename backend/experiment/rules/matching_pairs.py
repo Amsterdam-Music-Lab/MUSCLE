@@ -20,21 +20,22 @@ class MatchingPairs(Base):
     @classmethod
     def first_round(cls, experiment):
         rendered = render_to_string('consent/consent_rhythm.html')
-        consent = Consent.action(rendered, title=_(
+        consent = Consent(rendered, title=_(
             'Informed consent'), confirm=_('I agree'), deny=_('Stop'))
         # 2. Choose playlist.
-        playlist = Playlist.action(experiment.playlists.all())
+        playlist = Playlist(experiment.playlists.all())
 
         # 3. Start session.
-        start_session = StartSession.action()
+        start_session = StartSession()
 
         explainer = Explainer(
             instruction='',
             steps=[
                 Step(description=_('On the next page, you will find a board with 16 music cards.')),
                 Step(description=_('Two cards are tune twins, but one sound may be distorted.')),
-                Step(description=_('Your task is to find all the tune twins on the board.'))
-            ]).action(step_numbers=True)
+                Step(description=_('Your task is to find all the tune twins on the board.')),
+            ],
+            step_numbers=True)
 
         return [
             consent,
@@ -52,7 +53,7 @@ class MatchingPairs(Base):
                     intro_questions = Explainer(
                         instruction='Before starting the game, we would like to ask you some demographic questions.',
                         steps=[]
-                    ).action()
+                    )
                     return [intro_questions, trial]
             else:
                 trial = MatchingPairs.get_matching_pairs_trial(session)
@@ -70,7 +71,7 @@ class MatchingPairs(Base):
                     final_text='Thank you for playing!',
                     show_social=False,
                     show_profile_link=True
-                ).action()
+                )
         else:
             session.final_score += session.result_set.filter(
                 question_key='matching_pairs').last().score
@@ -79,7 +80,7 @@ class MatchingPairs(Base):
                 session,
                 config={'show_total_score': True},
                 title='Score'
-            ).action()
+            )
             key = 'play_again'
             cont = Trial(
                 playback=None,
@@ -89,7 +90,7 @@ class MatchingPairs(Base):
                     result_id=prepare_result(key, session),
                     submits=True),
                 ])
-            ).action()
+            )
             return [score, cont]
     
     @classmethod
@@ -116,7 +117,7 @@ class MatchingPairs(Base):
         return Trial(
             title=_("Questionnaire %(index)i / %(total)i") % {'index': index, 'total': total_questions},
             feedback_form=Form([question])
-        ).action(), skip_explainer
+        ), skip_explainer
 
     @classmethod
     def get_matching_pairs_trial(cls, session):
@@ -152,7 +153,7 @@ class MatchingPairs(Base):
             result_id=prepare_result('matching_pairs', session),
             config={'show_continue_button': False}
         )
-        return trial.action()
+        return trial
 
     @classmethod
     def calculate_score(cls, result, data):

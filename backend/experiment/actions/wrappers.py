@@ -36,4 +36,4 @@ def two_alternative_forced(session, section, choices, expected_response=None, st
     )
     feedback_form = Form([question])
     trial = Trial(playback=playback, feedback_form=feedback_form, title=title, config=config)
-    return trial.action()
+    return trial

@@ -37,15 +37,15 @@ class ToontjeHoger4Absolute(Base):
                     "Van ieder fragment kan je twee versies luisteren. Eén hiervan is het origineel. De andere hebben we een beetje hoger of lager gemaakt."),
                 Step("Kan jij horen welke van de twee versies precies zo hoog of laag is als je 'm kent? Welke is het origineel?"),
             ],
+            step_numbers=True,
             button_label="Start"
-
-        ).action(step_numbers=True)
+        )
 
         # 2. Choose playlist.
-        playlist = Playlist.action(experiment.playlists.all())
+        playlist = Playlist(experiment.playlists.all())
 
         # 3. Start session.
-        start_session = StartSession.action()
+        start_session = StartSession()
 
         return [
             explainer,
@@ -130,7 +130,7 @@ class ToontjeHoger4Absolute(Base):
             playback=playback,
             feedback_form=form,
             title=cls.TITLE,
-        ).action()
+        )
         return [trial]
 
     @classmethod
@@ -158,7 +158,7 @@ class ToontjeHoger4Absolute(Base):
 
         # Return score view
         config = {'show_total_score': True}
-        score = Score(session, config=config, feedback=feedback).action()
+        score = Score(session, config=config, feedback=feedback)
         return [score]
 
     @classmethod
@@ -183,7 +183,7 @@ class ToontjeHoger4Absolute(Base):
             final_text=final_text,
             rank=toontjehoger_ranks(session),
             button={'text': 'Wat hebben we getest?'}
-        ).action()
+        )
 
         # Info page
         body = render_to_string(
@@ -193,6 +193,6 @@ class ToontjeHoger4Absolute(Base):
             heading="Absoluut gehoor",
             button_label="Terug naar ToontjeHoger",
             button_link="/toontjehoger"
-        ).action()
+        )
 
         return [*score, final, info]

@@ -47,14 +47,15 @@ class ToontjeHoger1Mozart(Base):
                 Step("Hierna verschijnt een korte puzzel."),
                 Step("Lukt het om het juiste antwoord te vinden?"),
             ],
+            step_numbers=True,
             button_label="Start"
-        ).action(step_numbers=True)
+        )
 
         # 2. Choose playlist.
-        playlist = Playlist.action(experiment.playlists.all())
+        playlist = Playlist(experiment.playlists.all())
 
         # 3. Start session.
-        start_session = StartSession.action()
+        start_session = StartSession()
 
         return [
             explainer,
@@ -116,7 +117,7 @@ class ToontjeHoger1Mozart(Base):
             body=body,
             heading=heading,
             button_label="Volgende",
-        ).action()
+        )
         return [info]
 
     @classmethod
@@ -129,7 +130,7 @@ class ToontjeHoger1Mozart(Base):
 
         # Return score view
         config = {'show_total_score': True}
-        score = Score(session, config=config, feedback=feedback).action()
+        score = Score(session, config=config, feedback=feedback)
         return [score]
 
     @classmethod
@@ -161,7 +162,7 @@ class ToontjeHoger1Mozart(Base):
             config=listen_config,
             playback=playback,
             title=cls.TITLE,
-        ).action()
+        )
 
         # Step 2
         # --------------------
@@ -191,7 +192,7 @@ class ToontjeHoger1Mozart(Base):
                 image_url)),
             feedback_form=form,
             title=cls.TITLE,
-        ).action()
+        )
 
         return [listen, image_trial]
 
@@ -204,8 +205,9 @@ class ToontjeHoger1Mozart(Base):
                 Step("Hierna verschijnt weer een korte puzzel."),
                 Step("Lukt het nu om de juiste te kiezen?"),
             ],
+            step_numbers=True,
             button_label="Start"
-        ).action(step_numbers=True)
+        )
 
         return [explainer]
 
@@ -235,7 +237,7 @@ class ToontjeHoger1Mozart(Base):
             final_text=final_text,
             rank=toontjehoger_ranks(session),
             button={'text': 'Wat hebben we getest?'}
-        ).action()
+        )
 
         # Info page
         body = render_to_string(
@@ -245,6 +247,6 @@ class ToontjeHoger1Mozart(Base):
             heading="Het Mozart effect",
             button_label="Terug naar ToontjeHoger",
             button_link="/toontjehoger"
-        ).action()
+        )
 
         return [*answer_explainer, *score, final, info]

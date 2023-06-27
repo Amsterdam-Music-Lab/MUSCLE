@@ -34,14 +34,14 @@ class DurationDiscrimination(Base):
     @classmethod
     def first_round(cls, experiment):
         """Create data for the first experiment rounds"""
-        explainer = cls.intro_explanation().action(True)
+        explainer = cls.intro_explanation()
 
         # 2. Consent with default text
-        consent = Consent.action()
+        consent = Consent()
 
-        explainer2 = practice_explainer().action()
+        explainer2 = practice_explainer()
 
-        start_session = StartSession.action()
+        start_session = StartSession()
 
         return [
             explainer,
@@ -160,7 +160,7 @@ class DurationDiscrimination(Base):
                 'response_time': section.duration + .1
             }
         )
-        return view.action()
+        return view
 
     @classmethod
     def get_question_text(cls):
@@ -180,7 +180,8 @@ class DurationDiscrimination(Base):
                 Step(_(
                     'This test will take around 4 minutes to complete. Try to stay focused for the entire test!'))
             ],
-            button_label='Ok'
+            button_label='Ok',
+            step_numbers=True
         )
 
     @classmethod

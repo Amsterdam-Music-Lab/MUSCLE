@@ -6,6 +6,7 @@ from django.views.decorators.http import require_POST
 
 from .models import Session
 from experiment.models import Experiment
+from experiment.utils import serialize
 from section.models import Playlist
 from participant.utils import get_participant
 
@@ -70,7 +71,7 @@ def continue_session(request, session_id):
         raise Http404("Session does not exist")
 
     # Get next round for given session
-    action = session.experiment_rules().next_round(session)
+    action = serialize(session.experiment_rules().next_round(session))
     return JsonResponse(action, json_dumps_params={'indent': 4})
 
 
@@ -92,10 +93,10 @@ def next_round(request, session_id):
     # Get next round for given session
     if request.session.get('experiment_series'):
         # we are in the middle of an experiment series - need to pass in request.session object
-        actions = session.experiment_rules().next_round(session, request.session)
+        actions = serialize(session.experiment_rules().next_round(session, request.session))
     else:
         # Get next round for given session
-        actions = session.experiment_rules().next_round(session)
+        actions = serialize(session.experiment_rules().next_round(session))
     
     if not isinstance(actions,  list):
         if actions.get('redirect'):

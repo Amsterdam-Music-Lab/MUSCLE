@@ -32,7 +32,7 @@ class ThatsMySong(Hooked):
         
         return Trial(
                 title=_("Questionnaire"),
-                feedback_form=Form([question], is_skippable=question.is_skippable)).action()
+                feedback_form=Form([question], is_skippable=question.is_skippable))
 
     def get_info_playlist(self, filename):
         """ function used by `manage.py compileplaylist` to compile a csv with metadata """
@@ -81,7 +81,7 @@ class ThatsMySong(Hooked):
                 Score(session,
                     config=config,
                     title=title
-                ).action(),
+                ),
                 Final(
                     session=session,
                     final_text=cls.final_score_message(session) + " For more information about this experiment, visit the Vanderbilt University Medical Center Music Cognition Lab.",
@@ -91,7 +91,7 @@ class ThatsMySong(Hooked):
                     button={'text': _('Play again'), 'link': '{}/{}{}'.format(settings.CORS_ORIGIN_WHITELIST[0], session.experiment.slug,
                         '?participant_id='+session.participant.participant_id_url if session.participant.participant_id_url else '')},
                     logo={'image': '/images/vumc_mcl_logo.png', 'link':'https://www.vumc.org/music-cognition-lab/welcome'}
-                ).action()
+                )
             ]
 
         # Get next round number and initialise actions list. Two thirds of
@@ -109,7 +109,7 @@ class ThatsMySong(Hooked):
                     actions.append(
                         Trial(
                         title=_("Questionnaire"),
-                        feedback_form=Form([question], is_skippable=question.is_skippable)).action()
+                        feedback_form=Form([question], is_skippable=question.is_skippable))
                 )
 
             question = ChoiceQuestion(
@@ -129,7 +129,7 @@ class ThatsMySong(Hooked):
             actions.append(
                 Trial(
                 title=_("Playlist selection"),
-                feedback_form=Form([question])).action()
+                feedback_form=Form([question]))
             )
 
         # Go to SongSync
@@ -144,7 +144,7 @@ class ThatsMySong(Hooked):
             actions.append(Score(session,
                 config=config,
                 title=title
-            ).action())
+            ))
 
             # Load the heard_before offset.
             plan = json_data.get('plan')

@@ -30,11 +30,11 @@ class Huang2022(Hooked):
         # read consent form from file
         rendered = render_to_string(
             'consent/consent_huang2021.html')
-        consent = Consent.action(rendered, title=_(
+        consent = Consent(rendered, title=_(
             'Informed consent'), confirm=_('I agree'), deny=_('Stop'))
-        playlist = Playlist.action(experiment.playlists.all())
+        playlist = Playlist(experiment.playlists.all())
         # start session
-        start_session = StartSession.action()
+        start_session = StartSession()
 
         return [
             consent,
@@ -81,7 +81,7 @@ class Huang2022(Hooked):
         return Trial(
             title=_("Questionnaire %(index)i / %(total)i") % {'index': index, 'total': total_questions},
             feedback_form=Form([question], is_skippable=question.is_skippable)
-        ).action()
+        )
 
     @staticmethod
     def next_round(session, request_session=None):
@@ -110,7 +110,7 @@ class Huang2022(Hooked):
                 style=STYLE_BOOLEAN_NEGATIVE_FIRST)])
             return Trial(playback=playback, feedback_form=form, html=html,
                          config={'response_time': 120},
-                         title=_("Audio check")).action()
+                         title=_("Audio check"))
         elif next_round_number <= 1:
             last_result = session.result_set.last()
             if last_result.question_key == 'audio_check1':
@@ -126,14 +126,14 @@ class Huang2022(Hooked):
                     )])
                     return Trial(playback=playback, html=html, feedback_form=form,
                                  config={'response_time': 120},
-                                 title=_("Ready to experiment")).action()
+                                 title=_("Ready to experiment"))
                 else:
                     session.increment_round() # adjust round numbering
             elif last_result.question_key == 'audio_check2' and last_result.score == 0:
                 # participant had persistent audio problems, delete session and redirect
                 session.finish()
                 session.save()
-                return Redirect(settings.HOMEPAGE).action()
+                return Redirect(settings.HOMEPAGE)
 
             # Start experiment: plan sections and show explainers
             Huang2022.plan_sections(session)
@@ -148,7 +148,8 @@ class Huang2022(Hooked):
                 Step(_(
                     "Was the music in the right place when the sound came back? Or did we jump to a different spot during the silence?"))
             ],
-            button_label=_("Let's go!")).action(True)
+            step_numbers=True,
+            button_label=_("Let's go!"))
             explainer_devices = Explainer(
                 instruction=_("You can use your smartphone, computer or tablet to participate in this experiment. Please choose the best network in your area to participate in the experiment, such as wireless network (WIFI), mobile data network signal (4G or above) or wired network. If the network is poor, it may cause the music to fail to load or the experiment may fail to run properly. You can access the experiment page through the following channels:"),
                 steps=[
@@ -159,8 +160,9 @@ class Huang2022(Hooked):
                         "If the link to load the experiment page through the WeChat app on your cell phone fails, you can copy and paste the link in the browser of your cell phone or computer to participate in the experiment. You can use any of the currently available browsers, such as Safari, Firefox, 360, Google Chrome, Quark, etc."),
                     )
                 ],
+                step_numbers=True,
                 button_label=_("Continue")
-            ).action(True)
+            )
             # Choose playlist
             actions.extend([explainer, explainer_devices, Huang2022.next_song_sync_action(session)])
         elif next_round_number <= total_rounds + 1:
@@ -176,7 +178,7 @@ class Huang2022(Hooked):
                 config=config,
                 title=title
             )
-            actions.append(score.action())
+            actions.append(score)
             
             # SongSync rounds
             if next_round_number < heard_before_offset:
@@ -198,7 +200,8 @@ class Huang2022(Hooked):
                     instruction=_("Please answer some questions \
                     on your musical (Goldsmiths-MSI) and demographic background"),
                     steps=[],
-                    button_label=_("Let's go!")).action(), action])
+                    step_numbers=True,
+                    button_label=_("Let's go!")), action])
                 session.increment_round()
         else:
             action = Huang2022.get_question(session)
@@ -217,7 +220,7 @@ class Huang2022(Hooked):
             rank=Huang2022.rank(session),
             show_social=False,
             show_profile_link=True
-        ).action()
+        )
 
     @classmethod
     def final_score_message(cls, session):

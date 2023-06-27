@@ -28,4 +28,4 @@ class RhythmExperimentSeriesMRI(RhythmExperimentSeries):
                 )
             ],
             button_label=_("Continue")
-        ).action()
+        )
