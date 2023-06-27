@@ -1,5 +1,3 @@
-import { API_ROOT, SILENT_MP3 } from "../config.js";
-
 let audioContext;
 let track;
 
