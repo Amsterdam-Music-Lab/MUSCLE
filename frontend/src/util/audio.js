@@ -2,23 +2,13 @@ import { API_ROOT, SILENT_MP3 } from "../config.js";
 import Timer from "./timer";
 
 // Audio provides function around a shared audio object
-
-// Declare webaudio vars in the root scope
-let audioContext;
-let track;
-
 // Create a global audio object once
 // <audio /> docs: https://developer.mozilla.org/en-US/docs/Web/HTML/Element/audio
 const audio = document.createElement("audio");
-
 audio.id = "audio-player";
 audio.controls = "controls";
 audio.src = SILENT_MP3;
-
-// switch to cors anonymous for local development 
-API_ROOT == 'http://localhost:8000' ? audio.crossOrigin = "anonymous" : audio.crossorigin = "use-credentials";
-
-// 
+audio.setAttribute('crossOrigin', 'use-credentials');
 audio.disableRemotePlayback = true;
 audio.style.display = "none";
 
@@ -43,16 +33,8 @@ export let audioInitialized = false;
 export const init = () => {
     load(SILENT_MP3);
     play();
-    audioInitialized = true;
-    initWebAudio();
+    audioInitialized = true;   
 };
-
-// init webaudio context and connect track to destination (output) 
-const initWebAudio = () => {
-    audioContext = new AudioContext();
-    track = audioContext.createMediaElementSource(audio);
-    track.connect(audioContext.destination);
-}
 
 // init audio after first user action on page
 export const initAudioListener = () => {
@@ -62,13 +44,6 @@ export const initAudioListener = () => {
     };
     document.addEventListener("click", initOnce);
 };
-
-// Adjust gain
-export const changeGain = (level) => {
-    const gainNode = audioContext.createGain();
-    track.connect(gainNode).connect(audioContext.destination);
-    gainNode.gain.value = level;    
-}
 
 export const stopFadeTimer = () => {
     if (_stopFadeTimer) {
