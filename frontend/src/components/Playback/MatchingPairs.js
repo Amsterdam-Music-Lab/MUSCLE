@@ -117,8 +117,7 @@ const MatchingPairs = ({
             }              
             resultBuffer.current.push({            
                 selectedSection: currentCard.id,
-                xPosition: xPosition.current,
-                yPosition: yPosition.current,
+                cardIndex: index,
                 score: score.current,
                 timestamp: formatTime(Date.now() - startTime.current)
             });
