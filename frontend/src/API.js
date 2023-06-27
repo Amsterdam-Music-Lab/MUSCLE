@@ -30,6 +30,7 @@ export const URLS = {
         create: "/session/create/",
         result: "/session/result/",
         next_round: (id) => "/session/" + id + "/next_round/",
+        finalize: (id) => "/session/" + id + "/finalize/"
     },
 };
 
@@ -128,6 +129,21 @@ export const getNextRound = async ({ session }) => {
         return null;
     }
 };
+
+export const finalizeSession = async ({ session, participant }) => {
+    try {
+        const response = await axios.post(
+            API_BASE_URL + URLS.session.finalize(session.current.id),
+            qs.stringify({
+                csrfmiddlewaretoken: participant.csrf_token,
+            })
+        );
+        return response.data;
+    } catch (err) {
+        console.error(err);
+        return null;
+    }
+}
 
 // Share participant
 export const shareParticipant = async ({ email, participant }) => {

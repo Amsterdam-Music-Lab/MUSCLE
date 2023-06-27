@@ -117,8 +117,7 @@ const MatchingPairs = ({
             }              
             resultBuffer.current.push({            
                 selectedSection: currentCard.id,
-                xPosition: xPosition.current,
-                yPosition: yPosition.current,
+                cardIndex: index,
                 score: score.current,
                 timestamp: formatTime(Date.now() - startTime.current)
             });
@@ -163,13 +162,13 @@ const MatchingPairs = ({
     return (
         <div className="aha__matching-pairs container">
             <div className="row justify-content-around">
-                <div className="col-6 align-self-start">
+                <div className="col align-self-start">
                     <div dangerouslySetInnerHTML={{ __html: message }}
                          className={classNames("matching-pairs__feedback", {fbnomatch: score.current === 0}, {fblucky: score.current === 10}, {fbmemory: score.current === 20}, {fbmisremembered: score.current === -10})}
                         
                     />
                 </div>
-                <div className="col-6 align-self-end">
+                <div className="col align-self-end">
                     <div className="matching-pairs__score">Score: <br />{total}</div>        
                 </div>
             </div>
