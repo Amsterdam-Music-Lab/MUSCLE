@@ -50,7 +50,7 @@ const MatchingPairs = ({
         // Check if this turn has finished
         if (turnedCards.length === 2) {                        
             // update total score & display current score
-            setTotal(calculateRunningScore());
+            setTotal(total+score.current);
             setMessage(setScoreMessage(score.current));            
             // show end of turn animations
             switch (score.current) {                                       
@@ -144,21 +144,11 @@ const MatchingPairs = ({
         if (sections.filter(s => s.inactive).length === sections.length) {
             // all cards have been turned
             setTimeout(() => {
-                submitResult({moves: resultBuffer.current});
+                submitResult({score: total, moves: resultBuffer.current});
               }, finishDelay);            
         } else { setMessage('<br/> Try again'); }                      
     }
 
-    const calculateRunningScore = () => {        
-        const allScores = resultBuffer.current.filter(
-            r => r.score !== undefined).map(r => r.score);            
-        if (!allScores.length) return 100;
-        const initial = 0;
-        const score = allScores.reduce( 
-            (accumulator, s)  => accumulator + s, initial )
-        return 100 + score; //Math.round(score / resultBuffer.current.length * 100)
-    }
-    
     return (
         <div className="aha__matching-pairs container">
             <div className="row justify-content-around">

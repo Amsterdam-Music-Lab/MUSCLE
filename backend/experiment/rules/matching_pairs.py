@@ -147,6 +147,5 @@ class MatchingPairs(Base):
         moves = data.get('result').get('moves')
         for m in moves:
             m['filename'] = str(Section.objects.get(pk=m.get('selectedSection')).filename)
-        score = sum([int(m['score']) for m in moves if 
-                           m.get('score') and m['score']!= None]) + 100
+        score = data.get('result').get('score')
         return score
