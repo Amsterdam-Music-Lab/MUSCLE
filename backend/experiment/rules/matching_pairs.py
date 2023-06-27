@@ -56,7 +56,7 @@ class MatchingPairs(Base):
             if trial:
                 if not skip_explainer:
                     intro_questions = Explainer(
-                        instruction='Before starting the game, we would like to ask you some demographic questions.',
+                        instruction='Before starting the game, we would like to ask you five demographic questions.',
                         steps=[]
                     ).action()
                     return [intro_questions, trial]
