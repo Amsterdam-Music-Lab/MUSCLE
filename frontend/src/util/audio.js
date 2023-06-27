@@ -142,7 +142,7 @@ export const setCurrentTime = (t) => {
 };
 
 // Get current time
-export const getCurrentTime = () => {  
+export const getCurrentTime = () => {
     return audio.currentTime;
 };
 

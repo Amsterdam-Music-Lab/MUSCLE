@@ -42,7 +42,7 @@ const AutoPlay = ({instruction, preloadMessage, onPreloadReady, playConfig, sect
                 // Play audio at start time            
                 if (!playConfig.mute) {
                     audio.playFrom(Math.max(0, playConfig.playhead));
-                }                             
+                }
                 setTimeout(startedPlaying(), latency);
                 break;
             default:
@@ -82,7 +82,7 @@ const AutoPlay = ({instruction, preloadMessage, onPreloadReady, playConfig, sect
                             onTick={onCircleTimerTick}
                             onFinish={() => {
                                 // Stop audio
-                                finishedPlaying();                                
+                                finishedPlaying();
                             }}
                         />
                         <div className="circle-content">

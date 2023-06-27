@@ -61,7 +61,7 @@ const Playback = ({
     // Cancel all events when component unmounts
     useEffect(() => {
         return () => {
-            cancelAudioListeners();            
+            cancelAudioListeners();
         };
     }, [cancelAudioListeners]);
 
@@ -120,9 +120,9 @@ const Playback = ({
     }, [playerIndex]);
 
     // Play section with given index
-    const playSection = useCallback(        
+    const playSection = useCallback(
         (index = 0) => {
-            
+
             // Load different audio
             if (index !== lastPlayerIndex.current) {
                 audio.loadUntilAvailable(
