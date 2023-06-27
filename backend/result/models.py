@@ -49,7 +49,7 @@ class Result(models.Model):
         """Export data for admin"""
         return {
             'created_at': self.created_at.isoformat(),
-            'section': self.section.name if self.section else None,
+            'section': self.section.song.name if self.section.song else None,
             'score': self.score,
             'expected_response': self.expected_response,
             'given_response': self.given_response,
