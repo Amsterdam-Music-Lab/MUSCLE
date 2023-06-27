@@ -94,7 +94,7 @@ class Participant(models.Model):
 
     def profile_questions(self):
         """Get all profile questions answered by this participant"""
-        return self.profile().values_list('question_key', flat=True)
+        return self.profile().filter(given_response__isnull=False).values_list('question_key', flat=True)
 
     def random_empty_profile_question(self):
         """Get a random profile question with empty answer"""

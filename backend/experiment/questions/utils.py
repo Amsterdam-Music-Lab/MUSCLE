@@ -41,7 +41,7 @@ def unasked_question(participant, questions=DEMOGRAPHICS, randomize=False):
         if not question.key in profile_questions:
             q = deepcopy(question)
             try:
-                result_id = participant.profile().get(question_key=q.key)
+                result_id = participant.profile().get(question_key=q.key).pk
             except Result.DoesNotExist:
                 result_id = prepare_result(
                     question.key,

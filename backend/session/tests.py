@@ -1,4 +1,7 @@
+import json
+
 from django.test import TestCase
+from django.utils import timezone
 
 from experiment.models import Experiment
 from participant.models import Participant
@@ -10,6 +13,7 @@ class SessionTest(TestCase):
 
     @classmethod
     def setUpTestData(cls):
+        
         cls.participant = Participant.objects.create(unique_hash=42)
         cls.experiment = Experiment.objects.create(rules='LISTENING_CONDITIONS', slug='test')
         cls.session = Session.objects.create(
@@ -28,7 +32,22 @@ class SessionTest(TestCase):
         } 
         response = self.client.post('/session/create', data)
         assert response.status_code != 500
-    
+
+    def test_finalize(self):
+        response = self.client.get('/participant/')
+        response_data = json.loads(response.content)
+        csrf_token = response_data.get('csrf_token')
+        participant = Participant.objects.get(pk=response_data.get('id'))
+        session = Session.objects.create(
+            experiment=self.experiment,
+            participant=participant)
+        data = {
+            'csrfmiddlewaretoken:': csrf_token
+        }
+        response = self.client.post('/session/{}/finalize/'.format(session.pk), data)
+        assert response.status_code == 200
+        assert Session.objects.filter(finished_at__isnull=False).count() == 1
+
     def test_total_questions(self):   
         assert self.session.total_questions() == 0
         Result.objects.create(
@@ -53,3 +72,29 @@ class SessionTest(TestCase):
             given_response=''
         )
         assert self.session.skipped_questions() == 2
+    
+    def test_percentile_rank(self):
+        # create one session with relatively low score
+        Session.objects.create(
+            experiment=self.experiment,
+            participant=self.participant,
+            final_score=24,
+            finished_at=timezone.now()
+        )
+        # create one unfinished session with relatively high score
+        Session.objects.create(
+            experiment=self.experiment,
+            participant=self.participant,
+            final_score=180
+        )
+        finished_session = Session.objects.create(
+            experiment=self.experiment,
+            participant=self.participant,
+            final_score=42,
+            finished_at=timezone.now()
+        )
+        rank = finished_session.percentile_rank(exclude_unfinished=True)
+        assert rank == 75.0
+        rank = finished_session.percentile_rank(exclude_unfinished=False)
+        assert rank == 62.5
+
