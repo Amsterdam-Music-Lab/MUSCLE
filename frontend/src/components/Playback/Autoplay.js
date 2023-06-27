@@ -43,6 +43,7 @@ const AutoPlay = ({instruction, preloadMessage, onPreloadReady, playConfig, sect
                 if (!playConfig.mute) {
                     audio.playFrom(Math.max(0, playConfig.playhead));
                 }
+                // Compensate for audio latency and set state to playing
                 setTimeout(startedPlaying(), latency);
                 break;
             default:
