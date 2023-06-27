@@ -31,15 +31,19 @@ const AutoPlay = ({instruction, preloadMessage, onPreloadReady, playConfig, sect
     useEffect(() => {
         switch (state.view) {
             case RECOGNIZE:              
-                // Only initialize webaudio if section is local    
+                // Only initialize webaudio if section is local
+                let latency
                 if (!section['url'].startsWith('http')) {
                     webAudio.initWebAudio();
+                    latency = webAudio.getTotalLatency() * 1000;
+                } else {
+                    latency = 0;
                 }
                 // Play audio at start time            
                 if (!playConfig.mute) {
                     audio.playFrom(Math.max(0, playConfig.playhead));
                 }                             
-                setTimeout(startedPlaying(), webAudio.getTotalLatency() * 1000);
+                setTimeout(startedPlaying(), latency);
                 break;
             default:
             // nothing

@@ -82,8 +82,12 @@ const Playback = ({
     const playAudio = useCallback(
         (index) => {
             // Only initialize webaudio if section is local            
+            let latency
             if (!sections[index]['url'].startsWith('http')) {
                 webAudio.initWebAudio();
+                latency = webAudio.getTotalLatency() * 1000;
+            } else {
+                latency = 0;
             }
             // Store player index
             setPlayerIndex(index);
@@ -105,7 +109,7 @@ const Playback = ({
             // Play audio
             audio.playFrom(Math.max(0, playConfig.playhead || 0));
             // Compensate for audio latency and set state to playing
-            setTimeout(startedPlaying && startedPlaying(), webAudio.getTotalLatency() * 1000);            
+            setTimeout(startedPlaying && startedPlaying(), latency);            
         },
         [cancelAudioListeners, playConfig.mute, playConfig.playhead, startedPlaying, onAudioEnded]
     );

@@ -14,10 +14,8 @@ export const initWebAudio = () => {
 
 // return total audio latency in milliseconds
 export const getTotalLatency = () => {    
-    let totalLatency = (track === undefined) ? 0 : (audioContext.outputLatency + audioContext.baseLatency) * 1000;
-    console.log(`Base latency = ${audioContext.outputLatency * 1000} ms`);
-    console.log(`Output latency = ${audioContext.baseLatency * 1000} ms`);
-    console.log(`Total latency = ${totalLatency} ms`);    
+    let totalLatency = (track === undefined) ? 0 : (audioContext.outputLatency + audioContext.baseLatency) * 1000;    
+    console.log(`Compensated ${totalLatency}ms (Base:${audioContext.baseLatency * 1000}ms + Output:${audioContext.outputLatency * 1000}ms)`);    
     return totalLatency
 }
 
