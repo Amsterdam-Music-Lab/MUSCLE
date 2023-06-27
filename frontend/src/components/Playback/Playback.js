@@ -82,13 +82,7 @@ const Playback = ({
     const playAudio = useCallback(
         (index) => {
             // Only initialize webaudio if section is local            
-            let latency
-            if (!sections[index]['url'].startsWith('http')) {
-                webAudio.initWebAudio();
-                latency = webAudio.getTotalLatency() * 1000;
-            } else {
-                latency = 0;
-            }
+            let latency = webAudio.initWebAudio(sections[index]['url']);            
             // Store player index
             setPlayerIndex(index);
             // Determine if audio should be played
