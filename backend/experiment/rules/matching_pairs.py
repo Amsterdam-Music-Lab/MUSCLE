@@ -24,7 +24,7 @@ class MatchingPairs(Base):
 
     @classmethod
     def first_round(cls, experiment):
-        rendered = render_to_string('consent/consent_rhythm.html')
+        rendered = render_to_string('consent/consent_matching_pairs.html')
         consent = Consent.action(rendered, title=_(
             'Informed consent'), confirm=_('I agree'), deny=_('Stop'))
         # 2. Choose playlist.
@@ -36,9 +36,10 @@ class MatchingPairs(Base):
         explainer = Explainer(
             instruction='',
             steps=[
-                Step(description=_('On the next page, you will find a board with 16 music cards.')),
-                Step(description=_('Two cards are tune twins, but one sound may be distorted.')),
-                Step(description=_('Your task is to find all the tune twins on the board.'))
+                Step(description=_('TuneTwins consists of 16 musical fragments. Your task is to listen and find the 8 matching pairs.')),
+                Step(description=_('Some versions of the game are easy and you will have to listen for identical pairs. Some versions are more difficult and you will have to listen for similar pairs, one of which is distorted.')),
+                Step(description=_('Finding a match removes the pair from the board.')),
+                Step(description=_('Earn more points by clearing the board in fewer turns.'))
             ]).action(step_numbers=True)
 
         return [
