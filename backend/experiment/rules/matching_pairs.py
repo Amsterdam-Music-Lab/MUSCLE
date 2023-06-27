@@ -16,7 +16,7 @@ from section.models import Section
 
 class MatchingPairs(Base):
     ID = 'MATCHING_PAIRS'
-    num_pairs = 2
+    num_pairs = 8
     contact_email = 'jx.li@uva.nl'
 
     @classmethod
