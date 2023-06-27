@@ -16,11 +16,8 @@ from section.models import Section
 
 class MatchingPairs(Base):
     ID = 'MATCHING_PAIRS'
-    num_pairs = 8
-
-    @classmethod
-    def feedback_info(cls):
-        pass
+    num_pairs = 2
+    contact_email = 'jx.li@uva.nl'
 
     @classmethod
     def first_round(cls, experiment):
@@ -76,6 +73,7 @@ class MatchingPairs(Base):
                 },
                 rank=MatchingPairs.rank(session, exclude_unfinished=False),
                 show_social=True,
+                feedback_info=MatchingPairs.feedback_info()
             ).action()
             cont = MatchingPairs.get_matching_pairs_trial(session)
             return [score, cont]
