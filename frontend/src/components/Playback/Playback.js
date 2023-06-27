@@ -81,13 +81,12 @@ const Playback = ({
     // Play audio
     const playAudio = useCallback(
         (index) => {
-            // Only initialize webaudio if section is local
+            // Only initialize webaudio if section is local            
             if (!sections[index]['url'].startsWith('http')) {
                 webAudio.initWebAudio();
             }
             // Store player index
             setPlayerIndex(index);
-
             // Determine if audio should be played
             if (playConfig.mute) {
                 setPlayerIndex(-1);

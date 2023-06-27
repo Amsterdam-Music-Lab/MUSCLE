@@ -5,14 +5,10 @@ import Timer from "./timer";
 // Create a global audio object once
 // <audio /> docs: https://developer.mozilla.org/en-US/docs/Web/HTML/Element/audio
 const audio = document.createElement("audio");
-
 audio.id = "audio-player";
 audio.controls = "controls";
 audio.src = SILENT_MP3;
-
-// switch to cors anonymous for local development 
-API_ROOT == 'http://localhost:8000' ? audio.crossOrigin = "anonymous" : audio.crossorigin = "use-credentials";
-
+audio.setAttribute('crossOrigin', 'use-credentials');
 audio.disableRemotePlayback = true;
 audio.style.display = "none";
 
