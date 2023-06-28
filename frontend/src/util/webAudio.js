@@ -2,8 +2,8 @@ let audioContext;
 let track;
 
 // init audio in webaudio context and connect track to destination (output)
-export const initWebAudio = () => {    
-    if (track === undefined) {        
+export const initWebAudio = () => {
+    if (track === undefined) {   
         audioContext = new AudioContext();
         track = audioContext.createMediaElementSource(window.audio);
         track.connect(audioContext.destination);     
