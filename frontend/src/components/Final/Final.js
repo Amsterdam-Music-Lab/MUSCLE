@@ -11,9 +11,9 @@ import UserFeedback from "../UserFeedback/UserFeedback";
 
 // Final is an experiment view that shows the final scores of the experiment
 // It can only be the last view of an experiment
-const Final= ({ experiment, participant, session, score, final_text, action_texts, button, stop_button, 
+const Final= ({ experiment, participant, session, score, final_text, action_texts, button,  
             onNext, history, show_participant_link, participant_id_only,
-            show_profile_link, show_social, show_feedback_info, points, rank, logo }) => {
+            show_profile_link, show_social, feedback_info, points, rank, logo }) => {
     const [showScore, setShowScore] = useState(0);
 
     // Use a ref to prevent doing multiple increments
@@ -99,10 +99,10 @@ const Final= ({ experiment, participant, session, score, final_text, action_text
                     participantIDOnly={participant_id_only}
                 />
             )}
-            {show_feedback_info && (<UserFeedback
+            {feedback_info && (<UserFeedback
                 experimentSlug={experiment.slug}
                 participant={participant}
-                feedbackInfo={experiment.feedback_info}
+                feedbackInfo={feedback_info}
             />)}
                 
         </div>

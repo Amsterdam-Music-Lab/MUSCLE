@@ -22,7 +22,7 @@ class Final:  # pylint: disable=too-few-public-methods
     def __init__(self, session, title=_("Final score"), final_text=None,
                  button=None, points=None, rank=None, show_social=False,
                  show_profile_link=False, show_participant_link=False,
-                 show_participant_id_only=False, total_score=None, logo=None
+                 show_participant_id_only=False, feedback_info=None, total_score=None, logo=None
                  ):
 
         self.session = session
@@ -34,6 +34,7 @@ class Final:  # pylint: disable=too-few-public-methods
         self.show_profile_link = show_profile_link
         self.show_participant_link = show_participant_link
         self.show_participant_id_only = show_participant_id_only
+        self.feedback_info = feedback_info
         self.logo = logo
         if total_score is None:
             self.total_score = self.session.total_score()
@@ -62,6 +63,7 @@ class Final:  # pylint: disable=too-few-public-methods
             'show_social': self.show_social,
             'show_profile_link': self.show_profile_link,
             'show_participant_link': self.show_participant_link,
+            'feedback_info': self.feedback_info,
             'participant_id_only': self.show_participant_id_only,
             'logo': self.logo
         }

@@ -216,7 +216,8 @@ class Huang2022(Hooked):
             final_text=Huang2022.final_score_message(session),
             rank=Huang2022.rank(session),
             show_social=False,
-            show_profile_link=True
+            show_profile_link=True,
+            feedback_info=Huang2022.feedback_info()
         ).action()
 
     @classmethod
