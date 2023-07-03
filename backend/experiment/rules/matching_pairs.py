@@ -33,10 +33,11 @@ class MatchingPairs(Base):
         explainer = Explainer(
             instruction='',
             steps=[
-                Step(description=_('TuneTwins consists of 16 musical fragments. Your task is to listen and find the 8 matching pairs.')),
+                Step(description=_('TuneTwins is a musical version of "Memory". It consists of 16 musical fragments. Your task is to listen and find the 8 matching pairs.')),
                 Step(description=_('Some versions of the game are easy and you will have to listen for identical pairs. Some versions are more difficult and you will have to listen for similar pairs, one of which is distorted.')),
+                Step(description=_('Click on another card to stop the current card from playing.')),
                 Step(description=_('Finding a match removes the pair from the board.')),
-                Step(description=_('Earn more points by clearing the board in fewer turns.'))
+                Step(description=_('Listen carefully to avoid mistakes and earn more points.'))
             ]).action(step_numbers=True)
 
         return [
