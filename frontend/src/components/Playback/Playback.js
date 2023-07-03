@@ -82,7 +82,7 @@ const Playback = ({
     const playAudio = useCallback(
         (index) => {
             // Only initialize webaudio if section is local            
-            let latency = webAudio.initWebAudio();            
+            let latency = 0;      
             // Store player index
             setPlayerIndex(index);
             // Determine if audio should be played
