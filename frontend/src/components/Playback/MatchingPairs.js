@@ -163,7 +163,7 @@ const MatchingPairs = ({
                 </div>
             </div>
 
-            <div className="playing-board d-flex justify-content-center">
+            <div className="playing-board">
                 {Object.keys(sections).map((index) => (
                     <PlayCard 
                         key={index}

@@ -1,5 +1,13 @@
 @import url('https://fonts.googleapis.com/css2?family=Rajdhani&display=swap');
 
+@media (min-aspect-ratio: 1/1) {
+    $card: 15vh;
+}
+
+@media (max-aspect-ratio: 1/1) {
+    $card: 15vw;
+}
+
 .aha__page .container {
     padding-top: 2vh;
 }
@@ -9,47 +17,42 @@
     max-width: 100%;
 }
 
+@media (min-aspect-ratio: 1/1)  {
 .playing-board {
-    display: flex;
-    column-gap: 10px;
-    row-gap: 10px;
-    flex-wrap: wrap;
+        grid-template-columns: 15vh 15vh 15vh 15vh;
+        column-gap: 1vh;
+        row-gap: 1vh;
+    }
+}
+
+@media (max-aspect-ratio: 1/1)  {
+    .playing-board {
+        grid-template-columns: 15vw 15vw 15vw 15vw;
+        column-gap: 1vw;
+        row-gap: 1vw;
+    }
+}
+
+.playing-board {
+    display: grid;
     max-width: 100%;
-
-    .player-wrapper {
-        position: relative;
-    }
-
-    .buttons {
-        max-width: 350px;
-
-        .aha__button {
-            margin-bottom: 10px;
-            margin-right: 5px;
-            margin-left: 5px;
-        }
-    }
-
-    .feedback {
-        padding-top: 50px;
-        padding-left: 35px;
-        font-size: large;
-    }
 }
 
 .matching-pairs__feedback, .matching-pairs__score {
     font-family: 'Rajdhani', sans-serif;
-    font-size: x-large;
-    text-align: center;   
-    padding-bottom: 1.5rem;    
+    line-height: 1;
+    text-align: center;
+    padding-bottom: 1.5rem;
     font-weight: 700;
-    width: auto;    
+    font-size: 95%;
+    width: auto;
+
+    @media(min-width: 500px) {
+        font-size: 150%;
+    }
 }
 
-.col {
-    margin-left: 4vw;
-    margin-right: 4vw;
-}
+
 
 .matching-pairs__feedback {
     float: left;
@@ -71,5 +74,4 @@
 
 .matching-pairs__score {
     float: right;
-    padding-right: 35px;
 }
