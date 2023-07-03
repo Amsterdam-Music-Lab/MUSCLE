@@ -1,7 +1,6 @@
 import React, { useRef, useState, useEffect } from "react";
 
 import * as audio from "../../util/audio";
-import * as webAudio from "../../util/webAudio";
 import { MEDIA_ROOT } from "../../config";
 
 import Circle from "../Circle/Circle";
@@ -30,15 +29,12 @@ const AutoPlay = ({instruction, preloadMessage, onPreloadReady, playConfig, sect
     // Handle view logic
     useEffect(() => {
         switch (state.view) {
-            case RECOGNIZE:              
-                // Only initialize webaudio if section is local
-                let latency = webAudio.initWebAudio(section['url']);             
+            case RECOGNIZE:                
                 // Play audio at start time            
                 if (!playConfig.mute) {
                     audio.playFrom(Math.max(0, playConfig.playhead));
-                }
-                // Compensate for audio latency and set state to playing
-                setTimeout(startedPlaying(), latency);                
+                }                
+                startedPlaying();                
                 break;
             default:
             // nothing

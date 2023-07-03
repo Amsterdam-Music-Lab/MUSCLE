@@ -82,7 +82,7 @@ const Playback = ({
     const playAudio = useCallback(
         (index) => {
             // Only initialize webaudio if section is local            
-            let latency = webAudio.initWebAudio(sections[index]['url']);            
+            let latency = 0;      
             // Store player index
             setPlayerIndex(index);
             // Determine if audio should be played
@@ -116,7 +116,8 @@ const Playback = ({
     // Play section with given index
     const playSection = useCallback(
         (index = 0) => {
-
+            // set corssorigin for web-audio
+            document.getElementById('audio-player').setAttribute('crossOrigin', 'use-credentials');
             // Load different audio
             if (index !== lastPlayerIndex.current) {
                 audio.loadUntilAvailable(
