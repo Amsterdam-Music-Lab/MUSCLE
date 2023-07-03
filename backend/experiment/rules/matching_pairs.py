@@ -17,7 +17,7 @@ from section.models import Section
 class MatchingPairs(Base):
     ID = 'MATCHING_PAIRS'
     num_pairs = 8
-    contact_email = 'jx.li@uva.nl'
+    contact_email = 'aml.tunetwins@gmail.com'
 
     @classmethod
     def first_round(cls, experiment):
