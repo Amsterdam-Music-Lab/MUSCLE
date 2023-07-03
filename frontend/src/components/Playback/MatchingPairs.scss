@@ -30,26 +30,13 @@
         }
     }
 
-    .instruction {
-        min-height: 55px;
-        h3 {
-            margin: 0;
-        }
-    }
-
     .feedback {
         padding-top: 50px;
         font-size: large;
     }
-
-    .running-score {
-        position: absolute;
-        margin-top: -7%;
-        
-    }
 }
 
-.matching-pairs__debug, .matching-pairs__feedback, .matching-pairs__score {
+.matching-pairs__feedback, .matching-pairs__score {
     font-family: 'Rajdhani', sans-serif;
     font-size: x-large;
     text-align: center;   
@@ -65,6 +52,7 @@
 
 .matching-pairs__feedback {
     float: left;
+    padding-left: 35px;
     color: white;
     
     &.fbnomatch {
@@ -83,4 +71,5 @@
 
 .matching-pairs__score {
     float: right;
+    padding-right: 35px;
 }
