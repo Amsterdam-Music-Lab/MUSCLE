@@ -9,8 +9,17 @@ const PlayCard = ({ onClick, registerUserClicks, playing, section, onFinish, sto
     const startTime = 0;
     const [time, setTime] = useState(startTime);
     
-    const cardSize = window.innerHeight >= window.innerWidth ? window.innerWidth / 100 * 15 : window.innerHeight / 100 * 15;
-    
+    const [cardSize, setCardSize] = useState(window.innerHeight >= window.innerWidth ? window.innerWidth / 100 * 15 : window.innerHeight / 100 * 15);
+
+    const calcCardSize = () => {
+        setCardSize(window.innerHeight >= window.innerWidth ? window.innerWidth / 100 * 15 : window.innerHeight / 100 * 15);
+    }
+
+    useEffect(() => {
+        window.addEventListener('resize', calcCardSize);
+        return window.removeEventListener('resize', calcCardSize)
+    }, [])
+
     useEffect(() => {
         if (!playing) {
             return;
