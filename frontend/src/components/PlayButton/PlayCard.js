@@ -9,7 +9,7 @@ const PlayCard = ({ onClick, registerUserClicks, playing, section, onFinish, sto
     const startTime = 0;
     const [time, setTime] = useState(startTime);
     
-    const cardSize = window.innerHeight > window.innerWidth? window.innerWidth / 100 * 15 : window.innerHeight / 100 * 15;
+    const cardSize = window.innerHeight >= window.innerWidth ? window.innerWidth / 100 * 15 : window.innerHeight / 100 * 15;
     
     useEffect(() => {
         if (!playing) {
