@@ -9,7 +9,7 @@ const PlayCard = ({ onClick, registerUserClicks, playing, section, onFinish, sto
     const startTime = 0;
     const [time, setTime] = useState(startTime);
     
-    const cardSize = window.innerWidth > 768 ? 110 : 70;
+    const cardSize = window.innerHeight > window.innerWidth? window.innerWidth / 100 * 15 : window.innerHeight / 100 * 15;
     
     useEffect(() => {
         if (!playing) {
@@ -35,14 +35,14 @@ const PlayCard = ({ onClick, registerUserClicks, playing, section, onFinish, sto
             onClick();
         }}>
                 { section.turned ?
-                    <Histogram 
-                        className="front"
+                    <Histogram
                         running={playing}
                         histogramWidth={cardSize}
                         height={cardSize}
                         bars={5}
-                        width={10}
-                        spacing={10}
+                        width={cardSize/8}
+                        spacing={cardSize/12}
+                        marginBottom={0}
                         backgroundColor="purple"
                         borderRadius=".5rem"
                     />
