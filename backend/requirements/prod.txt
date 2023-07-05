@@ -8,7 +8,7 @@ asgiref==3.7.2
     # via django
 audioread==3.0.0
     # via -r requirements.in/base.txt
-django==3.2.19
+django==3.2.20
     # via
     #   -r requirements.in/base.txt
     #   django-cors-headers
