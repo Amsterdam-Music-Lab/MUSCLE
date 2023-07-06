@@ -104,7 +104,7 @@ class ThatsMySong(Hooked):
 
             demographics = [question_by_key('dgf_generation'), question_by_key('dgf_gender_identity')]
             for i in range(len(demographics)):
-                question = unasked_question(session.participant, demographics)
+                question = unasked_question(session.participant, demographics[i:i+1]) # workaround for multiple questions in one round, because unasked_question() returns unanswered questions
                 if question:
                     actions.append(
                         Trial(
