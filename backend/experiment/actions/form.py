@@ -63,8 +63,8 @@ class BooleanQuestion(Question):
     def __init__(self, choices=None, **kwargs):
         super().__init__(**kwargs)
         self.choices = choices or {
-            'yes': _('YES'),
-            'no': _('NO')
+            'yes': _('Yes'),
+            'no': _('No')
         }
         self.view = 'BUTTON_ARRAY'
 
