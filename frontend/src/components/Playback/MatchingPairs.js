@@ -19,6 +19,7 @@ const MatchingPairs = ({
     const secondCard = useRef(-1);
     const [total, setTotal] = useState(100);
     const [message, setMessage] = useState('Pick a card')
+    const [end, setEnd] = useState(false);
 
     const resultBuffer = useRef([]);
 
@@ -143,10 +144,15 @@ const MatchingPairs = ({
         // Check if the board is empty
         if (sections.filter(s => s.inactive).length === sections.length) {
             // all cards have been turned
-            setTimeout(() => {
-                submitResult({score: total, moves: resultBuffer.current});
-              }, finishDelay);            
+            setEnd(true);
+            // setTimeout(() => {
+            //     submitResult({score: total, moves: resultBuffer.current});
+            //   }, finishDelay);            
         } else { setMessage(''); }              
+    }
+
+    if (end) {
+        submitResult({score: total, moves: resultBuffer.current});
     }
 
     return (

@@ -5,29 +5,29 @@ import Histogram from "../Histogram/Histogram";
 import Timer from "../../util/timer";
 
 const PlayCard = ({ onClick, registerUserClicks, playing, section, onFinish, stopAudioAfter }) => {
-    // automatic timer
-    const startTime = 0;
-    const [time, setTime] = useState(startTime);
+    // // automatic timer
+    // const startTime = 0;
+    // const [time, setTime] = useState(startTime);
     
     const cardSize = window.innerHeight >= window.innerWidth ? window.innerWidth / 100 * 15 : window.innerHeight / 100 * 15;
     
-    useEffect(() => {
-        if (!playing) {
-            return;
-        }
+    // useEffect(() => {
+    //     if (!playing) {
+    //         return;
+    //     }
 
-        // Create timer and return stop function
-        return Timer({
-            time: startTime,
-            duration: stopAudioAfter,
-            onTick: (t) => {
-                setTime(Math.min(t, stopAudioAfter));
-            },
-            onFinish: () => {
-                onFinish && onFinish();
-            },
-        });
-    }, [playing, stopAudioAfter, onFinish]);
+    //     // Create timer and return stop function
+    //     return Timer({
+    //         time: startTime,
+    //         duration: stopAudioAfter,
+    //         onTick: (t) => {
+    //             setTime(Math.min(t, stopAudioAfter));
+    //         },
+    //         onFinish: () => {
+    //             onFinish && onFinish();
+    //         },
+    //     });
+    // }, [playing, stopAudioAfter, onFinish]);
     
     return (
         <div className={classNames("aha__play-card", {turned: section.turned}, {noevents: section.noevents}, {disabled: section.inactive}, { memory: section.memory }, { lucky: section.lucky }, { nomatch: section.nomatch })} onClick={event => {
