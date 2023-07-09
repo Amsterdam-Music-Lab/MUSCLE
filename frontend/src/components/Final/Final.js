@@ -77,6 +77,7 @@ const Final= ({ experiment, participant, session, score, final_text, action_text
             )}
             {show_social && (<Social
                 score={score}
+                experimentSlug={experiment.slug}
             />
             )}
             {show_profile_link && (
