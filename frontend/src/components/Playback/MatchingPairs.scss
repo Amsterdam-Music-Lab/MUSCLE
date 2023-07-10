@@ -1,13 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Rajdhani&display=swap');
 
-@media (min-aspect-ratio: 1/1) {
-    $card: 15vh;
-}
-
-@media (max-aspect-ratio: 1/1) {
-    $card: 15vw;
-}
-
 .aha__page .container {
     padding-top: 2vh;
 }
@@ -17,39 +9,58 @@
     max-width: 100%;
 }
 
-@media (min-aspect-ratio: 1/1)  {
 .playing-board {
-        grid-template-columns: 15vh 15vh 15vh 15vh;
-        column-gap: 1vh;
-        row-gap: 1vh;
-    }
-}
-
-@media (max-aspect-ratio: 1/1)  {
-    .playing-board {
-        grid-template-columns: 15vw 15vw 15vw 15vw;
-        column-gap: 1vw;
-        row-gap: 1vw;
-    }
-}
-
-.playing-board {
-    display: grid;
+    display: flex;
+    column-gap: 10px;
+    row-gap: 10px;
+    flex-wrap: wrap;
     max-width: 100%;
+
+    .player-wrapper {
+        position: relative;
+    }
+
+    .buttons {
+        max-width: 350px;
+
+        .aha__button {
+            margin-bottom: 10px;
+            margin-right: 5px;
+            margin-left: 5px;
+        }
+    }
+
+    .instruction {
+        min-height: 55px;
+        h3 {
+            margin: 0;
+        }
+    }
+
+    .feedback {
+        padding-top: 50px;
+        font-size: large;
+    }
+
+    .running-score {
+        position: absolute;
+        margin-top: -7%;
+        
+    }
 }
 
-.matching-pairs__feedback, .matching-pairs__score {
+.matching-pairs__debug, .matching-pairs__feedback, .matching-pairs__score {
     font-family: 'Rajdhani', sans-serif;
-    line-height: 1;
-    text-align: center;
-    padding-bottom: 1.5rem;
+    font-size: x-large;
+    text-align: center;   
+    padding-bottom: 1.5rem;    
     font-weight: 700;
-    font-size: 95%;
-    width: auto;
+    width: auto;    
+}
 
-    @media(min-width: 500px) {
-        font-size: 150%;
-    }
+.col {
+    margin-left: 4vw;
+    margin-right: 4vw;
 }
 
 .matching-pairs__feedback {

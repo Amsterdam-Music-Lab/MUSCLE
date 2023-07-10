@@ -1,5 +1,16 @@
-$playButtonHighDisplay: 15vw;
-$playButtonWideDisplay: 15vh;
+$playButtonSize: 110px;
+
+@media(max-width: 768px) {
+    .back, 
+    .front {     
+        width: calc($playButtonSize - 40px)!important;
+        height: calc($playButtonSize - 40px)!important;
+    }
+    .aha__play-card {        
+        width: calc($playButtonSize - 40px)!important;
+        height: calc($playButtonSize - 40px)!important;
+    }
+}
 
 @keyframes memorymatch {
     20% {
@@ -71,6 +82,12 @@ $playButtonWideDisplay: 15vh;
 }
 
 .aha__play-card {
+    position: relative;
+    width: $playButtonSize;
+    height: $playButtonSize;
+    display: block;
+    border-radius: 6px;
+    opacity: 1;    
 
     &.disabled {
         pointer-events: none;
@@ -99,23 +116,20 @@ $playButtonWideDisplay: 15vh;
         pointer-events: none;
     }
 
-    .back {
-        background-color: $gray;
-        border-radius: .5rem;
-    }
-    
-    @media(min-aspect-ratio: 1/1) {
-        .back {
-            width: $playButtonWideDisplay;
-            height: $playButtonWideDisplay;
-        }
+    .front {
+        opacity: 1;
+        transform: rotateY(90deg);
+        transition: all ease-in 0.2s;
+        position: absolute;
+        width: $playButtonSize;
+        height: $playButtonSize;
     }
 
-    @media(max-aspect-ratio: 1/1) {
-        .back {
-            width: $playButtonHighDisplay;
-            height: $playButtonHighDisplay;
-        }
+    .back {
+        background-color: $gray;
+        width: $playButtonSize;
+        height: $playButtonSize;
+        border-radius: .5rem;
     }
     
 }
