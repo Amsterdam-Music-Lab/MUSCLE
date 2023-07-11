@@ -37,6 +37,6 @@ export const URLS = {
     shareTwitter:
         "https://twitter.com/intent/tweet?text=" +
         encodeURIComponent(
-            "I scored --SCORE-- points on Amsterdam Music Lab - #amsterdammusiclab #citizenscience https://app.amsterdammusiclab.nl--SLUG--"
+            "I scored --SCORE-- points on #amsterdammusiclab--HASHTAG--#citizenscience https://app.amsterdammusiclab.nl--SLUG--"
         ),
 };

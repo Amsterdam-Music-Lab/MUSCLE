@@ -69,6 +69,7 @@ class MatchingPairs(Base):
                 session,
                 title='Score',
                 final_text='Can you score higher than your friends and family? Share and let them try!',
+                socialm_hashtag='#TuneTwins',
                 button={
                     'text': 'Play again',
                 },
