@@ -13,7 +13,7 @@ import UserFeedback from "../UserFeedback/UserFeedback";
 // It can only be the last view of an experiment
 const Final= ({ experiment, participant, session, score, final_text, action_texts, button,  
             onNext, history, show_participant_link, participant_id_only,
-            show_profile_link, show_social, feedback_info, points, rank, logo }) => {
+            show_profile_link, show_social, feedback_info, points, rank, logo, socialm_hashtag }) => {
     const [showScore, setShowScore] = useState(0);
 
     // Use a ref to prevent doing multiple increments
@@ -78,6 +78,8 @@ const Final= ({ experiment, participant, session, score, final_text, action_text
             {show_social && (<Social
                 score={score}
                 experimentSlug={experiment.slug}
+                socialm_hashtag={socialm_hashtag}
+
             />
             )}
             {show_profile_link && (
