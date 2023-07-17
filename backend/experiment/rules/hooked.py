@@ -286,9 +286,9 @@ class Hooked(Base):
         n_free = n_rounds - 2 * n_old - n_new
 
         # Assign songs.
-        old_songs = songs[:n_old]
-        new_songs = songs[n_old:n_old+n_new]
-        free_songs = songs[n_old+n_new:n_old+n_new+n_free]
+        old_songs = songs[:n_old] # will reappear in "heard before" rounds
+        new_songs = songs[n_old:n_old+n_new] # novel songs in "heard before" rounds
+        free_songs = songs[n_old+n_new:n_old+n_new+n_free] # will not reappear in "heard before" rounds
 
         # Assign sections.
         old_sections = [session.section_from_song(s) for s in old_songs]

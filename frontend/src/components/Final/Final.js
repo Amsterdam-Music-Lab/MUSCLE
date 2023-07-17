@@ -5,12 +5,15 @@ import Rank from "../Rank/Rank";
 import Social from "../Social/Social";
 
 import { URLS } from "../../config";
+import { finalizeSession } from "../../API";
 import ParticipantLink from "../ParticipantLink/ParticipantLink";
 import UserFeedback from "../UserFeedback/UserFeedback";
 
 // Final is an experiment view that shows the final scores of the experiment
 // It can only be the last view of an experiment
-const Final= ({ experiment, participant, score, final_text, action_texts, button, onNext, history, show_participant_link, participant_id_only, show_profile_link, show_social, points, rank, logo }) => {
+const Final= ({ experiment, participant, session, score, final_text, action_texts, button,  
+            onNext, history, show_participant_link, participant_id_only,
+            show_profile_link, show_social, feedback_info, points, rank, logo }) => {
     const [showScore, setShowScore] = useState(0);
 
     // Use a ref to prevent doing multiple increments
@@ -42,6 +45,10 @@ const Final= ({ experiment, participant, score, final_text, action_texts, button
             clearTimeout(id);
         };
     }, [score, showScore]);
+
+    const finalize = () => {
+        finalizeSession({ session, participant });
+    }
 
     return (
         <div className="aha__final d-flex flex-column justify-content-center">
@@ -92,10 +99,10 @@ const Final= ({ experiment, participant, score, final_text, action_texts, button
                     participantIDOnly={participant_id_only}
                 />
             )}
-            {experiment.feedback_info && (<UserFeedback
+            {feedback_info && (<UserFeedback
                 experimentSlug={experiment.slug}
                 participant={participant}
-                feedbackInfo={experiment.feedback_info}
+                feedbackInfo={feedback_info}
             />)}
                 
         </div>

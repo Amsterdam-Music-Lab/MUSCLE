@@ -18,7 +18,7 @@ const MatchingPairs = ({
     const firstCard = useRef(-1);
     const secondCard = useRef(-1);
     const [total, setTotal] = useState(100);
-    const [message, setMessage] = useState('')
+    const [message, setMessage] = useState('Pick a card')
 
     const resultBuffer = useRef([]);
 
@@ -50,7 +50,7 @@ const MatchingPairs = ({
         // Check if this turn has finished
         if (turnedCards.length === 2) {                        
             // update total score & display current score
-            setTotal(calculateRunningScore());
+            setTotal(total+score.current);
             setMessage(setScoreMessage(score.current));            
             // show end of turn animations
             switch (score.current) {                                       
@@ -117,8 +117,7 @@ const MatchingPairs = ({
             }              
             resultBuffer.current.push({            
                 selectedSection: currentCard.id,
-                xPosition: xPosition.current,
-                yPosition: yPosition.current,
+                cardIndex: index,
                 score: score.current,
                 timestamp: formatTime(Date.now() - startTime.current)
             });
@@ -145,21 +144,11 @@ const MatchingPairs = ({
         if (sections.filter(s => s.inactive).length === sections.length) {
             // all cards have been turned
             setTimeout(() => {
-                submitResult({moves: resultBuffer.current});
+                submitResult({score: total, moves: resultBuffer.current});
               }, finishDelay);            
-        } else { setMessage('<br/> Try again'); }                      
+        } else { setMessage(''); }              
     }
 
-    const calculateRunningScore = () => {        
-        const allScores = resultBuffer.current.filter(
-            r => r.score !== undefined).map(r => r.score);            
-        if (!allScores.length) return 100;
-        const initial = 0;
-        const score = allScores.reduce( 
-            (accumulator, s)  => accumulator + s, initial )
-        return 100 + score; //Math.round(score / resultBuffer.current.length * 100)
-    }
-    
     return (
         <div className="aha__matching-pairs container">
             <div className="row justify-content-around">
@@ -174,7 +163,7 @@ const MatchingPairs = ({
                 </div>
             </div>
 
-            <div className="playing-board d-flex justify-content-center">
+            <div className="playing-board">
                 {Object.keys(sections).map((index) => (
                     <PlayCard 
                         key={index}

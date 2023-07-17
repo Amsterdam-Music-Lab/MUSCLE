@@ -109,7 +109,7 @@ class Huang2022(Hooked):
                 submits=True,
                 style=STYLE_BOOLEAN_NEGATIVE_FIRST)])
             return Trial(playback=playback, feedback_form=form, html=html,
-                         config={'response_time': 120},
+                         config={'response_time': 15},
                          title=_("Audio check"))
         elif next_round_number <= 1:
             last_result = session.result_set.last()
@@ -125,7 +125,7 @@ class Huang2022(Hooked):
                         style=STYLE_BOOLEAN_NEGATIVE_FIRST
                     )])
                     return Trial(playback=playback, html=html, feedback_form=form,
-                                 config={'response_time': 120},
+                                 config={'response_time': 15},
                                  title=_("Ready to experiment"))
                 else:
                     session.increment_round() # adjust round numbering
@@ -219,9 +219,10 @@ class Huang2022(Hooked):
             final_text=Huang2022.final_score_message(session),
             rank=Huang2022.rank(session),
             show_social=False,
-            show_profile_link=True
+            show_profile_link=True,
+            feedback_info=Huang2022.feedback_info()
         )
-
+    
     @classmethod
     def final_score_message(cls, session):
         """Create final score message for given session"""

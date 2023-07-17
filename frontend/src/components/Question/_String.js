@@ -25,7 +25,6 @@ const String = ({ question, value = "", onChange }) => {
 
     // Key validation
     const handleKey = (e) => {
-        console.log(e.charCode)
         if (e.key === 'Enter') {
             e.preventDefault();
         }

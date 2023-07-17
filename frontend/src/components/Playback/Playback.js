@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 
 import * as audio from "../../util/audio";
+import * as webAudio from "../../util/webAudio";
 import { MEDIA_ROOT } from "../../config";
 
 import AutoPlay from "./Autoplay";
@@ -80,9 +81,10 @@ const Playback = ({
     // Play audio
     const playAudio = useCallback(
         (index) => {
+            // Only initialize webaudio if section is local            
+            let latency = 0;      
             // Store player index
             setPlayerIndex(index);
-
             // Determine if audio should be played
             if (playConfig.mute) {
                 setPlayerIndex(-1);
@@ -100,7 +102,8 @@ const Playback = ({
 
             // Play audio
             audio.playFrom(Math.max(0, playConfig.playhead || 0));
-            startedPlaying && startedPlaying();
+            // Compensate for audio latency and set state to playing
+            setTimeout(startedPlaying && startedPlaying(), latency);            
         },
         [cancelAudioListeners, playConfig.mute, playConfig.playhead, startedPlaying, onAudioEnded]
     );
@@ -113,7 +116,8 @@ const Playback = ({
     // Play section with given index
     const playSection = useCallback(
         (index = 0) => {
-
+            // set corssorigin for web-audio
+            document.getElementById('audio-player').setAttribute('crossOrigin', 'use-credentials');
             // Load different audio
             if (index !== lastPlayerIndex.current) {
                 audio.loadUntilAvailable(

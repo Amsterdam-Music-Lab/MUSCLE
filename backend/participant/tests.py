@@ -62,8 +62,12 @@ class ParticipantTest(TestCase):
 
     def test_profile_questions(self):
         results = self.participant.profile_questions()
-        assert len(results) == 2
+        assert len(results) == 1
         assert results.first() == 'test1'
+        self.result2.given_response = 'nothing'
+        self.result2.save()
+        results = self.participant.profile_questions()
+        assert len(results) == 2
         Result.objects.all().delete()
         results = self.participant.profile_questions()
         assert len(results) == 0
