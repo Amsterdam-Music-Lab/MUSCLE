@@ -6,4 +6,4 @@ class BaseAction(object):
 
     def action(self):
         self.view = self.ID
-        return self.__dict__ 
+        return self.__dict__
