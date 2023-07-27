@@ -39,6 +39,7 @@ class Participant(models.Model):
             "unique_hash": self.unique_hash,
             "country_code": self.country_code,
             "access_info": self.access_info,
+            "participant_id_url": self.participant_id_url,
             "profile": self.profile_object()
         }
 
