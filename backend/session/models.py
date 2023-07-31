@@ -79,6 +79,7 @@ class Session(models.Model):
     def export_admin(self):
         """Export data for admin"""
         return {
+            'session_id': self.id,
             'participant': self.participant.id,
             'started_at': self.started_at.isoformat(),
             'finished_at': self.finished_at.isoformat() if self.finished_at else None,

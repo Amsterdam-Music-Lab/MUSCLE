@@ -71,6 +71,12 @@ $playButtonWideDisplay: 18vh;
 }
 
 .aha__play-card {
+    position: relative;
+    width: $playButtonSize;
+    height: $playButtonSize;
+    display: block;
+    border-radius: 6px;
+    opacity: 1;    
 
     .disabled {
         pointer-events: none;
@@ -99,8 +105,19 @@ $playButtonWideDisplay: 18vh;
         pointer-events: none;
     }
 
+    .front {
+        opacity: 1;
+        transform: rotateY(90deg);
+        transition: all ease-in 0.2s;
+        position: absolute;
+        width: $playButtonSize;
+        height: $playButtonSize;
+    }
+
     .back {
         background-color: $gray;
+        width: $playButtonSize;
+        height: $playButtonSize;
         border-radius: .5rem;
     }
     

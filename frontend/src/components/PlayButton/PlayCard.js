@@ -12,14 +12,14 @@ const PlayCard = ({ onClick, registerUserClicks, playing, section }) => {
             onClick();
         }}>
                 { section.turned ?
-                    <Histogram
+                    <Histogram 
+                        className="front"
                         running={playing}
                         histogramWidth={cardSize}
                         height={cardSize}
                         bars={5}
-                        width={cardSize/8}
-                        spacing={cardSize/12}
-                        marginBottom={0}
+                        width={10}
+                        spacing={10}
                         backgroundColor="purple"
                         borderRadius=".5rem"
                     />
