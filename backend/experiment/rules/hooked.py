@@ -376,8 +376,8 @@ class Hooked(Base):
         form = Form([BooleanQuestion(
             key=key,
             choices={
-                'new': _("NO"),
-                'old': _("YES"),
+                'new': _("No"),
+                'old': _("Yes"),
             },
             question=_("Did you hear this song in previous rounds?"),
             result_id=prepare_result(key, session, section=section, expected_response=expected_response, scoring_rule='REACTION_TIME',),

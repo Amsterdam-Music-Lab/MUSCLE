@@ -33,10 +33,10 @@ export const URLS = {
 
     // share
     shareFacebook:
-        "https://www.facebook.com/sharer/sharer.php?u=https://app.amsterdammusiclab.nl",
+        "https://www.facebook.com/sharer/sharer.php?u=https://app.amsterdammusiclab.nl--SLUG--",
     shareTwitter:
         "https://twitter.com/intent/tweet?text=" +
         encodeURIComponent(
-            "I scored --SCORE-- points on Amsterdam Music Lab - #amsterdammusiclab #citizenscience https://app.amsterdammusiclab.nl"
+            "I scored --SCORE-- points on #amsterdammusiclab--HASHTAG--#citizenscience https://app.amsterdammusiclab.nl--SLUG----ENDTEXT--"
         ),
 };

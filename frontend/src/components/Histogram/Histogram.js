@@ -11,7 +11,6 @@ const Histogram = ({
     running = true,
     marginLeft = 0,
     marginTop = 0,
-    marginBottom = 5,
     backgroundColor = undefined,
     histogramWidth = undefined,
     borderRadius = '0.15rem',
@@ -34,7 +33,7 @@ const Histogram = ({
             style={{
                 width,
                 height: running
-                    ? Math.random() * (height * .9 - width) + width
+                    ? Math.random() * (height - width) + width
                     : width,
                 marginRight: index < bars - 1 ? spacing : 0,
             }}
@@ -44,7 +43,7 @@ const Histogram = ({
     return (
         <div
             className={classNames("aha__histogram", { active: running })}
-            style={{ height, marginLeft, marginTop, marginBottom, backgroundColor, width: histogramWidth, borderRadius: borderRadius, border: backgroundColor? `10px solid ${backgroundColor}` : undefined}}
+            style={{ height, marginLeft, marginTop, backgroundColor, width: histogramWidth, borderRadius: borderRadius, border: backgroundColor? `10px solid ${backgroundColor}` : undefined}}
         >
             {_bars}
         </div>

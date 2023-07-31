@@ -151,8 +151,8 @@ class Kuiper2020(Hooked):
         form = Form([BooleanQuestion(
             key='heard_before',
             choices={
-                'new': _("NO"),
-                'old': _("YES"),
+                'new': _("No"),
+                'old': _("Yes"),
             },
             question=_("Did you hear this song in previous rounds?"),
             result_id=result_pk,

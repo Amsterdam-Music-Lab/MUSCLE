@@ -11,7 +11,7 @@ const MatchingPairs = ({
     stopAudioAfter,
     submitResult,
 }) => {
-    const finishDelay = 1500;
+    // const finishDelay = 1500;
     const xPosition = useRef(-1);
     const yPosition = useRef(-1);
     const score = useRef(undefined);
@@ -19,6 +19,7 @@ const MatchingPairs = ({
     const secondCard = useRef(-1);
     const [total, setTotal] = useState(100);
     const [message, setMessage] = useState('Pick a card')
+    const [end, setEnd] = useState(false);
 
     const resultBuffer = useRef([]);
 
@@ -65,11 +66,11 @@ const MatchingPairs = ({
                 default:
                     turnedCards[0].nomatch = true;
                     turnedCards[1].nomatch = true;
-                    // reset nomatch cards for coming turns
+                    // reset nomatch cards for coming turns after animations have finished
                     setTimeout(() => {
                         turnedCards[0].nomatch = false;
                         turnedCards[1].nomatch = false;                        
-                      }, finishDelay);
+                      }, 700);
                     break;  
             }   
 
@@ -143,10 +144,15 @@ const MatchingPairs = ({
         // Check if the board is empty
         if (sections.filter(s => s.inactive).length === sections.length) {
             // all cards have been turned
-            setTimeout(() => {
-                submitResult({score: total, moves: resultBuffer.current});
-              }, finishDelay);            
+            setEnd(true);
+            // setTimeout(() => {
+            //     submitResult({score: total, moves: resultBuffer.current});
+            //   }, finishDelay);            
         } else { setMessage(''); }              
+    }
+
+    if (end) {
+        submitResult({score: total, moves: resultBuffer.current});
     }
 
     return (
@@ -163,7 +169,7 @@ const MatchingPairs = ({
                 </div>
             </div>
 
-            <div className="playing-board">
+            <div className="playing-board d-flex justify-content-center">
                 {Object.keys(sections).map((index) => (
                     <PlayCard 
                         key={index}

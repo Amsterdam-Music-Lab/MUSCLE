@@ -70,6 +70,8 @@ class MatchingPairs(Base):
                 session,
                 title='Score',
                 final_text='Can you score higher than your friends and family? Share and let them try!',
+                socialm_hashtag='#TuneTwins',
+                socialm_endtext='https://www.amsterdammusiclab.nl/blog/tunetwins',
                 button={
                     'text': 'Play again',
                 },
