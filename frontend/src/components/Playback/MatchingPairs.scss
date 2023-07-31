@@ -1,11 +1,11 @@
 @import url('https://fonts.googleapis.com/css2?family=Rajdhani&display=swap');
 
 @media (min-aspect-ratio: 1/1) {
-    $card: 15vh;
+    $card: 20vh;
 }
 
 @media (max-aspect-ratio: 1/1) {
-    $card: 15vw;
+    $card: 20vw;
 }
 
 .aha__page .container {
@@ -19,17 +19,17 @@
 
 @media (min-aspect-ratio: 1/1)  {
 .playing-board {
-        grid-template-columns: 15vh 15vh 15vh 15vh;
-        column-gap: 1vh;
-        row-gap: 1vh;
+        grid-template-columns: 18vh 18vh 18vh 18vh;
+        column-gap: 2vh;
+        row-gap: 2vh;
     }
 }
 
 @media (max-aspect-ratio: 1/1)  {
     .playing-board {
-        grid-template-columns: 15vw 15vw 15vw 15vw;
-        column-gap: 1vw;
-        row-gap: 1vw;
+        grid-template-columns: 18vw 18vw 18vw 18vw;
+        column-gap: 2vw;
+        row-gap: 2vw;
     }
 }
 
