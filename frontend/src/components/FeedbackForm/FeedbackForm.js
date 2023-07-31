@@ -6,7 +6,7 @@ import Button from "../Button/Button";
 const FeedbackForm = ({
     formActive,
     form,
-    button_label,
+    buttonLabel,
     skipLabel,
     isSkippable,
     onResult,
@@ -77,7 +77,7 @@ const FeedbackForm = ({
                             className={
                                 "btn-primary submit anim anim-fade-in anim-speed-500"
                             }
-                            title={button_label}
+                            title={buttonLabel}
                         />
                     </div>
                 )}
