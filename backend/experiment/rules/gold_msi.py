@@ -40,7 +40,7 @@ class GoldMSI(Base):
             feedback_form = Form([
                 question,
             ])
-            view = Trial(None, feedback_form)
+            view = Trial(None, feedback_form=feedback_form)
             return view
         else:
             return final_action_with_optional_button(session, '', request_session)
