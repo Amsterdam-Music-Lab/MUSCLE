@@ -78,7 +78,7 @@ class MatchingPairs(Base):
                 rank=MatchingPairs.rank(session, exclude_unfinished=False),
                 show_social=True,
                 feedback_info=MatchingPairs.feedback_info()
-            ).action()
+            )
             cont = MatchingPairs.get_matching_pairs_trial(session)
             return [score, cont]
     
