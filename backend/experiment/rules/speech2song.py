@@ -24,8 +24,8 @@ class Speech2Song(Base):
     """ Rules for a speech-to-song experiment """
     ID = 'SPEECH_TO_SONG'
 
-    @staticmethod
-    def first_round(experiment, participant):
+    @classmethod
+    def first_round(cls, experiment):
         explainer = Explainer(
             instruction=_("This is an experiment about an auditory illusion."),
             steps=[
@@ -82,10 +82,10 @@ class Speech2Song(Base):
                 ],
                 button_label=_('OK')
             )
-            return combine_actions(
+            return [
                 explainer,
                 *next_repeated_representation(session, is_speech, 0)
-            )
+            ]
         if session.current_round == 2:
             e1 = Explainer(
                 instruction=_('Previous studies have shown that many people perceive the segment you just heard as song-like after repetition, but it is no problem if you do not share that perception because there is a wide range of individual differences.'),
@@ -153,7 +153,7 @@ class Speech2Song(Base):
             # uneven round: repeated representation
             actions.extend(next_repeated_representation(
                 session, is_speech))
-        return [actions]
+        return actions
 
     def get_question(session):
         questions = [
