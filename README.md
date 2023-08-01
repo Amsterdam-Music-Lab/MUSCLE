@@ -2,11 +2,11 @@
 This application provides an easy way to implement and run online listening experiments for music research. It presents questions, and typically audio stimuli, to participants, and collects their feedback.
 
 ## Try MUSCLE
-Try the already implemented experiments at the [Amsterdam Music Lab Website](https://www.amsterdammusiclab.nl/experiments/)
+- Try the already implemented experiments at the [Amsterdam Music Lab Website](https://www.amsterdammusiclab.nl/experiments/).
 
-For documentation to use the infrastructure, refer to our [wiki](https://github.com/Amsterdam-Music-Lab/aml-experiments/wiki).
+- For documentation on how to use the infrastructure, refer to our [wiki](https://github.com/Amsterdam-Music-Lab/aml-experiments/wiki).
 
-We are also happy if you file a feature request in our [issues list](https://github.com/Amsterdam-Music-Lab/aml-experiments/issues), if you star or fork this repository.
+- We are also happy if you file a feature request in our [issues list](https://github.com/Amsterdam-Music-Lab/aml-experiments/issues), or if you fork this repository to add your own code.
 
 ## Installation with Docker
 The easiest way to run the application locally is through Docker.
