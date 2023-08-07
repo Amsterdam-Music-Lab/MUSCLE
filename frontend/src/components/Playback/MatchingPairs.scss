@@ -18,10 +18,9 @@
 }
 
 .playing-board {
-        grid-template-columns: 18vh 18vh 18vh 18vh;
-        column-gap: 2vh;
-        row-gap: 2vh;
-    }
+    grid-template-columns: 18vh 18vh 18vh 18vh;
+    column-gap: 2vh;
+    row-gap: 2vh;
 }
 
 @media (max-aspect-ratio: 1/1)  {
