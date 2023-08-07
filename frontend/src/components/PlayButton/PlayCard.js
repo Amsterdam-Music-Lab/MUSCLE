@@ -3,8 +3,6 @@ import classNames from "classnames";
 import Histogram from "../Histogram/Histogram";
 
 const PlayCard = ({ onClick, registerUserClicks, playing, section }) => {
-
-    const cardSize = window.innerHeight >= window.innerWidth ? window.innerWidth / 100 * 18 : window.innerHeight / 100 * 18;
     
     return (
         <div className={classNames("aha__play-card", {turned: section.turned}, {noevents: section.noevents}, {disabled: section.inactive}, { memory: section.memory }, { lucky: section.lucky }, { nomatch: section.nomatch })} onClick={event => {
@@ -15,11 +13,8 @@ const PlayCard = ({ onClick, registerUserClicks, playing, section }) => {
                     <Histogram 
                         className="front"
                         running={playing}
-                        histogramWidth={cardSize}
-                        height={cardSize}
                         bars={5}
-                        width={10}
-                        spacing={10}
+                        marginBottom={0}
                         backgroundColor="purple"
                         borderRadius=".5rem"
                     />

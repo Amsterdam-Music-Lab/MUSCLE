@@ -11,7 +11,7 @@ const MatchingPairs = ({
     stopAudioAfter,
     submitResult,
 }) => {
-    // const finishDelay = 1500;
+    const finishDelay = 1500;
     const xPosition = useRef(-1);
     const yPosition = useRef(-1);
     const score = useRef(undefined);
@@ -66,11 +66,11 @@ const MatchingPairs = ({
                 default:
                     turnedCards[0].nomatch = true;
                     turnedCards[1].nomatch = true;
-                    // reset nomatch cards for coming turns after animations have finished
+                    // reset nomatch cards for coming turns
                     setTimeout(() => {
                         turnedCards[0].nomatch = false;
                         turnedCards[1].nomatch = false;                        
-                      }, 700);
+                      }, finishDelay);
                     break;  
             }   
 
@@ -169,7 +169,7 @@ const MatchingPairs = ({
                 </div>
             </div>
 
-            <div className="playing-board d-flex justify-content-center">
+            <div className="playing-board">
                 {Object.keys(sections).map((index) => (
                     <PlayCard 
                         key={index}
