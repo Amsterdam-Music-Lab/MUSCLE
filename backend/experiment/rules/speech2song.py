@@ -214,7 +214,7 @@ def question_speech(session, section):
             _('sounds neither like speech nor like song'),
             _('sounds somewhat like song'),
             _('sounds exactly like song')],
-        result_id=prepare_result(key, session, section=section)
+        result_id=prepare_result(key, session, section=section, scoring_rule='LIKERT')
     )
 
 
@@ -230,7 +230,7 @@ def question_sound(session, section):
             _('sounds neither like an environmental sound nor like music'),
             _('sounds somewhat like music'),
             _('sounds exactly like music')],
-        result_id=prepare_result(key, session, section=section),
+        result_id=prepare_result(key, session, section=section, scoring_rule='LIKERT'),
     )
 
 def sound(section, n_representation=None):
