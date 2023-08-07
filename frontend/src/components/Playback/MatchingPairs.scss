@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Rajdhani&display=swap');
 
 @media (min-aspect-ratio: 1/1) {
-    $card: 18vh;
+    $card: 16vh;
 }
 
 @media (max-aspect-ratio: 1/1) {
@@ -19,9 +19,9 @@
 
 @media (min-aspect-ratio: 1/1)  {
 .playing-board {
-        grid-template-columns: 18vh 18vh 18vh 18vh;
-        column-gap: 2vh;
-        row-gap: 2vh;
+        grid-template-columns: 16vh 16vh 16vh 16vh;
+        column-gap: 1.5vh;
+        row-gap: 1.5vh;
     }
 }
 
@@ -42,12 +42,12 @@
     font-family: 'Rajdhani', sans-serif;
     line-height: 1;
     text-align: center;
-    padding-bottom: 1.5rem;
+    padding-bottom: .7rem;
     font-weight: 700;
     font-size: 95%;
     width: auto;
 
-    @media(min-width: 500px) {
+    @media(min-width: 900px) {
         font-size: 150%;
     }
 }

@@ -1,5 +1,5 @@
 $playButtonHighDisplay: 18vw;
-$playButtonWideDisplay: 18vh;
+$playButtonWideDisplay: 16vh;
 
 @keyframes memorymatch {
     20% {
@@ -72,30 +72,30 @@ $playButtonWideDisplay: 18vh;
 
 .aha__play-card {
 
-    .disabled {
+    &.disabled {
         pointer-events: none;
         opacity: 0;
     }
 
-    .nomatch {
+    &.nomatch {
         animation-duration: 0.7s;
         animation-name: nomatch;
         animation-iteration-count: 1;        
     }
 
-    .lucky {
+    &.lucky {
         animation-duration: 0.55s;
         animation-name: luckymatch;
         animation-iteration-count: 1;        
     }
 
-    .memory {
+    &.memory {
         animation-duration: 0.8s;
         animation-name: memorymatch;
         animation-iteration-count: 1;        
     }
     
-    .noevents {
+    &.noevents {
         pointer-events: none;
     }
 
