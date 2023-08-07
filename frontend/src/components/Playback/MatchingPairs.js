@@ -144,10 +144,7 @@ const MatchingPairs = ({
         // Check if the board is empty
         if (sections.filter(s => s.inactive).length === sections.length) {
             // all cards have been turned
-            setEnd(true);
-            // setTimeout(() => {
-            //     submitResult({score: total, moves: resultBuffer.current});
-            //   }, finishDelay);            
+            setEnd(true); 
         } else { setMessage(''); }              
     }
 
@@ -156,7 +153,7 @@ const MatchingPairs = ({
     }
 
     return (
-        <div className="aha__matching-pairs container">
+        <div className="aha__matching-pairs">
             <div className="row justify-content-around">
                 <div className="col-6 align-self-start">
                     <div dangerouslySetInnerHTML={{ __html: message }}
