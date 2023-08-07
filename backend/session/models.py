@@ -57,8 +57,9 @@ class Session(models.Model):
 
     def previous_section(self):
         """ Get previous song presented in an experiment """
-        if self.result_set.count() > 0:
-            result = self.result_set.last()
+        valid_results = self.result_set.filter(score__isnull=False)
+        if valid_results.count() > 0:
+            result = valid_results.last()
             if result.section:
                 return result.section
         return None

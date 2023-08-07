@@ -26,11 +26,12 @@ class MusicalPreferences(Base):
             steps=[
                 Step(description=_('Answer how much you like a song')),
                 Step(description=_('Then tell us whether you know the song'))
-            ]
-        ).action(True)
-        consent = Consent.action()
-        playlist = Playlist.action(experiment.playlists.all())
-        start_session = StartSession.action()
+            ],
+            step_numbers=True,
+        )
+        consent = Consent()
+        playlist = Playlist(experiment.playlists.all())
+        start_session = StartSession()
         return [
             explainer,
             consent,
@@ -55,7 +56,7 @@ class MusicalPreferences(Base):
                     instruction=_("Please answer some questions \
                     on your musical (Goldsmiths-MSI) and demographic background"),
                     steps=[],
-                    button_label=_("Let's go!")).action()
+                    button_label=_("Let's go!"))
                 )
                 actions.extend(cls.get_questions(session))
             question = BooleanQuestion(
@@ -71,7 +72,7 @@ class MusicalPreferences(Base):
             actions.append(
                 Trial(
                     feedback_form=Form([question]),
-                ).action()
+                )
             )
             return actions
 
@@ -105,7 +106,7 @@ class MusicalPreferences(Base):
                 'response_time': section.duration + .1,
             }
         )
-        return view.action()
+        return view
     
     @classmethod
     def calculate_score(cls, result, data):
@@ -136,7 +137,7 @@ class MusicalPreferences(Base):
             title='Preference overview',
             final_text=feedback,
             show_social=True
-        ).action()
+        )
         return view
     
     @classmethod
@@ -159,7 +160,7 @@ class MusicalPreferences(Base):
         return [
             Trial(
                 title=_("Questionnaire"),
-                feedback_form=Form([question])).action() 
+                feedback_form=Form([question]))
             for question in questions
         ]
 

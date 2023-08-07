@@ -22,13 +22,13 @@ class MatchingPairs(Base):
     @classmethod
     def first_round(cls, experiment):
         rendered = render_to_string('consent/consent_matching_pairs.html')
-        consent = Consent.action(rendered, title=_(
+        consent = Consent(rendered, title=_(
             'Informed consent'), confirm=_('I agree'), deny=_('Stop'))
         # 2. Choose playlist.
-        playlist = Playlist.action(experiment.playlists.all())
+        playlist = Playlist(experiment.playlists.all())
 
         # 3. Start session.
-        start_session = StartSession.action()
+        start_session = StartSession()
 
         explainer = Explainer(
             instruction='',
@@ -38,7 +38,8 @@ class MatchingPairs(Base):
                 Step(description=_('Click on another card to stop the current card from playing.')),
                 Step(description=_('Finding a match removes the pair from the board.')),
                 Step(description=_('Listen carefully to avoid mistakes and earn more points.'))
-            ]).action(step_numbers=True)
+            ],
+            step_numbers=True)
 
         return [
             consent,
@@ -56,7 +57,7 @@ class MatchingPairs(Base):
                     intro_questions = Explainer(
                         instruction='Before starting the game, we would like to ask you five demographic questions.',
                         steps=[]
-                    ).action()
+                    )
                     return [intro_questions, trial]
             else:
                 trial = MatchingPairs.get_matching_pairs_trial(session)
@@ -77,7 +78,7 @@ class MatchingPairs(Base):
                 rank=MatchingPairs.rank(session, exclude_unfinished=False),
                 show_social=True,
                 feedback_info=MatchingPairs.feedback_info()
-            ).action()
+            )
             cont = MatchingPairs.get_matching_pairs_trial(session)
             return [score, cont]
     
@@ -105,7 +106,7 @@ class MatchingPairs(Base):
         return Trial(
             title=_("Questionnaire %(index)i / %(total)i") % {'index': index, 'total': total_questions},
             feedback_form=Form([question])
-        ).action(), skip_explainer
+        ), skip_explainer
 
     @classmethod
     def get_matching_pairs_trial(cls, session):
@@ -141,7 +142,7 @@ class MatchingPairs(Base):
             result_id=prepare_result('matching_pairs', session),
             config={'show_continue_button': False}
         )
-        return trial.action()
+        return trial
 
     @classmethod
     def calculate_score(cls, result, data):

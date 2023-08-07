@@ -29,4 +29,4 @@ class RhythmExperimentSeriesUnpaid(RhythmExperimentSeries):
                 )
             ],
             button_label=_("Continue")
-        ).action()
+        )

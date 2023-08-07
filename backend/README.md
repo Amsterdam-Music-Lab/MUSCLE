@@ -53,10 +53,10 @@ If you want to make a minor adaption to an existing view, you can adapt the defa
 ```python
 # /src/hooked/rules/custom_rules.py
 
-action = SongSync.action(session)
+action = SongSync()
 
 # Minor change to config
-actions['config']['recognition_time'] = 20
+action['config']['recognition_time'] = 20
 ```
 
 #### Extend views

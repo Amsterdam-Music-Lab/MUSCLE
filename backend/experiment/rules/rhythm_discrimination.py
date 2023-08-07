@@ -83,14 +83,14 @@ class RhythmDiscrimination(Base):
     @classmethod
     def first_round(cls, experiment):
         """Create data for the first experiment rounds"""
-        explainer = intro_explainer().action(True)
+        explainer = intro_explainer()
 
         # 2. Consent with default text
-        consent = Consent.action()
+        consent = Consent()
 
-        explainer2 = practice_explainer().action()
+        explainer2 = practice_explainer()
 
-        start_session = StartSession.action()
+        start_session = StartSession()
 
         return [
             explainer,
@@ -149,7 +149,7 @@ def next_trial_actions(session, round_number, request_session):
                 session.save()
                 explainer = start_experiment_explainer()
                 explainer.steps.pop(0)
-                actions.append(explainer.action(True))
+                actions.append(explainer)
 
     try:
         section = session.playlist.section_set.filter(
@@ -187,11 +187,11 @@ def next_trial_actions(session, round_number, request_session):
         title=_('Rhythm discrimination: %s' % (title)),
         config={
             'listen_first': True,
-            'response_time': section.duration + .1
+            'response_time': section.duration + .5
         }
     )
 
-    actions.append(view.action())
+    actions.append(view)
     return actions
 
 
@@ -242,6 +242,7 @@ def intro_explainer():
             Step(_(
                 'This test will take around 6 minutes to complete. Try to stay focused for the entire test!'))
         ],
+        step_numbers=True,
         button_label='Ok'
     )
 
@@ -265,7 +266,7 @@ def response_explainer(correct, same, button_label=_('Next fragment')):
         instruction=instruction,
         steps=[],
         button_label=button_label
-    ).action()
+    )
 
 
 def finalize_experiment(session, request_session):

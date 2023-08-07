@@ -26,8 +26,8 @@ class GoldMSI(Base):
 
     @classmethod
     def first_round(cls, experiment):
-        consent = Consent.action()
-        start_session = StartSession.action()
+        consent = Consent()
+        start_session = StartSession()
         return [
             consent,
             start_session
@@ -40,7 +40,7 @@ class GoldMSI(Base):
             feedback_form = Form([
                 question,
             ])
-            view = Trial(None, feedback_form)
-            return view.action()
+            view = Trial(None, feedback_form=feedback_form)
+            return view
         else:
             return final_action_with_optional_button(session, '', request_session)

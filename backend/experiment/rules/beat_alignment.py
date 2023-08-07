@@ -36,14 +36,15 @@ class BeatAlignment(Base):
                 Step(_(
                     "Listen carefully to the following examples. Pay close attention to the description that accompanies each example."))
             ],
-            button_label=_('Ok')
-        ).action(True)
+            button_label=_('Ok'),
+            step_numbers=True
+        )
 
         # 2. Consent with default text
-        consent = Consent.action()
+        consent = Consent()
         
         # 3. Start session
-        start_session = StartSession.action()
+        start_session = StartSession()
         return [
             explainer,
             consent,
@@ -89,7 +90,8 @@ class BeatAlignment(Base):
                     Step(_("Remember: try not to move or tap along with the sounds")),
                     Step(_('In total, this test will take around 6 minutes to complete. Try to stay focused for the entire duration!'))
                 ],
-                button_label=_('Start')).action(True)
+                step_numbers=True,
+                button_label=_('Start'))
             )
             session.save_json_data({'done_practice': True})
             return practice_rounds
@@ -124,7 +126,7 @@ class BeatAlignment(Base):
                 'show_continue_button': False
             }
         )
-        return view.action()
+        return view
 
     @classmethod
     def next_trial_action(cls, session, this_round):
@@ -158,4 +160,4 @@ class BeatAlignment(Base):
                 'listen_first': True
             }
         )
-        return view.action()
+        return view

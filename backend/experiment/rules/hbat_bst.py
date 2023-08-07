@@ -73,7 +73,7 @@ class BST(HBat):
                 'response_time': section.duration + .1
             }
         )
-        return view.action()
+        return view
 
     @classmethod
     def response_explainer(cls, correct, in2, button_label=_('Next fragment')):

@@ -35,16 +35,16 @@ class RhythmExperimentSeries(Base):
                 )
             ],
             button_label=_("Continue")
-        ).action()
+        )
 
     @classmethod
     def first_round(cls, experiment):
         """Create data for the first experiment rounds."""
         # read consent form from file
         rendered = render_to_string(cls.consent_form)
-        consent = Consent.action(rendered, title=_(
+        consent = Consent(rendered, title=_(
             'Informed consent'), confirm=_('I agree'), deny=_('Stop'))
-        start_session = StartSession.action()
+        start_session = StartSession()
         return [
             consent,
             cls.intro_explainer(),
@@ -66,7 +66,7 @@ class RhythmExperimentSeries(Base):
                 final_text=rendered,
                 show_participant_link=cls.show_participant_final,
                 show_participant_id_only=cls.show_participant_final,
-            ).action()
+            )
         slug = experiment_data[experiment_number]
         session.save()
         button = {
@@ -76,7 +76,7 @@ class RhythmExperimentSeries(Base):
         return Final(session,
                      title=_('Next experiment (%d to go!)') % (
                          len(experiment_data) - experiment_number),
-                     button=button).action()
+                     button=button)
 
 
 def prepare_experiments(session):

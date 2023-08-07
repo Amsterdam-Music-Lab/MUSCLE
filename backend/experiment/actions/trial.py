@@ -1,6 +1,8 @@
 from django.utils.translation import gettext_lazy as _
 
-class Trial(object):  # pylint: disable=too-few-public-methods
+from .base_action import BaseAction
+
+class Trial(BaseAction):  # pylint: disable=too-few-public-methods
     """
     A view that may include Playback and/or a Form
     Relates to client component: Trial.js

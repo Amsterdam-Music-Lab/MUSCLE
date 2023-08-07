@@ -35,9 +35,10 @@ def handle_results(data, session):
 
 def prepare_result(question_key, session=None, participant=None, **kwargs):
     ''' Create a Result object, and provide its id to be serialized
+    - question_key: the key of the question in the questionnaire dictionaries
     - session: the session on which the Result is going to be registered
-    - is_profile: optionally, flag that the Result is a profile type question
-    possible kwargs: 
+    - participant: alernatively, the participant on which the Result is going to be registered
+    possible kwargs:
         - section: optionally, provide a section to which the Result is going to be tied
         - expected_response: optionally, provide the correct answer, used for scoring  
         - comment: optionally, provide a comment to be saved in the database, e.g. "training phase"

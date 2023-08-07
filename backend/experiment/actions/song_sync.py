@@ -2,7 +2,9 @@ import random
 
 from django.utils.translation import gettext_lazy as _
 
-class SongSync(object):  # pylint: disable=too-few-public-methods
+from  .base_action import BaseAction
+
+class SongSync(BaseAction):  # pylint: disable=too-few-public-methods
     """
     Provide data for a SongSync view that handles views for song recognition,
     a silence and in- or out-sync continuation of audio playback

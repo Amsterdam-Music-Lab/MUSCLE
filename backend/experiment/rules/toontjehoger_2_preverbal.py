@@ -34,18 +34,18 @@ class ToontjeHoger2Preverbal(Base):
                 Step(
                     "Tenslotte krijg je twee geluiden te horen met de vraag: welke baby is in Frankrijk geboren?"),
             ],
+            step_numbers=True,
             button_label="Start"
-
-        ).action(step_numbers=True)
+        )
 
         # 2 Spectrogram information
         spectrogram_info = cls.get_spectrogram_info()
 
         # 3. Choose playlist.
-        playlist = Playlist.action(experiment.playlists.all())
+        playlist = Playlist(experiment.playlists.all())
 
         # 4. Start session.
-        start_session = StartSession.action()
+        start_session = StartSession()
 
         return [
             explainer,
@@ -66,7 +66,7 @@ class ToontjeHoger2Preverbal(Base):
             body=body,
             heading="Wat is een spectrogram?",
             button_label="Volgende",
-        ).action()
+        )
         return info
 
     @classmethod
@@ -110,7 +110,7 @@ class ToontjeHoger2Preverbal(Base):
 
         # Return score view
         config = {'show_total_score': True}
-        score = Score(session, config=config, feedback=feedback).action()
+        score = Score(session, config=config, feedback=feedback)
         return [score]
 
     @classmethod
@@ -139,7 +139,7 @@ class ToontjeHoger2Preverbal(Base):
                 "/images/experiments/toontjehoger/preverbal_1.webp")),
             feedback_form=form,
             title=cls.TITLE,
-        ).action()
+        )
 
         return [image_trial]
 
@@ -178,7 +178,7 @@ class ToontjeHoger2Preverbal(Base):
             feedback_form=None,
             title=cls.TITLE,
             style='primary-form'
-        ).action()
+        )
         return [trial]
 
     @classmethod
@@ -226,7 +226,7 @@ class ToontjeHoger2Preverbal(Base):
             playback=playback,
             feedback_form=form,
             title=cls.TITLE,
-        ).action()
+        )
         return [trial]
 
     @classmethod
@@ -251,7 +251,7 @@ class ToontjeHoger2Preverbal(Base):
             final_text=final_text,
             rank=toontjehoger_ranks(session),
             button={'text': 'Wat hebben we getest?'}
-        ).action()
+        )
 
         # Info page
         body = render_to_string(
@@ -261,6 +261,6 @@ class ToontjeHoger2Preverbal(Base):
             heading="Het eerste luisteren",
             button_label="Terug naar ToontjeHoger",
             button_link="/toontjehoger"
-        ).action()
+        )
 
         return [*score, final, info]

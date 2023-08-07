@@ -36,14 +36,13 @@ class ToontjeHoger6Relative(Base):
                 Step("Aan jou de taak om te ontrafelen of deze melodieën hetzelfde zijn, ongeacht de toonhoogte! ", number=3),
             ],
             button_label="Start"
-
-        ).action(step_numbers=False)
+        )
 
         # 2. Choose playlist.
-        playlist = Playlist.action(experiment.playlists.all())
+        playlist = Playlist(experiment.playlists.all())
 
         # 3. Start session.
-        start_session = StartSession.action()
+        start_session = StartSession()
 
         return [
             explainer,
@@ -85,7 +84,7 @@ class ToontjeHoger6Relative(Base):
 
         # Return score view
         config = {'show_total_score': True}
-        score = Score(session, config=config, feedback=feedback).action()
+        score = Score(session, config=config, feedback=feedback)
         return [score]
 
     @classmethod
@@ -144,7 +143,7 @@ class ToontjeHoger6Relative(Base):
             feedback_form=form,
             title=cls.TITLE,
             style='blue-players'
-        ).action()
+        )
         return [trial]
 
     @classmethod
@@ -169,7 +168,7 @@ class ToontjeHoger6Relative(Base):
             final_text=final_text,
             rank=toontjehoger_ranks(session),
             button={'text': 'Wat hebben we getest?'}
-        ).action()
+        )
 
         # Info page
         body = render_to_string(
@@ -179,6 +178,6 @@ class ToontjeHoger6Relative(Base):
             heading="Relatief gehoor",
             button_label="Terug naar ToontjeHoger",
             button_link="/toontjehoger"
-        ).action()
+        )
 
         return [*score, final, info]

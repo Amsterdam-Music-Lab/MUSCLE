@@ -38,15 +38,15 @@ class ToontjeHoger3Plink(Base):
                 Step(
                     "Weet je het niet? Beantwoord dan extra vragen over de tijdsperiode en emotie van het nummer.")
             ],
+            step_numbers=True,
             button_label="Start"
-
-        ).action(step_numbers=True)
+        )
 
         # 2. Choose playlist.
-        playlist = Playlist.action(experiment.playlists.all())
+        playlist = Playlist(experiment.playlists.all())
 
         # 3. Start session.
-        start_session = StartSession.action()
+        start_session = StartSession()
 
         return [
             explainer,
@@ -143,7 +143,7 @@ class ToontjeHoger3Plink(Base):
 
         # Return score view
         config = {'show_total_score': True}
-        score = Score(session, config=config, feedback=feedback).action()
+        score = Score(session, config=config, feedback=feedback)
 
         return [score]
 
@@ -177,8 +177,7 @@ class ToontjeHoger3Plink(Base):
                     "Verdien extra punten door twee extra vragen over het nummer te beantwoorden."),
             ],
             button_label="Start"
-
-        ).action(step_numbers=False)
+        )
 
         # Plink round
         # --------------------
@@ -197,7 +196,7 @@ class ToontjeHoger3Plink(Base):
             dont_know_label="Ik weet het niet",
             extra_questions=extra_questions,
             extra_questions_intro=extra_questions_intro
-        ).action()
+        )
 
         return [plink]
 
@@ -220,7 +219,7 @@ class ToontjeHoger3Plink(Base):
             submits=False
         )
 
-        return question.action()
+        return question
 
     @classmethod
     def get_optional_question2(cls, session):
@@ -238,7 +237,7 @@ class ToontjeHoger3Plink(Base):
             submits=True
         )
 
-        return question.action()
+        return question
 
     @classmethod
     def calculate_score(cls, result, data):
@@ -307,7 +306,7 @@ class ToontjeHoger3Plink(Base):
             final_text=final_text,
             rank=toontjehoger_ranks(session),
             button={'text': 'Wat hebben we getest?'}
-        ).action()
+        )
 
         # Info page
         body = render_to_string(
@@ -317,6 +316,6 @@ class ToontjeHoger3Plink(Base):
             heading="Muziekherkenning",
             button_label="Terug naar ToontjeHoger",
             button_link="/toontjehoger"
-        ).action()
+        )
 
         return [*score, final, info]

@@ -43,21 +43,22 @@ class Hooked(Base):
                 Step(_(
                     "Was the music in the right place when the sound came back? Or did we jump to a different spot during the silence?"))
             ],
-            button_label=_("Let's go!")).action(True)
+            step_numbers=True,
+            button_label=_("Let's go!"))
 
         # 2. Get informed consent.
         if  cls.consent_file:
             rendered = render_to_string('consent/{}'.format(cls.consent_file))
-            consent = Consent.action(text=rendered, title=_('Informed consent'), confirm=_('I agree'), deny=_('Stop'))
+            consent = Consent(text=rendered, title=_('Informed consent'), confirm=_('I agree'), deny=_('Stop'))
         else:
             # fall back to lorem ipsum if no consent_file is defined
-            consent = Consent.action()
+            consent = Consent()
 
         # 3. Choose playlist.
-        playlist = Playlist.action(experiment.playlists.all())
+        playlist = Playlist(experiment.playlists.all())
 
         # 4. Start session.
-        start_session = StartSession.action()
+        start_session = StartSession()
 
         return [
             explainer,
@@ -128,7 +129,7 @@ class Hooked(Base):
 
         return Trial(
                 title=_("Questionnaire"),
-                feedback_form=Form([question], is_skippable=question.is_skippable)).action()
+                feedback_form=Form([question], is_skippable=question.is_skippable))
 
 
     
@@ -153,7 +154,7 @@ class Hooked(Base):
                 Score(session,
                     config=config,
                     title=title
-                ).action(),
+                ),
                 Final(
                     session=session,
                     final_text=cls.final_score_message(session),
@@ -161,7 +162,7 @@ class Hooked(Base):
                     show_social=True,
                     show_profile_link=True,
                     button={'text': _('Play again'), 'link': '{}/{}'.format(settings.CORS_ORIGIN_WHITELIST[0], session.experiment.slug)}
-                ).action()
+                )
             ]
 
         # Get next round number and initialise actions list. Two thirds of
@@ -184,7 +185,7 @@ class Hooked(Base):
             actions.append(Score(session,
                 config=config,
                 title=title
-            ).action())
+            ))
 
             # Load the heard_before offset.
             plan = json_data.get('plan')
@@ -220,7 +221,8 @@ class Hooked(Base):
                 Step(_("Listen carefully to the music.")),
                 Step(_("Did you hear the same song during previous rounds?")),
             ],
-            button_label=_("Continue")).action(True)
+            step_numbers=True,
+            button_label=_("Continue"))
 
     @staticmethod
     def final_score_message(session):
@@ -340,7 +342,7 @@ class Hooked(Base):
             title=cls.get_trial_title(session, next_round_number),
             key=key,
             result_id=result_id
-        ).action()
+        )
     
     @classmethod
     def next_heard_before_action(cls, session):
@@ -392,4 +394,4 @@ class Hooked(Base):
             feedback_form=form,
             config=config,
         )
-        return trial.action()
+        return trial

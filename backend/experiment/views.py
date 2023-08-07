@@ -7,6 +7,7 @@ from django.utils.translation import gettext_lazy as _
 from django.utils.translation import activate
 
 from .models import Experiment, Feedback
+from .utils import serialize
 from session.models import Session
 
 logger = logging.getLogger(__name__)
@@ -32,7 +33,7 @@ def get_experiment(request, slug):
             return redirect('/experiment/id/{}/'.format(slug), request)
 
         # convert non lists to list
-        next_round = session.experiment_rules().next_round(session)
+        next_round = serialize(session.experiment_rules().next_round(session))
         if not isinstance(next_round, list):
             next_round = [next_round]
 
@@ -65,7 +66,7 @@ def get_experiment(request, slug):
             for playlist in experiment.playlists.all()
         ],
         'feedback_info': experiment.get_rules().feedback_info(),
-        'next_round': experiment.get_rules().first_round(experiment),
+        'next_round': serialize(experiment.get_rules().first_round(experiment)),
         'loading_text': _('Loading')
     }
 

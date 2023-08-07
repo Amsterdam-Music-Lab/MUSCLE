@@ -26,14 +26,14 @@ class Categorization(Base):
             instruction="This is a listening experiment in which you have to respond to short sound sequences.",
             steps=[],
             button_label='Ok'
-        ).action()
+        )
         # read consent from file
         rendered = render_to_string(
             'consent/consent_categorization.html')
-        consent = Consent.action(
+        consent = Consent(
             rendered, title='Informed consent', confirm='I agree', deny='Stop')
         
-        start_session = StartSession.action()
+        start_session = StartSession()
         return [explainer, consent, start_session]
 
     @classmethod
@@ -59,7 +59,7 @@ class Categorization(Base):
                 rank=None,
                 show_social=False,
                 show_profile_link=False
-            ).action()
+            )
             return final
 
         # Total participants reached - Abort with message
@@ -73,7 +73,7 @@ class Categorization(Base):
                 rank=None,
                 show_social=False,
                 show_profile_link=False
-            ).action()
+            )
             return final
 
         # Calculate round number from passed training rounds
@@ -105,7 +105,7 @@ class Categorization(Base):
                         rank=None,
                         show_social=False,
                         show_profile_link=False
-                    ).action()
+                    )
                     return final
             # Prepare sections for next phase
             json_data = cls.plan_phase(session)
@@ -116,7 +116,7 @@ class Categorization(Base):
                     instruction="The experiment will now begin. Please don't close the browser during the experiment. You can only run it once. Click to start a sound sequence.",
                     steps=[],
                     button_label='Ok'
-                ).action()
+                )
                 trial = cls.next_trial_action(session)
                 return [explainer2, trial]
 
@@ -146,7 +146,7 @@ class Categorization(Base):
                     instruction="You are entering the main phase of the experiment. From now on you will only occasionally get feedback on your responses. Simply try to keep responding to the sound sequences as you did before.",
                     steps=[],
                     button_label='Ok'
-                ).action()
+                )
             else:
                 # Update passed training rounds for calc round_number
                 json_data['training_rounds'] = session.rounds_passed()
@@ -179,12 +179,12 @@ class Categorization(Base):
                         rank=None,
                         show_social=False,
                         show_profile_link=False
-                    ).action()
+                    )
                     return final
                 else:
                     # Show continue to next training phase or exit option
                     explainer = Trial(title="Training failed", feedback_form=Form(
-                        [repeat_training_or_quit])).action()
+                        [repeat_training_or_quit]))
 
             feedback = cls.get_feedback(session)
             return [feedback, explainer]
@@ -251,7 +251,7 @@ class Categorization(Base):
                 show_profile_link=False,
                 total_score=round(score_percent),
                 points='% correct'
-            ).action()
+            )
             return final
 
     @classmethod
@@ -466,7 +466,7 @@ class Categorization(Base):
         else:
             pass  # throw error
 
-        return Score(session, icon=icon, timer=1, title=cls.get_title(session)).action()
+        return Score(session, icon=icon, timer=1, title=cls.get_title(session))
 
     @classmethod
     def get_trial_with_feedback(cls, session):
@@ -520,7 +520,7 @@ class Categorization(Base):
             return None
         return Trial(
             title="Questionnaire",
-            feedback_form=Form([question], submit_label='Continue')).action()
+            feedback_form=Form([question], submit_label='Continue'))
 
 
 musical_experience_question = ChoiceQuestion(

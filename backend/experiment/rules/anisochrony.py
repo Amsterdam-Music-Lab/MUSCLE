@@ -78,7 +78,7 @@ class Anisochrony(DurationDiscrimination):
             title=_('Anisochrony'),
             config=config
         )
-        return view.action()
+        return view
 
     @classmethod
     def intro_explanation(cls, *args):
