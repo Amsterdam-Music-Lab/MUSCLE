@@ -187,7 +187,7 @@ def next_trial_actions(session, round_number, request_session):
         title=_('Rhythm discrimination: %s' % (title)),
         config={
             'listen_first': True,
-            'response_time': section.duration + .1
+            'response_time': section.duration + .5
         }
     )
 
