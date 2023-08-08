@@ -10,7 +10,9 @@ const ListenCircle = ({
     return (
         <>
             <CountDown duration={duration} running={countDownRunning} />
-            <Histogram running={histogramRunning} />
+            <div className="aha__histogram-container">
+                <Histogram running={histogramRunning} />
+            </div>
         </>
     );
 };

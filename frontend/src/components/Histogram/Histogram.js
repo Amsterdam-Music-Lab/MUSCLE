@@ -4,15 +4,12 @@ import classNames from "classnames";
 // Histogram with random bar movement for decoration
 const Histogram = ({
     bars = 7,
-    width = 6,
     spacing = 6,
-    height = 40,
     interval = 100,
     running = true,
     marginLeft = 0,
     marginTop = 0,
     backgroundColor = undefined,
-    histogramWidth = undefined,
     borderRadius = '0.15rem',
 }) => {
     const [pulse, setPulse] = useState(true);
@@ -31,10 +28,10 @@ const Histogram = ({
         <div
             key={index}
             style={{
-                width,
+                width: '80%',
                 height: running
-                    ? Math.random() * (height - width) + width
-                    : width,
+                    ? `${Math.random() * 100}%`
+                    : '10%',
                 marginRight: index < bars - 1 ? spacing : 0,
             }}
         />
@@ -43,7 +40,7 @@ const Histogram = ({
     return (
         <div
             className={classNames("aha__histogram", { active: running })}
-            style={{ height, marginLeft, marginTop, backgroundColor, width: histogramWidth, borderRadius: borderRadius, border: backgroundColor? `10px solid ${backgroundColor}` : undefined}}
+            style={{ height: '100%', marginLeft, marginTop, backgroundColor, width: '100%', borderRadius: borderRadius, border: backgroundColor? `10px solid ${backgroundColor}` : undefined}}
         >
             {_bars}
         </div>
