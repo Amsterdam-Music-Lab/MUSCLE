@@ -22,7 +22,7 @@ class TestsSelenium(unittest.TestCase):
     ```
     [selenium]
     browser=Firefox  # Firefox | Chrome | Safari | Edge
-    headless=no      # yes | no
+    headless=no      # yes | no  (headless does not work on Safari)
 
     [url]
     root=http://localhost:3000
@@ -83,7 +83,7 @@ class TestsSelenium(unittest.TestCase):
             self.driver.find_element(By.XPATH, '//div[text()="I agree"]').click()
         
         # Wait for examples to end and click Start
-        el = WebDriverWait(self.driver, 60,  poll_frequency = 1) \
+        WebDriverWait(self.driver, 60,  poll_frequency = 1) \
             .until(expected_conditions.element_to_be_clickable((By.XPATH, '//div[text()="Start"]'))) \
             .click()
 
@@ -122,7 +122,7 @@ class TestsSelenium(unittest.TestCase):
                     ans = random.choices(["Yes", "No", "No response"], weights=(40,40,20))[0]
 
                     if ans in ("Yes", "No"):
-                        el = WebDriverWait(self.driver, 6) \
+                        WebDriverWait(self.driver, 6) \
                             .until(presence_of_element_located((By.XPATH, '//*[text()="{}"]'.format(ans)))) \
                             .click()
                     if ans in ("No","No response") or bonus_rounds: break
