@@ -1,0 +1,27 @@
+{% load i18n %}
+<h1>{{unlocked}} {% translate "unlocked" %}</h1>
+<div>
+    <div>
+        <h3>{% translate "Your top 3 favourite songs out of {{n_songs}}:" %}</h3>
+        <ul>
+            {% for song in top_participant %}
+                <li>{{song.name}}</li>
+            {% endfor %}
+        </ul>
+    </div>
+    <div class="{% if !n_known_songs %}is-greyed-out{% endif %}">
+        {% if n_known_songs %}
+        <h3>{% translate "Of {{n_songs}}, you know {{n_known_songs}} %}</h3>
+        {% endif %}
+    </div>
+    <div class="{% if !top_all %}is-greyed-out{% endif %}">
+        {% if top_all %}
+        <h3>{% translate "Top 3 favourite songs by others:" %}</h3>
+        <ul>
+            {% for song in top_all %}
+                <li>{{song.name}}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+    </div>
+</div>
