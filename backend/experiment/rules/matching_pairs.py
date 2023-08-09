@@ -19,6 +19,14 @@ class MatchingPairs(Base):
     num_pairs = 8
     contact_email = 'aml.tunetwins@gmail.com'
 
+    questions = [
+        question_by_key('dgf_gender_identity'),
+        question_by_key('dgf_generation'),
+        question_by_key('dgf_musical_experience', EXTRA_DEMOGRAPHICS),
+        question_by_key('dgf_country_of_origin'),
+        question_by_key('dgf_education')
+    ]
+
     @classmethod
     def first_round(cls, experiment):
         rendered = render_to_string('consent/consent_matching_pairs.html')
@@ -48,20 +56,19 @@ class MatchingPairs(Base):
             start_session
         ]
     
-    @staticmethod
-    def next_round(session):
+    @classmethod
+    def next_round(cls, session):
         if session.rounds_passed() < 1:       
-            trial, skip_explainer = MatchingPairs.get_question(session)
-            if trial:
-                if not skip_explainer:
-                    intro_questions = Explainer(
-                        instruction='Before starting the game, we would like to ask you five demographic questions.',
-                        steps=[]
-                    )
-                    return [intro_questions, trial]
+            trials = cls.get_questions_block(session)
+            if trials:
+                intro_questions = Explainer(
+                    instruction=_('Before starting the game, we would like to ask you %i demographic questions.' % (len(trials))),
+                    steps=[]
+                )
+                return [intro_questions, *trials]
             else:
-                trial = MatchingPairs.get_matching_pairs_trial(session)
-            return trial
+                trial = cls.get_matching_pairs_trial(session)
+                return [trial]
         else:
             session.final_score += session.result_set.filter(
                 question_key='matching_pairs').last().score
@@ -81,32 +88,6 @@ class MatchingPairs(Base):
             )
             cont = MatchingPairs.get_matching_pairs_trial(session)
             return [score, cont]
-    
-    @classmethod
-    def get_question(cls, session):
-        questions = [
-            question_by_key('dgf_gender_identity'),
-            question_by_key('dgf_generation'),
-            question_by_key('dgf_musical_experience', EXTRA_DEMOGRAPHICS),
-            question_by_key('dgf_country_of_origin'),
-            question_by_key('dgf_education')
-        ]
-        open_questions = total_unanswered_questions(session.participant, questions)
-        if not open_questions:
-            return None, None
-        total_questions = int(session.load_json_data().get('saved_total', '0'))
-        if not total_questions:
-            total_questions = open_questions     
-            session.save_json_data({'saved_total': open_questions})
-        question = unasked_question(session.participant, questions)
-        skip_explainer = session.load_json_data().get('explainer_shown')
-        if not skip_explainer:
-            session.save_json_data({'explainer_shown': True})
-        index = total_questions - open_questions + 1
-        return Trial(
-            title=_("Questionnaire %(index)i / %(total)i") % {'index': index, 'total': total_questions},
-            feedback_form=Form([question])
-        ), skip_explainer
 
     @classmethod
     def get_matching_pairs_trial(cls, session):
