@@ -5,7 +5,7 @@ from participant.models import Participant
 from result.models import Result
 from session.models import Session
 from .demographics import DEMOGRAPHICS
-from .utils import unasked_question, total_unanswered_questions
+from .utils import unanswered_questions, total_unanswered_questions
 
 class UtilsTestCase(TestCase):
 
@@ -24,15 +24,10 @@ class UtilsTestCase(TestCase):
         )
         cls.questions = DEMOGRAPHICS[:3]
     
-    def test_unasked_question(self):
-        question = unasked_question(self.participant, self.questions)
+    def test_unanswered_questions(self):
+        question = unanswered_questions(self.participant, self.questions)
         assert question.key == 'dgf_generation'
-        Result.objects.create(
-            participant=self.participant,
-            question_key='dgf_generation',
-            given_response='boomer'
-        )
-        question = unasked_question(self.participant, self.questions)
+        question = unanswered_questions(self.participant, self.questions)
         assert question.key == 'dgf_country_of_origin'
     
     def test_total_unanswered_questions(self):

@@ -1,6 +1,6 @@
 from django.utils.translation import gettext_lazy as _
 
-from experiment.actions.form import ChoiceQuestion, Question, NumberQuestion, TextQuestion
+from experiment.actions.form import ChoiceQuestion, NumberQuestion, TextQuestion
 from experiment.standards.iso_countries import ISO_COUNTRIES
 from experiment.standards.iso_languages import ISO_LANGUAGES
 from experiment.standards.isced_education import ISCED_EDUCATION_LEVELS

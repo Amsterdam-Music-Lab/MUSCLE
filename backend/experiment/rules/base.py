@@ -6,7 +6,7 @@ from django.conf import settings
 
 from experiment.actions import Final, Form, Trial
 from experiment.questions.demographics import DEMOGRAPHICS
-from experiment.questions.utils import total_unanswered_questions, unasked_question
+from experiment.questions.utils import unanswered_questions
 from result.score import SCORING_RULES
 
 
@@ -99,18 +99,16 @@ class Base(object):
         return ranks['PLASTIC']
 
     @classmethod
-    def get_questions_block(cls, session):
+    def get_questionnaire(cls, session):
         ''' Get a list of questions to be asked in succession '''
-        open_questions = total_unanswered_questions(session.participant, cls.questions)
+        trials = []
+        questions = list(unanswered_questions(session.participant, cls.questions))
+        open_questions = len(questions)
         if not open_questions:
             return None
-        trials = []
-        for index in range(open_questions):
-            question = unasked_question(session.participant, cls.questions)
-            if not question:
-                return None
+        for index, question in enumerate(questions):
             trials.append(Trial(
                 title=_("Questionnaire %(index)i / %(total)i") % {'index': index+1, 'total': open_questions},
-                feedback_form=Form([question])
+                feedback_form=Form([question], is_skippable=question.is_skippable)
             ))
         return trials

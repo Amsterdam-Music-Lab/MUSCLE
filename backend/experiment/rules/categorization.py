@@ -4,9 +4,8 @@ from django.db.models import Avg
 
 from experiment.actions.form import Form, ChoiceQuestion
 from experiment.actions import Consent, Explainer, Score, StartSession, Trial, Final
-from experiment.actions.utils import combine_actions
 from experiment.actions.wrappers import two_alternative_forced
-from experiment.questions.utils import unasked_question
+from experiment.questions.utils import unanswered_questions
 
 from experiment.questions.demographics import EXTRA_DEMOGRAPHICS
 from experiment.questions.utils import question_by_key
@@ -19,6 +18,13 @@ SCORE_AVG_MIN_TRAINING = 0.8
 
 class Categorization(Base):
     ID = 'CATEGORIZATION'
+
+    questions = [
+        question_by_key('dgf_age', EXTRA_DEMOGRAPHICS),
+        question_by_key('dgf_gender_reduced', EXTRA_DEMOGRAPHICS),
+        question_by_key('dgf_native_language', EXTRA_DEMOGRAPHICS),
+        question_by_key('dgf_musical_experience', EXTRA_DEMOGRAPHICS)
+    ]
 
     @classmethod
     def first_round(cls, experiment):
@@ -38,10 +44,10 @@ class Categorization(Base):
 
     @classmethod
     def next_round(cls, session):
-        action = cls.get_question(session)
-        if action:
-            return action
-        
+        actions = cls.get_questionnaire(session)
+        if actions:
+            return actions
+
         json_data = session.load_json_data()
 
         # Plan experiment on the first call to next_round
@@ -512,34 +518,7 @@ class Categorization(Base):
         rounds_passed = (session.rounds_passed() -
                          int(json_data['training_rounds'])+1)
         return f"Round {rounds_passed} / {len(json_data['sequence'])}"
-    
-    @classmethod
-    def get_question(cls, session):
-        question = unasked_question(session.participant, questions)
-        if not question:
-            return None
-        return Trial(
-            title="Questionnaire",
-            feedback_form=Form([question], submit_label='Continue'))
 
-
-musical_experience_question = ChoiceQuestion(
-    key='musical_experience',
-    view='RADIOS',
-    question="Please select your level of musical experience:",
-    choices={
-        'none': "None",
-        'moderate': "Moderate",
-        'extensive': "Extensive",
-        'professional': "Professional"
-    },
-    is_skippable=True
-)
-
-questions = [question_by_key('dgf_age', EXTRA_DEMOGRAPHICS),
-             question_by_key('dgf_gender_reduced', EXTRA_DEMOGRAPHICS),
-             question_by_key('dgf_native_language', EXTRA_DEMOGRAPHICS),
-             musical_experience_question]
 
 repeat_training_or_quit = ChoiceQuestion(
     key='failed_training',

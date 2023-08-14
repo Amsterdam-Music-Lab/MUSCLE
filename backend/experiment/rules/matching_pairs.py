@@ -9,7 +9,7 @@ from experiment.actions import Consent, Explainer, Final, Playlist, StartSession
 from experiment.actions.form import Form
 from experiment.actions.playback import Playback
 from experiment.questions.demographics import EXTRA_DEMOGRAPHICS
-from experiment.questions.utils import question_by_key, total_unanswered_questions, unasked_question
+from experiment.questions.utils import question_by_key
 from result.utils import prepare_result
 
 from section.models import Section
@@ -18,13 +18,12 @@ class MatchingPairs(Base):
     ID = 'MATCHING_PAIRS'
     num_pairs = 8
     contact_email = 'aml.tunetwins@gmail.com'
-
     questions = [
         question_by_key('dgf_gender_identity'),
         question_by_key('dgf_generation'),
         question_by_key('dgf_musical_experience', EXTRA_DEMOGRAPHICS),
         question_by_key('dgf_country_of_origin'),
-        question_by_key('dgf_education')
+        question_by_key('dgf_education', drop_choices=['isced-2', 'isced-5'])
     ]
 
     @classmethod
@@ -59,7 +58,7 @@ class MatchingPairs(Base):
     @classmethod
     def next_round(cls, session):
         if session.rounds_passed() < 1:       
-            trials = cls.get_questions_block(session)
+            trials = cls.get_questionnaire(session)
             if trials:
                 intro_questions = Explainer(
                     instruction=_('Before starting the game, we would like to ask you %i demographic questions.' % (len(trials))),

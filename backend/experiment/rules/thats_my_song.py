@@ -3,7 +3,7 @@ from django.conf import settings
 
 from experiment.actions import Final, Score, Trial
 from experiment.actions.form import Form, ChoiceQuestion
-from experiment.questions.utils import question_by_key, unasked_question
+from experiment.questions.utils import question_by_key, unanswered_questions
 from experiment.questions.musicgens import MUSICGENS_17_W_VARIANTS
 from .hooked import Hooked
 from result.utils import prepare_result
@@ -14,25 +14,14 @@ class ThatsMySong(Hooked):
     consent_file = None
     round_modifier = 1
 
+    questions = [
+        question_by_key('dgf_generation'),
+        question_by_key('dgf_gender_identity')
+    ]
+
     @classmethod
     def feedback_info(cls):
         return None
-    
-    @classmethod
-    def get_random_question(cls, session):
-
-        question = unasked_question(
-            session.participant,
-            MUSICGENS_17_W_VARIANTS,
-            randomize=True
-        )
-        
-        if question is None:
-            return None
-        
-        return Trial(
-                title=_("Questionnaire"),
-                feedback_form=Form([question], is_skippable=question.is_skippable))
 
     def get_info_playlist(self, filename):
         """ function used by `manage.py compileplaylist` to compile a csv with metadata """
@@ -101,16 +90,9 @@ class ThatsMySong(Hooked):
         # Collect actions.
         actions = []
         if next_round_number == 1:
-
-            demographics = [question_by_key('dgf_generation'), question_by_key('dgf_gender_identity')]
-            for i in range(len(demographics)):
-                question = unasked_question(session.participant, demographics[i:i+1]) # workaround for multiple questions in one round, because unasked_question() returns unanswered questions
-                if question:
-                    actions.append(
-                        Trial(
-                        title=_("Questionnaire"),
-                        feedback_form=Form([question], is_skippable=question.is_skippable))
-                )
+            questions = cls.get_questionnaire(session)
+            for q in questions:
+                actions.append(q)
 
             question = ChoiceQuestion(
                 key='playlist_decades',
