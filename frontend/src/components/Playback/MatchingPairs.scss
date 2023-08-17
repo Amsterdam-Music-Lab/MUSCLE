@@ -13,8 +13,10 @@
 }
 
 .aha__matching-pairs {
-    margin: 0px auto;
-    max-width: 100%;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    margin: 0px auto;    
 }
 
 @media (min-aspect-ratio: 1/1)  {
@@ -35,7 +37,7 @@
 
 .playing-board {
     display: inline-grid;
-    max-width: 100%;
+    max-width: 100%;    
 }
 
 .matching-pairs__feedback, .matching-pairs__score {
