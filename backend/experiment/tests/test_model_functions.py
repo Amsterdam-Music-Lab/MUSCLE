@@ -11,5 +11,4 @@ class TestModelExperiment(TestCase):
         rules2 = self.experiment.get_rules()
         keys1 = [q.key for q in rules1.questions]
         keys2 = [q.key for q in rules2.questions]
-        print(keys1, keys2)
         assert keys1 != keys2
