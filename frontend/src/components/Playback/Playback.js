@@ -115,9 +115,7 @@ const Playback = ({
 
     // Play section with given index
     const playSection = useCallback(
-        (index = 0) => {
-            // set corssorigin for web-audio
-            document.getElementById('audio-player').setAttribute('crossOrigin', 'use-credentials');
+        (index = 0) => {            
             // Load different audio
             if (index !== lastPlayerIndex.current) {
                 audio.loadUntilAvailable(
