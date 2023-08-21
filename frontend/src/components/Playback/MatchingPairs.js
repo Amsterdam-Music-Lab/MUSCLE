@@ -10,8 +10,7 @@ const MatchingPairs = ({
     finishedPlaying,
     stopAudioAfter,
     submitResult,
-}) => {
-    const finishDelay = 1500;
+}) => {    
     const xPosition = useRef(-1);
     const yPosition = useRef(-1);
     const score = useRef(undefined);
@@ -70,7 +69,7 @@ const MatchingPairs = ({
                     setTimeout(() => {
                         turnedCards[0].nomatch = false;
                         turnedCards[1].nomatch = false;                        
-                      }, finishDelay);
+                      }, 700);
                     break;  
             }   
 
