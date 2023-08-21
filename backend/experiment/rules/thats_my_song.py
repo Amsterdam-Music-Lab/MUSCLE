@@ -3,7 +3,7 @@ from django.conf import settings
 
 from experiment.actions import Final, Score, Trial
 from experiment.actions.form import Form, ChoiceQuestion
-from experiment.questions.utils import question_by_key, unanswered_questions
+from experiment.questions.utils import question_by_key
 from experiment.questions.musicgens import MUSICGENS_17_W_VARIANTS
 from .hooked import Hooked
 from result.utils import prepare_result
@@ -90,7 +90,10 @@ class ThatsMySong(Hooked):
         # Collect actions.
         actions = []
         if next_round_number == 1:
+            # get list of trials for demographic questions
             questions = cls.get_questionnaire(session)
+            # prepare questions for the get_random_question call
+            cls.prepare_questions(session, [MUSICGENS_17_W_VARIANTS])
             for q in questions:
                 actions.append(q)
 
