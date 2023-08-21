@@ -140,7 +140,7 @@ class ThatsMySong(Hooked):
             if next_round_number in range(3, 6):
                 actions.append(cls.next_song_sync_action(session))
             if next_round_number in range(6, heard_before_offset):
-                actions.append(cls.get_random_question(session)) if cls.questions else None
+                actions.append(cls.get_random_question(session)) if cls.questionnaire else None
                 actions.append(cls.next_song_sync_action(session))
 
             # HeardBefore rounds
@@ -150,7 +150,7 @@ class ThatsMySong(Hooked):
                 actions.append(
                     cls.next_heard_before_action(session))
             if next_round_number > heard_before_offset:
-                actions.append(cls.get_random_question(session)) if cls.questions else None
+                actions.append(cls.get_random_question(session)) if cls.questionnaire else None
                 actions.append(
                     cls.next_heard_before_action(session))
 
