@@ -4,7 +4,9 @@ from django.template.loader import render_to_string
 from django.utils.translation import gettext_lazy as _
 from django.conf import settings
 
-from experiment.actions import Final
+from experiment.actions import Final, Form, Trial
+from experiment.questions.demographics import DEMOGRAPHICS
+from experiment.questions.utils import unanswered_questions
 from result.score import SCORING_RULES
 
 
@@ -14,6 +16,7 @@ class Base(object):
     """Base class for other rules classes"""
 
     contact_email = settings.CONTACT_MAIL
+    questions = DEMOGRAPHICS
 
     @classmethod
     def feedback_info(cls):
@@ -94,3 +97,18 @@ class Base(object):
 
         # Default return, in case score isn't in the buckets
         return ranks['PLASTIC']
+
+    @classmethod
+    def get_questionnaire(cls, session):
+        ''' Get a list of questions to be asked in succession '''
+        trials = []
+        questions = list(unanswered_questions(session.participant, cls.questions))
+        open_questions = len(questions)
+        if not open_questions:
+            return None
+        for index, question in enumerate(questions):
+            trials.append(Trial(
+                title=_("Questionnaire %(index)i / %(total)i") % {'index': index+1, 'total': open_questions},
+                feedback_form=Form([question], is_skippable=question.is_skippable)
+            ))
+        return trials
