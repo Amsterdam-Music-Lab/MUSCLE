@@ -36,8 +36,7 @@ class Speech2Song(Base):
         LanguageQuestion(_('Mandarin Chinese')).exposure_question()
     ]
 
-    @classmethod
-    def first_round(cls, experiment):
+    def first_round(self, experiment):
         explainer = Explainer(
             instruction=_("This is an experiment about an auditory illusion."),
             steps=[
@@ -65,8 +64,7 @@ class Speech2Song(Base):
             start_session
         ]
 
-    @classmethod
-    def next_round(cls, session):
+    def next_round(self, session):
         blocks = [1, 2, 3]
         # shuffle blocks based on session.id as seed -> always same order for same session
         np.random.seed(session.id)
@@ -75,7 +73,7 @@ class Speech2Song(Base):
         actions = []
         is_speech = True
         if session.current_round == 1:
-            question_trial = cls.get_questionnaire(session)
+            question_trial = self.get_questionnaire(session)
             if question_trial:
                 return question_trial
 

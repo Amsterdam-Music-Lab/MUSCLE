@@ -21,8 +21,7 @@ class ToontjeHoger5Tempo(Base):
     SCORE_CORRECT = 20
     SCORE_WRONG = 0
 
-    @classmethod
-    def first_round(cls, experiment):
+    def first_round(self, experiment):
         """Create data for the first experiment rounds."""
 
         # 1. Explain game.
@@ -52,8 +51,7 @@ class ToontjeHoger5Tempo(Base):
             start_session
         ]
 
-    @classmethod
-    def next_round(cls, session, request_session=None):
+    def next_round(self, session, request_session=None):
         """Get action data for the next round"""
 
         rounds_passed = session.rounds_passed()
@@ -61,17 +59,16 @@ class ToontjeHoger5Tempo(Base):
         # Round 1
         if rounds_passed == 0:
             # No combine_actions because of inconsistent next_round array wrapping in first round
-            return cls.get_round(session, rounds_passed)
+            return self.get_round(session, rounds_passed)
 
         # Round 2
         if rounds_passed < session.experiment.rounds:
-            return [*cls.get_score(session), *cls.get_round(session, rounds_passed)]
+            return [*self.get_score(session), *self.get_round(session, rounds_passed)]
 
         # Final
-        return cls.get_final_round(session)
+        return self.get_final_round(session)
 
-    @classmethod
-    def get_random_section_pair(cls, session, genre):
+    def get_random_section_pair(self, session, genre):
         """
           - session: current Session
           - genre: (C)lassic (J)azz (R)ock
@@ -116,15 +113,14 @@ class ToontjeHoger5Tempo(Base):
             raise Exception(
                 "Error: could not find original section: {}".format(tag_original))
 
-        section_changed = cls.get_section_changed(
+        section_changed = self.get_section_changed(
             session=session, tag=tag_changed)
 
         sections = [section_original, section_changed]
         random.shuffle(sections)
         return sections
-
-    @classmethod
-    def get_section_changed(cls, session, tag):
+ 
+    def get_section_changed(self, session, tag):
         section_changed = session.section_from_any_song(
             filter_by={'tag': tag, 'group': "ch"})
         if not section_changed:
@@ -132,12 +128,11 @@ class ToontjeHoger5Tempo(Base):
                 "Error: could not find changed section: {}".format(tag))
         return section_changed
 
-    @classmethod
-    def get_round(cls, session, round):
+    def get_round(self, session, round):
         # Get sections
         genre = ["C", "J", "R"][round % 3]
 
-        sections = cls.get_random_section_pair(session, genre)
+        sections = self.get_random_section_pair(session, genre)
         section_original = sections[0] if sections[0].group == "or" else sections[1]  
 
         # Player
@@ -169,16 +164,14 @@ class ToontjeHoger5Tempo(Base):
         trial = Trial(
             playback=playback,
             feedback_form=form,
-            title=cls.TITLE,
+            title=self.TITLE,
         )
         return [trial]
-
-    @classmethod
-    def calculate_score(cls, result, data):
-        return cls.SCORE_CORRECT if result.expected_response == result.given_response else cls.SCORE_WRONG
-
-    @classmethod
-    def get_section_pair_from_result(cls, result):
+   
+    def calculate_score(self, result, data):
+        return self.SCORE_CORRECT if result.expected_response == result.given_response else self.SCORE_WRONG
+    
+    def get_section_pair_from_result(self, result):
         section_original = result.section
 
         if section_original is None:
@@ -186,7 +179,7 @@ class ToontjeHoger5Tempo(Base):
                 "Error: could not get section from result")
 
         tag_changed = section_original.tag.replace("OR", "CH")
-        section_changed = cls.get_section_changed(
+        section_changed = self.get_section_changed(
             session=result.session, tag=tag_changed)
 
         if section_changed is None:
@@ -196,8 +189,7 @@ class ToontjeHoger5Tempo(Base):
 
         return (section_original, section_changed)
 
-    @ classmethod
-    def get_score(cls, session):
+    def get_score(self, session):
         # Feedback
         last_result = session.last_result()
         feedback = ""
@@ -205,14 +197,14 @@ class ToontjeHoger5Tempo(Base):
             logger.error("No last result")
             feedback = "Er is een fout opgetreden"
         else:
-            if last_result.score == cls.SCORE_CORRECT:
+            if last_result.score == self.SCORE_CORRECT:
                 feedback = "Goedzo! Het was inderdaad antwoord {}!".format(
                     last_result.expected_response.upper())
             else:
                 feedback = "Helaas! Het juiste antwoord was {}.".format(
                     last_result.expected_response.upper())
 
-            section_original, section_changed = cls.get_section_pair_from_result(
+            section_original, section_changed = self.get_section_pair_from_result(
                 last_result)
 
             # Create feedback message
@@ -232,21 +224,20 @@ class ToontjeHoger5Tempo(Base):
         score = Score(session, config=config, feedback=feedback)
         return [score]
 
-    @ classmethod
-    def get_final_round(cls, session):
+    def get_final_round(self, session):
 
         # Finish session.
         session.finish()
         session.save()
 
         # Score
-        score = cls.get_score(session)
+        score = self.get_score(session)
 
         # Final
         final_text = "Dat bleek toch even lastig!"
-        if session.final_score >= session.experiment.rounds * 0.8 * cls.SCORE_CORRECT:
+        if session.final_score >= session.experiment.rounds * 0.8 * self.SCORE_CORRECT:
             final_text = "Goed gedaan! Jouw timing is uitstekend!"
-        elif session.final_score >= session.experiment.rounds * 0.5 * cls.SCORE_CORRECT:
+        elif session.final_score >= session.experiment.rounds * 0.5 * self.SCORE_CORRECT:
             final_text = "Goed gedaan! Jouw timing is best OK!"
 
         final = Final(

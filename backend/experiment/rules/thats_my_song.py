@@ -19,8 +19,7 @@ class ThatsMySong(Hooked):
         question_by_key('dgf_gender_identity')
     ]
 
-    @classmethod
-    def feedback_info(cls):
+    def feedback_info(self):
         return None
 
     def get_info_playlist(self, filename):
@@ -49,8 +48,7 @@ class ThatsMySong(Hooked):
             'group': decade
         }
 
-    @classmethod
-    def next_round(cls, session):	
+    def next_round(self, session):	
         """Get action data for the next round"""
         json_data = session.load_json_data()
 
@@ -65,7 +63,7 @@ class ThatsMySong(Hooked):
             # Return a score and final score action.
             next_round_number = session.get_next_round()
             config = {'show_section': True, 'show_total_score': True}
-            title = cls.get_trial_title(session, next_round_number - 1 - cls.round_modifier)
+            title = self.get_trial_title(session, next_round_number - 1 - self.round_modifier)
             return [
                 Score(session,
                     config=config,
@@ -73,8 +71,8 @@ class ThatsMySong(Hooked):
                 ),
                 Final(
                     session=session,
-                    final_text=cls.final_score_message(session) + " For more information about this experiment, visit the Vanderbilt University Medical Center Music Cognition Lab.",
-                    rank=cls.rank(session),
+                    final_text=self.final_score_message(session) + " For more information about this experiment, visit the Vanderbilt University Medical Center Music Cognition Lab.",
+                    rank=self.rank(session),
                     show_social=True,
                     show_profile_link=True,
                     button={'text': _('Play again'), 'link': '{}/{}{}'.format(settings.CORS_ORIGIN_WHITELIST[0], session.experiment.slug,
@@ -91,9 +89,9 @@ class ThatsMySong(Hooked):
         actions = []
         if next_round_number == 1:
             # get list of trials for demographic questions
-            questions = cls.get_questionnaire(session)
+            questions = self.get_questionnaire(session)
             # prepare questions for the get_random_question call
-            cls.prepare_questions(session, [MUSICGENS_17_W_VARIANTS])
+            self.prepare_questions(session, [MUSICGENS_17_W_VARIANTS])
             if questions:
                 for q in questions:
                     actions.append(q)
@@ -121,12 +119,12 @@ class ThatsMySong(Hooked):
         # Go to SongSync
         elif next_round_number == 2:
             decades = session.result_set.first().given_response.split(',')
-            cls.plan_sections(session, {'group__in': decades})
-            actions.append(cls.next_song_sync_action(session))
+            self.plan_sections(session, {'group__in': decades})
+            actions.append(self.next_song_sync_action(session))
         else:
             # Create a score action.
             config = {'show_section': True, 'show_total_score': True}
-            title = cls.get_trial_title(session, next_round_number - 1 - cls.round_modifier)
+            title = self.get_trial_title(session, next_round_number - 1 - self.round_modifier)
             actions.append(Score(session,
                 config=config,
                 title=title
@@ -138,20 +136,20 @@ class ThatsMySong(Hooked):
 
             # SongSync rounds. Skip questions until Round 5.
             if next_round_number in range(3, 6):
-                actions.append(cls.next_song_sync_action(session))
+                actions.append(self.next_song_sync_action(session))
             if next_round_number in range(6, heard_before_offset):
-                actions.append(cls.get_random_question(session)) if cls.questionnaire else None
-                actions.append(cls.next_song_sync_action(session))
+                actions.append(self.get_random_question(session)) if self.questionnaire else None
+                actions.append(self.next_song_sync_action(session))
 
             # HeardBefore rounds
             if next_round_number == heard_before_offset:
                 # Introduce new round type with Explainer.
-                actions.append(cls.heard_before_explainer())
+                actions.append(self.heard_before_explainer())
                 actions.append(
-                    cls.next_heard_before_action(session))
+                    self.next_heard_before_action(session))
             if next_round_number > heard_before_offset:
-                actions.append(cls.get_random_question(session)) if cls.questionnaire else None
+                actions.append(self.get_random_question(session)) if self.questionnaire else None
                 actions.append(
-                    cls.next_heard_before_action(session))
+                    self.next_heard_before_action(session))
 
         return actions

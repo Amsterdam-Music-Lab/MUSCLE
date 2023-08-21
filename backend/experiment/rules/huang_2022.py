@@ -9,7 +9,7 @@ from experiment.actions.form import BooleanQuestion, ChoiceQuestion, Form, Quest
 from experiment.actions.playback import Playback
 from experiment.questions.demographics import EXTRA_DEMOGRAPHICS
 from experiment.questions.goldsmiths import MSI_ALL
-from experiment.questions.utils import question_by_key, unanswered_questions, total_unanswered_questions
+from experiment.questions.utils import question_by_key
 from experiment.actions.styles import STYLE_BOOLEAN_NEGATIVE_FIRST
 from result.utils import prepare_result
 from .hooked import Hooked
@@ -99,8 +99,7 @@ class Huang2022(Hooked):
     round_modifier = 2
     contact_email = 'musicexp_china@163.com'
 
-    # questions = MSI_ALL + [
-    questions = [
+    questions = MSI_ALL + [
         question_by_key('msi_39_best_instrument'),
         genre_question(),
         question_by_key('dgf_generation'),
@@ -114,8 +113,7 @@ class Huang2022(Hooked):
         contact_question()
     ]
 
-    @classmethod
-    def first_round(cls, experiment):
+    def first_round(self, experiment):
         """Create data for the first experiment rounds."""
         # read consent form from file
         rendered = render_to_string(
@@ -132,15 +130,13 @@ class Huang2022(Hooked):
             start_session
         ]
 
-    @classmethod
-    def feedback_info(cls):
+    def feedback_info(self):
         info = super().feedback_info()
         info['header'] = _("Any remarks or questions (optional):")
         info['thank_you'] = _("Thank you for your feedback!")
         return info
-
-    @classmethod
-    def next_round(cls, session):
+    
+    def next_round(self, session):
         """Get action data for the next round"""
 
         # If the number of results equals the number of experiment.rounds,
@@ -148,7 +144,7 @@ class Huang2022(Hooked):
         json_data = session.load_json_data()
         # Get next round number and initialise actions list. Two thirds of
         # rounds will be song_sync; the remainder heard_before.
-        next_round_number = session.get_current_round() - cls.round_modifier 
+        next_round_number = session.get_current_round() - self.round_modifier 
         total_rounds = session.experiment.rounds
 
         # Collect actions.
@@ -192,7 +188,7 @@ class Huang2022(Hooked):
                 return Redirect(settings.HOMEPAGE)
 
             # Start experiment: plan sections and show explainers
-            cls.plan_sections(session)
+            self.plan_sections(session)
             # Show explainers and go to SongSync
             explainer = Explainer(
             instruction=_("How to Play"),
@@ -220,7 +216,7 @@ class Huang2022(Hooked):
                 button_label=_("Continue")
             )
             # Choose playlist
-            actions.extend([explainer, explainer_devices, Huang2022.next_song_sync_action(session)])
+            actions.extend([explainer, explainer_devices, self.next_song_sync_action(session)])
         else:
             # Load the heard_before offset.
             plan = json_data.get('plan')
@@ -228,7 +224,7 @@ class Huang2022(Hooked):
 
             # show score 
             config = {'show_section': True, 'show_total_score': True}
-            title = Huang2022.get_trial_title(session, next_round_number - 1)
+            title = self.get_trial_title(session, next_round_number - 1)
             score = Score(
                 session,
                 config=config,
@@ -238,18 +234,18 @@ class Huang2022(Hooked):
             
             # SongSync rounds
             if next_round_number < heard_before_offset:
-                actions.append(Huang2022.next_song_sync_action(session))
+                actions.append(self.next_song_sync_action(session))
             # HeardBefore rounds
             elif next_round_number == heard_before_offset:
                 # Introduce new round type with Explainer.
-                actions.append(Huang2022.heard_before_explainer())
+                actions.append(self.heard_before_explainer())
                 actions.append(
-                    Huang2022.next_heard_before_action(session))
+                    self.next_heard_before_action(session))
             elif heard_before_offset < next_round_number <= total_rounds:
                 actions.append(
-                    Huang2022.next_heard_before_action(session))   
-            else:
-                questionnaire = cls.get_questionnaire(session)
+                    self.next_heard_before_action(session))   
+            elif next_round_number == total_rounds + 1:
+                questionnaire = self.get_questionnaire(session)
                 if questionnaire:
                     actions.extend([Explainer(
                         instruction=_("Please answer some questions \
@@ -257,25 +253,26 @@ class Huang2022(Hooked):
                         steps=[],
                         step_numbers=True,
                         button_label=_("Let's go!")), *questionnaire])
+                    session.increment_round()
                 else:
-                    actions.append(Huang2022.finalize(session))
+                    actions.append(self.finalize(session))
+            else:
+                return [self.finalize(session)]
         return actions
     
-    @classmethod
-    def finalize(cls, session):
+    def finalize(self, session):
         session.finish()
         session.save()
         return Final(
             session=session,
-            final_text=Huang2022.final_score_message(session),
-            rank=Huang2022.rank(session),
+            final_text=self.final_score_message(session),
+            rank=self.rank(session),
             show_social=False,
             show_profile_link=True,
-            feedback_info=Huang2022.feedback_info()
+            feedback_info=self.feedback_info()
         )
     
-    @classmethod
-    def final_score_message(cls, session):
+    def final_score_message(self, session):
         """Create final score message for given session"""
 
         n_sync_guessed = 0
