@@ -94,8 +94,9 @@ class ThatsMySong(Hooked):
             questions = cls.get_questionnaire(session)
             # prepare questions for the get_random_question call
             cls.prepare_questions(session, [MUSICGENS_17_W_VARIANTS])
-            for q in questions:
-                actions.append(q)
+            if questions:
+                for q in questions:
+                    actions.append(q)
 
             question = ChoiceQuestion(
                 key='playlist_decades',
