@@ -5,6 +5,11 @@ from result.utils import prepare_profile_result
 
 from .demographics import DEMOGRAPHICS
 
+def copy_shuffle(questions):
+    qcopy = deepcopy(questions)
+    random.shuffle(qcopy)
+    return qcopy
+
 def total_unanswered_questions(participant, questions=DEMOGRAPHICS):
     """ Return how many questions have not been answered yet by the participant"""
     profile_questions = participant.profile().values_list('question_key', flat=True)
@@ -24,7 +29,7 @@ def question_by_key(key, questions=DEMOGRAPHICS, is_skippable=None, drop_choices
             return q
     return None
 
-def unanswered_questions(participant, questions, randomize=False):
+def unanswered_questions(participant, questions, randomize=False, cutoff_index=None):
     """Generator to give next unasked profile question and prepare its result
     - participant: participant who will be checked for unanswered questions
     - questions: list of questions from which to select an unanswered question
@@ -32,7 +37,7 @@ def unanswered_questions(participant, questions, randomize=False):
     """
     if randomize:
         random.shuffle(questions)
-    for question in questions:
+    for question in questions[:cutoff_index]:
         profile_result = prepare_profile_result(question.key, participant)
         if profile_result.given_response == None:
             q = deepcopy(question)  

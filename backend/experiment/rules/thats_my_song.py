@@ -3,7 +3,7 @@ from django.conf import settings
 
 from experiment.actions import Final, Score, Trial
 from experiment.actions.form import Form, ChoiceQuestion
-from experiment.questions.utils import question_by_key
+from experiment.questions.utils import copy_shuffle, question_by_key
 from experiment.questions.musicgens import MUSICGENS_17_W_VARIANTS
 from .hooked import Hooked
 from result.utils import prepare_result
@@ -14,10 +14,12 @@ class ThatsMySong(Hooked):
     consent_file = None
     round_modifier = 1
 
-    questions = [
-        question_by_key('dgf_generation'),
-        question_by_key('dgf_gender_identity')
-    ]
+    def __init__(self):
+        self.questions = [
+            question_by_key('dgf_generation'),
+            question_by_key('dgf_gender_identity'),
+            *copy_shuffle(MUSICGENS_17_W_VARIANTS)
+        ]
 
     def feedback_info(self):
         return None
@@ -88,10 +90,8 @@ class ThatsMySong(Hooked):
         # Collect actions.
         actions = []
         if next_round_number == 1:
-            # get list of trials for demographic questions
-            questions = self.get_questionnaire(session)
-            # prepare questions for the get_random_question call
-            self.prepare_questions(session, [MUSICGENS_17_W_VARIANTS])
+            # get list of trials for demographic questions (first 2 questions)
+            questions = self.get_questionnaire(session, cutoff_index=2)
             if questions:
                 for q in questions:
                     actions.append(q)
@@ -138,7 +138,9 @@ class ThatsMySong(Hooked):
             if next_round_number in range(3, 6):
                 actions.append(self.next_song_sync_action(session))
             if next_round_number in range(6, heard_before_offset):
-                actions.append(self.get_random_question(session)) if self.questionnaire else None
+                question = self.get_single_question(session, randomize=True)
+                if question:
+                    actions.append(question)
                 actions.append(self.next_song_sync_action(session))
 
             # HeardBefore rounds
@@ -148,7 +150,9 @@ class ThatsMySong(Hooked):
                 actions.append(
                     self.next_heard_before_action(session))
             if next_round_number > heard_before_offset:
-                actions.append(self.get_random_question(session)) if self.questionnaire else None
+                question = self.get_single_question(session, randomize=True)
+                if question:
+                    actions.append(question)
                 actions.append(
                     self.next_heard_before_action(session))
 

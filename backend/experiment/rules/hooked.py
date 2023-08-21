@@ -12,7 +12,7 @@ from experiment.actions import  Consent, Explainer, Final, Playlist, Score, Song
 from experiment.actions.form import BooleanQuestion, Form
 from experiment.actions.playback import Playback
 from experiment.questions.demographics import DEMOGRAPHICS
-from experiment.questions.utils import unanswered_questions
+from experiment.questions.utils import copy_shuffle, unanswered_questions
 from experiment.questions.goldsmiths import MSI_FG_GENERAL, MSI_ALL
 from experiment.questions.stomp import STOMP20
 from experiment.questions.tipi import TIPI
@@ -21,14 +21,6 @@ from result.utils import prepare_result
 
 logger = logging.getLogger(__name__)
 
-question_lists = [
-    DEMOGRAPHICS, # 1. Demographic questions (7 questions)
-    MSI_FG_GENERAL, # 2. General music sophistication
-    MSI_ALL, # 3. Complete music sophistication (20 questions)
-    STOMP20, # 4. STOMP (20 questions)
-    TIPI  # 5. TIPI (10 questions)
-]
-
 class Hooked(Base):
     """Superclass for Hooked experiment rules"""
 
@@ -36,6 +28,15 @@ class Hooked(Base):
     timeout = 15
     questions = True
     round_modifier = 0
+
+    def __init__(self):
+        self.questions = [
+            *copy_shuffle(DEMOGRAPHICS), # 1. Demographic questions (7 questions)
+            *copy_shuffle(MSI_FG_GENERAL), # 2. General music sophistication
+            *copy_shuffle(MSI_ALL), # 3. Complete music sophistication (20 questions)
+            *copy_shuffle(STOMP20), # 4. STOMP (20 questions)
+            *copy_shuffle(TIPI)  # 5. TIPI (10 questions)
+        ]
 
     def first_round(self, experiment):
         """Create data for the first experiment rounds."""
@@ -74,27 +75,6 @@ class Hooked(Base):
             playlist,
             start_session
         ]
-
-    def prepare_questions(self, session, question_lists=question_lists):
-        self.questionnaire = chain.from_iterable(
-            unanswered_questions(
-            session.participant, deepcopy(qlist), randomize=True) for qlist in question_lists
-        )
-
-    def get_random_question(self):
-        """Get a random question from each question list, in priority completion order.
-
-        Participants will not continue to the next question set until they
-        have completed their current one.
-        """
-
-        try:
-            question = next(self.questionnaire)
-            return Trial(
-                title=_("Questionnaire"),
-                feedback_form=Form([question], is_skippable=question.is_skippable))
-        except StopIteration:
-            return None
 
     def next_round(self, session):
         """Get action data for the next round"""
@@ -137,7 +117,6 @@ class Hooked(Base):
         if next_round_number == 1:
             # Plan sections
             self.plan_sections(session)
-            self.prepare_questions(session)
             # Go to SongSync straight away.
             actions.append(self.next_song_sync_action(session))
         else:
@@ -157,7 +136,7 @@ class Hooked(Base):
             if next_round_number in range(2, 5):
                 actions.append(self.next_song_sync_action(session))
             if next_round_number in range(5, heard_before_offset):
-                question_trial = self.get_random_question(session)
+                question_trial = self.get_single_question(session)
                 if question_trial:
                     actions.append(question_trial)
                 actions.append(self.next_song_sync_action(session))
@@ -169,7 +148,7 @@ class Hooked(Base):
                 actions.append(
                     self.next_heard_before_action(session))
             if next_round_number > heard_before_offset:
-                question_trial = self.get_random_question(session)
+                question_trial = self.get_single_question(session)
                 if question_trial:
                     actions.append(question_trial)
                 actions.append(

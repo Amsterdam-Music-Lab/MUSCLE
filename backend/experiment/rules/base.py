@@ -94,10 +94,25 @@ class Base(object):
         # Default return, in case score isn't in the buckets
         return ranks['PLASTIC']
 
-    def get_questionnaire(self, session):
+    def get_single_question(self, session, randomize=False):
+        """Get a random question from each question list, in priority completion order.
+
+        Participants will not continue to the next question set until they
+        have completed their current one.
+        """
+        questionnaire = unanswered_questions(session.participant, self.questions, randomize)
+        try:
+            question = next(questionnaire)
+            return Trial(
+                title=_("Questionnaire"),
+                feedback_form=Form([question], is_skippable=question.is_skippable))
+        except StopIteration:
+            return None
+    
+    def get_questionnaire(self, session, randomize=False, cutoff_index=-1):
         ''' Get a list of questions to be asked in succession '''
         trials = []
-        questions = list(unanswered_questions(session.participant, self.questions))
+        questions = list(unanswered_questions(session.participant, self.questions, randomize, cutoff_index))
         open_questions = len(questions)
         if not open_questions:
             return None
