@@ -95,6 +95,9 @@ class HookedTest(TestCase):
         )
         assert Huang2022.feedback_info() != None
         question_trials = Huang2022.get_questionnaire(session)
+        assert len(question_trials) == len(Huang2022.questions)
         keys = [q.feedback_form.form[0].key for q in question_trials]
+        questions = [q.key for q in Huang2022.questions]
+        assert set(keys).difference(set(questions)) == set()
 
 
