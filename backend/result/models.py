@@ -27,7 +27,7 @@ class Result(models.Model):
 
     def clean(self):
         # Don't save if both session and participant field are null
-        if self.session is None and self.result is None:
+        if self.session is None and self.participant is None:
             raise ValidationError('Session or participant needed for valid result')
 
     class Meta:

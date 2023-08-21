@@ -4,7 +4,7 @@ from experiment.actions import Trial, Consent, StartSession
 from experiment.actions.form import Form
 from experiment.questions.goldsmiths import MSI_F3_MUSICAL_TRAINING
 from experiment.questions.demographics import EXTRA_DEMOGRAPHICS
-from experiment.questions.utils import question_by_key, unasked_question
+from experiment.questions.utils import question_by_key, unanswered_questions
 from experiment.actions.utils import final_action_with_optional_button
 
 from .base import Base
@@ -35,12 +35,8 @@ class GoldMSI(Base):
 
     @classmethod
     def next_round(cls, session, request_session=None):
-        question = unasked_question(session.participant, cls.questions)
-        if question:
-            feedback_form = Form([
-                question,
-            ])
-            view = Trial(None, feedback_form=feedback_form)
-            return view
+        questions = cls.get_questionnaire(session)
+        if questions:
+            return questions
         else:
             return final_action_with_optional_button(session, '', request_session)

@@ -1,5 +1,7 @@
-import random
+from copy import deepcopy
+from itertools import chain
 import logging
+import random
 
 from django.conf import settings
 from django.utils.translation import gettext_lazy as _
@@ -10,7 +12,7 @@ from experiment.actions import  Consent, Explainer, Final, Playlist, Score, Song
 from experiment.actions.form import BooleanQuestion, Form
 from experiment.actions.playback import Playback
 from experiment.questions.demographics import DEMOGRAPHICS
-from experiment.questions.utils import unasked_question
+from experiment.questions.utils import unanswered_questions
 from experiment.questions.goldsmiths import MSI_FG_GENERAL, MSI_ALL
 from experiment.questions.stomp import STOMP20
 from experiment.questions.tipi import TIPI
@@ -19,6 +21,13 @@ from result.utils import prepare_result
 
 logger = logging.getLogger(__name__)
 
+question_lists = [
+    DEMOGRAPHICS, # 1. Demographic questions (7 questions)
+    MSI_FG_GENERAL, # 2. General music sophistication
+    MSI_ALL, # 3. Complete music sophistication (20 questions)
+    STOMP20, # 4. STOMP (20 questions)
+    TIPI  # 5. TIPI (10 questions)
+]
 
 class Hooked(Base):
     """Superclass for Hooked experiment rules"""
@@ -67,6 +76,12 @@ class Hooked(Base):
             start_session
         ]
 
+    @classmethod
+    def prepare_questions(cls, session, question_lists=question_lists):
+        cls.questionnaire = chain.from_iterable(
+            unanswered_questions(
+            session.participant, deepcopy(qlist), randomize=True) for qlist in question_lists
+        )
 
     @classmethod
     def get_random_question(cls, session):
@@ -76,60 +91,13 @@ class Hooked(Base):
         have completed their current one.
         """
 
-        # Constantly re-randomising is mildly inefficient, but it's not
-        # worth the trouble to save blocked, randomised question lists persistently.
-
-        # 1. Demographic questions (7 questions)
-        question = \
-            unasked_question(
-                session.participant,
-                DEMOGRAPHICS,
-                randomize=True
-            )
-
-        # 2. General music sophistication (18 questions)
-        if question is None:
-            question = \
-                unasked_question(
-                    session.participant,
-                    MSI_FG_GENERAL,
-                    randomize=True
-                )
-
-        # 3. Complete music sophistication (20 questions)
-        if question is None:
-            # next_question() will skip the FG questions from before
-            question = \
-                unasked_question(
-                    session.participant,
-                    MSI_ALL,
-                    randomize=True
-                )
-
-        # 4. STOMP (20 questions)
-        if question is None:
-            question = \
-                unasked_question(
-                    session.participant,
-                    STOMP20,
-                    randomize=True
-                )
-
-        # 5. TIPI (10 questions)
-        if question is None:
-            question = \
-                unasked_question(
-                    session.participant,
-                    TIPI,
-                    randomize=True
-                )
-        
-        if question is None:
-            return None
-
-        return Trial(
+        try:
+            question = next(cls.questionnaire)
+            return Trial(
                 title=_("Questionnaire"),
                 feedback_form=Form([question], is_skippable=question.is_skippable))
+        except StopIteration:
+            return None
 
 
     
@@ -175,7 +143,7 @@ class Hooked(Base):
         if next_round_number == 1:
             # Plan sections
             cls.plan_sections(session)
-
+            cls.prepare_questions(session)
             # Go to SongSync straight away.
             actions.append(cls.next_song_sync_action(session))
         else:
@@ -195,7 +163,9 @@ class Hooked(Base):
             if next_round_number in range(2, 5):
                 actions.append(cls.next_song_sync_action(session))
             if next_round_number in range(5, heard_before_offset):
-                actions.append(cls.get_random_question(session)) if cls.questions else None
+                question_trial = cls.get_random_question(session)
+                if question_trial:
+                    actions.append(question_trial)
                 actions.append(cls.next_song_sync_action(session))
 
             # HeardBefore rounds
@@ -205,7 +175,9 @@ class Hooked(Base):
                 actions.append(
                     cls.next_heard_before_action(session))
             if next_round_number > heard_before_offset:
-                actions.append(cls.get_random_question(session)) if cls.questions else None
+                question_trial = cls.get_random_question(session)
+                if question_trial:
+                    actions.append(question_trial)
                 actions.append(
                     cls.next_heard_before_action(session))
 

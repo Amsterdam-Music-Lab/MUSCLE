@@ -1,6 +1,7 @@
 from .models import Result
 
 from .score import SCORING_RULES
+from experiment.questions.profile_scoring_rules import PROFILE_SCORING_RULES
 
 def get_result(session, data):
     result_id = data.get('result_id')
@@ -33,33 +34,40 @@ def handle_results(data, session):
         result = score_result(form_element, session)
     return result
 
-def prepare_result(question_key, session=None, participant=None, **kwargs):
+def prepare_profile_result(question_key, participant, **kwargs):
+    ''' Create a Result object, and provide its id to be serialized
+    - question_key: the key of the question in the questionnaire dictionaries
+    - participant: the participant on which the Result is going to be registered
+    possible kwargs:
+        - expected_response: optionally, provide the correct answer, used for scoring  
+        - comment: optionally, provide a comment to be saved in the database
+        - scoring_rule: optionally, provide a scoring rule
+    '''
+    scoring_rule = PROFILE_SCORING_RULES.get(question_key, '')
+    result, created = Result.objects.get_or_create(
+        question_key=question_key,
+        participant=participant,
+        scoring_rule=scoring_rule,
+        **kwargs
+    )
+    return result
+
+def prepare_result(question_key, session, **kwargs):
     ''' Create a Result object, and provide its id to be serialized
     - question_key: the key of the question in the questionnaire dictionaries
     - session: the session on which the Result is going to be registered
-    - participant: alernatively, the participant on which the Result is going to be registered
     possible kwargs:
         - section: optionally, provide a section to which the Result is going to be tied
         - expected_response: optionally, provide the correct answer, used for scoring  
         - comment: optionally, provide a comment to be saved in the database, e.g. "training phase"
         - scoring_rule: optionally, provide a scoring rule
     '''
-    if session:
-        result = Result(
-            question_key=question_key,
-            session=session,
-            **kwargs
-        )
-    elif participant:
-        result = Result(
-            question_key=question_key,
-            participant=participant,
-            **kwargs
-        )
-    else:
-        raise Exception('We need a session or participant to create a Result')
-    result.save()
-    return result.id 
+    result = Result.objects.create(
+        question_key=question_key,
+        session=session,
+        **kwargs
+    )
+    return result.id
 
 def score_result(data, session):
     """

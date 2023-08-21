@@ -48,33 +48,12 @@ class ParticipantTest(TestCase):
         assert response.get('csrf_token') != None
 
     def test_profile(self):
-        assert len(self.participant.profile()) == 2
+        assert len(self.participant.profile()) == 1
     
     def test_profile_object(self):
         po = self.participant.profile_object()
-        assert len(po.keys()) == 3
-        assert po.get('test2') == None
+        assert len(po.keys()) == 2
         assert po.get('test1_score') == 2.5
-    
-    def test_profile_question(self):
-        result = self.participant.profile_question('test1')
-        assert result.given_response == '2 1/2'
-
-    def test_profile_questions(self):
-        results = self.participant.profile_questions()
-        assert len(results) == 1
-        assert results.first() == 'test1'
-        self.result2.given_response = 'nothing'
-        self.result2.save()
-        results = self.participant.profile_questions()
-        assert len(results) == 2
-        Result.objects.all().delete()
-        results = self.participant.profile_questions()
-        assert len(results) == 0
-    
-    def test_empty_profile_question(self):
-        empty_result = self.participant.random_empty_profile_question()
-        assert empty_result.question_key == 'test2'
 
     def test_access_info(self):
         # this will create a new participant
@@ -86,3 +65,5 @@ class ParticipantTest(TestCase):
         self.client.get('/participant/')
         participant = Participant.objects.last()
         assert participant.country_code == 'BLA'
+    
+

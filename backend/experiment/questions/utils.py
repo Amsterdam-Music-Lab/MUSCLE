@@ -1,17 +1,13 @@
 from copy import deepcopy
 import random
 
-from .profile_scoring_rules import PROFILE_SCORING_RULES
-from .demographics import DEMOGRAPHICS
+from result.utils import prepare_profile_result
 
-from result.utils import prepare_result
-from result.models import Result
+from .demographics import DEMOGRAPHICS
 
 def total_unanswered_questions(participant, questions=DEMOGRAPHICS):
     """ Return how many questions have not been answered yet by the participant"""
-    profile_questions = participant.profile().exclude(
-        given_response=None
-    ).values_list('question_key', flat=True)
+    profile_questions = participant.profile().values_list('question_key', flat=True)
     return len([question for question in questions if question.key not in profile_questions])
 
 def question_by_key(key, questions=DEMOGRAPHICS, is_skippable=None, drop_choices=[]):
@@ -28,26 +24,17 @@ def question_by_key(key, questions=DEMOGRAPHICS, is_skippable=None, drop_choices
             return q
     return None
 
-def unasked_question(participant, questions=DEMOGRAPHICS, randomize=False):
-    """Get unasked question and prepare its result
-    - session: session whose participant will be checked for unanswerd questions
+def unanswered_questions(participant, questions, randomize=False):
+    """Generator to give next unasked profile question and prepare its result
+    - participant: participant who will be checked for unanswered questions
     - questions: list of questions from which to select an unanswered question
     - optionally, randomize order of questions
     """
     if randomize:
         random.shuffle(questions)
-    profile_questions = participant.profile_questions()
     for question in questions:
-        if not question.key in profile_questions:
-            q = deepcopy(question)
-            try:
-                result_id = participant.profile().get(question_key=q.key).pk
-            except Result.DoesNotExist:
-                result_id = prepare_result(
-                    question.key,
-                    participant=participant,
-                    scoring_rule=PROFILE_SCORING_RULES.get(question.key, '')
-                )
-            q.result_id = result_id
-            return q
-    return None
+        profile_result = prepare_profile_result(question.key, participant)
+        if profile_result.given_response == None:
+            q = deepcopy(question)  
+            q.result_id = profile_result.pk
+            yield q
