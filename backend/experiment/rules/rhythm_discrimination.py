@@ -80,8 +80,7 @@ STIMULI = {
 class RhythmDiscrimination(Base):
     ID = 'RHYTHM_DISCRIMINATION'
 
-    @classmethod
-    def first_round(cls, experiment):
+    def first_round(self, experiment):
         """Create data for the first experiment rounds"""
         explainer = intro_explainer()
 
@@ -99,8 +98,7 @@ class RhythmDiscrimination(Base):
             start_session
         ]
 
-    @classmethod
-    def next_round(cls, session, request_session=None):
+    def next_round(self, session, request_session=None):
         next_round_number = session.get_next_round()
 
         if next_round_number == 1:
@@ -108,7 +106,7 @@ class RhythmDiscrimination(Base):
 
         return next_trial_actions(
             session, next_round_number, request_session)
-
+    
 
 def next_trial_actions(session, round_number, request_session):
     """

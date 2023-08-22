@@ -69,7 +69,7 @@ To make major modifications, you can extend another view, e.g.:
 from .song_sync import SongSync
 
 class CustomSongSync(SongSync):
-    @staticmethod
+
     def calculate_score(session, data):
         # Custom score calculation here
 ```

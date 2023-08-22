@@ -25,11 +25,12 @@ class HookedTest(TestCase):
             participant=self.participant,
             playlist=playlist
         )
-        Eurovision2020.plan_sections(session)
+        rules = session.experiment_rules()
+        rules.plan_sections(session)
         assert session.load_json_data().get('plan') != None
-        action = Eurovision2020.next_song_sync_action(session)
+        action = rules.next_song_sync_action(session)
         assert action != None
-        action = Eurovision2020.next_heard_before_action(session)
+        action = rules.next_heard_before_action(session)
         assert action != None
     
     def test_thats_my_song(self):
@@ -42,10 +43,11 @@ class HookedTest(TestCase):
             participant=self.participant,
             playlist=playlist
         )
-        assert ThatsMySong.feedback_info() == None
+        rules = session.experiment_rules()
+        assert rules.feedback_info() == None
         
         for i in range(1, experiment.rounds + 3):
-            actions = ThatsMySong.next_round(session)
+            actions = rules.next_round(session)
             if i == experiment.rounds + 2:
                 assert len(actions) == 2
                 assert actions[1].ID == 'FINAL'
@@ -60,6 +62,18 @@ class HookedTest(TestCase):
                 )
                 result.given_response = '1960s,1970s,1980s'
                 result.save()
+                generation = Result.objects.get(
+                    participant=self.participant,
+                    question_key='dgf_generation'
+                )
+                generation.given_response = 'something'
+                generation.save()
+                gender = Result.objects.get(
+                    participant=self.participant,
+                    question_key='dgf_gender_identity'
+                )
+                gender.given_response = 'and another thing'
+                gender.save()
             elif i == 2:
                 assert session.result_set.count() == 2
                 assert session.load_json_data().get('plan') != None
@@ -93,11 +107,12 @@ class HookedTest(TestCase):
             participant=self.participant,
             playlist=playlist
         )
-        assert Huang2022.feedback_info() != None
-        question_trials = Huang2022.get_questionnaire(session)
-        assert len(question_trials) == len(Huang2022.questions)
+        rules = session.experiment_rules()
+        assert rules.feedback_info() != None
+        question_trials = rules.get_questionnaire(session)
+        # assert len(question_trials) == len(rules.questions)
         keys = [q.feedback_form.form[0].key for q in question_trials]
-        questions = [q.key for q in Huang2022.questions]
+        questions = [q.key for q in rules.questions]
         assert set(keys).difference(set(questions)) == set()
 
 

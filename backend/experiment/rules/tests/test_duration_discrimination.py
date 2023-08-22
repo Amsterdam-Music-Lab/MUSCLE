@@ -20,17 +20,18 @@ class DDITest(TestCase):
             participant=cls.participant,
             playlist=cls.playlist
         )
+        cls.rules = cls.session.experiment_rules()
 
     def test_trial_action(self):
         difference = 200000
         catch_section = Section.objects.get(playlist=self.playlist.id, song__name=0)
         diff_section = Section.objects.get(playlist=self.playlist.id, song__name=difference)
-        catch_trial = DurationDiscrimination.next_trial_action(self.session, 1, difference)
+        catch_trial = self.rules.next_trial_action(self.session, 1, difference)
         assert catch_trial
         assert catch_trial.feedback_form
         section = catch_trial.playback.sections[0]
         assert section['id'] == catch_section.id
-        regular_trial = DurationDiscrimination.next_trial_action(self.session, 0, difference)
+        regular_trial = self.rules.next_trial_action(self.session, 0, difference)
         assert regular_trial
         assert regular_trial.feedback_form
         section = regular_trial.playback.sections[0]
@@ -50,17 +51,18 @@ class AnisochronyTest(TestCase):
             participant=cls.participant,
             playlist=cls.playlist
         )
+        cls.rules = cls.session.experiment_rules()
     
     def test_trial_action(self):
         difficulty = 1001
         catch_section = Section.objects.get(playlist=self.playlist.id, song__name=0)
         diff_section = Section.objects.get(playlist=self.playlist.id, song__name=difficulty)
-        catch_trial = Anisochrony.next_trial_action(self.session, 1, difficulty)
+        catch_trial = self.rules.next_trial_action(self.session, 1, difficulty)
         assert catch_trial
         assert catch_trial.feedback_form
         section = catch_trial.playback.sections[0]
         assert section['id'] == catch_section.id
-        regular_trial = Anisochrony.next_trial_action(self.session, 0, difficulty)
+        regular_trial = self.rules.next_trial_action(self.session, 0, difficulty)
         assert regular_trial
         assert regular_trial.feedback_form
         section = regular_trial.playback.sections[0]

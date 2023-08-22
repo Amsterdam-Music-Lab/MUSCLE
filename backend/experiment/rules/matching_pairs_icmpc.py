@@ -5,8 +5,11 @@ from experiment.actions.form import TextQuestion
 
 class MatchingPairsICMPC(MatchingPairs):
     ID = 'MATCHING_PAIRS_ICMPC'
-    questions = [*MatchingPairs.questions, TextQuestion(
-        key='fame_name',
-        question=_("Enter a name to enter the ICMPC hall of fame"),
-        is_skippable=True
-    )]
+
+    def __init__(self):
+        super().__init__()
+        self.questions.append(TextQuestion(
+            key='fame_name',
+            question=_("Enter a name to enter the ICMPC hall of fame"),
+            is_skippable=True
+        ))

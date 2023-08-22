@@ -19,8 +19,7 @@ class MusicalPreferences(Base):
     ID = 'MUSICAL_PREFERENCES'
     block_size = 16
 
-    @classmethod
-    def first_round(cls, experiment):
+    def first_round(self, experiment):
         explainer = Explainer(
             instruction=_('This experiment investigates musical preferences'),
             steps=[
@@ -39,18 +38,17 @@ class MusicalPreferences(Base):
             start_session
         ]
 
-    @classmethod
-    def next_round(cls, session, request_session=None):
+    def next_round(self, session, request_session=None):
         if session.last_result() and session.last_result().score == -1:
             # last result was key='continue', value='no':
-            return cls.get_final_view(session)
+            return self.get_final_view(session)
         n_results = session.rounds_passed()
-        if (n_results > 0 and int(n_results / 2) % cls.block_size == 0):
+        if (n_results > 0 and int(n_results / 2) % self.block_size == 0):
             # end of a block
             actions = []
             if int(n_results / 2) == session.experiment.rounds:
-                return cls.get_final_view(session)
-            elif int(n_results / 2) == cls.block_size:
+                return self.get_final_view(session)
+            elif int(n_results / 2) == self.block_size:
                 # first time we hit the end of a block, present questionnaire
                 actions.append(Explainer(
                     instruction=_("Please answer some questions \
@@ -58,7 +56,7 @@ class MusicalPreferences(Base):
                     steps=[],
                     button_label=_("Let's go!"))
                 )
-                actions.extend(cls.get_questions(session))
+                actions.extend(self.get_questions(session))
             question = BooleanQuestion(
                 question=_("Would you like to listen to more songs?"),
                 choices={
@@ -108,8 +106,7 @@ class MusicalPreferences(Base):
         )
         return view
     
-    @classmethod
-    def calculate_score(cls, result, data):
+    def calculate_score(self, result, data):
         result.comment = data.get('key')
         result.save()
         if data.get('key') == 'like_song':
@@ -120,16 +117,15 @@ class MusicalPreferences(Base):
         else:
             return None
     
-    @classmethod
-    def get_final_view(cls, session):
+    def get_final_view(self, session):
         # finalize experiment
         participant_results = session.result_set.filter(comment='like_song')
-        participant_pref = cls.get_preferred_songs(participant_results)
+        participant_pref = self.get_preferred_songs(participant_results)
         from experiment.models.result import Result 
         all_results = Result.objects.filter(
             comment='like_song'
         )
-        all_pref = cls.get_preferred_songs(all_results)
+        all_pref = self.get_preferred_songs(all_results)
         feedback = render_to_string('final/musical_preferences.html', 
         {'top_all': all_pref, 'top_participant': participant_pref})
         view = Final(
@@ -140,8 +136,7 @@ class MusicalPreferences(Base):
         )
         return view
     
-    @classmethod
-    def get_preferred_songs(cls, result_set, n=5):
+    def get_preferred_songs(self, result_set, n=5):
         top_songs = result_set.values('section').annotate(
             avg_score=Avg('score')).order_by()[:n]
         from section.models import Section
@@ -151,8 +146,7 @@ class MusicalPreferences(Base):
             out_list.append({'name': section.song.name, 'score': s.get('avg_score')})
         return out_list
     
-    @classmethod
-    def get_questions(cls, session):
+    def get_questions(self, session):
         questions = [
             question_by_key('dgf_generation'),
             question_by_key('dgf_education', drop_choices=['isced-5']),

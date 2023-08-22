@@ -23,21 +23,22 @@ n_rounds_per_block = n_trials_per_block * 2  # each trial has two rounds
 class Speech2Song(Base):
     """ Rules for a speech-to-song experiment """
     ID = 'SPEECH_TO_SONG'
-    questions = [
-        question_by_key('dgf_age', EXTRA_DEMOGRAPHICS),
-        question_by_key('dgf_gender_identity'),
-        question_by_key('dgf_country_of_origin_open', EXTRA_DEMOGRAPHICS),
-        question_by_key('dgf_country_of_residence_open', EXTRA_DEMOGRAPHICS),
-        question_by_key('lang_mother', LANGUAGE),
-        question_by_key('lang_second', LANGUAGE),
-        question_by_key('lang_third', LANGUAGE),
-        LanguageQuestion(_('English')).exposure_question(),
-        LanguageQuestion(_('Brazilian Portuguese')).exposure_question(),
-        LanguageQuestion(_('Mandarin Chinese')).exposure_question()
-    ]
+    
+    def __init__(self):
+        self.questions = [
+            question_by_key('dgf_age', EXTRA_DEMOGRAPHICS),
+            question_by_key('dgf_gender_identity'),
+            question_by_key('dgf_country_of_origin_open', EXTRA_DEMOGRAPHICS),
+            question_by_key('dgf_country_of_residence_open', EXTRA_DEMOGRAPHICS),
+            question_by_key('lang_mother', LANGUAGE),
+            question_by_key('lang_second', LANGUAGE),
+            question_by_key('lang_third', LANGUAGE),
+            LanguageQuestion(_('English')).exposure_question(),
+            LanguageQuestion(_('Brazilian Portuguese')).exposure_question(),
+            LanguageQuestion(_('Mandarin Chinese')).exposure_question()
+        ]
 
-    @classmethod
-    def first_round(cls, experiment):
+    def first_round(self, experiment):
         explainer = Explainer(
             instruction=_("This is an experiment about an auditory illusion."),
             steps=[
@@ -65,8 +66,7 @@ class Speech2Song(Base):
             start_session
         ]
 
-    @classmethod
-    def next_round(cls, session):
+    def next_round(self, session):
         blocks = [1, 2, 3]
         # shuffle blocks based on session.id as seed -> always same order for same session
         np.random.seed(session.id)
@@ -75,7 +75,7 @@ class Speech2Song(Base):
         actions = []
         is_speech = True
         if session.current_round == 1:
-            question_trial = cls.get_questionnaire(session)
+            question_trial = self.get_questionnaire(session)
             if question_trial:
                 return question_trial
 

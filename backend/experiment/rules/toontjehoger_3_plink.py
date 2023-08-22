@@ -23,9 +23,8 @@ class ToontjeHoger3Plink(Base):
     SCORE_EXTRA_1_CORRECT = 4
     SCORE_EXTRA_2_CORRECT = 4
     SCORE_EXTRA_WRONG = 0
-
-    @classmethod
-    def first_round(cls, experiment):
+    
+    def first_round(self, experiment):
         """Create data for the first experiment rounds."""
 
         # 1. Explain game.
@@ -53,9 +52,8 @@ class ToontjeHoger3Plink(Base):
             playlist,
             start_session
         ]
-
-    @classmethod
-    def next_round(cls, session, request_session=None):
+    
+    def next_round(self, session, request_session=None):
         """Get action data for the next round"""
 
         rounds_passed = session.rounds_passed()
@@ -63,17 +61,16 @@ class ToontjeHoger3Plink(Base):
         # Round 1
         if rounds_passed == 0:
             # No combine_actions because of inconsistent next_round array wrapping in first round
-            return cls.get_plink_round(session)
+            return self.get_plink_round(session)
 
         # Round 2-experiments.rounds
         if rounds_passed < session.experiment.rounds:
-            return [*cls.get_score(session), *cls.get_plink_round(session)]
+            return [*self.get_score(session), *self.get_plink_round(session)]
 
         # Final
-        return cls.get_final_round(session)
-
-    @classmethod
-    def get_score_message(cls, session):
+        return self.get_final_round(session)
+  
+    def get_score_message(self, session):
         last_result = session.last_result()
 
         if not last_result:
@@ -110,9 +107,9 @@ class ToontjeHoger3Plink(Base):
         feedback_prefix = "Goedzo!"
 
         # - Partial score or all questions wrong
-        all_wrong_score = last_result.score == 2 * cls.SCORE_EXTRA_WRONG
-        only_half_score = last_result.score < cls.SCORE_EXTRA_1_CORRECT + \
-            cls.SCORE_EXTRA_2_CORRECT if not all_wrong_score else False
+        all_wrong_score = last_result.score == 2 * self.SCORE_EXTRA_WRONG
+        only_half_score = last_result.score < self.SCORE_EXTRA_1_CORRECT + \
+            self.SCORE_EXTRA_2_CORRECT if not all_wrong_score else False
 
         if all_wrong_score:
             feedback_prefix = "Helaas!"
@@ -136,19 +133,17 @@ class ToontjeHoger3Plink(Base):
         feedback = "{} {} \n {}".format(
             feedback_prefix, question_part, section_part)
         return feedback
-
-    @classmethod
-    def get_score(cls, session):
-        feedback = cls.get_score_message(session)
+   
+    def get_score(self, session):
+        feedback = self.get_score_message(session)
 
         # Return score view
         config = {'show_total_score': True}
         score = Score(session, config=config, feedback=feedback)
 
         return [score]
-
-    @classmethod
-    def get_plink_round(cls, session):
+    
+    def get_plink_round(self, session):
 
         # Config
         # -----------------
@@ -181,12 +176,12 @@ class ToontjeHoger3Plink(Base):
 
         # Plink round
         # --------------------
-        extra_questions = [cls.get_optional_question1(
-            session), cls.get_optional_question2(session)]
+        extra_questions = [self.get_optional_question1(
+            session), self.get_optional_question2(session)]
 
         plink = Plink(
             section=section,
-            title=cls.TITLE,
+            title=self.TITLE,
             result_id=prepare_result(
                 'plink', session, section=section, expected_response=expected_response
             ),
@@ -199,9 +194,8 @@ class ToontjeHoger3Plink(Base):
         )
 
         return [plink]
-
-    @classmethod
-    def get_optional_question1(cls, session):
+ 
+    def get_optional_question1(self, session):
 
         # Config
         # -----------------
@@ -220,9 +214,8 @@ class ToontjeHoger3Plink(Base):
         )
 
         return question
-
-    @classmethod
-    def get_optional_question2(cls, session):
+ 
+    def get_optional_question2(self, session):
 
         # Question
         emotions = ['vrolijk', 'droevig', 'boosheid', 'angst', 'tederheid']
@@ -238,9 +231,8 @@ class ToontjeHoger3Plink(Base):
         )
 
         return question
-
-    @classmethod
-    def calculate_score(cls, result, data):
+    
+    def calculate_score(self, result, data):
         """
         Calculate score, based on the data field
 
@@ -263,7 +255,7 @@ class ToontjeHoger3Plink(Base):
         if main_question != "":
             result.given_response = main_question
             result.save()
-            return cls.SCORE_MAIN_CORRECT if result.expected_response == result.given_response else cls.SCORE_MAIN_WRONG
+            return self.SCORE_MAIN_CORRECT if result.expected_response == result.given_response else self.SCORE_MAIN_WRONG
 
         # Handle extra questions data
         extra_questions = Plink.extract_extra_questions(data)
@@ -278,29 +270,28 @@ class ToontjeHoger3Plink(Base):
             # Check if the given answers
             # e.g section.group = 60s;vrolijk (time_period;emotion)
             for index, answer in enumerate(extra_questions):
-                points_correct = cls.SCORE_EXTRA_1_CORRECT if index == 0 else cls.SCORE_EXTRA_2_CORRECT
+                points_correct = self.SCORE_EXTRA_1_CORRECT if index == 0 else self.SCORE_EXTRA_2_CORRECT
                 score += points_correct if answer and (
-                    answer in section.group) else cls.SCORE_EXTRA_WRONG
+                    answer in section.group) else self.SCORE_EXTRA_WRONG
 
             return score
 
         # Should not happen
         logger.error("Error: could not calculate score")
         return 0
-
-    @classmethod
-    def get_final_round(cls, session):
+ 
+    def get_final_round(self, session):
 
         # Finish session.
         session.finish()
         session.save()
 
         # Score
-        score = cls.get_score(session)
+        score = self.get_score(session)
 
         # Final
         final_text = "Goed gedaan, jouw muziekherkenning is uitstekend!" if session.final_score >= 4 * \
-            cls.SCORE_MAIN_CORRECT else "Dat bleek toch even lastig!"
+            self.SCORE_MAIN_CORRECT else "Dat bleek toch even lastig!"
         final = Final(
             session=session,
             final_text=final_text,

@@ -16,11 +16,12 @@ class Base(object):
     """Base class for other rules classes"""
 
     contact_email = settings.CONTACT_MAIL
-    questions = DEMOGRAPHICS
+    
+    def __init__(self):
+        self.questions = DEMOGRAPHICS
 
-    @classmethod
-    def feedback_info(cls):
-        feedback_body = render_to_string('feedback/user_feedback.html', {'email': cls.contact_email})
+    def feedback_info(self):
+        feedback_body = render_to_string('feedback/user_feedback.html', {'email': self.contact_email})
         return {
             'header': _("Do you have any remarks or questions?"),
             'button': _("Submit"),
@@ -28,8 +29,7 @@ class Base(object):
             'thank_you': _("We appreciate your feedback!")
         }
 
-    @classmethod
-    def calculate_score(cls, result, data):
+    def calculate_score(self, result, data):
         """use scoring rule to calculate score
         If not scoring rule is defined, return None
         Override in rules file for other scoring schemes"""
@@ -38,7 +38,6 @@ class Base(object):
             return scoring_rule(result, data)
         return None
 
-    @staticmethod
     def final_score_message(session):
         """Create final score message for given session, base on score per result"""
 
@@ -61,8 +60,7 @@ class Base(object):
         )
         return score_message + " " + message
 
-    @staticmethod
-    def rank(session, exclude_unfinished=True):
+    def rank(self, session, exclude_unfinished=True):
         """Get rank based on session score"""
         score = session.final_score
         ranks = Final.RANKS
@@ -98,11 +96,25 @@ class Base(object):
         # Default return, in case score isn't in the buckets
         return ranks['PLASTIC']
 
-    @classmethod
-    def get_questionnaire(cls, session):
+    def get_single_question(self, session, randomize=False):
+        """Get a random question from each question list, in priority completion order.
+
+        Participants will not continue to the next question set until they
+        have completed their current one.
+        """
+        questionnaire = unanswered_questions(session.participant, self.questions, randomize)
+        try:
+            question = next(questionnaire)
+            return Trial(
+                title=_("Questionnaire"),
+                feedback_form=Form([question], is_skippable=question.is_skippable))
+        except StopIteration:
+            return None
+    
+    def get_questionnaire(self, session, randomize=False, cutoff_index=None):
         ''' Get a list of questions to be asked in succession '''
         trials = []
-        questions = list(unanswered_questions(session.participant, cls.questions))
+        questions = list(unanswered_questions(session.participant, self.questions, randomize, cutoff_index))
         open_questions = len(questions)
         if not open_questions:
             return None

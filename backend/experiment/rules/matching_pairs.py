@@ -18,16 +18,17 @@ class MatchingPairs(Base):
     ID = 'MATCHING_PAIRS'
     num_pairs = 8
     contact_email = 'aml.tunetwins@gmail.com'
-    questions = [
-        question_by_key('dgf_gender_identity'),
-        question_by_key('dgf_generation'),
-        question_by_key('dgf_musical_experience', EXTRA_DEMOGRAPHICS),
-        question_by_key('dgf_country_of_origin'),
-        question_by_key('dgf_education', drop_choices=['isced-2', 'isced-5'])
-    ]
 
-    @classmethod
-    def first_round(cls, experiment):
+    def __init__(self):
+        self.questions = [
+            question_by_key('dgf_gender_identity'),
+            question_by_key('dgf_generation'),
+            question_by_key('dgf_musical_experience', EXTRA_DEMOGRAPHICS),
+            question_by_key('dgf_country_of_origin'),
+            question_by_key('dgf_education', drop_choices=['isced-2', 'isced-5'])
+        ]
+
+    def first_round(self, experiment):
         rendered = render_to_string('consent/consent_matching_pairs.html')
         consent = Consent(rendered, title=_(
             'Informed consent'), confirm=_('I agree'), deny=_('Stop'))
@@ -55,10 +56,9 @@ class MatchingPairs(Base):
             start_session
         ]
     
-    @classmethod
-    def next_round(cls, session):
+    def next_round(self, session):
         if session.rounds_passed() < 1:       
-            trials = cls.get_questionnaire(session)
+            trials = self.get_questionnaire(session)
             if trials:
                 intro_questions = Explainer(
                     instruction=_('Before starting the game, we would like to ask you %i demographic questions.' % (len(trials))),
@@ -66,7 +66,7 @@ class MatchingPairs(Base):
                 )
                 return [intro_questions, *trials]
             else:
-                trial = cls.get_matching_pairs_trial(session)
+                trial = self.get_matching_pairs_trial(session)
                 return [trial]
         else:
             session.final_score += session.result_set.filter(
@@ -81,22 +81,21 @@ class MatchingPairs(Base):
                 button={
                     'text': 'Play again',
                 },
-                rank=MatchingPairs.rank(session, exclude_unfinished=False),
+                rank=self.rank(session, exclude_unfinished=False),
                 show_social=True,
-                feedback_info=MatchingPairs.feedback_info()
+                feedback_info=self.feedback_info()
             )
-            cont = MatchingPairs.get_matching_pairs_trial(session)
+            cont = self.get_matching_pairs_trial(session)
             return [score, cont]
 
-    @classmethod
-    def get_matching_pairs_trial(cls, session):
+    def get_matching_pairs_trial(self, session):
         json_data = session.load_json_data()
         pairs = json_data.get('pairs', [])
-        if len(pairs) < cls.num_pairs:
+        if len(pairs) < self.num_pairs:
             pairs = list(session.playlist.section_set.order_by().distinct('group').values_list('group', flat=True))
             random.shuffle(pairs)
-        selected_pairs = pairs[:cls.num_pairs]
-        session.save_json_data({'pairs': pairs[cls.num_pairs:]})
+        selected_pairs = pairs[:self.num_pairs]
+        session.save_json_data({'pairs': pairs[self.num_pairs:]})
         originals = session.playlist.section_set.filter(group__in=selected_pairs, tag='Original')  
         degradations = json_data.get('degradations')
         if not degradations:
@@ -124,8 +123,7 @@ class MatchingPairs(Base):
         )
         return trial
 
-    @classmethod
-    def calculate_score(cls, result, data):
+    def calculate_score(self, result, data):
         moves = data.get('result').get('moves')
         for m in moves:
             m['filename'] = str(Section.objects.get(pk=m.get('selectedSection')).filename)

@@ -11,8 +11,7 @@ from experiment.actions.utils import final_action_with_optional_button
 class ListeningConditions(Base):
     ID = 'LISTENING_CONDITIONS'
 
-    @classmethod
-    def next_round(cls, session, request_session=None):
+    def next_round(self, session, request_session=None):
         round_number = session.get_next_round()
         playback = None
         feedback_form = None
@@ -99,8 +98,7 @@ class ListeningConditions(Base):
         view = Trial(playback, feedback_form)
         return [view]
 
-    @classmethod
-    def first_round(cls, experiment):
+    def first_round(self, experiment):
         consent = Consent()
         explainer = Explainer(
             instruction=_(
