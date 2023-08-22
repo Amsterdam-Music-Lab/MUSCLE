@@ -79,11 +79,11 @@ class MatchingPairs(Base):
                 button={
                     'text': 'Play again',
                 },
-                rank=MatchingPairs.rank(session, exclude_unfinished=False),
+                rank=self.rank(session, exclude_unfinished=False),
                 show_social=True,
-                feedback_info=MatchingPairs.feedback_info()
+                feedback_info=self.feedback_info()
             )
-            cont = MatchingPairs.get_matching_pairs_trial(session)
+            cont = self.get_matching_pairs_trial(session)
             return [score, cont]
 
     def get_matching_pairs_trial(self, session):
