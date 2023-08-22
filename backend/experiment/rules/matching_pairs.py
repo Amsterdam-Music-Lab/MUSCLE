@@ -18,13 +18,15 @@ class MatchingPairs(Base):
     ID = 'MATCHING_PAIRS'
     num_pairs = 8
     contact_email = 'aml.tunetwins@gmail.com'
-    questions = [
-        question_by_key('dgf_gender_identity'),
-        question_by_key('dgf_generation'),
-        question_by_key('dgf_musical_experience', EXTRA_DEMOGRAPHICS),
-        question_by_key('dgf_country_of_origin'),
-        question_by_key('dgf_education', drop_choices=['isced-2', 'isced-5'])
-    ]
+
+    def __init__(self):
+        self.questions = [
+            question_by_key('dgf_gender_identity'),
+            question_by_key('dgf_generation'),
+            question_by_key('dgf_musical_experience', EXTRA_DEMOGRAPHICS),
+            question_by_key('dgf_country_of_origin'),
+            question_by_key('dgf_education', drop_choices=['isced-2', 'isced-5'])
+        ]
 
     def first_round(self, experiment):
         rendered = render_to_string('consent/consent_matching_pairs.html')

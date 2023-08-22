@@ -16,7 +16,9 @@ class Base(object):
     """Base class for other rules classes"""
 
     contact_email = settings.CONTACT_MAIL
-    questions = DEMOGRAPHICS
+    
+    def __init__(self):
+        self.questions = DEMOGRAPHICS
 
     def feedback_info(self):
         feedback_body = render_to_string('feedback/user_feedback.html', {'email': self.contact_email})
@@ -109,7 +111,7 @@ class Base(object):
         except StopIteration:
             return None
     
-    def get_questionnaire(self, session, randomize=False, cutoff_index=-1):
+    def get_questionnaire(self, session, randomize=False, cutoff_index=None):
         ''' Get a list of questions to be asked in succession '''
         trials = []
         questions = list(unanswered_questions(session.participant, self.questions, randomize, cutoff_index))

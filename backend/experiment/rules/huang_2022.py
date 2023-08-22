@@ -99,19 +99,20 @@ class Huang2022(Hooked):
     round_modifier = 2
     contact_email = 'musicexp_china@163.com'
 
-    questions = MSI_ALL + [
-        question_by_key('msi_39_best_instrument'),
-        genre_question(),
-        question_by_key('dgf_generation'),
-        question_by_key('dgf_education', drop_choices=['isced-5']),
-        question_by_key(
-            'dgf_highest_qualification_expectation', EXTRA_DEMOGRAPHICS),
-        question_by_key('dgf_occupational_status', EXTRA_DEMOGRAPHICS),
-        origin_question(),
-        residence_question(),
-        gender_question(),
-        contact_question()
-    ]
+    def __init__(self):
+        self.questions = MSI_ALL + [
+            question_by_key('msi_39_best_instrument'),
+            genre_question(),
+            question_by_key('dgf_generation'),
+            question_by_key('dgf_education', drop_choices=['isced-5']),
+            question_by_key(
+                'dgf_highest_qualification_expectation', EXTRA_DEMOGRAPHICS),
+            question_by_key('dgf_occupational_status', EXTRA_DEMOGRAPHICS),
+            origin_question(),
+            residence_question(),
+            gender_question(),
+            contact_question()
+        ]
 
     def first_round(self, experiment):
         """Create data for the first experiment rounds."""

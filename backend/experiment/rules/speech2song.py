@@ -23,18 +23,20 @@ n_rounds_per_block = n_trials_per_block * 2  # each trial has two rounds
 class Speech2Song(Base):
     """ Rules for a speech-to-song experiment """
     ID = 'SPEECH_TO_SONG'
-    questions = [
-        question_by_key('dgf_age', EXTRA_DEMOGRAPHICS),
-        question_by_key('dgf_gender_identity'),
-        question_by_key('dgf_country_of_origin_open', EXTRA_DEMOGRAPHICS),
-        question_by_key('dgf_country_of_residence_open', EXTRA_DEMOGRAPHICS),
-        question_by_key('lang_mother', LANGUAGE),
-        question_by_key('lang_second', LANGUAGE),
-        question_by_key('lang_third', LANGUAGE),
-        LanguageQuestion(_('English')).exposure_question(),
-        LanguageQuestion(_('Brazilian Portuguese')).exposure_question(),
-        LanguageQuestion(_('Mandarin Chinese')).exposure_question()
-    ]
+    
+    def __init__(self):
+        self.questions = [
+            question_by_key('dgf_age', EXTRA_DEMOGRAPHICS),
+            question_by_key('dgf_gender_identity'),
+            question_by_key('dgf_country_of_origin_open', EXTRA_DEMOGRAPHICS),
+            question_by_key('dgf_country_of_residence_open', EXTRA_DEMOGRAPHICS),
+            question_by_key('lang_mother', LANGUAGE),
+            question_by_key('lang_second', LANGUAGE),
+            question_by_key('lang_third', LANGUAGE),
+            LanguageQuestion(_('English')).exposure_question(),
+            LanguageQuestion(_('Brazilian Portuguese')).exposure_question(),
+            LanguageQuestion(_('Mandarin Chinese')).exposure_question()
+        ]
 
     def first_round(self, experiment):
         explainer = Explainer(

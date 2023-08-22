@@ -19,12 +19,13 @@ SCORE_AVG_MIN_TRAINING = 0.8
 class Categorization(Base):
     ID = 'CATEGORIZATION'
 
-    questions = [
-        question_by_key('dgf_age', EXTRA_DEMOGRAPHICS),
-        question_by_key('dgf_gender_reduced', EXTRA_DEMOGRAPHICS),
-        question_by_key('dgf_native_language', EXTRA_DEMOGRAPHICS),
-        question_by_key('dgf_musical_experience', EXTRA_DEMOGRAPHICS)
-    ]
+    def __init__(self):
+        self.questions = [
+            question_by_key('dgf_age', EXTRA_DEMOGRAPHICS),
+            question_by_key('dgf_gender_reduced', EXTRA_DEMOGRAPHICS),
+            question_by_key('dgf_native_language', EXTRA_DEMOGRAPHICS),
+            question_by_key('dgf_musical_experience', EXTRA_DEMOGRAPHICS)
+        ]
 
     def first_round(self, experiment):
         explainer = Explainer(
