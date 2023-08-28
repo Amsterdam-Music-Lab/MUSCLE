@@ -17,8 +17,7 @@ class Anisochrony(DurationDiscrimination):
     max_turnpoints = 8
     catch_condition = 'REGULAR'
 
-    @classmethod
-    def get_response_explainer(cls, correct, correct_response, button_label=_('Next fragment')):
+    def get_response_explainer(self, correct, correct_response, button_label=_('Next fragment')):
         correct_response = _('REGULAR') if correct_response=='REGULAR' else _('IRREGULAR')
         if correct:
             instruction = _(
@@ -32,8 +31,7 @@ class Anisochrony(DurationDiscrimination):
             button_label=button_label
         )
 
-    @classmethod
-    def next_trial_action(cls, session, trial_condition, difficulty):
+    def next_trial_action(self, session, trial_condition, difficulty):
         """
         Provide the next trial action
         Arguments:
@@ -80,8 +78,7 @@ class Anisochrony(DurationDiscrimination):
         )
         return view
 
-    @classmethod
-    def intro_explanation(cls, *args):
+    def intro_explanation(self, *args):
         return Explainer(
             instruction=_(
                 'In this test you will hear a series of tones for each trial.'),
@@ -100,8 +97,7 @@ class Anisochrony(DurationDiscrimination):
             button_label='Ok'
         )
 
-    @classmethod
-    def calculate_score(cls, result, data):
+    def calculate_score(self, result, data):
         # a result's score is used to keep track of how many correct results were in a row
         # for catch trial, set score to 2 -> not counted for calculating turnpoints
         try:
@@ -117,8 +113,7 @@ class Anisochrony(DurationDiscrimination):
         else:
             return 0
 
-    @classmethod
-    def get_final_text(cls, difference):
+    def get_final_text(self, difference):
         percentage = round(difference / 6000, 2)
         feedback = _(
             "Well done! You heard the difference when we shifted a tone by {} percent.").format(percentage)
@@ -126,9 +121,8 @@ class Anisochrony(DurationDiscrimination):
             Our brains use this to process rhythm even better!")
         return render_feedback_trivia(feedback, trivia)
 
-    @classmethod
-    def get_difficulty(cls, session, multiplier=1.0):
+    def get_difficulty(self, session, multiplier=1.0):
         if session.final_score == 0:
-            return cls.practice_diff
+            return self.practice_diff
         else:
-            return super(Anisochrony, cls).get_difficulty(session, multiplier)
+            return super(Anisochrony, self).get_difficulty(session, multiplier)

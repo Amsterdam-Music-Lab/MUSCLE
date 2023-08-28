@@ -10,8 +10,7 @@ const MatchingPairs = ({
     finishedPlaying,
     stopAudioAfter,
     submitResult,
-}) => {
-    // const finishDelay = 1500;
+}) => {    
     const xPosition = useRef(-1);
     const yPosition = useRef(-1);
     const score = useRef(undefined);
@@ -66,7 +65,7 @@ const MatchingPairs = ({
                 default:
                     turnedCards[0].nomatch = true;
                     turnedCards[1].nomatch = true;
-                    // reset nomatch cards for coming turns after animations have finished
+                    // reset nomatch cards for coming turns
                     setTimeout(() => {
                         turnedCards[0].nomatch = false;
                         turnedCards[1].nomatch = false;                        
@@ -144,10 +143,7 @@ const MatchingPairs = ({
         // Check if the board is empty
         if (sections.filter(s => s.inactive).length === sections.length) {
             // all cards have been turned
-            setEnd(true);
-            // setTimeout(() => {
-            //     submitResult({score: total, moves: resultBuffer.current});
-            //   }, finishDelay);            
+            setEnd(true); 
         } else { setMessage(''); }              
     }
 
@@ -156,7 +152,7 @@ const MatchingPairs = ({
     }
 
     return (
-        <div className="aha__matching-pairs container">
+        <div className="aha__matching-pairs">
             <div className="row justify-content-around">
                 <div className="col-6 align-self-start">
                     <div dangerouslySetInnerHTML={{ __html: message }}
@@ -169,7 +165,7 @@ const MatchingPairs = ({
                 </div>
             </div>
 
-            <div className="playing-board d-flex justify-content-center">
+            <div className="playing-board">
                 {Object.keys(sections).map((index) => (
                     <PlayCard 
                         key={index}

@@ -1,33 +1,36 @@
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useState} from "react";
 import classNames from "classnames";
 
 import Histogram from "../Histogram/Histogram";
-import Timer from "../../util/timer";
+import { MEDIA_ROOT } from "../../config";
+const PlayCard = ({ onClick, registerUserClicks, playing, section }) => {
+    const [firstRender, setFirstRender] = useState(false);
 
-const PlayCard = ({ onClick, registerUserClicks, playing, section, onFinish, stopAudioAfter }) => {
-    // // automatic timer
-    // const startTime = 0;
-    // const [time, setTime] = useState(startTime);
+    useEffect(() => {
+        if (!firstRender) {
+          createBuffer();
+          setFirstRender(true);
+        }
+    }, [firstRender])
     
-    const cardSize = window.innerWidth > 768 ? 110 : 70;
-    
-    // useEffect(() => {
-    //     if (!playing) {
-    //         return;
-    //     }
+    const createBuffer = () => {
+        // preload the section (temporary solution for ICMPC)
+        const audioBuffer = document.createElement("audio");
+        audioBuffer.id = `buffer-${section.id}`;    
+        audioBuffer.src = MEDIA_ROOT + section.url;
+        audioBuffer.crossorigin = "use-credentials";
+        audioBuffer.disableRemotePlayback = true;
+        audioBuffer.style.display = "none";
 
-    //     // Create timer and return stop function
-    //     return Timer({
-    //         time: startTime,
-    //         duration: stopAudioAfter,
-    //         onTick: (t) => {
-    //             setTime(Math.min(t, stopAudioAfter));
-    //         },
-    //         onFinish: () => {
-    //             onFinish && onFinish();
-    //         },
-    //     });
-    // }, [playing, stopAudioAfter, onFinish]);
+        // Required for Firefox to trigger canplaythrough event
+        audioBuffer.preload = "auto";
+
+        // Required for Safari/iOS
+        audioBuffer.load();
+
+        // Add it to the page
+        document.body.appendChild(audioBuffer);
+    }
     
     return (
         <div className={classNames("aha__play-card", {turned: section.turned}, {noevents: section.noevents}, {disabled: section.inactive}, { memory: section.memory }, { lucky: section.lucky }, { nomatch: section.nomatch })} onClick={event => {
@@ -38,18 +41,15 @@ const PlayCard = ({ onClick, registerUserClicks, playing, section, onFinish, sto
                     <Histogram 
                         className="front"
                         running={playing}
-                        histogramWidth={cardSize}
-                        height={cardSize}
                         bars={5}
-                        width={10}
-                        spacing={10}
+                        marginBottom={0}
                         backgroundColor="purple"
                         borderRadius=".5rem"
                     />
                     :
                     <div className={classNames("back", {seen: section.seen})}>
                     </div>
-                }
+            }            
         </div>
     );
 };

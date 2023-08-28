@@ -1,16 +1,5 @@
-$playButtonSize: 110px;
-
-@media(max-width: 768px) {
-    .back, 
-    .front {     
-        width: calc($playButtonSize - 40px)!important;
-        height: calc($playButtonSize - 40px)!important;
-    }
-    .aha__play-card {        
-        width: calc($playButtonSize - 40px)!important;
-        height: calc($playButtonSize - 40px)!important;
-    }
-}
+$playButtonHighDisplay: 18vw;
+$playButtonWideDisplay: 16vh;
 
 @keyframes memorymatch {
     20% {
@@ -82,12 +71,6 @@ $playButtonSize: 110px;
 }
 
 .aha__play-card {
-    position: relative;
-    width: $playButtonSize;
-    height: $playButtonSize;
-    display: block;
-    border-radius: 6px;
-    opacity: 1;    
 
     &.disabled {
         pointer-events: none;
@@ -116,20 +99,23 @@ $playButtonSize: 110px;
         pointer-events: none;
     }
 
-    .front {
-        opacity: 1;
-        transform: rotateY(90deg);
-        transition: all ease-in 0.2s;
-        position: absolute;
-        width: $playButtonSize;
-        height: $playButtonSize;
-    }
-
     .back {
         background-color: $gray;
-        width: $playButtonSize;
-        height: $playButtonSize;
         border-radius: .5rem;
+    }
+    
+    @media(min-aspect-ratio: 1/1) {
+        .back, .turned {
+            width: $playButtonWideDisplay;
+            height: $playButtonWideDisplay;
+        }
+    }
+
+    @media(max-aspect-ratio: 1/1) {
+        .back, .turned {
+            width: $playButtonHighDisplay;
+            height: $playButtonHighDisplay;
+        }
     }
     
 }

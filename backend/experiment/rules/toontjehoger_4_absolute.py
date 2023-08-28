@@ -23,8 +23,7 @@ class ToontjeHoger4Absolute(Base):
     # number of songs (each with a,b,c version) in the playlist
     PLAYLIST_ITEMS = 13
 
-    @classmethod
-    def first_round(cls, experiment):
+    def first_round(self, experiment):
         """Create data for the first experiment rounds."""
 
         # 1. Explain game.
@@ -53,8 +52,7 @@ class ToontjeHoger4Absolute(Base):
             start_session
         ]
 
-    @classmethod
-    def next_round(cls, session, request_session=None):
+    def next_round(self, session, request_session=None):
         """Get action data for the next round"""
 
         rounds_passed = session.rounds_passed()
@@ -62,20 +60,19 @@ class ToontjeHoger4Absolute(Base):
         # Round 1
         if rounds_passed == 0:
             # No combine_actions because of inconsistent next_round array wrapping in first round
-            return cls.get_round(session)
+            return self.get_round(session)
 
         # Round 2
         if rounds_passed < session.experiment.rounds:
-            return [*cls.get_score(session), *cls.get_round(session)]
+            return [*self.get_score(session), *self.get_round(session)]
 
         # Final
-        return cls.get_final_round(session)
+        return self.get_final_round(session)
 
-    @classmethod
-    def get_round(cls, session):
+    def get_round(self, session):
         # Get available section groups
         results = session.result_set.all()
-        available_groups = list(map(str, range(1, cls.PLAYLIST_ITEMS)))
+        available_groups = list(map(str, range(1, self.PLAYLIST_ITEMS)))
         for result in results:
             available_groups.remove(result.section.group)
 
@@ -129,16 +126,14 @@ class ToontjeHoger4Absolute(Base):
         trial = Trial(
             playback=playback,
             feedback_form=form,
-            title=cls.TITLE,
+            title=self.TITLE,
         )
         return [trial]
 
-    @classmethod
-    def calculate_score(cls, result, data):
-        return cls.SCORE_CORRECT if result.expected_response == result.given_response else cls.SCORE_WRONG
+    def calculate_score(self, result, data):
+        return self.SCORE_CORRECT if result.expected_response == result.given_response else self.SCORE_WRONG
 
-    @classmethod
-    def get_score(cls, session):
+    def get_score(self, session):
         # Feedback
         last_result = session.last_result()
         feedback = ""
@@ -146,7 +141,7 @@ class ToontjeHoger4Absolute(Base):
             logger.error("No last result")
             feedback = "Er is een fout opgetreden"
         else:
-            if last_result.score == cls.SCORE_CORRECT:
+            if last_result.score == self.SCORE_CORRECT:
                 feedback = "Goedzo! Het was inderdaad antwoord {}!".format(
                     last_result.expected_response.upper())
             else:
@@ -160,22 +155,21 @@ class ToontjeHoger4Absolute(Base):
         config = {'show_total_score': True}
         score = Score(session, config=config, feedback=feedback)
         return [score]
-
-    @classmethod
-    def get_final_round(cls, session):
+ 
+    def get_final_round(self, session):
 
         # Finish session.
         session.finish()
         session.save()
 
         # Score
-        score = cls.get_score(session)
+        score = self.get_score(session)
 
         # Final
         final_text = "Dat bleek toch even lastig!"
-        if session.final_score >= session.experiment.rounds * 0.8 * cls.SCORE_CORRECT:
+        if session.final_score >= session.experiment.rounds * 0.8 * self.SCORE_CORRECT:
             final_text = "Goed gedaan! Jouw absolute gehoor is uitstekend!"
-        elif session.final_score >= session.experiment.rounds * 0.5 * cls.SCORE_CORRECT:
+        elif session.final_score >= session.experiment.rounds * 0.5 * self.SCORE_CORRECT:
             final_text = "Goed gedaan! Jouw absolute gehoor is best OK!"
 
         final = Final(

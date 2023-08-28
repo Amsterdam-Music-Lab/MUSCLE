@@ -1,4 +1,5 @@
 from .explainer import Explainer, Step
+from .form import *
 from .final import Final
 from .score import Score
 from .song_sync import SongSync

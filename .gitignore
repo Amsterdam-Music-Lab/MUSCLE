@@ -6,3 +6,5 @@ node_modules/
 yarn-error.log*
 yarn.lock
 
+tests/*.ini
+tests/__pycache__

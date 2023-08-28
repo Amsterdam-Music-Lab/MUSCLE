@@ -15,8 +15,7 @@ class BST(HBat):
     the HBAT rules. """
     ID = 'BST'
 
-    @classmethod
-    def intro_explainer(cls):
+    def intro_explainer(self):
         return Explainer(
             instruction=_(
                 'In this test you will hear a number of rhythms which have a regular beat.'),
@@ -34,9 +33,8 @@ class BST(HBat):
             ],
             button_label='Ok'
         )
-
-    @classmethod
-    def next_trial_action(cls, session, trial_condition, level=1):
+    
+    def next_trial_action(self, session, trial_condition, level=1):
         """
         Get the next actions for the experiment
         trial_condition is either 1 or 0
@@ -74,9 +72,8 @@ class BST(HBat):
             }
         )
         return view
-
-    @classmethod
-    def response_explainer(cls, correct, in2, button_label=_('Next fragment')):
+    
+    def response_explainer(self, correct, in2, button_label=_('Next fragment')):
         if correct:
             if in2:
                 instruction = _(
@@ -96,13 +93,12 @@ class BST(HBat):
             steps=[],
             button_label=button_label
         )
-
-    @classmethod
-    def finalize_experiment(cls, session, request_session):
+    
+    def finalize_experiment(self, session, request_session):
         """ if either the max_turnpoints have been reached,
         or if the section couldn't be found (outlier), stop the experiment
         """
-        loudness_diff = int(get_average_difference_level_based(session, 6, cls.start_diff))
+        loudness_diff = int(get_average_difference_level_based(session, 6, self.start_diff))
         feedback = _("Well done! You heard the difference \
             when the accented tone was only {} dB louder.").format(loudness_diff)
         trivia = _("A march and a waltz are very common meters in Western music, but in other cultures, much more complex meters also exist!")

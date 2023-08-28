@@ -35,8 +35,7 @@ class MusicalPreferences(Base):
             residence_question()
         ]
 
-    @classmethod
-    def first_round(cls, experiment):
+    def first_round(self, experiment):
         explainer = Explainer(
             instruction=_('This experiment investigates musical preferences'),
             steps=[
@@ -55,8 +54,7 @@ class MusicalPreferences(Base):
             start_session
         ]
 
-    @classmethod
-    def next_round(cls, session, request_session=None):
+    def next_round(self, session, request_session=None):
         next_round_number = session.get_current_round()
         if next_round_number == 1:
             playback = get_test_playback()
@@ -95,15 +93,16 @@ class MusicalPreferences(Base):
                 session.save()
                 return Redirect(settings.HOMEPAGE)
             
-            question_trials = cls.get_questions(session)
+            question_trials = self.get_questionnaire(session)
             if question_trials:
+                n_questions = len(question_trials)
                 explainer = Explainer(
                     instruction=_("Questionnaire"),
                     steps=[
                         Step(_(
-                            "To understand your musical preferences, we have 6 questions for you before the experiment \
+                            "To understand your musical preferences, we have {} questions for you before the experiment \
                                 begins. The first two questions are about your music listening experience, while the other \
-                                four questions are demographic questions. It will take 2-3 minutes.")),
+                                four questions are demographic questions. It will take 2-3 minutes.").format(n_questions)),
                         Step(_("Have fun!"))
                     ],
                     button_label=_("Let's go!")
@@ -123,24 +122,24 @@ class MusicalPreferences(Base):
                 button_label=_("Start")
             )
             actions = [explainer]
-        elif next_round_number == cls.preference_offset:
+        elif next_round_number == self.preference_offset:
             like_results = session.result_set.filter(question_key='like_song')
             feedback = Trial(
                 html=HTML(body=render_to_string('html/musical_preferences/feedback.html', {
                     'unlocked': _("Love"),
                     'n_songs': next_round_number,
-                    'top_participant': cls.get_preferred_songs(like_results, 3)
+                    'top_participant': self.get_preferred_songs(like_results, 3)
                 }))
             )
             actions = [feedback]
-        elif next_round_number == cls.knowledge_offset:
+        elif next_round_number == self.knowledge_offset:
             like_results = session.result_set.filter(question_key='like_song')
             known_songs = session.result_set.filter(question_key='know_song', score=2).count()
             feedback = Trial(
                 html=HTML(body=render_to_string('html/musical_preferences/feedback.html', {
                     'unlocked': _("Knowledge"),
                     'n_songs': next_round_number,
-                    'top_participant': cls.get_preferred_songs(like_results, 3),
+                    'top_participant': self.get_preferred_songs(like_results, 3),
                     'n_known_songs': known_songs
                 }))
             )
@@ -155,9 +154,9 @@ class MusicalPreferences(Base):
                 html=HTML(body=render_to_string('html/musical_preferences/feedback.html', {
                     'unlocked': _("Connection"),
                     'n_songs': next_round_number,
-                    'top_participant': cls.get_preferred_songs(like_results, 3),
+                    'top_participant': self.get_preferred_songs(like_results, 3),
                     'n_known_songs': known_songs,
-                    'top_all': cls.get_preferred_songs(all_results, 3)
+                    'top_all': self.get_preferred_songs(all_results, 3)
                 }))
             )
             actions = [feedback]
@@ -196,8 +195,7 @@ class MusicalPreferences(Base):
         actions.append(view)
         return actions
     
-    @classmethod
-    def calculate_score(cls, result, data):
+    def calculate_score(self, result, data):
         result.comment = data.get('key')
         result.save()
         if data.get('key') == 'like_song':
@@ -205,15 +203,14 @@ class MusicalPreferences(Base):
         else:
             return None
     
-    @classmethod
-    def get_final_view(cls, session):
+    def get_final_view(self, session):
         # finalize experiment
         participant_results = session.result_set.filter(comment='like_song')
-        participant_pref = cls.get_preferred_songs(participant_results)
+        participant_pref = self.get_preferred_songs(participant_results)
         all_results = Result.objects.filter(
             comment='like_song'
         )
-        all_pref = cls.get_preferred_songs(all_results)
+        all_pref = self.get_preferred_songs(all_results)
         feedback = render_to_string('final/musical_preferences.html', 
         {'top_all': all_pref, 'top_participant': participant_pref})
         view = Final(
@@ -224,8 +221,7 @@ class MusicalPreferences(Base):
         )
         return view
     
-    @classmethod
-    def get_preferred_songs(cls, result_set, n=5):
+    def get_preferred_songs(self, result_set, n=5):
         top_songs = result_set.values('section').annotate(
             avg_score=Avg('score')).order_by()[:n]
         out_list = []
@@ -233,18 +229,3 @@ class MusicalPreferences(Base):
             section = Section.objects.get(pk=s.get('section'))
             out_list.append({'artist': section.song.artist, 'name': section.song.name})
         return out_list
-    
-    @classmethod
-    def get_questions(cls, session):
-        open_questions = total_unanswered_questions(session.participant, cls.questions)
-        if not open_questions:
-            return None
-        trials = []
-        for index in range(open_questions):
-            question = unasked_question(session.participant, cls.questions)
-            trials.append(Trial(
-                title=_("Questionnaire %(index)i / %(total)i") % {'index': index+1, 'total': open_questions},
-                feedback_form=Form([question])
-            ))
-        return trials
-

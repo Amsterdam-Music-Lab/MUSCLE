@@ -1,5 +1,7 @@
-import random
+from copy import deepcopy
+from itertools import chain
 import logging
+import random
 
 from django.conf import settings
 from django.utils.translation import gettext_lazy as _
@@ -10,7 +12,7 @@ from experiment.actions import  Consent, Explainer, Final, Playlist, Score, Song
 from experiment.actions.form import BooleanQuestion, Form
 from experiment.actions.playback import Playback
 from experiment.questions.demographics import DEMOGRAPHICS
-from experiment.questions.utils import unasked_question
+from experiment.questions.utils import copy_shuffle, unanswered_questions
 from experiment.questions.goldsmiths import MSI_FG_GENERAL, MSI_ALL
 from experiment.questions.stomp import STOMP20
 from experiment.questions.tipi import TIPI
@@ -18,7 +20,6 @@ from experiment.actions.styles import STYLE_BOOLEAN_NEGATIVE_FIRST
 from result.utils import prepare_result
 
 logger = logging.getLogger(__name__)
-
 
 class Hooked(Base):
     """Superclass for Hooked experiment rules"""
@@ -28,8 +29,16 @@ class Hooked(Base):
     questions = True
     round_modifier = 0
 
-    @classmethod
-    def first_round(cls, experiment):
+    def __init__(self):
+        self.questions = [
+            *copy_shuffle(DEMOGRAPHICS), # 1. Demographic questions (7 questions)
+            *copy_shuffle(MSI_FG_GENERAL), # 2. General music sophistication
+            *copy_shuffle(MSI_ALL), # 3. Complete music sophistication (20 questions)
+            *copy_shuffle(STOMP20), # 4. STOMP (20 questions)
+            *copy_shuffle(TIPI)  # 5. TIPI (10 questions)
+        ]
+
+    def first_round(self, experiment):
         """Create data for the first experiment rounds."""
         
         # 1. Explain game.
@@ -47,8 +56,8 @@ class Hooked(Base):
             button_label=_("Let's go!"))
 
         # 2. Get informed consent.
-        if  cls.consent_file:
-            rendered = render_to_string('consent/{}'.format(cls.consent_file))
+        if  self.consent_file:
+            rendered = render_to_string('consent/{}'.format(self.consent_file))
             consent = Consent(text=rendered, title=_('Informed consent'), confirm=_('I agree'), deny=_('Stop'))
         else:
             # fall back to lorem ipsum if no consent_file is defined
@@ -67,74 +76,7 @@ class Hooked(Base):
             start_session
         ]
 
-
-    @classmethod
-    def get_random_question(cls, session):
-        """Get a random question from each question list, in priority completion order.
-
-        Participants will not continue to the next question set until they
-        have completed their current one.
-        """
-
-        # Constantly re-randomising is mildly inefficient, but it's not
-        # worth the trouble to save blocked, randomised question lists persistently.
-
-        # 1. Demographic questions (7 questions)
-        question = \
-            unasked_question(
-                session.participant,
-                DEMOGRAPHICS,
-                randomize=True
-            )
-
-        # 2. General music sophistication (18 questions)
-        if question is None:
-            question = \
-                unasked_question(
-                    session.participant,
-                    MSI_FG_GENERAL,
-                    randomize=True
-                )
-
-        # 3. Complete music sophistication (20 questions)
-        if question is None:
-            # next_question() will skip the FG questions from before
-            question = \
-                unasked_question(
-                    session.participant,
-                    MSI_ALL,
-                    randomize=True
-                )
-
-        # 4. STOMP (20 questions)
-        if question is None:
-            question = \
-                unasked_question(
-                    session.participant,
-                    STOMP20,
-                    randomize=True
-                )
-
-        # 5. TIPI (10 questions)
-        if question is None:
-            question = \
-                unasked_question(
-                    session.participant,
-                    TIPI,
-                    randomize=True
-                )
-        
-        if question is None:
-            return None
-
-        return Trial(
-                title=_("Questionnaire"),
-                feedback_form=Form([question], is_skippable=question.is_skippable))
-
-
-    
-    @classmethod
-    def next_round(cls, session):
+    def next_round(self, session):
         """Get action data for the next round"""
         json_data = session.load_json_data()
 
@@ -149,7 +91,7 @@ class Hooked(Base):
             # Return a score and final score action.
             next_round_number = session.get_next_round()
             config = {'show_section': True, 'show_total_score': True}
-            title = cls.get_trial_title(session, next_round_number - 1)
+            title = self.get_trial_title(session, next_round_number - 1)
             return [
                 Score(session,
                     config=config,
@@ -157,8 +99,8 @@ class Hooked(Base):
                 ),
                 Final(
                     session=session,
-                    final_text=cls.final_score_message(session),
-                    rank=cls.rank(session),
+                    final_text=self.final_score_message(session),
+                    rank=self.rank(session),
                     show_social=True,
                     show_profile_link=True,
                     button={'text': _('Play again'), 'link': '{}/{}'.format(settings.CORS_ORIGIN_WHITELIST[0], session.experiment.slug)}
@@ -174,14 +116,13 @@ class Hooked(Base):
 
         if next_round_number == 1:
             # Plan sections
-            cls.plan_sections(session)
-
+            self.plan_sections(session)
             # Go to SongSync straight away.
-            actions.append(cls.next_song_sync_action(session))
+            actions.append(self.next_song_sync_action(session))
         else:
             # Create a score action.
             config = {'show_section': True, 'show_total_score': True}
-            title = cls.get_trial_title(session, next_round_number - 1)
+            title = self.get_trial_title(session, next_round_number - 1)
             actions.append(Score(session,
                 config=config,
                 title=title
@@ -193,27 +134,29 @@ class Hooked(Base):
 
             # SongSync rounds. Skip questions until Round 5.
             if next_round_number in range(2, 5):
-                actions.append(cls.next_song_sync_action(session))
+                actions.append(self.next_song_sync_action(session))
             if next_round_number in range(5, heard_before_offset):
-                actions.append(cls.get_random_question(session)) if cls.questions else None
-                actions.append(cls.next_song_sync_action(session))
+                question_trial = self.get_single_question(session)
+                if question_trial:
+                    actions.append(question_trial)
+                actions.append(self.next_song_sync_action(session))
 
             # HeardBefore rounds
             if next_round_number == heard_before_offset:
                 # Introduce new round type with Explainer.
-                actions.append(cls.heard_before_explainer())
+                actions.append(self.heard_before_explainer())
                 actions.append(
-                    cls.next_heard_before_action(session))
+                    self.next_heard_before_action(session))
             if next_round_number > heard_before_offset:
-                actions.append(cls.get_random_question(session)) if cls.questions else None
+                question_trial = self.get_single_question(session)
+                if question_trial:
+                    actions.append(question_trial)
                 actions.append(
-                    cls.next_heard_before_action(session))
+                    self.next_heard_before_action(session))
 
         return actions
 
-
-    @staticmethod
-    def heard_before_explainer():
+    def heard_before_explainer(self):
         """Explainer for heard-before rounds"""
         return Explainer(
             instruction=_("Bonus Rounds"),
@@ -224,8 +167,7 @@ class Hooked(Base):
             step_numbers=True,
             button_label=_("Continue"))
 
-    @staticmethod
-    def final_score_message(session):
+    def final_score_message(self, session):
         """Create final score message for given session"""
 
         n_sync_guessed = 0
@@ -262,13 +204,11 @@ class Hooked(Base):
             n_old_new_correct, n_old_new_expected)
         return score_message + " " + song_sync_message + " " + heard_before_message
 
-    @classmethod
-    def get_trial_title(cls, session, next_round_number):    
+    def get_trial_title(self, session, next_round_number):    
         return _("Round %(number)d / %(total)d") %\
             {'number': next_round_number, 'total': session.experiment.rounds}
-    
-    @classmethod
-    def plan_sections(cls, session, filter_by={}):
+
+    def plan_sections(self, session, filter_by={}):
         """Set the plan of tracks for a session.
         """
 
@@ -313,12 +253,11 @@ class Hooked(Base):
         # Save, overwriting existing plan if one exists.
         session.save_json_data({'plan': plan})
 
-    @classmethod
-    def next_song_sync_action(cls, session):
+    def next_song_sync_action(self, session):
         """Get next song_sync section for this session."""
 
         # Load plan.
-        next_round_number = session.get_current_round() - cls.round_modifier
+        next_round_number = session.get_current_round() - self.round_modifier
         try:
             plan = session.load_json_data()['plan']
             sections = plan['song_sync_sections']
@@ -339,17 +278,16 @@ class Hooked(Base):
         result_id = prepare_result(key, session, section=section, scoring_rule='SONG_SYNC')
         return SongSync(
             section=section,
-            title=cls.get_trial_title(session, next_round_number),
+            title=self.get_trial_title(session, next_round_number),
             key=key,
             result_id=result_id
         )
-    
-    @classmethod
-    def next_heard_before_action(cls, session):
+
+    def next_heard_before_action(self, session):
         """Get next heard_before action for this session."""
 
         # Load plan.
-        next_round_number = session.get_current_round() - cls.round_modifier
+        next_round_number = session.get_current_round() - self.round_modifier
         try:
             plan = session.load_json_data()['plan']
             sections = plan['heard_before_sections']
@@ -386,10 +324,10 @@ class Hooked(Base):
             ])
         config = {
             'auto_advance': True,
-            'response_time': cls.timeout
+            'response_time': self.timeout
         }
         trial = Trial(
-            title=cls.get_trial_title(session, next_round_number),
+            title=self.get_trial_title(session, next_round_number),
             playback=playback,
             feedback_form=form,
             config=config,

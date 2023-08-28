@@ -19,8 +19,7 @@ class ToontjeHoger6Relative(Base):
     SCORE_CORRECT = 50
     SCORE_WRONG = 0
 
-    @classmethod
-    def first_round(cls, experiment):
+    def first_round(self, experiment):
         """Create data for the first experiment rounds."""
 
         # 1. Explain game.
@@ -49,9 +48,8 @@ class ToontjeHoger6Relative(Base):
             playlist,
             start_session
         ]
-
-    @classmethod
-    def next_round(cls, session, request_session=None):
+ 
+    def next_round(self, session, request_session=None):
         """Get action data for the next round"""
 
         rounds_passed = session.rounds_passed()
@@ -59,17 +57,16 @@ class ToontjeHoger6Relative(Base):
         # Round 1
         if rounds_passed == 0:
             # No combine_actions because of inconsistent next_round array wrapping in first round
-            return cls.get_round(rounds_passed, session)
+            return self.get_round(rounds_passed, session)
 
         # Round 2
         if rounds_passed == 1:
-            return [*cls.get_score(session), *cls.get_round(round, session)]
+            return [*self.get_score(session), *self.get_round(round, session)]
 
         # Final
-        return cls.get_final_round(session)
-
-    @classmethod
-    def get_score(cls, session):
+        return self.get_final_round(session)
+ 
+    def get_score(self, session):
         # Feedback
         last_result = session.last_result()
 
@@ -77,7 +74,7 @@ class ToontjeHoger6Relative(Base):
             logger.error("No last result")
             feedback = "Er is een fout opgetreden"
         else:
-            if last_result.score == cls.SCORE_CORRECT:
+            if last_result.score == self.SCORE_CORRECT:
                 feedback = "Dat is correct! De melodieën in de muziekfragmenten zijn inderdaad verschillend."
             else:
                 feedback = "Helaas! De melodieën in de muziekfragmenten zijn toch echt verschillend."
@@ -86,9 +83,8 @@ class ToontjeHoger6Relative(Base):
         config = {'show_total_score': True}
         score = Score(session, config=config, feedback=feedback)
         return [score]
-
-    @classmethod
-    def get_round(cls, round, session):
+  
+    def get_round(self, round, session):
 
         # Config
         # -----------------
@@ -141,28 +137,26 @@ class ToontjeHoger6Relative(Base):
         trial = Trial(
             playback=playback,
             feedback_form=form,
-            title=cls.TITLE,
+            title=self.TITLE,
             style='blue-players'
         )
         return [trial]
 
-    @classmethod
-    def calculate_score(cls, result, data):
-        return cls.SCORE_CORRECT if result.expected_response == result.given_response else cls.SCORE_WRONG
+    def calculate_score(self, result, data):
+        return self.SCORE_CORRECT if result.expected_response == result.given_response else self.SCORE_WRONG
 
-    @classmethod
-    def get_final_round(cls, session):
+    def get_final_round(self, session):
 
         # Finish session.
         session.finish()
         session.save()
 
         # Score
-        score = cls.get_score(session)
+        score = self.get_score(session)
 
         # Final
         final_text = "Goed gedaan, jouw relatief gehoor is uitstekend!" if session.final_score >= 2 * \
-            cls.SCORE_CORRECT else "Dat bleek toch even lastig!"
+            self.SCORE_CORRECT else "Dat bleek toch even lastig!"
         final = Final(
             session=session,
             final_text=final_text,

@@ -9,7 +9,7 @@ from experiment.actions import Consent, Explainer, Final, Playlist, StartSession
 from experiment.actions.form import Form
 from experiment.actions.playback import Playback
 from experiment.questions.demographics import EXTRA_DEMOGRAPHICS
-from experiment.questions.utils import question_by_key, total_unanswered_questions, unasked_question
+from experiment.questions.utils import question_by_key
 from result.utils import prepare_result
 
 from section.models import Section
@@ -19,8 +19,16 @@ class MatchingPairs(Base):
     num_pairs = 8
     contact_email = 'aml.tunetwins@gmail.com'
 
-    @classmethod
-    def first_round(cls, experiment):
+    def __init__(self):
+        self.questions = [
+            question_by_key('dgf_gender_identity'),
+            question_by_key('dgf_generation'),
+            question_by_key('dgf_musical_experience', EXTRA_DEMOGRAPHICS),
+            question_by_key('dgf_country_of_origin'),
+            question_by_key('dgf_education', drop_choices=['isced-2', 'isced-5'])
+        ]
+
+    def first_round(self, experiment):
         rendered = render_to_string('consent/consent_matching_pairs.html')
         consent = Consent(rendered, title=_(
             'Informed consent'), confirm=_('I agree'), deny=_('Stop'))
@@ -48,20 +56,18 @@ class MatchingPairs(Base):
             start_session
         ]
     
-    @staticmethod
-    def next_round(session):
+    def next_round(self, session):
         if session.rounds_passed() < 1:       
-            trial, skip_explainer = MatchingPairs.get_question(session)
-            if trial:
-                if not skip_explainer:
-                    intro_questions = Explainer(
-                        instruction='Before starting the game, we would like to ask you five demographic questions.',
-                        steps=[]
-                    )
-                    return [intro_questions, trial]
+            trials = self.get_questionnaire(session)
+            if trials:
+                intro_questions = Explainer(
+                    instruction=_('Before starting the game, we would like to ask you %i demographic questions.' % (len(trials))),
+                    steps=[]
+                )
+                return [intro_questions, *trials]
             else:
-                trial = MatchingPairs.get_matching_pairs_trial(session)
-            return trial
+                trial = self.get_matching_pairs_trial(session)
+                return [trial]
         else:
             session.final_score += session.result_set.filter(
                 question_key='matching_pairs').last().score
@@ -75,48 +81,21 @@ class MatchingPairs(Base):
                 button={
                     'text': 'Play again',
                 },
-                rank=MatchingPairs.rank(session, exclude_unfinished=False),
+                rank=self.rank(session, exclude_unfinished=False),
                 show_social=True,
-                feedback_info=MatchingPairs.feedback_info()
+                feedback_info=self.feedback_info()
             )
-            cont = MatchingPairs.get_matching_pairs_trial(session)
+            cont = self.get_matching_pairs_trial(session)
             return [score, cont]
-    
-    @classmethod
-    def get_question(cls, session):
-        questions = [
-            question_by_key('dgf_gender_identity'),
-            question_by_key('dgf_generation'),
-            question_by_key('dgf_musical_experience', EXTRA_DEMOGRAPHICS),
-            question_by_key('dgf_country_of_origin'),
-            question_by_key('dgf_education')
-        ]
-        open_questions = total_unanswered_questions(session.participant, questions)
-        if not open_questions:
-            return None, None
-        total_questions = int(session.load_json_data().get('saved_total', '0'))
-        if not total_questions:
-            total_questions = open_questions     
-            session.save_json_data({'saved_total': open_questions})
-        question = unasked_question(session.participant, questions)
-        skip_explainer = session.load_json_data().get('explainer_shown')
-        if not skip_explainer:
-            session.save_json_data({'explainer_shown': True})
-        index = total_questions - open_questions + 1
-        return Trial(
-            title=_("Questionnaire %(index)i / %(total)i") % {'index': index, 'total': total_questions},
-            feedback_form=Form([question])
-        ), skip_explainer
 
-    @classmethod
-    def get_matching_pairs_trial(cls, session):
+    def get_matching_pairs_trial(self, session):
         json_data = session.load_json_data()
         pairs = json_data.get('pairs', [])
-        if len(pairs) < cls.num_pairs:
+        if len(pairs) < self.num_pairs:
             pairs = list(session.playlist.section_set.order_by().distinct('group').values_list('group', flat=True))
             random.shuffle(pairs)
-        selected_pairs = pairs[:cls.num_pairs]
-        session.save_json_data({'pairs': pairs[cls.num_pairs:]})
+        selected_pairs = pairs[:self.num_pairs]
+        session.save_json_data({'pairs': pairs[self.num_pairs:]})
         originals = session.playlist.section_set.filter(group__in=selected_pairs, tag='Original')  
         degradations = json_data.get('degradations')
         if not degradations:
@@ -144,8 +123,7 @@ class MatchingPairs(Base):
         )
         return trial
 
-    @classmethod
-    def calculate_score(cls, result, data):
+    def calculate_score(self, result, data):
         moves = data.get('result').get('moves')
         for m in moves:
             m['filename'] = str(Section.objects.get(pk=m.get('selectedSection')).filename)

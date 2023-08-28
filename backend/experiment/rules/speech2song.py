@@ -11,7 +11,7 @@ from experiment.actions.playback import Playback
 from experiment.actions.utils import combine_actions
 from experiment.questions.demographics import EXTRA_DEMOGRAPHICS
 from experiment.questions.languages import LANGUAGE, LanguageQuestion
-from experiment.questions.utils import question_by_key, unasked_question
+from experiment.questions.utils import question_by_key, unanswered_questions
 
 from result.utils import prepare_result
 
@@ -23,9 +23,22 @@ n_rounds_per_block = n_trials_per_block * 2  # each trial has two rounds
 class Speech2Song(Base):
     """ Rules for a speech-to-song experiment """
     ID = 'SPEECH_TO_SONG'
+    
+    def __init__(self):
+        self.questions = [
+            question_by_key('dgf_age', EXTRA_DEMOGRAPHICS),
+            question_by_key('dgf_gender_identity'),
+            question_by_key('dgf_country_of_origin_open', EXTRA_DEMOGRAPHICS),
+            question_by_key('dgf_country_of_residence_open', EXTRA_DEMOGRAPHICS),
+            question_by_key('lang_mother', LANGUAGE),
+            question_by_key('lang_second', LANGUAGE),
+            question_by_key('lang_third', LANGUAGE),
+            LanguageQuestion(_('English')).exposure_question(),
+            LanguageQuestion(_('Brazilian Portuguese')).exposure_question(),
+            LanguageQuestion(_('Mandarin Chinese')).exposure_question()
+        ]
 
-    @classmethod
-    def first_round(cls, experiment):
+    def first_round(self, experiment):
         explainer = Explainer(
             instruction=_("This is an experiment about an auditory illusion."),
             steps=[
@@ -53,8 +66,7 @@ class Speech2Song(Base):
             start_session
         ]
 
-    @staticmethod
-    def next_round(session):
+    def next_round(self, session):
         blocks = [1, 2, 3]
         # shuffle blocks based on session.id as seed -> always same order for same session
         np.random.seed(session.id)
@@ -63,7 +75,7 @@ class Speech2Song(Base):
         actions = []
         is_speech = True
         if session.current_round == 1:
-            question_trial = Speech2Song.get_question(session)
+            question_trial = self.get_questionnaire(session)
             if question_trial:
                 return question_trial
 
@@ -154,26 +166,6 @@ class Speech2Song(Base):
             actions.extend(next_repeated_representation(
                 session, is_speech))
         return actions
-
-    def get_question(session):
-        questions = [
-            question_by_key('dgf_age', EXTRA_DEMOGRAPHICS),
-            question_by_key('dgf_gender_identity'),
-            question_by_key('dgf_country_of_origin_open', EXTRA_DEMOGRAPHICS),
-            question_by_key('dgf_country_of_residence_open', EXTRA_DEMOGRAPHICS),
-            question_by_key('lang_mother', LANGUAGE),
-            question_by_key('lang_second', LANGUAGE),
-            question_by_key('lang_third', LANGUAGE),
-            LanguageQuestion(_('English')).exposure_question(),
-            LanguageQuestion(_('Brazilian Portuguese')).exposure_question(),
-            LanguageQuestion(_('Mandarin Chinese')).exposure_question()
-        ]
-
-        question = unasked_question(session.participant, questions)
-        if not question:
-            return None
-        feedback_form = Form([question])
-        return Trial(playback=None, feedback_form=feedback_form)
 
 def next_single_representation(session, is_speech, group_id):
     """ combine a question after the first representation,

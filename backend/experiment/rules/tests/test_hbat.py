@@ -21,16 +21,17 @@ class HBatTest(TestCase):
             participant=cls.participant,
             playlist=cls.playlist
         )
+        cls.rules = cls.session.experiment_rules()
     
     def test_trial_action(self):
         level = 4
-        slower_trial = HBat.next_trial_action(self.session, 1, level)
+        slower_trial = self.rules.next_trial_action(self.session, 1, level)
         assert slower_trial
         result_id = slower_trial.feedback_form.form[0].result_id
         result = Result.objects.get(pk=result_id)
         assert result
         assert result.expected_response == 'SLOWER'
-        faster_trial = HBat.next_trial_action(self.session, 0, level)
+        faster_trial = self.rules.next_trial_action(self.session, 0, level)
         assert faster_trial
         result_id = faster_trial.feedback_form.form[0].result_id
         result = Result.objects.get(pk=result_id)
@@ -51,15 +52,16 @@ class HBat_BST_Test(TestCase):
             participant=cls.participant,
             playlist=cls.playlist
         )
+        cls.rules = cls.session.experiment_rules()
     
     def test_trial_action(self):
-        in2 = BST.next_trial_action(self.session, 1, 3)
+        in2 = self.rules.next_trial_action(self.session, 1, 3)
         assert in2
         result_id = in2.feedback_form.form[0].result_id
         result = Result.objects.get(pk=result_id)
         assert result
         assert result.expected_response == 'in2'
-        in3 = BST.next_trial_action(self.session, 0, 3)
+        in3 = self.rules.next_trial_action(self.session, 0, 3)
         assert in3
         result_id = in3.feedback_form.form[0].result_id
         result = Result.objects.get(pk=result_id)

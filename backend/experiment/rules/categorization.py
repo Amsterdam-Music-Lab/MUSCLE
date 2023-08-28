@@ -4,9 +4,8 @@ from django.db.models import Avg
 
 from experiment.actions.form import Form, ChoiceQuestion
 from experiment.actions import Consent, Explainer, Score, StartSession, Trial, Final
-from experiment.actions.utils import combine_actions
 from experiment.actions.wrappers import two_alternative_forced
-from experiment.questions.utils import unasked_question
+from experiment.questions.utils import unanswered_questions
 
 from experiment.questions.demographics import EXTRA_DEMOGRAPHICS
 from experiment.questions.utils import question_by_key
@@ -20,8 +19,15 @@ SCORE_AVG_MIN_TRAINING = 0.8
 class Categorization(Base):
     ID = 'CATEGORIZATION'
 
-    @classmethod
-    def first_round(cls, experiment):
+    def __init__(self):
+        self.questions = [
+            question_by_key('dgf_age', EXTRA_DEMOGRAPHICS),
+            question_by_key('dgf_gender_reduced', EXTRA_DEMOGRAPHICS),
+            question_by_key('dgf_native_language', EXTRA_DEMOGRAPHICS),
+            question_by_key('dgf_musical_experience', EXTRA_DEMOGRAPHICS)
+        ]
+
+    def first_round(self, experiment):
         explainer = Explainer(
             instruction="This is a listening experiment in which you have to respond to short sound sequences.",
             steps=[],
@@ -36,17 +42,16 @@ class Categorization(Base):
         start_session = StartSession()
         return [explainer, consent, start_session]
 
-    @classmethod
-    def next_round(cls, session):
-        action = cls.get_question(session)
-        if action:
-            return action
-        
+    def next_round(self, session):
+        actions = self.get_questionnaire(session)
+        if actions:
+            return actions
+
         json_data = session.load_json_data()
 
         # Plan experiment on the first call to next_round
         if not json_data:
-            json_data = cls.plan_experiment(session)
+            json_data = self.plan_experiment(session)
 
         # Check if this participant already has a session
         if json_data == 'REPEAT':
@@ -108,7 +113,7 @@ class Categorization(Base):
                     )
                     return final
             # Prepare sections for next phase
-            json_data = cls.plan_phase(session)
+            json_data = self.plan_phase(session)
 
         if 'training' in json_data['phase']:
             if rounds_passed == 0:
@@ -117,12 +122,12 @@ class Categorization(Base):
                     steps=[],
                     button_label='Ok'
                 )
-                trial = cls.next_trial_action(session)
+                trial = self.next_trial_action(session)
                 return [explainer2, trial]
 
             # Get next training action
             elif rounds_passed < len(json_data['sequence']):
-                return cls.get_trial_with_feedback(session)
+                return self.get_trial_with_feedback(session)
 
             # Training phase completed, get the results
             training_rounds = int(json_data['training_rounds'])
@@ -186,15 +191,15 @@ class Categorization(Base):
                     explainer = Trial(title="Training failed", feedback_form=Form(
                         [repeat_training_or_quit]))
 
-            feedback = cls.get_feedback(session)
+            feedback = self.get_feedback(session)
             return [feedback, explainer]
 
         elif json_data['phase'] == 'testing':           
             if rounds_passed < len(json_data['sequence']):                
                 # Determine wether this round has feedback
                 if rounds_passed in json_data['feedback_sequence']:
-                    return cls.get_trial_with_feedback(session)
-                return cls.next_trial_action(session)
+                    return self.get_trial_with_feedback(session)
+                return self.next_trial_action(session)
 
             # Testing phase completed get results
             this_results = session.result_set.filter(comment='testing')
@@ -254,8 +259,7 @@ class Categorization(Base):
             )
             return final
 
-    @classmethod
-    def plan_experiment(cls, session):
+    def plan_experiment(self, session):
         """
         Randomly assign one of four (equal sized) groups to participants
         S1 = Same direction, Pair 1
@@ -361,8 +365,7 @@ class Categorization(Base):
 
         return json_data
 
-    @classmethod
-    def plan_phase(cls, session):
+    def plan_phase(self, session):
         json_data = session.load_json_data()
         print(json_data['group'], session.playlist.section_set.first().tag)
         if 'training' in json_data['phase']:
@@ -452,8 +455,7 @@ class Categorization(Base):
 
         return json_data
 
-    @classmethod
-    def get_feedback(cls, session):
+    def get_feedback(self, session):
 
         last_score = session.last_score()
 
@@ -466,18 +468,16 @@ class Categorization(Base):
         else:
             pass  # throw error
 
-        return Score(session, icon=icon, timer=1, title=cls.get_title(session))
+        return Score(session, icon=icon, timer=1, title=self.get_title(session))
 
-    @classmethod
-    def get_trial_with_feedback(cls, session):
+    def get_trial_with_feedback(self, session):
 
-        score = cls.get_feedback(session)
-        trial = cls.next_trial_action(session)
+        score = self.get_feedback(session)
+        trial = self.next_trial_action(session)
 
         return [score, trial]
 
-    @classmethod
-    def next_trial_action(cls, session):
+    def next_trial_action(self, session):
         """
         Get the next action for the experiment
         """
@@ -503,43 +503,15 @@ class Categorization(Base):
                   }
         style = {json_data['button_order']: True}
         trial = two_alternative_forced(session, section, choices, expected_response,
-            style=style, comment=json_data['phase'], scoring_rule='CORRECTNESS', title=cls.get_title(session), config=config)
+            style=style, comment=json_data['phase'], scoring_rule='CORRECTNESS', title=self.get_title(session), config=config)
         return trial
 
-    @classmethod
-    def get_title(cls, session):
+    def get_title(self, session):
         json_data = session.load_json_data()
         rounds_passed = (session.rounds_passed() -
                          int(json_data['training_rounds'])+1)
         return f"Round {rounds_passed} / {len(json_data['sequence'])}"
-    
-    @classmethod
-    def get_question(cls, session):
-        question = unasked_question(session.participant, questions)
-        if not question:
-            return None
-        return Trial(
-            title="Questionnaire",
-            feedback_form=Form([question], submit_label='Continue'))
 
-
-musical_experience_question = ChoiceQuestion(
-    key='musical_experience',
-    view='RADIOS',
-    question="Please select your level of musical experience:",
-    choices={
-        'none': "None",
-        'moderate': "Moderate",
-        'extensive': "Extensive",
-        'professional': "Professional"
-    },
-    is_skippable=True
-)
-
-questions = [question_by_key('dgf_age', EXTRA_DEMOGRAPHICS),
-             question_by_key('dgf_gender_reduced', EXTRA_DEMOGRAPHICS),
-             question_by_key('dgf_native_language', EXTRA_DEMOGRAPHICS),
-             musical_experience_question]
 
 repeat_training_or_quit = ChoiceQuestion(
     key='failed_training',

@@ -172,8 +172,9 @@ class Experiment(models.Model):
         return rows, list(fieldnames)
 
     def get_rules(self):
-        """Get rules class to be used for this session"""
-        return EXPERIMENT_RULES[self.rules]
+        """Get instance of rules class to be used for this session"""
+        cl = EXPERIMENT_RULES[self.rules]
+        return cl()
 
     def max_score(self):
         """Get max score from all sessions with a positive score"""
