@@ -33,7 +33,8 @@ class MusicalPreferences(Base):
         'no': 0
     }
 
-    questions = [
+    def __init__(self):
+        self.questions = [
             question_by_key('msi_38_listen_music', MSI_F1_ACTIVE_ENGAGEMENT),
             genre_question(),
             gender_question(),
@@ -81,7 +82,7 @@ class MusicalPreferences(Base):
                             steps = [
                                 Step(_("You will hear 64 music clips and have to answer two questions for each clip.")),
                                 Step(_("It will take 20-30 minutes to complete the whole experiment.")),
-                                Step(_("Either wear headphones or use your device's spekers.")),
+                                Step(_("Either wear headphones or use your device's speakers.")),
                                 Step(_("Your final results will be displayed at the end.")),
                                 Step(_("Have fun!"))
                             ],
@@ -210,6 +211,7 @@ class MusicalPreferences(Base):
             session,
             title=_("End"),
             final_text=_("Thank you for your participation and contribution to science!"),
+            feedback_info=self.feedback_info(),
             show_social=True
         )
         return view
