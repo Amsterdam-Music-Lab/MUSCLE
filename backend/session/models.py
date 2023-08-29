@@ -110,6 +110,10 @@ class Session(models.Model):
     def increment_round(self):
         self.current_round += 1
         self.save()
+    
+    def decrement_round(self):
+        self.current_round -= 1
+        self.save()
 
     def song_ids(self):
         """Get a list of song ids from the sections of this session's results"""

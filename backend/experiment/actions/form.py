@@ -148,15 +148,15 @@ class LikertQuestionIcon(Question):
         self.view = likert_view
         if scale_steps == 7:
             self.choices = {
-                1: 'fa-face-angry',
-                2: 'fa-face-frown-open',
-                3: 'fa-face-frown',
+                1: 'fa-face-grin-hearts',
+                2: 'fa-face-grin',
+                3: 'fa-face-smile',
                 4: 'fa-face-meh',  # Undecided
-                5: 'fa-face-smile',
-                6: 'fa-face-grin',
-                7: 'fa-face-grin-hearts',
+                5: 'fa-face-frown',
+                6: 'fa-face-frown-open',
+                7: 'fa-face-angry',
             }
-            self.config = {'icons':True, 'colors': ['#0CC7F1', '#42b5ff',  '#8b9bfa', '#ab86f1', '#bb7ae9', '#c863e8', '#d843e2']}
+            self.config = {'icons':True, 'colors': ['#d843e2', '#c863e8', '#bb7ae9','#ab86f1', '#8b9bfa', '#42b5ff', '#0CC7F1']}
         elif scale_steps == 5:
             self.choices = {
                 1: _("Strongly Disagree"),

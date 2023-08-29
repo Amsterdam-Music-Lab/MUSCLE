@@ -38,7 +38,7 @@ class Base(object):
             return scoring_rule(result, data)
         return None
 
-    def final_score_message(session):
+    def final_score_message(self, session):
         """Create final score message for given session, base on score per result"""
 
         correct = 0
