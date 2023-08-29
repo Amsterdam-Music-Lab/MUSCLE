@@ -11,17 +11,6 @@ import Profile from "../Profile/Profile";
 import Reload from "../Reload/Reload";
 import StoreProfile from "../StoreProfile/StoreProfile.js";
 
-import { library } from '@fortawesome/fontawesome-svg-core';
-import { faHeart, faThumbsDown, faThumbsUp, faQuestion, faFaceAngry,faFaceFrownOpen, faFaceFrown, faFaceMeh, faFaceSmile, faFaceGrin, faFaceGrinHearts, faArrowsLeftRight} from '@fortawesome/free-solid-svg-icons';
-
-library.add(
-    faThumbsDown,
-    faThumbsUp,
-    faQuestion,
-    faHeart,
-    faFaceAngry, faFaceFrownOpen, faFaceFrown, faFaceMeh, faFaceSmile, faFaceGrin, faFaceGrinHearts, faArrowsLeftRight
-);
-
 // App is the root component of our application
 const App = () => {
     return (
