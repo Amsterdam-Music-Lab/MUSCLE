@@ -25,7 +25,6 @@ export const getPlayerLabel = (index, labelStyle, customLabels) => {
 
 export const renderLabel = (label, size="fa-lg") => {
     if (!label) return label
-    if (label.startsWith('ti-')) return <span className={label}></span>
     if (label.startsWith('fa-')) return <span className={`fa-solid ${label} ${size}`}></span>
     else return label
 }
