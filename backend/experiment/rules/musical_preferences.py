@@ -3,14 +3,14 @@ from django.conf import settings
 from django.utils.translation import gettext_lazy as _
 from django.template.loader import render_to_string
 
-from experiment.questions.utils import question_by_key, total_unanswered_questions, unasked_question
+from experiment.questions.utils import question_by_key
 from experiment.questions.demographics import EXTRA_DEMOGRAPHICS
 from experiment.questions.goldsmiths import MSI_F1_ACTIVE_ENGAGEMENT
 
 from experiment.actions import Consent, Explainer, Final, HTML, Playlist, Redirect, Step, StartSession, Trial
 from experiment.actions.form import BooleanQuestion, ChoiceQuestion, Form, LikertQuestionIcon
 from experiment.actions.playback import Playback
-from experiment.actions.styles import STYLE_BOOLEAN, STYLE_BOOLEAN_NEGATIVE_FIRST
+from experiment.actions.styles import STYLE_BOOLEAN_NEGATIVE_FIRST
 
 from result.utils import prepare_result
 from result.models import Result
@@ -23,8 +23,17 @@ from .huang_2022 import gender_question, genre_question, get_test_playback, orig
 
 class MusicalPreferences(Base):
     ID = 'MUSICAL_PREFERENCES'
-    preference_offset = 20
-    knowledge_offset = 42
+    # preference_offset = 20
+    # knowledge_offset = 42
+    preference_offset = 4
+    knowledge_offset = 5
+    test_end = 6
+
+    know_score = {
+        'yes': 2,
+        'unsure': 1,
+        'no': 0
+    }
 
     questions = [
             question_by_key('msi_38_listen_music', MSI_F1_ACTIVE_ENGAGEMENT),
@@ -56,6 +65,7 @@ class MusicalPreferences(Base):
 
     def next_round(self, session, request_session=None):
         next_round_number = session.get_current_round()
+        actions = []
         if next_round_number == 1:
             playback = get_test_playback()
             html = HTML(body='<h4>{}</h4>'.format(_('Do you hear the music?')))
@@ -69,7 +79,7 @@ class MusicalPreferences(Base):
             return Trial(playback=playback, feedback_form=form, html=html,
                          config={'response_time': 15},
                          title=_("Audio check"))
-        elif next_round_number <= 2:
+        elif next_round_number == 2:
             last_result = session.result_set.last()
             if last_result.question_key == 'audio_check1':
                 if last_result.score == 0:
@@ -108,8 +118,7 @@ class MusicalPreferences(Base):
                     button_label=_("Let's go!")
                 )
                 return [explainer, *question_trials]
-
-        elif next_round_number == 2:
+        elif next_round_number == 3:
             explainer = Explainer(
                 instruction=_("How to play"),
                 steps = [
@@ -144,7 +153,7 @@ class MusicalPreferences(Base):
                 }))
             )
             actions = [feedback]
-        elif next_round_number == session.experiment.rounds:
+        elif next_round_number == self.test_end:
             like_results = session.result_set.filter(question_key='like_song')
             known_songs = session.result_set.filter(question_key='know_song', score=2).count()
             all_results = Result.objects.filter(
@@ -161,7 +170,6 @@ class MusicalPreferences(Base):
             )
             actions = [feedback]
 
-        
         section = session.playlist.random_section()
         like_key = 'like_song'
         likert = LikertQuestionIcon(
@@ -180,7 +188,7 @@ class MusicalPreferences(Base):
                 'yes': 'fa-thumbs-up',
             },
             result_id=prepare_result(know_key, session, section=section),
-            style=STYLE_BOOLEAN
+            style=STYLE_BOOLEAN_NEGATIVE_FIRST
         )
         playback = Playback([section], play_config={'show_animation': True})
         form = Form([know, likert])
@@ -196,12 +204,10 @@ class MusicalPreferences(Base):
         return actions
     
     def calculate_score(self, result, data):
-        result.comment = data.get('key')
-        result.save()
-        if data.get('key') == 'like_song':
-            return int(data.get('value'))
+        if data.get('key') == 'know_song':
+            return self.know_score.get(data.get('value'))
         else:
-            return None
+            return super().calculate_score(result, data)
     
     def get_final_view(self, session):
         # finalize experiment

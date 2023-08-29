@@ -1,27 +1,58 @@
 {% load i18n %}
-<h1>{{unlocked}} {% translate "unlocked" %}</h1>
-<div>
-    <div>
-        <h3>{% translate "Your top 3 favourite songs out of {{n_songs}}:" %}</h3>
-        <ul>
-            {% for song in top_participant %}
-                <li>{{song.name}}</li>
-            {% endfor %}
-        </ul>
+<h2 class="title">{{unlocked}} {% translate "unlocked" %}</h2>  
+<div class="card mb-3 bg-blue">
+    <div class="row">
+        <div class="col-md-4">
+            <span class="fa-solid fa-heart fa-7x"></span>
+        </div>
+        <div class="col-md-8">
+            <div class="card-body">
+                <h5>
+                    {% blocktranslate %}
+                        Your top 3 favourite songs out of {{n_songs}}: 
+                    {% endblocktranslate %}
+                </h5>
+                <ul>
+                    {% for song in top_participant %}
+                        <li>{{song.name}}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
     </div>
-    <div class="{% if !n_known_songs %}is-greyed-out{% endif %}">
-        {% if n_known_songs %}
-        <h3>{% translate "Of {{n_songs}}, you know {{n_known_songs}} %}</h3>
-        {% endif %}
+</div>
+<div class="card mb-3 bg-blue {% if n_known_songs == None %}is-greyed-out{% endif %}">
+    <div class="row">
+        <div class="col-md-4">     
+            <span class="fa-solid fa-lightbulb fa-7x"></span>
+        </div>
+        <div class="col-md-8">
+            <div class="card-body">
+                <h5>
+                    {% blocktranslate %}
+                        Of {{n_songs}} songs, you know {{n_known_songs}}
+                    {% endblocktranslate %}
+                </h5>
+            </div>
+        </div>
     </div>
-    <div class="{% if !top_all %}is-greyed-out{% endif %}">
-        {% if top_all %}
-        <h3>{% translate "Top 3 favourite songs by others:" %}</h3>
-        <ul>
-            {% for song in top_all %}
-                <li>{{song.name}}</li>
-            {% endfor %}
-        </ul>
-        {% endif %}
+</div>
+<div class="card bg-blue {% if not top_all %}is-greyed-out{% endif %}">
+    <div class="row">
+        <div class="col-md-4">
+            <span class="fa-solid fa-user-group fa-7x"></span>
+        </div>
+        <div class="col-md-8">
+            <div class="card-body">
+                <h5>
+                    {% translate "Top 3 favourite songs by others:" %}
+                </h5>
+                <ul>
+                    {% for song in top_all %}
+                        <li>{{song.name}}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
     </div>
 </div>
