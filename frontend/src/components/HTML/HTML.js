@@ -8,7 +8,7 @@ const HTML = ({ body }) => {
     return (
         <div className={classNames("aha__HTML")}>
             <div
-                className="html-content d-flex justify-content-center pb-3"
+                className="html-content text-center pb-3"
                 dangerouslySetInnerHTML={{ __html: body }}
             />
         </div>
