@@ -1,8 +1,7 @@
 import json
 
 from django.views.decorators.http import require_POST
-from django.http import Http404, HttpResponseServerError, JsonResponse, HttpResponseBadRequest
-from django.shortcuts import redirect
+from django.http import HttpResponse, HttpResponseServerError, JsonResponse, HttpResponseBadRequest
 
 from participant.utils import get_participant
 from session.models import Session
@@ -76,7 +75,7 @@ def get_result(request, question):
         result = Result.objects.get(
             question_key=question, participant=participant)
     except Result.DoesNotExist:
-        raise Http404("Not found")
+        return HttpResponse(status=204)
 
     return JsonResponse({"answer": result.given_response},
                         json_dumps_params={'indent': 4})

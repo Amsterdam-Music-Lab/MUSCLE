@@ -30,7 +30,7 @@ class ResultTest(TestCase):
     
     def test_get(self):
         response = self.client.get('/result/speed_swallow/')
-        assert response.status_code == 404
+        assert response.status_code == 204
         
     def test_create(self):
         result = Result.objects.create(

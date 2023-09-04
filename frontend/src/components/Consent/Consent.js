@@ -15,7 +15,7 @@ const Consent = ({ title, text, experiment, participant, onNext, confirm, deny, 
         if (consent || (new URLSearchParams(url_query_string).get("participant_id"))) {
             onNext();
         }
-    }, [consent, onNext]);
+    }, [consent, onNext, url_query_string]);
 
     // Click on agree button
     const onAgree = async () => {

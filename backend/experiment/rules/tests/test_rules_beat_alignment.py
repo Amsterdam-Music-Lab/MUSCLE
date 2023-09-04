@@ -56,7 +56,7 @@ class BeatAlignmentRuleTest(TestCase):
         csrf_token = response_json['csrf_token']
 
         response = self.client.get('/result/consent_ba/')
-        self.assertEqual(response.status_code, 404) # By design, returns 404 if no consent has been given so far :/
+        self.assertEqual(response.status_code, 204) # returns 204 if no consent has been given so far
 
         data = {"json_data": "{\"key\":\"consent_ba\",\"value\":true}", "csrfmiddlewaretoken": csrf_token}
         response = self.client.post('/result/consent/', data)
