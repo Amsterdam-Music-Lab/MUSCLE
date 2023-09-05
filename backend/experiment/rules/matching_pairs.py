@@ -2,11 +2,9 @@ import random
 
 from django.utils.translation import gettext_lazy as _
 from django.template.loader import render_to_string
-from django.conf import settings
 
 from .base import Base
 from experiment.actions import Consent, Explainer, Final, Playlist, StartSession, Step, Trial
-from experiment.actions.form import Form
 from experiment.actions.playback import Playback
 from experiment.questions.demographics import EXTRA_DEMOGRAPHICS
 from experiment.questions.utils import question_by_key
@@ -73,6 +71,7 @@ class MatchingPairs(Base):
                 question_key='matching_pairs').last().score
             session.save()
             social_info = self.social_media_info(session.experiment, session.final_score)
+            social_info['apps'].append('clipboard')
             score = Final(
                 session,
                 title='Score',

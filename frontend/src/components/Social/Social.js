@@ -22,16 +22,26 @@ const Social = ({ social }) => {
             }
         )
     }
+
+    const copyToClipboard = (url) => {
+        navigator.clipboard.writeText(
+            url
+        ).then(
+            (success) => {},
+            (error) => {console.error(error)}
+          );
+    }
     
     return (
         <div className="aha__share d-flex justify-content-center mt-4">
             {social.apps.includes('facebook') && (
                 <FacebookShareButton
                     url={social.url}
+                    title={social.message}
                     hashtag={social.hashtags[0]}
                     blankTarget="true"
                 >
-                    <i class="fa-brands fa-facebook-f fa-2x"></i>
+                    <i className="fa-brands fa-facebook-f fa-2x"></i>
                 </FacebookShareButton>
             )}
             {social.apps.includes('whatsapp') && (
@@ -63,8 +73,13 @@ const Social = ({ social }) => {
                 </WeiboShareButton>
             )}
             {social.apps.includes('share') && showShare && (
-                <div onClick={() => shareContent(social.text, social.url)}>
+                <div onClick={shareContent(social.text, social.url)}>
                     <i className="fa-solid fa-share-nodes fa-2x"></i>
+                </div>
+            )}
+            {social.apps.includes('clipboard') && (
+                <div onClick={() => copyToClipboard(social.url)}>
+                    <i className="fa-solid fa-clipboard fa-2x"></i>
                 </div>
             )}
         </div>

@@ -126,13 +126,15 @@ class Base(object):
         return trials
     
     def social_media_info(self, experiment, score):
+        current_url =  "{}/{}".format(settings.RELOAD_PARTICIPANT_TARGET,
+            experiment.slug
+        )
         return {
             'apps': ['facebook', 'twitter'],
-            'message': _("I scored %(score)i points on %(base_url)s/%(slug)s") % {
+            'message': _("I scored %(score)i points on %(url)s") % {
                 'score': score,
-                'base_url': settings.RELOAD_PARTICIPANT_TARGET,
-                'slug': experiment.slug
+                'url': current_url
             },
-            'url': experiment.url,
+            'url': experiment.url or current_url,
             'hashtags': [experiment.hashtag or experiment.slug, "amsterdammusiclab", "citizenscience"]
         }

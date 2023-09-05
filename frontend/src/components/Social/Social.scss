@@ -2,6 +2,9 @@
     &.d-flex {
         gap: 1vw;
     }
+    div {
+        cursor: pointer;
+    }
     i {
         $size: 4rem;
         width: $size;
