@@ -1,32 +1,72 @@
-import React from "react";
+import React, { useRef } from "react";
+import {
+    FacebookShareButton, TwitterShareButton, WeiboShareButton, WhatsappShareButton
+  } from 'next-share'
+  
 
-import { URLS } from "../../config";
-
-const Social = ({ score, experimentSlug="", socialm_hashtag="", socialm_endtext="" }) => {
+const Social = ({ social }) => {
     /* Social is a view which returns social media links with icons
     if render_social is set to false, returns an empty diff
     */
+
+    const showShare = useRef(
+        window.isSecureContext && 
+        navigator.userAgent.includes('Mobi') &&
+        !navigator.userAgent.includes('Firefox'))
+    
+    const shareContent = (text, url) => {
+        navigator.share(
+            {
+                text: text,
+                url: url
+            }
+        )
+    }
+    
     return (
         <div className="aha__share d-flex justify-content-center mt-4">
-            <a
-                href={URLS.shareFacebook.replace("--SLUG--",experimentSlug ? "/"+experimentSlug : "")}
-                target="_blank"
-                className="fa-brands fa-facebook"
-                rel="noopener noreferrer"
-            >
-                Share on Facebook
-            </a>
-            <a
-                href={URLS.shareTwitter.replace("--SCORE--", score)
-                    .replace("--SLUG--", experimentSlug ? "/"+experimentSlug : "")
-                    .replace("--HASHTAG--", encodeURIComponent(socialm_hashtag ? " playing " + socialm_hashtag +" " : " "))
-                    .replace("--ENDTEXT--", encodeURIComponent(socialm_endtext ? " "+socialm_endtext : ""))}
-                target="_blank"
-                className="fa-brands fa-twitter"
-                rel="noopener noreferrer"
-            >
-                Share on Twitter
-            </a>
+            {social.apps.includes('facebook') && (
+                <FacebookShareButton
+                    url={social.url}
+                    hashtag={social.hashtags[0]}
+                    blankTarget="true"
+                >
+                    <i class="fa-brands fa-facebook-f fa-2x"></i>
+                </FacebookShareButton>
+            )}
+            {social.apps.includes('whatsapp') && (
+                <WhatsappShareButton
+                    url={social.url}
+                    title={social.message}
+                    blankTarget="true"
+                >
+                    <i className="fa-brands fa-whatsapp fa-2x"></i>
+                </WhatsappShareButton>
+            )}
+            {social.apps.includes('twitter') && (
+                <TwitterShareButton
+                    url={social.url}
+                    title={social.message}
+                    hashtags={social.hashtags}
+                    blankTarget="true"
+                >
+                    <i className="fa-brands fa-x-twitter fa-2x"></i>
+                </TwitterShareButton>
+            )}
+            {social.apps.includes('weibo') && (
+                <WeiboShareButton
+                    url={social.url}
+                    title={social.message}
+                    blankTarget="true"
+                >
+                    <i className="fa-brands fa-weibo fa-2x"></i>
+                </WeiboShareButton>
+            )}
+            {social.apps.includes('share') && showShare && (
+                <div onClick={() => shareContent(social.text, social.url)}>
+                    <i className="fa-solid fa-share-nodes fa-2x"></i>
+                </div>
+            )}
         </div>
     );
 };

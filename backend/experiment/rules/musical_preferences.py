@@ -207,12 +207,14 @@ class MusicalPreferences(Base):
     
     def get_final_view(self, session):
         # finalize experiment
+        social_info = self.social_media_info(session.experiment, session.final_score)
+        social_info['apps'] = ['weibo', 'share']
         view = Final(
             session,
             title=_("End"),
             final_text=_("Thank you for your participation and contribution to science!"),
             feedback_info=self.feedback_info(),
-            show_social=True
+            social=social_info
         )
         return view
     

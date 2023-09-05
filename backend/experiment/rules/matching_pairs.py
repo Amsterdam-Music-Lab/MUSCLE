@@ -72,17 +72,16 @@ class MatchingPairs(Base):
             session.final_score += session.result_set.filter(
                 question_key='matching_pairs').last().score
             session.save()
+            social_info = self.social_media_info(session.experiment, session.final_score)
             score = Final(
                 session,
                 title='Score',
                 final_text='Can you score higher than your friends and family? Share and let them try!',
-                socialm_hashtag='#TuneTwins',
-                socialm_endtext='https://www.amsterdammusiclab.nl/blog/tunetwins',
                 button={
                     'text': 'Play again',
                 },
                 rank=self.rank(session, exclude_unfinished=False),
-                show_social=True,
+                social=social_info,
                 feedback_info=self.feedback_info()
             )
             cont = self.get_matching_pairs_trial(session)

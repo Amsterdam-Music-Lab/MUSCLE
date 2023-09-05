@@ -124,3 +124,15 @@ class Base(object):
                 feedback_form=Form([question], is_skippable=question.is_skippable)
             ))
         return trials
+    
+    def social_media_info(self, experiment, score):
+        return {
+            'apps': ['facebook', 'twitter'],
+            'message': _("I scored %(score)i points on %(base_url)s/%(slug)s") % {
+                'score': score,
+                'base_url': settings.RELOAD_PARTICIPANT_TARGET,
+                'slug': experiment.slug
+            },
+            'url': experiment.url,
+            'hashtags': [experiment.hashtag or experiment.slug, "amsterdammusiclab", "citizenscience"]
+        }
