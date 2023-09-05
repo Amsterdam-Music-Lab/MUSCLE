@@ -460,11 +460,11 @@ class Categorization(Base):
         last_score = session.last_score()
 
         if session.last_result().given_response == "TIMEOUT":
-            icon = "ti-help"  # "ti-time"
+            icon = "fa-question"
         elif last_score == 1:
-            icon = 'ti-face-smile'
+            icon = 'fa-face-smile'
         elif last_score == 0:
-            icon = 'ti-face-sad'
+            icon = 'fa-face-frown'
         else:
             pass  # throw error
 

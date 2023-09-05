@@ -11,7 +11,7 @@ const Social = ({ score, experimentSlug="", socialm_hashtag="", socialm_endtext=
             <a
                 href={URLS.shareFacebook.replace("--SLUG--",experimentSlug ? "/"+experimentSlug : "")}
                 target="_blank"
-                className="ti-facebook"
+                className="fa-brands fa-facebook"
                 rel="noopener noreferrer"
             >
                 Share on Facebook
@@ -22,7 +22,7 @@ const Social = ({ score, experimentSlug="", socialm_hashtag="", socialm_endtext=
                     .replace("--HASHTAG--", encodeURIComponent(socialm_hashtag ? " playing " + socialm_hashtag +" " : " "))
                     .replace("--ENDTEXT--", encodeURIComponent(socialm_endtext ? " "+socialm_endtext : ""))}
                 target="_blank"
-                className="ti-twitter-alt"
+                className="fa-brands fa-twitter"
                 rel="noopener noreferrer"
             >
                 Share on Twitter

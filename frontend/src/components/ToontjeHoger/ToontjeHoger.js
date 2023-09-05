@@ -28,7 +28,7 @@ const Share = ({ score, label, message }) => {
             <div className="social">
                 <a
                     href={getLink("http://twitter.com/share?url=%URL%&text=%TEXT%")}
-                    className="twitter ti-twitter-alt"
+                    className="twitter fa-brands fa-twitter"
                     target="_blank"
                     rel="noopener noreferrer"
                 >
@@ -36,7 +36,7 @@ const Share = ({ score, label, message }) => {
                 </a>
                 <a
                     href={getLink("http://www.facebook.com/sharer.php?u=%URL%&t=%TEXT%")}
-                    className="facebook ti-facebook"
+                    className="facebook fa-brands fa-facebook"
                     target="_blank"
                     rel="noopener noreferrer"
                 >
@@ -45,7 +45,7 @@ const Share = ({ score, label, message }) => {
                 <a
                     href={getLink("whatsapp://send?text=%TEXT%%20%URL%")}
                     data-action="share/whatsapp/share"
-                    className="whatsapp ti-whatsapp"
+                    className="whatsapp fa-brands fa-whatsapp"
                     target="_blank"
                     rel="noopener noreferrer"
                 >

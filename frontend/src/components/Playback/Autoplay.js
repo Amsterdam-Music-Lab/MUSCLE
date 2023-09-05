@@ -84,7 +84,7 @@ const AutoPlay = ({instruction, preloadMessage, onPreloadReady, playConfig, sect
                                     countDownRunning={running}
                                 />
                                 : <div className="stationary">
-                                    <span className="ti-headphone"></span>
+                                    <span className="fa-solid fa-headphones fa-6x"></span>
                                 </div>
                             }
                         </div>

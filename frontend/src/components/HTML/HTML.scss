@@ -38,4 +38,20 @@
             @include btn-style($pink);
         }
     }
+
+    .card.bg-blue {
+        height: 22vh;
+        background-color: $blue;
+
+        span {
+            margin-top: 3vh;
+        }
+
+        &.is-greyed-out {
+            border: .5rem solid grey;
+            background-color: transparent;
+            color: transparent;
+        }
+        
+    }
 }
