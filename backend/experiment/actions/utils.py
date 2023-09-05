@@ -6,12 +6,6 @@ from django.template.loader import render_to_string
 
 from experiment.actions import Final
 
-def combine_actions(*argv):
-    """Return the first action with the rest of the actions as an array under key 'next_round'"""
-    actions = argv[0]
-    actions['next_round'] = argv[1:]
-    return actions
-
 def final_action_with_optional_button(session, final_text, request_session):
     """ given a session, a score message and an optional session dictionary from an experiment series,
     return a Final.action, which has a button to continue to the next experiment if series is defined
