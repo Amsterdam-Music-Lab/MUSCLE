@@ -61,9 +61,6 @@ class Categorization(Base):
             final = Final(
                 session=session,
                 final_text="You already have participated in this experiment.",
-                rank=None,
-                show_social=False,
-                show_profile_link=False
             )
             return final
 
@@ -75,9 +72,6 @@ class Categorization(Base):
             final = Final(
                 session=session,
                 final_text="The maximimum number of participants has been reached.",
-                rank=None,
-                show_social=False,
-                show_profile_link=False
             )
             return final
 
@@ -107,9 +101,6 @@ class Categorization(Base):
                     final = Final(
                         session=session,
                         final_text="Thanks for your participation!" + final_message,
-                        rank=None,
-                        show_social=False,
-                        show_profile_link=False
                     )
                     return final
             # Prepare sections for next phase
@@ -181,9 +172,6 @@ class Categorization(Base):
                     final = Final(
                         session=session,
                         final_text="Thanks for your participation!" + final_message,
-                        rank=None,
-                        show_social=False,
-                        show_profile_link=False
                     )
                     return final
                 else:
@@ -251,9 +239,6 @@ class Categorization(Base):
             final = Final(
                 session=session,
                 final_text=final_text + final_message,
-                rank=rank,
-                show_social=False,
-                show_profile_link=False,
                 total_score=round(score_percent),
                 points='% correct'
             )

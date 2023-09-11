@@ -1,28 +1,18 @@
 .aha__share {
-    a {
-        $size: 55px;
-        display: inline-block;
+    &.d-flex {
+        gap: 1vw;
+    }
+    div {
+        cursor: pointer;
+    }
+    i {
+        $size: 4rem;
         width: $size;
         height: $size;
-        border-radius: 50%;
         line-height: $size;
         text-align: center;
-        background-color: $teal;
-        color: white;
-        margin: 0 10px;
-        font-size: 0;
-
-        &::before {
-            font-size: 26px;
-        }
-
-        &:hover {
-            text-decoration: none;
-        }
-
-        &.fa-brands {
-            border: 2px solid rgba(white, 0.1);
-            background-color: rgba(white, 0.1);
-        }
+        border: 2px solid rgba(white, 0.1);
+        background-color: rgba(white, 0.1);
+        border-radius: 50%;
     }
 }

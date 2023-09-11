@@ -2,11 +2,9 @@ import random
 
 from django.utils.translation import gettext_lazy as _
 from django.template.loader import render_to_string
-from django.conf import settings
 
 from .base import Base
 from experiment.actions import Consent, Explainer, Final, Playlist, StartSession, Step, Trial
-from experiment.actions.form import Form
 from experiment.actions.playback import Playback
 from experiment.questions.demographics import EXTRA_DEMOGRAPHICS
 from experiment.questions.utils import question_by_key
@@ -72,17 +70,17 @@ class MatchingPairs(Base):
             session.final_score += session.result_set.filter(
                 question_key='matching_pairs').last().score
             session.save()
+            social_info = self.social_media_info(session.experiment, session.final_score)
+            social_info['apps'].append('clipboard')
             score = Final(
                 session,
                 title='Score',
                 final_text='Can you score higher than your friends and family? Share and let them try!',
-                socialm_hashtag='#TuneTwins',
-                socialm_endtext='https://www.amsterdammusiclab.nl/blog/tunetwins',
                 button={
                     'text': 'Play again',
                 },
                 rank=self.rank(session, exclude_unfinished=False),
-                show_social=True,
+                social=social_info,
                 feedback_info=self.feedback_info()
             )
             cont = self.get_matching_pairs_trial(session)
