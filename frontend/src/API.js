@@ -37,8 +37,8 @@ export const URLS = {
 export const useExperiment = (slug) =>
     useGet(API_BASE_URL + URLS.experiment.get(slug));
 
-export const useParticipant = (url_query_string) =>
-    useGet(API_BASE_URL + URLS.participant.current + url_query_string);
+export const useParticipant = (urlQueryString) =>
+    useGet(API_BASE_URL + URLS.participant.current + urlQueryString);
 
 export const useParticipantScores = () =>
     useGet(API_BASE_URL + URLS.participant.score);
