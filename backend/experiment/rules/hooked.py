@@ -12,7 +12,7 @@ from experiment.actions import  Consent, Explainer, Final, Playlist, Score, Song
 from experiment.actions.form import BooleanQuestion, Form
 from experiment.actions.playback import Playback
 from experiment.questions.demographics import DEMOGRAPHICS
-from experiment.questions.utils import copy_shuffle, unanswered_questions
+from experiment.questions.utils import copy_shuffle
 from experiment.questions.goldsmiths import MSI_FG_GENERAL, MSI_ALL
 from experiment.questions.stomp import STOMP20
 from experiment.questions.tipi import TIPI
@@ -92,6 +92,7 @@ class Hooked(Base):
             next_round_number = session.get_next_round()
             config = {'show_section': True, 'show_total_score': True}
             title = self.get_trial_title(session, next_round_number - 1)
+            social_info = self.social_media_info(session.experiment, session.final_score)
             return [
                 Score(session,
                     config=config,
@@ -101,7 +102,7 @@ class Hooked(Base):
                     session=session,
                     final_text=self.final_score_message(session),
                     rank=self.rank(session),
-                    show_social=True,
+                    social=social_info,
                     show_profile_link=True,
                     button={'text': _('Play again'), 'link': '{}/{}'.format(settings.CORS_ORIGIN_WHITELIST[0], session.experiment.slug)}
                 )

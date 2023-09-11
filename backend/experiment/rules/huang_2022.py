@@ -268,7 +268,6 @@ class Huang2022(Hooked):
             session=session,
             final_text=self.final_score_message(session),
             rank=self.rank(session),
-            show_social=False,
             show_profile_link=True,
             feedback_info=self.feedback_info()
         )
