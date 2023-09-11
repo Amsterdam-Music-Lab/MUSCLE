@@ -10,17 +10,19 @@ const Social = ({ social }) => {
     */
 
     const showShare = useRef(
-        navigator.share !== undefined &&
-        navigator.userAgent.includes('Mobi') &&
-        !navigator.userAgent.includes('Firefox'))
+        navigator.share !== undefined && navigator.canShare !== undefined
+    )
     
-    const shareContent = async(text, url) => {
+    const shareContent = (text, url) => {
         const shareData = {
             text: text,
             url: url
         }
         if (navigator.canShare(shareData)) {
-            await navigator.share(shareData);
+            navigator.share(shareData).then(
+                (success) => {},
+                (error) => {console.error(error)}
+            );
         }
     }
 
