@@ -10,26 +10,22 @@ const Social = ({ social }) => {
     */
 
     const showShare = useRef(
-        window.isSecureContext && 
+        navigator.share !== undefined &&
         navigator.userAgent.includes('Mobi') &&
         !navigator.userAgent.includes('Firefox'))
     
-    const shareContent = (text, url) => {
-        navigator.share(
-            {
-                text: text,
-                url: url
-            }
-        )
+    const shareContent = async(text, url) => {
+        const shareData = {
+            text: text,
+            url: url
+        }
+        if (navigator.canShare(shareData)) {
+            await navigator.share(shareData);
+        }
     }
 
-    const copyToClipboard = (url) => {
-        navigator.clipboard.writeText(
-            url
-        ).then(
-            (success) => {},
-            (error) => {console.error(error)}
-          );
+    const copyToClipboard = async (url) => {
+        await navigator.clipboard.writeText(url);
     }
     
     return (
@@ -72,8 +68,8 @@ const Social = ({ social }) => {
                     <i className="fa-brands fa-weibo fa-2x"></i>
                 </WeiboShareButton>
             )}
-            {social.apps.includes('share') && showShare && (
-                <div onClick={shareContent(social.text, social.url)}>
+            {showShare.current && social.apps.includes('share') && (
+                <div onClick={() => shareContent(social.text, social.url)}>
                     <i className="fa-solid fa-share-nodes fa-2x"></i>
                 </div>
             )}
