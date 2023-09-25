@@ -11,6 +11,10 @@ class Playback(BaseAction):
         - preload_message: text to display during preload
         - instruction: text to display during presentation of the sound
         - play_config: define to override the following values:
+            - play_method:
+                - 'BUFFER': Use webaudio buffers. (recommended for stimuli up to 45s)  
+                - 'HTML': Use the HTML tag. (recommended for stimuli longer 45s)
+            - external_audio (if set to True, web-audio api will be disabled)
             - ready_time: time before presentation of sound
             - timeout_after_playback: pause in ms after playback has finished
             - playhead: from where the audio file should play (offset in seconds from start)
@@ -34,6 +38,8 @@ class Playback(BaseAction):
         self.preload_message = preload_message
         self.instruction = instruction
         self.play_config = {
+            'play_method': 'BUFFER',
+            'external_audio': False,
             'ready_time': 0,
             'playhead': 0,
             'show_animation': False,
