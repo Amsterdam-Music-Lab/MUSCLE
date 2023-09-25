@@ -3,9 +3,11 @@ import React from "react";
 import ReactDOM from "react-dom";
 import App from "./components/App/App";
 import { initAudioListener } from "./util/audio";
+import { initWebAudioListener } from "./util/webAudio";
 
 // Init audio listener
 initAudioListener();
+initWebAudioListener();
 
 // Create app
 ReactDOM.render(<App />, document.getElementById("root"));
