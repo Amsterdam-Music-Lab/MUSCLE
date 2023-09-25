@@ -1,6 +1,7 @@
 import React, { useRef, useState, useEffect } from "react";
 
 import * as audio from "../../util/audio";
+import * as webAudio from "../../util/webAudio";
 import { MEDIA_ROOT } from "../../config";
 
 import Circle from "../Circle/Circle";
@@ -13,7 +14,7 @@ const RECOGNIZE = "RECOGNIZE";
 
 const AutoPlay = ({instruction, preloadMessage, onPreloadReady, playConfig, sections, time, startedPlaying, finishedPlaying, responseTime, className=''}) => {
     // player state
-    const [state, setState] = useState({ view: PRELOAD });
+    const [state, setState] = useState({ view: RECOGNIZE });
     const running = useRef(playConfig.auto_play);
     const setView = (view, data = {}) => {
         setState({ view, ...data });
@@ -26,15 +27,25 @@ const AutoPlay = ({instruction, preloadMessage, onPreloadReady, playConfig, sect
     };
 
 
+
     // Handle view logic
     useEffect(() => {
         switch (state.view) {
-            case RECOGNIZE:                
+            case RECOGNIZE:
+                let latency = 0;
                 // Play audio at start time            
                 if (!playConfig.mute) {
-                    audio.playFrom(Math.max(0, playConfig.playhead));
+                    if (playConfig.play_method === 'BUFFER' && playConfig.external_audio === false) {
+                        console.log('Autoplay buffer');
+                        latency = webAudio.getTotalLatency();
+                        webAudio.playBufferFrom(section.id, 0, Math.max(0, playConfig.playhead));
+                    } else {
+                        console.log('Autoplay HTML audio')
+                        audio.playFrom(Math.max(0, playConfig.playhead));
+                    }                    
                 }                
-                startedPlaying();                
+                startedPlaying();
+                setTimeout(startedPlaying(), latency);
                 break;
             default:
             // nothing

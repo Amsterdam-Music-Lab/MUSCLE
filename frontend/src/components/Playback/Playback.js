@@ -9,6 +9,7 @@ import PlayButton from "../PlayButton/PlayButton";
 import MultiPlayer from "./MultiPlayer";
 import SpectrogramPlayer from "./SpectrogramPlayer";
 import MatchingPairs from "./MatchingPairs";
+import Loading from "../Loading/Loading";
 
 export const AUTOPLAY = "AUTOPLAY";
 export const BUTTON = "BUTTON";
@@ -30,6 +31,7 @@ const Playback = ({
     startedPlaying,
     finishedPlaying,
 }) => {
+    const [sectionsLoaded, setSectionsLoaded] = useState(null);    
     const [playerIndex, setPlayerIndex] = useState(-1);
     const lastPlayerIndex = useRef(-1);
     const activeAudioEndedListener = useRef(null);
@@ -48,9 +50,29 @@ const Playback = ({
         prevPlayerIndex.current = parseInt(playerIndex);
     }, [playerIndex]);
 
-    // Preload first section
+    
     useEffect(() => {
-        return audio.loadUntilAvailable(MEDIA_ROOT + sections[0].url, () => {});
+        if (playConfig.play_method === 'BUFFER' && playConfig.external_audio === false) {
+            // Use Web-audio and preload sections in buffers            
+            sections.map((section, index) => {
+                // Clear buffers if this is the first section
+                if (index === 0) {
+                    webAudio.clearBuffers();
+                } 
+                return webAudio.loadBuffer(section.id, MEDIA_ROOT + section.url, () => {                    
+                    if (index === (sections.length-1)) {
+                        setSectionsLoaded(1);
+                    }                                        
+                });
+            })
+        } else {
+            if (playConfig.external_audio === true) {
+                webAudio.closeWebAudio();
+            }
+            setSectionsLoaded(1);
+            // Preload first section
+            return audio.loadUntilAvailable(MEDIA_ROOT + sections[0].url, () => {});
+        }        
     }, [sections]);
 
     // Cancel events
@@ -81,27 +103,57 @@ const Playback = ({
     // Play audio
     const playAudio = useCallback(
         (index) => {
-            // Only initialize webaudio if section is local            
-            let latency = 0;      
-            // Store player index
-            setPlayerIndex(index);
-            // Determine if audio should be played
-            if (playConfig.mute) {
-                setPlayerIndex(-1);
-                audio.pause();
-                return;
+            let latency = 0;
+            if (playConfig.play_method === 'BUFFER' && playConfig.external_audio === false) {
+                console.log('Play buffer');                
+                // Determine latency for current audio device
+                latency = webAudio.getTotalLatency();
+                // Store player index
+                setPlayerIndex(index);
+                // Determine if audio should be played
+                if (playConfig.mute) {
+                    setPlayerIndex(-1);
+                    webAudio.stopBuffer();
+                    return;
+                }
+                // Volume 1
+                // audio.setVolume(1);
+    
+                // Cancel active events
+                cancelAudioListeners();           
+    
+                // Play audio
+                // audio.playFrom(Math.max(0, playConfig.playhead || 0));
+                
+                webAudio.playBuffer(sections[index].id);
+                // listen for active audio events
+                activeAudioEndedListener.current = webAudio.listenOnce("ended", onAudioEnded);                
+            } else {
+                console.log('Play HTML audo')
+                // Only initialize webaudio if section is local            
+                if (playConfig.external_audio === false) {                    
+                    latency = webAudio.initWebAudio();
+                }
+                // Store player index
+                setPlayerIndex(index);
+                // Determine if audio should be played
+                if (playConfig.mute) {
+                    setPlayerIndex(-1);
+                    audio.pause();
+                    return;
+                }
+                // Volume 1
+                audio.setVolume(1);
+
+                // Cancel active events
+                cancelAudioListeners();
+
+                // listen for active audio events
+                activeAudioEndedListener.current = audio.listenOnce("ended", onAudioEnded);
+
+                // Play audio
+                audio.playFrom(Math.max(0, playConfig.playhead || 0));                
             }
-            // Volume 1
-            audio.setVolume(1);
-
-            // Cancel active events
-            cancelAudioListeners();
-
-            // listen for active audio events
-            activeAudioEndedListener.current = audio.listenOnce("ended", onAudioEnded);
-
-            // Play audio
-            audio.playFrom(Math.max(0, playConfig.playhead || 0));
             // Compensate for audio latency and set state to playing
             setTimeout(startedPlaying && startedPlaying(), latency);            
         },
@@ -115,43 +167,76 @@ const Playback = ({
 
     // Play section with given index
     const playSection = useCallback(
-        (index = 0) => {            
-            // Load different audio
-            if (index !== lastPlayerIndex.current) {
-                audio.loadUntilAvailable(
-                    MEDIA_ROOT + sections[index].url,
-                    () => { 
-                        playAudio(index);
-                    }
-                );
-                
-                return;
-            }
+        (index = 0) => {
+            if (playConfig.play_method === 'BUFFER' && playConfig.external_audio === false) {
+                // Play section from buffer
+                if (index !== lastPlayerIndex.current) {
+                    // Load different audio
+                    if (prevPlayerIndex.current !== -1) {
+                        stopPlaying();
+                    }                
+                    playAudio(index);
+                    return;
+                }
+                // Stop playback
+                if (lastPlayerIndex.current === index) {
+                    webAudio.suspend();
+                    setPlayerIndex(-1);
+                    return;
+                }
 
-            // Stop playback
-            if (lastPlayerIndex.current === index) {
-                audio.pause();
-                setPlayerIndex(-1);
-                return;
-            }
+                // Start playback
+                playAudio(index);
+            } else {
+                if (playConfig.external_audio === true) {
+                    // webAudio.closeWebAudio();
+                }
+                // Play section from <AUDIO> tag
+                if (index !== lastPlayerIndex.current) {
+                    // Load different audio
+                    audio.loadUntilAvailable(
+                        MEDIA_ROOT + sections[index].url,
+                        () => { 
+                            playAudio(index);
+                        }
+                    );                    
+                    return;
+                }
 
-            // Start playback
-            playAudio(index);
+                // Stop playback
+                if (lastPlayerIndex.current === index) {
+                    audio.pause();
+                    setPlayerIndex(-1);
+                    return;
+                }
+
+                // Start playback
+                playAudio(index);
+            }
+            
         },
         [playAudio, sections]
     );
 
+    const stopPlaying = () => {
+        if (playConfig.play_method === 'BUFFER' && playConfig.external_audio === false) {
+            webAudio.stopBuffer();
+        } else {
+            audio.stop();
+        }
+    }
+
     // Local logic for onfinished playing
     const onFinishedPlaying = useCallback(() => {
         setPlayerIndex(-1);
-        audio.stop();
+        stopPlaying();
         finishedPlaying && finishedPlaying();
     }, [finishedPlaying]);
 
     // Stop audio on unmount
     useEffect(
         () => () => {
-            audio.stop();
+            stopPlaying();
         },
         []
     );
@@ -216,6 +301,10 @@ const Playback = ({
         }
     };
 
+    if (!sectionsLoaded) {            
+        return <Loading loadingText={'loading'} />;
+    }
+    
     return (
         <div className="aha__playback">
             <div className="playback"> {render(playerType)} </div>{" "}
