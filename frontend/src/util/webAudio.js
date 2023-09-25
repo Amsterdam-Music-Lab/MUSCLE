@@ -33,8 +33,7 @@ export const initWebAudio = () => {
 // Change HTML audio element crossorigin attribute for playing external files
 export const closeWebAudio = () => {
     window.audio.removeAttribute('crossOrigin');    
-    window.audio.crossorigin = "use-credentials";
-    audioContext.close();
+    window.audio.crossorigin = "use-credentials";    
 }
 
 // return total audio latency in milliseconds
