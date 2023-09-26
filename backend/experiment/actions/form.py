@@ -1,7 +1,7 @@
 from django.conf import settings
 from django.utils.translation import gettext_lazy as _
 
-from .styles import STYLE_NEUTRAL
+from .styles import STYLE_NEUTRAL, STYLE_BOOLEAN_NEGATIVE_FIRST
 from .base_action import BaseAction
 
 class Question(BaseAction):
@@ -64,10 +64,11 @@ class BooleanQuestion(Question):
     def __init__(self, choices=None, **kwargs):
         super().__init__(**kwargs)
         self.choices = choices or {
-            'yes': _('Yes'),
-            'no': _('No')
+            'no': _('No'),
+            'yes': _('Yes')
         }
         self.view = 'BUTTON_ARRAY'
+        self.style = STYLE_BOOLEAN_NEGATIVE_FIRST
 
 class ChoiceQuestion(Question):
     def __init__(self, choices, min_values=1, **kwargs):
