@@ -17,6 +17,7 @@ from experiment.questions.goldsmiths import MSI_FG_GENERAL, MSI_ALL
 from experiment.questions.stomp import STOMP20
 from experiment.questions.tipi import TIPI
 from experiment.actions.styles import STYLE_BOOLEAN_NEGATIVE_FIRST
+from experiment.actions.wrappers import song_sync
 from result.utils import prepare_result
 
 logger = logging.getLogger(__name__)
@@ -92,7 +93,6 @@ class Hooked(Base):
             next_round_number = session.get_next_round()
             config = {'show_section': True, 'show_total_score': True}
             title = self.get_trial_title(session, next_round_number - 1)
-            social_info = self.social_media_info(session.experiment, session.final_score)
             return [
                 Score(session,
                     config=config,
@@ -102,7 +102,7 @@ class Hooked(Base):
                     session=session,
                     final_text=self.final_score_message(session),
                     rank=self.rank(session),
-                    social=social_info,
+                    show_social=True,
                     show_profile_link=True,
                     button={'text': _('Play again'), 'link': '{}/{}'.format(settings.CORS_ORIGIN_WHITELIST[0], session.experiment.slug)}
                 )
@@ -119,7 +119,7 @@ class Hooked(Base):
             # Plan sections
             self.plan_sections(session)
             # Go to SongSync straight away.
-            actions.append(self.next_song_sync_action(session))
+            actions.extend(self.next_song_sync_action(session))
         else:
             # Create a score action.
             config = {'show_section': True, 'show_total_score': True}
@@ -135,12 +135,12 @@ class Hooked(Base):
 
             # SongSync rounds. Skip questions until Round 5.
             if next_round_number in range(2, 5):
-                actions.append(self.next_song_sync_action(session))
+                actions.extend(self.next_song_sync_action(session))
             if next_round_number in range(5, heard_before_offset):
                 question_trial = self.get_single_question(session)
                 if question_trial:
                     actions.append(question_trial)
-                actions.append(self.next_song_sync_action(session))
+                actions.extend(self.next_song_sync_action(session))
 
             # HeardBefore rounds
             if next_round_number == heard_before_offset:
@@ -254,7 +254,7 @@ class Hooked(Base):
         # Save, overwriting existing plan if one exists.
         session.save_json_data({'plan': plan})
 
-    def next_song_sync_action(self, session):
+    def next_song_sync_action(self, session, explainers=[]):
         """Get next song_sync section for this session."""
 
         # Load plan.
@@ -275,15 +275,8 @@ class Hooked(Base):
         if not section:
             logger.warning("Warning: no next_song_sync section found")
             section = session.section_from_any_song()
-        key = 'song_sync'
-        result_id = prepare_result(key, session, section=section, scoring_rule='SONG_SYNC')
-        return SongSync(
-            section=section,
-            title=self.get_trial_title(session, next_round_number),
-            key=key,
-            result_id=result_id
-        )
-
+        return song_sync(session, section, title=self.get_trial_title(session, next_round_number))
+       
     def next_heard_before_action(self, session):
         """Get next heard_before action for this session."""
 

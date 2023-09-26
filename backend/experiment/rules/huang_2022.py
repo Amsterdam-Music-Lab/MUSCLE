@@ -217,7 +217,7 @@ class Huang2022(Hooked):
                 button_label=_("Continue")
             )
             # Choose playlist
-            actions.extend([explainer, explainer_devices, self.next_song_sync_action(session)])
+            actions.extend([explainer, explainer_devices, *self.next_song_sync_action(session)])
         else:
             # Load the heard_before offset.
             plan = json_data.get('plan')
@@ -235,7 +235,7 @@ class Huang2022(Hooked):
             
             # SongSync rounds
             if next_round_number < heard_before_offset:
-                actions.append(self.next_song_sync_action(session))
+                actions.extend(self.next_song_sync_action(session))
             # HeardBefore rounds
             elif next_round_number == heard_before_offset:
                 # Introduce new round type with Explainer.
@@ -268,6 +268,7 @@ class Huang2022(Hooked):
             session=session,
             final_text=self.final_score_message(session),
             rank=self.rank(session),
+            show_social=False,
             show_profile_link=True,
             feedback_info=self.feedback_info()
         )
