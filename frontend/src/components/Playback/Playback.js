@@ -52,7 +52,7 @@ const Playback = ({
 
     
     useEffect(() => {
-        if (playConfig.play_method === 'BUFFER' && playConfig.external_audio === false) {
+        if (playConfig.play_method === 'BUFFER' && !playConfig.external_audio) {
             // Use Web-audio and preload sections in buffers            
             sections.map((section, index) => {
                 // Clear buffers if this is the first section
@@ -66,7 +66,7 @@ const Playback = ({
                 });
             })
         } else {
-            if (playConfig.external_audio === true) {
+            if (playConfig.external_audio) {
                 webAudio.closeWebAudio();
             }
             setSectionsLoaded(1);
@@ -104,7 +104,7 @@ const Playback = ({
     const playAudio = useCallback(
         (index) => {
             let latency = 0;
-            if (playConfig.play_method === 'BUFFER' && playConfig.external_audio === false) {
+            if (playConfig.play_method === 'BUFFER' && !playConfig.external_audio) {
                 console.log('Play buffer');                
                 // Determine latency for current audio device
                 latency = webAudio.getTotalLatency();
@@ -131,7 +131,7 @@ const Playback = ({
             } else {
                 console.log('Play HTML audo')
                 // Only initialize webaudio if section is local            
-                if (playConfig.external_audio === false) {                    
+                if (!playConfig.external_audio) {                    
                     latency = webAudio.initWebAudio();
                 }
                 // Store player index
@@ -168,7 +168,7 @@ const Playback = ({
     // Play section with given index
     const playSection = useCallback(
         (index = 0) => {
-            if (playConfig.play_method === 'BUFFER' && playConfig.external_audio === false) {
+            if (playConfig.play_method === 'BUFFER' && !playConfig.external_audio) {
                 // Play section from buffer
                 if (index !== lastPlayerIndex.current) {
                     // Load different audio
@@ -188,7 +188,7 @@ const Playback = ({
                 // Start playback
                 playAudio(index);
             } else {
-                if (playConfig.external_audio === true) {
+                if (playConfig.external_audio) {
                     // webAudio.closeWebAudio();
                 }
                 // Play section from <AUDIO> tag
@@ -219,7 +219,7 @@ const Playback = ({
     );
 
     const stopPlaying = () => {
-        if (playConfig.play_method === 'BUFFER' && playConfig.external_audio === false) {
+        if (playConfig.play_method === 'BUFFER' && !playConfig.external_audio) {
             webAudio.stopBuffer();
         } else {
             audio.stop();
