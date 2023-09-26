@@ -58,7 +58,7 @@ def song_sync(session, section, title, response_time=15):
             'ready_time': 3,
             'show_animation': True
         }),
-        config=trial_config,
+        config={**trial_config, 'break_round_on': {'EQUALS': ['TIMEOUT', 'no']}},
         title=title
     )
     silence = Trial(

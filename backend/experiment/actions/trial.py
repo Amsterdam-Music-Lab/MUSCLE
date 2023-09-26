@@ -27,9 +27,7 @@ class Trial(BaseAction):  # pylint: disable=too-few-public-methods
             - response_time: how long to wait until stopping the player / proceeding to the next view
             - auto_advance: proceed to next view after player has stopped
             - listen_first: whether participant can submit before end of sound
-            - time_pass_break: when time has passed, submit the result immediately; skipping any subsequent actions (e.g. a certainty question)
-                - Can not be combined with listen_first (True)
-                - Can not be combined with auto_advance (False)
+            - break_round_on: result values upon which consecutive rounds in the current next_round array will be skipped
             - continue_label: if there is no form, how to label a button to proceed to next view
         - style: style class to add to elements in form and playback
             - neutral: first element is blue, second is yellow, third is teal

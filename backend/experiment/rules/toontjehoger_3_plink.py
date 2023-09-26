@@ -166,7 +166,8 @@ class ToontjeHoger3Plink(Base):
                 is_skippable=True,
                 skip_label='Ik weet het niet',
                 submit_label='Volgende'
-            )
+            ),
+            config={'break_round_on': {'NOT': ['skipped']}}
         ))
         
 
@@ -181,17 +182,14 @@ class ToontjeHoger3Plink(Base):
             ],
             button_label="Start"
         )
-        connected_rounds = {
-            'plink': {
-                'skipped': [
-                    extra_questions_intro,
-                    self.get_era_question(session, section),
-                    self.get_emotion_question(session, section)
-                ]
-            }
-        }
+        extra_rounds = [
+            extra_questions_intro,
+            self.get_era_question(session, section),
+            self.get_emotion_question(session, section)
+        ]
 
-        return [*next_round, connected_rounds]
+
+        return [*next_round, *extra_rounds]
  
     def get_era_question(self, session, section):
 
