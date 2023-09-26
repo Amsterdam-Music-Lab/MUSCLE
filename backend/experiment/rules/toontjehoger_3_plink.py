@@ -167,7 +167,7 @@ class ToontjeHoger3Plink(Base):
                 skip_label='Ik weet het niet',
                 submit_label='Volgende'
             ),
-            config={'break_round_on': {'NOT': ['skipped']}}
+            config={'break_round_on': {'NOT': ['']}}
         ))
         
 
