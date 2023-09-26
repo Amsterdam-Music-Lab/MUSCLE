@@ -80,7 +80,7 @@ const AutoPlay = ({instruction, preloadMessage, onPreloadReady, playConfig, sect
                             {playConfig.show_animation
                                 ? <ListenCircle
                                     duration={responseTime}
-                                    histogramRunning={running}
+                                    histogramRunning={running && !playConfig.mute}
                                     countDownRunning={running}
                                 />
                                 : <div className="stationary">

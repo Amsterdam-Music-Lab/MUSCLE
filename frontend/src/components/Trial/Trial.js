@@ -61,6 +61,16 @@ const Trial = ({
                     form,
                     config
                 });
+                if (config.break_round_on) {
+                    const values = form.map((formElement) => formElement.value);
+                    if (checkBreakRound(values, config.break_round_on)) {
+                        // one of the break conditions is met:
+                        // onNext will request next_round from server,
+                        // and ignore further rounds in the current array
+                        onNext(true)
+                    }
+                    
+                }
             } else {
                 if (result_id) {
                     onResult({
@@ -75,6 +85,18 @@ const Trial = ({
         },
         [feedback_form, config, onNext, onResult]
     );
+
+    const checkBreakRound = (values, breakConditions) => {
+        switch(Object.keys(breakConditions)[0]) {
+            case 'EQUALS':
+                return values.some(val => breakConditions['EQUALS'].includes(val));
+            case 'NOT':
+                return !values.some(val => breakConditions['NOT'].includes(val));
+            default:
+                return false;
+        }
+
+    }
 
     const finishedPlaying = useCallback(() => {
         

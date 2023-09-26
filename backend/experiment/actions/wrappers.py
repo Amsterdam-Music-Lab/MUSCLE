@@ -51,40 +51,51 @@ def song_sync(session, section, title, response_time=15):
         feedback_form=Form([BooleanQuestion(
             key='recognize',
             result_id=prepare_result('recognize', session),
-            submits=True,
-            style=STYLE_BOOLEAN_NEGATIVE_FIRST
+            submits=True
         )]),
         playback=Playback([section], 'AUTOPLAY', play_config={
             'ready_time': 3,
             'show_animation': True
-        }),
+        },
+        preload_message=_('Get ready!'),
+        instruction=_('Do you recognize the song?'),
+        ),
         config={**trial_config, 'break_round_on': {'EQUALS': ['TIMEOUT', 'no']}},
         title=title
     )
+    silence_time = 4
     silence = Trial(
-        playback=Playback([section], 'AUTOPLAY', play_config={
-            'mute': True,
-            'ready_time': 0
+        playback=Playback([section], 'AUTOPLAY',
+                          instruction=_('Keep imagining the music'),
+                          play_config={
+                            'mute': True,
+                            'ready_time': 0,
+                            'show_animation': True,
         }),
-        config={'recognition_time': 4},
+        config={
+            'recognition_time': silence_time,
+            'auto_advance': True,
+            'show_continue_button': False
+        },
         title=title
     )
     continuation_correctness = random.randint(0, 1) == 1
     correct_place = Trial(
         feedback_form=Form([BooleanQuestion(
             key='correct_place',
+            submits=True,
             result_id=prepare_result('correct_place',
                                      session,
                                      expected_response='yes' if continuation_correctness else 'no')
         )]),
-        playback=Playback([section], 'AUTOPLAY', play_config={
+        playback=Playback([section], 'AUTOPLAY',
+                        instruction=_('Did the track come back in the right place?'),
+                        play_config={
             'ready_time': 0,
-            'playhead': random.randint(100, 150) / 10 if not continuation_correctness else 0,
+            'playhead': silence_time + (random.randint(100, 150) / 10 if not continuation_correctness else 0),
             'show_animation': True
         }),
         config=trial_config,
         title=title
     )
-    return [recognize, {'recognize': {'yes': [
-                silence, correct_place
-            ]}}]
+    return [recognize, silence, correct_place]

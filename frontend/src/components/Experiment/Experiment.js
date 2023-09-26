@@ -93,8 +93,8 @@ const Experiment = ({ match, location }) => {
     ]);
 
     // trigger next action from next_round array, or call session/next_round
-    const onNext = async () => {
-        if (actions.length) {
+    const onNext = async (doBreak) => {
+        if (!doBreak && actions.length) {
             updateActions(actions);
         } else {
             // Try to get next_round data from server
