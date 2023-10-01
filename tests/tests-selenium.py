@@ -21,8 +21,11 @@ class TestsSelenium(unittest.TestCase):
 
     ```
     [selenium]
-    browser=Firefox  # Firefox | Chrome | Safari | Edge
-    headless=no      # yes | no  (headless does not work on Safari)
+    browser=Firefox
+    ; Firefox | Chrome | Safari | Edge
+
+    headless=no
+    ; yes | no  (headless does not work on Safari)
 
     [url]
     root=http://localhost:3000
