@@ -23,6 +23,7 @@ export const initWebAudioListener = () => {
 
 // init HTML audio element in webaudio context and connect track to destination (output)
 export const initWebAudio = () => {
+    console.log('Init HTML webaudio')
     if (track === undefined) {                 
         track = audioContext.createMediaElementSource(window.audio);
         track.connect(audioContext.destination);        
@@ -32,14 +33,21 @@ export const initWebAudio = () => {
 
 // Change HTML audio element crossorigin attribute for playing external files
 export const closeWebAudio = () => {
+    console.log('close webaudio for html - external audio')
     window.audio.removeAttribute('crossOrigin');    
     window.audio.crossorigin = "use-credentials";    
 }
 
 // return total audio latency in milliseconds
 export const getTotalLatency = () => {    
-    let totalLatency = (audioContext.outputLatency + audioContext.baseLatency) * 1000;
-    console.log(`Latency: ${totalLatency}ms`);
+    let baseLatency = audioContext.baseLatency;
+    let outputLatency = audioContext.outputLatency;
+    console.log('Baselatency : ' + typeof baseLatency);
+    console.log('Outputlatency : ' + typeof outputLatency);
+    isNaN(baseLatency) ? baseLatency = 0 : baseLatency = audioContext.baseLatency;
+    isNaN(outputLatency) ? outputLatency = 0 : outputLatency = audioContext.outputLatency;    
+    let totalLatency = (baseLatency + outputLatency) * 1000;
+    console.log(`Compensate for total Latency of: ${totalLatency}ms`);
     return totalLatency;
 }
 
