@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-02 12:32+0200\n"
+"POT-Creation-Date: 2023-10-02 12:48+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1566,15 +1566,15 @@ msgid "Tech check"
 msgstr "调试阶段"
 
 #: experiment/rules/musical_preferences.py:131
-msgid " Love"
+msgid "Love "
 msgstr "乐"
 
 #: experiment/rules/musical_preferences.py:142
-msgid " Knowledge"
+msgid "Knowledge "
 msgstr "识"
 
 #: experiment/rules/musical_preferences.py:157
-msgid " Connection"
+msgid "Connection "
 msgstr "友"
 
 #: experiment/rules/musical_preferences.py:171
@@ -3109,29 +3109,15 @@ msgid "Unlocked"
 msgstr "解锁乐之"
 
 #: experiment/templates/html/musical_preferences/feedback.html:11
-#, fuzzy, python-format
-#| msgid ""
-#| "                        Your top 3 favourite songs out of %(n_songs)s: \n"
-#| "                    "
-msgid ""
-"\n"
-"                        Your top 3 favourite songs out of %(n_songs)s: \n"
-"                    "
+msgid " Your top 3 favourite songs out of %(n_songs)s:"
 msgstr "在%(n_songs)s首歌曲里，您最喜欢的3首歌曲是："
 
-#: experiment/templates/html/musical_preferences/feedback.html:32
-#, fuzzy, python-format
-#| msgid ""
-#| "                        Of %(n_songs)s songs, you know %(n_known_songs)s\n"
-#| "                    "
-msgid ""
-"\n"
-"                        Of %(n_songs)s songs, you know %(n_known_songs)s\n"
-"                    "
+#: experiment/templates/html/musical_preferences/feedback.html:30
+msgid " Of %(n_songs)s songs, you know %(n_known_songs)s"
 msgstr "在%(n_songs)s首歌曲里，您知道 %(n_known_songs)s的歌曲。"
 
-#: experiment/templates/html/musical_preferences/feedback.html:48
-msgid "Top 3 favourite songs by others:"
+#: experiment/templates/html/musical_preferences/feedback.html:44
+msgid "All players' top 3 favourite songs:"
 msgstr "其他人最喜欢的3首歌曲是："
 
 #: experiment/views.py:70

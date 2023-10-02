@@ -128,7 +128,7 @@ class MusicalPreferences(Base):
             like_results = session.result_set.filter(question_key='like_song')
             feedback = Trial(
                 html=HTML(body=render_to_string('html/musical_preferences/feedback.html', {
-                    'unlocked': _(" Love"),
+                    'unlocked': _("Love "),
                     'n_songs': n_songs,
                     'top_participant': self.get_preferred_songs(like_results, 3)
                 }))
@@ -139,7 +139,7 @@ class MusicalPreferences(Base):
             known_songs = session.result_set.filter(question_key='know_song', score=2).count()
             feedback = Trial(
                 html=HTML(body=render_to_string('html/musical_preferences/feedback.html', {
-                    'unlocked': _(" Knowledge"),
+                    'unlocked': _("Knowledge "),
                     'n_songs': n_songs,
                     'top_participant': self.get_preferred_songs(like_results, 3),
                     'n_known_songs': known_songs
@@ -154,7 +154,7 @@ class MusicalPreferences(Base):
             )
             feedback = Trial(
                 html=HTML(body=render_to_string('html/musical_preferences/feedback.html', {
-                    'unlocked': _(" Connection"),
+                    'unlocked': _("Connection "),
                     'n_songs': n_songs,
                     'top_participant': self.get_preferred_songs(like_results, 3),
                     'n_known_songs': known_songs,
