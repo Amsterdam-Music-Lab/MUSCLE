@@ -168,13 +168,13 @@ class MusicalPreferences(Base):
         section = session.playlist.random_section()
         like_key = 'like_song'
         likert = LikertQuestionIcon(
-            question=_('How much do you like this song?'),
+            question=_('2. How much do you like this song?'),
             key=like_key,
             result_id=prepare_result(like_key, session, section=section, scoring_rule='LIKERT')
         )
         know_key = 'know_song'
         know = ChoiceQuestion(
-            question=_('Do you know this song?'),
+            question=_('1. Do you know this song?'),
             key=know_key,
             view='BUTTON_ARRAY',
             choices={
