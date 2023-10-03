@@ -1,7 +1,7 @@
 from .models import Result
 
-from .score import SCORING_RULES
 from experiment.questions.profile_scoring_rules import PROFILE_SCORING_RULES
+from result.score import SCORING_RULES
 
 def get_result(session, data):
     result_id = data.get('result_id')

@@ -8,7 +8,7 @@ from django.utils.translation import gettext_lazy as _
 from django.template.loader import render_to_string
 
 from .base import Base
-from experiment.actions import  Consent, Explainer, Final, Playlist, Score, SongSync, StartSession, Step, Trial
+from experiment.actions import  Consent, Explainer, Final, Playlist, Score, StartSession, Step, Trial
 from experiment.actions.form import BooleanQuestion, Form
 from experiment.actions.playback import Playback
 from experiment.questions.demographics import DEMOGRAPHICS
@@ -91,13 +91,8 @@ class Hooked(Base):
 
             # Return a score and final score action.
             next_round_number = session.get_next_round()
-            config = {'show_section': True, 'show_total_score': True}
-            title = self.get_trial_title(session, next_round_number - 1)
             return [
-                Score(session,
-                    config=config,
-                    title=title
-                ),
+                self.get_score(session, next_round_number),
                 Final(
                     session=session,
                     final_text=self.final_score_message(session),
@@ -122,12 +117,7 @@ class Hooked(Base):
             actions.extend(self.next_song_sync_action(session))
         else:
             # Create a score action.
-            config = {'show_section': True, 'show_total_score': True}
-            title = self.get_trial_title(session, next_round_number - 1)
-            actions.append(Score(session,
-                config=config,
-                title=title
-            ))
+            actions.append(self.get_score(session,next_round_number))
 
             # Load the heard_before offset.
             plan = json_data.get('plan')
@@ -327,3 +317,13 @@ class Hooked(Base):
             config=config,
         )
         return trial
+
+    def get_score(self, session, round_number):
+        config = {'show_section': True, 'show_total_score': True}
+        title = self.get_trial_title(session, round_number - 1)
+        score = session.result_set.order_by('-created_at')[1].score
+        return Score(session,
+            config=config,
+            title=title,
+            score=score
+        )

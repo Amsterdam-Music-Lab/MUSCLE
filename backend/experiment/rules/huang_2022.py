@@ -224,13 +224,7 @@ class Huang2022(Hooked):
             heard_before_offset = len(plan['song_sync_sections']) + 1
 
             # show score 
-            config = {'show_section': True, 'show_total_score': True}
-            title = self.get_trial_title(session, next_round_number - 1)
-            score = Score(
-                session,
-                config=config,
-                title=title
-            )
+            score = self.get_score(session, next_round_number)
             actions.append(score)
             
             # SongSync rounds

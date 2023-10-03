@@ -50,7 +50,7 @@ def song_sync(session, section, title, response_time=15):
     recognize = Trial(
         feedback_form=Form([BooleanQuestion(
             key='recognize',
-            result_id=prepare_result('recognize', session),
+            result_id=prepare_result('recognize', session, scoring_rule='SONG_SYNC_RECOGNITION'),
             submits=True
         )]),
         playback=Playback([section], 'AUTOPLAY', play_config={
@@ -86,6 +86,7 @@ def song_sync(session, section, title, response_time=15):
             submits=True,
             result_id=prepare_result('correct_place',
                                      session,
+                                     scoring_rule='SONG_SYNC_CONTINUATION',
                                      expected_response='yes' if continuation_correctness else 'no')
         )]),
         playback=Playback([section], 'AUTOPLAY',
