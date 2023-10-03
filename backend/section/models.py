@@ -7,6 +7,7 @@ from django.utils import timezone
 from django.urls import reverse
 
 from .utils import CsvStringBuilder
+from .validators import audio_file_validator
 
 class Playlist(models.Model):
     """List of sections to be used in an Experiment"""
@@ -232,7 +233,7 @@ class Section(models.Model):
     song = models.ForeignKey(Song, on_delete=models.CASCADE, blank=True, null=True)
     start_time = models.FloatField(db_index=True, default=0.0)  # sec
     duration = models.FloatField(default=0.0)  # sec
-    filename = models.FileField(upload_to=audio_upload_path, max_length=255)
+    filename = models.FileField(upload_to=audio_upload_path, max_length=255, validators=[audio_file_validator()])
     play_count = models.PositiveIntegerField(default=0)
     code = models.PositiveIntegerField(default=random_code)    
     tag = models.CharField(max_length=128, default='0')
