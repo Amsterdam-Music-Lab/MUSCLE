@@ -12,7 +12,7 @@ export const init = () => {
     audioContext = new (window.AudioContext || window.webkitAudioContext)();
 };
 
-// init audio after first user action on page
+// init webaudio after first user action on page
 export const initWebAudioListener = () => {
     const initOnce = () => {
         document.removeEventListener("click", initOnce);
@@ -42,10 +42,15 @@ export const closeWebAudio = () => {
 export const getTotalLatency = () => {    
     let baseLatency = audioContext.baseLatency;
     let outputLatency = audioContext.outputLatency;
-    console.log('Baselatency : ' + typeof baseLatency);
-    console.log('Outputlatency : ' + typeof outputLatency);
-    isNaN(baseLatency) ? baseLatency = 0 : baseLatency = audioContext.baseLatency;
-    isNaN(outputLatency) ? outputLatency = 0 : outputLatency = audioContext.outputLatency;    
+    console.log(`Baselatency : ${baseLatency} Type: ${typeof baseLatency}`);
+    console.log(`Outputlatency : ${outputLatency} Type: ${typeof outputLatency}`);
+    // Check if the response is a valid number 
+    if (isNaN(baseLatency)) {
+        baseLatency = 0;
+    }
+    if (isNaN(outputLatency)) {
+        outputLatency = 0
+    }    
     let totalLatency = (baseLatency + outputLatency) * 1000;
     console.log(`Compensate for total Latency of: ${totalLatency}ms`);
     return totalLatency;
@@ -83,6 +88,7 @@ export const loadBuffer = async (id, src, canPlay) => {
         });
 }
 
+// Clear buffer list
 export const clearBuffers = () => {
     buffers = {};
 }
@@ -101,9 +107,11 @@ export const playBuffer = (id) => {
     source.connect(audioContext.destination);    
     source.start();
 }
+
+// Play buffer from given time
 export const playBufferFrom = (id, time) => {
     source = audioContext.createBufferSource();
-    source.buffer = buffers[id]; // <==            
+    source.buffer = buffers[id];          
     source.connect(audioContext.destination);    
     source.start(0, time);
 }

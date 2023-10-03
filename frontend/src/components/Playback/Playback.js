@@ -105,7 +105,7 @@ const Playback = ({
         (index) => {
             let latency = 0;
             if (playConfig.play_method === 'BUFFER' && !playConfig.external_audio) {
-                console.log('Play buffer (local');                
+                console.log('Play buffer (local)');                
                 // Determine latency for current audio device
                 latency = webAudio.getTotalLatency();
                 // Store player index
