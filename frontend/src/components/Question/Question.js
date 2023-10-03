@@ -81,6 +81,9 @@ const Question = ({
             )}
             <h3 className={classNames({title: emphasizeTitle})}>{question.question}</h3>
             <div className="question">{render(question.view)}</div>
+            {question.expected_response &&
+                <p className="expected-response">{question.expected_response}</p>
+            }
         </div>
     );
 };
