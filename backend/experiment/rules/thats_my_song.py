@@ -121,7 +121,7 @@ class ThatsMySong(Hooked):
         elif next_round_number == 2:
             decades = session.result_set.first().given_response.split(',')
             self.plan_sections(session, {'group__in': decades})
-            actions.append(self.next_song_sync_action(session))
+            actions.extend(self.next_song_sync_action(session))
         else:
             # Create a score action.
             config = {'show_section': True, 'show_total_score': True}
@@ -137,12 +137,12 @@ class ThatsMySong(Hooked):
 
             # SongSync rounds. Skip questions until Round 5.
             if next_round_number in range(3, 6):
-                actions.append(self.next_song_sync_action(session))
+                actions.extend(self.next_song_sync_action(session))
             if next_round_number in range(6, heard_before_offset):
                 question = self.get_single_question(session, randomize=True)
                 if question:
                     actions.append(question)
-                actions.append(self.next_song_sync_action(session))
+                actions.extend(self.next_song_sync_action(session))
 
             # HeardBefore rounds
             if next_round_number == heard_before_offset:
