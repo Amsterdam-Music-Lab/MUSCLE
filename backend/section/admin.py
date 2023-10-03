@@ -1,16 +1,17 @@
 import csv
-from os.path import basename, join, splitext
-from os.path import split as pathsplit
 
 from inline_actions.admin import InlineActionsModelAdminMixin
 from django.contrib import admin, messages
+from django.core.exceptions import ValidationError
 from django.shortcuts import render, redirect
 from django.http import JsonResponse, HttpResponse
 from django.conf import settings
+from django.utils.translation import gettext_lazy as _
+
+import audioread
 
 from .models import Section, Playlist, Song
-from section.forms import AddSections
-import audioread
+from .forms import AddSections
 
 class SectionAdmin(admin.ModelAdmin):
     list_per_page = 50
@@ -69,8 +70,9 @@ class PlaylistAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
         """Add multiple sections
         """
         sections = Section.objects.filter(playlist=obj)
+        form = AddSections()
         # Get the info for new sections
-        if '_add' in request.POST:            
+        if '_add' in request.POST:
             this_artist = request.POST.get('artist')
             this_name = request.POST.get('name')
             this_tag = request.POST.get('tag')
@@ -78,11 +80,18 @@ class PlaylistAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
             new_sections = request.FILES.getlist('files')
             # Create section object for each file
             for section in new_sections:
-                
                 new_section = Section.objects.create(playlist=obj,
                                                      tag=this_tag,
                                                      group=this_group,
                                                      filename=section)
+                try:
+                    new_section.clean_fields()
+                except ValidationError as e:
+                    new_section.delete()
+                    file_errors = form.errors.get('file', [])
+                    file_errors.append(_('Cannot upload {}: {}').format(str(section), e.messages[0]))
+                    form.errors['file'] = file_errors
+                    continue
                 if this_artist and this_name:
                     this_song, created = Song.objects.get_or_create(artist=this_artist, name=this_name)
                     new_section.song = this_song                
@@ -91,11 +100,11 @@ class PlaylistAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
                     new_section.duration = f.duration
                 new_section.save()
                 obj.save()
-            return redirect('/admin/section/playlist')
+            if not form.errors:
+                return redirect('/admin/section/playlist')
         # Go back to admin playlist overview
         if '_back' in request.POST:
             return redirect('/admin/section/playlist')
-        form = AddSections
         return render(
             request,
             'add-sections.html',
