@@ -290,7 +290,7 @@ class Categorization(Base):
             participant=session.participant)
 
         # Check if this participant already has a previous session
-        if current_sessions.count() > 1 and not settings.DEBUG:
+        if current_sessions.count() > 1 and not settings.TESTING:
             json_data = 'REPEAT'
         else:
             # Check wether a group falls behind in the count
