@@ -1,4 +1,6 @@
-class Explainer(object):
+from .base_action import BaseAction
+
+class Explainer(BaseAction):
     """
     Provide data for a explainer that explains the experiment steps
 
@@ -9,15 +11,16 @@ class Explainer(object):
 
     ID = "EXPLAINER"
 
-    def __init__(self, instruction, steps, button_label="Let's go!", timer=None):
+    def __init__(self, instruction, steps, button_label="Let's go!", timer=None, step_numbers=False):
         self.instruction = instruction
         self.steps = steps
         self.button_label = button_label
         self.timer = timer
+        self.step_numbers = step_numbers
 
-    def action(self, step_numbers=False):
+    def action(self):
         """Get data for explainer action"""
-        if step_numbers:
+        if self.step_numbers:
             serialized_steps = [step.action(index+1) for index, step in enumerate(self.steps)]
         else:
             serialized_steps = [step.action() for step in self.steps]

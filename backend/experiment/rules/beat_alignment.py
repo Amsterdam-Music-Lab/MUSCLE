@@ -1,11 +1,10 @@
-import random
 import logging
 import copy
 
 from django.utils.translation import gettext_lazy as _
 
 from .base import Base
-from experiment.actions import Trial, Explainer, Consent, Playlist, StartSession, Step
+from experiment.actions import Trial, Explainer, Consent, StartSession, Step
 from experiment.actions.form import ChoiceQuestion, Form
 from experiment.actions.playback import Playback
 from experiment.actions.utils import final_action_with_optional_button, render_feedback_trivia
@@ -19,8 +18,7 @@ class BeatAlignment(Base):
 
     ID = 'BEAT_ALIGNMENT'
 
-    @classmethod
-    def first_round(cls, experiment):
+    def first_round(self, experiment):
         """Create data for the first experiment rounds"""
 
         # 1. General explainer
@@ -36,22 +34,22 @@ class BeatAlignment(Base):
                 Step(_(
                     "Listen carefully to the following examples. Pay close attention to the description that accompanies each example."))
             ],
-            button_label=_('Ok')
-        ).action(True)
+            button_label=_('Ok'),
+            step_numbers=True
+        )
 
         # 2. Consent with default text
-        consent = Consent.action()
+        consent = Consent()
         
         # 3. Start session
-        start_session = StartSession.action()
+        start_session = StartSession()
         return [
             explainer,
             consent,
             start_session
         ]
 
-    @classmethod
-    def next_round(cls, session, request_session=None):
+    def next_round(self, session, request_session=None):
         """Get action data for the next round"""
 
         # If the number of results equals the number of experiment.rounds
@@ -77,7 +75,7 @@ class BeatAlignment(Base):
             practice_list = session.playlist
             practice_rounds = []
             for i in range(1, 4):
-                this_round = cls.next_practice_action(practice_list, i)
+                this_round = self.next_practice_action(practice_list, i)
                 practice_rounds.append(copy.deepcopy(this_round))
             practice_rounds.append(Explainer(
                 instruction=_('You will now hear 17 music fragments.'),
@@ -89,15 +87,15 @@ class BeatAlignment(Base):
                     Step(_("Remember: try not to move or tap along with the sounds")),
                     Step(_('In total, this test will take around 6 minutes to complete. Try to stay focused for the entire duration!'))
                 ],
-                button_label=_('Start')).action(True)
+                step_numbers=True,
+                button_label=_('Start'))
             )
             session.save_json_data({'done_practice': True})
             return practice_rounds
 
-        return cls.next_trial_action(session, next_round_number)
+        return self.next_trial_action(session, next_round_number)
 
-    @classmethod
-    def next_practice_action(cls, playlist, count):
+    def next_practice_action(self, playlist, count):
         """Get action data for the next practice round"""
         section = playlist.section_set.filter(
             song__name__startswith='ex{}'.format(count)).first()
@@ -124,10 +122,9 @@ class BeatAlignment(Base):
                 'show_continue_button': False
             }
         )
-        return view.action()
+        return view
 
-    @classmethod
-    def next_trial_action(cls, session, this_round):
+    def next_trial_action(self, session, this_round):
         """Get next section for given session"""
         filter_by = {'tag': '0'}
         section = session.section_from_unused_song(filter_by)
@@ -158,4 +155,4 @@ class BeatAlignment(Base):
                 'listen_first': True
             }
         )
-        return view.action()
+        return view

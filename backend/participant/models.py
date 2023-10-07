@@ -39,12 +39,13 @@ class Participant(models.Model):
             "unique_hash": self.unique_hash,
             "country_code": self.country_code,
             "access_info": self.access_info,
+            "participant_id_url": self.participant_id_url,
             "profile": self.profile_object()
         }
 
     def profile(self):
-        """Get all profile type results of this participant"""
-        return self.result_set.all()
+        """Get all answered results of this participant"""
+        return self.result_set.all().filter(given_response__isnull=False)
 
     def profile_object(self):
         """Get full profile data"""
@@ -87,18 +88,3 @@ class Participant(models.Model):
             })
 
         return scores
-
-    def profile_question(self, question):
-        """Get a profile question for given question key"""
-        return self.profile().filter(question_key=question).first()
-
-    def profile_questions(self):
-        """Get all profile questions answered by this participant"""
-        return self.profile().values_list('question_key', flat=True)
-
-    def random_empty_profile_question(self):
-        """Get a random profile question with empty answer"""
-        pks = self.profile().filter(given_response=None).values_list('pk', flat=True)
-        if len(pks) == 0:
-            return None
-        return self.profile().get(pk=random.choice(pks))

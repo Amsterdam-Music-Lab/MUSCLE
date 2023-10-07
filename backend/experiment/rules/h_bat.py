@@ -27,16 +27,15 @@ class HBat(Base):
     ID = 'H_BAT'
     start_diff = 20
 
-    @classmethod
-    def next_round(cls, session, request_session=None):
+    def next_round(self, session, request_session=None):
         if session.final_score == 0:
             # we are practicing
             actions = get_practice_views(
                 session,
-                cls.intro_explainer(),
+                self.intro_explainer(),
                 staircasing,
-                cls.next_trial_action,
-                cls.response_explainer,
+                self.next_trial_action,
+                self.response_explainer,
                 get_previous_condition,
                 1
             )
@@ -46,28 +45,27 @@ class HBat(Base):
         trial_condition = get_trial_condition(2)
         if not previous_results.count():
             # first trial
-            action = cls.next_trial_action(session, trial_condition, 1)
+            action = self.next_trial_action(session, trial_condition, 1)
             if not action:
                 # participant answered first trial incorrectly (outlier)
-                action = cls.finalize_experiment(session, request_session)
+                action = self.finalize_experiment(session, request_session)
         else:
-            action = staircasing(session, cls.next_trial_action)
+            action = staircasing(session, self.next_trial_action)
             if not action:
                 # action is None if the audio file doesn't exist
-                action = cls.finalize_experiment(session, request_session)
+                action = self.finalize_experiment(session, request_session)
             if session.final_score == MAX_TURNPOINTS+1:
                 # delete result created before this check
                 session.result_set.order_by('-created_at').first().delete()
-                action = cls.finalize_experiment(session, request_session)
+                action = self.finalize_experiment(session, request_session)
             return action
-
-    @classmethod
-    def first_round(cls, experiment):
-        explainer = cls.intro_explainer().action(True)
-        consent = Consent.action()
-        explainer2 = practice_explainer().action()
-        playlist = Playlist.action(experiment.playlists.all())
-        start_session = StartSession.action()
+    
+    def first_round(self, experiment):
+        explainer = self.intro_explainer()
+        consent = Consent()
+        explainer2 = practice_explainer()
+        playlist = Playlist(experiment.playlists.all())
+        start_session = StartSession()
         return [
             explainer,
             consent,
@@ -76,8 +74,7 @@ class HBat(Base):
             start_session
         ]
 
-    @classmethod
-    def next_trial_action(cls, session, trial_condition, level=1, *kwargs):
+    def next_trial_action(self, session, trial_condition, level=1, *kwargs):
         """
         Get the next actions for the experiment
         trial_condition is either 1 or 0
@@ -118,10 +115,9 @@ class HBat(Base):
                 'response_time': section.duration + .1
             }
         )
-        return view.action()
-
-    @classmethod
-    def intro_explainer(cls):
+        return view
+    
+    def intro_explainer(self):
         return Explainer(
             instruction=_(
                 'In this test you will hear a series of tones for each trial.'),
@@ -138,11 +134,11 @@ class HBat(Base):
                 Step(_(
                     'This test will take around 4 minutes to complete. Try to stay focused for the entire test!'))
             ],
+            step_numbers=True,
             button_label='Ok'
         )
-
-    @classmethod
-    def response_explainer(cls, correct, slower, button_label=_('Next fragment')):
+    
+    def response_explainer(self, correct, slower, button_label=_('Next fragment')):
         if correct:
             if slower:
                 instruction = _(
@@ -162,38 +158,33 @@ class HBat(Base):
             steps=[],
             button_label=button_label
         )
-
-    @classmethod
-    def finalize_experiment(cls, session, request_session):
+    
+    def finalize_experiment(self, session, request_session):
         """ if either the max_turnpoints have been reached,
         or if the section couldn't be found (outlier), stop the experiment
         """
         average_diff = get_average_difference_level_based(
-            session, 6, cls.start_diff)
+            session, 6, self.start_diff)
         percentage = float(Decimal(str(average_diff / 5)
                                    ).quantize(Decimal('.01'), rounding=ROUND_HALF_UP))
         feedback = _("Well done! You heard the difference when the rhythm was \
                     speeding up or slowing down with only {} percent!").format(percentage)
-        trivia = cls.get_trivia()
+        trivia = self.get_trivia()
         final_text = render_feedback_trivia(feedback, trivia)
         session.finish()
         session.save()
         return final_action_with_optional_button(session, final_text, request_session)
-
-    @classmethod
-    def get_trivia(cls):
+    
+    def get_trivia(self):
         return _("When people listen to music, they often perceive an underlying regular pulse, like the woodblock \
             in this task. This allows us to clap along with the music at a concert and dance together in synchrony.")
-
 
 def get_previous_condition(previous_result):
     """ check if previous section was slower / in 2 (1) or faster / in 3 (0) """
     return int(previous_result.section.tag)
 
-
 def get_previous_level(previous_result):
     return int(previous_result.section.group)
-
 
 def staircasing(session, trial_action_callback):
     trial_condition = get_trial_condition(2)

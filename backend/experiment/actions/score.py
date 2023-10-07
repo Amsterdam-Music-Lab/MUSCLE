@@ -2,7 +2,9 @@ import random
 
 from django.utils.translation import gettext as _
 
-class Score(object):  # pylint: disable=too-few-public-methods
+from .base_action import BaseAction
+
+class Score(BaseAction):  # pylint: disable=too-few-public-methods
     """
     Provide data for an intermediate score view
 
@@ -36,7 +38,7 @@ class Score(object):  # pylint: disable=too-few-public-methods
             self.config.update(config)
         self.icon = icon
         self.texts = {
-            'score': _('Score'),
+            'score': _('Total Score'),
             'next': _('Next'),
             'listen_explainer': _('You listened to:')
         }
@@ -55,10 +57,10 @@ class Score(object):  # pylint: disable=too-few-public-methods
             'feedback': self.feedback,
             'icon': self.icon,
             'timer': self.timer
-        }
-        if self.config.get('show_section'):
+        }        
+        if self.config['show_section']:
             action['last_song'] = self.session.last_song()
-        if self.config.get('show_total_score'):
+        if self.config['show_total_score']:
             action['total_score'] = self.session.total_score()
         return action
 

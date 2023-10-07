@@ -5,7 +5,6 @@ from experiment.actions import Trial, Explainer, Step, Score, Final, StartSessio
 from experiment.actions.form import ButtonArrayQuestion, Form
 from experiment.actions.playback import Playback
 from .base import Base
-from experiment.actions.utils import combine_actions
 from experiment.utils import non_breaking_spaces
 
 from result.utils import prepare_result
@@ -34,9 +33,8 @@ class ToontjeHoger1Mozart(Base):
     TITLE = ""
     SCORE_CORRECT = 50
     SCORE_WRONG = 0
-
-    @classmethod
-    def first_round(cls, experiment):
+    
+    def first_round(self, experiment):
         """Create data for the first experiment rounds."""
 
         # 1. Explain game.
@@ -47,14 +45,15 @@ class ToontjeHoger1Mozart(Base):
                 Step("Hierna verschijnt een korte puzzel."),
                 Step("Lukt het om het juiste antwoord te vinden?"),
             ],
+            step_numbers=True,
             button_label="Start"
-        ).action(step_numbers=True)
+        )
 
         # 2. Choose playlist.
-        playlist = Playlist.action(experiment.playlists.all())
+        playlist = Playlist(experiment.playlists.all())
 
         # 3. Start session.
-        start_session = StartSession.action()
+        start_session = StartSession()
 
         return [
             explainer,
@@ -62,14 +61,13 @@ class ToontjeHoger1Mozart(Base):
             start_session
         ]
 
-    @classmethod
-    def next_round(cls, session, request_session=None):
+    def next_round(self, session, request_session=None):
         """Get action data for the next round"""
         rounds_passed = session.rounds_passed()
 
         # Round 1
         if rounds_passed == 0:
-            round = cls.get_image_trial(session,
+            round = self.get_image_trial(session,
                                         section_group='1',
                                         image_url=QUESTION_URL1,
                                         question="Welke vorm ontstaat er na het afknippen van de hoekjes?",
@@ -80,9 +78,9 @@ class ToontjeHoger1Mozart(Base):
 
         # Round 2
         if rounds_passed == 1:
-            answer_explainer = cls.get_answer_explainer(session, round=1)
-            score = cls.get_score(session)
-            round = cls.get_image_trial(session,
+            answer_explainer = self.get_answer_explainer(session, round=1)
+            score = self.get_score(session)
+            round = self.get_image_trial(session,
                                         section_group='2',
                                         image_url=QUESTION_URL2,
                                         question="Welke vorm ontstaat er na het afknippen van het hoekje?",
@@ -91,10 +89,10 @@ class ToontjeHoger1Mozart(Base):
             return [*answer_explainer, *score, *round]
 
         # Final
-        return cls.get_final_round(session)
+        return self.get_final_round(session)
 
-    @classmethod
-    def get_answer_explainer(cls, session, round):
+    
+    def get_answer_explainer(self, session, round):
         last_result = session.last_result()
 
         correct_answer_given = last_result.score > 0
@@ -116,11 +114,10 @@ class ToontjeHoger1Mozart(Base):
             body=body,
             heading=heading,
             button_label="Volgende",
-        ).action()
+        )
         return [info]
-
-    @classmethod
-    def get_score(cls, session):
+ 
+    def get_score(self, session):
         # Feedback message
         last_result = session.last_result()
         section = last_result.section
@@ -129,11 +126,10 @@ class ToontjeHoger1Mozart(Base):
 
         # Return score view
         config = {'show_total_score': True}
-        score = Score(session, config=config, feedback=feedback).action()
+        score = Score(session, config=config, feedback=feedback)
         return [score]
-
-    @classmethod
-    def get_image_trial(cls, session, section_group, image_url, question, expected_response):
+ 
+    def get_image_trial(self, session, section_group, image_url, question, expected_response):
         # Config
         # -----------------
         section = session.section_from_any_song(
@@ -160,8 +156,8 @@ class ToontjeHoger1Mozart(Base):
         listen = Trial(
             config=listen_config,
             playback=playback,
-            title=cls.TITLE,
-        ).action()
+            title=self.TITLE,
+        )
 
         # Step 2
         # --------------------
@@ -190,12 +186,11 @@ class ToontjeHoger1Mozart(Base):
                 body='<img src="{}" style="height:calc(100% - 260px);max-height:326px;max-width: 100%;"/>'.format(
                 image_url)),
             feedback_form=form,
-            title=cls.TITLE,
-        ).action()
+            title=self.TITLE,
+        )
 
         return [listen, image_trial]
 
-    @classmethod
     def get_explainer_round2():
         explainer = Explainer(
             instruction="Het Mozart effect",
@@ -204,38 +199,37 @@ class ToontjeHoger1Mozart(Base):
                 Step("Hierna verschijnt weer een korte puzzel."),
                 Step("Lukt het nu om de juiste te kiezen?"),
             ],
+            step_numbers=True,
             button_label="Start"
-        ).action(step_numbers=True)
+        )
 
         return [explainer]
-
-    @classmethod
-    def calculate_score(cls, result, data):
-        score = cls.SCORE_CORRECT if result.expected_response == result.given_response else cls.SCORE_WRONG
+ 
+    def calculate_score(self, result, data):
+        score = self.SCORE_CORRECT if result.expected_response == result.given_response else self.SCORE_WRONG
         return score
 
-    @classmethod
-    def get_final_round(cls, session):
+    def get_final_round(self, session):
 
         # Finish session.
         session.finish()
         session.save()
 
         # Answer explainer
-        answer_explainer = cls.get_answer_explainer(session, round=2)
+        answer_explainer = self.get_answer_explainer(session, round=2)
 
         # Score
-        score = cls.get_score(session)
+        score = self.get_score(session)
 
         # Final
         final_text = "Je hebt het uitstekend gedaan!" if session.final_score >= 2 * \
-            cls.SCORE_CORRECT else "Dat bleek toch even lastig!"
+            self.SCORE_CORRECT else "Dat bleek toch even lastig!"
         final = Final(
             session=session,
             final_text=final_text,
             rank=toontjehoger_ranks(session),
             button={'text': 'Wat hebben we getest?'}
-        ).action()
+        )
 
         # Info page
         body = render_to_string(
@@ -245,6 +239,6 @@ class ToontjeHoger1Mozart(Base):
             heading="Het Mozart effect",
             button_label="Terug naar ToontjeHoger",
             button_link="/toontjehoger"
-        ).action()
+        )
 
         return [*answer_explainer, *score, final, info]

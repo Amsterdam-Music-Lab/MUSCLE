@@ -1,4 +1,6 @@
-class ToontjeHoger:  # pylint: disable=too-few-public-methods
+from .base_action import BaseAction
+
+class ToontjeHoger(BaseAction):  # pylint: disable=too-few-public-methods
     """
     Provide data for a view that shows the ToontjeHoger homepage
 
@@ -21,13 +23,4 @@ class ToontjeHoger:  # pylint: disable=too-few-public-methods
         experiments: A list of ExperimentData objects
         """
         self.config = config
-        self.experiments = experiments
-
-    def action(self):
-        """Get data for ToontjeHoger action"""
-
-        return {
-            'view': ToontjeHoger.ID,
-            'config': self.config,
-            'experiments': [vars(i) for i in self.experiments]
-        }
+        self.experiments = [vars(i) for i in self.experiments]

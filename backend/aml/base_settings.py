@@ -142,7 +142,9 @@ HOMEPAGE = 'https://www.amsterdammusiclab.nl'
 
 # CORS origin white list from .env
 CORS_ORIGIN_WHITELIST = os.getenv(
-    "AML_CORS_ORIGIN_WHITELIST", "http://localhost:3000,http://127.0.0.1:3000").split(",")
+    "AML_CORS_ORIGIN_WHITELIST",
+    "http://localhost:3000,http://127.0.0.1:3000,{}".format(HOMEPAGE)
+).split(",")
 
 # CORS
 CORS_ORIGIN_ALLOW_ALL = False

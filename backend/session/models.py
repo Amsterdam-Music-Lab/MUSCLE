@@ -57,8 +57,9 @@ class Session(models.Model):
 
     def previous_section(self):
         """ Get previous song presented in an experiment """
-        if self.result_set.count() > 0:
-            result = self.result_set.last()
+        valid_results = self.result_set.filter(score__isnull=False)
+        if valid_results.count() > 0:
+            result = valid_results.last()
             if result.section:
                 return result.section
         return None
@@ -79,6 +80,7 @@ class Session(models.Model):
     def export_admin(self):
         """Export data for admin"""
         return {
+            'session_id': self.id,
             'participant': self.participant.id,
             'started_at': self.started_at.isoformat(),
             'finished_at': self.finished_at.isoformat() if self.finished_at else None,
@@ -107,6 +109,10 @@ class Session(models.Model):
     
     def increment_round(self):
         self.current_round += 1
+        self.save()
+    
+    def decrement_round(self):
+        self.current_round -= 1
         self.save()
 
     def song_ids(self):
@@ -209,20 +215,18 @@ class Session(models.Model):
         """Get session rank based on final_score, within current experiment"""
         return self.experiment.session_set.filter(final_score__gte=self.final_score).values('final_score').annotate(total=models.Count('final_score')).count()
 
-    def percentile_rank(self):
+    def percentile_rank(self, exclude_unfinished):
         """Get session percentile rank based on final_score, within current experiment"""
-        if self.is_finished():
-            finished_set = \
-                self.experiment.session_set.filter(finished_at__isnull=False)
-            n_finished = finished_set.count()
-            if n_finished == 0:
-                return 0.0  # Should be impossible but avoids x/0
-            n_lte = \
-                finished_set.filter(final_score__lte=self.final_score).count()
-            n_eq = finished_set.filter(final_score=self.final_score).count()
-            return 100.0 * (n_lte - (0.5 * n_eq)) / n_finished
-        else:
-            return 0.0
+        session_set = self.experiment.session_set
+        if exclude_unfinished:
+            session_set = session_set.filter(finished_at__isnull=False)
+        n_session = session_set.count()
+        if n_session == 0:
+            return 0.0  # Should be impossible but avoids x/0
+        n_lte = \
+            session_set.filter(final_score__lte=self.final_score).count()
+        n_eq = session_set.filter(final_score=self.final_score).count()
+        return 100.0 * (n_lte - (0.5 * n_eq)) / n_session
 
     def question_bonus(self, bonus=100, skip_penalty=5):
         """Get the question bonus, given by the bonus reduced with number of skipped questions times the skip_penalty"""

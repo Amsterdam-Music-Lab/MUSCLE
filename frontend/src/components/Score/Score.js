@@ -57,7 +57,7 @@ const Score = ({
             }
         };
     }, [timer, onNext]);
-
+    
     return (
         <div className="aha__score d-flex flex-column justify-content-center">
             <div
@@ -78,16 +78,16 @@ const Score = ({
                             <h3>{score_message}</h3>
                         </div>
                     ) : (
-                        <span className={icon}></span>
+                        <span className={`fa-solid ${icon}`}></span>
                     )}
                 </div>
             </div>
-            {total_score === 0 ||
-                (!!total_score && (
-                    <h4 className="total-score">
-                        {texts.score}: {total_score - score + showScore}
-                    </h4>
-                ))}
+            
+            {total_score !== undefined && (
+                <h4 className="total-score">
+                    {texts.score}: {total_score - score + showScore}
+                </h4>
+                )}
 
             {!timer && (
                 <div className="d-flex flex-column justify-content-center align-items-center mt-3 mb-4">

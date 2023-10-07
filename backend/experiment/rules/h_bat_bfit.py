@@ -6,6 +6,5 @@ class HBatBFIT(HBat):
     """ a class for the BFIT test, which has a different trivia section """
     ID = 'H_BAT_BFIT'
 
-    @classmethod
-    def get_trivia(cls):
+    def get_trivia(self):
         return _("Musicians often speed up or slow down rhythms to convey a particular feeling or groove. We call this ‘expressive timing’.")

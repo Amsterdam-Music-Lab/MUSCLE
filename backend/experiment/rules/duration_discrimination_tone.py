@@ -7,9 +7,8 @@ from .duration_discrimination import DurationDiscrimination
 class DurationDiscriminationTone(DurationDiscrimination):
     ID = 'DURATION_DISCRIMINATION_TONE'
     condition = _('tone')
-
-    @classmethod
-    def get_final_text(cls, difference):
+ 
+    def get_final_text(self, difference):
         milliseconds = round(difference / 1000)
         feedback = _('Well done! You managed to hear the difference between tones that \
                 differed only {} milliseconds in length.').format(milliseconds)
@@ -18,8 +17,7 @@ class DurationDiscriminationTone(DurationDiscrimination):
                 if we want to be able to process rhythm in music.')
         return render_feedback_trivia(feedback, trivia)
 
-    @classmethod
-    def get_response_explainer(cls, correct, correct_response, button_label=_('Next fragment')):
+    def get_response_explainer(self, correct, correct_response, button_label=_('Next fragment')):
         preposition = _('than') if correct_response=='LONGER' else _('as')
         correct_response = _('LONGER') if correct_response=='LONGER' else _('EQUAL')
         if correct:
@@ -33,15 +31,12 @@ class DurationDiscriminationTone(DurationDiscrimination):
             steps=[],
             button_label=button_label
         )
-
-    @classmethod
-    def get_question_text(cls):
+ 
+    def get_question_text(self):
         return _("Is the second tone EQUALLY LONG as the first tone or LONGER?")
 
-    @classmethod
-    def get_introduction(cls):
+    def get_introduction(self):
         return _('In this test you will hear two tones on each trial.')
 
-    @classmethod
-    def get_task_explanation(cls):
+    def get_task_explanation(self):
         return _("It's your job to decide if the second tone is EQUALLY LONG as the first tone, or LONGER.")

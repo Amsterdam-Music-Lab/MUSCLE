@@ -1,0 +1,58 @@
+{% load i18n %}
+<h2 class="title">{% translate "Unlocked" %} {{unlocked}}</h2>  
+<div class="card mb-3 bg-blue">
+    <div class="row no-gutters">
+        <div class="col">
+            <span class="fa-solid fa-heart fa-4x"></span>
+        </div>
+        <div class="col-8">
+            <div class="card-body">
+                <h5 class="card-title">
+                    {% blocktranslate %}
+                        Your top 3 favourite songs out of {{n_songs}}: 
+                    {% endblocktranslate %}
+                </h5>
+                <ul class="card-text">
+                    {% for song in top_participant %}
+                        <li>{{song.name}}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="card mb-3 bg-blue {% if n_known_songs == None %}is-greyed-out{% endif %}">
+    <div class="row no-gutters">
+        <div class="col">     
+            <span class="fa-solid fa-lightbulb fa-4x"></span>
+        </div>
+        <div class="col-8">
+            <div class="card-body">
+                <h5 class="card-title">
+                    {% blocktranslate %}
+                        Of {{n_songs}} songs, you know {{n_known_songs}}
+                    {% endblocktranslate %}
+                </h5>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="card bg-blue {% if not top_all %}is-greyed-out{% endif %}">
+    <div class="row no-gutters">
+        <div class="col">
+            <span class="fa-solid fa-user-group fa-4x"></span>
+        </div>
+        <div class="col-8">
+            <div class="card-body">
+                <h5 class="card-title">
+                    {% translate "Top 3 favourite songs by others:" %}
+                </h5>
+                <ul class="card-text">
+                    {% for song in top_all %}
+                        <li>{{song.name}}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>

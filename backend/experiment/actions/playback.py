@@ -1,4 +1,6 @@
-class Playback(object):
+from .base_action import BaseAction
+
+class Playback(BaseAction):
     ''' A playback wrapper for different kinds of players
         - player_type: can be one of the following:
             - 'AUTOPLAY' - player starts automatically
@@ -28,7 +30,7 @@ class Playback(object):
     def __init__(self, sections, player_type='AUTOPLAY', preload_message='', instruction='', play_config=None):
         self.sections = [{'id': s.id, 'url': s.absolute_url(), 'group': s.group}
                          for s in sections]
-        self.player_type = player_type
+        self.ID = player_type
         self.preload_message = preload_message
         self.instruction = instruction
         self.play_config = {
@@ -40,13 +42,3 @@ class Playback(object):
         }
         if play_config:
             self.play_config.update(play_config)
-
-    def action(self):
-        action = {
-            'player_type': self.player_type,
-            'sections': self.sections,
-            'instruction': self.instruction,
-            'preload_message': self.preload_message,
-            'play_config': self.play_config
-        }
-        return action

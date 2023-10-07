@@ -26,6 +26,8 @@ class Experiment(models.Model):
     playlists = models.ManyToManyField('section.Playlist', blank=True)
     name = models.CharField(db_index=True, max_length=64)
     slug = models.CharField(db_index=True, max_length=64, unique=True)
+    url = models.CharField(verbose_name='URL with more information about the experiment', max_length=100, blank=True, default='')
+    hashtag = models.CharField(verbose_name='hashtag for social media', max_length=20, blank=True, default='')
     active = models.BooleanField(default=True)
     rounds = models.PositiveIntegerField(default=10)
     bonus_points = models.PositiveIntegerField(default=0)
@@ -172,8 +174,9 @@ class Experiment(models.Model):
         return rows, list(fieldnames)
 
     def get_rules(self):
-        """Get rules class to be used for this session"""
-        return EXPERIMENT_RULES[self.rules]
+        """Get instance of rules class to be used for this session"""
+        cl = EXPERIMENT_RULES[self.rules]
+        return cl()
 
     def max_score(self):
         """Get max score from all sessions with a positive score"""

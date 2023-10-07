@@ -16,7 +16,12 @@ services:
           - PGPASSWORD=${SQL_PASSWORD}
         volumes:
           - db_data:/var/lib/postgresql/data/
-          - db_backup:/backups/       
+          - db_backup:/backups/
+        healthcheck:
+          test: ["CMD-SHELL", "pg_isready"]
+          interval: 5s
+          timeout: 5s
+          retries: 5  
     ip2country:
         image: extrawurst/ip2country:latest
         ports:
@@ -26,8 +31,10 @@ services:
           context: ./backend
           dockerfile: DockerfileDevelop
         depends_on:
-            - db
-            - ip2country
+          db:
+            condition: service_healthy
+          ip2country:
+            condition: service_started
         volumes:
           - type: bind
             source: ./backend

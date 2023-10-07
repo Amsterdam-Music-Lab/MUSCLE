@@ -16,8 +16,7 @@ class Eurovision2020(Hooked):
 
     ID = 'EUROVISION_2020'
 
-    @classmethod
-    def plan_sections(cls, session):
+    def plan_sections(self, session):
         """Set the plan of tracks for a session.
 
         N.B. Assumes exactly one segment each of tags 1, 2, and 3 per song!
@@ -84,10 +83,8 @@ class Eurovision2020(Hooked):
         session.save_json_data({'plan': plan})
         # session.save() is required for persistence
         session.save()
-
-
-    @classmethod
-    def next_song_sync_action(cls, session):
+    
+    def next_song_sync_action(self, session):
         """Get next song_sync section for this session."""
 
         # Load plan.
@@ -116,13 +113,11 @@ class Eurovision2020(Hooked):
         return SongSync(
             key=key,
             section=section,
-            title=cls.get_trial_title(session, next_round_number),
+            title=self.get_trial_title(session, next_round_number),
             result_id=result_id
-        ).action()
-
-
-    @classmethod
-    def next_heard_before_action(cls, session):
+        )
+    
+    def next_heard_before_action(self, session):
         """Get next heard_before action for this session."""
 
         # Load plan.
@@ -158,8 +153,8 @@ class Eurovision2020(Hooked):
         form = Form([BooleanQuestion(
             key='heard_before',
             choices={
-                'new': _("NO"),
-                'old': _("YES"),
+                'new': _("No"),
+                'old': _("Yes"),
             },
             question=_("Did you hear this song in previous rounds?"),
             result_id=result_pk,
@@ -167,13 +162,13 @@ class Eurovision2020(Hooked):
             submits=True)])
         config = {      
             'auto_advance': True,
-            'decision_time': cls.timeout
+            'decision_time': self.timeout
         }
         trial = Trial(
-            title=cls.get_trial_title(session, next_round_number),
+            title=self.get_trial_title(session, next_round_number),
             playback=playback,
             feedback_form=form,
             config=config,
         )
-        return trial.action()
+        return trial
 

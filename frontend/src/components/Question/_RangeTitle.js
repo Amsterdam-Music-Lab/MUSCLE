@@ -9,9 +9,9 @@ const RangeTitle = ({question, value, sliderValue, emptyValue, changePosition=fa
         <div>
             <h4 className="current-value" style={{position: 'relative', left: changePosition? `${position}%` : '0%'}}>
             { emptyValue ? (
-                renderLabel("fa-arrows-left-right", "2x")
+                renderLabel("fa-arrows-left-right", "fa-2x")
             ) : (
-                <span style={{color: question.config && question.config.colors[sliderValue]}}> {renderLabel(question.choices[value], "2x")}</span>
+                <span style={{color: question.config && question.config.colors[sliderValue]}}> {renderLabel(question.choices[value], "fa-2x")}</span>
             )
             }
             </h4>

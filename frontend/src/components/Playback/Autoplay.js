@@ -29,12 +29,12 @@ const AutoPlay = ({instruction, preloadMessage, onPreloadReady, playConfig, sect
     // Handle view logic
     useEffect(() => {
         switch (state.view) {
-            case RECOGNIZE:
+            case RECOGNIZE:                
                 // Play audio at start time            
                 if (!playConfig.mute) {
                     audio.playFrom(Math.max(0, playConfig.playhead));
-                }
-                startedPlaying();
+                }                
+                startedPlaying();                
                 break;
             default:
             // nothing
@@ -84,7 +84,7 @@ const AutoPlay = ({instruction, preloadMessage, onPreloadReady, playConfig, sect
                                     countDownRunning={running}
                                 />
                                 : <div className="stationary">
-                                    <span className="ti-headphone"></span>
+                                    <span className="fa-solid fa-headphones fa-6x"></span>
                                 </div>
                             }
                         </div>

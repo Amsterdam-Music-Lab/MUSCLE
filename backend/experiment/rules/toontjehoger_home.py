@@ -70,16 +70,15 @@ class ToontjeHogerHome(Base):
                        ),
     ]
 
-    @classmethod
-    def first_round(cls, experiment):
+    def first_round(self, experiment):
         """Create data for the first experiment round"""
 
         # Session history
-        sessions = cls.get_sessions(participant)
-        next_experiment_slug = cls.get_next_experiment_slug(sessions)
+        sessions = self.get_sessions(participant)
+        next_experiment_slug = self.get_next_experiment_slug(sessions)
 
         # Score
-        score = cls.get_score(sessions)
+        score = self.get_score(sessions)
         score_label = "punten" if len(sessions) > 0 and score > 0 else "Nog geen punten!"
         score_class = ""
         if score < 100:
@@ -100,7 +99,7 @@ class ToontjeHogerHome(Base):
         # - 'random experiment' when user has completed all experiments
         main_button_label = "Volgende experiment" if next_experiment_slug else "Willekeurig experiment"
         main_button_url = "/{}".format(next_experiment_slug) if next_experiment_slug else random.choice([
-            experiment.slug for experiment in cls.EXPERIMENT_DATA])
+            experiment.slug for experiment in self.EXPERIMENT_DATA])
 
         # Home
         home = ToontjeHoger(
@@ -129,27 +128,25 @@ class ToontjeHogerHome(Base):
                 'portrait_description': "Het ToontjeHoger team (v.l.n.r.): Atser Damsma, Henkjan Honing, Zwanet Young, Mariëlle Baelemans, Fleur Bouwer, Ashley Burgoyne, Berit Janssen* en Makiko Sadakata*. (foto: Bob Bronshoff)<br><span style=\"opacity: 0.6; font-size: 0.8em;\">*Niet op de foto</span>",
                 'privacy_description': "Deze website verwerkt uitsluitend geanomiseerde gegevens. Voor aanvullende informatie zie {}.".format(external_url("UvA Privacy Statement", "https://www.uva.nl/home/disclaimers/privacy.html"))
             },
-            experiments=cls.EXPERIMENT_DATA
-        ).action()
+            experiments=self.EXPERIMENT_DATA
+        )
 
         return [
             home,
         ]
 
-    @ classmethod
-    def get_score(cls, sessions):
+    def get_score(self, sessions):
         score = 0
         for session in sessions:
             score += session.final_score
         return score
 
-    @ classmethod
-    def get_sessions(cls, participant):
+    def get_sessions(self, participant):
         from session.models import Session
         from experiment.models import Experiment
 
         experiment_slugs = [
-            experiment.slug for experiment in cls.EXPERIMENT_DATA]
+            experiment.slug for experiment in self.EXPERIMENT_DATA]
 
         experiment_ids = Experiment.objects.filter(slug__in=experiment_slugs)
 
@@ -157,10 +154,9 @@ class ToontjeHogerHome(Base):
                                           experiment_id__in=experiment_ids)
         return sessions
 
-    @ classmethod
-    def get_next_experiment_slug(cls, sessions):
+    def get_next_experiment_slug(self, sessions):
         experiment_slugs = [
-            experiment.slug for experiment in cls.EXPERIMENT_DATA]
+            experiment.slug for experiment in self.EXPERIMENT_DATA]
         for session in sessions:
             if session.experiment.slug in experiment_slugs:
                 experiment_slugs.remove(session.experiment.slug)

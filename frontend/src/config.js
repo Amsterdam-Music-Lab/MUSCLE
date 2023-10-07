@@ -30,13 +30,4 @@ export const URLS = {
     reloadParticipant: "/participant/reload/:id/:hash",
     AMLHome:
         process.env.REACT_APP_AML_HOME || "https://www.amsterdammusiclab.nl",
-
-    // share
-    shareFacebook:
-        "https://www.facebook.com/sharer/sharer.php?u=https://app.amsterdammusiclab.nl",
-    shareTwitter:
-        "https://twitter.com/intent/tweet?text=" +
-        encodeURIComponent(
-            "I scored --SCORE-- points on Amsterdam Music Lab - #amsterdammusiclab #citizenscience https://app.amsterdammusiclab.nl"
-        ),
 };

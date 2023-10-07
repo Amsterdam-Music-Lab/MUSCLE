@@ -52,13 +52,11 @@ class Plink(object):  # pylint: disable=too-few-public-methods
 
         return action
 
-    @staticmethod
-    def extract_main_question(data):
+    def extract_main_question(self, data):
         """Helper that extracts main_question from the given data"""
         return data.get('main_question', '') if type(data) is dict else ''
 
-    @staticmethod
-    def extract_extra_questions(data):
+    def extract_extra_questions(self, data):
         """Helper that extracts extra_questions from the given data"""
         extra_questions = data.get('extra_questions') if type(data) is dict else []
         if not isinstance(extra_questions, list):

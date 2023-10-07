@@ -19,8 +19,7 @@ class ToontjeHoger2Preverbal(Base):
     SCORE_CORRECT = 50
     SCORE_WRONG = 0
 
-    @classmethod
-    def first_round(cls, experiment):
+    def first_round(self, experiment):
         """Create data for the first experiment rounds."""
 
         # 1. Explain game.
@@ -34,18 +33,18 @@ class ToontjeHoger2Preverbal(Base):
                 Step(
                     "Tenslotte krijg je twee geluiden te horen met de vraag: welke baby is in Frankrijk geboren?"),
             ],
+            step_numbers=True,
             button_label="Start"
-
-        ).action(step_numbers=True)
+        )
 
         # 2 Spectrogram information
-        spectrogram_info = cls.get_spectrogram_info()
+        spectrogram_info = self.get_spectrogram_info()
 
         # 3. Choose playlist.
-        playlist = Playlist.action(experiment.playlists.all())
+        playlist = Playlist(experiment.playlists.all())
 
         # 4. Start session.
-        start_session = StartSession.action()
+        start_session = StartSession()
 
         return [
             explainer,
@@ -54,8 +53,7 @@ class ToontjeHoger2Preverbal(Base):
             start_session
         ]
 
-    @classmethod
-    def get_spectrogram_info(cls):
+    def get_spectrogram_info(self):
         image_url = "/images/experiments/toontjehoger/spectrogram_info_nl.webp"
         description = "Een spectrogram is een visuele weergave van geluid, waarin je kan zien hoe een geluid verandert over de tijd. Hoe witter, hoe meer energie op die frequentie."
         body = '<div class="center"><img src="{}"></div><p>{}</p>'.format(
@@ -66,11 +64,10 @@ class ToontjeHoger2Preverbal(Base):
             body=body,
             heading="Wat is een spectrogram?",
             button_label="Volgende",
-        ).action()
+        )
         return info
-
-    @classmethod
-    def next_round(cls, session, request_session=None):
+    
+    def next_round(self, session, request_session=None):
         """Get action data for the next round"""
 
         rounds_passed = session.rounds_passed()
@@ -78,17 +75,16 @@ class ToontjeHoger2Preverbal(Base):
         # Round 1
         if rounds_passed == 0:
             # No combine_actions because of inconsistent next_round array wrapping in first round
-            return cls.get_round1(session)
+            return self.get_round1(session)
 
         # Round 2
         if rounds_passed == 1:
-            return [*cls.get_score(session, rounds_passed), *cls.get_round1_playback(session), *cls.get_round2(round, session)]
+            return [*self.get_score(session, rounds_passed), *self.get_round1_playback(session), *self.get_round2(round, session)]
 
         # Final
-        return cls.get_final_round(session)
-
-    @classmethod
-    def get_score(cls, session, rounds_passed):
+        return self.get_final_round(session)
+    
+    def get_score(self, session, rounds_passed):
         # Feedback
         last_result = session.last_result()
         feedback = ""
@@ -98,23 +94,22 @@ class ToontjeHoger2Preverbal(Base):
         else:
             if rounds_passed == 1:
                 appendix = "Op het volgende scherm kun je de geluiden beluisteren."
-                if last_result.score == cls.SCORE_CORRECT:
+                if last_result.score == self.SCORE_CORRECT:
                     feedback = "Dat is correct! Spectrogram C is inderdaad van een mens. " + appendix
                 else:
                     feedback = "Helaas! Je antwoord was onjuist. Het geluid van spectrogram C is van een mens. " + appendix
             elif rounds_passed == 2:
-                if last_result.score == cls.SCORE_CORRECT:
+                if last_result.score == self.SCORE_CORRECT:
                     feedback = "Dat is correct! Geluid A is inderdaad de Franse baby."
                 else:
                     feedback = "Helaas! Geluid A is de Franse baby."
 
         # Return score view
         config = {'show_total_score': True}
-        score = Score(session, config=config, feedback=feedback).action()
+        score = Score(session, config=config, feedback=feedback)
         return [score]
-
-    @classmethod
-    def get_round1(cls, session):
+ 
+    def get_round1(self, session):
         # Question
         key = 'expected_spectrogram'
         question = ButtonArrayQuestion(
@@ -138,13 +133,12 @@ class ToontjeHoger2Preverbal(Base):
             body='<img src="{}" style="height:calc(100% - 260px);max-height:326px;max-width: 100%;"/>'.format(
                 "/images/experiments/toontjehoger/preverbal_1.webp")),
             feedback_form=form,
-            title=cls.TITLE,
-        ).action()
+            title=self.TITLE,
+        )
 
         return [image_trial]
-
-    @classmethod
-    def get_round1_playback(cls, session):
+    
+    def get_round1_playback(self, session):
         # Get sections
         sectionA = session.section_from_any_song(
             filter_by={'tag': 'a', 'group': '1'})
@@ -176,13 +170,12 @@ class ToontjeHoger2Preverbal(Base):
         trial = Trial(
             playback=playback,
             feedback_form=None,
-            title=cls.TITLE,
+            title=self.TITLE,
             style='primary-form'
-        ).action()
+        )
         return [trial]
-
-    @classmethod
-    def get_round2(cls, round, session):
+    
+    def get_round2(self, round, session):
 
         # Get sections
         # French
@@ -225,33 +218,31 @@ class ToontjeHoger2Preverbal(Base):
         trial = Trial(
             playback=playback,
             feedback_form=form,
-            title=cls.TITLE,
-        ).action()
+            title=self.TITLE,
+        )
         return [trial]
-
-    @classmethod
-    def calculate_score(cls, result, data):
-        return cls.SCORE_CORRECT if result.expected_response == result.given_response else cls.SCORE_WRONG
-
-    @classmethod
-    def get_final_round(cls, session):
+ 
+    def calculate_score(self, result, data):
+        return self.SCORE_CORRECT if result.expected_response == result.given_response else self.SCORE_WRONG
+    
+    def get_final_round(self, session):
 
         # Finish session.
         session.finish()
         session.save()
 
         # Score
-        score = cls.get_score(session, session.rounds_passed())
+        score = self.get_score(session, session.rounds_passed())
 
         # Final
         final_text = "Goed gedaan! Je hebt beide vragen correct beantwoord!" if session.final_score >= 2 * \
-            cls.SCORE_CORRECT else "Dat bleek toch even lastig!"
+            self.SCORE_CORRECT else "Dat bleek toch even lastig!"
         final = Final(
             session=session,
             final_text=final_text,
             rank=toontjehoger_ranks(session),
             button={'text': 'Wat hebben we getest?'}
-        ).action()
+        )
 
         # Info page
         body = render_to_string(
@@ -261,6 +252,6 @@ class ToontjeHoger2Preverbal(Base):
             heading="Het eerste luisteren",
             button_label="Terug naar ToontjeHoger",
             button_link="/toontjehoger"
-        ).action()
+        )
 
         return [*score, final, info]

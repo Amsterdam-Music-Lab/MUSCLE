@@ -10,8 +10,7 @@ class RhythmExperimentSeriesUnpaid(RhythmExperimentSeries):
     debrief_form = 'final/debrief_rhythm_unpaid.html'
     show_participant_final = False
 
-    @classmethod
-    def intro_explainer(cls):
+    def intro_explainer(self):
         return Explainer(
             instruction=_("You are about to take part in an experiment about rhythm perception."),
             steps=[
@@ -29,4 +28,4 @@ class RhythmExperimentSeriesUnpaid(RhythmExperimentSeries):
                 )
             ],
             button_label=_("Continue")
-        ).action()
+        )

@@ -3,7 +3,7 @@ import logging
 
 from django.utils.translation import gettext_lazy as _
 
-from experiment.actions.utils import combine_actions, final_action_with_optional_button, render_feedback_trivia
+from experiment.actions.utils import final_action_with_optional_button, render_feedback_trivia
 from experiment.rules.util.practice import practice_explainer, practice_again_explainer, start_experiment_explainer
 from experiment.actions import Trial, Consent, Explainer, StartSession, Step
 from experiment.actions.playback import Playback
@@ -80,17 +80,16 @@ STIMULI = {
 class RhythmDiscrimination(Base):
     ID = 'RHYTHM_DISCRIMINATION'
 
-    @classmethod
-    def first_round(cls, experiment):
+    def first_round(self, experiment):
         """Create data for the first experiment rounds"""
-        explainer = intro_explainer().action(True)
+        explainer = intro_explainer()
 
         # 2. Consent with default text
-        consent = Consent.action()
+        consent = Consent()
 
-        explainer2 = practice_explainer().action()
+        explainer2 = practice_explainer()
 
-        start_session = StartSession.action()
+        start_session = StartSession()
 
         return [
             explainer,
@@ -99,8 +98,7 @@ class RhythmDiscrimination(Base):
             start_session
         ]
 
-    @classmethod
-    def next_round(cls, session, request_session=None):
+    def next_round(self, session, request_session=None):
         next_round_number = session.get_next_round()
 
         if next_round_number == 1:
@@ -108,7 +106,7 @@ class RhythmDiscrimination(Base):
 
         return next_trial_actions(
             session, next_round_number, request_session)
-
+    
 
 def next_trial_actions(session, round_number, request_session):
     """
@@ -149,7 +147,7 @@ def next_trial_actions(session, round_number, request_session):
                 session.save()
                 explainer = start_experiment_explainer()
                 explainer.steps.pop(0)
-                actions.append(explainer.action(True))
+                actions.append(explainer)
 
     try:
         section = session.playlist.section_set.filter(
@@ -187,11 +185,11 @@ def next_trial_actions(session, round_number, request_session):
         title=_('Rhythm discrimination: %s' % (title)),
         config={
             'listen_first': True,
-            'response_time': section.duration + .1
+            'response_time': section.duration + .5
         }
     )
 
-    actions.append(view.action())
+    actions.append(view)
     return actions
 
 
@@ -242,6 +240,7 @@ def intro_explainer():
             Step(_(
                 'This test will take around 6 minutes to complete. Try to stay focused for the entire test!'))
         ],
+        step_numbers=True,
         button_label='Ok'
     )
 
@@ -265,7 +264,7 @@ def response_explainer(correct, same, button_label=_('Next fragment')):
         instruction=instruction,
         steps=[],
         button_label=button_label
-    ).action()
+    )
 
 
 def finalize_experiment(session, request_session):

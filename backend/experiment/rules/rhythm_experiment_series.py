@@ -15,8 +15,7 @@ class RhythmExperimentSeries(Base):
     debrief_form = 'final/experiment_series.html'
     show_participant_final = True
 
-    @classmethod
-    def intro_explainer(cls):
+    def intro_explainer(self):
         return Explainer(
             instruction=_(
                 "You are about to take part in an experiment about rhythm perception."),
@@ -35,38 +34,38 @@ class RhythmExperimentSeries(Base):
                 )
             ],
             button_label=_("Continue")
-        ).action()
+        )
 
-    @classmethod
-    def first_round(cls, experiment):
+    
+    def first_round(self, experiment):
         """Create data for the first experiment rounds."""
         # read consent form from file
-        rendered = render_to_string(cls.consent_form)
-        consent = Consent.action(rendered, title=_(
+        rendered = render_to_string(self.consent_form)
+        consent = Consent(rendered, title=_(
             'Informed consent'), confirm=_('I agree'), deny=_('Stop'))
-        start_session = StartSession.action()
+        start_session = StartSession()
         return [
             consent,
-            cls.intro_explainer(),
+            self.intro_explainer(),
             start_session
         ]
 
-    @classmethod
-    def next_round(cls, session):
+    
+    def next_round(self, session):
         data = session.load_json_data()
         experiment_data = data.get('experiments')
         experiment_number = int(session.final_score)
         if not experiment_data:
             experiment_data = prepare_experiments(session)
         if experiment_number == len(experiment_data):
-            rendered = render_to_string(cls.debrief_form)
+            rendered = render_to_string(self.debrief_form)
             return Final(
                 session,
                 title=_("Thank you very much for participating!"),
                 final_text=rendered,
-                show_participant_link=cls.show_participant_final,
-                show_participant_id_only=cls.show_participant_final,
-            ).action()
+                show_participant_link=self.show_participant_final,
+                show_participant_id_only=self.show_participant_final,
+            )
         slug = experiment_data[experiment_number]
         session.save()
         button = {
@@ -76,7 +75,7 @@ class RhythmExperimentSeries(Base):
         return Final(session,
                      title=_('Next experiment (%d to go!)') % (
                          len(experiment_data) - experiment_number),
-                     button=button).action()
+                     button=button)
 
 
 def prepare_experiments(session):

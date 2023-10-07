@@ -1,16 +1,5 @@
-$playButtonSize: 110px;
-
-@media(max-width: 768px) {
-    .back, 
-    .front {     
-        width: calc($playButtonSize - 40px)!important;
-        height: calc($playButtonSize - 40px)!important;
-    }
-    .aha__play-card {        
-        width: calc($playButtonSize - 40px)!important;
-        height: calc($playButtonSize - 40px)!important;
-    }
-}
+$playButtonHighDisplay: 18vw;
+$playButtonWideDisplay: 16vh;
 
 @keyframes memorymatch {
     20% {
@@ -82,15 +71,6 @@ $playButtonSize: 110px;
 }
 
 .aha__play-card {
-    position: relative;
-    width: $playButtonSize;
-    height: $playButtonSize;
-    display: block;
-    border-radius: 6px;
-    opacity: 1;
-    transition-property: opacity;
-    transition-delay: 0.8s;
-    transition-duration: 0.7s;
 
     &.disabled {
         pointer-events: none;
@@ -100,44 +80,42 @@ $playButtonSize: 110px;
     &.nomatch {
         animation-duration: 0.7s;
         animation-name: nomatch;
-        animation-iteration-count: 1;
-        pointer-events: none;
+        animation-iteration-count: 1;        
     }
 
     &.lucky {
         animation-duration: 0.55s;
         animation-name: luckymatch;
-        animation-iteration-count: 1;
-        pointer-events: none;
-        opacity: 0;
+        animation-iteration-count: 1;        
     }
 
     &.memory {
         animation-duration: 0.8s;
         animation-name: memorymatch;
-        animation-iteration-count: 1;
-        pointer-events: none;
-        opacity: 0;
+        animation-iteration-count: 1;        
     }
     
     &.noevents {
         pointer-events: none;
     }
 
-    .front {
-        opacity: 1;
-        transform: rotateY(90deg);
-        transition: all ease-in 0.2s;
-        position: absolute;
-        width: $playButtonSize;
-        height: $playButtonSize;
-    }
-
     .back {
         background-color: $gray;
-        width: $playButtonSize;
-        height: $playButtonSize;
         border-radius: .5rem;
+    }
+    
+    @media(min-aspect-ratio: 1/1) {
+        .back, .turned {
+            width: $playButtonWideDisplay;
+            height: $playButtonWideDisplay;
+        }
+    }
+
+    @media(max-aspect-ratio: 1/1) {
+        .back, .turned {
+            width: $playButtonHighDisplay;
+            height: $playButtonHighDisplay;
+        }
     }
     
 }

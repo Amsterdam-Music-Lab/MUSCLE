@@ -11,8 +11,7 @@ from experiment.actions.utils import final_action_with_optional_button
 class ListeningConditions(Base):
     ID = 'LISTENING_CONDITIONS'
 
-    @classmethod
-    def next_round(cls, session, request_session=None):
+    def next_round(self, session, request_session=None):
         round_number = session.get_next_round()
         playback = None
         feedback_form = None
@@ -91,17 +90,16 @@ class ListeningConditions(Base):
             message = _(
                 "Please keep the eventual sound level the same over the course of the experiment.")
             actions = [
-                Trial(playback, feedback_form).action(),
+                Trial(playback, feedback_form),
                 final_action_with_optional_button(
                     session, message, request_session)
             ]
             return actions
         view = Trial(playback, feedback_form)
-        return [view.action()]
+        return [view]
 
-    @classmethod
-    def first_round(cls, experiment):
-        consent = Consent.action()
+    def first_round(self, experiment):
+        consent = Consent()
         explainer = Explainer(
             instruction=_(
                 'General listening instructions:'),
@@ -111,10 +109,11 @@ class ListeningConditions(Base):
                 ),
                 Step(_("Please use headphones, and turn off sound notifications from other devices and applications (e.g., e-mail, phone messages)."),
                      )],
+            step_numbers=True,
             button_label=_('OK')
-        ).action(True)
-        playlist = Playlist.action(experiment.playlists.all())
-        start_session = StartSession.action()
+        )
+        playlist = Playlist(experiment.playlists.all())
+        start_session = StartSession()
         return [
             consent,
             explainer,

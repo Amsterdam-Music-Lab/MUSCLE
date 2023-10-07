@@ -7,7 +7,7 @@ from .trial import Trial
 from result.utils import prepare_result
 
 
-def two_alternative_forced(session, section, choices, expected_response=None, style={}, comment='', scoring_rule=None, config=None):
+def two_alternative_forced(session, section, choices, expected_response=None, style={}, comment='', scoring_rule=None, title='', config=None):
     """
     Provide data for a Two Alternative Forced view that (auto)plays a section,
     shows a question and has two customizable buttons
@@ -35,5 +35,5 @@ def two_alternative_forced(session, section, choices, expected_response=None, st
         style=button_style
     )
     feedback_form = Form([question])
-    trial = Trial(playback=playback, feedback_form=feedback_form, config=config)
-    return trial.action()
+    trial = Trial(playback=playback, feedback_form=feedback_form, title=title, config=config)
+    return trial

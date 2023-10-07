@@ -2,8 +2,9 @@ from django.conf import settings
 from django.utils.translation import gettext_lazy as _
 
 from .styles import STYLE_NEUTRAL
+from .base_action import BaseAction
 
-class Question(object):
+class Question(BaseAction):
     ''' Question is part of a form.
     - key: description of question in results table
     - view: which widget the question should use in the frontend
@@ -63,15 +64,16 @@ class BooleanQuestion(Question):
     def __init__(self, choices=None, **kwargs):
         super().__init__(**kwargs)
         self.choices = choices or {
-            'yes': _('YES'),
-            'no': _('NO')
+            'yes': _('Yes'),
+            'no': _('No')
         }
         self.view = 'BUTTON_ARRAY'
 
 class ChoiceQuestion(Question):
-    def __init__(self, choices, **kwargs):
+    def __init__(self, choices, min_values=1, **kwargs):
         super().__init__(**kwargs)
         self.choices = choices
+        self.min_values = min_values # minimal number of values to be selected, 1 or more
 
 
 class DropdownQuestion(Question):
@@ -146,15 +148,15 @@ class LikertQuestionIcon(Question):
         self.view = likert_view
         if scale_steps == 7:
             self.choices = {
-                1: 'fa-face-angry',
-                2: 'fa-face-frown-open',
-                3: 'fa-face-frown',
+                1: 'fa-face-grin-hearts',
+                2: 'fa-face-grin',
+                3: 'fa-face-smile',
                 4: 'fa-face-meh',  # Undecided
-                5: 'fa-face-smile',
-                6: 'fa-face-grin',
-                7: 'fa-face-grin-hearts',
+                5: 'fa-face-frown',
+                6: 'fa-face-frown-open',
+                7: 'fa-face-angry',
             }
-            self.config = {'icons':True, 'colors': ['#0CC7F1', '#42b5ff',  '#8b9bfa', '#ab86f1', '#bb7ae9', '#c863e8', '#d843e2']}
+            self.config = {'icons':True, 'colors': ['#d843e2', '#c863e8', '#bb7ae9','#ab86f1', '#8b9bfa', '#42b5ff', '#0CC7F1']}
         elif scale_steps == 5:
             self.choices = {
                 1: _("Strongly Disagree"),
@@ -164,7 +166,7 @@ class LikertQuestionIcon(Question):
                 5: _("Strongly Agree"),
             }
 
-class Form(object):
+class Form(BaseAction):
     ''' Form is a view which brings together an array of questions with submit and optional skip button
     - form: array of questions
     - button_label: label of submit button

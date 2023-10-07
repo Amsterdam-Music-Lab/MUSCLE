@@ -77,15 +77,15 @@ const Trial = ({
     );
 
     const finishedPlaying = useCallback(() => {
-
+        
         if (config.auto_advance) {
-
+            
             // Create a time_passed result
-            if (config.auto_advance_timer != null) {
+            if (config.auto_advance_timer != null) {                
                 if (playback.player_type === 'BUTTON') {
                     startTime.current = getCurrentTime();
                 }
-
+                const id = setTimeout( () => {makeResult({type: "time_passed",});} , config.auto_advance_timer);
             } else {
 
                 makeResult({
@@ -103,7 +103,7 @@ const Trial = ({
         <div role="presentation" className={classNames("aha__trial", config.style)}>
             {playback && (
                 <Playback
-                    playerType={playback.player_type}
+                    playerType={playback.view}
                     instruction={playback.instruction}
                     onPreloadReady={() => {
                         setPreloadReady(true);

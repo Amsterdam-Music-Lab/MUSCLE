@@ -1,84 +1,174 @@
 from django.db.models import Avg
+from django.conf import settings
 from django.utils.translation import gettext_lazy as _
 from django.template.loader import render_to_string
 
-from experiment.actions.utils import combine_actions
 from experiment.questions.utils import question_by_key
+from experiment.questions.demographics import EXTRA_DEMOGRAPHICS
+from experiment.questions.goldsmiths import MSI_F1_ACTIVE_ENGAGEMENT
 
-from experiment.actions import Consent, Explainer, Final, Playlist, Step, StartSession, Trial
+from experiment.actions import Consent, Explainer, Final, HTML, Playlist, Redirect, Step, StartSession, Trial
 from experiment.actions.form import BooleanQuestion, ChoiceQuestion, Form, LikertQuestionIcon
 from experiment.actions.playback import Playback
 from experiment.actions.styles import STYLE_BOOLEAN, STYLE_BOOLEAN_NEGATIVE_FIRST
 
 from result.utils import prepare_result
+from result.models import Result
+
+from section.models import Section
 
 from .base import Base
+from .huang_2022 import gender_question, genre_question, get_test_playback, origin_question, residence_question
 
 
 class MusicalPreferences(Base):
     ID = 'MUSICAL_PREFERENCES'
-    block_size = 16
+    preference_offset = 4 #20
+    knowledge_offset = 6 #42
+    round_increment = 1
 
-    @classmethod
-    def first_round(cls, experiment):
-        explainer = Explainer(
-            instruction=_('This experiment investigates musical preferences'),
-            steps=[
-                Step(description=_('Answer how much you like a song')),
-                Step(description=_('Then tell us whether you know the song'))
-            ]
-        ).action(True)
-        consent = Consent.action()
-        playlist = Playlist.action(experiment.playlists.all())
-        start_session = StartSession.action()
+    know_score = {
+        'yes': 2,
+        'unsure': 1,
+        'no': 0
+    }
+
+    def __init__(self):
+        self.questions = [
+            question_by_key('msi_38_listen_music', MSI_F1_ACTIVE_ENGAGEMENT),
+            genre_question(),
+            gender_question(),
+            question_by_key('dgf_age', EXTRA_DEMOGRAPHICS),
+            origin_question(),
+            residence_question()
+        ]
+
+    def first_round(self, experiment):
+        consent = Consent()
+        playlist = Playlist(experiment.playlists.all())
+        start_session = StartSession()
         return [
-            explainer,
             consent,
             playlist,
             start_session
         ]
 
-    @classmethod
-    def next_round(cls, session, request_session=None):
-        if session.last_result() and session.last_result().score == -1:
-            # last result was key='continue', value='no':
-            return cls.get_final_view(session)
-        n_results = session.rounds_passed()
-        if (n_results > 0 and int(n_results / 2) % cls.block_size == 0):
-            # end of a block
-            actions = []
-            if int(n_results / 2) == session.experiment.rounds:
-                return cls.get_final_view(session)
-            elif int(n_results / 2) == cls.block_size:
-                # first time we hit the end of a block, present questionnaire
-                actions.append(Explainer(
-                    instruction=_("Please answer some questions \
-                    on your musical (Goldsmiths-MSI) and demographic background"),
-                    steps=[],
-                    button_label=_("Let's go!")).action()
-                )
-                actions.extend(cls.get_questions(session))
-            question = BooleanQuestion(
-                question=_("Would you like to listen to more songs?"),
-                choices={
-                    'yes': 'fa-thumbs-up',
-                    'no': 'fa-thumbs-down'
-                },
-                key='continue',
-                style=STYLE_BOOLEAN,
-                submits=True
+    def next_round(self, session, request_session=None):
+        next_round_number = session.get_current_round()
+        actions = []
+        if next_round_number == 1:
+            last_result = session.result_set.last()
+            if last_result:
+                if last_result.score == 1:
+                    question_trials = self.get_questionnaire(session)
+                    if question_trials:
+                        n_questions = len(question_trials)
+                        explainer = Explainer(
+                            instruction=_("Questionnaire"),
+                            steps=[
+                                Step(_(
+                                    "To understand your musical preferences, we have {} questions for you before the experiment \
+                                        begins. The first two questions are about your music listening experience, while the other \
+                                        four questions are demographic questions. It will take 2-3 minutes.").format(n_questions)),
+                                Step(_("Have fun!"))
+                            ],
+                            button_label=_("Let's go!")
+                        )
+                        return [explainer, *question_trials]
+                    else:
+                        session.increment_round()
+                        explainer = Explainer(
+                            instruction=_("How to play"),
+                            steps = [
+                                Step(_("You will hear 64 music clips and have to answer two questions for each clip.")),
+                                Step(_("It will take 20-30 minutes to complete the whole experiment.")),
+                                Step(_("Either wear headphones or use your device's speakers.")),
+                                Step(_("Your final results will be displayed at the end.")),
+                                Step(_("Have fun!"))
+                            ],
+                            button_label=_("Start")
+                        )
+                        return [explainer]
+                else:
+                    session.decrement_round()
+                    if last_result.question_key == 'audio_check1':
+                        playback = get_test_playback()                    
+                        html = HTML(body=render_to_string('html/huang_2022/audio_check.html'))
+                        form = Form(form=[BooleanQuestion(
+                            key='audio_check2',
+                            choices={'no': _('Quit'), 'yes': _('Next')},
+                            result_id=prepare_result('audio_check2', session, scoring_rule='BOOLEAN'),
+                            submits=True,
+                            style=STYLE_BOOLEAN_NEGATIVE_FIRST
+                        )])
+                        return Trial(playback=playback, html=html, feedback_form=form,
+                                     config={'response_time': 15},
+                                     title=_("Tech check"))
+                    else:
+                        # participant had persistent audio problems, delete session and redirect
+                        session.finish()
+                        session.save()
+                        return Redirect(settings.HOMEPAGE)
+            else:
+                session.decrement_round()
+                playback = get_test_playback()
+                html = HTML(body='<h4>{}</h4>'.format(_('Do you hear the music?')))
+                form = Form(form=[BooleanQuestion(
+                    key='audio_check1',
+                    choices={'no': _('No'), 'yes': _('Yes')},
+                    result_id=prepare_result('audio_check1', session, 
+                        scoring_rule='BOOLEAN'),
+                    submits=True,
+                    style=STYLE_BOOLEAN_NEGATIVE_FIRST)])
+                return Trial(playback=playback, feedback_form=form, html=html,
+                             config={'response_time': 15},
+                             title=_("Audio check"))  
+        n_songs = next_round_number - self.round_increment
+        if n_songs == self.preference_offset + 1:
+            like_results = session.result_set.filter(question_key='like_song')
+            feedback = Trial(
+                html=HTML(body=render_to_string('html/musical_preferences/feedback.html', {
+                    'unlocked': _(" Love"),
+                    'n_songs': n_songs,
+                    'top_participant': self.get_preferred_songs(like_results, 3)
+                }))
             )
-            actions.append(
-                Trial(
-                    feedback_form=Form([question]),
-                ).action()
+            actions = [feedback]
+        elif n_songs == self.knowledge_offset + 1:
+            like_results = session.result_set.filter(question_key='like_song')
+            known_songs = session.result_set.filter(question_key='know_song', score=2).count()
+            feedback = Trial(
+                html=HTML(body=render_to_string('html/musical_preferences/feedback.html', {
+                    'unlocked': _(" Knowledge"),
+                    'n_songs': n_songs,
+                    'top_participant': self.get_preferred_songs(like_results, 3),
+                    'n_known_songs': known_songs
+                }))
             )
-            return actions
+            actions = [feedback]
+        elif n_songs == session.experiment.rounds + 1:
+            like_results = session.result_set.filter(question_key='like_song')
+            known_songs = session.result_set.filter(question_key='know_song', score=2).count()
+            all_results = Result.objects.filter(
+                comment='like_song'
+            )
+            feedback = Trial(
+                html=HTML(body=render_to_string('html/musical_preferences/feedback.html', {
+                    'unlocked': _(" Connection"),
+                    'n_songs': n_songs,
+                    'top_participant': self.get_preferred_songs(like_results, 3),
+                    'n_known_songs': known_songs,
+                    'top_all': self.get_preferred_songs(all_results, 3)
+                }))
+            )
+            session.finish()
+            session.save()
+            return [feedback, self.get_final_view(session)]
 
         section = session.playlist.random_section()
         like_key = 'like_song'
         likert = LikertQuestionIcon(
-            question=_('Do you like this song?'),
+            question=_('How much do you like this song?'),
             key=like_key,
             result_id=prepare_result(like_key, session, section=section, scoring_rule='LIKERT')
         )
@@ -88,78 +178,51 @@ class MusicalPreferences(Base):
             key=know_key,
             view='BUTTON_ARRAY',
             choices={
-                'no': 'fa-thumbs-down',
+                'yes': 'fa-check',
                 'unsure': 'fa-question',
-                'yes': 'fa-thumbs-up',
+                'no': 'fa-xmark'                
             },
             result_id=prepare_result(know_key, session, section=section),
-            style=STYLE_BOOLEAN_NEGATIVE_FIRST
+            style=STYLE_BOOLEAN
         )
         playback = Playback([section], play_config={'show_animation': True})
-        form = Form([likert, know])
+        form = Form([know, likert])
         view = Trial(
             playback=playback,
             feedback_form=form,
-            title=_('Musical preference'),
+            title=_('Song %(round)i out of %(total)i' %{
+                'round': n_songs, 'total': session.experiment.rounds}),
             config={
                 'response_time': section.duration + .1,
             }
         )
-        return view.action()
+        actions.append(view)
+        return actions
     
-    @classmethod
-    def calculate_score(cls, result, data):
-        result.comment = data.get('key')
-        result.save()
-        if data.get('key') == 'like_song':
-            return int(data.get('value'))
-        elif data.get('key') == 'continue':
-            if data.get('value') == 'no':
-                return -1
+    def calculate_score(self, result, data):
+        if data.get('key') == 'know_song':
+            return self.know_score.get(data.get('value'))
         else:
-            return None
+            return super().calculate_score(result, data)
     
-    @classmethod
-    def get_final_view(cls, session):
+    def get_final_view(self, session):
         # finalize experiment
-        participant_results = session.result_set.filter(comment='like_song')
-        participant_pref = cls.get_preferred_songs(participant_results)
-        from experiment.models.result import Result 
-        all_results = Result.objects.filter(
-            comment='like_song'
-        )
-        all_pref = cls.get_preferred_songs(all_results)
-        feedback = render_to_string('final/musical_preferences.html', 
-        {'top_all': all_pref, 'top_participant': participant_pref})
+        social_info = self.social_media_info(session.experiment, session.final_score)
+        social_info['apps'] = ['weibo', 'share']
         view = Final(
             session,
-            title='Preference overview',
-            final_text=feedback,
-            show_social=True
-        ).action()
+            title=_("End"),
+            final_text=_("Thank you for your participation and contribution to science!"),
+            feedback_info=self.feedback_info(),
+            social=social_info
+        )
         return view
     
-    @classmethod
-    def get_preferred_songs(cls, result_set, n=5):
+    def get_preferred_songs(self, result_set, n=5):
         top_songs = result_set.values('section').annotate(
             avg_score=Avg('score')).order_by()[:n]
-        from section.models import Section
         out_list = []
         for s in top_songs:
             section = Section.objects.get(pk=s.get('section'))
-            out_list.append({'name': section.song.name, 'score': s.get('avg_score')})
+            out_list.append({'artist': section.song.artist, 'name': section.song.name})
         return out_list
-    
-    @classmethod
-    def get_questions(cls, session):
-        questions = [
-            question_by_key('dgf_generation'),
-            question_by_key('dgf_education', drop_choices=['isced-5']),
-        ]
-        return [
-            Trial(
-                title=_("Questionnaire"),
-                feedback_form=Form([question])).action() 
-            for question in questions
-        ]
-

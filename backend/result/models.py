@@ -27,7 +27,7 @@ class Result(models.Model):
 
     def clean(self):
         # Don't save if both session and participant field are null
-        if self.session is None and self.result is None:
+        if self.session is None and self.participant is None:
             raise ValidationError('Session or participant needed for valid result')
 
     class Meta:
@@ -49,7 +49,8 @@ class Result(models.Model):
         """Export data for admin"""
         return {
             'created_at': self.created_at.isoformat(),
-            'section': self.section.name if self.section else None,
+            'section_id': self.section.id if self.section else None,
+            'section_name': self.section.song.name if self.section and self.section.song else None,
             'score': self.score,
             'expected_response': self.expected_response,
             'given_response': self.given_response,

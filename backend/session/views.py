@@ -1,11 +1,13 @@
 import json
 
+from django.conf import settings
 from django.http import Http404, JsonResponse, HttpResponseBadRequest
-from django.shortcuts import redirect
+from django.shortcuts import get_object_or_404, redirect
 from django.views.decorators.http import require_POST
 
 from .models import Session
 from experiment.models import Experiment
+from experiment.utils import serialize
 from section.models import Playlist
 from participant.utils import get_participant
 
@@ -64,13 +66,11 @@ def create_session(request):
 
 def continue_session(request, session_id):
     """ given a session_id, continue where we left off """
-    try:
-        session = Session.objects.get(pk=session_id)
-    except Session.DoesNotExist:
-        raise Http404("Session does not exist")
+    
+    session = get_object_or_404(Session, pk=session_id)
 
     # Get next round for given session
-    action = session.experiment_rules().next_round(session)
+    action = serialize(session.experiment_rules().next_round(session))
     return JsonResponse(action, json_dumps_params={'indent': 4})
 
 
@@ -82,20 +82,16 @@ def next_round(request, session_id):
     # Current participant
     participant = get_participant(request)
 
-    # Get session
-    try:
-        session = Session.objects.get(
+    session = get_object_or_404(Session, 
             pk=session_id, participant__id=participant.id)
-    except Session.DoesNotExist:
-        raise Http404("Session does not exist")
 
     # Get next round for given session
     if request.session.get('experiment_series'):
         # we are in the middle of an experiment series - need to pass in request.session object
-        actions = session.experiment_rules().next_round(session, request.session)
+        actions = serialize(session.experiment_rules().next_round(session, request.session))
     else:
         # Get next round for given session
-        actions = session.experiment_rules().next_round(session)
+        actions = serialize(session.experiment_rules().next_round(session))
     
     if not isinstance(actions,  list):
         if actions.get('redirect'):
@@ -103,3 +99,11 @@ def next_round(request, session_id):
         actions = [actions]
 
     return JsonResponse({'next_round': actions}, json_dumps_params={'indent': 4})
+
+def finalize_session(request, session_id):
+    # Get session
+    participant = get_participant(request)
+    session = get_object_or_404(Session, pk=session_id, participant__id=participant.id)
+    session.finish()
+    session.save()
+    return JsonResponse({'status': 'ok'})

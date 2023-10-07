@@ -8,10 +8,9 @@ from .base import Base
 from experiment.actions import Consent, Explainer, Step, Final, Playlist, Trial, StartSession
 from experiment.actions.form import Form, RadiosQuestion
 from experiment.actions.playback import Playback
-from experiment.actions.utils import combine_actions
 from experiment.questions.demographics import EXTRA_DEMOGRAPHICS
 from experiment.questions.languages import LANGUAGE, LanguageQuestion
-from experiment.questions.utils import question_by_key, unasked_question
+from experiment.questions.utils import question_by_key
 
 from result.utils import prepare_result
 
@@ -23,9 +22,22 @@ n_rounds_per_block = n_trials_per_block * 2  # each trial has two rounds
 class Speech2Song(Base):
     """ Rules for a speech-to-song experiment """
     ID = 'SPEECH_TO_SONG'
+    
+    def __init__(self):
+        self.questions = [
+            question_by_key('dgf_age', EXTRA_DEMOGRAPHICS),
+            question_by_key('dgf_gender_identity'),
+            question_by_key('dgf_country_of_origin_open', EXTRA_DEMOGRAPHICS),
+            question_by_key('dgf_country_of_residence_open', EXTRA_DEMOGRAPHICS),
+            question_by_key('lang_mother', LANGUAGE),
+            question_by_key('lang_second', LANGUAGE),
+            question_by_key('lang_third', LANGUAGE),
+            LanguageQuestion(_('English')).exposure_question(),
+            LanguageQuestion(_('Brazilian Portuguese')).exposure_question(),
+            LanguageQuestion(_('Mandarin Chinese')).exposure_question()
+        ]
 
-    @staticmethod
-    def first_round(experiment, participant):
+    def first_round(self, experiment):
         explainer = Explainer(
             instruction=_("This is an experiment about an auditory illusion."),
             steps=[
@@ -34,17 +46,17 @@ class Speech2Song(Base):
                 )
             ],
             button_label=_('Start')
-        ).action()
+        )
         # read consent form from file
         rendered = render_to_string(
             'consent/consent_speech2song.html')
 
-        consent = Consent.action(
+        consent = Consent(
             rendered, title=_('Informed consent'), confirm=_('I agree'), deny=_('Stop'))
 
-        playlist = Playlist.action(experiment.playlists.all())
+        playlist = Playlist(experiment.playlists.all())
 
-        start_session = StartSession.action()
+        start_session = StartSession()
 
         return [
             explainer,
@@ -53,8 +65,7 @@ class Speech2Song(Base):
             start_session
         ]
 
-    @staticmethod
-    def next_round(session):
+    def next_round(self, session):
         blocks = [1, 2, 3]
         # shuffle blocks based on session.id as seed -> always same order for same session
         np.random.seed(session.id)
@@ -63,9 +74,9 @@ class Speech2Song(Base):
         actions = []
         is_speech = True
         if session.current_round == 1:
-            question_trial = Speech2Song.get_question(session)
+            question_trial = self.get_questionnaire(session)
             if question_trial:
-                return question_trial.action()
+                return question_trial
 
             explainer = Explainer(
                 instruction=_(
@@ -81,17 +92,17 @@ class Speech2Song(Base):
                     ),
                 ],
                 button_label=_('OK')
-            ).action()
-            return combine_actions(
+            )
+            return [
                 explainer,
                 *next_repeated_representation(session, is_speech, 0)
-            )
+            ]
         if session.current_round == 2:
             e1 = Explainer(
                 instruction=_('Previous studies have shown that many people perceive the segment you just heard as song-like after repetition, but it is no problem if you do not share that perception because there is a wide range of individual differences.'),
                 steps=[],
                 button_label=_('Continue')
-            ).action()
+            )
             e2 = Explainer(
                 instruction=_('Part 1'),
                 steps=[
@@ -101,7 +112,7 @@ class Speech2Song(Base):
                         description=_('Your task is to rate each segment on a scale from 1 to 5.'))
                 ],
                 button_label=_('Continue')
-            ).action()
+            )
             actions.extend([e1, e2])
             group_id = blocks[0]
         elif 2 < session.current_round <= n_rounds_per_block + 1:
@@ -127,7 +138,7 @@ class Speech2Song(Base):
                     )
                 ],
                 button_label=_('Continue')
-            ).action()
+            )
             actions.append(e3)
             group_id = 4
             is_speech = False
@@ -144,7 +155,7 @@ class Speech2Song(Base):
                 session=session,
                 score_message=_(
                     'Thank you for contributing your time to science!')
-            ).action()
+            )
         if session.current_round % 2 == 0:
             # even round: single representation (first round are questions only)
             actions.extend(next_single_representation(
@@ -153,27 +164,7 @@ class Speech2Song(Base):
             # uneven round: repeated representation
             actions.extend(next_repeated_representation(
                 session, is_speech))
-        return [actions]
-
-    def get_question(session):
-        questions = [
-            question_by_key('dgf_age', EXTRA_DEMOGRAPHICS),
-            question_by_key('dgf_gender_identity'),
-            question_by_key('dgf_country_of_origin_open', EXTRA_DEMOGRAPHICS),
-            question_by_key('dgf_country_of_residence_open', EXTRA_DEMOGRAPHICS),
-            question_by_key('lang_mother', LANGUAGE),
-            question_by_key('lang_second', LANGUAGE),
-            question_by_key('lang_third', LANGUAGE),
-            LanguageQuestion(_('English')).exposure_question(),
-            LanguageQuestion(_('Brazilian Portuguese')).exposure_question(),
-            LanguageQuestion(_('Mandarin Chinese')).exposure_question()
-        ]
-
-        question = unasked_question(session.participant, questions)
-        if not question:
-            return None
-        feedback_form = Form([question])
-        return Trial(playback=None, feedback_form=feedback_form)
+        return actions
 
 def next_single_representation(session, is_speech, group_id):
     """ combine a question after the first representation,
@@ -200,7 +191,7 @@ def speech_or_sound_question(session, section, is_speech):
         question = question_speech(session, section)
     else:
         question = question_sound(session, section)
-    return Trial(playback=None, feedback_form=Form([question])).action()
+    return Trial(playback=None, feedback_form=Form([question]))
 
 
 def question_speech(session, section):
@@ -214,7 +205,7 @@ def question_speech(session, section):
             _('sounds neither like speech nor like song'),
             _('sounds somewhat like song'),
             _('sounds exactly like song')],
-        result_id=prepare_result(key, session, section=section)
+        result_id=prepare_result(key, session, section=section, scoring_rule='LIKERT')
     )
 
 
@@ -230,7 +221,7 @@ def question_sound(session, section):
             _('sounds neither like an environmental sound nor like music'),
             _('sounds somewhat like music'),
             _('sounds exactly like music')],
-        result_id=prepare_result(key, session, section=section),
+        result_id=prepare_result(key, session, section=section, scoring_rule='LIKERT'),
     )
 
 def sound(section, n_representation=None):
@@ -258,4 +249,4 @@ def sound(section, n_representation=None):
                 'response_time': section.duration+.5}
     )
 
-    return view.action()
+    return view

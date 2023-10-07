@@ -4,7 +4,6 @@ import numpy as np
 from django.utils.translation import gettext as _
 
 from experiment.actions import Explainer, Step
-from experiment.actions.utils import combine_actions
 
 
 def get_practice_views(
@@ -41,7 +40,7 @@ def get_practice_views(
         response_explainer = response_callback(correct, previous_condition)
         trial = trial_callback(
             session, trial_condition, difficulty)
-        return [response_explainer.action(), trial]
+        return [response_explainer, trial]
     else:
         # after last practice trial
         penultimate_score = previous_results.all()[1].score
@@ -59,8 +58,8 @@ def get_practice_views(
             session.save()
             trial = first_trial_callback(session, trial_callback)
             return [
-                response_explainer.action(),
-                start_experiment_explainer().action(True),
+                response_explainer,
+                start_experiment_explainer(),
                 trial
             ]
         else:
@@ -69,10 +68,10 @@ def get_practice_views(
             next_trial = trial_callback(
                 session, trial_condition, difficulty)
             return [
-                response_explainer.action(),
-                practice_again_explainer().action(),
-                intro_explainer.action(True),
-                practice_explainer().action(True),
+                response_explainer,
+                practice_again_explainer(),
+                intro_explainer,
+                practice_explainer(),
                 next_trial
             ]
 
@@ -109,6 +108,7 @@ def start_experiment_explainer():
             Step(_(
                     "Remember that you don't move along or tap during the test.")),
         ],
+        step_numbers=True,
         button_label=_('Start')
     )
 

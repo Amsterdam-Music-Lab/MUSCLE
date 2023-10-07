@@ -1,7 +1,8 @@
 from django.utils.translation import gettext_lazy as _
 
+from .base_action import BaseAction
 
-class Final:  # pylint: disable=too-few-public-methods
+class Final(BaseAction):  # pylint: disable=too-few-public-methods
     """
     Provide data for a final view
 
@@ -20,9 +21,9 @@ class Final:  # pylint: disable=too-few-public-methods
     }
 
     def __init__(self, session, title=_("Final score"), final_text=None,
-                 button=None, points=None, rank=None, show_social=False,
+                 button=None, points=None, rank=None, social=None,
                  show_profile_link=False, show_participant_link=False,
-                 show_participant_id_only=False, total_score=None
+                 show_participant_id_only=False, feedback_info=None, total_score=None, logo=None
                  ):
 
         self.session = session
@@ -30,10 +31,12 @@ class Final:  # pylint: disable=too-few-public-methods
         self.final_text = final_text
         self.button = button
         self.rank = rank
-        self.show_social = show_social
+        self.social = social
         self.show_profile_link = show_profile_link
         self.show_participant_link = show_participant_link
         self.show_participant_id_only = show_participant_id_only
+        self.feedback_info = feedback_info
+        self.logo = logo
         if total_score is None:
             self.total_score = self.session.total_score()
         else:
@@ -46,7 +49,7 @@ class Final:  # pylint: disable=too-few-public-methods
     def action(self):
         """Get data for final action"""
         return {
-            'view': Final.ID,
+            'view': self.ID,
             'score': self.total_score,
             'rank': self.rank,
             'final_text': self.final_text,
@@ -58,8 +61,10 @@ class Final:  # pylint: disable=too-few-public-methods
                 'all_experiments': _('All experiments')
             },
             'title': self.title,
-            'show_social': self.show_social,
+            'social': self.social,
             'show_profile_link': self.show_profile_link,
             'show_participant_link': self.show_participant_link,
-            'participant_id_only': self.show_participant_id_only
+            'feedback_info': self.feedback_info,
+            'participant_id_only': self.show_participant_id_only,
+            'logo': self.logo,
         }
