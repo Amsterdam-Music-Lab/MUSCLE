@@ -30,19 +30,14 @@ Setup experiment data in the admin panel
     * Save
 """
 
-from django.template.loader import render_to_string
-
-from django.db.models import Avg
-
-from experiment.actions.form import Form, ChoiceQuestion
-from experiment.actions import Consent, Explainer, StartSession, Trial, Final, Playback
-
-from experiment.actions.utils import combine_actions
-
-from experiment.questions.demographics import DEMOGRAPHICS, EXTRA_DEMOGRAPHICS
-from experiment.questions.utils import question_by_key
-
 from .base import Base
+from experiment.actions import Consent, Explainer, StartSession, Trial, Final, Playback
+from django.template.loader import render_to_string
+from experiment.questions.demographics import EXTRA_DEMOGRAPHICS
+from experiment.questions.utils import question_by_key
+from django.db.models import Avg
+from experiment.actions.form import Form, ChoiceQuestion
+from result.utils import prepare_result
 
 
 class RulesTemplate(Base):
@@ -56,60 +51,59 @@ class RulesTemplate(Base):
     #    RulesTemplate.ID: RulesTemplate
     ID = 'RULES_TEMPLATE'
 
-    @classmethod
-    def first_round(cls, experiment, participant):
+    def __init__(self):
+        # Create questionaire to ask for age, gender, native language and musical experience. It will be run after a session is created.
+        self.questions = [
+            question_by_key('dgf_age', EXTRA_DEMOGRAPHICS),
+            question_by_key('dgf_gender_reduced', EXTRA_DEMOGRAPHICS),
+            question_by_key('dgf_native_language', EXTRA_DEMOGRAPHICS),
+            question_by_key('dgf_musical_experience', EXTRA_DEMOGRAPHICS)
+        ]
+
+    def first_round(self, experiment):
         """
-        Returns a list of actions (json objects) based on a view. Views used here: Explainer, Consent, Trial, StartSession.
-        A view is converted to action by calling action() method on the view.
-        The last action returned should always be StartSession.
+        Returns a list of actions. Actions used here: Explainer, Consent, StartSession.
+        The last action returned by first_round() should always be StartSession.
         """
 
         explainer = Explainer(
             instruction="This is a listening experiment in which you have to respond to short sound sequences",
             steps=[],
             button_label='Ok'
-        ).action()
+        )
 
         # Read consent from file
         rendered = render_to_string('consent/consent_rules_template.html')
-        consent = Consent.action(rendered, title='Informed consent', confirm='I agree', deny='Stop')
+        consent = Consent(rendered, title='Informed consent', confirm='I agree', deny='Stop')
 
-        # Create questionaire to ask for age and gender
-        questions = [question_by_key('dgf_age', EXTRA_DEMOGRAPHICS),
-            question_by_key('dgf_gender_reduced', DEMOGRAPHICS)
-        ]
-        questionaire = [
-            Trial(
-                title="Questionnaire",
-                feedback_form=Form([question], submit_label='Continue', is_profile=True)).action()
-            for question in questions
-        ]
+        start_session = StartSession()
 
-        explainer2 = Explainer(
-            instruction="The experiment will now begin",
-            steps=[],
-            button_label='Ok'
-        ).action()
+        return [explainer, consent, start_session]
 
-        start_session = StartSession.action()
-
-        return [explainer, consent] + questionaire + [explainer2, start_session]
-
-    @classmethod
-    def next_round(cls, session):
+    def next_round(self, session):
         """
-        Returns an action (json) that contains a list of following actions at key 'next_round'. Generated with combine_actions().
-        (Cannot return a list of actions as in first_round())
-        Views used here: Final, Trial (returned by next_trial_action()), Explainer (returned by get_feedback())
+        Returns a list of actions.
+        Actions used here: Final, Trial (returned by get_questionnaire(), next_trial_action()), Explainer (also returned by get_feedback())
         """
+
+        # get_questionnaire() returns questions that haven't been asked yet
+        actions = self.get_questionnaire(session)
+        if actions:
+            return actions
 
         if session.rounds_passed() == 0: 
-            # Beginning of experiment, return next trial action, no feedback on previous trial
-            return cls.next_trial_action(session)
+            # Beginning of experiment, return an explainer and the next trial action, no feedback on previous trial
+
+            explainer2 = Explainer(
+                instruction="The experiment will now begin",
+                steps=[],
+                button_label='Ok'
+            )
+            return [explainer2, self.next_trial_action(session)]
 
         elif not session.rounds_complete():
             #Combine two actions, feedback on previous action and next trial action
-            return combine_actions(cls.get_feedback(session), cls.next_trial_action(session))
+            return [self.get_feedback(session), self.next_trial_action(session)]
 
         else:  
             # All sections have been played, finalize the experiment and return feedback
@@ -142,18 +136,15 @@ class RulesTemplate(Base):
                 session=session,
                 final_text=final_text,
                 rank=rank,
-                show_social=False,
-                show_profile_link=False,
                 total_score=round(score_percent),
                 points='% correct'
-            ).action()
+            )
 
-            return combine_actions(cls.get_feedback(session), final)
+            return [self.get_feedback(session), final]
  
-    @classmethod
-    def next_trial_action(cls, session):
+    def next_trial_action(self, session):
         """
-        Get the next trial action for the experiment. Not necessary as a separate method, but often used for convenience.
+        Returns the next trial action for the experiment. Not necessary as a separate method, but often used for convenience.
         """
 
         # Retrieve next section in the sequence
@@ -161,36 +152,45 @@ class RulesTemplate(Base):
 
         # Determine expected response, in this case section tag (A or B)
         expected_response = section.tag
-        
-        # Prepare to store result on the server
-        result_pk = cls.prepare_result(session, section, expected_response)
 
-        # Build Trial view, configure through config argument 
-        # Trial has Playback, ChoiceQuestion and Form to submit response
-        playback = Playback([section])
+        # Build Trial action, configure through config argument. Trial has Playback and Form with ChoiceQuestion to submit response.
+
+        playback = Playback([section], 'BUTTON')
+
+        key = 'choice'
+        button_style = {'neutral': True, 'buttons-large-gap': True}
         question = ChoiceQuestion(
-            key='choice',
+            key=key,
+            result_id=prepare_result(
+                key,
+                session=session,
+                section=section,
+                expected_response=expected_response,
+                scoring_rule='CORRECTNESS',
+            ),
             question="A or B?",
             choices={
                 'A': 'Answer A',
                 'B': 'Answer B'
             },
             view='BUTTON_ARRAY',
-            scoring_rule='CORRECTNESS',
-            result_id=result_pk,
-            submits=True
+            submits=True,
+            style=button_style
         )
-        form = Form([question])
-        view = Trial(
+
+        feedback_form = Form([question])
+
+        trial = Trial(
             playback=playback,
-            feedback_form=form,
+            feedback_form=feedback_form,
             title=f"Round {session.rounds_passed()} / {len(session.playlist.section_set.all())}",
             config = {'listen_first': True, 'decision_time': section.duration + .1}
         )
-        return view.action()
 
-    @classmethod
-    def get_feedback(cls, session):
+        return trial
+
+
+    def get_feedback(self, session):
         """
         Get feedback for the previous trial. Not necessary as a separate method.
         """
@@ -201,6 +201,6 @@ class RulesTemplate(Base):
             instruction=instruction,
             steps=[],
             button_label=button_label
-        ).action()
+        )
 
         return feedback
