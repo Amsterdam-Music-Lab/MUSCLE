@@ -9,13 +9,14 @@ import PlayButton from "../PlayButton/PlayButton";
 import MultiPlayer from "./MultiPlayer";
 import SpectrogramPlayer from "./SpectrogramPlayer";
 import MatchingPairs from "./MatchingPairs";
-import Loading from "../Loading/Loading";
+import Preload from "../Preload/Preload";
 
 export const AUTOPLAY = "AUTOPLAY";
 export const BUTTON = "BUTTON";
 export const MULTIPLAYER = "MULTIPLAYER";
 export const SPECTROGRAM = "SPECTROGRAM";
 export const MATCHINGPAIRS = "MATCHINGPAIRS";
+export const PRELOAD = "PRELOAD";
 
 const Playback = ({
     playerType,
@@ -31,10 +32,13 @@ const Playback = ({
     startedPlaying,
     finishedPlaying,
 }) => {
-    const [sectionsLoaded, setSectionsLoaded] = useState(null);    
     const [playerIndex, setPlayerIndex] = useState(-1);
     const lastPlayerIndex = useRef(-1);
     const activeAudioEndedListener = useRef(null);
+    const [state, setState] = useState({ view: PRELOAD });
+    const setView = (view, data = {}) => {
+        setState({ view, ...data });
+    }
 
     // Keep track of which player has played, in a an array of player indices
     const [hasPlayed, setHasPlayed] = useState([]);
@@ -49,31 +53,6 @@ const Playback = ({
         }
         prevPlayerIndex.current = parseInt(playerIndex);
     }, [playerIndex]);
-
-    
-    useEffect(() => {
-        if (playConfig.play_method === 'BUFFER' && !playConfig.external_audio) {
-            // Use Web-audio and preload sections in buffers            
-            sections.map((section, index) => {
-                // Clear buffers if this is the first section
-                if (index === 0) {
-                    webAudio.clearBuffers();
-                } 
-                return webAudio.loadBuffer(section.id, MEDIA_ROOT + section.url, () => {                    
-                    if (index === (sections.length-1)) {
-                        setSectionsLoaded(1);
-                    }                                        
-                });
-            })
-        } else {
-            if (playConfig.external_audio) {
-                webAudio.closeWebAudio();
-            }
-            setSectionsLoaded(1);
-            // Preload first section
-            return audio.loadUntilAvailable(MEDIA_ROOT + sections[0].url, () => {});
-        }        
-    }, [sections]);
 
     // Cancel events
     const cancelAudioListeners = useCallback(() => {
@@ -97,7 +76,6 @@ const Playback = ({
         } else {
             finishedPlaying();
         }
-
     }, []);
 
     // Play audio
@@ -106,42 +84,46 @@ const Playback = ({
             let latency = 0;
             if (playConfig.play_method === 'BUFFER' && !playConfig.external_audio) {
                 console.log('Play buffer (local)');                
+
                 // Determine latency for current audio device
                 latency = webAudio.getTotalLatency();
+
                 // Store player index
                 setPlayerIndex(index);
+
                 // Determine if audio should be played
                 if (playConfig.mute) {
                     setPlayerIndex(-1);
                     webAudio.stopBuffer();
                     return;
                 }
-                // Volume 1
-                // audio.setVolume(1);
     
                 // Cancel active events
                 cancelAudioListeners();           
-    
-                // Play audio
-                // audio.playFrom(Math.max(0, playConfig.playhead || 0));
                 
+                // Play audio
                 webAudio.playBuffer(sections[index].id);
+
                 // listen for active audio events
                 activeAudioEndedListener.current = webAudio.listenOnce("ended", onAudioEnded);                
             } else {
                 console.log('Play HTML audo')
+
                 // Only initialize webaudio if section is local            
                 if (!playConfig.external_audio) {                    
                     latency = webAudio.initWebAudio();
                 }
+
                 // Store player index
                 setPlayerIndex(index);
+
                 // Determine if audio should be played
                 if (playConfig.mute) {
                     setPlayerIndex(-1);
                     audio.pause();
                     return;
                 }
+
                 // Volume 1
                 audio.setVolume(1);
 
@@ -178,6 +160,7 @@ const Playback = ({
                     playAudio(index);
                     return;
                 }
+
                 // Stop playback
                 if (lastPlayerIndex.current === index) {
                     webAudio.suspend();
@@ -191,6 +174,7 @@ const Playback = ({
                 if (playConfig.external_audio) {
                     // webAudio.closeWebAudio();
                 }
+
                 // Play section from <AUDIO> tag
                 if (index !== lastPlayerIndex.current) {
                     // Load different audio
@@ -249,6 +233,7 @@ const Playback = ({
     const render = (view) => {
         const attrs = {
             sections,
+            setView,
             instruction,
             preloadMessage,
             autoAdvance,
@@ -264,7 +249,20 @@ const Playback = ({
             submitResult
         };
 
-        switch (view) {
+        switch (state.view) {
+            case PRELOAD:
+                return (
+                    <Preload
+                        instruction={preloadMessage}
+                        duration={playConfig.ready_time}                        
+                        sections={sections}
+                        playConfig={playConfig}
+                        onNext={() => {                        
+                            setView(playerType);
+                            onPreloadReady();
+                        }}
+                    />
+            );
             case AUTOPLAY:
                 return <AutoPlay {...attrs} onPreloadReady={onPreloadReady} />;
             case BUTTON:
@@ -300,10 +298,6 @@ const Playback = ({
                 return <div> Unknown player view {view} </div>;
         }
     };
-
-    if (!sectionsLoaded) {            
-        return <Loading loadingText={'loading'} />;
-    }
     
     return (
         <div className="aha__playback">

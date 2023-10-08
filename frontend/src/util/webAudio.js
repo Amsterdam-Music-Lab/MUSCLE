@@ -103,7 +103,7 @@ export const stopBuffer = () => {
 // play buffer by section.id
 export const playBuffer = (id) => {
     source = audioContext.createBufferSource();
-    source.buffer = buffers[id]; // <==            
+    source.buffer = buffers[id];
     source.connect(audioContext.destination);    
     source.start();
 }
