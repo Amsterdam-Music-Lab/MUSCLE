@@ -110,37 +110,7 @@ class RulesTemplate(Base):
             session.finish()
             session.save()
 
-            # Calculate average score
-            score_avg = session.result_set.all().aggregate(Avg('score'))['score__avg']
-            score_percent = score_avg * 100
-
-            # Assign rank based on percentage of correct responses
-            ranks = Final.RANKS
-            if score_percent == 100:
-                rank = ranks['PLATINUM']
-                final_text = "Congratulations! You did great and won a platinum medal!"
-            elif score_percent >= 80:
-                rank = ranks['GOLD']
-                final_text = "Congratulations! You did great and won a gold medal!"
-            elif score_percent >= 60:
-                rank = ranks['SILVER']
-                final_text = "Congratulations! You did very well and won a silver medal!"
-            elif score_percent >= 40:
-                rank = ranks['BRONZE']
-                final_text = "Congratulations! You did well and won a bronze medal!"
-            else:
-                rank = ranks['PLASTIC']
-                final_text = "Congratulations! You did OK and won a plastic medal!"
-
-            final = Final(
-                session=session,
-                final_text=final_text,
-                rank=rank,
-                total_score=round(score_percent),
-                points='% correct'
-            )
-
-            return [self.get_feedback(session), final]
+            return [self.get_feedback(session), self.get_final_view(session)]
  
     def next_trial_action(self, session):
         """
@@ -189,7 +159,6 @@ class RulesTemplate(Base):
 
         return trial
 
-
     def get_feedback(self, session):
         """
         Get feedback for the previous trial. Not necessary as a separate method.
@@ -204,3 +173,40 @@ class RulesTemplate(Base):
         )
 
         return feedback
+
+    def get_final_view(self, session):
+        """
+        Get Final view (action).
+        """
+
+        # Calculate average score
+        score_avg = session.result_set.all().aggregate(Avg('score'))['score__avg']
+        score_percent = score_avg * 100
+
+        # Assign rank based on percentage of correct responses
+        ranks = Final.RANKS
+        if score_percent == 100:
+            rank = ranks['PLATINUM']
+            final_text = "Congratulations! You did great and won a platinum medal!"
+        elif score_percent >= 80:
+            rank = ranks['GOLD']
+            final_text = "Congratulations! You did great and won a gold medal!"
+        elif score_percent >= 60:
+            rank = ranks['SILVER']
+            final_text = "Congratulations! You did very well and won a silver medal!"
+        elif score_percent >= 40:
+            rank = ranks['BRONZE']
+            final_text = "Congratulations! You did well and won a bronze medal!"
+        else:
+            rank = ranks['PLASTIC']
+            final_text = "Congratulations! You did OK and won a plastic medal!"
+
+        final = Final(
+            session=session,
+            final_text=final_text,
+            rank=rank,
+            total_score=round(score_percent),
+            points='% correct'
+        )
+
+        return final
