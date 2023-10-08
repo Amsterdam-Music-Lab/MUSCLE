@@ -49,9 +49,9 @@ const Playback = ({
     }, [playerIndex]);
 
     // Preload first section
-    useEffect(() => {
-        return audio.loadUntilAvailable(MEDIA_ROOT + sections[0].url, () => {});
-    }, [sections]);
+    // useEffect(() => {
+    //     return audio.loadUntilAvailable(MEDIA_ROOT + sections[0].url, () => {});
+    // }, [sections]);
 
     // Cancel events
     const cancelAudioListeners = useCallback(() => {
