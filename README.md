@@ -10,6 +10,9 @@ This application provides an easy way to implement and run online listening expe
 
 - We are also happy if you file a feature request in our [issues list](https://github.com/Amsterdam-Music-Lab/aml-experiments/issues), or if you fork this repository to add your own code.
 
+## Before installation
+We recommend downloading a code editor, for instance [Visual Studio Code](https://code.visualstudio.com/), and to use [git](https://git-scm.com/) to copy this repository to your machine, as this makes it easier to keep your local copy up to date.
+
 ## Installation with Docker
 The easiest way to run the application locally is through Docker.
 
