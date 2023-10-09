@@ -128,7 +128,7 @@ class MusicalPreferences(Base):
             like_results = session.result_set.filter(question_key='like_song')
             feedback = Trial(
                 html=HTML(body=render_to_string('html/musical_preferences/feedback.html', {
-                    'unlocked': _(" Love"),
+                    'unlocked': _("Love "),
                     'n_songs': n_songs,
                     'top_participant': self.get_preferred_songs(like_results, 3)
                 }))
@@ -139,7 +139,7 @@ class MusicalPreferences(Base):
             known_songs = session.result_set.filter(question_key='know_song', score=2).count()
             feedback = Trial(
                 html=HTML(body=render_to_string('html/musical_preferences/feedback.html', {
-                    'unlocked': _(" Knowledge"),
+                    'unlocked': _("Knowledge "),
                     'n_songs': n_songs,
                     'top_participant': self.get_preferred_songs(like_results, 3),
                     'n_known_songs': known_songs
@@ -154,7 +154,7 @@ class MusicalPreferences(Base):
             )
             feedback = Trial(
                 html=HTML(body=render_to_string('html/musical_preferences/feedback.html', {
-                    'unlocked': _(" Connection"),
+                    'unlocked': _("Connection "),
                     'n_songs': n_songs,
                     'top_participant': self.get_preferred_songs(like_results, 3),
                     'n_known_songs': known_songs,
@@ -168,13 +168,13 @@ class MusicalPreferences(Base):
         section = session.playlist.random_section()
         like_key = 'like_song'
         likert = LikertQuestionIcon(
-            question=_('How much do you like this song?'),
+            question=_('2. How much do you like this song?'),
             key=like_key,
             result_id=prepare_result(like_key, session, section=section, scoring_rule='LIKERT')
         )
         know_key = 'know_song'
         know = ChoiceQuestion(
-            question=_('Do you know this song?'),
+            question=_('1. Do you know this song?'),
             key=know_key,
             view='BUTTON_ARRAY',
             choices={

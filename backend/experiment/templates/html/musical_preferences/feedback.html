@@ -1,5 +1,5 @@
 {% load i18n %}
-<h2 class="title">{% translate "Unlocked" %} {{unlocked}}</h2>  
+<h2 class="title">{{unlocked}}{% translate "Unlocked" %}</h2>  
 <div class="card mb-3 bg-blue">
     <div class="row no-gutters">
         <div class="col">
@@ -8,9 +8,7 @@
         <div class="col-8">
             <div class="card-body">
                 <h5 class="card-title">
-                    {% blocktranslate %}
-                        Your top 3 favourite songs out of {{n_songs}}: 
-                    {% endblocktranslate %}
+                    {% blocktranslate %} Your top 3 favourite songs out of {{n_songs}}:{% endblocktranslate %}
                 </h5>
                 <ul class="card-text">
                     {% for song in top_participant %}
@@ -29,9 +27,7 @@
         <div class="col-8">
             <div class="card-body">
                 <h5 class="card-title">
-                    {% blocktranslate %}
-                        Of {{n_songs}} songs, you know {{n_known_songs}}
-                    {% endblocktranslate %}
+                    {% blocktranslate %} Of {{n_songs}} songs, you know {{n_known_songs}}{% endblocktranslate %}
                 </h5>
             </div>
         </div>
@@ -45,7 +41,7 @@
         <div class="col-8">
             <div class="card-body">
                 <h5 class="card-title">
-                    {% translate "Top 3 favourite songs by others:" %}
+                    {% translate "All players' top 3 favourite songs:" %}
                 </h5>
                 <ul class="card-text">
                     {% for song in top_all %}
