@@ -28,11 +28,11 @@ As of April 2022, [Docker Desktop for Linux](https://docs.docker.com/desktop/lin
 ## Development build
 Make a copy of the file .env.dist (in the same directory as this README) and rename it to .env. This file contains variables used by Docker to start up a container network serving MUSCLE.
 
-Then, open a terminal and run
+Start Docker (the app icon is a whale carrying containers). Then, open a terminal and run
 `docker-compose up` (add `sudo` on Linux).
-This command makes use of the `docker-compose.yaml`, which defines four containers:
+This command starts up the containers defined in `docker-compose.yaml`:
 - a PostgreSQL container, for storing experiment/user/playlist data, saved on the host machine in the Docker user data, represented in the volume `db_data`. Data added to the database will persist if the container is shut down.
-- a ip2country container, which provides country codes for ip addresses. This container is mainly interesting for running tests during development.
+- a ip2country container, which provides country codes for ip addresses, used for demographic information of users.
 - a container of the server, defined in DockerfileDevelop in `backend`. The Dockerfile defines the Python version and installs development dependencies. The startup command runs migrations and then starts up a Django development server.
 - a container of the client, defined in DockerfileDevelop in `frontend`. The Dockerfile defines the node version and installs node modules. The startup command kicks off a React development server.
 
