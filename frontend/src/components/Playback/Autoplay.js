@@ -25,7 +25,7 @@ const AutoPlay = ({instruction, preloadMessage, onPreloadReady, playConfig, sect
             if (playConfig.play_method === 'BUFFER' && !playConfig.external_audio) {
                 console.log('Autoplay buffer');
                 latency = webAudio.getTotalLatency();
-                webAudio.playBufferFrom(section.id, 0, Math.max(0, playConfig.playhead));
+                webAudio.playBufferFrom(section.id, Math.max(0, playConfig.playhead));
             } else {
                 console.log('Autoplay HTML audio')
                 audio.playFrom(Math.max(0, playConfig.playhead));
