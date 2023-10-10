@@ -12,7 +12,6 @@ class ThatsMySong(Hooked):
 
     ID = 'THATS_MY_SONG'
     consent_file = None
-    round_modifier = 1
     relevant_keys = ['recognize', 'heard_before', 'playlist_decades']
 
     def __init__(self):
@@ -58,7 +57,7 @@ class ThatsMySong(Hooked):
         
         # If the number of results equals the number of experiment.rounds,
         # close the session and return data for the final_score view.
-        if round_number == session.experiment.rounds + 1:
+        if round_number == session.experiment.rounds:
 
             # Finish session.
             session.finish()
@@ -123,7 +122,7 @@ class ThatsMySong(Hooked):
 
             # Load the heard_before offset.
             plan = json_data.get('plan')
-            heard_before_offset = len(plan['song_sync_sections']) + 2
+            heard_before_offset = len(plan['song_sync_sections'])
 
             # SongSync rounds. Skip questions until Round 5.
             if round_number in range(2, 5):

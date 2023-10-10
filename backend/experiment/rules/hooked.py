@@ -56,7 +56,7 @@ class Hooked(Base):
             button_label=_("Let's go!"))
 
         # 2. Get informed consent.
-        if  self.consent_file:
+        if self.consent_file:
             rendered = render_to_string('consent/{}'.format(self.consent_file))
             consent = Consent(text=rendered, title=_('Informed consent'), confirm=_('I agree'), deny=_('Stop'))
         else:
