@@ -82,6 +82,7 @@ def score_result(data, session):
     }
     """
     result = get_result(session, data)
+    result.save_json_data(data)
     result.given_response = data.get('value')
     # Calculate score: by default, apply a scoring rule
     # Can be overridden by defining calculate_score in the rules file    
@@ -93,7 +94,6 @@ def score_result(data, session):
     # Populate and save the result
     # result can also be None
     result.score = score
-    result.save_json_data(data)
     result.save()
     return result
 

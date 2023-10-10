@@ -1,6 +1,8 @@
 import logging
 import math
 
+from django.db.models import Q
+
 logger = logging.getLogger(__name__)
 
 def check_expected_response(result):
@@ -9,9 +11,6 @@ def check_expected_response(result):
     except Exception as e:
         logger.log(e)
         return None
-
-def get_previous_result(session, filter_by={}):
-    return session.result_set.order_by('-created_at').filter(**filter_by).first()
 
 def correctness_score(result, data):
     expected_response = check_expected_response(result)
@@ -48,6 +47,8 @@ def reaction_time_score(result, data):
             return math.floor(-time)
 
 def song_sync_recognition_score(result, data):
+    if result.given_response == 'TIMEOUT' or result.given_response == 'no':
+        return 0
     json_data = result.load_json_data()
     if json_data:
         time = json_data.get('decision_time')
@@ -55,7 +56,7 @@ def song_sync_recognition_score(result, data):
         return math.ceil(timeout - time)
         
 def song_sync_continuation_score(result, data):
-    previous_result = get_previous_result(result.session, {'question_key': 'recognize'})
+    previous_result = result.session.get_previous_result(['recognize'])
     if check_expected_response(result) != result.given_response:
         previous_result.score *= -1
         previous_result.save()

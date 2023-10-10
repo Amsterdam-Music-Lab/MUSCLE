@@ -1,5 +1,3 @@
-from copy import deepcopy
-from itertools import chain
 import logging
 import random
 
@@ -20,6 +18,7 @@ from experiment.actions.styles import STYLE_BOOLEAN_NEGATIVE_FIRST
 from experiment.actions.wrappers import song_sync
 from result.utils import prepare_result
 
+
 logger = logging.getLogger(__name__)
 
 class Hooked(Base):
@@ -28,7 +27,7 @@ class Hooked(Base):
     consent_file = 'consent_hooked.html';
     timeout = 15
     questions = True
-    round_modifier = 0
+    relevant_keys = ['recognize', 'heard_before']
 
     def __init__(self):
         self.questions = [
@@ -80,19 +79,19 @@ class Hooked(Base):
     def next_round(self, session):
         """Get action data for the next round"""
         json_data = session.load_json_data()
+        round_number = self.get_current_round(session)
 
         # If the number of results equals the number of experiment.rounds,
         # close the session and return data for the final_score view.
-        if session.rounds_complete():
+        if round_number == session.experiment.rounds:
 
             # Finish session.
             session.finish()
             session.save()
 
             # Return a score and final score action.
-            next_round_number = session.get_next_round()
             return [
-                self.get_score(session, next_round_number),
+                self.get_score(session, round_number),
                 Final(
                     session=session,
                     final_text=self.final_score_message(session),
@@ -105,40 +104,39 @@ class Hooked(Base):
 
         # Get next round number and initialise actions list. Two thirds of
         # rounds will be song_sync; the remainder heard_before.
-        next_round_number = session.get_next_round()
 
         # Collect actions.
         actions = []
 
-        if next_round_number == 1:
+        if round_number == 1:
             # Plan sections
             self.plan_sections(session)
             # Go to SongSync straight away.
             actions.extend(self.next_song_sync_action(session))
         else:
             # Create a score action.
-            actions.append(self.get_score(session,next_round_number))
+            actions.append(self.get_score(session, round_number))
 
             # Load the heard_before offset.
             plan = json_data.get('plan')
             heard_before_offset = plan['n_song_sync'] + 1
 
             # SongSync rounds. Skip questions until Round 5.
-            if next_round_number in range(2, 5):
+            if round_number in range(2, 5):
                 actions.extend(self.next_song_sync_action(session))
-            if next_round_number in range(5, heard_before_offset):
+            if round_number in range(5, heard_before_offset):
                 question_trial = self.get_single_question(session)
                 if question_trial:
                     actions.append(question_trial)
                 actions.extend(self.next_song_sync_action(session))
 
             # HeardBefore rounds
-            if next_round_number == heard_before_offset:
+            if round_number == heard_before_offset:
                 # Introduce new round type with Explainer.
                 actions.append(self.heard_before_explainer())
                 actions.append(
                     self.next_heard_before_action(session))
-            if next_round_number > heard_before_offset:
+            if round_number > heard_before_offset:
                 question_trial = self.get_single_question(session)
                 if question_trial:
                     actions.append(question_trial)
@@ -146,6 +144,9 @@ class Hooked(Base):
                     self.next_heard_before_action(session))
 
         return actions
+
+    def get_current_round(self, session):
+        return session.get_relevant_results(self.relevant_keys).count()
 
     def heard_before_explainer(self):
         """Explainer for heard-before rounds"""
@@ -321,9 +322,9 @@ class Hooked(Base):
     def get_score(self, session, round_number):
         config = {'show_section': True, 'show_total_score': True}
         title = self.get_trial_title(session, round_number - 1)
-        score = session.result_set.order_by('-created_at')[1].score
+        previous_score = session.get_previous_result(self.relevant_keys).score
         return Score(session,
             config=config,
             title=title,
-            score=score
+            score=previous_score
         )
