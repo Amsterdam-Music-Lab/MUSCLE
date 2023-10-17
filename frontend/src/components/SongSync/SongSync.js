@@ -1,9 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
-import * as audio from "../../util/audio";
+import { playAudio, pauseAudio } from "../../util/audioControl";
 import ListenFeedback from "../Listen/ListenFeedback";
 import ListenCircle from "../ListenCircle/ListenCircle";
 import Preload from "../Preload/Preload";
-import { MEDIA_ROOT } from "../../config";
 import { getCurrentTime, getTimeSince } from "../../util/time";
 
 const PRELOAD = "PRELOAD";
@@ -47,7 +46,7 @@ const SongSync = ({
         submitted.current = true;
 
         // Stop audio
-        audio.pause();
+        pauseAudio(config);
 
         setRunning(false);
 
@@ -63,11 +62,14 @@ const SongSync = ({
 
     // Handle view logic
     useEffect(() => {
-        switch (state.view) {
-            case RECOGNIZE:
+        let latency;
+        switch (state.view) {            
+            case RECOGNIZE:                
                 // Play audio at start time
-                audio.playFrom(0);
-                startTime.current = getCurrentTime();
+                config.playhead = 0
+                // Get latency and compensate timing
+                latency = playAudio(config, section);                
+                setTimeout(startTime.current = getCurrentTime(), latency);
                 break;
             case SYNC:
                 // Play audio from sync start time
@@ -76,9 +78,11 @@ const SongSync = ({
                     state.result.recognition_time +
                         config.silence_time +
                         config.continuation_offset
-                );
-                audio.playFrom(syncStart);
-                startTime.current = getCurrentTime();
+                );                
+                config.playhead = syncStart
+                // Get latency and compensate timing
+                latency = playAudio(config, section);
+                setTimeout(startTime.current = getCurrentTime(), latency);
                 break;
             default:
             // nothing
@@ -86,7 +90,7 @@ const SongSync = ({
 
         // Clean up
         return () => {
-            audio.pause();
+            pauseAudio(config);            
         };
     }, [state, config]);
 
@@ -97,7 +101,8 @@ const SongSync = ({
                 <Preload
                     instruction={instructions.ready}
                     duration={config.ready_time}
-                    url={MEDIA_ROOT + section}
+                    sections={section}
+                    playConfig={config}
                     onNext={() => {
                         setView(RECOGNIZE);
                     }}

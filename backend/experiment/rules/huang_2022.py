@@ -98,6 +98,7 @@ class Huang2022(Hooked):
     timeout = 15
     round_modifier = 2
     contact_email = 'musicexp_china@163.com'
+    play_method = 'EXTERNAL'
 
     def __init__(self):
         self.questions = MSI_ALL + [
@@ -152,7 +153,7 @@ class Huang2022(Hooked):
         actions = []
 
         if next_round_number == -1:
-            playback = get_test_playback()
+            playback = get_test_playback(self.play_method)
             html = HTML(body='<h4>{}</h4>'.format(_('Do you hear the music?')))
             form = Form(form=[BooleanQuestion(
                 key='audio_check1',
@@ -168,7 +169,7 @@ class Huang2022(Hooked):
             last_result = session.result_set.last()
             if last_result.question_key == 'audio_check1':
                 if last_result.score == 0:
-                    playback = get_test_playback()                    
+                    playback = get_test_playback(self.play_method)
                     html = HTML(body=render_to_string('html/huang_2022/audio_check.html'))
                     form = Form(form=[BooleanQuestion(
                         key='audio_check2',
@@ -314,12 +315,12 @@ class Huang2022(Hooked):
         ]
         return " ".join([str(m) for m in messages])
 
-def get_test_playback():
+def get_test_playback(play_method):
     from section.models import Section
     test_section = Section.objects.get(song__name='audiocheck')
     playback = Playback(sections=[test_section],
         play_config={
-            'external_audio': True,
+            'play_method': play_method,            
             'show_animation': True
             })
     return playback
