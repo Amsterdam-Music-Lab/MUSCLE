@@ -14,7 +14,7 @@ class Playback(BaseAction):
             - play_method:
                 - 'BUFFER': Use webaudio buffers. (recommended for stimuli up to 45s)  
                 - 'HTML': Use the HTML tag. (recommended for stimuli longer 45s)
-            - external_audio (if set to True, web-audio api will be disabled)
+                - 'EXTERNAL': Use for externally hosted audio files. Web-audio api will be disabled            
             - ready_time: time before presentation of sound
             - timeout_after_playback: pause in ms after playback has finished
             - playhead: from where the audio file should play (offset in seconds from start)

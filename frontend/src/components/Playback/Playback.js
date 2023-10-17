@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef, useCallback } from "react";
 
 import * as audio from "../../util/audio";
 import * as webAudio from "../../util/webAudio";
-import { MEDIA_ROOT } from "../../config";
+import { playAudio, pauseAudio } from "../../util/audioControl";
 
 import AutoPlay from "./Autoplay";
 import PlayButton from "../PlayButton/PlayButton";
@@ -77,150 +77,72 @@ const Playback = ({
             finishedPlaying();
         }
     }, []);
-
-    // Play audio
-    const playAudio = useCallback(
-        (index) => {
-            let latency = 0;
-            if (playConfig.play_method === 'BUFFER' && !playConfig.external_audio) {
-                console.log('Play buffer (local)');                
-
-                // Determine latency for current audio device
-                latency = webAudio.getTotalLatency();
-
-                // Store player index
-                setPlayerIndex(index);
-
-                // Determine if audio should be played
-                if (playConfig.mute) {
-                    setPlayerIndex(-1);
-                    webAudio.stopBuffer();
-                    return;
-                }
     
-                // Cancel active events
-                cancelAudioListeners();           
-                
-                // Play audio
-                webAudio.playBuffer(sections[index].id);
-
-                // listen for active audio events
-                activeAudioEndedListener.current = webAudio.listenOnce("ended", onAudioEnded);                
-            } else {
-                console.log('Play HTML audo')
-
-                // Only initialize webaudio if section is local            
-                if (!playConfig.external_audio) {                    
-                    latency = webAudio.initWebAudio();
-                }
-
-                // Store player index
-                setPlayerIndex(index);
-
-                // Determine if audio should be played
-                if (playConfig.mute) {
-                    setPlayerIndex(-1);
-                    audio.pause();
-                    return;
-                }
-
-                // Volume 1
-                audio.setVolume(1);
-
-                // Cancel active events
-                cancelAudioListeners();
-
-                // listen for active audio events
-                activeAudioEndedListener.current = audio.listenOnce("ended", onAudioEnded);
-
-                // Play audio
-                audio.playFrom(Math.max(0, playConfig.playhead || 0));                
-            }
-            // Compensate for audio latency and set state to playing
-            setTimeout(startedPlaying && startedPlaying(), latency);            
-        },
-        [cancelAudioListeners, playConfig.mute, playConfig.playhead, startedPlaying, onAudioEnded]
-    );
-
     // Keep track of last player index
     useEffect(() => {
         lastPlayerIndex.current = playerIndex;
     }, [playerIndex]);
 
+    if (playConfig.play_method === 'EXTERNAL') {                    
+        webAudio.closeWebAudio();            
+    }
+
     // Play section with given index
     const playSection = useCallback(
         (index = 0) => {
-            if (playConfig.play_method === 'BUFFER' && !playConfig.external_audio) {
-                // Play section from buffer
+            
                 if (index !== lastPlayerIndex.current) {
                     // Load different audio
                     if (prevPlayerIndex.current !== -1) {
-                        stopPlaying();
+                        pauseAudio(playConfig);
                     }                
-                    playAudio(index);
+                    // Store player index
+                    setPlayerIndex(index);
+
+                    // Determine if audio should be played
+                    if (playConfig.mute) {
+                        setPlayerIndex(-1);
+                        pauseAudio(playConfig);
+                        return;
+                    }
+                    let latency = playAudio(playConfig, sections[index]);
+
+                    // Cancel active events
+                    cancelAudioListeners();
+
+                    // listen for active audio events
+                    if (playConfig.play_method === 'BUFFER') {
+                        activeAudioEndedListener.current = webAudio.listenOnce("ended", onAudioEnded);
+                    } else {
+                        activeAudioEndedListener.current = audio.listenOnce("ended", onAudioEnded);
+                    }                    
+
+                    // Compensate for audio latency and set state to playing
+                    setTimeout(startedPlaying && startedPlaying(), latency);
                     return;
                 }
 
                 // Stop playback
                 if (lastPlayerIndex.current === index) {
-                    webAudio.suspend();
-                    setPlayerIndex(-1);
-                    return;
-                }
-
-                // Start playback
-                playAudio(index);
-            } else {
-                if (playConfig.external_audio) {
-                    // webAudio.closeWebAudio();
-                }
-
-                // Play section from <AUDIO> tag
-                if (index !== lastPlayerIndex.current) {
-                    // Load different audio
-                    audio.loadUntilAvailable(
-                        MEDIA_ROOT + sections[index].url,
-                        () => { 
-                            playAudio(index);
-                        }
-                    );                    
-                    return;
-                }
-
-                // Stop playback
-                if (lastPlayerIndex.current === index) {
-                    audio.pause();
-                    setPlayerIndex(-1);
-                    return;
-                }
-
-                // Start playback
-                playAudio(index);
-            }
-            
-        },
-        [playAudio, sections]
+                        pauseAudio(playConfig);                     
+                        setPlayerIndex(-1);
+                        return;
+                    }
+            },
+            [playAudio, pauseAudio, sections, activeAudioEndedListener, cancelAudioListeners, startedPlaying, onAudioEnded]
     );
-
-    const stopPlaying = () => {
-        if (playConfig.play_method === 'BUFFER' && !playConfig.external_audio) {
-            webAudio.stopBuffer();
-        } else {
-            audio.stop();
-        }
-    }
 
     // Local logic for onfinished playing
     const onFinishedPlaying = useCallback(() => {
         setPlayerIndex(-1);
-        stopPlaying();
+        pauseAudio(playConfig);
         finishedPlaying && finishedPlaying();
     }, [finishedPlaying]);
 
     // Stop audio on unmount
     useEffect(
         () => () => {
-            stopPlaying();
+            pauseAudio(playConfig);
         },
         []
     );

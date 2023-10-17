@@ -1,7 +1,6 @@
 import React, { useRef, useState, useEffect } from "react";
 
-import * as audio from "../../util/audio";
-import * as webAudio from "../../util/webAudio";
+import { playAudio } from "../../util/audioControl";
 
 import Circle from "../Circle/Circle";
 import ListenCircle from "../ListenCircle/ListenCircle";
@@ -21,15 +20,9 @@ const AutoPlay = ({instruction, preloadMessage, onPreloadReady, playConfig, sect
     useEffect(() => {        
         let latency = 0;
         // Play audio at start time            
-        if (!playConfig.mute) {
-            if (playConfig.play_method === 'BUFFER' && !playConfig.external_audio) {
-                console.log('Autoplay buffer');
-                latency = webAudio.getTotalLatency();
-                webAudio.playBufferFrom(section.id, Math.max(0, playConfig.playhead));
-            } else {
-                console.log('Autoplay HTML audio')
-                audio.playFrom(Math.max(0, playConfig.playhead));
-            }                    
+        if (!playConfig.mute) {            
+            latency = playAudio(playConfig, section);          
+            // Compensate for audio latency and set state to playing
             setTimeout(startedPlaying(), latency);
         }
     }, [playConfig, startedPlaying]);

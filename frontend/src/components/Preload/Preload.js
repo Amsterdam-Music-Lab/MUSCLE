@@ -25,7 +25,8 @@ const Preload = ({ instruction, pageTitle, duration, sections, playConfig, onNex
 
     // Audio preloader
     useEffect(() => {
-        if (playConfig.play_method === 'BUFFER' && !playConfig.external_audio) {
+        console.log('preload');
+        if (playConfig.play_method === 'BUFFER') {
 
             // Use Web-audio and preload sections in buffers            
             sections.map((section, index) => {
@@ -46,10 +47,9 @@ const Preload = ({ instruction, pageTitle, duration, sections, playConfig, onNex
                 });
             })
         } else {
-            if (playConfig.external_audio) {
-                webAudio.closeWebAudio();
+            if (playConfig.play_method === 'EXTERNAL') {                    
+                webAudio.closeWebAudio();            
             }
-            
             // Load audio until available
             // Return remove listener   
             return audio.loadUntilAvailable(MEDIA_ROOT + sections[0].url, () => {
@@ -60,8 +60,7 @@ const Preload = ({ instruction, pageTitle, duration, sections, playConfig, onNex
             });            
         }              
     }, [sections, onNext]);
-
-
+    
     return (
         <ListenFeedback
             className={classNames({ pulse: overtime || duration === 0 })}

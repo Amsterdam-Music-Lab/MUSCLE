@@ -5,7 +5,7 @@ let audioContext
 
 export let audioInitialized = false;
     
-// Play a silent mp3 to make the buffer play after a user action
+// Create the AudioContext object after a user action
 // after that other audio can be started programmatically
 // More info: https://developer.mozilla.org/en-US/docs/Web/Media/Autoplay_guide
 export const init = () => {
@@ -27,8 +27,7 @@ export const initWebAudio = () => {
     if (track === undefined) {                 
         track = audioContext.createMediaElementSource(window.audio);
         track.connect(audioContext.destination);        
-    }
-    return getTotalLatency();
+    }    
 }
 
 // Change HTML audio element crossorigin attribute for playing external files
@@ -44,13 +43,15 @@ export const getTotalLatency = () => {
     let outputLatency = audioContext.outputLatency;
     console.log(`Baselatency : ${baseLatency} Type: ${typeof baseLatency}`);
     console.log(`Outputlatency : ${outputLatency} Type: ${typeof outputLatency}`);
+
     // Check if the response is a valid number 
     if (isNaN(baseLatency)) {
         baseLatency = 0;
     }
     if (isNaN(outputLatency)) {
         outputLatency = 0
-    }    
+    }
+    
     let totalLatency = (baseLatency + outputLatency) * 1000;
     console.log(`Compensate for total Latency of: ${totalLatency}ms`);
     return totalLatency;
