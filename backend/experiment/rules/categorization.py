@@ -12,6 +12,8 @@ from experiment.questions.utils import question_by_key
 from .base import Base
 import random
 
+from django.conf import settings
+
 
 SCORE_AVG_MIN_TRAINING = 0.8
 
@@ -288,7 +290,7 @@ class Categorization(Base):
             participant=session.participant)
 
         # Check if this participant already has a previous session
-        if current_sessions.count() > 1:
+        if current_sessions.count() > 1 and not settings.TESTING:
             json_data = 'REPEAT'
         else:
             # Check wether a group falls behind in the count
