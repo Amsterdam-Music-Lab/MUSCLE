@@ -146,7 +146,7 @@ class Eurovision2020(Hooked):
             section = session.section_from_any_song()
 
         playback = Playback(
-            [section],
+            sections = [section],
             play_config={'ready_time': 3, 'show_animation': True, 'play_method': self.play_method},
             preload_message=_('Get ready!'))
         expected_result=int(novelty[next_round_number - 1] == 'old')
