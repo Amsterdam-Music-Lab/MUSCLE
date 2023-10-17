@@ -36,6 +36,25 @@ class PlaylistModelTest(TestCase):
                         "Salvador Sobral,Amar pelos dois,0.0,10.0,bat/sobral.mp3,0,0,0\n")
         s = playlist.update_sections()
         self.assertEqual(s['status'], playlist.CSV_ERROR)
+    
+    def test_get_section(self):
+        playlist = Playlist.objects.get(name='TestPlaylist')
+        playlist.csv = (
+                        "Weird Al,Eat It,0.0,10.0,some/file.mp3,0,tag1,0\n"
+                        "Weird Al,Eat It,10.0,20.0,some/file.mp3,0,tag2,0\n"
+                        "Weird Al,Like a Surgeon,0.0,10.0,some/otherfile.mp3,0,tag1,0\n"
+                        "Weird Al,Like a Surgeon,10.0,20.0,some/otherfile.mp3,0,tag2,0\n"
+                        )
+        playlist.update_sections()
+        assert Song.objects.count() == 2
+        song1 = Song.objects.get(name='Eat It')
+        section = playlist.get_section(song_ids=[song1.id])
+        assert section.song.id == song1.id
+        section = playlist.get_section(filter_by={'tag': 'tag1'})
+        assert section.tag == 'tag1'
+        song2 = Song.objects.get(name='Like a Surgeon')
+        section = playlist.get_section(filter_by={'tag': 'tag2'}, song_ids=[song2.id])
+        assert section.tag == 'tag2' and section.song.id == song2.id
 
     def test_valid_csv(self):
         playlist = Playlist.objects.get(name='TestPlaylist')    
@@ -76,12 +95,12 @@ class TestAmdinEditSection(TestCase):
 
     @classmethod
     def setUpTestData(cls):
-        Playlist.objects.create()
-        Song.objects.create(artist='default',
+        cls.playlist = Playlist.objects.create()
+        cls.song = Song.objects.create(artist='default',
                             name='default',
-                            restricted = [{"restricted": "nl"}])
-        Section.objects.create(playlist=Playlist.objects.first(),
-                               song = Song.objects.first())
+                            restricted= [{"restricted": "nl"}])
+        Section.objects.create(playlist=cls.playlist,
+                               song=cls.song)
 
     def test_edit_sections(self):
         request = MockRequest()
@@ -106,3 +125,4 @@ class TestAmdinEditSection(TestCase):
         self.assertEqual(edit_section.group, 'edited')
         self.assertEqual(edit_section.song.restricted, [])
         self.assertEqual(response.status_code, 302)
+ 

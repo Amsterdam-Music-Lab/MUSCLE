@@ -1,7 +1,7 @@
 from django.utils.translation import gettext_lazy as _
 from django.conf import settings
 
-from experiment.actions import Final, Score, Trial
+from experiment.actions import Final, Trial
 from experiment.actions.form import Form, ChoiceQuestion
 from experiment.questions.utils import copy_shuffle, question_by_key
 from experiment.questions.musicgens import MUSICGENS_17_W_VARIANTS
@@ -140,10 +140,10 @@ class ThatsMySong(Hooked):
                 actions.append(
                     self.next_heard_before_action(session))
             if round_number > heard_before_offset:
+                actions.append(
+                    self.next_heard_before_action(session))
                 question = self.get_single_question(session, randomize=True)
                 if question:
                     actions.append(question)
-                actions.append(
-                    self.next_heard_before_action(session))
 
         return actions

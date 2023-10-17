@@ -165,7 +165,7 @@ class MusicalPreferences(Base):
             session.save()
             return [feedback, self.get_final_view(session)]
 
-        section = session.playlist.random_section()
+        section = session.playlist.get_section()
         like_key = 'like_song'
         likert = LikertQuestionIcon(
             question=_('How much do you like this song?'),

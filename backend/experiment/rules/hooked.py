@@ -23,11 +23,13 @@ logger = logging.getLogger(__name__)
 
 class Hooked(Base):
     """Superclass for Hooked experiment rules"""
+    ID = 'HOOKED'
 
     consent_file = 'consent_hooked.html';
     timeout = 15
     questions = True
     relevant_keys = ['recognize', 'heard_before']
+    round_modifier = 0
 
     def __init__(self):
         self.questions = [
@@ -90,13 +92,14 @@ class Hooked(Base):
             session.save()
 
             # Return a score and final score action.
+            total_score = session.total_score()
             return [
                 self.get_score(session, round_number),
                 Final(
                     session=session,
                     final_text=self.final_score_message(session),
                     rank=self.rank(session),
-                    show_social=True,
+                    social=self.social_media_info(session.experiment, total_score),
                     show_profile_link=True,
                     button={'text': _('Play again'), 'link': '{}/{}'.format(settings.CORS_ORIGIN_WHITELIST[0], session.experiment.slug)}
                 )
@@ -108,7 +111,7 @@ class Hooked(Base):
         # Collect actions.
         actions = []
 
-        if round_number == 1:
+        if round_number == 0:
             # Plan sections
             self.plan_sections(session)
             # Go to SongSync straight away.
@@ -119,10 +122,10 @@ class Hooked(Base):
 
             # Load the heard_before offset.
             plan = json_data.get('plan')
-            heard_before_offset = plan['n_song_sync'] + 1
+            heard_before_offset = plan['n_song_sync']
 
             # SongSync rounds. Skip questions until Round 5.
-            if round_number in range(2, 5):
+            if round_number in range(1, 5):
                 actions.extend(self.next_song_sync_action(session))
             if round_number in range(5, heard_before_offset):
                 question_trial = self.get_single_question(session)
@@ -196,9 +199,9 @@ class Hooked(Base):
             n_old_new_correct, n_old_new_expected)
         return score_message + " " + song_sync_message + " " + heard_before_message
 
-    def get_trial_title(self, session, next_round_number):    
+    def get_trial_title(self, session, round_number):    
         return _("Round %(number)d / %(total)d") %\
-            {'number': next_round_number, 'total': session.experiment.rounds}
+            {'number': round_number+1, 'total': session.experiment.rounds}
 
     def plan_sections(self, session, filter_by={}):
         """Set the plan of tracks for a session.
@@ -261,8 +264,8 @@ class Hooked(Base):
         section = None
         if next_round_number <= len(sections):
             section = \
-                session.section_from_any_song(
-                    {'id': sections[next_round_number-1].get('id')})
+                session.playlist.section_set.get(
+                    **{'id': sections[next_round_number-1].get('id')})
         if not section:
             logger.warning("Warning: no next_song_sync section found")
             section = session.section_from_any_song()
@@ -272,7 +275,6 @@ class Hooked(Base):
         """Get next heard_before action for this session."""
 
         # Load plan.
-        next_round_number = session.get_current_round() - self.round_modifier
         try:
             plan = session.load_json_data()['plan']
             sections = plan['heard_before_sections']
@@ -281,11 +283,12 @@ class Hooked(Base):
             logger.error('Missing plan key: %s' % str(error))
             return None
         # Get section.
+        round_number = session.get_current_round() - self.round_modifier - heard_before_offset
         section = None
-        if next_round_number - heard_before_offset  <= len(sections):
-            this_section_info = sections[next_round_number - heard_before_offset]
-            section = session.section_from_any_song(
-                    {'id': this_section_info.get('id')})
+        if round_number <= len(sections):
+            this_section_info = sections[round_number]
+            section = session.playlist.section_set.get(
+                    **{'id': this_section_info.get('id')})
         if not section:
             logger.warning("Warning: no heard_before section found")
             section = session.section_from_any_song()
@@ -312,7 +315,7 @@ class Hooked(Base):
             'response_time': self.timeout
         }
         trial = Trial(
-            title=self.get_trial_title(session, next_round_number),
+            title=self.get_trial_title(session, round_number),
             playback=playback,
             feedback_form=form,
             config=config,
