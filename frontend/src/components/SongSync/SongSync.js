@@ -64,11 +64,11 @@ const SongSync = ({
     useEffect(() => {
         let latency;
         switch (state.view) {            
-            case RECOGNIZE:                
+            case RECOGNIZE:                       
                 // Play audio at start time
                 config.playhead = 0
                 // Get latency and compensate timing
-                latency = playAudio(config, section);                
+                latency = playAudio(config, section[0]);                
                 setTimeout(startTime.current = getCurrentTime(), latency);
                 break;
             case SYNC:
@@ -81,7 +81,7 @@ const SongSync = ({
                 );                
                 config.playhead = syncStart
                 // Get latency and compensate timing
-                latency = playAudio(config, section);
+                latency = playAudio(config, section[0]);
                 setTimeout(startTime.current = getCurrentTime(), latency);
                 break;
             default:
