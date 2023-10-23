@@ -37,6 +37,8 @@ class TestsSelenium(unittest.TestCase):
 
     Run tests:
     python tests-selenium.py
+
+    To skip individual tests, add `@unittest.skip` before the test
     """
   
     def setUp(self):

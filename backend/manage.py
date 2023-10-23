@@ -1,10 +1,8 @@
 #!/usr/bin/env python
 """Django's command-line utility for administrative tasks."""
-import os
 import sys
 from os.path import join, dirname
 from dotenv import load_dotenv
-from pathlib import Path
 
 def main():
     env_path = join(dirname(__file__), '.env')
