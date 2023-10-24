@@ -11,7 +11,7 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         if User.objects.count() == 0:
             management.call_command('createsuperuser', '--no-input')
-            logger.info('Created superuser')
+            print('Created superuser')
         if Experiment.objects.count() == 0:
             playlist = Playlist.objects.create(
                 name='Empty Playlist'
