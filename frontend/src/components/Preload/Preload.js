@@ -24,8 +24,7 @@ const Preload = ({ instruction, pageTitle, duration, sections, playConfig, onNex
     };
 
     // Audio preloader
-    useEffect(() => {
-        console.log('preload');
+    useEffect(() => {        
         if (playConfig.play_method === 'BUFFER') {
 
             // Use Web-audio and preload sections in buffers            

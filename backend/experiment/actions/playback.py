@@ -13,7 +13,7 @@ class Playback(BaseAction):
         - play_config: define to override the following values:
             - play_method:
                 - 'BUFFER': Use webaudio buffers. (recommended for stimuli up to 45s)  
-                - 'HTML': Use the HTML tag. (recommended for stimuli longer 45s)
+                - 'HTML': Use the HTML tag. (recommended for stimuli longer than 45s)
                 - 'EXTERNAL': Use for externally hosted audio files. Web-audio api will be disabled            
             - ready_time: time before presentation of sound
             - timeout_after_playback: pause in ms after playback has finished

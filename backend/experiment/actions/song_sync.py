@@ -17,6 +17,10 @@ class SongSync(BaseAction):  # pylint: disable=too-few-public-methods
         - section: section to be played during the round
         - title: title of the page
         - config: optional settings to override the default config
+            - play_method:
+                - 'BUFFER': Use webaudio buffers. (recommended for stimuli up to 45s)  
+                - 'HTML': Use the HTML tag. (recommended for stimuli longer than 45s)
+                - 'EXTERNAL': Use for externally hosted audio files. Web-audio api will be disabled 
         - instructions: optional instructions to override the default instructions
         - buttons: optional button labels to override the default labels
         '''

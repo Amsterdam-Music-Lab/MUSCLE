@@ -5,7 +5,7 @@ export const playAudio = (playConfig, section) => {
     let latency = 0;
 
     if (playConfig.play_method === 'BUFFER') {
-        console.log(`Play buffer ${section.id} (local)`);
+        
         // Determine latency for current audio device
         latency = webAudio.getTotalLatency()
         // Play audio
@@ -13,7 +13,6 @@ export const playAudio = (playConfig, section) => {
 
         return latency
     } else {        
-        console.log('Play HTML audo')
 
         // Only initialize webaudio if section is hosted local
         if (playConfig.play_method !== 'EXTERNAL') {

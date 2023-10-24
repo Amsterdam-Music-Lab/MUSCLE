@@ -22,8 +22,7 @@ export const initWebAudioListener = () => {
 };
 
 // init HTML audio element in webaudio context and connect track to destination (output)
-export const initWebAudio = () => {
-    console.log('Init HTML webaudio')
+export const initWebAudio = () => {    
     if (track === undefined) {                 
         track = audioContext.createMediaElementSource(window.audio);
         track.connect(audioContext.destination);        
@@ -31,8 +30,7 @@ export const initWebAudio = () => {
 }
 
 // Change HTML audio element crossorigin attribute for playing external files
-export const closeWebAudio = () => {
-    console.log('close webaudio for html - external audio')
+export const closeWebAudio = () => {    
     window.audio.removeAttribute('crossOrigin');    
     window.audio.crossorigin = "use-credentials";    
 }
@@ -41,19 +39,16 @@ export const closeWebAudio = () => {
 export const getTotalLatency = () => {    
     let baseLatency = audioContext.baseLatency;
     let outputLatency = audioContext.outputLatency;
-    console.log(`Baselatency : ${baseLatency} Type: ${typeof baseLatency}`);
-    console.log(`Outputlatency : ${outputLatency} Type: ${typeof outputLatency}`);
 
     // Check if the response is a valid number 
     if (isNaN(baseLatency)) {
         baseLatency = 0;
     }
     if (isNaN(outputLatency)) {
-        outputLatency = 0
+        outputLatency = 0;
     }
     
-    let totalLatency = (baseLatency + outputLatency) * 1000;
-    console.log(`Compensate for total Latency of: ${totalLatency}ms`);
+    let totalLatency = (baseLatency + outputLatency) * 1000;    
     return totalLatency;
 }
 
@@ -83,8 +78,7 @@ export const loadBuffer = async (id, src, canPlay) => {
         .then(buffer => audioContext.decodeAudioData(buffer))
         // store buffer in buffers object
         .then(decodedData => {            
-            buffers[id] = decodedData;
-            console.log(buffers);
+            buffers[id] = decodedData;            
             canPlay();
         });
 }
