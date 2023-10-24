@@ -33,9 +33,8 @@ const Preload = ({ instruction, pageTitle, duration, sections, playConfig, onNex
                 if (index === 0) {
                     webAudio.clearBuffers();
                 }
-                
-                // Load sections in buffer
-                // Return remove listener  
+                                
+                // Load sections in buffer                
                 return webAudio.loadBuffer(section.id, MEDIA_ROOT + section.url, () => {                    
                     if (index === (sections.length - 1)) {
                         audioIsAvailable.current = true;
