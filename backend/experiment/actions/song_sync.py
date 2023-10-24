@@ -17,6 +17,10 @@ class SongSync(BaseAction):  # pylint: disable=too-few-public-methods
         - section: section to be played during the round
         - title: title of the page
         - config: optional settings to override the default config
+            - play_method:
+                - 'BUFFER': Use webaudio buffers. (recommended for stimuli up to 45s)  
+                - 'HTML': Use the HTML tag. (recommended for stimuli longer than 45s)
+                - 'EXTERNAL': Use for externally hosted audio files. Web-audio api will be disabled 
         - instructions: optional instructions to override the default instructions
         - buttons: optional button labels to override the default labels
         '''
@@ -31,6 +35,7 @@ class SongSync(BaseAction):  # pylint: disable=too-few-public-methods
             'sync_time': 15,
             'continuation_offset': random.randint(100, 150) / 10 if not continuation_correctness else 0,
             'continuation_correctness': continuation_correctness,
+            'play_method': 'BUFFER'
         }
         if config:
             self.config.update(config)
@@ -52,10 +57,13 @@ class SongSync(BaseAction):  # pylint: disable=too-few-public-methods
 
     def action(self):
         """Serialize data for song_sync action"""
+        section = [{'id': self.section.id, 
+                    'url': self.section.absolute_url(), 
+                    'group': self.section.group}]
         # Create action
         action = {
             'view': self.ID,
-            'section': self.section.absolute_url(),
+            'section': section,
             'result_id': self.result_id,
             'config': self.config,
             'key': self.key,

@@ -1,4 +1,4 @@
-import { SILENT_MP3 } from "../config.js";
+import { API_ROOT, SILENT_MP3 } from "../config.js";
 import Timer from "./timer";
 
 // Audio provides function around a shared audio object
@@ -8,7 +8,10 @@ const audio = document.createElement("audio");
 audio.id = "audio-player";
 audio.controls = "controls";
 audio.src = SILENT_MP3;
-audio.crossorigin = "use-credentials";
+
+// switch to cors anonymous for local development (needed for webaudio)
+API_ROOT == 'http://localhost:8000' ? audio.crossOrigin = "anonymous" : audio.crossorigin = "use-credentials";
+
 audio.disableRemotePlayback = true;
 audio.style.display = "none";
 
