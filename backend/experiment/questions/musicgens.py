@@ -7,10 +7,10 @@ def musicgens_question(key, question):
         question = question,
         choices = {
             1: "Never",
-            2: "Not Very Often",
-            3: "Occasionally",
+            2: "Rarely",
+            3: "Once in a while",
             4: "Sometimes",
-            5: "Very Often",
+            5: "Very often",
             6: "Always"
         },
         explainer = "Please tell us how much you agree"
@@ -159,7 +159,7 @@ MUSICGENS_17_W_VARIANTS = [
         choices = {
             1: "Yes",
             0: "No",
-            -1: "I'm Not Sure"
+            -1: "I'm not sure"
         }
     ),
     RadiosQuestion(
@@ -168,7 +168,7 @@ MUSICGENS_17_W_VARIANTS = [
         choices = {
             1: "Yes",
             0: "No",
-            -1: "I'm Not Sure"
+            -1: "I'm not sure"
         }
     ),
     RadiosQuestion(
@@ -177,7 +177,7 @@ MUSICGENS_17_W_VARIANTS = [
         choices = {
             1: "Yes",
             0: "No",
-            -1: "I'm Not Sure"
+            -1: "I'm not sure"
         }
     ),
     musicgens_question(
@@ -260,4 +260,8 @@ MUSICGENS_17_W_VARIANTS = [
         "P17_3",
         "Hearing good music makes me want to sing along."
     )
+]
+
+MUSICGENS_EXTRA = [
+    
 ]
