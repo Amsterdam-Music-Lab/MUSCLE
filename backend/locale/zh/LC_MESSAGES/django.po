@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-24 13:37+0200\n"
+"POT-Creation-Date: 2023-10-25 09:45+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1245,7 +1245,7 @@ msgstr "开始吧！"
 #: experiment/templates/consent/consent_categorization.html:15
 #: experiment/templates/consent/consent_hooked.html:79
 #: experiment/templates/consent/consent_huang2021.html:88
-#: experiment/templates/consent/consent_musical_preferences.html:69
+#: experiment/templates/consent/consent_musical_preferences.html:63
 msgid "Informed consent"
 msgstr "知情同意声书"
 
@@ -1601,7 +1601,9 @@ msgid ""
 "%(top_participant)s. I know %(known_songs)i out of %(n_songs)i songs. All "
 "players' top 3 songs: %(top_all)s"
 msgstr ""
-"一起探索音乐喜好!%(url)s 我最喜欢的三首歌曲：%(top_participant)s；我知道%(n_songs)i首歌曲中的%(known_songs)i首；其他人最喜爱的三首歌曲：%(top_all)s。"
+"一起探索音乐喜好!%(url)s 我最喜欢的三首歌曲：%(top_participant)s；我知"
+"道%(n_songs)i首歌曲中的%(known_songs)i首；其他人最喜爱的三首歌曲："
+"%(top_all)s。"
 
 #: experiment/rules/musical_preferences.py:252
 #: experiment/templates/final/musical_preferences.html:2
@@ -2456,7 +2458,6 @@ msgid ""
 msgstr ""
 
 #: experiment/templates/consent/consent_hooked.html:74
-#: experiment/templates/consent/consent_musical_preferences.html:64
 msgid ""
 "\n"
 "    If you have any complaints regarding this research project, you can "
@@ -2736,9 +2737,9 @@ msgid ""
 "Amsterdam’s Institute for Logic, Language, and Computation.  \n"
 msgstr ""
 "\n"
-"您即将参加由阿姆斯特丹大学逻辑、语言和计算研究所（ILLC）音乐认知实验组的博"
-"士研究生Xuan Huang 主持的《“中国音乐饵”与记忆》的研究项目。在正式参与该研究项"
-"目之前，请您仔细阅读我们的知情同意书以了解实验程序。\n"
+"您即将参加由阿姆斯特丹大学逻辑、语言和计算研究所（ILLC）音乐认知实验组的博士"
+"研究生Xuan Huang 主持的《“中国音乐饵”与记忆》的研究项目。在正式参与该研究项目"
+"之前，请您仔细阅读我们的知情同意书以了解实验程序。\n"
 
 #: experiment/templates/consent/consent_musical_preferences.html:12
 msgid ""
@@ -2753,8 +2754,11 @@ msgid ""
 "universal structural features for musical preferences? \n"
 msgstr ""
 "\n"
-"研究表明，人们对音乐的文化偏好和熟悉程度从婴儿期开始显现，并持续到整个青春期和成年期。人们会偏好他们文化上熟悉的音乐。这项研究将帮助我们了解个人和情景对音乐偏好的影响，以及构成中国听众音乐偏好的潜在因素。例如，对西方古典音乐有偏好的人是否也对中国传统音乐有偏好？音乐偏好是否存在特定的文化或普遍的结构特征？"
-"\n"
+"研究表明，人们对音乐的文化偏好和熟悉程度从婴儿期开始显现，并持续到整个青春期"
+"和成年期。人们会偏好他们文化上熟悉的音乐。这项研究将帮助我们了解个人和情景对"
+"音乐偏好的影响，以及构成中国听众音乐偏好的潜在因素。例如，对西方古典音乐有偏"
+"好的人是否也对中国传统音乐有偏好？音乐偏好是否存在特定的文化或普遍的结构特"
+"征？\n"
 
 #: experiment/templates/consent/consent_musical_preferences.html:26
 msgid "Instructions"
@@ -2769,7 +2773,8 @@ msgid ""
 "device before the experiment begins.   \n"
 msgstr ""
 "\n"
-"该研究是一个音乐偏好实验，在整个实验里您将听到64个音乐片段，您可以佩戴耳机或使用设备的扬声器来聆听片段。在实验正式开始前调整好您的设备音量的大小。\n"
+"该研究是一个音乐偏好实验，在整个实验里您将听到64个音乐片段，您可以佩戴耳机或"
+"使用设备的扬声器来聆听片段。在实验正式开始前调整好您的设备音量的大小。\n"
 
 #: experiment/templates/consent/consent_musical_preferences.html:34
 msgid ""
@@ -2780,7 +2785,8 @@ msgid ""
 "preferences will be available after the experiment is completed. \n"
 msgstr ""
 "\n"
-"该实验有两个部分。 第一部分为调查问卷，包含6个问题。 第二部分为音乐偏好测试，您将聆听音乐片段并回答相关问题。您的音乐偏好结果将在整个实验完成后获得。\n"
+"该实验有两个部分。 第一部分为调查问卷，包含6个问题。 第二部分为音乐偏好测试，"
+"您将聆听音乐片段并回答相关问题。您的音乐偏好结果将在整个实验完成后获得。\n"
 
 #: experiment/templates/consent/consent_musical_preferences.html:42
 msgid ""
@@ -2791,8 +2797,8 @@ msgid ""
 "the information gathered up until then will be permanently deleted. \n"
 msgstr ""
 "\n"
-"参加本研究是完全自愿的。您可以拒绝参加研究，或者在研究过程中的任何时候选择退出研究，不需任何理由，且您的数据将被永久删除。"
-"这项研究没有已知的风险。\n"
+"参加本研究是完全自愿的。您可以拒绝参加研究，或者在研究过程中的任何时候选择退"
+"出研究，不需任何理由，且您的数据将被永久删除。这项研究没有已知的风险。\n"
 
 #: experiment/templates/consent/consent_musical_preferences.html:50
 msgid ""
@@ -2805,7 +2811,9 @@ msgid ""
 "viewed by third parties without your express permission.\n"
 msgstr ""
 " \n"
-"在此研究过程中所搜集的信息仅用于科学研究。数据完全匿名，可能会随着研究结果发表一同展示。我们保证您在任何情况下都将保持匿名。此外，未经您的明确许可，您的个人信息将不会被第三方查看 \n"
+"在此研究过程中所搜集的信息仅用于科学研究。数据完全匿名，可能会随着研究结果发"
+"表一同展示。我们保证您在任何情况下都将保持匿名。此外，未经您的明确许可，您的"
+"个人信息将不会被第三方查看 \n"
 
 #: experiment/templates/consent/consent_musical_preferences.html:59
 msgid ""
@@ -2814,27 +2822,29 @@ msgid ""
 "regarding this project, you can contact the Secretary of the Ethics "
 "Committee of the Faculty of Humanities of the University of Amsterdam "
 "(commissie-ethiek-fgw@uva.nl). \n"
+"    "
 msgstr ""
-"如您需了解关于本研究项目的更多信息，请联系Xuan Huang(邮箱: x.huang@uva.nl; "
-"地址: Science Park 107, 1098 GE Amsterdam)或者John A. Burgoyne 博士 ( 电话: "
+"如您需了解关于本研究项目的更多信息，请联系Xuan Huang(邮箱: x.huang@uva.nl; 地"
+"址: Science Park 107, 1098 GE Amsterdam)或者John A. Burgoyne 博士 ( 电话: "
 "+31205257034；邮箱: j.a.burgoyne@uva.nl; 地址: Science Park 107, 1098 GE "
 "Amsterdam)。如果您对此研究项目有任何投诉，请联系阿姆斯特丹大学人文学院伦理委"
 "员会秘书 (the secretary of the Ethics Committee of the Faculty of Humanities "
 "of the University of Amsterdam），电话: +31205253054；邮箱: commissie-ethiek-"
 "fgw@uva.nl; 地址: Kloveniersburgwal 48, 1012 CX Amsterdam。\n"
+"    "
 
-#: experiment/templates/consent/consent_musical_preferences.html:72
+#: experiment/templates/consent/consent_musical_preferences.html:66
 msgid ""
 " \n"
 "    I have been clearly informed about the research project and I consent to "
 "participate in this research. I retain the right to revoke this consent "
 "without having to provide any reasons for my decision. I am aware that I am "
 "entitled to discontinue the research at any time and can withdraw my "
-"participation. \n"
+"participation. "
 msgstr ""
 " \n"
-"我已经阅读了知情同意书,我同意参与该项研究。我有权撤销这一同意而无须提供任何"
-"理由。我知道我有权在任何时候中止研究，可以撤回我的参与。\n"
+"我已经阅读了知情同意书,我同意参与该项研究。我有权撤销这一同意而无须提供任何理"
+"由。我知道我有权在任何时候中止研究，可以撤回我的参与。"
 
 #: experiment/templates/consent/consent_rhythm.html:2
 #: experiment/templates/consent/consent_rhythm_unpaid.html:2
@@ -3279,6 +3289,19 @@ msgstr "复制"
 #: section/admin.py:92
 msgid "Cannot upload {}: {}"
 msgstr ""
+
+#~ msgid ""
+#~ "\n"
+#~ "    If you have any complaints regarding this research project, you can "
+#~ "contact the secretary of the Ethics Committee of the Faculty of "
+#~ "Humanities of the University of Amsterdam (phone number: +31 20 525 3054; "
+#~ "e-mail: commissie-ethiek-fgw@uva.nl; Kloveniersburgwal 48, 1012 CX "
+#~ "Amsterdam)."
+#~ msgstr ""
+#~ "\n"
+#~ "如果我对该研究有投诉，我可以联系阿姆斯特丹大学人文学院伦理委员会秘书 (电"
+#~ "话：+31 20 525 3054；电子邮件：commissie-ethiek-fgw@uva.nl ;  地址："
+#~ "Kloveniersburgwal 48, 1012 CX Amsterdam)。"
 
 #~ msgid " Love"
 #~ msgstr "乐"
