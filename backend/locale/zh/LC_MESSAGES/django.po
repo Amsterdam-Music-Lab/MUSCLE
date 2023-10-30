@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-25 09:45+0200\n"
+"POT-Creation-Date: 2023-10-30 14:04+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -576,7 +576,7 @@ msgstr "11或以上"
 
 #: experiment/questions/goldsmiths.py:153
 msgid "I listen attentively to music for _ per day."
-msgstr ""
+msgstr "我每天专心聆听音乐___。"
 
 #: experiment/questions/goldsmiths.py:155
 msgid "0-15 min"
@@ -640,7 +640,7 @@ msgstr "当我听到一首音乐时，我通常能确定它的流派（类型）
 
 #: experiment/questions/goldsmiths.py:210
 msgid "I have had formal training in music theory for _ years."
-msgstr "您接受了多少年音乐理论方面的专业培训？"
+msgstr "我接受过正式的音乐理论培训__年。"
 
 #: experiment/questions/goldsmiths.py:214
 #: experiment/questions/goldsmiths.py:230
@@ -655,7 +655,7 @@ msgstr "7或以上"
 msgid ""
 "I have had _ years of formal training on a musical instrument (including "
 "voice) during my lifetime."
-msgstr "您接受了多少年乐器（包括声乐）方面的专业培训？"
+msgstr "在我的人生中，我接受过__年的正规乐器训练（包括声乐)。"
 
 #: experiment/questions/goldsmiths.py:233
 msgid "3-5"
@@ -1591,8 +1591,8 @@ msgstr "1. 您知道这首歌吗？"
 
 #: experiment/rules/musical_preferences.py:206
 #, python-format
-msgid "Song %(round)i/%(total)i"
-msgstr "%(round)i/%(total)i首歌"
+msgid "Song %(round)s/%(total)s"
+msgstr "%(round)s/%(total)s首歌"
 
 #: experiment/rules/musical_preferences.py:228
 #, python-format

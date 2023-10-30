@@ -203,8 +203,8 @@ class MusicalPreferences(Base):
         view = Trial(
             playback=playback,
             feedback_form=form,
-            title=_('Song %(round)i/%(total)i' %{
-                'round': n_songs, 'total': session.experiment.rounds}),
+            title=_('Song %(round)s/%(total)s') %{
+                'round': n_songs, 'total': session.experiment.rounds},
             config={
                 'response_time': section.duration + .1,
             }
