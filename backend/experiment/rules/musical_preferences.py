@@ -24,8 +24,8 @@ from .huang_2022 import gender_question, genre_question, get_test_playback, orig
 class MusicalPreferences(Base):
     ID = 'MUSICAL_PREFERENCES'
     consent_file = 'consent_musical_preferences.html'
-    preference_offset = 4 #20
-    knowledge_offset = 6 #42
+    preference_offset = 20
+    knowledge_offset = 42
     round_increment = 1
 
     know_score = {
