@@ -10,13 +10,18 @@
     .select-fields p {
         display: inline-block;
     }
+
+    .help-text {
+        color: var(--body-quiet-color);        
+        font-size: 12px;
+    }
+
     .song-help {
         position: relative;
-        top: 7.3rem;                
-        color: var(--body-quiet-color);        
+        top: 7.3rem;
         margin-left: 5rem;
-        font-size: 12px;        
     }
+
     p label {
         display: block;
     }
@@ -49,7 +54,7 @@
 
 <form enctype="multipart/form-data" action="" method="post">
     <div class="select-fields">
-        <div class="song-help mini">* Fill out both the artist and name fields to create a new song object</div>
+        <div class="help-text song-help mini">* Fill out both the artist and name fields to create a new song object</div>
         {% csrf_token %} {{ form.as_p }} {% render_inline_action_fields %}
         {% if form.errors %}
             <div class="error">
@@ -60,7 +65,7 @@
         {% endif %}
         
     </div>
-    
+    <div class="help-text mini">* Allowed audio file formats: WAV, MP3, FLAC, OGG</div>
     <div class="button-container">
         <input type="submit" name="_add" value="Add sections" id="add-button" />
     </div>
@@ -69,4 +74,24 @@
 <form>
     <input type="submit" name="_back" value="Go back" id="back-button" />
 </form>
+
+<script>
+    function fileValidation() {
+        var fileInput = 
+            document.getElementById('id_files');
+         
+        var filePath = fileInput.value;
+     
+        // Allowing file type
+        var allowedExtensions = 
+/(\.doc|\.docx|\.odt|\.pdf|\.tex|\.txt|\.rtf|\.wps|\.wks|\.wpd)$/i;
+         
+        if (!allowedExtensions.exec(filePath)) {
+            alert('Invalid file type');
+            fileInput.value = '';
+            return false;
+        } 
+    }
+    
+</script>
 {% endblock %}
