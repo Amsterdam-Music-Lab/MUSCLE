@@ -55,11 +55,10 @@ class ToontjeHoger3Plink(Base):
     def next_round(self, session, request_session=None):
         """Get action data for the next round"""
 
-        rounds_passed = session.rounds_passed()
+        rounds_passed = session.get_relevant_results(['plink']).count()
 
         # Round 1
         if rounds_passed == 0:
-            # No combine_actions because of inconsistent next_round array wrapping in first round
             return self.get_plink_round(session)
 
         # Round 2-experiments.rounds
@@ -80,7 +79,7 @@ class ToontjeHoger3Plink(Base):
             logger.error("No last result")
             return ""
         
-        if last_results[2].given_response != 'skipped':
+        if last_results[2].given_response != '':
             # delete other results, because these questions weren't asked
             last_results[0].delete()
             last_results[1].delete()
