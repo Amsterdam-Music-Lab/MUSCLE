@@ -124,7 +124,10 @@ class ToontjeHoger3Plink(Base):
                 feedback_prefix, question_part, section_part)
         
         config = {'show_total_score': True}
-        return Score(session, config=config, feedback=feedback, score=score)
+        round_number = session.get_relevant_results(['plink']).count() - 1
+        score_title =  "Ronde %(number)d / %(total)d" %\
+            {'number': round_number+1, 'total': session.experiment.rounds}
+        return Score(session, config=config, feedback=feedback, score=score, title=score_title)
         
     
     def get_plink_round(self, session, present_score=False):
