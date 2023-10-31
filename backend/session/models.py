@@ -49,7 +49,6 @@ class Session(models.Model):
         """Return artist and name of previous song, 
         or return empty string if no scores are set
         """
-
         section = self.previous_section()
         if section:
             return "{} - {}".format(section.song.artist, section.song.name)
