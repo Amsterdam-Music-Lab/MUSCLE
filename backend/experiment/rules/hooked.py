@@ -253,7 +253,7 @@ class Hooked(Base):
         """Get next song_sync section for this session."""
 
         # Load plan.
-        next_round_number = session.get_current_round() - self.round_modifier
+        round_number = self.get_current_round(session) - self.round_modifier
         try:
             plan = session.load_json_data()['plan']
             sections = plan['song_sync_sections']
@@ -263,14 +263,14 @@ class Hooked(Base):
 
         # Get section.
         section = None
-        if next_round_number <= len(sections):
+        if round_number <= len(sections):
             section = \
                 session.playlist.section_set.get(
-                    **{'id': sections[next_round_number-1].get('id')})
+                    **{'id': sections[round_number-1].get('id')})
         if not section:
             logger.warning("Warning: no next_song_sync section found")
             section = session.section_from_any_song()
-        return song_sync(session, section, title=self.get_trial_title(session, next_round_number))
+        return song_sync(session, section, title=self.get_trial_title(session, round_number))
        
     def next_heard_before_action(self, session):
         """Get next heard_before action for this session."""

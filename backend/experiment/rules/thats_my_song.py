@@ -13,6 +13,7 @@ class ThatsMySong(Hooked):
     ID = 'THATS_MY_SONG'
     consent_file = None
     relevant_keys = ['recognize', 'heard_before', 'playlist_decades']
+    round_modifier = 1
 
     def __init__(self):
         self.questions = [
@@ -124,7 +125,7 @@ class ThatsMySong(Hooked):
             actions.extend(self.next_song_sync_action(session))
         else:
             # Create a score action.
-            actions.append(self.get_score(session, round_number))
+            actions.append(self.get_score(session, round_number - self.round_modifier))
 
             # Load the heard_before offset.
             plan = json_data.get('plan')
