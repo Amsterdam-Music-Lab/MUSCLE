@@ -38,7 +38,7 @@ const Trial = ({
 
     // Create result data
     const makeResult = useCallback(
-        (result) => {
+        async (result) => {
             // Prevent multiple submissions
             if (submitted.current) {
                 return;
@@ -56,7 +56,7 @@ const Trial = ({
                 if (feedback_form.is_skippable) {
                     form.map((formElement => (formElement.value = formElement.value || '')))
                 }
-                onResult({
+                await onResult({
                     decision_time,
                     form,
                     config
