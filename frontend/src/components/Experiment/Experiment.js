@@ -11,8 +11,6 @@ import Final from "../Final/Final";
 import Loading from "../Loading/Loading";
 import Playlist from "../Playlist/Playlist";
 import Score from "../Score/Score";
-import SongSync from "../SongSync/SongSync";
-import Plink from "../Plink/Plink";
 import StartSession from "../StartSession/StartSession";
 import Trial from "../Trial/Trial";
 import useResultHandler from "../../hooks/useResultHandler";
@@ -143,10 +141,6 @@ const Experiment = ({ match, location }) => {
             // -------------------------
             case "TRIAL_VIEW":
                 return <Trial {...attrs} />;
-            case "SONG_SYNC":
-                return <SongSync {...attrs} />;
-            case "PLINK":
-                return <Plink {...attrs} />;
 
             // Information & Scoring
             // -------------------------
