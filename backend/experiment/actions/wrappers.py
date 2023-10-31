@@ -73,7 +73,7 @@ def song_sync(session, section, title, response_time=15):
                             'show_animation': True,
         }),
         config={
-            'recognition_time': silence_time,
+            'response_time': silence_time,
             'auto_advance': True,
             'show_continue_button': False
         },
