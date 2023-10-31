@@ -40,16 +40,21 @@ const ToggleButton = ({ label, value, index, name, active, onChange }) => {
     const disabled = active? '' : 'disabled';
     return (
         <label
-            className={classNames("btn btn-secondary btn-lg", disabled)}
-            onClick={() => {
-                onChange(value);
-            }}
-            tabIndex="0"
-            onKeyPress={() => {
-                onChange(value);
-            }}
+            className={classNames("btn btn-secondary btn-lg", disabled)}            
+            tabIndex="0"            
         >
-            <input className={value} type="radio" name={name} id={index} value={value}/>
+            <input className={value}
+                type="radio"
+                name={name}
+                id={index}
+                value={value}
+                onClick={() => {                    
+                    onChange(value);
+                }}
+                onKeyPress={() => {                    
+                    onChange(value);
+                }}            
+            />
             {renderLabel(label)}
         </label>)
 }
