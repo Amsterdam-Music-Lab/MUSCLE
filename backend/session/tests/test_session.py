@@ -5,7 +5,7 @@ from django.utils import timezone
 
 from experiment.models import Experiment
 from participant.models import Participant
-from section.models import Playlist
+from section.models import Playlist, Section, Song
 from result.models import Result
 from session.models import Session
 
@@ -97,4 +97,19 @@ class SessionTest(TestCase):
         assert rank == 75.0
         rank = finished_session.percentile_rank(exclude_unfinished=False)
         assert rank == 62.5
+
+    def test_last_song(self):
+        song = Song.objects.create(artist='Beavis', name='Butthead')
+        section = Section.objects.create(playlist=self.playlist, song=song)
+        Result.objects.create(
+            session=self.session,
+            section=section,
+            question_key='preference',
+            score=0
+        )
+        previous_section = self.session.previous_section()
+        assert previous_section
+        last_song = self.session.last_song()
+        assert last_song == 'Beavis - Butthead'
+
 
