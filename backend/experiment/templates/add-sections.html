@@ -1,5 +1,8 @@
 {% extends "admin/base_site.html" %} {% load inline_action_tags %} {% block content %}
 <style>
+    .error {
+        color: red;
+    }
     .select-fields {
         width: 100%;
     }
@@ -48,6 +51,13 @@
     <div class="select-fields">
         <div class="song-help mini">* Fill out both the artist and name fields to create a new song object</div>
         {% csrf_token %} {{ form.as_p }} {% render_inline_action_fields %}
+        {% if form.errors %}
+            <div class="error">
+                {% for message in form.errors.file %}
+                    <p>{{message}}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
         
     </div>
     

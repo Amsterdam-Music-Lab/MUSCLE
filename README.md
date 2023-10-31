@@ -10,8 +10,11 @@ This application provides an easy way to implement and run online listening expe
 
 - We are also happy if you file a feature request in our [issues list](https://github.com/Amsterdam-Music-Lab/aml-experiments/issues), or if you fork this repository to add your own code.
 
+## Before installation
+We recommend downloading a code editor, for instance [Visual Studio Code](https://code.visualstudio.com/), and to use [git](https://git-scm.com/) to copy this repository to your machine, as this makes it easier to keep your local copy up to date.
+
 ## Installation with Docker
-The easiest way to run the application locally is through Docker.
+The easiest way to run the application locally is through Docker. Docker is an application which runs a network of virtual machines ("containers") and is therefore (mostly) platform independent.
 
 ### Mac OS X or Windows 10
 Install [Docker Desktop](https://docs.docker.com/desktop/).
@@ -23,35 +26,22 @@ Install [Docker Desktop](https://docs.docker.com/desktop/).
 As of April 2022, [Docker Desktop for Linux](https://docs.docker.com/desktop/linux/) is still in Beta and have not been tested by us.
 
 ## Development build
-Make a file called .env next in this directory, with the following settings. Change database name and user and passwords as appropriate. The only setting that you'll have to set later is the slug, which depends on the slug (short name) of an existing experiment in your database.
-```
-SQL_DATABASE=aml
-SQL_USER=aml
-SQL_PASSWORD=supersecretpassword
-SQL_HOST=db
-SQL_PORT=5432
+Make a copy of the file .env.dist (in the same directory as this README) and rename it to .env. This file contains variables used by Docker to start up a container network serving MUSCLE.
 
-AML_SECRET_KEY=secretdjangopassword
-AML_LOCATION_PROVIDER=http://ip2country:5000/{}
-AML_DEBUG=True
-DJANGO_SETTINGS_MODULE=aml.development_settings
-
-REACT_APP_API_ROOT=http://localhost:8000
-REACT_APP_EXPERIMENT_SLUG=your_slug
-REACT_APP_AML_HOME=https://www.amsterdammusiclab.nl
-```
-Then, open a console and run
+Start Docker (the app icon is a whale carrying containers). Then, open a terminal and run
 `docker-compose up` (add `sudo` on Linux).
-This command makes use of the `docker-compose.yaml`, which defines four containers:
+This command starts up the containers defined in `docker-compose.yaml`:
 - a PostgreSQL container, for storing experiment/user/playlist data, saved on the host machine in the Docker user data, represented in the volume `db_data`. Data added to the database will persist if the container is shut down.
-- a ip2country container, which provides country codes for ip addresses. This container is mainly interesting for running tests during development.
+- a ip2country container, which provides country codes for ip addresses, used for demographic information of users.
 - a container of the server, defined in DockerfileDevelop in `backend`. The Dockerfile defines the Python version and installs development dependencies. The startup command runs migrations and then starts up a Django development server.
 - a container of the client, defined in DockerfileDevelop in `frontend`. The Dockerfile defines the node version and installs node modules. The startup command kicks off a React development server.
 
+Once you see all containers have started up, open your browser and navigate to [localhost:3000](http://localhost:3000). You should now be able to see the first screen of the Goldsmiths Musical Sophistication Index questionnaire.
+
 Since the `docker-compose.yaml` defines bind mounts for `backend` and `frontend`, any changes to the files on the host are immediately reflected in the containers, which means code watching works and hot reload works in the same way as with a native node or Django server.
 
-To stop the containers, press `ctrl-c` or (in another console) run
+To stop the containers, press `ctrl-c` or (in another terminal) run
 `docker-compose down`.
 
 ## Production build
-A production build should define its own `docker-compose.yaml`, making use of the `Dockerfile` of the `backend` and `frontend` environments. Instead of mounting the entire backend and frontend directory and using the development servers, the backend should serve with gunicorn, and the frontend should use a build script to compile static html, css and JavaScript.
+A production build should define its own `docker-compose.yaml`, making use of the `Dockerfile` of the `backend` and `frontend` environments. It should also define a custom .env file, with safe passwords for the SQL database and the Python backend. Instead of mounting the entire backend and frontend directory and using the development servers, the backend should serve with gunicorn, and the frontend should use a build script to compile static html, css and JavaScript.

@@ -42,6 +42,9 @@ services:
         environment:
           - AML_DEBUG=${AML_DEBUG}
           - DJANGO_SETTINGS_MODULE=${DJANGO_SETTINGS_MODULE}
+          - DJANGO_SUPERUSER_USERNAME=${DJANGO_SUPERUSER_USERNAME}
+          - DJANGO_SUPERUSER_PASSWORD=${DJANGO_SUPERUSER_PASSWORD}
+          - DJANGO_SUPERUSER_EMAIL=${DJANGO_SUPERUSER_EMAIL}
           - AML_LOCATION_PROVIDER=${AML_LOCATION_PROVIDER}
           - SQL_DATABASE=${SQL_DATABASE}
           - SQL_USER=${SQL_USER}
@@ -49,7 +52,7 @@ services:
           - SQL_HOST=${SQL_HOST}
         ports:
           - 8000:8000
-        command: bash -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
+        command: bash -c "python manage.py migrate && python manage.py bootstrap && python manage.py runserver 0.0.0.0:8000"
     client:
         build:
           context: ./frontend

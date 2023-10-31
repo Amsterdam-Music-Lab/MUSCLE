@@ -16,6 +16,7 @@ class Eurovision2020(Hooked):
     """
 
     ID = 'EUROVISION_2020'
+    play_method = 'BUFFER'
 
     def plan_sections(self, session):
         """Set the plan of tracks for a session.
@@ -139,8 +140,8 @@ class Eurovision2020(Hooked):
             section = session.playlist.get_section()
 
         playback = Playback(
-            [section],
-            play_config={'ready_time': 3, 'show_animation': True},
+            sections = [section],
+            play_config={'ready_time': 3, 'show_animation': True, 'play_method': self.play_method},
             preload_message=_('Get ready!'))
         expected_result=int(novelty[round_number] == 'old')
         # create Result object and save expected result to database

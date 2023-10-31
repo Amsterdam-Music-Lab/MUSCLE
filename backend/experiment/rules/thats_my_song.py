@@ -49,6 +49,12 @@ class ThatsMySong(Hooked):
             'tag': form,
             'group': decade
         }
+    
+    def first_round(self, experiment):
+        actions = super().first_round(experiment)
+        # remove consent
+        del actions[1]
+        return actions
 
     def next_round(self, session):	
         """Get action data for the next round"""

@@ -7,6 +7,7 @@ from django.utils import timezone
 from django.urls import reverse
 
 from .utils import CsvStringBuilder
+from .validators import audio_file_validator
 
 class Playlist(models.Model):
     """List of sections to be used in an Experiment"""
@@ -24,7 +25,7 @@ class Playlist(models.Model):
     def save(self, *args, **kwargs):
         """Update playlist csv field on every save"""
         if self.process_csv is False:  
-            self.csv = self.update_admin_csv()            
+            self.csv = self.update_admin_csv()
         super(Playlist, self).save(*args, **kwargs)
 
     class Meta:
@@ -212,6 +213,7 @@ class Playlist(models.Model):
                             section.tag,
                             section.group])
         csv_string = csvfile.csv_string
+        print(csv_string)
         return ''.join(csv_string)
     
 class Song(models.Model):
@@ -239,11 +241,11 @@ class Section(models.Model):
     song = models.ForeignKey(Song, on_delete=models.CASCADE, blank=True, null=True)
     start_time = models.FloatField(db_index=True, default=0.0)  # sec
     duration = models.FloatField(default=0.0)  # sec
-    filename = models.FileField(upload_to=audio_upload_path, max_length=255)
+    filename = models.FileField(upload_to=audio_upload_path, max_length=255, validators=[audio_file_validator()])
     play_count = models.PositiveIntegerField(default=0)
     code = models.PositiveIntegerField(default=random_code)    
-    tag = models.CharField(max_length=128, default='0')
-    group = models.CharField(max_length=128, default='0')
+    tag = models.CharField(max_length=128, default='0', blank=True)
+    group = models.CharField(max_length=128, default='0', blank=True)
 
     class Meta:
         ordering = ['song__artist', 'song__name', 'start_time']

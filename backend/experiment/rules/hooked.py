@@ -30,6 +30,7 @@ class Hooked(Base):
     questions = True
     relevant_keys = ['recognize', 'heard_before']
     round_modifier = 0
+    play_method = 'BUFFER'
 
     def __init__(self):
         self.questions = [
@@ -294,7 +295,7 @@ class Hooked(Base):
             section = session.section_from_any_song()
         playback = Playback(
             [section],
-            play_config={'ready_time': 3, 'show_animation': True},
+            play_config={'ready_time': 3, 'show_animation': True, 'play_method': self.play_method},
             preload_message=_('Get ready!'))
         expected_response = this_section_info.get('novelty')
         # create Result object and save expected result to database
