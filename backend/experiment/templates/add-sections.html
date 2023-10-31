@@ -16,6 +16,11 @@
         font-size: 12px;
     }
 
+    .text-red {
+        color: var(--error-fg);        
+        font-size: 13px;
+    }
+
     .song-help {
         position: relative;
         top: 7.3rem;
@@ -65,7 +70,7 @@
         {% endif %}
         
     </div>
-    <div class="help-text mini">* Allowed audio file formats: WAV, MP3, FLAC, OGG</div>
+    <div class="help-text mini" id="file-help">* Allowed audio file formats: WAV, MP3, FLAC, OGG</div>
     <div class="button-container">
         <input type="submit" name="_add" value="Add sections" id="add-button" />
     </div>
@@ -76,22 +81,25 @@
 </form>
 
 <script>
-    function fileValidation() {
-        var fileInput = 
-            document.getElementById('id_files');
-         
-        var filePath = fileInput.value;
-     
-        // Allowing file type
-        var allowedExtensions = 
-/(\.doc|\.docx|\.odt|\.pdf|\.tex|\.txt|\.rtf|\.wps|\.wks|\.wpd)$/i;
-         
-        if (!allowedExtensions.exec(filePath)) {
-            alert('Invalid file type');
-            fileInput.value = '';
-            return false;
-        } 
+    // Validate input when files are selected
+    const fileValidation = () => {
+        let inputFiles = inputElement.files;        
+        Object.values(inputFiles).forEach(file => {
+            const thisFile = file.name.split('.')
+            const ext = thisFile[thisFile.length -1].toLowerCase();
+            if (ext == 'wav' || ext == 'mp3' || ext == 'flac' || ext == 'ogg') {
+                // Files are valid. Help text turns to default.
+                errorDisplay.classList.remove("text-red");                
+            } else {
+                // Invalid files. Help text turns red and input is emptied
+                errorDisplay.classList.add("text-red");
+                inputElement.value = '';
+            };
+        });
     }
-    
+    const inputElement = document.getElementById('id_files');
+    const errorDisplay = document.getElementById('file-help');
+    inputElement.addEventListener('change', fileValidation);
 </script>
+
 {% endblock %}
