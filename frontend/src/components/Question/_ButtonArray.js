@@ -48,12 +48,10 @@ const ToggleButton = ({ label, value, index, name, active, onChange }) => {
                 name={name}
                 id={index}
                 value={value}
-                onClick={() => {
-                    console.log('label button array onclick')
+                onClick={() => {                    
                     onChange(value);
                 }}
-                onKeyPress={() => {
-                    console.log('label button array onkeypress')
+                onKeyPress={() => {                    
                     onChange(value);
                 }}            
             />
