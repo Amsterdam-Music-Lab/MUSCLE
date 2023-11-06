@@ -1,7 +1,7 @@
 import * as audio from "./audio";
 import * as webAudio from "./webAudio";
 
-export const playAudio = (playConfig, section) => {    
+export const playAudio = (playConfig, section) => { 
     let latency = 0;
 
     if (playConfig.play_method === 'BUFFER') {

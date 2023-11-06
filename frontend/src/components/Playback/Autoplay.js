@@ -1,11 +1,9 @@
-import React, { useRef, useState, useEffect } from "react";
-
-import { playAudio } from "../../util/audioControl";
+import React, { useRef, useEffect } from "react";
 
 import Circle from "../Circle/Circle";
 import ListenCircle from "../ListenCircle/ListenCircle";
 
-const AutoPlay = ({playback, time, startedPlaying, finishedPlaying, responseTime, className=''}) => {
+const AutoPlay = ({playbackArgs, playSection, time, finishedPlaying, responseTime, className=''}) => {
     // player state
     
     const running = useRef(true);
@@ -15,15 +13,9 @@ const AutoPlay = ({playback, time, startedPlaying, finishedPlaying, responseTime
     };
 
     // Handle view logic
-    useEffect(() => {        
-        let latency = 0;
-        // Play audio at start time            
-        if (playback.play_from) {            
-            latency = playAudio(playback.play_from, playback.section);          
-            // Compensate for audio latency and set state to playing
-            setTimeout(startedPlaying(), latency);
-        }
-    }, [playback, startedPlaying]);
+    useEffect(() => {
+        playSection(0);
+    });
 
     // Render component
     return (
@@ -33,7 +25,7 @@ const AutoPlay = ({playback, time, startedPlaying, finishedPlaying, responseTime
                     running={running}
                     duration={responseTime}
                     color="white"
-                    animateCircle={playback.show_animation}
+                    animateCircle={playbackArgs.show_animation}
                     onTick={onCircleTimerTick}
                     onFinish={() => {
                         // Stop audio
@@ -41,7 +33,7 @@ const AutoPlay = ({playback, time, startedPlaying, finishedPlaying, responseTime
                     }}
                 />
                 <div className="circle-content">
-                    {playback.show_animation
+                    {playbackArgs.show_animation
                         ? <ListenCircle
                             duration={responseTime}
                             histogramRunning={running}
@@ -59,8 +51,8 @@ const AutoPlay = ({playback, time, startedPlaying, finishedPlaying, responseTime
             }
             >
             {/* Instruction */}
-            {playback.instruction && (<div className="instruction d-flex justify-content-center align-items-center">
-                <h3 className="text-center">{playback.instruction}</h3>
+            {playbackArgs.instruction && (<div className="instruction d-flex justify-content-center align-items-center">
+                <h3 className="text-center">{playbackArgs.instruction}</h3>
             </div>)}
         </div>
     </div>

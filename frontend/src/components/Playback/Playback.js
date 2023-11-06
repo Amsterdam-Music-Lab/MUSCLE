@@ -72,14 +72,14 @@ const Playback = ({
         } else {
             finishedPlaying();
         }
-    }, []);
+    }, [playbackArgs, finishedPlaying]);
     
     // Keep track of last player index
     useEffect(() => {
         lastPlayerIndex.current = playerIndex;
     }, [playerIndex]);
 
-    if (playbackArgs.playMethod === 'EXTERNAL') {                    
+    if (playbackArgs.play_method === 'EXTERNAL') {                    
         webAudio.closeWebAudio();            
     }
 
@@ -101,7 +101,7 @@ const Playback = ({
                         pauseAudio(playbackArgs);
                         return;
                     }
-                    let latency = playAudio(playbackArgs.play_from, playbackArgs.sections[index]);
+                    let latency = playAudio(playbackArgs, playbackArgs.sections[index]);
 
                     // Cancel active events
                     cancelAudioListeners();
@@ -140,7 +140,7 @@ const Playback = ({
         () => () => {
             pauseAudio(playbackArgs);
         },
-        []
+        [playbackArgs]
     );
 
     // Autoplay
@@ -167,10 +167,7 @@ const Playback = ({
         switch (state.view) {
             case PRELOAD:
                 return (
-                    <Preload
-                        instruction={playbackArgs.preloadMessage}
-                        duration={playbackArgs.readyTime}                        
-                        sections={playbackArgs.sections}
+                    <Preload {...attrs}
                         onNext={() => {                        
                             setView(playbackArgs.view);
                             onPreloadReady();

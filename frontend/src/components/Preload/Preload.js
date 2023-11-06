@@ -8,11 +8,12 @@ import { MEDIA_ROOT } from "../../config";
 import classNames from "classnames";
 
 // Preload is an experiment screen that continues after a given time or after an audio file has been preloaded
-const Preload = ({ instruction, pageTitle, duration, sections, playConfig, onNext }) => {
+const Preload = ({ playbackArgs, pageTitle, onNext }) => {
     const timeHasPassed = useRef(false);
     const audioIsAvailable = useRef(false);
-    const [loaderDuration, setLoaderDuration] = useState(duration);
     const [overtime, setOvertime] = useState(false);
+    const duration = playbackArgs.ready_time;
+    const [loaderDuration, setLoaderDuration] = useState(duration);
     
     const onTimePassed = () => {
         timeHasPassed.current = true;
@@ -25,10 +26,10 @@ const Preload = ({ instruction, pageTitle, duration, sections, playConfig, onNex
 
     // Audio preloader
     useEffect(() => {        
-        if (playConfig.play_method === 'BUFFER') {
+        if (playbackArgs.play_method === 'BUFFER') {
 
             // Use Web-audio and preload sections in buffers            
-            sections.map((section, index) => {
+            playbackArgs.sections.map((section, index) => {
                 // Clear buffers if this is the first section
                 if (index === 0) {
                     webAudio.clearBuffers();
@@ -36,7 +37,7 @@ const Preload = ({ instruction, pageTitle, duration, sections, playConfig, onNex
                                 
                 // Load sections in buffer                
                 return webAudio.loadBuffer(section.id, MEDIA_ROOT + section.url, () => {                    
-                    if (index === (sections.length - 1)) {
+                    if (index === (playbackArgs.sections.length - 1)) {
                         audioIsAvailable.current = true;
                         if (timeHasPassed.current) {
                             onNext();
@@ -45,26 +46,26 @@ const Preload = ({ instruction, pageTitle, duration, sections, playConfig, onNex
                 });
             })
         } else {
-            if (playConfig.play_method === 'EXTERNAL') {                    
+            if (playbackArgs.play_method === 'EXTERNAL') {                    
                 webAudio.closeWebAudio();            
             }
             // Load audio until available
             // Return remove listener   
-            return audio.loadUntilAvailable(MEDIA_ROOT + sections[0].url, () => {
+            return audio.loadUntilAvailable(MEDIA_ROOT + playbackArgs.sections[0].url, () => {
                 audioIsAvailable.current = true;
                 if (timeHasPassed.current) {
                     onNext();
                 }
             });            
         }              
-    }, [sections, onNext]);
+    }, [playbackArgs, onNext]);
     
     return (
         <ListenFeedback
             className={classNames({ pulse: overtime || duration === 0 })}
             pageTitle={pageTitle}
             duration={loaderDuration}
-            instruction={instruction}
+            instruction={playbackArgs.preload_message}
             onFinish={onTimePassed}
             circleContent={duration >= 1 && <CountDown duration={duration} />}
         />
