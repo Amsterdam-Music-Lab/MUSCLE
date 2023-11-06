@@ -1,8 +1,18 @@
 from .base_action import BaseAction
 
+TYPE_AUTOPLAY = 'AUTOPLAY'
+TYPE_BUTTON = 'BUTTON'
+TYPE_SPECTROGRAM = 'SPECTROGRAM'
+TYPE_MULTIPLAYER = 'MULTIPLAYER'
+TYPE_MATCHINGPAIRS = 'MATCHINGPAIRS'
+
+PLAY_EXTERNAL = 'EXTERNAL'
+PLAY_HTML = 'HTML'
+PLAY_BUFFER = 'BUFFER'
+
 class Playback(BaseAction):
     ''' A playback wrapper for different kinds of players
-        - player_type: can be one of the following:
+        - view: can be one of the following:
             - 'AUTOPLAY' - player starts automatically
             - 'BUTTON' - display one play button
             - 'MULTIPLAYER' - display multiple small play buttons, one per section
@@ -10,6 +20,8 @@ class Playback(BaseAction):
         - sections: a list of sections (in many cases, will only contain *one* section)
         - preload_message: text to display during preload
         - instruction: text to display during presentation of the sound
+        - play_from: from where in the file to start playback. Set to None to mute
+        - ready_time: how long to countdown before playback
         - play_config: define to override the following values:
             - play_method:
                 - 'BUFFER': Use webaudio buffers. (recommended for stimuli up to 45s)  
@@ -26,25 +38,84 @@ class Playback(BaseAction):
             - play_once: the sound can only be played once
     '''
 
-    TYPE_AUTOPLAY = 'AUTOPLAY'
-    TYPE_BUTTON = 'BUTTON'
-    TYPE_MULTIPLAYER = 'MULTIPLAYER'
-    TYPE_SPECTROGRAM = 'SPECTROGRAM'
-
-    def __init__(self, sections, player_type='AUTOPLAY', preload_message='', instruction='', play_config=None):
+    def __init__(self,
+                 sections,
+                 preload_message='',
+                 instruction='',
+                 play_from=0,
+                 ready_time=0,
+                 timeout_after_playback=None):
+        self.id = 'PLAYBACK'
         self.sections = [{'id': s.id, 'url': s.absolute_url(), 'group': s.group}
                          for s in sections]
-        self.ID = player_type
+        if not sections[0].absolute_url().startswith('server'):
+            self.play_method = PLAY_EXTERNAL
+        elif sections[0].duration > 44.9:
+            self.play_method = PLAY_HTML
+        else:
+            self.play_method = PLAY_BUFFER
         self.preload_message = preload_message
         self.instruction = instruction
-        self.play_config = {
-            'play_method': 'BUFFER',
-            'external_audio': False,
-            'ready_time': 0,
-            'playhead': 0,
-            'show_animation': False,
-            'mute': False,
-            'play_once': False,
-        }
-        if play_config:
-            self.play_config.update(play_config)
+        self.play_from = play_from
+        self.ready_time = ready_time
+        self.timeout_after_playback = timeout_after_playback
+        # self.play_config = {
+        #     'play_method': 'BUFFER',
+        #     'external_audio': False,
+        #     'ready_time': 0,
+        #     'playhead': 0,
+        #     'show_animation': False,
+        #     'mute': False,
+        #     'play_once': False,
+        # }
+        # if play_config:
+        #     self.play_config.update(play_config)
+    
+class Autoplay(Playback):
+    '''
+    This player starts playing automatically
+    - show_animation: if True, show a countdown and moving histogram
+    '''
+    def __init__(self, show_animation=False, *args, **kwargs):
+        self.view = TYPE_AUTOPLAY
+        self.show_animation = show_animation
+        super.__init__(self, *args, **kwargs)
+    
+
+class PlayButton(Playback):
+    '''
+    This player shows a button, which triggers playback
+    - play_once: if True, button will be disabled after one play
+    '''
+    def __init__(self, play_once=False, *args, **kwargs):
+        self.view = TYPE_BUTTON
+        self.play_once = play_once
+        super.__init__(self, *args, **kwargs)
+    
+class SpectogramPlayer(PlayButton):
+    '''
+    This is a special case of the PlayButton:
+    it shows an image above the play button
+    '''
+    def __init__(self, *args, **kwargs):
+        self.view = TYPE_SPECTROGRAM
+        super.__init__(self, *args, **kwargs)
+
+class Multiplayer(PlayButton):
+    '''
+    This is a player with multiple play buttons
+    - stop_audio_after: after how many seconds to stop audio
+    '''
+    def __init__(self, stop_audio_after=5, *args, **kwargs):
+        self.view = TYPE_MULTIPLAYER
+        self.stop_audio_after = stop_audio_after
+        super.__init__(self, *args, **kwargs)
+    
+class MatchingPairs(Multiplayer):
+    '''
+    This is a special case of multiplayer:
+    play buttons are represented as cards
+    '''
+    def __init__(self, *args, **kwargs):
+        self.view = TYPE_MATCHINGPAIRS
+        super.__init__(self, *args, **kwargs)

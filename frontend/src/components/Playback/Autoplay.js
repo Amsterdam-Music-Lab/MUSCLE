@@ -5,12 +5,10 @@ import { playAudio } from "../../util/audioControl";
 import Circle from "../Circle/Circle";
 import ListenCircle from "../ListenCircle/ListenCircle";
 
-const AutoPlay = ({instruction, preloadMessage, onPreloadReady, playConfig, sections, time, startedPlaying, finishedPlaying, responseTime, className=''}) => {
+const AutoPlay = ({playback, time, startedPlaying, finishedPlaying, responseTime, className=''}) => {
     // player state
     
-    const running = useRef(playConfig.auto_play);
-    
-    const section = sections[0];
+    const running = useRef(true);
 
     const onCircleTimerTick = (t) => {
         time.current = t;
@@ -20,12 +18,12 @@ const AutoPlay = ({instruction, preloadMessage, onPreloadReady, playConfig, sect
     useEffect(() => {        
         let latency = 0;
         // Play audio at start time            
-        if (!playConfig.mute) {            
-            latency = playAudio(playConfig, section);          
+        if (playback.play_from) {            
+            latency = playAudio(playback.play_from, playback.section);          
             // Compensate for audio latency and set state to playing
             setTimeout(startedPlaying(), latency);
         }
-    }, [playConfig, startedPlaying]);
+    }, [playback, startedPlaying]);
 
     // Render component
     return (
@@ -35,7 +33,7 @@ const AutoPlay = ({instruction, preloadMessage, onPreloadReady, playConfig, sect
                     running={running}
                     duration={responseTime}
                     color="white"
-                    animateCircle={playConfig.show_animation}
+                    animateCircle={playback.show_animation}
                     onTick={onCircleTimerTick}
                     onFinish={() => {
                         // Stop audio
@@ -43,7 +41,7 @@ const AutoPlay = ({instruction, preloadMessage, onPreloadReady, playConfig, sect
                     }}
                 />
                 <div className="circle-content">
-                    {playConfig.show_animation
+                    {playback.show_animation
                         ? <ListenCircle
                             duration={responseTime}
                             histogramRunning={running}
@@ -61,8 +59,8 @@ const AutoPlay = ({instruction, preloadMessage, onPreloadReady, playConfig, sect
             }
             >
             {/* Instruction */}
-            {instruction && (<div className="instruction d-flex justify-content-center align-items-center">
-                <h3 className="text-center">{instruction}</h3>
+            {playback.instruction && (<div className="instruction d-flex justify-content-center align-items-center">
+                <h3 className="text-center">{playback.instruction}</h3>
             </div>)}
         </div>
     </div>

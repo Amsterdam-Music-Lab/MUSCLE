@@ -6,6 +6,7 @@ import FeedbackForm from "../FeedbackForm/FeedbackForm";
 import HTML from "../HTML/HTML";
 import Playback from "../Playback/Playback";
 import Button from "../Button/Button";
+import { play } from "../../util/audio";
 
 /** Trial is an experiment view to present information to the user and/or collect user feedback
 If "playback" is provided, it will play audio through the Playback component
@@ -23,7 +24,7 @@ const Trial = ({
 }) => {
     // Main component state
     const [formActive, setFormActive] = useState(!config.listen_first);
-    const [preloadReady, setPreloadReady] = useState(!playback?.play_config?.ready_time);
+    const [preloadReady, setPreloadReady] = useState(!playback?.ready_time);
 
     const submitted = useRef(false);
 
@@ -82,10 +83,10 @@ const Trial = ({
             
             // Create a time_passed result
             if (config.auto_advance_timer != null) {                
-                if (playback.player_type === 'BUTTON') {
+                if (playback.view === 'BUTTON') {
                     startTime.current = getCurrentTime();
                 }
-                const id = setTimeout( () => {makeResult({type: "time_passed",});} , config.auto_advance_timer);
+                setTimeout( () => {makeResult({type: "time_passed",});} , config.auto_advance_timer);
             } else {
 
                 makeResult({
@@ -103,16 +104,12 @@ const Trial = ({
         <div role="presentation" className={classNames("aha__trial", config.style)}>
             {playback && (
                 <Playback
-                    playerType={playback.view}
-                    instruction={playback.instruction}
+                    playbackArgs={playback}
                     onPreloadReady={() => {
                         setPreloadReady(true);
                     }}
-                    preloadMessage={playback.preload_message}
                     autoAdvance={config.auto_advance}
                     responseTime={config.response_time}
-                    playConfig={playback.play_config}
-                    sections={playback.sections}
                     time={time}
                     submitResult={makeResult}
                     startedPlaying={startTimer}
