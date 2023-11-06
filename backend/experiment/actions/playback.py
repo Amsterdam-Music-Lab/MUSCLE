@@ -52,7 +52,7 @@ class Playback(BaseAction):
                  timeout_after_playback=None):
         self.sections = [{'id': s.id, 'url': s.absolute_url(), 'group': s.group}
                          for s in sections]
-        if not sections[0].absolute_url().startswith('server'):
+        if str(sections[0].filename).startswith('http'):
             self.play_method = PLAY_EXTERNAL
         elif sections[0].duration > 44.9:
             self.play_method = PLAY_HTML

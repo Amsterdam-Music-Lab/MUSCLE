@@ -84,48 +84,40 @@ const Playback = ({
     }
 
     // Play section with given index
-    const playSection = useCallback(
-        (index = 0) => {
-            
-                if (index !== lastPlayerIndex.current) {
-                    // Load different audio
-                    if (prevPlayerIndex.current !== -1) {
-                        pauseAudio(playbackArgs);
-                    }                
-                    // Store player index
-                    setPlayerIndex(index);
-
-                    // Determine if audio should be played
-                    if (playbackArgs.play_from) {
-                        setPlayerIndex(-1);
-                        pauseAudio(playbackArgs);
-                        return;
-                    }
-                    let latency = playAudio(playbackArgs, playbackArgs.sections[index]);
-
-                    // Cancel active events
-                    cancelAudioListeners();
-
-                    // listen for active audio events
-                    if (playbackArgs.play_method === 'BUFFER') {
-                        activeAudioEndedListener.current = webAudio.listenOnce("ended", onAudioEnded);
-                    } else {
-                        activeAudioEndedListener.current = audio.listenOnce("ended", onAudioEnded);
-                    }                    
-
-                    // Compensate for audio latency and set state to playing
-                    setTimeout(startedPlaying && startedPlaying(), latency);
-                    return;
-                }
-
-                // Stop playback
-                if (lastPlayerIndex.current === index) {
-                        pauseAudio(playbackArgs);                     
-                        setPlayerIndex(-1);
-                        return;
-                    }
-            },
-            [playbackArgs, activeAudioEndedListener, cancelAudioListeners, startedPlaying, onAudioEnded]
+    const playSection = useCallback((index = 0) => {
+        if (index !== lastPlayerIndex.current) {
+            // Load different audio
+            if (prevPlayerIndex.current !== -1) {
+                pauseAudio(playbackArgs);
+            }                
+            // Store player index
+            setPlayerIndex(index);
+            // Determine if audio should be played
+            if (playbackArgs.play_from) {
+                setPlayerIndex(-1);
+                pauseAudio(playbackArgs);
+                return;
+            }
+            let latency = playAudio(playbackArgs, playbackArgs.sections[index]);
+            // Cancel active events
+            cancelAudioListeners();
+            // listen for active audio events
+            if (playbackArgs.play_method === 'BUFFER') {
+                activeAudioEndedListener.current = webAudio.listenOnce("ended", onAudioEnded);
+            } else {
+                activeAudioEndedListener.current = audio.listenOnce("ended", onAudioEnded);
+            }                    
+            // Compensate for audio latency and set state to playing
+            setTimeout(startedPlaying && startedPlaying(), latency);
+            return;
+        }
+        // Stop playback
+        if (lastPlayerIndex.current === index) {
+                pauseAudio(playbackArgs);                     
+                setPlayerIndex(-1);
+                return;
+        }
+    },[playbackArgs, activeAudioEndedListener, cancelAudioListeners, startedPlaying, onAudioEnded]
     );
 
     // Local logic for onfinished playing
@@ -137,16 +129,16 @@ const Playback = ({
 
     // Stop audio on unmount
     useEffect(
-        () => () => {
-            pauseAudio(playbackArgs);
+        () => {
+            return pauseAudio(playbackArgs);
         },
         [playbackArgs]
     );
 
-    // Autoplay
-    useEffect(() => {
-        playbackArgs.view === 'AUTOPLAY' && playSection(0);
-    }, [playbackArgs, playSection]);
+    // // Autoplay
+    // useEffect(() => {
+    //     playbackArgs.view === 'AUTOPLAY' && playSection(0);
+    // }, [playbackArgs, playSection]);
 
     const render = (view) => {
         const attrs = {
@@ -175,7 +167,7 @@ const Playback = ({
                     />
             );
             case AUTOPLAY:
-                return <AutoPlay {...attrs} onPreloadReady={onPreloadReady} />;
+                return <AutoPlay {...attrs} />;
             case BUTTON:
                 return (
                     <PlayButton
