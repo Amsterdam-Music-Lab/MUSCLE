@@ -80,8 +80,8 @@ class Autoplay(Playback):
     This player starts playing automatically
     - show_animation: if True, show a countdown and moving histogram
     '''
-    def __init__(self, show_animation=False, **kwargs):
-        super().__init__(**kwargs)
+    def __init__(self, sections, show_animation=False, **kwargs):
+        super().__init__(sections, **kwargs)
         self.show_animation = show_animation        
         self.view = TYPE_AUTOPLAY
     
@@ -91,8 +91,8 @@ class PlayButton(Playback):
     This player shows a button, which triggers playback
     - play_once: if True, button will be disabled after one play
     '''
-    def __init__(self, play_once=False, **kwargs):
-        super().__init__(**kwargs)
+    def __init__(self, sections, play_once=False, **kwargs):
+        super().__init__(sections, **kwargs)
         self.view = TYPE_BUTTON
         self.play_once = play_once
 
@@ -103,8 +103,8 @@ class Multiplayer(PlayButton):
     - label_style: set if players should be labeled in alphabetic / numeric  / roman style (based on player index)
     - labels: pass list of strings if players should have custom labels
     '''
-    def __init__(self, stop_audio_after=5, label_style='', labels=[], **kwargs):
-        super().__init__(**kwargs)
+    def __init__(self, sections, stop_audio_after=5, label_style='', labels=[], **kwargs):
+        super().__init__(sections, **kwargs)
         self.view = TYPE_MULTIPLAYER
         self.stop_audio_after = stop_audio_after
         if label_style:
@@ -122,8 +122,8 @@ class ImagePlayer(PlayButton):
     This is a special case of the Multiplayer:
     it shows an image next to each play button
     '''
-    def __init__(self, images, image_labels=[], **kwargs):
-        super().__init__(**kwargs)
+    def __init__(self, sections, images, image_labels=[], **kwargs):
+        super().__init__(sections, **kwargs)
         self.view = TYPE_IMAGE
         if len(images) != len(self.sections):
             raise UserWarning('Number of images and sections for the ImagePlayer do not match')
@@ -138,6 +138,6 @@ class MatchingPairs(Multiplayer):
     This is a special case of multiplayer:
     play buttons are represented as cards
     '''
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
+    def __init__(self, sections, **kwargs):
+        super().__init__(sections, **kwargs)
         self.view = TYPE_MATCHINGPAIRS
