@@ -206,7 +206,6 @@ class Playlist(models.Model):
                             section.tag,
                             section.group])
         csv_string = csvfile.csv_string
-        print(csv_string)
         return ''.join(csv_string)
     
 class Song(models.Model):

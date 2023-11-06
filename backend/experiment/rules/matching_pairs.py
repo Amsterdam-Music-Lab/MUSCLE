@@ -12,7 +12,7 @@ from result.utils import prepare_result
 
 from section.models import Section
 
-class MatchingPairs(Base):
+class MatchingPairsGame(Base):
     ID = 'MATCHING_PAIRS'
     num_pairs = 8
     contact_email = 'aml.tunetwins@gmail.com'

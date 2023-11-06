@@ -11,7 +11,7 @@ from .hbat_bst import BST
 from .huang_2022 import Huang2022
 from .kuiper_2020 import Kuiper2020
 from .listening_conditions import ListeningConditions
-from .matching_pairs import MatchingPairs
+from .matching_pairs import MatchingPairsGame
 from .matching_pairs_icmpc import MatchingPairsICMPC
 from .musical_preferences import MusicalPreferences
 from .rhythm_discrimination import RhythmDiscrimination
@@ -41,7 +41,7 @@ EXPERIMENT_RULES = {
     HBat.ID: HBat,
     HBatBFIT.ID: HBatBFIT,
     BST.ID: BST,
-    MatchingPairs.ID: MatchingPairs,
+    MatchingPairsGame.ID: MatchingPairsGame,
     MatchingPairsICMPC.ID: MatchingPairsICMPC,
     MusicalPreferences.ID: MusicalPreferences,
     RhythmDiscrimination.ID: RhythmDiscrimination,
