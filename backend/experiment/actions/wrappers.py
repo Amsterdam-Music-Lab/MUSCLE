@@ -42,7 +42,7 @@ def two_alternative_forced(session, section, choices, expected_response=None, st
     trial = Trial(playback=playback, feedback_form=feedback_form, title=title, config=config)
     return trial
 
-def song_sync(session, section, title, response_time=15):
+def song_sync(session, section, title, response_time=15, play_method='BUFFER'):
     trial_config = {
         'response_time': response_time,
         'auto_advance': True
@@ -55,7 +55,8 @@ def song_sync(session, section, title, response_time=15):
         )]),
         playback=Playback([section], 'AUTOPLAY', play_config={
             'ready_time': 3,
-            'show_animation': True
+            'show_animation': True,
+            'play_method': play_method
         },
         preload_message=_('Get ready!'),
         instruction=_('Do you recognize the song?'),
