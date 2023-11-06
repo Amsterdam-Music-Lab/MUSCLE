@@ -6,7 +6,7 @@ from experiment.utils import non_breaking_spaces
 from .toontjehoger_1_mozart import toontjehoger_ranks
 from experiment.actions import Trial, Explainer, Step, Score, Final, StartSession, Playlist, Info
 from experiment.actions.form import ButtonArrayQuestion, Form
-from experiment.actions.playback import Playback
+from experiment.actions.playback import Multiplayer
 from experiment.actions.styles import STYLE_NEUTRAL
 from .base import Base
 from result.utils import prepare_result
@@ -97,12 +97,7 @@ class ToontjeHoger4Absolute(Base):
         random.shuffle(sections)
 
         # Player
-        play_config = {
-            'label_style': 'ALPHABETIC',
-        }
-
-        playback = Playback(
-            sections, player_type=Playback.TYPE_MULTIPLAYER, play_config=play_config)
+        playback = Multiplayer(sections, label_style='ALPHABETIC')
 
         # Question
         key = 'pitch'

@@ -7,14 +7,14 @@ import { playAudio, pauseAudio } from "../../util/audioControl";
 import AutoPlay from "./Autoplay";
 import PlayButton from "../PlayButton/PlayButton";
 import MultiPlayer from "./MultiPlayer";
-import SpectrogramPlayer from "./SpectrogramPlayer";
+import ImagePlayer from "./ImagePlayer";
 import MatchingPairs from "./MatchingPairs";
 import Preload from "../Preload/Preload";
 
 export const AUTOPLAY = "AUTOPLAY";
 export const BUTTON = "BUTTON";
 export const MULTIPLAYER = "MULTIPLAYER";
-export const SPECTROGRAM = "SPECTROGRAM";
+export const IMAGE = "IMAGE";
 export const MATCHINGPAIRS = "MATCHINGPAIRS";
 export const PRELOAD = "PRELOAD";
 
@@ -194,9 +194,9 @@ const Playback = ({
                         disabledPlayers={playbackArgs.play_once ? hasPlayed : undefined}
                     />
                 );
-            case SPECTROGRAM:
+            case IMAGE:
                 return (
-                    <SpectrogramPlayer
+                    <ImagePlayer
                         {...attrs}
                         disabledPlayers={playbackArgs.play_once ? hasPlayed : undefined}
                     />

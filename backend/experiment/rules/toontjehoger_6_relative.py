@@ -4,7 +4,7 @@ from os.path import join
 from .toontjehoger_1_mozart import toontjehoger_ranks
 from experiment.actions import Trial, Explainer, Step, Score, Final, StartSession, Playlist, Info
 from experiment.actions.form import ChoiceQuestion, Form
-from experiment.actions.playback import Playback
+from experiment.actions.playback import Multiplayer
 from experiment.actions.styles import STYLE_BOOLEAN
 from .base import Base
 
@@ -126,13 +126,11 @@ class ToontjeHoger6Relative(Base):
         form = Form([question])
 
         # Player
-        play_config = {
-            'label_style': 'CUSTOM',
-            'labels': ['A', 'B' if round == 0 else 'C'],
-            'play_once': True,
-        }
-        playback = Playback(
-            [section1, section2], player_type=Playback.TYPE_MULTIPLAYER, play_config=play_config)
+        playback = Multiplayer(
+            [section1, section2],
+            play_once=True,
+            labels=['A', 'B' if round == 0 else 'C']
+        )
 
         trial = Trial(
             playback=playback,

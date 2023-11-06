@@ -1,14 +1,19 @@
 from .base_action import BaseAction
 
+# player types
 TYPE_AUTOPLAY = 'AUTOPLAY'
 TYPE_BUTTON = 'BUTTON'
-TYPE_SPECTROGRAM = 'SPECTROGRAM'
+TYPE_IMAGE = 'IMAGE'
 TYPE_MULTIPLAYER = 'MULTIPLAYER'
 TYPE_MATCHINGPAIRS = 'MATCHINGPAIRS'
 
+# playback methods
 PLAY_EXTERNAL = 'EXTERNAL'
 PLAY_HTML = 'HTML'
 PLAY_BUFFER = 'BUFFER'
+
+# labeling
+allowed_player_label_styles = ['ALPHABETIC', 'NUMERIC', 'ROMAN']
 
 class Playback(BaseAction):
     ''' A playback wrapper for different kinds of players
@@ -16,7 +21,7 @@ class Playback(BaseAction):
             - 'AUTOPLAY' - player starts automatically
             - 'BUTTON' - display one play button
             - 'MULTIPLAYER' - display multiple small play buttons, one per section
-            - 'SPECTROGRAM' - extends multiplayer with a list of spectrograms
+            - 'IMAGE' - extends multiplayer with a list of spectrograms
         - sections: a list of sections (in many cases, will only contain *one* section)
         - preload_message: text to display during preload
         - instruction: text to display during presentation of the sound
@@ -77,9 +82,9 @@ class Autoplay(Playback):
     - show_animation: if True, show a countdown and moving histogram
     '''
     def __init__(self, show_animation=False, *args, **kwargs):
+        super.__init__(self, *args, **kwargs)
         self.view = TYPE_AUTOPLAY
         self.show_animation = show_animation
-        super.__init__(self, *args, **kwargs)
     
 
 class PlayButton(Playback):
@@ -88,28 +93,46 @@ class PlayButton(Playback):
     - play_once: if True, button will be disabled after one play
     '''
     def __init__(self, play_once=False, *args, **kwargs):
+        super.__init__(self, *args, **kwargs)
         self.view = TYPE_BUTTON
         self.play_once = play_once
-        super.__init__(self, *args, **kwargs)
-    
-class SpectogramPlayer(PlayButton):
-    '''
-    This is a special case of the PlayButton:
-    it shows an image above the play button
-    '''
-    def __init__(self, *args, **kwargs):
-        self.view = TYPE_SPECTROGRAM
-        super.__init__(self, *args, **kwargs)
 
 class Multiplayer(PlayButton):
     '''
     This is a player with multiple play buttons
     - stop_audio_after: after how many seconds to stop audio
+    - label_style: set if players should be labeled in alphabetic / numeric  / roman style (based on player index)
+    - labels: pass list of strings if players should have custom labels
     '''
-    def __init__(self, stop_audio_after=5, *args, **kwargs):
+    def __init__(self, stop_audio_after=5, label_style='', labels=[], *args, **kwargs):
+        super.__init__(self, *args, **kwargs)
         self.view = TYPE_MULTIPLAYER
         self.stop_audio_after = stop_audio_after
+        if label_style:
+            if label_style not in allowed_player_label_styles:
+                raise UserWarning('Unknown label style: choose alphabetic, numeric or roman ordering')
+            self.label_stye = label_style
+        if labels:
+            if len(labels) != len(self.sections):
+                raise UserWarning('Number of labels and sections for the play buttons do not match')
+            self.labels = labels
+            self.label_stye = label_style
+
+class ImagePlayer(PlayButton):
+    '''
+    This is a special case of the Multiplayer:
+    it shows an image next to each play button
+    '''
+    def __init__(self, images, image_labels=[], *args, **kwargs):
         super.__init__(self, *args, **kwargs)
+        self.view = TYPE_IMAGE
+        if len(images) != len(self.sections):
+            raise UserWarning('Number of images and sections for the ImagePlayer do not match')
+        self.images = images
+        if image_labels:
+            if len(image_labels) != len(self.sections):
+                raise UserWarning('Number of image labels and sections do not match')
+            self.image_labels = image_labels
     
 class MatchingPairs(Multiplayer):
     '''
@@ -117,5 +140,5 @@ class MatchingPairs(Multiplayer):
     play buttons are represented as cards
     '''
     def __init__(self, *args, **kwargs):
-        self.view = TYPE_MATCHINGPAIRS
         super.__init__(self, *args, **kwargs)
+        self.view = TYPE_MATCHINGPAIRS

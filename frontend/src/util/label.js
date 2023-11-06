@@ -16,10 +16,8 @@ export const getPlayerLabel = (index, labelStyle, customLabels) => {
             return String.fromCharCode(65 + index);
         case LABEL_ROMAN:
             return romanNumeral(index + 1);
-        case LABEL_CUSTOM:
-            return customLabels[index] || "";
         default:
-            return "";
+            return customLabels[index] || "";
     }
 };
 
