@@ -5,7 +5,6 @@ from django.db.models import Avg
 from experiment.actions.form import Form, ChoiceQuestion
 from experiment.actions import Consent, Explainer, Score, StartSession, Trial, Final
 from experiment.actions.wrappers import two_alternative_forced
-from experiment.questions.utils import unanswered_questions
 
 from experiment.questions.demographics import EXTRA_DEMOGRAPHICS
 from experiment.questions.utils import question_by_key

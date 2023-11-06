@@ -2,7 +2,7 @@ import random
 from django.utils.translation import gettext_lazy as _
 
 from experiment.actions import SongSync, Trial
-from experiment.actions.playback import Playback
+from experiment.actions.playback import Autoplay
 from experiment.actions.form import BooleanQuestion, Form
 from experiment.actions.styles import STYLE_BOOLEAN_NEGATIVE_FIRST
 from result.utils import prepare_result
@@ -136,10 +136,12 @@ class Kuiper2020(Hooked):
             print("Warning: no heard_before section found")
             section = session.section_from_any_song()
 
-        playback = Playback(
+        playback = Autoplay(
             [section],
-            play_config={'ready_time': 3, 'show_animation': True},
-            preload_message=_('Get ready!'))
+            show_animation=True,
+            ready_time=3,
+            preload_message=_('Get ready!')
+        )
         expected_result=int(novelty[next_round_number - 1] == 'old')
         # create Result object and save expected result to database
         result_pk = prepare_result('heard_before', session, section=section, expected_response=expected_result, scoring_rule='REACTION_TIME')

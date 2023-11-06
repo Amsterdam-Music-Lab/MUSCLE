@@ -1,7 +1,7 @@
 from django.utils.translation import gettext as _
 
 from .form import ChoiceQuestion, Form
-from .playback import Playback
+from .playback import PlayButton
 from .trial import Trial
 
 from result.utils import prepare_result
@@ -12,9 +12,8 @@ def two_alternative_forced(session, section, choices, expected_response=None, st
     Provide data for a Two Alternative Forced view that (auto)plays a section,
     shows a question and has two customizable buttons
     """
-    playback = Playback(
-        [section],
-        'BUTTON'
+    playback = PlayButton(
+        [section]
     )
     key = 'choice'
     button_style = {'invisible-text': True, 'buttons-large-gap': True}

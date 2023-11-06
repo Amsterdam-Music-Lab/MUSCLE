@@ -8,7 +8,7 @@ from .base import Base
 from section.models import Section
 from experiment.actions import Trial, Consent, Explainer, StartSession, Step
 from experiment.actions.form import ChoiceQuestion, Form
-from experiment.actions.playback import Playback
+from experiment.actions.playback import Autoplay
 from experiment.actions.utils import final_action_with_optional_button, render_feedback_trivia
 from experiment.actions.utils import get_average_difference
 from experiment.rules.util.practice import get_trial_condition_block, get_practice_views, practice_explainer
@@ -141,7 +141,7 @@ class DurationDiscrimination(Base):
         )
         # create Result object and save expected result to database
         
-        playback = Playback([section])
+        playback = Autoplay([section])
         form = Form([question])
         view = Trial(
             playback=playback,

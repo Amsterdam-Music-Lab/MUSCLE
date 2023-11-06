@@ -6,7 +6,7 @@ from django.conf import settings
 
 from experiment.actions import HTML, Final, Score, Explainer, Step, Consent, StartSession, Redirect, Playlist, Trial
 from experiment.actions.form import BooleanQuestion, ChoiceQuestion, Form, Question
-from experiment.actions.playback import Playback
+from experiment.actions.playback import Autoplay
 from experiment.questions.demographics import EXTRA_DEMOGRAPHICS
 from experiment.questions.goldsmiths import MSI_ALL
 from experiment.questions.utils import question_by_key
@@ -318,10 +318,9 @@ class Huang2022(Hooked):
 def get_test_playback(play_method):
     from section.models import Section
     test_section = Section.objects.get(song__name='audiocheck')
-    playback = Playback(sections=[test_section],
-        play_config={
-            'play_method': play_method,            
-            'show_animation': True
-            })
+    playback = Autoplay(
+        sections=[test_section],
+        show_animation=True
+    )
     return playback
     

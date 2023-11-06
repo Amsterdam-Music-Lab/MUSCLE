@@ -7,7 +7,7 @@ from .base import Base
 
 from experiment.actions import Consent, Explainer, Step, Final, Playlist, Trial, StartSession
 from experiment.actions.form import Form, RadiosQuestion
-from experiment.actions.playback import Playback
+from experiment.actions.playback import Autoplay
 from experiment.questions.demographics import EXTRA_DEMOGRAPHICS
 from experiment.questions.languages import LANGUAGE, LanguageQuestion
 from experiment.questions.utils import question_by_key
@@ -229,15 +229,10 @@ def sound(section, n_representation=None):
         ready_time = 0
     else:
         ready_time = 1
-    config = {
-        'ready_time': ready_time,
-        'show_animation': False
-    }
     title = _('Listen carefully')
-    playback = Playback(
+    playback = Autoplay(
         sections = [section],
-        player_type='AUTOPLAY',
-        play_config=config
+        ready_time = ready_time,
     )
     view = Trial(
             playback=playback,

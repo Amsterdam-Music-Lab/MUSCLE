@@ -10,7 +10,7 @@ from django.template.loader import render_to_string
 from .base import Base
 from experiment.actions import  Consent, Explainer, Final, Playlist, Score, SongSync, StartSession, Step, Trial
 from experiment.actions.form import BooleanQuestion, Form
-from experiment.actions.playback import Playback
+from experiment.actions.playback import Autoplay
 from experiment.questions.demographics import DEMOGRAPHICS
 from experiment.questions.utils import copy_shuffle
 from experiment.questions.goldsmiths import MSI_FG_GENERAL, MSI_ALL
@@ -307,10 +307,12 @@ class Hooked(Base):
         if not section:
             logger.warning("Warning: no heard_before section found")
             section = session.section_from_any_song()
-        playback = Playback(
+        playback = Autoplay(
             [section],
-            play_config={'ready_time': 3, 'show_animation': True, 'play_method': self.play_method},
-            preload_message=_('Get ready!'))
+            show_animation=True,
+            ready_time=3,
+            preload_message=_('Get ready!')
+        )
         expected_response = this_section_info.get('novelty')
         # create Result object and save expected result to database
         key = 'heard_before'
