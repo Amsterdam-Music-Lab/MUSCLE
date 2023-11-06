@@ -83,7 +83,7 @@ class Autoplay(Playback):
     def __init__(self, sections, show_animation=False, **kwargs):
         super().__init__(sections, **kwargs)
         self.show_animation = show_animation        
-        self.view = TYPE_AUTOPLAY
+        self.ID = TYPE_AUTOPLAY
     
 
 class PlayButton(Playback):
@@ -93,7 +93,7 @@ class PlayButton(Playback):
     '''
     def __init__(self, sections, play_once=False, **kwargs):
         super().__init__(sections, **kwargs)
-        self.view = TYPE_BUTTON
+        self.ID = TYPE_BUTTON
         self.play_once = play_once
 
 class Multiplayer(PlayButton):
@@ -105,7 +105,7 @@ class Multiplayer(PlayButton):
     '''
     def __init__(self, sections, stop_audio_after=5, label_style='', labels=[], **kwargs):
         super().__init__(sections, **kwargs)
-        self.view = TYPE_MULTIPLAYER
+        self.ID = TYPE_MULTIPLAYER
         self.stop_audio_after = stop_audio_after
         if label_style:
             if label_style not in allowed_player_label_styles:
@@ -124,7 +124,7 @@ class ImagePlayer(PlayButton):
     '''
     def __init__(self, sections, images, image_labels=[], **kwargs):
         super().__init__(sections, **kwargs)
-        self.view = TYPE_IMAGE
+        self.ID = TYPE_IMAGE
         if len(images) != len(self.sections):
             raise UserWarning('Number of images and sections for the ImagePlayer do not match')
         self.images = images
@@ -140,4 +140,4 @@ class MatchingPairs(Multiplayer):
     '''
     def __init__(self, sections, **kwargs):
         super().__init__(sections, **kwargs)
-        self.view = TYPE_MATCHINGPAIRS
+        self.ID = TYPE_MATCHINGPAIRS
