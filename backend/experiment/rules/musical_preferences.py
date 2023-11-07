@@ -26,6 +26,7 @@ class MusicalPreferences(Base):
     preference_offset = 4 #20
     knowledge_offset = 6 #42
     round_increment = 1
+    play_method = 'EXTERNAL'
 
     know_score = {
         'yes': 2,
@@ -111,7 +112,7 @@ class MusicalPreferences(Base):
                         return Redirect(settings.HOMEPAGE)
             else:
                 session.decrement_round()
-                playback = get_test_playback()
+                playback = get_test_playback(self.play_method)
                 html = HTML(body='<h4>{}</h4>'.format(_('Do you hear the music?')))
                 form = Form(form=[BooleanQuestion(
                     key='audio_check1',
