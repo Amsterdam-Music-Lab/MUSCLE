@@ -10,4 +10,5 @@ class AddSections(forms.Form):
     name = forms.CharField(max_length=128, required=False)
     tag = forms.CharField(max_length=128, required=False)
     group = forms.CharField(max_length=128, required=False)
-    files = forms.FileField(widget=MultipleFileInput, validators=[audio_file_validator()])
+    files = forms.FileField(widget=MultipleFileInput(attrs={'accept':'.wav,.mp3,.aiff,.flac,.ogg'}), 
+                            validators=[audio_file_validator()])
