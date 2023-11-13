@@ -45,3 +45,29 @@ To stop the containers, press `ctrl-c` or (in another terminal) run
 
 ## Production build
 A production build should define its own `docker-compose.yaml`, making use of the `Dockerfile` of the `backend` and `frontend` environments. It should also define a custom .env file, with safe passwords for the SQL database and the Python backend. Instead of mounting the entire backend and frontend directory and using the development servers, the backend should serve with gunicorn, and the frontend should use a build script to compile static html, css and JavaScript.
+
+## Run tests
+
+### Frontend tests
+
+To run the frontend tests, run the following command:
+
+```sh
+docker compose run client yarn test --watchAll=false
+```
+
+#### Watch mode
+
+To run the frontend tests in watch mode, which allows you to re-run tests when you change files, run the following command:
+
+```sh
+docker compose run client yarn test
+```
+
+### Backend tests
+
+To run the backend tests, run the following command:
+
+```sh
+docker-compose run server bash -c "python manage.py test"
+```
