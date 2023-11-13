@@ -21,7 +21,7 @@ def two_alternative_forced(session, section, choices, expected_response=None, st
         'BUTTON'
     )
     key = 'choice'
-    button_style = {'invisible-text': True, 'buttons-large-gap': True}
+    button_style = {'invisible-text': True, 'buttons-large-gap': True, 'buttons-large-text': True}
     button_style.update(style)
     question = ChoiceQuestion(
         key=key,
