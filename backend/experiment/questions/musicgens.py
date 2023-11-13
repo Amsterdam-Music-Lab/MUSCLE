@@ -263,5 +263,116 @@ MUSICGENS_17_W_VARIANTS = [
 ]
 
 MUSICGENS_EXTRA = [
-    
+    RadiosQuestion(
+        key = "PHENOTYPES_1",
+        question = "Please select the sentence that describes your level of achievement in music.",
+        choices = {
+            1: "I have no training or recognised talent in this area.",
+            2: "I play one or more musical instruments proficiently.",
+            3: "I have played with a recognised orchestra or band.",
+            4: "I have composed an original piece of music.",
+            5: "My musical talent has been critiqued in a local publication.",
+            6: "My composition has been recorded.",
+            7: "Recordings of my composition have been sold publicly.",
+            8: "My compositions have been critiqued in a national publication.",
+            9: " My compositions have been critiqued in multiple national publications."
+        }
+    ),
+    RadiosQuestion(
+        key = "PHENOTYPES_2",
+        question = "How engaged with music are you? Singing, playing, and even writing music counts here. Please choose the answer which describes you best.",
+        choices = {
+            1: "I am not engaged in music at all.",
+            2: "I am self-taught and play music privately, but I have never played, sung, or shown my music to others.",
+            3: "I have taken lessons in music, but I have never played, sung, or shown my music to others.",
+            4: "I have played or sung, or my music has been played in public concerts in my home town, but I have not been paid for this.",
+            5: "I have played or sung, or my music has been played in public concerts in my home town, and I have been paid for this.",
+            6: "I am professionally active as a musician.",
+            7: "I am professionally active as a musiciean and have been reviewed/featured in the national or international media and/or have received an award for my musical activities."
+        }
+    ),
+    RadiosQuestion(
+        key = "PHENOTYPES_3",
+        question = "I have never been complimented for my talents as a musical performer.",
+        choices = {
+            1: "Completely disagree",
+            2: "Strongly disagree",
+            3: "Disagree",
+            4: "Neither agree nor disagree",
+            5: "Agree",
+            6: "Strongly agree",
+            7: "Completely agree"
+        }
+    ),
+    RadiosQuestion(
+        key = "PHENOTYPES_4",
+        question = "To what extent do you agree that you see yourself as someone who is sophisticated in art, music, or literature?",
+        choices = {
+            1: "Agree strongly",
+            2: "Agree moderately",
+            3: "Agree slightly",
+            4: "Disagree slightly",
+            5: "Disagree moderately",
+            6: "Disagree strongly"
+        }
+    ),
+    RadiosQuestion(
+        key = "PHENOTYPES_5",
+        question = "At the peak of my interest, I practised ___ hours on my primary instrument (including voice).",
+        choices = {
+            1: "0",
+            2: "0.5",
+            3: "1",
+            4: "1.5",
+            5: "3–4",
+            6: "5 or more"
+        }
+    ),
+    RadiosQuestion(
+        key = "PHENOTYPES_6",
+        question = "How often did you play or sing during the most active period?",
+        choices = {
+            1: "Every day",
+            2: "More than 1x per week",
+            3: "1x per week",
+            4: "1x per month"
+        }
+    ),
+    RadiosQuestion(
+        key = "PHENOTYPES_7",
+        question = "How long (duration) did you play or sing during the most active period?",
+        choices = {
+            1: "More than 1 hour per week",
+            2: "1 hour per week",
+            3: "Less than 1 hour per week"
+        }
+    ),
+    RadiosQuestion(
+        key = "PHENOTYPES_8",
+        question = "About how many hours do you usually spend each week playing a musical instrument?",
+        choices = {
+            1: "None",
+            2: "1 hour or less a week",
+            3: "2–3 hours a week",
+            4: "4–5 hours a week",
+            5: "6–7 hours a week",
+            6: "8 or more hours a week"
+        }
+    ),
+    RadiosQuestion(
+        key = "PHENOTYPES_9",
+        question = "Indicate approximately how many hours per week you have played or practiced any musical instrument at all, i.e., all different instruments, on average over the last 10 years.",
+        choices = {
+            1: "less than 1 hour per week",
+            2: "1 hour per week",
+            3: "2 hours per week",
+            4: "3 hours per week",
+            5: "4–5 hours per week",
+            6: "6–9 hours per week",
+            7: "10–14 hours per week",
+            8: "15–24 hours per week",
+            9: "25–40 hours per week",
+            10: "41 or more hours per week"
+        }
+    )
 ]
