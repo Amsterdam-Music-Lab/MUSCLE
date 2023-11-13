@@ -51,10 +51,18 @@ class MusicalPreferences(Base):
             text=rendered, title=_('Informed consent'), confirm=_('I agree'), deny=_('Stop')
         )
         playlist = Playlist(experiment.playlists.all())
+        explainer = Explainer(
+            instruction=_('Welcome to the Musical Preferences experiment!'),
+            steps=[
+                Step(_('Please start by checking your connection quality.'))
+            ],
+            button_label=_('OK')
+        )
         start_session = StartSession()
         return [
             consent,
             playlist,
+            explainer,
             start_session
         ]
 
@@ -97,7 +105,7 @@ class MusicalPreferences(Base):
                 else:
                     session.decrement_round()
                     if last_result.question_key == 'audio_check1':
-                        playback = get_test_playback()                    
+                        playback = get_test_playback('EXTERNAL')                    
                         html = HTML(body=render_to_string('html/huang_2022/audio_check.html'))
                         form = Form(form=[BooleanQuestion(
                             key='audio_check2',
@@ -116,7 +124,7 @@ class MusicalPreferences(Base):
                         return Redirect(settings.HOMEPAGE)
             else:
                 session.decrement_round()
-                playback = get_test_playback()
+                playback = get_test_playback('EXTERNAL')
                 html = HTML(body='<h4>{}</h4>'.format(_('Do you hear the music?')))
                 form = Form(form=[BooleanQuestion(
                     key='audio_check1',
