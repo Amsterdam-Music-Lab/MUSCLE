@@ -37,6 +37,8 @@ class TestsSelenium(unittest.TestCase):
 
     Run tests:
     python tests-selenium.py
+
+    To skip individual tests, add `@unittest.skip` before the test
     """
   
     def setUp(self):
@@ -73,6 +75,7 @@ class TestsSelenium(unittest.TestCase):
     def tearDown(self):
         self.driver.quit()
         #warnings.simplefilter("default", ResourceWarning)
+
 
     def test_beatalignment(self):
 
@@ -165,6 +168,63 @@ class TestsSelenium(unittest.TestCase):
                 raise Exception("Unknown view")
 
         self.driver.find_element(By.XPATH,  '//*[text()="Play again"]')
+
+
+    def test_categorization(self):
+
+        self.driver.get("{}/{}".format(self.config['url']['root'], self.config['experiment_slugs']['categorization']))
+
+        # Explainer 1
+        self.driver.find_element(By.XPATH, "//div[text()=\"Ok\"]").click()
+
+        # If consent present, agree
+        if self.driver.find_element(By.TAG_NAME,"h4").text.lower() == "informed consent":
+            self.driver.find_element(By.XPATH, '//div[text()="I agree"]').click()
+
+        # What is your age?
+        el = WebDriverWait(self.driver, 3).until(presence_of_element_located((By.CSS_SELECTOR,"input[type='number']")))
+        el.send_keys(18)
+        self.driver.find_element(By.XPATH,  '//*[text()="Continue"]').click()
+
+        # What is your gender
+        self.driver.find_element(By.CSS_SELECTOR, ".radio:nth-child(1)").click()
+        self.driver.find_element(By.XPATH,  '//*[text()="Continue"]').click()
+
+        # What is your native language
+        select = Select(self.driver.find_element(By.TAG_NAME, 'select'))
+        select.select_by_value('nl')
+        self.driver.find_element(By.XPATH,  '//*[text()="Continue"]').click()
+
+        # Please select your level of musical experience
+        self.driver.find_element(By.CSS_SELECTOR, ".radio:nth-child(1)").click()
+        self.driver.find_element(By.XPATH,  '//*[text()="Continue"]').click()
+
+        # Explainer 2
+        WebDriverWait(self.driver, 5) \
+                .until(presence_of_element_located((By.XPATH, "//div[text()=\"Ok\"]"))) \
+                .click()
+
+        training_rounds = 20
+        testing_rounds = 80
+        training = True
+        for n in (training_rounds, testing_rounds):
+            for i in range(n):
+
+                WebDriverWait(self.driver, 5) \
+                    .until(presence_of_element_located((By.CSS_SELECTOR, ".aha__play-button"))) \
+                    .click()
+
+                expected_response = self.driver.execute_script('return document.querySelector(".expected-response").textContent')
+                button_to_click = self.driver.execute_script(f'return document.querySelector(\'input[value="{expected_response}"]\').parentElement')
+                WebDriverWait(self.driver, 5) \
+                    .until(lambda x: False if "disabled" in button_to_click.get_attribute("class") else button_to_click) \
+                    .click()
+
+            if training:
+                WebDriverWait(self.driver, 5) \
+                    .until(presence_of_element_located((By.XPATH, "//div[text()=\"Ok\"]"))) \
+                    .click()
+                training = False
 
 
 if __name__ == '__main__':
