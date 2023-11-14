@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-30 14:04+0100\n"
+"POT-Creation-Date: 2023-11-13 15:36+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -49,7 +49,7 @@ msgstr "最终得分"
 msgid "points"
 msgstr "分"
 
-#: experiment/actions/final.py:59 experiment/rules/hooked.py:107
+#: experiment/actions/final.py:59 experiment/rules/hooked.py:108
 #: experiment/rules/thats_my_song.py:87
 msgid "Play again"
 msgstr "再玩一次"
@@ -62,17 +62,17 @@ msgstr "我的结果"
 msgid "All experiments"
 msgstr "实验结束"
 
-#: experiment/actions/form.py:67 experiment/actions/song_sync.py:46
-#: experiment/rules/eurovision_2020.py:157 experiment/rules/hooked.py:319
-#: experiment/rules/huang_2022.py:159 experiment/rules/kuiper_2020.py:150
-#: experiment/rules/musical_preferences.py:123
+#: experiment/actions/form.py:67 experiment/actions/song_sync.py:51
+#: experiment/rules/eurovision_2020.py:159 experiment/rules/hooked.py:321
+#: experiment/rules/huang_2022.py:160 experiment/rules/kuiper_2020.py:150
+#: experiment/rules/musical_preferences.py:131
 msgid "Yes"
 msgstr "是"
 
-#: experiment/actions/form.py:68 experiment/actions/song_sync.py:47
-#: experiment/rules/eurovision_2020.py:156 experiment/rules/hooked.py:318
-#: experiment/rules/huang_2022.py:159 experiment/rules/kuiper_2020.py:149
-#: experiment/rules/musical_preferences.py:123
+#: experiment/actions/form.py:68 experiment/actions/song_sync.py:52
+#: experiment/rules/eurovision_2020.py:158 experiment/rules/hooked.py:320
+#: experiment/rules/huang_2022.py:160 experiment/rules/kuiper_2020.py:149
+#: experiment/rules/musical_preferences.py:131
 msgid "No"
 msgstr "否"
 
@@ -114,8 +114,8 @@ msgid "Completely Agree"
 msgstr "完全同意"
 
 #: experiment/actions/form.py:177 experiment/actions/trial.py:50
-#: experiment/actions/utils.py:25 experiment/rules/hooked.py:169
-#: experiment/rules/huang_2022.py:217
+#: experiment/actions/utils.py:25 experiment/rules/hooked.py:170
+#: experiment/rules/huang_2022.py:218
 #: experiment/rules/rhythm_experiment_series.py:36
 #: experiment/rules/rhythm_experiment_series.py:72
 #: experiment/rules/rhythm_experiment_series_mri.py:29
@@ -137,7 +137,7 @@ msgstr "请选择一个曲库"
 msgid "Total Score"
 msgstr "总得分"
 
-#: experiment/actions/score.py:42 experiment/rules/musical_preferences.py:104
+#: experiment/actions/score.py:42 experiment/rules/musical_preferences.py:112
 msgid "Next"
 msgstr "下一首"
 
@@ -161,25 +161,25 @@ msgstr "不正确"
 msgid "Correct"
 msgstr "正确"
 
-#: experiment/actions/song_sync.py:38
+#: experiment/actions/song_sync.py:43
 msgid "Do you recognise this song?"
 msgstr "您是否认出了这首歌曲？"
 
-#: experiment/actions/song_sync.py:39
+#: experiment/actions/song_sync.py:44
 msgid "Keep imagining the music"
 msgstr "继续默唱音乐"
 
-#: experiment/actions/song_sync.py:40
+#: experiment/actions/song_sync.py:45
 msgid "Did the track come back in the right place?"
 msgstr "歌曲回到正确的位置了吗？"
 
-#: experiment/actions/song_sync.py:41 experiment/rules/eurovision_2020.py:149
-#: experiment/rules/hooked.py:311 experiment/rules/kuiper_2020.py:142
+#: experiment/actions/song_sync.py:46 experiment/rules/eurovision_2020.py:151
+#: experiment/rules/hooked.py:313 experiment/rules/kuiper_2020.py:142
 msgid "Get ready!"
 msgstr "准备"
 
 #: experiment/actions/utils.py:21 experiment/actions/utils.py:31
-#: experiment/rules/musical_preferences.py:251
+#: experiment/rules/musical_preferences.py:259
 msgid "End"
 msgstr ""
 
@@ -854,7 +854,7 @@ msgstr "提交"
 msgid "We appreciate your feedback!"
 msgstr ""
 
-#: experiment/rules/base.py:109 experiment/rules/musical_preferences.py:72
+#: experiment/rules/base.py:109 experiment/rules/musical_preferences.py:80
 msgid "Questionnaire"
 msgstr "问卷调查"
 
@@ -926,7 +926,7 @@ msgid ""
 msgstr ""
 
 #: experiment/rules/beat_alignment.py:91
-#: experiment/rules/musical_preferences.py:94
+#: experiment/rules/musical_preferences.py:102
 #: experiment/rules/speech2song.py:48 experiment/rules/util/practice.py:112
 msgid "Start"
 msgstr "开始"
@@ -1081,7 +1081,7 @@ msgid ""
 "tone, or LONGER."
 msgstr ""
 
-#: experiment/rules/eurovision_2020.py:159 experiment/rules/hooked.py:321
+#: experiment/rules/eurovision_2020.py:161 experiment/rules/hooked.py:323
 #: experiment/rules/kuiper_2020.py:152
 msgid "Did you hear this song in previous rounds?"
 msgstr "您是否在之前的识别环节里听到过这首歌曲？"
@@ -1208,7 +1208,7 @@ msgid ""
 "cultures, much more complex meters also exist!"
 msgstr ""
 
-#: experiment/rules/hooked.py:49 experiment/rules/huang_2022.py:198
+#: experiment/rules/hooked.py:50 experiment/rules/huang_2022.py:199
 msgid ""
 "Do you recognise the song? Try to sing along. The faster you recognise "
 "songs, the more points you can earn."
@@ -1217,7 +1217,7 @@ msgstr ""
 "能识别出该音乐”，同时请在大脑中跟唱这段音乐。您在15秒内识别出歌曲的速度越快，"
 "您就能获得更多的分数。"
 
-#: experiment/rules/hooked.py:51 experiment/rules/huang_2022.py:200
+#: experiment/rules/hooked.py:52 experiment/rules/huang_2022.py:201
 msgid ""
 "Do you really know the song? Keep singing or imagining the music while the "
 "sound is muted. The music is still playing: you just can’t hear it!"
@@ -1225,19 +1225,19 @@ msgstr ""
 "当您识别出某首歌曲且点击'是'的瞬间，音乐声从这一秒开始会被静音。请您继续将静"
 "音前的音乐在脑海中接唱下去直到该音乐再次播放为止。"
 
-#: experiment/rules/hooked.py:53 experiment/rules/huang_2022.py:202
+#: experiment/rules/hooked.py:54 experiment/rules/huang_2022.py:203
 msgid ""
 "Was the music in the right place when the sound came back? Or did we jump to "
 "a different spot during the silence?"
 msgstr "当您再次听到声音时，您需要判断出此音乐与您脑海中的音乐是否同步。"
 
-#: experiment/rules/hooked.py:56 experiment/rules/huang_2022.py:205
-#: experiment/rules/huang_2022.py:256
-#: experiment/rules/musical_preferences.py:80
+#: experiment/rules/hooked.py:57 experiment/rules/huang_2022.py:206
+#: experiment/rules/huang_2022.py:257
+#: experiment/rules/musical_preferences.py:88
 msgid "Let's go!"
 msgstr "开始吧！"
 
-#: experiment/rules/hooked.py:61 experiment/rules/huang_2022.py:123
+#: experiment/rules/hooked.py:62 experiment/rules/huang_2022.py:124
 #: experiment/rules/matching_pairs.py:32
 #: experiment/rules/musical_preferences.py:51
 #: experiment/rules/rhythm_experiment_series.py:45
@@ -1249,7 +1249,7 @@ msgstr "开始吧！"
 msgid "Informed consent"
 msgstr "知情同意声书"
 
-#: experiment/rules/hooked.py:61 experiment/rules/huang_2022.py:123
+#: experiment/rules/hooked.py:62 experiment/rules/huang_2022.py:124
 #: experiment/rules/matching_pairs.py:32
 #: experiment/rules/musical_preferences.py:51
 #: experiment/rules/rhythm_experiment_series.py:45
@@ -1257,7 +1257,7 @@ msgstr "知情同意声书"
 msgid "I agree"
 msgstr "同意"
 
-#: experiment/rules/hooked.py:61 experiment/rules/huang_2022.py:123
+#: experiment/rules/hooked.py:62 experiment/rules/huang_2022.py:124
 #: experiment/rules/matching_pairs.py:32
 #: experiment/rules/musical_preferences.py:51
 #: experiment/rules/rhythm_experiment_series.py:45
@@ -1265,19 +1265,19 @@ msgstr "同意"
 msgid "Stop"
 msgstr "停止"
 
-#: experiment/rules/hooked.py:163
+#: experiment/rules/hooked.py:164
 msgid "Bonus Rounds"
 msgstr "奖励环节"
 
-#: experiment/rules/hooked.py:165
+#: experiment/rules/hooked.py:166
 msgid "Listen carefully to the music."
 msgstr "请仔细地听音乐。"
 
-#: experiment/rules/hooked.py:166
+#: experiment/rules/hooked.py:167
 msgid "Did you hear the same song during previous rounds?"
 msgstr "您是否在之前的音乐识别环节里听到过同一首歌曲？"
 
-#: experiment/rules/hooked.py:209
+#: experiment/rules/hooked.py:210
 #, python-format
 msgid "Round %(number)d / %(total)d"
 msgstr "%(number)d / %(total)d轮"
@@ -1317,42 +1317,42 @@ msgstr ""
 msgid "Contact (optional):"
 msgstr "微信号、手机、邮箱等（选填）："
 
-#: experiment/rules/huang_2022.py:136
+#: experiment/rules/huang_2022.py:137
 msgid "Any remarks or questions (optional):"
 msgstr "请写下您的意见或建议："
 
-#: experiment/rules/huang_2022.py:137
+#: experiment/rules/huang_2022.py:138
 msgid "Thank you for your feedback!"
 msgstr "感谢您的反馈!"
 
-#: experiment/rules/huang_2022.py:156
-#: experiment/rules/musical_preferences.py:120
+#: experiment/rules/huang_2022.py:157
+#: experiment/rules/musical_preferences.py:128
 msgid "Do you hear the music?"
 msgstr "您听到音乐了吗？"
 
-#: experiment/rules/huang_2022.py:166
-#: experiment/rules/musical_preferences.py:130
+#: experiment/rules/huang_2022.py:167
+#: experiment/rules/musical_preferences.py:138
 msgid "Audio check"
 msgstr "音频测试"
 
-#: experiment/rules/huang_2022.py:175
-#: experiment/rules/musical_preferences.py:104
+#: experiment/rules/huang_2022.py:176
+#: experiment/rules/musical_preferences.py:112
 msgid "Quit"
 msgstr "退出"
 
-#: experiment/rules/huang_2022.py:175
+#: experiment/rules/huang_2022.py:176
 msgid "Try"
 msgstr "运行"
 
-#: experiment/rules/huang_2022.py:182
+#: experiment/rules/huang_2022.py:183
 msgid "Ready to experiment"
 msgstr "调试阶段"
 
-#: experiment/rules/huang_2022.py:195
+#: experiment/rules/huang_2022.py:196
 msgid "How to Play"
 msgstr "实验介绍"
 
-#: experiment/rules/huang_2022.py:207
+#: experiment/rules/huang_2022.py:208
 msgid ""
 "You can use your smartphone, computer or tablet to participate in this "
 "experiment. Please choose the best network in your area to participate in "
@@ -1366,12 +1366,12 @@ msgstr ""
 "网络环境不佳，有可能会导致音乐加载失败或实验运行不流畅等情况出现。您可以通过"
 "以下的渠道打开实验页面："
 
-#: experiment/rules/huang_2022.py:210
+#: experiment/rules/huang_2022.py:211
 msgid ""
 "Directly click the link on WeChat (smart phone or PC version, or WeChat Web)"
 msgstr "通过手机微信或电脑微信客户端/网页版的链接直接点开进入到实验页面;"
 
-#: experiment/rules/huang_2022.py:213
+#: experiment/rules/huang_2022.py:214
 msgid ""
 "If the link to load the experiment page through the WeChat app on your cell "
 "phone fails, you can copy and paste the link in the browser of your cell "
@@ -1382,29 +1382,29 @@ msgstr ""
 "通过复制黏贴实验链接到浏览器参与实验。您可以使用市面上目前的任何一种浏览器，"
 "如Safari、火狐、360等等。"
 
-#: experiment/rules/huang_2022.py:252
+#: experiment/rules/huang_2022.py:253
 msgid ""
 "Please answer some questions                         on your musical "
 "(Goldsmiths-MSI) and demographic background"
 msgstr "接下来是《金史密斯音乐素养》水平测试与人口统计特征问卷。"
 
-#: experiment/rules/huang_2022.py:296
+#: experiment/rules/huang_2022.py:297
 msgid "Thank you for your contribution to science!"
 msgstr "感谢您的参与以及对科学的贡献！"
 
-#: experiment/rules/huang_2022.py:298
+#: experiment/rules/huang_2022.py:299
 msgid "Well done!"
 msgstr "太棒了！"
 
-#: experiment/rules/huang_2022.py:298
+#: experiment/rules/huang_2022.py:299
 msgid "Too bad!"
 msgstr "有点糟哦！"
 
-#: experiment/rules/huang_2022.py:300
+#: experiment/rules/huang_2022.py:301
 msgid "You did not recognise any songs at first."
 msgstr "您起初并没有识别出任何歌曲。"
 
-#: experiment/rules/huang_2022.py:302
+#: experiment/rules/huang_2022.py:303
 #, python-format
 msgid ""
 "It took you %(n_seconds)d s to recognise a song on average,                 "
@@ -1414,7 +1414,7 @@ msgstr ""
 "您平均花了 %(n_seconds)d 秒识别出一首歌曲，并且在您认为您知道的 %(n_total)d "
 "首歌曲里, 您正确地识别出了 %(n_correct)d 首。"
 
-#: experiment/rules/huang_2022.py:308
+#: experiment/rules/huang_2022.py:309
 #, python-format
 msgid ""
 "During the bonus rounds, you remembered %(n_correct)d of the %(n_total)d "
@@ -1489,6 +1489,7 @@ msgid ""
 msgstr ""
 
 #: experiment/rules/listening_conditions.py:113
+#: experiment/rules/musical_preferences.py:59
 #: experiment/rules/speech2song.py:94
 msgid "OK"
 msgstr "好"
@@ -1528,7 +1529,15 @@ msgstr ""
 msgid "Enter a name to enter the ICMPC hall of fame"
 msgstr ""
 
-#: experiment/rules/musical_preferences.py:75
+#: experiment/rules/musical_preferences.py:55
+msgid "Welcome to the Musical Preferences experiment!"
+msgstr "欢迎参加音乐偏好实验！"
+
+#: experiment/rules/musical_preferences.py:57
+msgid "Please start by checking your connection quality."
+msgstr "请先检查您的网络连接质量。"
+
+#: experiment/rules/musical_preferences.py:83
 msgid ""
 "To understand your musical preferences, we have {} questions for you before "
 "the experiment                                         begins. The first two "
@@ -1539,62 +1548,62 @@ msgstr ""
 "为了了解您的音乐偏好，在实验开始前请您回答{}个问题。前两个问题是关于您的音乐"
 "聆听经验，其他四个问题是人口统计学问题。答题需要2-3分钟左右。"
 
-#: experiment/rules/musical_preferences.py:78
-#: experiment/rules/musical_preferences.py:92
+#: experiment/rules/musical_preferences.py:86
+#: experiment/rules/musical_preferences.py:100
 msgid "Have fun!"
 msgstr "祝答题愉快！"
 
-#: experiment/rules/musical_preferences.py:86
+#: experiment/rules/musical_preferences.py:94
 msgid "How to play"
 msgstr "实验介绍"
 
-#: experiment/rules/musical_preferences.py:88
+#: experiment/rules/musical_preferences.py:96
 msgid ""
 "You will hear 64 music clips and have to answer two questions for each clip."
 msgstr "在整个实验过程中，你将听到64个音乐片段并回答与之相关的问题。"
 
-#: experiment/rules/musical_preferences.py:89
+#: experiment/rules/musical_preferences.py:97
 msgid "It will take 20-30 minutes to complete the whole experiment."
 msgstr "整个实验需要20至30分钟。"
 
-#: experiment/rules/musical_preferences.py:90
+#: experiment/rules/musical_preferences.py:98
 msgid "Either wear headphones or use your device's speakers."
 msgstr "请佩戴耳机或使用设备扬声器。"
 
-#: experiment/rules/musical_preferences.py:91
+#: experiment/rules/musical_preferences.py:99
 msgid "Your final results will be displayed at the end."
 msgstr "您的实验结果将在最后显示。"
 
-#: experiment/rules/musical_preferences.py:111
+#: experiment/rules/musical_preferences.py:119
 msgid "Tech check"
 msgstr "调试阶段"
 
-#: experiment/rules/musical_preferences.py:136
+#: experiment/rules/musical_preferences.py:144
 msgid "Love unlocked"
 msgstr "解锁乐之爱"
 
-#: experiment/rules/musical_preferences.py:147
+#: experiment/rules/musical_preferences.py:155
 msgid "Knowledge unlocked"
 msgstr "解锁乐之识"
 
-#: experiment/rules/musical_preferences.py:164
+#: experiment/rules/musical_preferences.py:172
 msgid "Connection unlocked"
 msgstr "解锁乐之友"
 
-#: experiment/rules/musical_preferences.py:184
+#: experiment/rules/musical_preferences.py:192
 msgid "2. How much do you like this song?"
 msgstr "2. 您对这首歌的喜欢程度是？"
 
-#: experiment/rules/musical_preferences.py:190
+#: experiment/rules/musical_preferences.py:198
 msgid "1. Do you know this song?"
 msgstr "1. 您知道这首歌吗？"
 
-#: experiment/rules/musical_preferences.py:206
+#: experiment/rules/musical_preferences.py:214
 #, python-format
 msgid "Song %(round)s/%(total)s"
 msgstr "%(round)s/%(total)s首歌"
 
-#: experiment/rules/musical_preferences.py:228
+#: experiment/rules/musical_preferences.py:236
 #, python-format
 msgid ""
 "I explored musical preferences on %(url)s! My top 3 favorite songs: "
@@ -1605,7 +1614,7 @@ msgstr ""
 "道%(n_songs)i首歌曲中的%(known_songs)i首；其他人最喜爱的三首歌曲："
 "%(top_all)s。"
 
-#: experiment/rules/musical_preferences.py:252
+#: experiment/rules/musical_preferences.py:260
 #: experiment/templates/final/musical_preferences.html:2
 msgid "Thank you for your participation and contribution to science!"
 msgstr "感谢您的参与以及对科学的贡献！"
