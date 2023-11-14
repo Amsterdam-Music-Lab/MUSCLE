@@ -6,9 +6,11 @@ from django.conf import settings
 
 from experiment.actions import Final, Form, Trial
 from experiment.questions.demographics import DEMOGRAPHICS
-from experiment.questions.utils import unanswered_questions
+from experiment.questions.goldsmiths import MSI_OTHER
+from experiment.questions.utils import question_by_key, unanswered_questions
 from result.score import SCORING_RULES
 
+from experiment.questions import get_questions_from_keys
 
 logger = logging.getLogger(__name__)
 
@@ -16,9 +18,9 @@ class Base(object):
     """Base class for other rules classes"""
 
     contact_email = settings.CONTACT_MAIL
-    
+
     def __init__(self):
-        self.questions = DEMOGRAPHICS
+        self.questions = DEMOGRAPHICS + [question_by_key('msi_39_best_instrument', MSI_OTHER)]
 
     def feedback_info(self):
         feedback_body = render_to_string('feedback/user_feedback.html', {'email': self.contact_email})
@@ -113,8 +115,9 @@ class Base(object):
     
     def get_questionnaire(self, session, randomize=False, cutoff_index=None):
         ''' Get a list of questions to be asked in succession '''
+
         trials = []
-        questions = list(unanswered_questions(session.participant, self.questions, randomize, cutoff_index))
+        questions = list(unanswered_questions(session.participant, get_questions_from_keys(session.experiment.questions), randomize, cutoff_index))
         open_questions = len(questions)
         if not open_questions:
             return None

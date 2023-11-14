@@ -12,6 +12,8 @@ from experiment.actions import  Consent, Explainer, Final, Playlist, Score, Song
 from experiment.actions.form import BooleanQuestion, Form
 from experiment.actions.playback import Playback
 from experiment.questions.demographics import DEMOGRAPHICS
+from experiment.questions.goldsmiths import MSI_OTHER
+from experiment.questions.utils import question_by_key
 from experiment.questions.utils import copy_shuffle
 from experiment.questions.goldsmiths import MSI_FG_GENERAL, MSI_ALL
 from experiment.questions.stomp import STOMP20
@@ -33,6 +35,7 @@ class Hooked(Base):
     def __init__(self):
         self.questions = [
             *copy_shuffle(DEMOGRAPHICS), # 1. Demographic questions (7 questions)
+            question_by_key('msi_39_best_instrument', MSI_OTHER),
             *copy_shuffle(MSI_FG_GENERAL), # 2. General music sophistication
             *copy_shuffle(MSI_ALL), # 3. Complete music sophistication (20 questions)
             *copy_shuffle(STOMP20), # 4. STOMP (20 questions)
