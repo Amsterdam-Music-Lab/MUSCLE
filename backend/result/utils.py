@@ -88,6 +88,8 @@ def score_result(data, session):
     # Can be overridden by defining calculate_score in the rules file    
     if result.session:
         score = session.experiment_rules().calculate_score(result, data)
+        # refresh session data in case anything was changed within calculate_score function
+        session.refresh_from_db()
     else:
         # this is a profile type result, i.e., it doesn't have a session:
         score = apply_scoring_rule(result, data)

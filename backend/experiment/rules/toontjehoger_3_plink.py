@@ -171,21 +171,22 @@ class ToontjeHoger3Plink(Base):
             ),
             config={'break_round_on': {'NOT': ['']}}
         ))
+        json_data = session.load_json_data()
+        if not json_data.get('extra_questions_intro_shown'):
+            # Extra questions intro: only show first time
+            # --------------------
+            extra_questions_intro = Explainer(
+                instruction="Tussenronde",
+                steps=[
+                    Step("Jammer dat je de artiest en titel van dit nummer niet weet!"),
+                    Step(
+                        "Verdien extra punten door twee extra vragen over het nummer te beantwoorden."),
+                ],
+                button_label="Start"
+            )
+            next_round.append(extra_questions_intro)
         
-
-        # Extra questions intro
-        # --------------------
-        extra_questions_intro = Explainer(
-            instruction="Tussenronde",
-            steps=[
-                Step("Jammer dat je de artiest en titel van dit nummer niet weet!"),
-                Step(
-                    "Verdien extra punten door twee extra vragen over het nummer te beantwoorden."),
-            ],
-            button_label="Start"
-        )
         extra_rounds = [
-            extra_questions_intro,
             self.get_era_question(session, section),
             self.get_emotion_question(session, section)
         ]
@@ -213,8 +214,7 @@ class ToontjeHoger3Plink(Base):
                 session,
                 section=section,
                 expected_response=section.group.split(';')[0]
-            ),
-            submits=False
+            )
         )
 
         return Trial(feedback_form=Form([question]))
@@ -236,8 +236,7 @@ class ToontjeHoger3Plink(Base):
                 session,
                 section=section,
                 expected_response=section.group.split(';')[1]
-            ),
-            submits=True
+            )
         )
 
         return Trial(feedback_form=Form([question]))
@@ -249,6 +248,8 @@ class ToontjeHoger3Plink(Base):
         if result.question_key == 'plink':
             return self.SCORE_MAIN_CORRECT if result.expected_response == result.given_response else self.SCORE_MAIN_WRONG
         elif result.question_key == 'era':
+            result.session.save_json_data({'extra_questions_intro_shown': True})
+            result.session.save()
             return self.SCORE_EXTRA_1_CORRECT if result.given_response == result.expected_response else self.SCORE_EXTRA_WRONG
         else:
             return self.SCORE_EXTRA_2_CORRECT if result.given_response == result.expected_response else self.SCORE_EXTRA_WRONG
