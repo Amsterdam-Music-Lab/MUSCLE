@@ -151,6 +151,7 @@ class ToontjeHoger3Plink(Base):
         question1 = AutoCompleteQuestion(
             key='plink',
             choices=choices,
+            question='Noem de artiest en de titel van het nummer',
             result_id=prepare_result(
                 'plink',
                 session,
