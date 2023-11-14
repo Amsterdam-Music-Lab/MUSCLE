@@ -8,7 +8,7 @@ from experiment.actions import HTML, Final, Score, Explainer, Step, Consent, Sta
 from experiment.actions.form import BooleanQuestion, ChoiceQuestion, Form, Question
 from experiment.actions.playback import Playback
 from experiment.questions.demographics import EXTRA_DEMOGRAPHICS
-from experiment.questions.goldsmiths import MSI_ALL
+from experiment.questions.goldsmiths import MSI_ALL, MSI_OTHER
 from experiment.questions.utils import question_by_key
 from experiment.actions.styles import STYLE_BOOLEAN_NEGATIVE_FIRST
 from result.utils import prepare_result
@@ -102,7 +102,7 @@ class Huang2022(Hooked):
 
     def __init__(self):
         self.questions = MSI_ALL + [
-            question_by_key('msi_39_best_instrument'),
+            question_by_key('msi_39_best_instrument', MSI_OTHER),
             genre_question(),
             question_by_key('dgf_generation'),
             question_by_key('dgf_education', drop_choices=['isced-5']),
