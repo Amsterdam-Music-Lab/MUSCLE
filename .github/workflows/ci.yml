@@ -12,6 +12,13 @@ jobs:
       - name: Run Backend Tests
         run: sudo docker-compose --env-file .env-github-actions run server bash -c "python manage.py test"
 
+  backend-lint:
+    name: Lint Backend
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - run: sudo docker-compose --env-file .env-github-actions run server bash -c "flake8"
+
   frontend-test:
     runs-on: ubuntu-latest
     steps:
@@ -20,6 +27,7 @@ jobs:
         run: sudo docker-compose --env-file .env-github-actions run client yarn test --watchAll=false
 
   frontend-lint:
+    name: Lint Frontend
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
