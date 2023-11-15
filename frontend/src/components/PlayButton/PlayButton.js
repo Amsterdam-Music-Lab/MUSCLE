@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import classNames from "classnames";
 
-const PlayButton = ({ playSection, isPlaying, className="" }) => {
+const PlayButton = ({ children, playSection, isPlaying, className="" }) => {
 
     const [clicked, setClicked] = useState(false);
 
@@ -15,7 +15,9 @@ const PlayButton = ({ playSection, isPlaying, className="" }) => {
             onKeyPress={(e) => {
                 playSection && playSection(0)
             }}
-        ></div>
+        >
+            {children}
+        </div>
     );
 };
 
