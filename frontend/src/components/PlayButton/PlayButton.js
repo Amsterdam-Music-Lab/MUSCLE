@@ -16,7 +16,6 @@ const PlayButton = ({ children, playSection, isPlaying, className="" }) => {
                 playSection && playSection(0)
             }}
         >
-            {children}
         </div>
     );
 };
