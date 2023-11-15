@@ -1,5 +1,6 @@
 FROM node:18-alpine
 
+RUN yarn set version stable
 WORKDIR /client
 COPY package.json /client/
 COPY yarn.lock /client/
