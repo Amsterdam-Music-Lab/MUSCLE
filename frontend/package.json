@@ -11,8 +11,8 @@
     "classnames": "^2.2.6",
     "email-validator": "^2.0.4",
     "file-saver": "^2.0.5",
-    "qs": "^6.10.3",
     "next-share": "0.25.0",
+    "qs": "^6.10.3",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-rangeslider": "^2.2.0",
@@ -29,10 +29,16 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "scss": "sass src/index.scss src/index.css",
-    "scss-watch": "sass src/index.scss src/index.css; sass --watch src/index.scss src/index.css"
+    "scss-watch": "sass src/index.scss src/index.css; sass --watch src/index.scss src/index.css",
+    "storybook": "REACT_APP_API_ROOT=http://localhost:8000 && storybook dev -p 6006",
+    "build-storybook": "storybook build",
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
   },
   "eslintConfig": {
-    "extends": "react-app"
+    "extends": [
+      "react-app",
+      "plugin:storybook/recommended"
+    ]
   },
   "browserslist": {
     "production": [
@@ -45,5 +51,22 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@storybook/addon-essentials": "7.5.3",
+    "@storybook/addon-interactions": "7.5.3",
+    "@storybook/addon-links": "7.5.3",
+    "@storybook/addon-onboarding": "1.0.8",
+    "@storybook/blocks": "7.5.3",
+    "@storybook/preset-create-react-app": "7.5.3",
+    "@storybook/react": "7.5.3",
+    "@storybook/react-webpack5": "7.5.3",
+    "@storybook/testing-library": "0.2.2",
+    "babel-plugin-named-exports-order": "0.0.2",
+    "eslint": "^8.53.0",
+    "eslint-plugin-storybook": "^0.6.15",
+    "prop-types": "15.8.1",
+    "storybook": "7.5.3",
+    "webpack": "5.89.0"
   }
 }
