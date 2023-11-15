@@ -1,3 +1,4 @@
+import "../src/index.css";
 import { initAudioListener } from "../src/util/audio";
 import { initWebAudioListener } from "../src/util/webAudio";
 
