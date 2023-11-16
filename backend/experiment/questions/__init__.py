@@ -38,3 +38,6 @@ def get_default_question_keys():
 def get_questions_from_keys(keys):
     """ Returns questions in the order of keys"""
     return [QUESTIONS_ALL[KEYS_ALL.index(key)] for key in keys]
+
+if len(KEYS_ALL) != len(set(KEYS_ALL)):
+    raise Exception("Duplicate question keys")
