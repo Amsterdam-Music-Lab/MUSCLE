@@ -45,3 +45,22 @@ To stop the containers, press `ctrl-c` or (in another terminal) run
 
 ## Production build
 A production build should define its own `docker-compose.yaml`, making use of the `Dockerfile` of the `backend` and `frontend` environments. It should also define a custom .env file, with safe passwords for the SQL database and the Python backend. Instead of mounting the entire backend and frontend directory and using the development servers, the backend should serve with gunicorn, and the frontend should use a build script to compile static html, css and JavaScript.
+
+# docker-compose --env-file .env-github-actions run client yarn test --watchAll=false
+
+## Storybook
+
+You can either run Storybook in a Docker container, or on your local machine.
+
+### Docker
+
+```sh
+docker exec -it muscle-client-1 yarn run storybook
+```
+
+### Local
+
+```sh
+cd frontend
+yarn run storybook
+```
