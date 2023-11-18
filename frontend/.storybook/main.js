@@ -15,7 +15,7 @@ const config = {
     docs: {
         autodocs: "tag",
     },
-    staticDirs: ["..\\public"],
+    staticDirs: ["../public"],
     env: {
         REACT_APP_API_ROOT: "",
     },
