@@ -5,6 +5,10 @@ from django.utils import timezone
 from experiment.rules import EXPERIMENT_RULES
 from experiment.standards.iso_languages import ISO_LANGUAGES
 
+from django.contrib.postgres.fields import ArrayField
+from .questions import QUESTIONS_CHOICES, get_default_question_keys
+from django import forms
+
 language_choices = [(key, ISO_LANGUAGES[key]) for key in ISO_LANGUAGES.keys()]
 language_choices[0] = ('', 'Unset')
 
@@ -36,6 +40,11 @@ class Experiment(models.Model):
         default="", blank=True, choices=language_choices, max_length=2)
     experiment_series = models.ForeignKey(ExperimentSeries, on_delete=models.SET_NULL,
                                           blank=True, null=True)
+    questions = ArrayField(
+                models.TextField(choices=QUESTIONS_CHOICES),
+                blank=True,
+                default=get_default_question_keys
+            )
 
     class Meta:
         ordering = ['name']

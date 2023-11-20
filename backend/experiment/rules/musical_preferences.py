@@ -6,6 +6,7 @@ from django.template.loader import render_to_string
 from experiment.questions.utils import question_by_key
 from experiment.questions.demographics import EXTRA_DEMOGRAPHICS
 from experiment.questions.goldsmiths import MSI_F1_ACTIVE_ENGAGEMENT
+from experiment.questions.other import OTHER
 
 from experiment.actions import Consent, Explainer, Final, HTML, Playlist, Redirect, Step, StartSession, Trial
 from experiment.actions.form import BooleanQuestion, ChoiceQuestion, Form, LikertQuestionIcon
@@ -18,7 +19,7 @@ from result.models import Result
 from section.models import Section
 
 from .base import Base
-from .huang_2022 import gender_question, genre_question, get_test_playback, origin_question, residence_question
+from .huang_2022 import get_test_playback
 
 
 class MusicalPreferences(Base):
@@ -38,11 +39,11 @@ class MusicalPreferences(Base):
     def __init__(self):
         self.questions = [
             question_by_key('msi_38_listen_music', MSI_F1_ACTIVE_ENGAGEMENT),
-            genre_question(),
-            gender_question(),
+            question_by_key('dgf_genre_preference_zh', OTHER),
+            question_by_key('dgf_gender_identity_zh', OTHER),
             question_by_key('dgf_age', EXTRA_DEMOGRAPHICS),
-            origin_question(),
-            residence_question()
+            question_by_key('dgf_region_of_origin', OTHER),
+            question_by_key('dgf_region_of_residence', OTHER)
         ]
 
     def first_round(self, experiment):

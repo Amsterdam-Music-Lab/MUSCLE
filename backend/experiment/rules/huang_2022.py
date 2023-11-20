@@ -8,7 +8,8 @@ from experiment.actions import HTML, Final, Score, Explainer, Step, Consent, Sta
 from experiment.actions.form import BooleanQuestion, ChoiceQuestion, Form, Question
 from experiment.actions.playback import Playback
 from experiment.questions.demographics import EXTRA_DEMOGRAPHICS
-from experiment.questions.goldsmiths import MSI_ALL
+from experiment.questions.goldsmiths import MSI_ALL, MSI_OTHER
+from experiment.questions.other import OTHER
 from experiment.questions.utils import question_by_key
 from experiment.actions.styles import STYLE_BOOLEAN_NEGATIVE_FIRST
 from result.utils import prepare_result
@@ -16,80 +17,6 @@ from .hooked import Hooked
 
 logger = logging.getLogger(__name__)
 
-region_choices = {
-    'HD': '华东（山东、江苏、安徽、浙江、福建、江西、上海）',
-    'HN': '华南（广东、广西、海南）',
-    'HZ': '华中（湖北、湖南、河南、江西）',
-    'HB': '华北（北京、天津、河北、山西、内蒙古）',
-    'XB': '西北（宁夏、新疆、青海、陕西、甘肃）',
-    'XN': '西南（四川、云南、贵州、西藏、重庆）',
-    'DB': '东北（辽宁、吉林、黑龙江）',
-    'GAT': '港澳台（香港、澳门、台湾）',
-    'QT': '国外',
-    'no_answer': '不想回答'
-}
-
-
-def origin_question():
-    return ChoiceQuestion(
-        key='dgf_region_of_origin',
-        view='DROPDOWN',
-        question=_(
-            "In which region did you spend the most formative years of your childhood and youth?"),
-        choices=region_choices,
-    )
-
-
-def residence_question():
-    return ChoiceQuestion(
-        view='DROPDOWN',
-        key='dgf_region_of_residence',
-        question=_("In which region do you currently reside?"),
-        choices=region_choices,
-    )
-
-
-def gender_question():
-    return ChoiceQuestion(
-        key='dgf_gender_identity',
-        view='RADIOS',
-        question="您目前对自己的性别认识?",
-        choices={
-            'male': "男",
-            'Female': "女",
-            'Others': "其他",
-            'no_answer': "不想回答"
-        }
-    )
-
-def genre_question():
-    return ChoiceQuestion(
-        view='DROPDOWN',
-        key='dgf_genre_preference',
-        question=_(
-            "To which group of musical genres do you currently listen most?"),
-        choices={
-            'unpretentious': _("Pop/Country/Religious"),
-            'Chinese artistic': _("Folk/Mountain songs"),
-            'sophisticated': _("Western classical music/Jazz/Opera/Musical"),
-            'classical': _("Chinese opera"),
-            'intense': _("Rock/Punk/Metal"),
-            'mellow': _("Dance/Electronic/New Age"),
-            'contemporary': _("Hip-hop/R&B/Funk"),
-        }
-    )
-
-def contact_question():
-    return Question(
-            key='contact',
-            explainer=_(
-                "Thank you so much for your feedback! Feel free to include your contact information if you would like a reply or skip if you wish to remain anonymous."
-            ),
-            question=_(
-                "Contact (optional):"
-            ),
-            is_skippable=True
-        )
 
 class Huang2022(Hooked):
     """Rules for the Chinese version of the Hooked experiment."""
@@ -102,17 +29,17 @@ class Huang2022(Hooked):
 
     def __init__(self):
         self.questions = MSI_ALL + [
-            question_by_key('msi_39_best_instrument'),
-            genre_question(),
+            question_by_key('msi_39_best_instrument', MSI_OTHER),
+            question_by_key('dgf_genre_preference_zh', OTHER),
             question_by_key('dgf_generation'),
             question_by_key('dgf_education', drop_choices=['isced-5']),
             question_by_key(
                 'dgf_highest_qualification_expectation', EXTRA_DEMOGRAPHICS),
             question_by_key('dgf_occupational_status', EXTRA_DEMOGRAPHICS),
-            origin_question(),
-            residence_question(),
-            gender_question(),
-            contact_question()
+            question_by_key('dgf_region_of_origin', OTHER),
+            question_by_key('dgf_region_of_residence', OTHER),
+            question_by_key('dgf_gender_identity_zh', OTHER),
+            question_by_key('contact', OTHER),
         ]
 
     def first_round(self, experiment):
