@@ -130,7 +130,7 @@ class ExperimentForm(ModelForm):
             choices += ((i, EXPERIMENT_RULES[i].__name__),)
 
         self.fields['rules'] = ChoiceField(
-            choices=choices
+            choices=sorted(choices)
         )
 
         self.fields['questions'] = TypedMultipleChoiceField(
