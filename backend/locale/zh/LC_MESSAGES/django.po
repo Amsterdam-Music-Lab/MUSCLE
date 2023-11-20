@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-13 15:36+0100\n"
+"POT-Creation-Date: 2023-11-20 14:03+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -65,14 +65,14 @@ msgstr "实验结束"
 #: experiment/actions/form.py:67 experiment/actions/song_sync.py:51
 #: experiment/rules/eurovision_2020.py:159 experiment/rules/hooked.py:321
 #: experiment/rules/huang_2022.py:160 experiment/rules/kuiper_2020.py:150
-#: experiment/rules/musical_preferences.py:131
+#: experiment/rules/musical_preferences.py:132
 msgid "Yes"
 msgstr "是"
 
 #: experiment/actions/form.py:68 experiment/actions/song_sync.py:52
 #: experiment/rules/eurovision_2020.py:158 experiment/rules/hooked.py:320
 #: experiment/rules/huang_2022.py:160 experiment/rules/kuiper_2020.py:149
-#: experiment/rules/musical_preferences.py:131
+#: experiment/rules/musical_preferences.py:132
 msgid "No"
 msgstr "否"
 
@@ -137,7 +137,7 @@ msgstr "请选择一个曲库"
 msgid "Total Score"
 msgstr "总得分"
 
-#: experiment/actions/score.py:42 experiment/rules/musical_preferences.py:112
+#: experiment/actions/score.py:42 experiment/rules/musical_preferences.py:113
 msgid "Next"
 msgstr "下一首"
 
@@ -179,9 +179,9 @@ msgid "Get ready!"
 msgstr "准备"
 
 #: experiment/actions/utils.py:21 experiment/actions/utils.py:31
-#: experiment/rules/musical_preferences.py:259
+#: experiment/rules/musical_preferences.py:260
 msgid "End"
-msgstr ""
+msgstr "完成"
 
 #: experiment/questions/demographics.py:10
 msgid "Have not (yet) completed any school qualification"
@@ -854,7 +854,7 @@ msgstr "提交"
 msgid "We appreciate your feedback!"
 msgstr ""
 
-#: experiment/rules/base.py:109 experiment/rules/musical_preferences.py:80
+#: experiment/rules/base.py:109 experiment/rules/musical_preferences.py:81
 msgid "Questionnaire"
 msgstr "问卷调查"
 
@@ -926,7 +926,7 @@ msgid ""
 msgstr ""
 
 #: experiment/rules/beat_alignment.py:91
-#: experiment/rules/musical_preferences.py:102
+#: experiment/rules/musical_preferences.py:103
 #: experiment/rules/speech2song.py:48 experiment/rules/util/practice.py:112
 msgid "Start"
 msgstr "开始"
@@ -1233,25 +1233,24 @@ msgstr "当您再次听到声音时，您需要判断出此音乐与您脑海中
 
 #: experiment/rules/hooked.py:57 experiment/rules/huang_2022.py:206
 #: experiment/rules/huang_2022.py:257
-#: experiment/rules/musical_preferences.py:88
+#: experiment/rules/musical_preferences.py:89
 msgid "Let's go!"
 msgstr "开始吧！"
 
 #: experiment/rules/hooked.py:62 experiment/rules/huang_2022.py:124
 #: experiment/rules/matching_pairs.py:32
-#: experiment/rules/musical_preferences.py:51
+#: experiment/rules/musical_preferences.py:52
 #: experiment/rules/rhythm_experiment_series.py:45
 #: experiment/rules/speech2song.py:55
 #: experiment/templates/consent/consent_categorization.html:15
 #: experiment/templates/consent/consent_hooked.html:79
 #: experiment/templates/consent/consent_huang2021.html:88
-#: experiment/templates/consent/consent_musical_preferences.html:63
+#: experiment/templates/consent/consent_musical_preferences.html:64
 msgid "Informed consent"
 msgstr "知情同意声书"
 
 #: experiment/rules/hooked.py:62 experiment/rules/huang_2022.py:124
 #: experiment/rules/matching_pairs.py:32
-#: experiment/rules/musical_preferences.py:51
 #: experiment/rules/rhythm_experiment_series.py:45
 #: experiment/rules/speech2song.py:55
 msgid "I agree"
@@ -1259,7 +1258,6 @@ msgstr "同意"
 
 #: experiment/rules/hooked.py:62 experiment/rules/huang_2022.py:124
 #: experiment/rules/matching_pairs.py:32
-#: experiment/rules/musical_preferences.py:51
 #: experiment/rules/rhythm_experiment_series.py:45
 #: experiment/rules/speech2song.py:55
 msgid "Stop"
@@ -1318,25 +1316,26 @@ msgid "Contact (optional):"
 msgstr "微信号、手机、邮箱等（选填）："
 
 #: experiment/rules/huang_2022.py:137
+#: experiment/rules/musical_preferences.py:269
 msgid "Any remarks or questions (optional):"
-msgstr "请写下您的意见或建议："
+msgstr "建议或意见反馈，如技术问题(选填):"
 
 #: experiment/rules/huang_2022.py:138
 msgid "Thank you for your feedback!"
 msgstr "感谢您的反馈!"
 
 #: experiment/rules/huang_2022.py:157
-#: experiment/rules/musical_preferences.py:128
+#: experiment/rules/musical_preferences.py:129
 msgid "Do you hear the music?"
 msgstr "您听到音乐了吗？"
 
 #: experiment/rules/huang_2022.py:167
-#: experiment/rules/musical_preferences.py:138
+#: experiment/rules/musical_preferences.py:139
 msgid "Audio check"
 msgstr "音频测试"
 
 #: experiment/rules/huang_2022.py:176
-#: experiment/rules/musical_preferences.py:112
+#: experiment/rules/musical_preferences.py:113
 msgid "Quit"
 msgstr "退出"
 
@@ -1489,7 +1488,7 @@ msgid ""
 msgstr ""
 
 #: experiment/rules/listening_conditions.py:113
-#: experiment/rules/musical_preferences.py:59
+#: experiment/rules/musical_preferences.py:60
 #: experiment/rules/speech2song.py:94
 msgid "OK"
 msgstr "好"
@@ -1529,15 +1528,23 @@ msgstr ""
 msgid "Enter a name to enter the ICMPC hall of fame"
 msgstr ""
 
-#: experiment/rules/musical_preferences.py:55
+#: experiment/rules/musical_preferences.py:52
+msgid "I consent and continue."
+msgstr "同意"
+
+#: experiment/rules/musical_preferences.py:52
+msgid "I do not consent."
+msgstr "退出"
+
+#: experiment/rules/musical_preferences.py:56
 msgid "Welcome to the Musical Preferences experiment!"
 msgstr "欢迎参加音乐偏好实验！"
 
-#: experiment/rules/musical_preferences.py:57
+#: experiment/rules/musical_preferences.py:58
 msgid "Please start by checking your connection quality."
 msgstr "请先检查您的网络连接质量。"
 
-#: experiment/rules/musical_preferences.py:83
+#: experiment/rules/musical_preferences.py:84
 msgid ""
 "To understand your musical preferences, we have {} questions for you before "
 "the experiment                                         begins. The first two "
@@ -1548,74 +1555,73 @@ msgstr ""
 "为了了解您的音乐偏好，在实验开始前请您回答{}个问题。前两个问题是关于您的音乐"
 "聆听经验，其他四个问题是人口统计学问题。答题需要2-3分钟左右。"
 
-#: experiment/rules/musical_preferences.py:86
-#: experiment/rules/musical_preferences.py:100
+#: experiment/rules/musical_preferences.py:87
+#: experiment/rules/musical_preferences.py:101
 msgid "Have fun!"
 msgstr "祝答题愉快！"
 
-#: experiment/rules/musical_preferences.py:94
+#: experiment/rules/musical_preferences.py:95
 msgid "How to play"
 msgstr "实验介绍"
 
-#: experiment/rules/musical_preferences.py:96
+#: experiment/rules/musical_preferences.py:97
 msgid ""
 "You will hear 64 music clips and have to answer two questions for each clip."
 msgstr "在整个实验过程中，你将听到64个音乐片段并回答与之相关的问题。"
 
-#: experiment/rules/musical_preferences.py:97
+#: experiment/rules/musical_preferences.py:98
 msgid "It will take 20-30 minutes to complete the whole experiment."
 msgstr "整个实验需要20至30分钟。"
 
-#: experiment/rules/musical_preferences.py:98
+#: experiment/rules/musical_preferences.py:99
 msgid "Either wear headphones or use your device's speakers."
 msgstr "请佩戴耳机或使用设备扬声器。"
 
-#: experiment/rules/musical_preferences.py:99
+#: experiment/rules/musical_preferences.py:100
 msgid "Your final results will be displayed at the end."
 msgstr "您的实验结果将在最后显示。"
 
-#: experiment/rules/musical_preferences.py:119
+#: experiment/rules/musical_preferences.py:120
 msgid "Tech check"
 msgstr "调试阶段"
 
-#: experiment/rules/musical_preferences.py:144
+#: experiment/rules/musical_preferences.py:145
 msgid "Love unlocked"
 msgstr "解锁乐之爱"
 
-#: experiment/rules/musical_preferences.py:155
+#: experiment/rules/musical_preferences.py:156
 msgid "Knowledge unlocked"
 msgstr "解锁乐之识"
 
-#: experiment/rules/musical_preferences.py:172
+#: experiment/rules/musical_preferences.py:173
 msgid "Connection unlocked"
 msgstr "解锁乐之友"
 
-#: experiment/rules/musical_preferences.py:192
+#: experiment/rules/musical_preferences.py:193
 msgid "2. How much do you like this song?"
 msgstr "2. 您对这首歌的喜欢程度是？"
 
-#: experiment/rules/musical_preferences.py:198
+#: experiment/rules/musical_preferences.py:199
 msgid "1. Do you know this song?"
 msgstr "1. 您知道这首歌吗？"
 
-#: experiment/rules/musical_preferences.py:214
+#: experiment/rules/musical_preferences.py:215
 #, python-format
 msgid "Song %(round)s/%(total)s"
 msgstr "%(round)s/%(total)s首歌"
 
-#: experiment/rules/musical_preferences.py:236
+#: experiment/rules/musical_preferences.py:237
 #, python-format
 msgid ""
 "I explored musical preferences on %(url)s! My top 3 favorite songs: "
 "%(top_participant)s. I know %(known_songs)i out of %(n_songs)i songs. All "
 "players' top 3 songs: %(top_all)s"
 msgstr ""
-"一起探索音乐喜好!%(url)s 我最喜欢的三首歌曲：%(top_participant)s；我知"
+"一起探索音乐喜好%(url)s! 我最喜欢的三首歌曲：%(top_participant)s；我知"
 "道%(n_songs)i首歌曲中的%(known_songs)i首；其他人最喜爱的三首歌曲："
 "%(top_all)s。"
 
-#: experiment/rules/musical_preferences.py:260
-#: experiment/templates/final/musical_preferences.html:2
+#: experiment/rules/musical_preferences.py:261
 msgid "Thank you for your participation and contribution to science!"
 msgstr "感谢您的参与以及对科学的贡献！"
 
@@ -2108,7 +2114,7 @@ msgstr ""
 #: experiment/templates/consent/consent_categorization.html:13
 #: experiment/templates/consent/consent_hooked.html:66
 #: experiment/templates/consent/consent_huang2021.html:76
-#: experiment/templates/consent/consent_musical_preferences.html:56
+#: experiment/templates/consent/consent_musical_preferences.html:57
 #: experiment/templates/consent/consent_rhythm.html:17
 #: experiment/templates/consent/consent_rhythm_unpaid.html:15
 #: experiment/templates/consent/consent_speech2song.html:62
@@ -2175,7 +2181,6 @@ msgstr ""
 #: experiment/templates/consent/consent_categorization.html:5
 #: experiment/templates/consent/consent_hooked.html:22
 #: experiment/templates/consent/consent_huang2021.html:23
-#: experiment/templates/consent/consent_musical_preferences.html:18
 msgid "Who can take part in this research?"
 msgstr "谁能参与这项研究？"
 
@@ -2233,7 +2238,6 @@ msgstr ""
 #: experiment/templates/consent/consent_categorization.html:11
 #: experiment/templates/consent/consent_hooked.html:58
 #: experiment/templates/consent/consent_huang2021.html:67
-#: experiment/templates/consent/consent_musical_preferences.html:47
 #: experiment/templates/consent/consent_speech2song.html:45
 msgid "Confidential treatment of your details"
 msgstr "信息匿名和保密性"
@@ -2345,7 +2349,6 @@ msgstr ""
 "碍患者的工作和生活开发新的方法等。"
 
 #: experiment/templates/consent/consent_hooked.html:25
-#: experiment/templates/consent/consent_musical_preferences.html:21
 msgid ""
 "\n"
 "    Anybody with sufficiently good hearing, natural or corrected, to enjoy "
@@ -2401,7 +2404,6 @@ msgstr ""
 
 #: experiment/templates/consent/consent_hooked.html:43
 #: experiment/templates/consent/consent_huang2021.html:52
-#: experiment/templates/consent/consent_musical_preferences.html:39
 #: experiment/templates/consent/consent_speech2song.html:28
 msgid "Voluntary participation"
 msgstr "自愿参与"
@@ -2743,12 +2745,12 @@ msgid ""
 "You will be taking part in the Musical Preferences research project "
 "conducted by Xuan Huang under the supervision of Prof. Henkjan Honing and "
 "Dr. John Ashley Burgoyne of the Music Cognition Group at the University of "
-"Amsterdam’s Institute for Logic, Language, and Computation.  \n"
+"Amsterdam’s Institute for Logic, Language, and Computation.\n"
 msgstr ""
 "\n"
-"您即将参加由阿姆斯特丹大学逻辑、语言和计算研究所（ILLC）音乐认知实验组的博士"
-"研究生Xuan Huang 主持的《“中国音乐饵”与记忆》的研究项目。在正式参与该研究项目"
-"之前，请您仔细阅读我们的知情同意书以了解实验程序。\n"
+" 您即将参加由阿姆斯特丹大学逻辑、语言和计算研究所的音乐认知实验组批准开展的"
+"《音乐偏好》课题研究。该课题由博士研究生Xuan Huang主持并在Honing教授以及"
+"Burgoyne博士指导下开展。\n"
 
 #: experiment/templates/consent/consent_musical_preferences.html:12
 msgid ""
@@ -2760,7 +2762,7 @@ msgid ""
 "investigate the factors that underly musical preferences in China. For "
 "example, do people who have preferences for classical music also have "
 "preferences for Chinese traditional music? Are there cultural-specific or "
-"universal structural features for musical preferences? \n"
+"universal structural features for musical preferences?\n"
 msgstr ""
 "\n"
 "研究表明，人们对音乐的文化偏好和熟悉程度从婴儿期开始显现，并持续到整个青春期"
@@ -2769,80 +2771,98 @@ msgstr ""
 "好的人是否也对中国传统音乐有偏好？音乐偏好是否存在特定的文化或普遍的结构特"
 "征？\n"
 
-#: experiment/templates/consent/consent_musical_preferences.html:26
+#: experiment/templates/consent/consent_musical_preferences.html:18
+msgid "Who can take part?"
+msgstr "谁能参与该研究？"
+
+#: experiment/templates/consent/consent_musical_preferences.html:22
+msgid "Legally competent participants aged 16 or older."
+msgstr "法定年龄满十六周岁。"
+
+#: experiment/templates/consent/consent_musical_preferences.html:23
+msgid ""
+"Anybody with sufficient good hearing, natural or corrected, to enjoy music "
+"listening is welcome to participate in this research."
+msgstr "拥有先天良好听力或通过矫正听力可欣赏音乐的个体。"
+
+#: experiment/templates/consent/consent_musical_preferences.html:27
 msgid "Instructions"
 msgstr "研究说明与过程"
 
-#: experiment/templates/consent/consent_musical_preferences.html:28
+#: experiment/templates/consent/consent_musical_preferences.html:29
 msgid ""
 "\n"
 "This study is a music preference experiment in which you will hear 64 music "
 "clips throughout the experiment, you either wear headphones or use your "
 "device's speakers to listen to the clips. Adjust the volume level of your "
-"device before the experiment begins.   \n"
+"device before the experiment begins.\n"
 msgstr ""
 "\n"
 "该研究是一个音乐偏好实验，在整个实验里您将听到64个音乐片段，您可以佩戴耳机或"
 "使用设备的扬声器来聆听片段。在实验正式开始前调整好您的设备音量的大小。\n"
 
-#: experiment/templates/consent/consent_musical_preferences.html:34
+#: experiment/templates/consent/consent_musical_preferences.html:35
 msgid ""
 "\n"
 "The experiment has two parts. The first part is a questionnaire with 6 "
 "questions. The second part is a music preference test, where you will listen "
 "to a music clip and answer questions about it. The results of your music "
-"preferences will be available after the experiment is completed. \n"
+"preferences will be available after the experiment is completed.\n"
 msgstr ""
 "\n"
 "该实验有两个部分。 第一部分为调查问卷，包含6个问题。 第二部分为音乐偏好测试，"
 "您将聆听音乐片段并回答相关问题。您的音乐偏好结果将在整个实验完成后获得。\n"
 
-#: experiment/templates/consent/consent_musical_preferences.html:42
+#: experiment/templates/consent/consent_musical_preferences.html:40
+msgid "Voluntary participation & risks"
+msgstr "自愿参加与不适"
+
+#: experiment/templates/consent/consent_musical_preferences.html:43
 msgid ""
 "\n"
-"You will be participating in this research project on a voluntary basis. "
-"This means you are free to stop taking part at any stage without "
-"consequences or penalty. If you decide to stop or withdraw your consent, all "
-"the information gathered up until then will be permanently deleted. \n"
+"You will be participating in this research on a voluntary basis. This means "
+"you are free to stop taking part at any stage without consequences or "
+"penalty.  If you decide to stop or withdraw your consent, all the "
+"information gathered up until then will be permanently deleted. This "
+"research has no known risks.\n"
 msgstr ""
 "\n"
 "参加本研究是完全自愿的。您可以拒绝参加研究，或者在研究过程中的任何时候选择退"
-"出研究，不需任何理由，且您的数据将被永久删除。这项研究没有已知的风险。\n"
+"出研究,不需任何理由，且您的数据将被永久删除。 这项研究没有已知的风险。 \n"
 
-#: experiment/templates/consent/consent_musical_preferences.html:50
+#: experiment/templates/consent/consent_musical_preferences.html:48
+msgid "Privacy"
+msgstr "隐私问题"
+
+#: experiment/templates/consent/consent_musical_preferences.html:51
 msgid ""
 " \n"
-"The information gathered over the course of this research will be used for "
-"further analysis and publication in scientific journals only. Fully "
-"anonymised data collected during the experiment may be made available online "
-"in tandem with these scientific publications. We guarantee that you will "
-"remain anonymous under all circumstances. Your personal details will not be "
-"viewed by third parties without your express permission.\n"
+"The information gathered will be used for publication in scientific journals "
+"only. Fully anonymized data may be available online in tandem with these "
+"scientific publications. We guarantee that you will remain anonymous under "
+"all circumstances. Your personal information will not be viewed by third "
+"parties without your express permission.\n"
 msgstr ""
 " \n"
 "在此研究过程中所搜集的信息仅用于科学研究。数据完全匿名，可能会随着研究结果发"
 "表一同展示。我们保证您在任何情况下都将保持匿名。此外，未经您的明确许可，您的"
-"个人信息将不会被第三方查看 \n"
+"个人信息将不会被第三方查看。\n"
 
-#: experiment/templates/consent/consent_musical_preferences.html:59
+#: experiment/templates/consent/consent_musical_preferences.html:60
 msgid ""
 " For further information, please contact Xuan Huang (x.huang@uva.nl) or Dr. "
 "John Ashley Burgoyne (j.a.burgoyne@uva.nl). If you have any complaints "
 "regarding this project, you can contact the Secretary of the Ethics "
 "Committee of the Faculty of Humanities of the University of Amsterdam "
-"(commissie-ethiek-fgw@uva.nl). \n"
+"(commissie-ethiek-fgw@uva.nl).\n"
 "    "
 msgstr ""
-"如您需了解关于本研究项目的更多信息，请联系Xuan Huang(邮箱: x.huang@uva.nl; 地"
-"址: Science Park 107, 1098 GE Amsterdam)或者John A. Burgoyne 博士 ( 电话: "
-"+31205257034；邮箱: j.a.burgoyne@uva.nl; 地址: Science Park 107, 1098 GE "
-"Amsterdam)。如果您对此研究项目有任何投诉，请联系阿姆斯特丹大学人文学院伦理委"
-"员会秘书 (the secretary of the Ethics Committee of the Faculty of Humanities "
-"of the University of Amsterdam），电话: +31205253054；邮箱: commissie-ethiek-"
-"fgw@uva.nl; 地址: Kloveniersburgwal 48, 1012 CX Amsterdam。\n"
+"如您需了解关于此研究项目的更多信息，请联系Xuan Huang(邮箱:x.huang@uva.nl)或"
+"Burgoyne博士（邮箱:j.a.burgoyne@uva.nl)。如果您对此研究项目有任何投诉，请联系"
+"阿姆斯特丹大学人文学院伦理委员会秘书（邮箱：commissie-ethiek-fgw@uva.nl）。\n"
 "    "
 
-#: experiment/templates/consent/consent_musical_preferences.html:66
+#: experiment/templates/consent/consent_musical_preferences.html:67
 msgid ""
 " \n"
 "    I have been clearly informed about the research project and I consent to "
@@ -2852,8 +2872,8 @@ msgid ""
 "participation. "
 msgstr ""
 " \n"
-"我已经阅读了知情同意书,我同意参与该项研究。我有权撤销这一同意而无须提供任何理"
-"由。我知道我有权在任何时候中止研究，可以撤回我的参与。"
+"我已经阅读了知情同意书,我同意参与该项研究。我有权撤销这一同意而无须提供任何 "
+"理由。我知道我有权在任何时候中止研究，可以撤回我的参与。"
 
 #: experiment/templates/consent/consent_rhythm.html:2
 #: experiment/templates/consent/consent_rhythm_unpaid.html:2
@@ -3236,14 +3256,6 @@ msgstr ""
 msgid "Did you know..."
 msgstr ""
 
-#: experiment/templates/final/musical_preferences.html:5
-msgid "Your Top 5 favorite songs:"
-msgstr ""
-
-#: experiment/templates/final/musical_preferences.html:13
-msgid "Top 5 favorite songs:"
-msgstr ""
-
 #: experiment/templates/html/huang_2022/audio_check.html:3
 msgid "Check volume"
 msgstr "检查设备音量大小。"
@@ -3264,7 +3276,7 @@ msgstr "在%(n_songs)s首歌曲里，您最喜欢的3首歌曲是："
 #: experiment/templates/html/musical_preferences/feedback.html:30
 #, python-format
 msgid " Of %(n_songs)s songs, you know %(n_known_songs)s"
-msgstr "在%(n_songs)s首歌曲里，您知道 %(n_known_songs)s的歌曲。"
+msgstr "在%(n_songs)s首歌曲里，您知道 %(n_known_songs)s首。"
 
 #: experiment/templates/html/musical_preferences/feedback.html:44
 msgid "All players' top 3 favourite songs:"

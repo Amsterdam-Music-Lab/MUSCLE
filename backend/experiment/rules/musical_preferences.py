@@ -27,6 +27,7 @@ class MusicalPreferences(Base):
     preference_offset = 20
     knowledge_offset = 42
     round_increment = 1
+    contact_email = 'musicexp_china@163.com'
 
     know_score = {
         'yes': 2,
@@ -48,7 +49,7 @@ class MusicalPreferences(Base):
         rendered = render_to_string('consent/{}'.format(self.consent_file)
         )
         consent = Consent(
-            text=rendered, title=_('Informed consent'), confirm=_('I agree'), deny=_('Stop')
+            text=rendered, title=_('Informed consent'), confirm=_('I consent and continue.'), deny=_('I do not consent.')
         )
         playlist = Playlist(experiment.playlists.all())
         explainer = Explainer(
@@ -182,11 +183,11 @@ class MusicalPreferences(Base):
                 session,
                 top_participant,
                 known_songs,
-                n_songs,
+                n_songs-1,
                 top_all
             )]
 
-        section = session.playlist.random_section()
+        section = session.section_from_unused_song()
         like_key = 'like_song'
         likert = LikertQuestionIcon(
             question=_('2. How much do you like this song?'),
@@ -232,7 +233,7 @@ class MusicalPreferences(Base):
         )
         format_songs = lambda songs: ', '.join([song['name'] for song in songs])
         return {
-            'apps': ['facebook', 'twitter'],
+            'apps': ['weibo', 'share'],
             'message': _("I explored musical preferences on %(url)s! My top 3 favorite songs: %(top_participant)s. I know %(known_songs)i out of %(n_songs)i songs. All players' top 3 songs: %(top_all)s") % {
                 'url': current_url,
                 'top_participant': format_songs(top_participant),
@@ -262,6 +263,11 @@ class MusicalPreferences(Base):
             social=social_info
         )
         return view
+
+    def feedback_info(self):
+        info = super().feedback_info()
+        info['header'] = _("Any remarks or questions (optional):")
+        return info
     
     def get_preferred_songs(self, result_set, n=5):
         top_songs = result_set.values('section').annotate(
