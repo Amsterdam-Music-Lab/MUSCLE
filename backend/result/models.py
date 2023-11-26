@@ -24,6 +24,7 @@ class Result(models.Model):
 
     # Contains data in json_format
     json_data = models.TextField(blank=True)
+    json_temp = models.JSONField(default=dict, blank=True, null=True)
 
     def clean(self):
         # Don't save if both session and participant field are null

@@ -16,6 +16,7 @@ class Session(models.Model):
     finished_at = models.DateTimeField(
         db_index=True, default=None, null=True, blank=True)
     json_data = models.TextField(blank=True)
+    json_temp = models.JSONField(default=dict, blank=True, null=True)
     final_score = models.FloatField(db_index=True, default=0.0)
     current_round = models.IntegerField(default=1)
 
