@@ -24,7 +24,7 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
     search_fields = ['name']
     inline_actions = ['export', 'export_csv']
     fields = ['name', 'slug', 'url', 'hashtag', 'language', 'active', 'rules',
-              'rounds', 'bonus_points', 'playlists', 'experiment_series']
+              'rounds', 'bonus_points', 'playlists', 'experiment_series','questions']
     inlines = [FeedbackInline]
     form = ExperimentForm
 
@@ -98,7 +98,6 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
         )
 
     export_csv.short_description = "Export CSV"
-
 
 admin.site.register(Experiment, ExperimentAdmin)
 
