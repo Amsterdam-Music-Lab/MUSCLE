@@ -277,7 +277,7 @@ class Hooked(Base):
        
     def next_heard_before_action(self, session):
         """Get next heard_before action for this session."""
-
+        round_number = self.get_current_round(session) - self.round_modifier
         # Load plan.
         try:
             plan = session.load_json_data()['plan']
@@ -287,10 +287,9 @@ class Hooked(Base):
             logger.error('Missing plan key: %s' % str(error))
             return None
         # Get section.
-        round_number = session.get_current_round() - self.round_modifier - heard_before_offset
         section = None
-        if round_number <= len(sections):
-            this_section_info = sections[round_number]
+        if round_number - heard_before_offset <= len(sections):
+            this_section_info = sections[round_number - heard_before_offset]
             section = session.playlist.section_set.get(
                     **{'id': this_section_info.get('id')})
         if not section:

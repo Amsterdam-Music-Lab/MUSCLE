@@ -147,10 +147,10 @@ class ThatsMySong(Hooked):
                 actions.append(
                     self.next_heard_before_action(session))
             if round_number > heard_before_offset:
-                actions.append(
-                    self.next_heard_before_action(session))
                 question = self.get_single_question(session, randomize=True)
                 if question:
                     actions.append(question)
+                actions.append(
+                    self.next_heard_before_action(session))
 
         return actions
