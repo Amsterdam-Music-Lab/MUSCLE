@@ -508,5 +508,5 @@ repeat_training_or_quit = ChoiceQuestion(
     },
     submits=True,
     is_skippable=False,
-    style={'buttons-large-gap': True, 'boolean': True}
+    style={'buttons-large-gap': True, 'buttons-large-text': True, 'boolean': True}
 )

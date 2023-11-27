@@ -53,8 +53,7 @@ def create_session(request):
     data = request.POST.get("data")
     if data:
         try:
-            json.loads(data)
-            session.json_data = data
+            session.save_json_data(data)
         except ValueError:
             return HttpResponseBadRequest("Invalid data")
 

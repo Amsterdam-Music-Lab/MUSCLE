@@ -1,7 +1,10 @@
+import { MEDIA_ROOT } from "../config";
+
 let track;
-let source
+let source;
 let buffers = {};
-let audioContext
+let audioContext;
+let previousSource;
 
 export let audioInitialized = false;
     
@@ -70,18 +73,25 @@ export const changeGain = (level) => {
 }
 
 // load sound data and store in buffers object
-export const loadBuffer = async (id, src, canPlay) => {    
-    await fetch(src, {})
+export const loadBuffer = async (id, src, canPlay) => {   
+    await fetch(MEDIA_ROOT + src, {})
     // Return the data as an ArrayBuffer
         .then(response => response.arrayBuffer())
         // Decode the audio data
         .then(buffer => audioContext.decodeAudioData(buffer))
         // store buffer in buffers object
         .then(decodedData => {            
-            buffers[id] = decodedData;            
+            buffers[id] = decodedData;
+            previousSource = src;
             canPlay();
         });
 }
+
+export const checkSectionLoaded = (section) => {
+    if (section.url === previousSource) {
+        return true;
+    }
+} 
 
 // Clear buffer list
 export const clearBuffers = () => {

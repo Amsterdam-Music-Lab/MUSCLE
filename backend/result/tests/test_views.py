@@ -163,25 +163,40 @@ class ScoringTest(TestCase):
         ]}
         return self.make_request(view)
 
-    def song_sync_request(self, result_type, continuation_correctness):
+    def song_sync_recognize_request(self, result_type):
         result = Result.objects.create(
-            session = self.session,
-            section = self.section,
-            scoring_rule='SONG_SYNC'
+            question_key='recognize',
+            session=self.session,
+            section=self.section,
+            scoring_rule='SONG_SYNC_RECOGNITION'
         )
         view = {
-            "result_id": result.pk,
-            "view": "SONG_SYNC",
-            "key": "song_sync",
-            "result": {
-                "type": result_type,
-                "continuation_correctness": continuation_correctness,
-                "recognition_time": 10
-            },
+            "decision_time": 10,
             "config": {
-                "recognition_time": 15,
-                "continuation_correctness": True,
-            }
+                "response_time": 15
+            },
+            "form": [
+                {"key": "recognize", "result_id": result.pk, "value": result_type}
+            ]
+        }
+        return self.make_request(view)
+    
+    def song_sync_continue_request(self, result_type):
+        result = Result.objects.create(
+            question_key='correct_place',
+            session=self.session,
+            section=self.section,
+            scoring_rule='SONG_SYNC_CONTINUATION',
+            expected_response='yes'
+        )
+        view = {
+            "decision_time": 10,
+            "config": {
+                "response_time": 15
+            },
+            "form": [
+                {"key": "recognize", "result_id": result.pk, "value": result_type}
+            ]
         }
         return self.make_request(view)
     
@@ -236,19 +251,20 @@ class ScoringTest(TestCase):
         assert self.session.result_set.last().score == 0
     
     def test_song_sync(self):
-        client_request = self.song_sync_request('time_passed', False)
+        client_request = self.song_sync_recognize_request("TIMEOUT")
         response = self.client.post('/result/score/', client_request)
         assert response.status_code == 200
         assert self.session.result_set.last().score == 0
-        client_request = self.song_sync_request('not_recognized', False)
+        client_request = self.song_sync_recognize_request('no')
         response = self.client.post('/result/score/', client_request)
         assert response.status_code == 200
         assert self.session.result_set.last().score == 0
-        client_request = self.song_sync_request('recognized', False)
-        response = self.client.post('/result/score/', client_request)
-        assert response.status_code == 200
-        assert self.session.result_set.last().score == -5
-        client_request = self.song_sync_request('recognized', True)
+        client_request = self.song_sync_recognize_request('yes')
         response = self.client.post('/result/score/', client_request)
         assert response.status_code == 200
         assert self.session.result_set.last().score == 5
+        client_request = self.song_sync_continue_request('no')
+        response = self.client.post('/result/score/', client_request)
+        assert response.status_code == 200
+        assert self.session.get_previous_result(['recognize']).score == -5
+

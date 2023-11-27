@@ -1,6 +1,8 @@
 import logging
 import math
 
+from django.db.models import Q
+
 logger = logging.getLogger(__name__)
 
 def check_expected_response(result):
@@ -44,30 +46,21 @@ def reaction_time_score(result, data):
         else:
             return math.floor(-time)
 
-def song_sync_score(result, data):
-    score = 0
-    # Calculate from the data object
-    # If requested keys don't exist, return None
-    try:
-        config = data['config']
-        result = data['result']
-        # Calculate scores based on result type
-        if result['type'] == 'time_passed':
-            score = 0
-        elif result['type'] == 'not_recognized':
-            score = 0
-        elif result['type'] == 'recognized':
-            # Get score
-            score = math.ceil(
-                config['recognition_time'] - result['recognition_time']
-            )
-            if config['continuation_correctness'] != result['continuation_correctness']:
-                score *= -1
-    except KeyError as error:
-        logger.warning('KeyError: %s' % str(error))
-        return None
-    return score
-
+def song_sync_recognition_score(result, data):
+    if result.given_response == 'TIMEOUT' or result.given_response == 'no':
+        return 0
+    json_data = result.load_json_data()
+    if json_data:
+        time = json_data.get('decision_time')
+        timeout = json_data.get('config').get('response_time')
+        return math.ceil(timeout - time)
+        
+def song_sync_continuation_score(result, data):
+    previous_result = result.session.get_previous_result(['recognize'])
+    if check_expected_response(result) != result.given_response:
+        previous_result.score *= -1
+        previous_result.save()
+    return None
 
 SCORING_RULES = {
     'BOOLEAN': boolean_score,
@@ -75,6 +68,7 @@ SCORING_RULES = {
     'LIKERT': likert_score,
     'REVERSE_LIKERT': reverse_likert_score,
     'REACTION_TIME': reaction_time_score,
-    'SONG_SYNC': song_sync_score,
+    'SONG_SYNC_RECOGNITION': song_sync_recognition_score,
+    'SONG_SYNC_CONTINUATION': song_sync_continuation_score,
     'CATEGORIES_TO_LIKERT': categories_likert_score,
 }

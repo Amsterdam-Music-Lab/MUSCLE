@@ -23,7 +23,6 @@ class Huang2022(Hooked):
 
     ID = 'HUANG_2022'
     timeout = 15
-    round_modifier = 2
     contact_email = 'musicexp_china@163.com'
     play_method = 'EXTERNAL'
 
@@ -73,107 +72,101 @@ class Huang2022(Hooked):
         json_data = session.load_json_data()
         # Get next round number and initialise actions list. Two thirds of
         # rounds will be song_sync; the remainder heard_before.
-        next_round_number = session.get_current_round() - self.round_modifier 
+        round_number = self.get_current_round(session)
         total_rounds = session.experiment.rounds
 
         # Collect actions.
         actions = []
+        plan = json_data.get('plan')
 
-        if next_round_number == -1:
-            playback = get_test_playback(self.play_method)
-            html = HTML(body='<h4>{}</h4>'.format(_('Do you hear the music?')))
-            form = Form(form=[BooleanQuestion(
-                key='audio_check1',
-                choices={'no': _('No'), 'yes': _('Yes')},
-                result_id=prepare_result('audio_check1', session, 
-                    scoring_rule='BOOLEAN'),
-                submits=True,
-                style=STYLE_BOOLEAN_NEGATIVE_FIRST)])
-            return Trial(playback=playback, feedback_form=form, html=html,
-                         config={'response_time': 15},
-                         title=_("Audio check"))
-        elif next_round_number <= 1:
+        if not plan:
             last_result = session.result_set.last()
-            if last_result.question_key == 'audio_check1':
+            if not last_result:
+                playback = get_test_playback(self.play_method)
+                html = HTML(body='<h4>{}</h4>'.format(_('Do you hear the music?')))
+                form = Form(form=[BooleanQuestion(
+                    key='audio_check1',
+                    choices={'no': _('No'), 'yes': _('Yes')},
+                    result_id=prepare_result('audio_check1', session, 
+                        scoring_rule='BOOLEAN'),
+                    submits=True,
+                    style=STYLE_BOOLEAN_NEGATIVE_FIRST)])
+                return Trial(playback=playback, feedback_form=form, html=html,
+                             config={'response_time': 15},
+                             title=_("Audio check"))
+            else:
                 if last_result.score == 0:
-                    playback = get_test_playback(self.play_method)
-                    html = HTML(body=render_to_string('html/huang_2022/audio_check.html'))
-                    form = Form(form=[BooleanQuestion(
-                        key='audio_check2',
-                        choices={'no': _('Quit'), 'yes': _('Try')},
-                        result_id=prepare_result('audio_check2', session, scoring_rule='BOOLEAN'),
-                        submits=True,
-                        style=STYLE_BOOLEAN_NEGATIVE_FIRST
-                    )])
-                    return Trial(playback=playback, html=html, feedback_form=form,
-                                 config={'response_time': 15},
-                                 title=_("Ready to experiment"))
-                else:
-                    session.increment_round() # adjust round numbering
-            elif last_result.question_key == 'audio_check2' and last_result.score == 0:
-                # participant had persistent audio problems, delete session and redirect
-                session.finish()
-                session.save()
-                return Redirect(settings.HOMEPAGE)
-
-            # Start experiment: plan sections and show explainers
-            self.plan_sections(session)
-            # Show explainers and go to SongSync
-            explainer = Explainer(
-            instruction=_("How to Play"),
-            steps=[
-                Step(_(
-                    "Do you recognise the song? Try to sing along. The faster you recognise songs, the more points you can earn.")),
-                Step(_(
-                    "Do you really know the song? Keep singing or imagining the music while the sound is muted. The music is still playing: you just can’t hear it!")),
-                Step(_(
-                    "Was the music in the right place when the sound came back? Or did we jump to a different spot during the silence?"))
-            ],
-            step_numbers=True,
-            button_label=_("Let's go!"))
-            explainer_devices = Explainer(
-                instruction=_("You can use your smartphone, computer or tablet to participate in this experiment. Please choose the best network in your area to participate in the experiment, such as wireless network (WIFI), mobile data network signal (4G or above) or wired network. If the network is poor, it may cause the music to fail to load or the experiment may fail to run properly. You can access the experiment page through the following channels:"),
-                steps=[
-                    Step(_(
-                        "Directly click the link on WeChat (smart phone or PC version, or WeChat Web)"),
-                    ),
-                    Step(_(
-                        "If the link to load the experiment page through the WeChat app on your cell phone fails, you can copy and paste the link in the browser of your cell phone or computer to participate in the experiment. You can use any of the currently available browsers, such as Safari, Firefox, 360, Google Chrome, Quark, etc."),
+                    # user indicated they couldn't hear the music
+                    if last_result.question_key == 'audio_check1':
+                        playback = get_test_playback(self.play_method)
+                        html = HTML(body=render_to_string('html/huang_2022/audio_check.html'))
+                        form = Form(form=[BooleanQuestion(
+                            key='audio_check2',
+                            choices={'no': _('Quit'), 'yes': _('Try')},
+                            result_id=prepare_result('audio_check2', session, scoring_rule='BOOLEAN'),
+                            submits=True,
+                            style=STYLE_BOOLEAN_NEGATIVE_FIRST
+                        )])
+                        return Trial(playback=playback, html=html, feedback_form=form,
+                                     config={'response_time': 15},
+                                     title=_("Ready to experiment"))
+                    else:
+                        # finish and redirect
+                        session.finish()
+                        session.save()
+                        return Redirect(settings.HOMEPAGE)
+                if last_result.score == 1:
+                    # Start experiment: plan sections and show explainers
+                    self.plan_sections(session)
+                    # Show explainers and go to SongSync
+                    explainer = Explainer(
+                    instruction=_("How to Play"),
+                    steps=[
+                        Step(_(
+                            "Do you recognise the song? Try to sing along. The faster you recognise songs, the more points you can earn.")),
+                        Step(_(
+                            "Do you really know the song? Keep singing or imagining the music while the sound is muted. The music is still playing: you just can’t hear it!")),
+                        Step(_(
+                            "Was the music in the right place when the sound came back? Or did we jump to a different spot during the silence?"))
+                    ],
+                    step_numbers=True,
+                    button_label=_("Let's go!"))
+                    explainer_devices = Explainer(
+                        instruction=_("You can use your smartphone, computer or tablet to participate in this experiment. Please choose the best network in your area to participate in the experiment, such as wireless network (WIFI), mobile data network signal (4G or above) or wired network. If the network is poor, it may cause the music to fail to load or the experiment may fail to run properly. You can access the experiment page through the following channels:"),
+                        steps=[
+                            Step(_(
+                                "Directly click the link on WeChat (smart phone or PC version, or WeChat Web)"),
+                            ),
+                            Step(_(
+                                "If the link to load the experiment page through the WeChat app on your cell phone fails, you can copy and paste the link in the browser of your cell phone or computer to participate in the experiment. You can use any of the currently available browsers, such as Safari, Firefox, 360, Google Chrome, Quark, etc."),
+                            )
+                        ],
+                        step_numbers=True,
+                        button_label=_("Continue")
                     )
-                ],
-                step_numbers=True,
-                button_label=_("Continue")
-            )
-            # Choose playlist
-            actions.extend([explainer, explainer_devices, self.next_song_sync_action(session)])
+                    actions.extend([explainer, explainer_devices, *self.next_song_sync_action(session)])
         else:
             # Load the heard_before offset.
-            plan = json_data.get('plan')
+
             heard_before_offset = len(plan['song_sync_sections']) + 1
 
             # show score 
-            config = {'show_section': True, 'show_total_score': True}
-            title = self.get_trial_title(session, next_round_number - 1)
-            score = Score(
-                session,
-                config=config,
-                title=title
-            )
+            score = self.get_score(session, round_number)
             actions.append(score)
             
             # SongSync rounds
-            if next_round_number < heard_before_offset:
-                actions.append(self.next_song_sync_action(session))
+            if round_number < heard_before_offset:
+                actions.extend(self.next_song_sync_action(session))
             # HeardBefore rounds
-            elif next_round_number == heard_before_offset:
+            elif round_number == heard_before_offset:
                 # Introduce new round type with Explainer.
                 actions.append(self.heard_before_explainer())
                 actions.append(
                     self.next_heard_before_action(session))
-            elif heard_before_offset < next_round_number <= total_rounds:
+            elif heard_before_offset < round_number <= total_rounds:
                 actions.append(
                     self.next_heard_before_action(session))   
-            elif next_round_number == total_rounds + 1:
+            elif round_number == total_rounds + 1:
                 questionnaire = self.get_questionnaire(session)
                 if questionnaire:
                     actions.extend([Explainer(

@@ -29,13 +29,18 @@ const Preload = ({ instruction, pageTitle, duration, sections, playConfig, onNex
 
             // Use Web-audio and preload sections in buffers            
             sections.map((section, index) => {
+                // skip Preload if the section has already been loaded in the previous action
+                if (webAudio.checkSectionLoaded(section)) {
+                    onNext();
+                    return undefined;
+                }
                 // Clear buffers if this is the first section
                 if (index === 0) {
                     webAudio.clearBuffers();
                 }
                                 
                 // Load sections in buffer                
-                return webAudio.loadBuffer(section.id, MEDIA_ROOT + section.url, () => {                    
+                return webAudio.loadBuffer(section.id, section.url, () => {                    
                     if (index === (sections.length - 1)) {
                         audioIsAvailable.current = true;
                         if (timeHasPassed.current) {

@@ -36,7 +36,7 @@ def score(request):
     try:
         result_data = json.loads(json_data)
         # Create a result from the data
-        result = handle_results(result_data, session)   
+        result = handle_results(result_data, session)
         if not result:
             return HttpResponseServerError("Could not create result from data")
         if result.session:

@@ -1,11 +1,11 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useEffect } from "react";
 
 import { playAudio } from "../../util/audioControl";
 
 import Circle from "../Circle/Circle";
 import ListenCircle from "../ListenCircle/ListenCircle";
 
-const AutoPlay = ({instruction, preloadMessage, onPreloadReady, playConfig, sections, time, startedPlaying, finishedPlaying, responseTime, className=''}) => {
+const AutoPlay = ({instruction, playConfig, sections, time, startedPlaying, finishedPlaying, responseTime, className=''}) => {
     // player state
     
     const running = useRef(playConfig.auto_play);
