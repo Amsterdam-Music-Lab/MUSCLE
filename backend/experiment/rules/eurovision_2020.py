@@ -130,11 +130,11 @@ class Eurovision2020(Hooked):
         # Get section.
         section = None
         if round_number <= len(songs) and round_number <= len(tags):
-            section = \
-                session.playlist.get_section(
-                    {'tag': str(tags[round_number])},
-                    [songs[round_number]]
-                )
+            section = session.playlist.get_section(
+                {'tag': str(tags[round_number])},
+                [songs[round_number]]
+            )
+
         if not section:
             print("Warning: no heard_before section found")
             section = session.playlist.get_section()

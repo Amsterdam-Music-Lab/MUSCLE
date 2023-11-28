@@ -176,22 +176,18 @@ class Hooked(Base):
         n_old_new_correct = 0
 
         for result in session.result_set.all():
-            json_data = result.load_json_data()
-            try:
-                if json_data['view'] == 'SONG_SYNC':
-                    if json_data['result']['type'] == 'recognized':
-                        n_sync_guessed += 1
-                        sync_time += json_data['result']['recognition_time']
-                        if result.score > 0:
-                            n_sync_correct += 1
-                else:
-                    if result.expected_response == 'old':
-                        n_old_new_expected += 1
-                        if result.score > 0:
-                            n_old_new_correct += 1
-            except KeyError as error:
-                print('KeyError: %s' % str(error))
-                continue
+            if result.question_key == 'recognize':
+                if result.given_response == 'yes':
+                    n_sync_guessed += 1
+                    json_data = result.load_json_data()
+                    sync_time += json_data.get('decision_time')
+                    if result.score > 0:
+                        n_sync_correct += 1
+            else:
+                if result.expected_response == 'old':
+                    n_old_new_expected += 1
+                    if result.score > 0:
+                        n_old_new_correct += 1
 
         score_message = "Well done!" if session.final_score > 0 else "Too bad!"
         if n_sync_guessed == 0:
