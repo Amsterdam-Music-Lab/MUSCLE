@@ -93,14 +93,16 @@ const Playback = ({
             // Store player index
             setPlayerIndex(index);
             // Determine if audio should be played
-            if (playbackArgs.play_from) {
+            if (playbackArgs.mute) {
                 setPlayerIndex(-1);
                 pauseAudio(playMethod);
                 return;
             }
             let latency = playAudio(playbackArgs.sections[index], playMethod);
+            
             // Cancel active events
             cancelAudioListeners();
+            
             // listen for active audio events
             if (playMethod === 'BUFFER') {
                 activeAudioEndedListener.current = webAudio.listenOnce("ended", onAudioEnded);
