@@ -29,18 +29,6 @@ class Playback(BaseAction):
         - stop_audio_after: after how many seconds playback audio should be stopped
         - timeout_after_playback: pause in ms after playback has finished
         - ready_time: how long to countdown before playback
-            - play_method:
-                - 'BUFFER': Use webaudio buffers. (recommended for stimuli up to 45s)  
-                - 'HTML': Use the HTML tag. (recommended for stimuli longer than 45s)
-                - 'EXTERNAL': Use for externally hosted audio files. Web-audio api will be disabled            
-            - ready_time: time before presentation of sound
-            
-            - play_from: from where the audio file should play (offset in seconds from start)
-            - mute: whether audio should be muted
-            
-            - show_animation: whether to show an animation during playback 
-            - (multiplayer) label_style: player index number style: NUMERIC, ALPHABETIC, ROMAN or empty (no label)
-            - play_once: the sound can only be played once
     '''
 
     def __init__(self,
@@ -56,7 +44,7 @@ class Playback(BaseAction):
                          for s in sections]
         if str(sections[0].filename).startswith('http'):
             self.play_method = PLAY_EXTERNAL
-        elif sections[0].duration > 44.9:
+        elif sections[0].duration > 45:
             self.play_method = PLAY_HTML
         else:
             self.play_method = PLAY_BUFFER
