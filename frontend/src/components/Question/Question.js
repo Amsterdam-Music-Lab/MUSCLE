@@ -28,7 +28,6 @@ const Question = ({
     onChange,
     id,
     active,
-    style,
     emphasizeTitle = false,
 }) => {
     const [value, setValue] = useState(question.value || "");
@@ -44,7 +43,7 @@ const Question = ({
             value,
             question,
             active,
-            style,
+            style: question.style,
             emphasizeTitle,
             onChange: registerChange,
         };

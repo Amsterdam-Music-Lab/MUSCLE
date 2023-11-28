@@ -1,4 +1,5 @@
 import React, { useState, useRef } from "react";
+
 import Question from "../Question/Question";
 import Button from "../Button/Button";
 
@@ -67,34 +68,32 @@ const FeedbackForm = ({
                     />
                 ))}
                 {/* Continue button */}
-                {showSubmitButtons && formValid && (
-                    <div className="center">
-                        <Button
+                {showSubmitButtons && (
+                    
+                    <div className="row justify-content-around">
+                        {isSkippable && (
+                            // skip button
+                            <Button
                             onClick={() => {
                                 onSubmit();
                             }}
-                            className={
-                                "btn-primary submit anim anim-fade-in anim-speed-500"
-                            }
-                            title={buttonLabel}
-                        />
-                    </div>
-                )}
-
-                {/* Skip button */}
-                {/* Only show skip-button when there is no value */}
-                {isSkippable && showSubmitButtons && (
-                    <div className="center">
-                        <Button
-                            onClick={() => {
-                                onSubmit();
-                            }}
-                            className={
-                                "btn-gray anim anim-fade-in anim-speed-500"
+                            className={"btn-gray col-4 align-self-start"
                             }
                             title={skipLabel}
+                        />)}
+                        <Button
+                            onClick={() => {
+                                onSubmit();
+                            }}
+                            className={
+                                "submit col-4"
+                            }
+                            active={formValid}
+                            title={buttonLabel}
                         />
+                        
                     </div>
+
                 )}
             </form>
         </div>

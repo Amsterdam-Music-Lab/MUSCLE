@@ -2,11 +2,9 @@ import React from "react";
 import Slider from "react-rangeslider";
 import classNames from "classnames";
 
-import RangeLimits from "./_RangeLimits";
 import RangeTitle from "./_RangeTitle";
-import { renderLabel } from "../../util/label";
 
-const IconRange = ({ question, value, onChange, emphasizeTitle }) => {
+const IconRange = ({ question, value, style, onChange, emphasizeTitle }) => {
     const emptyValue = !value;
 
     const keys = Object.keys(question.choices);
@@ -24,7 +22,7 @@ const IconRange = ({ question, value, onChange, emphasizeTitle }) => {
     }
 
     return (
-        <div className={classNames("aha__text-range", { empty: emptyValue })}>
+        <div className={classNames("aha__text-range", style, { empty: emptyValue })}>
             <RangeTitle
                 emphasizeTitle={emphasizeTitle}
                 question={question}

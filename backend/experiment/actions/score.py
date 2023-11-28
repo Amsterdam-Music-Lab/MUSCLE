@@ -13,7 +13,7 @@ class Score(BaseAction):  # pylint: disable=too-few-public-methods
 
     ID = 'SCORE'
 
-    def __init__(self, session, title=None, score_message=None, config=None, icon=None, timer=None, feedback=None):
+    def __init__(self, session, title=None, score=None, score_message=None, config=None, icon=None, timer=None, feedback=None):
         """ Score presents feedback to a participant after a Trial
         - session: a Session object
         - title: the title of the score page
@@ -27,7 +27,7 @@ class Score(BaseAction):  # pylint: disable=too-few-public-methods
         """
         self.session = session
         self.title = title
-        self.score = session.last_score()
+        self.score = score or session.last_score()
         self.score_message = score_message or self.default_score_message
         self.feedback = feedback
         self.config = {

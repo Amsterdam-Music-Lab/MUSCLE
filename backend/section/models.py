@@ -166,12 +166,19 @@ class Playlist(models.Model):
         # order_by is required to make distinct work with values_list
         return self.section_set.filter(**filter_by).order_by('song').values_list('song_id', flat=True).distinct()
 
-    def random_section(self, filter_by={}):
-        """Get a random section from this playlist"""
-        pks = self.section_set.filter(**filter_by).values_list('pk', flat=True)
+    def get_section(self, filter_by={}, song_ids=[]):
+        """Get a random section from this playlist
+            Optionally, limit to specific song_ids and filter conditions
+        """
+        if song_ids:
+            sections = self.section_set.filter(song__id__in=song_ids)
+        else:
+            sections = self.section_set
+        pks = sections.filter(**filter_by).values_list('pk', flat=True)
         if len(pks) == 0:
             return None
         return self.section_set.get(pk=random.choice(pks))
+
 
     def export_admin(self):
         """Export data for admin"""
