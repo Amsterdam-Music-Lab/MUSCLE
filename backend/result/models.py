@@ -35,15 +35,15 @@ class Result(models.Model):
 
     def load_json_data(self):
         """Get json_data as object"""
-        return json.loads(self.json_data) if self.json_data else {}
+        return self.json_data if self.json_data else {}
     
     def save_json_data(self, data):
-        """Convert json data object to string and merge with json_data, overwriting duplicate keys.
-
-        Only valid for JSON objects/Python dicts.
+        """Merge data with json_data, overwriting duplicate keys.        
         """
-        updated_data = {**self.load_json_data(), **data}
-        self.json_data = json.dumps(updated_data)
+        new_data = self.load_json_data()
+        new_data.update(data)
+        self.json_data = new_data
+        self.save()
 
     def export_admin(self):
         """Export data for admin"""
