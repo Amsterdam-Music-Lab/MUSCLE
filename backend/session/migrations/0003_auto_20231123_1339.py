@@ -2,9 +2,9 @@
 
 from django.db import migrations
 import json
-from session.models import Session
 
 def forwards_func(apps, schema_editor):
+    Session = apps.get_model('session', 'Session')
     for session in Session.objects.all():
         if session.json_data:
             for key,value in json.loads(session.json_data).items():

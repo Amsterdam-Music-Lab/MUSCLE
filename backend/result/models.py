@@ -23,8 +23,7 @@ class Result(models.Model):
     scoring_rule = models.CharField(default="", max_length=64)
 
     # Contains data in json_format
-    json_data = models.TextField(blank=True)
-    json_temp = models.JSONField(default=dict, blank=True, null=True)
+    json_data = models.JSONField(default=dict, blank=True, null=True)
 
     def clean(self):
         # Don't save if both session and participant field are null

@@ -2,9 +2,9 @@
 
 from django.db import migrations
 import json
-from result.models import Result
 
 def forwards_func(apps, schema_editor):
+    Result = apps.get_model('result', 'Result')
     for result in Result.objects.all():
         if result.json_data:
             for key,value in json.loads(result.json_data).items():
@@ -12,6 +12,7 @@ def forwards_func(apps, schema_editor):
                 result.save()
 
 def reverse_func(apps, schema_editor):
+    Result = apps.get_model('result', 'Result')
     for result in Result.objects.all():        
         result.json_data = json.dumps(result.json_temp)
         result.save()
