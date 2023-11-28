@@ -128,6 +128,7 @@ class ExperimentForm(ModelForm):
         choices = tuple()
         for i in EXPERIMENT_RULES:
             choices += ((i, EXPERIMENT_RULES[i].__name__),)
+        choices += (("","---------"),)
 
         self.fields['rules'] = ChoiceField(
             choices=sorted(choices)
@@ -135,7 +136,8 @@ class ExperimentForm(ModelForm):
 
         self.fields['questions'] = TypedMultipleChoiceField(
             choices=QUESTIONS_CHOICES,
-            widget=CheckboxSelectMultiple
+            widget=CheckboxSelectMultiple,
+            required=False
         )
 
     class Meta:
