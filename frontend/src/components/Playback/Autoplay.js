@@ -18,7 +18,7 @@ const AutoPlay = ({sections, mute, playhead, playMethod, instruction, showAnimat
     useEffect(() => {        
         let latency = 0;
         // Play audio at start time            
-        if (mute) {            
+        if (!mute) {            
             latency = playAudio(sections[0], playMethod, playhead);          
             // Compensate for audio latency and set state to playing
             setTimeout(startedPlaying(), latency);
