@@ -14,6 +14,26 @@ class HookedTest(TestCase):
     def setUpTestData(cls):
         ''' set up data for Hooked base class '''
         cls.participant = Participant.objects.create()
+    
+    def test_hooked(self):
+        experiment = Experiment.objects.create(name='Hooked', rules='HOOKED', rounds=3)
+        playlist = Playlist.objects.get(name='Eurovision 2021')
+        playlist.update_sections()
+        session = Session.objects.create(
+            experiment=experiment,
+            participant=self.participant,
+            playlist=playlist
+        )
+        rules = session.experiment_rules()
+        rules.plan_sections(session)
+        plan = session.load_json_data().get('plan')
+        assert plan != None
+        actions = rules.next_song_sync_action(session)
+        assert len(actions) == 3
+        actions = rules.next_song_sync_action(session)
+        assert len(actions) == 3
+        action = rules.next_heard_before_action(session)
+        assert action != None
 
     def test_eurovision(self):
         experiment = Experiment.objects.get(name='Hooked-Eurovision')
@@ -25,12 +45,9 @@ class HookedTest(TestCase):
             playlist=playlist
         )
         rules = session.experiment_rules()
-        rules.plan_sections(session)
-        assert session.load_json_data().get('plan') != None
-        action = rules.next_song_sync_action(session)
-        assert action != None
-        action = rules.next_heard_before_action(session)
-        assert action != None
+        for i in range(0, experiment.rounds):
+            actions = rules.next_round(session)
+            assert actions
     
     def test_thats_my_song(self):
         musicgen_keys = [q.key for q in MUSICGENS_17_W_VARIANTS]
@@ -45,12 +62,12 @@ class HookedTest(TestCase):
         rules = session.experiment_rules()
         assert rules.feedback_info() == None
         
-        for i in range(1, experiment.rounds + 3):
+        for i in range(0, experiment.rounds):
             actions = rules.next_round(session)
-            if i == experiment.rounds + 2:
+            if i == experiment.rounds + 1:
                 assert len(actions) == 2
                 assert actions[1].ID == 'FINAL'
-            elif i == 1:
+            elif i == 0:
                 assert len(actions) == 3
                 assert actions[0].feedback_form.form[0].key == 'dgf_generation'
                 assert actions[1].feedback_form.form[0].key == 'dgf_gender_identity'
@@ -73,29 +90,30 @@ class HookedTest(TestCase):
                 )
                 gender.given_response = 'and another thing'
                 gender.save()
-            elif i == 2:
-                assert session.result_set.count() == 2
+            elif i == 1:
+                assert session.result_set.count() == 3
                 assert session.load_json_data().get('plan') != None
-                assert len(actions) == 1
-                assert actions[0].key == 'song_sync'
+                assert len(actions) == 3
+                assert actions[0].feedback_form.form[0].key == 'recognize'
+                assert actions[2].feedback_form.form[0].key == 'correct_place'
             else:
                 plan = session.load_json_data().get('plan')
-                heard_before_offset = len(plan['song_sync_sections']) + 2
+                heard_before_offset = len(plan['song_sync_sections'])
                 assert actions[0].ID == 'SCORE'
-                if i < 6:
-                    assert len(actions) == 2
-                    assert actions[1].key == 'song_sync'
+                if i < 5:
+                    assert len(actions) == 4
+                    assert actions[1].feedback_form.form[0].key == 'recognize'
                 elif i < heard_before_offset:
-                    assert len(actions) == 3
+                    assert len(actions) == 5
                     assert actions[1].feedback_form.form[0].key in musicgen_keys
                 elif i == heard_before_offset:
                     assert len(actions) == 3
                     assert actions[1].ID == 'EXPLAINER'
+                    assert actions[2].feedback_form.form[0].key == 'heard_before'
                 else:
                     assert len(actions) == 3
-                    assert actions[2].feedback_form.form[0].key == 'heard_before'
                     assert actions[1].feedback_form.form[0].key in musicgen_keys
-            session.increment_round()
+                    assert actions[2].feedback_form.form[0].key == 'heard_before'
     
     def test_hooked_china(self):
         experiment = Experiment.objects.get(name='Hooked-China')

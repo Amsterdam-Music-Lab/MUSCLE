@@ -1,21 +1,21 @@
 import * as audio from "./audio";
 import * as webAudio from "./webAudio";
 
-export const playAudio = (playConfig, section) => { 
+export const playAudio = (section, playMethod, playhead=0) => { 
     let latency = 0;
 
-    if (playConfig.play_method === 'BUFFER') {
+    if (playMethod === 'BUFFER') {
         
         // Determine latency for current audio device
         latency = webAudio.getTotalLatency()
         // Play audio
-        webAudio.playBufferFrom(section.id, Math.max(0, playConfig.playhead || 0));
+        webAudio.playBufferFrom(section.id, Math.max(0, playhead || 0));
 
         return latency
     } else {        
 
         // Only initialize webaudio if section is hosted local
-        if (playConfig.play_method !== 'EXTERNAL') {
+        if (playMethod !== 'EXTERNAL') {
             // Determine latency for current audio device
             latency = webAudio.getTotalLatency()
             webAudio.initWebAudio();            
@@ -25,14 +25,14 @@ export const playAudio = (playConfig, section) => {
         audio.setVolume(1);
 
         // Play audio
-        audio.playFrom(Math.max(0, playConfig.playhead || 0));
+        audio.playFrom(Math.max(0, playhead || 0));
         
         return latency
     }
 }
 
-export const pauseAudio = (playConfig) => {
-    if (playConfig.play_method === 'BUFFER') {
+export const pauseAudio = (playMethod) => {
+    if (playMethod === 'BUFFER') {
         webAudio.stopBuffer();
     } else {
         audio.stop();

@@ -26,18 +26,18 @@ class Playback(BaseAction):
         - preload_message: text to display during preload
         - instruction: text to display during presentation of the sound
         - play_from: from where in the file to start playback. Set to None to mute
+        - stop_audio_after: after how many seconds playback audio should be stopped
+        - timeout_after_playback: pause in ms after playback has finished
         - ready_time: how long to countdown before playback
-        - play_config: define to override the following values:
             - play_method:
                 - 'BUFFER': Use webaudio buffers. (recommended for stimuli up to 45s)  
                 - 'HTML': Use the HTML tag. (recommended for stimuli longer than 45s)
                 - 'EXTERNAL': Use for externally hosted audio files. Web-audio api will be disabled            
             - ready_time: time before presentation of sound
-            - timeout_after_playback: pause in ms after playback has finished
-            - playhead: from where the audio file should play (offset in seconds from start)
+            
+            - play_from: from where the audio file should play (offset in seconds from start)
             - mute: whether audio should be muted
-            - auto_play: whether sound will start automatically
-            - stop_audio_after: after how many seconds playback audio should be stopped
+            
             - show_animation: whether to show an animation during playback 
             - (multiplayer) label_style: player index number style: NUMERIC, ALPHABETIC, ROMAN or empty (no label)
             - play_once: the sound can only be played once
@@ -49,7 +49,9 @@ class Playback(BaseAction):
                  instruction='',
                  play_from=0,
                  ready_time=0,
-                 timeout_after_playback=None):
+                 mute=None,
+                 timeout_after_playback=None,
+                 stop_audio_after=None):
         self.sections = [{'id': s.id, 'url': s.absolute_url(), 'group': s.group}
                          for s in sections]
         if str(sections[0].filename).startswith('http'):
@@ -61,8 +63,10 @@ class Playback(BaseAction):
         self.preload_message = preload_message
         self.instruction = instruction
         self.play_from = play_from
+        self.mute = mute
         self.ready_time = ready_time
         self.timeout_after_playback = timeout_after_playback
+        self.stop_audio_after = stop_audio_after
         # self.play_config = {
         #     'play_method': 'BUFFER',
         #     'external_audio': False,

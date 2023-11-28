@@ -1,7 +1,7 @@
 from .models import Result
 
-from .score import SCORING_RULES
 from experiment.questions.profile_scoring_rules import PROFILE_SCORING_RULES
+from result.score import SCORING_RULES
 
 def get_result(session, data):
     result_id = data.get('result_id')
@@ -82,18 +82,20 @@ def score_result(data, session):
     }
     """
     result = get_result(session, data)
+    result.save_json_data(data)
     result.given_response = data.get('value')
     # Calculate score: by default, apply a scoring rule
     # Can be overridden by defining calculate_score in the rules file    
     if result.session:
         score = session.experiment_rules().calculate_score(result, data)
+        # refresh session data in case anything was changed within calculate_score function
+        session.refresh_from_db()
     else:
         # this is a profile type result, i.e., it doesn't have a session:
         score = apply_scoring_rule(result, data)
     # Populate and save the result
     # result can also be None
     result.score = score
-    result.save_json_data(data)
     result.save()
     return result
 

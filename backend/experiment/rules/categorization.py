@@ -353,7 +353,6 @@ class Categorization(Base):
 
     def plan_phase(self, session):
         json_data = session.load_json_data()
-        print(json_data['group'], session.playlist.section_set.first().tag)
         if 'training' in json_data['phase']:
             # Retrieve training stimuli for the assigned group
             if json_data["group"] == 'S1':
@@ -384,7 +383,6 @@ class Categorization(Base):
                 section_sequence.append(sections[0].song_id)
                 section_sequence.append(sections[1].song_id)
             random.shuffle(section_sequence)
-            print(section_sequence)
             json_data['sequence'] = section_sequence
 
         else:
@@ -509,5 +507,5 @@ repeat_training_or_quit = ChoiceQuestion(
     },
     submits=True,
     is_skippable=False,
-    style={'buttons-large-gap': True, 'boolean': True}
+    style={'buttons-large-gap': True, 'buttons-large-text': True, 'boolean': True}
 )

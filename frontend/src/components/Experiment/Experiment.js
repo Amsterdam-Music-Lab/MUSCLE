@@ -11,8 +11,6 @@ import Final from "../Final/Final";
 import Loading from "../Loading/Loading";
 import Playlist from "../Playlist/Playlist";
 import Score from "../Score/Score";
-import SongSync from "../SongSync/SongSync";
-import Plink from "../Plink/Plink";
 import StartSession from "../StartSession/StartSession";
 import Trial from "../Trial/Trial";
 import useResultHandler from "../../hooks/useResultHandler";
@@ -93,8 +91,8 @@ const Experiment = ({ match, location }) => {
     ]);
 
     // trigger next action from next_round array, or call session/next_round
-    const onNext = async () => {
-        if (actions.length) {
+    const onNext = async (doBreak) => {
+        if (!doBreak && actions.length) {
             updateActions(actions);
         } else {
             // Try to get next_round data from server
@@ -143,10 +141,6 @@ const Experiment = ({ match, location }) => {
             // -------------------------
             case "TRIAL_VIEW":
                 return <Trial {...attrs} />;
-            case "SONG_SYNC":
-                return <SongSync {...attrs} />;
-            case "PLINK":
-                return <Plink {...attrs} />;
 
             // Information & Scoring
             // -------------------------

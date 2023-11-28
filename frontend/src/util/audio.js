@@ -10,7 +10,7 @@ audio.controls = "controls";
 audio.src = SILENT_MP3;
 
 // switch to cors anonymous for local development (needed for webaudio)
-API_ROOT == 'http://localhost:8000' ? audio.crossOrigin = "anonymous" : audio.crossorigin = "use-credentials";
+API_ROOT === 'http://localhost:8000' ? audio.crossOrigin = "anonymous" : audio.crossorigin = "use-credentials";
 
 audio.disableRemotePlayback = true;
 audio.style.display = "none";

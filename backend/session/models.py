@@ -49,7 +49,6 @@ class Session(models.Model):
         """Return artist and name of previous song, 
         or return empty string if no scores are set
         """
-
         section = self.previous_section()
         if section:
             return "{} - {}".format(section.song.artist, section.song.name)
@@ -243,3 +242,13 @@ class Session(models.Model):
     def answered_questions(self):
         """Get number of answered (non-empty) profile questions for this session"""
         return self.result_set.exclude(given_response="").count()
+    
+    def get_relevant_results(self, question_keys=[]):
+        results = self.result_set
+        if question_keys:
+            return results.filter(question_key__in=question_keys)
+        return results
+
+    def get_previous_result(self, question_keys=[]):
+        results = self.get_relevant_results(question_keys)
+        return results.order_by('-created_at').first()

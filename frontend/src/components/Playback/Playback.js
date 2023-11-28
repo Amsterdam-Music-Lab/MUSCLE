@@ -35,6 +35,7 @@ const Playback = ({
     const setView = (view, data = {}) => {
         setState({ view, ...data });
     }
+    const playMethod = playbackArgs.play_method;
 
     // Keep track of which player has played, in a an array of player indices
     const [hasPlayed, setHasPlayed] = useState([]);
@@ -66,7 +67,6 @@ const Playback = ({
     const onAudioEnded = useCallback(() => {
         setPlayerIndex(-1);
 
-        //AJ: added for categorization experiment for form activation after playback and auto_advance to work properly
         if (playbackArgs.timeout_after_playback) {
             setTimeout(finishedPlaying, playbackArgs.timeout_after_playback);
         } else {
@@ -79,7 +79,7 @@ const Playback = ({
         lastPlayerIndex.current = playerIndex;
     }, [playerIndex]);
 
-    if (playbackArgs.play_method === 'EXTERNAL') {                    
+    if (playMethod === 'EXTERNAL') {                    
         webAudio.closeWebAudio();            
     }
 
@@ -88,21 +88,21 @@ const Playback = ({
         if (index !== lastPlayerIndex.current) {
             // Load different audio
             if (prevPlayerIndex.current !== -1) {
-                pauseAudio(playbackArgs);
+                pauseAudio(playMethod);
             }                
             // Store player index
             setPlayerIndex(index);
             // Determine if audio should be played
             if (playbackArgs.play_from) {
                 setPlayerIndex(-1);
-                pauseAudio(playbackArgs);
+                pauseAudio(playMethod);
                 return;
             }
-            let latency = playAudio(playbackArgs, playbackArgs.sections[index]);
+            let latency = playAudio(playbackArgs.sections[index], playMethod);
             // Cancel active events
             cancelAudioListeners();
             // listen for active audio events
-            if (playbackArgs.play_method === 'BUFFER') {
+            if (playMethod === 'BUFFER') {
                 activeAudioEndedListener.current = webAudio.listenOnce("ended", onAudioEnded);
             } else {
                 activeAudioEndedListener.current = audio.listenOnce("ended", onAudioEnded);
@@ -113,36 +113,36 @@ const Playback = ({
         }
         // Stop playback
         if (lastPlayerIndex.current === index) {
-                pauseAudio(playbackArgs);                     
+                pauseAudio(playMethod);                     
                 setPlayerIndex(-1);
                 return;
         }
-    },[playbackArgs, activeAudioEndedListener, cancelAudioListeners, startedPlaying, onAudioEnded]
+    },[playbackArgs, playMethod, activeAudioEndedListener, cancelAudioListeners, startedPlaying, onAudioEnded]
     );
 
     // Local logic for onfinished playing
     const onFinishedPlaying = useCallback(() => {
         setPlayerIndex(-1);
-        pauseAudio(playbackArgs);
+        pauseAudio(playMethod);
         finishedPlaying && finishedPlaying();
-    }, [finishedPlaying, playbackArgs]);
+    }, [finishedPlaying, playMethod]);
 
     // Stop audio on unmount
     useEffect(
         () => {
-            return pauseAudio(playbackArgs);
+            return pauseAudio(playMethod);
         },
-        [playbackArgs]
+        [playMethod]
     );
-
-    // // Autoplay
-    // useEffect(() => {
-    //     playbackArgs.view === 'AUTOPLAY' && playSection(0);
-    // }, [playbackArgs, playSection]);
 
     const render = (view) => {
         const attrs = {
-            playbackArgs,
+            sections: playbackArgs.sections,
+            showAnimation: playbackArgs.show_animation,
+            mute: playbackArgs.mute,
+            playhead: playbackArgs.play_from,
+            playMethod: playMethod,
+            instruction: playbackArgs.instruction,
             setView,
             autoAdvance,
             responseTime,
@@ -160,6 +160,8 @@ const Playback = ({
             case PRELOAD:
                 return (
                     <Preload {...attrs}
+                        duration={playbackArgs.ready_time}
+                        preloadMessage={playbackArgs.preload_message}
                         onNext={() => {                        
                             setView(playbackArgs.view);
                             onPreloadReady();
@@ -194,7 +196,6 @@ const Playback = ({
                 return (
                     <MatchingPairs
                         {...attrs}
-                        stopAudioAfter={playbackArgs.stop_audio_after}
                     />
                 );
             default:

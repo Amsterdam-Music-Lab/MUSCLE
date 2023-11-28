@@ -8,6 +8,7 @@ from .gold_msi import GoldMSI
 from .h_bat import HBat
 from .h_bat_bfit import HBatBFIT
 from .hbat_bst import BST
+from .hooked import Hooked
 from .huang_2022 import Huang2022
 from .kuiper_2020 import Kuiper2020
 from .listening_conditions import ListeningConditions
@@ -41,6 +42,7 @@ EXPERIMENT_RULES = {
     HBat.ID: HBat,
     HBatBFIT.ID: HBatBFIT,
     BST.ID: BST,
+    Hooked.ID: Hooked,
     MatchingPairsGame.ID: MatchingPairsGame,
     MatchingPairsICMPC.ID: MatchingPairsICMPC,
     MusicalPreferences.ID: MusicalPreferences,
