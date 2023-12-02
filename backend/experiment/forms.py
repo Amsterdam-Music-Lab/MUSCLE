@@ -145,6 +145,10 @@ class ExperimentForm(ModelForm):
         fields = ['name', 'slug', 'active', 'rules',
                   'rounds', 'bonus_points', 'playlists', 'experiment_series']
 
+    class Media:
+        js = ["experiment_admin.js"]
+        css = {"all": ["experiment_admin.css"]}
+
 
 class ExportForm(Form):
     export_session_fields = MultipleChoiceField(

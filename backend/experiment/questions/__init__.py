@@ -32,7 +32,7 @@ for question_group in QUESTION_GROUPS:
     QUESTIONS_CHOICES.append( (question_group[0], [(q.key,"("+q.key+") "+q.question) for q in question_group[1]]) )
 
 def get_default_question_keys():
-    return [q.key for q in DEMOGRAPHICS]
+    return []
 
 
 def get_questions_from_keys(keys):
