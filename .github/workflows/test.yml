@@ -16,7 +16,6 @@ jobs:
         run: sudo docker-compose --env-file .env-github-actions run server bash -c "python manage.py test"
 
   frontend-test:
-    needs: backend-test
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
