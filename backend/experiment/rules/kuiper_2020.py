@@ -48,7 +48,7 @@ class Kuiper2020(Hooked):
             old_sections_2 = \
                 [session.
                  section_from_any_song(
-                     {'group': s.group, 'tag': 3 - s.tag}
+                     {'group': s.group, 'tag': 3 - int(s.tag)}
                  )
                  for s in old_sections_1]
         free_sections = [session.section_from_song(s) for s in free_songs]
@@ -143,7 +143,6 @@ class Kuiper2020(Hooked):
             },
             question=_("Did you hear this song in previous rounds?"),
             result_id=result_pk,
-            scoring_rule='REACTION_TIME',
             style=STYLE_BOOLEAN_NEGATIVE_FIRST,
             submits=True)])
         config = {
