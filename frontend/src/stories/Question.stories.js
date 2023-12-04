@@ -312,8 +312,6 @@ export const TextRange = {
                 "Choice 2",
                 "Choice 3",
             ],
-            min_value: 1,
-            max_value: 42,
         },
         onChange: () => {},
         id: 0,
