@@ -64,11 +64,12 @@ def song_sync(session, section, title, response_time=15, play_method='BUFFER'):
     silence = Trial(
         playback=Autoplay([section],
                           show_animation=True,
-                          instruction=_('Keep imagining the music')),
+                          instruction=_('Keep imagining the music'),
+                          mute=True),
         config={
             'response_time': silence_time,
             'auto_advance': True,
-            'show_continue_button': False
+            'show_continue_button': False,
         },
         title=title
     )
