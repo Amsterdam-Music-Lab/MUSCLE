@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import classNames from "classnames";
 
-const PlayButton = ({ children, playSection, isPlaying, className="" }) => {
+const PlayButton = ({ playSection, isPlaying, className="" }) => {
 
     const [clicked, setClicked] = useState(false);
 
