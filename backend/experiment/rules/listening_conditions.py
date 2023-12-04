@@ -6,6 +6,7 @@ from experiment.actions import Consent, Explainer, Step, Playback, Playlist, Sta
 from experiment.actions.form import ChoiceQuestion, Form
 from experiment.actions.playback import Playback
 from experiment.actions.utils import final_action_with_optional_button
+from result.utils import prepare_result
 
 
 class ListeningConditions(Base):
@@ -17,7 +18,7 @@ class ListeningConditions(Base):
         feedback_form = None
         if round_number == 1:
             key = 'quiet_room'
-            result_pk = Base.prepare_result(session, expected_response=key)
+            result_pk = prepare_result(session, expected_response=key)
             feedback_form = Form([
                 ChoiceQuestion(
                     key=key,
@@ -34,7 +35,7 @@ class ListeningConditions(Base):
                 )])
         elif round_number == 2:
             key = 'internet_connection'
-            result_pk = Base.prepare_result(session, expected_response=key)
+            result_pk = prepare_result(session, expected_response=key)
             feedback_form = Form([ChoiceQuestion(
                 key='internet_connection',
                 question=_(
@@ -49,7 +50,7 @@ class ListeningConditions(Base):
             )])
         elif round_number == 3:
             key = 'headphones'
-            result_pk = Base.prepare_result(session, expected_response=key)
+            result_pk = prepare_result(session, expected_response=key)
             feedback_form = Form([
                 ChoiceQuestion(
                     key=key,
@@ -66,7 +67,7 @@ class ListeningConditions(Base):
             ])
         elif round_number == 4:
             key = 'notifications_off'
-            result_pk = Base.prepare_result(session, expected_response=key)
+            result_pk = prepare_result(session, expected_response=key)
             feedback_form = Form([
                 ChoiceQuestion(
                     key=key,
