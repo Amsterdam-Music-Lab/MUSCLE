@@ -98,7 +98,7 @@ const Playback = ({
                 pauseAudio(playMethod);
                 return;
             }
-            let latency = playAudio(playbackArgs.sections[index], playMethod);
+            let latency = playAudio(playbackArgs.sections[index], playMethod, playbackArgs.play_from);
             
             // Cancel active events
             cancelAudioListeners();
@@ -132,7 +132,7 @@ const Playback = ({
     // Stop audio on unmount
     useEffect(
         () => {
-            return pauseAudio(playMethod);
+            return () => pauseAudio(playMethod);
         },
         [playMethod]
     );
