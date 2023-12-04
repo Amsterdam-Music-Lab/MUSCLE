@@ -1,11 +1,9 @@
 import React, { useRef, useEffect } from "react";
 
-import { playAudio } from "../../util/audioControl";
-
 import Circle from "../Circle/Circle";
 import ListenCircle from "../ListenCircle/ListenCircle";
 
-const AutoPlay = ({sections, mute, playhead, playMethod, instruction, showAnimation, time, startedPlaying, finishedPlaying, responseTime, className=''}) => {
+const AutoPlay = ({playSection, instruction, showAnimation, time, finishedPlaying, responseTime, className=''}) => {
     // player state
     
     const running = useRef(true);
@@ -16,14 +14,8 @@ const AutoPlay = ({sections, mute, playhead, playMethod, instruction, showAnimat
 
     // Handle view logic
     useEffect(() => {        
-        let latency = 0;
-        // Play audio at start time            
-        if (!mute) {            
-            latency = playAudio(sections[0], playMethod, playhead);          
-            // Compensate for audio latency and set state to playing
-            setTimeout(startedPlaying(), latency);
-        }
-    }, [sections, mute, playMethod, playhead, startedPlaying]);
+        playSection(0);
+    }, [playSection]);
 
     // Render component
     return (
