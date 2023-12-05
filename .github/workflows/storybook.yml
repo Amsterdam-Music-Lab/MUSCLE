@@ -39,6 +39,7 @@ jobs:
           path: ./frontend/storybook-static
 
   deploy-gh-pages:
+    if: false
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
