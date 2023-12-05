@@ -2,12 +2,17 @@ import "./index.css";
 import React from "react";
 import ReactDOM from "react-dom";
 import App from "./components/App/App";
+import { initSentry } from "./config/sentry";
 import { initAudioListener } from "./util/audio";
 import { initWebAudioListener } from "./util/webAudio";
+
+// Init sentry
+initSentry();
 
 // Init audio listener
 initAudioListener();
 initWebAudioListener();
+
 
 // Create app
 ReactDOM.render(<App />, document.getElementById("root"));
