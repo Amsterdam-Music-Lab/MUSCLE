@@ -1,4 +1,4 @@
-[![DOI](https://zenodo.org/badge/418963353.svg)](https://zenodo.org/badge/latestdoi/418963353)
+[![DOI](https://zenodo.org/badge/418963353.svg)](https://zenodo.org/badge/latestdoi/418963353) [![Test](https://github.com/Amsterdam-Music-Lab/MUSCLE/actions/workflows/test.yml/badge.svg)](https://github.com/Amsterdam-Music-Lab/MUSCLE/actions/workflows/test.yml/badge.svg)
 
 # MUSic-related Citizen Science Listening Experiments (MUSCLE)
 This application provides an easy way to implement and run online listening experiments for music research. It presents questions, and typically audio stimuli, to participants, and collects their feedback.
