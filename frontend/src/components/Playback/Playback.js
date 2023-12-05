@@ -139,6 +139,7 @@ const Playback = ({
 
     const render = (view) => {
         const attrs = {
+            playbackArgs,
             sections: playbackArgs.sections,
             showAnimation: playbackArgs.show_animation,
             mute: playbackArgs.mute,

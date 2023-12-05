@@ -8,7 +8,7 @@ const MultiPlayer = ({
     playSection,
     sections,
     playerIndex,
-    playArgs,
+    playbackArgs,
     disabledPlayers,
     extraContent,
 }) => {
@@ -30,11 +30,11 @@ const MultiPlayer = ({
                             disabledPlayers.includes(parseInt(index))
                         }
                         label={
-                            playArgs.label_style | playArgs.labels
+                            playbackArgs.label_style | playbackArgs.labels
                                 ? getPlayerLabel(
                                       index,
-                                      playArgs.label_style,
-                                      playArgs.labels || []
+                                      playbackArgs.label_style,
+                                      playbackArgs.labels || []
                                   )
                                 : ""
                         }
