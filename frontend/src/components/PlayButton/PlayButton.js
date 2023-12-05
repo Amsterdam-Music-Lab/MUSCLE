@@ -15,7 +15,8 @@ const PlayButton = ({ playSection, isPlaying, className="" }) => {
             onKeyPress={(e) => {
                 playSection && playSection(0)
             }}
-        ></div>
+        >
+        </div>
     );
 };
 
