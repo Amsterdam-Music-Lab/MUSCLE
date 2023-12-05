@@ -2,7 +2,6 @@ name: Test suite
 
 on:
   push:
-  pull_request:
 
 jobs:
   backend-test:
