@@ -6,7 +6,6 @@ import FeedbackForm from "../FeedbackForm/FeedbackForm";
 import HTML from "../HTML/HTML";
 import Playback from "../Playback/Playback";
 import Button from "../Button/Button";
-import { play } from "../../util/audio";
 
 /** Trial is an experiment view to present information to the user and/or collect user feedback
 If "playback" is provided, it will play audio through the Playback component
@@ -84,7 +83,7 @@ const Trial = ({
                 
             }
         },
-        [feedback_form, config, onNext, onResult]
+        [feedback_form, config, onNext, onResult, result_id]
     );
 
     const checkBreakRound = (values, breakConditions) => {

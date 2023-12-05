@@ -139,13 +139,9 @@ const Playback = ({
 
     const render = (view) => {
         const attrs = {
-            playbackArgs,
             sections: playbackArgs.sections,
             showAnimation: playbackArgs.show_animation,
-            mute: playbackArgs.mute,
-            playhead: playbackArgs.play_from,
-            playMethod: playMethod,
-            instruction: playbackArgs.instruction,
+            playbackArgs,
             setView,
             autoAdvance,
             responseTime,
@@ -172,7 +168,9 @@ const Playback = ({
                     />
             );
             case AUTOPLAY:
-                return <AutoPlay {...attrs} />;
+                return <AutoPlay {...attrs}
+                        instruction={playbackArgs.instruction}
+                />;
             case BUTTON:
                 return (
                     <PlayButton
@@ -185,6 +183,7 @@ const Playback = ({
                 return (
                     <MultiPlayer
                         {...attrs}
+                        labels={playbackArgs.labels}
                         disabledPlayers={playbackArgs.play_once ? hasPlayed : undefined}
                     />
                 );
