@@ -41,7 +41,7 @@ def two_alternative_forced(session, section, choices, expected_response=None, st
     trial = Trial(playback=playback, feedback_form=feedback_form, title=title, config=config)
     return trial
 
-def song_sync(session, section, title, response_time=15, play_method='BUFFER'):
+def song_sync(session, section, title, response_time=15):
     trial_config = {
         'response_time': response_time,
         'auto_advance': True

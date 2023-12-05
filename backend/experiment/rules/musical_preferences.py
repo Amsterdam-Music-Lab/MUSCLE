@@ -107,7 +107,7 @@ class MusicalPreferences(Base):
                 else:
                     session.decrement_round()
                     if last_result.question_key == 'audio_check1':
-                        playback = get_test_playback('EXTERNAL')                    
+                        playback = get_test_playback()                    
                         html = HTML(body=render_to_string('html/huang_2022/audio_check.html'))
                         form = Form(form=[BooleanQuestion(
                             key='audio_check2',
@@ -126,7 +126,7 @@ class MusicalPreferences(Base):
                         return Redirect(settings.HOMEPAGE)
             else:
                 session.decrement_round()
-                playback = get_test_playback('EXTERNAL')
+                playback = get_test_playback()
                 html = HTML(body='<h4>{}</h4>'.format(_('Do you hear the music?')))
                 form = Form(form=[BooleanQuestion(
                     key='audio_check1',

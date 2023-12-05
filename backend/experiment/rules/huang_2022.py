@@ -98,7 +98,7 @@ class Huang2022(Hooked):
                 if last_result.score == 0:
                     # user indicated they couldn't hear the music
                     if last_result.question_key == 'audio_check1':
-                        playback = get_test_playback(self.play_method)
+                        playback = get_test_playback()
                         html = HTML(body=render_to_string('html/huang_2022/audio_check.html'))
                         form = Form(form=[BooleanQuestion(
                             key='audio_check2',

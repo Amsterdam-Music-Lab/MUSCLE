@@ -55,17 +55,6 @@ class Playback(BaseAction):
         self.ready_time = ready_time
         self.timeout_after_playback = timeout_after_playback
         self.stop_audio_after = stop_audio_after
-        # self.play_config = {
-        #     'play_method': 'BUFFER',
-        #     'external_audio': False,
-        #     'ready_time': 0,
-        #     'playhead': 0,
-        #     'show_animation': False,
-        #     'mute': False,
-        #     'play_once': False,
-        # }
-        # if play_config:
-        #     self.play_config.update(play_config)
     
 class Autoplay(Playback):
     '''

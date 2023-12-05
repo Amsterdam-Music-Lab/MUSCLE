@@ -269,7 +269,7 @@ class Hooked(Base):
         if not section:
             logger.warning("Warning: no next_song_sync section found")
             section = session.section_from_any_song()
-        return song_sync(session, section, title=self.get_trial_title(session, round_number), play_method=self.play_method)
+        return song_sync(session, section, title=self.get_trial_title(session, round_number))
        
     def next_heard_before_action(self, session):
         """Get next heard_before action for this session."""
