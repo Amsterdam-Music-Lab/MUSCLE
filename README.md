@@ -53,7 +53,10 @@ A production build should define its own `docker-compose.yaml`, making use of th
 To run the frontend tests, run the following command:
 
 ```sh
-docker compose run client yarn test --watchAll=false
+docker compose run --rm client yarn test --watchAll=false
+
+# or use the script
+./scripts/test-frontend
 ```
 
 #### Watch mode
@@ -61,7 +64,10 @@ docker compose run client yarn test --watchAll=false
 To run the frontend tests in watch mode, which allows you to re-run tests when you change files, run the following command:
 
 ```sh
-docker compose run client yarn test
+docker compose run --rm client yarn test
+
+# or use the script
+./scripts/test-frontend-watch
 ```
 
 ### Backend tests
@@ -69,5 +75,8 @@ docker compose run client yarn test
 To run the backend tests, run the following command:
 
 ```sh
-docker-compose run server bash -c "python manage.py test"
+docker-compose run --rm server bash -c "python manage.py test"
+
+# or use the script
+./scripts/test-backend
 ```
