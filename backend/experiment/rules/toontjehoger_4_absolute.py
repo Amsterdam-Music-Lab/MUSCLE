@@ -8,6 +8,7 @@ from experiment.actions import Trial, Explainer, Step, Score, Final, StartSessio
 from experiment.actions.form import ButtonArrayQuestion, Form
 from experiment.actions.playback import Multiplayer
 from experiment.actions.styles import STYLE_NEUTRAL
+from experiment.utils import create_player_labels
 from .base import Base
 from result.utils import prepare_result
 
@@ -97,7 +98,7 @@ class ToontjeHoger4Absolute(Base):
         random.shuffle(sections)
 
         # Player
-        playback = Multiplayer(sections, label_style='ALPHABETIC')
+        playback = Multiplayer(sections, labels=create_player_labels(len(sections), 'alphabetic'))
 
         # Question
         key = 'pitch'

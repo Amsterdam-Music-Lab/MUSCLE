@@ -8,7 +8,7 @@ from experiment.actions.form import ButtonArrayQuestion, Form
 from experiment.actions.playback import Multiplayer
 from experiment.actions.styles import STYLE_NEUTRAL
 from .base import Base
-from experiment.utils import non_breaking_spaces
+from experiment.utils import create_player_labels, non_breaking_spaces
 
 from result.utils import prepare_result
 
@@ -136,7 +136,7 @@ class ToontjeHoger5Tempo(Base):
         section_original = sections[0] if sections[0].group == "or" else sections[1]  
 
         # Player
-        playback = Multiplayer(sections, label_style='ALPHABETIC')
+        playback = Multiplayer(sections, labels=create_player_labels(len(sections), 'alphabetic'))
 
         # Question
         key = 'pitch'

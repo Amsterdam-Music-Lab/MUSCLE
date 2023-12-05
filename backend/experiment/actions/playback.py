@@ -12,9 +12,6 @@ PLAY_EXTERNAL = 'EXTERNAL'
 PLAY_HTML = 'HTML'
 PLAY_BUFFER = 'BUFFER'
 
-# labeling
-allowed_player_label_styles = ['ALPHABETIC', 'NUMERIC', 'ROMAN']
-
 class Playback(BaseAction):
     ''' A playback wrapper for different kinds of players
         - view: can be one of the following:
@@ -25,10 +22,12 @@ class Playback(BaseAction):
         - sections: a list of sections (in many cases, will only contain *one* section)
         - preload_message: text to display during preload
         - instruction: text to display during presentation of the sound
-        - play_from: from where in the file to start playback. Set to None to mute
-        - stop_audio_after: after how many seconds playback audio should be stopped
+        - play_from: from where in the file to start playback
+        - ready_time: how long to show preload
+        - show_animation: whether to show animations during playback
+        - mute: set to True to mute audio
         - timeout_after_playback: pause in ms after playback has finished
-        - ready_time: how long to countdown before playback
+        - stop_audio_after: after how many seconds playback audio should be stopped
     '''
 
     def __init__(self,
@@ -37,6 +36,7 @@ class Playback(BaseAction):
                  instruction='',
                  play_from=0,
                  ready_time=0,
+                 show_animation=False,
                  mute=None,
                  timeout_after_playback=None,
                  stop_audio_after=None):
@@ -48,6 +48,7 @@ class Playback(BaseAction):
             self.play_method = PLAY_HTML
         else:
             self.play_method = PLAY_BUFFER
+        self.show_animation = show_animation 
         self.preload_message = preload_message
         self.instruction = instruction
         self.play_from = play_from
@@ -61,11 +62,9 @@ class Autoplay(Playback):
     This player starts playing automatically
     - show_animation: if True, show a countdown and moving histogram
     '''
-    def __init__(self, sections, show_animation=False, **kwargs):
-        super().__init__(sections, **kwargs)
-        self.show_animation = show_animation        
+    def __init__(self, sections, **kwargs):
+        super().__init__(sections, **kwargs)   
         self.ID = TYPE_AUTOPLAY
-    
 
 class PlayButton(Playback):
     '''
@@ -84,19 +83,14 @@ class Multiplayer(PlayButton):
     - label_style: set if players should be labeled in alphabetic / numeric  / roman style (based on player index)
     - labels: pass list of strings if players should have custom labels
     '''
-    def __init__(self, sections, stop_audio_after=5, label_style='', labels=[], **kwargs):
+    def __init__(self, sections, stop_audio_after=5, labels=[], **kwargs):
         super().__init__(sections, **kwargs)
         self.ID = TYPE_MULTIPLAYER
         self.stop_audio_after = stop_audio_after
-        if label_style:
-            if label_style not in allowed_player_label_styles:
-                raise UserWarning('Unknown label style: choose alphabetic, numeric or roman ordering')
-            self.label_stye = label_style
         if labels:
             if len(labels) != len(self.sections):
                 raise UserWarning('Number of labels and sections for the play buttons do not match')
             self.labels = labels
-            self.label_stye = label_style
 
 class ImagePlayer(PlayButton):
     '''
