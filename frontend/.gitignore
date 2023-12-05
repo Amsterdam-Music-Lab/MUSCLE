@@ -23,3 +23,6 @@ install-state.gz
 
 src/index.css
 src/index.css.map
+
+# Storybook
+storybook-static
