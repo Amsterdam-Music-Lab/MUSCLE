@@ -4,6 +4,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
 	let fieldLabel = document.querySelector(".field-questions > div > label")
 	let groups = document.querySelectorAll(".field-questions > div > ul > li")
 	let questions = document.querySelectorAll("#id_questions label")
+	let formInputs = document.querySelectorAll("button, fieldset, optgroup, option, select, textarea, input")
 
 	let buttons = [
 		{"text": "Show all", "eventListener": showAll(true)},
@@ -23,8 +24,16 @@ document.addEventListener("DOMContentLoaded", (event) => {
 		btn.addEventListener("click", button.eventListener)
 		buttonsColumn.append(btn)
 	})
+
+	let loader = document.createElement("div")
+	loader.className = "loader"
+	loader.style.display = "none"
+	loader.innerText = "Loading..."
+	buttonsColumn.append(loader)
 	
 	groups.forEach( (group) => {
+
+		group.style.fontWeight = "bold"
 
 		let buttonsRow = document.createElement("span")
 		buttonsRow.className = "buttons-row"
@@ -106,6 +115,10 @@ document.addEventListener("DOMContentLoaded", (event) => {
 		let defaultQuestions = []
 
 		if (rules) {
+
+			formInputs.forEach( c => c.setAttribute("disabled",""))
+			loader.style.display = "block"
+
 			//Get default question list
 			let url=`/experiment/default_questions/${rules}/`
 			let response = await fetch(url)
@@ -114,6 +127,9 @@ document.addEventListener("DOMContentLoaded", (event) => {
 				let json_data = await response.json()
 				defaultQuestions = json_data['default_questions']
 			}
+
+			formInputs.forEach( c => c.removeAttribute("disabled"))
+			loader.style.display = "none"
 		}
 
 		// Uncheck all questions
