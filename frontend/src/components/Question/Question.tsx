@@ -22,6 +22,24 @@ export const TEXT_RANGE = "TEXT_RANGE";
 export const ICON_RANGE = "ICON_RANGE";
 export const STRING = "STRING";
 
+interface Question {
+    view: string;
+    value: any;
+    style: any;
+    question: string;
+    explainer: string;
+    expected_response: string;
+}
+
+interface QuestionProps {
+    question: Question;
+    onChange: (value: any, id: string) => void;
+    id: string;
+    active: boolean;
+    emphasizeTitle?: boolean;
+}
+
+
 // Question is an experiment view that shows a question and handles storing the answer
 const Question = ({
     question,
@@ -29,7 +47,7 @@ const Question = ({
     id,
     disabled = false,
     emphasizeTitle = false,
-}) => {
+}: QuestionProps) => {
     const [value, setValue] = useState(question.value || "");
 
     const registerChange = (value) => {
