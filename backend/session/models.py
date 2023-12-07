@@ -85,6 +85,10 @@ class Session(models.Model):
             'json_data': self.load_json_data(),
             'results': [result.export_admin() for result in self.result_set.all()]
         }
+    
+    def export_results(self):
+        # export session result objects
+        return self.result_set.all()
 
     def is_finished(self):
         """Determine if the session is finished"""
