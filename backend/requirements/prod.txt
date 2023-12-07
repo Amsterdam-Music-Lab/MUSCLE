@@ -18,6 +18,7 @@ coverage==7.3.2
     # via -r requirements.in/base.txt
 defusedxml==0.7.1
     # via genbadge
+    # via sentry-sdk
 django==3.2.23
     # via
     #   -r requirements.in/base.txt
@@ -53,6 +54,8 @@ pytz==2023.3
     #   pandas
 requests==2.31.0
     # via genbadge
+sentry-sdk==1.38.0
+    # via -r requirements.in/base.txt
 six==1.16.0
     # via python-dateutil
 sqlparse==0.4.4
@@ -63,6 +66,7 @@ typing-extensions==4.6.3
     # via asgiref
 urllib3==2.1.0
     # via requests
+    # via sentry-sdk
 
 # The following packages are considered to be unsafe in a requirements file:
 # setuptools
