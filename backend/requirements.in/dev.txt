@@ -19,4 +19,4 @@ requests
 pip-tools
 
 # Generate code coverage
-coverage
+genbadge[coverage]
