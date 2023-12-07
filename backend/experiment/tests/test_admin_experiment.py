@@ -66,4 +66,4 @@ class TestAdminExperiment(TestCase):
         experiment = Experiment.objects.first()
         response = this_experiment_admin.export(request, experiment)
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response['content-type'], 'application/json')
+        self.assertEqual(response['content-type'], 'application/x-zip-compressed')
