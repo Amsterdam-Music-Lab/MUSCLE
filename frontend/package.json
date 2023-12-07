@@ -35,6 +35,11 @@
     "storybook:build": "storybook build",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
   },
+  "jest": {
+    "moduleNameMapper": {
+      "axios": "axios/dist/node/axios.cjs"
+    }
+  },
   "eslintConfig": {
     "extends": [
       "react-app",
