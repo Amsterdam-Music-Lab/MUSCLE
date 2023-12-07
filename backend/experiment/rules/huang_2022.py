@@ -148,7 +148,7 @@ class Huang2022(Hooked):
         else:
             # Load the heard_before offset.
 
-            heard_before_offset = len(plan['song_sync_sections']) + 1
+            heard_before_offset = len(plan['song_sync_sections'])
 
             # show score 
             score = self.get_score(session, round_number)
@@ -163,10 +163,10 @@ class Huang2022(Hooked):
                 actions.append(self.heard_before_explainer())
                 actions.append(
                     self.next_heard_before_action(session))
-            elif heard_before_offset < round_number <= total_rounds:
+            elif heard_before_offset < round_number < total_rounds:
                 actions.append(
                     self.next_heard_before_action(session))   
-            elif round_number == total_rounds + 1:
+            else:
                 questionnaire = self.get_questionnaire(session)
                 if questionnaire:
                     actions.extend([Explainer(
@@ -175,11 +175,8 @@ class Huang2022(Hooked):
                         steps=[],
                         step_numbers=True,
                         button_label=_("Let's go!")), *questionnaire])
-                    session.increment_round()
                 else:
-                    actions.append(self.finalize(session))
-            else:
-                return [self.finalize(session)]
+                    return [self.finalize(session)]
         return actions
     
     def finalize(self, session):

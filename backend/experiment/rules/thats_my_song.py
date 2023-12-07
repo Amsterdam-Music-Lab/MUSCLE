@@ -64,7 +64,7 @@ class ThatsMySong(Hooked):
         
         # If the number of results equals the number of experiment.rounds,
         # close the session and return data for the final_score view.
-        if round_number == session.experiment.rounds:
+        if round_number == session.experiment.rounds + self.round_modifier:
 
             # Finish session.
             session.finish()
@@ -73,7 +73,7 @@ class ThatsMySong(Hooked):
             # Return a score and final score action.
             social_info = self.social_media_info(session.experiment, session.final_score)
             return [
-                self.get_score(session, round_number),
+                self.get_score(session, round_number - self.round_modifier),
                 Final(
                     session=session,
                     final_text=self.final_score_message(session) + " For more information about this experiment, visit the Vanderbilt University Medical Center Music Cognition Lab.",

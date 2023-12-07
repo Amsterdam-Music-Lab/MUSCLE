@@ -65,7 +65,7 @@ class HookedTest(TestCase):
         
         for i in range(0, experiment.rounds):
             actions = rules.next_round(session)
-            if i == experiment.rounds:
+            if i == experiment.rounds + 1:
                 assert len(actions) == 2
                 assert actions[1].ID == 'FINAL'
             elif i == 0:
@@ -113,9 +113,8 @@ class HookedTest(TestCase):
                     assert actions[2].feedback_form.form[0].key == 'heard_before'
                 else:
                     assert len(actions) == 3
-                    assert actions[1].feedback_form.form[0].key == 'heard_before'
-                    assert actions[2].feedback_form.form[0].key in musicgen_keys
-            session.increment_round()
+                    assert actions[1].feedback_form.form[0].key in musicgen_keys
+                    assert actions[2].feedback_form.form[0].key == 'heard_before'
     
     def test_hooked_china(self):
         experiment = Experiment.objects.get(name='Hooked-China')
