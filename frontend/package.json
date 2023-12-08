@@ -37,7 +37,13 @@
   },
   "jest": {
     "moduleNameMapper": {
-      "axios": "axios/dist/node/axios.cjs"
+      "axios": "axios/dist/node/axios.cjs",
+      "^components/(.*)$": "<rootDir>/src/components/$1",
+      "^config/(.*)$": "<rootDir>/src/config/$1",
+      "^hooks/(.*)$": "<rootDir>/src/hooks/$1",
+      "^scss/(.*)$": "<rootDir>/src/scss/$1",
+      "^stories/(.*)$": "<rootDir>/src/stories/$1",
+      "^util/(.*)$": "<rootDir>/src/util/$1"
     }
   },
   "eslintConfig": {
