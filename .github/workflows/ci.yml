@@ -6,6 +6,7 @@ on:
 jobs:
 
   backend-test:
+    name: Test Backend
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -20,6 +21,7 @@ jobs:
       - run: sudo docker-compose --env-file .env-github-actions run server bash -c "flake8"
 
   frontend-test:
+    name: Test Frontend
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
