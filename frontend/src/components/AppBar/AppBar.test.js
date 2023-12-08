@@ -2,7 +2,6 @@ import React from 'react';
 import { render, fireEvent } from '@testing-library/react';
 import AppBar from './AppBar';
 import { BrowserRouter as Router } from 'react-router-dom';
-import '@testing-library/jest-dom';
 
 describe('AppBar', () => {
 

@@ -1,5 +1,4 @@
 import { render } from '@testing-library/react';
-import '@testing-library/jest-dom';
 import { getPlayerLabel, LABEL_NUMERIC, LABEL_ALPHABETIC, LABEL_ROMAN, LABEL_CUSTOM, renderLabel } from "./label";
 
 describe('getPlayerLabel', () => {
