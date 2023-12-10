@@ -17,7 +17,7 @@ const config = {
     },
     staticDirs: ["../public"],
     env: {
-        REACT_APP_API_ROOT: "",
+        REACT_APP_API_ROOT: "http://localhost:8000",
     },
 };
 
