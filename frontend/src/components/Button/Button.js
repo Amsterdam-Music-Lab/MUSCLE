@@ -37,7 +37,7 @@ const Button = ({
         : {};
 
     return (
-        <div
+        <button
             className={classNames({ active }, className, padding, "aha__button btn btn-lg")}
             onClick={(e) => {
                 clickOnce();
@@ -47,10 +47,11 @@ const Button = ({
             onKeyPress={(e) => {
                 clickOnce();
             }}
+            type="button"
             {...touchEvent}
         >
             {title}
-        </div>
+        </button>
     );
 };
 
