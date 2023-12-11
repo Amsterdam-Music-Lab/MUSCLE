@@ -1,5 +1,5 @@
 from django.test import TestCase
-from experiment.models import Experiment
+from experiment.models import Experiment, ExperimentSeries
 
 class TestModelExperiment(TestCase):
     @classmethod
