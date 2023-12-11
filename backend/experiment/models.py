@@ -24,6 +24,10 @@ class ExperimentSeries(models.Model):
     def __str__(self):
         return self.name
 
+    class Meta:
+        verbose_name_plural = "Experiment Series"
+
+
 class Experiment(models.Model):
     """Root entity for configuring experiments"""
 
@@ -86,7 +90,7 @@ class Experiment(models.Model):
         }
 
     def export_table(self, session_keys, result_keys, export_options):
-        """Export filtered tabular data for admin        
+        """Export filtered tabular data for admin
             session_keys : session fieldnames to be included
             result_keys : result fieldnames to be included
             export_options : export options (see admin/forms.py)
@@ -195,7 +199,7 @@ class Experiment(models.Model):
             return score['final_score__max']
 
         return 0
-    
+
 class Feedback(models.Model):
     text = models.TextField()
     experiment = models.ForeignKey(Experiment, on_delete=models.CASCADE)
