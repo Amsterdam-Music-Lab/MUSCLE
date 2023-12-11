@@ -4,11 +4,11 @@ import { saveAs } from 'file-saver';
 import { URLS } from "../../config";
 import Button from "../Button/Button";
 import Loading from "../Loading/Loading";
-import * as API from "../../API";
+import { createConsent, useConsent } from "../../API";
 
 // Consent is an experiment view that shows the consent text, and handles agreement/stop actions
 const Consent = ({ title, text, experiment, participant, onNext, confirm, deny, urlQueryString }) => {
-    const [consent, loadingConsent] = API.useConsent(experiment.slug);
+    const [consent, loadingConsent] = useConsent(experiment.slug);
 
     // Listen for consent, and auto advance if already given
     useEffect(() => {
@@ -20,7 +20,7 @@ const Consent = ({ title, text, experiment, participant, onNext, confirm, deny, 
     // Click on agree button
     const onAgree = async () => {
         // Store consent
-        await API.createConsent({ experiment, participant });
+        await createConsent({ experiment, participant });
 
         // Next!
         onNext();
@@ -31,7 +31,6 @@ const Consent = ({ title, text, experiment, participant, onNext, confirm, deny, 
         const txt = doc.body.textContent.split('  ').join('');
         const blob = new Blob([txt], {type: "text/plain;charset=utf-8"});
         saveAs(blob, 'consent.txt');
-        
     }
 
     // Loader in case consent is being loaded
@@ -63,8 +62,9 @@ const Consent = ({ title, text, experiment, participant, onNext, confirm, deny, 
                     <h3>{title}</h3>
                 </div>
                 <div className="flex-end">
-                    <button 
+                    <button
                         className="btn btn-download fa-solid fa-download font-weight-bold"
+                        data-testid="download-button"
                         onClick={onDownload}
                     >
                     </button>
@@ -73,6 +73,7 @@ const Consent = ({ title, text, experiment, participant, onNext, confirm, deny, 
 
             <div
                 className="consent-text"
+                data-testid="consent-text"
                 style={{ height: height - correction }}
                 dangerouslySetInnerHTML={{ __html: text }}
             />

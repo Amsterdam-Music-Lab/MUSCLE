@@ -37,6 +37,17 @@
     "lint:ts": "eslint . --ext .js,.jsx,.ts,.tsx",
     "lint": "eslint src/**/*.js"
   },
+  "jest": {
+    "moduleNameMapper": {
+      "axios": "axios/dist/node/axios.cjs",
+      "^components/(.*)$": "<rootDir>/src/components/$1",
+      "^config/(.*)$": "<rootDir>/src/config/$1",
+      "^hooks/(.*)$": "<rootDir>/src/hooks/$1",
+      "^scss/(.*)$": "<rootDir>/src/scss/$1",
+      "^stories/(.*)$": "<rootDir>/src/stories/$1",
+      "^util/(.*)$": "<rootDir>/src/util/$1"
+    }
+  },
   "eslintConfig": {
     "extends": [
       "react-app",
@@ -65,6 +76,7 @@
     "@storybook/react": "7.5.3",
     "@storybook/react-webpack5": "7.5.3",
     "@storybook/testing-library": "0.2.2",
+    "@testing-library/react-hooks": "^8.0.1",
     "babel-plugin-named-exports-order": "0.0.2",
     "eslint": "^8.54.0",
     "eslint-config-react-app": "^7.0.1",
