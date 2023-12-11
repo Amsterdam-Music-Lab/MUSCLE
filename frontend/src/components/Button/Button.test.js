@@ -20,9 +20,9 @@ describe('Button component', () => {
         expect(mockOnClick).toHaveBeenCalledTimes(1);
     });
 
-    test('does not call onClick when active is false', () => {
+    test('does not call onClick when disabled is true', () => {
         const mockOnClick = jest.fn();
-        render(<Button title="Test Button" onClick={mockOnClick} active={false} />);
+        render(<Button title="Test Button" onClick={mockOnClick} disabled={true} />);
 
         const button = screen.getByText('Test Button');
         fireEvent.click(button);

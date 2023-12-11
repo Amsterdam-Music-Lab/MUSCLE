@@ -69,7 +69,7 @@ const Trial = ({
                         // and ignore further rounds in the current array
                         onNext(true)
                     }
-                    
+
                 }
             } else {
                 if (result_id) {
@@ -80,7 +80,7 @@ const Trial = ({
                 } else {
                     onNext();
                 }
-                
+
             }
         },
         [feedback_form, config, onNext, onResult]
@@ -99,11 +99,11 @@ const Trial = ({
     }
 
     const finishedPlaying = useCallback(() => {
-        
+
         if (config.auto_advance) {
-            
+
             // Create a time_passed result
-            if (config.auto_advance_timer != null) {                
+            if (config.auto_advance_timer != null) {
                 if (playback.player_type === 'BUTTON') {
                     startTime.current = getCurrentTime();
                 }
@@ -165,7 +165,7 @@ const Trial = ({
                         title={config.continue_label}
                         className={"btn-primary anim anim-fade-in anim-speed-500"}
                         onClick={onNext}
-                        active={formActive}
+                        disabled={!formActive}
                     />
                 </div>
             )}
