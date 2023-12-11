@@ -141,7 +141,6 @@ const Playback = ({
         const attrs = {
             sections: playbackArgs.sections,
             showAnimation: playbackArgs.show_animation,
-            playbackArgs,
             setView,
             autoAdvance,
             responseTime,
@@ -159,6 +158,7 @@ const Playback = ({
             case PRELOAD:
                 return (
                     <Preload {...attrs}
+                        playMethod={playbackArgs.play_method}
                         duration={playbackArgs.ready_time}
                         preloadMessage={playbackArgs.preload_message}
                         onNext={() => {                        
