@@ -34,8 +34,6 @@ django-debug-toolbar==3.2.2
     # via -r requirements.in/dev.txt
 django-inline-actions==2.4.0
     # via -r requirements.in/base.txt
-flake8==4.0.1
-    # via -r requirements.in/base.txt
 genbadge[coverage]==1.1.1
     # via -r requirements.in/base.txt
 idna==3.3
