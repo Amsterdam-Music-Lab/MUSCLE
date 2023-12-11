@@ -82,7 +82,7 @@ class Huang2022(Hooked):
         if not plan:
             last_result = session.result_set.last()
             if not last_result:
-                playback = self.get_test_playback()
+                playback = get_test_playback()
                 html = HTML(body='<h4>{}</h4>'.format(_('Do you hear the music?')))
                 form = Form(form=[BooleanQuestion(
                     key='audio_check1',
