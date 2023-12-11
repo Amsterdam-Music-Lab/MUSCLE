@@ -33,7 +33,8 @@
     "scss-watch": "sass src/index.scss src/index.css; sass --watch src/index.scss src/index.css",
     "storybook": "REACT_APP_API_ROOT=http://localhost:8000 && storybook dev -p 6006",
     "storybook:build": "storybook build",
-    "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
+    "lint:ts": "eslint . --ext .js,.jsx,.ts,.tsx",
+    "lint": "eslint src/**/*.js"
   },
   "eslintConfig": {
     "extends": [

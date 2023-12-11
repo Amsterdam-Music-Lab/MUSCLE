@@ -28,6 +28,8 @@ django-debug-toolbar==3.2.2
     # via -r requirements.in/dev.txt
 django-inline-actions==2.4.0
     # via -r requirements.in/base.txt
+flake8==4.0.1
+    # via -r requirements.in/dev.txt
 idna==3.3
     # via requests
 iptocc==2.1.2
