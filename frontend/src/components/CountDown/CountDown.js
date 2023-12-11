@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import Timer from "../../util/timer";
+import Timer from "util/timer";
 import classNames from "classnames";
 
 // CountDown to zero
