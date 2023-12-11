@@ -1,4 +1,4 @@
-[![DOI](https://zenodo.org/badge/418963353.svg)](https://zenodo.org/badge/latestdoi/418963353) [![Test](https://github.com/Amsterdam-Music-Lab/MUSCLE/actions/workflows/test.yml/badge.svg)](https://github.com/Amsterdam-Music-Lab/MUSCLE/actions/workflows/test.yml/badge.svg)
+[![DOI](https://zenodo.org/badge/418963353.svg)](https://zenodo.org/badge/latestdoi/418963353) [![Test](https://github.com/Amsterdam-Music-Lab/MUSCLE/actions/workflows/ci.yml/badge.svg)](https://github.com/Amsterdam-Music-Lab/MUSCLE/actions/workflows/test.yml/badge.svg)
 ![Backend Code Coverage Percentage](https://raw.githubusercontent.com/Amsterdam-Music-Lab/MUSCLE/code-coverage-badges/backend/coverage-backend-badge.svg)
 
 # MUSic-related Citizen Science Listening Experiments (MUSCLE)
