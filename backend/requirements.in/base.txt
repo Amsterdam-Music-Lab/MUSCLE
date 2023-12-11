@@ -20,5 +20,8 @@ IPToCC
 # PostgrSQL database client
 psycopg2
 
+# to convert labels to Roman numerals
+roman
+
 # print progress
 tqdm

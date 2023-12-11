@@ -27,13 +27,13 @@ def external_url(text, url):
     # Create a HTML element for an external url
     return '<a href="{}" target="_blank" rel="noopener noreferrer" >{}</a>'.format(url, text)
 
-def create_player_labels(num_labels, label_style,):
-    return [format_label(i, label_style) for i in num_labels]
+def create_player_labels(num_labels, label_style='number'):
+    return [format_label(i, label_style) for i in range(num_labels)]
 
 def format_label(number, label_style):
     if label_style == 'alphabetic':
-        return ''
+        return chr(number + 65)
     elif label_style == 'roman':
-        return roman.toRoman(number)
+        return roman.toRoman(number+1)
     else:
-        return str(number)
+        return str(number+1)
