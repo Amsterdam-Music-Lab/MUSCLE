@@ -13,6 +13,7 @@ from .kuiper_2020 import Kuiper2020
 from .listening_conditions import ListeningConditions
 from .matching_pairs import MatchingPairs
 from .matching_pairs_icmpc import MatchingPairsICMPC
+from .matching_pairs_tutorial import MatchingPairsTutorial
 from .musical_preferences import MusicalPreferences
 from .rhythm_discrimination import RhythmDiscrimination
 from .rhythm_experiment_series import RhythmExperimentSeries
@@ -43,6 +44,7 @@ EXPERIMENT_RULES = {
     BST.ID: BST,
     MatchingPairs.ID: MatchingPairs,
     MatchingPairsICMPC.ID: MatchingPairsICMPC,
+    MatchingPairsTutorial.ID: MatchingPairsTutorial,
     MusicalPreferences.ID: MusicalPreferences,
     RhythmDiscrimination.ID: RhythmDiscrimination,
     RhythmExperimentSeries.ID: RhythmExperimentSeries,
