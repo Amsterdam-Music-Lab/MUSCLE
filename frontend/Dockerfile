@@ -4,5 +4,6 @@ RUN yarn set version stable
 WORKDIR /client
 COPY package.json /client/
 COPY yarn.lock /client/
+COPY jsconfig.json /client/
 RUN yarn
 COPY . /client/
