@@ -143,7 +143,7 @@ class Eurovision2020(Hooked):
             sections = [section],
             play_config={'ready_time': 3, 'show_animation': True, 'play_method': self.play_method},
             preload_message=_('Get ready!'))
-        expected_result=int(novelty[round_number] == 'old')
+        expected_result=novelty[round_number]
         # create Result object and save expected result to database
         result_pk = prepare_result('heard_before', session, section=section, expected_response=expected_result, scoring_rule='REACTION_TIME')
         form = Form([BooleanQuestion(
