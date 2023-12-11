@@ -1,9 +1,11 @@
 export const romanNumeral = (int) => {
   let roman = '';
 
-  roman +=  'M'.repeat(int / 1000);  int %= 1000; 
-  roman += 'CM'.repeat(int / 900);   int %= 900; 
-  roman +=  'D'.repeat(int / 500);   int %= 500;  
+  if (int < 0 || !int) return roman;
+
+  roman +=  'M'.repeat(int / 1000);  int %= 1000;
+  roman += 'CM'.repeat(int / 900);   int %= 900;
+  roman +=  'D'.repeat(int / 500);   int %= 500;
   roman += 'CD'.repeat(int / 400);   int %= 400;
   roman +=  'C'.repeat(int / 100);   int %= 100;
   roman += 'XC'.repeat(int / 90);    int %= 90;

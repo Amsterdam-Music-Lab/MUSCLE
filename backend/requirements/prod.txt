@@ -8,6 +8,16 @@ asgiref==3.7.2
     # via django
 audioread==3.0.0
     # via -r requirements.in/base.txt
+certifi==2023.11.17
+    # via requests
+charset-normalizer==3.3.2
+    # via requests
+click==8.1.7
+    # via genbadge
+coverage==7.3.2
+    # via -r requirements.in/base.txt
+defusedxml==0.7.1
+    # via genbadge
 django==3.2.23
     # via
     #   -r requirements.in/base.txt
@@ -17,14 +27,20 @@ django-cors-headers==4.0.0
     # via -r requirements.in/base.txt
 django-inline-actions==2.4.0
     # via -r requirements.in/base.txt
+genbadge[coverage]==1.1.1
+    # via -r requirements.in/base.txt
 gunicorn==20.1.0
     # via -r requirements.in/prod.txt
+idna==3.6
+    # via requests
 iptocc==2.1.2
     # via -r requirements.in/base.txt
 numpy==1.24.3
     # via pandas
 pandas==1.5.3
     # via iptocc
+pillow==10.1.0
+    # via genbadge
 psycopg2==2.9.6
     # via -r requirements.in/base.txt
 python-dateutil==2.8.2
@@ -35,6 +51,8 @@ pytz==2023.3
     # via
     #   django
     #   pandas
+requests==2.31.0
+    # via genbadge
 roman==4.1
     # via -r requirements.in/base.txt
 six==1.16.0
@@ -45,6 +63,8 @@ tqdm==4.65.0
     # via -r requirements.in/base.txt
 typing-extensions==4.6.3
     # via asgiref
+urllib3==2.1.0
+    # via requests
 
 # The following packages are considered to be unsafe in a requirements file:
 # setuptools

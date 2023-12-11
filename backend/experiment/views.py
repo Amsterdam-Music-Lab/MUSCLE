@@ -12,6 +12,8 @@ from session.models import Session
 
 logger = logging.getLogger(__name__)
 
+from experiment.rules import EXPERIMENT_RULES
+
 # Experiment
 
 def get_experiment(request, slug):
@@ -91,3 +93,6 @@ def experiment_or_404(slug):
         return Experiment.objects.get(slug=slug, active=True)
     except Experiment.DoesNotExist:
         raise Http404("Experiment does not exist")
+
+def default_questions(request, rules):
+    return JsonResponse({'default_questions': [q.key for q in EXPERIMENT_RULES[rules]().questions]})

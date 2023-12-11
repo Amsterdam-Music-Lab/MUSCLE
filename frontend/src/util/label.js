@@ -5,7 +5,11 @@ export const LABEL_ALPHABETIC = "ALPHABETIC";
 export const LABEL_CUSTOM = "CUSTOM";
 export const LABEL_ROMAN = "ROMAN";
 
-// Get a player label, based on index, labelstyle and customLabels
+/**
+ * @deprecated This function is deprecated and will be removed in the future.
+ * See also https://github.com/Amsterdam-Music-Lab/MUSCLE/pull/640
+ * Get a player label, based on index, labelstyle and customLabels
+ */
 export const getPlayerLabel = (index, labelStyle, customLabels) => {
     index = parseInt(index);
 

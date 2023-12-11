@@ -16,6 +16,12 @@ certifi==2023.7.22
     # via requests
 charset-normalizer==2.1.0
     # via requests
+click==8.1.7
+    # via genbadge
+coverage==7.3.2
+    # via -r requirements.in/base.txt
+defusedxml==0.7.1
+    # via genbadge
 django==3.2.23
     # via
     #   -r requirements.in/base.txt
@@ -27,6 +33,8 @@ django-cors-headers==3.10.0
 django-debug-toolbar==3.2.2
     # via -r requirements.in/dev.txt
 django-inline-actions==2.4.0
+    # via -r requirements.in/base.txt
+genbadge[coverage]==1.1.1
     # via -r requirements.in/base.txt
 idna==3.3
     # via requests
@@ -42,6 +50,8 @@ numpy==1.22.0
     # via pandas
 pandas==1.3.4
     # via iptocc
+pillow==10.1.0
+    # via genbadge
 platformdirs==2.4.0
     # via pylint
 psycopg2==2.9.1
@@ -66,7 +76,9 @@ pytz==2021.3
     #   django
     #   pandas
 requests==2.31.0
-    # via -r requirements.in/dev.txt
+    # via
+    #   -r requirements.in/dev.txt
+    #   genbadge
 roman==4.1
     # via -r requirements.in/base.txt
 six==1.16.0

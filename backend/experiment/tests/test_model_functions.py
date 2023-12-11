@@ -1,5 +1,5 @@
 from django.test import TestCase
-from experiment.models import Experiment
+from experiment.models import Experiment, ExperimentSeries
 
 class TestModelExperiment(TestCase):
     @classmethod
@@ -12,3 +12,11 @@ class TestModelExperiment(TestCase):
         keys1 = [q.key for q in rules1.questions]
         keys2 = [q.key for q in rules2.questions]
         assert keys1 != keys2
+
+class TestModelExperimentSeries(TestCase):
+
+    def test_verbose_name_plural(self):
+        # Get the ExperimentSeries Meta class
+        meta = ExperimentSeries._meta
+        # Check if verbose_name_plural is correctly set
+        self.assertEqual(meta.verbose_name_plural, "Experiment Series")
