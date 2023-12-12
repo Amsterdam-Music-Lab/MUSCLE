@@ -80,6 +80,7 @@ const getDefaultArgs = (overrides = {}) => ({
     stopAudio: () => { },
     submitResult: () => { },
     finishedPlaying: () => { },
+    ...overrides,
 })
 
 export const Default = {
