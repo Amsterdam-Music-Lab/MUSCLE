@@ -19,7 +19,7 @@ const MatchingPairs = ({
     const [total, setTotal] = useState(100);
     const [message, setMessage] = useState('Pick a card')
     const [end, setEnd] = useState(false);
-    const columnCount = sections.length > 6 ? 4 : 2;
+    const columnCount = sections.length > 6 ? 4 : 3;
 
     const resultBuffer = useRef([]);
 
@@ -166,7 +166,7 @@ const MatchingPairs = ({
                 </div>
             </div>
 
-            <div className={classNames("playing-board", columnCount === 2 && "playing-board--two-columns")}>
+            <div className={classNames("playing-board", columnCount === 3 && "playing-board--three-columns")}>
                 {Object.keys(sections).map((index) => (
                     <PlayCard
                         key={index}

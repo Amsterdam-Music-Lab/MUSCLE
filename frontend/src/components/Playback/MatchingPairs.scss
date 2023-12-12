@@ -25,7 +25,7 @@
         column-gap: 1.5vh;
         row-gap: 1.5vh;
 
-        &.playing-board--two-columns {
+        &.playing-board--three-columns {
             grid-template-columns: 16vh 16vh;
         }
     }
@@ -37,7 +37,7 @@
         column-gap: 2vw;
         row-gap: 2vw;
 
-        &.playing-board--two-columns {
+        &.playing-board--three-columns {
             grid-template-columns: 18vw 18vw;
         }
     }

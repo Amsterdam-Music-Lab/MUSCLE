@@ -102,7 +102,7 @@ export const Default = {
     },
 };
 
-export const WithTwoColumns = {
+export const WithThreeColumns = {
     args: getDefaultArgs({
         sections: [
             {
@@ -160,7 +160,7 @@ export const WithTwoColumns = {
     parameters: {
         docs: {
             description: {
-                component: 'This story shows the component with two columns. The component automatically adjusts the number of columns based on the number of sections. Six or less sections will result in two columns, more than six sections will result in four columns.',
+                component: 'This story shows the component with three columns. The component automatically adjusts the number of columns based on the number of sections. Six or less sections will result in three columns, more than six sections will result in four columns.',
             },
         },
     },
