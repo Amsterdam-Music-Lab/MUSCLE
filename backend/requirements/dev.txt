@@ -21,12 +21,13 @@ certifi==2023.7.22
 charset-normalizer==2.1.0
     # via requests
 click==8.1.7
-    # via genbadge
+    # via
+    #   genbadge
+    #   pip-tools
 coverage==7.3.2
     # via -r requirements.in/base.txt
 defusedxml==0.7.1
     # via genbadge
-    # via pip-tools
 django==3.2.23
     # via
     #   -r requirements.in/base.txt
@@ -92,7 +93,6 @@ requests==2.31.0
     # via
     #   -r requirements.in/dev.txt
     #   genbadge
-    # via -r requirements.in/dev.txt
 sentry-sdk==1.38.0
     # via -r requirements.in/base.txt
 six==1.16.0
