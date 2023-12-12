@@ -1,0 +1,2 @@
+#!/bin/bash
+docker compose run --rm -p 6006:6006 client yarn run storybook
