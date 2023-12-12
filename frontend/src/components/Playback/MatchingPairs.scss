@@ -16,14 +16,18 @@
     position: absolute;
     left: 50%;
     transform: translateX(-50%);
-    margin: 0px auto;    
+    margin: 0px auto;
 }
 
 @media (min-aspect-ratio: 1/1)  {
-.playing-board {
+    .playing-board {
         grid-template-columns: 16vh 16vh 16vh 16vh;
         column-gap: 1.5vh;
         row-gap: 1.5vh;
+
+        &.playing-board--two-columns {
+            grid-template-columns: 16vh 16vh;
+        }
     }
 }
 
@@ -32,12 +36,16 @@
         grid-template-columns: 18vw 18vw 18vw 18vw;
         column-gap: 2vw;
         row-gap: 2vw;
+
+        &.playing-board--two-columns {
+            grid-template-columns: 18vw 18vw;
+        }
     }
 }
 
 .playing-board {
     display: inline-grid;
-    max-width: 100%;    
+    max-width: 100%;
 }
 
 .matching-pairs__feedback, .matching-pairs__score {
@@ -57,7 +65,7 @@
 .matching-pairs__feedback {
     float: left;
     color: white;
-    
+
     &.fbnomatch {
         color: $gray;
     }
@@ -70,7 +78,7 @@
     &.fbmisremembered {
         color: $red;
     }
-} 
+}
 
 .matching-pairs__score {
     float: right;
