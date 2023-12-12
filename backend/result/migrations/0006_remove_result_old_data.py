@@ -6,7 +6,7 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('result', '0005_auto_20231124_1146'),
+        ('result', '0005_rename_json_temp_to_json_data'),
     ]
 
     operations = [

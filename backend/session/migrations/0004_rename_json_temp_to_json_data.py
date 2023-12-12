@@ -2,21 +2,20 @@
 
 from django.db import migrations, models
 
-
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('result', '0004_auto_20231123_1340'),
+        ('session', '0003_migrate_json_data_to_JSONField'),
     ]
 
     operations = [
         migrations.RenameField(
-            model_name='Result',
+            model_name='Session',
             old_name='json_data',
             new_name='old_data'
         ),
         migrations.RenameField(
-            model_name='Result',
+            model_name='Session',
             old_name='json_temp',
             new_name='json_data'
         )

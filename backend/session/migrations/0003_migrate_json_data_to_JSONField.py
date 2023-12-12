@@ -12,6 +12,7 @@ def forwards_func(apps, schema_editor):
                 session.save()
                 
 def reverse_func(apps, schema_editor):
+    Session = apps.get_model('session', 'Session')
     for session in Session.objects.all():        
         session.json_data = json.dumps(session.json_temp)
         session.save()
