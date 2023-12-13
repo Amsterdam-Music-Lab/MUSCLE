@@ -43,9 +43,9 @@ export const useParticipant = (urlQueryString) =>
 export const useParticipantScores = () =>
     useGet(API_BASE_URL + URLS.participant.score);
 
-export const useParticipantLink = () => 
+export const useParticipantLink = () =>
     useGet(API_BASE_URL + URLS.participant.link);
-    
+
 export const useConsent = (slug) =>
     useGet(API_BASE_URL + URLS.result.get('consent_' + slug));
 
@@ -129,21 +129,6 @@ export const getNextRound = async ({ session }) => {
         return null;
     }
 };
-
-export const finalizeSession = async ({ session, participant }) => {
-    try {
-        const response = await axios.post(
-            API_BASE_URL + URLS.session.finalize(session.current.id),
-            qs.stringify({
-                csrfmiddlewaretoken: participant.csrf_token,
-            })
-        );
-        return response.data;
-    } catch (err) {
-        console.error(err);
-        return null;
-    }
-}
 
 // Share participant
 export const shareParticipant = async ({ email, participant }) => {
