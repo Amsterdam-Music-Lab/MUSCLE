@@ -85,7 +85,7 @@ const Trial = ({
     );
 
     const checkBreakRound = (values, breakConditions) => {
-        switch(Object.keys(breakConditions)[0]) {
+        switch (Object.keys(breakConditions)[0]) {
             case 'EQUALS':
                 return values.some(val => breakConditions['EQUALS'].includes(val));
             case 'NOT':
@@ -112,7 +112,8 @@ const Trial = ({
                 if (playback.player_type === 'BUTTON') {
                     startTime.current = getCurrentTime();
                 }
-                const id = setTimeout( () => {makeResult({type: "time_passed",});} , config.auto_advance_timer);
+
+                setTimeout(() => { makeResult({ type: "time_passed", }); }, config.auto_advance_timer);
             } else {
 
                 makeResult({
@@ -158,9 +159,9 @@ const Trial = ({
                     skipLabel={feedback_form.skip_label}
                     isSkippable={feedback_form.is_skippable}
                     onResult={makeResult}
-                    // emphasizeTitle={feedback_form.is_profile}
-                    // to do: if we want left-aligned text with a pink divider,
-                    // make this style option available again (used in Question.scss)
+                // emphasizeTitle={feedback_form.is_profile}
+                // to do: if we want left-aligned text with a pink divider,
+                // make this style option available again (used in Question.scss)
                 />
             )}
             {preloadReady && !feedback_form && config.show_continue_button && (
