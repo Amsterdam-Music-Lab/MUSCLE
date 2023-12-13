@@ -24,6 +24,7 @@ class Playback(BaseAction):
             - show_animation: whether to show an animation during playback 
             - (multiplayer) label_style: player index number style: NUMERIC, ALPHABETIC, ROMAN or empty (no label)
             - play_once: the sound can only be played once
+            - resume_play: if the playback should resume from where a previous view left off
     '''
 
     TYPE_AUTOPLAY = 'AUTOPLAY'
@@ -45,6 +46,7 @@ class Playback(BaseAction):
             'show_animation': False,
             'mute': False,
             'play_once': False,
+            'resume_play': False
         }
         if play_config:
             self.play_config.update(play_config)

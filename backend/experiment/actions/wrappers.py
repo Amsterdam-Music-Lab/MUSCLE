@@ -96,7 +96,8 @@ def song_sync(session, section, title, response_time=15, play_method='BUFFER'):
                         play_config={
             'ready_time': 0,
             'playhead': silence_time + (random.randint(100, 150) / 10 if not continuation_correctness else 0),
-            'show_animation': True
+            'show_animation': True,
+            'resume_play': True
         }),
         config=trial_config,
         title=title

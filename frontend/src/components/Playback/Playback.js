@@ -27,7 +27,6 @@ const Playback = ({
     autoAdvance,
     responseTime,
     playConfig = {},
-    time,
     submitResult,
     startedPlaying,
     finishedPlaying,
@@ -105,7 +104,11 @@ const Playback = ({
                         pauseAudio(playConfig);
                         return;
                     }
-                    let latency = playAudio(playConfig, sections[index]);
+                    // if the current player has resume_play set to true,
+                    // retrieve previous player's decisionTime from sessionStorage
+                    const playheadShift = playConfig.resume_play ? 
+                        parseFloat(window.sessionStorage.getItem('decisionTime')) : 0;
+                    let latency = playAudio(playConfig, sections[index], playheadShift);
 
                     // Cancel active events
                     cancelAudioListeners();
@@ -161,7 +164,6 @@ const Playback = ({
             autoAdvance,
             responseTime,
             playConfig,
-            time,
             startedPlaying,
             playerIndex,
             finishedPlaying: onFinishedPlaying,
