@@ -76,25 +76,25 @@ const Playback = ({
             finishedPlaying();
         }
     }, []);
-    
+
     // Keep track of last player index
     useEffect(() => {
         lastPlayerIndex.current = playerIndex;
     }, [playerIndex]);
 
-    if (playConfig.play_method === 'EXTERNAL') {                    
-        webAudio.closeWebAudio();            
+    if (playConfig.play_method === 'EXTERNAL') {
+        webAudio.closeWebAudio();
     }
 
     // Play section with given index
     const playSection = useCallback(
         (index = 0) => {
-            
+
                 if (index !== lastPlayerIndex.current) {
                     // Load different audio
                     if (prevPlayerIndex.current !== -1) {
                         pauseAudio(playConfig);
-                    }                
+                    }
                     // Store player index
                     setPlayerIndex(index);
 
@@ -115,7 +115,7 @@ const Playback = ({
                         activeAudioEndedListener.current = webAudio.listenOnce("ended", onAudioEnded);
                     } else {
                         activeAudioEndedListener.current = audio.listenOnce("ended", onAudioEnded);
-                    }                    
+                    }
 
                     // Compensate for audio latency and set state to playing
                     setTimeout(startedPlaying && startedPlaying(), latency);
@@ -124,7 +124,7 @@ const Playback = ({
 
                 // Stop playback
                 if (lastPlayerIndex.current === index) {
-                        pauseAudio(playConfig);                     
+                        pauseAudio(playConfig);
                         setPlayerIndex(-1);
                         return;
                     }
@@ -183,10 +183,10 @@ const Playback = ({
                 return (
                     <Preload
                         instruction={preloadMessage}
-                        duration={playConfig.ready_time}                        
+                        duration={playConfig.ready_time}
                         sections={sections}
                         playConfig={playConfig}
-                        onNext={() => {                        
+                        onNext={() => {
                             setView(playerType);
                             onPreloadReady();
                         }}
@@ -227,7 +227,7 @@ const Playback = ({
                 return <div> Unknown player view {view} </div>;
         }
     };
-    
+
     return (
         <div className="aha__playback">
             <div className="playback"> {render(playerType)} </div>{" "}
