@@ -40,6 +40,13 @@ jobs:
           git add backend/coverage-backend-badge.svg
           git commit -m "Add backend coverage badge for commit $GITHUB_SHA"
           git push origin code-coverage-badges
+          # Check if there are any changes
+          if git diff --staged --quiet; then
+            echo "No changes in coverage badge. Skipping commit and push."
+          else
+            git commit -m "Add backend coverage badge for commit $GITHUB_SHA"
+            git push origin code-coverage-badges
+          fi
 
   backend-lint:
     name: Lint Backend
