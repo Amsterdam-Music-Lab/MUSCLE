@@ -67,7 +67,7 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
                     all_songs |= Song.objects.filter(pk=section.song.pk)
 
         # create empty zip file in memory
-        zip_buffer = BytesIO()        
+        zip_buffer = BytesIO()
         with ZipFile(zip_buffer, 'w') as new_zip:
             # serialize data to new json files within the zip file
             new_zip.writestr('sessions.json', data=str(serializers.serialize("json", all_sessions)))
@@ -76,7 +76,7 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
             new_zip.writestr('results.json', data=str(serializers.serialize("json", all_results.order_by('session'))))
             new_zip.writestr('sections.json', data=str(serializers.serialize("json", all_sections.order_by('playlist', 'pk'))))
             new_zip.writestr('songs.json', data=str(serializers.serialize("json", all_songs.order_by('pk'))))
-            
+
         # create forced download response
         response = HttpResponse(zip_buffer.getbuffer())
         response['Content-Type'] = 'application/x-zip-compressed'
