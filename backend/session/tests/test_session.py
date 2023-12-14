@@ -112,4 +112,19 @@ class SessionTest(TestCase):
         last_song = self.session.last_song()
         assert last_song == 'Beavis - Butthead'
 
+    def test_json_data(self):
+        self.session.save_json_data({'test': 'tested'})
+        self.assertEqual(self.session.load_json_data(), {'test': 'tested'})
+        self.session.save_json_data({'test_len': 'tested_len'})
+        self.assertEqual(len(self.session.json_data), 2)
 
+    def test_json_data_direct(self):        
+        self.session.json_data.update({'test_direct': 'tested_direct'})
+        self.session.save()
+        self.assertEqual(self.session.json_data['test_direct'], 'tested_direct') 
+        self.session.save_json_data({'test_direct_len': 'tested_direct_len'})
+        self.session.save()
+        self.assertEqual(len(self.session.json_data), 2)
+        self.session.json_data.pop('test_direct_len')
+        self.assertEqual(len(self.session.json_data), 1)
+        self.assertEqual(self.session.json_data.get('test_direct_len', 'temp_value'), 'temp_value')

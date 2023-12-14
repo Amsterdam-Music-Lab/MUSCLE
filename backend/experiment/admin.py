@@ -1,13 +1,21 @@
 import csv
+from zipfile import ZipFile
+from io import BytesIO
+import json
 
 from django.contrib import admin
 from django.db import models
+from django.utils import timezone
+from django.core import serializers
 from django.shortcuts import render, redirect
 from django.forms import CheckboxSelectMultiple, ModelForm, ModelMultipleChoiceField
-from django.http import HttpResponse, JsonResponse
+from django.http import HttpResponse
 from inline_actions.admin import InlineActionsModelAdminMixin
 from experiment.models import Experiment, ExperimentSeries, Feedback
 from experiment.forms import ExperimentForm, ExportForm, TemplateForm, EXPORT_TEMPLATES
+from section.models import Section, Song
+from result.models import Result
+from participant.models import Participant
 
 class FeedbackInline(admin.TabularInline):
     """Inline to show results linked to given participant
@@ -34,14 +42,45 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
     }
 
     def export(self, request, obj, parent_obj=None):
-        """Export experiment data in JSON, force download"""
+        """Export experiment JSON data as zip archive, force download"""
 
-        response = JsonResponse(
-            obj.export_admin(), json_dumps_params={'indent': 4})
+        # Init empty querysets
+        all_results = Result.objects.none()
+        all_songs = Song.objects.none()
+        all_sections = Section.objects.none()
+        all_participants = Participant.objects.none()
+        all_profiles = Result.objects.none()
 
-        # force download attachment
-        response['Content-Disposition'] = 'attachment; filename="' + \
-            obj.slug+'.json"'
+        # Collect data
+        all_sessions = obj.export_sessions().order_by('pk')
+
+        for session in all_sessions:
+            all_results |= session.export_results()
+            all_participants |= Participant.objects.filter(pk=session.participant.pk)
+            all_profiles |= session.participant.export_profiles()
+
+        for playlist in obj.playlists.all():
+            these_sections = playlist.export_sections()
+            all_sections |= these_sections
+            for section in these_sections:
+                if section.song:
+                    all_songs |= Song.objects.filter(pk=section.song.pk)
+
+        # create empty zip file in memory
+        zip_buffer = BytesIO()
+        with ZipFile(zip_buffer, 'w') as new_zip:
+            # serialize data to new json files within the zip file
+            new_zip.writestr('sessions.json', data=str(serializers.serialize("json", all_sessions)))
+            new_zip.writestr('participants.json', data=str(serializers.serialize("json", all_participants.order_by('pk'))))
+            new_zip.writestr('profiles.json', data=str(serializers.serialize("json", all_profiles.order_by('participant', 'pk'))))
+            new_zip.writestr('results.json', data=str(serializers.serialize("json", all_results.order_by('session'))))
+            new_zip.writestr('sections.json', data=str(serializers.serialize("json", all_sections.order_by('playlist', 'pk'))))
+            new_zip.writestr('songs.json', data=str(serializers.serialize("json", all_songs.order_by('pk'))))
+
+        # create forced download response
+        response = HttpResponse(zip_buffer.getbuffer())
+        response['Content-Type'] = 'application/x-zip-compressed'
+        response['Content-Disposition'] = 'attachment; filename="'+obj.slug+'-'+timezone.now().isoformat()+'.zip"'        
         return response
 
     export.short_description = "Export JSON"
