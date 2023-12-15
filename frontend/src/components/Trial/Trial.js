@@ -50,14 +50,12 @@ const Trial = ({
             }
 
             if (feedback_form) {
-                const decisionTime = getTimeSince(startTime.current);
-                // keep decisionTime in sessionStorage to be used by subsequent renders
-                window.sessionStorage.setItem('decisionTime', decisionTime);
+                
                 if (feedback_form.is_skippable) {
                     form.map((formElement => (formElement.value = formElement.value || '')))
                 }
                 await onResult({
-                    decision_time: decisionTime,
+                    decision_time: getAndStoreDecisionTime(),
                     form,
                     config
                 });
@@ -96,6 +94,13 @@ const Trial = ({
                 return false;
         }
 
+    }
+
+    const getAndStoreDecisionTime = () => {
+        const decisionTime = getTimeSince(startTime.current);
+        // keep decisionTime in sessionStorage to be used by subsequent renders
+        window.sessionStorage.setItem('decisionTime', decisionTime);
+        return decisionTime;
     }
 
     const finishedPlaying = useCallback(() => {
