@@ -30,8 +30,6 @@ const Trial = ({
     // This is used to keep track of the time a participant spends in this Trial view
     const startTime = useRef(getCurrentTime());
 
-    // Time ref, stores the time without updating the view
-    const time = useRef(0);
     const startTimer = useCallback(() => {
         startTime.current = getCurrentTime();
     }, []);
@@ -45,7 +43,6 @@ const Trial = ({
             }
             submitted.current = true;
 
-            const decision_time = getTimeSince(startTime.current);
             const form = feedback_form ? feedback_form.form : [{}];
 
             if (result.type === "time_passed") {
@@ -53,11 +50,12 @@ const Trial = ({
             }
 
             if (feedback_form) {
+                
                 if (feedback_form.is_skippable) {
                     form.map((formElement => (formElement.value = formElement.value || '')))
                 }
                 await onResult({
-                    decision_time,
+                    decision_time: getAndStoreDecisionTime(),
                     form,
                     config
                 });
@@ -98,6 +96,13 @@ const Trial = ({
 
     }
 
+    const getAndStoreDecisionTime = () => {
+        const decisionTime = getTimeSince(startTime.current);
+        // keep decisionTime in sessionStorage to be used by subsequent renders
+        window.sessionStorage.setItem('decisionTime', decisionTime);
+        return decisionTime;
+    }
+
     const finishedPlaying = useCallback(() => {
         
         if (config.auto_advance) {
@@ -135,7 +140,6 @@ const Trial = ({
                     responseTime={config.response_time}
                     playConfig={playback.play_config}
                     sections={playback.sections}
-                    time={time}
                     submitResult={makeResult}
                     startedPlaying={startTimer}
                     finishedPlaying={finishedPlaying}

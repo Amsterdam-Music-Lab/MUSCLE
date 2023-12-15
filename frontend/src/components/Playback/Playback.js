@@ -23,11 +23,10 @@ const Playback = ({
     sections,
     instruction,
     onPreloadReady,
-    preloadMessage,
+    preloadMessage = '',
     autoAdvance,
     responseTime,
     playConfig = {},
-    time,
     submitResult,
     startedPlaying,
     finishedPlaying,
@@ -105,7 +104,8 @@ const Playback = ({
                         pauseAudio(playConfig);
                         return;
                     }
-                    let latency = playAudio(playConfig, sections[index]);
+                    const playheadShift = getPlayheadShift();
+                    let latency = playAudio(playConfig, sections[index], playheadShift);
 
                     // Cancel active events
                     cancelAudioListeners();
@@ -131,6 +131,14 @@ const Playback = ({
             },
             [playAudio, pauseAudio, sections, activeAudioEndedListener, cancelAudioListeners, startedPlaying, onAudioEnded]
     );
+
+    const getPlayheadShift = () => {
+        /* if the current Playback view has resume_play set to true,
+        retrieve previous Playback view's decisionTime from sessionStorage
+        */
+        return playConfig.resume_play ? 
+        parseFloat(window.sessionStorage.getItem('decisionTime')) : 0;
+    }
 
     // Local logic for onfinished playing
     const onFinishedPlaying = useCallback(() => {
@@ -161,7 +169,6 @@ const Playback = ({
             autoAdvance,
             responseTime,
             playConfig,
-            time,
             startedPlaying,
             playerIndex,
             finishedPlaying: onFinishedPlaying,

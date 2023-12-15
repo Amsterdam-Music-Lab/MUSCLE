@@ -56,6 +56,7 @@ def song_sync_recognition_score(result, data):
         return math.ceil(timeout - time)
         
 def song_sync_continuation_score(result, data):
+    ''' modify previous result and return None'''
     previous_result = result.session.get_previous_result(['recognize'])
     if check_expected_response(result) != result.given_response:
         previous_result.score *= -1

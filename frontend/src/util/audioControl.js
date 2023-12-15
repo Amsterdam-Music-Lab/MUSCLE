@@ -1,15 +1,16 @@
 import * as audio from "./audio";
 import * as webAudio from "./webAudio";
 
-export const playAudio = (playConfig, section) => {    
+export const playAudio = (playConfig, section, playheadShift=0) => {    
     let latency = 0;
+    const playhead = playConfig.playhead + playheadShift
 
     if (playConfig.play_method === 'BUFFER') {
         
         // Determine latency for current audio device
         latency = webAudio.getTotalLatency()
         // Play audio
-        webAudio.playBufferFrom(section.id, Math.max(0, playConfig.playhead || 0));
+        webAudio.playBufferFrom(section.id, playhead);
 
         return latency
     } else {        
@@ -25,7 +26,7 @@ export const playAudio = (playConfig, section) => {
         audio.setVolume(1);
 
         // Play audio
-        audio.playFrom(Math.max(0, playConfig.playhead || 0));
+        audio.playFrom(Math.max(0, playhead));
         
         return latency
     }
