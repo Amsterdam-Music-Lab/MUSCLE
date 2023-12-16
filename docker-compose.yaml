@@ -68,6 +68,9 @@ services:
           - type: bind
             source: ./frontend/.storybook
             target: /client/.storybook
+          - type: bind
+            source: ./frontend/tsconfig.json
+            target: /client/tsconfig.json
         environment:
           - REACT_APP_API_ROOT=${REACT_APP_API_ROOT}
           - REACT_APP_EXPERIMENT_SLUG=${REACT_APP_EXPERIMENT_SLUG}
