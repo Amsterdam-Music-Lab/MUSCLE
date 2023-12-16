@@ -7427,6 +7427,7 @@ __metadata:
     prop-types: "npm:15.8.1"
     qs: "npm:^6.10.3"
     react: "npm:^17.0.2"
+    react-app-rewired: "npm:^2.2.1"
     react-dom: "npm:^17.0.2"
     react-rangeslider: "npm:^2.2.0"
     react-router: "npm:5.2.0"
@@ -16303,6 +16304,19 @@ __metadata:
     regenerator-runtime: "npm:^0.13.9"
     whatwg-fetch: "npm:^3.6.2"
   checksum: 7079c81717f4707d078943ab507771c3e80333e6c2c80c8d9a02e4a5661974e9bb196aea9f56336f559214a23f495c5f3907937d13a070e701019ae7a9d53c26
+  languageName: node
+  linkType: hard
+
+"react-app-rewired@npm:^2.2.1":
+  version: 2.2.1
+  resolution: "react-app-rewired@npm:2.2.1"
+  dependencies:
+    semver: "npm:^5.6.0"
+  peerDependencies:
+    react-scripts: ">=2.1.3"
+  bin:
+    react-app-rewired: bin/index.js
+  checksum: 722e20f5e5691b61e8c13da014c4fe38d87d8843715270484aa0b0e1d6605faf1c8961f18bde41ca82493975cb69f5259d943e5a40a79b0c80536a3dde057b3d
   languageName: node
   linkType: hard
 

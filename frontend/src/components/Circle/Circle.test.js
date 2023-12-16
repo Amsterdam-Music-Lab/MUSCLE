@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, waitFor } from '@testing-library/react';
 import Circle from './Circle';
-import Timer from 'util/timer';
+import Timer from '@/util/timer';
 
 global.requestAnimationFrame = (callback) => {
     setTimeout(callback, 0);
@@ -10,7 +10,7 @@ global.performance = {
     now: () => Date.now()
 };
 
-jest.mock('util/timer', () => ({
+jest.mock('@/util/timer', () => ({
     __esModule: true,
     default: jest.fn(),
 }));

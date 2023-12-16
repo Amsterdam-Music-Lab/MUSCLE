@@ -1,3 +1,5 @@
+const path = require('path');
+
 /** @type { import('@storybook/react-webpack5').StorybookConfig } */
 const config = {
     stories: ["../src/**/*.mdx", "../src/**/*.stories.@(js|jsx|mjs|ts|tsx)"],
@@ -19,20 +21,14 @@ const config = {
     env: {
         REACT_APP_API_ROOT: "http://localhost:8000",
     },
-    webpackFinal: async (config) => {
-        (config.resolve.alias = {
+    webpackFinal: (config) => {
+        config.resolve.alias = {
             ...config.resolve.alias,
-            util: require("path").resolve(__dirname, "../src/util"),
-        }),
-            (config.resolve.alias = {
-                ...config.resolve.alias,
-                components: require("path").resolve(
-                    __dirname,
-                    "../src/components"
-                ),
-            });
+            '@': path.resolve(__dirname, '../src'),
+        };
+
         return config;
-    }
+    },
 };
 
 export default config;
