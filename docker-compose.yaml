@@ -71,6 +71,9 @@ services:
           - type: bind
             source: ./frontend/tsconfig.json
             target: /client/tsconfig.json
+          - type: bind
+            source: ./frontend/config-overrides.js
+            target: /client/config-overrides.js
         environment:
           - REACT_APP_API_ROOT=${REACT_APP_API_ROOT}
           - REACT_APP_EXPERIMENT_SLUG=${REACT_APP_EXPERIMENT_SLUG}
