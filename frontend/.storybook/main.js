@@ -19,6 +19,20 @@ const config = {
     env: {
         REACT_APP_API_ROOT: "http://localhost:8000",
     },
+    webpackFinal: async (config) => {
+        (config.resolve.alias = {
+            ...config.resolve.alias,
+            util: require("path").resolve(__dirname, "../src/util"),
+        }),
+            (config.resolve.alias = {
+                ...config.resolve.alias,
+                components: require("path").resolve(
+                    __dirname,
+                    "../src/components"
+                ),
+            });
+        return config;
+    }
 };
 
 export default config;
