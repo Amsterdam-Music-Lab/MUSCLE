@@ -9,33 +9,6 @@ document.addEventListener('DOMContentLoaded', function() {
         const colorCircle = group.querySelector('.color-circle');
         const resetButton = group.querySelector('.color-reset');
 
-        function updateAndInjectCSSVariables() {
-            // look for all inputs with the class color-picker-widget
-            const colorPickerWidgets = document.querySelectorAll('.color-picker-widget');
-
-            const cssVariables = [];
-
-            // loop through each input
-            colorPickerWidgets.forEach(widget => {
-                // get the name and value of each input
-                const name = widget.name;
-                const value = widget.value;
-
-                // if the value is not empty, add it to the cssVariables array
-                if (value !== '') {
-                    cssVariables.push(`--${name}: ${value};`);
-                }
-            });
-
-            // inject the cssVariables into the document
-            const cssVariablesString = cssVariables.join(' ');
-            const style = document.createElement('style');
-            style.innerHTML = `:root { ${cssVariablesString} }`;
-            document.head.appendChild(style);
-        }
-
-        updateAndInjectCSSVariables();
-
         // Function to update the color circle and apply border styles
         function updateColorDisplay(selectedColor, origin) {
             colorCircle.style.backgroundColor = selectedColor;
@@ -85,5 +58,46 @@ document.addEventListener('DOMContentLoaded', function() {
             colorPicker.style.border = '';
             colorText.style.border = '';
         });
+
+        function initialize() {
+            const selectedValue = colorText.value;
+
+            // if looks like a hex value, update the color picker and text input
+            if (selectedValue.match(/^#[0-9A-F]{6}$/i)) {
+                updateColorDisplay(selectedValue, 'picker');
+            } else {
+
+                updateColorDisplay(selectedValue, 'select');
+            }
+        }
+
+        initialize();
     });
+
+    function updateAndInjectCSSVariables() {
+        // look for all inputs with the class color-picker-widget
+        const colorPickerWidgets = document.querySelectorAll('.color-picker-widget');
+
+        const cssVariables = [];
+
+        // loop through each input
+        colorPickerWidgets.forEach(widget => {
+            // get the name and value of each input
+            const name = widget.name;
+            const value = widget.value;
+
+            // if the value is not empty, add it to the cssVariables array
+            if (value !== '') {
+                cssVariables.push(`--${name}: ${value};`);
+            }
+        });
+
+        // inject the cssVariables into the document
+        const cssVariablesString = cssVariables.join(' ');
+        const style = document.createElement('style');
+        style.innerHTML = `:root { ${cssVariablesString} }`;
+        document.head.appendChild(style);
+    }
+
+    updateAndInjectCSSVariables();
 });
