@@ -11,6 +11,7 @@ def theme_css(request):
             css_content = "/* Theme configuration */"
             css_content += "\n\n:root {"
             css_content += "\n\n  /* Color & Design Token Configuration */"
+            css_content += "\n  "
             css_content += "\n  ".join([f"--{key}: {value};" for key, value in variables.items()])
             css_content += "\n\n  /* Additional Variables */"
             css_content += "\n  " + config.additional_variables
