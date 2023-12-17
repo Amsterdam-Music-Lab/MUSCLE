@@ -49,7 +49,8 @@ INSTALLED_APPS = [
     'participant',
     'result',
     'session',
-    'section'
+    'section',
+    'theme'
 ]
 
 MIDDLEWARE = [
