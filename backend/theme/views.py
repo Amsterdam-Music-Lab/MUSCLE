@@ -8,8 +8,15 @@ def theme_css(request):
     if config:
         try:
             variables = json.loads(config.css_variables)
-            css_content = "\n".join([f"--{key}: {value};" for key, value in variables.items()])
-            css_content += "\n" + config.additional_variables
+            css_content = "/* Theme configuration */"
+            css_content += "\n\n:root {"
+            css_content += "\n\n  /* Color & Design Token Configuration */"
+            css_content += "\n  ".join([f"--{key}: {value};" for key, value in variables.items()])
+            css_content += "\n\n  /* Additional Variables */"
+            css_content += "\n  " + config.additional_variables
+            css_content += "\n}"
+            # Global CSS
+            css_content += "\n\n/* Global CSS */"
             css_content += "\n" + config.global_css
         except json.JSONDecodeError:
             # Handle the case where JSON is not well-formatted
