@@ -4,7 +4,7 @@ on:
   issues:
     types: [assigned]
   pull_request:
-    types: [assigned, closed]
+    types: [assigned, closed, opened]
   workflow_run:
     workflows: ["Test suite"]
     types:
