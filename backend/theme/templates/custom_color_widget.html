@@ -1,0 +1,37 @@
+<!-- custom_color_widget.html -->
+<div class="color-picker-group">
+    <select name="{{ name }}_select" class="color-select">
+        <option value="" {% if value == '' %}selected{% endif %}>Select a color</option>"
+        <option value="var(--teal)" {% if value == 'var(--teal)' %}selected{% endif %}>
+            Teal
+        </option>
+        <option value="var(--yellow)" {% if value == 'var(--yellow)' %}selected{% endif %}>
+            Yellow
+        </option>
+        <option value="var(--pink)" {% if value == 'var(--pink)' %}selected{% endif %}>
+            Pink
+        </option>
+        <option value="var(--red)" {% if value == 'var(--red)' %}selected{% endif %}>
+            Red
+        </option>
+        <option value="var(--blue)" {% if value == 'var(--blue)' %}selected{% endif %}>
+            Blue
+        </option>
+        <option value="var(--green)" {% if value == 'var(--green)' %}selected{% endif %}>
+            Green
+        </option>
+        <option value="var(--indigo)" {% if value == 'var(--indigo)' %}selected{% endif %}>
+            Indigo
+        </option>
+        <option value="var(--gray)" {% if value == 'var(--gray)' %}selected{% endif %}>
+            Gray
+        </option>
+        <option value="var(--black)" {% if value == 'var(--black)' %}selected{% endif %}>
+            Black
+        </option>
+    </select>
+    <input type="color" name="{{ name }}_picker" class="color-picker">
+    <input type="text" name="{{ name }}" value="{{ value }}" class="color-text">
+    <div class="color-circle" style="width: 2rem; height: 2rem; border-radius: 2rem; background-color: {{ value }}"></div>
+    <button type="button" class="color-reset">Reset</button>
+</div>

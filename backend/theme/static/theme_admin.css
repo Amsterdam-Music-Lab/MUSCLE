@@ -1,0 +1,17 @@
+.color-picker-group {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+.color-reset {
+    border: 1px solid #ccc;
+    background: #fff;
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    cursor: pointer;
+}
+
+.color-reset:hover {
+    background: #eee;
+}

@@ -1,16 +1,32 @@
 from django import forms
+from django.template.loader import render_to_string
+from django.utils.safestring import mark_safe
 from .models import ThemeConfig
 import json
-import logging
+
 
 class ColorPickerWidget(forms.widgets.Input):
     input_type = 'color'
+
+    def __init__(self, attrs=None):
+        super().__init__(attrs={'class': 'color-picker-widget'})
 
     def format_value(self, value):
         # Ensure the value is in the correct format for a color input (#RRGGBB)
         if value and not value.startswith('#'):
             value = '#' + value
         return value
+
+class CustomColorWidget(forms.Widget):
+    template_name = 'custom_color_widget.html'
+
+    def render(self, name, value, attrs=None, renderer=None):
+        context = {
+            'name': name,
+            'value': value or '',
+            # Add more context variables as needed
+        }
+        return mark_safe(render_to_string(self.template_name, context))
 
 class ThemeConfigForm(forms.ModelForm):
 
@@ -25,12 +41,12 @@ class ThemeConfigForm(forms.ModelForm):
     gray_900 = forms.CharField(widget=ColorPickerWidget(), max_length=20, required=False, label='Gray 900')
     black = forms.CharField(widget=ColorPickerWidget(), max_length=20, required=False, label='Black')
 
-    primary = forms.CharField(widget=ColorPickerWidget(), max_length=20, required=False, label='Primary')
-    success = forms.CharField(widget=ColorPickerWidget(), max_length=20, required=False, label='Success')
-    positive = forms.CharField(widget=ColorPickerWidget(), max_length=20, required=False, label='Positive')
-    negative = forms.CharField(widget=ColorPickerWidget(), max_length=20, required=False, label='Negative')
-    secondary = forms.CharField(widget=ColorPickerWidget(), max_length=20, required=False, label='Secondary')
-    info = forms.CharField(widget=ColorPickerWidget(), max_length=20, required=False, label='Info')
+    primary = forms.CharField(widget=CustomColorWidget(), required=False, label='Primary')
+    success = forms.CharField(widget=CustomColorWidget(), required=False, label='Success')
+    positive = forms.CharField(widget=CustomColorWidget(), required=False, label='Positive')
+    negative = forms.CharField(widget=CustomColorWidget(), required=False, label='Negative')
+    secondary = forms.CharField(widget=CustomColorWidget(), required=False, label='Secondary')
+    info = forms.CharField(widget=CustomColorWidget(), required=False, label='Info')
 
     class Meta:
         model = ThemeConfig
@@ -41,6 +57,10 @@ class ThemeConfigForm(forms.ModelForm):
             'additional_variables': forms.Textarea(attrs={'cols': 80, 'rows': 20}),
             'global_css': forms.Textarea(attrs={'cols': 80, 'rows': 20}),
         }
+
+    class Media:
+        js = ['theme_admin.js']
+        css = {"all": ["theme_admin.css"]}
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
