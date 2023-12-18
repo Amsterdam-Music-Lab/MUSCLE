@@ -48,7 +48,7 @@ class MusicalPreferences(Base):
 
     def first_round(self, experiment):
         rendered = render_to_string('consent/{}'.format(self.consent_file)
-        )
+                                    )
         consent = Consent(
             text=rendered, title=_('Informed consent'), confirm=_('I consent and continue.'), deny=_('I do not consent.')
         )
@@ -94,11 +94,15 @@ class MusicalPreferences(Base):
                         session.increment_round()
                         explainer = Explainer(
                             instruction=_("How to play"),
-                            steps = [
-                                Step(_("You will hear 64 music clips and have to answer two questions for each clip.")),
-                                Step(_("It will take 20-30 minutes to complete the whole experiment.")),
-                                Step(_("Either wear headphones or use your device's speakers.")),
-                                Step(_("Your final results will be displayed at the end.")),
+                            steps=[
+                                Step(
+                                    _("You will hear 64 music clips and have to answer two questions for each clip.")),
+                                Step(
+                                    _("It will take 20-30 minutes to complete the whole experiment.")),
+                                Step(
+                                    _("Either wear headphones or use your device's speakers.")),
+                                Step(
+                                    _("Your final results will be displayed at the end.")),
                                 Step(_("Have fun!"))
                             ],
                             button_label=_("Start")
@@ -107,12 +111,14 @@ class MusicalPreferences(Base):
                 else:
                     session.decrement_round()
                     if last_result.question_key == 'audio_check1':
-                        playback = get_test_playback('EXTERNAL')                    
-                        html = HTML(body=render_to_string('html/huang_2022/audio_check.html'))
+                        playback = get_test_playback('EXTERNAL')
+                        html = HTML(body=render_to_string(
+                            'html/huang_2022/audio_check.html'))
                         form = Form(form=[BooleanQuestion(
                             key='audio_check2',
                             choices={'no': _('Quit'), 'yes': _('Next')},
-                            result_id=prepare_result('audio_check2', session, scoring_rule='BOOLEAN'),
+                            result_id=prepare_result(
+                                'audio_check2', session, scoring_rule='BOOLEAN'),
                             submits=True,
                             style=STYLE_BOOLEAN_NEGATIVE_FIRST
                         )])
@@ -127,17 +133,18 @@ class MusicalPreferences(Base):
             else:
                 session.decrement_round()
                 playback = get_test_playback('EXTERNAL')
-                html = HTML(body='<h4>{}</h4>'.format(_('Do you hear the music?')))
+                html = HTML(
+                    body='<h4>{}</h4>'.format(_('Do you hear the music?')))
                 form = Form(form=[BooleanQuestion(
                     key='audio_check1',
                     choices={'no': _('No'), 'yes': _('Yes')},
-                    result_id=prepare_result('audio_check1', session, 
-                        scoring_rule='BOOLEAN'),
+                    result_id=prepare_result('audio_check1', session,
+                                             scoring_rule='BOOLEAN'),
                     submits=True,
                     style=STYLE_BOOLEAN_NEGATIVE_FIRST)])
                 return Trial(playback=playback, feedback_form=form, html=html,
                              config={'response_time': 15},
-                             title=_("Audio check"))  
+                             title=_("Audio check"))
         n_songs = next_round_number - self.round_increment
         if n_songs == self.preference_offset + 1:
             like_results = session.result_set.filter(question_key='like_song')
@@ -151,7 +158,8 @@ class MusicalPreferences(Base):
             actions = [feedback]
         elif n_songs == self.knowledge_offset + 1:
             like_results = session.result_set.filter(question_key='like_song')
-            known_songs = session.result_set.filter(question_key='know_song', score=2).count()
+            known_songs = session.result_set.filter(
+                question_key='know_song', score=2).count()
             feedback = Trial(
                 html=HTML(body=render_to_string('html/musical_preferences/feedback.html', {
                     'unlocked': _("Knowledge unlocked"),
@@ -163,7 +171,8 @@ class MusicalPreferences(Base):
             actions = [feedback]
         elif n_songs == session.experiment.rounds + 1:
             like_results = session.result_set.filter(question_key='like_song')
-            known_songs = session.result_set.filter(question_key='know_song', score=2).count()
+            known_songs = session.result_set.filter(
+                question_key='know_song', score=2).count()
             all_results = Result.objects.filter(
                 question_key='like_song'
             )
@@ -193,7 +202,8 @@ class MusicalPreferences(Base):
         likert = LikertQuestionIcon(
             question=_('2. How much do you like this song?'),
             key=like_key,
-            result_id=prepare_result(like_key, session, section=section, scoring_rule='LIKERT')
+            result_id=prepare_result(
+                like_key, session, section=section, scoring_rule='LIKERT')
         )
         know_key = 'know_song'
         know = ChoiceQuestion(
@@ -203,7 +213,7 @@ class MusicalPreferences(Base):
             choices={
                 'yes': 'fa-check',
                 'unsure': 'fa-question',
-                'no': 'fa-xmark'                
+                'no': 'fa-xmark'
             },
             result_id=prepare_result(know_key, session, section=section),
             style=STYLE_BOOLEAN
@@ -213,7 +223,7 @@ class MusicalPreferences(Base):
         view = Trial(
             playback=playback,
             feedback_form=form,
-            title=_('Song %(round)s/%(total)s') %{
+            title=_('Song %(round)s/%(total)s') % {
                 'round': n_songs, 'total': session.experiment.rounds},
             config={
                 'response_time': section.duration + .1,
@@ -221,18 +231,20 @@ class MusicalPreferences(Base):
         )
         actions.append(view)
         return actions
-    
+
     def calculate_score(self, result, data):
         if data.get('key') == 'know_song':
             return self.know_score.get(data.get('value'))
         else:
             return super().calculate_score(result, data)
-    
+
     def social_media_info(self, experiment, top_participant, known_songs, n_songs, top_all):
-        current_url =  "{}/{}".format(settings.RELOAD_PARTICIPANT_TARGET,
-            experiment.slug
-        )
-        format_songs = lambda songs: ', '.join([song['name'] for song in songs])
+        current_url = "{}/{}".format(settings.RELOAD_PARTICIPANT_TARGET,
+                                     experiment.slug
+                                     )
+
+        def format_songs(songs): return ', '.join(
+            [song['name'] for song in songs])
         return {
             'apps': ['weibo', 'share'],
             'message': _("I explored musical preferences on %(url)s! My top 3 favorite songs: %(top_participant)s. I know %(known_songs)i out of %(n_songs)i songs. All players' top 3 songs: %(top_all)s") % {
@@ -245,7 +257,7 @@ class MusicalPreferences(Base):
             'url': experiment.url or current_url,
             'hashtags': [experiment.hashtag or experiment.slug, "amsterdammusiclab", "citizenscience"]
         }
-    
+
     def get_final_view(self, session, top_participant, known_songs, n_songs, top_all):
         # finalize experiment
         social_info = self.social_media_info(
@@ -259,7 +271,8 @@ class MusicalPreferences(Base):
         view = Final(
             session,
             title=_("End"),
-            final_text=_("Thank you for your participation and contribution to science!"),
+            final_text=_(
+                "Thank you for your participation and contribution to science!"),
             feedback_info=self.feedback_info(),
             social=social_info
         )
@@ -269,12 +282,13 @@ class MusicalPreferences(Base):
         info = super().feedback_info()
         info['header'] = _("Any remarks or questions (optional):")
         return info
-    
+
     def get_preferred_songs(self, result_set, n=5):
         top_songs = result_set.values('section').annotate(
-            avg_score=Avg('score')).order_by()[:n]
+            avg_score=Avg('score')).order_by('-score')[:n]
         out_list = []
         for s in top_songs:
             section = Section.objects.get(pk=s.get('section'))
-            out_list.append({'artist': section.song.artist, 'name': section.song.name})
+            out_list.append({'artist': section.song.artist,
+                            'name': section.song.name})
         return out_list
