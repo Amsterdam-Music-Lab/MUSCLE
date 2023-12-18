@@ -4,10 +4,10 @@ import classNames from "classnames";
 import { renderLabel } from "../../util/label";
 
 // ButtonArray is a question view for selecting a single option from a list of buttons
-const ButtonArray = ({ question, active, onChange }) => {
+const ButtonArray = ({ question, disabled, onChange }) => {
 
     const buttonPress = (value) => {
-        if (!active) {
+        if (disabled) {
             return;
         }
         else {
@@ -18,7 +18,7 @@ const ButtonArray = ({ question, active, onChange }) => {
 
     return (
         <div className="aha__buttons buttons d-flex flex-wrap justify-content-center p-3 w-100">
-            
+
             <div className={classNames("btn-group-toggle-custom", question.style)} role="group" data-toggle="buttons" aria-label="Button Array">
                 {Object.keys(question.choices).map((val, index) => (
                     <ToggleButton
@@ -26,9 +26,9 @@ const ButtonArray = ({ question, active, onChange }) => {
                         value={val}
                         index={index}
                         name={question.key}
-                        key={question.key+index}
+                        key={question.key + index}
                         onChange={buttonPress}
-                        active={active}
+                        disabled={disabled}
                     />
                 ))}
             </div>
@@ -36,24 +36,25 @@ const ButtonArray = ({ question, active, onChange }) => {
     )
 }
 
-const ToggleButton = ({ label, value, index, name, active, onChange }) => {
-    const disabled = active? '' : 'disabled';
+const ToggleButton = ({ label, value, index, name, disabled, onChange }) => {
+    const disabledClasses = disabled ? 'disabled' : '';
     return (
         <label
-            className={classNames("btn btn-secondary btn-lg", disabled)}            
-            tabIndex="0"            
+            className={classNames("btn btn-secondary btn-lg", disabledClasses)}
+            tabIndex="0"
         >
             <input className={value}
                 type="radio"
                 name={name}
                 id={index}
                 value={value}
-                onClick={() => {                    
+                disabled={disabled}
+                onClick={() => {
                     onChange(value);
                 }}
-                onKeyPress={() => {                    
+                onKeyPress={() => {
                     onChange(value);
-                }}            
+                }}
             />
             {renderLabel(label)}
         </label>)

@@ -23,7 +23,6 @@ const Playback = ({
     onPreloadReady,
     autoAdvance,
     responseTime,
-    time,
     submitResult,
     startedPlaying,
     finishedPlaying,
@@ -98,13 +97,13 @@ const Playback = ({
                 pauseAudio(playMethod);
                 return;
             }
-            let latency = playAudio(playbackArgs.sections[index], playMethod, playbackArgs.play_from);
-            
+                
+            const playheadShift = getPlayheadShift();
+            let latency = playAudio(playConfig, sections[index], playheadShift);
             // Cancel active events
             cancelAudioListeners();
-            
             // listen for active audio events
-            if (playMethod === 'BUFFER') {
+            if (playConfig.play_method === 'BUFFER') {
                 activeAudioEndedListener.current = webAudio.listenOnce("ended", onAudioEnded);
             } else {
                 activeAudioEndedListener.current = audio.listenOnce("ended", onAudioEnded);
@@ -115,12 +114,20 @@ const Playback = ({
         }
         // Stop playback
         if (lastPlayerIndex.current === index) {
-                pauseAudio(playMethod);                     
+                pauseAudio(playConfig);                     
                 setPlayerIndex(-1);
                 return;
         }
-    },[playbackArgs, playMethod, activeAudioEndedListener, cancelAudioListeners, startedPlaying, onAudioEnded]
-    );
+        [playAudio, pauseAudio, sections, activeAudioEndedListener, cancelAudioListeners, startedPlaying, onAudioEnded]
+    });
+
+    const getPlayheadShift = () => {
+        /* if the current Playback view has resume_play set to true,
+        retrieve previous Playback view's decisionTime from sessionStorage
+        */
+        return playConfig.resume_play ? 
+        parseFloat(window.sessionStorage.getItem('decisionTime')) : 0;
+    }
 
     // Local logic for onfinished playing
     const onFinishedPlaying = useCallback(() => {
@@ -144,7 +151,6 @@ const Playback = ({
             setView,
             autoAdvance,
             responseTime,
-            time,
             startedPlaying,
             playerIndex,
             finishedPlaying: onFinishedPlaying,
@@ -198,6 +204,7 @@ const Playback = ({
                 return (
                     <MatchingPairs
                         {...attrs}
+                        stopAudioAfter={playbackArgs.stop_audio_after}
                     />
                 );
             default:

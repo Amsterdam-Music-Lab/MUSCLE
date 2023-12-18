@@ -39,7 +39,8 @@ jobs:
           path: ./frontend/storybook-static
 
   deploy-gh-pages:
-    if: false
+    # only deploy on develop branch
+    if: github.ref == 'refs/heads/develop'
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}

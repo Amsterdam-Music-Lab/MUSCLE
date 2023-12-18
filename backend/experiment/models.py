@@ -88,6 +88,10 @@ class Experiment(models.Model):
                 ]
             },
         }
+    
+    def export_sessions(self):
+        # export session objects
+        return self.session_set.all()    
 
     def export_table(self, session_keys, result_keys, export_options):
         """Export filtered tabular data for admin

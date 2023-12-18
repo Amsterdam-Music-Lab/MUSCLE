@@ -12,6 +12,7 @@ PLAY_EXTERNAL = 'EXTERNAL'
 PLAY_HTML = 'HTML'
 PLAY_BUFFER = 'BUFFER'
 
+
 class Playback(BaseAction):
     ''' A playback wrapper for different kinds of players
         - view: can be one of the following:
@@ -22,12 +23,13 @@ class Playback(BaseAction):
         - sections: a list of sections (in many cases, will only contain *one* section)
         - preload_message: text to display during preload
         - instruction: text to display during presentation of the sound
-        - play_from: from where in the file to start playback
-        - ready_time: how long to show preload
-        - show_animation: whether to show animations during playback
-        - mute: set to True to mute audio
-        - timeout_after_playback: pause in ms after playback has finished
-        - stop_audio_after: after how many seconds playback audio should be stopped
+        - play_from: where in the audio file to start playing/
+        - ready_time: how long to show the "Preload" view (loading spinner)
+        - show_animation: whether to show animations with this player
+        - mute: whether to mute the audio
+        - timeout_after_playback: once playback has finished, add optional timeout (in seconds) before proceeding
+        - stop_audio_after: stop playback after so many seconds
+        - resume_play: if the playback should resume from where a previous view left off
     '''
 
     def __init__(self,
@@ -37,9 +39,10 @@ class Playback(BaseAction):
                  play_from=0,
                  ready_time=0,
                  show_animation=False,
-                 mute=None,
+                 mute=False,
                  timeout_after_playback=None,
-                 stop_audio_after=None):
+                 stop_audio_after=None,
+                 resume_play=False):
         self.sections = [{'id': s.id, 'url': s.absolute_url(), 'group': s.group}
                          for s in sections]
         if str(sections[0].filename).startswith('http'):
@@ -48,7 +51,7 @@ class Playback(BaseAction):
             self.play_method = PLAY_HTML
         else:
             self.play_method = PLAY_BUFFER
-        self.show_animation = show_animation 
+        self.show_animation = show_animation
         self.preload_message = preload_message
         self.instruction = instruction
         self.play_from = play_from
@@ -56,25 +59,31 @@ class Playback(BaseAction):
         self.ready_time = ready_time
         self.timeout_after_playback = timeout_after_playback
         self.stop_audio_after = stop_audio_after
-    
+        self.resume_play = resume_play
+
+
 class Autoplay(Playback):
     '''
     This player starts playing automatically
     - show_animation: if True, show a countdown and moving histogram
     '''
+
     def __init__(self, sections, **kwargs):
-        super().__init__(sections, **kwargs)   
+        super().__init__(sections, **kwargs)
         self.ID = TYPE_AUTOPLAY
+
 
 class PlayButton(Playback):
     '''
     This player shows a button, which triggers playback
     - play_once: if True, button will be disabled after one play
     '''
+
     def __init__(self, sections, play_once=False, **kwargs):
         super().__init__(sections, **kwargs)
         self.ID = TYPE_BUTTON
         self.play_once = play_once
+
 
 class Multiplayer(PlayButton):
     '''
@@ -83,36 +92,44 @@ class Multiplayer(PlayButton):
     - label_style: set if players should be labeled in alphabetic / numeric  / roman style (based on player index)
     - labels: pass list of strings if players should have custom labels
     '''
+
     def __init__(self, sections, stop_audio_after=5, labels=[], **kwargs):
         super().__init__(sections, **kwargs)
         self.ID = TYPE_MULTIPLAYER
         self.stop_audio_after = stop_audio_after
         if labels:
             if len(labels) != len(self.sections):
-                raise UserWarning('Number of labels and sections for the play buttons do not match')
+                raise UserWarning(
+                    'Number of labels and sections for the play buttons do not match')
             self.labels = labels
+
 
 class ImagePlayer(PlayButton):
     '''
     This is a special case of the Multiplayer:
     it shows an image next to each play button
     '''
+
     def __init__(self, sections, images, image_labels=[], **kwargs):
         super().__init__(sections, **kwargs)
         self.ID = TYPE_IMAGE
         if len(images) != len(self.sections):
-            raise UserWarning('Number of images and sections for the ImagePlayer do not match')
+            raise UserWarning(
+                'Number of images and sections for the ImagePlayer do not match')
         self.images = images
         if image_labels:
             if len(image_labels) != len(self.sections):
-                raise UserWarning('Number of image labels and sections do not match')
+                raise UserWarning(
+                    'Number of image labels and sections do not match')
             self.image_labels = image_labels
-    
+
+
 class MatchingPairs(Multiplayer):
     '''
     This is a special case of multiplayer:
     play buttons are represented as cards
     '''
+
     def __init__(self, sections, **kwargs):
         super().__init__(sections, **kwargs)
         self.ID = TYPE_MATCHINGPAIRS

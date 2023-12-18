@@ -9,14 +9,14 @@ const Button = ({
     className = "",
     padding = "px-4",
     style = {},
-    active = true,
+    disabled = false,
     value = "",
 }) => {
     const clicked = useRef(false);
 
     // Only handle the first click
     const clickOnce = () => {
-        if (!active || clicked.current) {
+        if (disabled || clicked.current) {
             return;
         }
         clicked.current = true;
@@ -37,20 +37,22 @@ const Button = ({
         : {};
 
     return (
-        <div
-            className={classNames({ active }, className, padding, "aha__button btn btn-lg")}
+        <button
+            className={classNames({ disabled }, className, padding, "aha__button btn btn-lg")}
             onClick={(e) => {
                 clickOnce();
             }}
+            disabled={disabled}
             style={style}
             tabIndex="0"
             onKeyPress={(e) => {
                 clickOnce();
             }}
+            type="button"
             {...touchEvent}
         >
             {title}
-        </div>
+        </button>
     );
 };
 

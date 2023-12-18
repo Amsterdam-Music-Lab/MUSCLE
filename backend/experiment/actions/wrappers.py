@@ -20,7 +20,8 @@ def two_alternative_forced(session, section, choices, expected_response=None, st
         [section]
     )
     key = 'choice'
-    button_style = {'invisible-text': True, 'buttons-large-gap': True, 'buttons-large-text': True}
+    button_style = {'invisible-text': True,
+                    'buttons-large-gap': True, 'buttons-large-text': True}
     button_style.update(style)
     question = ChoiceQuestion(
         key=key,
@@ -38,8 +39,10 @@ def two_alternative_forced(session, section, choices, expected_response=None, st
         style=button_style
     )
     feedback_form = Form([question])
-    trial = Trial(playback=playback, feedback_form=feedback_form, title=title, config=config)
+    trial = Trial(playback=playback, feedback_form=feedback_form,
+                  title=title, config=config)
     return trial
+
 
 def song_sync(session, section, title, response_time=15):
     trial_config = {
@@ -49,15 +52,17 @@ def song_sync(session, section, title, response_time=15):
     recognize = Trial(
         feedback_form=Form([BooleanQuestion(
             key='recognize',
-            result_id=prepare_result('recognize', session, section=section, scoring_rule='SONG_SYNC_RECOGNITION'),
+            result_id=prepare_result(
+                'recognize', session, section=section, scoring_rule='SONG_SYNC_RECOGNITION'),
             submits=True
         )]),
         playback=Autoplay([section], show_animation=True,
-            ready_time=3,
-            preload_message=_('Get ready!'),
-            instruction=_('Do you recognize the song?'),
-        ),
-        config={**trial_config, 'break_round_on': {'EQUALS': ['TIMEOUT', 'no']}},
+                          ready_time=3,
+                          preload_message=_('Get ready!'),
+                          instruction=_('Do you recognize the song?'),
+                          ),
+        config={**trial_config,
+                'break_round_on': {'EQUALS': ['TIMEOUT', 'no']}},
         title=title
     )
     silence_time = 4
@@ -85,9 +90,13 @@ def song_sync(session, section, title, response_time=15):
                                      expected_response='yes' if continuation_correctness else 'no')
         )]),
         playback=Autoplay([section],
-                        instruction=_('Did the track come back in the right place?'),
-                        show_animation=True,
-                        play_from=silence_time + (random.randint(100, 150) / 10 if not continuation_correctness else 0)),
+                          instruction=_(
+                              'Did the track come back in the right place?'),
+                          show_animation=True,
+                          play_from=silence_time +
+                          (random.randint(100, 150) /
+                           10 if not continuation_correctness else 0),
+                          resume_play=True),
         config=trial_config,
         title=title
     )

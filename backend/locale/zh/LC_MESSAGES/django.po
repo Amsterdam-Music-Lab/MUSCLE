@@ -852,7 +852,7 @@ msgstr "提交"
 
 #: experiment/rules/base.py:29
 msgid "We appreciate your feedback!"
-msgstr ""
+msgstr "感谢您的反馈！"
 
 #: experiment/rules/base.py:109 experiment/rules/musical_preferences.py:81
 msgid "Questionnaire"

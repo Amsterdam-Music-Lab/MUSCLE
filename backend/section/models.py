@@ -191,6 +191,10 @@ class Playlist(models.Model):
             },
         }
     
+    def export_sections(self):
+        # export section objects
+        return self.section_set.all()
+    
     def update_admin_csv(self):
         """Update csv data for admin"""
         csvfile = CsvStringBuilder()
@@ -299,6 +303,9 @@ class Section(models.Model):
             'name': self.song.name,
             'play_count': self.play_count
         }
+       
+    def export_song(self):
+        return self.instance
 
     def export_admin_csv(self):
         """Export csv data for admin"""

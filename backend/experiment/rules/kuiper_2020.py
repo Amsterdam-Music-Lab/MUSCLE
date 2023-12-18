@@ -100,7 +100,7 @@ class Kuiper2020(Hooked):
         section = None
         if round_number <= len(sections):
             section = \
-                session.section_from_any_song({'id': sections[round_number - 1]})
+                session.playlist.section_set.get(id=sections[round_number])
         if not section:
             print("Warning: no next_song_sync section found")
             section = session.section_from_any_song()
@@ -123,7 +123,7 @@ class Kuiper2020(Hooked):
         section = None
         if round_number <= len(sections):
             section = \
-                session.section_from_any_song({'id': sections[round_number]})
+                session.playlist.section_set.get(id=sections[round_number])
         if not section:
             print("Warning: no heard_before section found")
             section = session.section_from_any_song()

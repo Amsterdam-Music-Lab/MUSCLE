@@ -21,7 +21,7 @@ const FeedbackForm = ({
 
     const onSubmit = () => {
         // Prevent double submit
-        if (isSubmitted.current){            
+        if (isSubmitted.current) {
             return;
         }
         isSubmitted.current = true;
@@ -38,7 +38,7 @@ const FeedbackForm = ({
             onSubmit(form);
         }
         // for every non-skippable question, check that we have a value
-        const validFormElements = form.filter( formElement => {
+        const validFormElements = form.filter(formElement => {
             if (formElement.is_skippable) return true;
             else if (formElement.value && validateFormElement(formElement)) return true;
         });
@@ -61,7 +61,7 @@ const FeedbackForm = ({
                     <Question
                         key={index}
                         id={index}
-                        active={formActive}
+                        disabled={!formActive}
                         question={form[index]}
                         onChange={onChange}
                         emphasizeTitle={emphasizeTitle}
@@ -69,18 +69,18 @@ const FeedbackForm = ({
                 ))}
                 {/* Continue button */}
                 {showSubmitButtons && (
-                    
+
                     <div className="row justify-content-around">
                         {isSkippable && (
                             // skip button
                             <Button
-                            onClick={() => {
-                                onSubmit();
-                            }}
-                            className={"btn-gray col-4 align-self-start"
-                            }
-                            title={skipLabel}
-                        />)}
+                                onClick={() => {
+                                    onSubmit();
+                                }}
+                                className={"btn-gray col-4 align-self-start"
+                                }
+                                title={skipLabel}
+                            />)}
                         <Button
                             onClick={() => {
                                 onSubmit();
@@ -88,10 +88,10 @@ const FeedbackForm = ({
                             className={
                                 "submit col-4"
                             }
-                            active={formValid}
+                            disabled={!formValid}
                             title={buttonLabel}
                         />
-                        
+
                     </div>
 
                 )}

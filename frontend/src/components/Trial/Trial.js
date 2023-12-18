@@ -30,8 +30,6 @@ const Trial = ({
     // This is used to keep track of the time a participant spends in this Trial view
     const startTime = useRef(getCurrentTime());
 
-    // Time ref, stores the time without updating the view
-    const time = useRef(0);
     const startTimer = useCallback(() => {
         startTime.current = getCurrentTime();
     }, []);
@@ -45,7 +43,6 @@ const Trial = ({
             }
             submitted.current = true;
 
-            const decision_time = getTimeSince(startTime.current);
             const form = feedback_form ? feedback_form.form : [{}];
 
             if (result.type === "time_passed") {
@@ -53,11 +50,12 @@ const Trial = ({
             }
 
             if (feedback_form) {
+                
                 if (feedback_form.is_skippable) {
                     form.map((formElement => (formElement.value = formElement.value || '')))
                 }
                 await onResult({
-                    decision_time,
+                    decision_time: getAndStoreDecisionTime(),
                     form,
                     config
                 });
@@ -69,7 +67,7 @@ const Trial = ({
                         // and ignore further rounds in the current array
                         onNext(true)
                     }
-                    
+
                 }
             } else {
                 if (result_id) {
@@ -80,7 +78,7 @@ const Trial = ({
                 } else {
                     onNext();
                 }
-                
+
             }
         },
         [feedback_form, config, onNext, onResult, result_id]
@@ -98,10 +96,17 @@ const Trial = ({
 
     }
 
+    const getAndStoreDecisionTime = () => {
+        const decisionTime = getTimeSince(startTime.current);
+        // keep decisionTime in sessionStorage to be used by subsequent renders
+        window.sessionStorage.setItem('decisionTime', decisionTime);
+        return decisionTime;
+    }
+
     const finishedPlaying = useCallback(() => {
-        
+
         if (config.auto_advance) {
-            
+
             // Create a time_passed result
             if (config.auto_advance_timer != null) {                
                 if (playback.view === 'BUTTON') {
@@ -131,7 +136,6 @@ const Trial = ({
                     }}
                     autoAdvance={config.auto_advance}
                     responseTime={config.response_time}
-                    time={time}
                     submitResult={makeResult}
                     startedPlaying={startTimer}
                     finishedPlaying={finishedPlaying}
@@ -161,7 +165,7 @@ const Trial = ({
                         title={config.continue_label}
                         className={"btn-primary anim anim-fade-in anim-speed-500"}
                         onClick={onNext}
-                        active={formActive}
+                        disabled={!formActive}
                     />
                 </div>
             )}

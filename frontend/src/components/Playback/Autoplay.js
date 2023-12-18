@@ -3,19 +3,15 @@ import React, { useRef, useEffect } from "react";
 import Circle from "../Circle/Circle";
 import ListenCircle from "../ListenCircle/ListenCircle";
 
-const AutoPlay = ({playSection, instruction, showAnimation, time, finishedPlaying, responseTime, className=''}) => {
+const AutoPlay = ({instruction, playConfig, playSection, startedPlaying, finishedPlaying, responseTime, className=''}) => {
     // player state
     
-    const running = useRef(true);
-
-    const onCircleTimerTick = (t) => {
-        time.current = t;
-    };
+    const running = useRef(playConfig.auto_play);
 
     // Handle view logic
     useEffect(() => {        
-        playSection(0);
-    }, [playSection]);
+        playSection(0)
+    }, [playConfig, startedPlaying]);
 
     // Render component
     return (
@@ -26,7 +22,6 @@ const AutoPlay = ({playSection, instruction, showAnimation, time, finishedPlayin
                     duration={responseTime}
                     color="white"
                     animateCircle={showAnimation}
-                    onTick={onCircleTimerTick}
                     onFinish={() => {
                         // Stop audio
                         finishedPlaying();
