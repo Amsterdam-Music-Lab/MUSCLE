@@ -21,7 +21,8 @@ def two_alternative_forced(session, section, choices, expected_response=None, st
         'BUTTON'
     )
     key = 'choice'
-    button_style = {'invisible-text': True, 'buttons-large-gap': True, 'buttons-large-text': True}
+    button_style = {'invisible-text': True,
+                    'buttons-large-gap': True, 'buttons-large-text': True}
     button_style.update(style)
     question = ChoiceQuestion(
         key=key,
@@ -39,18 +40,22 @@ def two_alternative_forced(session, section, choices, expected_response=None, st
         style=button_style
     )
     feedback_form = Form([question])
-    trial = Trial(playback=playback, feedback_form=feedback_form, title=title, config=config)
+    trial = Trial(playback=playback, feedback_form=feedback_form,
+                  title=title, config=config)
     return trial
 
-def song_sync(session, section, title, response_time=15, play_method='BUFFER'):
+
+def song_sync(session, section, title, play_method='BUFFER',
+              recognition_time=15, sync_time=15, min_jitter=10, max_jitter=15):
     trial_config = {
-        'response_time': response_time,
+        'response_time': recognition_time,
         'auto_advance': True
     }
     recognize = Trial(
         feedback_form=Form([BooleanQuestion(
             key='recognize',
-            result_id=prepare_result('recognize', session, section=section, scoring_rule='SONG_SYNC_RECOGNITION'),
+            result_id=prepare_result(
+                'recognize', session, section=section, scoring_rule='SONG_SYNC_RECOGNITION'),
             submits=True
         )]),
         playback=Playback([section], 'AUTOPLAY', play_config={
@@ -58,10 +63,11 @@ def song_sync(session, section, title, response_time=15, play_method='BUFFER'):
             'show_animation': True,
             'play_method': play_method
         },
-        preload_message=_('Get ready!'),
-        instruction=_('Do you recognize the song?'),
+            preload_message=_('Get ready!'),
+            instruction=_('Do you recognize the song?'),
         ),
-        config={**trial_config, 'break_round_on': {'EQUALS': ['TIMEOUT', 'no']}},
+        config={**trial_config,
+                'break_round_on': {'EQUALS': ['TIMEOUT', 'no']}},
         title=title
     )
     silence_time = 4
@@ -69,9 +75,9 @@ def song_sync(session, section, title, response_time=15, play_method='BUFFER'):
         playback=Playback([section], 'AUTOPLAY',
                           instruction=_('Keep imagining the music'),
                           play_config={
-                            'mute': True,
-                            'ready_time': 0,
-                            'show_animation': True,
+            'mute': True,
+            'ready_time': 0,
+            'show_animation': True,
         }),
         config={
             'response_time': silence_time,
@@ -81,6 +87,7 @@ def song_sync(session, section, title, response_time=15, play_method='BUFFER'):
         title=title
     )
     continuation_correctness = random.randint(0, 1) == 1
+    trial_config['resonse_time'] = sync_time
     correct_place = Trial(
         feedback_form=Form([BooleanQuestion(
             key='correct_place',
@@ -92,10 +99,11 @@ def song_sync(session, section, title, response_time=15, play_method='BUFFER'):
                                      expected_response='yes' if continuation_correctness else 'no')
         )]),
         playback=Playback([section], 'AUTOPLAY',
-                        instruction=_('Did the track come back in the right place?'),
-                        play_config={
+                          instruction=_(
+                              'Did the track come back in the right place?'),
+                          play_config={
             'ready_time': 0,
-            'playhead': silence_time + (random.randint(100, 150) / 10 if not continuation_correctness else 0),
+            'playhead': silence_time + (random.uniform(min_jitter, max_jitter) if not continuation_correctness else 0),
             'show_animation': True,
             'resume_play': True
         }),
