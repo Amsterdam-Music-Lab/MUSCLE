@@ -29,9 +29,11 @@ class Hooked(Base):
     ID = 'HOOKED'
 
     consent_file = 'consent_hooked.html'
-    recognition_time = 15
-    sync_time = 15
+    recognition_time = 15  # response time for "Do you know this song?"
+    sync_time = 15  # response time for "Did the track come back in the right place?"
+    # if the track continues in the wrong place: minimal shift forward (in seconds)
     min_jitter = 10
+    # if the track continutes in the wrong place: maximal shift forward (in seconds)
     max_jitter = 15
     questions = True
     relevant_keys = ['recognize', 'heard_before']
