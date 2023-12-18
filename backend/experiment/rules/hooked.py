@@ -35,6 +35,7 @@ class Hooked(Base):
     min_jitter = 10
     # if the track continutes in the wrong place: maximal shift forward (in seconds)
     max_jitter = 15
+    heard_before_time = 15  # response time for "Have you heard this song in previous rounds?"
     questions = True
     relevant_keys = ['recognize', 'heard_before']
     round_modifier = 0
@@ -328,7 +329,7 @@ class Hooked(Base):
         ])
         config = {
             'auto_advance': True,
-            'response_time': self.timeout
+            'response_time': self.heard_before_time
         }
         trial = Trial(
             title=self.get_trial_title(session, round_number),
