@@ -9,6 +9,11 @@ const MatchingPairs = ({
     playerIndex,
     finishedPlaying,
     stopAudioAfter,
+    showAnimations,
+    histogramBars,
+    showTotalScore,
+    showScoreMessage,
+    showTurnScore,
     submitResult,
 }) => {    
     const xPosition = useRef(-1);
@@ -17,7 +22,8 @@ const MatchingPairs = ({
     const firstCard = useRef(-1);
     const secondCard = useRef(-1);
     const [total, setTotal] = useState(100);
-    const [message, setMessage] = useState('Pick a card')
+    const [message, setMessage] = useState('Pick a card');
+    const [turnScore, setTurnScore] = useState('');
     const [end, setEnd] = useState(false);
 
     const resultBuffer = useRef([]);
@@ -51,27 +57,30 @@ const MatchingPairs = ({
         if (turnedCards.length === 2) {                        
             // update total score & display current score
             setTotal(total+score.current);
-            setMessage(setScoreMessage(score.current));            
+            setMessage(setScoreMessage(score.current));
             // show end of turn animations
-            switch (score.current) {                                       
-                case 10:
-                    turnedCards[0].lucky = true;
-                    turnedCards[1].lucky = true;                                        
-                    break;
-                case 20:
-                    turnedCards[0].memory = true;
-                    turnedCards[1].memory = true;                                        
-                    break;
-                default:
-                    turnedCards[0].nomatch = true;
-                    turnedCards[1].nomatch = true;
-                    // reset nomatch cards for coming turns
-                    setTimeout(() => {
-                        turnedCards[0].nomatch = false;
-                        turnedCards[1].nomatch = false;                        
-                      }, 700);
-                    break;  
-            }   
+            if (showAnimations) {
+                switch (score.current) {                                       
+                    case 10:
+                        turnedCards[0].lucky = true;
+                        turnedCards[1].lucky = true;                                        
+                        break;
+                    case 20:
+                        turnedCards[0].memory = true;
+                        turnedCards[1].memory = true;                                        
+                        break;
+                    default:
+                        turnedCards[0].nomatch = true;
+                        turnedCards[1].nomatch = true;
+                        // reset nomatch cards for coming turns
+                        setTimeout(() => {
+                            turnedCards[0].nomatch = false;
+                            turnedCards[1].nomatch = false;                        
+                          }, 700);
+                        break;  
+                }   
+            }
+            
 
             // add third click event to finish the turn
             document.getElementById('root').addEventListener('click', finishTurn);
@@ -95,13 +104,16 @@ const MatchingPairs = ({
                 if (lastCard.group === currentCard.group) {
                     // match                                        
                     if (currentCard.seen) {
-                        score.current = 20;                        
+                        score.current = 20;      
+                        setTurnScore('+1')
                     } else {
-                        score.current = 10;                        
+                        score.current = 10;
+                        setTurnScore('0')
                     }
                 } else {                    
                     if (currentCard.seen) { score.current = -10; }
                     else { score.current = 0; }
+                    setTurnScore('-1')
                 };
                 currentCard.seen = true;
                 lastCard.seen = true;
@@ -137,6 +149,7 @@ const MatchingPairs = ({
         // remove third click event
         document.getElementById('root').removeEventListener('click', finishTurn);
         score.current = undefined;
+        setTurnScore('');
         // Turn all cards back and enable events
         sections.forEach(section => section.turned = false);
         sections.forEach(section => section.noevents = false);        
@@ -156,15 +169,15 @@ const MatchingPairs = ({
             <div className="row justify-content-around">
                 <div className="col-6 align-self-start">
                     <div dangerouslySetInnerHTML={{ __html: message }}
-                         className={classNames("matching-pairs__feedback", {fbnomatch: score.current === 0}, {fblucky: score.current === 10}, {fbmemory: score.current === 20}, {fbmisremembered: score.current === -10})}
+                         className={classNames("matching-pairs__feedback", { nomessage: !showScoreMessage }, {fbnomatch: score.current === 0}, {fblucky: score.current === 10}, {fbmemory: score.current === 20}, {fbmisremembered: score.current === -10})}
                         
                     />
                 </div>
                 <div className="col-6 align-self-end">
-                    <div className="matching-pairs__score">Score: <br />{total}</div>        
+                    <div className={classNames("matching-pairs__score", { noscore: !showTotalScore } )}>Score: <br />{total}</div>        
                 </div>
             </div>
-
+        
             <div className="playing-board">
                 {Object.keys(sections).map((index) => (
                     <PlayCard 
@@ -177,11 +190,14 @@ const MatchingPairs = ({
                         playing={playerIndex === index}
                         section={sections[index]}
                         onFinish={showFeedback}
-                        stopAudioAfter={stopAudioAfter}                    
+                        stopAudioAfter={stopAudioAfter}
+                        showAnimations={showAnimations}
+                        histogramBars={histogramBars}
                     />
                 )
                 )}
             </div>
+            <div className={classNames("turnscore", { noturnscore: !showTurnScore})}>{turnScore}</div>
         </div>  
     )
 }

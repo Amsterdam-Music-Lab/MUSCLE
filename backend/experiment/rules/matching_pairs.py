@@ -15,6 +15,11 @@ from section.models import Section
 class MatchingPairs(Base):
     ID = 'MATCHING_PAIRS'
     num_pairs = 8
+    show_animations = True
+    show_total_score = True
+    show_score_message = True
+    show_turn_score = False
+    histogram_bars = 5
     contact_email = 'aml.tunetwins@gmail.com'
 
     def __init__(self):
@@ -110,7 +115,12 @@ class MatchingPairs(Base):
         playback = Playback(
             sections=player_sections,
             player_type='MATCHINGPAIRS',
-            play_config={'stop_audio_after': 5}
+            play_config={'stop_audio_after': 5,
+                         'show_animations': self.show_animations,
+                         'show_total_score': self.show_total_score,
+                         'show_score_message': self.show_score_message,
+                         'show_turn_score': self.show_turn_score,                         
+                         'histogram_bars': self.histogram_bars}
         )
         trial = Trial(
             title='Tune twins',

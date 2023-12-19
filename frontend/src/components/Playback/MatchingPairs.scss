@@ -70,8 +70,24 @@
     &.fbmisremembered {
         color: $red;
     }
+    &.nomessage {
+        opacity: 0;
+    }
 } 
 
 .matching-pairs__score {
     float: right;
+
+    &.noscore {
+        opacity: 0;
+    }
+}
+
+.turnscore {
+    position: fixed;
+    bottom: -2rem;
+    left: -2rem;
+    &.noturnscore {
+        opacity: 0;
+    }
 }

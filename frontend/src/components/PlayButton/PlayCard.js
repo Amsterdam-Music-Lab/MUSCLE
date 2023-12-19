@@ -2,7 +2,7 @@ import classNames from "classnames";
 
 import Histogram from "../Histogram/Histogram";
 
-const PlayCard = ({ onClick, registerUserClicks, playing, section }) => {
+const PlayCard = ({ onClick, registerUserClicks, playing, section, histogramBars }) => {
    
     return (
         <div className={classNames("aha__play-card", {turned: section.turned}, {noevents: section.noevents}, {disabled: section.inactive}, { memory: section.memory }, { lucky: section.lucky }, { nomatch: section.nomatch })} onClick={event => {
@@ -13,7 +13,7 @@ const PlayCard = ({ onClick, registerUserClicks, playing, section }) => {
                     <Histogram 
                         className="front"
                         running={playing}
-                        bars={5}
+                        bars={histogramBars}
                         marginBottom={0}
                         backgroundColor="purple"
                         borderRadius=".5rem"
