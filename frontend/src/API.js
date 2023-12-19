@@ -130,6 +130,22 @@ export const getNextRound = async ({ session }) => {
     }
 };
 
+// Tell the backend that the session is finished
+export const finalizeSession = async ({ session, participant }) => {
+    try {
+        const response = await axios.post(
+            API_BASE_URL + URLS.session.finalize(session.current.id),
+            qs.stringify({
+                csrfmiddlewaretoken: participant.csrf_token,
+            })
+        );
+        return response.data;
+    } catch (err) {
+        console.error(err);
+        return null;
+    }
+}
+
 // Share participant
 export const shareParticipant = async ({ email, participant }) => {
     try {

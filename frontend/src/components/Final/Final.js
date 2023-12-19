@@ -5,6 +5,7 @@ import Rank from "../Rank/Rank";
 import Social from "../Social/Social";
 
 import { URLS } from "../../config";
+import { finalizeSession } from "../../API";
 import ParticipantLink from "../ParticipantLink/ParticipantLink";
 import UserFeedback from "../UserFeedback/UserFeedback";
 
@@ -44,6 +45,10 @@ const Final= ({ experiment, participant, session, score, final_text, action_text
             clearTimeout(id);
         };
     }, [score, showScore]);
+
+    const finalize = () => {
+        finalizeSession({ session, participant });
+    }
 
     return (
         <div className="aha__final d-flex flex-column justify-content-center">
