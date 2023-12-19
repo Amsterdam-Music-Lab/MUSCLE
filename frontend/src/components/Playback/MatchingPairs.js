@@ -15,7 +15,7 @@ const MatchingPairs = ({
     showScoreMessage,
     showTurnFeedback,
     submitResult,
-}) => {    
+}) => {
     const xPosition = useRef(-1);
     const yPosition = useRef(-1);
     const score = useRef(undefined);
@@ -25,13 +25,14 @@ const MatchingPairs = ({
     const [message, setMessage] = useState('Pick a card');
     const [turnScore, setTurnScore] = useState('');
     const [end, setEnd] = useState(false);
+    const columnCount = sections.length > 6 ? 4 : 3;
 
     const resultBuffer = useRef([]);
 
     const startTime = useRef(Date.now());
-    
+
     const setScoreMessage = (score) => {
-        switch (score) {       
+        switch (score) {
             case -10: return '-10 <br />Misremembered';
             case 0: return '0 <br />No match';
             case 10: return '+10 <br />Lucky match';
@@ -50,13 +51,14 @@ const MatchingPairs = ({
     }
 
     // Show (animated) feedback after second click on second card or finished playing
-    const showFeedback = () => {        
-                
+    const showFeedback = () => {
+
         const turnedCards = sections.filter(s => s.turned);
         // Check if this turn has finished
-        if (turnedCards.length === 2) {                        
+        if (turnedCards.length === 2) {
             // update total score & display current score
             setTotal(total+score.current);
+            setMessage(setScoreMessage(score.current));
             setMessage(setScoreMessage(score.current));
             // show end of turn animations
             if (showAnimations) {
@@ -88,21 +90,21 @@ const MatchingPairs = ({
         }
     }
 
-    const checkMatchingPairs = (index) => {        
+    const checkMatchingPairs = (index) => {
         const currentCard = sections[index];
         const turnedCards = sections.filter(s => s.turned);
         if (turnedCards.length < 2) {
             if (turnedCards.length === 1) {
                 // We have two turned cards
                 currentCard.turned = true;
-                secondCard.current = index;                
+                secondCard.current = index;
                 // set no mouse events for all but current
-                sections.forEach(section => section.noevents = true);                
+                sections.forEach(section => section.noevents = true);
                 currentCard.noevents = true;
                 // check for match
-                const lastCard = sections[firstCard.current];                
+                const lastCard = sections[firstCard.current];
                 if (lastCard.group === currentCard.group) {
-                    // match                                        
+                    // match
                     if (currentCard.seen) {
                         score.current = 20;      
                         setTurnScore('+1')
@@ -110,7 +112,7 @@ const MatchingPairs = ({
                         score.current = 10;
                         setTurnScore('0')
                     }
-                } else {                    
+                } else {
                     if (currentCard.seen) { score.current = -10; }
                     else { score.current = 0; }
                     setTurnScore('-1')
@@ -126,8 +128,8 @@ const MatchingPairs = ({
                 currentCard.noevents = true;
                 // clear message
                 setMessage('');
-            }              
-            resultBuffer.current.push({            
+            }
+            resultBuffer.current.push({
                 selectedSection: currentCard.id,
                 cardIndex: index,
                 score: score.current,
@@ -140,9 +142,9 @@ const MatchingPairs = ({
     const finishTurn = () => {
         finishedPlaying();
         // remove matched cards from the board
-        if (score.current === 10 || score.current === 20) {            
+        if (score.current === 10 || score.current === 20) {
             sections[firstCard.current].inactive = true;
-            sections[secondCard.current].inactive = true;            
+            sections[secondCard.current].inactive = true;
         }
         firstCard.current = -1;
         secondCard.current = -1;
@@ -152,12 +154,12 @@ const MatchingPairs = ({
         setTurnScore('');
         // Turn all cards back and enable events
         sections.forEach(section => section.turned = false);
-        sections.forEach(section => section.noevents = false);        
+        sections.forEach(section => section.noevents = false);
         // Check if the board is empty
         if (sections.filter(s => s.inactive).length === sections.length) {
             // all cards have been turned
-            setEnd(true); 
-        } else { setMessage(''); }              
+            setEnd(true);
+        } else { setMessage(''); }
     }
 
     if (end) {
@@ -177,10 +179,10 @@ const MatchingPairs = ({
                     <div className={classNames("matching-pairs__score", { noscore: !showTotalScore } )}>Score: <br />{total}</div>        
                 </div>
             </div>
-        
-            <div className="playing-board">
+
+            <div className={classNames("playing-board", columnCount === 3 && "playing-board--three-columns")}>
                 {Object.keys(sections).map((index) => (
-                    <PlayCard 
+                    <PlayCard
                         key={index}
                         onClick={()=> {
                             playSection(index);
@@ -203,3 +205,4 @@ const MatchingPairs = ({
 }
 
 export default MatchingPairs;
+

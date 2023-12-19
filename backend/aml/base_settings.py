@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import os
+from corsheaders.defaults import default_headers
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -150,13 +151,14 @@ CORS_ORIGIN_WHITELIST = os.getenv(
 CORS_ORIGIN_ALLOW_ALL = False
 CORS_ALLOW_CREDENTIALS = True
 
-
+CORS_ALLOW_HEADERS = list(default_headers) + [
+    'sentry-trace',
+    'baggage',
+]
 
 SESSION_SAVE_EVERY_REQUEST = False # Do not set to True, because it will break session-based participant_id
 
 CSRF_USE_SESSIONS = False
-CORS_ALLOW_CREDENTIALS = True
-
 
 LOCALE_PATHS = [os.path.join(BASE_DIR, 'locale')]
 

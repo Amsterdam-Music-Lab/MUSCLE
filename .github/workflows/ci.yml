@@ -23,6 +23,7 @@ jobs:
           sudo docker-compose --env-file .env-github-actions run server bash -c "genbadge coverage -i coverage.xml -o coverage-backend-badge-new.svg -n \"Backend Code Coverage\""
       # Push coverage badge to separate branch (only for main and develop branches)
       - name: Push Backend Coverage Badge to separate branch
+        continue-on-error: true
         if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop'
         run: |
           if git ls-remote --heads origin code-coverage-badges; then
@@ -39,6 +40,13 @@ jobs:
           git add backend/coverage-backend-badge.svg
           git commit -m "Add backend coverage badge for commit $GITHUB_SHA"
           git push origin code-coverage-badges
+          # Check if there are any changes
+          if git diff --staged --quiet; then
+            echo "No changes in coverage badge. Skipping commit and push."
+          else
+            git commit -m "Add backend coverage badge for commit $GITHUB_SHA"
+            git push origin code-coverage-badges
+          fi
 
   backend-lint:
     name: Lint Backend

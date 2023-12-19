@@ -1,8 +1,9 @@
 .aha__button {
-    transition: background-color 0.3s ease-out;
-    opacity: 0.5;
-    &.active {
-        transition: opacity 0.3s ease-out, background-color 0.3s ease-out;
-        opacity: 1;
+    transition: opacity 0.3s ease-out, background-color 0.3s ease-out;
+    opacity: 1;
+    &.disabled, &:disabled {
+        transition: background-color 0.3s ease-out;
+        opacity: 0.5;
+        cursor: not-allowed;
     }
 }
