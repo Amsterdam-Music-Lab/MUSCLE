@@ -18,7 +18,7 @@ class MatchingPairs(Base):
     show_animations = True
     show_total_score = True
     show_score_message = True
-    show_turn_score = False
+    show_turn_feedback = False
     histogram_bars = 5
     contact_email = 'aml.tunetwins@gmail.com'
 
@@ -119,7 +119,7 @@ class MatchingPairs(Base):
                          'show_animations': self.show_animations,
                          'show_total_score': self.show_total_score,
                          'show_score_message': self.show_score_message,
-                         'show_turn_score': self.show_turn_score,                         
+                         'show_turn_feedback': self.show_turn_feedback,                         
                          'histogram_bars': self.histogram_bars}
         )
         trial = Trial(

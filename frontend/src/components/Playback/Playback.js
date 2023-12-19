@@ -225,7 +225,7 @@ const Playback = ({
                         histogramBars={playConfig.histogram_bars}
                         showTotalScore={playConfig.show_total_score}
                         showScoreMessage={playConfig.show_score_message}
-                        showTurnScore={playConfig.show_turn_score}
+                        showTurnFeedback={playConfig.show_turn_feedback}
                     />
                 );
             default:

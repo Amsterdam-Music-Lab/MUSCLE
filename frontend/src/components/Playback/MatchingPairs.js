@@ -13,7 +13,7 @@ const MatchingPairs = ({
     histogramBars,
     showTotalScore,
     showScoreMessage,
-    showTurnScore,
+    showTurnFeedback,
     submitResult,
 }) => {    
     const xPosition = useRef(-1);
@@ -197,7 +197,7 @@ const MatchingPairs = ({
                 )
                 )}
             </div>
-            <div className={classNames("turnscore", { noturnscore: !showTurnScore})}>{turnScore}</div>
+            <div className={classNames("turnscore", { noturnscore: !showTurnFeedback})}>{turnScore}</div>
         </div>  
     )
 }
