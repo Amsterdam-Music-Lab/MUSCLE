@@ -9,6 +9,7 @@ from .h_bat import HBat
 from .h_bat_bfit import HBatBFIT
 from .hbat_bst import BST
 from .hooked import Hooked
+from .tele_tunes import HookedTeleTunes
 from .huang_2022 import Huang2022
 from .kuiper_2020 import Kuiper2020
 from .listening_conditions import ListeningConditions
@@ -43,6 +44,7 @@ EXPERIMENT_RULES = {
     HBatBFIT.ID: HBatBFIT,
     BST.ID: BST,
     Hooked.ID: Hooked,
+    HookedTeleTunes.ID: HookedTeleTunes,
     MatchingPairs.ID: MatchingPairs,
     MatchingPairsICMPC.ID: MatchingPairsICMPC,
     MusicalPreferences.ID: MusicalPreferences,
