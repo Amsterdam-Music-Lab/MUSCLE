@@ -2,13 +2,12 @@
 import ButtonArray from '../components/Question/_ButtonArray';
 
 export default {
-    title: 'ButtonArray',
+    title: 'Question/ButtonArray',
     component: ButtonArray,
     parameters: {
         layout: 'fullscreen',
     },
 };
-
 
 export const Default = {
     args: {
