@@ -111,6 +111,7 @@ export const playBuffer = (id) => {
     // https://devcodef1.com/news/1068842/fixing-ios-17-web-audio-issue
     audioContext.close();
     audioContext = new (window.AudioContext || window.webkitAudioContext)();
+
     source = audioContext.createBufferSource();
     source.buffer = buffers[id];
     source.connect(audioContext.destination);    
@@ -123,6 +124,7 @@ export const playBufferFrom = (id, time) => {
     // https://devcodef1.com/news/1068842/fixing-ios-17-web-audio-issue
     audioContext.close();
     audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    
     source = audioContext.createBufferSource();
     source.buffer = buffers[id];          
     source.connect(audioContext.destination);    
