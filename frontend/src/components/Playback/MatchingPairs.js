@@ -23,7 +23,7 @@ const MatchingPairs = ({
     const secondCard = useRef(-1);
     const [total, setTotal] = useState(100);
     const [message, setMessage] = useState('Pick a card');
-    const [turnScore, setTurnScore] = useState('');
+    const [turnFeedback, setTurnFeedback] = useState('');
     const [end, setEnd] = useState(false);
     const columnCount = sections.length > 6 ? 4 : 3;
 
@@ -107,15 +107,15 @@ const MatchingPairs = ({
                     // match
                     if (currentCard.seen) {
                         score.current = 20;      
-                        setTurnScore('+1')
+                        setTurnFeedback('+1')
                     } else {
                         score.current = 10;
-                        setTurnScore('0')
+                        setTurnFeedback('0')
                     }
                 } else {
                     if (currentCard.seen) { score.current = -10; }
                     else { score.current = 0; }
-                    setTurnScore('-1')
+                    setTurnFeedback('-1')
                 };
                 currentCard.seen = true;
                 lastCard.seen = true;
@@ -151,7 +151,7 @@ const MatchingPairs = ({
         // remove third click event
         document.getElementById('root').removeEventListener('click', finishTurn);
         score.current = undefined;
-        setTurnScore('');
+        setTurnFeedback('');
         // Turn all cards back and enable events
         sections.forEach(section => section.turned = false);
         sections.forEach(section => section.noevents = false);
@@ -199,7 +199,7 @@ const MatchingPairs = ({
                 )
                 )}
             </div>
-            <div className={classNames("turnscore", { noturnscore: !showTurnFeedback})}>{turnScore}</div>
+            <div className={classNames("turnscore", { noturnscore: !showTurnFeedback})}>{turnFeedback}</div>
         </div>  
     )
 }
