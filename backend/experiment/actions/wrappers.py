@@ -87,7 +87,7 @@ def song_sync(session, section, title, play_method='BUFFER',
         title=title
     )
     continuation_correctness = random.randint(0, 1) == 1
-    trial_config['resonse_time'] = sync_time
+    trial_config['response_time'] = sync_time
     correct_place = Trial(
         feedback_form=Form([BooleanQuestion(
             key='correct_place',
