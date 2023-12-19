@@ -107,6 +107,10 @@ export const stopBuffer = () => {
 
 // play buffer by section.id
 export const playBuffer = (id) => {
+    // temporary solution for ios17
+    // https://devcodef1.com/news/1068842/fixing-ios-17-web-audio-issue
+    audioContext.close();
+    audioContext = new (window.AudioContext || window.webkitAudioContext)();
     source = audioContext.createBufferSource();
     source.buffer = buffers[id];
     source.connect(audioContext.destination);    
@@ -115,10 +119,14 @@ export const playBuffer = (id) => {
 
 // Play buffer from given time
 export const playBufferFrom = (id, time) => {
+    // temporary solution for ios17
+    // https://devcodef1.com/news/1068842/fixing-ios-17-web-audio-issue
+    audioContext.close();
+    audioContext = new (window.AudioContext || window.webkitAudioContext)();
     source = audioContext.createBufferSource();
     source.buffer = buffers[id];          
     source.connect(audioContext.destination);    
-    source.start(0, time);
+    source.start(0, time);    
 }
 
 // Suspend webaudio (frees up resources)
