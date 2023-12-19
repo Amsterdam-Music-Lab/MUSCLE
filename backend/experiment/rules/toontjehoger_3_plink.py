@@ -3,7 +3,8 @@ from os.path import join
 from django.template.loader import render_to_string
 
 from .toontjehoger_1_mozart import toontjehoger_ranks
-from experiment.actions import Explainer, Step, Score, Final, StartSession, Playback, Playlist, Info, Trial
+from experiment.actions import Explainer, Step, Score, Final, StartSession, Playlist, Info, Trial
+from experiment.actions.playback import PlayButton
 from experiment.actions.form import AutoCompleteQuestion, RadiosQuestion, Form
 from .base import Base
 
@@ -22,7 +23,7 @@ class ToontjeHoger3Plink(Base):
     SCORE_EXTRA_1_CORRECT = 4
     SCORE_EXTRA_2_CORRECT = 4
     SCORE_EXTRA_WRONG = 0
-    
+
     def first_round(self, experiment):
         """Create data for the first experiment rounds."""
 
@@ -51,7 +52,7 @@ class ToontjeHoger3Plink(Base):
             playlist,
             start_session
         ]
-    
+
     def next_round(self, session, request_session=None):
         """Get action data for the next round"""
 
@@ -78,15 +79,15 @@ class ToontjeHoger3Plink(Base):
         if not last_results:
             logger.error("No last result")
             return ""
-        
+
         if last_results[2].given_response != '':
             # delete other results, because these questions weren't asked
             last_results[0].delete()
             last_results[1].delete()
             return [last_results[2]]
-        
+
         return last_results[:2]
-  
+
     def get_score_view(self, session):
         last_results = self.get_last_results(session)
         section = last_results[0].section
@@ -95,9 +96,11 @@ class ToontjeHoger3Plink(Base):
         if len(last_results) == 1:
             # plink result
             if last_results[0].expected_response == last_results[0].given_response:
-                feedback = "Goedzo! Je hoorde inderdaad {} van {}.".format(non_breaking_spaces(section.song.name), non_breaking_spaces(section.song.artist))
+                feedback = "Goedzo! Je hoorde inderdaad {} van {}.".format(
+                    non_breaking_spaces(section.song.name), non_breaking_spaces(section.song.artist))
             else:
-                feedback = "Helaas! Je hoorde {} van {}.".format(non_breaking_spaces(section.song.name), non_breaking_spaces(section.song.artist))
+                feedback = "Helaas! Je hoorde {} van {}.".format(non_breaking_spaces(
+                    section.song.name), non_breaking_spaces(section.song.artist))
         else:
             if score == 2 * self.SCORE_EXTRA_WRONG:
                 feedback_prefix = "Helaas!"
@@ -122,14 +125,13 @@ class ToontjeHoger3Plink(Base):
             # The \n results in a linebreak
             feedback = "{} {} \n {}".format(
                 feedback_prefix, question_part, section_part)
-        
+
         config = {'show_total_score': True}
         round_number = session.get_relevant_results(['plink']).count() - 1
-        score_title =  "Ronde %(number)d / %(total)d" %\
+        score_title = "Ronde %(number)d / %(total)d" %\
             {'number': round_number+1, 'total': session.experiment.rounds}
         return Score(session, config=config, feedback=feedback, score=score, title=score_title)
-        
-    
+
     def get_plink_round(self, session, present_score=False):
         next_round = []
         if present_score:
@@ -147,7 +149,7 @@ class ToontjeHoger3Plink(Base):
             raise Exception("Error: could not find section")
 
         expected_response = section.pk
-        
+
         question1 = AutoCompleteQuestion(
             key='plink',
             choices=choices,
@@ -160,8 +162,7 @@ class ToontjeHoger3Plink(Base):
             )
         )
         next_round.append(Trial(
-            playback=Playback(
-                player_type='BUTTON',
+            playback=PlayButton(
                 sections=[section]
             ),
             feedback_form=Form(
@@ -186,15 +187,14 @@ class ToontjeHoger3Plink(Base):
                 button_label="Start"
             )
             next_round.append(extra_questions_intro)
-        
+
         extra_rounds = [
             self.get_era_question(session, section),
             self.get_emotion_question(session, section)
         ]
 
-
         return [*next_round, *extra_rounds]
- 
+
     def get_era_question(self, session, section):
 
         # Config
@@ -219,7 +219,7 @@ class ToontjeHoger3Plink(Base):
         )
 
         return Trial(feedback_form=Form([question]))
- 
+
     def get_emotion_question(self, session, section):
 
         # Question
@@ -241,7 +241,7 @@ class ToontjeHoger3Plink(Base):
         )
 
         return Trial(feedback_form=Form([question]))
-    
+
     def calculate_score(self, result, data):
         """
         Calculate score, based on the data field
@@ -249,12 +249,13 @@ class ToontjeHoger3Plink(Base):
         if result.question_key == 'plink':
             return self.SCORE_MAIN_CORRECT if result.expected_response == result.given_response else self.SCORE_MAIN_WRONG
         elif result.question_key == 'era':
-            result.session.save_json_data({'extra_questions_intro_shown': True})
+            result.session.save_json_data(
+                {'extra_questions_intro_shown': True})
             result.session.save()
             return self.SCORE_EXTRA_1_CORRECT if result.given_response == result.expected_response else self.SCORE_EXTRA_WRONG
         else:
             return self.SCORE_EXTRA_2_CORRECT if result.given_response == result.expected_response else self.SCORE_EXTRA_WRONG
- 
+
     def get_final_round(self, session):
 
         # Finish session.
