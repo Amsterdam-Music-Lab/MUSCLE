@@ -2,11 +2,11 @@
 import Question from '../components/Question/Question';
 
 export default {
-  title: 'Question',
-  component: Question,
-  parameters: {
-    layout: 'fullscreen',
-  },
+    title: 'Question',
+    component: Question,
+    parameters: {
+        layout: 'fullscreen',
+    },
 };
 
 export const Default = {
@@ -17,7 +17,7 @@ export const Default = {
             view: "STRING",
             value: "",
         },
-        onChange: () => {},
+        onChange: () => { },
         id: 0,
         active: true,
         style: {},
@@ -63,7 +63,7 @@ export const WithActiveFalse = {
             view: "STRING",
             value: "",
         },
-        onChange: () => {},
+        onChange: () => { },
         id: 0,
         active: false,
         style: {},
@@ -86,7 +86,7 @@ export const WithEmphasizeTitle = {
             view: "STRING",
             value: "",
         },
-        onChange: () => {},
+        onChange: () => { },
         id: 0,
         active: true,
         style: {},
@@ -109,38 +109,10 @@ export const WithStyle = {
             view: "STRING",
             value: "",
         },
-        onChange: () => {},
+        onChange: () => { },
         id: 0,
         active: true,
-        style: {backgroundColor: "red"},
-        emphasizeTitle: false,
-    },
-    decorators: [
-        (Story) => (
-            <div style={{ width: '100%', height: '100%', backgroundColor: '#ddd', padding: '1rem' }}>
-                <Story />
-            </div>
-        ),
-    ],
-};
-
-export const ButtonArray = {
-    args: {
-        question: {
-            question: "This is the question",
-            explainer: "This is the explainer",
-            view: "BUTTON_ARRAY",
-            value: "",
-            choices: [
-                "Choice 1",
-                "Choice 2",
-                "Choice 3",
-            ],
-        },
-        onChange: () => {},
-        id: 0,
-        active: true,
-        style: {},
+        style: { backgroundColor: "red" },
         emphasizeTitle: false,
     },
     decorators: [
@@ -165,7 +137,7 @@ export const Checkboxes = {
                 "Choice 3",
             ],
         },
-        onChange: () => {},
+        onChange: () => { },
         id: 0,
         active: true,
         style: {},
@@ -193,7 +165,7 @@ export const Dropdown = {
                 "Choice 3",
             ],
         },
-        onChange: () => {},
+        onChange: () => { },
         id: 0,
         active: true,
         style: {},
@@ -225,7 +197,7 @@ export const Autocomplete = {
                 "United States",
             ],
         },
-        onChange: () => {},
+        onChange: () => { },
         id: 0,
         active: true,
         style: {},
@@ -253,7 +225,7 @@ export const Radios = {
                 "Choice 3",
             ],
         },
-        onChange: () => {},
+        onChange: () => { },
         id: 0,
         active: true,
         style: {},
@@ -283,7 +255,7 @@ export const Range = {
             min_value: 1,
             max_value: 42,
         },
-        onChange: () => {},
+        onChange: () => { },
         id: 0,
         active: true,
         style: {},
@@ -313,7 +285,7 @@ export const TextRange = {
                 "Choice 3",
             ],
         },
-        onChange: () => {},
+        onChange: () => { },
         id: 0,
         active: true,
         style: {},
@@ -346,7 +318,7 @@ export const IconRange = {
             min_value: 1,
             max_value: 42,
         },
-        onChange: () => {},
+        onChange: () => { },
         id: 0,
         active: true,
         style: {},
