@@ -7,7 +7,7 @@ const PlayButton = ({ playSection, isPlaying, className="" }) => {
 
     return (
         <div
-            className={classNames("aha__play-button border-outside", "btn", {
+            className={classNames("aha__play-button btn-blue border-outside", "btn", {
                 stop: isPlaying, disabled: clicked && !isPlaying,
             },className)}
             onClick={ (playSection && !clicked) ? () => {setClicked(true); playSection(0);} : undefined}
