@@ -284,11 +284,11 @@ class MusicalPreferences(Base):
         return info
 
     def get_preferred_songs(self, result_set, n=5):
-        top_songs = result_set.values('section').annotate(
-            avg_score=Avg('score')).order_by('-score')[:n]
+        top_results = result_set.annotate(
+            avg_score=Avg('score')).order_by('score')[:n]
         out_list = []
-        for s in top_songs:
-            section = Section.objects.get(pk=s.get('section'))
+        for result in top_results.all():
+            section = Section.objects.get(pk=result.section.id)
             out_list.append({'artist': section.song.artist,
                             'name': section.song.name})
         return out_list
