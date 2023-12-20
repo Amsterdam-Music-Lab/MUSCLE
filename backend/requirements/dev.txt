@@ -12,12 +12,18 @@ audioread==2.1.9
     # via -r requirements.in/base.txt
 autopep8==1.5.7
     # via -r requirements.in/dev.txt
+build==1.0.3
+    # via pip-tools
 certifi==2023.7.22
-    # via requests
+    # via
+    #   requests
+    #   sentry-sdk
 charset-normalizer==2.1.0
     # via requests
 click==8.1.7
-    # via genbadge
+    # via
+    #   genbadge
+    #   pip-tools
 coverage==7.3.2
     # via -r requirements.in/base.txt
 defusedxml==0.7.1
@@ -38,6 +44,8 @@ genbadge[coverage]==1.1.1
     # via -r requirements.in/base.txt
 idna==3.3
     # via requests
+importlib-metadata==7.0.0
+    # via build
 iptocc==2.1.2
     # via -r requirements.in/base.txt
 isort==5.9.3
@@ -48,10 +56,14 @@ mccabe==0.6.1
     # via pylint
 numpy==1.22.0
     # via pandas
+packaging==23.2
+    # via build
 pandas==1.3.4
     # via iptocc
 pillow==10.1.0
     # via genbadge
+pip-tools==7.3.0
+    # via -r requirements.in/dev.txt
 platformdirs==2.4.0
     # via pylint
 psycopg2==2.9.1
@@ -67,6 +79,8 @@ pylint-django==2.4.4
     # via -r requirements.in/dev.txt
 pylint-plugin-utils==0.6
     # via pylint-django
+pyproject-hooks==1.0.0
+    # via build
 python-dateutil==2.8.2
     # via pandas
 python-dotenv==0.19.1
@@ -79,6 +93,8 @@ requests==2.31.0
     # via
     #   -r requirements.in/dev.txt
     #   genbadge
+sentry-sdk==1.38.0
+    # via -r requirements.in/base.txt
 six==1.16.0
     # via python-dateutil
 sqlparse==0.4.4
@@ -89,6 +105,11 @@ toml==0.10.2
     # via
     #   autopep8
     #   pylint
+tomli==2.0.1
+    # via
+    #   build
+    #   pip-tools
+    #   pyproject-hooks
 tqdm==4.65.0
     # via -r requirements.in/base.txt
 typing-extensions==3.10.0.2
@@ -96,9 +117,16 @@ typing-extensions==3.10.0.2
     #   astroid
     #   pylint
 urllib3==1.26.18
-    # via requests
+    # via
+    #   requests
+    #   sentry-sdk
+wheel==0.42.0
+    # via pip-tools
 wrapt==1.13.2
     # via astroid
+zipp==3.17.0
+    # via importlib-metadata
 
 # The following packages are considered to be unsafe in a requirements file:
+# pip
 # setuptools

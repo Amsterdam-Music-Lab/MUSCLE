@@ -9,7 +9,9 @@ asgiref==3.7.2
 audioread==3.0.0
     # via -r requirements.in/base.txt
 certifi==2023.11.17
-    # via requests
+    # via
+    #   requests
+    #   sentry-sdk
 charset-normalizer==3.3.2
     # via requests
 click==8.1.7
@@ -53,6 +55,8 @@ pytz==2023.3
     #   pandas
 requests==2.31.0
     # via genbadge
+sentry-sdk==1.38.0
+    # via -r requirements.in/base.txt
 six==1.16.0
     # via python-dateutil
 sqlparse==0.4.4
@@ -62,7 +66,9 @@ tqdm==4.65.0
 typing-extensions==4.6.3
     # via asgiref
 urllib3==2.1.0
-    # via requests
+    # via
+    #   requests
+    #   sentry-sdk
 
 # The following packages are considered to be unsafe in a requirements file:
 # setuptools
