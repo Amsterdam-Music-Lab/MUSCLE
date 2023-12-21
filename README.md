@@ -46,3 +46,7 @@ To stop the containers, press `ctrl-c` or (in another terminal) run
 
 ## Production build
 A production build should define its own `docker-compose.yaml`, making use of the `Dockerfile` of the `backend` and `frontend` environments. It should also define a custom .env file, with safe passwords for the SQL database and the Python backend. Instead of mounting the entire backend and frontend directory and using the development servers, the backend should serve with gunicorn, and the frontend should use a build script to compile static html, css and JavaScript.
+
+## Troubleshooting
+
+Please refer to the [wiki](https://github.com/Amsterdam-Music-Lab/MUSCLE/wiki/X.-Troubleshooting) a checklist of common issues and their solutions.
