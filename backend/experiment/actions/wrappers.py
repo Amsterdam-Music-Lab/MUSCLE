@@ -9,6 +9,7 @@ from .trial import Trial
 from result.utils import prepare_result
 
 from experiment.actions.styles import STYLE_BOOLEAN_NEGATIVE_FIRST
+from experiment.actions.utils import randomize_playhead
 
 
 def two_alternative_forced(session, section, choices, expected_response=None, style={}, comment='', scoring_rule=None, title='', config=None):
@@ -103,7 +104,7 @@ def song_sync(session, section, title, play_method='BUFFER',
                               'Did the track come back in the right place?'),
                           play_config={
             'ready_time': 0,
-            'playhead': silence_time + (random.uniform(min_jitter, max_jitter) if not continuation_correctness else 0),
+            'playhead': randomize_playhead(min_jitter, max_jitter, silence_time, continuation_correctness),
             'show_animation': True,
             'resume_play': True
         }),
