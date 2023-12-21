@@ -39,7 +39,8 @@ class MusicalPreferencesTest(TestCase):
                 session=self.session
             )
         mp = MusicalPreferences()
-        preferred_sections = mp.get_preferred_songs(self.session.result_set, 3)
+        preferred_sections = mp.get_preferred_songs(
+            self.session.result_set.order_by('?'), 3)
         assert preferred_sections[0]['artist'] == 'SuperArtist'
         assert preferred_sections[1]['name'] == 'MehSong'
         assert preferred_sections[2]['artist'] == 'MehArtist'
