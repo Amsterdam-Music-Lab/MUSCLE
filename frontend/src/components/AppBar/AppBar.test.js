@@ -9,7 +9,7 @@ describe('AppBar', () => {
 
   beforeEach(() => {
     jest.resetModules();
-    process.env.REACT_APP_AML_HOME = BASE_URL;
+    import.meta.env.VITE_AML_HOME = BASE_URL;
   });
 
   it('renders correctly', () => {

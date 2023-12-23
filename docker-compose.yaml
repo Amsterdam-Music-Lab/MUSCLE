@@ -69,20 +69,30 @@ services:
           - type: bind
             source: ./frontend/.storybook
             target: /client/.storybook
+          - type: bind
+            source: ./frontend/tsconfig.json
+            target: /client/tsconfig.json
+          - type: bind
+            source: ./frontend/vite-env.d.ts
+            target: /client/vite-env.d.ts
+          - type: bind
+            source: ./frontend/vite.config.ts
+            target: /client/vite.config.ts
+
         environment:
-          - REACT_APP_API_ROOT=${REACT_APP_API_ROOT}
-          - REACT_APP_EXPERIMENT_SLUG=${REACT_APP_EXPERIMENT_SLUG}
-          - REACT_APP_AML_HOME=${REACT_APP_AML_HOME}
-          - REACT_APP_LOGO_URL=${REACT_APP_LOGO_URL}
-          - REACT_APP_HTML_FAVICON=${REACT_APP_HTML_FAVICON}
-          - REACT_APP_HTML_PAGE_TITLE=${REACT_APP_HTML_PAGE_TITLE}
-          - REACT_APP_HTML_OG_DESCRIPTION=${REACT_APP_HTML_OG_DESCRIPTION}
-          - REACT_APP_HTML_OG_IMAGE=${REACT_APP_HTML_OG_IMAGE}
-          - REACT_APP_HTML_OG_TITLE=${REACT_APP_HTML_OG_TITLE}
-          - REACT_APP_HTML_OG_URL=${REACT_APP_HTML_OG_URL}
-          - REACT_APP_HTML_BODY_CLASS=${REACT_APP_HTML_BODY_CLASS}
-          - REACT_APP_SENTRY_DSN=${REACT_APP_SENTRY_DSN}
-          - REACT_APP_STRICT=${REACT_APP_STRICT}
+          - VITE_API_ROOT=${VITE_API_ROOT}
+          - VITE_EXPERIMENT_SLUG=${VITE_EXPERIMENT_SLUG}
+          - VITE_AML_HOME=${VITE_AML_HOME}
+          - VITE_LOGO_URL=${VITE_LOGO_URL}
+          - VITE_HTML_FAVICON=${VITE_HTML_FAVICON}
+          - VITE_HTML_PAGE_TITLE=${VITE_HTML_PAGE_TITLE}
+          - VITE_HTML_OG_DESCRIPTION=${VITE_HTML_OG_DESCRIPTION}
+          - VITE_HTML_OG_IMAGE=${VITE_HTML_OG_IMAGE}
+          - VITE_HTML_OG_TITLE=${VITE_HTML_OG_TITLE}
+          - VITE_HTML_OG_URL=${VITE_HTML_OG_URL}
+          - VITE_HTML_BODY_CLASS=${VITE_HTML_BODY_CLASS}
+          - VITE_SENTRY_DSN=${VITE_SENTRY_DSN}
+          - VITE_STRICT=${VITE_STRICT}
         ports:
           - 3000:3000
         command: sh -c "yarn scss && yarn start"

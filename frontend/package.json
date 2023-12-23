@@ -4,6 +4,7 @@
   "license": "MIT",
   "dependencies": {
     "@sentry/react": "^7.85.0",
+    "@vitejs/plugin-react": "^4.2.1",
     "axios": ">=1.6.0",
     "classnames": "^2.2.6",
     "email-validator": "^2.0.4",
@@ -15,15 +16,17 @@
     "react-rangeslider": "^2.2.0",
     "react-router": "5.2.0",
     "react-router-dom": "5.2.0",
-    "react-scripts": "5.0.0",
     "react-select": "^5.4.0",
     "react-transition-group": "^4.4.5",
     "sass": "^1.69.5",
+    "vite": "^5.0.10",
+    "vite-tsconfig-paths": "^4.2.2",
     "zustand": "^4.4.7"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "sass src/index.scss src/index.css; react-scripts build",
+    "start": "vite",
+    "build": "sass src/index.scss src/index.css && tsc && vite build",
+    "preview": "vite preview",
     "test": "react-scripts test",
     "test:ci": "react-scripts test --coverage --watchAll=false",
     "generate-badge": "coverage-badges -s coverage/coverage-summary.json -o coverage-frontend-badge-new.svg --label 'Frontend Code Coverage'",
