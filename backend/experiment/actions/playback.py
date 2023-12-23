@@ -17,7 +17,7 @@ class Playback(BaseAction):
                 - 'HTML': Use the HTML tag. (recommended for stimuli longer than 45s)
                 - 'EXTERNAL': Use for externally hosted audio files. Web-audio api will be disabled
                 - 'MATCHINGPAIRS': Use for the matching pairs game.
-                - 'VISUALMATCHINGPAIRS': Use for the visual matching pairs game.
+                - 'PREFETCH': Files will be fetched and cached in the browser.
             - ready_time: time before presentation of sound
             - timeout_after_playback: pause in ms after playback has finished
             - playhead: from where the audio file should play (offset in seconds from start)

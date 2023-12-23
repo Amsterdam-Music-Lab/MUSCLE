@@ -26,7 +26,7 @@ const Preload = ({ instruction, pageTitle, duration, sections, playConfig, onNex
     useEffect(() => {
         const preloadResources = async () => {
 
-            if (playConfig.play_method === 'CACHE') {
+            if (playConfig.play_method === 'PREFETCH') {
 
                 await Promise.all(sections.map((section) => {
                     return fetch(MEDIA_ROOT + section.url);
