@@ -10,7 +10,6 @@ const VisualMatchingPairs = (props) => {
         playerIndex,
         finishedPlaying,
         setPlayerIndex,
-        stopAudioAfter,
         submitResult,
         view,
     } = props;
@@ -198,7 +197,8 @@ const VisualMatchingPairs = (props) => {
         }
     }, [gameState, setEnd]);
 
-    const registerUserClicks = () => console.log('registerUserClicks');
+    const registerUserClicks = () => void 0;
+    const stopAudioAfter = () => void 0;
 
     const onPlayCardClick = (index) => {
         setPlayerIndex(-1);
