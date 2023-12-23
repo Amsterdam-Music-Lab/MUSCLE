@@ -225,19 +225,6 @@ const VisualMatchingPairs = (props) => {
 
     return (
         <div className="aha__visual-matching-pairs">
-            <p>First card index {firstCard}</p>
-            <p>Second card index {secondCard}</p>
-            <p>In between turns {inBetweenTurns ? 'true' : 'false'}</p>
-            <p>Score {score}</p>
-            <p>End {end ? 'true' : 'false'}</p>
-            <p>Player index {playerIndex}</p>
-            <p>Amount of turned cards: {gameState.filter(s => s.turned).length}</p>
-            <p>Amount of inactive cards: {gameState.filter(s => s.inactive).length}</p>
-            <p>Amount of seen cards: {gameState.filter(s => s.seen).length}</p>
-            <p>Amount of noevents cards: {gameState.filter(s => s.noevents).length}</p>
-            <p>Amount of lucky cards: {gameState.filter(s => s.lucky).length}</p>
-            <p>Amount of memory cards: {gameState.filter(s => s.memory).length}</p>
-            <p>Amount of nomatch cards: {gameState.filter(s => s.nomatch).length}</p>
 
             <div className="row justify-content-around">
                 <div className="col-6 align-self-start">
