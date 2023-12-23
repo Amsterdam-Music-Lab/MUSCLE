@@ -17,7 +17,10 @@ const config = {
     },
     staticDirs: ["../public"],
     env: {
-        REACT_APP_API_ROOT: "http://localhost:8000",
+        VITE_API_ROOT: "http://localhost:8000",
+    },
+    core: {
+        builder: '@storybook/builder-vite',
     },
 };
 

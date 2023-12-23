@@ -5161,6 +5161,42 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@storybook/builder-vite@npm:^7.6.6":
+  version: 7.6.6
+  resolution: "@storybook/builder-vite@npm:7.6.6"
+  dependencies:
+    "@storybook/channels": "npm:7.6.6"
+    "@storybook/client-logger": "npm:7.6.6"
+    "@storybook/core-common": "npm:7.6.6"
+    "@storybook/csf-plugin": "npm:7.6.6"
+    "@storybook/node-logger": "npm:7.6.6"
+    "@storybook/preview": "npm:7.6.6"
+    "@storybook/preview-api": "npm:7.6.6"
+    "@storybook/types": "npm:7.6.6"
+    "@types/find-cache-dir": "npm:^3.2.1"
+    browser-assert: "npm:^1.2.1"
+    es-module-lexer: "npm:^0.9.3"
+    express: "npm:^4.17.3"
+    find-cache-dir: "npm:^3.0.0"
+    fs-extra: "npm:^11.1.0"
+    magic-string: "npm:^0.30.0"
+    rollup: "npm:^2.25.0 || ^3.3.0"
+  peerDependencies:
+    "@preact/preset-vite": "*"
+    typescript: ">= 4.3.x"
+    vite: ^3.0.0 || ^4.0.0 || ^5.0.0
+    vite-plugin-glimmerx: "*"
+  peerDependenciesMeta:
+    "@preact/preset-vite":
+      optional: true
+    typescript:
+      optional: true
+    vite-plugin-glimmerx:
+      optional: true
+  checksum: 71ca9359925b71e936dfdfe1bde7f2735d5f139f988251d1daed5e19f16b1333389878377cb8ec06347c784b9e40e37939eaf854b8a0faf584fe9d8327fc41be
+  languageName: node
+  linkType: hard
+
 "@storybook/builder-webpack5@npm:7.6.6":
   version: 7.6.6
   resolution: "@storybook/builder-webpack5@npm:7.6.6"
@@ -7065,6 +7101,7 @@ __metadata:
     "@storybook/addon-links": "npm:7.6.6"
     "@storybook/addon-onboarding": "npm:1.0.10"
     "@storybook/blocks": "npm:7.6.6"
+    "@storybook/builder-vite": "npm:^7.6.6"
     "@storybook/preset-create-react-app": "npm:7.6.6"
     "@storybook/react": "npm:7.6.6"
     "@storybook/react-webpack5": "npm:7.6.6"
@@ -9137,6 +9174,13 @@ __metadata:
     iterator.prototype: "npm:^1.1.0"
     safe-array-concat: "npm:^1.0.0"
   checksum: 47d59ccbcf2fe32d9e5ac4fff65d613210851bbf14ba32726e5eb771194173b66aa233d7e4049b2cb24251545787ac1ea3242f91aa343aaaa7ce699e20d12e1c
+  languageName: node
+  linkType: hard
+
+"es-module-lexer@npm:^0.9.3":
+  version: 0.9.3
+  resolution: "es-module-lexer@npm:0.9.3"
+  checksum: be77d73aee709fdc68d22b9938da81dfee3bc45e8d601629258643fe5bfdab253d6e2540035e035cfa8cf52a96366c1c19b46bcc23b4507b1d44e5907d2e7f6c
   languageName: node
   linkType: hard
 
@@ -12277,7 +12321,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"magic-string@npm:^0.30.5":
+"magic-string@npm:^0.30.0, magic-string@npm:^0.30.5":
   version: 0.30.5
   resolution: "magic-string@npm:0.30.5"
   dependencies:
@@ -14386,6 +14430,20 @@ __metadata:
   bin:
     rimraf: ./bin.js
   checksum: f1e646f8c567795f2916aef7aadf685b543da6b9a53e482bb04b07472c7eef2b476045ba1e29f401c301c66b630b22b815ab31fdd60c5e1ae6566ff523debf45
+  languageName: node
+  linkType: hard
+
+"rollup@npm:^2.25.0 || ^3.3.0":
+  version: 3.29.4
+  resolution: "rollup@npm:3.29.4"
+  dependencies:
+    fsevents: "npm:~2.3.2"
+  dependenciesMeta:
+    fsevents:
+      optional: true
+  bin:
+    rollup: dist/bin/rollup
+  checksum: 65eddf84bf389ea8e4d4c1614b1c6a298d08f8ae785c0c087e723a879190c8aaddbab4aa3b8a0524551b9036750c9f8bfea27b377798accfd2ba5084ceff5aaa
   languageName: node
   linkType: hard
 
