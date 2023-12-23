@@ -92,7 +92,7 @@ class MatchingPairs(Base):
 
     def get_visual_matching_pairs_trial(self, session):
         playback = Playback(
-            sections=session.playlist.section_set.all(),
+            sections=session.playlist.section_set.filter(tag__contains='vmp'),
             player_type='VISUALMATCHINGPAIRS',
             play_config={ 'play_method': 'PREFETCH' }
         )
