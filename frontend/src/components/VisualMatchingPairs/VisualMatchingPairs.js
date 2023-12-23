@@ -43,7 +43,7 @@ const VisualMatchingPairs = (props) => {
     }
 
     // Show (animated) feedback after second click on second card or finished playing
-    const showFeedback = (firstCard, secondCard) => {
+    const showFeedback = (firstCard, secondCard, score) => {
 
         // update total score & display current score
         setTotal(total + score);
@@ -98,6 +98,7 @@ const VisualMatchingPairs = (props) => {
         let gameStateCopy = gameState.map(s => ({ ...s }));
         const currentCard = gameStateCopy[index];
         const turnedCardsCount = gameStateCopy.filter(s => s.turned).length;
+        let newScore = 0;
 
         if (turnedCardsCount === 1) {
             // We have two turned cards
@@ -117,22 +118,23 @@ const VisualMatchingPairs = (props) => {
             if (lastCard.group === currentCard.group) {
                 // match
                 if (currentCard.seen) {
-                    setScore(20);
+                    newScore = 20;
                 } else {
-                    setScore(10);
+                    newScore = 10;
                 }
             } else {
                 if (currentCard.seen) {
-                    setScore(-10);
+                    newScore = -10;
                 } else {
-                    setScore(0);
+                    newScore = 0;
                 }
             };
             gameStateCopy[index].seen = true;
             gameStateCopy[firstCard].seen = true;
 
+            setScore(newScore);
             setGameState([...gameStateCopy]);
-            showFeedback(firstCard, index)
+            showFeedback(firstCard, index, newScore);
         }
 
         if (turnedCardsCount === 0) {
