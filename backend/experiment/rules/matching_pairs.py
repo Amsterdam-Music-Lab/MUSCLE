@@ -54,9 +54,9 @@ class MatchingPairs(Base):
             explainer,
             start_session
         ]
-    
+
     def next_round(self, session):
-        if session.rounds_passed() < 1:       
+        if session.rounds_passed() < 1:
             trials = self.get_questionnaire(session)
             if trials:
                 intro_questions = Explainer(
@@ -65,8 +65,11 @@ class MatchingPairs(Base):
                 )
                 return [intro_questions, *trials]
             else:
-                trial = self.get_matching_pairs_trial(session)
+                trial = self.get_visual_matching_pairs_trial(session)
                 return [trial]
+        elif session.rounds_passed() < 2:
+            trial = self.get_matching_pairs_trial(session)
+            return [trial]
         else:
             session.final_score += session.result_set.filter(
                 question_key='matching_pairs').last().score
@@ -87,6 +90,21 @@ class MatchingPairs(Base):
             cont = self.get_matching_pairs_trial(session)
             return [score, cont]
 
+    def get_visual_matching_pairs_trial(self, session):
+        playback = Playback(
+            sections=session.playlist.section_set.all(),
+            player_type='VISUALMATCHINGPAIRS',
+            play_config={ 'play_method': 'PREFETCH' }
+        )
+        trial = Trial(
+            title='Visual Tune twins',
+            playback=playback,
+            feedback_form=None,
+            result_id=prepare_result('visual_matching_pairs', session),
+            config={'show_continue_button': False}
+        )
+        return trial
+
     def get_matching_pairs_trial(self, session):
         json_data = session.load_json_data()
         pairs = json_data.get('pairs', [])
@@ -95,7 +113,7 @@ class MatchingPairs(Base):
             random.shuffle(pairs)
         selected_pairs = pairs[:self.num_pairs]
         session.save_json_data({'pairs': pairs[self.num_pairs:]})
-        originals = session.playlist.section_set.filter(group__in=selected_pairs, tag='Original')  
+        originals = session.playlist.section_set.filter(group__in=selected_pairs, tag='Original')
         degradations = json_data.get('degradations')
         if not degradations:
             degradations = ['Original', '1stDegradation', '2ndDegradation']

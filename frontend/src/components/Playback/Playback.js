@@ -10,6 +10,7 @@ import MultiPlayer from "./MultiPlayer";
 import SpectrogramPlayer from "./SpectrogramPlayer";
 import MatchingPairs from "./MatchingPairs";
 import Preload from "../Preload/Preload";
+import VisualMatchingPairs from "components/VisualMatchingPairs/VisualMatchingPairs";
 
 export const AUTOPLAY = "AUTOPLAY";
 export const BUTTON = "BUTTON";
@@ -17,6 +18,7 @@ export const MULTIPLAYER = "MULTIPLAYER";
 export const SPECTROGRAM = "SPECTROGRAM";
 export const MATCHINGPAIRS = "MATCHINGPAIRS";
 export const PRELOAD = "PRELOAD";
+export const VISUALMATCHINGPAIRS = "VISUALMATCHINGPAIRS";
 
 const Playback = ({
     playerType,
@@ -136,7 +138,7 @@ const Playback = ({
         /* if the current Playback view has resume_play set to true,
         retrieve previous Playback view's decisionTime from sessionStorage
         */
-        return playConfig.resume_play ? 
+        return playConfig.resume_play ?
         parseFloat(window.sessionStorage.getItem('decisionTime')) : 0;
     }
 
@@ -221,6 +223,12 @@ const Playback = ({
                     <MatchingPairs
                         {...attrs}
                         stopAudioAfter={playConfig.stop_audio_after}
+                    />
+                );
+            case VISUALMATCHINGPAIRS:
+                return (
+                    <VisualMatchingPairs
+                        {...attrs}
                     />
                 );
             default:
