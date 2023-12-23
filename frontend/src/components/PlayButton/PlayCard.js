@@ -2,8 +2,16 @@ import classNames from "classnames";
 
 import Histogram from "../Histogram/Histogram";
 import { MATCHINGPAIRS } from "components/Playback/Playback";
+import { API_ROOT } from "config";
 
 const PlayCard = ({ onClick, registerUserClicks, playing, section, view }) => {
+
+    const getImgSrc = (url) => {
+        if (url.startsWith("http")) {
+            return url;
+        }
+        return API_ROOT + url;
+    }
 
     return (
         <div className={classNames("aha__play-card", { turned: section.turned }, { noevents: section.noevents }, { disabled: section.inactive }, { memory: section.memory }, { lucky: section.lucky }, { nomatch: section.nomatch })} onClick={event => {
@@ -21,7 +29,7 @@ const PlayCard = ({ onClick, registerUserClicks, playing, section, view }) => {
                         borderRadius=".5rem"
                     />
                     : <div className="front front--visual">
-                        <img src={section.url} alt={section.name} />
+                        <img src={getImgSrc(section.url)} alt={section.name} />
                     </div>
                 :
                 <div className={classNames("back", { seen: section.seen })}>
