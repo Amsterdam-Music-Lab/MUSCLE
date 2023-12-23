@@ -14,10 +14,24 @@ const PlayCard = ({ onClick, registerUserClicks, playing, section, view }) => {
     }
 
     return (
-        <div className={classNames("aha__play-card", { turned: section.turned }, { noevents: section.noevents }, { disabled: section.inactive }, { memory: section.memory }, { lucky: section.lucky }, { nomatch: section.nomatch })} onClick={event => {
-            registerUserClicks(event.clientX, event.clientY);
-            onClick();
-        }}>
+        <div
+            data-testid="play-card"
+            className={
+                classNames(
+                    "aha__play-card",
+                    { turned: section.turned },
+                    { noevents: section.noevents },
+                    { disabled: section.inactive },
+                    { memory: section.memory },
+                    { lucky: section.lucky },
+                    { nomatch: section.nomatch })
+            }
+            onClick={event => {
+                registerUserClicks(event.clientX, event.clientY);
+                onClick();
+            }}
+            role="button"
+        >
             {section.turned ?
                 view === MATCHINGPAIRS ?
                     <Histogram

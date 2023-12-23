@@ -233,7 +233,9 @@ const VisualMatchingPairs = (props) => {
                     />
                 </div>
                 <div className="col-6 align-self-end">
-                    <div className="matching-pairs__score">Score: <br />{total}</div>
+                    <div className="matching-pairs__score" data-testid="score">
+                        Score: <br />{total}
+                    </div>
                 </div>
             </div>
 
@@ -252,7 +254,12 @@ const VisualMatchingPairs = (props) => {
                 )
                 )}
             </div>
-            <div className="visual-matching-pairs__overlay" onClick={finishTurn} style={{ display: inBetweenTurns ? 'block' : 'none' }}></div>
+            <div
+                className="visual-matching-pairs__overlay"
+                onClick={finishTurn}
+                style={{ display: inBetweenTurns ? 'block' : 'none' }}
+                data-testid="overlay"
+            ></div>
         </div>
     )
 }
