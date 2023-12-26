@@ -4,20 +4,20 @@ import Consent from './Consent';
 import { useConsent } from '../../API'
 import { saveAs } from 'file-saver';
 
-global.Blob = jest.fn().mockImplementation((content, options) => ({
+global.Blob = vi.fn().mockImplementation((content, options) => ({
     content,
     options
 }));
 
-global.URL.createObjectURL = jest.fn();
+global.URL.createObjectURL = vi.fn();
 
-jest.mock('file-saver', () => ({
-    saveAs: jest.fn(),
+vi.mock('file-saver', () => ({
+    saveAs: vi.fn(),
 }));
 
-jest.mock('../../API', () => ({
-    createConsent: jest.fn(),
-    useConsent: jest.fn(),
+vi.mock('../../API', () => ({
+    createConsent: vi.fn(),
+    useConsent: vi.fn(),
 }));
 
 const mockExperiment = {
@@ -29,18 +29,18 @@ describe('Consent', () => {
     it('renders loading state correctly', () => {
         useConsent.mockReturnValue([null, true]); // Mock loading state
         const { getByText } = render(<Consent experiment={{ slug: 'test-experiment', loading_text: 'Loading...' }} />);
-        expect(getByText('Loading...')).toBeInTheDocument();
+        expect(document.body.contains(getByText('Loading...'))).to.be.true;
     });
 
     it('renders consent text when not loading', () => {
         useConsent.mockReturnValue([null, false]);
         const { getByText } = render(<Consent text="<p>Consent Text</p>" experiment={mockExperiment} />);
-        expect(getByText('Consent Text')).toBeInTheDocument();
+        expect(document.body.contains(getByText('Consent Text'))).to.be.true;
     });
 
     it('calls onNext when Agree button is clicked', async () => {
         useConsent.mockReturnValue([null, false]);
-        const onNext = jest.fn();
+        const onNext = vi.fn();
         const { getByText } = render(<Consent onNext={onNext} confirm="Agree" experiment={mockExperiment} />);
         fireEvent.click(getByText('Agree'));
 

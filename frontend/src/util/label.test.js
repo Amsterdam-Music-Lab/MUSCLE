@@ -11,7 +11,9 @@ describe('renderLabel', () => {
     it('returns non-FontAwesome label as is', () => {
         const label = 'NonFontAwesomeLabel';
         const { getByText } = render(renderLabel(label));
-        expect(getByText(label)).toBeInTheDocument();
+
+        const labelElement = getByText(label)
+        expect(document.body.contains(labelElement)).to.be.true;
     });
 
     it('handles empty or undefined labels correctly', () => {

@@ -7,7 +7,7 @@ const makeDefaultProps = (overrides = {}) => ({
     icon: 'fa-icon',
     feedback: 'Well done!',
     timer: null,
-    onNext: jest.fn(),
+    onNext: vi.fn(),
     ...overrides,
 });
 

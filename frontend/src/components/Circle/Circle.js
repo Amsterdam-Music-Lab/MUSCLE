@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Timer }from "@/util/timer";
+import Timer from "@/util/timer";
 
 // Circle shows a counterclockwise circular animation
 const Circle = ({
