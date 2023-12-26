@@ -39,10 +39,17 @@
     "lint:fix": "eslint --fix src/**/*.js"
   },
   "eslintConfig": {
+    "plugins": [
+      "chai-friendly"
+    ],
     "extends": [
       "react-app",
       "plugin:storybook/recommended"
-    ]
+    ],
+    "rules": {
+      "no-unused-expressions": 0,
+      "chai-friendly/no-unused-expressions": ["error", { "allowShortCircuit": true }]
+    }
   },
   "browserslist": {
     "production": [
@@ -73,6 +80,7 @@
     "coverage-badges-cli": "^1.2.5",
     "eslint": "^8.54.0",
     "eslint-config-react-app": "^7.0.1",
+    "eslint-plugin-chai-friendly": "^0.7.2",
     "eslint-plugin-storybook": "^0.6.15",
     "happy-dom": "^12.10.3",
     "history": "^5.3.0",

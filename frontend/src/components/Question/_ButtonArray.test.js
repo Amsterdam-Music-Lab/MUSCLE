@@ -1,6 +1,7 @@
 import React from 'react';
 import { render, fireEvent } from '@testing-library/react';
 import ButtonArray from './_ButtonArray';
+import { vi } from 'vitest';
 
 const getProps = (overrides = {}) => ({
     question: {

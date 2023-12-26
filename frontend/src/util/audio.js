@@ -10,7 +10,7 @@ audio.controls = "controls";
 audio.src = SILENT_MP3;
 
 // switch to cors anonymous for local development (needed for webaudio)
-API_ROOT === 'http://localhost:8000' ? audio.crossOrigin = "anonymous" : audio.crossorigin = "use-credentials";
+audio.crossOrigin = API_ROOT === 'http://localhost:8000' ? "anonymous" : "use-credentials";
 
 audio.disableRemotePlayback = true;
 audio.style.display = "none";
@@ -36,7 +36,7 @@ export let audioInitialized = false;
 export const init = () => {
     load(SILENT_MP3);
     play();
-    audioInitialized = true;   
+    audioInitialized = true;
 };
 
 // init audio after first user action on page

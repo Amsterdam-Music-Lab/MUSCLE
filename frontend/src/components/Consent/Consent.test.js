@@ -3,6 +3,7 @@ import { fireEvent, render, waitFor } from '@testing-library/react';
 import Consent from './Consent';
 import { useConsent } from '../../API'
 import { saveAs } from 'file-saver';
+import { vi } from 'vitest';
 
 global.Blob = vi.fn().mockImplementation((content, options) => ({
     content,

@@ -20,8 +20,7 @@ export const Timer = ({
 
         // timer finished
         if (time === duration) {
-            onFinish && onFinish();
-            return;
+            return onFinish ? onFinish() : void 0;
         }
 
         // callback after interval
@@ -29,7 +28,9 @@ export const Timer = ({
             lastTime = time;
 
             // tick
-            onTick && onTick(time, delta);
+            if (onTick) {
+                onTick(time, delta);
+            }
         }
 
         lastTimestamp = timestamp;

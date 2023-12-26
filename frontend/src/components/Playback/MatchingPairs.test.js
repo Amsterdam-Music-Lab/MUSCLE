@@ -1,6 +1,7 @@
 import React from 'react';
 import { render } from '@testing-library/react';
 import MatchingPairs, { SCORE_FEEDBACK_DISPLAY } from './MatchingPairs';
+import { vi } from 'vitest';
 
 vi.mock("../../util/stores", () => ({
     __esModule: true,

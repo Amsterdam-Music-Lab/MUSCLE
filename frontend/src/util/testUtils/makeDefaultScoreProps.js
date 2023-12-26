@@ -1,3 +1,5 @@
+import { vi } from 'vitest';
+
 const makeDefaultProps = (overrides = {}) => ({
     last_song: 'Test Song',
     score: 10,
