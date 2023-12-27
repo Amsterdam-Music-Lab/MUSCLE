@@ -5,5 +5,6 @@ WORKDIR /client
 COPY package.json /client/
 COPY yarn.lock /client/
 COPY jsconfig.json /client/
+COPY .eslintrc.js /client/
 RUN yarn
 COPY . /client/
