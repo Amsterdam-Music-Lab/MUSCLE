@@ -1,9 +1,11 @@
+from typing import Any
 from django.test import Client, TestCase
 from django.contrib.admin.sites import AdminSite
+from django.core.files.uploadedfile import SimpleUploadedFile
 from django.urls import reverse
 from section.admin import PlaylistAdmin
 from section.models import Playlist, Section, Song
-
+from section.forms import PlaylistAdminForm
 
 class PlaylistModelTest(TestCase):
 
@@ -147,3 +149,48 @@ class PlaylistAdminTest(TestCase):
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response['Content-Type'], 'application/json')
+
+class PlaylistAdminFormTest(TestCase):
+
+    def setUp(self):
+        self.csv_content = b'The Beatles, A day in the life,1.0,1.0,https://example.com/the-beatles/a-day-in-the-life.mp3,0,band,9\nGustav Mahler, Symphony No. 5,2.0,2.0,https://example.com/gustav-mahler/symphony-no-5.mp3,0,composer,5\nDjango Reinhardt, Minor Swing,3.0,3.0,https://example.com/django-reinhardt/minor-swing.mp3,0,artist,3\n'
+
+    def test_csv_file_upload(self):
+        uploaded_file = SimpleUploadedFile('test.csv', self.csv_content, content_type='text/csv')
+
+        form_data = {'name': 'Test Playlist', 'process_csv': True}
+        file_data = {'csv_file': uploaded_file}
+
+        form = PlaylistAdminForm(data=form_data, files=file_data)
+
+        self.assertTrue(form.is_valid())
+
+        playlist = form.save()
+
+        self.assertEqual(playlist.csv, self.csv_content.decode('utf-8'))
+
+    def test_csv_text_input(self):
+        form_data = {'name': 'Test Playlist', 'process_csv': True, 'csv': self.csv_content.decode('utf-8')}
+
+        form = PlaylistAdminForm(data=form_data)
+
+        self.assertTrue(form.is_valid())
+
+        playlist = form.save()
+
+        self.assertEqual(playlist.csv.strip(), self.csv_content.decode('utf-8').strip())
+
+
+    def test_should_not_process_csv(self):
+        uploaded_file = SimpleUploadedFile('test.csv', self.csv_content, content_type='text/csv')
+
+        form_data = {'name': 'Test Playlist', 'process_csv': False}
+        file_data = {'csv_file': uploaded_file}
+
+        form = PlaylistAdminForm(data=form_data, files=file_data)
+
+        self.assertTrue(form.is_valid())
+
+        playlist = form.save()
+
+        self.assertEqual(playlist.csv, '')
