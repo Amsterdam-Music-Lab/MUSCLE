@@ -1,5 +1,6 @@
 from django.test import Client, TestCase
 from django.contrib.admin.sites import AdminSite
+from django.urls import reverse
 from section.admin import PlaylistAdmin
 from section.models import Playlist, Section, Song
 
@@ -29,14 +30,14 @@ class PlaylistModelTest(TestCase):
 
     def test_update_sections_not_number(self):
         playlist = Playlist.objects.get(name='TestPlaylist')
-        # Third row string is not a number 
+        # Third row string is not a number
         playlist.csv = ("Måneskin,Zitti e buoni,0.0,10.0,bat/maneskin.mp3,0,0,0\n"
                         "Duncan Laurence,Arcade,0.0,10.0,bat/laurence.mp3,0,0,0\n"
                         "Netta,Toy,string,string,bat/netta.mp3,string,tag,group\n"
                         "Salvador Sobral,Amar pelos dois,0.0,10.0,bat/sobral.mp3,0,0,0\n")
         s = playlist.update_sections()
         self.assertEqual(s['status'], playlist.CSV_ERROR)
-    
+
     def test_get_section(self):
         playlist = Playlist.objects.get(name='TestPlaylist')
         playlist.csv = (
@@ -57,7 +58,7 @@ class PlaylistModelTest(TestCase):
         assert section.tag == 'tag2' and section.song.id == song2.id
 
     def test_valid_csv(self):
-        playlist = Playlist.objects.get(name='TestPlaylist')    
+        playlist = Playlist.objects.get(name='TestPlaylist')
         playlist.csv = ("Måneskin,Zitti e buoni,0.0,10.0,bat/maneskin.mp3,0,0,0\n"
                         "Duncan Laurence,Arcade,0.0,10.0,bat/laurence.mp3,0,1,2\n"
                         "Netta,Toy,0.0,10.0,bat/netta.mp3,1,tag,group\n"
@@ -85,7 +86,7 @@ class PlaylistModelTest(TestCase):
         self.assertEqual(sections[3].tag, "0")
         self.assertEqual(sections[3].group, '0')
        
-        
+
 class MockRequest:
     pass
 
@@ -94,7 +95,7 @@ this_playlist_admin = PlaylistAdmin(
     model=Playlist, admin_site=AdminSite)
     
 
-class TestAmdinEditSection(TestCase):
+class TestAdminEditSection(TestCase):
 
     @classmethod
     def setUpTestData(cls):
@@ -117,7 +118,7 @@ class TestAmdinEditSection(TestCase):
                         pre_fix + '_tag': 'edited',
                         pre_fix + '_group': 'edited',
                         pre_fix + '_restricted': '0'}
-        this_playlist = Playlist.objects.first()            
+        this_playlist = Playlist.objects.first()
         response = this_playlist_admin.edit_sections(request, this_playlist)
         edit_section = Section.objects.first()
         self.assertEqual(edit_section.song.artist, 'edited')
@@ -128,4 +129,21 @@ class TestAmdinEditSection(TestCase):
         self.assertEqual(edit_section.group, 'edited')
         self.assertEqual(edit_section.song.restricted, [])
         self.assertEqual(response.status_code, 302)
- 
+
+class PlaylistAdminTest(TestCase):
+    def setUp(self):
+        self.playlist = Playlist.objects.create(name="Test Playlist")
+        self.client = Client()
+        self.playlist_admin = PlaylistAdmin(model=Playlist, admin_site=AdminSite())
+
+    def test_export_csv(self):
+        url = reverse('admin:section_playlist_export_csv', args=[self.playlist.pk])
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response['Content-Type'], 'text/csv')
+
+    def test_export_json(self):
+        url = reverse('admin:section_playlist_export_json', args=[self.playlist.pk])
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response['Content-Type'], 'application/json')
