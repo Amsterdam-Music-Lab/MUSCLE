@@ -8,9 +8,9 @@ const scrollToTop = () => {
 };
 
 // AutoComplete is a question view for selecting a single option from a dropdown list with autocompletion
-const AutoComplete = ({ question, value, onChange, emphasizeTitle = false }) => {
+const AutoComplete = ({ question, value, onChange = false }) => {
     const options = Object.keys(question.choices)
-        .map((val, index) => ({
+        .map((val) => ({
             value: val,
             label: question.choices[val],
         }))

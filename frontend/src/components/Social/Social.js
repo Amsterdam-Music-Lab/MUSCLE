@@ -1,8 +1,8 @@
 import React, { useRef } from "react";
 import {
-    FacebookShareButton, TwitterShareButton, WeiboShareButton, WhatsappShareButton
-  } from 'next-share'
-  
+    FacebookShareButton, TwitterShareButton, WeiboShareButton, WhatsappShareButton,
+} from "next-share"
+
 
 const Social = ({ social }) => {
     /* Social is a view which returns social media links with icons
@@ -10,18 +10,18 @@ const Social = ({ social }) => {
     */
 
     const showShare = useRef(
-        navigator.share !== undefined && navigator.canShare !== undefined
+        navigator.share !== undefined && navigator.canShare !== undefined,
     )
-    
+
     const shareContent = (text, url) => {
         const shareData = {
             text: text,
-            url: url
+            url: url,
         }
         if (navigator.canShare(shareData)) {
             navigator.share(shareData).then(
-                (success) => {},
-                (error) => {console.error(error)}
+                () => void 0,
+                (error) => { console.error(error) },
             );
         }
     }
@@ -29,10 +29,10 @@ const Social = ({ social }) => {
     const copyToClipboard = async (url) => {
         await navigator.clipboard.writeText(url);
     }
-    
+
     return (
         <div className="aha__share d-flex justify-content-center mt-4">
-            {social.apps.includes('facebook') && (
+            {social.apps.includes("facebook") && (
                 <FacebookShareButton
                     url={social.url}
                     title={social.message}
@@ -42,7 +42,7 @@ const Social = ({ social }) => {
                     <i className="fa-brands fa-facebook-f fa-2x"></i>
                 </FacebookShareButton>
             )}
-            {social.apps.includes('whatsapp') && (
+            {social.apps.includes("whatsapp") && (
                 <WhatsappShareButton
                     url={social.url}
                     title={social.message}
@@ -51,7 +51,7 @@ const Social = ({ social }) => {
                     <i className="fa-brands fa-whatsapp fa-2x"></i>
                 </WhatsappShareButton>
             )}
-            {social.apps.includes('twitter') && (
+            {social.apps.includes("twitter") && (
                 <TwitterShareButton
                     url={social.url}
                     title={social.message}
@@ -61,7 +61,7 @@ const Social = ({ social }) => {
                     <i className="fa-brands fa-x-twitter fa-2x"></i>
                 </TwitterShareButton>
             )}
-            {social.apps.includes('weibo') && (
+            {social.apps.includes("weibo") && (
                 <WeiboShareButton
                     url={social.url}
                     title={social.message}
@@ -70,12 +70,12 @@ const Social = ({ social }) => {
                     <i className="fa-brands fa-weibo fa-2x"></i>
                 </WeiboShareButton>
             )}
-            {showShare.current && social.apps.includes('share') && (
+            {showShare.current && social.apps.includes("share") && (
                 <div onClick={() => shareContent(social.text, social.url)}>
                     <i className="fa-solid fa-share-nodes fa-2x"></i>
                 </div>
             )}
-            {social.apps.includes('clipboard') && (
+            {social.apps.includes("clipboard") && (
                 <div onClick={() => copyToClipboard(social.url)}>
                     <i className="fa-solid fa-clipboard fa-2x"></i>
                 </div>

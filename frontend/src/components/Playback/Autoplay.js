@@ -3,13 +3,13 @@ import React, { useRef, useEffect } from "react";
 import Circle from "../Circle/Circle";
 import ListenCircle from "../ListenCircle/ListenCircle";
 
-const AutoPlay = ({instruction, playConfig, playSection, time, startedPlaying, finishedPlaying, responseTime, className=''}) => {
+const AutoPlay = ({ instruction, playConfig, playSection, startedPlaying, finishedPlaying, responseTime, className = "" }) => {
     // player state
-    
+
     const running = useRef(playConfig.auto_play);
 
     // Handle view logic
-    useEffect(() => {        
+    useEffect(() => {
         playSection(0)
     }, [playConfig, startedPlaying]);
 
@@ -45,12 +45,12 @@ const AutoPlay = ({instruction, playConfig, playSection, time, startedPlaying, f
                 className
             }
             >
-            {/* Instruction */}
-            {instruction && (<div className="instruction d-flex justify-content-center align-items-center">
-                <h3 className="text-center">{instruction}</h3>
-            </div>)}
+                {/* Instruction */}
+                {instruction && (<div className="instruction d-flex justify-content-center align-items-center">
+                    <h3 className="text-center">{instruction}</h3>
+                </div>)}
+            </div>
         </div>
-    </div>
-    )   
+    )
 }
 export default AutoPlay;

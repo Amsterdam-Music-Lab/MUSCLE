@@ -103,7 +103,7 @@ const MatchingPairs = ({
                 } else {
                     if (currentCard.seen) { score.current = -10; }
                     else { score.current = 0; }
-                };
+                }
                 currentCard.seen = true;
                 lastCard.seen = true;
                 showFeedback();

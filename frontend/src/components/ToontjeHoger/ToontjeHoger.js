@@ -241,7 +241,7 @@ const ToontjeHogerHome = ({ experiment, config, experiments }) => {
 };
 
 // ToontjeHoger is an experiment view that shows the ToontjeHoger home
-const ToontjeHogerAbout = ({ experiment, config, experiments }) => {
+const ToontjeHogerAbout = ({ experiment, config }) => {
     return (
         <div className="aha__toontjehoger about">
             <Logo homeUrl={`/${experiment.slug}`} />

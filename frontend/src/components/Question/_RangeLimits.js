@@ -2,14 +2,14 @@ import React from "react";
 
 import { renderLabel } from "../../util/label";
 
-const RangeLimits = ({ minVal, maxVal, labels}) => {
+const RangeLimits = ({ minVal, maxVal, labels }) => {
     return (
         <div className="limits">
-            { labels ?
+            {labels ?
                 <div className="labels">
-                    {labels.map(label => (
-                        <span>{renderLabel(label)}</span>
-                    )
+                    {labels.map((label, i) => (
+                        <span key={i}>{renderLabel(label)}</span>
+                    ),
                     )}
                 </div> :
                 <div>

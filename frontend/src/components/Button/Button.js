@@ -28,26 +28,22 @@ const Button = ({
     // Without the browser having registered any user interaction (e.g. click)
     const touchEvent = audioInitialized
         ? {
-              onTouchStart: (e) => {
-                  e.stopPropagation();
-                  clickOnce();
-                  return false;
-              },
-          }
+            onTouchStart: (e) => {
+                e.stopPropagation();
+                clickOnce();
+                return false;
+            },
+        }
         : {};
 
     return (
         <button
             className={classNames({ disabled }, className, padding, "aha__button btn btn-lg")}
-            onClick={(e) => {
-                clickOnce();
-            }}
+            onClick={clickOnce}
             disabled={disabled}
             style={style}
             tabIndex="0"
-            onKeyPress={(e) => {
-                clickOnce();
-            }}
+            onKeyPress={clickOnce}
             type="button"
             {...touchEvent}
         >

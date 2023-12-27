@@ -20,7 +20,7 @@ export default {
     },
 };
 
-const ExperimentWrapper = ({ slug }) => (
+const ExperimentWrapper = () => (
     <Route path="/:slug" render={({ match, location }) => (
         <Experiment match={match} location={location} />
     )} />

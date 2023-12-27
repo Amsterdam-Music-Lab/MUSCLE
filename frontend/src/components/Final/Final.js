@@ -11,9 +11,9 @@ import UserFeedback from "../UserFeedback/UserFeedback";
 
 // Final is an experiment view that shows the final scores of the experiment
 // It can only be the last view of an experiment
-const Final= ({ experiment, participant, session, score, final_text, action_texts, button,
-            onNext, history, show_participant_link, participant_id_only,
-            show_profile_link, social, feedback_info, points, rank, logo }) => {
+const Final = ({ experiment, participant, session, score, final_text, action_texts, button,
+    onNext, history, show_participant_link, participant_id_only,
+    show_profile_link, social, feedback_info, points, rank, logo }) => {
     const [showScore, setShowScore] = useState(0);
 
     // Use a ref to prevent doing multiple increments
@@ -29,7 +29,7 @@ const Final= ({ experiment, participant, session, score, final_text, action_text
             // Score step
             const scoreStep = Math.max(
                 1,
-                Math.min(10, Math.ceil(Math.abs(scoreValue.current - score) / 10))
+                Math.min(10, Math.ceil(Math.abs(scoreValue.current - score) / 10)),
             );
 
             // Score are equal, stop
@@ -46,6 +46,8 @@ const Final= ({ experiment, participant, session, score, final_text, action_text
         };
     }, [score, showScore]);
 
+    // turn off no-unused-vars as we need to keep the finalize function
+    // eslint-disable-next-line no-unused-vars
     const finalize = () => {
         finalizeSession({ session, participant });
     }
@@ -53,10 +55,10 @@ const Final= ({ experiment, participant, session, score, final_text, action_text
     return (
         <div className="aha__final d-flex flex-column justify-content-center">
             {rank && (
-            <div className="text-center">
-                <Rank rank={rank} />
-                <h1 className="total-score title">{showScore} {points}</h1>
-            </div>
+                <div className="text-center">
+                    <Rank rank={rank} />
+                    <h1 className="total-score title">{showScore} {points}</h1>
+                </div>
             )}
             <div className="text-center">
                 <div dangerouslySetInnerHTML={{ __html: final_text }} />

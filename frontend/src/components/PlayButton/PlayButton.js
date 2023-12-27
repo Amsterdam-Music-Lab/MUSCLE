@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import classNames from "classnames";
 
-const PlayButton = ({ playSection, isPlaying, className="" }) => {
+const PlayButton = ({ playSection, isPlaying, className = "" }) => {
 
     const [clicked, setClicked] = useState(false);
 
@@ -9,10 +9,10 @@ const PlayButton = ({ playSection, isPlaying, className="" }) => {
         <div
             className={classNames("aha__play-button border-outside", "btn", {
                 stop: isPlaying, disabled: clicked && !isPlaying,
-            },className)}
-            onClick={ (playSection && !clicked) ? () => {setClicked(true); playSection(0);} : undefined}
+            }, className)}
+            onClick={(playSection && !clicked) ? () => { setClicked(true); playSection(0); } : undefined}
             tabIndex="0"
-            onKeyPress={(e) => {
+            onKeyPress={() => {
                 playSection && playSection(0)
             }}
         >
