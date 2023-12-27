@@ -2,6 +2,7 @@ import datetime
 import random
 import csv
 
+from django import forms
 from django.db import models
 from django.utils import timezone
 from django.urls import reverse
@@ -25,7 +26,7 @@ class Playlist(models.Model):
 
     def save(self, *args, **kwargs):
         """Update playlist csv field on every save"""
-        if self.process_csv is False:  
+        if self.process_csv is False:
             self.csv = self.update_admin_csv()
         super(Playlist, self).save(*args, **kwargs)
 
@@ -154,8 +155,8 @@ class Playlist(models.Model):
         self.section_set.filter(pk__in=delete_ids).delete()
 
         # Reset process csv option and save playlist
-        self.process_csv = False        
-        self.save()        
+        self.process_csv = False
+        self.save()
 
         return {
             'status': self.CSV_OK,
@@ -190,15 +191,15 @@ class Playlist(models.Model):
                 'sections': [section.export_admin() for section in self.section_set.all()],
             },
         }
-    
+
     def export_sections(self):
         # export section objects
         return self.section_set.all()
-    
+
     def update_admin_csv(self):
         """Update csv data for admin"""
         csvfile = CsvStringBuilder()
-        writer = csv.writer(csvfile)            
+        writer = csv.writer(csvfile)
         for section in self.section_set.all():
             if section.song:
                 this_artist = section.song.artist
@@ -225,7 +226,7 @@ class Song(models.Model):
     artist = models.CharField(db_index=True, blank=True, default='', max_length=128)
     name = models.CharField(db_index=True, blank=True, default='' ,max_length=128)
     restricted = models.JSONField(default=list, blank=True)
-    
+
     class Meta:
         unique_together = ("artist", "name")
 
@@ -249,7 +250,7 @@ class Section(models.Model):
     duration = models.FloatField(default=0.0)  # sec
     filename = models.FileField(upload_to=audio_upload_path, max_length=255, validators=[audio_file_validator()])
     play_count = models.PositiveIntegerField(default=0)
-    code = models.PositiveIntegerField(default=random_code)    
+    code = models.PositiveIntegerField(default=random_code)
     tag = models.CharField(max_length=128, default='0', blank=True)
     group = models.CharField(max_length=128, default='0', blank=True)
 
@@ -269,7 +270,7 @@ class Section(models.Model):
             return self.song.artist
         else:
             return ''
-    
+
     def song_name(self):
         if self.song:
             return self.song.name
@@ -306,7 +307,7 @@ class Section(models.Model):
             'name': self.song.name,
             'play_count': self.play_count
         }
-       
+
     def export_song(self):
         return self.instance
 
