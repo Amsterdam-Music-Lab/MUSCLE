@@ -6,6 +6,7 @@ from django.core.exceptions import ValidationError
 from django.shortcuts import render, redirect
 from django.http import JsonResponse, HttpResponse
 from django.conf import settings
+from django.urls import path
 from django.utils.translation import gettext_lazy as _
 
 import audioread
@@ -24,7 +25,6 @@ class SectionAdmin(admin.ModelAdmin):
 
     # Prevent large inner join
     list_select_related = ()
-
 
 admin.site.register(Section, SectionAdmin)
 
@@ -45,6 +45,7 @@ admin.site.register(Song, SongAdmin)
 
 class PlaylistAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
     form = PlaylistAdminForm
+    change_form_template = 'change_form.html'
     list_display = ('name', 'section_count', 'experiment_count')
     search_fields = ['name', 'section__song__artist', 'section__song__name']
     inline_actions = ['add_sections',
@@ -186,6 +187,22 @@ class PlaylistAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
         return response
 
     export_csv.short_description = "Export Sections CSV"
+
+    def export_csv_view(self, request, pk):
+        obj = self.get_object(request, pk)
+        return self.export_csv(request, obj)
+
+    def export_json_view(self, request, pk):
+        obj = self.get_object(request, pk)
+        return self.export_json(request, obj)
+
+    def get_urls(self):
+        urls = super().get_urls()
+        custom_urls = [
+            path('<int:pk>/export_csv/', self.export_csv_view, name='section_playlist_export_csv'),
+            path('<int:pk>/export_json/', self.export_json_view, name='section_playlist_export_json'),
+        ]
+        return custom_urls + urls
 
 
 admin.site.register(Playlist, PlaylistAdmin)
