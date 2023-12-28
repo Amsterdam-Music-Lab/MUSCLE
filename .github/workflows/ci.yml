@@ -79,8 +79,6 @@ jobs:
       - name: Push Frontend Coverage Badge to separate branch
         continue-on-error: true
         run: |
-          # Similar steps as for the backend...
-          # Ensure to change paths and names to reflect frontend specifics
           if git ls-remote --heads origin code-coverage-badges; then
             git fetch origin code-coverage-badges
             git checkout code-coverage-badges
@@ -91,6 +89,7 @@ jobs:
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git config --global user.name "github-actions[bot]"
           rm frontend/coverage-frontend-badge.svg -f
+          ls -la frontend/public/coverage
           mv frontend/public/coverage/coverage-frontend-badge-new.svg frontend/coverage-frontend-badge.svg
           git add frontend/coverage-frontend-badge.svg
           git commit -m "Add frontend coverage badge for commit $GITHUB_SHA"
