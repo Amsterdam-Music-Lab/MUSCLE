@@ -19,7 +19,7 @@ const FloatingActionButton = ({
         return `floating-action-button--${vertical} ${horizontal ? `floating-action-button--${horizontal}` : ''}`;
     }
 
-    return (
+    return (<>
         <div className={
             classNames("floating-action-button",
                 getPositionClassNames(position),
@@ -34,6 +34,17 @@ const FloatingActionButton = ({
                 {children}
             </div>
         </div>
+        <div className={
+            classNames(
+                'floating-action-button__overlay',
+                expanded && 'floating-action-button__overlay--expanded'
+            )}
+            onClick={() => setExpanded(false)}
+            aria-hidden={expanded ? 'false' : 'true'}
+            role="presentation"
+        >
+        </div>
+    </>
     );
 };
 
