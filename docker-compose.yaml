@@ -60,17 +60,8 @@ services:
           dockerfile: DockerfileDevelop
         volumes:
           - type: bind
-            source: ./frontend/src
-            target: /client/src
-          - type: bind
-            source: ./frontend/public
-            target: /client/public
-          - type: bind
-            source: ./frontend/.storybook
-            target: /client/.storybook
-          - type: bind
-            source: ./frontend/coverage
-            target: /client/coverage
+            source: ./frontend
+            target: /client
         environment:
           - REACT_APP_API_ROOT=${REACT_APP_API_ROOT}
           - REACT_APP_EXPERIMENT_SLUG=${REACT_APP_EXPERIMENT_SLUG}
