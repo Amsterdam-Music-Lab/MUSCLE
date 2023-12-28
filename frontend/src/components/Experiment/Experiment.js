@@ -224,6 +224,16 @@ const Experiment = ({ match, location }) => {
                         className={className}
                     >
                         {render(state.view)}
+
+                        {experiment?.feedback_info?.show_float_button && (
+                            <FloatingActionButton>
+                                <UserFeedback
+                                    experimentSlug={experiment.slug}
+                                    participant={participant}
+                                    feedbackInfo={experiment.feedback_info}
+                                    inline={false} />
+                            </FloatingActionButton>
+                        )}
                     </DefaultPage>
                 ) : (
                     <div className="loader-container">
@@ -231,11 +241,7 @@ const Experiment = ({ match, location }) => {
                     </div>
                 )}
 
-                {experiment?.feedback_info?.show_float_button && (
-                    <FloatingActionButton>
-                        <UserFeedback experimentSlug={experiment.slug} participant={participant} feedbackInfo={experiment.feedback_info} />
-                    </FloatingActionButton>
-                )}
+
             </CSSTransition>
         </TransitionGroup>
     );
