@@ -6,6 +6,7 @@ const FloatingActionButton = ({
     children,
     icon = 'fa-comment',
     position = 'center-right',
+    className,
 }) => {
 
     const [expanded, setExpanded] = React.useState(false);
@@ -23,7 +24,9 @@ const FloatingActionButton = ({
         <div className={
             classNames("floating-action-button",
                 getPositionClassNames(position),
-                expanded && 'floating-action-button--expanded')}>
+                expanded && 'floating-action-button--expanded',
+                className
+            )}>
             <button
                 className='floating-action-button__toggle-button'
                 onClick={() => setExpanded(!expanded)}
