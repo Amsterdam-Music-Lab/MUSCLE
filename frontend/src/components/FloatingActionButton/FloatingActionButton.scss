@@ -1,0 +1,97 @@
+@import "../../scss/variables.scss";
+
+.floating-action-button {
+    $self: &;
+
+    display: flex;
+    flex-direction: row;
+
+    position: fixed;
+    z-index: 100;
+    cursor: pointer;
+    transition-property: transform, left, right, top, bottom, filter;
+    transition-duration: 0.2s;
+    transition-timing-function: ease-in-out;
+
+    filter: drop-shadow(0, 0, 0, rgba(0, 0, 0, 0));
+
+    &--expanded {
+        filter: drop-shadow(0px 2px 2px rgba(0, 0, 0, 0.2));
+    }
+
+    &--left {
+        right: auto;
+        left: 0px;
+
+        &#{$self}--expanded {
+            left: 200px;
+        }
+    }
+
+    &--right {
+        left: auto;
+        right: -200px;
+
+        &#{$self}--expanded {
+            right: 0px;
+        }
+    }
+
+    &--top {
+        align-items: flex-start;
+        bottom: auto;
+        top: 0px;
+    }
+
+    &--bottom {
+        align-items: flex-end;
+        top: auto;
+        bottom: 0px;
+    }
+
+    // vertically centered
+    &--center {
+        align-items: center;
+        top: 50%;
+        transform: translateY(-50%);
+    }
+
+    &__toggle-button {
+        background: $gray;
+        border: none;
+        padding: .5rem;
+        border-top-left-radius: 4px;
+        border-bottom-left-radius: 4px;
+    }
+
+    &__icon {
+        width: 24px;
+        height: 24px;
+        color: #fff;
+    }
+
+    &__content {
+        background: $gray;
+        border: none;
+        padding: .5rem;
+        border-top-right-radius: 4px;
+        border-bottom-right-radius: 4px;
+        width: 200px;
+        min-height: 100px;
+        max-height: 100vh;
+
+        #{$self}--left & {
+            border-top-left-radius: 0px;
+            border-bottom-left-radius: 0px;
+            border-top-right-radius: 4px;
+            border-bottom-right-radius: 4px;
+        }
+
+        #{$self}--right & {
+            border-top-left-radius: 4px;
+            border-bottom-left-radius: 4px;
+            border-top-right-radius: 0px;
+            border-bottom-right-radius: 0px;
+        }
+    }
+}
