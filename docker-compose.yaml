@@ -68,9 +68,6 @@ services:
           - type: bind
             source: ./frontend/.storybook
             target: /client/.storybook
-          - type: bind
-            source: ./frontend/coverage
-            target: /client/coverage
         environment:
           - REACT_APP_API_ROOT=${REACT_APP_API_ROOT}
           - REACT_APP_EXPERIMENT_SLUG=${REACT_APP_EXPERIMENT_SLUG}
