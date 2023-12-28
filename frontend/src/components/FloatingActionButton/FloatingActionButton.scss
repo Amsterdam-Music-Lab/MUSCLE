@@ -57,7 +57,7 @@
     }
 
     &__toggle-button {
-        background: $gray;
+        background: $gray-200;
         border: none;
         padding: .5rem;
         border-top-left-radius: 4px;
@@ -67,11 +67,11 @@
     &__icon {
         width: 24px;
         height: 24px;
-        color: #fff;
+        color: $black;
     }
 
     &__content {
-        background: $gray;
+        background: $gray-200;
         border: none;
         padding: .5rem;
         border-top-right-radius: 4px;
