@@ -40,3 +40,8 @@ class GoldMSI(Base):
             return questions
         else:
             return final_action_with_optional_button(session, '', request_session)
+
+    def feedback_info(self):
+        info = super().feedback_info()
+        info['show_float_button'] = True
+        return info
