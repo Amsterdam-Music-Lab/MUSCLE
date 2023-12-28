@@ -1,0 +1,20 @@
+<svg width="118.5" height="20" viewBox="0 0 1185 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="&quot;Frontend: 25.48%">
+  <title>&quot;Frontend: 25.48%</title>
+  <linearGradient id="wlCZE" x2="0" y2="100%">
+    <stop offset="0" stop-opacity=".1" stop-color="#EEE"/>
+    <stop offset="1" stop-opacity=".1"/>
+  </linearGradient>
+  <mask id="Ywaym"><rect width="1185" height="200" rx="30" fill="#FFF"/></mask>
+  <g mask="url(#Ywaym)">
+    <rect width="645" height="200" fill="#555"/>
+    <rect width="540" height="200" fill="#ce0000" x="645"/>
+    <rect width="1185" height="200" fill="url(#wlCZE)"/>
+  </g>
+  <g aria-hidden="true" fill="#fff" text-anchor="start" font-family="Verdana,DejaVu Sans,sans-serif" font-size="110">
+    <text x="60" y="148" textLength="545" fill="#000" opacity="0.25">&quot;Frontend</text>
+    <text x="50" y="138" textLength="545">&quot;Frontend</text>
+    <text x="700" y="148" textLength="440" fill="#000" opacity="0.25">25.48%</text>
+    <text x="690" y="138" textLength="440">25.48%</text>
+  </g>
+  
+</svg>
