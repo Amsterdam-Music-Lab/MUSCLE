@@ -26,6 +26,7 @@
     "build": "sass src/index.scss src/index.css; react-scripts build",
     "test": "react-scripts test",
     "test:ci": "react-scripts test --coverage --watchAll=false",
+    "generate-badge": "coverage-badges -s coverage/coverage-summary.json -o coverage-frontend-badge-new.svg --label 'Frontend Code Coverage'",
     "eject": "react-scripts eject",
     "scss": "sass src/index.scss src/index.css",
     "scss:watch": "sass src/index.scss src/index.css; sass --watch src/index.scss src/index.css",
@@ -44,7 +45,11 @@
       "^scss/(.*)$": "<rootDir>/src/scss/$1",
       "^stories/(.*)$": "<rootDir>/src/stories/$1",
       "^util/(.*)$": "<rootDir>/src/util/$1"
-    }
+    },
+    "coverageReporters": [
+      "lcov",
+      "json-summary"
+    ]
   },
   "eslintConfig": {
     "extends": [
@@ -78,6 +83,7 @@
     "@testing-library/react": "^14.1.2",
     "@testing-library/user-event": "^14.5.1",
     "babel-plugin-named-exports-order": "0.0.2",
+    "coverage-badges-cli": "^1.2.5",
     "eslint": "^8.54.0",
     "eslint-config-react-app": "^7.0.1",
     "eslint-plugin-storybook": "^0.6.15",
