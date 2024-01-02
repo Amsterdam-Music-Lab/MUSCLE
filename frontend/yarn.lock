@@ -7372,6 +7372,7 @@ __metadata:
     email-validator: "npm:^2.0.4"
     eslint: "npm:^8.54.0"
     eslint-config-react-app: "npm:^7.0.1"
+    eslint-plugin-react: "npm:^7.33.2"
     eslint-plugin-storybook: "npm:^0.6.15"
     file-saver: "npm:^2.0.5"
     next-share: "npm:0.25.0"
@@ -10346,7 +10347,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-react@npm:^7.27.1":
+"eslint-plugin-react@npm:^7.27.1, eslint-plugin-react@npm:^7.33.2":
   version: 7.33.2
   resolution: "eslint-plugin-react@npm:7.33.2"
   dependencies:
