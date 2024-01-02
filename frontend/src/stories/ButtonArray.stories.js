@@ -1,4 +1,3 @@
-
 import ButtonArray from '../components/Question/_ButtonArray';
 
 export default {
@@ -113,6 +112,58 @@ export const CategorizationWithHiddenTextDisabled = {
     decorators: [
         (Story) => (
             <div style={{ width: '100%', height: '100%', backgroundColor: '#ddd', padding: '1rem' }}>
+                <Story />
+            </div>
+        ),
+    ],
+}
+
+export const BooleanColorScheme = {
+    args: getDefaultArgs(),
+    decorators: [
+        (Story) => (
+            <div className="boolean"
+                style={{ width: '100%', height: '100%', backgroundColor: '#ddd', padding: '1rem' }}
+            >
+                <Story />
+            </div>
+        ),
+    ],
+}
+
+export const BooleanNegativeFirstColorScheme = {
+    args: getDefaultArgs(),
+    decorators: [
+        (Story) => (
+            <div className="boolean-negative-first"
+                style={{ width: '100%', height: '100%', backgroundColor: '#ddd', padding: '1rem' }}
+            >
+                <Story />
+            </div>
+        ),
+    ],
+}
+
+export const NeutralColorScheme = {
+    args: getDefaultArgs(),
+    decorators: [
+        (Story) => (
+            <div className="neutral"
+                style={{ width: '100%', height: '100%', backgroundColor: '#ddd', padding: '1rem' }}
+            >
+                <Story />
+            </div>
+        ),
+    ],
+}
+
+export const NeutralInvertedColorScheme = {
+    args: getDefaultArgs(),
+    decorators: [
+        (Story) => (
+            <div className="neutral-inverted"
+                style={{ width: '100%', height: '100%', backgroundColor: '#ddd', padding: '1rem' }}
+            >
                 <Story />
             </div>
         ),
