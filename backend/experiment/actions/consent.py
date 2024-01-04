@@ -23,7 +23,7 @@ class Consent(BaseAction):  # pylint: disable=too-few-public-methods
                 amet, nec te atqui scribentur. Diam molestie posidonium te sit, \
                 ea sea expetenda suscipiantur contentiones."
 
-    def __init__(self, text=default_text, title='Informed consent', confirm='I agree', deny='Stop', style=None):
+    def __init__(self, text=default_text, title='Informed consent', confirm='I agree', deny='Stop', style=FrontendStyle()):
         super(Consent, self).__init__(style)
         self.text = text
         self.title = title
