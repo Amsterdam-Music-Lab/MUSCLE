@@ -30,7 +30,7 @@ class GoldMSI(Base):
             style=FrontendStyle(
                 FrontendStyle.BOOLEAN,
                 submit_button=FrontendStyle(
-                    FrontendStyle.WARNING
+                    FrontendStyle.SUCCESS
                 )
             )
         )
