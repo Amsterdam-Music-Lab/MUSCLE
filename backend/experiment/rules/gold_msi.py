@@ -26,7 +26,14 @@ class GoldMSI(Base):
         self.questions = MSI_F3_MUSICAL_TRAINING + demographics
 
     def first_round(self, experiment):
-        consent = Consent(style=FrontendStyle("boolean", submit_button=FrontendStyle("boolean-inverted")))
+        consent = Consent(
+            style=FrontendStyle(
+                FrontendStyle.BOOLEAN,
+                submit_button=FrontendStyle(
+                    FrontendStyle.WARNING
+                )
+            )
+        )
         return [
             consent,
         ]
