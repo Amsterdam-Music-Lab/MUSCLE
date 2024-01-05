@@ -13,7 +13,7 @@ jobs:
       - name: Run Backend Tests
         run: sudo docker-compose --env-file .env-github-actions run server bash -c "coverage run manage.py test"
       - name: Generate Backend Coverage Report (Inline)
-        run: sudo docker-compose --env-file .env-github-actions run server bash -c "coverage report"
+        run: sudo docker-compose --env-file .env-github-actions run server bash -c "coverage report --show-missing"
 
       # Generate coverage badge (only for main and develop branches)
       - name: Generate Backend Coverage Report (XML) and Badge
