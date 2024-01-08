@@ -16,6 +16,8 @@ import Trial from "../Trial/Trial";
 import useResultHandler from "../../hooks/useResultHandler";
 import Info from "../Info/Info";
 import classNames from "classnames";
+import FloatingActionButton from "components/FloatingActionButton/FloatingActionButton";
+import UserFeedback from "components/UserFeedback/UserFeedback";
 
 // Experiment handles the main experiment flow:
 // - Loads the experiment and participant
@@ -55,7 +57,7 @@ const Experiment = ({ match, location }) => {
         [loadState]
     );
 
-    const updateActions = useCallback( (currentActions) => {
+    const updateActions = useCallback((currentActions) => {
         let newActions = currentActions;
         const newState = newActions.shift();
         loadState(newState);
@@ -213,21 +215,33 @@ const Experiment = ({ match, location }) => {
                         title={state.title}
                         logoClickConfirm={
                             ["FINAL", "ERROR", "TOONTJEHOGER"].includes(key) ||
-                            // Info pages at end of experiment
-                            (key === "INFO" &&
-                                (!state.next_round || !state.next_round.length))
+                                // Info pages at end of experiment
+                                (key === "INFO" &&
+                                    (!state.next_round || !state.next_round.length))
                                 ? null
                                 : "Are you sure you want to stop this experiment?"
                         }
                         className={className}
                     >
                         {render(state.view)}
+
+                        {experiment?.feedback_info?.show_float_button && (
+                            <FloatingActionButton>
+                                <UserFeedback
+                                    experimentSlug={experiment.slug}
+                                    participant={participant}
+                                    feedbackInfo={experiment.feedback_info}
+                                    inline={false} />
+                            </FloatingActionButton>
+                        )}
                     </DefaultPage>
                 ) : (
                     <div className="loader-container">
                         <Loading />
                     </div>
                 )}
+
+
             </CSSTransition>
         </TransitionGroup>
     );
