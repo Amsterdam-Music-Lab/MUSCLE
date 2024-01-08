@@ -35,3 +35,99 @@ export const Default = {
         ),
     ],
 };
+
+export const TopLeft = {
+    args: {
+        position: 'top-left',
+        children: (
+            <UserFeedback {...userFeedbackProps} />
+        ),
+    },
+    decorators: [
+        (Story) => (
+            <div style={{ width: '100%', height: '100%', backgroundColor: '#aaa', padding: '1rem' }}>
+                <Story />
+            </div>
+        ),
+    ],
+};
+
+export const TopRight = {
+    args: {
+        position: 'top-right',
+        children: (
+            <UserFeedback {...userFeedbackProps} />
+        ),
+    },
+    decorators: [
+        (Story) => (
+            <div style={{ width: '100%', height: '100%', backgroundColor: '#aaa', padding: '1rem' }}>
+                <Story />
+            </div>
+        ),
+    ],
+};
+
+export const BottomLeft = {
+    args: {
+        position: 'bottom-left',
+        children: (
+            <UserFeedback {...userFeedbackProps} />
+        ),
+    },
+    decorators: [
+        (Story) => (
+            <div style={{ width: '100%', height: '100%', backgroundColor: '#aaa', padding: '1rem' }}>
+                <Story />
+            </div>
+        ),
+    ],
+};
+
+export const BottomRight = {
+    args: {
+        position: 'bottom-right',
+        children: (
+            <UserFeedback {...userFeedbackProps} />
+        ),
+    },
+    decorators: [
+        (Story) => (
+            <div style={{ width: '100%', height: '100%', backgroundColor: '#aaa', padding: '1rem' }}>
+                <Story />
+            </div>
+        ),
+    ],
+};
+
+export const CenterLeft = {
+    args: {
+        position: 'center-left',
+        children: (
+            <UserFeedback {...userFeedbackProps} />
+        ),
+    },
+    decorators: [
+        (Story) => (
+            <div style={{ width: '100%', height: '100%', backgroundColor: '#aaa', padding: '1rem' }}>
+                <Story />
+            </div>
+        ),
+    ],
+};
+
+export const CenterRight = {
+    args: {
+        position: 'center-right',
+        children: (
+            <UserFeedback {...userFeedbackProps} />
+        ),
+    },
+    decorators: [
+        (Story) => (
+            <div style={{ width: '100%', height: '100%', backgroundColor: '#aaa', padding: '1rem' }}>
+                <Story />
+            </div>
+        ),
+    ],
+};
