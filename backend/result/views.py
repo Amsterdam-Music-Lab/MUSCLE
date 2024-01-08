@@ -78,7 +78,6 @@ def verify_session(request):
     participant = get_participant(request)
     # Get session for current participant
     session_id = request.POST.get("session_id")
-    breakpoint()
 
     if not session_id:
         return HttpResponseBadRequest("session_id not defined")
