@@ -3,14 +3,13 @@ import * as webAudio from "./webAudio";
 
 export const playAudio = (section, playMethod, playheadShift=0) => {
     let latency = 0;
-    const playhead = playConfig.playhead + playheadShift
 
     if (playMethod === 'BUFFER') {
         
         // Determine latency for current audio device
         latency = webAudio.getTotalLatency()
         // Play audio
-        webAudio.playBufferFrom(section.id, playhead);
+        webAudio.playBufferFrom(section.id, playheadShift);
 
         return latency
     } else {        
@@ -26,7 +25,7 @@ export const playAudio = (section, playMethod, playheadShift=0) => {
         audio.setVolume(1);
 
         // Play audio
-        audio.playFrom(Math.max(0, playhead));
+        audio.playFrom(Math.max(0, playheadShift));
         
         return latency
     }

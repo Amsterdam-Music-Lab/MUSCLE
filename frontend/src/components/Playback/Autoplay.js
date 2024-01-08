@@ -3,15 +3,15 @@ import React, { useRef, useEffect } from "react";
 import Circle from "../Circle/Circle";
 import ListenCircle from "../ListenCircle/ListenCircle";
 
-const AutoPlay = ({instruction, playConfig, playSection, startedPlaying, finishedPlaying, responseTime, className=''}) => {
+const AutoPlay = ({instruction, showAnimation, playSection, startedPlaying, finishedPlaying, responseTime, className=''}) => {
     // player state
     
-    const running = useRef(playConfig.auto_play);
+    const running = useRef(true);
 
     // Handle view logic
     useEffect(() => {        
         playSection(0)
-    }, [playConfig, startedPlaying]);
+    }, [playSection, startedPlaying]);
 
     // Render component
     return (

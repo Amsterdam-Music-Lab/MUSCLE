@@ -35,6 +35,7 @@ const Playback = ({
         setState({ view, ...data });
     }
     const playMethod = playbackArgs.play_method;
+    const sections = playbackArgs.sections;
 
     // Keep track of which player has played, in a an array of player indices
     const [hasPlayed, setHasPlayed] = useState([]);
@@ -82,6 +83,15 @@ const Playback = ({
         webAudio.closeWebAudio();            
     }
 
+    const getPlayheadShift = useCallback(() => {
+        /* if the current Playback view has resume_play set to true,
+        retrieve previous Playback view's decisionTime from sessionStorage
+        */
+        return playbackArgs.resume_play ? 
+        parseFloat(window.sessionStorage.getItem('decisionTime')) : 0;
+    }, [playbackArgs]
+    )
+
     // Play section with given index
     const playSection = useCallback((index = 0) => {
         if (index !== lastPlayerIndex.current) {
@@ -99,11 +109,11 @@ const Playback = ({
             }
                 
             const playheadShift = getPlayheadShift();
-            let latency = playAudio(playConfig, sections[index], playheadShift);
+            let latency = playAudio(playMethod, sections[index], playheadShift);
             // Cancel active events
             cancelAudioListeners();
             // listen for active audio events
-            if (playConfig.play_method === 'BUFFER') {
+            if (playMethod === 'BUFFER') {
                 activeAudioEndedListener.current = webAudio.listenOnce("ended", onAudioEnded);
             } else {
                 activeAudioEndedListener.current = audio.listenOnce("ended", onAudioEnded);
@@ -114,20 +124,12 @@ const Playback = ({
         }
         // Stop playback
         if (lastPlayerIndex.current === index) {
-                pauseAudio(playConfig);                     
+                pauseAudio(playMethod);                     
                 setPlayerIndex(-1);
                 return;
         }
-        [playAudio, pauseAudio, sections, activeAudioEndedListener, cancelAudioListeners, startedPlaying, onAudioEnded]
-    });
-
-    const getPlayheadShift = () => {
-        /* if the current Playback view has resume_play set to true,
-        retrieve previous Playback view's decisionTime from sessionStorage
-        */
-        return playConfig.resume_play ? 
-        parseFloat(window.sessionStorage.getItem('decisionTime')) : 0;
-    }
+    }, [sections, activeAudioEndedListener, cancelAudioListeners, getPlayheadShift, playbackArgs, playMethod, startedPlaying, onAudioEnded]
+    );
 
     // Local logic for onfinished playing
     const onFinishedPlaying = useCallback(() => {
@@ -146,7 +148,7 @@ const Playback = ({
 
     const render = (view) => {
         const attrs = {
-            sections: playbackArgs.sections,
+            sections,
             showAnimation: playbackArgs.show_animation,
             setView,
             autoAdvance,
