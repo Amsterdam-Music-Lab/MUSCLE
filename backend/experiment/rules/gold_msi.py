@@ -43,5 +43,4 @@ class GoldMSI(Base):
 
     def feedback_info(self):
         info = super().feedback_info()
-        info['show_float_button'] = True
         return info
