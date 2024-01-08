@@ -82,7 +82,7 @@ const Experiment = ({ match, location }) => {
         if (!loadingExperiment && !loadingParticipant) {
             // Loading succeeded
             if (experiment) {
-                setExperimentData({participant: participant, session: session})
+                setExperimentData({participant: participant, session: session.current})
                 updateActions(experiment.next_round);
             } else {
                 // Loading error
@@ -107,7 +107,7 @@ const Experiment = ({ match, location }) => {
         } else {
             // Try to get next_round data from server
             const round = await getNextRound({
-                session: session,
+                session: session.current,
             });
             if (round) {
                 updateActions(round.next_round);
