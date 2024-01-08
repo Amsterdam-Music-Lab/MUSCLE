@@ -96,7 +96,9 @@ class ListeningConditions(Base):
                     session, message, request_session)
             ]
             return actions
-        view = Trial(playback, feedback_form)
+
+        view = Trial(playback, feedback_form=feedback_form)
+
         return [view]
 
     def first_round(self, experiment):
