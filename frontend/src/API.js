@@ -24,6 +24,7 @@ export const URLS = {
         get: (question) => "/result/" + question + "/",
         current: "/result/current_profile",
         score: "/result/score/",
+        intermediateScore: "/result/intermediate_score/",
         consent: "/result/consent/"
     },
     session: {
@@ -118,6 +119,30 @@ export const scoreResult = async ({
         return null;
     }
 };
+
+export const scoreIntermediateResult = async ({
+    session,
+    participant,
+    result,
+}) => {
+    try {
+        const vars = {
+            session_id: session.id,
+            json_data: JSON.stringify(result),
+            csrfmiddlewaretoken: participant.csrf_token
+        };
+
+        const response = await axios.post(
+            API_BASE_URL + URLS.result.intermediateScore,
+            qs.stringify(vars)
+        );
+        return response.data;
+    } catch (err) {
+        console.error(err);
+        return null;
+    }
+};
+       
 
 // Get next_round from server
 export const getNextRound = async ({ session }) => {

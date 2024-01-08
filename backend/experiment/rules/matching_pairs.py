@@ -127,3 +127,7 @@ class MatchingPairs(Base):
             m['filename'] = str(Section.objects.get(pk=m.get('selectedSection')).filename)
         score = data.get('result').get('score')
         return score
+    
+    def calculate_intermediate_score(self, session, result):
+        result_obj = prepare_result('move', session, json_data=result)
+        

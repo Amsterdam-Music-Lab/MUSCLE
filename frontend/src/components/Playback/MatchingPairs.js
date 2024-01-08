@@ -1,5 +1,8 @@
-import React, {useRef, useState} from "react";
+import React, {useContext, useRef, useState} from "react";
 import classNames from "classnames";
+
+import { scoreIntermediateResult } from "../../API";
+import { experimentContext } from "../Experiment/Experiment";
 
 import PlayCard from "../PlayButton/PlayCard";
 
@@ -22,6 +25,7 @@ const MatchingPairs = ({
     const columnCount = sections.length > 6 ? 4 : 3;
 
     const resultBuffer = useRef([]);
+    const experimentData = useContext(experimentContext);
 
     const startTime = useRef(Date.now());
 
@@ -80,7 +84,7 @@ const MatchingPairs = ({
         }
     }
 
-    const checkMatchingPairs = (index) => {
+    const checkMatchingPairs = async (index) => {        
         const currentCard = sections[index];
         const turnedCards = sections.filter(s => s.turned);
         if (turnedCards.length < 2) {
@@ -106,7 +110,8 @@ const MatchingPairs = ({
                 };
                 currentCard.seen = true;
                 lastCard.seen = true;
-                showFeedback();
+                const imScore = await scoreIntermediateResult(Object.assign({result: {currentCard, lastCard}}, experimentData));
+                showFeedback(imScore);
             } else {
                 // first click of the turn
                 firstCard.current = index;

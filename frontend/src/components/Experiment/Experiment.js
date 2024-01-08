@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useRef } from "react";
+import React, { createContext, useState, useEffect, useCallback, useRef} from "react";
 import { useExperiment, useParticipant, getNextRound } from "../../API";
 import { TransitionGroup, CSSTransition } from "react-transition-group";
 import { withRouter } from "react-router-dom";
@@ -17,6 +17,13 @@ import useResultHandler from "../../hooks/useResultHandler";
 import Info from "../Info/Info";
 import classNames from "classnames";
 
+// provides participant and session context to child components
+const experimentDataNull = {
+    participant: null,
+    session: null
+}
+export const experimentContext = createContext(experimentDataNull);
+
 // Experiment handles the main experiment flow:
 // - Loads the experiment and participant
 // - Renders the view based on the state that is provided by the server
@@ -28,6 +35,7 @@ const Experiment = ({ match, location }) => {
 
     // Current experiment state
     const [state, setState] = useState(startState);
+    const [experimentData, setExperimentData] = useState(experimentDataNull)
     const [playlist, setPlaylist] = useState(null);
     const [actions, setActions] = useState([]);
     const session = useRef(null);
@@ -74,6 +82,7 @@ const Experiment = ({ match, location }) => {
         if (!loadingExperiment && !loadingParticipant) {
             // Loading succeeded
             if (experiment) {
+                setExperimentData({participant: participant, session: session})
                 updateActions(experiment.next_round);
             } else {
                 // Loading error
@@ -86,6 +95,7 @@ const Experiment = ({ match, location }) => {
         participant,
         loadingParticipant,
         setError,
+        session,
         updateActions,
         loadState,
     ]);
@@ -97,7 +107,7 @@ const Experiment = ({ match, location }) => {
         } else {
             // Try to get next_round data from server
             const round = await getNextRound({
-                session: session.current,
+                session: session,
             });
             if (round) {
                 updateActions(round.next_round);
@@ -194,42 +204,44 @@ const Experiment = ({ match, location }) => {
         key = state.question.key;
     }
     return (
-        <TransitionGroup
-            className={classNames(
-                "aha__experiment",
-                !loadingExperiment && experiment
-                    ? "experiment-" + experiment.slug
-                    : ""
-            )}
-        >
-            <CSSTransition
-                key={key}
-                timeout={{ enter: 300, exit: 0 }}
-                classNames={"transition"}
-                unmountOnExit
-            >
-                {(!loadingExperiment && experiment) || key === "ERROR" ? (
-                    <DefaultPage
-                        title={state.title}
-                        logoClickConfirm={
-                            ["FINAL", "ERROR", "TOONTJEHOGER"].includes(key) ||
-                            // Info pages at end of experiment
-                            (key === "INFO" &&
-                                (!state.next_round || !state.next_round.length))
-                                ? null
-                                : "Are you sure you want to stop this experiment?"
-                        }
-                        className={className}
-                    >
-                        {render(state.view)}
-                    </DefaultPage>
-                ) : (
-                    <div className="loader-container">
-                        <Loading />
-                    </div>
+        <experimentContext.Provider value={experimentData}>
+            <TransitionGroup
+                className={classNames(
+                    "aha__experiment",
+                    !loadingExperiment && experiment
+                        ? "experiment-" + experiment.slug
+                        : ""
                 )}
-            </CSSTransition>
-        </TransitionGroup>
+            >
+                <CSSTransition
+                    key={key}
+                    timeout={{ enter: 300, exit: 0 }}
+                    classNames={"transition"}
+                    unmountOnExit
+                >
+                    {(!loadingExperiment && experiment) || key === "ERROR" ? (
+                        <DefaultPage
+                            title={state.title}
+                            logoClickConfirm={
+                                ["FINAL", "ERROR", "TOONTJEHOGER"].includes(key) ||
+                                // Info pages at end of experiment
+                                (key === "INFO" &&
+                                    (!state.next_round || !state.next_round.length))
+                                    ? null
+                                    : "Are you sure you want to stop this experiment?"
+                            }
+                            className={className}
+                        >
+                            {render(state.view)}
+                        </DefaultPage>
+                    ) : (
+                        <div className="loader-container">
+                            <Loading />
+                        </div>
+                    )}
+                </CSSTransition>
+            </TransitionGroup>
+        </experimentContext.Provider>
     );
 };
 
