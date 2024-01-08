@@ -92,9 +92,10 @@ describe('Final Component', () => {
 
         expect(profileLink).toBeInTheDocument();
 
+        expect(history.location.pathname).toBe('/');
+
         fireEvent.click(profileLink)
 
-        expect(history.length).toBe(2);
         expect(history.location.pathname).toBe('/profile');
 
     });
