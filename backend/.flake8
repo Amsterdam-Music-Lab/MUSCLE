@@ -18,7 +18,6 @@ extend-ignore =
     F841, # Local variable name is assigned to but never used
     E302, # Expected 2 blank lines, found 1
     E305, # Expected 2 blank lines after class or function definition, found 1
-    E402, # Module level import not at top of file
 
 # Low Priority: Style Guide Adherence
 # These are mostly about whitespace and indentation, which can be adjusted later.

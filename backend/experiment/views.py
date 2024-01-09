@@ -9,10 +9,9 @@ from django.utils.translation import activate
 from .models import Experiment, Feedback
 from .utils import serialize
 from session.models import Session
+from experiment.rules import EXPERIMENT_RULES
 
 logger = logging.getLogger(__name__)
-
-from experiment.rules import EXPERIMENT_RULES
 
 # Experiment
 
