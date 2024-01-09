@@ -5,10 +5,9 @@ import {
     Route,
     Redirect
 } from "react-router-dom";
-import axios from "axios";
-import {create } from "zustand";
-import { EXPERIMENT_SLUG, API_BASE_URL, URLS } from "../../config";
-import { URLS as ApiUrls } from "../../API";
+import { create } from "zustand";
+import { EXPERIMENT_SLUG, URLS } from "../../config";
+import { getParticipant } from "API";
 import Experiment from "../Experiment/Experiment";
 import Profile from "../Profile/Profile";
 import Reload from "../Reload/Reload";
@@ -25,11 +24,13 @@ const App = () => {
     const queryParams = window.location.search;
     
     useEffect(() => {
-        const getParticipant = async () => {
-            const participantResponse = await axios.get(API_BASE_URL + ApiUrls.participant.current + queryParams);
-            setParticipant(participantResponse.data);
+        if (queryParams && !(new URLSearchParams(queryParams).has("participant_id"))) {
+            console.error("Unknown URL parameter, use ?participant_id=")
+            return;
         }
-        getParticipant();
+        getParticipant(queryParams).then(data => {
+            setParticipant(data);
+        })
     }, [])
 
     return (

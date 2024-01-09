@@ -7,15 +7,16 @@ import Loading from "../Loading/Loading";
 import { createConsent, useConsent } from "../../API";
 
 // Consent is an experiment view that shows the consent text, and handles agreement/stop actions
-const Consent = ({ title, text, experiment, participant, onNext, confirm, deny, urlQueryString }) => {
+const Consent = ({ title, text, experiment, participant, onNext, confirm, deny }) => {
     const [consent, loadingConsent] = useConsent(experiment.slug);
+    const urlQueryString = window.location.search;
 
     // Listen for consent, and auto advance if already given
     useEffect(() => {
         if (consent || (new URLSearchParams(urlQueryString).get("participant_id"))) {
             onNext();
         }
-    }, [consent, onNext, urlQueryString]);
+    }, [consent, onNext]);
 
     // Click on agree button
     const onAgree = async () => {

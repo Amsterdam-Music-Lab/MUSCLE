@@ -37,8 +37,15 @@ export const URLS = {
 export const useExperiment = (slug) =>
     useGet(API_BASE_URL + URLS.experiment.get(slug));
 
-export const useParticipant = (urlQueryString) =>
-    useGet(API_BASE_URL + URLS.participant.current + urlQueryString);
+export const getParticipant = async (urlQueryString) => {
+    try {
+        const response = await axios.get(API_BASE_URL + URLS.participant.current + urlQueryString);
+        return response.data;
+    } catch (err) {
+        console.error(err);
+        return null;
+    }
+}
 
 export const useParticipantScores = () =>
     useGet(API_BASE_URL + URLS.participant.score);

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
-import { useExperiment, useParticipant, getNextRound } from "../../API";
+import { useExperiment, getNextRound } from "../../API";
 import { TransitionGroup, CSSTransition } from "react-transition-group";
 import { withRouter } from "react-router-dom";
 import { useParticipantStore } from "../App/App";
@@ -26,7 +26,7 @@ import UserFeedback from "components/UserFeedback/UserFeedback";
 // - It handles sending results to the server
 // - Implements participant_id as URL parameter, e.g. http://localhost:3000/bat?participant_id=johnsmith34
 //   Empty URL parameter "participant_id" is the same as no URL parameter at all
-const Experiment = ({ match, location }) => {
+const Experiment = ({ match }) => {
     const startState = { view: "LOADING" };
     const participant = useParticipantStore((state) => state.participant);
 
@@ -38,8 +38,6 @@ const Experiment = ({ match, location }) => {
 
     // API hooks
     const [experiment, loadingExperiment] = useExperiment(match.params.slug);
-    const urlQueryString = useRef(location.search); // location.search is a part of URL after (and incuding) "?"
-    // const [participant, loadingParticipant] = useParticipant(urlQueryString.current);
 
     const loadingText = experiment ? experiment.loading_text : "";
     const className = experiment ? experiment.class_name : "";
@@ -68,11 +66,6 @@ const Experiment = ({ match, location }) => {
 
     // Start first_round when experiment and partipant have been loaded
     useEffect(() => {
-
-        if (urlQueryString.current && !(new URLSearchParams(urlQueryString.current).has("participant_id"))) {
-            setError("Unknown URL parameter, use ?participant_id=");
-            return
-        }
 
         // Check if done loading
         if (!loadingExperiment && participant) {
@@ -134,7 +127,6 @@ const Experiment = ({ match, location }) => {
             setError,
             onResult,
             onNext,
-            urlQueryString,
             ...state,
         };
 
