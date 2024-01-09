@@ -4,7 +4,6 @@
 # High Priority: Security and Correctness
 # These issues are critical and should be addressed first.
 extend-ignore =
-    E711, # Comparison to None should be 'if cond is None:'
     E713, # Test for membership should be 'not in'
     E722, # Do not use bare 'except'
     F722, # Syntax error identified by pyflakes
