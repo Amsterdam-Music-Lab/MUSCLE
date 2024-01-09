@@ -40,6 +40,8 @@ django-debug-toolbar==3.2.2
     # via -r requirements.in/dev.txt
 django-inline-actions==2.4.0
     # via -r requirements.in/base.txt
+flake8==4.0.1
+    # via -r requirements.in/dev.txt
 genbadge[coverage]==1.1.1
     # via -r requirements.in/base.txt
 idna==3.3
@@ -53,7 +55,9 @@ isort==5.9.3
 lazy-object-proxy==1.6.0
     # via astroid
 mccabe==0.6.1
-    # via pylint
+    # via
+    #   flake8
+    #   pylint
 numpy==1.22.0
     # via pandas
 packaging==23.2
@@ -69,7 +73,11 @@ platformdirs==2.4.0
 psycopg2==2.9.1
     # via -r requirements.in/base.txt
 pycodestyle==2.8.0
-    # via autopep8
+    # via
+    #   autopep8
+    #   flake8
+pyflakes==2.4.0
+    # via flake8
 pylint==2.11.1
     # via
     #   -r requirements.in/dev.txt
