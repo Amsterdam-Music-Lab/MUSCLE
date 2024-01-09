@@ -10,7 +10,6 @@ extend-ignore =
 
 # Medium Priority: Code Maintainability and Readability
 # Improving these can greatly enhance code readability and maintainability.
-    E101, # Indentation contains mixed spaces and tabs
     E501, # Line too long
     F401, # Unused import
     F403, # 'from module import *' used; unable to detect undefined names
