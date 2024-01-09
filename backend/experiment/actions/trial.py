@@ -1,6 +1,7 @@
 from django.utils.translation import gettext_lazy as _
 
 from .base_action import BaseAction
+from experiment.actions.form import Form
 
 
 class Trial(BaseAction):  # pylint: disable=too-few-public-methods
@@ -17,7 +18,16 @@ class Trial(BaseAction):  # pylint: disable=too-few-public-methods
 
     ID = 'TRIAL_VIEW'
 
-    def __init__(self, playback=None, html=None, feedback_form=None, title='', config=None, result_id=None, style=None):
+    def __init__(
+            self,
+            playback=None,
+            html: str= None,
+            feedback_form: Form = None,
+            title='',
+            config=None,
+            result_id=None,
+            style=None
+            ):
         '''
         - playback: Playback object (may be None)
         - html: HTML object (may be None)
