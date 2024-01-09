@@ -33,7 +33,6 @@ class BeatAlignmentRuleTest(TestCase):
         cls.experiment = Experiment.objects.create(rules='BEAT_ALIGNMENT', slug='ba', rounds=13) #rules is BeatAlignment.ID in beat_alignment.py
         cls.experiment.playlists.add(playlist)
 
-
     def load_json(self, response):
         '''Asserts response status 200 OK, asserts content type json, loads and returns response.content json in a dictionary'''
         self.assertEqual(response.status_code, 200)

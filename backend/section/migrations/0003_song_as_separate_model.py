@@ -29,7 +29,6 @@ class Migration(migrations.Migration):
                     section.restrict_to_nl = 1
             section.save()          
 
-
     dependencies = [
         ('section', '0002_alter_section_filename'),
     ]

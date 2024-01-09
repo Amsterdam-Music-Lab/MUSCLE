@@ -91,7 +91,6 @@ class ToontjeHoger1Mozart(Base):
         # Final
         return self.get_final_round(session)
 
-
     def get_answer_explainer(self, session, round):
         last_result = session.last_result()
 

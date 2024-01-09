@@ -300,8 +300,7 @@ class DurationDiscrimination(Base):
         # return rounded difficulty
         # this uses the decimal module, since round() does not work entirely as expected
         return int(Decimal(str(current_difficulty)).quantize(Decimal('0'), rounding=ROUND_HALF_UP))
-
-
+    
     def last_non_catch_correct(self, previous_results):
         """ check if previous responses (before the current one, which is correct)
         have been catch or non-catch, and if non-catch, if they were correct

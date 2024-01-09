@@ -62,8 +62,6 @@ class TestAdminExperiment(TestCase):
         participant_fields = [key for key in participant]
         self.assertEqual(len(participant_fields), EXPECTED_PARTICIPANT_FIELDS)
 
-    
-
 class TestAdminExperimentExport(TestCase):
 
     fixtures = ['playlist', 'experiment']

@@ -51,7 +51,6 @@ class Trial(BaseAction):  # pylint: disable=too-few-public-methods
             self.config.update(config)
         self.style = style
 
-
     def action(self):
         """
         Serialize data for experiment action

@@ -179,7 +179,6 @@ class Playlist(models.Model):
             return None
         return self.section_set.get(pk=random.choice(pks))
 
-
     def export_admin(self):
         """Export data for admin"""
         return {
