@@ -21,7 +21,7 @@ def question_by_key(key, questions=DEMOGRAPHICS, is_skippable=None, drop_choices
         if question.key == key:
             q = deepcopy(question)
             # Question is_skippable
-            if is_skippable != None:
+            if is_skippable is not None:
                 q.is_skippable = is_skippable
             if hasattr(question, 'choices') and len(drop_choices):
                 for choice in drop_choices:
@@ -39,7 +39,7 @@ def unanswered_questions(participant, questions, randomize=False, cutoff_index=N
         random.shuffle(questions)
     for question in questions[:cutoff_index]:
         profile_result = prepare_profile_result(question.key, participant)
-        if profile_result.given_response == None:
-            q = deepcopy(question)  
+        if profile_result.given_response is None:
+            q = deepcopy(question)
             q.result_id = profile_result.pk
             yield q

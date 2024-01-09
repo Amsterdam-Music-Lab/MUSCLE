@@ -14,7 +14,7 @@ class HookedTest(TestCase):
     def setUpTestData(cls):
         ''' set up data for Hooked base class '''
         cls.participant = Participant.objects.create()
-    
+
     def test_hooked(self):
         experiment = Experiment.objects.create(name='Hooked', rules='HOOKED', rounds=3)
         playlist = Playlist.objects.get(name='Eurovision 2021')
@@ -27,13 +27,13 @@ class HookedTest(TestCase):
         rules = session.experiment_rules()
         rules.plan_sections(session)
         plan = session.load_json_data().get('plan')
-        assert plan != None
+        assert plan is not None
         actions = rules.next_song_sync_action(session)
         assert len(actions) == 3
         actions = rules.next_song_sync_action(session)
         assert len(actions) == 3
         action = rules.next_heard_before_action(session)
-        assert action != None
+        assert action is not None
 
     def test_eurovision(self):
         experiment = Experiment.objects.get(name='Hooked-Eurovision')
@@ -48,7 +48,7 @@ class HookedTest(TestCase):
         for i in range(0, experiment.rounds):
             actions = rules.next_round(session)
             assert actions
-    
+
     def test_thats_my_song(self):
         musicgen_keys = [q.key for q in MUSICGENS_17_W_VARIANTS]
         experiment = Experiment.objects.get(name='ThatsMySong')
@@ -60,8 +60,8 @@ class HookedTest(TestCase):
             playlist=playlist
         )
         rules = session.experiment_rules()
-        assert rules.feedback_info() == None
-        
+        assert rules.feedback_info() is None
+
         for i in range(0, experiment.rounds):
             actions = rules.next_round(session)
             if i == experiment.rounds + 1:
@@ -92,7 +92,7 @@ class HookedTest(TestCase):
                 gender.save()
             elif i == 1:
                 assert session.result_set.count() == 3
-                assert session.load_json_data().get('plan') != None
+                assert session.load_json_data().get('plan') is not None
                 assert len(actions) == 3
                 assert actions[0].feedback_form.form[0].key == 'recognize'
                 assert actions[2].feedback_form.form[0].key == 'correct_place'
@@ -114,7 +114,7 @@ class HookedTest(TestCase):
                     assert len(actions) == 3
                     assert actions[1].feedback_form.form[0].key in musicgen_keys
                     assert actions[2].feedback_form.form[0].key == 'heard_before'
-    
+
     def test_hooked_china(self):
         experiment = Experiment.objects.get(name='Hooked-China')
         playlist = Playlist.objects.get(name='普通话')
@@ -125,7 +125,7 @@ class HookedTest(TestCase):
             playlist=playlist
         )
         rules = session.experiment_rules()
-        assert rules.feedback_info() != None
+        assert rules.feedback_info() is not None
         question_trials = rules.get_questionnaire(session)
         # assert len(question_trials) == len(rules.questions)
         keys = [q.feedback_form.form[0].key for q in question_trials]

@@ -213,7 +213,7 @@ const Playback = ({
                 return <div> Unknown player view {view} </div>;
         }
     };
-    
+
     return (
         <div className="aha__playback">
             <div className="playback"> {render(playbackArgs.view)} </div>{" "}

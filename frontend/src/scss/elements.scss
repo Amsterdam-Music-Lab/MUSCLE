@@ -29,7 +29,7 @@ h3.title {
         color: white;
     }
 
-    &:focus {
+    &:focus, &.checked {
         box-shadow: 0 0 0 0.2rem rgba($color, 0.5);
     }
 

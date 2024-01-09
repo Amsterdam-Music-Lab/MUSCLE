@@ -1,4 +1,5 @@
 from os.path import join
+import random
 
 from django.conf import settings
 from django.utils.translation import gettext_lazy as _
@@ -88,3 +89,6 @@ def get_last_n_turnpoints(session, num_turnpoints):
     all_results = session.result_set.filter(comment__iendswith='turnpoint').order_by('-created_at').all()
     cutoff = min(all_results.count(), num_turnpoints)
     return all_results[:cutoff]
+
+def randomize_playhead(min_jitter, max_jitter, silence_time, continuation_correctness):
+    return silence_time + (random.uniform(min_jitter, max_jitter) if not continuation_correctness else 0)

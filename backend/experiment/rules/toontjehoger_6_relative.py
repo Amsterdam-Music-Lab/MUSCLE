@@ -48,7 +48,7 @@ class ToontjeHoger6Relative(Base):
             playlist,
             start_session
         ]
- 
+
     def next_round(self, session, request_session=None):
         """Get action data for the next round"""
 
@@ -65,7 +65,7 @@ class ToontjeHoger6Relative(Base):
 
         # Final
         return self.get_final_round(session)
- 
+
     def get_score(self, session):
         # Feedback
         last_result = session.last_result()
@@ -83,7 +83,7 @@ class ToontjeHoger6Relative(Base):
         config = {'show_total_score': True}
         score = Score(session, config=config, feedback=feedback)
         return [score]
-  
+
     def get_round(self, round, session):
 
         # Config
@@ -91,7 +91,7 @@ class ToontjeHoger6Relative(Base):
         # section 1 is always section 'a'
         section1 = session.section_from_any_song(
             filter_by={'tag': 'a'})
-        if section1 == None:
+        if section1 is None:
             raise Exception(
                 "Error: could not find section1 for round {}".format(round))
 
@@ -99,7 +99,7 @@ class ToontjeHoger6Relative(Base):
         tag = 'b' if round == 0 else 'c'
         section2 = session.section_from_any_song(
             filter_by={'tag': tag})
-        if section2 == None:
+        if section2 is None:
             raise Exception(
                 "Error: could not find section2 for round {}".format(round))
 

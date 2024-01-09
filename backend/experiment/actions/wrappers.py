@@ -9,6 +9,7 @@ from .trial import Trial
 from result.utils import prepare_result
 
 from experiment.actions.styles import STYLE_BOOLEAN_NEGATIVE_FIRST
+from experiment.actions.utils import randomize_playhead
 
 
 def two_alternative_forced(session, section, choices, expected_response=None, style={}, comment='', scoring_rule=None, title='', config=None):
@@ -44,9 +45,10 @@ def two_alternative_forced(session, section, choices, expected_response=None, st
     return trial
 
 
-def song_sync(session, section, title, response_time=15):
+def song_sync(session, section, title, play_method='BUFFER',
+              recognition_time=15, sync_time=15, min_jitter=10, max_jitter=15):
     trial_config = {
-        'response_time': response_time,
+        'response_time': recognition_time,
         'auto_advance': True
     }
     recognize = Trial(
@@ -79,6 +81,7 @@ def song_sync(session, section, title, response_time=15):
         title=title
     )
     continuation_correctness = random.randint(0, 1) == 1
+    trial_config['response_time'] = sync_time
     correct_place = Trial(
         feedback_form=Form([BooleanQuestion(
             key='correct_place',

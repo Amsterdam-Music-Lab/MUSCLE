@@ -145,7 +145,7 @@ class ToontjeHoger3Plink(Base):
 
         # Get section to recognize
         section = session.section_from_unused_song()
-        if section == None:
+        if section is None:
             raise Exception("Error: could not find section")
 
         expected_response = section.pk

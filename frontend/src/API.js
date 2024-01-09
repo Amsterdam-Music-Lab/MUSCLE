@@ -43,9 +43,9 @@ export const useParticipant = (urlQueryString) =>
 export const useParticipantScores = () =>
     useGet(API_BASE_URL + URLS.participant.score);
 
-export const useParticipantLink = () => 
+export const useParticipantLink = () =>
     useGet(API_BASE_URL + URLS.participant.link);
-    
+
 export const useConsent = (slug) =>
     useGet(API_BASE_URL + URLS.result.get('consent_' + slug));
 
@@ -130,6 +130,7 @@ export const getNextRound = async ({ session }) => {
     }
 };
 
+// Tell the backend that the session is finished
 export const finalizeSession = async ({ session, participant }) => {
     try {
         const response = await axios.post(

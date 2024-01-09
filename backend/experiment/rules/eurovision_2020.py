@@ -85,7 +85,7 @@ class Eurovision2020(Hooked):
         session.save_json_data({'plan': plan})
         # session.save() is required for persistence
         session.save()
-    
+
     def next_song_sync_action(self, session):
         """Get next song_sync section for this session."""
 
@@ -111,7 +111,7 @@ class Eurovision2020(Hooked):
             print("Warning: no next_song_sync section found")
             section = session.playlist.get_section()
         return song_sync(session, section, title=self.get_trial_title(session, round_number))
-    
+
     def next_heard_before_action(self, session):
         """Get next heard_before action for this session."""
 
@@ -147,7 +147,8 @@ class Eurovision2020(Hooked):
         )
         expected_result=novelty[round_number]
         # create Result object and save expected result to database
-        result_pk = prepare_result('heard_before', session, section=section, expected_response=expected_result, scoring_rule='REACTION_TIME')
+        result_pk = prepare_result('heard_before', session, section=section,
+                                   expected_response=expected_result, scoring_rule='REACTION_TIME')
         form = Form([BooleanQuestion(
             key='heard_before',
             choices={
@@ -158,9 +159,9 @@ class Eurovision2020(Hooked):
             result_id=result_pk,
             style=STYLE_BOOLEAN_NEGATIVE_FIRST,
             submits=True)])
-        config = {      
+        config = {
             'auto_advance': True,
-            'decision_time': self.timeout
+            'decision_time': self.heard_before_time
         }
         trial = Trial(
             title=self.get_trial_title(session, round_number),
@@ -169,4 +170,3 @@ class Eurovision2020(Hooked):
             config=config,
         )
         return trial
-

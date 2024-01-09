@@ -33,7 +33,7 @@ class ToontjeHoger1Mozart(Base):
     TITLE = ""
     SCORE_CORRECT = 50
     SCORE_WRONG = 0
-    
+
     def first_round(self, experiment):
         """Create data for the first experiment rounds."""
 
@@ -91,7 +91,7 @@ class ToontjeHoger1Mozart(Base):
         # Final
         return self.get_final_round(session)
 
-    
+
     def get_answer_explainer(self, session, round):
         last_result = session.last_result()
 
@@ -116,7 +116,7 @@ class ToontjeHoger1Mozart(Base):
             button_label="Volgende",
         )
         return [info]
- 
+
     def get_score(self, session):
         # Feedback message
         last_result = session.last_result()
@@ -128,13 +128,13 @@ class ToontjeHoger1Mozart(Base):
         config = {'show_total_score': True}
         score = Score(session, config=config, feedback=feedback)
         return [score]
- 
+
     def get_image_trial(self, session, section_group, image_url, question, expected_response):
         # Config
         # -----------------
         section = session.section_from_any_song(
             filter_by={'group': section_group})
-        if section == None:
+        if section is None:
             raise Exception("Error: could not find section")
 
         # Step 1
@@ -200,7 +200,7 @@ class ToontjeHoger1Mozart(Base):
         )
 
         return [explainer]
- 
+
     def calculate_score(self, result, data):
         score = self.SCORE_CORRECT if result.expected_response == result.given_response else self.SCORE_WRONG
         return score
