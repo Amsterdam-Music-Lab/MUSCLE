@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback, useRef } from "react";
 import { useExperiment, useParticipant, getNextRound } from "../../API";
 import { TransitionGroup, CSSTransition } from "react-transition-group";
 import { withRouter } from "react-router-dom";
+import { useParticipantStore } from "../App/App";
 
 import Consent from "../Consent/Consent";
 import DefaultPage from "../Page/DefaultPage";
@@ -27,6 +28,7 @@ import UserFeedback from "components/UserFeedback/UserFeedback";
 //   Empty URL parameter "participant_id" is the same as no URL parameter at all
 const Experiment = ({ match, location }) => {
     const startState = { view: "LOADING" };
+    const participant = useParticipantStore((state) => state.participant);
 
     // Current experiment state
     const [state, setState] = useState(startState);
@@ -37,7 +39,7 @@ const Experiment = ({ match, location }) => {
     // API hooks
     const [experiment, loadingExperiment] = useExperiment(match.params.slug);
     const urlQueryString = useRef(location.search); // location.search is a part of URL after (and incuding) "?"
-    const [participant, loadingParticipant] = useParticipant(urlQueryString.current);
+    // const [participant, loadingParticipant] = useParticipant(urlQueryString.current);
 
     const loadingText = experiment ? experiment.loading_text : "";
     const className = experiment ? experiment.class_name : "";
@@ -73,7 +75,7 @@ const Experiment = ({ match, location }) => {
         }
 
         // Check if done loading
-        if (!loadingExperiment && !loadingParticipant) {
+        if (!loadingExperiment && participant) {
             // Loading succeeded
             if (experiment) {
                 updateActions(experiment.next_round);
@@ -86,7 +88,6 @@ const Experiment = ({ match, location }) => {
         experiment,
         loadingExperiment,
         participant,
-        loadingParticipant,
         setError,
         updateActions,
         loadState,
