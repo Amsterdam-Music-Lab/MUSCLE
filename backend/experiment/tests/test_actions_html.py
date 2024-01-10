@@ -2,6 +2,7 @@ from django.test import TestCase
 
 from experiment.actions.html import HTML
 
+
 class HTMLTest(TestCase):
 
     def test_initialization(self):

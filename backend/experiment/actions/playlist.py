@@ -2,6 +2,7 @@ from django.utils.translation import gettext_lazy as _
 
 from .base_action import BaseAction
 
+
 class Playlist(BaseAction):  # pylint: disable=too-few-public-methods
     """
     Provide data for playlist selection view

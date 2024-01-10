@@ -4,6 +4,7 @@ from django.utils.translation import gettext_lazy as _
 from .styles import STYLE_NEUTRAL, STYLE_BOOLEAN_NEGATIVE_FIRST, STYLE_GRADIENT_7
 from .base_action import BaseAction
 
+
 class Question(BaseAction):
     ''' Question is part of a form.
     - key: description of question in results table
@@ -45,6 +46,7 @@ class Question(BaseAction):
                 self.expected_response = result.expected_response
         return self.__dict__
 
+
 class NumberQuestion(Question):
     def __init__(self, input_type='number', min_value=0, max_value=120, **kwargs):
         super().__init__(**kwargs)
@@ -53,12 +55,14 @@ class NumberQuestion(Question):
         self.input_type = input_type
         self.view = 'STRING'
 
+
 class TextQuestion(Question):
     def __init__(self, input_type='text', max_length=None, **kwargs):
         super().__init__(**kwargs)
         self.max_length = max_length
         self.input_type = input_type
         self.view = 'STRING'
+
 
 class BooleanQuestion(Question):
     def __init__(self, choices=None, **kwargs):
@@ -69,6 +73,7 @@ class BooleanQuestion(Question):
         }
         self.view = 'BUTTON_ARRAY'
         self.style = {STYLE_BOOLEAN_NEGATIVE_FIRST: True, 'buttons-large-gap': True}
+
 
 class ChoiceQuestion(Question):
     def __init__(self, choices, min_values=1, **kwargs):
@@ -143,6 +148,7 @@ class LikertQuestion(Question):
                     5: _("Strongly Agree"),
                 }
 
+
 class LikertQuestionIcon(Question):
     def __init__(self, scale_steps=7, likert_view='ICON_RANGE', **kwargs):
         super().__init__(**kwargs)
@@ -158,6 +164,7 @@ class LikertQuestionIcon(Question):
                 7: 'fa-face-angry',
             }
             self.style = STYLE_GRADIENT_7
+
 
 class Form(BaseAction):
     ''' Form is a view which brings together an array of questions with submit and optional skip button

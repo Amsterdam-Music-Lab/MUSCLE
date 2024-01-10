@@ -16,6 +16,7 @@ QUESTION_URL2 = "/images/experiments/toontjehoger/mozart-effect2.webp"
 ANSWER_URL1 = "/images/experiments/toontjehoger/mozart-effect1-answer.webp"
 ANSWER_URL2 = "/images/experiments/toontjehoger/mozart-effect2-answer.webp"
 
+
 def toontjehoger_ranks(session):
     score = session.final_score
     if score < 25:

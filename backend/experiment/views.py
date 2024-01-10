@@ -15,6 +15,7 @@ logger = logging.getLogger(__name__)
 
 # Experiment
 
+
 def get_experiment(request, slug):
     """Get experiment data from active experiment with given :slug
     DO NOT modify session data here, it will break participant_id system
@@ -79,6 +80,7 @@ def get_experiment(request, slug):
         response.set_cookie(settings.LANGUAGE_COOKIE_NAME, None)
     return response
 
+
 def post_feedback(request, slug):
     text = request.POST.get('feedback')
     experiment = experiment_or_404(slug)
@@ -86,12 +88,14 @@ def post_feedback(request, slug):
     feedback.save()
     return JsonResponse({'status': 'ok'})
 
+
 def experiment_or_404(slug):
     # get experiment
     try:
         return Experiment.objects.get(slug=slug, active=True)
     except Experiment.DoesNotExist:
         raise Http404("Experiment does not exist")
+
 
 def default_questions(request, rules):
     return JsonResponse({'default_questions': [q.key for q in EXPERIMENT_RULES[rules]().questions]})

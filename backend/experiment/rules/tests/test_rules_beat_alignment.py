@@ -6,6 +6,7 @@ from section.models import Playlist
 from session.models import Session
 import json
 
+
 class BeatAlignmentRuleTest(TestCase):
 
     @classmethod

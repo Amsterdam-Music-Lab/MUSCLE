@@ -3,6 +3,7 @@ from django.utils.translation import gettext as _
 from . import RhythmExperimentSeries
 from experiment.actions import Explainer, Step
 
+
 class RhythmExperimentSeriesMRI(RhythmExperimentSeries):
     ID = 'RHYTHM_SERIES_MRI'
     consent_form = 'consent/consent_MRI.html'

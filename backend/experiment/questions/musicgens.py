@@ -2,6 +2,7 @@ from django.utils.translation import gettext_lazy as _
 
 from experiment.actions.form import LikertQuestion, RadiosQuestion
 
+
 def musicgens_question(key, question):
     """Define a standard MusicGens question"""
     return LikertQuestion(
@@ -18,6 +19,7 @@ def musicgens_question(key, question):
         explainer = _("Please tell us how much you agree")
     )
 
+
 def musicgens_radio_question(key, question):
     """Define a MusicGens question with three radio buttons """
     return RadiosQuestion(
@@ -29,6 +31,7 @@ def musicgens_radio_question(key, question):
             -1: _("I'm not sure")
         }
     )
+
 
 MUSICGENS_17_W_VARIANTS = [
     musicgens_question(

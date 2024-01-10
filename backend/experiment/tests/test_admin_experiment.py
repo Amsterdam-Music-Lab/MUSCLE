@@ -20,10 +20,12 @@ EXPECTED_PARTICIPANT_FIELDS = 5
 class MockRequest:
     pass
 
+
 request = MockRequest()
 
 this_experiment_admin = ExperimentAdmin(
     model=Experiment, admin_site=AdminSite)
+
 
 class TestAdminExperiment(TestCase):    
 
@@ -61,6 +63,7 @@ class TestAdminExperiment(TestCase):
         participant = model_to_dict(Participant.objects.first())
         participant_fields = [key for key in participant]
         self.assertEqual(len(participant_fields), EXPECTED_PARTICIPANT_FIELDS)
+
 
 class TestAdminExperimentExport(TestCase):
 

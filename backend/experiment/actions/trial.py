@@ -2,6 +2,7 @@ from django.utils.translation import gettext_lazy as _
 
 from .base_action import BaseAction
 
+
 class Trial(BaseAction):  # pylint: disable=too-few-public-methods
     """
     A view that may include Playback and/or a Form
