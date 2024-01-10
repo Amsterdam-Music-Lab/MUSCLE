@@ -156,7 +156,7 @@ const VisualMatchingPairs = (props) => {
         const newResult = {
             selectedSection: currentCard.id,
             cardIndex: index,
-            score,
+            score: newScore,
             timestamp: formatTime(Date.now() - startTime)
         }
 
