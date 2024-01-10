@@ -8,6 +8,7 @@ from experiment.actions import Consent, Explainer, Final, Playback, Playlist, St
 from experiment.actions.form import Form
 from experiment.actions.playback import Playback
 
+
 class ListeningConditionsTest(TestCase):
 
     def setUp(self):
@@ -55,7 +56,6 @@ class ListeningConditionsTest(TestCase):
         self.assertEqual(len(actions[0].feedback_form.form), 1)
         self.assertEqual(actions[0].feedback_form.form[0].key, 'quiet_room')
 
-
     def test_next_round_final_round(self):
         listening_conditions = ListeningConditions()
         listening_conditions.first_round(self.experiment)
@@ -69,7 +69,6 @@ class ListeningConditionsTest(TestCase):
         self.assertIsInstance(actions[0].playback, Playback)
         self.assertIsNone(actions[0].feedback_form)  # Assuming no feedback form for the final round
         self.assertIsInstance(actions[1], Final)
-
 
     def test_next_round_does_not_throw_error(self):
         listening_conditions = ListeningConditions()

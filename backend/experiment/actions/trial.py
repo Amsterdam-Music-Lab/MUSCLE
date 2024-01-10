@@ -20,13 +20,13 @@ class Trial(BaseAction):  # pylint: disable=too-few-public-methods
 
     def __init__(
             self,
-            playback=None,
-            html: str= None,
+            playback = None,
+            html: str = None,
             feedback_form: Form = None,
             title='',
-            config=None,
-            result_id=None,
-            style=None
+            config = None,
+            result_id = None,
+            style = None
             ):
         '''
         - playback: Playback object (may be None)
