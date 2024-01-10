@@ -8,6 +8,8 @@ class Playback(BaseAction):
             - 'BUTTON' - display one play button
             - 'MULTIPLAYER' - display multiple small play buttons, one per section
             - 'SPECTROGRAM' - extends multiplayer with a list of spectrograms
+            - 'MATCHINGPAIRS': Use for the matching pairs game.
+            - 'VISUALMATCHINGPAIRS': Use for the visual matching pairs game.
         - sections: a list of sections (in many cases, will only contain *one* section)
         - preload_message: text to display during preload
         - instruction: text to display during presentation of the sound
@@ -16,7 +18,6 @@ class Playback(BaseAction):
                 - 'BUFFER': Use webaudio buffers. (recommended for stimuli up to 45s)
                 - 'HTML': Use the HTML tag. (recommended for stimuli longer than 45s)
                 - 'EXTERNAL': Use for externally hosted audio files. Web-audio api will be disabled
-                - 'MATCHINGPAIRS': Use for the matching pairs game.
                 - 'PREFETCH': Files will be fetched and cached in the browser.
             - ready_time: time before presentation of sound
             - timeout_after_playback: pause in ms after playback has finished
