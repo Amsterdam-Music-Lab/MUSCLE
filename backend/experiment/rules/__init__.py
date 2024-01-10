@@ -66,5 +66,6 @@ EXPERIMENT_RULES = {
     ToontjeHoger6Relative.ID: ToontjeHoger6Relative,
     Eurovision2020.ID: Eurovision2020,
     Kuiper2020.ID: Kuiper2020,
-    ThatsMySong.ID: ThatsMySong
+    ThatsMySong.ID: ThatsMySong,
+    VisualMatchingPairs.ID: VisualMatchingPairs
 }
