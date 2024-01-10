@@ -69,7 +69,7 @@ class VisualMatchingPairs(Base):
                 return [trial]
         else:
             session.final_score += session.result_set.filter(
-                question_key='matching_pairs').last().score
+                question_key='visual_matching_pairs').last().score
             session.save()
             social_info = self.social_media_info(session.experiment, session.final_score)
             social_info['apps'].append('clipboard')
