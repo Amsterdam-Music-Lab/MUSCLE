@@ -16,8 +16,6 @@ extend-ignore =
     F405, # Name may be undefined, or defined from star imports
     F811, # Redefinition of unused name from line N
     F841, # Local variable name is assigned to but never used
-    E302, # Expected 2 blank lines, found 1
-    E305, # Expected 2 blank lines after class or function definition, found 1
 
 # Low Priority: Style Guide Adherence
 # These are mostly about whitespace and indentation, which can be adjusted later.
