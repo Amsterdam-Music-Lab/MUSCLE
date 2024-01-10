@@ -106,7 +106,7 @@ class RhythmDiscrimination(Base):
 
         return next_trial_actions(
             session, next_round_number, request_session)
-    
+
 
 def next_trial_actions(session, round_number, request_session):
     """

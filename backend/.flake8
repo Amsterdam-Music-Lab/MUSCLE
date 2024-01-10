@@ -4,11 +4,9 @@
 # High Priority: Security and Correctness
 # These issues are critical and should be addressed first.
 extend-ignore =
-    E713, # Test for membership should be 'not in'
     E722, # Do not use bare 'except'
     F722, # Syntax error identified by pyflakes
     F821, # Undefined name
-    E266, # Too many leading '#' for block comment
 
 # Medium Priority: Code Maintainability and Readability
 # Improving these can greatly enhance code readability and maintainability.
