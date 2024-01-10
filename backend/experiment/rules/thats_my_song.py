@@ -8,6 +8,7 @@ from experiment.questions.musicgens import MUSICGENS_17_W_VARIANTS
 from .hooked import Hooked
 from result.utils import prepare_result
 
+
 class ThatsMySong(Hooked):
 
     ID = 'THATS_MY_SONG'

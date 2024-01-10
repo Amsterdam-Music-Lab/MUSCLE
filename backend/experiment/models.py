@@ -12,6 +12,7 @@ from django import forms
 language_choices = [(key, ISO_LANGUAGES[key]) for key in ISO_LANGUAGES.keys()]
 language_choices[0] = ('', 'Unset')
 
+
 class ExperimentSeries(models.Model):
     """ A model to allow nesting multiple experiments into a 'parent' experiment """
     name = models.CharField(max_length=64, default='')
@@ -203,6 +204,7 @@ class Experiment(models.Model):
             return score['final_score__max']
 
         return 0
+
 
 class Feedback(models.Model):
     text = models.TextField()

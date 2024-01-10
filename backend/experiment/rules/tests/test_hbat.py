@@ -7,6 +7,7 @@ from result.models import Result
 from section.models import Playlist
 from session.models import Session
 
+
 class HBatTest(TestCase):
     fixtures = ['playlist', 'experiment']
 
@@ -37,6 +38,7 @@ class HBatTest(TestCase):
         result = Result.objects.get(pk=result_id)
         assert result
         assert result.expected_response == 'FASTER'
+
 
 class HBat_BST_Test(TestCase):
     fixtures = ['playlist', 'experiment']

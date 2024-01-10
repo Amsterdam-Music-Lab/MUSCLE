@@ -2,6 +2,7 @@ import unittest
 
 from experiment.actions.info import Info
 
+
 class TestInfo(unittest.TestCase):
 
     def test_initialization_all_parameters(self):
@@ -29,6 +30,7 @@ class TestInfo(unittest.TestCase):
         self.assertEqual(info.heading, "Heading")
         self.assertIsNone(info.button_label)
         self.assertIsNone(info.button_link)
+
 
 if __name__ == '__main__':
     unittest.main()

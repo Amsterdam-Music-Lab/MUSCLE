@@ -3,6 +3,7 @@ from unittest.mock import Mock
 
 from experiment.actions.score import Score
 
+
 class TestScore(unittest.TestCase):
 
     def setUp(self):
@@ -71,6 +72,7 @@ class TestScore(unittest.TestCase):
         self.assertIn(score.default_score_message(0), ["No points"])  # Zero
         self.assertIn(score.default_score_message(-5), ["Incorrect"])  # Negative
         self.assertIn(score.default_score_message(None), ["No points"])  # None
+
 
 if __name__ == '__main__':
     unittest.main()

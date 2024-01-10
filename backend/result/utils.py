@@ -3,6 +3,7 @@ from .models import Result
 from experiment.questions.profile_scoring_rules import PROFILE_SCORING_RULES
 from result.score import SCORING_RULES
 
+
 def get_result(session, data):
     result_id = data.get('result_id')
     try:
@@ -14,6 +15,7 @@ def get_result(session, data):
         except Result.DoesNotExist:
             raise
     return result
+
 
 def handle_results(data, session):
     """ 
@@ -34,6 +36,7 @@ def handle_results(data, session):
         result = score_result(form_element, session)
     return result
 
+
 def prepare_profile_result(question_key, participant, **kwargs):
     ''' Create a Result object, and provide its id to be serialized
     - question_key: the key of the question in the questionnaire dictionaries
@@ -52,6 +55,7 @@ def prepare_profile_result(question_key, participant, **kwargs):
     )
     return result
 
+
 def prepare_result(question_key, session, **kwargs):
     ''' Create a Result object, and provide its id to be serialized
     - question_key: the key of the question in the questionnaire dictionaries
@@ -68,6 +72,7 @@ def prepare_result(question_key, session, **kwargs):
         **kwargs
     )
     return result.id
+
 
 def score_result(data, session):
     """
@@ -98,6 +103,7 @@ def score_result(data, session):
     result.score = score
     result.save()
     return result
+
 
 def apply_scoring_rule(result, data):
     scoring_rule = SCORING_RULES.get(result.scoring_rule)

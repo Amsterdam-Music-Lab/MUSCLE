@@ -10,6 +10,7 @@ from session.models import Session
 
 from result.utils import handle_results
 
+
 class ResultTest(TestCase):
 
     @classmethod
@@ -76,6 +77,7 @@ class ResultTest(TestCase):
         json_data = self.session.result_set.first().json_data
         assert json_data.get('config') is not None
         assert json_data.get('decision_time') == 42
+
 
 class ScoringTest(TestCase):
 

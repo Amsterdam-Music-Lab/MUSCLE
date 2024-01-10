@@ -84,13 +84,16 @@ class PlaylistModelTest(TestCase):
         self.assertEqual(sections[3].song.restricted, [{"restricted": "nl"}])
         self.assertEqual(sections[3].tag, "0")
         self.assertEqual(sections[3].group, '0')
+       
         
 class MockRequest:
     pass
 
+
 this_playlist_admin = PlaylistAdmin(
     model=Playlist, admin_site=AdminSite)
     
+
 class TestAmdinEditSection(TestCase):
 
     @classmethod

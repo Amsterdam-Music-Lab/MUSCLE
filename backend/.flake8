@@ -10,17 +10,12 @@ extend-ignore =
 
 # Medium Priority: Code Maintainability and Readability
 # Improving these can greatly enhance code readability and maintainability.
-    E101, # Indentation contains mixed spaces and tabs
     E501, # Line too long
-    E303, # Too many blank lines
     F401, # Unused import
     F403, # 'from module import *' used; unable to detect undefined names
     F405, # Name may be undefined, or defined from star imports
     F811, # Redefinition of unused name from line N
     F841, # Local variable name is assigned to but never used
-    E302, # Expected 2 blank lines, found 1
-    E305, # Expected 2 blank lines after class or function definition, found 1
-    E402, # Module level import not at top of file
 
 # Low Priority: Style Guide Adherence
 # These are mostly about whitespace and indentation, which can be adjusted later.

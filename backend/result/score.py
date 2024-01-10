@@ -5,12 +5,14 @@ from django.db.models import Q
 
 logger = logging.getLogger(__name__)
 
+
 def check_expected_response(result):
     try:
         return result.expected_response
     except Exception as e:
         logger.log(e)
         return None
+
 
 def correctness_score(result, data):
     expected_response = check_expected_response(result)
@@ -19,21 +21,26 @@ def correctness_score(result, data):
     else:
         return 0
 
+
 def boolean_score(result, data):
     if result.given_response == 'yes':
         return 1
     else:
         return 0
 
+
 def likert_score(result, data):
     return int(data['value'])
+
 
 def reverse_likert_score(result, data):
     return int(data['scale_steps']) + 1 - int(data['value'])
 
+
 def categories_likert_score(result, data):
     choices = list(data['choices'].keys())
     return choices.index(data['value']) + 1
+
 
 def reaction_time_score(result, data):
     expected_response = check_expected_response(result)
@@ -45,6 +52,7 @@ def reaction_time_score(result, data):
             return math.ceil(timeout - time)
         else:
             return math.floor(-time)
+        
 
 def song_sync_recognition_score(result, data):
     if result.given_response == 'TIMEOUT' or result.given_response == 'no':
@@ -54,7 +62,8 @@ def song_sync_recognition_score(result, data):
         time = json_data.get('decision_time')
         timeout = json_data.get('config').get('response_time')
         return math.ceil(timeout - time)
-        
+
+
 def song_sync_continuation_score(result, data):
     ''' modify previous result and return None'''
     previous_result = result.session.get_previous_result(['recognize'])
@@ -62,6 +71,7 @@ def song_sync_continuation_score(result, data):
         previous_result.score *= -1
         previous_result.save()
     return None
+
 
 SCORING_RULES = {
     'BOOLEAN': boolean_score,

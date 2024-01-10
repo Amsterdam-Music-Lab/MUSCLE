@@ -7,6 +7,7 @@ from experiment.models import Experiment
 from session.models import Session
 from result.models import Result
 
+
 class ParticipantTest(TestCase):
 
     @classmethod

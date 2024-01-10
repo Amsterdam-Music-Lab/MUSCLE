@@ -1,5 +1,6 @@
 from .base_action import BaseAction
 
+
 class Playback(BaseAction):
     ''' A playback wrapper for different kinds of players
         - player_type: can be one of the following:

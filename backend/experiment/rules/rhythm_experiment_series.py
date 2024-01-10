@@ -35,7 +35,6 @@ class RhythmExperimentSeries(Base):
             ],
             button_label=_("Continue")
         )
-
     
     def first_round(self, experiment):
         """Create data for the first experiment rounds."""
@@ -49,7 +48,6 @@ class RhythmExperimentSeries(Base):
             self.intro_explainer(),
             start_session
         ]
-
     
     def next_round(self, session):
         data = session.load_json_data()

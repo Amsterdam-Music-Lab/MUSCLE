@@ -4,6 +4,7 @@ from django.utils.translation import gettext as _
 
 from .base_action import BaseAction
 
+
 class Score(BaseAction):  # pylint: disable=too-few-public-methods
     """
     Provide data for an intermediate score view

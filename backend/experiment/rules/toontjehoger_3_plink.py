@@ -129,7 +129,6 @@ class ToontjeHoger3Plink(Base):
             {'number': round_number+1, 'total': session.experiment.rounds}
         return Score(session, config=config, feedback=feedback, score=score, title=score_title)
 
-
     def get_plink_round(self, session, present_score=False):
         next_round = []
         if present_score:
@@ -191,7 +190,6 @@ class ToontjeHoger3Plink(Base):
             self.get_era_question(session, section),
             self.get_emotion_question(session, section)
         ]
-
 
         return [*next_round, *extra_rounds]
 
