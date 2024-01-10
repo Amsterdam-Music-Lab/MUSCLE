@@ -28,9 +28,7 @@ const Preload = ({ instruction, pageTitle, duration, sections, playConfig, onNex
 
             if (playConfig.play_method === 'PREFETCH') {
 
-                await Promise.all(sections.map((section) => {
-                    return fetch(MEDIA_ROOT + section.url);
-                }))
+                await Promise.all(sections.map((section) => fetch(MEDIA_ROOT + section.url)));
 
                 return onNext();
             }
