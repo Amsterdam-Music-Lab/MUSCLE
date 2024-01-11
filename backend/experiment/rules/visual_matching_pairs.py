@@ -31,10 +31,9 @@ class VisualMatchingPairs(Base):
         rendered = render_to_string('consent/consent_matching_pairs.html')
         consent = Consent(rendered, title=_(
             'Informed consent'), confirm=_('I agree'), deny=_('Stop'))
-        # 2. Choose playlist.
+        
         playlist = Playlist(experiment.playlists.all())
 
-        # 3. Start session.
         start_session = StartSession()
 
         explainer = Explainer(
@@ -85,6 +84,7 @@ class VisualMatchingPairs(Base):
                 feedback_info=self.feedback_info()
             )
             cont = self.get_visual_matching_pairs_trial(session)
+
             return [score, cont]
     
     def get_visual_matching_pairs_trial(self, session):
@@ -104,6 +104,7 @@ class VisualMatchingPairs(Base):
             result_id=prepare_result('visual_matching_pairs', session),
             config={'show_continue_button': False}
         )
+
         return trial
 
     def calculate_score(self, result, data):
@@ -111,4 +112,5 @@ class VisualMatchingPairs(Base):
         for m in moves:
             m['filename'] = str(Section.objects.get(pk=m.get('selectedSection')).filename)
         score = data.get('result').get('score')
+        
         return score
