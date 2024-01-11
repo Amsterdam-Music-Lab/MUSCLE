@@ -2,7 +2,6 @@ from .frontend_style import FrontendStyle
 
 class BaseAction(object):
     ID = 'BASE'
-    style = FrontendStyle()
 
     def __init__(self, style = FrontendStyle()):
         self.style = style
