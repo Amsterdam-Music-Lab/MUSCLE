@@ -26,7 +26,7 @@ const VisualMatchingPairs = (props) => {
 
     const [resultBuffer, setResultBuffer] = useState([]);
 
-    const startTime = useState(useRef(Date.now()));
+    const [startTime] = useState(Date.now());
 
     const getScoreMessage = (score) => {
         switch (score) {
@@ -152,6 +152,8 @@ const VisualMatchingPairs = (props) => {
             // clear message
             setMessage('');
         }
+
+        console.log('start time', startTime)
 
         const newResult = {
             selectedSection: currentCard.id,
