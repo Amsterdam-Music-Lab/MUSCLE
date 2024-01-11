@@ -73,7 +73,6 @@ class TestAdminExperimentExport(TestCase):
     def setUpTestData(cls):
         cls.participant = Participant.objects.create(unique_hash=42)
         cls.experiment = Experiment.objects.get(name='Hooked-China')
-        print(cls.experiment)
         for playlist in cls.experiment.playlists.all():
             playlist.update_sections()            
         print(cls.experiment.pk)

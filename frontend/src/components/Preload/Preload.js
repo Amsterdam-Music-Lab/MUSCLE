@@ -13,7 +13,7 @@ const Preload = ({ instruction, pageTitle, duration, sections, playConfig, onNex
     const audioIsAvailable = useRef(false);
     const [loaderDuration, setLoaderDuration] = useState(duration);
     const [overtime, setOvertime] = useState(false);
-    
+
     const onTimePassed = () => {
         timeHasPassed.current = true;
         setLoaderDuration(0);
@@ -23,47 +23,58 @@ const Preload = ({ instruction, pageTitle, duration, sections, playConfig, onNex
         }
     };
 
-    // Audio preloader
-    useEffect(() => {        
-        if (playConfig.play_method === 'BUFFER') {
+    useEffect(() => {
+        const preloadResources = async () => {
 
-            // Use Web-audio and preload sections in buffers            
-            sections.map((section, index) => {
-                // skip Preload if the section has already been loaded in the previous action
-                if (webAudio.checkSectionLoaded(section)) {
-                    onNext();
-                    return undefined;
-                }
-                // Clear buffers if this is the first section
-                if (index === 0) {
-                    webAudio.clearBuffers();
-                }
-                                
-                // Load sections in buffer                
-                return webAudio.loadBuffer(section.id, section.url, () => {                    
-                    if (index === (sections.length - 1)) {
-                        audioIsAvailable.current = true;
-                        if (timeHasPassed.current) {
-                            onNext();
-                        }                        
-                    }                                        
-                });
-            })
-        } else {
-            if (playConfig.play_method === 'EXTERNAL') {                    
-                webAudio.closeWebAudio();            
+            if (playConfig.play_method === 'PREFETCH') {
+
+                await Promise.all(sections.map((section) => fetch(MEDIA_ROOT + section.url)));
+
+                return onNext();
             }
-            // Load audio until available
-            // Return remove listener   
-            return audio.loadUntilAvailable(MEDIA_ROOT + sections[0].url, () => {
-                audioIsAvailable.current = true;
-                if (timeHasPassed.current) {
-                    onNext();
+
+            if (playConfig.play_method === 'BUFFER') {
+
+                // Use Web-audio and preload sections in buffers
+                sections.map((section, index) => {
+                    // skip Preload if the section has already been loaded in the previous action
+                    if (webAudio.checkSectionLoaded(section)) {
+                        onNext();
+                        return undefined;
+                    }
+                    // Clear buffers if this is the first section
+                    if (index === 0) {
+                        webAudio.clearBuffers();
+                    }
+
+                    // Load sections in buffer
+                    return webAudio.loadBuffer(section.id, section.url, () => {
+                        if (index === (sections.length - 1)) {
+                            audioIsAvailable.current = true;
+                            if (timeHasPassed.current) {
+                                onNext();
+                            }
+                        }
+                    });
+                })
+            } else {
+                if (playConfig.play_method === 'EXTERNAL') {
+                    webAudio.closeWebAudio();
                 }
-            });            
-        }              
-    }, [sections, onNext]);
-    
+                // Load audio until available
+                // Return remove listener
+                return audio.loadUntilAvailable(MEDIA_ROOT + sections[0].url, () => {
+                    audioIsAvailable.current = true;
+                    if (timeHasPassed.current) {
+                        onNext();
+                    }
+                });
+            }
+        }
+
+        preloadResources();
+    }, [sections, onNext, playConfig]);
+
     return (
         <ListenFeedback
             className={classNames({ pulse: overtime || duration === 0 })}

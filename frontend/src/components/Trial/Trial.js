@@ -50,7 +50,7 @@ const Trial = ({
             }
 
             if (feedback_form) {
-                
+
                 if (feedback_form.is_skippable) {
                     form.map((formElement => (formElement.value = formElement.value || '')))
                 }

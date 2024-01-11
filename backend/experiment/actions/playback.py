@@ -8,21 +8,24 @@ class Playback(BaseAction):
             - 'BUTTON' - display one play button
             - 'MULTIPLAYER' - display multiple small play buttons, one per section
             - 'SPECTROGRAM' - extends multiplayer with a list of spectrograms
+            - 'MATCHINGPAIRS': Use for the matching pairs game.
+            - 'VISUALMATCHINGPAIRS': Use for the visual matching pairs game.
         - sections: a list of sections (in many cases, will only contain *one* section)
         - preload_message: text to display during preload
         - instruction: text to display during presentation of the sound
         - play_config: define to override the following values:
             - play_method:
-                - 'BUFFER': Use webaudio buffers. (recommended for stimuli up to 45s)  
+                - 'BUFFER': Use webaudio buffers. (recommended for stimuli up to 45s)
                 - 'HTML': Use the HTML tag. (recommended for stimuli longer than 45s)
-                - 'EXTERNAL': Use for externally hosted audio files. Web-audio api will be disabled            
+                - 'EXTERNAL': Use for externally hosted audio files. Web-audio api will be disabled
+                - 'PREFETCH': Files will be fetched and cached in the browser.
             - ready_time: time before presentation of sound
             - timeout_after_playback: pause in ms after playback has finished
             - playhead: from where the audio file should play (offset in seconds from start)
             - mute: whether audio should be muted
             - auto_play: whether sound will start automatically
             - stop_audio_after: after how many seconds playback audio should be stopped
-            - show_animation: whether to show an animation during playback 
+            - show_animation: whether to show an animation during playback
             - (multiplayer) label_style: player index number style: NUMERIC, ALPHABETIC, ROMAN or empty (no label)
             - play_once: the sound can only be played once
             - resume_play: if the playback should resume from where a previous view left off
