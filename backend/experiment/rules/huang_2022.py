@@ -4,8 +4,8 @@ from django.utils.translation import gettext_lazy as _
 from django.template.loader import render_to_string
 from django.conf import settings
 
-from experiment.actions import HTML, Final, Score, Explainer, Step, Consent, StartSession, Redirect, Playlist, Trial
-from experiment.actions.form import BooleanQuestion, ChoiceQuestion, Form, Question
+from experiment.actions import HTML, Final, Explainer, Step, Consent, StartSession, Redirect, Playlist, Trial
+from experiment.actions.form import BooleanQuestion, Form
 from experiment.actions.playback import Autoplay
 from experiment.questions.demographics import EXTRA_DEMOGRAPHICS
 from experiment.questions.goldsmiths import MSI_ALL, MSI_OTHER
