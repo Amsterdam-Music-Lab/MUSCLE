@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import classNames from "classnames";
 
-
+import { MEDIA_ROOT } from "./config";
 import ListenFeedback from "../Listen/ListenFeedback";
 import CountDown from "../CountDown/CountDown";
 import * as audio from "../../util/audio";
@@ -24,44 +24,55 @@ const Preload = ({ sections, playMethod, duration, preloadMessage, pageTitle, on
     };
 
     // Audio preloader
-    useEffect(() => {        
-        if (playMethod === 'BUFFER') {
+    useEffect(() => {
+        const preloadResources = async () => {
+            if (playMethod === 'NOAUDIO') {
 
-            // Use Web-audio and preload sections in buffers            
-            sections.map((section, index) => {
-                // skip Preload if the section has already been loaded in the previous action
-                if (webAudio.checkSectionLoaded(section)) {
-                    onNext();
-                    return undefined;
-                }
-                // Clear buffers if this is the first section
-                if (index === 0) {
-                    webAudio.clearBuffers();
-                }
-                                
-                // Load sections in buffer                
-                return webAudio.loadBuffer(section.id, section.url, () => {                    
-                    if (index === (sections.length - 1)) {
-                        setAudioAvailable(true);
-                        if (timePassed) {
-                            onNext();
-                        }                        
-                    }                                        
-                });
-            })
-        } else {
-            if (playMethod === 'EXTERNAL') {                    
-                webAudio.closeWebAudio();        
+                await Promise.all(sections.map((section) => fetch(MEDIA_ROOT + section.url)));
+
+                return onNext();
             }
-            // Load audio until available
-            // Return remove listener   
-            return audio.loadUntilAvailable(sections[0].url, () => {
-                setAudioAvailable(true);
-                if (timePassed) {
-                    onNext();
+
+            if (playMethod === 'BUFFER') {
+
+                // Use Web-audio and preload sections in buffers            
+                sections.map((section, index) => {
+                    // skip Preload if the section has already been loaded in the previous action
+                    if (webAudio.checkSectionLoaded(section)) {
+                        onNext();
+                        return undefined;
+                    }
+                    // Clear buffers if this is the first section
+                    if (index === 0) {
+                        webAudio.clearBuffers();
+                    }
+
+                    // Load sections in buffer                
+                    return webAudio.loadBuffer(section.id, section.url, () => {                    
+                        if (index === (sections.length - 1)) {
+                            setAudioAvailable(true);
+                            if (timePassed) {
+                                onNext();
+                            }                        
+                        }                                        
+                    });
+                })
+            } else {
+                if (playMethod === 'EXTERNAL') {                    
+                    webAudio.closeWebAudio();        
                 }
-            });            
-        }              
+                // Load audio until available
+                // Return remove listener   
+                return audio.loadUntilAvailable(sections[0].url, () => {
+                    setAudioAvailable(true);
+                    if (timePassed) {
+                        onNext();
+                    }
+                });            
+            }
+        }
+
+        preloadResources();     
     }, [sections, playMethod, onNext, timePassed]);
     
     return (

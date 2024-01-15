@@ -6,20 +6,17 @@ TYPE_BUTTON = 'BUTTON'
 TYPE_IMAGE = 'IMAGE'
 TYPE_MULTIPLAYER = 'MULTIPLAYER'
 TYPE_MATCHINGPAIRS = 'MATCHINGPAIRS'
+TYPE_VISUALMATCHINGPAIRS = 'VISUALMATCHINGPAIRS'
 
 # playback methods
 PLAY_EXTERNAL = 'EXTERNAL'
 PLAY_HTML = 'HTML'
 PLAY_BUFFER = 'BUFFER'
+PLAY_NOAUDIO = 'NOAUDIO'
 
 
 class Playback(BaseAction):
-    ''' A playback wrapper for different kinds of players
-        - view: can be one of the following:
-            - 'AUTOPLAY' - player starts automatically
-            - 'BUTTON' - display one play button
-            - 'MULTIPLAYER' - display multiple small play buttons, one per section
-            - 'IMAGE' - extends multiplayer with a list of spectrograms
+    ''' A playback base class for different kinds of players
         - sections: a list of sections (in many cases, will only contain *one* section)
         - preload_message: text to display during preload
         - instruction: text to display during presentation of the sound
@@ -133,3 +130,16 @@ class MatchingPairs(Multiplayer):
     def __init__(self, sections, **kwargs):
         super().__init__(sections, **kwargs)
         self.ID = TYPE_MATCHINGPAIRS
+
+
+class VisualMatchingPairs(MatchingPairs):
+    '''
+    This is a special case of multiplayer:
+    play buttons are represented as cards
+    this player does not play audio, but displays images instead
+    '''
+
+    def __init__(self, sections, **kwargs):
+        super().__init__(sections, **kwargs)
+        self.ID = TYPE_VISUALMATCHINGPAIRS
+        self.play_method = PLAY_NOAUDIO

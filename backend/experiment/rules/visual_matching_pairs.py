@@ -92,10 +92,8 @@ class VisualMatchingPairs(Base):
         player_sections = list(session.playlist.section_set.filter(tag__contains='vmp'))
         random.shuffle(player_sections)
 
-        playback = Playback(
-            sections=player_sections,
-            player_type='VISUALMATCHINGPAIRS',
-            play_config={ 'play_method': 'PREFETCH' }
+        playback = VisualMatchingPairs(
+            sections=player_sections
         )
         trial = Trial(
             title='Visual Tune twins',
