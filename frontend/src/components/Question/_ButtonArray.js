@@ -52,7 +52,7 @@ const ToggleButton = ({ label, value, index, name, disabled, onChange, checked }
                 checked={checked}
                 aria-checked={checked}
                 disabled={disabled}
-                onClick={() => {
+                onChange={() => {
                     onChange(value);
                 }}
                 onKeyPress={() => {
