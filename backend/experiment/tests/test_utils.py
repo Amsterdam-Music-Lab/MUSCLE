@@ -2,6 +2,7 @@ from django.test import TestCase
 
 from experiment.utils import create_player_labels
 
+
 class TestExperimentUtils(TestCase):
     
     def test_create_player_labels(self):

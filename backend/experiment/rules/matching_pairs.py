@@ -12,6 +12,7 @@ from result.utils import prepare_result
 
 from section.models import Section
 
+
 class MatchingPairsGame(Base):
     ID = 'MATCHING_PAIRS'
     num_pairs = 8

@@ -232,6 +232,7 @@ class Huang2022(Hooked):
         ]
         return " ".join([str(m) for m in messages])
 
+
 def get_test_playback():
     from section.models import Section
     test_section = Section.objects.get(song__name='audiocheck')
