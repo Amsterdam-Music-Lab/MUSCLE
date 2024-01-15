@@ -147,7 +147,7 @@ class MusicalPreferences(Base):
                              title=_("Audio check"))
         n_songs = next_round_number - self.round_increment
         if n_songs == self.preference_offset + 1:
-            like_results = session.result_set.filter(question_key='like_song', section_id__isnull=False)
+            like_results = session.result_set.filter(question_key='like_song')
             feedback = Trial(
                 html=HTML(body=render_to_string('html/musical_preferences/feedback.html', {
                     'unlocked': _("Love unlocked"),
@@ -157,7 +157,7 @@ class MusicalPreferences(Base):
             )
             actions = [feedback]
         elif n_songs == self.knowledge_offset + 1:
-            like_results = session.result_set.filter(question_key='like_song', section_id__isnull=False)
+            like_results = session.result_set.filter(question_key='like_song')
             known_songs = session.result_set.filter(
                 question_key='know_song', score=2).count()
             feedback = Trial(
@@ -170,7 +170,7 @@ class MusicalPreferences(Base):
             )
             actions = [feedback]
         elif n_songs == session.experiment.rounds + 1:
-            like_results = session.result_set.filter(question_key='like_song', section_id__isnull=False)
+            like_results = session.result_set.filter(question_key='like_song')
             known_songs = session.result_set.filter(
                 question_key='know_song', score=2).count()
             all_results = Result.objects.filter(
