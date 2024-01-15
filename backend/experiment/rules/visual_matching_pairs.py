@@ -5,7 +5,7 @@ from django.template.loader import render_to_string
 
 from .base import Base
 from experiment.actions import Consent, Explainer, Final, Playlist, StartSession, Step, Trial
-from experiment.actions.playback import Playback
+from experiment.actions.playback import VisualMatchingPairs
 from experiment.questions.demographics import EXTRA_DEMOGRAPHICS
 from experiment.questions.utils import question_by_key
 from result.utils import prepare_result
@@ -13,7 +13,7 @@ from result.utils import prepare_result
 from section.models import Section
 
 
-class VisualMatchingPairs(Base):
+class VisualMatchingPairsGame(Base):
     ID = 'VISUAL_MATCHING_PAIRS'
     num_pairs = 8
     contact_email = 'aml.tunetwins@gmail.com'

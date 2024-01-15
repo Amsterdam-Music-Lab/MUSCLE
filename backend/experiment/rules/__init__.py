@@ -29,7 +29,7 @@ from .toontjehoger_3_plink import ToontjeHoger3Plink
 from .toontjehoger_4_absolute import ToontjeHoger4Absolute
 from .toontjehoger_5_tempo import ToontjeHoger5Tempo
 from .toontjehoger_6_relative import ToontjeHoger6Relative
-from .visual_matching_pairs import VisualMatchingPairs
+from .visual_matching_pairs import VisualMatchingPairsGame
 
 # Rules available to this application
 # If you create new Rules, add them to the list
@@ -67,5 +67,5 @@ EXPERIMENT_RULES = {
     Eurovision2020.ID: Eurovision2020,
     Kuiper2020.ID: Kuiper2020,
     ThatsMySong.ID: ThatsMySong,
-    VisualMatchingPairs.ID: VisualMatchingPairs
+    VisualMatchingPairsGame.ID: VisualMatchingPairsGame
 }
