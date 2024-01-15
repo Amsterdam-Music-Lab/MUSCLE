@@ -1,12 +1,9 @@
-import React, { useRef, useEffect } from "react";
+import React, { useEffect } from "react";
 
 import Circle from "../Circle/Circle";
 import ListenCircle from "../ListenCircle/ListenCircle";
 
 const AutoPlay = ({instruction, showAnimation, playSection, startedPlaying, finishedPlaying, responseTime, className=''}) => {
-    // player state
-    
-    const running = useRef(true);
 
     // Handle view logic
     useEffect(() => {        
@@ -18,7 +15,7 @@ const AutoPlay = ({instruction, showAnimation, playSection, startedPlaying, fini
         <div>
             <div className="circle">
                 <Circle
-                    running={running}
+                    running={true}
                     duration={responseTime}
                     color="white"
                     animateCircle={showAnimation}
@@ -31,8 +28,8 @@ const AutoPlay = ({instruction, showAnimation, playSection, startedPlaying, fini
                     {showAnimation
                         ? <ListenCircle
                             duration={responseTime}
-                            histogramRunning={running}
-                            countDownRunning={running}
+                            histogramRunning={true}
+                            countDownRunning={true}
                         />
                         : <div className="stationary">
                             <span className="fa-solid fa-headphones fa-6x"></span>

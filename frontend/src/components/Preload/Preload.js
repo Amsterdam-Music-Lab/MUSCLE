@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import classNames from "classnames";
 
 
@@ -9,16 +9,16 @@ import * as webAudio from "../../util/webAudio";
 
 // Preload is an experiment screen that continues after a given time or after an audio file has been preloaded
 const Preload = ({ sections, playMethod, duration, preloadMessage, pageTitle, onNext }) => {
-    const timeHasPassed = useRef(false);
-    const audioIsAvailable = useRef(false);
+    const [timePassed, setTimePassed] = useState(false);
+    const [audioAvailable, setAudioAvailable] = useState(false);
     const [overtime, setOvertime] = useState(false);
     const [loaderDuration, setLoaderDuration] = useState(duration);
     
     const onTimePassed = () => {
-        timeHasPassed.current = true;
+        setTimePassed(true)
         setLoaderDuration(0);
         setOvertime(true);
-        if (audioIsAvailable.current) {
+        if (audioAvailable) {
             onNext();
         }
     };
@@ -42,8 +42,8 @@ const Preload = ({ sections, playMethod, duration, preloadMessage, pageTitle, on
                 // Load sections in buffer                
                 return webAudio.loadBuffer(section.id, section.url, () => {                    
                     if (index === (sections.length - 1)) {
-                        audioIsAvailable.current = true;
-                        if (timeHasPassed.current) {
+                        setAudioAvailable(true);
+                        if (timePassed) {
                             onNext();
                         }                        
                     }                                        
@@ -56,13 +56,13 @@ const Preload = ({ sections, playMethod, duration, preloadMessage, pageTitle, on
             // Load audio until available
             // Return remove listener   
             return audio.loadUntilAvailable(sections[0].url, () => {
-                audioIsAvailable.current = true;
-                if (timeHasPassed.current) {
+                setAudioAvailable(true);
+                if (timePassed) {
                     onNext();
                 }
             });            
         }              
-    }, [sections, playMethod, onNext]);
+    }, [sections, playMethod, onNext, timePassed]);
     
     return (
         <ListenFeedback

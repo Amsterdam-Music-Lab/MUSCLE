@@ -23,7 +23,7 @@ const Trial = ({
 }) => {
     // Main component state
     const [formActive, setFormActive] = useState(!config.listen_first);
-    const [preloadReady, setPreloadReady] = useState(!playback?.ready_time);
+    const [preloadReady, setPreloadReady] = useState(!(playback?.ready_time));
 
     const submitted = useRef(false);
 
