@@ -9,6 +9,7 @@ from django.urls import reverse
 from .utils import CsvStringBuilder
 from .validators import audio_file_validator
 
+
 class Playlist(models.Model):
     """List of sections to be used in an Experiment"""
 
@@ -179,7 +180,6 @@ class Playlist(models.Model):
             return None
         return self.section_set.get(pk=random.choice(pks))
 
-
     def export_admin(self):
         """Export data for admin"""
         return {
@@ -219,6 +219,7 @@ class Playlist(models.Model):
         csv_string = csvfile.csv_string
         return ''.join(csv_string)
     
+
 class Song(models.Model):
     """ A Song object with an artist and name (unique together)"""
     artist = models.CharField(db_index=True, blank=True, default='', max_length=128)
@@ -228,10 +229,12 @@ class Song(models.Model):
     class Meta:
         unique_together = ("artist", "name")
 
+
 def audio_upload_path(instance, filename):
     """Generate path to save audio based on playlist.name"""
     folder_name = instance.playlist.name.replace(' ', '')
     return '{0}/{1}'.format(folder_name, filename)
+
 
 class Section(models.Model):
     """A snippet/section of a song, belonging to a Playlist"""

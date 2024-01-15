@@ -1,6 +1,7 @@
 from django.test import TestCase
 
-from experiment.forms import ExperimentForm, ExportForm, TemplateForm, EXPERIMENT_RULES, QUESTIONS_CHOICES, SESSION_CHOICES, RESULT_CHOICES, EXPORT_OPTIONS, TEMPLATE_CHOICES
+from experiment.forms import ExperimentForm, ExportForm, TemplateForm, EXPERIMENT_RULES, SESSION_CHOICES, RESULT_CHOICES, EXPORT_OPTIONS, TEMPLATE_CHOICES
+
 
 class ExperimentFormTest(TestCase):
     def test_form_fields(self):
@@ -21,6 +22,7 @@ class ExperimentFormTest(TestCase):
         expected_choices.append(("", "---------"))
         self.assertEqual(form.fields['rules'].choices, sorted(expected_choices))
 
+
 class ExportFormTest(TestCase):
     def test_form_fields(self):
         form = ExportForm()
@@ -33,6 +35,7 @@ class ExportFormTest(TestCase):
         self.assertEqual(form.fields['export_session_fields'].choices, SESSION_CHOICES)
         self.assertEqual(form.fields['export_result_fields'].choices, RESULT_CHOICES)
         self.assertEqual(form.fields['export_options'].choices, EXPORT_OPTIONS)
+
 
 class TemplateFormTest(TestCase):
     def test_form_fields(self):

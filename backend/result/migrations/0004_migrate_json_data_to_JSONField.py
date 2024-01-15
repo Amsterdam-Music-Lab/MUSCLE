@@ -3,6 +3,7 @@
 from django.db import migrations
 import json
 
+
 def forwards_func(apps, schema_editor):
     Result = apps.get_model('result', 'Result')
     for result in Result.objects.all():
@@ -11,11 +12,13 @@ def forwards_func(apps, schema_editor):
                 result.json_temp[key] = value
                 result.save()
 
+
 def reverse_func(apps, schema_editor):
     Result = apps.get_model('result', 'Result')
     for result in Result.objects.all():        
         result.json_data = json.dumps(result.json_temp)
         result.save()
+
 
 class Migration(migrations.Migration):
 

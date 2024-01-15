@@ -4,6 +4,7 @@ import sys
 from os.path import join, dirname
 from dotenv import load_dotenv
 
+
 def main():
     env_path = join(dirname(__file__), '.env')
     load_dotenv(dotenv_path=env_path)

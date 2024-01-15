@@ -166,6 +166,7 @@ class Speech2Song(Base):
                 session, is_speech))
         return actions
 
+
 def next_single_representation(session, is_speech, group_id):
     """ combine a question after the first representation,
     and several repeated representations of the sound,
@@ -174,6 +175,7 @@ def next_single_representation(session, is_speech, group_id):
     section = session.section_from_unused_song(filter_by)
     actions = [sound(section), speech_or_sound_question(session, section, is_speech)]
     return actions
+
 
 def next_repeated_representation(session, is_speech, group_id=-1):
     if group_id >= 0:
@@ -223,6 +225,7 @@ def question_sound(session, section):
             _('sounds exactly like music')],
         result_id=prepare_result(key, session, section=section, scoring_rule='LIKERT'),
     )
+
 
 def sound(section, n_representation=None):
     if n_representation and n_representation > 1:

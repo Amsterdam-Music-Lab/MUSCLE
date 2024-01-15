@@ -179,12 +179,15 @@ class HBat(Base):
         return _("When people listen to music, they often perceive an underlying regular pulse, like the woodblock \
             in this task. This allows us to clap along with the music at a concert and dance together in synchrony.")
 
+
 def get_previous_condition(previous_result):
     """ check if previous section was slower / in 2 (1) or faster / in 3 (0) """
     return int(previous_result.section.tag)
 
+
 def get_previous_level(previous_result):
     return int(previous_result.section.group)
+
 
 def staircasing(session, trial_action_callback):
     trial_condition = get_trial_condition(2)

@@ -18,7 +18,7 @@ class ListeningConditions(Base):
         feedback_form = None
         if round_number == 1:
             key = 'quiet_room'
-            result_pk = prepare_result(session, expected_response=key)
+            result_pk = prepare_result(key, session, expected_response=key)
             feedback_form = Form([
                 ChoiceQuestion(
                     key=key,
@@ -35,7 +35,7 @@ class ListeningConditions(Base):
                 )])
         elif round_number == 2:
             key = 'internet_connection'
-            result_pk = prepare_result(session, expected_response=key)
+            result_pk = prepare_result(key, session, expected_response=key)
             feedback_form = Form([ChoiceQuestion(
                 key='internet_connection',
                 question=_(
@@ -50,7 +50,7 @@ class ListeningConditions(Base):
             )])
         elif round_number == 3:
             key = 'headphones'
-            result_pk = prepare_result(session, expected_response=key)
+            result_pk = prepare_result(key, session, expected_response=key)
             feedback_form = Form([
                 ChoiceQuestion(
                     key=key,
@@ -67,7 +67,7 @@ class ListeningConditions(Base):
             ])
         elif round_number == 4:
             key = 'notifications_off'
-            result_pk = prepare_result(session, expected_response=key)
+            result_pk = prepare_result(key, session, expected_response=key)
             feedback_form = Form([
                 ChoiceQuestion(
                     key=key,
@@ -96,7 +96,9 @@ class ListeningConditions(Base):
                     session, message, request_session)
             ]
             return actions
-        view = Trial(playback, feedback_form)
+
+        view = Trial(playback, feedback_form=feedback_form)
+
         return [view]
 
     def first_round(self, experiment):

@@ -10,6 +10,7 @@ import MultiPlayer from "./MultiPlayer";
 import ImagePlayer from "./ImagePlayer";
 import MatchingPairs from "./MatchingPairs";
 import Preload from "../Preload/Preload";
+import VisualMatchingPairs from "components/VisualMatchingPairs/VisualMatchingPairs";
 
 export const AUTOPLAY = "AUTOPLAY";
 export const BUTTON = "BUTTON";
@@ -17,6 +18,7 @@ export const MULTIPLAYER = "MULTIPLAYER";
 export const IMAGE = "IMAGE";
 export const MATCHINGPAIRS = "MATCHINGPAIRS";
 export const PRELOAD = "PRELOAD";
+export const VISUALMATCHINGPAIRS = "VISUALMATCHINGPAIRS";
 
 const Playback = ({
     playbackArgs,
@@ -207,6 +209,12 @@ const Playback = ({
                     <MatchingPairs
                         {...attrs}
                         stopAudioAfter={playbackArgs.stop_audio_after}
+                    />
+                );
+            case VISUALMATCHINGPAIRS:
+                return (
+                    <VisualMatchingPairs
+                        {...attrs}
                     />
                 );
             default:

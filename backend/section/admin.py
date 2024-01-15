@@ -13,6 +13,7 @@ import audioread
 from .models import Section, Playlist, Song
 from .forms import AddSections
 
+
 class SectionAdmin(admin.ModelAdmin):
     list_per_page = 50
     list_display = ('artist_name', 'song_name', 'start_time',
@@ -29,6 +30,7 @@ admin.site.register(Section, SectionAdmin)
 
 # @admin.register(Playlist)
 
+
 class SongAdmin(admin.ModelAdmin):
     list_per_page = 50
     list_display = ('artist', 'name')    
@@ -37,7 +39,9 @@ class SongAdmin(admin.ModelAdmin):
     # Prevent large inner join
     list_select_related = ()
 
+
 admin.site.register(Song, SongAdmin)
+
 
 class PlaylistAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
     list_display = ('name', 'section_count', 'experiment_count')

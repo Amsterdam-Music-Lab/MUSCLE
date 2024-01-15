@@ -2,6 +2,7 @@ from django.test import TestCase
 
 from experiment.actions.utils import randomize_playhead
 
+
 class TestActions(TestCase):
 
     def test_randomize_playhead(self):

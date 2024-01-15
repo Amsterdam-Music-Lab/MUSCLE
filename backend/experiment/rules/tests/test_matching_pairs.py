@@ -5,6 +5,7 @@ from participant.models import Participant
 from section.models import Playlist
 from session.models import Session
 
+
 class MatchingPairsTest(TestCase):
 
     @classmethod

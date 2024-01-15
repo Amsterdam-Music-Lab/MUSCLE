@@ -10,6 +10,7 @@ from .duration_discrimination import DurationDiscrimination
 
 logger = logging.getLogger(__name__)
 
+
 class Anisochrony(DurationDiscrimination):
     ID = 'ANISOCHRONY'
     start_diff = 180000

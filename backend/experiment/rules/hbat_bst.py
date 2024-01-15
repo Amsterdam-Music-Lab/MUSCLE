@@ -10,6 +10,7 @@ from result.utils import prepare_result
 
 from .h_bat import HBat
 
+
 class BST(HBat):
     """ Rules for the BST experiment, which follow closely
     the HBAT rules. """
