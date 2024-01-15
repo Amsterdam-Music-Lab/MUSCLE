@@ -3,7 +3,8 @@ from os.path import join
 from django.template.loader import render_to_string
 
 from .toontjehoger_1_mozart import toontjehoger_ranks
-from experiment.actions import Explainer, Step, Score, Final, StartSession, Playback, Playlist, Info, Trial
+from experiment.actions import Explainer, Step, Score, Final, StartSession, Playlist, Info, Trial
+from experiment.actions.playback import PlayButton
 from experiment.actions.form import AutoCompleteQuestion, RadiosQuestion, Form
 from .base import Base
 
@@ -95,9 +96,11 @@ class ToontjeHoger3Plink(Base):
         if len(last_results) == 1:
             # plink result
             if last_results[0].expected_response == last_results[0].given_response:
-                feedback = "Goedzo! Je hoorde inderdaad {} van {}.".format(non_breaking_spaces(section.song.name), non_breaking_spaces(section.song.artist))
+                feedback = "Goedzo! Je hoorde inderdaad {} van {}.".format(
+                    non_breaking_spaces(section.song.name), non_breaking_spaces(section.song.artist))
             else:
-                feedback = "Helaas! Je hoorde {} van {}.".format(non_breaking_spaces(section.song.name), non_breaking_spaces(section.song.artist))
+                feedback = "Helaas! Je hoorde {} van {}.".format(non_breaking_spaces(
+                    section.song.name), non_breaking_spaces(section.song.artist))
         else:
             if score == 2 * self.SCORE_EXTRA_WRONG:
                 feedback_prefix = "Helaas!"
@@ -125,7 +128,7 @@ class ToontjeHoger3Plink(Base):
 
         config = {'show_total_score': True}
         round_number = session.get_relevant_results(['plink']).count() - 1
-        score_title =  "Ronde %(number)d / %(total)d" %\
+        score_title = "Ronde %(number)d / %(total)d" %\
             {'number': round_number+1, 'total': session.experiment.rounds}
         return Score(session, config=config, feedback=feedback, score=score, title=score_title)
 
@@ -159,8 +162,7 @@ class ToontjeHoger3Plink(Base):
             )
         )
         next_round.append(Trial(
-            playback=Playback(
-                player_type='BUTTON',
+            playback=PlayButton(
                 sections=[section]
             ),
             feedback_form=Form(
@@ -247,7 +249,8 @@ class ToontjeHoger3Plink(Base):
         if result.question_key == 'plink':
             return self.SCORE_MAIN_CORRECT if result.expected_response == result.given_response else self.SCORE_MAIN_WRONG
         elif result.question_key == 'era':
-            result.session.save_json_data({'extra_questions_intro_shown': True})
+            result.session.save_json_data(
+                {'extra_questions_intro_shown': True})
             result.session.save()
             return self.SCORE_EXTRA_1_CORRECT if result.given_response == result.expected_response else self.SCORE_EXTRA_WRONG
         else:

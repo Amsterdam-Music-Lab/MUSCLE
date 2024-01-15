@@ -1,7 +1,6 @@
 from django.test import TestCase
 
 from experiment.models import Experiment
-from experiment.rules import Eurovision2020, Huang2022, ThatsMySong
 from experiment.questions.musicgens import MUSICGENS_17_W_VARIANTS
 from participant.models import Participant
 from result.models import Result

@@ -1,17 +1,16 @@
-import React, { useRef, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 
 import Circle from "../Circle/Circle";
 import ListenCircle from "../ListenCircle/ListenCircle";
 
-const AutoPlay = ({instruction, playConfig, playSection, time, startedPlaying, finishedPlaying, responseTime, className=''}) => {
-    // player state
+const AutoPlay = ({instruction, showAnimation, playSection, startedPlaying, finishedPlaying, responseTime, className=''}) => {
     
-    const running = useRef(playConfig.auto_play);
+    const [running, setRunning] = useState(true);
 
     // Handle view logic
     useEffect(() => {        
         playSection(0)
-    }, [playConfig, startedPlaying]);
+    }, [playSection, startedPlaying]);
 
     // Render component
     return (
@@ -21,14 +20,15 @@ const AutoPlay = ({instruction, playConfig, playSection, time, startedPlaying, f
                     running={running}
                     duration={responseTime}
                     color="white"
-                    animateCircle={playConfig.show_animation}
+                    animateCircle={showAnimation}
                     onFinish={() => {
                         // Stop audio
+                        setRunning(false);
                         finishedPlaying();
                     }}
                 />
                 <div className="circle-content">
-                    {playConfig.show_animation
+                    {showAnimation
                         ? <ListenCircle
                             duration={responseTime}
                             histogramRunning={running}

@@ -13,7 +13,7 @@ from .tele_tunes import HookedTeleTunes
 from .huang_2022 import Huang2022
 from .kuiper_2020 import Kuiper2020
 from .listening_conditions import ListeningConditions
-from .matching_pairs import MatchingPairs
+from .matching_pairs import MatchingPairsGame
 from .matching_pairs_icmpc import MatchingPairsICMPC
 from .musical_preferences import MusicalPreferences
 from .rhythm_discrimination import RhythmDiscrimination
@@ -29,7 +29,7 @@ from .toontjehoger_3_plink import ToontjeHoger3Plink
 from .toontjehoger_4_absolute import ToontjeHoger4Absolute
 from .toontjehoger_5_tempo import ToontjeHoger5Tempo
 from .toontjehoger_6_relative import ToontjeHoger6Relative
-from .visual_matching_pairs import VisualMatchingPairs
+from .visual_matching_pairs import VisualMatchingPairsGame
 
 # Rules available to this application
 # If you create new Rules, add them to the list
@@ -46,7 +46,7 @@ EXPERIMENT_RULES = {
     BST.ID: BST,
     Hooked.ID: Hooked,
     HookedTeleTunes.ID: HookedTeleTunes,
-    MatchingPairs.ID: MatchingPairs,
+    MatchingPairsGame.ID: MatchingPairsGame,
     MatchingPairsICMPC.ID: MatchingPairsICMPC,
     MusicalPreferences.ID: MusicalPreferences,
     RhythmDiscrimination.ID: RhythmDiscrimination,
@@ -67,5 +67,5 @@ EXPERIMENT_RULES = {
     Eurovision2020.ID: Eurovision2020,
     Kuiper2020.ID: Kuiper2020,
     ThatsMySong.ID: ThatsMySong,
-    VisualMatchingPairs.ID: VisualMatchingPairs
+    VisualMatchingPairsGame.ID: VisualMatchingPairsGame
 }

@@ -1,7 +1,7 @@
 from django.test import TestCase
 
 from experiment.models import Experiment
-from experiment.rules import VisualMatchingPairs
+from experiment.rules import VisualMatchingPairsGame
 from participant.models import Participant
 from section.models import Playlist
 from session.models import Session
@@ -35,7 +35,7 @@ class VisualMatchingPairsTest(TestCase):
             participant=self.participant,
             playlist=self.playlist
         )
-        self.rules = VisualMatchingPairs()
+        self.rules = VisualMatchingPairsGame()
 
     def test_visual_matching_pairs_trial(self):
         trial = self.rules.get_visual_matching_pairs_trial(self.session)

@@ -4,7 +4,7 @@ from django.utils.translation import gettext_lazy as _
 from section.models import Section
 from experiment.actions import Trial, Explainer, Step
 from experiment.actions.form import ChoiceQuestion, Form
-from experiment.actions.playback import Playback
+from experiment.actions.playback import Autoplay
 from experiment.actions.utils import render_feedback_trivia
 from .duration_discrimination import DurationDiscrimination
 
@@ -65,7 +65,7 @@ class Anisochrony(DurationDiscrimination):
             submits=True
         )
         
-        playback = Playback([section])
+        playback = Autoplay([section])
         form = Form([question])
         config = {
             'listen_first': True,

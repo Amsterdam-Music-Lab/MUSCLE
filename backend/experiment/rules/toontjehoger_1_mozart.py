@@ -3,7 +3,7 @@ from django.template.loader import render_to_string
 from os.path import join
 from experiment.actions import Trial, Explainer, Step, Score, Final, StartSession, Playlist, Info, HTML
 from experiment.actions.form import ButtonArrayQuestion, Form
-from experiment.actions.playback import Playback
+from experiment.actions.playback import Autoplay
 from .base import Base
 from experiment.utils import non_breaking_spaces
 
@@ -141,11 +141,7 @@ class ToontjeHoger1Mozart(Base):
         # --------------------
 
         # Listen
-        play_config = {'show_animation': True}
-        playback = Playback([section],
-                            player_type=Playback.TYPE_AUTOPLAY,
-                            play_config=play_config
-                            )
+        playback = Autoplay([section], show_animation=True)
 
         listen_config = {
             'auto_advance': True,

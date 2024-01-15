@@ -7,8 +7,8 @@ const MatchingPairs = ({
     playSection,
     sections,
     playerIndex,
-    finishedPlaying,
     stopAudioAfter,
+    finishedPlaying,
     submitResult,
 }) => {
     const xPosition = useRef(-1);

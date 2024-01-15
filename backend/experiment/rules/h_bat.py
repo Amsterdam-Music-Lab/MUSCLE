@@ -7,7 +7,7 @@ from .base import Base
 from section.models import Section
 from experiment.actions import Trial, Consent, Explainer, Playlist, Step, StartSession
 from experiment.actions.form import ChoiceQuestion, Form
-from experiment.actions.playback import Playback
+from experiment.actions.playback import Autoplay
 
 from experiment.rules.util.practice import get_practice_views, practice_explainer, get_trial_condition, get_trial_condition_block
 from experiment.actions.utils import final_action_with_optional_button, render_feedback_trivia
@@ -105,7 +105,7 @@ class HBat(Base):
             view='BUTTON_ARRAY',
             submits=True
         )
-        playback = Playback([section])
+        playback = Autoplay([section])
         form = Form([question])
         view = Trial(
             playback=playback,
