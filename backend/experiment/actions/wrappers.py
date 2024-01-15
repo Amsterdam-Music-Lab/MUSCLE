@@ -45,8 +45,9 @@ def two_alternative_forced(session, section, choices, expected_response=None, st
     return trial
 
 
-def song_sync(session, section, title, play_method='BUFFER',
-              recognition_time=15, sync_time=15, min_jitter=10, max_jitter=15):
+def song_sync(session, section, title,
+              recognition_time=15, sync_time=15,
+              min_jitter=10, max_jitter=15):
     trial_config = {
         'response_time': recognition_time,
         'auto_advance': True
@@ -96,9 +97,8 @@ def song_sync(session, section, title, play_method='BUFFER',
                           instruction=_(
                               'Did the track come back in the right place?'),
                           show_animation=True,
-                          play_from=silence_time +
-                          (random.randint(100, 150) /
-                           10 if not continuation_correctness else 0),
+                          play_from=randomize_playhead(
+                              min_jitter, max_jitter, silence_time, continuation_correctness),
                           resume_play=True),
         config=trial_config,
         title=title

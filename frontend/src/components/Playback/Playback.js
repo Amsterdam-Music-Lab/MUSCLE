@@ -109,7 +109,7 @@ const Playback = ({
             }
                 
             const playheadShift = getPlayheadShift();
-            let latency = playAudio(sections[index], playMethod, playheadShift);
+            let latency = playAudio(sections[index], playMethod, playheadShift + playbackArgs.play_from);
             // Cancel active events
             cancelAudioListeners();
             // listen for active audio events

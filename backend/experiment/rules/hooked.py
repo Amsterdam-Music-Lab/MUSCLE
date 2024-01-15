@@ -283,7 +283,7 @@ class Hooked(Base):
         if not section:
             logger.warning("Warning: no next_song_sync section found")
             section = session.section_from_any_song()
-        return song_sync(session, section, title=self.get_trial_title(session, round_number), play_method=self.play_method,
+        return song_sync(session, section, title=self.get_trial_title(session, round_number),
                          recognition_time=self.recognition_time, sync_time=self.sync_time,
                          min_jitter=self.min_jitter, max_jitter=self.max_jitter)
 
