@@ -5,6 +5,7 @@ import { withRouter } from "react-router-dom";
 import classNames from "classnames";
 
 import { useParticipantStore, useSessionStore } from "../../util/stores";
+import { createSession } from "../../API.js";
 import Consent from "../Consent/Consent";
 import DefaultPage from "../Page/DefaultPage";
 import ToontjeHoger from "../ToontjeHoger/ToontjeHoger";
@@ -20,12 +21,6 @@ import Info from "../Info/Info";
 import FloatingActionButton from "components/FloatingActionButton/FloatingActionButton";
 import UserFeedback from "components/UserFeedback/UserFeedback";
 
-// provides participant and session context to child components
-const experimentDataNull = {
-    participant: null,
-    session: null
-}
-export const experimentContext = createContext(experimentDataNull);
 
 // Experiment handles the main experiment flow:
 // - Loads the experiment and participant
@@ -36,14 +31,13 @@ export const experimentContext = createContext(experimentDataNull);
 const Experiment = ({ match }) => {
     const startState = { view: "LOADING" };
     const participant = useParticipantStore((state) => state.participant);
-    const session = useRef(null);
     const setSessionStore = useSessionStore((state) => state.setSession);
 
     // Current experiment state
     const [state, setState] = useState(startState);
-    const [experimentData, setExperimentData] = useState(experimentDataNull)
     const [playlist, setPlaylist] = useState(null);
     const [actions, setActions] = useState([]);
+    const [session, setSession] = useState(null);
 
     // API hooks
     const [experiment, loadingExperiment] = useExperiment(match.params.slug);
@@ -73,17 +67,30 @@ const Experiment = ({ match }) => {
         setActions(newActions);
     }, [loadState, setActions]);
 
+    useEffect(() => {
+        if (!experiment || !participant || !playlist) {
+            return;
+        }
+        try { 
+            createSession({
+                experiment,
+                participant,
+                playlist,
+            }).then(data => {
+                setSession(data.session);
+                setSessionStore(data.session);
+            });
+        } catch (err) {
+            setError(`Could not create a session: ${err}`)
+        }
+    }, [experiment, participant, playlist, setError, setSessionStore])
+
     // Start first_round when experiment and partipant have been loaded
     useEffect(() => {
-        if (session.current) {
-            setSessionStore(session.current);
-        }
-
         // Check if done loading
         if (!loadingExperiment && participant) {
             // Loading succeeded
             if (experiment) {
-                setExperimentData({participant: participant, session: session.current})
                 updateActions(experiment.next_round);
             } else {
                 // Loading error
@@ -92,13 +99,10 @@ const Experiment = ({ match }) => {
         }
     }, [
         experiment,
-        session,
         loadingExperiment,
         participant,
         setError,
-        setSessionStore,
-        updateActions,
-        loadState,
+        updateActions
     ]);
 
     // trigger next action from next_round array, or call session/next_round
@@ -108,7 +112,7 @@ const Experiment = ({ match }) => {
         } else {
             // Try to get next_round data from server
             const round = await getNextRound({
-                session: session.current
+                session: session
             });
             if (round) {
                 updateActions(round.next_round);
