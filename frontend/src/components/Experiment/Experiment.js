@@ -2,8 +2,9 @@ import React, { useState, useEffect, useCallback, useRef } from "react";
 import { useExperiment, getNextRound } from "../../API";
 import { TransitionGroup, CSSTransition } from "react-transition-group";
 import { withRouter } from "react-router-dom";
-import { useParticipantStore } from "../App/App";
+import classNames from "classnames";
 
+import { useParticipantStore, useSessionStore } from "../../util/stores";
 import Consent from "../Consent/Consent";
 import DefaultPage from "../Page/DefaultPage";
 import ToontjeHoger from "../ToontjeHoger/ToontjeHoger";
@@ -16,7 +17,6 @@ import StartSession from "../StartSession/StartSession";
 import Trial from "../Trial/Trial";
 import useResultHandler from "../../hooks/useResultHandler";
 import Info from "../Info/Info";
-import classNames from "classnames";
 import FloatingActionButton from "components/FloatingActionButton/FloatingActionButton";
 import UserFeedback from "components/UserFeedback/UserFeedback";
 
@@ -29,12 +29,12 @@ import UserFeedback from "components/UserFeedback/UserFeedback";
 const Experiment = ({ match }) => {
     const startState = { view: "LOADING" };
     const participant = useParticipantStore((state) => state.participant);
+    const session = useSessionStore((state) => state.session);
 
     // Current experiment state
     const [state, setState] = useState(startState);
     const [playlist, setPlaylist] = useState(null);
     const [actions, setActions] = useState([]);
-    const session = useRef(null);
 
     // API hooks
     const [experiment, loadingExperiment] = useExperiment(match.params.slug);
@@ -93,7 +93,7 @@ const Experiment = ({ match }) => {
         } else {
             // Try to get next_round data from server
             const round = await getNextRound({
-                session: session.current,
+                session
             });
             if (round) {
                 updateActions(round.next_round);
