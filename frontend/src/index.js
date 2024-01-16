@@ -1,5 +1,5 @@
 import "./index.css";
-import React from "react";
+import React, { StrictMode } from "react";
 import { createRoot } from 'react-dom/client';
 import App from "./components/App/App";
 import { initSentry } from "./config/sentry";
@@ -17,7 +17,13 @@ initWebAudioListener();
 const container = document.getElementById("root");
 const root = createRoot(container);
 root.render(
-    <App />
+    process.env.REACT_APP_STRICT === true ? (
+        <StrictMode>
+            <App />
+        </StrictMode>
+    ) : (
+        <App />
+    )
 );
 
 // import * as serviceWorker from "./serviceWorker";

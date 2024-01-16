@@ -9,6 +9,7 @@ from session.models import Session
 
 n_results = 10
 
+
 class SessionUtilsTest(TestCase):
     @classmethod
     def setUpTestData(cls):

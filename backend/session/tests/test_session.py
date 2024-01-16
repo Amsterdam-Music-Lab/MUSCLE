@@ -9,6 +9,7 @@ from section.models import Playlist, Section, Song
 from result.models import Result
 from session.models import Session
 
+
 class SessionTest(TestCase):
 
     @classmethod

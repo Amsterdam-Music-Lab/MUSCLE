@@ -4,6 +4,7 @@ from experiment.actions import Explainer, Step
 
 from . import RhythmExperimentSeries
 
+
 class RhythmExperimentSeriesUnpaid(RhythmExperimentSeries):
     ID = 'RHYTHM_SERIES_UNPAID'
     consent_form = 'consent/consent_rhythm_unpaid.html'

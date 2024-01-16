@@ -3,7 +3,7 @@ from django.template.loader import render_to_string
 from os.path import join
 from experiment.actions import Trial, Explainer, Step, Score, Final, StartSession, Playlist, Info, HTML
 from experiment.actions.form import ButtonArrayQuestion, Form
-from experiment.actions.playback import Playback
+from experiment.actions.playback import Autoplay
 from .base import Base
 from experiment.utils import non_breaking_spaces
 
@@ -15,6 +15,7 @@ QUESTION_URL1 = "/images/experiments/toontjehoger/mozart-effect1.webp"
 QUESTION_URL2 = "/images/experiments/toontjehoger/mozart-effect2.webp"
 ANSWER_URL1 = "/images/experiments/toontjehoger/mozart-effect1-answer.webp"
 ANSWER_URL2 = "/images/experiments/toontjehoger/mozart-effect2-answer.webp"
+
 
 def toontjehoger_ranks(session):
     score = session.final_score
@@ -33,7 +34,7 @@ class ToontjeHoger1Mozart(Base):
     TITLE = ""
     SCORE_CORRECT = 50
     SCORE_WRONG = 0
-    
+
     def first_round(self, experiment):
         """Create data for the first experiment rounds."""
 
@@ -91,7 +92,6 @@ class ToontjeHoger1Mozart(Base):
         # Final
         return self.get_final_round(session)
 
-    
     def get_answer_explainer(self, session, round):
         last_result = session.last_result()
 
@@ -116,7 +116,7 @@ class ToontjeHoger1Mozart(Base):
             button_label="Volgende",
         )
         return [info]
- 
+
     def get_score(self, session):
         # Feedback message
         last_result = session.last_result()
@@ -128,24 +128,20 @@ class ToontjeHoger1Mozart(Base):
         config = {'show_total_score': True}
         score = Score(session, config=config, feedback=feedback)
         return [score]
- 
+
     def get_image_trial(self, session, section_group, image_url, question, expected_response):
         # Config
         # -----------------
         section = session.section_from_any_song(
             filter_by={'group': section_group})
-        if section == None:
+        if section is None:
             raise Exception("Error: could not find section")
 
         # Step 1
         # --------------------
 
         # Listen
-        play_config = {'show_animation': True}
-        playback = Playback([section],
-                            player_type=Playback.TYPE_AUTOPLAY,
-                            play_config=play_config
-                            )
+        playback = Autoplay([section], show_animation=True)
 
         listen_config = {
             'auto_advance': True,
@@ -204,7 +200,7 @@ class ToontjeHoger1Mozart(Base):
         )
 
         return [explainer]
- 
+
     def calculate_score(self, result, data):
         score = self.SCORE_CORRECT if result.expected_response == result.given_response else self.SCORE_WRONG
         return score

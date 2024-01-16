@@ -8,6 +8,7 @@ from session.models import Session
 from result.models import Result
 from result.utils import handle_results
 
+
 @require_POST
 def score(request):
     """Create a new result for the given session, and return followup action"""
@@ -31,6 +32,7 @@ def score(request):
         return HttpResponseServerError("Invalid data")
 
     return JsonResponse({'success': True})
+
 
 @require_POST
 def intermediate_score(request):

@@ -1,7 +1,9 @@
+from session.models import Session
 from .models import Result
 
 from experiment.questions.profile_scoring_rules import PROFILE_SCORING_RULES
 from result.score import SCORING_RULES
+
 
 def get_result(session, data):
     result_id = data.get('result_id')
@@ -15,8 +17,9 @@ def get_result(session, data):
             raise
     return result
 
+
 def handle_results(data, session):
-    """ 
+    """
     if the given_result is an array of results, retrieve and save results for all of them
     else, handle results at top level
     """
@@ -34,12 +37,13 @@ def handle_results(data, session):
         result = score_result(form_element, session)
     return result
 
+
 def prepare_profile_result(question_key, participant, **kwargs):
     ''' Create a Result object, and provide its id to be serialized
     - question_key: the key of the question in the questionnaire dictionaries
     - participant: the participant on which the Result is going to be registered
     possible kwargs:
-        - expected_response: optionally, provide the correct answer, used for scoring  
+        - expected_response: optionally, provide the correct answer, used for scoring
         - comment: optionally, provide a comment to be saved in the database
         - scoring_rule: optionally, provide a scoring rule
     '''
@@ -52,7 +56,8 @@ def prepare_profile_result(question_key, participant, **kwargs):
     )
     return result
 
-def prepare_result(question_key, session, **kwargs):
+
+def prepare_result(question_key: str, session: Session, **kwargs) -> int:
     ''' Create a Result object, and provide its id to be serialized
     - question_key: the key of the question in the questionnaire dictionaries
     - session: the session on which the Result is going to be registered
@@ -70,9 +75,10 @@ def prepare_result(question_key, session, **kwargs):
     )
     return result.id
 
+
 def score_result(data, session):
     """
-    Create a result for given session, based on the result data 
+    Create a result for given session, based on the result data
     (form element or top level data)
     parameters:
     session: a Session object
@@ -86,7 +92,7 @@ def score_result(data, session):
     result.save_json_data(data)
     result.given_response = data.get('value')
     # Calculate score: by default, apply a scoring rule
-    # Can be overridden by defining calculate_score in the rules file    
+    # Can be overridden by defining calculate_score in the rules file
     if result.session:
         score = session.experiment_rules().calculate_score(result, data)
         # refresh session data in case anything was changed within calculate_score function
@@ -99,6 +105,7 @@ def score_result(data, session):
     result.score = score
     result.save()
     return result
+
 
 def apply_scoring_rule(result, data):
     scoring_rule = SCORING_RULES.get(result.scoring_rule)

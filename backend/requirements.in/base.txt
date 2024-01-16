@@ -20,6 +20,9 @@ IPToCC
 # PostgrSQL database client
 psycopg2
 
+# to convert labels to Roman numerals
+roman
+
 # Sentry SDK, for monitoring performance & errors. See also sentry.io.
 sentry-sdk
 

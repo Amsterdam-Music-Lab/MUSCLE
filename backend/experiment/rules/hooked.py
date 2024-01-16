@@ -8,7 +8,7 @@ from django.template.loader import render_to_string
 from .base import Base
 from experiment.actions import Consent, Explainer, Final, Playlist, Score, StartSession, Step, Trial
 from experiment.actions.form import BooleanQuestion, Form
-from experiment.actions.playback import Playback
+from experiment.actions.playback import Autoplay
 from experiment.questions.demographics import DEMOGRAPHICS
 from experiment.questions.goldsmiths import MSI_OTHER
 from experiment.questions.utils import question_by_key
@@ -283,7 +283,7 @@ class Hooked(Base):
         if not section:
             logger.warning("Warning: no next_song_sync section found")
             section = session.section_from_any_song()
-        return song_sync(session, section, title=self.get_trial_title(session, round_number), play_method=self.play_method,
+        return song_sync(session, section, title=self.get_trial_title(session, round_number),
                          recognition_time=self.recognition_time, sync_time=self.sync_time,
                          min_jitter=self.min_jitter, max_jitter=self.max_jitter)
 
@@ -307,11 +307,12 @@ class Hooked(Base):
         if not section:
             logger.warning("Warning: no heard_before section found")
             section = session.section_from_any_song()
-        playback = Playback(
+        playback = Autoplay(
             [section],
-            play_config={'ready_time': 3, 'show_animation': True,
-                         'play_method': self.play_method},
-            preload_message=_('Get ready!'))
+            show_animation=True,
+            ready_time=3,
+            preload_message=_('Get ready!')
+        )
         expected_response = this_section_info.get('novelty')
         # create Result object and save expected result to database
         key = 'heard_before'

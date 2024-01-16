@@ -12,7 +12,8 @@ describe('MatchingPairs Component', () => {
         playSection: jest.fn(),
         playerIndex: 0,
         finishedPlaying: jest.fn(),
-        stopAudioAfter: jest.fn(),
+        onFinish: jest.fn(),
+        stopAudioAfter: 4.0,
         submitResult: jest.fn(),
     };
 

@@ -1,5 +1,6 @@
 from experiment.actions.form import LikertQuestion
 
+
 def stomp_question(key, genre):
     """Define a standard STOMP question for a genre"""
     return LikertQuestion(
@@ -16,6 +17,7 @@ def stomp_question(key, genre):
         ],
         explainer = "Indicate your musical preferences"
     )
+
 
 STOMP20 = [
     stomp_question('stomp_alternative', 'alternative'),

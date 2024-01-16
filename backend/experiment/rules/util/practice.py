@@ -85,6 +85,7 @@ def practice_explainer():
         button_label=_('Begin experiment')
     )
 
+
 def practice_again_explainer():
     return Explainer(
         instruction=_(
@@ -96,6 +97,7 @@ def practice_again_explainer():
         ],
         button_label=_('Continue')
     )
+
 
 def start_experiment_explainer():
     return Explainer(
@@ -111,6 +113,7 @@ def start_experiment_explainer():
         step_numbers=True,
         button_label=_('Start')
     )
+
 
 def get_trial_condition_block(session, n_trials_per_block):
     """ make a list of n_trials_per_blocks conditions, of which one is catch (=1) 

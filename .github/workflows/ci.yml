@@ -54,7 +54,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Lint Backend
-        continue-on-error: true
+        continue-on-error: false
         run: sudo docker-compose --env-file .env-github-actions run server bash -c "flake8"
 
   frontend-test:
@@ -69,7 +69,7 @@ jobs:
     name: Generate Frontend Coverage Badge
     needs: frontend-test
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop' || 1 == 1 # TODO: Remove last condition
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop'
     steps:
       - uses: actions/checkout@v3
       - name: Generate Frontend Coverage Report (XML) and Badge

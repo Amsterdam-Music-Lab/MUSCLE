@@ -7,6 +7,7 @@ from session.models import Session
 from .demographics import DEMOGRAPHICS
 from .utils import unanswered_questions, total_unanswered_questions
 
+
 class UtilsTestCase(TestCase):
 
     @classmethod
