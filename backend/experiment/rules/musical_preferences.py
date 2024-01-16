@@ -174,7 +174,8 @@ class MusicalPreferences(Base):
             known_songs = session.result_set.filter(
                 question_key='know_song', score=2).count()
             all_results = Result.objects.filter(
-                question_key='like_song'
+                question_key='like_song',
+                section_id__isnull=False
             )
             top_participant = self.get_preferred_songs(like_results, 3)
             top_all = self.get_preferred_songs(all_results, 3)
