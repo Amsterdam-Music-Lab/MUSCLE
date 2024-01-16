@@ -52,7 +52,7 @@ class MatchingPairsGame(Base):
             consent,
             playlist,
             explainer,
-            start_session
+            # start_session
         ]
     
     def next_round(self, session):
@@ -129,5 +129,8 @@ class MatchingPairsGame(Base):
         return score
     
     def calculate_intermediate_score(self, session, result):
+        print(result)
         result_obj = prepare_result('move', session, json_data=result)
+        return 0
+
         

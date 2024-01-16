@@ -38,7 +38,7 @@ def score(request):
 def intermediate_score(request):
     session = verify_session(request)
     result = request.POST.get("json_data")
-    score = session.experiment_rules().intermediate_score(session, result)
+    score = session.experiment_rules().calculate_intermediate_score(session, result)
     return JsonResponse({'score': score})
 
 @require_POST
@@ -92,3 +92,5 @@ def verify_session(request):
     # Prevent creating results when session is finished
     if session.is_finished():
         return HttpResponseServerError("Session has already finished")
+
+    return session
