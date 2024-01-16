@@ -29,7 +29,8 @@ import UserFeedback from "components/UserFeedback/UserFeedback";
 const Experiment = ({ match }) => {
     const startState = { view: "LOADING" };
     const participant = useParticipantStore((state) => state.participant);
-    const session = useSessionStore((state) => state.session);
+    const session = useRef(null);
+    const setSessionStore = useSessionStore((state) => state.setSession);
 
     // Current experiment state
     const [state, setState] = useState(startState);
@@ -66,6 +67,9 @@ const Experiment = ({ match }) => {
 
     // Start first_round when experiment and partipant have been loaded
     useEffect(() => {
+        if (session.current) {
+            setSessionStore(session.current);
+        }
 
         // Check if done loading
         if (!loadingExperiment && participant) {
@@ -79,9 +83,11 @@ const Experiment = ({ match }) => {
         }
     }, [
         experiment,
+        session,
         loadingExperiment,
         participant,
         setError,
+        setSessionStore,
         updateActions,
         loadState,
     ]);
@@ -93,7 +99,7 @@ const Experiment = ({ match }) => {
         } else {
             // Try to get next_round data from server
             const round = await getNextRound({
-                session
+                session: session.current
             });
             if (round) {
                 updateActions(round.next_round);

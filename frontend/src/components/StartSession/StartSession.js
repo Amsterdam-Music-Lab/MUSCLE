@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 
-import { useParticipantStore, useSessionStore } from "../../util/stores";
+import { useParticipantStore } from "../../util/stores";
 import { createSession } from "../../API.js";
 import Loading from "../Loading/Loading";
 
@@ -10,14 +10,13 @@ import Loading from "../Loading/Loading";
 // - This view is requird in every experiment as it created the session that is used for storing results
 const StartSession = ({
     experiment,
-    // participant,
     playlist,
     setError,
     onNext,
+    session,
 }) => {
-    const setSession = useSessionStore((state) => state.setSession);
     const participant = useParticipantStore((state) => state.participant);
-    
+
     // Create a new session, and set state to next_round
     useEffect(() => {
         const init = async () => {
@@ -28,14 +27,14 @@ const StartSession = ({
                     playlist,
                 });
                 // Store session
-                setSession(data.session);
+                session.current = data.session;
                 onNext();
             } catch (err) {
                 setError(`Could not create a session: ${err}`)
             }
         };
         init();
-    }, [experiment, participant, playlist, setSession, setError, onNext]);
+    }, [experiment, participant, playlist, session, setError, onNext]);
 
     return <Loading loadingText={experiment.loading_text} />;
 };
