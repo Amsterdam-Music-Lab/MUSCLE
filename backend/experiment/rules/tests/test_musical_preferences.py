@@ -57,13 +57,19 @@ class MusicalPreferencesTest(TestCase):
                     section=section,
                     session=self.session
                 )
-        # Create 10 results without a section
+
+        other_session = Session.objects.create(
+            experiment=self.experiment,
+            participant=self.participant,
+            playlist=self.playlist
+        )
+
         for i in range(10):
             Result.objects.create(
                 question_key='like_song',
                 score=5-i,
                 section=None,
-                session=self.session
+                session=other_session
             )
         mp = MusicalPreferences()
 
