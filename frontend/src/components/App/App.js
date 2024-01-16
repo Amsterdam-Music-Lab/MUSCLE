@@ -1,4 +1,4 @@
-import {useEffect, React} from "react";
+import {useEffect, useState, React} from "react";
 import {
     BrowserRouter as Router,
     Switch,
@@ -7,7 +7,7 @@ import {
 } from "react-router-dom";
 import { create } from "zustand";
 import { EXPERIMENT_SLUG, URLS } from "../../config";
-import { getParticipant } from "API";
+import { API_BASE_URL, URLS as API_URLS } from "../../API";
 import Experiment from "../Experiment/Experiment";
 import Profile from "../Profile/Profile";
 import Reload from "../Reload/Reload";
@@ -20,18 +20,28 @@ export const useParticipantStore = create((set) => ({
 
 // App is the root component of our application
 const App = () => {
+    const [error, setError] = useState(null);
     const setParticipant = useParticipantStore((state) => state.setParticipant);
     const queryParams = window.location.search;
     
     useEffect(() => {
         if (queryParams && !(new URLSearchParams(queryParams).has("participant_id"))) {
-            console.error("Unknown URL parameter, use ?participant_id=")
+            setError("Unknown URL parameter, use ?participant_id=");
             return;
         }
-        getParticipant(queryParams).then(data => {
-            setParticipant(data);
-        })
-    }, [])
+        try {
+            fetch(API_BASE_URL + API_URLS.participant.current + queryParams).then(response => {
+                setParticipant(response.data);
+            });
+        } catch (err) {
+            console.error(err);
+            setError(err);
+        }
+    }, [queryParams, setParticipant])
+
+    if (error) {
+        return <div>Error: Cannot initiate participant: {error}</div>;
+    }
 
     return (
         <Router className="aha__app">
