@@ -5,18 +5,16 @@ import {
     Route,
     Redirect
 } from "react-router-dom";
-import { create } from "zustand";
-import { EXPERIMENT_SLUG, URLS } from "../../config";
-import { API_BASE_URL, URLS as API_URLS } from "../../API";
+import axios from "axios";
+
+import { API_BASE_URL, EXPERIMENT_SLUG, URLS } from "../../config";
+import { URLS as API_URLS } from "../../API";
+import { useParticipantStore } from "../../util/stores";
 import Experiment from "../Experiment/Experiment";
 import Profile from "../Profile/Profile";
 import Reload from "../Reload/Reload";
 import StoreProfile from "../StoreProfile/StoreProfile.js";
 
-export const useParticipantStore = create((set) => ({
-    participant: null,
-    setParticipant: (participant) => set((state) => ({participant}))
-}));
 
 // App is the root component of our application
 const App = () => {
@@ -30,7 +28,7 @@ const App = () => {
             return;
         }
         try {
-            fetch(API_BASE_URL + API_URLS.participant.current + queryParams).then(response => {
+            axios.get(API_BASE_URL + API_URLS.participant.current + queryParams).then(response => {
                 setParticipant(response.data);
             });
         } catch (err) {
