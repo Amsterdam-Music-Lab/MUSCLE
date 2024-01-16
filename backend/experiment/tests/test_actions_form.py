@@ -2,6 +2,7 @@ from django.test import TestCase
 
 from experiment.actions.form import BooleanQuestion, ChoiceQuestion, Form, NumberQuestion, TextQuestion, DropdownQuestion, AutoCompleteQuestion, RadiosQuestion, ButtonArrayQuestion, RangeQuestion, LikertQuestion, LikertQuestionIcon
 
+
 class FormTest(TestCase):
     def setUp(self):
         self.questions = [NumberQuestion(key='test_key', min_value=1, max_value=10)]
@@ -20,6 +21,7 @@ class FormTest(TestCase):
         self.assertIn('submit_label', action_result)
         self.assertIn('skip_label', action_result)
         self.assertIn('is_skippable', action_result)
+
 
 class NumberQuestionTest(TestCase):
     def setUp(self):
@@ -44,6 +46,7 @@ class NumberQuestionTest(TestCase):
         self.assertEqual(action_result['min_value'], 1)
         self.assertEqual(action_result['max_value'], 10)
 
+
 class TextQuestionTest(TestCase):
     def setUp(self):
         self.text_question = TextQuestion(
@@ -62,6 +65,7 @@ class TextQuestionTest(TestCase):
         self.assertIn('key', action_result)
         self.assertIn('max_length', action_result)
         self.assertEqual(action_result['max_length'], 100)
+
 
 class BooleanQuestionTest(TestCase):
     def setUp(self):
@@ -82,6 +86,7 @@ class BooleanQuestionTest(TestCase):
         self.assertIn('key', action_result)
         self.assertIn('choices', action_result)
         self.assertEqual(action_result['choices'], {'no': 'No', 'yes': 'Yes'})
+
 
 class ChoiceQuestionTest(TestCase):
     def setUp(self):
@@ -107,6 +112,7 @@ class ChoiceQuestionTest(TestCase):
         self.assertIn('min_values', action_result)
         self.assertEqual(action_result['min_values'], 1)
 
+
 class DropdownQuestionTest(TestCase):
     def setUp(self):
         self.dropdown_question = DropdownQuestion(
@@ -126,6 +132,7 @@ class DropdownQuestionTest(TestCase):
         self.assertIn('key', action_result)
         self.assertIn('choices', action_result)
         self.assertEqual(action_result['choices'], {'no': 'No', 'yes': 'Yes'})
+
 
 class AutoCompleteQuestionTest(TestCase):
     def setUp(self):
@@ -189,6 +196,7 @@ class ButtonArrayQuestionTest(TestCase):
         self.assertIn('choices', action_result)
         self.assertEqual(action_result['choices'], {'no': 'No', 'yes': 'Yes'})
 
+
 class RangeQuestionTest(TestCase):
     def setUp(self):
         self.range_question = RangeQuestion(
@@ -210,6 +218,7 @@ class RangeQuestionTest(TestCase):
         self.assertEqual(action_result['min_value'], 1)
         self.assertEqual(action_result['max_value'], 10)
 
+
 class LikertQuestionCustomChoicesTest(TestCase):
     def setUp(self):
         self.likert_question = LikertQuestion(
@@ -229,6 +238,7 @@ class LikertQuestionCustomChoicesTest(TestCase):
         self.assertIn('key', action_result)
         self.assertIn('choices', action_result)
         self.assertEqual(action_result['choices'], {'no': 'No', 'yes': 'Yes'})
+
 
 class LikertQuestionSevenScaleStepsTest(TestCase):
     def setUp(self):
@@ -262,6 +272,7 @@ class LikertQuestionSevenScaleStepsTest(TestCase):
                     6: "Strongly Agree",
                     7: "Completely Agree",
                 })
+
 
 class LikertQuestionFiveScaleStepsTest(TestCase):
     def setUp(self):

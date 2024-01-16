@@ -17,7 +17,7 @@ region_choices = {
 
 OTHER = [
 
-	ChoiceQuestion(
+    ChoiceQuestion(
         key='dgf_region_of_origin',
         view='DROPDOWN',
         question=_(

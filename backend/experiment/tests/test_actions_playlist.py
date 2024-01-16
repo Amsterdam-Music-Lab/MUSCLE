@@ -3,6 +3,7 @@ from unittest.mock import MagicMock
 
 from experiment.actions.playlist import Playlist
 
+
 class TestPlaylist(unittest.TestCase):
 
     def setUp(self):
@@ -31,6 +32,7 @@ class TestPlaylist(unittest.TestCase):
             self.assertIn('name', playlist)
             self.assertIsInstance(playlist['id'], int)
             self.assertIsInstance(playlist['name'], str)
+
 
 if __name__ == '__main__':
     unittest.main()
