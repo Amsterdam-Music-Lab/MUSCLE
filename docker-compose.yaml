@@ -59,8 +59,6 @@ services:
         ports:
           - 8000:8000
         command: bash -c "python manage.py migrate && python manage.py bootstrap && python manage.py runserver 0.0.0.0:8000"
-        networks:
-          - web
     client:
         labels:
           - "traefik.enable=true"
