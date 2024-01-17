@@ -34,12 +34,14 @@ const PlayCard = ({ onClick, registerUserClicks, playing, section, view }) => {
         >
             {section.turned ?
                 view === VISUALMATCHINGPAIRS ?
-                <div className="front front--visual">
+                    <div
+                        data-testid="front"
+                        className="front front--visual"
+                    >
                         <img src={getImgSrc(section.url)} alt={section.name} />
                     </div>
                     :
                     <Histogram
-                        className="front"
                         running={playing}
                         bars={5}
                         marginBottom={0}
@@ -47,7 +49,10 @@ const PlayCard = ({ onClick, registerUserClicks, playing, section, view }) => {
                         borderRadius=".5rem"
                     />
                 :
-                <div className={classNames("back", { seen: section.seen })}>
+                <div
+                    data-testid="back"
+                    className={classNames("back", { seen: section.seen })}
+                >
                 </div>
             }
         </div>
