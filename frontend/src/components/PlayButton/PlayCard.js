@@ -1,7 +1,7 @@
 import classNames from "classnames";
 
 import Histogram from "../Histogram/Histogram";
-import { MATCHINGPAIRS } from "components/Playback/Playback";
+import { VISUALMATCHINGPAIRS } from "components/Playback/Playback";
 import { API_ROOT } from "config";
 
 const PlayCard = ({ onClick, registerUserClicks, playing, section, view }) => {
@@ -33,7 +33,11 @@ const PlayCard = ({ onClick, registerUserClicks, playing, section, view }) => {
             role="button"
         >
             {section.turned ?
-                view === MATCHINGPAIRS ?
+                view === VISUALMATCHINGPAIRS ?
+                <div className="front front--visual">
+                        <img src={getImgSrc(section.url)} alt={section.name} />
+                    </div>
+                    :
                     <Histogram
                         className="front"
                         running={playing}
@@ -42,9 +46,6 @@ const PlayCard = ({ onClick, registerUserClicks, playing, section, view }) => {
                         backgroundColor="purple"
                         borderRadius=".5rem"
                     />
-                    : <div className="front front--visual">
-                        <img src={getImgSrc(section.url)} alt={section.name} />
-                    </div>
                 :
                 <div className={classNames("back", { seen: section.seen })}>
                 </div>
