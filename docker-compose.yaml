@@ -27,6 +27,10 @@ services:
         ports:
          - 8854:5000
     server:
+        labels:
+          - "traefik.enable=true"
+          - "traefik.http.routers.server.rule=Host(`backend.muscle.local`)"
+          - "traefik.http.routers.server.entrypoints=web"
         build:
           context: ./backend
           dockerfile: DockerfileDevelop
@@ -40,6 +44,7 @@ services:
             source: ./backend
             target: /server
         environment:
+          - AML_ALLOWED_HOSTS=${AML_ALLOWED_HOSTS}
           - AML_DEBUG=${AML_DEBUG}
           - DJANGO_SETTINGS_MODULE=${DJANGO_SETTINGS_MODULE}
           - DJANGO_SUPERUSER_USERNAME=${DJANGO_SUPERUSER_USERNAME}
@@ -54,7 +59,13 @@ services:
         ports:
           - 8000:8000
         command: bash -c "python manage.py migrate && python manage.py bootstrap && python manage.py runserver 0.0.0.0:8000"
+        networks:
+          - web
     client:
+        labels:
+          - "traefik.enable=true"
+          - "traefik.http.routers.client.rule=Host(`muscle.local`)"
+          - "traefik.http.routers.client.entrypoints=web"
         build:
           context: ./frontend
           dockerfile: DockerfileDevelop
@@ -85,6 +96,18 @@ services:
         ports:
           - 3000:3000
         command: sh -c "yarn scss && yarn start"
+    traefik:
+      image: traefik:v2.4
+      command:
+        - "--api.insecure=true"
+        - "--providers.docker=true"
+        - "--providers.docker.exposedbydefault=false"
+        - "--entrypoints.web.address=:80"
+      ports:
+        - "80:80"
+        - "8080:8080"  # Traefik dashboard
+      volumes:
+        - /var/run/docker.sock:/var/run/docker.sock
 volumes:
     db_data:
     db_backup:
