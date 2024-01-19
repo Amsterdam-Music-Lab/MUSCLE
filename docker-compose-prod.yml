@@ -1,0 +1,42 @@
+version: '3.8'
+
+services:
+  client-builder:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      target: builder
+    volumes:
+      - type: bind
+        source: ./frontend/src
+        target: /client/src
+      - type: bind
+        source: ./frontend/public
+        target: /client/public
+      - type: bind
+        source: ./frontend/.storybook
+        target: /client/.storybook
+    environment:
+      - REACT_APP_API_ROOT=${REACT_APP_API_ROOT}
+      - REACT_APP_EXPERIMENT_SLUG=${REACT_APP_EXPERIMENT_SLUG}
+      - REACT_APP_AML_HOME=${REACT_APP_AML_HOME}
+      - REACT_APP_LOGO_URL=${REACT_APP_LOGO_URL}
+      - REACT_APP_HTML_FAVICON=${REACT_APP_HTML_FAVICON}
+      - REACT_APP_HTML_PAGE_TITLE=${REACT_APP_HTML_PAGE_TITLE}
+      - REACT_APP_HTML_OG_DESCRIPTION=${REACT_APP_HTML_OG_DESCRIPTION}
+      - REACT_APP_HTML_OG_IMAGE=${REACT_APP_HTML_OG_IMAGE}
+      - REACT_APP_HTML_OG_TITLE=${REACT_APP_HTML_OG_TITLE}
+      - REACT_APP_HTML_OG_URL=${REACT_APP_HTML_OG_URL}
+      - REACT_APP_HTML_BODY_CLASS=${REACT_APP_HTML_BODY_CLASS}
+      - REACT_APP_SENTRY_DSN=${REACT_APP_SENTRY_DSN}
+      - REACT_APP_STRICT=${REACT_APP_STRICT}
+  client-runner:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      target: runner
+    command: nginx -g 'daemon off;'
+    ports:
+      - 3000:80
+    depends_on:
+      - client-builder
