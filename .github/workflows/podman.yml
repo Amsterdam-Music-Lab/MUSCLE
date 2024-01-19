@@ -10,6 +10,6 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Build Podman images
-        run: podman-compose -f docker-compose-build.yml build
+        run: podman-compose -f docker-compose-deploy.yml build
       - name: Deploy Podman images
-        run: podman-compose -f docker-compose-build.yml up -d
+        run: podman-compose -f docker-compose-deploy.yml up -d
