@@ -41,7 +41,9 @@ class Playback(BaseAction):
                  mute=False,
                  timeout_after_playback=None,
                  stop_audio_after=None,
-                 resume_play=False):
+                 resume_play=False,
+                 score_feedback_display='large-top'
+                 ):
         self.sections = [{'id': s.id, 'url': s.absolute_url(), 'group': s.group}
                          for s in sections]
         if str(sections[0].filename).startswith('http'):
@@ -59,7 +61,7 @@ class Playback(BaseAction):
         self.timeout_after_playback = timeout_after_playback
         self.stop_audio_after = stop_audio_after
         self.resume_play = resume_play
-
+        self.score_feedback_display = score_feedback_display
 
 class Autoplay(Playback):
     '''

@@ -112,13 +112,14 @@ class MatchingPairsGame(Base):
             stop_audio_after=5,
             show_animation=self.show_animation,
             display_score=self.display_score
+            score_feedback_display='small-bottom-right'
         )
         trial = Trial(
             title='Tune twins',
             playback=playback,
             feedback_form=None,
             result_id=prepare_result('matching_pairs', session),
-            config={'show_continue_button': False}
+            config={ 'show_continue_button': False }
         )
         return trial
 
