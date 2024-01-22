@@ -2,7 +2,7 @@
 from django.utils.translation import gettext_lazy as _
 
 from .base import Base
-from experiment.actions import Consent, Explainer, Step, Playlist, StartSession, Trial
+from experiment.actions import Consent, Explainer, Step, Playlist, Trial
 from experiment.actions.form import ChoiceQuestion, Form
 from experiment.actions.playback import Autoplay
 from experiment.actions.utils import final_action_with_optional_button
@@ -116,10 +116,8 @@ class ListeningConditions(Base):
             button_label=_('OK')
         )
         playlist = Playlist(experiment.playlists.all())
-        start_session = StartSession()
         return [
             consent,
             explainer,
             playlist,
-            start_session
         ]

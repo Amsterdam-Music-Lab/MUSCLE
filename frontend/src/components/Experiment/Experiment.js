@@ -1,10 +1,11 @@
-import React, { useState, useEffect, useCallback, useRef } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useExperiment, getNextRound } from "../../API";
 import { TransitionGroup, CSSTransition } from "react-transition-group";
 import { withRouter } from "react-router-dom";
 import classNames from "classnames";
 
 import { useParticipantStore, useSessionStore } from "../../util/stores";
+import { createSession } from "../../API.js";
 import Consent from "../Consent/Consent";
 import DefaultPage from "../Page/DefaultPage";
 import ToontjeHoger from "../ToontjeHoger/ToontjeHoger";
@@ -13,7 +14,6 @@ import Final from "../Final/Final";
 import Loading from "../Loading/Loading";
 import Playlist from "../Playlist/Playlist";
 import Score from "../Score/Score";
-import StartSession from "../StartSession/StartSession";
 import Trial from "../Trial/Trial";
 import useResultHandler from "../../hooks/useResultHandler";
 import Info from "../Info/Info";
@@ -29,8 +29,8 @@ import UserFeedback from "components/UserFeedback/UserFeedback";
 const Experiment = ({ match }) => {
     const startState = { view: "LOADING" };
     const participant = useParticipantStore((state) => state.participant);
-    const session = useRef(null);
-    const setSessionStore = useSessionStore((state) => state.setSession);
+    const setSession = useSessionStore((state) => state.setSession);
+    const session = useSessionStore((state) => state.session);
 
     // Current experiment state
     const [state, setState] = useState(startState);
@@ -65,12 +65,25 @@ const Experiment = ({ match }) => {
         setActions(newActions);
     }, [loadState, setActions]);
 
+    useEffect(() => {
+        if (!experiment || !participant || !playlist) {
+            return;
+        }
+        try { 
+            createSession({
+                experiment,
+                participant,
+                playlist,
+            }).then(data => {
+                setSession(data.session);
+            });
+        } catch (err) {
+            setError(`Could not create a session: ${err}`)
+        }
+    }, [experiment, participant, playlist, setError, setSession])
+
     // Start first_round when experiment and partipant have been loaded
     useEffect(() => {
-        if (session.current) {
-            setSessionStore(session.current);
-        }
-
         // Check if done loading
         if (!loadingExperiment && participant) {
             // Loading succeeded
@@ -83,13 +96,10 @@ const Experiment = ({ match }) => {
         }
     }, [
         experiment,
-        session,
         loadingExperiment,
         participant,
         setError,
-        setSessionStore,
-        updateActions,
-        loadState,
+        updateActions
     ]);
 
     // trigger next action from next_round array, or call session/next_round
@@ -99,7 +109,7 @@ const Experiment = ({ match }) => {
         } else {
             // Try to get next_round data from server
             const round = await getNextRound({
-                session: session.current
+                session
             });
             if (round) {
                 updateActions(round.next_round);
@@ -124,7 +134,6 @@ const Experiment = ({ match }) => {
         // Default attributes for every view
         const attrs = {
             experiment,
-            session,
             participant,
             loadState,
             playlist,
@@ -156,8 +165,6 @@ const Experiment = ({ match }) => {
             // -------------------------
             case "PLAYLIST":
                 return <Playlist {...attrs} />;
-            case "START_SESSION":
-                return <StartSession {...attrs} />;
             case "LOADING":
                 return <Loading {...attrs} />;
             case "ERROR":

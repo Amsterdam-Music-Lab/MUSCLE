@@ -4,7 +4,7 @@ from django.utils.translation import gettext_lazy as _
 from django.template.loader import render_to_string
 
 from .base import Base
-from experiment.actions import Consent, Explainer, Final, Playlist, StartSession, Step, Trial
+from experiment.actions import Consent, Explainer, Final, Playlist, Step, Trial
 from experiment.actions.playback import VisualMatchingPairs
 from experiment.questions.demographics import EXTRA_DEMOGRAPHICS
 from experiment.questions.utils import question_by_key
@@ -34,8 +34,6 @@ class VisualMatchingPairsGame(Base):
         
         playlist = Playlist(experiment.playlists.all())
 
-        start_session = StartSession()
-
         explainer = Explainer(
             instruction='',
             steps=[
@@ -50,8 +48,7 @@ class VisualMatchingPairsGame(Base):
         return [
             consent,
             playlist,
-            explainer,
-            start_session
+            explainer
         ]
     
     def next_round(self, session):

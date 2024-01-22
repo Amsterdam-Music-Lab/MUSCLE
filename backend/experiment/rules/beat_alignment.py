@@ -4,7 +4,7 @@ import copy
 from django.utils.translation import gettext_lazy as _
 
 from .base import Base
-from experiment.actions import Trial, Explainer, Consent, StartSession, Step
+from experiment.actions import Trial, Explainer, Consent, Step
 from experiment.actions.form import ChoiceQuestion, Form
 from experiment.actions.playback import Autoplay
 from experiment.actions.utils import final_action_with_optional_button, render_feedback_trivia
@@ -40,13 +40,10 @@ class BeatAlignment(Base):
 
         # 2. Consent with default text
         consent = Consent()
-        
-        # 3. Start session
-        start_session = StartSession()
+
         return [
             explainer,
             consent,
-            start_session
         ]
 
     def next_round(self, session, request_session=None):

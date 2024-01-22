@@ -6,7 +6,7 @@ from django.utils.translation import gettext_lazy as _
 from django.template.loader import render_to_string
 
 from .base import Base
-from experiment.actions import Consent, Explainer, Final, Playlist, Score, StartSession, Step, Trial
+from experiment.actions import Consent, Explainer, Final, Playlist, Score, Step, Trial
 from experiment.actions.form import BooleanQuestion, Form
 from experiment.actions.playback import Autoplay
 from experiment.questions.demographics import DEMOGRAPHICS
@@ -82,14 +82,10 @@ class Hooked(Base):
         # 3. Choose playlist.
         playlist = Playlist(experiment.playlists.all())
 
-        # 4. Start session.
-        start_session = StartSession()
-
         return [
             explainer,
             consent,
             playlist,
-            start_session
         ]
 
     def next_round(self, session):

@@ -3,7 +3,7 @@ from django.template.loader import render_to_string
 from django.db.models import Avg
 
 from experiment.actions.form import Form, ChoiceQuestion
-from experiment.actions import Consent, Explainer, Score, StartSession, Trial, Final
+from experiment.actions import Consent, Explainer, Score, Trial, Final
 from experiment.actions.wrappers import two_alternative_forced
 
 from experiment.questions.demographics import EXTRA_DEMOGRAPHICS
@@ -40,8 +40,7 @@ class Categorization(Base):
         consent = Consent(
             rendered, title='Informed consent', confirm='I agree', deny='Stop')
         
-        start_session = StartSession()
-        return [explainer, consent, start_session]
+        return [explainer, consent]
 
     def next_round(self, session):
         actions = self.get_questionnaire(session)

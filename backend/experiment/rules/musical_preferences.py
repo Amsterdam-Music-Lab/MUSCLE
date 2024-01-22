@@ -8,7 +8,7 @@ from experiment.questions.demographics import EXTRA_DEMOGRAPHICS
 from experiment.questions.goldsmiths import MSI_F1_ACTIVE_ENGAGEMENT
 from experiment.questions.other import OTHER
 
-from experiment.actions import Consent, Explainer, Final, HTML, Playlist, Redirect, Step, StartSession, Trial
+from experiment.actions import Consent, Explainer, Final, HTML, Playlist, Redirect, Step, Trial
 from experiment.actions.form import BooleanQuestion, ChoiceQuestion, Form, LikertQuestionIcon
 from experiment.actions.playback import Autoplay
 from experiment.actions.styles import STYLE_BOOLEAN, STYLE_BOOLEAN_NEGATIVE_FIRST
@@ -60,12 +60,10 @@ class MusicalPreferences(Base):
             ],
             button_label=_('OK')
         )
-        start_session = StartSession()
         return [
             consent,
             playlist,
             explainer,
-            start_session
         ]
 
     def next_round(self, session, request_session=None):

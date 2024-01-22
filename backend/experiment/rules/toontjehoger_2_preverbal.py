@@ -2,7 +2,7 @@ import logging
 from django.template.loader import render_to_string
 
 from .toontjehoger_1_mozart import toontjehoger_ranks
-from experiment.actions import Trial, Explainer, Step, Score, Final, StartSession, Playlist, Info, HTML
+from experiment.actions import Trial, Explainer, Step, Score, Final, Playlist, Info, HTML
 from experiment.actions.form import ButtonArrayQuestion, ChoiceQuestion, Form
 from experiment.actions.playback import ImagePlayer
 from experiment.actions.styles import STYLE_NEUTRAL
@@ -43,14 +43,10 @@ class ToontjeHoger2Preverbal(Base):
         # 3. Choose playlist.
         playlist = Playlist(experiment.playlists.all())
 
-        # 4. Start session.
-        start_session = StartSession()
-
         return [
             explainer,
             spectrogram_info,
             playlist,
-            start_session
         ]
 
     def get_spectrogram_info(self):
