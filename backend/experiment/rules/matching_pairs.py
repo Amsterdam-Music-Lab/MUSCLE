@@ -18,8 +18,7 @@ class MatchingPairsGame(Base):
     ID = 'MATCHING_PAIRS'
     num_pairs = 8
     show_animation = True
-    display_score = 'top'
-    histogram_bars = 5
+    display_score = 'large-top'
     contact_email = 'aml.tunetwins@gmail.com'
 
     def __init__(self):
@@ -74,7 +73,7 @@ class MatchingPairsGame(Base):
         else:
             # final score saves the result from the cleared board into account
             session.final_score += session.result_set.filter(
-                question_key='matching_pairs_board')
+                question_key='matching_pairs_board').first().score
             session.save()
             social_info = self.social_media_info(session.experiment, session.final_score)
             social_info['apps'].append('clipboard')
@@ -130,7 +129,7 @@ class MatchingPairsGame(Base):
 
     def calculate_score(self, result, data):
         ''' in this experiment, this saves only the cleared board '''
-        moves = list(result.session.result_set)
+        moves = list(result.session.result_set.filter(question_key='move'))
         scores = sum(m.score for m in moves)
         return 100 + scores
     

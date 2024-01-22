@@ -27,10 +27,6 @@ const MatchingPairs = ({
     const [end, setEnd] = useState(false);
     const columnCount = sections.length > 6 ? 4 : 3;
 
-    const resultBuffer = useRef([]);
-
-    const startTime = useRef(Date.now());
-
     const participant = useParticipantStore(state => state.participant);
     const session = useSessionStore(state => state.session);
 
@@ -47,10 +43,6 @@ const MatchingPairs = ({
     const registerUserClicks = (posX, posY) => {
         xPosition.current = posX;
         yPosition.current = posY;
-    }
-
-    const formatTime = (time) => {
-        return time/1000;
     }
 
     // Show (animated) feedback after second click on second card or finished playing
@@ -106,10 +98,10 @@ const MatchingPairs = ({
                 currentCard.noevents = true;
                 // check for match
                 const lastCard = sections[firstCard.current];
-                currentCard.seen = true;
-                lastCard.seen = true;
                 const imScore = await scoreIntermediateResult({session, participant, result: {currentCard, lastCard}});
                 score.current = imScore.score;
+                currentCard.seen = true;
+                lastCard.seen = true;
                 showFeedback();
             } else {
                 // first click of the turn
@@ -120,12 +112,6 @@ const MatchingPairs = ({
                 // clear message
                 setMessage('');
             }
-            resultBuffer.current.push({
-                selectedSection: currentCard.id,
-                cardIndex: index,
-                score: score.current,
-                timestamp: formatTime(Date.now() - startTime.current)
-            });
         }
         return;
     };
@@ -154,7 +140,7 @@ const MatchingPairs = ({
     }
 
     if (end) {
-        submitResult({score: total, moves: resultBuffer.current});
+        submitResult();
     }
 
     return (
