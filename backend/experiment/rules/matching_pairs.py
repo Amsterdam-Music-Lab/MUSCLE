@@ -1,4 +1,5 @@
 import random
+import json
 
 from django.utils.translation import gettext_lazy as _
 from django.template.loader import render_to_string
@@ -59,7 +60,10 @@ class MatchingPairsGame(Base):
         ]
     
     def next_round(self, session):
-        if session.rounds_passed() < 1:       
+        if session.rounds_passed() < 1:
+            # initialize final_score at 100
+            session.final_score = 100
+            session.save()
             trials = self.get_questionnaire(session)
             if trials:
                 intro_questions = Explainer(
@@ -71,9 +75,6 @@ class MatchingPairsGame(Base):
                 trial = self.get_matching_pairs_trial(session)
                 return [trial]
         else:
-            session.final_score += session.result_set.filter(
-                question_key='matching_pairs').last().score
-            session.save()
             social_info = self.social_media_info(session.experiment, session.final_score)
             social_info['apps'].append('clipboard')
             score = Final(
@@ -134,8 +135,25 @@ class MatchingPairsGame(Base):
         return score
     
     def calculate_intermediate_score(self, session, result):
-        print(result)
-        result_obj = prepare_result('move', session, json_data=result)
-        return 0
+        result_data = json.loads(result)
+        if result_data['currentCard']['group'] == result_data['lastCard']['group']:
+            if 'seen' in result_data['currentCard']:
+                score = 20
+                given_response = 'match'
+            else:
+                score = 10
+                given_response = 'lucky match'
+        else:
+            if 'seen' in result_data['currentCard']:
+                score = -10
+                given_response = 'misremembered'
+            else:
+                score = 0
+                given_response = 'no match'
+        session.final_score += score
+        session.save()
+        prepare_result('move', session, json_data=result_data,
+                       score=score, given_response=given_response)
+        return score
 
         

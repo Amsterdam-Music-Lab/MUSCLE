@@ -106,24 +106,11 @@ const MatchingPairs = ({
                 currentCard.noevents = true;
                 // check for match
                 const lastCard = sections[firstCard.current];
-                if (lastCard.group === currentCard.group) {
-                    // match
-                    if (currentCard.seen) {
-                        score.current = 20;      
-                        setTurnFeedback('+1')
-                    } else {
-                        score.current = 10;
-                        setTurnFeedback('0')
-                    }
-                } else {
-                    if (currentCard.seen) { score.current = -10; }
-                    else { score.current = 0; }
-                    setTurnFeedback('-1')
-                };
                 currentCard.seen = true;
                 lastCard.seen = true;
                 const imScore = await scoreIntermediateResult({session, participant, result: {currentCard, lastCard}});
-                showFeedback(imScore);
+                score.current = imScore.score;
+                showFeedback();
             } else {
                 // first click of the turn
                 firstCard.current = index;
