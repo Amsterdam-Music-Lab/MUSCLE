@@ -41,7 +41,7 @@ numpy==1.24.3
     # via pandas
 pandas==1.5.3
     # via iptocc
-pillow==10.1.0
+pillow==10.2.0
     # via genbadge
 psycopg2==2.9.6
     # via -r requirements.in/base.txt
