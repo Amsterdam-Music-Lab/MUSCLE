@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useRef } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useExperiment, getNextRound } from "../../API";
 import { TransitionGroup, CSSTransition } from "react-transition-group";
 import { withRouter } from "react-router-dom";
@@ -29,13 +29,13 @@ import UserFeedback from "components/UserFeedback/UserFeedback";
 const Experiment = ({ match }) => {
     const startState = { view: "LOADING" };
     const participant = useParticipantStore((state) => state.participant);
-    const setSessionStore = useSessionStore((state) => state.setSession);
+    const setSession = useSessionStore((state) => state.setSession);
+    const session = useSessionStore((state) => state.session);
 
     // Current experiment state
     const [state, setState] = useState(startState);
     const [playlist, setPlaylist] = useState(null);
     const [actions, setActions] = useState([]);
-    const [session, setSession] = useState(null);
 
     // API hooks
     const [experiment, loadingExperiment] = useExperiment(match.params.slug);
@@ -76,12 +76,11 @@ const Experiment = ({ match }) => {
                 playlist,
             }).then(data => {
                 setSession(data.session);
-                setSessionStore(data.session);
             });
         } catch (err) {
             setError(`Could not create a session: ${err}`)
         }
-    }, [experiment, participant, playlist, setError, setSessionStore])
+    }, [experiment, participant, playlist, setError, setSession])
 
     // Start first_round when experiment and partipant have been loaded
     useEffect(() => {
@@ -110,7 +109,7 @@ const Experiment = ({ match }) => {
         } else {
             // Try to get next_round data from server
             const round = await getNextRound({
-                session: session
+                session
             });
             if (round) {
                 updateActions(round.next_round);
@@ -135,7 +134,6 @@ const Experiment = ({ match }) => {
         // Default attributes for every view
         const attrs = {
             experiment,
-            session,
             participant,
             loadState,
             playlist,
