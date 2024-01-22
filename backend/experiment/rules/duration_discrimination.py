@@ -1,4 +1,3 @@
-import math
 import logging
 from decimal import Decimal, ROUND_HALF_UP
 
@@ -6,7 +5,7 @@ from django.utils.translation import gettext_lazy as _
 
 from .base import Base
 from section.models import Section
-from experiment.actions import Trial, Consent, Explainer, StartSession, Step
+from experiment.actions import Trial, Consent, Explainer, Step
 from experiment.actions.form import ChoiceQuestion, Form
 from experiment.actions.playback import Autoplay
 from experiment.actions.utils import final_action_with_optional_button, render_feedback_trivia
@@ -40,13 +39,10 @@ class DurationDiscrimination(Base):
 
         explainer2 = practice_explainer()
 
-        start_session = StartSession()
-
         return [
             explainer,
             consent,
             explainer2,
-            start_session
         ]
 
     def next_round(self, session, request_session=None):

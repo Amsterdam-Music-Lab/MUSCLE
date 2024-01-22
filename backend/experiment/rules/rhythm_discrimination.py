@@ -5,7 +5,7 @@ from django.utils.translation import gettext_lazy as _
 
 from experiment.actions.utils import final_action_with_optional_button, render_feedback_trivia
 from experiment.rules.util.practice import practice_explainer, practice_again_explainer, start_experiment_explainer
-from experiment.actions import Trial, Consent, Explainer, StartSession, Step
+from experiment.actions import Trial, Consent, Explainer, Step
 from experiment.actions.playback import Autoplay
 from experiment.actions.form import ChoiceQuestion, Form
 
@@ -89,13 +89,10 @@ class RhythmDiscrimination(Base):
 
         explainer2 = practice_explainer()
 
-        start_session = StartSession()
-
         return [
             explainer,
             consent,
             explainer2,
-            start_session
         ]
 
     def next_round(self, session, request_session=None):

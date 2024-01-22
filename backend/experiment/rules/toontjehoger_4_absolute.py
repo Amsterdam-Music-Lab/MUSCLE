@@ -4,7 +4,7 @@ from os.path import join
 from django.template.loader import render_to_string
 from experiment.utils import non_breaking_spaces
 from .toontjehoger_1_mozart import toontjehoger_ranks
-from experiment.actions import Trial, Explainer, Step, Score, Final, StartSession, Playlist, Info
+from experiment.actions import Trial, Explainer, Step, Score, Final, Playlist, Info
 from experiment.actions.form import ButtonArrayQuestion, Form
 from experiment.actions.playback import Multiplayer
 from experiment.actions.styles import STYLE_NEUTRAL
@@ -43,13 +43,9 @@ class ToontjeHoger4Absolute(Base):
         # 2. Choose playlist.
         playlist = Playlist(experiment.playlists.all())
 
-        # 3. Start session.
-        start_session = StartSession()
-
         return [
             explainer,
             playlist,
-            start_session
         ]
 
     def next_round(self, session, request_session=None):

@@ -3,7 +3,7 @@ from os.path import join
 from django.template.loader import render_to_string
 
 from .toontjehoger_1_mozart import toontjehoger_ranks
-from experiment.actions import Explainer, Step, Score, Final, StartSession, Playlist, Info, Trial
+from experiment.actions import Explainer, Step, Score, Final, Playlist, Info, Trial
 from experiment.actions.playback import PlayButton
 from experiment.actions.form import AutoCompleteQuestion, RadiosQuestion, Form
 from .base import Base
@@ -44,13 +44,9 @@ class ToontjeHoger3Plink(Base):
         # 2. Choose playlist.
         playlist = Playlist(experiment.playlists.all())
 
-        # 3. Start session.
-        start_session = StartSession()
-
         return [
             explainer,
             playlist,
-            start_session
         ]
 
     def next_round(self, session, request_session=None):

@@ -4,7 +4,7 @@ from django.utils.translation import gettext_lazy as _
 from django.template.loader import render_to_string
 from django.conf import settings
 
-from experiment.actions import HTML, Final, Explainer, Step, Consent, StartSession, Redirect, Playlist, Trial
+from experiment.actions import HTML, Final, Explainer, Step, Consent, Redirect, Playlist, Trial
 from experiment.actions.form import BooleanQuestion, Form
 from experiment.actions.playback import Autoplay
 from experiment.questions.demographics import EXTRA_DEMOGRAPHICS
@@ -49,13 +49,10 @@ class Huang2022(Hooked):
         consent = Consent(rendered, title=_(
             'Informed consent'), confirm=_('I agree'), deny=_('Stop'))
         playlist = Playlist(experiment.playlists.all())
-        # start session
-        start_session = StartSession()
 
         return [
             consent,
             playlist,
-            start_session
         ]
 
     def feedback_info(self):

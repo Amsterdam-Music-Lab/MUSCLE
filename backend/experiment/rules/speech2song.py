@@ -5,7 +5,7 @@ from django.template.loader import render_to_string
 
 from .base import Base
 
-from experiment.actions import Consent, Explainer, Step, Final, Playlist, Trial, StartSession
+from experiment.actions import Consent, Explainer, Step, Final, Playlist, Trial
 from experiment.actions.form import Form, RadiosQuestion
 from experiment.actions.playback import Autoplay
 from experiment.questions.demographics import EXTRA_DEMOGRAPHICS
@@ -56,13 +56,10 @@ class Speech2Song(Base):
 
         playlist = Playlist(experiment.playlists.all())
 
-        start_session = StartSession()
-
         return [
             explainer,
             consent,
             playlist,
-            start_session
         ]
 
     def next_round(self, session):
