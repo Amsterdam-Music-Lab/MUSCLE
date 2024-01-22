@@ -1,3 +1,5 @@
+from typing import List, Dict
+
 from .base_action import BaseAction
 
 # player types
@@ -127,9 +129,10 @@ class MatchingPairs(Multiplayer):
     play buttons are represented as cards
     '''
 
-    def __init__(self, sections, **kwargs):
+    def __init__(self, sections: List[Dict], display_score: str = 'large_top', **kwargs):
         super().__init__(sections, **kwargs)
         self.ID = TYPE_MATCHINGPAIRS
+        self.display_score = display_score
 
 
 class VisualMatchingPairs(MatchingPairs):

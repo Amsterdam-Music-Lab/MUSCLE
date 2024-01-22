@@ -16,6 +16,9 @@ from section.models import Section
 class MatchingPairsGame(Base):
     ID = 'MATCHING_PAIRS'
     num_pairs = 8
+    show_animation = True
+    display_score = 'top'
+    histogram_bars = 5
     contact_email = 'aml.tunetwins@gmail.com'
 
     def __init__(self):
@@ -110,7 +113,9 @@ class MatchingPairsGame(Base):
         random.shuffle(player_sections)
         playback = MatchingPairs(
             sections=player_sections,
-            stop_audio_after=5
+            stop_audio_after=5,
+            show_animation=self.show_animation,
+            display_score=self.display_score
         )
         trial = Trial(
             title='Tune twins',
