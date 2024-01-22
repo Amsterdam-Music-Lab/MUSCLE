@@ -150,18 +150,19 @@ const Playback = ({
 
     const render = (view) => {
         const attrs = {
-            sections,
-            showAnimation: playbackArgs.show_animation,
-            setView,
             autoAdvance,
-            responseTime,
-            startedPlaying,
-            playerIndex,
             finishedPlaying: onFinishedPlaying,
-            playSection,
             lastPlayerIndex,
+            playSection,
+            playerIndex,
+            responseTime,
+            sections,
             setPlayerIndex,
-            submitResult
+            setView,
+            showAnimation: playbackArgs.show_animation,
+            startedPlaying,
+            submitResult,
+            view,
         };
 
         switch (state.view) {
@@ -209,6 +210,8 @@ const Playback = ({
                     <MatchingPairs
                         {...attrs}
                         stopAudioAfter={playbackArgs.stop_audio_after}
+                        showAnimation={playbackArgs.show_animation}
+                        displayScore={playbackArgs.display_score}
                     />
                 );
             case VISUALMATCHINGPAIRS:
