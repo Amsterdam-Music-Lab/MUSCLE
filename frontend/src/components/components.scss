@@ -21,6 +21,7 @@
 @import "./Experiment/Experiment";
 @import "./Explainer/Explainer";
 @import "./Final/Final";
+@import "./FloatingActionButton/FloatingActionButton";
 @import "./HTML/HTML";
 @import "./Info/Info";
 @import "./Listen/Listen";
@@ -33,10 +34,11 @@
 @import "./Playback/Multiplayer";
 @import "./Playback/Playback";
 @import "./Playback/MatchingPairs";
-@import "./Playback/SpectrogramPlayer";
+@import "./Playback/ImagePlayer";
 @import "./Question/Question";
 @import "./Score/Score";
 @import "./Trial/Trial";
 @import "./FeedbackForm/FeedbackForm";
 @import "./ToontjeHoger/ToontjeHoger";
 @import "./UserFeedback/UserFeedback";
+@import "./VisualMatchingPairs/VisualMatchingPairs.scss";

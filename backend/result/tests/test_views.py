@@ -10,6 +10,7 @@ from session.models import Session
 
 from result.utils import handle_results
 
+
 class ResultTest(TestCase):
 
     @classmethod
@@ -27,11 +28,11 @@ class ResultTest(TestCase):
         session = self.client.session
         session['participant_id'] = self.participant.id
         session.save()
-    
+
     def test_get(self):
         response = self.client.get('/result/speed_swallow/')
         assert response.status_code == 204
-        
+
     def test_create(self):
         result = Result.objects.create(
             question_key="speed_swallow",
@@ -53,10 +54,10 @@ class ResultTest(TestCase):
         assert response.status_code == 200
         assert Result.objects.count() == 1
         response = self.client.get('/result/speed_swallow/')
-        assert json.loads(response.content).get('answer') != None
+        assert json.loads(response.content).get('answer') is not None
         response = self.client.post('/result/score/', request)
         assert Result.objects.count() == 1
-    
+
     def test_handle_results_with_form(self):
         result1 = Result.objects.create(
             session=self.session
@@ -74,8 +75,9 @@ class ResultTest(TestCase):
         handle_results(data, self.session)
         assert self.session.result_count() == 2
         json_data = self.session.result_set.first().json_data
-        assert json_data.get('config') != None
+        assert json_data.get('config') is not None
         assert json_data.get('decision_time') == 42
+
 
 class ScoringTest(TestCase):
 
@@ -101,7 +103,7 @@ class ScoringTest(TestCase):
             participant=cls.participant,
             playlist=playlist
         )
-    
+
     def likert_request(self, rule, value, profile=False):
         result = Result.objects.create(
             question_key="test",
@@ -119,7 +121,7 @@ class ScoringTest(TestCase):
             }]
         }
         return self.make_request(action)
-    
+
     def choice_request(self):
         result = Result.objects.create(
             session=self.session,
@@ -145,8 +147,8 @@ class ScoringTest(TestCase):
             ],
         }
         return self.make_request(view)
-    
-    def correctness_request(self, value): 
+
+    def correctness_request(self, value):
         result = Result.objects.create(
             session = self.session,
             section = self.section,
@@ -180,7 +182,7 @@ class ScoringTest(TestCase):
             ]
         }
         return self.make_request(view)
-    
+
     def song_sync_continue_request(self, result_type):
         result = Result.objects.create(
             question_key='correct_place',
@@ -199,7 +201,7 @@ class ScoringTest(TestCase):
             ]
         }
         return self.make_request(view)
-    
+
     def make_request(self, view):
         """ set up the Django session data,
         return a request wrapping the view and id of the custom Session object """
@@ -211,34 +213,34 @@ class ScoringTest(TestCase):
             "session_id": session_id,
             "json_data": json.dumps(view)
         }
-    
+
     def test_likert_score(self):
         client_request = self.likert_request('LIKERT', 2)
         response = self.client.post('/result/score/', client_request)
         assert response.status_code == 200
         assert self.session.result_set.count() == 1
         assert self.session.result_set.last().score == 2
-    
+
     def test_likert_reversed(self):
         client_request = self.likert_request('REVERSE_LIKERT', 2)
         response = self.client.post('/result/score/', client_request)
         assert response.status_code == 200
         assert self.session.result_set.count() == 1
         assert self.session.result_set.last().score == 6
-    
+
     def test_likert_profile(self):
         client_request = self.likert_request('LIKERT', 6, True)
         response = self.client.post('/result/score/', client_request)
         assert response.status_code == 200
         assert self.session.result_set.count() == 1
         assert self.session.result_set.last().score == 6
-    
+
     def test_categories_to_likert(self):
         client_request = self.choice_request()
         response = self.client.post('/result/score/', client_request)
         assert response.status_code == 200
         assert self.session.result_set.last().score == 2
-    
+
     def test_correctness(self):
         client_request = self.correctness_request('spam')
         response = self.client.post('/result/score/', client_request)
@@ -249,7 +251,7 @@ class ScoringTest(TestCase):
         assert response.status_code == 200
         assert self.session.result_set.count() == 2
         assert self.session.result_set.last().score == 0
-    
+
     def test_song_sync(self):
         client_request = self.song_sync_recognize_request("TIMEOUT")
         response = self.client.post('/result/score/', client_request)

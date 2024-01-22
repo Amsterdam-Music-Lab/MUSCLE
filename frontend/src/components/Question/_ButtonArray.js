@@ -4,7 +4,7 @@ import classNames from "classnames";
 import { renderLabel } from "../../util/label";
 
 // ButtonArray is a question view for selecting a single option from a list of buttons
-const ButtonArray = ({ question, disabled, onChange }) => {
+const ButtonArray = ({ question, disabled, onChange, value }) => {
 
     const buttonPress = (value) => {
         if (disabled) {
@@ -14,7 +14,6 @@ const ButtonArray = ({ question, disabled, onChange }) => {
             onChange(value)
         }
     }
-
 
     return (
         <div className="aha__buttons buttons d-flex flex-wrap justify-content-center p-3 w-100">
@@ -29,6 +28,7 @@ const ButtonArray = ({ question, disabled, onChange }) => {
                         key={question.key + index}
                         onChange={buttonPress}
                         disabled={disabled}
+                        checked={value === val}
                     />
                 ))}
             </div>
@@ -36,11 +36,12 @@ const ButtonArray = ({ question, disabled, onChange }) => {
     )
 }
 
-const ToggleButton = ({ label, value, index, name, disabled, onChange }) => {
+const ToggleButton = ({ label, value, index, name, disabled, onChange, checked }) => {
     const disabledClasses = disabled ? 'disabled' : '';
+    const checkedClasses = checked ? 'checked' : '';
     return (
         <label
-            className={classNames("btn btn-secondary btn-lg", disabledClasses)}
+            className={classNames("btn btn-secondary btn-lg", disabledClasses, checkedClasses)}
             tabIndex="0"
         >
             <input className={value}
@@ -48,13 +49,11 @@ const ToggleButton = ({ label, value, index, name, disabled, onChange }) => {
                 name={name}
                 id={index}
                 value={value}
+                checked={checked}
+                aria-checked={checked}
                 disabled={disabled}
-                onClick={() => {
-                    onChange(value);
-                }}
-                onKeyPress={() => {
-                    onChange(value);
-                }}
+                onChange={() => onChange(value)}
+                onKeyPress={() => onChange(value)}
             />
             {renderLabel(label)}
         </label>)

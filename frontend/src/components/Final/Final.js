@@ -11,9 +11,9 @@ import UserFeedback from "../UserFeedback/UserFeedback";
 
 // Final is an experiment view that shows the final scores of the experiment
 // It can only be the last view of an experiment
-const Final= ({ experiment, participant, session, score, final_text, action_texts, button,  
-            onNext, history, show_participant_link, participant_id_only,
-            show_profile_link, social, feedback_info, points, rank, logo }) => {
+const Final = ({ experiment, participant, session, score, final_text, action_texts, button,
+    onNext, history, show_participant_link, participant_id_only,
+    show_profile_link, social, feedback_info, points, rank, logo }) => {
     const [showScore, setShowScore] = useState(0);
 
     // Use a ref to prevent doing multiple increments
@@ -46,17 +46,17 @@ const Final= ({ experiment, participant, session, score, final_text, action_text
         };
     }, [score, showScore]);
 
-    const finalize = () => {
+    useEffect(() => {
         finalizeSession({ session, participant });
-    }
+    }, [session, participant]);
 
     return (
         <div className="aha__final d-flex flex-column justify-content-center">
             {rank && (
-            <div className="text-center">
-                <Rank rank={rank} />
-                <h1 className="total-score title">{showScore} {points}</h1>
-            </div>
+                <div className="text-center">
+                    <Rank rank={rank} />
+                    <h1 className="total-score title" data-testid="score">{showScore} {points}</h1>
+                </div>
             )}
             <div className="text-center">
                 <div dangerouslySetInnerHTML={{ __html: final_text }} />
@@ -85,10 +85,9 @@ const Final= ({ experiment, participant, session, score, final_text, action_text
                         {action_texts.all_experiments}
                     </a>
                     <div
+                        data-testid="profile-link"
                         className="home text-center"
-                        onClick={() => {
-                            history.push(URLS.profile);
-                        }}
+                        onClick={() => history.push(URLS.profile)}
                     >
                         {action_texts.profile}
                     </div>
@@ -104,7 +103,7 @@ const Final= ({ experiment, participant, session, score, final_text, action_text
                 participant={participant}
                 feedbackInfo={feedback_info}
             />)}
-                
+
         </div>
     );
 };

@@ -20,10 +20,12 @@ EXPECTED_PARTICIPANT_FIELDS = 5
 class MockRequest:
     pass
 
+
 request = MockRequest()
 
 this_experiment_admin = ExperimentAdmin(
     model=Experiment, admin_site=AdminSite)
+
 
 class TestAdminExperiment(TestCase):    
 
@@ -62,7 +64,6 @@ class TestAdminExperiment(TestCase):
         participant_fields = [key for key in participant]
         self.assertEqual(len(participant_fields), EXPECTED_PARTICIPANT_FIELDS)
 
-    
 
 class TestAdminExperimentExport(TestCase):
 
@@ -72,7 +73,6 @@ class TestAdminExperimentExport(TestCase):
     def setUpTestData(cls):
         cls.participant = Participant.objects.create(unique_hash=42)
         cls.experiment = Experiment.objects.get(name='Hooked-China')
-        print(cls.experiment)
         for playlist in cls.experiment.playlists.all():
             playlist.update_sections()            
         print(cls.experiment.pk)

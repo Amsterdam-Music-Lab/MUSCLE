@@ -1,5 +1,6 @@
 from .base_action import BaseAction
 
+
 class StartSession(BaseAction):  # pylint: disable=too-few-public-methods
     """
     Provide data for a StartSession view

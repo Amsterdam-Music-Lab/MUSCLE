@@ -7,13 +7,10 @@ const MatchingPairs = ({
     playSection,
     sections,
     playerIndex,
-    finishedPlaying,
     stopAudioAfter,
-    showAnimations,
-    histogramBars,
-    showTotalScore,
-    showScoreMessage,
-    showTurnFeedback,
+    showAnimation,
+    displayScore,
+    finishedPlaying,
     submitResult,
 }) => {
     const xPosition = useRef(-1);
@@ -61,7 +58,7 @@ const MatchingPairs = ({
             setMessage(setScoreMessage(score.current));
             setMessage(setScoreMessage(score.current));
             // show end of turn animations
-            if (showAnimations) {
+            if (showAnimation) {
                 switch (score.current) {                                       
                     case 10:
                         turnedCards[0].lucky = true;
@@ -171,12 +168,12 @@ const MatchingPairs = ({
             <div className="row justify-content-around">
                 <div className="col-6 align-self-start">
                     <div dangerouslySetInnerHTML={{ __html: message }}
-                         className={classNames("matching-pairs__feedback", { nomessage: !showScoreMessage }, {fbnomatch: score.current === 0}, {fblucky: score.current === 10}, {fbmemory: score.current === 20}, {fbmisremembered: score.current === -10})}
+                         className={classNames("matching-pairs__feedback", { nomessage: displayScore === 'hidden' }, {fbnomatch: score.current === 0}, {fblucky: score.current === 10}, {fbmemory: score.current === 20}, {fbmisremembered: score.current === -10})}
                         
                     />
                 </div>
                 <div className="col-6 align-self-end">
-                    <div className={classNames("matching-pairs__score", { noscore: !showTotalScore } )}>Score: <br />{total}</div>        
+                    <div className={classNames("matching-pairs__score", { noscore: displayScore === 'hidden' } )}>Score: <br />{total}</div>        
                 </div>
             </div>
 
@@ -193,13 +190,12 @@ const MatchingPairs = ({
                         section={sections[index]}
                         onFinish={showFeedback}
                         stopAudioAfter={stopAudioAfter}
-                        showAnimations={showAnimations}
-                        histogramBars={histogramBars}
+                        showAnimation={showAnimation}
                     />
                 )
                 )}
             </div>
-            <div className={classNames("turnscore", { noturnscore: !showTurnFeedback})}>{turnFeedback}</div>
+            <div className={classNames("turnscore", { noturnscore: displayScore === 'hidden'})}>{turnFeedback}</div>
         </div>  
     )
 }

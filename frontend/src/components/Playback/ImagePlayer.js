@@ -1,24 +1,24 @@
 import React, { useCallback } from "react";
 import MultiPlayer from "./MultiPlayer";
 
-const SpectrogramPlayer = (props) => {
+const ImagePlayer = (props) => {
     const playSection = props.playSection;
 
     // extraContent callback can be used to add content to each player
     const extraContent = useCallback(
         (index) => {
-            const spectrograms = props.playConfig.spectrograms;
-            if (!spectrograms) {
-                return <p>Warning: No spectrograms found</p>;
+            const images = props.images;
+            if (!images) {
+                return <p>Warning: No images found</p>;
             }
-            const labels = props.playConfig.spectrogram_labels;
+            const labels = props.image_labels;
 
-            if (index >= 0 && index < spectrograms.length) {
+            if (index >= 0 && index < images.length) {
                 return (
-                    <div className="spectrogram">
+                    <div className="image">
                         <img
-                            src={spectrograms[index]}
-                            alt="Spectrogram"
+                            src={images[index]}
+                            alt="PlayerImage"
                             onClick={() => {
                                 playSection(index);
                             }}
@@ -32,14 +32,14 @@ const SpectrogramPlayer = (props) => {
                 return <p>Warning: No spectrograms available for index {index}</p>;
             }
         },
-        [props.playConfig.spectrograms, props.playConfig.spectrogram_labels, playSection]
+        [props.images, props.image_labels, playSection]
     );
 
     return (
-        <div className="aha__spectrogram-player">
+        <div className="aha__image-player">
             <MultiPlayer {...props} extraContent={extraContent} />
         </div>
     );
 };
 
-export default SpectrogramPlayer;
+export default ImagePlayer;

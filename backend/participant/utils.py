@@ -13,6 +13,7 @@ def located_in_nl(request):
     """Return True if the requesting IP-address is located in NL"""
     return country(request) == 'nl'
 
+
 def country(request):
     """Get country code of requesting ip"""
 
@@ -38,6 +39,7 @@ def country(request):
 
     return country_code
 
+
 def get_country_code(ip_address):
     """Get country code from given ip address"""
 
@@ -56,6 +58,7 @@ def get_country_code(ip_address):
         except:
             return None
 
+
 def visitor_ip_address(request):
     """Get visitor ip address from request"""
 
@@ -67,6 +70,7 @@ def visitor_ip_address(request):
 
     return request.META.get('REMOTE_ADDR')
 
+
 def get_participant(request):
     # get participant from session
     participant_id = request.session.get(PARTICIPANT_KEY, -1)
@@ -75,6 +79,7 @@ def get_participant(request):
                 pk=int(participant_id))
     except Participant.DoesNotExist:
         raise
+
 
 def get_or_create_participant(request):
     """Get a participant from URL, the session, or create/add a new one"""

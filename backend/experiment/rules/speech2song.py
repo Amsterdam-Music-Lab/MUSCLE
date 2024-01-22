@@ -7,7 +7,7 @@ from .base import Base
 
 from experiment.actions import Consent, Explainer, Step, Final, Playlist, Trial, StartSession
 from experiment.actions.form import Form, RadiosQuestion
-from experiment.actions.playback import Playback
+from experiment.actions.playback import Autoplay
 from experiment.questions.demographics import EXTRA_DEMOGRAPHICS
 from experiment.questions.languages import LANGUAGE, LanguageQuestion
 from experiment.questions.utils import question_by_key
@@ -166,6 +166,7 @@ class Speech2Song(Base):
                 session, is_speech))
         return actions
 
+
 def next_single_representation(session, is_speech, group_id):
     """ combine a question after the first representation,
     and several repeated representations of the sound,
@@ -174,6 +175,7 @@ def next_single_representation(session, is_speech, group_id):
     section = session.section_from_unused_song(filter_by)
     actions = [sound(section), speech_or_sound_question(session, section, is_speech)]
     return actions
+
 
 def next_repeated_representation(session, is_speech, group_id=-1):
     if group_id >= 0:
@@ -224,20 +226,16 @@ def question_sound(session, section):
         result_id=prepare_result(key, session, section=section, scoring_rule='LIKERT'),
     )
 
+
 def sound(section, n_representation=None):
     if n_representation and n_representation > 1:
         ready_time = 0
     else:
         ready_time = 1
-    config = {
-        'ready_time': ready_time,
-        'show_animation': False
-    }
     title = _('Listen carefully')
-    playback = Playback(
+    playback = Autoplay(
         sections = [section],
-        player_type='AUTOPLAY',
-        play_config=config
+        ready_time = ready_time,
     )
     view = Trial(
             playback=playback,

@@ -5,20 +5,19 @@ from django.template.loader import render_to_string
 
 from .base import Base
 from experiment.actions import Consent, Explainer, Final, Playlist, StartSession, Step, Trial
-from experiment.actions.playback import Playback
+from experiment.actions.playback import MatchingPairs
 from experiment.questions.demographics import EXTRA_DEMOGRAPHICS
 from experiment.questions.utils import question_by_key
 from result.utils import prepare_result
 
 from section.models import Section
 
-class MatchingPairs(Base):
+
+class MatchingPairsGame(Base):
     ID = 'MATCHING_PAIRS'
     num_pairs = 8
-    show_animations = True
-    show_total_score = True
-    show_score_message = True
-    show_turn_feedback = False
+    show_animation = True
+    display_score = 'top'
     histogram_bars = 5
     contact_email = 'aml.tunetwins@gmail.com'
 
@@ -112,15 +111,11 @@ class MatchingPairs(Base):
             degradations = session.playlist.section_set.filter(group__in=selected_pairs, tag=degradation_type)
             player_sections = list(originals) + list(degradations)
         random.shuffle(player_sections)
-        playback = Playback(
+        playback = MatchingPairs(
             sections=player_sections,
-            player_type='MATCHINGPAIRS',
-            play_config={'stop_audio_after': 5,
-                         'show_animations': self.show_animations,
-                         'show_total_score': self.show_total_score,
-                         'show_score_message': self.show_score_message,
-                         'show_turn_feedback': self.show_turn_feedback,                         
-                         'histogram_bars': self.histogram_bars}
+            stop_audio_after=5,
+            show_animation=self.show_animation,
+            display_score=self.display_score
         )
         trial = Trial(
             title='Tune twins',
