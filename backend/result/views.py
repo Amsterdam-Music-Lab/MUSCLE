@@ -41,6 +41,7 @@ def intermediate_score(request):
     score = session.experiment_rules().calculate_intermediate_score(session, result)
     return JsonResponse({'score': score})
 
+
 @require_POST
 def consent(request):
     ''' Register consent: in contrast to `create`, available without sending a session_id '''
