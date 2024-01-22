@@ -146,6 +146,7 @@ class PlaylistAdminTest(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response['Content-Type'], 'text/csv')
 
+
 class PlaylistAdminFormTest(TestCase):
 
     def setUp(self):
