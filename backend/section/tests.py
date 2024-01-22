@@ -146,13 +146,6 @@ class PlaylistAdminTest(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response['Content-Type'], 'text/csv')
 
-    def test_export_json(self):
-        url = reverse('admin:section_playlist_export_json', args=[self.playlist.pk])
-        response = self.client.get(url)
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(response['Content-Type'], 'application/json')
-
-
 class PlaylistAdminFormTest(TestCase):
 
     def setUp(self):

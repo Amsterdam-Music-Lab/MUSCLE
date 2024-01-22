@@ -20,6 +20,5 @@
 {% block after_field_sets %}
 <div class="custom-actions">
     <a href="{% url 'admin:section_playlist_export_csv' original.pk %}" class="button">Export to CSV</a>
-    <a href="{% url 'admin:section_playlist_export_json' original.pk %}" class="button">Export to JSON</a>
 </div>
 {% endblock %}

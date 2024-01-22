@@ -50,7 +50,7 @@ class PlaylistAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
     list_display = ('name', 'section_count', 'experiment_count')
     search_fields = ['name', 'section__song__artist', 'section__song__name']
     inline_actions = ['add_sections',
-                      'edit_sections', 'export_json', 'export_csv']
+                      'edit_sections', 'export_csv']
 
     def save_model(self, request, obj, form, change):
 
@@ -160,19 +160,6 @@ class PlaylistAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
                      'sections': sections}
         )
 
-    def export_json(self, request, obj, parent_obj=None):
-        """Export playlist data in JSON, force download"""
-
-        response = JsonResponse(
-            obj.export_admin(), json_dumps_params={'indent': 4})
-
-        # force download attachment
-        response['Content-Disposition'] = 'attachment; filename="playlist_' + \
-            str(obj.id)+'.json"'
-        return response
-
-    export_json.short_description = "Export JSON"
-
     def export_csv(self, request, obj, parent_obj=None):
         """Export playlist sections to csv, force download"""
 
@@ -193,15 +180,10 @@ class PlaylistAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
         obj = self.get_object(request, pk)
         return self.export_csv(request, obj)
 
-    def export_json_view(self, request, pk):
-        obj = self.get_object(request, pk)
-        return self.export_json(request, obj)
-
     def get_urls(self):
         urls = super().get_urls()
         custom_urls = [
             path('<int:pk>/export_csv/', self.export_csv_view, name='section_playlist_export_csv'),
-            path('<int:pk>/export_json/', self.export_json_view, name='section_playlist_export_json'),
         ]
         return custom_urls + urls
 
