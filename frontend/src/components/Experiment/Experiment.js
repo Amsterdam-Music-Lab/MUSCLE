@@ -156,8 +156,6 @@ const Experiment = ({ match }) => {
             // -------------------------
             case "PLAYLIST":
                 return <Playlist {...attrs} />;
-            case "START_SESSION":
-                return <StartSession {...attrs} />;
             case "LOADING":
                 return <Loading {...attrs} />;
             case "ERROR":

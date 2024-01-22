@@ -1,7 +1,7 @@
 import logging
 from django.template.loader import render_to_string
 from os.path import join
-from experiment.actions import Trial, Explainer, Step, Score, Final, StartSession, Playlist, Info, HTML
+from experiment.actions import Trial, Explainer, Step, Score, Final, Playlist, Info, HTML
 from experiment.actions.form import ButtonArrayQuestion, Form
 from experiment.actions.playback import Autoplay
 from .base import Base
@@ -53,13 +53,9 @@ class ToontjeHoger1Mozart(Base):
         # 2. Choose playlist.
         playlist = Playlist(experiment.playlists.all())
 
-        # 3. Start session.
-        start_session = StartSession()
-
         return [
             explainer,
-            playlist,
-            start_session
+            playlist
         ]
 
     def next_round(self, session, request_session=None):

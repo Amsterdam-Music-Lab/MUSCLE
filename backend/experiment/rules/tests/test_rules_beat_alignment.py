@@ -45,7 +45,7 @@ class BeatAlignmentRuleTest(TestCase):
         response_json = self.load_json(response)
         self.assertTrue( {'id','slug','name','class_name','rounds','playlists','next_round','loading_text'} <= response_json.keys() )
         # 3 practice rounds (number hardcoded in BeatAlignment.first_round)
-        views_exp = ['EXPLAINER','CONSENT', 'START_SESSION']
+        views_exp = ['EXPLAINER', 'CONSENT']
         self.assertEquals(len(response_json['next_round']), len(views_exp))
         for i in range(len(views_exp)):
             self.assertEquals(response_json['next_round'][i]['view'], views_exp[i])
