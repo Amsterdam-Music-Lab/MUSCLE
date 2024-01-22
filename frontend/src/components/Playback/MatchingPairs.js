@@ -140,7 +140,7 @@ const MatchingPairs = ({
     }
 
     if (end) {
-        submitResult();
+        submitResult({});
     }
 
     return (
