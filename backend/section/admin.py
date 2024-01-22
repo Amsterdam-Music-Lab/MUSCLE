@@ -26,6 +26,7 @@ class SectionAdmin(admin.ModelAdmin):
     # Prevent large inner join
     list_select_related = ()
 
+
 admin.site.register(Section, SectionAdmin)
 
 # @admin.register(Playlist)

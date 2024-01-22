@@ -7,6 +7,7 @@ from section.admin import PlaylistAdmin
 from section.models import Playlist, Section, Song
 from section.forms import PlaylistAdminForm
 
+
 class PlaylistModelTest(TestCase):
 
     @classmethod
@@ -132,6 +133,7 @@ class TestAdminEditSection(TestCase):
         self.assertEqual(edit_section.song.restricted, [])
         self.assertEqual(response.status_code, 302)
 
+
 class PlaylistAdminTest(TestCase):
     def setUp(self):
         self.playlist = Playlist.objects.create(name="Test Playlist")
@@ -149,6 +151,7 @@ class PlaylistAdminTest(TestCase):
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response['Content-Type'], 'application/json')
+
 
 class PlaylistAdminFormTest(TestCase):
 
@@ -179,7 +182,6 @@ class PlaylistAdminFormTest(TestCase):
         playlist = form.save()
 
         self.assertEqual(playlist.csv.strip(), self.csv_content.decode('utf-8').strip())
-
 
     def test_should_not_process_csv(self):
         uploaded_file = SimpleUploadedFile('test.csv', self.csv_content, content_type='text/csv')

@@ -16,6 +16,7 @@ class AddSections(forms.Form):
     files = forms.FileField(widget=MultipleFileInput(attrs={'accept':'.wav,.mp3,.aiff,.flac,.ogg'}),
                             validators=[audio_file_validator()])
 
+
 class PlaylistAdminForm(forms.ModelForm):
     csv_file = forms.FileField(required=False, help_text='Upload a CSV file (overrides the text input above)', label='CSV file', widget=forms.FileInput(attrs={'accept':'.csv'}))
 
