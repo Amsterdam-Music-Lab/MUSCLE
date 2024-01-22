@@ -61,9 +61,6 @@ class MatchingPairsGame(Base):
     
     def next_round(self, session):
         if session.rounds_passed() < 1:
-            # initialize final_score at 100
-            session.final_score = 100
-            session.save()
             trials = self.get_questionnaire(session)
             if trials:
                 intro_questions = Explainer(
@@ -75,6 +72,10 @@ class MatchingPairsGame(Base):
                 trial = self.get_matching_pairs_trial(session)
                 return [trial]
         else:
+            # final score saves the result from the cleared board into account
+            session.final_score += session.result_set.filter(
+                question_key='matching_pairs_board')
+            session.save()
             social_info = self.social_media_info(session.experiment, session.final_score)
             social_info['apps'].append('clipboard')
             score = Final(
@@ -122,36 +123,40 @@ class MatchingPairsGame(Base):
             title='Tune twins',
             playback=playback,
             feedback_form=None,
-            result_id=prepare_result('matching_pairs', session),
+            result_id=prepare_result('matching_pairs_board', session),
             config={'show_continue_button': False}
         )
         return trial
 
     def calculate_score(self, result, data):
-        moves = data.get('result').get('moves')
-        for m in moves:
-            m['filename'] = str(Section.objects.get(pk=m.get('selectedSection')).filename)
-        score = data.get('result').get('score')
-        return score
+        ''' in this experiment, this saves only the cleared board '''
+        moves = list(result.session.result_set)
+        scores = sum(m.score for m in moves)
+        return 100 + scores
     
     def calculate_intermediate_score(self, session, result):
+        ''' will be called every time two cards have been turned '''
         result_data = json.loads(result)
-        if result_data['currentCard']['group'] == result_data['lastCard']['group']:
-            if 'seen' in result_data['currentCard']:
+        first_card = result_data['lastCard']
+        first_section = Section.objects.get(pk=first_card['id'])
+        first_card['filename'] = str(first_section.filename)
+        second_card = result_data['currentCard']
+        second_section = Section.objects.get(pk=second_card['id'])
+        second_card['filename'] = str(second_section.filename)
+        if first_section.group == second_section.group:
+            if 'seen' in second_card:
                 score = 20
                 given_response = 'match'
             else:
                 score = 10
                 given_response = 'lucky match'
         else:
-            if 'seen' in result_data['currentCard']:
+            if 'seen' in second_card:
                 score = -10
                 given_response = 'misremembered'
             else:
                 score = 0
                 given_response = 'no match'
-        session.final_score += score
-        session.save()
         prepare_result('move', session, json_data=result_data,
                        score=score, given_response=given_response)
         return score
