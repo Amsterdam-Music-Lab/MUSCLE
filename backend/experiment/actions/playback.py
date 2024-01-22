@@ -63,6 +63,7 @@ class Playback(BaseAction):
         self.resume_play = resume_play
         self.score_feedback_display = score_feedback_display
 
+
 class Autoplay(Playback):
     '''
     This player starts playing automatically
