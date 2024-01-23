@@ -48,7 +48,12 @@
     ],
     "rules": {
       "no-unused-expressions": 0,
-      "chai-friendly/no-unused-expressions": ["error", { "allowShortCircuit": true }]
+      "chai-friendly/no-unused-expressions": [
+        "error",
+        {
+          "allowShortCircuit": true
+        }
+      ]
     }
   },
   "browserslist": {

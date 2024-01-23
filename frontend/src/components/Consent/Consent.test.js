@@ -58,7 +58,7 @@ describe('Consent', () => {
 
     it('auto advances if consent is already given', () => {
         useConsent.mockReturnValue([true, false]);
-        const onNext = jest.fn();
+        const onNext = vi.fn();
         render(<Consent onNext={onNext} experiment={mockExperiment} />);
         expect(onNext).toHaveBeenCalled();
     });
