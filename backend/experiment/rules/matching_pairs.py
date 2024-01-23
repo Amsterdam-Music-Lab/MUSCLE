@@ -17,7 +17,7 @@ class MatchingPairsGame(Base):
     ID = 'MATCHING_PAIRS'
     num_pairs = 8
     show_animation = True
-    score_feedback_display = 'small-bottom-right'
+    score_feedback_display = 'large-top'
     histogram_bars = 5
     contact_email = 'aml.tunetwins@gmail.com'
 
