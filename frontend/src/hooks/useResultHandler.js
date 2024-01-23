@@ -31,7 +31,7 @@ const useResultHandler = ({ session, participant, onNext, state }) => {
 
             // Create result data
             const data = {
-                session: session,
+                session,
                 participant,
                 result: mergedResults,
             };
