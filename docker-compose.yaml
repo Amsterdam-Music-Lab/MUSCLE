@@ -101,7 +101,7 @@ services:
           - 3000:3000
         command: sh -c "yarn scss && yarn start"
     traefik:
-      image: traefik:v2.4
+      image: traefik:latest
       command:
         - "--api.insecure=true"
         - "--providers.docker=true"
