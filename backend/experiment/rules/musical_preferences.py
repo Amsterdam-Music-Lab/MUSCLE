@@ -8,9 +8,9 @@ from experiment.questions.demographics import EXTRA_DEMOGRAPHICS
 from experiment.questions.goldsmiths import MSI_F1_ACTIVE_ENGAGEMENT
 from experiment.questions.other import OTHER
 
-from experiment.actions import Consent, Explainer, Final, HTML, Playlist, Redirect, Step, StartSession, Trial
+from experiment.actions import Consent, Explainer, Final, HTML, Playlist, Redirect, Step, Trial
 from experiment.actions.form import BooleanQuestion, ChoiceQuestion, Form, LikertQuestionIcon
-from experiment.actions.playback import Playback
+from experiment.actions.playback import Autoplay
 from experiment.actions.styles import STYLE_BOOLEAN, STYLE_BOOLEAN_NEGATIVE_FIRST
 
 from result.utils import prepare_result
@@ -60,12 +60,10 @@ class MusicalPreferences(Base):
             ],
             button_label=_('OK')
         )
-        start_session = StartSession()
         return [
             consent,
             playlist,
             explainer,
-            start_session
         ]
 
     def next_round(self, session, request_session=None):
@@ -111,9 +109,8 @@ class MusicalPreferences(Base):
                 else:
                     session.decrement_round()
                     if last_result.question_key == 'audio_check1':
-                        playback = get_test_playback('EXTERNAL')
-                        html = HTML(body=render_to_string(
-                            'html/huang_2022/audio_check.html'))
+                        playback = get_test_playback()                    
+                        html = HTML(body=render_to_string('html/huang_2022/audio_check.html'))
                         form = Form(form=[BooleanQuestion(
                             key='audio_check2',
                             choices={'no': _('Quit'), 'yes': _('Next')},
@@ -132,7 +129,7 @@ class MusicalPreferences(Base):
                         return Redirect(settings.HOMEPAGE)
             else:
                 session.decrement_round()
-                playback = get_test_playback('EXTERNAL')
+                playback = get_test_playback()
                 html = HTML(
                     body='<h4>{}</h4>'.format(_('Do you hear the music?')))
                 form = Form(form=[BooleanQuestion(
@@ -174,7 +171,8 @@ class MusicalPreferences(Base):
             known_songs = session.result_set.filter(
                 question_key='know_song', score=2).count()
             all_results = Result.objects.filter(
-                question_key='like_song'
+                question_key='like_song',
+                section_id__isnull=False
             )
             top_participant = self.get_preferred_songs(like_results, 3)
             top_all = self.get_preferred_songs(all_results, 3)
@@ -218,7 +216,7 @@ class MusicalPreferences(Base):
             result_id=prepare_result(know_key, session, section=section),
             style=STYLE_BOOLEAN
         )
-        playback = Playback([section], play_config={'show_animation': True})
+        playback = Autoplay([section], show_animation=True)
         form = Form([know, likert])
         view = Trial(
             playback=playback,

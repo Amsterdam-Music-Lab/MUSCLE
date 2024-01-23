@@ -2,13 +2,11 @@ import React from "react";
 import PlayerSmall from "../PlayButton/PlayerSmall";
 import classNames from "classnames";
 
-import { getPlayerLabel } from "../../util/label";
-
 const MultiPlayer = ({
     playSection,
     sections,
     playerIndex,
-    playConfig,
+    labels,
     disabledPlayers,
     extraContent,
 }) => {
@@ -30,13 +28,7 @@ const MultiPlayer = ({
                             disabledPlayers.includes(parseInt(index))
                         }
                         label={
-                            playConfig.label_style
-                                ? getPlayerLabel(
-                                      index,
-                                      playConfig.label_style,
-                                      playConfig.labels || []
-                                  )
-                                : ""
+                            labels? labels[index] : ""
                         }
                         playing={playerIndex === index}
                     />

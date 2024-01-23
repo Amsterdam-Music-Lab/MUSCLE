@@ -17,7 +17,7 @@ class TestsSelenium(unittest.TestCase):
     Install selenium on your system
     pip install selenium
 
-    Create tests-selenium.ini file in the same directory as this file describing your setup: 
+    Create tests-selenium.ini file in the same directory as this file describing your setup:
 
     ```
     [selenium]
@@ -40,7 +40,7 @@ class TestsSelenium(unittest.TestCase):
 
     To skip individual tests, add `@unittest.skip` before the test
     """
-  
+
     def setUp(self):
 
         warnings.simplefilter("ignore", ResourceWarning)
@@ -48,7 +48,7 @@ class TestsSelenium(unittest.TestCase):
         self.config = configparser.ConfigParser()
         self.config.read('tests-selenium.ini')
 
-        browser = self.config['selenium']['browser'] 
+        browser = self.config['selenium']['browser']
         headless = self.config['selenium']['headless'] == "yes"
 
         if browser == "Firefox":
@@ -71,7 +71,7 @@ class TestsSelenium(unittest.TestCase):
 
         self.driver.set_window_size(1920, 1080)
 
-  
+
     def tearDown(self):
         self.driver.quit()
         #warnings.simplefilter("default", ResourceWarning)
@@ -80,14 +80,14 @@ class TestsSelenium(unittest.TestCase):
     def test_beatalignment(self):
 
         self.driver.get("{}/{}".format(self.config['url']['root'], self.config['experiment_slugs']['beat_alignment']))
-        
+
         # Explainer
         self.driver.find_element(By.XPATH, "//div[text()='Ok']").click()
 
         # If consent present, agree
         if self.driver.find_element(By.TAG_NAME,"h4").text.lower() == "informed consent":
             self.driver.find_element(By.XPATH, '//div[text()="I agree"]').click()
-        
+
         # Wait for examples to end and click Start
         WebDriverWait(self.driver, 60,  poll_frequency = 1) \
             .until(expected_conditions.element_to_be_clickable((By.XPATH, '//div[text()="Start"]'))) \
@@ -95,7 +95,7 @@ class TestsSelenium(unittest.TestCase):
 
         btn1 = '//label[text()="ALIGNED TO THE BEAT"]'
         btn2 = '//label[text()="NOT ALIGNED TO THE BEAT"]'
-        
+
         while self.driver.find_element(By.TAG_NAME,"h4").text != "END":
             btn = random.choice([btn1, btn2]) # randomly pick a button to click
             WebDriverWait(self.driver, 30,  poll_frequency = 1) \
@@ -104,7 +104,7 @@ class TestsSelenium(unittest.TestCase):
 
 
     def test_eurovision(self):
-    
+
         self.driver.get("{}/{}".format(self.config['url']['root'], self.config['experiment_slugs']['eurovision']))
 
         # Explainer
@@ -117,9 +117,9 @@ class TestsSelenium(unittest.TestCase):
         h4_text = None
         bonus_rounds = False
 
-        while True: 
+        while True:
 
-            if h4_text == None: time.sleep(1)
+            if h4_text is None: time.sleep(1)
             h4_text = WebDriverWait(self.driver, 1).until(presence_of_element_located((By.TAG_NAME,"h4"))).text
 
             if "ROUND " in h4_text:
@@ -137,12 +137,12 @@ class TestsSelenium(unittest.TestCase):
                 WebDriverWait(self.driver, 25, poll_frequency = 1) \
                     .until(presence_of_element_located((By.XPATH, '//*[text()="Next"]'))) \
                     .click()
-          
+
             elif h4_text == "QUESTIONNAIRE":
 
                 if self.driver.find_elements(By.CLASS_NAME, "aha__radios"):
                     self.driver.find_element(By.CSS_SELECTOR, ".radio:nth-child(1)").click()
-            
+
                 if self.driver.find_elements(By.TAG_NAME, "select"):
                     select = Select(self.driver.find_element(By.TAG_NAME, 'select'))
                     select.select_by_value('nl')
@@ -156,7 +156,7 @@ class TestsSelenium(unittest.TestCase):
 
                 # Click Continue after question answered
                 self.driver.find_element(By.XPATH,  '//*[text()="Continue"]').click()
-                 
+
             elif h4_text == "FINAL SCORE":
                 break
 
@@ -164,7 +164,7 @@ class TestsSelenium(unittest.TestCase):
                 self.driver.find_element(By.XPATH,  '//*[text()="Continue"]').click()
                 bonus_rounds = True
 
-            else: 
+            else:
                 raise Exception("Unknown view")
 
         self.driver.find_element(By.XPATH,  '//*[text()="Play again"]')

@@ -1,8 +1,11 @@
-import React, { useState, useEffect, useCallback, useRef } from "react";
-import { useExperiment, useParticipant, getNextRound } from "../../API";
+import React, { useState, useEffect, useCallback } from "react";
+import { useExperiment, getNextRound } from "../../API";
 import { TransitionGroup, CSSTransition } from "react-transition-group";
 import { withRouter } from "react-router-dom";
+import classNames from "classnames";
 
+import { useParticipantStore, useSessionStore } from "../../util/stores";
+import { createSession } from "../../API.js";
 import Consent from "../Consent/Consent";
 import DefaultPage from "../Page/DefaultPage";
 import ToontjeHoger from "../ToontjeHoger/ToontjeHoger";
@@ -11,11 +14,9 @@ import Final from "../Final/Final";
 import Loading from "../Loading/Loading";
 import Playlist from "../Playlist/Playlist";
 import Score from "../Score/Score";
-import StartSession from "../StartSession/StartSession";
 import Trial from "../Trial/Trial";
 import useResultHandler from "../../hooks/useResultHandler";
 import Info from "../Info/Info";
-import classNames from "classnames";
 import FloatingActionButton from "components/FloatingActionButton/FloatingActionButton";
 import UserFeedback from "components/UserFeedback/UserFeedback";
 
@@ -25,19 +26,19 @@ import UserFeedback from "components/UserFeedback/UserFeedback";
 // - It handles sending results to the server
 // - Implements participant_id as URL parameter, e.g. http://localhost:3000/bat?participant_id=johnsmith34
 //   Empty URL parameter "participant_id" is the same as no URL parameter at all
-const Experiment = ({ match, location }) => {
+const Experiment = ({ match }) => {
     const startState = { view: "LOADING" };
+    const participant = useParticipantStore((state) => state.participant);
+    const setSession = useSessionStore((state) => state.setSession);
+    const session = useSessionStore((state) => state.session);
 
     // Current experiment state
     const [state, setState] = useState(startState);
     const [playlist, setPlaylist] = useState(null);
     const [actions, setActions] = useState([]);
-    const session = useRef(null);
 
     // API hooks
     const [experiment, loadingExperiment] = useExperiment(match.params.slug);
-    const urlQueryString = useRef(location.search); // location.search is a part of URL after (and incuding) "?"
-    const [participant, loadingParticipant] = useParticipant(urlQueryString.current);
 
     const loadingText = experiment ? experiment.loading_text : "";
     const className = experiment ? experiment.class_name : "";
@@ -64,16 +65,27 @@ const Experiment = ({ match, location }) => {
         setActions(newActions);
     }, [loadState, setActions]);
 
+    useEffect(() => {
+        if (!experiment || !participant || !playlist) {
+            return;
+        }
+        try { 
+            createSession({
+                experiment,
+                participant,
+                playlist,
+            }).then(data => {
+                setSession(data.session);
+            });
+        } catch (err) {
+            setError(`Could not create a session: ${err}`)
+        }
+    }, [experiment, participant, playlist, setError, setSession])
+
     // Start first_round when experiment and partipant have been loaded
     useEffect(() => {
-
-        if (urlQueryString.current && !(new URLSearchParams(urlQueryString.current).has("participant_id"))) {
-            setError("Unknown URL parameter, use ?participant_id=");
-            return
-        }
-
         // Check if done loading
-        if (!loadingExperiment && !loadingParticipant) {
+        if (!loadingExperiment && participant) {
             // Loading succeeded
             if (experiment) {
                 updateActions(experiment.next_round);
@@ -86,10 +98,8 @@ const Experiment = ({ match, location }) => {
         experiment,
         loadingExperiment,
         participant,
-        loadingParticipant,
         setError,
-        updateActions,
-        loadState,
+        updateActions
     ]);
 
     // trigger next action from next_round array, or call session/next_round
@@ -99,7 +109,7 @@ const Experiment = ({ match, location }) => {
         } else {
             // Try to get next_round data from server
             const round = await getNextRound({
-                session: session.current,
+                session
             });
             if (round) {
                 updateActions(round.next_round);
@@ -124,7 +134,6 @@ const Experiment = ({ match, location }) => {
         // Default attributes for every view
         const attrs = {
             experiment,
-            session,
             participant,
             loadState,
             playlist,
@@ -133,7 +142,6 @@ const Experiment = ({ match, location }) => {
             setError,
             onResult,
             onNext,
-            urlQueryString,
             ...state,
         };
 
@@ -157,8 +165,6 @@ const Experiment = ({ match, location }) => {
             // -------------------------
             case "PLAYLIST":
                 return <Playlist {...attrs} />;
-            case "START_SESSION":
-                return <StartSession {...attrs} />;
             case "LOADING":
                 return <Loading {...attrs} />;
             case "ERROR":

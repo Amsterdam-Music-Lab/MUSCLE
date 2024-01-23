@@ -5,6 +5,15 @@ import { createMemoryHistory } from 'history'
 
 import Final from './Final'; // Adjust the import path as necessary
 
+jest.mock("../../util/stores", () => ({
+    useSessionStore: (fn) => {
+        const methods = {
+            setSession: jest.fn(),
+            session: 1
+        }
+        return fn(methods)
+    }
+}))
 
 jest.mock('../../API', () => ({
     finalizeSession: jest.fn(),
@@ -24,7 +33,6 @@ describe('Final Component', () => {
                 <Final
                     experiment={{ slug: 'test-experiment' }}
                     participant="participant-id"
-                    session="session-id"
                     score={100}
                     final_text="<p>Final Text</p>"
                     rank={1}
@@ -59,7 +67,6 @@ describe('Final Component', () => {
                 <Final
                     experiment={{ slug: 'test-experiment' }}
                     participant="participant-id"
-                    session="session-id"
                     score={100}
                     final_text="<p>Final Text</p>"
                 />
@@ -111,6 +118,6 @@ describe('Final Component', () => {
             </BrowserRouter>
         );
 
-        expect(finalizeSession).toHaveBeenCalledWith({ session: 'session-id', participant: 'participant-id' });
+        expect(finalizeSession).toHaveBeenCalledWith({ session: 1, participant: 'participant-id' });
     });
 });

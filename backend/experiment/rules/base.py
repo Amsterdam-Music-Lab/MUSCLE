@@ -14,6 +14,7 @@ from experiment.questions import get_questions_from_keys
 
 logger = logging.getLogger(__name__)
 
+
 class Base(object):
     """Base class for other rules classes"""
 

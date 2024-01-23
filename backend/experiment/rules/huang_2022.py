@@ -4,9 +4,9 @@ from django.utils.translation import gettext_lazy as _
 from django.template.loader import render_to_string
 from django.conf import settings
 
-from experiment.actions import HTML, Final, Score, Explainer, Step, Consent, StartSession, Redirect, Playlist, Trial
-from experiment.actions.form import BooleanQuestion, ChoiceQuestion, Form, Question
-from experiment.actions.playback import Playback
+from experiment.actions import HTML, Final, Explainer, Step, Consent, Redirect, Playlist, Trial
+from experiment.actions.form import BooleanQuestion, Form
+from experiment.actions.playback import Autoplay
 from experiment.questions.demographics import EXTRA_DEMOGRAPHICS
 from experiment.questions.goldsmiths import MSI_ALL, MSI_OTHER
 from experiment.questions.other import OTHER
@@ -49,13 +49,10 @@ class Huang2022(Hooked):
         consent = Consent(rendered, title=_(
             'Informed consent'), confirm=_('I agree'), deny=_('Stop'))
         playlist = Playlist(experiment.playlists.all())
-        # start session
-        start_session = StartSession()
 
         return [
             consent,
             playlist,
-            start_session
         ]
 
     def feedback_info(self):
@@ -82,7 +79,7 @@ class Huang2022(Hooked):
         if not plan:
             last_result = session.result_set.last()
             if not last_result:
-                playback = get_test_playback(self.play_method)
+                playback = get_test_playback()
                 html = HTML(body='<h4>{}</h4>'.format(_('Do you hear the music?')))
                 form = Form(form=[BooleanQuestion(
                     key='audio_check1',
@@ -98,7 +95,7 @@ class Huang2022(Hooked):
                 if last_result.score == 0:
                     # user indicated they couldn't hear the music
                     if last_result.question_key == 'audio_check1':
-                        playback = get_test_playback(self.play_method)
+                        playback = get_test_playback()
                         html = HTML(body=render_to_string('html/huang_2022/audio_check.html'))
                         form = Form(form=[BooleanQuestion(
                             key='audio_check2',
@@ -232,13 +229,13 @@ class Huang2022(Hooked):
         ]
         return " ".join([str(m) for m in messages])
 
-def get_test_playback(play_method):
+
+def get_test_playback():
     from section.models import Section
     test_section = Section.objects.get(song__name='audiocheck')
-    playback = Playback(sections=[test_section],
-        play_config={
-            'play_method': play_method,            
-            'show_animation': True
-            })
+    playback = Autoplay(
+        sections=[test_section],
+        show_animation=True
+    )
     return playback
     

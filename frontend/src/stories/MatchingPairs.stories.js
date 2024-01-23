@@ -1,4 +1,4 @@
-import MatchingPairs from '../components/Playback/MatchingPairs';
+import MatchingPairs, { SCORE_FEEDBACK_DISPLAY } from '../components/Playback/MatchingPairs';
 
 import audio from './assets/audio.wav';
 
@@ -149,8 +149,7 @@ export const WithThreeColumns = {
                 memory: false,
             },
         ],
-    },
-    ),
+    }),
     decorators: [
         (Story) => (
             <div id="root" style={{ width: '100%', height: '100%', backgroundColor: '#ddd', padding: '1rem' }}>
@@ -162,6 +161,48 @@ export const WithThreeColumns = {
         docs: {
             description: {
                 component: 'This story shows the component with three columns. The component automatically adjusts the number of columns based on the number of sections. Six or less sections will result in three columns, more than six sections will result in four columns.',
+            },
+        },
+    },
+};
+
+export const WithSmallBottomRightScoreFeedback = {
+    args: {
+        ...getDefaultArgs(),
+        scoreFeedbackDisplay: SCORE_FEEDBACK_DISPLAY.SMALL_BOTTOM_RIGHT
+    },
+    decorators: [
+        (Story) => (
+            <div id="root" style={{ width: '100%', height: '100%', backgroundColor: '#ddd', padding: '1rem' }}>
+                <Story />
+            </div>
+        ),
+    ],
+    parameters: {
+        docs: {
+            description: {
+                component: 'This story shows the component with the default props.',
+            },
+        },
+    },
+};
+
+export const WithShowAnimation = {
+    args: {
+        ...getDefaultArgs(),
+        showAnimation: true,
+    },
+    decorators: [
+        (Story) => (
+            <div id="root" style={{ width: '100%', height: '100%', backgroundColor: '#ddd', padding: '1rem' }}>
+                <Story />
+            </div>
+        ),
+    ],
+    parameters: {
+        docs: {
+            description: {
+                component: 'This story shows the component with the default props.',
             },
         },
     },

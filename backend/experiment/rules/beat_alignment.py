@@ -4,9 +4,9 @@ import copy
 from django.utils.translation import gettext_lazy as _
 
 from .base import Base
-from experiment.actions import Trial, Explainer, Consent, StartSession, Step
+from experiment.actions import Trial, Explainer, Consent, Step
 from experiment.actions.form import ChoiceQuestion, Form
-from experiment.actions.playback import Playback
+from experiment.actions.playback import Autoplay
 from experiment.actions.utils import final_action_with_optional_button, render_feedback_trivia
 from result.utils import prepare_result
 
@@ -40,13 +40,10 @@ class BeatAlignment(Base):
 
         # 2. Consent with default text
         consent = Consent()
-        
-        # 3. Start session
-        start_session = StartSession()
+
         return [
             explainer,
             consent,
-            start_session
         ]
 
     def next_round(self, session, request_session=None):
@@ -108,7 +105,7 @@ class BeatAlignment(Base):
         else:
             presentation_text = _(
                 "In this example the beeps are NOT ALIGNED TO THE BEAT of the music.")
-        playback = Playback([section],
+        playback = Autoplay([section],
                             instruction=presentation_text,
                             preload_message=presentation_text,
                             )
@@ -145,7 +142,7 @@ class BeatAlignment(Base):
             submits=True
         )
         form = Form([question])
-        playback = Playback([section])
+        playback = Autoplay([section])
         view = Trial(
             playback=playback,
             feedback_form=form,

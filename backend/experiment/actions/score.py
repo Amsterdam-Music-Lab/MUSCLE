@@ -4,11 +4,12 @@ from django.utils.translation import gettext as _
 
 from .base_action import BaseAction
 
+
 class Score(BaseAction):  # pylint: disable=too-few-public-methods
     """
     Provide data for an intermediate score view
 
-    Relates to client component: Score.js 
+    Relates to client component: Score.js
     """
 
     ID = 'SCORE'
@@ -57,7 +58,7 @@ class Score(BaseAction):  # pylint: disable=too-few-public-methods
             'feedback': self.feedback,
             'icon': self.icon,
             'timer': self.timer
-        }        
+        }
         if self.config['show_section']:
             action['last_song'] = self.session.last_song()
         if self.config['show_total_score']:
@@ -66,9 +67,9 @@ class Score(BaseAction):  # pylint: disable=too-few-public-methods
 
     def default_score_message(self, score):
         """Fallback to generate a message for the given score"""
-        
+
         # None
-        if score == None:
+        if score is None:
             score = 0
         # Zero
         if score == 0:

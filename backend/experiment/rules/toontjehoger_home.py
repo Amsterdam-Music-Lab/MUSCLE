@@ -74,7 +74,7 @@ class ToontjeHogerHome(Base):
         """Create data for the first experiment round"""
 
         # Session history
-        sessions = self.get_sessions(participant)
+        sessions = self.get_sessions(participant) # To be fixed in the future
         next_experiment_slug = self.get_next_experiment_slug(sessions)
 
         # Score

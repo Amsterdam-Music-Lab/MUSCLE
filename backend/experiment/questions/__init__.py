@@ -31,6 +31,7 @@ for question_group in QUESTION_GROUPS:
     KEYS_ALL.extend([question.key for question in question_group[1]])
     QUESTIONS_CHOICES.append( (question_group[0], [(q.key,"("+q.key+") "+q.question) for q in question_group[1]]) )
 
+
 def get_default_question_keys():
     return []
 
@@ -38,6 +39,7 @@ def get_default_question_keys():
 def get_questions_from_keys(keys):
     """ Returns questions in the order of keys"""
     return [QUESTIONS_ALL[KEYS_ALL.index(key)] for key in keys]
+
 
 if len(KEYS_ALL) != len(set(KEYS_ALL)):
     raise Exception("Duplicate question keys")

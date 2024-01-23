@@ -38,7 +38,7 @@ def scores(request):
         'messages': {
             'title': _('My profile'),
             'summary': ngettext(
-            'You have participated in %(count)d Amsterdam Music Lab experiment. Your best score is:', 
+            'You have participated in %(count)d Amsterdam Music Lab experiment. Your best score is:',
             'You have partcipated in %(count)d Amsterdam Music Lab experiments. Your best scores are:',
                 len(scores)) % {'count': len(scores)},
             'points': _('points'),

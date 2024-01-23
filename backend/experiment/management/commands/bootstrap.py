@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 from experiment.models import Experiment
 from section.models import Playlist
 
+
 class Command(BaseCommand):
     """ Command for creating a superuser and an experiment if they do not yet exist """
 

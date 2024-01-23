@@ -7,6 +7,7 @@ from experiment.models import Experiment
 from session.models import Session
 from result.models import Result
 
+
 class ParticipantTest(TestCase):
 
     @classmethod
@@ -35,21 +36,21 @@ class ParticipantTest(TestCase):
         self.session = self.client.session
         self.session['country_code'] = 'BLA'
         self.session.save()
-    
+
     def set_participant(self):
         self.session['participant_id'] = self.participant.id
         self.session.save()
-    
+
     def test_current_view(self):
         self.set_participant()
         response = json.loads(self.client.get('/participant/').content)
         assert response.get('id') == self.participant.id
         assert int(response.get('hash')) == self.participant.unique_hash
-        assert response.get('csrf_token') != None
+        assert response.get('csrf_token') is not None
 
     def test_profile(self):
         assert len(self.participant.profile()) == 1
-    
+
     def test_profile_object(self):
         po = self.participant.profile_object()
         assert len(po.keys()) == 2
@@ -65,5 +66,5 @@ class ParticipantTest(TestCase):
         self.client.get('/participant/')
         participant = Participant.objects.last()
         assert participant.country_code == 'BLA'
-    
+
 

@@ -4,17 +4,21 @@ from django.utils.translation import gettext_lazy as _
 from django.template.loader import render_to_string
 
 from .base import Base
-from experiment.actions import Consent, Explainer, Final, Playlist, StartSession, Step, Trial
-from experiment.actions.playback import Playback
+from experiment.actions import Consent, Explainer, Final, Playlist, Step, Trial
+from experiment.actions.playback import MatchingPairs
 from experiment.questions.demographics import EXTRA_DEMOGRAPHICS
 from experiment.questions.utils import question_by_key
 from result.utils import prepare_result
 
 from section.models import Section
 
-class MatchingPairs(Base):
+
+class MatchingPairsGame(Base):
     ID = 'MATCHING_PAIRS'
     num_pairs = 8
+    show_animation = True
+    score_feedback_display = 'large-top'
+    histogram_bars = 5
     contact_email = 'aml.tunetwins@gmail.com'
 
     def __init__(self):
@@ -33,9 +37,6 @@ class MatchingPairs(Base):
         # 2. Choose playlist.
         playlist = Playlist(experiment.playlists.all())
 
-        # 3. Start session.
-        start_session = StartSession()
-
         explainer = Explainer(
             instruction='',
             steps=[
@@ -50,8 +51,7 @@ class MatchingPairs(Base):
         return [
             consent,
             playlist,
-            explainer,
-            start_session
+            explainer
         ]
     
     def next_round(self, session):
@@ -107,17 +107,18 @@ class MatchingPairs(Base):
             degradations = session.playlist.section_set.filter(group__in=selected_pairs, tag=degradation_type)
             player_sections = list(originals) + list(degradations)
         random.shuffle(player_sections)
-        playback = Playback(
+        playback = MatchingPairs(
             sections=player_sections,
-            player_type='MATCHINGPAIRS',
-            play_config={'stop_audio_after': 5}
+            stop_audio_after=5,
+            show_animation=self.show_animation,
+            score_feedback_display=self.score_feedback_display,
         )
         trial = Trial(
             title='Tune twins',
             playback=playback,
             feedback_form=None,
             result_id=prepare_result('matching_pairs', session),
-            config={'show_continue_button': False}
+            config={ 'show_continue_button': False }
         )
         return trial
 

@@ -5,6 +5,7 @@ from django.db import migrations
 
 logger = logging.getLogger(__name__)
 
+
 def populate_results(apps, schema_editor):
     ExperimentResult = apps.get_model('experiment', 'Result')
     Profile = apps.get_model('experiment', 'Profile')
@@ -44,6 +45,7 @@ def populate_results(apps, schema_editor):
     OldParticipant = apps.get_model('experiment', 'Participant')
     OldParticipant.objects.all().delete()
 
+
 def backwards_populate_results(apps, schema_editor):
     ExperimentResult = apps.get_model('experiment', 'Result')
     Profile = apps.get_model('experiment', 'Profile')
@@ -82,11 +84,13 @@ def backwards_populate_results(apps, schema_editor):
     OldParticipant = apps.get_model('participant', 'Participant')
     OldParticipant.objects.all().delete()
 
+
 def attempt_set_section(new_result, result):
     try:
         new_result.section = result.section
     except:
         logging.warning('result {} could not set section {}'.format(new_result.id, result.section.id))
+
 
 def get_or_create_participant(participant, apps, app_name='participant'):
     Participant = apps.get_model(app_name, 'Participant')
@@ -102,6 +106,7 @@ def get_or_create_participant(participant, apps, app_name='participant'):
         )
         new_participant.save()
     return new_participant
+
 
 def get_or_create_session(session, new_participant, apps, app_name='session'):
     Session = apps.get_model(app_name, 'Session')
