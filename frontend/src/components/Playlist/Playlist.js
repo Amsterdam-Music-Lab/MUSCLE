@@ -1,9 +1,11 @@
 import React, { useEffect } from "react";
 import Loading from "../Loading/Loading";
+import { useErrorStore } from "util/stores";
 
 // Playlist is an experiment view, that handles (auto)selection of a playlist
-const Playlist = ({ experiment, instruction, setPlaylist, onNext, setError }) => {
+const Playlist = ({ experiment, instruction, setPlaylist, onNext }) => {
     const playlists = experiment.playlists;
+    const setError = useErrorStore(state => state.setError);
 
     // Handle empty or single playlist
     useEffect(() => {

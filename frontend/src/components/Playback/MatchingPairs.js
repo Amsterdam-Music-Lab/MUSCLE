@@ -2,7 +2,7 @@ import React, {useRef, useState} from "react";
 import classNames from "classnames";
 
 import { scoreIntermediateResult } from "../../API";
-import { useParticipantStore, useSessionStore } from "util/stores";
+import { useErrorStore, useParticipantStore, useSessionStore } from "util/stores";
 
 import PlayCard from "../PlayButton/PlayCard";
 
@@ -29,6 +29,7 @@ const MatchingPairs = ({
 
     const participant = useParticipantStore(state => state.participant);
     const session = useSessionStore(state => state.session);
+    const setError = useErrorStore(state => state.setError);
 
     const setScoreMessage = (score) => {
         switch (score) {
@@ -99,6 +100,10 @@ const MatchingPairs = ({
                 // check for match
                 const lastCard = sections[firstCard.current];
                 const imScore = await scoreIntermediateResult({session, participant, result: {currentCard, lastCard}});
+                if (!imScore) {
+                    setError('We cannot currently proceed with the game. Try again later');
+                    return;
+                }
                 score.current = imScore.score;
                 currentCard.seen = true;
                 lastCard.seen = true;
@@ -140,6 +145,7 @@ const MatchingPairs = ({
     }
 
     if (end) {
+        // submit empty result, which will trigger a call to `next_round`
         submitResult({});
     }
 
