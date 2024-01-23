@@ -1,7 +1,10 @@
+import json
+
 from django.test import TestCase
 
 from experiment.models import Experiment
 from participant.models import Participant
+from result.models import Result
 from section.models import Playlist
 from session.models import Session
 
@@ -61,3 +64,46 @@ class MatchingPairsTest(TestCase):
                 assert len(pairs) == 1
                 assert len(degradations) == 0
             self.session.increment_round()
+
+    def test_intermediate_score(self):
+        participant_info = json.loads(self.client.get('/participant/').content)
+        csrf_token = {
+            'csrfmiddlewaretoken': participant_info.get('csrf_token')}
+        self.session.participant = Participant.objects.get(
+            pk=int(participant_info.get('id')))
+        self.session.save()
+        session_data = {'session_id': self.session.id}
+        data = {'lastCard': {'id': 1}, 'currentCard': {'id': 2}}
+        self.client.post(
+            '/result/intermediate_score/', wrap_request(data, csrf_token, session_data))
+        # lucky match
+        result = Result.objects.filter(
+            question_key='move').last()
+        assert result.score == 10
+        assert result.given_response == 'lucky match'
+        data = {'lastCard': {'id': 1}, 'currentCard': {'id': 2, 'seen': True}}
+        self.client.post(
+            '/result/intermediate_score/', wrap_request(data, csrf_token, session_data))
+        result = Result.objects.filter(
+            question_key='move').last()
+        assert result.score == 20
+        assert result.given_response == 'match'
+        data = {'lastCard': {'id': 1}, 'currentCard': {'id': 4, 'seen': True}}
+        self.client.post(
+            '/result/intermediate_score/', wrap_request(data, csrf_token, session_data))
+        result = Result.objects.filter(
+            question_key='move').last()
+        assert result.score == -10
+        assert result.given_response == 'misremembered'
+        data = {'lastCard': {'id': 1, 'seen': True}, 'currentCard': {'id': 4}}
+        self.client.post(
+            '/result/intermediate_score/', wrap_request(data, csrf_token, session_data))
+        result = Result.objects.filter(
+            question_key='move').last()
+        assert result.score == 0
+        assert result.given_response == 'no match'
+
+
+def wrap_request(data, csrf_token, session_data):
+    return {'json_data': json.dumps(data),
+            **csrf_token, **session_data}
