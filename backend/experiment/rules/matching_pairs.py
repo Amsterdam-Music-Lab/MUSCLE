@@ -68,9 +68,6 @@ class MatchingPairsGame(Base):
                 return [trial]
         else:
             # final score saves the result from the cleared board into account
-            session.final_score += session.result_set.filter(
-                question_key='matching_pairs_board').first().score
-            session.save()
             social_info = self.social_media_info(session.experiment, session.final_score)
             social_info['apps'].append('clipboard')
             score = Final(
@@ -118,16 +115,13 @@ class MatchingPairsGame(Base):
             title='Tune twins',
             playback=playback,
             feedback_form=None,
-            result_id=prepare_result('matching_pairs_board', session),
             config={'show_continue_button': False}
         )
         return trial
 
     def calculate_score(self, result, data):
-        ''' in this experiment, this saves only the cleared board '''
-        moves = list(result.session.result_set.filter(question_key='move'))
-        scores = sum(m.score for m in moves)
-        return 100 + scores
+        ''' not used in this experiment '''
+        pass
     
     def calculate_intermediate_score(self, session, result):
         ''' will be called every time two cards have been turned '''
