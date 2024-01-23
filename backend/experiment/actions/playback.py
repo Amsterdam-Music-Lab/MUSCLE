@@ -41,7 +41,8 @@ class Playback(BaseAction):
                  mute=False,
                  timeout_after_playback=None,
                  stop_audio_after=None,
-                 resume_play=False):
+                 resume_play=False,
+                 ):
         self.sections = [{'id': s.id, 'url': s.absolute_url(), 'group': s.group}
                          for s in sections]
         if str(sections[0].filename).startswith('http'):
@@ -127,12 +128,14 @@ class MatchingPairs(Multiplayer):
     '''
     This is a special case of multiplayer:
     play buttons are represented as cards
+    - sections: a list of sections (in many cases, will only contain *one* section)
+    - score_feedback_display: how to display the score feedback (large-top, small-bottom-right, hidden)
     '''
 
-    def __init__(self, sections: List[Dict], display_score: str = 'large_top', **kwargs):
+    def __init__(self, sections: List[Dict], score_feedback_display: str = 'large-top', **kwargs):
         super().__init__(sections, **kwargs)
         self.ID = TYPE_MATCHINGPAIRS
-        self.display_score = display_score
+        self.score_feedback_display = score_feedback_display
 
 
 class VisualMatchingPairs(MatchingPairs):

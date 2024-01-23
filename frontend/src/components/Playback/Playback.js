@@ -211,13 +211,14 @@ const Playback = ({
                         {...attrs}
                         stopAudioAfter={playbackArgs.stop_audio_after}
                         showAnimation={playbackArgs.show_animation}
-                        displayScore={playbackArgs.display_score}
+                        scoreFeedbackDisplay={playbackArgs.score_feedback_display}
                     />
                 );
             case VISUALMATCHINGPAIRS:
                 return (
                     <VisualMatchingPairs
                         {...attrs}
+                        scoreFeedbackDisplay={playbackArgs.score_feedback_display}
                     />
                 );
             default:
