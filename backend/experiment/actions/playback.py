@@ -130,7 +130,7 @@ class MatchingPairs(Multiplayer):
     play buttons are represented as cards
     '''
 
-    def __init__(self, sections: List[Dict], score_feedback_display: str = 'large_top', **kwargs):
+    def __init__(self, sections: List[Dict], score_feedback_display: str = 'large-top', **kwargs):
         super().__init__(sections, **kwargs)
         self.ID = TYPE_MATCHINGPAIRS
         self.score_feedback_display = score_feedback_display
