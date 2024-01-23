@@ -15,7 +15,6 @@ const MatchingPairs = ({
     playerIndex,
     stopAudioAfter,
     showAnimation,
-    displayScore,
     finishedPlaying,
     scoreFeedbackDisplay = SCORE_FEEDBACK_DISPLAY.LARGE_TOP, // 'largeTop' (default) | 'smallBottomRight' | 'hidden'
     submitResult,
@@ -194,7 +193,6 @@ const MatchingPairs = ({
                 )
                 )}
             </div>
-            <div className={classNames("turnscore", { noturnscore: displayScore === 'hidden'})}>{turnFeedback}</div>
         </div>  
     )
 }
