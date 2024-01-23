@@ -108,8 +108,12 @@ class Playlist(models.Model):
             song = None
             if row['artist'] and row['name']:
                 song, created = Song.objects.get_or_create(artist=row['artist'], name=row['name'])
+
             if int(row['restrict_to_nl']) == 1:
                 song.restricted = [{"restricted": "nl"}]
+                song.save()
+            elif int(row['restrict_to_nl']) == 0:
+                song.restricted = []
                 song.save()
             section = Section(playlist=self,
                               start_time=float(row['start_time']),
@@ -319,7 +323,7 @@ class Section(models.Model):
             self.start_time,
             self.duration,
             self.filename,
-            self.song.restricted,
+            1 if self.song.restricted else 0,
             self.tag,
             self.group,
         ]
