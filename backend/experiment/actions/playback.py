@@ -128,6 +128,8 @@ class MatchingPairs(Multiplayer):
     '''
     This is a special case of multiplayer:
     play buttons are represented as cards
+    - sections: a list of sections (in many cases, will only contain *one* section)
+    - score_feedback_display: how to display the score feedback (large-top, small-bottom-right, hidden)
     '''
 
     def __init__(self, sections: List[Dict], score_feedback_display: str = 'large-top', **kwargs):
