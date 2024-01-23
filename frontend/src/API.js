@@ -131,7 +131,7 @@ export const getNextRound = async ({ session }) => {
 export const finalizeSession = async ({ session, participant }) => {
     try {
         const response = await axios.post(
-            API_BASE_URL + URLS.session.finalize(session.current.id),
+            API_BASE_URL + URLS.session.finalize(session.id),
             qs.stringify({
                 csrfmiddlewaretoken: participant.csrf_token,
             })
