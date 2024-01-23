@@ -16,7 +16,7 @@ const MatchingPairs = ({
     stopAudioAfter,
     showAnimation,
     finishedPlaying,
-    scoreFeedbackDisplay = SCORE_FEEDBACK_DISPLAY.LARGE_TOP, // 'largeTop' (default) | 'smallBottomRight' | 'hidden'
+    scoreFeedbackDisplay = SCORE_FEEDBACK_DISPLAY.LARGE_TOP, // 'large-top' (default) | 'small-bottom-right' | 'hidden'
     submitResult,
 }) => {
 
