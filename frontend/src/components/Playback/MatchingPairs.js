@@ -1,4 +1,4 @@
-import React, {useRef, useState} from "react";
+import React, { useRef, useState } from "react";
 import classNames from "classnames";
 
 import { scoreIntermediateResult } from "../../API";
@@ -6,16 +6,23 @@ import { useErrorStore, useParticipantStore, useSessionStore } from "util/stores
 
 import PlayCard from "../PlayButton/PlayCard";
 
+export const SCORE_FEEDBACK_DISPLAY = {
+    SMALL_BOTTOM_RIGHT: 'small-bottom-right',
+    LARGE_TOP: 'large-top',
+    HIDDEN: 'hidden',
+}
+
 const MatchingPairs = ({
     playSection,
     sections,
     playerIndex,
     stopAudioAfter,
     showAnimation,
-    displayScore,
     finishedPlaying,
+    scoreFeedbackDisplay = SCORE_FEEDBACK_DISPLAY.LARGE_TOP, // 'large-top' (default) | 'small-bottom-right' | 'hidden'
     submitResult,
 }) => {
+
     const xPosition = useRef(-1);
     const yPosition = useRef(-1);
     const score = useRef(undefined);
@@ -53,10 +60,10 @@ const MatchingPairs = ({
         // Check if this turn has finished
         if (turnedCards.length === 2) {
             // update total score & display current score
-            setTotal(total+score.current);
+            setTotal(total + score.current);
             setMessage(setScoreMessage(score.current));
             setMessage(setScoreMessage(score.current));
-            // show end of turn animations
+            // show end of turn animations if enabled
             if (showAnimation) {
                 switch (score.current) {                                       
                     case 10:
@@ -151,23 +158,14 @@ const MatchingPairs = ({
 
     return (
         <div className="aha__matching-pairs">
-            <div className="row justify-content-around">
-                <div className="col-6 align-self-start">
-                    <div dangerouslySetInnerHTML={{ __html: message }}
-                         className={classNames("matching-pairs__feedback", { nomessage: displayScore === 'hidden' }, {fbnomatch: score.current === 0}, {fblucky: score.current === 10}, {fbmemory: score.current === 20}, {fbmisremembered: score.current === -10})}
-                        
-                    />
-                </div>
-                <div className="col-6 align-self-end">
-                    <div className={classNames("matching-pairs__score", { noscore: displayScore === 'hidden' } )}>Score: <br />{total}</div>        
-                </div>
-            </div>
+
+            {scoreFeedbackDisplay !== SCORE_FEEDBACK_DISPLAY.HIDDEN && <ScoreFeedback message={message} score={score} total={total} scoreFeedbackDisplay={scoreFeedbackDisplay} />}
 
             <div className={classNames("playing-board", columnCount === 3 && "playing-board--three-columns")}>
                 {Object.keys(sections).map((index) => (
                     <PlayCard
                         key={index}
-                        onClick={()=> {
+                        onClick={() => {
                             playSection(index);
                             checkMatchingPairs(index);
                         }}
@@ -181,8 +179,33 @@ const MatchingPairs = ({
                 )
                 )}
             </div>
-            <div className={classNames("turnscore", { noturnscore: displayScore === 'hidden'})}>{turnFeedback}</div>
         </div>  
+    )
+}
+
+const ScoreFeedback = ({
+    message,
+    scoreFeedbackDisplay = SCORE_FEEDBACK_DISPLAY.LARGE_TOP,
+    score,
+    total,
+}) => {
+    return (
+        <div className={
+            classNames(
+                "matching-pairs__score-feedback row justify-content-around",
+                { "matching-pairs__score-feedback--small-bottom-right": scoreFeedbackDisplay === SCORE_FEEDBACK_DISPLAY.SMALL_BOTTOM_RIGHT },
+            )}
+        >
+            <div className="col-6 align-self-start">
+                <div dangerouslySetInnerHTML={{ __html: message }}
+                    className={classNames("matching-pairs__feedback", { fbnomatch: score.current === 0 }, { fblucky: score.current === 10 }, { fbmemory: score.current === 20 }, { fbmisremembered: score.current === -10 })}
+
+                />
+            </div>
+            <div className="col-6 align-self-end">
+                <div className="matching-pairs__score">Score: <br />{total}</div>
+            </div>
+        </div>
     )
 }
 

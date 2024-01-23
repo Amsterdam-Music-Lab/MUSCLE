@@ -18,7 +18,7 @@ class MatchingPairsGame(Base):
     ID = 'MATCHING_PAIRS'
     num_pairs = 8
     show_animation = True
-    display_score = 'large-top'
+    score_feedback_display = 'large-top'
     contact_email = 'aml.tunetwins@gmail.com'
 
     def __init__(self):
@@ -109,7 +109,7 @@ class MatchingPairsGame(Base):
             sections=player_sections,
             stop_audio_after=5,
             show_animation=self.show_animation,
-            display_score=self.display_score
+            score_feedback_display=self.score_feedback_display,
         )
         trial = Trial(
             title='Tune twins',

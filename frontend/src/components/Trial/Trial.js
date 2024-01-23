@@ -126,7 +126,6 @@ const Trial = ({
         return;
     }, [config, playback, makeResult]);
 
-
     return (
         <div role="presentation" className={classNames("aha__trial", config.style)}>
             {playback && (
