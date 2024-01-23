@@ -195,7 +195,7 @@ class MusicalPreferences(Base):
                 top_all
             )]
 
-        section = session.playlist.get_section()
+        section = session.section_from_unused_song()
         like_key = 'like_song'
         likert = LikertQuestionIcon(
             question=_('2. How much do you like this song?'),
