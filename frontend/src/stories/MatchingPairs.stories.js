@@ -186,3 +186,24 @@ export const WithSmallBottomRightScoreFeedback = {
         },
     },
 };
+
+export const WithShowAnimation = {
+    args: {
+        ...getDefaultArgs(),
+        showAnimation: true,
+    },
+    decorators: [
+        (Story) => (
+            <div id="root" style={{ width: '100%', height: '100%', backgroundColor: '#ddd', padding: '1rem' }}>
+                <Story />
+            </div>
+        ),
+    ],
+    parameters: {
+        docs: {
+            description: {
+                component: 'This story shows the component with the default props.',
+            },
+        },
+    },
+};
