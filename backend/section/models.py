@@ -314,15 +314,12 @@ class Section(models.Model):
     def export_admin_csv(self):
         """Export csv data for admin"""
         return [
-            self.id,
-            self.pk,
             self.song.artist,
             self.song.name,
             self.start_time,
             self.duration,
             self.filename,
             self.song.restricted,
-            self.play_count,
             self.tag,
             self.group,
         ]
