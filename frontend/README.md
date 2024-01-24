@@ -38,10 +38,10 @@ Tip: Use SongBool or SongSync as an example when creating a new view with audio 
 Use the following variables to configure your index.html file:
 
 ```
-REACT_APP_HTML_PAGE_TITLE=Amsterdam Music Lab Experiment
-REACT_APP_HTML_OG_DESCRIPTION=Listening experiments from the Amsterdam Music Lab. Test your musical knowledge and skills in engaging citizen-science experiments.
-REACT_APP_HTML_OG_IMAGE=https://app.amsterdammusiclab.nl/images/og-hooked.jpg
-REACT_APP_HTML_OG_TITLE=Amsterdam Music Lab Experiment
-REACT_APP_HTML_OG_URL=https://app.amsterdammusiclab.nl
-REACT_APP_HTML_BODY_CLASS=
+VITE_HTML_PAGE_TITLE=Amsterdam Music Lab Experiment
+VITE_HTML_OG_DESCRIPTION=Listening experiments from the Amsterdam Music Lab. Test your musical knowledge and skills in engaging citizen-science experiments.
+VITE_HTML_OG_IMAGE=https://app.amsterdammusiclab.nl/images/og-hooked.jpg
+VITE_HTML_OG_TITLE=Amsterdam Music Lab Experiment
+VITE_HTML_OG_URL=https://app.amsterdammusiclab.nl
+VITE_HTML_BODY_CLASS=
 ```
