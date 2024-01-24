@@ -8,7 +8,7 @@ jobs:
   build:
     runs-on: self-hosted
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Build Podman images
         run: podman-compose -f docker-compose-deploy.yml build
       - name: Deploy Podman images
