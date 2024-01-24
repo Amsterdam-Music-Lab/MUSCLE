@@ -1,6 +1,10 @@
 version: '3.8'
 
 services:
+  ip2country:
+    image: extrawurst/ip2country:latest
+    ports:
+      - 8854:5000
   client-builder:
     build:
       context: ./frontend
