@@ -78,7 +78,9 @@ services:
           - type: bind
             source: ./frontend/vite.config.ts
             target: /client/vite.config.ts
-
+          - type: bind
+            source: ./frontend/vitest.config.ts
+            target: /client/vitest.config.ts
         environment:
           - VITE_API_ROOT=${VITE_API_ROOT}
           - VITE_EXPERIMENT_SLUG=${VITE_EXPERIMENT_SLUG}
