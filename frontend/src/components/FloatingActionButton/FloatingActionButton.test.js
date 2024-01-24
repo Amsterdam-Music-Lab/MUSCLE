@@ -1,13 +1,14 @@
 import React from 'react';
-import { render, fireEvent, screen } from '@testing-library/react';
+import { getByTestId, render, fireEvent, screen } from '@testing-library/react';
 import FloatingActionButton from './FloatingActionButton';
 
 describe('FloatingActionButton', () => {
     it('renders the button with the initial icon', () => {
-        render(<FloatingActionButton icon="fa-comment" />);
-        const icon = screen.getByTestId('floating-action-button__icon');
-        expect(icon).toBeInTheDocument();
-        expect(icon).toHaveClass('fa-comment');
+        const { getByTestId } = render(<FloatingActionButton icon="fa-comment" />);
+        const icon = getByTestId('floating-action-button__icon');
+
+        expect(icon).to.exist;
+        expect(icon).classList.contains('fa-comment');
     });
 
     it('toggles the content on click', () => {
@@ -17,10 +18,10 @@ describe('FloatingActionButton', () => {
         fireEvent.click(toggleButton);
 
         const content = getByTestId('floating-action-button');
-        expect(content).toHaveClass('floating-action-button--expanded');
+        expect(content).classList.contains('floating-action-button--expanded').to.be.true;
 
         fireEvent.click(toggleButton);
-        expect(content).not.toHaveClass('floating-action-button--expanded');
+        expect(content).classList.contains('floating-action-button--expanded').to.be.false;
     });
 
     it('displays the correct icon when expanded', () => {
@@ -30,8 +31,9 @@ describe('FloatingActionButton', () => {
         fireEvent.click(toggleButton);
 
         const icon = getByTestId('floating-action-button__icon');
-        expect(icon).toBeInTheDocument();
-        expect(icon).toHaveClass('fa-times');
+
+        expect(icon).to.exist;
+        expect(icon).classList.contains('fa-times');
     });
 
     it('closes the expanded content when the overlay is clicked', () => {
@@ -44,30 +46,31 @@ describe('FloatingActionButton', () => {
         fireEvent.click(overlay);
 
         const content = getByTestId('floating-action-button__content');
-        expect(content).not.toHaveClass('floating-action-button--expanded');
+        expect(content).classList.contains('floating-action-button--expanded').to.be.false;
     });
 
     it('initially renders in a collapsed state', () => {
-        render(<FloatingActionButton icon="fa-comment" />);
-        expect(screen.getByTestId('floating-action-button')).not.toHaveClass('floating-action-button--expanded');
+        const { getByTestId } = render(<FloatingActionButton icon="fa-comment" />);
+        expect(getByTestId('floating-action-button').classList.contains('floating-action-button--expanded')).to.be.false;
     });
 
     it('correctly applies position classes', () => {
-        render(<FloatingActionButton position="bottom-left" />);
-        expect(screen.getByTestId('floating-action-button')).toHaveClass('floating-action-button--bottom');
-        expect(screen.getByTestId('floating-action-button')).toHaveClass('floating-action-button--left');
+        const { getByTestId } = render(<FloatingActionButton position="bottom-left" />);
+        expect(getByTestId('floating-action-button').classList.contains('floating-action-button--bottom')).to.be.true;
+        expect(getByTestId('floating-action-button').classList.contains('floating-action-button--left')).to.be.true;
     });
 
     it('applies custom class name', () => {
-        render(<FloatingActionButton className="custom-class" />);
-        expect(screen.getByTestId('floating-action-button')).toHaveClass('custom-class');
+        const { getByTestId } = render(<FloatingActionButton className="custom-class" />);
+        expect(document.body.contains(getByTestId("floating-action-button").querySelector(".custom-class"))).to.be.true;
     });
 
     it('updates aria-hidden attribute of overlay correctly', () => {
-        render(<FloatingActionButton />);
-        const overlay = screen.getByTestId('floating-action-button__overlay');
-        expect(overlay).toHaveAttribute('aria-hidden', 'true');
-        fireEvent.click(screen.getByTestId('floating-action-button__toggle-button'));
-        expect(overlay).toHaveAttribute('aria-hidden', 'false');
+        const { getByTestId } = render(<FloatingActionButton />);
+        const overlay = getByTestId('floating-action-button__overlay');
+        expect(overlay).to.have.attribute('aria-hidden', 'true');
+
+        fireEvent.click(getByTestId('floating-action-button__toggle-button'));
+        expect(overlay).to.have.attribute('aria-hidden', 'false');
     });
 });

@@ -42,24 +42,29 @@ describe('MatchingPairs Component', () => {
     it('displays score feedback when scoreFeedbackDisplay is not HIDDEN', () => {
         const sections = new Array(6).fill({}).map((_, index) => ({ id: index }));
         const { container } = render(<MatchingPairs {...baseProps} sections={sections} scoreFeedbackDisplay={SCORE_FEEDBACK_DISPLAY.LARGE_TOP} />);
-        expect(container.querySelector('.matching-pairs__score-feedback')).toBeInTheDocument();
+
+        expect(document.body.contains(container.querySelector('.matching-pairs__score-feedback'))).to.be.true;
     });
 
     it('does not display score feedback when scoreFeedbackDisplay is HIDDEN', () => {
         const sections = new Array(6).fill({}).map((_, index) => ({ id: index }));
         const { container } = render(<MatchingPairs {...baseProps} sections={sections} scoreFeedbackDisplay={SCORE_FEEDBACK_DISPLAY.HIDDEN} />);
-        expect(container.querySelector('.matching-pairs__score-feedback')).not.toBeInTheDocument();
+
+        expect(document.body.contains(container.querySelector('.matching-pairs__score-feedback'))).to.not.be.true;
     });
 
     it('displays score feedback on the top when scoreFeedbackDisplay is LARGE_TOP', () => {
         const sections = new Array(6).fill({}).map((_, index) => ({ id: index }));
         const { container } = render(<MatchingPairs {...baseProps} sections={sections} scoreFeedbackDisplay={SCORE_FEEDBACK_DISPLAY.LARGE_TOP} />);
-        expect(container.querySelector('.matching-pairs__score-feedback--small-bottom-right')).not.toBeInTheDocument();
+
+        expect(document.body.contains(container.querySelector('.matching-pairs__score-feedback--small-bottom-right'))).to.not.be.true;
     });
 
     it('displays score feedback on the bottom right when scoreFeedbackDisplay is SMALL_BOTTOM_RIGHT', () => {
         const sections = new Array(6).fill({}).map((_, index) => ({ id: index }));
         const { container } = render(<MatchingPairs {...baseProps} sections={sections} scoreFeedbackDisplay={SCORE_FEEDBACK_DISPLAY.SMALL_BOTTOM_RIGHT} />);
-        expect(container.querySelector('.matching-pairs__score-feedback--small-bottom-right')).toBeInTheDocument();
+
+        expect(document.body.contains(container.querySelector('.matching-pairs__score-feedback--large-top'))).to.not.be.true;
+        expect(document.body.contains(container.querySelector('.matching-pairs__score-feedback--small-bottom-right'))).to.be.true;
     });
 });

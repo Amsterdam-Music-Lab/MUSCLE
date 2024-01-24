@@ -10,10 +10,10 @@ describe('Playback', () => {
     const basicProps = {
         autoAdvance: false,
         responseTime: 42,
-        onPreloadReady: jest.fn(),
-        startedPlaying: jest.fn(),
-        finishedPlaying: jest.fn(),
-        submitResult: jest.fn(),
+        onPreloadReady: vi.fn(),
+        startedPlaying: vi.fn(),
+        finishedPlaying: vi.fn(),
+        submitResult: vi.fn(),
     }
 
     let playbackArgs = {
@@ -31,7 +31,7 @@ describe('Playback', () => {
         <Playback 
             {... basicProps} playbackArgs={playbackArgs}
         />);
-        expect(container.querySelector('.aha__playback')).toBeInTheDocument();
+        expect(document.body.contains(container.querySelector('.aha__playback'))).to.be.true;
     });
 
     it('shows Preload during ready_time', () => {
@@ -39,7 +39,7 @@ describe('Playback', () => {
         <Playback 
             {... basicProps} playbackArgs={playbackArgs}
         />);
-        expect(container.querySelector('.aha__listen')).toBeInTheDocument();
+        expect(document.body.contains(container.querySelector('.aha__listen'))).to.be.true;
     });
 
 })

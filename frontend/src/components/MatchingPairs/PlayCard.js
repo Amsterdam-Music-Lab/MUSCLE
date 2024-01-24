@@ -1,7 +1,7 @@
 import classNames from "classnames";
 
 import Histogram from "../Histogram/Histogram";
-import { API_ROOT } from "config";
+import { API_ROOT } from "@/config";
 
 const PlayCard = ({ onClick, registerUserClicks, playing, section, view, showAnimation }) => {
     const getImgSrc = (url) => {
