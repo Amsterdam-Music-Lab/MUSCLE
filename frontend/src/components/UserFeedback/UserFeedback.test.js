@@ -1,4 +1,5 @@
 import React from 'react';
+import { vi } from 'vitest';
 import { render, fireEvent, waitFor } from '@testing-library/react';
 import UserFeedback from './UserFeedback';
 import { postFeedback } from '../../API';

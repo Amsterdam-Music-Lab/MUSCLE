@@ -1,9 +1,10 @@
 import React from 'react';
+import { vi } from 'vitest';
 import { render } from '@testing-library/react';
 
 import Playback from './Playback';
 
-jest.mock("../../util/stores");
+vi.mock("../../util/stores");
 
 describe('Playback', () => {
 

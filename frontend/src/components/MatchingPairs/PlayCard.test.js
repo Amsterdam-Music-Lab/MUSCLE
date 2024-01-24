@@ -1,6 +1,7 @@
 import React from "react";
+import { vi } from "vitest";
 import { render, fireEvent, screen } from "@testing-library/react";
-import PlayCard from "./PlayCard"; // Adjust the path as necessary
+import PlayCard from "./PlayCard";
 
 describe("PlayCard Component Tests", () => {
     const mockOnClick = vi.fn();
