@@ -81,6 +81,7 @@
     "@storybook/testing-library": "0.2.2",
     "@testing-library/react": "^14.1.2",
     "@testing-library/user-event": "^14.5.1",
+    "@vitest/coverage-v8": "^1.2.1",
     "babel-plugin-named-exports-order": "0.0.2",
     "coverage-badges-cli": "^1.2.5",
     "eslint": "^8.54.0",
