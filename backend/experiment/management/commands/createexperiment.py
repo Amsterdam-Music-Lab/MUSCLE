@@ -9,12 +9,8 @@ class Command(BaseCommand):
         # Ask for the experiment name
         experiment_name = input("What is the name of your experiment? (ex. Musical Preferences): ")
 
-        # Convert experiment name to snake_case and lowercase every word and replace spaces with underscores
-        experiment_name_snake_case = experiment_name.lower().replace(' ', '_')
-        experiment_name_snake_case_upper = experiment_name_snake_case.upper()
-
-        # Convert experiment name to PascalCase and capitalize every word and remove spaces
-        experiment_name_pascal_case = experiment_name.title().replace(' ', '')
+        # Get the experiment name in different cases
+        experiment_name_snake_case, experiment_name_snake_case_upper, experiment_name_pascal_case = self.get_experiment_name_cases(experiment_name)
 
         # Create a new file for the experiment class
         filename = f"./experiment/rules/{experiment_name_snake_case}.py"
@@ -44,9 +40,41 @@ class Command(BaseCommand):
 
         self.stdout.write(self.style.SUCCESS(f"Created {filename} for experiment {experiment_name}"))
 
-        # Example of modifying an existing file by adding a line of text
-        # existing_file = 'existing_file.py'  # Specify the correct path to the file you want to modify
-        # with open(existing_file, 'a') as f:
-        #     f.write(f"# Added experiment: {experiment_name}\n")
+        # Add the new experiment to ./experiment/rules/__init__.py
+        self.register_experiment_rule(experiment_name, './experiment/rules/__init__.py')
 
-        # self.stdout.write(self.style.SUCCESS(f"Updated {existing_file}"))
+    def register_experiment_rule(self, experiment_name, file_path):
+
+        # Get the experiment name in different cases
+        experiment_name_snake_case, experiment_name_snake_case_upper, experiment_name_pascal_case = self.get_experiment_name_cases(experiment_name)
+
+        # New lines to add
+        new_import = f"from .{experiment_name_snake_case} import {experiment_name_pascal_case}\n"
+        new_dict_entry = f"    {experiment_name_pascal_case}.ID: {experiment_name_pascal_case},\n"
+
+        with open(file_path, 'r') as file:
+            lines = file.readlines()
+
+        # Find the line to insert the new import, maintaining alphabetical order
+        import_index = next(i for i, line in enumerate(lines) if line.startswith('from .') and line > new_import)
+        lines.insert(import_index, new_import)
+
+        # Find the line to insert the new dictionary entry, maintaining alphabetical order within the EXPERIMENT_RULES
+        dict_start_index = lines.index("EXPERIMENT_RULES = {\n") + 1  # Start after the opening brace
+        dict_end_index = lines.index("}\n", dict_start_index)  # Find the closing brace
+        dict_entry_index = next((i for i, line in enumerate(lines[dict_start_index:dict_end_index], dict_start_index) if line > new_dict_entry), dict_end_index)
+        lines.insert(dict_entry_index, new_dict_entry)
+
+        # Write the modified lines back to the file
+        with open(file_path, 'w') as file:
+            file.writelines(lines)
+
+    def get_experiment_name_cases(self, experiment_name):
+        # Convert experiment name to snake_case and lowercase every word and replace spaces with underscores
+        experiment_name_snake_case = experiment_name.lower().replace(' ', '_')
+        experiment_name_snake_case_upper = experiment_name_snake_case.upper()
+
+        # Convert experiment name to PascalCase and capitalize every word and remove spaces
+        experiment_name_pascal_case = experiment_name.title().replace(' ', '')
+
+        return experiment_name_snake_case, experiment_name_snake_case_upper, experiment_name_pascal_case
