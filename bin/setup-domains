@@ -44,14 +44,16 @@ replace_env_variables() {
     printf "${GREEN_END}"
 
     # Add CLIENT_DOMAIN if it doesn't exist and then replace the value
-    if ! grep -q "CLIENT_DOMAIN" .env; then
-        echo "CLIENT_DOMAIN=" >> .env
+    if ! grep -q "CLIENT_DOMAIN=" .env; then
+        # Insert on the first line and add a newline
+        sed -i '' '1s/^/CLIENT_DOMAIN=\n/' .env
     fi
     sed -i '' "s/CLIENT_DOMAIN=.*/CLIENT_DOMAIN=$main_domain/g" .env
 
     # Add SERVER_DOMAIN if it doesn't exist and then replace the value
-    if ! grep -q "SERVER_DOMAIN" .env; then
-        echo "SERVER_DOMAIN=" >> .env
+    if ! grep -q "SERVER_DOMAIN=" .env; then
+        # Insert the line after CLIENT_DOMAIN
+        sed -i '' '2s/^/SERVER_DOMAIN=\n/' .env
     fi
     sed -i '' "s/SERVER_DOMAIN=.*/SERVER_DOMAIN=$backend_domain/g" .env
 
