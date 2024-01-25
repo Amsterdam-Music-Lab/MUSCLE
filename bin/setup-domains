@@ -73,7 +73,7 @@ replace_env_variables() {
 
 # Function to get domain selection
 get_domain_selection() {
-    local PS3="Please choose a domain for $1: "
+    local PS3="Please choose a domain for $1 (default: $2): "
     local options=("$2" "$3" "other (type a custom domain yourself)")
     local domain
 
@@ -111,7 +111,6 @@ HOST_ENTRIES=(
     "127.0.0.1 $backend_domain"
     "# END MUSCLE"
 )
-
 
 # Backup the original hosts file
 echo -e "\nBacking up your hosts file to ${HOSTS_FILE}.bak..."
