@@ -8,6 +8,7 @@ from .section.models import Playlist
 from .experiment.questions.demographics import EXTRA_DEMOGRAPHICS
 from .experiment.questions.utils import question_by_key
 
+
 class NewExperiment(Base):
     ID = 'NEW_EXPERIMENT'
     contact_email = 'info@example.com'

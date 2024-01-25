@@ -2,6 +2,7 @@ import os.path
 
 from django.core.management.base import BaseCommand
 
+
 class Command(BaseCommand):
     help = 'Creates a new experiment rules class'
 
@@ -29,7 +30,7 @@ class Command(BaseCommand):
         if os.path.isfile(filename):
             # Warn the user that the file already exists and ask if they want to overwrite it
             self.stdout.write(self.style.WARNING(f"File {filename} already exists"))
-            overwrite = input(f"Do you want to overwrite it? (y/n): ")
+            overwrite = input("Do you want to overwrite it? (y/n): ")
 
             # If the user does not want to overwrite the file, exit the command
             if overwrite.lower() != 'y':
@@ -89,7 +90,7 @@ class Command(BaseCommand):
         if os.path.isfile(filename):
             # Warn the user that the file already exists and ask if they want to overwrite it
             self.stdout.write(self.style.WARNING(f"File {filename} already exists"))
-            overwrite = input(f"Do you want to overwrite it? (y/n): ")
+            overwrite = input("Do you want to overwrite it? (y/n): ")
 
             # If the user does not want to overwrite the file, exit the command
             if overwrite.lower() != 'y':
