@@ -1,10 +1,58 @@
 version: '3.8'
 
 services:
+  db:
+    image: postgres
+    environment:
+      - POSTGRES_DB=${SQL_DATABASE}
+      - POSTGRES_USER=${SQL_USER}
+      - POSTGRES_PASSWORD=${SQL_PASSWORD}
+      - PGHOST=${SQL_HOST}
+      - PGPORT=${SQL_PORT}
+      - PGUSER=${SQL_USER}
+      - PGDATABASE=${SQL_DATABASE}
+      - PGPASSWORD=${SQL_PASSWORD}
+    volumes:
+      - /home/github-runner/podman-volumes/db-data:/var/lib/postgresql/data
+      - /home/github-runner/podman-volumes/db-backups:/backups
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
   ip2country:
     image: extrawurst/ip2country:latest
     ports:
       - 8854:5000
+  # server:
+  #   build:
+  #     context: ./backend
+  #     dockerfile: DockerfileDevelop
+  #   depends_on:
+  #     db:
+  #       condition: service_healthy
+  #     ip2country:
+  #       condition: service_started
+  #   volumes:
+  #     - type: bind
+  #       source: ./backend
+  #       target: /server
+  #   environment:
+  #     - AML_ALLOWED_HOSTS=${AML_ALLOWED_HOSTS}
+  #     - AML_DEBUG=${AML_DEBUG}
+  #     - DJANGO_SETTINGS_MODULE=${DJANGO_SETTINGS_MODULE}
+  #     - DJANGO_SUPERUSER_USERNAME=${DJANGO_SUPERUSER_USERNAME}
+  #     - DJANGO_SUPERUSER_PASSWORD=${DJANGO_SUPERUSER_PASSWORD}
+  #     - DJANGO_SUPERUSER_EMAIL=${DJANGO_SUPERUSER_EMAIL}
+  #     - AML_LOCATION_PROVIDER=${AML_LOCATION_PROVIDER}
+  #     - SENTRY_DSN=${SENTRY_DSN}
+  #     - SQL_DATABASE=${SQL_DATABASE}
+  #     - SQL_USER=${SQL_USER}
+  #     - SQL_PASSWORD=${SQL_PASSWORD}
+  #     - SQL_HOST=${SQL_HOST}
+  #   ports:
+  #     - 8000:8000
+  #   command: bash -c "python manage.py migrate && python manage.py bootstrap && python manage.py runserver 0.0.0.0:8000"
   client-builder:
     build:
       context: ./frontend
