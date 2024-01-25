@@ -40,11 +40,32 @@ replace_env_variables() {
     backend_domain_without_port="${backend_domain%:*}"
 
     printf $"${GREEN_BEGIN}"
-    echo -e "\nReplacing AML_ALLOWED_HOSTS and REACT_APP_API_ROOT values in .env file..."
+    echo -e "\nReplacing CLIENT_DOMAIN, SERVER_DOMAIN, AML_ALLOWED_HOSTS and REACT_APP_API_ROOT values in .env file..."
     printf "${GREEN_END}"
-    # Replace AML_ALLOWED_HOSTS="old_value" with AML_ALLOWED_HOSTS="new_value"
-    sed -i '' "s/AML_ALLOWED_HOSTS=.*/AML_ALLOWED_HOSTS=$main_domain,$backend_domain_without_port,localhost/g" .env
-    # Replace REACT_APP_API_ROOT="old_value" with REACT_APP_API_ROOT="new_value"
+
+    # Add CLIENT_DOMAIN if it doesn't exist and then replace the value
+    if ! grep -q "CLIENT_DOMAIN" .env; then
+        echo "CLIENT_DOMAIN=" >> .env
+    fi
+    sed -i '' "s/CLIENT_DOMAIN=.*/CLIENT_DOMAIN=$main_domain/g" .env
+
+    # Add SERVER_DOMAIN if it doesn't exist and then replace the value
+    if ! grep -q "SERVER_DOMAIN" .env; then
+        echo "SERVER_DOMAIN=" >> .env
+    fi
+    sed -i '' "s/SERVER_DOMAIN=.*/SERVER_DOMAIN=$backend_domain/g" .env
+
+    # Add AML_ALLOWED_HOSTS if it doesn't exist and then replace the value
+    if ! grep -q "AML_ALLOWED_HOSTS" .env; then
+        echo "AML_ALLOWED_HOSTS=" >> .env
+    fi
+    # include "$SERVER_DOMAIN" in AML_ALLOWED_HOSTS
+    sed -i '' "s/AML_ALLOWED_HOSTS=.*/AML_ALLOWED_HOSTS=\$SERVER_DOMAIN,$main_domain,$backend_domain_without_port,localhost/g" .env
+
+    # Add REACT_APP_API_ROOT if it doesn't exist and then replace the value
+    if ! grep -q "REACT_APP_API_ROOT" .env; then
+        echo "REACT_APP_API_ROOT=" >> .env
+    fi
     sed -i '' "s/REACT_APP_API_ROOT=.*/REACT_APP_API_ROOT=http:\/\/$backend_domain/g" .env
 }
 

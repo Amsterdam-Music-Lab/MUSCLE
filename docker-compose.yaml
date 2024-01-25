@@ -32,7 +32,8 @@ services:
           # routes HTTP requests with the host 'backend.muscle.local' to this service,
           # and sets 'web' as the (http, insecure) network entry point for these requests.
           - "traefik.enable=true"
-          - "traefik.http.routers.server.rule=Host(`backend.muscle.local`)"
+          # Use the env variable SERVER_DOMAIN to set the domain for the backend or default to backend.muscle.local
+          - "traefik.http.routers.server.rule=Host(`${SERVER_DOMAIN:-backend.muscle.local}`)"
           - "traefik.http.routers.server.entrypoints=web"
         build:
           context: ./backend
@@ -68,7 +69,8 @@ services:
           # routes HTTP requests with the host 'muscle.local' to this service,
           # and sets 'web' as the (http, insecure) network entry point for these requests.
           - "traefik.enable=true"
-          - "traefik.http.routers.client.rule=Host(`muscle.local`)"
+          # Use the env variable CLIENT_DOMAIN to set the domain for the frontend or default to muscle.local
+          - "traefik.http.routers.client.rule=Host(`${CLIENT_DOMAIN:-muscle.local}`)"
           - "traefik.http.routers.client.entrypoints=web"
         build:
           context: ./frontend
