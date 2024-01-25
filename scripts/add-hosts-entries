@@ -8,8 +8,8 @@ YELLOW_END="\e[0m"
 GREEN_BEGIN="\e[32m"
 GREEN_END="\e[0m"
 
-# Function to remove existing MUSCLE entries
-remove_existing_muscle_entries() {
+# Function to remove existing hosts entries
+remove_existing_hosts_entries() {
     printf $"${GREEN_BEGIN}"
     echo -e "\nRemoving existing entries for MUSCLE..."
     printf "${GREEN_END}"
@@ -21,8 +21,8 @@ remove_existing_muscle_entries() {
     fi
 }
 
-# Function to add host entries
-add_host_entries() {
+# Function to add hosts entries
+add_hosts_entries() {
     printf $"${GREEN_BEGIN}"
     echo -e "\nAdding the following entries to your hosts file:"
     printf "${GREEN_END}"
@@ -72,7 +72,7 @@ backend_domain=$(get_domain_selection "backend" "backend.muscle.local" "localhos
 
 printf "\nYou have chosen ${GREEN_BEGIN}$backend_domain${GREEN_END} as your backend domain.\n"
 
-# Define host entries
+# Define hosts entries
 HOST_ENTRIES=(
     "# MUSCLE"
     "127.0.0.1 $main_domain"
@@ -84,7 +84,7 @@ HOST_ENTRIES=(
 sudo cp "$HOSTS_FILE" "${HOSTS_FILE}.bak"
 
 # Remove existing MUSCLE entries
-remove_existing_muscle_entries
+remove_existing_hosts_entries
 
 # Add new MUSCLE entries
-add_host_entries
+add_hosts_entries
