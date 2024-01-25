@@ -29,14 +29,23 @@ add_hosts_entries() {
     for entry in "${HOST_ENTRIES[@]}"; do
         echo "$entry"
     done
-    printf $"${YELLOW_BEGIN}"
-    echo -e "\nYou may be asked for your password.\n"
-    printf "${YELLOW_END}"
     for entry in "${HOST_ENTRIES[@]}"; do
         echo "$entry" | sudo tee -a "$HOSTS_FILE" > /dev/null
     done
+}
 
-    printf "\nDone! You can now access the MUSCLE user interface at ${GREEN_BEGIN}http://$main_domain${GREEN_END} and the admin interface at ${GREEN_BEGIN}http://$backend_domain/admin${GREEN_END}.\n"
+# Replace AML_ALLOWED_HOSTS and REACT_APP_API_ROOT values in .env file
+replace_env_variables() {
+    # Get the backend domain without port number (if any) for AML_ALLOWED_HOSTS
+    backend_domain_without_port="${backend_domain%:*}"
+
+    printf $"${GREEN_BEGIN}"
+    echo -e "\nReplacing AML_ALLOWED_HOSTS and REACT_APP_API_ROOT values in .env file..."
+    printf "${GREEN_END}"
+    # Replace AML_ALLOWED_HOSTS="old_value" with AML_ALLOWED_HOSTS="new_value"
+    sed -i '' "s/AML_ALLOWED_HOSTS=.*/AML_ALLOWED_HOSTS=$main_domain,$backend_domain_without_port,localhost/g" .env
+    # Replace REACT_APP_API_ROOT="old_value" with REACT_APP_API_ROOT="new_value"
+    sed -i '' "s/REACT_APP_API_ROOT=.*/REACT_APP_API_ROOT=http:\/\/$backend_domain/g" .env
 }
 
 # Function to get domain selection
@@ -80,7 +89,12 @@ HOST_ENTRIES=(
     "# END MUSCLE"
 )
 
+printf $"${YELLOW_BEGIN}"
+echo -e "\nYou may be asked for your password.\n"
+printf "${YELLOW_END}"
+
 # Backup the original hosts file
+echo "Backing up your hosts file to ${HOSTS_FILE}.bak..."
 sudo cp "$HOSTS_FILE" "${HOSTS_FILE}.bak"
 
 # Remove existing MUSCLE entries
@@ -88,3 +102,8 @@ remove_existing_hosts_entries
 
 # Add new MUSCLE entries
 add_hosts_entries
+
+# Replace AML_ALLOWED_HOSTS and REACT_APP_API_ROOT values in .env
+replace_env_variables
+
+printf "\nDone! You can now access the MUSCLE platform at the following addresses:\n1) User interface:      ${GREEN_BEGIN}http://$main_domain${GREEN_END}\n2) Admin interface:     ${GREEN_BEGIN}http://$backend_domain/admin${GREEN_END}.\n"
