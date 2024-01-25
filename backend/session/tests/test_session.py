@@ -9,6 +9,7 @@ from section.models import Playlist, Section, Song
 from result.models import Result
 from session.models import Session
 
+
 class SessionTest(TestCase):
 
     @classmethod
@@ -16,12 +17,13 @@ class SessionTest(TestCase):
         
         cls.participant = Participant.objects.create(unique_hash=42)
         cls.experiment = Experiment.objects.create(rules='LISTENING_CONDITIONS', slug='test')
+        cls.playlist = Playlist.objects.create(
+            name='Test playlist'
+        )
         cls.session = Session.objects.create(
             experiment=cls.experiment,
             participant=cls.participant,
-        )
-        cls.playlist = Playlist.objects.create(
-            name='Test playlist'
+            playlist=cls.playlist
         )
     
     def test_create(self):
@@ -111,6 +113,25 @@ class SessionTest(TestCase):
         assert previous_section
         last_song = self.session.last_song()
         assert last_song == 'Beavis - Butthead'
+
+    def test_section_from_unused_song(self):
+        csv = ("Artist 1,Name 1,0.0,10.0,test/file1.mp3,0,1,0\n"
+               "Artist 1,Name 2,0.0,10.0,test/file2.mp3,0,1,0\n"
+               "Artist 2,Name 1,0.0,10.0,test/file3.mp3,0,0,0\n"
+               "Artist 2,Name 2,0.0,10.0,test/file4.mp3,0,0,0\n"
+               )
+        self.playlist.csv = csv
+        self.playlist.update_sections()
+        first_section = Section.objects.first()
+        assert first_section.song.artist == 'Artist 1'
+        assert first_section.song.name == 'Name 1'
+        Result.objects.create(session=self.session, section=first_section)
+        next_section = self.session.section_from_unused_song({'tag': '1'})
+        assert next_section.song.artist == 'Artist 1'
+        assert next_section.song.name == 'Name 2'
+        Result.objects.create(session=self.session, section=next_section)
+        another_section = self.session.section_from_unused_song()
+        assert another_section.song.artist == 'Artist 2'
 
     def test_json_data(self):
         self.session.save_json_data({'test': 'tested'})

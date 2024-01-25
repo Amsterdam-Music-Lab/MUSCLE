@@ -1,10 +1,10 @@
 from django.test import TestCase
 
 from experiment.models import Experiment
-from experiment.rules import MatchingPairs
 from participant.models import Participant
 from section.models import Playlist
 from session.models import Session
+
 
 class MatchingPairsTest(TestCase):
 

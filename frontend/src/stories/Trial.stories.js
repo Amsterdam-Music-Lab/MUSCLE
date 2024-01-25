@@ -46,26 +46,43 @@ export const Default = {
             ],
         },
         feedback_form: {
-            form: [{
-                key: "msi_14_never_complimented",
-                view: "TEXT_RANGE",
-                value: "",
-                question: "Ik heb nog nooit complimenten gekregen voor mijn talenten als muzikant.",
-                explainer: "In hoeverre ben je het hiermee eens of oneens?",
-                result_id: 18,
-                style: "neutral",
-                scoring_rule: "LIKERT",
-                scale_steps: 7,
-                choices: {
-                    "1": "Helemaal mee oneens",
-                    "2": "Zeer mee oneens",
-                    "3": "Mee oneens",
-                    "4": "Niet mee eens of oneens",
-                    "5": "Mee eens",
-                    "6": "Zeer mee eens",
-                    "7": "Helemaal mee eens"
+            form: [
+                {
+                    "key": "know_song",
+                    "view": "BUTTON_ARRAY",
+                    "explainer": "",
+                    "question": "1. Do you know this song?",
+                    "result_id": 17242,
+                    "is_skippable": false,
+                    "submits": false,
+                    "style": "boolean",
+                    "choices": {
+                        "yes": "fa-check",
+                        "unsure": "fa-question",
+                        "no": "fa-xmark"
+                    },
+                    "min_values": 1
+                },
+                {
+                    "key": "like_song",
+                    "view": "ICON_RANGE",
+                    "explainer": "",
+                    "question": "2. How much do you like this song?",
+                    "result_id": 17241,
+                    "is_skippable": false,
+                    "submits": false,
+                    "style": "gradient-7",
+                    "choices": {
+                        "1": "fa-face-grin-hearts",
+                        "2": "fa-face-grin",
+                        "3": "fa-face-smile",
+                        "4": "fa-face-meh",
+                        "5": "fa-face-frown",
+                        "6": "fa-face-frown-open",
+                        "7": "fa-face-angry"
+                    }
                 }
-            }],
+            ],
             submit_label: "Submit",
             skip_label: "Skip",
             is_skippable: true,

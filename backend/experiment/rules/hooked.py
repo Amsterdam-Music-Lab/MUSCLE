@@ -6,9 +6,9 @@ from django.utils.translation import gettext_lazy as _
 from django.template.loader import render_to_string
 
 from .base import Base
-from experiment.actions import  Consent, Explainer, Final, Playlist, Score, StartSession, Step, Trial
+from experiment.actions import Consent, Explainer, Final, Playlist, Score, Step, Trial
 from experiment.actions.form import BooleanQuestion, Form
-from experiment.actions.playback import Playback
+from experiment.actions.playback import Autoplay
 from experiment.questions.demographics import DEMOGRAPHICS
 from experiment.questions.goldsmiths import MSI_OTHER
 from experiment.questions.utils import question_by_key
@@ -23,12 +23,19 @@ from result.utils import prepare_result
 
 logger = logging.getLogger(__name__)
 
+
 class Hooked(Base):
     """Superclass for Hooked experiment rules"""
     ID = 'HOOKED'
 
-    consent_file = 'consent_hooked.html';
-    timeout = 15
+    consent_file = 'consent_hooked.html'
+    recognition_time = 15  # response time for "Do you know this song?"
+    sync_time = 15  # response time for "Did the track come back in the right place?"
+    # if the track continues in the wrong place: minimal shift forward (in seconds)
+    min_jitter = 10
+    # if the track continutes in the wrong place: maximal shift forward (in seconds)
+    max_jitter = 15
+    heard_before_time = 15  # response time for "Have you heard this song in previous rounds?"
     questions = True
     relevant_keys = ['recognize', 'heard_before']
     round_modifier = 0
@@ -36,17 +43,19 @@ class Hooked(Base):
 
     def __init__(self):
         self.questions = [
-            *copy_shuffle(DEMOGRAPHICS), # 1. Demographic questions (7 questions)
+            # 1. Demographic questions (7 questions)
+            *copy_shuffle(DEMOGRAPHICS),
             question_by_key('msi_39_best_instrument', MSI_OTHER),
-            *copy_shuffle(MSI_FG_GENERAL), # 2. General music sophistication
-            *copy_shuffle(MSI_ALL), # 3. Complete music sophistication (20 questions)
-            *copy_shuffle(STOMP20), # 4. STOMP (20 questions)
+            *copy_shuffle(MSI_FG_GENERAL),  # 2. General music sophistication
+            # 3. Complete music sophistication (20 questions)
+            *copy_shuffle(MSI_ALL),
+            *copy_shuffle(STOMP20),  # 4. STOMP (20 questions)
             *copy_shuffle(TIPI)  # 5. TIPI (10 questions)
         ]
 
     def first_round(self, experiment):
         """Create data for the first experiment rounds."""
-        
+
         # 1. Explain game.
         explainer = Explainer(
             instruction="How to Play",
@@ -64,7 +73,8 @@ class Hooked(Base):
         # 2. Get informed consent.
         if self.consent_file:
             rendered = render_to_string('consent/{}'.format(self.consent_file))
-            consent = Consent(text=rendered, title=_('Informed consent'), confirm=_('I agree'), deny=_('Stop'))
+            consent = Consent(text=rendered, title=_(
+                'Informed consent'), confirm=_('I agree'), deny=_('Stop'))
         else:
             # fall back to lorem ipsum if no consent_file is defined
             consent = Consent()
@@ -72,14 +82,10 @@ class Hooked(Base):
         # 3. Choose playlist.
         playlist = Playlist(experiment.playlists.all())
 
-        # 4. Start session.
-        start_session = StartSession()
-
         return [
             explainer,
             consent,
             playlist,
-            start_session
         ]
 
     def next_round(self, session):
@@ -103,9 +109,11 @@ class Hooked(Base):
                     session=session,
                     final_text=self.final_score_message(session),
                     rank=self.rank(session),
-                    social=self.social_media_info(session.experiment, total_score),
+                    social=self.social_media_info(
+                        session.experiment, total_score),
                     show_profile_link=True,
-                    button={'text': _('Play again'), 'link': '{}/{}'.format(settings.CORS_ORIGIN_WHITELIST[0], session.experiment.slug)}
+                    button={'text': _('Play again'), 'link': '{}/{}'.format(
+                        settings.CORS_ORIGIN_WHITELIST[0], session.experiment.slug)}
                 )
             ]
 
@@ -199,7 +207,7 @@ class Hooked(Base):
             n_old_new_correct, n_old_new_expected)
         return score_message + " " + song_sync_message + " " + heard_before_message
 
-    def get_trial_title(self, session, round_number):    
+    def get_trial_title(self, session, round_number):
         return _("Round %(number)d / %(total)d") %\
             {'number': round_number+1, 'total': session.experiment.rounds}
 
@@ -221,9 +229,11 @@ class Hooked(Base):
         n_free = n_rounds - 2 * n_old - n_new
 
         # Assign songs.
-        old_songs = songs[:n_old] # will reappear in "heard before" rounds
-        new_songs = songs[n_old:n_old+n_new] # novel songs in "heard before" rounds
-        free_songs = songs[n_old+n_new:n_old+n_new+n_free] # will not reappear in "heard before" rounds
+        old_songs = songs[:n_old]  # will reappear in "heard before" rounds
+        # novel songs in "heard before" rounds
+        new_songs = songs[n_old:n_old+n_new]
+        # will not reappear in "heard before" rounds
+        free_songs = songs[n_old+n_new:n_old+n_new+n_free]
 
         # Assign sections.
         old_sections = [session.section_from_song(s) for s in old_songs]
@@ -269,8 +279,10 @@ class Hooked(Base):
         if not section:
             logger.warning("Warning: no next_song_sync section found")
             section = session.section_from_any_song()
-        return song_sync(session, section, title=self.get_trial_title(session, round_number), play_method=self.play_method)
-       
+        return song_sync(session, section, title=self.get_trial_title(session, round_number),
+                         recognition_time=self.recognition_time, sync_time=self.sync_time,
+                         min_jitter=self.min_jitter, max_jitter=self.max_jitter)
+
     def next_heard_before_action(self, session):
         """Get next heard_before action for this session."""
         round_number = self.get_current_round(session) - self.round_modifier
@@ -287,14 +299,16 @@ class Hooked(Base):
         if round_number - heard_before_offset <= len(sections):
             this_section_info = sections[round_number - heard_before_offset]
             section = session.playlist.section_set.get(
-                    **{'id': this_section_info.get('id')})
+                **{'id': this_section_info.get('id')})
         if not section:
             logger.warning("Warning: no heard_before section found")
             section = session.section_from_any_song()
-        playback = Playback(
+        playback = Autoplay(
             [section],
-            play_config={'ready_time': 3, 'show_animation': True, 'play_method': self.play_method},
-            preload_message=_('Get ready!'))
+            show_animation=True,
+            ready_time=3,
+            preload_message=_('Get ready!')
+        )
         expected_response = this_section_info.get('novelty')
         # create Result object and save expected result to database
         key = 'heard_before'
@@ -305,13 +319,14 @@ class Hooked(Base):
                 'old': _("Yes"),
             },
             question=_("Did you hear this song in previous rounds?"),
-            result_id=prepare_result(key, session, section=section, expected_response=expected_response, scoring_rule='REACTION_TIME',),
+            result_id=prepare_result(
+                key, session, section=section, expected_response=expected_response, scoring_rule='REACTION_TIME',),
             submits=True,
             style={STYLE_BOOLEAN_NEGATIVE_FIRST: True, 'buttons-large-gap': True})
-            ])
+        ])
         config = {
             'auto_advance': True,
-            'response_time': self.timeout
+            'response_time': self.heard_before_time
         }
         trial = Trial(
             title=self.get_trial_title(session, round_number),
@@ -326,7 +341,7 @@ class Hooked(Base):
         title = self.get_trial_title(session, round_number - 1)
         previous_score = session.get_previous_result(self.relevant_keys).score
         return Score(session,
-            config=config,
-            title=title,
-            score=previous_score
-        )
+                     config=config,
+                     title=title,
+                     score=previous_score
+                     )

@@ -12,6 +12,7 @@ from django import forms
 language_choices = [(key, ISO_LANGUAGES[key]) for key in ISO_LANGUAGES.keys()]
 language_choices[0] = ('', 'Unset')
 
+
 class ExperimentSeries(models.Model):
     """ A model to allow nesting multiple experiments into a 'parent' experiment """
     name = models.CharField(max_length=64, default='')
@@ -88,10 +89,10 @@ class Experiment(models.Model):
                 ]
             },
         }
-    
+
     def export_sessions(self):
         # export session objects
-        return self.session_set.all()    
+        return self.session_set.all()
 
     def export_table(self, session_keys, result_keys, export_options):
         """Export filtered tabular data for admin
@@ -142,7 +143,7 @@ class Experiment(models.Model):
                     this_row = copy.deepcopy(row)
                 for result in session.result_set.all():
                     # Add all results to one row
-                    if not 'wide_format' in export_options:
+                    if 'wide_format' not in export_options:
                         this_row = copy.deepcopy(row)
                     # Get data for al potential result fields
                     full_result_data = {
@@ -183,7 +184,7 @@ class Experiment(models.Model):
                     fieldnames.update(result_data.keys())
                     result_counter += 1
                     # Append row for long format
-                    if not 'wide_format' in export_options:
+                    if 'wide_format' not in export_options:
                         rows.append(this_row)
                 # Append row for wide format
                 if 'wide_format' in export_options:
@@ -203,6 +204,7 @@ class Experiment(models.Model):
             return score['final_score__max']
 
         return 0
+
 
 class Feedback(models.Model):
     text = models.TextField()

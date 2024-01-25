@@ -5,6 +5,7 @@ from django.utils import timezone
 
 from django.core.exceptions import ValidationError
 
+
 # Create your models here.
 class Result(models.Model):
     """Score for each step in a session"""

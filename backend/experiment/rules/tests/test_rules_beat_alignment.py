@@ -6,6 +6,7 @@ from section.models import Playlist
 from session.models import Session
 import json
 
+
 class BeatAlignmentRuleTest(TestCase):
 
     @classmethod
@@ -33,7 +34,6 @@ class BeatAlignmentRuleTest(TestCase):
         cls.experiment = Experiment.objects.create(rules='BEAT_ALIGNMENT', slug='ba', rounds=13) #rules is BeatAlignment.ID in beat_alignment.py
         cls.experiment.playlists.add(playlist)
 
-
     def load_json(self, response):
         '''Asserts response status 200 OK, asserts content type json, loads and returns response.content json in a dictionary'''
         self.assertEqual(response.status_code, 200)
@@ -45,7 +45,7 @@ class BeatAlignmentRuleTest(TestCase):
         response_json = self.load_json(response)
         self.assertTrue( {'id','slug','name','class_name','rounds','playlists','next_round','loading_text'} <= response_json.keys() )
         # 3 practice rounds (number hardcoded in BeatAlignment.first_round)
-        views_exp = ['EXPLAINER','CONSENT', 'START_SESSION']
+        views_exp = ['EXPLAINER', 'CONSENT']
         self.assertEquals(len(response_json['next_round']), len(views_exp))
         for i in range(len(views_exp)):
             self.assertEquals(response_json['next_round'][i]['view'], views_exp[i])

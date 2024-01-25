@@ -8,6 +8,7 @@ $blue: #0cc7f1;
 $green: #00b612;
 $indigo: #2b2bee;
 $gray: #bdbebf;
+$gray-200: #e9ecef;
 $gray-900: #212529;
 $black: $gray-900;
 
@@ -22,3 +23,10 @@ $facebook-blue: #4267b2;
 $twitter-blue: #1da1f2;
 
 $fa-font-path: "../public/vendor/font-awesome/webfonts";
+
+// breakpoints
+$breakpoint-xs: 0;
+$breakpoint-sm: 576px;
+$breakpoint-md: 768px;
+$breakpoint-lg: 992px;
+$breakpoint-xl: 1200px;

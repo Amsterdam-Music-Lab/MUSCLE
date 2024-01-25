@@ -1,5 +1,6 @@
 from .base_action import BaseAction
 
+
 class Consent(BaseAction):  # pylint: disable=too-few-public-methods
     """
     Provide data for a view that ask consent for using the experiment data

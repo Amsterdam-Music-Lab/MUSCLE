@@ -14,6 +14,7 @@ from experiment.questions import get_questions_from_keys
 
 logger = logging.getLogger(__name__)
 
+
 class Base(object):
     """Base class for other rules classes"""
 
@@ -25,10 +26,20 @@ class Base(object):
     def feedback_info(self):
         feedback_body = render_to_string('feedback/user_feedback.html', {'email': self.contact_email})
         return {
+            # Header above the feedback form
             'header': _("Do you have any remarks or questions?"),
+
+            # Button text
             'button': _("Submit"),
+
+            # Body of the feedback form, can be HTML. Shown under the button
             'contact_body': feedback_body,
-            'thank_you': _("We appreciate your feedback!")
+
+            # Thank you message after submitting feedback
+            'thank_you': _("We appreciate your feedback!"),
+
+            # Show a floating button on the right side of the screen to open the feedback form
+            'show_float_button': False,
         }
 
     def calculate_score(self, result, data):
@@ -112,7 +123,7 @@ class Base(object):
                 feedback_form=Form([question], is_skippable=question.is_skippable))
         except StopIteration:
             return None
-    
+
     def get_questionnaire(self, session, randomize=False, cutoff_index=None):
         ''' Get a list of questions to be asked in succession '''
 
@@ -127,7 +138,7 @@ class Base(object):
                 feedback_form=Form([question], is_skippable=question.is_skippable)
             ))
         return trials
-    
+
     def social_media_info(self, experiment, score):
         current_url =  "{}/{}".format(settings.RELOAD_PARTICIPANT_TARGET,
             experiment.slug

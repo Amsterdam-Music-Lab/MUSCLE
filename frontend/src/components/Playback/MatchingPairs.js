@@ -1,23 +1,33 @@
-import React, {useRef, useState} from "react";
+import React, { useRef, useState } from "react";
 import classNames from "classnames";
 
 import PlayCard from "../PlayButton/PlayCard";
+
+export const SCORE_FEEDBACK_DISPLAY = {
+    SMALL_BOTTOM_RIGHT: 'small-bottom-right',
+    LARGE_TOP: 'large-top',
+    HIDDEN: 'hidden',
+}
 
 const MatchingPairs = ({
     playSection,
     sections,
     playerIndex,
-    finishedPlaying,
     stopAudioAfter,
+    showAnimation,
+    finishedPlaying,
+    scoreFeedbackDisplay = SCORE_FEEDBACK_DISPLAY.LARGE_TOP, // 'large-top' (default) | 'small-bottom-right' | 'hidden'
     submitResult,
 }) => {
+
     const xPosition = useRef(-1);
     const yPosition = useRef(-1);
     const score = useRef(undefined);
     const firstCard = useRef(-1);
     const secondCard = useRef(-1);
     const [total, setTotal] = useState(100);
-    const [message, setMessage] = useState('Pick a card')
+    const [message, setMessage] = useState('Pick a card');
+    const [turnFeedback, setTurnFeedback] = useState('');
     const [end, setEnd] = useState(false);
     const columnCount = sections.length > 6 ? 4 : 3;
 
@@ -41,7 +51,7 @@ const MatchingPairs = ({
     }
 
     const formatTime = (time) => {
-        return time/1000;
+        return time / 1000;
     }
 
     // Show (animated) feedback after second click on second card or finished playing
@@ -51,28 +61,32 @@ const MatchingPairs = ({
         // Check if this turn has finished
         if (turnedCards.length === 2) {
             // update total score & display current score
-            setTotal(total+score.current);
+            setTotal(total + score.current);
             setMessage(setScoreMessage(score.current));
-            // show end of turn animations
-            switch (score.current) {
-                case 10:
-                    turnedCards[0].lucky = true;
-                    turnedCards[1].lucky = true;
-                    break;
-                case 20:
-                    turnedCards[0].memory = true;
-                    turnedCards[1].memory = true;
-                    break;
-                default:
-                    turnedCards[0].nomatch = true;
-                    turnedCards[1].nomatch = true;
-                    // reset nomatch cards for coming turns
-                    setTimeout(() => {
-                        turnedCards[0].nomatch = false;
-                        turnedCards[1].nomatch = false;
-                      }, 700);
-                    break;
+            setMessage(setScoreMessage(score.current));
+            // show end of turn animations if enabled
+            if (showAnimation) {
+                switch (score.current) {                                       
+                    case 10:
+                        turnedCards[0].lucky = true;
+                        turnedCards[1].lucky = true;                                        
+                        break;
+                    case 20:
+                        turnedCards[0].memory = true;
+                        turnedCards[1].memory = true;                                        
+                        break;
+                    default:
+                        turnedCards[0].nomatch = true;
+                        turnedCards[1].nomatch = true;
+                        // reset nomatch cards for coming turns
+                        setTimeout(() => {
+                            turnedCards[0].nomatch = false;
+                            turnedCards[1].nomatch = false;                        
+                          }, 700);
+                        break;  
+                }   
             }
+            
 
             // add third click event to finish the turn
             document.getElementById('root').addEventListener('click', finishTurn);
@@ -96,13 +110,16 @@ const MatchingPairs = ({
                 if (lastCard.group === currentCard.group) {
                     // match
                     if (currentCard.seen) {
-                        score.current = 20;
+                        score.current = 20;      
+                        setTurnFeedback('+1')
                     } else {
                         score.current = 10;
+                        setTurnFeedback('0')
                     }
                 } else {
                     if (currentCard.seen) { score.current = -10; }
                     else { score.current = 0; }
+                    setTurnFeedback('-1')
                 };
                 currentCard.seen = true;
                 lastCard.seen = true;
@@ -138,6 +155,7 @@ const MatchingPairs = ({
         // remove third click event
         document.getElementById('root').removeEventListener('click', finishTurn);
         score.current = undefined;
+        setTurnFeedback('');
         // Turn all cards back and enable events
         sections.forEach(section => section.turned = false);
         sections.forEach(section => section.noevents = false);
@@ -149,28 +167,19 @@ const MatchingPairs = ({
     }
 
     if (end) {
-        submitResult({score: total, moves: resultBuffer.current});
+        submitResult({ score: total, moves: resultBuffer.current });
     }
 
     return (
         <div className="aha__matching-pairs">
-            <div className="row justify-content-around">
-                <div className="col-6 align-self-start">
-                    <div dangerouslySetInnerHTML={{ __html: message }}
-                         className={classNames("matching-pairs__feedback", {fbnomatch: score.current === 0}, {fblucky: score.current === 10}, {fbmemory: score.current === 20}, {fbmisremembered: score.current === -10})}
 
-                    />
-                </div>
-                <div className="col-6 align-self-end">
-                    <div className="matching-pairs__score">Score: <br />{total}</div>
-                </div>
-            </div>
+            {scoreFeedbackDisplay !== SCORE_FEEDBACK_DISPLAY.HIDDEN && <ScoreFeedback message={message} score={score} total={total} scoreFeedbackDisplay={scoreFeedbackDisplay} />}
 
             <div className={classNames("playing-board", columnCount === 3 && "playing-board--three-columns")}>
                 {Object.keys(sections).map((index) => (
                     <PlayCard
                         key={index}
-                        onClick={()=> {
+                        onClick={() => {
                             playSection(index);
                             checkMatchingPairs(index);
                         }}
@@ -179,12 +188,40 @@ const MatchingPairs = ({
                         section={sections[index]}
                         onFinish={showFeedback}
                         stopAudioAfter={stopAudioAfter}
+                        showAnimation={showAnimation}
                     />
                 )
                 )}
+            </div>
+        </div>  
+    )
+}
+
+const ScoreFeedback = ({
+    message,
+    scoreFeedbackDisplay = SCORE_FEEDBACK_DISPLAY.LARGE_TOP,
+    score,
+    total,
+}) => {
+    return (
+        <div className={
+            classNames(
+                "matching-pairs__score-feedback row justify-content-around",
+                { "matching-pairs__score-feedback--small-bottom-right": scoreFeedbackDisplay === SCORE_FEEDBACK_DISPLAY.SMALL_BOTTOM_RIGHT },
+            )}
+        >
+            <div className="col-6 align-self-start">
+                <div dangerouslySetInnerHTML={{ __html: message }}
+                    className={classNames("matching-pairs__feedback", { fbnomatch: score.current === 0 }, { fblucky: score.current === 10 }, { fbmemory: score.current === 20 }, { fbmisremembered: score.current === -10 })}
+
+                />
+            </div>
+            <div className="col-6 align-self-end">
+                <div className="matching-pairs__score">Score: <br />{total}</div>
             </div>
         </div>
     )
 }
 
 export default MatchingPairs;
+

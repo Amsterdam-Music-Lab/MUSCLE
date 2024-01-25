@@ -23,7 +23,7 @@ const Trial = ({
 }) => {
     // Main component state
     const [formActive, setFormActive] = useState(!config.listen_first);
-    const [preloadReady, setPreloadReady] = useState(!playback?.play_config?.ready_time);
+    const [preloadReady, setPreloadReady] = useState(!(playback?.ready_time));
 
     const submitted = useRef(false);
 
@@ -50,7 +50,7 @@ const Trial = ({
             }
 
             if (feedback_form) {
-                
+
                 if (feedback_form.is_skippable) {
                     form.map((formElement => (formElement.value = formElement.value || '')))
                 }
@@ -81,11 +81,11 @@ const Trial = ({
 
             }
         },
-        [feedback_form, config, onNext, onResult]
+        [feedback_form, config, onNext, onResult, result_id]
     );
 
     const checkBreakRound = (values, breakConditions) => {
-        switch(Object.keys(breakConditions)[0]) {
+        switch (Object.keys(breakConditions)[0]) {
             case 'EQUALS':
                 return values.some(val => breakConditions['EQUALS'].includes(val));
             case 'NOT':
@@ -108,11 +108,12 @@ const Trial = ({
         if (config.auto_advance) {
 
             // Create a time_passed result
-            if (config.auto_advance_timer != null) {
-                if (playback.player_type === 'BUTTON') {
+            if (config.auto_advance_timer != null) {                
+                if (playback.view === 'BUTTON') {
                     startTime.current = getCurrentTime();
                 }
-                const id = setTimeout( () => {makeResult({type: "time_passed",});} , config.auto_advance_timer);
+
+                setTimeout(() => { makeResult({ type: "time_passed", }); }, config.auto_advance_timer);
             } else {
 
                 makeResult({
@@ -125,21 +126,16 @@ const Trial = ({
         return;
     }, [config, playback, makeResult]);
 
-
     return (
         <div role="presentation" className={classNames("aha__trial", config.style)}>
             {playback && (
                 <Playback
-                    playerType={playback.view}
-                    instruction={playback.instruction}
+                    playbackArgs={playback}
                     onPreloadReady={() => {
                         setPreloadReady(true);
                     }}
-                    preloadMessage={playback.preload_message}
                     autoAdvance={config.auto_advance}
                     responseTime={config.response_time}
-                    playConfig={playback.play_config}
-                    sections={playback.sections}
                     submitResult={makeResult}
                     startedPlaying={startTimer}
                     finishedPlaying={finishedPlaying}
@@ -158,9 +154,9 @@ const Trial = ({
                     skipLabel={feedback_form.skip_label}
                     isSkippable={feedback_form.is_skippable}
                     onResult={makeResult}
-                    // emphasizeTitle={feedback_form.is_profile}
-                    // to do: if we want left-aligned text with a pink divider,
-                    // make this style option available again (used in Question.scss)
+                // emphasizeTitle={feedback_form.is_profile}
+                // to do: if we want left-aligned text with a pink divider,
+                // make this style option available again (used in Question.scss)
                 />
             )}
             {preloadReady && !feedback_form && config.show_continue_button && (

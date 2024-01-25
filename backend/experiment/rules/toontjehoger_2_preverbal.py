@@ -2,9 +2,9 @@ import logging
 from django.template.loader import render_to_string
 
 from .toontjehoger_1_mozart import toontjehoger_ranks
-from experiment.actions import Trial, Explainer, Step, Score, Final, StartSession, Playlist, Info, HTML
+from experiment.actions import Trial, Explainer, Step, Score, Final, Playlist, Info, HTML
 from experiment.actions.form import ButtonArrayQuestion, ChoiceQuestion, Form
-from experiment.actions.playback import Playback
+from experiment.actions.playback import ImagePlayer
 from experiment.actions.styles import STYLE_NEUTRAL
 from .base import Base
 from os.path import join
@@ -43,14 +43,10 @@ class ToontjeHoger2Preverbal(Base):
         # 3. Choose playlist.
         playlist = Playlist(experiment.playlists.all())
 
-        # 4. Start session.
-        start_session = StartSession()
-
         return [
             explainer,
             spectrogram_info,
             playlist,
-            start_session
         ]
 
     def get_spectrogram_info(self):
@@ -159,13 +155,12 @@ class ToontjeHoger2Preverbal(Base):
                 "Error: could not find section C for round 1")
 
         # Player
-        play_config = {
-            'label_style': 'ALPHABETIC',
-            'spectrograms': ["/images/experiments/toontjehoger/spectrogram-trumpet.webp", "/images/experiments/toontjehoger/spectrogram-whale.webp", "/images/experiments/toontjehoger/spectrogram-human.webp"],
-            'spectrogram_labels': ['Trompet', 'Walvis', 'Mens'],
-        }
-        playback = Playback(
-            [sectionA, sectionB, sectionC], player_type=Playback.TYPE_SPECTROGRAM, play_config=play_config)
+        playback = ImagePlayer(
+            [sectionA, sectionB, sectionC],
+            label_style='ALPHABETIC',
+            images=["/images/experiments/toontjehoger/spectrogram-trumpet.webp", "/images/experiments/toontjehoger/spectrogram-whale.webp", "/images/experiments/toontjehoger/spectrogram-human.webp"],
+            image_labels = ['Trompet', 'Walvis', 'Mens']
+        )
 
         trial = Trial(
             playback=playback,
@@ -192,12 +187,11 @@ class ToontjeHoger2Preverbal(Base):
                 "Error: could not find section B for round 2")
 
         # Player
-        play_config = {
-            'label_style': 'ALPHABETIC',
-            'spectrograms': ["/images/experiments/toontjehoger/spectrogram-baby-french.webp", "/images/experiments/toontjehoger/spectrogram-baby-german.webp"]
-        }
-        playback = Playback(
-            [sectionA, sectionB], player_type=Playback.TYPE_SPECTROGRAM, play_config=play_config)
+        playback = ImagePlayer(
+            [sectionA, sectionB],
+            label_style='ALPHABETIC',
+            images=["/images/experiments/toontjehoger/spectrogram-baby-french.webp", "/images/experiments/toontjehoger/spectrogram-baby-german.webp"],
+        )
 
         # Question
         key = 'baby'

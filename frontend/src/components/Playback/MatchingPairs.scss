@@ -13,10 +13,10 @@
 }
 
 .aha__matching-pairs {
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    margin: 0px auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 
 @media (min-aspect-ratio: 1/1)  {
@@ -45,7 +45,22 @@
 
 .playing-board {
     display: inline-grid;
-    max-width: 100%;
+}
+
+.matching-pairs__score-feedback {
+
+    font-weight: 700;
+
+    &--small-bottom-right {
+        position: fixed;
+        justify-content: flex-end;
+        bottom: 0;
+        right: 0;
+        text-align: right;
+        font-size: 0.5rem;
+        backface-visibility: hidden;
+        font-weight: normal;
+    }
 }
 
 .matching-pairs__feedback, .matching-pairs__score {
@@ -53,7 +68,6 @@
     line-height: 1;
     text-align: center;
     padding-bottom: .7rem;
-    font-weight: 700;
     font-size: 95%;
     width: auto;
 
@@ -63,7 +77,6 @@
 }
 
 .matching-pairs__feedback {
-    float: left;
     color: white;
 
     &.fbnomatch {
@@ -78,8 +91,24 @@
     &.fbmisremembered {
         color: $red;
     }
-}
+    &.nomessage {
+        opacity: 0;
+    }
+} 
 
 .matching-pairs__score {
     float: right;
+    
+    &.noscore {
+        opacity: 0;
+    }
+}
+
+.turnscore {
+    position: fixed;
+    bottom: -2rem;
+    left: -2rem;
+    &.noturnscore {
+        opacity: 0;
+    }
 }

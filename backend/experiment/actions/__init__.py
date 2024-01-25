@@ -8,6 +8,5 @@ from .playback import Playback
 from .playlist import Playlist
 from .redirect import Redirect
 from .score import Score
-from .start_session import StartSession
 from .toontjehoger import ToontjeHoger
 from .trial import Trial

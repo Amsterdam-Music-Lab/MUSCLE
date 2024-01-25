@@ -1,10 +1,9 @@
 from django.utils.translation import gettext_lazy as _
 
-from experiment.actions import Trial, Consent, StartSession
-from experiment.actions.form import Form
+from experiment.actions import Consent
 from experiment.questions.goldsmiths import MSI_F3_MUSICAL_TRAINING
 from experiment.questions.demographics import EXTRA_DEMOGRAPHICS
-from experiment.questions.utils import question_by_key, unanswered_questions
+from experiment.questions.utils import question_by_key
 from experiment.actions.utils import final_action_with_optional_button
 
 from .base import Base
@@ -28,10 +27,8 @@ class GoldMSI(Base):
 
     def first_round(self, experiment):
         consent = Consent()
-        start_session = StartSession()
         return [
             consent,
-            start_session
         ]
 
     def next_round(self, session, request_session=None):
@@ -40,3 +37,7 @@ class GoldMSI(Base):
             return questions
         else:
             return final_action_with_optional_button(session, '', request_session)
+
+    def feedback_info(self):
+        info = super().feedback_info()
+        return info

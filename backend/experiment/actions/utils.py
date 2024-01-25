@@ -1,10 +1,12 @@
 from os.path import join
+import random
 
 from django.conf import settings
 from django.utils.translation import gettext_lazy as _
 from django.template.loader import render_to_string
 
 from experiment.actions import Final
+
 
 def final_action_with_optional_button(session, final_text, request_session):
     """ given a session, a score message and an optional session dictionary from an experiment series,
@@ -33,12 +35,14 @@ def final_action_with_optional_button(session, final_text, request_session):
             final_text=final_text,
         )
 
+
 def render_feedback_trivia(feedback, trivia):
     ''' Given two texts of feedback and trivia,
     render them in the final/feedback_trivia.html template.'''
     context = {'feedback': feedback, 'trivia': trivia}
     return render_to_string(join('final',
         'feedback_trivia.html'), context)
+
 
 def get_average_difference(session, num_turnpoints, initial_value):
     """ 
@@ -54,6 +58,7 @@ def get_average_difference(session, num_turnpoints, initial_value):
             # for future compatibility, still catch the condition that there may be no results                 
             return initial_value
     return (sum([int(result.section.song.name) for result in last_turnpoints]) / last_turnpoints.count())
+
 
 def get_average_difference_level_based(session, num_turnpoints, initial_value):
     """ calculate the difference based on exponential decay,
@@ -71,6 +76,7 @@ def get_average_difference_level_based(session, num_turnpoints, initial_value):
     # Difference by level starts at initial value (which is level 1, so 20/(2^0)) and then halves for every next level
     return sum([initial_value / (2 ** (int(result.section.song.name.split('_')[-1]) - 1)) for result in last_turnpoints]) / last_turnpoints.count() 
 
+
 def get_fallback_result(session):
     """ if there were no turnpoints (outliers):
     return the last result, or if there are no results, return None
@@ -80,6 +86,7 @@ def get_fallback_result(session):
         return None
     return session.result_set.order_by('-created_at')[0]
 
+
 def get_last_n_turnpoints(session, num_turnpoints):
     """
     select all results associated with turnpoints in the result set
@@ -88,3 +95,7 @@ def get_last_n_turnpoints(session, num_turnpoints):
     all_results = session.result_set.filter(comment__iendswith='turnpoint').order_by('-created_at').all()
     cutoff = min(all_results.count(), num_turnpoints)
     return all_results[:cutoff]
+
+
+def randomize_playhead(min_jitter, max_jitter, silence_time, continuation_correctness):
+    return silence_time + (random.uniform(min_jitter, max_jitter) if not continuation_correctness else 0)
