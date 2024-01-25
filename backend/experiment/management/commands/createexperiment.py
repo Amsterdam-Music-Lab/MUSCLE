@@ -29,6 +29,8 @@ class Command(BaseCommand):
             if overwrite.lower() != 'y':
                 self.stdout.write(self.style.WARNING(f"File {filename} was not created"))
                 return
+            else:
+                self.stdout.write(self.style.WARNING(f"File {filename} will be overwritten"))
 
         # Create the file by copying ./experiment/management/commands/templates/experiment.py
         with open(filename, 'w') as f:
