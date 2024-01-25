@@ -110,12 +110,12 @@ HOST_ENTRIES=(
     "# END MUSCLE"
 )
 
-printf $"${YELLOW_BEGIN}"
-echo -e "\nYou may be asked for your password.\n"
-printf "${YELLOW_END}"
 
 # Backup the original hosts file
-echo "Backing up your hosts file to ${HOSTS_FILE}.bak..."
+echo -e "\nBacking up your hosts file to ${HOSTS_FILE}.bak..."
+printf $"${YELLOW_BEGIN}"
+echo -e "You may be asked for your password."
+printf "${YELLOW_END}"
 sudo cp "$HOSTS_FILE" "${HOSTS_FILE}.bak"
 
 # Remove existing MUSCLE entries
@@ -128,3 +128,4 @@ add_hosts_entries
 replace_env_variables
 
 printf "\nDone! You can now access the MUSCLE platform at the following addresses:\n1) User interface:      ${GREEN_BEGIN}http://$main_domain${GREEN_END}\n2) Admin interface:     ${GREEN_BEGIN}http://$backend_domain/admin${GREEN_END}.\n"
+printf "\nDon't forget to run ${GREEN_BEGIN}docker-compose up${GREEN_END} to (re-)start the platform.\n"
