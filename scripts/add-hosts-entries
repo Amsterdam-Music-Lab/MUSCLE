@@ -1,27 +1,72 @@
 #!/bin/bash
 
-# Define host entries
-HOST_ENTRIES=(
-    "# MUSCLE"
-    "127.0.0.1 muscle.local"
-    "127.0.0.1 backend.muscle.local"
-    "# END MUSCLE"
-)
-
 # Path to the hosts file
 HOSTS_FILE="/etc/hosts"
 
-# Function to add an entry if it doesn't exist
-add_host_entry() {
-    local entry=$1
-    if ! grep -q "$entry" "$HOSTS_FILE"; then
-        echo "$entry" | sudo tee -a "$HOSTS_FILE"
+YELLOW_BEGIN="\e[33m"
+YELLOW_END="\e[0m"
+
+# Function to remove existing MUSCLE entries
+remove_existing_muscle_entries() {
+    # Check if we are on macOS and adjust the sed command accordingly
+    if [[ "$OSTYPE" == "darwin"* ]]; then
+        sudo sed -i '' '/# MUSCLE/,/# END MUSCLE/d' "$HOSTS_FILE"
     else
-        echo "Entry already exists: $entry"
+        sudo sed -i '/# MUSCLE/,/# END MUSCLE/d' "$HOSTS_FILE"
     fi
 }
 
-# Add each host entry
-for entry in "${HOST_ENTRIES[@]}"; do
-    add_host_entry "$entry"
-done
+# Function to add host entries
+add_host_entries() {
+    echo "Adding new entries for MUSCLE..."
+    for entry in "${HOST_ENTRIES[@]}"; do
+        echo "$entry" | sudo tee -a "$HOSTS_FILE" > /dev/null
+    done
+}
+
+# Function to get domain selection
+get_domain_selection() {
+    local PS3="Please select the domain for $1 (Enter '3' to type yourself): "
+    local options=("$2" "$3" "other (type yourself)")
+    local domain
+
+    select opt in "${options[@]}"; do
+        case $REPLY in
+            1) domain=$2; break ;;
+            2) domain=$3; break ;;
+            3) read -p "Enter the domain: " domain; break ;;
+            *) echo "Invalid option. Please try again."; continue ;;
+        esac
+    done
+
+    echo "$domain"
+}
+
+# Main domain selection
+printf $"${YELLOW_BEGIN}"
+echo -e "# Define main site domain"
+printf "${YELLOW_END}"
+main_domain=$(get_domain_selection "main site" "muscle.local" "localhost:3000")
+
+# Backend domain selection
+printf $"${YELLOW_BEGIN}"
+echo "# Define backend domain"
+printf "${YELLOW_END}"
+backend_domain=$(get_domain_selection "backend" "backend.muscle.local" "localhost:8000")
+
+# Define host entries
+HOST_ENTRIES=(
+    "# MUSCLE"
+    "127.0.0.1 $main_domain"
+    "127.0.0.1 $backend_domain"
+    "# END MUSCLE"
+)
+
+# Backup the original hosts file
+sudo cp "$HOSTS_FILE" "${HOSTS_FILE}.bak"
+
+# Remove existing MUSCLE entries
+remove_existing_muscle_entries
+
+# Add new MUSCLE entries
+add_host_entries
