@@ -14,3 +14,5 @@ jobs:
         run: podman-compose -f docker-compose-deploy.yml build
       - name: Deploy Podman images
         run: podman-compose -f docker-compose-deploy.yml up -d
+      - name: Check Podman images
+        run: podman-compose -f docker-compose-deploy.yml ps
