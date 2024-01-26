@@ -12,10 +12,6 @@ def get_section(request, section_id, code):
     try:
         section = Section.objects.get(pk=section_id, code=code)
 
-        # Check location restrictions
-        if len(section.song.restricted) and not located_in_nl(request):
-            raise PermissionDenied
-
         # Section will be served, so increase play count
         # On your local development server you can receive multiple requests on
         # a single section
