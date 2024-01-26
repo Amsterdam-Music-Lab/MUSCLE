@@ -12,14 +12,14 @@ class VisualMatchingPairsTest(TestCase):
     @classmethod
     def setUpTestData(self):
         section_csv = (
-            "owner,George,0.0,1.0,https://m.media-amazon.com/images/M/MV5BMTUyNjE0NzAzMl5BMl5BanBnXkFtZTYwMjQzMzU3._V1_FMjpg_UX1000_.jpg,0,	vmp,	3\n"
-            "owner,George,0.0,1.0,https://m.media-amazon.com/images/M/MV5BMTUyNjE0NzAzMl5BMl5BanBnXkFtZTYwMjQzMzU3._V1_FMjpg_UX1000_.jpg,0,	vmp,	3\n"
-            "owner,John,0.0,1.0,https://m.media-amazon.com/images/M/MV5BMTYwMDE4MzgzMF5BMl5BanBnXkFtZTYwMDQzMzU3._V1_FMjpg_UX1000_.jpg,0,	vmp,	1\n"
-            "owner,John,0.0,1.0,https://m.media-amazon.com/images/M/MV5BMTYwMDE4MzgzMF5BMl5BanBnXkFtZTYwMDQzMzU3._V1_FMjpg_UX1000_.jpg,0,	vmp,	1\n"
-            "owner,Paul,0.0,1.0,https://m.media-amazon.com/images/M/MV5BMTkyNTY0MzUxOV5BMl5BanBnXkFtZTYwNTQzMzU3._V1_.jpg,0,	vmp,	2\n"
-            "owner,Paul,0.0,1.0,https://m.media-amazon.com/images/M/MV5BMTkyNTY0MzUxOV5BMl5BanBnXkFtZTYwNTQzMzU3._V1_.jpg,0,	vmp,	2\n"
-            "owner,Ringo,0.0,1.0,https://m.media-amazon.com/images/M/MV5BMTU1NjY5NTY4N15BMl5BanBnXkFtZTYwNzQzMzU3._V1_.jpg,0,	vmp,	4\n"
-            "owner,Ringo,0.0,1.0,https://m.media-amazon.com/images/M/MV5BMTU1NjY5NTY4N15BMl5BanBnXkFtZTYwNzQzMzU3._V1_.jpg,0,	vmp,	4\n"
+            "owner,George,0.0,1.0,https://m.media-amazon.com/images/M/MV5BMTUyNjE0NzAzMl5BMl5BanBnXkFtZTYwMjQzMzU3._V1_FMjpg_UX1000_.jpg,	vmp,	3\n"
+            "owner,George,0.0,1.0,https://m.media-amazon.com/images/M/MV5BMTUyNjE0NzAzMl5BMl5BanBnXkFtZTYwMjQzMzU3._V1_FMjpg_UX1000_.jpg,	vmp,	3\n"
+            "owner,John,0.0,1.0,https://m.media-amazon.com/images/M/MV5BMTYwMDE4MzgzMF5BMl5BanBnXkFtZTYwMDQzMzU3._V1_FMjpg_UX1000_.jpg,	vmp,	1\n"
+            "owner,John,0.0,1.0,https://m.media-amazon.com/images/M/MV5BMTYwMDE4MzgzMF5BMl5BanBnXkFtZTYwMDQzMzU3._V1_FMjpg_UX1000_.jpg,	vmp,	1\n"
+            "owner,Paul,0.0,1.0,https://m.media-amazon.com/images/M/MV5BMTkyNTY0MzUxOV5BMl5BanBnXkFtZTYwNTQzMzU3._V1_.jpg,	vmp,	2\n"
+            "owner,Paul,0.0,1.0,https://m.media-amazon.com/images/M/MV5BMTkyNTY0MzUxOV5BMl5BanBnXkFtZTYwNTQzMzU3._V1_.jpg,	vmp,	2\n"
+            "owner,Ringo,0.0,1.0,https://m.media-amazon.com/images/M/MV5BMTU1NjY5NTY4N15BMl5BanBnXkFtZTYwNzQzMzU3._V1_.jpg,	vmp,	4\n"
+            "owner,Ringo,0.0,1.0,https://m.media-amazon.com/images/M/MV5BMTU1NjY5NTY4N15BMl5BanBnXkFtZTYwNzQzMzU3._V1_.jpg,	vmp,	4\n"
         )
         self.playlist = Playlist.objects.create(name='TestVisualMatchingPairs')
         self.playlist.csv = section_csv

@@ -97,8 +97,7 @@ class Playlist(models.Model):
 
             # check for valid numbers
             if not (is_number(row['start_time'])
-                    and is_number(row['duration'])
-                    and is_number(row['restrict_to_nl'])):
+                    and is_number(row['duration'])):
                 return {
                     'status': self.CSV_ERROR,
                     'message': "Error: Expected number fields on line: " + str(lines)

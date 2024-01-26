@@ -8,7 +8,7 @@ from participant.utils import located_in_nl
 
 
 def get_section(request, section_id, code):
-    """Get section by given id, check location restrictions"""
+    """Get section by given id"""
     try:
         section = Section.objects.get(pk=section_id, code=code)
 

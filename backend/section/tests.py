@@ -24,30 +24,30 @@ class PlaylistModelTest(TestCase):
     def test_update_sections_invalid_row_length(self):
         playlist = Playlist.objects.get(name='TestPlaylist')
         # Third row invalid, len < 8
-        playlist.csv = ("Måneskin,Zitti e buoni,0.0,10.0,bat/maneskin.mp3,0,0,0\n"
-                        "Duncan Laurence,Arcade,0.0,10.0,bat/laurence.mp3,0,0,0\n"
-                        "Netta,Toy,0.0,10.0,0,0,0\n"
-                        "Salvador Sobral,Amar pelos dois,0.0,10.0,bat/sobral.mp3,0,0,0\n")
+        playlist.csv = ("Måneskin,Zitti e buoni,0.0,10.0,bat/maneskin.mp3,0,0\n"
+                        "Duncan Laurence,Arcade,0.0,10.0,bat/laurence.mp3,0,0\n"
+                        "Netta,Toy,0.0,10.0,0,0\n"
+                        "Salvador Sobral,Amar pelos dois,0.0,10.0,bat/sobral.mp3,0,0\n")
         s = playlist.update_sections()
         self.assertEqual(s['status'], playlist.CSV_ERROR)
 
     def test_update_sections_not_number(self):
         playlist = Playlist.objects.get(name='TestPlaylist')
         # Third row string is not a number
-        playlist.csv = ("Måneskin,Zitti e buoni,0.0,10.0,bat/maneskin.mp3,0,0,0\n"
-                        "Duncan Laurence,Arcade,0.0,10.0,bat/laurence.mp3,0,0,0\n"
+        playlist.csv = ("Måneskin,Zitti e buoni,0.0,10.0,bat/maneskin.mp3,0,0\n"
+                        "Duncan Laurence,Arcade,0.0,10.0,bat/laurence.mp3,0,0\n"
                         "Netta,Toy,string,string,bat/netta.mp3,string,tag,group\n"
-                        "Salvador Sobral,Amar pelos dois,0.0,10.0,bat/sobral.mp3,0,0,0\n")
+                        "Salvador Sobral,Amar pelos dois,0.0,10.0,bat/sobral.mp3,0,0\n")
         s = playlist.update_sections()
         self.assertEqual(s['status'], playlist.CSV_ERROR)
 
     def test_get_section(self):
         playlist = Playlist.objects.get(name='TestPlaylist')
         playlist.csv = (
-                        "Weird Al,Eat It,0.0,10.0,some/file.mp3,0,tag1,0\n"
-                        "Weird Al,Eat It,10.0,20.0,some/file.mp3,0,tag2,0\n"
-                        "Weird Al,Like a Surgeon,0.0,10.0,some/otherfile.mp3,0,tag1,0\n"
-                        "Weird Al,Like a Surgeon,10.0,20.0,some/otherfile.mp3,0,tag2,0\n"
+                        "Weird Al,Eat It,0.0,10.0,some/file.mp3,tag1,0\n"
+                        "Weird Al,Eat It,10.0,20.0,some/file.mp3,tag2,0\n"
+                        "Weird Al,Like a Surgeon,0.0,10.0,some/otherfile.mp3,tag1,0\n"
+                        "Weird Al,Like a Surgeon,10.0,20.0,some/otherfile.mp3,tag2,0\n"
                         )
         playlist.update_sections()
         assert Song.objects.count() == 2
@@ -62,10 +62,10 @@ class PlaylistModelTest(TestCase):
 
     def test_valid_csv(self):
         playlist = Playlist.objects.get(name='TestPlaylist')
-        playlist.csv = ("Måneskin,Zitti e buoni,0.0,10.0,bat/maneskin.mp3,0,0,0\n"
-                        "Duncan Laurence,Arcade,0.0,10.0,bat/laurence.mp3,0,1,2\n"
-                        "Netta,Toy,0.0,10.0,bat/netta.mp3,1,tag,group\n"
-                        "Salvador Sobral,Amar pelos dois,0.0,10.0,bat/sobral.mp3,1,0,0\n")
+        playlist.csv = ("Måneskin,Zitti e buoni,0.0,10.0,bat/maneskin.mp3,0,0\n"
+                        "Duncan Laurence,Arcade,0.0,10.0,bat/laurence.mp3,1,2\n"
+                        "Netta,Toy,0.0,10.0,bat/netta.mp3,tag,group\n"
+                        "Salvador Sobral,Amar pelos dois,0.0,10.0,bat/sobral.mp3,0,0\n")
         s = playlist.update_sections()
         self.assertEqual(s['status'], playlist.CSV_OK)
         sections = playlist.section_set.all()
