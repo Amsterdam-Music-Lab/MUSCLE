@@ -11,7 +11,10 @@ class Command(BaseCommand):
         experiment_name = input("What is the name of your experiment? (ex. Musical Preferences): ")
 
         # Create the experiment rule class
-        self.create_experiment_rule_class(experiment_name)
+        success = self.create_experiment_rule_class(experiment_name)
+
+        if not success:
+            return
 
         # Add the new experiment to ./experiment/rules/__init__.py
         self.register_experiment_rule(experiment_name, './experiment/rules/__init__.py')
@@ -28,7 +31,7 @@ class Command(BaseCommand):
 
         # Check if the file already exists
         if os.path.isfile(filename):
-            self.stdout.write(self.style.ERROR(f"File {filename} already exists. Exiting without creating file."))
+            self.stdout.write(self.style.ERROR(f"Experiment {experiment_name} already exists. Exiting without creating file(s)."))
             return
 
         # Create the file by copying ./experiment/management/commands/templates/experiment.py
@@ -42,6 +45,8 @@ class Command(BaseCommand):
                 )
 
         self.stdout.write(self.style.SUCCESS(f"Created {filename} for experiment {experiment_name}"))
+
+        return True
 
     def register_experiment_rule(self, experiment_name, file_path):
 
