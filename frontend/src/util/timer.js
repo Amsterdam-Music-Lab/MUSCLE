@@ -28,9 +28,7 @@ export const Timer = ({
             lastTime = time;
 
             // tick
-            if (onTick) {
-                onTick(time, delta);
-            }
+            onTick && onTick(time, delta);
         }
 
         lastTimestamp = timestamp;
