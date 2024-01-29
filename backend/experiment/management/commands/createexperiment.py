@@ -28,16 +28,8 @@ class Command(BaseCommand):
 
         # Check if the file already exists
         if os.path.isfile(filename):
-            # Warn the user that the file already exists and ask if they want to overwrite it
-            self.stdout.write(self.style.WARNING(f"File {filename} already exists"))
-            overwrite = input("Do you want to overwrite it? (y/n): ")
-
-            # If the user does not want to overwrite the file, exit the command
-            if overwrite.lower() != 'y':
-                self.stdout.write(self.style.WARNING(f"File {filename} was not created"))
-                return
-            else:
-                self.stdout.write(self.style.WARNING(f"File {filename} will be overwritten"))
+            self.stdout.write(self.style.ERROR(f"File {filename} already exists. Exiting without creating file."))
+            return
 
         # Create the file by copying ./experiment/management/commands/templates/experiment.py
         with open(filename, 'w') as f:
@@ -88,16 +80,8 @@ class Command(BaseCommand):
 
         # Check if the file already exists
         if os.path.isfile(filename):
-            # Warn the user that the file already exists and ask if they want to overwrite it
-            self.stdout.write(self.style.WARNING(f"File {filename} already exists"))
-            overwrite = input("Do you want to overwrite it? (y/n): ")
-
-            # If the user does not want to overwrite the file, exit the command
-            if overwrite.lower() != 'y':
-                self.stdout.write(self.style.WARNING(f"File {filename} was not created"))
-                return
-            else:
-                self.stdout.write(self.style.WARNING(f"File {filename} will be overwritten"))
+            self.stdout.write(self.style.ERROR(f"File {filename} already exists. Exiting without creating file."))
+            return
 
         # Create the file by copying ./experiment/management/commands/templates/experiment.py
         with open(filename, 'w') as f:
