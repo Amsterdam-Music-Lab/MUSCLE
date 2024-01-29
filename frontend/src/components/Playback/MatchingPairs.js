@@ -1,6 +1,9 @@
 import React, { useRef, useState } from "react";
 import classNames from "classnames";
 
+import { scoreIntermediateResult } from "../../API";
+import { useErrorStore, useParticipantStore, useSessionStore } from "util/stores";
+
 import PlayCard from "../PlayButton/PlayCard";
 
 export const SCORE_FEEDBACK_DISPLAY = {
@@ -31,9 +34,9 @@ const MatchingPairs = ({
     const [end, setEnd] = useState(false);
     const columnCount = sections.length > 6 ? 4 : 3;
 
-    const resultBuffer = useRef([]);
-
-    const startTime = useRef(Date.now());
+    const participant = useParticipantStore(state => state.participant);
+    const session = useSessionStore(state => state.session);
+    const setError = useErrorStore(state => state.setError);
 
     const setScoreMessage = (score) => {
         switch (score) {
@@ -48,10 +51,6 @@ const MatchingPairs = ({
     const registerUserClicks = (posX, posY) => {
         xPosition.current = posX;
         yPosition.current = posY;
-    }
-
-    const formatTime = (time) => {
-        return time / 1000;
     }
 
     // Show (animated) feedback after second click on second card or finished playing
@@ -94,7 +93,7 @@ const MatchingPairs = ({
         }
     }
 
-    const checkMatchingPairs = (index) => {
+    const checkMatchingPairs = async (index) => {        
         const currentCard = sections[index];
         const turnedCards = sections.filter(s => s.turned);
         if (turnedCards.length < 2) {
@@ -107,20 +106,12 @@ const MatchingPairs = ({
                 currentCard.noevents = true;
                 // check for match
                 const lastCard = sections[firstCard.current];
-                if (lastCard.group === currentCard.group) {
-                    // match
-                    if (currentCard.seen) {
-                        score.current = 20;      
-                        setTurnFeedback('+1')
-                    } else {
-                        score.current = 10;
-                        setTurnFeedback('0')
-                    }
-                } else {
-                    if (currentCard.seen) { score.current = -10; }
-                    else { score.current = 0; }
-                    setTurnFeedback('-1')
-                };
+                const imScore = await scoreIntermediateResult({session, participant, result: {currentCard, lastCard}});
+                if (!imScore) {
+                    setError('We cannot currently proceed with the game. Try again later');
+                    return;
+                }
+                score.current = imScore.score;
                 currentCard.seen = true;
                 lastCard.seen = true;
                 showFeedback();
@@ -133,12 +124,6 @@ const MatchingPairs = ({
                 // clear message
                 setMessage('');
             }
-            resultBuffer.current.push({
-                selectedSection: currentCard.id,
-                cardIndex: index,
-                score: score.current,
-                timestamp: formatTime(Date.now() - startTime.current)
-            });
         }
         return;
     };
@@ -167,7 +152,8 @@ const MatchingPairs = ({
     }
 
     if (end) {
-        submitResult({ score: total, moves: resultBuffer.current });
+        // submit empty result, which will trigger a call to `next_round`
+        submitResult({});
     }
 
     return (

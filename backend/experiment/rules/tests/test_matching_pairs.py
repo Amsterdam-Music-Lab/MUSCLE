@@ -1,7 +1,10 @@
+import json
+
 from django.test import TestCase
 
 from experiment.models import Experiment
 from participant.models import Participant
+from result.models import Result
 from section.models import Playlist
 from session.models import Session
 
@@ -61,3 +64,40 @@ class MatchingPairsTest(TestCase):
                 assert len(pairs) == 1
                 assert len(degradations) == 0
             self.session.increment_round()
+
+    def intermediate_score_request(self, data):
+        request_data = {'json_data': json.dumps(
+            data), **self.csrf_token, **self.session_data}
+        self.client.post(
+            '/result/intermediate_score/', request_data)
+        result = Result.objects.filter(
+            question_key='move').last()
+        return result
+
+    def test_intermediate_score(self):
+        participant_info = json.loads(self.client.get('/participant/').content)
+        self.csrf_token = {
+            'csrfmiddlewaretoken': participant_info.get('csrf_token')}
+        self.session.participant = Participant.objects.get(
+            pk=int(participant_info.get('id')))
+        self.session.save()
+        self.session_data = {'session_id': self.session.id}
+        sections = self.playlist.section_set.all()
+        data = {'lastCard': {'id': sections[0].id},
+                'currentCard': {'id': sections[1].id}}
+        result = self.intermediate_score_request(data)
+        assert result.score == 10
+        assert result.given_response == 'lucky match'
+        data['currentCard'].update({'seen': True})
+        result = self.intermediate_score_request(data)
+        assert result.score == 20
+        assert result.given_response == 'match'
+        data['currentCard'] = {'id': sections[3].id, 'seen': True}
+        result = self.intermediate_score_request(data)
+        assert result.score == -10
+        assert result.given_response == 'misremembered'
+        data['lastCard'].update({'seen': True})
+        data['currentCard'].pop('seen')
+        result = self.intermediate_score_request(data)
+        assert result.score == 0
+        assert result.given_response == 'no match'

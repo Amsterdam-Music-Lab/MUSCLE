@@ -50,6 +50,12 @@ class Base(object):
         if scoring_rule:
             return scoring_rule(result, data)
         return None
+    
+    def calculate_intermediate_score(self, session, result):
+        """ process result data during a trial (i.e., between next_round calls) 
+        return score
+        """
+        return 0
 
     def final_score_message(self, session):
         """Create final score message for given session, base on score per result"""

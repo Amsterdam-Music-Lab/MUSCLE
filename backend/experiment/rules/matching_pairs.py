@@ -1,4 +1,5 @@
 import random
+import json
 
 from django.utils.translation import gettext_lazy as _
 from django.template.loader import render_to_string
@@ -18,7 +19,6 @@ class MatchingPairsGame(Base):
     num_pairs = 8
     show_animation = True
     score_feedback_display = 'large-top'
-    histogram_bars = 5
     contact_email = 'aml.tunetwins@gmail.com'
 
     def __init__(self):
@@ -55,7 +55,7 @@ class MatchingPairsGame(Base):
         ]
     
     def next_round(self, session):
-        if session.rounds_passed() < 1:       
+        if session.rounds_passed() < 1:
             trials = self.get_questionnaire(session)
             if trials:
                 intro_questions = Explainer(
@@ -67,9 +67,7 @@ class MatchingPairsGame(Base):
                 trial = self.get_matching_pairs_trial(session)
                 return [trial]
         else:
-            session.final_score += session.result_set.filter(
-                question_key='matching_pairs').last().score
-            session.save()
+            # final score saves the result from the cleared board into account
             social_info = self.social_media_info(session.experiment, session.final_score)
             social_info['apps'].append('clipboard')
             score = Final(
@@ -117,14 +115,39 @@ class MatchingPairsGame(Base):
             title='Tune twins',
             playback=playback,
             feedback_form=None,
-            result_id=prepare_result('matching_pairs', session),
-            config={ 'show_continue_button': False }
+            config={'show_continue_button': False}
         )
         return trial
 
     def calculate_score(self, result, data):
-        moves = data.get('result').get('moves')
-        for m in moves:
-            m['filename'] = str(Section.objects.get(pk=m.get('selectedSection')).filename)
-        score = data.get('result').get('score')
+        ''' not used in this experiment '''
+        pass
+    
+    def calculate_intermediate_score(self, session, result):
+        ''' will be called every time two cards have been turned '''
+        result_data = json.loads(result)
+        first_card = result_data['lastCard']
+        first_section = Section.objects.get(pk=first_card['id'])
+        first_card['filename'] = str(first_section.filename)
+        second_card = result_data['currentCard']
+        second_section = Section.objects.get(pk=second_card['id'])
+        second_card['filename'] = str(second_section.filename)
+        if first_section.group == second_section.group:
+            if 'seen' in second_card:
+                score = 20
+                given_response = 'match'
+            else:
+                score = 10
+                given_response = 'lucky match'
+        else:
+            if 'seen' in second_card:
+                score = -10
+                given_response = 'misremembered'
+            else:
+                score = 0
+                given_response = 'no match'
+        prepare_result('move', session, json_data=result_data,
+                       score=score, given_response=given_response)
         return score
+
+        
