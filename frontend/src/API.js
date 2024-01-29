@@ -15,7 +15,7 @@ export const URLS = {
         feedback: (slug) => "/experiment/" + slug + "/feedback/",
     },
     experiment_collection: {
-        get: (slug) => "/experiment_collection/" + slug + "/"
+        get: (slug) => "experiment/collection/" + slug + "/"
     },
     participant: {
         current: "/participant/",
