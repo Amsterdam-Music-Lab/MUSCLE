@@ -4,7 +4,7 @@ from participant.models import Participant
 from session.models import Session
 from experiment.models import Experiment
 from experiment.rules.listening_conditions import ListeningConditions
-from experiment.actions import Consent, Explainer, Final, Playback, Playlist, Trial, Form
+from experiment.actions import Consent, Explainer, Final, Playback, Playlist, StartSession, Trial, Form
 from experiment.actions.form import Form
 from experiment.actions.playback import Playback
 
@@ -43,6 +43,7 @@ class ListeningConditionsTest(TestCase):
         self.assertIsInstance(actions[0], Consent)
         self.assertIsInstance(actions[1], Explainer)
         self.assertIsInstance(actions[2], Playlist)
+        self.assertIsInstance(actions[3], StartSession)
 
     def test_next_round_first_round(self):
         listening_conditions = ListeningConditions()
