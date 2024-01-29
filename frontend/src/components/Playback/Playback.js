@@ -180,7 +180,7 @@ const Playback = ({
             case PRELOAD:
                 return (
                     <Preload {...attrs}
-                        playMethod={playbackArgs.play_method}
+                        playMethod={playMethod}
                         duration={playbackArgs.ready_time}
                         preloadMessage={playbackArgs.preload_message}
                         onNext={() => {                        
