@@ -161,11 +161,13 @@ class ExperimentSeriesForm(ModelForm):
 
     class Meta:
         model = ExperimentSeries
-        fields = ['name', 'first_experiments', 'random_experiments', 'last_experiments']
+        fields = ['slug', 'first_experiments',
+                  'random_experiments', 'last_experiments', 'dashboard']
 
 
 class ExperimentSeriesAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
-    fields = ['name', 'first_experiments', 'random_experiments', 'last_experiments']
+    fields = ['slug', 'first_experiments',
+              'random_experiments', 'last_experiments', 'dashboard']
     form = ExperimentSeriesForm
 
 

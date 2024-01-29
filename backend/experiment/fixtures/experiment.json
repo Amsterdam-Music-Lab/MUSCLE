@@ -3,7 +3,7 @@
   "model": "experiment.experimentseries",
   "pk": 1,
   "fields": {
-    "name": "RhythmTestSeries",
+    "slug": "RhythmTestSeries",
     "first_experiments": [
       "10"
     ],
