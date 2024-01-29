@@ -36,13 +36,24 @@ const Playback = ({
     const setView = (view, data = {}) => {
         setState({ view, ...data });
     }
-    const playMethod = playbackArgs.play_method;
+    let playMethod = playbackArgs.play_method;
     const sections = playbackArgs.sections;
 
     // Keep track of which player has played, in a an array of player indices
     const [hasPlayed, setHasPlayed] = useState([]);
     const prevPlayerIndex = useRef(-1);
 
+
+    // Disable webaudio for ios versions below 17
+    const userAgentString = window.navigator.userAgent    
+
+    if (userAgentString.indexOf('iPhone') > -1 || userAgentString.indexOf('iPad') > -1 && userAgentString.indexOf('OS') > -1) {
+        const iosVersion = userAgentString.substring(userAgentString.indexOf('OS') + 3, userAgentString.indexOf('OS') + 5)
+        if (iosVersion < 17) {
+            playMethod = 'EXTERNAL';            
+        }
+    }
+    
     useEffect(() => {
         const index = prevPlayerIndex.current;
         if (index !== -1) {
