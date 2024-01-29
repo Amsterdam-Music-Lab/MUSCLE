@@ -62,13 +62,12 @@ const Experiment = ({ match }) => {
     }, [loadState, setActions]);
 
     useEffect(() => {
-        if (!experiment || !participant || !playlist) {
+        if (!experiment || !participant ) {
             return;
         }
         createSession({
             experiment,
-            participant,
-            playlist,
+            participant
         }).then(data => {
             setSession(data.session);
         }).catch(err => {
