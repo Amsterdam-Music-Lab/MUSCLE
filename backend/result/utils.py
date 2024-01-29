@@ -63,7 +63,8 @@ def prepare_result(question_key: str, session: Session, **kwargs) -> int:
     - session: the session on which the Result is going to be registered
     possible kwargs:
         - section: optionally, provide a section to which the Result is going to be tied
-        - expected_response: optionally, provide the correct answer, used for scoring
+        - expected_response: optionally, provide the correct answer, used for scoring  
+        - json_data: optionally, provide json data tied to this result
         - comment: optionally, provide a comment to be saved in the database, e.g. "training phase"
         - scoring_rule: optionally, provide a scoring rule
     '''

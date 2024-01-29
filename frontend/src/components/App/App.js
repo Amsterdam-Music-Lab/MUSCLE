@@ -1,4 +1,4 @@
-import {useEffect, useState, React} from "react";
+import {useEffect, React} from "react";
 import {
     BrowserRouter as Router,
     Switch,
@@ -9,7 +9,7 @@ import axios from "axios";
 
 import { API_BASE_URL, EXPERIMENT_SLUG, URLS } from "../../config";
 import { URLS as API_URLS } from "../../API";
-import { useParticipantStore } from "../../util/stores";
+import { useErrorStore, useParticipantStore } from "../../util/stores";
 import Experiment from "../Experiment/Experiment";
 import ExperimentCollection from "../ExperimentCollection/ExperimentCollection";
 import Profile from "../Profile/Profile";
@@ -19,7 +19,8 @@ import StoreProfile from "../StoreProfile/StoreProfile.js";
 
 // App is the root component of our application
 const App = () => {
-    const [error, setError] = useState(null);
+    const error = useErrorStore(state => state.error);
+    const setError = useErrorStore(state => state.setError);
     const setParticipant = useParticipantStore((state) => state.setParticipant);
     const queryParams = window.location.search;
     
@@ -36,10 +37,10 @@ const App = () => {
             console.error(err);
             setError(err);
         }
-    }, [queryParams, setParticipant])
+    }, [setError, queryParams, setParticipant])
 
     if (error) {
-        return <div>Error: Cannot initiate participant: {error}</div>;
+        return <p className="aha__error">Error: {error}</p>;
     }
 
     return (
