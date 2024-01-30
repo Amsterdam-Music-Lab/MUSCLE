@@ -29,11 +29,11 @@ services:
     server:
         labels:
           # Enables Traefik for the Django backend service,
-          # routes HTTP requests with the host 'backend.muscle.local' to this service,
+          # routes HTTP requests with the host 'backend.muscle.localhost' to this service,
           # and sets 'web' as the (http, insecure) network entry point for these requests.
           - "traefik.enable=true"
-          # Use the env variable SERVER_DOMAIN to set the domain for the backend or default to backend.muscle.local
-          - "traefik.http.routers.server.rule=Host(`${SERVER_DOMAIN:-backend.muscle.local}`)"
+          # Use the env variable SERVER_DOMAIN to set the domain for the backend or default to backend.muscle.localhost
+          - "traefik.http.routers.server.rule=Host(`${SERVER_DOMAIN:-backend.muscle.localhost}`)"
           - "traefik.http.routers.server.entrypoints=web"
         build:
           context: ./backend
@@ -66,11 +66,11 @@ services:
     client:
         labels:
           # Enables Traefik for the React frontend service,
-          # routes HTTP requests with the host 'muscle.local' to this service,
+          # routes HTTP requests with the host 'muscle.localhost' to this service,
           # and sets 'web' as the (http, insecure) network entry point for these requests.
           - "traefik.enable=true"
-          # Use the env variable CLIENT_DOMAIN to set the domain for the frontend or default to muscle.local
-          - "traefik.http.routers.client.rule=Host(`${CLIENT_DOMAIN:-muscle.local}`)"
+          # Use the env variable CLIENT_DOMAIN to set the domain for the frontend or default to muscle.localhost
+          - "traefik.http.routers.client.rule=Host(`${CLIENT_DOMAIN:-muscle.localhost}`)"
           - "traefik.http.routers.client.entrypoints=web"
         build:
           context: ./frontend

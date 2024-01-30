@@ -92,7 +92,7 @@ get_domain_selection() {
 printf $"${YELLOW_BEGIN}"
 echo -e "\n# Define main site domain (the user interface)"
 printf "${YELLOW_END}"
-main_domain=$(get_domain_selection "main site" "muscle.local" "localhost:3000")
+main_domain=$(get_domain_selection "main site" "muscle.localhost" "localhost:3000")
 
 printf "\nYou have chosen ${GREEN_BEGIN}$main_domain${GREEN_END} as your main site domain.\n"
 
@@ -100,7 +100,7 @@ printf "\nYou have chosen ${GREEN_BEGIN}$main_domain${GREEN_END} as your main si
 printf $"${YELLOW_BEGIN}"
 echo -e "\n# Define backend domain (the admin interface)"
 printf "${YELLOW_END}"
-backend_domain=$(get_domain_selection "backend" "backend.muscle.local" "localhost:8000")
+backend_domain=$(get_domain_selection "backend" "backend.muscle.localhost" "localhost:8000")
 
 printf "\nYou have chosen ${GREEN_BEGIN}$backend_domain${GREEN_END} as your backend domain.\n"
 
