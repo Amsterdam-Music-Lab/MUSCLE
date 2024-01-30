@@ -2,7 +2,7 @@ import React, { useRef, useState } from "react";
 import classNames from "classnames";
 
 import { scoreIntermediateResult } from "../../API";
-import useBoundStore from "util/stores";
+import useBoundStore from "@/util/stores";
 
 import PlayCard from "./PlayCard";
 
