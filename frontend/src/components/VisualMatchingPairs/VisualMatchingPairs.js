@@ -153,8 +153,6 @@ const VisualMatchingPairs = (props) => {
             setMessage('');
         }
 
-        console.log('start time', startTime)
-
         const newResult = {
             selectedSection: currentCard.id,
             cardIndex: index,
@@ -202,7 +200,7 @@ const VisualMatchingPairs = (props) => {
     }, [gameState, setEnd]);
 
     const registerUserClicks = () => void 0;
-    const stopAudioAfter = () => void 0;
+
 
     const onPlayCardClick = (index) => {
         setPlayerIndex(-1);
@@ -247,10 +245,8 @@ const VisualMatchingPairs = (props) => {
                         key={index}
                         onClick={() => onPlayCardClick(index)}
                         playing={playerIndex === index}
-                        onFinish={showFeedback}
                         registerUserClicks={registerUserClicks}
                         section={section}
-                        stopAudioAfter={stopAudioAfter}
                         view={view}
                     />
                 )
