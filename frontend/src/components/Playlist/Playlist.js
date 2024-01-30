@@ -13,38 +13,42 @@ const Playlist = ({ experiment, instruction, onNext }) => {
     useEffect(() => {
         if (playlists.length < 2) {
             console.error("This experiment defines a playlist view, but only has one playlist registered");
+            onNext();
         }
-    }, [playlists])
+    }, [playlists, onNext])
 
     // Handle playlist action
-    return (
-        <div className="aha__playlist">
-            <h3 className="title">{instruction}</h3>
-            <ul>
-                {playlists.map((playlist, index) => (
-                    <PlaylistItem
-                        key={playlist.id}
-                        playlist={playlist}
-                        onClick={(playlistId) => {
-                            registerPlaylist(playlistId, participant, session).then(response => {
-                                if (response) {
-                                    onNext();
-                                }
-                                else {
-                                    setError("Could not set playlist");
-                                }
-                            });
-                        }}
-                        delay={index * 250}
-                    />
-                ))}
-            </ul>
-        </div>
-    );
+    if (playlists.length > 1) {
+        return (
+            <div className="aha__playlist">
+                <h3 data-testid="playlist-instruction" className="title">{instruction}</h3>
+                <ul>
+                    {playlists.map((playlist, index) => (
+                        <PlaylistItem
+                            key={playlist.id}
+                            playlist={playlist}
+                            onClick={(playlistId) => {
+                                registerPlaylist(playlistId, participant, session).then(response => {
+                                    if (response) {
+                                        onNext();
+                                    }
+                                    else {
+                                        setError("Could not set playlist");
+                                    }
+                                });
+                            }}
+                            delay={index * 250}
+                        />
+                    ))}
+                </ul>
+            </div>
+        );
+    };
 };
 
 const PlaylistItem = ({ delay, playlist, onClick }) => (
     <li
+        data-testid="playlist-item"
         onClick={() => {
             onClick(playlist.id);
         }}
