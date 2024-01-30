@@ -59,6 +59,7 @@ def register_playlist(request, session_id):
     except Playlist.DoesNotExist:
         raise Http404("Playlist does not exist")
 
+
 def continue_session(request, session_id):
     """ given a session_id, continue where we left off """
     
