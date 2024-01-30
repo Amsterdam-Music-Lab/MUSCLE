@@ -25,21 +25,21 @@ export const initWebAudioListener = () => {
 };
 
 // init HTML audio element in webaudio context and connect track to destination (output)
-export const initWebAudio = () => {    
-    if (track === undefined) {                 
+export const initWebAudio = () => {
+    if (track === undefined) {
         track = audioContext.createMediaElementSource(window.audio);
-        track.connect(audioContext.destination);        
-    }    
-}
+        track.connect(audioContext.destination);
+    }
+};
 
 // Change HTML audio element crossorigin attribute for playing external files
-export const closeWebAudio = () => {    
-    window.audio.removeAttribute('crossOrigin');    
-    window.audio.crossorigin = "use-credentials";    
-}
+export const closeWebAudio = () => {
+    window.audio.removeAttribute('crossOrigin');
+    window.audio.crossorigin = "use-credentials";
+};
 
 // return total audio latency in milliseconds
-export const getTotalLatency = () => {    
+export const getTotalLatency = () => {
     let baseLatency = audioContext.baseLatency;
     let outputLatency = audioContext.outputLatency;
 
@@ -51,77 +51,77 @@ export const getTotalLatency = () => {
         outputLatency = 0;
     }
     
-    let totalLatency = (baseLatency + outputLatency) * 1000;    
+    let totalLatency = (baseLatency + outputLatency) * 1000;
     return totalLatency;
-}
+};
 
 // return base audio latency in seconds
 export const getBaseLatency = () => {
     return audioContext.baseLatency;
-}
+};
 
 // return output audio latency in seconds
-export const getOutputLatency = () => {    
+export const getOutputLatency = () => {
     return audioContext.outputLatency;
-}
+};
 
 // Adjust gain
 export const changeGain = (level) => {
     const gainNode = audioContext.createGain();
     track.connect(gainNode).connect(audioContext.destination);
-    gainNode.gain.value = level;    
-}
+    gainNode.gain.value = level;
+};
 
 // load sound data and store in buffers object
-export const loadBuffer = async (id, src, canPlay) => {   
+export const loadBuffer = async (id, src, canPlay) => {
     await fetch(MEDIA_ROOT + src, {})
-    // Return the data as an ArrayBuffer
+        // Return the data as an ArrayBuffer
         .then(response => response.arrayBuffer())
         // Decode the audio data
         .then(buffer => audioContext.decodeAudioData(buffer))
         // store buffer in buffers object
-        .then(decodedData => {            
+        .then(decodedData => {
             buffers[id] = decodedData;
             previousSource = src;
             canPlay();
         });
-}
+};
 
 export const checkSectionLoaded = (section) => {
     if (section.url === previousSource) {
         return true;
-    }
-} 
+    };
+};
 
 // Clear buffer list
 export const clearBuffers = () => {
     buffers = {};
-}
+};
 
 // stop buffer playback
 export const stopBuffer = () => {
     if (source) {
         source.stop();
-    }    
-}
+    };
+};
 
 // Play buffer from given time
 export const playBufferFrom = (id, time) => {
     source = audioContext.createBufferSource();
-    source.buffer = buffers[id];          
-    source.connect(audioContext.destination);    
+    source.buffer = buffers[id];
+    source.connect(audioContext.destination);
     source.start(0, time);
-}
+};
 
 // Suspend webaudio (frees up resources)
 export const suspend = () => {
     audioContext.suspend();
-}
+};
 
 // Resume webaudio
 export const resume = () => {
     audioContext.resume();
-}
+};
 
 // Listen once to the given event
 // After that remove listener
@@ -135,4 +135,18 @@ export const listenOnce = (event, callback) => {
     };
     source.addEventListener(event, _callback);
     return remove;
+};
+
+// function to check wether a users device is webaudio compatible
+export const compatibleDevice = () => {
+    const userAgentString = window.navigator.userAgent;
+    let compatible = true;
+    // Disable webaudio for ios versions below 17
+    if ((userAgentString.indexOf('iPhone') > -1 || userAgentString.indexOf('iPad') > -1) && (userAgentString.indexOf('OS') > -1)) {
+        const iosVersion = userAgentString.substring(userAgentString.indexOf('OS') + 3, userAgentString.indexOf('OS') + 5)
+        if (iosVersion < 17) {
+            compatible = false;
+        }
+    }
+    return compatible;
 };
