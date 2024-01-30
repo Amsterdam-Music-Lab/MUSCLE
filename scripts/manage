@@ -1,0 +1,4 @@
+#!/bin/bash
+
+# This script executes Django management commands through Docker.
+docker-compose run --rm server python manage.py $@

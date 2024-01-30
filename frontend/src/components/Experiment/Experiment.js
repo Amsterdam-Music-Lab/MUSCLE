@@ -1,11 +1,10 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { useExperiment, getNextRound } from "../../API";
 import { TransitionGroup, CSSTransition } from "react-transition-group";
 import { withRouter } from "react-router-dom";
 import classNames from "classnames";
 
 import { useErrorStore, useParticipantStore, useSessionStore } from "../../util/stores";
-import { createSession } from "../../API.js";
+import { createSession, getNextRound, useExperiment } from "../../API";
 import Consent from "../Consent/Consent";
 import DefaultPage from "../Page/DefaultPage";
 import ToontjeHoger from "../ToontjeHoger/ToontjeHoger";
@@ -62,19 +61,18 @@ const Experiment = ({ match }) => {
     }, [loadState, setActions]);
 
     useEffect(() => {
-        if (!experiment || !participant || !playlist) {
+        if (!experiment || !participant ) {
             return;
         }
         createSession({
             experiment,
-            participant,
-            playlist,
+            participant
         }).then(data => {
             setSession(data.session);
         }).catch(err => {
             setError(`Could not create a session: ${err}`)
         });
-    }, [experiment, participant, playlist, setError, setSession])
+    }, [experiment, participant, setError, setSession])
 
     // Start first_round when experiment and partipant have been loaded
     useEffect(() => {
@@ -200,6 +198,7 @@ const Experiment = ({ match }) => {
                     ? "experiment-" + experiment.slug
                     : ""
             )}
+            data-testid="experiment-wrapper"
         >
             <CSSTransition
                 key={key}

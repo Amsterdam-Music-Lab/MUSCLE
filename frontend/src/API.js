@@ -32,7 +32,7 @@ export const URLS = {
     },
     session: {
         create: "/session/create/",
-        result: "/session/result/",
+        register_playlist: (id) => "/session/" + id + "/register_playlist/",
         next_round: (id) => "/session/" + id + "/next_round/",
         finalize: (id) => "/session/" + id + "/finalize/"
     },
@@ -76,14 +76,12 @@ export const createConsent = async ({ experiment, participant }) => {
 };
 
 // Create a new session for given experiment
-export const createSession = async ({ experiment, participant, playlist }) => {
+export const createSession = async ( {experiment, participant} ) => {
     try {
         const response = await axios.post(
             API_BASE_URL + URLS.session.create,
             qs.stringify({
                 experiment_id: experiment.id,
-                playlist_id: playlist,
-                json_data: "",
                 csrfmiddlewaretoken: participant.csrf_token,
             })
         );
@@ -93,6 +91,22 @@ export const createSession = async ({ experiment, participant, playlist }) => {
         return null;
     }
 };
+
+export const registerPlaylist = async (playlistId, participant, session) => {
+    try {
+        const response = await axios.post(
+            API_BASE_URL + URLS.session.register_playlist(session.id),
+            qs.stringify({
+                playlist_id: playlistId,
+                csrfmiddlewaretoken: participant.csrf_token
+            })
+        )
+        return response.data;
+    } catch(err) {
+        console.error(err);
+        return null;
+    }
+}
 
 // Create result for given session
 export const scoreResult = async ({
