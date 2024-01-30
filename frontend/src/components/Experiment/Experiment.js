@@ -1,11 +1,10 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { useExperiment, getNextRound } from "../../API";
 import { TransitionGroup, CSSTransition } from "react-transition-group";
 import { withRouter } from "react-router-dom";
 import classNames from "classnames";
 
-import { useParticipantStore, useSessionStore } from "../../util/stores";
-import { createSession } from "../../API.js";
+import { useErrorStore, useParticipantStore, useSessionStore } from "../../util/stores";
+import { createSession, getNextRound, useExperiment } from "../../API";
 import Consent from "../Consent/Consent";
 import DefaultPage from "../Page/DefaultPage";
 import ToontjeHoger from "../ToontjeHoger/ToontjeHoger";
@@ -19,6 +18,7 @@ import useResultHandler from "../../hooks/useResultHandler";
 import Info from "../Info/Info";
 import FloatingActionButton from "components/FloatingActionButton/FloatingActionButton";
 import UserFeedback from "components/UserFeedback/UserFeedback";
+
 
 // Experiment handles the main experiment flow:
 // - Loads the experiment and participant
@@ -51,12 +51,7 @@ const Experiment = ({ match }) => {
     }, []);
 
     // Create error view
-    const setError = useCallback(
-        (error) => {
-            loadState({ view: "ERROR", error });
-        },
-        [loadState]
-    );
+    const setError = useErrorStore(state => state.setError);
 
     const updateActions = useCallback((currentActions) => {
         let newActions = currentActions;
@@ -66,21 +61,18 @@ const Experiment = ({ match }) => {
     }, [loadState, setActions]);
 
     useEffect(() => {
-        if (!experiment || !participant || !playlist) {
+        if (!experiment || !participant ) {
             return;
         }
-        try { 
-            createSession({
-                experiment,
-                participant,
-                playlist,
-            }).then(data => {
-                setSession(data.session);
-            });
-        } catch (err) {
+        createSession({
+            experiment,
+            participant
+        }).then(data => {
+            setSession(data.session);
+        }).catch(err => {
             setError(`Could not create a session: ${err}`)
-        }
-    }, [experiment, participant, playlist, setError, setSession])
+        });
+    }, [experiment, participant, setError, setSession])
 
     // Start first_round when experiment and partipant have been loaded
     useEffect(() => {
@@ -139,7 +131,6 @@ const Experiment = ({ match }) => {
             playlist,
             loadingText,
             setPlaylist,
-            setError,
             onResult,
             onNext,
             ...state,
@@ -167,8 +158,6 @@ const Experiment = ({ match }) => {
                 return <Playlist {...attrs} />;
             case "LOADING":
                 return <Loading {...attrs} />;
-            case "ERROR":
-                return <div>Error: {state.error}</div>;
             case "CONSENT":
                 return <Consent {...attrs} />;
             case "INFO":
@@ -192,7 +181,7 @@ const Experiment = ({ match }) => {
 
     // Fail safe
     if (!state) {
-        return <div>Error: No valid state</div>;
+        setError('No valid state');
     }
 
     let key = state.view;
@@ -209,6 +198,7 @@ const Experiment = ({ match }) => {
                     ? "experiment-" + experiment.slug
                     : ""
             )}
+            data-testid="experiment-wrapper"
         >
             <CSSTransition
                 key={key}
