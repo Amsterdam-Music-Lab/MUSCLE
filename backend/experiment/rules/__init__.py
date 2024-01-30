@@ -1,15 +1,14 @@
+from .anisochrony import Anisochrony
 from .beat_alignment import BeatAlignment
+from .categorization import Categorization
 from .duration_discrimination import DurationDiscrimination
 from .duration_discrimination_tone import DurationDiscriminationTone
-from .anisochrony import Anisochrony
-from .categorization import Categorization
 from .eurovision_2020 import Eurovision2020
 from .gold_msi import GoldMSI
 from .h_bat import HBat
 from .h_bat_bfit import HBatBFIT
 from .hbat_bst import BST
 from .hooked import Hooked
-from .tele_tunes import HookedTeleTunes
 from .huang_2022 import Huang2022
 from .kuiper_2020 import Kuiper2020
 from .listening_conditions import ListeningConditions
@@ -21,14 +20,15 @@ from .rhythm_experiment_series import RhythmExperimentSeries
 from .rhythm_experiment_series_mri import RhythmExperimentSeriesMRI
 from .rhythm_experiment_series_unpaid import RhythmExperimentSeriesUnpaid
 from .speech2song import Speech2Song
+from .tele_tunes import HookedTeleTunes
 from .thats_my_song import ThatsMySong
-from .toontjehoger_home import ToontjeHogerHome
 from .toontjehoger_1_mozart import ToontjeHoger1Mozart
 from .toontjehoger_2_preverbal import ToontjeHoger2Preverbal
 from .toontjehoger_3_plink import ToontjeHoger3Plink
 from .toontjehoger_4_absolute import ToontjeHoger4Absolute
 from .toontjehoger_5_tempo import ToontjeHoger5Tempo
 from .toontjehoger_6_relative import ToontjeHoger6Relative
+from .toontjehoger_home import ToontjeHogerHome
 from .visual_matching_pairs import VisualMatchingPairsGame
 
 # Rules available to this application
@@ -36,16 +36,21 @@ from .visual_matching_pairs import VisualMatchingPairsGame
 # so they can be referred to by the admin
 
 EXPERIMENT_RULES = {
+    Anisochrony.ID: Anisochrony,
     BeatAlignment.ID: BeatAlignment,
-    Speech2Song.ID: Speech2Song,
+    BST.ID: BST,
+    Categorization.ID: Categorization,
     DurationDiscrimination.ID: DurationDiscrimination,
     DurationDiscriminationTone.ID: DurationDiscriminationTone,
-    Anisochrony.ID: Anisochrony,
+    Eurovision2020.ID: Eurovision2020,
+    GoldMSI.ID: GoldMSI,
     HBat.ID: HBat,
     HBatBFIT.ID: HBatBFIT,
-    BST.ID: BST,
     Hooked.ID: Hooked,
     HookedTeleTunes.ID: HookedTeleTunes,
+    Huang2022.ID: Huang2022,
+    Kuiper2020.ID: Kuiper2020,
+    ListeningConditions.ID: ListeningConditions,
     MatchingPairsGame.ID: MatchingPairsGame,
     MatchingPairsICMPC.ID: MatchingPairsICMPC,
     MusicalPreferences.ID: MusicalPreferences,
@@ -53,19 +58,14 @@ EXPERIMENT_RULES = {
     RhythmExperimentSeries.ID: RhythmExperimentSeries,
     RhythmExperimentSeriesMRI.ID: RhythmExperimentSeriesMRI,
     RhythmExperimentSeriesUnpaid.ID: RhythmExperimentSeriesUnpaid,
-    GoldMSI.ID: GoldMSI,
-    ListeningConditions.ID: ListeningConditions,
-    Huang2022.ID: Huang2022,
-    Categorization.ID: Categorization,
-    ToontjeHogerHome.ID: ToontjeHogerHome,
+    Speech2Song.ID: Speech2Song,
+    ThatsMySong.ID: ThatsMySong,
     ToontjeHoger1Mozart.ID: ToontjeHoger1Mozart,
     ToontjeHoger2Preverbal.ID: ToontjeHoger2Preverbal,
     ToontjeHoger3Plink.ID: ToontjeHoger3Plink,
     ToontjeHoger4Absolute.ID: ToontjeHoger4Absolute,
     ToontjeHoger5Tempo.ID: ToontjeHoger5Tempo,
     ToontjeHoger6Relative.ID: ToontjeHoger6Relative,
-    Eurovision2020.ID: Eurovision2020,
-    Kuiper2020.ID: Kuiper2020,
-    ThatsMySong.ID: ThatsMySong,
+    ToontjeHogerHome.ID: ToontjeHogerHome,
     VisualMatchingPairsGame.ID: VisualMatchingPairsGame
 }
