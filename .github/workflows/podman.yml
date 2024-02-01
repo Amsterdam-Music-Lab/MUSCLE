@@ -8,6 +8,8 @@ jobs:
   build:
     environment: test
     runs-on: self-hosted
+    env:
+      DJANGO_SETTINGS_MODULE: ${{ vars.DJANGO_SETTINGS_MODULE }}
     steps:
       - uses: actions/checkout@v4
       - name: Build Podman images
@@ -16,3 +18,5 @@ jobs:
         run: podman-compose -f docker-compose-deploy.yml up -d --force-recreate
       - name: Check Podman images
         run: podman-compose -f docker-compose-deploy.yml ps
+      - name: Check if DJANGO_SETTINGS_MODULE is set
+        run: echo $DJANGO_SETTINGS_MODULE
