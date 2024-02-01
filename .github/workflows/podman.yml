@@ -9,7 +9,33 @@ jobs:
     environment: test
     runs-on: self-hosted
     env:
+
+      # Variables
+      POSTGRES_DB: ${{ vars.SQL_DATABASE }}
+      PGHOST: ${{ vars.SQL_HOST }}
+      PGPORT: ${{ vars.SQL_PORT }}
+      PGDATABASE: ${{ vars.SQL_DATABASE }}
+      AML_ALLOWED_HOSTS: ${{ vars.AML_ALLOWED_HOSTS }}
+      AML_CORS_ORIGIN_WHITELIST: ${{ vars.AML_CORS_ORIGIN_WHITELIST }}
+      AML_DEBUG: ${{ vars.AML_DEBUG }}
       DJANGO_SETTINGS_MODULE: ${{ vars.DJANGO_SETTINGS_MODULE }}
+      AML_LOCATION_PROVIDER: ${{ vars.AML_LOCATION_PROVIDER }}
+      SQL_DATABASE: ${{ vars.SQL_DATABASE }}
+      SQL_HOST: ${{ vars.SQL_HOST }}
+      REACT_APP_API_ROOT: ${{ vars.REACT_APP_API_ROOT }}
+      REACT_APP_EXPERIMENT_SLUG: ${{ vars.REACT_APP_EXPERIMENT_SLUG }}
+      REACT_APP_AML_HOME: ${{ vars.REACT_APP_AML_HOME }}
+      REACT_APP_HTML_PAGE_TITLE: ${{ vars.REACT_APP_HTML_PAGE_TITLE }}
+      
+      # Secrets
+      POSTGRES_USER: ${{ secrets.SQL_USER }}
+      POSTGRES_PASSWORD: ${{ secrets.SQL_PASSWORD }}
+      PGUSER: ${{ secrets.SQL_USER }}
+      SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
+      SQL_USER: ${{ secrets.SQL_USER }}
+      SQL_PASSWORD: ${{ secrets.SQL_PASSWORD }}
+      REACT_APP_SENTRY_DSN: ${{ secrets.REACT_APP_SENTRY_DSN }}
+
     steps:
       - uses: actions/checkout@v4
       - name: Build Podman images
