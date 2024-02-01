@@ -22,6 +22,7 @@ jobs:
       AML_LOCATION_PROVIDER: ${{ vars.AML_LOCATION_PROVIDER }}
       SQL_DATABASE: ${{ vars.SQL_DATABASE }}
       SQL_HOST: ${{ vars.SQL_HOST }}
+      SQL_PORT: ${{ vars.SQL_PORT }}
       REACT_APP_API_ROOT: ${{ vars.REACT_APP_API_ROOT }}
       REACT_APP_EXPERIMENT_SLUG: ${{ vars.REACT_APP_EXPERIMENT_SLUG }}
       REACT_APP_AML_HOME: ${{ vars.REACT_APP_AML_HOME }}
