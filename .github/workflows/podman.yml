@@ -39,5 +39,5 @@ jobs:
         run: podman-compose -f docker-compose-deploy.yml up -d --force-recreate
       - name: Check Podman images
         run: podman-compose -f docker-compose-deploy.yml ps
-      - name: Check logs of the server service container (muscle_server_1) after waiting for 5 seconds
-        run: sleep 5 && podman logs muscle_server_1
+      - name: Check logs
+        run: podman-compose -f docker-compose-deploy.yml logs
