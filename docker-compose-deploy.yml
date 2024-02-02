@@ -27,7 +27,7 @@ services:
   server:
     build:
       context: ./backend
-      dockerfile: Dockerfile
+      dockerfile: DockerfileDevelop
     depends_on:
       db:
         condition: service_healthy
