@@ -39,27 +39,5 @@ jobs:
         run: podman-compose -f docker-compose-deploy.yml up -d --force-recreate
       - name: Check Podman images
         run: podman-compose -f docker-compose-deploy.yml ps
-      - name: Check if all environment variables are set correctly
-        run: |
-          echo $POSTGRES_DB
-          echo $PGHOST
-          echo $PGPORT
-          echo $PGDATABASE
-          echo $AML_ALLOWED_HOSTS
-          echo $AML_CORS_ORIGIN_WHITELIST
-          echo $AML_DEBUG
-          echo $DJANGO_SETTINGS_MODULE
-          echo $AML_LOCATION_PROVIDER
-          echo $SQL_DATABASE
-          echo $SQL_HOST
-          echo $REACT_APP_API_ROOT
-          echo $REACT_APP_EXPERIMENT_SLUG
-          echo $REACT_APP_AML_HOME
-          echo $REACT_APP_HTML_PAGE_TITLE
-          echo $POSTGRES_USER
-          echo $POSTGRES_PASSWORD
-          echo $PGUSER
-          echo $SENTRY_DSN
-          echo $REACT_APP_SENTRY_DSN
-      - name: Check logs of Podman images
-        run: podman-compose -f docker-compose-deploy.yml logs
+      - name: Check logs of the server service container (muscle_server_1) after waiting for 5 seconds
+        run: sleep 5 && podman logs muscle_server_1
