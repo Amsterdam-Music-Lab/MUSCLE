@@ -1,4 +1,4 @@
-FROM python:3.8
+FROM docker.io/python:3.8 as base
 ENV PYTHONUNBUFFERED 1
 RUN apt-get -y update
 RUN apt-get install -y ffmpeg
