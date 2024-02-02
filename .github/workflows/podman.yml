@@ -11,15 +11,11 @@ jobs:
     env:
 
       # Variables
-      POSTGRES_DB: ${{ vars.SQL_DATABASE }}
-      PGHOST: ${{ vars.SQL_HOST }}
-      PGPORT: ${{ vars.SQL_PORT }}
-      PGDATABASE: ${{ vars.SQL_DATABASE }}
       AML_ALLOWED_HOSTS: ${{ vars.AML_ALLOWED_HOSTS }}
       AML_CORS_ORIGIN_WHITELIST: ${{ vars.AML_CORS_ORIGIN_WHITELIST }}
       AML_DEBUG: ${{ vars.AML_DEBUG }}
-      DJANGO_SETTINGS_MODULE: ${{ vars.DJANGO_SETTINGS_MODULE }}
       AML_LOCATION_PROVIDER: ${{ vars.AML_LOCATION_PROVIDER }}
+      DJANGO_SETTINGS_MODULE: ${{ vars.DJANGO_SETTINGS_MODULE }}
       SQL_DATABASE: ${{ vars.SQL_DATABASE }}
       SQL_HOST: ${{ vars.SQL_HOST }}
       SQL_PORT: ${{ vars.SQL_PORT }}
@@ -29,9 +25,7 @@ jobs:
       REACT_APP_HTML_PAGE_TITLE: ${{ vars.REACT_APP_HTML_PAGE_TITLE }}
       
       # Secrets
-      POSTGRES_USER: ${{ secrets.SQL_USER }}
-      POSTGRES_PASSWORD: ${{ secrets.SQL_PASSWORD }}
-      PGUSER: ${{ secrets.SQL_USER }}
+      AML_SECRET_KEY: ${{ secrets.AML_SECRET_KEY }}
       SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
       SQL_USER: ${{ secrets.SQL_USER }}
       SQL_PASSWORD: ${{ secrets.SQL_PASSWORD }}
