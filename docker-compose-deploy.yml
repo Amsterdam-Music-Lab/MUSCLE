@@ -17,6 +17,7 @@ services:
       - /home/github-runner/podman-volumes/db-backups:/backups
     healthcheck:
       test: ["CMD-SHELL", "pg_isready"]
+      start_period: 5s
       interval: 5s
       timeout: 5s
       retries: 5
