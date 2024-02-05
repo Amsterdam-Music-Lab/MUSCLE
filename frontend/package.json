@@ -1,8 +1,6 @@
 {
   "name": "aml-frontend",
-  "version": "0.1.0",
-  "private": true,
-  "homepage": "app.amsterdammusiclab.nl",
+  "private": false,
   "description": "The React Frontend for the MUSCLE platform",
   "license": "MIT",
   "dependencies": {

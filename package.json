@@ -1,8 +1,6 @@
 {
     "name": "aml-experiments",
-    "version": "1.7.0",
-    "private": true,
-    "homepage": "app.amsterdammusiclab.nl",
+    "private": false,
     "description": "The MUSCLE platform is an application that provides an easy way to implement and run online listening experiments for music research.",
     "license": "MIT",
     "__comment1__": "private set to true to suppress 'warning package.json: No license field'",
