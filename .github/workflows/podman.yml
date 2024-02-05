@@ -39,11 +39,11 @@ jobs:
       - name: Build Podman images
         run: podman-compose -f docker-compose-deploy.yml build
       - name: Apply Django migrations
-        run: podman-compose -f docker-compose-deploy.yml run --rm web python manage.py migrate --noinput
+        run: podman-compose -f docker-compose-deploy.yml run --rm server python manage.py migrate --noinput
       - name: Run custom Django bootstrap management command
-        run: podman-compose -f docker-compose-deploy.yml run --rm web python manage.py bootstrap
+        run: podman-compose -f docker-compose-deploy.yml run --rm server python manage.py bootstrap
       - name: Collect static files
-        run: podman-compose -f docker-compose-deploy.yml run --rm web python manage.py collectstatic --noinput
+        run: podman-compose -f docker-compose-deploy.yml run --rm server python manage.py collectstatic --noinput
       - name: Deploy Podman images
         run: podman-compose -f docker-compose-deploy.yml up -d --force-recreate
       - name: Check Podman images
