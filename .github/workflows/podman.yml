@@ -44,3 +44,5 @@ jobs:
         run: podman-compose -f docker-compose-deploy.yml ps
       - name: Check logs
         run: podman-compose -f docker-compose-deploy.yml logs
+      - name: Check if Django's superuser environment variables are set
+        run: echo $DJANGO_SUPERUSER_USERNAME $DJANGO_SUPERUSER_PASSWORD $DJANGO_SUPERUSER_EMAIL
