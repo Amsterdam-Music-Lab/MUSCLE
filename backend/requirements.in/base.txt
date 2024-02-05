@@ -34,3 +34,6 @@ coverage
 
 # Generate a code coverage badge
 genbadge[coverage]
+
+# Debug toolbar for development (and test server)
+django-debug-toolbar
