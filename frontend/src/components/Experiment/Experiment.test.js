@@ -4,21 +4,7 @@ import { render, screen } from '@testing-library/react';
 
 import Experiment from './Experiment';
 
-jest.mock("../../util/stores", () => ({
-    useSessionStore: (fn) => {
-        const methods = {
-            setSession: jest.fn(),
-            session: 1
-        } 
-        return fn(methods);
-    },
-    useParticipantStore: () => {
-        return {participant: 1}
-    },
-    useErrorStore: () => {
-        return {setError: jest.fn()}
-    }
-}));
+jest.mock("../../util/stores");
 
 jest.mock("../../API", () => ({
     useExperiment: () => {return [{id: 24, slug: 'test', name: 'Test', next_round: [

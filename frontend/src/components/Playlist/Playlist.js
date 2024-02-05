@@ -43,7 +43,7 @@ const Playlist = ({ experiment, instruction, onNext }) => {
                 </ul>
             </div>
         );
-    };
+    } else { return null };
 };
 
 const PlaylistItem = ({ delay, playlist, onClick }) => (

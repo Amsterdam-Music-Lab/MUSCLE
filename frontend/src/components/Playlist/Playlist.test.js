@@ -3,17 +3,7 @@ import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 
 import Playlist from './Playlist';
 
-jest.mock("../../util/stores", () => ({
-    useSessionStore: () => {
-        return {session: 1}
-    },
-    useParticipantStore: () => {
-        return {participant: 1}
-    },
-    useErrorStore: () => {
-        return {setError: jest.fn()}
-    }
-}))
+jest.mock("../../util/stores");
 
 jest.mock('../../API', () => ({
     registerPlaylist: jest.fn(),

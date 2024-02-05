@@ -2,6 +2,8 @@ import React from 'react';
 import { render } from '@testing-library/react';
 import MatchingPairs, { SCORE_FEEDBACK_DISPLAY } from './MatchingPairs';
 
+jest.mock("../../util/stores");
+
 describe('MatchingPairs Component', () => {
 
     const baseProps = {

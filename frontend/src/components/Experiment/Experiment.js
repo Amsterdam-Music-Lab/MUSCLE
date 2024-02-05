@@ -60,45 +60,19 @@ const Experiment = ({ match }) => {
         setActions(newActions);
     }, [loadState, setActions]);
 
-    useEffect(() => {
-        if (!experiment || !participant ) {
-            return;
-        }
-        createSession({
-            experiment,
-            participant
-        }).then(data => {
-            setSession(data.session);
-        }).catch(err => {
-            setError(`Could not create a session: ${err}`)
-        });
-    }, [experiment, participant, setError, setSession])
-
-    // Start first_round when experiment and partipant have been loaded
-    useEffect(() => {
-        // Check if done loading
-        if (!loadingExperiment && participant) {
-            // Loading succeeded
-            if (experiment) {
-                updateActions(experiment.next_round);
-            } else {
-                // Loading error
-                setError("Could not load experiment");
-            }
-        }
-    }, [
-        experiment,
-        loadingExperiment,
-        participant,
-        setError,
-        updateActions
-    ]);
-
     // trigger next action from next_round array, or call session/next_round
-    const onNext = async (doBreak) => {
+    const onNext = useCallback(async (doBreak) => {
         if (!doBreak && actions.length) {
             updateActions(actions);
         } else {
+            if (!session) {
+                try {
+                    setSession(await createSession({experiment, participant}));
+                }
+                catch(err) {
+                    setError(`Could not create a session: ${err}`)
+                };
+            }
             // Try to get next_round data from server
             const round = await getNextRound({
                 session
@@ -111,7 +85,29 @@ const Experiment = ({ match }) => {
                 );
             }
         }
-    };
+    }, [actions, experiment, participant, session, setError, setSession, updateActions]);
+
+    // Start first_round when experiment and partipant have been loaded
+    useEffect(() => {
+        // Check if done loading
+        if (!loadingExperiment && participant) {
+            // Loading succeeded
+            if (experiment) {
+                updateActions(experiment.next_round);
+            } else {
+                // Loading error
+                setError("Could not load experiment");
+            }
+            onNext();
+        }
+    }, [
+        experiment,
+        loadingExperiment,
+        participant,
+        setError,
+        onNext,
+        updateActions
+    ]);
 
     const onResult = useResultHandler({
         session,

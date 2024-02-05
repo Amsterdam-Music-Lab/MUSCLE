@@ -2,6 +2,8 @@ import React from "react";
 import { render, fireEvent, screen } from "@testing-library/react";
 import PlayCard from "./PlayCard"; // Adjust the path as necessary
 
+jest.mock("../../util/stores");
+
 describe("PlayCard Component Tests", () => {
     const mockOnClick = jest.fn();
     const mockRegisterUserClicks = jest.fn();
