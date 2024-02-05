@@ -6,7 +6,3 @@ RUN apt-get install -y ffmpeg
 WORKDIR /server
 COPY requirements/dev.txt /server/
 RUN pip install -r dev.txt
-
-# Base the test image on the base image that is used for development
-FROM base as test
-COPY . /server/
