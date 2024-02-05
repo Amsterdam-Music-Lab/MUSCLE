@@ -69,8 +69,12 @@ const Playback = ({
     }, [cancelAudioListeners]);
 
     // Audio ended playing
-    const onAudioEnded = useCallback(() => {
-        setPlayerIndex(-1);
+    const onAudioEnded = useCallback((index) => {
+        
+        // If the player index is not the last player index, return
+        if (lastPlayerIndex.current === index) {
+            setPlayerIndex(-1);
+        }
 
         if (playbackArgs.timeout_after_playback) {
             setTimeout(finishedPlaying, playbackArgs.timeout_after_playback);
@@ -119,9 +123,9 @@ const Playback = ({
             cancelAudioListeners();
             // listen for active audio events
             if (playMethod === 'BUFFER') {
-                activeAudioEndedListener.current = webAudio.listenOnce("ended", onAudioEnded);
+                activeAudioEndedListener.current = webAudio.listenOnce("ended", () => onAudioEnded(index));
             } else {
-                activeAudioEndedListener.current = audio.listenOnce("ended", onAudioEnded);
+                activeAudioEndedListener.current = audio.listenOnce("ended", () => onAudioEnded(index));
             }                    
             // Compensate for audio latency and set state to playing
             setTimeout(startedPlaying && startedPlaying(), latency);
