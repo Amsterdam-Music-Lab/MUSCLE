@@ -55,3 +55,7 @@ jobs:
         run: podman-compose -f docker-compose-deploy.yml ps
       - name: Check logs
         run: podman-compose -f docker-compose-deploy.yml logs
+      - name: Check if static files are present in backend/static and backend/upload
+        run: |
+          ls -l /home/github-runner/podman-volumes/server-static
+          ls -l /home/github-runner/podman-volumes/server-uploads
