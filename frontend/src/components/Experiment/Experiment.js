@@ -104,7 +104,6 @@ const Experiment = ({ match }) => {
                 // Loading error
                 setError("Could not load experiment");
             }
-            onNext();
         }
     }, [
         experiment,
