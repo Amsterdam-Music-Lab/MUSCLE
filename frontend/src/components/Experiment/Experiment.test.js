@@ -10,7 +10,8 @@ jest.mock("../../API", () => ({
     useExperiment: () => {return [{id: 24, slug: 'test', name: 'Test', next_round: [
         {view: 'EXPLAINER'}
     ]}, false]},
-    createSession: () => Promise.resolve({data: {session: 1}})
+    createSession: () => Promise.resolve({data: {session: {id: 1}}}),
+    getNextRound: () => Promise.resolve({next_round: [{view: 'EXPLAINER'}]})
 }));
 
 describe('Experiment Component', () => {
@@ -22,7 +23,8 @@ describe('Experiment Component', () => {
                 <Experiment match={ {params: {slug: 'test'}} }/>
             </MemoryRouter>
         );
-        expect(screen.getByTestId('experiment-wrapper').toBeInTheDocument());
+        expect(screen.getByTestId('experiment-wrapper')).toBeInTheDocument();
+        expect(screen.getByTestId('explainer')).toBeInTheDocument();
     })
 
 
