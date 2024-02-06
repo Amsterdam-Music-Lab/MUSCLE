@@ -25,7 +25,9 @@ export const playAudio = (section, playMethod, playheadShift=0) => {
         audio.setVolume(1);
 
         // Play audio
-        audio.playFrom(Math.max(0, playheadShift));
+        audio.loadUntilAvailable(section.url, () => {
+            audio.playFrom(Math.max(0, playheadShift));
+        });
         
         return latency
     }
