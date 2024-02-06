@@ -2,7 +2,7 @@ module.exports = {
     useSessionStore: (fn) => {
         const methods = {
             setSession: jest.fn(),
-            session: 1
+            session: {id: 1}
         } 
         return fn(methods);
     },

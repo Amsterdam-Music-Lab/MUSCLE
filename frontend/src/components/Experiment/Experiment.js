@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import { TransitionGroup, CSSTransition } from "react-transition-group";
 import { withRouter } from "react-router-dom";
 import classNames from "classnames";
@@ -28,14 +28,16 @@ import UserFeedback from "components/UserFeedback/UserFeedback";
 //   Empty URL parameter "participant_id" is the same as no URL parameter at all
 const Experiment = ({ match }) => {
     const startState = { view: "LOADING" };
+    // Stores
+    const setError = useErrorStore(state => state.setError);
     const participant = useParticipantStore((state) => state.participant);
     const setSession = useSessionStore((state) => state.setSession);
     const session = useSessionStore((state) => state.session);
 
     // Current experiment state
     const [state, setState] = useState(startState);
-    const [playlist, setPlaylist] = useState(null);
-    const [actions, setActions] = useState([]);
+    const playlist = useRef(null);
+    const actions = useRef([]);
 
     // API hooks
     const [experiment, loadingExperiment] = useExperiment(match.params.slug);
@@ -50,32 +52,35 @@ const Experiment = ({ match }) => {
         setState(state);
     }, []);
 
-    // Create error view
-    const setError = useErrorStore(state => state.setError);
-
     const updateActions = useCallback((currentActions) => {
         let newActions = currentActions;
         const newState = newActions.shift();
         loadState(newState);
-        setActions(newActions);
-    }, [loadState, setActions]);
+        actions.current = newActions;
+    }, [loadState]);
+
+    const checkSession = useCallback(async () => {
+        if (!session) {
+            try {
+                const newSession = await createSession({experiment, participant, playlist})
+                setSession(newSession);
+                return newSession;
+            }
+            catch(err) {
+                setError(`Could not create a session: ${err}`)
+            };
+        } else return session;
+    }, [experiment, participant, playlist, session, setError, setSession])
 
     // trigger next action from next_round array, or call session/next_round
     const onNext = useCallback(async (doBreak) => {
-        if (!doBreak && actions.length) {
-            updateActions(actions);
+        if (!doBreak && actions.current.length) {
+            updateActions(actions.current);
         } else {
-            if (!session) {
-                try {
-                    setSession(await createSession({experiment, participant}));
-                }
-                catch(err) {
-                    setError(`Could not create a session: ${err}`)
-                };
-            }
+            const checkedSession = await checkSession();
             // Try to get next_round data from server
             const round = await getNextRound({
-                session
+                session: checkedSession
             });
             if (round) {
                 updateActions(round.next_round);
@@ -83,9 +88,10 @@ const Experiment = ({ match }) => {
                 setError(
                     "An error occured while loading the data, please try to reload the page. (Error: next_round data unavailable)"
                 );
+                loadState(undefined);
             }
         }
-    }, [actions, experiment, participant, session, setError, setSession, updateActions]);
+    }, [actions, checkSession, loadState, setError, updateActions]);
 
     // Start first_round when experiment and partipant have been loaded
     useEffect(() => {
@@ -124,11 +130,10 @@ const Experiment = ({ match }) => {
             experiment,
             participant,
             loadState,
-            playlist,
             loadingText,
-            setPlaylist,
             onResult,
             onNext,
+            playlist,
             ...state,
         };
 
