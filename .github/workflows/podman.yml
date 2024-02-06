@@ -38,6 +38,15 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+      - name: Create .env file
+        run: |
+          touch .env
+          echo "REACT_APP_API_ROOT=$REACT_APP_API_ROOT" >> .env
+          echo "REACT_APP_EXPERIMENT_SLUG=$REACT_APP_EXPERIMENT_SLUG" >> .env
+          echo "REACT_APP_AML_HOME=$REACT_APP_AML_HOME" >> .env
+          echo "REACT_APP_HTML_PAGE_TITLE=$REACT_APP_HTML_PAGE_TITLE" >> .env
+          echo "REACT_APP_SENTRY_DSN=$REACT_APP_SENTRY_DSN" >> .env
+          cp .env frontend/.env
       - name: Build Podman images
         run: podman-compose -f docker-compose-deploy.yml build
       - name: Deploy Podman images

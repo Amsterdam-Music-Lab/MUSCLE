@@ -7,6 +7,10 @@ COPY package.json /client/
 COPY yarn.lock /client/
 COPY jsconfig.json /client/
 COPY . /client/
+
+# Copy .env file to break the cache
+COPY .env /client/
+
 RUN yarn
 RUN yarn scss
 RUN yarn build
