@@ -25,7 +25,7 @@ class ExperimentSeries(models.Model):
     dashboard = models.BooleanField(default=False)
 
     def __str__(self):
-        return self.name
+        return self.slug
 
     class Meta:
         verbose_name_plural = "Experiment Series"
