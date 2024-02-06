@@ -17,3 +17,6 @@ pip-tools
 
 # Flake8 for linting
 flake8
+
+# Debug toolbar for development
+django-debug-toolbar

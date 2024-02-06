@@ -36,8 +36,8 @@ django==3.2.24
     #   django-inline-actions
 django-cors-headers==3.10.0
     # via -r requirements.in/base.txt
-django-debug-toolbar==3.2.2
-    # via -r requirements.in/base.txt
+django-debug-toolbar==4.3.0
+    # via -r requirements.in/dev.txt
 django-inline-actions==2.4.0
     # via -r requirements.in/base.txt
 flake8==4.0.1
