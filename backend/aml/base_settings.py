@@ -14,6 +14,7 @@ import os
 from corsheaders.defaults import default_headers
 import sentry_sdk
 
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -40,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'inline_actions',
+    'django_markup',
     'corsheaders',
     'experiment',
     'participant',
@@ -176,3 +178,9 @@ sentry_sdk.init(
     # We recommend adjusting this value in production.
     profiles_sample_rate=0.2,
 )
+
+MARKUP_SETTINGS = {
+    'markdown': {
+        'safe_mode': True
+    }
+}
