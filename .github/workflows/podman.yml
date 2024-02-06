@@ -34,6 +34,8 @@ jobs:
       DJANGO_SUPERUSER_PASSWORD: ${{ secrets.DJANGO_SUPERUSER_PASSWORD }}
       DJANGO_SUPERUSER_EMAIL: ${{ secrets.DJANGO_SUPERUSER_EMAIL }}
 
+      RUNNER_TRACKING_ID: ""
+
     steps:
       - uses: actions/checkout@v4
       - name: Build Podman images
