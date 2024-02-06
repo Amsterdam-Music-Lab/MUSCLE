@@ -6,16 +6,18 @@ import Experiment from './Experiment';
 
 jest.mock("../../util/stores");
 
-// need to define the object returned by useExperiment, otherwise the mocked function 
-// creates a different object every time, causing an infinite useEffect loop
+// need to define the returned objects, otherwise the mocked function 
+// creates a different object every time, causing useEffect to trigger unnecessarily
 const experimentObj = {id: 24, slug: 'test', name: 'Test', next_round: [
     {view: 'Playlist', playlists: [{id: 42, name: 'TestPlaylist'}]}
 ]};
+const sessionObj = {data: {session: {id: 1}}};
+const nextRoundObj = {next_round: [{view: 'EXPLAINER'}]};
 
 jest.mock("../../API", () => ({
     useExperiment: () => [experimentObj, false],
-    createSession: () => Promise.resolve({data: {session: {id: 1}}}),
-    getNextRound: () => Promise.resolve({next_round: [{view: 'EXPLAINER'}]})
+    createSession: () => Promise.resolve(sessionObj),
+    getNextRound: () => Promise.resolve(nextRoundObj)
 }));
 
 describe('Experiment Component', () => {

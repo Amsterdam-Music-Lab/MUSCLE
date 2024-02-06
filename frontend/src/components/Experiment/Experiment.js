@@ -113,7 +113,6 @@ const Experiment = ({ match }) => {
         loadingExperiment,
         participant,
         setError,
-        onNext,
         updateActions
     ]);
 
