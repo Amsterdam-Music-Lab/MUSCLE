@@ -6,25 +6,44 @@ import Experiment from './Experiment';
 
 jest.mock("../../util/stores");
 
+// need to define the object returned by useExperiment, otherwise the mocked function 
+// creates a different object every time, causing an infinite useEffect loop
+const experimentObj = {id: 24, slug: 'test', name: 'Test', next_round: [
+    {view: 'Playlist', playlists: [{id: 42, name: 'TestPlaylist'}]}
+]};
+
 jest.mock("../../API", () => ({
-    useExperiment: () => {return [{id: 24, slug: 'test', name: 'Test', next_round: [
-        {view: 'EXPLAINER'}
-    ]}, false]},
+    useExperiment: () => [experimentObj, false],
     createSession: () => Promise.resolve({data: {session: {id: 1}}}),
     getNextRound: () => Promise.resolve({next_round: [{view: 'EXPLAINER'}]})
 }));
 
 describe('Experiment Component', () => {
 
-    it('renders with given props', () => {
-
+    it('renders with given props', async () => {
         render(
             <MemoryRouter>
                 <Experiment match={ {params: {slug: 'test'}} }/>
             </MemoryRouter>
         );
-        expect(screen.getByTestId('experiment-wrapper')).toBeInTheDocument();
-        expect(screen.getByTestId('explainer')).toBeInTheDocument();
+        await screen.findByTestId('experiment-wrapper');
+        await screen.findByTestId('explainer');
+    })
+
+    it('renders with empty next_round array from useExperiment', async () => {
+        const experimentObj = {id: 24, slug: 'test', name: 'Test', next_round: []};
+        jest.mock("../../API", () => ({
+            useExperiment: () => [experimentObj, false],
+            createSession: () => Promise.resolve({data: {session: {id: 1}}}),
+            getNextRound: () => Promise.resolve({next_round: [{view: 'EXPLAINER'}]})
+        }));
+        render(
+            <MemoryRouter>
+                <Experiment match={ {params: {slug: 'test'}} }/>
+            </MemoryRouter>
+        );
+        await screen.findByTestId('experiment-wrapper');
+        await screen.findByTestId('explainer');
     })
 
 
