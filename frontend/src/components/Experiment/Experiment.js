@@ -99,14 +99,12 @@ const Experiment = ({ match }) => {
         if (!loadingExperiment && participant) {
             // Loading succeeded
             if (experiment) {
-                if (!(experiment.next_round.length)) {
-                    onNext();
-                }
                 updateActions(experiment.next_round);
             } else {
                 // Loading error
                 setError("Could not load experiment");
             }
+            onNext();
         }
     }, [
         experiment,
