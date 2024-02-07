@@ -8,9 +8,6 @@ from aml.base_settings import *
 
 STATIC_URL = '/django_static/'
 
-# Make sure Django runs on subpath /server
-FORCE_SCRIPT_NAME = '/server/'
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
