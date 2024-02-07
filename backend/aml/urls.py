@@ -40,6 +40,10 @@ urlpatterns = [
 #   ^ The static helper function only works in debug mode
 # (https://docs.djangoproject.com/en/3.0/howto/static-files/)
 
+# Run Django on /server subpath
+if settings.FORCE_SCRIPT_NAME:
+    urlpatterns = [path(settings.FORCE_SCRIPT_NAME, include(urlpatterns))]
+
 # Debug toolbar
 if settings.DEBUG:
     import debug_toolbar
