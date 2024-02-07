@@ -6,11 +6,6 @@ from aml.base_settings import *
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
-STATIC_ROOT = '/static/'
-MEDIA_ROOT = '/upload/'
-
-# Make sure Django runs on subpath /server
-FORCE_SCRIPT_NAME = '/server/'
 
 DATABASES = {
     'default': {
@@ -27,8 +22,6 @@ SESSION_COOKIE_SAMESITE = 'None'
 CSRF_COOKIE_SAMESITE = 'None'
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
-SESSION_COOKIE_PATH = '/server/'
-CSRF_COOKIE_PATH = '/server/'
 
 LOGGING = {
     'version': 1,
