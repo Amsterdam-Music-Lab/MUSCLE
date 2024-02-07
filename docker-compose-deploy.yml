@@ -99,6 +99,7 @@ services:
       - 3000:80
     depends_on:
       - client-builder
+      - server
     volumes:
       - /home/github-runner/podman-volumes/server-static:/nginx/static
       - /home/github-runner/podman-volumes/server-uploads:/nginx/upload
