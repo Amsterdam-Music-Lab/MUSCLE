@@ -49,6 +49,8 @@ jobs:
           cp .env frontend/.env
       - name: Build Podman images
         run: podman-compose -f docker-compose-deploy.yml build
+      - name: Kill muscle client container
+        run: podman rm -f muscle_client-runner_1 || true
       - name: Deploy Podman images
         run: podman-compose -f docker-compose-deploy.yml up -d --force-recreate
       - name: Check Podman images
