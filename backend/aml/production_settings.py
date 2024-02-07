@@ -6,8 +6,7 @@ from aml.base_settings import *
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
-STATIC_ROOT = '/static/'
-MEDIA_ROOT = '/upload/'
+STATIC_URL = '/django_static/'
 
 # Make sure Django runs on subpath /server
 FORCE_SCRIPT_NAME = '/server/'
