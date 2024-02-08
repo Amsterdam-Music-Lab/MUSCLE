@@ -1,11 +1,25 @@
 name: Podman build & deploy
 
+# Temporary solution to run this workflow for every commit
+# on this feature branch. Should be removed before merging.
 on:
   push:
   workflow_dispatch:
+
+## This will be the conditions for running this workflow
+## once all the new servers are available
+# on:
+#   push:
+#     branches:
+#       - develop
+#       - main
+#     tags:
+#       - '*'
+#   workflow_dispatch:
   
 jobs:
-  build:
+  deploy-test:
+    name: Deploy to test environment
     environment: test
     runs-on: self-hosted
     env:
@@ -34,6 +48,7 @@ jobs:
       DJANGO_SUPERUSER_PASSWORD: ${{ secrets.DJANGO_SUPERUSER_PASSWORD }}
       DJANGO_SUPERUSER_EMAIL: ${{ secrets.DJANGO_SUPERUSER_EMAIL }}
 
+      # Prevent podman services from exiting after startup
       RUNNER_TRACKING_ID: ""
 
     steps:
