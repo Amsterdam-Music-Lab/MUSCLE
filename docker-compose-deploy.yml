@@ -101,7 +101,7 @@ services:
       - client-builder
       - server
     volumes:
-      - /home/github-runner/podman-volumes/server-static:/nginx/static
-      - /home/github-runner/podman-volumes/server-uploads:/nginx/upload
+      - /home/github-runner/podman-volumes/server-static:/usr/share/nginx/html/django_static
+      - /home/github-runner/podman-volumes/server-uploads:/usr/share/nginx/html/upload
       - ./nginx/custom-nginx.conf:/etc/nginx/conf.d/default.conf
       
