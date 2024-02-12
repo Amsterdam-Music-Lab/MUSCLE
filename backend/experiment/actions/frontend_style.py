@@ -1,4 +1,7 @@
-class FrontendStyle:
+from enum import Enum
+
+
+class EFrontendStyle(Enum):
     EMPTY = ''
     BOOLEAN = 'boolean'
     BOOLEAN_NEGATIVE_FIRST = 'boolean-negative-first'
@@ -11,14 +14,17 @@ class FrontendStyle:
     INFO = 'info'
     WARNING = 'warning'
 
-    VALID_STYLES = [EMPTY, BOOLEAN, BOOLEAN_NEGATIVE_FIRST, NEUTRAL, NEUTRAL_INVERTED, PRIMARY, SECONDARY, SUCCESS, NEGATIVE, INFO, WARNING]
+
+class FrontendStyle:
+
+    VALID_STYLES = EFrontendStyle.__members__.values()
 
     """
     Initialize the FrontendStyle with a root style, and optionally nested styles.
     :param root_style: The style name for the root element.
     :param nested_styles: A dictionary where keys are element identifiers and values are style names.
     """
-    def __init__(self, root_style = EMPTY, **nested_styles):
+    def __init__(self, root_style = EFrontendStyle.EMPTY, **nested_styles):
 
         if root_style not in self.VALID_STYLES:
             raise ValueError(f"Invalid root style: {root_style}")
