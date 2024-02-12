@@ -35,9 +35,9 @@ const Experiment = ({ match }) => {
     const session = useSessionStore((state) => state.session);
 
     // Current experiment state
+    const [actions, setActions] = useState([]);
     const [state, setState] = useState(startState);
     const playlist = useRef(null);
-    const actions = useRef([]);
 
     // API hooks
     const [experiment, loadingExperiment] = useExperiment(match.params.slug);
@@ -45,53 +45,59 @@ const Experiment = ({ match }) => {
     const loadingText = experiment ? experiment.loading_text : "";
     const className = experiment ? experiment.class_name : "";
 
-    // Load state, set random key
-    const loadState = useCallback((state) => {
+    // set random key before setting state
+    // this will assure that `state` will be recognized as an updated object
+    const updateState = useCallback((state) => {
         if (!state) return;
         state.key = Math.random();
         setState(state);
     }, []);
 
     const updateActions = useCallback((currentActions) => {
-        let newActions = currentActions;
+        const newActions = currentActions;
+        setActions(newActions);
         const newState = newActions.shift();
-        loadState(newState);
-        actions.current = newActions;
-    }, [loadState]);
+        updateState(newState);
+    }, [updateState]);
 
     const checkSession = useCallback(async () => {
-        if (!session) {
-            try {
-                const newSession = await createSession({experiment, participant, playlist})
-                setSession(newSession);
-                return newSession;
-            }
-            catch(err) {
-                setError(`Could not create a session: ${err}`)
-            };
-        } else return session;
-    }, [experiment, participant, playlist, session, setError, setSession])
+        try {
+            const newSession = await createSession({experiment, participant, playlist})
+            setSession(newSession);
+            return newSession;
+        }
+        catch(err) {
+            setError(`Could not create a session: ${err}`)
+        };
+    }, [experiment, participant, playlist, setError, setSession])
+
+    const continueToNextRound = useCallback(async() => {
+        let thisSession = session;
+        if (!thisSession) {
+            thisSession = await checkSession();
+        };
+        // Try to get next_round data from server
+        const round = await getNextRound({
+            session: thisSession
+        });
+        if (round) {
+            updateActions(round.next_round);
+        } else {
+            setError(
+                "An error occured while loading the data, please try to reload the page. (Error: next_round data unavailable)"
+            );
+            setState(undefined);
+        }
+    }, [checkSession, updateActions, session, setError, setState])
 
     // trigger next action from next_round array, or call session/next_round
-    const onNext = useCallback(async (doBreak) => {
-        if (!doBreak && actions.current.length) {
-            updateActions(actions.current);
+    const onNext = async (doBreak) => {
+        if (!doBreak && actions.length) {
+            updateActions(actions);
         } else {
-            const checkedSession = await checkSession();
-            // Try to get next_round data from server
-            const round = await getNextRound({
-                session: checkedSession
-            });
-            if (round) {
-                updateActions(round.next_round);
-            } else {
-                setError(
-                    "An error occured while loading the data, please try to reload the page. (Error: next_round data unavailable)"
-                );
-                loadState(undefined);
-            }
+            continueToNextRound();
         }
-    }, [actions, checkSession, loadState, setError, updateActions]);
+    };
 
     // Start first_round when experiment and partipant have been loaded
     useEffect(() => {
@@ -99,13 +105,19 @@ const Experiment = ({ match }) => {
         if (!loadingExperiment && participant) {
             // Loading succeeded
             if (experiment) {
-                updateActions(experiment.next_round);
+                if (experiment.next_round.length) {
+                    const firstActions = [ ...experiment.next_round ];
+                    updateActions(firstActions);
+                } else {
+                    continueToNextRound();
+                }
             } else {
                 // Loading error
                 setError("Could not load experiment");
             }
         }
     }, [
+        continueToNextRound,
         experiment,
         loadingExperiment,
         participant,
@@ -116,7 +128,6 @@ const Experiment = ({ match }) => {
     const onResult = useResultHandler({
         session,
         participant,
-        loadState,
         onNext,
         state,
     });
@@ -127,7 +138,6 @@ const Experiment = ({ match }) => {
         const attrs = {
             experiment,
             participant,
-            loadState,
             loadingText,
             onResult,
             onNext,
@@ -183,12 +193,8 @@ const Experiment = ({ match }) => {
         setError('No valid state');
     }
 
-    let key = state.view;
+    const view = state.view;
 
-    // Force view refresh for consecutive questions
-    if (state.view === "QUESTION") {
-        key = state.question.key;
-    }
     return (
         <TransitionGroup
             className={classNames(
@@ -200,25 +206,25 @@ const Experiment = ({ match }) => {
             data-testid="experiment-wrapper"
         >
             <CSSTransition
-                key={key}
+                key={view}
                 timeout={{ enter: 300, exit: 0 }}
                 classNames={"transition"}
                 unmountOnExit
             >
-                {(!loadingExperiment && experiment) || key === "ERROR" ? (
+                {(!loadingExperiment && experiment) || view === "ERROR" ? (
                     <DefaultPage
                         title={state.title}
                         logoClickConfirm={
-                            ["FINAL", "ERROR", "TOONTJEHOGER"].includes(key) ||
+                            ["FINAL", "ERROR", "TOONTJEHOGER"].includes(view) ||
                                 // Info pages at end of experiment
-                                (key === "INFO" &&
+                                (view === "INFO" &&
                                     (!state.next_round || !state.next_round.length))
                                 ? null
                                 : "Are you sure you want to stop this experiment?"
                         }
                         className={className}
                     >
-                        {render(state.view)}
+                        {render(view)}
 
                         {experiment?.feedback_info?.show_float_button && (
                             <FloatingActionButton>
