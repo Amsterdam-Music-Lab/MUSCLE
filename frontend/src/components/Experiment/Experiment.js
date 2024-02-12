@@ -61,6 +61,9 @@ const Experiment = ({ match }) => {
     }, [updateState]);
 
     const checkSession = useCallback(async () => {
+        if (session) {
+            return session;
+        }
         try {
             const newSession = await createSession({experiment, participant, playlist})
             setSession(newSession);
@@ -69,13 +72,10 @@ const Experiment = ({ match }) => {
         catch(err) {
             setError(`Could not create a session: ${err}`)
         };
-    }, [experiment, participant, playlist, setError, setSession])
+    }, [experiment, participant, playlist, session, setError, setSession])
 
     const continueToNextRound = useCallback(async() => {
-        let thisSession = session;
-        if (!thisSession) {
-            thisSession = await checkSession();
-        };
+        const thisSession = await checkSession();
         // Try to get next_round data from server
         const round = await getNextRound({
             session: thisSession
@@ -88,7 +88,7 @@ const Experiment = ({ match }) => {
             );
             setState(undefined);
         }
-    }, [checkSession, updateActions, session, setError, setState])
+    }, [checkSession, updateActions, setError, setState])
 
     // trigger next action from next_round array, or call session/next_round
     const onNext = async (doBreak) => {
