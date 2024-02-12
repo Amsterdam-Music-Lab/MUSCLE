@@ -228,14 +228,14 @@ const VisualMatchingPairs = (props) => {
     return (
         <div className="aha__visual-matching-pairs">
 
-            <div className="row justify-content-around">
+            <div className="row justify-content-between">
                 <div className="col-6 align-self-start">
                     <div dangerouslySetInnerHTML={{ __html: message }}
-                        className={classNames("matching-pairs__feedback", getScoreClasses(score))}
+                        className={classNames("visual-matching-pairs__feedback", getScoreClasses(score))}
                     />
                 </div>
                 <div className="col-6 align-self-end">
-                    <div className="matching-pairs__score" data-testid="score">
+                    <div className="visual-matching-pairs__score" data-testid="score">
                         Score: <br />{total}
                     </div>
                 </div>
