@@ -31,7 +31,6 @@ class FrontendStyle:
             else:
                 raise ValueError(f"Nested styles must be of type FrontendStyle, got {type(nested_style)} for '{element}'")
 
-
     def get_style(self, element: str) -> str:
         """
         Get the style for a specific element.

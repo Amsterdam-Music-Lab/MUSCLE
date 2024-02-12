@@ -1,5 +1,6 @@
 from .frontend_style import FrontendStyle
 
+
 class BaseAction(object):
     ID = 'BASE'
 

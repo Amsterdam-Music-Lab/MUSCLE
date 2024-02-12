@@ -2,6 +2,7 @@ import unittest
 
 from experiment.actions.frontend_style import FrontendStyle
 
+
 class TestFrontendStyle(unittest.TestCase):
 
     def test_init_with_valid_root_style(self):
@@ -59,6 +60,7 @@ class TestFrontendStyle(unittest.TestCase):
             }
         }
         self.assertEqual(style.to_dict(), expected_dict)
+
 
 if __name__ == '__main__':
     unittest.main()
