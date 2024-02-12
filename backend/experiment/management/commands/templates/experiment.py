@@ -8,10 +8,10 @@ from experiment.questions.demographics import EXTRA_DEMOGRAPHICS
 from experiment.questions.utils import question_by_key
 from experiment.rules.base import Base
 from result.utils import prepare_result
-from section.models import Playlist
 
 
 class NewExperiment(Base):
+    ''' An experiment type that could be used to test musical preferences '''
     ID = 'NEW_EXPERIMENT'
     contact_email = 'info@example.com'
 
@@ -29,15 +29,15 @@ class NewExperiment(Base):
 
 
     def first_round(self, experiment):
-        # 1. Informed consent
-        rendered = render_to_string('consent/consent_new_experiment.html')
+        # 1. Informed consent (optional)
+        rendered = render_to_string('consent/consent.html')
         consent = Consent(rendered, title=_(
             'Informed consent'), confirm=_('I agree'), deny=_('Stop'))
         
         # 2. Choose playlist (only relevant if there are multiple playlists the participant can choose from)
         playlist = Playlist(experiment.playlists.all())
 
-        # 3. Explainer
+        # 3. Explainer (optional)
         explainer = Explainer(
             instruction='Welcome to this new experiment',
             steps=[
@@ -57,15 +57,21 @@ class NewExperiment(Base):
     def next_round(self, session):
         # ask any questions defined in the admin interface
         actions = self.get_questionnaire(session)
-
         if actions:
             return actions
+
         elif session.rounds_complete():
             # we have as many results as rounds in this experiment
             # finish session and show Final view
             session.finish()
             session.save()
-            return [Final()]
+            return [
+                Final(
+                    session,
+                    final_text=_('Thank you for participating!'),
+                    feedback_info=self.feedback_info()  # show feedback bar, this line can be removed
+                )
+            ]
         else:
             return self.get_trial(session)
 
@@ -89,6 +95,7 @@ class NewExperiment(Base):
             title=_('Test experiment'),
             config={
                 'response_time': section.duration,
+                # listen_first: whether response buttons will be greyed out during `response_time`
                 'listen_first': True
             }
         )
