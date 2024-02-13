@@ -8,7 +8,7 @@ import { createConsent, useConsent } from "../../API";
 import classNames from "classnames";
 
 // Consent is an experiment view that shows the consent text, and handles agreement/stop actions
-const Consent = ({ title, text, experiment, participant, onNext, confirm, deny, urlQueryString, style }) => {
+const Consent = ({ title, text, experiment, participant, onNext, confirm, deny, style }) => {
     const [consent, loadingConsent] = useConsent(experiment.slug);
     const urlQueryString = window.location.search;
 
