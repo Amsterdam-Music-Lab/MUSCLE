@@ -119,7 +119,7 @@ export const CategorizationWithHiddenTextDisabled = {
 }
 
 export const BooleanColorScheme = {
-    args: getDefaultArgs(),
+    args: getArgs(),
     decorators: [
         (Story) => (
             <div className="boolean"
@@ -132,7 +132,7 @@ export const BooleanColorScheme = {
 }
 
 export const BooleanNegativeFirstColorScheme = {
-    args: getDefaultArgs(),
+    args: getArgs(),
     decorators: [
         (Story) => (
             <div className="boolean-negative-first"
@@ -145,7 +145,7 @@ export const BooleanNegativeFirstColorScheme = {
 }
 
 export const NeutralColorScheme = {
-    args: getDefaultArgs(),
+    args: getArgs(),
     decorators: [
         (Story) => (
             <div className="neutral"
@@ -158,7 +158,7 @@ export const NeutralColorScheme = {
 }
 
 export const NeutralInvertedColorScheme = {
-    args: getDefaultArgs(),
+    args: getArgs(),
     decorators: [
         (Story) => (
             <div className="neutral-inverted"
