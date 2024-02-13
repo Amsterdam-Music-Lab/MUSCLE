@@ -11,7 +11,7 @@ from result.models import Result
 from session.models import Session
 
 # Expected field count per model
-EXPECTED_EXPERIMENT_FIELDS = 13
+EXPECTED_EXPERIMENT_FIELDS = 14
 EXPECTED_SESSION_FIELDS = 9
 EXPECTED_RESULT_FIELDS = 12
 EXPECTED_PARTICIPANT_FIELDS = 5
