@@ -29,9 +29,6 @@ class GoldMSI(Base):
         consent = Consent(
             style=FrontendStyle(
                 EFrontendStyle.BOOLEAN,
-                submit_button=FrontendStyle(
-                    EFrontendStyle.SUCCESS
-                )
             )
         )
         return [

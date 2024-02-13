@@ -56,7 +56,6 @@ const Consent = ({ title, text, experiment, participant, onNext, confirm, deny, 
 
     const correction = width > 720 ? 300 : 250;
 
-    const submitButtonStyle = style?.submit_button?.root || '';
 
     // Show consent
     return (
@@ -88,7 +87,7 @@ const Consent = ({ title, text, experiment, participant, onNext, confirm, deny, 
                 </a>
 
                 <Button
-                    className={classNames("btn-positive", submitButtonStyle)}
+                    className="btn-positive"
                     onClick={onAgree}
                     title={confirm}
                 />
