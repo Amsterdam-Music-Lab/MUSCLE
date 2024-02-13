@@ -33,15 +33,20 @@ class Consent(BaseAction):  # pylint: disable=too-few-public-methods
                 ea sea expetenda suscipiantur contentiones."
     
     def __init__(self, text, title='Informed consent', confirm='I agree', deny='Stop', url='', render_format='HTML'):
+        # Determine which text to use
+        # from field: experiment.consent (prio-1)
         if text!='':
             dry_text = text
+        # from template file (prio-2)    
         elif url!='':
             dry_text = render_to_string(url)
             url_length = len(url)
             if url[(url_length-2):url_length] == 'md':
                 render_format = 'MARKDOWN'
+        # use efault text (prio-3)
         else:
             dry_text = self.default_text
+        # render text fot the consent component
         if render_format == 'HTML':
             template = Template(dry_text)
             context = Context()
