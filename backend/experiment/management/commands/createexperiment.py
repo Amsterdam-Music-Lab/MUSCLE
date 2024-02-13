@@ -12,6 +12,9 @@ class Command(BaseCommand):
         # Ask for the experiment name
         experiment_rules_set_name = input("What is the name of your experiment rule set? (ex. Musical Preferences): ")
 
+        (snake_case, snake_case_upper, pascal_case) = self.get_experiment_rules_set_name_cases(experiment_rules_set_name)
+        self.stdout.write(self.style.WARNING(f"Converting {experiment_rules_set_name} to {snake_case} (snake_case) and {pascal_case} (PascalCase) for file names and class names."))
+
         # Create the experiment rule class
         success = self.create_experiment_rule_class(experiment_rules_set_name)
 
