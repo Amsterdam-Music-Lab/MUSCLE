@@ -14,6 +14,10 @@ class EFrontendStyle(Enum):
     INFO = 'info'
     WARNING = 'warning'
 
+    @staticmethod
+    def is_valid(value):
+        return value in EFrontendStyle.__members__.values()
+
 
 class FrontendStyle:
 
@@ -24,9 +28,9 @@ class FrontendStyle:
     :param root_style: The style name for the root element.
     :param nested_styles: A dictionary where keys are element identifiers and values are style names.
     """
-    def __init__(self, root_style = EFrontendStyle.EMPTY, **nested_styles):
+    def __init__(self, root_style: EFrontendStyle = EFrontendStyle.EMPTY, **nested_styles):
 
-        if root_style not in self.VALID_STYLES:
+        if not EFrontendStyle.is_valid(root_style):
             raise ValueError(f"Invalid root style: {root_style}")
 
         self.styles = {'root': root_style}
@@ -51,14 +55,27 @@ class FrontendStyle:
         :param element: The element identifier to apply the style to.
         :param style: The style name to apply.
         """
-        if style in self.VALID_STYLES:
+        if EFrontendStyle.is_valid(style):
             self.styles[element] = style
         else:
-            raise ValueError(f"Invalid style: {style}. Valid styles are: {', '.join(self.VALID_STYLES)}")
+            valid_styles = ', '.join([str(s) for s in self.VALID_STYLES])
+            raise ValueError(f"Invalid style: {style}. Valid styles are {valid_styles}.")
 
     def to_dict(self) -> dict:
-        serialized_styles = {'root': self.styles['root']}
+        serialized_styles = {'root': self.styles['root'].value}
         for element, style in self.styles.items():
             if element != 'root':
-                serialized_styles[element] = style.to_dict() if isinstance(style, FrontendStyle) else style
+                if isinstance(style, FrontendStyle):
+                    serialized_styles[element] = style.to_dict()
+                elif isinstance(style, EFrontendStyle):
+                    serialized_styles[element] = style.value
+                else:
+                    serialized_styles[element] = style
+
         return serialized_styles
+    
+    def __str__(self):
+        return str(self.to_dict())
+    
+    def __json__(self):
+        return self.to_dict()

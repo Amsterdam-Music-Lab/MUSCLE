@@ -43,7 +43,7 @@ class TestFrontendStyle(unittest.TestCase):
     def test_to_dict(self):
         nested_style = FrontendStyle(EFrontendStyle.SUCCESS)
         style = FrontendStyle(EFrontendStyle.NEUTRAL, nested=nested_style)
-        expected_dict = {'root': EFrontendStyle.NEUTRAL, 'nested': {'root': EFrontendStyle.SUCCESS}}
+        expected_dict = {'root': EFrontendStyle.NEUTRAL.value, 'nested': {'root': EFrontendStyle.SUCCESS.value}}
         self.assertEqual(style.to_dict(), expected_dict)
 
     def test_to_dict_with_deep_nesting(self):
@@ -51,11 +51,11 @@ class TestFrontendStyle(unittest.TestCase):
         nested_style_level_1 = FrontendStyle(EFrontendStyle.INFO, nested_lvl2=nested_style_level_2)
         style = FrontendStyle(EFrontendStyle.NEUTRAL, nested_lvl1=nested_style_level_1)
         expected_dict = {
-            'root': EFrontendStyle.NEUTRAL,
+            'root': EFrontendStyle.NEUTRAL.value,
             'nested_lvl1': {
-                'root': EFrontendStyle.INFO,
+                'root': EFrontendStyle.INFO.value,
                 'nested_lvl2': {
-                    'root': EFrontendStyle.WARNING
+                    'root': EFrontendStyle.WARNING.value
                 }
             }
         }
