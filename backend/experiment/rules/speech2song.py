@@ -47,12 +47,14 @@ class Speech2Song(Base):
             ],
             button_label=_('Start')
         )
-        # read consent form from file
-        rendered = render_to_string(
-            'consent/consent_speech2song.html')
-
+        # Add consent from file or admin (admin has priority)
         consent = Consent(
-            rendered, title=_('Informed consent'), confirm=_('I agree'), deny=_('Stop'))
+            experiment.consent,
+            title=_('Informed consent'),
+            confirm=_('I agree'),
+            deny=_('Stop'),
+            url='consent/consent_speech2song.html'
+            )
 
         playlist = Playlist(experiment.playlists.all())
 

@@ -1,7 +1,6 @@
 from django.utils import timezone
 from django.template.loader import render_to_string
 from django.db.models import Avg
-from django_markup.markup import formatter
 
 from experiment.actions.form import Form, ChoiceQuestion
 from experiment.actions import Consent, Explainer, Score, Trial, Final
@@ -35,13 +34,14 @@ class Categorization(Base):
             steps=[],
             button_label='Ok'
         )
-        # read consent from file
-        
-        rendered = formatter(experiment.consent, filter_name='markdown')
-        
+        # Add consent from file or admin (admin has priority)
         consent = Consent(
-            rendered, title='Informed consent', confirm='I agree', deny='Stop')
-        
+            experiment.consent,
+            title='Informed consent',
+            confirm='I agree',
+            deny='Stop',
+            url='consent/consent_categorization.html'
+            )
         return [explainer, consent]
 
     def next_round(self, session):

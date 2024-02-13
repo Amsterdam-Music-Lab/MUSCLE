@@ -102,7 +102,8 @@ class ListeningConditions(Base):
         return [view]
 
     def first_round(self, experiment):
-        consent = Consent()
+        # Consent with admin text or default text
+        consent = Consent(experiment.consent)
         explainer = Explainer(
             instruction=_(
                 'General listening instructions:'),

@@ -26,7 +26,8 @@ class GoldMSI(Base):
         self.questions = MSI_F3_MUSICAL_TRAINING + demographics
 
     def first_round(self, experiment):
-        consent = Consent()
+        # Consent with admin text or default text
+        consent = Consent(experiment.consent)
         return [
             consent,
         ]
