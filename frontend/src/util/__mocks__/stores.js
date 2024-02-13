@@ -7,7 +7,7 @@ module.exports = {
         return fn(methods);
     },
     useParticipantStore: () => {
-        return {participant: 1}
+        return {id: 1}
     },
     useErrorStore: () => {
         return {setError: jest.fn()}

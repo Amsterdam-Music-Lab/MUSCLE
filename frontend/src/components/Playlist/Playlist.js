@@ -6,7 +6,7 @@ const Playlist = ({ experiment, instruction, onNext, playlist }) => {
 
     useEffect(() => {
         if (playlists.length < 2) {
-            console.error("This experiment defines a playlist view, but only has one playlist registered");
+            // silently proceed to next view
             onNext();
         }
     }, [playlists, onNext])

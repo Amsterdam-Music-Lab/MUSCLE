@@ -5,14 +5,11 @@ import Playlist from './Playlist';
 
 jest.mock("../../util/stores");
 
-jest.mock('../../API', () => ({
-    registerPlaylist: jest.fn(),
-}));
-
 describe('Playlist Component', () => {
-    const onNext = jest.fn();
     const playlist = { current: 25 };
     const experimentProp = { slug: 'test-experiment', playlists: [{id: 42}, {id: 43}] };
+    const onNext = jest.fn();
+
     it('renders correctly with given props', () => {
         render(
             <Playlist experiment={experimentProp} instruction="instruction" onNext={onNext} playlist={playlist}/>
@@ -31,12 +28,11 @@ describe('Playlist Component', () => {
     })
 
     it('does not render with less than 2 playlists', () => {
-        const consoleSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
         experimentProp.playlists = [{id: 42}]
         render(
             <Playlist experiment={experimentProp} instruction="instruction" onNext={onNext} playlist={playlist}/>
         )
-        expect(consoleSpy).toHaveBeenCalled();
+        expect((onNext).toHaveBeenCalled);
         expect(screen.queryByTestId('playlist-instruction')).not.toBeInTheDocument();
     });
 });

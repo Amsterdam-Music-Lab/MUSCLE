@@ -19,7 +19,6 @@ import Info from "../Info/Info";
 import FloatingActionButton from "components/FloatingActionButton/FloatingActionButton";
 import UserFeedback from "components/UserFeedback/UserFeedback";
 
-
 // Experiment handles the main experiment flow:
 // - Loads the experiment and participant
 // - Renders the view based on the state that is provided by the server
@@ -72,7 +71,7 @@ const Experiment = ({ match }) => {
         catch(err) {
             setError(`Could not create a session: ${err}`)
         };
-    }, [experiment, participant, playlist, session, setError, setSession])
+    }, [experiment, participant, playlist, setError, setSession])
 
     const continueToNextRound = useCallback(async() => {
         const thisSession = await checkSession();

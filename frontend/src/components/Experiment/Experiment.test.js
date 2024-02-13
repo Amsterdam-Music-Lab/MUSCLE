@@ -8,9 +8,10 @@ jest.mock("../../util/stores");
 
 // need to define the returned objects, otherwise the mocked function 
 // creates a different object every time, causing useEffect to trigger unnecessarily
-const experimentObj = {id: 24, slug: 'test', name: 'Test', next_round: [
-    {view: 'Playlist', playlists: [{id: 42, name: 'TestPlaylist'}]}
-]};
+const experimentObj = {
+    id: 24, slug: 'test', name: 'Test', playlists: [{id: 42, name: 'TestPlaylist'}],
+    next_round: [{view: 'PLAYLIST'}]
+};
 const sessionObj = {data: {session: {id: 1}}};
 const nextRoundObj = {next_round: [{view: 'EXPLAINER'}]};
 
