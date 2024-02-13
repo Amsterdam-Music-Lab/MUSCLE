@@ -28,12 +28,7 @@ class Command(BaseCommand):
         create_experiment = input("Do you want to create a new experiment with the same name? (yes/no): ")
 
         if create_experiment.lower() == 'yes' or create_experiment.lower() == 'y':
-            self.stdout.write(self.style.WARNING("Creating a new experiment..."))
-            Experiment.objects.create(
-                name=experiment_rules_set_name, 
-                rules=experiment_rules_set_name,
-                slug=experiment_rules_set_name.lower().replace(' ', '_')
-            )
+            self.create_test_in_db(experiment_rules_set_name)
 
     def create_experiment_rule_class(self, experiment_rules_set_name):
         # Get the experiment name in different cases
@@ -112,6 +107,15 @@ class Command(BaseCommand):
                 )
 
         self.stdout.write(self.style.SUCCESS(f"Created {filename} for experiment {experiment_rules_set_name}"))
+
+    def create_test_in_db(self, experiment_rules_set_name):
+        self.stdout.write(self.style.WARNING("Creating a new experiment..."))
+        Experiment.objects.create(
+            name=experiment_rules_set_name, 
+            rules=experiment_rules_set_name,
+            slug=experiment_rules_set_name.lower().replace(' ', '_')
+        )
+        self.stdout.write(self.style.SUCCESS(f"Created experiment {experiment_rules_set_name}"))
 
     def get_experiment_rules_set_name_cases(self, experiment_rules_set_name):
         # Convert experiment name to snake_case and lowercase every word and replace spaces with underscores
