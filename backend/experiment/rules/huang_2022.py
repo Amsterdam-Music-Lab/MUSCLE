@@ -42,12 +42,15 @@ class Huang2022(Hooked):
         ]
 
     def first_round(self, experiment):
-        """Create data for the first experiment rounds."""
-        # read consent form from file
-        rendered = render_to_string(
-            'consent/consent_huang2021.html')
-        consent = Consent(rendered, title=_(
-            'Informed consent'), confirm=_('I agree'), deny=_('Stop'))
+        """Create data for the first experiment rounds."""        
+        # Add consent from file or admin (admin has priority)
+        consent = Consent(
+            experiment.consent,
+            title=_('Informed consent'),
+            confirm=_('I agree'),
+            deny=_('Stop'),
+            url='consent/consent_huang2021.html'
+            )
         playlist = Playlist(experiment.playlists.all())
 
         return [

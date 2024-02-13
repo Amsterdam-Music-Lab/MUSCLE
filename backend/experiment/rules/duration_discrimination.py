@@ -34,8 +34,8 @@ class DurationDiscrimination(Base):
         """Create data for the first experiment rounds"""
         explainer = self.intro_explanation()
 
-        # 2. Consent with default text
-        consent = Consent()
+        # 2. Consent with admin text or default text
+        consent = Consent(experiment.consent)
 
         explainer2 = practice_explainer()
 

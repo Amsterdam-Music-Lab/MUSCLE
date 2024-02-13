@@ -28,10 +28,15 @@ class VisualMatchingPairsGame(Base):
         ]
 
     def first_round(self, experiment):
-        rendered = render_to_string('consent/consent_matching_pairs.html')
-        consent = Consent(rendered, title=_(
-            'Informed consent'), confirm=_('I agree'), deny=_('Stop'))
-        
+        # Add consent from file or admin (admin has priority)
+        consent = Consent(
+            experiment.consent,
+            title=_('Informed consent'),
+            confirm=_('I agree'),
+            deny=_('Stop'),
+            url='consent/consent_matching_pairs.html'
+            )
+
         playlist = Playlist(experiment.playlists.all())
 
         explainer = Explainer(

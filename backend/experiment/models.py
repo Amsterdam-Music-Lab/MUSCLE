@@ -50,6 +50,7 @@ class Experiment(models.Model):
                 blank=True,
                 default=get_default_question_keys
             )
+    consent = models.TextField(blank=True, default='')
 
     class Meta:
         ordering = ['name']
