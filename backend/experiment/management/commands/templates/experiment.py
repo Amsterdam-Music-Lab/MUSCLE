@@ -27,7 +27,6 @@ class NewExperiment(Base):
                             'isced-2', 'isced-5'])
         ]
 
-
     def first_round(self, experiment):
         # 1. Informed consent (optional)
         rendered = render_to_string('consent/consent.html')
