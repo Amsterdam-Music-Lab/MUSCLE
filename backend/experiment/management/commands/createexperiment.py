@@ -35,7 +35,6 @@ class Command(BaseCommand):
                 slug=experiment_rules_set_name.lower().replace(' ', '_')
             )
 
-
     def create_experiment_rule_class(self, experiment_rules_set_name):
         # Get the experiment name in different cases
         experiment_rules_set_name_snake_case, experiment_rules_set_name_snake_case_upper, experiment_rules_set_name_pascal_case = self.get_experiment_rules_set_name_cases(experiment_rules_set_name)
