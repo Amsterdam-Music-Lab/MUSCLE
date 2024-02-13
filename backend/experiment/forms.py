@@ -144,6 +144,9 @@ class ExperimentForm(ModelForm):
         model = Experiment
         fields = ['name', 'slug', 'active', 'rules',
                   'rounds', 'bonus_points', 'playlists', 'experiment_series']
+        help_texts = {'consent': 'Enter the text to ask consent for using the experiment data for this instance of the experiment.<br> \
+                      This field will override any text loaded from the rules file.<br> \
+                      Allowed tags: HTML (default), MARKDOWN (Optional setting in the rules file)'}
 
     class Media:
         js = ["experiment_admin.js"]
