@@ -1,5 +1,6 @@
 from typing import List, Dict
 
+from .frontend_style import FrontendStyle
 from .base_action import BaseAction
 
 # player types
@@ -42,6 +43,7 @@ class Playback(BaseAction):
                  timeout_after_playback=None,
                  stop_audio_after=None,
                  resume_play=False,
+                 style=FrontendStyle()
                  ):
         self.sections = [{'id': s.id, 'url': s.absolute_url(), 'group': s.group}
                          for s in sections]
@@ -60,6 +62,7 @@ class Playback(BaseAction):
         self.timeout_after_playback = timeout_after_playback
         self.stop_audio_after = stop_audio_after
         self.resume_play = resume_play
+        self.style = style
 
 
 class Autoplay(Playback):
