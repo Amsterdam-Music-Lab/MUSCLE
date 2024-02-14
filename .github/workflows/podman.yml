@@ -12,6 +12,8 @@ jobs:
     environment: test
     runs-on: tst
     if: github.ref == 'refs/heads/develop'
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.ref }}
     env:
 
       # Variables
