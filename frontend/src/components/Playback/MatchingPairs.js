@@ -16,7 +16,6 @@ const MatchingPairs = ({
     playSection,
     sections,
     playerIndex,
-    stopAudioAfter,
     showAnimation,
     finishedPlaying,
     scoreFeedbackDisplay = SCORE_FEEDBACK_DISPLAY.LARGE_TOP, // 'large-top' (default) | 'small-bottom-right' | 'hidden'
@@ -30,7 +29,6 @@ const MatchingPairs = ({
     const secondCard = useRef(-1);
     const [total, setTotal] = useState(100);
     const [message, setMessage] = useState('Pick a card');
-    const [turnFeedback, setTurnFeedback] = useState('');
     const [end, setEnd] = useState(false);
     const columnCount = sections.length > 6 ? 4 : 3;
 
@@ -140,7 +138,6 @@ const MatchingPairs = ({
         // remove third click event
         document.getElementById('root').removeEventListener('click', finishTurn);
         score.current = undefined;
-        setTurnFeedback('');
         // Turn all cards back and enable events
         sections.forEach(section => section.turned = false);
         sections.forEach(section => section.noevents = false);
@@ -176,7 +173,6 @@ const MatchingPairs = ({
                             playing={playerIndex === index}
                             section={sections[index]}
                             onFinish={showFeedback}
-                            stopAudioAfter={stopAudioAfter}
                             showAnimation={showAnimation}
                         />
                     )

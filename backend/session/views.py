@@ -31,7 +31,14 @@ def create_session(request):
     # Create new session
     session = Session(experiment=experiment, participant=participant)
 
-    if experiment.playlists.count() >= 1:
+    if request.POST.get("playlist_id"):
+        try:
+            playlist = Playlist.objects.get(
+                pk=request.POST.get("playlist_id"), experiment__id=session.experiment.id)
+            session.playlist = playlist
+        except:
+            raise Http404("Playlist does not exist")
+    elif experiment.playlists.count() >= 1:
         # register first playlist
         session.playlist = experiment.playlists.first()
 
@@ -39,25 +46,6 @@ def create_session(request):
     session.save()
 
     return JsonResponse({'session': {'id': session.id}})
-
-
-@require_POST
-def register_playlist(request, session_id):
-    # load playlist from request
-    playlist_id = request.POST.get("playlist_id")
-    if not playlist_id:
-        return HttpResponseBadRequest("playlist_id not defined")
-    participant = get_participant(request)
-    session = get_object_or_404(Session,
-                                pk=session_id, participant__id=participant.id)
-    try:
-        playlist = Playlist.objects.get(
-            pk=playlist_id, experiment__id=session.experiment.id)
-        session.playlist = playlist
-        session.save()
-        return JsonResponse({'success': True})
-    except Playlist.DoesNotExist:
-        raise Http404("Playlist does not exist")
 
 
 def continue_session(request, session_id):

@@ -2,6 +2,8 @@ import React from 'react';
 import { render, fireEvent, waitFor } from '@testing-library/react';
 import VisualMatchingPairs from './VisualMatchingPairs'; // Adjust the import path as necessary
 
+jest.mock("../../util/stores");
+
 // Mock data for sections
 const mockSections = [
     { id: 1, content: 'Card 1', url: '/cat-01.jpg', inactive: false, turned: false, noevents: false, seen: false, group: 1 },
