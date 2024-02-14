@@ -21,7 +21,7 @@ jobs:
   deploy-test:
     name: Deploy to test environment
     environment: test
-    runs-on: self-hosted
+    runs-on: tst
     env:
 
       # Variables
