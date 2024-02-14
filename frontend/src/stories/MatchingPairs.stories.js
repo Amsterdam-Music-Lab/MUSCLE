@@ -1,6 +1,22 @@
+import useBoundStore from 'util/stores';
 import MatchingPairs, { SCORE_FEEDBACK_DISPLAY } from '../components/Playback/MatchingPairs';
 
 import audio from './assets/audio.wav';
+
+
+const Decorator = (Story) => {
+    const setSession = useBoundStore(state => state.setSession);
+    const setParticipant = useBoundStore(state => state.setParticipant);
+    setSession({ id: 1 });
+    setParticipant({ id: 1, csrf_token: '123' });
+
+    return (
+        <div id="root" style={{ width: '100%', height: '100%', backgroundColor: '#ddd', padding: '1rem' }}>
+            <Story />
+        </div>
+    )
+}
+
 
 export default {
     title: 'MatchingPairs',
@@ -87,13 +103,7 @@ export const Default = {
     args: {
         ...getDefaultArgs(),
     },
-    decorators: [
-        (Story) => (
-            <div id="root" style={{ width: '100%', height: '100%', backgroundColor: '#ddd', padding: '1rem' }}>
-                <Story />
-            </div>
-        ),
-    ],
+    decorators: [ Decorator ],
     parameters: {
         docs: {
             description: {
@@ -150,13 +160,7 @@ export const WithThreeColumns = {
             },
         ],
     }),
-    decorators: [
-        (Story) => (
-            <div id="root" style={{ width: '100%', height: '100%', backgroundColor: '#ddd', padding: '1rem' }}>
-                <Story />
-            </div>
-        ),
-    ],
+    decorators: [ Decorator ],
     parameters: {
         docs: {
             description: {
@@ -171,13 +175,7 @@ export const WithSmallBottomRightScoreFeedback = {
         ...getDefaultArgs(),
         scoreFeedbackDisplay: SCORE_FEEDBACK_DISPLAY.SMALL_BOTTOM_RIGHT
     },
-    decorators: [
-        (Story) => (
-            <div id="root" style={{ width: '100%', height: '100%', backgroundColor: '#ddd', padding: '1rem' }}>
-                <Story />
-            </div>
-        ),
-    ],
+    decorators: [ Decorator ],
     parameters: {
         docs: {
             description: {
@@ -192,13 +190,7 @@ export const WithShowAnimation = {
         ...getDefaultArgs(),
         showAnimation: true,
     },
-    decorators: [
-        (Story) => (
-            <div id="root" style={{ width: '100%', height: '100%', backgroundColor: '#ddd', padding: '1rem' }}>
-                <Story />
-            </div>
-        ),
-    ],
+    decorators: [ Decorator ],
     parameters: {
         docs: {
             description: {
