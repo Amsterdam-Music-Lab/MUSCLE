@@ -1,27 +1,17 @@
 name: Podman build & deploy
 
-# Temporary solution to run this workflow for every commit
-# on this feature branch. Should be removed before merging.
 on:
   push:
+    branches:
+      - develop
   workflow_dispatch:
-
-## This will be the conditions for running this workflow
-## once all the new servers are available
-# on:
-#   push:
-#     branches:
-#       - develop
-#       - main
-#     tags:
-#       - '*'
-#   workflow_dispatch:
   
 jobs:
   deploy-test:
     name: Deploy to test environment
     environment: test
     runs-on: tst
+    if: github.ref == 'refs/heads/develop'
     env:
 
       # Variables
