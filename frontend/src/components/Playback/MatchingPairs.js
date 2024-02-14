@@ -63,14 +63,14 @@ const MatchingPairs = ({
             setMessage(setScoreMessage(score.current));
             // show end of turn animations if enabled
             if (showAnimation) {
-                switch (score.current) {                                       
+                switch (score.current) {
                     case 10:
                         turnedCards[0].lucky = true;
-                        turnedCards[1].lucky = true;                                        
+                        turnedCards[1].lucky = true;
                         break;
                     case 20:
                         turnedCards[0].memory = true;
-                        turnedCards[1].memory = true;                                        
+                        turnedCards[1].memory = true;
                         break;
                     default:
                         turnedCards[0].nomatch = true;
@@ -78,12 +78,12 @@ const MatchingPairs = ({
                         // reset nomatch cards for coming turns
                         setTimeout(() => {
                             turnedCards[0].nomatch = false;
-                            turnedCards[1].nomatch = false;                        
-                          }, 700);
-                        break;  
-                }   
+                            turnedCards[1].nomatch = false;
+                        }, 700);
+                        break;
+                }
             }
-            
+
 
             // add third click event to finish the turn
             document.getElementById('root').addEventListener('click', finishTurn);
@@ -91,7 +91,7 @@ const MatchingPairs = ({
         }
     }
 
-    const checkMatchingPairs = async (index) => {        
+    const checkMatchingPairs = async (index) => {
         const currentCard = sections[index];
         const turnedCards = sections.filter(s => s.turned);
         if (turnedCards.length < 2) {
@@ -104,7 +104,7 @@ const MatchingPairs = ({
                 currentCard.noevents = true;
                 // check for match
                 const lastCard = sections[firstCard.current];
-                const imScore = await scoreIntermediateResult({session, participant, result: {currentCard, lastCard}});
+                const imScore = await scoreIntermediateResult({ session, participant, result: { currentCard, lastCard } });
                 if (!imScore) {
                     setError('We cannot currently proceed with the game. Try again later');
                     return;
@@ -156,25 +156,32 @@ const MatchingPairs = ({
     return (
         <div className="aha__matching-pairs">
 
-            {scoreFeedbackDisplay !== SCORE_FEEDBACK_DISPLAY.HIDDEN && <ScoreFeedback message={message} score={score} total={total} scoreFeedbackDisplay={scoreFeedbackDisplay} />}
+            <div>
 
-            <div className={classNames("playing-board", columnCount === 3 && "playing-board--three-columns")}>
-                {Object.keys(sections).map((index) => (
-                    <PlayCard
-                        key={index}
-                        onClick={() => {
-                            playSection(index);
-                            checkMatchingPairs(index);
-                        }}
-                        registerUserClicks={registerUserClicks}
-                        playing={playerIndex === index}
-                        section={sections[index]}
-                        showAnimation={showAnimation}
-                    />
-                )
-                )}
+
+                {scoreFeedbackDisplay !== SCORE_FEEDBACK_DISPLAY.HIDDEN && <ScoreFeedback message={message} score={score} total={total} scoreFeedbackDisplay={scoreFeedbackDisplay} />}
+
+                <div className={classNames("playing-board", columnCount === 3 && "playing-board--three-columns")}>
+                    {Object.keys(sections).map((index) => (
+                        <PlayCard
+                            key={index}
+                            onClick={() => {
+                                playSection(index);
+                                checkMatchingPairs(index);
+                            }}
+                            registerUserClicks={registerUserClicks}
+                            playing={playerIndex === index}
+                            section={sections[index]}
+                            onFinish={showFeedback}
+                            stopAudioAfter={stopAudioAfter}
+                            showAnimation={showAnimation}
+                        />
+                    )
+                    )}
+                </div>
             </div>
-        </div>  
+        </div>
+
     )
 }
 
@@ -187,7 +194,7 @@ const ScoreFeedback = ({
     return (
         <div className={
             classNames(
-                "matching-pairs__score-feedback row justify-content-around",
+                "matching-pairs__score-feedback row justify-content-between",
                 { "matching-pairs__score-feedback--small-bottom-right": scoreFeedbackDisplay === SCORE_FEEDBACK_DISPLAY.SMALL_BOTTOM_RIGHT },
             )}
         >

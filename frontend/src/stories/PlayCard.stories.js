@@ -12,21 +12,25 @@ export default {
   },
 };
 
-export const Default = {
-    args: {
-        onClick: () => alert("Clicked!"),
-        registerUserClicks: () => alert('Registered'),
-        playing: false,
-        section: {
-            "id": 32,
-            "url": "/section/32/78165/",
-            "group": "\t1"
-        },
-        view: "MATCHINGPAIRS"
+const getDefaultArgs = (overrides = {}) => ({
+    onClick: () => alert("Clicked!"),
+    registerUserClicks: () => void 0,
+    playing: true,
+    section: {
+        "id": 32,
+        "url": "/section/32/78165/",
+        "group": "\t1"
     },
+    showAnimation: true,
+    view: "MATCHINGPAIRS",
+    ...overrides
+});
+
+export const Default = {
+    args: getDefaultArgs(),
     decorators: [
         (Story) => (
-            <div style={{ width: '100%', height: '100%', backgroundColor: '#ddd', padding: '1rem' }}>
+            <div style={{ width: '256px', height: '256px', backgroundColor: '#ddd', padding: '1rem' }}>
                 <Story />
             </div>
         ),
@@ -34,21 +38,17 @@ export const Default = {
 };
 
 export const Turned = {
-    args: {
-        onClick: () => alert("Clicked!"),
-        registerUserClicks: () => alert('Registered'),
-        playing: false,
+    args: getDefaultArgs({
         section: {
             "id": 32,
             "url": "/section/32/78165/",
             "group": "\t1",
             "turned": true
         },
-        view: "MATCHINGPAIRS"
-    },
+    }),
     decorators: [
         (Story) => (
-            <div style={{ width: '100%', height: '100%', backgroundColor: '#ddd', padding: '1rem' }}>
+            <div style={{ width: '256px', height: '256px', backgroundColor: '#ddd', padding: '1rem' }}>
                 <Story />
             </div>
         ),
@@ -56,21 +56,17 @@ export const Turned = {
 };
 
 export const Seen = {
-    args: {
-        onClick: () => alert("Clicked!"),
-        registerUserClicks: () => alert('Registered'),
-        playing: false,
+    args: getDefaultArgs({
         section: {
             "id": 32,
             "url": "/section/32/78165/",
             "group": "\t1",
             "seen": true
         },
-        view: "MATCHINGPAIRS"
-    },
+    }),
     decorators: [
         (Story) => (
-            <div style={{ width: '100%', height: '100%', backgroundColor: '#ddd', padding: '1rem' }}>
+            <div style={{ width: '256px', height: '256px', backgroundColor: '#ddd', padding: '1rem' }}>
                 <Story />
             </div>
         ),
@@ -78,21 +74,17 @@ export const Seen = {
 };
 
 export const Memory = {
-    args: {
-        onClick: () => alert("Clicked!"),
-        registerUserClicks: () => alert('Registered'),
-        playing: false,
+    args: getDefaultArgs({
         section: {
             "id": 32,
             "url": "/section/32/78165/",
             "group": "\t1",
             "memory": true
         },
-        view: "MATCHINGPAIRS"
-    },
+    }),
     decorators: [
         (Story) => (
-            <div style={{ width: '100%', height: '100%', backgroundColor: '#ddd', padding: '1rem' }}>
+            <div style={{ width: '256px', height: '256px', backgroundColor: '#ddd', padding: '1rem' }}>
                 <Story />
             </div>
         ),
@@ -100,21 +92,17 @@ export const Memory = {
 };
 
 export const Lucky = {
-    args: {
-        onClick: () => alert("Clicked!"),
-        registerUserClicks: () => alert('Registered'),
-        playing: false,
+    args: getDefaultArgs({
         section: {
             "id": 32,
             "url": "/section/32/78165/",
             "group": "\t1",
             "lucky": true
         },
-        view: "MATCHINGPAIRS"
-    },
+    }),
     decorators: [
         (Story) => (
-            <div style={{ width: '100%', height: '100%', backgroundColor: '#ddd', padding: '1rem' }}>
+            <div style={{ width: '256px', height: '256px', backgroundColor: '#ddd', padding: '1rem' }}>
                 <Story />
             </div>
         ),
@@ -122,21 +110,17 @@ export const Lucky = {
 };
 
 export const NoEvents = {
-    args: {
-        onClick: () => alert("Clicked!"),
-        registerUserClicks: () => alert('Registered'),
-        playing: false,
+    args: getDefaultArgs({
         section: {
             "id": 32,
             "url": "/section/32/78165/",
             "group": "\t1",
             "noevents": true
         },
-        view: "MATCHINGPAIRS"
-    },
+    }),
     decorators: [
         (Story) => (
-            <div style={{ width: '100%', height: '100%', backgroundColor: '#ddd', padding: '1rem' }}>
+            <div style={{ width: '256px', height: '256px', backgroundColor: '#ddd', padding: '1rem' }}>
                 <Story />
             </div>
         ),
@@ -144,21 +128,17 @@ export const NoEvents = {
 };
 
 export const Inactive = {
-    args: {
-        onClick: () => alert("Clicked!"),
-        registerUserClicks: () => alert('Registered'),
-        playing: false,
+    args: getDefaultArgs({
         section: {
             "id": 32,
             "url": "/section/32/78165/",
             "group": "\t1",
             "inactive": true
         },
-        view: "MATCHINGPAIRS"
-    },
+    }),
     decorators: [
         (Story) => (
-            <div style={{ width: '100%', height: '100%', backgroundColor: '#ddd', padding: '1rem' }}>
+            <div style={{ width: '256px', height: '256px', backgroundColor: '#ddd', padding: '1rem' }}>
                 <Story />
             </div>
         ),
@@ -166,21 +146,21 @@ export const Inactive = {
 };
 
 export const Playing = {
-    args: {
+    args: getDefaultArgs({
         onClick: () => void 0,
         registerUserClicks: () => void 0,
         playing: true,
+        showAnimation: true,
         section: {
             "id": 32,
             "url": "/section/32/78165/",
             "group": "\t1",
             "turned": true
         },
-        view: "MATCHINGPAIRS"
-    },
+    }),
     decorators: [
         (Story) => (
-            <div style={{ display: 'flex', width: '100%', minHeight: '128px', height: '100%', backgroundColor: '#ddd', padding: '1rem'}}>
+            <div style={{ width: '128px', minHeight: '128px', margin: '1rem auto', height: '256px', backgroundColor: '#ddd', padding: '1rem'}}>
                 <Story />
             </div>
         ),
@@ -188,7 +168,7 @@ export const Playing = {
 };
 
 export const VisualMatchingPairs = {
-    args: {
+    args: getDefaultArgs({
         onClick: () => alert("Clicked!"),
         registerUserClicks: () => alert('Registered'),
         playing: false,
@@ -199,10 +179,10 @@ export const VisualMatchingPairs = {
             "turned": true
         },
         view: "VISUALMATCHINGPAIRS"
-    },
+    }),
     decorators: [
         (Story) => (
-            <div style={{ width: '100%', height: '100%', backgroundColor: '#ddd', padding: '1rem' }}>
+            <div style={{ width: '256px', height: '256px', backgroundColor: '#ddd', padding: '1rem' }}>
                 <Story />
             </div>
         ),

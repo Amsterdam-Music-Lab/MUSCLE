@@ -74,13 +74,12 @@ class Command(BaseCommand):
                 start_position = 0.0
                 with audioread.audio_open(audio_file) as f:
                     duration = f.duration
-                restrict_to_nl = 0
                 group_tag_option = options.get('tag_group')
                 if group_tag_option:
                     group, tag = calculate_group_tag(
                         filename, group_tag_option, i)
                 row = [artist_name, song_name,
-                       start_position, duration, filename, restrict_to_nl,
+                       start_position, duration, filename,
                        tag, group]
                 csv_writer.writerow(row)
 
