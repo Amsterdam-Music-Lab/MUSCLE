@@ -1,5 +1,8 @@
 -r base.txt
 
+# Debug toolbar for development
+django-debug-toolbar
+
 # Codebase checker
 pylint
 
@@ -17,6 +20,3 @@ pip-tools
 
 # Flake8 for linting
 flake8
-
-# Debug toolbar for development
-django-debug-toolbar
