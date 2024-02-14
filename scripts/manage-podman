@@ -1,0 +1,4 @@
+#!/bin/bash
+
+# This script executes Django management commands through Docker.
+podman-compose run --rm server python manage.py $@
