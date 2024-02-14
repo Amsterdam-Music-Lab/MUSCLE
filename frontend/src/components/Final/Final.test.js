@@ -6,7 +6,7 @@ import { createMemoryHistory } from 'history'
 import Final from './Final'; // Adjust the import path as necessary
 
 jest.mock("../../util/stores", () => ({
-    useSessionStore: (fn) => {
+    useBoundStore: (fn) => {
         const methods = {
             setSession: jest.fn(),
             session: 1

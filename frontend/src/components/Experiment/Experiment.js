@@ -3,7 +3,7 @@ import { TransitionGroup, CSSTransition } from "react-transition-group";
 import { withRouter } from "react-router-dom";
 import classNames from "classnames";
 
-import { useErrorStore, useParticipantStore, useSessionStore } from "../../util/stores";
+import useBoundStore from "../../util/stores";
 import { createSession, getNextRound, useExperiment } from "../../API";
 import Consent from "../Consent/Consent";
 import DefaultPage from "../Page/DefaultPage";
@@ -28,10 +28,10 @@ import UserFeedback from "components/UserFeedback/UserFeedback";
 const Experiment = ({ match }) => {
     const startState = { view: "LOADING" };
     // Stores
-    const setError = useErrorStore(state => state.setError);
-    const participant = useParticipantStore((state) => state.participant);
-    const setSession = useSessionStore((state) => state.setSession);
-    const session = useSessionStore((state) => state.session);
+    const setError = useBoundStore(state => state.setError);
+    const participant = useBoundStore((state) => state.participant);
+    const setSession = useBoundStore((state) => state.setSession);
+    const session = useBoundStore((state) => state.session);
 
     // Current experiment state
     const [actions, setActions] = useState([]);
