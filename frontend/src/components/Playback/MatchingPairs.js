@@ -173,7 +173,6 @@ const MatchingPairs = ({
                             playing={playerIndex === index}
                             section={sections[index]}
                             onFinish={showFeedback}
-                            stopAudioAfter={stopAudioAfter}
                             showAnimation={showAnimation}
                         />
                     )
