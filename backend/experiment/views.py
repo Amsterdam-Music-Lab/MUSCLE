@@ -142,6 +142,7 @@ def get_experiment_collection(request, slug):
 def serialize_experiment(experiment_object, finished=False):
     return {
         'slug': experiment_object.slug,
+        'name': experiment_object.name,
         'finished': finished
     }
 
