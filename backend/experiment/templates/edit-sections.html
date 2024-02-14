@@ -64,11 +64,11 @@
                     value="{{ section.song.name}}" {% if not section.song %} placeholder="*" {% endif %}>
             </td>
             <td>
-                <input type="text" name="{{section.id}}_start_time" maxlength="128" required=""
+                <input type="number" name="{{section.id}}_start_time" maxlength="128" required=""
                     id="{{section.id}}_start_time" value="{{ section.start_time}}">
             </td>
             <td>
-                <input type="text" name="{{section.id}}_duration" maxlength="128" required=""
+                <input type="number" name="{{section.id}}_duration" maxlength="128" required=""
                     id="{{section.id}}_duration" value="{{ section.duration}}">
             </td>
             <td>
