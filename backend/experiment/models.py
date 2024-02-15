@@ -152,8 +152,10 @@ class Experiment(models.Model):
                         'result_score': result.score,
                         'result_comment': result.comment,
                         'expected_response': result.expected_response,
-                        'given_response': result.given_response
+                        'given_response': result.given_response,
+                        'question_key': result.question_key,
                     }
+
                     result_data = {}
                     # Add counter for single row / wide format
                     if 'wide_format' in export_options:
