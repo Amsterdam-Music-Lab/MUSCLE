@@ -83,12 +83,13 @@ class TestAdminExperimentExport(TestCase):
             Result.objects.create(
                 session=Session.objects.first(),
                 expected_response = i,
-                given_response = i
+                given_response = i,
+                question_key = 'test_question_' + str(i),
             )
             Result.objects.create(
                 participant=cls.participant,
                 question_key= i,
-                given_response = i
+                given_response = i,
             )
             
     def setUp(self):
@@ -132,3 +133,18 @@ class TestAdminExperimentExport(TestCase):
         # test response from forced download
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response['content-type'], 'application/x-zip-compressed')
+
+    def test_export_table_includes_question_key(self):
+        session_keys = ['session_start', 'session_end']
+        result_keys = ['question_key']
+        export_options = ['convert_result_json']  # Adjust based on your needs
+
+        # Call the method under test
+        rows, fieldnames = self.experiment.export_table(session_keys, result_keys, export_options)
+
+        # Assert that 'question_key' is in the fieldnames and check its value in rows
+        self.assertIn('question_key', fieldnames)
+        for i in range(len(rows)):
+            row = rows[i]
+            self.assertIn('question_key', row)
+            self.assertEqual(row['question_key'], 'test_question_' + str(i))
