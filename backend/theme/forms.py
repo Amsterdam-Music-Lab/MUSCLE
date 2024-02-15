@@ -17,6 +17,7 @@ class ColorPickerWidget(forms.widgets.Input):
             value = '#' + value
         return value
 
+
 class CustomColorWidget(forms.Widget):
     template_name = 'custom_color_widget.html'
 
@@ -27,6 +28,7 @@ class CustomColorWidget(forms.Widget):
             # Add more context variables as needed
         }
         return mark_safe(render_to_string(self.template_name, context))
+
 
 class ThemeConfigForm(forms.ModelForm):
 

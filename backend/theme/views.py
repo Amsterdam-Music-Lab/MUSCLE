@@ -2,6 +2,7 @@ import json
 from django.http import HttpResponse
 from .models import ThemeConfig
 
+
 def theme_css(request):
     config = ThemeConfig.objects.first()
 

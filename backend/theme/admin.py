@@ -2,6 +2,7 @@ from django.contrib import admin
 from .models import ThemeConfig
 from .forms import ThemeConfigForm
 
+
 @admin.register(ThemeConfig)
 class ThemeConfigAdmin(admin.ModelAdmin):
     form = ThemeConfigForm
