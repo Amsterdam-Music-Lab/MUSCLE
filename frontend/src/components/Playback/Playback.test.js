@@ -1,7 +1,9 @@
 import React from 'react';
-import { render, wait } from '@testing-library/react';
+import { render } from '@testing-library/react';
 
 import Playback from './Playback';
+
+jest.mock("../../util/stores");
 
 describe('Playback', () => {
 

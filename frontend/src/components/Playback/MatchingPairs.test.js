@@ -2,9 +2,7 @@ import React from 'react';
 import { render } from '@testing-library/react';
 import MatchingPairs, { SCORE_FEEDBACK_DISPLAY } from './MatchingPairs';
 
-jest.mock("../PlayButton/PlayCard", () => (props) => (
-    <div data-testid="play-card" {...props} />
-));
+jest.mock("../../util/stores");
 
 describe('MatchingPairs Component', () => {
 
@@ -15,6 +13,7 @@ describe('MatchingPairs Component', () => {
         onFinish: jest.fn(),
         stopAudioAfter: 4.0,
         submitResult: jest.fn(),
+        showAnimation: false
     };
 
     it('displays three columns when sections length is less than or equal to 6', () => {
@@ -26,7 +25,7 @@ describe('MatchingPairs Component', () => {
     it('displays four columns when sections length is greater than 6', () => {
         const sections = new Array(7).fill({}).map((_, index) => ({ id: index }));
         const { container } = render(<MatchingPairs {...baseProps} sections={sections} />);
-        expect(container.querySelector('.playing-board--two-columns')).not.toBeInTheDocument();
+        expect(container.querySelector('.playing-board--three-columns')).not.toBeInTheDocument();
     });
 
     it('displays score feedback when scoreFeedbackDisplay is not HIDDEN', () => {

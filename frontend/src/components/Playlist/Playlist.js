@@ -1,18 +1,12 @@
 import React, { useEffect } from "react";
 
-import { registerPlaylist } from "API";
-import { useErrorStore, useParticipantStore, useSessionStore } from "util/stores";
-
 // Playlist is an experiment view, that handles (auto)selection of a playlist
-const Playlist = ({ experiment, instruction, onNext }) => {
+const Playlist = ({ experiment, instruction, onNext, playlist }) => {
     const playlists = experiment.playlists;
-    const session = useSessionStore(state => state.session);
-    const participant = useParticipantStore(state => state.participant);
-    const setError = useErrorStore(state => state.setError);
 
     useEffect(() => {
         if (playlists.length < 2) {
-            console.error("This experiment defines a playlist view, but only has one playlist registered");
+            // silently proceed to next view
             onNext();
         }
     }, [playlists, onNext])
@@ -23,19 +17,13 @@ const Playlist = ({ experiment, instruction, onNext }) => {
             <div className="aha__playlist">
                 <h3 data-testid="playlist-instruction" className="title">{instruction}</h3>
                 <ul>
-                    {playlists.map((playlist, index) => (
+                    {playlists.map((playlistItem, index) => (
                         <PlaylistItem
-                            key={playlist.id}
-                            playlist={playlist}
+                            key={playlistItem.id}
+                            playlist={playlistItem}
                             onClick={(playlistId) => {
-                                registerPlaylist(playlistId, participant, session).then(response => {
-                                    if (response) {
-                                        onNext();
-                                    }
-                                    else {
-                                        setError("Could not set playlist");
-                                    }
-                                });
+                                playlist.current = playlistId;
+                                onNext();
                             }}
                             delay={index * 250}
                         />
@@ -43,7 +31,7 @@ const Playlist = ({ experiment, instruction, onNext }) => {
                 </ul>
             </div>
         );
-    };
+    } else { return null };
 };
 
 const PlaylistItem = ({ delay, playlist, onClick }) => (
