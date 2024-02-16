@@ -53,8 +53,6 @@ class ThemeConfigAdmin(admin.ModelAdmin):
         if obj.font:
             # Check if the font field contains a URL
             if obj.font.startswith('http://') or obj.font.startswith('https://'):
-                # Font is specified as a URL
-
                 # Extract font-family name from URL
                 font_family_match = re.search(r'family=([^&:]+)', obj.font)
                 font_family = font_family_match.group(1).replace("+", " ") if font_family_match else "sans-serif"
