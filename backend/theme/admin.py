@@ -7,6 +7,9 @@ from .forms import ThemeConfigForm
 class ThemeConfigAdmin(admin.ModelAdmin):
     form = ThemeConfigForm
     fieldsets = (
+        ('Theme Configuration', {
+            'fields': ('name',)
+        }),
         ('Font Configuration', {
             'description': 'Please use a valid font-family name, url or enter the name or url of a font from Google Fonts (e.g. Roboto, Fredoka, Open Sans). See also <a href="https://fonts.google.com/" target="_blank">Google Fonts</a>',
             'fields': ('font',)
