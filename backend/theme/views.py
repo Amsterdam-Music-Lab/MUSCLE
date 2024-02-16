@@ -9,31 +9,47 @@ def theme_css(request):
     if config:
         try:
             variables = json.loads(config.css_variables)
-            css_content = "/* Theme configuration */"
-            css_content += "\n\n:root {"
-            css_content += "\n\n  /* Color & Design Token Configuration */"
-            css_content += "\n  "
-            css_content += "\n  ".join([f"--{key}: {value};" for key, value in variables.items()])
-            css_content += "\n\n  /* Additional Variables */"
-            css_content += "\n  " + config.additional_variables
-            css_content += "\n}"
+            css_variables = "\n".join([f"--{key}: {value};" for key, value in variables.items()])
+            css_content = f"""
+            /* Theme configuration */
+            :root {{
+              /* Color & Design Token Configuration */
+                {css_variables}
+              /* Additional Variables */
+              {config.additional_variables}
+            }}
+            """
+            
             # Global CSS
-            css_content += "\n\n/* Global CSS */"
-            css_content += "\n" + config.global_css
+            css_content += f"""
+            \n\n/* Global CSS */
+            {config.global_css}
+            """
 
             # Custom Logo
             custom_logo_url = config.logo if config.logo else ""
             if custom_logo_url:
-                css_content += "\n\n/* Custom Logo */"
-                css_content += f"\n\n.logo.logo--custom {{ background-image: url({custom_logo_url}); }}"
+                css_content += f"""
+                \n\n/* Custom Logo */\n
+                \n.logo.logo--custom {{
+                  background-image: url({custom_logo_url});
+                }}
+                """
 
             # Custom Background
             custom_background_url = config.background if config.background else ""
             if custom_background_url:
-                css_content += "\n\n/* Custom Background */"
-                css_content += f"\n\n.aha__page.aha__page--custom {{ background-image: url({custom_background_url}); position: relative; }}"
+                css_content += f"""
+                \n\n/* Custom Background */\n
+                \n.aha__page.aha__page--custom {{
+                  background-image: url({custom_background_url});
+                  position: relative;
+                }}
+                """
+
                 # ::before should show a black to transparent gradient
                 css_content += f"""
+                \n\n/* Custom Background Gradient */\n
                 \n.aha__page.aha__page--custom::before {{
                   content: "";
                   position: absolute;
