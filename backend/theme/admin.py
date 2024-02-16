@@ -8,7 +8,7 @@ class ThemeConfigAdmin(admin.ModelAdmin):
     form = ThemeConfigForm
     fieldsets = (
         ('Font Configuration', {
-            'description': 'Please use a valid font-family name or enter the name of a font from Google Fonts (e.g. Roboto, Fredoka, Open Sans). See also <a href="https://fonts.google.com/" target="_blank">Google Fonts</a>',
+            'description': 'Please use a valid font-family name, url or enter the name or url of a font from Google Fonts (e.g. Roboto, Fredoka, Open Sans). See also <a href="https://fonts.google.com/" target="_blank">Google Fonts</a>',
             'fields': ('font',)
         }),
         ('Logo Configuration', {
