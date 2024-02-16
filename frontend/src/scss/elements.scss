@@ -8,7 +8,7 @@ h3.title {
     &:after {
         content: "";
         position: absolute;
-        background-color: $primary;
+        background-color: var(--primary, $primary);
         bottom: -5px;
         left: -31px;
         width: 100px;
