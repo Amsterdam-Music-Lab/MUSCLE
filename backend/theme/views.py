@@ -20,6 +20,13 @@ def theme_css(request):
             # Global CSS
             css_content += "\n\n/* Global CSS */"
             css_content += "\n" + config.global_css
+
+            # Custom Logo
+            custom_logo_url = config.logo if config.logo else ""
+            if custom_logo_url:
+                css_content += "\n\n/* Custom Logo */"
+                css_content += f"\n\n.logo.custom-logo {{ background-image: url({custom_logo_url}); }}"
+
         except json.JSONDecodeError:
             # Handle the case where JSON is not well-formatted
             css_content = "/* Error in CSS variables JSON format */"
