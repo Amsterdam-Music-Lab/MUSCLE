@@ -7,6 +7,16 @@ from .forms import ThemeConfigForm
 class ThemeConfigAdmin(admin.ModelAdmin):
     form = ThemeConfigForm
     fieldsets = (
+        ('Font Configuration', {
+            'description': 'Please use a valid font-family name or enter the name of a font from Google Fonts (e.g. Roboto, Fredoka, Open Sans). See also <a href="https://fonts.google.com/" target="_blank">Google Fonts</a>',
+            'fields': ('font',)
+        }),
+        ('Logo Configuration', {
+            'fields': ('logo',)
+        }),
+        ('Background Configuration', {
+            'fields': ('background',)
+        }),
         ('Color Configuration', {
             'fields': ('teal', 'yellow', 'pink', 'red', 'blue', 'green', 'indigo', 'gray', 'gray_900', 'black')
         }),
