@@ -81,9 +81,9 @@ def theme_css(request):
                 """
 
                 # ::before should show a black to transparent gradient
-                css_content += f"""
-                /* Custom Background Gradient */\n
-                .aha__page.aha__page--custom::before {{
+                css_content += """
+                /* Custom Background Gradient */
+                .aha__page.aha__page--custom::before {
                   content: "";
                   position: absolute;
                   top: 0;
@@ -91,7 +91,7 @@ def theme_css(request):
                   bottom: 0;
                   left: 0;
                   background: linear-gradient(180deg, rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0) 100%);
-                }}
+                }
                 """
 
         except json.JSONDecodeError:
