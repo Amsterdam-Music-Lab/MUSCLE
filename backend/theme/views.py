@@ -25,7 +25,7 @@ def theme_css(request):
             custom_logo_url = config.logo if config.logo else ""
             if custom_logo_url:
                 css_content += "\n\n/* Custom Logo */"
-                css_content += f"\n\n.logo.custom-logo {{ background-image: url({custom_logo_url}); }}"
+                css_content += f"\n\n.logo.logo--custom {{ background-image: url({custom_logo_url}); }}"
 
         except json.JSONDecodeError:
             # Handle the case where JSON is not well-formatted

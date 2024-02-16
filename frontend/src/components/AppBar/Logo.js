@@ -17,7 +17,7 @@ export const Logo = ({ logoClickConfirm = null }) => {
     // and a-element for absolute urls (https://www.example.com/)
     const logoProps = {
         onClick: onLogoClick,
-        className: "logo custom-logo",
+        className: "logo logo--custom",
         "aria-label": "Logo",
         style: { backgroundImage: `url(${LOGO_URL})` },
     };
