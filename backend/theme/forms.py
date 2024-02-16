@@ -61,7 +61,7 @@ class ThemeConfigForm(forms.ModelForm):
         }
 
     class Media:
-        js = ['theme_admin.js']
+        js = ['theme_admin.js', 'img_preview.js']
         css = {"all": ["theme_admin.css"]}
 
     def __init__(self, *args, **kwargs):
