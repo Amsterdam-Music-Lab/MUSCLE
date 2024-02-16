@@ -27,6 +27,24 @@ def theme_css(request):
                 css_content += "\n\n/* Custom Logo */"
                 css_content += f"\n\n.logo.logo--custom {{ background-image: url({custom_logo_url}); }}"
 
+            # Custom Background
+            custom_background_url = config.background if config.background else ""
+            if custom_background_url:
+                css_content += "\n\n/* Custom Background */"
+                css_content += f"\n\n.aha__page.aha__page--custom {{ background-image: url({custom_background_url}); position: relative; }}"
+                # ::before should show a black to transparent gradient
+                css_content += f"""
+                \n.aha__page.aha__page--custom::before {{
+                  content: "";
+                  position: absolute;
+                  top: 0;
+                  right: 0;
+                  bottom: 0;
+                  left: 0;
+                  background: linear-gradient(180deg, rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0) 100%);
+                }}
+                """
+
         except json.JSONDecodeError:
             # Handle the case where JSON is not well-formatted
             css_content = "/* Error in CSS variables JSON format */"
