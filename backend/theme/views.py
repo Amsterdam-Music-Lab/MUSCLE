@@ -5,7 +5,7 @@ from .models import ThemeConfig
 
 
 def theme_css(request):
-    config = ThemeConfig.objects.first()
+    config = ThemeConfig.objects.filter(active=True).first()
 
     if config:
         try:
@@ -65,7 +65,7 @@ def theme_css(request):
                 css_content += f"""
                 /* Custom Logo */
                 .logo.logo--custom {{
-                  background-image: url({custom_logo_url});
+                  background-image: url({custom_logo_url}) !important;
                 }}
                 """
 

@@ -15,6 +15,9 @@ class ThemeConfigAdmin(admin.ModelAdmin):
         ('Theme Configuration', {
             'fields': ('name',)
         }),
+        ('Status', {
+            'fields': ('active',)
+        }),
         ('Font Configuration', {
             'description': 'Please use a valid font-family name, url or enter the name or url of a font from Google Fonts (e.g. Roboto, Fredoka, Open Sans). See also <a href="https://fonts.google.com/" target="_blank">Google Fonts</a>',
             'fields': ('font',)
@@ -44,7 +47,7 @@ class ThemeConfigAdmin(admin.ModelAdmin):
         }),
     )
 
-    list_display = ('id', 'name_link', 'font_preview', 'logo_preview', 'background_preview')
+    list_display = ('id', 'name_link', 'font_preview', 'logo_preview', 'background_preview', 'active')
 
     def name_link(self, obj):
         return format_html('<a href="{}">{}</a>', f'/admin/theme/themeconfig/{obj.id}/change/', obj.name)

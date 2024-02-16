@@ -9,3 +9,4 @@ class ThemeConfig(models.Model):
     css_variables = models.TextField()  # Store all hard-coded variables as text
     additional_variables = models.TextField(null=True, blank=True)
     global_css = models.TextField(null=True, blank=True)
+    active = models.BooleanField(default=True)
