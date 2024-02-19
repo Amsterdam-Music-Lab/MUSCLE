@@ -3,7 +3,7 @@ import classNames from "classnames";
 import { Link, withRouter } from "react-router-dom";
 import * as EmailValidator from "email-validator";
 import { URLS } from "../../config";
-import { useParticipantStore } from "../../util/stores";
+import useBoundStore from "../../util/stores";
 import { shareParticipant} from "../../API";
 import DefaultPage from "../Page/DefaultPage";
 import Loading from "../Loading/Loading";
@@ -13,7 +13,7 @@ const StoreProfile = ({ history }) => {
     const [email, setEmail] = useState("");
 
     const validEmail = email && EmailValidator.validate(email);
-    const participant = useParticipantStore((state) => state.participant);
+    const participant = useBoundStore((state) => state.participant);
 
     const sendLink = async () => {
         if (validEmail) {
