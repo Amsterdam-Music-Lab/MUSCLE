@@ -32,9 +32,7 @@ class MatchingPairsLite(MatchingPairsGame):
                 title='Score',
                 final_text='End of the game',
                 button={
-                    'text': 'Play again',
+                    'text': 'Back to dashboard',
                 },
-                rank=self.rank(session, exclude_unfinished=False),
-                feedback_info=self.feedback_info()
             )
             return score
