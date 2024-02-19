@@ -28,6 +28,10 @@ class ExperimentSeries(models.Model):
     class Meta:
         verbose_name_plural = "Experiment Series"
 
+def consent_upload_path(instance, filename):
+    """Generate path to save audio based on playlist.name"""
+    folder_name = instance.slug
+    return 'consent/{0}/{1}'.format(folder_name, filename)
 
 class Experiment(models.Model):
     """Root entity for configuring experiments"""
@@ -50,7 +54,7 @@ class Experiment(models.Model):
                 blank=True,
                 default=get_default_question_keys
             )
-    consent = models.TextField(blank=True, default='')
+    consent = models.FileField(upload_to=consent_upload_path, blank=True, default='')
 
     class Meta:
         ordering = ['name']

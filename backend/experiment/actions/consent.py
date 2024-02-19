@@ -3,15 +3,24 @@ from django.template.loader import render_to_string
 from django.template import Template, Context
 from django_markup.markup import formatter
 
+def get_render_format(url):
+    """
+    Detect markdown file by file extention 
+    """
+    url_length = len(url)
+    if url[(url_length-2):url_length] == 'md':
+        return 'MARKDOWN'
+    return 'HTML'
+
 class Consent(BaseAction):  # pylint: disable=too-few-public-methods
     """
     Provide data for a view that ask consent for using the experiment data
-    - text: Has priority over 'url'
+    - text: Uploaded file via experiment.consent (fileField)
     - title: The title to be displayed
     - confirm: The text on the confirm button
     - deny: The text on the deny button
     - url:  If no text is provided the url will be used to load a template (HTML or MARKDOWN)            
-    - render_format: (autodetected when reading from a file)
+    - render_format: (autodetected from the file extention)
         'HTML': (default) Allowed tags: html, django template language
         'MARKDOWN': Allowed tags: Markdown language
 
@@ -34,16 +43,16 @@ class Consent(BaseAction):  # pylint: disable=too-few-public-methods
     
     def __init__(self, text, title='Informed consent', confirm='I agree', deny='Stop', url='', render_format='HTML'):
         # Determine which text to use
-        # from field: experiment.consent (prio-1)
+        # Uploaded consent via file field: experiment.consent (High priority)
         if text!='':
-            dry_text = text
-        # from template file (prio-2)    
+            with text.open('r') as f:
+                dry_text = f.read()
+            render_format = get_render_format(text.url)
+        # Template file via url (Low priority)
         elif url!='':
             dry_text = render_to_string(url)
-            url_length = len(url)
-            if url[(url_length-2):url_length] == 'md':
-                render_format = 'MARKDOWN'
-        # use efault text (prio-3)
+            render_format = get_render_format(url)            
+        # use default text 
         else:
             dry_text = self.default_text
         # render text fot the consent component
