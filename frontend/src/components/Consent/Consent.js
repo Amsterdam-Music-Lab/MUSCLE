@@ -8,7 +8,7 @@ import { createConsent, useConsent } from "../../API";
 import classNames from "classnames";
 
 // Consent is an experiment view that shows the consent text, and handles agreement/stop actions
-const Consent = ({ title, text, experiment, participant, onNext, confirm, deny, style }) => {
+const Consent = ({ title, text, experiment, participant, onNext, confirm, deny }) => {
     const [consent, loadingConsent] = useConsent(experiment.slug);
     const urlQueryString = window.location.search;
 
@@ -59,7 +59,7 @@ const Consent = ({ title, text, experiment, participant, onNext, confirm, deny, 
 
     // Show consent
     return (
-        <div className={classNames("aha__consent", style?.root)}>
+        <div className={classNames("aha__consent")}>
             <div className="aha__consent-header d-flex">
                 <div className="flex-fill">
                     <h3>{title}</h3>
