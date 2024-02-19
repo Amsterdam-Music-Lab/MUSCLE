@@ -3,17 +3,17 @@ import Button from "../Button/Button";
 
 // Explainer is an experiment view that shows a list of steps
 // If the button has not been clicked, onNext will be called automatically after the timer expires (in milliseconds). If timer == null, onNext will only be called after the button is clicked.
-const Explainer = ({ instruction, button_label, steps = [], onNext, timer }) => {
+const Explainer = ({ instruction, button_label, steps = [], timer = null, onNext }) => {
 
     useEffect( () => {
         if (timer != null) {
             const id = setTimeout(onNext, timer);
             return () => {clearTimeout(id)}; // if button has been clicked, clear timeout
         }
-    })
+    }, [onNext, timer])
 
     return (
-        <div className="aha__explainer">
+        <div data-testid="explainer" className="aha__explainer">
             <h3 className="title">{instruction}</h3>
 
             <ul>

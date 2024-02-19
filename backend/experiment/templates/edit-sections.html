@@ -79,13 +79,6 @@
                 <input type="text" name="{{section.id}}_tag" maxlength="128" id="{{section.id}}_tag"
                     value="{{ section.tag}}">
             </td>
-
-            <td>
-                {% if section.song %}                
-                <input type="checkbox" name="{{section.id}}_restricted" id="{{section.id}}_restricted" 
-                    {% if section.song.restricted %} checked {% endif %}>
-                {% endif %}
-            </td>
         </tr>
         {% endfor %}
         <tr class="song-padding">

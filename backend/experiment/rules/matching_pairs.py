@@ -105,6 +105,7 @@ class MatchingPairsGame(Base):
             degradations = session.playlist.section_set.filter(group__in=selected_pairs, tag=degradation_type)
             player_sections = list(originals) + list(degradations)
         random.shuffle(player_sections)
+
         playback = MatchingPairs(
             sections=player_sections,
             stop_audio_after=5,

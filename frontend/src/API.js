@@ -70,16 +70,17 @@ export const createConsent = async ({ experiment, participant }) => {
 };
 
 // Create a new session for given experiment
-export const createSession = async ( {experiment, participant} ) => {
+export const createSession = async ( {experiment, participant, playlist} ) => {
     try {
         const response = await axios.post(
             API_BASE_URL + URLS.session.create,
             qs.stringify({
                 experiment_id: experiment.id,
+                playlist_id: playlist.current,
                 csrfmiddlewaretoken: participant.csrf_token,
             })
         );
-        return response.data;
+        return response.data.session;
     } catch (err) {
         console.error(err);
         return null;

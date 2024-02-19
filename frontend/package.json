@@ -81,7 +81,7 @@
     "@storybook/react-webpack5": "7.6.6",
     "@storybook/testing-library": "0.2.2",
     "@testing-library/jest-dom": "^6.1.5",
-    "@testing-library/react": "^14.1.2",
+    "@testing-library/react": "^14.2.1",
     "@testing-library/user-event": "^14.5.1",
     "babel-plugin-named-exports-order": "0.0.2",
     "coverage-badges-cli": "^1.2.5",

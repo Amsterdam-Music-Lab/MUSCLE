@@ -138,10 +138,6 @@ class PlaylistAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
                         section.song = this_song
                     else:
                         section.song = this_song
-                        if request.POST.get(pre_fix + '_restricted'):
-                            section.song.restricted = [{"restricted": "nl"}]
-                        else:
-                            section.song.restricted = []
                         section.song.save()
                 section.start_time = request.POST.get(pre_fix + '_start_time')
                 section.duration = request.POST.get(pre_fix + '_duration')
