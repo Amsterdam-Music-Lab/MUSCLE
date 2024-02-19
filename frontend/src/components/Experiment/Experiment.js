@@ -59,7 +59,7 @@ const Experiment = ({ match }) => {
         updateState(newState);
     }, [updateState]);
 
-    const checkSession = useCallback(async () => {
+    const checkSession = async () => {
         if (session) {
             return session;
         }
@@ -71,9 +71,9 @@ const Experiment = ({ match }) => {
         catch(err) {
             setError(`Could not create a session: ${err}`)
         };
-    }, [experiment, participant, playlist, setError, setSession])
+    };
 
-    const continueToNextRound = useCallback(async() => {
+    const continueToNextRound = async() => {
         const thisSession = await checkSession();
         // Try to get next_round data from server
         const round = await getNextRound({
@@ -87,7 +87,7 @@ const Experiment = ({ match }) => {
             );
             setState(undefined);
         }
-    }, [checkSession, updateActions, setError, setState])
+    };
 
     // trigger next action from next_round array, or call session/next_round
     const onNext = async (doBreak) => {
@@ -108,7 +108,7 @@ const Experiment = ({ match }) => {
                     const firstActions = [ ...experiment.next_round ];
                     updateActions(firstActions);
                 } else {
-                    continueToNextRound();
+                    setError("The first_round array from the ruleset is empty")
                 }
             } else {
                 // Loading error
@@ -116,7 +116,6 @@ const Experiment = ({ match }) => {
             }
         }
     }, [
-        continueToNextRound,
         experiment,
         loadingExperiment,
         participant,
