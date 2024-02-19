@@ -4,7 +4,7 @@ import MatchingPairs, { SCORE_FEEDBACK_DISPLAY } from '../components/Playback/Ma
 import audio from './assets/audio.wav';
 
 
-const Decorator = (Story) => {
+const StoreDecorator = (Story) => {
     const setSession = useBoundStore(state => state.setSession);
     const setParticipant = useBoundStore(state => state.setParticipant);
     setSession({ id: 1 });
@@ -103,7 +103,7 @@ export const Default = {
     args: {
         ...getDefaultArgs(),
     },
-    decorators: [ Decorator ],
+    decorators: [ StoreDecorator ],
     parameters: {
         docs: {
             description: {
@@ -160,7 +160,7 @@ export const WithThreeColumns = {
             },
         ],
     }),
-    decorators: [ Decorator ],
+    decorators: [ StoreDecorator ],
     parameters: {
         docs: {
             description: {
@@ -175,7 +175,7 @@ export const WithSmallBottomRightScoreFeedback = {
         ...getDefaultArgs(),
         scoreFeedbackDisplay: SCORE_FEEDBACK_DISPLAY.SMALL_BOTTOM_RIGHT
     },
-    decorators: [ Decorator ],
+    decorators: [ StoreDecorator ],
     parameters: {
         docs: {
             description: {
@@ -190,7 +190,7 @@ export const WithShowAnimation = {
         ...getDefaultArgs(),
         showAnimation: true,
     },
-    decorators: [ Decorator ],
+    decorators: [ StoreDecorator ],
     parameters: {
         docs: {
             description: {
