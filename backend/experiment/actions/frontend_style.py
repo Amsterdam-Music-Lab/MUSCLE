@@ -32,7 +32,27 @@ class FrontendStyle:
         if not EFrontendStyle.is_valid(root_style):
             raise ValueError(f"Invalid root style: {root_style}")
 
-        self.styles = { 'root': root_style }
+        self.styles = {'root': root_style}
+
+    def get_style(self, element: str) -> str:
+        """
+        Get the style for a specific element.
+        :param element: The element identifier for which to get the style.
+        :return: The style name for the given element.
+        """
+        return self.styles.get(element, None)
+
+    def apply_style(self, element: str, style: str) -> None:
+        """
+        Apply a specific style to an element after validating the style.
+        :param element: The element identifier to apply the style to.
+        :param style: The style name to apply.
+        """
+        if EFrontendStyle.is_valid(style):
+            self.styles[element] = style
+        else:
+            valid_styles = ', '.join([str(s) for s in self.VALID_STYLES])
+            raise ValueError(f"Invalid style: {style}. Valid styles are {valid_styles}.")
 
     def to_dict(self) -> dict:
         serialized_styles = { 'root': self.styles['root'].value }

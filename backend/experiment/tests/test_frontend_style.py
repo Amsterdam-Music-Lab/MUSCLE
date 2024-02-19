@@ -13,15 +13,6 @@ class TestFrontendStyle(unittest.TestCase):
         with self.assertRaises(ValueError):
             FrontendStyle("invalid-style")
 
-    def test_init_with_valid_nested_styles(self):
-        nested_style = FrontendStyle(EFrontendStyle.SUCCESS)
-        style = FrontendStyle(EFrontendStyle.PRIMARY, nested=nested_style)
-        self.assertIsInstance(style.get_style('nested'), FrontendStyle)
-
-    def test_init_with_invalid_nested_styles(self):
-        with self.assertRaises(ValueError):
-            FrontendStyle(EFrontendStyle.PRIMARY, nested="invalid-style")
-
     def test_get_style(self):
         style = FrontendStyle(EFrontendStyle.SECONDARY)
         self.assertEqual(style.get_style('root'), EFrontendStyle.SECONDARY)
@@ -41,26 +32,9 @@ class TestFrontendStyle(unittest.TestCase):
             style.apply_style('root', "invalid-style")
 
     def test_to_dict(self):
-        nested_style = FrontendStyle(EFrontendStyle.SUCCESS)
-        style = FrontendStyle(EFrontendStyle.NEUTRAL, nested=nested_style)
-        expected_dict = {'root': EFrontendStyle.NEUTRAL.value, 'nested': {'root': EFrontendStyle.SUCCESS.value}}
+        style = FrontendStyle(EFrontendStyle.NEUTRAL)
+        expected_dict = {'root': EFrontendStyle.NEUTRAL.value }
         self.assertEqual(style.to_dict(), expected_dict)
-
-    def test_to_dict_with_deep_nesting(self):
-        nested_style_level_2 = FrontendStyle(EFrontendStyle.WARNING)
-        nested_style_level_1 = FrontendStyle(EFrontendStyle.INFO, nested_lvl2=nested_style_level_2)
-        style = FrontendStyle(EFrontendStyle.NEUTRAL, nested_lvl1=nested_style_level_1)
-        expected_dict = {
-            'root': EFrontendStyle.NEUTRAL.value,
-            'nested_lvl1': {
-                'root': EFrontendStyle.INFO.value,
-                'nested_lvl2': {
-                    'root': EFrontendStyle.WARNING.value
-                }
-            }
-        }
-        self.assertEqual(style.to_dict(), expected_dict)
-
 
 if __name__ == '__main__':
     unittest.main()

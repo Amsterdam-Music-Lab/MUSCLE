@@ -24,7 +24,7 @@ class Consent(BaseAction):  # pylint: disable=too-few-public-methods
                 ea sea expetenda suscipiantur contentiones."
 
     def __init__(self, text=default_text, title='Informed consent', confirm='I agree', deny='Stop'):
-        super().__init__(style)
+        super().__init__()
         self.text = text
         self.title = title
         self.confirm = confirm
