@@ -1,0 +1,65 @@
+name: Podman build & deploy
+
+on:
+  push:
+    branches:
+      - develop
+  workflow_dispatch:
+  
+jobs:
+  deploy-test:
+    name: Deploy to test environment
+    environment: test
+    runs-on: tst
+    if: github.ref == 'refs/heads/develop'
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.ref }}
+    env:
+
+      # Variables
+      AML_ALLOWED_HOSTS: ${{ vars.AML_ALLOWED_HOSTS }}
+      AML_CORS_ORIGIN_WHITELIST: ${{ vars.AML_CORS_ORIGIN_WHITELIST }}
+      AML_DEBUG: ${{ vars.AML_DEBUG }}
+      AML_LOCATION_PROVIDER: ${{ vars.AML_LOCATION_PROVIDER }}
+      AML_SUBPATH: ${{ vars.AML_SUBPATH }}
+      DJANGO_SETTINGS_MODULE: ${{ vars.DJANGO_SETTINGS_MODULE }}
+      SQL_DATABASE: ${{ vars.SQL_DATABASE }}
+      SQL_HOST: ${{ vars.SQL_HOST }}
+      SQL_PORT: ${{ vars.SQL_PORT }}
+      REACT_APP_API_ROOT: ${{ vars.REACT_APP_API_ROOT }}
+      REACT_APP_EXPERIMENT_SLUG: ${{ vars.REACT_APP_EXPERIMENT_SLUG }}
+      REACT_APP_AML_HOME: ${{ vars.REACT_APP_AML_HOME }}
+      REACT_APP_HTML_PAGE_TITLE: ${{ vars.REACT_APP_HTML_PAGE_TITLE }}
+      
+      # Secrets
+      AML_SECRET_KEY: ${{ secrets.AML_SECRET_KEY }}
+      SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
+      SQL_USER: ${{ secrets.SQL_USER }}
+      SQL_PASSWORD: ${{ secrets.SQL_PASSWORD }}
+      REACT_APP_SENTRY_DSN: ${{ secrets.REACT_APP_SENTRY_DSN }}
+      DJANGO_SUPERUSER_USERNAME: ${{ secrets.DJANGO_SUPERUSER_USERNAME }}
+      DJANGO_SUPERUSER_PASSWORD: ${{ secrets.DJANGO_SUPERUSER_PASSWORD }}
+      DJANGO_SUPERUSER_EMAIL: ${{ secrets.DJANGO_SUPERUSER_EMAIL }}
+
+      # Prevent podman services from exiting after startup
+      RUNNER_TRACKING_ID: ""
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Create .env file
+        run: |
+          touch .env
+          echo "REACT_APP_API_ROOT=$REACT_APP_API_ROOT" >> .env
+          echo "REACT_APP_EXPERIMENT_SLUG=$REACT_APP_EXPERIMENT_SLUG" >> .env
+          echo "REACT_APP_AML_HOME=$REACT_APP_AML_HOME" >> .env
+          echo "REACT_APP_HTML_PAGE_TITLE=$REACT_APP_HTML_PAGE_TITLE" >> .env
+          echo "REACT_APP_SENTRY_DSN=$REACT_APP_SENTRY_DSN" >> .env
+          cp .env frontend/.env
+      - name: Build Podman images
+        run: podman-compose -f docker-compose-deploy.yml build
+      - name: Deploy Podman images
+        run: podman-compose -f docker-compose-deploy.yml up -d --force-recreate
+      - name: Check Podman images
+        run: podman-compose -f docker-compose-deploy.yml ps
+      - name: Check logs
+        run: podman-compose -f docker-compose-deploy.yml logs
