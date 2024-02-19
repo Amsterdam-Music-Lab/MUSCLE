@@ -153,8 +153,6 @@ const VisualMatchingPairs = (props) => {
             setMessage('');
         }
 
-        console.log('start time', startTime)
-
         const newResult = {
             selectedSection: currentCard.id,
             cardIndex: index,
@@ -202,7 +200,7 @@ const VisualMatchingPairs = (props) => {
     }, [gameState, setEnd]);
 
     const registerUserClicks = () => void 0;
-    const stopAudioAfter = () => void 0;
+
 
     const onPlayCardClick = (index) => {
         setPlayerIndex(-1);
@@ -228,14 +226,14 @@ const VisualMatchingPairs = (props) => {
     return (
         <div className="aha__visual-matching-pairs">
 
-            <div className="row justify-content-around">
+            <div className="row justify-content-between">
                 <div className="col-6 align-self-start">
                     <div dangerouslySetInnerHTML={{ __html: message }}
-                        className={classNames("matching-pairs__feedback", getScoreClasses(score))}
+                        className={classNames("visual-matching-pairs__feedback", getScoreClasses(score))}
                     />
                 </div>
                 <div className="col-6 align-self-end">
-                    <div className="matching-pairs__score" data-testid="score">
+                    <div className="visual-matching-pairs__score" data-testid="score">
                         Score: <br />{total}
                     </div>
                 </div>
@@ -247,10 +245,8 @@ const VisualMatchingPairs = (props) => {
                         key={index}
                         onClick={() => onPlayCardClick(index)}
                         playing={playerIndex === index}
-                        onFinish={showFeedback}
                         registerUserClicks={registerUserClicks}
                         section={section}
-                        stopAudioAfter={stopAudioAfter}
                         view={view}
                     />
                 )

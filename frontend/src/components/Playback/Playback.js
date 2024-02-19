@@ -36,13 +36,16 @@ const Playback = ({
     const setView = (view, data = {}) => {
         setState({ view, ...data });
     }
-    const playMethod = playbackArgs.play_method;
+    
+    // check if the users device is webaudio compatible
+    const playMethod = webAudio.compatibleDevice() ? playbackArgs.play_method : 'EXTERNAL';    
+    
     const sections = playbackArgs.sections;
 
     // Keep track of which player has played, in a an array of player indices
     const [hasPlayed, setHasPlayed] = useState([]);
     const prevPlayerIndex = useRef(-1);
-
+    
     useEffect(() => {
         const index = prevPlayerIndex.current;
         if (index !== -1) {
@@ -66,8 +69,12 @@ const Playback = ({
     }, [cancelAudioListeners]);
 
     // Audio ended playing
-    const onAudioEnded = useCallback(() => {
-        setPlayerIndex(-1);
+    const onAudioEnded = useCallback((index) => {
+        
+        // If the player index is not the last player index, return
+        if (lastPlayerIndex.current === index) {
+            setPlayerIndex(-1);
+        }
 
         if (playbackArgs.timeout_after_playback) {
             setTimeout(finishedPlaying, playbackArgs.timeout_after_playback);
@@ -116,9 +123,9 @@ const Playback = ({
             cancelAudioListeners();
             // listen for active audio events
             if (playMethod === 'BUFFER') {
-                activeAudioEndedListener.current = webAudio.listenOnce("ended", onAudioEnded);
+                activeAudioEndedListener.current = webAudio.listenOnce("ended", () => onAudioEnded(index));
             } else {
-                activeAudioEndedListener.current = audio.listenOnce("ended", onAudioEnded);
+                activeAudioEndedListener.current = audio.listenOnce("ended", () => onAudioEnded(index));
             }                    
             // Compensate for audio latency and set state to playing
             setTimeout(startedPlaying && startedPlaying(), latency);
@@ -169,7 +176,7 @@ const Playback = ({
             case PRELOAD:
                 return (
                     <Preload {...attrs}
-                        playMethod={playbackArgs.play_method}
+                        playMethod={playMethod}
                         duration={playbackArgs.ready_time}
                         preloadMessage={playbackArgs.preload_message}
                         onNext={() => {                        

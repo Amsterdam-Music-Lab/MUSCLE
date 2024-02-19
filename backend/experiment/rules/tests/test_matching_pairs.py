@@ -14,21 +14,21 @@ class MatchingPairsTest(TestCase):
     @classmethod
     def setUpTestData(cls):
         section_csv = (
-            "default,Crown_1_E1,0.0,10.0,MatchingPairs/Original/Crown_1_E1.mp3,0,Original,6\n"
-            "default,Crown_1_E1,0.0,10.0,MatchingPairs/1stDegradation/Crown_1_E1.mp3,0,1stDegradation,6\n"
-            "default,Crown_1_E1,0.0,10.0,MatchingPairs/2ndDegradation/Crown_1_E1.mp3,0,2ndDegradation,6\n"
-            "default,ER_2_E1,0.0,10.0,MatchingPairs/Original/ER_2_E1.mp3,0,Original,21\n"
-            "default,ER_2_E1,0.0,10.0,MatchingPairs/1stDegradation/ER_2_E1.mp3,0,1stDegradation,21\n"
-            "default,ER_2_E1,0.0,10.0,MatchingPairs/2ndDegradation/ER_2_E1.mp3,0,2ndDegradation,21\n"
-            "default,GameOfThrones_1_E1,0.0,10.0,MatchingPairs/Original/GameOfThrones_1_E1.mp3,0,Original,26\n"
-            "default,GameOfThrones_1_E1,0.0,10.0,MatchingPairs/1stDegradation/GameOfThrones_1_E1.mp3,0,1stDegradation,26\n"
-            "default,GameOfThrones_1_E1,0.0,10.0,MatchingPairs/2ndDegradation/GameOfThrones_1_E1.mp3,0,2ndDegradation,26\n"
-            "default,RickandMorty_12_E1,0.0,10.0,MatchingPairs/Original/RickandMorty_12_E1.mp3,0,Original,44\n"
-            "default,RickandMorty_12_E1,0.0,10.0,MatchingPairs/1stDegradation/RickandMorty_12_E1.mp3,0,1stDegradation,44\n"
-            "default,RickandMorty_12_E1,0.0,10.0,MatchingPairs/2ndDegradation/RickandMorty_12_E1.mp3,0,2ndDegradation,44\n"
-            "default,TwinPeaks_0_E1,0.0,10.0,MatchingPairs/1stDegradation/TwinPeaks_0_E1.mp3,0,1stDegradation,86\n"
-            "default,TwinPeaks_0_E1,0.0,10.0,MatchingPairs/2ndDegradation/TwinPeaks_0_E1.mp3,0,2ndDegradation,86\n"
-            "default,TwinPeaks_1_E1,0.0,10.0,MatchingPairs/Original/TwinPeaks_1_E1.mp3,0,Original,86\n"
+            "default,Crown_1_E1,0.0,10.0,MatchingPairs/Original/Crown_1_E1.mp3,Original,6\n"
+            "default,Crown_1_E1,0.0,10.0,MatchingPairs/1stDegradation/Crown_1_E1.mp3,1stDegradation,6\n"
+            "default,Crown_1_E1,0.0,10.0,MatchingPairs/2ndDegradation/Crown_1_E1.mp3,2ndDegradation,6\n"
+            "default,ER_2_E1,0.0,10.0,MatchingPairs/Original/ER_2_E1.mp3,Original,21\n"
+            "default,ER_2_E1,0.0,10.0,MatchingPairs/1stDegradation/ER_2_E1.mp3,1stDegradation,21\n"
+            "default,ER_2_E1,0.0,10.0,MatchingPairs/2ndDegradation/ER_2_E1.mp3,2ndDegradation,21\n"
+            "default,GameOfThrones_1_E1,0.0,10.0,MatchingPairs/Original/GameOfThrones_1_E1.mp3,Original,26\n"
+            "default,GameOfThrones_1_E1,0.0,10.0,MatchingPairs/1stDegradation/GameOfThrones_1_E1.mp3,1stDegradation,26\n"
+            "default,GameOfThrones_1_E1,0.0,10.0,MatchingPairs/2ndDegradation/GameOfThrones_1_E1.mp3,2ndDegradation,26\n"
+            "default,RickandMorty_12_E1,0.0,10.0,MatchingPairs/Original/RickandMorty_12_E1.mp3,Original,44\n"
+            "default,RickandMorty_12_E1,0.0,10.0,MatchingPairs/1stDegradation/RickandMorty_12_E1.mp3,1stDegradation,44\n"
+            "default,RickandMorty_12_E1,0.0,10.0,MatchingPairs/2ndDegradation/RickandMorty_12_E1.mp3,2ndDegradation,44\n"
+            "default,TwinPeaks_0_E1,0.0,10.0,MatchingPairs/1stDegradation/TwinPeaks_0_E1.mp3,1stDegradation,86\n"
+            "default,TwinPeaks_0_E1,0.0,10.0,MatchingPairs/2ndDegradation/TwinPeaks_0_E1.mp3,2ndDegradation,86\n"
+            "default,TwinPeaks_1_E1,0.0,10.0,MatchingPairs/Original/TwinPeaks_1_E1.mp3,Original,86\n"
         )
         cls.playlist = Playlist.objects.create(name='TestMatchingPairs')
         cls.playlist.csv = section_csv

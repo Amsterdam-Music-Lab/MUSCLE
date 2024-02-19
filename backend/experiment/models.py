@@ -2,12 +2,11 @@ import copy
 
 from django.db import models
 from django.utils import timezone
+from django.contrib.postgres.fields import ArrayField
+from typing import List, Dict, Tuple, Any
 from experiment.rules import EXPERIMENT_RULES
 from experiment.standards.iso_languages import ISO_LANGUAGES
-
-from django.contrib.postgres.fields import ArrayField
 from .questions import QUESTIONS_CHOICES, get_default_question_keys
-from django import forms
 
 language_choices = [(key, ISO_LANGUAGES[key]) for key in ISO_LANGUAGES.keys()]
 language_choices[0] = ('', 'Unset')
@@ -96,7 +95,7 @@ class Experiment(models.Model):
         # export session objects
         return self.session_set.all()
 
-    def export_table(self, session_keys, result_keys, export_options):
+    def export_table(self, session_keys: List[str], result_keys: List[str], export_options: Dict[str, Any]) -> Tuple[List[Dict[str, Any]], List[str]]:
         """Export filtered tabular data for admin
             session_keys : session fieldnames to be included
             result_keys : result fieldnames to be included
@@ -154,8 +153,10 @@ class Experiment(models.Model):
                         'result_score': result.score,
                         'result_comment': result.comment,
                         'expected_response': result.expected_response,
-                        'given_response': result.given_response
+                        'given_response': result.given_response,
+                        'question_key': result.question_key,
                     }
+
                     result_data = {}
                     # Add counter for single row / wide format
                     if 'wide_format' in export_options:

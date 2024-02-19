@@ -8,13 +8,9 @@ from participant.utils import located_in_nl
 
 
 def get_section(request, section_id, code):
-    """Get section by given id, check location restrictions"""
+    """Get section by given id"""
     try:
         section = Section.objects.get(pk=section_id, code=code)
-
-        # Check location restrictions
-        if len(section.song.restricted) and not located_in_nl(request):
-            raise PermissionDenied
 
         # Section will be served, so increase play count
         # On your local development server you can receive multiple requests on

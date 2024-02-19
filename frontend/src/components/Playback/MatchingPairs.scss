@@ -60,6 +60,10 @@
         font-size: 0.5rem;
         backface-visibility: hidden;
         font-weight: normal;
+
+        .matching-pairs__feedback, .matching-pairs__score {
+            float: none;
+        }
     }
 }
 
@@ -77,6 +81,7 @@
 }
 
 .matching-pairs__feedback {
+    float: left;
     color: white;
 
     &.fbnomatch {
@@ -98,7 +103,7 @@
 
 .matching-pairs__score {
     float: right;
-    
+
     &.noscore {
         opacity: 0;
     }

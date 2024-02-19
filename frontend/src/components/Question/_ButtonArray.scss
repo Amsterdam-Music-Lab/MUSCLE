@@ -31,10 +31,14 @@
         }
 
         &.invisible-text {
-            .btn.btn-secondary:not(.disabled):not(:disabled) {
+            .btn.btn-secondary {
                 color: transparent;
                 width: 4rem;
                 height: 4rem;
+
+                &:hover {
+                    color: transparent;
+                }
             }
         }
     }

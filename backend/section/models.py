@@ -21,7 +21,7 @@ class Playlist(models.Model):
 
     default_csv_row = 'CSV Format: artist_name [string],\
         song_name [string], start_position [float], duration [float],\
-        "path/filename.mp3" [string], restricted_to_nl [int 0=False 1=True], tag [string], group [string]'
+        "path/filename.mp3" [string], tag [string], group [string]'
     csv = models.TextField(blank=True, help_text=default_csv_row)
 
     def save(self, *args, **kwargs):
@@ -68,7 +68,7 @@ class Playlist(models.Model):
         # Add new sections from csv
         try:
             reader = csv.DictReader(self.csv.splitlines(), fieldnames=(
-                'artist', 'name', 'start_time', 'duration', 'filename', 'restrict_to_nl', 'tag', 'group'))
+                'artist', 'name', 'start_time', 'duration', 'filename', 'tag', 'group'))
         except csv.Error:
             return {
                 'status': self.CSV_ERROR,
@@ -97,8 +97,7 @@ class Playlist(models.Model):
 
             # check for valid numbers
             if not (is_number(row['start_time'])
-                    and is_number(row['duration'])
-                    and is_number(row['restrict_to_nl'])):
+                    and is_number(row['duration'])):
                 return {
                     'status': self.CSV_ERROR,
                     'message': "Error: Expected number fields on line: " + str(lines)
@@ -109,12 +108,6 @@ class Playlist(models.Model):
             if row['artist'] and row['name']:
                 song, created = Song.objects.get_or_create(artist=row['artist'], name=row['name'])
 
-            if int(row['restrict_to_nl']) == 1:
-                song.restricted = [{"restricted": "nl"}]
-                song.save()
-            elif int(row['restrict_to_nl']) == 0:
-                song.restricted = []
-                song.save()
             section = Section(playlist=self,
                               start_time=float(row['start_time']),
                               duration=float(row['duration']),
@@ -132,9 +125,6 @@ class Playlist(models.Model):
                         if not ex_section.song:
                             ex_section.song = song
                             ex_section.save()
-                        elif ex_section.song.restricted != song.restricted:
-                            ex_section.song.restricted = song.restricted
-                            ex_section.song.save()
                     ex_section.start_time = section.start_time
                     ex_section.duration = section.duration
                     ex_section.tag = section.tag
@@ -208,17 +198,14 @@ class Playlist(models.Model):
             if section.song:
                 this_artist = section.song.artist
                 this_name = section.song.name
-                this_restricted = '1' if section.song.restricted else '0'
             else:
                 this_artist = ''
                 this_name = ''
-                this_restricted = ''
             writer.writerow([this_artist,
                             this_name,
                             section.start_time,
                             section.duration,
                             section.filename,
-                            this_restricted,
                             section.tag,
                             section.group])
         csv_string = csvfile.csv_string
@@ -229,7 +216,6 @@ class Song(models.Model):
     """ A Song object with an artist and name (unique together)"""
     artist = models.CharField(db_index=True, blank=True, default='', max_length=128)
     name = models.CharField(db_index=True, blank=True, default='' ,max_length=128)
-    restricted = models.JSONField(default=list, blank=True)
 
     class Meta:
         unique_together = ("artist", "name")
@@ -323,7 +309,6 @@ class Section(models.Model):
             self.start_time,
             self.duration,
             self.filename,
-            1 if self.song.restricted else 0,
             self.tag,
             self.group,
         ]
