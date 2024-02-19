@@ -36,5 +36,6 @@ class TestFrontendStyle(unittest.TestCase):
         expected_dict = {'root': EFrontendStyle.NEUTRAL.value }
         self.assertEqual(style.to_dict(), expected_dict)
 
+
 if __name__ == '__main__':
     unittest.main()
