@@ -4,7 +4,7 @@ import json
 from django.utils.translation import gettext_lazy as _
 
 from .base import Base
-from experiment.actions import Final, Playlist, Trial
+from experiment.actions import Final, Playlist, Trial, Info
 from experiment.actions.playback import MatchingPairs
 from result.utils import prepare_result
 
@@ -14,16 +14,18 @@ from section.models import Section
 class MatchingPairsLite(Base):
     ID = 'MATCHING_PAIRS_LITE'
     num_pairs = 8
-    show_animation = True
-    score_feedback_display = 'bottom_right'
+    show_animation = False
+    score_feedback_display = 'small-bottom-right'
     contact_email = 'aml.tunetwins@gmail.com'
 
     def first_round(self, experiment):     
         # 2. Choose playlist.
         playlist = Playlist(experiment.playlists.all())
-
+        info = Info('',
+                    heading='Press start to enter the game',
+                    button_label='Start')
         return [
-            playlist
+            playlist, info
         ]
     
     def next_round(self, session):
