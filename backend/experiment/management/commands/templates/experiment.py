@@ -34,8 +34,7 @@ class NewExperiment(Base):
         Consent and Playlist are often desired, but optional
         '''
         # 1. Informed consent (optional)
-        rendered = render_to_string('consent/consent.html')
-        consent = Consent(rendered, title=_(
+        consent = Consent(experiment.consent, title=_(
             'Informed consent'), confirm=_('I agree'), deny=_('Stop'))
         
         # 2. Choose playlist (optional, only relevant if there are multiple playlists the participant can choose from)
