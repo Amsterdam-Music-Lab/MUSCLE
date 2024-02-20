@@ -8,7 +8,7 @@ def get_render_format(url):
     Detect markdown file by file extention 
     """
     url_length = len(url)
-    if url[(url_length-2):url_length] == 'md':
+    if url[(url_length-2):url_length].lower() == 'md':
         return 'MARKDOWN'
     return 'HTML'
 
@@ -42,18 +42,18 @@ class Consent(BaseAction):  # pylint: disable=too-few-public-methods
                 ea sea expetenda suscipiantur contentiones."
     
     def __init__(self, text, title='Informed consent', confirm='I agree', deny='Stop', url='', render_format='HTML'):
-        # Determine which text to use
-        # Uploaded consent via file field: experiment.consent (High priority)
+        # Determine which text to use        
         if text!='':
+            # Uploaded consent via file field: experiment.consent (High priority)
             with text.open('r') as f:
                 dry_text = f.read()
-            render_format = get_render_format(text.url)
-        # Template file via url (Low priority)
+            render_format = get_render_format(text.url)        
         elif url!='':
+            # Template file via url (Low priority)
             dry_text = render_to_string(url)
-            render_format = get_render_format(url)            
-        # use default text 
+            render_format = get_render_format(url)        
         else:
+            # use default text
             dry_text = self.default_text
         # render text fot the consent component
         if render_format == 'HTML':
@@ -65,3 +65,4 @@ class Consent(BaseAction):  # pylint: disable=too-few-public-methods
         self.title = title
         self.confirm = confirm
         self.deny = deny
+        self.render_format = render_format
