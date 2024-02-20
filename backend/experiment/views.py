@@ -12,10 +12,9 @@ from .utils import serialize
 from participant.utils import get_participant
 from session.models import Session
 from experiment.rules import EXPERIMENT_RULES
+from experiment.actions.utils import COLLECTION_KEY
 
 logger = logging.getLogger(__name__)
-
-# Experiment
 
 
 def get_experiment(request, slug):
@@ -112,7 +111,11 @@ def get_experiment_collection(request, slug):
     except if ExperimentSeries.dashboard = True,
     then all random_experiments will be returned as an array (also those with finished session)
     '''
-    collection = ExperimentSeries.objects.get(slug=slug)
+    try:
+        collection = ExperimentSeries.objects.get(slug=slug)
+    except:
+        return Http404
+    request.session[COLLECTION_KEY] = slug
     participant = get_participant(request)
     if collection.first_experiments:
         experiments = get_associated_experiments(collection.first_experiments)
