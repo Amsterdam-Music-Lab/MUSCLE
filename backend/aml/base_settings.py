@@ -176,3 +176,5 @@ sentry_sdk.init(
     # We recommend adjusting this value in production.
     profiles_sample_rate=0.2,
 )
+
+SUBPATH = os.getenv('AML_SUBPATH', None)

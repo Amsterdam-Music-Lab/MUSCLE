@@ -3,7 +3,7 @@ import { TransitionGroup, CSSTransition } from "react-transition-group";
 import { withRouter } from "react-router-dom";
 import classNames from "classnames";
 
-import { useErrorStore, useParticipantStore, useSessionStore } from "../../util/stores";
+import { useBoundStore } from "../../util/stores";
 import { createSession, getNextRound, useExperiment } from "../../API";
 import Consent from "../Consent/Consent";
 import DefaultPage from "../Page/DefaultPage";
@@ -28,10 +28,10 @@ import UserFeedback from "components/UserFeedback/UserFeedback";
 const Experiment = ({ match }) => {
     const startState = { view: "LOADING" };
     // Stores
-    const setError = useErrorStore(state => state.setError);
-    const participant = useParticipantStore((state) => state.participant);
-    const setSession = useSessionStore((state) => state.setSession);
-    const session = useSessionStore((state) => state.session);
+    const setError = useBoundStore(state => state.setError);
+    const participant = useBoundStore((state) => state.participant);
+    const setSession = useBoundStore((state) => state.setSession);
+    const session = useBoundStore((state) => state.session);
 
     // Current experiment state
     const [actions, setActions] = useState([]);
@@ -59,7 +59,7 @@ const Experiment = ({ match }) => {
         updateState(newState);
     }, [updateState]);
 
-    const checkSession = useCallback(async () => {
+    const checkSession = async () => {
         if (session) {
             return session;
         }
@@ -71,9 +71,9 @@ const Experiment = ({ match }) => {
         catch(err) {
             setError(`Could not create a session: ${err}`)
         };
-    }, [experiment, participant, playlist, setError, setSession])
+    };
 
-    const continueToNextRound = useCallback(async() => {
+    const continueToNextRound = async() => {
         const thisSession = await checkSession();
         // Try to get next_round data from server
         const round = await getNextRound({
@@ -87,7 +87,7 @@ const Experiment = ({ match }) => {
             );
             setState(undefined);
         }
-    }, [checkSession, updateActions, setError, setState])
+    };
 
     // trigger next action from next_round array, or call session/next_round
     const onNext = async (doBreak) => {
@@ -105,10 +105,9 @@ const Experiment = ({ match }) => {
             // Loading succeeded
             if (experiment) {
                 if (experiment.next_round.length) {
-                    const firstActions = [ ...experiment.next_round ];
-                    updateActions(firstActions);
+                    updateActions([ ...experiment.next_round ]);
                 } else {
-                    continueToNextRound();
+                    setError("The first_round array from the ruleset is empty")
                 }
             } else {
                 // Loading error

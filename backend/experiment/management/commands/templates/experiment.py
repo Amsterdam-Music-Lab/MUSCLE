@@ -28,12 +28,17 @@ class NewExperiment(Base):
         ]
 
     def first_round(self, experiment):
+        ''' Provide the first rounds of the experiment, 
+        before session creation
+        The first_round must return at least one Info or Explainer action
+        Consent and Playlist are often desired, but optional
+        '''
         # 1. Informed consent (optional)
         rendered = render_to_string('consent/consent.html')
         consent = Consent(rendered, title=_(
             'Informed consent'), confirm=_('I agree'), deny=_('Stop'))
         
-        # 2. Choose playlist (only relevant if there are multiple playlists the participant can choose from)
+        # 2. Choose playlist (optional, only relevant if there are multiple playlists the participant can choose from)
         playlist = Playlist(experiment.playlists.all())
 
         # 3. Explainer (optional)
