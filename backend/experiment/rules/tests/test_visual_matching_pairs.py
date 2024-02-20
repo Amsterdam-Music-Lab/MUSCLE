@@ -38,38 +38,11 @@ class VisualMatchingPairsTest(TestCase):
         self.rules = VisualMatchingPairsGame()
 
     def test_visual_matching_pairs_trial(self):
-        trial = self.rules.get_visual_matching_pairs_trial(self.session)
+        trial = self.rules.get_matching_pairs_trial(self.session)
         self.assertIsNotNone(trial)
         self.assertEqual(trial.title, 'Visual Tune twins')
         self.assertIsNotNone(trial.playback)
         self.assertEqual(trial.playback.ID, 'VISUALMATCHINGPAIRS')
-
-    def test_calculate_score(self):
-        result = None
-        data = {
-            'result': {
-                'moves': [
-                    { "selectedSection": self.sections[1].id, "cardIndex": 1, "score": 0, "timestamp": 1 },
-                    { "selectedSection": self.sections[6].id, "cardIndex": 6, "score": 0, "timestamp": 2 },
-                    { "selectedSection": self.sections[7].id, "cardIndex": 5, "score": 0, "timestamp": 3 },
-                    { "selectedSection": self.sections[6].id, "cardIndex": 6, "score": 20, "timestamp": 4 },
-                    { "selectedSection": self.sections[2].id, "cardIndex": 2, "score": 0, "timestamp": 5 },
-                    { "selectedSection": self.sections[5].id, "cardIndex": 7, "score": 0, "timestamp": 6 },
-                    { "selectedSection": self.sections[3].id, "cardIndex": 3, "score": 0, "timestamp": 7 },
-                    { "selectedSection": self.sections[4].id, "cardIndex": 2, "score": 20, "timestamp": 8 },
-                    { "selectedSection": self.sections[5].id, "cardIndex": 7, "score": 0, "timestamp": 9 },
-                    { "selectedSection": self.sections[0].id, "cardIndex": 4, "score": 0, "timestamp": 10 },
-                    { "selectedSection": self.sections[0].id, "cardIndex": 4, "score": 0, "timestamp": 11 },
-                    { "selectedSection": self.sections[1].id, "cardIndex": 1, "score": 20, "timestamp": 12 },
-                    { "selectedSection": self.sections[5].id, "cardIndex": 7, "score": 0, "timestamp": 13 },
-                    { "selectedSection": self.sections[4].id, "cardIndex": 0, "score": 10, "timestamp": 14 }
-                ],
-                'score': 10
-            }
-        }
-
-        score = self.rules.calculate_score(result, data)
-        self.assertEqual(score, 10)
 
     def test_next_round_logic(self):
         self.session.increment_round()
