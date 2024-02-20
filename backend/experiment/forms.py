@@ -144,7 +144,7 @@ class ExperimentForm(ModelForm):
     class Meta:
         model = Experiment
         fields = ['name', 'slug', 'active', 'rules',
-                  'rounds', 'bonus_points', 'playlists', 'experiment_series']
+                  'rounds', 'bonus_points', 'playlists']
 
     class Media:
         js = ["experiment_admin.js"]

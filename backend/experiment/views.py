@@ -22,34 +22,6 @@ def get_experiment(request, slug):
     DO NOT modify session data here, it will break participant_id system
        (/participant and /experiment/<slug> are called at the same time by the frontend)"""
     experiment = experiment_or_404(slug)
-    series_data = request.session.get('experiment_series')
-    if experiment.experiment_series and series_data:
-        # we are in the middle of a test battery
-        try:
-            session = Session.objects.get(
-                pk=series_data.get('session_id'),
-                experiment=experiment
-            )
-        except Session.DoesNotExist:
-            # delete session data and reload
-            del request.session['experiment_series']
-            return redirect('/experiment/id/{}/'.format(slug), request)
-
-        # convert non lists to list
-        next_round = serialize(session.experiment_rules().next_round(session))
-        if not isinstance(next_round, list):
-            next_round = [next_round]
-
-        data = {
-            'session': {
-                'id': session.id,
-                'playlist': session.playlist.id,
-                'json_data': session.load_json_data(),
-            },
-            'next_round': next_round
-        }
-        return JsonResponse(data, json_dumps_params={'indent': 4})
-
     class_name = ''
     if request.LANGUAGE_CODE.startswith('zh'):
         class_name = 'chinese'

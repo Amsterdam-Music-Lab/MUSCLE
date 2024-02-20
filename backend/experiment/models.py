@@ -44,8 +44,6 @@ class Experiment(models.Model):
     rules = models.CharField(default="", max_length=64)
     language = models.CharField(
         default="", blank=True, choices=language_choices, max_length=2)
-    experiment_series = models.ForeignKey(ExperimentSeries, on_delete=models.SET_NULL,
-                                          blank=True, null=True)
     questions = ArrayField(
                 models.TextField(choices=QUESTIONS_CHOICES),
                 blank=True,

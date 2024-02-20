@@ -34,7 +34,7 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
     search_fields = ['name']
     inline_actions = ['export', 'export_csv']
     fields = ['name', 'slug', 'url', 'hashtag', 'language', 'active', 'rules',
-              'rounds', 'bonus_points', 'playlists', 'experiment_series','questions']
+              'rounds', 'bonus_points', 'playlists', 'questions']
     inlines = [FeedbackInline]
     form = ExperimentForm
 
@@ -153,7 +153,7 @@ class ModelFormFieldAsJSON(ModelMultipleChoiceField):
 class ExperimentSeriesForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super(ModelForm, self).__init__(*args, **kwargs)
-        experiments = Experiment.objects.all().filter(experiment_series=None)
+        experiments = Experiment.objects.all()
         self.fields['first_experiments'] = ModelFormFieldAsJSON(queryset=experiments, required=False)
         self.fields['random_experiments'] = ModelFormFieldAsJSON(queryset=experiments, required=False)
         self.fields['last_experiments'] = ModelFormFieldAsJSON(queryset=experiments, required=False)
