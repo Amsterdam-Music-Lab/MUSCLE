@@ -9,6 +9,8 @@ from django.contrib.postgres.fields import ArrayField
 from .questions import QUESTIONS_CHOICES, get_default_question_keys
 from django import forms
 
+from .validators import consent_file_validator
+
 language_choices = [(key, ISO_LANGUAGES[key]) for key in ISO_LANGUAGES.keys()]
 language_choices[0] = ('', 'Unset')
 
@@ -54,7 +56,10 @@ class Experiment(models.Model):
                 blank=True,
                 default=get_default_question_keys
             )
-    consent = models.FileField(upload_to=consent_upload_path, blank=True, default='')
+    consent = models.FileField(upload_to=consent_upload_path,
+                               blank=True,
+                               default='',
+                               validators=[consent_file_validator()])
 
     class Meta:
         ordering = ['name']
