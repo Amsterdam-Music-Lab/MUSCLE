@@ -9,7 +9,7 @@ import axios from "axios";
 
 import { API_BASE_URL, EXPERIMENT_SLUG, URLS } from "../../config";
 import { URLS as API_URLS } from "../../API";
-import { useErrorStore, useParticipantStore } from "../../util/stores";
+import useBoundStore from "../../util/stores";
 import Experiment from "../Experiment/Experiment";
 import Profile from "../Profile/Profile";
 import Reload from "../Reload/Reload";
@@ -18,9 +18,9 @@ import StoreProfile from "../StoreProfile/StoreProfile.js";
 
 // App is the root component of our application
 const App = () => {
-    const error = useErrorStore(state => state.error);
-    const setError = useErrorStore(state => state.setError);
-    const setParticipant = useParticipantStore((state) => state.setParticipant);
+    const error = useBoundStore(state => state.error);
+    const setError = useBoundStore(state => state.setError);
+    const setParticipant = useBoundStore((state) => state.setParticipant);
     const queryParams = window.location.search;
     
     useEffect(() => {

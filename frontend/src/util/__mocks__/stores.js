@@ -1,15 +1,11 @@
 module.exports = {
-    useSessionStore: (fn) => {
-        const methods = {
+    useBoundStore: () => {
+        return {
+            setError: jest.fn(),
+            setParticipant: jest.fn(),
             setSession: jest.fn(),
-            session: {id: 1}
-        } 
-        return fn(methods);
-    },
-    useParticipantStore: () => {
-        return {id: 1}
-    },
-    useErrorStore: () => {
-        return {setError: jest.fn()}
+            participant: { id: 1 },
+            session: { id: 1 }
+        }
     }
 };
