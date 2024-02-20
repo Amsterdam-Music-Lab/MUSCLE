@@ -42,16 +42,16 @@ class Consent(BaseAction):  # pylint: disable=too-few-public-methods
                 ea sea expetenda suscipiantur contentiones."
     
     def __init__(self, text, title='Informed consent', confirm='I agree', deny='Stop', url='', render_format='HTML'):
-        # Determine which text to use        
+        # Determine which text to use
         if text!='':
             # Uploaded consent via file field: experiment.consent (High priority)
             with text.open('r') as f:
                 dry_text = f.read()
-            render_format = get_render_format(text.url)        
+            render_format = get_render_format(text.url)
         elif url!='':
             # Template file via url (Low priority)
             dry_text = render_to_string(url)
-            render_format = get_render_format(url)        
+            render_format = get_render_format(url)
         else:
             # use default text
             dry_text = self.default_text
