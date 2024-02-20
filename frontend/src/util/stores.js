@@ -1,17 +1,17 @@
 import { create } from "zustand";
 
 // Stores
-export const createErrorSlice = (set) => ({
+const createErrorSlice = (set) => ({
     error: null,
     setError: (error) => set(() => ({ error }))
 });
 
-export const createParticipantSlice = (set) => ({
+const createParticipantSlice = (set) => ({
     participant: null,
     setParticipant: (participant) => set(() => ({ participant }))
 });
 
-export const createSessionSlice = (set) => ({
+const createSessionSlice = (set) => ({
     session: null,
     setSession: (session) => set(() => ({ session }))
 });
