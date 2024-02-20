@@ -97,7 +97,7 @@ services:
       target: runner
     command: nginx -g 'daemon off;'
     ports:
-      - 3000:80
+      - 8080:80
     depends_on:
       - client-builder
       - server
