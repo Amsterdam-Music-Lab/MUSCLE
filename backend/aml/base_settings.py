@@ -184,3 +184,5 @@ MARKUP_SETTINGS = {
         'safe_mode': True
     }
 }
+
+SUBPATH = os.getenv('AML_SUBPATH', None)

@@ -2,7 +2,11 @@ import React from 'react';
 import { render } from '@testing-library/react';
 import MatchingPairs, { SCORE_FEEDBACK_DISPLAY } from './MatchingPairs';
 
-jest.mock("../../util/stores");
+jest.mock("../../util/stores", () => ({
+    __esModule: true,
+    default: jest.fn(),
+    useBoundStore: jest.fn()
+}));
 
 describe('MatchingPairs Component', () => {
 

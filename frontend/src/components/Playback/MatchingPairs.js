@@ -2,7 +2,7 @@ import React, { useRef, useState } from "react";
 import classNames from "classnames";
 
 import { scoreIntermediateResult } from "../../API";
-import { useErrorStore, useParticipantStore, useSessionStore } from "util/stores";
+import useBoundStore from "util/stores";
 
 import PlayCard from "../PlayButton/PlayCard";
 
@@ -32,9 +32,9 @@ const MatchingPairs = ({
     const [end, setEnd] = useState(false);
     const columnCount = sections.length > 6 ? 4 : 3;
 
-    const participant = useParticipantStore(state => state.participant);
-    const session = useSessionStore(state => state.session);
-    const setError = useErrorStore(state => state.setError);
+    const participant = useBoundStore(state => state.participant);
+    const session = useBoundStore(state => state.session);
+    const setError = useBoundStore(state => state.setError);
 
     const setScoreMessage = (score) => {
         switch (score) {

@@ -6,7 +6,7 @@ import Social from "../Social/Social";
 
 import { URLS } from "../../config";
 import { finalizeSession } from "../../API";
-import { useSessionStore } from "../../util/stores";
+import useBoundStore from "../../util/stores";
 import ParticipantLink from "../ParticipantLink/ParticipantLink";
 import UserFeedback from "../UserFeedback/UserFeedback";
 
@@ -16,7 +16,7 @@ const Final = ({ experiment, participant, score, final_text, action_texts, butto
     onNext, history, show_participant_link, participant_id_only,
     show_profile_link, social, feedback_info, points, rank, logo }) => {
     const [showScore, setShowScore] = useState(0);
-    const session = useSessionStore((state) => state.session);
+    const session = useBoundStore((state) => state.session);
 
     // Use a ref to prevent doing multiple increments
     // when the render is skipped

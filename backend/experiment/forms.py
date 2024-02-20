@@ -13,7 +13,7 @@ SESSION_CHOICES = [('experiment_id', 'Experiment ID'),
                    ('participant_access_info', 'Participant access info'),
                    ('session_start', 'Session start time'),
                    ('session_end', 'Session end time'),
-                   ('final_score', 'Final score')
+                   ('final_score', 'Final score'),
                    ]
 
 # result_keys for Export CSV
@@ -22,7 +22,8 @@ RESULT_CHOICES = [('section_name', 'Section name'),
                   ('result_score', 'Result score'),
                   ('result_comment', 'Result comment'),
                   ('expected_response', 'Expected response'),
-                  ('given_response', 'Given response')
+                  ('given_response', 'Given response'),
+                  ('question_key', 'Question key'),
                   ]
 
 # export_options for Export CSV

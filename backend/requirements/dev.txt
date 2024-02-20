@@ -44,8 +44,8 @@ django==3.2.24
     #   django-inline-actions
     #   django-markup
 django-cors-headers==3.10.0
-    # via -r requirements.in\base.txt
-django-debug-toolbar==3.2.2
+    # via -r requirements.in/base.txt
+django-debug-toolbar==4.3.0
     # via -r requirements.in/dev.txt
 django-inline-actions==2.4.0
     # via -r requirements.in\base.txt
@@ -129,7 +129,7 @@ requests==2.31.0
     #   -r requirements.in/dev.txt
     #   genbadge
 roman==4.1
-    # via -r requirements.in\base.txt
+    # via -r requirements.in/base.txt
 sentry-sdk==1.38.0
     # via -r requirements.in\base.txt
 six==1.16.0

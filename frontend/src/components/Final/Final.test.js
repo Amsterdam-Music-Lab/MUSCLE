@@ -5,15 +5,24 @@ import { createMemoryHistory } from 'history'
 
 import Final from './Final'; // Adjust the import path as necessary
 
-jest.mock("../../util/stores", () => ({
-    useSessionStore: (fn) => {
-        const methods = {
-            setSession: jest.fn(),
-            session: 1
-        }
-        return fn(methods)
-    }
-}))
+// import useBoundStore from "../../util/stores";
+
+// const session = useBoundStore((state) => state.session);
+
+// console.log(session, useBoundStore)
+
+jest.mock('../../util/stores', () => ({
+    __esModule: true,
+    default: (fn) => {
+        const state = {
+            session: 1,
+            participant: 'participant-id',
+        };
+        
+        return fn(state);
+    },
+    useBoundStore: jest.fn()
+})); 
 
 jest.mock('../../API', () => ({
     finalizeSession: jest.fn(),
@@ -113,7 +122,7 @@ describe('Final Component', () => {
             <BrowserRouter>
                 <Final
                     participant="participant-id"
-                    session="session-id"
+session="session-id"
                 />
             </BrowserRouter>
         );
