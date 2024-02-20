@@ -140,6 +140,6 @@ def get_associated_experiments(pk_list):
 def get_upcoming_experiment(experiment_list, participant):
     ''' get next experiment for which there is no finished session for this participant '''
     upcoming = next((experiment for experiment in experiment_list if
-                     check_finished_session(experiment, participant) == False), None)
+                     check_finished_session(experiment, participant) is False), None)
     if upcoming:
         return serialize_experiment(upcoming)

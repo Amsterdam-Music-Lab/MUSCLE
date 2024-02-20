@@ -9,6 +9,7 @@ from experiment.actions import Final
 
 COLLECTION_KEY = 'experiment_collection'
 
+
 def final_action_with_optional_button(session, final_text, request_session):
     """ given a session, a score message and an optional session dictionary from an experiment series,
     return a Final.action, which has a button to continue to the next experiment if series is defined
