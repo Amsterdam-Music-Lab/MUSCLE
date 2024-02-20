@@ -3,7 +3,7 @@ import { TransitionGroup, CSSTransition } from "react-transition-group";
 import { withRouter } from "react-router-dom";
 import classNames from "classnames";
 
-import useBoundStore from "../../util/stores";
+import { useBoundStore } from "../../util/stores";
 import { createSession, getNextRound, useExperiment } from "../../API";
 import Consent from "../Consent/Consent";
 import DefaultPage from "../Page/DefaultPage";
@@ -59,7 +59,7 @@ const Experiment = ({ match }) => {
         updateState(newState);
     }, [updateState]);
 
-    const checkSession = useCallback(async () => {
+    const checkSession = async () => {
         if (session) {
             return session;
         }
@@ -71,9 +71,9 @@ const Experiment = ({ match }) => {
         catch(err) {
             setError(`Could not create a session: ${err}`)
         };
-    }, [experiment, participant, playlist, setError, setSession])
+    };
 
-    const continueToNextRound = useCallback(async() => {
+    const continueToNextRound = async() => {
         const thisSession = await checkSession();
         // Try to get next_round data from server
         const round = await getNextRound({
@@ -87,7 +87,7 @@ const Experiment = ({ match }) => {
             );
             setState(undefined);
         }
-    }, [checkSession, updateActions, setError, setState])
+    };
 
     // trigger next action from next_round array, or call session/next_round
     const onNext = async (doBreak) => {
@@ -105,10 +105,9 @@ const Experiment = ({ match }) => {
             // Loading succeeded
             if (experiment) {
                 if (experiment.next_round.length) {
-                    const firstActions = [ ...experiment.next_round ];
-                    updateActions(firstActions);
+                    updateActions([ ...experiment.next_round ]);
                 } else {
-                    continueToNextRound();
+                    setError("The first_round array from the ruleset is empty")
                 }
             } else {
                 // Loading error
@@ -116,7 +115,6 @@ const Experiment = ({ match }) => {
             }
         }
     }, [
-        continueToNextRound,
         experiment,
         loadingExperiment,
         participant,

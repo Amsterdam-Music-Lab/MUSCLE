@@ -1,6 +1,6 @@
 import React from 'react';
-import { MemoryRouter } from 'react-router-dom/cjs/react-router-dom';
-import { render, screen } from '@testing-library/react';
+import { MemoryRouter } from 'react-router-dom';
+import { fireEvent, render, screen } from '@testing-library/react';
 
 import Experiment from './Experiment';
 
@@ -10,13 +10,16 @@ jest.mock("../../util/stores");
 // creates a different object every time, causing useEffect to trigger unnecessarily
 const experimentObj = {
     id: 24, slug: 'test', name: 'Test', playlists: [{id: 42, name: 'TestPlaylist'}],
-    next_round: [{view: 'PLAYLIST'}]
+    next_round: [{view: 'INFO', button_label: 'Continue'}]
 };
 const sessionObj = {data: {session: {id: 1}}};
 const nextRoundObj = {next_round: [{view: 'EXPLAINER'}]};
 
 jest.mock("../../API", () => ({
-    useExperiment: () => [experimentObj, false],
+    useExperiment: () => {
+
+        return [experimentObj, false]
+    },
     createSession: () => Promise.resolve(sessionObj),
     getNextRound: () => Promise.resolve(nextRoundObj)
 }));
@@ -24,31 +27,18 @@ jest.mock("../../API", () => ({
 describe('Experiment Component', () => {
 
     xit('renders with given props', async () => {
+        /**
+         * render is caught in an endless useEffect loop now
+         * skipping for the time being
+        */
         render(
             <MemoryRouter>
                 <Experiment match={ {params: {slug: 'test'}} }/>
             </MemoryRouter>
         );
         await screen.findByTestId('experiment-wrapper');
-        await screen.findByTestId('explainer');
-    })
+        expect(screen.getByText('Continue')).toBeInTheDocument();
 
-    xit('renders with empty next_round array from useExperiment', async () => {
-        const experimentObj = {id: 24, slug: 'test', name: 'Test', next_round: []};
-        jest.mock("../../API", () => ({
-            useExperiment: () => [experimentObj, false],
-            createSession: () => Promise.resolve({data: {session: {id: 1}}}),
-            getNextRound: () => Promise.resolve({next_round: [{view: 'EXPLAINER'}]})
-        }));
-        render(
-            <MemoryRouter>
-                <Experiment match={ {params: {slug: 'test'}} }/>
-            </MemoryRouter>
-        );
-        await screen.findByTestId('experiment-wrapper');
-        await screen.findByTestId('explainer');
-    })
-
-
+    });
 
 });
