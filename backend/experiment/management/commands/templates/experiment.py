@@ -28,9 +28,8 @@ class NewExperiment(Base):
         ]
 
     def first_round(self, experiment):
-        # 1. Informed consent (optional)
-        rendered = render_to_string('consent/consent.html')
-        consent = Consent(rendered, title=_(
+        # 1. Informed consent (optional)        
+        consent = Consent(experiment.consent, title=_(
             'Informed consent'), confirm=_('I agree'), deny=_('Stop'))
         
         # 2. Choose playlist (only relevant if there are multiple playlists the participant can choose from)
