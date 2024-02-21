@@ -24,7 +24,7 @@ class FrontendStyle:
     VALID_STYLES = EFrontendStyle.__members__.values()
 
     """
-    Initialize the FrontendStyle with a root style, and optionally nested styles.
+    Initialize the FrontendStyle with a root style.
     :param root_style: The style name for the root element.
     """
     def __init__(self, root_style: EFrontendStyle = EFrontendStyle.EMPTY):
