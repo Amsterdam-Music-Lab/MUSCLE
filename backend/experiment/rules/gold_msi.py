@@ -25,12 +25,8 @@ class GoldMSI(Base):
         ]
         self.questions = MSI_F3_MUSICAL_TRAINING + demographics
 
-    def first_round(self, experiment):
-        consent = Consent(
-            style=FrontendStyle(
-                EFrontendStyle.BOOLEAN,
-            )
-        )
+    def first_round(self):
+        consent = Consent()
         return [
             consent,
         ]
