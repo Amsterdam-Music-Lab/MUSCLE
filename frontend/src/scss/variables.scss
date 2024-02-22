@@ -1,25 +1,27 @@
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300&family=Noto+Serif+SC:wght@600&display=swap');
 
-$teal: #39d7b8;
-$yellow: #ffb14c;
-$pink: #d843e2;
-$red: #fa5577;
-$blue: #0cc7f1;
-$green: #00b612;
-$indigo: #2b2bee;
-$gray: #bdbebf;
-$gray-200: #e9ecef;
-$gray-600: #707273; // Used in _Range.scss
-$gray-900: #212529;
-$black: $gray-900;
+// Colors
+$teal: var(--teal, #39d7b8);
+$yellow: var(--yellow, #ffb14c);
+$pink: var(--pink, #d843e2);
+$red: var(--red, #fa5577);
+$blue: var(--blue, #0cc7f1);
+$green: var(--green, #00b612);
+$indigo: var(--indigo, #2b2bee);
+$gray: var(--gray, #bdbebf);
+$gray-200: var(--gray-200, #e9ecef);
+$gray-600: var(--gray-600, #707273);
+$gray-900: var(--gray-900, #212529);
+$black: var(--black, var(--gray-900, #212529));
 
-$primary: $pink;
-$secondary: $gray-900;
-$success: $teal;
-$positive: $teal;
-$negative: $red;
-$warning: $yellow;
-$info: $blue;
+$primary: var(--primary, $pink);
+$secondary: var(--secondary, $gray-900);
+$success: var(--success, $teal);
+$positive: var(--positive, $teal);
+$negative: var(--negative, $red);
+$warning: var(--warning, $yellow);
+$info: var(--info, $blue);
+
 
 $facebook-blue: #4267b2;
 $twitter-blue: #1da1f2;
