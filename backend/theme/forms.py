@@ -40,6 +40,8 @@ class ThemeConfigForm(forms.ModelForm):
     green = forms.CharField(widget=ColorPickerWidget(), max_length=20, required=False, label='Green')
     indigo = forms.CharField(widget=ColorPickerWidget(), max_length=20, required=False, label='Indigo')
     gray = forms.CharField(widget=ColorPickerWidget(), max_length=20, required=False, label='Gray')
+    gray_200 = forms.CharField(widget=ColorPickerWidget(), max_length=20, required=False, label='Gray 200')
+    gray_600 = forms.CharField(widget=ColorPickerWidget(), max_length=20, required=False, label='Gray 600')
     gray_900 = forms.CharField(widget=ColorPickerWidget(), max_length=20, required=False, label='Gray 900')
     black = forms.CharField(widget=ColorPickerWidget(), max_length=20, required=False, label='Black')
 
@@ -76,6 +78,8 @@ class ThemeConfigForm(forms.ModelForm):
         self.fields['green'].initial = '#00b612'
         self.fields['indigo'].initial = '#2b2bee'
         self.fields['gray'].initial = '#bdbebf'
+        self.fields['gray_200'].initial = '#e9ecef'
+        self.fields['gray_600'].initial = '#707273'
         self.fields['gray_900'].initial = '#212529'
         self.fields['black'].initial = '#212529'
 

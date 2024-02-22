@@ -41,7 +41,7 @@
 
     .rangeslider .rangeslider__handle {
         background: $teal;
-        border: 1px solid darken($gray, 30%);
+        border: 1px solid $gray-600;
         cursor: pointer;
         display: inline-block;
         position: absolute;
