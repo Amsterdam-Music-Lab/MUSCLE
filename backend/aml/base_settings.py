@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'inline_actions',
+    'django_markup',
     'corsheaders',
     'experiment',
     'participant',
@@ -181,5 +182,11 @@ if os.getenv("SENTRY_DSN"):
     )
 else:
     logger.info("SENTRY_DSN is not defined. Skipping Sentry initialization.")
+
+MARKUP_SETTINGS = {
+    'markdown': {
+        'safe_mode': True
+    }
+}
 
 SUBPATH = os.getenv('AML_SUBPATH', None)

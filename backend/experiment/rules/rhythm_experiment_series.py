@@ -38,10 +38,16 @@ class RhythmExperimentSeries(Base):
     
     def first_round(self, experiment):
         """Create data for the first experiment rounds."""
-        # read consent form from file
-        rendered = render_to_string(self.consent_form)
-        consent = Consent(rendered, title=_(
-            'Informed consent'), confirm=_('I agree'), deny=_('Stop'))
+
+        # read consent form from file or admin (admin has priority)
+        consent = Consent(
+            experiment.consent,
+            title=_('Informed consent'),
+            confirm=_('I agree'),
+            deny=_('Stop'),
+            url=self.consent_form
+            )
+        
         return [
             consent,
             self.intro_explainer(),
