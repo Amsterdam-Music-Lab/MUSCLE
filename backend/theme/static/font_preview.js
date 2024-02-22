@@ -10,7 +10,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 if (fontName) {
                     // Load the font from Google Fonts
                     const link = document.createElement('link');
-                    link.href = `https://fonts.googleapis.com/css?family=${fontName}:400,700`;
+                    link.href = `https://fonts.googleapis.com/css?family=${encodeURIComponent(fontName)}:400,700`; // Escape meta-characters in font name
                     link.rel = 'stylesheet';
                     document.head.appendChild(link);
 

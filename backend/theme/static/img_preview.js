@@ -6,10 +6,23 @@ document.addEventListener("DOMContentLoaded", function() {
       if (input && preview) {
         input.addEventListener("change", function() {
           const url = input.value;
-          preview.src = url;
+          const escapedUrl = escapeHtml(url); // Escape the meta-characters in the URL
+          preview.src = escapedUrl;
           preview.style.display = url ? "block" : "none";
         });
       }
+    }
+
+    // Function to escape meta-characters in a string
+    function escapeHtml(text) {
+      const map = {
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#039;'
+      };
+      return text.replace(/[&<>"']/g, function(m) { return map[m]; });
     }
   
     // Add previews next to the input fields

@@ -88,7 +88,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
             // if the value is not empty, add it to the cssVariables array
             if (value !== '') {
-                cssVariables.push(`--${name}: ${value};`);
+                const escapedValue = value.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+                cssVariables.push(`--${name}: ${escapedValue};`);
             }
         });
 
