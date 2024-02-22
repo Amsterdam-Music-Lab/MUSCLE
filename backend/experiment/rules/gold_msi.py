@@ -1,6 +1,6 @@
 from django.utils.translation import gettext_lazy as _
 
-from experiment.actions import Consent
+from experiment.actions import Consent, FrontendStyle, EFrontendStyle
 from experiment.questions.goldsmiths import MSI_F3_MUSICAL_TRAINING
 from experiment.questions.demographics import EXTRA_DEMOGRAPHICS
 from experiment.questions.utils import question_by_key

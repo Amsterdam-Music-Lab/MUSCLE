@@ -68,7 +68,7 @@ class TestAdminExperiment(TestCase):
 class TestAdminExperimentExport(TestCase):
 
     fixtures = ['playlist', 'experiment']
- 
+
     @classmethod
     def setUpTestData(cls):
         cls.participant = Participant.objects.create(unique_hash=42)
@@ -91,7 +91,7 @@ class TestAdminExperimentExport(TestCase):
                 question_key= i,
                 given_response = i,
             )
-            
+
     def setUp(self):
         self.client = Client()
 

@@ -10,9 +10,9 @@ from experiment.rules.base import Base
 from result.utils import prepare_result
 
 
-class NewExperiment(Base):
+class NewExperimentRuleset(Base):
     ''' An experiment type that could be used to test musical preferences '''
-    ID = 'NEW_EXPERIMENT'
+    ID = 'NEW_EXPERIMENT_RULESET'
     contact_email = 'info@example.com'
 
     def __init__(self):
@@ -98,7 +98,6 @@ class NewExperiment(Base):
             title=_('Test experiment'),
             config={
                 'response_time': section.duration,
-                # listen_first: whether response buttons will be greyed out during `response_time`
                 'listen_first': True
             }
         )

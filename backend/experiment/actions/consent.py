@@ -24,7 +24,7 @@ class Consent(BaseAction):  # pylint: disable=too-few-public-methods
         'HTML': (default) Allowed tags: html, django template language
         'MARKDOWN': Allowed tags: Markdown language
 
-    Relates to client component: Consent.js    
+    Relates to client component: Consent.js
     """
 
     # default consent text, that can be used for multiple experiments
