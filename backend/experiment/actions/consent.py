@@ -3,6 +3,7 @@ from django.template.loader import render_to_string
 from django.template import Template, Context
 from django_markup.markup import formatter
 
+
 def get_render_format(url):
     """
     Detect markdown file by file extention 
@@ -11,6 +12,7 @@ def get_render_format(url):
     if url[(url_length-2):url_length].lower() == 'md':
         return 'MARKDOWN'
     return 'HTML'
+
 
 class Consent(BaseAction):  # pylint: disable=too-few-public-methods
     """

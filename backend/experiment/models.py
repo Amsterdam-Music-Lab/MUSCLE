@@ -29,10 +29,12 @@ class ExperimentSeries(models.Model):
     class Meta:
         verbose_name_plural = "Experiment Series"
 
+
 def consent_upload_path(instance, filename):
     """Generate path to save audio based on playlist.name"""
     folder_name = instance.slug
     return 'consent/{0}/{1}'.format(folder_name, filename)
+
 
 class Experiment(models.Model):
     """Root entity for configuring experiments"""

@@ -79,7 +79,6 @@ class Hooked(Base):
             url=self.consent_file
             )
         
-
         # 3. Choose playlist.
         playlist = Playlist(experiment.playlists.all())
 
