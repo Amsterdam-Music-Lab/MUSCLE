@@ -10,7 +10,7 @@ def theme_css(request):
     if config:
         try:
             variables = json.loads(config.css_variables)
-            css_variables = "\n\t".join([f"--{key}: {value};" for key, value in variables.items()])
+            css_variables = "\n\t".join([f"--{key}: {value};" for key, value in variables.items() if value and value.strip() != ""])
 
             css_content = "/* Theme configuration */\n"
 
