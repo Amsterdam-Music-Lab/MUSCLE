@@ -87,7 +87,7 @@
     }
 
     &.plastic {
-        background-color: mix($gray, $black, 20%);
+        background-color: color-mix($gray 80%, $black 20%);
         box-shadow: 13px 0 64px $black;
     }
 
