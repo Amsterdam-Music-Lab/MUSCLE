@@ -24,7 +24,7 @@ from .huang_2022 import get_test_playback
 
 class MusicalPreferences(Base):
     ID = 'MUSICAL_PREFERENCES'
-    consent_file = 'consent_musical_preferences.html'
+    consent_file = 'consent/consent_musical_preferences.html'
     preference_offset = 20
     knowledge_offset = 42
     round_increment = 1
@@ -46,11 +46,14 @@ class MusicalPreferences(Base):
             question_by_key('dgf_region_of_residence', OTHER)
         ]
 
-    def first_round(self, experiment):
-        rendered = render_to_string('consent/{}'.format(self.consent_file)
-                                    )
+    def first_round(self, experiment):        
+                                    
         consent = Consent(
-            text=rendered, title=_('Informed consent'), confirm=_('I consent and continue.'), deny=_('I do not consent.')
+            experiment.consent,
+            title=_('Informed consent'),
+            confirm=_('I consent and continue.'),
+            deny=_('I do not consent.'),
+            url=self.consent_file
         )
         playlist = Playlist(experiment.playlists.all())
         explainer = Explainer(

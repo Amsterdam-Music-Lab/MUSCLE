@@ -145,6 +145,10 @@ class ExperimentForm(ModelForm):
         model = Experiment
         fields = ['name', 'slug', 'active', 'rules',
                   'rounds', 'bonus_points', 'playlists']
+        help_texts = {'consent': 'Upload an HTML (.html) or MARKDOWN (.md) file with a text to ask a user its consent<br> \
+                      for using the experiment data for this instance of the experiment.<br> \
+                      This field will override any consent text loaded from the rules file. <br>\
+                      HTML files also allow django template tags so that the text can be translated'}
 
     class Media:
         js = ["experiment_admin.js"]

@@ -8,6 +8,8 @@ from experiment.rules import EXPERIMENT_RULES
 from experiment.standards.iso_languages import ISO_LANGUAGES
 from .questions import QUESTIONS_CHOICES, get_default_question_keys
 
+from .validators import consent_file_validator
+
 language_choices = [(key, ISO_LANGUAGES[key]) for key in ISO_LANGUAGES.keys()]
 language_choices[0] = ('', 'Unset')
 
@@ -30,6 +32,12 @@ class ExperimentSeries(models.Model):
         verbose_name_plural = "Experiment Series"
 
 
+def consent_upload_path(instance, filename):
+    """Generate path to save audio based on playlist.name"""
+    folder_name = instance.slug
+    return 'consent/{0}/{1}'.format(folder_name, filename)
+
+
 class Experiment(models.Model):
     """Root entity for configuring experiments"""
 
@@ -49,6 +57,10 @@ class Experiment(models.Model):
                 blank=True,
                 default=get_default_question_keys
             )
+    consent = models.FileField(upload_to=consent_upload_path,
+                               blank=True,
+                               default='',
+                               validators=[consent_file_validator()])
 
     class Meta:
         ordering = ['name']

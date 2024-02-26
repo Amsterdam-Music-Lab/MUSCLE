@@ -11,7 +11,7 @@ from result.models import Result
 from session.models import Session
 
 # Expected field count per model
-EXPECTED_EXPERIMENT_FIELDS = 12
+EXPECTED_EXPERIMENT_FIELDS = 13
 EXPECTED_SESSION_FIELDS = 9
 EXPECTED_RESULT_FIELDS = 12
 EXPECTED_PARTICIPANT_FIELDS = 5
@@ -68,7 +68,7 @@ class TestAdminExperiment(TestCase):
 class TestAdminExperimentExport(TestCase):
 
     fixtures = ['playlist', 'experiment']
- 
+
     @classmethod
     def setUpTestData(cls):
         cls.participant = Participant.objects.create(unique_hash=42)
@@ -91,7 +91,7 @@ class TestAdminExperimentExport(TestCase):
                 question_key= i,
                 given_response = i,
             )
-            
+
     def setUp(self):
         self.client = Client()
 

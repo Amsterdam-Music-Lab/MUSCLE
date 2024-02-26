@@ -24,7 +24,7 @@ jobs:
       # Push coverage badge to separate branch (only for main and develop branches)
       - name: Push Backend Coverage Badge to separate branch
         continue-on-error: true
-        if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop'
+        if: github.ref == 'refs/heads/develop'
         run: |
           if git ls-remote --heads origin code-coverage-badges; then
             git fetch origin code-coverage-badges
@@ -69,7 +69,7 @@ jobs:
     name: Generate Frontend Coverage Badge
     needs: frontend-test
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop'
+    if: github.ref == 'refs/heads/develop'
     steps:
       - uses: actions/checkout@v3
       - name: Generate Frontend Coverage Report (XML) and Badge

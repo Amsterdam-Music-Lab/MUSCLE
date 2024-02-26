@@ -6,13 +6,13 @@ from section.models import Playlist
 from session.models import Session
 
 
-class NewExperimentTest(TestCase):
+class NewExperimentRulesetTest(TestCase):
 
     @classmethod
     def setUpTestData(self):
         self.participant = Participant.objects.create()
-        self.playlist = Playlist.objects.create(name='NewExperiment')
-        self.experiment = Experiment.objects.create(name='NewExperiment', rounds=5)
+        self.playlist = Playlist.objects.create(name='NewExperimentRuleset')
+        self.experiment = Experiment.objects.create(name='NewExperimentRuleset', rounds=5)
         self.session = Session.objects.create(
             experiment=self.experiment,
             participant=self.participant,
@@ -20,4 +20,4 @@ class NewExperimentTest(TestCase):
         )
 
     def test_initializes_correctly(self):
-        assert self.experiment.name == 'NewExperiment'
+        assert self.experiment.name == 'NewExperimentRuleset'

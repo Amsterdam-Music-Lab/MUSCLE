@@ -38,8 +38,8 @@ class BeatAlignment(Base):
             step_numbers=True
         )
 
-        # 2. Consent with default text
-        consent = Consent()
+        # 2. Consent with admin text or default text
+        consent = Consent(experiment.consent)
 
         return [
             explainer,

@@ -28,7 +28,7 @@ class Hooked(Base):
     """Superclass for Hooked experiment rules"""
     ID = 'HOOKED'
 
-    consent_file = 'consent_hooked.html'
+    consent_file = 'consent/consent_hooked.html'
     recognition_time = 15  # response time for "Do you know this song?"
     sync_time = 15  # response time for "Did the track come back in the right place?"
     # if the track continues in the wrong place: minimal shift forward (in seconds)
@@ -70,15 +70,15 @@ class Hooked(Base):
             step_numbers=True,
             button_label=_("Let's go!"))
 
-        # 2. Get informed consent.
-        if self.consent_file:
-            rendered = render_to_string('consent/{}'.format(self.consent_file))
-            consent = Consent(text=rendered, title=_(
-                'Informed consent'), confirm=_('I agree'), deny=_('Stop'))
-        else:
-            # fall back to lorem ipsum if no consent_file is defined
-            consent = Consent()
-
+        # 2. Add consent from file or admin (admin has priority)
+        consent = Consent(
+            experiment.consent,
+            title=_('Informed consent'),
+            confirm=_('I agree'),
+            deny=_('Stop'),
+            url=self.consent_file
+            )
+        
         # 3. Choose playlist.
         playlist = Playlist(experiment.playlists.all())
 

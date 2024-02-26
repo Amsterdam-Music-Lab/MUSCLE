@@ -62,7 +62,8 @@ class HBat(Base):
     
     def first_round(self, experiment):
         explainer = self.intro_explainer()
-        consent = Consent()
+        # Consent with admin text or default text
+        consent = Consent(experiment.consent)
         explainer2 = practice_explainer()
         playlist = Playlist(experiment.playlists.all())
         return [

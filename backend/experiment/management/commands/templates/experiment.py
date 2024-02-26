@@ -10,9 +10,9 @@ from experiment.rules.base import Base
 from result.utils import prepare_result
 
 
-class NewExperiment(Base):
+class NewExperimentRuleset(Base):
     ''' An experiment type that could be used to test musical preferences '''
-    ID = 'NEW_EXPERIMENT'
+    ID = 'NEW_EXPERIMENT_RULESET'
     contact_email = 'info@example.com'
 
     def __init__(self):
@@ -34,9 +34,10 @@ class NewExperiment(Base):
         Consent and Playlist are often desired, but optional
         '''
         # 1. Informed consent (optional)
-        rendered = render_to_string('consent/consent.html')
-        consent = Consent(rendered, title=_(
-            'Informed consent'), confirm=_('I agree'), deny=_('Stop'))
+        consent = Consent(experiment.consent,
+                            title=_('Informed consent'),
+                            confirm=_('I agree'), 
+                            deny=_('Stop'))
         
         # 2. Choose playlist (optional, only relevant if there are multiple playlists the participant can choose from)
         playlist = Playlist(experiment.playlists.all())
@@ -99,7 +100,6 @@ class NewExperiment(Base):
             title=_('Test experiment'),
             config={
                 'response_time': section.duration,
-                # listen_first: whether response buttons will be greyed out during `response_time`
                 'listen_first': True
             }
         )

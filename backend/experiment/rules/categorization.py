@@ -34,12 +34,14 @@ class Categorization(Base):
             steps=[],
             button_label='Ok'
         )
-        # read consent from file
-        rendered = render_to_string(
-            'consent/consent_categorization.html')
+        # Add consent from file or admin (admin has priority)
         consent = Consent(
-            rendered, title='Informed consent', confirm='I agree', deny='Stop')
-        
+            experiment.consent,
+            title='Informed consent',
+            confirm='I agree',
+            deny='Stop',
+            url='consent/consent_categorization.html'
+            )
         return [explainer, consent]
 
     def next_round(self, session):
