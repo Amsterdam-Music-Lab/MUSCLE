@@ -115,7 +115,6 @@ const Experiment = ({ match }) => {
             }
         }
     }, [
-        continueToNextRound,
         experiment,
         loadingExperiment,
         participant,

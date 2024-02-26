@@ -20,14 +20,10 @@ def move_slug_to_name(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('experiment', '0018_set_default_question_data'),
+        ('experiment', '0019_create_consent_file_field'),
     ]
 
     operations = [
-        migrations.AlterModelOptions(
-            name='experimentseries',
-            options={'verbose_name_plural': 'Experiment Series'},
-        ),
         migrations.AddField(
             model_name='experimentseries',
             name='slug',
