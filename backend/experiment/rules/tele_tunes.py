@@ -13,7 +13,7 @@ class HookedTeleTunes(Hooked):
     sync_time = 6
     min_jitter = 5
     max_jitter = 10
-    consent_file = 'consent_teletunes.html'
+    consent_file = 'consent/consent_teletunes.html'
 
     def __init__(self):
         self.questions = [
