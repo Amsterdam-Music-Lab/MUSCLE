@@ -137,6 +137,9 @@ class Session(models.Model):
         To ensure appropriate IP restrictions, most rules should use this
         method instead of operating on the playlist directly.
         """
+        if self.playlist is None:
+            raise ValueError("Playlist is not defined for this session")
+        
         pks = self.filter_songs(filter_by)
         if pks:
             # Return a random section
