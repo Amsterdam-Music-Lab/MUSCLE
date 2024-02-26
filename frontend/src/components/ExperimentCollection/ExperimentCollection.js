@@ -1,25 +1,12 @@
-import React, { useState, useEffect } from "react";
 import { Link, Redirect } from "react-router-dom";
 
 import { useExperimentCollection } from "../../API";
 import Loading  from "../Loading/Loading";
 
 const ExperimentCollection = ({match}) => {
-    const [dashboard, setDashboard] = useState(undefined);
-    const [experiment, setExperiment] = useState(undefined);
     const [experimentCollection, loadingExperimentCollection] = useExperimentCollection(match.params.slug);
-
-    useEffect(() => {
-        if (!loadingExperimentCollection) {
-            if (experimentCollection) {
-                if (experimentCollection.dashboard) {
-                    setDashboard(experimentCollection.dashboard);
-                } else {
-                    setExperiment(experimentCollection);
-                }
-            }
-        }
-    }, [experimentCollection, loadingExperimentCollection, setDashboard])
+    const dashboard = experimentCollection?.dashboard;
+    const experiment = !dashboard && experimentCollection;
 
     return (
         loadingExperimentCollection? (
