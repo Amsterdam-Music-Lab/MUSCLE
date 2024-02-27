@@ -45,6 +45,8 @@ const Trial = ({
 
             const form = feedback_form ? feedback_form.form : [{}];
 
+            console.log("Result: ", result, "Type: ", result?.type)
+
             if (result.type === "time_passed") {
                 form.map((formElement) => (formElement.value = "TIMEOUT"));
             }
