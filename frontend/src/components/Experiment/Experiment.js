@@ -32,6 +32,7 @@ const Experiment = ({ match }) => {
     const participant = useBoundStore((state) => state.participant);
     const setSession = useBoundStore((state) => state.setSession);
     const session = useBoundStore((state) => state.session);
+    const setTheme = useBoundStore((state) => state.setTheme);
 
     // Current experiment state
     const [actions, setActions] = useState([]);
@@ -104,6 +105,11 @@ const Experiment = ({ match }) => {
         if (!loadingExperiment && participant) {
             // Loading succeeded
             if (experiment) {
+                // Set theme
+                if (experiment.theme) {
+                    setTheme(experiment.theme);
+                }
+
                 if (experiment.next_round.length) {
                     updateActions([ ...experiment.next_round ]);
                 } else {
@@ -119,7 +125,8 @@ const Experiment = ({ match }) => {
         loadingExperiment,
         participant,
         setError,
-        updateActions
+        updateActions,
+        setTheme,
     ]);
 
     const onResult = useResultHandler({
