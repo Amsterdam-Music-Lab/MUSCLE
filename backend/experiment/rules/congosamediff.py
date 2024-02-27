@@ -24,16 +24,11 @@ class CongoSameDiff(Base):
         The first_round must return at least one Info or Explainer action
         Consent and Playlist are often desired, but optional
         '''
-        # 1. Informed consent
-        consent = Consent(experiment.consent,
-                            title=_('Informed consent'),
-                            confirm=_('I agree'),
-                            deny=_('Stop'))
 
-        # 2. Playlist
+        # 1. Playlist
         playlist = Playlist(experiment.playlists.all())
 
-        # 3. Explainer
+        # 2. Explainer
         explainer = Explainer(
             instruction='Welcome to this new experiment',
             steps=[
@@ -45,7 +40,6 @@ class CongoSameDiff(Base):
         )
 
         return [
-            consent,
             playlist,
             explainer
         ]
