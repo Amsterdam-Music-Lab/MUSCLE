@@ -8,3 +8,7 @@ class ThemeConfig(models.Model):
     logo_url = models.CharField(null=True, blank=True, max_length=255)
     background_url = models.CharField(null=True, blank=True, max_length=255)
     active = models.BooleanField(default=True)
+
+    def __str__(self):
+        return self.name
+
