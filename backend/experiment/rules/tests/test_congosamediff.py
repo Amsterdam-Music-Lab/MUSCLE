@@ -1,4 +1,4 @@
-from unittest import TestCase
+from django.test import TestCase
 
 from experiment.models import Experiment
 from participant.models import Participant
@@ -12,7 +12,10 @@ class CongoSameDiffTest(TestCase):
     def setUpTestData(self):
         self.participant = Participant.objects.create()
         self.playlist = Playlist.objects.create(name='CongoSameDiff')
-        self.experiment = Experiment.objects.create(name='CongoSameDiff', rounds=5)
+        self.experiment = Experiment.objects.create(
+            name='CongoSameDiff',
+            rounds=5,
+        )
         self.session = Session.objects.create(
             experiment=self.experiment,
             participant=self.participant,
@@ -21,3 +24,4 @@ class CongoSameDiffTest(TestCase):
 
     def test_initializes_correctly(self):
         assert self.experiment.name == 'CongoSameDiff'
+        assert self.experiment.rounds == 5
