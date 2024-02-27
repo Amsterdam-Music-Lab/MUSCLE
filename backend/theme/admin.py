@@ -3,10 +3,14 @@ from django.contrib import admin
 from django.utils.html import format_html
 from django.utils.safestring import mark_safe
 from .models import ThemeConfig
+from .forms import ThemeConfigForm
 
-# Register your models here.
+
 @admin.register(ThemeConfig)
 class ThemeConfigAdmin(admin.ModelAdmin):
+
+    form = ThemeConfigForm
+
     list_display = ('id', 'name_link', 'font_preview', 'logo_preview', 'background_preview', 'active')
     list_filter = ('active',)
     search_fields = ('name', 'description')
