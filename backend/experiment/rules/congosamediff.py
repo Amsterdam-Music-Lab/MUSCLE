@@ -11,9 +11,9 @@ from result.utils import prepare_result
 
 
 class CongoSameDiff(Base):
-    ''' An experiment type that could be used to test musical preferences '''
+    ''' A micro-PROMS inspired experiment that tests the participant's ability to distinguish between different sounds. '''
     ID = 'CONGOSAMEDIFF'
-    contact_email = 'info@example.com'
+    contact_email = 'aml.tunetwins@gmail.com'
 
     def __init__(self):
         pass
