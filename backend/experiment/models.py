@@ -7,6 +7,7 @@ from typing import List, Dict, Tuple, Any
 from experiment.rules import EXPERIMENT_RULES
 from experiment.standards.iso_languages import ISO_LANGUAGES
 from .questions import QUESTIONS_CHOICES, get_default_question_keys
+from theme.models import ThemeConfig
 
 from .validators import consent_file_validator, experiment_slug_validator
 
@@ -53,7 +54,7 @@ class Experiment(models.Model):
     language = models.CharField(
         default="", blank=True, choices=language_choices, max_length=2)
     theme_config = models.ForeignKey(
-        'theme.ThemeConfig',
+        ThemeConfig,
         on_delete=models.SET_NULL,
         blank=True,
         null=True

@@ -12,3 +12,12 @@ class ThemeConfig(models.Model):
     def __str__(self):
         return self.name
 
+    def __dict__(self):
+        return {
+            'name': self.name,
+            'description': self.description,
+            'font_url': self.font_url,
+            'logo_url': self.logo_url,
+            'background_url': self.background_url,
+            'active': self.active
+        }
