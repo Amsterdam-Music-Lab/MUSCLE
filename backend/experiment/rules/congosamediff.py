@@ -16,16 +16,7 @@ class CongoSameDiff(Base):
     contact_email = 'info@example.com'
 
     def __init__(self):
-
-        # Add your questions here
-        self.questions = [
-            question_by_key('dgf_gender_identity'),
-            question_by_key('dgf_generation'),
-            question_by_key('dgf_musical_experience', EXTRA_DEMOGRAPHICS),
-            question_by_key('dgf_country_of_origin'),
-            question_by_key('dgf_education', drop_choices=[
-                            'isced-2', 'isced-5'])
-        ]
+        pass
 
     def first_round(self, experiment):
         ''' Provide the first rounds of the experiment,
