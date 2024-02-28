@@ -6,7 +6,9 @@ import Loading  from "../Loading/Loading";
 const ExperimentCollection = ({match}) => {
     const [experimentCollection, loadingExperimentCollection] = useExperimentCollection(match.params.slug);
     const dashboard = experimentCollection?.dashboard;
-    const experiment = !dashboard && experimentCollection;
+    const experiment = dashboard ? undefined : experimentCollection;;
+    
+
 
     return (
         loadingExperimentCollection? (
@@ -16,7 +18,7 @@ const ExperimentCollection = ({match}) => {
         ) : dashboard? (
             <div className="aha__collection">
                 {/* Experiments */}
-                <div className="dashboard">
+                <div data-testid="collection-dashboard" className="dashboard">
                     <ul>
                         {dashboard.map((exp) => (
                             <li key={exp.slug} >
@@ -29,7 +31,7 @@ const ExperimentCollection = ({match}) => {
                 </div>
             </div>
         ) : experiment && (
-            <Redirect to={"/" + experiment.slug} />
+            <Redirect data-testid="collection-redirect" to={"/" + experiment.slug} />
         )
     )
 }

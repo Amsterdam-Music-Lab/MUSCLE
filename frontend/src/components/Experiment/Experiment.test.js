@@ -1,44 +1,47 @@
 import React from 'react';
 import { MemoryRouter } from 'react-router-dom';
-import { render, screen } from '@testing-library/react';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import mockAxios from "jest-mock-axios";
+import { getNextRound } from '../../API';
 
 import Experiment from './Experiment';
 
 jest.mock("../../util/stores");
 
-// need to define the returned objects, otherwise the mocked function 
-// creates a different object every time, causing useEffect to trigger unnecessarily
 const experimentObj = {
     id: 24, slug: 'test', name: 'Test', playlists: [{id: 42, name: 'TestPlaylist'}],
     next_round: [{view: 'INFO', button_label: 'Continue'}]
 };
-const sessionObj = {data: {session: {id: 1}}};
-const nextRoundObj = {next_round: [{view: 'EXPLAINER'}]};
+const nextRoundObj = {next_round: [{view: 'EXPLAINER', instruction: 'Instruction'}]};
 
-jest.mock("../../API", () => ({
-    useExperiment: () => {
-
-        return [experimentObj, false]
-    },
-    createSession: () => Promise.resolve(sessionObj),
-    getNextRound: () => Promise.resolve(nextRoundObj)
-}));
 
 describe('Experiment Component', () => {
+    afterEach(() => {
+        mockAxios.reset();
+    });
+    
 
-    xit('renders with given props', async () => {
-        /**
-         * render is caught in an endless useEffect loop now
-         * skipping for the time being
-        */
+    it('renders with given props', async () => {
+        mockAxios.get.mockResolvedValueOnce({data: experimentObj});
         render(
             <MemoryRouter>
                 <Experiment match={ {params: {slug: 'test'}} }/>
             </MemoryRouter>
         );
-        await screen.findByTestId('experiment-wrapper');
-        expect(screen.getByText('Continue')).toBeInTheDocument();
+        await screen.findByText('Continue');
+    });
 
+    xit('calls onNext', async () => {
+        mockAxios.get.mockResolvedValueOnce({data: experimentObj});
+        render(
+            <MemoryRouter>
+                <Experiment match={ {params: {slug: 'test'}} }/>
+            </MemoryRouter>
+        );
+        const button = await screen.findByText('Continue');
+        fireEvent.click(button);
+        mockAxios.get.mockResolvedValueOnce({data: nextRoundObj});
+        await waitFor(() => expect(getNextRound).toHaveBeenCalled());
     });
 
 });

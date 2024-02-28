@@ -19,7 +19,7 @@ describe('Playlist Component', () => {
         expect(playlistItems.length === 2);
     });
 
-    it('calls registerPlaylist when playlist item is clicked', () => {
+    it('calls onNext when playlist item is clicked', () => {
         render(
             <Playlist experiment={experimentProp} instruction="instruction" onNext={onNext} playlist={playlist}/>
         )
