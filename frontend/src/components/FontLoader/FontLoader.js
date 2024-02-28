@@ -31,10 +31,15 @@ const FontLoader = ({ fontUrl, fontType = 'heading' }) => {
 
         return () => {
             // Remove the link and style elements during cleanup
-            link && document.head.removeChild(link);
-            style && document.head.removeChild(style);
+            if (link) {
+                document.head.removeChild(link);
+            }
+
+            if (style) {
+                document.head.removeChild(style);
+            }
         };
-    }, [fontUrl, font, selector]);
+    }, [fontUrl, font, selector, fontType]);
 
     return null;
 };

@@ -201,7 +201,9 @@ const Experiment = ({ match }) => {
 
     const view = state.view;
 
-    return (
+    return (<>
+        <FontLoader fontUrl={theme?.heading_font_url} fontType="heading" />
+        <FontLoader fontUrl={theme?.body_font_url} fontType="body" />
         <TransitionGroup
             className={classNames(
                 "aha__experiment",
@@ -230,9 +232,6 @@ const Experiment = ({ match }) => {
                         }
                         className={className}
                     >
-                        <FontLoader fontUrl={theme?.heading_font_url} fontType="heading" />
-                        <FontLoader fontUrl={theme?.body_font_url} fontType="body" />
-
                         {render(view)}
 
                         {experiment?.feedback_info?.show_float_button && (
@@ -254,6 +253,8 @@ const Experiment = ({ match }) => {
 
             </CSSTransition>
         </TransitionGroup>
+    </>
+
     );
 };
 
