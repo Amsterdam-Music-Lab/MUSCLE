@@ -100,9 +100,15 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
-    // Setup font preview
-    addFontPreviewElement("id_font_url", "fontPreview");
+    // Setup heading font preview
+    addFontPreviewElement("id_heading_font_url", "fontPreview");
 
-    // Update font preview on change
-    updateFontPreview("id_font_url", "fontPreview");
+    // Update heading font preview on change
+    updateFontPreview("id_heading_font_url", "fontPreview");
+
+    // Setup body font preview
+    addFontPreviewElement("id_body_font_url", "bodyFontPreview");
+
+    // Update body font preview on change
+    updateFontPreview("id_body_font_url", "bodyFontPreview");
 });

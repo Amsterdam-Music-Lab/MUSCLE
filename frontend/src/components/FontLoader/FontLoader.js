@@ -1,14 +1,16 @@
 import React, { useEffect } from 'react';
-import useBoundStore from 'util/stores';
 
-const FontLoader = () => {
-    const theme = useBoundStore(state => state.theme);
-    const fontUrl = theme?.font_url;
-    const fontFamilyMatch = /family=([^&:]+)/.exec(fontUrl);
-    const fontFamily = fontFamilyMatch ? fontFamilyMatch[1].replace(/\+/g, ' ') : "sans-serif";
-
+const FontLoader = ({fontUrl, fontType = 'heading'}) => {
+    const fontMatch = /family=([^&:]+)/.exec(fontUrl);
+    const font = fontMatch ? fontMatch[1].replace(/\+/g, ' ') : "sans-serif";
+    const selector = fontType === 'heading' ? 'h1, h2, h3, h4, h5, h6' : 'body';
 
     useEffect(() => {
+
+        if (!fontUrl) {
+            return;
+        }
+
         // Dynamically load the font
         const link = document.createElement('link');
         link.href = fontUrl;
@@ -18,17 +20,17 @@ const FontLoader = () => {
         // Set the global font style
         const style = document.createElement('style');
         style.innerHTML = `
-            body {
-                font-family: "${fontFamily}", sans-serif;
-            }
-        `;
+    ${selector} {
+        font-family: "${font}", sans-serif;
+    }
+`;
         document.head.appendChild(style);
 
         return () => {
             document.head.removeChild(link);
             document.head.removeChild(style);
         };
-    }, [theme]);
+    }, [fontUrl]);
 
     return null;
 }

@@ -33,6 +33,7 @@ const Experiment = ({ match }) => {
     const participant = useBoundStore((state) => state.participant);
     const setSession = useBoundStore((state) => state.setSession);
     const session = useBoundStore((state) => state.session);
+    const theme = useBoundStore((state) => state.theme);
     const setTheme = useBoundStore((state) => state.setTheme);
 
     // Current experiment state
@@ -229,7 +230,8 @@ const Experiment = ({ match }) => {
                         }
                         className={className}
                     >
-                        <FontLoader />
+                        <FontLoader fontUrl={theme?.heading_font_url} fontType="heading" />
+                        <FontLoader fontUrl={theme?.body_font_url} fontType="body" />
 
                         {render(view)}
 
