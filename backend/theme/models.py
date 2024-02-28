@@ -12,7 +12,7 @@ class ThemeConfig(models.Model):
     def __str__(self):
         return self.name
 
-    def __dict__(self):
+    def __to_json__(self):
         return {
             'name': self.name,
             'description': self.description,
