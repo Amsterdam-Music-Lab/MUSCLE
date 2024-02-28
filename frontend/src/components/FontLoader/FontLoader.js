@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 
 const FontLoader = ({fontUrl, fontType = 'heading'}) => {
     const fontMatch = /family=([^&:]+)/.exec(fontUrl);
