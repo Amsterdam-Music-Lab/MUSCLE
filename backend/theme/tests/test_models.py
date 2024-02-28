@@ -1,6 +1,7 @@
 from django.test import TestCase
 from theme.models import ThemeConfig
 
+
 class ThemeConfigModelTest(TestCase):
     @classmethod
     def setUpTestData(cls):
