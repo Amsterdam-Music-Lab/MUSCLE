@@ -11,7 +11,6 @@ class ThemeConfigModelTest(TestCase):
             body_font_url='https://example.com/body_font',
             logo_url='https://example.com/logo',
             background_url='https://example.com/background',
-            active=True
         )
 
     def test_theme_config_str(self):
@@ -27,6 +26,5 @@ class ThemeConfigModelTest(TestCase):
             'body_font_url': 'https://example.com/body_font',
             'logo_url': 'https://example.com/logo',
             'background_url': 'https://example.com/background',
-            'active': True
         }
         self.assertEqual(theme_config.__to_json__(), expected_json)

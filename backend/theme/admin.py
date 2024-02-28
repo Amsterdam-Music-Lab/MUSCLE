@@ -11,14 +11,10 @@ class ThemeConfigAdmin(admin.ModelAdmin):
 
     form = ThemeConfigForm
 
-    list_display = ('id', 'name_link', 'heading_font_preview', 'body_font_preview', 'logo_preview', 'background_preview', 'active')
-    list_filter = ('active',)
+    list_display = ('id', 'name_link', 'heading_font_preview', 'body_font_preview', 'logo_preview', 'background_preview')
     search_fields = ('name', 'description')
     ordering = ('name',)
     fieldsets = (
-        (None, {
-            'fields': ('name', 'description', 'active')
-        }),
         ('Heading Font Configuration', {
             'description': 'Please use a valid font-family name, url or enter the name or url of a font from Google Fonts (e.g. Roboto, Fredoka, Open Sans). See also <a href="https://fonts.google.com/" target="_blank">Google Fonts</a>',
             'fields': ('heading_font_url',)
@@ -34,18 +30,6 @@ class ThemeConfigAdmin(admin.ModelAdmin):
             'fields': ('background_url',)
         }),
     )
-    readonly_fields = ('active',)
-    actions = ['make_active', 'make_inactive']
-
-    def make_active(self, request, queryset):
-        queryset.update(active=True)
-
-    make_active.short_description = "Make selected themes active"
-
-    def make_inactive(self, request, queryset):
-        queryset.update(active=False)
-
-    make_inactive.short_description = "Make selected themes inactive"
 
     def name_link(self, obj):
         return format_html('<a href="{}">{}</a>', f'/admin/theme/themeconfig/{obj.id}/change/', obj.name)

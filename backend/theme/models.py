@@ -8,7 +8,6 @@ class ThemeConfig(models.Model):
     body_font_url = models.CharField(null=True, blank=True, max_length=255)
     logo_url = models.CharField(null=True, blank=True, max_length=255)
     background_url = models.CharField(null=True, blank=True, max_length=255)
-    active = models.BooleanField(default=True)
 
     def __str__(self):
         return self.name
@@ -21,5 +20,4 @@ class ThemeConfig(models.Model):
             'body_font_url': self.body_font_url,
             'logo_url': self.logo_url,
             'background_url': self.background_url,
-            'active': self.active
         }
