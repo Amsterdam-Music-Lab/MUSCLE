@@ -15,6 +15,9 @@ class ThemeConfigAdmin(admin.ModelAdmin):
     search_fields = ('name', 'description')
     ordering = ('name',)
     fieldsets = (
+        (None, {
+            'fields': ('name', 'description')
+        }),
         ('Heading Font Configuration', {
             'description': 'Please use a valid font-family name, url or enter the name or url of a font from Google Fonts (e.g. Roboto, Fredoka, Open Sans). See also <a href="https://fonts.google.com/" target="_blank">Google Fonts</a>',
             'fields': ('heading_font_url',)
