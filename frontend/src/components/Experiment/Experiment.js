@@ -18,6 +18,7 @@ import useResultHandler from "../../hooks/useResultHandler";
 import Info from "../Info/Info";
 import FloatingActionButton from "components/FloatingActionButton/FloatingActionButton";
 import UserFeedback from "components/UserFeedback/UserFeedback";
+import FontLoader from "components/FontLoader/FontLoader";
 
 // Experiment handles the main experiment flow:
 // - Loads the experiment and participant
@@ -65,16 +66,16 @@ const Experiment = ({ match }) => {
             return session;
         }
         try {
-            const newSession = await createSession({experiment, participant, playlist})
+            const newSession = await createSession({ experiment, participant, playlist })
             setSession(newSession);
             return newSession;
         }
-        catch(err) {
+        catch (err) {
             setError(`Could not create a session: ${err}`)
         };
     };
 
-    const continueToNextRound = async() => {
+    const continueToNextRound = async () => {
         const thisSession = await checkSession();
         // Try to get next_round data from server
         const round = await getNextRound({
@@ -111,7 +112,7 @@ const Experiment = ({ match }) => {
                 }
 
                 if (experiment.next_round.length) {
-                    updateActions([ ...experiment.next_round ]);
+                    updateActions([...experiment.next_round]);
                 } else {
                     setError("The first_round array from the ruleset is empty")
                 }
@@ -228,6 +229,8 @@ const Experiment = ({ match }) => {
                         }
                         className={className}
                     >
+                        <FontLoader />
+
                         {render(view)}
 
                         {experiment?.feedback_info?.show_float_button && (
