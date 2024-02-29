@@ -46,9 +46,6 @@ jobs:
       DJANGO_SUPERUSER_PASSWORD: ${{ secrets.DJANGO_SUPERUSER_PASSWORD }}
       DJANGO_SUPERUSER_EMAIL: ${{ secrets.DJANGO_SUPERUSER_EMAIL }}
 
-      # Sentry Auth Token
-      SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
-
       # Prevent podman services from exiting after startup
       RUNNER_TRACKING_ID: ""
 
@@ -67,27 +64,14 @@ jobs:
         run: podman-compose -f docker-compose-deploy.yml build
       - name: Deploy Podman images
         run: podman-compose -f docker-compose-deploy.yml up -d --force-recreate
-      # - uses: getsentry/action-release@v1
-      #   env:
-      #     SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
-      #     SENTRY_ORG: uva-aml
-      #   with:
-      #     environment: test
-      #     projects: muscle-frontend, muscle-backend
-      #     sourcemaps: './frontend/build/static/js'
-      - name: Notify Sentry of new release
-        run: |
-          # Install Sentry CLI
-          curl -sL https://sentry.io/get-cli/ | bash
-
-          # Create new Sentry release
-          export SENTRY_RELEASE=$(sentry-cli releases propose-version)
-          sentry-cli releases new -p aml-uva $SENTRY_RELEASE
-          sentry-cli releases set-commits --auto $SENTRY_RELEASE
-          sentry-cli releases finalize $SENTRY_RELEASE
-
-          # Create new deploy for this Sentry release
-          sentry-cli releases deploys $SENTRY_RELEASE new -e $SENTRY_DEPLOY_ENVIRONMENT
+      - uses: getsentry/action-release@v1
+        env:
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+          SENTRY_ORG: uva-aml
+        with:
+          environment: test
+          projects: muscle-frontend, muscle-backend
+          sourcemaps: './frontend/build/static/js'
       - name: Prune old images
         run: podman image prune -a -f
       - name: Check Podman images
@@ -150,13 +134,11 @@ jobs:
       - uses: getsentry/action-release@v1
         env:
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
-          SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
-          SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT }}
-          SENTRY_URL: https://sentry.io/
+          SENTRY_ORG: uva-aml
         with:
           environment: acceptance
-          version: ${{ github.sha }}
           projects: muscle-frontend, muscle-backend
+          sourcemaps: './frontend/build/static/js'
       - name: Prune old images
         run: podman image prune -a -f
       - name: Check Podman images
