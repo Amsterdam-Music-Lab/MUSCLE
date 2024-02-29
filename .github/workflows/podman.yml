@@ -16,7 +16,7 @@ jobs:
     name: Deploy to test environment
     environment: Test
     runs-on: tst
-    if: github.ref == 'refs/heads/develop'
+    if: github.ref == 'refs/heads/develop' || 1 == 1 # Temporarily always run during testing
     concurrency:
       group: ${{ github.workflow }}-${{ github.ref }}
     env:
@@ -64,6 +64,14 @@ jobs:
         run: podman-compose -f docker-compose-deploy.yml build
       - name: Deploy Podman images
         run: podman-compose -f docker-compose-deploy.yml up -d --force-recreate
+      - uses: getsentry/action-release@v1
+        env:
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+          SENTRY_ORG: uva-aml
+        with:
+          environment: test
+          projects: muscle-frontend, muscle-backend
+          sourcemaps: './frontend/build/static/js'
       - name: Prune old images
         run: podman image prune -a -f
       - name: Check Podman images
@@ -123,6 +131,16 @@ jobs:
         run: podman-compose -f docker-compose-deploy.yml build
       - name: Deploy Podman images
         run: podman-compose -f docker-compose-deploy.yml up -d --force-recreate
+      - uses: getsentry/action-release@v1
+        env:
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+          SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
+          SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT }}
+          SENTRY_URL: https://sentry.io/
+        with:
+          environment: acceptance
+          version: ${{ github.sha }}
+          projects: muscle-frontend, muscle-backend
       - name: Prune old images
         run: podman image prune -a -f
       - name: Check Podman images
