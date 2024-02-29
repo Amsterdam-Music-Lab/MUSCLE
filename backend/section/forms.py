@@ -13,16 +13,27 @@ class AddSections(forms.Form):
     name = forms.CharField(max_length=128, required=False)
     tag = forms.CharField(max_length=128, required=False)
     group = forms.CharField(max_length=128, required=False)
-    files = forms.FileField(widget=MultipleFileInput(attrs={'accept':'.wav,.mp3,.aiff,.flac,.ogg'}),
-                            validators=[audio_file_validator()])
+    files = forms.FileField(widget=MultipleFileInput(
+        attrs={'accept': '.wav,.mp3,.aiff,.flac,.ogg'}),
+        validators=[audio_file_validator()])
 
 
 class PlaylistAdminForm(forms.ModelForm):
-    csv_file = forms.FileField(required=False, help_text='Upload a CSV file (overrides the text input above)', label='CSV file', widget=forms.FileInput(attrs={'accept':'.csv'}))
+    csv_file = forms.FileField(required=False,
+                               help_text='Upload a CSV file \
+                                (overrides the text input above)',
+                               label='CSV file',
+                               widget=forms.FileInput(attrs={'accept': '.csv'})
+                               )
 
     class Meta:
         model = Playlist
         fields = '__all__'
+        help_texts = {
+            'url_prefix': 'Replace the local server with an external server'}
+        widgets = {'url_prefix': forms.TextInput(attrs={'size': '37',
+                   'placeholder': 'https://example.com/sections/'})
+                   }
 
     def save(self, commit=True):
         playlist = super().save(commit=False)

@@ -15,6 +15,9 @@ class Playlist(models.Model):
     """List of sections to be used in an Experiment"""
 
     name = models.CharField(db_index=True, max_length=64)
+    url_prefix = models.CharField(max_length=128,
+                                  blank=True,
+                                  default='')
 
     process_warning = 'Warning: Processing a live playlist may affect the result data'
     process_csv = models.BooleanField(default=False, help_text=process_warning)
@@ -23,6 +26,8 @@ class Playlist(models.Model):
         song_name [string], start_position [float], duration [float],\
         "path/filename.mp3" [string], tag [string], group [string]'
     csv = models.TextField(blank=True, help_text=default_csv_row)
+
+    
 
     def save(self, *args, **kwargs):
         """Update playlist csv field on every save"""
