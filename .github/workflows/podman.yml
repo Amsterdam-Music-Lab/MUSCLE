@@ -61,17 +61,18 @@ jobs:
         run: podman-compose -f docker-compose-deploy.yml up -d --force-recreate
       - name: Notify Sentry of new release
         run: |
-          curl -X POST "https://sentry.io/api/0/organizations/uva-aml/releases/" \
-          -H "Authorization: Bearer ${{ secrets.SENTRY_AUTH_TOKEN }}" \
-          -H "Content-Type: application/json" \
-          -d '{
-            "version": "${{ github.sha }}",
-            "refs": [{
-              "repository": "Amsterdam-Music-Lab/MUSCLE",
-              "commit": "${{ github.sha }}"
-            }],
-            "projects": ["muscle-frontend", "muscle-backend"]
-          }'
+            curl -X POST "https://sentry.io/api/0/organizations/uva-aml/releases/" \
+            -H "Authorization: Bearer ${{ secrets.SENTRY_AUTH_TOKEN }}" \
+            -H "Content-Type: application/json" \
+            -d '{
+                "version": "${{ github.sha }}",
+                "refs": [{
+                    "repository": "Amsterdam-Music-Lab/MUSCLE",
+                    "commit": "${{ github.sha }}"
+                }],
+                "projects": ["muscle-frontend", "muscle-backend"],
+                "environment": "test"
+            }'
       - name: Prune old images
         run: podman image prune -a -f
       - name: Check Podman images
@@ -142,7 +143,8 @@ jobs:
               "repository": "Amsterdam-Music-Lab/MUSCLE",
               "commit": "${{ github.sha }}"
             }],
-            "projects": ["muscle-frontend", "muscle-backend"]
+            "projects": ["muscle-frontend", "muscle-backend"],
+            "environment": "acceptance"
           }'
       - name: Prune old images
         run: podman image prune -a -f
