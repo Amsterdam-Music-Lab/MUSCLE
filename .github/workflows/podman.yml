@@ -80,7 +80,7 @@ jobs:
           -d '{
             "version": "${{ github.sha }}",
             "refs": [{
-              "repository": "uva-aml/muscle-frontend",
+              "repository": "Amsterdam-Music-Lab/MUSCLE",
               "commit": "${{ github.sha }}"
             }],
             "projects": ["muscle-frontend", "muscle-backend"]
