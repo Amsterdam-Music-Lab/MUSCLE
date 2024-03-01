@@ -64,14 +64,14 @@ jobs:
         run: podman-compose -f docker-compose-deploy.yml build
       - name: Deploy Podman images
         run: podman-compose -f docker-compose-deploy.yml up -d --force-recreate
-      - uses: getsentry/action-release@v1
-        env:
-          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
-          SENTRY_ORG: uva-aml
-        with:
-          environment: test
-          projects: muscle-frontend, muscle-backend
-          sourcemaps: './frontend/build/static/js'
+      # - uses: getsentry/action-release@v1
+      #   env:
+      #     SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+      #     SENTRY_ORG: uva-aml
+      #   with:
+      #     environment: test
+      #     projects: muscle-frontend, muscle-backend
+      #     sourcemaps: './frontend/build/static/js'
       - name: Notify Sentry of new release
         run: |
           curl -X POST "https://sentry.io/api/0/organizations/uva-aml/releases/" \
