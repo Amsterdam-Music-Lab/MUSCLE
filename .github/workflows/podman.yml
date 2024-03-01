@@ -16,7 +16,7 @@ jobs:
     name: Deploy to test environment
     environment: Test
     runs-on: tst
-    if: github.ref == 'refs/heads/develop' || 1 == 1 # Temporarily always run during testing
+    if: github.event_name == 'workflow_dispatch' || github.ref == 'refs/heads/develop' || 1 == 1 # Temporarily always run during testing
     concurrency:
       group: ${{ github.workflow }}-${{ github.ref }}
     env:
@@ -83,7 +83,7 @@ jobs:
     name: Deploy to acceptance environment
     environment: Acceptance
     runs-on: ACC
-    if: github.ref == 'refs/heads/main' || github.ref == 'refs/tags/*' || 1 == 1 # Temporarily always run during testing
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/tags/*'
     concurrency:
       group: ${{ github.workflow }}-${{ github.ref }}
     env:
