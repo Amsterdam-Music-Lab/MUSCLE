@@ -8,7 +8,7 @@ from experiment.rules import EXPERIMENT_RULES
 from experiment.standards.iso_languages import ISO_LANGUAGES
 from .questions import QUESTIONS_CHOICES, get_default_question_keys
 
-from .validators import consent_file_validator
+from .validators import consent_file_validator, experiment_slug_validator
 
 language_choices = [(key, ISO_LANGUAGES[key]) for key in ISO_LANGUAGES.keys()]
 language_choices[0] = ('', 'Unset')
@@ -43,7 +43,7 @@ class Experiment(models.Model):
 
     playlists = models.ManyToManyField('section.Playlist', blank=True)
     name = models.CharField(db_index=True, max_length=64)
-    slug = models.SlugField(db_index=True, max_length=64, unique=True)
+    slug = models.SlugField(db_index=True, max_length=64, unique=True, validators=[experiment_slug_validator])
     url = models.CharField(verbose_name='URL with more information about the experiment', max_length=100, blank=True, default='')
     hashtag = models.CharField(verbose_name='hashtag for social media', max_length=20, blank=True, default='')
     active = models.BooleanField(default=True)
