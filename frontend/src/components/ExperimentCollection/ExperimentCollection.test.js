@@ -1,6 +1,6 @@
 import React from 'react';
 import { MemoryRouter } from 'react-router-dom';
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 
 import mockAxios from "jest-mock-axios";
 
@@ -17,24 +17,27 @@ describe('ExperimentCollection', () => {
         name: 'Another Experiment'
     };
 
-    afterEach(() => {
-        mockAxios.reset();
+    it('forwards to a single experiment if it receives a single object', () => {
+        mockAxios.get.mockResolvedValueOnce({data: experiment1});
+        render(
+        <MemoryRouter>
+            <ExperimentCollection match={{params: {slug: 'some_collection'}}}/>
+        </MemoryRouter>);
+        waitFor(() => {
+            expect(screen.getByTestId('collection-redirect')).toBeInTheDocument();
+        })
     });
 
-    it('shows a dashboard of multiple experiments if it receives an array', async () => {
+    it('shows a dashboard of multiple experiments if it receives an array', () => {
         mockAxios.get.mockResolvedValueOnce({data: {dashboard: [experiment1, experiment2]}});
         render(
         <MemoryRouter>
             <ExperimentCollection match={{params: {slug: 'some_collection'}}}/>
         </MemoryRouter>
         );
-        await screen.findByTestId('collection-dashboard');
-    });
-
-    it('forwards to a single experiment if it receives a single object', async () => {
-        mockAxios.get.mockResolvedValueOnce({data: experiment1});
-        render(<ExperimentCollection match={{params: {slug: 'some_collection'}}}/>);
-        await screen.findByTestId('collection-redirect');
+        waitFor(() => {
+            expect(screen.getByTestId('collection-dashboard')).toBeInTheDocument();
+        }) 
     });
 
     
