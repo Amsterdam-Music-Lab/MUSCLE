@@ -16,15 +16,17 @@ language_choices[0] = ('', 'Unset')
 
 class ExperimentSeries(models.Model):
     """ A model to allow nesting multiple experiments into a 'parent' experiment """
-    name = models.CharField(max_length=64, default='')
+    slug = models.SlugField(max_length=64, default='')
     # first experiments in a test series, in fixed order
     first_experiments = models.JSONField(blank=True, null=True, default=dict)
     random_experiments = models.JSONField(blank=True, null=True, default=dict)
     # last experiments in a test series, in fixed order
     last_experiments = models.JSONField(blank=True, null=True, default=dict)
+    # present random_experiments as dashboard
+    dashboard = models.BooleanField(default=False)
 
     def __str__(self):
-        return self.name
+        return self.slug
 
     class Meta:
         verbose_name_plural = "Experiment Series"
@@ -50,8 +52,6 @@ class Experiment(models.Model):
     rules = models.CharField(default="", max_length=64)
     language = models.CharField(
         default="", blank=True, choices=language_choices, max_length=2)
-    experiment_series = models.ForeignKey(ExperimentSeries, on_delete=models.SET_NULL,
-                                          blank=True, null=True)
     questions = ArrayField(
                 models.TextField(choices=QUESTIONS_CHOICES),
                 blank=True,

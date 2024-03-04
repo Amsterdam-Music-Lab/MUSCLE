@@ -27,6 +27,7 @@ export const URLS = {
     profile: "/profile",
     storeProfile: "/profile/store",
     experiment: "/:slug",
+    experimentCollection: "/collection/:slug",
     reloadParticipant: "/participant/reload/:id/:hash",
     AMLHome:
         process.env.REACT_APP_AML_HOME || "https://www.amsterdammusiclab.nl",

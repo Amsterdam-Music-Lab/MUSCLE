@@ -14,7 +14,6 @@ class ExperimentFormTest(TestCase):
         self.assertIn('rounds', form.fields)
         self.assertIn('bonus_points', form.fields)
         self.assertIn('playlists', form.fields)
-        self.assertIn('experiment_series', form.fields)
 
     def test_rules_field_choices(self):
         form = ExperimentForm()
