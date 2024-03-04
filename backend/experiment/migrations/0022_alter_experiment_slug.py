@@ -6,7 +6,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('experiment', '0019_create_consent_file_field'),
+        ('experiment', '0021_remove_experiment_experiment_series'),
     ]
 
     operations = [
