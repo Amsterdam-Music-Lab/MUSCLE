@@ -8,7 +8,7 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ('theme', '0001_initial'),
-        ('experiment', '0019_create_consent_file_field'),
+        ('experiment', '0022_alter_experiment_slug'),
     ]
 
     operations = [
