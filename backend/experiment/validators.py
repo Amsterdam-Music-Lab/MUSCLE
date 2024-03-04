@@ -21,9 +21,10 @@ def experiment_slug_validator(value):
         'static',
     ]
 
-    # Slugs must not be in the disallowed list
-    if value in disallowed_slugs:
-        raise ValidationError(f'The slug "{value}" is not allowed.')
+    # Slug cannot start with a disallowed slug
+    for slug in disallowed_slugs:
+        if value.lower().startswith(slug):
+            raise ValidationError(f'The slug "{value}" is not allowed.')
 
     # Slugs must be lowercase    
     if value.lower() != value:
