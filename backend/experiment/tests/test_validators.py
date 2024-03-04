@@ -1,7 +1,7 @@
 from django.core.exceptions import ValidationError
 from django.test import TestCase
 
-from experiment.validators import experiment_slug_validator, consent_file_validator
+from experiment.validators import experiment_slug_validator
 
 
 class ExperimentValidatorsTest(TestCase):

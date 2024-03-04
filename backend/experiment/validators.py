@@ -9,7 +9,17 @@ def consent_file_validator():
 
 
 def experiment_slug_validator(value):
-    disallowed_slugs = ['admin', 'server']
+    
+    disallowed_slugs = [
+        'admin',
+        'server',
+        'experiment',
+        'participant',
+        'result',
+        'section',
+        'session',
+        'static',
+    ]
 
     # Slugs must not be in the disallowed list
     if value in disallowed_slugs:
