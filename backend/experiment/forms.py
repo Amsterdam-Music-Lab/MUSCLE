@@ -142,7 +142,7 @@ class ExperimentForm(ModelForm):
     class Meta:
         model = Experiment
         fields = ['name', 'slug', 'active', 'rules',
-                  'rounds', 'bonus_points', 'playlists', 'experiment_series']
+                  'rounds', 'bonus_points', 'playlists',]
         help_texts = {
             'consent': 'Upload an HTML (.html) or MARKDOWN (.md) file with a text to ask a user its consent<br> \
                       for using the experiment data for this instance of the experiment.<br> \
