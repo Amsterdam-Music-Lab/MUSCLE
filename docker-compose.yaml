@@ -27,13 +27,6 @@ services:
         ports:
          - 8854:5000
     server:
-        labels:
-          # Enables Traefik for the Django backend service,
-          # routes HTTP requests with the host 'backend.muscle.local' to this service,
-          # and sets 'web' as the (http, insecure) network entry point for these requests.
-          - "traefik.enable=true"
-          - "traefik.http.routers.server.rule=Host(`backend.muscle.local`)"
-          - "traefik.http.routers.server.entrypoints=web"
         build:
           context: ./backend
           dockerfile: DockerfileDevelop
@@ -63,13 +56,6 @@ services:
           - 8000:8000
         command: bash -c "python manage.py migrate && python manage.py bootstrap && python manage.py runserver 0.0.0.0:8000"
     client:
-        labels:
-          # Enables Traefik for the React frontend service,
-          # routes HTTP requests with the host 'muscle.local' to this service,
-          # and sets 'web' as the (http, insecure) network entry point for these requests.
-          - "traefik.enable=true"
-          - "traefik.http.routers.client.rule=Host(`muscle.local`)"
-          - "traefik.http.routers.client.entrypoints=web"
         build:
           context: ./frontend
           dockerfile: DockerfileDevelop
@@ -100,18 +86,6 @@ services:
         ports:
           - 3000:3000
         command: sh -c "yarn scss && yarn start"
-    traefik:
-      image: traefik:latest
-      command:
-        - "--api.insecure=true"
-        - "--providers.docker=true"
-        - "--providers.docker.exposedbydefault=false"
-        - "--entrypoints.web.address=:80"
-      ports:
-        - "80:80"
-        - "8080:8080"  # Traefik dashboard
-      volumes:
-        - /var/run/docker.sock:/var/run/docker.sock
 volumes:
     db_data:
     db_backup:
