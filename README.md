@@ -24,11 +24,10 @@ Install [Docker Desktop](https://docs.docker.com/desktop/).
 ### Linux
 * Install [Docker Engine](https://docs.docker.com/engine/install/)
 * Install [Docker Compose](https://docs.docker.com/compose/install/)
-
-As of April 2022, [Docker Desktop for Linux](https://docs.docker.com/desktop/linux/) is still in Beta and have not been tested by us.
+* Install [Docker Desktop](https://docs.docker.com/desktop/install/linux-install/)
 
 ## Development build
-Make a copy of the file .env.dist (in the same directory as this README) and rename it to .env. This file contains variables used by Docker to start up a container network serving MUSCLE.
+Make a copy of [the file](https://github.com/Amsterdam-Music-Lab/MUSCLE/blob/develop/.env.dist) `.env.dist` (in the same directory as this README) and rename it to `.env.` This file contains variables used by Docker to start up a container network serving MUSCLE.
 
 Start Docker (the app icon is a whale carrying containers). Then, open a terminal and run
 `docker-compose up` (add `sudo` on Linux).

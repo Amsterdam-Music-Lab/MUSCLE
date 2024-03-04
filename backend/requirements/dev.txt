@@ -48,9 +48,9 @@ django-cors-headers==3.10.0
 django-debug-toolbar==4.3.0
     # via -r requirements.in/dev.txt
 django-inline-actions==2.4.0
-    # via -r requirements.in\base.txt
+    # via -r requirements.in/base.txt
 django-markup[all_filter_dependencies]==1.8.1
-    # via -r requirements.in\base.txt
+    # via -r requirements.in/base.txt
 docutils==0.20.1
     # via
     #   django-markup
@@ -58,7 +58,7 @@ docutils==0.20.1
 flake8==4.0.1
     # via -r requirements.in/dev.txt
 genbadge[coverage]==1.1.1
-    # via -r requirements.in\base.txt
+    # via -r requirements.in/base.txt
 html5lib==1.1
     # via textile
 idna==3.3
