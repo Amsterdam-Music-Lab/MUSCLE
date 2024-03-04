@@ -18,7 +18,7 @@ class ExperimentValidatorsTest(TestCase):
         slug = 'admin'
         with self.assertRaises(ValidationError) as cm:
             experiment_slug_validator(slug)
-        self.assertEqual(str(cm.exception.messages[0]), 'The slug "admin" is not allowed.')
+        self.assertEqual(str(cm.exception.messages[0]), 'The slug cannot start with "admin".')
 
     def test_uppercase_slug(self):
         # Test an uppercase slug
@@ -32,7 +32,7 @@ class ExperimentValidatorsTest(TestCase):
         slug = 'admin-test'
         with self.assertRaises(ValidationError) as cm:
             experiment_slug_validator(slug)
-        self.assertEqual(str(cm.exception.messages[0]), 'The slug "admin-test" is not allowed.')
+        self.assertEqual(str(cm.exception.messages[0]), 'The slug cannot start with "admin".')
 
     def test_valid_prefix(self):
         # Test a valid prefix
