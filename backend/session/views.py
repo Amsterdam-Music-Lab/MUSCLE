@@ -31,31 +31,16 @@ def create_session(request):
     # Create new session
     session = Session(experiment=experiment, participant=participant)
 
-    # Get playlist
-    if experiment.playlists.count() == 1:
-        # Skip if there is only one playlist
-        session.playlist = experiment.playlists.first()
-    else:
-        # load playlist from request
-        playlist_id = request.POST.get("playlist_id")
-
-        if not playlist_id:
-            return HttpResponseBadRequest("playlist_id not defined")
-
+    if request.POST.get("playlist_id"):
         try:
             playlist = Playlist.objects.get(
-                pk=playlist_id, experiment__id=experiment.id)
+                pk=request.POST.get("playlist_id"), experiment__id=session.experiment.id)
             session.playlist = playlist
-        except Playlist.DoesNotExist:
+        except:
             raise Http404("Playlist does not exist")
-
-    # Get json_data
-    data = request.POST.get("data")
-    if data:
-        try:
-            session.save_json_data(data)
-        except ValueError:
-            return HttpResponseBadRequest("Invalid data")
+    elif experiment.playlists.count() >= 1:
+        # register first playlist
+        session.playlist = experiment.playlists.first()
 
     # Save session
     session.save()
@@ -98,6 +83,7 @@ def next_round(request, session_id):
         actions = [actions]
 
     return JsonResponse({'next_round': actions}, json_dumps_params={'indent': 4})
+
 
 def finalize_session(request, session_id):
     # Get session

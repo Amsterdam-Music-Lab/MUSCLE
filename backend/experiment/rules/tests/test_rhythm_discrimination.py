@@ -7,6 +7,7 @@ from result.models import Result
 from section.models import Playlist
 from session.models import Session
 
+
 class RhythmDiscriminationTest(TestCase):
     fixtures = ['playlist', 'experiment']
 

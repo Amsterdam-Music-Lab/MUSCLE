@@ -1,9 +1,22 @@
-FROM node:18-alpine
+# Builder image
+FROM docker.io/node:18-alpine as builder
 
 RUN yarn set version stable
 WORKDIR /client
 COPY package.json /client/
 COPY yarn.lock /client/
 COPY jsconfig.json /client/
-RUN yarn
 COPY . /client/
+
+# Copy .env file to break the cache
+COPY .env /client/
+
+RUN yarn
+RUN yarn scss
+RUN yarn build
+
+# Runner image that serves the built app using nginx
+FROM docker.io/nginx:alpine as runner
+
+COPY --from=builder /client/build /usr/share/nginx/html
+EXPOSE 80

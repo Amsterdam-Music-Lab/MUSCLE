@@ -1,5 +1,6 @@
 from .base_action import BaseAction
 
+
 class ToontjeHoger(BaseAction):  # pylint: disable=too-few-public-methods
     """
     Provide data for a view that shows the ToontjeHoger homepage

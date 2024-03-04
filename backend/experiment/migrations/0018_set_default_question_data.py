@@ -1,6 +1,7 @@
 from django.db import migrations
 from experiment.rules import EXPERIMENT_RULES
 
+
 def set_default_question_data(apps, schema_editor):
 
     Experiment = apps.get_model("experiment", "Experiment")

@@ -1,4 +1,4 @@
-import { renderHook, act } from "@testing-library/react-hooks";
+import { renderHook, act } from "@testing-library/react";
 import useResultHandler from "./useResultHandler";
 
 import * as API from '../API.js';
@@ -9,7 +9,7 @@ describe('useResultHandler', () => {
 
     const mockOnNext = jest.fn();
     const initialState = { next_round: ['round2'] }; // Example initial state
-    const mockSession = { current: 'session-id' };
+    const mockSession = 'session-id';
     const mockParticipant = 'participant-id';
 
     it('buffers results correctly', async () => {

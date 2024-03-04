@@ -6,9 +6,9 @@ from django.utils.translation import gettext_lazy as _
 from django.template.loader import render_to_string
 
 from .base import Base
-from experiment.actions import Consent, Explainer, Final, Playlist, Score, StartSession, Step, Trial
+from experiment.actions import Consent, Explainer, Final, Playlist, Score, Step, Trial
 from experiment.actions.form import BooleanQuestion, Form
-from experiment.actions.playback import Playback
+from experiment.actions.playback import Autoplay
 from experiment.questions.demographics import DEMOGRAPHICS
 from experiment.questions.goldsmiths import MSI_OTHER
 from experiment.questions.utils import question_by_key
@@ -28,7 +28,7 @@ class Hooked(Base):
     """Superclass for Hooked experiment rules"""
     ID = 'HOOKED'
 
-    consent_file = 'consent_hooked.html'
+    consent_file = 'consent/consent_hooked.html'
     recognition_time = 15  # response time for "Do you know this song?"
     sync_time = 15  # response time for "Did the track come back in the right place?"
     # if the track continues in the wrong place: minimal shift forward (in seconds)
@@ -70,26 +70,22 @@ class Hooked(Base):
             step_numbers=True,
             button_label=_("Let's go!"))
 
-        # 2. Get informed consent.
-        if self.consent_file:
-            rendered = render_to_string('consent/{}'.format(self.consent_file))
-            consent = Consent(text=rendered, title=_(
-                'Informed consent'), confirm=_('I agree'), deny=_('Stop'))
-        else:
-            # fall back to lorem ipsum if no consent_file is defined
-            consent = Consent()
-
+        # 2. Add consent from file or admin (admin has priority)
+        consent = Consent(
+            experiment.consent,
+            title=_('Informed consent'),
+            confirm=_('I agree'),
+            deny=_('Stop'),
+            url=self.consent_file
+            )
+        
         # 3. Choose playlist.
         playlist = Playlist(experiment.playlists.all())
-
-        # 4. Start session.
-        start_session = StartSession()
 
         return [
             explainer,
             consent,
             playlist,
-            start_session
         ]
 
     def next_round(self, session):
@@ -283,7 +279,7 @@ class Hooked(Base):
         if not section:
             logger.warning("Warning: no next_song_sync section found")
             section = session.section_from_any_song()
-        return song_sync(session, section, title=self.get_trial_title(session, round_number), play_method=self.play_method,
+        return song_sync(session, section, title=self.get_trial_title(session, round_number),
                          recognition_time=self.recognition_time, sync_time=self.sync_time,
                          min_jitter=self.min_jitter, max_jitter=self.max_jitter)
 
@@ -307,11 +303,12 @@ class Hooked(Base):
         if not section:
             logger.warning("Warning: no heard_before section found")
             section = session.section_from_any_song()
-        playback = Playback(
+        playback = Autoplay(
             [section],
-            play_config={'ready_time': 3, 'show_animation': True,
-                         'play_method': self.play_method},
-            preload_message=_('Get ready!'))
+            show_animation=True,
+            ready_time=3,
+            preload_message=_('Get ready!')
+        )
         expected_response = this_section_info.get('novelty')
         # create Result object and save expected result to database
         key = 'heard_before'

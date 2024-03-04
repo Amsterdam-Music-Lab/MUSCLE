@@ -1,6 +1,6 @@
 import "./index.css";
-import React from "react";
-import ReactDOM from "react-dom";
+import React, { StrictMode } from "react";
+import { createRoot } from 'react-dom/client';
 import App from "./components/App/App";
 import { initSentry } from "./config/sentry";
 import { initAudioListener } from "./util/audio";
@@ -13,9 +13,18 @@ initSentry();
 initAudioListener();
 initWebAudioListener();
 
-
 // Create app
-ReactDOM.render(<App />, document.getElementById("root"));
+const container = document.getElementById("root");
+const root = createRoot(container);
+root.render(
+    process.env.REACT_APP_STRICT === true ? (
+        <StrictMode>
+            <App />
+        </StrictMode>
+    ) : (
+        <App />
+    )
+);
 
 // import * as serviceWorker from "./serviceWorker";
 // If you want your app to work offline and load faster, you can change

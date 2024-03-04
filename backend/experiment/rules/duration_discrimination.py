@@ -1,4 +1,3 @@
-import math
 import logging
 from decimal import Decimal, ROUND_HALF_UP
 
@@ -6,9 +5,9 @@ from django.utils.translation import gettext_lazy as _
 
 from .base import Base
 from section.models import Section
-from experiment.actions import Trial, Consent, Explainer, StartSession, Step
+from experiment.actions import Trial, Consent, Explainer, Step
 from experiment.actions.form import ChoiceQuestion, Form
-from experiment.actions.playback import Playback
+from experiment.actions.playback import Autoplay
 from experiment.actions.utils import final_action_with_optional_button, render_feedback_trivia
 from experiment.actions.utils import get_average_difference
 from experiment.rules.util.practice import get_trial_condition_block, get_practice_views, practice_explainer
@@ -35,18 +34,15 @@ class DurationDiscrimination(Base):
         """Create data for the first experiment rounds"""
         explainer = self.intro_explanation()
 
-        # 2. Consent with default text
-        consent = Consent()
+        # 2. Consent with admin text or default text
+        consent = Consent(experiment.consent)
 
         explainer2 = practice_explainer()
-
-        start_session = StartSession()
 
         return [
             explainer,
             consent,
             explainer2,
-            start_session
         ]
 
     def next_round(self, session, request_session=None):
@@ -64,7 +60,7 @@ class DurationDiscrimination(Base):
             return actions
 
         else:
-            ##### Actual trials ####
+            # Actual trials
             action = self.staircasing_blocks(
                 session, self.next_trial_action, request_session)
             return action
@@ -141,7 +137,7 @@ class DurationDiscrimination(Base):
         )
         # create Result object and save expected result to database
         
-        playback = Playback([section])
+        playback = Autoplay([section])
         form = Form([question])
         view = Trial(
             playback=playback,
@@ -154,7 +150,7 @@ class DurationDiscrimination(Base):
             }
         )
         return view
- 
+
     def get_question_text(self):
         return _("Is the second interval EQUALLY LONG as the first interval or LONGER?")
 
@@ -300,7 +296,6 @@ class DurationDiscrimination(Base):
         # return rounded difficulty
         # this uses the decimal module, since round() does not work entirely as expected
         return int(Decimal(str(current_difficulty)).quantize(Decimal('0'), rounding=ROUND_HALF_UP))
-
     
     def last_non_catch_correct(self, previous_results):
         """ check if previous responses (before the current one, which is correct)

@@ -1,5 +1,6 @@
 [![DOI](https://zenodo.org/badge/418963353.svg)](https://zenodo.org/badge/latestdoi/418963353) [![Test](https://github.com/Amsterdam-Music-Lab/MUSCLE/actions/workflows/ci.yml/badge.svg)](https://github.com/Amsterdam-Music-Lab/MUSCLE/actions/workflows/test.yml/badge.svg)
 ![Backend Code Coverage Percentage](https://raw.githubusercontent.com/Amsterdam-Music-Lab/MUSCLE/code-coverage-badges/backend/coverage-backend-badge.svg)
+![Frontend Code Coverage Percentage](https://raw.githubusercontent.com/Amsterdam-Music-Lab/MUSCLE/code-coverage-badges/frontend/coverage-frontend-badge.svg)
 
 # MUSic-related Citizen Science Listening Experiments (MUSCLE)
 This application provides an easy way to implement and run online listening experiments for music research. It presents questions, and typically audio stimuli, to participants, and collects their feedback.
@@ -23,11 +24,10 @@ Install [Docker Desktop](https://docs.docker.com/desktop/).
 ### Linux
 * Install [Docker Engine](https://docs.docker.com/engine/install/)
 * Install [Docker Compose](https://docs.docker.com/compose/install/)
-
-As of April 2022, [Docker Desktop for Linux](https://docs.docker.com/desktop/linux/) is still in Beta and have not been tested by us.
+* Install [Docker Desktop](https://docs.docker.com/desktop/install/linux-install/)
 
 ## Development build
-Make a copy of the file .env.dist (in the same directory as this README) and rename it to .env. This file contains variables used by Docker to start up a container network serving MUSCLE.
+Make a copy of [the file](https://github.com/Amsterdam-Music-Lab/MUSCLE/blob/develop/.env.dist) `.env.dist` (in the same directory as this README) and rename it to `.env.` This file contains variables used by Docker to start up a container network serving MUSCLE.
 
 Start Docker (the app icon is a whale carrying containers). Then, open a terminal and run
 `docker-compose up` (add `sudo` on Linux).
@@ -46,3 +46,7 @@ To stop the containers, press `ctrl-c` or (in another terminal) run
 
 ## Production build
 A production build should define its own `docker-compose.yaml`, making use of the `Dockerfile` of the `backend` and `frontend` environments. It should also define a custom .env file, with safe passwords for the SQL database and the Python backend. Instead of mounting the entire backend and frontend directory and using the development servers, the backend should serve with gunicorn, and the frontend should use a build script to compile static html, css and JavaScript.
+
+## Troubleshooting
+
+Please refer to the [wiki](https://github.com/Amsterdam-Music-Lab/MUSCLE/wiki/X.-Troubleshooting) a checklist of common issues and their solutions.

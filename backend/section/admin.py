@@ -6,12 +6,14 @@ from django.core.exceptions import ValidationError
 from django.shortcuts import render, redirect
 from django.http import JsonResponse, HttpResponse
 from django.conf import settings
+from django.urls import path
 from django.utils.translation import gettext_lazy as _
 
 import audioread
 
 from .models import Section, Playlist, Song
-from .forms import AddSections
+from .forms import AddSections, PlaylistAdminForm
+
 
 class SectionAdmin(admin.ModelAdmin):
     list_per_page = 50
@@ -29,27 +31,32 @@ admin.site.register(Section, SectionAdmin)
 
 # @admin.register(Playlist)
 
+
 class SongAdmin(admin.ModelAdmin):
     list_per_page = 50
-    list_display = ('artist', 'name')    
-    search_fields = ['artist', 'name']   
+    list_display = ('artist', 'name')
+    search_fields = ['artist', 'name']
 
     # Prevent large inner join
     list_select_related = ()
 
+
 admin.site.register(Song, SongAdmin)
 
+
 class PlaylistAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
+    form = PlaylistAdminForm
+    change_form_template = 'change_form.html'
     list_display = ('name', 'section_count', 'experiment_count')
     search_fields = ['name', 'section__song__artist', 'section__song__name']
     inline_actions = ['add_sections',
-                      'edit_sections', 'export_json', 'export_csv']
+                      'edit_sections', 'export_csv']
 
     def save_model(self, request, obj, form, change):
 
         # store proces value
         process_csv = obj.process_csv
-        
+
         # save playlist (so it sure has an id)
         super().save_model(request, obj, form, change)
 
@@ -94,8 +101,8 @@ class PlaylistAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
                     continue
                 if this_artist and this_name:
                     this_song, created = Song.objects.get_or_create(artist=this_artist, name=this_name)
-                    new_section.song = this_song                
-                file_path = settings.MEDIA_ROOT + '/' + str(new_section.filename)      
+                    new_section.song = this_song
+                file_path = settings.MEDIA_ROOT + '/' + str(new_section.filename)
                 with audioread.audio_open(file_path) as f:
                     new_section.duration = f.duration
                 new_section.save()
@@ -122,7 +129,7 @@ class PlaylistAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
             for section in sections:
                 # Create pre fix to get the right section fields
                 pre_fix = str(section.id)
-                # Get data and update section                                 
+                # Get data and update section
                 this_artist = request.POST.get(pre_fix + '_artist')
                 this_name = request.POST.get(pre_fix + '_name')
                 if this_artist and this_name:
@@ -130,16 +137,12 @@ class PlaylistAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
                     if created:
                         section.song = this_song
                     else:
-                        section.song = this_song                                                
-                        if request.POST.get(pre_fix + '_restricted'):
-                            section.song.restricted = [{"restricted": "nl"}]                            
-                        else:
-                            section.song.restricted = []
+                        section.song = this_song
                         section.song.save()
                 section.start_time = request.POST.get(pre_fix + '_start_time')
                 section.duration = request.POST.get(pre_fix + '_duration')
                 section.tag = request.POST.get(pre_fix + '_tag')
-                section.group = request.POST.get(pre_fix + '_group')                                
+                section.group = request.POST.get(pre_fix + '_group')
                 section.save()
                 obj.save()
             return redirect('/admin/section/playlist')
@@ -152,19 +155,6 @@ class PlaylistAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
             context={'playlist': obj,
                      'sections': sections}
         )
-
-    def export_json(self, request, obj, parent_obj=None):
-        """Export playlist data in JSON, force download"""
-
-        response = JsonResponse(
-            obj.export_admin(), json_dumps_params={'indent': 4})
-
-        # force download attachment
-        response['Content-Disposition'] = 'attachment; filename="playlist_' + \
-            str(obj.id)+'.json"'
-        return response
-
-    export_json.short_description = "Export JSON"
 
     def export_csv(self, request, obj, parent_obj=None):
         """Export playlist sections to csv, force download"""
@@ -181,6 +171,17 @@ class PlaylistAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
         return response
 
     export_csv.short_description = "Export Sections CSV"
+
+    def export_csv_view(self, request, pk):
+        obj = self.get_object(request, pk)
+        return self.export_csv(request, obj)
+
+    def get_urls(self):
+        urls = super().get_urls()
+        custom_urls = [
+            path('<int:pk>/export_csv/', self.export_csv_view, name='section_playlist_export_csv'),
+        ]
+        return custom_urls + urls
 
 
 admin.site.register(Playlist, PlaylistAdmin)

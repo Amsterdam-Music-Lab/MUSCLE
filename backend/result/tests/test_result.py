@@ -5,6 +5,7 @@ from participant.models import Participant
 from result.models import Result
 from session.models import Session
 
+
 class ResultTest(TestCase):
 
     @classmethod

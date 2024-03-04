@@ -8,9 +8,9 @@ from experiment.questions.demographics import EXTRA_DEMOGRAPHICS
 from experiment.questions.goldsmiths import MSI_F1_ACTIVE_ENGAGEMENT
 from experiment.questions.other import OTHER
 
-from experiment.actions import Consent, Explainer, Final, HTML, Playlist, Redirect, Step, StartSession, Trial
+from experiment.actions import Consent, Explainer, Final, HTML, Playlist, Redirect, Step, Trial
 from experiment.actions.form import BooleanQuestion, ChoiceQuestion, Form, LikertQuestionIcon
-from experiment.actions.playback import Playback
+from experiment.actions.playback import Autoplay
 from experiment.actions.styles import STYLE_BOOLEAN, STYLE_BOOLEAN_NEGATIVE_FIRST
 
 from result.utils import prepare_result
@@ -24,7 +24,7 @@ from .huang_2022 import get_test_playback
 
 class MusicalPreferences(Base):
     ID = 'MUSICAL_PREFERENCES'
-    consent_file = 'consent_musical_preferences.html'
+    consent_file = 'consent/consent_musical_preferences.html'
     preference_offset = 20
     knowledge_offset = 42
     round_increment = 1
@@ -46,11 +46,14 @@ class MusicalPreferences(Base):
             question_by_key('dgf_region_of_residence', OTHER)
         ]
 
-    def first_round(self, experiment):
-        rendered = render_to_string('consent/{}'.format(self.consent_file)
-                                    )
+    def first_round(self, experiment):        
+                                    
         consent = Consent(
-            text=rendered, title=_('Informed consent'), confirm=_('I consent and continue.'), deny=_('I do not consent.')
+            experiment.consent,
+            title=_('Informed consent'),
+            confirm=_('I consent and continue.'),
+            deny=_('I do not consent.'),
+            url=self.consent_file
         )
         playlist = Playlist(experiment.playlists.all())
         explainer = Explainer(
@@ -60,12 +63,10 @@ class MusicalPreferences(Base):
             ],
             button_label=_('OK')
         )
-        start_session = StartSession()
         return [
             consent,
             playlist,
             explainer,
-            start_session
         ]
 
     def next_round(self, session, request_session=None):
@@ -111,9 +112,8 @@ class MusicalPreferences(Base):
                 else:
                     session.decrement_round()
                     if last_result.question_key == 'audio_check1':
-                        playback = get_test_playback('EXTERNAL')
-                        html = HTML(body=render_to_string(
-                            'html/huang_2022/audio_check.html'))
+                        playback = get_test_playback()                    
+                        html = HTML(body=render_to_string('html/huang_2022/audio_check.html'))
                         form = Form(form=[BooleanQuestion(
                             key='audio_check2',
                             choices={'no': _('Quit'), 'yes': _('Next')},
@@ -132,7 +132,7 @@ class MusicalPreferences(Base):
                         return Redirect(settings.HOMEPAGE)
             else:
                 session.decrement_round()
-                playback = get_test_playback('EXTERNAL')
+                playback = get_test_playback()
                 html = HTML(
                     body='<h4>{}</h4>'.format(_('Do you hear the music?')))
                 form = Form(form=[BooleanQuestion(
@@ -198,7 +198,7 @@ class MusicalPreferences(Base):
                 top_all
             )]
 
-        section = session.playlist.get_section()
+        section = session.section_from_unused_song()
         like_key = 'like_song'
         likert = LikertQuestionIcon(
             question=_('2. How much do you like this song?'),
@@ -219,7 +219,7 @@ class MusicalPreferences(Base):
             result_id=prepare_result(know_key, session, section=section),
             style=STYLE_BOOLEAN
         )
-        playback = Playback([section], play_config={'show_animation': True})
+        playback = Autoplay([section], show_animation=True)
         form = Form([know, likert])
         view = Trial(
             playback=playback,

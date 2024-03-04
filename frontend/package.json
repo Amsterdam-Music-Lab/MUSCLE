@@ -1,34 +1,33 @@
 {
   "name": "aml-frontend",
-  "version": "0.1.0",
-  "private": true,
-  "homepage": "/",
+  "private": false,
+  "description": "The React Frontend for the MUSCLE platform",
+  "license": "MIT",
   "dependencies": {
     "@sentry/react": "^7.85.0",
-    "@testing-library/jest-dom": "^5.16.1",
-    "@testing-library/react": "^12.1.2",
-    "@testing-library/user-event": "^13.5.0",
     "axios": ">=1.6.0",
     "classnames": "^2.2.6",
     "email-validator": "^2.0.4",
     "file-saver": "^2.0.5",
     "next-share": "0.25.0",
     "qs": "^6.10.3",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
     "react-rangeslider": "^2.2.0",
     "react-router": "5.2.0",
     "react-router-dom": "5.2.0",
     "react-scripts": "5.0.0",
     "react-select": "^5.4.0",
-    "react-transition-group": "^4.3.0",
-    "sass": "^1.50"
+    "react-transition-group": "^4.4.5",
+    "sass": "^1.69.5",
+    "zustand": "^4.4.7"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "sass src/index.scss src/index.css; react-scripts build",
     "test": "react-scripts test",
     "test:ci": "react-scripts test --coverage --watchAll=false",
+    "generate-badge": "coverage-badges -s coverage/coverage-summary.json -o coverage-frontend-badge-new.svg --label 'Frontend Code Coverage'",
     "eject": "react-scripts eject",
     "scss": "sass src/index.scss src/index.css",
     "scss:watch": "sass src/index.scss src/index.css; sass --watch src/index.scss src/index.css",
@@ -47,7 +46,11 @@
       "^scss/(.*)$": "<rootDir>/src/scss/$1",
       "^stories/(.*)$": "<rootDir>/src/stories/$1",
       "^util/(.*)$": "<rootDir>/src/util/$1"
-    }
+    },
+    "coverageReporters": [
+      "lcov",
+      "json-summary"
+    ]
   },
   "eslintConfig": {
     "extends": [
@@ -68,22 +71,26 @@
     ]
   },
   "devDependencies": {
-    "@storybook/addon-essentials": "7.5.3",
-    "@storybook/addon-interactions": "7.5.3",
-    "@storybook/addon-links": "7.5.3",
-    "@storybook/addon-onboarding": "1.0.8",
-    "@storybook/blocks": "7.5.3",
-    "@storybook/preset-create-react-app": "7.5.3",
-    "@storybook/react": "7.5.3",
-    "@storybook/react-webpack5": "7.5.3",
+    "@storybook/addon-essentials": "7.6.6",
+    "@storybook/addon-interactions": "7.6.6",
+    "@storybook/addon-links": "7.6.6",
+    "@storybook/addon-onboarding": "1.0.10",
+    "@storybook/blocks": "7.6.6",
+    "@storybook/preset-create-react-app": "7.6.6",
+    "@storybook/react": "7.6.6",
+    "@storybook/react-webpack5": "7.6.6",
     "@storybook/testing-library": "0.2.2",
-    "@testing-library/react-hooks": "^8.0.1",
+    "@testing-library/jest-dom": "^6.1.5",
+    "@testing-library/react": "^14.2.1",
+    "@testing-library/user-event": "^14.5.1",
     "babel-plugin-named-exports-order": "0.0.2",
+    "coverage-badges-cli": "^1.2.5",
     "eslint": "^8.54.0",
     "eslint-config-react-app": "^7.0.1",
     "eslint-plugin-storybook": "^0.6.15",
+    "history": "^5.3.0",
     "prop-types": "15.8.1",
-    "storybook": "7.5.3",
+    "storybook": "7.6.6",
     "webpack": "5.89.0"
   }
 }

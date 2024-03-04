@@ -1,0 +1,25 @@
+{% extends "admin/change_form.html" %}
+{% load i18n static %}
+
+{% block extrahead %}
+{{ block.super }}
+<style>
+    .custom-actions {
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-end;
+        align-items: center;
+        margin: 1rem 0;
+        gap: 1rem;
+    }
+</style>
+{% endblock %}
+
+
+{% block after_field_sets %}
+{% if original.pk %}
+<div class="custom-actions">
+    <a href="{% url 'admin:section_playlist_export_csv' original.pk %}" class="button">Export to CSV</a>
+</div>
+{% endif %}
+{% endblock %}

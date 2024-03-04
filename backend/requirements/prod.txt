@@ -8,6 +8,8 @@ asgiref==3.7.2
     # via django
 audioread==3.0.0
     # via -r requirements.in/base.txt
+bleach==6.1.0
+    # via django-markup
 certifi==2023.11.17
     # via
     #   requests
@@ -20,31 +22,48 @@ coverage==7.3.2
     # via -r requirements.in/base.txt
 defusedxml==0.7.1
     # via genbadge
-django==3.2.23
+django==3.2.24
     # via
     #   -r requirements.in/base.txt
     #   django-cors-headers
     #   django-inline-actions
+    #   django-markup
 django-cors-headers==4.0.0
     # via -r requirements.in/base.txt
 django-inline-actions==2.4.0
     # via -r requirements.in/base.txt
+django-markup[all_filter_dependencies]==1.8.1
+    # via -r requirements.in/base.txt
+docutils==0.20.1
+    # via
+    #   django-markup
+    #   python-creole
 genbadge[coverage]==1.1.1
     # via -r requirements.in/base.txt
 gunicorn==20.1.0
     # via -r requirements.in/prod.txt
+html5lib==1.1
+    # via textile
 idna==3.6
     # via requests
+importlib-metadata==7.0.1
+    # via markdown
 iptocc==2.1.2
     # via -r requirements.in/base.txt
+markdown==3.5.2
+    # via django-markup
 numpy==1.24.3
     # via pandas
 pandas==1.5.3
     # via iptocc
-pillow==10.1.0
+pillow==10.2.0
     # via genbadge
 psycopg2==2.9.6
     # via -r requirements.in/base.txt
+pygments==2.17.2
+    # via django-markup
+python-creole==1.4.10
+    # via django-markup
 python-dateutil==2.8.2
     # via pandas
 python-dotenv==1.0.0
@@ -53,14 +72,25 @@ pytz==2023.3
     # via
     #   django
     #   pandas
+regex==2023.12.25
+    # via textile
 requests==2.31.0
     # via genbadge
+roman==4.1
+    # via -r requirements.in/base.txt
 sentry-sdk==1.38.0
     # via -r requirements.in/base.txt
 six==1.16.0
-    # via python-dateutil
+    # via
+    #   bleach
+    #   html5lib
+    #   python-dateutil
+smartypants==2.0.1
+    # via django-markup
 sqlparse==0.4.4
     # via django
+textile==4.0.2
+    # via django-markup
 tqdm==4.65.0
     # via -r requirements.in/base.txt
 typing-extensions==4.6.3
@@ -69,6 +99,12 @@ urllib3==2.1.0
     # via
     #   requests
     #   sentry-sdk
+webencodings==0.5.1
+    # via
+    #   bleach
+    #   html5lib
+zipp==3.17.0
+    # via importlib-metadata
 
 # The following packages are considered to be unsafe in a requirements file:
 # setuptools

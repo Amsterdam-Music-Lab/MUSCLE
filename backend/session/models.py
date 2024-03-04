@@ -123,15 +123,7 @@ class Session(models.Model):
     
     def filter_songs(self, filter_by={}):
         # Get pks from sections with given filter and song_id
-        pks = self.playlist.section_set.filter(
-            # IP checking is overridable in filter_by.
-            **(
-                {}
-                if self.participant.is_dutch()
-                else {'song__restricted': []}
-            ),
-            **filter_by
-        ).values_list('song_id', flat=True)
+        pks = self.playlist.section_set.filter(**filter_by).values_list('song_id', flat=True)
 
         # Return None if nothing matches
         if len(pks) == 0:

@@ -2,15 +2,17 @@ import copy
 
 from django.db import models
 from django.utils import timezone
+from django.contrib.postgres.fields import ArrayField
+from typing import List, Dict, Tuple, Any
 from experiment.rules import EXPERIMENT_RULES
 from experiment.standards.iso_languages import ISO_LANGUAGES
-
-from django.contrib.postgres.fields import ArrayField
 from .questions import QUESTIONS_CHOICES, get_default_question_keys
-from django import forms
+
+from .validators import consent_file_validator
 
 language_choices = [(key, ISO_LANGUAGES[key]) for key in ISO_LANGUAGES.keys()]
 language_choices[0] = ('', 'Unset')
+
 
 class ExperimentSeries(models.Model):
     """ A model to allow nesting multiple experiments into a 'parent' experiment """
@@ -26,6 +28,12 @@ class ExperimentSeries(models.Model):
 
     class Meta:
         verbose_name_plural = "Experiment Series"
+
+
+def consent_upload_path(instance, filename):
+    """Generate path to save audio based on playlist.name"""
+    folder_name = instance.slug
+    return 'consent/{0}/{1}'.format(folder_name, filename)
 
 
 class Experiment(models.Model):
@@ -49,6 +57,10 @@ class Experiment(models.Model):
                 blank=True,
                 default=get_default_question_keys
             )
+    consent = models.FileField(upload_to=consent_upload_path,
+                               blank=True,
+                               default='',
+                               validators=[consent_file_validator()])
 
     class Meta:
         ordering = ['name']
@@ -88,12 +100,12 @@ class Experiment(models.Model):
                 ]
             },
         }
-    
+
     def export_sessions(self):
         # export session objects
-        return self.session_set.all()    
+        return self.session_set.all()
 
-    def export_table(self, session_keys, result_keys, export_options):
+    def export_table(self, session_keys: List[str], result_keys: List[str], export_options: Dict[str, Any]) -> Tuple[List[Dict[str, Any]], List[str]]:
         """Export filtered tabular data for admin
             session_keys : session fieldnames to be included
             result_keys : result fieldnames to be included
@@ -142,7 +154,7 @@ class Experiment(models.Model):
                     this_row = copy.deepcopy(row)
                 for result in session.result_set.all():
                     # Add all results to one row
-                    if not 'wide_format' in export_options:
+                    if 'wide_format' not in export_options:
                         this_row = copy.deepcopy(row)
                     # Get data for al potential result fields
                     full_result_data = {
@@ -151,8 +163,10 @@ class Experiment(models.Model):
                         'result_score': result.score,
                         'result_comment': result.comment,
                         'expected_response': result.expected_response,
-                        'given_response': result.given_response
+                        'given_response': result.given_response,
+                        'question_key': result.question_key,
                     }
+
                     result_data = {}
                     # Add counter for single row / wide format
                     if 'wide_format' in export_options:
@@ -183,7 +197,7 @@ class Experiment(models.Model):
                     fieldnames.update(result_data.keys())
                     result_counter += 1
                     # Append row for long format
-                    if not 'wide_format' in export_options:
+                    if 'wide_format' not in export_options:
                         rows.append(this_row)
                 # Append row for wide format
                 if 'wide_format' in export_options:
@@ -203,6 +217,7 @@ class Experiment(models.Model):
             return score['final_score__max']
 
         return 0
+
 
 class Feedback(models.Model):
     text = models.TextField()

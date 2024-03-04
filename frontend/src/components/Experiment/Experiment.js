@@ -1,8 +1,10 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
-import { useExperiment, useParticipant, getNextRound } from "../../API";
 import { TransitionGroup, CSSTransition } from "react-transition-group";
 import { withRouter } from "react-router-dom";
+import classNames from "classnames";
 
+import { useBoundStore } from "../../util/stores";
+import { createSession, getNextRound, useExperiment } from "../../API";
 import Consent from "../Consent/Consent";
 import DefaultPage from "../Page/DefaultPage";
 import ToontjeHoger from "../ToontjeHoger/ToontjeHoger";
@@ -11,11 +13,11 @@ import Final from "../Final/Final";
 import Loading from "../Loading/Loading";
 import Playlist from "../Playlist/Playlist";
 import Score from "../Score/Score";
-import StartSession from "../StartSession/StartSession";
 import Trial from "../Trial/Trial";
 import useResultHandler from "../../hooks/useResultHandler";
 import Info from "../Info/Info";
-import classNames from "classnames";
+import FloatingActionButton from "components/FloatingActionButton/FloatingActionButton";
+import UserFeedback from "components/UserFeedback/UserFeedback";
 
 // Experiment handles the main experiment flow:
 // - Loads the experiment and participant
@@ -23,58 +25,90 @@ import classNames from "classnames";
 // - It handles sending results to the server
 // - Implements participant_id as URL parameter, e.g. http://localhost:3000/bat?participant_id=johnsmith34
 //   Empty URL parameter "participant_id" is the same as no URL parameter at all
-const Experiment = ({ match, location }) => {
+const Experiment = ({ match }) => {
     const startState = { view: "LOADING" };
+    // Stores
+    const setError = useBoundStore(state => state.setError);
+    const participant = useBoundStore((state) => state.participant);
+    const setSession = useBoundStore((state) => state.setSession);
+    const session = useBoundStore((state) => state.session);
 
     // Current experiment state
-    const [state, setState] = useState(startState);
-    const [playlist, setPlaylist] = useState(null);
     const [actions, setActions] = useState([]);
-    const session = useRef(null);
+    const [state, setState] = useState(startState);
+    const playlist = useRef(null);
 
     // API hooks
     const [experiment, loadingExperiment] = useExperiment(match.params.slug);
-    const urlQueryString = useRef(location.search); // location.search is a part of URL after (and incuding) "?"
-    const [participant, loadingParticipant] = useParticipant(urlQueryString.current);
 
     const loadingText = experiment ? experiment.loading_text : "";
     const className = experiment ? experiment.class_name : "";
 
-    // Load state, set random key
-    const loadState = useCallback((state) => {
+    // set random key before setting state
+    // this will assure that `state` will be recognized as an updated object
+    const updateState = useCallback((state) => {
         if (!state) return;
         state.key = Math.random();
         setState(state);
     }, []);
 
-    // Create error view
-    const setError = useCallback(
-        (error) => {
-            loadState({ view: "ERROR", error });
-        },
-        [loadState]
-    );
-
-    const updateActions = useCallback( (currentActions) => {
-        let newActions = currentActions;
-        const newState = newActions.shift();
-        loadState(newState);
+    const updateActions = useCallback((currentActions) => {
+        const newActions = currentActions;
         setActions(newActions);
-    }, [loadState, setActions]);
+        const newState = newActions.shift();
+        updateState(newState);
+    }, [updateState]);
+
+    const checkSession = async () => {
+        if (session) {
+            return session;
+        }
+        try {
+            const newSession = await createSession({experiment, participant, playlist})
+            setSession(newSession);
+            return newSession;
+        }
+        catch(err) {
+            setError(`Could not create a session: ${err}`)
+        };
+    };
+
+    const continueToNextRound = async() => {
+        const thisSession = await checkSession();
+        // Try to get next_round data from server
+        const round = await getNextRound({
+            session: thisSession
+        });
+        if (round) {
+            updateActions(round.next_round);
+        } else {
+            setError(
+                "An error occured while loading the data, please try to reload the page. (Error: next_round data unavailable)"
+            );
+            setState(undefined);
+        }
+    };
+
+    // trigger next action from next_round array, or call session/next_round
+    const onNext = async (doBreak) => {
+        if (!doBreak && actions.length) {
+            updateActions(actions);
+        } else {
+            continueToNextRound();
+        }
+    };
 
     // Start first_round when experiment and partipant have been loaded
     useEffect(() => {
-
-        if (urlQueryString.current && !(new URLSearchParams(urlQueryString.current).has("participant_id"))) {
-            setError("Unknown URL parameter, use ?participant_id=");
-            return
-        }
-
         // Check if done loading
-        if (!loadingExperiment && !loadingParticipant) {
+        if (!loadingExperiment && participant) {
             // Loading succeeded
             if (experiment) {
-                updateActions(experiment.next_round);
+                if (experiment.next_round.length) {
+                    updateActions([ ...experiment.next_round ]);
+                } else {
+                    setError("The first_round array from the ruleset is empty")
+                }
             } else {
                 // Loading error
                 setError("Could not load experiment");
@@ -84,35 +118,13 @@ const Experiment = ({ match, location }) => {
         experiment,
         loadingExperiment,
         participant,
-        loadingParticipant,
         setError,
-        updateActions,
-        loadState,
+        updateActions
     ]);
-
-    // trigger next action from next_round array, or call session/next_round
-    const onNext = async (doBreak) => {
-        if (!doBreak && actions.length) {
-            updateActions(actions);
-        } else {
-            // Try to get next_round data from server
-            const round = await getNextRound({
-                session: session.current,
-            });
-            if (round) {
-                updateActions(round.next_round);
-            } else {
-                setError(
-                    "An error occured while loading the data, please try to reload the page. (Error: next_round data unavailable)"
-                );
-            }
-        }
-    };
 
     const onResult = useResultHandler({
         session,
         participant,
-        loadState,
         onNext,
         state,
     });
@@ -122,16 +134,11 @@ const Experiment = ({ match, location }) => {
         // Default attributes for every view
         const attrs = {
             experiment,
-            session,
             participant,
-            loadState,
-            playlist,
             loadingText,
-            setPlaylist,
-            setError,
             onResult,
             onNext,
-            urlQueryString,
+            playlist,
             ...state,
         };
 
@@ -155,12 +162,8 @@ const Experiment = ({ match, location }) => {
             // -------------------------
             case "PLAYLIST":
                 return <Playlist {...attrs} />;
-            case "START_SESSION":
-                return <StartSession {...attrs} />;
             case "LOADING":
                 return <Loading {...attrs} />;
-            case "ERROR":
-                return <div>Error: {state.error}</div>;
             case "CONSENT":
                 return <Consent {...attrs} />;
             case "INFO":
@@ -184,15 +187,11 @@ const Experiment = ({ match, location }) => {
 
     // Fail safe
     if (!state) {
-        return <div>Error: No valid state</div>;
+        setError('No valid state');
     }
 
-    let key = state.view;
+    const view = state.view;
 
-    // Force view refresh for consecutive questions
-    if (state.view === "QUESTION") {
-        key = state.question.key;
-    }
     return (
         <TransitionGroup
             className={classNames(
@@ -201,33 +200,46 @@ const Experiment = ({ match, location }) => {
                     ? "experiment-" + experiment.slug
                     : ""
             )}
+            data-testid="experiment-wrapper"
         >
             <CSSTransition
-                key={key}
+                key={view}
                 timeout={{ enter: 300, exit: 0 }}
                 classNames={"transition"}
                 unmountOnExit
             >
-                {(!loadingExperiment && experiment) || key === "ERROR" ? (
+                {(!loadingExperiment && experiment) || view === "ERROR" ? (
                     <DefaultPage
                         title={state.title}
                         logoClickConfirm={
-                            ["FINAL", "ERROR", "TOONTJEHOGER"].includes(key) ||
-                            // Info pages at end of experiment
-                            (key === "INFO" &&
-                                (!state.next_round || !state.next_round.length))
+                            ["FINAL", "ERROR", "TOONTJEHOGER"].includes(view) ||
+                                // Info pages at end of experiment
+                                (view === "INFO" &&
+                                    (!state.next_round || !state.next_round.length))
                                 ? null
                                 : "Are you sure you want to stop this experiment?"
                         }
                         className={className}
                     >
-                        {render(state.view)}
+                        {render(view)}
+
+                        {experiment?.feedback_info?.show_float_button && (
+                            <FloatingActionButton>
+                                <UserFeedback
+                                    experimentSlug={experiment.slug}
+                                    participant={participant}
+                                    feedbackInfo={experiment.feedback_info}
+                                    inline={false} />
+                            </FloatingActionButton>
+                        )}
                     </DefaultPage>
                 ) : (
                     <div className="loader-container">
                         <Loading />
                     </div>
                 )}
+
+
             </CSSTransition>
         </TransitionGroup>
     );

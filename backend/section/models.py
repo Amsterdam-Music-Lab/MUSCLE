@@ -2,12 +2,14 @@ import datetime
 import random
 import csv
 
+from django import forms
 from django.db import models
 from django.utils import timezone
 from django.urls import reverse
 
 from .utils import CsvStringBuilder
 from .validators import audio_file_validator
+
 
 class Playlist(models.Model):
     """List of sections to be used in an Experiment"""
@@ -19,12 +21,12 @@ class Playlist(models.Model):
 
     default_csv_row = 'CSV Format: artist_name [string],\
         song_name [string], start_position [float], duration [float],\
-        "path/filename.mp3" [string], restricted_to_nl [int 0=False 1=True], tag [string], group [string]'
+        "path/filename.mp3" [string], tag [string], group [string]'
     csv = models.TextField(blank=True, help_text=default_csv_row)
 
     def save(self, *args, **kwargs):
         """Update playlist csv field on every save"""
-        if self.process_csv is False:  
+        if self.process_csv is False:
             self.csv = self.update_admin_csv()
         super(Playlist, self).save(*args, **kwargs)
 
@@ -66,7 +68,7 @@ class Playlist(models.Model):
         # Add new sections from csv
         try:
             reader = csv.DictReader(self.csv.splitlines(), fieldnames=(
-                'artist', 'name', 'start_time', 'duration', 'filename', 'restrict_to_nl', 'tag', 'group'))
+                'artist', 'name', 'start_time', 'duration', 'filename', 'tag', 'group'))
         except csv.Error:
             return {
                 'status': self.CSV_ERROR,
@@ -95,8 +97,7 @@ class Playlist(models.Model):
 
             # check for valid numbers
             if not (is_number(row['start_time'])
-                    and is_number(row['duration'])
-                    and is_number(row['restrict_to_nl'])):
+                    and is_number(row['duration'])):
                 return {
                     'status': self.CSV_ERROR,
                     'message': "Error: Expected number fields on line: " + str(lines)
@@ -106,9 +107,7 @@ class Playlist(models.Model):
             song = None
             if row['artist'] and row['name']:
                 song, created = Song.objects.get_or_create(artist=row['artist'], name=row['name'])
-            if int(row['restrict_to_nl']) == 1:
-                song.restricted = [{"restricted": "nl"}]
-                song.save()
+
             section = Section(playlist=self,
                               start_time=float(row['start_time']),
                               duration=float(row['duration']),
@@ -126,9 +125,6 @@ class Playlist(models.Model):
                         if not ex_section.song:
                             ex_section.song = song
                             ex_section.save()
-                        elif ex_section.song.restricted != song.restricted:
-                            ex_section.song.restricted = song.restricted
-                            ex_section.song.save()
                     ex_section.start_time = section.start_time
                     ex_section.duration = section.duration
                     ex_section.tag = section.tag
@@ -153,8 +149,8 @@ class Playlist(models.Model):
         self.section_set.filter(pk__in=delete_ids).delete()
 
         # Reset process csv option and save playlist
-        self.process_csv = False        
-        self.save()        
+        self.process_csv = False
+        self.save()
 
         return {
             'status': self.CSV_OK,
@@ -179,7 +175,6 @@ class Playlist(models.Model):
             return None
         return self.section_set.get(pk=random.choice(pks))
 
-
     def export_admin(self):
         """Export data for admin"""
         return {
@@ -190,48 +185,47 @@ class Playlist(models.Model):
                 'sections': [section.export_admin() for section in self.section_set.all()],
             },
         }
-    
+
     def export_sections(self):
         # export section objects
         return self.section_set.all()
-    
+
     def update_admin_csv(self):
         """Update csv data for admin"""
         csvfile = CsvStringBuilder()
-        writer = csv.writer(csvfile)            
+        writer = csv.writer(csvfile)
         for section in self.section_set.all():
             if section.song:
                 this_artist = section.song.artist
                 this_name = section.song.name
-                this_restricted = '1' if section.song.restricted else '0'
             else:
                 this_artist = ''
                 this_name = ''
-                this_restricted = ''
             writer.writerow([this_artist,
                             this_name,
                             section.start_time,
                             section.duration,
                             section.filename,
-                            this_restricted,
                             section.tag,
                             section.group])
         csv_string = csvfile.csv_string
         return ''.join(csv_string)
     
+
 class Song(models.Model):
     """ A Song object with an artist and name (unique together)"""
     artist = models.CharField(db_index=True, blank=True, default='', max_length=128)
     name = models.CharField(db_index=True, blank=True, default='' ,max_length=128)
-    restricted = models.JSONField(default=list, blank=True)
-    
+
     class Meta:
         unique_together = ("artist", "name")
+
 
 def audio_upload_path(instance, filename):
     """Generate path to save audio based on playlist.name"""
     folder_name = instance.playlist.name.replace(' ', '')
     return '{0}/{1}'.format(folder_name, filename)
+
 
 class Section(models.Model):
     """A snippet/section of a song, belonging to a Playlist"""
@@ -246,7 +240,7 @@ class Section(models.Model):
     duration = models.FloatField(default=0.0)  # sec
     filename = models.FileField(upload_to=audio_upload_path, max_length=255, validators=[audio_file_validator()])
     play_count = models.PositiveIntegerField(default=0)
-    code = models.PositiveIntegerField(default=random_code)    
+    code = models.PositiveIntegerField(default=random_code)
     tag = models.CharField(max_length=128, default='0', blank=True)
     group = models.CharField(max_length=128, default='0', blank=True)
 
@@ -266,7 +260,7 @@ class Section(models.Model):
             return self.song.artist
         else:
             return ''
-    
+
     def song_name(self):
         if self.song:
             return self.song.name
@@ -303,22 +297,18 @@ class Section(models.Model):
             'name': self.song.name,
             'play_count': self.play_count
         }
-       
+
     def export_song(self):
         return self.instance
 
     def export_admin_csv(self):
         """Export csv data for admin"""
         return [
-            self.id,
-            self.pk,
             self.song.artist,
             self.song.name,
             self.start_time,
             self.duration,
             self.filename,
-            self.song.restricted,
-            self.play_count,
             self.tag,
             self.group,
         ]

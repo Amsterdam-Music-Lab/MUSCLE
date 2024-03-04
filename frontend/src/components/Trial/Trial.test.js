@@ -3,6 +3,8 @@ import { render, screen } from '@testing-library/react';
 
 import Trial from "./Trial";
 
+jest.mock("../../util/stores");
+
 const feedback_form = {
     form: [{
         key: 'test_question',

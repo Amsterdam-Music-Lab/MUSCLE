@@ -8,10 +8,11 @@ from experiment.questions.musicgens import MUSICGENS_17_W_VARIANTS
 from .hooked import Hooked
 from result.utils import prepare_result
 
+
 class ThatsMySong(Hooked):
 
     ID = 'THATS_MY_SONG'
-    consent_file = None
+    consent_file = ''
     relevant_keys = ['recognize', 'heard_before', 'playlist_decades']
     round_modifier = 1
 

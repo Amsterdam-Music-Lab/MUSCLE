@@ -11,7 +11,7 @@ from result.models import Result
 from session.models import Session
 
 # Expected field count per model
-EXPECTED_EXPERIMENT_FIELDS = 13
+EXPECTED_EXPERIMENT_FIELDS = 14
 EXPECTED_SESSION_FIELDS = 9
 EXPECTED_RESULT_FIELDS = 12
 EXPECTED_PARTICIPANT_FIELDS = 5
@@ -20,10 +20,12 @@ EXPECTED_PARTICIPANT_FIELDS = 5
 class MockRequest:
     pass
 
+
 request = MockRequest()
 
 this_experiment_admin = ExperimentAdmin(
     model=Experiment, admin_site=AdminSite)
+
 
 class TestAdminExperiment(TestCase):    
 
@@ -62,20 +64,17 @@ class TestAdminExperiment(TestCase):
         participant_fields = [key for key in participant]
         self.assertEqual(len(participant_fields), EXPECTED_PARTICIPANT_FIELDS)
 
-    
 
 class TestAdminExperimentExport(TestCase):
 
     fixtures = ['playlist', 'experiment']
- 
+
     @classmethod
     def setUpTestData(cls):
         cls.participant = Participant.objects.create(unique_hash=42)
         cls.experiment = Experiment.objects.get(name='Hooked-China')
-        print(cls.experiment)
         for playlist in cls.experiment.playlists.all():
-            playlist.update_sections()            
-        print(cls.experiment.pk)
+            playlist.update_sections()
         cls.session = Session.objects.create(
             experiment=cls.experiment,
             participant=cls.participant,
@@ -84,14 +83,15 @@ class TestAdminExperimentExport(TestCase):
             Result.objects.create(
                 session=Session.objects.first(),
                 expected_response = i,
-                given_response = i
+                given_response = i,
+                question_key = 'test_question_' + str(i),
             )
             Result.objects.create(
                 participant=cls.participant,
                 question_key= i,
-                given_response = i
+                given_response = i,
             )
-            
+
     def setUp(self):
         self.client = Client()
 
@@ -133,3 +133,18 @@ class TestAdminExperimentExport(TestCase):
         # test response from forced download
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response['content-type'], 'application/x-zip-compressed')
+
+    def test_export_table_includes_question_key(self):
+        session_keys = ['session_start', 'session_end']
+        result_keys = ['question_key']
+        export_options = ['convert_result_json']  # Adjust based on your needs
+
+        # Call the method under test
+        rows, fieldnames = self.experiment.export_table(session_keys, result_keys, export_options)
+
+        # Assert that 'question_key' is in the fieldnames and check its value in rows
+        self.assertIn('question_key', fieldnames)
+        for i in range(len(rows)):
+            row = rows[i]
+            self.assertIn('question_key', row)
+            self.assertEqual(row['question_key'], 'test_question_' + str(i))

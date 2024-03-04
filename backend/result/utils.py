@@ -4,6 +4,7 @@ from .models import Result
 from experiment.questions.profile_scoring_rules import PROFILE_SCORING_RULES
 from result.score import SCORING_RULES
 
+
 def get_result(session, data):
     result_id = data.get('result_id')
     try:
@@ -15,6 +16,7 @@ def get_result(session, data):
         except Result.DoesNotExist:
             raise
     return result
+
 
 def handle_results(data, session):
     """
@@ -34,6 +36,7 @@ def handle_results(data, session):
         result.save()
         result = score_result(form_element, session)
     return result
+
 
 def prepare_profile_result(question_key, participant, **kwargs):
     ''' Create a Result object, and provide its id to be serialized
@@ -60,7 +63,8 @@ def prepare_result(question_key: str, session: Session, **kwargs) -> int:
     - session: the session on which the Result is going to be registered
     possible kwargs:
         - section: optionally, provide a section to which the Result is going to be tied
-        - expected_response: optionally, provide the correct answer, used for scoring
+        - expected_response: optionally, provide the correct answer, used for scoring  
+        - json_data: optionally, provide json data tied to this result
         - comment: optionally, provide a comment to be saved in the database, e.g. "training phase"
         - scoring_rule: optionally, provide a scoring rule
     '''
@@ -70,6 +74,7 @@ def prepare_result(question_key: str, session: Session, **kwargs) -> int:
         **kwargs
     )
     return result.id
+
 
 def score_result(data, session):
     """
@@ -100,6 +105,7 @@ def score_result(data, session):
     result.score = score
     result.save()
     return result
+
 
 def apply_scoring_rule(result, data):
     scoring_rule = SCORING_RULES.get(result.scoring_rule)

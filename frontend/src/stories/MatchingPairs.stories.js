@@ -1,6 +1,22 @@
-import MatchingPairs from '../components/Playback/MatchingPairs';
+import useBoundStore from 'util/stores';
+import MatchingPairs, { SCORE_FEEDBACK_DISPLAY } from '../components/Playback/MatchingPairs';
 
 import audio from './assets/audio.wav';
+
+
+const StoreDecorator = (Story) => {
+    const setSession = useBoundStore(state => state.setSession);
+    const setParticipant = useBoundStore(state => state.setParticipant);
+    setSession({ id: 1 });
+    setParticipant({ id: 1, csrf_token: '123' });
+
+    return (
+        <div id="root" style={{ width: '100%', height: '100%', backgroundColor: '#ddd', padding: '1rem' }}>
+            <Story />
+        </div>
+    )
+}
+
 
 export default {
     title: 'MatchingPairs',
@@ -87,13 +103,7 @@ export const Default = {
     args: {
         ...getDefaultArgs(),
     },
-    decorators: [
-        (Story) => (
-            <div id="root" style={{ width: '100%', height: '100%', backgroundColor: '#ddd', padding: '1rem' }}>
-                <Story />
-            </div>
-        ),
-    ],
+    decorators: [ StoreDecorator ],
     parameters: {
         docs: {
             description: {
@@ -149,19 +159,42 @@ export const WithThreeColumns = {
                 memory: false,
             },
         ],
-    },
-    ),
-    decorators: [
-        (Story) => (
-            <div id="root" style={{ width: '100%', height: '100%', backgroundColor: '#ddd', padding: '1rem' }}>
-                <Story />
-            </div>
-        ),
-    ],
+    }),
+    decorators: [ StoreDecorator ],
     parameters: {
         docs: {
             description: {
                 component: 'This story shows the component with three columns. The component automatically adjusts the number of columns based on the number of sections. Six or less sections will result in three columns, more than six sections will result in four columns.',
+            },
+        },
+    },
+};
+
+export const WithSmallBottomRightScoreFeedback = {
+    args: {
+        ...getDefaultArgs(),
+        scoreFeedbackDisplay: SCORE_FEEDBACK_DISPLAY.SMALL_BOTTOM_RIGHT
+    },
+    decorators: [ StoreDecorator ],
+    parameters: {
+        docs: {
+            description: {
+                component: 'This story shows the component with the default props.',
+            },
+        },
+    },
+};
+
+export const WithShowAnimation = {
+    args: {
+        ...getDefaultArgs(),
+        showAnimation: true,
+    },
+    decorators: [ StoreDecorator ],
+    parameters: {
+        docs: {
+            description: {
+                component: 'This story shows the component with the default props.',
             },
         },
     },

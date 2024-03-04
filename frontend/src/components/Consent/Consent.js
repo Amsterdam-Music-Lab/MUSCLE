@@ -5,10 +5,12 @@ import { URLS } from "../../config";
 import Button from "../Button/Button";
 import Loading from "../Loading/Loading";
 import { createConsent, useConsent } from "../../API";
+import classNames from "classnames";
 
 // Consent is an experiment view that shows the consent text, and handles agreement/stop actions
-const Consent = ({ title, text, experiment, participant, onNext, confirm, deny, urlQueryString }) => {
+const Consent = ({ title, text, experiment, participant, onNext, confirm, deny }) => {
     const [consent, loadingConsent] = useConsent(experiment.slug);
+    const urlQueryString = window.location.search;
 
     // Listen for consent, and auto advance if already given
     useEffect(() => {
@@ -54,9 +56,10 @@ const Consent = ({ title, text, experiment, participant, onNext, confirm, deny, 
 
     const correction = width > 720 ? 300 : 250;
 
+
     // Show consent
     return (
-        <div className="aha__consent">
+        <div className={classNames("aha__consent")}>
             <div className="aha__consent-header d-flex">
                 <div className="flex-fill">
                     <h3>{title}</h3>

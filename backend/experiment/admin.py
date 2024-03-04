@@ -17,6 +17,7 @@ from section.models import Section, Song
 from result.models import Result
 from participant.models import Participant
 
+
 class FeedbackInline(admin.TabularInline):
     """Inline to show results linked to given participant
     """
@@ -25,6 +26,7 @@ class FeedbackInline(admin.TabularInline):
     fields = ['text']
     extra = 0
 
+
 class ExperimentAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
     list_display = ('name', 'rules', 'rounds', 'playlist_count',
                     'session_count', 'active')
@@ -32,7 +34,7 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
     search_fields = ['name']
     inline_actions = ['export', 'export_csv']
     fields = ['name', 'slug', 'url', 'hashtag', 'language', 'active', 'rules',
-              'rounds', 'bonus_points', 'playlists', 'experiment_series','questions']
+              'rounds', 'bonus_points', 'playlists', 'experiment_series','consent', 'questions']
     inlines = [FeedbackInline]
     form = ExperimentForm
 
@@ -138,12 +140,15 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
 
     export_csv.short_description = "Export CSV"
 
+
 admin.site.register(Experiment, ExperimentAdmin)
+
 
 class ModelFormFieldAsJSON(ModelMultipleChoiceField):
     """ override clean method to prevent pk lookup to save querysets """
     def clean(self, value):
         return value
+
 
 class ExperimentSeriesForm(ModelForm):
     def __init__(self, *args, **kwargs):
@@ -158,8 +163,10 @@ class ExperimentSeriesForm(ModelForm):
         model = ExperimentSeries
         fields = ['name', 'first_experiments', 'random_experiments', 'last_experiments']
 
+
 class ExperimentSeriesAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
     fields = ['name', 'first_experiments', 'random_experiments', 'last_experiments']
     form = ExperimentSeriesForm
+
 
 admin.site.register(ExperimentSeries, ExperimentSeriesAdmin)

@@ -13,7 +13,7 @@ SESSION_CHOICES = [('experiment_id', 'Experiment ID'),
                    ('participant_access_info', 'Participant access info'),
                    ('session_start', 'Session start time'),
                    ('session_end', 'Session end time'),
-                   ('final_score', 'Final score')
+                   ('final_score', 'Final score'),
                    ]
 
 # result_keys for Export CSV
@@ -22,7 +22,8 @@ RESULT_CHOICES = [('section_name', 'Section name'),
                   ('result_score', 'Result score'),
                   ('result_comment', 'Result comment'),
                   ('expected_response', 'Expected response'),
-                  ('given_response', 'Given response')
+                  ('given_response', 'Given response'),
+                  ('question_key', 'Question key'),
                   ]
 
 # export_options for Export CSV
@@ -144,6 +145,10 @@ class ExperimentForm(ModelForm):
         model = Experiment
         fields = ['name', 'slug', 'active', 'rules',
                   'rounds', 'bonus_points', 'playlists', 'experiment_series']
+        help_texts = {'consent': 'Upload an HTML (.html) or MARKDOWN (.md) file with a text to ask a user its consent<br> \
+                      for using the experiment data for this instance of the experiment.<br> \
+                      This field will override any consent text loaded from the rules file. <br>\
+                      HTML files also allow django template tags so that the text can be translated'}
 
     class Media:
         js = ["experiment_admin.js"]

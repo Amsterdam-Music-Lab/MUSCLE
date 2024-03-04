@@ -1,5 +1,6 @@
 from django.db import migrations, models
 
+
 def apply_sections(apps, from_app, to_app):
     ''' create sections and playlists
     delete old ones when done '''
@@ -22,6 +23,7 @@ def apply_sections(apps, from_app, to_app):
         )
         new_section.save()
 
+
 def get_or_create_playlist(playlist, apps, to_app):
     Playlist = apps.get_model(to_app, 'Playlist')
     try:
@@ -37,11 +39,14 @@ def get_or_create_playlist(playlist, apps, to_app):
         new_playlist.save()
     return new_playlist 
 
+
 def change_playlist_reference(apps, schema_editor):
     apply_changes(apps, 'experiment', 'section')
 
+
 def backwards_change_playlist_reference(apps, schema_editor):
     apply_changes(apps, 'section', 'experiment')
+
 
 def apply_changes(apps, from_app, to_app):
     Experiment = apps.get_model('experiment', 'Experiment')
@@ -57,11 +62,13 @@ def apply_changes(apps, from_app, to_app):
                 exp.playlists.add(new_playlist)
             exp.save()
 
+
 def get_playlist(playlist, apps, app_name='section'):
     Playlist = apps.get_model(app_name, 'Playlist')
     return Playlist.objects.get(
         name=playlist.name
     )
+
 
 class Migration(migrations.Migration):
 

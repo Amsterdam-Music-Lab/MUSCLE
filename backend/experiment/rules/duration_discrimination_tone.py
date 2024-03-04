@@ -4,6 +4,7 @@ from experiment.actions import Explainer
 from experiment.actions.utils import render_feedback_trivia
 from .duration_discrimination import DurationDiscrimination
 
+
 class DurationDiscriminationTone(DurationDiscrimination):
     ID = 'DURATION_DISCRIMINATION_TONE'
     condition = _('tone')

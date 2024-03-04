@@ -6,7 +6,7 @@ from django.utils.translation import gettext as _
 from django.template.loader import render_to_string
 
 from .base import Base
-from experiment.actions import Consent, Explainer, Final, StartSession, Step
+from experiment.actions import Consent, Explainer, Final, Step
 
 
 class RhythmExperimentSeries(Base):
@@ -35,21 +35,23 @@ class RhythmExperimentSeries(Base):
             ],
             button_label=_("Continue")
         )
-
     
     def first_round(self, experiment):
         """Create data for the first experiment rounds."""
-        # read consent form from file
-        rendered = render_to_string(self.consent_form)
-        consent = Consent(rendered, title=_(
-            'Informed consent'), confirm=_('I agree'), deny=_('Stop'))
-        start_session = StartSession()
+
+        # read consent form from file or admin (admin has priority)
+        consent = Consent(
+            experiment.consent,
+            title=_('Informed consent'),
+            confirm=_('I agree'),
+            deny=_('Stop'),
+            url=self.consent_form
+            )
+        
         return [
             consent,
             self.intro_explainer(),
-            start_session
         ]
-
     
     def next_round(self, session):
         data = session.load_json_data()

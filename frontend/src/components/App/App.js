@@ -1,18 +1,47 @@
-import React from "react";
+import {useEffect, React} from "react";
 import {
     BrowserRouter as Router,
     Switch,
     Route,
     Redirect
 } from "react-router-dom";
-import { URLS, EXPERIMENT_SLUG } from "../../config";
+import axios from "axios";
+
+import { API_BASE_URL, EXPERIMENT_SLUG, URLS } from "../../config";
+import { URLS as API_URLS } from "../../API";
+import useBoundStore from "../../util/stores";
 import Experiment from "../Experiment/Experiment";
 import Profile from "../Profile/Profile";
 import Reload from "../Reload/Reload";
 import StoreProfile from "../StoreProfile/StoreProfile.js";
 
+
 // App is the root component of our application
 const App = () => {
+    const error = useBoundStore(state => state.error);
+    const setError = useBoundStore(state => state.setError);
+    const setParticipant = useBoundStore((state) => state.setParticipant);
+    const queryParams = window.location.search;
+    
+    useEffect(() => {
+        if (queryParams && !(new URLSearchParams(queryParams).has("participant_id"))) {
+            setError("Unknown URL parameter, use ?participant_id=");
+            return;
+        }
+        try {
+            axios.get(API_BASE_URL + API_URLS.participant.current + queryParams).then(response => {
+                setParticipant(response.data);
+            });
+        } catch (err) {
+            console.error(err);
+            setError(err);
+        }
+    }, [setError, queryParams, setParticipant])
+
+    if (error) {
+        return <p className="aha__error">Error: {error}</p>;
+    }
+
     return (
         <Router className="aha__app">
             <Switch>

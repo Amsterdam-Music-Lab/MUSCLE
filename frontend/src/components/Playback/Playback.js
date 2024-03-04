@@ -7,26 +7,24 @@ import { playAudio, pauseAudio } from "../../util/audioControl";
 import AutoPlay from "./Autoplay";
 import PlayButton from "../PlayButton/PlayButton";
 import MultiPlayer from "./MultiPlayer";
-import SpectrogramPlayer from "./SpectrogramPlayer";
+import ImagePlayer from "./ImagePlayer";
 import MatchingPairs from "./MatchingPairs";
 import Preload from "../Preload/Preload";
+import VisualMatchingPairs from "components/VisualMatchingPairs/VisualMatchingPairs";
 
 export const AUTOPLAY = "AUTOPLAY";
 export const BUTTON = "BUTTON";
 export const MULTIPLAYER = "MULTIPLAYER";
-export const SPECTROGRAM = "SPECTROGRAM";
+export const IMAGE = "IMAGE";
 export const MATCHINGPAIRS = "MATCHINGPAIRS";
 export const PRELOAD = "PRELOAD";
+export const VISUALMATCHINGPAIRS = "VISUALMATCHINGPAIRS";
 
 const Playback = ({
-    playerType,
-    sections,
-    instruction,
+    playbackArgs,
     onPreloadReady,
-    preloadMessage = '',
     autoAdvance,
     responseTime,
-    playConfig = {},
     submitResult,
     startedPlaying,
     finishedPlaying,
@@ -38,11 +36,16 @@ const Playback = ({
     const setView = (view, data = {}) => {
         setState({ view, ...data });
     }
+    
+    // check if the users device is webaudio compatible
+    const playMethod = webAudio.compatibleDevice() ? playbackArgs.play_method : 'EXTERNAL';    
+    
+    const sections = playbackArgs.sections;
 
     // Keep track of which player has played, in a an array of player indices
     const [hasPlayed, setHasPlayed] = useState([]);
     const prevPlayerIndex = useRef(-1);
-
+    
     useEffect(() => {
         const index = prevPlayerIndex.current;
         if (index !== -1) {
@@ -66,161 +69,163 @@ const Playback = ({
     }, [cancelAudioListeners]);
 
     // Audio ended playing
-    const onAudioEnded = useCallback(() => {
-        setPlayerIndex(-1);
+    const onAudioEnded = useCallback((index) => {
+        
+        // If the player index is not the last player index, return
+        if (lastPlayerIndex.current === index) {
+            setPlayerIndex(-1);
+        }
 
-        //AJ: added for categorization experiment for form activation after playback and auto_advance to work properly
-        if (playConfig.timeout_after_playback) {
-            setTimeout(finishedPlaying, playConfig.timeout_after_playback);
+        if (playbackArgs.timeout_after_playback) {
+            setTimeout(finishedPlaying, playbackArgs.timeout_after_playback);
         } else {
             finishedPlaying();
         }
-    }, []);
-
+    }, [playbackArgs, finishedPlaying]);
+    
     // Keep track of last player index
     useEffect(() => {
         lastPlayerIndex.current = playerIndex;
     }, [playerIndex]);
 
-    if (playConfig.play_method === 'EXTERNAL') {
-        webAudio.closeWebAudio();
+    if (playMethod === 'EXTERNAL') {                    
+        webAudio.closeWebAudio();            
     }
 
-    // Play section with given index
-    const playSection = useCallback(
-        (index = 0) => {
-
-                if (index !== lastPlayerIndex.current) {
-                    // Load different audio
-                    if (prevPlayerIndex.current !== -1) {
-                        pauseAudio(playConfig);
-                    }
-                    // Store player index
-                    setPlayerIndex(index);
-
-                    // Determine if audio should be played
-                    if (playConfig.mute) {
-                        setPlayerIndex(-1);
-                        pauseAudio(playConfig);
-                        return;
-                    }
-                    const playheadShift = getPlayheadShift();
-                    let latency = playAudio(playConfig, sections[index], playheadShift);
-
-                    // Cancel active events
-                    cancelAudioListeners();
-
-                    // listen for active audio events
-                    if (playConfig.play_method === 'BUFFER') {
-                        activeAudioEndedListener.current = webAudio.listenOnce("ended", onAudioEnded);
-                    } else {
-                        activeAudioEndedListener.current = audio.listenOnce("ended", onAudioEnded);
-                    }
-
-                    // Compensate for audio latency and set state to playing
-                    setTimeout(startedPlaying && startedPlaying(), latency);
-                    return;
-                }
-
-                // Stop playback
-                if (lastPlayerIndex.current === index) {
-                        pauseAudio(playConfig);
-                        setPlayerIndex(-1);
-                        return;
-                    }
-            },
-            [playAudio, pauseAudio, sections, activeAudioEndedListener, cancelAudioListeners, startedPlaying, onAudioEnded]
-    );
-
-    const getPlayheadShift = () => {
+    const getPlayheadShift = useCallback(() => {
         /* if the current Playback view has resume_play set to true,
         retrieve previous Playback view's decisionTime from sessionStorage
         */
-        return playConfig.resume_play ? 
+        return playbackArgs.resume_play ? 
         parseFloat(window.sessionStorage.getItem('decisionTime')) : 0;
-    }
+    }, [playbackArgs]
+    )
+
+    // Play section with given index
+    const playSection = useCallback((index = 0) => {
+        if (index !== lastPlayerIndex.current) {
+            // Load different audio
+            if (prevPlayerIndex.current !== -1) {
+                pauseAudio(playMethod);
+            }                
+            // Store player index
+            setPlayerIndex(index);
+            // Determine if audio should be played
+            if (playbackArgs.mute) {
+                setPlayerIndex(-1);
+                pauseAudio(playMethod);
+                return;
+            }
+                
+            const playheadShift = getPlayheadShift();
+            let latency = playAudio(sections[index], playMethod, playheadShift + playbackArgs.play_from);
+            // Cancel active events
+            cancelAudioListeners();
+            // listen for active audio events
+            if (playMethod === 'BUFFER') {
+                activeAudioEndedListener.current = webAudio.listenOnce("ended", () => onAudioEnded(index));
+            } else {
+                activeAudioEndedListener.current = audio.listenOnce("ended", () => onAudioEnded(index));
+            }                    
+            // Compensate for audio latency and set state to playing
+            setTimeout(startedPlaying && startedPlaying(), latency);
+            return;
+        }
+        // Stop playback
+        if (lastPlayerIndex.current === index) {
+                pauseAudio(playMethod);                     
+                setPlayerIndex(-1);
+                return;
+        }
+    }, [sections, activeAudioEndedListener, cancelAudioListeners, getPlayheadShift, playbackArgs, playMethod, startedPlaying, onAudioEnded]
+    );
 
     // Local logic for onfinished playing
     const onFinishedPlaying = useCallback(() => {
         setPlayerIndex(-1);
-        pauseAudio(playConfig);
+        pauseAudio(playMethod);
         finishedPlaying && finishedPlaying();
-    }, [finishedPlaying]);
+    }, [finishedPlaying, playMethod]);
 
     // Stop audio on unmount
     useEffect(
-        () => () => {
-            pauseAudio(playConfig);
+        () => {
+            return () => pauseAudio(playMethod);
         },
-        []
+        [playMethod]
     );
-
-    // Autoplay
-    useEffect(() => {
-        playConfig.auto_play && playSection(0);
-    }, [playConfig.auto_play, playSection]);
 
     const render = (view) => {
         const attrs = {
-            sections,
-            setView,
-            instruction,
-            preloadMessage,
             autoAdvance,
-            responseTime,
-            playConfig,
-            startedPlaying,
-            playerIndex,
             finishedPlaying: onFinishedPlaying,
-            playSection,
             lastPlayerIndex,
+            playSection,
+            playerIndex,
+            responseTime,
+            sections,
             setPlayerIndex,
-            submitResult
+            setView,
+            showAnimation: playbackArgs.show_animation,
+            startedPlaying,
+            submitResult,
+            view,
         };
 
         switch (state.view) {
             case PRELOAD:
                 return (
-                    <Preload
-                        instruction={preloadMessage}
-                        duration={playConfig.ready_time}
-                        sections={sections}
-                        playConfig={playConfig}
-                        onNext={() => {
-                            setView(playerType);
+                    <Preload {...attrs}
+                        playMethod={playMethod}
+                        duration={playbackArgs.ready_time}
+                        preloadMessage={playbackArgs.preload_message}
+                        onNext={() => {                        
+                            setView(playbackArgs.view);
                             onPreloadReady();
                         }}
                     />
             );
             case AUTOPLAY:
-                return <AutoPlay {...attrs} onPreloadReady={onPreloadReady} />;
+                return <AutoPlay {...attrs}
+                        instruction={playbackArgs.instruction}
+                />;
             case BUTTON:
                 return (
                     <PlayButton
                         {...attrs}
                         isPlaying={playerIndex > -1}
-                        disabled={playConfig.play_once && hasPlayed.includes(0)}
+                        disabled={playbackArgs.play_once && hasPlayed.includes(0)}
                     />
                 );
             case MULTIPLAYER:
                 return (
                     <MultiPlayer
                         {...attrs}
-                        disabledPlayers={playConfig.play_once ? hasPlayed : undefined}
+                        labels={playbackArgs.labels}
+                        disabledPlayers={playbackArgs.play_once ? hasPlayed : undefined}
                     />
                 );
-            case SPECTROGRAM:
+            case IMAGE:
                 return (
-                    <SpectrogramPlayer
+                    <ImagePlayer
                         {...attrs}
-                        disabledPlayers={playConfig.play_once ? hasPlayed : undefined}
+                        disabledPlayers={playbackArgs.play_once ? hasPlayed : undefined}
                     />
                 );
             case MATCHINGPAIRS:
                 return (
                     <MatchingPairs
                         {...attrs}
-                        stopAudioAfter={playConfig.stop_audio_after}
+                        stopAudioAfter={playbackArgs.stop_audio_after}
+                        showAnimation={playbackArgs.show_animation}
+                        scoreFeedbackDisplay={playbackArgs.score_feedback_display}
+                    />
+                );
+            case VISUALMATCHINGPAIRS:
+                return (
+                    <VisualMatchingPairs
+                        {...attrs}
+                        scoreFeedbackDisplay={playbackArgs.score_feedback_display}
                     />
                 );
             default:
@@ -230,7 +235,7 @@ const Playback = ({
 
     return (
         <div className="aha__playback">
-            <div className="playback"> {render(playerType)} </div>{" "}
+            <div className="playback"> {render(playbackArgs.view)} </div>{" "}
         </div>
     );
 };
