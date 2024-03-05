@@ -30,9 +30,14 @@ class PlaylistAdminForm(forms.ModelForm):
         model = Playlist
         fields = '__all__'
         help_texts = {
-            'url_prefix': 'Replace the local server with an external server'}
+            'url_prefix': 
+                'URL for hosting the audio files on an external server.<br> \
+                Make sure the folder structure matches \
+                that of the local server.<br>\
+                Leave this empty if you host the audio files locally.'}
+        
         widgets = {'url_prefix': forms.TextInput(attrs={'size': '37',
-                   'placeholder': 'https://example.com/sections/'})
+                   'placeholder': 'https://example.com/'})
                    }
 
     def save(self, commit=True):

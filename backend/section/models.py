@@ -8,7 +8,7 @@ from django.utils import timezone
 from django.urls import reverse
 
 from .utils import CsvStringBuilder
-from .validators import audio_file_validator
+from .validators import audio_file_validator, url_prefix_validator
 
 
 class Playlist(models.Model):
@@ -17,7 +17,8 @@ class Playlist(models.Model):
     name = models.CharField(db_index=True, max_length=64)
     url_prefix = models.CharField(max_length=128,
                                   blank=True,
-                                  default='')
+                                  default='',
+                                  validators=[url_prefix_validator])
 
     process_warning = 'Warning: Processing a live playlist may affect the result data'
     process_csv = models.BooleanField(default=False, help_text=process_warning)
@@ -33,6 +34,8 @@ class Playlist(models.Model):
         """Update playlist csv field on every save"""
         if self.process_csv is False:
             self.csv = self.update_admin_csv()
+        if self.url_prefix != '' and self.url_prefix[-1] != '/':
+            self.url_prefix += '/'
         super(Playlist, self).save(*args, **kwargs)
 
     class Meta:
