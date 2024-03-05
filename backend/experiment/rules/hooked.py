@@ -3,7 +3,6 @@ import random
 
 from django.conf import settings
 from django.utils.translation import gettext_lazy as _
-from django.template.loader import render_to_string
 
 from .base import Base
 from experiment.actions import Consent, Explainer, Final, Playlist, Score, Step, Trial
