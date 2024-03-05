@@ -4,7 +4,7 @@ import classNames from "classnames";
 import { scoreIntermediateResult } from "../../API";
 import useBoundStore from "util/stores";
 
-import PlayCard from "../PlayButton/PlayCard";
+import PlayCard from "./PlayCard";
 
 export const SCORE_FEEDBACK_DISPLAY = {
     SMALL_BOTTOM_RIGHT: 'small-bottom-right',
@@ -18,15 +18,17 @@ const MatchingPairs = ({
     playerIndex,
     showAnimation,
     finishedPlaying,
-    scoreFeedbackDisplay = SCORE_FEEDBACK_DISPLAY.LARGE_TOP, // 'large-top' (default) | 'small-bottom-right' | 'hidden'
+    scoreFeedbackDisplay = SCORE_FEEDBACK_DISPLAY.LARGE_TOP,
     submitResult,
+    view
 }) => {
 
     const xPosition = useRef(-1);
     const yPosition = useRef(-1);
-    const score = useRef(undefined);
     const firstCard = useRef(-1);
     const secondCard = useRef(-1);
+    const score = useRef(null);
+    const [inBetweenTurns, setInBetweenTurns] = useState(false);
     const [total, setTotal] = useState(100);
     const [message, setMessage] = useState('Pick a card');
     const [end, setEnd] = useState(false);
@@ -37,7 +39,7 @@ const MatchingPairs = ({
     const setError = useBoundStore(state => state.setError);
 
     const setScoreMessage = (score) => {
-        switch (score) {
+        switch (score.current) {
             case -10: return '-10 <br />Misremembered';
             case 0: return '0 <br />No match';
             case 10: return '+10 <br />Lucky match';
@@ -83,10 +85,7 @@ const MatchingPairs = ({
                         break;
                 }
             }
-
-
-            // add third click event to finish the turn
-            document.getElementById('root').addEventListener('click', finishTurn);
+            setInBetweenTurns(true);
             return;
         }
     }
@@ -96,7 +95,7 @@ const MatchingPairs = ({
         const turnedCards = sections.filter(s => s.turned);
         if (turnedCards.length < 2) {
             if (turnedCards.length === 1) {
-                // We have two turned cards
+                // This is the second card to be turned
                 currentCard.turned = true;
                 secondCard.current = index;
                 // set no mouse events for all but current
@@ -104,12 +103,13 @@ const MatchingPairs = ({
                 currentCard.noevents = true;
                 // check for match
                 const lastCard = sections[firstCard.current];
-                const imScore = await scoreIntermediateResult({ session, participant, result: { currentCard, lastCard } });
-                if (!imScore) {
+                try {
+                    const scoreResponse = await scoreIntermediateResult({ session, participant, result: { currentCard, lastCard } });
+                    score.current = scoreResponse.score;
+                } catch {
                     setError('We cannot currently proceed with the game. Try again later');
                     return;
                 }
-                score.current = imScore.score;
                 currentCard.seen = true;
                 lastCard.seen = true;
                 showFeedback();
@@ -135,9 +135,7 @@ const MatchingPairs = ({
         }
         firstCard.current = -1;
         secondCard.current = -1;
-        // remove third click event
-        document.getElementById('root').removeEventListener('click', finishTurn);
-        score.current = undefined;
+        score.current = null;
         // Turn all cards back and enable events
         sections.forEach(section => section.turned = false);
         sections.forEach(section => section.noevents = false);
@@ -146,6 +144,7 @@ const MatchingPairs = ({
             // all cards have been turned
             setEnd(true);
         } else { setMessage(''); }
+        setInBetweenTurns(false);
     }
 
     if (end) {
@@ -157,8 +156,6 @@ const MatchingPairs = ({
         <div className="aha__matching-pairs">
 
             <div>
-
-
                 {scoreFeedbackDisplay !== SCORE_FEEDBACK_DISPLAY.HIDDEN && <ScoreFeedback message={message} score={score} total={total} scoreFeedbackDisplay={scoreFeedbackDisplay} />}
 
                 <div className={classNames("playing-board", columnCount === 3 && "playing-board--three-columns")}>
@@ -174,10 +171,17 @@ const MatchingPairs = ({
                             section={sections[index]}
                             onFinish={showFeedback}
                             showAnimation={showAnimation}
+                            view={view}
                         />
                     )
                     )}
                 </div>
+                <div
+                    className="matching-pairs__overlay"
+                    onClick={finishTurn}
+                    style={{ display: inBetweenTurns ? 'block' : 'none' }}
+                    data-testid="overlay"
+                ></div>
             </div>
         </div>
 
@@ -200,7 +204,7 @@ const ScoreFeedback = ({
             <div className="col-6 align-self-start">
                 <div dangerouslySetInnerHTML={{ __html: message }}
                     className={classNames("matching-pairs__feedback", { fbnomatch: score.current === 0 }, { fblucky: score.current === 10 }, { fbmemory: score.current === 20 }, { fbmisremembered: score.current === -10 })}
-
+                
                 />
             </div>
             <div className="col-6 align-self-end">

@@ -12,11 +12,11 @@
     padding-top: 2vh;
 }
 
-.aha__visual-matching-pairs {
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    margin: 0px auto;
+.aha__matching-pairs {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 
 @media (min-aspect-ratio: 1/1)  {
@@ -45,15 +45,33 @@
 
 .playing-board {
     display: inline-grid;
-    max-width: 100%;
 }
 
-.visual-matching-pairs__feedback, .visual-matching-pairs__score {
+.matching-pairs__score-feedback {
+
+    font-weight: 700;
+
+    &--small-bottom-right {
+        position: fixed;
+        justify-content: flex-end;
+        bottom: 0;
+        right: 0;
+        text-align: right;
+        font-size: 0.5rem;
+        backface-visibility: hidden;
+        font-weight: normal;
+
+        .matching-pairs__feedback, .matching-pairs__score {
+            float: none;
+        }
+    }
+}
+
+.matching-pairs__feedback, .matching-pairs__score {
     font-family: 'Rajdhani', sans-serif;
     line-height: 1;
     text-align: center;
     padding-bottom: .7rem;
-    font-weight: 700;
     font-size: 95%;
     width: auto;
 
@@ -62,7 +80,7 @@
     }
 }
 
-.visual-matching-pairs__feedback {
+.matching-pairs__feedback {
     float: left;
     color: white;
 
@@ -78,13 +96,29 @@
     &.fbmisremembered {
         color: $red;
     }
-}
+    &.nomessage {
+        opacity: 0;
+    }
+} 
 
-.visual-matching-pairs__score {
+.matching-pairs__score {
     float: right;
+
+    &.noscore {
+        opacity: 0;
+    }
 }
 
-.visual-matching-pairs__overlay {
+.turnscore {
+    position: fixed;
+    bottom: -2rem;
+    left: -2rem;
+    &.noturnscore {
+        opacity: 0;
+    }
+}
+
+.matching-pairs__overlay {
     position: fixed;
     top: 0;
     left: 0;

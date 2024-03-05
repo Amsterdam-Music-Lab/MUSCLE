@@ -1,7 +1,6 @@
 import classNames from "classnames";
 
 import Histogram from "../Histogram/Histogram";
-import { VISUALMATCHINGPAIRS } from "components/Playback/Playback";
 import { API_ROOT } from "config";
 
 const PlayCard = ({ onClick, registerUserClicks, playing, section, view, showAnimation }) => {
@@ -34,7 +33,7 @@ const PlayCard = ({ onClick, registerUserClicks, playing, section, view, showAni
             role="button"
         >
             {section.turned ?
-                view === VISUALMATCHINGPAIRS ?
+                view === 'visual' ?
                     <div
                         data-testid="front"
                         className="front front--visual"
