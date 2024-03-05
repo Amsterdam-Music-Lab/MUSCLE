@@ -120,8 +120,6 @@ TEMPLATE_CHOICES = [
 
 
 class ExperimentForm(ModelForm):
-    # TO DO: add "clean_slug" method which checks that slug is NOT
-    # "experiment", "participant", "profile"
 
     def __init__(self, *args, **kwargs):
         super(ModelForm, self).__init__(*args, **kwargs)
@@ -144,11 +142,15 @@ class ExperimentForm(ModelForm):
     class Meta:
         model = Experiment
         fields = ['name', 'slug', 'active', 'rules',
-                  'rounds', 'bonus_points', 'playlists']
-        help_texts = {'consent': 'Upload an HTML (.html) or MARKDOWN (.md) file with a text to ask a user its consent<br> \
+                  'rounds', 'bonus_points', 'playlists',]
+        help_texts = {
+            'consent': 'Upload an HTML (.html) or MARKDOWN (.md) file with a text to ask a user its consent<br> \
                       for using the experiment data for this instance of the experiment.<br> \
                       This field will override any consent text loaded from the rules file. <br>\
-                      HTML files also allow django template tags so that the text can be translated'}
+                      HTML files also allow django template tags so that the text can be translated',
+            'slug': 'The slug is used to identify the experiment in the URL so you can access it on the web as follows: app.amsterdammusiclab.nl/{slug} <br>\
+            It must be unique, lowercase and contain only letters, numbers, and hyphens. Nor can it start with any of the following reserved words: admin, server, experiment, participant, result, section, session, static.',
+        }
 
     class Media:
         js = ["experiment_admin.js"]
