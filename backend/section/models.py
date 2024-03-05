@@ -28,8 +28,6 @@ class Playlist(models.Model):
         "path/filename.mp3" [string], tag [string], group [string]'
     csv = models.TextField(blank=True, help_text=default_csv_row)
 
-    
-
     def save(self, *args, **kwargs):
         """Update playlist csv field on every save"""
         if self.process_csv is False:
