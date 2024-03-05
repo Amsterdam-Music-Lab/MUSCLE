@@ -1,3 +1,15 @@
+// Function to escape meta-characters in a string
+function escapeHtml(text) {
+    const map = {
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#039;'
+    };
+    return text.replace(/[&<>"']/g, function (m) { return map[m]; });
+}
+
 document.addEventListener("DOMContentLoaded", function () {
 
     // Function to update the font preview
@@ -66,7 +78,7 @@ document.addEventListener("DOMContentLoaded", function () {
         if (fontName) {
             // Load the font
             const link = document.createElement('link');
-            link.href = fontUrl;
+            link.href = escapeHtml(fontUrl);
             link.rel = 'stylesheet';
             document.head.appendChild(link);
 

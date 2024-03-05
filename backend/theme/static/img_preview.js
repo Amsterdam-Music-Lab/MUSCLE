@@ -1,3 +1,15 @@
+// Function to escape meta-characters in a string
+function escapeHtml(text) {
+    const map = {
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#039;'
+    };
+    return text.replace(/[&<>"']/g, function (m) { return map[m]; });
+}
+
 document.addEventListener("DOMContentLoaded", function () {
     // Function to update the preview image
     function updateImagePreview(inputId, imgPreviewId) {
@@ -11,18 +23,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 preview.style.display = url ? "block" : "none";
             });
         }
-    }
-
-    // Function to escape meta-characters in a string
-    function escapeHtml(text) {
-        const map = {
-            '&': '&amp;',
-            '<': '&lt;',
-            '>': '&gt;',
-            '"': '&quot;',
-            "'": '&#039;'
-        };
-        return text.replace(/[&<>"']/g, function (m) { return map[m]; });
     }
 
     // Add previews next to the input fields
