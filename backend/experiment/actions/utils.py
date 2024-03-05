@@ -7,25 +7,22 @@ from django.template.loader import render_to_string
 
 from experiment.actions import Final
 
+COLLECTION_KEY = 'experiment_collection'
+
 
 def final_action_with_optional_button(session, final_text, request_session):
     """ given a session, a score message and an optional session dictionary from an experiment series,
     return a Final.action, which has a button to continue to the next experiment if series is defined
     """
     if request_session:
-        from session.models import Session
-        series_data = request_session.get('experiment_series')
-        series_slug = series_data.get('slug')
-        series_session = Session.objects.get(pk=series_data.get('session_id'))
-        series_session.final_score += 1
-        series_session.save()
+        series_slug = request_session.get(COLLECTION_KEY)
         return Final(
             title=_('End'),
             session=session,
             final_text=final_text,
             button={
                 'text': _('Continue'),
-                'link': '{}/{}'.format(settings.CORS_ORIGIN_WHITELIST[0], series_slug)
+                'link': '{}/{}/{}'.format(settings.CORS_ORIGIN_WHITELIST[0], 'collection', series_slug)
             }
         )
     else:

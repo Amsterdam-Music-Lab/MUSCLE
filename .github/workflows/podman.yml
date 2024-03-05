@@ -4,19 +4,15 @@ on:
   push:
     branches:
       - develop
+      - main
   workflow_dispatch:
-
-  # temporarily also for PRs
-  pull_request:
-      branches:
-      - develop
 
 jobs:
   deploy-test:
     name: Deploy to test environment
     environment: Test
     runs-on: tst
-    if: github.ref == 'refs/heads/develop'
+    if: github.event_name == 'workflow_dispatch' || github.ref == 'refs/heads/develop'
     concurrency:
       group: ${{ github.workflow }}-${{ github.ref }}
     env:
@@ -64,6 +60,20 @@ jobs:
         run: podman-compose -f docker-compose-deploy.yml build
       - name: Deploy Podman images
         run: podman-compose -f docker-compose-deploy.yml up -d --force-recreate
+      - name: Notify Sentry of new release
+        run: |
+            curl -X POST "https://sentry.io/api/0/organizations/uva-aml/releases/" \
+            -H "Authorization: Bearer ${{ secrets.SENTRY_AUTH_TOKEN }}" \
+            -H "Content-Type: application/json" \
+            -d '{
+                "version": "${{ github.sha }}",
+                "refs": [{
+                    "repository": "Amsterdam-Music-Lab/MUSCLE",
+                    "commit": "${{ github.sha }}"
+                }],
+                "projects": ["muscle-frontend", "muscle-backend"],
+                "environment": "test"
+            }'
       - name: Prune old images
         run: podman image prune -a -f
       - name: Check Podman images
@@ -75,7 +85,7 @@ jobs:
     name: Deploy to acceptance environment
     environment: Acceptance
     runs-on: ACC
-    if: github.ref == 'refs/heads/main' || github.ref == 'refs/tags/*' || 1 == 1 # Temporarily always run during testing
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/tags/*'
     concurrency:
       group: ${{ github.workflow }}-${{ github.ref }}
     env:
@@ -123,6 +133,20 @@ jobs:
         run: podman-compose -f docker-compose-deploy.yml build
       - name: Deploy Podman images
         run: podman-compose -f docker-compose-deploy.yml up -d --force-recreate
+      - name: Notify Sentry of new release
+        run: |
+          curl -X POST "https://sentry.io/api/0/organizations/uva-aml/releases/" \
+          -H "Authorization: Bearer ${{ secrets.SENTRY_AUTH_TOKEN }}" \
+          -H "Content-Type: application/json" \
+          -d '{
+            "version": "${{ github.sha }}",
+            "refs": [{
+              "repository": "Amsterdam-Music-Lab/MUSCLE",
+              "commit": "${{ github.sha }}"
+            }],
+            "projects": ["muscle-frontend", "muscle-backend"],
+            "environment": "acceptance"
+          }'
       - name: Prune old images
         run: podman image prune -a -f
       - name: Check Podman images

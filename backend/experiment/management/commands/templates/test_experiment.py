@@ -1,4 +1,4 @@
-from unittest import TestCase
+from django.test import TestCase
 
 from experiment.models import Experiment
 from participant.models import Participant

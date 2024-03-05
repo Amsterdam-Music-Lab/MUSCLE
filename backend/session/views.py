@@ -70,12 +70,7 @@ def next_round(request, session_id):
             pk=session_id, participant__id=participant.id)
 
     # Get next round for given session
-    if request.session.get('experiment_series'):
-        # we are in the middle of an experiment series - need to pass in request.session object
-        actions = serialize(session.experiment_rules().next_round(session, request.session))
-    else:
-        # Get next round for given session
-        actions = serialize(session.experiment_rules().next_round(session))
+    actions = serialize(session.experiment_rules().next_round(session))
     
     if not isinstance(actions,  list):
         if actions.get('redirect'):

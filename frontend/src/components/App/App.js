@@ -11,6 +11,7 @@ import { API_BASE_URL, EXPERIMENT_SLUG, URLS } from "../../config";
 import { URLS as API_URLS } from "../../API";
 import useBoundStore from "../../util/stores";
 import Experiment from "../Experiment/Experiment";
+import ExperimentCollection from "../ExperimentCollection/ExperimentCollection";
 import Profile from "../Profile/Profile";
 import Reload from "../Reload/Reload";
 import StoreProfile from "../StoreProfile/StoreProfile.js";
@@ -61,6 +62,9 @@ const App = () => {
                 <Route path={URLS.profile} exact>
                     <Profile slug={EXPERIMENT_SLUG} />
                 </Route>
+
+                {/* Experiment Collection */}
+                <Route path={URLS.experimentCollection} component={ExperimentCollection} />
 
                 {/* Experiment */}
                 <Route path={URLS.experiment} component={Experiment} />

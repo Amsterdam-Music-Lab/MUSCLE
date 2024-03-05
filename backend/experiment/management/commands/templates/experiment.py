@@ -42,7 +42,7 @@ class NewExperimentRuleset(Base):
         # 2. Choose playlist (optional, only relevant if there are multiple playlists the participant can choose from)
         playlist = Playlist(experiment.playlists.all())
 
-        # 3. Explainer
+        # 3. Explainer (optional)
         explainer = Explainer(
             instruction='Welcome to this new experiment',
             steps=[

@@ -1,6 +1,6 @@
 from django.urls import path
 from django.views.generic.base import TemplateView
-from .views import get_experiment, post_feedback, default_questions
+from .views import get_experiment, get_experiment_collection, post_feedback, default_questions
 
 app_name = 'experiment'
 
@@ -8,6 +8,8 @@ urlpatterns = [
     # Experiment
     path('<slug:slug>/', get_experiment, name='experiment'),
     path('<slug:slug>/feedback/', post_feedback, name='feedback'),
+    path('collection/<slug:slug>/', get_experiment_collection,
+         name='experiment_collection'),
     path('default_questions/<str:rules>/', default_questions, name='default_questions'),
 
     # Robots.txt
