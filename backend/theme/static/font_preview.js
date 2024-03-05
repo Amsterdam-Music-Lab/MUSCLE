@@ -60,7 +60,7 @@ document.addEventListener("DOMContentLoaded", function () {
             fontUrl = fontName; // Use the URL directly if it's a URL
         } else {
             const formattedFontName = fontName.replace(/\s+/g, '+'); // Replace spaces with '+' for Google Fonts
-            fontUrl = `https://fonts.googleapis.com/css?family=${formattedFontName}:400,700`;
+            fontUrl = `https://fonts.googleapis.com/css?family=${encodeURIComponent(formattedFontName)}:400,700`; // Escape meta-characters in font name
         }
 
         if (fontName) {

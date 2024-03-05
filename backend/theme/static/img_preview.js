@@ -36,7 +36,8 @@ document.addEventListener("DOMContentLoaded", function () {
             element.parentNode.insertBefore(preview, element.nextSibling);
 
             const url = element.value;
-            preview.src = url;
+            const escapedUrl = escapeHtml(url); // Escape the meta-characters in the URL
+            preview.src = escapedUrl;
             preview.style.display = url ? "block" : "none";
         }
     }
