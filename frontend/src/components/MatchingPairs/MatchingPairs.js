@@ -27,26 +27,18 @@ const MatchingPairs = ({
     const yPosition = useRef(-1);
     const firstCard = useRef(-1);
     const secondCard = useRef(-1);
-    const score = useRef(null);
-    const [inBetweenTurns, setInBetweenTurns] = useState(false);
-    const [total, setTotal] = useState(100);
-    const [message, setMessage] = useState('Pick a card');
     const [end, setEnd] = useState(false);
+    const [feedbackText, setFeedbackText] = useState('Pick a card');
+    const [feedbackClass, setFeedbackClass] = useState('');
+    const [inBetweenTurns, setInBetweenTurns] = useState(false);
+    const [score, setScore] = useState(null);
+    const [total, setTotal] = useState(100);
+
     const columnCount = sections.length > 6 ? 4 : 3;
 
     const participant = useBoundStore(state => state.participant);
     const session = useBoundStore(state => state.session);
     const setError = useBoundStore(state => state.setError);
-
-    const setScoreMessage = (score) => {
-        switch (score.current) {
-            case -10: return '-10 <br />Misremembered';
-            case 0: return '0 <br />No match';
-            case 10: return '+10 <br />Lucky match';
-            case 20: return '+20 <br />Good job!';
-            default: return '';
-        }
-    }
 
     const registerUserClicks = (posX, posY) => {
         xPosition.current = posX;
@@ -54,37 +46,38 @@ const MatchingPairs = ({
     }
 
     // Show (animated) feedback after second click on second card or finished playing
-    const showFeedback = () => {
+    const showFeedback = (score) => {
 
         const turnedCards = sections.filter(s => s.turned);
         // Check if this turn has finished
         if (turnedCards.length === 2) {
             // update total score & display current score
-            setTotal(total + score.current);
-            setMessage(setScoreMessage(score.current));
-            setMessage(setScoreMessage(score.current));
-            // show end of turn animations if enabled
-            if (showAnimation) {
-                switch (score.current) {
-                    case 10:
-                        turnedCards[0].lucky = true;
-                        turnedCards[1].lucky = true;
-                        break;
-                    case 20:
-                        turnedCards[0].memory = true;
-                        turnedCards[1].memory = true;
-                        break;
-                    default:
-                        turnedCards[0].nomatch = true;
-                        turnedCards[1].nomatch = true;
-                        // reset nomatch cards for coming turns
-                        setTimeout(() => {
-                            turnedCards[0].nomatch = false;
-                            turnedCards[1].nomatch = false;
-                        }, 700);
-                        break;
-                }
+            setTotal(total + score);
+            let fbclass;
+            switch (score) {
+                case 10:
+                    fbclass = 'fblucky';
+                    setFeedbackText('Lucky match');
+                    break;
+                case 20:
+                    fbclass = 'fbmemory';
+                    setFeedbackText('Good job!');
+                    break;
+                case 0:
+                    fbclass = 'fbnomatch';
+                    setFeedbackText('No match');
+                    break;
+                case -10:
+                    fbclass = 'fbmisremembered';
+                    setFeedbackText('Misremembered');
+                    break;
+                default:
+                    setFeedbackClass('');
+                    setFeedbackText('');
             }
+            setFeedbackClass(fbclass);
+            turnedCards[0].matchClass = turnedCards[1].matchClass = fbclass;
+            turnedCards[1].seen = turnedCards[1].seen = true;
             setInBetweenTurns(true);
             return;
         }
@@ -105,22 +98,20 @@ const MatchingPairs = ({
                 const lastCard = sections[firstCard.current];
                 try {
                     const scoreResponse = await scoreIntermediateResult({ session, participant, result: { currentCard, lastCard } });
-                    score.current = scoreResponse.score;
+                    setScore(scoreResponse.score);
+                    showFeedback(scoreResponse.score);
                 } catch {
                     setError('We cannot currently proceed with the game. Try again later');
                     return;
                 }
-                currentCard.seen = true;
-                lastCard.seen = true;
-                showFeedback();
             } else {
                 // first click of the turn
                 firstCard.current = index;
                 // turn first card, disable events
                 currentCard.turned = true;
                 currentCard.noevents = true;
-                // clear message
-                setMessage('');
+                // clear feedback text
+                setFeedbackText('');
             }
         }
         return;
@@ -129,21 +120,25 @@ const MatchingPairs = ({
     const finishTurn = () => {
         finishedPlaying();
         // remove matched cards from the board
-        if (score.current === 10 || score.current === 20) {
+        if (score === 10 || score === 20) {
             sections[firstCard.current].inactive = true;
             sections[secondCard.current].inactive = true;
         }
         firstCard.current = -1;
         secondCard.current = -1;
-        score.current = null;
+        setScore(null);
         // Turn all cards back and enable events
         sections.forEach(section => section.turned = false);
         sections.forEach(section => section.noevents = false);
+        sections.forEach(section => section.matchClass = '');
         // Check if the board is empty
         if (sections.filter(s => s.inactive).length === sections.length) {
             // all cards have been turned
             setEnd(true);
-        } else { setMessage(''); }
+        } else { 
+            setFeedbackText('Pick a card');
+            setFeedbackClass('');
+        }
         setInBetweenTurns(false);
     }
 
@@ -156,7 +151,7 @@ const MatchingPairs = ({
         <div className="aha__matching-pairs">
 
             <div>
-                {scoreFeedbackDisplay !== SCORE_FEEDBACK_DISPLAY.HIDDEN && <ScoreFeedback message={message} score={score} total={total} scoreFeedbackDisplay={scoreFeedbackDisplay} />}
+                {scoreFeedbackDisplay !== SCORE_FEEDBACK_DISPLAY.HIDDEN && <ScoreFeedback score={score} total={total} feedbackClass={feedbackClass} feedbackText={feedbackText} scoreFeedbackDisplay={scoreFeedbackDisplay} />}
 
                 <div className={classNames("playing-board", columnCount === 3 && "playing-board--three-columns")}>
                     {Object.keys(sections).map((index) => (
@@ -189,9 +184,10 @@ const MatchingPairs = ({
 }
 
 const ScoreFeedback = ({
-    message,
     scoreFeedbackDisplay = SCORE_FEEDBACK_DISPLAY.LARGE_TOP,
     score,
+    feedbackText,
+    feedbackClass,
     total,
 }) => {
     return (
@@ -202,10 +198,9 @@ const ScoreFeedback = ({
             )}
         >
             <div className="col-6 align-self-start">
-                <div dangerouslySetInnerHTML={{ __html: message }}
-                    className={classNames("matching-pairs__feedback", { fbnomatch: score.current === 0 }, { fblucky: score.current === 10 }, { fbmemory: score.current === 20 }, { fbmisremembered: score.current === -10 })}
-                
-                />
+                <div className={classNames("matching-pairs__feedback", feedbackClass)}>
+                    {score} <br/> {feedbackText}
+                </div>
             </div>
             <div className="col-6 align-self-end">
                 <div className="matching-pairs__score">Score: <br />{total}</div>

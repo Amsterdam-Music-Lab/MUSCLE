@@ -10,6 +10,7 @@ const PlayCard = ({ onClick, registerUserClicks, playing, section, view, showAni
         }
         return API_ROOT + url;
     }
+    const matchClass = section.matchClass;
 
     const histogramBars = showAnimation ? 5 : 0;
    
@@ -19,12 +20,11 @@ const PlayCard = ({ onClick, registerUserClicks, playing, section, view, showAni
             className={
                 classNames(
                     "aha__play-card",
+                    matchClass,
                     { turned: section.turned },
                     { noevents: section.noevents },
                     { disabled: section.inactive },
-                    { memory: section.memory },
-                    { lucky: section.lucky },
-                    { nomatch: section.nomatch })
+                )
             }
             onClick={event => {
                 registerUserClicks(event.clientX, event.clientY);
