@@ -1,6 +1,7 @@
 {
   "name": "aml-frontend",
   "description": "The React Frontend for the MUSCLE platform",
+  "type": "module",
   "license": "MIT",
   "dependencies": {
     "@sentry/react": "^7.85.0",
