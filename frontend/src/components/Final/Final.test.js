@@ -7,7 +7,7 @@ import * as API from '../../API';
 
 import Final from './Final'; // Adjust the import path as necessary
 
-jest.mock('../../util/stores', () => ({
+vi.mock('../../util/stores', () => ({
     __esModule: true,
     default: (fn) => {
         const state = {
@@ -18,7 +18,7 @@ jest.mock('../../util/stores', () => ({
         
         return fn(state);
     },
-    useBoundStore: jest.fn()
+    useBoundStore: vi.fn()
 }));
 
 vi.mock('../../API', () => ({

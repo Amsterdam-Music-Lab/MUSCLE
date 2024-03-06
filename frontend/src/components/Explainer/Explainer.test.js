@@ -8,7 +8,7 @@ describe('Explainer Component', () => {
         instruction: 'Some instruction',
         button_label: 'Next',
         steps: [],
-        onNext: jest.fn(),
+        onNext: vi.fn(),
         timer: 1
     }
 
@@ -17,7 +17,7 @@ describe('Explainer Component', () => {
         render(
             <Explainer {...props} />
         );
-        expect(screen.getByTestId('explainer')).toBeInTheDocument();
+        expect(screen.getByTestId('explainer')).to.exist;
     })
 
 

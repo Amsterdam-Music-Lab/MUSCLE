@@ -5,8 +5,8 @@ import { vi } from 'vitest';
 
 vi.mock("../../util/stores", () => ({
     __esModule: true,
-    default: jest.fn(),
-    useBoundStore: jest.fn()
+    default: vi.fn(),
+    useBoundStore: vi.fn()
 }));
 
 vi.mock("@/components/PlayButton/PlayCard", () => ({

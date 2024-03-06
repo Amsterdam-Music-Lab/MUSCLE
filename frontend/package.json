@@ -5,6 +5,7 @@
   "license": "MIT",
   "dependencies": {
     "@sentry/react": "^7.85.0",
+    "@types/react-router-dom": "^5.3.3",
     "@vitejs/plugin-react": "^4.2.1",
     "axios": ">=1.6.0",
     "classnames": "^2.2.6",
@@ -83,6 +84,7 @@
     "@testing-library/react": "^14.1.2",
     "@testing-library/user-event": "^14.5.1",
     "@vitest/coverage-v8": "^1.2.1",
+    "axios-mock-adapter": "^1.22.0",
     "babel-plugin-named-exports-order": "0.0.2",
     "coverage-badges-cli": "^1.2.5",
     "eslint": "^8.54.0",

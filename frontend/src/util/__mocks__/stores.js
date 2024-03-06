@@ -1,9 +1,9 @@
 module.exports = {
     useBoundStore: () => {
         return {
-            setError: jest.fn(),
-            setParticipant: jest.fn(),
-            setSession: jest.fn(),
+            setError: vi.fn(),
+            setParticipant: vi.fn(),
+            setSession: vi.fn(),
             participant: { id: 1 },
             session: { id: 1 }
         }

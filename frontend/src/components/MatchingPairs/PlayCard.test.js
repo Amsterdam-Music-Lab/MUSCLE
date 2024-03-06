@@ -3,6 +3,8 @@ import { vi } from "vitest";
 import { render, fireEvent, screen } from "@testing-library/react";
 import PlayCard from "./PlayCard";
 
+vi.mock("../../util/stores");
+
 describe("PlayCard Component Tests", () => {
     const mockOnClick = vi.fn();
     const mockRegisterUserClicks = vi.fn();
