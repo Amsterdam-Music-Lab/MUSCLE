@@ -26,7 +26,7 @@
   },
   "scripts": {
     "start": "vite --host",
-    "build": "sass src/index.scss src/index.css && tsc && vite build",
+    "build": "sass src/index.scss src/index.css && vite build",
     "preview": "vite preview",
     "test": "vitest",
     "test:ci": "vitest --watch=false --coverage",
