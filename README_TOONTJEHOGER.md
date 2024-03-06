@@ -94,15 +94,15 @@ backend/templates/info/toontjehoger/experiment6.html
 Use the following .env variables to configure your ToontjeHoger instance:
 
 ```
-VITE_EXPERIMENT_SLUG=toontjehoger
-VITE_AML_HOME=/toontjehoger
-VITE_LOGO_URL=/images/experiments/toontjehoger/logo-white.svg
-VITE_HTML_PAGE_TITLE=ToontjeHoger
-VITE_HTML_OG_DESCRIPTION=ToontjeHoger is een website met spelletjes die de luisteraar laat inzien dat zij muzikaler is dan je zou denken.
-VITE_HTML_OG_IMAGE=https://toontjehoger.changeme.example.com/images/og-hooked.jpg
-VITE_HTML_OG_TITLE=ToontjeHoger
-VITE_HTML_OG_URL=https://toontjehoger.changeme.example.com/
-VITE_HTML_BODY_CLASS=toontjehoger
+FRONTEND_EXPERIMENT_SLUG=toontjehoger
+FRONTEND_AML_HOME=/toontjehoger
+FRONTEND_LOGO_URL=/images/experiments/toontjehoger/logo-white.svg
+FRONTEND_HTML_PAGE_TITLE=ToontjeHoger
+FRONTEND_HTML_OG_DESCRIPTION=ToontjeHoger is een website met spelletjes die de luisteraar laat inzien dat zij muzikaler is dan je zou denken.
+FRONTEND_HTML_OG_IMAGE=https://toontjehoger.changeme.example.com/images/og-hooked.jpg
+FRONTEND_HTML_OG_TITLE=ToontjeHoger
+FRONTEND_HTML_OG_URL=https://toontjehoger.changeme.example.com/
+FRONTEND_HTML_BODY_CLASS=toontjehoger
 ```
 
 ## Playlists
