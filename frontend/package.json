@@ -21,6 +21,7 @@
     "react-select": "^5.4.0",
     "react-transition-group": "^4.4.5",
     "sass": "^1.69.5",
+    "typescript": "^5.3.3",
     "vite": "^5.0.10",
     "vite-tsconfig-paths": "^4.2.2",
     "zustand": "^4.4.7"
@@ -36,8 +37,7 @@
     "scss:watch": "sass src/index.scss src/index.css; sass --watch src/index.scss src/index.css",
     "storybook": "VITE_API_ROOT=http://localhost:8000 && storybook dev -p 6006",
     "storybook:build": "storybook build",
-    "lint:ts": "eslint . --ext .js,.jsx,.ts,.tsx",
-    "lint": "eslint src/**/*.js",
+    "lint": "eslint src/**/*.{js,jsx,ts,tsx}",
     "lint:fix": "eslint --fix src/**/*.js"
   },
   "eslintConfig": {

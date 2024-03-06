@@ -24,6 +24,7 @@ export default {
 
 export const Default = {
     args: {
+        ...getArgs(),
         title: "This is the Consent component's title",
         text: "<h2>This is the Consent component's text</h2><p>It can contain lists, headings, bold, italic and underlined text, you name it!</p><ul><li><b>Item 1</b></li><li><i>Item 2</i></li><li><u>Item 3</u></li></ul>",
         onNext: () => {console.log("On next triggered")},

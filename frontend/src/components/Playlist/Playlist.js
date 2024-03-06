@@ -1,6 +1,4 @@
 import React, { useEffect } from "react";
-import Loading from "../Loading/Loading";
-import useBoundStore from "@/util/stores";
 
 // Playlist is an experiment view, that handles (auto)selection of a playlist
 const Playlist = ({ experiment, instruction, onNext, playlist }) => {
