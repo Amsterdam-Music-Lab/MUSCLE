@@ -3,7 +3,7 @@ import { TransitionGroup, CSSTransition } from "react-transition-group";
 import { withRouter } from "react-router-dom";
 import classNames from "classnames";
 
-import { useBoundStore } from "../../util/stores";
+import useBoundStore from "../../util/stores";
 import { createSession, getNextRound, useExperiment } from "../../API";
 import Consent from "../Consent/Consent";
 import DefaultPage from "../Page/DefaultPage";
@@ -18,6 +18,7 @@ import useResultHandler from "../../hooks/useResultHandler";
 import Info from "../Info/Info";
 import FloatingActionButton from "components/FloatingActionButton/FloatingActionButton";
 import UserFeedback from "components/UserFeedback/UserFeedback";
+import FontLoader from "components/FontLoader/FontLoader";
 
 // Experiment handles the main experiment flow:
 // - Loads the experiment and participant
@@ -32,6 +33,8 @@ const Experiment = ({ match }) => {
     const participant = useBoundStore((state) => state.participant);
     const setSession = useBoundStore((state) => state.setSession);
     const session = useBoundStore((state) => state.session);
+    const theme = useBoundStore((state) => state.theme);
+    const setTheme = useBoundStore((state) => state.setTheme);
 
     // Current experiment state
     const [actions, setActions] = useState([]);
@@ -64,16 +67,16 @@ const Experiment = ({ match }) => {
             return session;
         }
         try {
-            const newSession = await createSession({experiment, participant, playlist})
+            const newSession = await createSession({ experiment, participant, playlist })
             setSession(newSession);
             return newSession;
         }
-        catch(err) {
+        catch (err) {
             setError(`Could not create a session: ${err}`)
         };
     };
 
-    const continueToNextRound = async() => {
+    const continueToNextRound = async () => {
         const thisSession = await checkSession();
         // Try to get next_round data from server
         const round = await getNextRound({
@@ -104,8 +107,13 @@ const Experiment = ({ match }) => {
         if (!loadingExperiment && participant) {
             // Loading succeeded
             if (experiment) {
+                // Set theme
+                if (experiment.theme) {
+                    setTheme(experiment.theme);
+                }
+
                 if (experiment.next_round.length) {
-                    updateActions([ ...experiment.next_round ]);
+                    updateActions([...experiment.next_round]);
                 } else {
                     setError("The first_round array from the ruleset is empty")
                 }
@@ -119,7 +127,8 @@ const Experiment = ({ match }) => {
         loadingExperiment,
         participant,
         setError,
-        updateActions
+        updateActions,
+        setTheme,
     ]);
 
     const onResult = useResultHandler({
@@ -192,7 +201,9 @@ const Experiment = ({ match }) => {
 
     const view = state.view;
 
-    return (
+    return (<>
+        <FontLoader fontUrl={theme?.heading_font_url} fontType="heading" />
+        <FontLoader fontUrl={theme?.body_font_url} fontType="body" />
         <TransitionGroup
             className={classNames(
                 "aha__experiment",
@@ -242,6 +253,8 @@ const Experiment = ({ match }) => {
 
             </CSSTransition>
         </TransitionGroup>
+    </>
+
     );
 };
 

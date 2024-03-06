@@ -1,6 +1,5 @@
 import { create } from "zustand";
 
-// Stores
 const createErrorSlice = (set) => ({
     error: null,
     setError: (error) => set(() => ({ error }))
@@ -16,10 +15,16 @@ const createSessionSlice = (set) => ({
     setSession: (session) => set(() => ({ session }))
 });
 
+const createThemeSlice = (set) => ({
+    theme: null,
+    setTheme: (theme) => set(() => ({ theme })),
+});
+
 export const useBoundStore = create((...args) => ({
     ...createErrorSlice(...args),
     ...createParticipantSlice(...args),
-    ...createSessionSlice(...args)
+    ...createSessionSlice(...args),
+    ...createThemeSlice(...args),
 }));
 
 export default useBoundStore;

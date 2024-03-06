@@ -34,6 +34,7 @@ def get_experiment(request, slug):
         'id': experiment.id,
         'slug': experiment.slug,
         'name': experiment.name,
+        'theme': experiment.theme_config.__to_json__() if experiment.theme_config else None,
         'class_name': class_name,  # can be used to override style
         'rounds': experiment.rounds,
         'playlists': [
