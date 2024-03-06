@@ -3,11 +3,11 @@ import react from '@vitejs/plugin-react'
 import viteTsconfigPaths from 'vite-tsconfig-paths'
 
 export default defineConfig({
-  base: '',
-  plugins: [react(), viteTsconfigPaths()],
+  plugins: [react()],
   server: {
-    open: true,
+    host: '0.0.0.0',
     port: 3000,
+    strictPort: true,
   },
   esbuild: {
     include: /\.[jt]sx?$/,

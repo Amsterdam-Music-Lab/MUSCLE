@@ -25,7 +25,7 @@
     "zustand": "^4.4.7"
   },
   "scripts": {
-    "start": "vite",
+    "start": "vite --host",
     "build": "sass src/index.scss src/index.css && tsc && vite build",
     "preview": "vite preview",
     "test": "vitest",
