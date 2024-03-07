@@ -24,8 +24,8 @@ const App = () => {
     const queryParams = window.location.search;
     
     useEffect(() => {
-        if (queryParams && !(new URLSearchParams(queryParams).has("participant_id"))) {
-            setError("Unknown URL parameter, use ?participant_id=");
+        const urlParams = new URLSearchParams(queryParams);
+        if (!urlParams.has("participant_id")) {
             return;
         }
         try {
@@ -34,7 +34,7 @@ const App = () => {
             });
         } catch (err) {
             console.error(err);
-            setError(err);
+            setError('Could not load participant');
         }
     }, [setError, queryParams, setParticipant])
 
