@@ -25,8 +25,10 @@ const App = () => {
     
     useEffect(() => {
         const urlParams = new URLSearchParams(queryParams);
-        if (!urlParams.has("participant_id")) {
-            return;
+        const participantId = urlParams.get('participant_id');
+        let queryParams = '';
+        if (participantId) {
+            queryParams = `?participant_id=${participantId}`;
         }
         try {
             axios.get(API_BASE_URL + API_URLS.participant.current + queryParams).then(response => {
