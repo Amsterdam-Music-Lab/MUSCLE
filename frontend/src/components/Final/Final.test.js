@@ -5,12 +5,6 @@ import { createMemoryHistory } from 'history'
 
 import Final from './Final'; // Adjust the import path as necessary
 
-// import useBoundStore from "../../util/stores";
-
-// const session = useBoundStore((state) => state.session);
-
-// console.log(session, useBoundStore)
-
 jest.mock('../../util/stores', () => ({
     __esModule: true,
     default: (fn) => {
@@ -22,7 +16,7 @@ jest.mock('../../util/stores', () => ({
         return fn(state);
     },
     useBoundStore: jest.fn()
-})); 
+}));
 
 jest.mock('../../API', () => ({
     finalizeSession: jest.fn(),

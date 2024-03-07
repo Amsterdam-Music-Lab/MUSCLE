@@ -1,9 +1,15 @@
 import React from "react";
 import { URLS, LOGO_URL, LOGO_TITLE } from "../../config";
 import { Link } from "react-router-dom";
+import useBoundStore from "util/stores";
 
 // AppBar is a bar on top of the app, with navigation and title
 const AppBar = ({ title, logoClickConfirm = null }) => {
+
+    const theme = useBoundStore((state) => state.theme);
+
+    const logoUrl = theme?.logo_url || LOGO_URL;
+
     // Handle click on logo, to optionally confirm navigating
     const onLogoClick = (e) => {
         if (logoClickConfirm) {
@@ -20,7 +26,7 @@ const AppBar = ({ title, logoClickConfirm = null }) => {
         onClick: onLogoClick,
         className: "logo",
         "aria-label": "Logo",
-        style: { backgroundImage: `url(${LOGO_URL})` },
+        style: { backgroundImage: `url(${logoUrl})` },
     };
     const logo = URLS.AMLHome.startsWith("http") ? (
         <a href={URLS.AMLHome} {...logoProps}>

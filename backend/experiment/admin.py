@@ -33,7 +33,7 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
     list_filter = ['active']
     search_fields = ['name']
     inline_actions = ['export', 'export_csv']
-    fields = ['name', 'slug', 'url', 'hashtag', 'language', 'active', 'rules',
+    fields = ['name', 'slug', 'url', 'hashtag', 'theme_config',  'language', 'active', 'rules',
               'rounds', 'bonus_points', 'playlists', 'consent', 'questions']
     inlines = [FeedbackInline]
     form = ExperimentForm
