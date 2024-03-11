@@ -101,6 +101,9 @@ const Playback = ({
 
     // Play section with given index
     const playSection = useCallback((index = 0) => {
+        if (playMethod === 'NOAUDIO') {
+            return;
+        }
         if (index !== lastPlayerIndex.current) {
             // Load different audio
             if (prevPlayerIndex.current !== -1) {
@@ -217,7 +220,7 @@ const Playback = ({
                         stopAudioAfter={playbackArgs.stop_audio_after}
                         showAnimation={playbackArgs.show_animation}
                         scoreFeedbackDisplay={playbackArgs.score_feedback_display}
-                        view={playMethod === 'noaudio'? 'visual': ''}
+                        view={playMethod === 'NOAUDIO'? 'visual': ''}
                     />
                 );
             default:

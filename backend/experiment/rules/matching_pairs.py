@@ -2,7 +2,6 @@ import random
 import json
 
 from django.utils.translation import gettext_lazy as _
-from django.template.loader import render_to_string
 
 from .base import Base
 from experiment.actions import Consent, Explainer, Final, Playlist, Step, Trial
