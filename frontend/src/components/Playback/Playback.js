@@ -217,6 +217,7 @@ const Playback = ({
                         stopAudioAfter={playbackArgs.stop_audio_after}
                         showAnimation={playbackArgs.show_animation}
                         scoreFeedbackDisplay={playbackArgs.score_feedback_display}
+                        view={playMethod === 'noaudio'? 'visual': ''}
                     />
                 );
             default:

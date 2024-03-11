@@ -2,8 +2,6 @@ import React from "react";
 import { render, fireEvent, screen } from "@testing-library/react";
 import PlayCard from "./PlayCard"; // Adjust the path as necessary
 
-jest.mock("../../util/stores");
-
 describe("PlayCard Component Tests", () => {
     const mockOnClick = jest.fn();
     const mockRegisterUserClicks = jest.fn();
@@ -12,9 +10,6 @@ describe("PlayCard Component Tests", () => {
         turned: false,
         noevents: false,
         inactive: false,
-        memory: false,
-        lucky: false,
-        nomatch: false,
         seen: false,
         url: "test.jpg",
         name: "Test"
@@ -43,7 +38,7 @@ describe("PlayCard Component Tests", () => {
     });
 
     it("should display image for visual matching pairs view", () => {
-        render(<PlayCard onClick={mockOnClick} registerUserClicks={mockRegisterUserClicks} section={{ ...sectionProps, turned: true }} view="VISUALMATCHINGPAIRS" />);
+        render(<PlayCard onClick={mockOnClick} registerUserClicks={mockRegisterUserClicks} section={{ ...sectionProps, turned: true }} view="visual" />);
         expect(screen.getByAltText("Test")).toBeInTheDocument();
     });
 
@@ -62,19 +57,19 @@ describe("PlayCard Component Tests", () => {
         expect(screen.getByTestId("play-card")).toHaveClass("noevents");
     });
 
-    it("should display a card with memory when memory", () => {
-        render(<PlayCard onClick={mockOnClick} registerUserClicks={mockRegisterUserClicks} section={{ ...sectionProps, memory: true }} />);
-        expect(screen.getByTestId("play-card")).toHaveClass("memory");
+    it("should display a card with fbmemory when memory", () => {
+        render(<PlayCard onClick={mockOnClick} registerUserClicks={mockRegisterUserClicks} section={{ ...sectionProps, matchClass: 'fbmemory' }} />);
+        expect(screen.getByTestId("play-card")).toHaveClass("fbmemory");
     });
 
-    it("should display a card with lucky when lucky", () => {
-        render(<PlayCard onClick={mockOnClick} registerUserClicks={mockRegisterUserClicks} section={{ ...sectionProps, lucky: true }} />);
-        expect(screen.getByTestId("play-card")).toHaveClass("lucky");
+    it("should display a card with fblucky when lucky", () => {
+        render(<PlayCard onClick={mockOnClick} registerUserClicks={mockRegisterUserClicks} section={{ ...sectionProps, matchClass: 'fblucky' }} />);
+        expect(screen.getByTestId("play-card")).toHaveClass("fblucky");
     });
 
-    it("should display a card with nomatch when nomatch", () => {
-        render(<PlayCard onClick={mockOnClick} registerUserClicks={mockRegisterUserClicks} section={{ ...sectionProps, nomatch: true }} />);
-        expect(screen.getByTestId("play-card")).toHaveClass("nomatch");
+    it("should display a card with fbnomatch when nomatch", () => {
+        render(<PlayCard onClick={mockOnClick} registerUserClicks={mockRegisterUserClicks} section={{ ...sectionProps, matchClass: 'fbnomatch' }} />);
+        expect(screen.getByTestId("play-card")).toHaveClass("fbnomatch");
     });
 
     it("should display a card with seen when seen", () => {

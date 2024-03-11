@@ -25,9 +25,8 @@ const MatchingPairs = ({
 
     const xPosition = useRef(-1);
     const yPosition = useRef(-1);
-    const firstCard = useRef(-1);
-    const secondCard = useRef(-1);
-    const [end, setEnd] = useState(false);
+    const [firstCard, setFirstCard] = useState(null);
+    const [secondCard, setSecondCard] = useState(null);
     const [feedbackText, setFeedbackText] = useState('Pick a card');
     const [feedbackClass, setFeedbackClass] = useState('');
     const [inBetweenTurns, setInBetweenTurns] = useState(false);
@@ -90,12 +89,12 @@ const MatchingPairs = ({
             if (turnedCards.length === 1) {
                 // This is the second card to be turned
                 currentCard.turned = true;
-                secondCard.current = index;
+                setSecondCard(currentCard);
                 // set no mouse events for all but current
                 sections.forEach(section => section.noevents = true);
                 currentCard.noevents = true;
                 // check for match
-                const lastCard = sections[firstCard.current];
+                const lastCard = firstCard;
                 try {
                     const scoreResponse = await scoreIntermediateResult({ session, participant, result: { currentCard, lastCard } });
                     setScore(scoreResponse.score);
@@ -106,7 +105,7 @@ const MatchingPairs = ({
                 }
             } else {
                 // first click of the turn
-                firstCard.current = index;
+                setFirstCard(currentCard);
                 // turn first card, disable events
                 currentCard.turned = true;
                 currentCard.noevents = true;
@@ -121,11 +120,11 @@ const MatchingPairs = ({
         finishedPlaying();
         // remove matched cards from the board
         if (score === 10 || score === 20) {
-            sections[firstCard.current].inactive = true;
-            sections[secondCard.current].inactive = true;
+            sections.find(s => s === firstCard).inactive = true;
+            sections.find(s => s === secondCard).inactive = true;
         }
-        firstCard.current = -1;
-        secondCard.current = -1;
+        setFirstCard(null);
+        setSecondCard(null)
         setScore(null);
         // Turn all cards back and enable events
         sections.forEach(section => section.turned = false);
@@ -133,25 +132,29 @@ const MatchingPairs = ({
         sections.forEach(section => section.matchClass = '');
         // Check if the board is empty
         if (sections.filter(s => s.inactive).length === sections.length) {
-            // all cards have been turned
-            setEnd(true);
+            // submit empty result, which will trigger a call to `next_round`
+            submitResult({});
+            setFeedbackText('');
         } else { 
             setFeedbackText('Pick a card');
+            setScore('');
             setFeedbackClass('');
         }
         setInBetweenTurns(false);
-    }
-
-    if (end) {
-        // submit empty result, which will trigger a call to `next_round`
-        submitResult({});
     }
 
     return (
         <div className="aha__matching-pairs">
 
             <div>
-                {scoreFeedbackDisplay !== SCORE_FEEDBACK_DISPLAY.HIDDEN && <ScoreFeedback score={score} total={total} feedbackClass={feedbackClass} feedbackText={feedbackText} scoreFeedbackDisplay={scoreFeedbackDisplay} />}
+                {scoreFeedbackDisplay !== SCORE_FEEDBACK_DISPLAY.HIDDEN && 
+                    <ScoreFeedback
+                        score={score}
+                        total={total}
+                        feedbackClass={feedbackClass}
+                        feedbackText={feedbackText}
+                        scoreFeedbackDisplay={scoreFeedbackDisplay} 
+                    />}
 
                 <div className={classNames("playing-board", columnCount === 3 && "playing-board--three-columns")}>
                     {Object.keys(sections).map((index) => (
@@ -203,7 +206,7 @@ const ScoreFeedback = ({
                 </div>
             </div>
             <div className="col-6 align-self-end">
-                <div className="matching-pairs__score">Score: <br />{total}</div>
+                <div data-testid="score" className="matching-pairs__score">Score: <br />{total}</div>
             </div>
         </div>
     )
