@@ -1,3 +1,5 @@
+import random
+
 from django.utils.translation import gettext_lazy as _
 
 from .matching_pairs import MatchingPairsGame
@@ -36,3 +38,18 @@ class MatchingPairsLite(MatchingPairsGame):
                 },
             )
             return score
+
+    def select_sections(self, session):
+        pairs = list(session.playlist.section_set.order_by().distinct(
+            'group').values_list('group', flat=True))
+        random.shuffle(pairs)
+        selected_pairs = pairs[:self.num_pairs]
+        originals = session.playlist.section_set.filter(
+            group__in=selected_pairs, tag='Original')
+        degradations = session.playlist.section_set.filter(
+            group__in=selected_pairs, tag='Degradation')
+        if degradations:
+            player_sections = list(originals) + list(degradations)
+        else:
+            player_sections = list(originals) + list(originals)
+        return player_sections

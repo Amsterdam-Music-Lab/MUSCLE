@@ -2,6 +2,7 @@ from typing import List, Dict
 
 from .frontend_style import FrontendStyle
 from .base_action import BaseAction
+from .utils import is_audio_file
 
 # player types
 TYPE_AUTOPLAY = 'AUTOPLAY'
@@ -47,7 +48,9 @@ class Playback(BaseAction):
                  ):
         self.sections = [{'id': s.id, 'url': s.absolute_url(), 'group': s.group}
                          for s in sections]
-        if str(sections[0].filename).startswith('http'):
+        if not is_audio_file(str(sections[0].filename)):
+            self.play_method = PLAY_NOAUDIO
+        elif str(sections[0].filename).startswith('http'):
             self.play_method = PLAY_EXTERNAL
         elif sections[0].duration > 45:
             self.play_method = PLAY_HTML

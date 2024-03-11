@@ -89,7 +89,7 @@ class MatchingPairsGame(Base):
             cont = self.get_matching_pairs_trial(session)
             return [score, cont]
 
-    def get_matching_pairs_trial(self, session):
+    def select_sections(self, session):
         json_data = session.load_json_data()
         pairs = json_data.get('pairs', [])
         if len(pairs) < self.num_pairs:
@@ -109,6 +109,10 @@ class MatchingPairsGame(Base):
         else:
             degradations = session.playlist.section_set.filter(group__in=selected_pairs, tag=degradation_type)
             player_sections = list(originals) + list(degradations)
+        return player_sections
+
+    def get_matching_pairs_trial(self, session):
+        player_sections = self.select_sections(session)
         random.shuffle(player_sections)
 
         playback = MatchingPairs(
