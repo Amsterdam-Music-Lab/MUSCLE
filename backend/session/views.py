@@ -8,6 +8,7 @@ from django.views.decorators.http import require_POST
 from .models import Session
 from experiment.models import Experiment
 from experiment.utils import serialize
+from experiment.actions.utils import COLLECTION_KEY
 from section.models import Playlist
 from participant.utils import get_participant
 
@@ -70,7 +71,11 @@ def next_round(request, session_id):
             pk=session_id, participant__id=participant.id)
 
     # Get next round for given session
-    actions = serialize(session.experiment_rules().next_round(session))
+    if request.session.get(COLLECTION_KEY):
+        actions = serialize(session.experiment_rules(
+        ).next_round(session, request.session))
+    else:
+        actions = serialize(session.experiment_rules().next_round(session))
     
     if not isinstance(actions,  list):
         if actions.get('redirect'):
