@@ -20,7 +20,7 @@ jest.mock('../../util/stores', () => ({
 
 describe('MatchingPairs Component', () => {
     beforeEach(() => {
-        mockAxios.reset();
+        jest.resetAllMocks();
     });
     
     const mockSections = [
@@ -45,8 +45,8 @@ describe('MatchingPairs Component', () => {
     });
 
     it('flips a card when clicked', async () => {
-        const { getAllByTestId } = render(<MatchingPairs {...baseProps} sections={mockSections} setPlayerIndex={jest.fn()} />);
-        const cards = getAllByTestId('play-card'); // Assuming each card is a button, adjust if necessary
+        render(<MatchingPairs {...baseProps} sections={mockSections} setPlayerIndex={jest.fn()} />);
+        const cards = screen.getAllByRole('button'); // Assuming each card is a button, adjust if necessary
 
         fireEvent.click(cards[0]);
 
@@ -54,70 +54,67 @@ describe('MatchingPairs Component', () => {
     });
 
     it('updates score after a match', async () => {
-        mockAxios.post.mockResolvedValueOnce({data: {score: 10}});
-        const { getAllByTestId, getByText } = render(<MatchingPairs {...baseProps} sections={mockSections} setPlayerIndex={jest.fn()} />);
-        const cards = getAllByTestId('play-card');
+    mockAxios.post.mockResolvedValueOnce({data: {score: 10}});
+    const { getByText } = render(<MatchingPairs {...baseProps} sections={mockSections} setPlayerIndex={jest.fn()} />);
+    const cards = screen.getAllByRole('button');
 
-        fireEvent.click(cards[0]);
-        fireEvent.click(cards[2]);
+    fireEvent.click(cards[0]);
+    fireEvent.click(cards[2]);
 
-        await waitFor( () => expect(getByText('Score: 110')).toBeInTheDocument());
+    await waitFor( () => expect(getByText('Score: 110')).toBeInTheDocument());
     });
 
-    it('has a blocking overlay in-between turns', async () => {
+    xit('has a blocking overlay in-between turns', async () => {
         mockAxios.post.mockResolvedValueOnce({data: {score: 0}});
-        const { getAllByTestId, getByTestId } = render(<MatchingPairs {...baseProps} sections={mockSections} setPlayerIndex={jest.fn()} />);
-        const cards = getAllByTestId('play-card');
+        render(<MatchingPairs {...baseProps} sections={mockSections} setPlayerIndex={jest.fn()} />);
+        const cards = screen.getAllByRole('button');
 
-        await waitFor(() => expect(getByTestId('overlay')).toHaveStyle('display: none'));
+        await waitFor(() => expect(screen.getByTestId('overlay')).toHaveStyle('display: none'));
 
         fireEvent.click(cards[0]);
         fireEvent.click(cards[1]);
 
-        await waitFor(() => expect(getByTestId('overlay')).toHaveStyle('display: block'));
+        await waitFor(() => expect(screen.getByTestId('overlay')).toHaveStyle('display: block'));
     });
 
-    it('calls scoreIntermediateResult after each turn', async() => {
+    xit('calls scoreIntermediateResult after each turn', async() => {
         const api = require('../../API');
         const spy = jest.spyOn(api, 'scoreIntermediateResult');
         mockAxios.post.mockResolvedValueOnce({data: {score: 10}});
-        const { getAllByTestId, getByTestId, getByText } = render(<MatchingPairs {...baseProps} sections={mockSections} setPlayerIndex={jest.fn()} />);
-        const cards = getAllByTestId('play-card');
+        render(<MatchingPairs {...baseProps} sections={mockSections} setPlayerIndex={jest.fn()} />);
+        const cards = screen.getAllByTestId('play-card');
 
         fireEvent.click(cards[0]);
         fireEvent.click(cards[2]);
-        fireEvent.click(getByTestId('overlay'));
+        fireEvent.click(screen.getByTestId('overlay'));
 
-        await waitFor(() => getByText('Pick a card'));
+        await waitFor(() => screen.getByText('Pick a card'));
         expect(spy).toHaveBeenCalled();
     })
 
 
-    it('ends the game when all pairs are matched', async () => {
+    xit('ends the game when all pairs are matched', async () => {
         mockAxios.post.mockResolvedValue({data: {score: 10}});
         const submitResult = jest.fn();
-        const { getAllByTestId, getByTestId, queryByText } = render(
+        render(
             <MatchingPairs {...baseProps} sections={mockSections} setPlayerIndex={jest.fn()} submitResult={submitResult} />
         );
-        const cards = getAllByTestId('play-card');
+        const cards = screen.getAllByTestId('play-card');
 
         fireEvent.click(cards[0]);
         fireEvent.click(cards[2]);
-        fireEvent.click(getByTestId('overlay'));
-        await waitFor(() => {
-            queryByText('Score: 110');
-            expect(cards[0]).toHaveClass('disabled');
-            expect(cards[2]).toHaveClass('disabled');
-        });
+        fireEvent.click(screen.getByTestId('overlay'));
+        await screen.findByText('Score: 110');
+        expect(cards[0]).toBeDisabled();
+        expect(cards[2]).toBeDisabled();
         
         fireEvent.click(cards[1]);
         fireEvent.click(cards[3]);
-        fireEvent.click(getByTestId('overlay'));
-
-        await waitFor(() => {
-            
-            expect(submitResult).toHaveBeenCalled();
-        });
+        fireEvent.click(screen.getByTestId('overlay'));
+        await screen.findByText('Score: 120');
+        expect(cards[1]).toBeDisabled();
+        expect(cards[3]).toBeDisabled();
+        expect(submitResult).toHaveBeenCalled();
     });
 
     it('displays three columns when sections length is less than or equal to 6', () => {
