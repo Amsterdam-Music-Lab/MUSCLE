@@ -4,6 +4,7 @@ from django.utils.translation import gettext_lazy as _
 
 from .matching_pairs import MatchingPairsGame
 from experiment.actions import Final, Playlist, Info
+from experiment.actions.utils import COLLECTION_KEY
 
 
 class MatchingPairsLite(MatchingPairsGame):
@@ -23,18 +24,19 @@ class MatchingPairsLite(MatchingPairsGame):
             playlist, info
         ]
     
-    def next_round(self, session):
+    def next_round(self, session, request_session=None):
         if session.rounds_passed() < 1:
             trial = self.get_matching_pairs_trial(session)
             return [trial]
         else:
+            print(request_session.keys())
             # final score saves the result from the cleared board into account
             score = Final(
                 session,
                 title='Score',
                 final_text='End of the game',
                 button={
-                    'text': 'Back to dashboard',
+                    'text': 'Back to dashboard', 'link': '/collection/{}'.format(request_session.get(COLLECTION_KEY))
                 },
             )
             return score
