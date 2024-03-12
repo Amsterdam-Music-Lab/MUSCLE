@@ -10,24 +10,24 @@ from experiment.actions import Final
 COLLECTION_KEY = 'experiment_collection'
 
 
-def final_action_with_optional_button(session, final_text, request_session):
+def final_action_with_optional_button(session, final_text='', title=_('End'), button_text=_('Continue')):
     """ given a session, a score message and an optional session dictionary from an experiment series,
     return a Final.action, which has a button to continue to the next experiment if series is defined
     """
-    if request_session:
-        series_slug = request_session.get(COLLECTION_KEY)
+    collection_slug = session.load_json_data().get(COLLECTION_KEY)
+    if collection_slug:
         return Final(
-            title=_('End'),
+            title=title,
             session=session,
             final_text=final_text,
             button={
-                'text': _('Continue'),
-                'link': '{}/{}/{}'.format(settings.CORS_ORIGIN_WHITELIST[0], 'collection', series_slug)
+                'text': button_text,
+                'link': '/collection/{}'.format(collection_slug)
             }
         )
     else:
         return Final(
-            title=_('End'),
+            title=title,
             session=session,
             final_text=final_text,
         )

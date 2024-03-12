@@ -6,7 +6,7 @@ from django.shortcuts import get_object_or_404, redirect
 from django.views.decorators.http import require_POST
 
 from .models import Session
-from experiment.models import Experiment
+from experiment.models import Experiment, ExperimentSeries
 from experiment.utils import serialize
 from experiment.actions.utils import COLLECTION_KEY
 from section.models import Playlist
@@ -70,12 +70,15 @@ def next_round(request, session_id):
     session = get_object_or_404(Session, 
             pk=session_id, participant__id=participant.id)
 
+    collection_slug = request.session.get(COLLECTION_KEY)
+    if collection_slug:
+        # set information of the ExperimentCollection to the session
+        collection = ExperimentSeries.objects.get(slug=collection_slug)
+        if collection and session.experiment in collection.associated_experiments:
+            session.save_json_data({COLLECTION_KEY: collection_slug})
+
     # Get next round for given session
-    if request.session.get(COLLECTION_KEY):
-        actions = serialize(session.experiment_rules(
-        ).next_round(session, request.session))
-    else:
-        actions = serialize(session.experiment_rules().next_round(session))
+    actions = serialize(session.experiment_rules().next_round(session))
     
     if not isinstance(actions,  list):
         if actions.get('redirect'):
