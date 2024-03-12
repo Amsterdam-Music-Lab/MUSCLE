@@ -2,6 +2,7 @@
 from django.utils.translation import gettext_lazy as _
 from experiment.actions.final import Final
 from experiment.models import Experiment
+from section.models import Playlist as PlaylistModel
 from session.models import Session
 from experiment.actions import ChoiceQuestion, Explainer, Form, Playlist, Trial
 from experiment.actions.playback import Autoplay
@@ -84,7 +85,7 @@ class CongoSameDiff(Base):
     def get_next_trial(
             self,
             session: Session,
-            subset: Playlist,
+            subset: PlaylistModel,
             trial_index: int,
             is_practice=False
     ):
