@@ -16,7 +16,7 @@ jest.mock('../../util/stores', () => ({
         return fn(state);
     },
     useBoundStore: jest.fn()
-})); 
+}));
 
 jest.mock('../../API', () => ({
     finalizeSession: jest.fn(),

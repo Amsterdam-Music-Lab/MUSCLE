@@ -79,14 +79,14 @@ class MatchingPairsGame(Base):
                 title='Score',
                 final_text='Can you score higher than your friends and family? Share and let them try!',
                 button={
-                    'text': 'Play again',
+                    'text': 'Play again', 'link': '{}/{}'.format(
+                        settings.CORS_ORIGIN_WHITELIST[0], session.experiment.slug)
                 },
                 rank=self.rank(session, exclude_unfinished=False),
                 social=social_info,
                 feedback_info=self.feedback_info()
             )
-            cont = self.get_matching_pairs_trial(session)
-            return [score, cont]
+            return [score]
 
     def select_sections(self, session):
         json_data = session.load_json_data()

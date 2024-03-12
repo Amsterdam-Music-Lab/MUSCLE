@@ -46,10 +46,12 @@ INSTALLED_APPS = [
     'django_markup',
     'corsheaders',
     'experiment',
+    'image',
     'participant',
     'result',
     'session',
-    'section'
+    'section',
+    'theme',
 ]
 
 MIDDLEWARE = [
