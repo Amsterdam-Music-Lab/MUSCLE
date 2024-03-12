@@ -49,6 +49,8 @@ class Playback(BaseAction):
                          for s in sections]
         if str(sections[0].filename).startswith('http'):
             self.play_method = PLAY_EXTERNAL
+        elif sections[0].playlist.url_prefix != '':
+            self.play_method = PLAY_EXTERNAL
         elif sections[0].duration > 45:
             self.play_method = PLAY_HTML
         else:

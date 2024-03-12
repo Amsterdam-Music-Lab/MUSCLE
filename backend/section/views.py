@@ -26,6 +26,10 @@ def get_section(request, section_id, code):
         if str(section.filename).startswith('http'):
             # external link, redirect
             return redirect(str(section.filename))
+        
+        if section.playlist.url_prefix:
+            # Make link external using url_prefix
+            return redirect(section.playlist.url_prefix + str(section.filename))
 
         # We only do this in production, as the Django dev server not correctly supports
         # The range/seeking of audio files in Chrome
