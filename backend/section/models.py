@@ -32,7 +32,7 @@ class Playlist(models.Model):
         """Update playlist csv field on every save"""
         if self.process_csv is False:
             self.csv = self.update_admin_csv()
-        if self.url_prefix != '' and self.url_prefix[-1] != '/':
+        if self.url_prefix and self.url_prefix.endswidth('/'):
             self.url_prefix += '/'
         super(Playlist, self).save(*args, **kwargs)
 

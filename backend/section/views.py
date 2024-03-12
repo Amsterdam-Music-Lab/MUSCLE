@@ -27,7 +27,7 @@ def get_section(request, section_id, code):
             # external link, redirect
             return redirect(str(section.filename))
         
-        if section.playlist.url_prefix != '':
+        if section.playlist.url_prefix:
             # Make link external using url_prefix
             return redirect(section.playlist.url_prefix + str(section.filename))
 
