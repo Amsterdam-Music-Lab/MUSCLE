@@ -30,11 +30,8 @@ class CongoSameDiff(Base):
 
         # 2. Explainer
         explainer = Explainer(
-            instruction='Welcome to this new experiment',
+            instruction='Welcome to this Same Diff experiment',
             steps=[
-                Step(description=_('Please read the instructions carefully')),
-                Step(description=_('Next step of explanation')),
-                Step(description=_('Another step of explanation')),
             ],
             step_numbers=True
         )
@@ -72,14 +69,13 @@ class CongoSameDiff(Base):
         section = session.section_from_any_song()
         question = ChoiceQuestion(
             question=_(
-                "Is the third sound the SAME or DIFFERENT?"),
+                "Is the last fragment the same as the first two fragments?"),
             view='BUTTON_ARRAY',
             # Definitely same, Probably same, Probably different, Definitely different, and I don’t know.
             choices={
-                'DEFINITELY_SAME': _('DEFINITELY SAME'),
-                'PROBABLY_SAME': _('PROBABLY SAME'),
-                'PROBABLY_DIFFERENT': _('PROBABLY DIFFERENT'),
-                'DEFINITELY_DIFFERENT': _('DEFINITELY DIFFERENT'),
+                'YES': _('YES'),
+                'MAYBE': _('MAYBE'),
+                'NO': _('NO'),
                 'I_DONT_KNOW': _('I DON’T KNOW')
             },
             key=key,
