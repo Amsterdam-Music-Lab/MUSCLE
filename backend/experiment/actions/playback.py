@@ -2,7 +2,7 @@ from typing import List, Dict
 
 from .frontend_style import FrontendStyle
 from .base_action import BaseAction
-from .utils import is_audio_file
+from section.validators import audio_extensions
 
 # player types
 TYPE_AUTOPLAY = 'AUTOPLAY'
@@ -48,14 +48,7 @@ class Playback(BaseAction):
                  ):
         self.sections = [{'id': s.id, 'url': s.absolute_url(), 'group': s.group}
                          for s in sections]
-        if not is_audio_file(str(sections[0].filename)):
-            self.play_method = PLAY_NOAUDIO
-        elif str(sections[0].filename).startswith('http'):
-            self.play_method = PLAY_EXTERNAL
-        elif sections[0].duration > 45:
-            self.play_method = PLAY_HTML
-        else:
-            self.play_method = PLAY_BUFFER
+        self.play_method = determine_play_method(sections[0])
         self.show_animation = show_animation
         self.preload_message = preload_message
         self.instruction = instruction
@@ -155,3 +148,19 @@ class VisualMatchingPairs(MatchingPairs):
         super().__init__(sections, **kwargs)
         self.ID = TYPE_VISUALMATCHINGPAIRS
         self.play_method = PLAY_NOAUDIO
+
+
+def determine_play_method(section):
+    filename = str(section.filename)
+    if not is_audio_file(filename):
+        return PLAY_NOAUDIO
+    elif filename.startswith('http'):
+        return PLAY_EXTERNAL
+    elif section.duration > 45:
+        return PLAY_HTML
+    else:
+        return PLAY_BUFFER
+
+
+def is_audio_file(filename):
+    return any(filename.lower().endswith(ext) for ext in audio_extensions)
