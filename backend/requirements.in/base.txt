@@ -2,7 +2,7 @@
 audioread
 
 # Django Framework
-Django<4.0
+Django~=4.2.0
 
 # Django inline actions, admin extension
 django-inline-actions
@@ -18,7 +18,7 @@ python-dotenv
 IPToCC
 
 # PostgrSQL database client
-psycopg2
+psycopg[binary]
 
 # to convert labels to Roman numerals
 roman
