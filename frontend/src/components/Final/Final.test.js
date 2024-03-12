@@ -22,7 +22,7 @@ vi.mock('../../util/stores', () => ({
 }));
 
 vi.mock('../../API', () => ({
-    finalizeSession: jest.fn(),
+    finalizeSession: vi.fn(),
 }));
 
 vi.mock('../../API');

@@ -15,7 +15,7 @@ const experimentObj = {
 
 const nextRoundObj = { next_round: [{ view: 'EXPLAINER', instruction: 'Instruction' }] };
 
-jest.mock('../../util/stores', () => ({
+vi.mock('../../util/stores', () => ({
     __esModule: true,
     default: (fn) => {
         const state = {
@@ -25,7 +25,7 @@ jest.mock('../../util/stores', () => ({
         
         return fn(state);
     },
-    useBoundStore: jest.fn()
+    useBoundStore: vi.fn()
 }));  
 
 describe('Experiment Component', () => {
@@ -41,7 +41,7 @@ describe('Experiment Component', () => {
             <MemoryRouter>
                 <Experiment match={ {params: {slug: 'test'}} }/>
             </MemoryRouter>
-        ));
+        );
         await screen.findByText('Continue');
     });
 
