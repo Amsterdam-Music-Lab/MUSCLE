@@ -49,7 +49,7 @@ class MatchingPairsLite(MatchingPairsGame):
         originals = session.playlist.section_set.filter(
             group__in=selected_pairs, tag='Original')
         degradations = session.playlist.section_set.filter(
-            group__in=selected_pairs, tag='Degradation')
+            group__in=selected_pairs).exclude(tag='Original')
         if degradations:
             player_sections = list(originals) + list(degradations)
         else:
