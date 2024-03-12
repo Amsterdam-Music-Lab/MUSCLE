@@ -1,6 +1,7 @@
 from django.test import TestCase
 
-from experiment.models import Experiment
+from experiment.models import Experiment, ExperimentSeries
+from experiment.actions.utils import COLLECTION_KEY
 from participant.models import Participant
 from section.models import Playlist
 from session.models import Session
@@ -14,7 +15,8 @@ class SessionViewsTest(TestCase):
         cls.playlist2 = Playlist.objects.create(name='Second Playlist')
         cls.experiment = Experiment.objects.create(
             name='TestViews',
-            slug='testviews'
+            slug='testviews',
+            rules='LISTENING_CONDITIONS'
         )
         cls.experiment.playlists.add(
             cls.playlist1, cls.playlist2
@@ -45,3 +47,25 @@ class SessionViewsTest(TestCase):
             experiment=self.experiment, participant=self.participant)
         assert new_session
         assert new_session.playlist == self.playlist1
+
+    def test_next_round(self):
+        session = Session.objects.create(
+            experiment=self.experiment, participant=self.participant)
+        response = self.client.get(
+            '/session/{}/next_round/'.format(session.id))
+        assert response
+
+    def test_next_round_with_collection(self):
+        slug = 'mycollection'
+        collection = ExperimentSeries.objects.create(slug=slug)
+        collection.random_experiments = [self.experiment]
+        collection.save()
+        request_session = self.client.session
+        request_session[COLLECTION_KEY] = slug
+        request_session.save()
+        session = Session.objects.create(
+            experiment=self.experiment, participant=self.participant)
+        response = self.client.get(
+            '/session/{}/next_round/'.format(session.id))
+        assert response
+        assert session.load_json_data().get(COLLECTION_KEY)
