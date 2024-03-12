@@ -1,4 +1,4 @@
-import VisualMatchingPairs from '../components/MatchingPairs/MatchingPairs2';
+import VisualMatchingPairs from '../components/MatchingPairs/MatchingPairs';
 
 import Cat01 from './assets/images/cat-01.webp';
 import Cat02 from './assets/images/cat-02.webp';
