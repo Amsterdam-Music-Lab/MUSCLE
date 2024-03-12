@@ -27,12 +27,12 @@ const App = () => {
     useEffect(() => {
         const urlParams = new URLSearchParams(queryParams);
         const participantId = urlParams.get('participant_id');
-        let queryParams = '';
+        let participantQueryParams = '';
         if (participantId) {
-            queryParams = `?participant_id=${participantId}`;
+            participantQueryParams = `?participant_id=${participantId}`;
         }
         try {
-            axios.get(API_BASE_URL + API_URLS.participant.current + queryParams).then(response => {
+            axios.get(API_BASE_URL + API_URLS.participant.current + participantQueryParams).then(response => {
                 setParticipant(response.data);
             });
         } catch (err) {
