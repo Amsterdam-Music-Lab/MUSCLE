@@ -2,11 +2,15 @@ import React from 'react';
 import { Route, MemoryRouter } from 'react-router-dom';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { vi } from 'vitest';
-import { getNextRound } from '../../API';
-
+import MockAdapter from 'axios-mock-adapter';
+import axios from 'axios';
 import Experiment from './Experiment';
+import * as API from '../../API'; 
+
+let mock = new MockAdapter(axios);
 
 vi.mock("../../util/stores");
+
 
 const experimentObj = {
     id: 24, slug: 'test', name: 'Test', playlists: [{ id: 42, name: 'TestPlaylist' }],
@@ -31,12 +35,12 @@ vi.mock('../../util/stores', () => ({
 describe('Experiment Component', () => {
 
     afterEach(() => {
-        // mockAxios.reset();
+        mock.reset();
     });
 
     // fix/remove this implementation after merging #810
-    test.skip('renders with given props', async () => {
-        // mockAxios.get.mockResolvedValueOnce({data: experimentObj});
+    test('renders with given props', async () => {
+        mock.onGet().replyOnce(200, experimentObj);
         render(
             <MemoryRouter>
                 <Experiment match={ {params: {slug: 'test'}} }/>
@@ -45,9 +49,10 @@ describe('Experiment Component', () => {
         await screen.findByText('Continue');
     });
 
-    // fix/remove this implementation after merging #810
-    test.skip('calls onNext', async () => {
-        // mockAxios.get.mockResolvedValueOnce({data: experimentObj});
+    test('calls onNext', async () => {
+        mock.onGet().replyOnce(200, experimentObj);
+        const spy = vi.spyOn(API, 'getNextRound');
+
         render(
             <MemoryRouter initialEntries={['/test']}>
                 <Route path="/:slug" component={Experiment} />
@@ -55,8 +60,8 @@ describe('Experiment Component', () => {
         );
         const button = await screen.findByText('Continue');
         fireEvent.click(button);
-        // mockAxios.get.mockResolvedValueOnce({data: nextRoundObj});
-        await waitFor(() => expect(getNextRound).toHaveBeenCalled());
+        mock.onGet().replyOnce(200, nextRoundObj);
+        await waitFor(() => expect(spy).toHaveBeenCalled());
     });
 
 });

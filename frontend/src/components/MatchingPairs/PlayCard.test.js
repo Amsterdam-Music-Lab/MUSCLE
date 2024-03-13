@@ -62,17 +62,17 @@ describe("PlayCard Component Tests", () => {
 
     it("should display a card with fbmemory when memory", () => {
         render(<PlayCard onClick={mockOnClick} registerUserClicks={mockRegisterUserClicks} section={{ ...sectionProps, matchClass: 'fbmemory' }} />);
-        expect(screen.getByTestId("play-card").classList.contains("memory")).to.be.true;
+        expect(screen.getByTestId("play-card").classList.contains("fbmemory")).to.be.true;
     });
 
     it("should display a card with fblucky when lucky", () => {
         render(<PlayCard onClick={mockOnClick} registerUserClicks={mockRegisterUserClicks} section={{ ...sectionProps, matchClass: 'fblucky' }} />);
-        expect(screen.getByTestId("play-card").classList.contains("lucky")).to.be.true;
+        expect(screen.getByTestId("play-card").classList.contains("fblucky")).to.be.true;
     });
 
     it("should display a card with fbnomatch when nomatch", () => {
         render(<PlayCard onClick={mockOnClick} registerUserClicks={mockRegisterUserClicks} section={{ ...sectionProps, matchClass: 'fbnomatch' }} />);
-        expect(screen.getByTestId("play-card").classList.contains("nomatch")).to.be.true;
+        expect(screen.getByTestId("play-card").classList.contains("fbnomatch")).to.be.true;
     });
 
     it("should display a card with seen when seen", () => {

@@ -37,7 +37,7 @@ describe('ExperimentCollection', () => {
         </MemoryRouter>
         );
         waitFor(() => {
-            expect(screen.getByTestId('collection-dashboard')).toBeInTheDocument();
+            expect(document.querySelector('[data-testid="collection-dashboard"]')).not.toBeNull();
         }) 
     });
 

@@ -48,6 +48,7 @@ const MatchingPairs = ({
     const showFeedback = (score) => {
 
         const turnedCards = sections.filter(s => s.turned);
+
         // Check if this turn has finished
         if (turnedCards.length === 2) {
             // update total score & display current score

@@ -13,6 +13,8 @@ const PlayCard = ({ onClick, registerUserClicks, playing, section, view, showAni
     const matchClass = section.matchClass;
 
     const histogramBars = showAnimation ? 5 : 0;
+
+    console.log("MATCH CLASS", matchClass)
    
     return (
         <div
