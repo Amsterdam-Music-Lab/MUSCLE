@@ -70,12 +70,15 @@ def next_round(request, session_id):
     session = get_object_or_404(Session, 
             pk=session_id, participant__id=participant.id)
 
+    # check if this experiment is part of an ExperimentSeries
     collection_slug = request.session.get(COLLECTION_KEY)
     if collection_slug:
-        # set information of the ExperimentCollection to the session
-        collection = ExperimentSeries.objects.get(slug=collection_slug)
-        if collection and session.experiment.pk in collection.associated_experiments():
-            session.save_json_data({COLLECTION_KEY: collection_slug})
+        # check that current session does not have the collection information saved yet
+        if not session.load_json_data().get(COLLECTION_KEY):
+            # set information of the ExperimentCollection to the session
+            collection = ExperimentSeries.objects.get(slug=collection_slug)
+            if collection and session.experiment.pk in collection.associated_experiments():
+                session.save_json_data({COLLECTION_KEY: collection_slug})
 
     # Get next round for given session
     actions = serialize(session.experiment_rules().next_round(session))
