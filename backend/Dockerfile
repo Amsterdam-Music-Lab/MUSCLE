@@ -1,8 +1,6 @@
 FROM docker.io/python:3.8
 ENV PYTHONUNBUFFERED 1
-RUN apt-get -y update
-RUN apt-get install -y ffmpeg
-RUN apt-get install -y gettext
+RUN apt-get -y update && apt-get install -y ffmpeg gettext
 
 WORKDIR /server
 COPY requirements/prod.txt /server/
