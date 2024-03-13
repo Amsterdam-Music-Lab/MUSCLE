@@ -1,10 +1,17 @@
 import React from 'react';
 import { render, waitFor } from '@testing-library/react';
 import Circle from './Circle';
+import { vi } from 'vitest';
+import Timer from '@/util/timer';
 
-const Timer = jest.requireActual('util/timer');
+vi.mock('@/util/timer', () => {
+    return {
+        Timer: vi.fn(),
+        default: vi.fn(),
+    };
+});
 
-let timerSpy;
+
 
 global.performance = {
     now: () => Date.now(),
@@ -13,11 +20,9 @@ global.performance = {
 describe('Circle', () => {
 
     beforeEach(() => {
-        timerSpy = jest.spyOn(Timer, 'default');
-
         // mock requestAnimationFrame
         let time = 0
-        jest.spyOn(window, 'requestAnimationFrame').mockImplementation(
+        vi.spyOn(window, 'requestAnimationFrame').mockImplementation(
             // @ts-expect-error
             (cb) => {
                 // we can then use fake timers to preserve the async nature of this call
@@ -27,21 +32,28 @@ describe('Circle', () => {
                     cb(time)
                 }, 0)
             })
-    });
 
-    afterEach(() => {
-        jest.clearAllMocks();
+        Timer.mockReset();
+
+        Timer.mockImplementation(({ onFinish, onTick }) => {
+            onTick && onTick(0);
+            onFinish && onFinish();
+            return vi.fn();
+        });
     });
 
     it('renders correctly with default props', () => {
         const { container } = render(<Circle />);
-        expect(container.querySelector('.aha__circle')).toBeInTheDocument();
+
+        expect(document.body.contains(container.querySelector('.aha__circle'))).to.be.true;
         expect(container.querySelectorAll('circle').length).toBe(2);
     });
 
     it('calls onTick and onFinish callbacks when running is true', async () => {
-        const onTick = jest.fn();
-        const onFinish = jest.fn();
+
+
+        const onTick = vi.fn();
+        const onFinish = vi.fn();
 
         render(
             <Circle
@@ -59,11 +71,11 @@ describe('Circle', () => {
     });
 
     it('does not start timer when running is false', () => {
-        const onTick = jest.fn();
-        const onFinish = jest.fn();
+        const onTick = vi.fn();
+        const onFinish = vi.fn();
         render(<Circle running={false} onTick={onTick} onFinish={onFinish} duration={100} />);
 
-        expect(timerSpy).not.toHaveBeenCalled();
+        expect(Timer).not.toHaveBeenCalled();
         expect(onTick).not.toHaveBeenCalled();
         expect(onFinish).not.toHaveBeenCalled();
     });
@@ -75,7 +87,7 @@ describe('Circle', () => {
 
         const percentageCircle = container.querySelector('.circle-percentage');
 
-        expect(percentageCircle).toHaveStyle('stroke-dashoffset: 0.5340707511102648;');
+        expect(percentageCircle.style.strokeDashoffset).to.equal('0.5340707511102648');
     });
 
 });

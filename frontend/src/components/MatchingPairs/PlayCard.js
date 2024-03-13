@@ -1,7 +1,7 @@
 import classNames from "classnames";
 
 import Histogram from "../Histogram/Histogram";
-import { API_ROOT } from "config";
+import { API_ROOT } from "@/config";
 
 const PlayCard = ({ onClick, registerUserClicks, playing, section, view, showAnimation }) => {
     const getImgSrc = (url) => {
@@ -13,6 +13,8 @@ const PlayCard = ({ onClick, registerUserClicks, playing, section, view, showAni
     const matchClass = section.matchClass;
 
     const histogramBars = showAnimation ? 5 : 0;
+
+    console.log("MATCH CLASS", matchClass)
    
     return (
         <div

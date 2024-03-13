@@ -2,8 +2,9 @@ import React from 'react';
 import { act, fireEvent, render, screen } from '@testing-library/react';
 import Score from './Score';
 import makeDefaultScoreProps from '../../util/testUtils/makeDefaultScoreProps';
+import { vi } from 'vitest';
 
-jest.useFakeTimers();
+vi.useFakeTimers();
 
 describe('Score component', () => {
 
@@ -17,21 +18,21 @@ describe('Score component', () => {
             icon: null,
             feedback: 'Well done!',
             timer: null,
-            onNext: jest.fn(),
+            onNext: vi.fn(),
         };
 
         render(<Score {...props} />);
-        expect(screen.getByText('Great job!')).toBeInTheDocument();
-        expect(screen.getByText('Test Song')).toBeInTheDocument();
+        expect(document.body.contains(screen.getByText('Great job!'))).to.be.true;
+        expect(document.body.contains(screen.getByText('Test Song'))).to.be.true;
     });
 
 
     it('calls onNext after timer duration', () => {
-        const onNext = jest.fn();
+        const onNext = vi.fn();
         render(<Score {...{ ...makeDefaultScoreProps({ timer: 5, onNext }) }} />);
 
         act(() => {
-            jest.advanceTimersByTime(5000);
+            vi.advanceTimersByTime(5000);
         });
 
         expect(onNext).toHaveBeenCalled();
@@ -39,14 +40,14 @@ describe('Score component', () => {
 
     it('conditionally renders elements', () => {
         const { rerender } = render(<Score {...{ ...makeDefaultScoreProps({ icon: null }) }} />);
-        expect(screen.queryByTestId('icon-element')).not.toBeInTheDocument();
+        expect(document.body.contains(screen.queryByTestId('icon-element'))).to.not.be.true;
 
         rerender(<Score {...{ ...makeDefaultScoreProps({ last_song: null }) }} />);
-        expect(screen.queryByText('Test Song')).not.toBeInTheDocument();
+        expect(document.body.contains(screen.queryByText('Test Song'))).to.not.be.true;
     });
 
     it('calls onNext when button is clicked and no timer', () => {
-        const onNext = jest.fn();
+        const onNext = vi.fn();
         render(<Score {...{ ...makeDefaultScoreProps({ timer: null, onNext }) }} />);
 
         fireEvent.click(screen.getByText('Next'));

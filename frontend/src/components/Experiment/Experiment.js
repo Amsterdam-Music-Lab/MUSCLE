@@ -16,9 +16,9 @@ import Score from "../Score/Score";
 import Trial from "../Trial/Trial";
 import useResultHandler from "../../hooks/useResultHandler";
 import Info from "../Info/Info";
-import FloatingActionButton from "components/FloatingActionButton/FloatingActionButton";
-import UserFeedback from "components/UserFeedback/UserFeedback";
-import FontLoader from "components/FontLoader/FontLoader";
+import FloatingActionButton from "@/components/FloatingActionButton/FloatingActionButton";
+import UserFeedback from "@/components/UserFeedback/UserFeedback";
+import FontLoader from "@/components/FontLoader/FontLoader";
 
 // Experiment handles the main experiment flow:
 // - Loads the experiment and participant

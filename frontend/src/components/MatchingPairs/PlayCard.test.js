@@ -1,10 +1,13 @@
 import React from "react";
+import { vi } from "vitest";
 import { render, fireEvent, screen } from "@testing-library/react";
-import PlayCard from "./PlayCard"; // Adjust the path as necessary
+import PlayCard from "./PlayCard";
+
+vi.mock("../../util/stores");
 
 describe("PlayCard Component Tests", () => {
-    const mockOnClick = jest.fn();
-    const mockRegisterUserClicks = jest.fn();
+    const mockOnClick = vi.fn();
+    const mockRegisterUserClicks = vi.fn();
 
     const sectionProps = {
         turned: false,
@@ -28,72 +31,72 @@ describe("PlayCard Component Tests", () => {
 
     it("should display the back of the card by default", () => {
         render(<PlayCard onClick={mockOnClick} registerUserClicks={mockRegisterUserClicks} section={sectionProps} />);
-        expect(screen.getByTestId("play-card").querySelector(".back")).toBeInTheDocument();
+        expect(document.body.contains(screen.getByTestId("play-card").querySelector(".back"))).to.be.true;
     });
 
     it("should display the front of the card when turned", () => {
         render(<PlayCard onClick={mockOnClick} registerUserClicks={mockRegisterUserClicks} section={{ ...sectionProps, turned: true }} />);
-        expect(screen.getByTestId("play-card").querySelector(".aha__histogram")).toBeInTheDocument();
-        expect(screen.getByTestId("play-card").querySelector(".front")).not.toBeInTheDocument();
+        expect(document.body.contains(screen.getByTestId("play-card").querySelector(".aha__histogram"))).to.be.true;
+        expect(document.body.contains(screen.getByTestId("play-card").querySelector(".front"))).to.not.be.true;
     });
 
     it("should display image for visual matching pairs view", () => {
         render(<PlayCard onClick={mockOnClick} registerUserClicks={mockRegisterUserClicks} section={{ ...sectionProps, turned: true }} view="visual" />);
-        expect(screen.getByAltText("Test")).toBeInTheDocument();
+        expect(document.body.contains(screen.getByAltText("Test"))).to.be.true;
     });
 
     it("should display histogram for non-visual matching pairs view", () => {
         render(<PlayCard onClick={mockOnClick} registerUserClicks={mockRegisterUserClicks} section={{ ...sectionProps, turned: true }} view="MATCHINGPAIRS" />);
-        expect(screen.getByTestId("play-card").querySelector(".aha__histogram")).toHaveClass("aha__histogram");
+        expect(document.body.contains(screen.getByTestId("play-card").querySelector(".aha__histogram"))).to.be.true;
     });
 
     it("should display a disabled card when inactive", () => {
         render(<PlayCard onClick={mockOnClick} registerUserClicks={mockRegisterUserClicks} section={{ ...sectionProps, inactive: true }} />);
-        expect(screen.getByTestId("play-card")).toHaveClass("disabled");
+        expect(screen.getByTestId("play-card").classList.contains("disabled")).to.be.true;
     });
 
     it("should display a card with no events when noevents", () => {
         render(<PlayCard onClick={mockOnClick} registerUserClicks={mockRegisterUserClicks} section={{ ...sectionProps, noevents: true }} />);
-        expect(screen.getByTestId("play-card")).toHaveClass("noevents");
+        expect(screen.getByTestId("play-card").classList.contains("noevents")).to.be.true;
     });
 
     it("should display a card with fbmemory when memory", () => {
         render(<PlayCard onClick={mockOnClick} registerUserClicks={mockRegisterUserClicks} section={{ ...sectionProps, matchClass: 'fbmemory' }} />);
-        expect(screen.getByTestId("play-card")).toHaveClass("fbmemory");
+        expect(screen.getByTestId("play-card").classList.contains("fbmemory")).to.be.true;
     });
 
     it("should display a card with fblucky when lucky", () => {
         render(<PlayCard onClick={mockOnClick} registerUserClicks={mockRegisterUserClicks} section={{ ...sectionProps, matchClass: 'fblucky' }} />);
-        expect(screen.getByTestId("play-card")).toHaveClass("fblucky");
+        expect(screen.getByTestId("play-card").classList.contains("fblucky")).to.be.true;
     });
 
     it("should display a card with fbnomatch when nomatch", () => {
         render(<PlayCard onClick={mockOnClick} registerUserClicks={mockRegisterUserClicks} section={{ ...sectionProps, matchClass: 'fbnomatch' }} />);
-        expect(screen.getByTestId("play-card")).toHaveClass("fbnomatch");
+        expect(screen.getByTestId("play-card").classList.contains("fbnomatch")).to.be.true;
     });
 
     it("should display a card with seen when seen", () => {
         render(<PlayCard onClick={mockOnClick} registerUserClicks={mockRegisterUserClicks} section={{ ...sectionProps, seen: true }} />);
-        expect(screen.getByTestId("play-card").querySelector(".back")).toHaveClass("seen");
+        expect(screen.getByTestId("play-card").querySelector(".back").classList.contains("seen")).to.be.true;
     });
 
     it("should display a card with a histogram when turned and playing", () => {
         render(<PlayCard onClick={mockOnClick} registerUserClicks={mockRegisterUserClicks} playing section={{ ...sectionProps, turned: true }} />);
-        expect(screen.getByTestId("play-card").querySelector(".aha__histogram")).toBeInTheDocument();
+        expect(document.body.contains(screen.getByTestId("play-card").querySelector(".aha__histogram"))).to.be.true;
     });
 
     it("should display a card with a histogram when turned and not playing", () => {
         render(<PlayCard onClick={mockOnClick} registerUserClicks={mockRegisterUserClicks} playing={false} section={{ ...sectionProps, turned: true }} />);
-        expect(screen.getByTestId("play-card").querySelector(".aha__histogram")).toBeInTheDocument();
+        expect(document.body.contains(screen.getByTestId("play-card").querySelector(".aha__histogram"))).to.be.true;
     });
 
     it("should display a card without a histogram when not turned and playing", () => {
         render(<PlayCard onClick={mockOnClick} registerUserClicks={mockRegisterUserClicks} playing section={sectionProps} />);
-        expect(screen.getByTestId("play-card").querySelector(".aha__histogram")).not.toBeInTheDocument();
+        expect(document.body.contains(screen.getByTestId("play-card").querySelector(".aha__histogram"))).to.not.be.true;
     });
 
     it("should display a card without a histogram when not turned and not playing", () => {
         render(<PlayCard onClick={mockOnClick} registerUserClicks={mockRegisterUserClicks} playing={false} section={sectionProps} />);
-        expect(screen.getByTestId("play-card").querySelector(".aha__histogram")).not.toBeInTheDocument();
+        expect(document.body.contains(screen.getByTestId("play-card").querySelector(".aha__histogram"))).to.not.be.true;
     });
 });

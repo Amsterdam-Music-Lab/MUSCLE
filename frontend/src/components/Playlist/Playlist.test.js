@@ -1,20 +1,21 @@
 import React from 'react';
 import { fireEvent, render, screen } from '@testing-library/react';
+import { vi } from 'vitest';
 
 import Playlist from './Playlist';
 
-jest.mock("../../util/stores");
+vi.mock("../../util/stores");
 
 describe('Playlist Component', () => {
     const playlist = { current: 25 };
     const experimentProp = { slug: 'test-experiment', playlists: [{id: 42}, {id: 43}] };
-    const onNext = jest.fn();
+    const onNext = vi.fn();
 
     it('renders correctly with given props', () => {
         render(
             <Playlist experiment={experimentProp} instruction="instruction" onNext={onNext} playlist={playlist}/>
         )
-        expect(screen.getByTestId('playlist-instruction')).toBeInTheDocument();
+        expect(screen.getByTestId('playlist-instruction')).to.exist;
         const playlistItems = screen.getAllByTestId('playlist-item');
         expect(playlistItems.length === 2);
     });
@@ -33,6 +34,6 @@ describe('Playlist Component', () => {
             <Playlist experiment={experimentProp} instruction="instruction" onNext={onNext} playlist={playlist}/>
         )
         expect((onNext).toHaveBeenCalled);
-        expect(screen.queryByTestId('playlist-instruction')).not.toBeInTheDocument();
+        expect(screen.queryByTestId('playlist-instruction')).not.to.exist;
     });
 });
