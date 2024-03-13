@@ -1,3 +1,5 @@
+import json
+
 from django.test import TestCase
 
 from experiment.models import Experiment, ExperimentSeries
@@ -58,8 +60,6 @@ class SessionViewsTest(TestCase):
     def test_next_round_with_collection(self):
         slug = 'mycollection'
         collection = ExperimentSeries.objects.create(slug=slug)
-        collection.random_experiments = [self.experiment]
-        collection.save()
         request_session = self.client.session
         request_session[COLLECTION_KEY] = slug
         request_session.save()
@@ -68,4 +68,11 @@ class SessionViewsTest(TestCase):
         response = self.client.get(
             '/session/{}/next_round/'.format(session.id))
         assert response
-        assert session.load_json_data().get(COLLECTION_KEY)
+        changed_session = Session.objects.get(pk=session.pk)
+        assert changed_session.load_json_data().get(COLLECTION_KEY) is None
+        collection.random_experiments = [self.experiment.pk]
+        collection.save()
+        response = self.client.get(
+            '/session/{}/next_round/'.format(session.id))
+        changed_session = Session.objects.get(pk=session.pk)
+        assert changed_session.load_json_data().get(COLLECTION_KEY) == slug
