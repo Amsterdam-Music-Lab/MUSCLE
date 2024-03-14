@@ -11,7 +11,7 @@ from result.models import Result
 from session.models import Session
 
 # Expected field count per model
-EXPECTED_EXPERIMENT_FIELDS = 14
+EXPECTED_EXPERIMENT_FIELDS = 16
 EXPECTED_SESSION_FIELDS = 9
 EXPECTED_RESULT_FIELDS = 12
 EXPECTED_PARTICIPANT_FIELDS = 5
@@ -27,7 +27,7 @@ this_experiment_admin = ExperimentAdmin(
     model=Experiment, admin_site=AdminSite)
 
 
-class TestAdminExperiment(TestCase):    
+class TestAdminExperiment(TestCase):
 
     @classmethod
     def setUpTestData(cls):
