@@ -130,6 +130,7 @@ const Experiment = ({ match }) => {
         participant,
         setError,
         updateActions,
+        theme,
         setTheme,
     ]);
 
