@@ -119,7 +119,9 @@ def serialize_experiment(experiment_object, finished=False):
     return {
         'slug': experiment_object.slug,
         'name': experiment_object.name,
-        'finished': finished
+        'description': experiment_object.description,
+        'image': experiment_object.image.file.url if experiment_object.image else '',
+        'finished': finished,
     }
 
 
