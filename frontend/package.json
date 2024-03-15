@@ -32,7 +32,7 @@
     "preview": "vite preview",
     "test": "vitest",
     "test:ci": "vitest --watch=false --coverage",
-    "generate-badge": "coverage-badges -s coverage/coverage-summary.json -o coverage-frontend-badge-new.svg --label 'Frontend Code Coverage'",
+    "generate-badge": "coverage-badges -s coverage/coverage-final.json -o coverage-frontend-badge-new.svg --label 'Frontend Code Coverage'",
     "scss": "sass src/index.scss src/index.css",
     "scss:watch": "sass src/index.scss src/index.css; sass --watch src/index.scss src/index.css",
     "storybook": "VITE_API_ROOT=http://localhost:8000 && storybook dev -p 6006",
