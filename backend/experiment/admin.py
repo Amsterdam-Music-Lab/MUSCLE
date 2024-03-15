@@ -153,7 +153,7 @@ class ModelFormFieldAsJSON(ModelMultipleChoiceField):
 class ExperimentSeriesForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super(ModelForm, self).__init__(*args, **kwargs)
-        from . import Experiment
+        
         experiments = Experiment.objects.all().filter(experiment_series=None)
         self.fields['first_experiments'] = ModelFormFieldAsJSON(queryset=experiments, required=False)
         self.fields['random_experiments'] = ModelFormFieldAsJSON(queryset=experiments, required=False)
