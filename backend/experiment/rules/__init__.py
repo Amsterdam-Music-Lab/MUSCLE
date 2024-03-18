@@ -1,6 +1,7 @@
 from .anisochrony import Anisochrony
 from .beat_alignment import BeatAlignment
 from .categorization import Categorization
+from .congosamediff import CongoSameDiff
 from .duration_discrimination import DurationDiscrimination
 from .duration_discrimination_tone import DurationDiscriminationTone
 from .eurovision_2020 import Eurovision2020
@@ -41,6 +42,7 @@ EXPERIMENT_RULES = {
     BeatAlignment.ID: BeatAlignment,
     BST.ID: BST,
     Categorization.ID: Categorization,
+    CongoSameDiff.ID: CongoSameDiff,
     DurationDiscrimination.ID: DurationDiscrimination,
     DurationDiscriminationTone.ID: DurationDiscriminationTone,
     Eurovision2020.ID: Eurovision2020,

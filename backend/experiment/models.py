@@ -4,7 +4,6 @@ from django.db import models
 from django.utils import timezone
 from django.contrib.postgres.fields import ArrayField
 from typing import List, Dict, Tuple, Any
-from experiment.rules import EXPERIMENT_RULES
 from experiment.standards.iso_languages import ISO_LANGUAGES
 from .questions import QUESTIONS_CHOICES, get_default_question_keys
 from theme.models import ThemeConfig
@@ -221,6 +220,7 @@ class Experiment(models.Model):
 
     def get_rules(self):
         """Get instance of rules class to be used for this session"""
+        from experiment.rules import EXPERIMENT_RULES
         cl = EXPERIMENT_RULES[self.rules]
         return cl()
 
