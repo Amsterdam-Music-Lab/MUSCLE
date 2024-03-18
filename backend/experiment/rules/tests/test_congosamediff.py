@@ -48,68 +48,46 @@ class CongoSameDiffTest(TestCase):
         assert isinstance(actions[1], Explainer)
 
     def test_next_round_final_round(self):
-        congo_same_diff, session = create_context('final')
+        congo_same_diff = CongoSameDiff()
 
-        session.get_next_round = lambda: 6
-        final_action = congo_same_diff.next_round(session)
+        self.session.get_next_round = lambda: 6
+        final_action = congo_same_diff.next_round(self.session)
 
         assert isinstance(final_action, Final)
 
     def test_next_round_practice_trial(self):
-        congo_same_diff, session = create_context('practice')
+        congo_same_diff = CongoSameDiff()
 
-        session.get_next_round = lambda: 2
-        practice_action = congo_same_diff.next_round(session)
+        self.session.get_next_round = lambda: 2
+        practice_action = congo_same_diff.next_round(self.session)
 
         assert isinstance(practice_action, Trial)
         assert practice_action.feedback_form.form[0].question == 'Is the third sound the SAME or DIFFERENT as the first two sounds?'
 
     def test_next_round_non_practice_trial(self):
-        congo_same_diff, session = create_context('non-practice')
+        congo_same_diff = CongoSameDiff()
 
-        session.get_next_round = lambda: 4
-        non_practice_action = congo_same_diff.next_round(session)
+        self.session.get_next_round = lambda: 4
+        non_practice_action = congo_same_diff.next_round(self.session)
 
         assert isinstance(non_practice_action, Trial)
         assert non_practice_action.feedback_form.form[0].question == 'Is the third sound the SAME or DIFFERENT as the first two sounds?'
 
     def test_get_next_trial(self):
-        congo_same_diff, session = create_context('next_trial')
-        subset = session.playlist.section_set.exclude(tag__contains='practice')
+        congo_same_diff = CongoSameDiff()
+        subset = self.session.playlist.section_set.exclude(tag__contains='practice')
         trial_index = 1
         is_practice = True
-        trial_action = congo_same_diff.get_next_trial(session, subset, trial_index, is_practice)
+        trial_action = congo_same_diff.get_next_trial(self.session, subset, trial_index, is_practice)
         assert isinstance(trial_action, Trial)
         assert trial_action.feedback_form.form[0].question == 'Is the third sound the SAME or DIFFERENT as the first two sounds?'
 
     def test_get_final_round(self):
-        congo_same_diff, session = create_context('final')
+        congo_same_diff = CongoSameDiff()
 
-        final_action = congo_same_diff.get_final_round(session)
+        final_action = congo_same_diff.get_final_round(self.session)
 
         assert isinstance(final_action, Final)
         assert final_action.final_text == 'Thank you for participating!'
 
 
-def create_context(name):
-    playlist = PlaylistModel.objects.create(name=f'CongoSameDiff{name}')
-    playlist.csv = (
-        "Dave,m1_contour,0.0,20.0,samediff/melody_1_contour.wav,practice_contour,m1\n"
-        "Dave,m1_interval,0.0,20.0,samediff/melody_1_interval.wav,practice_interval,m1\n"
-        "Dave,m1_same,0.0,20.0,samediff/melody_1_same.wav,same,m1\n"
-        "Dave,m1_scale,0.0,20.0,samediff/melody_1_scale.wav,scale,m1\n"
-    )
-    playlist.update_sections()
-    participant = Participant.objects.create()
-    experiment = Experiment.objects.create(
-        name=f'CongoSameDiff{name}',
-        slug=f'congosamediff-{name}',
-        rounds=4,
-    )
-    session = Session.objects.create(
-        experiment=experiment,
-        participant=participant,
-        playlist=playlist
-    )
-
-    return CongoSameDiff(), session
