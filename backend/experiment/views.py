@@ -125,12 +125,9 @@ def serialize_experiment(experiment_object, finished=False):
 
 def check_finished_session(experiment, participant):
     ''' Check if there is a finished session for this experiment and participant '''
-    try:
-        Session.objects.get(
-            experiment=experiment, participant=participant, finished_at__isnull=False)
-        return True
-    except:
-        return False
+    count = Session.objects.filter(
+        experiment=experiment, participant=participant, finished_at__isnull=False).count()
+    return count
 
 
 def get_associated_experiments(pk_list):
@@ -141,6 +138,6 @@ def get_associated_experiments(pk_list):
 def get_upcoming_experiment(experiment_list, participant):
     ''' get next experiment for which there is no finished session for this participant '''
     upcoming = next((experiment for experiment in experiment_list if
-                     check_finished_session(experiment, participant) is False), None)
+                     check_finished_session(experiment, participant) is 0), None)
     if upcoming:
         return serialize_experiment(upcoming)

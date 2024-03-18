@@ -18,14 +18,15 @@ const ExperimentCollection = ({match}) => {
         ) : dashboard? (
             <div className="aha__collection">
                 {/* Experiments */}
-                <div data-testid="collection-dashboard" className="dashboard">
+                <div role="region" className="dashboard">
                     <ul>
                         {dashboard.map((exp) => (
                             <li key={exp.slug} >
                                 <Link to={"/" + exp.slug}>
                                     <h3>{exp.name}</h3>
-                                </Link>
-                            </li>
+                                    <div role="status" class="counter">{exp.finished}</div>
+                                </Link>   
+                            </li> 
                         ))}
                     </ul>
                 </div>
