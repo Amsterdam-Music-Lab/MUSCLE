@@ -13,6 +13,7 @@ from .huang_2022 import Huang2022
 from .kuiper_2020 import Kuiper2020
 from .listening_conditions import ListeningConditions
 from .matching_pairs import MatchingPairsGame
+from .matching_pairs_fixed import MatchingPairsFixed
 from .matching_pairs_lite import MatchingPairsLite
 from .matching_pairs_icmpc import MatchingPairsICMPC
 from .musical_preferences import MusicalPreferences
@@ -52,6 +53,7 @@ EXPERIMENT_RULES = {
     Huang2022.ID: Huang2022,
     Kuiper2020.ID: Kuiper2020,
     ListeningConditions.ID: ListeningConditions,
+    MatchingPairsFixed.ID: MatchingPairsFixed,
     MatchingPairsGame.ID: MatchingPairsGame,
     MatchingPairsLite.ID: MatchingPairsLite,
     MatchingPairsICMPC.ID: MatchingPairsICMPC,

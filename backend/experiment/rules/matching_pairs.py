@@ -19,6 +19,7 @@ class MatchingPairsGame(Base):
     show_animation = True
     score_feedback_display = 'large-top'
     contact_email = 'aml.tunetwins@gmail.com'
+    randomize = True
 
     def __init__(self):
         self.questions = [
@@ -79,8 +80,8 @@ class MatchingPairsGame(Base):
                 title='Score',
                 final_text='Can you score higher than your friends and family? Share and let them try!',
                 button={
-                    'text': 'Play again', 'link': '{}/{}'.format(
-                        settings.CORS_ORIGIN_WHITELIST[0], session.experiment.slug)
+                    'text': 'Play again', 'link': '/{}'.format(
+                        session.experiment.slug)
                 },
                 rank=self.rank(session, exclude_unfinished=False),
                 social=social_info,
@@ -93,14 +94,16 @@ class MatchingPairsGame(Base):
         pairs = json_data.get('pairs', [])
         if len(pairs) < self.num_pairs:
             pairs = list(session.playlist.section_set.order_by().distinct('group').values_list('group', flat=True))
-            random.shuffle(pairs)
+            if self.randomize:
+                random.shuffle(pairs)
         selected_pairs = pairs[:self.num_pairs]
         session.save_json_data({'pairs': pairs[self.num_pairs:]})
         originals = session.playlist.section_set.filter(group__in=selected_pairs, tag='Original')  
         degradations = json_data.get('degradations')
         if not degradations:
             degradations = ['Original', '1stDegradation', '2ndDegradation']
-            random.shuffle(degradations)
+            if self.randomize:
+                random.shuffle(degradations)
         degradation_type = degradations.pop()
         session.save_json_data({'degradations': degradations})
         if degradation_type == 'Original':
@@ -112,7 +115,8 @@ class MatchingPairsGame(Base):
 
     def get_matching_pairs_trial(self, session):
         player_sections = self.select_sections(session)
-        random.shuffle(player_sections)
+        if self.randomize:
+            random.shuffle(player_sections)
 
         playback = MatchingPairs(
             sections=player_sections,
