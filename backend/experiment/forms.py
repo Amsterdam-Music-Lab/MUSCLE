@@ -144,6 +144,8 @@ class ExperimentForm(ModelForm):
         fields = ['name', 'slug', 'active', 'rules',
                   'rounds', 'bonus_points', 'playlists',]
         help_texts = {
+            'description': 'A short description of the experiment that will be displayed on the experiment collection page and as a meta description in search engines.',
+            'image': 'An image that will be displayed on the experiment collection page and as a meta image in search engines.',
             'consent': 'Upload an HTML (.html) or MARKDOWN (.md) file with a text to ask a user its consent<br> \
                       for using the experiment data for this instance of the experiment.<br> \
                       This field will override any consent text loaded from the rules file. <br>\
