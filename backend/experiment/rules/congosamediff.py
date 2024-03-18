@@ -32,7 +32,6 @@ class CongoSameDiff(Base):
         explainer = Explainer(
             instruction='Welcome to this Same Diff experiment',
             steps=[],
-            step_numbers=True
         )
 
         return [
