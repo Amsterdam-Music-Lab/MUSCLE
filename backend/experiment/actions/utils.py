@@ -22,7 +22,7 @@ def final_action_with_optional_button(session, final_text='', title=_('End'), bu
             final_text=final_text,
             button={
                 'text': button_text,
-                'link': '/collection/{}'.format(collection_slug)
+                'link': f'/collection/{collection_slug}'
             }
         )
     else:
