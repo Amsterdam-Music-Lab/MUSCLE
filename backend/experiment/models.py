@@ -44,6 +44,35 @@ def consent_upload_path(instance, filename):
     return 'consent/{0}/{1}'.format(folder_name, filename)
 
 
+class ExperimentSeriesGroup(models.Model):
+    name = models.CharField(max_length=64, blank=True, default='')
+    series = models.ForeignKey(ExperimentSeries, on_delete=models.CASCADE)
+    order = models.IntegerField()
+    dashboard = models.BooleanField()
+    randomize = models.BooleanField()
+
+    def __str__(self):
+        compound_name = self.name or self.series.name or self.series.slug or 'Unnamed group'
+        return f'{compound_name} - {self.order}'
+
+    class Meta:
+        ordering = ['order']
+        verbose_name_plural = "Experiment Series Groups"
+
+
+class GroupedExperiment(models.Model):
+    experiment = models.ForeignKey('Experiment', on_delete=models.CASCADE)
+    group = models.ForeignKey(ExperimentSeriesGroup, on_delete=models.CASCADE)
+    order = models.IntegerField()
+
+    def __str__(self):
+        return f'{self.experiment.name} - {self.group.name} - {self.order}'
+
+    class Meta:
+        ordering = ['order']
+        verbose_name_plural = "Grouped Experiments"
+
+
 class Experiment(models.Model):
     """Root entity for configuring experiments"""
 

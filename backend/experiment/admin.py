@@ -1,7 +1,6 @@
 import csv
 from zipfile import ZipFile
 from io import BytesIO
-import json
 from django.utils.safestring import mark_safe
 
 from django.contrib import admin
@@ -9,13 +8,13 @@ from django.db import models
 from django.utils import timezone
 from django.core import serializers
 from django.shortcuts import render, redirect
-from django.forms import CheckboxSelectMultiple, ModelForm, ModelMultipleChoiceField
+from django.forms import CheckboxSelectMultiple
 from django.http import HttpResponse
 from inline_actions.admin import InlineActionsModelAdminMixin
 from django.urls import reverse
 from django.utils.html import format_html
-from experiment.models import Experiment, ExperimentSeries, Feedback
-from experiment.forms import ExperimentForm, ExportForm, TemplateForm, EXPORT_TEMPLATES
+from experiment.models import Experiment, ExperimentSeries, ExperimentSeriesGroup, Feedback, GroupedExperiment
+from experiment.forms import ExperimentSeriesForm, ExperimentForm, ExportForm, TemplateForm, EXPORT_TEMPLATES
 from section.models import Section, Song
 from result.models import Result
 from participant.models import Participant
@@ -159,31 +158,23 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
 admin.site.register(Experiment, ExperimentAdmin)
 
 
-class ModelFormFieldAsJSON(ModelMultipleChoiceField):
-    """ override clean method to prevent pk lookup to save querysets """
-    def clean(self, value):
-        return value
+class GroupedExperimentInline(admin.TabularInline):
+    model = GroupedExperiment
+    extra = 1
 
 
-class ExperimentSeriesForm(ModelForm):
-    def __init__(self, *args, **kwargs):
-        super(ModelForm, self).__init__(*args, **kwargs)
-        experiments = Experiment.objects.all()
-        self.fields['first_experiments'] = ModelFormFieldAsJSON(queryset=experiments, required=False)
-        self.fields['random_experiments'] = ModelFormFieldAsJSON(queryset=experiments, required=False)
-        self.fields['last_experiments'] = ModelFormFieldAsJSON(queryset=experiments, required=False)
-
-    class Meta:
-        model = ExperimentSeries
-        fields = ['slug', 'first_experiments',
-                  'random_experiments', 'last_experiments', 'dashboard']
+class ExperimentSeriesGroupInline(admin.TabularInline):
+    model = ExperimentSeriesGroup
+    extra = 1
+    inlines = [GroupedExperimentInline]
 
 
 class ExperimentSeriesAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
-    list_display = ('slug', 'name', 'description_excerpt', 'dashboard')
+    list_display = ('slug', 'name', 'description_excerpt', 'dashboard', 'groups')
     fields = ['slug', 'name', 'description', 'first_experiments',
               'random_experiments', 'last_experiments', 'dashboard']
     form = ExperimentSeriesForm
+    inlines = [ExperimentSeriesGroupInline]
 
     def description_excerpt(self, obj):
 
@@ -192,5 +183,26 @@ class ExperimentSeriesAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
 
         return obj.description[:50] + '...'
 
+    def groups(self, obj):
+        groups = ExperimentSeriesGroup.objects.filter(series=obj)
+        return format_html(', '.join([f'<a href="/admin/experiment/experimentseriesgroup/{group.id}/change/">{group.name}</a>' for group in groups]))
+
 
 admin.site.register(ExperimentSeries, ExperimentSeriesAdmin)
+
+
+class ExperimentSeriesGroupAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
+    list_display = ('name', 'related_series', 'order', 'dashboard', 'randomize')
+    fields = ['name', 'series', 'order', 'dashboard', 'randomize']
+    inlines = [GroupedExperimentInline]
+
+    def related_series(self, obj):
+
+        if not obj.series:
+            return "No series"
+
+        url = reverse("admin:experiment_experimentseries_change", args=[obj.series.pk])
+        return format_html('<a href="{}">{}</a>', url, obj.series.name)
+
+
+admin.site.register(ExperimentSeriesGroup, ExperimentSeriesGroupAdmin)
