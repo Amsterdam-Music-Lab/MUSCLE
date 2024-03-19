@@ -6,10 +6,10 @@ from .form import BooleanQuestion, ChoiceQuestion, Form
 from .playback import Autoplay, PlayButton
 from .trial import Trial
 
-from result.utils import prepare_result
-
-from experiment.actions.styles import STYLE_BOOLEAN_NEGATIVE_FIRST
 from experiment.actions.utils import randomize_playhead
+from result.utils import prepare_result
+from section.models import Section
+from session.models import Session
 
 
 def two_alternative_forced(session, section, choices, expected_response=None, style={}, comment='', scoring_rule=None, title='', config=None):
@@ -45,7 +45,7 @@ def two_alternative_forced(session, section, choices, expected_response=None, st
     return trial
 
 
-def song_sync(session, section, title,
+def song_sync(session: Session, section: Section, title: str,
               recognition_time=15, sync_time=15,
               min_jitter=10, max_jitter=15):
     trial_config = {
@@ -82,6 +82,9 @@ def song_sync(session, section, title,
         title=title
     )
     continuation_correctness = random.randint(0, 1) == 1
+    jitter = randomize_playhead(
+        min_jitter, max_jitter, continuation_correctness)
+    session.save_json_data({'continuation_offset': jitter})
     trial_config['response_time'] = sync_time
     correct_place = Trial(
         feedback_form=Form([BooleanQuestion(
@@ -97,8 +100,7 @@ def song_sync(session, section, title,
                           instruction=_(
                               'Did the track come back in the right place?'),
                           show_animation=True,
-                          play_from=randomize_playhead(
-                              min_jitter, max_jitter, silence_time, continuation_correctness),
+                          play_from=silence_time + jitter,
                           resume_play=True),
         config=trial_config,
         title=title

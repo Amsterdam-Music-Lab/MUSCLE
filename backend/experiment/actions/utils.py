@@ -94,5 +94,5 @@ def get_last_n_turnpoints(session, num_turnpoints):
     return all_results[:cutoff]
 
 
-def randomize_playhead(min_jitter, max_jitter, silence_time, continuation_correctness):
-    return silence_time + (random.uniform(min_jitter, max_jitter) if not continuation_correctness else 0)
+def randomize_playhead(min_jitter, max_jitter, continuation_correctness):
+    return random.uniform(min_jitter, max_jitter) if not continuation_correctness else 0
