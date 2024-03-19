@@ -101,7 +101,12 @@ def get_experiment_collection(request, slug):
         if collection.dashboard:
             serialized = [serialize_experiment(experiment, get_finished_session_count(
                 experiment, participant)) for experiment in experiments]
-            return JsonResponse({'dashboard': serialized})
+            return JsonResponse(
+                serialize_experiment_series(
+                    collection, 
+                    {'dashboard': serialized}
+                )
+            )
         else:
             upcoming_experiment = get_upcoming_experiment(
                 experiments, participant)
@@ -113,6 +118,19 @@ def get_experiment_collection(request, slug):
         if upcoming_experiment:
             return JsonResponse(upcoming_experiment)
     return JsonResponse()
+
+
+def serialize_experiment_series(
+    experiment_series: ExperimentSeries,
+    overrides={},
+):
+    return {
+        'slug': experiment_series.slug,
+        'name': experiment_series.name,
+        'description': experiment_series.description,
+        'dashboard': experiment_series.dashboard,
+        **overrides
+    }
 
 
 def serialize_experiment(experiment_object, finished=0):
