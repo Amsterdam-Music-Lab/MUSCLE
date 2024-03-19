@@ -34,18 +34,27 @@ class TestExperimentCollectionViews(TestCase):
         )
         # check that first_experiments is returned correctly
         response = self.client.get('/experiment/collection/series_test/')
-        assert response.json().get('slug') == 'experiment1'
+        assert response.json().get('redirect_to').get('slug') == 'experiment1'
         # create session
-        Session.objects.create(experiment=experiment1,
-                               participant=self.participant, finished_at=timezone.now())
+        Session.objects.create(
+            experiment=experiment1,
+            participant=self.participant,
+            finished_at=timezone.now()
+        )
         response = self.client.get('/experiment/collection/series_test/')
-        assert response.json().get('slug') in ('experiment2', 'experiment3')
-        Session.objects.create(experiment=experiment2,
-                               participant=self.participant, finished_at=timezone.now())
-        Session.objects.create(experiment=experiment3,
-                               participant=self.participant, finished_at=timezone.now())
+        assert response.json().get('redirect_to').get('slug') in ('experiment2', 'experiment3')
+        Session.objects.create(
+            experiment=experiment2,
+            participant=self.participant,
+            finished_at=timezone.now()
+        )
+        Session.objects.create(
+            experiment=experiment3,
+            participant=self.participant,
+            finished_at=timezone.now()
+        )
         response = self.client.get('/experiment/collection/series_test/')
-        assert response.json().get('slug') == 'experiment4'
+        assert response.json().get('redirect_to').get('slug') == 'experiment4'
         # if ExperimentSeries has dashboard set True, return list of random experiments
         collection.dashboard = True
         collection.save()

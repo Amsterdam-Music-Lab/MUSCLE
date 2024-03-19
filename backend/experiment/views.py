@@ -94,7 +94,12 @@ def get_experiment_collection(request, slug):
         experiments = get_associated_experiments(collection.first_experiments)
         upcoming_experiment = get_upcoming_experiment(experiments, participant)
         if upcoming_experiment:
-            return JsonResponse(upcoming_experiment)
+            return JsonResponse(
+                serialize_experiment_series(
+                    collection,
+                    redirect_to=upcoming_experiment
+                )
+            )
     if collection.random_experiments:
         experiments = get_associated_experiments(collection.random_experiments)
         shuffle(experiments)
@@ -103,33 +108,44 @@ def get_experiment_collection(request, slug):
                 experiment, participant)) for experiment in experiments]
             return JsonResponse(
                 serialize_experiment_series(
-                    collection, 
-                    {'dashboard': serialized}
+                    collection,
+                    dashboard=serialized
                 )
             )
         else:
             upcoming_experiment = get_upcoming_experiment(
                 experiments, participant)
             if upcoming_experiment:
-                return JsonResponse(upcoming_experiment)
+                return JsonResponse(
+                    serialize_experiment_series(
+                        collection,
+                        redirect_to=upcoming_experiment
+                    )
+                )
     if collection.last_experiments:
         experiments = get_associated_experiments(collection.last_experiments)
         upcoming_experiment = get_upcoming_experiment(experiments, participant)
         if upcoming_experiment:
-            return JsonResponse(upcoming_experiment)
+            return JsonResponse(
+                serialize_experiment_series(
+                    collection,
+                    redirect_to=upcoming_experiment
+                )
+            )
     return JsonResponse()
 
 
 def serialize_experiment_series(
     experiment_series: ExperimentSeries,
-    overrides={},
+    dashboard: list = [],
+    redirect_to: Experiment = None
 ):
     return {
         'slug': experiment_series.slug,
         'name': experiment_series.name,
         'description': experiment_series.description,
-        'dashboard': experiment_series.dashboard,
-        **overrides
+        'dashboard': dashboard,
+        'redirect_to': redirect_to,
     }
 
 
