@@ -80,8 +80,8 @@ class MatchingPairsGame(Base):
                 title='Score',
                 final_text='Can you score higher than your friends and family? Share and let them try!',
                 button={
-                    'text': 'Play again', 'link': '/{}'.format(
-                        session.experiment.slug)
+                    'text': 'Play again',
+                    'link': f'/{session.experiment.slug}'
                 },
                 rank=self.rank(session, exclude_unfinished=False),
                 social=social_info,
