@@ -11,33 +11,38 @@ let mock = new MockAdapter(axios);
 describe('ExperimentCollection', () => {
     const experiment1 = {
         slug: 'some_slug',
-        name: 'Some Experiment'
+        name: 'Some Experiment',
+        finished: 0
     };
     const experiment2 = {
         slug: 'another_slug',
-        name: 'Another Experiment'
+        name: 'Another Experiment',
+        finished: 2
     };
 
-    it('forwards to a single experiment if it receives a single object', () => {
+    it('forwards to a single experiment if it receives a single object', async () => {
         mock.onGet().replyOnce(200, experiment1);
         render(
         <MemoryRouter>
             <ExperimentCollection match={{params: {slug: 'some_collection'}}}/>
         </MemoryRouter>);
-        waitFor(() => {
-            expect(screen.getByTestId('collection-redirect')).toBeInTheDocument();
+        await waitFor(() => {
+            expect(screen.queryByRole('menu')).toBeFalsy();
         })
     });
 
-    it('shows a dashboard of multiple experiments if it receives an array', () => {
+    it('shows a dashboard of multiple experiments if it receives an array', async () => {
         mock.onGet().replyOnce(200, {dashboard: [experiment1, experiment2]});
         render(
         <MemoryRouter>
             <ExperimentCollection match={{params: {slug: 'some_collection'}}}/>
         </MemoryRouter>
         );
-        waitFor(() => {
-            expect(document.querySelector('[data-testid="collection-dashboard"]')).not.toBeNull();
+        await waitFor(() => {
+            expect(screen.getByRole('menu')).toBeTruthy();
+            const counters = screen.getAllByRole('status');
+            expect(counters).toHaveLength(2);
+            expect(counters[1].innerHTML).toBe('2');
         }) 
     });
 
