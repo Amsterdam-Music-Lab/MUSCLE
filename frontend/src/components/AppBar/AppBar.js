@@ -1,7 +1,7 @@
 import React from "react";
 import { URLS, LOGO_URL, LOGO_TITLE } from "../../config";
 import { Link } from "react-router-dom";
-import useBoundStore from "util/stores";
+import useBoundStore from "@/util/stores";
 
 // AppBar is a bar on top of the app, with navigation and title
 const AppBar = ({ title, logoClickConfirm = null }) => {

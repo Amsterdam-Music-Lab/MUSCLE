@@ -1,5 +1,5 @@
 import React from "react";
-import useBoundStore from "util/stores";
+import useBoundStore from "@/util/stores";
 
 // Page is a single page in the application
 const Page = ({ className, children }) => {

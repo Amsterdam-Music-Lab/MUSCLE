@@ -1,13 +1,14 @@
 import { renderHook, act } from "@testing-library/react";
 import useResultHandler from "./useResultHandler";
+import { vi } from 'vitest';
 
 import * as API from '../API.js';
 
-jest.mock('../API.js');
+vi.mock('../API.js');
 
 describe('useResultHandler', () => {
 
-    const mockOnNext = jest.fn();
+    const mockOnNext = vi.fn();
     const initialState = { next_round: ['round2'] }; // Example initial state
     const mockSession = 'session-id';
     const mockParticipant = 'participant-id';

@@ -1,4 +1,4 @@
-import useBoundStore from 'util/stores';
+import useBoundStore from '@/util/stores';
 import MatchingPairs, { SCORE_FEEDBACK_DISPLAY } from '../components/MatchingPairs/MatchingPairs';
 
 import audio from './assets/audio.wav';

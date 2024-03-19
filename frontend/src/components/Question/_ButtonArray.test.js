@@ -1,6 +1,7 @@
 import React from 'react';
 import { render, fireEvent } from '@testing-library/react';
 import ButtonArray from './_ButtonArray';
+import { vi } from 'vitest';
 
 const getProps = (overrides = {}) => ({
     question: {
@@ -20,7 +21,7 @@ const getProps = (overrides = {}) => ({
         "min_values": 1,
     },
     disabled: false,
-    onChange: jest.fn(),
+    onChange: vi.fn(),
     value: null,
     ...overrides,
 });
@@ -32,7 +33,7 @@ describe('ButtonArray', () => {
 
         const button = getByText('Yes');
 
-        expect(button).toHaveClass('checked');
+        expect(button.classList.contains('checked')).to.be.true;
     });
 
     it('does not add the "checked" class to a button when it is not selected', () => {
@@ -41,7 +42,7 @@ describe('ButtonArray', () => {
 
         const button = getByText('Unsure');
 
-        expect(button).not.toHaveClass('checked');
+        expect(button.classList.contains('checked')).to.be.false;
     });
 
     it('calls the onChange function when a button is clicked', () => {

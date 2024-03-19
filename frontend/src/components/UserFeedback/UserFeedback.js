@@ -3,7 +3,7 @@ import React, { useState} from 'react';
 import { postFeedback } from '../../API';
 import Button from '../Button/Button';
 import HTML from '../HTML/HTML';
-import classNames from 'util/classNames';
+import classNames from '@/util/classNames';
 
 const UserFeedback = ({experimentSlug, participant, feedbackInfo, inline = true}) => {
     const [value, setValue] = useState('');

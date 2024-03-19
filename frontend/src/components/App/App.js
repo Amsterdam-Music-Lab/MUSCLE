@@ -15,6 +15,7 @@ import ExperimentCollection from "../ExperimentCollection/ExperimentCollection";
 import Profile from "../Profile/Profile";
 import Reload from "../Reload/Reload";
 import StoreProfile from "../StoreProfile/StoreProfile.js";
+import useDisableRightClickOnTouchDevices from "../../hooks/useDisableRightClickOnTouchDevices.js";
 
 
 // App is the root component of our application
@@ -24,15 +25,17 @@ const App = () => {
     const setParticipant = useBoundStore((state) => state.setParticipant);
     const queryParams = window.location.search;
     
+    useDisableRightClickOnTouchDevices();
+    
     useEffect(() => {
         const urlParams = new URLSearchParams(queryParams);
         const participantId = urlParams.get('participant_id');
-        let queryParams = '';
+        let participantQueryParams = '';
         if (participantId) {
-            queryParams = `?participant_id=${participantId}`;
+            participantQueryParams = `?participant_id=${participantId}`;
         }
         try {
-            axios.get(API_BASE_URL + API_URLS.participant.current + queryParams).then(response => {
+            axios.get(API_BASE_URL + API_URLS.participant.current + participantQueryParams).then(response => {
                 setParticipant(response.data);
             });
         } catch (err) {

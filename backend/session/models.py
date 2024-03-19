@@ -137,6 +137,7 @@ class Session(models.Model):
         To ensure appropriate IP restrictions, most rules should use this
         method instead of operating on the playlist directly.
         """
+        
         pks = self.filter_songs(filter_by)
         if pks:
             # Return a random section

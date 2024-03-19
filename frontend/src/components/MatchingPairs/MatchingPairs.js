@@ -2,7 +2,7 @@ import React, { useRef, useState } from "react";
 import classNames from "classnames";
 
 import { scoreIntermediateResult } from "../../API";
-import useBoundStore from "util/stores";
+import useBoundStore from "@/util/stores";
 
 import PlayCard from "./PlayCard";
 
@@ -48,6 +48,7 @@ const MatchingPairs = ({
     const showFeedback = (score) => {
 
         const turnedCards = sections.filter(s => s.turned);
+
         // Check if this turn has finished
         if (turnedCards.length === 2) {
             // update total score & display current score

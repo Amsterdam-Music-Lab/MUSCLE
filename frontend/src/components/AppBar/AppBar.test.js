@@ -2,19 +2,22 @@ import React from 'react';
 import { render, fireEvent } from '@testing-library/react';
 import AppBar from './AppBar';
 import { BrowserRouter as Router } from 'react-router-dom';
+import { vi } from 'vitest';
 
 describe('AppBar', () => {
 
   const BASE_URL = 'https://www.amsterdammusiclab.nl';
 
   beforeEach(() => {
-    jest.resetModules();
-    process.env.REACT_APP_AML_HOME = BASE_URL;
+    vi.resetModules();
+    import.meta.env.VITE_AML_HOME = BASE_URL;
   });
 
   it('renders correctly', () => {
     const { getByText } = render(<AppBar title="Test Title" />, { wrapper: Router });
-    expect(getByText('Test Title')).toBeInTheDocument();
+
+    const titleElement = getByText('Test Title');
+    expect(document.body.contains(titleElement)).to.be.true;
   });
 
   it('renders logo as Link for relative URL', () => {
@@ -33,7 +36,7 @@ describe('AppBar', () => {
 
   it('prevents navigation when logoClickConfirm is provided and user cancels', () => {
     // Mock window.confirm
-    window.confirm = jest.fn(() => false);
+    window.confirm = vi.fn(() => false);
 
     const { getByLabelText } = render(<AppBar title="Test Title" logoClickConfirm="Confirm?" />, { wrapper: Router });
     const logo = getByLabelText('Logo');
