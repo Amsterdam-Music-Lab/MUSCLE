@@ -103,8 +103,11 @@ def get_experiment_collection(request, slug):
         experiments = get_associated_experiments(collection.random_experiments)
         shuffle(experiments)
         if collection.dashboard:
-            serialized = [serialize_experiment(experiment, get_finished_session_count(
-                experiment, participant)) for experiment in experiments]
+            serialized = [
+                serialize_experiment(
+                    experiment,
+                    get_finished_session_count(experiment, participant)
+                ) for experiment in experiments]
             return JsonResponse(
                 serialize_experiment_series(
                     collection,
@@ -141,12 +144,11 @@ def serialize_experiment_series_group(group: ExperimentSeriesGroup):
         grouped_experiments = list(grouped_experiments)
         shuffle(grouped_experiments)
 
-    if grouped_experiments:
-        return {
-            'name': group.name,
-            'dashboard': group.dashboard,
-            'experiments': [serialize_experiment(experiment.experiment) for experiment in grouped_experiments]
-        }
+    return {
+        'name': group.name,
+        'dashboard': group.dashboard,
+        'experiments': [serialize_experiment(experiment.experiment) for experiment in grouped_experiments]
+    }
 
 
 def serialize_experiment_series(
