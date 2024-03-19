@@ -1,12 +1,13 @@
 from django.test import TestCase
 
+from experiment.actions import Trial
 from experiment.models import Experiment
 from participant.models import Participant
 from section.models import Playlist
 from session.models import Session
 
 
-class TestMatchingPairsFixed(TestCase):
+class TestMatchingPairsVariants(TestCase):
 
     def setUp(self):
         section_csv = (
@@ -25,20 +26,44 @@ class TestMatchingPairsFixed(TestCase):
         self.playlist.csv = section_csv
         self.playlist.update_sections()
         self.participant = Participant.objects.create()
-        self.experiment = Experiment.objects.create(
-            rules='MATCHING_PAIRS_FIXED', slug='mpairs_fixed')
+
+    def test_lite_version(self):
+        experiment = Experiment.objects.create(
+            rules='MATCHING_PAIRS_LITE', slug='mpairs_lite'
+        )
+        session = Session.objects.create(
+            experiment=experiment,
+            participant=self.participant,
+            playlist=self.playlist
+        )
+        first_trial = session.experiment_rules().get_matching_pairs_trial(session)
+        another_session = Session.objects.create(
+            experiment=experiment,
+            participant=self.participant,
+            playlist=self.playlist
+        )
+        second_trial = another_session.experiment_rules(
+        ).get_matching_pairs_trial(another_session)
+        assert isinstance(first_trial, Trial)
+        assert isinstance(second_trial, Trial)
+        assert first_trial.playback.sections != second_trial.playback.sections
 
     def test_fixed_order_sections(self):
+        experiment = Experiment.objects.create(
+            rules='MATCHING_PAIRS_FIXED', slug='mpairs_fixed')
         session = Session.objects.create(
-            experiment=self.experiment,
+            experiment=experiment,
             participant=self.participant,
             playlist=self.playlist
         )
-        first_run_sections = session.experiment_rules().select_sections(session)
+        first_trial = session.experiment_rules().get_matching_pairs_trial(session)
         another_session = Session.objects.create(
-            experiment=self.experiment,
+            experiment=experiment,
             participant=self.participant,
             playlist=self.playlist
         )
-        second_run_sections = another_session.experiment_rules().select_sections(another_session)
-        assert first_run_sections == second_run_sections
+        second_trial = another_session.experiment_rules(
+        ).get_matching_pairs_trial(another_session)
+        assert isinstance(first_trial, Trial)
+        assert isinstance(second_trial, Trial)
+        assert first_trial.playback.sections == second_trial.playback.sections
