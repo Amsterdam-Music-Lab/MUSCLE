@@ -99,7 +99,7 @@ def get_experiment_collection(request, slug):
         experiments = get_associated_experiments(collection.random_experiments)
         shuffle(experiments)
         if collection.dashboard:
-            serialized = [serialize_experiment(experiment, check_finished_session(
+            serialized = [serialize_experiment(experiment, get_finished_session_count(
                 experiment, participant)) for experiment in experiments]
             return JsonResponse({'dashboard': serialized})
         else:
