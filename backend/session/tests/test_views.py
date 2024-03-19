@@ -66,13 +66,13 @@ class SessionViewsTest(TestCase):
         session = Session.objects.create(
             experiment=self.experiment, participant=self.participant)
         response = self.client.get(
-            f'/session/{session.id}/next_round/'
+            f'/session/{session.id}/next_round/')
         assert response
         changed_session = Session.objects.get(pk=session.pk)
         assert changed_session.load_json_data().get(COLLECTION_KEY) is None
         collection.random_experiments = [self.experiment.pk]
         collection.save()
         response = self.client.get(
-            f'/session/{session.id}/next_round/'
+            f'/session/{session.id}/next_round/')
         changed_session = Session.objects.get(pk=session.pk)
         assert changed_session.load_json_data().get(COLLECTION_KEY) == slug
