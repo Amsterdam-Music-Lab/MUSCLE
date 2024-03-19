@@ -2,14 +2,19 @@ import re
 from django.contrib import admin
 from django.utils.html import format_html
 from django.utils.safestring import mark_safe
-from .models import ThemeConfig
+from .models import FooterConfig, ThemeConfig
 from .forms import ThemeConfigForm
 
+
+class FooterConfigInline(admin.StackedInline):
+    model = FooterConfig
+    fields = ['description', 'logos']
 
 @admin.register(ThemeConfig)
 class ThemeConfigAdmin(admin.ModelAdmin):
 
     form = ThemeConfigForm
+    inlines = [FooterConfigInline]
 
     list_display = ('id', 'name_link', 'heading_font_preview', 'body_font_preview', 'logo_preview', 'background_preview')
     search_fields = ('name', 'description')
@@ -27,10 +32,10 @@ class ThemeConfigAdmin(admin.ModelAdmin):
             'fields': ('body_font_url',)
         }),
         ('Logo Configuration', {
-            'fields': ('logo_url',)
+            'fields': ('logo_image',)
         }),
         ('Background Configuration', {
-            'fields': ('background_url',)
+            'fields': ('background_image',)
         }),
     )
 
@@ -88,13 +93,13 @@ class ThemeConfigAdmin(admin.ModelAdmin):
         return "No font selected"
 
     def logo_preview(self, obj):
-        if obj.logo_url:
-            return mark_safe(f'<img src="{obj.logo_url}" style="max-height: 50px;"/>')
+        if obj.logo_image:
+            return mark_safe(f'<img src="/upload/{obj.logo_image.file}" style="max-height: 50px;"/>')
         return ""
 
     def background_preview(self, obj):
-        if obj.background_url:
-            return mark_safe(f'<div style="background-image: url({obj.background_url}); height: 50px; width: 100px; background-size: cover;"></div>')
+        if obj.background_image:
+            return mark_safe(f'<div style="background-image: url(/upload/{obj.background_image.file}); height: 50px; width: 100px; background-size: cover;"></div>')
         return ""
 
     heading_font_preview.short_description = 'Heading Font Preview'

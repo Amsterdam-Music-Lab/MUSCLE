@@ -4,7 +4,7 @@ from django.core.exceptions import ValidationError
 valid_extensions = ['md', 'html']
 
 
-def consent_file_validator():
+def markdown_html_validator():
     return FileExtensionValidator(allowed_extensions=valid_extensions)
 
 

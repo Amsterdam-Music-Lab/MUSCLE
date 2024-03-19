@@ -30,3 +30,14 @@ class ThemeConfig(models.Model):
             'logo_image': self.logo_image.filename,
             'background_image': self.background_image.filename,
         }
+
+
+class FooterConfig(models.Model):
+    theme = models.OneToOneField(ThemeConfig, on_delete=models.CASCADE)
+    description = models.FileField(upload_to=footer_info_upload_path,
+                                   blank=True,
+                                   default='',
+                                   help_text='Upload a file in html or markdown format',
+                                   validators=[markdown_html_validator()])
+    logos = models.ManyToManyField(
+        to='image.Image', blank=True, help_text='Add references to Image objects; make sure these have sufficient contrast with the background (image).')
