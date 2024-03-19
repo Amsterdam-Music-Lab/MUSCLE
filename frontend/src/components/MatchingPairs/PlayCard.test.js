@@ -61,19 +61,25 @@ describe("PlayCard Component Tests", () => {
     });
 
     it("should display a card with fbmemory when memory", () => {
-        render(<PlayCard onClick={mockOnClick} registerUserClicks={mockRegisterUserClicks} section={{ ...sectionProps, matchClass: 'fbmemory' }} />);
-        expect(screen.getByTestId("play-card").classList.contains("fbmemory")).to.be.true;
+        render(<PlayCard onClick={mockOnClick} registerUserClicks={mockRegisterUserClicks} showAnimation={true} section={{ ...sectionProps, matchClass: 'fbmemory' }} />);
+        const check = screen.getByRole("button").classList;
+        expect(screen.getByRole("button").classList.contains("fbmemory")).to.be.true;
     });
 
     it("should display a card with fblucky when lucky", () => {
-        render(<PlayCard onClick={mockOnClick} registerUserClicks={mockRegisterUserClicks} section={{ ...sectionProps, matchClass: 'fblucky' }} />);
-        expect(screen.getByTestId("play-card").classList.contains("fblucky")).to.be.true;
+        render(<PlayCard onClick={mockOnClick} registerUserClicks={mockRegisterUserClicks} showAnimation={true} section={{ ...sectionProps, matchClass: 'fblucky' }} />);
+        expect(screen.getByRole("button").classList.contains("fblucky")).to.be.true;
     });
 
     it("should display a card with fbnomatch when nomatch", () => {
-        render(<PlayCard onClick={mockOnClick} registerUserClicks={mockRegisterUserClicks} section={{ ...sectionProps, matchClass: 'fbnomatch' }} />);
-        expect(screen.getByTestId("play-card").classList.contains("fbnomatch")).to.be.true;
+        render(<PlayCard onClick={mockOnClick} registerUserClicks={mockRegisterUserClicks} showAnimation={true} section={{ ...sectionProps, matchClass: 'fbnomatch' }} />);
+        expect(screen.getByRole("button").classList.contains("fbnomatch")).to.be.true;
     });
+
+    it("should not apply matchClass when showAnimations is false", () => {
+        render(<PlayCard onClick={mockOnClick} registerUserClicks={mockRegisterUserClicks} showAnimation={false} section={{ ...sectionProps, matchClass: 'fbnomatch' }} />);
+        expect(screen.getByRole("button").classList.contains("fbnomatch")).not.to.be.true;
+    })
 
     it("should display a card with seen when seen", () => {
         render(<PlayCard onClick={mockOnClick} registerUserClicks={mockRegisterUserClicks} section={{ ...sectionProps, seen: true }} />);
