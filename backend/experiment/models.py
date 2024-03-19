@@ -17,6 +17,8 @@ language_choices[0] = ('', 'Unset')
 
 class ExperimentSeries(models.Model):
     """ A model to allow nesting multiple experiments into a 'parent' experiment """
+    name = models.CharField(max_length=64, default='')
+    description = models.TextField(blank=True, default='')
     slug = models.SlugField(max_length=64, default='')
     # first experiments in a test series, in fixed order
     first_experiments = models.JSONField(blank=True, null=True, default=dict)
@@ -27,7 +29,7 @@ class ExperimentSeries(models.Model):
     dashboard = models.BooleanField(default=False)
 
     def __str__(self):
-        return self.slug
+        return self.name or self.slug
 
     class Meta:
         verbose_name_plural = "Experiment Series"

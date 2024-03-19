@@ -4,8 +4,8 @@ import json
 from django.test import Client, TestCase
 from django.forms.models import model_to_dict
 from django.contrib.admin.sites import AdminSite
-from experiment.admin import ExperimentAdmin
-from experiment.models import Experiment
+from experiment.admin import ExperimentAdmin, ExperimentSeriesAdmin
+from experiment.models import Experiment, ExperimentSeries
 from participant.models import Participant
 from result.models import Result
 from session.models import Session
@@ -148,3 +148,32 @@ class TestAdminExperimentExport(TestCase):
             row = rows[i]
             self.assertIn('question_key', row)
             self.assertEqual(row['question_key'], 'test_question_' + str(i))
+
+
+class TestExperimentSeriesAdmin(TestCase):
+    
+    @classmethod
+    def setUpTestData(self):
+        self.experiment_series = ExperimentSeries.objects.create(
+            name='test',
+            description='test description very long like the tea of oolong and the song of the bird in the morning',
+            slug='TEST',
+        )
+        self.site = AdminSite()
+        self.admin = ExperimentSeriesAdmin(ExperimentSeries, self.site)
+
+    def test_experiment_series_admin_list_display(self):
+        self.assertEqual(
+            ExperimentSeriesAdmin.list_display,
+            ('slug', 'name', 'description_excerpt', 'dashboard')
+        )
+
+    def test_experiment_series_admin_description_excerpt(self):
+        self.assertEqual(
+            self.admin.description_excerpt(self.experiment_series),
+            'test description very long like the tea of oolong ...'
+        )
+        self.assertEqual(
+            self.admin.description_excerpt(ExperimentSeries.objects.create(description='')),
+            ''
+        )

@@ -94,25 +94,59 @@ def get_experiment_collection(request, slug):
         experiments = get_associated_experiments(collection.first_experiments)
         upcoming_experiment = get_upcoming_experiment(experiments, participant)
         if upcoming_experiment:
-            return JsonResponse(upcoming_experiment)
+            return JsonResponse(
+                serialize_experiment_series(
+                    collection,
+                    redirect_to=upcoming_experiment
+                )
+            )
     if collection.random_experiments:
         experiments = get_associated_experiments(collection.random_experiments)
         shuffle(experiments)
         if collection.dashboard:
             serialized = [serialize_experiment(experiment, get_finished_session_count(
                 experiment, participant)) for experiment in experiments]
-            return JsonResponse({'dashboard': serialized})
+            return JsonResponse(
+                serialize_experiment_series(
+                    collection,
+                    dashboard=serialized
+                )
+            )
         else:
             upcoming_experiment = get_upcoming_experiment(
                 experiments, participant)
             if upcoming_experiment:
-                return JsonResponse(upcoming_experiment)
+                return JsonResponse(
+                    serialize_experiment_series(
+                        collection,
+                        redirect_to=upcoming_experiment
+                    )
+                )
     if collection.last_experiments:
         experiments = get_associated_experiments(collection.last_experiments)
         upcoming_experiment = get_upcoming_experiment(experiments, participant)
         if upcoming_experiment:
-            return JsonResponse(upcoming_experiment)
+            return JsonResponse(
+                serialize_experiment_series(
+                    collection,
+                    redirect_to=upcoming_experiment
+                )
+            )
     return JsonResponse()
+
+
+def serialize_experiment_series(
+    experiment_series: ExperimentSeries,
+    dashboard: list = [],
+    redirect_to: Experiment = None
+):
+    return {
+        'slug': experiment_series.slug,
+        'name': experiment_series.name,
+        'description': experiment_series.description,
+        'dashboard': dashboard,
+        'redirect_to': redirect_to,
+    }
 
 
 def serialize_experiment(experiment_object, finished=0):
