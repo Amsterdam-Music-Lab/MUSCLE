@@ -27,5 +27,5 @@ class RhythmDiscriminationTest(TestCase):
         plan_stimuli(self.session)
         self.session.final_score = 1
         self.session.save()
-        trial = next_trial_actions(self.session, 6, None)
+        trial = next_trial_actions(self.session, 6)
         assert trial

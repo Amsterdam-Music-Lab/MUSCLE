@@ -2,6 +2,7 @@ import csv
 from zipfile import ZipFile
 from io import BytesIO
 import json
+from django.utils.safestring import mark_safe
 
 from django.contrib import admin
 from django.db import models
@@ -11,6 +12,8 @@ from django.shortcuts import render, redirect
 from django.forms import CheckboxSelectMultiple, ModelForm, ModelMultipleChoiceField
 from django.http import HttpResponse
 from inline_actions.admin import InlineActionsModelAdminMixin
+from django.urls import reverse
+from django.utils.html import format_html
 from experiment.models import Experiment, ExperimentSeries, Feedback
 from experiment.forms import ExperimentForm, ExportForm, TemplateForm, EXPORT_TEMPLATES
 from section.models import Section, Song
@@ -28,12 +31,12 @@ class FeedbackInline(admin.TabularInline):
 
 
 class ExperimentAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
-    list_display = ('name', 'rules', 'rounds', 'playlist_count',
+    list_display = ('image_preview', 'experiment_link', 'rules', 'rounds', 'playlist_count',
                     'session_count', 'active')
     list_filter = ['active']
     search_fields = ['name']
     inline_actions = ['export', 'export_csv']
-    fields = ['name', 'slug', 'url', 'hashtag', 'theme_config',  'language', 'active', 'rules',
+    fields = ['name', 'description', 'image', 'slug', 'url', 'hashtag', 'theme_config',  'language', 'active', 'rules',
               'rounds', 'bonus_points', 'playlists', 'consent', 'questions']
     inlines = [FeedbackInline]
     form = ExperimentForm
@@ -139,6 +142,18 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
         )
 
     export_csv.short_description = "Export CSV"
+
+    def image_preview(self, obj):
+        if obj.image and obj.image.file:
+            img_src = obj.image.file.url
+            return mark_safe(f'<img src="{img_src}" style="max-height: 50px;"/>')
+        return ""
+    
+    def experiment_link(self, obj):
+        """Generate a link to the experiment's admin change page."""
+        url = reverse("admin:experiment_experiment_change", args=[obj.pk])
+        name = obj.name or obj.slug or "No name"
+        return format_html('<a href="{}">{}</a>', url, name)
 
 
 admin.site.register(Experiment, ExperimentAdmin)

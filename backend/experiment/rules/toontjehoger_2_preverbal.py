@@ -63,7 +63,7 @@ class ToontjeHoger2Preverbal(Base):
         )
         return info
     
-    def next_round(self, session, request_session=None):
+    def next_round(self, session):
         """Get action data for the next round"""
 
         rounds_passed = session.rounds_passed()

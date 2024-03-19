@@ -4,10 +4,10 @@ from django.db import models
 from django.utils import timezone
 from django.contrib.postgres.fields import ArrayField
 from typing import List, Dict, Tuple, Any
-from experiment.rules import EXPERIMENT_RULES
 from experiment.standards.iso_languages import ISO_LANGUAGES
 from .questions import QUESTIONS_CHOICES, get_default_question_keys
 from theme.models import ThemeConfig
+from image.models import Image
 
 from .validators import consent_file_validator, experiment_slug_validator
 
@@ -32,6 +32,9 @@ class ExperimentSeries(models.Model):
     class Meta:
         verbose_name_plural = "Experiment Series"
 
+    def associated_experiments(self):
+        return [*self.first_experiments, *self.random_experiments, *self.last_experiments]
+
 
 def consent_upload_path(instance, filename):
     """Generate path to save audio based on playlist.name"""
@@ -44,6 +47,13 @@ class Experiment(models.Model):
 
     playlists = models.ManyToManyField('section.Playlist', blank=True)
     name = models.CharField(db_index=True, max_length=64)
+    description = models.TextField(blank=True, default='')
+    image = models.ForeignKey(
+        Image,
+        on_delete=models.SET_NULL,
+        blank=True,
+        null=True
+    )
     slug = models.SlugField(db_index=True, max_length=64, unique=True, validators=[experiment_slug_validator])
     url = models.CharField(verbose_name='URL with more information about the experiment', max_length=100, blank=True, default='')
     hashtag = models.CharField(verbose_name='hashtag for social media', max_length=20, blank=True, default='')
@@ -213,6 +223,7 @@ class Experiment(models.Model):
 
     def get_rules(self):
         """Get instance of rules class to be used for this session"""
+        from experiment.rules import EXPERIMENT_RULES
         cl = EXPERIMENT_RULES[self.rules]
         return cl()
 

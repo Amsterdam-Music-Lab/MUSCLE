@@ -45,3 +45,12 @@ class ImageAdminTest(TestCase):
     def test_readonly_fields(self):
         expected_readonly_fields = ['created_at', 'updated_at']
         self.assertEqual(self.admin.readonly_fields, expected_readonly_fields)
+
+    def test_experiment_link(self):
+        experiment = Experiment.objects.create(name="Test Experiment")
+        request = self.factory.get('/')
+        link = self.admin.experiment_link(experiment)
+        expected_url = reverse("admin:experiment_experiment_change", args=[experiment.pk])
+        expected_name = "Test Experiment"
+        expected_link = format_html('<a href="{}">{}</a>', expected_url, expected_name)
+        self.assertEqual(link, expected_link)

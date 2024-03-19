@@ -15,6 +15,7 @@ import ExperimentCollection from "../ExperimentCollection/ExperimentCollection";
 import Profile from "../Profile/Profile";
 import Reload from "../Reload/Reload";
 import StoreProfile from "../StoreProfile/StoreProfile.js";
+import useDisableRightClickOnTouchDevices from "../../hooks/useDisableRightClickOnTouchDevices.js";
 
 
 // App is the root component of our application
@@ -23,6 +24,8 @@ const App = () => {
     const setError = useBoundStore(state => state.setError);
     const setParticipant = useBoundStore((state) => state.setParticipant);
     const queryParams = window.location.search;
+    
+    useDisableRightClickOnTouchDevices();
     
     useEffect(() => {
         const urlParams = new URLSearchParams(queryParams);

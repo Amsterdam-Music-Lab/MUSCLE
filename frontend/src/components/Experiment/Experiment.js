@@ -110,6 +110,8 @@ const Experiment = ({ match }) => {
                 // Set theme
                 if (experiment.theme) {
                     setTheme(experiment.theme);
+                } else if (!experiment.theme && theme) {
+                    setTheme(null);
                 }
 
                 if (experiment.next_round.length) {
@@ -128,6 +130,7 @@ const Experiment = ({ match }) => {
         participant,
         setError,
         updateActions,
+        theme,
         setTheme,
     ]);
 
