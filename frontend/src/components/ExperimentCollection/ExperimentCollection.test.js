@@ -12,12 +12,12 @@ describe('ExperimentCollection', () => {
     const experiment1 = {
         slug: 'some_slug',
         name: 'Some Experiment',
-        finished: 0
+        finished_session_count: 0
     };
     const experiment2 = {
         slug: 'another_slug',
         name: 'Another Experiment',
-        finished: 2
+        finished_session_count: 2
     };
 
     it('forwards to a single experiment if it receives a single object', async () => {
