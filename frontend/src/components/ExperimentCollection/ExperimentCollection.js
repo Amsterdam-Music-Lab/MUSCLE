@@ -5,34 +5,52 @@ import Loading  from "../Loading/Loading";
 import { API_ROOT } from "../../config";
 
 const ExperimentCollection = ({match}) => {
-    const [experimentCollection, loadingExperimentCollection] = useExperimentCollection(match.params.slug);
-    const dashboard = experimentCollection?.dashboard;
-    const experiment = dashboard ? undefined : experimentCollection;;
+    /** ExperimentCollection is a Component which can show a dashboard of multiple experiments,
+     * or redirect to the next experiment in the collection,
+     * depending on the response from the backend, which can come in two "flavours": 
+     * {
+     *   slug: string,
+     *   name: string,
+     *   finished_session_count: number
+     * }
+     * {
+     *  dashboard:
+     *    [
+     *      {
+     *        slug: string
+     *        name: string,
+     *        sessions_finished: number
+     *      }
+     *    ]
+     * }
+     * */ 
+    
+    const [experimentCollection, loadingExperimentCollection] = useExperimentCollection(match.params.slug); 
 
     return (
         loadingExperimentCollection? (
             <div className="loader-container">
                 <Loading />
             </div>
-        ) : dashboard? (
+        ) : experimentCollection.dashboard? (
             <div className="aha__collection">
                 {/* Experiments */}
-                <div data-testid="collection-dashboard" className="dashboard">
+                <div role="menu" className="dashboard">
                     <ul>
-                        {dashboard.map((exp) => (
-                            <li key={exp.slug}>
+                        {experimentCollection.dashboard.map((exp) => (
+                            <li key={exp.slug} >
                                 <Link to={"/" + exp.slug}>
                                     <ImageOrPlaceholder imagePath={exp.image} alt={exp.description} />
                                     <h3>{exp.name}</h3>
-                                    <p>{exp.description}</p>
-                                </Link>
-                            </li>
+                                    <div role="status" className="counter">{exp.finished_session_count}</div>
+                                </Link>   
+                            </li> 
                         ))}
                     </ul>
                 </div>
             </div>
-        ) : experiment && (
-            <Redirect data-testid="collection-redirect" to={"/" + experiment.slug} />
+        ) : (
+            <Redirect data-testid="collection-redirect" to={"/" + experimentCollection.slug} />
         )
     )
 }

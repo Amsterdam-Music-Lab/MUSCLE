@@ -210,6 +210,7 @@
                     width: 300px;
                     max-width: 100%;
                     min-height: 300px;
+                    position: relative;
 
                     @media (max-width: 420px) {
                         width: 100%;
@@ -236,7 +237,14 @@
                         padding: 0 15px 15px;
                         opacity: 0.8;
                     }
+                    .counter {
+                        color: white;
+                        position: absolute;
+                        bottom: 1rem;
+                        right: 1rem;
+                    }
                 }
+                
             }
         }
     }
