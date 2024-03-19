@@ -12,6 +12,8 @@ from django.shortcuts import render, redirect
 from django.forms import CheckboxSelectMultiple, ModelForm, ModelMultipleChoiceField
 from django.http import HttpResponse
 from inline_actions.admin import InlineActionsModelAdminMixin
+from django.urls import reverse
+from django.utils.html import format_html
 from experiment.models import Experiment, ExperimentSeries, Feedback
 from experiment.forms import ExperimentForm, ExportForm, TemplateForm, EXPORT_TEMPLATES
 from section.models import Section, Song
@@ -29,7 +31,7 @@ class FeedbackInline(admin.TabularInline):
 
 
 class ExperimentAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
-    list_display = ('image_preview', 'name', 'rules', 'rounds', 'playlist_count',
+    list_display = ('image_preview', 'experiment_link', 'rules', 'rounds', 'playlist_count',
                     'session_count', 'active')
     list_filter = ['active']
     search_fields = ['name']
@@ -146,6 +148,12 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
             img_src = obj.image.file.url
             return mark_safe(f'<img src="{img_src}" style="max-height: 50px;"/>')
         return ""
+    
+    def experiment_link(self, obj):
+        """Generate a link to the experiment's admin change page."""
+        url = reverse("admin:experiment_experiment_change", args=[obj.pk])
+        name = obj.name or obj.slug or "No name"
+        return format_html('<a href="{}">{}</a>', url, name)
 
 
 admin.site.register(Experiment, ExperimentAdmin)
