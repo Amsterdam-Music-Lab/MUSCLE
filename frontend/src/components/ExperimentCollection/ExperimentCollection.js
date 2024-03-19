@@ -30,6 +30,10 @@ const ExperimentCollection = ({ match }) => {
     const dashboard = experimentCollection?.dashboard || [];
     const experimentToRedirectTo = experimentCollection?.redirect_to;
 
+    // TODO: get next experiment and about link from experimentCollection
+    const nextExperiment = null; // TODO: get next experiment from experimentCollection
+    const aboutLink = null; // TODO: get about link from experimentCollection
+
     if (loadingExperimentCollection) {
         return (
             <div className="loader-container">
@@ -44,6 +48,18 @@ const ExperimentCollection = ({ match }) => {
 
     return (
         <div className="aha__collection">
+            <div class="hero">
+                <div class="intro">
+                    <p>{experimentCollection?.description}</p>
+                    <div class="actions">
+                        {nextExperiment && <a class="btn btn-lg btn-primary" href={"/" + nextExperiment.slug}>Volgende experiment</a>}
+                        {aboutLink && <a class="btn btn-lg btn-outline-primary" href="/toontjehoger/about">Over ons</a>}
+                    </div>
+                </div>
+                <div class="results">
+
+                </div>
+            </div>
             {/* Experiments */}
             <div role="menu" className="dashboard">
                 <ul>
