@@ -1,10 +1,16 @@
 import React from 'react';
 import { Route, MemoryRouter } from 'react-router-dom';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
-import mockAxios from "jest-mock-axios";
-import * as API from '../../API';
-
+import { vi } from 'vitest';
+import MockAdapter from 'axios-mock-adapter';
+import axios from 'axios';
 import Experiment from './Experiment';
+import * as API from '../../API'; 
+
+let mock = new MockAdapter(axios);
+
+vi.mock("../../util/stores");
+
 
 const experimentObj = {
     id: 24, slug: 'test', name: 'Test', playlists: [{ id: 42, name: 'TestPlaylist' }],
@@ -13,7 +19,7 @@ const experimentObj = {
 
 const nextRoundObj = { next_round: [{ view: 'EXPLAINER', instruction: 'Instruction' }] };
 
-jest.mock('../../util/stores', () => ({
+vi.mock('../../util/stores', () => ({
     __esModule: true,
     default: (fn) => {
         const state = {
@@ -23,27 +29,30 @@ jest.mock('../../util/stores', () => ({
         
         return fn(state);
     },
-    useBoundStore: jest.fn()
+    useBoundStore: vi.fn()
 }));  
 
 describe('Experiment Component', () => {
 
     afterEach(() => {
-        mockAxios.reset();
+        mock.reset();
     });
 
-    it('renders with given props', async () => {
-        mockAxios.get.mockResolvedValueOnce({ data: experimentObj });
-        render((
-            <MemoryRouter initialEntries={['/test']}>
-                <Route path="/:slug" component={Experiment} />
+    // fix/remove this implementation after merging #810
+    test('renders with given props', async () => {
+        mock.onGet().replyOnce(200, experimentObj);
+        render(
+            <MemoryRouter>
+                <Experiment match={ {params: {slug: 'test'}} }/>
             </MemoryRouter>
-        ));
+        );
         await screen.findByText('Continue');
     });
 
-    it('calls onNext', async () => {
-        mockAxios.get.mockResolvedValueOnce({ data: experimentObj });
+    test('calls onNext', async () => {
+        mock.onGet().replyOnce(200, experimentObj);
+        const spy = vi.spyOn(API, 'getNextRound');
+
         render(
             <MemoryRouter initialEntries={['/test']}>
                 <Route path="/:slug" component={Experiment} />
@@ -51,9 +60,8 @@ describe('Experiment Component', () => {
         );
         const button = await screen.findByText('Continue');
         fireEvent.click(button);
-        mockAxios.get.mockResolvedValueOnce({ data: nextRoundObj });
-        jest.spyOn(API, 'getNextRound');
-        await waitFor(() => expect(API.getNextRound).toHaveBeenCalled());
+        mock.onGet().replyOnce(200, nextRoundObj);
+        await waitFor(() => expect(spy).toHaveBeenCalled());
     });
 
 });

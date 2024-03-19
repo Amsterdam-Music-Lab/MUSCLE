@@ -2,6 +2,7 @@ import csv
 from zipfile import ZipFile
 from io import BytesIO
 import json
+from django.utils.safestring import mark_safe
 
 from django.contrib import admin
 from django.db import models
@@ -28,12 +29,12 @@ class FeedbackInline(admin.TabularInline):
 
 
 class ExperimentAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
-    list_display = ('name', 'rules', 'rounds', 'playlist_count',
+    list_display = ('image_preview', 'name', 'rules', 'rounds', 'playlist_count',
                     'session_count', 'active')
     list_filter = ['active']
     search_fields = ['name']
     inline_actions = ['export', 'export_csv']
-    fields = ['name', 'slug', 'url', 'hashtag', 'theme_config',  'language', 'active', 'rules',
+    fields = ['name', 'description', 'image', 'slug', 'url', 'hashtag', 'theme_config',  'language', 'active', 'rules',
               'rounds', 'bonus_points', 'playlists', 'consent', 'questions']
     inlines = [FeedbackInline]
     form = ExperimentForm
@@ -139,6 +140,12 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
         )
 
     export_csv.short_description = "Export CSV"
+
+    def image_preview(self, obj):
+        if obj.image and obj.image.file:
+            img_src = obj.image.file.url
+            return mark_safe(f'<img src="{img_src}" style="max-height: 50px;"/>')
+        return ""
 
 
 admin.site.register(Experiment, ExperimentAdmin)

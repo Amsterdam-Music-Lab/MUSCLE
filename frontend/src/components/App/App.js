@@ -25,17 +25,19 @@ const App = () => {
     const queryParams = window.location.search;
     
     useEffect(() => {
-        if (queryParams && !(new URLSearchParams(queryParams).has("participant_id"))) {
-            setError("Unknown URL parameter, use ?participant_id=");
-            return;
+        const urlParams = new URLSearchParams(queryParams);
+        const participantId = urlParams.get('participant_id');
+        let participantQueryParams = '';
+        if (participantId) {
+            participantQueryParams = `?participant_id=${participantId}`;
         }
         try {
-            axios.get(API_BASE_URL + API_URLS.participant.current + queryParams).then(response => {
+            axios.get(API_BASE_URL + API_URLS.participant.current + participantQueryParams).then(response => {
                 setParticipant(response.data);
             });
         } catch (err) {
             console.error(err);
-            setError(err);
+            setError('Could not load participant');
         }
     }, [setError, queryParams, setParticipant])
 

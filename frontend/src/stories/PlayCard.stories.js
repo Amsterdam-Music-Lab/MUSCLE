@@ -1,5 +1,5 @@
 
-import PlayCard from '../components/PlayButton/PlayCard';
+import PlayCard from '../components/MatchingPairs/PlayCard';
 import catImage from './assets/images/cat-01.webp';
 
 console.log(catImage);

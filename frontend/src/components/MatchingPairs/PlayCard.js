@@ -1,8 +1,7 @@
 import classNames from "classnames";
 
 import Histogram from "../Histogram/Histogram";
-import { VISUALMATCHINGPAIRS } from "components/Playback/Playback";
-import { API_ROOT } from "config";
+import { API_ROOT } from "@/config";
 
 const PlayCard = ({ onClick, registerUserClicks, playing, section, view, showAnimation }) => {
     const getImgSrc = (url) => {
@@ -11,21 +10,21 @@ const PlayCard = ({ onClick, registerUserClicks, playing, section, view, showAni
         }
         return API_ROOT + url;
     }
+    const matchClass = section.matchClass;
 
     const histogramBars = showAnimation ? 5 : 0;
-   
+
     return (
         <div
             data-testid="play-card"
             className={
                 classNames(
                     "aha__play-card",
+                    matchClass,
                     { turned: section.turned },
                     { noevents: section.noevents },
                     { disabled: section.inactive },
-                    { memory: section.memory },
-                    { lucky: section.lucky },
-                    { nomatch: section.nomatch })
+                )
             }
             onClick={event => {
                 registerUserClicks(event.clientX, event.clientY);
@@ -34,7 +33,7 @@ const PlayCard = ({ onClick, registerUserClicks, playing, section, view, showAni
             role="button"
         >
             {section.turned ?
-                view === VISUALMATCHINGPAIRS ?
+                view === 'visual' ?
                     <div
                         data-testid="front"
                         className="front front--visual"

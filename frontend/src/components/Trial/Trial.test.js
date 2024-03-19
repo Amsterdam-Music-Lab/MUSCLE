@@ -1,9 +1,10 @@
 import React from "react";
 import { render, screen } from '@testing-library/react';
+import { vi } from 'vitest';
 
 import Trial from "./Trial";
 
-jest.mock("../../util/stores");
+vi.mock("../../util/stores");
 
 const feedback_form = {
     form: [{
@@ -26,7 +27,7 @@ describe('Trial', () => {
             feedback_form={feedback_form}
             config={config}
             />);
-        expect(screen.queryByRole('presentation')).toBeInTheDocument();
+        expect(screen.queryByRole('presentation')).to.exist;
     });
 
     it("can set the class of the trial element", () => {
@@ -36,6 +37,7 @@ describe('Trial', () => {
             config={config}
             />
         )
-        expect(screen.queryByRole('presentation')).toHaveClass('boolean');
+        const presentation = screen.queryByRole('presentation');
+        expect(presentation.classList.contains('boolean')).toBe(true);
     });
 });

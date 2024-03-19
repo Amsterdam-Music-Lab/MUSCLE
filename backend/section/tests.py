@@ -86,7 +86,13 @@ class PlaylistModelTest(TestCase):
         self.assertEqual(sections[3].filename,"bat/sobral.mp3")
         self.assertEqual(sections[3].tag, "0")
         self.assertEqual(sections[3].group, '0')
-       
+
+    def test_url_prefix_add_slash(self):
+        playlist = Playlist.objects.get(name='TestPlaylist')
+        playlist.url_prefix = 'https://test.com'
+        playlist.save()
+        self.assertEqual(playlist.url_prefix, 'https://test.com/')
+
 
 class MockRequest:
     pass
@@ -186,3 +192,22 @@ class PlaylistAdminFormTest(TestCase):
         playlist = form.save()
 
         self.assertEqual(playlist.csv, '')
+
+    def test_url_prefix_validator(self):
+        form_data = {'url_prefix': 'htps://test.com'}
+        form = PlaylistAdminForm(data=form_data)
+        self.assertFalse(form.is_valid())
+
+    def test_url_prefix_validator_http(self):
+        form_data = {'name': 'Test Playlist',
+                     'process_csv': False,
+                     'url_prefix': 'http://test.com'}
+        form = PlaylistAdminForm(data=form_data)
+        self.assertTrue(form.is_valid())
+
+    def test_url_prefix_validator_https(self):
+        form_data = {'name': 'Test Playlist',
+                     'process_csv': False,
+                     'url_prefix': 'https://test.com'}
+        form = PlaylistAdminForm(data=form_data)
+        self.assertTrue(form.is_valid())

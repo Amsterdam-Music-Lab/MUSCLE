@@ -1,11 +1,12 @@
 import React from 'react';
+import { vi } from 'vitest';
 import { render, fireEvent, waitFor } from '@testing-library/react';
 import UserFeedback from './UserFeedback';
 import { postFeedback } from '../../API';
 
 // Mock the API call
-jest.mock('../../API', () => ({
-  postFeedback: jest.fn(),
+vi.mock('../../API', () => ({
+  postFeedback: vi.fn(),
 }));
 
 describe('UserFeedback', () => {
@@ -27,9 +28,9 @@ describe('UserFeedback', () => {
       />
     );
 
-    expect(getByText(mockFeedbackInfo.header)).toBeInTheDocument();
-    expect(getByRole('textbox')).toBeInTheDocument();
-    expect(getByText(mockFeedbackInfo.button)).toBeInTheDocument();
+    expect(getByText(mockFeedbackInfo.header)).to.exist;
+    expect(getByRole('textbox')).to.exist;
+    expect(getByText(mockFeedbackInfo.button)).to.exist;
   });
 
   it('allows input to be entered', () => {
@@ -67,8 +68,8 @@ describe('UserFeedback', () => {
         feedback: 'Great experience!',
         participant: mockParticipant
       });
-      expect(queryByText(mockFeedbackInfo.header)).not.toBeInTheDocument();
-      expect(getByText(mockFeedbackInfo.thank_you)).toBeInTheDocument();
+      expect(queryByText(mockFeedbackInfo.header)).to.not.exist;
+      expect(getByText(mockFeedbackInfo.thank_you)).to.exist;
     });
   });
 });

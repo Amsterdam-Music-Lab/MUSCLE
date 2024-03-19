@@ -1,6 +1,6 @@
 
 import React from 'react';
-import classNames from 'util/classNames';
+import classNames from '@/util/classNames';
 
 /**
  * The FloatingActionButton component is a reusable component that renders a floating action button with customizable position, icon, and content.

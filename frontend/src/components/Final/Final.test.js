@@ -1,33 +1,42 @@
 import React from 'react';
+import { vi } from 'vitest';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { BrowserRouter, Router } from 'react-router-dom';
 import { createMemoryHistory } from 'history'
+import * as API from '../../API';
 
 import Final from './Final'; // Adjust the import path as necessary
 
-jest.mock('../../util/stores', () => ({
+vi.mock('../../util/stores', () => ({
     __esModule: true,
     default: (fn) => {
         const state = {
+            setSession: vi.fn(),
             session: 1,
             participant: 'participant-id',
         };
         
         return fn(state);
     },
-    useBoundStore: jest.fn()
+    useBoundStore: vi.fn()
 }));
 
-jest.mock('../../API', () => ({
-    finalizeSession: jest.fn(),
+vi.mock('../../API', () => ({
+    finalizeSession: vi.fn(),
 }));
 
-jest.mock('../../config', () => ({
-    URLS: {
-        AMLHome: '/aml',
-        profile: '/profile',
-    },
-}));
+vi.mock('../../API');
+
+vi.mock('../../config', () => {
+    return {
+        SILENT_MP3: '',
+        API_ROOT: '',
+        URLS: {
+            AMLHome: '/aml',
+            profile: '/profile',
+        }
+    }
+});
 
 describe('Final Component', () => {
     it('renders correctly with given props', () => {
@@ -43,12 +52,12 @@ describe('Final Component', () => {
             </BrowserRouter>
         );
 
-        expect(screen.getByText(/Final Text/i)).toBeInTheDocument();
-        expect(screen.getByTestId('score')).toBeInTheDocument(); // Adjust based on how you display points
+        expect(screen.queryByText(/Final Text/i)).to.exist;
+        expect(screen.queryByTestId('score')).to.exist;
     });
 
     it('calls onNext prop when button is clicked', async () => {
-        const onNextMock = jest.fn();
+        const onNextMock = vi.fn();
         render(
             <BrowserRouter>
                 <Final
@@ -76,8 +85,8 @@ describe('Final Component', () => {
             </BrowserRouter>
         );
 
-        expect(screen.queryByText('Rank')).not.toBeInTheDocument();
-        expect(screen.queryByText('Social')).not.toBeInTheDocument();
+        expect(screen.queryByText('Rank')).to.not.exist;
+        expect(screen.queryByText('Social')).to.not.exist;
     });
 
     it('navigates to profile page when profile link is clicked', async () => {
@@ -100,7 +109,7 @@ describe('Final Component', () => {
 
         const profileLink = screen.getByTestId('profile-link');
 
-        expect(profileLink).toBeInTheDocument();
+        expect(profileLink).to.exist;
 
         expect(history.location.pathname).toBe('/');
 
@@ -111,7 +120,9 @@ describe('Final Component', () => {
     });
 
     it('calls finalizeSession with correct arguments', () => {
-        const { finalizeSession } = require('../../API');
+
+        API.finalizeSession = vi.fn()
+
         render(
             <BrowserRouter>
                 <Final
@@ -121,6 +132,6 @@ session="session-id"
             </BrowserRouter>
         );
 
-        expect(finalizeSession).toHaveBeenCalledWith({ session: 1, participant: 'participant-id' });
+        expect(API.finalizeSession).toHaveBeenCalledWith({ session: 1, participant: 'participant-id' });
     });
 });

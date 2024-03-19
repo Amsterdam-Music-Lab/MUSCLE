@@ -1,7 +1,7 @@
 $playButtonHighDisplay: 18vw;
 $playButtonWideDisplay: 16vh;
 
-@keyframes memorymatch {
+@keyframes memory {
     20% {
         transform: scale(1.15);
     }
@@ -22,7 +22,7 @@ $playButtonWideDisplay: 16vh;
     }
 }
 
-@keyframes luckymatch {
+@keyframes lucky {
     40% {
         transform: scale(1.15);
     }
@@ -77,21 +77,21 @@ $playButtonWideDisplay: 16vh;
         opacity: 0;
     }
 
-    &.nomatch {
+    &.fbnomatch, &.fbmisremembered {
         animation-duration: 0.7s;
         animation-name: nomatch;
         animation-iteration-count: 1;
     }
 
-    &.lucky {
+    &.fblucky {
         animation-duration: 0.55s;
-        animation-name: luckymatch;
+        animation-name: lucky;
         animation-iteration-count: 1;
     }
 
-    &.memory {
+    &.fbmemory {
         animation-duration: 0.8s;
-        animation-name: memorymatch;
+        animation-name: memory;
         animation-iteration-count: 1;
     }
 

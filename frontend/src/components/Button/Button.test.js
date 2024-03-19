@@ -1,16 +1,18 @@
 import React from 'react';
 import { fireEvent, render, screen } from '@testing-library/react';
 import Button from './Button';
+import { vi } from 'vitest';
 
 describe('Button component', () => {
 
     it('renders correctly', () => {
         render(<Button title="Test Button" />);
-        expect(screen.getByText('Test Button')).toBeInTheDocument();
+        const buttonElement = screen.getByText('Test Button');
+        expect(document.body.contains(buttonElement)).to.be.true;
     });
 
     test('calls onClick handler only once', () => {
-        const mockOnClick = jest.fn();
+        const mockOnClick = vi.fn();
         render(<Button title="Test Button" onClick={mockOnClick} />);
 
         const button = screen.getByText('Test Button');
@@ -21,7 +23,7 @@ describe('Button component', () => {
     });
 
     test('does not call onClick when disabled is true', () => {
-        const mockOnClick = jest.fn();
+        const mockOnClick = vi.fn();
         render(<Button title="Test Button" onClick={mockOnClick} disabled={true} />);
 
         const button = screen.getByText('Test Button');
@@ -35,8 +37,8 @@ describe('Button component', () => {
         render(<Button title="Test Button" className="custom-class" style={style} />);
 
         const button = screen.getByText('Test Button');
-        expect(button).toHaveClass('custom-class');
-        expect(button).toHaveStyle('background-color: blue');
+        expect(button.classList.contains('custom-class')).to.be.true;
+        expect(button.style.backgroundColor).toBe('blue');
     });
 
 });
