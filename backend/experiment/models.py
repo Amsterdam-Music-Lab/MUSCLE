@@ -47,9 +47,9 @@ def consent_upload_path(instance, filename):
 class ExperimentSeriesGroup(models.Model):
     name = models.CharField(max_length=64, blank=True, default='')
     series = models.ForeignKey(ExperimentSeries, on_delete=models.CASCADE)
-    order = models.IntegerField()
-    dashboard = models.BooleanField()
-    randomize = models.BooleanField()
+    order = models.IntegerField(default=0)
+    dashboard = models.BooleanField(default=False)
+    randomize = models.BooleanField(default=False)
 
     def __str__(self):
         compound_name = self.name or self.series.name or self.series.slug or 'Unnamed group'
@@ -63,7 +63,7 @@ class ExperimentSeriesGroup(models.Model):
 class GroupedExperiment(models.Model):
     experiment = models.ForeignKey('Experiment', on_delete=models.CASCADE)
     group = models.ForeignKey(ExperimentSeriesGroup, on_delete=models.CASCADE)
-    order = models.IntegerField()
+    order = models.IntegerField(default=0)
 
     def __str__(self):
         return f'{self.experiment.name} - {self.group.name} - {self.order}'
