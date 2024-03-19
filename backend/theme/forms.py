@@ -9,7 +9,7 @@ class ThemeConfigForm(forms.ModelForm):
         fields = '__all__'
 
     class Media:
-        js = ['img_preview.js', 'font_preview.js']
+        js = ['font_preview.js']
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

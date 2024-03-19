@@ -1,17 +1,25 @@
 from django.test import TestCase
+
+from image.models import Image
 from theme.models import ThemeConfig
 
 
 class ThemeConfigModelTest(TestCase):
     @classmethod
     def setUpTestData(cls):
+        logo_image = Image.objects.create(
+            file='someimage.jpg'
+        )
+        background_image = Image.objects.create(
+            file='anotherimage.png'
+        )
         ThemeConfig.objects.create(
             name='Default',
             description='Default theme configuration',
             heading_font_url='https://example.com/heading_font',
             body_font_url='https://example.com/body_font',
-            logo_url='https://example.com/logo',
-            background_url='https://example.com/background',
+            logo_image=logo_image,
+            background_image=background_image,
         )
 
     def test_theme_config_str(self):
@@ -25,7 +33,7 @@ class ThemeConfigModelTest(TestCase):
             'description': 'Default theme configuration',
             'heading_font_url': 'https://example.com/heading_font',
             'body_font_url': 'https://example.com/body_font',
-            'logo_url': 'https://example.com/logo',
-            'background_url': 'https://example.com/background',
+            'logo_image': 'someimage.jpg',
+            'background_image': 'anotherimage.png',
         }
         self.assertEqual(theme_config.__to_json__(), expected_json)

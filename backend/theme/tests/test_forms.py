@@ -12,7 +12,7 @@ class ThemeConfigFormTest(TestCase):
 
     def test_form_media(self):
         form = ThemeConfigForm()
-        self.assertEqual(form.Media.js, ['img_preview.js', 'font_preview.js'])
+        self.assertEqual(form.Media.js, ['font_preview.js'])
 
     def test_save_method(self):
         form = ThemeConfigForm()
