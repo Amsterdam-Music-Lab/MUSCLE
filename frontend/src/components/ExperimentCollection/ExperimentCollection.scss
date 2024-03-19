@@ -194,6 +194,7 @@
                     width: 300px;
                     max-width: 100%;
                     min-height: 300px;
+                    position: relative;
 
                     @media (max-width: 420px) {
                         width: 100%;
@@ -222,9 +223,9 @@
                     }
                     .counter {
                         color: white;
-                        position: relative;
-                        top: 30vh;
-                        left: 90%;
+                        position: absolute;
+                        bottom: 1rem;
+                        right: 1rem;
                     }
                 }
                 

@@ -115,16 +115,16 @@ def get_experiment_collection(request, slug):
     return JsonResponse()
 
 
-def serialize_experiment(experiment_object, finished=False):
+def serialize_experiment(experiment_object, finished=0):
     return {
         'slug': experiment_object.slug,
         'name': experiment_object.name,
-        'finished': finished
+        'finished_session_count': finished
     }
 
 
-def check_finished_session(experiment, participant):
-    ''' Check if there is a finished session for this experiment and participant '''
+def get_finished_session_count(experiment, participant):
+    ''' Get the number of finished sessions for this experiment and participant '''
     count = Session.objects.filter(
         experiment=experiment, participant=participant, finished_at__isnull=False).count()
     return count
@@ -138,6 +138,6 @@ def get_associated_experiments(pk_list):
 def get_upcoming_experiment(experiment_list, participant):
     ''' get next experiment for which there is no finished session for this participant '''
     upcoming = next((experiment for experiment in experiment_list if
-                     check_finished_session(experiment, participant) == 0), None)
+                     get_finished_session_count(experiment, participant) == 0), None)
     if upcoming:
         return serialize_experiment(upcoming)
