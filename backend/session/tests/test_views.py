@@ -54,7 +54,7 @@ class SessionViewsTest(TestCase):
         session = Session.objects.create(
             experiment=self.experiment, participant=self.participant)
         response = self.client.get(
-            f'/session/{session.id}/next_round/'
+            f'/session/{session.id}/next_round/')
         assert response
 
     def test_next_round_with_collection(self):
