@@ -12,7 +12,7 @@ from result.utils import prepare_result
 class ListeningConditions(Base):
     ID = 'LISTENING_CONDITIONS'
 
-    def next_round(self, session, request_session=None):
+    def next_round(self, session):
         round_number = session.get_next_round()
         playback = None
         feedback_form = None
@@ -93,7 +93,7 @@ class ListeningConditions(Base):
             actions = [
                 Trial(playback, feedback_form),
                 final_action_with_optional_button(
-                    session, message, request_session)
+                    session, message)
             ]
             return actions
 

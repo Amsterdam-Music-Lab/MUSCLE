@@ -32,6 +32,9 @@ class ExperimentSeries(models.Model):
     class Meta:
         verbose_name_plural = "Experiment Series"
 
+    def associated_experiments(self):
+        return [*self.first_experiments, *self.random_experiments, *self.last_experiments]
+
 
 def consent_upload_path(instance, filename):
     """Generate path to save audio based on playlist.name"""
