@@ -1,5 +1,7 @@
 import React from 'react';
 
+import HTML from '../../HTML/HTML';
+
 interface ExperimentCollectionAboutProps {
     content: string;
 }
@@ -8,7 +10,7 @@ export const ExperimentCollectionAbout: React.FC<ExperimentCollectionAboutProps>
     return (
         <div className='hero'>
             <div role="contentinfo">
-                {content}
+                <HTML body={content} />
             </div>
         </div>
     );
