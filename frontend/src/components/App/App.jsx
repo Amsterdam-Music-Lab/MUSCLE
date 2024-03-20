@@ -10,7 +10,7 @@ import axios from "axios";
 import { API_BASE_URL, EXPERIMENT_SLUG, URLS } from "../../config.js";
 import { URLS as API_URLS } from "../../API.js";
 import useBoundStore from "../../util/stores.js";
-import Experiment from "../Experiment/Experiment.jsx";
+import Experiment from "../Experiment/Experiment";
 import ExperimentCollection from "../ExperimentCollection/ExperimentCollection";
 import Profile from "../Profile/Profile";
 import Reload from "../Reload/Reload";
