@@ -133,18 +133,25 @@ class ExperimentSeriesForm(ModelForm):
         self.fields['first_experiments'] = ModelFormFieldAsJSON(
             queryset=experiments,
             required=False,
-            help_text='This field will be deprecated in the nearby future. Please use experiment series groups (see bottom of form).'
+            help_text=('This field will be deprecated in the nearby future. '
+                       'Please use experiment series groups (see bottom of form).')
         )
         self.fields['random_experiments'] = ModelFormFieldAsJSON(
             queryset=experiments,
             required=False,
-            help_text='This field will be deprecated in the nearby future. Please use experiment series groups (see bottom of form).'
+            help_text=('This field will be deprecated in the nearby future. '
+                       'Please use experiment series groups (see bottom of form).')
         )
         self.fields['last_experiments'] = ModelFormFieldAsJSON(
             queryset=experiments,
             required=False,
-            help_text='This field will be deprecated in the nearby future. Please use experiment series groups (see bottom of form).'
+            help_text=('This field will be deprecated in the nearby future. '
+                       'Please use experiment series groups (see bottom of form).')
         )
+        self.fields['dashboard'].help_text = ('If you check "dashboard", the experiment collection will have a '
+                                              'dashboard that shows all or a subgroup of related experiments along '
+                                              'with a description, footer, and about page. If you leave it unchecked, '
+                                              'the experiment collection will redirect to the first experiment.')
 
     class Meta:
         model = ExperimentSeries
