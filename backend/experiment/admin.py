@@ -197,13 +197,9 @@ class ExperimentSeriesGroupAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin)
     inlines = [GroupedExperimentInline]
 
     def related_series(self, obj):
-
-        if not obj.series:
-            return "No series"
-
         url = reverse("admin:experiment_experimentseries_change", args=[obj.series.pk])
         return format_html('<a href="{}">{}</a>', url, obj.series.name)
-    
+
     def experiments(self, obj):
         experiments = GroupedExperiment.objects.filter(group=obj)
 
