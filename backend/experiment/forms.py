@@ -130,9 +130,21 @@ class ExperimentSeriesForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super(ModelForm, self).__init__(*args, **kwargs)
         experiments = Experiment.objects.all()
-        self.fields['first_experiments'] = ModelFormFieldAsJSON(queryset=experiments, required=False)
-        self.fields['random_experiments'] = ModelFormFieldAsJSON(queryset=experiments, required=False)
-        self.fields['last_experiments'] = ModelFormFieldAsJSON(queryset=experiments, required=False)
+        self.fields['first_experiments'] = ModelFormFieldAsJSON(
+            queryset=experiments,
+            required=False,
+            help_text='This field will be deprecated in the nearby future. Please use experiment series groups (see bottom of form).'
+        )
+        self.fields['random_experiments'] = ModelFormFieldAsJSON(
+            queryset=experiments,
+            required=False,
+            help_text='This field will be deprecated in the nearby future. Please use experiment series groups (see bottom of form).'
+        )
+        self.fields['last_experiments'] = ModelFormFieldAsJSON(
+            queryset=experiments,
+            required=False,
+            help_text='This field will be deprecated in the nearby future. Please use experiment series groups (see bottom of form).'
+        )
 
     class Meta:
         model = ExperimentSeries
