@@ -192,7 +192,7 @@ admin.site.register(ExperimentSeries, ExperimentSeriesAdmin)
 
 
 class ExperimentSeriesGroupAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
-    list_display = ('name', 'related_series', 'order', 'dashboard', 'randomize')
+    list_display = ('name', 'related_series', 'order', 'dashboard', 'randomize', 'experiments')
     fields = ['name', 'series', 'order', 'dashboard', 'randomize']
     inlines = [GroupedExperimentInline]
 
@@ -203,6 +203,14 @@ class ExperimentSeriesGroupAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin)
 
         url = reverse("admin:experiment_experimentseries_change", args=[obj.series.pk])
         return format_html('<a href="{}">{}</a>', url, obj.series.name)
+    
+    def experiments(self, obj):
+        experiments = GroupedExperiment.objects.filter(group=obj)
+
+        if not experiments:
+            return "No experiments"
+
+        return format_html(', '.join([f'<a href="/admin/experiment/groupedexperiment/{experiment.id}/change/">{experiment.experiment.name}</a>' for experiment in experiments]))
 
 
 admin.site.register(ExperimentSeriesGroup, ExperimentSeriesGroupAdmin)
