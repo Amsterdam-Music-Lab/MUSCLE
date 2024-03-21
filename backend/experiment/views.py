@@ -1,10 +1,11 @@
+import json
 import logging
 from random import shuffle
 
 from django.http import Http404, JsonResponse
 from django.conf import settings
-from django.utils.translation import gettext_lazy as _
-from django.utils.translation import activate
+from django.utils.translation import activate, gettext_lazy as _
+from django_markup.markup import formatter
 
 from .models import Experiment, ExperimentSeries, ExperimentSeriesGroup, Feedback, GroupedExperiment
 from .utils import serialize
@@ -197,3 +198,23 @@ def get_upcoming_experiment(experiment_list, participant):
                      get_finished_session_count(experiment, participant) == 0), None)
     if upcoming:
         return serialize_experiment(upcoming)
+
+
+def render_markdown(request):
+
+    if request.method != 'POST':
+        return JsonResponse({'status': 'error', 'message': 'Only POST requests are allowed'})
+
+    if not request.body:
+        return JsonResponse({'status': 'error', 'message': 'No body found in request'})
+
+    if request.content_type != 'application/json':
+        return JsonResponse({'status': 'error', 'message': 'Only application/json content type is allowed'})
+
+    data = json.loads(request.body)
+    markdown = data['markdown']
+
+    if markdown:
+        return JsonResponse({'html': formatter(markdown, filter_name='markdown')})
+
+    return JsonResponse({'html': ''})
