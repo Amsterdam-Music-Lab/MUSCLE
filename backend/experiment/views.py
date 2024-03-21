@@ -159,6 +159,10 @@ def serialize_experiment_series(
 ):
     groups = ExperimentSeriesGroup.objects.filter(series_id=experiment_series.id)
     serialized_groups = [serialize_experiment_series_group(group) for group in groups]
+    about_content = experiment_series.about_content
+
+    if about_content:
+        about_content = formatter(about_content, filter_name='markdown')
 
     return {
         'slug': experiment_series.slug,
@@ -167,6 +171,7 @@ def serialize_experiment_series(
         'dashboard': dashboard,
         'redirect_to': redirect_to,
         'groups': serialized_groups,
+        'about_content': about_content,
     }
 
 
