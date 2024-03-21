@@ -32,12 +32,12 @@ class GoldMSI(Base):
             consent,
         ]
 
-    def next_round(self, session, request_session=None):
+    def next_round(self, session):
         questions = self.get_questionnaire(session)
         if questions:
             return questions
         else:
-            return final_action_with_optional_button(session, '', request_session)
+            return final_action_with_optional_button(session)
 
     def feedback_info(self):
         info = super().feedback_info()

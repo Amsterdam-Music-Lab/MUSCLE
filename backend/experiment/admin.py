@@ -180,9 +180,17 @@ class ExperimentSeriesForm(ModelForm):
 
 
 class ExperimentSeriesAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
-    fields = ['slug', 'first_experiments',
+    list_display = ('slug', 'name', 'description_excerpt', 'dashboard')
+    fields = ['slug', 'name', 'description', 'first_experiments',
               'random_experiments', 'last_experiments', 'dashboard']
     form = ExperimentSeriesForm
+
+    def description_excerpt(self, obj):
+
+        if len(obj.description) < 50:
+            return obj.description
+
+        return obj.description[:50] + '...'
 
 
 admin.site.register(ExperimentSeries, ExperimentSeriesAdmin)

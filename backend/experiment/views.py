@@ -94,45 +94,76 @@ def get_experiment_collection(request, slug):
         experiments = get_associated_experiments(collection.first_experiments)
         upcoming_experiment = get_upcoming_experiment(experiments, participant)
         if upcoming_experiment:
-            return JsonResponse(upcoming_experiment)
+            return JsonResponse(
+                serialize_experiment_series(
+                    collection,
+                    redirect_to=upcoming_experiment
+                )
+            )
     if collection.random_experiments:
         experiments = get_associated_experiments(collection.random_experiments)
         shuffle(experiments)
         if collection.dashboard:
-            serialized = [serialize_experiment(experiment, check_finished_session(
+            serialized = [serialize_experiment(experiment, get_finished_session_count(
                 experiment, participant)) for experiment in experiments]
-            return JsonResponse({'dashboard': serialized})
+            return JsonResponse(
+                serialize_experiment_series(
+                    collection,
+                    dashboard=serialized
+                )
+            )
         else:
             upcoming_experiment = get_upcoming_experiment(
                 experiments, participant)
             if upcoming_experiment:
-                return JsonResponse(upcoming_experiment)
+                return JsonResponse(
+                    serialize_experiment_series(
+                        collection,
+                        redirect_to=upcoming_experiment
+                    )
+                )
     if collection.last_experiments:
         experiments = get_associated_experiments(collection.last_experiments)
         upcoming_experiment = get_upcoming_experiment(experiments, participant)
         if upcoming_experiment:
-            return JsonResponse(upcoming_experiment)
+            return JsonResponse(
+                serialize_experiment_series(
+                    collection,
+                    redirect_to=upcoming_experiment
+                )
+            )
     return JsonResponse()
 
 
-def serialize_experiment(experiment_object, finished=False):
+def serialize_experiment_series(
+    experiment_series: ExperimentSeries,
+    dashboard: list = [],
+    redirect_to: Experiment = None
+):
     return {
-        'slug': experiment_object.slug,
-        'name': experiment_object.name,
-        'description': experiment_object.description,
-        'image': experiment_object.image.file.url if experiment_object.image else '',
-        'finished': finished,
+        'slug': experiment_series.slug,
+        'name': experiment_series.name,
+        'description': experiment_series.description,
+        'dashboard': dashboard,
+        'redirect_to': redirect_to,
     }
 
 
-def check_finished_session(experiment, participant):
-    ''' Check if there is a finished session for this experiment and participant '''
-    try:
-        Session.objects.get(
-            experiment=experiment, participant=participant, finished_at__isnull=False)
-        return True
-    except:
-        return False
+def serialize_experiment(experiment_object, finished=0):
+    return {
+        'slug': experiment_object.slug,
+        'name': experiment_object.name,
+        'finished_session_count': finished,
+        'description': experiment_object.description,
+        'image': experiment_object.image.file.url if experiment_object.image else '',
+    }
+
+
+def get_finished_session_count(experiment, participant):
+    ''' Get the number of finished sessions for this experiment and participant '''
+    count = Session.objects.filter(
+        experiment=experiment, participant=participant, finished_at__isnull=False).count()
+    return count
 
 
 def get_associated_experiments(pk_list):
@@ -143,6 +174,6 @@ def get_associated_experiments(pk_list):
 def get_upcoming_experiment(experiment_list, participant):
     ''' get next experiment for which there is no finished session for this participant '''
     upcoming = next((experiment for experiment in experiment_list if
-                     check_finished_session(experiment, participant) is False), None)
+                     get_finished_session_count(experiment, participant) == 0), None)
     if upcoming:
         return serialize_experiment(upcoming)

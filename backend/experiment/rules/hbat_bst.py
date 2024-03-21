@@ -95,7 +95,7 @@ class BST(HBat):
             button_label=button_label
         )
     
-    def finalize_experiment(self, session, request_session):
+    def finalize_experiment(self, session):
         """ if either the max_turnpoints have been reached,
         or if the section couldn't be found (outlier), stop the experiment
         """
@@ -106,4 +106,4 @@ class BST(HBat):
         final_text = render_feedback_trivia(feedback, trivia)
         session.finish()
         session.save()
-        return final_action_with_optional_button(session, final_text, request_session)
+        return final_action_with_optional_button(session, final_text)
