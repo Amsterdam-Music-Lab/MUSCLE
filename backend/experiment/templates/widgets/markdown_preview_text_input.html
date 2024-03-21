@@ -6,12 +6,15 @@
     </div>
 
     <div class="tab-content active" id="tab-content-edit">
-        <textarea rows="10" name="{{ widget.name }}" value="{{ widget.value|default:'' }}" {% include "django/forms/widgets/attrs.html" %}>{{ widget.value|default:'' }}</textarea>
+        <textarea rows="{{ widget.attrs.rows|default:'16' }}" name="{{ widget.name }}" value="{{ widget.value|default:'' }}" placeholder="{{ widget.placeholder|default:''}}" {% include "django/forms/widgets/attrs.html" %}>{{ widget.value|default:'' }}</textarea>
     </div>
-
+    
     <div class="tab-content" id="tab-content-preview">
         <markdown-preview id="markdownPreview"></markdown-preview>
     </div>
+
+    <!-- Render placeholder as html -->
+    <div class="help">{{ widget.attrs.help_text|default:'This field supports markdown syntax, allowing you to format text and embed images. For more information, see <a href="https://www.markdownguide.org/basic-syntax/" target="_blank" rel="noopener noreferrer">https://www.markdownguide.org/basic-syntax/</a> and be sure to use the preview tab to see how your content will be rendered.'|safe }}</div>
 </div>
 
 {% block markdown_preview_text_input_css %}
@@ -54,6 +57,7 @@
         min-height: 128px;
         background-color: var(--button-bg);
         margin-top: -1px;
+        margin-bottom: .5rem;
         border-radius: 5px 0 5px 5px;
     }
 
@@ -65,6 +69,8 @@
         width: 100%;
         min-height: 256px !important;
         height: 100%;
+        border: 0;
+        border-radius: 5px;
     }
 </style>
 {% endblock %}
