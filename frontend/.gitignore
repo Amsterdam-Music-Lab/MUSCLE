@@ -27,3 +27,5 @@ src/index.css.map
 
 # Storybook
 storybook-static
+
+*storybook.log

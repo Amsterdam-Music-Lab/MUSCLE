@@ -3084,6 +3084,19 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@chromatic-com/storybook@npm:^1.2.25":
+  version: 1.2.25
+  resolution: "@chromatic-com/storybook@npm:1.2.25"
+  dependencies:
+    chromatic: "npm:^11.0.0"
+    filesize: "npm:^10.0.12"
+    jsonfile: "npm:^6.1.0"
+    react-confetti: "npm:^6.1.0"
+    strip-ansi: "npm:^7.1.0"
+  checksum: 10c0/30c65bdddaba133aa0a136b049e79a518644b38e7265478c61457cf6166ab0b64d76c880e8b576e0818d62e366287d655ff33c305db0731e4264d2fb116e543b
+  languageName: node
+  linkType: hard
+
 "@colors/colors@npm:1.5.0":
   version: 1.5.0
   resolution: "@colors/colors@npm:1.5.0"
@@ -4319,6 +4332,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@storybook/addon-onboarding@npm:^8.0.4":
+  version: 8.0.4
+  resolution: "@storybook/addon-onboarding@npm:8.0.4"
+  checksum: 10c0/e2e4b4bad180c76ef45f740f012eb8339524b2d67f4f9ce902f83efbedd1be9e43bc74b5159110fff5816919635f3998a72846be8e68c118d0ef927bed40d519
+  languageName: node
+  linkType: hard
+
 "@storybook/addon-outline@npm:8.0.4":
   version: 8.0.4
   resolution: "@storybook/addon-outline@npm:8.0.4"
@@ -4849,7 +4869,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@storybook/react@npm:8.0.4":
+"@storybook/react@npm:8.0.4, @storybook/react@npm:^8.0.4":
   version: 8.0.4
   resolution: "@storybook/react@npm:8.0.4"
   dependencies:
@@ -4912,7 +4932,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@storybook/test@npm:8.0.4":
+"@storybook/test@npm:8.0.4, @storybook/test@npm:^8.0.4":
   version: 8.0.4
   resolution: "@storybook/test@npm:8.0.4"
   dependencies:
@@ -5991,13 +6011,17 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "aml-frontend@workspace:."
   dependencies:
+    "@chromatic-com/storybook": "npm:^1.2.25"
     "@sentry/react": "npm:^7.85.0"
     "@storybook/addon-essentials": "npm:8.0.4"
     "@storybook/addon-interactions": "npm:8.0.4"
     "@storybook/addon-links": "npm:8.0.4"
+    "@storybook/addon-onboarding": "npm:^8.0.4"
     "@storybook/blocks": "npm:8.0.4"
     "@storybook/builder-vite": "npm:^8.0.4"
+    "@storybook/react": "npm:^8.0.4"
     "@storybook/react-vite": "npm:^8.0.4"
+    "@storybook/test": "npm:^8.0.4"
     "@storybook/testing-library": "npm:0.2.2"
     "@testing-library/react": "npm:^14.1.2"
     "@testing-library/react-hooks": "npm:^8.0.1"
@@ -6840,6 +6864,25 @@ __metadata:
   version: 2.0.0
   resolution: "chownr@npm:2.0.0"
   checksum: 10c0/594754e1303672171cc04e50f6c398ae16128eb134a88f801bf5354fd96f205320f23536a045d9abd8b51024a149696e51231565891d4efdab8846021ecf88e6
+  languageName: node
+  linkType: hard
+
+"chromatic@npm:^11.0.0":
+  version: 11.2.0
+  resolution: "chromatic@npm:11.2.0"
+  peerDependencies:
+    "@chromatic-com/cypress": ^0.*.* || ^1.0.0
+    "@chromatic-com/playwright": ^0.*.* || ^1.0.0
+  peerDependenciesMeta:
+    "@chromatic-com/cypress":
+      optional: true
+    "@chromatic-com/playwright":
+      optional: true
+  bin:
+    chroma: dist/bin.js
+    chromatic: dist/bin.js
+    chromatic-cli: dist/bin.js
+  checksum: 10c0/dbccc584bc145ba91ba56b87ea739feb9fa1d9a308645a4f2b61d697e6891133336a8604c9c269bef32027810a3d6de6d64b38da822e8170feb09bbdc6998b3e
   languageName: node
   linkType: hard
 
@@ -8435,6 +8478,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"filesize@npm:^10.0.12":
+  version: 10.1.1
+  resolution: "filesize@npm:10.1.1"
+  checksum: 10c0/440f873dbf39fb934041cbc2cb6cc9425b0aae6faf465e1c84facaf4120e80638b779890f07a1ca76f47ddc7fba3e328498b4869454fb6e067777e806b9a4755
+  languageName: node
+  linkType: hard
+
 "fill-range@npm:^7.0.1":
   version: 7.0.1
   resolution: "fill-range@npm:7.0.1"
@@ -9863,7 +9913,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jsonfile@npm:^6.0.1":
+"jsonfile@npm:^6.0.1, jsonfile@npm:^6.1.0":
   version: 6.1.0
   resolution: "jsonfile@npm:6.1.0"
   dependencies:
@@ -11356,6 +11406,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-confetti@npm:^6.1.0":
+  version: 6.1.0
+  resolution: "react-confetti@npm:6.1.0"
+  dependencies:
+    tween-functions: "npm:^1.2.0"
+  peerDependencies:
+    react: ^16.3.0 || ^17.0.1 || ^18.0.0
+  checksum: 10c0/5b4eb23eef564695f6db1d25b294ed31d5fa21ff4092c6a38e641f85cd10e3e0b50014366e3ac0f7cf772e73faaecd14614e5b11a5531336fa769dda8068ab59
+  languageName: node
+  linkType: hard
+
 "react-docgen-typescript@npm:^2.2.2":
   version: 2.2.2
   resolution: "react-docgen-typescript@npm:2.2.2"
@@ -12521,7 +12582,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"strip-ansi@npm:^7.0.1":
+"strip-ansi@npm:^7.0.1, strip-ansi@npm:^7.1.0":
   version: 7.1.0
   resolution: "strip-ansi@npm:7.1.0"
   dependencies:
@@ -12867,6 +12928,13 @@ __metadata:
   peerDependencies:
     typescript: ">=2.8.0 || >= 3.2.0-dev || >= 3.3.0-dev || >= 3.4.0-dev || >= 3.5.0-dev || >= 3.6.0-dev || >= 3.6.0-beta || >= 3.7.0-dev || >= 3.7.0-beta"
   checksum: 10c0/02f19e458ec78ead8fffbf711f834ad8ecd2cc6ade4ec0320790713dccc0a412b99e7fd907c4cda2a1dc602c75db6f12e0108e87a5afad4b2f9e90a24cabd5a2
+  languageName: node
+  linkType: hard
+
+"tween-functions@npm:^1.2.0":
+  version: 1.2.0
+  resolution: "tween-functions@npm:1.2.0"
+  checksum: 10c0/7e59295b8b0ee4132ed2fe335f56a9db5c87056dad6b6fd3011be72239fd20398003ddb4403bc98ad9f5c94468890830f64016edbbde35581faf95b32cda8305
   languageName: node
   linkType: hard
 
