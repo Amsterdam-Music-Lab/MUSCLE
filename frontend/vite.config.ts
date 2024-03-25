@@ -11,11 +11,6 @@ export default defineConfig({
   build: {
     outDir: 'build',
   },
-  esbuild: {
-    include: /\.[jt]sx?$/,
-    exclude: [],
-    loader: 'jsx',
-  },
   resolve: {
     alias: {
       '@/': '/src/',
