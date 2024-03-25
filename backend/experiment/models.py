@@ -61,7 +61,7 @@ class ExperimentSeriesGroup(models.Model):
 
 
 class GroupedExperiment(models.Model):
-    experiment = models.ForeignKey('Experiment', on_delete=models.CASCADE)
+    experiment = models.OneToOneField('Experiment', on_delete=models.CASCADE)
     group = models.ForeignKey(ExperimentSeriesGroup, on_delete=models.CASCADE)
     order = models.IntegerField(default=0)
 
