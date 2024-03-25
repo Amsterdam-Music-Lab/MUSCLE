@@ -160,12 +160,12 @@ admin.site.register(Experiment, ExperimentAdmin)
 
 class GroupedExperimentInline(admin.StackedInline):
     model = GroupedExperiment
-    extra = 1
+    extra = 0
 
 
 class ExperimentSeriesGroupInline(admin.StackedInline):
     model = ExperimentSeriesGroup
-    extra = 1
+    extra = 0
     inlines = [GroupedExperimentInline]
 
 

@@ -158,6 +158,10 @@ class ExperimentSeriesForm(ModelForm):
         fields = ['slug', 'first_experiments',
                   'random_experiments', 'last_experiments', 'dashboard']
 
+    class Media:
+        js = ["experiment_series_admin.js"]
+        css = {"all": ["experiment_series_admin.css"]}
+
 
 class ExperimentForm(ModelForm):
 
