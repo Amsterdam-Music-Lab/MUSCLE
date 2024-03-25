@@ -53,7 +53,11 @@ class ExperimentSeriesGroup(models.Model):
 
     def __str__(self):
         compound_name = self.name or self.series.name or self.series.slug or 'Unnamed group'
-        return f'{compound_name} - {self.order}'
+
+        if not self.name:
+            return f'{compound_name} ({self.order})'
+
+        return f'{compound_name}'
 
     class Meta:
         ordering = ['order']

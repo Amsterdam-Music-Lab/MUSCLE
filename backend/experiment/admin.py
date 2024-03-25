@@ -192,9 +192,14 @@ admin.site.register(ExperimentSeries, ExperimentSeriesAdmin)
 
 
 class ExperimentSeriesGroupAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
-    list_display = ('name', 'related_series', 'order', 'dashboard', 'randomize', 'experiments')
+    list_display = ('name_link', 'related_series', 'order', 'dashboard', 'randomize', 'experiments')
     fields = ['name', 'series', 'order', 'dashboard', 'randomize']
     inlines = [GroupedExperimentInline]
+
+    def name_link(self, obj):
+        obj_name = obj.__str__()
+        url = reverse("admin:experiment_experimentseriesgroup_change", args=[obj.pk])
+        return format_html('<a href="{}">{}</a>', url, obj_name)
 
     def related_series(self, obj):
         url = reverse("admin:experiment_experimentseries_change", args=[obj.series.pk])
