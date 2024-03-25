@@ -1,10 +1,11 @@
+import json
 import logging
 from random import shuffle
 
 from django.http import Http404, JsonResponse
 from django.conf import settings
-from django.utils.translation import gettext_lazy as _
-from django.utils.translation import activate
+from django.utils.translation import activate, gettext_lazy as _
+from django_markup.markup import formatter
 
 from .models import Experiment, ExperimentSeries, ExperimentSeriesGroup, Feedback, GroupedExperiment
 from .utils import serialize
@@ -158,6 +159,10 @@ def serialize_experiment_series(
 ):
     groups = ExperimentSeriesGroup.objects.filter(series_id=experiment_series.id)
     serialized_groups = [serialize_experiment_series_group(group) for group in groups]
+    about_content = experiment_series.about_content
+
+    if about_content:
+        about_content = formatter(about_content, filter_name='markdown')
 
     return {
         'slug': experiment_series.slug,
@@ -166,6 +171,7 @@ def serialize_experiment_series(
         'dashboard': dashboard,
         'redirect_to': redirect_to,
         'groups': serialized_groups,
+        'about_content': about_content,
     }
 
 
@@ -197,3 +203,23 @@ def get_upcoming_experiment(experiment_list, participant):
                      get_finished_session_count(experiment, participant) == 0), None)
     if upcoming:
         return serialize_experiment(upcoming)
+
+
+def render_markdown(request):
+
+    if request.method != 'POST':
+        return JsonResponse({'status': 'error', 'message': 'Only POST requests are allowed'})
+
+    if not request.body:
+        return JsonResponse({'status': 'error', 'message': 'No body found in request'})
+
+    if request.content_type != 'application/json':
+        return JsonResponse({'status': 'error', 'message': 'Only application/json content type is allowed'})
+
+    data = json.loads(request.body)
+    markdown = data['markdown']
+
+    if markdown:
+        return JsonResponse({'html': formatter(markdown, filter_name='markdown')})
+
+    return JsonResponse({'html': ''})

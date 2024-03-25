@@ -27,6 +27,7 @@ class ExperimentSeries(models.Model):
     last_experiments = models.JSONField(blank=True, null=True, default=dict)
     # present random_experiments as dashboard
     dashboard = models.BooleanField(default=False)
+    about_content = models.TextField(blank=True, default='')
 
     def __str__(self):
         return self.name or self.slug
