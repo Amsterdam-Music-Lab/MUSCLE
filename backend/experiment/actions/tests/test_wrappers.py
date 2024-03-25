@@ -25,17 +25,17 @@ class ActionWrappersTest(TestCase):
         for action in actions:
             assert isinstance(action, Trial)
 
-    @mock.patch("random.randint")
-    def test_song_sync_no_jitter(self, mock_randint):
-        mock_randint.return_value = 1
+    @mock.patch("random.choice")
+    def test_song_sync_no_jitter(self, mock_random_choice):
+        mock_random_choice.return_value = True
         song_sync(self.session, self.section, 'HookedTest')
         inspect_session = Session.objects.first()
         saved_jitter = inspect_session.load_json_data().get('continuation_offset')
         assert saved_jitter == 0
 
-    @mock.patch("random.randint")
-    def test_song_sync_with_jitter(self, mock_randint):
-        mock_randint.return_value = 0
+    @mock.patch("random.choice")
+    def test_song_sync_with_jitter(self, mock_random_choice):
+        mock_random_choice.return_value = False
         song_sync(self.session, self.section, 'HookedTest')
         inspect_session = Session.objects.first()
         saved_jitter = inspect_session.load_json_data().get('continuation_offset')

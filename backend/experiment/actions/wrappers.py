@@ -81,7 +81,7 @@ def song_sync(session: Session, section: Section, title: str,
         },
         title=title
     )
-    continuation_correctness = random.randint(0, 1) == 1
+    continuation_correctness = random.choice([True, False])
     jitter = randomize_playhead(
         min_jitter, max_jitter, continuation_correctness)
     session.save_json_data({'continuation_offset': jitter})
