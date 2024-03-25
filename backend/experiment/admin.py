@@ -158,12 +158,12 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
 admin.site.register(Experiment, ExperimentAdmin)
 
 
-class GroupedExperimentInline(admin.TabularInline):
+class GroupedExperimentInline(admin.StackedInline):
     model = GroupedExperiment
     extra = 1
 
 
-class ExperimentSeriesGroupInline(admin.TabularInline):
+class ExperimentSeriesGroupInline(admin.StackedInline):
     model = ExperimentSeriesGroup
     extra = 1
     inlines = [GroupedExperimentInline]
