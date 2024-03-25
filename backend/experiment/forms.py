@@ -148,10 +148,13 @@ class ExperimentSeriesForm(ModelForm):
             help_text=('This field will be deprecated in the nearby future. '
                        'Please use experiment series groups (see bottom of form).')
         )
-        self.fields['dashboard'].help_text = ('If you check "dashboard", the experiment collection will have a '
-                                              'dashboard that shows all or a subgroup of related experiments along '
-                                              'with a description, footer, and about page. If you leave it unchecked, '
-                                              'the experiment collection will redirect to the first experiment.')
+        self.fields['dashboard'].help_text = (
+            'This field will be deprecated in the nearby future. '
+            'Please use experiment series groups for dashboard configuration. (see bottom of form). <br><br>'
+            'Legacy behavior: If you check "dashboard", the experiment collection will have a '
+            'dashboard that shows all or a subgroup of related experiments along '
+            'with a description, footer, and about page. If you leave it unchecked, '
+            'the experiment collection will redirect to the first experiment.')
 
     class Meta:
         model = ExperimentSeries
