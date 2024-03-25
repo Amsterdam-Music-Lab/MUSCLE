@@ -1,5 +1,3 @@
-import json
-
 from django.test import TestCase
 
 from experiment.models import Experiment, ExperimentSeries

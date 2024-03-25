@@ -3,11 +3,10 @@ from random import shuffle
 
 from django.http import Http404, JsonResponse
 from django.conf import settings
-from django.shortcuts import redirect
 from django.utils.translation import gettext_lazy as _
 from django.utils.translation import activate
 
-from .models import Experiment, ExperimentSeries, Feedback
+from .models import Experiment, ExperimentSeries, ExperimentSeriesGroup, Feedback, GroupedExperiment
 from .utils import serialize
 from participant.utils import get_participant
 from session.models import Session
@@ -104,8 +103,11 @@ def get_experiment_collection(request, slug):
         experiments = get_associated_experiments(collection.random_experiments)
         shuffle(experiments)
         if collection.dashboard:
-            serialized = [serialize_experiment(experiment, get_finished_session_count(
-                experiment, participant)) for experiment in experiments]
+            serialized = [
+                serialize_experiment(
+                    experiment,
+                    get_finished_session_count(experiment, participant)
+                ) for experiment in experiments]
             return JsonResponse(
                 serialize_experiment_series(
                     collection,
@@ -135,21 +137,39 @@ def get_experiment_collection(request, slug):
     return JsonResponse()
 
 
+def serialize_experiment_series_group(group: ExperimentSeriesGroup):
+    grouped_experiments = GroupedExperiment.objects.filter(group_id=group.id).order_by('order')
+
+    if group.randomize:
+        grouped_experiments = list(grouped_experiments)
+        shuffle(grouped_experiments)
+
+    return {
+        'name': group.name,
+        'dashboard': group.dashboard,
+        'experiments': [serialize_experiment(experiment.experiment) for experiment in grouped_experiments]
+    }
+
+
 def serialize_experiment_series(
     experiment_series: ExperimentSeries,
     dashboard: list = [],
     redirect_to: Experiment = None
 ):
+    groups = ExperimentSeriesGroup.objects.filter(series_id=experiment_series.id)
+    serialized_groups = [serialize_experiment_series_group(group) for group in groups]
+
     return {
         'slug': experiment_series.slug,
         'name': experiment_series.name,
         'description': experiment_series.description,
         'dashboard': dashboard,
         'redirect_to': redirect_to,
+        'groups': serialized_groups,
     }
 
 
-def serialize_experiment(experiment_object, finished=0):
+def serialize_experiment(experiment_object: Experiment, finished=0):
     return {
         'slug': experiment_object.slug,
         'name': experiment_object.name,
