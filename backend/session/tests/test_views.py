@@ -1,6 +1,6 @@
 from django.test import TestCase
 
-from experiment.models import Experiment, ExperimentSeries, ExperimentSeriesGroup
+from experiment.models import Experiment, ExperimentSeries
 from experiment.actions.utils import COLLECTION_KEY
 from participant.models import Participant
 from section.models import Playlist
