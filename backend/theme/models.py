@@ -27,8 +27,8 @@ class ThemeConfig(models.Model):
             'description': self.description,
             'heading_font_url': self.heading_font_url,
             'body_font_url': self.body_font_url,
-            'logo_image': self.logo_image.filename,
-            'background_image': self.background_image.filename,
+            'logo_image': self.logo_image.file,
+            'background_image': self.background_image.file,
         }
 
 
