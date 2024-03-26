@@ -10,11 +10,7 @@ export const ExperimentCollectionAbout: React.FC<ExperimentCollectionAboutProps>
     return (
         <div className="container">
             <div className="col-12 mt-3">
-                <div className="hero">
-                    <div role="contentinfo">
-                        <HTML body={content} />
-                    </div>
-                </div>
+                <HTML body={content} innerClassName="prose text-left pb-3 text-white" />
             </div>
         </div>
     );
