@@ -1,7 +1,6 @@
 import csv
 from zipfile import ZipFile
 from io import BytesIO
-import json
 from django.utils.safestring import mark_safe
 
 from django.contrib import admin
@@ -9,13 +8,13 @@ from django.db import models
 from django.utils import timezone
 from django.core import serializers
 from django.shortcuts import render, redirect
-from django.forms import CheckboxSelectMultiple, ModelForm, ModelMultipleChoiceField
+from django.forms import CheckboxSelectMultiple, ModelForm, TextInput
 from django.http import HttpResponse
 from inline_actions.admin import InlineActionsModelAdminMixin
 from django.urls import reverse
 from django.utils.html import format_html
-from experiment.models import Experiment, ExperimentSeries, Feedback
-from experiment.forms import ExperimentForm, ExportForm, TemplateForm, EXPORT_TEMPLATES
+from experiment.models import Experiment, ExperimentSeries, ExperimentSeriesGroup, Feedback, GroupedExperiment
+from experiment.forms import ExperimentSeriesForm, ExperimentForm, ExportForm, TemplateForm, EXPORT_TEMPLATES
 from section.models import Section, Song
 from result.models import Result
 from participant.models import Participant
@@ -159,10 +158,19 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
 admin.site.register(Experiment, ExperimentAdmin)
 
 
-class ModelFormFieldAsJSON(ModelMultipleChoiceField):
-    """ override clean method to prevent pk lookup to save querysets """
-    def clean(self, value):
-        return value
+class GroupedExperimentInline(admin.StackedInline):
+    model = GroupedExperiment
+    extra = 0
+
+
+class ExperimentSeriesGroupInline(admin.StackedInline):
+    model = ExperimentSeriesGroup
+    extra = 0
+    inlines = [GroupedExperimentInline]
+
+
+class MarkdownPreviewTextInput(TextInput):
+    template_name = 'widgets/markdown_preview_text_input.html'
 
 
 class ExperimentSeriesForm(ModelForm):
@@ -172,18 +180,22 @@ class ExperimentSeriesForm(ModelForm):
         self.fields['first_experiments'] = ModelFormFieldAsJSON(queryset=experiments, required=False)
         self.fields['random_experiments'] = ModelFormFieldAsJSON(queryset=experiments, required=False)
         self.fields['last_experiments'] = ModelFormFieldAsJSON(queryset=experiments, required=False)
+        self.fields['about_content'].widget = MarkdownPreviewTextInput()
 
     class Meta:
         model = ExperimentSeries
         fields = ['slug', 'first_experiments',
-                  'random_experiments', 'last_experiments', 'dashboard']
+                  'random_experiments', 'last_experiments',
+                  'dashboard', 'about_content']
 
 
 class ExperimentSeriesAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
-    list_display = ('slug', 'name', 'description_excerpt', 'dashboard')
+    list_display = ('slug', 'name', 'description_excerpt', 'dashboard', 'groups')
     fields = ['slug', 'name', 'description', 'first_experiments',
-              'random_experiments', 'last_experiments', 'dashboard']
+              'random_experiments', 'last_experiments', 'dashboard',
+              'about_content']
     form = ExperimentSeriesForm
+    inlines = [ExperimentSeriesGroupInline]
 
     def description_excerpt(self, obj):
 
@@ -192,5 +204,35 @@ class ExperimentSeriesAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
 
         return obj.description[:50] + '...'
 
+    def groups(self, obj):
+        groups = ExperimentSeriesGroup.objects.filter(series=obj)
+        return format_html(', '.join([f'<a href="/admin/experiment/experimentseriesgroup/{group.id}/change/">{group.name}</a>' for group in groups]))
+
 
 admin.site.register(ExperimentSeries, ExperimentSeriesAdmin)
+
+
+class ExperimentSeriesGroupAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
+    list_display = ('name_link', 'related_series', 'order', 'dashboard', 'randomize', 'experiments')
+    fields = ['name', 'series', 'order', 'dashboard', 'randomize']
+    inlines = [GroupedExperimentInline]
+
+    def name_link(self, obj):
+        obj_name = obj.__str__()
+        url = reverse("admin:experiment_experimentseriesgroup_change", args=[obj.pk])
+        return format_html('<a href="{}">{}</a>', url, obj_name)
+
+    def related_series(self, obj):
+        url = reverse("admin:experiment_experimentseries_change", args=[obj.series.pk])
+        return format_html('<a href="{}">{}</a>', url, obj.series.name)
+
+    def experiments(self, obj):
+        experiments = GroupedExperiment.objects.filter(group=obj)
+
+        if not experiments:
+            return "No experiments"
+
+        return format_html(', '.join([f'<a href="/admin/experiment/groupedexperiment/{experiment.id}/change/">{experiment.experiment.name}</a>' for experiment in experiments]))
+
+
+admin.site.register(ExperimentSeriesGroup, ExperimentSeriesGroupAdmin)

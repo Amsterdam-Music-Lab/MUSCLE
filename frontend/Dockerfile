@@ -1,8 +1,8 @@
 # Builder image
 FROM docker.io/node:18-alpine as builder
 
-RUN yarn set version stable
 WORKDIR /client
+RUN yarn set version 4.1.1
 COPY package.json /client/
 COPY yarn.lock /client/
 COPY jsconfig.json /client/

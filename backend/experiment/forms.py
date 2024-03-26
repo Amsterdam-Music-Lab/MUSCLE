@@ -1,8 +1,9 @@
-from django.forms import CheckboxSelectMultiple, ModelForm, ChoiceField, Form, MultipleChoiceField, Select
-from experiment.models import Experiment
+import json
+
+from django.forms import CheckboxSelectMultiple, ModelForm, ChoiceField, Form, MultipleChoiceField, ModelMultipleChoiceField, Select, TypedMultipleChoiceField, CheckboxSelectMultiple
+from experiment.models import ExperimentSeries, Experiment
 from experiment.rules import EXPERIMENT_RULES
 
-from django.forms import TypedMultipleChoiceField, CheckboxSelectMultiple
 from .questions import QUESTIONS_CHOICES
 
 # session_keys for Export CSV
@@ -119,6 +120,52 @@ TEMPLATE_CHOICES = [
 ]
 
 
+class ModelFormFieldAsJSON(ModelMultipleChoiceField):
+    """ override clean method to prevent pk lookup to save querysets """
+    def clean(self, value):
+        return value
+
+
+class ExperimentSeriesForm(ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(ModelForm, self).__init__(*args, **kwargs)
+        experiments = Experiment.objects.all()
+        self.fields['first_experiments'] = ModelFormFieldAsJSON(
+            queryset=experiments,
+            required=False,
+            help_text=('This field will be deprecated in the nearby future. '
+                       'Please use experiment series groups (see bottom of form).')
+        )
+        self.fields['random_experiments'] = ModelFormFieldAsJSON(
+            queryset=experiments,
+            required=False,
+            help_text=('This field will be deprecated in the nearby future. '
+                       'Please use experiment series groups (see bottom of form).')
+        )
+        self.fields['last_experiments'] = ModelFormFieldAsJSON(
+            queryset=experiments,
+            required=False,
+            help_text=('This field will be deprecated in the nearby future. '
+                       'Please use experiment series groups (see bottom of form).')
+        )
+        self.fields['dashboard'].help_text = (
+            'This field will be deprecated in the nearby future. '
+            'Please use experiment series groups for dashboard configuration. (see bottom of form). <br><br>'
+            'Legacy behavior: If you check "dashboard", the experiment collection will have a '
+            'dashboard that shows all or a subgroup of related experiments along '
+            'with a description, footer, and about page. If you leave it unchecked, '
+            'the experiment collection will redirect to the first experiment.')
+
+    class Meta:
+        model = ExperimentSeries
+        fields = ['slug', 'first_experiments',
+                  'random_experiments', 'last_experiments', 'dashboard']
+
+    class Media:
+        js = ["experiment_series_admin.js"]
+        css = {"all": ["experiment_series_admin.css"]}
+
+
 class ExperimentForm(ModelForm):
 
     def __init__(self, *args, **kwargs):
@@ -127,7 +174,7 @@ class ExperimentForm(ModelForm):
         choices = tuple()
         for i in EXPERIMENT_RULES:
             choices += ((i, EXPERIMENT_RULES[i].__name__),)
-        choices += (("","---------"),)
+        choices += (("", "---------"),)
 
         self.fields['rules'] = ChoiceField(
             choices=sorted(choices)
