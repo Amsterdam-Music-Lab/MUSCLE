@@ -1,3 +1,4 @@
+import React from "react";
 import { Link } from "react-router-dom";
 
 import { API_ROOT } from "../../../config";
@@ -14,7 +15,7 @@ export const ExperimentCollectionDashboard: React.FC<ExperimentCollectionDashboa
 
     // TODO: get next experiment and about link from experimentCollection
     const nextExperiment = experimentCollection.next_experiment; // TODO: get next_experiment from experimentCollection
-    const aboutContent = experimentCollection.about_content // TODO: get about_content from experimentCollection
+    const aboutContent = experimentCollection.about_content;
 
     return (
         <>
@@ -23,7 +24,7 @@ export const ExperimentCollectionDashboard: React.FC<ExperimentCollectionDashboa
                     <p>{experimentCollection?.description}</p>
                     <nav className="actions">
                         {nextExperiment && <a className="btn btn-lg btn-primary" href={"/" + nextExperiment.slug}>Volgende experiment</a>}
-                        {aboutContent && <Link className="btn btn-lg btn-outline-primary" to="about">Over ons</Link>}
+                        {aboutContent && <Link className="btn btn-lg btn-outline-primary" to={`/collection/${experimentCollection.slug}/about`}>Over ons</Link>}
                     </nav>
                 </div>
                 <div className="results">
