@@ -173,22 +173,6 @@ class MarkdownPreviewTextInput(TextInput):
     template_name = 'widgets/markdown_preview_text_input.html'
 
 
-class ExperimentSeriesForm(ModelForm):
-    def __init__(self, *args, **kwargs):
-        super(ModelForm, self).__init__(*args, **kwargs)
-        experiments = Experiment.objects.all()
-        self.fields['first_experiments'] = ModelFormFieldAsJSON(queryset=experiments, required=False)
-        self.fields['random_experiments'] = ModelFormFieldAsJSON(queryset=experiments, required=False)
-        self.fields['last_experiments'] = ModelFormFieldAsJSON(queryset=experiments, required=False)
-        self.fields['about_content'].widget = MarkdownPreviewTextInput()
-
-    class Meta:
-        model = ExperimentSeries
-        fields = ['slug', 'first_experiments',
-                  'random_experiments', 'last_experiments',
-                  'dashboard', 'about_content']
-
-
 class ExperimentSeriesAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
     list_display = ('slug', 'name', 'description_excerpt', 'dashboard', 'groups')
     fields = ['slug', 'name', 'description', 'first_experiments',
