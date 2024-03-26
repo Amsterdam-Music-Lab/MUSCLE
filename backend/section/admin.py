@@ -4,9 +4,9 @@ from inline_actions.admin import InlineActionsModelAdminMixin
 from django.contrib import admin, messages
 from django.core.exceptions import ValidationError
 from django.shortcuts import render, redirect
-from django.http import JsonResponse, HttpResponse
+from django.http import HttpResponse
 from django.conf import settings
-from django.urls import path
+from django.urls import path, reverse
 from django.utils.translation import gettext_lazy as _
 
 import audioread
@@ -51,6 +51,9 @@ class PlaylistAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
     search_fields = ['name', 'section__song__artist', 'section__song__name']
     inline_actions = ['add_sections',
                       'edit_sections', 'export_csv']
+
+    def redirect_to_overview(self):
+        return redirect(reverse('admin:section_playlist_changelist'))
 
     def save_model(self, request, obj, form, change):
 
@@ -108,10 +111,10 @@ class PlaylistAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
                 new_section.save()
                 obj.save()
             if not form.errors:
-                return redirect('/admin/section/playlist')
+                return self.redirect_to_overview()
         # Go back to admin playlist overview
         if '_back' in request.POST:
-            return redirect('/admin/section/playlist')
+            return self.redirect_to_overview()
         return render(
             request,
             'add-sections.html',
@@ -145,10 +148,9 @@ class PlaylistAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
                 section.group = request.POST.get(pre_fix + '_group')
                 section.save()
                 obj.save()
-            return redirect('/admin/section/playlist')
-        # Go back to admin playlist overview
+            return self.redirect_to_overview()
         if '_back' in request.POST:
-            return redirect('/admin/section/playlist')
+            return self.redirect_to_overview()
         return render(
             request,
             'edit-sections.html',
