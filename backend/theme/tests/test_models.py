@@ -36,4 +36,4 @@ class ThemeConfigModelTest(TestCase):
             'logo_image': 'someimage.jpg',
             'background_image': 'anotherimage.png',
         }
-        self.assertEqual(theme_config.__to_json__(), expected_json)
+        self.assertEqual(theme_config.to_json(), expected_json)

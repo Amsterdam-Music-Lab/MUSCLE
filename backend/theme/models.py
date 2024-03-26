@@ -21,14 +21,15 @@ class ThemeConfig(models.Model):
     def __str__(self):
         return self.name
 
-    def __to_json__(self):
+    def to_json(self):
         return {
             'name': self.name,
             'description': self.description,
             'heading_font_url': self.heading_font_url,
             'body_font_url': self.body_font_url,
-            'logo_image': self.logo_image.file,
-            'background_image': self.background_image.file,
+            'logo_image': self.logo_image.file if self.logo_image else None,
+            'background_image': self.background_image.file if self.background_image else None,
+            'footer': self.footer.to_json() if self.footer else None
         }
 
 
@@ -39,3 +40,12 @@ class FooterConfig(models.Model):
     logos = models.ManyToManyField(
         to='image.Image', blank=True, help_text='Add references to Image objects; make sure these have sufficient contrast with the background (image).')
     privacy = models.TextField(blank=True, default='')
+
+    def to_json(self):
+        return {
+            'disclaimer': self.disclaimer,
+            'logos': [
+                str(logo.file) for logo in self.logos.all()
+            ],
+            'privacy': self.privacy
+        }

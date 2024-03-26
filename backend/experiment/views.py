@@ -34,7 +34,7 @@ def get_experiment(request, slug):
         'id': experiment.id,
         'slug': experiment.slug,
         'name': experiment.name,
-        'theme': experiment.theme_config.__to_json__() if experiment.theme_config else None,
+        'theme': experiment.theme_config.to_json() if experiment.theme_config else None,
         'class_name': class_name,  # can be used to override style
         'rounds': experiment.rounds,
         'playlists': [
@@ -168,6 +168,7 @@ def serialize_experiment_series(
         'slug': experiment_series.slug,
         'name': experiment_series.name,
         'description': experiment_series.description,
+        'theme': experiment_series.theme_config.to_json() if experiment_series.theme_config else None,
         'dashboard': dashboard,
         'redirect_to': redirect_to,
         'groups': serialized_groups,

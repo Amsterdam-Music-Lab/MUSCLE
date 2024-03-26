@@ -171,7 +171,7 @@ class ExperimentSeriesGroupInline(admin.StackedInline):
 
 class ExperimentSeriesAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
     list_display = ('slug', 'name', 'description_excerpt', 'dashboard', 'groups')
-    fields = ['slug', 'name', 'description', 'first_experiments',
+    fields = ['slug', 'name', 'description', 'theme_config', 'first_experiments',
               'random_experiments', 'last_experiments', 'dashboard',
               'about_content']
     form = ExperimentSeriesForm
