@@ -11,11 +11,6 @@ export default defineConfig({
       reportsDirectory: 'public/coverage',
     },
   },
-  esbuild: {
-    include: /\.[jt]sx?$/,
-    exclude: [],
-    loader: 'jsx',
-  },
   resolve: {
     alias: {
         '@/': '/src/',

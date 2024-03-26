@@ -10,7 +10,7 @@ const PlayCard = ({ onClick, registerUserClicks, playing, section, view, showAni
         }
         return API_ROOT + url;
     }
-    const matchClass = section.matchClass;
+    const matchClass = showAnimation? section.matchClass : '';
 
     const histogramBars = showAnimation ? 5 : 0;
 
