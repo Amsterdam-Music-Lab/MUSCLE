@@ -95,9 +95,9 @@ class CongoSameDiff(Base):
         subset_count = subset.count()
 
         practice_label = 'PRACTICE' if is_practice else 'NORMAL'
-        section_name = section.song.name
-        section_tag = section.tag
-        section_group = section.group
+        section_name = section.song.name if section.song else 'No name'
+        section_tag = section.tag if section.tag else 'No tag'
+        section_group = section.group if section.group else 'No group'
 
         question = ChoiceQuestion(
             explainer=f'{practice_label} ({trial_index}/{subset_count}) | {section_name} | {section_tag} | {section_group}',
