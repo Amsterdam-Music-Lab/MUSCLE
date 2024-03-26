@@ -49,7 +49,7 @@ const ExperimentCollection = ({ match }) => {
     return (
         <div className="aha__collection">
             <Router>
-                <Route path={URLS.experimentCollectionAbout} component={() => <ExperimentCollectionAbout content={'## Hey!\n\n **lolz**'} />} />
+                <Route path={URLS.experimentCollectionAbout} component={() => <ExperimentCollectionAbout content={experimentCollection?.about_content} />} />
                 <Route path={URLS.experimentCollection} exact component={() => <ExperimentCollectionDashboard experimentCollection={experimentCollection} />} />
             </Router>
         </div>
