@@ -22,8 +22,8 @@
     "react-transition-group": "^4.4.5",
     "sass": "^1.69.5",
     "typescript": "^5.3.3",
-    "vite": "^5.0.12",
-    "vite-tsconfig-paths": "^4.2.2",
+    "vite": "^5.2.2",
+    "vite-tsconfig-paths": "^4.3.2",
     "zustand": "^4.4.7"
   },
   "scripts": {
@@ -35,10 +35,11 @@
     "generate-badge": "coverage-badges -s coverage/coverage-final.json -o coverage-frontend-badge-new.svg --label 'Frontend Code Coverage'",
     "scss": "sass src/index.scss src/index.css",
     "scss:watch": "sass src/index.scss src/index.css; sass --watch src/index.scss src/index.css",
-    "storybook": "VITE_API_ROOT=http://localhost:8000 && storybook dev -p 6006",
+    "storybook": "storybook dev -p 6006",
     "storybook:build": "storybook build",
     "lint": "eslint src/**/*.{js,jsx,ts,tsx}",
-    "lint:fix": "eslint --fix src/**/*.js"
+    "lint:fix": "eslint --fix src/**/*.js",
+    "build-storybook": "storybook build"
   },
   "eslintConfig": {
     "plugins": [
@@ -71,17 +72,21 @@
     ]
   },
   "devDependencies": {
-    "@storybook/addon-essentials": "7.6.6",
-    "@storybook/addon-interactions": "7.6.6",
-    "@storybook/addon-links": "7.6.6",
-    "@storybook/addon-onboarding": "1.0.10",
-    "@storybook/blocks": "7.6.6",
-    "@storybook/builder-vite": "^7.6.17",
-    "@storybook/react-vite": "^7.6.17",
+    "@chromatic-com/storybook": "^1.2.25",
+    "@storybook/addon-essentials": "8.0.4",
+    "@storybook/addon-interactions": "8.0.4",
+    "@storybook/addon-links": "8.0.4",
+    "@storybook/addon-onboarding": "^8.0.4",
+    "@storybook/blocks": "8.0.4",
+    "@storybook/builder-vite": "^8.0.4",
+    "@storybook/react": "^8.0.4",
+    "@storybook/react-vite": "^8.0.4",
+    "@storybook/test": "^8.0.4",
     "@storybook/testing-library": "0.2.2",
     "@testing-library/react": "^14.1.2",
     "@testing-library/react-hooks": "^8.0.1",
     "@testing-library/user-event": "^14.5.1",
+    "@types/react": "^18.2.67",
     "@vitest/coverage-v8": "^1.2.1",
     "axios-mock-adapter": "^1.22.0",
     "babel-plugin-named-exports-order": "0.0.2",
@@ -93,7 +98,7 @@
     "happy-dom": "^12.10.3",
     "history": "^5.3.0",
     "prop-types": "15.8.1",
-    "storybook": "7.6.6",
+    "storybook": "^8.0.4",
     "vitest": "^1.1.0"
   }
 }

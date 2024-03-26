@@ -2,7 +2,7 @@ from django.test import TestCase
 
 from image.models import Image
 from theme.models import ThemeConfig
-from experiment.models import Experiment
+from experiment.models import Experiment, ExperimentSeries
 from participant.models import Participant
 from session.models import Session
 from result.models import Result
@@ -124,3 +124,22 @@ class ExperimentModelTest(TestCase):
         max_score = experiment.max_score()
         self.assertEqual(max_score, question_scores + bonus_points)
         self.assertEqual(max_score, 13.0)
+
+
+class ExperimentSeriesModelTest(TestCase):
+
+    @classmethod
+    def setUpTestData(self):
+        self.experiment_series = ExperimentSeries.objects.create(
+            slug='test-series',
+            name='Test Series',
+            description='Test series description with a very long description. From here to the moon and from the moon to the stars.',
+        )
+
+    def test_experiment_series_str(self):
+        experiment_series_no_name = ExperimentSeries.objects.create(
+            slug='test-series-no-name',
+        )
+
+        self.assertEqual(str(self.experiment_series), 'Test Series')
+        self.assertEqual(str(experiment_series_no_name), 'test-series-no-name')

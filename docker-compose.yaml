@@ -73,6 +73,9 @@ services:
             source: ./frontend/tsconfig.json
             target: /client/tsconfig.json
           - type: bind
+            source: ./frontend/tsconfig.node.json
+            target: /client/tsconfig.node.json
+          - type: bind
             source: ./frontend/vite-env.d.ts
             target: /client/vite-env.d.ts
           - type: bind

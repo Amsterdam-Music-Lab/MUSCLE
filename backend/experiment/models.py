@@ -17,6 +17,8 @@ language_choices[0] = ('', 'Unset')
 
 class ExperimentSeries(models.Model):
     """ A model to allow nesting multiple experiments into a 'parent' experiment """
+    name = models.CharField(max_length=64, default='')
+    description = models.TextField(blank=True, default='')
     slug = models.SlugField(max_length=64, default='')
     # first experiments in a test series, in fixed order
     first_experiments = models.JSONField(blank=True, null=True, default=dict)
@@ -25,9 +27,10 @@ class ExperimentSeries(models.Model):
     last_experiments = models.JSONField(blank=True, null=True, default=dict)
     # present random_experiments as dashboard
     dashboard = models.BooleanField(default=False)
+    about_content = models.TextField(blank=True, default='')
 
     def __str__(self):
-        return self.slug
+        return self.name or self.slug
 
     class Meta:
         verbose_name_plural = "Experiment Series"
@@ -40,6 +43,39 @@ def consent_upload_path(instance, filename):
     """Generate path to save consent file based on experiment.slug"""
     folder_name = instance.slug
     return 'consent/{0}/{1}'.format(folder_name, filename)
+
+
+class ExperimentSeriesGroup(models.Model):
+    name = models.CharField(max_length=64, blank=True, default='')
+    series = models.ForeignKey(ExperimentSeries, on_delete=models.CASCADE)
+    order = models.IntegerField(default=0, help_text='Order of the group in the series. Lower numbers come first.')
+    dashboard = models.BooleanField(default=False)
+    randomize = models.BooleanField(default=False, help_text='Randomize the order of the experiments in this group.')
+
+    def __str__(self):
+        compound_name = self.name or self.series.name or self.series.slug or 'Unnamed group'
+
+        if not self.name:
+            return f'{compound_name} ({self.order})'
+
+        return f'{compound_name}'
+
+    class Meta:
+        ordering = ['order']
+        verbose_name_plural = "Experiment Series Groups"
+
+
+class GroupedExperiment(models.Model):
+    experiment = models.OneToOneField('Experiment', on_delete=models.CASCADE)
+    group = models.ForeignKey(ExperimentSeriesGroup, on_delete=models.CASCADE)
+    order = models.IntegerField(default=0, help_text='Order of the experiment in the group. Lower numbers come first.')
+
+    def __str__(self):
+        return f'{self.experiment.name} - {self.group.name} - {self.order}'
+
+    class Meta:
+        ordering = ['order']
+        verbose_name_plural = "Grouped Experiments"
 
 
 class Experiment(models.Model):
