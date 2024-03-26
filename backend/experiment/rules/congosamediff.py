@@ -61,14 +61,12 @@ class CongoSameDiff(Base):
         if next_round_number <= practice_trials_count:
             subset = session.playlist.section_set.filter(
                 tag__contains='practice')
-            
             return self.get_next_trial(
                 session,
                 subset,
                 next_round_number,
                 True
             )
-        
         subset = session.playlist.section_set.exclude(
             tag__contains='practice')
 
@@ -120,7 +118,7 @@ class CongoSameDiff(Base):
         view = Trial(
             playback=playback,
             feedback_form=form,
-            title=_('Test experiment'),
+            title=_(session.experiment.name),
             config={
                 'response_time': section.duration,
                 'listen_first': True
