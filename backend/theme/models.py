@@ -35,10 +35,7 @@ class ThemeConfig(models.Model):
 class FooterConfig(models.Model):
     theme = models.OneToOneField(
         ThemeConfig, on_delete=models.CASCADE, related_name='footer')
-    description = models.FileField(upload_to=footer_info_upload_path,
-                                   blank=True,
-                                   default='',
-                                   help_text='Upload a file in html or markdown format',
-                                   validators=[markdown_html_validator()])
+    disclaimer = models.TextField(blank=True, default='')
     logos = models.ManyToManyField(
         to='image.Image', blank=True, help_text='Add references to Image objects; make sure these have sufficient contrast with the background (image).')
+    privacy = models.TextField(blank=True, default='')

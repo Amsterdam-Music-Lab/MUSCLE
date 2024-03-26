@@ -3,12 +3,13 @@ from django.contrib import admin
 from django.utils.html import format_html
 from django.utils.safestring import mark_safe
 from .models import FooterConfig, ThemeConfig
-from .forms import ThemeConfigForm
+from .forms import ThemeConfigForm, FooterConfigForm
 
 
 class FooterConfigInline(admin.StackedInline):
     model = FooterConfig
-    fields = ['description', 'logos']
+    form = FooterConfigForm
+    fields = ['disclaimer', 'logos', 'privacy']
 
 @admin.register(ThemeConfig)
 class ThemeConfigAdmin(admin.ModelAdmin):
