@@ -1,6 +1,4 @@
-import json
-
-from django.forms import CheckboxSelectMultiple, ModelForm, ChoiceField, Form, MultipleChoiceField, ModelMultipleChoiceField, Select, TypedMultipleChoiceField, CheckboxSelectMultiple
+from django.forms import CheckboxSelectMultiple, ModelForm, ChoiceField, Form, MultipleChoiceField, ModelMultipleChoiceField, Select, TypedMultipleChoiceField, CheckboxSelectMultiple, TextInput
 from experiment.models import ExperimentSeries, Experiment
 from experiment.rules import EXPERIMENT_RULES
 
@@ -126,6 +124,10 @@ class ModelFormFieldAsJSON(ModelMultipleChoiceField):
         return value
 
 
+class MarkdownPreviewTextInput(TextInput):
+    template_name = 'widgets/markdown_preview_text_input.html'
+
+
 class ExperimentSeriesForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super(ModelForm, self).__init__(*args, **kwargs)
@@ -155,11 +157,13 @@ class ExperimentSeriesForm(ModelForm):
             'dashboard that shows all or a subgroup of related experiments along '
             'with a description, footer, and about page. If you leave it unchecked, '
             'the experiment collection will redirect to the first experiment.')
+        self.fields['about_content'].widget = MarkdownPreviewTextInput()
 
     class Meta:
         model = ExperimentSeries
         fields = ['slug', 'first_experiments',
-                  'random_experiments', 'last_experiments', 'dashboard']
+                  'random_experiments', 'last_experiments',
+                  'dashboard', 'about_content']
 
     class Media:
         js = ["experiment_series_admin.js"]
