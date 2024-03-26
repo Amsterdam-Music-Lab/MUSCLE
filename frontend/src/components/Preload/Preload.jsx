@@ -49,9 +49,9 @@ const Preload = ({ sections, playMethod, duration, preloadMessage, pageTitle, on
 
                     // Load sections in buffer                
                     return webAudio.loadBuffer(section.id, section.url, () => {                    
-                        if (index === (sections.length - 1)) {
-                            setAudioAvailable(true);
+                        if (index === (sections.length - 1)) {                            
                             if (timePassed) {
+                                setAudioAvailable(true);
                                 onNext();
                             }                        
                         }                                        
