@@ -16,7 +16,8 @@ class ThemeConfigAdmin(admin.ModelAdmin):
     form = ThemeConfigForm
     inlines = [FooterConfigInline]
 
-    list_display = ('id', 'name_link', 'heading_font_preview', 'body_font_preview', 'logo_preview', 'background_preview')
+    list_display = ('name', 'heading_font_preview',
+                    'body_font_preview', 'logo_preview', 'background_preview', 'footer_overview')
     search_fields = ('name', 'description')
     ordering = ('name',)
     fieldsets = (
@@ -39,8 +40,8 @@ class ThemeConfigAdmin(admin.ModelAdmin):
         }),
     )
 
-    def name_link(self, obj):
-        return format_html('<a href="{}">{}</a>', f'/admin/theme/themeconfig/{obj.id}/change/', obj.name)
+    def footer_overview(self, obj):
+        return f'Footer with {obj.footer.logos.count()} logos'
 
     def heading_font_preview(self, obj):
         if obj.heading_font_url:
