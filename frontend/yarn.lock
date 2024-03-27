@@ -5473,6 +5473,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/react-dom@npm:^18.2.22":
+  version: 18.2.22
+  resolution: "@types/react-dom@npm:18.2.22"
+  dependencies:
+    "@types/react": "npm:*"
+  checksum: 10c0/cd85b5f402126e44b8c7b573e74737389816abcc931b2b14d8f946ba81cce8637ea490419488fcae842efb1e2f69853bc30522e43fd8359e1007d4d14b8d8146
+  languageName: node
+  linkType: hard
+
 "@types/react-router-dom@npm:^5.3.3":
   version: 5.3.3
   resolution: "@types/react-router-dom@npm:5.3.3"
@@ -6037,6 +6046,7 @@ __metadata:
     "@testing-library/react-hooks": "npm:^8.0.1"
     "@testing-library/user-event": "npm:^14.5.1"
     "@types/react": "npm:^18.2.72"
+    "@types/react-dom": "npm:^18.2.22"
     "@types/react-router-dom": "npm:^5.3.3"
     "@vitejs/plugin-react": "npm:^4.2.1"
     "@vitest/coverage-istanbul": "npm:^1.4.0"
