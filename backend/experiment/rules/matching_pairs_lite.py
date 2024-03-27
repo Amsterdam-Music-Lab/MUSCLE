@@ -23,7 +23,7 @@ class MatchingPairsLite(MatchingPairsGame):
         return [
             playlist, info
         ]
-    
+
     def next_round(self, session):
         if session.rounds_passed() < 1:
             trial = self.get_matching_pairs_trial(session)
@@ -34,14 +34,20 @@ class MatchingPairsLite(MatchingPairsGame):
     def select_sections(self, session):
         pairs = list(session.playlist.section_set.order_by().distinct(
             'group').values_list('group', flat=True))
-        random.seed(self.random_seed)
-        random.shuffle(pairs)
         selected_pairs = pairs[:self.num_pairs]
         originals = session.playlist.section_set.filter(
-            group__in=selected_pairs, tag='Original')
+            group__in=selected_pairs, tag='Original'
+        )
         degradations = session.playlist.section_set.exclude(tag='Original').filter(
-            group__in=selected_pairs)
+            group__in=selected_pairs
+        )
         if degradations:
-            return list(originals) + list(degradations)
+            sections = list(originals) + list(degradations)
+            random.seed(self.random_seed)
+            random.shuffle(sections)
+            return sections
         else:
-            return list(originals) + list(originals)
+            sections = list(originals) * 2
+            random.seed(self.random_seed)
+            random.shuffle(sections)
+            return sections
