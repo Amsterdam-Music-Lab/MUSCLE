@@ -117,10 +117,11 @@ class CongoSameDiff(Base):
         )
         form = Form([question])
         playback = PlayButton([section], play_once=False)
+        experiment_name = session.experiment.name if session.experiment else 'SameDiff Experiment'
         view = Trial(
             playback=playback,
             feedback_form=form,
-            title=_(session.experiment.name),
+            title=_(experiment_name),
             config={
                 'response_time': section.duration,
                 'listen_first': True
