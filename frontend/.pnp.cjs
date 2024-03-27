@@ -42,6 +42,7 @@ const RAW_RUNTIME_STATE =
           ["@testing-library/react-hooks", "virtual:74792effab46f58ba1849ed2d34bd613b5659d762979dea959819ade1937f6e3f71378429c07ee0ed12a2f529924b755998205bbacdbe5f616b371b307f52d67#npm:8.0.1"],\
           ["@testing-library/user-event", "virtual:74792effab46f58ba1849ed2d34bd613b5659d762979dea959819ade1937f6e3f71378429c07ee0ed12a2f529924b755998205bbacdbe5f616b371b307f52d67#npm:14.5.1"],\
           ["@types/react", "npm:18.2.72"],\
+          ["@types/react-dom", "npm:18.2.22"],\
           ["@types/react-router-dom", "npm:5.3.3"],\
           ["@vitejs/plugin-react", "virtual:74792effab46f58ba1849ed2d34bd613b5659d762979dea959819ade1937f6e3f71378429c07ee0ed12a2f529924b755998205bbacdbe5f616b371b307f52d67#npm:4.2.1"],\
           ["@vitest/coverage-v8", "virtual:74792effab46f58ba1849ed2d34bd613b5659d762979dea959819ade1937f6e3f71378429c07ee0ed12a2f529924b755998205bbacdbe5f616b371b307f52d67#npm:1.2.1"],\
@@ -7118,7 +7119,7 @@ const RAW_RUNTIME_STATE =
           ["@storybook/types", "npm:8.0.4"],\
           ["@types/lodash", "npm:4.14.201"],\
           ["@types/react", "npm:18.2.72"],\
-          ["@types/react-dom", null],\
+          ["@types/react-dom", "npm:18.2.22"],\
           ["color-convert", "npm:2.0.1"],\
           ["dequal", "npm:2.0.3"],\
           ["lodash", "npm:4.17.21"],\
@@ -7453,7 +7454,7 @@ const RAW_RUNTIME_STATE =
           ["@storybook/theming", "virtual:79919fca69d84fa3b3f9b43bdcf978de12ee8420d8febb0ad469e4817be79408584b15186f4a3469be77002d2a5d22cb554363710d70829b098ead04bda9b14a#npm:8.0.4"],\
           ["@storybook/types", "npm:8.0.4"],\
           ["@types/react", "npm:18.2.72"],\
-          ["@types/react-dom", null],\
+          ["@types/react-dom", "npm:18.2.22"],\
           ["memoizerific", "npm:1.11.3"],\
           ["react", "npm:18.2.0"],\
           ["react-dom", "virtual:74792effab46f58ba1849ed2d34bd613b5659d762979dea959819ade1937f6e3f71378429c07ee0ed12a2f529924b755998205bbacdbe5f616b371b307f52d67#npm:18.2.0"],\
@@ -7747,7 +7748,7 @@ const RAW_RUNTIME_STATE =
         "packageDependencies": [\
           ["@storybook/icons", "virtual:79919fca69d84fa3b3f9b43bdcf978de12ee8420d8febb0ad469e4817be79408584b15186f4a3469be77002d2a5d22cb554363710d70829b098ead04bda9b14a#npm:1.2.9"],\
           ["@types/react", "npm:18.2.72"],\
-          ["@types/react-dom", null],\
+          ["@types/react-dom", "npm:18.2.22"],\
           ["react", "npm:18.2.0"],\
           ["react-dom", "virtual:74792effab46f58ba1849ed2d34bd613b5659d762979dea959819ade1937f6e3f71378429c07ee0ed12a2f529924b755998205bbacdbe5f616b371b307f52d67#npm:18.2.0"]\
         ],\
@@ -7872,7 +7873,7 @@ const RAW_RUNTIME_STATE =
           ["@types/estree", "npm:0.0.51"],\
           ["@types/node", "npm:18.18.9"],\
           ["@types/react", "npm:18.2.72"],\
-          ["@types/react-dom", null],\
+          ["@types/react-dom", "npm:18.2.22"],\
           ["@types/typescript", null],\
           ["acorn", "npm:7.4.1"],\
           ["acorn-jsx", "virtual:cbd667f2b1f6381a5e4053a06d8a760001aeaf2c55ededb42a4a954f9fbc3770f9aa342f1fb68f465b8596eff0a3842b42e2e2c9b3fbb404b3174563caaa5c1e#npm:5.3.2"],\
@@ -7914,7 +7915,7 @@ const RAW_RUNTIME_STATE =
           ["@types/estree", "npm:0.0.51"],\
           ["@types/node", "npm:18.18.9"],\
           ["@types/react", "npm:18.2.72"],\
-          ["@types/react-dom", null],\
+          ["@types/react-dom", "npm:18.2.22"],\
           ["@types/typescript", null],\
           ["acorn", "npm:7.4.1"],\
           ["acorn-jsx", "virtual:cbd667f2b1f6381a5e4053a06d8a760001aeaf2c55ededb42a4a954f9fbc3770f9aa342f1fb68f465b8596eff0a3842b42e2e2c9b3fbb404b3174563caaa5c1e#npm:5.3.2"],\
@@ -7956,7 +7957,7 @@ const RAW_RUNTIME_STATE =
         "packageDependencies": [\
           ["@storybook/react-dom-shim", "virtual:cbd667f2b1f6381a5e4053a06d8a760001aeaf2c55ededb42a4a954f9fbc3770f9aa342f1fb68f465b8596eff0a3842b42e2e2c9b3fbb404b3174563caaa5c1e#npm:8.0.4"],\
           ["@types/react", "npm:18.2.72"],\
-          ["@types/react-dom", null],\
+          ["@types/react-dom", "npm:18.2.22"],\
           ["react", "npm:18.2.0"],\
           ["react-dom", "virtual:74792effab46f58ba1849ed2d34bd613b5659d762979dea959819ade1937f6e3f71378429c07ee0ed12a2f529924b755998205bbacdbe5f616b371b307f52d67#npm:18.2.0"]\
         ],\
@@ -8004,7 +8005,7 @@ const RAW_RUNTIME_STATE =
           ["@storybook/node-logger", "npm:8.0.4"],\
           ["@storybook/react", "virtual:368aa567865d54a3e38fe421e413fe0632beb22f6064897b0730c111d101c9207aa74789e278cef5f0476cdf19771dda8919648cc9c410ea8b1c2ae68d846b67#npm:8.0.4"],\
           ["@types/react", "npm:18.2.72"],\
-          ["@types/react-dom", null],\
+          ["@types/react-dom", "npm:18.2.22"],\
           ["@types/vite", null],\
           ["find-up", "npm:5.0.0"],\
           ["magic-string", "npm:0.30.5"],\
@@ -8124,7 +8125,7 @@ const RAW_RUNTIME_STATE =
           ["@storybook/client-logger", "npm:8.0.4"],\
           ["@storybook/global", "npm:5.0.0"],\
           ["@types/react", "npm:18.2.72"],\
-          ["@types/react-dom", null],\
+          ["@types/react-dom", "npm:18.2.22"],\
           ["memoizerific", "npm:1.11.3"],\
           ["react", "npm:18.2.0"],\
           ["react-dom", "virtual:74792effab46f58ba1849ed2d34bd613b5659d762979dea959819ade1937f6e3f71378429c07ee0ed12a2f529924b755998205bbacdbe5f616b371b307f52d67#npm:18.2.0"]\
@@ -8258,11 +8259,12 @@ const RAW_RUNTIME_STATE =
           ["@babel/runtime", "npm:7.22.11"],\
           ["@testing-library/dom", "npm:9.3.3"],\
           ["@types/react", "npm:18.2.72"],\
-          ["@types/react-dom", "npm:18.2.17"],\
+          ["@types/react-dom", "npm:18.2.22"],\
           ["react", "npm:18.2.0"],\
           ["react-dom", "virtual:74792effab46f58ba1849ed2d34bd613b5659d762979dea959819ade1937f6e3f71378429c07ee0ed12a2f529924b755998205bbacdbe5f616b371b307f52d67#npm:18.2.0"]\
         ],\
         "packagePeers": [\
+          "@types/react-dom",\
           "@types/react",\
           "react-dom",\
           "react"\
@@ -8284,7 +8286,7 @@ const RAW_RUNTIME_STATE =
           ["@testing-library/react-hooks", "virtual:74792effab46f58ba1849ed2d34bd613b5659d762979dea959819ade1937f6e3f71378429c07ee0ed12a2f529924b755998205bbacdbe5f616b371b307f52d67#npm:8.0.1"],\
           ["@babel/runtime", "npm:7.22.11"],\
           ["@types/react", "npm:18.2.72"],\
-          ["@types/react-dom", null],\
+          ["@types/react-dom", "npm:18.2.22"],\
           ["@types/react-test-renderer", null],\
           ["react", "npm:18.2.0"],\
           ["react-dom", "virtual:74792effab46f58ba1849ed2d34bd613b5659d762979dea959819ade1937f6e3f71378429c07ee0ed12a2f529924b755998205bbacdbe5f616b371b307f52d67#npm:18.2.0"],\
@@ -8802,10 +8804,10 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["@types/react-dom", [\
-      ["npm:18.2.17", {\
-        "packageLocation": "../../../.yarn/berry/cache/@types-react-dom-npm-18.2.17-d5475408ae-10c0.zip/node_modules/@types/react-dom/",\
+      ["npm:18.2.22", {\
+        "packageLocation": "../../../.yarn/berry/cache/@types-react-dom-npm-18.2.22-5cfb6052f5-10c0.zip/node_modules/@types/react-dom/",\
         "packageDependencies": [\
-          ["@types/react-dom", "npm:18.2.17"],\
+          ["@types/react-dom", "npm:18.2.22"],\
           ["@types/react", "npm:18.2.21"]\
         ],\
         "linkType": "HARD"\
@@ -9532,6 +9534,7 @@ const RAW_RUNTIME_STATE =
           ["@testing-library/react-hooks", "virtual:74792effab46f58ba1849ed2d34bd613b5659d762979dea959819ade1937f6e3f71378429c07ee0ed12a2f529924b755998205bbacdbe5f616b371b307f52d67#npm:8.0.1"],\
           ["@testing-library/user-event", "virtual:74792effab46f58ba1849ed2d34bd613b5659d762979dea959819ade1937f6e3f71378429c07ee0ed12a2f529924b755998205bbacdbe5f616b371b307f52d67#npm:14.5.1"],\
           ["@types/react", "npm:18.2.72"],\
+          ["@types/react-dom", "npm:18.2.22"],\
           ["@types/react-router-dom", "npm:5.3.3"],\
           ["@vitejs/plugin-react", "virtual:74792effab46f58ba1849ed2d34bd613b5659d762979dea959819ade1937f6e3f71378429c07ee0ed12a2f529924b755998205bbacdbe5f616b371b307f52d67#npm:4.2.1"],\
           ["@vitest/coverage-v8", "virtual:74792effab46f58ba1849ed2d34bd613b5659d762979dea959819ade1937f6e3f71378429c07ee0ed12a2f529924b755998205bbacdbe5f616b371b307f52d67#npm:1.2.1"],\
@@ -15799,7 +15802,7 @@ const RAW_RUNTIME_STATE =
         "packageDependencies": [\
           ["react-colorful", "virtual:79919fca69d84fa3b3f9b43bdcf978de12ee8420d8febb0ad469e4817be79408584b15186f4a3469be77002d2a5d22cb554363710d70829b098ead04bda9b14a#npm:5.6.1"],\
           ["@types/react", "npm:18.2.72"],\
-          ["@types/react-dom", null],\
+          ["@types/react-dom", "npm:18.2.22"],\
           ["react", "npm:18.2.0"],\
           ["react-dom", "virtual:74792effab46f58ba1849ed2d34bd613b5659d762979dea959819ade1937f6e3f71378429c07ee0ed12a2f529924b755998205bbacdbe5f616b371b307f52d67#npm:18.2.0"]\
         ],\
@@ -15946,7 +15949,7 @@ const RAW_RUNTIME_STATE =
           ["react-element-to-jsx-string", "virtual:cbd667f2b1f6381a5e4053a06d8a760001aeaf2c55ededb42a4a954f9fbc3770f9aa342f1fb68f465b8596eff0a3842b42e2e2c9b3fbb404b3174563caaa5c1e#npm:15.0.0"],\
           ["@base2/pretty-print-object", "npm:1.0.1"],\
           ["@types/react", "npm:18.2.72"],\
-          ["@types/react-dom", null],\
+          ["@types/react-dom", "npm:18.2.22"],\
           ["is-plain-object", "npm:5.0.0"],\
           ["react", "npm:18.2.0"],\
           ["react-dom", "virtual:74792effab46f58ba1849ed2d34bd613b5659d762979dea959819ade1937f6e3f71378429c07ee0ed12a2f529924b755998205bbacdbe5f616b371b307f52d67#npm:18.2.0"],\
@@ -16125,7 +16128,7 @@ const RAW_RUNTIME_STATE =
           ["@emotion/react", "virtual:477dc5e46ee902a0d158455ae21c7e9aa1dc81af7ed87bfbfdac606f9ee149d975ea4d61e484ff2ff78ac10b242438f5ba1b72f76bae617229d3a80453b90096#npm:11.11.1"],\
           ["@floating-ui/dom", "npm:1.5.1"],\
           ["@types/react", "npm:18.2.72"],\
-          ["@types/react-dom", null],\
+          ["@types/react-dom", "npm:18.2.22"],\
           ["@types/react-transition-group", "npm:4.4.6"],\
           ["memoize-one", "npm:6.0.0"],\
           ["prop-types", "npm:15.8.1"],\
@@ -16157,7 +16160,7 @@ const RAW_RUNTIME_STATE =
           ["react-transition-group", "virtual:74792effab46f58ba1849ed2d34bd613b5659d762979dea959819ade1937f6e3f71378429c07ee0ed12a2f529924b755998205bbacdbe5f616b371b307f52d67#npm:4.4.5"],\
           ["@babel/runtime", "npm:7.22.11"],\
           ["@types/react", "npm:18.2.72"],\
-          ["@types/react-dom", null],\
+          ["@types/react-dom", "npm:18.2.22"],\
           ["dom-helpers", "npm:5.2.1"],\
           ["loose-envify", "npm:1.4.0"],\
           ["prop-types", "npm:15.8.1"],\
