@@ -11,53 +11,61 @@ class MatchingPairsFixedTest(TestCase):
     @classmethod
     def setUpTestData(self):
         self.experiment = Experiment.objects.create(
-            name='Test Experiment',
-            slug='test-experiment',
+            name='Test Experiment Matching Pairs Fixed',
+            slug='test-experiment-matching-pairs-fixed',
             rules='matching_pairs_lite'
         )
         self.playlist = Playlist.objects.create(
-            name='Test Playlist'
+            name='Test Playlist for select_sections',
         )
 
     def test_select_sections_original_degraded(self):
 
         self.section1 = Section.objects.create(
             playlist=self.playlist,
+            code='1',
             group='Group 1',
             tag='Original'
         )
         self.section2 = Section.objects.create(
             playlist=self.playlist,
+            code='2',
             group='Group 1',
             tag='Degradation'
         )
         self.section3 = Section.objects.create(
             playlist=self.playlist,
+            code='3',
             group='Group 2',
             tag='Original'
         )
         self.section4 = Section.objects.create(
             playlist=self.playlist,
+            code='4',
             group='Group 2',
             tag='Degradation'
         )
         self.section5 = Section.objects.create(
             playlist=self.playlist,
+            code='5',
             group='Group 1',
             tag='Original'
         )
         self.section6 = Section.objects.create(
             playlist=self.playlist,
+            code='6',
             group='Group 1',
             tag='Degradation'
         )
         self.section7 = Section.objects.create(
             playlist=self.playlist,
+            code='7',
             group='Group 2',
             tag='Original'
         )
         self.section8 = Section.objects.create(
             playlist=self.playlist,
+            code='8',
             group='Group 2',
             tag='Degradation'
         )
@@ -92,48 +100,57 @@ class MatchingPairsFixedTest(TestCase):
         self.assertEqual(sections.count(self.section7), 1)
         self.assertEqual(sections.count(self.section8), 1)
 
-        for i in range(8):
-            self.assertEqual(sections[i].pk, deterministic_order[i])
+        for (index, section) in enumerate(sections):
+            code = section.code
+            self.assertEqual(code, deterministic_order[index])
 
     def test_select_sections_original_original(self):
 
         self.section1 = Section.objects.create(
             playlist=self.playlist,
+            code='1',
             group='Group 1',
             tag='Original'
         )
         self.section2 = Section.objects.create(
             playlist=self.playlist,
+            code='2',
             group='Group 1',
             tag='Original'
         )
         self.section3 = Section.objects.create(
             playlist=self.playlist,
+            code='3',
             group='Group 2',
             tag='Original'
         )
         self.section4 = Section.objects.create(
             playlist=self.playlist,
+            code='4',
             group='Group 2',
             tag='Original'
         )
         self.section5 = Section.objects.create(
             playlist=self.playlist,
+            code='5',
             group='Group 1',
             tag='Original'
         )
         self.section6 = Section.objects.create(
             playlist=self.playlist,
+            code='6',
             group='Group 1',
             tag='Original'
         )
         self.section7 = Section.objects.create(
             playlist=self.playlist,
+            code='7',
             group='Group 2',
             tag='Original'
         )
         self.section8 = Section.objects.create(
             playlist=self.playlist,
+            code='8',
             group='Group 2',
             tag='Original'
         )
@@ -148,7 +165,7 @@ class MatchingPairsFixedTest(TestCase):
 
         rule = MatchingPairsFixed()
         sections = rule.select_sections(self.session)
-        deterministic_order = [9, 10, 13, 12, 14, 13, 15, 11, 10, 14, 16, 15, 16, 11, 9, 12]
+        deterministic_order = [1, 2, 5, 4, 6, 5, 7, 3, 2, 6, 8, 7, 8, 3, 1, 4]
 
         self.assertEqual(len(sections), 16)
         self.assertIn(self.section1, sections)
@@ -168,5 +185,6 @@ class MatchingPairsFixedTest(TestCase):
         self.assertEqual(sections.count(self.section7), 2)
         self.assertEqual(sections.count(self.section8), 2)
 
-        for i in range(8):
-            self.assertEqual(sections[i].pk, deterministic_order[i])
+        for (index, section) in enumerate(sections):
+            code = section.code
+            self.assertEqual(code, deterministic_order[index])
