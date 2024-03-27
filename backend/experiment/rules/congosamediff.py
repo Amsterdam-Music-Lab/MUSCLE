@@ -5,7 +5,7 @@ from experiment.models import Experiment
 from section.models import Playlist as PlaylistModel
 from session.models import Session
 from experiment.actions import ChoiceQuestion, Explainer, Form, Playlist, Trial
-from experiment.actions.playback import Autoplay
+from experiment.actions.playback import PlayButton
 from .base import Base
 from result.utils import prepare_result
 
@@ -60,7 +60,8 @@ class CongoSameDiff(Base):
         # return a practice trial
         if next_round_number <= practice_trials_count:
             subset = session.playlist.section_set.filter(
-                tag__contains='practice')
+                tag__contains='practice'
+            )
             return self.get_next_trial(
                 session,
                 subset,
@@ -68,7 +69,8 @@ class CongoSameDiff(Base):
                 True
             )
         subset = session.playlist.section_set.exclude(
-            tag__contains='practice')
+            tag__contains='practice'
+        )
 
         # if the next_round_number is greater than the no. of practice trials,
         # return a non-practice trial
@@ -114,7 +116,7 @@ class CongoSameDiff(Base):
             submits=True
         )
         form = Form([question])
-        playback = Autoplay([section])
+        playback = PlayButton([section], play_once=False)
         view = Trial(
             playback=playback,
             feedback_form=form,
