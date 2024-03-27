@@ -147,7 +147,8 @@ class PlaylistAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
                 section.tag = request.POST.get(pre_fix + '_tag')
                 section.group = request.POST.get(pre_fix + '_group')
                 section.save()
-                obj.save()
+            obj.process_csv = False
+            obj.save()
             return self.redirect_to_overview()
         if '_back' in request.POST:
             return self.redirect_to_overview()

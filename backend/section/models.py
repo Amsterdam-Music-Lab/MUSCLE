@@ -34,6 +34,7 @@ class Playlist(models.Model):
             self.csv = self.update_admin_csv()
         if self.url_prefix and self.url_prefix[-1] != '/':
             self.url_prefix += '/'
+        self.process_csv = False
         super(Playlist, self).save(*args, **kwargs)
 
     class Meta:
