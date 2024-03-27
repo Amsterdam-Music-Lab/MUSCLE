@@ -32,7 +32,7 @@
     "preview": "vite preview",
     "test": "vitest",
     "test:ci": "vitest --watch=false --coverage",
-    "generate-badge": "coverage-badges -s coverage/coverage-final.json -o coverage-frontend-badge-new.svg --label 'Frontend Code Coverage'",
+    "generate-badge": "coverage-badges -s coverage/coverage-summary.json -o coverage-frontend-badge-new.svg --label 'Frontend Code Coverage'",
     "scss": "sass src/index.scss src/index.css",
     "scss:watch": "sass src/index.scss src/index.css; sass --watch src/index.scss src/index.css",
     "storybook": "storybook dev -p 6006",
@@ -87,7 +87,8 @@
     "@testing-library/react-hooks": "^8.0.1",
     "@testing-library/user-event": "^14.5.1",
     "@types/react": "^18.2.67",
-    "@vitest/coverage-v8": "^1.2.1",
+    "@vitest/coverage-istanbul": "^1.4.0",
+    "@vitest/coverage-v8": "^1.4.0",
     "axios-mock-adapter": "^1.22.0",
     "babel-plugin-named-exports-order": "0.0.2",
     "coverage-badges-cli": "^1.2.5",
@@ -99,6 +100,6 @@
     "history": "^5.3.0",
     "prop-types": "15.8.1",
     "storybook": "^8.0.4",
-    "vitest": "^1.1.0"
+    "vitest": "^1.4.0"
   }
 }
