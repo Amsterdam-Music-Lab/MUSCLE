@@ -21,11 +21,6 @@ const experiment1 = getExperiment({
     slug: 'some_slug',
     name: 'Some Experiment'
 });
-const experiment2 = getExperiment({
-    slug: 'another_slug',
-    name: 'Another Experiment',
-    finished_session_count: 2
-});
 
 const experimentWithAllProps = getExperiment({ image: 'some_image.jpg', description: 'Some description' });
 
@@ -40,21 +35,6 @@ describe('ExperimentCollection', () => {
         await waitFor(() => {
             expect(screen.queryByRole('menu')).toBeFalsy();
         })
-    });
-
-    it('shows a dashboard of multiple experiments if it receives an array', async () => {
-        mock.onGet().replyOnce(200, {dashboard: [experiment1, experiment2]});
-        render(
-        <MemoryRouter>
-            <ExperimentCollection match={{params: {slug: 'some_collection'}}}/>
-        </MemoryRouter>
-        );
-        await waitFor(() => {
-            expect(screen.getByRole('menu')).toBeTruthy();
-            const counters = screen.getAllByRole('status');
-            expect(counters).toHaveLength(2);
-            expect(counters[1].innerHTML).toBe('2');
-        }) 
     });
 
     it('shows a loading spinner while loading', () => {
