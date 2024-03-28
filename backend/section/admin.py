@@ -102,7 +102,11 @@ class PlaylistAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
                     file_errors.append(_('Cannot upload {}: {}').format(str(section), e.messages[0]))
                     form.errors['file'] = file_errors
                     continue
-                if this_artist and this_name:
+                if this_artist or this_name:
+                    if not this_artist:
+                        this_artist = 'artist'
+                    if not this_name:
+                        this_name = 'name'
                     this_song, created = Song.objects.get_or_create(artist=this_artist, name=this_name)
                     new_section.song = this_song
                 file_path = settings.MEDIA_ROOT + '/' + str(new_section.filename)
@@ -135,7 +139,11 @@ class PlaylistAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
                 # Get data and update section
                 this_artist = request.POST.get(pre_fix + '_artist')
                 this_name = request.POST.get(pre_fix + '_name')
-                if this_artist and this_name:
+                if this_artist or this_name:
+                    if not this_artist:
+                        this_artist = 'artist'
+                    if not this_name:
+                        this_name = 'name'
                     this_song, created = Song.objects.get_or_create(artist=this_artist, name=this_name)
                     if created:
                         section.song = this_song
