@@ -25,6 +25,18 @@ class CongoSameDiff(Base):
         Consent and Playlist are often desired, but optional
         '''
 
+        # Do a validity check on the experiment
+        # All sections need to have a group value
+        sections = experiment.playlists.first().section_set.all()
+        for section in sections:
+            if not section.group:
+                file_name = section.song.name if section.song else 'No name'
+                raise ValueError(f'Section {file_name} should have a group value')
+            
+        # It also needs at least one section with the tag 'practice'
+        if not sections.filter(tag__contains='practice').exists():
+            raise ValueError('At least one section should have the tag "practice"')
+
         # 1. Playlist
         playlist = Playlist(experiment.playlists.all())
 
