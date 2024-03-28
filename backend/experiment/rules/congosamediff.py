@@ -36,6 +36,10 @@ class CongoSameDiff(Base):
         # It also needs at least one section with the tag 'practice'
         if not sections.filter(tag__contains='practice').exists():
             raise ValueError('At least one section should have the tag "practice"')
+        
+        # It should also contain at least one section without the tag 'practice'
+        if not sections.exclude(tag__contains='practice').exists():
+            raise ValueError('At least one section should not have the tag "practice"')
 
         # 1. Playlist
         playlist = Playlist(experiment.playlists.all())
