@@ -114,9 +114,10 @@ class Playlist(models.Model):
             song = None
             if row['artist'] or row['name']:
                 if not row['artist']:
-                        row['artist'] = 'artist'
+                    row['artist'] = 'artist'
                 if not row['name']:
                     row['name'] = 'name'
+
                 song, created = Song.objects.get_or_create(artist=row['artist'], name=row['name'])
 
             section = Section(playlist=self,
