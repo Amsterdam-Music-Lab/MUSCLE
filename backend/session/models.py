@@ -105,14 +105,22 @@ class Session(models.Model):
     def get_next_round(self):
         """Get next round number"""
         return self.rounds_passed() + 1
-    
+
     def get_current_round(self):
         return self.current_round
-    
+
+    def set_current_round(self, round_number):
+        self.current_round = round_number
+        self.save()
+
+    def reset_rounds(self):
+        self.current_round = 1
+        self.save()
+
     def increment_round(self):
         self.current_round += 1
         self.save()
-    
+
     def decrement_round(self):
         self.current_round -= 1
         self.save()

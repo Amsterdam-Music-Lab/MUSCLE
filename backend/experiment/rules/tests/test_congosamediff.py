@@ -2,6 +2,7 @@ from django.test import TestCase
 
 from experiment.models import Experiment
 from participant.models import Participant
+from result.models import Result
 from section.models import Playlist as PlaylistModel, Section, Song
 from session.models import Session
 from experiment.actions import Explainer, Trial, Final, Playlist as PlaylistAction
@@ -50,7 +51,15 @@ class CongoSameDiffTest(TestCase):
     def test_next_round_final_round(self):
         congo_same_diff = CongoSameDiff()
 
-        self.session.get_next_round = lambda: 6
+        Result.objects.create(
+            session=self.session,
+            participant=self.participant,
+            question_key='practice_done',
+            given_response='YES'
+        )
+
+        self.session.get_current_round = lambda: 6
+        
         final_action = congo_same_diff.next_round(self.session)
 
         assert isinstance(final_action, Final)
@@ -58,7 +67,7 @@ class CongoSameDiffTest(TestCase):
     def test_next_round_practice_trial(self):
         congo_same_diff = CongoSameDiff()
 
-        self.session.get_next_round = lambda: 2
+        self.session.get_current_round = lambda: 2
         practice_action = congo_same_diff.next_round(self.session)
 
         assert isinstance(practice_action, Trial)
@@ -67,7 +76,7 @@ class CongoSameDiffTest(TestCase):
     def test_next_round_non_practice_trial(self):
         congo_same_diff = CongoSameDiff()
 
-        self.session.get_next_round = lambda: 4
+        self.session.get_current_round = lambda: 4
         non_practice_action = congo_same_diff.next_round(self.session)
 
         assert isinstance(non_practice_action, Trial)
@@ -89,5 +98,4 @@ class CongoSameDiffTest(TestCase):
 
         assert isinstance(final_action, Final)
         assert final_action.final_text == 'Thank you for participating!'
-
 
