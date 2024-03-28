@@ -28,7 +28,7 @@ class Trial(BaseAction):  # pylint: disable=too-few-public-methods
             title='',
             config: dict = None,
             result_id: int = None,
-            style = FrontendStyle()
+            style: FrontendStyle = FrontendStyle()
             ):
         '''
         - playback: Playback object (may be None)
