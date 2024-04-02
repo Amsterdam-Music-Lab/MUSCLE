@@ -46,7 +46,7 @@ class FooterConfig(models.Model):
         return {
             'disclaimer': self.disclaimer,
             'logos': [
-                str(logo.file) for logo in self.logos.all()
+                join(settings.MEDIA_URL, str(logo.file)) for logo in self.logos.all()
             ],
             'privacy': self.privacy
         }

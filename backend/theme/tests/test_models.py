@@ -1,4 +1,5 @@
 from django.test import TestCase
+from django.conf import settings
 
 from image.models import Image
 from theme.models import FooterConfig, ThemeConfig
@@ -25,6 +26,8 @@ class ThemeConfigModelTest(TestCase):
             theme=theme,
             disclaimer='Some [more information][https://example.com/our-team]'
         )
+        cls.footer.logos.add(logo_image)
+        cls.footer.logos.add(background_image)
 
     def test_theme_config_str(self):
         theme_config = ThemeConfig.objects.get(name='Default')
@@ -33,7 +36,7 @@ class ThemeConfigModelTest(TestCase):
     def test_footer_to_json(self):
         expected_json = {
             'disclaimer': 'Some [more information][https://example.com/our-team]',
-            'logos': [],
+            'logos': [f'{settings.MEDIA_URL}someimage.jpg', f'{settings.MEDIA_URL}anotherimage.png'],
             'privacy': ''
         }
         self.assertEqual(self.footer.to_json(), expected_json)
@@ -45,8 +48,8 @@ class ThemeConfigModelTest(TestCase):
             'description': 'Default theme configuration',
             'heading_font_url': 'https://example.com/heading_font',
             'body_font_url': 'https://example.com/body_font',
-            'logo_url': 'someimage.jpg',
-            'background_url': 'anotherimage.png',
+            'logo_url': f'{settings.MEDIA_URL}someimage.jpg',
+            'background_url': f'{settings.MEDIA_URL}anotherimage.png',
             'footer': self.footer.to_json(),
         }
         self.assertEqual(theme_config.to_json(), expected_json)
@@ -75,8 +78,8 @@ class ThemeConfigModelTest(TestCase):
             'description': 'Default theme configuration',
             'heading_font_url': 'https://example.com/heading_font',
             'body_font_url': 'https://example.com/body_font',
-            'logo_url': 'someimage.jpg',
-            'background_url': 'anotherimage.png',
+            'logo_url': f'{settings.MEDIA_URL}someimage.jpg',
+            'background_url': f'{settings.MEDIA_URL}anotherimage.png',
             'footer': None,
         }
         self.assertEqual(theme_config.to_json(), expected_json)
