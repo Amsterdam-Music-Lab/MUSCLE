@@ -25,6 +25,22 @@ class CongoSameDiff(Base):
         Consent and Playlist are often desired, but optional
         '''
 
+        # Do a validity check on the experiment
+        # All sections need to have a group value
+        sections = experiment.playlists.first().section_set.all()
+        for section in sections:
+            if not section.group:
+                file_name = section.song.name if section.song else 'No name'
+                raise ValueError(f'Section {file_name} should have a group value')
+            
+        # It also needs at least one section with the tag 'practice'
+        if not sections.filter(tag__contains='practice').exists():
+            raise ValueError('At least one section should have the tag "practice"')
+        
+        # It should also contain at least one section without the tag 'practice'
+        if not sections.exclude(tag__contains='practice').exists():
+            raise ValueError('At least one section should not have the tag "practice"')
+
         # 1. Playlist
         playlist = Playlist(experiment.playlists.all())
 
@@ -141,16 +157,17 @@ class CongoSameDiff(Base):
             trial_index: int,
             is_practice=False
     ):
-        # define a key, by which responses to this trial can be found in the database
-        key = 'samediff_trial'
         # get a section based on the practice tag and the trial_index
         section = subset.all()[trial_index - 1]
         subset_count = subset.count()
 
         practice_label = 'PRACTICE' if is_practice else 'NORMAL'
-        section_name = section.song.name if section.song else 'No name'
-        section_tag = section.tag if section.tag else 'No tag'
-        section_group = section.group if section.group else 'No group'
+        section_name = section.song.name if section.song else 'no_name'
+        section_tag = section.tag if section.tag else 'no_tag'
+        section_group = section.group if section.group else 'no_group'
+
+        # define a key, by which responses to this trial can be found in the database
+        key = f'samediff_trial_{section_group}'
 
         question = ChoiceQuestion(
             explainer=f'{practice_label} ({trial_index}/{subset_count}) | {section_name} | {section_tag} | {section_group}',
