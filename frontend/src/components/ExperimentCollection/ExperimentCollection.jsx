@@ -38,10 +38,10 @@ const ExperimentCollection = ({ match }) => {
     const aboutLink = null; // TODO: get about link from experimentCollection
 
     // Values to be sent from the backend
-    
-    const score = 85    
-    const score_class = 'SILVER'
-    const score_label = 'Points'
+    const score = 165
+    const no_score_label = 'Nog geen punten!'
+    const score_class = 'gold'
+    const score_label = 'Punten'
     const social = {
         'apps': ['facebook', 'twitter'],
         'message': "I scored 100 points",
@@ -136,7 +136,10 @@ const ExperimentCollection = ({ match }) => {
                         <Social
                             social={social}                        
                         />
-                    </div>
+                    </div>                
+                )}
+                {!score && (
+                    <h3>{no_score_label}</h3>
                 )}
             </div>
             
