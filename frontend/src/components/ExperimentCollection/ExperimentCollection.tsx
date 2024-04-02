@@ -1,37 +1,25 @@
 import {
     BrowserRouter as Router,
     Route,
-    Redirect
+    Redirect,
+    RouteComponentProps
 } from "react-router-dom";
 import { useExperimentCollection } from "../../API";
 import Loading from "../Loading/Loading";
 import ExperimentCollectionAbout from "./ExperimentCollectionAbout/ExperimentCollectionAbout";
 import ExperimentCollectionDashboard from "./ExperimentCollectionDashboard/ExperimentCollectionDashboard";
 import { URLS } from "../../config";
+import IExperimentCollection from "@/interfaces/ExperimentCollection.interface";
 
-const ExperimentCollection = ({ match }) => {
-    /** ExperimentCollection is a Component which can show a dashboard of multiple experiments,
- * or redirect to the next experiment in the collection,
- * depending on the response from the backend, which has the following structure: 
- * {
- *   slug: string,
- *   name: string,
- *   description: string,
- *   dashboard: [
- *     {
- *       slug: string,
- *       name: string,
- *       finished_session_count: number
- *     }
- *   ],
- *   redirect_to: {
- *     slug: string,
- *     name: string,
- *     finished_session_count: number
- *   }
- * }
- * */
-    const [experimentCollection, loadingExperimentCollection] = useExperimentCollection(match.params.slug);
+interface RouteParams {
+    slug: string
+}
+
+interface ExperimentCollectionProps extends RouteComponentProps<RouteParams> {
+}
+
+const ExperimentCollection = ({ match }: ExperimentCollectionProps) => {
+    const [experimentCollection, loadingExperimentCollection] = useExperimentCollection(match.params.slug) as [IExperimentCollection, boolean];
     const experimentToRedirectTo = experimentCollection?.redirect_to;
 
     if (loadingExperimentCollection) {
