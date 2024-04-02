@@ -26,8 +26,8 @@ class ThemeConfig(models.Model):
             'description': self.description,
             'heading_font_url': self.heading_font_url,
             'body_font_url': self.body_font_url,
-            'logo_image': self.logo_image.file if self.logo_image else None,
-            'background_image': self.background_image.file if self.background_image else None,
+            'logo_image': str(self.logo_image.file) if self.logo_image else None,
+            'background_image': str(self.background_image.file) if self.background_image else None,
             'footer': self.footer.to_json() if hasattr(self, 'footer') else None
         }
 
