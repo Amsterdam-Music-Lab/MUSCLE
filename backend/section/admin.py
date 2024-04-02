@@ -13,6 +13,7 @@ import audioread
 
 from .models import Section, Playlist, Song
 from .forms import AddSections, PlaylistAdminForm
+from .utils import get_or_create_song
 
 
 class SectionAdmin(admin.ModelAdmin):
@@ -102,18 +103,20 @@ class PlaylistAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
                     file_errors.append(_('Cannot upload {}: {}').format(str(section), e.messages[0]))
                     form.errors['file'] = file_errors
                     continue
+
+                # Retrieve or create Song object
+                song = None
                 if this_artist or this_name:
-                    if not this_artist:
-                        this_artist = 'artist'
-                    if not this_name:
-                        this_name = 'name'
-                    this_song, created = Song.objects.get_or_create(artist=this_artist, name=this_name)
-                    new_section.song = this_song
+                    song = get_or_create_song(this_artist, this_name)
+                    if song is not None:
+                        new_section.song = song
+                    
                 file_path = settings.MEDIA_ROOT + '/' + str(new_section.filename)
                 with audioread.audio_open(file_path) as f:
                     new_section.duration = f.duration
                 new_section.save()
-                obj.save()
+            
+            obj.save()
             if not form.errors:
                 return self.redirect_to_overview()
         # Go back to admin playlist overview
@@ -139,17 +142,14 @@ class PlaylistAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
                 # Get data and update section
                 this_artist = request.POST.get(pre_fix + '_artist')
                 this_name = request.POST.get(pre_fix + '_name')
+
+                # Retrieve or create Song object
+                song = None
                 if this_artist or this_name:
-                    if not this_artist:
-                        this_artist = 'artist'
-                    if not this_name:
-                        this_name = 'name'
-                    this_song, created = Song.objects.get_or_create(artist=this_artist, name=this_name)
-                    if created:
-                        section.song = this_song
-                    else:
-                        section.song = this_song
-                        section.song.save()
+                    song = get_or_create_song(this_artist, this_name)
+                    if song is not None:
+                        section.song = song
+
                 section.start_time = request.POST.get(pre_fix + '_start_time')
                 section.duration = request.POST.get(pre_fix + '_duration')
                 section.tag = request.POST.get(pre_fix + '_tag')

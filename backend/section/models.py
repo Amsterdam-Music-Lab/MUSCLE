@@ -7,7 +7,7 @@ from django.db import models
 from django.utils import timezone
 from django.urls import reverse
 
-from .utils import CsvStringBuilder
+from .utils import CsvStringBuilder, get_or_create_song
 from .validators import audio_file_validator, url_prefix_validator
 
 
@@ -110,16 +110,12 @@ class Playlist(models.Model):
                     'message': "Error: Expected number fields on line: " + str(lines)
                 }
 
-            # create new section
+            # Retrieve or create Song object
             song = None
             if row['artist'] or row['name']:
-                if not row['artist']:
-                    row['artist'] = 'artist'
-                if not row['name']:
-                    row['name'] = 'name'
+                song = get_or_create_song(row['artist'], row['name'])
 
-                song, created = Song.objects.get_or_create(artist=row['artist'], name=row['name'])
-
+            # create new section
             section = Section(playlist=self,
                               start_time=float(row['start_time']),
                               duration=float(row['duration']),
@@ -133,10 +129,9 @@ class Playlist(models.Model):
             # if same section already exists, update it with new info
             for ex_section in existing_sections:
                 if ex_section.filename == section.filename:
-                    if song:
-                        if not ex_section.song:
-                            ex_section.song = song
-                            ex_section.save()
+                    if song:                        
+                        ex_section.song = song
+                        ex_section.save()
                     ex_section.start_time = section.start_time
                     ex_section.duration = section.duration
                     ex_section.tag = section.tag
