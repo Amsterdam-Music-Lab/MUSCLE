@@ -51,6 +51,7 @@ class ExperimentSeriesGroup(models.Model):
     order = models.IntegerField(default=0, help_text='Order of the group in the series. Lower numbers come first.')
     dashboard = models.BooleanField(default=False)
     randomize = models.BooleanField(default=False, help_text='Randomize the order of the experiments in this group.')
+    finished = models.BooleanField(default=False)
 
     def __str__(self):
         compound_name = self.name or self.series.name or self.series.slug or 'Unnamed group'
