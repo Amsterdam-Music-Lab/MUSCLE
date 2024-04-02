@@ -1,4 +1,6 @@
 import re
+
+from django.conf import settings
 from django.contrib import admin
 from django.utils.html import format_html
 from django.utils.safestring import mark_safe
@@ -97,12 +99,12 @@ class ThemeConfigAdmin(admin.ModelAdmin):
 
     def logo_preview(self, obj):
         if obj.logo_image:
-            return mark_safe(f'<img src="/upload/{obj.logo_image.file}" style="max-height: 50px;"/>')
+            return mark_safe(f'<img src="{settings.MEDIA_URL}{obj.logo_image.file}" style="max-height: 50px;"/>')
         return ""
 
     def background_preview(self, obj):
         if obj.background_image:
-            return mark_safe(f'<div style="background-image: url(/upload/{obj.background_image.file}); height: 50px; width: 100px; background-size: cover;"></div>')
+            return mark_safe(f'<div style="background-image: url({settings.MEDIA_URL}{obj.background_image.file}); height: 50px; width: 100px; background-size: cover;"></div>')
         return ""
 
     heading_font_preview.short_description = 'Heading Font Preview'

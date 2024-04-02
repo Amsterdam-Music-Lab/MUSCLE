@@ -45,8 +45,8 @@ class ThemeConfigModelTest(TestCase):
             'description': 'Default theme configuration',
             'heading_font_url': 'https://example.com/heading_font',
             'body_font_url': 'https://example.com/body_font',
-            'logo_image': 'someimage.jpg',
-            'background_image': 'anotherimage.png',
+            'logo_url': 'someimage.jpg',
+            'background_url': 'anotherimage.png',
             'footer': self.footer.to_json(),
         }
         self.assertEqual(theme_config.to_json(), expected_json)
@@ -61,8 +61,8 @@ class ThemeConfigModelTest(TestCase):
             'description': 'Default theme configuration',
             'heading_font_url': 'https://example.com/heading_font',
             'body_font_url': 'https://example.com/body_font',
-            'logo_image': None,
-            'background_image': None,
+            'logo_url': None,
+            'background_url': None,
             'footer': self.footer.to_json()
         }
         self.assertEqual(theme_config.to_json(), expected_json)
@@ -75,8 +75,8 @@ class ThemeConfigModelTest(TestCase):
             'description': 'Default theme configuration',
             'heading_font_url': 'https://example.com/heading_font',
             'body_font_url': 'https://example.com/body_font',
-            'logo_image': 'someimage.jpg',
-            'background_image': 'anotherimage.png',
+            'logo_url': 'someimage.jpg',
+            'background_url': 'anotherimage.png',
             'footer': None,
         }
         self.assertEqual(theme_config.to_json(), expected_json)

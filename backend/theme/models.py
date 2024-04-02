@@ -1,5 +1,7 @@
-from django.db import models
+from os.path import join
 
+from django.db import models
+from django.conf import settings
 
 def footer_info_upload_path(instance, filename):
     """Generate path to save consent file based on experiment.slug"""
@@ -26,8 +28,8 @@ class ThemeConfig(models.Model):
             'description': self.description,
             'heading_font_url': self.heading_font_url,
             'body_font_url': self.body_font_url,
-            'logo_image': str(self.logo_image.file) if self.logo_image else None,
-            'background_image': str(self.background_image.file) if self.background_image else None,
+            'logo_url': join(settings.MEDIA_URL, str(self.logo_image.file)) if self.logo_image else None,
+            'background_url': join(settings.MEDIA_URL, str(self.background_image.file)) if self.background_image else None,
             'footer': self.footer.to_json() if hasattr(self, 'footer') else None
         }
 
