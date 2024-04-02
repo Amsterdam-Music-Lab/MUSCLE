@@ -1,8 +1,5 @@
 from django.db import models
 
-from experiment.validators import markdown_html_validator
-
-
 def footer_info_upload_path(instance, filename):
     """Generate path to save consent file based on experiment.slug"""
     folder_name = instance.slug
