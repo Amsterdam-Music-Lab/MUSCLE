@@ -5,7 +5,6 @@
   "license": "MIT",
   "dependencies": {
     "@sentry/react": "^7.85.0",
-    "@types/react-router-dom": "^5.3.3",
     "@vitejs/plugin-react": "^4.2.1",
     "axios": ">=1.6.0",
     "classnames": "^2.2.6",
@@ -86,7 +85,9 @@
     "@testing-library/react": "^14.1.2",
     "@testing-library/react-hooks": "^8.0.1",
     "@testing-library/user-event": "^14.5.1",
-    "@types/react": "^18.2.67",
+    "@types/react": "^18.2.73",
+    "@types/react-dom": "^18.2.23",
+    "@types/react-router-dom": "^5.3.3",
     "@vitest/coverage-istanbul": "^1.4.0",
     "@vitest/coverage-v8": "^1.4.0",
     "axios-mock-adapter": "^1.22.0",

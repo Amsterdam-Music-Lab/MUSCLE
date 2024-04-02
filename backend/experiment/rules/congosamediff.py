@@ -25,6 +25,22 @@ class CongoSameDiff(Base):
         Consent and Playlist are often desired, but optional
         '''
 
+        # Do a validity check on the experiment
+        # All sections need to have a group value
+        sections = experiment.playlists.first().section_set.all()
+        for section in sections:
+            if not section.group:
+                file_name = section.song.name if section.song else 'No name'
+                raise ValueError(f'Section {file_name} should have a group value')
+            
+        # It also needs at least one section with the tag 'practice'
+        if not sections.filter(tag__contains='practice').exists():
+            raise ValueError('At least one section should have the tag "practice"')
+        
+        # It should also contain at least one section without the tag 'practice'
+        if not sections.exclude(tag__contains='practice').exists():
+            raise ValueError('At least one section should not have the tag "practice"')
+
         # 1. Playlist
         playlist = Playlist(experiment.playlists.all())
 
@@ -41,34 +57,61 @@ class CongoSameDiff(Base):
 
     def next_round(self, session: Session):
 
-        next_round_number = session.get_next_round()
+        next_round_number = session.get_current_round()
 
         # total number of trials
-        total_trials_count = session.playlist.section_set.count()
+        total_trials_count = session.playlist.section_set.count() + 1  # +1 for the post-practice round
 
-        # if the next_round_number is greater than the total number of trials,
-        # return a final action
+        practice_done = session.result_set.filter(
+            question_key='practice_done',
+            given_response='YES'
+        ).exists()
+
+        # if the participant has completed all trials, return the final round
         if next_round_number > total_trials_count:
             return self.get_final_round(session)
 
-        # count of practice rounds
+        # count of practice rounds (excluding the post-practice round)
         practice_trials_count = session.playlist.section_set.filter(
             tag__contains='practice'
         ).count()
 
-        # if the next_round_number is less than the number of practice trials,
-        # return a practice trial
+        # load the practice trials
+        practice_trials_subset = session.playlist.section_set.filter(
+            tag__contains='practice'
+        )
+
+        # if the user hasn't completed the practice trials
+        # return the next practice trial
         if next_round_number <= practice_trials_count:
-            subset = session.playlist.section_set.filter(
-                tag__contains='practice'
-            )
             return self.get_next_trial(
                 session,
-                subset,
+                practice_trials_subset,
                 next_round_number,
                 True
             )
-        subset = session.playlist.section_set.exclude(
+
+        # if the participant has not completed the practice trials correctly
+        # reset the rounds and return the first practice trial
+        if next_round_number > practice_trials_count + 1 and not practice_done:
+            session.reset_rounds()
+
+            return self.get_next_trial(
+                session,
+                practice_trials_subset,
+                1,
+                True
+            )
+
+        # if the participant has completed the practice trials
+        # ask if the participant has completed the practice trials correctly
+        # yes will move the participant to the non-practice trials
+        # no will reset the rounds and return the first practice trial
+        if next_round_number == practice_trials_count + 1 and not practice_done:
+            return self.get_practice_done_view(session)
+
+        # load the non-practice trials
+        real_trials_subset = session.playlist.section_set.exclude(
             tag__contains='practice'
         )
 
@@ -76,10 +119,36 @@ class CongoSameDiff(Base):
         # return a non-practice trial
         return self.get_next_trial(
             session,
-            subset,
-            next_round_number - practice_trials_count,
+            real_trials_subset,
+            next_round_number - practice_trials_count - 1,
             False
         )
+
+    def get_practice_done_view(self, session: Session):
+
+        key = 'practice_done'
+        result_pk = prepare_result(key, session, expected_response=key)
+
+        question = ChoiceQuestion(
+            question="Did the participant complete the practice round correctly?",
+            key=key,
+            choices={
+                "YES": "Yes, continue",
+                "NO": "No, restart the practice trials",
+            },
+            view='BUTTON_ARRAY',
+            result_id=result_pk,
+            submits=True,
+        )
+
+        form = Form([question])
+
+        trial = Trial(
+            feedback_form=form,
+            title='Practice Done',
+        )
+
+        return [trial]
 
     def get_next_trial(
             self,
@@ -88,16 +157,17 @@ class CongoSameDiff(Base):
             trial_index: int,
             is_practice=False
     ):
-        # define a key, by which responses to this trial can be found in the database
-        key = 'samediff_trial'
         # get a section based on the practice tag and the trial_index
         section = subset.all()[trial_index - 1]
         subset_count = subset.count()
 
         practice_label = 'PRACTICE' if is_practice else 'NORMAL'
-        section_name = section.song.name if section.song else 'No name'
-        section_tag = section.tag if section.tag else 'No tag'
-        section_group = section.group if section.group else 'No group'
+        section_name = section.song.name if section.song else 'no_name'
+        section_tag = section.tag if section.tag else 'no_tag'
+        section_group = section.group if section.group else 'no_group'
+
+        # define a key, by which responses to this trial can be found in the database
+        key = f'samediff_trial_{section_group}'
 
         question = ChoiceQuestion(
             explainer=f'{practice_label} ({trial_index}/{subset_count}) | {section_name} | {section_tag} | {section_group}',
@@ -124,11 +194,11 @@ class CongoSameDiff(Base):
             title=_(experiment_name),
             config={
                 'response_time': section.duration,
-                'listen_first': True
+                'listen_first': False,
             }
         )
         return view
-    
+
     def get_final_round(self, session: Session):
         # Finish session
         session.finish()
@@ -139,4 +209,3 @@ class CongoSameDiff(Base):
             session=session,
             final_text=_('Thank you for participating!'),
         )
-
