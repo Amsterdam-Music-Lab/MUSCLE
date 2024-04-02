@@ -1,9 +1,11 @@
 from django.db import models
 
+
 def footer_info_upload_path(instance, filename):
     """Generate path to save consent file based on experiment.slug"""
     folder_name = instance.slug
     return 'consent/{0}/{1}'.format(folder_name, filename)
+
 
 class ThemeConfig(models.Model):
     name = models.CharField(max_length=255, unique=True, default='Default')

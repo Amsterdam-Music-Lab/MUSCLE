@@ -2,6 +2,7 @@ from django import forms
 from .models import ThemeConfig
 from experiment.forms import MarkdownPreviewTextInput
 
+
 class ThemeConfigForm(forms.ModelForm):
 
     class Meta:

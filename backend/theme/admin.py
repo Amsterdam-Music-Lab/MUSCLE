@@ -11,6 +11,7 @@ class FooterConfigInline(admin.StackedInline):
     form = FooterConfigForm
     fields = ['disclaimer', 'logos', 'privacy']
 
+
 @admin.register(ThemeConfig)
 class ThemeConfigAdmin(admin.ModelAdmin):
 
