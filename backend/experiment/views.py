@@ -10,6 +10,7 @@ from django_markup.markup import formatter
 from .models import Experiment, ExperimentSeries, ExperimentSeriesGroup, Feedback, GroupedExperiment
 from .utils import serialize
 from participant.utils import get_participant
+from participant.models import Participant
 from session.models import Session
 from experiment.rules import EXPERIMENT_RULES
 from experiment.actions.utils import COLLECTION_KEY
@@ -76,13 +77,12 @@ def default_questions(request, rules):
 
 
 def get_experiment_collection(request, slug):
-    ''' this view goes through all experiment in an ExperimentSeries in this order:
-    first_experiments (fixed order)
-    random_experiments (random order)
-    last_experiments (fixed order)
-    it will return the next experiment from one of these fields which has an unfinished session
-    except if ExperimentSeries.dashboard = True,
-    then all random_experiments will be returned as an array (also those with finished session)
+    ''' 
+    check which `ExperimentSeriesGroup` objects are related to the `ExperimentSeries` with the given slug
+    retrieve the group with the lowest order (= current_group)
+    return the next experiment from the current_group without a finished session
+    except if ExperimentSeriesGroup.dashboard = True,
+    then all experiments of the current_group will be returned as an array (also those with finished session)
     '''
     try:
         collection = ExperimentSeries.objects.get(slug=slug)
@@ -90,75 +90,46 @@ def get_experiment_collection(request, slug):
         return Http404
     request.session[COLLECTION_KEY] = slug
     participant = get_participant(request)
-    if collection.first_experiments:
-        experiments = get_associated_experiments(collection.first_experiments)
-        upcoming_experiment = get_upcoming_experiment(experiments, participant)
-        if upcoming_experiment:
-            return JsonResponse(
-                serialize_experiment_series(
-                    collection,
-                    redirect_to=upcoming_experiment
-                )
-            )
-    if collection.random_experiments:
-        experiments = get_associated_experiments(collection.random_experiments)
-        shuffle(experiments)
-        if collection.dashboard:
-            serialized = [
-                serialize_experiment(
-                    experiment,
-                    get_finished_session_count(experiment, participant)
-                ) for experiment in experiments]
-            return JsonResponse(
-                serialize_experiment_series(
-                    collection,
-                    dashboard=serialized
-                )
-            )
-        else:
-            upcoming_experiment = get_upcoming_experiment(
-                experiments, participant)
-            if upcoming_experiment:
-                return JsonResponse(
-                    serialize_experiment_series(
-                        collection,
-                        redirect_to=upcoming_experiment
-                    )
-                )
-    if collection.last_experiments:
-        experiments = get_associated_experiments(collection.last_experiments)
-        upcoming_experiment = get_upcoming_experiment(experiments, participant)
-        if upcoming_experiment:
-            return JsonResponse(
-                serialize_experiment_series(
-                    collection,
-                    redirect_to=upcoming_experiment
-                )
-            )
-    return JsonResponse()
+    active_groups = ExperimentSeriesGroup.objects.filter(
+        series=collection.id, finished=False).order_by('order')
+    if not active_groups:
+        return JsonResponse({})
+    current_group = active_groups.first()
+    serialized_group = serialize_experiment_series_group(
+        current_group, participant)
+    if not serialized_group:
+        # if the current group is not a dashboard and has no unfinished experiments, it will return None
+        return get_experiment_collection(request, slug)
+    return JsonResponse({
+        **serialize_experiment_series(collection),
+        **serialized_group
+    })
 
 
-def serialize_experiment_series_group(group: ExperimentSeriesGroup):
-    grouped_experiments = GroupedExperiment.objects.filter(group_id=group.id).order_by('order')
+def serialize_experiment_series_group(group: ExperimentSeriesGroup, participant: Participant) -> dict:
+    grouped_experiments = list(GroupedExperiment.objects.filter(
+        group_id=group.id).order_by('order'))
 
     if group.randomize:
-        grouped_experiments = list(grouped_experiments)
         shuffle(grouped_experiments)
 
+    next_experiment = get_upcoming_experiment(
+        grouped_experiments, participant, group.dashboard)
+
+    if not next_experiment:
+        group.finished = True
+        group.save()
+        return None
+
     return {
-        'name': group.name,
-        'dashboard': group.dashboard,
-        'experiments': [serialize_experiment(experiment.experiment) for experiment in grouped_experiments]
+        'dashboard': [serialize_experiment(experiment.experiment) for experiment in grouped_experiments] if group.dashboard else None,
+        'next_experiment': next_experiment
     }
 
 
 def serialize_experiment_series(
-    experiment_series: ExperimentSeries,
-    dashboard: list = [],
-    redirect_to: Experiment = None
+    experiment_series: ExperimentSeries
 ):
-    groups = ExperimentSeriesGroup.objects.filter(series_id=experiment_series.id)
-    serialized_groups = [serialize_experiment_series_group(group) for group in groups]
     about_content = experiment_series.about_content
 
     if about_content:
@@ -168,9 +139,6 @@ def serialize_experiment_series(
         'slug': experiment_series.slug,
         'name': experiment_series.name,
         'description': experiment_series.description,
-        'dashboard': dashboard,
-        'redirect_to': redirect_to,
-        'groups': serialized_groups,
         'about_content': about_content,
     }
 
@@ -197,12 +165,15 @@ def get_associated_experiments(pk_list):
     return [Experiment.objects.get(pk=pk) for pk in pk_list]
 
 
-def get_upcoming_experiment(experiment_list, participant):
-    ''' get next experiment for which there is no finished session for this participant '''
-    upcoming = next((experiment for experiment in experiment_list if
-                     get_finished_session_count(experiment, participant) == 0), None)
-    if upcoming:
-        return serialize_experiment(upcoming)
+def get_upcoming_experiment(experiment_list, participant, repeat_allowed=True):
+    ''' return next experiment with minimum finished sessions for this participant
+     if repeated experiments are not allowed (dashboard=False) and there are only finished sessions, return None '''
+    finished_session_counts = [get_finished_session_count(
+        experiment.experiment, participant) for experiment in experiment_list]
+    minimum_session_count = min(finished_session_counts)
+    if not repeat_allowed and minimum_session_count != 0:
+        return None
+    return serialize_experiment(experiment_list[finished_session_counts.index(minimum_session_count)].experiment)
 
 
 def render_markdown(request):
