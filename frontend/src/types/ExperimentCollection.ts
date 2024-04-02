@@ -2,6 +2,7 @@ import Experiment from "./Experiment";
 
 export default interface ExperimentCollection {
     id: number;
+    slug: string;
     name: string;
     description: string;
     dashboard: Experiment[];
