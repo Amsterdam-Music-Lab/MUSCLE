@@ -28,7 +28,7 @@ const Preload = ({ sections, playMethod, duration, preloadMessage, pageTitle, on
         const preloadResources = async () => {
             if (playMethod === 'NOAUDIO') {
 
-                await Promise.all(sections.map((section) => fetch(MEDIA_ROOT + section.url, {mode: 'no-cors'})));
+                await Promise.all(sections.map((section) => fetch(MEDIA_ROOT + section.url)));
 
                 return onNext();
             }
