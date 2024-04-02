@@ -1,8 +1,11 @@
+import React, { useEffect, useState, useRef } from "react";
 import { Link, Redirect } from "react-router-dom";
 
 import { useExperimentCollection } from "../../API";
 import Loading from "../Loading/Loading";
 import { API_ROOT } from "../../config";
+import Rank from "../Rank/Rank";
+import Social from "../Social/Social"
 
 const ExperimentCollection = ({ match }) => {
         /** ExperimentCollection is a Component which can show a dashboard of multiple experiments,
@@ -34,6 +37,19 @@ const ExperimentCollection = ({ match }) => {
     const nextExperiment = null; // TODO: get next experiment from experimentCollection
     const aboutLink = null; // TODO: get about link from experimentCollection
 
+    // Values to be sent from the backend
+    
+    const score = 85    
+    const score_class = 'SILVER'
+    const score_label = 'Points'
+    const social = {
+        'apps': ['facebook', 'twitter'],
+        'message': "I scored 100 points",
+        'url': 'wwww.amsterdammusiclab.nl',
+        'hashtags': ["amsterdammusiclab", "citizenscience"]
+    }
+       
+
     if (loadingExperimentCollection) {
         return (
             <div className="loader-container">
@@ -46,20 +62,84 @@ const ExperimentCollection = ({ match }) => {
         return <Redirect to={"/" + experimentToRedirectTo.slug} />;
     }
 
+    const useAnimatedScore = (targetScore) => {
+        const [score, setScore] = useState(0);
+    
+        const scoreValue = useRef(0);
+    
+        useEffect(() => {
+            if (targetScore === 0) {
+                return;
+            }
+    
+            let id = -1;
+    
+            const nextStep = () => {
+                // Score step
+                const scoreStep = Math.max(
+                    1,
+                    Math.min(10, Math.ceil(Math.abs(scoreValue.current - targetScore) / 10))
+                );
+    
+                // Scores are equal, stop
+                if (targetScore === scoreValue.current) {
+                    return;
+                }
+    
+                // Add / subtract score
+                scoreValue.current += Math.sign(targetScore - scoreValue.current) * scoreStep;
+                setScore(scoreValue.current);
+    
+                id = setTimeout(nextStep, 50);
+            };
+            id = setTimeout(nextStep, 50);
+    
+            return () => {
+                window.clearTimeout(id);
+            };
+        }, [targetScore]);
+    
+        return score;
+    };
+
+    const Score = ({ score, label, scoreClass }) => {
+        const currentScore = useAnimatedScore(score);
+    
+        return (
+            <div className="score">
+                <Rank rank={{ class: scoreClass }} />
+                <h3>
+                    {currentScore ? currentScore + " " : ""}
+                    {label}
+                </h3>
+            </div>
+        );
+    };
     return (
         <div className="aha__collection">
-            <div class="hero">
-                <div class="intro">
+            <div className="hero">
+                <div className="intro">
                     <p>{experimentCollection?.description}</p>
-                    <div class="actions">
-                        {nextExperiment && <a class="btn btn-lg btn-primary" href={"/" + nextExperiment.slug}>Volgende experiment</a>}
-                        {aboutLink && <a class="btn btn-lg btn-outline-primary" href="/toontjehoger/about">Over ons</a>}
+                    <div className="actions">
+                        {nextExperiment && <a className="btn btn-lg btn-primary" href={"/" + nextExperiment.slug}>Volgende experiment</a>}
+                        {aboutLink && <a className="btn btn-lg btn-outline-primary" href="/toontjehoger/about">Over ons</a>}
                     </div>
                 </div>
-                <div class="results">
-
-                </div>
+                
+                {score && (
+                    <div className="results">
+                        <Score
+                        score={score}
+                        scoreClass={score_class}
+                        label={score_label}
+                        />
+                        <Social
+                            social={social}                        
+                        />
+                    </div>
+                )}
             </div>
+            
             {/* Experiments */}
             <div role="menu" className="dashboard">
                 <ul>
