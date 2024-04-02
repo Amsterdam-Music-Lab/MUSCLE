@@ -9,7 +9,7 @@ import Loading from "../Loading/Loading";
 import ExperimentCollectionAbout from "./ExperimentCollectionAbout/ExperimentCollectionAbout";
 import ExperimentCollectionDashboard from "./ExperimentCollectionDashboard/ExperimentCollectionDashboard";
 import { URLS } from "../../config";
-import IExperimentCollection from "@/interfaces/ExperimentCollection.interface";
+import IExperimentCollection from "@/types/ExperimentCollection";
 
 interface RouteParams {
     slug: string

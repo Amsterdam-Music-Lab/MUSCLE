@@ -1,4 +1,4 @@
-import Experiment from "./Experiment.interface";
+import Experiment from "./Experiment";
 
 export default interface ExperimentCollection {
     id: number;

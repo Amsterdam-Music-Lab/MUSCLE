@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 import { API_ROOT } from "../../../config";
-import ExperimentCollection from "@/interfaces/ExperimentCollection.interface";
+import ExperimentCollection from "@/types/ExperimentCollection";
 
 
 interface ExperimentCollectionDashboardProps {
