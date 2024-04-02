@@ -64,7 +64,7 @@ class TestAdminExperiment(TestCase):
 
     def test_participant_model(self):
         participant = model_to_dict(Participant.objects.first())
-        participant_fields = [key for key in partxwicipant]
+        participant_fields = [key for key in participant]
         self.assertEqual(len(participant_fields), EXPECTED_PARTICIPANT_FIELDS)
 
     def test_experiment_link(self):
