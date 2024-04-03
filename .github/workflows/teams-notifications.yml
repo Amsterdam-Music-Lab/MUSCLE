@@ -18,17 +18,23 @@ jobs:
       - name: Notify Teams on Issue Assignment
         if: github.event_name == 'issues'
         run: |
-          curl -H "Content-Type: application/json" -d "{\"text\": \"🚀 Issue Assigned: ${{ github.event.issue.title }} assigned to ${{ github.event.issue.assignee.login }}\"}" ${{ secrets.TEAMS_WEBHOOK_URL }}
+          echo "${{ github.event.issue.title }}" | sed 's/"/\\"/g' > escaped_title.txt
+          ISSUE_TITLE=$(cat escaped_title.txt)
+          curl -H "Content-Type: application/json" -d "{\"text\": \"🚀 Issue Assigned: $ISSUE_TITLE assigned to ${{ github.event.issue.assignee.login }}\"}" ${{ secrets.TEAMS_WEBHOOK_URL }}
 
       - name: Notify Teams on Pull Request Assignment
         if: github.event_name == 'pull_request' && github.event.action == 'assigned'
         run: |
-          curl -H "Content-Type: application/json" -d "{\"text\": \"🚀 PR Assigned: ${{ github.event.pull_request.title }} assigned to ${{ github.event.pull_request.assignee.login }}\"}" ${{ secrets.TEAMS_WEBHOOK_URL }}
+          echo "${{ github.event.pull_request.title }}" | sed 's/"/\\"/g' > escaped_title.txt
+          PR_TITLE=$(cat escaped_title.txt)
+          curl -H "Content-Type: application/json" -d "{\"text\": \"🚀 PR Assigned: $PR_TITLE assigned to ${{ github.event.pull_request.assignee.login }}\"}" ${{ secrets.TEAMS_WEBHOOK_URL }}
 
       - name: Notify Teams on Pull Request Merged
         if: github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true
         run: |
-          curl -H "Content-Type: application/json" -d "{\"text\": \"🎉 PR Merged: ${{ github.event.pull_request.title }}\"}" ${{ secrets.TEAMS_WEBHOOK_URL }}
+          echo "${{ github.event.pull_request.title }}" | sed 's/"/\\"/g' > escaped_title.txt
+          PR_TITLE=$(cat escaped_title.txt)
+          curl -H "Content-Type: application/json" -d "{\"text\": \"🎉 PR Merged: $PR_TITLE\"}" ${{ secrets.TEAMS_WEBHOOK_URL }}
 
       - name: Notify Teams on Pipeline Failure
         if: github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'failure'
