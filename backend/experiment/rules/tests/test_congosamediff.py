@@ -2,6 +2,7 @@ from django.test import TestCase
 
 from experiment.models import Experiment
 from participant.models import Participant
+from result.models import Result
 from section.models import Playlist as PlaylistModel, Section, Song
 from session.models import Session
 from experiment.actions import Explainer, Trial, Final, Playlist as PlaylistAction
@@ -41,7 +42,9 @@ class CongoSameDiffTest(TestCase):
 
     def test_first_round(self):
         congo_same_diff = CongoSameDiff()
-        experiment = Experiment(id=1, name='CongoSameDiff', slug='congosamediff', rounds=4)
+        experiment = Experiment(id=1, name='CongoSameDiff', slug='congosamediff_first_round', rounds=4)
+        experiment.save()
+        experiment.playlists.set([self.playlist])
         actions = congo_same_diff.first_round(experiment)
         assert len(actions) >= 1
         assert isinstance(actions[0], PlaylistAction)
@@ -50,7 +53,15 @@ class CongoSameDiffTest(TestCase):
     def test_next_round_final_round(self):
         congo_same_diff = CongoSameDiff()
 
-        self.session.get_next_round = lambda: 6
+        Result.objects.create(
+            session=self.session,
+            participant=self.participant,
+            question_key='practice_done',
+            given_response='YES'
+        )
+
+        self.session.get_current_round = lambda: 6
+        
         final_action = congo_same_diff.next_round(self.session)
 
         assert isinstance(final_action, Final)
@@ -58,7 +69,7 @@ class CongoSameDiffTest(TestCase):
     def test_next_round_practice_trial(self):
         congo_same_diff = CongoSameDiff()
 
-        self.session.get_next_round = lambda: 2
+        self.session.get_current_round = lambda: 2
         practice_action = congo_same_diff.next_round(self.session)
 
         assert isinstance(practice_action, Trial)
@@ -67,7 +78,7 @@ class CongoSameDiffTest(TestCase):
     def test_next_round_non_practice_trial(self):
         congo_same_diff = CongoSameDiff()
 
-        self.session.get_next_round = lambda: 4
+        self.session.get_current_round = lambda: 4
         non_practice_action = congo_same_diff.next_round(self.session)
 
         assert isinstance(non_practice_action, Trial)
@@ -90,4 +101,53 @@ class CongoSameDiffTest(TestCase):
         assert isinstance(final_action, Final)
         assert final_action.final_text == 'Thank you for participating!'
 
+    def test_throw_exception_if_trial_without_group(self):
+        congo_same_diff = CongoSameDiff()
+        experiment = Experiment(id=1, name='CongoSameDiff', slug='congosamediff_first_round', rounds=4)
+        experiment.save()
+        playlist = PlaylistModel.objects.create(name='CongoSameDiff')
+        Section.objects.create(
+            playlist=playlist,
+            start_time=0.0,
+            duration=20.0,
+            song=Song.objects.create(artist='no_group', name='no_group'),
+            tag='practice_contour',
+            group=''
+        )
+        experiment.playlists.set([playlist])
+        with self.assertRaisesRegex(ValueError, "Section no_group should have a group value"):
+            congo_same_diff.first_round(experiment)
 
+    def test_throw_exception_if_no_practice_rounds(self):
+        congo_same_diff = CongoSameDiff()
+        experiment = Experiment(id=1, name='CongoSameDiff', slug='congosamediff_first_round', rounds=4)
+        experiment.save()
+        playlist = PlaylistModel.objects.create(name='CongoSameDiff')
+        Section.objects.create(
+            playlist=playlist,
+            start_time=0.0,
+            duration=20.0,
+            song=Song.objects.create(artist='no_practice', name='no_practice'),
+            tag='',
+            group='m1'
+        )
+        experiment.playlists.set([playlist])
+        with self.assertRaisesRegex(ValueError, 'At least one section should have the tag "practice"'):
+            congo_same_diff.first_round(experiment)
+
+    def test_throw_exception_if_no_normal_rounds(self):
+        congo_same_diff = CongoSameDiff()
+        experiment = Experiment(id=1, name='CongoSameDiff', slug='congosamediff_first_round', rounds=4)
+        experiment.save()
+        playlist = PlaylistModel.objects.create(name='CongoSameDiff')
+        Section.objects.create(
+            playlist=playlist,
+            start_time=0.0,
+            duration=20.0,
+            song=Song.objects.create(artist='only_practice', name='only_practice'),
+            tag='practice_contour',
+            group='m1'
+        )
+        experiment.playlists.set([playlist])
+        with self.assertRaisesRegex(ValueError, 'At least one section should not have the tag "practice"'):
+            congo_same_diff.first_round(experiment)

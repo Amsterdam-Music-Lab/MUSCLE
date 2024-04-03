@@ -3,12 +3,12 @@ import classNames from "classnames";
 
 
 // HTML is an experiment view, that shows custom HTML and a Form
-const HTML = ({ body }) => {
+const HTML = ({ body, innerClassName = "text-center pb-3" }) => {
 
     return (
         <div className={classNames("aha__HTML")}>
             <div
-                className="html-content text-center pb-3"
+                className={classNames("html-content", innerClassName)}
                 dangerouslySetInnerHTML={{ __html: body }}
             />
         </div>
