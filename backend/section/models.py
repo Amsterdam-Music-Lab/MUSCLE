@@ -123,8 +123,7 @@ class Playlist(models.Model):
                               tag=row['tag'],
                               group=row['group'],
                               )
-            if song:
-                section.song = song
+            section.song = song
 
             # if same section already exists, update it with new info
             for ex_section in existing_sections:
@@ -222,7 +221,7 @@ class Playlist(models.Model):
 class Song(models.Model):
     """ A Song object with an artist and name (unique together)"""
     artist = models.CharField(db_index=True, blank=True, default='', max_length=128)
-    name = models.CharField(db_index=True, blank=True, default='' ,max_length=128)
+    name = models.CharField(db_index=True, blank=True, default='', max_length=128)
 
     class Meta:
         unique_together = ("artist", "name")
@@ -319,4 +318,3 @@ class Section(models.Model):
             self.tag,
             self.group,
         ]
-

@@ -108,14 +108,13 @@ class PlaylistAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
                 song = None
                 if this_artist or this_name:
                     song = get_or_create_song(this_artist, this_name)
-                    if song is not None:
-                        new_section.song = song
-                    
+                new_section.song = song
+
                 file_path = settings.MEDIA_ROOT + '/' + str(new_section.filename)
                 with audioread.audio_open(file_path) as f:
                     new_section.duration = f.duration
                 new_section.save()
-            
+
             obj.save()
             if not form.errors:
                 return self.redirect_to_overview()
@@ -146,9 +145,8 @@ class PlaylistAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
                 # Retrieve or create Song object
                 song = None
                 if this_artist or this_name:
-                    song = get_or_create_song(this_artist, this_name)
-                    if song is not None:
-                        section.song = song
+                    song = get_or_create_song(this_artist, this_name)                
+                section.song = song
 
                 section.start_time = request.POST.get(pre_fix + '_start_time')
                 section.duration = request.POST.get(pre_fix + '_duration')
