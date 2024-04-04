@@ -240,11 +240,26 @@
                         padding: 0 15px 15px;
                         opacity: 0.8;
                     }
-                    .counter {
-                        color: white;
+
+                    .status-bar {
                         position: absolute;
-                        bottom: 1rem;
-                        right: 1rem;
+                        bottom: .25rem;
+                        right: .25rem;
+                        display: flex;
+                        justify-content: flex-end;
+                        align-items: center;
+                        column-gap: .25rem;
+                    }
+                    .counter {
+                        color: var(--white);
+                        background-color: rgba(0, 0, 0, 0.3);
+                        padding: 0.2rem 0.5rem;
+                        border-radius: 0.5rem;
+                        transition: background-color 0.3s ease-out;
+
+                        &:hover {
+                            background-color: rgba(0, 0, 0, 1);
+                        }
                     }
                 }
                 

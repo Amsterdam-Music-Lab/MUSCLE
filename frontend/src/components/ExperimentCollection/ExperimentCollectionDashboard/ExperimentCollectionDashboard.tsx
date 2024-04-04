@@ -39,7 +39,10 @@ export const ExperimentCollectionDashboard: React.FC<ExperimentCollectionDashboa
                             <Link to={"/" + exp.slug}>
                                 <ImageOrPlaceholder imagePath={exp.image} alt={exp.description} />
                                 <h3>{exp.name}</h3>
-                                <div role="status" className="counter">{exp.finished_session_count}</div>
+                                <div className="status-bar">
+                                    <span title={`Het "${exp.name}" experiment is ${exp.started_session_count} keer gestart`} role="status" className="counter">{exp.started_session_count}</span>
+                                    <span title={`Het "${exp.name}" experiment is ${exp.finished_session_count} keer voltooid`} role="status" className="counter">{exp.finished_session_count}</span>
+                                </div>
                             </Link>
                         </li>
                     ))}
@@ -55,6 +58,5 @@ const ImageOrPlaceholder = ({ imagePath, alt }: { imagePath: string, alt: string
 
     return imgSrc ? <img src={imgSrc} alt={alt} /> : <div className="placeholder" />;
 }
-
 
 export default ExperimentCollectionDashboard;
