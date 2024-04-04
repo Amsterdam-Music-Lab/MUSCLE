@@ -1,16 +1,18 @@
-import React from 'react';
 import { MemoryRouter } from 'react-router-dom';
 import { render, screen, waitFor } from '@testing-library/react';
+import { describe, it, expect } from 'vitest';
 
 import ExperimentCollectionDashboard from './ExperimentCollectionDashboard';
+import Experiment from '@/types/Experiment';
 
 const getExperiment = (overrides = {}) => {
     return {
         slug: 'some_slug',
         name: 'Some Experiment',
-        finished_session_count: 0,
+        started_session_count: 2,
+        finished_session_count: 1,
         ...overrides
-    };
+    } as Experiment
 }
 
 const experiment1 = getExperiment({
@@ -36,8 +38,9 @@ describe('ExperimentCollectionDashboard', () => {
         await waitFor(() => {
             expect(screen.getByRole('menu')).toBeTruthy();
             const counters = screen.getAllByRole('status');
-            expect(counters).toHaveLength(2);
-            expect(counters[1].innerHTML).toBe('2');
+            expect(counters).toHaveLength(4);
+            expect(counters[0].innerHTML).toBe(experiment1.started_session_count.toString());
+            expect(counters[1].innerHTML).toBe(experiment1.finished_session_count.toString());
         })
     });
 })
