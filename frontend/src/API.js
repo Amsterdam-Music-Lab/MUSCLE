@@ -15,7 +15,7 @@ export const URLS = {
         feedback: (slug) => "/experiment/" + slug + "/feedback/",
     },
     experiment_collection: {
-        get: (slug) => "/experiment/collection/" + slug + "/"
+        get: (slug, participantId) => `/experiment/collection/${slug}/${participantId ? `?participant_id=${participantId}` : ''}`,
     },
     participant: {
         current: "/participant/",
@@ -41,8 +41,8 @@ export const URLS = {
 export const useExperiment = (slug) =>
     useGet(API_BASE_URL + URLS.experiment.get(slug));
 
-export const useExperimentCollection = (slug) => 
-    useGet(API_BASE_URL + URLS.experiment_collection.get(slug));
+export const useExperimentCollection = (slug, participantId) => 
+    useGet(API_BASE_URL + URLS.experiment_collection.get(slug, participantId));
 
 export const useParticipantScores = () =>
     useGet(API_BASE_URL + URLS.participant.score);
