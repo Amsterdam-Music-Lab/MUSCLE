@@ -5,6 +5,28 @@ import IParticipant from "@/types/Participant";
 import ISession from "@/types/Session";
 import ITheme from "@/types/Theme";
 
+interface DocumentHeadSlice {
+    pageTitle: string;
+    setPageTitle: (title: string) => void;
+    pageDescription: string;
+    setPageDescription: (description: string) => void;
+    pageImage: string;
+    setPageImage: (image: string) => void;
+    pageUrl: string;
+    setPageUrl: (url: string) => void;
+}
+
+const createDocumentHeadSlice: StateCreator<DocumentHeadSlice> = (set) => ({
+    pageTitle: "",
+    setPageTitle: (pageTitle) => set(() => ({ pageTitle })),
+    pageDescription: "",
+    setPageDescription: (pageDescription) => set(() => ({ pageDescription })),
+    pageImage: "",
+    setPageImage: (pageImage) => set(() => ({ pageImage })),
+    pageUrl: "",
+    setPageUrl: (pageUrl) => set(() => ({ pageUrl })),
+});
+
 interface ErrorSlice {
     error: string | null;
     setError: (message: string, errorToCapture?: Error) => void;
@@ -55,6 +77,7 @@ const createThemeSlice: StateCreator<ThemeSlice> = (set) => ({
 });
 
 export const useBoundStore = create<ErrorSlice & ParticipantSlice & SessionSlice & ThemeSlice>((...args) => ({
+    ...createDocumentHeadSlice(...args),
     ...createErrorSlice(...args),
     ...createParticipantSlice(...args),
     ...createSessionSlice(...args),
