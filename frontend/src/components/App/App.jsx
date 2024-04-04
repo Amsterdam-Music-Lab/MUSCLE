@@ -60,7 +60,7 @@ const App = () => {
             <Switch>
                 {/* Request reload for given participant */}
                 <Route path={URLS.reloadParticipant}>
-                    <Reload/>
+                    <Reload />
                 </Route>
 
                 {/* Default experiment */}
