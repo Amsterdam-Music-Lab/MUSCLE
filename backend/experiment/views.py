@@ -35,6 +35,8 @@ def get_experiment(request, slug):
         'slug': experiment.slug,
         'name': experiment.name,
         'theme': serialize_theme(experiment.theme_config) if experiment.theme_config else None,
+        'description': experiment.description,
+        'image': experiment.image.file.url if experiment.image else '',
         'class_name': class_name,  # can be used to override style
         'rounds': experiment.rounds,
         'playlists': [
