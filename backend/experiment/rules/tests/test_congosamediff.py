@@ -15,10 +15,16 @@ class CongoSameDiffTest(TestCase):
     @classmethod
     def setUpTestData(self):
         self.section_csv = (
-            "Dave,m1_contour,0.0,20.0,samediff/melody_1_contour.wav,practice_contour,m1\n"
-            "Dave,m1_interval,0.0,20.0,samediff/melody_1_interval.wav,practice_interval,m1\n"
-            "Dave,m1_same,0.0,20.0,samediff/melody_1_same.wav,same,m1\n"
-            "Dave,m1_scale,0.0,20.0,samediff/melody_1_scale.wav,scale,m1\n"
+            "Dave,m1_contour_practice,0.0,20.0,samediff/melody_1_contour.wav,practice,1\n"
+            "Dave,m2_same_practice,0.0,20.0,samediff/melody_1_same.wav,practice,1\n"
+            "Dave,m1_same,0.0,20.0,samediff/melody_1_same.wav,'',1\n"
+            "Dave,m1_scale,0.0,20.0,samediff/melody_1_scale.wav,'',1\n"
+            "Dave,m1_contour,0.0,20.0,samediff/melody_1_contour.wav,'',1\n"
+            "Dave,m1_interval,0.0,20.0,samediff/melody_1_interval.wav,'',1\n"
+            "Dave,m1_same,0.0,20.0,samediff/melody_1_same.wav,'',2\n"
+            "Dave,m1_scale,0.0,20.0,samediff/melody_1_scale.wav,'',2\n"
+            "Dave,m1_contour,0.0,20.0,samediff/melody_1_contour.wav,'',2\n"
+            "Dave,m1_interval,0.0,20.0,samediff/melody_1_interval.wav,'',2\n"
         )
         self.playlist = PlaylistModel.objects.create(name='CongoSameDiff')
         self.playlist.csv = self.section_csv
@@ -61,7 +67,7 @@ class CongoSameDiffTest(TestCase):
         )
 
         self.session.get_current_round = lambda: 6
-        
+
         final_action = congo_same_diff.next_round(self.session)
 
         assert isinstance(final_action, Final)
@@ -118,6 +124,23 @@ class CongoSameDiffTest(TestCase):
         with self.assertRaisesRegex(ValueError, "Section no_group should have a group value"):
             congo_same_diff.first_round(experiment)
 
+    def test_throw_exception_if_trial_group_not_int(self):
+        congo_same_diff = CongoSameDiff()
+        experiment = Experiment(id=1, name='CongoSameDiff', slug='congosamediff_first_round', rounds=4)
+        experiment.save()
+        playlist = PlaylistModel.objects.create(name='CongoSameDiff')
+        Section.objects.create(
+            playlist=playlist,
+            start_time=0.0,
+            duration=20.0,
+            song=Song.objects.create(artist='group_not_int', name='group_not_int'),
+            tag='practice_contour',
+            group='not_int_42'
+        )
+        experiment.playlists.set([playlist])
+        with self.assertRaisesRegex(ValueError, "Section group_not_int should have a group value containing only digits"):
+            congo_same_diff.first_round(experiment)
+
     def test_throw_exception_if_no_practice_rounds(self):
         congo_same_diff = CongoSameDiff()
         experiment = Experiment(id=1, name='CongoSameDiff', slug='congosamediff_first_round', rounds=4)
@@ -129,7 +152,7 @@ class CongoSameDiffTest(TestCase):
             duration=20.0,
             song=Song.objects.create(artist='no_practice', name='no_practice'),
             tag='',
-            group='m1'
+            group='1'
         )
         experiment.playlists.set([playlist])
         with self.assertRaisesRegex(ValueError, 'At least one section should have the tag "practice"'):
@@ -146,8 +169,16 @@ class CongoSameDiffTest(TestCase):
             duration=20.0,
             song=Song.objects.create(artist='only_practice', name='only_practice'),
             tag='practice_contour',
-            group='m1'
+            group='42'
         )
         experiment.playlists.set([playlist])
         with self.assertRaisesRegex(ValueError, 'At least one section should not have the tag "practice"'):
             congo_same_diff.first_round(experiment)
+
+    def test_get_total_trials_count(self):
+        congo_same_diff = CongoSameDiff()
+        total_trials_count = congo_same_diff.get_total_trials_count(self.session)
+
+        # practice trials + post-practice question + non-practice trials
+        # 2 + 1 + 2 = 5
+        assert total_trials_count == 5
