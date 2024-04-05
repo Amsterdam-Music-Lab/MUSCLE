@@ -28,25 +28,7 @@ class CongoSameDiff(Base):
         '''
 
         # Do a validity check on the experiment
-        # All sections need to have a group value
-        sections = experiment.playlists.first().section_set.all()
-        for section in sections:
-            file_name = section.song.name if section.song else 'No name'
-            # every section.group should consist of a number
-            regex_pattern = r'^\d+$'
-            if not section.group or not re.search(regex_pattern, section.group):
-                raise ValueError(f'Section {file_name} should have a group value containing only digits')
-            # the section song name should not be empty
-            if not section.song.name:
-                raise ValueError(f'Section {file_name} should have a name that will be used for the result key')
-
-        # It also needs at least one section with the tag 'practice'
-        if not sections.filter(tag__contains='practice').exists():
-            raise ValueError('At least one section should have the tag "practice"')
-
-        # It should also contain at least one section without the tag 'practice'
-        if not sections.exclude(tag__contains='practice').exists():
-            raise ValueError('At least one section should not have the tag "practice"')
+        self.validate(experiment)
 
         # 1. Playlist
         playlist = Playlist(experiment.playlists.all())
@@ -235,3 +217,30 @@ class CongoSameDiff(Base):
         total_unique_exp_trials_count = total_exp_variants.values('group').distinct().count()
         total_trials_count = practice_trials_count + total_unique_exp_trials_count + 1
         return total_trials_count
+
+    def validate(self, experiment: Experiment):
+
+        errors = []
+
+        # All sections need to have a group value
+        sections = experiment.playlists.first().section_set.all()
+        for section in sections:
+            file_name = section.song.name if section.song else 'No name'
+            # every section.group should consist of a number
+            regex_pattern = r'^\d+$'
+            if not section.group or not re.search(regex_pattern, section.group):
+                errors.append(f'Section {file_name} should have a group value containing only digits')
+            # the section song name should not be empty
+            if not section.song.name:
+                errors.append(f'Section {file_name} should have a name that will be used for the result key')
+
+        # It also needs at least one section with the tag 'practice'
+        if not sections.filter(tag__contains='practice').exists():
+            errors.append('At least one section should have the tag "practice"')
+
+        # It should also contain at least one section without the tag 'practice'
+        if not sections.exclude(tag__contains='practice').exists():
+            errors.append('At least one section should not have the tag "practice"')
+
+        if errors:
+            raise ValueError('The experiment playlist is not valid: \n- ' + '\n- '.join(errors))

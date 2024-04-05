@@ -175,6 +175,39 @@ class CongoSameDiffTest(TestCase):
         with self.assertRaisesRegex(ValueError, 'At least one section should not have the tag "practice"'):
             congo_same_diff.first_round(experiment)
 
+    def test_throw_combined_exceptions_if_multiple_errors(self):
+        congo_same_diff = CongoSameDiff()
+        experiment = Experiment(id=1, name='CongoSameDiff', slug='congosamediff_first_round', rounds=4)
+        experiment.save()
+        playlist = PlaylistModel.objects.create(name='CongoSameDiff')
+        Section.objects.create(
+            playlist=playlist,
+            start_time=0.0,
+            duration=20.0,
+            song=Song.objects.create(artist='no_group', name='no_group'),
+            tag='practice_contour',
+            group=''
+        )
+        Section.objects.create(
+            playlist=playlist,
+            start_time=0.0,
+            duration=20.0,
+            song=Song.objects.create(artist='group_not_int', name='group_not_int'),
+            tag='practice_contour',
+            group='not_int_42'
+        )
+        Section.objects.create(
+            playlist=playlist,
+            start_time=0.0,
+            duration=20.0,
+            song=Song.objects.create(artist='only_practice', name='only_practice'),
+            tag='practice_contour',
+            group='42'
+        )
+        experiment.playlists.set([playlist])
+        with self.assertRaisesRegex(ValueError, "The experiment playlist is not valid: \n- Section group_not_int should have a group value containing only digits\n- Section no_group should have a group value containing only digits\n- At least one section should not have the tag \"practice\""):
+            congo_same_diff.first_round(experiment)
+
     def test_get_total_trials_count(self):
         congo_same_diff = CongoSameDiff()
         total_trials_count = congo_same_diff.get_total_trials_count(self.session)
