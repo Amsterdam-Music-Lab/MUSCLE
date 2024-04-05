@@ -128,7 +128,7 @@ class Playlist(models.Model):
             # if same section already exists, update it with new info
             for ex_section in existing_sections:
                 if ex_section.filename == section.filename:
-                    if song:                        
+                    if song:
                         ex_section.song = song
                         ex_section.save()
                     ex_section.start_time = section.start_time

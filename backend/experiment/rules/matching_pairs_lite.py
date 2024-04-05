@@ -14,7 +14,7 @@ class MatchingPairsLite(MatchingPairsGame):
     score_feedback_display = 'small-bottom-right'
     contact_email = 'aml.tunetwins@gmail.com'
 
-    def first_round(self, experiment):     
+    def first_round(self, experiment):
         # 2. Choose playlist.
         playlist = Playlist(experiment.playlists.all())
         info = Info('',
