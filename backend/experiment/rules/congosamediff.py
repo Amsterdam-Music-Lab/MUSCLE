@@ -71,15 +71,13 @@ class CongoSameDiff(Base):
         if next_round_number > total_trials_count:
             return self.get_final_round(session)
 
-        # count of practice rounds (excluding the post-practice round)
-        practice_trials_count = session.playlist.section_set.filter(
-            tag__contains='practice'
-        ).count()
-
         # load the practice trials
         practice_trials_subset = session.playlist.section_set.filter(
             tag__contains='practice'
         )
+
+        # count of practice rounds (excluding the post-practice round)
+        practice_trials_count = practice_trials_subset.count()
 
         # if the user hasn't completed the practice trials
         # return the next practice trial
