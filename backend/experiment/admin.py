@@ -32,13 +32,18 @@ class FeedbackInline(admin.TabularInline):
 
 
 class ExperimentAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
-    list_display = ('image_preview', 'experiment_name_link', 'experiment_slug_link', 'rules', 'rounds', 'playlist_count',
+    list_display = ('image_preview', 'experiment_name_link',
+                    'experiment_slug_link', 'rules',
+                    'rounds', 'playlist_count',
                     'session_count', 'active')
     list_filter = ['active']
     search_fields = ['name']
     inline_actions = ['export', 'export_csv']
-    fields = ['name', 'description', 'image', 'slug', 'url', 'hashtag', 'theme_config',  'language', 'active', 'rules',
-              'rounds', 'bonus_points', 'playlists', 'consent', 'questions']
+    fields = ['name', 'description', 'image',
+              'slug', 'url', 'hashtag', 'theme_config', 
+              'language', 'active', 'rules',
+              'rounds', 'bonus_points', 'playlists',
+              'consent', 'questions']
     inlines = [FeedbackInline]
     form = ExperimentForm
 
@@ -158,7 +163,6 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
 
     def experiment_slug_link(self, obj):
         dev_mode = settings.DEBUG is True
-
         url = f"http://localhost:3000/{obj.slug}" if dev_mode else f"/{obj.slug}"
 
         return format_html(
@@ -189,12 +193,19 @@ class MarkdownPreviewTextInput(TextInput):
 
 
 class ExperimentSeriesAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
-    list_display = ('slug', 'name', 'description_excerpt', 'dashboard', 'groups')
+    list_display = ('name', 'slug_link', 'description_excerpt', 'dashboard', 'groups')
     fields = ['slug', 'name', 'description', 'first_experiments',
               'random_experiments', 'last_experiments', 'dashboard',
               'about_content']
     form = ExperimentSeriesForm
     inlines = [ExperimentSeriesGroupInline]
+
+    def slug_link(self, obj):
+        dev_mode = settings.DEBUG is True
+        url = f"http://localhost:3000/collection/{obj.slug}" if dev_mode else f"/collection/{obj.slug}"
+
+        return format_html(
+            f'<a href="{url}" target="_blank" rel="noopener noreferrer" title="Open {obj.slug} experiment group in new tab" >{obj.slug}&nbsp;<small>&#8599;</small></a>')
 
     def description_excerpt(self, obj):
 
@@ -206,6 +217,8 @@ class ExperimentSeriesAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
     def groups(self, obj):
         groups = ExperimentSeriesGroup.objects.filter(series=obj)
         return format_html(', '.join([f'<a href="/admin/experiment/experimentseriesgroup/{group.id}/change/">{group.name}</a>' for group in groups]))
+    
+    slug_link.short_description = "Slug"
 
 
 admin.site.register(ExperimentSeries, ExperimentSeriesAdmin)
