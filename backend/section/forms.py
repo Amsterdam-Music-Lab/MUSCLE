@@ -34,10 +34,13 @@ class PlaylistAdminForm(forms.ModelForm):
                 'URL for hosting the audio files on an external server.<br> \
                 Make sure the path of the audio file is valid.<br> \
                 Leave this empty if you host the audio files locally.'}
-        
+
         widgets = {'url_prefix': forms.TextInput(attrs={'size': '37',
                    'placeholder': 'https://example.com/'})
                    }
+
+    class Media:
+        js = ['validate_csv.js',]
 
     def save(self, commit=True):
         playlist = super().save(commit=False)

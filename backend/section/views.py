@@ -1,10 +1,12 @@
-from django.http import Http404, FileResponse
-from django.core.exceptions import PermissionDenied
+import json
+import csv
+from http import HTTPStatus
+import os
+from django.http import Http404, FileResponse, JsonResponse
 from django.conf import settings
 from django.shortcuts import redirect
 
 from .models import Section
-from participant.utils import located_in_nl
 
 
 def get_section(request, section_id, code):
@@ -26,7 +28,7 @@ def get_section(request, section_id, code):
         if str(section.filename).startswith('http'):
             # external link, redirect
             return redirect(str(section.filename))
-        
+
         if section.playlist.url_prefix:
             # Make link external using url_prefix
             return redirect(section.playlist.url_prefix + str(section.filename))
@@ -57,3 +59,89 @@ def get_section(request, section_id, code):
 
     except Section.DoesNotExist:
         raise Http404("Section does not exist")
+
+
+def validate_csv(request):
+    """Validate the csv file"""
+
+    json_body = json.loads(request.body)
+    csv_data = json_body['csv']
+
+    # Add new sections from csv
+    try:
+        reader = csv.DictReader(csv_data.splitlines(), fieldnames=(
+            'artist', 'name', 'start_time', 'duration', 'filename', 'tag', 'group'))
+    except csv.Error:
+        return {
+            'status': HTTPStatus.UNPROCESSABLE_ENTITY,
+            'message': "Error: could not initialize csv.DictReader"
+        }
+
+    validation_warnings = []
+    validation_errors = []
+    lines_count = 0
+    parsed_csv_data = []
+
+    for row in reader:
+        lines_count += 1
+
+        if None in row.values():
+            validation_errors.append(
+                f"Error: Missing value in row {lines_count}")
+            continue
+
+        if not row['filename'].endswith(('.mp3', '.wav', '.ogg')):
+            validation_errors.append(
+                f"Error: Invalid file extension in row {lines_count}")
+            continue
+
+        if not row['start_time'].replace('.', '', 1).isdigit():
+            validation_errors.append(
+                f"Error: Invalid start_time in row {lines_count}")
+            continue
+
+        if not row['duration'].replace('.', '', 1).isdigit():
+            validation_errors.append(
+                f"Error: Invalid duration in row {lines_count}")
+            continue
+
+        # check if file exists
+        filename = row['filename']
+        if not filename.startswith('http'):
+            full_file_path = f'./upload/{filename}'
+            if not os.path.isfile(full_file_path):
+                validation_errors.append(f"Error: File '{filename}' cannot be found in row {lines_count}.")
+
+        for key, value in row.items():
+            if value != value.strip():
+                validation_warnings.append(
+                    f"Warning: Whitespace in column '{key}' with value '{value}' in row {lines_count}")
+
+        parsed_csv_data.append(row)
+
+    if validation_errors:
+
+        message = f"Error: CSV contains {len(validation_errors)} errors"
+
+        if validation_warnings:
+            message += f" and {len(validation_warnings)} warnings"
+
+        return JsonResponse({
+            'status': HTTPStatus.UNPROCESSABLE_ENTITY,
+            'message': message,
+            'warnings': validation_warnings,
+            'errors': validation_errors
+        }, status=HTTPStatus.UNPROCESSABLE_ENTITY)
+
+    message = f"CSV with {lines_count} rows parsed successfully"
+
+    if validation_warnings:
+        message += f" with {len(validation_warnings)} warnings"
+
+    return JsonResponse({
+        'status': HTTPStatus.OK,
+        'message': message,
+        'lines': lines_count,
+        'warnings': validation_warnings,
+        'data': parsed_csv_data
+    }, status=HTTPStatus.OK)
