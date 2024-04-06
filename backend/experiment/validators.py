@@ -9,7 +9,7 @@ def markdown_html_validator():
 
 
 def experiment_slug_validator(value):
-    
+
     disallowed_slugs = [
         'admin',
         'server',
