@@ -1,5 +1,5 @@
 import "../public/vendor/bootstrap/bootstrap.min.css";
-import "../src/index.css";
+import "../src/index.scss";
 import { initAudioListener } from "../src/util/audio";
 import { initWebAudioListener } from "../src/util/webAudio";
 
