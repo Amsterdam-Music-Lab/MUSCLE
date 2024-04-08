@@ -44,8 +44,7 @@ def serialize_experiment_collection_group(group: ExperimentCollectionGroup, part
         return None
 
     return {
-        'dashboard': group.dashboard,
-        'grouped_experiments': [serialize_experiment(experiment.experiment) for experiment in grouped_experiments],
+        'dashboard': [serialize_experiment(experiment.experiment) for experiment in grouped_experiments] if group.dashboard else [],
         'next_experiment': next_experiment
     }
 
