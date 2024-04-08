@@ -232,12 +232,12 @@ class ExperimentCollectionGroupAdmin(InlineActionsModelAdminMixin, admin.ModelAd
     def name_link(self, obj):
         obj_name = obj.__str__()
         url = reverse(
-            "admin:experiment_ExperimentCollectiongroup_change", args=[obj.pk])
+            "admin:experiment_experimentcollectiongroup_change", args=[obj.pk])
         return format_html('<a href="{}">{}</a>', url, obj_name)
 
     def related_series(self, obj):
         url = reverse(
-            "admin:experiment_ExperimentCollection_change", args=[obj.series.pk])
+            "admin:experiment_experimentcollection_change", args=[obj.series.pk])
         return format_html('<a href="{}">{}</a>', url, obj.series.name)
 
     def experiments(self, obj):

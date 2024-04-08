@@ -33,7 +33,7 @@ class ExperimentCollection(models.Model):
         return self.name or self.slug
 
     class Meta:
-        verbose_name_plural = "Experiment Series"
+        verbose_name_plural = "ExperimentCollections"
 
     def associated_experiments(self):
         return [*self.first_experiments, *self.random_experiments, *self.last_experiments]
@@ -63,7 +63,7 @@ class ExperimentCollectionGroup(models.Model):
 
     class Meta:
         ordering = ['order']
-        verbose_name_plural = "Experiment Series Groups"
+        verbose_name_plural = "ExperimentCollection Groups"
 
 
 class GroupedExperiment(models.Model):
