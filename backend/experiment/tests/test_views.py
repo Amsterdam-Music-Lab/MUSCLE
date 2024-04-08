@@ -7,8 +7,8 @@ from experiment.views import (
 )
 from experiment.models import (
     Experiment,
-    ExperimentSeries,
-    ExperimentSeriesGroup,
+    ExperimentCollection,
+    ExperimentCollectionGroup,
     GroupedExperiment,
 )
 from participant.models import Participant
@@ -20,11 +20,11 @@ class TestExperimentCollectionViews(TestCase):
     @classmethod
     def setUpTestData(cls):
         cls.participant = Participant.objects.create()
-        collection = ExperimentSeries.objects.create(
+        collection = ExperimentCollection.objects.create(
             name='Test Series',
             slug='test_series'
         )
-        introductory_group = ExperimentSeriesGroup.objects.create(
+        introductory_group = ExperimentCollectionGroup.objects.create(
             name='introduction',
             series=collection,
             order=1
@@ -35,7 +35,7 @@ class TestExperimentCollectionViews(TestCase):
             experiment=cls.experiment1,
             group=introductory_group
         )
-        intermediate_group = ExperimentSeriesGroup.objects.create(
+        intermediate_group = ExperimentCollectionGroup.objects.create(
             name='intermediate',
             series=collection,
             order=2
@@ -52,7 +52,7 @@ class TestExperimentCollectionViews(TestCase):
             experiment=cls.experiment3,
             group=intermediate_group
         )
-        final_group = ExperimentSeriesGroup.objects.create(
+        final_group = ExperimentCollectionGroup.objects.create(
             name='final',
             series=collection,
             order=3
@@ -98,7 +98,7 @@ class TestExperimentCollectionViews(TestCase):
             'next_experiment').get('slug'), 'experiment4')
 
     def test_experiment_collection_with_dashboard(self):
-        # if ExperimentSeries has dashboard set True, return list of random experiments
+        # if ExperimentCollection has dashboard set True, return list of random experiments
         session = self.client.session
         session['participant_id'] = self.participant.id
         session.save()
@@ -107,7 +107,7 @@ class TestExperimentCollectionViews(TestCase):
             participant=self.participant,
             finished_at=timezone.now()
         )
-        intermediate_group = ExperimentSeriesGroup.objects.get(
+        intermediate_group = ExperimentCollectionGroup.objects.get(
             name='intermediate'
         )
         intermediate_group.dashboard = True

@@ -7,7 +7,7 @@ from django.conf import settings
 from django.utils.translation import activate, gettext_lazy as _
 from django_markup.markup import formatter
 
-from .models import Experiment, ExperimentSeries, ExperimentSeriesGroup, Feedback, GroupedExperiment
+from .models import Experiment, ExperimentCollection, ExperimentCollectionGroup, Feedback, GroupedExperiment
 from .utils import serialize
 from participant.utils import get_participant
 from participant.models import Participant
@@ -78,19 +78,19 @@ def default_questions(request, rules):
 
 def get_experiment_collection(request, slug):
     ''' 
-    check which `ExperimentSeriesGroup` objects are related to the `ExperimentSeries` with the given slug
+    check which `ExperimentCollectionGroup` objects are related to the `ExperimentCollection` with the given slug
     retrieve the group with the lowest order (= current_group)
     return the next experiment from the current_group without a finished session
-    except if ExperimentSeriesGroup.dashboard = True,
+    except if ExperimentCollectionGroup.dashboard = True,
     then all experiments of the current_group will be returned as an array (also those with finished session)
     '''
     try:
-        collection = ExperimentSeries.objects.get(slug=slug)
+        collection = ExperimentCollection.objects.get(slug=slug)
     except:
         return Http404
     request.session[COLLECTION_KEY] = slug
     participant = get_participant(request)
-    active_groups = ExperimentSeriesGroup.objects.filter(
+    active_groups = ExperimentCollectionGroup.objects.filter(
         series=collection.id, finished=False).order_by('order')
     if not active_groups:
         return JsonResponse({})
@@ -106,7 +106,7 @@ def get_experiment_collection(request, slug):
     })
 
 
-def serialize_experiment_series_group(group: ExperimentSeriesGroup, participant: Participant) -> dict:
+def serialize_experiment_series_group(group: ExperimentCollectionGroup, participant: Participant) -> dict:
     grouped_experiments = list(GroupedExperiment.objects.filter(
         group_id=group.id).order_by('order'))
 
@@ -128,7 +128,7 @@ def serialize_experiment_series_group(group: ExperimentSeriesGroup, participant:
 
 
 def serialize_experiment_series(
-    experiment_series: ExperimentSeries
+    experiment_series: ExperimentCollection
 ):
     about_content = experiment_series.about_content
 
@@ -161,7 +161,7 @@ def get_finished_session_count(experiment, participant):
 
 
 def get_associated_experiments(pk_list):
-    ''' get all the experiment objects registered in an ExperimentSeries field'''
+    ''' get all the experiment objects registered in an ExperimentCollection field'''
     return [Experiment.objects.get(pk=pk) for pk in pk_list]
 
 

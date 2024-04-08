@@ -6,7 +6,7 @@ from django.shortcuts import get_object_or_404, redirect
 from django.views.decorators.http import require_POST
 
 from .models import Session
-from experiment.models import Experiment, ExperimentSeries
+from experiment.models import Experiment, ExperimentCollection
 from experiment.utils import serialize
 from experiment.actions.utils import COLLECTION_KEY
 from section.models import Playlist
@@ -70,13 +70,13 @@ def next_round(request, session_id):
     session = get_object_or_404(Session, 
             pk=session_id, participant__id=participant.id)
 
-    # check if this experiment is part of an ExperimentSeries
+    # check if this experiment is part of an ExperimentCollection
     collection_slug = request.session.get(COLLECTION_KEY)
     if collection_slug:
         # check that current session does not have the collection information saved yet
         if not session.load_json_data().get(COLLECTION_KEY):
             # set information of the ExperimentCollection to the session
-            collection = ExperimentSeries.objects.get(slug=collection_slug)
+            collection = ExperimentCollection.objects.get(slug=collection_slug)
             if collection and session.experiment.pk in collection.associated_experiments():
                 session.save_json_data({COLLECTION_KEY: collection_slug})
 
