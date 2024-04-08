@@ -8,7 +8,7 @@ import {
 import axios from "axios";
 
 import { API_BASE_URL, EXPERIMENT_SLUG, URLS } from "@/config";
-import { URLS as API_URLS } from "../../API.js";
+import { URLS as API_URLS } from "../../API";
 import useBoundStore from "../../util/stores";
 import Experiment from "../Experiment/Experiment";
 import ExperimentCollection from "../ExperimentCollection/ExperimentCollection";

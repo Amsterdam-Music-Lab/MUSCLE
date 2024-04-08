@@ -69,7 +69,7 @@ const ExperimentCollection = ({ match }: ExperimentCollectionProps) => {
         <div className="aha__collection">
             <Switch>
                 <Route path={URLS.experimentCollectionAbout} component={() => <ExperimentCollectionAbout content={experimentCollection?.about_content} slug={experimentCollection.slug} />} />
-                <Route path={URLS.experimentCollection} exact component={() => <ExperimentCollectionDashboard experimentCollection={experimentCollection} participantId={participantId} />} />
+                <Route path={URLS.experimentCollection} exact component={() => <ExperimentCollectionDashboard experimentCollection={experimentCollection} participantIdUrl={participantIdUrl} />} />
             </Switch>
         </div>
     )

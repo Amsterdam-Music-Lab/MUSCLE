@@ -7,10 +7,10 @@ import ExperimentCollection from "@/types/ExperimentCollection";
 
 interface ExperimentCollectionDashboardProps {
     experimentCollection: ExperimentCollection;
-    participantId: string | null;
+    participantIdUrl: string | null;
 }
 
-export const ExperimentCollectionDashboard: React.FC<ExperimentCollectionDashboardProps> = ({ experimentCollection, participantId }) => {
+export const ExperimentCollectionDashboard: React.FC<ExperimentCollectionDashboardProps> = ({ experimentCollection, participantIdUrl }) => {
 
     const dashboard = experimentCollection?.dashboard;
 
@@ -18,7 +18,7 @@ export const ExperimentCollectionDashboard: React.FC<ExperimentCollectionDashboa
     const nextExperiment = experimentCollection.next_experiment; // TODO: get next_experiment from experimentCollection
     const aboutContent = experimentCollection.about_content;
 
-    const getExperimentHref = (slug: string) => `/${slug}/${participantId ? `?participant_id=${participantId}` : ""}`;
+    const getExperimentHref = (slug: string) => `/${slug}${participantIdUrl ? `?participant_id=${participantIdUrl}` : ""}`;
 
     return (
         <>
