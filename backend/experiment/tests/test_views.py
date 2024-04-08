@@ -2,7 +2,7 @@ from django.test import TestCase
 from django.utils import timezone
 
 from image.models import Image
-from experiment.views import (
+from experiment.serializers import (
     serialize_experiment,
 )
 from experiment.models import (
@@ -82,7 +82,7 @@ class TestExperimentCollectionViews(TestCase):
         response = self.client.get('/experiment/collection/test_series/')
         self.assertIn(response.json().get('next_experiment').get(
             'slug'), ('experiment2', 'experiment3'))
-        self.assertEqual(response.json().get('dashboard'), None)
+        self.assertEqual(response.json().get('dashboard'), [])
         Session.objects.create(
             experiment=self.experiment2,
             participant=self.participant,

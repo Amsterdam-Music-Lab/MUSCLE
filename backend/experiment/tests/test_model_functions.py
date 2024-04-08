@@ -21,4 +21,4 @@ class TestModelExperimentCollection(TestCase):
         # Get the ExperimentCollection Meta class
         meta = ExperimentCollection._meta
         # Check if verbose_name_plural is correctly set
-        self.assertEqual(meta.verbose_name_plural, "Experiment Series")
+        self.assertEqual(meta.verbose_name_plural, "Experiment Collections")

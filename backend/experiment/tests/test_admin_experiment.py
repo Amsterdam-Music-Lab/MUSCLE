@@ -198,7 +198,7 @@ class ExperimentCollectionGroupAdminTest(TestCase):
         request = self.factory.get('/')
         related_series = self.admin.related_series(group)
         expected_url = reverse(
-            "admin:experiment_ExperimentCollection_change", args=[series.pk])
+            "admin:experiment_experimentcollection_change", args=[series.pk])
         expected_related_series = format_html('<a href="{}">{}</a>', expected_url, series.name)
         self.assertEqual(related_series, expected_related_series)
 
