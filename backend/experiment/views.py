@@ -1,19 +1,17 @@
 import json
 import logging
-from random import shuffle
+
 
 from django.http import Http404, JsonResponse
 from django.conf import settings
 from django.utils.translation import activate, gettext_lazy as _
 from django_markup.markup import formatter
 
-from .models import Experiment, ExperimentCollection, ExperimentCollectionGroup, Feedback, GroupedExperiment
-from .utils import serialize
-from participant.utils import get_participant
-from participant.models import Participant
-from session.models import Session
+from .models import Experiment, ExperimentCollection, ExperimentCollectionGroup, Feedback
+from experiment.serializers import serialize_actions, serialize_experiment_collection, serialize_experiment_collection_group
 from experiment.rules import EXPERIMENT_RULES
 from experiment.actions.utils import COLLECTION_KEY
+from participant.utils import get_participant
 
 logger = logging.getLogger(__name__)
 
@@ -43,7 +41,7 @@ def get_experiment(request, slug):
             for playlist in experiment.playlists.all()
         ],
         'feedback_info': experiment.get_rules().feedback_info(),
-        'next_round': serialize(experiment.get_rules().first_round(experiment)),
+        'next_round': serialize_actions(experiment.get_rules().first_round(experiment)),
         'loading_text': _('Loading')
     }
 
@@ -93,87 +91,26 @@ def get_experiment_collection(request, slug):
     active_groups = ExperimentCollectionGroup.objects.filter(
         series=collection.id, finished=False).order_by('order')
     if not active_groups:
+        # TO DO: We should return a debrief here
         return JsonResponse({})
     current_group = active_groups.first()
-    serialized_group = serialize_experiment_series_group(
+    serialized_group = serialize_experiment_collection_group(
         current_group, participant)
     if not serialized_group:
         # if the current group is not a dashboard and has no unfinished experiments, it will return None
+        # set it to finished and continue to next group
+        current_group.finished = True
+        current_group.save()
         return get_experiment_collection(request, slug)
     return JsonResponse({
-        **serialize_experiment_series(collection),
+        **serialize_experiment_collection(collection),
         **serialized_group
     })
-
-
-def serialize_experiment_series_group(group: ExperimentCollectionGroup, participant: Participant) -> dict:
-    grouped_experiments = list(GroupedExperiment.objects.filter(
-        group_id=group.id).order_by('order'))
-
-    if group.randomize:
-        shuffle(grouped_experiments)
-
-    next_experiment = get_upcoming_experiment(
-        grouped_experiments, participant, group.dashboard)
-
-    if not next_experiment:
-        group.finished = True
-        group.save()
-        return None
-
-    return {
-        'dashboard': [serialize_experiment(experiment.experiment) for experiment in grouped_experiments] if group.dashboard else None,
-        'next_experiment': next_experiment
-    }
-
-
-def serialize_experiment_series(
-    experiment_series: ExperimentCollection
-):
-    about_content = experiment_series.about_content
-
-    if about_content:
-        about_content = formatter(about_content, filter_name='markdown')
-
-    return {
-        'slug': experiment_series.slug,
-        'name': experiment_series.name,
-        'description': experiment_series.description,
-        'about_content': about_content,
-    }
-
-
-def serialize_experiment(experiment_object: Experiment, finished=0):
-    return {
-        'slug': experiment_object.slug,
-        'name': experiment_object.name,
-        'finished_session_count': finished,
-        'description': experiment_object.description,
-        'image': experiment_object.image.file.url if experiment_object.image else '',
-    }
-
-
-def get_finished_session_count(experiment, participant):
-    ''' Get the number of finished sessions for this experiment and participant '''
-    count = Session.objects.filter(
-        experiment=experiment, participant=participant, finished_at__isnull=False).count()
-    return count
 
 
 def get_associated_experiments(pk_list):
     ''' get all the experiment objects registered in an ExperimentCollection field'''
     return [Experiment.objects.get(pk=pk) for pk in pk_list]
-
-
-def get_upcoming_experiment(experiment_list, participant, repeat_allowed=True):
-    ''' return next experiment with minimum finished sessions for this participant
-     if repeated experiments are not allowed (dashboard=False) and there are only finished sessions, return None '''
-    finished_session_counts = [get_finished_session_count(
-        experiment.experiment, participant) for experiment in experiment_list]
-    minimum_session_count = min(finished_session_counts)
-    if not repeat_allowed and minimum_session_count != 0:
-        return None
-    return serialize_experiment(experiment_list[finished_session_counts.index(minimum_session_count)].experiment)
 
 
 def render_markdown(request):

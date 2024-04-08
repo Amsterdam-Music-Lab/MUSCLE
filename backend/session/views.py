@@ -7,7 +7,7 @@ from django.views.decorators.http import require_POST
 
 from .models import Session
 from experiment.models import Experiment, ExperimentCollection
-from experiment.utils import serialize
+from experiment.serializers import serialize_actions
 from experiment.actions.utils import COLLECTION_KEY
 from section.models import Playlist
 from participant.utils import get_participant
@@ -55,7 +55,7 @@ def continue_session(request, session_id):
     session = get_object_or_404(Session, pk=session_id)
 
     # Get next round for given session
-    action = serialize(session.experiment_rules().next_round(session))
+    action = serialize_actions(session.experiment_rules().next_round(session))
     return JsonResponse(action, json_dumps_params={'indent': 4})
 
 
@@ -81,9 +81,9 @@ def next_round(request, session_id):
                 session.save_json_data({COLLECTION_KEY: collection_slug})
 
     # Get next round for given session
-    actions = serialize(session.experiment_rules().next_round(session))
+    actions = serialize_actions(session.experiment_rules().next_round(session))
     
-    if not isinstance(actions,  list):
+    if not isinstance(actions, list):
         if actions.get('redirect'):
             return redirect(actions.get('redirect'))
         actions = [actions]
