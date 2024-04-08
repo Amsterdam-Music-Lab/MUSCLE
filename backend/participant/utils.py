@@ -83,10 +83,8 @@ def get_participant(request):
 
 def get_or_create_participant(request):
     """Get a participant from URL, the session, or create/add a new one"""
-
     # check if query string contains  participant
-    participant_id_url = request.GET.get("participant_id") # can be None
-
+    participant_id_url = request.GET.get("participant_id")  # can be None
     try:
         if participant_id_url:
             # get participant from query string
@@ -110,8 +108,7 @@ def get_or_create_participant(request):
         participant = Participant(country_code=country_code, access_info=access_info, participant_id_url=participant_id_url)
         participant.save()
         set_participant(request, participant)
-
-    return participant
+        return participant
 
 
 def set_participant(request, participant):
