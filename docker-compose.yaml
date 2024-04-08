@@ -103,7 +103,7 @@ services:
           - VITE_STRICT=${FRONTEND_STRICT}
         ports:
           - 3000:3000
-        command: sh -c "yarn scss && yarn start"
+        command: yarn start
 volumes:
     db_data:
     db_backup:
