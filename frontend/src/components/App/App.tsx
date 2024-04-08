@@ -1,4 +1,4 @@
-import {useEffect, React} from "react";
+import { useEffect } from "react";
 import {
     BrowserRouter as Router,
     Switch,
@@ -7,7 +7,7 @@ import {
 } from "react-router-dom";
 import axios from "axios";
 
-import { API_BASE_URL, EXPERIMENT_SLUG, URLS } from "../../config.js";
+import { API_BASE_URL, EXPERIMENT_SLUG, URLS } from "@/config";
 import { URLS as API_URLS } from "../../API.js";
 import useBoundStore from "../../util/stores";
 import Experiment from "../Experiment/Experiment";
@@ -16,7 +16,7 @@ import Loading from "../Loading/Loading";
 import Profile from "../Profile/Profile";
 import Reload from "../Reload/Reload";
 import StoreProfile from "../StoreProfile/StoreProfile";
-import useDisableRightClickOnTouchDevices from "../../hooks/useDisableRightClickOnTouchDevices.js";
+import useDisableRightClickOnTouchDevices from "../../hooks/useDisableRightClickOnTouchDevices";
 
 
 // App is the root component of our application

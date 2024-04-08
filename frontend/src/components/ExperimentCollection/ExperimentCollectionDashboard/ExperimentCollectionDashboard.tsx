@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-import { API_ROOT } from "../../../config";
+import { API_ROOT } from "@/config";
 import ExperimentCollection from "@/types/ExperimentCollection";
 
 

@@ -7,13 +7,13 @@ import {
 } from "react-router-dom";
 
 import useBoundStore from "../../util/stores";
-import { useExperimentCollection } from "../../API";
 import Consent from "../Consent/Consent";
 import DefaultPage from "../Page/DefaultPage";
+import { useExperimentCollection } from "@/API.js";
 import Loading from "../Loading/Loading";
 import ExperimentCollectionAbout from "./ExperimentCollectionAbout/ExperimentCollectionAbout";
 import ExperimentCollectionDashboard from "./ExperimentCollectionDashboard/ExperimentCollectionDashboard";
-import { URLS } from "../../config";
+import { URLS } from "@/config";
 import IExperimentCollection from "@/types/ExperimentCollection";
 import { useBoundStore } from "@/util/stores";
 import { Participant } from "@/types/Participant";
