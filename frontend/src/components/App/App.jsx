@@ -9,7 +9,7 @@ import axios from "axios";
 
 import { API_BASE_URL, EXPERIMENT_SLUG, URLS } from "../../config.js";
 import { URLS as API_URLS } from "../../API.js";
-import useBoundStore from "../../util/stores.js";
+import useBoundStore from "../../util/stores";
 import Experiment from "../Experiment/Experiment";
 import ExperimentCollection from "../ExperimentCollection/ExperimentCollection";
 import Loading from "../Loading/Loading";
@@ -25,6 +25,7 @@ const App = () => {
     const setError = useBoundStore(state => state.setError);
     const participant = useBoundStore((state) => state.participant);
     const setParticipant = useBoundStore((state) => state.setParticipant);
+    const setParticipantLoading = useBoundStore((state) => state.setParticipantLoading);
     const queryParams = window.location.search;
     
     useDisableRightClickOnTouchDevices();
@@ -42,7 +43,9 @@ const App = () => {
             });
         } catch (err) {
             console.error(err);
-            setError('Could not load participant');
+            setError('Could not load participant', err);
+        } finally {
+            setParticipantLoading(false);
         }
     }, [setError, queryParams, setParticipant])
 

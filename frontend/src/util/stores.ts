@@ -19,12 +19,16 @@ const createErrorSlice: StateCreator<ErrorSlice> = (set) => ({
 
 interface ParticipantSlice {
     participant: Participant | null;
+    participantLoading: boolean;
     setParticipant: (participant: Participant) => void;
+    setParticipantLoading: (participantLoading: boolean) => void;
 }
 
 const createParticipantSlice: StateCreator<ParticipantSlice> = (set) => ({
     participant: null,
-    setParticipant: (participant) => set(() => ({ participant }))
+    participantLoading: true,
+    setParticipant: (participant) => set(() => ({ participant })),
+    setParticipantLoading: (participantLoading) => set(() => ({ participantLoading }))
 });
 
 interface SessionSlice {

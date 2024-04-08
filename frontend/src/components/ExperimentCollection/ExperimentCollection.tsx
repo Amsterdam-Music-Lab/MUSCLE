@@ -15,12 +15,15 @@ import ExperimentCollectionAbout from "./ExperimentCollectionAbout/ExperimentCol
 import ExperimentCollectionDashboard from "./ExperimentCollectionDashboard/ExperimentCollectionDashboard";
 import { URLS } from "../../config";
 import IExperimentCollection from "@/types/ExperimentCollection";
+import { useBoundStore } from "@/util/stores";
+import { Participant } from "@/types/Participant";
 
 interface RouteParams {
     slug: string
 }
 
 interface ExperimentCollectionProps extends RouteComponentProps<RouteParams> {
+    participant: Participant
 }
 
 const ExperimentCollection = ({ match }: ExperimentCollectionProps) => {
@@ -72,4 +75,27 @@ const ExperimentCollection = ({ match }: ExperimentCollectionProps) => {
     )
 }
 
-export default ExperimentCollection;
+const WithParticipantExperimentCollection = (props: ExperimentCollectionProps) => {
+    const participant = useBoundStore((state) => state.participant);
+    const participantLoading = useBoundStore((state) => state.participantLoading);
+
+    if (participantLoading) {
+        return (
+            <div className="loader-container">
+                <Loading />
+            </div>
+        );
+    }
+
+    if (!participant) {
+        return (
+            <div className="aha__collection">
+                <p>Participant not found</p>
+            </div>
+        )
+    }
+
+    return <ExperimentCollection {...props} participant={participant} />;
+}
+
+export default WithParticipantExperimentCollection;
