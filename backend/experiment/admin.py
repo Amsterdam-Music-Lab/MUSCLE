@@ -1,8 +1,10 @@
 import csv
+from urllib import request
 from zipfile import ZipFile
 from io import BytesIO
 from django.utils.safestring import mark_safe
 
+from django.conf import settings
 from django.contrib import admin
 from django.db import models
 from django.utils import timezone
@@ -30,13 +32,18 @@ class FeedbackInline(admin.TabularInline):
 
 
 class ExperimentAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
-    list_display = ('image_preview', 'experiment_link', 'rules', 'rounds', 'playlist_count',
+    list_display = ('image_preview', 'experiment_name_link',
+                    'experiment_slug_link', 'rules',
+                    'rounds', 'playlist_count',
                     'session_count', 'active')
     list_filter = ['active']
     search_fields = ['name']
     inline_actions = ['export', 'export_csv']
-    fields = ['name', 'description', 'image', 'slug', 'url', 'hashtag', 'theme_config',  'language', 'active', 'rules',
-              'rounds', 'bonus_points', 'playlists', 'consent', 'questions']
+    fields = ['name', 'description', 'image',
+              'slug', 'url', 'hashtag', 'theme_config', 
+              'language', 'active', 'rules',
+              'rounds', 'bonus_points', 'playlists',
+              'consent', 'questions']
     inlines = [FeedbackInline]
     form = ExperimentForm
 
@@ -147,12 +154,24 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
             img_src = obj.image.file.url
             return mark_safe(f'<img src="{img_src}" style="max-height: 50px;"/>')
         return ""
-    
-    def experiment_link(self, obj):
+
+    def experiment_name_link(self, obj):
         """Generate a link to the experiment's admin change page."""
         url = reverse("admin:experiment_experiment_change", args=[obj.pk])
         name = obj.name or obj.slug or "No name"
         return format_html('<a href="{}">{}</a>', url, name)
+
+    def experiment_slug_link(self, obj):
+        dev_mode = settings.DEBUG is True
+        url = f"http://localhost:3000/{obj.slug}" if dev_mode else f"/{obj.slug}"
+
+        return format_html(
+            f'<a href="{url}" target="_blank" rel="noopener noreferrer" title="Open {obj.slug} experiment in new tab" >{obj.slug}&nbsp;<small>&#8599;</small></a>')
+
+    # Name the columns
+    image_preview.short_description = "Image"
+    experiment_name_link.short_description = "Name"
+    experiment_slug_link.short_description = "Slug"
 
 
 admin.site.register(Experiment, ExperimentAdmin)
@@ -174,12 +193,19 @@ class MarkdownPreviewTextInput(TextInput):
 
 
 class ExperimentCollectionAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
-    list_display = ('slug', 'name', 'description_excerpt', 'dashboard', 'groups')
+    list_display = ('name', 'slug_link', 'description_excerpt', 'dashboard', 'groups')
     fields = ['slug', 'name', 'description', 'first_experiments',
               'random_experiments', 'last_experiments', 'dashboard',
               'about_content']
     form = ExperimentCollectionForm
     inlines = [ExperimentCollectionGroupInline]
+
+    def slug_link(self, obj):
+        dev_mode = settings.DEBUG is True
+        url = f"http://localhost:3000/collection/{obj.slug}" if dev_mode else f"/collection/{obj.slug}"
+
+        return format_html(
+            f'<a href="{url}" target="_blank" rel="noopener noreferrer" title="Open {obj.slug} experiment group in new tab" >{obj.slug}&nbsp;<small>&#8599;</small></a>')
 
     def description_excerpt(self, obj):
 
@@ -190,7 +216,9 @@ class ExperimentCollectionAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
 
     def groups(self, obj):
         groups = ExperimentCollectionGroup.objects.filter(series=obj)
-        return format_html(', '.join([f'<a href="/admin/experiment/ExperimentCollectiongroup/{group.id}/change/">{group.name}</a>' for group in groups]))
+        return format_html(', '.join([f'<a href="/admin/experiment/experimentcollectiongroup/{group.id}/change/">{group.name}</a>' for group in groups]))
+    
+    slug_link.short_description = "Slug"
 
 
 admin.site.register(ExperimentCollection, ExperimentCollectionAdmin)

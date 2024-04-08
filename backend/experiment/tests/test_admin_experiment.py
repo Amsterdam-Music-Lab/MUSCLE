@@ -168,7 +168,7 @@ class TestExperimentCollectionAdmin(TestCase):
     def test_experiment_series_admin_list_display(self):
         self.assertEqual(
             ExperimentCollectionAdmin.list_display,
-            ('slug', 'name', 'description_excerpt', 'dashboard', 'groups')
+            ('name', 'slug_link', 'description_excerpt', 'dashboard', 'groups')
         )
 
     def test_experiment_series_admin_description_excerpt(self):

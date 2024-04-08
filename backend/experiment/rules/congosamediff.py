@@ -1,4 +1,6 @@
 
+import random
+import re
 from django.utils.translation import gettext_lazy as _
 from experiment.actions.final import Final
 from experiment.models import Experiment
@@ -25,6 +27,9 @@ class CongoSameDiff(Base):
         Consent and Playlist are often desired, but optional
         '''
 
+        # Do a validity check on the experiment
+        self.validate(experiment)
+
         # 1. Playlist
         playlist = Playlist(experiment.playlists.all())
 
@@ -43,8 +48,8 @@ class CongoSameDiff(Base):
 
         next_round_number = session.get_current_round()
 
-        # total number of trials
-        total_trials_count = session.playlist.section_set.count() + 1  # +1 for the post-practice round
+        # practice trials + post-practice question + non-practice trials
+        total_trials_count = self.get_total_trials_count(session)
 
         practice_done = session.result_set.filter(
             question_key='practice_done',
@@ -55,15 +60,13 @@ class CongoSameDiff(Base):
         if next_round_number > total_trials_count:
             return self.get_final_round(session)
 
-        # count of practice rounds (excluding the post-practice round)
-        practice_trials_count = session.playlist.section_set.filter(
-            tag__contains='practice'
-        ).count()
-
         # load the practice trials
         practice_trials_subset = session.playlist.section_set.filter(
             tag__contains='practice'
         )
+
+        # count of practice rounds (excluding the post-practice round)
+        practice_trials_count = practice_trials_subset.count()
 
         # if the user hasn't completed the practice trials
         # return the next practice trial
@@ -83,7 +86,7 @@ class CongoSameDiff(Base):
             return self.get_next_trial(
                 session,
                 practice_trials_subset,
-                1,
+                1,  # first practice trial
                 True
             )
 
@@ -94,17 +97,26 @@ class CongoSameDiff(Base):
         if next_round_number == practice_trials_count + 1 and not practice_done:
             return self.get_practice_done_view(session)
 
-        # load the non-practice trials
-        real_trials_subset = session.playlist.section_set.exclude(
+        # group number of the trial to be played
+        group_number = next_round_number - practice_trials_count - 1
+
+        # load the non-practice trial variants for the group number
+        real_trial_variants = session.playlist.section_set.exclude(
             tag__contains='practice'
+        ).filter(
+            group=group_number
         )
+
+        # pick a variant from the variants randomly (#919)
+        variants_count = real_trial_variants.count()
+        random_variants_index = random.randint(0, variants_count - 1)
 
         # if the next_round_number is greater than the no. of practice trials,
         # return a non-practice trial
         return self.get_next_trial(
             session,
-            real_trials_subset,
-            next_round_number - practice_trials_count - 1,
+            real_trial_variants,
+            random_variants_index + 1,
             False
         )
 
@@ -141,16 +153,17 @@ class CongoSameDiff(Base):
             trial_index: int,
             is_practice=False
     ):
-        # define a key, by which responses to this trial can be found in the database
-        key = 'samediff_trial'
         # get a section based on the practice tag and the trial_index
         section = subset.all()[trial_index - 1]
         subset_count = subset.count()
 
         practice_label = 'PRACTICE' if is_practice else 'NORMAL'
-        section_name = section.song.name if section.song else 'No name'
-        section_tag = section.tag if section.tag else 'No tag'
-        section_group = section.group if section.group else 'No group'
+        section_name = section.song.name if section.song else 'no_name'
+        section_tag = section.tag if section.tag else 'no_tag'
+        section_group = section.group if section.group else 'no_group'
+
+        # define a key, by which responses to this trial can be found in the database
+        key = f'samediff_trial_{section_group}_{section_name}'
 
         question = ChoiceQuestion(
             explainer=f'{practice_label} ({trial_index}/{subset_count}) | {section_name} | {section_tag} | {section_group}',
@@ -192,3 +205,42 @@ class CongoSameDiff(Base):
             session=session,
             final_text=_('Thank you for participating!'),
         )
+
+    def get_total_trials_count(self, session: Session):
+        practice_trials_subset = session.playlist.section_set.filter(
+            tag__contains='practice'
+        )
+        practice_trials_count = practice_trials_subset.count()
+        total_exp_variants = session.playlist.section_set.exclude(
+            tag__contains='practice'
+        )
+        total_unique_exp_trials_count = total_exp_variants.values('group').distinct().count()
+        total_trials_count = practice_trials_count + total_unique_exp_trials_count + 1
+        return total_trials_count
+
+    def validate(self, experiment: Experiment):
+
+        errors = []
+
+        # All sections need to have a group value
+        sections = experiment.playlists.first().section_set.all()
+        for section in sections:
+            file_name = section.song.name if section.song else 'No name'
+            # every section.group should consist of a number
+            regex_pattern = r'^\d+$'
+            if not section.group or not re.search(regex_pattern, section.group):
+                errors.append(f'Section {file_name} should have a group value containing only digits')
+            # the section song name should not be empty
+            if not section.song.name:
+                errors.append(f'Section {file_name} should have a name that will be used for the result key')
+
+        # It also needs at least one section with the tag 'practice'
+        if not sections.filter(tag__contains='practice').exists():
+            errors.append('At least one section should have the tag "practice"')
+
+        # It should also contain at least one section without the tag 'practice'
+        if not sections.exclude(tag__contains='practice').exists():
+            errors.append('At least one section should not have the tag "practice"')
+
+        if errors:
+            raise ValueError('The experiment playlist is not valid: \n- ' + '\n- '.join(errors))
