@@ -1,25 +1,25 @@
-import VisualMatchingPairs from '../components/MatchingPairs/MatchingPairs';
+import VisualMatchingPairs from "../components/MatchingPairs/MatchingPairs";
 
-import Cat01 from './assets/images/cat-01.webp';
-import Cat02 from './assets/images/cat-02.webp';
-import Cat03 from './assets/images/cat-03.webp';
+import Cat01 from "./assets/images/cat-01.webp";
+import Cat02 from "./assets/images/cat-02.webp";
+import Cat03 from "./assets/images/cat-03.webp";
 
 export default {
-    title: 'VisualMatchingPairs',
+    title: "VisualMatchingPairs",
     component: VisualMatchingPairs,
     parameters: {
-        layout: 'fullscreen',
+        layout: "fullscreen",
         docs: {
             description: {
-                component: 'This story shows the component with the default props.',
-                story: 'This story shows the component with the default props.',
+                component: "This story shows the component with the default props.",
+                story: "This story shows the component with the default props.",
             },
-        }
+        },
     },
 };
 
 const getDefaultArgs = (overrides = {}) => ({
-    playSection: () => { },
+    playSection: () => {},
     sections: [
         {
             id: 1,
@@ -71,12 +71,18 @@ const getDefaultArgs = (overrides = {}) => ({
         },
     ],
     playerIndex: 0,
-    stopAudio: () => { },
-    submitResult: (args) => { alert('submitResult: ' + JSON.stringify(args, null, 2)); },
-    finishedPlaying: () => { console.log('finished playing') },
-    setPlayerIndex: (i) => { console.log('set player index', i) },
+    stopAudio: () => {},
+    submitResult: (args) => {
+        alert("submitResult: " + JSON.stringify(args, null, 2));
+    },
+    finishedPlaying: () => {
+        console.log("finished playing");
+    },
+    setPlayerIndex: (i) => {
+        console.log("set player index", i);
+    },
     ...overrides,
-})
+});
 
 export const Default = {
     args: {
@@ -84,7 +90,10 @@ export const Default = {
     },
     decorators: [
         (Story) => (
-            <div id="root" style={{ width: '100%', height: '100%', backgroundColor: '#ddd', padding: '1rem' }}>
+            <div
+                id="root"
+                style={{ width: "100%", height: "100%", backgroundColor: "#ddd", padding: "1rem" }}
+            >
                 <Story />
             </div>
         ),
@@ -92,7 +101,7 @@ export const Default = {
     parameters: {
         docs: {
             description: {
-                component: 'This story shows the component with the default props.',
+                component: "This story shows the component with the default props.",
             },
         },
     },
@@ -203,15 +212,18 @@ export const MoreCards = {
     },
     decorators: [
         (Story) => (
-            <div id="root" style={{ width: '100%', height: '100%', backgroundColor: '#ddd', padding:'1rem' }}>
+            <div
+                id="root"
+                style={{ width: "100%", height: "100%", backgroundColor: "#ddd", padding: "1rem" }}
+            >
                 <Story />
             </div>
-        ),  
+        ),
     ],
     parameters: {
         docs: {
             description: {
-                component: 'This story shows the component with more cards.',
+                component: "This story shows the component with more cards.",
             },
         },
     },

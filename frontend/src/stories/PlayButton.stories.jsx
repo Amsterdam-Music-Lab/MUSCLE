@@ -1,21 +1,20 @@
-
-import PlayButton from '../components/PlayButton/PlayButton';
+import PlayButton from "../components/PlayButton/PlayButton";
 
 export default {
-  title: 'PlayButton',
-  component: PlayButton,
-  parameters: {
-    layout: 'fullscreen',
-  },
+    title: "PlayButton",
+    component: PlayButton,
+    parameters: {
+        layout: "fullscreen",
+    },
 };
 
 export const Default = {
-    args: {
-
-    },
+    args: {},
     decorators: [
         (Story) => (
-            <div style={{ width: '100%', height: '100%', backgroundColor: '#ddd', padding: '1rem' }}>
+            <div
+                style={{ width: "100%", height: "100%", backgroundColor: "#ddd", padding: "1rem" }}
+            >
                 <Story />
             </div>
         ),
@@ -28,7 +27,9 @@ export const Playing = {
     },
     decorators: [
         (Story) => (
-            <div style={{ width: '100%', height: '100%', backgroundColor: '#ddd', padding: '1rem' }}>
+            <div
+                style={{ width: "100%", height: "100%", backgroundColor: "#ddd", padding: "1rem" }}
+            >
                 <Story />
             </div>
         ),
@@ -38,11 +39,13 @@ export const Playing = {
 export const BooleanColorScheme = {
     args: {
         isPlaying: false,
-        className: 'boolean',
+        className: "boolean",
     },
     decorators: [
         (Story) => (
-            <div style={{ width: '100%', height: '100%', backgroundColor: '#ddd', padding: '1rem' }}>
+            <div
+                style={{ width: "100%", height: "100%", backgroundColor: "#ddd", padding: "1rem" }}
+            >
                 <Story />
             </div>
         ),
@@ -52,11 +55,13 @@ export const BooleanColorScheme = {
 export const BooleanNegativeFirstColorScheme = {
     args: {
         isPlaying: false,
-        className: 'boolean-negative-first',
+        className: "boolean-negative-first",
     },
     decorators: [
         (Story) => (
-            <div style={{ width: '100%', height: '100%', backgroundColor: '#ddd', padding: '1rem' }}>
+            <div
+                style={{ width: "100%", height: "100%", backgroundColor: "#ddd", padding: "1rem" }}
+            >
                 <Story />
             </div>
         ),
@@ -66,11 +71,13 @@ export const BooleanNegativeFirstColorScheme = {
 export const NeutralColorScheme = {
     args: {
         isPlaying: false,
-        className: 'neutral',
+        className: "neutral",
     },
     decorators: [
         (Story) => (
-            <div style={{ width: '100%', height: '100%', backgroundColor: '#ddd', padding: '1rem' }}>
+            <div
+                style={{ width: "100%", height: "100%", backgroundColor: "#ddd", padding: "1rem" }}
+            >
                 <Story />
             </div>
         ),
@@ -80,11 +87,13 @@ export const NeutralColorScheme = {
 export const NeutralInvertedColorScheme = {
     args: {
         isPlaying: false,
-        className: 'neutral-inverted',
+        className: "neutral-inverted",
     },
     decorators: [
         (Story) => (
-            <div style={{ width: '100%', height: '100%', backgroundColor: '#ddd', padding: '1rem' }}>
+            <div
+                style={{ width: "100%", height: "100%", backgroundColor: "#ddd", padding: "1rem" }}
+            >
                 <Story />
             </div>
         ),

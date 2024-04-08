@@ -1,10 +1,10 @@
-import Trial from '../components/Trial/Trial';
+import Trial from "../components/Trial/Trial";
 
 export default {
-    title: 'Trial',
+    title: "Trial",
     component: Trial,
     parameters: {
-        layout: 'fullscreen',
+        layout: "fullscreen",
     },
 };
 
@@ -47,48 +47,48 @@ const getDefaultArgs = (overrides = {}) => ({
     feedback_form: {
         form: [
             {
-                "key": "know_song",
-                "view": "BUTTON_ARRAY",
-                "explainer": "",
-                "question": "1. Do you know this song?",
-                "result_id": 17242,
-                "is_skippable": false,
-                "submits": false,
-                "style": "boolean",
-                "choices": {
-                    "yes": "fa-check",
-                    "unsure": "fa-question",
-                    "no": "fa-xmark"
+                key: "know_song",
+                view: "BUTTON_ARRAY",
+                explainer: "",
+                question: "1. Do you know this song?",
+                result_id: 17242,
+                is_skippable: false,
+                submits: false,
+                style: "boolean",
+                choices: {
+                    yes: "fa-check",
+                    unsure: "fa-question",
+                    no: "fa-xmark",
                 },
-                "min_values": 1
+                min_values: 1,
             },
             {
-                "key": "like_song",
-                "view": "ICON_RANGE",
-                "explainer": "",
-                "question": "2. How much do you like this song?",
-                "result_id": 17241,
-                "is_skippable": false,
-                "submits": false,
-                "style": "gradient-7",
-                "choices": {
-                    "1": "fa-face-grin-hearts",
-                    "2": "fa-face-grin",
-                    "3": "fa-face-smile",
-                    "4": "fa-face-meh",
-                    "5": "fa-face-frown",
-                    "6": "fa-face-frown-open",
-                    "7": "fa-face-angry"
-                }
-            }
+                key: "like_song",
+                view: "ICON_RANGE",
+                explainer: "",
+                question: "2. How much do you like this song?",
+                result_id: 17241,
+                is_skippable: false,
+                submits: false,
+                style: "gradient-7",
+                choices: {
+                    1: "fa-face-grin-hearts",
+                    2: "fa-face-grin",
+                    3: "fa-face-smile",
+                    4: "fa-face-meh",
+                    5: "fa-face-frown",
+                    6: "fa-face-frown-open",
+                    7: "fa-face-angry",
+                },
+            },
         ],
         submit_label: "Submit",
         skip_label: "Skip",
         is_skippable: true,
         is_profile: true,
     },
-    onNext: () => { },
-    onResult: () => { },
+    onNext: () => {},
+    onResult: () => {},
     ...overrides,
 });
 
@@ -96,7 +96,9 @@ export const Default = {
     args: getDefaultArgs(),
     decorators: [
         (Story) => (
-            <div style={{ width: '100%', height: '100%', backgroundColor: '#fff', padding: '1rem' }}>
+            <div
+                style={{ width: "100%", height: "100%", backgroundColor: "#fff", padding: "1rem" }}
+            >
                 <Story />
             </div>
         ),
@@ -115,13 +117,14 @@ export const BooleanColorScheme = {
     }),
     decorators: [
         (Story) => (
-            <div style={{ width: '100%', height: '100%', backgroundColor: '#fff', padding: '1rem' }}
+            <div
+                style={{ width: "100%", height: "100%", backgroundColor: "#fff", padding: "1rem" }}
             >
                 <Story />
             </div>
         ),
     ],
-}
+};
 
 export const BooleanNegativeFirstColorScheme = {
     args: getDefaultArgs({
@@ -135,13 +138,14 @@ export const BooleanNegativeFirstColorScheme = {
     }),
     decorators: [
         (Story) => (
-            <div style={{ width: '100%', height: '100%', backgroundColor: '#fff', padding: '1rem' }}
+            <div
+                style={{ width: "100%", height: "100%", backgroundColor: "#fff", padding: "1rem" }}
             >
                 <Story />
             </div>
         ),
     ],
-}
+};
 
 export const NeutralColorScheme = {
     args: getDefaultArgs({
@@ -155,13 +159,14 @@ export const NeutralColorScheme = {
     }),
     decorators: [
         (Story) => (
-            <div style={{ width: '100%', height: '100%', backgroundColor: '#fff', padding: '1rem' }}
+            <div
+                style={{ width: "100%", height: "100%", backgroundColor: "#fff", padding: "1rem" }}
             >
                 <Story />
             </div>
         ),
     ],
-}
+};
 
 export const NeutralInvertedColorScheme = {
     args: getDefaultArgs({
@@ -175,10 +180,11 @@ export const NeutralInvertedColorScheme = {
     }),
     decorators: [
         (Story) => (
-            <div style={{ width: '100%', height: '100%', backgroundColor: '#fff', padding: '1rem' }}
+            <div
+                style={{ width: "100%", height: "100%", backgroundColor: "#fff", padding: "1rem" }}
             >
                 <Story />
             </div>
         ),
     ],
-}
+};
