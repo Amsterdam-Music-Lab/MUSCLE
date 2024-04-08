@@ -16,7 +16,6 @@ export const BUTTON = "BUTTON";
 export const MULTIPLAYER = "MULTIPLAYER";
 export const IMAGE = "IMAGE";
 export const MATCHINGPAIRS = "MATCHINGPAIRS";
-export const VISUALMATCHINGPAIRS = "VISUALMATCHINGPAIRS";
 export const PRELOAD = "PRELOAD";
 
 const Playback = ({
@@ -215,7 +214,6 @@ const Playback = ({
                     />
                 );
             case MATCHINGPAIRS:
-            case VISUALMATCHINGPAIRS:
                 return (
                     <MatchingPairs
                         {...attrs}
