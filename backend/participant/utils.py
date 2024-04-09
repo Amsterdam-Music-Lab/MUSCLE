@@ -108,7 +108,7 @@ def get_or_create_participant(request):
         participant = Participant(country_code=country_code, access_info=access_info, participant_id_url=participant_id_url)
         participant.save()
         set_participant(request, participant)
-        return participant
+    return participant
 
 
 def set_participant(request, participant):
