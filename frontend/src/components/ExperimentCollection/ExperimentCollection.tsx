@@ -21,6 +21,7 @@ interface ExperimentCollectionProps extends RouteComponentProps<RouteParams> {
 const ExperimentCollection = ({ match }: ExperimentCollectionProps) => {
     const [experimentCollection, loadingExperimentCollection] = useExperimentCollection(match.params.slug) as [IExperimentCollection, boolean];
     const nextExperiment = experimentCollection?.next_experiment;
+    const displayDashboard = experimentCollection?.dashboard.length;
 
     if (loadingExperimentCollection) {
         return (
@@ -30,7 +31,7 @@ const ExperimentCollection = ({ match }: ExperimentCollectionProps) => {
         );
     }
 
-    if (nextExperiment) {
+    if (!displayDashboard && nextExperiment) {
         return <Redirect to={"/" + nextExperiment.slug} />;
     }
 

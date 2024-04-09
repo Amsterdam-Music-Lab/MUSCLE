@@ -11,7 +11,7 @@ interface ExperimentCollectionDashboardProps {
 
 export const ExperimentCollectionDashboard: React.FC<ExperimentCollectionDashboardProps> = ({ experimentCollection }) => {
 
-    const dashboard = experimentCollection?.dashboard || [];
+    const dashboard = experimentCollection?.dashboard;
 
     // TODO: get next experiment and about link from experimentCollection
     const nextExperiment = experimentCollection.next_experiment; // TODO: get next_experiment from experimentCollection
