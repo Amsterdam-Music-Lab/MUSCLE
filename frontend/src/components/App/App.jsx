@@ -12,6 +12,7 @@ import { URLS as API_URLS } from "../../API.js";
 import useBoundStore from "../../util/stores.js";
 import Experiment from "../Experiment/Experiment";
 import ExperimentCollection from "../ExperimentCollection/ExperimentCollection";
+import Loading from "../Loading/Loading";
 import Profile from "../Profile/Profile";
 import Reload from "../Reload/Reload";
 import StoreProfile from "../StoreProfile/StoreProfile";
@@ -22,6 +23,7 @@ import useDisableRightClickOnTouchDevices from "../../hooks/useDisableRightClick
 const App = () => {
     const error = useBoundStore(state => state.error);
     const setError = useBoundStore(state => state.setError);
+    const participant = useBoundStore((state) => state.participant);
     const setParticipant = useBoundStore((state) => state.setParticipant);
     const queryParams = window.location.search;
     
@@ -50,6 +52,11 @@ const App = () => {
 
     return (
         <Router className="aha__app">
+            { !participant? (
+            <div className="loader-container">
+                <Loading />
+            </div>
+            ) : (
             <Switch>
                 {/* Request reload for given participant */}
                 <Route path={URLS.reloadParticipant}>
@@ -85,6 +92,7 @@ const App = () => {
 
 
             </Switch>
+            )}
         </Router>
     );
 };

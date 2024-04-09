@@ -1,8 +1,8 @@
 import {
-    BrowserRouter as Router,
     Route,
     Redirect,
-    RouteComponentProps
+    RouteComponentProps,
+    Switch
 } from "react-router-dom";
 import { useExperimentCollection } from "../../API";
 import Loading from "../Loading/Loading";
@@ -36,10 +36,10 @@ const ExperimentCollection = ({ match }: ExperimentCollectionProps) => {
 
     return (
         <div className="aha__collection">
-            <Router>
+            <Switch>
                 <Route path={URLS.experimentCollectionAbout} component={() => <ExperimentCollectionAbout content={experimentCollection?.about_content} slug={experimentCollection.slug} />} />
                 <Route path={URLS.experimentCollection} exact component={() => <ExperimentCollectionDashboard experimentCollection={experimentCollection} />} />
-            </Router>
+            </Switch>
         </div>
     )
 }
