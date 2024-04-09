@@ -71,7 +71,7 @@ class TestAdminExperiment(TestCase):
         experiment = Experiment.objects.create(name="Test Experiment")
         site = AdminSite()
         admin = ExperimentAdmin(experiment, site)
-        link = admin.experiment_link(experiment)
+        link = admin.experiment_name_link(experiment)
         expected_url = reverse(
             "admin:experiment_experiment_change", args=[experiment.pk])
         expected_name = "Test Experiment"
