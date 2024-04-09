@@ -1,39 +1,40 @@
-import useBoundStore from '@/util/stores';
-import MatchingPairs, { SCORE_FEEDBACK_DISPLAY } from '../components/MatchingPairs/MatchingPairs';
+import useBoundStore from "@/util/stores";
+import MatchingPairs, { SCORE_FEEDBACK_DISPLAY } from "../components/MatchingPairs/MatchingPairs";
 
-import audio from './assets/audio.wav';
-
+import audio from "./assets/audio.wav";
 
 const StoreDecorator = (Story) => {
-    const setSession = useBoundStore(state => state.setSession);
-    const setParticipant = useBoundStore(state => state.setParticipant);
+    const setSession = useBoundStore((state) => state.setSession);
+    const setParticipant = useBoundStore((state) => state.setParticipant);
     setSession({ id: 1 });
-    setParticipant({ id: 1, csrf_token: '123' });
+    setParticipant({ id: 1, csrf_token: "123" });
 
     return (
-        <div id="root" style={{ width: '100%', height: '100%', backgroundColor: '#ddd', padding: '1rem' }}>
+        <div
+            id="root"
+            style={{ width: "100%", height: "100%", backgroundColor: "#ddd", padding: "1rem" }}
+        >
             <Story />
         </div>
-    )
-}
-
+    );
+};
 
 export default {
-    title: 'MatchingPairs',
+    title: "MatchingPairs",
     component: MatchingPairs,
     parameters: {
-        layout: 'fullscreen',
+        layout: "fullscreen",
         docs: {
             description: {
-                component: 'This story shows the component with the default props.',
-                story: 'This story shows the component with the default props.',
+                component: "This story shows the component with the default props.",
+                story: "This story shows the component with the default props.",
             },
-        }
+        },
     },
 };
 
 const getDefaultArgs = (overrides = {}) => ({
-    playSection: () => { },
+    playSection: () => {},
     sections: [
         {
             id: 1,
@@ -93,21 +94,21 @@ const getDefaultArgs = (overrides = {}) => ({
         },
     ],
     playerIndex: 0,
-    stopAudio: () => { },
-    submitResult: () => { },
-    finishedPlaying: () => { },
+    stopAudio: () => {},
+    submitResult: () => {},
+    finishedPlaying: () => {},
     ...overrides,
-})
+});
 
 export const Default = {
     args: {
         ...getDefaultArgs(),
     },
-    decorators: [ StoreDecorator ],
+    decorators: [StoreDecorator],
     parameters: {
         docs: {
             description: {
-                component: 'This story shows the component with the default props.',
+                component: "This story shows the component with the default props.",
             },
         },
     },
@@ -160,11 +161,12 @@ export const WithThreeColumns = {
             },
         ],
     }),
-    decorators: [ StoreDecorator ],
+    decorators: [StoreDecorator],
     parameters: {
         docs: {
             description: {
-                component: 'This story shows the component with three columns. The component automatically adjusts the number of columns based on the number of sections. Six or less sections will result in three columns, more than six sections will result in four columns.',
+                component:
+                    "This story shows the component with three columns. The component automatically adjusts the number of columns based on the number of sections. Six or less sections will result in three columns, more than six sections will result in four columns.",
             },
         },
     },
@@ -173,13 +175,13 @@ export const WithThreeColumns = {
 export const WithSmallBottomRightScoreFeedback = {
     args: {
         ...getDefaultArgs(),
-        scoreFeedbackDisplay: SCORE_FEEDBACK_DISPLAY.SMALL_BOTTOM_RIGHT
+        scoreFeedbackDisplay: SCORE_FEEDBACK_DISPLAY.SMALL_BOTTOM_RIGHT,
     },
-    decorators: [ StoreDecorator ],
+    decorators: [StoreDecorator],
     parameters: {
         docs: {
             description: {
-                component: 'This story shows the component with the default props.',
+                component: "This story shows the component with the default props.",
             },
         },
     },
@@ -190,11 +192,11 @@ export const WithShowAnimation = {
         ...getDefaultArgs(),
         showAnimation: true,
     },
-    decorators: [ StoreDecorator ],
+    decorators: [StoreDecorator],
     parameters: {
         docs: {
             description: {
-                component: 'This story shows the component with the default props.',
+                component: "This story shows the component with the default props.",
             },
         },
     },

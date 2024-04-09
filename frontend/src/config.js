@@ -30,6 +30,7 @@ export const URLS = {
     profile: "/profile",
     storeProfile: "/profile/store",
     experiment: "/:slug",
+    experimentCollectionAbout: "/collection/:slug/about",
     experimentCollection: "/collection/:slug",
     reloadParticipant: "/participant/reload/:id/:hash",
     AMLHome:

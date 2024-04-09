@@ -1,6 +1,6 @@
 from django.test import TestCase
 
-from experiment.models import Experiment, ExperimentSeries
+from experiment.models import Experiment, ExperimentCollection
 from experiment.actions.utils import COLLECTION_KEY
 from participant.models import Participant
 from section.models import Playlist
@@ -57,7 +57,7 @@ class SessionViewsTest(TestCase):
 
     def test_next_round_with_collection(self):
         slug = 'mycollection'
-        collection = ExperimentSeries.objects.create(slug=slug)
+        collection = ExperimentCollection.objects.create(slug=slug)
         request_session = self.client.session
         request_session[COLLECTION_KEY] = slug
         request_session.save()

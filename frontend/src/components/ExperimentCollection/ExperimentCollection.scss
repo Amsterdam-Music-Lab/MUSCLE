@@ -36,13 +36,15 @@
         }
 
         .intro {
+            padding: 30px 15px 40px;
+
             @media (min-width: 720px) {
                 width: 50%;
                 max-width: 650px;
             }
 
-            @media (max-width: 720px) {
-                padding: 30px 15px 40px;
+            @media (min-width: 1024px) {
+                padding: 0;
             }
 
             .actions {
