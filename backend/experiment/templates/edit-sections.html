@@ -9,6 +9,7 @@
     }
     p.form-filename {
         max-width: 200px;
+        word-wrap: break-word;
     }
     .song-padding {
         height: 2rem;
@@ -52,7 +53,7 @@
                 <p>{{section.code}}</p>
             </td>
             <td>
-                <p class="form-filename">{{section.filename}}</p>
+                <p class="form-filename" title="{{section.filename}}">{{section.filename}}</p>
             </td>
             <td>
                 <input type="text" name="{{section.id}}_artist" maxlength="128" id="{{section.id}}_artist"
