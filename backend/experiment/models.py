@@ -9,7 +9,7 @@ from .questions import QUESTIONS_CHOICES, get_default_question_keys
 from theme.models import ThemeConfig
 from image.models import Image
 
-from .validators import consent_file_validator, experiment_slug_validator
+from .validators import markdown_html_validator, experiment_slug_validator
 
 language_choices = [(key, ISO_LANGUAGES[key]) for key in ISO_LANGUAGES.keys()]
 language_choices[0] = ('', 'Unset')
@@ -20,6 +20,8 @@ class ExperimentCollection(models.Model):
     name = models.CharField(max_length=64, default='')
     description = models.TextField(blank=True, default='')
     slug = models.SlugField(max_length=64, default='')
+    theme_config = models.ForeignKey(
+        "theme.ThemeConfig", blank=True, null=True, on_delete=models.SET_NULL)
     # first experiments in a test series, in fixed order
     first_experiments = models.JSONField(blank=True, null=True, default=dict)
     random_experiments = models.JSONField(blank=True, null=True, default=dict)
@@ -40,7 +42,7 @@ class ExperimentCollection(models.Model):
 
 
 def consent_upload_path(instance, filename):
-    """Generate path to save audio based on playlist.name"""
+    """Generate path to save consent file based on experiment.slug"""
     folder_name = instance.slug
     return 'consent/{0}/{1}'.format(folder_name, filename)
 
@@ -115,7 +117,7 @@ class Experiment(models.Model):
     consent = models.FileField(upload_to=consent_upload_path,
                                blank=True,
                                default='',
-                               validators=[consent_file_validator()])
+                               validators=[markdown_html_validator()])
 
     class Meta:
         ordering = ['name']

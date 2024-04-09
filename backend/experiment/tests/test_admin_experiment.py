@@ -67,6 +67,18 @@ class TestAdminExperiment(TestCase):
         participant_fields = [key for key in participant]
         self.assertEqual(len(participant_fields), EXPECTED_PARTICIPANT_FIELDS)
 
+    def test_experiment_link(self):
+        experiment = Experiment.objects.create(name="Test Experiment")
+        site = AdminSite()
+        admin = ExperimentAdmin(experiment, site)
+        link = admin.experiment_name_link(experiment)
+        expected_url = reverse(
+            "admin:experiment_experiment_change", args=[experiment.pk])
+        expected_name = "Test Experiment"
+        expected_link = format_html(
+            '<a href="{}">{}</a>', expected_url, expected_name)
+        self.assertEqual(link, expected_link)
+
 
 class TestAdminExperimentExport(TestCase):
 

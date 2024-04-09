@@ -1,4 +1,6 @@
 from django.test import TestCase
+
+from image.models import Image
 from theme.models import ThemeConfig
 from experiment.models import Experiment, ExperimentCollection
 from participant.models import Participant
@@ -9,13 +11,19 @@ from result.models import Result
 class ExperimentModelTest(TestCase):
     @classmethod
     def setUpTestData(cls):
+        logo_image = Image.objects.create(
+            file='logoimage.svg'
+        )
+        background_image = Image.objects.create(
+            file='backgroundimage.tif'
+        )
         ThemeConfig.objects.create(
             name='Default',
             description='Default theme configuration',
             heading_font_url='https://example.com/heading_font',
             body_font_url='https://example.com/body_font',
-            logo_url='https://example.com/logo',
-            background_url='https://example.com/background',
+            logo_image=logo_image,
+            background_image=background_image,
         )
         Experiment.objects.create(
             name='Test Experiment',
