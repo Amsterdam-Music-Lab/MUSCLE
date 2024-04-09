@@ -1,11 +1,10 @@
-
-import Info from '../components/Info/Info';
+import Info from "../components/Info/Info";
 
 export default {
-    title: 'Info',
+    title: "Info",
     component: Info,
     parameters: {
-        layout: 'fullscreen',
+        layout: "fullscreen",
     },
 };
 
@@ -18,7 +17,9 @@ export const Default = {
     },
     decorators: [
         (Story) => (
-            <div style={{ width: '100%', height: '100%', backgroundColor: '#666', padding: '1rem' }}>
+            <div
+                style={{ width: "100%", height: "100%", backgroundColor: "#666", padding: "1rem" }}
+            >
                 <Story />
             </div>
         ),
@@ -34,7 +35,9 @@ export const WithButton = {
     },
     decorators: [
         (Story) => (
-            <div style={{ width: '100%', height: '100%', backgroundColor: '#666', padding: '1rem' }}>
+            <div
+                style={{ width: "100%", height: "100%", backgroundColor: "#666", padding: "1rem" }}
+            >
                 <Story />
             </div>
         ),
