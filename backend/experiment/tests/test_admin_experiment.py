@@ -6,8 +6,8 @@ from django.forms.models import model_to_dict
 from django.contrib.admin.sites import AdminSite
 from django.urls import reverse
 from django.utils.html import format_html
-from experiment.admin import ExperimentAdmin, ExperimentSeriesAdmin, ExperimentSeriesGroupAdmin
-from experiment.models import Experiment, ExperimentSeries, ExperimentSeriesGroup, GroupedExperiment
+from experiment.admin import ExperimentAdmin, ExperimentCollectionAdmin, ExperimentCollectionGroupAdmin
+from experiment.models import Experiment, ExperimentCollection, ExperimentCollectionGroup, GroupedExperiment
 from participant.models import Participant
 from result.models import Result
 from session.models import Session
@@ -153,21 +153,21 @@ class TestAdminExperimentExport(TestCase):
             self.assertEqual(row['question_key'], 'test_question_' + str(i))
 
 
-class TestExperimentSeriesAdmin(TestCase):
+class TestExperimentCollectionAdmin(TestCase):
     
     @classmethod
     def setUpTestData(self):
-        self.experiment_series = ExperimentSeries.objects.create(
+        self.experiment_series = ExperimentCollection.objects.create(
             name='test',
             description='test description very long like the tea of oolong and the song of the bird in the morning',
             slug='TEST',
         )
         self.site = AdminSite()
-        self.admin = ExperimentSeriesAdmin(ExperimentSeries, self.site)
+        self.admin = ExperimentCollectionAdmin(ExperimentCollection, self.site)
 
     def test_experiment_series_admin_list_display(self):
         self.assertEqual(
-            ExperimentSeriesAdmin.list_display,
+            ExperimentCollectionAdmin.list_display,
             ('name', 'slug_link', 'description_excerpt', 'dashboard', 'groups')
         )
 
@@ -177,36 +177,42 @@ class TestExperimentSeriesAdmin(TestCase):
             'test description very long like the tea of oolong ...'
         )
         self.assertEqual(
-            self.admin.description_excerpt(ExperimentSeries.objects.create(description='')),
+            self.admin.description_excerpt(
+                ExperimentCollection.objects.create(description='')),
             ''
         )
 
 
-class ExperimentSeriesGroupAdminTest(TestCase):
+class ExperimentCollectionGroupAdminTest(TestCase):
     @classmethod
     def setUpTestData(self):
         self.factory = RequestFactory()
         self.site = AdminSite()
-        self.admin = ExperimentSeriesGroupAdmin(ExperimentSeriesGroup, self.site)
+        self.admin = ExperimentCollectionGroupAdmin(
+            ExperimentCollectionGroup, self.site)
 
     def test_related_series_with_series(self):
-        series = ExperimentSeries.objects.create(name='Test Series')
-        group = ExperimentSeriesGroup.objects.create(name='Test Group', order=1, randomize=False, series=series, dashboard=True)
+        series = ExperimentCollection.objects.create(name='Test Series')
+        group = ExperimentCollectionGroup.objects.create(
+            name='Test Group', order=1, randomize=False, series=series, dashboard=True)
         request = self.factory.get('/')
         related_series = self.admin.related_series(group)
-        expected_url = reverse("admin:experiment_experimentseries_change", args=[series.pk])
+        expected_url = reverse(
+            "admin:experiment_experimentcollection_change", args=[series.pk])
         expected_related_series = format_html('<a href="{}">{}</a>', expected_url, series.name)
         self.assertEqual(related_series, expected_related_series)
 
     def test_experiments_with_no_experiments(self):
-        series = ExperimentSeries.objects.create(name='Test Series')
-        group = ExperimentSeriesGroup.objects.create(name='Test Group', order=1, randomize=False, dashboard=True, series=series)
+        series = ExperimentCollection.objects.create(name='Test Series')
+        group = ExperimentCollectionGroup.objects.create(
+            name='Test Group', order=1, randomize=False, dashboard=True, series=series)
         experiments = self.admin.experiments(group)
         self.assertEqual(experiments, "No experiments")
 
     def test_experiments_with_experiments(self):
-        series = ExperimentSeries.objects.create(name='Test Series')
-        group = ExperimentSeriesGroup.objects.create(name='Test Group', order=1, randomize=False, dashboard=True, series=series)
+        series = ExperimentCollection.objects.create(name='Test Series')
+        group = ExperimentCollectionGroup.objects.create(
+            name='Test Group', order=1, randomize=False, dashboard=True, series=series)
         experiment1 = Experiment.objects.create(name='Experiment 1', slug='experiment-1')
         experiment2 = Experiment.objects.create(name='Experiment 2', slug='experiment-2')
         grouped_experiment1 = GroupedExperiment.objects.create(group=group, experiment=experiment1)

@@ -15,7 +15,7 @@ language_choices = [(key, ISO_LANGUAGES[key]) for key in ISO_LANGUAGES.keys()]
 language_choices[0] = ('', 'Unset')
 
 
-class ExperimentSeries(models.Model):
+class ExperimentCollection(models.Model):
     """ A model to allow nesting multiple experiments into a 'parent' experiment """
     name = models.CharField(max_length=64, default='')
     description = models.TextField(blank=True, default='')
@@ -33,7 +33,7 @@ class ExperimentSeries(models.Model):
         return self.name or self.slug
 
     class Meta:
-        verbose_name_plural = "Experiment Series"
+        verbose_name_plural = "Experiment Collections"
 
     def associated_experiments(self):
         return [*self.first_experiments, *self.random_experiments, *self.last_experiments]
@@ -45,12 +45,13 @@ def consent_upload_path(instance, filename):
     return 'consent/{0}/{1}'.format(folder_name, filename)
 
 
-class ExperimentSeriesGroup(models.Model):
+class ExperimentCollectionGroup(models.Model):
     name = models.CharField(max_length=64, blank=True, default='')
-    series = models.ForeignKey(ExperimentSeries, on_delete=models.CASCADE)
+    series = models.ForeignKey(ExperimentCollection, on_delete=models.CASCADE)
     order = models.IntegerField(default=0, help_text='Order of the group in the series. Lower numbers come first.')
     dashboard = models.BooleanField(default=False)
     randomize = models.BooleanField(default=False, help_text='Randomize the order of the experiments in this group.')
+    finished = models.BooleanField(default=False)
 
     def __str__(self):
         compound_name = self.name or self.series.name or self.series.slug or 'Unnamed group'
@@ -62,12 +63,13 @@ class ExperimentSeriesGroup(models.Model):
 
     class Meta:
         ordering = ['order']
-        verbose_name_plural = "Experiment Series Groups"
+        verbose_name_plural = "Experiment Collection Groups"
 
 
 class GroupedExperiment(models.Model):
     experiment = models.OneToOneField('Experiment', on_delete=models.CASCADE)
-    group = models.ForeignKey(ExperimentSeriesGroup, on_delete=models.CASCADE)
+    group = models.ForeignKey(
+        ExperimentCollectionGroup, on_delete=models.CASCADE)
     order = models.IntegerField(default=0, help_text='Order of the experiment in the group. Lower numbers come first.')
 
     def __str__(self):

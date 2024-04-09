@@ -71,7 +71,7 @@ def visitor_ip_address(request):
     return request.META.get('REMOTE_ADDR')
 
 
-def get_participant(request):
+def get_participant(request) -> Participant:
     # get participant from session
     participant_id = request.session.get(PARTICIPANT_KEY, -1)
     try:
@@ -81,7 +81,7 @@ def get_participant(request):
         raise
 
 
-def get_or_create_participant(request):
+def get_or_create_participant(request) -> Participant:
     """Get a participant from URL, the session, or create/add a new one"""
     # check if query string contains  participant
     participant_id_url = request.GET.get("participant_id")  # can be None

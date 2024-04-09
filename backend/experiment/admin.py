@@ -15,8 +15,8 @@ from django.http import HttpResponse
 from inline_actions.admin import InlineActionsModelAdminMixin
 from django.urls import reverse
 from django.utils.html import format_html
-from experiment.models import Experiment, ExperimentSeries, ExperimentSeriesGroup, Feedback, GroupedExperiment
-from experiment.forms import ExperimentSeriesForm, ExperimentForm, ExportForm, TemplateForm, EXPORT_TEMPLATES
+from experiment.models import Experiment, ExperimentCollection, ExperimentCollectionGroup, Feedback, GroupedExperiment
+from experiment.forms import ExperimentCollectionForm, ExperimentForm, ExportForm, TemplateForm, EXPORT_TEMPLATES
 from section.models import Section, Song
 from result.models import Result
 from participant.models import Participant
@@ -182,8 +182,8 @@ class GroupedExperimentInline(admin.StackedInline):
     extra = 0
 
 
-class ExperimentSeriesGroupInline(admin.StackedInline):
-    model = ExperimentSeriesGroup
+class ExperimentCollectionGroupInline(admin.StackedInline):
+    model = ExperimentCollectionGroup
     extra = 0
     inlines = [GroupedExperimentInline]
 
@@ -192,13 +192,13 @@ class MarkdownPreviewTextInput(TextInput):
     template_name = 'widgets/markdown_preview_text_input.html'
 
 
-class ExperimentSeriesAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
+class ExperimentCollectionAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
     list_display = ('name', 'slug_link', 'description_excerpt', 'dashboard', 'groups')
     fields = ['slug', 'name', 'description', 'first_experiments',
               'random_experiments', 'last_experiments', 'dashboard',
               'about_content']
-    form = ExperimentSeriesForm
-    inlines = [ExperimentSeriesGroupInline]
+    form = ExperimentCollectionForm
+    inlines = [ExperimentCollectionGroupInline]
 
     def slug_link(self, obj):
         dev_mode = settings.DEBUG is True
@@ -215,27 +215,29 @@ class ExperimentSeriesAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
         return obj.description[:50] + '...'
 
     def groups(self, obj):
-        groups = ExperimentSeriesGroup.objects.filter(series=obj)
-        return format_html(', '.join([f'<a href="/admin/experiment/experimentseriesgroup/{group.id}/change/">{group.name}</a>' for group in groups]))
+        groups = ExperimentCollectionGroup.objects.filter(series=obj)
+        return format_html(', '.join([f'<a href="/admin/experiment/experimentcollectiongroup/{group.id}/change/">{group.name}</a>' for group in groups]))
     
     slug_link.short_description = "Slug"
 
 
-admin.site.register(ExperimentSeries, ExperimentSeriesAdmin)
+admin.site.register(ExperimentCollection, ExperimentCollectionAdmin)
 
 
-class ExperimentSeriesGroupAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
+class ExperimentCollectionGroupAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
     list_display = ('name_link', 'related_series', 'order', 'dashboard', 'randomize', 'experiments')
     fields = ['name', 'series', 'order', 'dashboard', 'randomize']
     inlines = [GroupedExperimentInline]
 
     def name_link(self, obj):
         obj_name = obj.__str__()
-        url = reverse("admin:experiment_experimentseriesgroup_change", args=[obj.pk])
+        url = reverse(
+            "admin:experiment_experimentcollectiongroup_change", args=[obj.pk])
         return format_html('<a href="{}">{}</a>', url, obj_name)
 
     def related_series(self, obj):
-        url = reverse("admin:experiment_experimentseries_change", args=[obj.series.pk])
+        url = reverse(
+            "admin:experiment_experimentcollection_change", args=[obj.series.pk])
         return format_html('<a href="{}">{}</a>', url, obj.series.name)
 
     def experiments(self, obj):
@@ -247,4 +249,4 @@ class ExperimentSeriesGroupAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin)
         return format_html(', '.join([f'<a href="/admin/experiment/groupedexperiment/{experiment.id}/change/">{experiment.experiment.name}</a>' for experiment in experiments]))
 
 
-admin.site.register(ExperimentSeriesGroup, ExperimentSeriesGroupAdmin)
+admin.site.register(ExperimentCollectionGroup, ExperimentCollectionGroupAdmin)

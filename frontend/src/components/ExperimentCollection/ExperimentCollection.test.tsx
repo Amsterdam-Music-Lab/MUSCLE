@@ -27,7 +27,7 @@ const experimentWithAllProps = getExperiment({ image: 'some_image.jpg', descript
 describe('ExperimentCollection', () => {
 
     it('forwards to a single experiment if it receives a single object', async () => {
-        mock.onGet().replyOnce(200, experiment1);
+        mock.onGet().replyOnce(200, {dashboard: [], next_experiment: experiment1});
         render(
         <MemoryRouter>
             <ExperimentCollection match={{params: {slug: 'some_collection'}}}/>
@@ -50,7 +50,7 @@ describe('ExperimentCollection', () => {
     });
 
     it('shows a placeholder if no image is available', () => {
-        mock.onGet().replyOnce(200, { dashboard: [experiment1] });
+        mock.onGet().replyOnce(200, { dashboard: [experiment1], next_experiment: experiment1 });
         render(
         <MemoryRouter>
             <ExperimentCollection match={{params: {slug: 'some_collection'}}}/>
@@ -62,7 +62,7 @@ describe('ExperimentCollection', () => {
     });
 
     it('shows the image if it is available', () => {
-        mock.onGet().replyOnce(200, { dashboard: [experimentWithAllProps] });
+        mock.onGet().replyOnce(200, { dashboard: [experimentWithAllProps], next_experiment: experiment1 });
         render(
         <MemoryRouter>
             <ExperimentCollection match={{params: {slug: 'some_collection'}}}/>
@@ -74,7 +74,7 @@ describe('ExperimentCollection', () => {
     });
 
     it('shows the description if it is available', () => {
-        mock.onGet().replyOnce(200, { dashboard: [experimentWithAllProps] });
+        mock.onGet().replyOnce(200, { dashboard: [experimentWithAllProps], next_experiment: experiment1 });
         render(
         <MemoryRouter>
             <ExperimentCollection match={{params: {slug: 'some_collection'}}}/>

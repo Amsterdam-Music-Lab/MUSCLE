@@ -1,5 +1,5 @@
-const formSelector = "#experimentseriesgroup_set-group fieldset";
-const formSetSelector = ".dynamic-experimentseriesgroup_set";
+const formSelector = "#experimentcollectiongroup_set-group fieldset";
+const formSetSelector = ".dynamic-experimentcollectiongroup_set";
 const orderFieldSelector = ".field-order input";
 
 document.addEventListener("DOMContentLoaded", function () {
