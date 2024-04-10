@@ -5,6 +5,7 @@ from .base import Base
 from experiment.actions import Consent, Explainer, Step, Playlist, Trial
 from experiment.actions.form import ChoiceQuestion, Form
 from experiment.actions.playback import Autoplay
+from experiment.actions.styles import STYLE_BOOLEAN
 from experiment.actions.utils import final_action_with_optional_button
 from result.utils import prepare_result
 
@@ -46,8 +47,9 @@ class ListeningConditions(Base):
                     'NO': _('NO')
                 },
                 view='BUTTON_ARRAY',
-                submits=True
-            )])
+                result_id=result_pk,
+                submits=True,
+                style=STYLE_BOOLEAN)])
         elif round_number == 3:
             key = 'headphones'
             result_pk = prepare_result(key, session, expected_response=key)
@@ -62,7 +64,8 @@ class ListeningConditions(Base):
                     },
                     view='BUTTON_ARRAY',
                     result_id=result_pk,
-                    submits=True
+                    submits=True,
+                    style=STYLE_BOOLEAN
                 )
             ])
         elif round_number == 4:
@@ -79,7 +82,8 @@ class ListeningConditions(Base):
                     },
                     view='BUTTON_ARRAY',
                     result_id=result_pk,
-                    submits=True
+                    submits=True,
+                    style=STYLE_BOOLEAN
                 ),
             ])
         elif round_number == 5:
