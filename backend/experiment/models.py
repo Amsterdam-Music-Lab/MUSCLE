@@ -42,6 +42,7 @@ class ExperimentCollection(models.Model):
         return [
             experiment.experiment for group in groups for experiment in list(group.experiments.all())]
 
+
 def consent_upload_path(instance, filename):
     """Generate path to save consent file based on experiment.slug"""
     folder_name = instance.slug
