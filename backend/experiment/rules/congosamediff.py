@@ -264,7 +264,9 @@ class CongoSameDiff(Base):
         # Every non-practice group should have the same number of variants 
         # that should be labeled with a single uppercase letter
         groups = sections.values('group').distinct()
-        variants_count = sections.exclude(tag__contains='practice').values('tag').distinct().count()
+        variants = sections.exclude(tag__contains='practice').values('tag')
+        unique_variants = set([variant['tag'] for variant in variants])
+        variants_count = len(unique_variants)
         for group in groups:
             group_variants = sections.filter(group=group['group']).exclude(tag__contains='practice').values('tag').distinct()
 
@@ -273,7 +275,9 @@ class CongoSameDiff(Base):
                     errors.append(f'Group {group["group"]} should have variants with a single uppercase letter (A-Z), but has {variant["tag"]}')
 
             if group_variants.count() != variants_count:
-                errors.append(f'Group {group["group"]} should have the same number of variants as the total amount of variants ({variants_count}) but has {group_variants.count()}')
+                group_variants_stringified = ', '.join([variant['tag'] for variant in group_variants])
+                total_variants_stringified = ', '.join(unique_variants)
+                errors.append(f'Group {group["group"]} should have the same number of variants as the total amount of variants ({variants_count}; {total_variants_stringified}) but has {group_variants.count()} ({group_variants_stringified})')
 
         if errors:
             raise ValueError('The experiment playlist is not valid: \n- ' + '\n- '.join(errors))
