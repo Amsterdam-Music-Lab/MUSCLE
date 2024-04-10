@@ -1,7 +1,6 @@
 import json
 import logging
 
-
 from django.http import Http404, JsonResponse
 from django.conf import settings
 from django.utils.translation import activate, gettext_lazy as _
