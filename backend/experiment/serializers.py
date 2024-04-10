@@ -53,6 +53,7 @@ def serialize_experiment(experiment_object: Experiment, participant: Participant
     return {
         'slug': experiment_object.slug,
         'name': experiment_object.name,
+        'started_session_count': get_started_session_count(experiment_object, participant),
         'finished_session_count': get_finished_session_count(experiment_object, participant),
         'description': experiment_object.description,
         'image': experiment_object.image.file.url if experiment_object.image else '',
@@ -68,6 +69,13 @@ def get_upcoming_experiment(experiment_list, participant, repeat_allowed=True):
     if not repeat_allowed and minimum_session_count != 0:
         return None
     return serialize_experiment(experiment_list[finished_session_counts.index(minimum_session_count)].experiment, participant)
+
+
+def get_started_session_count(experiment, participant):
+    ''' Get the number of started sessions for this experiment and participant '''
+    count = Session.objects.filter(
+        experiment=experiment, participant=participant).count()
+    return count
 
 
 def get_finished_session_count(experiment, participant):

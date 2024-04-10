@@ -105,7 +105,6 @@ def get_experiment_collection(request, slug):
         **serialize_experiment_collection(collection),
         **serialized_group
     })
-)
 
 
 def get_associated_experiments(pk_list):
