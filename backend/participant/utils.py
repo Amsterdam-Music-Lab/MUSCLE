@@ -95,10 +95,6 @@ def get_or_create_participant(request) -> Participant:
             # Get participant from session
             participant = get_participant(request)
 
-            # if no participant_id URL parameter in request, but previous participant was created from URL, do not use it and create a new participant
-            if participant.participant_id_url:
-                raise Participant.DoesNotExist
-
     except Participant.DoesNotExist:
         # create new participant
         country_code = country(request)

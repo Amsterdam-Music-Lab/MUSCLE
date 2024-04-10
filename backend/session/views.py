@@ -77,7 +77,7 @@ def next_round(request, session_id):
         if not session.load_json_data().get(COLLECTION_KEY):
             # set information of the ExperimentCollection to the session
             collection = ExperimentCollection.objects.get(slug=collection_slug)
-            if collection and session.experiment.pk in collection.associated_experiments():
+            if collection and session.experiment in collection.associated_experiments():
                 session.save_json_data({COLLECTION_KEY: collection_slug})
 
     # Get next round for given session

@@ -38,7 +38,9 @@ class ExperimentCollection(models.Model):
         verbose_name_plural = "Experiment Collections"
 
     def associated_experiments(self):
-        return [*self.first_experiments, *self.random_experiments, *self.last_experiments]
+        groups = self.groups.all()
+        return [
+            experiment.experiment for group in groups for experiment in list(group.experiments.all())]
 
 
 def consent_upload_path(instance, filename):
@@ -49,7 +51,8 @@ def consent_upload_path(instance, filename):
 
 class ExperimentCollectionGroup(models.Model):
     name = models.CharField(max_length=64, blank=True, default='')
-    series = models.ForeignKey(ExperimentCollection, on_delete=models.CASCADE)
+    series = models.ForeignKey(ExperimentCollection,
+                               on_delete=models.CASCADE, related_name='groups')
     order = models.IntegerField(default=0, help_text='Order of the group in the series. Lower numbers come first.')
     dashboard = models.BooleanField(default=False)
     randomize = models.BooleanField(default=False, help_text='Randomize the order of the experiments in this group.')
@@ -71,7 +74,7 @@ class ExperimentCollectionGroup(models.Model):
 class GroupedExperiment(models.Model):
     experiment = models.OneToOneField('Experiment', on_delete=models.CASCADE)
     group = models.ForeignKey(
-        ExperimentCollectionGroup, on_delete=models.CASCADE)
+        ExperimentCollectionGroup, on_delete=models.CASCADE, related_name='experiments')
     order = models.IntegerField(default=0, help_text='Order of the experiment in the group. Lower numbers come first.')
 
     def __str__(self):
