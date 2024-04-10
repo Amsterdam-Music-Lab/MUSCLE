@@ -17,14 +17,14 @@ class CongoSameDiffTest(TestCase):
         self.section_csv = (
             "Dave,m1_contour_practice,0.0,20.0,samediff/melody_1_contour.wav,practice,1\n"
             "Dave,m2_same_practice,0.0,20.0,samediff/melody_1_same.wav,practice,1\n"
-            "Dave,m1_same,0.0,20.0,samediff/melody_1_same.wav,'',1\n"
-            "Dave,m1_scale,0.0,20.0,samediff/melody_1_scale.wav,'',1\n"
-            "Dave,m1_contour,0.0,20.0,samediff/melody_1_contour.wav,'',1\n"
-            "Dave,m1_interval,0.0,20.0,samediff/melody_1_interval.wav,'',1\n"
-            "Dave,m1_same,0.0,20.0,samediff/melody_1_same.wav,'',2\n"
-            "Dave,m1_scale,0.0,20.0,samediff/melody_1_scale.wav,'',2\n"
-            "Dave,m1_contour,0.0,20.0,samediff/melody_1_contour.wav,'',2\n"
-            "Dave,m1_interval,0.0,20.0,samediff/melody_1_interval.wav,'',2\n"
+            "Dave,m1_same,0.0,20.0,samediff/melody_1_same.wav,A,1\n"
+            "Dave,m1_scale,0.0,20.0,samediff/melody_1_scale.wav,B,1\n"
+            "Dave,m1_contour,0.0,20.0,samediff/melody_1_contour.wav,C,1\n"
+            "Dave,m1_interval,0.0,20.0,samediff/melody_1_interval.wav,D,1\n"
+            "Dave,m1_same,0.0,20.0,samediff/melody_1_same.wav,A,2\n"
+            "Dave,m1_scale,0.0,20.0,samediff/melody_1_scale.wav,B,2\n"
+            "Dave,m1_contour,0.0,20.0,samediff/melody_1_contour.wav,C,2\n"
+            "Dave,m1_interval,0.0,20.0,samediff/melody_1_interval.wav,D,2\n"
         )
         self.playlist = PlaylistModel.objects.create(name='CongoSameDiff')
         self.playlist.csv = self.section_csv
@@ -215,3 +215,59 @@ class CongoSameDiffTest(TestCase):
         # practice trials + post-practice question + non-practice trials
         # 2 + 1 + 2 = 5
         assert total_trials_count == 5
+
+    def test_get_patterns(self):
+        congo_same_diff = CongoSameDiff()
+        patterns = congo_same_diff.get_patterns(3, 2)
+        patterns_length = len(patterns)
+
+        assert patterns_length == 8
+        assert patterns == [
+            ('A', 'A', 'A'),
+            ('A', 'A', 'B'),
+            ('A', 'B', 'A'),
+            ('A', 'B', 'B'),
+            ('B', 'A', 'A'),
+            ('B', 'A', 'B'),
+            ('B', 'B', 'A'),
+            ('B', 'B', 'B'),
+        ]
+
+    def test_get_patterns_bigger(self):
+        congo_same_diff = CongoSameDiff()
+        patterns = congo_same_diff.get_patterns(4, 4)
+        patterns_length = len(patterns)
+
+        assert patterns_length == 256
+        assert patterns[0] == ('A', 'A', 'A', 'A')
+        assert patterns[255] == ('D', 'D', 'D', 'D')
+
+    def test_get_participant_group_variant(self):
+        congo_same_diff = CongoSameDiff()
+
+        patterns = [('A', 'A'), ('A', 'B'), ('B', 'A'), ('B', 'B')]
+
+        # Test participant ID 1 and group number 1
+        variant = congo_same_diff.get_participant_group_variant(1, 1, patterns)
+        assert variant == 'A'
+
+        # Test participant ID 1 and group number 2
+        variant = congo_same_diff.get_participant_group_variant(1, 2, patterns)
+        assert variant == 'A'
+
+        # Test participant ID 6 and group number 1
+        variant = congo_same_diff.get_participant_group_variant(6, 1, patterns)
+        assert variant == 'A'
+
+        # Test participant ID 6 and group number 2
+        variant = congo_same_diff.get_participant_group_variant(6, 2, patterns)
+        assert variant == 'B'
+
+        # Test participant ID 7 and group number 1
+        variant = congo_same_diff.get_participant_group_variant(7, 1, patterns)
+        assert variant == 'B'
+
+        # Test participant ID 7 and group number 2
+        variant = congo_same_diff.get_participant_group_variant(7, 2, patterns)
+        assert variant == 'A'
+        
