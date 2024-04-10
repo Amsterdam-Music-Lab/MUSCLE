@@ -74,7 +74,6 @@ def visitor_ip_address(request):
 def get_participant(request) -> Participant:
     # get participant from session
     participant_id = request.session.get(PARTICIPANT_KEY, -1)
-    print(participant_id)
     try:
         return Participant.objects.get(
                 pk=int(participant_id))
