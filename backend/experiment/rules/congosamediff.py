@@ -273,7 +273,7 @@ class CongoSameDiff(Base):
                     errors.append(f'Group {group["group"]} should have variants with a single uppercase letter (A-Z), but has {variant["tag"]}')
 
             if group_variants.count() != variants_count:
-                errors.append(f'Group {group["group"]} should have the same number of variants as the other groups ({variants_count}) but has {group_variants.count()}')
+                errors.append(f'Group {group["group"]} should have the same number of variants as the total amount of variants ({variants_count}) but has {group_variants.count()}')
 
         if errors:
             raise ValueError('The experiment playlist is not valid: \n- ' + '\n- '.join(errors))
