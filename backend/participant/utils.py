@@ -74,6 +74,7 @@ def visitor_ip_address(request):
 def get_participant(request) -> Participant:
     # get participant from session
     participant_id = request.session.get(PARTICIPANT_KEY, -1)
+    print(participant_id)
     try:
         return Participant.objects.get(
                 pk=int(participant_id))
@@ -94,10 +95,6 @@ def get_or_create_participant(request) -> Participant:
         else:
             # Get participant from session
             participant = get_participant(request)
-
-            # if no participant_id URL parameter in request, but previous participant was created from URL, do not use it and create a new participant
-            if participant.participant_id_url:
-                raise Participant.DoesNotExist
 
     except Participant.DoesNotExist:
         # create new participant
