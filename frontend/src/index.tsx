@@ -1,5 +1,5 @@
-import "./index.css";
-import React, { StrictMode } from "react";
+import "./index.scss";
+import { StrictMode } from "react";
 import { createRoot } from 'react-dom/client';
 import App from "./components/App/App";
 import { initSentry } from "./config/sentry";
