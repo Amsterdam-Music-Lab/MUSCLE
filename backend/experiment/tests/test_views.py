@@ -129,9 +129,13 @@ class ExperimentViewsTest(TestCase):
                 file='test-image.jpg'
             )
         )
+        participant = Participant.objects.create()
+        Session.objects.bulk_create([
+            Session(experiment=experiment, participant=participant, finished_at=timezone.now()) for index in range(3)
+        ])
 
         # Call the serialize_experiment function
-        serialized_experiment = serialize_experiment(experiment, 3)
+        serialized_experiment = serialize_experiment(experiment, participant)
 
         # Assert the serialized data
         self.assertEqual(

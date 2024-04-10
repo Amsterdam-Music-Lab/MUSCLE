@@ -44,16 +44,16 @@ def serialize_experiment_collection_group(group: ExperimentCollectionGroup, part
         return None
 
     return {
-        'dashboard': [serialize_experiment(experiment.experiment) for experiment in grouped_experiments] if group.dashboard else [],
+        'dashboard': [serialize_experiment(experiment.experiment, participant) for experiment in grouped_experiments] if group.dashboard else [],
         'next_experiment': next_experiment
     }
 
 
-def serialize_experiment(experiment_object: Experiment, finished=0):
+def serialize_experiment(experiment_object: Experiment, participant: Participant):
     return {
         'slug': experiment_object.slug,
         'name': experiment_object.name,
-        'finished_session_count': finished,
+        'finished_session_count': get_finished_session_count(experiment_object, participant),
         'description': experiment_object.description,
         'image': experiment_object.image.file.url if experiment_object.image else '',
     }
@@ -67,7 +67,7 @@ def get_upcoming_experiment(experiment_list, participant, repeat_allowed=True):
     minimum_session_count = min(finished_session_counts)
     if not repeat_allowed and minimum_session_count != 0:
         return None
-    return serialize_experiment(experiment_list[finished_session_counts.index(minimum_session_count)].experiment)
+    return serialize_experiment(experiment_list[finished_session_counts.index(minimum_session_count)].experiment, participant)
 
 
 def get_finished_session_count(experiment, participant):
