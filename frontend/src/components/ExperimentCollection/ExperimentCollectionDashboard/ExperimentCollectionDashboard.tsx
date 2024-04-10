@@ -40,8 +40,8 @@ export const ExperimentCollectionDashboard: React.FC<ExperimentCollectionDashboa
                                 <ImageOrPlaceholder imagePath={exp.image} alt={exp.description} />
                                 <h3>{exp.name}</h3>
                                 <div className="status-bar">
-                                    <span title={`Het "${exp.name}" experiment is ${exp.started_session_count} keer gestart`} role="status" className="counter">{exp.started_session_count}</span>
-                                    <span title={`Het "${exp.name}" experiment is ${exp.finished_session_count} keer voltooid`} role="status" className="counter">{exp.finished_session_count}</span>
+                                    <span title={`Started ${exp.started_session_count} times`} role="status" className="counter">{exp.started_session_count}</span>
+                                    <span title={`Started ${exp.finished_session_count} times`} role="status" className="counter">{exp.finished_session_count}</span>
                                 </div>
                             </Link>
                         </li>
