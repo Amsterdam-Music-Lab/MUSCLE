@@ -1,10 +1,9 @@
 
-import random
 import re
 import itertools
 import string
 from django.utils.translation import gettext_lazy as _
-from experiment.actions.final import Final
+from experiment.actions.utils import final_action_with_optional_button
 from experiment.models import Experiment
 from section.models import Playlist as PlaylistModel
 from session.models import Session
@@ -219,7 +218,7 @@ class CongoSameDiff(Base):
         session.finish()
         session.save()
 
-        return Final(
+        return final_action_with_optional_button(
             title=_('End'),
             session=session,
             final_text=_('Thank you for participating!'),
