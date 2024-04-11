@@ -1,6 +1,8 @@
 
 import random
 import re
+import itertools
+import string
 from django.utils.translation import gettext_lazy as _
 from experiment.actions.final import Final
 from experiment.models import Experiment
@@ -13,7 +15,7 @@ from result.utils import prepare_result
 
 
 class CongoSameDiff(Base):
-    ''' A micro-PROMS inspired experiment that tests the participant's ability to distinguish between different sounds. '''
+    """ A micro-PROMS inspired experiment that tests the participant's ability to distinguish between different sounds. """
     ID = 'CONGOSAMEDIFF'
     contact_email = 'aml.tunetwins@gmail.com'
 
@@ -21,11 +23,11 @@ class CongoSameDiff(Base):
         pass
 
     def first_round(self, experiment: Experiment):
-        ''' Provide the first rounds of the experiment,
+        """ Provide the first rounds of the experiment,
         before session creation
         The first_round must return at least one Info or Explainer action
         Consent and Playlist are often desired, but optional
-        '''
+        """
 
         # Do a validity check on the experiment
         self.validate(experiment)
@@ -100,23 +102,40 @@ class CongoSameDiff(Base):
         # group number of the trial to be played
         group_number = next_round_number - practice_trials_count - 1
 
-        # load the non-practice trial variants for the group number
+        # load the non-practice group variants for the group number
         real_trial_variants = session.playlist.section_set.exclude(
             tag__contains='practice'
         ).filter(
             group=group_number
         )
 
-        # pick a variant from the variants randomly (#919)
-        variants_count = real_trial_variants.count()
-        random_variants_index = random.randint(0, variants_count - 1)
+        # patterns amount is the number of groups times the number of variants in each group
+        groups_amount = session.playlist.section_set.values('group').distinct().count()
+        variants_amount = real_trial_variants.count()
+        patterns = self.get_patterns(groups_amount, variants_amount)
+
+        # get the participant's group variant
+        participant_id = session.participant.participant_id_url
+        participant_group_variant = self.get_participant_group_variant(
+            participant_id,
+            group_number,
+            patterns
+        )
+
+        # get the index of the participant's group variant in the real_trial_variants
+        # aka the index of the variant whose tag matches the participant's group variant
+        real_trial_variants_list = list(real_trial_variants)
+        pattern_group_variants_index = [
+            i for i, variant in enumerate(real_trial_variants_list)
+            if variant.tag == participant_group_variant
+        ][0]
 
         # if the next_round_number is greater than the no. of practice trials,
         # return a non-practice trial
         return self.get_next_trial(
             session,
             real_trial_variants,
-            random_variants_index + 1,
+            pattern_group_variants_index + 1,
             False
         )
 
@@ -242,5 +261,71 @@ class CongoSameDiff(Base):
         if not sections.exclude(tag__contains='practice').exists():
             errors.append('At least one section should not have the tag "practice"')
 
+        # Every non-practice group should have the same number of variants 
+        # that should be labeled with a single uppercase letter
+        groups = sections.values('group').distinct()
+        variants = sections.exclude(tag__contains='practice').values('tag')
+        unique_variants = set([variant['tag'] for variant in variants])
+        variants_count = len(unique_variants)
+        for group in groups:
+            group_variants = sections.filter(group=group['group']).exclude(tag__contains='practice').values('tag').distinct()
+
+            for variant in group_variants:
+                if not re.search(r'^[A-Z]$', variant['tag']):
+                    errors.append(f'Group {group["group"]} should have variants with a single uppercase letter (A-Z), but has {variant["tag"]}')
+
+            if group_variants.count() != variants_count:
+                group_variants_stringified = ', '.join([variant['tag'] for variant in group_variants])
+                total_variants_stringified = ', '.join(unique_variants)
+                errors.append(f'Group {group["group"]} should have the same number of variants as the total amount of variants ({variants_count}; {total_variants_stringified}) but has {group_variants.count()} ({group_variants_stringified})')
+
         if errors:
             raise ValueError('The experiment playlist is not valid: \n- ' + '\n- '.join(errors))
+
+    def get_patterns(self, groups_amount: int, variants_amount: int) -> list:
+        """
+        Generate patterns based on the given number of groups and variants.
+
+        Args:
+            groups_amount (int): The number of groups.
+            variants_amount (int): The number of variants.
+
+        Returns:
+            list: A list of all possible patterns generated using itertools.product.
+                For example, `[('A', 'A'), ('A', 'B'), ('B', 'A'), ('B', 'B')]`
+        """
+        patterns = []
+
+        # Generate variant labels (e.g., ['A', 'B', 'C'])
+        variants = list(string.ascii_uppercase)[:variants_amount]
+
+        # Generate all possible patterns using itertools.product
+        patterns = list(itertools.product(variants, repeat=groups_amount))
+
+        return patterns
+
+    def get_participant_group_variant(self, participant_id: int, group_number: int, patterns: list, ):
+        """
+        Returns the variant for a participant based on their ID, patterns, and group number.
+        For example, if there are 2 groups and 2 variants, the patterns would be:
+        [('A', 'A'), ('A', 'B'), ('B', 'A'), ('B', 'B')].
+        The participant ID is used to select a pattern from the list.
+        The group number is used to select the group variant from the chosen pattern.
+        Let's say the participant ID is 3 and the group number is 2.
+        The participant ID modulo the number of patterns (3 % 4 = 3) would select the pattern ('B', 'A').
+        The group number (2) would then select the second variant ('A') from the pattern ('B', 'A').
+
+        Parameters:
+        participant_id (int): The ID of the participant, which serves as an index to choose a pattern.
+        group_number (int): The group number, which serves as an index for the chosen pattern.
+        patterns (list): A list of patterns generated using get_patterns.
+
+        Returns:
+        The variant for the participant.
+
+        """
+
+        patterns_index = int(participant_id) % len(patterns) - 1
+        group_index = group_number - 1
+
+        return patterns[patterns_index][group_index]
