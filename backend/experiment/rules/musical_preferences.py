@@ -37,13 +37,19 @@ class MusicalPreferences(Base):
     }
 
     def __init__(self):
-        self.questions = [
-            question_by_key('msi_38_listen_music', MSI_F1_ACTIVE_ENGAGEMENT),
-            question_by_key('dgf_genre_preference_zh', OTHER),
-            question_by_key('dgf_gender_identity_zh', OTHER),
-            question_by_key('dgf_age', EXTRA_DEMOGRAPHICS),
-            question_by_key('dgf_region_of_origin', OTHER),
-            question_by_key('dgf_region_of_residence', OTHER)
+        self.question_series = [
+            {
+                "name": "Question series Musical Preferences",
+                "keys": [
+                    'msi_38_listen_music',
+                    'dgf_genre_preference_zh',
+                    'dgf_gender_identity_zh',
+                    'dgf_age',
+                    'dgf_region_of_origin',
+                    'dgf_region_of_residence',
+                ],
+                "randomize": False
+            },
         ]
 
     def first_round(self, experiment):        

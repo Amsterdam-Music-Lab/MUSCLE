@@ -2,8 +2,6 @@ from django.forms import CheckboxSelectMultiple, ModelForm, ChoiceField, Form, M
 from experiment.models import Experiment
 from experiment.rules import EXPERIMENT_RULES
 
-from django.forms import TypedMultipleChoiceField, CheckboxSelectMultiple
-from .questions import QUESTIONS_CHOICES
 
 # session_keys for Export CSV
 SESSION_CHOICES = [('experiment_id', 'Experiment ID'),
@@ -133,12 +131,6 @@ class ExperimentForm(ModelForm):
             choices=sorted(choices)
         )
 
-        self.fields['questions'] = TypedMultipleChoiceField(
-            choices=QUESTIONS_CHOICES,
-            widget=CheckboxSelectMultiple,
-            required=False
-        )
-
     class Meta:
         model = Experiment
         fields = ['name', 'slug', 'active', 'rules',
@@ -178,3 +170,8 @@ class TemplateForm(Form):
     select_template = ChoiceField(
         widget=Select,
         choices=TEMPLATE_CHOICES)
+
+
+class QuestionSeriesAdminForm(ModelForm):
+    class Media:
+        js = ["questionseries_admin.js"]

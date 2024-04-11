@@ -1,45 +1,72 @@
-from .demographics import DEMOGRAPHICS, EXTRA_DEMOGRAPHICS
-from .goldsmiths import MSI_F1_ACTIVE_ENGAGEMENT, MSI_F2_PERCEPTUAL_ABILITIES, MSI_F3_MUSICAL_TRAINING, MSI_F4_SINGING_ABILITIES, MSI_F5_EMOTIONS, MSI_OTHER
-from .languages import LANGUAGE
+from .demographics import DEMOGRAPHICS, EXTRA_DEMOGRAPHICS, DEMOGRAPHICS_OTHER
+from .goldsmiths import MSI_F1_ACTIVE_ENGAGEMENT, MSI_F2_PERCEPTUAL_ABILITIES, MSI_F3_MUSICAL_TRAINING, MSI_F4_SINGING_ABILITIES, MSI_F5_EMOTIONS, MSI_OTHER, MSI_FG_GENERAL, MSI_ALL
+from .languages import LANGUAGE, LANGUAGE_OTHER
 from .musicgens import MUSICGENS_17_W_VARIANTS
 from .stomp import STOMP
 from .tipi import TIPI
 from .other import OTHER
+import random
+from experiment.models import QuestionGroup, Question
 
-# Label of the group as it will apear in the admin
-QUESTION_GROUPS = [ ("DEMOGRAPHICS",DEMOGRAPHICS),
-    ("EXTRA_DEMOGRAPHICS",EXTRA_DEMOGRAPHICS),
-    ("MSI_F1_ACTIVE_ENGAGEMENT",MSI_F1_ACTIVE_ENGAGEMENT),
-    ("MSI_F2_PERCEPTUAL_ABILITIES",MSI_F2_PERCEPTUAL_ABILITIES),
-    ("MSI_F3_MUSICAL_TRAINING",MSI_F3_MUSICAL_TRAINING),
-    ("MSI_F4_SINGING_ABILITIES",MSI_F4_SINGING_ABILITIES),
-    ("MSI_F5_EMOTIONS",MSI_F5_EMOTIONS),
-    ("MSI_OTHER",MSI_OTHER),
-    ("LANGUAGE",LANGUAGE),
-    ("MUSICGENS_17_W_VARIANTS",MUSICGENS_17_W_VARIANTS),
-    ("STOMP",STOMP),
-    ("TIPI",TIPI),
-    ("OTHER",OTHER)
-]
+# Default QuestionGroups used by command createquestions
+QUESTION_GROUPS_DEFAULT = { "DEMOGRAPHICS" : DEMOGRAPHICS,
+    "EXTRA_DEMOGRAPHICS" : EXTRA_DEMOGRAPHICS,
+    "MSI_F1_ACTIVE_ENGAGEMENT" : MSI_F1_ACTIVE_ENGAGEMENT,
+    "MSI_F2_PERCEPTUAL_ABILITIES" : MSI_F2_PERCEPTUAL_ABILITIES,
+    "MSI_F3_MUSICAL_TRAINING" : MSI_F3_MUSICAL_TRAINING,
+    "MSI_F4_SINGING_ABILITIES" : MSI_F4_SINGING_ABILITIES,
+    "MSI_F5_EMOTIONS" : MSI_F5_EMOTIONS,
+    "MSI_OTHER" : MSI_OTHER,
+    "MSI_FG_GENERAL" : MSI_FG_GENERAL,
+    "MSI_ALL" : MSI_ALL,
+    "LANGUAGE" : LANGUAGE,
+    "MUSICGENS_17_W_VARIANTS" : MUSICGENS_17_W_VARIANTS,
+    "STOMP" : STOMP,
+    "STOMP20" : STOMP,
+    "TIPI" : TIPI,
+    "OTHER" : OTHER,
+    "DEMOGRAPHICS_OTHER" : DEMOGRAPHICS_OTHER,
+    "LANGUAGE_OTHER" : LANGUAGE_OTHER
+}
 
-QUESTIONS_ALL = []
-KEYS_ALL = []
-QUESTIONS_CHOICES = []
+QUESTIONS = {}
+QUESTION_GROUPS = {}
 
-for question_group in QUESTION_GROUPS:
-    QUESTIONS_ALL.extend(question_group[1])
-    KEYS_ALL.extend([question.key for question in question_group[1]])
-    QUESTIONS_CHOICES.append( (question_group[0], [(q.key,"("+q.key+") "+q.question) for q in question_group[1]]) )
+for group, questions in QUESTION_GROUPS_DEFAULT.items():
+    for question in questions: QUESTIONS[question.key] = question
+    QUESTION_GROUPS[group] = [ q.key for q in questions ]
+
+
+def get_questions_from_series(questionseries_set):
+
+    keys_all = []
+
+    for questionseries in questionseries_set:
+        keys = [qis.question.key for qis in questionseries.questioninseries_set.all()]
+        if questionseries.randomize: random.shuffle(keys)
+        keys_all.extend(keys)
+
+    return [QUESTIONS[key] for key in keys_all]
 
 
 def get_default_question_keys():
+    """ For backward compatibility. One of the migrations calls it"""
     return []
 
+def create_default_questions():
+    """Creates default questions and question groups in the database"""
 
-def get_questions_from_keys(keys):
-    """ Returns questions in the order of keys"""
-    return [QUESTIONS_ALL[KEYS_ALL.index(key)] for key in keys]
+    for group_key, questions in QUESTION_GROUPS_DEFAULT.items():
 
+            if not QuestionGroup.objects.filter(key = group_key).exists():
+                group = QuestionGroup.objects.create(key = group_key, editable = False)
+            else:
+                group = QuestionGroup.objects.get(key = group_key)
 
-if len(KEYS_ALL) != len(set(KEYS_ALL)):
-    raise Exception("Duplicate question keys")
+            for question in questions:
+                if not Question.objects.filter(key = question.key).exists():
+                    q = Question.objects.create(key = question.key, question = question.question, editable = False)
+                else:
+                    q = Question.objects.get(key = question.key)
+                group.questions.add(q)
+

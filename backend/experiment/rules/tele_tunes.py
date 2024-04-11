@@ -16,10 +16,8 @@ class HookedTeleTunes(Hooked):
     consent_file = 'consent/consent_teletunes.html'
 
     def __init__(self):
-        self.questions = [
-            # 1. Demographic questions (7 questions)
-            *copy_shuffle(DEMOGRAPHICS),
-            # 2. Musicgens questions with variants
-            *copy_shuffle(MUSICGENS_17_W_VARIANTS)
+        self.question_series = [
+            {"name": "DEMOGRAPHICS", "keys": QUESTION_GROUPS["DEMOGRAPHICS"], "randomize": True}, # 1. Demographic questions (7 questions)
+            {"name": "MUSICGENS_17_W_VARIANTS", "keys": QUESTION_GROUPS["MUSICGENS_17_W_VARIANTS"], "randomize": True}, # 2. Musicgens questions with variants
         ]
 

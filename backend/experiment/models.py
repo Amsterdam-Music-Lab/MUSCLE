@@ -5,7 +5,6 @@ from django.utils import timezone
 from django.contrib.postgres.fields import ArrayField
 from typing import List, Dict, Tuple, Any
 from experiment.standards.iso_languages import ISO_LANGUAGES
-from .questions import QUESTIONS_CHOICES, get_default_question_keys
 from theme.models import ThemeConfig
 from image.models import Image
 
@@ -71,11 +70,6 @@ class Experiment(models.Model):
         blank=True,
         null=True
     )
-    questions = ArrayField(
-                models.TextField(choices=QUESTIONS_CHOICES),
-                blank=True,
-                default=get_default_question_keys
-            )
     consent = models.FileField(upload_to=consent_upload_path,
                                blank=True,
                                default='',
@@ -239,6 +233,77 @@ class Experiment(models.Model):
         return 0
 
 
+    def add_default_question_series(self):
+        """ Add default question_series to experiment"""
+        from experiment.rules import EXPERIMENT_RULES
+        for i,question_series in enumerate(EXPERIMENT_RULES[self.rules]().question_series):
+            qs = QuestionSeries.objects.create(
+                name = question_series['name'],
+                experiment = self,
+                index = i+1,
+                randomize = question_series['randomize'])
+            for i,question in enumerate(question_series['keys']):
+                qis = QuestionInSeries.objects.create(
+                    question_series = qs,
+                    question = Question.objects.get(pk=question),
+                    index=i+1)
+
+
 class Feedback(models.Model):
     text = models.TextField()
     experiment = models.ForeignKey(Experiment, on_delete=models.CASCADE)
+
+
+class Question(models.Model):
+
+    key = models.CharField(primary_key=True, max_length=128)
+    question = models.CharField(max_length=1024)
+    editable = models.BooleanField(default=True, editable=False)
+
+    def __str__(self):
+        return "("+self.key+") "+ self.question
+
+    class Meta:
+        ordering = ["key"]
+
+
+class QuestionGroup(models.Model):
+
+    key = models.CharField(primary_key=True, max_length=128)
+    questions = models.ManyToManyField(Question)
+    editable = models.BooleanField(default=True, editable=False)
+
+    class Meta:
+        ordering = ["key"]
+        verbose_name_plural = "Question Groups"
+
+    def __str__(self):
+        return self.key
+
+
+class QuestionSeries(models.Model):
+
+    name = models.CharField(default='', max_length=128)
+    experiment = models.ForeignKey(Experiment, on_delete=models.CASCADE)
+    index = models.PositiveIntegerField() # index of QuestionSeries within Experiment
+    questions = models.ManyToManyField(Question, through='QuestionInSeries')
+    randomize = models.BooleanField(default=False) # randomize questions within QuestionSeries
+
+    class Meta:
+        ordering = ["index"]
+        verbose_name_plural = "Question Series"
+
+    def __str__(self):
+        return "QuestionSeries object ({}): {} questions".format(self.id, self.questioninseries_set.count())
+
+
+class QuestionInSeries(models.Model):
+
+    question_series = models.ForeignKey(QuestionSeries, on_delete=models.CASCADE)
+    question = models.ForeignKey(Question, on_delete=models.CASCADE)
+    index = models.PositiveIntegerField()
+
+    class Meta:
+        unique_together = ('question_series', 'question')
+        ordering = ["index"]
+        verbose_name_plural = "Question In Series objects"

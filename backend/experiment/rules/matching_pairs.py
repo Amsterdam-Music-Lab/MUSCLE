@@ -22,12 +22,18 @@ class MatchingPairsGame(Base):
     randomize = True
 
     def __init__(self):
-        self.questions = [
-            question_by_key('dgf_gender_identity'),
-            question_by_key('dgf_generation'),
-            question_by_key('dgf_musical_experience', EXTRA_DEMOGRAPHICS),
-            question_by_key('dgf_country_of_origin'),
-            question_by_key('dgf_education', drop_choices=['isced-2', 'isced-5'])
+        self.question_series = [
+            {
+                "name": "Demographics",
+                "keys": [
+                    'dgf_gender_identity',
+                    'dgf_generation',
+                    'dgf_musical_experience',
+                    'dgf_country_of_origin',
+                    'dgf_education_matching_pairs',
+                ],
+                "randomize": False
+            },
         ]
 
     def first_round(self, experiment):

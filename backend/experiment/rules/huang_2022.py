@@ -11,6 +11,7 @@ from experiment.questions.demographics import EXTRA_DEMOGRAPHICS
 from experiment.questions.goldsmiths import MSI_ALL, MSI_OTHER
 from experiment.questions.other import OTHER
 from experiment.questions.utils import question_by_key
+from experiment.questions import QUESTION_GROUPS
 from experiment.actions.styles import STYLE_BOOLEAN_NEGATIVE_FIRST
 from result.utils import prepare_result
 from .hooked import Hooked
@@ -27,18 +28,28 @@ class Huang2022(Hooked):
     play_method = 'EXTERNAL'
 
     def __init__(self):
-        self.questions = MSI_ALL + [
-            question_by_key('msi_39_best_instrument', MSI_OTHER),
-            question_by_key('dgf_genre_preference_zh', OTHER),
-            question_by_key('dgf_generation'),
-            question_by_key('dgf_education', drop_choices=['isced-5']),
-            question_by_key(
-                'dgf_highest_qualification_expectation', EXTRA_DEMOGRAPHICS),
-            question_by_key('dgf_occupational_status', EXTRA_DEMOGRAPHICS),
-            question_by_key('dgf_region_of_origin', OTHER),
-            question_by_key('dgf_region_of_residence', OTHER),
-            question_by_key('dgf_gender_identity_zh', OTHER),
-            question_by_key('contact', OTHER),
+        self.question_series = [
+            {
+                "name": "MSI_ALL",
+                "keys": QUESTION_GROUPS["MSI_ALL"],
+                "randomize": False
+            },
+            {
+                "name": "Demographics and other",
+                "keys": [
+                    'msi_39_best_instrument',
+                    'dgf_genre_preference_zh',
+                    'dgf_generation',
+                    'dgf_education_huang_2022',
+                    'dgf_highest_qualification_expectation',
+                    'dgf_occupational_status',
+                    'dgf_region_of_origin',
+                    'dgf_region_of_residence',
+                    'dgf_gender_identity_zh',
+                    'contact'
+                ],
+                "randomize": False
+            },
         ]
 
     def first_round(self, experiment):

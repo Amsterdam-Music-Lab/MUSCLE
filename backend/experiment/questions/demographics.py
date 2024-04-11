@@ -145,3 +145,28 @@ EXTRA_DEMOGRAPHICS = [
         }
     )
 ]
+
+
+# Temporary until full Question model is implemented
+from .utils import question_by_key
+
+question_dgf_education_matching_pairs =  question_by_key('dgf_education', drop_choices=['isced-2', 'isced-5'])
+question_dgf_education_matching_pairs.key = 'dgf_education_matching_pairs'
+
+question_dgf_education_gold_msi = question_by_key('dgf_education', drop_choices=['isced-1'])
+question_dgf_education_gold_msi.key = 'dgf_education_gold_msi'
+
+question_dgf_education_huang_2022 = question_by_key('dgf_education', drop_choices=['isced-5'])
+question_dgf_education_huang_2022.key = 'dgf_education_huang_2022'
+
+DEMOGRAPHICS_OTHER = [
+    question_dgf_education_matching_pairs,
+    question_dgf_education_gold_msi,
+    question_dgf_education_huang_2022,
+
+    TextQuestion(
+        key='fame_name',
+        question=_("Enter a name to enter the ICMPC hall of fame"),
+        is_skippable=True
+    )
+]

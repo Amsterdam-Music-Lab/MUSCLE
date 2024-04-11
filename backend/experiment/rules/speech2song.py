@@ -24,17 +24,23 @@ class Speech2Song(Base):
     ID = 'SPEECH_TO_SONG'
     
     def __init__(self):
-        self.questions = [
-            question_by_key('dgf_age', EXTRA_DEMOGRAPHICS),
-            question_by_key('dgf_gender_identity'),
-            question_by_key('dgf_country_of_origin_open', EXTRA_DEMOGRAPHICS),
-            question_by_key('dgf_country_of_residence_open', EXTRA_DEMOGRAPHICS),
-            question_by_key('lang_mother', LANGUAGE),
-            question_by_key('lang_second', LANGUAGE),
-            question_by_key('lang_third', LANGUAGE),
-            LanguageQuestion(_('English')).exposure_question(),
-            LanguageQuestion(_('Brazilian Portuguese')).exposure_question(),
-            LanguageQuestion(_('Mandarin Chinese')).exposure_question()
+        self.question_series = [
+            {
+                "name": "Question series Speech2Song",
+                "keys": [
+                    'dgf_age',
+                    'dgf_gender_identity',
+                    'dgf_country_of_origin_open',
+                    'dgf_country_of_residence_open',
+                    'lang_mother',
+                    'lang_second',
+                    'lang_third',
+                    LanguageQuestion(_('English')).exposure_question().key,
+                    LanguageQuestion(_('Brazilian Portuguese')).exposure_question().key,
+                    LanguageQuestion(_('Mandarin Chinese')).exposure_question().key
+                ],
+                "randomize": False
+            },
         ]
 
     def first_round(self, experiment):

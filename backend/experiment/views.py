@@ -13,6 +13,7 @@ from participant.utils import get_participant
 from session.models import Session
 from experiment.rules import EXPERIMENT_RULES
 from experiment.actions.utils import COLLECTION_KEY
+from experiment.models import QuestionSeries, QuestionInSeries, Question, QuestionGroup
 
 logger = logging.getLogger(__name__)
 
@@ -70,9 +71,17 @@ def experiment_or_404(slug):
     except Experiment.DoesNotExist:
         raise Http404("Experiment does not exist")
 
+def question_groups(request):
+    question_groups = {}
+    for question_group in QuestionGroup.objects.all():
+        question_groups[question_group.key] = [q.key for q in QuestionGroup.objects.get(pk=question_group.key).questions.all()]
+    return JsonResponse(question_groups)
 
-def default_questions(request, rules):
-    return JsonResponse({'default_questions': [q.key for q in EXPERIMENT_RULES[rules]().questions]})
+
+def add_default_question_series(request, id):
+    if request.method == "POST":
+        Experiment.objects.get(pk=id).add_default_question_series()
+    return JsonResponse({})
 
 
 def get_experiment_collection(request, slug):

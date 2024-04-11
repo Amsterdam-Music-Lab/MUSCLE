@@ -51,3 +51,11 @@ class LanguageQuestion(Question):
             question=question,
             choices=choices
         )
+
+# Temporary until full Question model is implemented
+LANGUAGE_OTHER = [
+    # Copied from speech2song.py
+    LanguageQuestion(_('English')).exposure_question(),
+    LanguageQuestion(_('Brazilian Portuguese')).exposure_question(),
+    LanguageQuestion(_('Mandarin Chinese')).exposure_question()
+]
