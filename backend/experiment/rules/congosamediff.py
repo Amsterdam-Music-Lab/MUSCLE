@@ -1,6 +1,6 @@
 
 import re
-import itertools
+import math
 import string
 from django.utils.translation import gettext_lazy as _
 from experiment.actions.utils import final_action_with_optional_button
@@ -36,7 +36,7 @@ class CongoSameDiff(Base):
 
         # 2. Explainer
         explainer = Explainer(
-            instruction='Welcome to this Same Diff experiment',
+            instruction='Welcome to this Musicality Battery experiment',
             steps=[],
         )
 
@@ -111,14 +111,14 @@ class CongoSameDiff(Base):
         # patterns amount is the number of groups times the number of variants in each group
         groups_amount = session.playlist.section_set.values('group').distinct().count()
         variants_amount = real_trial_variants.count()
-        patterns = self.get_patterns(groups_amount, variants_amount)
 
         # get the participant's group variant
         participant_id = session.participant.participant_id_url
         participant_group_variant = self.get_participant_group_variant(
-            participant_id,
+            int(participant_id),
             group_number,
-            patterns
+            groups_amount,
+            variants_amount
         )
 
         # get the index of the participant's group variant in the real_trial_variants
@@ -201,7 +201,7 @@ class CongoSameDiff(Base):
         )
         form = Form([question])
         playback = PlayButton([section], play_once=False)
-        experiment_name = session.experiment.name if session.experiment else 'SameDiff Experiment'
+        experiment_name = session.experiment.name if session.experiment else 'Musicality Battery Experiment'
         view = Trial(
             playback=playback,
             feedback_form=form,
@@ -281,50 +281,36 @@ class CongoSameDiff(Base):
         if errors:
             raise ValueError('The experiment playlist is not valid: \n- ' + '\n- '.join(errors))
 
-    def get_patterns(self, groups_amount: int, variants_amount: int) -> list:
-        """
-        Generate patterns based on the given number of groups and variants.
+    def get_participant_group_variant(self, participant_id: int, group_number: int, groups_amount: int, variants_amount: int) -> str:
 
-        Args:
-            groups_amount (int): The number of groups.
-            variants_amount (int): The number of variants.
+        if participant_id <= 0:
+            raise ValueError(f"Participant id ({participant_id}) should be larger than 0")
 
-        Returns:
-            list: A list of all possible patterns generated using itertools.product.
-                For example, `[('A', 'A'), ('A', 'B'), ('B', 'A'), ('B', 'B')]`
-        """
-        patterns = []
+        if group_number <= 0:
+            raise ValueError(f"Group number ({group_number}) should be larger than 0")
+
+        if groups_amount <= 0:
+            raise ValueError(f"Groups amount ({groups_amount}) should be larger than 0")
+
+        if variants_amount <= 0:
+            raise ValueError(f"Variants amount ({variants_amount}) should be larger than 0")
 
         # Generate variant labels (e.g., ['A', 'B', 'C'])
         variants = list(string.ascii_uppercase)[:variants_amount]
 
-        # Generate all possible patterns using itertools.product
-        patterns = list(itertools.product(variants, repeat=groups_amount))
+        total_patterns = len(variants)
 
-        return patterns
+        participant_index = participant_id - 1
 
-    def get_participant_group_variant(self, participant_id: int, group_number: int, patterns: list, ):
-        """
-        Returns the variant for a participant based on their ID, patterns, and group number.
-        For example, if there are 2 groups and 2 variants, the patterns would be:
-        [('A', 'A'), ('A', 'B'), ('B', 'A'), ('B', 'B')].
-        The participant ID is used to select a pattern from the list.
-        The group number is used to select the group variant from the chosen pattern.
-        Let's say the participant ID is 3 and the group number is 2.
-        The participant ID modulo the number of patterns (3 % 4 = 3) would select the pattern ('B', 'A').
-        The group number (2) would then select the second variant ('A') from the pattern ('B', 'A').
-
-        Parameters:
-        participant_id (int): The ID of the participant, which serves as an index to choose a pattern.
-        group_number (int): The group number, which serves as an index for the chosen pattern.
-        patterns (list): A list of patterns generated using get_patterns.
-
-        Returns:
-        The variant for the participant.
-
-        """
-
-        patterns_index = int(participant_id) % len(patterns) - 1
         group_index = group_number - 1
 
-        return patterns[patterns_index][group_index]
+        # Determine if the pattern should be reversed (every 4th, 5th, 6th participant)
+        reversed_pattern = participant_index % (variants_amount * 2) >= variants_amount
+
+        # Calculate the participant's group variant
+        if reversed_pattern:
+            variant_index = (participant_index - group_index) % total_patterns
+        else:
+            variant_index = (participant_index + group_index) % total_patterns
+
+        return variants[variant_index]
