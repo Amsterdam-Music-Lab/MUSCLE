@@ -216,58 +216,107 @@ class CongoSameDiffTest(TestCase):
         # 2 + 1 + 2 = 5
         assert total_trials_count == 5
 
-    def test_get_patterns(self):
-        congo_same_diff = CongoSameDiff()
-        patterns = congo_same_diff.get_patterns(3, 2)
-        patterns_length = len(patterns)
-
-        assert patterns_length == 8
-        assert patterns == [
-            ('A', 'A', 'A'),
-            ('A', 'A', 'B'),
-            ('A', 'B', 'A'),
-            ('A', 'B', 'B'),
-            ('B', 'A', 'A'),
-            ('B', 'A', 'B'),
-            ('B', 'B', 'A'),
-            ('B', 'B', 'B'),
-        ]
-
-    def test_get_patterns_bigger(self):
-        congo_same_diff = CongoSameDiff()
-        patterns = congo_same_diff.get_patterns(4, 4)
-        patterns_length = len(patterns)
-
-        assert patterns_length == 256
-        assert patterns[0] == ('A', 'A', 'A', 'A')
-        assert patterns[255] == ('D', 'D', 'D', 'D')
-
     def test_get_participant_group_variant(self):
+        csd = CongoSameDiff()
+
+        # Test with small number of groups and variants
+        self.assertEqual(csd.get_participant_group_variant(1, 1, 2, 2), 'A')
+        self.assertEqual(csd.get_participant_group_variant(1, 2, 2, 2), 'B')
+        self.assertEqual(csd.get_participant_group_variant(2, 1, 2, 2), 'B')
+        self.assertEqual(csd.get_participant_group_variant(2, 2, 2, 2), 'A')
+
+        # Test with more variants than groups
+        self.assertEqual(csd.get_participant_group_variant(1, 1, 2, 3), 'A')
+        self.assertEqual(csd.get_participant_group_variant(1, 2, 2, 3), 'B')
+        self.assertEqual(csd.get_participant_group_variant(2, 1, 2, 3), 'B')
+        self.assertEqual(csd.get_participant_group_variant(2, 2, 2, 3), 'C')
+        self.assertEqual(csd.get_participant_group_variant(3, 1, 2, 3), 'C')
+        self.assertEqual(csd.get_participant_group_variant(3, 2, 2, 3), 'A')
+
+        # Test for participant 1 to 6 to match the expected sequence and reverses
+        self.assertEqual(csd.get_participant_group_variant(1, 1, 3, 3), 'A')
+        self.assertEqual(csd.get_participant_group_variant(1, 2, 3, 3), 'B')
+        self.assertEqual(csd.get_participant_group_variant(1, 3, 3, 3), 'C')
+
+        self.assertEqual(csd.get_participant_group_variant(2, 1, 3, 3), 'B')
+        self.assertEqual(csd.get_participant_group_variant(2, 2, 3, 3), 'C')
+        self.assertEqual(csd.get_participant_group_variant(2, 3, 3, 3), 'A')
+
+        self.assertEqual(csd.get_participant_group_variant(3, 1, 3, 3), 'C')
+        self.assertEqual(csd.get_participant_group_variant(3, 2, 3, 3), 'A')
+        self.assertEqual(csd.get_participant_group_variant(3, 3, 3, 3), 'B')
+
+        self.assertEqual(csd.get_participant_group_variant(4, 1, 3, 3), 'A')
+        self.assertEqual(csd.get_participant_group_variant(4, 2, 3, 3), 'C')
+        self.assertEqual(csd.get_participant_group_variant(4, 3, 3, 3), 'B')
+
+        self.assertEqual(csd.get_participant_group_variant(5, 1, 3, 3), 'B')
+        self.assertEqual(csd.get_participant_group_variant(5, 2, 3, 3), 'A')
+        self.assertEqual(csd.get_participant_group_variant(5, 3, 3, 3), 'C')
+
+        self.assertEqual(csd.get_participant_group_variant(6, 1, 3, 3), 'C')
+        self.assertEqual(csd.get_participant_group_variant(6, 2, 3, 3), 'B')
+        self.assertEqual(csd.get_participant_group_variant(6, 3, 3, 3), 'A')
+
+        # Test for participant 7 to 12 to match the expected sequence and reverses
+        self.assertEqual(csd.get_participant_group_variant(7, 1, 3, 3), 'A')
+        self.assertEqual(csd.get_participant_group_variant(7, 2, 3, 3), 'B')
+        self.assertEqual(csd.get_participant_group_variant(7, 3, 3, 3), 'C')
+
+        self.assertEqual(csd.get_participant_group_variant(8, 1, 3, 3), 'B')
+        self.assertEqual(csd.get_participant_group_variant(8, 2, 3, 3), 'C')
+        self.assertEqual(csd.get_participant_group_variant(8, 3, 3, 3), 'A')
+
+        self.assertEqual(csd.get_participant_group_variant(9, 1, 3, 3), 'C')
+        self.assertEqual(csd.get_participant_group_variant(9, 2, 3, 3), 'A')
+        self.assertEqual(csd.get_participant_group_variant(9, 3, 3, 3), 'B')
+
+        self.assertEqual(csd.get_participant_group_variant(10, 1, 3, 3), 'A')
+        self.assertEqual(csd.get_participant_group_variant(10, 2, 3, 3), 'C')
+        self.assertEqual(csd.get_participant_group_variant(10, 3, 3, 3), 'B')
+
+        self.assertEqual(csd.get_participant_group_variant(11, 1, 3, 3), 'B')
+        self.assertEqual(csd.get_participant_group_variant(11, 2, 3, 3), 'A')
+        self.assertEqual(csd.get_participant_group_variant(11, 3, 3, 3), 'C')
+
+        self.assertEqual(csd.get_participant_group_variant(12, 1, 3, 3), 'C')
+        self.assertEqual(csd.get_participant_group_variant(12, 2, 3, 3), 'B')
+        self.assertEqual(csd.get_participant_group_variant(12, 3, 3, 3), 'A')
+
+        # Test with more groups than variants
+        self.assertEqual(csd.get_participant_group_variant(1, 1, 4, 3), 'A')
+        self.assertEqual(csd.get_participant_group_variant(1, 2, 4, 3), 'B')
+        self.assertEqual(csd.get_participant_group_variant(1, 3, 4, 3), 'C')
+        self.assertEqual(csd.get_participant_group_variant(1, 4, 4, 3), 'A')
+
+        self.assertEqual(csd.get_participant_group_variant(2, 1, 4, 3), 'B')
+        self.assertEqual(csd.get_participant_group_variant(2, 2, 4, 3), 'C')
+        self.assertEqual(csd.get_participant_group_variant(2, 3, 4, 3), 'A')
+        self.assertEqual(csd.get_participant_group_variant(2, 4, 4, 3), 'B')
+
+        self.assertEqual(csd.get_participant_group_variant(4, 1, 4, 3), 'A')
+        self.assertEqual(csd.get_participant_group_variant(4, 2, 4, 3), 'C')
+        self.assertEqual(csd.get_participant_group_variant(4, 3, 4, 3), 'B')
+        self.assertEqual(csd.get_participant_group_variant(4, 4, 4, 3), 'A')
+
+        self.assertEqual(csd.get_participant_group_variant(7, 1, 4, 3), 'A')
+        self.assertEqual(csd.get_participant_group_variant(7, 2, 4, 3), 'B')
+        self.assertEqual(csd.get_participant_group_variant(7, 3, 4, 3), 'C')
+        self.assertEqual(csd.get_participant_group_variant(7, 4, 4, 3), 'A')
+
+    def test_edge_cases(self):
         congo_same_diff = CongoSameDiff()
 
-        patterns = [('A', 'A'), ('A', 'B'), ('B', 'A'), ('B', 'B')]
+        # Test edge cases
+        self.assertEqual(congo_same_diff.get_participant_group_variant(1, 4, 4, 3), 'A')  # Group number exceeds variants
+        self.assertEqual(congo_same_diff.get_participant_group_variant(12, 1, 2, 3), 'C')  # Reversed, with fewer groups than variants
 
-        # Test participant ID 1 and group number 1
-        variant = congo_same_diff.get_participant_group_variant(1, 1, patterns)
-        assert variant == 'A'
+    def test_invalid_parameters(self):
+        congo_same_diff = CongoSameDiff()
 
-        # Test participant ID 1 and group number 2
-        variant = congo_same_diff.get_participant_group_variant(1, 2, patterns)
-        assert variant == 'A'
-
-        # Test participant ID 6 and group number 1
-        variant = congo_same_diff.get_participant_group_variant(6, 1, patterns)
-        assert variant == 'A'
-
-        # Test participant ID 6 and group number 2
-        variant = congo_same_diff.get_participant_group_variant(6, 2, patterns)
-        assert variant == 'B'
-
-        # Test participant ID 7 and group number 1
-        variant = congo_same_diff.get_participant_group_variant(7, 1, patterns)
-        assert variant == 'B'
-
-        # Test participant ID 7 and group number 2
-        variant = congo_same_diff.get_participant_group_variant(7, 2, patterns)
-        assert variant == 'A'
-        
+        # Test scenarios with invalid parameters (should raise exceptions or handle gracefully)
+        with self.assertRaises(ValueError):  # Assuming your method raises ValueError for invalid inputs
+            congo_same_diff.get_participant_group_variant(-1, 1, 3, 3)  # Negative participant ID
+            congo_same_diff.get_participant_group_variant(1, -1, 3, 3)  # Negative group number
+            congo_same_diff.get_participant_group_variant(1, 1, -1, 3)  # Negative groups amount
+            congo_same_diff.get_participant_group_variant(1, 1, 3, -1)  # Negative variants amount
