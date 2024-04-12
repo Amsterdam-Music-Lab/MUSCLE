@@ -9,7 +9,7 @@ from session.models import Session
 
 
 class HookedTest(TestCase):
-    fixtures = ['playlist', 'experiment']
+    fixtures = ['playlist', 'experiment','question','questionseries','questioninseries']
 
     @classmethod
     def setUpTestData(cls):
@@ -130,7 +130,7 @@ class HookedTest(TestCase):
         question_trials = rules.get_questionnaire(session)
         # assert len(question_trials) == len(rules.questions)
         keys = [q.feedback_form.form[0].key for q in question_trials]
-        questions = [q.key for q in rules.questions]
+        questions = rules.question_series[0]['keys'][0:3]
         assert set(keys).difference(set(questions)) == set()
 
 
