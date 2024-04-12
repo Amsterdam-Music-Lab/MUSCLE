@@ -147,23 +147,29 @@ EXTRA_DEMOGRAPHICS = [
 ]
 
 
+
+def demographics_other():
+    from .utils import question_by_key
+
+    questions = []
+
+    question =  question_by_key('dgf_education', drop_choices=['isced-2', 'isced-5'])
+    question.key = 'dgf_education_matching_pairs'
+    questions.append(question)
+
+    question = question_by_key('dgf_education', drop_choices=['isced-1'])
+    question.key = 'dgf_education_gold_msi'
+    questions.append(question)
+
+    question = question_by_key('dgf_education', drop_choices=['isced-5'])
+    question.key = 'dgf_education_huang_2022'
+    questions.append(question)
+
+    return questions
+
+
 # Temporary until full Question model is implemented
-from .utils import question_by_key
-
-question_dgf_education_matching_pairs =  question_by_key('dgf_education', drop_choices=['isced-2', 'isced-5'])
-question_dgf_education_matching_pairs.key = 'dgf_education_matching_pairs'
-
-question_dgf_education_gold_msi = question_by_key('dgf_education', drop_choices=['isced-1'])
-question_dgf_education_gold_msi.key = 'dgf_education_gold_msi'
-
-question_dgf_education_huang_2022 = question_by_key('dgf_education', drop_choices=['isced-5'])
-question_dgf_education_huang_2022.key = 'dgf_education_huang_2022'
-
-DEMOGRAPHICS_OTHER = [
-    question_dgf_education_matching_pairs,
-    question_dgf_education_gold_msi,
-    question_dgf_education_huang_2022,
-
+DEMOGRAPHICS_OTHER = demographics_other() + [
     TextQuestion(
         key='fame_name',
         question=_("Enter a name to enter the ICMPC hall of fame"),
