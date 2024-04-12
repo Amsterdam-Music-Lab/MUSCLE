@@ -61,7 +61,7 @@ genbadge[coverage]==1.1.1
     # via -r requirements.in/base.txt
 html5lib==1.1
     # via textile
-idna==3.3
+idna==3.7
     # via requests
 importlib-metadata==7.0.0
     # via
