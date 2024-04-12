@@ -147,7 +147,6 @@ EXTRA_DEMOGRAPHICS = [
 ]
 
 
-
 def demographics_other():
     from .utils import question_by_key
 
