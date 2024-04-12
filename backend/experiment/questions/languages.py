@@ -52,6 +52,7 @@ class LanguageQuestion(Question):
             choices=choices
         )
 
+
 # Temporary until full Question model is implemented
 LANGUAGE_OTHER = [
     # Copied from speech2song.py

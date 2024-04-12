@@ -71,6 +71,7 @@ def experiment_or_404(slug):
     except Experiment.DoesNotExist:
         raise Http404("Experiment does not exist")
 
+
 def question_groups(request):
     question_groups = {}
     for question_group in QuestionGroup.objects.all():

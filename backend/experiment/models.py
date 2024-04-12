@@ -232,7 +232,6 @@ class Experiment(models.Model):
 
         return 0
 
-
     def add_default_question_series(self):
         """ Add default question_series to experiment"""
         from experiment.rules import EXPERIMENT_RULES

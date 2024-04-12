@@ -34,14 +34,17 @@ class QuestionInSeriesInline(admin.TabularInline):
     model = QuestionInSeries
     extra = 0
 
+
 class QuestionSeriesInline(admin.TabularInline):
     model = QuestionSeries
     extra = 0
     show_change_link = True
 
+
 class QuestionAdmin(admin.ModelAdmin):
     def has_change_permission(self, request, obj=None):
         return obj.editable if obj else False
+
 
 class QuestionGroupAdmin(admin.ModelAdmin):
     formfield_overrides = {
@@ -57,13 +60,16 @@ class QuestionGroupAdmin(admin.ModelAdmin):
 
         return form
 
+
 class QuestionSeriesAdmin(admin.ModelAdmin):
     inlines = [QuestionInSeriesInline]
     form = QuestionSeriesAdminForm
 
+
 admin.site.register(Question, QuestionAdmin)
 admin.site.register(QuestionGroup, QuestionGroupAdmin)
 admin.site.register(QuestionSeries, QuestionSeriesAdmin)
+
 
 class ExperimentAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
     list_display = ('image_preview', 'experiment_link', 'rules', 'rounds', 'playlist_count',

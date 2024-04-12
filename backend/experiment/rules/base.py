@@ -26,7 +26,6 @@ class Base(object):
             {"name": "MSI_OTHER", "keys": ['msi_39_best_instrument'], "randomize": False},
         ]
 
-
     def feedback_info(self):
         feedback_body = render_to_string('feedback/user_feedback.html', {'email': self.contact_email})
         return {
