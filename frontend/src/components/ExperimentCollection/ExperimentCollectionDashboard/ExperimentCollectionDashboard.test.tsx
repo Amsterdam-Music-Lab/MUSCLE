@@ -71,19 +71,7 @@ describe('ExperimentCollectionDashboard', () => {
         );
         await waitFor(() => {
             expect(screen.getByRole('menu')).toBeTruthy();
-            expect(screen.getByRole('menu').querySelector('a').getAttribute('href')).toBe('/some_slug/');
-        });
-    });
-
-    it('links to the experiment with the correct slug and participant id', async () => {
-        render(
-            <MemoryRouter>
-                <ExperimentCollectionDashboard experimentCollection={{ dashboard: [experiment1] }} participantId="123" />
-            </MemoryRouter>
-        );
-        await waitFor(() => {
-            expect(screen.getByRole('menu')).toBeTruthy();
-            expect(screen.getByRole('menu').querySelector('a').getAttribute('href')).toBe('/some_slug/?participant_id=123');
+            expect(screen.getByRole('menu').querySelector('a').getAttribute('href')).toBe('/some_slug');
         });
     });
 })

@@ -75,27 +75,4 @@ const ExperimentCollection = ({ match }: ExperimentCollectionProps) => {
     )
 }
 
-const WithParticipantExperimentCollection = (props: ExperimentCollectionProps) => {
-    const participant = useBoundStore((state) => state.participant);
-    const participantLoading = useBoundStore((state) => state.participantLoading);
-
-    if (participantLoading) {
-        return (
-            <div className="loader-container">
-                <Loading />
-            </div>
-        );
-    }
-
-    if (!participant) {
-        return (
-            <div className="aha__collection">
-                <p>Participant not found</p>
-            </div>
-        )
-    }
-
-    return <ExperimentCollection {...props} participant={participant} />;
-}
-
-export default WithParticipantExperimentCollection;
+export default ExperimentCollection;

@@ -12,7 +12,8 @@ import { URLS as API_URLS } from "../../API";
 import useBoundStore from "../../util/stores";
 import Experiment from "../Experiment/Experiment";
 import ExperimentCollection from "../ExperimentCollection/ExperimentCollection";
-import Loading from "../Loading/Loading";
+import LoaderContainer from "../LoaderContainer/LoaderContainer";
+import ConditionalRender from "../ConditionalRender/ConditionalRender";
 import Profile from "../Profile/Profile";
 import Reload from "../Reload/Reload";
 import StoreProfile from "../StoreProfile/StoreProfile";
@@ -27,9 +28,9 @@ const App = () => {
     const setParticipant = useBoundStore((state) => state.setParticipant);
     const setParticipantLoading = useBoundStore((state) => state.setParticipantLoading);
     const queryParams = window.location.search;
-    
+
     useDisableRightClickOnTouchDevices();
-    
+
     useEffect(() => {
         const urlParams = new URLSearchParams(queryParams);
         const participantId = urlParams.get('participant_id');
@@ -55,48 +56,44 @@ const App = () => {
 
     return (
         <Router className="aha__app">
-            { !participant? (
-            <div className="loader-container">
-                <Loading />
-            </div>
-            ) : (
-            <Switch>
-                {/* Request reload for given participant */}
-                <Route path={URLS.reloadParticipant}>
-                    <Reload />
-                </Route>
+            <ConditionalRender condition={participant} fallback={<LoaderContainer />}>
+                <Switch>
+                    {/* Request reload for given participant */}
+                    <Route path={URLS.reloadParticipant}>
+                        <Reload />
+                    </Route>
 
-                {/* Default experiment */}
-                <Route path="/" exact>
-                    <Redirect
-                        to={URLS.experiment.replace(":slug", EXPERIMENT_SLUG)}
+                    {/* Default experiment */}
+                    <Route path="/" exact>
+                        <Redirect
+                            to={URLS.experiment.replace(":slug", EXPERIMENT_SLUG)}
+                        />
+                    </Route>
+
+                    {/* Profile */}
+                    <Route path={URLS.profile} exact>
+                        <Profile slug={EXPERIMENT_SLUG} />
+                    </Route>
+
+                    {/* Experiment Collection */}
+                    <Route path={URLS.experimentCollection} component={ExperimentCollection} />
+
+                    {/* Experiment */}
+                    <Route path={URLS.experiment} component={Experiment} />
+
+                    <Route path={URLS.session} />
+
+                    {/* Store profile */}
+                    <Route
+                        path={URLS.storeProfile}
+                        exact
+                        component={StoreProfile}
                     />
-                </Route>
-                
-                {/* Profile */}
-                <Route path={URLS.profile} exact>
-                    <Profile slug={EXPERIMENT_SLUG} />
-                </Route>
-
-                {/* Experiment Collection */}
-                <Route path={URLS.experimentCollection} component={ExperimentCollection} />
-
-                {/* Experiment */}
-                <Route path={URLS.experiment} component={Experiment} />
-
-                <Route path={URLS.session} />
-
-                {/* Store profile */}
-                <Route
-                    path={URLS.storeProfile}
-                    exact
-                    component={StoreProfile}
-                />
+                </Switch>
+            </ConditionalRender>
 
 
-            </Switch>
-            )}
-        </Router>
+        </Router >
     );
 };
 
