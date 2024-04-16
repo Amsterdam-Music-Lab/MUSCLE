@@ -7,4 +7,4 @@ from .matching_pairs_lite import MatchingPairsLite
 
 class MatchingPairsFixed(MatchingPairsLite):
     ID = 'MATCHING_PAIRS_FIXED'
-    randomize = False
+    random_seed = 'fixed'

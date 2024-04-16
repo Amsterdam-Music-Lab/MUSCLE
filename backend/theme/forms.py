@@ -1,5 +1,6 @@
 from django import forms
 from .models import ThemeConfig
+from experiment.forms import MarkdownPreviewTextInput
 
 
 class ThemeConfigForm(forms.ModelForm):
@@ -9,7 +10,7 @@ class ThemeConfigForm(forms.ModelForm):
         fields = '__all__'
 
     class Media:
-        js = ['img_preview.js', 'font_preview.js']
+        js = ['font_preview.js']
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -20,3 +21,10 @@ class ThemeConfigForm(forms.ModelForm):
         if commit:
             instance.save()
         return instance
+
+
+class FooterConfigForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['disclaimer'].widget = MarkdownPreviewTextInput()
+        self.fields['privacy'].widget = MarkdownPreviewTextInput()

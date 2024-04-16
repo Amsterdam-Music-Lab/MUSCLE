@@ -8,17 +8,19 @@ from experiment.standards.iso_languages import ISO_LANGUAGES
 from theme.models import ThemeConfig
 from image.models import Image
 
-from .validators import consent_file_validator, experiment_slug_validator
+from .validators import markdown_html_validator, experiment_slug_validator
 
 language_choices = [(key, ISO_LANGUAGES[key]) for key in ISO_LANGUAGES.keys()]
 language_choices[0] = ('', 'Unset')
 
 
-class ExperimentSeries(models.Model):
+class ExperimentCollection(models.Model):
     """ A model to allow nesting multiple experiments into a 'parent' experiment """
     name = models.CharField(max_length=64, default='')
     description = models.TextField(blank=True, default='')
     slug = models.SlugField(max_length=64, default='')
+    theme_config = models.ForeignKey(
+        "theme.ThemeConfig", blank=True, null=True, on_delete=models.SET_NULL)
     # first experiments in a test series, in fixed order
     first_experiments = models.JSONField(blank=True, null=True, default=dict)
     random_experiments = models.JSONField(blank=True, null=True, default=dict)
@@ -26,21 +28,60 @@ class ExperimentSeries(models.Model):
     last_experiments = models.JSONField(blank=True, null=True, default=dict)
     # present random_experiments as dashboard
     dashboard = models.BooleanField(default=False)
+    about_content = models.TextField(blank=True, default='')
 
     def __str__(self):
         return self.name or self.slug
 
     class Meta:
-        verbose_name_plural = "Experiment Series"
+        verbose_name_plural = "Experiment Collections"
 
     def associated_experiments(self):
-        return [*self.first_experiments, *self.random_experiments, *self.last_experiments]
+        groups = self.groups.all()
+        return [
+            experiment.experiment for group in groups for experiment in list(group.experiments.all())]
 
 
 def consent_upload_path(instance, filename):
-    """Generate path to save audio based on playlist.name"""
+    """Generate path to save consent file based on experiment.slug"""
     folder_name = instance.slug
     return 'consent/{0}/{1}'.format(folder_name, filename)
+
+
+class ExperimentCollectionGroup(models.Model):
+    name = models.CharField(max_length=64, blank=True, default='')
+    series = models.ForeignKey(ExperimentCollection,
+                               on_delete=models.CASCADE, related_name='groups')
+    order = models.IntegerField(default=0, help_text='Order of the group in the series. Lower numbers come first.')
+    dashboard = models.BooleanField(default=False)
+    randomize = models.BooleanField(default=False, help_text='Randomize the order of the experiments in this group.')
+    finished = models.BooleanField(default=False)
+
+    def __str__(self):
+        compound_name = self.name or self.series.name or self.series.slug or 'Unnamed group'
+
+        if not self.name:
+            return f'{compound_name} ({self.order})'
+
+        return f'{compound_name}'
+
+    class Meta:
+        ordering = ['order']
+        verbose_name_plural = "Experiment Collection Groups"
+
+
+class GroupedExperiment(models.Model):
+    experiment = models.OneToOneField('Experiment', on_delete=models.CASCADE)
+    group = models.ForeignKey(
+        ExperimentCollectionGroup, on_delete=models.CASCADE, related_name='experiments')
+    order = models.IntegerField(default=0, help_text='Order of the experiment in the group. Lower numbers come first.')
+
+    def __str__(self):
+        return f'{self.experiment.name} - {self.group.name} - {self.order}'
+
+    class Meta:
+        ordering = ['order']
+        verbose_name_plural = "Grouped Experiments"
 
 
 class Experiment(models.Model):
@@ -73,7 +114,7 @@ class Experiment(models.Model):
     consent = models.FileField(upload_to=consent_upload_path,
                                blank=True,
                                default='',
-                               validators=[consent_file_validator()])
+                               validators=[markdown_html_validator()])
 
     class Meta:
         ordering = ['name']

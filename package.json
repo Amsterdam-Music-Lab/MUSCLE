@@ -1,13 +1,12 @@
 {
-    "name": "aml-experiments",
-    "version": "1.9.0",
+    "name": "muscle",
+    "version": "1.9.3",
     "private": false,
     "description": "The MUSCLE platform is an application that provides an easy way to implement and run online listening experiments for music research.",
     "license": "MIT",
-    "__comment1__": "private set to true to suppress 'warning package.json: No license field'",
     "scripts": {
         "test-front": "sudo docker-compose run client yarn test --watchAll=false",
         "test-back": "sudo docker-compose run server bash -c 'python manage.py test'"
     },
-    "packageManager": "yarn@4.0.2"
+    "packageManager": "yarn@4.1.1"
 }

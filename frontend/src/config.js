@@ -20,6 +20,9 @@ export const SILENT_MP3 = "/audio/silent.mp3";
 export const LOGO_URL = import.meta.env.VITE_LOGO_URL || '/images/logo-white.svg';
 export const LOGO_TITLE = import.meta.env.VITE_HTML_PAGE_TITLE || 'Amsterdam Music Lab';
 
+// Background
+export const BACKGROUND_URL = import.meta.env.VITE_BACKGROUND_URL || '/images/background.jpg'
+
 // Urls used by app
 export const URLS = {
     home: "/",
@@ -27,6 +30,7 @@ export const URLS = {
     profile: "/profile",
     storeProfile: "/profile/store",
     experiment: "/:slug",
+    experimentCollectionAbout: "/collection/:slug/about",
     experimentCollection: "/collection/:slug",
     reloadParticipant: "/participant/reload/:id/:hash",
     AMLHome:

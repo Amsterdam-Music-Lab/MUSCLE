@@ -12,18 +12,18 @@ TARGET_CHOICES = (
 class Image(models.Model):
     file = models.ImageField(upload_to='%Y/%m/%d/')
     title = models.CharField(max_length=255)
-    description = models.TextField(blank=True, null=True)
-    alt = models.CharField(max_length=255, blank=True, null=True)
-    href = models.URLField(blank=True, null=True)
-    rel = models.CharField(max_length=255, blank=True, null=True)
+    description = models.TextField(blank=True, default='')
+    alt = models.CharField(max_length=255, blank=True, default='')
+    href = models.URLField(blank=True, default='')
+    rel = models.CharField(max_length=255, blank=True, default='')
     target = models.CharField(
         max_length=255,
         blank=True,
-        null=True,
-        choices=TARGET_CHOICES
+        choices=TARGET_CHOICES,
+        default=TARGET_CHOICES[0]
     )
     tags = ArrayField(
-        models.CharField(max_length=255), blank=True, default=list, null=True
+        models.CharField(max_length=255), blank=True, default=list
     )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

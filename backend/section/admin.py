@@ -4,15 +4,16 @@ from inline_actions.admin import InlineActionsModelAdminMixin
 from django.contrib import admin, messages
 from django.core.exceptions import ValidationError
 from django.shortcuts import render, redirect
-from django.http import JsonResponse, HttpResponse
+from django.http import HttpResponse
 from django.conf import settings
-from django.urls import path
+from django.urls import path, reverse
 from django.utils.translation import gettext_lazy as _
 
 import audioread
 
 from .models import Section, Playlist, Song
 from .forms import AddSections, PlaylistAdminForm
+from .utils import get_or_create_song
 
 
 class SectionAdmin(admin.ModelAdmin):
@@ -51,6 +52,9 @@ class PlaylistAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
     search_fields = ['name', 'section__song__artist', 'section__song__name']
     inline_actions = ['add_sections',
                       'edit_sections', 'export_csv']
+
+    def redirect_to_overview(self):
+        return redirect(reverse('admin:section_playlist_changelist'))
 
     def save_model(self, request, obj, form, change):
 
@@ -99,19 +103,24 @@ class PlaylistAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
                     file_errors.append(_('Cannot upload {}: {}').format(str(section), e.messages[0]))
                     form.errors['file'] = file_errors
                     continue
-                if this_artist and this_name:
-                    this_song, created = Song.objects.get_or_create(artist=this_artist, name=this_name)
-                    new_section.song = this_song
+
+                # Retrieve or create Song object
+                song = None
+                if this_artist or this_name:
+                    song = get_or_create_song(this_artist, this_name)
+                new_section.song = song
+
                 file_path = settings.MEDIA_ROOT + '/' + str(new_section.filename)
                 with audioread.audio_open(file_path) as f:
                     new_section.duration = f.duration
                 new_section.save()
-                obj.save()
+
+            obj.save()
             if not form.errors:
-                return redirect('/admin/section/playlist')
+                return self.redirect_to_overview()
         # Go back to admin playlist overview
         if '_back' in request.POST:
-            return redirect('/admin/section/playlist')
+            return self.redirect_to_overview()
         return render(
             request,
             'add-sections.html',
@@ -132,23 +141,23 @@ class PlaylistAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
                 # Get data and update section
                 this_artist = request.POST.get(pre_fix + '_artist')
                 this_name = request.POST.get(pre_fix + '_name')
-                if this_artist and this_name:
-                    this_song, created = Song.objects.get_or_create(artist=this_artist, name=this_name)
-                    if created:
-                        section.song = this_song
-                    else:
-                        section.song = this_song
-                        section.song.save()
+
+                # Retrieve or create Song object
+                song = None
+                if this_artist or this_name:
+                    song = get_or_create_song(this_artist, this_name)                
+                section.song = song
+
                 section.start_time = request.POST.get(pre_fix + '_start_time')
                 section.duration = request.POST.get(pre_fix + '_duration')
                 section.tag = request.POST.get(pre_fix + '_tag')
                 section.group = request.POST.get(pre_fix + '_group')
                 section.save()
-                obj.save()
-            return redirect('/admin/section/playlist')
-        # Go back to admin playlist overview
+            obj.process_csv = False
+            obj.save()
+            return self.redirect_to_overview()
         if '_back' in request.POST:
-            return redirect('/admin/section/playlist')
+            return self.redirect_to_overview()
         return render(
             request,
             'edit-sections.html',

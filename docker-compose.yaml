@@ -73,6 +73,9 @@ services:
             source: ./frontend/tsconfig.json
             target: /client/tsconfig.json
           - type: bind
+            source: ./frontend/tsconfig.node.json
+            target: /client/tsconfig.node.json
+          - type: bind
             source: ./frontend/vite-env.d.ts
             target: /client/vite-env.d.ts
           - type: bind
@@ -100,7 +103,7 @@ services:
           - VITE_STRICT=${FRONTEND_STRICT}
         ports:
           - 3000:3000
-        command: sh -c "yarn scss && yarn start"
+        command: yarn start
 volumes:
     db_data:
     db_backup:

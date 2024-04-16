@@ -9,12 +9,9 @@ export default defineConfig({
     environment: 'happy-dom',
     coverage: {
       reportsDirectory: 'public/coverage',
+      provider: 'v8',
+      reporter: "json-summary",
     },
-  },
-  esbuild: {
-    include: /\.[jt]sx?$/,
-    exclude: [],
-    loader: 'jsx',
   },
   resolve: {
     alias: {

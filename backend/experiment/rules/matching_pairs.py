@@ -19,7 +19,7 @@ class MatchingPairsGame(Base):
     show_animation = True
     score_feedback_display = 'large-top'
     contact_email = 'aml.tunetwins@gmail.com'
-    randomize = True
+    random_seed = None
 
     def __init__(self):
         self.question_series = [
@@ -100,16 +100,16 @@ class MatchingPairsGame(Base):
         pairs = json_data.get('pairs', [])
         if len(pairs) < self.num_pairs:
             pairs = list(session.playlist.section_set.order_by().distinct('group').values_list('group', flat=True))
-            if self.randomize:
-                random.shuffle(pairs)
+            random.seed(self.random_seed)
+            random.shuffle(pairs)
         selected_pairs = pairs[:self.num_pairs]
         session.save_json_data({'pairs': pairs[self.num_pairs:]})
         originals = session.playlist.section_set.filter(group__in=selected_pairs, tag='Original')  
         degradations = json_data.get('degradations')
         if not degradations:
             degradations = ['Original', '1stDegradation', '2ndDegradation']
-            if self.randomize:
-                random.shuffle(degradations)
+            random.seed(self.random_seed)
+            random.shuffle(degradations)
         degradation_type = degradations.pop()
         session.save_json_data({'degradations': degradations})
         if degradation_type == 'Original':
@@ -121,8 +121,8 @@ class MatchingPairsGame(Base):
 
     def get_matching_pairs_trial(self, session):
         player_sections = self.select_sections(session)
-        if self.randomize:
-            random.shuffle(player_sections)
+        random.seed(self.random_seed)
+        random.shuffle(player_sections)
 
         playback = MatchingPairs(
             sections=player_sections,

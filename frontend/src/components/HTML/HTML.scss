@@ -71,4 +71,37 @@
         }
         
     }
+
+    .prose {
+        h1, h2, h3 {
+            position: relative;
+            padding-bottom: 15px;
+            margin-bottom: 15px;
+            text-align: left;
+
+            &:after {
+                content: "";
+                position: absolute;
+                background-color: $primary;
+                bottom: -5px;
+                left: -31px;
+                width: 100px;
+                height: 5px;
+            }
+        }
+
+        blockquote * {
+            margin: 50px 30px;
+            color: $primary;
+            text-shadow: 0 0 30px $primary;
+    
+            @media (max-width: 720px) {
+                margin: 30px 20px;
+            }
+
+            &::after {
+                display: none;
+            }
+        }
+    }
 }
