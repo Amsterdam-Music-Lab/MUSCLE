@@ -179,9 +179,13 @@ class CongoSameDiff(Base):
         section_name = section.song.name if section.song else 'no_name'
         section_tag = section.tag if section.tag else 'no_tag'
         section_group = section.group if section.group else 'no_group'
+        section_artist = section.song.artist if section.song else 'NO_EXPECTED_RESPONSE'
 
         # define a key, by which responses to this trial can be found in the database
         key = f'samediff_trial_{section_group}_{section_name}'
+
+        # set artist field as expected_response in the results
+        expected_response = section_artist
 
         question = ChoiceQuestion(
             explainer=f'{practice_label} ({trial_index}/{subset_count}) | {section_name} | {section_tag} | {section_group}',
@@ -196,7 +200,7 @@ class CongoSameDiff(Base):
             },
             style={},
             key=key,
-            result_id=prepare_result(key, session, section=section),
+            result_id=prepare_result(key, session, section=section, expected_response=expected_response),
             submits=True
         )
         form = Form([question])
