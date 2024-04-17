@@ -26,7 +26,7 @@ const experimentWithAllProps = getExperiment({ image: 'some_image.jpg', descript
 
 describe('ExperimentCollection', () => {
 
-    it('forwards to a single experiment if it receives a single object', async () => {
+    it('forwards to a single experiment if it receives an empty dashboard array', async () => {
         mock.onGet().replyOnce(200, {dashboard: [], next_experiment: experiment1});
         render(
         <MemoryRouter>
