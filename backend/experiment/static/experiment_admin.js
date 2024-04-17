@@ -7,7 +7,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
 
 	let buttonAddDefaultQuestions = document.createElement("input")
 	buttonAddDefaultQuestions.type = "button"
-	buttonAddDefaultQuestions.value = "Add rules' defaults"
+	buttonAddDefaultQuestions.value = "Add rules' defaults and save"
 	buttonAddDefaultQuestions.addEventListener("click", addDefaultQuestions)
 
 	let message = document.createElement("span")
