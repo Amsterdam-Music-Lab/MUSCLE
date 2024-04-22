@@ -276,17 +276,19 @@ class Experiment(models.Model):
     def add_default_question_series(self):
         """ Add default question_series to experiment"""
         from experiment.rules import EXPERIMENT_RULES
-        for i,question_series in enumerate(EXPERIMENT_RULES[self.rules]().question_series):
-            qs = QuestionSeries.objects.create(
-                name = question_series['name'],
-                experiment = self,
-                index = i+1,
-                randomize = question_series['randomize'])
-            for i,question in enumerate(question_series['keys']):
-                qis = QuestionInSeries.objects.create(
-                    question_series = qs,
-                    question = Question.objects.get(pk=question),
-                    index=i+1)
+        question_series = getattr(EXPERIMENT_RULES[self.rules](), "question_series", None)
+        if question_series:
+            for i,question_series in enumerate(question_series):
+                qs = QuestionSeries.objects.create(
+                    name = question_series['name'],
+                    experiment = self,
+                    index = i+1,
+                    randomize = question_series['randomize'])
+                for i,question in enumerate(question_series['keys']):
+                    qis = QuestionInSeries.objects.create(
+                        question_series = qs,
+                        question = Question.objects.get(pk=question),
+                        index=i+1)
 
 
 class Feedback(models.Model):
