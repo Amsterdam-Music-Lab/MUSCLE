@@ -42,7 +42,7 @@ class Categorization(Base):
             deny='Stop',
             url='consent/consent_categorization.html'
             )
-        return [explainer, consent]
+        return [consent, explainer]
 
     def next_round(self, session):
         actions = self.get_questionnaire(session)
