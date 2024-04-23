@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from "react";
 import {
     Route,
     Redirect,
@@ -10,6 +10,7 @@ import useBoundStore from "../../util/stores";
 import { useExperimentCollection } from "../../API";
 import Consent from "../Consent/Consent";
 import DefaultPage from "../Page/DefaultPage";
+import Info from "../Info/Info";
 import Loading from "../Loading/Loading";
 import ExperimentCollectionAbout from "./ExperimentCollectionAbout/ExperimentCollectionAbout";
 import ExperimentCollectionDashboard from "./ExperimentCollectionDashboard/ExperimentCollectionDashboard";
@@ -58,8 +59,13 @@ const ExperimentCollection = ({ match }: ExperimentCollectionProps) => {
        
     }
 
-    if (!displayDashboard && nextExperiment) {
-        return <Redirect to={"/" + nextExperiment.slug} />;
+    if (!displayDashboard) {
+        if (nextExperiment) {
+            return <Redirect to={"/" + nextExperiment.slug} />;
+        } else {
+            return <Info body={experimentCollection?.debrief} heading={experimentCollection.name} />
+        }
+
     }
 
     return (

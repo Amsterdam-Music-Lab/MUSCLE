@@ -1,7 +1,7 @@
 import json
 import logging
 
-from django.http import Http404, JsonResponse
+from django.http import Http404, HttpRequest, JsonResponse
 from django.conf import settings
 from django.utils.translation import activate, gettext_lazy as _
 from django_markup.markup import formatter
@@ -73,7 +73,7 @@ def default_questions(request, rules):
     return JsonResponse({'default_questions': [q.key for q in EXPERIMENT_RULES[rules]().questions]})
 
 
-def get_experiment_collection(request, slug):
+def get_experiment_collection(request: HttpRequest, slug: str) -> JsonResponse:
     ''' 
     check which `ExperimentCollectionGroup` objects are related to the `ExperimentCollection` with the given slug
     retrieve the group with the lowest order (= current_group)
@@ -90,17 +90,20 @@ def get_experiment_collection(request, slug):
     active_groups = ExperimentCollectionGroup.objects.filter(
         series=collection.id, finished=False).order_by('order')
     if not active_groups:
-        # TO DO: We should return a debrief here
-        return JsonResponse({})
-    current_group = active_groups.first()
-    serialized_group = serialize_experiment_collection_group(
-        current_group, participant)
-    if not serialized_group:
-        # if the current group is not a dashboard and has no unfinished experiments, it will return None
-        # set it to finished and continue to next group
-        current_group.finished = True
-        current_group.save()
-        return get_experiment_collection(request, slug)
+        serialized_group = {
+            'dashboard': [],
+            'next_experiment': None
+        }
+    else:
+        current_group = active_groups.first()
+        serialized_group = serialize_experiment_collection_group(
+            current_group, participant)
+        if not serialized_group:
+            # if the current group is not a dashboard and has no unfinished experiments, it will return None
+            # set it to finished and continue to next group
+            current_group.finished = True
+            current_group.save()
+            return get_experiment_collection(request, slug)
     return JsonResponse({
         **serialize_experiment_collection(collection),
         **serialized_group
