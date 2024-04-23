@@ -25,6 +25,7 @@ vi.mock('../../util/stores', () => ({
         const state = {
             session: 1,
             participant: 'participant-id',
+            setSession: vi.fn(),
         };
         
         return fn(state);
