@@ -131,25 +131,6 @@ class MarkdownPreviewTextInput(TextInput):
 class ExperimentCollectionForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super(ModelForm, self).__init__(*args, **kwargs)
-        experiments = Experiment.objects.all()
-        self.fields['first_experiments'] = ModelFormFieldAsJSON(
-            queryset=experiments,
-            required=False,
-            help_text=('This field will be deprecated in the nearby future. '
-                       'Please use experiment series groups (see bottom of form).')
-        )
-        self.fields['random_experiments'] = ModelFormFieldAsJSON(
-            queryset=experiments,
-            required=False,
-            help_text=('This field will be deprecated in the nearby future. '
-                       'Please use experiment series groups (see bottom of form).')
-        )
-        self.fields['last_experiments'] = ModelFormFieldAsJSON(
-            queryset=experiments,
-            required=False,
-            help_text=('This field will be deprecated in the nearby future. '
-                       'Please use experiment series groups (see bottom of form).')
-        )
         self.fields['dashboard'].help_text = (
             'This field will be deprecated in the nearby future. '
             'Please use experiment series groups for dashboard configuration. (see bottom of form). <br><br>'
@@ -158,11 +139,11 @@ class ExperimentCollectionForm(ModelForm):
             'with a description, footer, and about page. If you leave it unchecked, '
             'the experiment collection will redirect to the first experiment.')
         self.fields['about_content'].widget = MarkdownPreviewTextInput()
+        self.fields['intro'].widget = MarkdownPreviewTextInput()
 
     class Meta:
         model = ExperimentCollection
-        fields = ['slug', 'first_experiments',
-                  'random_experiments', 'last_experiments',
+        fields = ['slug', 'description', 'intro',
                   'dashboard', 'about_content']
 
     class Media:

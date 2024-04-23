@@ -2,6 +2,7 @@ from random import shuffle
 
 from django_markup.markup import formatter
 
+from experiment.actions.consent import Consent, get_render_format, render_html_or_markdown
 from participant.models import Participant
 from session.models import Session
 from .models import Experiment, ExperimentCollection, ExperimentCollectionGroup, GroupedExperiment
@@ -15,18 +16,34 @@ def serialize_actions(actions):
 
 
 def serialize_experiment_collection(
-    experiment_series: ExperimentCollection
+    experiment_collection: ExperimentCollection
 ) -> dict:
-    about_content = experiment_series.about_content
+    about_content = experiment_collection.about_content
 
     if about_content:
         about_content = formatter(about_content, filter_name='markdown')
 
+    debrief = ''
+    debrief_file = experiment_collection.debrief
+    if (debrief_file):
+        render_format = get_render_format(debrief_file.url)
+        with debrief_file.open('r') as f:
+            dry_text = f.read()
+        debrief = render_html_or_markdown(dry_text, render_format)
+
+    if experiment_collection.consent:
+        consent = Consent(experiment_collection.consent).action()
+    else:
+        consent = ''
+
     return {
-        'slug': experiment_series.slug,
-        'name': experiment_series.name,
-        'description': experiment_series.description,
+        'slug': experiment_collection.slug,
+        'name': experiment_collection.name,
+        'description': experiment_collection.description,
+        'intro': experiment_collection.intro,
+        'consent': consent,
         'about_content': about_content,
+        'debrief': debrief
     }
 
 

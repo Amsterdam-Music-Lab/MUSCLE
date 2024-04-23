@@ -15,11 +15,28 @@ language_choices = [(key, ISO_LANGUAGES[key]) for key in ISO_LANGUAGES.keys()]
 language_choices[0] = ('', 'Unset')
 
 
+def consent_upload_path(instance, filename):
+    """Generate path to save consent file based on experiment.slug"""
+    folder_name = instance.slug
+    return f'consent/{folder_name}/{filename}'
+
+
+def debrief_upload_path(instance, filename):
+    """Generate path to save consent file based on experiment.slug"""
+    folder_name = instance.slug
+    return f'debrief/{folder_name}/{filename}'
+
+
 class ExperimentCollection(models.Model):
     """ A model to allow nesting multiple experiments into a 'parent' experiment """
     name = models.CharField(max_length=64, default='')
     description = models.TextField(blank=True, default='')
     slug = models.SlugField(max_length=64, default='')
+    consent = models.FileField(upload_to=consent_upload_path,
+                               blank=True,
+                               default='',
+                               validators=[markdown_html_validator()])
+    intro = models.TextField(blank=True, default='')
     theme_config = models.ForeignKey(
         "theme.ThemeConfig", blank=True, null=True, on_delete=models.SET_NULL)
     # first experiments in a test series, in fixed order
@@ -30,6 +47,10 @@ class ExperimentCollection(models.Model):
     # present random_experiments as dashboard
     dashboard = models.BooleanField(default=False)
     about_content = models.TextField(blank=True, default='')
+    debrief = models.FileField(upload_to=debrief_upload_path,
+                               blank=True,
+                               default='',
+                               validators=[markdown_html_validator()])
 
     def __str__(self):
         return self.name or self.slug
@@ -41,12 +62,6 @@ class ExperimentCollection(models.Model):
         groups = self.groups.all()
         return [
             experiment.experiment for group in groups for experiment in list(group.experiments.all())]
-
-
-def consent_upload_path(instance, filename):
-    """Generate path to save consent file based on experiment.slug"""
-    folder_name = instance.slug
-    return 'consent/{0}/{1}'.format(folder_name, filename)
 
 
 class ExperimentCollectionGroup(models.Model):
@@ -72,7 +87,7 @@ class ExperimentCollectionGroup(models.Model):
 
 
 class GroupedExperiment(models.Model):
-    experiment = models.OneToOneField('Experiment', on_delete=models.CASCADE)
+    experiment = models.ForeignKey('Experiment', on_delete=models.CASCADE)
     group = models.ForeignKey(
         ExperimentCollectionGroup, on_delete=models.CASCADE, related_name='experiments')
     order = models.IntegerField(default=0, help_text='Order of the experiment in the group. Lower numbers come first.')

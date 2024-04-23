@@ -15,27 +15,6 @@ class RhythmExperimentSeries(Base):
     debrief_form = 'final/experiment_series.html'
     show_participant_final = True
 
-    def intro_explainer(self):
-        return Explainer(
-            instruction=_(
-                "You are about to take part in an experiment about rhythm perception."),
-            steps=[
-                Step(_(
-                    "We want to find out what the best way is to test whether someone has a good sense of rhythm!"),
-                ),
-                Step(_(
-                    "You will be doing many little tasks that have something to do with rhythm."),
-                ),
-                Step(_(
-                    "You will get a short explanation and a practice trial for each little task."),
-                ),
-                Step(_(
-                    "You can get reimbursed for completing the entire experiment! Either by earning 6 euros, or by getting 1 research credit (for psychology students at UvA only). You will get instructions for how to get paid or how to get your credit at the end of the experiment."),
-                )
-            ],
-            button_label=_("Continue")
-        )
-    
     def first_round(self, experiment):
         """Create data for the first experiment rounds."""
 
