@@ -107,6 +107,7 @@ const Experiment = ({ match }) => {
         if (!loadingExperiment && participant) {
             // Loading succeeded
             if (experiment) {
+                setSession(null);
                 // Set theme
                 if (experiment.theme) {
                     setTheme(experiment.theme);
