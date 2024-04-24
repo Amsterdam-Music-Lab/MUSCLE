@@ -5,19 +5,19 @@ from .congosamediff import CongoSameDiff
 from .duration_discrimination import DurationDiscrimination
 from .duration_discrimination_tone import DurationDiscriminationTone
 from .eurovision_2020 import Eurovision2020
-from .gold_msi import GoldMSI
 from .h_bat import HBat
 from .h_bat_bfit import HBatBFIT
 from .hbat_bst import BST
 from .hooked import Hooked
 from .huang_2022 import Huang2022
 from .kuiper_2020 import Kuiper2020
-from .listening_conditions import ListeningConditions
 from .matching_pairs import MatchingPairsGame
 from .matching_pairs_fixed import MatchingPairsFixed
 from .matching_pairs_lite import MatchingPairsLite
 from .matching_pairs_icmpc import MatchingPairsICMPC
 from .musical_preferences import MusicalPreferences
+from .rhythm_battery_final import RhythmBatteryFinal
+from .rhythm_battery_intro import RhythmBatteryIntro
 from .rhythm_discrimination import RhythmDiscrimination
 from .rhythm_experiment_series import RhythmExperimentSeries
 from .rhythm_experiment_series_mri import RhythmExperimentSeriesMRI
@@ -47,19 +47,19 @@ EXPERIMENT_RULES = {
     DurationDiscrimination.ID: DurationDiscrimination,
     DurationDiscriminationTone.ID: DurationDiscriminationTone,
     Eurovision2020.ID: Eurovision2020,
-    GoldMSI.ID: GoldMSI,
     HBat.ID: HBat,
     HBatBFIT.ID: HBatBFIT,
     Hooked.ID: Hooked,
     HookedTeleTunes.ID: HookedTeleTunes,
     Huang2022.ID: Huang2022,
     Kuiper2020.ID: Kuiper2020,
-    ListeningConditions.ID: ListeningConditions,
     MatchingPairsFixed.ID: MatchingPairsFixed,
     MatchingPairsGame.ID: MatchingPairsGame,
     MatchingPairsLite.ID: MatchingPairsLite,
     MatchingPairsICMPC.ID: MatchingPairsICMPC,
     MusicalPreferences.ID: MusicalPreferences,
+    RhythmBatteryFinal.ID: RhythmBatteryFinal,
+    RhythmBatteryIntro.ID: RhythmBatteryIntro,
     RhythmDiscrimination.ID: RhythmDiscrimination,
     RhythmExperimentSeries.ID: RhythmExperimentSeries,
     RhythmExperimentSeriesMRI.ID: RhythmExperimentSeriesMRI,

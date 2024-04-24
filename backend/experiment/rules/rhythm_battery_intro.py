@@ -2,7 +2,7 @@
 from django.utils.translation import gettext_lazy as _
 
 from .base import Base
-from experiment.actions import Consent, Explainer, Step, Playlist, Trial
+from experiment.actions import Explainer, Step, Trial
 from experiment.actions.form import ChoiceQuestion, Form
 from experiment.actions.playback import Autoplay
 from experiment.actions.styles import STYLE_BOOLEAN
@@ -10,8 +10,8 @@ from experiment.actions.utils import final_action_with_optional_button
 from result.utils import prepare_result
 
 
-class ListeningConditions(Base):
-    ID = 'LISTENING_CONDITIONS'
+class RhythmBatteryIntro(Base):
+    ID = 'RHYTHM_BATTERY_INTRO'
 
     def next_round(self, session):
         round_number = session.get_next_round()
@@ -137,7 +137,7 @@ class ListeningConditions(Base):
                 Step(_("Please use headphones, and turn off sound notifications from other devices and applications (e.g., e-mail, phone messages)."),
                      )],
             step_numbers=True,
-            button_label=_('OK')
+            button_label=_('Ok')
         )
         return [
             self.intro_explainer(),
