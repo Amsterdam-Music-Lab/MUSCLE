@@ -89,7 +89,7 @@ const MatchingPairs = ({
         if (turnedCards.length < 2) {
             if (turnedCards.length === 1) {
                 // This is the second card to be turned
-                currentCard.turned = true;
+                currentCard.turned = true;                
                 setSecondCard(currentCard);
                 // set no mouse events for all but current
                 sections.forEach(section => section.noevents = true);
@@ -110,6 +110,7 @@ const MatchingPairs = ({
                 // turn first card, disable events
                 currentCard.turned = true;
                 currentCard.noevents = true;
+                currentCard.seen = true;
                 // clear feedback text
                 setFeedbackText('');
             }
