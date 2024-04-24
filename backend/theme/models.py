@@ -1,14 +1,4 @@
-from os.path import join
-
 from django.db import models
-from django.conf import settings
-
-
-def footer_info_upload_path(instance, filename):
-    """Generate path to save consent file based on experiment.slug"""
-    folder_name = instance.slug
-    return 'consent/{0}/{1}'.format(folder_name, filename)
-
 
 class ThemeConfig(models.Model):
     name = models.CharField(max_length=255, unique=True, default='Default')
@@ -23,17 +13,6 @@ class ThemeConfig(models.Model):
     def __str__(self):
         return self.name
 
-    def to_json(self):
-        return {
-            'name': self.name,
-            'description': self.description,
-            'heading_font_url': self.heading_font_url,
-            'body_font_url': self.body_font_url,
-            'logo_url': join(settings.MEDIA_URL, str(self.logo_image.file)) if self.logo_image else None,
-            'background_url': join(settings.MEDIA_URL, str(self.background_image.file)) if self.background_image else None,
-            'footer': self.footer.to_json() if hasattr(self, 'footer') else None
-        }
-
 
 class FooterConfig(models.Model):
     theme = models.OneToOneField(
@@ -43,11 +22,8 @@ class FooterConfig(models.Model):
         to='image.Image', blank=True, help_text='Add references to Image objects; make sure these have sufficient contrast with the background (image).')
     privacy = models.TextField(blank=True, default='')
 
-    def to_json(self):
-        return {
-            'disclaimer': self.disclaimer,
-            'logos': [
-                join(settings.MEDIA_URL, str(logo.file)) for logo in self.logos.all()
-            ],
-            'privacy': self.privacy
-        }
+
+class HeaderConfig(models.Model):
+    theme = models.OneToOneField(
+        ThemeConfig, on_delete=models.CASCADE, related_name='header')
+    show_score = models.BooleanField(default=False)
