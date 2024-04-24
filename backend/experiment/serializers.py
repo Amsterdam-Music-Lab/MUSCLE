@@ -23,14 +23,6 @@ def serialize_experiment_collection(
     if about_content:
         about_content = formatter(about_content, filter_name='markdown')
 
-    debrief = ''
-    debrief_file = experiment_collection.debrief
-    if (debrief_file):
-        render_format = get_render_format(debrief_file.url)
-        with debrief_file.open('r') as f:
-            dry_text = f.read()
-        debrief = render_html_or_markdown(dry_text, render_format)
-
     if experiment_collection.consent:
         consent = Consent(experiment_collection.consent).action()
     else:
@@ -40,10 +32,8 @@ def serialize_experiment_collection(
         'slug': experiment_collection.slug,
         'name': experiment_collection.name,
         'description': experiment_collection.description,
-        'intro': experiment_collection.intro,
         'consent': consent,
         'about_content': about_content,
-        'debrief': debrief
     }
 
 

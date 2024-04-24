@@ -14,9 +14,7 @@ export default interface ExperimentCollection {
     name: string;
     description: string;
     consent: Consent;
-    info: string;
     dashboard: Experiment[];
     next_experiment: Experiment | null;
     about_content: string;
-    debrief: string;
 }

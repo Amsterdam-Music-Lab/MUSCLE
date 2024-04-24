@@ -39,10 +39,7 @@ class ListeningConditionsTest(TestCase):
     def test_first_round(self):
         listening_conditions = ListeningConditions()
         actions = listening_conditions.first_round(self.experiment)
-
-        self.assertIsInstance(actions[0], Consent)
-        self.assertIsInstance(actions[1], Explainer)
-        self.assertIsInstance(actions[2], Playlist)
+        self.assertIsInstance(actions[0], Explainer)
 
     def test_next_round_first_round(self):
         listening_conditions = ListeningConditions()

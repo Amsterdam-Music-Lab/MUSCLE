@@ -59,13 +59,8 @@ const ExperimentCollection = ({ match }: ExperimentCollectionProps) => {
        
     }
 
-    if (!displayDashboard) {
-        if (nextExperiment) {
-            return <Redirect to={"/" + nextExperiment.slug} />;
-        } else {
-            return <Info body={experimentCollection?.debrief} heading={experimentCollection.name} />
-        }
-
+    if (!displayDashboard && nextExperiment) {
+        return <Redirect to={"/" + nextExperiment.slug} />;
     }
 
     return (

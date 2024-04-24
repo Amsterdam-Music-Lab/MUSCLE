@@ -36,7 +36,6 @@ class ExperimentCollection(models.Model):
                                blank=True,
                                default='',
                                validators=[markdown_html_validator()])
-    intro = models.TextField(blank=True, default='')
     theme_config = models.ForeignKey(
         "theme.ThemeConfig", blank=True, null=True, on_delete=models.SET_NULL)
     # first experiments in a test series, in fixed order
@@ -47,10 +46,6 @@ class ExperimentCollection(models.Model):
     # present random_experiments as dashboard
     dashboard = models.BooleanField(default=False)
     about_content = models.TextField(blank=True, default='')
-    debrief = models.FileField(upload_to=debrief_upload_path,
-                               blank=True,
-                               default='',
-                               validators=[markdown_html_validator()])
 
     def __str__(self):
         return self.name or self.slug
@@ -70,8 +65,8 @@ class ExperimentCollectionGroup(models.Model):
                                on_delete=models.CASCADE, related_name='groups')
     order = models.IntegerField(default=0, help_text='Order of the group in the series. Lower numbers come first.')
     dashboard = models.BooleanField(default=False)
-    randomize = models.BooleanField(default=False, help_text='Randomize the order of the experiments in this group.')
-    finished = models.BooleanField(default=False)
+    randomize = models.BooleanField(
+        default=False, help_text='Randomize the order of the experiments in this group.')
 
     def __str__(self):
         compound_name = self.name or self.series.name or self.series.slug or 'Unnamed group'

@@ -139,11 +139,10 @@ class ExperimentCollectionForm(ModelForm):
             'with a description, footer, and about page. If you leave it unchecked, '
             'the experiment collection will redirect to the first experiment.')
         self.fields['about_content'].widget = MarkdownPreviewTextInput()
-        self.fields['intro'].widget = MarkdownPreviewTextInput()
 
     class Meta:
         model = ExperimentCollection
-        fields = ['slug', 'description', 'intro',
+        fields = ['slug', 'description',
                   'dashboard', 'about_content']
 
     class Media:

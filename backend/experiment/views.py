@@ -73,7 +73,7 @@ def default_questions(request, rules):
     return JsonResponse({'default_questions': [q.key for q in EXPERIMENT_RULES[rules]().questions]})
 
 
-def get_experiment_collection(request: HttpRequest, slug: str) -> JsonResponse:
+def get_experiment_collection(request: HttpRequest, slug: str, group_index: int = 0) -> JsonResponse:
     ''' 
     check which `ExperimentCollectionGroup` objects are related to the `ExperimentCollection` with the given slug
     retrieve the group with the lowest order (= current_group)
@@ -87,23 +87,22 @@ def get_experiment_collection(request: HttpRequest, slug: str) -> JsonResponse:
         return Http404
     request.session[COLLECTION_KEY] = slug
     participant = get_participant(request)
-    active_groups = ExperimentCollectionGroup.objects.filter(
-        series=collection.id, finished=False).order_by('order')
-    if not active_groups:
-        serialized_group = {
-            'dashboard': [],
-            'next_experiment': None
-        }
-    else:
-        current_group = active_groups.first()
+    groups = list(ExperimentCollectionGroup.objects.filter(
+        series=collection.id).order_by('order'))
+    try:
+        current_group = groups[group_index]
         serialized_group = serialize_experiment_collection_group(
             current_group, participant)
         if not serialized_group:
             # if the current group is not a dashboard and has no unfinished experiments, it will return None
             # set it to finished and continue to next group
-            current_group.finished = True
-            current_group.save()
-            return get_experiment_collection(request, slug)
+            group_index += 1
+            return get_experiment_collection(request, slug, group_index=group_index)
+    except IndexError:
+        serialized_group = {
+            'dashboard': [],
+            'next_experiment': None
+        }
     return JsonResponse({
         **serialize_experiment_collection(collection),
         **serialized_group
