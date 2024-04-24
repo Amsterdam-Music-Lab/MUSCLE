@@ -84,4 +84,16 @@ describe('ExperimentCollection', () => {
             expect(screen.getByText('Some description')).toBeInTheDocument();
         })
     });
+
+    it('shows consent first if available', () => {
+        mock.onGet().replyOnce(200, { consent: '<p>This is our consent form!</p>', dashboard: [experimentWithAllProps], next_experiment: experiment1} );
+        render(
+            <MemoryRouter>
+                <ExperimentCollection match={{params: {slug: 'some_collection'}}}/>
+            </MemoryRouter>
+        );
+        waitFor(() => {
+            expect(screen.getByText('This is our consent form!')).toBeInTheDocument();
+        })
+    })
 })
