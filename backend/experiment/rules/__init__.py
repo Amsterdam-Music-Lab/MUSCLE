@@ -19,9 +19,6 @@ from .musical_preferences import MusicalPreferences
 from .rhythm_battery_final import RhythmBatteryFinal
 from .rhythm_battery_intro import RhythmBatteryIntro
 from .rhythm_discrimination import RhythmDiscrimination
-from .rhythm_experiment_series import RhythmExperimentSeries
-from .rhythm_experiment_series_mri import RhythmExperimentSeriesMRI
-from .rhythm_experiment_series_unpaid import RhythmExperimentSeriesUnpaid
 from .speech2song import Speech2Song
 from .tele_tunes import HookedTeleTunes
 from .thats_my_song import ThatsMySong
@@ -61,9 +58,6 @@ EXPERIMENT_RULES = {
     RhythmBatteryFinal.ID: RhythmBatteryFinal,
     RhythmBatteryIntro.ID: RhythmBatteryIntro,
     RhythmDiscrimination.ID: RhythmDiscrimination,
-    RhythmExperimentSeries.ID: RhythmExperimentSeries,
-    RhythmExperimentSeriesMRI.ID: RhythmExperimentSeriesMRI,
-    RhythmExperimentSeriesUnpaid.ID: RhythmExperimentSeriesUnpaid,
     Speech2Song.ID: Speech2Song,
     ThatsMySong.ID: ThatsMySong,
     ToontjeHoger1Mozart.ID: ToontjeHoger1Mozart,

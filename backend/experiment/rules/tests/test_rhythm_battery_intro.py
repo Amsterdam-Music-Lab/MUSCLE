@@ -3,7 +3,7 @@ from section.models import Section, Song, Playlist as PlaylistModel
 from participant.models import Participant
 from session.models import Session
 from experiment.models import Experiment
-from backend.experiment.rules.rhythm_battery_intro import RhythmBatteryIntro
+from experiment.rules.rhythm_battery_intro import RhythmBatteryIntro
 from experiment.actions import Explainer, Final, Playback, Trial, Form
 from experiment.actions.form import Form
 from experiment.actions.playback import Playback

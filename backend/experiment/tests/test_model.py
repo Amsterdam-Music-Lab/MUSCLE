@@ -33,7 +33,7 @@ class ExperimentModelTest(TestCase):
             hashtag='test',
             rounds=5,
             bonus_points=10,
-            rules='GOLD_MSI',
+            rules='RHYTHM_BATTERY_FINAL',
             language='en',
             theme_config=ThemeConfig.objects.get(name='Default'),
         )

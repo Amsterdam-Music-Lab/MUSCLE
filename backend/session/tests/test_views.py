@@ -16,7 +16,7 @@ class SessionViewsTest(TestCase):
         cls.experiment = Experiment.objects.create(
             name='TestViews',
             slug='testviews',
-            rules='LISTENING_CONDITIONS'
+            rules='RHYTHM_BATTERY_INTRO'
         )
         cls.experiment.playlists.add(
             cls.playlist1, cls.playlist2

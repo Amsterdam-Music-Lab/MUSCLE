@@ -2,7 +2,7 @@ from django.test import TestCase
 from django.core.files.uploadedfile import SimpleUploadedFile
 from experiment.actions import Explainer
 from experiment.models import Experiment
-from backend.experiment.rules.rhythm_battery_final import RhythmBatteryFinal
+from experiment.rules.rhythm_battery_final import RhythmBatteryFinal
 
 
 class TestRhythmBatteryFinal(TestCase):
