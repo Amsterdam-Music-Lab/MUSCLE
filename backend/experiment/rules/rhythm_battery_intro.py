@@ -32,7 +32,8 @@ class RhythmBatteryIntro(Base):
                     },
                     result_id=result_pk,
                     view='BUTTON_ARRAY',
-                    submits=True
+                    submits=True,
+                    style=STYLE_BOOLEAN
                 )])
         elif round_number == 2:
             key = 'internet_connection'
