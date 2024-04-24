@@ -1,8 +1,9 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-import { API_ROOT } from "../../../config";
+import { API_ROOT } from "@/config";
 import ExperimentCollection from "@/types/ExperimentCollection";
+import DefaultPage from "@/components/Page/DefaultPage";
 
 
 interface ExperimentCollectionDashboardProps {
@@ -13,24 +14,8 @@ export const ExperimentCollectionDashboard: React.FC<ExperimentCollectionDashboa
 
     const dashboard = experimentCollection?.dashboard;
 
-    // TODO: get next experiment and about link from experimentCollection
-    const nextExperiment = experimentCollection.next_experiment; // TODO: get next_experiment from experimentCollection
-    const aboutContent = experimentCollection.about_content;
-
     return (
-        <>
-            <div className="hero">
-                <div className="intro">
-                    <p>{experimentCollection?.description}</p>
-                    <nav className="actions">
-                        {nextExperiment && <a className="btn btn-lg btn-primary" href={"/" + nextExperiment.slug}>Volgende experiment</a>}
-                        {aboutContent && <Link className="btn btn-lg btn-outline-primary" to={`/collection/${experimentCollection.slug}/about`}>Over ons</Link>}
-                    </nav>
-                </div>
-                <div className="results">
-
-                </div>
-            </div>
+        <DefaultPage>
             {/* Experiments */}
             <div role="menu" className="dashboard">
                 <ul>
@@ -49,7 +34,7 @@ export const ExperimentCollectionDashboard: React.FC<ExperimentCollectionDashboa
                     {dashboard.length === 0 && <p>No experiments found</p>}
                 </ul>
             </div>
-        </>
+        </DefaultPage>
     );
 }
 

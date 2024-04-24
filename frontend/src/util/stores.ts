@@ -1,23 +1,27 @@
 import { create } from "zustand";
 
+import IParticipant from "@/types/Participant";
+import ISession from "@/types/Session";
+import ITheme from "@/types/Theme";
+
 const createErrorSlice = (set) => ({
     error: null,
-    setError: (error) => set(() => ({ error }))
+    setError: (error: string) => set(() => ({ error }))
 });
 
 const createParticipantSlice = (set) => ({
     participant: null,
-    setParticipant: (participant) => set(() => ({ participant }))
+    setParticipant: (participant: IParticipant) => set(() => ({ participant }))
 });
 
 const createSessionSlice = (set) => ({
     session: null,
-    setSession: (session) => set(() => ({ session }))
+    setSession: (session: ISession) => set(() => ({ session }))
 });
 
 const createThemeSlice = (set) => ({
     theme: null,
-    setTheme: (theme) => set(() => ({ theme })),
+    setTheme: (theme: ITheme) => set(() => ({ theme })),
 });
 
 export const useBoundStore = create((...args) => ({

@@ -3,22 +3,22 @@ import { TransitionGroup, CSSTransition } from "react-transition-group";
 import { withRouter } from "react-router-dom";
 import classNames from "classnames";
 
-import useBoundStore from "../../util/stores";
-import { createSession, getNextRound, useExperiment } from "../../API";
-import Consent from "../Consent/Consent";
-import DefaultPage from "../Page/DefaultPage";
-import ToontjeHoger from "../ToontjeHoger/ToontjeHoger";
-import Explainer from "../Explainer/Explainer";
-import Final from "../Final/Final";
-import Loading from "../Loading/Loading";
-import Playlist from "../Playlist/Playlist";
-import Score from "../Score/Score";
-import Trial from "../Trial/Trial";
-import useResultHandler from "../../hooks/useResultHandler";
-import Info from "../Info/Info";
+import useBoundStore from "@/util/stores";
+import { createSession, getNextRound, useExperiment } from "@/API";
+import Consent from "@/components/Consent/Consent";
+import DefaultPage from "@/components/Page/DefaultPage";
+import ToontjeHoger from "@/components/ToontjeHoger/ToontjeHoger";
+import Explainer from "@/components/Explainer/Explainer";
+import Final from "@/components/Final/Final";
+import Loading from "@/components/Loading/Loading";
+import Playlist from "@/components/Playlist/Playlist";
+import Score from "@/components/Score/Score";
+import Trial from "@/components/Trial/Trial";
+import Info from "@/components/Info/Info";
 import FloatingActionButton from "@/components/FloatingActionButton/FloatingActionButton";
 import UserFeedback from "@/components/UserFeedback/UserFeedback";
 import FontLoader from "@/components/FontLoader/FontLoader";
+import useResultHandler from "@/hooks/useResultHandler";
 
 // Experiment handles the main experiment flow:
 // - Loads the experiment and participant

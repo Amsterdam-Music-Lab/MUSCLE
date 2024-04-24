@@ -1,6 +1,6 @@
 import Experiment from "./Experiment";
 
-export default interface Consent {
+export interface Consent {
     text: string;
     title: string;
     confirm: string;
