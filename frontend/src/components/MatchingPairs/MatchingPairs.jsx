@@ -95,9 +95,10 @@ const MatchingPairs = ({
                 sections.forEach(section => section.noevents = true);
                 currentCard.noevents = true;
                 // check for match
-                const lastCard = firstCard;
+                const first_card = firstCard;
+                const second_card = currentCard;
                 try {
-                    const scoreResponse = await scoreIntermediateResult({ session, participant, result: { currentCard, lastCard } });
+                    const scoreResponse = await scoreIntermediateResult({ session, participant, result: { first_card, second_card } });
                     setScore(scoreResponse.score);
                     showFeedback(scoreResponse.score);
                 } catch {
