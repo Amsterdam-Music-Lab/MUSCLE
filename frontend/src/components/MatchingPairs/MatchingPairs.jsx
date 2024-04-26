@@ -94,6 +94,7 @@ const MatchingPairs = ({
                 // set no mouse events for all but current
                 sections.forEach(section => section.noevents = true);
                 currentCard.noevents = true;
+                currentCard.boardposition = parseInt(index) + 1;
                 // check for match
                 const first_card = firstCard;
                 const second_card = currentCard;
@@ -112,6 +113,7 @@ const MatchingPairs = ({
                 currentCard.turned = true;
                 currentCard.noevents = true;
                 currentCard.seen = true;
+                currentCard.boardposition = parseInt(index) + 1;
                 // clear feedback text
                 setFeedbackText('');
             }
