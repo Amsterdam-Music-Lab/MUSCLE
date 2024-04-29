@@ -34,6 +34,7 @@ def serialize_experiment_collection(
         'description': experiment_collection.description,
         'consent': consent,
         'about_content': about_content,
+        'theme_id': experiment_collection.theme_config.pk if hasattr(experiment_collection, 'theme_config') else None
     }
 
 

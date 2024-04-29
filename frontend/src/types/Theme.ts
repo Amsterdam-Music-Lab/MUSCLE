@@ -5,5 +5,5 @@ export interface Header {
 };
 
 export default interface Theme {
-    header: Headers;
+    header: Header;
 }

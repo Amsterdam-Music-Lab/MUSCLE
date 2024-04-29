@@ -33,6 +33,7 @@ export const URLS = {
     experimentCollectionAbout: "/collection/:slug/about",
     experimentCollection: "/collection/:slug",
     reloadParticipant: "/participant/reload/:id/:hash",
+    theme: "/theme/:id",
     AMLHome:
         import.meta.env.VITE_AML_HOME || "https://www.amsterdammusiclab.nl",
 };

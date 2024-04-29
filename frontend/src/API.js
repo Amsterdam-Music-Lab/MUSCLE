@@ -36,6 +36,9 @@ export const URLS = {
         next_round: (id) => "/session/" + id + "/next_round/",
         finalize: (id) => "/session/" + id + "/finalize/"
     },
+    theme: {
+        get: (id) => `/theme/${id}`,
+    }
 };
 
 export const useExperiment = (slug) =>
@@ -218,6 +221,19 @@ export const postFeedback = async({ experimentSlug, feedback, participant }) => 
             })
         );
         return response.data;
+    } catch (err) {
+        console.error(err);
+        return null;
+    }
+}
+
+export const getTheme = async(theme_id) => {
+    const endpoint = API_BASE_URL + URLS.theme.get(theme_id);
+    try {
+        const response = await axios.get(
+            endpoint,
+        );
+        return response;
     } catch (err) {
         console.error(err);
         return null;

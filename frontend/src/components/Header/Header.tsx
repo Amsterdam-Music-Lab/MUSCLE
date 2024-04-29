@@ -1,13 +1,13 @@
 import React from "react";
 
-interface ExperimentCollectionHeaderProps {
+interface HeaderProps {
     nextExperimentSlug: string;
     nextExperimentButtonText: string;
     collectionSlug: string;
     aboutButtonText: string;
 }
 
-export const ExperimentCollectionHeader: React.FC<ExperimentCollectionHeaderProps> = ({ nextExperimentSlug, nextExperimentButtonText, collectionSlug, aboutButtonText }) => {
+export const Header: React.FC<HeaderProps> = ({ nextExperimentSlug, nextExperimentButtonText, collectionSlug, aboutButtonText }) => {
     return (
         <div className="hero">
             <div className="intro">
@@ -22,4 +22,4 @@ export const ExperimentCollectionHeader: React.FC<ExperimentCollectionHeaderProp
 
 }
 
-export default ExperimentCollectionHeader;
+export default Header;

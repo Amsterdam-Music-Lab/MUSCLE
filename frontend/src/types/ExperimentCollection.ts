@@ -1,4 +1,5 @@
 import Experiment from "./Experiment";
+import Theme from "./Theme";
 
 export interface Consent {
     text: string;
@@ -17,4 +18,5 @@ export default interface ExperimentCollection {
     dashboard: Experiment[];
     next_experiment: Experiment | null;
     about_content: string;
+    theme_id: number | null;
 }

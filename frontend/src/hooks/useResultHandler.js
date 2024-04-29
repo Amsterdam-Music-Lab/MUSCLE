@@ -1,5 +1,5 @@
 import { useRef, useCallback } from "react";
-import { scoreResult } from "../API.js";
+import { scoreResult } from "@/API";
 
 // useResult provides a reusable function to handle experiment view data
 // - collect results in a buffer

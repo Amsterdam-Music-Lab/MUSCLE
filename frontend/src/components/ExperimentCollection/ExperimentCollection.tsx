@@ -7,7 +7,7 @@ import {
 } from "react-router-dom";
 
 import useBoundStore from "../../util/stores";
-import { useExperimentCollection } from "../../API";
+import { useExperimentCollection, getTheme } from "@/API";
 import Consent from "../Consent/Consent";
 import DefaultPage from "../Page/DefaultPage";
 import Loading from "../Loading/Loading";
@@ -15,6 +15,7 @@ import ExperimentCollectionAbout from "./ExperimentCollectionAbout/ExperimentCol
 import ExperimentCollectionDashboard from "./ExperimentCollectionDashboard/ExperimentCollectionDashboard";
 import { URLS } from "../../config";
 import IExperimentCollection from "@/types/ExperimentCollection";
+import ITheme from "@/types/Theme";
 
 interface RouteParams {
     slug: string
@@ -27,6 +28,7 @@ const ExperimentCollection = ({ match }: ExperimentCollectionProps) => {
     const [experimentCollection, loadingExperimentCollection] = useExperimentCollection(match.params.slug) as [IExperimentCollection, boolean];
     const [hasShownConsent, setHasShownConsent] = useState(false);
     const participant = useBoundStore((state) => state.participant);
+    const setTheme = useBoundStore((state) => state.setTheme);
     const nextExperiment = experimentCollection?.next_experiment;
     const displayDashboard = experimentCollection?.dashboard.length;
     const showConsent = experimentCollection?.consent;
@@ -41,6 +43,12 @@ const ExperimentCollection = ({ match }: ExperimentCollectionProps) => {
                 <Loading />
             </div>
         );
+    }
+
+    if (experimentCollection.theme_id) {
+        getTheme(experimentCollection.theme_id).then( (theme: ITheme) =>
+            setTheme(theme)
+        )
     }
 
     if (!hasShownConsent && showConsent) {
