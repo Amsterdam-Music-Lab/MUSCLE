@@ -1,5 +1,5 @@
 from typing import Any
-from django.test import Client, TestCase
+from django.test import Client, TestCase, RequestFactory
 from django.contrib.admin.sites import AdminSite
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.urls import reverse
@@ -86,7 +86,13 @@ class PlaylistModelTest(TestCase):
         self.assertEqual(sections[3].filename,"bat/sobral.mp3")
         self.assertEqual(sections[3].tag, "0")
         self.assertEqual(sections[3].group, '0')
-       
+
+    def test_url_prefix_add_slash(self):
+        playlist = Playlist.objects.get(name='TestPlaylist')
+        playlist.url_prefix = 'https://test.com'
+        playlist.save()
+        self.assertEqual(playlist.url_prefix, 'https://test.com/')
+
 
 class MockRequest:
     pass
@@ -128,6 +134,71 @@ class TestAdminEditSection(TestCase):
         self.assertEqual(edit_section.tag, 'edited')
         self.assertEqual(edit_section.group, 'edited')
         self.assertEqual(response.status_code, 302)
+
+    def test_edit_sections_song_creation_artist(self):
+        request = MockRequest()
+        this_section = Section.objects.first()
+        pre_fix = str(this_section.id)
+        request.POST = {
+            '_update': '',
+            pre_fix + '_artist': 'artist',
+            pre_fix + '_name': '',
+            pre_fix + '_start_time': '1.1',
+            pre_fix + '_duration': '1.1',
+            pre_fix + '_tag': 'default',
+            pre_fix + '_group': 'default',
+        }
+        this_playlist = Playlist.objects.first()
+        response = this_playlist_admin.edit_sections(request, this_playlist)
+        new_song = Song.objects.get(artist='artist')
+        self.assertEqual(new_song.artist, 'artist')
+        self.assertEqual(new_song.name, '')
+        self.assertEqual(response.status_code, 302)
+        all_songs = Song.objects.all()
+        self.assertEqual(all_songs.count(), 2)
+
+    def test_edit_sections_song_creation_name(self):
+        request = MockRequest()
+        this_section = Section.objects.first()
+        pre_fix = str(this_section.id)
+        request.POST = {
+            '_update': '',
+            pre_fix + '_artist': '',
+            pre_fix + '_name': 'name',
+            pre_fix + '_start_time': '1.1',
+            pre_fix + '_duration': '1.1',
+            pre_fix + '_tag': 'default',
+            pre_fix + '_group': 'default',
+        }
+        this_playlist = Playlist.objects.first()
+        response = this_playlist_admin.edit_sections(request, this_playlist)
+        new_song = Song.objects.get(name='name')
+        self.assertEqual(new_song.artist, '')
+        self.assertEqual(new_song.name, 'name')
+        self.assertEqual(response.status_code, 302)
+        all_songs = Song.objects.all()
+        self.assertEqual(all_songs.count(), 2)
+
+    def test_edit_sections_no_song(self):
+        request = MockRequest()
+        this_section = Section.objects.first()
+        pre_fix = str(this_section.id)
+        request.POST = {
+            '_update': '',
+            pre_fix + '_artist': '',
+            pre_fix + '_name': '',
+            pre_fix + '_start_time': '1.1',
+            pre_fix + '_duration': '1.1',
+            pre_fix + '_tag': 'default',
+            pre_fix + '_group': 'default',
+        }
+        this_playlist = Playlist.objects.first()
+        response = this_playlist_admin.edit_sections(request, this_playlist)
+        updated_section = Section.objects.first()        
+        self.assertEqual(updated_section.song, None)
+        self.assertEqual(response.status_code, 302)
+        all_songs = Song.objects.all()
+        self.assertEqual(all_songs.count(), 1)
 
 
 class PlaylistAdminTest(TestCase):
@@ -186,3 +257,22 @@ class PlaylistAdminFormTest(TestCase):
         playlist = form.save()
 
         self.assertEqual(playlist.csv, '')
+
+    def test_url_prefix_validator(self):
+        form_data = {'url_prefix': 'htps://test.com'}
+        form = PlaylistAdminForm(data=form_data)
+        self.assertFalse(form.is_valid())
+
+    def test_url_prefix_validator_http(self):
+        form_data = {'name': 'Test Playlist',
+                     'process_csv': False,
+                     'url_prefix': 'http://test.com'}
+        form = PlaylistAdminForm(data=form_data)
+        self.assertTrue(form.is_valid())
+
+    def test_url_prefix_validator_https(self):
+        form_data = {'name': 'Test Playlist',
+                     'process_csv': False,
+                     'url_prefix': 'https://test.com'}
+        form = PlaylistAdminForm(data=form_data)
+        self.assertTrue(form.is_valid())

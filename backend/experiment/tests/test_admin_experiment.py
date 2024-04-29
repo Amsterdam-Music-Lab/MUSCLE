@@ -1,17 +1,20 @@
 from zipfile import ZipFile
 from io import BytesIO
 import json
-from django.test import Client, TestCase
+from django.test import Client, TestCase, RequestFactory
 from django.forms.models import model_to_dict
 from django.contrib.admin.sites import AdminSite
-from experiment.admin import ExperimentAdmin
-from experiment.models import Experiment
+from django.urls import reverse
+from django.utils.html import format_html
+from experiment.admin import ExperimentAdmin, ExperimentCollectionAdmin, ExperimentCollectionGroupAdmin
+from experiment.models import Experiment, ExperimentCollection, ExperimentCollectionGroup, GroupedExperiment
 from participant.models import Participant
 from result.models import Result
 from session.models import Session
 
+
 # Expected field count per model
-EXPECTED_EXPERIMENT_FIELDS = 14
+EXPECTED_EXPERIMENT_FIELDS = 16
 EXPECTED_SESSION_FIELDS = 9
 EXPECTED_RESULT_FIELDS = 12
 EXPECTED_PARTICIPANT_FIELDS = 5
@@ -27,7 +30,7 @@ this_experiment_admin = ExperimentAdmin(
     model=Experiment, admin_site=AdminSite)
 
 
-class TestAdminExperiment(TestCase):    
+class TestAdminExperiment(TestCase):
 
     @classmethod
     def setUpTestData(cls):
@@ -63,6 +66,18 @@ class TestAdminExperiment(TestCase):
         participant = model_to_dict(Participant.objects.first())
         participant_fields = [key for key in participant]
         self.assertEqual(len(participant_fields), EXPECTED_PARTICIPANT_FIELDS)
+
+    def test_experiment_link(self):
+        experiment = Experiment.objects.create(name="Test Experiment")
+        site = AdminSite()
+        admin = ExperimentAdmin(experiment, site)
+        link = admin.experiment_name_link(experiment)
+        expected_url = reverse(
+            "admin:experiment_experiment_change", args=[experiment.pk])
+        expected_name = "Test Experiment"
+        expected_link = format_html(
+            '<a href="{}">{}</a>', expected_url, expected_name)
+        self.assertEqual(link, expected_link)
 
 
 class TestAdminExperimentExport(TestCase):
@@ -148,3 +163,79 @@ class TestAdminExperimentExport(TestCase):
             row = rows[i]
             self.assertIn('question_key', row)
             self.assertEqual(row['question_key'], 'test_question_' + str(i))
+
+
+class TestExperimentCollectionAdmin(TestCase):
+    
+    @classmethod
+    def setUpTestData(self):
+        self.experiment_series = ExperimentCollection.objects.create(
+            name='test',
+            description='test description very long like the tea of oolong and the song of the bird in the morning',
+            slug='TEST',
+        )
+        self.site = AdminSite()
+        self.admin = ExperimentCollectionAdmin(ExperimentCollection, self.site)
+
+    def test_experiment_series_admin_list_display(self):
+        self.assertEqual(
+            ExperimentCollectionAdmin.list_display,
+            ('name', 'slug_link', 'description_excerpt', 'dashboard', 'groups')
+        )
+
+    def test_experiment_series_admin_description_excerpt(self):
+        self.assertEqual(
+            self.admin.description_excerpt(self.experiment_series),
+            'test description very long like the tea of oolong ...'
+        )
+        self.assertEqual(
+            self.admin.description_excerpt(
+                ExperimentCollection.objects.create(description='')),
+            ''
+        )
+
+
+class ExperimentCollectionGroupAdminTest(TestCase):
+    @classmethod
+    def setUpTestData(self):
+        self.factory = RequestFactory()
+        self.site = AdminSite()
+        self.admin = ExperimentCollectionGroupAdmin(
+            ExperimentCollectionGroup, self.site)
+
+    def test_related_series_with_series(self):
+        series = ExperimentCollection.objects.create(name='Test Series')
+        group = ExperimentCollectionGroup.objects.create(
+            name='Test Group', order=1, randomize=False, series=series, dashboard=True)
+        request = self.factory.get('/')
+        related_series = self.admin.related_series(group)
+        expected_url = reverse(
+            "admin:experiment_experimentcollection_change", args=[series.pk])
+        expected_related_series = format_html('<a href="{}">{}</a>', expected_url, series.name)
+        self.assertEqual(related_series, expected_related_series)
+
+    def test_experiments_with_no_experiments(self):
+        series = ExperimentCollection.objects.create(name='Test Series')
+        group = ExperimentCollectionGroup.objects.create(
+            name='Test Group', order=1, randomize=False, dashboard=True, series=series)
+        experiments = self.admin.experiments(group)
+        self.assertEqual(experiments, "No experiments")
+
+    def test_experiments_with_experiments(self):
+        series = ExperimentCollection.objects.create(name='Test Series')
+        group = ExperimentCollectionGroup.objects.create(
+            name='Test Group', order=1, randomize=False, dashboard=True, series=series)
+        experiment1 = Experiment.objects.create(name='Experiment 1', slug='experiment-1')
+        experiment2 = Experiment.objects.create(name='Experiment 2', slug='experiment-2')
+        grouped_experiment1 = GroupedExperiment.objects.create(group=group, experiment=experiment1)
+        grouped_experiment2 = GroupedExperiment.objects.create(group=group, experiment=experiment2)
+        
+        request = self.factory.get('/')
+        experiments = self.admin.experiments(group)
+        expected_experiments = format_html(
+            ', '.join([
+                f'<a href="/admin/experiment/groupedexperiment/{experiment.id}/change/">{experiment.experiment.name}</a>'
+                for experiment in [grouped_experiment1, grouped_experiment2]
+            ])
+        )
+        self.assertEqual(experiments, expected_experiments)

@@ -49,7 +49,7 @@ class ToontjeHoger3Plink(Base):
             playlist,
         ]
 
-    def next_round(self, session, request_session=None):
+    def next_round(self, session):
         """Get action data for the next round"""
 
         rounds_passed = session.get_relevant_results(['plink']).count()

@@ -74,7 +74,7 @@ jobs:
       - uses: actions/checkout@v3
       - name: Generate Frontend Coverage Report (XML) and Badge
         run: |
-          sudo docker-compose --env-file .env-github-actions run client yarn test:ci --coverageDirectory=public/coverage
+          sudo docker-compose --env-file .env-github-actions run client yarn test:ci
           sudo docker-compose --env-file .env-github-actions run client yarn coverage-badges -s public/coverage/coverage-summary.json -o public/coverage/coverage-frontend-badge-new.svg --label 'Frontend Code Coverage'
       - name: Push Frontend Coverage Badge to separate branch
         continue-on-error: true

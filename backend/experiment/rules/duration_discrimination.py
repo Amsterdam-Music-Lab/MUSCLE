@@ -5,7 +5,7 @@ from django.utils.translation import gettext_lazy as _
 
 from .base import Base
 from section.models import Section
-from experiment.actions import Trial, Consent, Explainer, Step
+from experiment.actions import Trial, Explainer, Step
 from experiment.actions.form import ChoiceQuestion, Form
 from experiment.actions.playback import Autoplay
 from experiment.actions.utils import final_action_with_optional_button, render_feedback_trivia
@@ -33,19 +33,14 @@ class DurationDiscrimination(Base):
     def first_round(self, experiment):
         """Create data for the first experiment rounds"""
         explainer = self.intro_explanation()
-
-        # 2. Consent with admin text or default text
-        consent = Consent(experiment.consent)
-
         explainer2 = practice_explainer()
 
         return [
             explainer,
-            consent,
             explainer2,
         ]
 
-    def next_round(self, session, request_session=None):
+    def next_round(self, session):
         if session.final_score == 0:
             self.register_difficulty(session)
             # we are practicing
@@ -62,7 +57,7 @@ class DurationDiscrimination(Base):
         else:
             # Actual trials
             action = self.staircasing_blocks(
-                session, self.next_trial_action, request_session)
+                session, self.next_trial_action)
             return action
 
     def calculate_score(self, result, data):
@@ -177,7 +172,7 @@ class DurationDiscrimination(Base):
     def get_introduction(self):
         return _('In this test you will hear two time durations for each trial, which are marked by two tones.')
 
-    def finalize_experiment(self, session, request_session):
+    def finalize_experiment(self, session):
         ''' After 8 turnpoints, finalize experiment
         Give participant feedback
         '''
@@ -185,7 +180,7 @@ class DurationDiscrimination(Base):
         final_text = self.get_final_text(difference)
         session.finish()
         session.save()
-        return final_action_with_optional_button(session, final_text, request_session)
+        return final_action_with_optional_button(session, final_text)
 
     def get_final_text(self, difference):
         percentage = round(difference / 6000, 2)
@@ -197,7 +192,7 @@ class DurationDiscrimination(Base):
             for shorter durations, people can hear even smaller differences than for longer durations.")
         return render_feedback_trivia(feedback, trivia)
 
-    def staircasing_blocks(self, session, trial_action_callback, request_session=None):
+    def staircasing_blocks(self, session, trial_action_callback):
         """ Calculate staircasing procedure in blocks of 5 trials with one catch trial
         Arguments:
         - session: the session
@@ -278,7 +273,7 @@ class DurationDiscrimination(Base):
                         difficulty)
         if not action:
             # action is None if the audio file doesn't exist
-            return self.finalize_experiment(session, request_session)
+            return self.finalize_experiment(session)
         return action
 
     def get_difficulty(self, session, multiplier=1.0):

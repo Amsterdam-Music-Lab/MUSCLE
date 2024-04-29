@@ -1,9 +1,9 @@
 [
 {
-  "model": "experiment.experimentseries",
+  "model": "experiment.ExperimentCollection",
   "pk": 1,
   "fields": {
-    "name": "RhythmTestSeries",
+    "slug": "RhythmTestSeries",
     "first_experiments": [
       "10"
     ],
@@ -33,7 +33,6 @@
     "bonus_points": 0,
     "rules": "DURATION_DISCRIMINATION",
     "language": "",
-    "experiment_series": null,
     "playlists": [
       5
     ]
@@ -50,7 +49,6 @@
     "bonus_points": 0,
     "rules": "DURATION_DISCRIMINATION_TONE",
     "language": "",
-    "experiment_series": null,
     "playlists": [
       4
     ]
@@ -67,7 +65,6 @@
     "bonus_points": 0,
     "rules": "BEAT_ALIGNMENT",
     "language": "",
-    "experiment_series": null,
     "playlists": [
       7
     ]
@@ -84,7 +81,6 @@
     "bonus_points": 0,
     "rules": "H_BAT",
     "language": "",
-    "experiment_series": null,
     "playlists": [
       9
     ]
@@ -101,7 +97,6 @@
     "bonus_points": 0,
     "rules": "H_BAT_BFIT",
     "language": "",
-    "experiment_series": null,
     "playlists": [
       8
     ]
@@ -118,7 +113,6 @@
     "bonus_points": 0,
     "rules": "BST",
     "language": "",
-    "experiment_series": null,
     "playlists": [
       10
     ]
@@ -135,7 +129,6 @@
     "bonus_points": 0,
     "rules": "ANISOCHRONY",
     "language": "",
-    "experiment_series": null,
     "playlists": [
       3
     ]
@@ -152,7 +145,6 @@
     "bonus_points": 0,
     "rules": "RHYTHM_DISCRIMINATION",
     "language": "",
-    "experiment_series": null,
     "playlists": [
       6
     ]
@@ -162,14 +154,13 @@
   "model": "experiment.experiment",
   "pk": 9,
   "fields": {
-    "name": "Gold-MSI",
-    "slug": "gmsi",
+    "name": "Rhythm Battery Final",
+    "slug": "rhythm_outro",
     "active": true,
     "rounds": 10,
     "bonus_points": 0,
-    "rules": "GOLD_MSI",
+    "rules": "RHYTHM_BATTERY_FINAL",
     "language": "",
-    "experiment_series": null,
     "playlists": [
       3
     ]
@@ -179,48 +170,13 @@
   "model": "experiment.experiment",
   "pk": 10,
   "fields": {
-    "name": "ListeningConditions",
-    "slug": "lisc",
+    "name": "Rhythm Battery Intro",
+    "slug": "rhythm_intro",
     "active": true,
     "rounds": 10,
     "bonus_points": 0,
-    "rules": "LISTENING_CONDITIONS",
+    "rules": "RHYTHM_BATTERY_INTRO",
     "language": "",
-    "experiment_series": null,
-    "playlists": [
-      11
-    ]
-  }
-},
-{
-  "model": "experiment.experiment",
-  "pk": 11,
-  "fields": {
-    "name": "RhythmExperiment",
-    "slug": "rhythm_series",
-    "active": false,
-    "rounds": 10,
-    "bonus_points": 0,
-    "rules": "TEST_BATTERY",
-    "language": "",
-    "experiment_series": 1,
-    "playlists": [
-      3
-    ]
-  }
-},
-{
-  "model": "experiment.experiment",
-  "pk": 13,
-  "fields": {
-    "name": "RhythmSeriesMRI",
-    "slug": "rhythm_mri",
-    "active": true,
-    "rounds": 10,
-    "bonus_points": 0,
-    "rules": "RHYTHM_SERIES_MRI",
-    "language": "",
-    "experiment_series": 1,
     "playlists": [
       11
     ]
@@ -237,7 +193,6 @@
     "bonus_points": 0,
     "rules": "HUANG_2022",
     "language": "zh",
-    "experiment_series": null,
     "playlists": [
       13,
       2,
@@ -245,23 +200,6 @@
     ],
     "questions": [
        "msi_01_music_activities", "msi_03_writing", "msi_08_intrigued_styles", "msi_15_internet_search_music", "msi_21_spend_income", "msi_24_music_addiction", "msi_28_track_new", "msi_34_attended_events", "msi_38_listen_music", "msi_05_good_singer", "msi_06_song_first_time", "msi_11_spot_mistakes", "msi_12_performance_diff", "msi_13_trouble_recognising", "msi_18_out_of_beat", "msi_22_out_of_tune", "msi_23_no_idea_in_tune", "msi_26_genre", "msi_14_never_complimented", "msi_27_consider_musician", "msi_32_practice_years", "msi_33_practice_daily", "msi_35_theory_training", "msi_36_instrumental_training", "msi_37_play_instruments", "msi_04_sing_along", "msi_07_from_memory", "msi_10_sing_with_recording", "msi_17_not_sing_harmony", "msi_25_sing_public", "msi_29_sing_after_hearing", "msi_30_sing_back", "msi_02_shivers", "msi_09_rarely_emotions", "msi_16_motivate", "msi_19_identify_special", "msi_20_talk_emotions", "msi_31_memories", "msi_39_best_instrument", "dgf_genre_preference_zh", "dgf_generation", "dgf_education", "dgf_highest_qualification_expectation", "dgf_occupational_status", "dgf_region_of_origin", "dgf_region_of_residence", "dgf_gender_identity_zh", "contact"
-    ]
-  }
-},
-{
-  "model": "experiment.experiment",
-  "pk": 15,
-  "fields": {
-    "name": "RhythmSeriesUnpaid",
-    "slug": "rhythm_september",
-    "active": true,
-    "rounds": 10,
-    "bonus_points": 0,
-    "rules": "RHYTHM_SERIES_UNPAID",
-    "language": "",
-    "experiment_series": 1,
-    "playlists": [
-      3
     ]
   }
 },
@@ -276,7 +214,6 @@
     "bonus_points": 0,
     "rules": "CATEGORIZATION",
     "language": "en",
-    "experiment_series": null,
     "playlists": [
       12
     ]
@@ -293,7 +230,6 @@
     "bonus_points": 0,
     "rules": "MATCHING_PAIRS",
     "language": "en",
-    "experiment_series": null,
     "playlists": [
       14
     ]
@@ -310,7 +246,6 @@
     "bonus_points": 0,
     "rules": "EUROVISION_2020",
     "language": "en",
-    "experiment_series": null,
     "playlists": [
       16
     ]
@@ -327,7 +262,6 @@
     "bonus_points": 0,
     "rules": "KUIPER_2020",
     "language": "en",
-    "experiment_series": null,
     "playlists": [
       17
     ]
@@ -344,7 +278,6 @@
     "bonus_points": 0,
     "rules": "THATS_MY_SONG",
     "language": "",
-    "experiment_series": null,
     "playlists": [
       18
     ],

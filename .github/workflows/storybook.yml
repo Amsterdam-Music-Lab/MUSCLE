@@ -20,9 +20,6 @@ jobs:
       - name: Install dependencies
         run: yarn
         working-directory: ./frontend
-      - name: Run SCSS
-        run: yarn scss
-        working-directory: ./frontend
       - name: Build Storybook
         run: yarn storybook:build
         working-directory: ./frontend

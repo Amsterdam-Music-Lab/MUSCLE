@@ -2,6 +2,7 @@ from django.utils.translation import gettext_lazy as _
 
 from .base_action import BaseAction
 from experiment.actions.form import Form
+from experiment.actions.playback import Playback
 from .frontend_style import FrontendStyle
 
 
@@ -21,13 +22,13 @@ class Trial(BaseAction):  # pylint: disable=too-few-public-methods
 
     def __init__(
             self,
-            playback = None,
+            playback: Playback = None,
             html: str = None,
             feedback_form: Form = None,
             title='',
-            config = None,
-            result_id = None,
-            style = FrontendStyle()
+            config: dict = None,
+            result_id: int = None,
+            style: FrontendStyle = FrontendStyle()
             ):
         '''
         - playback: Playback object (may be None)

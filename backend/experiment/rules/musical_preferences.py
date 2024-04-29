@@ -69,7 +69,7 @@ class MusicalPreferences(Base):
             explainer,
         ]
 
-    def next_round(self, session, request_session=None):
+    def next_round(self, session):
         next_round_number = session.get_current_round()
         actions = []
         if next_round_number == 1:

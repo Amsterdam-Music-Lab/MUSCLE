@@ -4,36 +4,89 @@ from django.db import models
 from django.utils import timezone
 from django.contrib.postgres.fields import ArrayField
 from typing import List, Dict, Tuple, Any
-from experiment.rules import EXPERIMENT_RULES
 from experiment.standards.iso_languages import ISO_LANGUAGES
 from .questions import QUESTIONS_CHOICES, get_default_question_keys
+from theme.models import ThemeConfig
+from image.models import Image
 
-from .validators import consent_file_validator
+from .validators import markdown_html_validator, experiment_slug_validator
 
 language_choices = [(key, ISO_LANGUAGES[key]) for key in ISO_LANGUAGES.keys()]
 language_choices[0] = ('', 'Unset')
 
 
-class ExperimentSeries(models.Model):
+def consent_upload_path(instance, filename):
+    """Generate path to save consent file based on experiment.slug"""
+    folder_name = instance.slug
+    return f'consent/{folder_name}/{filename}'
+
+
+class ExperimentCollection(models.Model):
     """ A model to allow nesting multiple experiments into a 'parent' experiment """
     name = models.CharField(max_length=64, default='')
+    description = models.TextField(blank=True, default='')
+    slug = models.SlugField(max_length=64, default='')
+    consent = models.FileField(upload_to=consent_upload_path,
+                               blank=True,
+                               default='',
+                               validators=[markdown_html_validator()])
+    theme_config = models.ForeignKey(
+        "theme.ThemeConfig", blank=True, null=True, on_delete=models.SET_NULL)
     # first experiments in a test series, in fixed order
     first_experiments = models.JSONField(blank=True, null=True, default=dict)
     random_experiments = models.JSONField(blank=True, null=True, default=dict)
     # last experiments in a test series, in fixed order
     last_experiments = models.JSONField(blank=True, null=True, default=dict)
+    # present random_experiments as dashboard
+    dashboard = models.BooleanField(default=False)
+    about_content = models.TextField(blank=True, default='')
 
     def __str__(self):
-        return self.name
+        return self.name or self.slug
 
     class Meta:
-        verbose_name_plural = "Experiment Series"
+        verbose_name_plural = "Experiment Collections"
+
+    def associated_experiments(self):
+        groups = self.groups.all()
+        return [
+            experiment.experiment for group in groups for experiment in list(group.experiments.all())]
 
 
-def consent_upload_path(instance, filename):
-    """Generate path to save audio based on playlist.name"""
-    folder_name = instance.slug
-    return 'consent/{0}/{1}'.format(folder_name, filename)
+class ExperimentCollectionGroup(models.Model):
+    name = models.CharField(max_length=64, blank=True, default='')
+    series = models.ForeignKey(ExperimentCollection,
+                               on_delete=models.CASCADE, related_name='groups')
+    order = models.IntegerField(default=0, help_text='Order of the group in the series. Lower numbers come first.')
+    dashboard = models.BooleanField(default=False)
+    randomize = models.BooleanField(
+        default=False, help_text='Randomize the order of the experiments in this group.')
+
+    def __str__(self):
+        compound_name = self.name or self.series.name or self.series.slug or 'Unnamed group'
+
+        if not self.name:
+            return f'{compound_name} ({self.order})'
+
+        return f'{compound_name}'
+
+    class Meta:
+        ordering = ['order']
+        verbose_name_plural = "Experiment Collection Groups"
+
+
+class GroupedExperiment(models.Model):
+    experiment = models.ForeignKey('Experiment', on_delete=models.CASCADE)
+    group = models.ForeignKey(
+        ExperimentCollectionGroup, on_delete=models.CASCADE, related_name='experiments')
+    order = models.IntegerField(default=0, help_text='Order of the experiment in the group. Lower numbers come first.')
+
+    def __str__(self):
+        return f'{self.experiment.name} - {self.group.name} - {self.order}'
+
+    class Meta:
+        ordering = ['order']
+        verbose_name_plural = "Grouped Experiments"
 
 
 class Experiment(models.Model):
@@ -41,7 +94,14 @@ class Experiment(models.Model):
 
     playlists = models.ManyToManyField('section.Playlist', blank=True)
     name = models.CharField(db_index=True, max_length=64)
-    slug = models.CharField(db_index=True, max_length=64, unique=True)
+    description = models.TextField(blank=True, default='')
+    image = models.ForeignKey(
+        Image,
+        on_delete=models.SET_NULL,
+        blank=True,
+        null=True
+    )
+    slug = models.SlugField(db_index=True, max_length=64, unique=True, validators=[experiment_slug_validator])
     url = models.CharField(verbose_name='URL with more information about the experiment', max_length=100, blank=True, default='')
     hashtag = models.CharField(verbose_name='hashtag for social media', max_length=20, blank=True, default='')
     active = models.BooleanField(default=True)
@@ -50,8 +110,12 @@ class Experiment(models.Model):
     rules = models.CharField(default="", max_length=64)
     language = models.CharField(
         default="", blank=True, choices=language_choices, max_length=2)
-    experiment_series = models.ForeignKey(ExperimentSeries, on_delete=models.SET_NULL,
-                                          blank=True, null=True)
+    theme_config = models.ForeignKey(
+        ThemeConfig,
+        on_delete=models.SET_NULL,
+        blank=True,
+        null=True
+    )
     questions = ArrayField(
                 models.TextField(choices=QUESTIONS_CHOICES),
                 blank=True,
@@ -60,7 +124,7 @@ class Experiment(models.Model):
     consent = models.FileField(upload_to=consent_upload_path,
                                blank=True,
                                default='',
-                               validators=[consent_file_validator()])
+                               validators=[markdown_html_validator()])
 
     class Meta:
         ordering = ['name']
@@ -206,6 +270,7 @@ class Experiment(models.Model):
 
     def get_rules(self):
         """Get instance of rules class to be used for this session"""
+        from experiment.rules import EXPERIMENT_RULES
         cl = EXPERIMENT_RULES[self.rules]
         return cl()
 

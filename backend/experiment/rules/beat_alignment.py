@@ -4,7 +4,7 @@ import copy
 from django.utils.translation import gettext_lazy as _
 
 from .base import Base
-from experiment.actions import Trial, Explainer, Consent, Step
+from experiment.actions import Trial, Explainer, Step
 from experiment.actions.form import ChoiceQuestion, Form
 from experiment.actions.playback import Autoplay
 from experiment.actions.utils import final_action_with_optional_button, render_feedback_trivia
@@ -38,15 +38,11 @@ class BeatAlignment(Base):
             step_numbers=True
         )
 
-        # 2. Consent with admin text or default text
-        consent = Consent(experiment.consent)
-
         return [
             explainer,
-            consent,
         ]
 
-    def next_round(self, session, request_session=None):
+    def next_round(self, session):
         """Get action data for the next round"""
 
         # If the number of results equals the number of experiment.rounds
@@ -62,7 +58,7 @@ class BeatAlignment(Base):
             trivia = _('In the UK, over 140.000 people did \
                 this test when it was first developed?')
             final_text = render_feedback_trivia(feedback, trivia)
-            return final_action_with_optional_button(session, final_text, request_session)
+            return final_action_with_optional_button(session, final_text)
         
         # Next round number, can be used to return different actions
         next_round_number = session.get_next_round()

@@ -2,7 +2,6 @@ import random
 import json
 
 from django.utils.translation import gettext_lazy as _
-from django.conf import settings
 
 from .base import Base
 from experiment.actions import Consent, Explainer, Final, Playlist, Step, Trial
@@ -20,6 +19,7 @@ class MatchingPairsGame(Base):
     show_animation = True
     score_feedback_display = 'large-top'
     contact_email = 'aml.tunetwins@gmail.com'
+    random_seed = None
 
     def __init__(self):
         self.questions = [
@@ -80,8 +80,8 @@ class MatchingPairsGame(Base):
                 title='Score',
                 final_text='Can you score higher than your friends and family? Share and let them try!',
                 button={
-                    'text': 'Play again', 'link': '{}/{}'.format(
-                        settings.CORS_ORIGIN_WHITELIST[0], session.experiment.slug)
+                    'text': 'Play again',
+                    'link': f'/{session.experiment.slug}'
                 },
                 rank=self.rank(session, exclude_unfinished=False),
                 social=social_info,
@@ -89,11 +89,12 @@ class MatchingPairsGame(Base):
             )
             return [score]
 
-    def get_matching_pairs_trial(self, session):
+    def select_sections(self, session):
         json_data = session.load_json_data()
         pairs = json_data.get('pairs', [])
         if len(pairs) < self.num_pairs:
             pairs = list(session.playlist.section_set.order_by().distinct('group').values_list('group', flat=True))
+            random.seed(self.random_seed)
             random.shuffle(pairs)
         selected_pairs = pairs[:self.num_pairs]
         session.save_json_data({'pairs': pairs[self.num_pairs:]})
@@ -101,6 +102,7 @@ class MatchingPairsGame(Base):
         degradations = json_data.get('degradations')
         if not degradations:
             degradations = ['Original', '1stDegradation', '2ndDegradation']
+            random.seed(self.random_seed)
             random.shuffle(degradations)
         degradation_type = degradations.pop()
         session.save_json_data({'degradations': degradations})
@@ -109,6 +111,11 @@ class MatchingPairsGame(Base):
         else:
             degradations = session.playlist.section_set.filter(group__in=selected_pairs, tag=degradation_type)
             player_sections = list(originals) + list(degradations)
+        return player_sections
+
+    def get_matching_pairs_trial(self, session):
+        player_sections = self.select_sections(session)
+        random.seed(self.random_seed)
         random.shuffle(player_sections)
 
         playback = MatchingPairs(

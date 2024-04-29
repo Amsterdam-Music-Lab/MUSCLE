@@ -20,8 +20,7 @@ export const Timer = ({
 
         // timer finished
         if (time === duration) {
-            onFinish && onFinish();
-            return;
+            return onFinish ? onFinish() : void 0;
         }
 
         // callback after interval

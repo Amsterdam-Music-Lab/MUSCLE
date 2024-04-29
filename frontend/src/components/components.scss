@@ -19,6 +19,7 @@
 // Experiment
 @import "./Consent/Consent";
 @import "./Experiment/Experiment";
+@import "./ExperimentCollection/ExperimentCollection";
 @import "./Explainer/Explainer";
 @import "./Final/Final";
 @import "./FloatingActionButton/FloatingActionButton";
@@ -27,13 +28,13 @@
 @import "./Listen/Listen";
 @import "./ListenCircle/ListenCircle";
 @import "./Loading/Loading";
+@import "./MatchingPairs/MatchingPairs";
+@import "./MatchingPairs/PlayCard";
 @import "./Playlist/Playlist";
 @import "./PlayButton/PlayButton";
 @import "./PlayButton/PlayerSmall";
-@import "./PlayButton/PlayCard";
 @import "./Playback/Multiplayer";
 @import "./Playback/Playback";
-@import "./Playback/MatchingPairs";
 @import "./Playback/ImagePlayer";
 @import "./Question/Question";
 @import "./Score/Score";
@@ -41,4 +42,3 @@
 @import "./FeedbackForm/FeedbackForm";
 @import "./ToontjeHoger/ToontjeHoger";
 @import "./UserFeedback/UserFeedback";
-@import "./VisualMatchingPairs/VisualMatchingPairs.scss";

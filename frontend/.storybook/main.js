@@ -1,24 +1,43 @@
-/** @type { import('@storybook/react-webpack5').StorybookConfig } */
+import { join, dirname } from "path";
+import { mergeConfig } from 'vite';
+
+/**
+ * This function is used to resolve the absolute path of a package.
+ * It is needed in projects that use Yarn PnP or are set up within a monorepo.
+ */
+function getAbsolutePath(value) {
+    return dirname(require.resolve(join(value, "package.json")));
+}
+
+/** @type { import('@storybook/react-vite').StorybookConfig } */
 const config = {
     stories: ["../src/**/*.mdx", "../src/**/*.stories.@(js|jsx|mjs|ts|tsx)"],
     addons: [
-        "@storybook/addon-links",
-        "@storybook/addon-essentials",
-        "@storybook/preset-create-react-app",
-        "@storybook/addon-onboarding",
-        "@storybook/addon-interactions",
+        getAbsolutePath("@storybook/addon-onboarding"),
+        getAbsolutePath("@storybook/addon-links"),
+        getAbsolutePath("@storybook/addon-essentials"),
+        getAbsolutePath("@chromatic-com/storybook"),
+        getAbsolutePath("@storybook/addon-interactions"),
     ],
     framework: {
-        name: "@storybook/react-webpack5",
+        name: getAbsolutePath("@storybook/react-vite"),
         options: {},
     },
     docs: {
         autodocs: "tag",
     },
+    viteFinal: (config) => {
+        return mergeConfig(config, {
+            resolve: {
+                alias: {
+                    '@/': '/src/',
+                },
+            },
+        });
+    },
     staticDirs: ["../public"],
     env: {
-        REACT_APP_API_ROOT: "http://localhost:8000",
+        VITE_API_ROOT: "http://localhost:8000",
     },
 };
-
 export default config;

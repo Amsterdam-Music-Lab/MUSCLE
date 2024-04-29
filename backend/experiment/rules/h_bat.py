@@ -5,7 +5,7 @@ from django.utils.translation import gettext_lazy as _
 
 from .base import Base
 from section.models import Section
-from experiment.actions import Trial, Consent, Explainer, Playlist, Step
+from experiment.actions import Trial, Explainer, Step
 from experiment.actions.form import ChoiceQuestion, Form
 from experiment.actions.playback import Autoplay
 
@@ -27,7 +27,7 @@ class HBat(Base):
     ID = 'H_BAT'
     start_diff = 20
 
-    def next_round(self, session, request_session=None):
+    def next_round(self, session):
         if session.final_score == 0:
             # we are practicing
             actions = get_practice_views(
@@ -48,29 +48,25 @@ class HBat(Base):
             action = self.next_trial_action(session, trial_condition, 1)
             if not action:
                 # participant answered first trial incorrectly (outlier)
-                action = self.finalize_experiment(session, request_session)
+                action = self.finalize_experiment(session)
         else:
             action = staircasing(session, self.next_trial_action)
             if not action:
                 # action is None if the audio file doesn't exist
-                action = self.finalize_experiment(session, request_session)
+                action = self.finalize_experiment(session)
             if session.final_score == MAX_TURNPOINTS+1:
                 # delete result created before this check
                 session.result_set.order_by('-created_at').first().delete()
-                action = self.finalize_experiment(session, request_session)
+                action = self.finalize_experiment(session)
             return action
     
     def first_round(self, experiment):
         explainer = self.intro_explainer()
         # Consent with admin text or default text
-        consent = Consent(experiment.consent)
         explainer2 = practice_explainer()
-        playlist = Playlist(experiment.playlists.all())
         return [
             explainer,
-            consent,
             explainer2,
-            playlist,
         ]
 
     def next_trial_action(self, session, trial_condition, level=1, *kwargs):
@@ -158,7 +154,7 @@ class HBat(Base):
             button_label=button_label
         )
     
-    def finalize_experiment(self, session, request_session):
+    def finalize_experiment(self, session):
         """ if either the max_turnpoints have been reached,
         or if the section couldn't be found (outlier), stop the experiment
         """
@@ -172,7 +168,7 @@ class HBat(Base):
         final_text = render_feedback_trivia(feedback, trivia)
         session.finish()
         session.save()
-        return final_action_with_optional_button(session, final_text, request_session)
+        return final_action_with_optional_button(session, final_text)
     
     def get_trivia(self):
         return _("When people listen to music, they often perceive an underlying regular pulse, like the woodblock \

@@ -7,30 +7,27 @@ from django.template.loader import render_to_string
 
 from experiment.actions import Final
 
+COLLECTION_KEY = 'experiment_collection'
 
-def final_action_with_optional_button(session, final_text, request_session):
+
+def final_action_with_optional_button(session, final_text='', title=_('End'), button_text=_('Continue')):
     """ given a session, a score message and an optional session dictionary from an experiment series,
     return a Final.action, which has a button to continue to the next experiment if series is defined
     """
-    if request_session:
-        from session.models import Session
-        series_data = request_session.get('experiment_series')
-        series_slug = series_data.get('slug')
-        series_session = Session.objects.get(pk=series_data.get('session_id'))
-        series_session.final_score += 1
-        series_session.save()
+    collection_slug = session.load_json_data().get(COLLECTION_KEY)
+    if collection_slug:
         return Final(
-            title=_('End'),
+            title=title,
             session=session,
             final_text=final_text,
             button={
-                'text': _('Continue'),
-                'link': '{}/{}'.format(settings.CORS_ORIGIN_WHITELIST[0], series_slug)
+                'text': button_text,
+                'link': f'/collection/{collection_slug}'
             }
         )
     else:
         return Final(
-            title=_('End'),
+            title=title,
             session=session,
             final_text=final_text,
         )
@@ -97,5 +94,5 @@ def get_last_n_turnpoints(session, num_turnpoints):
     return all_results[:cutoff]
 
 
-def randomize_playhead(min_jitter, max_jitter, silence_time, continuation_correctness):
-    return silence_time + (random.uniform(min_jitter, max_jitter) if not continuation_correctness else 0)
+def randomize_playhead(min_jitter, max_jitter, continuation_correctness):
+    return random.uniform(min_jitter, max_jitter) if not continuation_correctness else 0

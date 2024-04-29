@@ -22,7 +22,7 @@ coverage==7.3.2
     # via -r requirements.in/base.txt
 defusedxml==0.7.1
     # via genbadge
-django==3.2.24
+django==3.2.25
     # via
     #   -r requirements.in/base.txt
     #   django-cors-headers
@@ -40,11 +40,11 @@ docutils==0.20.1
     #   python-creole
 genbadge[coverage]==1.1.1
     # via -r requirements.in/base.txt
-gunicorn==20.1.0
+gunicorn==22.0.0
     # via -r requirements.in/prod.txt
 html5lib==1.1
     # via textile
-idna==3.6
+idna==3.7
     # via requests
 importlib-metadata==7.0.1
     # via markdown
@@ -56,7 +56,7 @@ numpy==1.24.3
     # via pandas
 pandas==1.5.3
     # via iptocc
-pillow==10.2.0
+pillow==10.3.0
     # via genbadge
 psycopg2==2.9.6
     # via -r requirements.in/base.txt
@@ -87,7 +87,7 @@ six==1.16.0
     #   python-dateutil
 smartypants==2.0.1
     # via django-markup
-sqlparse==0.4.4
+sqlparse==0.5.0
     # via django
 textile==4.0.2
     # via django-markup

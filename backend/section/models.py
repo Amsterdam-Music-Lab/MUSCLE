@@ -7,14 +7,18 @@ from django.db import models
 from django.utils import timezone
 from django.urls import reverse
 
-from .utils import CsvStringBuilder
-from .validators import audio_file_validator
+from .utils import CsvStringBuilder, get_or_create_song
+from .validators import audio_file_validator, url_prefix_validator
 
 
 class Playlist(models.Model):
     """List of sections to be used in an Experiment"""
 
     name = models.CharField(db_index=True, max_length=64)
+    url_prefix = models.CharField(max_length=128,
+                                  blank=True,
+                                  default='',
+                                  validators=[url_prefix_validator])
 
     process_warning = 'Warning: Processing a live playlist may affect the result data'
     process_csv = models.BooleanField(default=False, help_text=process_warning)
@@ -28,6 +32,9 @@ class Playlist(models.Model):
         """Update playlist csv field on every save"""
         if self.process_csv is False:
             self.csv = self.update_admin_csv()
+        if self.url_prefix and self.url_prefix[-1] != '/':
+            self.url_prefix += '/'
+        self.process_csv = False
         super(Playlist, self).save(*args, **kwargs)
 
     class Meta:
@@ -103,11 +110,12 @@ class Playlist(models.Model):
                     'message': "Error: Expected number fields on line: " + str(lines)
                 }
 
-            # create new section
+            # Retrieve or create Song object
             song = None
-            if row['artist'] and row['name']:
-                song, created = Song.objects.get_or_create(artist=row['artist'], name=row['name'])
+            if row['artist'] or row['name']:
+                song = get_or_create_song(row['artist'], row['name'])
 
+            # create new section
             section = Section(playlist=self,
                               start_time=float(row['start_time']),
                               duration=float(row['duration']),
@@ -115,16 +123,14 @@ class Playlist(models.Model):
                               tag=row['tag'],
                               group=row['group'],
                               )
-            if song:
-                section.song = song
+            section.song = song
 
             # if same section already exists, update it with new info
             for ex_section in existing_sections:
                 if ex_section.filename == section.filename:
-                    if song:
-                        if not ex_section.song:
-                            ex_section.song = song
-                            ex_section.save()
+                    if song:                        
+                        ex_section.song = song
+                        ex_section.save()
                     ex_section.start_time = section.start_time
                     ex_section.duration = section.duration
                     ex_section.tag = section.tag
@@ -215,7 +221,7 @@ class Playlist(models.Model):
 class Song(models.Model):
     """ A Song object with an artist and name (unique together)"""
     artist = models.CharField(db_index=True, blank=True, default='', max_length=128)
-    name = models.CharField(db_index=True, blank=True, default='' ,max_length=128)
+    name = models.CharField(db_index=True, blank=True, default='', max_length=128)
 
     class Meta:
         unique_together = ("artist", "name")
@@ -312,4 +318,3 @@ class Section(models.Model):
             self.tag,
             self.group,
         ]
-
