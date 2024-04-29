@@ -5,7 +5,7 @@ from django.utils.translation import gettext_lazy as _
 
 from experiment.actions.utils import final_action_with_optional_button, render_feedback_trivia
 from experiment.rules.util.practice import practice_explainer, practice_again_explainer, start_experiment_explainer
-from experiment.actions import Trial, Consent, Explainer, Step
+from experiment.actions import Trial, Explainer, Step
 from experiment.actions.playback import Autoplay
 from experiment.actions.form import ChoiceQuestion, Form
 
@@ -83,15 +83,10 @@ class RhythmDiscrimination(Base):
     def first_round(self, experiment):
         """Create data for the first experiment rounds"""
         explainer = intro_explainer()
-
-        # 2. Consent with admin text or default text
-        consent = Consent(experiment.consent)
-
         explainer2 = practice_explainer()
 
         return [
             explainer,
-            consent,
             explainer2,
         ]
 

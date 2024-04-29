@@ -54,9 +54,8 @@ class ThatsMySong(Hooked):
     
     def first_round(self, experiment):
         actions = super().first_round(experiment)
-        # remove consent
-        del actions[1]
-        return actions
+        # skip Consent and Playlist action
+        return actions[:1]
 
     def next_round(self, session):	
         """Get action data for the next round"""

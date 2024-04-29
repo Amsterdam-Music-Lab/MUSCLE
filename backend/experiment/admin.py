@@ -194,8 +194,7 @@ class MarkdownPreviewTextInput(TextInput):
 
 class ExperimentCollectionAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
     list_display = ('name', 'slug_link', 'description_excerpt', 'dashboard', 'groups')
-    fields = ['slug', 'name', 'description', 'theme_config', 'first_experiments',
-              'random_experiments', 'last_experiments', 'dashboard',
+    fields = ['slug', 'name', 'description', 'consent', 'theme_config', 'dashboard',
               'about_content']
     form = ExperimentCollectionForm
     inlines = [ExperimentCollectionGroupInline]

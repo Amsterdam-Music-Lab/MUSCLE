@@ -19,7 +19,7 @@ class Command(BaseCommand):
             )
             experiment = Experiment.objects.create(
                 name='Goldsmiths Musical Sophistication Index',
-                rules='GOLD_MSI',
+                rules='RHYTHM_BATTERY_FINAL',
                 slug='gold-msi',
             )
             experiment.playlists.add(playlist)

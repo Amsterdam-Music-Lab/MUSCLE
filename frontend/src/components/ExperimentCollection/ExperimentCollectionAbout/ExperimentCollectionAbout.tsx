@@ -7,7 +7,7 @@ interface ExperimentCollectionAboutProps {
     slug: string;
 }
 
-export const ExperimentCollectionAbout: React.FC<ExperimentCollectionAboutProps> = (props) => {
+export const ExperimentCollectionAbout: React.FC<ExperimentCollectionAboutProps> = (props: ExperimentCollectionAboutProps) => {
 
     const { content, slug } = props;
 

@@ -13,7 +13,8 @@ class ParticipantTest(TestCase):
     @classmethod
     def setUpTestData(cls):
         cls.participant = Participant.objects.create(unique_hash=42)
-        cls.experiment = Experiment.objects.create(rules='LISTENING_CONDITIONS', slug='test')
+        cls.experiment = Experiment.objects.create(
+            rules='RHYTHM_BATTERY_INTRO', slug='test')
         cls.session = Session.objects.create(
             experiment=cls.experiment,
             participant=cls.participant,
