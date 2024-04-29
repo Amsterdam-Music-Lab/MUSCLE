@@ -74,4 +74,16 @@ describe('ExperimentCollectionDashboard', () => {
             expect(screen.getByRole('menu').querySelector('a').getAttribute('href')).toBe('/some_slug');
         });
     });
+
+    it('links to the experiment with the correct slug and participant id if the participand id url is present', async () => {
+        render(
+            <MemoryRouter>
+                <ExperimentCollectionDashboard experimentCollection={{ dashboard: [experiment1] }} participantIdUrl="some_id" />
+            </MemoryRouter>
+        );
+        await waitFor(() => {
+            expect(screen.getByRole('menu')).toBeTruthy();
+            expect(screen.getByRole('menu').querySelector('a').getAttribute('href')).toBe('/some_slug?participant_id=some_id');
+        });
+    });
 })
