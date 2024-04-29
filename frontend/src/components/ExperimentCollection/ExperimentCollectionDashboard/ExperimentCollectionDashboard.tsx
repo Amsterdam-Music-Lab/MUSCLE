@@ -15,7 +15,10 @@ export const ExperimentCollectionDashboard: React.FC<ExperimentCollectionDashboa
     const dashboard = experimentCollection?.dashboard;
 
     return (
-        <DefaultPage>
+        <DefaultPage
+            aboutSlug={experimentCollection.slug}
+            nextExperiment={experimentCollection.nextExperiment}
+        >
             {/* Experiments */}
             <div role="menu" className="dashboard">
                 <ul>

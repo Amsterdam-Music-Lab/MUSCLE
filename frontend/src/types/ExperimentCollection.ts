@@ -1,5 +1,4 @@
 import Experiment from "./Experiment";
-import Theme from "./Theme";
 
 export interface Consent {
     text: string;

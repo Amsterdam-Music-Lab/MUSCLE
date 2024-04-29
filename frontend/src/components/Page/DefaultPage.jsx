@@ -6,7 +6,7 @@ import AppBar from "../AppBar/AppBar";
 import Header from "../Header/Header";
 
 // DefaultPage is a Page with an AppBar and a width-restricted container for content
-const DefaultPage = ({ className, title, logoClickConfirm, children }) => {
+const DefaultPage = ({ className, title, logoClickConfirm, aboutSlug, nextExperiment, children }) => {
 
     const theme = useBoundStore((state) => state.theme);
     const headerProps = theme?.header;
@@ -15,7 +15,7 @@ const DefaultPage = ({ className, title, logoClickConfirm, children }) => {
         <Page className={className}>
             <AppBar title={title} logoClickConfirm={logoClickConfirm} />
             {headerProps && (
-                <Header { ...headerProps }></Header>
+                <Header nextExperimentSlug={nextExperiment} collectionSlug={aboutSlug} {...headerProps }></Header>
             )}
             <div className="container">
                 <div className="row justify-content-center py-3">

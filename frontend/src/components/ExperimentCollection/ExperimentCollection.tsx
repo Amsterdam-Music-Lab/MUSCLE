@@ -45,12 +45,6 @@ const ExperimentCollection = ({ match }: ExperimentCollectionProps) => {
         );
     }
 
-    if (experimentCollection.theme_id) {
-        getTheme(experimentCollection.theme_id).then( (theme: ITheme) =>
-            setTheme(theme)
-        )
-    }
-
     if (!hasShownConsent && showConsent) {
         const attrs = {
             participant,
@@ -68,6 +62,13 @@ const ExperimentCollection = ({ match }: ExperimentCollectionProps) => {
 
     if (!displayDashboard && nextExperiment) {
         return <Redirect to={"/" + nextExperiment.slug} />;
+    }
+
+
+    if (experimentCollection.theme_id) {
+        getTheme(experimentCollection.theme_id).then( (theme: ITheme) =>
+            setTheme(theme)
+        )
     }
 
     return (
