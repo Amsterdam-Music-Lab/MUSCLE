@@ -6,7 +6,6 @@ import {
     Switch
 } from "react-router-dom";
 
-import useBoundStore from "../../util/stores";
 import Consent from "../Consent/Consent";
 import DefaultPage from "../Page/DefaultPage";
 import { useExperimentCollection } from "@/API.js";
