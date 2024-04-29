@@ -42,10 +42,9 @@ class Consent(BaseAction):  # pylint: disable=too-few-public-methods
     - title: The title to be displayed
     - confirm: The text on the confirm button
     - deny: The text on the deny button
-    - url:  If no text is provided the url will be used to load a template (HTML or MARKDOWN)            
-    - render_format: (autodetected from the file extention)
-        'HTML': (default) Allowed tags: html, django template language
-        'MARKDOWN': Allowed tags: Markdown language
+    - url:  If no text is provided the url will be used to load a template (HTML or MARKDOWN)
+        HTML: (default) Allowed tags: html, django template language
+        MARKDOWN: Allowed tags: Markdown language
 
     Relates to client component: Consent.js
     """
@@ -64,7 +63,7 @@ class Consent(BaseAction):  # pylint: disable=too-few-public-methods
                 amet, nec te atqui scribentur. Diam molestie posidonium te sit, \
                 ea sea expetenda suscipiantur contentiones."
     
-    def __init__(self, text, title='Informed consent', confirm='I agree', deny='Stop', url='', render_format='HTML'):
+    def __init__(self, text, title='Informed consent', confirm='I agree', deny='Stop', url=''):
         # Determine which text to use
         if text!='':
             # Uploaded consent via file field: experiment.consent (High priority)

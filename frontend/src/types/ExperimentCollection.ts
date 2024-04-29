@@ -5,7 +5,6 @@ export default interface Consent {
     title: string;
     confirm: string;
     deny: string;
-    render_format: string;
     view: 'CONSENT'
 }
 
