@@ -24,7 +24,7 @@ const MatchingPairs = ({
 }) => {
 
     const xPosition = useRef(-1);
-    const yPosition = useRef(-1);
+    const yPosition = useRef(-1);    
     const [firstCard, setFirstCard] = useState(null);
     const [secondCard, setSecondCard] = useState(null);
     const [feedbackText, setFeedbackText] = useState('Pick a card');
@@ -90,11 +90,13 @@ const MatchingPairs = ({
             if (turnedCards.length === 1) {
                 // This is the second card to be turned
                 currentCard.turned = true;                
-                setSecondCard(currentCard);
+                setSecondCard(currentCard);                                
                 // set no mouse events for all but current
                 sections.forEach(section => section.noevents = true);
                 currentCard.noevents = true;
                 currentCard.boardposition = parseInt(index) + 1;
+                currentCard.timestamp = performance.now();                
+                currentCard.response_interval_ms = Math.round(currentCard.timestamp - firstCard.timestamp);                
                 // check for match
                 const first_card = firstCard;
                 const second_card = currentCard;
@@ -108,12 +110,13 @@ const MatchingPairs = ({
                 }
             } else {
                 // first click of the turn
-                setFirstCard(currentCard);
+                setFirstCard(currentCard);                
                 // turn first card, disable events
                 currentCard.turned = true;
                 currentCard.noevents = true;
                 currentCard.seen = true;
                 currentCard.boardposition = parseInt(index) + 1;
+                currentCard.timestamp = performance.now();                
                 // clear feedback text
                 setFeedbackText('');
             }
