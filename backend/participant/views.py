@@ -24,6 +24,7 @@ def current(request):
         'id': participant.id,
         'hash': participant.unique_hash,
         'csrf_token': get_token(request),
+        'participant_id_url': participant.participant_id_url,
         'country': participant.country_code
     }, json_dumps_params={'indent': 4})
     return response

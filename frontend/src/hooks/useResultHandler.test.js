@@ -2,9 +2,9 @@ import { renderHook, act } from "@testing-library/react";
 import useResultHandler from "./useResultHandler";
 import { vi } from 'vitest';
 
-import * as API from '../API.js';
+import * as API from '../API';
 
-vi.mock('../API.js');
+vi.mock('../API');
 
 describe('useResultHandler', () => {
 
