@@ -32,8 +32,6 @@ const experiment2 = getExperiment({
     description: 'Some description',
 });
 
-const experimentWithAllProps = getExperiment({ image: 'some_image.jpg', description: 'Some description' });
-
 describe('ExperimentCollectionDashboard', () => {
 
     it('shows a dashboard of multiple experiments if it receives an array', async () => {
