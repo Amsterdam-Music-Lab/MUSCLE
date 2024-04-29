@@ -2,7 +2,7 @@ from random import shuffle
 
 from django_markup.markup import formatter
 
-from experiment.actions.consent import Consent, get_render_format, render_html_or_markdown
+from experiment.actions.consent import Consent
 from participant.models import Participant
 from session.models import Session
 from .models import Experiment, ExperimentCollection, ExperimentCollectionGroup, GroupedExperiment
@@ -26,7 +26,7 @@ def serialize_experiment_collection(
     if experiment_collection.consent:
         consent = Consent(experiment_collection.consent).action()
     else:
-        consent = ''
+        consent = None
 
     return {
         'slug': experiment_collection.slug,

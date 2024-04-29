@@ -128,6 +128,7 @@ class RhythmBatteryIntro(Base):
         )
 
     def first_round(self, experiment):
+        intro_explainer = self.intro_explainer()
         explainer = Explainer(
             instruction=_(
                 'General listening instructions:'),
@@ -141,6 +142,6 @@ class RhythmBatteryIntro(Base):
             button_label=_('Ok')
         )
         return [
-            self.intro_explainer(),
+            intro_explainer,
             explainer,
         ]

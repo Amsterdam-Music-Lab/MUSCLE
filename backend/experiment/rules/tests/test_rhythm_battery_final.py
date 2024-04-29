@@ -12,7 +12,7 @@ class TestRhythmBatteryFinal(TestCase):
             name='test_md',
             slug='MARKDOWN',
             consent=SimpleUploadedFile(
-                'consent.md', b'#test', content_type='text/html')
+                'consent.md', b'# test', content_type='text/html')
         )
 
     def test_init(self):
