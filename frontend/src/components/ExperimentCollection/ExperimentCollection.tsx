@@ -30,6 +30,7 @@ const ExperimentCollection = ({ match }: ExperimentCollectionProps) => {
     const [experimentCollection, loadingExperimentCollection] = useExperimentCollection(match.params.slug) as [IExperimentCollection, boolean];
     const [hasShownConsent, setHasShownConsent] = useState(false);
     const participant = useBoundStore((state) => state.participant);
+    const participantIdUrl = participant?.participant_id_url;
     const nextExperiment = experimentCollection?.next_experiment;
     const displayDashboard = experimentCollection?.dashboard.length;
     const showConsent = experimentCollection?.consent;
@@ -37,6 +38,8 @@ const ExperimentCollection = ({ match }: ExperimentCollectionProps) => {
     const onNext = () => {
         setHasShownConsent(true);
     }
+
+    const getExperimentHref = (slug: string) => `/${slug}${participantIdUrl ? `?participant_id=${participantIdUrl}` : ""}`;
 
     if (loadingExperimentCollection) {
         return (
@@ -62,7 +65,7 @@ const ExperimentCollection = ({ match }: ExperimentCollectionProps) => {
     }
 
     if (!displayDashboard && nextExperiment) {
-        return <Redirect to={"/" + nextExperiment.slug} />;
+        return <Redirect to={getExperimentHref(nextExperiment.slug)} />
     }
 
     return (

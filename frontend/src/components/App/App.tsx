@@ -56,7 +56,7 @@ const App = () => {
 
     return (
         <Router className="aha__app">
-            <ConditionalRender condition={participant} fallback={<LoaderContainer />}>
+            <ConditionalRender condition={!!participant} fallback={<LoaderContainer />}>
                 <Switch>
                     {/* Request reload for given participant */}
                     <Route path={URLS.reloadParticipant}>
