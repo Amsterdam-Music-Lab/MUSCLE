@@ -50,9 +50,13 @@ def serialize_experiment_collection_group(group: ExperimentCollectionGroup, part
     if not next_experiment:
         return None
 
+    total_score = get_total_score(grouped_experiments, participant)
+    
     return {
         'dashboard': [serialize_experiment(experiment.experiment, participant) for experiment in grouped_experiments] if group.dashboard else [],
-        'next_experiment': next_experiment
+        'next_experiment': next_experiment,
+        'total_score': total_score,
+        'score_class': get_rank(total_score)
     }
 
 
@@ -90,3 +94,31 @@ def get_finished_session_count(experiment, participant):
     count = Session.objects.filter(
         experiment=experiment, participant=participant, finished_at__isnull=False).count()
     return count
+
+
+def get_total_score(grouped_experiments, participant):
+    total_score = 0
+    for grouped_experiment in grouped_experiments:
+        
+        sessions = Session.objects.filter(experiment=grouped_experiment.experiment, participant=participant)
+        for session in sessions:
+            total_score += session.final_score
+    return total_score
+
+
+def get_rank(score):
+        score_class = ""
+        if score < 100:
+            score_class = "plastic"
+        elif score < 200:
+            score_class = "bronze"
+        elif score < 300:
+            score_class = "silver"
+        elif score < 600:
+            score_class = "gold"
+        elif score < 1000:
+            score_class = "platinum"
+        else:
+            score_class = "diamond"
+        return score_class
+

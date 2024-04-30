@@ -7,6 +7,7 @@ import Social from "../../Social/Social"
 import ExperimentCollection from "@/types/ExperimentCollection";
 
 
+
 interface ExperimentCollectionDashboardProps {
     experimentCollection: ExperimentCollection;
     participantIdUrl: string | null;
@@ -23,10 +24,10 @@ export const ExperimentCollectionDashboard: React.FC<ExperimentCollectionDashboa
     const getExperimentHref = (slug: string) => `/${slug}${participantIdUrl ? `?participant_id=${participantIdUrl}` : ""}`;
 
     // Values to be sent from the backend
-    const score = 165
-    const no_score_label = 'Nog geen punten!'
-    const score_class = 'gold'
-    const score_label = 'Punten'
+    const score = experimentCollection.total_score;
+    const no_score_label = 'Nog geen punten!';
+    const score_class = experimentCollection.score_class;
+    const score_label = 'Punten';
     const social = {
         'apps': ['facebook', 'twitter'],
         'message': "I scored 100 points",
