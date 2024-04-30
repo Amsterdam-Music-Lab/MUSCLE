@@ -96,6 +96,7 @@ const MatchingPairs = ({
                 currentCard.noevents = true;
                 currentCard.boardposition = parseInt(index) + 1;
                 currentCard.timestamp = performance.now();
+                // check if firstCard exists then assign response time to second_card
                 firstCard ? currentCard.response_interval_ms = Math.round(currentCard.timestamp - firstCard.timestamp) : {};
                 // check for match
                 const first_card = firstCard;
