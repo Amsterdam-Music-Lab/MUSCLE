@@ -31,7 +31,7 @@ urlpatterns = [
     path('result/', include('result.urls')),
     path('section/', include('section.urls')),
     path('session/', include('session.urls')),
-    path('theme', include('theme.urls')),
+    path('theme/', include('theme.urls')),
     path('admin/', admin.site.urls),
 
     # Sentry debug (uncomment to test Sentry)
