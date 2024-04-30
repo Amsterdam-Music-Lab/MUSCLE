@@ -116,7 +116,9 @@ const MatchingPairs = ({
                 currentCard.noevents = true;
                 currentCard.seen = true;
                 currentCard.boardposition = parseInt(index) + 1;
-                currentCard.timestamp = performance.now();                
+                currentCard.timestamp = performance.now();
+                // reset response interval in case this card has a value from a previous turn
+                currentCard.response_interval_ms = '';
                 // clear feedback text
                 setFeedbackText('');
             }
