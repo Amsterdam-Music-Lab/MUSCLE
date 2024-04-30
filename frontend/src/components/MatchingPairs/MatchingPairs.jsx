@@ -25,8 +25,8 @@ const MatchingPairs = ({
 
     const xPosition = useRef(-1);
     const yPosition = useRef(-1);    
-    const [firstCard, setFirstCard] = useState(null);
-    const [secondCard, setSecondCard] = useState(null);
+    const [firstCard, setFirstCard] = useState({});
+    const [secondCard, setSecondCard] = useState({});
     const [feedbackText, setFeedbackText] = useState('Pick a card');
     const [feedbackClass, setFeedbackClass] = useState('');
     const [inBetweenTurns, setInBetweenTurns] = useState(false);
@@ -95,9 +95,8 @@ const MatchingPairs = ({
                 sections.forEach(section => section.noevents = true);
                 currentCard.noevents = true;
                 currentCard.boardposition = parseInt(index) + 1;
-                currentCard.timestamp = performance.now();
-                // check if firstCard exists then assign response time to second_card
-                firstCard ? currentCard.response_interval_ms = Math.round(currentCard.timestamp - firstCard.timestamp) : {};
+                currentCard.timestamp = performance.now();                
+                currentCard.response_interval_ms = Math.round(currentCard.timestamp - firstCard.timestamp);
                 // check for match
                 const first_card = firstCard;
                 const second_card = currentCard;
