@@ -5,7 +5,7 @@ from django.utils.translation import gettext_lazy as _
 
 from .base import Base
 from section.models import Section
-from experiment.actions import Trial, Consent, Explainer, Step
+from experiment.actions import Trial, Explainer, Step
 from experiment.actions.form import ChoiceQuestion, Form
 from experiment.actions.playback import Autoplay
 from experiment.actions.utils import final_action_with_optional_button, render_feedback_trivia
@@ -33,15 +33,10 @@ class DurationDiscrimination(Base):
     def first_round(self, experiment):
         """Create data for the first experiment rounds"""
         explainer = self.intro_explanation()
-
-        # 2. Consent with admin text or default text
-        consent = Consent(experiment.consent)
-
         explainer2 = practice_explainer()
 
         return [
             explainer,
-            consent,
             explainer2,
         ]
 

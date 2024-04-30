@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import classNames from "classnames";
 
-import { MEDIA_ROOT } from "../../config";
+import { MEDIA_ROOT } from "@/config";
 import ListenFeedback from "../Listen/ListenFeedback";
 import CountDown from "../CountDown/CountDown";
 import * as audio from "../../util/audio";
