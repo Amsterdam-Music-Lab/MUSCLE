@@ -110,7 +110,7 @@ const MatchingPairs = ({
                 }
             } else {
                 // first click of the turn
-                setFirstCard(currentCard);       
+                setFirstCard(currentCard);
                 // turn first card, disable events
                 currentCard.turned = true;
                 currentCard.noevents = true;
