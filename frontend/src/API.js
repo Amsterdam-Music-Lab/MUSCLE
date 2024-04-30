@@ -1,4 +1,4 @@
-import { API_BASE_URL } from "./config";
+import { API_BASE_URL } from "@/config";
 import useGet from "./util/useGet";
 import axios from "axios";
 import qs from "qs";
@@ -15,7 +15,7 @@ export const URLS = {
         feedback: (slug) => "/experiment/" + slug + "/feedback/",
     },
     experiment_collection: {
-        get: (slug) => "/experiment/collection/" + slug + "/"
+        get: (slug) => `/experiment/collection/${slug}/`
     },
     participant: {
         current: "/participant/",

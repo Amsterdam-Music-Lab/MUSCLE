@@ -1,4 +1,4 @@
-import { MEDIA_ROOT } from "../config";
+import { MEDIA_ROOT } from "@/config";
 
 let track;
 let source;

@@ -139,10 +139,10 @@ class MatchingPairsGame(Base):
     def calculate_intermediate_score(self, session, result):
         ''' will be called every time two cards have been turned '''
         result_data = json.loads(result)
-        first_card = result_data['lastCard']
+        first_card = result_data['first_card']
         first_section = Section.objects.get(pk=first_card['id'])
         first_card['filename'] = str(first_section.filename)
-        second_card = result_data['currentCard']
+        second_card = result_data['second_card']
         second_section = Section.objects.get(pk=second_card['id'])
         second_card['filename'] = str(second_section.filename)
         if first_section.group == second_section.group:

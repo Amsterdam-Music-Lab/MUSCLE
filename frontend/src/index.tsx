@@ -1,7 +1,7 @@
 import "./index.scss";
 import { StrictMode } from "react";
 import { createRoot } from 'react-dom/client';
-import App from "./components/App/App";
+import App from "./components/App/App.tsx";
 import { initSentry } from "./config/sentry";
 import { initAudioListener } from "./util/audio";
 import { initWebAudioListener } from "./util/webAudio";

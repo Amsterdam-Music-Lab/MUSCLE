@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useLocation } from 'react-router-dom';
 
-import { API_BASE_URL } from "../../config";
+import { API_BASE_URL } from "@/config";
 
 const Reload = () => {
     const location = useLocation();

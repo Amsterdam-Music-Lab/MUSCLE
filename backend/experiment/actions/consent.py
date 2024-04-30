@@ -77,6 +77,7 @@ class Consent(BaseAction):  # pylint: disable=too-few-public-methods
         else:
             # use default text
             dry_text = self.default_text
+            render_format = 'HTML'
         # render text fot the consent component
         self.text = render_html_or_markdown(dry_text, render_format)
         self.title = title

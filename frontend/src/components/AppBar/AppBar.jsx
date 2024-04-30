@@ -1,5 +1,5 @@
 import React from "react";
-import { API_BASE_URL, URLS, LOGO_URL, LOGO_TITLE } from "../../config";
+import { API_BASE_URL, URLS, LOGO_URL, LOGO_TITLE } from "@/config";
 import { Link } from "react-router-dom";
 import useBoundStore from "@/util/stores";
 

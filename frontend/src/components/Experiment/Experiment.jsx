@@ -72,7 +72,7 @@ const Experiment = ({ match }) => {
             return newSession;
         }
         catch (err) {
-            setError(`Could not create a session: ${err}`)
+            setError(`Could not create a session: ${err}`, err)
         };
     };
 

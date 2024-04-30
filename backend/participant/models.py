@@ -42,7 +42,7 @@ class Participant(models.Model):
             "participant_id_url": self.participant_id_url,
             "profile": self.profile_object()
         }
-    
+
     def export_profiles(self):
         # export participant profile result objects
         return self.result_set.all()
