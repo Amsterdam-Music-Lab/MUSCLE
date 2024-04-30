@@ -1,30 +1,59 @@
-import { create } from "zustand";
+import { StateCreator, create } from "zustand";
 
 import IParticipant from "@/types/Participant";
 import ISession from "@/types/Session";
 import ITheme from "@/types/Theme";
 
-const createErrorSlice = (set) => ({
+interface ErrorSlice {
+    error: string | null;
+    setError: (message: string, errorToCapture?: Error) => void;
+}
+
+const createErrorSlice: StateCreator<ErrorSlice> = (set) => ({
     error: null,
-    setError: (error: string) => set(() => ({ error }))
+    setError: (message, errorToCapture) => {
+        set(() => ({ error: message }));
+        if (errorToCapture) {
+            Sentry.captureException(errorToCapture);
+        }
+    }
 });
 
-const createParticipantSlice = (set) => ({
+interface ParticipantSlice {
+    participant: IParticipant | null;
+    participantLoading: boolean;
+    setParticipant: (participant: IParticipant) => void;
+    setParticipantLoading: (participantLoading: boolean) => void;
+}
+
+const createParticipantSlice: StateCreator<ParticipantSlice> = (set) => ({
     participant: null,
-    setParticipant: (participant: IParticipant) => set(() => ({ participant }))
+    participantLoading: true,
+    setParticipant: (participant: IParticipant) => set(() => ({ participant })),
+    setParticipantLoading: (participantLoading: boolean) => set(() => ({ participantLoading }))
 });
 
-const createSessionSlice = (set) => ({
+interface SessionSlice {
+    session: ISession | null;
+    setSession: (session: ISession) => void;
+}
+
+const createSessionSlice: StateCreator<SessionSlice> = (set) => ({
     session: null,
-    setSession: (session: ISession) => set(() => ({ session }))
+    setSession: (session: ISession) => set(() => ({ session })),
 });
 
-const createThemeSlice = (set) => ({
+interface ThemeSlice {
+    theme: ITheme | null;
+    setTheme: (theme: ITheme) => void;
+}
+
+const createThemeSlice: StateCreator<ThemeSlice> = (set) => ({
     theme: null,
     setTheme: (theme: ITheme) => set(() => ({ theme })),
 });
 
-export const useBoundStore = create((...args) => ({
+export const useBoundStore = create<ErrorSlice & ParticipantSlice & SessionSlice & ThemeSlice>((...args) => ({
     ...createErrorSlice(...args),
     ...createParticipantSlice(...args),
     ...createSessionSlice(...args),

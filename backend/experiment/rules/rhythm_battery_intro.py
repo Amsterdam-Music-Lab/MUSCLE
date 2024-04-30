@@ -32,7 +32,8 @@ class RhythmBatteryIntro(Base):
                     },
                     result_id=result_pk,
                     view='BUTTON_ARRAY',
-                    submits=True
+                    submits=True,
+                    style=STYLE_BOOLEAN
                 )])
         elif round_number == 2:
             key = 'internet_connection'
@@ -127,6 +128,7 @@ class RhythmBatteryIntro(Base):
         )
 
     def first_round(self, experiment):
+        intro_explainer = self.intro_explainer()
         explainer = Explainer(
             instruction=_(
                 'General listening instructions:'),
@@ -140,6 +142,6 @@ class RhythmBatteryIntro(Base):
             button_label=_('Ok')
         )
         return [
-            self.intro_explainer(),
+            intro_explainer,
             explainer,
         ]

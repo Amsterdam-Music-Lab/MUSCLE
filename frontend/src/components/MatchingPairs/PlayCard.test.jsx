@@ -62,7 +62,6 @@ describe("PlayCard Component Tests", () => {
 
     it("should display a card with fbmemory when memory", () => {
         render(<PlayCard onClick={mockOnClick} registerUserClicks={mockRegisterUserClicks} showAnimation={true} section={{ ...sectionProps, matchClass: 'fbmemory' }} />);
-        const check = screen.getByRole("button").classList;
         expect(screen.getByRole("button").classList.contains("fbmemory")).to.be.true;
     });
 

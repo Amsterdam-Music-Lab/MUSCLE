@@ -4,7 +4,7 @@ import { withRouter } from "react-router-dom";
 import Rank from "../Rank/Rank";
 import Social from "../Social/Social";
 
-import { URLS } from "../../config";
+import { URLS } from "@/config";
 import { finalizeSession } from "../../API";
 import useBoundStore from "../../util/stores";
 import ParticipantLink from "../ParticipantLink/ParticipantLink";

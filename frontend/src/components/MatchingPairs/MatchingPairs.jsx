@@ -25,8 +25,8 @@ const MatchingPairs = ({
 
     const xPosition = useRef(-1);
     const yPosition = useRef(-1);
-    const [firstCard, setFirstCard] = useState(null);
-    const [secondCard, setSecondCard] = useState(null);
+    const [firstCard, setFirstCard] = useState({});
+    const [secondCard, setSecondCard] = useState({});
     const [feedbackText, setFeedbackText] = useState('Pick a card');
     const [feedbackClass, setFeedbackClass] = useState('');
     const [inBetweenTurns, setInBetweenTurns] = useState(false);
@@ -89,15 +89,19 @@ const MatchingPairs = ({
         if (turnedCards.length < 2) {
             if (turnedCards.length === 1) {
                 // This is the second card to be turned
-                currentCard.turned = true;
+                currentCard.turned = true;                
                 setSecondCard(currentCard);
                 // set no mouse events for all but current
                 sections.forEach(section => section.noevents = true);
                 currentCard.noevents = true;
+                currentCard.boardposition = parseInt(index) + 1;
+                currentCard.timestamp = performance.now();                
+                currentCard.response_interval_ms = Math.round(currentCard.timestamp - firstCard.timestamp);
                 // check for match
-                const lastCard = firstCard;
+                const first_card = firstCard;
+                const second_card = currentCard;
                 try {
-                    const scoreResponse = await scoreIntermediateResult({ session, participant, result: { currentCard, lastCard } });
+                    const scoreResponse = await scoreIntermediateResult({ session, participant, result: { first_card, second_card } });
                     setScore(scoreResponse.score);
                     showFeedback(scoreResponse.score);
                 } catch {
@@ -110,6 +114,9 @@ const MatchingPairs = ({
                 // turn first card, disable events
                 currentCard.turned = true;
                 currentCard.noevents = true;
+                currentCard.seen = true;
+                currentCard.boardposition = parseInt(index) + 1;
+                currentCard.timestamp = performance.now();                
                 // clear feedback text
                 setFeedbackText('');
             }

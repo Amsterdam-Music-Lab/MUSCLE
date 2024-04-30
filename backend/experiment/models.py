@@ -21,12 +21,6 @@ def consent_upload_path(instance, filename):
     return f'consent/{folder_name}/{filename}'
 
 
-def debrief_upload_path(instance, filename):
-    """Generate path to save consent file based on experiment.slug"""
-    folder_name = instance.slug
-    return f'debrief/{folder_name}/{filename}'
-
-
 class ExperimentCollection(models.Model):
     """ A model to allow nesting multiple experiments into a 'parent' experiment """
     name = models.CharField(max_length=64, default='')

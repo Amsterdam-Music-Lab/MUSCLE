@@ -8,12 +8,15 @@ import DefaultPage from "@/components/Page/DefaultPage";
 
 interface ExperimentCollectionDashboardProps {
     experimentCollection: ExperimentCollection;
+    participantIdUrl: string | null;
 }
 
-export const ExperimentCollectionDashboard: React.FC<ExperimentCollectionDashboardProps> = ({ experimentCollection }) => {
+export const ExperimentCollectionDashboard: React.FC<ExperimentCollectionDashboardProps> = ({ experimentCollection, participantIdUrl }) => {
 
     const dashboard = experimentCollection?.dashboard;
     const nextExperimentSlug = experimentCollection?.next_experiment?.slug;
+
+    const getExperimentHref = (slug: string) => `/${slug}${participantIdUrl ? `?participant_id=${participantIdUrl}` : ""}`;
 
     return (
         <DefaultPage
@@ -25,7 +28,7 @@ export const ExperimentCollectionDashboard: React.FC<ExperimentCollectionDashboa
                 <ul>
                     {dashboard.map((exp) => (
                         <li key={exp.slug}>
-                            <Link to={"/" + exp.slug}>
+                            <Link to={getExperimentHref(exp.slug)} role="menuitem">
                                 <ImageOrPlaceholder imagePath={exp.image} alt={exp.description} />
                                 <h3>{exp.name}</h3>
                                 <div className="status-bar">

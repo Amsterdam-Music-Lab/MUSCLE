@@ -5,15 +5,14 @@ export interface Consent {
     title: string;
     confirm: string;
     deny: string;
-    render_format: string;
-    view: 'CONSENT'
+    view: 'CONSENT';
 }
 
 export default interface ExperimentCollection {
     slug: string;
     name: string;
     description: string;
-    consent: Consent;
+    consent: Consent | null;
     dashboard: Experiment[];
     next_experiment: Experiment | null;
     about_content: string;

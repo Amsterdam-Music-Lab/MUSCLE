@@ -13,15 +13,16 @@ import DefaultPage from "../Page/DefaultPage";
 import Loading from "../Loading/Loading";
 import ExperimentCollectionAbout from "./ExperimentCollectionAbout/ExperimentCollectionAbout";
 import ExperimentCollectionDashboard from "./ExperimentCollectionDashboard/ExperimentCollectionDashboard";
-import { URLS } from "../../config";
+import { URLS } from "@/config";
 import IExperimentCollection from "@/types/ExperimentCollection";
-import ITheme from "@/types/Theme";
+import IParticipant from "@/types/Participant";
 
 interface RouteParams {
     slug: string
 }
 
 interface ExperimentCollectionProps extends RouteComponentProps<RouteParams> {
+    participant: IParticipant
 }
 
 const ExperimentCollection = ({ match }: ExperimentCollectionProps) => {
@@ -29,6 +30,7 @@ const ExperimentCollection = ({ match }: ExperimentCollectionProps) => {
     const [hasShownConsent, setHasShownConsent] = useState(false);
     const participant = useBoundStore((state) => state.participant);
     const setTheme = useBoundStore((state) => state.setTheme);
+    const participantIdUrl = participant?.participant_id_url;
     const nextExperiment = experimentCollection?.next_experiment;
     const displayDashboard = experimentCollection?.dashboard.length;
     const showConsent = experimentCollection?.consent;
@@ -36,6 +38,8 @@ const ExperimentCollection = ({ match }: ExperimentCollectionProps) => {
     const onNext = () => {
         setHasShownConsent(true);
     }
+
+    const getExperimentHref = (slug: string) => `/${slug}${participantIdUrl ? `?participant_id=${participantIdUrl}` : ""}`;
 
     if (loadingExperimentCollection) {
         return (
@@ -61,7 +65,7 @@ const ExperimentCollection = ({ match }: ExperimentCollectionProps) => {
     }
 
     if (!displayDashboard && nextExperiment) {
-        return <Redirect to={"/" + nextExperiment.slug} />;
+        return <Redirect to={getExperimentHref(nextExperiment.slug)} />
     }
 
 
@@ -75,7 +79,7 @@ const ExperimentCollection = ({ match }: ExperimentCollectionProps) => {
         <div className="aha__collection">
             <Switch>
                 <Route path={URLS.experimentCollectionAbout} component={() => <ExperimentCollectionAbout content={experimentCollection?.about_content} slug={experimentCollection.slug} />} />
-                <Route path={URLS.experimentCollection} exact component={() => <ExperimentCollectionDashboard experimentCollection={experimentCollection} />} />
+                <Route path={URLS.experimentCollection} exact component={() => <ExperimentCollectionDashboard experimentCollection={experimentCollection} participantIdUrl={participantIdUrl} />} />
             </Switch>
         </div>
     )

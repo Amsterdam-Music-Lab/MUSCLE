@@ -1,4 +1,5 @@
 
+import random
 import re
 import math
 import string
@@ -112,10 +113,10 @@ class CongoSameDiff(Base):
         groups_amount = session.playlist.section_set.values('group').distinct().count()
         variants_amount = real_trial_variants.count()
 
-        # get the participant's group variant
-        participant_id = session.participant.participant_id_url
+        # get the participant's group variant based on the participant's id # else default to random number between 1 and variants_amount
+        participant_id = int(session.participant.participant_id_url) if session.participant.participant_id_url else random.randint(1, variants_amount * 2)
         participant_group_variant = self.get_participant_group_variant(
-            int(participant_id),
+            participant_id,
             group_number,
             groups_amount,
             variants_amount
@@ -179,9 +180,13 @@ class CongoSameDiff(Base):
         section_name = section.song.name if section.song else 'no_name'
         section_tag = section.tag if section.tag else 'no_tag'
         section_group = section.group if section.group else 'no_group'
+        section_artist = section.song.artist if section.song else 'NO_EXPECTED_RESPONSE'
 
         # define a key, by which responses to this trial can be found in the database
         key = f'samediff_trial_{section_group}_{section_name}'
+
+        # set artist field as expected_response in the results
+        expected_response = section_artist
 
         question = ChoiceQuestion(
             explainer=f'{practice_label} ({trial_index}/{subset_count}) | {section_name} | {section_tag} | {section_group}',
@@ -196,7 +201,7 @@ class CongoSameDiff(Base):
             },
             style={},
             key=key,
-            result_id=prepare_result(key, session, section=section),
+            result_id=prepare_result(key, session, section=section, expected_response=expected_response),
             submits=True
         )
         form = Form([question])
