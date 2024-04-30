@@ -233,7 +233,7 @@ export const getTheme = async(theme_id) => {
         const response = await axios.get(
             endpoint,
         );
-        return response;
+        return response.data;
     } catch (err) {
         console.error(err);
         return null;

@@ -13,11 +13,12 @@ interface ExperimentCollectionDashboardProps {
 export const ExperimentCollectionDashboard: React.FC<ExperimentCollectionDashboardProps> = ({ experimentCollection }) => {
 
     const dashboard = experimentCollection?.dashboard;
+    const nextExperimentSlug = experimentCollection?.next_experiment?.slug;
 
     return (
         <DefaultPage
-            aboutSlug={experimentCollection.slug}
-            nextExperiment={experimentCollection.nextExperiment}
+            collectionSlug={experimentCollection.slug}
+            nextExperimentSlug={nextExperimentSlug}
         >
             {/* Experiments */}
             <div role="menu" className="dashboard">
