@@ -4,7 +4,7 @@ import DefaultPage from "../Page/DefaultPage";
 import Loading from "../Loading/Loading";
 import Rank from "../Rank/Rank";
 import { useParticipantScores } from "../../API";
-import { URLS } from "../../config";
+import { URLS } from "@/config";
 import ParticipantLink from "../ParticipantLink/ParticipantLink";
 
 // Profile loads and shows the profile of a participant for a given experiment

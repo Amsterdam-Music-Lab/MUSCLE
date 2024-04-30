@@ -1,4 +1,4 @@
-import { API_ROOT, MEDIA_ROOT, SILENT_MP3 } from "../config.js";
+import { API_ROOT, MEDIA_ROOT, SILENT_MP3 } from "../config";
 import Timer from "./timer";
 
 // Audio provides function around a shared audio object
