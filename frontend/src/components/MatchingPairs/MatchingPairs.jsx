@@ -24,7 +24,7 @@ const MatchingPairs = ({
 }) => {
 
     const xPosition = useRef(-1);
-    const yPosition = useRef(-1);    
+    const yPosition = useRef(-1);
     const [firstCard, setFirstCard] = useState({});
     const [secondCard, setSecondCard] = useState({});
     const [feedbackText, setFeedbackText] = useState('Pick a card');
