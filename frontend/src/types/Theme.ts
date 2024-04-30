@@ -5,5 +5,12 @@ export interface Header {
 };
 
 export default interface Theme {
-    header: Header;
+    backgroundUrl: string;
+    bodyFontUrl: string;
+    description: string;
+    headingFontUrl: string;
+    logoUrl: string;
+    name: string;
+    footer: null;
+    header: Header | null;
 }
