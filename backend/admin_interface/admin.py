@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.utils.html import format_html
 from .models import AdminInterfaceConfiguration, AdminInterfaceThemeConfiguration
 
 
@@ -7,7 +8,7 @@ class AdminInterfaceThemeConfigurationInline(admin.StackedInline):
     extra = 0
     fields = (
         # Color scheme
-        
+
         ## Official Django colors
 
         ### Main colors
@@ -75,9 +76,24 @@ class AdminInterfaceThemeConfigurationInline(admin.StackedInline):
 
 
 class AdminInterfaceConfigurationAdmin(admin.ModelAdmin):
-    list_display = ('name', 'description')
+    list_display = ('name', 'description', 'theme_overview', 'active',)
 
     inlines = [AdminInterfaceThemeConfigurationInline]
+
+    def theme_overview(self, obj):
+        theme = obj.theme if hasattr(obj, 'theme') else None
+
+        if not theme:
+            return "No theme assigned"
+        
+        fields = AdminInterfaceThemeConfigurationInline.fields
+        color_fields = [f for f in fields if f.startswith('color_')]
+        color_overview = ''.join(
+            f'<span style="display: inline-block; width: 20px; height: 20px; background-color: {getattr(theme, f)}; margin-right: 5px;"></span>'
+            for f in color_fields
+        )
+
+        return format_html(f'<div>{color_overview}</div>')
 
 
 admin.site.register(
