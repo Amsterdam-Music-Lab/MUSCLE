@@ -1,10 +1,12 @@
 from django.contrib import admin
 from django.utils.html import format_html
 from .models import AdminInterfaceConfiguration, AdminInterfaceThemeConfiguration
+from .forms import AdminInterfaceConfigurationForm, AdminInterfaceThemeConfigurationForm
 
 
 class AdminInterfaceThemeConfigurationInline(admin.StackedInline):
     model = AdminInterfaceThemeConfiguration
+    form = AdminInterfaceThemeConfigurationForm
     extra = 0
     fields = (
         # Color scheme
@@ -78,6 +80,7 @@ class AdminInterfaceThemeConfigurationInline(admin.StackedInline):
 class AdminInterfaceConfigurationAdmin(admin.ModelAdmin):
     list_display = ('name', 'description', 'theme_overview', 'active',)
 
+    form = AdminInterfaceConfigurationForm
     inlines = [AdminInterfaceThemeConfigurationInline]
 
     def theme_overview(self, obj):
