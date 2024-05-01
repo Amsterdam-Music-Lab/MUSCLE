@@ -11,51 +11,51 @@ class AdminInterfaceThemeConfigurationInline(admin.StackedInline):
     fields = (
         # Color scheme
 
-        ## Official Django colors
+        # - Official Django colors
 
-        ### Main colors
+        # -- Main colors
         'color_primary',
         'color_secondary',
         'color_accent',
         'color_primary_fg',
 
-        ### Body
+        # -- Body
         'color_body_fg',
         'color_body_bg',
         'color_body_quiet_color',
         'color_body_loud_color',
 
-        ### Header
+        # -- Header
         'color_header_color',
 
-        ### Breadcumbs
+        # -- Breadcumbs
         'color_breadcrumbs_fg',
 
-        ### Link
+        # -- Link
         'color_link_fg',
         'color_link_hover_color',
         'color_link_selected_fg',
 
-        ### Borders
+        # -- Borders
         'color_hairline_color',
         'color_border_color',
 
-        ### Error
+        # -- Error
         'color_error_fg',
 
-        ### Message
+        # -- Message
         'color_message_success_bg',
         'color_message_warning_bg',
         'color_message_error_bg',
 
-        ### Darkened
+        # -- Darkened
         'color_darkened_bg',
 
-        ### Selected
+        # -- Selected
         'color_selected_bg',
         'color_selected_row',
 
-        ### Button
+        # -- Button
         'color_button_fg',
         'color_button_bg',
         'color_button_hover_bg',
