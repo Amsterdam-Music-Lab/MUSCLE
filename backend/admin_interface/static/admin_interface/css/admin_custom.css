@@ -1,14 +1,3 @@
-:root {
-    --default-bg: #f8d7da;
-    --default-fg: #721c24;
-    --success-bg: #d4edda;
-    --success-fg: #155724;
-    --warning-bg: #fff3cd;
-    --warning-fg: #856404;
-    --error-bg: #f8d7da;
-    --error-fg: #721c24;
-}
-
 .mt-1 {
     margin-top: 0.25rem;
 }
