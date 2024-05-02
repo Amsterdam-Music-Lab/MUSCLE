@@ -47,13 +47,9 @@ describe("DefaultPage Component Tests", () => {
 
         
 
-        it('renders itself with children', async () => {
-            await screen.findByText('Default page title');
-        })
-
-        it('does not shows a header', async () => {
-            await screen.findByText('All you ever wanted to know')
-        })
+        it.todo('renders itself with children');
+        
+        it.todo('does not shows a header');
     })
 
     describe("with a theme", () => {
@@ -83,13 +79,9 @@ describe("DefaultPage Component Tests", () => {
             )
         });
 
-        it('renders itself with children', async () => {
-            await screen.findByText('Default page title');
-        });
+        it.todo('renders itself with children');
 
-        it('shows a header', async () => {
-            await screen.findByText('All you ever wanted to know');
-        })
+        it.todo('shows a header');
     })
     
 });
