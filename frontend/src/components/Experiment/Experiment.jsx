@@ -19,6 +19,7 @@ import FloatingActionButton from "@/components/FloatingActionButton/FloatingActi
 import UserFeedback from "@/components/UserFeedback/UserFeedback";
 import FontLoader from "@/components/FontLoader/FontLoader";
 import useResultHandler from "@/hooks/useResultHandler";
+import { API_ROOT } from "../../config";
 
 // Experiment handles the main experiment flow:
 // - Loads the experiment and participant
@@ -35,6 +36,9 @@ const Experiment = ({ match }) => {
     const session = useBoundStore((state) => state.session);
     const theme = useBoundStore((state) => state.theme);
     const setTheme = useBoundStore((state) => state.setTheme);
+
+    const setHeadData = useBoundStore((state) => state.setHeadData);
+    const resetHeadData = useBoundStore((state) => state.resetHeadData);
 
     // Current experiment state
     const [actions, setActions] = useState([]);
@@ -108,6 +112,14 @@ const Experiment = ({ match }) => {
             // Loading succeeded
             if (experiment) {
                 setSession(null);
+                // Set Helmet Head data
+                setHeadData({
+                    title: experiment.name,
+                    description: experiment.description,
+                    image: `${API_ROOT}/${experiment.image}`,
+                    url: window.location.href
+                });
+
                 // Set theme
                 if (experiment.theme) {
                     setTheme(experiment.theme);
@@ -125,6 +137,11 @@ const Experiment = ({ match }) => {
                 setError("Could not load experiment");
             }
         }
+
+        // Cleanup
+        return () => {
+            resetHeadData();
+        };
     }, [
         experiment,
         loadingExperiment,

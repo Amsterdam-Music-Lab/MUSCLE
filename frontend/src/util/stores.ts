@@ -5,26 +5,39 @@ import IParticipant from "@/types/Participant";
 import ISession from "@/types/Session";
 import ITheme from "@/types/Theme";
 
+
+
+interface HeadData {
+    title: string;
+    description: string;
+    image: string;
+    url: string;
+}
+
 interface DocumentHeadSlice {
-    pageTitle: string;
-    setPageTitle: (title: string) => void;
-    pageDescription: string;
-    setPageDescription: (description: string) => void;
-    pageImage: string;
-    setPageImage: (image: string) => void;
-    pageUrl: string;
-    setPageUrl: (url: string) => void;
+    headData: HeadData;
+    setHeadData: (headData: HeadData) => void;
+    patchHeadData: (headData: Partial<HeadData>) => void;
+    resetHeadData: () => void;
 }
 
 const createDocumentHeadSlice: StateCreator<DocumentHeadSlice> = (set) => ({
-    pageTitle: "",
-    setPageTitle: (pageTitle) => set(() => ({ pageTitle })),
-    pageDescription: "",
-    setPageDescription: (pageDescription) => set(() => ({ pageDescription })),
-    pageImage: "",
-    setPageImage: (pageImage) => set(() => ({ pageImage })),
-    pageUrl: "",
-    setPageUrl: (pageUrl) => set(() => ({ pageUrl })),
+    headData: {
+        title: "",
+        description: "",
+        image: "",
+        url: "",
+    },
+    setHeadData: (headData) => set(() => ({ headData })),
+    patchHeadData: (headData) => set((state) => ({ headData: { ...state.headData, ...headData } })),
+    resetHeadData: () => set(() => ({
+        headData: {
+            title: import.meta.env.VITE_OG_TITLE ?? "",
+            description: import.meta.env.VITE_OG_DESCRIPTION ?? "",
+            image: import.meta.env.VITE_OG_IMAGE ?? "",
+            url: import.meta.env.VITE_OG_URL ?? "",
+        }
+    }))
 });
 
 interface ErrorSlice {
@@ -76,7 +89,7 @@ const createThemeSlice: StateCreator<ThemeSlice> = (set) => ({
     setTheme: (theme: ITheme) => set(() => ({ theme })),
 });
 
-export const useBoundStore = create<ErrorSlice & ParticipantSlice & SessionSlice & ThemeSlice>((...args) => ({
+export const useBoundStore = create<DocumentHeadSlice & ErrorSlice & ParticipantSlice & SessionSlice & ThemeSlice>((...args) => ({
     ...createDocumentHeadSlice(...args),
     ...createErrorSlice(...args),
     ...createParticipantSlice(...args),
