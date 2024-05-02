@@ -117,7 +117,10 @@ const Experiment = ({ match }) => {
                     title: experiment.name,
                     description: experiment.description,
                     image: `${API_ROOT}/${experiment.image}`,
-                    url: window.location.href
+                    url: window.location.href,
+                    structuredData: {
+                        "@type": "Experiment",
+                    },
                 });
 
                 // Set theme

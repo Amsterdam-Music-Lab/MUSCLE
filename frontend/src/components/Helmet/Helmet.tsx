@@ -10,6 +10,9 @@ const Helmet = () => {
         "@type": "Organization",
         url: url,
         logo: image,
+        name: headData.title,
+        description: description,
+        ...headData.structuredData,
     };
 
     return (
@@ -35,7 +38,6 @@ const Helmet = () => {
                 {JSON.stringify(structuredData)}
             </script>
         </ReactHelmet>
-
     );
 };
 

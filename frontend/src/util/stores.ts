@@ -5,13 +5,21 @@ import IParticipant from "@/types/Participant";
 import ISession from "@/types/Session";
 import ITheme from "@/types/Theme";
 
-
+interface StructuredData {
+    "@context": string;
+    "@type": string;
+    url: string;
+    logo: string;
+    name: string;
+    description: string;
+}
 
 interface HeadData {
     title: string;
     description: string;
     image: string;
     url: string;
+    structuredData: Partial<StructuredData>;
 }
 
 interface DocumentHeadSlice {
@@ -27,6 +35,14 @@ const createDocumentHeadSlice: StateCreator<DocumentHeadSlice> = (set) => ({
         description: "",
         image: "",
         url: "",
+        structuredData: {
+            "@context": "http://schema.org",
+            "@type": "Organization",
+            url: import.meta.env.VITE_OG_URL ?? "",
+            logo: import.meta.env.VITE_OG_IMAGE ?? "",
+            name: import.meta.env.VITE_OG_TITLE ?? "",
+            description: import.meta.env.VITE_OG_DESCRIPTION ?? "",
+        }
     },
     setHeadData: (headData) => set(() => ({ headData })),
     patchHeadData: (headData) => set((state) => ({ headData: { ...state.headData, ...headData } })),
