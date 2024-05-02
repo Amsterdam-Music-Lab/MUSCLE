@@ -1,3 +1,4 @@
+import * as Sentry from '@sentry/react';
 import { StateCreator, create } from "zustand";
 
 import IParticipant from "@/types/Participant";

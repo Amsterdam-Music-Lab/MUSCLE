@@ -1,6 +1,6 @@
 import React from "react";
-import { vi } from "vitest";
-import { render, fireEvent, screen } from "@testing-library/react";
+import { beforeEach, vi } from "vitest";
+import { render, screen } from "@testing-library/react";
 
 import DefaultPage from "./DefaultPage";
 import Explainer from "@/components/Explainer/Explainer";
@@ -16,6 +16,14 @@ describe("DefaultPage Component Tests", () => {
         timer: 1
     }
 
+    const defaultProps = {
+        className:'aha__default',
+        title: "Default page title",
+        logoClickConfirm: null,
+        collectionSlug: 'some_collection',
+        nextExperimentSlug: 'some_experiment',
+    }
+
     describe("without a theme", () => {
         vi.mock('../../util/stores', () => ({
             __esModule: true,
@@ -29,15 +37,22 @@ describe("DefaultPage Component Tests", () => {
             useBoundStore: vi.fn()
         }));
 
+        beforeEach(() => {
+            render(
+                <DefaultPage { ...defaultProps }>
+                    <Explainer { ...explainerProps } />
+                </DefaultPage>
+            )
+        })
+
         
 
         it('renders itself with children', async () => {
-            render(
-                <DefaultPage className='aha__default' title="Default page title">
-                    <Explainer { ...explainerProps} />
-                </DefaultPage>
-            )
-            await screen.findByText('Default  page title');
+            await screen.findByText('Default page title');
+        })
+
+        it('does not shows a header', async () => {
+            await screen.findByText('All you ever wanted to know')
         })
     })
 
@@ -48,7 +63,9 @@ describe("DefaultPage Component Tests", () => {
                 const state = {
                     theme: {
                         header: {
-                            nextExperimentButtonText
+                            next_experiment_button_text: 'Next!',
+                            about_button_text: 'All you ever wanted to know',
+                            show_score: false
                         }
                     }
                 };
@@ -58,13 +75,20 @@ describe("DefaultPage Component Tests", () => {
             useBoundStore: vi.fn()
         }));
 
-        it('renders itself with children', async () => {
+        beforeEach(() => {
             render(
-                <DefaultPage className='aha__default' title="Default page title">
+                <DefaultPage { ...defaultProps }>
                     <Explainer { ...explainerProps} />
                 </DefaultPage>
             )
+        });
+
+        it('renders itself with children', async () => {
             await screen.findByText('Default page title');
+        });
+
+        it('shows a header', async () => {
+            await screen.findByText('All you ever wanted to know');
         })
     })
     

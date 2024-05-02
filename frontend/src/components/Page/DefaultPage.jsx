@@ -6,7 +6,7 @@ import AppBar from "../AppBar/AppBar";
 import Header from "../Header/Header";
 
 // DefaultPage is a Page with an AppBar and a width-restricted container for content
-const DefaultPage = ({ className, title, logoClickConfirm, collectionSlug, nextExperimentSlug, children }) => {
+const DefaultPage = ({ className, title, logoClickConfirm, collectionSlug='', nextExperimentSlug='', children }) => {
 
     const theme = useBoundStore((state) => state.theme);
     const [headerProps, setHeaderProps] = useState(undefined);
@@ -14,11 +14,11 @@ const DefaultPage = ({ className, title, logoClickConfirm, collectionSlug, nextE
     useEffect(() => {
         if (theme && theme.header) {
             const headerProps = {
+                collectionSlug,
+                nextExperimentSlug,
                 aboutButtonText: theme.header.about_button_text,
                 nextExperimentButtonText: theme.header.next_experiment_button_text,
-                showScore: theme.header.show_score,
-                collectionSlug,
-                nextExperimentSlug
+                showScore: theme.header.show_score
             };
             setHeaderProps(headerProps);
         }

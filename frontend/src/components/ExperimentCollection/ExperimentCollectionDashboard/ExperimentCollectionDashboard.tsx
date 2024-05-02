@@ -13,8 +13,8 @@ interface ExperimentCollectionDashboardProps {
 
 export const ExperimentCollectionDashboard: React.FC<ExperimentCollectionDashboardProps> = ({ experimentCollection, participantIdUrl }) => {
 
-    const dashboard = experimentCollection?.dashboard;
-    const nextExperimentSlug = experimentCollection?.next_experiment?.slug;
+    const dashboard = experimentCollection.dashboard;
+    const nextExperimentSlug = experimentCollection.next_experiment?.slug;
 
     const getExperimentHref = (slug: string) => `/${slug}${participantIdUrl ? `?participant_id=${participantIdUrl}` : ""}`;
 

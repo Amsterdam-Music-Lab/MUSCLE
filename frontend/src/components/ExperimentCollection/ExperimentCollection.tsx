@@ -69,7 +69,7 @@ const ExperimentCollection = ({ match }: ExperimentCollectionProps) => {
     }
 
 
-    if (experimentCollection.theme_id) {
+    if (experimentCollection?.theme_id) {
         getTheme(experimentCollection.theme_id).then( (theme: ITheme) =>
             setTheme(theme)
         )
