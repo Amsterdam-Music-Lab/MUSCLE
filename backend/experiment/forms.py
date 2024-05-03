@@ -186,8 +186,8 @@ class ExperimentForm(ModelForm):
         }
 
     class Media:
-        js = ["experiment_admin.js"]
-        css = {"all": ["experiment_admin.css"]}
+        js = ["experiment_admin.js", "experiment_playlist_validation.js"]
+        css = {"all": ["experiment_admin.css", "experiment_playlist_validation.css"]}
 
 
 class ExportForm(Form):
