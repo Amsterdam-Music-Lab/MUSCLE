@@ -29,7 +29,7 @@ class CongoSameDiff(Base):
         """
 
         # Do a validity check on the experiment
-        self.validate(experiment)
+        self.validate_playlist(experiment)
 
         # 1. Playlist
         playlist = Playlist(experiment.playlists.all())
@@ -240,9 +240,11 @@ class CongoSameDiff(Base):
         total_trials_count = practice_trials_count + total_unique_exp_trials_count + 1
         return total_trials_count
 
-    def validate(self, experiment: Experiment):
+    def validate_playlist(self, experiment: Experiment):
 
         errors = []
+
+        super().validate_playlist(experiment)  # Call the base class validate_playlist to perform common checks
 
         # All sections need to have a group value
         sections = experiment.playlists.first().section_set.all()
@@ -264,7 +266,7 @@ class CongoSameDiff(Base):
         if not sections.exclude(tag__contains='practice').exists():
             errors.append('At least one section should not have the tag "practice"')
 
-        # Every non-practice group should have the same number of variants 
+        # Every non-practice group should have the same number of variants
         # that should be labeled with a single uppercase letter
         groups = sections.values('group').distinct()
         variants = sections.exclude(tag__contains='practice').values('tag')
