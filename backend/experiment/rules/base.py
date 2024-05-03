@@ -6,6 +6,7 @@ from django.conf import settings
 
 from experiment.actions import Final, Form, Trial
 from experiment.models import Experiment
+from section.models import Playlist
 from experiment.questions.demographics import DEMOGRAPHICS
 from experiment.questions.goldsmiths import MSI_OTHER
 from experiment.questions.utils import question_by_key, unanswered_questions
@@ -158,18 +159,16 @@ class Base(object):
             'hashtags': [experiment.hashtag or experiment.slug, "amsterdammusiclab", "citizenscience"]
         }
 
-    def validate_playlist(self, experiment: Experiment):
+    def validate_playlist(self, playlist: Playlist):
         errors = []
         # Common validations across experiments
-        playlist = experiment.playlists.first()
-
         if not playlist:
             errors.append('The experiment must have a playlist.')
-        else:
-            sections = playlist.section_set.all()
+            return errors
 
-            if not sections:
-                errors.append('The experiment must have at least one section.')
+        sections = playlist.section_set.all()
 
-        if errors:
-            raise ValueError('Validation errors: \n- ' + '\n- '.join(errors))
+        if not sections:
+            errors.append('The experiment must have at least one section.')
+
+        return errors
