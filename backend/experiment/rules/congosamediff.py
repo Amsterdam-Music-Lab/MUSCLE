@@ -1,7 +1,6 @@
 
 import random
 import re
-import math
 import string
 from django.utils.translation import gettext_lazy as _
 from experiment.actions.utils import final_action_with_optional_button
