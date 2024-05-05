@@ -14,7 +14,7 @@ class FooterConfigInline(admin.StackedInline):
     fields = ['disclaimer', 'logos', 'privacy']
 
 
-class HeadefConfigInline(admin.StackedInline):
+class HeaderConfigInline(admin.StackedInline):
     model = HeaderConfig
     fields = ['show_score']
 
