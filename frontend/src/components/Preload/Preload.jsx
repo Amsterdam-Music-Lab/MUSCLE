@@ -34,13 +34,11 @@ const Preload = ({ sections, playMethod, duration, preloadMessage, pageTitle, on
             }
 
             if (playMethod === 'BUFFER') {
-
                 // Use Web-audio and preload sections in buffers            
                 sections.map((section, index) => {
                     // skip Preload if the section has already been loaded in the previous action
                     if (webAudio.checkSectionLoaded(section)) {
-                        onNext();
-                        return undefined;
+                        return true;
                     }
                     // Clear buffers if this is the first section
                     if (index === 0) {
@@ -57,6 +55,7 @@ const Preload = ({ sections, playMethod, duration, preloadMessage, pageTitle, on
                         }                                        
                     });
                 })
+            onNext();
             } else {
                 if (playMethod === 'EXTERNAL') {                    
                     webAudio.closeWebAudio();        
