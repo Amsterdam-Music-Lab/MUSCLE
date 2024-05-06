@@ -22,18 +22,6 @@ export const ExperimentCollectionDashboard: React.FC<ExperimentCollectionDashboa
 
     return (
         <>
-            <div className="hero">
-                <div className="intro">
-                    <p>{experimentCollection?.description}</p>
-                    <nav className="actions">
-                        {nextExperiment && <a className="btn btn-lg btn-primary" href={"/" + nextExperiment.slug}>Volgende experiment</a>}
-                        {aboutContent && <Link className="btn btn-lg btn-outline-primary" to={`/collection/${experimentCollection.slug}/about`}>Over ons</Link>}
-                    </nav>
-                </div>
-                <div className="results">
-
-                </div>
-            </div>
             {/* Experiments */}
             <div role="menu" className="dashboard">
                 <ul>
