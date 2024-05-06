@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { withRouter } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
 
 import Rank from "../Rank/Rank";
 import Social from "../Social/Social";
@@ -65,9 +65,9 @@ const Final = ({ experiment, participant, score, final_text, action_texts, butto
             </div>
             {button && (
                 <div className="text-center pt-4">
-                    <a className='btn btn-primary btn-lg' href={button.link} onClick={button.link ? undefined : onNext}>
+                    <Link className='btn btn-primary btn-lg' to={button.link} onClick={button.link ? undefined : onNext}>
                         {button.text}
-                    </a>
+                    </Link>
                 </div>
             )}
             {logo && (
