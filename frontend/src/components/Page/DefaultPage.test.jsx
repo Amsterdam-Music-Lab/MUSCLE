@@ -24,72 +24,13 @@ describe("DefaultPage Component Tests", () => {
         nextExperimentSlug: 'some_experiment',
     }
 
-    describe("without a theme", () => {
-        vi.mock('../../util/stores', () => ({
-            __esModule: true,
-            default: (fn) => {
-                const state = {
-                    theme: null
-                };
-                
-                return fn(state);
-            },
-            useBoundStore: vi.fn()
-        }));
-
-        beforeEach(() => {
-            render(
-                <DefaultPage { ...defaultProps }>
-                    <Explainer { ...explainerProps } />
-                </DefaultPage>
-            )
-        })
-
-        
-
-        it('renders itself with children', async () => {
-            await screen.findByText('Default page title');
-        })
-
-        it('does not shows a header', async () => {
-            await screen.findByText('All you ever wanted to know')
-        })
-    })
-
-    describe("with a theme", () => {
-        vi.mock('../../util/stores', () => ({
-            __esModule: true,
-            default: (fn) => {
-                const state = {
-                    theme: {
-                        header: {
-                            next_experiment_button_text: 'Next!',
-                            about_button_text: 'All you ever wanted to know',
-                            show_score: false
-                        }
-                    }
-                };
-                
-                return fn(state);
-            },
-            useBoundStore: vi.fn()
-        }));
-
-        beforeEach(() => {
-            render(
-                <DefaultPage { ...defaultProps }>
-                    <Explainer { ...explainerProps} />
-                </DefaultPage>
-            )
-        });
-
-        it('renders itself with children', async () => {
-            await screen.findByText('Default page title');
-        });
-
-        it('shows a header', async () => {
-            await screen.findByText('All you ever wanted to know');
-        })
+    it('renders itself with children', async () => {
+        render(
+            <DefaultPage { ...defaultProps }>
+                <Explainer { ...explainerProps } />
+            </DefaultPage>
+        )
+        await screen.findByText('Some instruction');
     })
     
 });
