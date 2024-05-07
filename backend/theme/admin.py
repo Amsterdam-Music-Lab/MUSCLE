@@ -23,7 +23,7 @@ class HeaderConfigInline(admin.StackedInline):
 class ThemeConfigAdmin(admin.ModelAdmin):
 
     form = ThemeConfigForm
-    inlines = [HeadefConfigInline, FooterConfigInline]
+    inlines = [HeaderConfigInline, FooterConfigInline]
 
     list_display = ('name', 'header_overview', 'heading_font_preview',
                     'body_font_preview', 'logo_preview', 'background_preview', 'footer_overview')
