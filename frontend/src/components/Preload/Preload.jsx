@@ -54,12 +54,14 @@ const Preload = ({ sections, playMethod, duration, preloadMessage, pageTitle, on
                     webAudio.closeWebAudio();        
                 }
                 // Load audio until available
-                // Return remove listener   
-                return audio.loadUntilAvailable(section.url, () => {
-                    if (index === (sections.length - 1)) {                            
-                        setAudioAvailable(true);                  
-                    }
-                });            
+                // Return remove listener
+                sections.forEach((section, index) => {
+                    return audio.loadUntilAvailable(section.url, () => {
+                        if (index === (sections.length - 1)) {                            
+                            setAudioAvailable(true);                  
+                        }
+                    });
+                })       
             }
         }
 
