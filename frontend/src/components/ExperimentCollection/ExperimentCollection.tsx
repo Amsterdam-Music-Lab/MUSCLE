@@ -7,7 +7,7 @@ import {
 } from "react-router-dom";
 
 import useBoundStore from "../../util/stores";
-import { useExperimentCollection, getTheme } from "@/API";
+import { useExperimentCollection } from "@/API";
 import Consent from "../Consent/Consent";
 import DefaultPage from "../Page/DefaultPage";
 import Loading from "../Loading/Loading";
@@ -68,17 +68,10 @@ const ExperimentCollection = ({ match }: ExperimentCollectionProps) => {
         return <Redirect to={getExperimentHref(nextExperiment.slug)} />
     }
 
-
-    if (experimentCollection?.theme_id) {
-        getTheme(experimentCollection.theme_id).then( (theme: ITheme) =>
-            setTheme(theme)
-        )
-    }
-
     return (
         <div className="aha__collection">
             <Switch>
-                <Route path={URLS.experimentCollectionAbout} component={() => <ExperimentCollectionAbout content={experimentCollection?.about_content} slug={experimentCollection.slug} />} />
+                <Route path={URLS.experimentCollectionAbout} component={() => <ExperimentCollectionAbout content={experimentCollection?.aboutContent} slug={experimentCollection.slug} />} />
                 <Route path={URLS.experimentCollection} exact component={() => <ExperimentCollectionDashboard experimentCollection={experimentCollection} participantIdUrl={participantIdUrl} />} />
             </Switch>
         </div>

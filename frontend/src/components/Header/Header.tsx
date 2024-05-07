@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 interface HeaderProps {
-    nextExperimentSlug: string;
+    nextExperimentSlug: string | undefined;
     nextExperimentButtonText: string;
     collectionSlug: string;
     aboutButtonText: string;
