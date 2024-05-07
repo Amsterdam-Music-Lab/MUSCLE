@@ -114,7 +114,7 @@ class CongoSameDiff(Base):
         variants_amount = real_trial_variants.count()
 
         # get the participant's group variant based on the participant's id # else default to random number between 1 and variants_amount
-        participant_id = int(session.participant.participant_id_url) if session.participant.participant_id_url else random.randint(1, variants_amount * 2)
+        participant_id = session.participant.id
         participant_group_variant = self.get_participant_group_variant(
             participant_id,
             group_number,
