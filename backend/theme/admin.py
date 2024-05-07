@@ -50,7 +50,7 @@ class ThemeConfigAdmin(admin.ModelAdmin):
     )
 
     def header_overview(self, obj):
-        return f'Header set' if obj.header else ''
+        return 'Header set' if obj.header else ''
 
     def footer_overview(self, obj):
         return f'Footer with {obj.footer.logos.count()} logos'

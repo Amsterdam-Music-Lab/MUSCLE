@@ -44,9 +44,9 @@ class ThemeConfigSerializerTest(TestCase):
 
     def test_header_serializer(self):
         expected_json = {
-            'show_score': True,
-            'next_experiment_button_text': 'Next experiment',
-            'about_button_text': 'About us'
+            'showScore': True,
+            'nextExperimentButtonText': 'Next experiment',
+            'aboutButtonText': 'About us'
         }
         self.assertEqual(serialize_header(self.header), expected_json)
 
@@ -54,10 +54,10 @@ class ThemeConfigSerializerTest(TestCase):
         expected_json = {
             'name': 'Default',
             'description': 'Default theme configuration',
-            'heading_font_url': 'https://example.com/heading_font',
-            'body_font_url': 'https://example.com/body_font',
-            'logo_url': f'{settings.MEDIA_URL}someimage.jpg',
-            'background_url': f'{settings.MEDIA_URL}anotherimage.png',
+            'headingFontUrl': 'https://example.com/heading_font',
+            'bodyFontUrl': 'https://example.com/body_font',
+            'logoUrl': f'{settings.MEDIA_URL}someimage.jpg',
+            'backgroundUrl': f'{settings.MEDIA_URL}anotherimage.png',
             'footer': serialize_footer(self.footer),
             'header': serialize_header(self.header),
         }
@@ -71,10 +71,10 @@ class ThemeConfigSerializerTest(TestCase):
         expected_json = {
             'name': 'Default',
             'description': 'Default theme configuration',
-            'heading_font_url': 'https://example.com/heading_font',
-            'body_font_url': 'https://example.com/body_font',
-            'logo_url': None,
-            'background_url': None,
+            'headingFontUrl': 'https://example.com/heading_font',
+            'bodyFontUrl': 'https://example.com/body_font',
+            'logoUrl': None,
+            'backgroundUrl': None,
             'footer': serialize_footer(self.footer),
             'header': serialize_header(self.header),
         }
@@ -85,10 +85,10 @@ class ThemeConfigSerializerTest(TestCase):
         expected_json = {
             'name': 'Default',
             'description': 'Default theme configuration',
-            'heading_font_url': 'https://example.com/heading_font',
-            'body_font_url': 'https://example.com/body_font',
-            'logo_url': f'{settings.MEDIA_URL}someimage.jpg',
-            'background_url': f'{settings.MEDIA_URL}anotherimage.png',
+            'headingFontUrl': 'https://example.com/heading_font',
+            'bodyFontUrl': 'https://example.com/body_font',
+            'logoUrl': f'{settings.MEDIA_URL}someimage.jpg',
+            'backgroundUrl': f'{settings.MEDIA_URL}anotherimage.png',
             'header': serialize_header(self.header),
             'footer': None,
         }
@@ -99,10 +99,10 @@ class ThemeConfigSerializerTest(TestCase):
         expected_json = {
             'name': 'Default',
             'description': 'Default theme configuration',
-            'heading_font_url': 'https://example.com/heading_font',
-            'body_font_url': 'https://example.com/body_font',
-            'logo_url': f'{settings.MEDIA_URL}someimage.jpg',
-            'background_url': f'{settings.MEDIA_URL}anotherimage.png',
+            'headingFontUrl': 'https://example.com/heading_font',
+            'bodyFontUrl': 'https://example.com/body_font',
+            'logoUrl': f'{settings.MEDIA_URL}someimage.jpg',
+            'backgroundUrl': f'{settings.MEDIA_URL}anotherimage.png',
             'header': None,
             'footer': serialize_footer(self.footer),
         }
