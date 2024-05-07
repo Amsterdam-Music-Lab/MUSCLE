@@ -30,7 +30,7 @@ export const ExperimentCollectionDashboard: React.FC<ExperimentCollectionDashboa
     const score_label = 'Punten';
     const social = {
         'apps': ['facebook', 'twitter'],
-        'message': "I scored 100 points",
+        'message': `I scored ${experimentCollection.total_score} points`,
         'url': 'wwww.amsterdammusiclab.nl',
         'hashtags': ["amsterdammusiclab", "citizenscience"]
     }
