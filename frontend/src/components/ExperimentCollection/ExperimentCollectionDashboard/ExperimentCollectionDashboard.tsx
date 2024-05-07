@@ -3,7 +3,8 @@ import { Link } from "react-router-dom";
 
 import { API_ROOT } from "@/config";
 import ExperimentCollection from "@/types/ExperimentCollection";
-import DefaultPage from "@/components/Page/DefaultPage";
+import AppBar from "@/components/AppBar/AppBar";
+import Header from "@/components/Header/Header";
 
 
 interface ExperimentCollectionDashboardProps {
@@ -15,14 +16,20 @@ export const ExperimentCollectionDashboard: React.FC<ExperimentCollectionDashboa
 
     const dashboard = experimentCollection.dashboard;
     const nextExperimentSlug = experimentCollection.next_experiment?.slug;
+    const headerProps = experimentCollection.theme?.header? {
+        nextExperimentSlug,
+        collectionSlug: experimentCollection.slug,
+        ... experimentCollection.theme.header
+    } : undefined;
 
     const getExperimentHref = (slug: string) => `/${slug}${participantIdUrl ? `?participant_id=${participantIdUrl}` : ""}`;
 
     return (
-        <DefaultPage
-            collectionSlug={experimentCollection.slug}
-            nextExperimentSlug={nextExperimentSlug}
-        >
+        <>
+        <AppBar title={experimentCollection.name} logoClickConfirm="placeholder text" />
+        {headerProps && (
+            <Header { ...headerProps }></Header>
+        )}
             {/* Experiments */}
             <div role="menu" className="dashboard">
                 <ul>
@@ -41,7 +48,7 @@ export const ExperimentCollectionDashboard: React.FC<ExperimentCollectionDashboa
                     {dashboard.length === 0 && <p>No experiments found</p>}
                 </ul>
             </div>
-        </DefaultPage>
+        </>
     );
 }
 

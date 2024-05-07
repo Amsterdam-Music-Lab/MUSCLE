@@ -5,6 +5,7 @@ from django_markup.markup import formatter
 from experiment.actions.consent import Consent
 from participant.models import Participant
 from session.models import Session
+from theme.serializers import serialize_theme
 from .models import Experiment, ExperimentCollection, ExperimentCollectionGroup, GroupedExperiment
 
 
@@ -18,24 +19,25 @@ def serialize_actions(actions):
 def serialize_experiment_collection(
     experiment_collection: ExperimentCollection
 ) -> dict:
-    about_content = experiment_collection.about_content
 
-    if about_content:
-        about_content = formatter(about_content, filter_name='markdown')
-
-    if experiment_collection.consent:
-        consent = Consent(experiment_collection.consent).action()
-    else:
-        consent = None
-
-    return {
+    serialized = {
         'slug': experiment_collection.slug,
         'name': experiment_collection.name,
         'description': experiment_collection.description,
-        'consent': consent,
-        'about_content': about_content,
-        'theme_id': experiment_collection.theme_config.pk if experiment_collection.theme_config else None
     }
+
+    if experiment_collection.consent:
+        serialized['consent'] = Consent(experiment_collection.consent).action()
+
+    if experiment_collection.theme_config:
+        serialized['theme'] = serialize_theme(
+            experiment_collection.theme_config)
+
+    if experiment_collection.about_content:
+        serialized['aboutContent'] = formatter(
+            experiment_collection.about_content, filter_name='markdown')
+
+    return serialized
 
 
 def serialize_experiment_collection_group(group: ExperimentCollectionGroup, participant: Participant) -> dict:

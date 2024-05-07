@@ -44,8 +44,10 @@ export const URLS = {
 export const useExperiment = (slug) =>
     useGet(API_BASE_URL + URLS.experiment.get(slug));
 
-export const useExperimentCollection = (slug) => 
-    useGet(API_BASE_URL + URLS.experiment_collection.get(slug));
+export const useExperimentCollection = (slug) => {
+    const data = useGet(API_BASE_URL + URLS.experiment_collection.get(slug));
+    return data; // snakeToCamel(collection), loading
+}
 
 export const useParticipantScores = () =>
     useGet(API_BASE_URL + URLS.participant.score);
@@ -219,19 +221,6 @@ export const postFeedback = async({ experimentSlug, feedback, participant }) => 
                 feedback,
                 csrfmiddlewaretoken: participant.csrf_token,
             })
-        );
-        return response.data;
-    } catch (err) {
-        console.error(err);
-        return null;
-    }
-}
-
-export const getTheme = async(theme_id) => {
-    const endpoint = API_BASE_URL + URLS.theme.get(theme_id);
-    try {
-        const response = await axios.get(
-            endpoint,
         );
         return response.data;
     } catch (err) {
