@@ -5,6 +5,7 @@ on:
     branches:
       - develop
       - main
+      - ci/fix-acc-deploy
   workflow_dispatch:
 
 jobs:
@@ -93,7 +94,7 @@ jobs:
     name: Deploy to acceptance environment
     environment: Acceptance
     runs-on: ACC
-    if: github.ref == 'refs/heads/main' || github.ref == 'refs/tags/*' || (github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main')
+    # if: github.ref == 'refs/heads/main' || github.ref == 'refs/tags/*' || (github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main')
     concurrency:
       group: ${{ github.workflow }}-${{ github.ref }}
     env:
