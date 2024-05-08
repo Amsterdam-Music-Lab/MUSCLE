@@ -196,6 +196,7 @@ class ExperimentCollectionAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
     list_display = ('name', 'slug_link', 'description_excerpt', 'dashboard', 'groups')
     fields = ['slug', 'name', 'description', 'consent', 'theme_config', 'dashboard',
               'about_content']
+    inline_actions = ['dashboard']
     form = ExperimentCollectionForm
     inlines = [ExperimentCollectionGroupInline]
 
@@ -218,6 +219,10 @@ class ExperimentCollectionAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
         return format_html(', '.join([f'<a href="/admin/experiment/experimentcollectiongroup/{group.id}/change/">{group.name}</a>' for group in groups]))
     
     slug_link.short_description = "Slug"
+
+    def dashboard(self, request, obj, parent_obj=None):
+        """Open researchers dashboard for a collection"""
+        pass
 
 
 admin.site.register(ExperimentCollection, ExperimentCollectionAdmin)
