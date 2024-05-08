@@ -5,7 +5,6 @@ on:
     branches:
       - develop
       - main
-      - ci/fix-acc-deploy
   workflow_dispatch:
 
 jobs:
@@ -13,7 +12,7 @@ jobs:
     name: Deploy to test environment
     environment: Test
     runs-on: tst
-    # if: github.ref == 'refs/heads/develop' || (github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/develop')
+    if: github.ref == 'refs/heads/develop' || (github.event_name == 'workflow_dispatch' && github.ref != 'refs/heads/main')
     concurrency:
       group: ${{ github.workflow }}-${{ github.ref }}
     env:
