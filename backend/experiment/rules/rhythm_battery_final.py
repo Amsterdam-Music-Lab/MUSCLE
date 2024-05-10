@@ -18,7 +18,7 @@ class RhythmBatteryFinal(Base):
             {
                 "name": "MSI_F3_MUSICAL_TRAINING",
                 "keys": QUESTION_GROUPS["MSI_F3_MUSICAL_TRAINING"],
-                "randomize": False
+                "randomize": True
             },
             {
                 "name": "Demographics",
