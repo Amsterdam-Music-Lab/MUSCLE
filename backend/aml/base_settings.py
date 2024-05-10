@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     'session',
     'section',
     'theme',
+    'question'
 ]
 
 MIDDLEWARE = [

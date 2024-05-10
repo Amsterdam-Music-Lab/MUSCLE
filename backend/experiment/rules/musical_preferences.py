@@ -3,10 +3,10 @@ from django.conf import settings
 from django.utils.translation import gettext_lazy as _
 from django.template.loader import render_to_string
 
-from experiment.questions.utils import question_by_key
-from experiment.questions.demographics import EXTRA_DEMOGRAPHICS
-from experiment.questions.goldsmiths import MSI_F1_ACTIVE_ENGAGEMENT
-from experiment.questions.other import OTHER
+from question.utils import question_by_key
+from question.demographics import EXTRA_DEMOGRAPHICS
+from question.goldsmiths import MSI_F1_ACTIVE_ENGAGEMENT
+from question.other import OTHER
 
 from experiment.actions import Consent, Explainer, Final, HTML, Playlist, Redirect, Step, Trial
 from experiment.actions.form import BooleanQuestion, ChoiceQuestion, Form, LikertQuestionIcon

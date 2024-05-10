@@ -1,7 +1,7 @@
 from django.test import TestCase
 
 from experiment.models import Experiment
-from experiment.questions.musicgens import MUSICGENS_17_W_VARIANTS
+from question.musicgens import MUSICGENS_17_W_VARIANTS
 from participant.models import Participant
 from result.models import Result
 from section.models import Playlist

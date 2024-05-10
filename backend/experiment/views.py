@@ -10,7 +10,6 @@ from .models import Experiment, ExperimentCollection, ExperimentCollectionGroup,
 from experiment.serializers import serialize_actions, serialize_experiment_collection, serialize_experiment_collection_group
 from experiment.rules import EXPERIMENT_RULES
 from experiment.actions.utils import COLLECTION_KEY
-from experiment.models import QuestionSeries, QuestionInSeries, Question, QuestionGroup
 from participant.utils import get_participant
 
 logger = logging.getLogger(__name__)
@@ -68,13 +67,6 @@ def experiment_or_404(slug):
         return Experiment.objects.get(slug=slug, active=True)
     except Experiment.DoesNotExist:
         raise Http404("Experiment does not exist")
-
-
-def question_groups(request):
-    question_groups = {}
-    for question_group in QuestionGroup.objects.all():
-        question_groups[question_group.key] = [q.key for q in QuestionGroup.objects.get(pk=question_group.key).questions.all()]
-    return JsonResponse(question_groups)
 
 
 def add_default_question_series(request, id):

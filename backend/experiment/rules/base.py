@@ -5,12 +5,12 @@ from django.utils.translation import gettext_lazy as _
 from django.conf import settings
 
 from experiment.actions import Final, Form, Trial
-from experiment.questions.demographics import DEMOGRAPHICS
-from experiment.questions.goldsmiths import MSI_OTHER
-from experiment.questions.utils import question_by_key, unanswered_questions
+from question.demographics import DEMOGRAPHICS
+from question.goldsmiths import MSI_OTHER
+from question.utils import question_by_key, unanswered_questions
 from result.score import SCORING_RULES
 
-from experiment.questions import get_questions_from_series, QUESTION_GROUPS
+from question.questions import get_questions_from_series, QUESTION_GROUPS
 
 logger = logging.getLogger(__name__)
 

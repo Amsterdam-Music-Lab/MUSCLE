@@ -4,8 +4,8 @@ from django.template.loader import render_to_string
 
 from experiment.actions import Consent, BooleanQuestion, Explainer, Final, Form, Playlist, Step, Trial
 from experiment.actions.playback import Autoplay
-from experiment.questions.demographics import EXTRA_DEMOGRAPHICS
-from experiment.questions.utils import question_by_key
+from question.demographics import EXTRA_DEMOGRAPHICS
+from question.utils import question_by_key
 from experiment.rules.base import Base
 from result.utils import prepare_result
 

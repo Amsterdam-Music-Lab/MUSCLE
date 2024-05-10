@@ -8,9 +8,9 @@ from .base import Base
 from experiment.actions import Consent, Explainer, Step, Final, Playlist, Trial
 from experiment.actions.form import Form, RadiosQuestion
 from experiment.actions.playback import Autoplay
-from experiment.questions.demographics import EXTRA_DEMOGRAPHICS
-from experiment.questions.languages import LANGUAGE, LanguageQuestion
-from experiment.questions.utils import question_by_key
+from question.demographics import EXTRA_DEMOGRAPHICS
+from question.languages import LANGUAGE, LanguageQuestion
+from question.utils import question_by_key
 
 from result.utils import prepare_result
 

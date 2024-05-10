@@ -15,7 +15,8 @@ from django.http import HttpResponse
 from inline_actions.admin import InlineActionsModelAdminMixin
 from django.urls import reverse
 from django.utils.html import format_html
-from experiment.models import Experiment, ExperimentCollection, ExperimentCollectionGroup, Feedback, GroupedExperiment, Question, QuestionGroup, QuestionSeries, QuestionInSeries
+from experiment.models import Experiment, ExperimentCollection, ExperimentCollectionGroup, Feedback, GroupedExperiment
+from question.admin import QuestionSeriesInline
 from experiment.forms import ExperimentCollectionForm, ExperimentForm, ExportForm, TemplateForm, EXPORT_TEMPLATES, QuestionSeriesAdminForm
 from section.models import Section, Song
 from result.models import Result
@@ -29,47 +30,6 @@ class FeedbackInline(admin.TabularInline):
     model = Feedback
     fields = ['text']
     extra = 0
-
-
-class QuestionInSeriesInline(admin.TabularInline):
-    model = QuestionInSeries
-    extra = 0
-
-
-class QuestionSeriesInline(admin.TabularInline):
-    model = QuestionSeries
-    extra = 0
-    show_change_link = True
-
-
-class QuestionAdmin(admin.ModelAdmin):
-    def has_change_permission(self, request, obj=None):
-        return obj.editable if obj else False
-
-
-class QuestionGroupAdmin(admin.ModelAdmin):
-    formfield_overrides = {
-        models.ManyToManyField: {'widget': CheckboxSelectMultiple},
-    }
-
-    def get_form(self, request, obj=None, **kwargs):
-        form = super().get_form(request, obj, **kwargs)
-
-        if obj and not obj.editable:
-            for field_name in form.base_fields:
-                form.base_fields[field_name].disabled = True
-
-        return form
-
-
-class QuestionSeriesAdmin(admin.ModelAdmin):
-    inlines = [QuestionInSeriesInline]
-    form = QuestionSeriesAdminForm
-
-
-admin.site.register(Question, QuestionAdmin)
-admin.site.register(QuestionGroup, QuestionGroupAdmin)
-admin.site.register(QuestionSeries, QuestionSeriesAdmin)
 
 
 class ExperimentAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):

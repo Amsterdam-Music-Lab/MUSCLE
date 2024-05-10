@@ -8,14 +8,14 @@ from .base import Base
 from experiment.actions import Consent, Explainer, Final, Playlist, Score, Step, Trial
 from experiment.actions.form import BooleanQuestion, Form
 from experiment.actions.playback import Autoplay
-from experiment.questions import QUESTION_GROUPS
-from experiment.questions.demographics import DEMOGRAPHICS
-from experiment.questions.goldsmiths import MSI_OTHER
-from experiment.questions.utils import question_by_key
-from experiment.questions.utils import copy_shuffle
-from experiment.questions.goldsmiths import MSI_FG_GENERAL, MSI_ALL
-from experiment.questions.stomp import STOMP20
-from experiment.questions.tipi import TIPI
+from question.questions import QUESTION_GROUPS
+from question.demographics import DEMOGRAPHICS
+from question.goldsmiths import MSI_OTHER
+from question.utils import question_by_key
+from question.utils import copy_shuffle
+from question.goldsmiths import MSI_FG_GENERAL, MSI_ALL
+from question.stomp import STOMP20
+from question.tipi import TIPI
 from experiment.actions.styles import STYLE_BOOLEAN_NEGATIVE_FIRST
 from experiment.actions.wrappers import song_sync
 from result.utils import prepare_result

@@ -3,9 +3,9 @@ from django.conf import settings
 
 from experiment.actions import Final, Trial
 from experiment.actions.form import Form, ChoiceQuestion
-from experiment.questions.utils import copy_shuffle, question_by_key
-from experiment.questions.musicgens import MUSICGENS_17_W_VARIANTS
-from experiment.questions import QUESTION_GROUPS
+from question.utils import copy_shuffle, question_by_key
+from question.musicgens import MUSICGENS_17_W_VARIANTS
+from question.questions import QUESTION_GROUPS
 from .hooked import Hooked
 from result.utils import prepare_result
 

@@ -1,7 +1,7 @@
 
 from django.core.management.base import BaseCommand
 
-from experiment.questions import create_default_questions
+from question.questions import create_default_questions
 
 
 class Command(BaseCommand):

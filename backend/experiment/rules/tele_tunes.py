@@ -1,6 +1,6 @@
-from experiment.questions.musicgens import MUSICGENS_17_W_VARIANTS
-from experiment.questions.demographics import DEMOGRAPHICS
-from experiment.questions.utils import copy_shuffle
+from question.musicgens import MUSICGENS_17_W_VARIANTS
+from question.demographics import DEMOGRAPHICS
+from question.utils import copy_shuffle
 from .hooked import Hooked
 
 

@@ -6,8 +6,8 @@ from experiment.actions.form import Form, ChoiceQuestion
 from experiment.actions import Consent, Explainer, Score, Trial, Final
 from experiment.actions.wrappers import two_alternative_forced
 
-from experiment.questions.demographics import EXTRA_DEMOGRAPHICS
-from experiment.questions.utils import question_by_key
+from question.demographics import EXTRA_DEMOGRAPHICS
+from question.utils import question_by_key
 from .base import Base
 import random
 

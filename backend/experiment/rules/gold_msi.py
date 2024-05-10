@@ -1,10 +1,10 @@
 from django.utils.translation import gettext_lazy as _
 
 from experiment.actions import Consent, FrontendStyle, EFrontendStyle
-from experiment.questions.goldsmiths import MSI_F3_MUSICAL_TRAINING
-from experiment.questions.demographics import EXTRA_DEMOGRAPHICS
-from experiment.questions.utils import question_by_key
-from experiment.questions import QUESTION_GROUPS
+from question.goldsmiths import MSI_F3_MUSICAL_TRAINING
+from question.demographics import EXTRA_DEMOGRAPHICS
+from question.utils import question_by_key
+from question.questions import QUESTION_GROUPS
 from experiment.actions.utils import final_action_with_optional_button
 
 from .base import Base

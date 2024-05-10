@@ -6,7 +6,7 @@ from .stomp import STOMP
 from .tipi import TIPI
 from .other import OTHER
 import random
-from experiment.models import QuestionGroup, Question
+from .models import QuestionGroup, Question
 
 # Default QuestionGroups used by command createquestions
 QUESTION_GROUPS_DEFAULT = { "DEMOGRAPHICS" : DEMOGRAPHICS,

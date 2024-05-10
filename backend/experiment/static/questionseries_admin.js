@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
 
 	async function getQuestionGroups(){
 
-		let response = await fetch(`/experiment/question_groups/`)
+		let response = await fetch(`/question/question_groups/`)
 
 		if (response.ok) {
 			return await response.json()

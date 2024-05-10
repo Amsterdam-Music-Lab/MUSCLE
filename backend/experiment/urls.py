@@ -1,11 +1,10 @@
 from django.urls import path
 from django.views.generic.base import TemplateView
-from .views import get_experiment, get_experiment_collection, post_feedback, render_markdown, question_groups, add_default_question_series
+from .views import get_experiment, get_experiment_collection, post_feedback, render_markdown, add_default_question_series
 
 app_name = 'experiment'
 
 urlpatterns = [
-    path('question_groups/', question_groups, name='question_groups'),
     path('add_default_question_series/<int:id>/', add_default_question_series, name='add_default_question_series'),
     # Experiment
     path('render_markdown/', render_markdown, name='render_markdown'),

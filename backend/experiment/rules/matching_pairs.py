@@ -6,8 +6,8 @@ from django.utils.translation import gettext_lazy as _
 from .base import Base
 from experiment.actions import Consent, Explainer, Final, Playlist, Step, Trial
 from experiment.actions.playback import MatchingPairs
-from experiment.questions.demographics import EXTRA_DEMOGRAPHICS
-from experiment.questions.utils import question_by_key
+from question.demographics import EXTRA_DEMOGRAPHICS
+from question.utils import question_by_key
 from result.utils import prepare_result
 
 from section.models import Section

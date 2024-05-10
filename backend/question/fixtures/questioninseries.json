@@ -1,6 +1,6 @@
 [
   {
-    "model": "experiment.questioninseries",
+    "model": "question.questioninseries",
     "pk": 1,
     "fields": {
       "question_series": 1,
@@ -9,7 +9,7 @@
     }
   },
   {
-    "model": "experiment.questioninseries",
+    "model": "question.questioninseries",
     "pk": 2,
     "fields": {
       "question_series": 1,
@@ -18,7 +18,7 @@
     }
   },
   {
-    "model": "experiment.questioninseries",
+    "model": "question.questioninseries",
     "pk": 3,
     "fields": {
       "question_series": 1,
@@ -27,7 +27,7 @@
     }
   },
   {
-    "model": "experiment.questioninseries",
+    "model": "question.questioninseries",
     "pk": 4,
     "fields": {
       "question_series": 2,
@@ -36,7 +36,7 @@
     }
   },
   {
-    "model": "experiment.questioninseries",
+    "model": "question.questioninseries",
     "pk": 5,
     "fields": {
       "question_series": 2,
@@ -45,7 +45,7 @@
     }
   },
   {
-    "model": "experiment.questioninseries",
+    "model": "question.questioninseries",
     "pk": 6,
     "fields": {
       "question_series": 2,
@@ -54,7 +54,7 @@
     }
   },
   {
-    "model": "experiment.questioninseries",
+    "model": "question.questioninseries",
     "pk": 7,
     "fields": {
       "question_series": 2,
@@ -63,7 +63,7 @@
     }
   },
   {
-    "model": "experiment.questioninseries",
+    "model": "question.questioninseries",
     "pk": 8,
     "fields": {
       "question_series": 2,
