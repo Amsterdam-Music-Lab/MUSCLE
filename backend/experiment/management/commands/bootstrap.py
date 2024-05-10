@@ -23,5 +23,6 @@ class Command(BaseCommand):
                 slug='gold-msi',
             )
             experiment.playlists.add(playlist)
+            experiment.add_default_question_series()
             print('Created default experiment')
 
