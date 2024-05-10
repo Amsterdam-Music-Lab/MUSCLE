@@ -3,6 +3,7 @@ from experiment.models import Experiment
 
 
 class Question(models.Model):
+    """A model that (currently) refers to a built-in question"""
 
     key = models.CharField(primary_key=True, max_length=128)
     question = models.CharField(max_length=1024)
@@ -16,6 +17,7 @@ class Question(models.Model):
 
 
 class QuestionGroup(models.Model):
+    """Convenience model for groups of questions to add at once to Experiment QuestionSeries from admin"""
 
     key = models.CharField(primary_key=True, max_length=128)
     questions = models.ManyToManyField(Question)
@@ -30,6 +32,7 @@ class QuestionGroup(models.Model):
 
 
 class QuestionSeries(models.Model):
+    """Series of Questions asked in an Experiment"""
 
     name = models.CharField(default='', max_length=128)
     experiment = models.ForeignKey(Experiment, on_delete=models.CASCADE)
@@ -46,6 +49,7 @@ class QuestionSeries(models.Model):
 
 
 class QuestionInSeries(models.Model):
+    """Question with its index in QuestionSeries"""
 
     question_series = models.ForeignKey(QuestionSeries, on_delete=models.CASCADE)
     question = models.ForeignKey(Question, on_delete=models.CASCADE)

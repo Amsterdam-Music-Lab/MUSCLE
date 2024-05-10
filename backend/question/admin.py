@@ -27,6 +27,9 @@ class QuestionGroupAdmin(admin.ModelAdmin):
     }
 
     def get_form(self, request, obj=None, **kwargs):
+        """This method is needed because setting the QuestionGroup.questions field as readonly
+            for built-in (i.e., not editable) groups shows the questions as one-line of concatenated strings, which is ugly.
+            Instead, this method allows to keep the checkboxes, but disabled"""
         form = super().get_form(request, obj, **kwargs)
 
         if obj and not obj.editable:
