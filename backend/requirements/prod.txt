@@ -40,7 +40,7 @@ docutils==0.20.1
     #   python-creole
 genbadge[coverage]==1.1.1
     # via -r requirements.in/base.txt
-gunicorn==20.1.0
+gunicorn==22.0.0
     # via -r requirements.in/prod.txt
 html5lib==1.1
     # via textile
@@ -87,11 +87,11 @@ six==1.16.0
     #   python-dateutil
 smartypants==2.0.1
     # via django-markup
-sqlparse==0.4.4
+sqlparse==0.5.0
     # via django
 textile==4.0.2
     # via django-markup
-tqdm==4.65.0
+tqdm==4.66.3
     # via -r requirements.in/base.txt
 typing-extensions==4.6.3
     # via asgiref

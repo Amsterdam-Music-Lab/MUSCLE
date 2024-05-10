@@ -43,7 +43,7 @@ class Categorization(Base):
             deny='Stop',
             url='consent/consent_categorization.html'
             )
-        return [explainer, consent]
+        return [consent, explainer]
 
     def next_round(self, session):
         actions = self.get_questionnaire(session)
@@ -53,7 +53,7 @@ class Categorization(Base):
         json_data = session.load_json_data()
 
         # Plan experiment on the first call to next_round
-        if not json_data:
+        if not json_data.get('phase'):
             json_data = self.plan_experiment(session)
 
         # Check if this participant already has a session

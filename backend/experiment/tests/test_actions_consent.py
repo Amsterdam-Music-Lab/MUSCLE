@@ -27,24 +27,20 @@ class ConsentTest(TestCase):
 
     def test_markdown_rendering(self):
         consent = Consent('', url='dev/consent_mock.md')
-        self.assertEqual(consent.render_format, 'MARKDOWN')
         self.assertEqual(consent.text, '<h1>test</h1>')
 
     def test_html_rendering(self):
         consent = Consent('', url='dev/consent_mock.html')
-        self.assertEqual(consent.render_format, 'HTML')
         self.assertEqual(consent.text, '<h1>test</h1>')
 
     def test_uploaded_markdown_rendering(self):
         experiment = Experiment.objects.get(slug='MARKDOWN')
         consent = Consent(experiment.consent)
-        self.assertEqual(consent.render_format, 'MARKDOWN')
         self.assertEqual(consent.text, '<h1>test</h1>')
 
     def test_uploaded_html_rendering(self):
         experiment = Experiment.objects.get(slug='HTML')
         consent = Consent(experiment.consent)
-        self.assertEqual(consent.render_format, 'HTML')
         self.assertEqual(consent.text, '<h1>test</h1>')
 
     def test_template_language_rendering(self):

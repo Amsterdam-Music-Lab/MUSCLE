@@ -6,7 +6,7 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('experiment', '0033_rename_related'),
+        ('experiment', '0034_collection_corrections'),
     ]
 
     operations = [

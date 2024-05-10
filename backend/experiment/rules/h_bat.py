@@ -5,7 +5,7 @@ from django.utils.translation import gettext_lazy as _
 
 from .base import Base
 from section.models import Section
-from experiment.actions import Trial, Consent, Explainer, Playlist, Step
+from experiment.actions import Trial, Explainer, Step
 from experiment.actions.form import ChoiceQuestion, Form
 from experiment.actions.playback import Autoplay
 
@@ -63,14 +63,10 @@ class HBat(Base):
     def first_round(self, experiment):
         explainer = self.intro_explainer()
         # Consent with admin text or default text
-        consent = Consent(experiment.consent)
         explainer2 = practice_explainer()
-        playlist = Playlist(experiment.playlists.all())
         return [
             explainer,
-            consent,
             explainer2,
-            playlist,
         ]
 
     def next_trial_action(self, session, trial_condition, level=1, *kwargs):

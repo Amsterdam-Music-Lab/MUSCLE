@@ -1,7 +1,7 @@
 import json
 import logging
 
-from django.http import Http404, JsonResponse
+from django.http import Http404, HttpRequest, JsonResponse
 from django.conf import settings
 from django.utils.translation import activate, gettext_lazy as _
 from django_markup.markup import formatter
@@ -75,7 +75,7 @@ def add_default_question_series(request, id):
     return JsonResponse({})
 
 
-def get_experiment_collection(request, slug):
+def get_experiment_collection(request: HttpRequest, slug: str, group_index: int = 0) -> JsonResponse:
     ''' 
     check which `ExperimentCollectionGroup` objects are related to the `ExperimentCollection` with the given slug
     retrieve the group with the lowest order (= current_group)
@@ -89,20 +89,22 @@ def get_experiment_collection(request, slug):
         return Http404
     request.session[COLLECTION_KEY] = slug
     participant = get_participant(request)
-    active_groups = ExperimentCollectionGroup.objects.filter(
-        series=collection.id, finished=False).order_by('order')
-    if not active_groups:
-        # TO DO: We should return a debrief here
-        return JsonResponse({})
-    current_group = active_groups.first()
-    serialized_group = serialize_experiment_collection_group(
-        current_group, participant)
-    if not serialized_group:
-        # if the current group is not a dashboard and has no unfinished experiments, it will return None
-        # set it to finished and continue to next group
-        current_group.finished = True
-        current_group.save()
-        return get_experiment_collection(request, slug)
+    groups = list(ExperimentCollectionGroup.objects.filter(
+        series=collection.id).order_by('order'))
+    try:
+        current_group = groups[group_index]
+        serialized_group = serialize_experiment_collection_group(
+            current_group, participant)
+        if not serialized_group:
+            # if the current group is not a dashboard and has no unfinished experiments, it will return None
+            # set it to finished and continue to next group
+            group_index += 1
+            return get_experiment_collection(request, slug, group_index=group_index)
+    except IndexError:
+        serialized_group = {
+            'dashboard': [],
+            'next_experiment': None
+        }
     return JsonResponse({
         **serialize_experiment_collection(collection),
         **serialized_group

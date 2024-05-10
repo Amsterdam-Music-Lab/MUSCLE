@@ -9,7 +9,7 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('experiment', '0034_add_question_model'),
+        ('experiment', '0035_add_question_model'),
     ]
 
     operations = [

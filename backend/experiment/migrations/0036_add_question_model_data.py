@@ -12,7 +12,7 @@ def add_default_question_series(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('experiment', '0034_add_question_model'),
+        ('experiment', '0035_add_question_model'),
         ('question', '0002_add_question_model_data'),
     ]
 

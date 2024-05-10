@@ -1,18 +1,17 @@
 from django.utils.translation import gettext_lazy as _
+from django.template.loader import render_to_string
 
-from experiment.actions import Consent, FrontendStyle, EFrontendStyle
-from question.goldsmiths import MSI_F3_MUSICAL_TRAINING
-from question.demographics import EXTRA_DEMOGRAPHICS
-from question.utils import question_by_key
 from question.questions import QUESTION_GROUPS
-from experiment.actions.utils import final_action_with_optional_button
+from experiment.actions import Explainer, Final, Step
 
 from .base import Base
 
 
-class GoldMSI(Base):
+class RhythmBatteryFinal(Base):
     """ an experiment view that implements the GoldMSI questionnaire """
-    ID = 'GOLD_MSI'
+    ID = 'RHYTHM_BATTERY_FINAL'
+    debrief_form = 'final/debrief_rhythm_unpaid.html'
+    show_participant_final = False
 
     def __init__(self):
         self.question_series = [
@@ -36,18 +35,29 @@ class GoldMSI(Base):
         ]
 
     def first_round(self, experiment):
-        # Consent with admin text or default text
-        consent = Consent(experiment.consent)
-        return [
-            consent,
-        ]
+        explainer = Explainer(
+            _('Finally, we would like to ask you to answer some questions about your musical and demographic background.'),
+            steps=[
+                Step(
+                    _('After these questions, the experiment will proceed to the final screen.'))
+            ],
+            button_label=_('Ok')
+        )
+        return [explainer]
 
     def next_round(self, session):
         questions = self.get_questionnaire(session)
         if questions:
             return questions
         else:
-            return final_action_with_optional_button(session)
+            rendered = render_to_string(self.debrief_form)
+            return Final(
+                session,
+                title=_("Thank you very much for participating!"),
+                final_text=rendered,
+                show_participant_link=self.show_participant_final,
+                show_participant_id_only=self.show_participant_final,
+            )
 
     def feedback_info(self):
         info = super().feedback_info()

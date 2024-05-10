@@ -2,7 +2,7 @@
 from django.utils.translation import gettext_lazy as _
 
 from .base import Base
-from experiment.actions import Consent, Explainer, Step, Playlist, Trial
+from experiment.actions import Explainer, Step, Trial
 from experiment.actions.form import ChoiceQuestion, Form
 from experiment.actions.playback import Autoplay
 from experiment.actions.styles import STYLE_BOOLEAN
@@ -10,8 +10,8 @@ from experiment.actions.utils import final_action_with_optional_button
 from result.utils import prepare_result
 
 
-class ListeningConditions(Base):
-    ID = 'LISTENING_CONDITIONS'
+class RhythmBatteryIntro(Base):
+    ID = 'RHYTHM_BATTERY_INTRO'
 
     def next_round(self, session):
         round_number = session.get_next_round()
@@ -32,7 +32,8 @@ class ListeningConditions(Base):
                     },
                     result_id=result_pk,
                     view='BUTTON_ARRAY',
-                    submits=True
+                    submits=True,
+                    style=STYLE_BOOLEAN
                 )])
         elif round_number == 2:
             key = 'internet_connection'
@@ -105,9 +106,29 @@ class ListeningConditions(Base):
 
         return [view]
 
+    def intro_explainer(self):
+        return Explainer(
+            instruction=_(
+                "You are about to take part in an experiment about rhythm perception."),
+            steps=[
+                Step(_(
+                    "We want to find out what the best way is to test whether someone has a good sense of rhythm!"),
+                ),
+                Step(_(
+                    "You will be doing many little tasks that have something to do with rhythm."),
+                ),
+                Step(_(
+                    "You will get a short explanation and a practice trial for each little task."),
+                ),
+                Step(_(
+                    "You can get reimbursed for completing the entire experiment! Either by earning 6 euros, or by getting 1 research credit (for psychology students at UvA only). You will get instructions for how to get paid or how to get your credit at the end of the experiment."),
+                )
+            ],
+            button_label=_("Continue")
+        )
+
     def first_round(self, experiment):
-        # Consent with admin text or default text
-        consent = Consent(experiment.consent)
+        intro_explainer = self.intro_explainer()
         explainer = Explainer(
             instruction=_(
                 'General listening instructions:'),
@@ -118,11 +139,9 @@ class ListeningConditions(Base):
                 Step(_("Please use headphones, and turn off sound notifications from other devices and applications (e.g., e-mail, phone messages)."),
                      )],
             step_numbers=True,
-            button_label=_('OK')
+            button_label=_('Ok')
         )
-        playlist = Playlist(experiment.playlists.all())
         return [
-            consent,
+            intro_explainer,
             explainer,
-            playlist,
         ]

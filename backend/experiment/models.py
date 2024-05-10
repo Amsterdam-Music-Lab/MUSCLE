@@ -14,11 +14,21 @@ language_choices = [(key, ISO_LANGUAGES[key]) for key in ISO_LANGUAGES.keys()]
 language_choices[0] = ('', 'Unset')
 
 
+def consent_upload_path(instance, filename):
+    """Generate path to save consent file based on experiment.slug"""
+    folder_name = instance.slug
+    return f'consent/{folder_name}/{filename}'
+
+
 class ExperimentCollection(models.Model):
     """ A model to allow nesting multiple experiments into a 'parent' experiment """
     name = models.CharField(max_length=64, default='')
     description = models.TextField(blank=True, default='')
     slug = models.SlugField(max_length=64, default='')
+    consent = models.FileField(upload_to=consent_upload_path,
+                               blank=True,
+                               default='',
+                               validators=[markdown_html_validator()])
     theme_config = models.ForeignKey(
         "theme.ThemeConfig", blank=True, null=True, on_delete=models.SET_NULL)
     # first experiments in a test series, in fixed order
@@ -42,20 +52,14 @@ class ExperimentCollection(models.Model):
             experiment.experiment for group in groups for experiment in list(group.experiments.all())]
 
 
-def consent_upload_path(instance, filename):
-    """Generate path to save consent file based on experiment.slug"""
-    folder_name = instance.slug
-    return 'consent/{0}/{1}'.format(folder_name, filename)
-
-
 class ExperimentCollectionGroup(models.Model):
     name = models.CharField(max_length=64, blank=True, default='')
     series = models.ForeignKey(ExperimentCollection,
                                on_delete=models.CASCADE, related_name='groups')
     order = models.IntegerField(default=0, help_text='Order of the group in the series. Lower numbers come first.')
     dashboard = models.BooleanField(default=False)
-    randomize = models.BooleanField(default=False, help_text='Randomize the order of the experiments in this group.')
-    finished = models.BooleanField(default=False)
+    randomize = models.BooleanField(
+        default=False, help_text='Randomize the order of the experiments in this group.')
 
     def __str__(self):
         compound_name = self.name or self.series.name or self.series.slug or 'Unnamed group'
@@ -71,7 +75,7 @@ class ExperimentCollectionGroup(models.Model):
 
 
 class GroupedExperiment(models.Model):
-    experiment = models.OneToOneField('Experiment', on_delete=models.CASCADE)
+    experiment = models.ForeignKey('Experiment', on_delete=models.CASCADE)
     group = models.ForeignKey(
         ExperimentCollectionGroup, on_delete=models.CASCADE, related_name='experiments')
     order = models.IntegerField(default=0, help_text='Order of the experiment in the group. Lower numbers come first.')

@@ -227,7 +227,6 @@ class MarkdownPreview extends HTMLElement {
         }
 
         set markdown(html) {
-            console.log('knalvis!', html);
             this.shadowRoot.getElementById('markdownContent').innerHTML = html;
         }
     }
@@ -236,11 +235,7 @@ class MarkdownPreview extends HTMLElement {
 
     const csrf = document.querySelector('input[name="csrfmiddlewaretoken"]').value;
 
-    function renderMarkdown() {
-        // get value
-        const textarea = document.querySelector('.markdown-preview-text-input textarea');
-        const markdownPreview = document.getElementById('markdownPreview');
-
+    function renderMarkdown(textarea, markdownPreview) {
         // render markdown through http post request to /experiment/render_markdown
         return fetch('/experiment/render_markdown/', {
             method: 'POST',
@@ -259,33 +254,39 @@ class MarkdownPreview extends HTMLElement {
     }
 
     document.addEventListener('DOMContentLoaded', function() {
-        const tabs = document.querySelectorAll('.markdown-preview-text-input .tab');
-        const tabContents = document.querySelectorAll('.markdown-preview-text-input .tab-content');
 
-        tabs.forEach(function(tab, index) {
-            tab.addEventListener('click', function() {
-                tabs.forEach(function(tab) {
-                    tab.classList.remove('active');
+        const markdownWidgets = document.querySelectorAll('.markdown-preview-text-input');
+
+        markdownWidgets.forEach(function(widget) {
+            const tabs = widget.querySelectorAll('.tab');
+            const tabContents = widget.querySelectorAll('.tab-content');
+
+            tabs.forEach(function(tab, index) {
+                tab.addEventListener('click', function() {
+                    tabs.forEach(function(tab) {
+                        tab.classList.remove('active');
+                    });
+
+                    tab.classList.add('active');
+
+                    tabContents.forEach(function(tabContent) {
+                        tabContent.classList.remove('active');
+                    });
+
+                    tabContents[index].classList.add('active');
                 });
-
-                tab.classList.add('active');
-
-                tabContents.forEach(function(tabContent) {
-                    tabContent.classList.remove('active');
-                });
-
-                tabContents[index].classList.add('active');
             });
+
+            const textarea = widget.querySelector('textarea');
+            const markdownPreview = widget.querySelector('#markdownPreview');
+
+            textarea.addEventListener('blur', function() {
+                renderMarkdown(textarea, markdownPreview);
+            });
+
+            renderMarkdown(textarea, markdownPreview);
         });
-
-        const textarea = document.querySelector('.markdown-preview-text-input textarea');
-        const markdownPreview = document.querySelector('.markdown-preview-text-input .markdown-preview');
-
-        textarea.addEventListener('blur', function() {
-            renderMarkdown();
-        });
-
-        renderMarkdown();
+        
     });
 
 </script>

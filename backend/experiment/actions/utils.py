@@ -15,6 +15,13 @@ def final_action_with_optional_button(session, final_text='', title=_('End'), bu
     return a Final.action, which has a button to continue to the next experiment if series is defined
     """
     collection_slug = session.load_json_data().get(COLLECTION_KEY)
+
+    if session.participant.participant_id_url:
+        participant_id_url = session.participant.participant_id_url
+        redirect_url = f'/collection/{collection_slug}?participant_id_url={participant_id_url}'
+    else:
+        redirect_url = f'/collection/{collection_slug}'
+
     if collection_slug:
         return Final(
             title=title,
@@ -22,7 +29,7 @@ def final_action_with_optional_button(session, final_text='', title=_('End'), bu
             final_text=final_text,
             button={
                 'text': button_text,
-                'link': f'/collection/{collection_slug}'
+                'link': redirect_url
             }
         )
     else:

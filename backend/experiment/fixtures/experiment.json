@@ -154,12 +154,12 @@
   "model": "experiment.experiment",
   "pk": 9,
   "fields": {
-    "name": "Gold-MSI",
-    "slug": "gmsi",
+    "name": "Rhythm Battery Final",
+    "slug": "rhythm_outro",
     "active": true,
     "rounds": 10,
     "bonus_points": 0,
-    "rules": "GOLD_MSI",
+    "rules": "RHYTHM_BATTERY_FINAL",
     "language": "",
     "playlists": [
       3
@@ -170,44 +170,12 @@
   "model": "experiment.experiment",
   "pk": 10,
   "fields": {
-    "name": "ListeningConditions",
-    "slug": "lisc",
+    "name": "Rhythm Battery Intro",
+    "slug": "rhythm_intro",
     "active": true,
     "rounds": 10,
     "bonus_points": 0,
-    "rules": "LISTENING_CONDITIONS",
-    "language": "",
-    "playlists": [
-      11
-    ]
-  }
-},
-{
-  "model": "experiment.experiment",
-  "pk": 11,
-  "fields": {
-    "name": "RhythmExperiment",
-    "slug": "rhythm_series",
-    "active": false,
-    "rounds": 10,
-    "bonus_points": 0,
-    "rules": "TEST_BATTERY",
-    "language": "",
-    "playlists": [
-      3
-    ]
-  }
-},
-{
-  "model": "experiment.experiment",
-  "pk": 13,
-  "fields": {
-    "name": "RhythmSeriesMRI",
-    "slug": "rhythm_mri",
-    "active": true,
-    "rounds": 10,
-    "bonus_points": 0,
-    "rules": "RHYTHM_SERIES_MRI",
+    "rules": "RHYTHM_BATTERY_INTRO",
     "language": "",
     "playlists": [
       11
@@ -229,22 +197,6 @@
       13,
       2,
       1
-    ]
-  }
-},
-{
-  "model": "experiment.experiment",
-  "pk": 15,
-  "fields": {
-    "name": "RhythmSeriesUnpaid",
-    "slug": "rhythm_september",
-    "active": true,
-    "rounds": 10,
-    "bonus_points": 0,
-    "rules": "RHYTHM_SERIES_UNPAID",
-    "language": "",
-    "playlists": [
-      3
     ]
   }
 },

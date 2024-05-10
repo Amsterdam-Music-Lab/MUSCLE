@@ -72,7 +72,7 @@ const Experiment = ({ match }) => {
             return newSession;
         }
         catch (err) {
-            setError(`Could not create a session: ${err}`)
+            setError(`Could not create a session: ${err}`, err)
         };
     };
 
@@ -107,6 +107,7 @@ const Experiment = ({ match }) => {
         if (!loadingExperiment && participant) {
             // Loading succeeded
             if (experiment) {
+                setSession(null);
                 // Set theme
                 if (experiment.theme) {
                     setTheme(experiment.theme);

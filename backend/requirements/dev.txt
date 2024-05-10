@@ -139,7 +139,7 @@ six==1.16.0
     #   python-dateutil
 smartypants==2.0.1
     # via django-markup
-sqlparse==0.4.4
+sqlparse==0.5.0
     # via
     #   django
     #   django-debug-toolbar
@@ -154,7 +154,7 @@ tomli==2.0.1
     #   build
     #   pip-tools
     #   pyproject-hooks
-tqdm==4.65.0
+tqdm==4.66.3
     # via -r requirements.in\base.txt
 typing-extensions==3.10.0.2
     # via
