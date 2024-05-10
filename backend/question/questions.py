@@ -51,11 +51,6 @@ def get_questions_from_series(questionseries_set):
     return [QUESTIONS[key] for key in keys_all]
 
 
-def get_default_question_keys():
-    """ For backward compatibility. One of the migrations calls it"""
-    return []
-
-
 def create_default_questions():
     """Creates default questions and question groups in the database"""
 
