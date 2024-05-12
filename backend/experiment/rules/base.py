@@ -6,27 +6,40 @@ from django.conf import settings
 
 from experiment.actions import Final, Form, Trial
 from experiment.questions.demographics import DEMOGRAPHICS
-from experiment.questions.utils import unanswered_questions
+from experiment.questions.goldsmiths import MSI_OTHER
+from experiment.questions.utils import question_by_key, unanswered_questions
 from result.score import SCORING_RULES
 
+from experiment.questions import get_questions_from_keys
 
 logger = logging.getLogger(__name__)
+
 
 class Base(object):
     """Base class for other rules classes"""
 
     contact_email = settings.CONTACT_MAIL
-    
+
     def __init__(self):
-        self.questions = DEMOGRAPHICS
+        self.questions = DEMOGRAPHICS + [question_by_key('msi_39_best_instrument', MSI_OTHER)]
 
     def feedback_info(self):
         feedback_body = render_to_string('feedback/user_feedback.html', {'email': self.contact_email})
         return {
+            # Header above the feedback form
             'header': _("Do you have any remarks or questions?"),
+
+            # Button text
             'button': _("Submit"),
+
+            # Body of the feedback form, can be HTML. Shown under the button
             'contact_body': feedback_body,
-            'thank_you': _("We appreciate your feedback!")
+
+            # Thank you message after submitting feedback
+            'thank_you': _("We appreciate your feedback!"),
+
+            # Show a floating button on the right side of the screen to open the feedback form
+            'show_float_button': False,
         }
 
     def calculate_score(self, result, data):
@@ -37,6 +50,12 @@ class Base(object):
         if scoring_rule:
             return scoring_rule(result, data)
         return None
+    
+    def calculate_intermediate_score(self, session, result):
+        """ process result data during a trial (i.e., between next_round calls) 
+        return score
+        """
+        return 0
 
     def final_score_message(self, session):
         """Create final score message for given session, base on score per result"""
@@ -110,11 +129,12 @@ class Base(object):
                 feedback_form=Form([question], is_skippable=question.is_skippable))
         except StopIteration:
             return None
-    
+
     def get_questionnaire(self, session, randomize=False, cutoff_index=None):
         ''' Get a list of questions to be asked in succession '''
+
         trials = []
-        questions = list(unanswered_questions(session.participant, self.questions, randomize, cutoff_index))
+        questions = list(unanswered_questions(session.participant, get_questions_from_keys(session.experiment.questions), randomize, cutoff_index))
         open_questions = len(questions)
         if not open_questions:
             return None
@@ -124,11 +144,9 @@ class Base(object):
                 feedback_form=Form([question], is_skippable=question.is_skippable)
             ))
         return trials
-    
+
     def social_media_info(self, experiment, score):
-        current_url =  "{}/{}".format(settings.RELOAD_PARTICIPANT_TARGET,
-            experiment.slug
-        )
+        current_url = f"{settings.RELOAD_PARTICIPANT_TARGET}/{experiment.slug}"
         return {
             'apps': ['facebook', 'twitter'],
             'message': _("I scored %(score)i points on %(url)s") % {

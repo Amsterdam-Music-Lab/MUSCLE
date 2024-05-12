@@ -1,10 +1,11 @@
 from .hooked import Hooked
 import random
 from django.utils.translation import gettext_lazy as _
-from experiment.actions import SongSync, Trial
-from experiment.actions.playback import Playback
+from experiment.actions import Trial
+from experiment.actions.playback import Autoplay
 from experiment.actions.form import BooleanQuestion, Form
 from experiment.actions.styles import STYLE_BOOLEAN_NEGATIVE_FIRST
+from experiment.actions.wrappers import song_sync
 from result.utils import prepare_result
 
 
@@ -15,6 +16,7 @@ class Eurovision2020(Hooked):
     """
 
     ID = 'EUROVISION_2020'
+    play_method = 'BUFFER'
 
     def plan_sections(self, session):
         """Set the plan of tracks for a session.
@@ -83,12 +85,12 @@ class Eurovision2020(Hooked):
         session.save_json_data({'plan': plan})
         # session.save() is required for persistence
         session.save()
-    
+
     def next_song_sync_action(self, session):
         """Get next song_sync section for this session."""
 
         # Load plan.
-        next_round_number = session.get_next_round()
+        round_number = self.get_current_round(session)
         try:
             plan = session.load_json_data()['plan']
             songs = plan['songs']
@@ -99,29 +101,21 @@ class Eurovision2020(Hooked):
 
         # Get section.
         section = None
-        if next_round_number <= len(songs) and next_round_number <= len(tags):
+        if round_number <= len(songs) and round_number <= len(tags):
             section = \
-                session.section_from_song(
-                    songs[next_round_number - 1],
-                    {'tag': tags[next_round_number - 1]}
+                session.playlist.get_section(
+                    {'tag': str(tags[round_number])},
+                    [songs[round_number]]
                 )
         if not section:
             print("Warning: no next_song_sync section found")
-            section = session.section_from_any_song()
-        key = 'song_sync'
-        result_id = prepare_result(key, session, section=section, scoring_rule='SONG_SYNC')
-        return SongSync(
-            key=key,
-            section=section,
-            title=self.get_trial_title(session, next_round_number),
-            result_id=result_id
-        )
-    
+            section = session.playlist.get_section()
+        return song_sync(session, section, title=self.get_trial_title(session, round_number))
+
     def next_heard_before_action(self, session):
         """Get next heard_before action for this session."""
 
         # Load plan.
-        next_round_number = session.get_next_round()
         try:
             plan = session.load_json_data()['plan']
             songs = plan['songs']
@@ -131,25 +125,30 @@ class Eurovision2020(Hooked):
             print('Missing plan key: %s' % str(error))
             return None
 
+        round_number = self.get_current_round(session)
+
         # Get section.
         section = None
-        if next_round_number <= len(songs) and next_round_number <= len(tags):
-            section = \
-                session.section_from_song(
-                    songs[next_round_number - 1],
-                    {'tag': tags[next_round_number - 1]}
-                )
+        if round_number <= len(songs) and round_number <= len(tags):
+            section = session.playlist.get_section(
+                {'tag': str(tags[round_number])},
+                [songs[round_number]]
+            )
+
         if not section:
             print("Warning: no heard_before section found")
-            section = session.section_from_any_song()
+            section = session.playlist.get_section()
 
-        playback = Playback(
-            [section],
-            play_config={'ready_time': 3, 'show_animation': True},
-            preload_message=_('Get ready!'))
-        expected_result=int(novelty[next_round_number - 1] == 'old')
+        playback = Autoplay(
+            sections = [section],
+            show_animation=True,
+            ready_time=3,
+            preload_message=_('Get ready!')
+        )
+        expected_result=novelty[round_number]
         # create Result object and save expected result to database
-        result_pk = prepare_result('heard_before', session, section=section, expected_response=expected_result, scoring_rule='REACTION_TIME')
+        result_pk = prepare_result('heard_before', session, section=section,
+                                   expected_response=expected_result, scoring_rule='REACTION_TIME')
         form = Form([BooleanQuestion(
             key='heard_before',
             choices={
@@ -160,15 +159,14 @@ class Eurovision2020(Hooked):
             result_id=result_pk,
             style=STYLE_BOOLEAN_NEGATIVE_FIRST,
             submits=True)])
-        config = {      
+        config = {
             'auto_advance': True,
-            'decision_time': self.timeout
+            'decision_time': self.heard_before_time
         }
         trial = Trial(
-            title=self.get_trial_title(session, next_round_number),
+            title=self.get_trial_title(session, round_number),
             playback=playback,
             feedback_form=form,
             config=config,
         )
         return trial
-

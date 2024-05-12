@@ -21,7 +21,7 @@ services:
           test: ["CMD-SHELL", "pg_isready"]
           interval: 5s
           timeout: 5s
-          retries: 5  
+          retries: 5
     ip2country:
         image: extrawurst/ip2country:latest
         ports:
@@ -40,16 +40,21 @@ services:
             source: ./backend
             target: /server
         environment:
+          - AML_ALLOWED_HOSTS=${AML_ALLOWED_HOSTS}
           - AML_DEBUG=${AML_DEBUG}
           - DJANGO_SETTINGS_MODULE=${DJANGO_SETTINGS_MODULE}
+          - DJANGO_SUPERUSER_USERNAME=${DJANGO_SUPERUSER_USERNAME}
+          - DJANGO_SUPERUSER_PASSWORD=${DJANGO_SUPERUSER_PASSWORD}
+          - DJANGO_SUPERUSER_EMAIL=${DJANGO_SUPERUSER_EMAIL}
           - AML_LOCATION_PROVIDER=${AML_LOCATION_PROVIDER}
+          - SENTRY_DSN=${SENTRY_DSN}
           - SQL_DATABASE=${SQL_DATABASE}
           - SQL_USER=${SQL_USER}
           - SQL_PASSWORD=${SQL_PASSWORD}
           - SQL_HOST=${SQL_HOST}
         ports:
           - 8000:8000
-        command: bash -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
+        command: bash -c "python manage.py migrate && python manage.py bootstrap && python manage.py runserver 0.0.0.0:8000"
     client:
         build:
           context: ./frontend
@@ -61,21 +66,44 @@ services:
           - type: bind
             source: ./frontend/public
             target: /client/public
+          - type: bind
+            source: ./frontend/.storybook
+            target: /client/.storybook
+          - type: bind
+            source: ./frontend/tsconfig.json
+            target: /client/tsconfig.json
+          - type: bind
+            source: ./frontend/tsconfig.node.json
+            target: /client/tsconfig.node.json
+          - type: bind
+            source: ./frontend/vite-env.d.ts
+            target: /client/vite-env.d.ts
+          - type: bind
+            source: ./frontend/vite.config.ts
+            target: /client/vite.config.ts
+          - type: bind
+            source: ./frontend/vitest.config.ts
+            target: /client/vitest.config.ts
+          - type: bind
+            source: ./frontend/index.html
+            target: /client/index.html
         environment:
-          - REACT_APP_API_ROOT=${REACT_APP_API_ROOT}
-          - REACT_APP_EXPERIMENT_SLUG=${REACT_APP_EXPERIMENT_SLUG}
-          - REACT_APP_AML_HOME=${REACT_APP_AML_HOME}
-          - REACT_APP_LOGO_URL=${REACT_APP_LOGO_URL}
-          - REACT_APP_HTML_FAVICON=${REACT_APP_HTML_FAVICON}
-          - REACT_APP_HTML_PAGE_TITLE=${REACT_APP_HTML_PAGE_TITLE}
-          - REACT_APP_HTML_OG_DESCRIPTION=${REACT_APP_HTML_OG_DESCRIPTION}
-          - REACT_APP_HTML_OG_IMAGE=${REACT_APP_HTML_OG_IMAGE}
-          - REACT_APP_HTML_OG_TITLE=${REACT_APP_HTML_OG_TITLE}
-          - REACT_APP_HTML_OG_URL=${REACT_APP_HTML_OG_URL}
-          - REACT_APP_HTML_BODY_CLASS=${REACT_APP_HTML_BODY_CLASS}
+          - VITE_API_ROOT=${FRONTEND_API_ROOT}
+          - VITE_EXPERIMENT_SLUG=${FRONTEND_EXPERIMENT_SLUG}
+          - VITE_AML_HOME=${FRONTEND_AML_HOME}
+          - VITE_LOGO_URL=${FRONTEND_LOGO_URL}
+          - VITE_HTML_FAVICON=${FRONTEND_HTML_FAVICON}
+          - VITE_HTML_PAGE_TITLE=${FRONTEND_HTML_PAGE_TITLE}
+          - VITE_HTML_OG_DESCRIPTION=${FRONTEND_HTML_OG_DESCRIPTION}
+          - VITE_HTML_OG_IMAGE=${FRONTEND_HTML_OG_IMAGE}
+          - VITE_HTML_OG_TITLE=${FRONTEND_HTML_OG_TITLE}
+          - VITE_HTML_OG_URL=${FRONTEND_HTML_OG_URL}
+          - VITE_HTML_BODY_CLASS=${FRONTEND_HTML_BODY_CLASS}
+          - VITE_SENTRY_DSN=${FRONTEND_SENTRY_DSN}
+          - VITE_STRICT=${FRONTEND_STRICT}
         ports:
           - 3000:3000
-        command: sh -c "yarn scss && yarn start"
+        command: yarn start
 volumes:
     db_data:
     db_backup:

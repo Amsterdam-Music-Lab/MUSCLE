@@ -43,6 +43,10 @@ class Participant(models.Model):
             "profile": self.profile_object()
         }
 
+    def export_profiles(self):
+        # export participant profile result objects
+        return self.result_set.all()
+
     def profile(self):
         """Get all answered results of this participant"""
         return self.result_set.all().filter(given_response__isnull=False)

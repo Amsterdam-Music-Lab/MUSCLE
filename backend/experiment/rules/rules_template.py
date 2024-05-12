@@ -13,11 +13,11 @@ Setup experiment data in the admin panel
     * Name: rules_template
     * Process CSV: yes
     * CSV (see format explanation at the bottom of text entry field):
-        Sample Artist 1,Sample Song 1,0.0,1.25,rt/sample_1.wav,0,A,CRV
-        Sample Artist 2,Sample Song 2,0.0,1.25,rt/sample_2.wav,0,B,MTW
-        Sample Artist 3,Sample Song 3,0.0,1.25,rt/sample_3.wav,0,A,CRV
-        Sample Artist 4,Sample Song 4,0.0,1.25,rt/sample_4.wav,0,A,GWN
-        Sample Artist 5,Sample Song 5,0.0,1.25,rt/sample_5.wav,0,B,CGB
+        Sample Artist 1,Sample Song 1,0.0,1.25,rt/sample_1.wav,A,CRV
+        Sample Artist 2,Sample Song 2,0.0,1.25,rt/sample_2.wav,B,MTW
+        Sample Artist 3,Sample Song 3,0.0,1.25,rt/sample_3.wav,A,CRV
+        Sample Artist 4,Sample Song 4,0.0,1.25,rt/sample_4.wav,A,GWN
+        Sample Artist 5,Sample Song 5,0.0,1.25,rt/sample_5.wav,B,CGB
     * Save
 
 * Create experiment
@@ -31,8 +31,8 @@ Setup experiment data in the admin panel
 """
 
 from .base import Base
-from experiment.actions import Consent, Explainer, StartSession, Trial, Final, Playback
-from django.template.loader import render_to_string
+from experiment.actions import Consent, Explainer, Trial, Final
+from experiment.actions.playback import PlayButton
 from experiment.questions.demographics import EXTRA_DEMOGRAPHICS
 from experiment.questions.utils import question_by_key
 from django.db.models import Avg
@@ -62,8 +62,7 @@ class RulesTemplate(Base):
 
     def first_round(self, experiment):
         """
-        Returns a list of actions. Actions used here: Explainer, Consent, StartSession.
-        The last action returned by first_round() should always be StartSession.
+        Returns a list of actions. Actions used here: Explainer, Consent.
         """
 
         explainer = Explainer(
@@ -72,13 +71,16 @@ class RulesTemplate(Base):
             button_label='Ok'
         )
 
-        # Read consent from file
-        rendered = render_to_string('consent/consent_rules_template.html')
-        consent = Consent(rendered, title='Informed consent', confirm='I agree', deny='Stop')
+        # Add consent from file or admin (admin has priority)
+        consent = Consent(
+            experiment.consent,
+            title='Informed consent',
+            confirm='I agree',
+            deny='Stop',
+            url='consent/consent_rules_template.html'
+            )
+        return [consent, explainer]
 
-        start_session = StartSession()
-
-        return [explainer, consent, start_session]
 
     def next_round(self, session):
         """
@@ -122,13 +124,14 @@ class RulesTemplate(Base):
 
         # Determine expected response, in this case section tag (A or B)
         expected_response = section.tag
-
+        print("Expected response: ", expected_response)
         # Build Trial action, configure through config argument. Trial has Playback and Form with ChoiceQuestion to submit response.
 
-        playback = Playback([section], 'BUTTON')
+        playback = PlayButton([section])
 
         key = 'choice'
-        button_style = {'neutral': True, 'buttons-large-gap': True}
+        button_style = {'neutral': True, 'invisible-text': True,
+                        'buttons-large-gap': True, 'buttons-large-text': True}
         question = ChoiceQuestion(
             key=key,
             result_id=prepare_result(

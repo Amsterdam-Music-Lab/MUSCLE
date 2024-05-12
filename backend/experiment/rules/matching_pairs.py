@@ -1,21 +1,25 @@
 import random
+import json
 
 from django.utils.translation import gettext_lazy as _
-from django.template.loader import render_to_string
 
 from .base import Base
-from experiment.actions import Consent, Explainer, Final, Playlist, StartSession, Step, Trial
-from experiment.actions.playback import Playback
+from experiment.actions import Consent, Explainer, Final, Playlist, Step, Trial
+from experiment.actions.playback import MatchingPairs
 from experiment.questions.demographics import EXTRA_DEMOGRAPHICS
 from experiment.questions.utils import question_by_key
 from result.utils import prepare_result
 
 from section.models import Section
 
-class MatchingPairs(Base):
+
+class MatchingPairsGame(Base):
     ID = 'MATCHING_PAIRS'
     num_pairs = 8
+    show_animation = True
+    score_feedback_display = 'large-top'
     contact_email = 'aml.tunetwins@gmail.com'
+    random_seed = None
 
     def __init__(self):
         self.questions = [
@@ -27,14 +31,16 @@ class MatchingPairs(Base):
         ]
 
     def first_round(self, experiment):
-        rendered = render_to_string('consent/consent_matching_pairs.html')
-        consent = Consent(rendered, title=_(
-            'Informed consent'), confirm=_('I agree'), deny=_('Stop'))
+        # Add consent from file or admin (admin has priority)
+        consent = Consent(
+            experiment.consent,
+            title=_('Informed consent'),
+            confirm=_('I agree'),
+            deny=_('Stop'),
+            url='consent/consent_matching_pairs.html'
+            )
         # 2. Choose playlist.
         playlist = Playlist(experiment.playlists.all())
-
-        # 3. Start session.
-        start_session = StartSession()
 
         explainer = Explainer(
             instruction='',
@@ -50,12 +56,11 @@ class MatchingPairs(Base):
         return [
             consent,
             playlist,
-            explainer,
-            start_session
+            explainer
         ]
     
     def next_round(self, session):
-        if session.rounds_passed() < 1:       
+        if session.rounds_passed() < 1:
             trials = self.get_questionnaire(session)
             if trials:
                 intro_questions = Explainer(
@@ -67,9 +72,7 @@ class MatchingPairs(Base):
                 trial = self.get_matching_pairs_trial(session)
                 return [trial]
         else:
-            session.final_score += session.result_set.filter(
-                question_key='matching_pairs').last().score
-            session.save()
+            # final score saves the result from the cleared board into account
             social_info = self.social_media_info(session.experiment, session.final_score)
             social_info['apps'].append('clipboard')
             score = Final(
@@ -78,19 +81,20 @@ class MatchingPairs(Base):
                 final_text='Can you score higher than your friends and family? Share and let them try!',
                 button={
                     'text': 'Play again',
+                    'link': f'/{session.experiment.slug}'
                 },
                 rank=self.rank(session, exclude_unfinished=False),
                 social=social_info,
                 feedback_info=self.feedback_info()
             )
-            cont = self.get_matching_pairs_trial(session)
-            return [score, cont]
+            return [score]
 
-    def get_matching_pairs_trial(self, session):
+    def select_sections(self, session):
         json_data = session.load_json_data()
         pairs = json_data.get('pairs', [])
         if len(pairs) < self.num_pairs:
             pairs = list(session.playlist.section_set.order_by().distinct('group').values_list('group', flat=True))
+            random.seed(self.random_seed)
             random.shuffle(pairs)
         selected_pairs = pairs[:self.num_pairs]
         session.save_json_data({'pairs': pairs[self.num_pairs:]})
@@ -98,6 +102,7 @@ class MatchingPairs(Base):
         degradations = json_data.get('degradations')
         if not degradations:
             degradations = ['Original', '1stDegradation', '2ndDegradation']
+            random.seed(self.random_seed)
             random.shuffle(degradations)
         degradation_type = degradations.pop()
         session.save_json_data({'degradations': degradations})
@@ -106,24 +111,56 @@ class MatchingPairs(Base):
         else:
             degradations = session.playlist.section_set.filter(group__in=selected_pairs, tag=degradation_type)
             player_sections = list(originals) + list(degradations)
+        return player_sections
+
+    def get_matching_pairs_trial(self, session):
+        player_sections = self.select_sections(session)
+        random.seed(self.random_seed)
         random.shuffle(player_sections)
-        playback = Playback(
+
+        playback = MatchingPairs(
             sections=player_sections,
-            player_type='MATCHINGPAIRS',
-            play_config={'stop_audio_after': 5}
+            stop_audio_after=5,
+            show_animation=self.show_animation,
+            score_feedback_display=self.score_feedback_display,
         )
         trial = Trial(
             title='Tune twins',
             playback=playback,
             feedback_form=None,
-            result_id=prepare_result('matching_pairs', session),
             config={'show_continue_button': False}
         )
         return trial
 
     def calculate_score(self, result, data):
-        moves = data.get('result').get('moves')
-        for m in moves:
-            m['filename'] = str(Section.objects.get(pk=m.get('selectedSection')).filename)
-        score = data.get('result').get('score')
+        ''' not used in this experiment '''
+        pass
+    
+    def calculate_intermediate_score(self, session, result):
+        ''' will be called every time two cards have been turned '''
+        result_data = json.loads(result)
+        first_card = result_data['first_card']
+        first_section = Section.objects.get(pk=first_card['id'])
+        first_card['filename'] = str(first_section.filename)
+        second_card = result_data['second_card']
+        second_section = Section.objects.get(pk=second_card['id'])
+        second_card['filename'] = str(second_section.filename)
+        if first_section.group == second_section.group:
+            if 'seen' in second_card:
+                score = 20
+                given_response = 'match'
+            else:
+                score = 10
+                given_response = 'lucky match'
+        else:
+            if 'seen' in second_card:
+                score = -10
+                given_response = 'misremembered'
+            else:
+                score = 0
+                given_response = 'no match'
+        prepare_result('move', session, json_data=result_data,
+                       score=score, given_response=given_response)
         return score
+
+        

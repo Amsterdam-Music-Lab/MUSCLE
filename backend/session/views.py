@@ -6,8 +6,9 @@ from django.shortcuts import get_object_or_404, redirect
 from django.views.decorators.http import require_POST
 
 from .models import Session
-from experiment.models import Experiment
-from experiment.utils import serialize
+from experiment.models import Experiment, ExperimentCollection
+from experiment.serializers import serialize_actions
+from experiment.actions.utils import COLLECTION_KEY
 from section.models import Playlist
 from participant.utils import get_participant
 
@@ -31,32 +32,16 @@ def create_session(request):
     # Create new session
     session = Session(experiment=experiment, participant=participant)
 
-    # Get playlist
-    if experiment.playlists.count() == 1:
-        # Skip if there is only one playlist
-        session.playlist = experiment.playlists.first()
-    else:
-        # load playlist from request
-        playlist_id = request.POST.get("playlist_id")
-
-        if not playlist_id:
-            return HttpResponseBadRequest("playlist_id not defined")
-
+    if request.POST.get("playlist_id"):
         try:
             playlist = Playlist.objects.get(
-                pk=playlist_id, experiment__id=experiment.id)
+                pk=request.POST.get("playlist_id"), experiment__id=session.experiment.id)
             session.playlist = playlist
-        except Playlist.DoesNotExist:
+        except:
             raise Http404("Playlist does not exist")
-
-    # Get json_data
-    data = request.POST.get("data")
-    if data:
-        try:
-            json.loads(data)
-            session.json_data = data
-        except ValueError:
-            return HttpResponseBadRequest("Invalid data")
+    elif experiment.playlists.count() >= 1:
+        # register first playlist
+        session.playlist = experiment.playlists.first()
 
     # Save session
     session.save()
@@ -70,7 +55,7 @@ def continue_session(request, session_id):
     session = get_object_or_404(Session, pk=session_id)
 
     # Get next round for given session
-    action = serialize(session.experiment_rules().next_round(session))
+    action = serialize_actions(session.experiment_rules().next_round(session))
     return JsonResponse(action, json_dumps_params={'indent': 4})
 
 
@@ -85,20 +70,26 @@ def next_round(request, session_id):
     session = get_object_or_404(Session, 
             pk=session_id, participant__id=participant.id)
 
+    # check if this experiment is part of an ExperimentCollection
+    collection_slug = request.session.get(COLLECTION_KEY)
+    if collection_slug:
+        # check that current session does not have the collection information saved yet
+        if not session.load_json_data().get(COLLECTION_KEY):
+            # set information of the ExperimentCollection to the session
+            collection = ExperimentCollection.objects.get(slug=collection_slug)
+            if collection and session.experiment in collection.associated_experiments():
+                session.save_json_data({COLLECTION_KEY: collection_slug})
+
     # Get next round for given session
-    if request.session.get('experiment_series'):
-        # we are in the middle of an experiment series - need to pass in request.session object
-        actions = serialize(session.experiment_rules().next_round(session, request.session))
-    else:
-        # Get next round for given session
-        actions = serialize(session.experiment_rules().next_round(session))
+    actions = serialize_actions(session.experiment_rules().next_round(session))
     
-    if not isinstance(actions,  list):
+    if not isinstance(actions, list):
         if actions.get('redirect'):
             return redirect(actions.get('redirect'))
         actions = [actions]
 
     return JsonResponse({'next_round': actions}, json_dumps_params={'indent': 4})
+
 
 def finalize_session(request, session_id):
     # Get session

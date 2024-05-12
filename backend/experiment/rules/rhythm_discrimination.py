@@ -5,8 +5,8 @@ from django.utils.translation import gettext_lazy as _
 
 from experiment.actions.utils import final_action_with_optional_button, render_feedback_trivia
 from experiment.rules.util.practice import practice_explainer, practice_again_explainer, start_experiment_explainer
-from experiment.actions import Trial, Consent, Explainer, StartSession, Step
-from experiment.actions.playback import Playback
+from experiment.actions import Trial, Explainer, Step
+from experiment.actions.playback import Autoplay
 from experiment.actions.form import ChoiceQuestion, Form
 
 from result.utils import prepare_result
@@ -83,32 +83,24 @@ class RhythmDiscrimination(Base):
     def first_round(self, experiment):
         """Create data for the first experiment rounds"""
         explainer = intro_explainer()
-
-        # 2. Consent with default text
-        consent = Consent()
-
         explainer2 = practice_explainer()
-
-        start_session = StartSession()
 
         return [
             explainer,
-            consent,
             explainer2,
-            start_session
         ]
 
-    def next_round(self, session, request_session=None):
+    def next_round(self, session):
         next_round_number = session.get_next_round()
 
         if next_round_number == 1:
             plan_stimuli(session)
 
         return next_trial_actions(
-            session, next_round_number, request_session)
-    
+            session, next_round_number)
 
-def next_trial_actions(session, round_number, request_session):
+
+def next_trial_actions(session, round_number):
     """
     Get the next trial action, depending on the round number
     """
@@ -120,7 +112,7 @@ def next_trial_actions(session, round_number, request_session):
         return actions
 
     if len(plan) == round_number-1:
-        return [finalize_experiment(session, request_session)]
+        return [finalize_experiment(session)]
 
     condition = plan[round_number-1]
 
@@ -173,7 +165,7 @@ def next_trial_actions(session, round_number, request_session):
         submits=True
     )
     form = Form([question])
-    playback = Playback([section])
+    playback = Autoplay([section])
     if round_number < 5:
         title = _('practice')
     else:
@@ -267,7 +259,7 @@ def response_explainer(correct, same, button_label=_('Next fragment')):
     )
 
 
-def finalize_experiment(session, request_session):
+def finalize_experiment(session):
     # we had 4 practice trials and 60 experiment trials
     percentage = (sum([res.score for res in session.result_set.all()]
                       ) / session.result_set.count()) * 100
@@ -280,4 +272,4 @@ def finalize_experiment(session, request_session):
         in brain scanners, which make a lot of noise. The beep-sound helps people in the scanner \
         to hear the rhythm really well.")
     final_text = render_feedback_trivia(feedback, trivia)
-    return final_action_with_optional_button(session, final_text, request_session)
+    return final_action_with_optional_button(session, final_text)

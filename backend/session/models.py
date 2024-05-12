@@ -15,7 +15,7 @@ class Session(models.Model):
     started_at = models.DateTimeField(db_index=True, default=timezone.now)
     finished_at = models.DateTimeField(
         db_index=True, default=None, null=True, blank=True)
-    json_data = models.TextField(blank=True)
+    json_data = models.JSONField(default=dict, blank=True, null=True)
     final_score = models.FloatField(db_index=True, default=0.0)
     current_round = models.IntegerField(default=1)
 
@@ -49,7 +49,6 @@ class Session(models.Model):
         """Return artist and name of previous song, 
         or return empty string if no scores are set
         """
-
         section = self.previous_section()
         if section:
             return "{} - {}".format(section.song.artist, section.song.name)
@@ -65,17 +64,16 @@ class Session(models.Model):
         return None
 
     def save_json_data(self, data):
-        """Convert json data object to string and merge with json_data, overwriting duplicate keys.
-
-        Only valid for JSON objects/Python dicts.
+        """Merge data with json_data, overwriting duplicate keys.        
         """
-        updated_data = {**self.load_json_data(), **data}
-        self.json_data = json.dumps(updated_data)
+        new_data = self.load_json_data()
+        new_data.update(data)
+        self.json_data = new_data
         self.save()
 
     def load_json_data(self):
-        """Get json data object from string json_data"""
-        return json.loads(self.json_data) if self.json_data else {}
+        """Get json data as object"""
+        return self.json_data if self.json_data else {}
 
     def export_admin(self):
         """Export data for admin"""
@@ -87,6 +85,10 @@ class Session(models.Model):
             'json_data': self.load_json_data(),
             'results': [result.export_admin() for result in self.result_set.all()]
         }
+    
+    def export_results(self):
+        # export session result objects
+        return self.result_set.all()
 
     def is_finished(self):
         """Determine if the session is finished"""
@@ -103,14 +105,22 @@ class Session(models.Model):
     def get_next_round(self):
         """Get next round number"""
         return self.rounds_passed() + 1
-    
+
     def get_current_round(self):
         return self.current_round
-    
+
+    def set_current_round(self, round_number):
+        self.current_round = round_number
+        self.save()
+
+    def reset_rounds(self):
+        self.current_round = 1
+        self.save()
+
     def increment_round(self):
         self.current_round += 1
         self.save()
-    
+
     def decrement_round(self):
         self.current_round -= 1
         self.save()
@@ -121,15 +131,7 @@ class Session(models.Model):
     
     def filter_songs(self, filter_by={}):
         # Get pks from sections with given filter and song_id
-        pks = self.playlist.section_set.filter(
-            # IP checking is overridable in filter_by.
-            **(
-                {}
-                if self.participant.is_dutch()
-                else {'song__restricted': []}
-            ),
-            **filter_by
-        ).values_list('song_id', flat=True)
+        pks = self.playlist.section_set.filter(**filter_by).values_list('song_id', flat=True)
 
         # Return None if nothing matches
         if len(pks) == 0:
@@ -143,6 +145,7 @@ class Session(models.Model):
         To ensure appropriate IP restrictions, most rules should use this
         method instead of operating on the playlist directly.
         """
+        
         pks = self.filter_songs(filter_by)
         if pks:
             # Return a random section
@@ -243,3 +246,13 @@ class Session(models.Model):
     def answered_questions(self):
         """Get number of answered (non-empty) profile questions for this session"""
         return self.result_set.exclude(given_response="").count()
+    
+    def get_relevant_results(self, question_keys=[]):
+        results = self.result_set
+        if question_keys:
+            return results.filter(question_key__in=question_keys)
+        return results
+
+    def get_previous_result(self, question_keys=[]):
+        results = self.get_relevant_results(question_keys)
+        return results.order_by('-created_at').first()

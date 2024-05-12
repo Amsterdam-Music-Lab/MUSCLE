@@ -6,6 +6,8 @@ from aml.base_settings import *
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
+# Static url is set to /django_static/ in the nginx configuration
+# to avoid conflicts with the frontend's static files in /static/
 STATIC_URL = '/django_static/'
 
 DATABASES = {
@@ -62,6 +64,6 @@ LOGGING = {
     }
 }
 
-RELOAD_PARTICIPANT_TARGET = 'http://app.amsterdammusiclab.nl/'
+RELOAD_PARTICIPANT_TARGET = 'http://app.amsterdammusiclab.nl'
 
 TESTING = os.getenv('AML_TESTING', '') != 'False'

@@ -1,13 +1,26 @@
 import csv
+from urllib import request
+from zipfile import ZipFile
+from io import BytesIO
+from django.utils.safestring import mark_safe
 
+from django.conf import settings
 from django.contrib import admin
 from django.db import models
+from django.utils import timezone
+from django.core import serializers
 from django.shortcuts import render, redirect
-from django.forms import CheckboxSelectMultiple, ModelForm, ModelMultipleChoiceField
-from django.http import HttpResponse, JsonResponse
+from django.forms import CheckboxSelectMultiple, ModelForm, TextInput
+from django.http import HttpResponse
 from inline_actions.admin import InlineActionsModelAdminMixin
-from experiment.models import Experiment, ExperimentSeries, Feedback
-from experiment.forms import ExperimentForm, ExportForm, TemplateForm, EXPORT_TEMPLATES
+from django.urls import reverse
+from django.utils.html import format_html
+from experiment.models import Experiment, ExperimentCollection, ExperimentCollectionGroup, Feedback, GroupedExperiment
+from experiment.forms import ExperimentCollectionForm, ExperimentForm, ExportForm, TemplateForm, EXPORT_TEMPLATES
+from section.models import Section, Song
+from result.models import Result
+from participant.models import Participant
+
 
 class FeedbackInline(admin.TabularInline):
     """Inline to show results linked to given participant
@@ -17,14 +30,20 @@ class FeedbackInline(admin.TabularInline):
     fields = ['text']
     extra = 0
 
+
 class ExperimentAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
-    list_display = ('name', 'rules', 'rounds', 'playlist_count',
+    list_display = ('image_preview', 'experiment_name_link',
+                    'experiment_slug_link', 'rules',
+                    'rounds', 'playlist_count',
                     'session_count', 'active')
     list_filter = ['active']
     search_fields = ['name']
     inline_actions = ['export', 'export_csv']
-    fields = ['name', 'slug', 'url', 'hashtag', 'language', 'active', 'rules',
-              'rounds', 'bonus_points', 'playlists', 'experiment_series']
+    fields = ['name', 'description', 'image',
+              'slug', 'url', 'hashtag', 'theme_config', 
+              'language', 'active', 'rules',
+              'rounds', 'bonus_points', 'playlists',
+              'consent', 'questions']
     inlines = [FeedbackInline]
     form = ExperimentForm
 
@@ -34,14 +53,45 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
     }
 
     def export(self, request, obj, parent_obj=None):
-        """Export experiment data in JSON, force download"""
+        """Export experiment JSON data as zip archive, force download"""
 
-        response = JsonResponse(
-            obj.export_admin(), json_dumps_params={'indent': 4})
+        # Init empty querysets
+        all_results = Result.objects.none()
+        all_songs = Song.objects.none()
+        all_sections = Section.objects.none()
+        all_participants = Participant.objects.none()
+        all_profiles = Result.objects.none()
 
-        # force download attachment
-        response['Content-Disposition'] = 'attachment; filename="' + \
-            obj.slug+'.json"'
+        # Collect data
+        all_sessions = obj.export_sessions().order_by('pk')
+
+        for session in all_sessions:
+            all_results |= session.export_results()
+            all_participants |= Participant.objects.filter(pk=session.participant.pk)
+            all_profiles |= session.participant.export_profiles()
+
+        for playlist in obj.playlists.all():
+            these_sections = playlist.export_sections()
+            all_sections |= these_sections
+            for section in these_sections:
+                if section.song:
+                    all_songs |= Song.objects.filter(pk=section.song.pk)
+
+        # create empty zip file in memory
+        zip_buffer = BytesIO()
+        with ZipFile(zip_buffer, 'w') as new_zip:
+            # serialize data to new json files within the zip file
+            new_zip.writestr('sessions.json', data=str(serializers.serialize("json", all_sessions)))
+            new_zip.writestr('participants.json', data=str(serializers.serialize("json", all_participants.order_by('pk'))))
+            new_zip.writestr('profiles.json', data=str(serializers.serialize("json", all_profiles.order_by('participant', 'pk'))))
+            new_zip.writestr('results.json', data=str(serializers.serialize("json", all_results.order_by('session'))))
+            new_zip.writestr('sections.json', data=str(serializers.serialize("json", all_sections.order_by('playlist', 'pk'))))
+            new_zip.writestr('songs.json', data=str(serializers.serialize("json", all_songs.order_by('pk'))))
+
+        # create forced download response
+        response = HttpResponse(zip_buffer.getbuffer())
+        response['Content-Type'] = 'application/x-zip-compressed'
+        response['Content-Disposition'] = 'attachment; filename="'+obj.slug+'-'+timezone.now().isoformat()+'.zip"'        
         return response
 
     export.short_description = "Export JSON"
@@ -99,29 +149,103 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
 
     export_csv.short_description = "Export CSV"
 
+    def image_preview(self, obj):
+        if obj.image and obj.image.file:
+            img_src = obj.image.file.url
+            return mark_safe(f'<img src="{img_src}" style="max-height: 50px;"/>')
+        return ""
+
+    def experiment_name_link(self, obj):
+        """Generate a link to the experiment's admin change page."""
+        url = reverse("admin:experiment_experiment_change", args=[obj.pk])
+        name = obj.name or obj.slug or "No name"
+        return format_html('<a href="{}">{}</a>', url, name)
+
+    def experiment_slug_link(self, obj):
+        dev_mode = settings.DEBUG is True
+        url = f"http://localhost:3000/{obj.slug}" if dev_mode else f"/{obj.slug}"
+
+        return format_html(
+            f'<a href="{url}" target="_blank" rel="noopener noreferrer" title="Open {obj.slug} experiment in new tab" >{obj.slug}&nbsp;<small>&#8599;</small></a>')
+
+    # Name the columns
+    image_preview.short_description = "Image"
+    experiment_name_link.short_description = "Name"
+    experiment_slug_link.short_description = "Slug"
+
 
 admin.site.register(Experiment, ExperimentAdmin)
 
-class ModelFormFieldAsJSON(ModelMultipleChoiceField):
-    """ override clean method to prevent pk lookup to save querysets """
-    def clean(self, value):
-        return value
 
-class ExperimentSeriesForm(ModelForm):
-    def __init__(self, *args, **kwargs):
-        super(ModelForm, self).__init__(*args, **kwargs)
-        from . import Experiment
-        experiments = Experiment.objects.all().filter(experiment_series=None)
-        self.fields['first_experiments'] = ModelFormFieldAsJSON(queryset=experiments, required=False)
-        self.fields['random_experiments'] = ModelFormFieldAsJSON(queryset=experiments, required=False)
-        self.fields['last_experiments'] = ModelFormFieldAsJSON(queryset=experiments, required=False)
+class GroupedExperimentInline(admin.StackedInline):
+    model = GroupedExperiment
+    extra = 0
 
-    class Meta:
-        model = ExperimentSeries
-        fields = ['name', 'first_experiments', 'random_experiments', 'last_experiments']
 
-class ExperimentSeriesAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
-    fields = ['name', 'first_experiments', 'random_experiments', 'last_experiments']
-    form = ExperimentSeriesForm
+class ExperimentCollectionGroupInline(admin.StackedInline):
+    model = ExperimentCollectionGroup
+    extra = 0
+    inlines = [GroupedExperimentInline]
 
-admin.site.register(ExperimentSeries, ExperimentSeriesAdmin)
+
+class MarkdownPreviewTextInput(TextInput):
+    template_name = 'widgets/markdown_preview_text_input.html'
+
+
+class ExperimentCollectionAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
+    list_display = ('name', 'slug_link', 'description_excerpt', 'dashboard', 'groups')
+    fields = ['slug', 'name', 'description', 'consent', 'theme_config', 'dashboard',
+              'about_content']
+    form = ExperimentCollectionForm
+    inlines = [ExperimentCollectionGroupInline]
+
+    def slug_link(self, obj):
+        dev_mode = settings.DEBUG is True
+        url = f"http://localhost:3000/collection/{obj.slug}" if dev_mode else f"/collection/{obj.slug}"
+
+        return format_html(
+            f'<a href="{url}" target="_blank" rel="noopener noreferrer" title="Open {obj.slug} experiment group in new tab" >{obj.slug}&nbsp;<small>&#8599;</small></a>')
+
+    def description_excerpt(self, obj):
+
+        if len(obj.description) < 50:
+            return obj.description
+
+        return obj.description[:50] + '...'
+
+    def groups(self, obj):
+        groups = ExperimentCollectionGroup.objects.filter(series=obj)
+        return format_html(', '.join([f'<a href="/admin/experiment/experimentcollectiongroup/{group.id}/change/">{group.name}</a>' for group in groups]))
+    
+    slug_link.short_description = "Slug"
+
+
+admin.site.register(ExperimentCollection, ExperimentCollectionAdmin)
+
+
+class ExperimentCollectionGroupAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
+    list_display = ('name_link', 'related_series', 'order', 'dashboard', 'randomize', 'experiments')
+    fields = ['name', 'series', 'order', 'dashboard', 'randomize']
+    inlines = [GroupedExperimentInline]
+
+    def name_link(self, obj):
+        obj_name = obj.__str__()
+        url = reverse(
+            "admin:experiment_experimentcollectiongroup_change", args=[obj.pk])
+        return format_html('<a href="{}">{}</a>', url, obj_name)
+
+    def related_series(self, obj):
+        url = reverse(
+            "admin:experiment_experimentcollection_change", args=[obj.series.pk])
+        return format_html('<a href="{}">{}</a>', url, obj.series.name)
+
+    def experiments(self, obj):
+        experiments = GroupedExperiment.objects.filter(group=obj)
+
+        if not experiments:
+            return "No experiments"
+
+        return format_html(', '.join([f'<a href="/admin/experiment/groupedexperiment/{experiment.id}/change/">{experiment.experiment.name}</a>' for experiment in experiments]))
+
+
+admin.site.register(ExperimentCollectionGroup, ExperimentCollectionGroupAdmin)

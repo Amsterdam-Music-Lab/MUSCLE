@@ -1,8 +1,9 @@
 from django.conf import settings
 from django.utils.translation import gettext_lazy as _
 
-from .styles import STYLE_NEUTRAL
+from .styles import STYLE_NEUTRAL, STYLE_BOOLEAN_NEGATIVE_FIRST, STYLE_GRADIENT_7
 from .base_action import BaseAction
+
 
 class Question(BaseAction):
     ''' Question is part of a form.
@@ -45,6 +46,7 @@ class Question(BaseAction):
                 self.expected_response = result.expected_response
         return self.__dict__
 
+
 class NumberQuestion(Question):
     def __init__(self, input_type='number', min_value=0, max_value=120, **kwargs):
         super().__init__(**kwargs)
@@ -53,6 +55,7 @@ class NumberQuestion(Question):
         self.input_type = input_type
         self.view = 'STRING'
 
+
 class TextQuestion(Question):
     def __init__(self, input_type='text', max_length=None, **kwargs):
         super().__init__(**kwargs)
@@ -60,14 +63,17 @@ class TextQuestion(Question):
         self.input_type = input_type
         self.view = 'STRING'
 
+
 class BooleanQuestion(Question):
     def __init__(self, choices=None, **kwargs):
         super().__init__(**kwargs)
         self.choices = choices or {
-            'yes': _('Yes'),
-            'no': _('No')
+            'no': _('No'),
+            'yes': _('Yes')
         }
         self.view = 'BUTTON_ARRAY'
+        self.style = {STYLE_BOOLEAN_NEGATIVE_FIRST: True, 'buttons-large-gap': True}
+
 
 class ChoiceQuestion(Question):
     def __init__(self, choices, min_values=1, **kwargs):
@@ -142,6 +148,7 @@ class LikertQuestion(Question):
                     5: _("Strongly Agree"),
                 }
 
+
 class LikertQuestionIcon(Question):
     def __init__(self, scale_steps=7, likert_view='ICON_RANGE', **kwargs):
         super().__init__(**kwargs)
@@ -156,15 +163,8 @@ class LikertQuestionIcon(Question):
                 6: 'fa-face-frown-open',
                 7: 'fa-face-angry',
             }
-            self.config = {'icons':True, 'colors': ['#d843e2', '#c863e8', '#bb7ae9','#ab86f1', '#8b9bfa', '#42b5ff', '#0CC7F1']}
-        elif scale_steps == 5:
-            self.choices = {
-                1: _("Strongly Disagree"),
-                2: _("Disagree"),
-                3: _("Neither Agree nor Disagree"),  # Undecided
-                4: _("Agree"),
-                5: _("Strongly Agree"),
-            }
+            self.style = STYLE_GRADIENT_7
+
 
 class Form(BaseAction):
     ''' Form is a view which brings together an array of questions with submit and optional skip button

@@ -4,9 +4,9 @@ import copy
 from django.utils.translation import gettext_lazy as _
 
 from .base import Base
-from experiment.actions import Trial, Explainer, Consent, StartSession, Step
+from experiment.actions import Trial, Explainer, Step
 from experiment.actions.form import ChoiceQuestion, Form
-from experiment.actions.playback import Playback
+from experiment.actions.playback import Autoplay
 from experiment.actions.utils import final_action_with_optional_button, render_feedback_trivia
 from result.utils import prepare_result
 
@@ -38,18 +38,11 @@ class BeatAlignment(Base):
             step_numbers=True
         )
 
-        # 2. Consent with default text
-        consent = Consent()
-        
-        # 3. Start session
-        start_session = StartSession()
         return [
             explainer,
-            consent,
-            start_session
         ]
 
-    def next_round(self, session, request_session=None):
+    def next_round(self, session):
         """Get action data for the next round"""
 
         # If the number of results equals the number of experiment.rounds
@@ -65,7 +58,7 @@ class BeatAlignment(Base):
             trivia = _('In the UK, over 140.000 people did \
                 this test when it was first developed?')
             final_text = render_feedback_trivia(feedback, trivia)
-            return final_action_with_optional_button(session, final_text, request_session)
+            return final_action_with_optional_button(session, final_text)
         
         # Next round number, can be used to return different actions
         next_round_number = session.get_next_round()
@@ -108,7 +101,7 @@ class BeatAlignment(Base):
         else:
             presentation_text = _(
                 "In this example the beeps are NOT ALIGNED TO THE BEAT of the music.")
-        playback = Playback([section],
+        playback = Autoplay([section],
                             instruction=presentation_text,
                             preload_message=presentation_text,
                             )
@@ -145,7 +138,7 @@ class BeatAlignment(Base):
             submits=True
         )
         form = Form([question])
-        playback = Playback([section])
+        playback = Autoplay([section])
         view = Trial(
             playback=playback,
             feedback_form=form,

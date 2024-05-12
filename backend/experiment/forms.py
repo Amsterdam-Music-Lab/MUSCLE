@@ -1,6 +1,8 @@
-from django.forms import CheckboxSelectMultiple, ModelForm, ChoiceField, Form, MultipleChoiceField, Select
-from experiment.models import Experiment
+from django.forms import CheckboxSelectMultiple, ModelForm, ChoiceField, Form, MultipleChoiceField, ModelMultipleChoiceField, Select, TypedMultipleChoiceField, CheckboxSelectMultiple, TextInput
+from experiment.models import ExperimentCollection, Experiment
 from experiment.rules import EXPERIMENT_RULES
+
+from .questions import QUESTIONS_CHOICES
 
 # session_keys for Export CSV
 SESSION_CHOICES = [('experiment_id', 'Experiment ID'),
@@ -10,7 +12,7 @@ SESSION_CHOICES = [('experiment_id', 'Experiment ID'),
                    ('participant_access_info', 'Participant access info'),
                    ('session_start', 'Session start time'),
                    ('session_end', 'Session end time'),
-                   ('final_score', 'Final score')
+                   ('final_score', 'Final score'),
                    ]
 
 # result_keys for Export CSV
@@ -19,7 +21,8 @@ RESULT_CHOICES = [('section_name', 'Section name'),
                   ('result_score', 'Result score'),
                   ('result_comment', 'Result comment'),
                   ('expected_response', 'Expected response'),
-                  ('given_response', 'Given response')
+                  ('given_response', 'Given response'),
+                  ('question_key', 'Question key'),
                   ]
 
 # export_options for Export CSV
@@ -115,9 +118,39 @@ TEMPLATE_CHOICES = [
 ]
 
 
+class ModelFormFieldAsJSON(ModelMultipleChoiceField):
+    """ override clean method to prevent pk lookup to save querysets """
+    def clean(self, value):
+        return value
+
+
+class MarkdownPreviewTextInput(TextInput):
+    template_name = 'widgets/markdown_preview_text_input.html'
+
+
+class ExperimentCollectionForm(ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(ModelForm, self).__init__(*args, **kwargs)
+        self.fields['dashboard'].help_text = (
+            'This field will be deprecated in the nearby future. '
+            'Please use experiment series groups for dashboard configuration. (see bottom of form). <br><br>'
+            'Legacy behavior: If you check "dashboard", the experiment collection will have a '
+            'dashboard that shows all or a subgroup of related experiments along '
+            'with a description, footer, and about page. If you leave it unchecked, '
+            'the experiment collection will redirect to the first experiment.')
+        self.fields['about_content'].widget = MarkdownPreviewTextInput()
+
+    class Meta:
+        model = ExperimentCollection
+        fields = ['slug', 'description',
+                  'dashboard', 'about_content']
+
+    class Media:
+        js = ["experiment_series_admin.js"]
+        css = {"all": ["experiment_series_admin.css"]}
+
+
 class ExperimentForm(ModelForm):
-    # TO DO: add "clean_slug" method which checks that slug is NOT
-    # "experiment", "participant", "profile"
 
     def __init__(self, *args, **kwargs):
         super(ModelForm, self).__init__(*args, **kwargs)
@@ -125,15 +158,36 @@ class ExperimentForm(ModelForm):
         choices = tuple()
         for i in EXPERIMENT_RULES:
             choices += ((i, EXPERIMENT_RULES[i].__name__),)
+        choices += (("", "---------"),)
 
         self.fields['rules'] = ChoiceField(
-            choices=choices
+            choices=sorted(choices)
+        )
+
+        self.fields['questions'] = TypedMultipleChoiceField(
+            choices=QUESTIONS_CHOICES,
+            widget=CheckboxSelectMultiple,
+            required=False
         )
 
     class Meta:
         model = Experiment
         fields = ['name', 'slug', 'active', 'rules',
-                  'rounds', 'bonus_points', 'playlists', 'experiment_series']
+                  'rounds', 'bonus_points', 'playlists',]
+        help_texts = {
+            'description': 'A short description of the experiment that will be displayed on the experiment collection page and as a meta description in search engines.',
+            'image': 'An image that will be displayed on the experiment collection page and as a meta image in search engines.',
+            'consent': 'Upload an HTML (.html) or MARKDOWN (.md) file with a text to ask a user its consent<br> \
+                      for using the experiment data for this instance of the experiment.<br> \
+                      This field will override any consent text loaded from the rules file. <br>\
+                      HTML files also allow django template tags so that the text can be translated',
+            'slug': 'The slug is used to identify the experiment in the URL so you can access it on the web as follows: app.amsterdammusiclab.nl/{slug} <br>\
+            It must be unique, lowercase and contain only letters, numbers, and hyphens. Nor can it start with any of the following reserved words: admin, server, experiment, participant, result, section, session, static.',
+        }
+
+    class Media:
+        js = ["experiment_admin.js"]
+        css = {"all": ["experiment_admin.css"]}
 
 
 class ExportForm(Form):

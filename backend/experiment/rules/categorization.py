@@ -3,9 +3,8 @@ from django.template.loader import render_to_string
 from django.db.models import Avg
 
 from experiment.actions.form import Form, ChoiceQuestion
-from experiment.actions import Consent, Explainer, Score, StartSession, Trial, Final
+from experiment.actions import Consent, Explainer, Score, Trial, Final
 from experiment.actions.wrappers import two_alternative_forced
-from experiment.questions.utils import unanswered_questions
 
 from experiment.questions.demographics import EXTRA_DEMOGRAPHICS
 from experiment.questions.utils import question_by_key
@@ -35,14 +34,15 @@ class Categorization(Base):
             steps=[],
             button_label='Ok'
         )
-        # read consent from file
-        rendered = render_to_string(
-            'consent/consent_categorization.html')
+        # Add consent from file or admin (admin has priority)
         consent = Consent(
-            rendered, title='Informed consent', confirm='I agree', deny='Stop')
-        
-        start_session = StartSession()
-        return [explainer, consent, start_session]
+            experiment.consent,
+            title='Informed consent',
+            confirm='I agree',
+            deny='Stop',
+            url='consent/consent_categorization.html'
+            )
+        return [consent, explainer]
 
     def next_round(self, session):
         actions = self.get_questionnaire(session)
@@ -52,7 +52,7 @@ class Categorization(Base):
         json_data = session.load_json_data()
 
         # Plan experiment on the first call to next_round
-        if not json_data:
+        if not json_data.get('phase'):
             json_data = self.plan_experiment(session)
 
         # Check if this participant already has a session
@@ -354,7 +354,6 @@ class Categorization(Base):
 
     def plan_phase(self, session):
         json_data = session.load_json_data()
-        print(json_data['group'], session.playlist.section_set.first().tag)
         if 'training' in json_data['phase']:
             # Retrieve training stimuli for the assigned group
             if json_data["group"] == 'S1':
@@ -385,7 +384,6 @@ class Categorization(Base):
                 section_sequence.append(sections[0].song_id)
                 section_sequence.append(sections[1].song_id)
             random.shuffle(section_sequence)
-            print(section_sequence)
             json_data['sequence'] = section_sequence
 
         else:
@@ -510,5 +508,5 @@ repeat_training_or_quit = ChoiceQuestion(
     },
     submits=True,
     is_skippable=False,
-    style={'buttons-large-gap': True, 'boolean': True}
+    style={'buttons-large-gap': True, 'buttons-large-text': True, 'boolean': True}
 )

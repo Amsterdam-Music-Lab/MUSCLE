@@ -32,9 +32,18 @@ urlpatterns = [
     path('section/', include('section.urls')),
     path('session/', include('session.urls')),
     path('admin/', admin.site.urls),
+
+    # Sentry debug (uncomment to test Sentry)
+    # path('sentry-debug/', lambda request: 1 / 0),
+
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 #   ^ The static helper function only works in debug mode
 # (https://docs.djangoproject.com/en/3.0/howto/static-files/)
+
+
+# Prefix all URLS with /server if AML_SUBPATH is set
+if settings.SUBPATH:
+    urlpatterns = [path('server/', include(urlpatterns))]
 
 # Debug toolbar
 if settings.DEBUG:

@@ -19,8 +19,6 @@ $playIconSize: 30px;
         opacity: 0.5;
     }
 
-    
-
     &::before {
         content: "";
         transition: border 0.1s ease-out, margin 0.1s ease-out, width 0.1s ease-out, height 0.1s ease-out;
@@ -51,4 +49,8 @@ $playIconSize: 30px;
             border-bottom: $playIconSize * 0.57 solid white;
         }
     }
+}
+
+.playbutton-spacer {
+    height: 87px; // Difference in height between PlayButton and Preload
 }

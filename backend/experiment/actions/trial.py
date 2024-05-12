@@ -1,6 +1,10 @@
 from django.utils.translation import gettext_lazy as _
 
 from .base_action import BaseAction
+from experiment.actions.form import Form
+from experiment.actions.playback import Playback
+from .frontend_style import FrontendStyle
+
 
 class Trial(BaseAction):  # pylint: disable=too-few-public-methods
     """
@@ -16,7 +20,16 @@ class Trial(BaseAction):  # pylint: disable=too-few-public-methods
 
     ID = 'TRIAL_VIEW'
 
-    def __init__(self, playback=None, html=None, feedback_form=None, title='', config=None, result_id=None, style=None):
+    def __init__(
+            self,
+            playback: Playback = None,
+            html: str = None,
+            feedback_form: Form = None,
+            title='',
+            config: dict = None,
+            result_id: int = None,
+            style: FrontendStyle = FrontendStyle()
+            ):
         '''
         - playback: Playback object (may be None)
         - html: HTML object (may be None)
@@ -27,9 +40,7 @@ class Trial(BaseAction):  # pylint: disable=too-few-public-methods
             - response_time: how long to wait until stopping the player / proceeding to the next view
             - auto_advance: proceed to next view after player has stopped
             - listen_first: whether participant can submit before end of sound
-            - time_pass_break: when time has passed, submit the result immediately; skipping any subsequent actions (e.g. a certainty question)
-                - Can not be combined with listen_first (True)
-                - Can not be combined with auto_advance (False)
+            - break_round_on: result values upon which consecutive rounds in the current next_round array will be skipped
             - continue_label: if there is no form, how to label a button to proceed to next view
         - style: style class to add to elements in form and playback
             - neutral: first element is blue, second is yellow, third is teal
@@ -53,7 +64,6 @@ class Trial(BaseAction):  # pylint: disable=too-few-public-methods
             self.config.update(config)
         self.style = style
 
-
     def action(self):
         """
         Serialize data for experiment action
@@ -65,8 +75,9 @@ class Trial(BaseAction):  # pylint: disable=too-few-public-methods
             'title': self.title,
             'config': self.config,
             'result_id': self.result_id,
-            'style': self.style
         }
+        if self.style:
+            action['style'] = self.style.to_dict()
         if self.playback:
             action['playback'] = self.playback.action()
         if self.html:

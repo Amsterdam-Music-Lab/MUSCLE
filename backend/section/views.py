@@ -8,13 +8,9 @@ from participant.utils import located_in_nl
 
 
 def get_section(request, section_id, code):
-    """Get section by given id, check location restrictions"""
+    """Get section by given id"""
     try:
         section = Section.objects.get(pk=section_id, code=code)
-
-        # Check location restrictions
-        if len(section.song.restricted) and not located_in_nl(request):
-            raise PermissionDenied
 
         # Section will be served, so increase play count
         # On your local development server you can receive multiple requests on
@@ -30,12 +26,16 @@ def get_section(request, section_id, code):
         if str(section.filename).startswith('http'):
             # external link, redirect
             return redirect(str(section.filename))
+        
+        if section.playlist.url_prefix:
+            # Make link external using url_prefix
+            return redirect(section.playlist.url_prefix + str(section.filename))
 
         # We only do this in production, as the Django dev server not correctly supports
         # The range/seeking of audio files in Chrome
         if not settings.DEBUG:
             return redirect(settings.MEDIA_URL + str(section.filename))
-        
+
         # Option 2: stream file through Django
         # Advantage: keeps url secure, correct play_count value
         # Disadvantage: potential high server load

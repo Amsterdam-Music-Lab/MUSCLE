@@ -6,6 +6,7 @@ from participant.models import Participant
 from section.models import Playlist, Section
 from session.models import Session
 
+
 class DDITest(TestCase):
     fixtures = ['playlist', 'experiment']
 
@@ -36,6 +37,7 @@ class DDITest(TestCase):
         assert regular_trial.feedback_form
         section = regular_trial.playback.sections[0]
         assert section['id'] == diff_section.id
+
 
 class AnisochronyTest(TestCase):
     fixtures = ['playlist', 'experiment']

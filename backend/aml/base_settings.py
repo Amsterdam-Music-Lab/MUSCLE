@@ -11,6 +11,11 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import os
+import logging
+from corsheaders.defaults import default_headers
+import sentry_sdk
+
+logger = logging.getLogger(__name__)
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -38,12 +43,15 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'inline_actions',
+    'django_markup',
     'corsheaders',
     'experiment',
+    'image',
     'participant',
     'result',
     'session',
-    'section'
+    'section',
+    'theme',
 ]
 
 MIDDLEWARE = [
@@ -150,14 +158,37 @@ CORS_ORIGIN_WHITELIST = os.getenv(
 CORS_ORIGIN_ALLOW_ALL = False
 CORS_ALLOW_CREDENTIALS = True
 
-
+CORS_ALLOW_HEADERS = list(default_headers) + [
+    'sentry-trace',
+    'baggage',
+]
 
 SESSION_SAVE_EVERY_REQUEST = False # Do not set to True, because it will break session-based participant_id
 
 CSRF_USE_SESSIONS = False
-CORS_ALLOW_CREDENTIALS = True
-
 
 LOCALE_PATHS = [os.path.join(BASE_DIR, 'locale')]
 
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
+
+if os.getenv("SENTRY_DSN"):
+    sentry_sdk.init(
+        dsn=os.getenv("SENTRY_DSN", ""),
+        # Set traces_sample_rate to 1.0 to capture 100%
+        # of transactions for performance monitoring.
+        traces_sample_rate=0.2,
+        # Set profiles_sample_rate to 1.0 to profile 100%
+        # of sampled transactions.
+        # We recommend adjusting this value in production.
+        profiles_sample_rate=0.2,
+    )
+else:
+    logger.info("SENTRY_DSN is not defined. Skipping Sentry initialization.")
+
+MARKUP_SETTINGS = {
+    'markdown': {
+        'safe_mode': True
+    }
+}
+
+SUBPATH = os.getenv('AML_SUBPATH', None)

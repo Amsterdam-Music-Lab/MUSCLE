@@ -8,25 +8,11 @@ from session.models import Session
 from result.models import Result
 from result.utils import handle_results
 
+
 @require_POST
 def score(request):
     """Create a new result for the given session, and return followup action"""
-    # Current participant
-    participant = get_participant(request)
-    # Get session for current participant
-    session_id = request.POST.get("session_id")
-
-    if not session_id:
-        return HttpResponseBadRequest("session_id not defined")
-    try:
-        session = Session.objects.get(
-            pk=session_id, participant__id=participant.id)
-    except Session.DoesNotExist:
-        return HttpResponseServerError("No session found")
-
-    # Prevent creating results when session is finished
-    if session.is_finished():
-        return HttpResponseServerError("Session has already finished")
+    session = verify_session(request)
 
     # Create result based on POST data
     json_data = request.POST.get("json_data")
@@ -36,7 +22,7 @@ def score(request):
     try:
         result_data = json.loads(json_data)
         # Create a result from the data
-        result = handle_results(result_data, session)   
+        result = handle_results(result_data, session)
         if not result:
             return HttpResponseServerError("Could not create result from data")
         if result.session:
@@ -46,6 +32,15 @@ def score(request):
         return HttpResponseServerError("Invalid data")
 
     return JsonResponse({'success': True})
+
+
+@require_POST
+def intermediate_score(request):
+    session = verify_session(request)
+    result = request.POST.get("json_data")
+    score = session.experiment_rules().calculate_intermediate_score(session, result)
+    return JsonResponse({'score': score})
+
 
 @require_POST
 def consent(request):
@@ -79,3 +74,24 @@ def get_result(request, question):
 
     return JsonResponse({"answer": result.given_response},
                         json_dumps_params={'indent': 4})
+
+
+def verify_session(request):
+    # Current participant
+    participant = get_participant(request)
+    # Get session for current participant
+    session_id = request.POST.get("session_id")
+
+    if not session_id:
+        return HttpResponseBadRequest("session_id not defined")
+    try:
+        session = Session.objects.get(
+            pk=session_id, participant__id=participant.id)
+    except Session.DoesNotExist:
+        return HttpResponseServerError("No session found")
+
+    # Prevent creating results when session is finished
+    if session.is_finished():
+        return HttpResponseServerError("Session has already finished")
+
+    return session

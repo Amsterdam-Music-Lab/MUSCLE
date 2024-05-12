@@ -1,12 +1,14 @@
 import random
 from django.utils.translation import gettext_lazy as _
 
-from experiment.actions import SongSync, Trial
-from experiment.actions.playback import Playback
+from experiment.actions import Trial
+from experiment.actions.playback import Autoplay
 from experiment.actions.form import BooleanQuestion, Form
 from experiment.actions.styles import STYLE_BOOLEAN_NEGATIVE_FIRST
+from experiment.actions.wrappers import song_sync
 from result.utils import prepare_result
 from .hooked import Hooked
+
 
 class Kuiper2020(Hooked):
     """Rules for the Christmas version of the Hooked experiment.
@@ -47,7 +49,7 @@ class Kuiper2020(Hooked):
             old_sections_2 = \
                 [session.
                  section_from_any_song(
-                     {'group': s.group, 'tag': 3 - s.tag}
+                     {'group': s.group, 'tag': 3 - int(s.tag)}
                  )
                  for s in old_sections_1]
         free_sections = [session.section_from_song(s) for s in free_songs]
@@ -78,8 +80,6 @@ class Kuiper2020(Hooked):
             )
         }
 
-        print(plan)
-
         # Save, overwriting existing plan if one exists.
         session.save_json_data({'plan': plan})
         # session.save() is required for persistence
@@ -89,7 +89,7 @@ class Kuiper2020(Hooked):
         """Get next song_sync section for this session."""
 
         # Load plan.
-        next_round_number = session.get_next_round()
+        round_number = self.get_current_round(session)
         try:
             plan = session.load_json_data()['plan']
             sections = plan['sections']
@@ -99,26 +99,18 @@ class Kuiper2020(Hooked):
 
         # Get section.
         section = None
-        if next_round_number <= len(sections):
+        if round_number <= len(sections):
             section = \
-                session.section_from_any_song({'id': sections[next_round_number - 1]})
+                session.playlist.section_set.get(id=sections[round_number])
         if not section:
             print("Warning: no next_song_sync section found")
             section = session.section_from_any_song()
-        key = 'song_sync'
-        result_id = prepare_result(key, session, section=section, scoring_rule='SONG_SYNC')
-        return SongSync(
-            key=key,
-            section=section,
-            title=self.get_trial_title(session, next_round_number),
-            result_id=result_id
-        )
-    
+        return song_sync(session, section, title=self.get_trial_title(session, round_number))
+
     def next_heard_before_action(self, session):
         """Get next heard_before action for this session."""
 
         # Load plan.
-        next_round_number = session.get_next_round()
         try:
             plan = session.load_json_data()['plan']
             sections = plan['sections']
@@ -127,22 +119,26 @@ class Kuiper2020(Hooked):
             print('Missing plan key: %s' % str(error))
             return None
 
+        round_number = self.get_current_round(session)
         # Get section.
         section = None
-        if next_round_number <= len(sections):
+        if round_number <= len(sections):
             section = \
-                session.section_from_any_song({'id': sections[next_round_number - 1]})
+                session.playlist.section_set.get(id=sections[round_number])
         if not section:
             print("Warning: no heard_before section found")
             section = session.section_from_any_song()
 
-        playback = Playback(
+        playback = Autoplay(
             [section],
-            play_config={'ready_time': 3, 'show_animation': True},
-            preload_message=_('Get ready!'))
-        expected_result=int(novelty[next_round_number - 1] == 'old')
+            show_animation=True,
+            ready_time=3,
+            preload_message=_('Get ready!')
+        )
+        expected_result=novelty[round_number]
         # create Result object and save expected result to database
-        result_pk = prepare_result('heard_before', session, section=section, expected_response=expected_result, scoring_rule='REACTION_TIME')
+        result_pk = prepare_result('heard_before', session, section=section,
+                                   expected_response=expected_result, scoring_rule='REACTION_TIME')
         form = Form([BooleanQuestion(
             key='heard_before',
             choices={
@@ -151,18 +147,16 @@ class Kuiper2020(Hooked):
             },
             question=_("Did you hear this song in previous rounds?"),
             result_id=result_pk,
-            scoring_rule='REACTION_TIME',
             style=STYLE_BOOLEAN_NEGATIVE_FIRST,
             submits=True)])
         config = {
             'auto_advance': True,
-            'decision_time': self.timeout
+            'decision_time': self.heard_before_time
         }
         trial = Trial(
-            title=self.get_trial_title(session, next_round_number),
+            title=self.get_trial_title(session, round_number),
             playback=playback,
             feedback_form=form,
             config=config,
         )
         return trial
-

@@ -24,6 +24,7 @@ def current(request):
         'id': participant.id,
         'hash': participant.unique_hash,
         'csrf_token': get_token(request),
+        'participant_id_url': participant.participant_id_url,
         'country': participant.country_code
     }, json_dumps_params={'indent': 4})
     return response
@@ -38,7 +39,7 @@ def scores(request):
         'messages': {
             'title': _('My profile'),
             'summary': ngettext(
-            'You have participated in %(count)d Amsterdam Music Lab experiment. Your best score is:', 
+            'You have participated in %(count)d Amsterdam Music Lab experiment. Your best score is:',
             'You have partcipated in %(count)d Amsterdam Music Lab experiments. Your best scores are:',
                 len(scores)) % {'count': len(scores)},
             'points': _('points'),

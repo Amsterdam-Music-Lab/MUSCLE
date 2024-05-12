@@ -1,4 +1,4 @@
-import { SILENT_MP3 } from "../config.js";
+import { API_ROOT, MEDIA_ROOT, SILENT_MP3 } from "../config";
 import Timer from "./timer";
 
 // Audio provides function around a shared audio object
@@ -8,7 +8,10 @@ const audio = document.createElement("audio");
 audio.id = "audio-player";
 audio.controls = "controls";
 audio.src = SILENT_MP3;
-audio.crossorigin = "use-credentials";
+
+// switch to cors anonymous for local development (needed for webaudio)
+audio.crossOrigin = API_ROOT === 'http://localhost:8000' ? "anonymous" : "use-credentials";
+
 audio.disableRemotePlayback = true;
 audio.style.display = "none";
 
@@ -33,7 +36,7 @@ export let audioInitialized = false;
 export const init = () => {
     load(SILENT_MP3);
     play();
-    audioInitialized = true;   
+    audioInitialized = true;
 };
 
 // init audio after first user action on page
@@ -167,7 +170,7 @@ export const loadUntilAvailable = (src, canPlay) => {
     // without having to stop for further buffering of content.
     const removeListener = listenOnce("canplaythrough", canPlay);
 
-    load(src);
+    load(MEDIA_ROOT + src);
 
     // If the ready state is already > 3, data is already loaded;
     // Call canPlay right away
