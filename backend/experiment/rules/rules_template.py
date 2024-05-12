@@ -81,7 +81,6 @@ class RulesTemplate(Base):
             )
         return [consent, explainer]
 
-
     def next_round(self, session):
         """
         Returns a list of actions.
@@ -104,7 +103,7 @@ class RulesTemplate(Base):
             return [explainer2, self.next_trial_action(session)]
 
         elif not session.rounds_complete():
-            #Combine two actions, feedback on previous action and next trial action
+            # Combine two actions, feedback on previous action and next trial action
             return [self.get_feedback(session), self.next_trial_action(session)]
 
         else:  
