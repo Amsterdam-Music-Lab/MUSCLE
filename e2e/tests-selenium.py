@@ -11,6 +11,7 @@ import time
 import unittest
 import configparser
 import warnings
+import os
 
 
 class TestsSelenium(unittest.TestCase):
@@ -30,6 +31,7 @@ class TestsSelenium(unittest.TestCase):
 
     [url]
     root=http://localhost:3000
+    ; root url of the server, used as fallback if BASE_URL is not set
 
     [experiment_slugs]
     beat_alignment=bat
@@ -48,7 +50,8 @@ class TestsSelenium(unittest.TestCase):
 
         self.config = configparser.ConfigParser()
         self.config.read('tests-selenium.ini')
-        self.base_url = self.config['url']['root']
+        ini_config_base_url = self.config['url']['root']
+        self.base_url = os.getenv('BASE_URL', ini_config_base_url)
 
         # Check if config is set
         if not self.config.sections():

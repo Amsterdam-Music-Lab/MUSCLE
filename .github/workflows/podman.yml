@@ -12,6 +12,7 @@ on:
     types: [created]
 
 jobs:
+
   deploy-test:
     name: Deploy to test environment
     environment: Test
@@ -276,3 +277,17 @@ jobs:
         run: podman image prune -a -f
       - name: Check Podman images
         run: podman-compose -f docker-compose-deploy.yml ps
+  
+  e2e-acceptance:
+    name: E2E tests on acceptance environment
+    runs-on: ACC
+    # temporarily true to test e2e tests
+    if: true || github.ref == 'refs/heads/main' || github.ref == 'refs/tags/*' || (github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main')
+
+    env:
+      BASE_URL: "https://illc-aml-mu-acc.science.uva.nl"
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run E2E tests
+        run: cd e2e && bash run-tests.sh
