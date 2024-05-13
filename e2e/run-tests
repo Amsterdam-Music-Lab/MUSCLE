@@ -1,5 +1,16 @@
+
 #!/bin/bash
 
-# This script is used to build the docker image and run the tests in a container
+# This script builds a Docker image and either runs tests in a container or opens an interactive bash terminal based on the supplied option.
+
+# Build the docker image
 docker build -t selenium-tests .
-docker run --rm -it -p 4444:4444 -p 5900:5900 -p 7900:7900 --network="host" --name selenium-tests-container -v $(pwd):/usr/src/app --entrypoint bash selenium-tests
+
+# Check for '-i' parameter to decide the mode of operation
+if [[ "$1" == "-i" ]]; then
+    # If '-i' is supplied, start the container with an interactive bash shell
+    docker run --rm -it --network="host" --name selenium-tests-container -v $(pwd):/usr/src/app --entrypoint bash selenium-tests
+else
+    # If no '-i' is supplied, run the python test script
+    docker run --rm -it --network="host" --name selenium-tests-container -v $(pwd):/usr/src/app selenium-tests python tests-selenium.py
+fi
