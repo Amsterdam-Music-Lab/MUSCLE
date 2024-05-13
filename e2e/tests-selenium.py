@@ -161,11 +161,16 @@ class TestsSelenium(unittest.TestCase):
         self.check_for_error(experiment_name, experiment_slug)
 
         # Explainer
-        self.driver.find_element(By.XPATH, "//div[text()=\"Let's go!\"]").click()
+        self.driver.find_element(By.XPATH, "//button[text()=\"Let's go!\"]").click()
 
         # If consent present, agree
-        if self.driver.find_element(By.TAG_NAME,"h4").text.lower() == "informed consent":
-            self.driver.find_element(By.XPATH, '//div[text()="I agree"]').click()
+        informed_consent_heading = self.driver.find_element(By.TAG_NAME,"h4").text.lower() == "informed consent"
+
+        if not informed_consent_heading:
+            raise Exception("Informed consent not found")
+
+        i_agree_button = self.driver.find_element(By.XPATH, '//button[text()="I agree"]')
+        i_agree_button.click()
 
         h4_text = None
         bonus_rounds = False
@@ -235,11 +240,16 @@ class TestsSelenium(unittest.TestCase):
         self.check_for_error(experiment_name, experiment_slug)
 
         # Explainer 1
-        self.driver.find_element(By.XPATH, "//div[text()=\"Ok\"]").click()
+        self.driver.find_element(By.XPATH, "//button[text()=\"Ok\"]").click()
 
         # If consent present, agree
-        if self.driver.find_element(By.TAG_NAME, "h4").text.lower() == "informed consent":
-            self.driver.find_element(By.XPATH, '//div[text()="I agree"]').click()
+        informed_consent_heading = self.driver.find_element(By.TAG_NAME,"h4").text.lower() == "informed consent"
+
+        if not informed_consent_heading:
+            raise Exception("Informed consent not found")
+
+        i_agree_button = self.driver.find_element(By.XPATH, '//button[text()="I agree"]')
+        i_agree_button.click()
 
         # What is your age?
         el = WebDriverWait(self.driver, 3).until(presence_of_element_located((By.CSS_SELECTOR,"input[type='number']")))
@@ -260,9 +270,9 @@ class TestsSelenium(unittest.TestCase):
         self.driver.find_element(By.XPATH,  '//*[text()="Continue"]').click()
 
         # Explainer 2
-        WebDriverWait(self.driver, 5) \
-                .until(presence_of_element_located((By.XPATH, "//div[text()=\"Ok\"]"))) \
-                .click()
+        WebDriverWait(self.driver, 10) \
+            .until(presence_of_element_located((By.XPATH, "//div[text()=\"Ok\"]"))) \
+            .click()
 
         training_rounds = 20
         testing_rounds = 80
