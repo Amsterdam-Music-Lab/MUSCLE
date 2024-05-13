@@ -48,6 +48,7 @@ class TestsSelenium(unittest.TestCase):
 
         self.config = configparser.ConfigParser()
         self.config.read('tests-selenium.ini')
+        self.base_url = self.config['url']['root']
 
         # Check if config is set
         if not self.config.sections():
@@ -110,17 +111,33 @@ class TestsSelenium(unittest.TestCase):
 
     def test_beatalignment(self):
 
-        self.driver.get("{}/{}".format(self.config['url']['root'], self.config['experiment_slugs']['beat_alignment']))
+        experiment_name = "beat_alignment"
+
+        experiment_slug = self.config['experiment_slugs'][experiment_name]
+        self.driver.get(f"{self.base_url}/{experiment_slug}")
+
+        # if page body contains the word "Error", raise an exception
+        self.check_for_error(experiment_name, experiment_slug)
 
         # Explainer
-        self.driver.find_element(By.XPATH, "//div[text()='Ok']").click()
+        ok_button = self.driver.find_element(By.XPATH, "//div[text()='Ok']")
+
+        if not ok_button:
+            raise Exception("Ok button not found")
+
+        ok_button.click()
+
+        heading = self.driver.find_element(By.TAG_NAME,"h4").text.lower() == "informed consent"
+
+        if not heading:
+            raise Exception("Informed consent not found")
 
         # If consent present, agree
-        if self.driver.find_element(By.TAG_NAME,"h4").text.lower() == "informed consent":
-            self.driver.find_element(By.XPATH, '//div[text()="I agree"]').click()
+        agree_button = self.driver.find_element(By.XPATH, '//div[text()="I agree"]')
+        agree_button.click()
 
         # Wait for examples to end and click Start
-        WebDriverWait(self.driver, 60,  poll_frequency = 1) \
+        WebDriverWait(self.driver, 5,  poll_frequency = 1) \
             .until(expected_conditions.element_to_be_clickable((By.XPATH, '//div[text()="Start"]'))) \
             .click()
 
@@ -135,7 +152,13 @@ class TestsSelenium(unittest.TestCase):
 
     def test_eurovision(self):
 
-        self.driver.get("{}/{}".format(self.config['url']['root'], self.config['experiment_slugs']['eurovision']))
+        experiment_name = "eurovision"
+
+        experiment_slug = self.config['experiment_slugs'][experiment_name]
+        self.driver.get(f"{self.base_url}/{experiment_slug}")
+
+        # if page body contains the word "Error", raise an exception
+        self.check_for_error(experiment_name, experiment_slug)
 
         # Explainer
         self.driver.find_element(By.XPATH, "//div[text()=\"Let's go!\"]").click()
@@ -203,7 +226,13 @@ class TestsSelenium(unittest.TestCase):
 
     def test_categorization(self):
 
-        self.driver.get("{}/{}".format(self.config['url']['root'], self.config['experiment_slugs']['categorization']))
+        experiment_name = "categorization"
+
+        experiment_slug = self.config['experiment_slugs'][experiment_name]
+        self.driver.get(f"{self.base_url}/{experiment_slug}")
+
+        # if page body contains the word "Error", raise an exception
+        self.check_for_error(experiment_name, experiment_slug)
 
         # Explainer 1
         self.driver.find_element(By.XPATH, "//div[text()=\"Ok\"]").click()
@@ -256,6 +285,10 @@ class TestsSelenium(unittest.TestCase):
                     .until(presence_of_element_located((By.XPATH, "//div[text()=\"Ok\"]"))) \
                     .click()
                 training = False
+
+    def check_for_error(self, experiment_name, experiment_slug='[no slug provided]'):
+        if "Error" in self.driver.find_element(By.TAG_NAME, "body").text:
+            raise Exception(f"Could not load {experiment_name} experiment, please check the server logs and make sure the slug ({experiment_slug}) is correct.")
 
 
 if __name__ == '__main__':
