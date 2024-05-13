@@ -7,6 +7,7 @@ on:
       - main
     tags:
       - '*'
+      - poc/enable-e2e # temporary branch for e2e testing
   workflow_dispatch:
   release:
     types: [created]
