@@ -2,6 +2,7 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions
 from selenium.webdriver.support.wait import WebDriverWait
+from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.expected_conditions import presence_of_element_located
 from selenium.webdriver.support.select import Select
@@ -48,34 +49,64 @@ class TestsSelenium(unittest.TestCase):
         self.config = configparser.ConfigParser()
         self.config.read('tests-selenium.ini')
 
+        # Check if config is set
+        if not self.config.sections():
+            raise Exception("Config file not found or empty")
+
         browser = self.config['selenium']['browser']
         headless = self.config['selenium']['headless'] == "yes"
 
         if browser == "Firefox":
             options = webdriver.FirefoxOptions()
-            if headless: options.add_argument("-headless")
+
+            if headless:
+                options.add_argument("-headless")
+
             self.driver = webdriver.Firefox(options=options)
+
         elif browser == "Chrome":
             options = webdriver.ChromeOptions()
-            if headless: options.add_argument("--headless=new")
-            driver = webdriver.Chrome(options=options)
+            options.binary_location = '/usr/bin/chromium'
+            if headless:
+                options.add_argument("--headless")
+
+            self.driver = webdriver.Chrome(options=options, executable_path='/usr/bin/chromedriver')
+
+        elif browser == "Chromium":
+            options = webdriver.ChromeOptions()
+            options.binary_location = '/usr/bin/chromium'
+
+            if headless:
+                options.add_argument("--no-sandbox")
+                options.add_argument("--headless")
+
+            service = Service('/usr/bin/chromedriver')
+            self.driver = webdriver.Chrome(service=service, options=options)
+
         elif browser == "Safari":
             options = webdriver.safari.options.Options()
-            driver = webdriver.Safari(options=options)
+            self.driver = webdriver.Safari(options=options)
+
         elif browser == "Edge":
             options = webdriver.EdgeOptions()
-            if headless: options.add_argument("--headless=new")
-            driver = webdriver.Edge(options=options)
+
+            if headless:
+                options.add_argument("--headless=new")
+
+            self.driver = webdriver.Edge(options=options)
+
         else:
             raise Exception("Unknown browser")
 
         self.driver.set_window_size(1920, 1080)
 
-
     def tearDown(self):
         self.driver.quit()
-        #warnings.simplefilter("default", ResourceWarning)
 
+    # This is a simple test to check if the e2e setup and the internet connection is working
+    def test_google(self):
+        self.driver.get("http://www.google.com")
+        self.assertIn("Google", self.driver.title)
 
     def test_beatalignment(self):
 
@@ -102,7 +133,6 @@ class TestsSelenium(unittest.TestCase):
                 .until(expected_conditions.element_to_be_clickable((By.XPATH, btn))) \
                 .click()
 
-
     def test_eurovision(self):
 
         self.driver.get("{}/{}".format(self.config['url']['root'], self.config['experiment_slugs']['eurovision']))
@@ -119,22 +149,24 @@ class TestsSelenium(unittest.TestCase):
 
         while True:
 
-            if h4_text is None: time.sleep(1)
+            if h4_text is None:
+                time.sleep(1)
+
             h4_text = WebDriverWait(self.driver, 1).until(presence_of_element_located((By.TAG_NAME,"h4"))).text
 
             if "ROUND " in h4_text:
 
                 for i in range(2):
-                    ans = random.choices(["Yes", "No", "No response"], weights=(40,40,20))[0]
+                    ans = random.choices(["Yes", "No", "No response"], weights=(40, 40, 20))[0]
 
                     if ans in ("Yes", "No"):
                         WebDriverWait(self.driver, 6) \
                             .until(presence_of_element_located((By.XPATH, '//*[text()="{}"]'.format(ans)))) \
                             .click()
-                    if ans in ("No","No response") or bonus_rounds: break
+                    if ans in ("No", "No response") or bonus_rounds:
+                        break
 
-
-                WebDriverWait(self.driver, 25, poll_frequency = 1) \
+                WebDriverWait(self.driver, 25, poll_frequency=1) \
                     .until(presence_of_element_located((By.XPATH, '//*[text()="Next"]'))) \
                     .click()
 
@@ -169,7 +201,6 @@ class TestsSelenium(unittest.TestCase):
 
         self.driver.find_element(By.XPATH,  '//*[text()="Play again"]')
 
-
     def test_categorization(self):
 
         self.driver.get("{}/{}".format(self.config['url']['root'], self.config['experiment_slugs']['categorization']))
@@ -178,7 +209,7 @@ class TestsSelenium(unittest.TestCase):
         self.driver.find_element(By.XPATH, "//div[text()=\"Ok\"]").click()
 
         # If consent present, agree
-        if self.driver.find_element(By.TAG_NAME,"h4").text.lower() == "informed consent":
+        if self.driver.find_element(By.TAG_NAME, "h4").text.lower() == "informed consent":
             self.driver.find_element(By.XPATH, '//div[text()="I agree"]').click()
 
         # What is your age?
