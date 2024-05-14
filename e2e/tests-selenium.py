@@ -53,6 +53,8 @@ class TestsSelenium(unittest.TestCase):
         ini_config_base_url = self.config['url']['root']
         self.base_url = os.getenv('BASE_URL', ini_config_base_url)
 
+        print(f"Running tests on {self.base_url}")
+
         # Check if config is set
         if not self.config.sections():
             raise Exception("Config file not found or empty")
