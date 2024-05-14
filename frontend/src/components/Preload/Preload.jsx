@@ -41,6 +41,11 @@ const Preload = ({ sections, playMethod, duration, preloadMessage, pageTitle, on
                         }
                         return;
                     }
+                    
+                    // Clear buffers if this is the first section
+                    if (index === 0) {
+                        webAudio.clearBuffers();
+                    }
 
                     // Load sections in buffer                
                     return webAudio.loadBuffer(section.id, section.url, () => {                    
@@ -66,8 +71,6 @@ const Preload = ({ sections, playMethod, duration, preloadMessage, pageTitle, on
         }
 
         preloadResources();
-        // on destroy, clean up buffers
-        return webAudio.clearBuffers();    
     }, [sections, playMethod, onNext]);
     
     return (
