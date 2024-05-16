@@ -74,7 +74,7 @@ export const changeGain = (level) => {
 
 // load sound data and store in buffers object
 export const loadBuffer = async (id, src, canPlay) => {
-    await fetch(src, {})
+    await fetch(MEDIA_ROOT + src, {})
         // Return the data as an ArrayBuffer
         .then(response => response.arrayBuffer())
         // Decode the audio data
