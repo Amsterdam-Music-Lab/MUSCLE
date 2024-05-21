@@ -77,7 +77,7 @@ const MatchingPairs = ({
             }
             setFeedbackClass(fbclass);
             turnedCards[0].matchClass = turnedCards[1].matchClass = fbclass;
-            turnedCards[1].seen = turnedCards[1].seen = true;
+            turnedCards[0].seen = turnedCards[1].seen = true;
             setInBetweenTurns(true);
             return;
         }
@@ -113,10 +113,11 @@ const MatchingPairs = ({
                 setFirstCard(currentCard);
                 // turn first card, disable events
                 currentCard.turned = true;
-                currentCard.noevents = true;
-                currentCard.seen = true;
+                currentCard.noevents = true;                
                 currentCard.boardposition = parseInt(index) + 1;
-                currentCard.timestamp = performance.now();                
+                currentCard.timestamp = performance.now();
+                // reset response interval in case this card has a value from a previous turn
+                currentCard.response_interval_ms = '';
                 // clear feedback text
                 setFeedbackText('');
             }

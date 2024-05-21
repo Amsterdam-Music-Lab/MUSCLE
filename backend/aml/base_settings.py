@@ -181,6 +181,8 @@ if os.getenv("SENTRY_DSN"):
         # of sampled transactions.
         # We recommend adjusting this value in production.
         profiles_sample_rate=0.2,
+        # Set environment
+        environment=os.getenv("SENTRY_ENVIRONMENT", "unknown"),
     )
 else:
     logger.info("SENTRY_DSN is not defined. Skipping Sentry initialization.")
