@@ -2,10 +2,10 @@ import datetime
 import random
 import csv
 
-from django import forms
 from django.db import models
 from django.utils import timezone
 from django.urls import reverse
+from django.conf import settings
 
 from .utils import CsvStringBuilder, get_or_create_song
 from .validators import audio_file_validator, url_prefix_validator
@@ -290,7 +290,10 @@ class Section(models.Model):
 
     def absolute_url(self):
         """Return absolute url for this section"""
-        return reverse('section:section', args=[self.pk, self.code])
+        base_url = settings.BASE_URL if hasattr(settings, 'BASE_URL') else ''
+        sections_url = reverse('section:section', args=[self.pk, self.code])
+
+        return base_url + sections_url
 
     def simple_object(self):
         return {'id': self.id, 'url': self.absolute_url()}

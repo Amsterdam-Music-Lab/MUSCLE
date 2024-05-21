@@ -1,4 +1,4 @@
-import { API_ROOT, MEDIA_ROOT, SILENT_MP3 } from "../config.js";
+import { API_ROOT, SILENT_MP3 } from "../config";
 import Timer from "./timer";
 
 // Audio provides function around a shared audio object
@@ -170,7 +170,7 @@ export const loadUntilAvailable = (src, canPlay) => {
     // without having to stop for further buffering of content.
     const removeListener = listenOnce("canplaythrough", canPlay);
 
-    load(MEDIA_ROOT + src);
+    load(src);
 
     // If the ready state is already > 3, data is already loaded;
     // Call canPlay right away

@@ -13,7 +13,6 @@ export const API_ROOT = import.meta.env.VITE_API_ROOT;
 export const API_BASE_URL = API_ROOT;
 
 // Media
-export const MEDIA_ROOT = API_ROOT;
 export const SILENT_MP3 = "/audio/silent.mp3";
 
 // Logo
