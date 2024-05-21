@@ -28,4 +28,4 @@ CORS_ALLOW_ALL_ORIGINS = True
 
 TESTING = DEBUG
 
-BASE_URL = os.getenv('BASE_URL', 'http://localhost:8000')
+BASE_URL = os.getenv('BASE_URL') or 'http://localhost:8000'
