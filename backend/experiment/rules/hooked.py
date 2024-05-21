@@ -82,9 +82,9 @@ class Hooked(Base):
         playlist = Playlist(experiment.playlists.all())
 
         return [
-            explainer,
             consent,
             playlist,
+            explainer,
         ]
 
     def next_round(self, session):
