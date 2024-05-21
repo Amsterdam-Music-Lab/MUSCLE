@@ -14,14 +14,12 @@ export const Header: React.FC<HeaderProps> = ({ nextExperimentSlug, nextExperime
         <div className="hero aha__header">
             <div className="intro">
                 <nav className="actions">
-                    {nextExperimentSlug && <a className="btn btn-lg btn-primary" href={"/" + nextExperimentSlug}>{nextExperimentButtonText}</a>}
+                    {nextExperimentSlug && <a className="btn btn-lg btn-primary" href={`/${nextExperimentSlug}`}>{nextExperimentButtonText}</a>}
                     {aboutButtonText && <Link className="btn btn-lg btn-outline-primary" to={`/collection/${collectionSlug}/about`}>{aboutButtonText}</Link>}
                 </nav>
             </div>
         </div>
     );
-
-
 }
 
 export default Header;
