@@ -12,7 +12,9 @@ jobs:
     name: Deploy to test environment
     environment: Test
     runs-on: tst
-    if: github.event_name == 'workflow_dispatch' || github.ref == 'refs/heads/develop'
+
+    # this job runs only on commits to the develop branch or when manually triggered for a branch other than main
+    if: github.ref == 'refs/heads/develop' || (github.event_name == 'workflow_dispatch' && github.ref != 'refs/heads/main')
     concurrency:
       group: ${{ github.workflow }}-${{ github.ref }}
     env:
@@ -32,6 +34,13 @@ jobs:
       FRONTEND_EXPERIMENT_SLUG: ${{ vars.FRONTEND_EXPERIMENT_SLUG }}
       FRONTEND_AML_HOME: ${{ vars.FRONTEND_AML_HOME }}
       FRONTEND_HTML_PAGE_TITLE: ${{ vars.FRONTEND_HTML_PAGE_TITLE }}
+      FRONTEND_HTML_FAVICON: ${{ vars.FRONTEND_HTML_FAVICON || '' }}
+      FRONTEND_LOGO_URL: ${{ vars.FRONTEND_LOGO_URL || '' }}
+      FRONTEND_HTML_OG_DESCRIPTION: ${{ vars.FRONTEND_HTML_OG_DESCRIPTION || '' }}
+      FRONTEND_HTML_OG_IMAGE: ${{ vars.FRONTEND_HTML_OG_IMAGE || '' }}
+      FRONTEND_HTML_OG_TITLE: ${{ vars.FRONTEND_HTML_OG_TITLE || '' }}
+      FRONTEND_HTML_OG_URL: ${{ vars.FRONTEND_HTML_OG_URL || '' }}
+      FRONTEND_HTML_BODY_CLASS: ${{ vars.FRONTEND_HTML_BODY_CLASS || '' }}
 
       # Secrets
       AML_SECRET_KEY: ${{ secrets.AML_SECRET_KEY }}
@@ -51,11 +60,18 @@ jobs:
       - name: Create .env file
         run: |
           touch .env
-          echo "FRONTEND_API_ROOT=$FRONTEND_API_ROOT" >> .env
-          echo "FRONTEND_EXPERIMENT_SLUG=$FRONTEND_EXPERIMENT_SLUG" >> .env
-          echo "FRONTEND_AML_HOME=$FRONTEND_AML_HOME" >> .env
-          echo "FRONTEND_HTML_PAGE_TITLE=$FRONTEND_HTML_PAGE_TITLE" >> .env
-          echo "FRONTEND_SENTRY_DSN=$FRONTEND_SENTRY_DSN" >> .env
+          echo "VITE_API_ROOT=$FRONTEND_API_ROOT" >> .env
+          echo "VITE_EXPERIMENT_SLUG=$FRONTEND_EXPERIMENT_SLUG" >> .env
+          echo "VITE_AML_HOME=$FRONTEND_AML_HOME" >> .env
+          echo "VITE_LOGO_URL=$FRONTEND_LOGO_URL" >> .env
+          echo "VITE_HTML_FAVICON=$FRONTEND_HTML_FAVICON" >> .env
+          echo "VITE_HTML_PAGE_TITLE=$FRONTEND_HTML_PAGE_TITLE" >> .env
+          echo "VITE_HTML_OG_DESCRIPTION=$FRONTEND_HTML_OG_DESCRIPTION" >> .env
+          echo "VITE_HTML_OG_IMAGE=$FRONTEND_HTML_OG_IMAGE" >> .env
+          echo "VITE_HTML_OG_TITLE=$FRONTEND_HTML_OG_TITLE" >> .env
+          echo "VITE_HTML_OG_URL=$FRONTEND_HTML_OG_URL" >> .env
+          echo "VITE_HTML_BODY_CLASS=$FRONTEND_HTML_BODY_CLASS" >> .env
+          echo "VITE_SENTRY_DSN=$FRONTEND_SENTRY_DSN" >> .env
           cp .env frontend/.env
       - name: Build Podman images
         run: podman-compose -f docker-compose-deploy.yml build
@@ -86,7 +102,9 @@ jobs:
     name: Deploy to acceptance environment
     environment: Acceptance
     runs-on: ACC
-    if: github.ref == 'refs/heads/main' || github.ref == 'refs/tags/*'
+    
+    # this job runs only on commits to the main branch, tags, or when manually triggered for the main branch
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/tags/*' || (github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main')
     concurrency:
       group: ${{ github.workflow }}-${{ github.ref }}
     env:
@@ -106,6 +124,13 @@ jobs:
         FRONTEND_EXPERIMENT_SLUG: ${{ vars.FRONTEND_EXPERIMENT_SLUG }}
         FRONTEND_AML_HOME: ${{ vars.FRONTEND_AML_HOME }}
         FRONTEND_HTML_PAGE_TITLE: ${{ vars.FRONTEND_HTML_PAGE_TITLE }}
+        FRONTEND_HTML_FAVICON: ${{ vars.FRONTEND_HTML_FAVICON || '' }}
+        FRONTEND_LOGO_URL: ${{ vars.FRONTEND_LOGO_URL || '' }}
+        FRONTEND_HTML_OG_DESCRIPTION: ${{ vars.FRONTEND_HTML_OG_DESCRIPTION || '' }}
+        FRONTEND_HTML_OG_IMAGE: ${{ vars.FRONTEND_HTML_OG_IMAGE || '' }}
+        FRONTEND_HTML_OG_TITLE: ${{ vars.FRONTEND_HTML_OG_TITLE || '' }}
+        FRONTEND_HTML_OG_URL: ${{ vars.FRONTEND_HTML_OG_URL || '' }}
+        FRONTEND_HTML_BODY_CLASS: ${{ vars.FRONTEND_HTML_BODY_CLASS || '' }}
 
         # Secrets
         AML_SECRET_KEY: ${{ secrets.AML_SECRET_KEY }}
@@ -125,11 +150,18 @@ jobs:
       - name: Create .env file
         run: |
           touch .env
-          echo "FRONTEND_API_ROOT=$FRONTEND_API_ROOT" >> .env
-          echo "FRONTEND_EXPERIMENT_SLUG=$FRONTEND_EXPERIMENT_SLUG" >> .env
-          echo "FRONTEND_AML_HOME=$FRONTEND_AML_HOME" >> .env
-          echo "FRONTEND_HTML_PAGE_TITLE=$FRONTEND_HTML_PAGE_TITLE" >> .env
-          echo "FRONTEND_SENTRY_DSN=$FRONTEND_SENTRY_DSN" >> .env
+          echo "VITE_API_ROOT=$FRONTEND_API_ROOT" >> .env
+          echo "VITE_EXPERIMENT_SLUG=$FRONTEND_EXPERIMENT_SLUG" >> .env
+          echo "VITE_AML_HOME=$FRONTEND_AML_HOME" >> .env
+          echo "VITE_LOGO_URL=$FRONTEND_LOGO_URL" >> .env
+          echo "VITE_HTML_FAVICON=$FRONTEND_HTML_FAVICON" >> .env
+          echo "VITE_HTML_PAGE_TITLE=$FRONTEND_HTML_PAGE_TITLE" >> .env
+          echo "VITE_HTML_OG_DESCRIPTION=$FRONTEND_HTML_OG_DESCRIPTION" >> .env
+          echo "VITE_HTML_OG_IMAGE=$FRONTEND_HTML_OG_IMAGE" >> .env
+          echo "VITE_HTML_OG_TITLE=$FRONTEND_HTML_OG_TITLE" >> .env
+          echo "VITE_HTML_OG_URL=$FRONTEND_HTML_OG_URL" >> .env
+          echo "VITE_HTML_BODY_CLASS=$FRONTEND_HTML_BODY_CLASS" >> .env
+          echo "VITE_SENTRY_DSN=$FRONTEND_SENTRY_DSN" >> .env
           cp .env frontend/.env
       - name: Build Podman images
         run: podman-compose -f docker-compose-deploy.yml build
