@@ -182,7 +182,7 @@ def next_repeated_representation(session, is_speech, group_id=-1):
         section = session.playlist.section_set.get(group=group_id)
     else:
         section = session.previous_section()
-    actions = [sound(section, i) for i in range(1, n_representations+1)]
+    actions = [sound(section)] * n_representations
     actions.append(speech_or_sound_question(session, section, is_speech))
     return actions
 
@@ -226,15 +226,10 @@ def question_sound(session, section):
     )
 
 
-def sound(section, n_representation=None):
-    if n_representation and n_representation > 1:
-        ready_time = 0
-    else:
-        ready_time = 1
+def sound(section):
     title = _('Listen carefully')
     playback = Autoplay(
-        sections = [section],
-        ready_time = ready_time,
+        sections=[section],
     )
     view = Trial(
             playback=playback,
