@@ -20,8 +20,6 @@ export const Header: React.FC<HeaderProps> = ({ nextExperimentSlug, nextExperime
             </div>
         </div>
     );
-
-
 }
 
 export default Header;
