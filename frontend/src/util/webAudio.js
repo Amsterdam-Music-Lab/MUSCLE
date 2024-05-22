@@ -1,5 +1,3 @@
-import { MEDIA_ROOT } from "../config";
-
 let track;
 let source;
 let buffers = {};
