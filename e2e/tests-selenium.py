@@ -173,84 +173,138 @@ class TestsSelenium(unittest.TestCase):
         if not end_heading:
             raise Exception("End heading not found")
 
-    # def test_eurovision(self):
+        print("Beat Alignment Test completed!")
 
-    #     experiment_name = "eurovision"
+    def test_eurovision(self):
 
-    #     experiment_slug = self.config['experiment_slugs'][experiment_name]
-    #     self.driver.get(f"{self.base_url}/{experiment_slug}")
+        experiment_name = "eurovision"
 
-    #     # if page body contains the word "Error", raise an exception
-    #     self.check_for_error(experiment_name, experiment_slug)
+        experiment_slug = self.config['experiment_slugs'][experiment_name]
+        self.driver.get(f"{self.base_url}/{experiment_slug}")
 
-    #     # Explainer
-    #     self.driver.find_element(By.XPATH, "//button[text()=\"Let's go!\"]").click()
+        # if page body contains the word "Error", raise an exception
+        self.check_for_error(experiment_name, experiment_slug)
 
-    #     # If consent present, agree
-    #     informed_consent_heading = self.driver.find_element(By.TAG_NAME,"h4").text.lower() == "informed consent"
+        # Explainer
+        WebDriverWait(self.driver, 5,  poll_frequency=1) \
+            .until(expected_conditions.element_to_be_clickable((By.XPATH, '//button[text()="Let\'s go!"]'))) \
+            .click()
 
-    #     if not informed_consent_heading:
-    #         raise Exception("Informed consent not found")
+        print("Let's go! button clicked")
 
-    #     i_agree_button = self.driver.find_element(By.XPATH, '//button[text()="I agree"]')
-    #     i_agree_button.click()
+        # If consent present, agree
+        informed_consent_heading = self.driver.find_element(By.TAG_NAME,"h4").text.lower() == "informed consent"
 
-    #     h4_text = None
-    #     bonus_rounds = False
+        if not informed_consent_heading:
+            raise Exception("Informed consent not found")
 
-    #     while True:
+        WebDriverWait(self.driver, 5,  poll_frequency=1) \
+            .until(expected_conditions.element_to_be_clickable((By.XPATH, '//button[text()="I agree"]'))) \
+            .click()
 
-    #         if h4_text is None:
-    #             time.sleep(1)
+        print("I agree button clicked")
 
-    #         h4_text = WebDriverWait(self.driver, 1).until(presence_of_element_located((By.TAG_NAME,"h4"))).text
+        h4_text = None
+        bonus_rounds = False
 
-    #         if "ROUND " in h4_text:
+        # press initial next button
+        WebDriverWait(self.driver, 5,  poll_frequency=1) \
+            .until(expected_conditions.element_to_be_clickable((By.XPATH, '//button[text()="Next"]'))) \
+            .click()
 
-    #             for i in range(2):
-    #                 ans = random.choices(["Yes", "No", "No response"], weights=(40, 40, 20))[0]
+        print("Next button clicked")
 
-    #                 if ans in ("Yes", "No"):
-    #                     WebDriverWait(self.driver, 6) \
-    #                         .until(presence_of_element_located((By.XPATH, '//*[text()="{}"]'.format(ans)))) \
-    #                         .click()
-    #                 if ans in ("No", "No response") or bonus_rounds:
-    #                     break
+        while True:
 
-    #             WebDriverWait(self.driver, 25, poll_frequency=1) \
-    #                 .until(presence_of_element_located((By.XPATH, '//*[text()="Next"]'))) \
-    #                 .click()
+            if h4_text is None:
+                time.sleep(1)
 
-    #         elif h4_text == "QUESTIONNAIRE":
+            h4_text = WebDriverWait(self.driver, 5).until(expected_conditions.presence_of_element_located((By.TAG_NAME,"h4"))).text
 
-    #             if self.driver.find_elements(By.CLASS_NAME, "aha__radios"):
-    #                 self.driver.find_element(By.CSS_SELECTOR, ".radio:nth-child(1)").click()
+            if "ROUND " in h4_text:
 
-    #             if self.driver.find_elements(By.TAG_NAME, "select"):
-    #                 select = Select(self.driver.find_element(By.TAG_NAME, 'select'))
-    #                 select.select_by_value('nl')
-    #                 #select.select_by_index(1)
+                for i in range(2):
+                    ans = random.choices(["Yes", "No", "No response"], weights=(40, 40, 20))[0]
 
-    #             if self.driver.find_elements(By.CLASS_NAME, "aha__text-range"):
-    #                 self.driver.find_element(By.CSS_SELECTOR, ".rangeslider").click()
+                    if ans in ("Yes", "No"):
+                        WebDriverWait(self.driver, 6) \
+                            .until(presence_of_element_located((By.XPATH, '//*[text()="{}"]'.format(ans)))) \
+                            .click()
 
-    #             els = self.driver.find_elements(By.CSS_SELECTOR, "input[type='text']")
-    #             if els: els[0].send_keys("Trumpet")
+                        print(f"Round {h4_text} - {ans}")
 
-    #             # Click Continue after question answered
-    #             self.driver.find_element(By.XPATH,  '//*[text()="Continue"]').click()
+                    if ans in ("No", "No response") or bonus_rounds:
+                        print(f"Round {h4_text} - Continue")
+                        break
 
-    #         elif h4_text == "FINAL SCORE":
-    #             break
+                    # wait for next page to load
+                    time.sleep(1)
 
-    #         elif self.driver.find_element(By.CSS_SELECTOR,"h3").text == "Bonus Rounds":
-    #             self.driver.find_element(By.XPATH,  '//*[text()="Continue"]').click()
-    #             bonus_rounds = True
+                WebDriverWait(self.driver, 25, poll_frequency=1) \
+                    .until(presence_of_element_located((By.XPATH, '//*[text()="Next"]'))) \
+                    .click()
 
-    #         else:
-    #             raise Exception("Unknown view")
+                print(f"Round {h4_text} - Next")
 
-    #     self.driver.find_element(By.XPATH,  '//*[text()="Play again"]')
+                # wait for next page to load
+                time.sleep(1)
+
+            elif h4_text == "QUESTIONNAIRE":
+
+                # get .aha__question h3 text
+                h3_text = self.driver.find_element(By.CSS_SELECTOR, ".aha__question h3").text
+                print(f"Questionnaire - {h3_text}")
+
+                if self.driver.find_elements(By.CLASS_NAME, "aha__radios"):
+                    self.driver.find_element(By.CSS_SELECTOR, ".radio:nth-child(1)").click()
+                    print("Radio button picked (1)")
+
+                if self.driver.find_elements(By.TAG_NAME, "select"):
+                    select = Select(self.driver.find_element(By.TAG_NAME, 'select'))
+                    select.select_by_value('nl')
+                    print("Select option 'nl' picked")
+
+                if self.driver.find_elements(By.CLASS_NAME, "aha__text-range"):
+                    self.driver.find_element(By.CSS_SELECTOR, ".rangeslider").click()
+                    print("Range slider clicked")
+
+                other_input = self.driver.find_elements(By.CSS_SELECTOR, "input[type='text']")
+
+                if other_input:
+                    other_input[0].send_keys("Trumpet")
+                    print("Text input filled with 'Trumpet'")
+
+                # Click Continue after question answered
+                WebDriverWait(self.driver, 5,  poll_frequency=1) \
+                    .until(expected_conditions.element_to_be_clickable((By.XPATH, '//button[text()="Continue"]'))) \
+                    .click()
+
+                print("Continue button clicked")
+
+                # wait for next page to load
+                time.sleep(1)
+
+            elif h4_text == "FINAL SCORE":
+                break
+
+            elif self.driver.find_element(By.CSS_SELECTOR, "h3").text == "Bonus Rounds":
+                WebDriverWait(self.driver, 5,  poll_frequency=1) \
+                    .until(expected_conditions.element_to_be_clickable((By.XPATH, '//button[text()="Continue"]'))) \
+                    .click()
+
+                bonus_rounds = True
+
+                print("Bonus Rounds - Continue")
+
+                # wait for next page to load
+                time.sleep(1)
+
+            else:
+                raise Exception("Unknown view")
+
+        self.driver.find_element(By.XPATH,  '//*[text()="Play again"]')
+
+        print("Eurovision Test completed!")
 
     # def test_categorization(self):
 
