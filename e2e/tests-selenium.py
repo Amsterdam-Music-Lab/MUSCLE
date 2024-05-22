@@ -114,6 +114,8 @@ class TestsSelenium(unittest.TestCase):
         self.driver.get("http://www.google.com")
         self.assertIn("Google", self.driver.title)
 
+        print("Google (and thus the internet) is working!")
+
     def test_beatalignment(self):
 
         experiment_name = "beat_alignment"
