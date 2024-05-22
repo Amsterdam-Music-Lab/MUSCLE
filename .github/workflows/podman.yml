@@ -5,7 +5,6 @@ on:
     branches:
       - develop
       - main
-      - ci/deploy-prod
   workflow_dispatch:
 
 jobs:
@@ -195,7 +194,7 @@ jobs:
     runs-on: PRD
 
     # this job runs only on tags
-    if: true || github.ref == 'refs/tags/*'
+    if: github.ref == 'refs/tags/*'
     concurrency:
       group: ${{ github.workflow }}-${{ github.ref }}
     env:
