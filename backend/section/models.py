@@ -293,7 +293,7 @@ class Section(models.Model):
         base_url = settings.BASE_URL if hasattr(settings, 'BASE_URL') else ''
         sections_url = reverse('section:section', args=[self.pk, self.code])
 
-        return base_url + sections_url
+        return base_url.rstrip('/') + sections_url
 
     def simple_object(self):
         return {'id': self.id, 'url': self.absolute_url()}
