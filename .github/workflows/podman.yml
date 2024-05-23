@@ -294,8 +294,8 @@ jobs:
       - name: Run E2E tests
         run: cd e2e && bash run-tests
       - name: Upload Screenshots
-        if: failure()
+        # if: failure()
         uses: actions/upload-artifact@v4
         with:
           name: selenium-screenshots
-          path: e2e/**/*.png
+          path: ./**/*.png
