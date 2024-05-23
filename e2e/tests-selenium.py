@@ -116,207 +116,207 @@ class TestsSelenium(unittest.TestCase):
 
         print("Google (and thus the internet) is working!")
 
-    # def test_beatalignment(self):
+    def test_beatalignment(self):
 
-    #     experiment_name = "beat_alignment"
+        experiment_name = "beat_alignment"
         
-    #     try:
+        try:
 
-    #         experiment_slug = self.config['experiment_slugs'][experiment_name]
-    #         self.driver.get(f"{self.base_url}/{experiment_slug}")
+            experiment_slug = self.config['experiment_slugs'][experiment_name]
+            self.driver.get(f"{self.base_url}/{experiment_slug}")
 
-    #         # if page body contains the word "Error", raise an exception
-    #         self.check_for_error(experiment_name, experiment_slug)
+            # if page body contains the word "Error", raise an exception
+            self.check_for_error(experiment_name, experiment_slug)
 
-    #         # Wait for ok button to appear and click it
-    #         WebDriverWait(self.driver, 5,  poll_frequency=1) \
-    #             .until(expected_conditions.element_to_be_clickable((By.XPATH, '//button[text()="Ok"]'))) \
+            # Wait for ok button to appear and click it
+            WebDriverWait(self.driver, 5,  poll_frequency=1) \
+                .until(expected_conditions.element_to_be_clickable((By.XPATH, '//button[text()="Ok"]'))) \
 
-    #         # Explainer
-    #         ok_button = self.driver.find_element(By.XPATH, "//button[text()='Ok']")
+            # Explainer
+            ok_button = self.driver.find_element(By.XPATH, "//button[text()='Ok']")
 
-    #         if not ok_button:
-    #             raise Exception("Ok button not found")
+            if not ok_button:
+                raise Exception("Ok button not found")
 
-    #         ok_button.click()
+            ok_button.click()
 
-    #         # Wait for examples to end and click Start
-    #         WebDriverWait(self.driver, 45,  poll_frequency=1) \
-    #             .until(expected_conditions.element_to_be_clickable((By.XPATH, '//button[text()="Start"]'))) \
-    #             .click()
+            # Wait for examples to end and click Start
+            WebDriverWait(self.driver, 45,  poll_frequency=1) \
+                .until(expected_conditions.element_to_be_clickable((By.XPATH, '//button[text()="Start"]'))) \
+                .click()
 
-    #         btn1 = '//label[text()="ALIGNED TO THE BEAT"]'
-    #         btn2 = '//label[text()="NOT ALIGNED TO THE BEAT"]'
+            btn1 = '//label[text()="ALIGNED TO THE BEAT"]'
+            btn2 = '//label[text()="NOT ALIGNED TO THE BEAT"]'
 
-    #         print("Starting BAT rounds...")
+            print("Starting BAT rounds...")
 
-    #         current_round = 1
+            current_round = 1
 
-    #         while self.driver.find_element(By.TAG_NAME, "h4").text != "END":
-    #             # randomly pick a button to click
-    #             btn = random.choice([btn1, btn2])
-    #             WebDriverWait(self.driver, 45,  poll_frequency=3) \
-    #                 .until(expected_conditions.element_to_be_clickable((By.XPATH, btn))) \
+            while self.driver.find_element(By.TAG_NAME, "h4").text != "END":
+                # randomly pick a button to click
+                btn = random.choice([btn1, btn2])
+                WebDriverWait(self.driver, 45,  poll_frequency=3) \
+                    .until(expected_conditions.element_to_be_clickable((By.XPATH, btn))) \
 
-    #             btn_element = self.driver.find_element(By.XPATH, btn)
+                btn_element = self.driver.find_element(By.XPATH, btn)
 
-    #             # click the button if it exists and is clickable
-    #             if btn_element and "disabled" not in btn_element.get_attribute("class"):
-    #                 print(f"Round {current_round}")
-    #                 btn_element.click()
-    #                 current_round += 1
+                # click the button if it exists and is clickable
+                if btn_element and "disabled" not in btn_element.get_attribute("class"):
+                    print(f"Round {current_round}")
+                    btn_element.click()
+                    current_round += 1
 
-    #             # wait 1 second
-    #             time.sleep(1)
+                # wait 1 second
+                time.sleep(1)
 
-    #         print("BAT rounds completed")
+            print("BAT rounds completed")
 
-    #         # Check if the final score is displayed
-    #         end_heading = self.driver.find_element(By.TAG_NAME, "h4").text == "END"
+            # Check if the final score is displayed
+            end_heading = self.driver.find_element(By.TAG_NAME, "h4").text == "END"
 
-    #         if not end_heading:
-    #             raise Exception("End heading not found")
+            if not end_heading:
+                raise Exception("End heading not found")
 
-    #         print("Beat Alignment Test completed!")
+            print("Beat Alignment Test completed!")
 
-    #     except Exception as e:
-    #         self.handle_error(e, experiment_name)
+        except Exception as e:
+            self.handle_error(e, experiment_name)
 
-    # def test_eurovision(self):
+    def test_eurovision(self):
 
-    #     experiment_name = "eurovision"
+        experiment_name = "eurovision"
 
-    #     try:
+        try:
 
-    #         experiment_slug = self.config['experiment_slugs'][experiment_name]
-    #         self.driver.get(f"{self.base_url}/{experiment_slug}")
+            experiment_slug = self.config['experiment_slugs'][experiment_name]
+            self.driver.get(f"{self.base_url}/{experiment_slug}")
 
-    #         # if page body contains the word "Error", raise an exception
-    #         self.check_for_error(experiment_name, experiment_slug)
+            # if page body contains the word "Error", raise an exception
+            self.check_for_error(experiment_name, experiment_slug)
 
-    #         # Explainer
-    #         WebDriverWait(self.driver, 5,  poll_frequency=1) \
-    #             .until(expected_conditions.element_to_be_clickable((By.XPATH, '//button[text()="Let\'s go!"]'))) \
-    #             .click()
+            # Explainer
+            WebDriverWait(self.driver, 5,  poll_frequency=1) \
+                .until(expected_conditions.element_to_be_clickable((By.XPATH, '//button[text()="Let\'s go!"]'))) \
+                .click()
 
-    #         print("Let's go! button clicked")
+            print("Let's go! button clicked")
 
-    #         # If consent present, agree
-    #         informed_consent_heading = self.driver.find_element(By.TAG_NAME,"h4").text.lower() == "informed consent"
+            # If consent present, agree
+            informed_consent_heading = self.driver.find_element(By.TAG_NAME,"h4").text.lower() == "informed consent"
 
-    #         if not informed_consent_heading:
-    #             raise Exception("Informed consent not found")
+            if not informed_consent_heading:
+                raise Exception("Informed consent not found")
 
-    #         WebDriverWait(self.driver, 5,  poll_frequency=1) \
-    #             .until(expected_conditions.element_to_be_clickable((By.XPATH, '//button[text()="I agree"]'))) \
-    #             .click()
+            WebDriverWait(self.driver, 5,  poll_frequency=1) \
+                .until(expected_conditions.element_to_be_clickable((By.XPATH, '//button[text()="I agree"]'))) \
+                .click()
 
-    #         print("I agree button clicked")
+            print("I agree button clicked")
 
-    #         h4_text = None
-    #         bonus_rounds = False
+            h4_text = None
+            bonus_rounds = False
 
-    #         # press initial next button
-    #         WebDriverWait(self.driver, 5,  poll_frequency=1) \
-    #             .until(expected_conditions.element_to_be_clickable((By.XPATH, '//button[text()="Next"]'))) \
-    #             .click()
+            # press initial next button
+            WebDriverWait(self.driver, 5,  poll_frequency=1) \
+                .until(expected_conditions.element_to_be_clickable((By.XPATH, '//button[text()="Next"]'))) \
+                .click()
 
-    #         print("Next button clicked")
+            print("Next button clicked")
 
-    #         while True:
+            while True:
 
-    #             if h4_text is None:
-    #                 time.sleep(1)
+                if h4_text is None:
+                    time.sleep(1)
 
-    #             h4_text = WebDriverWait(self.driver, 5).until(expected_conditions.presence_of_element_located((By.TAG_NAME,"h4"))).text
+                h4_text = WebDriverWait(self.driver, 5).until(expected_conditions.presence_of_element_located((By.TAG_NAME,"h4"))).text
 
-    #             if "ROUND " in h4_text:
+                if "ROUND " in h4_text:
 
-    #                 for i in range(2):
-    #                     ans = random.choices(["Yes", "No", "No response"], weights=(40, 40, 20))[0]
+                    for i in range(2):
+                        ans = random.choices(["Yes", "No", "No response"], weights=(40, 40, 20))[0]
 
-    #                     if ans in ("Yes", "No"):
-    #                         WebDriverWait(self.driver, 6) \
-    #                             .until(presence_of_element_located((By.XPATH, '//*[text()="{}"]'.format(ans)))) \
-    #                             .click()
+                        if ans in ("Yes", "No"):
+                            WebDriverWait(self.driver, 6) \
+                                .until(presence_of_element_located((By.XPATH, '//*[text()="{}"]'.format(ans)))) \
+                                .click()
 
-    #                         print(f"Round {h4_text} - {ans}")
+                            print(f"Round {h4_text} - {ans}")
 
-    #                     if ans in ("No", "No response") or bonus_rounds:
-    #                         print(f"Round {h4_text} - Continue")
-    #                         break
+                        if ans in ("No", "No response") or bonus_rounds:
+                            print(f"Round {h4_text} - Continue")
+                            break
 
-    #                     # wait for next page to load
-    #                     time.sleep(1)
+                        # wait for next page to load
+                        time.sleep(1)
 
-    #                 WebDriverWait(self.driver, 25, poll_frequency=1) \
-    #                     .until(presence_of_element_located((By.XPATH, '//*[text()="Next"]'))) \
-    #                     .click()
+                    WebDriverWait(self.driver, 25, poll_frequency=1) \
+                        .until(presence_of_element_located((By.XPATH, '//*[text()="Next"]'))) \
+                        .click()
 
-    #                 print(f"Round {h4_text} - Next")
+                    print(f"Round {h4_text} - Next")
 
-    #                 # wait for next page to load
-    #                 time.sleep(1)
+                    # wait for next page to load
+                    time.sleep(1)
 
-    #             elif h4_text == "QUESTIONNAIRE":
+                elif h4_text == "QUESTIONNAIRE":
 
-    #                 # get .aha__question h3 text
-    #                 h3_text = self.driver.find_element(By.CSS_SELECTOR, ".aha__question h3").text
-    #                 print(f"Questionnaire - {h3_text}")
+                    # get .aha__question h3 text
+                    h3_text = self.driver.find_element(By.CSS_SELECTOR, ".aha__question h3").text
+                    print(f"Questionnaire - {h3_text}")
 
-    #                 if self.driver.find_elements(By.CLASS_NAME, "aha__radios"):
-    #                     self.driver.find_element(By.CSS_SELECTOR, ".radio:nth-child(1)").click()
-    #                     print("Radio button picked (1)")
+                    if self.driver.find_elements(By.CLASS_NAME, "aha__radios"):
+                        self.driver.find_element(By.CSS_SELECTOR, ".radio:nth-child(1)").click()
+                        print("Radio button picked (1)")
 
-    #                 if self.driver.find_elements(By.TAG_NAME, "select"):
-    #                     select = Select(self.driver.find_element(By.TAG_NAME, 'select'))
-    #                     select.select_by_value('nl')
-    #                     print("Select option 'nl' picked")
+                    if self.driver.find_elements(By.TAG_NAME, "select"):
+                        select = Select(self.driver.find_element(By.TAG_NAME, 'select'))
+                        select.select_by_value('nl')
+                        print("Select option 'nl' picked")
 
-    #                 if self.driver.find_elements(By.CLASS_NAME, "aha__text-range"):
-    #                     self.driver.find_element(By.CSS_SELECTOR, ".rangeslider").click()
-    #                     print("Range slider clicked")
+                    if self.driver.find_elements(By.CLASS_NAME, "aha__text-range"):
+                        self.driver.find_element(By.CSS_SELECTOR, ".rangeslider").click()
+                        print("Range slider clicked")
 
-    #                 other_input = self.driver.find_elements(By.CSS_SELECTOR, "input[type='text']")
+                    other_input = self.driver.find_elements(By.CSS_SELECTOR, "input[type='text']")
 
-    #                 if other_input:
-    #                     other_input[0].send_keys("Trumpet")
-    #                     print("Text input filled with 'Trumpet'")
+                    if other_input:
+                        other_input[0].send_keys("Trumpet")
+                        print("Text input filled with 'Trumpet'")
 
-    #                 # Click Continue after question answered
-    #                 WebDriverWait(self.driver, 5,  poll_frequency=1) \
-    #                     .until(expected_conditions.element_to_be_clickable((By.XPATH, '//button[text()="Continue"]'))) \
-    #                     .click()
+                    # Click Continue after question answered
+                    WebDriverWait(self.driver, 5,  poll_frequency=1) \
+                        .until(expected_conditions.element_to_be_clickable((By.XPATH, '//button[text()="Continue"]'))) \
+                        .click()
 
-    #                 print("Continue button clicked")
+                    print("Continue button clicked")
 
-    #                 # wait for next page to load
-    #                 time.sleep(1)
+                    # wait for next page to load
+                    time.sleep(1)
 
-    #             elif h4_text == "FINAL SCORE":
-    #                 break
+                elif h4_text == "FINAL SCORE":
+                    break
 
-    #             elif self.driver.find_element(By.CSS_SELECTOR, "h3").text == "Bonus Rounds":
-    #                 WebDriverWait(self.driver, 5,  poll_frequency=1) \
-    #                     .until(expected_conditions.element_to_be_clickable((By.XPATH, '//button[text()="Continue"]'))) \
-    #                     .click()
+                elif self.driver.find_element(By.CSS_SELECTOR, "h3").text == "Bonus Rounds":
+                    WebDriverWait(self.driver, 5,  poll_frequency=1) \
+                        .until(expected_conditions.element_to_be_clickable((By.XPATH, '//button[text()="Continue"]'))) \
+                        .click()
 
-    #                 bonus_rounds = True
+                    bonus_rounds = True
 
-    #                 print("Bonus Rounds - Continue")
+                    print("Bonus Rounds - Continue")
 
-    #                 # wait for next page to load
-    #                 time.sleep(1)
+                    # wait for next page to load
+                    time.sleep(1)
 
-    #             else:
-    #                 raise Exception("Unknown view")
+                else:
+                    raise Exception("Unknown view")
 
-    #         self.driver.find_element(By.XPATH,  '//*[text()="Play again"]')
+            self.driver.find_element(By.XPATH,  '//*[text()="Play again"]')
 
-    #         print("Eurovision Test completed!")
+            print("Eurovision Test completed!")
 
-    #     except Exception as e:
-    #         self.handle_error(e, experiment_name)
+        except Exception as e:
+            self.handle_error(e, experiment_name)
 
     def test_categorization(self):
 
