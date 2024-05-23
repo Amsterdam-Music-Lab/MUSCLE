@@ -289,6 +289,13 @@ jobs:
       BASE_URL: "https://acc.amsterdammusiclab.nl"
 
     steps:
+
       - uses: actions/checkout@v4
       - name: Run E2E tests
         run: cd e2e && bash run-tests
+      - name: Upload Screenshots
+        if: failure()
+        uses: actions/upload-artifact@v2
+        with:
+          name: selenium-screenshots
+          path: e2e/screenshots/
