@@ -424,7 +424,8 @@ class TestsSelenium(unittest.TestCase):
             raise Exception(f"Could not load {experiment_name} experiment, please check the server logs and make sure the slug ({experiment_slug}) is correct.")
 
     def handle_error(self, e, experiment_name):
-        screen_shot_path = f"screenshots/{experiment_name}-{int(time.time())}.png"
+        current_time = time.strftime("%Y-%m-%d-%H-%M-%S")
+        screen_shot_path = f"screenshots/{experiment_name}-{current_time}.png"
         print('Capturing screenshot to', screen_shot_path)
         self.driver.get_screenshot_as_file(screen_shot_path)
         self.fail(e)
