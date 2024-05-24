@@ -119,7 +119,7 @@ class TestsSelenium(unittest.TestCase):
     def test_beatalignment(self):
 
         experiment_name = "beat_alignment"
-        
+
         try:
 
             experiment_slug = self.config['experiment_slugs'][experiment_name]
@@ -387,28 +387,48 @@ class TestsSelenium(unittest.TestCase):
 
                 for i in range(n):
 
-                    round_heading = WebDriverWait(self.driver, 5) \
+                    # wait .5 second
+                    time.sleep(.5)
+
+                    WebDriverWait(self.driver, 5) \
+                        .until(
+                            presence_of_element_located((By.CSS_SELECTOR, ".aha__play-button")) and
+                            expected_conditions.element_to_be_clickable((By.CSS_SELECTOR, ".aha__play-button"))) \
+                        .click()
+
+                    print('Round', i + 1, "Play button clicked")
+
+                    round_heading = WebDriverWait(self.driver, 10) \
                         .until(presence_of_element_located((By.TAG_NAME, "h4"))).text
 
                     print(f"{round_type.capitalize()} round {i + 1} - {round_heading}")
 
-                    WebDriverWait(self.driver, 5) \
-                        .until(presence_of_element_located((By.CSS_SELECTOR, ".aha__play-button"))) \
-                        .click()
-
                     expected_response = self.driver.execute_script('return document.querySelector(".expected-response").textContent')
+                    input_element = self.driver.execute_script(f'return document.querySelector(\'input[value="{expected_response}"]\')')
                     button_to_click = self.driver.execute_script(f'return document.querySelector(\'input[value="{expected_response}"]\').parentElement')
+
+                    # wait for label + input to not be disabled
+                    WebDriverWait(self.driver, 5) \
+                        .until(lambda x: False if input_element.get_attribute("disabled") else input_element) \
+
                     WebDriverWait(self.driver, 5) \
                         .until(lambda x: False if "disabled" in button_to_click.get_attribute("class") else button_to_click) \
                         .click()
 
-                    # wait for Score to appear
-                    WebDriverWait(self.driver, 5) \
-                        .until(presence_of_element_located((By.CSS_SELECTOR, ".aha__score")))
+                    print(f"{round_type.capitalize()} round {i + 1} - Answer {expected_response} clicked")
 
-                    # wait for Score to disappear (next round)
-                    WebDriverWait(self.driver, 5) \
-                        .until(lambda x: False if x.find_elements(By.CSS_SELECTOR, ".aha__score") else True)
+                    # The score is only consistently shown during training rounds
+                    if training:
+
+                        print("Waiting for score...")
+
+                        # wait for Score to appear
+                        WebDriverWait(self.driver, 5) \
+                            .until(presence_of_element_located((By.CSS_SELECTOR, ".aha__score")))
+
+                        # wait for Score to disappear (next round)
+                        WebDriverWait(self.driver, 5) \
+                            .until(lambda x: False if x.find_elements(By.CSS_SELECTOR, ".aha__score") else True)
 
                 if training:
                     WebDriverWait(self.driver, 5) \
@@ -423,11 +443,14 @@ class TestsSelenium(unittest.TestCase):
         if "Error" in self.driver.find_element(By.TAG_NAME, "body").text:
             raise Exception(f"Could not load {experiment_name} experiment, please check the server logs and make sure the slug ({experiment_slug}) is correct.")
 
-    def handle_error(self, e, experiment_name):
+    def take_screenshot(self, experiment_name, notes=""):
         current_time = time.strftime("%Y-%m-%d-%H-%M-%S")
         screen_shot_path = f"screenshots/{experiment_name}-{current_time}.png"
-        print('Capturing screenshot to', screen_shot_path)
+        print('Capturing screenshot to', screen_shot_path, notes)
         self.driver.get_screenshot_as_file(screen_shot_path)
+
+    def handle_error(self, e, experiment_name):
+        self.take_screenshot(experiment_name, str(e))
         self.fail(e)
 
 
