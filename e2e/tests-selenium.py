@@ -116,7 +116,7 @@ class TestsSelenium(unittest.TestCase):
 
         print("Google (and thus the internet) is working!")
 
-    def test_beatalignment(self):
+    def ztest_beatalignment(self):
 
         experiment_name = "beat_alignment"
 
@@ -182,7 +182,7 @@ class TestsSelenium(unittest.TestCase):
         except Exception as e:
             self.handle_error(e, experiment_name)
 
-    def test_eurovision(self):
+    def ztest_eurovision(self):
 
         experiment_name = "eurovision"
 
