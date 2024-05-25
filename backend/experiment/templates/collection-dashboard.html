@@ -1,0 +1,99 @@
+{% extends "admin/base_site.html" %} {% load inline_action_tags %} {% block content %}
+<style>
+    table {
+        width: 100%;
+        margin-bottom: 3rem;
+    }
+    .hide {
+        display: none;
+    }
+    .dashboard-caption {
+        font-weight: 600;
+        margin: 2rem 0px 2rem 0px;
+    }
+</style>
+
+<h1>Experiments in collection: {{ collection.name }}</h1>
+<p>
+    <form action="" method="post">
+        {% csrf_token %}{% render_inline_action_fields %}
+        <input type="submit" name="_participants" value="Participants" id="participant-button" />
+        <input type="submit" name="_sessions" value="Sessions" id="session-button" />
+        <input type="submit" name="_results" value="Results" id="result-button" />
+    </form>   
+</p>
+
+<table>
+    <caption class="dashboard-caption">Experiments</caption>
+    <tbody>
+        <tr>
+            <th>Experiment</th>
+            <th>Times started</th>
+            <th>Times finished</th>
+            <th>Participants</th>
+            <th>Sessions</th>           
+        </tr>        
+        {% for exp in experiments %}
+        
+        <tr>
+            <td>
+                <p>{{ exp.name }}</p>
+            </td>
+            <td>
+                <p>{{ exp.name }}</p>
+            </td>
+            <td>
+                <p>{{ exp.name }}</p>
+            </td>
+            <td>
+                
+            </td>
+            <td>
+                <a href="#all-sessions"><p id="toggle-sessions-{{ exp.id }}">Show Sessions</p></a>
+                <script>
+                    document.getElementById("toggle-sessions-{{ exp.id }}").addEventListener("click", function() {                            
+                        document.querySelectorAll(".experiment-{{ exp.id }}").forEach(function (element) {
+                            element.classList.toggle("hide");
+                        })
+                    })
+                </script>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<table id="all-sessions">
+    <caption class="dashboard-caption">Sessions</caption>
+    <tbody>
+        <tr>
+            <th>Session</th>
+            <th>Participant</th>
+            <th>Times finished</th>
+            <th>Participants</th>
+            <th>Results</th>           
+        </tr>        
+        {% for session in sessions %}                
+            <tr class="session-row hide experiment-{{ session.experiment.id }}">
+                <td>
+                    <p>{{ session.id }}</p>
+                </td>
+                <td>
+                    <p>{{ session.participant.id }}</p>
+                </td>
+                <td>
+                    <p>{{ session.name }}</p>
+                </td>
+                <td>
+                    
+                </td>
+                <td>
+                    <p>Preview results</p>
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+
+{% endblock %}

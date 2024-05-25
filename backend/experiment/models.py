@@ -8,6 +8,7 @@ from experiment.standards.iso_languages import ISO_LANGUAGES
 from .questions import QUESTIONS_CHOICES, get_default_question_keys
 from theme.models import ThemeConfig
 from image.models import Image
+from session.models import Session
 
 from .validators import markdown_html_validator, experiment_slug_validator
 
@@ -51,6 +52,17 @@ class ExperimentCollection(models.Model):
         groups = self.groups.all()
         return [
             experiment.experiment for group in groups for experiment in list(group.experiments.all())]
+
+    def export_sessions(self):
+        # export session objects
+        return Session.objects.filter(json_data__experiment_collection=self.name)
+
+    def current_participants(self):
+        """Get distinct list of participants"""
+        participants = {}
+        for session in self.export_sessions():
+            participants[session.participant.id] = session.participant
+        return participants.values()
 
 
 class ExperimentCollectionGroup(models.Model):

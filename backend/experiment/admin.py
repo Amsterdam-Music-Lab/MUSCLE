@@ -20,6 +20,7 @@ from experiment.forms import ExperimentCollectionForm, ExperimentForm, ExportFor
 from section.models import Section, Song
 from result.models import Result
 from participant.models import Participant
+from session.models import Session
 
 
 class FeedbackInline(admin.TabularInline):
@@ -196,6 +197,7 @@ class ExperimentCollectionAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
     list_display = ('name', 'slug_link', 'description_excerpt', 'dashboard', 'groups')
     fields = ['slug', 'name', 'description', 'consent', 'theme_config', 'dashboard',
               'about_content']
+    inline_actions = ['dashboard']
     form = ExperimentCollectionForm
     inlines = [ExperimentCollectionGroupInline]
 
@@ -218,6 +220,46 @@ class ExperimentCollectionAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
         return format_html(', '.join([f'<a href="/admin/experiment/experimentcollectiongroup/{group.id}/change/">{group.name}</a>' for group in groups]))
     
     slug_link.short_description = "Slug"
+
+    def dashboard(self, request, obj, parent_obj=None):
+        """Open researchers dashboard for a collection"""
+        all_experiments = obj.associated_experiments()
+        all_participants = obj.current_participants()
+        all_sessions = obj.export_sessions()
+
+        if '_back' in request.POST:
+            return render(
+                request,
+                'collection-dashboard.html',
+                context={'collection': obj, 
+                         'experiments': all_experiments}
+            )
+        if '_sessions' in request.POST:
+            all_sessions = obj.export_sessions
+            print(all_sessions)
+            return render(
+                request,
+                'collection-sessions.html',
+                context={'collection': obj,
+                         'sessions': all_sessions}
+            )
+        if '_participants' in request.POST:            
+            all_participants = obj.current_participants()
+            return render(
+                request,
+                'collection-participants.html',
+                context={'collection': obj,
+                         'participants': all_participants}
+            )
+    
+        return render(
+            request,
+            'collection-dashboard.html',
+            context={'collection': obj,
+                     'experiments': all_experiments,
+                     'sessions': all_sessions,
+                     'participants': all_participants}
+        )
 
 
 admin.site.register(ExperimentCollection, ExperimentCollectionAdmin)
