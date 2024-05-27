@@ -1,6 +1,3 @@
-import json
-
-from django.conf import settings
 from django.http import Http404, JsonResponse, HttpResponseBadRequest
 from django.shortcuts import get_object_or_404, redirect
 from django.views.decorators.http import require_POST

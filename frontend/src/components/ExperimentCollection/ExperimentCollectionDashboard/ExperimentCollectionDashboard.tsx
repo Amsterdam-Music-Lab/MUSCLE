@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 
 import { API_ROOT } from "@/config";
 import ExperimentCollection from "@/types/ExperimentCollection";
+import AppBar from "@/components/AppBar/AppBar";
+import Header from "@/components/Header/Header";
 
 
 interface ExperimentCollectionDashboardProps {
@@ -12,16 +14,22 @@ interface ExperimentCollectionDashboardProps {
 
 export const ExperimentCollectionDashboard: React.FC<ExperimentCollectionDashboardProps> = ({ experimentCollection, participantIdUrl }) => {
 
-    const dashboard = experimentCollection?.dashboard;
-
-    // TODO: get next experiment and about link from experimentCollection
-    const nextExperiment = experimentCollection.next_experiment; // TODO: get next_experiment from experimentCollection
-    const aboutContent = experimentCollection.about_content;
+    const dashboard = experimentCollection.dashboard;
+    const nextExperimentSlug = experimentCollection.nextExperiment?.slug;
+    const headerProps = experimentCollection.theme?.header? {
+        nextExperimentSlug,
+        collectionSlug: experimentCollection.slug,
+        ... experimentCollection.theme.header
+    } : undefined;
 
     const getExperimentHref = (slug: string) => `/${slug}${participantIdUrl ? `?participant_id=${participantIdUrl}` : ""}`;
 
     return (
         <>
+        <AppBar title={experimentCollection.name} logoClickConfirm="placeholder text" />
+        {headerProps && (
+            <Header { ...headerProps }></Header>
+        )}
             {/* Experiments */}
             <div role="menu" className="dashboard">
                 <ul>

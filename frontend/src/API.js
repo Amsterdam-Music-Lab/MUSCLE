@@ -36,13 +36,18 @@ export const URLS = {
         next_round: (id) => "/session/" + id + "/next_round/",
         finalize: (id) => "/session/" + id + "/finalize/"
     },
+    theme: {
+        get: (id) => `/theme/${id}`,
+    }
 };
 
 export const useExperiment = (slug) =>
     useGet(API_BASE_URL + URLS.experiment.get(slug));
 
-export const useExperimentCollection = (slug) => 
-    useGet(API_BASE_URL + URLS.experiment_collection.get(slug));
+export const useExperimentCollection = (slug) => {
+    const data = useGet(API_BASE_URL + URLS.experiment_collection.get(slug));
+    return data; // snakeToCamel(collection), loading
+}
 
 export const useParticipantScores = () =>
     useGet(API_BASE_URL + URLS.participant.score);
