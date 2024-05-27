@@ -82,9 +82,9 @@ class Hooked(Base):
         playlist = Playlist(experiment.playlists.all())
 
         return [
-            explainer,
             consent,
             playlist,
+            explainer,
         ]
 
     def next_round(self, session):
@@ -305,7 +305,6 @@ class Hooked(Base):
         playback = Autoplay(
             [section],
             show_animation=True,
-            ready_time=3,
             preload_message=_('Get ready!')
         )
         expected_response = this_section_info.get('novelty')

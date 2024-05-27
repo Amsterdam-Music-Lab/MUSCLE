@@ -22,7 +22,6 @@ describe('Playback', () => {
         show_animation: false,
         instruction: 'Listen, just listen!',
         play_method: 'HTML',
-        ready_time: 1,
         preload_message: 'Get ready',
         sections: [{id: 13, url: 'some/fancy/tune.mp3'}]
     };
@@ -33,14 +32,6 @@ describe('Playback', () => {
             {... basicProps} playbackArgs={playbackArgs}
         />);
         expect(document.body.contains(container.querySelector('.aha__playback'))).to.be.true;
-    });
-
-    it('shows Preload during ready_time', () => {
-        const { container } = render(
-        <Playback 
-            {... basicProps} playbackArgs={playbackArgs}
-        />);
-        expect(document.body.contains(container.querySelector('.aha__listen'))).to.be.true;
     });
 
 })
