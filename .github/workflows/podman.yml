@@ -12,6 +12,8 @@ jobs:
     name: Deploy to test environment
     environment: Test
     runs-on: tst
+
+    # this job runs only on commits to the develop branch or when manually triggered for a branch other than main
     if: github.ref == 'refs/heads/develop' || (github.event_name == 'workflow_dispatch' && github.ref != 'refs/heads/main')
     concurrency:
       group: ${{ github.workflow }}-${{ github.ref }}
@@ -100,6 +102,8 @@ jobs:
     name: Deploy to acceptance environment
     environment: Acceptance
     runs-on: ACC
+    
+    # this job runs only on commits to the main branch, tags, or when manually triggered for the main branch
     if: github.ref == 'refs/heads/main' || github.ref == 'refs/tags/*' || (github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main')
     concurrency:
       group: ${{ github.workflow }}-${{ github.ref }}
