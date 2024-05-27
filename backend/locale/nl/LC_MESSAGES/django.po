@@ -2327,8 +2327,6 @@ msgstr ""
 "demografische achtergrond."
 
 #: experiment/rules/rhythm_battery_final.py:35
-#, fuzzy
-#| msgid "After these questions, you will proceed to the final screen."
 msgid "After these questions, the experiment will proceed to the final screen."
 msgstr "Na deze vragen zal u het slotscherm te zien krijgen."
 

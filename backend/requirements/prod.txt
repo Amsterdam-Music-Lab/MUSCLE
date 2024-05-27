@@ -74,7 +74,7 @@ pytz==2023.3
     #   pandas
 regex==2023.12.25
     # via textile
-requests==2.31.0
+requests==2.32.0
     # via genbadge
 roman==4.1
     # via -r requirements.in/base.txt
@@ -91,7 +91,7 @@ sqlparse==0.5.0
     # via django
 textile==4.0.2
     # via django-markup
-tqdm==4.65.0
+tqdm==4.66.3
     # via -r requirements.in/base.txt
 typing-extensions==4.6.3
     # via asgiref

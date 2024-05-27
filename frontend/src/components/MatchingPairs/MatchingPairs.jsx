@@ -25,8 +25,8 @@ const MatchingPairs = ({
 
     const xPosition = useRef(-1);
     const yPosition = useRef(-1);
-    const [firstCard, setFirstCard] = useState(null);
-    const [secondCard, setSecondCard] = useState(null);
+    const [firstCard, setFirstCard] = useState({});
+    const [secondCard, setSecondCard] = useState({});
     const [feedbackText, setFeedbackText] = useState('Pick a card');
     const [feedbackClass, setFeedbackClass] = useState('');
     const [inBetweenTurns, setInBetweenTurns] = useState(false);
@@ -77,7 +77,7 @@ const MatchingPairs = ({
             }
             setFeedbackClass(fbclass);
             turnedCards[0].matchClass = turnedCards[1].matchClass = fbclass;
-            turnedCards[1].seen = turnedCards[1].seen = true;
+            turnedCards[0].seen = turnedCards[1].seen = true;
             setInBetweenTurns(true);
             return;
         }
@@ -94,10 +94,14 @@ const MatchingPairs = ({
                 // set no mouse events for all but current
                 sections.forEach(section => section.noevents = true);
                 currentCard.noevents = true;
+                currentCard.boardposition = parseInt(index) + 1;
+                currentCard.timestamp = performance.now();                
+                currentCard.response_interval_ms = Math.round(currentCard.timestamp - firstCard.timestamp);
                 // check for match
-                const lastCard = firstCard;
+                const first_card = firstCard;
+                const second_card = currentCard;
                 try {
-                    const scoreResponse = await scoreIntermediateResult({ session, participant, result: { currentCard, lastCard } });
+                    const scoreResponse = await scoreIntermediateResult({ session, participant, result: { first_card, second_card } });
                     setScore(scoreResponse.score);
                     showFeedback(scoreResponse.score);
                 } catch {
@@ -109,8 +113,11 @@ const MatchingPairs = ({
                 setFirstCard(currentCard);
                 // turn first card, disable events
                 currentCard.turned = true;
-                currentCard.noevents = true;
-                currentCard.seen = true;
+                currentCard.noevents = true;                
+                currentCard.boardposition = parseInt(index) + 1;
+                currentCard.timestamp = performance.now();
+                // reset response interval in case this card has a value from a previous turn
+                currentCard.response_interval_ms = '';
                 // clear feedback text
                 setFeedbackText('');
             }

@@ -1,4 +1,4 @@
-import { API_BASE_URL } from "./config";
+import { API_BASE_URL } from "@/config";
 import useGet from "./util/useGet";
 import axios from "axios";
 import qs from "qs";
@@ -15,7 +15,7 @@ export const URLS = {
         feedback: (slug) => "/experiment/" + slug + "/feedback/",
     },
     experiment_collection: {
-        get: (slug) => "/experiment/collection/" + slug + "/"
+        get: (slug) => `/experiment/collection/${slug}/`
     },
     participant: {
         current: "/participant/",
@@ -36,13 +36,18 @@ export const URLS = {
         next_round: (id) => "/session/" + id + "/next_round/",
         finalize: (id) => "/session/" + id + "/finalize/"
     },
+    theme: {
+        get: (id) => `/theme/${id}`,
+    }
 };
 
 export const useExperiment = (slug) =>
     useGet(API_BASE_URL + URLS.experiment.get(slug));
 
-export const useExperimentCollection = (slug) => 
-    useGet(API_BASE_URL + URLS.experiment_collection.get(slug));
+export const useExperimentCollection = (slug) => {
+    const data = useGet(API_BASE_URL + URLS.experiment_collection.get(slug));
+    return data; // snakeToCamel(collection), loading
+}
 
 export const useParticipantScores = () =>
     useGet(API_BASE_URL + URLS.participant.score);

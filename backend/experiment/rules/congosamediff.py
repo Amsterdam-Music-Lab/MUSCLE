@@ -1,4 +1,5 @@
 
+import random
 import re
 import math
 import string
@@ -112,10 +113,10 @@ class CongoSameDiff(Base):
         groups_amount = session.playlist.section_set.values('group').distinct().count()
         variants_amount = real_trial_variants.count()
 
-        # get the participant's group variant
-        participant_id = session.participant.participant_id_url
+        # get the participant's group variant based on the participant's id # else default to random number between 1 and variants_amount
+        participant_id = session.participant.id
         participant_group_variant = self.get_participant_group_variant(
-            int(participant_id),
+            participant_id,
             group_number,
             groups_amount,
             variants_amount

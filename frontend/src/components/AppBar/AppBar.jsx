@@ -1,5 +1,5 @@
 import React from "react";
-import { API_BASE_URL, URLS, LOGO_URL, LOGO_TITLE } from "../../config";
+import { API_BASE_URL, URLS, LOGO_URL, LOGO_TITLE } from "@/config";
 import { Link } from "react-router-dom";
 import useBoundStore from "@/util/stores";
 
@@ -39,11 +39,11 @@ const AppBar = ({ title, logoClickConfirm = null }) => {
     );
 
     return (
-        <nav className="aha__app-bar navbar bg-black">
+        <div className="aha__app-bar navbar bg-black">
             {logo}
             <h4 className="title text-light">{title}</h4>
             <span className="action-right"></span>
-        </nav>
+        </div>
     );
 };
 

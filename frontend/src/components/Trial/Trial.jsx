@@ -23,7 +23,8 @@ const Trial = ({
 }) => {
     // Main component state
     const [formActive, setFormActive] = useState(!config.listen_first);
-    const [preloadReady, setPreloadReady] = useState(!(playback?.ready_time));
+    // Preload is immediately set to ready if we don't have a playback object
+    const [preloadReady, setPreloadReady] = useState(!playback);
 
     const submitted = useRef(false);
 
@@ -54,7 +55,7 @@ const Trial = ({
                 if (feedback_form.is_skippable) {
                     form.map((formElement => (formElement.value = formElement.value || '')))
                 }
-                await onResult({
+                onResult({
                     decision_time: getAndStoreDecisionTime(),
                     form,
                     config

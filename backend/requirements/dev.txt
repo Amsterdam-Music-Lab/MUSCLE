@@ -124,7 +124,7 @@ pytz==2021.3
     #   pandas
 regex==2023.12.25
     # via textile
-requests==2.31.0
+requests==2.32.0
     # via
     #   -r requirements.in/dev.txt
     #   genbadge
@@ -154,7 +154,7 @@ tomli==2.0.1
     #   build
     #   pip-tools
     #   pyproject-hooks
-tqdm==4.65.0
+tqdm==4.66.3
     # via -r requirements.in\base.txt
 typing-extensions==3.10.0.2
     # via
