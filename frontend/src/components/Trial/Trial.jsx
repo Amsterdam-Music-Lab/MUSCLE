@@ -55,7 +55,7 @@ const Trial = ({
                 if (feedback_form.is_skippable) {
                     form.map((formElement => (formElement.value = formElement.value || '')))
                 }
-                await onResult({
+                onResult({
                     decision_time: getAndStoreDecisionTime(),
                     form,
                     config
