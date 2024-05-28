@@ -432,7 +432,8 @@ class TestsSelenium(unittest.TestCase):
 
     def agree_to_consent(self, h4_text='informed consent', button_text='I agree'):
         # If consent present, agree
-        informed_consent_heading = self.driver.find_element(By.TAG_NAME,"h4").text.lower() == h4_text.lower()
+        informed_consent_heading = WebDriverWait(self.driver, 5,  poll_frequency=1) \
+            .until(lambda x: h4_text in x.find_element(By.TAG_NAME, "h4").text.lower())
 
         if not informed_consent_heading:
             raise Exception("Informed consent not found")
