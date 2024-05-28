@@ -211,7 +211,7 @@ jobs:
       AML_LOCATION_PROVIDER: ${{ vars.AML_LOCATION_PROVIDER }}
       AML_SUBPATH: ${{ vars.AML_SUBPATH }}
       DJANGO_SETTINGS_MODULE: ${{ vars.DJANGO_SETTINGS_MODULE }}
-      SENTRY_ENVIRONMENT: "acceptance"
+      SENTRY_ENVIRONMENT: "production"
       SQL_DATABASE: ${{ vars.SQL_DATABASE }}
       SQL_HOST: ${{ vars.SQL_HOST }}
       SQL_PORT: ${{ vars.SQL_PORT }}
