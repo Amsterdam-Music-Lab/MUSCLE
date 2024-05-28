@@ -3,9 +3,9 @@ from os.path import join
 from django.template.loader import render_to_string
 
 from .toontjehoger_1_mozart import toontjehoger_ranks
-from experiment.actions import Explainer, Step, Score, Final, Playlist, Info, Trial
+from experiment.actions import Explainer, Step, Score, Final, Info, Trial
 from experiment.actions.playback import PlayButton
-from experiment.actions.form import AutoCompleteQuestion, RadiosQuestion, Form
+from experiment.actions.form import AutoCompleteQuestion, Form
 from .toontjehoger_3_plink import ToontjeHoger3Plink
 
 from experiment.utils import non_breaking_spaces
@@ -111,7 +111,7 @@ class ToontjeHogerKids3Plink(ToontjeHoger3Plink):
                 submit_label='Volgende'
             )
         ))
-        return [next_round]
+        return next_round
 
     def calculate_score(self, result, data):
         """
