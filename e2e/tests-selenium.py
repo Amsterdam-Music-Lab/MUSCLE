@@ -194,24 +194,15 @@ class TestsSelenium(unittest.TestCase):
             # if page body contains the word "Error", raise an exception
             self.check_for_error(experiment_name, experiment_slug)
 
+            # Check & Agree to Informed Consent
+            self.agree_to_consent()
+
             # Explainer
             WebDriverWait(self.driver, 5,  poll_frequency=1) \
                 .until(expected_conditions.element_to_be_clickable((By.XPATH, '//button[text()="Let\'s go!"]'))) \
                 .click()
 
             print("Let's go! button clicked")
-
-            # If consent present, agree
-            informed_consent_heading = self.driver.find_element(By.TAG_NAME,"h4").text.lower() == "informed consent"
-
-            if not informed_consent_heading:
-                raise Exception("Informed consent not found")
-
-            WebDriverWait(self.driver, 5,  poll_frequency=1) \
-                .until(expected_conditions.element_to_be_clickable((By.XPATH, '//button[text()="I agree"]'))) \
-                .click()
-
-            print("I agree button clicked")
 
             h4_text = None
             bonus_rounds = False
@@ -438,6 +429,19 @@ class TestsSelenium(unittest.TestCase):
 
         except Exception as e:
             self.handle_error(e, experiment_name)
+
+    def agree_to_consent(self, h4_text='informed consent', button_text='I agree'):
+        # If consent present, agree
+        informed_consent_heading = self.driver.find_element(By.TAG_NAME,"h4").text.lower() == h4_text.lower()
+
+        if not informed_consent_heading:
+            raise Exception("Informed consent not found")
+
+        WebDriverWait(self.driver, 5,  poll_frequency=1) \
+            .until(expected_conditions.element_to_be_clickable((By.XPATH, f'//button[text()="{button_text}"]'))) \
+            .click()
+
+        print("I agree button clicked")
 
     def check_for_error(self, experiment_name, experiment_slug='[no slug provided]'):
         if "Error" in self.driver.find_element(By.TAG_NAME, "body").text:
