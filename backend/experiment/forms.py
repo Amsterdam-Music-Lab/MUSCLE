@@ -170,6 +170,26 @@ class ExperimentForm(ModelForm):
             required=False
         )
 
+    def clean(self):
+
+        # Validat the rules' playlist
+        rule_id = self.cleaned_data['rules']
+        cl = EXPERIMENT_RULES[rule_id]
+        rules = cl()
+
+        playlists = self.cleaned_data['playlists']
+        playlist_errors = []
+
+        # Validate playlists
+        for playlist in playlists:
+            errors = rules.validate_playlist(playlist)
+
+            for error in errors:
+                playlist_errors.append(f"Playlist {playlist.name}: {error}")
+
+        if playlist_errors:
+            self.add_error('playlists', playlist_errors)
+
     class Meta:
         model = Experiment
         fields = ['name', 'slug', 'active', 'rules',
