@@ -207,13 +207,6 @@ class TestsSelenium(unittest.TestCase):
             h4_text = None
             bonus_rounds = False
 
-            # press initial next button
-            WebDriverWait(self.driver, 5,  poll_frequency=1) \
-                .until(expected_conditions.element_to_be_clickable((By.XPATH, '//button[text()="Next"]'))) \
-                .click()
-
-            print("Next button clicked")
-
             while True:
 
                 if h4_text is None:
