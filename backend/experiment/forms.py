@@ -189,7 +189,7 @@ class ExperimentForm(ModelForm):
             errors = rules.validate_playlist(playlist)
 
             for error in errors:
-                playlist_errors.append(f"Playlist {playlist.name}: {error}")
+                playlist_errors.append(f"Playlist [{playlist.name}]: {error}")
 
         if playlist_errors:
             self.add_error('playlists', playlist_errors)
@@ -210,8 +210,8 @@ class ExperimentForm(ModelForm):
         }
 
     class Media:
-        js = ["experiment_admin.js", "experiment_playlist_validation.js"]
-        css = {"all": ["experiment_admin.css", "experiment_playlist_validation.css"]}
+        js = ["experiment_admin.js"]
+        css = {"all": ["experiment_admin.css"]}
 
 
 class ExportForm(Form):
