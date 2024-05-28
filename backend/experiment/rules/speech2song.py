@@ -154,7 +154,7 @@ class Speech2Song(Base):
             return Final(
                 title=_('End of experiment'),
                 session=session,
-                score_message=_(
+                final_text=_(
                     'Thank you for contributing your time to science!')
             )
         if session.current_round % 2 == 0:
