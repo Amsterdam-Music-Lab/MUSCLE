@@ -20,8 +20,11 @@ def serialize_header(header: HeaderConfig) -> dict:
     return {
         'nextExperimentButtonText': _('Next experiment'),
         'aboutButtonText': _('About us'),
-        'showScore': header.show_score
-    }
+        'showScore': header.show_score,
+        'scoreClass': 'gold',
+        'scoreLabel': _('Points'),
+        'noScoreLabel': _('No points yet!')
+        }
 
 
 def serialize_theme(theme: ThemeConfig) -> dict:

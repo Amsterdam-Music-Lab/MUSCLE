@@ -12,16 +12,19 @@ interface ExperimentCollectionDashboardProps {
     participantIdUrl: string | null;
 }
 
-export const ExperimentCollectionDashboard: React.FC<ExperimentCollectionDashboardProps> = ({ experimentCollection, participantIdUrl }) => {
-
+export const ExperimentCollectionDashboard: React.FC<ExperimentCollectionDashboardProps> = ({ experimentCollection, participantIdUrl, totalScore }) => {
+    
     const dashboard = experimentCollection.dashboard;
-    const nextExperimentSlug = experimentCollection.nextExperiment?.slug;
+    const nextExperimentSlug = experimentCollection.nextExperiment?.slug;   
+    
     const headerProps = experimentCollection.theme?.header? {
-        nextExperimentSlug,
+        nextExperimentSlug,        
         collectionSlug: experimentCollection.slug,
-        ... experimentCollection.theme.header
+        ...experimentCollection.theme.header,
+        totalScore: totalScore
+        
     } : undefined;
-
+    
     const getExperimentHref = (slug: string) => `/${slug}${participantIdUrl ? `?participant_id=${participantIdUrl}` : ""}`;
 
     return (
