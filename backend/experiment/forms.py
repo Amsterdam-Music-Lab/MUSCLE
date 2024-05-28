@@ -170,7 +170,11 @@ class ExperimentForm(ModelForm):
             required=False
         )
 
-    def clean(self):
+    def clean_playlists(self):
+
+        # Check if there is a rules id selected and key exists
+        if 'rules' not in self.cleaned_data:
+            return
 
         # Validat the rules' playlist
         rule_id = self.cleaned_data['rules']
