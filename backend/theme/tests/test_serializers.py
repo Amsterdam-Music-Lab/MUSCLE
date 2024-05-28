@@ -46,7 +46,10 @@ class ThemeConfigSerializerTest(TestCase):
         expected_json = {
             'showScore': True,
             'nextExperimentButtonText': 'Next experiment',
-            'aboutButtonText': 'About us'
+            'aboutButtonText': 'About us',
+            'scoreClass': 'gold',
+            'scoreLabel': 'Points',
+            'noScoreLabel': 'No points yet!'
         }
         self.assertEqual(serialize_header(self.header), expected_json)
 
