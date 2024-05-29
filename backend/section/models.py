@@ -6,9 +6,10 @@ from django.db import models
 from django.utils import timezone
 from django.urls import reverse
 from django.conf import settings
+from django.core.exceptions import ValidationError
 
 from .utils import CsvStringBuilder, get_or_create_song
-from .validators import audio_file_validator, url_prefix_validator
+from .validators import audio_file_validator, file_exists_validator, url_prefix_validator
 
 
 class Playlist(models.Model):
@@ -28,6 +29,9 @@ class Playlist(models.Model):
         "path/filename.mp3" [string], tag [string], group [string]'
     csv = models.TextField(blank=True, help_text=default_csv_row)
 
+    CSV_OK = 0
+    CSV_ERROR = 10
+
     def save(self, *args, **kwargs):
         """Update playlist csv field on every save"""
         if self.process_csv is False:
@@ -43,6 +47,18 @@ class Playlist(models.Model):
     def __str__(self):
         return self.name
 
+    def clean(self):
+        super().clean()
+
+        sections = Section.objects.filter(playlist=self)
+
+        # Check if section files exist
+        for section in sections:
+            try:
+                file_exists_validator(str(section.filename))
+            except ValidationError as e:
+                self.add_error('csv', e)
+
     def section_count(self):
         """Number of sections"""
         return self.section_set.count()
@@ -54,9 +70,6 @@ class Playlist(models.Model):
         return self.experiment_set.count()
 
     experiment_count.short_description = "Experiments"
-
-    CSV_OK = 0
-    CSV_ERROR = 10
 
     def update_sections(self):
         """Update the sections from the csv file"""
@@ -216,7 +229,7 @@ class Playlist(models.Model):
                             section.group])
         csv_string = csvfile.csv_string
         return ''.join(csv_string)
-    
+
 
 class Song(models.Model):
     """ A Song object with an artist and name (unique together)"""
@@ -244,7 +257,7 @@ class Section(models.Model):
     song = models.ForeignKey(Song, on_delete=models.CASCADE, blank=True, null=True)
     start_time = models.FloatField(db_index=True, default=0.0)  # sec
     duration = models.FloatField(default=0.0)  # sec
-    filename = models.FileField(upload_to=audio_upload_path, max_length=255, validators=[audio_file_validator()])
+    filename = models.FileField(upload_to=audio_upload_path, max_length=255, validators=[audio_file_validator(), file_exists_validator])
     play_count = models.PositiveIntegerField(default=0)
     code = models.PositiveIntegerField(default=random_code)
     tag = models.CharField(max_length=128, default='0', blank=True)
