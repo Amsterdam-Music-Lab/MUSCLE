@@ -19,7 +19,7 @@ class AddSections(forms.Form):
     group = forms.CharField(max_length=128, required=False)
     files = forms.FileField(widget=MultipleFileInput(
         attrs={'accept': '.wav,.mp3,.aiff,.flac,.ogg'}),
-        validators=[audio_file_validator()]),
+        validators=[audio_file_validator()])
 
 
 class PlaylistAdminForm(forms.ModelForm):
