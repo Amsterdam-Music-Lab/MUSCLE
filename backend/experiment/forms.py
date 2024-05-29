@@ -192,6 +192,8 @@ class ExperimentForm(ModelForm):
         for playlist in playlists:
             errors = rules.validate_playlist(playlist)
 
+            playlist.clean()
+
             for error in errors:
                 playlist_errors.append(f"Playlist [{playlist.name}]: {error}")
 

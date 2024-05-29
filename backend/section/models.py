@@ -47,18 +47,6 @@ class Playlist(models.Model):
     def __str__(self):
         return self.name
 
-    def clean(self):
-        super().clean()
-
-        sections = Section.objects.filter(playlist=self)
-
-        # Check if section files exist
-        for section in sections:
-            try:
-                file_exists_validator(str(section.filename))
-            except ValidationError as e:
-                self.add_error('csv', e)
-
     def section_count(self):
         """Number of sections"""
         return self.section_set.count()

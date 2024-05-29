@@ -1,7 +1,12 @@
-from django import forms
-from .models import Playlist
+import csv
+import os
+from http import HTTPStatus
 
-from .validators import audio_file_validator
+from django import forms
+from django.core.exceptions import ValidationError
+from .models import Playlist, Section
+
+from .validators import audio_file_validator, file_exists_validator
 
 
 class MultipleFileInput(forms.ClearableFileInput):
@@ -15,7 +20,7 @@ class AddSections(forms.Form):
     group = forms.CharField(max_length=128, required=False)
     files = forms.FileField(widget=MultipleFileInput(
         attrs={'accept': '.wav,.mp3,.aiff,.flac,.ogg'}),
-        validators=[audio_file_validator()])
+        validators=[audio_file_validator()]),
 
 
 class PlaylistAdminForm(forms.ModelForm):
@@ -34,10 +39,36 @@ class PlaylistAdminForm(forms.ModelForm):
                 'URL for hosting the audio files on an external server.<br> \
                 Make sure the path of the audio file is valid.<br> \
                 Leave this empty if you host the audio files locally.'}
-        
+
         widgets = {'url_prefix': forms.TextInput(attrs={'size': '37',
                    'placeholder': 'https://example.com/'})
                    }
+
+    def clean_csv(self):
+        """Validate the csv file"""
+        super().clean()
+
+        print(self.cleaned_data['csv'])
+
+        csv_data = self.cleaned_data['csv']
+
+        try:
+            reader = csv.DictReader(csv_data.splitlines(), fieldnames=(
+                'artist', 'name', 'start_time', 'duration', 'filename', 'tag', 'group'))
+        except csv.Error:
+            return {
+                'status': HTTPStatus.UNPROCESSABLE_ENTITY,
+                'message': "Error: could not initialize csv.DictReader"
+            }
+
+        for row in reader:
+            # Check if the file exists
+            try:
+                file_exists_validator(row['filename'])
+            except ValidationError as e:
+                self.add_error('csv', e)
+
+        return csv_data
 
     def save(self, commit=True):
         playlist = super().save(commit=False)
