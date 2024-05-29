@@ -1,5 +1,4 @@
 import csv
-import os
 from http import HTTPStatus
 
 from django import forms
