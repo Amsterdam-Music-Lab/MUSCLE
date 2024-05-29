@@ -48,9 +48,13 @@ class PlaylistAdminForm(forms.ModelForm):
         """Validate the csv file"""
         super().clean()
 
-        print(self.cleaned_data['csv'])
+        url_prefix = self.cleaned_data['url_prefix']
 
         csv_data = self.cleaned_data['csv']
+
+        # We do not check external files
+        if url_prefix:
+            return csv_data
 
         try:
             reader = csv.DictReader(csv_data.splitlines(), fieldnames=(

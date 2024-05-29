@@ -192,15 +192,13 @@ class ExperimentForm(ModelForm):
         for playlist in playlists:
             errors = rules.validate_playlist(playlist)
 
-            playlist.clean()
-
             for error in errors:
                 playlist_errors.append(f"Playlist [{playlist.name}]: {error}")
 
         if playlist_errors:
             self.add_error('playlists', playlist_errors)
 
-        return self.cleaned_data['playlists']
+        return playlists
 
     class Meta:
         model = Experiment

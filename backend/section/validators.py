@@ -2,7 +2,6 @@ import os
 from django.core.validators import FileExtensionValidator
 from django.core.exceptions import ValidationError
 
-
 audio_extensions = ['wav', 'mp3', 'aiff', 'flac', 'ogg']
 
 

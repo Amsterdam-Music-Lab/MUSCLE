@@ -32,6 +32,23 @@ class Playlist(models.Model):
     CSV_OK = 0
     CSV_ERROR = 10
 
+    def clean_csv(self):
+        errors = []
+        sections = Section.objects.filter(playlist=self)
+
+        for section in sections:
+            filename = str(section.filename)
+
+            try:
+                file_exists_validator(filename)
+            except ValidationError as e:
+                errors.append(e)
+
+        if errors:
+            raise ValidationError(errors)
+
+        return self.csv
+
     def save(self, *args, **kwargs):
         """Update playlist csv field on every save"""
         if self.process_csv is False:
