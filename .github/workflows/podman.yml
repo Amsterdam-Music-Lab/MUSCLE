@@ -5,6 +5,8 @@ on:
     branches:
       - develop
       - main
+    tags:
+      - '*'
   workflow_dispatch:
   release:
     types: [created]
@@ -195,8 +197,8 @@ jobs:
     environment: Production
     runs-on: PRD
 
-    # this job runs only on tags
-    if: github.ref == 'refs/tags/*'
+    # this job runs only on tags or when a release is created, or when manually triggered for a tag
+    if: github.ref == 'refs/tags/*' || github.event_name == 'release' || (github.event_name == 'workflow_dispatch' && github.ref == 'refs/tags/*')
     concurrency:
       group: ${{ github.workflow }}-${{ github.ref }}
     env:

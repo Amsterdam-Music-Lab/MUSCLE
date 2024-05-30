@@ -5,6 +5,8 @@ from django.utils.translation import gettext_lazy as _
 from django.conf import settings
 
 from experiment.actions import Final, Form, Trial
+from experiment.models import Experiment
+from section.models import Playlist
 from experiment.questions.demographics import DEMOGRAPHICS
 from experiment.questions.goldsmiths import MSI_OTHER
 from experiment.questions.utils import question_by_key, unanswered_questions
@@ -156,3 +158,17 @@ class Base(object):
             'url': experiment.url or current_url,
             'hashtags': [experiment.hashtag or experiment.slug, "amsterdammusiclab", "citizenscience"]
         }
+
+    def validate_playlist(self, playlist: Playlist):
+        errors = []
+        # Common validations across experiments
+        if not playlist:
+            errors.append('The experiment must have a playlist.')
+            return errors
+
+        sections = playlist.section_set.all()
+
+        if not sections:
+            errors.append('The experiment must have at least one section.')
+
+        return errors
