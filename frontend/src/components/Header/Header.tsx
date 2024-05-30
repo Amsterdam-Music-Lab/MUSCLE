@@ -10,7 +10,7 @@ interface HeaderProps {
     collectionSlug: string;
     aboutButtonText: string;
     showScore: boolean;
-    totalScore: BigInteger;
+    totalScore: Number;
     scoreClass: string;
     scoreLabel: string;
     noScoreLabel: string;
@@ -87,7 +87,7 @@ export const Header: React.FC<HeaderProps> = ({ nextExperimentSlug, nextExperime
                     {aboutButtonText && <Link className="btn btn-lg btn-outline-primary" to={`/collection/${collectionSlug}/about`}>{aboutButtonText}</Link>}
                 </nav>
             </div>
-            {showScore, totalScore !== 0 && (
+            {showScore && totalScore !== 0 && (
                 <div className="results">
                     <Score
                     score={totalScore}
@@ -99,7 +99,7 @@ export const Header: React.FC<HeaderProps> = ({ nextExperimentSlug, nextExperime
                     />
                 </div>                
             )}
-            {showScore, totalScore === 0 && (
+            {showScore && totalScore === 0 && (
                 <h3>{noScoreLabel}</h3>
             )}
         </div>
