@@ -7,16 +7,16 @@ on:
 
 jobs:
   backup-test:
-    uses: ./.github/workflows/templates/db-backup.yml
+    uses: ./.github/workflows/db-backup-template.yml
     with:
       runner: tst
 
   backup-acceptance:
-    uses: ./.github/workflows/templates/db-backup.yml
+    uses: ./.github/workflows/db-backup-template.yml
     with:
       runner: ACC
 
   backup-production:
-    uses: ./.github/workflows/templates/db-backup.yml
+    uses: ./.github/workflows/db-backup-template.yml
     with:
       runner: PRD
