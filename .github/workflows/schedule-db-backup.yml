@@ -3,10 +3,7 @@ name: Schedule Database Backup
 on:
   schedule:
     - cron: '0 0 * * *' # Runs every night at midnight UTC
-  workflow_dispatch:
-  push:
-    branches:
-      - ci/893-automate-db-backups
+  workflow_dispatch:    # Allows manual triggering
 
 jobs:
   backup-test:
