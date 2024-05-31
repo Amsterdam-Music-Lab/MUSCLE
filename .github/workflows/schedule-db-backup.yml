@@ -4,6 +4,9 @@ on:
   schedule:
     - cron: '0 0 * * *' # Runs every night at midnight UTC
   workflow_dispatch:
+  push:
+    branches:
+      - ci/893-automate-db-backups
 
 jobs:
   backup-test:
