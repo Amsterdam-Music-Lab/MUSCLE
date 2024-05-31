@@ -12,11 +12,11 @@ jobs:
       runner: tst
 
   backup-acceptance:
-    uses: ./.github/workflows/db-backup.yml
+    uses: ./.github/workflows/templates/db-backup.yml
     with:
       runner: ACC
 
   backup-production:
-    uses: ./.github/workflows/db-backup.yml
+    uses: ./.github/workflows/templates/db-backup.yml
     with:
       runner: PRD
