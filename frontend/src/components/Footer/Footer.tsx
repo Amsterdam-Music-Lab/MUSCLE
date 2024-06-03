@@ -21,7 +21,7 @@ export const Footer: React.FC<IFooter> = ({disclaimer, logos, privacy}) => {
                     >
                         <img src={API_BASE_URL + logo.file} alt={logo.alt} />
                     </a>
-                ))};
+                ))}
             </div>
             <div className="disclaimer" dangerouslySetInnerHTML={{
                 __html: privacy,
