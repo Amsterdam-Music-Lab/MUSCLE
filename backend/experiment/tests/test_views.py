@@ -153,3 +153,6 @@ class ExperimentViewsTest(TestCase):
         self.assertEqual(
             serialized_experiment['finished_session_count'], 3
         )
+        self.assertEqual(
+            serialized_experiment['started_session_count'], 3
+        )
