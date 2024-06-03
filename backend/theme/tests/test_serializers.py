@@ -7,13 +7,19 @@ from theme.serializers import serialize_footer, serialize_header, serialize_them
 
 
 class ThemeConfigSerializerTest(TestCase):
+    maxDiff = None
+
     @classmethod
     def setUpTestData(cls):
         logo_image = Image.objects.create(
-            file='someimage.jpg'
+            file='someimage.jpg',
+            href='someurl.com',
+            alt='Alt text'
         )
         background_image = Image.objects.create(
-            file='anotherimage.png'
+            file='anotherimage.png',
+            href='another.url.com',
+            alt='Another alt text'
         )
         cls.theme = ThemeConfig.objects.create(
             name='Default',
@@ -25,7 +31,8 @@ class ThemeConfigSerializerTest(TestCase):
         )
         cls.footer = FooterConfig.objects.create(
             theme=cls.theme,
-            disclaimer='Some [more information][https://example.com/our-team]'
+            disclaimer='Some [information](https://example.com/our-team)',
+            privacy='Some privacy message'
         )
         cls.footer.logos.add(logo_image)
         cls.footer.logos.add(background_image)
@@ -36,9 +43,20 @@ class ThemeConfigSerializerTest(TestCase):
 
     def test_footer_serializer(self):
         expected_json = {
-            'disclaimer': 'Some [more information][https://example.com/our-team]',
-            'logos': [f'{settings.MEDIA_URL}someimage.jpg', f'{settings.MEDIA_URL}anotherimage.png'],
-            'privacy': ''
+            'disclaimer': '<p>Some <a href="https://example.com/our-team">information</a></p>',
+            'logos': [
+                {
+                    'file': f'{settings.MEDIA_URL}someimage.jpg',
+                    'href': 'someurl.com',
+                    'alt': 'Alt text'
+                },
+                {
+                    'file': f'{settings.MEDIA_URL}anotherimage.png',
+                    'href': 'another.url.com',
+                    'alt': 'Another alt text'
+                }
+            ],
+            'privacy': '<p>Some privacy message</p>'
         }
         self.assertEqual(serialize_footer(self.footer), expected_json)
 
