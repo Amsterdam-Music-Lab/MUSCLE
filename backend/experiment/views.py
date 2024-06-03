@@ -76,7 +76,7 @@ def default_questions(request, rules):
 
 
 def get_experiment_collection(request: HttpRequest, slug: str, group_index: int = 0) -> JsonResponse:
-    ''' 
+    '''
     check which `ExperimentCollectionGroup` objects are related to the `ExperimentCollection` with the given slug
     retrieve the group with the lowest order (= current_group)
     return the next experiment from the current_group without a finished session
