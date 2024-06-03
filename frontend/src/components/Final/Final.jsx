@@ -52,6 +52,10 @@ const Final = ({ experiment, participant, score, final_text, action_texts, butto
         finalizeSession({ session, participant });
     }, [session, participant]);
 
+    const isRelativeUrl = (url) => {
+        return url && url.startsWith("/");
+    }
+
     return (
         <div className="aha__final d-flex flex-column justify-content-center">
             {rank && (
@@ -65,9 +69,15 @@ const Final = ({ experiment, participant, score, final_text, action_texts, butto
             </div>
             {button && (
                 <div className="text-center pt-4">
-                    <Link className='btn btn-primary btn-lg' to={button.link} onClick={button.link ? undefined : onNext}>
-                        {button.text}
-                    </Link>
+                    {isRelativeUrl(button.link) ? (
+                        <Link data-testid="button-link" className='btn btn-primary btn-lg' to={button.link} onClick={button.link ? undefined : onNext}>
+                            {button.text}
+                        </Link>
+                    ) : (
+                        <a data-testid="button-link" className='btn btn-primary btn-lg' href={button.link} onClick={button.link ? undefined : onNext}>
+                            {button.text}
+                        </a>
+                    )}
                 </div>
             )}
             {logo && (
