@@ -23,7 +23,7 @@ export const Footer: React.FC<IFooter> = ({disclaimer, logos, privacy}) => {
                     </a>
                 ))}
             </div>
-            <div className="disclaimer" dangerouslySetInnerHTML={{
+            <div className="privacy" dangerouslySetInnerHTML={{
                 __html: privacy,
                 }}
             />
