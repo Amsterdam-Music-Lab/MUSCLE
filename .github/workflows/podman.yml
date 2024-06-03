@@ -5,7 +5,6 @@ on:
     branches:
       - develop
       - main
-      - poc/enable-e2e # temporary branch for e2e testing
     tags:
       - '*'
   workflow_dispatch:
@@ -283,7 +282,7 @@ jobs:
     name: E2E tests on acceptance environment
     runs-on: ACC
     # temporarily true to test e2e tests
-    if: true || github.ref == 'refs/heads/main' || github.ref == 'refs/tags/*' || (github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main')
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/tags/*' || (github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main')
 
     env:
       BASE_URL: "https://acc.amsterdammusiclab.nl"
