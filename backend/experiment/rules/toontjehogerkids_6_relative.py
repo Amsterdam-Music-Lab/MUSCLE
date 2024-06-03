@@ -26,13 +26,13 @@ class ToontjeHogerKids6Relative(Base):
         explainer = Explainer(
             instruction="Relatief Gehoor",
             steps=[
-                Step("In dit experiment kun je testen hoe goed jouw relatieve gehoor is! Relatief gehoor is het vermogen om een melodie te herkennen, ongeacht of deze nu wat hoger of lager in toonhoogte wordt afgespeeld."),
+                Step("In deze mini-game kun je jouw relatief gehoor testen!"),
                 # Empty step adds some spacing between steps to improve readability
                 Step(""),
                 Step(
-                    "Je krijgt twee melodieën te horen, verschillend in toonhoogte.", number=1),
+                    "Je hoort steeds twee melodieën, de een wat hoger dan de andere.", number=1),
                 Step("Luister goed, want je kunt ze maar één keer afspelen!", number=2),
-                Step("Aan jou de taak om te ontrafelen of deze melodieën hetzelfde zijn, ongeacht de toonhoogte! ", number=3),
+                Step("Aan jou de taak om te luisteren of deze melodieën hetzelfde zijn, ongeacht de toonhoogte!", number=3),
             ],
             button_label="Start"
         )
@@ -71,9 +71,9 @@ class ToontjeHogerKids6Relative(Base):
             feedback = "Er is een fout opgetreden"
         else:
             if last_result.score == self.SCORE_CORRECT:
-                feedback = "Dat is correct! De melodieën in de muziekfragmenten zijn inderdaad verschillend."
+                feedback = "Dat klopt! De melodieën zijn inderdaad verschillend."
             else:
-                feedback = "Helaas! De melodieën in de muziekfragmenten zijn toch echt verschillend."
+                feedback = "Helaas! De melodieën zijn toch echt verschillend."
 
         # Return score view
         config = {'show_total_score': True}
@@ -149,7 +149,7 @@ class ToontjeHogerKids6Relative(Base):
         score = self.get_score(session)
 
         # Final
-        final_text = "Goed gedaan, jouw relatief gehoor is uitstekend!" if session.final_score >= 2 * \
+        final_text = "Goed gedaan!" if session.final_score >= 2 * \
             self.SCORE_CORRECT else "Dat bleek toch even lastig!"
         final = Final(
             session=session,

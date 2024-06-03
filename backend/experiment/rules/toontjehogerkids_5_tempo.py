@@ -26,14 +26,13 @@ class ToontjeHogerKids5Tempo(Base):
 
         # 1. Explain game.
         explainer = Explainer(
-            instruction="Timing en tempo",
+            instruction="Maatgevoel",
             steps=[
                 Step(
-                    "Je krijgt dadelijk twee verschillende uitvoeringen van hetzelfde stuk te horen."),
-                Step("Eén wordt op de originele snelheid (tempo) afgespeeld, terwijl de ander iets is versneld of vertraagd."),
+                    "Je krijgt zo twee stukjes muziek te horen, de muziek is 2x hetzelfde."),
+                Step("Bij die muziek hoor je ook klikjes: die passen de ene keer goed bij de maat van de muziek, terwijl ze de andere keer niet goed gelijk lopen.   "),
                 Step(
-                    "Kan jij horen welke het origineel is?"),
-                Step("Let hierbij vooral op de timing van de muzikanten.")
+                    "Kan jij horen waar de klikjes goed bij de maat van de muziek passen?"),
             ],
             step_numbers=True,
             button_label="Start"
@@ -137,7 +136,7 @@ class ToontjeHogerKids5Tempo(Base):
         # Question
         key = 'pitch'
         question = ButtonArrayQuestion(
-            question="Welk fragment wordt in het originele tempo afgespeeld?",
+            question="Kan jij horen waar de klikjes goed bij de maat van de muziek passen?",
             key=key,
             choices={
                 "A": "A",
@@ -226,10 +225,8 @@ class ToontjeHogerKids5Tempo(Base):
 
         # Final
         final_text = "Dat bleek toch even lastig!"
-        if session.final_score >= session.experiment.rounds * 0.8 * self.SCORE_CORRECT:
-            final_text = "Goed gedaan! Jouw timing is uitstekend!"
-        elif session.final_score >= session.experiment.rounds * 0.5 * self.SCORE_CORRECT:
-            final_text = "Goed gedaan! Jouw timing is best OK!"
+        if session.final_score >= session.experiment.rounds * 0.5 * self.SCORE_CORRECT:
+            final_text = "Goed gedaan!"
 
         final = Final(
             session=session,

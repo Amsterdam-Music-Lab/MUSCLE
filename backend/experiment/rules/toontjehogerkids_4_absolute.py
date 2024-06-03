@@ -31,9 +31,9 @@ class ToontjeHogerKids4Absolute(Base):
             instruction="Absoluut gehoor",
             steps=[
                 Step(
-                    "Je gaat zo luisteren naar fragmenten muziek die je misschien herkent als de intro van een tv-programma of serie."),
+                    "Je gaat zo luisteren naar stukjes muziek die je misschien herkent van een tv-programma of filmpje."),
                 Step(
-                    "Van ieder fragment kan je twee versies luisteren. Eén hiervan is het origineel. De andere hebben we een beetje hoger of lager gemaakt."),
+                    "Je kunt steeds twee versies luisteren. Eén hiervan is het origineel. De andere hebben we een beetje hoger of lager gemaakt."),
                 Step("Kan jij horen welke van de twee versies precies zo hoog of laag is als je 'm kent? Welke is het origineel?"),
             ],
             step_numbers=True,
@@ -99,7 +99,7 @@ class ToontjeHogerKids4Absolute(Base):
         # Question
         key = 'pitch'
         question = ButtonArrayQuestion(
-            question="Welk fragment heeft de juiste toonhoogte?",
+            question="Welke van deze twee stukjes muziek klinkt precies zo hoog of laag als in het echt?",
             key=key,
             choices={
                 "A": "A",
@@ -158,10 +158,8 @@ class ToontjeHogerKids4Absolute(Base):
 
         # Final
         final_text = "Dat bleek toch even lastig!"
-        if session.final_score >= session.experiment.rounds * 0.8 * self.SCORE_CORRECT:
-            final_text = "Goed gedaan! Jouw absolute gehoor is uitstekend!"
-        elif session.final_score >= session.experiment.rounds * 0.5 * self.SCORE_CORRECT:
-            final_text = "Goed gedaan! Jouw absolute gehoor is best OK!"
+        if session.final_score >= session.experiment.rounds * 0.5 * self.SCORE_CORRECT:
+            final_text = "Goed gedaan!"
 
         final = Final(
             session=session,

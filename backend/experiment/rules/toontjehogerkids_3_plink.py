@@ -30,11 +30,11 @@ class ToontjeHogerKids3Plink(ToontjeHoger3Plink):
         explainer = Explainer(
             instruction="Muziekherkenning",
             steps=[
-                Step("Je krijgt {} zeer korte muziekfragmenten te horen.".format(
+                Step("Je hoort zo een heel kort stukje van een liedje.".format(
                     experiment.rounds)),
-                Step("Ken je het nummer? Noem de juiste artiest en titel!"),
+                Step("Herken je dit liedje? Kies dan de juiste artiest en titel!"),
                 Step(
-                    "Weet je het niet? Neem dan een gokje.")
+                    "Weet je het niet zeker? Doe dan maar een gok.")
             ],
             step_numbers=True,
             button_label="Start"
@@ -94,7 +94,7 @@ class ToontjeHogerKids3Plink(ToontjeHoger3Plink):
         question1 = AutoCompleteQuestion(
             key='plink',
             choices=choices,
-            question='Noem de artiest en de titel van het nummer',
+            question='Kies de artiest en de titel van het nummer',
             result_id=prepare_result(
                 'plink',
                 session,
@@ -129,7 +129,7 @@ class ToontjeHogerKids3Plink(ToontjeHoger3Plink):
         score = self.get_score_view(session)
 
         # Final
-        final_text = "Goed gedaan, jouw muziekherkenning is uitstekend!" if session.final_score >= 4 * \
+        final_text = "Goed gedaan!" if session.final_score >= 4 * \
             self.SCORE_MAIN_CORRECT else "Dat bleek toch even lastig!"
         final = Final(
             session=session,
