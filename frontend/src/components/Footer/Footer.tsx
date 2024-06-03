@@ -12,11 +12,12 @@ export const Footer: React.FC<IFooter> = ({disclaimer, logos, privacy}) => {
                 }}
             />
             <div className="logos">
-                {logos.map((logo: ILogo) => (
+                {logos.map((logo: ILogo, index: number) => (
                     <a
                         href={logo.href}
                         target="_blank"
                         rel="noopener noreferrer"
+                        key={index}
                     >
                         <img src={API_BASE_URL + logo.file} alt={logo.alt} />
                     </a>
