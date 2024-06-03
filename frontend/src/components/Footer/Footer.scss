@@ -8,7 +8,7 @@
     flex-direction: column;
     text-align: center;
 
-    .disclaimer > * {
+    .disclaimer, .privacy > * {
         max-width: 700px;
         margin: 0 auto;
     }
@@ -17,7 +17,7 @@
         padding-top: 30px;
         padding-bottom: 30px;
         display: flex;
-       gap: 45px;
+        gap: 45px;
         flex-wrap: wrap;
         align-items: center;
         justify-content: center;
