@@ -40,13 +40,10 @@ class ToontjeHoger2Preverbal(Base):
         # 2 Spectrogram information
         spectrogram_info = self.get_spectrogram_info()
 
-        # 3. Choose playlist.
-        playlist = Playlist(experiment.playlists.all())
 
         return [
             explainer,
             spectrogram_info,
-            playlist,
         ]
 
     def get_spectrogram_info(self):
@@ -109,7 +106,7 @@ class ToontjeHoger2Preverbal(Base):
         # Question
         key = 'expected_spectrogram'
         question = ButtonArrayQuestion(
-            question="Welk spectrogram toont het geluid van een mens?",
+            question=self.get_round1_question(),
             key=key,
             choices={
                 'A': 'A',
@@ -133,7 +130,13 @@ class ToontjeHoger2Preverbal(Base):
         )
 
         return [image_trial]
-    
+
+    def get_round1_question(self):
+        return "Welk spectrogram toont het geluid van een mens?"
+
+    def get_round_2_question(self):
+        return "Welke baby is in Frankrijk geboren?"
+
     def get_round1_playback(self, session):
         # Get sections
         sectionA = session.section_from_any_song(
@@ -196,7 +199,7 @@ class ToontjeHoger2Preverbal(Base):
         # Question
         key = 'baby'
         question = ChoiceQuestion(
-            question="Welke baby is in Frankrijk geboren?",
+            question=self.get_round_2_question(),
             key=key,
             choices={
                 "A": "A",
