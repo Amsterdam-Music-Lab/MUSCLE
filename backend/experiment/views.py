@@ -12,6 +12,7 @@ from experiment.serializers import serialize_actions, serialize_experiment_colle
 from experiment.rules import EXPERIMENT_RULES
 from experiment.actions.utils import COLLECTION_KEY
 from participant.utils import get_participant
+from theme.serializers import serialize_theme
 
 logger = logging.getLogger(__name__)
 
@@ -33,7 +34,7 @@ def get_experiment(request, slug):
         'id': experiment.id,
         'slug': experiment.slug,
         'name': experiment.name,
-        'theme': experiment.theme_config.to_json() if experiment.theme_config else None,
+        'theme': serialize_theme(experiment.theme_config) if experiment.theme_config else None,
         'class_name': class_name,  # can be used to override style
         'rounds': experiment.rounds,
         'playlists': [
