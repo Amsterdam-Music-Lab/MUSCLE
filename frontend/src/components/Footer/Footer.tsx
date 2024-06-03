@@ -7,7 +7,7 @@ import { Footer as IFooter, Logo as ILogo } from "@types/Footer";
 export const Footer: React.FC<IFooter> = ({disclaimer, logos, privacy}) => {
     return (
         <div className="aha__footer">
-            <p className="disclaimer" dangerouslySetInnerHTML={{
+            <div className="disclaimer" dangerouslySetInnerHTML={{
                 __html: disclaimer,
                 }}
             />
@@ -23,7 +23,7 @@ export const Footer: React.FC<IFooter> = ({disclaimer, logos, privacy}) => {
                     </a>
                 ))};
             </div>
-            <p className="disclaimer" dangerouslySetInnerHTML={{
+            <div className="disclaimer" dangerouslySetInnerHTML={{
                 __html: privacy,
                 }}
             />
