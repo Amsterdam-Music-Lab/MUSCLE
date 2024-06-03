@@ -12,6 +12,7 @@ from experiment.questions.demographics import DEMOGRAPHICS
 from experiment.questions.goldsmiths import MSI_OTHER
 from experiment.questions.utils import question_by_key, unanswered_questions
 from result.score import SCORING_RULES
+from session.models import Session
 
 from experiment.questions import get_questions_from_keys
 
@@ -53,7 +54,11 @@ class Base(object):
         if scoring_rule:
             return scoring_rule(result, data)
         return None
-    
+
+    def get_play_again_url(self, session: Session):
+        participant_id_url_param = f'?participant_id={session.participant.participant_id_url}' if session.participant.participant_id_url else ""
+        return f'/{session.experiment.slug}{participant_id_url_param}'
+
     def calculate_intermediate_score(self, session, result):
         """ process result data during a trial (i.e., between next_round calls) 
         return score
