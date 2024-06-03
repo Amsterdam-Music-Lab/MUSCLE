@@ -27,11 +27,11 @@ class ToontjeHogerKids2Preverbal(Base):
             instruction="Het eerste luisteren",
             steps=[
                 Step(
-                    "Je krijgt drie spectrogrammen te zien met de vraag: welk geluid is van een mens?"),
+                    "Je krijgt straks plaatjes te zien, een soort grafieken van een geluid. In een filmpje zie je zo een korte uitleg."),
                 Step(
-                    "Daarvoor eerst nog wat uitleg van wat een spectrogram is, natuurlijk."),
+                    "Welk plaatje denk jij dat er hoort bij de stem van een mens?"),
                 Step(
-                    "Tenslotte krijg je twee geluiden te horen met de vraag: welke baby is in Frankrijk geboren?"),
+                    "Daarna volgt een vraag over twee baby huiltjes, kun jij het verschil horen?"),
             ],
             step_numbers=True,
             button_label="Start"
@@ -51,9 +51,9 @@ class ToontjeHogerKids2Preverbal(Base):
 
     def get_spectrogram_info(self):
         image_url = "/images/experiments/toontjehoger/spectrogram_info_nl.webp"
-        description = "Een spectrogram is een visuele weergave van geluid, waarin je kan zien hoe een geluid verandert over de tijd. Hoe witter, hoe meer energie op die frequentie."
-        body = '<div class="center"><img src="{}"></div><p>{}</p>'.format(
-            image_url, description)
+        description = "Dit is een spectogram. Wil je weten hoe dat werkt? Kijk dan het filmpje!"
+        video = 'https://youtu.be/Mw5u3fe9aMI'
+        body = f'<div class="center"><img src="{image_url}"></div><p>{description}</p><iframe width="560" src={video}></iframe>'
 
         # Return answer info view
         info = Info(
@@ -89,14 +89,14 @@ class ToontjeHogerKids2Preverbal(Base):
             feedback = "Er is een fout opgetreden"
         else:
             if rounds_passed == 1:
-                appendix = "Op het volgende scherm kun je de geluiden beluisteren."
+                appendix = "Op het volgende scherm kun je de drie geluiden beluisteren."
                 if last_result.score == self.SCORE_CORRECT:
-                    feedback = "Dat is correct! Spectrogram C is inderdaad van een mens. " + appendix
+                    feedback = "Goedzo! Op plaatje C zie je inderdaad de stem van een mens. " + appendix
                 else:
-                    feedback = "Helaas! Je antwoord was onjuist. Het geluid van spectrogram C is van een mens. " + appendix
+                    feedback = "Helaas! Je antwoord was onjuist. Op plaatje C zag je de stem van een mens. " + appendix
             elif rounds_passed == 2:
                 if last_result.score == self.SCORE_CORRECT:
-                    feedback = "Dat is correct! Geluid A is inderdaad de Franse baby."
+                    feedback = "Goedzo! Geluid A is inderdaad de Franse baby."
                 else:
                     feedback = "Helaas! Geluid A is de Franse baby."
 
@@ -109,7 +109,7 @@ class ToontjeHogerKids2Preverbal(Base):
         # Question
         key = 'expected_spectrogram'
         question = ButtonArrayQuestion(
-            question="Welk spectrogram toont het geluid van een mens?",
+            question="Welk plaatje denk jij dat er hoort bij de stem van een mens?",
             key=key,
             choices={
                 'A': 'A',
@@ -196,7 +196,7 @@ class ToontjeHogerKids2Preverbal(Base):
         # Question
         key = 'baby'
         question = ChoiceQuestion(
-            question="Welke baby is in Frankrijk geboren?",
+            question="Hierboven zie je twee spectogrammen van baby huiltjes.  Een van een Duitse baby en een van een Franse baby. De talen Frans en Duits klinken heel anders. Kun jij bedenken welke van deze baby’s de Franse baby is?",
             key=key,
             choices={
                 "A": "A",
@@ -229,7 +229,7 @@ class ToontjeHogerKids2Preverbal(Base):
         score = self.get_score(session, session.rounds_passed())
 
         # Final
-        final_text = "Goed gedaan! Je hebt beide vragen correct beantwoord!" if session.final_score >= 2 * \
+        final_text = "Goed gedaan!" if session.final_score >= 2 * \
             self.SCORE_CORRECT else "Dat bleek toch even lastig!"
         final = Final(
             session=session,
