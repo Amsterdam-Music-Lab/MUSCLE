@@ -55,21 +55,26 @@ const Trial = ({
                 if (feedback_form.is_skippable) {
                     form.map((formElement => (formElement.value = formElement.value || '')))
                 }
-                onResult({
-                    decision_time: getAndStoreDecisionTime(),
-                    form,
-                    config
-                });
-                if (config.break_round_on) {
-                    const values = form.map((formElement) => formElement.value);
-                    if (checkBreakRound(values, config.break_round_on)) {
-                        // one of the break conditions is met:
-                        // onNext will request next_round from server,
-                        // and ignore further rounds in the current array
-                        onNext(true)
-                    }
 
+                const breakRoundOn = config.break_round_on;
+                const shouldBreakRound = breakRoundOn && checkBreakRound(form.map((formElement) => formElement.value), breakRoundOn);
+                const shouldCallOnNextInOnResult = !shouldBreakRound
+
+                await onResult(
+                    {
+                        decision_time: getAndStoreDecisionTime(),
+                        form,
+                        config
+                    },
+                    false,
+                    // if we break the round, we don't want to call onNext in onResult
+                    shouldCallOnNextInOnResult
+                );
+
+                if (shouldBreakRound) {
+                    onNext(true);
                 }
+
             } else {
                 if (result_id) {
                     onResult({
@@ -109,7 +114,7 @@ const Trial = ({
         if (config.auto_advance) {
 
             // Create a time_passed result
-            if (config.auto_advance_timer != null) {                
+            if (config.auto_advance_timer != null) {
                 if (playback.view === 'BUTTON') {
                     startTime.current = getCurrentTime();
                 }
