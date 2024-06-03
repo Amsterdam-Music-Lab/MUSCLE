@@ -22,11 +22,10 @@ export const Footer: React.FC<IFooter> = ({disclaimer, logos, privacy}) => {
                     </a>
                 ))};
             </div>
-            <div className="privacy">
-                <p>
-                    {privacy}
-                </p>
-            </div>
+            <p className="disclaimer" dangerouslySetInnerHTML={{
+                __html: privacy,
+                }}
+            />
         </div>
     )
 }
