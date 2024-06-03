@@ -11,10 +11,10 @@ from result.utils import prepare_result
 
 logger = logging.getLogger(__name__)
 
-QUESTION_URL1 = "/images/experiments/toontjehoger/mozart-effect1.webp"
-QUESTION_URL2 = "/images/experiments/toontjehoger/mozart-effect2.webp"
-ANSWER_URL1 = "/images/experiments/toontjehoger/mozart-effect1-answer.webp"
-ANSWER_URL2 = "/images/experiments/toontjehoger/mozart-effect2-answer.webp"
+QUESTION_URL1 = "/images/experiments/toontjehogerkids/mozart-effect1.webp"
+QUESTION_URL2 = "/images/experiments/toontjehogerkids/mozart-effect2.webp"
+ANSWER_URL1 = "/images/experiments/toontjehogerkids/mozart-effect1-answer.webp"
+ANSWER_URL2 = "/images/experiments/toontjehogerkids/mozart-effect2-answer.webp"
 
 
 def toontjehoger_ranks(session):
@@ -42,9 +42,9 @@ class ToontjeHogerKids1Mozart(Base):
         explainer = Explainer(
             instruction="Het Mozart effect",
             steps=[
-                Step("Je hoort een muziekfragment van ongeveer 25 seconden."),
-                Step("Hierna verschijnt een korte puzzel."),
-                Step("Lukt het om het juiste antwoord te vinden?"),
+                Step("Je hoort zo een kort stukje muziek."),
+                Step("Hierna zie je een puzzel."),
+                Step("Kun jij het juiste antwoord vinden?"),
             ],
             step_numbers=True,
             button_label="Start"
@@ -67,7 +67,7 @@ class ToontjeHogerKids1Mozart(Base):
             round = self.get_image_trial(session,
                                         section_group='1',
                                         image_url=QUESTION_URL1,
-                                        question="Welke vorm ontstaat er na het afknippen van de hoekjes?",
+                                         question="Je vouwt een papier en knipt er twee hoekjes af, precies zoals op het plaatje. Welke vorm krijgt het papier dan?",
                                         expected_response='B'
                                         )
             # No combine_actions because of inconsistent next_round array wrapping in first round
@@ -80,7 +80,7 @@ class ToontjeHogerKids1Mozart(Base):
             round = self.get_image_trial(session,
                                         section_group='2',
                                         image_url=QUESTION_URL2,
-                                        question="Welke vorm ontstaat er na het afknippen van het hoekje?",
+                                         question="Je vouwt een papier en knipt er twee hoekjes af, precies zoals op het plaatje. Welke vorm krijgt het papier dan?",
                                         expected_response='B'
                                         )
             return [*answer_explainer, *score, *round]
@@ -187,8 +187,8 @@ class ToontjeHogerKids1Mozart(Base):
         explainer = Explainer(
             instruction="Het Mozart effect",
             steps=[
-                Step("Je krijgt nu een ander muziekfragment van 20 seconden te horen."),
-                Step("Hierna verschijnt weer een korte puzzel."),
+                Step("Je krijgt nu een ander stukje muziek te horen."),
+                Step("Hierna zie je weer een puzzel."),
                 Step("Lukt het nu om de juiste te kiezen?"),
             ],
             step_numbers=True,
@@ -214,7 +214,7 @@ class ToontjeHogerKids1Mozart(Base):
         score = self.get_score(session)
 
         # Final
-        final_text = "Je hebt het uitstekend gedaan!" if session.final_score >= 2 * \
+        final_text = "Goed gedaan!" if session.final_score >= 2 * \
             self.SCORE_CORRECT else "Dat bleek toch even lastig!"
         final = Final(
             session=session,
