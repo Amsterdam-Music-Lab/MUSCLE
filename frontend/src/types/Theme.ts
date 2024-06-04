@@ -1,8 +1,7 @@
 export interface Header {
     nextExperimentButtonText: string;
     aboutButtonText: string;
-    showScore: boolean;
-    totalScore: Number;
+    showScore: boolean;    
 };
 
 export default interface Theme {

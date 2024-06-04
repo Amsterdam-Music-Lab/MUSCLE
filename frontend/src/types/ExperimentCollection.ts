@@ -18,4 +18,5 @@ export default interface ExperimentCollection {
     aboutContent: string;
     consent?: Consent;
     theme?: Theme;
+    totalScore: Number;
 }
