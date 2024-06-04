@@ -85,24 +85,45 @@
 }
 
 .toontjehoger {
-    ul > li > a > img {
-        &:first-of-type {
+    li {
+        &:first-of-type img {
             background-color: $yellow;
         }
-        &:nth-of-type(2) {
+        &:nth-of-type(2) img {
             background-color: $red;
         }
-        &:nth-of-type(3) {
+        &:nth-of-type(3) img {
             background-color: $teal;
         }
-        &:nth-of-type(4) {
+        &:nth-of-type(4) img {
             background-color: $pink;
         }
-        &:nth-of-type(5) {
+        &:nth-of-type(5) img {
             background-color: $blue;
         }
-        &:last-of-type {
+        &:last-of-type img {
             background-color: $indigo;
+        }
+    }
+
+    label {
+        &:first-of-type {
+            @include btn-style($blue);
+        }
+        &:nth-of-type(2) {
+            @include btn-style($yellow);
+        }
+        &:nth-of-type(3) {
+            @include btn-style($teal);
+        }
+        &:nth-of-type(4)  {
+            @include btn-style($pink);
+        }
+        &:nth-of-type(5) {
+            @include btn-style($red);
+        }
+        &:last-of-type {
+            @include btn-style($indigo);
         }
     }
 }
