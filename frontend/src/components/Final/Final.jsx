@@ -69,19 +69,20 @@ const Final = ({ experiment, participant, score, final_text, action_texts, butto
             </div>
             {button && (
                 <div className="text-center pt-4">
-                    {!button?.link && (
+                    {!button.link ? (
                         <button data-testid="button" className='btn btn-primary btn-lg' onClick={() => onNext(false)}>
                             {button.text}
                         </button>
-                    )}
-                    {button?.link && isRelativeUrl(button.link) ? (
-                        <Link data-testid="button-link" className='btn btn-primary btn-lg' to={button.link} onClick={() => onNext(false)}>
-                            {button.text}
-                        </Link>
                     ) : (
-                        <a data-testid="button-link" className='btn btn-primary btn-lg' href={button.link} onClick={() => onNext(false)}>
-                            {button.text}
-                        </a>
+                        isRelativeUrl(button.link) ? (
+                            <Link data-testid="button-link" className='btn btn-primary btn-lg' to={button.link}>
+                                {button.text}
+                            </Link>
+                        ) : (
+                            <a data-testid="button-link" className='btn btn-primary btn-lg' href={button.link} target="_blank" rel="noopener noreferrer">
+                                {button.text}
+                            </a>
+                        )
                     )}
                 </div>
             )}
