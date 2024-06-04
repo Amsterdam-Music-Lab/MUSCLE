@@ -33,11 +33,12 @@ def serialize_header(header: HeaderConfig) -> dict:
     return {
         'nextExperimentButtonText': _('Next experiment'),
         'aboutButtonText': _('About us'),
-        'showScore': header.show_score,
-        'scoreClass': 'gold',
-        'scoreLabel': _('Points'),
-        'noScoreLabel': _('No points yet!')
-        }
+        'score': {
+            'scoreClass': 'gold',
+            'scoreLabel': _('Points'),
+            'noScoreLabel': _('No points yet!')
+            } if header.show_score else None,
+    }
 
 
 def serialize_theme(theme: ThemeConfig) -> dict:

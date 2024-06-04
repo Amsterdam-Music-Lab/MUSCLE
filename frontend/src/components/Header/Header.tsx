@@ -11,12 +11,16 @@ interface HeaderProps {
     aboutButtonText: string;
     showScore: boolean;
     totalScore: Number;
+    score: Object;    
+}
+
+interface score {
     scoreClass: string;
     scoreLabel: string;
     noScoreLabel: string;
 }
 
-export const Header: React.FC<HeaderProps> = ({ nextExperimentSlug, nextExperimentButtonText, collectionSlug, aboutButtonText, showScore, totalScore, scoreClass, scoreLabel, noScoreLabel }) => {
+export const Header: React.FC<HeaderProps> = ({ nextExperimentSlug, nextExperimentButtonText, collectionSlug, aboutButtonText, showScore, totalScore, score }) => {
     
     const social = {
         'apps': ['facebook', 'twitter'],
@@ -86,20 +90,20 @@ export const Header: React.FC<HeaderProps> = ({ nextExperimentSlug, nextExperime
                     {aboutButtonText && <Link className="btn btn-lg btn-outline-primary" to={`/collection/${collectionSlug}/about`}>{aboutButtonText}</Link>}
                 </nav>
             </div>
-            {showScore && totalScore !== 0 && (
+            {score && totalScore !== 0 && (
                 <div className="results">
                     <Score
                     score={totalScore}
-                    scoreClass={scoreClass}
-                    label={scoreLabel}
+                    scoreClass={score.scoreClass}
+                    label={score.scoreLabel}
                     />
                     <Social
                         social={social}                        
                     />
                 </div>                
             )}
-            {showScore && totalScore === 0 && (
-                <h3>{noScoreLabel}</h3>
+            {score && totalScore === 0 && (
+                <h3>{score.noScoreLabel}</h3>
             )}
         </div>
     );
