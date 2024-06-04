@@ -20,7 +20,7 @@ export const ExperimentCollectionDashboard: React.FC<ExperimentCollectionDashboa
     const headerProps = experimentCollection.theme?.header? {
         nextExperimentSlug,        
         collectionSlug: experimentCollection.slug,
-        ...experimentCollection.theme.header,
+        ... experimentCollection.theme.header,
         totalScore: totalScore
         
     } : undefined;
