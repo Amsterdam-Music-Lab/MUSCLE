@@ -4,11 +4,8 @@ from os.path import join
 from django.template.loader import render_to_string
 from .toontjehoger_1_mozart import toontjehoger_ranks
 from .toontjehoger_5_tempo import ToontjeHoger5Tempo
-from experiment.actions import Trial, Explainer, Step, Score, Final, Playlist, Info
-from experiment.actions.form import ButtonArrayQuestion, Form
-from experiment.actions.playback import Multiplayer
-from experiment.actions.styles import STYLE_NEUTRAL
-from experiment.utils import create_player_labels, non_breaking_spaces
+from experiment.actions import Explainer, Step, Score, Final, Info
+from experiment.utils import non_breaking_spaces
 
 from result.utils import prepare_result
 
@@ -178,12 +175,12 @@ class ToontjeHogerKids5Tempo(ToontjeHoger5Tempo):
 
         # Info page
         body = render_to_string(
-            join('info', 'toontjehoger', 'experiment5.html'))
+            join('info', 'toontjehogerkids', 'experiment5.html'))
         info = Info(
             body=body,
             heading="Timing en tempo",
             button_label="Terug naar ToontjeHoger",
-            button_link="/toontjehoger"
+            button_link="/collection/thkids"
         )
 
         return [*score, final, info]

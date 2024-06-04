@@ -61,12 +61,12 @@ class ToontjeHogerKids1Mozart(ToontjeHoger1Mozart):
 
         # Info page
         body = render_to_string(
-            join('info', 'toontjehoger', 'experiment1.html'))
+            join('info', 'toontjehogerkids', 'experiment1.html'))
         info = Info(
             body=body,
             heading="Het Mozart effect",
             button_label="Terug naar ToontjeHoger",
-            button_link="/toontjehoger"
+            button_link="/collection/thkids"
         )
 
         return [*answer_explainer, *score, final, info]

@@ -139,12 +139,12 @@ class ToontjeHogerKids3Plink(ToontjeHoger3Plink):
 
         # Info page
         body = render_to_string(
-            join('info', 'toontjehoger', 'experiment3.html'))
+            join('info', 'toontjehogerkids', 'experiment3.html'))
         info = Info(
             body=body,
             heading="Muziekherkenning",
             button_label="Terug naar ToontjeHoger",
-            button_link="/toontjehoger"
+            button_link="/collection/thkids"
         )
 
         return [score, final, info]

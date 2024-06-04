@@ -2,13 +2,9 @@ import logging
 from django.template.loader import render_to_string
 
 from .toontjehoger_1_mozart import toontjehoger_ranks
-from experiment.actions import Trial, Explainer, Step, Score, Final, Playlist, Info, HTML
-from experiment.actions.form import ButtonArrayQuestion, ChoiceQuestion, Form
-from experiment.actions.playback import ImagePlayer
-from experiment.actions.styles import STYLE_NEUTRAL
+from experiment.actions import Explainer, Step, Score, Final, Info
 from .toontjehoger_2_preverbal import ToontjeHoger2Preverbal
 from os.path import join
-from result.utils import prepare_result
 
 logger = logging.getLogger(__name__)
 
@@ -108,12 +104,12 @@ class ToontjeHogerKids2Preverbal(ToontjeHoger2Preverbal):
 
         # Info page
         body = render_to_string(
-            join('info', 'toontjehoger', 'experiment2.html'))
+            join('info', 'toontjehogerkids', 'experiment2.html'))
         info = Info(
             body=body,
             heading="Het eerste luisteren",
             button_label="Terug naar ToontjeHoger",
-            button_link="/toontjehoger"
+            button_link="/collection/thkids"
         )
 
         return [*score, final, info]

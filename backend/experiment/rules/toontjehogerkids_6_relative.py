@@ -3,12 +3,7 @@ from django.template.loader import render_to_string
 from os.path import join
 from .toontjehoger_1_mozart import toontjehoger_ranks
 from .toontjehoger_6_relative import ToontjeHoger6Relative
-from experiment.actions import Trial, Explainer, Step, Score, Final, Playlist, Info
-from experiment.actions.form import ChoiceQuestion, Form
-from experiment.actions.playback import Multiplayer
-from experiment.actions.styles import STYLE_BOOLEAN
-
-from result.utils import prepare_result
+from experiment.actions import Explainer, Step, Score, Final, Info
 
 logger = logging.getLogger(__name__)
 
@@ -77,12 +72,12 @@ class ToontjeHogerKids6Relative(ToontjeHoger6Relative):
 
         # Info page
         body = render_to_string(
-            join('info', 'toontjehoger', 'experiment6.html'))
+            join('info', 'toontjehogerkids', 'experiment6.html'))
         info = Info(
             body=body,
             heading="Relatief gehoor",
             button_label="Terug naar ToontjeHoger",
-            button_link="/toontjehoger"
+            button_link="/collection/thkids"
         )
 
         return [*score, final, info]
