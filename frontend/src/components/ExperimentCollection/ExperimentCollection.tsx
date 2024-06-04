@@ -34,8 +34,8 @@ const ExperimentCollection = ({ match }: ExperimentCollectionProps) => {
     const nextExperiment = experimentCollection?.next_experiment;
     const displayDashboard = experimentCollection?.dashboard.length;
     const showConsent = experimentCollection?.consent;
-    const totalScore = experimentCollection?.total_score
-    const scoreClass = experimentCollection?.score_class
+    const totalScore = experimentCollection?.total_score;
+    const scoreClass = experimentCollection?.score_class;
     const onNext = () => {
         setHasShownConsent(true);
     }
