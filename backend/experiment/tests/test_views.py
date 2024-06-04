@@ -160,7 +160,8 @@ class ExperimentViewsTest(TestCase):
             serialized_experiment['description'], 'This is a test experiment'
         )
         self.assertEqual(
-            serialized_experiment['image'], '/upload/test-image.jpg'
+            serialized_experiment['image'], {
+                'file': '/upload/test-image.jpg', 'href': '', 'alt': ''}
         )
         self.assertEqual(
             serialized_experiment['finished_session_count'], 3

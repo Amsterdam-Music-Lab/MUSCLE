@@ -1,11 +1,8 @@
-import logging
-
 from os.path import join
 from django.template.loader import render_to_string
 from .toontjehoger_1_mozart import toontjehoger_ranks
-from experiment.actions import Trial, Explainer, Step, Final, Info
+from experiment.actions import Explainer, Step, Final, Info
 from .toontjehoger_4_absolute import ToontjeHoger4Absolute
-
 
 
 class ToontjeHogerKids4Absolute(ToontjeHoger4Absolute):
