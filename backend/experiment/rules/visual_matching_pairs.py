@@ -55,7 +55,7 @@ class VisualMatchingPairsGame(Base):
             playlist,
             explainer
         ]
-    
+
     def next_round(self, session):
         if session.rounds_passed() < 1:       
             trials = self.get_questionnaire(session)
@@ -80,6 +80,7 @@ class VisualMatchingPairsGame(Base):
                 final_text='Can you score higher than your friends and family? Share and let them try!',
                 button={
                     'text': 'Play again',
+                    'link': self.get_play_again_url(session)
                 },
                 rank=self.rank(session, exclude_unfinished=False),
                 social=social_info,
@@ -88,7 +89,7 @@ class VisualMatchingPairsGame(Base):
             cont = self.get_visual_matching_pairs_trial(session)
 
             return [score, cont]
-    
+
     def get_visual_matching_pairs_trial(self, session):
 
         player_sections = list(session.playlist.section_set.filter(tag__contains='vmp'))
@@ -112,5 +113,5 @@ class VisualMatchingPairsGame(Base):
         for m in moves:
             m['filename'] = str(Section.objects.get(pk=m.get('selectedSection')).filename)
         score = data.get('result').get('score')
-        
+
         return score

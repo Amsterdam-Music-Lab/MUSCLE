@@ -106,7 +106,7 @@ class TestExperimentCollectionViews(TestCase):
         self.assertEqual(response_json.get('theme').get('header').get(
             'showScore'), True)
         self.assertEqual(response_json.get('theme').get('footer').get(
-            'disclaimer'), 'Test Disclaimer')
+            'disclaimer'), '<p>Test Disclaimer</p>')
 
     def test_experiment_collection_with_dashboard(self):
         # if ExperimentCollection has dashboard set True, return list of random experiments
@@ -201,7 +201,7 @@ class ExperimentViewsTest(TestCase):
             response.json()['theme']['header']['showScore'], True
         )
         self.assertEqual(
-            response.json()['theme']['footer']['disclaimer'], 'Test Disclaimer'
+            response.json()['theme']['footer']['disclaimer'], '<p>Test Disclaimer</p>'
         )
 
 
