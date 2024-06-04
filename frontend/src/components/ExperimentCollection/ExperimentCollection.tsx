@@ -9,6 +9,7 @@ import {
 import useBoundStore from "../../util/stores";
 import { useExperimentCollection } from "@/API";
 import Consent from "../Consent/Consent";
+import Footer from "../Footer/Footer";
 import DefaultPage from "../Page/DefaultPage";
 import Loading from "../Loading/Loading";
 import ExperimentCollectionAbout from "./ExperimentCollectionAbout/ExperimentCollectionAbout";
@@ -34,6 +35,10 @@ const ExperimentCollection = ({ match }: ExperimentCollectionProps) => {
     const nextExperiment = experimentCollection?.next_experiment;
     const displayDashboard = experimentCollection?.dashboard.length;
     const showConsent = experimentCollection?.consent;
+
+    if (experimentCollection?.theme) {
+        setTheme(experimentCollection.theme);
+    }
 
     const onNext = () => {
         setHasShownConsent(true);
@@ -74,6 +79,13 @@ const ExperimentCollection = ({ match }: ExperimentCollectionProps) => {
                 <Route path={URLS.experimentCollectionAbout} component={() => <ExperimentCollectionAbout content={experimentCollection?.aboutContent} slug={experimentCollection.slug} />} />
                 <Route path={URLS.experimentCollection} exact component={() => <ExperimentCollectionDashboard experimentCollection={experimentCollection} participantIdUrl={participantIdUrl} />} />
             </Switch>
+            {experimentCollection.theme?.footer && (
+                <Footer
+                    disclaimer={experimentCollection.theme.footer.disclaimer}
+                    logos={experimentCollection.theme.footer.logos}
+                    privacy={experimentCollection.theme.footer.privacy}
+                />
+            )}
         </div>
     )
 }

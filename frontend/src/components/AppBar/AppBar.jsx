@@ -8,7 +8,7 @@ const AppBar = ({ title, logoClickConfirm = null }) => {
 
     const theme = useBoundStore((state) => state.theme);
 
-    const logoUrl = theme? (API_BASE_URL + theme.logo_url) : LOGO_URL;
+    const logoUrl = theme?.logoUrl ? (API_BASE_URL + theme.logoUrl) : LOGO_URL;
 
     // Handle click on logo, to optionally confirm navigating
     const onLogoClick = (e) => {
