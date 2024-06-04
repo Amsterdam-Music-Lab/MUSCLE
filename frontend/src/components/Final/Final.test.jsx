@@ -67,7 +67,7 @@ describe('Final Component', () => {
             </BrowserRouter>
         );
 
-        fireEvent.click(screen.getByText('Next'));
+        fireEvent.click(screen.getByTestId('button'));
         await waitFor(() => {
             expect(onNextMock).toHaveBeenCalled();
         });
@@ -133,5 +133,33 @@ session="session-id"
         );
 
         expect(API.finalizeSession).toHaveBeenCalledWith({ session: 1, participant: 'participant-id' });
+    });
+
+    it('Uses Link to navigate when button link is relative', () => {
+        render(
+            <BrowserRouter>
+                <Final
+                    button={{ text: 'Next', link: '/aml' }}
+                />
+            </BrowserRouter>
+        );
+
+        const el = screen.getByTestId('button-link');
+        expect(el).to.exist;
+        expect(el.getAttribute('href')).toBe('/aml');
+    });
+
+    it('Uses an anchor tag to navigate when button link is absolute', () => {
+        render(
+            <BrowserRouter>
+                <Final
+                    button={{ text: 'Next', link: 'https://example.com' }}
+                />
+            </BrowserRouter>
+        );
+
+        const el = screen.getByTestId('button-link');
+        expect(el).to.exist;
+        expect(el.getAttribute('href')).toBe('https://example.com');
     });
 });
