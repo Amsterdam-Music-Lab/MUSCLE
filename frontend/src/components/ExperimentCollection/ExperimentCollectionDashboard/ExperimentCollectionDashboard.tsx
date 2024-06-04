@@ -38,10 +38,6 @@ export const ExperimentCollectionDashboard: React.FC<ExperimentCollectionDashboa
                             <Link to={getExperimentHref(exp.slug)} role="menuitem">
                                 <ImageOrPlaceholder imagePath={exp.image} alt={exp.description} />
                                 <h3>{exp.name}</h3>
-                                <div className="status-bar">
-                                    <span title={`Started ${exp.started_session_count} times`} role="status" className="counter">{exp.started_session_count}</span>
-                                    <span title={`Started ${exp.finished_session_count} times`} role="status" className="counter">{exp.finished_session_count}</span>
-                                </div>
                             </Link>
                         </li>
                     ))}
