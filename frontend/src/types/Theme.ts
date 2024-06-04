@@ -1,7 +1,7 @@
 export interface Header {
     nextExperimentButtonText: string;
     aboutButtonText: string;
-    showScore: boolean;
+    showScore: boolean;    
 };
 
 export interface Header {

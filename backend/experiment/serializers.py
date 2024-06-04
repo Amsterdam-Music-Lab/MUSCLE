@@ -50,12 +50,15 @@ def serialize_experiment_collection_group(group: ExperimentCollectionGroup, part
     next_experiment = get_upcoming_experiment(
         grouped_experiments, participant, group.dashboard)
 
+    total_score = get_total_score(grouped_experiments, participant)
+
     if not next_experiment:
         return None
 
     return {
         'dashboard': [serialize_experiment(experiment.experiment, participant) for experiment in grouped_experiments] if group.dashboard else [],
-        'next_experiment': next_experiment
+        'next_experiment': next_experiment,
+        'total_score': total_score
     }
 
 
@@ -93,3 +96,13 @@ def get_finished_session_count(experiment, participant):
     count = Session.objects.filter(
         experiment=experiment, participant=participant, finished_at__isnull=False).count()
     return count
+
+
+def get_total_score(grouped_experiments, participant):
+    '''Calculate total score of all experiments on the dashboard'''
+    total_score = 0
+    for grouped_experiment in grouped_experiments:
+        sessions = Session.objects.filter(experiment=grouped_experiment.experiment, participant=participant)
+        for session in sessions:
+            total_score += session.final_score
+    return total_score
