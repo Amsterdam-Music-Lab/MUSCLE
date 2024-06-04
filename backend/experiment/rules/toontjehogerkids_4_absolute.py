@@ -5,7 +5,6 @@ from experiment.actions import Explainer, Step, Final, Info
 from .toontjehoger_4_absolute import ToontjeHoger4Absolute
 
 
-
 class ToontjeHogerKids4Absolute(ToontjeHoger4Absolute):
     ID = 'TOONTJE_HOGER_KIDS_4_ABSOLUTE'
     PLAYLIST_ITEMS = 13
