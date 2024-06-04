@@ -3,11 +3,11 @@ import random
 from os.path import join
 from django.template.loader import render_to_string
 from .toontjehoger_1_mozart import toontjehoger_ranks
+from .toontjehoger_5_tempo import ToontjeHoger5Tempo
 from experiment.actions import Trial, Explainer, Step, Score, Final, Playlist, Info
 from experiment.actions.form import ButtonArrayQuestion, Form
 from experiment.actions.playback import Multiplayer
 from experiment.actions.styles import STYLE_NEUTRAL
-from .base import Base
 from experiment.utils import create_player_labels, non_breaking_spaces
 
 from result.utils import prepare_result
@@ -15,11 +15,8 @@ from result.utils import prepare_result
 logger = logging.getLogger(__name__)
 
 
-class ToontjeHogerKids5Tempo(Base):
+class ToontjeHogerKids5Tempo(ToontjeHoger5Tempo):
     ID = 'TOONTJE_HOGER_KIDS_5_TEMPO'
-    TITLE = ""
-    SCORE_CORRECT = 20
-    SCORE_WRONG = 0
 
     def first_round(self, experiment):
         """Create data for the first experiment rounds."""
@@ -38,30 +35,9 @@ class ToontjeHogerKids5Tempo(Base):
             button_label="Start"
         )
 
-        # 2. Choose playlist.
-        playlist = Playlist(experiment.playlists.all())
-
         return [
-            explainer,
-            playlist,
+            explainer
         ]
-
-    def next_round(self, session):
-        """Get action data for the next round"""
-
-        rounds_passed = session.rounds_passed()
-
-        # Round 1
-        if rounds_passed == 0:
-            # No combine_actions because of inconsistent next_round array wrapping in first round
-            return self.get_round(session, rounds_passed)
-
-        # Round 2
-        if rounds_passed < session.experiment.rounds:
-            return [*self.get_score(session), *self.get_round(session, rounds_passed)]
-
-        # Final
-        return self.get_final_round(session)
 
     def get_random_section_pair(self, session, genre):
         """
@@ -123,43 +99,8 @@ class ToontjeHogerKids5Tempo(Base):
                 "Error: could not find changed section: {}".format(tag))
         return section_changed
 
-    def get_round(self, session, round):
-        # Get sections
-        genre = ["C", "J", "R"][round % 3]
-
-        sections = self.get_random_section_pair(session, genre)
-        section_original = sections[0] if sections[0].group == "or" else sections[1]  
-
-        # Player
-        playback = Multiplayer(sections, labels=create_player_labels(len(sections), 'alphabetic'))
-
-        # Question
-        key = 'pitch'
-        question = ButtonArrayQuestion(
-            question="Kan jij horen waar de klikjes goed bij de maat van de muziek passen?",
-            key=key,
-            choices={
-                "A": "A",
-                "B": "B",
-            },
-            submits=True,
-            result_id=prepare_result(
-                key, session, section=section_original,
-                expected_response="A" if sections[0].id == section_original.id else "B"
-            ),
-            style=STYLE_NEUTRAL
-        )
-        form = Form([question])
-
-        trial = Trial(
-            playback=playback,
-            feedback_form=form,
-            title=self.TITLE,
-        )
-        return [trial]
-   
-    def calculate_score(self, result, data):
-        return self.SCORE_CORRECT if result.expected_response == result.given_response else self.SCORE_WRONG
+    def get_trial_question(self):
+        return "Kan jij horen waar de klikjes goed bij de maat van de muziek passen?"
     
     def get_section_pair_from_result(self, result):
         section_original = result.section
