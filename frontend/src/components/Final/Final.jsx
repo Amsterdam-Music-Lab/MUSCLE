@@ -65,9 +65,9 @@ const Final = ({ experiment, participant, score, final_text, action_texts, butto
             </div>
             {button && (
                 <div className="text-center pt-4">
-                    <Link className='btn btn-primary btn-lg' to={button.link} onClick={button.link ? undefined : onNext}>
+                    <a className='btn btn-primary btn-lg' href={button.link} onClick={() => onNext()}>
                         {button.text}
-                    </Link>
+                    </a>
                 </div>
             )}
             {logo && (
