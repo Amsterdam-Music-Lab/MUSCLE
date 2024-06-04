@@ -4,6 +4,7 @@ from django.utils import timezone
 from image.models import Image
 from experiment.serializers import (
     serialize_experiment,
+    serialize_experiment_collection_group
 )
 from experiment.models import (
     Experiment,
@@ -115,6 +116,35 @@ class TestExperimentCollectionViews(TestCase):
         # check that first_experiments is returned correctly
         response = self.client.get('/experiment/collection/test_series/')
         self.assertEqual(type(response.json().get('dashboard')), list)
+
+    def test_experiment_collection_total_score(self):
+        """ Test calculation of total score for grouped experiment on dashboard """
+        session = self.client.session
+        session['participant_id'] = self.participant.id
+        session.save()
+        Session.objects.create(
+            experiment=self.experiment2,
+            participant=self.participant,
+            finished_at=timezone.now(),
+            final_score=8
+        )
+        intermediate_group = ExperimentCollectionGroup.objects.get(
+            name='intermediate'
+        )
+        intermediate_group.dashboard = True
+        intermediate_group.save()
+        serialized_coll_1 = serialize_experiment_collection_group(intermediate_group, self.participant)
+        total_score_1 = serialized_coll_1['total_score']
+        self.assertEqual(total_score_1, 8)
+        Session.objects.create(
+            experiment=self.experiment3,
+            participant=self.participant,
+            finished_at=timezone.now(),
+            final_score=8
+        )
+        serialized_coll_2 = serialize_experiment_collection_group(intermediate_group, self.participant)
+        total_score_2 = serialized_coll_2['total_score']
+        self.assertEqual(total_score_2, 16)
 
 
 class ExperimentViewsTest(TestCase):
