@@ -93,7 +93,7 @@ const Experiment = ({ match }) => {
     };
 
     // trigger next action from next_round array, or call session/next_round
-    const onNext = async (doBreak) => {
+    const onNext = async (doBreak: boolean = false) => {
         if (!doBreak && actions.length) {
             updateActions(actions);
         } else {
