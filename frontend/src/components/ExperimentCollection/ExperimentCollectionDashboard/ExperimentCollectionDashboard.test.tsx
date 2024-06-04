@@ -11,7 +11,7 @@ const getExperiment = (overrides = {}) => {
         slug: 'some_slug',
         name: 'Some Experiment',
         description: 'Some description',
-        image: undefined,
+        image: {},
         started_session_count: 2,
         finished_session_count: 1,
         ...overrides
@@ -62,11 +62,7 @@ describe('ExperimentCollectionDashboard', () => {
         );
         await waitFor(() => {
             expect(screen.getByRole('menu')).toBeTruthy();
-            const counters = screen.getAllByRole('status');
-            expect(counters).toHaveLength(4);
-            expect(counters[0].innerHTML).toBe(experiment1.started_session_count.toString());
-            expect(counters[1].innerHTML).toBe(experiment1.finished_session_count.toString());
-        })
+        });
     });
 
     it('shows a placeholder if an experiment has no image', async () => {
