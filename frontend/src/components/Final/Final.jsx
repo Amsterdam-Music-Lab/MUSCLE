@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Link, withRouter } from "react-router-dom";
+import { withRouter } from "react-router-dom";
 
 import Rank from "../Rank/Rank";
 import Social from "../Social/Social";
@@ -9,6 +9,7 @@ import { finalizeSession } from "../../API";
 import useBoundStore from "../../util/stores";
 import ParticipantLink from "../ParticipantLink/ParticipantLink";
 import UserFeedback from "../UserFeedback/UserFeedback";
+import FinalButton from "./FinalButton";
 
 // Final is an experiment view that shows the final scores of the experiment
 // It can only be the last view of an experiment
@@ -52,10 +53,6 @@ const Final = ({ experiment, participant, score, final_text, action_texts, butto
         finalizeSession({ session, participant });
     }, [session, participant]);
 
-    const isRelativeUrl = (url) => {
-        return url && url.startsWith("/");
-    }
-
     return (
         <div className="aha__final d-flex flex-column justify-content-center">
             {rank && (
@@ -69,21 +66,10 @@ const Final = ({ experiment, participant, score, final_text, action_texts, butto
             </div>
             {button && (
                 <div className="text-center pt-4">
-                    {!button.link ? (
-                        <button data-testid="button" className='btn btn-primary btn-lg' onClick={() => onNext(false)}>
-                            {button.text}
-                        </button>
-                    ) : (
-                        isRelativeUrl(button.link) ? (
-                            <Link data-testid="button-link" className='btn btn-primary btn-lg' to={button.link}>
-                                {button.text}
-                            </Link>
-                        ) : (
-                            <a data-testid="button-link" className='btn btn-primary btn-lg' href={button.link} target="_blank" rel="noopener noreferrer">
-                                {button.text}
-                            </a>
-                        )
-                    )}
+                    <FinalButton
+                        button={button}
+                        onNext={onNext}
+                    />
                 </div>
             )}
             {logo && (
