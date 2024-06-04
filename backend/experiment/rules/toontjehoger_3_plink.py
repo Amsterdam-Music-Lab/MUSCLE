@@ -41,12 +41,8 @@ class ToontjeHoger3Plink(Base):
             button_label="Start"
         )
 
-        # 2. Choose playlist.
-        playlist = Playlist(experiment.playlists.all())
-
         return [
             explainer,
-            playlist,
         ]
 
     def next_round(self, session):

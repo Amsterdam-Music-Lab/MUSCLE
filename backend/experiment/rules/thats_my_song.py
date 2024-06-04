@@ -51,7 +51,7 @@ class ThatsMySong(Hooked):
             'tag': form,
             'group': decade
         }
-    
+
     def first_round(self, experiment):
         actions = super().first_round(experiment)
         # skip Consent and Playlist action
@@ -61,7 +61,7 @@ class ThatsMySong(Hooked):
         """Get action data for the next round"""
         json_data = session.load_json_data()
         round_number = self.get_current_round(session)
-        
+
         # If the number of results equals the number of experiment.rounds,
         # close the session and return data for the final_score view.
         if round_number == session.experiment.rounds + self.round_modifier:
@@ -80,8 +80,10 @@ class ThatsMySong(Hooked):
                     rank=self.rank(session),
                     social=social_info,
                     show_profile_link=True,
-                    button={'text': _('Play again'), 'link': '{}/{}{}'.format(settings.CORS_ORIGIN_WHITELIST[0], session.experiment.slug,
-                        '?participant_id='+session.participant.participant_id_url if session.participant.participant_id_url else '')},
+                    button={
+                        'text': _('Play again'),
+                        'link': self.get_play_again_url(session)
+                    },
                     logo={'image': '/images/vumc_mcl_logo.png', 'link':'https://www.vumc.org/music-cognition-lab/welcome'}
                 )
             ]

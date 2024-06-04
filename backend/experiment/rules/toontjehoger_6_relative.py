@@ -2,9 +2,10 @@ import logging
 from django.template.loader import render_to_string
 from os.path import join
 from .toontjehoger_1_mozart import toontjehoger_ranks
-from experiment.actions import Trial, Explainer, Step, Score, Final, Playlist, Info
+from experiment.actions import Trial, Explainer, Step, Score, Final, Info
 from experiment.actions.form import ChoiceQuestion, Form
 from experiment.actions.playback import Multiplayer
+from experiment.actions.frontend_style import FrontendStyle, EFrontendStyle
 from experiment.actions.styles import STYLE_BOOLEAN
 from .base import Base
 
@@ -37,12 +38,8 @@ class ToontjeHoger6Relative(Base):
             button_label="Start"
         )
 
-        # 2. Choose playlist.
-        playlist = Playlist(experiment.playlists.all())
-
         return [
             explainer,
-            playlist,
         ]
 
     def next_round(self, session):
@@ -125,14 +122,14 @@ class ToontjeHoger6Relative(Base):
         playback = Multiplayer(
             [section1, section2],
             play_once=True,
-            labels=['A', 'B' if round == 0 else 'C']
+            labels=['A', 'B' if round == 0 else 'C'],
+            style=FrontendStyle(EFrontendStyle.INFO)
         )
 
         trial = Trial(
             playback=playback,
             feedback_form=form,
-            title=self.TITLE,
-            style='blue-players'
+            title=self.TITLE
         )
         return [trial]
 
