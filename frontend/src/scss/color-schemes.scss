@@ -79,3 +79,26 @@
         color: #0cc7f1;
     }
 }
+
+.toontjehoger {
+    ul > li > img {
+        &:first-of-type {
+            background-color: $yellow;
+        }
+        &:nth-of-type(2) {
+            background-color: $red;
+        }
+        &:nth-of-type(3) {
+            background-color: $teal;
+        }
+        &:nth-of-type(4) {
+            background-color: $pink;
+        }
+        &:nth-of-type(5) {
+            background-color: $blue;
+        }
+        &:last-of-type {
+            background-color: $indigo;
+        }
+    }
+}

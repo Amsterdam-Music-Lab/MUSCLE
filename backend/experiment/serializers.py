@@ -3,6 +3,7 @@ from random import shuffle
 from django_markup.markup import formatter
 
 from experiment.actions.consent import Consent
+from image.serializers import serialize_image
 from participant.models import Participant
 from session.models import Session
 from theme.serializers import serialize_theme
@@ -66,7 +67,7 @@ def serialize_experiment(experiment_object: Experiment, participant: Participant
         'started_session_count': get_started_session_count(experiment_object, participant),
         'finished_session_count': get_finished_session_count(experiment_object, participant),
         'description': experiment_object.description,
-        'image': experiment_object.image.file.url if experiment_object.image else '',
+        'image': serialize_image(experiment_object.image) if experiment_object.image else '',
     }
 
 
