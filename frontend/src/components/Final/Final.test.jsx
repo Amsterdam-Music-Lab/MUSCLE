@@ -67,7 +67,7 @@ describe('Final Component', () => {
             </BrowserRouter>
         );
 
-        fireEvent.click(screen.getByText('Next'));
+        fireEvent.click(screen.getByTestId('button'));
         await waitFor(() => {
             expect(onNextMock).toHaveBeenCalled();
         });
