@@ -25,43 +25,42 @@ export const Header: React.FC<HeaderProps> = ({ nextExperimentSlug, nextExperime
         'hashtags': ["amsterdammusiclab", "citizenscience"]
     }
 
-    const useAnimatedScore = (targetScore) => {
+    const useAnimatedScore = (targetScore: number) => {
         const [score, setScore] = useState(0);
-
-        const scoreValue = useRef(0);
-
+    
         useEffect(() => {
             if (targetScore === 0) {
+                setScore(0);
                 return;
             }
-
-            let id = -1;
-
+    
+            let animationFrameId: number;
+    
             const nextStep = () => {
-                // Score step
-                const scoreStep = Math.max(
-                    1,
-                    Math.min(10, Math.ceil(Math.abs(scoreValue.current - targetScore) / 10))
-                );
-
-                // Scores are equal, stop
-                if (targetScore === scoreValue.current) {
-                    return;
-                }
-
-                // Add / subtract score
-                scoreValue.current += Math.sign(targetScore - scoreValue.current) * scoreStep;
-                setScore(scoreValue.current);
-
-                id = setTimeout(nextStep, 50);
+                setScore((prevScore) => {
+                    const difference = targetScore - prevScore;
+                    const scoreStep = Math.max(1, Math.min(10, Math.ceil(Math.abs(difference) / 10)));
+    
+                    if (difference === 0) {
+                        cancelAnimationFrame(animationFrameId);
+                        return prevScore;
+                    }
+    
+                    const newScore = prevScore + Math.sign(difference) * scoreStep;
+                    animationFrameId = requestAnimationFrame(nextStep);
+                    return newScore;
+                });
             };
-            id = setTimeout(nextStep, 50);
-
+    
+            // Start the animation
+            animationFrameId = requestAnimationFrame(nextStep);
+    
+            // Cleanup function to cancel the animation frame
             return () => {
-                window.clearTimeout(id);
+                cancelAnimationFrame(animationFrameId);
             };
         }, [targetScore]);
-
+    
         return score;
     };
 
