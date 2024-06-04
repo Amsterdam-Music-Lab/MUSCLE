@@ -103,8 +103,11 @@ class ToontjeHogerKids2Preverbal(ToontjeHoger2Preverbal):
         )
 
         # Info page
+        debrief_message = "Had jij dat gedacht, dat Franse en Duitse baby's anders huilen? Waarom zouden ze dat doen denk je? Bekijk de filmpjes om dit uit te vinden!"
         body = render_to_string(
-            join('info', 'toontjehogerkids', 'experiment2.html'))
+            join('info', 'toontjehogerkids', 'debrief.html'),
+            {'debrief': debrief_message, 'vid1': 'https://www.youtube.com/embed/q7L_vwB7eIo?si=mRVJKE2urKT-Xxft',
+             'vid2': 'https://www.youtube.com/embed/4eKcwGB6xmc?si=ogeEhtyEFa9WxP9i'})
         info = Info(
             body=body,
             heading="Het eerste luisteren",
