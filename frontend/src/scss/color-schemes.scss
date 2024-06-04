@@ -38,6 +38,10 @@
             @include btn-style($blue);
         }
     }
+
+    .player {
+
+    }
 }
 
 .neutral-inverted {
@@ -81,7 +85,7 @@
 }
 
 .toontjehoger {
-    ul > li > img {
+    ul > li > a > img {
         &:first-of-type {
             background-color: $yellow;
         }
