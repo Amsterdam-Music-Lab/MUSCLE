@@ -1,26 +1,16 @@
 import logging
-import random
+
 from os.path import join
 from django.template.loader import render_to_string
-from experiment.utils import non_breaking_spaces
 from .toontjehoger_1_mozart import toontjehoger_ranks
-from experiment.actions import Trial, Explainer, Step, Score, Final, Playlist, Info
-from experiment.actions.form import ButtonArrayQuestion, Form
-from experiment.actions.playback import Multiplayer
-from experiment.actions.styles import STYLE_NEUTRAL
-from experiment.utils import create_player_labels
-from .base import Base
-from result.utils import prepare_result
+from experiment.actions import Trial, Explainer, Step, Final, Info
+from .toontjehoger_4_absolute import ToontjeHoger4Absolute
 
 logger = logging.getLogger(__name__)
 
 
-class ToontjeHogerKids4Absolute(Base):
+class ToontjeHogerKids4Absolute(ToontjeHoger4Absolute):
     ID = 'TOONTJE_HOGER_KIDS_4_ABSOLUTE'
-    TITLE = ""
-    SCORE_CORRECT = 20
-    SCORE_WRONG = 0
-    # number of songs (each with a,b,c version) in the playlist
     PLAYLIST_ITEMS = 13
 
     def first_round(self, experiment):
@@ -40,112 +30,12 @@ class ToontjeHogerKids4Absolute(Base):
             button_label="Start"
         )
 
-        # 2. Choose playlist.
-        playlist = Playlist(experiment.playlists.all())
-
         return [
             explainer,
-            playlist,
         ]
 
-    def next_round(self, session):
-        """Get action data for the next round"""
-
-        rounds_passed = session.rounds_passed()
-
-        # Round 1
-        if rounds_passed == 0:
-            # No combine_actions because of inconsistent next_round array wrapping in first round
-            return self.get_round(session)
-
-        # Round 2
-        if rounds_passed < session.experiment.rounds:
-            return [*self.get_score(session), *self.get_round(session)]
-
-        # Final
-        return self.get_final_round(session)
-
-    def get_round(self, session):
-        # Get available section groups
-        results = session.result_set.all()
-        available_groups = list(map(str, range(1, self.PLAYLIST_ITEMS)))
-        for result in results:
-            available_groups.remove(result.section.group)
-
-        # Get sections
-
-        # Original (A)
-        section1 = session.section_from_any_song(
-            filter_by={'tag': 'a', 'group__in': available_groups})
-        if not section1:
-            raise Exception(
-                "Error: could not find section 1")
-
-        # Changed (B/C)
-        variant = random.choice(["b", "c"])
-        section2 = session.section_from_any_song(
-            filter_by={'tag': variant, 'group': section1.group})
-        if not section2:
-            raise Exception(
-                "Error: could not find section 2")
-
-        # Random section order
-        sections = [section1, section2]
-        random.shuffle(sections)
-
-        # Player
-        playback = Multiplayer(sections, labels=create_player_labels(len(sections), 'alphabetic'))
-
-        # Question
-        key = 'pitch'
-        question = ButtonArrayQuestion(
-            question="Welke van deze twee stukjes muziek klinkt precies zo hoog of laag als in het echt?",
-            key=key,
-            choices={
-                "A": "A",
-                "B": "B",
-            },
-            submits=True,
-            result_id=prepare_result(
-                key, session, section=section1,
-                expected_response="A" if sections[0].id == section1.id else "B"
-            ),
-            style=STYLE_NEUTRAL
-        )
-        form = Form([question])
-
-        trial = Trial(
-            playback=playback,
-            feedback_form=form,
-            title=self.TITLE,
-        )
-        return [trial]
-
-    def calculate_score(self, result, data):
-        return self.SCORE_CORRECT if result.expected_response == result.given_response else self.SCORE_WRONG
-
-    def get_score(self, session):
-        # Feedback
-        last_result = session.last_result()
-        feedback = ""
-        if not last_result:
-            logger.error("No last result")
-            feedback = "Er is een fout opgetreden"
-        else:
-            if last_result.score == self.SCORE_CORRECT:
-                feedback = "Goedzo! Het was inderdaad antwoord {}!".format(
-                    last_result.expected_response.upper())
-            else:
-                feedback = "Helaas! Het juiste antwoord was {}.".format(
-                    last_result.expected_response.upper())
-
-            feedback += " Je luisterde naar de intro van {}.".format(
-                non_breaking_spaces(last_result.section.song.name))
-
-        # Return score view
-        config = {'show_total_score': True}
-        score = Score(session, config=config, feedback=feedback)
-        return [score]
+    def get_trial_question(self):
+        return "Welke van deze twee stukjes muziek klinkt precies zo hoog of laag als in het echt?"
  
     def get_final_round(self, session):
 
