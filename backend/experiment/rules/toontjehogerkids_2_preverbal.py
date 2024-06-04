@@ -37,7 +37,6 @@ class ToontjeHogerKids2Preverbal(ToontjeHoger2Preverbal):
         # 2 Spectrogram information
         spectrogram_info = self.get_spectrogram_info()
 
-
         return [
             explainer,
             spectrogram_info,

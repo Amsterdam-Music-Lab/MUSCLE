@@ -9,9 +9,6 @@ logger = logging.getLogger(__name__)
 
 class ToontjeHogerKids1Mozart(ToontjeHoger1Mozart):
     ID = 'TOONTJE_HOGER_KIDS_1_MOZART'
-    TITLE = ""
-    SCORE_CORRECT = 50
-    SCORE_WRONG = 0
 
     QUESTION_URL1 = "/images/experiments/toontjehogerkids/mozart-effect1.webp"
     QUESTION_URL2 = "/images/experiments/toontjehogerkids/mozart-effect2.webp"
@@ -39,7 +36,6 @@ class ToontjeHogerKids1Mozart(ToontjeHoger1Mozart):
 
     def get_task_explainer(self):
         return "Je vouwt een papier en knipt er twee hoekjes af, precies zoals op het plaatje. Welke vorm krijgt het papier dan?"
-
 
     def get_final_round(self, session):
 

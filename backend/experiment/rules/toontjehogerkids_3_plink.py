@@ -30,8 +30,7 @@ class ToontjeHogerKids3Plink(ToontjeHoger3Plink):
         explainer = Explainer(
             instruction="Muziekherkenning",
             steps=[
-                Step("Je hoort zo een heel kort stukje van een liedje.".format(
-                    experiment.rounds)),
+                Step("Je hoort zo een heel kort stukje van een liedje."),
                 Step("Herken je dit liedje? Kies dan de juiste artiest en titel!"),
                 Step(
                     "Weet je het niet zeker? Doe dan maar een gok.")
