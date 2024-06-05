@@ -1,4 +1,6 @@
 import logging
+from os.path import join
+
 from django.template.loader import render_to_string
 
 from .toontjehoger_1_mozart import toontjehoger_ranks
@@ -7,8 +9,8 @@ from experiment.actions.form import ButtonArrayQuestion, ChoiceQuestion, Form
 from experiment.actions.playback import ImagePlayer
 from experiment.actions.styles import STYLE_NEUTRAL
 from .base import Base
-from os.path import join
 from result.utils import prepare_result
+from section.models import Playlist
 
 logger = logging.getLogger(__name__)
 
@@ -18,6 +20,41 @@ class ToontjeHoger2Preverbal(Base):
     TITLE = ""
     SCORE_CORRECT = 50
     SCORE_WRONG = 0
+
+    def validate_playlist(self, playlist: Playlist):
+        ''' This is the original ToontjeHoger2Preverbal playlist:
+        ```
+        AML,Duitse baby,0.0,1.0,/toontjehoger/preverbal/4_duitse_baby.mp3,b,2
+        AML,Franse baby,0.0,1.0,/toontjehoger/preverbal/5_franse_baby.mp3,a,2
+        AML,Mens,0.0,1.0,/toontjehoger/preverbal/1_mens.mp3,c,1
+        AML,Trompet,0.0,1.0,/toontjehoger/preverbal/3_trompet.mp3,a,1
+        AML,Walvis,0.0,1.0,/toontjehoger/preverbal/2_walvis.mp3,b,1
+        ```
+        '''
+        sections = playlist.section_set.all()
+        errors = []
+        if len(sections) != 5:
+            errors.append('The playlist should contain exactly 5 sections')
+
+        first_round_sections = sections.filter(group='1')
+        if first_round_sections.count() != 3:
+            errors.append(
+                'There should be 3 sections with group 1 (first round)')
+        if sorted(first_round_sections.values('tag').distinct()) != ['a', 'b', 'c']:
+            errors.append(
+                'The first round sections should have tags a, b, c'
+            )
+
+        second_round_sections = sections.filter(group='2')
+        if second_round_sections.count() != 2:
+            errors.append(
+                'There should be 2 sections with group 2 (second round)')
+        if sorted(second_round_sections.values('tag').distinct()) != ['a', 'b']:
+            errors.append(
+                'The second round sections should have tags a, b'
+            )
+
+        return errors
 
     def first_round(self, experiment):
         """Create data for the first experiment rounds."""
