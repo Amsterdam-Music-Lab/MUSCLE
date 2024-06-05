@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 import Rank from "../Rank/Rank";
@@ -11,10 +11,10 @@ interface HeaderProps {
     aboutButtonText: string;
     showScore: boolean;
     totalScore: Number;
-    score: Object;    
+    score: Score;    
 }
 
-interface score {
+interface Score {
     scoreClass: string;
     scoreLabel: string;
     noScoreLabel: string;

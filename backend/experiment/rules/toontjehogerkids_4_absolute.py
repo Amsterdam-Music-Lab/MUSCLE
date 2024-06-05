@@ -32,7 +32,7 @@ class ToontjeHogerKids4Absolute(ToontjeHoger4Absolute):
 
     def get_trial_question(self):
         return "Welke van deze twee stukjes muziek klinkt precies zo hoog of laag als in het echt?"
- 
+
     def get_final_round(self, session):
 
         # Finish session.

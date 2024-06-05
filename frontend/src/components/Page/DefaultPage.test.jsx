@@ -1,5 +1,5 @@
 import React from "react";
-import { beforeEach, vi } from "vitest";
+import { vi } from "vitest";
 import { render, screen } from "@testing-library/react";
 
 import DefaultPage from "./DefaultPage";
