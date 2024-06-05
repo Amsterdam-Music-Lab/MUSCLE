@@ -18,8 +18,8 @@ import Profile from "../Profile/Profile";
 import Reload from "../Reload/Reload";
 import StoreProfile from "../StoreProfile/StoreProfile";
 import useDisableRightClickOnTouchDevices from "../../hooks/useDisableRightClickOnTouchDevices";
+import { InternalRedirect } from "../InternalRedirect/InternalRedirect";
 import Helmet from "@/components/Helmet/Helmet";
-
 
 // App is the root component of our application
 const App = () => {
@@ -77,6 +77,8 @@ const App = () => {
                         <Route path={URLS.profile} exact>
                             <Profile slug={EXPERIMENT_SLUG} />
                         </Route>
+                      
+                        <Route path={URLS.internalRedirect} component={InternalRedirect} />
 
                         {/* Experiment Collection */}
                         <Route path={URLS.experimentCollection} component={ExperimentCollection} />
@@ -94,8 +96,6 @@ const App = () => {
                         />
                     </Switch>
                 </ConditionalRender>
-
-
             </Router >
         </>
     );
