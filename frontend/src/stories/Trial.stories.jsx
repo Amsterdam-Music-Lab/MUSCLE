@@ -87,22 +87,20 @@ const getDefaultArgs = (overrides = {}) => ({
         is_skippable: true,
         is_profile: true,
     },
-    onNext: () => {},
-    onResult: () => {},
+    onNext: () => { },
+    onResult: () => { },
     ...overrides,
 });
 
+const getDecorator = (Story) => (
+    <div style={{ width: "100%", height: "100%", backgroundColor: "#fff", padding: "1rem" }}>
+        <Story />
+    </div>
+);
+
 export const Default = {
     args: getDefaultArgs(),
-    decorators: [
-        (Story) => (
-            <div
-                style={{ width: "100%", height: "100%", backgroundColor: "#fff", padding: "1rem" }}
-            >
-                <Story />
-            </div>
-        ),
-    ],
+    decorators: [getDecorator,],
 };
 
 export const BooleanColorScheme = {
@@ -115,15 +113,7 @@ export const BooleanColorScheme = {
             show_continue_button: true,
         },
     }),
-    decorators: [
-        (Story) => (
-            <div
-                style={{ width: "100%", height: "100%", backgroundColor: "#fff", padding: "1rem" }}
-            >
-                <Story />
-            </div>
-        ),
-    ],
+    decorators: [getDecorator,],
 };
 
 export const BooleanNegativeFirstColorScheme = {
@@ -136,15 +126,7 @@ export const BooleanNegativeFirstColorScheme = {
             show_continue_button: true,
         },
     }),
-    decorators: [
-        (Story) => (
-            <div
-                style={{ width: "100%", height: "100%", backgroundColor: "#fff", padding: "1rem" }}
-            >
-                <Story />
-            </div>
-        ),
-    ],
+    decorators: [getDecorator,],
 };
 
 export const NeutralColorScheme = {
@@ -157,15 +139,7 @@ export const NeutralColorScheme = {
             show_continue_button: true,
         },
     }),
-    decorators: [
-        (Story) => (
-            <div
-                style={{ width: "100%", height: "100%", backgroundColor: "#fff", padding: "1rem" }}
-            >
-                <Story />
-            </div>
-        ),
-    ],
+    decorators: [getDecorator,],
 };
 
 export const NeutralInvertedColorScheme = {
@@ -178,13 +152,73 @@ export const NeutralInvertedColorScheme = {
             show_continue_button: true,
         },
     }),
-    decorators: [
-        (Story) => (
-            <div
-                style={{ width: "100%", height: "100%", backgroundColor: "#fff", padding: "1rem" }}
-            >
-                <Story />
-            </div>
-        ),
-    ],
+    decorators: [getDecorator,],
 };
+
+export const ToontjeHoger4Absolute = {
+    args: getDefaultArgs({
+        config: {
+            response_time: 5,
+            auto_advance: false,
+            listen_first: false,
+            show_continue_button: true,
+            continue_label: "Continue"
+        },
+        playback: {
+            sections: [
+                {
+                    "id": 2,
+                    "url": "http://localhost:8000/section/2/13319/",
+                    "group": "1"
+                },
+                {
+                    "id": 3,
+                    "url": "http://localhost:8000/section/3/94320/",
+                    "group": "1"
+                }
+            ],
+            play_method: "EXTERNAL",
+            show_animation: false,
+            preload_message: "",
+            instruction: "",
+            play_from: 0,
+            mute: false,
+            timeout_after_playback: null,
+            stop_audio_after: 5,
+            resume_play: false,
+            style: {
+                root: ""
+            },
+            ID: "MULTIPLAYER",
+            play_once: false,
+            labels: [
+                "A",
+                "B"
+            ],
+            view: "MULTIPLAYER"
+        },
+        feedback_form: {
+            form: [
+                {
+                    key: "pitch",
+                    view: "BUTTON_ARRAY",
+                    explainer: "",
+                    question: "Welk fragment heeft de juiste toonhoogte?",
+                    result_id: 3,
+                    is_skippable: false,
+                    submits: true,
+                    style: "neutral",
+                    choices: {
+                        A: "A",
+                        B: "B"
+                    },
+                    expected_response: "A"
+                }
+            ],
+            submit_label: "Continue",
+            skip_label: "Skip",
+            is_skippable: false
+        }
+    }),
+    decorators: [getDecorator,],
+}
