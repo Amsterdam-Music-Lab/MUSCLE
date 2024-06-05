@@ -1,11 +1,14 @@
 import logging
-from django.template.loader import render_to_string
 from os.path import join
+
+from django.template.loader import render_to_string
+
 from experiment.actions import Trial, Explainer, Step, Score, Final, Info, HTML
 from experiment.actions.form import ButtonArrayQuestion, Form
 from experiment.actions.playback import Autoplay
 from .base import Base
 from experiment.utils import non_breaking_spaces
+from section.models import Playlist
 
 from result.utils import prepare_result
 
@@ -34,6 +37,23 @@ class ToontjeHoger1Mozart(Base):
     QUESTION_URL2 = "/images/experiments/toontjehoger/mozart-effect2.webp"
     ANSWER_URL1 = "/images/experiments/toontjehoger/mozart-effect1-answer.webp"
     ANSWER_URL2 = "/images/experiments/toontjehoger/mozart-effect2-answer.webp"
+
+    def validate_playlist(self, playlist: Playlist):
+        ''' This is the original ToontjeHoger1Mozart playlist:
+        ```
+        Tomaso Albinoni,"Adagio in G mineur (uitgevoerd door het Prague Baroque Orchestra, onder leiding van Trevor Pinnock)",0.0,26.0,/toontjehoger/mozart/fragment_a.mp3,0,1
+        Wolfgang Amadeus Mozart,"Sonate voor twee pianos in D groot, KV 448 (uitgevoerd door Lucas en Arthur Jussen)",0.0,28.0,/toontjehoger/mozart/fragment_b.mp3,0,2
+        ```
+        '''
+        errors = []
+        sections = playlist.section_set.all()
+        groups = sorted([int(s) for s in sections.values('group').distinct()])
+        if len(sections) != 2:
+            errors.append('The playlist should contain two sections')
+        if groups != [0, 1]:
+            errors.append(
+                'The group values should be 0 (for the first section) and 1 (for the second section)')
+        return errors
 
     def first_round(self, experiment):
         """Create data for the first experiment rounds."""
