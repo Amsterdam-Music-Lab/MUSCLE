@@ -31,6 +31,7 @@ export const URLS = {
     experiment: "/:slug",
     experimentCollectionAbout: "/collection/:slug/about",
     experimentCollection: "/collection/:slug",
+    internalRedirect: "/redirect/:path",
     reloadParticipant: "/participant/reload/:id/:hash",
     theme: "/theme/:id",
     AMLHome:

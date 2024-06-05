@@ -146,7 +146,7 @@ session="session-id"
 
         const el = screen.getByTestId('button-link');
         expect(el).to.exist;
-        expect(el.getAttribute('href')).toBe('/aml');
+        expect(el.getAttribute('href')).toBe('/redirect/aml');
     });
 
     it('Uses an anchor tag to navigate when button link is absolute', () => {
@@ -161,5 +161,22 @@ session="session-id"
         const el = screen.getByTestId('button-link');
         expect(el).to.exist;
         expect(el.getAttribute('href')).toBe('https://example.com');
+    });
+
+    it('Calls onNext when there is no button link and the user clicks the button', async () => {
+        const onNextMock = vi.fn();
+        render(
+            <BrowserRouter>
+                <Final
+                    button={{ text: 'Next' }}
+                    onNext={onNextMock}
+                />
+            </BrowserRouter>
+        );
+
+        fireEvent.click(screen.getByTestId('button'));
+        await waitFor(() => {
+            expect(onNextMock).toHaveBeenCalled();
+        });
     });
 });
