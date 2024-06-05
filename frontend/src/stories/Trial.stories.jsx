@@ -187,7 +187,7 @@ export const ToontjeHoger4Absolute = {
             stop_audio_after: 5,
             resume_play: false,
             style: {
-                root: ""
+                root: "neutral-inverted"
             },
             ID: "MULTIPLAYER",
             play_once: false,
@@ -207,7 +207,7 @@ export const ToontjeHoger4Absolute = {
                     result_id: 3,
                     is_skippable: false,
                     submits: true,
-                    style: "neutral",
+                    style: "neutral-inverted",
                     choices: {
                         A: "A",
                         B: "B"
