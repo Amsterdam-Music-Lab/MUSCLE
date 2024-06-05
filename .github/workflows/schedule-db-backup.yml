@@ -1,0 +1,13 @@
+name: Schedule Database Backup
+
+on:
+  schedule:
+    - cron: '0 0 * * *' # Runs every night at midnight UTC
+  workflow_dispatch:    # Allows manual triggering
+
+jobs:
+
+  backup-production:
+    uses: ./.github/workflows/db-backup-template.yml
+    with:
+      runner: PRD

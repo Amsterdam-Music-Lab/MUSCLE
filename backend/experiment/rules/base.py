@@ -3,9 +3,11 @@ import logging
 from django.template.loader import render_to_string
 from django.utils.translation import gettext_lazy as _
 from django.conf import settings
+from django.core.exceptions import ValidationError
 
 from experiment.actions import Final, Form, Trial
 from section.models import Playlist
+import section.validators
 from experiment.questions.demographics import DEMOGRAPHICS
 from experiment.questions.goldsmiths import MSI_OTHER
 from experiment.questions.utils import question_by_key, unanswered_questions
@@ -174,5 +176,10 @@ class Base(object):
 
         if not sections:
             errors.append('The experiment must have at least one section.')
+
+        try:
+            Playlist.clean_csv(playlist)
+        except ValidationError as e:
+            errors += e.error_list
 
         return errors

@@ -182,6 +182,10 @@ class ExperimentForm(ModelForm):
         rules = cl()
 
         playlists = self.cleaned_data['playlists']
+
+        if not playlists:
+            return self.cleaned_data['playlists']
+        
         playlist_errors = []
 
         # Validate playlists
@@ -193,6 +197,8 @@ class ExperimentForm(ModelForm):
 
         if playlist_errors:
             self.add_error('playlists', playlist_errors)
+
+        return playlists
 
     class Meta:
         model = Experiment
