@@ -1,5 +1,9 @@
 from django.contrib.postgres.fields import ArrayField
+from django.core.files.storage import default_storage
+from django.core.files.uploadedfile import UploadedFile
 from django.db import models
+from django.db.models.fields.files import ImageFieldFile
+from .validators import validate_image_file
 
 TARGET_CHOICES = (
     ('_self', 'Self'),
@@ -9,8 +13,27 @@ TARGET_CHOICES = (
 )
 
 
+class SVGAndImageFieldFile(ImageFieldFile):
+
+    def save(self, name, content, save=True):
+
+        if isinstance(content, UploadedFile) and (content.content_type == 'image/svg+xml' or name.endswith('.svg')):
+            name = default_storage.save(name, content)
+            self.name = name
+            self._committed = True
+        else:
+            super().save(name, content, save)
+
+
+class SVGAndImageField(models.ImageField):
+    attr_class = SVGAndImageFieldFile
+
+
 class Image(models.Model):
-    file = models.ImageField(upload_to='%Y/%m/%d/')
+    file = SVGAndImageField(
+        upload_to='%Y/%m/%d/',
+        validators=[validate_image_file]
+    )
     title = models.CharField(max_length=255)
     description = models.TextField(blank=True, default='')
     alt = models.CharField(max_length=255, blank=True, default='')
