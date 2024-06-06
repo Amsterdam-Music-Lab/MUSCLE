@@ -1,5 +1,4 @@
 
-import random
 import re
 import string
 from django.utils.translation import gettext_lazy as _
