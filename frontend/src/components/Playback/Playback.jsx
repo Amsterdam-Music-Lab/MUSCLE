@@ -178,7 +178,6 @@ const Playback = ({
                 return (
                     <Preload {...attrs}
                         playMethod={playMethod}
-                        duration={playbackArgs.ready_time}
                         preloadMessage={playbackArgs.preload_message}
                         onNext={() => {                        
                             setView(playbackArgs.view);

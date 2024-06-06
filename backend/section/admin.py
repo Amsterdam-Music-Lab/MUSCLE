@@ -1,4 +1,5 @@
 import csv
+from os.path import join
 
 from inline_actions.admin import InlineActionsModelAdminMixin
 from django.contrib import admin, messages
@@ -110,7 +111,8 @@ class PlaylistAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
                     song = get_or_create_song(this_artist, this_name)
                 new_section.song = song
 
-                file_path = settings.MEDIA_ROOT + '/' + str(new_section.filename)
+                file_path = join(settings.MEDIA_ROOT,
+                                 str(new_section.filename))
                 with audioread.audio_open(file_path) as f:
                     new_section.duration = f.duration
                 new_section.save()

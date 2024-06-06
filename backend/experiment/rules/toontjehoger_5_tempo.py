@@ -3,7 +3,7 @@ import random
 from os.path import join
 from django.template.loader import render_to_string
 from .toontjehoger_1_mozart import toontjehoger_ranks
-from experiment.actions import Trial, Explainer, Step, Score, Final, Playlist, Info
+from experiment.actions import Trial, Explainer, Step, Score, Final, Info
 from experiment.actions.form import ButtonArrayQuestion, Form
 from experiment.actions.playback import Multiplayer
 from experiment.actions.styles import STYLE_NEUTRAL
@@ -39,12 +39,8 @@ class ToontjeHoger5Tempo(Base):
             button_label="Start"
         )
 
-        # 2. Choose playlist.
-        playlist = Playlist(experiment.playlists.all())
-
         return [
             explainer,
-            playlist,
         ]
 
     def next_round(self, session):
@@ -124,6 +120,9 @@ class ToontjeHoger5Tempo(Base):
                 "Error: could not find changed section: {}".format(tag))
         return section_changed
 
+    def get_trial_question(self):
+        return "Welk fragment wordt in het originele tempo afgespeeld?"
+
     def get_round(self, session, round):
         # Get sections
         genre = ["C", "J", "R"][round % 3]
@@ -137,7 +136,7 @@ class ToontjeHoger5Tempo(Base):
         # Question
         key = 'pitch'
         question = ButtonArrayQuestion(
-            question="Welk fragment wordt in het originele tempo afgespeeld?",
+            question=self.get_trial_question(),
             key=key,
             choices={
                 "A": "A",

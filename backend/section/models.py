@@ -2,13 +2,14 @@ import datetime
 import random
 import csv
 
-from django import forms
 from django.db import models
 from django.utils import timezone
 from django.urls import reverse
+from django.conf import settings
+from django.core.exceptions import ValidationError
 
 from .utils import CsvStringBuilder, get_or_create_song
-from .validators import audio_file_validator, url_prefix_validator
+from .validators import audio_file_validator, file_exists_validator, url_prefix_validator
 
 
 class Playlist(models.Model):
@@ -27,6 +28,26 @@ class Playlist(models.Model):
         song_name [string], start_position [float], duration [float],\
         "path/filename.mp3" [string], tag [string], group [string]'
     csv = models.TextField(blank=True, help_text=default_csv_row)
+
+    CSV_OK = 0
+    CSV_ERROR = 10
+
+    def clean_csv(self):
+        errors = []
+        sections = Section.objects.filter(playlist=self)
+
+        for section in sections:
+            filename = str(section.filename)
+
+            try:
+                file_exists_validator(filename)
+            except ValidationError as e:
+                errors.append(e)
+
+        if errors:
+            raise ValidationError(errors)
+
+        return self.csv
 
     def save(self, *args, **kwargs):
         """Update playlist csv field on every save"""
@@ -54,9 +75,6 @@ class Playlist(models.Model):
         return self.experiment_set.count()
 
     experiment_count.short_description = "Experiments"
-
-    CSV_OK = 0
-    CSV_ERROR = 10
 
     def update_sections(self):
         """Update the sections from the csv file"""
@@ -216,7 +234,7 @@ class Playlist(models.Model):
                             section.group])
         csv_string = csvfile.csv_string
         return ''.join(csv_string)
-    
+
 
 class Song(models.Model):
     """ A Song object with an artist and name (unique together)"""
@@ -290,7 +308,10 @@ class Section(models.Model):
 
     def absolute_url(self):
         """Return absolute url for this section"""
-        return reverse('section:section', args=[self.pk, self.code])
+        base_url = settings.BASE_URL if hasattr(settings, 'BASE_URL') else ''
+        sections_url = reverse('section:section', args=[self.pk, self.code])
+
+        return base_url.rstrip('/') + sections_url
 
     def simple_object(self):
         return {'id': self.id, 'url': self.absolute_url()}

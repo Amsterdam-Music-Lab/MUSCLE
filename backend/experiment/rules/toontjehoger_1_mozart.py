@@ -1,7 +1,7 @@
 import logging
 from django.template.loader import render_to_string
 from os.path import join
-from experiment.actions import Trial, Explainer, Step, Score, Final, Playlist, Info, HTML
+from experiment.actions import Trial, Explainer, Step, Score, Final, Info, HTML
 from experiment.actions.form import ButtonArrayQuestion, Form
 from experiment.actions.playback import Autoplay
 from .base import Base
@@ -10,11 +10,6 @@ from experiment.utils import non_breaking_spaces
 from result.utils import prepare_result
 
 logger = logging.getLogger(__name__)
-
-QUESTION_URL1 = "/images/experiments/toontjehoger/mozart-effect1.webp"
-QUESTION_URL2 = "/images/experiments/toontjehoger/mozart-effect2.webp"
-ANSWER_URL1 = "/images/experiments/toontjehoger/mozart-effect1-answer.webp"
-ANSWER_URL2 = "/images/experiments/toontjehoger/mozart-effect2-answer.webp"
 
 
 def toontjehoger_ranks(session):
@@ -35,6 +30,11 @@ class ToontjeHoger1Mozart(Base):
     SCORE_CORRECT = 50
     SCORE_WRONG = 0
 
+    QUESTION_URL1 = "/images/experiments/toontjehoger/mozart-effect1.webp"
+    QUESTION_URL2 = "/images/experiments/toontjehoger/mozart-effect2.webp"
+    ANSWER_URL1 = "/images/experiments/toontjehoger/mozart-effect1-answer.webp"
+    ANSWER_URL2 = "/images/experiments/toontjehoger/mozart-effect2-answer.webp"
+
     def first_round(self, experiment):
         """Create data for the first experiment rounds."""
 
@@ -50,12 +50,8 @@ class ToontjeHoger1Mozart(Base):
             button_label="Start"
         )
 
-        # 2. Choose playlist.
-        playlist = Playlist(experiment.playlists.all())
-
         return [
-            explainer,
-            playlist
+            explainer
         ]
 
     def next_round(self, session):
@@ -66,8 +62,8 @@ class ToontjeHoger1Mozart(Base):
         if rounds_passed == 0:
             round = self.get_image_trial(session,
                                         section_group='1',
-                                        image_url=QUESTION_URL1,
-                                        question="Welke vorm ontstaat er na het afknippen van de hoekjes?",
+                                         image_url=self.QUESTION_URL1,
+                                         question=self.get_task_explainer(),
                                         expected_response='B'
                                         )
             # No combine_actions because of inconsistent next_round array wrapping in first round
@@ -79,14 +75,17 @@ class ToontjeHoger1Mozart(Base):
             score = self.get_score(session)
             round = self.get_image_trial(session,
                                         section_group='2',
-                                        image_url=QUESTION_URL2,
-                                        question="Welke vorm ontstaat er na het afknippen van het hoekje?",
+                                         image_url=self.QUESTION_URL2,
+                                         question=self.get_task_explainer(),
                                         expected_response='B'
                                         )
             return [*answer_explainer, *score, *round]
 
         # Final
         return self.get_final_round(session)
+
+    def get_task_explainer(self):
+        return "Welke vorm ontstaat er na het afknippen van de hoekjes?"
 
     def get_answer_explainer(self, session, round):
         last_result = session.last_result()
@@ -101,7 +100,7 @@ class ToontjeHoger1Mozart(Base):
             last_result.given_response, last_result.expected_response)
         feedback = feedback_correct if correct_answer_given else feedback_incorrect
 
-        image_url = ANSWER_URL1 if round == 1 else ANSWER_URL2
+        image_url = self.ANSWER_URL1 if round == 1 else self.ANSWER_URL2
         body = '<div class="center"><div><img src="{}"></div><h4 style="margin-top: 15px;">{}</h4></div>'.format(
             image_url, feedback)
 

@@ -29,7 +29,8 @@ class TestScore(unittest.TestCase):
         self.assertEqual(score.score, 100)
         self.assertEqual(score.score_message(score.score), "Score is 100")
         self.assertEqual(score.feedback, "Test Feedback")
-        self.assertEqual(score.config, {'show_section': True, 'show_total_score': True})
+        self.assertEqual(
+            score.config, {'show_section': True, 'show_total_score': True})
         self.assertEqual(score.icon, "icon-test")
         self.assertEqual(score.texts, {
             'score': 'Total Score',
@@ -40,11 +41,12 @@ class TestScore(unittest.TestCase):
 
     def test_initialization_minimal_parameters(self):
         score = Score(session=self.mock_session)
-        self.assertIsNone(score.title)
+        self.assertIn('Round', score.title)
         self.assertEqual(score.score, 10)
         self.assertEqual(score.score_message, score.default_score_message)
         self.assertIsNone(score.feedback)
-        self.assertEqual(score.config, {'show_section': False, 'show_total_score': False})
+        self.assertEqual(
+            score.config, {'show_section': False, 'show_total_score': False})
         self.assertIsNone(score.icon)
         self.assertEqual(score.texts, {
             'score': 'Total Score',
@@ -54,7 +56,8 @@ class TestScore(unittest.TestCase):
         self.assertIsNone(score.timer)
 
     def test_action_serialization(self):
-        score = Score(session=self.mock_session, config={'show_section': True, 'show_total_score': True})
+        score = Score(session=self.mock_session, config={
+                      'show_section': True, 'show_total_score': True})
         action = score.action()
         self.assertIn('view', action)
         self.assertIn('last_song', action)
@@ -70,7 +73,8 @@ class TestScore(unittest.TestCase):
         score = Score(session=self.mock_session)
         self.assertIn(score.default_score_message(10), ["Correct"])  # Positive
         self.assertIn(score.default_score_message(0), ["No points"])  # Zero
-        self.assertIn(score.default_score_message(-5), ["Incorrect"])  # Negative
+        self.assertIn(score.default_score_message(-5),
+                      ["Incorrect"])  # Negative
         self.assertIn(score.default_score_message(None), ["No points"])  # None
 
 

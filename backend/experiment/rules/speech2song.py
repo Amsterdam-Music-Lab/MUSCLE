@@ -12,6 +12,8 @@ from experiment.questions.demographics import EXTRA_DEMOGRAPHICS
 from experiment.questions.languages import LANGUAGE, LanguageQuestion
 from experiment.questions.utils import question_by_key
 
+from session.models import Session
+
 from result.utils import prepare_result
 
 n_representations = 8
@@ -59,9 +61,9 @@ class Speech2Song(Base):
         playlist = Playlist(experiment.playlists.all())
 
         return [
-            explainer,
             consent,
             playlist,
+            explainer,
         ]
 
     def next_round(self, session):
@@ -152,7 +154,7 @@ class Speech2Song(Base):
             return Final(
                 title=_('End of experiment'),
                 session=session,
-                score_message=_(
+                final_text=_(
                     'Thank you for contributing your time to science!')
             )
         if session.current_round % 2 == 0:
@@ -166,7 +168,7 @@ class Speech2Song(Base):
         return actions
 
 
-def next_single_representation(session, is_speech, group_id):
+def next_single_representation(session: Session, is_speech: bool, group_id: int) -> list:
     """ combine a question after the first representation,
     and several repeated representations of the sound,
     with a final question"""
@@ -176,18 +178,18 @@ def next_single_representation(session, is_speech, group_id):
     return actions
 
 
-def next_repeated_representation(session, is_speech, group_id=-1):
-    if group_id >= 0:
+def next_repeated_representation(session: Session, is_speech: bool, group_id: int = -1) -> list:
+    if group_id == 0:
         # for the Test case, there is no previous section to look at
         section = session.playlist.section_set.get(group=group_id)
     else:
         section = session.previous_section()
-    actions = [sound(section, i) for i in range(1, n_representations+1)]
+    actions = [sound(section)] * n_representations
     actions.append(speech_or_sound_question(session, section, is_speech))
     return actions
 
 
-def speech_or_sound_question(session, section, is_speech):
+def speech_or_sound_question(session, section, is_speech) -> Trial:
     if is_speech:
         question = question_speech(session, section)
     else:
@@ -226,15 +228,10 @@ def question_sound(session, section):
     )
 
 
-def sound(section, n_representation=None):
-    if n_representation and n_representation > 1:
-        ready_time = 0
-    else:
-        ready_time = 1
+def sound(section):
     title = _('Listen carefully')
     playback = Autoplay(
-        sections = [section],
-        ready_time = ready_time,
+        sections=[section],
     )
     view = Trial(
             playback=playback,
