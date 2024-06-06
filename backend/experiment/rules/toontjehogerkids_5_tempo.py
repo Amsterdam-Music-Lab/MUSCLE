@@ -4,11 +4,8 @@ from os.path import join
 from django.template.loader import render_to_string
 from .toontjehoger_1_mozart import toontjehoger_ranks
 from .toontjehoger_5_tempo import ToontjeHoger5Tempo
-from experiment.actions import Trial, Explainer, Step, Score, Final, Playlist, Info
-from experiment.actions.form import ButtonArrayQuestion, Form
-from experiment.actions.playback import Multiplayer
-from experiment.actions.styles import STYLE_NEUTRAL
-from experiment.utils import create_player_labels, non_breaking_spaces
+from experiment.actions import Explainer, Step, Score, Final, Info
+from experiment.utils import non_breaking_spaces
 
 from result.utils import prepare_result
 
@@ -177,13 +174,16 @@ class ToontjeHogerKids5Tempo(ToontjeHoger5Tempo):
         )
 
         # Info page
+        debrief_message = "Dit is een test die maatgevoel meet. Onderzoekers hebben laten zien dat de meeste mensen goed maatgevoel hebben. Maar als je nou niet zo goed kan dansen, heb jij dan toch niet zo'n goed maatgevoel? En kan je dit leren? Bekijk de filmpjes voor het antwoord!"
         body = render_to_string(
-            join('info', 'toontjehoger', 'experiment5.html'))
+            join('info', 'toontjehogerkids', 'debrief.html'),
+            {'debrief': debrief_message, 'vid1': 'https://www.youtube.com/embed/NXaevlxA3KY?si=Zg2XqBVEoZlcdXBs',
+             'vid2': 'https://www.youtube.com/embed/GRXSDXF0GXk?si=XzgZJypMBpZF6pOo'})
         info = Info(
             body=body,
             heading="Timing en tempo",
             button_label="Terug naar ToontjeHoger",
-            button_link="/toontjehoger"
+            button_link="/collection/thkids"
         )
 
         return [*score, final, info]

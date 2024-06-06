@@ -3,12 +3,7 @@ from django.template.loader import render_to_string
 from os.path import join
 from .toontjehoger_1_mozart import toontjehoger_ranks
 from .toontjehoger_6_relative import ToontjeHoger6Relative
-from experiment.actions import Trial, Explainer, Step, Score, Final, Playlist, Info
-from experiment.actions.form import ChoiceQuestion, Form
-from experiment.actions.playback import Multiplayer
-from experiment.actions.styles import STYLE_BOOLEAN
-
-from result.utils import prepare_result
+from experiment.actions import Explainer, Step, Score, Final, Info
 
 logger = logging.getLogger(__name__)
 
@@ -76,13 +71,16 @@ class ToontjeHogerKids6Relative(ToontjeHoger6Relative):
         )
 
         # Info page
+        debrief_message = "Als je de eerste noten van 'Lang zal ze leven' hoort, herken je het meteen! Hoe kan het dat je dat liedje herkent, zelfs als het veel hoger of langer gezongen wordt? Dit noemen we relatief gehoor. Kijk de filmpjes om uit te vinden hoe dit werkt!"
         body = render_to_string(
-            join('info', 'toontjehoger', 'experiment6.html'))
+            join('info', 'toontjehogerkids', 'debrief.html'),
+            {'debrief': debrief_message, 'vid1': 'https://www.youtube.com/embed/MYapIh4zqEM?si=2UKN327IbR_H7FSC',
+             'vid2': 'https://www.youtube.com/embed/GRXSDXF0GXk?si=3vvNqRKLWdlMpBs3'})
         info = Info(
             body=body,
             heading="Relatief gehoor",
             button_label="Terug naar ToontjeHoger",
-            button_link="/toontjehoger"
+            button_link="/collection/thkids"
         )
 
         return [*score, final, info]
