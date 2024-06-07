@@ -37,7 +37,7 @@ export const ExperimentCollectionDashboard: React.FC<ExperimentCollectionDashboa
                     {dashboard.map((exp: IExperiment) => (
                         <li key={exp.slug}>
                             <Link to={getExperimentHref(exp.slug)} role="menuitem">
-                                <ImageOrPlaceholder imagePath={exp.image.file} alt={exp.description} />
+                                <ImageOrPlaceholder imagePath={exp.image?.file} alt={exp.image?.alt ?? exp.description} />
                                 <h3>{exp.name}</h3>
                                 <p>{exp.description}</p>
                             </Link>
