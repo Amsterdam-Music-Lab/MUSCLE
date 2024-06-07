@@ -9,7 +9,9 @@ from django.conf import settings
 from django.core.exceptions import ValidationError
 
 from .utils import CsvStringBuilder, get_or_create_song
-from .validators import audio_file_validator, file_exists_validator, url_prefix_validator
+from section.validators import (
+    audio_file_validator, file_exists_validator, url_prefix_validator
+)
 
 
 class Playlist(models.Model):

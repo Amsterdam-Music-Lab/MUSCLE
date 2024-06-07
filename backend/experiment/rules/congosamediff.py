@@ -1,5 +1,4 @@
 
-import random
 import re
 import string
 from django.utils.translation import gettext_lazy as _
@@ -246,7 +245,7 @@ class CongoSameDiff(Base):
 
         errors = []
 
-        super().validate_playlist(playlist)  # Call the base class validate_playlist to perform common checks
+        errors += super().validate_playlist(playlist)  # Call the base class validate_playlist to perform common checks
 
         # All sections need to have a group value
         sections = playlist.section_set.all()

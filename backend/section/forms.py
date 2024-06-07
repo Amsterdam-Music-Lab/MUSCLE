@@ -3,9 +3,9 @@ from http import HTTPStatus
 
 from django import forms
 from django.core.exceptions import ValidationError
-from .models import Playlist, Section
+from .models import Playlist
 
-from .validators import audio_file_validator, file_exists_validator
+from section.validators import audio_file_validator, file_exists_validator
 
 
 class MultipleFileInput(forms.ClearableFileInput):
