@@ -1,3 +1,5 @@
+from unittest.mock import patch
+
 from django.test import TestCase
 
 from section.models import Playlist
@@ -6,6 +8,15 @@ from experiment.rules.toontjehogerkids_5_tempo import ToontjeHogerKids5Tempo
 
 
 class ToontjeHogerKids5TempoTest(TestCase):
+
+    def setUp(self):
+        # Mock the file_exists_validator function from section.models
+        # instead of section.validators as it is imported in the Playlist class
+        # which is in the section.models module
+        patcher = patch('section.models.file_exists_validator')
+        self.mock_file_exists_validator = patcher.start()
+        self.mock_file_exists_validator.return_value = None
+        self.addCleanup(patcher.stop)
 
     # Toontje Hoger Kids 5 Tempo does not have the strict tag validation
     # that Toontje Hoger 5 Tempo has. Therefore, we must ensure that
