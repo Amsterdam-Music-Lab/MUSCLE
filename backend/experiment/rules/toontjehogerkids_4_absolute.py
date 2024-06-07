@@ -1,11 +1,8 @@
-import logging
-
 from os.path import join
 from django.template.loader import render_to_string
 from .toontjehoger_1_mozart import toontjehoger_ranks
-from experiment.actions import Trial, Explainer, Step, Final, Info
+from experiment.actions import Explainer, Step, Final, Info
 from .toontjehoger_4_absolute import ToontjeHoger4Absolute
-
 
 
 class ToontjeHogerKids4Absolute(ToontjeHoger4Absolute):
@@ -35,7 +32,7 @@ class ToontjeHogerKids4Absolute(ToontjeHoger4Absolute):
 
     def get_trial_question(self):
         return "Welke van deze twee stukjes muziek klinkt precies zo hoog of laag als in het echt?"
- 
+
     def get_final_round(self, session):
 
         # Finish session.
@@ -58,13 +55,17 @@ class ToontjeHogerKids4Absolute(ToontjeHoger4Absolute):
         )
 
         # Info page
+        debrief_message = "Lukte het jou om het juiste antwoord te kiezen? Dan heb je goed onthouden hoe hoog of laag die muziekjes normaal altijd klinken! Sommige mensen noemen dit absoluut gehoor. \
+            Is dat eigenlijk bijzonder? Kijk de filmpjes om daar achter te komen!"
         body = render_to_string(
-            join('info', 'toontjehoger', 'experiment4.html'))
+            join('info', 'toontjehogerkids', 'debrief.html'),
+            {'debrief': debrief_message, 'vid1': 'https://www.youtube.com/embed/0wpT-wjI-0M?si=CALvWqid4SjabL9S',
+             'vid2': 'https://www.youtube.com/embed/LQnl1OP3q_Q?si=yTDVPnR7BAeBqWph'})
         info = Info(
             body=body,
             heading="Absoluut gehoor",
             button_label="Terug naar ToontjeHoger",
-            button_link="/toontjehoger"
+            button_link="/collection/thkids"
         )
 
         return [*score, final, info]

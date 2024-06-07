@@ -2,13 +2,9 @@ import logging
 from django.template.loader import render_to_string
 
 from .toontjehoger_1_mozart import toontjehoger_ranks
-from experiment.actions import Trial, Explainer, Step, Score, Final, Playlist, Info, HTML
-from experiment.actions.form import ButtonArrayQuestion, ChoiceQuestion, Form
-from experiment.actions.playback import ImagePlayer
-from experiment.actions.styles import STYLE_NEUTRAL
+from experiment.actions import Explainer, Step, Score, Final, Info
 from .toontjehoger_2_preverbal import ToontjeHoger2Preverbal
 from os.path import join
-from result.utils import prepare_result
 
 logger = logging.getLogger(__name__)
 
@@ -107,13 +103,16 @@ class ToontjeHogerKids2Preverbal(ToontjeHoger2Preverbal):
         )
 
         # Info page
+        debrief_message = "Had jij dat gedacht, dat Franse en Duitse baby's anders huilen? Waarom zouden ze dat doen denk je? Bekijk de filmpjes om dit uit te vinden!"
         body = render_to_string(
-            join('info', 'toontjehoger', 'experiment2.html'))
+            join('info', 'toontjehogerkids', 'debrief.html'),
+            {'debrief': debrief_message, 'vid1': 'https://www.youtube.com/embed/q7L_vwB7eIo?si=mRVJKE2urKT-Xxft',
+             'vid2': 'https://www.youtube.com/embed/4eKcwGB6xmc?si=ogeEhtyEFa9WxP9i'})
         info = Info(
             body=body,
             heading="Het eerste luisteren",
             button_label="Terug naar ToontjeHoger",
-            button_link="/toontjehoger"
+            button_link="/collection/thkids"
         )
 
         return [*score, final, info]

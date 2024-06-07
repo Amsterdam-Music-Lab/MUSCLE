@@ -61,10 +61,14 @@ class ThemeConfigSerializerTest(TestCase):
         self.assertEqual(serialize_footer(self.footer), expected_json)
 
     def test_header_serializer(self):
-        expected_json = {
-            'showScore': True,
+        expected_json = {            
             'nextExperimentButtonText': 'Next experiment',
-            'aboutButtonText': 'About us'
+            'aboutButtonText': 'About us',
+            'score': {
+                'scoreClass': 'gold',
+                'scoreLabel': 'Points',
+                'noScoreLabel': 'No points yet!'
+            }
         }
         self.assertEqual(serialize_header(self.header), expected_json)
 

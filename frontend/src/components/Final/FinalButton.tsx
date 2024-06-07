@@ -30,8 +30,10 @@ const FinalButton: React.FC<FinalButtonProps> = ({ button, onNext }) => {
 
     // If the button has a link, it will render a Link component if the link is a relative URL
     if (isRelativeUrl(button.link)) {
+        const url = `/redirect${button.link}`
+
         return (
-            <Link data-testid="button-link" className='btn btn-primary btn-lg' to={button.link}>
+            <Link data-testid="button-link" className='btn btn-primary btn-lg' to={url}>
                 {button.text}
             </Link>
         )

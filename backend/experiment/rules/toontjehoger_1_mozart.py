@@ -6,6 +6,7 @@ from django.template.loader import render_to_string
 from experiment.actions import Trial, Explainer, Step, Score, Final, Info, HTML
 from experiment.actions.form import ButtonArrayQuestion, Form
 from experiment.actions.playback import Autoplay
+from experiment.actions.styles import STYLE_TOONTJEHOGER
 from .base import Base
 from experiment.utils import non_breaking_spaces
 from section.models import Playlist
@@ -188,7 +189,8 @@ class ToontjeHoger1Mozart(Base):
             view='BUTTON_ARRAY',
             result_id=prepare_result(
             key, session, section=section, expected_response=expected_response),
-            submits=True
+            submits=True,
+            style=STYLE_TOONTJEHOGER
         )
         form = Form([question])
 
