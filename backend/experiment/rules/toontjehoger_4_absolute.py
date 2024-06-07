@@ -6,8 +6,9 @@ from experiment.utils import non_breaking_spaces
 from .toontjehoger_1_mozart import toontjehoger_ranks
 from experiment.actions import Trial, Explainer, Step, Score, Final, Info
 from experiment.actions.form import ButtonArrayQuestion, Form
+from experiment.actions.frontend_style import FrontendStyle, EFrontendStyle
 from experiment.actions.playback import Multiplayer
-from experiment.actions.styles import STYLE_NEUTRAL
+from experiment.actions.styles import STYLE_NEUTRAL_INVERTED
 from experiment.utils import create_player_labels
 from .base import Base
 from result.utils import prepare_result
@@ -92,7 +93,11 @@ class ToontjeHoger4Absolute(Base):
         random.shuffle(sections)
 
         # Player
-        playback = Multiplayer(sections, labels=create_player_labels(len(sections), 'alphabetic'))
+        playback = Multiplayer(
+            sections,
+            labels=create_player_labels(len(sections), 'alphabetic'),
+            style=FrontendStyle(EFrontendStyle.NEUTRAL_INVERTED)
+        )
 
         # Question
         key = 'pitch'
@@ -108,7 +113,7 @@ class ToontjeHoger4Absolute(Base):
                 key, session, section=section1,
                 expected_response="A" if sections[0].id == section1.id else "B"
             ),
-            style=STYLE_NEUTRAL
+            style=STYLE_NEUTRAL_INVERTED
         )
         form = Form([question])
 
