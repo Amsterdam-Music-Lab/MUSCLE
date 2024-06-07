@@ -8,6 +8,7 @@ from experiment.actions.form import ButtonArrayQuestion, Form
 from experiment.actions.frontend_style import FrontendStyle, EFrontendStyle
 from experiment.actions.playback import Multiplayer
 from experiment.actions.styles import STYLE_NEUTRAL_INVERTED
+from section.models import Playlist
 from .base import Base
 from experiment.utils import create_player_labels, non_breaking_spaces
 
@@ -83,7 +84,7 @@ class ToontjeHoger5Tempo(Base):
         valid_tag = False
         tag_base = ""
         tag_original = ""
-        while(not valid_tag):
+        while (not valid_tag):
             track = random.choice([1, 2, 3, 4, 5])
             pair = random.choice([1, 2])
             tag_base = "{}{}_P{}_".format(genre.upper(), track, pair, )
@@ -253,3 +254,16 @@ class ToontjeHoger5Tempo(Base):
         )
 
         return [*score, final, info]
+
+    def validate_playlist(self, playlist: Playlist):
+
+        errors = super().validate_playlist(playlist)
+        sections = playlist.section_set.all()
+        groups = sorted(list(set([section.group for section in sections])))
+
+        if groups != ['ch', 'or']:
+            errors.append(
+                "The playlist must contain two groups: 'or' and 'ch'. Found: {}".format(groups)
+            )
+
+        return errors
