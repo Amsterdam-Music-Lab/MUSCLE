@@ -27,3 +27,5 @@ INTERNAL_IPS = [
 CORS_ALLOW_ALL_ORIGINS = True
 
 TESTING = DEBUG
+
+BASE_URL = os.getenv('BASE_URL') or 'http://localhost:8000'

@@ -3,12 +3,15 @@ import logging
 from django.template.loader import render_to_string
 from django.utils.translation import gettext_lazy as _
 from django.conf import settings
+from django.core.exceptions import ValidationError
 
 from experiment.actions import Final, Form, Trial
 from question.demographics import DEMOGRAPHICS
 from question.goldsmiths import MSI_OTHER
 from question.utils import question_by_key, unanswered_questions
+from section.models import Playlist
 from result.score import SCORING_RULES
+from session.models import Session
 
 from question.questions import get_questions_from_series, QUESTION_GROUPS
 
@@ -53,7 +56,11 @@ class Base(object):
         if scoring_rule:
             return scoring_rule(result, data)
         return None
-    
+
+    def get_play_again_url(self, session: Session):
+        participant_id_url_param = f'?participant_id={session.participant.participant_id_url}' if session.participant.participant_id_url else ""
+        return f'/{session.experiment.slug}{participant_id_url_param}'
+
     def calculate_intermediate_score(self, session, result):
         """ process result data during a trial (i.e., between next_round calls) 
         return score
@@ -159,3 +166,22 @@ class Base(object):
             'url': experiment.url or current_url,
             'hashtags': [experiment.hashtag or experiment.slug, "amsterdammusiclab", "citizenscience"]
         }
+
+    def validate_playlist(self, playlist: Playlist):
+        errors = []
+        # Common validations across experiments
+        if not playlist:
+            errors.append('The experiment must have a playlist.')
+            return errors
+
+        sections = playlist.section_set.all()
+
+        if not sections:
+            errors.append('The experiment must have at least one section.')
+
+        try:
+            Playlist.clean_csv(playlist)
+        except ValidationError as e:
+            errors += e.error_list
+
+        return errors

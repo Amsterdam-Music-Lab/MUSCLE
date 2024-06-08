@@ -1,5 +1,12 @@
 import { useRef, useCallback } from "react";
-import { scoreResult } from "../API";
+import { scoreResult } from "@/API";
+
+interface ResultData {
+    session: unknown;
+    participant: unknown;
+    result: unknown;
+    section?: unknown;
+}
 
 // useResult provides a reusable function to handle experiment view data
 // - collect results in a buffer
@@ -9,14 +16,18 @@ const useResultHandler = ({ session, participant, onNext, state }) => {
     const resultBuffer = useRef([]);
 
     const onResult = useCallback(
-        async (result, forceSubmit = false) => {
+        async (
+            result: unknown,
+            forceSubmit = false,
+            goToNextAction = true
+        ) => {
             // Add data to result buffer
             resultBuffer.current.push(result || {});
 
             // Check if there is another round data available
             // can be forced by forceSubmit
             const hasNextRound = state && state.next_round && state.next_round.length;
-            if (hasNextRound && !forceSubmit) {
+            if (hasNextRound && !forceSubmit && goToNextAction) {
                 onNext();
                 return;
             }
@@ -30,7 +41,7 @@ const useResultHandler = ({ session, participant, onNext, state }) => {
             );
 
             // Create result data
-            const data = {
+            const data: ResultData = {
                 session,
                 participant,
                 result: mergedResults,
@@ -46,7 +57,11 @@ const useResultHandler = ({ session, participant, onNext, state }) => {
 
             // Clear resultBuffer
             resultBuffer.current = [];
-            onNext();
+
+            // Advance to next round
+            if (goToNextAction) {
+                onNext();
+            }
 
         },
         [participant, session, onNext, state]

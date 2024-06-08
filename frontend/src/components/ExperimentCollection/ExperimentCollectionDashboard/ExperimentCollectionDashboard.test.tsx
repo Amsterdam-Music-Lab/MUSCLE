@@ -11,7 +11,7 @@ const getExperiment = (overrides = {}) => {
         slug: 'some_slug',
         name: 'Some Experiment',
         description: 'Some description',
-        image: '',
+        image: {},
         started_session_count: 2,
         finished_session_count: 1,
         ...overrides
@@ -32,27 +32,43 @@ const experiment2 = getExperiment({
     description: 'Some description',
 });
 
+const collectionWithDashboard = { dashboard: [experiment1, experiment2] }
+
+const header = {
+    nextExperimentButtonText: 'Next experiment',
+    aboutButtonText: 'About us',
+    showScore: true
+}
+const collectionWithTheme = {
+    dashboard: [experiment1, experiment2],
+    theme: {
+        backgroundUrl: 'some/url.com',
+        bodyFontUrl: 'font/url.com',
+        description: 'description of the theme',
+        headingFontUrl: 'another/font/url.com',
+        logoUrl: 'where/is/the/logo.jpg',
+        name: 'Collection name',
+        header: header
+    }
+}
+
 describe('ExperimentCollectionDashboard', () => {
 
     it('shows a dashboard of multiple experiments if it receives an array', async () => {
         render(
             <MemoryRouter>
-                <ExperimentCollectionDashboard experimentCollection={{ dashboard: [experiment1, experiment2] }} />
+                <ExperimentCollectionDashboard experimentCollection={collectionWithDashboard} />
             </MemoryRouter>
         );
         await waitFor(() => {
             expect(screen.getByRole('menu')).toBeTruthy();
-            const counters = screen.getAllByRole('status');
-            expect(counters).toHaveLength(4);
-            expect(counters[0].innerHTML).toBe(experiment1.started_session_count.toString());
-            expect(counters[1].innerHTML).toBe(experiment1.finished_session_count.toString());
-        })
+        });
     });
 
     it('shows a placeholder if an experiment has no image', async () => {
         render(
             <MemoryRouter>
-                <ExperimentCollectionDashboard experimentCollection={{ dashboard: [experiment1] }} />
+                <ExperimentCollectionDashboard experimentCollection={collectionWithDashboard} />
             </MemoryRouter>
         );
         await waitFor(() => {
@@ -64,7 +80,7 @@ describe('ExperimentCollectionDashboard', () => {
     it('links to the experiment with the correct slug', async () => {
         render(
             <MemoryRouter>
-                <ExperimentCollectionDashboard experimentCollection={{ dashboard: [experiment1] }} />
+                <ExperimentCollectionDashboard experimentCollection={collectionWithDashboard} />
             </MemoryRouter>
         );
         await waitFor(() => {
@@ -76,12 +92,31 @@ describe('ExperimentCollectionDashboard', () => {
     it('links to the experiment with the correct slug and participant id if the participand id url is present', async () => {
         render(
             <MemoryRouter>
-                <ExperimentCollectionDashboard experimentCollection={{ dashboard: [experiment1] }} participantIdUrl="some_id" />
+                <ExperimentCollectionDashboard experimentCollection={collectionWithDashboard} participantIdUrl="some_id" />
             </MemoryRouter>
         );
         await waitFor(() => {
             expect(screen.getByRole('menu')).toBeTruthy();
             expect(screen.getByRole('menu').querySelector('a').getAttribute('href')).toBe('/some_slug?participant_id=some_id');
         });
+    });
+
+    it('does not show a header if no theme.header is present', () => {
+        render(
+            <MemoryRouter>
+                <ExperimentCollectionDashboard experimentCollection={collectionWithDashboard} participantIdUrl="some_id" />
+            </MemoryRouter>
+        );
+        const aboutButton = screen.queryByText('About us')
+        expect(aboutButton).toBeFalsy();
+    });
+
+    it('shows a header if a theme.header is present', async () => {
+        render(
+            <MemoryRouter>
+                <ExperimentCollectionDashboard experimentCollection={collectionWithTheme} participantIdUrl="some_id" />
+            </MemoryRouter>
+        );
+        await screen.findByText('About us');
     });
 })

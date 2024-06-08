@@ -265,6 +265,10 @@ class Experiment(models.Model):
     def get_rules(self):
         """Get instance of rules class to be used for this session"""
         from experiment.rules import EXPERIMENT_RULES
+
+        if self.rules not in EXPERIMENT_RULES:
+            raise ValueError(f"Rules do not exist (anymore): {self.rules} for experiment {self.name} ({self.slug})")
+
         cl = EXPERIMENT_RULES[self.rules]
         return cl()
 

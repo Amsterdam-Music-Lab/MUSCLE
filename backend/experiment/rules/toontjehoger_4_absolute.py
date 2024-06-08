@@ -4,10 +4,11 @@ from os.path import join
 from django.template.loader import render_to_string
 from experiment.utils import non_breaking_spaces
 from .toontjehoger_1_mozart import toontjehoger_ranks
-from experiment.actions import Trial, Explainer, Step, Score, Final, Playlist, Info
+from experiment.actions import Trial, Explainer, Step, Score, Final, Info
 from experiment.actions.form import ButtonArrayQuestion, Form
+from experiment.actions.frontend_style import FrontendStyle, EFrontendStyle
 from experiment.actions.playback import Multiplayer
-from experiment.actions.styles import STYLE_NEUTRAL
+from experiment.actions.styles import STYLE_NEUTRAL_INVERTED
 from experiment.utils import create_player_labels
 from .base import Base
 from result.utils import prepare_result
@@ -40,12 +41,8 @@ class ToontjeHoger4Absolute(Base):
             button_label="Start"
         )
 
-        # 2. Choose playlist.
-        playlist = Playlist(experiment.playlists.all())
-
         return [
             explainer,
-            playlist,
         ]
 
     def next_round(self, session):
@@ -55,15 +52,17 @@ class ToontjeHoger4Absolute(Base):
 
         # Round 1
         if rounds_passed == 0:
-            # No combine_actions because of inconsistent next_round array wrapping in first round
             return self.get_round(session)
 
-        # Round 2
+        # Round 2 - 4
         if rounds_passed < session.experiment.rounds:
             return [*self.get_score(session), *self.get_round(session)]
 
         # Final
         return self.get_final_round(session)
+
+    def get_trial_question(self):
+        return "Welk fragment heeft de juiste toonhoogte?"
 
     def get_round(self, session):
         # Get available section groups
@@ -94,12 +93,16 @@ class ToontjeHoger4Absolute(Base):
         random.shuffle(sections)
 
         # Player
-        playback = Multiplayer(sections, labels=create_player_labels(len(sections), 'alphabetic'))
+        playback = Multiplayer(
+            sections,
+            labels=create_player_labels(len(sections), 'alphabetic'),
+            style=FrontendStyle(EFrontendStyle.NEUTRAL_INVERTED)
+        )
 
         # Question
         key = 'pitch'
         question = ButtonArrayQuestion(
-            question="Welk fragment heeft de juiste toonhoogte?",
+            question=self.get_trial_question(),
             key=key,
             choices={
                 "A": "A",
@@ -110,7 +113,7 @@ class ToontjeHoger4Absolute(Base):
                 key, session, section=section1,
                 expected_response="A" if sections[0].id == section1.id else "B"
             ),
-            style=STYLE_NEUTRAL
+            style=STYLE_NEUTRAL_INVERTED
         )
         form = Form([question])
 

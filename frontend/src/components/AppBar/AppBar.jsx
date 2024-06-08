@@ -8,7 +8,7 @@ const AppBar = ({ title, logoClickConfirm = null }) => {
 
     const theme = useBoundStore((state) => state.theme);
 
-    const logoUrl = theme? (API_BASE_URL + theme.logo_url) : LOGO_URL;
+    const logoUrl = theme?.logoUrl ? (API_BASE_URL + theme.logoUrl) : LOGO_URL;
 
     // Handle click on logo, to optionally confirm navigating
     const onLogoClick = (e) => {
@@ -39,11 +39,11 @@ const AppBar = ({ title, logoClickConfirm = null }) => {
     );
 
     return (
-        <nav className="aha__app-bar navbar bg-black">
+        <div className="aha__app-bar navbar bg-black">
             {logo}
             <h4 className="title text-light">{title}</h4>
             <span className="action-right"></span>
-        </nav>
+        </div>
     );
 };
 

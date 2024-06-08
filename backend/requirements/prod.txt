@@ -74,7 +74,7 @@ pytz==2023.3
     #   pandas
 regex==2023.12.25
     # via textile
-requests==2.31.0
+requests==2.32.0
     # via genbadge
 roman==4.1
     # via -r requirements.in/base.txt

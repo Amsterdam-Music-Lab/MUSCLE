@@ -35,6 +35,7 @@ ALLOWED_HOSTS = os.getenv("AML_ALLOWED_HOSTS", "localhost").split(",")
 # Application definition
 
 INSTALLED_APPS = [
+    'admin_interface',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -182,6 +183,8 @@ if os.getenv("SENTRY_DSN"):
         # of sampled transactions.
         # We recommend adjusting this value in production.
         profiles_sample_rate=0.2,
+        # Set environment
+        environment=os.getenv("SENTRY_ENVIRONMENT", "unknown"),
     )
 else:
     logger.info("SENTRY_DSN is not defined. Skipping Sentry initialization.")

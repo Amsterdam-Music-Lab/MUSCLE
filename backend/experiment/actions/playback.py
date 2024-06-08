@@ -25,7 +25,6 @@ class Playback(BaseAction):
         - preload_message: text to display during preload
         - instruction: text to display during presentation of the sound
         - play_from: where in the audio file to start playing/
-        - ready_time: how long to show the "Preload" view (loading spinner)
         - show_animation: whether to show animations with this player
         - mute: whether to mute the audio
         - timeout_after_playback: once playback has finished, add optional timeout (in seconds) before proceeding
@@ -33,19 +32,19 @@ class Playback(BaseAction):
         - resume_play: if the playback should resume from where a previous view left off
     '''
 
-    def __init__(self,
-                 sections,
-                 preload_message='',
-                 instruction='',
-                 play_from=0,
-                 ready_time=0,
-                 show_animation=False,
-                 mute=False,
-                 timeout_after_playback=None,
-                 stop_audio_after=None,
-                 resume_play=False,
-                 style=FrontendStyle()
-                 ):
+    def __init__(
+        self,
+        sections,
+        preload_message='',
+        instruction='',
+        play_from=0,
+        show_animation=False,
+        mute=False,
+        timeout_after_playback=None,
+        stop_audio_after=None,
+        resume_play=False,
+        style=FrontendStyle()
+    ):
         self.sections = [{'id': s.id, 'url': s.absolute_url(), 'group': s.group}
                          for s in sections]
         self.play_method = determine_play_method(sections[0])
@@ -54,7 +53,6 @@ class Playback(BaseAction):
         self.instruction = instruction
         self.play_from = play_from
         self.mute = mute
-        self.ready_time = ready_time
         self.timeout_after_playback = timeout_after_playback
         self.stop_audio_after = stop_audio_after
         self.resume_play = resume_play
@@ -92,10 +90,18 @@ class Multiplayer(PlayButton):
     - labels: pass list of strings if players should have custom labels
     '''
 
-    def __init__(self, sections, stop_audio_after=5, labels=[], **kwargs):
+    def __init__(
+        self,
+        sections,
+        stop_audio_after=5,
+        labels=[],
+        style=FrontendStyle(),
+        **kwargs,
+    ):
         super().__init__(sections, **kwargs)
         self.ID = TYPE_MULTIPLAYER
         self.stop_audio_after = stop_audio_after
+        self.style = style
         if labels:
             if len(labels) != len(self.sections):
                 raise UserWarning(

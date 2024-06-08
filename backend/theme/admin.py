@@ -4,7 +4,7 @@ from django.conf import settings
 from django.contrib import admin
 from django.utils.html import format_html
 from django.utils.safestring import mark_safe
-from .models import FooterConfig, ThemeConfig
+from .models import FooterConfig, HeaderConfig, ThemeConfig
 from .forms import ThemeConfigForm, FooterConfigForm
 
 
@@ -14,13 +14,18 @@ class FooterConfigInline(admin.StackedInline):
     fields = ['disclaimer', 'logos', 'privacy']
 
 
+class HeaderConfigInline(admin.StackedInline):
+    model = HeaderConfig
+    fields = ['show_score']
+
+
 @admin.register(ThemeConfig)
 class ThemeConfigAdmin(admin.ModelAdmin):
 
     form = ThemeConfigForm
-    inlines = [FooterConfigInline]
+    inlines = [HeaderConfigInline, FooterConfigInline]
 
-    list_display = ('name', 'heading_font_preview',
+    list_display = ('name', 'header_overview', 'heading_font_preview',
                     'body_font_preview', 'logo_preview', 'background_preview', 'footer_overview')
     search_fields = ('name', 'description')
     ordering = ('name',)
@@ -43,6 +48,9 @@ class ThemeConfigAdmin(admin.ModelAdmin):
             'fields': ('background_image',)
         }),
     )
+
+    def header_overview(self, obj):
+        return 'Header set' if obj.header else ''
 
     def footer_overview(self, obj):
         return f'Footer with {obj.footer.logos.count()} logos'

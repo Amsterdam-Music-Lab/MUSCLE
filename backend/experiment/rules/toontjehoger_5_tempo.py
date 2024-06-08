@@ -3,10 +3,11 @@ import random
 from os.path import join
 from django.template.loader import render_to_string
 from .toontjehoger_1_mozart import toontjehoger_ranks
-from experiment.actions import Trial, Explainer, Step, Score, Final, Playlist, Info
+from experiment.actions import Trial, Explainer, Step, Score, Final, Info
 from experiment.actions.form import ButtonArrayQuestion, Form
+from experiment.actions.frontend_style import FrontendStyle, EFrontendStyle
 from experiment.actions.playback import Multiplayer
-from experiment.actions.styles import STYLE_NEUTRAL
+from experiment.actions.styles import STYLE_NEUTRAL_INVERTED
 from .base import Base
 from experiment.utils import create_player_labels, non_breaking_spaces
 
@@ -39,12 +40,8 @@ class ToontjeHoger5Tempo(Base):
             button_label="Start"
         )
 
-        # 2. Choose playlist.
-        playlist = Playlist(experiment.playlists.all())
-
         return [
             explainer,
-            playlist,
         ]
 
     def next_round(self, session):
@@ -115,7 +112,7 @@ class ToontjeHoger5Tempo(Base):
         sections = [section_original, section_changed]
         random.shuffle(sections)
         return sections
- 
+
     def get_section_changed(self, session, tag):
         section_changed = session.section_from_any_song(
             filter_by={'tag': tag, 'group': "ch"})
@@ -124,20 +121,27 @@ class ToontjeHoger5Tempo(Base):
                 "Error: could not find changed section: {}".format(tag))
         return section_changed
 
+    def get_trial_question(self):
+        return "Welk fragment wordt in het originele tempo afgespeeld?"
+
     def get_round(self, session, round):
         # Get sections
         genre = ["C", "J", "R"][round % 3]
 
         sections = self.get_random_section_pair(session, genre)
-        section_original = sections[0] if sections[0].group == "or" else sections[1]  
+        section_original = sections[0] if sections[0].group == "or" else sections[1]
 
         # Player
-        playback = Multiplayer(sections, labels=create_player_labels(len(sections), 'alphabetic'))
+        playback = Multiplayer(
+            sections,
+            labels=create_player_labels(len(sections), 'alphabetic'),
+            style=FrontendStyle(EFrontendStyle.NEUTRAL_INVERTED)
+        )
 
         # Question
         key = 'pitch'
         question = ButtonArrayQuestion(
-            question="Welk fragment wordt in het originele tempo afgespeeld?",
+            question=self.get_trial_question(),
             key=key,
             choices={
                 "A": "A",
@@ -148,7 +152,7 @@ class ToontjeHoger5Tempo(Base):
                 key, session, section=section_original,
                 expected_response="A" if sections[0].id == section_original.id else "B"
             ),
-            style=STYLE_NEUTRAL
+            style=STYLE_NEUTRAL_INVERTED
         )
         form = Form([question])
 
@@ -158,10 +162,10 @@ class ToontjeHoger5Tempo(Base):
             title=self.TITLE,
         )
         return [trial]
-   
+
     def calculate_score(self, result, data):
         return self.SCORE_CORRECT if result.expected_response == result.given_response else self.SCORE_WRONG
-    
+
     def get_section_pair_from_result(self, result):
         section_original = result.section
 

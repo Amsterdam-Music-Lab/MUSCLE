@@ -163,6 +163,36 @@ class ExperimentForm(ModelForm):
             choices=sorted(choices)
         )
 
+    def clean_playlists(self):
+
+        # Check if there is a rules id selected and key exists
+        if 'rules' not in self.cleaned_data:
+            return
+
+        # Validat the rules' playlist
+        rule_id = self.cleaned_data['rules']
+        cl = EXPERIMENT_RULES[rule_id]
+        rules = cl()
+
+        playlists = self.cleaned_data['playlists']
+
+        if not playlists:
+            return self.cleaned_data['playlists']
+        
+        playlist_errors = []
+
+        # Validate playlists
+        for playlist in playlists:
+            errors = rules.validate_playlist(playlist)
+
+            for error in errors:
+                playlist_errors.append(f"Playlist [{playlist.name}]: {error}")
+
+        if playlist_errors:
+            self.add_error('playlists', playlist_errors)
+
+        return playlists
+
     class Meta:
         model = Experiment
         fields = ['name', 'slug', 'active', 'rules',

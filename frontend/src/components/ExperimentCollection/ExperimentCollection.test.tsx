@@ -5,7 +5,6 @@ import MockAdapter from "axios-mock-adapter";
 import axios from 'axios';
 
 import ExperimentCollection from './ExperimentCollection';
-
 let mock = new MockAdapter(axios);
 
 const getExperiment = (overrides = {}) => {
@@ -21,6 +20,26 @@ const experiment1 = getExperiment({
     slug: 'some_slug',
     name: 'Some Experiment'
 });
+
+const theme = {
+    backgroundUrl: 'someurl.com',
+    bodyFontUrl: 'bodyFontUrl.com',
+    description: 'Description of the theme',
+    headingFontUrl: 'headingFontUrl.com',
+    logoUrl: 'logoUrl.com',
+    name: 'Awesome theme',
+    footer: {
+        disclaimer: 'disclaimer',
+        logos: [
+            {
+                'file': 'some/logo.jpg',
+                'href': 'some.url.net',
+                'alt': 'Our beautiful logo',
+            }
+        ],
+        privacy: 'privacy'
+    }
+}
 
 const experimentWithAllProps = getExperiment({ image: 'some_image.jpg', description: 'Some description' });
 
@@ -85,15 +104,27 @@ describe('ExperimentCollection', () => {
         })
     });
 
-    it('shows consent first if available', () => {
+    it('shows consent first if available', async () => {
         mock.onGet().replyOnce(200, { consent: '<p>This is our consent form!</p>', dashboard: [experimentWithAllProps], next_experiment: experiment1} );
         render(
             <MemoryRouter>
                 <ExperimentCollection match={{params: {slug: 'some_collection'}}}/>
             </MemoryRouter>
         );
-        waitFor(() => {
-            expect(screen.getByText('This is our consent form!')).toBeInTheDocument();
+        await waitFor(() => {
+            expect(document.querySelector('.consent-text')).not.toBeNull();
+        })
+    });
+
+    it('shows a footer if a theme with footer is available', async () => {
+        mock.onGet().replyOnce(200, { dashboard: [experimentWithAllProps], next_experiment: experiment1, theme });
+        render(
+            <MemoryRouter>
+                <ExperimentCollection match={{params: {slug: 'some_collection'}}}/>
+            </MemoryRouter>
+        );
+        await waitFor( () => {
+            expect(document.querySelector('.aha__footer')).not.toBeNull();
         })
     })
 })

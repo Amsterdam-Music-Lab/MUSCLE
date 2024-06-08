@@ -189,10 +189,6 @@ class ExperimentCollectionGroupInline(admin.StackedInline):
     inlines = [GroupedExperimentInline]
 
 
-class MarkdownPreviewTextInput(TextInput):
-    template_name = 'widgets/markdown_preview_text_input.html'
-
-
 class ExperimentCollectionAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
     list_display = ('name', 'slug_link', 'description_excerpt', 'dashboard', 'groups')
     fields = ['slug', 'name', 'description', 'consent', 'theme_config', 'dashboard',

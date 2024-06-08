@@ -1,4 +1,4 @@
-export interface Participant {
+export default interface Participant {
     id: number;
     hash: string;
     csrf_token: string;

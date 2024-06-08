@@ -1,5 +1,3 @@
-import { MEDIA_ROOT } from "@/config";
-
 let track;
 let source;
 let buffers = {};
@@ -74,7 +72,7 @@ export const changeGain = (level) => {
 
 // load sound data and store in buffers object
 export const loadBuffer = async (id, src, canPlay) => {
-    await fetch(MEDIA_ROOT + src, {})
+    await fetch(src, {})
         // Return the data as an ArrayBuffer
         .then(response => response.arrayBuffer())
         // Decode the audio data
