@@ -6,15 +6,14 @@ from django.conf import settings
 from django.core.exceptions import ValidationError
 
 from experiment.actions import Final, Form, Trial
+from question.demographics import DEMOGRAPHICS
+from question.goldsmiths import MSI_OTHER
+from question.utils import question_by_key, unanswered_questions
 from section.models import Playlist
-import section.validators
-from experiment.questions.demographics import DEMOGRAPHICS
-from experiment.questions.goldsmiths import MSI_OTHER
-from experiment.questions.utils import question_by_key, unanswered_questions
 from result.score import SCORING_RULES
 from session.models import Session
 
-from experiment.questions import get_questions_from_keys
+from question.questions import get_questions_from_series, QUESTION_GROUPS
 
 logger = logging.getLogger(__name__)
 
@@ -25,7 +24,10 @@ class Base(object):
     contact_email = settings.CONTACT_MAIL
 
     def __init__(self):
-        self.questions = DEMOGRAPHICS + [question_by_key('msi_39_best_instrument', MSI_OTHER)]
+        self.question_series = [
+            {"name": "DEMOGRAPHICS", "keys": QUESTION_GROUPS["DEMOGRAPHICS"], "randomize": False},
+            {"name": "MSI_OTHER", "keys": ['msi_39_best_instrument'], "randomize": False},
+        ]
 
     def feedback_info(self):
         feedback_body = render_to_string('feedback/user_feedback.html', {'email': self.contact_email})
@@ -129,7 +131,7 @@ class Base(object):
         Participants will not continue to the next question set until they
         have completed their current one.
         """
-        questionnaire = unanswered_questions(session.participant, self.questions, randomize)
+        questionnaire = unanswered_questions(session.participant, get_questions_from_series(session.experiment.questionseries_set.all()), randomize)
         try:
             question = next(questionnaire)
             return Trial(
@@ -142,7 +144,7 @@ class Base(object):
         ''' Get a list of questions to be asked in succession '''
 
         trials = []
-        questions = list(unanswered_questions(session.participant, get_questions_from_keys(session.experiment.questions), randomize, cutoff_index))
+        questions = list(unanswered_questions(session.participant, get_questions_from_series(session.experiment.questionseries_set.all()), randomize, cutoff_index))
         open_questions = len(questions)
         if not open_questions:
             return None

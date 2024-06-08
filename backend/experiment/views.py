@@ -73,8 +73,10 @@ def experiment_or_404(slug):
         raise Http404("Experiment does not exist")
 
 
-def default_questions(request, rules):
-    return JsonResponse({'default_questions': [q.key for q in EXPERIMENT_RULES[rules]().questions]})
+def add_default_question_series(request, id):
+    if request.method == "POST":
+        Experiment.objects.get(pk=id).add_default_question_series()
+    return JsonResponse({})
 
 
 def get_experiment_collection(request: HttpRequest, slug: str, group_index: int = 0) -> JsonResponse:

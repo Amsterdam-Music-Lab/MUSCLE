@@ -10,9 +10,9 @@ class TestModelExperiment(TestCase):
     def test_separate_rules_instance(self):
         rules1 = self.experiment.get_rules()
         rules2 = self.experiment.get_rules()
-        keys1 = [q.key for q in rules1.questions]
-        keys2 = [q.key for q in rules2.questions]
-        assert keys1 != keys2
+        keys1 = rules1.question_series[0]['keys'] + rules1.question_series[1]['keys']
+        keys2 = rules2.question_series[0]['keys'] + rules2.question_series[1]['keys']
+        assert keys1 == keys2
 
 
 class TestModelExperimentCollection(TestCase):
