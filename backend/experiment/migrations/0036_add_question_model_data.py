@@ -1,12 +1,14 @@
 
 from django.db import migrations
 from experiment.models import Experiment
+from experiment.rules import EXPERIMENT_RULES
 
 
 def add_default_question_series(apps, schema_editor):
 
     for experiment in Experiment.objects.all():
-        experiment.add_default_question_series()
+        if EXPERIMENT_RULES.get(experiment.rules) and not experiment.questionseries_set.all():
+            experiment.add_default_question_series()
 
 
 class Migration(migrations.Migration):
