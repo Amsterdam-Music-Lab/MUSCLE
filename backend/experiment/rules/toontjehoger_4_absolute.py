@@ -2,6 +2,7 @@ import logging
 import random
 from os.path import join
 from django.template.loader import render_to_string
+from section.models import Playlist
 from experiment.utils import non_breaking_spaces
 from .toontjehoger_1_mozart import toontjehoger_ranks
 from experiment.actions import Trial, Explainer, Step, Score, Final, Info
@@ -149,7 +150,7 @@ class ToontjeHoger4Absolute(Base):
         config = {'show_total_score': True}
         score = Score(session, config=config, feedback=feedback)
         return [score]
- 
+
     def get_final_round(self, session):
 
         # Finish session.
@@ -184,3 +185,15 @@ class ToontjeHoger4Absolute(Base):
         )
 
         return [*score, final, info]
+
+    def validate_playlist(self, playlist: Playlist):
+        errors = super().validate_playlist(playlist)
+
+        # Get group values from sections, ordered by group
+        groups = list(playlist.section_set.values_list('group', flat=True).order_by('group'))
+
+        # Check if the groups are sequential and unique
+        if groups != list(range(1, len(groups) + 1)):
+            errors.append(f"Groups in playlist sections should be sequential and unique from 1 to {len(groups)}.")
+
+        return errors
