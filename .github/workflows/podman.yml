@@ -264,7 +264,7 @@ jobs:
       - name: Shut down running containers
         run: podman compose -f docker-compose-deploy.yml down
       - name: Deploy Podman images
-        run: podman-compose -f docker-compose-deploy.yml up -d --force-recreate
+        run: podman-compose -f docker-compose-deploy.yml up -d
       - name: Notify Sentry of new release
         run: |
           curl -X POST "https://sentry.io/api/0/organizations/uva-aml/releases/" \
