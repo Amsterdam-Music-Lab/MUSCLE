@@ -62,6 +62,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+      - name: Shut down running containers
+        run: podman compose -f docker-compose-deploy.yml down
       - name: Create .env file
         run: |
           touch .env
