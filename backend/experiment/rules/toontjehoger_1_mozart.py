@@ -1,6 +1,7 @@
 import logging
 from django.template.loader import render_to_string
 from os.path import join
+from section.models import Playlist
 from experiment.actions import Trial, Explainer, Step, Score, Final, Info, HTML
 from experiment.actions.form import ButtonArrayQuestion, Form
 from experiment.actions.playback import Autoplay
@@ -235,3 +236,24 @@ class ToontjeHoger1Mozart(Base):
         )
 
         return [*answer_explainer, *score, final, info]
+
+    def validate_playlist(self, playlist: Playlist):
+
+        errors = []
+
+        errors += super().validate_playlist(playlist)
+
+        # Check if playlist has 2 sections
+        if playlist.section_set.count() != 2:
+            errors.append("The playlist should have 2 sections")
+
+        # Check if sections have different groups
+        groups = [section.group for section in playlist.section_set.all()]
+        if len(set(groups)) != 2:
+            errors.append("The sections should have different groups")
+
+        # Check if sections have group 1 and 2
+        if not (1 in groups and 2 in groups):
+            errors.append("The sections should have groups 1 and 2")
+
+        return errors

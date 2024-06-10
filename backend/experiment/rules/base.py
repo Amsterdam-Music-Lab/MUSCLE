@@ -7,8 +7,7 @@ from django.core.exceptions import ValidationError
 
 from experiment.actions import Final, Form, Trial
 from question.demographics import DEMOGRAPHICS
-from question.goldsmiths import MSI_OTHER
-from question.utils import question_by_key, unanswered_questions
+from question.utils import unanswered_questions
 from section.models import Playlist
 from result.score import SCORING_RULES
 from session.models import Session
