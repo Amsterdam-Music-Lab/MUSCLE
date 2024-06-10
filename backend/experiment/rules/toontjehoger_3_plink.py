@@ -54,7 +54,7 @@ class ToontjeHoger3Plink(Base):
                 'The sections should be tagged with an era in the format [0-9]0s, e.g., 90s')
         moods = sorted(sections.order_by('group').values_list(
             'group', flat=True).distinct())
-        if not 'droevig' in moods:
+        if 'droevig' not in moods:
             errors.append(
                 "The sections' groups should be indications of the songs' moods in Dutch"
             )
