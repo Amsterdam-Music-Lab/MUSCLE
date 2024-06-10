@@ -63,3 +63,21 @@ class ToontjeHoger5TempoTest(TestCase):
                 'C6_P1_OR, F4_P2_OR'
             ]
         )
+
+    def test_validate_playlist_invalid_groups(self):
+        csv_data = (
+            "Albania 2018 - Eugent Bushpepa,Mall,7.046,45.0,Eurovision/Set2/Karaoke/2018-11-00-07-046-k.mp3,C3_P2_OR,ch\n"
+            "Albania 2018 - Eugent Bushpepa,Mall,7.046,45.0,Eurovision/Set2/Karaoke/2018-11-00-07-046-k.mp3,C2_P1_OR,ch\n"
+            "Albania 2018 - Eugent Bushpepa,Mall,7.046,45.0,Eurovision/Set2/Karaoke/2018-11-00-07-046-k.mp3,C4_P2_OR,ch\n"
+        )
+        playlist = Playlist.objects.create(name='TestToontjeHoger5Tempo')
+        playlist.csv = csv_data
+        playlist.update_sections()
+
+        toontje_hoger_5_tempo_rules = ToontjeHoger5Tempo()
+        self.assertEqual(
+            toontje_hoger_5_tempo_rules.validate_playlist(playlist),
+            [
+                "The playlist must contain two groups: 'or' and 'ch'. Found: ['ch']"
+            ]
+        )
