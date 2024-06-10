@@ -1,7 +1,5 @@
 import React from "react";
 
-import { API_BASE_URL } from "@/config";
-
 import { Footer as IFooter, Logo as ILogo } from "@types/Footer";
 
 export const Footer: React.FC<IFooter> = ({disclaimer, logos, privacy}) => {
@@ -19,7 +17,7 @@ export const Footer: React.FC<IFooter> = ({disclaimer, logos, privacy}) => {
                         rel="noopener noreferrer"
                         key={index}
                     >
-                        <img src={API_BASE_URL + logo.file} alt={logo.alt} />
+                        <img src={logo.file} alt={logo.alt} />
                     </a>
                 ))}
             </div>
