@@ -7,7 +7,7 @@ from .models import Image
 
 def serialize_image(image: Image) -> dict:
     return {
-        'file': join(settings.MEDIA_URL, settings.SUBPATH, str(image.file)),
+        'file': f'{settings.BASE_URL.strip("/")}/{settings.MEDIA_URL.strip("/")}/{image.file}',
         'href': image.href,
         'alt': image.alt,
     }
