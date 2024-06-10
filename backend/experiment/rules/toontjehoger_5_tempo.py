@@ -259,10 +259,18 @@ class ToontjeHoger5Tempo(Base):
     def validate_tags(self, tags):
 
         errors = []
+        erroneous_tags = []
 
         for tag in tags:
             if not re.match(r'^[CJR][1-5]_P[12]_(OR|CH)$', tag):
-                errors.append("Invalid tag: {}".format(tag))
+                erroneous_tags.append(tag)
+
+        if erroneous_tags:
+            errors.append(
+                "Tags should start with either 'C', 'J' or 'R', followed by a number between 1 and 5, "
+                "followed by '_P', followed by either 1 or 2, followed by either '_OR' or '_CH'. "
+                "Invalid tags: {}".format(", ".join(erroneous_tags))
+            )
 
         return errors
 
