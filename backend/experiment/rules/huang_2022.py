@@ -7,12 +7,8 @@ from django.conf import settings
 from experiment.actions import HTML, Final, Explainer, Step, Consent, Redirect, Playlist, Trial
 from experiment.actions.form import BooleanQuestion, Form
 from experiment.actions.playback import Autoplay
-from question.demographics import EXTRA_DEMOGRAPHICS
-from question.goldsmiths import MSI_ALL, MSI_OTHER
-from question.other import OTHER
-from question.utils import question_by_key
-from question.questions import QUESTION_GROUPS
 from experiment.actions.styles import STYLE_BOOLEAN_NEGATIVE_FIRST
+from question.questions import QUESTION_GROUPS
 from result.utils import prepare_result
 from .hooked import Hooked
 
