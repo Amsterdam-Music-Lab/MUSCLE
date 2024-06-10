@@ -7,8 +7,6 @@ from .toontjehoger_5_tempo import ToontjeHoger5Tempo
 from experiment.actions import Explainer, Step, Score, Final, Info
 from experiment.utils import non_breaking_spaces
 
-from result.utils import prepare_result
-
 logger = logging.getLogger(__name__)
 
 
@@ -58,7 +56,7 @@ class ToontjeHogerKids5Tempo(ToontjeHoger5Tempo):
         valid_tag = False
         tag_base = ""
         tag_original = ""
-        while(not valid_tag):
+        while (not valid_tag):
             track = random.choice([1, 2, 3, 4, 5])
             pair = random.choice([1, 2])
             tag_base = "{}{}_P{}_".format(genre.upper(), track, pair, )
@@ -87,7 +85,7 @@ class ToontjeHogerKids5Tempo(ToontjeHoger5Tempo):
         sections = [section_original, section_changed]
         random.shuffle(sections)
         return sections
- 
+
     def get_section_changed(self, session, tag):
         section_changed = session.section_from_any_song(
             filter_by={'tag': tag, 'group': "ch"})
@@ -98,7 +96,7 @@ class ToontjeHogerKids5Tempo(ToontjeHoger5Tempo):
 
     def get_trial_question(self):
         return "Kan jij horen waar de klikjes goed bij de maat van de muziek passen?"
-    
+
     def get_section_pair_from_result(self, result):
         section_original = result.section
 

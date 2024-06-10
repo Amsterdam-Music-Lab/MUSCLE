@@ -16,7 +16,8 @@ from inline_actions.admin import InlineActionsModelAdminMixin
 from django.urls import reverse
 from django.utils.html import format_html
 from experiment.models import Experiment, ExperimentCollection, ExperimentCollectionGroup, Feedback, GroupedExperiment
-from experiment.forms import ExperimentCollectionForm, ExperimentForm, ExportForm, TemplateForm, EXPORT_TEMPLATES
+from question.admin import QuestionSeriesInline
+from experiment.forms import ExperimentCollectionForm, ExperimentForm, ExportForm, TemplateForm, EXPORT_TEMPLATES, QuestionSeriesAdminForm
 from section.models import Section, Song
 from result.models import Result
 from participant.models import Participant
@@ -43,8 +44,8 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
               'slug', 'url', 'hashtag', 'theme_config', 
               'language', 'active', 'rules',
               'rounds', 'bonus_points', 'playlists',
-              'consent', 'questions']
-    inlines = [FeedbackInline]
+              'consent']
+    inlines = [QuestionSeriesInline, FeedbackInline]
     form = ExperimentForm
 
     # make playlists fields a list of checkboxes
