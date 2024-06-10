@@ -19,7 +19,6 @@ import FloatingActionButton from "@/components/FloatingActionButton/FloatingActi
 import UserFeedback from "@/components/UserFeedback/UserFeedback";
 import FontLoader from "@/components/FontLoader/FontLoader";
 import useResultHandler from "@/hooks/useResultHandler";
-import { API_ROOT } from "../../config";
 
 // Experiment handles the main experiment flow:
 // - Loads the experiment and participant
@@ -116,7 +115,7 @@ const Experiment = ({ match }) => {
                 setHeadData({
                     title: experiment.name,
                     description: experiment.description,
-                    image: `${API_ROOT}/${experiment.image}`,
+                    image: experiment.image.file,
                     url: window.location.href,
                     structuredData: {
                         "@type": "Experiment",

@@ -1,7 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-import { API_ROOT } from "@/config";
 import ExperimentCollection from "@/types/ExperimentCollection";
 import AppBar from "@/components/AppBar/AppBar";
 import Header from "@/components/Header/Header";
@@ -54,7 +53,7 @@ export const ExperimentCollectionDashboard: React.FC<ExperimentCollectionDashboa
 }
 
 const ImageOrPlaceholder = ({ imagePath, alt }: { imagePath: string, alt: string }) => {
-    const imgSrc = imagePath ? `${API_ROOT}/${imagePath}` : null;
+    const imgSrc = imagePath ?? null;
 
     return imgSrc ? <img src={imgSrc} alt={alt} /> : <div className="placeholder" />;
 }
