@@ -193,7 +193,7 @@ class ToontjeHoger4Absolute(Base):
         groups = list(playlist.section_set.values_list('group', flat=True).order_by('group'))
 
         # Check if the groups are sequential and unique
-        if groups != list(range(1, len(groups) + 1)):
-            errors.append(f"Groups in playlist sections should be sequential and unique from 1 to {len(groups)}.")
+        if groups != list(map(str, range(1, len(groups) + 1))):
+            errors.append(f"Groups in playlist sections should be sequential and unique from 1 to {len(groups)}. E.g. {list(range(1, len(groups) + 1))}")
 
         return errors
