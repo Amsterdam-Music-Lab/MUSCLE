@@ -115,7 +115,7 @@ const Experiment = ({ match }) => {
                 setHeadData({
                     title: experiment.name,
                     description: experiment.description,
-                    image: experiment.image.file,
+                    image: experiment.image?.file,
                     url: window.location.href,
                     structuredData: {
                         "@type": "Experiment",
