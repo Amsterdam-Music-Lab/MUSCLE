@@ -4,6 +4,8 @@ from experiment.actions.form import ChoiceQuestion, NumberQuestion, TextQuestion
 from experiment.standards.iso_countries import ISO_COUNTRIES
 from experiment.standards.iso_languages import ISO_LANGUAGES
 from experiment.standards.isced_education import ISCED_EDUCATION_LEVELS
+from .utils import question_by_key
+
 
 ATTAINED_EDUCATION_CHOICES = dict(
     ISCED_EDUCATION_LEVELS,
@@ -148,19 +150,20 @@ EXTRA_DEMOGRAPHICS = [
 
 
 def demographics_other():
-    from .utils import question_by_key
-
     questions = []
 
-    question =  question_by_key('dgf_education', drop_choices=['isced-2', 'isced-5'])
+    question = question_by_key('dgf_education', DEMOGRAPHICS, drop_choices=[
+                               'isced-2', 'isced-5'])
     question.key = 'dgf_education_matching_pairs'
     questions.append(question)
 
-    question = question_by_key('dgf_education', drop_choices=['isced-1'])
+    question = question_by_key(
+        'dgf_education', DEMOGRAPHICS, drop_choices=['isced-1'])
     question.key = 'dgf_education_gold_msi'
     questions.append(question)
 
-    question = question_by_key('dgf_education', drop_choices=['isced-5'])
+    question = question_by_key(
+        'dgf_education', DEMOGRAPHICS, drop_choices=['isced-5'])
     question.key = 'dgf_education_huang_2022'
     questions.append(question)
 

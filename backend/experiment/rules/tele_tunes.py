@@ -1,6 +1,4 @@
-from question.musicgens import MUSICGENS_17_W_VARIANTS
-from question.demographics import DEMOGRAPHICS
-from question.utils import copy_shuffle
+from question.questions import QUESTION_GROUPS
 from .hooked import Hooked
 
 
