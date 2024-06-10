@@ -57,12 +57,12 @@ class TestToontjeHoger4Absolute(TestCase):
 
     def test_validate_valid_groups(self):
         csv_data = (
-            "Albania 2018 - Eugent Bushpepa,Mall,7.046,45.0,ToontjeHoger4Absolute/audio-1.mp3,1,1\n"
-            "Albania 2018 - Eugent Bushpepa,Mall,7.046,45.0,ToontjeHoger4Absolute/audio-2.mp3,2,2\n"
-            "Albania 2018 - Eugent Bushpepa,Mall,7.046,45.0,ToontjeHoger4Absolute/audio-3.mp3,3,3\n"
-            "Albania 2018 - Eugent Bushpepa,Mall,7.046,45.0,ToontjeHoger4Absolute/audio-4.mp3,4,4\n"
-            "Albania 2018 - Eugent Bushpepa,Mall,7.046,45.0,ToontjeHoger4Absolute/audio-5.mp3,5,5\n"
-            "Albania 2018 - Eugent Bushpepa,Mall,7.046,45.0,ToontjeHoger4Absolute/audio-6.mp3,6,6\n"
+            "Albania 2018 - Eugent Bushpepa,Mall,7.046,45.0,ToontjeHoger4Absolute/audio-1.mp3,a,1\n"
+            "Albania 2018 - Eugent Bushpepa,Mall,7.046,45.0,ToontjeHoger4Absolute/audio-2.mp3,c,2\n"
+            "Albania 2018 - Eugent Bushpepa,Mall,7.046,45.0,ToontjeHoger4Absolute/audio-3.mp3,a,3\n"
+            "Albania 2018 - Eugent Bushpepa,Mall,7.046,45.0,ToontjeHoger4Absolute/audio-4.mp3,b,4\n"
+            "Albania 2018 - Eugent Bushpepa,Mall,7.046,45.0,ToontjeHoger4Absolute/audio-5.mp3,c,5\n"
+            "Albania 2018 - Eugent Bushpepa,Mall,7.046,45.0,ToontjeHoger4Absolute/audio-6.mp3,b,6\n"
         )
         playlist = PlaylistModel.objects.create(name='TestToontjeHoger5Tempo')
         playlist.csv = csv_data
@@ -75,12 +75,12 @@ class TestToontjeHoger4Absolute(TestCase):
 
     def test_validate_invalid_groups(self):
         csv_data = (
-            "Albania 2018 - Eugent Bushpepa,Mall,7.046,45.0,ToontjeHoger4Absolute/audio-1.mp3,1,a\n"
-            "Albania 2018 - Eugent Bushpepa,Mall,7.046,45.0,ToontjeHoger4Absolute/audio-2.mp3,2,2\n"
-            "Albania 2018 - Eugent Bushpepa,Mall,7.046,45.0,ToontjeHoger4Absolute/audio-3.mp3,3,4\n"
-            "Albania 2018 - Eugent Bushpepa,Mall,7.046,45.0,ToontjeHoger4Absolute/audio-4.mp3,4,4\n"
-            "Albania 2018 - Eugent Bushpepa,Mall,7.046,45.0,ToontjeHoger4Absolute/audio-5.mp3,5,5\n"
-            "Albania 2018 - Eugent Bushpepa,Mall,7.046,45.0,ToontjeHoger4Absolute/audio-6.mp3,6,7\n"
+            "Albania 2018 - Eugent Bushpepa,Mall,7.046,45.0,ToontjeHoger4Absolute/audio-1.mp3,a,a\n"
+            "Albania 2018 - Eugent Bushpepa,Mall,7.046,45.0,ToontjeHoger4Absolute/audio-2.mp3,c,2\n"
+            "Albania 2018 - Eugent Bushpepa,Mall,7.046,45.0,ToontjeHoger4Absolute/audio-3.mp3,a,4\n"
+            "Albania 2018 - Eugent Bushpepa,Mall,7.046,45.0,ToontjeHoger4Absolute/audio-4.mp3,b,4\n"
+            "Albania 2018 - Eugent Bushpepa,Mall,7.046,45.0,ToontjeHoger4Absolute/audio-5.mp3,c,5\n"
+            "Albania 2018 - Eugent Bushpepa,Mall,7.046,45.0,ToontjeHoger4Absolute/audio-6.mp3,b,7\n"
         )
         playlist = PlaylistModel.objects.create(name='TestToontjeHoger5Tempo')
         playlist.csv = csv_data
@@ -92,4 +92,23 @@ class TestToontjeHoger4Absolute(TestCase):
             [
                 'Groups in playlist sections should be sequential and unique from 1 to 6. E.g. [1, 2, 3, 4, 5, 6]'
             ]
+        )
+
+    def test_validate_invalid_tags(self):
+        csv_data = (
+            "Albania 2018 - Eugent Bushpepa,Mall,7.046,45.0,ToontjeHoger4Absolute/audio-1.mp3,a,1\n"
+            "Albania 2018 - Eugent Bushpepa,Mall,7.046,45.0,ToontjeHoger4Absolute/audio-2.mp3,c,2\n"
+            "Albania 2018 - Eugent Bushpepa,Mall,7.046,45.0,ToontjeHoger4Absolute/audio-3.mp3,a,3\n"
+            "Albania 2018 - Eugent Bushpepa,Mall,7.046,45.0,ToontjeHoger4Absolute/audio-4.mp3,b,4\n"
+            "Albania 2018 - Eugent Bushpepa,Mall,7.046,45.0,ToontjeHoger4Absolute/audio-5.mp3,c,5\n"
+            "Albania 2018 - Eugent Bushpepa,Mall,7.046,45.0,ToontjeHoger4Absolute/audio-6.mp3,d,6\n"
+        )
+        playlist = PlaylistModel.objects.create(name='TestToontjeHoger5Tempo')
+        playlist.csv = csv_data
+        playlist.update_sections()
+
+        toontje_hoger_4_absolute = ToontjeHoger4Absolute()
+        self.assertEqual(
+            toontje_hoger_4_absolute.validate_playlist(playlist),
+            ['Tags in playlist sections should be \'a\', \'b\' or \'c\'. This playlist has tags: [\'a\', \'b\', \'c\', \'d\']']
         )

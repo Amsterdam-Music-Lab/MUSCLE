@@ -196,4 +196,9 @@ class ToontjeHoger4Absolute(Base):
         if groups != list(map(str, range(1, len(groups) + 1))):
             errors.append(f"Groups in playlist sections should be sequential and unique from 1 to {len(groups)}. E.g. {list(range(1, len(groups) + 1))}")
 
+        # Check if the tags are 'a', 'b' or 'c'
+        tags = list(playlist.section_set.values_list('tag', flat=True).distinct())
+        if tags != ['a', 'b', 'c']:
+            errors.append("Tags in playlist sections should be 'a', 'b' or 'c'. This playlist has tags: {}".format(tags))
+
         return errors
