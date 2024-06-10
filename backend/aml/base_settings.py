@@ -195,4 +195,4 @@ MARKUP_SETTINGS = {
     }
 }
 
-SUBPATH = os.getenv('AML_SUBPATH', None)
+SUBPATH = os.getenv('AML_SUBPATH', '')
