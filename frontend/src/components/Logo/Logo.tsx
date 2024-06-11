@@ -1,4 +1,4 @@
-import { API_BASE_URL, URLS, LOGO_URL, LOGO_TITLE } from "@/config";
+import { URLS, LOGO_URL, LOGO_TITLE } from "@/config";
 import { Link } from "react-router-dom";
 import useBoundStore from "@/util/stores";
 
@@ -6,7 +6,7 @@ import useBoundStore from "@/util/stores";
 const Logo: React.FC<{logoClickConfirm: string | null}> = ({logoClickConfirm=null}) => {
     const theme = useBoundStore((state) => state.theme);
 
-    const logoUrl = theme?.logoUrl ? (API_BASE_URL + theme.logoUrl) : LOGO_URL;
+    const logoUrl = theme?.logoUrl ?? LOGO_URL;
 
     // Handle click on logo, to optionally confirm navigating
     const onLogoClick = (e) => {
