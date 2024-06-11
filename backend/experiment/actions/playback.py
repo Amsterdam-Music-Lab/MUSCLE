@@ -86,7 +86,6 @@ class Multiplayer(PlayButton):
     '''
     This is a player with multiple play buttons
     - stop_audio_after: after how many seconds to stop audio
-    - label_style: set if players should be labeled in alphabetic / numeric  / roman style (based on player index)
     - labels: pass list of strings if players should have custom labels
     '''
 
@@ -109,7 +108,7 @@ class Multiplayer(PlayButton):
             self.labels = labels
 
 
-class ImagePlayer(PlayButton):
+class ImagePlayer(Multiplayer):
     '''
     This is a special case of the Multiplayer:
     it shows an image next to each play button

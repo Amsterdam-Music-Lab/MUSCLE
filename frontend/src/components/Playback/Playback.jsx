@@ -160,6 +160,7 @@ const Playback = ({
         const attrs = {
             autoAdvance,
             finishedPlaying: onFinishedPlaying,
+            labels: playbackArgs.labels,
             lastPlayerIndex,
             playSection,
             playerIndex,
@@ -210,6 +211,7 @@ const Playback = ({
                 return (
                     <ImagePlayer
                         {...attrs}
+                        images={playbackArgs.images}
                         disabledPlayers={playbackArgs.play_once ? hasPlayed : undefined}
                     />
                 );

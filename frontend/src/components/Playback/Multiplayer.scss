@@ -57,5 +57,17 @@
             }
         }
 
+        .player-wrapper:nth-child(3) {
+
+            .aha__play-button {
+                background-color: $teal;
+                box-shadow: 0 0 0 0.2em rgba($teal, 0.5);
+            }
+
+            .banner {
+                background-color: rgba($teal, 0.75);
+            }
+        }
+
     }
 }
