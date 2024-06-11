@@ -43,10 +43,11 @@ class ToontjeHoger3Plink(Base):
         if len(artist_titles) != len(sections):
             errors.append(
                 'Sections should have unique combinations of song.artist and song.name fields.')
-        self.validate_era_and_mood(sections, errors)
+        errors += self.validate_era_and_mood(sections)
         return errors
 
-    def validate_era_and_mood(self, sections, errors):
+    def validate_era_and_mood(self, sections):
+        errors = []
         eras = sorted(sections.order_by('tag').values_list(
             'tag', flat=True).distinct())
         if not all(re.match(r'[0-9]0s', e) for e in eras):

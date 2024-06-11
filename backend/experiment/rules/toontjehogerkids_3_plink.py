@@ -24,6 +24,9 @@ class ToontjeHogerKids3Plink(ToontjeHoger3Plink):
     SCORE_EXTRA_2_CORRECT = 4
     SCORE_EXTRA_WRONG = 0
 
+    def validate_era_and_mood(self, sections):
+        return []
+
     def first_round(self, experiment):
         """Create data for the first experiment rounds."""
 
