@@ -78,8 +78,8 @@ class ThemeConfigSerializerTest(TestCase):
             'description': 'Default theme configuration',
             'headingFontUrl': 'https://example.com/heading_font',
             'bodyFontUrl': 'https://example.com/body_font',
-            'logoUrl': f'{settings.MEDIA_URL}someimage.jpg',
-            'backgroundUrl': f'{settings.MEDIA_URL}anotherimage.png',
+            'logoUrl': f'{settings.BASE_URL}{settings.MEDIA_URL}someimage.jpg',
+            'backgroundUrl': f'{settings.BASE_URL}{settings.MEDIA_URL}anotherimage.png',
             'footer': serialize_footer(self.footer),
             'header': serialize_header(self.header),
         }
@@ -109,8 +109,8 @@ class ThemeConfigSerializerTest(TestCase):
             'description': 'Default theme configuration',
             'headingFontUrl': 'https://example.com/heading_font',
             'bodyFontUrl': 'https://example.com/body_font',
-            'logoUrl': f'{settings.MEDIA_URL}someimage.jpg',
-            'backgroundUrl': f'{settings.MEDIA_URL}anotherimage.png',
+            'logoUrl': f'{settings.BASE_URL}{settings.MEDIA_URL}someimage.jpg',
+            'backgroundUrl': f'{settings.BASE_URL}{settings.MEDIA_URL}anotherimage.png',
             'header': serialize_header(self.header),
             'footer': None,
         }
@@ -123,8 +123,8 @@ class ThemeConfigSerializerTest(TestCase):
             'description': 'Default theme configuration',
             'headingFontUrl': 'https://example.com/heading_font',
             'bodyFontUrl': 'https://example.com/body_font',
-            'logoUrl': f'{settings.MEDIA_URL}someimage.jpg',
-            'backgroundUrl': f'{settings.MEDIA_URL}anotherimage.png',
+            'logoUrl': f'{settings.BASE_URL}{settings.MEDIA_URL}someimage.jpg',
+            'backgroundUrl': f'{settings.BASE_URL}{settings.MEDIA_URL}anotherimage.png',
             'header': None,
             'footer': serialize_footer(self.footer),
         }
