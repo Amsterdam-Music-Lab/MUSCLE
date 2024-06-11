@@ -24,7 +24,7 @@
 
         a {
             max-width: 80%;
-            width: 330px;
+            width: 200px;
             display: block;
             position: relative;
             transition: opacity 0.3s ease-out;
@@ -36,7 +36,8 @@
             }
 
             img {
-                width: 200px;
+                max-height: 80px;
+                max-width: 220px;
             }
         }
     }
