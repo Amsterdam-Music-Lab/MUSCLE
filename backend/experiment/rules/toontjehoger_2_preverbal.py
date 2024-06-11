@@ -235,6 +235,7 @@ class ToontjeHoger2Preverbal(Base):
             sections,
             labels=create_player_labels(len(sections), 'alphabetic'),
             images=["/images/experiments/toontjehoger/spectrogram-baby-french.webp", "/images/experiments/toontjehoger/spectrogram-baby-german.webp"],
+            style=FrontendStyle(EFrontendStyle.NEUTRAL_INVERTED)
         )
 
         # Question
