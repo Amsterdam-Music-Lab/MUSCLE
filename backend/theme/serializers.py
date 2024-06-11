@@ -5,7 +5,7 @@ from django.utils.translation import gettext_lazy as _
 
 from django_markup.markup import formatter
 
-from image.models import Image
+from image.serializers import serialize_image
 from theme.models import FooterConfig, HeaderConfig, ThemeConfig
 
 
@@ -14,18 +14,10 @@ def serialize_footer(footer: FooterConfig) -> dict:
         'disclaimer': formatter(
             footer.disclaimer, filter_name='markdown'),
         'logos': [
-            serialize_logo(logo) for logo in footer.logos.all()
+            serialize_image(logo) for logo in footer.logos.all()
         ],
         'privacy': formatter(
             footer.privacy, filter_name='markdown'),
-    }
-
-
-def serialize_logo(logo: Image) -> dict:
-    return {
-        'file': join(settings.MEDIA_URL, str(logo.file)),
-        'href': logo.href,
-        'alt': logo.alt,
     }
 
 

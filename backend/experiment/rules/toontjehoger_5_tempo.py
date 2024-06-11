@@ -1,3 +1,4 @@
+import re
 import logging
 import random
 from os.path import join
@@ -255,6 +256,24 @@ class ToontjeHoger5Tempo(Base):
 
         return [*score, final, info]
 
+    def validate_tags(self, tags):
+
+        errors = []
+        erroneous_tags = []
+
+        for tag in tags:
+            if not re.match(r'^[CJR][1-5]_P[12]_(OR|CH)$', tag):
+                erroneous_tags.append(tag)
+
+        if erroneous_tags:
+            errors.append(
+                "Tags should start with either 'C', 'J' or 'R', followed by a number between 1 and 5, "
+                "followed by '_P', followed by either 1 or 2, followed by either '_OR' or '_CH'. "
+                "Invalid tags: {}".format(", ".join(erroneous_tags))
+            )
+
+        return errors
+
     def validate_playlist(self, playlist: Playlist):
 
         errors = super().validate_playlist(playlist)
@@ -265,5 +284,10 @@ class ToontjeHoger5Tempo(Base):
             errors.append(
                 "The playlist must contain two groups: 'or' and 'ch'. Found: {}".format(groups)
             )
+
+        tags = sorted(list(set([section.tag for section in sections])))
+
+        # Check if all tags are valid
+        errors += self.validate_tags(tags)
 
         return errors

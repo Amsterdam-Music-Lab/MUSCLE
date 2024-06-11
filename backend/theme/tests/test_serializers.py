@@ -46,12 +46,12 @@ class ThemeConfigSerializerTest(TestCase):
             'disclaimer': '<p>Some <a href="https://example.com/our-team">information</a></p>',
             'logos': [
                 {
-                    'file': f'{settings.MEDIA_URL}someimage.jpg',
+                    'file': f'{settings.BASE_URL}{settings.MEDIA_URL}someimage.jpg',
                     'href': 'someurl.com',
                     'alt': 'Alt text'
                 },
                 {
-                    'file': f'{settings.MEDIA_URL}anotherimage.png',
+                    'file': f'{settings.BASE_URL}{settings.MEDIA_URL}anotherimage.png',
                     'href': 'another.url.com',
                     'alt': 'Another alt text'
                 }

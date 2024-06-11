@@ -11,6 +11,7 @@ from section.models import Playlist
 from experiment.serializers import serialize_actions, serialize_experiment_collection, serialize_experiment_collection_group
 from experiment.rules import EXPERIMENT_RULES
 from experiment.actions.utils import COLLECTION_KEY
+from image.serializers import serialize_image
 from participant.utils import get_participant
 from theme.serializers import serialize_theme
 
@@ -36,7 +37,7 @@ def get_experiment(request, slug):
         'name': experiment.name,
         'theme': serialize_theme(experiment.theme_config) if experiment.theme_config else None,
         'description': experiment.description,
-        'image': experiment.image.file.url if experiment.image else '',
+        'image': serialize_image(experiment.image) if experiment.image else None,
         'class_name': class_name,  # can be used to override style
         'rounds': experiment.rounds,
         'playlists': [
