@@ -7,7 +7,9 @@ from .toontjehoger_1_mozart import toontjehoger_ranks
 from experiment.actions import Trial, Explainer, Step, Score, Final, Playlist, Info, HTML
 from experiment.actions.form import ButtonArrayQuestion, ChoiceQuestion, Form
 from experiment.actions.playback import ImagePlayer
-from experiment.actions.styles import STYLE_NEUTRAL
+from experiment.actions.styles import STYLE_NEUTRAL_INVERTED
+from experiment.actions.frontend_style import FrontendStyle, EFrontendStyle
+from experiment.utils import create_player_labels
 from .base import Base
 from result.utils import prepare_result
 from section.models import Playlist
@@ -153,7 +155,8 @@ class ToontjeHoger2Preverbal(Base):
             submits=True,
             result_id=prepare_result(
                 key, session, expected_response="C"
-            )
+            ),
+            style=STYLE_NEUTRAL_INVERTED
         )
         form = Form([question])
 
@@ -194,18 +197,19 @@ class ToontjeHoger2Preverbal(Base):
                 "Error: could not find section C for round 1")
 
         # Player
+        sections = [sectionA, sectionB, sectionC]
         playback = ImagePlayer(
-            [sectionA, sectionB, sectionC],
-            label_style='ALPHABETIC',
+            sections,
+            labels=create_player_labels(len(sections), 'alphabetic'),
             images=["/images/experiments/toontjehoger/spectrogram-trumpet.webp", "/images/experiments/toontjehoger/spectrogram-whale.webp", "/images/experiments/toontjehoger/spectrogram-human.webp"],
-            image_labels = ['Trompet', 'Walvis', 'Mens']
+            image_labels=['Trompet', 'Walvis', 'Mens'],
+            style=FrontendStyle(EFrontendStyle.NEUTRAL_INVERTED)
         )
 
         trial = Trial(
             playback=playback,
             feedback_form=None,
-            title=self.TITLE,
-            style='primary-form'
+            title=self.TITLE
         )
         return [trial]
     
@@ -226,9 +230,10 @@ class ToontjeHoger2Preverbal(Base):
                 "Error: could not find section B for round 2")
 
         # Player
+        sections = [sectionA, sectionB]
         playback = ImagePlayer(
-            [sectionA, sectionB],
-            label_style='ALPHABETIC',
+            sections,
+            labels=create_player_labels(len(sections), 'alphabetic'),
             images=["/images/experiments/toontjehoger/spectrogram-baby-french.webp", "/images/experiments/toontjehoger/spectrogram-baby-german.webp"],
         )
 
@@ -244,7 +249,7 @@ class ToontjeHoger2Preverbal(Base):
             view='BUTTON_ARRAY',
             submits=True,
             result_id=prepare_result(key, session, expected_response="A"),
-            style=STYLE_NEUTRAL
+            style=STYLE_NEUTRAL_INVERTED
         )
         form = Form([question])
 
