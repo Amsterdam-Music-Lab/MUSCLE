@@ -1,13 +1,15 @@
 import logging
 from django.template.loader import render_to_string
 from os.path import join
-from .toontjehoger_1_mozart import toontjehoger_ranks
+
 from experiment.actions import Trial, Explainer, Step, Score, Final, Info
 from experiment.actions.form import ChoiceQuestion, Form
 from experiment.actions.playback import Multiplayer
 from experiment.actions.frontend_style import FrontendStyle, EFrontendStyle
 from experiment.actions.styles import STYLE_BOOLEAN
+from section.models import Playlist
 from .base import Base
+from .toontjehoger_1_mozart import toontjehoger_ranks
 
 from result.utils import prepare_result
 
@@ -19,6 +21,22 @@ class ToontjeHoger6Relative(Base):
     TITLE = ""
     SCORE_CORRECT = 50
     SCORE_WRONG = 0
+
+    def validate_playlist(self, playlist: Playlist):
+        ''' This is the original Toontjehoger6Relative playlist:
+        ```
+        AML,Fragment A,0.0,1.0,/toontjehoger/relative/relative_a.mp3,a,0
+        AML,Fragment B,0.0,1.0,/toontjehoger/relative/relative_b.mp3,b,0
+        AML,Fragment C,0.0,1.0,/toontjehoger/relative/relative_c.mp3,c,0
+        ```
+        '''
+        errors = super().validate_playlist(playlist)
+        sections = playlist.section_set.all()
+        if sections.count() != 3:
+            errors.append('There should be three sections in the playlist')
+        if sorted([s.tag for s in sections]) != ['a', 'b', 'c']:
+            errors.append('The sections should have the tags a, b, c')
+        return errors
 
     def first_round(self, experiment):
         """Create data for the first experiment rounds."""
