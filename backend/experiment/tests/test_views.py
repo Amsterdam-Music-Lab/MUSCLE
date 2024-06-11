@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.test import TestCase
 from django.utils import timezone
 
@@ -166,7 +167,9 @@ class ExperimentViewsTest(TestCase):
             name='Test Experiment',
             description='This is a test experiment',
             image=Image.objects.create(
-                file='test-image.jpg'
+                file='test-image.jpg',
+                alt='Test',
+                href='https://www.example.com'
             ),
             theme_config=create_theme_config()
         )
@@ -190,7 +193,7 @@ class ExperimentViewsTest(TestCase):
         )
         self.assertEqual(
             serialized_experiment['image'], {
-                'file': '/upload/test-image.jpg', 'href': '', 'alt': ''}
+                'file': f'{settings.BASE_URL}/upload/test-image.jpg', 'href': 'https://www.example.com', 'alt': 'Test'}
         )
         self.assertEqual(
             serialized_experiment['finished_session_count'], 3
