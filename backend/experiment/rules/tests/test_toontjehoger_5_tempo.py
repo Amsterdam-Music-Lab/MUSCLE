@@ -7,7 +7,7 @@ from section.models import Playlist
 from experiment.rules.toontjehoger_5_tempo import ToontjeHoger5Tempo
 
 
-class ToontjeHoger5TempoTest(TestCase):
+class TestToontjeHoger5Tempo(TestCase):
 
     def setUp(self):
         # Mock the file_exists_validator function from section.models
@@ -20,16 +20,16 @@ class ToontjeHoger5TempoTest(TestCase):
 
     def test_validate_playlist_valid(self):
         csv_data = (
-            "Albania 2018 - Eugent Bushpepa,Mall,7.046,45.0,Eurovision/Set2/Karaoke/2018-11-00-07-046-k.mp3,C3_P2_OR,ch\n"
-            "Albania 2018 - Eugent Bushpepa,Mall,7.046,45.0,Eurovision/Set2/Karaoke/2018-11-00-07-046-k.mp3,C2_P1_OR,ch\n"
-            "Albania 2018 - Eugent Bushpepa,Mall,7.046,45.0,Eurovision/Set2/Karaoke/2018-11-00-07-046-k.mp3,C4_P2_OR,ch\n"
-            "Albania 2018 - Eugent Bushpepa,Mall,7.046,45.0,Eurovision/Set2/Karaoke/2018-11-00-07-046-k.mp3,C4_P2_OR,ch\n"
-            "Albania 2018 - Eugent Bushpepa,Mall,7.046,45.0,Eurovision/Set2/Karaoke/2018-11-00-07-046-k.mp3,C5_P2_OR,or\n"
-            "Albania 2018 - Eugent Bushpepa,Mall,7.046,45.0,Eurovision/Set2/Karaoke/2018-11-00-07-046-k.mp3,C5_P2_CH,or\n"
-            "Albania 2018 - Eugent Bushpepa,Mall,7.046,45.0,Eurovision/Set2/Karaoke/2018-11-00-07-046-k.mp3,C4_P1_OR,or\n"
-            "Albania 2018 - Eugent Bushpepa,Mall,7.046,45.0,Eurovision/Set2/Karaoke/2018-11-00-07-046-k.mp3,C2_P1_CH,or\n"
-            "Albania 2018 - Eugent Bushpepa,Mall,7.046,45.0,Eurovision/Set2/Karaoke/2018-11-00-07-046-k.mp3,C3_P1_OR,or\n"
-            "Albania 2018 - Eugent Bushpepa,Mall,7.046,45.0,Eurovision/Set2/Karaoke/2018-11-00-07-046-k.mp3,C2_P2_OR,or\n"
+            "song-01,artist-01,7.046,45.0,ToontjeHoger5Tempo/song-01.mp3,C3_P2_OR,ch\n"
+            "song-02,artist-02,7.046,45.0,ToontjeHoger5Tempo/song-02.mp3,C2_P1_OR,ch\n"
+            "song-03,artist-03,7.046,45.0,ToontjeHoger5Tempo/song-03.mp3,C4_P2_OR,ch\n"
+            "song-04,artist-04,7.046,45.0,ToontjeHoger5Tempo/song-04.mp3,C4_P2_OR,ch\n"
+            "song-05,artist-05,7.046,45.0,ToontjeHoger5Tempo/song-05.mp3,C5_P2_OR,or\n"
+            "song-06,artist-06,7.046,45.0,ToontjeHoger5Tempo/song-06.mp3,C5_P2_CH,or\n"
+            "song-07,artist-07,7.046,45.0,ToontjeHoger5Tempo/song-07.mp3,C4_P1_OR,or\n"
+            "song-08,artist-08,7.046,45.0,ToontjeHoger5Tempo/song-08.mp3,C2_P1_CH,or\n"
+            "song-09,artist-09,7.046,45.0,ToontjeHoger5Tempo/song-09.mp3,C3_P1_OR,or\n"
+            "song-10,artist-10,7.046,45.0,ToontjeHoger5Tempo/song-10.mp3,C2_P2_OR,or\n"
         )
         playlist = Playlist.objects.create(name='TestToontjeHoger5Tempo')
         playlist.csv = csv_data
@@ -42,12 +42,12 @@ class ToontjeHoger5TempoTest(TestCase):
 
     def test_validate_playlist_invalid_tags(self):
         csv_data = (
-            "Albania 2018 - Eugent Bushpepa,Mall,7.046,45.0,Eurovision/Set2/Karaoke/2018-11-00-07-046-k.mp3,F4_P2_OR,ch\n"
-            "Albania 2018 - Eugent Bushpepa,Mall,7.046,45.0,Eurovision/Set2/Karaoke/2018-11-00-07-046-k.mp3,C4_P9_OR,ch\n"
-            "Albania 2018 - Eugent Bushpepa,Mall,7.046,45.0,Eurovision/Set2/Karaoke/2018-11-00-07-046-k.mp3,C4_P2_ZR,ch\n"
-            "Albania 2018 - Eugent Bushpepa,Mall,7.046,45.0,Eurovision/Set2/Karaoke/2018-11-00-07-046-k.mp3,C6_P1_OR,or\n"
-            "Albania 2018 - Eugent Bushpepa,Mall,7.046,45.0,Eurovision/Set2/Karaoke/2018-11-00-07-046-k.mp3,C1_P3_OR,or\n"
-            "Albania 2018 - Eugent Bushpepa,Mall,7.046,45.0,Eurovision/Set2/Karaoke/2018-11-00-07-046-k.mp3,C1_P1_OZ,or\n"
+            "song-01,artist-01,7.046,45.0,ToontjeHoger5Tempo/song-01.mp3,F4_P2_OR,ch\n"
+            "song-02,artist-02,7.046,45.0,ToontjeHoger5Tempo/song-02.mp3,C4_P9_OR,ch\n"
+            "song-03,artist-03,7.046,45.0,ToontjeHoger5Tempo/song-03.mp3,C4_P2_ZR,ch\n"
+            "song-04,artist-04,7.046,45.0,ToontjeHoger5Tempo/song-04.mp3,C6_P1_OR,or\n"
+            "song-05,artist-05,7.046,45.0,ToontjeHoger5Tempo/song-05.mp3,C1_P3_OR,or\n"
+            "song-06,artist-06,7.046,45.0,ToontjeHoger5Tempo/song-06.mp3,C1_P1_OZ,or\n"
         )
         playlist = Playlist.objects.create(name='TestToontjeHoger5Tempo')
         playlist.csv = csv_data
@@ -66,9 +66,9 @@ class ToontjeHoger5TempoTest(TestCase):
 
     def test_validate_playlist_invalid_groups(self):
         csv_data = (
-            "Albania 2018 - Eugent Bushpepa,Mall,7.046,45.0,Eurovision/Set2/Karaoke/2018-11-00-07-046-k.mp3,C3_P2_OR,ch\n"
-            "Albania 2018 - Eugent Bushpepa,Mall,7.046,45.0,Eurovision/Set2/Karaoke/2018-11-00-07-046-k.mp3,C2_P1_OR,ch\n"
-            "Albania 2018 - Eugent Bushpepa,Mall,7.046,45.0,Eurovision/Set2/Karaoke/2018-11-00-07-046-k.mp3,C4_P2_OR,ch\n"
+            "song-01,artist-01,7.046,45.0,ToontjeHoger5Tempo/song-01.mp3,C3_P2_OR,ch\n"
+            "song-02,artist-02,7.046,45.0,ToontjeHoger5Tempo/song-02.mp3,C2_P1_OR,ch\n"
+            "song-03,artist-03,7.046,45.0,ToontjeHoger5Tempo/song-03.mp3,C4_P2_OR,ch\n"
         )
         playlist = Playlist.objects.create(name='TestToontjeHoger5Tempo')
         playlist.csv = csv_data

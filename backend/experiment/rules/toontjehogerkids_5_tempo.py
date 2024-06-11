@@ -187,5 +187,5 @@ class ToontjeHogerKids5Tempo(ToontjeHoger5Tempo):
         return [*score, final, info]
 
     def validate_tags(self, tags):
-        # No validation needed foor TH5 Kids
+        # No validation needed for TH5 Kids
         return []
