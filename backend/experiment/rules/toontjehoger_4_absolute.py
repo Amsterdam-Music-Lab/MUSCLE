@@ -1,3 +1,4 @@
+import re
 import logging
 import random
 from os.path import join
@@ -186,18 +187,34 @@ class ToontjeHoger4Absolute(Base):
 
         return [*score, final, info]
 
+    def validate_playlist_groups(self, groups):
+        integer_groups = []
+        integer_pattern = re.compile(r'^-?\d+$')
+        for group in groups:
+            if not integer_pattern.match(str(group)):
+                return ["Groups in playlist sections should be numbers. This playlist has groups: {}".format(groups)]
+
+            integer_groups.append(int(group))
+
+        # Check if the groups are sequential and unique
+        integer_groups.sort()
+        if integer_groups != list(range(1, len(groups) + 1)):
+            return ['Groups in playlist sections should be sequential numbers starting from 1 to the number of sections in the playlist ({}). E.g. "1, 2, 3, ... {}"'.format(len(groups), len(groups))]
+
+        return []
+
     def validate_playlist(self, playlist: Playlist):
         errors = super().validate_playlist(playlist)
 
         # Get group values from sections, ordered by group
-        groups = list(playlist.section_set.values_list('group', flat=True).order_by('group'))
+        groups = list(playlist.section_set.values_list('group', flat=True))
 
         # Check if the groups are sequential and unique
-        if groups != list(map(str, range(1, len(groups) + 1))):
-            errors.append(f"Groups in playlist sections should be sequential and unique from 1 to {len(groups)}. E.g. {list(range(1, len(groups) + 1))}")
+        errors += self.validate_playlist_groups(groups)
 
         # Check if the tags are 'a', 'b' or 'c'
         tags = list(playlist.section_set.values_list('tag', flat=True).distinct())
+
         if tags != ['a', 'b', 'c']:
             errors.append("Tags in playlist sections should be 'a', 'b' or 'c'. This playlist has tags: {}".format(tags))
 
