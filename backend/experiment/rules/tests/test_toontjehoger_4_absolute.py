@@ -94,7 +94,7 @@ class TestToontjeHoger4Absolute(TestCase):
             "Albania 2018 - Eugent Bushpepa,Mall,7.046,45.0,ToontjeHoger4Absolute/audio-5.mp3,c,5\n"
             "Albania 2018 - Eugent Bushpepa,Mall,7.046,45.0,ToontjeHoger4Absolute/audio-6.mp3,d,6\n"
         )
-        playlist = PlaylistModel.objects.create(name='TestToontjeHoger4Absolute')
+        playlist = PlaylistModel.objects.create(name='TestToontjeHoger4AbsoluteInvalidTags')
         playlist.csv = csv_data
         playlist.update_sections()
 

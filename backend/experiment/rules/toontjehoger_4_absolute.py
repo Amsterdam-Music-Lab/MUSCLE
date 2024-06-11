@@ -213,7 +213,12 @@ class ToontjeHoger4Absolute(Base):
         errors += self.validate_playlist_groups(groups)
 
         # Check if the tags are 'a', 'b' or 'c'
-        tags = list(playlist.section_set.values_list('tag', flat=True).distinct())
+        tags = list(
+            playlist.section_set
+            .values_list('tag', flat=True)
+            .distinct()
+            .order_by('tag')
+        )
 
         if tags != ['a', 'b', 'c']:
             errors.append("Tags in playlist sections should be 'a', 'b' or 'c'. This playlist has tags: {}".format(tags))
