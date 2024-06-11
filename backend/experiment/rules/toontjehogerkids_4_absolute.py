@@ -7,7 +7,7 @@ from .toontjehoger_4_absolute import ToontjeHoger4Absolute
 
 class ToontjeHogerKids4Absolute(ToontjeHoger4Absolute):
     ID = 'TOONTJE_HOGER_KIDS_4_ABSOLUTE'
-    PLAYLIST_ITEMS = 13
+    PLAYLIST_ITEMS = 12
 
     def first_round(self, experiment):
         """Create data for the first experiment rounds."""
