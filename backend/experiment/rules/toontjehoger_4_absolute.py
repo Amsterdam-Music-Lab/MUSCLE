@@ -199,7 +199,7 @@ class ToontjeHoger4Absolute(Base):
         # Check if the groups are sequential and unique
         integer_groups.sort()
         if integer_groups != list(range(1, len(groups) + 1)):
-            return ['Groups in playlist sections should be sequential numbers starting from 1 to the number of test items ({}). E.g. "1, 2, 3, ... {}"'.format(self.PLAYLIST_ITEMS, self.PLAYLIST_ITEMS)]
+            return ['Groups in playlist sections should be sequential numbers starting from 1 to the number of items in the playlist ({}). E.g. "1, 2, 3, ... {}"'.format(self.PLAYLIST_ITEMS, self.PLAYLIST_ITEMS)]
 
         return []
 
