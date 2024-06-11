@@ -6,6 +6,4 @@ export default interface Experiment {
     slug: string;
     description: string;
     image?: IImage;
-    started_session_count: number;
-    finished_session_count: number;
 }
