@@ -51,7 +51,7 @@ class ToontjeHogerKids1Mozart(ToontjeHoger1Mozart):
 
         # Final
         final_text = "Goed gedaan!" if session.final_score >= 2 * \
-            self.SCORE_CORRECT else "Dat bleek toch even lastig!"
+            self.SCORE_CORRECT else "Best lastig!"
         final = Final(
             session=session,
             final_text=final_text,
@@ -67,7 +67,7 @@ class ToontjeHogerKids1Mozart(ToontjeHoger1Mozart):
         info = Info(
             body=body,
             heading="Het Mozart effect",
-            button_label="Terug naar ToontjeHoger",
+            button_label="Terug naar ToontjeHogerKids",
             button_link="/collection/thkids"
         )
 
