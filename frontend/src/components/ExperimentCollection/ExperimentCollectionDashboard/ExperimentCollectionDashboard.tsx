@@ -3,8 +3,8 @@ import { Link } from "react-router-dom";
 
 import { API_ROOT } from "@/config";
 import ExperimentCollection from "@/types/ExperimentCollection";
-import AppBar from "@/components/AppBar/AppBar";
 import Header from "@/components/Header/Header";
+import Logo from "@/components/Logo/Logo";
 import IExperiment from "@/types/Experiment";
 
 
@@ -16,7 +16,7 @@ interface ExperimentCollectionDashboardProps {
 export const ExperimentCollectionDashboard: React.FC<ExperimentCollectionDashboardProps> = ({ experimentCollection, participantIdUrl, totalScore }) => {
     
     const dashboard = experimentCollection.dashboard;
-    const nextExperimentSlug = experimentCollection.nextExperiment?.slug;   
+    const nextExperimentSlug = experimentCollection.nextExperiment?.slug;
     
     const headerProps = experimentCollection.theme?.header? {
         nextExperimentSlug,        
@@ -30,7 +30,7 @@ export const ExperimentCollectionDashboard: React.FC<ExperimentCollectionDashboa
 
     return (
         <>
-        <AppBar title={experimentCollection.name} logoClickConfirm="placeholder text" />
+        <Logo logoClickConfirm={null} />
         {headerProps && (
             <Header { ...headerProps }></Header>
         )}

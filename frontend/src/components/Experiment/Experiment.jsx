@@ -247,7 +247,7 @@ const Experiment = ({ match }) => {
                     <DefaultPage
                         title={state.title}
                         logoClickConfirm={
-                            ["FINAL", "ERROR", "TOONTJEHOGER"].includes(view) ||
+                            ["FINAL", "ERROR"].includes(view) ||
                                 // Info pages at end of experiment
                                 (view === "INFO" &&
                                     (!state.next_round || !state.next_round.length))
