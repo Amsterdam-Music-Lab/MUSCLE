@@ -29,7 +29,7 @@ export const ExperimentCollectionDashboard: React.FC<ExperimentCollectionDashboa
     const getExperimentHref = (slug: string) => `/${slug}${participantIdUrl ? `?participant_id=${participantIdUrl}` : ""}`;
 
     return (
-        <>
+        <div className="aha__dashboard">
         <Logo logoClickConfirm={null} />
         {headerProps && (
             <Header { ...headerProps }></Header>
@@ -49,7 +49,7 @@ export const ExperimentCollectionDashboard: React.FC<ExperimentCollectionDashboa
                     {dashboard.length === 0 && <p>No experiments found</p>}
                 </ul>
             </div>
-        </>
+        </div>
     );
 }
 

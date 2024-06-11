@@ -22,7 +22,7 @@ const Logo: React.FC<{logoClickConfirm: string | null}> = ({logoClickConfirm=nul
     // and a-element for absolute urls (https://www.example.com/)
     const logoProps = {
         onClick: onLogoClick,
-        className: "logo",
+        className: "aha__logo",
         "aria-label": "Logo",
         style: { backgroundImage: `url(${logoUrl})` },
     };
