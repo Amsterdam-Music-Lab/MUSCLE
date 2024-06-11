@@ -26,7 +26,6 @@ const experiment2 = getExperiment({
     id: 2,
     slug: 'another_slug',
     name: 'Another Experiment',
-    finished_session_count: 2,
     description: 'Some description',
 });
 

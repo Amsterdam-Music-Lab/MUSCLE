@@ -10,8 +10,7 @@ let mock = new MockAdapter(axios);
 const getExperiment = (overrides = {}) => {
     return {
         slug: 'some_slug',
-        name: 'Some Experiment',
-        finished_session_count: 0,
+        name: 'Some Experiment'
         ...overrides
     };
 }
