@@ -21,10 +21,11 @@ class ToontjeHogerKids5Tempo(ToontjeHoger5Tempo):
             instruction="Maatgevoel",
             steps=[
                 Step(
-                    "Je krijgt zo twee stukjes muziek te horen, de muziek is 2x hetzelfde."),
-                Step("Bij die muziek hoor je ook klikjes: die passen de ene keer goed bij de maat van de muziek, terwijl ze de andere keer niet goed gelijk lopen.   "),
+                    "Je krijgt zo steeds twee keer een stukje muziek te horen met piepjes erin."),
                 Step(
-                    "Kan jij horen waar de klikjes goed bij de maat van de muziek passen?"),
+                    "Bij de ene versie zijn de piepjes in de maat, bij de andere niet in de maat.   "),
+                Step(
+                    "Kan jij horen waar de piepjes in de maat van de muziek zijn?"),
             ],
             step_numbers=True,
             button_label="Start"
@@ -95,7 +96,7 @@ class ToontjeHogerKids5Tempo(ToontjeHoger5Tempo):
         return section_changed
 
     def get_trial_question(self):
-        return "Kan jij horen waar de klikjes goed bij de maat van de muziek passen?"
+        return "Kan jij horen waar de piepjes in de maat van de muziek zijn?"
 
     def get_section_pair_from_result(self, result):
         section_original = result.section
@@ -160,7 +161,7 @@ class ToontjeHogerKids5Tempo(ToontjeHoger5Tempo):
         score = self.get_score(session)
 
         # Final
-        final_text = "Dat bleek toch even lastig!"
+        final_text = "Best lastig!"
         if session.final_score >= session.experiment.rounds * 0.5 * self.SCORE_CORRECT:
             final_text = "Goed gedaan!"
 
@@ -180,7 +181,7 @@ class ToontjeHogerKids5Tempo(ToontjeHoger5Tempo):
         info = Info(
             body=body,
             heading="Timing en tempo",
-            button_label="Terug naar ToontjeHoger",
+            button_label="Terug naar ToontjeHogerKids",
             button_link="/collection/thkids"
         )
 

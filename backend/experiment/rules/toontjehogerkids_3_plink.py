@@ -30,8 +30,9 @@ class ToontjeHogerKids3Plink(ToontjeHoger3Plink):
         explainer = Explainer(
             instruction="Muziekherkenning",
             steps=[
-                Step("Je hoort zo een heel kort stukje van een liedje."),
-                Step("Herken je dit liedje? Kies dan de juiste artiest en titel!"),
+                Step("Je hoort zo een heel kort stukje van {} liedjes.".format(
+                    experiment.rounds)),
+                Step("Herken je de liedjes? Kies dan steeds de juiste artiest en titel!"),
                 Step(
                     "Weet je het niet zeker? Doe dan maar een gok.")
             ],
@@ -129,7 +130,7 @@ class ToontjeHogerKids3Plink(ToontjeHoger3Plink):
 
         # Final
         final_text = "Goed gedaan!" if session.final_score >= 4 * \
-            self.SCORE_MAIN_CORRECT else "Dat bleek toch even lastig!"
+            self.SCORE_MAIN_CORRECT else "Best lastig!"
         final = Final(
             session=session,
             final_text=final_text,
@@ -147,7 +148,7 @@ class ToontjeHogerKids3Plink(ToontjeHoger3Plink):
         info = Info(
             body=body,
             heading="Muziekherkenning",
-            button_label="Terug naar ToontjeHoger",
+            button_label="Terug naar ToontjeHogerKids",
             button_link="/collection/thkids"
         )
 

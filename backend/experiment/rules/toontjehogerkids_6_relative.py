@@ -18,13 +18,14 @@ class ToontjeHogerKids6Relative(ToontjeHoger6Relative):
         explainer = Explainer(
             instruction="Relatief Gehoor",
             steps=[
-                Step("In deze mini-game kun je jouw relatief gehoor testen!"),
+                Step("In dit testje kun je jouw relatief gehoor testen!"),
                 # Empty step adds some spacing between steps to improve readability
                 Step(""),
                 Step(
-                    "Je hoort steeds twee melodieën, de een wat hoger dan de andere.", number=1),
+                    "Je hoort straks twee liedjes, de een wat hoger dan de andere.", number=1),
                 Step("Luister goed, want je kunt ze maar één keer afspelen!", number=2),
-                Step("Aan jou de taak om te luisteren of deze melodieën hetzelfde zijn, ongeacht de toonhoogte!", number=3),
+                Step(
+                    "De toonhoogte is dus anders. Klinkt het toch als hetzelfde liedje?", number=3),
             ],
             button_label="Start"
         )
@@ -42,9 +43,9 @@ class ToontjeHogerKids6Relative(ToontjeHoger6Relative):
             feedback = "Er is een fout opgetreden"
         else:
             if last_result.score == self.SCORE_CORRECT:
-                feedback = "Dat klopt! De melodieën zijn inderdaad verschillend."
+                feedback = "Dat klopt! De liedjes zijn inderdaad verschillend."
             else:
-                feedback = "Helaas! De melodieën zijn toch echt verschillend."
+                feedback = "Helaas! De liedjes zijn toch echt verschillend."
 
         # Return score view
         config = {'show_total_score': True}
@@ -62,7 +63,7 @@ class ToontjeHogerKids6Relative(ToontjeHoger6Relative):
 
         # Final
         final_text = "Goed gedaan!" if session.final_score >= 2 * \
-            self.SCORE_CORRECT else "Dat bleek toch even lastig!"
+            self.SCORE_CORRECT else "Best lastig!"
         final = Final(
             session=session,
             final_text=final_text,
@@ -79,7 +80,7 @@ class ToontjeHogerKids6Relative(ToontjeHoger6Relative):
         info = Info(
             body=body,
             heading="Relatief gehoor",
-            button_label="Terug naar ToontjeHoger",
+            button_label="Terug naar ToontjeHogerKids",
             button_link="/collection/thkids"
         )
 

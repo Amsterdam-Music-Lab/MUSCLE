@@ -20,11 +20,11 @@ class ToontjeHogerKids2Preverbal(ToontjeHoger2Preverbal):
             instruction="Het eerste luisteren",
             steps=[
                 Step(
-                    "Je krijgt straks plaatjes te zien, een soort grafieken van een geluid. In een filmpje zie je zo een korte uitleg."),
+                    "Je krijgt straks een soort grafieken van geluid te zien, met een uitlegfilmpje."),
                 Step(
-                    "Welk plaatje denk jij dat er hoort bij de stem van een mens?"),
+                    "Welk plaatje denk jij dat hoort bij de stem van een mens?"),
                 Step(
-                    "Daarna volgt een vraag over twee baby huiltjes, kun jij het verschil horen?"),
+                    "En hoor jij het verschil tussen twee babyhuiltjes?"),
             ],
             step_numbers=True,
             button_label="Start"
@@ -78,10 +78,10 @@ class ToontjeHogerKids2Preverbal(ToontjeHoger2Preverbal):
         return [score]
 
     def get_round1_question(self):
-        return "Welk plaatje denk jij dat er hoort bij de stem van een mens?"
+        return "Welk plaatje denk jij dat hoort bij de stem van een mens?"
 
     def get_round2_question(self):
-        return "Hierboven zie je twee spectogrammen van baby huiltjes. Een van een Duitse baby en een van een Franse baby. De talen Frans en Duits klinken heel anders. Kun jij bedenken welke van deze baby’s de Franse baby is?"
+        return "Hierboven zie je twee spectrogrammen van babyhuiltjes.  Eentje is een Duitse baby en eentje is een Franse baby. De talen Frans en Duits klinken heel anders. Kun jij bedenken welke van deze baby’s de Franse baby is?"
 
     def get_final_round(self, session):
 
@@ -94,7 +94,7 @@ class ToontjeHogerKids2Preverbal(ToontjeHoger2Preverbal):
 
         # Final
         final_text = "Goed gedaan!" if session.final_score >= 2 * \
-            self.SCORE_CORRECT else "Dat bleek toch even lastig!"
+            self.SCORE_CORRECT else "Best lastig!"
         final = Final(
             session=session,
             final_text=final_text,
@@ -111,7 +111,7 @@ class ToontjeHogerKids2Preverbal(ToontjeHoger2Preverbal):
         info = Info(
             body=body,
             heading="Het eerste luisteren",
-            button_label="Terug naar ToontjeHoger",
+            button_label="Terug naar ToontjeHogerKids",
             button_link="/collection/thkids"
         )
 
