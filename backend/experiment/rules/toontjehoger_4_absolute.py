@@ -1,7 +1,9 @@
+import re
 import logging
 import random
 from os.path import join
 from django.template.loader import render_to_string
+from section.models import Playlist
 from experiment.utils import non_breaking_spaces
 from .toontjehoger_1_mozart import toontjehoger_ranks
 from experiment.actions import Trial, Explainer, Step, Score, Final, Info
@@ -149,7 +151,7 @@ class ToontjeHoger4Absolute(Base):
         config = {'show_total_score': True}
         score = Score(session, config=config, feedback=feedback)
         return [score]
- 
+
     def get_final_round(self, session):
 
         # Finish session.
@@ -184,3 +186,41 @@ class ToontjeHoger4Absolute(Base):
         )
 
         return [*score, final, info]
+
+    def validate_playlist_groups(self, groups):
+        integer_groups = []
+        integer_pattern = re.compile(r'^-?\d+$')
+        for group in groups:
+            if not integer_pattern.match(str(group)):
+                return ["Groups in playlist sections should be numbers. This playlist has groups: {}".format(groups)]
+
+            integer_groups.append(int(group))
+
+        # Check if the groups are sequential and unique
+        integer_groups.sort()
+        if integer_groups != list(range(1, len(groups) + 1)):
+            return ['Groups in playlist sections should be sequential numbers starting from 1 to the number of sections in the playlist ({}). E.g. "1, 2, 3, ... {}"'.format(len(groups), len(groups))]
+
+        return []
+
+    def validate_playlist(self, playlist: Playlist):
+        errors = super().validate_playlist(playlist)
+
+        # Get group values from sections, ordered by group
+        groups = list(playlist.section_set.values_list('group', flat=True))
+
+        # Check if the groups are sequential and unique
+        errors += self.validate_playlist_groups(groups)
+
+        # Check if the tags are 'a', 'b' or 'c'
+        tags = list(
+            playlist.section_set
+            .values_list('tag', flat=True)
+            .distinct()
+            .order_by('tag')
+        )
+
+        if tags != ['a', 'b', 'c']:
+            errors.append("Tags in playlist sections should be 'a', 'b' or 'c'. This playlist has tags: {}".format(tags))
+
+        return errors
