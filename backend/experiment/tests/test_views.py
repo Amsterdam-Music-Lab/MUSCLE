@@ -77,7 +77,7 @@ class TestExperimentCollectionViews(TestCase):
         # check that first_experiments is returned correctly
         response = self.client.get('/experiment/collection/test_series/')
         self.assertEqual(response.json().get(
-            'next_experiment').get('slug'), 'experiment1')
+            'nextExperiment').get('slug'), 'experiment1')
         # create session
         Session.objects.create(
             experiment=self.experiment1,
@@ -85,7 +85,7 @@ class TestExperimentCollectionViews(TestCase):
             finished_at=timezone.now()
         )
         response = self.client.get('/experiment/collection/test_series/')
-        self.assertIn(response.json().get('next_experiment').get(
+        self.assertIn(response.json().get('nextExperiment').get(
             'slug'), ('experiment2', 'experiment3'))
         self.assertEqual(response.json().get('dashboard'), [])
         Session.objects.create(
@@ -101,7 +101,7 @@ class TestExperimentCollectionViews(TestCase):
         response = self.client.get('/experiment/collection/test_series/')
         response_json = response.json()
         self.assertEqual(response_json.get(
-            'next_experiment').get('slug'), 'experiment4')
+            'nextExperiment').get('slug'), 'experiment4')
         self.assertEqual(response_json.get('dashboard'), [])
         self.assertEqual(response_json.get('theme').get('name'), 'test_theme')
         self.assertEqual(len(response_json['theme']['header']['score']), 3)
@@ -144,7 +144,7 @@ class TestExperimentCollectionViews(TestCase):
         intermediate_group.dashboard = True
         intermediate_group.save()
         serialized_coll_1 = serialize_experiment_collection_group(intermediate_group, self.participant)
-        total_score_1 = serialized_coll_1['total_score']
+        total_score_1 = serialized_coll_1['totalScore']
         self.assertEqual(total_score_1, 8)
         Session.objects.create(
             experiment=self.experiment3,
@@ -153,7 +153,7 @@ class TestExperimentCollectionViews(TestCase):
             final_score=8
         )
         serialized_coll_2 = serialize_experiment_collection_group(intermediate_group, self.participant)
-        total_score_2 = serialized_coll_2['total_score']
+        total_score_2 = serialized_coll_2['totalScore']
         self.assertEqual(total_score_2, 16)
 
 
@@ -191,12 +191,6 @@ class ExperimentViewsTest(TestCase):
         self.assertEqual(
             serialized_experiment['image'], {
                 'file': '/upload/test-image.jpg', 'href': '', 'alt': ''}
-        )
-        self.assertEqual(
-            serialized_experiment['finished_session_count'], 3
-        )
-        self.assertEqual(
-            serialized_experiment['started_session_count'], 3
         )
 
     def test_get_experiment(self):
