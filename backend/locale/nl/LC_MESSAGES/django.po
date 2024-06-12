@@ -4023,7 +4023,7 @@ msgstr "punten"
 
 #: theme/serializers.py:31
 msgid "No points yet!"
-msgstr "Not geen punten!"
+msgstr "Nog geen punten!"
 
 #~ msgid "Round {} / {}"
 #~ msgstr "Ronde {} / {}"
