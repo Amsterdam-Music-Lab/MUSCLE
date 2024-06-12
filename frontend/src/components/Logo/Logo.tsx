@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import useBoundStore from "@/util/stores";
 
 
-const Logo: React.FC<{logoClickConfirm: string | null}> = ({logoClickConfirm=null}) => {
+const Logo: React.FC<{ logoClickConfirm: string | null }> = ({ logoClickConfirm = null }) => {
     const theme = useBoundStore((state) => state.theme);
 
     const logoUrl = theme?.logoUrl ?? LOGO_URL;
@@ -26,14 +26,14 @@ const Logo: React.FC<{logoClickConfirm: string | null}> = ({logoClickConfirm=nul
         "aria-label": "Logo",
         style: { backgroundImage: `url(${logoUrl})` },
     };
-    
+
     return (
         <>
-            { URLS.AMLHome.startsWith("http") ? (
+            {URLS.AMLHome.startsWith("http") ? (
                 <a href={URLS.AMLHome} {...logoProps}>
                     {LOGO_TITLE}
                 </a>
-                ) : (
+            ) : (
                 <Link to={URLS.AMLHome} {...logoProps}>
                     {LOGO_TITLE}
                 </Link>

@@ -1,13 +1,6 @@
 export interface Header {
     nextExperimentButtonText: string;
     aboutButtonText: string;
-    showScore: boolean;    
-};
-
-export interface Header {
-    nextExperimentButtonText: string;
-    aboutButtonText: string;
-    showScore: boolean;
 };
 
 export interface Logo {
@@ -21,7 +14,6 @@ export interface Footer {
     logos: Logo[];
     privacy: string;
 }
-
 
 export default interface Theme {
     backgroundUrl: string;
