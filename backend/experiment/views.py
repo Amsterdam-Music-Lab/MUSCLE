@@ -11,7 +11,9 @@ from section.models import Playlist
 from experiment.serializers import serialize_actions, serialize_experiment_collection, serialize_experiment_collection_group
 from experiment.rules import EXPERIMENT_RULES
 from experiment.actions.utils import COLLECTION_KEY
+from image.serializers import serialize_image
 from participant.utils import get_participant
+from theme.serializers import serialize_theme
 
 logger = logging.getLogger(__name__)
 
@@ -33,7 +35,9 @@ def get_experiment(request, slug):
         'id': experiment.id,
         'slug': experiment.slug,
         'name': experiment.name,
-        'theme': experiment.theme_config.to_json() if experiment.theme_config else None,
+        'theme': serialize_theme(experiment.theme_config) if experiment.theme_config else None,
+        'description': experiment.description,
+        'image': serialize_image(experiment.image) if experiment.image else None,
         'class_name': class_name,  # can be used to override style
         'rounds': experiment.rounds,
         'playlists': [
@@ -70,12 +74,14 @@ def experiment_or_404(slug):
         raise Http404("Experiment does not exist")
 
 
-def default_questions(request, rules):
-    return JsonResponse({'default_questions': [q.key for q in EXPERIMENT_RULES[rules]().questions]})
+def add_default_question_series(request, id):
+    if request.method == "POST":
+        Experiment.objects.get(pk=id).add_default_question_series()
+    return JsonResponse({})
 
 
 def get_experiment_collection(request: HttpRequest, slug: str, group_index: int = 0) -> JsonResponse:
-    ''' 
+    '''
     check which `ExperimentCollectionGroup` objects are related to the `ExperimentCollection` with the given slug
     retrieve the group with the lowest order (= current_group)
     return the next experiment from the current_group without a finished session

@@ -27,11 +27,13 @@ admin.site.index_title = "Welcome to AML Admin"
 # Urls patterns
 urlpatterns = [
     path('experiment/', include('experiment.urls')),
+    path('question/', include('question.urls')),
     path('participant/', include('participant.urls')),
     path('result/', include('result.urls')),
     path('section/', include('section.urls')),
     path('session/', include('session.urls')),
     path('theme/', include('theme.urls')),
+    path('admin_interface/', include('admin_interface.urls')),
     path('admin/', admin.site.urls),
 
     # Sentry debug (uncomment to test Sentry)

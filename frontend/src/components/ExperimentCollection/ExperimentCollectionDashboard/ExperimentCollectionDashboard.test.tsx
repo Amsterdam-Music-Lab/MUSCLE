@@ -11,9 +11,7 @@ const getExperiment = (overrides = {}) => {
         slug: 'some_slug',
         name: 'Some Experiment',
         description: 'Some description',
-        image: '',
-        started_session_count: 2,
-        finished_session_count: 1,
+        image: {},
         ...overrides
     } as Experiment
 }
@@ -28,7 +26,6 @@ const experiment2 = getExperiment({
     id: 2,
     slug: 'another_slug',
     name: 'Another Experiment',
-    finished_session_count: 2,
     description: 'Some description',
 });
 
@@ -37,7 +34,6 @@ const collectionWithDashboard = { dashboard: [experiment1, experiment2] }
 const header = {
     nextExperimentButtonText: 'Next experiment',
     aboutButtonText: 'About us',
-    showScore: true
 }
 const collectionWithTheme = {
     dashboard: [experiment1, experiment2],
@@ -62,11 +58,7 @@ describe('ExperimentCollectionDashboard', () => {
         );
         await waitFor(() => {
             expect(screen.getByRole('menu')).toBeTruthy();
-            const counters = screen.getAllByRole('status');
-            expect(counters).toHaveLength(4);
-            expect(counters[0].innerHTML).toBe(experiment1.started_session_count.toString());
-            expect(counters[1].innerHTML).toBe(experiment1.finished_session_count.toString());
-        })
+        });
     });
 
     it('shows a placeholder if an experiment has no image', async () => {

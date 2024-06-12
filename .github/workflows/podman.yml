@@ -12,6 +12,7 @@ on:
     types: [created]
 
 jobs:
+
   deploy-test:
     name: Deploy to test environment
     environment: Test
@@ -79,8 +80,10 @@ jobs:
           cp .env frontend/.env
       - name: Build Podman images
         run: podman-compose -f docker-compose-deploy.yml build
+      - name: Shut down running containers
+        run: podman compose -f docker-compose-deploy.yml down
       - name: Deploy Podman images
-        run: podman-compose -f docker-compose-deploy.yml up -d --force-recreate
+        run: podman-compose -f docker-compose-deploy.yml up -d
       - name: Notify Sentry of new release
         run: |
             curl -X POST "https://sentry.io/api/0/organizations/uva-aml/releases/" \
@@ -169,8 +172,10 @@ jobs:
           cp .env frontend/.env
       - name: Build Podman images
         run: podman-compose -f docker-compose-deploy.yml build
+      - name: Shut down running containers
+        run: podman compose -f docker-compose-deploy.yml down
       - name: Deploy Podman images
-        run: podman-compose -f docker-compose-deploy.yml up -d --force-recreate
+        run: podman-compose -f docker-compose-deploy.yml up -d
       - name: Notify Sentry of new release
         run: |
           curl -X POST "https://sentry.io/api/0/organizations/uva-aml/releases/" \
@@ -209,7 +214,7 @@ jobs:
       AML_LOCATION_PROVIDER: ${{ vars.AML_LOCATION_PROVIDER }}
       AML_SUBPATH: ${{ vars.AML_SUBPATH }}
       DJANGO_SETTINGS_MODULE: ${{ vars.DJANGO_SETTINGS_MODULE }}
-      SENTRY_ENVIRONMENT: "acceptance"
+      SENTRY_ENVIRONMENT: "production"
       SQL_DATABASE: ${{ vars.SQL_DATABASE }}
       SQL_HOST: ${{ vars.SQL_HOST }}
       SQL_PORT: ${{ vars.SQL_PORT }}
@@ -256,8 +261,10 @@ jobs:
           cp .env frontend/.env
       - name: Build Podman images
         run: podman-compose -f docker-compose-deploy.yml build
+      - name: Shut down running containers
+        run: podman compose -f docker-compose-deploy.yml down
       - name: Deploy Podman images
-        run: podman-compose -f docker-compose-deploy.yml up -d --force-recreate
+        run: podman-compose -f docker-compose-deploy.yml up -d
       - name: Notify Sentry of new release
         run: |
           curl -X POST "https://sentry.io/api/0/organizations/uva-aml/releases/" \
@@ -276,3 +283,18 @@ jobs:
         run: podman image prune -a -f
       - name: Check Podman images
         run: podman-compose -f docker-compose-deploy.yml ps
+  
+  e2e-acceptance:
+    name: E2E tests on acceptance environment
+    runs-on: ACC
+    # temporarily true to test e2e tests
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/tags/*' || (github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main')
+
+    env:
+      BASE_URL: "https://acc.amsterdammusiclab.nl"
+
+    steps:
+
+      - uses: actions/checkout@v4
+      - name: Run E2E tests
+        run: cd e2e && bash run-tests

@@ -8,15 +8,9 @@ from .base import Base
 from experiment.actions import Consent, Explainer, Final, Playlist, Score, Step, Trial
 from experiment.actions.form import BooleanQuestion, Form
 from experiment.actions.playback import Autoplay
-from experiment.questions.demographics import DEMOGRAPHICS
-from experiment.questions.goldsmiths import MSI_OTHER
-from experiment.questions.utils import question_by_key
-from experiment.questions.utils import copy_shuffle
-from experiment.questions.goldsmiths import MSI_FG_GENERAL, MSI_ALL
-from experiment.questions.stomp import STOMP20
-from experiment.questions.tipi import TIPI
 from experiment.actions.styles import STYLE_BOOLEAN_NEGATIVE_FIRST
 from experiment.actions.wrappers import song_sync
+from question.questions import QUESTION_GROUPS
 from result.utils import prepare_result
 
 
@@ -41,15 +35,13 @@ class Hooked(Base):
     play_method = 'BUFFER'
 
     def __init__(self):
-        self.questions = [
-            # 1. Demographic questions (7 questions)
-            *copy_shuffle(DEMOGRAPHICS),
-            question_by_key('msi_39_best_instrument', MSI_OTHER),
-            *copy_shuffle(MSI_FG_GENERAL),  # 2. General music sophistication
-            # 3. Complete music sophistication (20 questions)
-            *copy_shuffle(MSI_ALL),
-            *copy_shuffle(STOMP20),  # 4. STOMP (20 questions)
-            *copy_shuffle(TIPI)  # 5. TIPI (10 questions)
+        self.question_series = [
+            {"name": "DEMOGRAPHICS", "keys": QUESTION_GROUPS["DEMOGRAPHICS"], "randomize": True}, # 1. Demographic questions (7 questions)
+            {"name": "MSI_OTHER", "keys": ['msi_39_best_instrument'], "randomize": False},
+            {"name": "MSI_FG_GENERAL", "keys": QUESTION_GROUPS["MSI_FG_GENERAL"], "randomize": True}, # 2. General music sophistication
+            {"name": "MSI_ALL", "keys": QUESTION_GROUPS["MSI_ALL"], "randomize": True}, # 3. Complete music sophistication (20 questions)
+            {"name": "STOMP20", "keys": QUESTION_GROUPS["STOMP20"], "randomize": True}, # 4. STOMP (20 questions)
+            {"name": "TIPI", "keys": QUESTION_GROUPS["TIPI"], "randomize": True}, # 5. TIPI (10 questions)
         ]
 
     def first_round(self, experiment):

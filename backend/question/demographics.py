@@ -4,6 +4,8 @@ from experiment.actions.form import ChoiceQuestion, NumberQuestion, TextQuestion
 from experiment.standards.iso_countries import ISO_COUNTRIES
 from experiment.standards.iso_languages import ISO_LANGUAGES
 from experiment.standards.isced_education import ISCED_EDUCATION_LEVELS
+from .utils import question_by_key
+
 
 ATTAINED_EDUCATION_CHOICES = dict(
     ISCED_EDUCATION_LEVELS,
@@ -143,5 +145,36 @@ EXTRA_DEMOGRAPHICS = [
             'extensive': _("Extensive"),
             'professional': _("Professional")
         }
+    )
+]
+
+
+def demographics_other():
+    questions = []
+
+    question = question_by_key('dgf_education', DEMOGRAPHICS, drop_choices=[
+                               'isced-2', 'isced-5'])
+    question.key = 'dgf_education_matching_pairs'
+    questions.append(question)
+
+    question = question_by_key(
+        'dgf_education', DEMOGRAPHICS, drop_choices=['isced-1'])
+    question.key = 'dgf_education_gold_msi'
+    questions.append(question)
+
+    question = question_by_key(
+        'dgf_education', DEMOGRAPHICS, drop_choices=['isced-5'])
+    question.key = 'dgf_education_huang_2022'
+    questions.append(question)
+
+    return questions
+
+
+# Temporary until full Question model is implemented
+DEMOGRAPHICS_OTHER = demographics_other() + [
+    TextQuestion(
+        key='fame_name',
+        question=_("Enter a name to enter the ICMPC hall of fame"),
+        is_skippable=True
     )
 ]

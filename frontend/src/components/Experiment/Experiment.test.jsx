@@ -26,6 +26,8 @@ vi.mock('../../util/stores', () => ({
             session: 1,
             participant: 'participant-id',
             setSession: vi.fn(),
+            setHeadData: vi.fn(),
+            resetHeadData: vi.fn(),
         };
         
         return fn(state);

@@ -3,10 +3,9 @@ from django.conf import settings
 
 from experiment.actions import Final, Trial
 from experiment.actions.form import Form, ChoiceQuestion
-from experiment.questions.utils import copy_shuffle, question_by_key
-from experiment.questions.musicgens import MUSICGENS_17_W_VARIANTS
-from .hooked import Hooked
+from question.questions import QUESTION_GROUPS
 from result.utils import prepare_result
+from .hooked import Hooked
 
 
 class ThatsMySong(Hooked):
@@ -17,10 +16,9 @@ class ThatsMySong(Hooked):
     round_modifier = 1
 
     def __init__(self):
-        self.questions = [
-            question_by_key('dgf_generation'),
-            question_by_key('dgf_gender_identity'),
-            *copy_shuffle(MUSICGENS_17_W_VARIANTS)
+        self.question_series = [
+            {"name": "DEMOGRAPHICS", "keys": ['dgf_generation','dgf_gender_identity'], "randomize": False},
+            {"name": "MUSICGENS_17_W_VARIANTS", "keys": QUESTION_GROUPS["MUSICGENS_17_W_VARIANTS"], "randomize": True},
         ]
 
     def feedback_info(self):

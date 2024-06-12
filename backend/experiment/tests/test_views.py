@@ -1,9 +1,11 @@
+from django.conf import settings
 from django.test import TestCase
 from django.utils import timezone
 
 from image.models import Image
 from experiment.serializers import (
     serialize_experiment,
+    serialize_experiment_collection_group
 )
 from experiment.models import (
     Experiment,
@@ -11,8 +13,10 @@ from experiment.models import (
     ExperimentCollectionGroup,
     GroupedExperiment,
 )
+from experiment.rules.hooked import Hooked
 from participant.models import Participant
 from session.models import Session
+from theme.models import ThemeConfig, FooterConfig, HeaderConfig
 
 
 class TestExperimentCollectionViews(TestCase):
@@ -20,9 +24,11 @@ class TestExperimentCollectionViews(TestCase):
     @classmethod
     def setUpTestData(cls):
         cls.participant = Participant.objects.create()
+        theme_config = create_theme_config()
         collection = ExperimentCollection.objects.create(
             name='Test Series',
-            slug='test_series'
+            slug='test_series',
+            theme_config=theme_config
         )
         introductory_group = ExperimentCollectionGroup.objects.create(
             name='introduction',
@@ -41,7 +47,7 @@ class TestExperimentCollectionViews(TestCase):
             order=2
         )
         cls.experiment2 = Experiment.objects.create(
-            name='experiment2', slug='experiment2')
+            name='experiment2', slug='experiment2', theme_config=theme_config)
         cls.experiment3 = Experiment.objects.create(
             name='experiment3', slug='experiment3')
         GroupedExperiment.objects.create(
@@ -72,7 +78,7 @@ class TestExperimentCollectionViews(TestCase):
         # check that first_experiments is returned correctly
         response = self.client.get('/experiment/collection/test_series/')
         self.assertEqual(response.json().get(
-            'next_experiment').get('slug'), 'experiment1')
+            'nextExperiment').get('slug'), 'experiment1')
         # create session
         Session.objects.create(
             experiment=self.experiment1,
@@ -80,7 +86,7 @@ class TestExperimentCollectionViews(TestCase):
             finished_at=timezone.now()
         )
         response = self.client.get('/experiment/collection/test_series/')
-        self.assertIn(response.json().get('next_experiment').get(
+        self.assertIn(response.json().get('nextExperiment').get(
             'slug'), ('experiment2', 'experiment3'))
         self.assertEqual(response.json().get('dashboard'), [])
         Session.objects.create(
@@ -94,8 +100,14 @@ class TestExperimentCollectionViews(TestCase):
             finished_at=timezone.now()
         )
         response = self.client.get('/experiment/collection/test_series/')
-        self.assertEqual(response.json().get(
-            'next_experiment').get('slug'), 'experiment4')
+        response_json = response.json()
+        self.assertEqual(response_json.get(
+            'nextExperiment').get('slug'), 'experiment4')
+        self.assertEqual(response_json.get('dashboard'), [])
+        self.assertEqual(response_json.get('theme').get('name'), 'test_theme')
+        self.assertEqual(len(response_json['theme']['header']['score']), 3)
+        self.assertEqual(response_json.get('theme').get('footer').get(
+            'disclaimer'), '<p>Test Disclaimer</p>')
 
     def test_experiment_collection_with_dashboard(self):
         # if ExperimentCollection has dashboard set True, return list of random experiments
@@ -116,6 +128,35 @@ class TestExperimentCollectionViews(TestCase):
         response = self.client.get('/experiment/collection/test_series/')
         self.assertEqual(type(response.json().get('dashboard')), list)
 
+    def test_experiment_collection_total_score(self):
+        """ Test calculation of total score for grouped experiment on dashboard """
+        session = self.client.session
+        session['participant_id'] = self.participant.id
+        session.save()
+        Session.objects.create(
+            experiment=self.experiment2,
+            participant=self.participant,
+            finished_at=timezone.now(),
+            final_score=8
+        )
+        intermediate_group = ExperimentCollectionGroup.objects.get(
+            name='intermediate'
+        )
+        intermediate_group.dashboard = True
+        intermediate_group.save()
+        serialized_coll_1 = serialize_experiment_collection_group(intermediate_group, self.participant)
+        total_score_1 = serialized_coll_1['totalScore']
+        self.assertEqual(total_score_1, 8)
+        Session.objects.create(
+            experiment=self.experiment3,
+            participant=self.participant,
+            finished_at=timezone.now(),
+            final_score=8
+        )
+        serialized_coll_2 = serialize_experiment_collection_group(intermediate_group, self.participant)
+        total_score_2 = serialized_coll_2['totalScore']
+        self.assertEqual(total_score_2, 16)
+
 
 class ExperimentViewsTest(TestCase):
 
@@ -126,8 +167,11 @@ class ExperimentViewsTest(TestCase):
             name='Test Experiment',
             description='This is a test experiment',
             image=Image.objects.create(
-                file='test-image.jpg'
-            )
+                file='test-image.jpg',
+                alt='Test',
+                href='https://www.example.com'
+            ),
+            theme_config=create_theme_config()
         )
         participant = Participant.objects.create()
         Session.objects.bulk_create([
@@ -148,8 +192,64 @@ class ExperimentViewsTest(TestCase):
             serialized_experiment['description'], 'This is a test experiment'
         )
         self.assertEqual(
-            serialized_experiment['image'], '/upload/test-image.jpg'
+            serialized_experiment['image'], {
+                'file': f'{settings.BASE_URL}/upload/test-image.jpg', 'href': 'https://www.example.com', 'alt': 'Test'}
+        )
+
+    def test_get_experiment(self):
+        # Create an experiment
+        experiment = Experiment.objects.create(
+            slug='test-experiment',
+            name='Test Experiment',
+            description='This is a test experiment',
+            image=Image.objects.create(
+                file='test-image.jpg'
+            ),
+            rules=Hooked.ID,
+            theme_config=create_theme_config()
+        )
+        participant = Participant.objects.create()
+        Session.objects.bulk_create([
+            Session(experiment=experiment, participant=participant, finished_at=timezone.now()) for index in range(3)
+        ])
+
+        response = self.client.get('/experiment/test-experiment/')
+
+        self.assertEqual(
+            response.json()['slug'], 'test-experiment'
         )
         self.assertEqual(
-            serialized_experiment['finished_session_count'], 3
+            response.json()['name'], 'Test Experiment'
         )
+        self.assertEqual(
+            response.json()['theme']['name'], 'test_theme'
+        )
+        self.assertEqual(
+            len(response.json()['theme']['header']['score']), 3
+        )
+        self.assertEqual(
+            response.json()['theme']['footer']['disclaimer'], '<p>Test Disclaimer</p>'
+        )
+
+
+def create_theme_config():
+    theme_config = ThemeConfig.objects.create(
+            name='test_theme',
+            description='Test Theme',
+            heading_font_url='https://fonts.googleapis.com/css2?family=Architects+Daughter&family=Micro+5&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap',
+            body_font_url='https://fonts.googleapis.com/css2?family=Architects+Daughter&family=Micro+5&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap',
+            logo_image=Image.objects.create(file='test-logo.jpg'),
+            background_image=Image.objects.create(file='test-background.jpg'),
+    )
+    HeaderConfig.objects.create(
+        theme=theme_config,
+        show_score=True
+    )
+    footer_config = FooterConfig.objects.create(
+        theme=theme_config,
+        disclaimer='Test Disclaimer',
+        privacy='Test Privacy',
+    )
+    footer_config.logos.add(Image.objects.create(file='test-logo.jpg'))
+
+    return theme_config

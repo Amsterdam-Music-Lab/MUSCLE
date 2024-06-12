@@ -38,7 +38,7 @@ const Playback = ({
     // check if the users device is webaudio compatible
     const playMethod = webAudio.compatibleDevice() ? playbackArgs.play_method : 'EXTERNAL';    
     
-    const sections = playbackArgs.sections;
+    const { sections, style } = playbackArgs;
 
     // Keep track of which player has played, in a an array of player indices
     const [hasPlayed, setHasPlayed] = useState([]);
@@ -160,6 +160,7 @@ const Playback = ({
         const attrs = {
             autoAdvance,
             finishedPlaying: onFinishedPlaying,
+            labels: playbackArgs.labels,
             lastPlayerIndex,
             playSection,
             playerIndex,
@@ -167,6 +168,7 @@ const Playback = ({
             sections,
             setPlayerIndex,
             setView,
+            style,
             showAnimation: playbackArgs.show_animation,
             startedPlaying,
             submitResult,
@@ -209,6 +211,7 @@ const Playback = ({
                 return (
                     <ImagePlayer
                         {...attrs}
+                        images={playbackArgs.images}
                         disabledPlayers={playbackArgs.play_once ? hasPlayed : undefined}
                     />
                 );

@@ -2,7 +2,6 @@ from django.forms import CheckboxSelectMultiple, ModelForm, ChoiceField, Form, M
 from experiment.models import ExperimentCollection, Experiment
 from experiment.rules import EXPERIMENT_RULES
 
-from .questions import QUESTIONS_CHOICES
 
 # session_keys for Export CSV
 SESSION_CHOICES = [('experiment_id', 'Experiment ID'),
@@ -164,12 +163,6 @@ class ExperimentForm(ModelForm):
             choices=sorted(choices)
         )
 
-        self.fields['questions'] = TypedMultipleChoiceField(
-            choices=QUESTIONS_CHOICES,
-            widget=CheckboxSelectMultiple,
-            required=False
-        )
-
     def clean_playlists(self):
 
         # Check if there is a rules id selected and key exists
@@ -182,6 +175,10 @@ class ExperimentForm(ModelForm):
         rules = cl()
 
         playlists = self.cleaned_data['playlists']
+
+        if not playlists:
+            return self.cleaned_data['playlists']
+        
         playlist_errors = []
 
         # Validate playlists
@@ -193,6 +190,8 @@ class ExperimentForm(ModelForm):
 
         if playlist_errors:
             self.add_error('playlists', playlist_errors)
+
+        return playlists
 
     class Meta:
         model = Experiment
@@ -233,3 +232,8 @@ class TemplateForm(Form):
     select_template = ChoiceField(
         widget=Select,
         choices=TEMPLATE_CHOICES)
+
+
+class QuestionSeriesAdminForm(ModelForm):
+    class Media:
+        js = ["questionseries_admin.js"]

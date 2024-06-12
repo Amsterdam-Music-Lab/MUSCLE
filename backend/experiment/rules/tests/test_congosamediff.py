@@ -1,3 +1,5 @@
+from unittest.mock import patch
+
 from django.test import TestCase
 
 from experiment.models import Experiment
@@ -5,12 +7,23 @@ from participant.models import Participant
 from result.models import Result
 from section.models import Playlist as PlaylistModel, Section, Song
 from session.models import Session
-from experiment.actions import Explainer, Trial, Final, Playlist as PlaylistAction
+from experiment.actions import (
+    Explainer, Trial, Final, Playlist as PlaylistAction
+)
 
 from experiment.rules.congosamediff import CongoSameDiff
 
 
 class CongoSameDiffTest(TestCase):
+
+    def setUp(self):
+        # Mock the file_exists_validator function from section.models
+        # instead of section.validators as it is imported in the Playlist class
+        # which is in the section.models module
+        patcher = patch('section.models.file_exists_validator')
+        self.mock_file_exists_validator = patcher.start()
+        self.mock_file_exists_validator.return_value = None
+        self.addCleanup(patcher.stop)
 
     @classmethod
     def setUpTestData(self):

@@ -36,6 +36,9 @@ const Experiment = ({ match }) => {
     const theme = useBoundStore((state) => state.theme);
     const setTheme = useBoundStore((state) => state.setTheme);
 
+    const setHeadData = useBoundStore((state) => state.setHeadData);
+    const resetHeadData = useBoundStore((state) => state.resetHeadData);
+
     // Current experiment state
     const [actions, setActions] = useState([]);
     const [state, setState] = useState(startState);
@@ -108,6 +111,17 @@ const Experiment = ({ match }) => {
             // Loading succeeded
             if (experiment) {
                 setSession(null);
+                // Set Helmet Head data
+                setHeadData({
+                    title: experiment.name,
+                    description: experiment.description,
+                    image: experiment.image?.file,
+                    url: window.location.href,
+                    structuredData: {
+                        "@type": "Experiment",
+                    },
+                });
+
                 // Set theme
                 if (experiment.theme) {
                     setTheme(experiment.theme);
@@ -125,6 +139,11 @@ const Experiment = ({ match }) => {
                 setError("Could not load experiment");
             }
         }
+
+        // Cleanup
+        return () => {
+            resetHeadData();
+        };
     }, [
         experiment,
         loadingExperiment,
@@ -227,7 +246,7 @@ const Experiment = ({ match }) => {
                     <DefaultPage
                         title={state.title}
                         logoClickConfirm={
-                            ["FINAL", "ERROR", "TOONTJEHOGER"].includes(view) ||
+                            ["FINAL", "ERROR"].includes(view) ||
                                 // Info pages at end of experiment
                                 (view === "INFO" &&
                                     (!state.next_round || !state.next_round.length))

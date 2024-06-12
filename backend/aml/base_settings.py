@@ -35,6 +35,7 @@ ALLOWED_HOSTS = os.getenv("AML_ALLOWED_HOSTS", "localhost").split(",")
 # Application definition
 
 INSTALLED_APPS = [
+    'admin_interface',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -52,6 +53,7 @@ INSTALLED_APPS = [
     'session',
     'section',
     'theme',
+    'question'
 ]
 
 MIDDLEWARE = [
@@ -189,8 +191,8 @@ else:
 
 MARKUP_SETTINGS = {
     'markdown': {
-        'safe_mode': True
+        'safe_mode': False
     }
 }
 
-SUBPATH = os.getenv('AML_SUBPATH', None)
+SUBPATH = os.getenv('AML_SUBPATH', '')
