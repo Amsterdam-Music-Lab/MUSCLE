@@ -191,7 +191,7 @@ else:
 
 MARKUP_SETTINGS = {
     'markdown': {
-        'safe_mode': True
+        'safe_mode': False
     }
 }
 
