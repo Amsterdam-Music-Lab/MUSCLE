@@ -38,83 +38,36 @@ class ToontjeHogerKids5Tempo(ToontjeHoger5Tempo):
     def get_random_section_pair(self, session, genre):
         """
           - session: current Session
-          - genre: (C)lassic (J)azz (R)ock
+          - genre: unused
 
-          Voor de track: genereer drie random integers van 1-5 (bijv. [4 2 4])
-          Plak deze aan de letters C, J en R (bijv. [C4, J2, R4])
-          Voor het paar: genereer drie random integers van 1-2 (bijv. [1 2 2])
-          Plak deze aan de letter P (bijv. P1, P2, P2)
-          We willen zowel de originele als de veranderde versie van het paar. Dus combineer
-          bovenstaande met OR en CH (bijv. “C4_P1_OR”, “C4_P1_CH”, etc.)
+          return a section from an unused song, in both its original and changed variant
         """
-        # Previous tags
-        previous_tags = [
-            result.section.tag for result in session.result_set.all()]
 
-        # Get a random, unused track
-        # Loop until there is a valid tag
-        iterations = 0
-        valid_tag = False
-        tag_base = ""
-        tag_original = ""
-        while (not valid_tag):
-            track = random.choice([1, 2, 3, 4, 5])
-            pair = random.choice([1, 2])
-            tag_base = "{}{}_P{}_".format(genre.upper(), track, pair, )
-            tag_original = tag_base + "OR"
-            if not (tag_original in previous_tags):
-                valid_tag = True
-
-            # Failsafe: prevent infinite loop
-            # If this happens, just reuse a track
-            iterations += 1
-            if iterations > 10:
-                valid_tag = True
-
-        tag_changed = tag_base + "CH"
-
-        section_original = session.section_from_any_song(
-            filter_by={'tag': tag_original, 'group': "or"})
+        section_original = session.section_from_unused_song(
+            filter_by={'group': "or"})
 
         if not section_original:
             raise Exception(
                 "Error: could not find original section: {}".format(tag_original))
 
         section_changed = self.get_section_changed(
-            session=session, tag=tag_changed)
+            session=session, song=section_original.song)
 
         sections = [section_original, section_changed]
         random.shuffle(sections)
         return sections
 
-    def get_section_changed(self, session, tag):
-        section_changed = session.section_from_any_song(
-            filter_by={'tag': tag, 'group': "ch"})
+    def get_section_changed(self, session, song):
+        section_changed = session.playlist.section_set.get(
+            song__name=song.name, song__artist=song.artist, group='ch'
+        )
         if not section_changed:
             raise Exception(
-                "Error: could not find changed section: {}".format(tag))
+                "Error: could not find changed section: {}".format(song))
         return section_changed
 
     def get_trial_question(self):
         return "Kan jij horen waar de piepjes in de maat van de muziek zijn?"
-
-    def get_section_pair_from_result(self, result):
-        section_original = result.section
-
-        if section_original is None:
-            raise Exception(
-                "Error: could not get section from result")
-
-        tag_changed = section_original.tag.replace("OR", "CH")
-        section_changed = self.get_section_changed(
-            session=result.session, tag=tag_changed)
-
-        if section_changed is None:
-            raise Exception(
-                "Error: could not get changed section for tag: {}".format(
-                    tag_changed))
-
-        return (section_original, section_changed)
 
     def get_score(self, session):
         # Feedback
@@ -131,20 +84,10 @@ class ToontjeHogerKids5Tempo(ToontjeHoger5Tempo):
                 feedback = "Helaas! Het juiste antwoord was {}.".format(
                     last_result.expected_response.upper())
 
-            section_original, section_changed = self.get_section_pair_from_result(
-                last_result)
-
             # Create feedback message
             # - Track names are always the same
-            # - Artist could be different
-            if section_original.song.artist == section_changed.song.artist:
-                feedback += " Je hoorde {}, in beide fragmenten uitgevoerd door {}.".format(
-                    last_result.section.song.name, last_result.section.song.artist)
-            else:
-                section_a = section_original if last_result.expected_response == "A" else section_changed
-                section_b = section_changed if section_a.id == section_original.id else section_original
-                feedback += " Je hoorde {} uitgevoerd door A) {} en B) {}.".format(
-                    section_a.song.name, non_breaking_spaces(section_a.song.artist), non_breaking_spaces(section_b.song.artist))
+            feedback += " Je hoorde '{}' van {}.".format(
+                last_result.section.song.name, last_result.section.song.artist)
 
         # Return score view
         config = {'show_total_score': True}

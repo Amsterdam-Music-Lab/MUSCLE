@@ -42,7 +42,7 @@ class ToontjeHoger2Preverbal(Base):
         if first_round_sections.count() != 3:
             errors.append(
                 'There should be 3 sections with group 1 (first round)')
-        if sorted(first_round_sections.values('tag').distinct()) != ['a', 'b', 'c']:
+        if sorted(first_round_sections.values_list('tag', flat=True).distinct()) != ['a', 'b', 'c']:
             errors.append(
                 'The first round sections should have tags a, b, c'
             )
@@ -51,7 +51,7 @@ class ToontjeHoger2Preverbal(Base):
         if second_round_sections.count() != 2:
             errors.append(
                 'There should be 2 sections with group 2 (second round)')
-        if sorted(second_round_sections.values('tag').distinct()) != ['a', 'b']:
+        if sorted(second_round_sections.values_list('tag', flat=True).distinct()) != ['a', 'b']:
             errors.append(
                 'The second round sections should have tags a, b'
             )

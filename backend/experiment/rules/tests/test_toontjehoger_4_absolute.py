@@ -62,7 +62,7 @@ class TestToontjeHoger4Absolute(TestCase):
         
         self.assertEqual(
             toontje_hoger_4_absolute.validate_playlist(playlist),
-            ["Groups in playlist sections should be numbers. This playlist has groups: ['a', '2', '4', '4', '11', '7']"]
+            ["Groups in playlist sections should be numbers. This playlist has groups: ['11', '2', '4', '7', 'a']"]
         )
 
     def test_validate_invalid_sequential_groups(self):
@@ -82,7 +82,7 @@ class TestToontjeHoger4Absolute(TestCase):
 
         self.assertEqual(
             toontje_hoger_4_absolute.validate_playlist(playlist),
-            ['Groups in playlist sections should be sequential numbers starting from 1 to the number of sections in the playlist (6). E.g. "1, 2, 3, ... 6"']
+            ['Groups in playlist sections should be sequential numbers starting from 1 to the number of items in the playlist (13). E.g. "1, 2, 3, ... 13"']
         )
 
     def test_validate_invalid_tags(self):

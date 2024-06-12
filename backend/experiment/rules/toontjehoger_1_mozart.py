@@ -253,7 +253,7 @@ class ToontjeHoger1Mozart(Base):
             errors.append("The sections should have different groups")
 
         # Check if sections have group 1 and 2
-        if not (1 in groups and 2 in groups):
+        if sorted(groups) != ['1', '2']:
             errors.append("The sections should have groups 1 and 2")
 
         return errors
