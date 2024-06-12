@@ -58,8 +58,8 @@ def serialize_experiment_collection_group(group: ExperimentCollectionGroup, part
 
     return {
         'dashboard': [serialize_experiment(experiment.experiment, participant) for experiment in grouped_experiments] if group.dashboard else [],
-        'next_experiment': next_experiment,
-        'total_score': total_score
+        'nextExperiment': next_experiment,
+        'totalScore': total_score
     }
 
 
@@ -67,8 +67,6 @@ def serialize_experiment(experiment_object: Experiment, participant: Participant
     return {
         'slug': experiment_object.slug,
         'name': experiment_object.name,
-        'started_session_count': get_started_session_count(experiment_object, participant),
-        'finished_session_count': get_finished_session_count(experiment_object, participant),
         'description': experiment_object.description,
         'image': serialize_image(experiment_object.image) if experiment_object.image else None,
     }

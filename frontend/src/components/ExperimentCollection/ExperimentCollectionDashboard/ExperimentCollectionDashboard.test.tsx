@@ -12,8 +12,6 @@ const getExperiment = (overrides = {}) => {
         name: 'Some Experiment',
         description: 'Some description',
         image: {},
-        started_session_count: 2,
-        finished_session_count: 1,
         ...overrides
     } as Experiment
 }
@@ -28,7 +26,6 @@ const experiment2 = getExperiment({
     id: 2,
     slug: 'another_slug',
     name: 'Another Experiment',
-    finished_session_count: 2,
     description: 'Some description',
 });
 
