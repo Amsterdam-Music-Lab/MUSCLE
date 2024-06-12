@@ -10,29 +10,32 @@ import IExperiment from "@/types/Experiment";
 interface ExperimentCollectionDashboardProps {
     experimentCollection: ExperimentCollection;
     participantIdUrl: string | null;
+    totalScore: number;
 }
 
 export const ExperimentCollectionDashboard: React.FC<ExperimentCollectionDashboardProps> = ({ experimentCollection, participantIdUrl, totalScore }) => {
-    
+
     const dashboard = experimentCollection.dashboard;
     const nextExperimentSlug = experimentCollection.nextExperiment?.slug;
-    
-    const headerProps = experimentCollection.theme?.header? {
-        nextExperimentSlug,        
+
+    const headerProps = experimentCollection.theme?.header ? {
+        nextExperimentSlug,
         collectionSlug: experimentCollection.slug,
         ...experimentCollection.theme.header,
-        totalScore: totalScore
-        
+        totalScore,
+        experimentCollectionTitle: experimentCollection.name,
+        experimentCollectionDescription: experimentCollection.description
+
     } : undefined;
-    
+
     const getExperimentHref = (slug: string) => `/${slug}${participantIdUrl ? `?participant_id=${participantIdUrl}` : ""}`;
 
     return (
         <div className="aha__dashboard">
-        <Logo logoClickConfirm={null} />
-        {headerProps && (
-            <Header { ...headerProps }></Header>
-        )}
+            <Logo logoClickConfirm={null} />
+            {headerProps && (
+                <Header {...headerProps}></Header>
+            )}
             {/* Experiments */}
             <div role="menu" className="dashboard toontjehoger">
                 <ul>
