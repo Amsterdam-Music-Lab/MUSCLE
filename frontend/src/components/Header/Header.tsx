@@ -9,9 +9,7 @@ interface HeaderProps {
     nextExperimentButtonText: string;
     collectionSlug: string;
     aboutButtonText: string;
-    showScore: boolean;
     totalScore: Number;
-    score: Score;    
 }
 
 interface Score {

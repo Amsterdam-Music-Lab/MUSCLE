@@ -34,7 +34,6 @@ const collectionWithDashboard = { dashboard: [experiment1, experiment2] }
 const header = {
     nextExperimentButtonText: 'Next experiment',
     aboutButtonText: 'About us',
-    showScore: true
 }
 const collectionWithTheme = {
     dashboard: [experiment1, experiment2],
