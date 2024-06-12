@@ -94,7 +94,7 @@ export const Header: React.FC<HeaderProps> = ({
     return (
         <div className="hero aha__header">
             <div className="intro">
-                <HTML body={experimentCollectionDescription} innerClassName="py-3" />
+                <HTML body={experimentCollectionDescription} innerClassName="" />
                 <nav className="actions">
                     {nextExperimentSlug && <a className="btn btn-lg btn-primary" href={`/${nextExperimentSlug}`}>{nextExperimentButtonText}</a>}
                     {aboutButtonText && <Link className="btn btn-lg btn-outline-primary" to={`/collection/${collectionSlug}/about`}>{aboutButtonText}</Link>}
