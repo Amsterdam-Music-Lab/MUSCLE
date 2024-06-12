@@ -24,7 +24,10 @@ def serialize_experiment_collection(
     serialized = {
         'slug': experiment_collection.slug,
         'name': experiment_collection.name,
-        'description': experiment_collection.description,
+        'description': formatter(
+            experiment_collection.description,
+            filter_name='markdown'
+        ),
     }
 
     if experiment_collection.consent:
@@ -32,11 +35,14 @@ def serialize_experiment_collection(
 
     if experiment_collection.theme_config:
         serialized['theme'] = serialize_theme(
-            experiment_collection.theme_config)
+            experiment_collection.theme_config
+        )
 
     if experiment_collection.about_content:
         serialized['aboutContent'] = formatter(
-            experiment_collection.about_content, filter_name='markdown')
+            experiment_collection.about_content,
+            filter_name='markdown'
+        )
 
     return serialized
 
