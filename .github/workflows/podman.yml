@@ -290,6 +290,9 @@ jobs:
     # temporarily true to test e2e tests
     if: github.ref == 'refs/heads/main' || github.ref == 'refs/tags/*' || (github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main')
 
+    # needs to happen after the deployment to the acceptance environment
+    needs: deploy-acceptance
+
     env:
       BASE_URL: "https://acc.amsterdammusiclab.nl"
 
