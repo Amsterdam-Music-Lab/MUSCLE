@@ -129,10 +129,14 @@
         padding-bottom: 50px;
         background-color: rgba(white, 0.2);
         max-width: 1200px;
-        margin: 0 auto;
+        margin: 0 1.25rem;
 
         @media (max-width: 720px) {
             padding: 15px 15px;
+        }
+
+        @media (min-width: $breakpoint-xl) {
+            margin: 0 auto;
         }
 
         ul {
