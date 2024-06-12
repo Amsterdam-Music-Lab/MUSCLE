@@ -23,7 +23,6 @@ export const ExperimentCollectionDashboard: React.FC<ExperimentCollectionDashboa
         collectionSlug: experimentCollection.slug,
         ...experimentCollection.theme.header,
         totalScore,
-        experimentCollectionTitle: experimentCollection.name,
         experimentCollectionDescription: experimentCollection.description
 
     } : undefined;

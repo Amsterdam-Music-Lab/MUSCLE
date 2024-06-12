@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 
 import Rank from "../Rank/Rank";
 import Social from "../Social/Social"
+import HTML from '@/components/HTML/HTML';
 
 interface HeaderProps {
     experimentCollectionTitle: string;
@@ -21,7 +22,6 @@ interface Score {
 }
 
 export const Header: React.FC<HeaderProps> = ({
-    experimentCollectionTitle,
     experimentCollectionDescription,
     nextExperimentSlug,
     nextExperimentButtonText,
@@ -37,7 +37,6 @@ export const Header: React.FC<HeaderProps> = ({
         'url': 'wwww.amsterdammusiclab.nl',
         'hashtags': ["amsterdammusiclab", "citizenscience"]
     }
-
 
     const useAnimatedScore = (targetScore: number) => {
         const [score, setScore] = useState(0);
@@ -95,8 +94,7 @@ export const Header: React.FC<HeaderProps> = ({
     return (
         <div className="hero aha__header">
             <div className="intro">
-                <h1>{experimentCollectionTitle}</h1>
-                <p>{experimentCollectionDescription}</p>
+                <HTML body={experimentCollectionDescription} innerClassName="py-3" />
                 <nav className="actions">
                     {nextExperimentSlug && <a className="btn btn-lg btn-primary" href={`/${nextExperimentSlug}`}>{nextExperimentButtonText}</a>}
                     {aboutButtonText && <Link className="btn btn-lg btn-outline-primary" to={`/collection/${collectionSlug}/about`}>{aboutButtonText}</Link>}
