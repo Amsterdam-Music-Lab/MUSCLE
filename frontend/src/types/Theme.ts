@@ -1,3 +1,5 @@
+import Image from "./Image";
+
 export interface Header {
     nextExperimentButtonText: string;
     aboutButtonText: string;
@@ -20,7 +22,7 @@ export default interface Theme {
     bodyFontUrl: string;
     description: string;
     headingFontUrl: string;
-    logoUrl: string;
+    logo: Image;
     name: string;
     footer: Footer | null;
     header: Header | null;

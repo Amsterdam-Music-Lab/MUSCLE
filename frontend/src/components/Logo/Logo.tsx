@@ -6,7 +6,9 @@ import useBoundStore from "@/util/stores";
 const Logo: React.FC<{ logoClickConfirm: string | null }> = ({ logoClickConfirm = null }) => {
     const theme = useBoundStore((state) => state.theme);
 
-    const logoUrl = theme?.logoUrl ?? LOGO_URL;
+    const { alt, title, file, target, rel } = theme?.logo || {};
+    const href = theme?.logo?.href || URLS.AMLHome;
+    const logoUrl = file ?? LOGO_URL;
 
     // Handle click on logo, to optionally confirm navigating
     const onLogoClick = (e) => {
@@ -25,16 +27,21 @@ const Logo: React.FC<{ logoClickConfirm: string | null }> = ({ logoClickConfirm 
         className: "aha__logo",
         "aria-label": "Logo",
         style: { backgroundImage: `url(${logoUrl})` },
+        href,
+        alt: alt || LOGO_TITLE,
+        title: title || LOGO_TITLE,
+        target: target || "_self",
+        rel: rel || "noopener noreferrer",
     };
 
     return (
         <>
             {URLS.AMLHome.startsWith("http") ? (
-                <a href={URLS.AMLHome} {...logoProps}>
+                <a {...logoProps}>
                     {LOGO_TITLE}
                 </a>
             ) : (
-                <Link to={URLS.AMLHome} {...logoProps}>
+                <Link to={href} {...logoProps}>
                     {LOGO_TITLE}
                 </Link>
             )}

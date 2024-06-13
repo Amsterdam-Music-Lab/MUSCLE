@@ -10,4 +10,9 @@ def serialize_image(image: Image) -> dict:
         'file': f'{settings.BASE_URL.strip("/")}/{settings.MEDIA_URL.strip("/")}/{image.file}',
         'href': image.href,
         'alt': image.alt,
+        'rel': image.rel,
+        'target': image.target,
+        'tags': image.tags,
+        'title': image.title,
+        'description': image.description,
     }

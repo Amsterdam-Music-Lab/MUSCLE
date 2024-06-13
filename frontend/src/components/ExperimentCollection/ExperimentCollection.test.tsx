@@ -25,7 +25,15 @@ const theme = {
     bodyFontUrl: 'bodyFontUrl.com',
     description: 'Description of the theme',
     headingFontUrl: 'headingFontUrl.com',
-    logoUrl: 'logoUrl.com',
+    logo: {
+        title: 'Logo title',
+        description: 'Logo description',
+        file: 'logo.jpg',
+        alt: 'Logo alt',
+        href: 'https://www.example.com',
+        rel: 'noopener noreferrer',
+        target: '_blank'
+    },
     name: 'Awesome theme',
     footer: {
         disclaimer: 'disclaimer',
