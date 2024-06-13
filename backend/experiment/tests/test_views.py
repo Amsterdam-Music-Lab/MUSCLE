@@ -167,9 +167,13 @@ class ExperimentViewsTest(TestCase):
             name='Test Experiment',
             description='This is a test experiment',
             image=Image.objects.create(
+                title='Test',
+                description='',
                 file='test-image.jpg',
                 alt='Test',
-                href='https://www.example.com'
+                href='https://www.example.com',
+                rel='',
+                target='_self',
             ),
             theme_config=create_theme_config()
         )
@@ -193,7 +197,15 @@ class ExperimentViewsTest(TestCase):
         )
         self.assertEqual(
             serialized_experiment['image'], {
-                'file': f'{settings.BASE_URL}/upload/test-image.jpg', 'href': 'https://www.example.com', 'alt': 'Test'}
+                'title': 'Test',
+                'description': '',
+                'file': f'{settings.BASE_URL}/upload/test-image.jpg',
+                'href': 'https://www.example.com',
+                'alt': 'Test',
+                'rel': '',
+                'target': '_self',
+                'tags': []
+            }
         )
 
     def test_get_experiment(self):
