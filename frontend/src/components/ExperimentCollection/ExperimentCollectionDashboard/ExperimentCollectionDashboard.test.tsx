@@ -42,7 +42,15 @@ const collectionWithTheme = {
         bodyFontUrl: 'font/url.com',
         description: 'description of the theme',
         headingFontUrl: 'another/font/url.com',
-        logoUrl: 'where/is/the/logo.jpg',
+        logo: {
+            title: 'Logo title',
+            description: 'Logo description',
+            file: 'logo.jpg',
+            alt: 'Logo alt',
+            href: 'https://www.example.com',
+            rel: 'noopener noreferrer',
+            target: '_blank'
+        },
         name: 'Collection name',
         header: header
     }

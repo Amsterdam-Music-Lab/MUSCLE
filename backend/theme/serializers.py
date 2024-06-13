@@ -39,7 +39,7 @@ def serialize_theme(theme: ThemeConfig) -> dict:
         'description': theme.description,
         'headingFontUrl': theme.heading_font_url,
         'bodyFontUrl': theme.body_font_url,
-        'logoUrl': f'{settings.BASE_URL.strip("/")}/{settings.MEDIA_URL.strip("/")}/{str(theme.logo_image.file)}' if theme.logo_image else None,
+        'logo': serialize_image(theme.logo_image) if theme.logo_image else None,
         'backgroundUrl': f'{settings.BASE_URL.strip("/")}/{settings.MEDIA_URL.strip("/")}/{str(theme.background_image.file)}' if theme.background_image else None,
         'footer': serialize_footer(theme.footer) if hasattr(theme, 'footer') else None,
         'header': serialize_header(theme.header) if hasattr(theme, 'header') else None
