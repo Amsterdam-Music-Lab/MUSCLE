@@ -75,8 +75,9 @@ class ToontjeHogerKids6Relative(ToontjeHoger6Relative):
         debrief_message = "Als je de eerste noten van 'Lang zal ze leven' hoort, herken je het meteen! Hoe kan het dat je dat liedje herkent, zelfs als het veel hoger of langer gezongen wordt? Dit noemen we relatief gehoor. Kijk de filmpjes om uit te vinden hoe dit werkt!"
         body = render_to_string(
             join('info', 'toontjehogerkids', 'debrief.html'),
-            {'debrief': debrief_message, 'vid1': 'https://www.youtube.com/embed/MYapIh4zqEM?si=2UKN327IbR_H7FSC',
-             'vid2': 'https://www.youtube.com/embed/GRXSDXF0GXk?si=3vvNqRKLWdlMpBs3'})
+            {'debrief': debrief_message,
+             'vid1': 'https://www.youtube.com/embed/W7EI4JVBs2o?si=rWpjzTi4GiF3XYTz',
+             'vid2': 'https://www.youtube.com/embed/UoxcFS6Wds8?si=SXz7XvuIrk30GpXW'})
         info = Info(
             body=body,
             heading="Relatief gehoor",

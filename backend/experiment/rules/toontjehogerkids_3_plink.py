@@ -146,8 +146,9 @@ class ToontjeHogerKids3Plink(ToontjeHoger3Plink):
             Binnen twee seconden? Of nog minder? Kijk de filmpjes voor het antwoord!"
         body = render_to_string(
             join('info', 'toontjehogerkids', 'debrief.html'),
-            {'debrief': debrief_message, 'vid1': 'https://www.youtube.com/embed/A6pkgeABn5s?si=LYYoTn7GM-RlH1-1',
-             'vid2': 'https://www.youtube.com/embed/7LRoZ27g1rY?si=7mT5GxkHy1Fjgx_1'})
+            {'debrief': debrief_message,
+             'vid1': 'https://www.youtube.com/embed/JF8uq1UllMo?si=9H51MMVyg9JcTSAh',
+             'vid2': 'https://www.youtube.com/embed/qUXd1ql6gLc?si=RIKb_QI67baWGEbA'})
         info = Info(
             body=body,
             heading="Muziekherkenning",

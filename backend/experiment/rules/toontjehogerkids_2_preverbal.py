@@ -41,7 +41,7 @@ class ToontjeHogerKids2Preverbal(ToontjeHoger2Preverbal):
     def get_spectrogram_info(self):
         image_url = "/images/experiments/toontjehoger/spectrogram_info_nl.webp"
         description = "Dit is een spectogram. Wil je weten hoe dat werkt? Kijk dan het filmpje!"
-        video = 'https://www.youtube.com/embed/Mw5u3fe9aMI?si=lWc7xFpoj4gBZj2d'
+        video = 'https://www.youtube.com/embed/7uDw3aC-1nc?si=xTvhO7Lx6XeqwkJM'
         body = f'<div class="center"><img src="{image_url}"></div><p>{description}</p><iframe width="100%" height="315" src={video}></iframe>'
 
         # Return answer info view
@@ -106,8 +106,9 @@ class ToontjeHogerKids2Preverbal(ToontjeHoger2Preverbal):
         debrief_message = "Had jij dat gedacht, dat Franse en Duitse baby's anders huilen? Waarom zouden ze dat doen denk je? Bekijk de filmpjes om dit uit te vinden!"
         body = render_to_string(
             join('info', 'toontjehogerkids', 'debrief.html'),
-            {'debrief': debrief_message, 'vid1': 'https://www.youtube.com/embed/q7L_vwB7eIo?si=mRVJKE2urKT-Xxft',
-             'vid2': 'https://www.youtube.com/embed/4eKcwGB6xmc?si=ogeEhtyEFa9WxP9i'})
+            {'debrief': debrief_message,
+             'vid1': 'https://www.youtube.com/embed/QV9rM_7HE3s?si=V4SKnbDgdBLhPivt',
+             'vid2': 'https://www.youtube.com/embed/w1f9Rr0yXIs?si=Cjz2CU9wUlm-ST8c'})
         info = Info(
             body=body,
             heading="Het eerste luisteren",

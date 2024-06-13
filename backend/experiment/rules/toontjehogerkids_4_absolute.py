@@ -59,8 +59,9 @@ class ToontjeHogerKids4Absolute(ToontjeHoger4Absolute):
             Is dat eigenlijk bijzonder? Kijk de filmpjes om daar achter te komen!"
         body = render_to_string(
             join('info', 'toontjehogerkids', 'debrief.html'),
-            {'debrief': debrief_message, 'vid1': 'https://www.youtube.com/embed/0wpT-wjI-0M?si=CALvWqid4SjabL9S',
-             'vid2': 'https://www.youtube.com/embed/LQnl1OP3q_Q?si=yTDVPnR7BAeBqWph'})
+            {'debrief': debrief_message,
+             'vid1': 'https://www.youtube.com/embed/AkbIazK9Jcc?si=yjJLjXQa8wQbvSrf',
+             'vid2': 'https://www.youtube.com/embed/KVB6d0Oy_5o?si=zxj1gUzjME_n-fQ5'})
         info = Info(
             body=body,
             heading="Absoluut gehoor",
