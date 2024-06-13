@@ -48,7 +48,7 @@ class ToontjeHogerKids5Tempo(ToontjeHoger5Tempo):
 
         if not section_original:
             raise Exception(
-                "Error: could not find original section: {}".format(tag_original))
+                "Error: could not find original section: {}".format(section_original))
 
         section_changed = self.get_section_changed(
             session=session, song=section_original.song)
