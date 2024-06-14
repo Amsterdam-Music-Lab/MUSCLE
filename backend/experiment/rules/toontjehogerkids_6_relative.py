@@ -76,8 +76,8 @@ class ToontjeHogerKids6Relative(ToontjeHoger6Relative):
         body = render_to_string(
             join('info', 'toontjehogerkids', 'debrief.html'),
             {'debrief': debrief_message,
-             'vid1': 'https://www.youtube.com/embed/W7EI4JVBs2o?si=rWpjzTi4GiF3XYTz',
-             'vid2': 'https://www.youtube.com/embed/UoxcFS6Wds8?si=SXz7XvuIrk30GpXW'})
+             'vid1': 'https://www.youtube.com/embed/W7EI4JVBs2o?si=rWpjzTi4GiF3XYTz?rel=0',
+             'vid2': 'https://www.youtube.com/embed/UoxcFS6Wds8?si=SXz7XvuIrk30GpXW?rel=0'})
         info = Info(
             body=body,
             heading="Relatief gehoor",

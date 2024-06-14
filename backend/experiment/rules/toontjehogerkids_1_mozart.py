@@ -65,8 +65,8 @@ class ToontjeHogerKids1Mozart(ToontjeHoger1Mozart):
         body = render_to_string(
             join('info', 'toontjehogerkids', 'debrief.html'),
             {'debrief': debrief_message,
-             'vid1': "https://www.youtube.com/embed/hW12-q4781Q?si=PPorbSo_PdyDeS_Y",
-             'vid2': "https://www.youtube.com/embed/DHx7cJ22MZI?si=wMK09bLSrsDY6nyl"})
+             'vid1': "https://www.youtube.com/embed/hW12-q4781Q?si=PPorbSo_PdyDeS_Y?rel=0",
+             'vid2': "https://www.youtube.com/embed/DHx7cJ22MZI?si=wMK09bLSrsDY6nyl?rel=0"})
         info = Info(
             body=body,
             heading="Het Mozart effect",

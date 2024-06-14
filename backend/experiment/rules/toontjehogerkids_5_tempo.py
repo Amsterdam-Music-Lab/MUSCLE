@@ -120,8 +120,11 @@ class ToontjeHogerKids5Tempo(ToontjeHoger5Tempo):
         body = render_to_string(
             join('info', 'toontjehogerkids', 'debrief.html'),
             {'debrief': debrief_message,
-             'vid1': 'https://www.youtube.com/embed/lsQx-mJ4-cA?si=BuO5FO56I4rThTAY',
-             'vid2': 'https://www.youtube.com/embed/9LSmfsiEXhI?si=WsxrYN3UnHiiG8qT'})
+            #  'vid1': 'https://www.youtube.com/embed/lsQx-mJ4-cA?si=BuO5FO56I4rThTAY?rel=0',
+            #  'vid2': 'https://www.youtube.com/embed/9LSmfsiEXhI?si=WsxrYN3UnHiiG8qT?rel=0'})
+            # use youtube-nocookie
+                'vid1': 'https://www.youtube-nocookie.com/embed/lsQx-mJ4-cA?si=BuO5FO56I4rThTAY?rel=0&amp;showinfo=0',
+                'vid2': 'https://www.youtube-nocookie.com/embed/9LSmfsiEXhI?si=WsxrYN3UnHiiG8qT?rel=0&amp;showinfo=0'})
         info = Info(
             body=body,
             heading="Timing en tempo",

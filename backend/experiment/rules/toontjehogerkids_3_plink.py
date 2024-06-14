@@ -147,8 +147,8 @@ class ToontjeHogerKids3Plink(ToontjeHoger3Plink):
         body = render_to_string(
             join('info', 'toontjehogerkids', 'debrief.html'),
             {'debrief': debrief_message,
-             'vid1': 'https://www.youtube.com/embed/JF8uq1UllMo?si=9H51MMVyg9JcTSAh',
-             'vid2': 'https://www.youtube.com/embed/qUXd1ql6gLc?si=RIKb_QI67baWGEbA'})
+             'vid1': 'https://www.youtube.com/embed/JF8uq1UllMo?si=9H51MMVyg9JcTSAh?rel=0',
+             'vid2': 'https://www.youtube.com/embed/qUXd1ql6gLc?si=RIKb_QI67baWGEbA?rel=0'})
         info = Info(
             body=body,
             heading="Muziekherkenning",

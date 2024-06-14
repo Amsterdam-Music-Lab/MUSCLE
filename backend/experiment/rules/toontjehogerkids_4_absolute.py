@@ -60,8 +60,8 @@ class ToontjeHogerKids4Absolute(ToontjeHoger4Absolute):
         body = render_to_string(
             join('info', 'toontjehogerkids', 'debrief.html'),
             {'debrief': debrief_message,
-             'vid1': 'https://www.youtube.com/embed/AkbIazK9Jcc?si=yjJLjXQa8wQbvSrf',
-             'vid2': 'https://www.youtube.com/embed/KVB6d0Oy_5o?si=zxj1gUzjME_n-fQ5'})
+             'vid1': 'https://www.youtube.com/embed/AkbIazK9Jcc?si=yjJLjXQa8wQbvSrf?rel=0',
+             'vid2': 'https://www.youtube.com/embed/KVB6d0Oy_5o?si=zxj1gUzjME_n-fQ5?rel=0'})
         info = Info(
             body=body,
             heading="Absoluut gehoor",
