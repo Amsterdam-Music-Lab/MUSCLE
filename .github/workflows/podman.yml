@@ -105,10 +105,19 @@ jobs:
       - name: Check logs
         run: podman-compose -f docker-compose-deploy.yml logs
 
+  backup-acceptance:
+    name: Backup acceptance database before deployment
+    # this job runs only on commits to the main branch, tags, or when manually triggered for the main branch
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/tags/*' || (github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main')
+    uses: ./.github/workflows/db-backup-template.yml
+    with:
+      runner: ACC
+
   deploy-acceptance:
     name: Deploy to acceptance environment
     environment: Acceptance
     runs-on: ACC
+    needs: backup-acceptance
     
     # this job runs only on commits to the main branch, tags, or when manually triggered for the main branch
     if: github.ref == 'refs/heads/main' || github.ref == 'refs/tags/*' || (github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main')
@@ -197,10 +206,19 @@ jobs:
       - name: Check logs
         run: podman-compose -f docker-compose-deploy.yml logs
 
+  backup-production:
+    name: Backup production database before deployment
+    # this job runs only on tags or when a release is created, or when manually triggered for a tag
+    if: github.ref == 'refs/tags/*' || github.event_name == 'release' || (github.event_name == 'workflow_dispatch' && github.ref == 'refs/tags/*')
+    uses: ./.github/workflows/db-backup-template.yml
+    with:
+      runner: PRD
+
   deploy-production:
     name: Deploy to production environment
     environment: Production
     runs-on: PRD
+    needs: backup-production
 
     # this job runs only on tags or when a release is created, or when manually triggered for a tag
     if: github.ref == 'refs/tags/*' || github.event_name == 'release' || (github.event_name == 'workflow_dispatch' && github.ref == 'refs/tags/*')
