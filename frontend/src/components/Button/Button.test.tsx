@@ -1,43 +1,47 @@
 import React from 'react';
-import { fireEvent, render, screen } from '@testing-library/react';
+import { fireEvent, render } from '@testing-library/react';
 import Button from './Button';
-import { vi } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 
 describe('Button component', () => {
 
     it('renders correctly', () => {
-        render(<Button title="Test Button" />);
-        const buttonElement = screen.getByText('Test Button');
-        expect(document.body.contains(buttonElement)).to.be.true;
+        const mockOnClick = vi.fn();
+        const { getByText } = render(<Button title="Test Button" onClick={mockOnClick} />);
+        const buttonElement = getByText('Test Button');
+
+        expect(document.body.contains(buttonElement)).toBe(true);
     });
 
-    test('calls onClick handler only once', () => {
+    it('calls onClick handler only once', () => {
         const mockOnClick = vi.fn();
-        render(<Button title="Test Button" onClick={mockOnClick} />);
+        const { getByText } = render(<Button title="Test Button" onClick={mockOnClick} />);
 
-        const button = screen.getByText('Test Button');
+        const button = getByText('Test Button');
         fireEvent.click(button);
         fireEvent.click(button); // second click
 
         expect(mockOnClick).toHaveBeenCalledTimes(1);
     });
 
-    test('does not call onClick when disabled is true', () => {
+    it('does not call onClick when disabled is true', () => {
         const mockOnClick = vi.fn();
-        render(<Button title="Test Button" onClick={mockOnClick} disabled={true} />);
+        const { getByText } = render(<Button title="Test Button" onClick={mockOnClick} disabled={true} />);
 
-        const button = screen.getByText('Test Button');
+        const button = getByText('Test Button');
         fireEvent.click(button);
 
         expect(mockOnClick).not.toHaveBeenCalled();
     });
 
-    test('applies custom class and style', () => {
+    it('applies custom class and style', () => {
+        const mockOnClick = vi.fn();
         const style = { backgroundColor: 'blue' };
-        render(<Button title="Test Button" className="custom-class" style={style} />);
+        const { getByText } = render(<Button title="Test Button" className="custom-class" style={style} onClick={mockOnClick} />);
 
-        const button = screen.getByText('Test Button');
-        expect(button.classList.contains('custom-class')).to.be.true;
+        const button = getByText('Test Button');
+        
+        expect(button.classList.contains('custom-class')).toBe(true);
         expect(button.style.backgroundColor).toBe('blue');
     });
 
