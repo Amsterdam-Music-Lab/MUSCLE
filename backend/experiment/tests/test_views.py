@@ -109,6 +109,19 @@ class TestExperimentCollectionViews(TestCase):
         self.assertEqual(response_json.get('theme').get('footer').get(
             'disclaimer'), '<p>Test Disclaimer</p>')
 
+    def test_get_experiment_collection_not_found(self):
+        # if ExperimentCollection does not exist, return 404
+        response = self.client.get('/experiment/collection/not_found/')
+        self.assertEqual(response.status_code, 404)
+
+    def test_get_experiment_collection_inactive(self):
+        # if ExperimentCollection is inactive, return 404
+        collection = ExperimentCollection.objects.get(slug='test_series')
+        collection.active = False
+        collection.save()
+        response = self.client.get('/experiment/collection/test_series/')
+        self.assertEqual(response.status_code, 404)
+
     def test_experiment_collection_with_dashboard(self):
         # if ExperimentCollection has dashboard set True, return list of random experiments
         session = self.client.session
