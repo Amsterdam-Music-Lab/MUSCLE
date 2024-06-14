@@ -80,7 +80,11 @@ def add_default_question_series(request, id):
     return JsonResponse({})
 
 
-def get_experiment_collection(request: HttpRequest, slug: str, group_index: int = 0) -> JsonResponse:
+def get_experiment_collection(
+            request: HttpRequest,
+            slug: str,
+            group_index: int = 0,
+        ) -> JsonResponse:
     '''
     check which `ExperimentCollectionGroup` objects are related to the `ExperimentCollection` with the given slug
     retrieve the group with the lowest order (= current_group)
@@ -90,8 +94,21 @@ def get_experiment_collection(request: HttpRequest, slug: str, group_index: int 
     '''
     try:
         collection = ExperimentCollection.objects.get(slug=slug)
-    except:
-        return Http404
+    except ExperimentCollection.DoesNotExist:
+        raise Http404("Experiment collection does not exist")
+    except Exception as e:
+        logger.error(e)
+        return JsonResponse(
+            {'error': 'Something went wrong while fetching the experiment collection. Please try again later.'},
+            status=500
+        )
+
+    if not collection.active:
+        return JsonResponse(
+                {'error': 'Experiment collection not found or not active'},
+                status=404
+            )
+
     request.session[COLLECTION_KEY] = slug
     participant = get_participant(request)
     groups = list(ExperimentCollectionGroup.objects.filter(
