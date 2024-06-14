@@ -1,9 +1,11 @@
 import { useRef, useCallback } from "react";
 import { scoreResult } from "@/API";
+import Session from "@/types/Session";
+import Participant from "@/types/Participant";
 
 interface ResultData {
-    session: unknown;
-    participant: unknown;
+    session: Session;
+    participant: Participant;
     result: unknown;
     section?: unknown;
 }
