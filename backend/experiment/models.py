@@ -39,6 +39,7 @@ class ExperimentCollection(models.Model):
     # present random_experiments as dashboard
     dashboard = models.BooleanField(default=False)
     about_content = models.TextField(blank=True, default='')
+    active = models.BooleanField(default=True)
 
     def __str__(self):
         return self.name or self.slug
