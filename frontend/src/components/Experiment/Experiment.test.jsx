@@ -23,7 +23,7 @@ vi.mock('../../util/stores', () => ({
     __esModule: true,
     default: (fn) => {
         const state = {
-            session: 1,
+            session: { id: 1 },
             participant: 'participant-id',
             setSession: vi.fn(),
             setHeadData: vi.fn(),
