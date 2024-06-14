@@ -93,21 +93,15 @@ def get_experiment_collection(
     then all experiments of the current_group will be returned as an array (also those with finished session)
     '''
     try:
-        collection = ExperimentCollection.objects.get(slug=slug)
+        collection = ExperimentCollection.objects.get(slug=slug, active=True)
     except ExperimentCollection.DoesNotExist:
-        raise Http404("Experiment collection does not exist")
+        raise Http404("Experiment collection does not exist or is not active")
     except Exception as e:
         logger.error(e)
         return JsonResponse(
             {'error': 'Something went wrong while fetching the experiment collection. Please try again later.'},
             status=500
         )
-
-    if not collection.active:
-        return JsonResponse(
-                {'error': 'Experiment collection not found or not active'},
-                status=404
-            )
 
     request.session[COLLECTION_KEY] = slug
     participant = get_participant(request)
