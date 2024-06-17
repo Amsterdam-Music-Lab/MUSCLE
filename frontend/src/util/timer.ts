@@ -18,7 +18,7 @@ export const Timer = ({
     let lastTime = time;
     let running = true;
 
-    const callback = (timestamp) => {
+    const callback = (timestamp: number) => {
         if (!running) {
             return;
         }

@@ -21,12 +21,8 @@ const CountDown = ({ duration, running = true }: CountDownProps) => {
         // start time when running
         return Timer({
             duration,
-            onTick: (t) => {
-                setTime(Math.min(t, duration));
-            },
-            onFinish: () => {
-                setZero(true);
-            },
+            onTick: (t) => setTime(Math.min(t, duration)),
+            onFinish: () => setZero(true),
         });
     }, [duration, running]);
 
