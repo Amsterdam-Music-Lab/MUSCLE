@@ -1,3 +1,11 @@
+interface TimerParams {
+    time?: number;
+    duration: number;
+    onTick?: (time: number, delta: number) => void;
+    onFinish?: () => void;
+    interval?: number;
+}
+
 // Timer component with callback
 export const Timer = ({
     time = 0,
@@ -5,7 +13,7 @@ export const Timer = ({
     onTick,
     onFinish,
     interval = 0.1,
-}) => {
+}: TimerParams) => {
     let lastTimestamp = performance.now();
     let lastTime = time;
     let running = true;
