@@ -1,7 +1,14 @@
+/**
+ * OnTick callback type
+ * @param time - current time in seconds
+ * @param delta - time since last tick in seconds
+ */
+type TOnTick = (time: number, delta: number) => void;
+
 interface TimerParams {
-    time?: number;
-    duration: number;
-    onTick?: (time: number, delta: number) => void;
+    time?: number;          // initial time in seconds
+    duration: number;       // duration in seconds
+    onTick?: TOnTick;
     onFinish?: () => void;
     interval?: number;
 }
