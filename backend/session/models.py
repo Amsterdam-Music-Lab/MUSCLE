@@ -1,7 +1,8 @@
-import json
 import random
 from django.db import models
 from django.utils import timezone
+
+from section.models import Section
 
 
 class Session(models.Model):
@@ -208,6 +209,40 @@ class Session(models.Model):
 
         # Return a random section
         return self.section_from_song(song_id)
+
+    def get_used_section(self, filter_by={}):
+        ''' get a section from the playlist which has been used previously in this session
+        :param filter_by: a dictionary with which to filter by section fields
+        '''
+        used_sections = [
+            result.section.id for result in self.result_set.filter(section__isnull=False)]
+        if not used_sections:
+            raise Section.DoesNotExist
+        sections = self.playlist.section_set.all().filter(
+            pk__in=used_sections).filter(**filter_by)
+        if sections:
+            return random.choice(sections)
+        raise Section.DoesNotExist
+
+    def get_unused_section(self, filter_by={}):
+        ''' get a section from the playlist which has not yet been used in this session
+        :param filter_by: a dictionary with which to filter by section fields
+        '''
+        used_sections = [
+            result.section.id for result in self.result_set.filter(section__isnull=False)]
+        if not used_sections:
+            return self.get_random_section()
+        else:
+            sections = self.playlist.section_set.all().exclude(
+                pk__in=used_sections).filter(**filter_by)
+            if sections:
+                return random.choice(sections)
+        raise Section.DoesNotExist
+
+    def get_random_section(self, filter_by={}):
+        ''' return a section from the playlist randomly '''
+        sections = self.playlist.section_set.all()
+        return random.choice(sections)
 
     def experiment_rules(self):
         """Get rules class to be used for this session"""

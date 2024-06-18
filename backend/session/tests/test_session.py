@@ -115,7 +115,7 @@ class SessionTest(TestCase):
         last_song = self.session.last_song()
         assert last_song == 'Beavis - Butthead'
 
-    def test_section_from_unused_song(self):
+    def test_get_used_section(self):
         csv = ("Artist 1,Name 1,0.0,10.0,test/file1.mp3,1,0\n"
                "Artist 1,Name 2,0.0,10.0,test/file2.mp3,1,0\n"
                "Artist 2,Name 1,0.0,10.0,test/file3.mp3,0,0\n"
