@@ -7322,7 +7322,7 @@ const RAW_RUNTIME_STATE =
           ["util", "npm:0.12.5"],\
           ["util-deprecate", "npm:1.0.2"],\
           ["watchpack", "npm:2.4.0"],\
-          ["ws", "virtual:9384498c24a5e5a65a2ab96d02150c11838b44f42689dc0a07b5a414dfc1775c74b26bb842e5b5ff90be75c50575ee344add3f04f692ea8ab6751d698f09a4b4#npm:8.14.2"]\
+          ["ws", "virtual:9384498c24a5e5a65a2ab96d02150c11838b44f42689dc0a07b5a414dfc1775c74b26bb842e5b5ff90be75c50575ee344add3f04f692ea8ab6751d698f09a4b4#npm:8.17.1"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -18219,17 +18219,17 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["ws", [\
-      ["npm:8.14.2", {\
-        "packageLocation": "../../../.yarn/berry/cache/ws-npm-8.14.2-b339ac47a2-10c0.zip/node_modules/ws/",\
+      ["npm:8.17.1", {\
+        "packageLocation": "../../../.yarn/berry/cache/ws-npm-8.17.1-f57fb24a2c-10c0.zip/node_modules/ws/",\
         "packageDependencies": [\
-          ["ws", "npm:8.14.2"]\
+          ["ws", "npm:8.17.1"]\
         ],\
         "linkType": "SOFT"\
       }],\
-      ["virtual:9384498c24a5e5a65a2ab96d02150c11838b44f42689dc0a07b5a414dfc1775c74b26bb842e5b5ff90be75c50575ee344add3f04f692ea8ab6751d698f09a4b4#npm:8.14.2", {\
-        "packageLocation": "./.yarn/__virtual__/ws-virtual-77922b7f52/4/.yarn/berry/cache/ws-npm-8.14.2-b339ac47a2-10c0.zip/node_modules/ws/",\
+      ["virtual:9384498c24a5e5a65a2ab96d02150c11838b44f42689dc0a07b5a414dfc1775c74b26bb842e5b5ff90be75c50575ee344add3f04f692ea8ab6751d698f09a4b4#npm:8.17.1", {\
+        "packageLocation": "./.yarn/__virtual__/ws-virtual-08437d4753/4/.yarn/berry/cache/ws-npm-8.17.1-f57fb24a2c-10c0.zip/node_modules/ws/",\
         "packageDependencies": [\
-          ["ws", "virtual:9384498c24a5e5a65a2ab96d02150c11838b44f42689dc0a07b5a414dfc1775c74b26bb842e5b5ff90be75c50575ee344add3f04f692ea8ab6751d698f09a4b4#npm:8.14.2"],\
+          ["ws", "virtual:9384498c24a5e5a65a2ab96d02150c11838b44f42689dc0a07b5a414dfc1775c74b26bb842e5b5ff90be75c50575ee344add3f04f692ea8ab6751d698f09a4b4#npm:8.17.1"],\
           ["@types/bufferutil", null],\
           ["@types/utf-8-validate", null],\
           ["bufferutil", null],\
