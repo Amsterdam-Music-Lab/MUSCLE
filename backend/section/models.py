@@ -275,8 +275,8 @@ class Section(models.Model):
 
     def __str__(self):
         return "{} - {} ({}-{})".format(
-            self.song.artist,
-            self.song.name,
+            self.artist_name(),
+            self.song_name(),
             self.start_time_str(),
             self.end_time_str()
         )
@@ -310,9 +310,8 @@ class Section(models.Model):
 
     def absolute_url(self):
         """Return absolute url for this section"""
-        base_url = settings.BASE_URL if hasattr(settings, 'BASE_URL') else ''
+        base_url = getattr(settings, 'BASE_URL', '')
         sections_url = reverse('section:section', args=[self.pk, self.code])
-
         return base_url.rstrip('/') + sections_url
 
     def simple_object(self):
