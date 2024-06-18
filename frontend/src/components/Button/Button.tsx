@@ -2,6 +2,16 @@ import React, { useRef } from "react";
 import classNames from "classnames";
 import { audioInitialized } from "../../util/audio";
 
+interface ButtonProps {
+    title: string;
+    onClick: (value: string) => void;
+    className?: string;
+    padding?: string;
+    style?: React.CSSProperties;
+    disabled?: boolean;
+    value?: string;
+}
+
 // Button is a button that can only be clicked one time
 const Button = ({
     title,
@@ -11,7 +21,7 @@ const Button = ({
     style = {},
     disabled = false,
     value = "",
-}) => {
+}: ButtonProps) => {
     const clicked = useRef(false);
 
     // Only handle the first click
@@ -28,12 +38,12 @@ const Button = ({
     // Without the browser having registered any user interaction (e.g. click)
     const touchEvent = audioInitialized
         ? {
-              onTouchStart: (e) => {
-                  e.stopPropagation();
-                  clickOnce();
-                  return false;
-              },
-          }
+            onTouchStart: (e) => {
+                e.stopPropagation();
+                clickOnce();
+                return false;
+            },
+        }
         : {};
 
     return (
