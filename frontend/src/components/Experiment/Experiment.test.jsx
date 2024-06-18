@@ -24,7 +24,13 @@ vi.mock('../../util/stores', () => ({
     default: (fn) => {
         const state = {
             session: { id: 1 },
-            participant: 'participant-id',
+            participant: {
+                id: 1,
+                hash: '00000000-0000-0000-0000-000000000000',
+                csrf_token: 'auSoWt7JA9fYyGE0Cc51tlYDnvGGxwo1HqVBsQHQ8dUE7QJZAjYZIieJc4kdYB4r',
+                participant_id_url: 'url',
+                country: 'nl',
+            },
             setSession: vi.fn(),
             setHeadData: vi.fn(),
             resetHeadData: vi.fn(),
