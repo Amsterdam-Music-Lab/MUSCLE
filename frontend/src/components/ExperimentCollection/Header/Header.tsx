@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 
-import Rank from "../../Rank/Rank";
+
 import Social from "../../Social/Social"
 import HTML from '@/components/HTML/HTML';
+import Score from "../Score/Score";
 
 interface HeaderProps {
     experimentCollectionTitle: string;
@@ -45,59 +46,6 @@ export const Header: React.FC<HeaderProps> = ({
         url: currentUrl,
         hashtags,
     }
-
-    const useAnimatedScore = (targetScore: number) => {
-        const [score, setScore] = useState(0);
-
-        useEffect(() => {
-            if (targetScore === 0) {
-                setScore(0);
-                return;
-            }
-
-            let animationFrameId: number;
-
-            const nextStep = () => {
-                setScore((prevScore) => {
-                    const difference = targetScore - prevScore;
-                    const scoreStep = Math.max(1, Math.min(10, Math.ceil(Math.abs(difference) / 10)));
-
-                    if (difference === 0) {
-                        cancelAnimationFrame(animationFrameId);
-                        return prevScore;
-                    }
-
-                    const newScore = prevScore + Math.sign(difference) * scoreStep;
-                    animationFrameId = requestAnimationFrame(nextStep);
-                    return newScore;
-                });
-            };
-
-            // Start the animation
-            animationFrameId = requestAnimationFrame(nextStep);
-
-            // Cleanup function to cancel the animation frame
-            return () => {
-                cancelAnimationFrame(animationFrameId);
-            };
-        }, [targetScore]);
-
-        return score;
-    };
-
-    const Score = ({ score, label, scoreClass }) => {
-        const currentScore = useAnimatedScore(score);
-
-        return (
-            <div className="score">
-                <Rank rank={{ class: scoreClass }} />
-                <h3>
-                    {currentScore ? currentScore + " " : ""}
-                    {label}
-                </h3>
-            </div>
-        );
-    };
 
     return (
         <div className="hero aha__header">
