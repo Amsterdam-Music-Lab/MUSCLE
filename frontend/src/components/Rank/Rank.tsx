@@ -14,10 +14,11 @@ const Rank = ({ rank }: RankProps) => {
             className={classNames("aha__rank", rank.class, {
                 offsetCup: rank.text,
             })}
+            data-testid="rank"
         >
-            <div className="cup" />
-            <h4>{rank.text}</h4>
-        </div>
+            <div className="cup-animation" data-testid="cup-animation" />
+            <h4 data-testid="rank-text">{rank.text}</h4>
+        </div >
     );
 };
 
