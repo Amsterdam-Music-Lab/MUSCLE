@@ -68,7 +68,7 @@ class ExperimentCollection(models.Model):
         return participants.values()
 
 
-class ExperimentCollectionGroup(models.Model):
+class Phase(models.Model):
     name = models.CharField(max_length=64, blank=True, default='')
     series = models.ForeignKey(ExperimentCollection,
                                on_delete=models.CASCADE, related_name='groups')
@@ -87,13 +87,15 @@ class ExperimentCollectionGroup(models.Model):
 
     class Meta:
         ordering = ['order']
-        verbose_name_plural = "Experiment Collection Groups"
 
 
 class GroupedExperiment(models.Model):
     experiment = models.ForeignKey('Experiment', on_delete=models.CASCADE)
     group = models.ForeignKey(
-        ExperimentCollectionGroup, on_delete=models.CASCADE, related_name='experiments')
+        Phase,
+        on_delete=models.CASCADE,
+        related_name='experiments'
+    )
     order = models.IntegerField(default=0, help_text='Order of the experiment in the group. Lower numbers come first.')
 
     def __str__(self):

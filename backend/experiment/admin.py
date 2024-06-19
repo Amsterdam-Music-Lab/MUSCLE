@@ -18,7 +18,7 @@ from django.utils.html import format_html
 from experiment.models import (
     Experiment,
     ExperimentCollection,
-    ExperimentCollectionGroup,
+    Phase,
     Feedback,
     GroupedExperiment
 )
@@ -195,8 +195,8 @@ class GroupedExperimentInline(admin.StackedInline):
     extra = 0
 
 
-class ExperimentCollectionGroupInline(admin.StackedInline):
-    model = ExperimentCollectionGroup
+class PhaseInline(admin.StackedInline):
+    model = Phase
     extra = 0
     inlines = [GroupedExperimentInline]
 
@@ -209,7 +209,7 @@ class ExperimentCollectionAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
               'about_content']
     inline_actions = ['dashboard']
     form = ExperimentCollectionForm
-    inlines = [ExperimentCollectionGroupInline]
+    inlines = [PhaseInline]
 
     def slug_link(self, obj):
         dev_mode = settings.DEBUG is True
@@ -226,8 +226,8 @@ class ExperimentCollectionAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
         return obj.description[:50] + '...'
 
     def groups(self, obj):
-        groups = ExperimentCollectionGroup.objects.filter(series=obj)
-        return format_html(', '.join([f'<a href="/admin/experiment/experimentcollectiongroup/{group.id}/change/">{group.name}</a>' for group in groups]))
+        groups = Phase.objects.filter(series=obj)
+        return format_html(', '.join([f'<a href="/admin/experiment/phase/{group.id}/change/">{group.name}</a>' for group in groups]))
     
     slug_link.short_description = "Slug"
 
@@ -264,7 +264,7 @@ class ExperimentCollectionAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
 admin.site.register(ExperimentCollection, ExperimentCollectionAdmin)
 
 
-class ExperimentCollectionGroupAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
+class PhaseAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
     list_display = ('name_link', 'related_series', 'order', 'dashboard', 'randomize', 'experiments')
     fields = ['name', 'series', 'order', 'dashboard', 'randomize']
     inlines = [GroupedExperimentInline]
@@ -272,7 +272,7 @@ class ExperimentCollectionGroupAdmin(InlineActionsModelAdminMixin, admin.ModelAd
     def name_link(self, obj):
         obj_name = obj.__str__()
         url = reverse(
-            "admin:experiment_experimentcollectiongroup_change", args=[obj.pk])
+            "admin:experiment_phase_change", args=[obj.pk])
         return format_html('<a href="{}">{}</a>', url, obj_name)
 
     def related_series(self, obj):
@@ -289,4 +289,4 @@ class ExperimentCollectionGroupAdmin(InlineActionsModelAdminMixin, admin.ModelAd
         return format_html(', '.join([f'<a href="/admin/experiment/groupedexperiment/{experiment.id}/change/">{experiment.experiment.name}</a>' for experiment in experiments]))
 
 
-admin.site.register(ExperimentCollectionGroup, ExperimentCollectionGroupAdmin)
+admin.site.register(Phase, PhaseAdmin)

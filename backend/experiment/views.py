@@ -6,9 +6,9 @@ from django.conf import settings
 from django.utils.translation import activate, gettext_lazy as _
 from django_markup.markup import formatter
 
-from .models import Experiment, ExperimentCollection, ExperimentCollectionGroup, Feedback
+from .models import Experiment, ExperimentCollection, Phase, Feedback
 from section.models import Playlist
-from experiment.serializers import serialize_actions, serialize_experiment_collection, serialize_experiment_collection_group
+from experiment.serializers import serialize_actions, serialize_experiment_collection, serialize_phase
 from experiment.rules import EXPERIMENT_RULES
 from experiment.actions.utils import COLLECTION_KEY
 from image.serializers import serialize_image
@@ -86,10 +86,10 @@ def get_experiment_collection(
             group_index: int = 0,
         ) -> JsonResponse:
     '''
-    check which `ExperimentCollectionGroup` objects are related to the `ExperimentCollection` with the given slug
+    check which `Phase` objects are related to the `ExperimentCollection` with the given slug
     retrieve the group with the lowest order (= current_group)
     return the next experiment from the current_group without a finished session
-    except if ExperimentCollectionGroup.dashboard = True,
+    except if Phase.dashboard = True,
     then all experiments of the current_group will be returned as an array (also those with finished session)
     '''
     try:
@@ -105,11 +105,11 @@ def get_experiment_collection(
 
     request.session[COLLECTION_KEY] = slug
     participant = get_participant(request)
-    groups = list(ExperimentCollectionGroup.objects.filter(
+    groups = list(Phase.objects.filter(
         series=collection.id).order_by('order'))
     try:
         current_group = groups[group_index]
-        serialized_group = serialize_experiment_collection_group(
+        serialized_group = serialize_phase(
             current_group, participant)
         if not serialized_group:
             # if the current group is not a dashboard and has no unfinished experiments, it will return None

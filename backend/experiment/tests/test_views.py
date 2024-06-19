@@ -5,12 +5,12 @@ from django.utils import timezone
 from image.models import Image
 from experiment.serializers import (
     serialize_experiment,
-    serialize_experiment_collection_group
+    serialize_phase
 )
 from experiment.models import (
     Experiment,
     ExperimentCollection,
-    ExperimentCollectionGroup,
+    Phase,
     GroupedExperiment,
 )
 from experiment.rules.hooked import Hooked
@@ -30,7 +30,7 @@ class TestExperimentCollectionViews(TestCase):
             slug='test_series',
             theme_config=theme_config
         )
-        introductory_group = ExperimentCollectionGroup.objects.create(
+        introductory_group = Phase.objects.create(
             name='introduction',
             series=collection,
             order=1
@@ -41,7 +41,7 @@ class TestExperimentCollectionViews(TestCase):
             experiment=cls.experiment1,
             group=introductory_group
         )
-        intermediate_group = ExperimentCollectionGroup.objects.create(
+        intermediate_group = Phase.objects.create(
             name='intermediate',
             series=collection,
             order=2
@@ -58,7 +58,7 @@ class TestExperimentCollectionViews(TestCase):
             experiment=cls.experiment3,
             group=intermediate_group
         )
-        final_group = ExperimentCollectionGroup.objects.create(
+        final_group = Phase.objects.create(
             name='final',
             series=collection,
             order=3
@@ -132,7 +132,7 @@ class TestExperimentCollectionViews(TestCase):
             participant=self.participant,
             finished_at=timezone.now()
         )
-        intermediate_group = ExperimentCollectionGroup.objects.get(
+        intermediate_group = Phase.objects.get(
             name='intermediate'
         )
         intermediate_group.dashboard = True
@@ -152,12 +152,12 @@ class TestExperimentCollectionViews(TestCase):
             finished_at=timezone.now(),
             final_score=8
         )
-        intermediate_group = ExperimentCollectionGroup.objects.get(
+        intermediate_group = Phase.objects.get(
             name='intermediate'
         )
         intermediate_group.dashboard = True
         intermediate_group.save()
-        serialized_coll_1 = serialize_experiment_collection_group(intermediate_group, self.participant)
+        serialized_coll_1 = serialize_phase(intermediate_group, self.participant)
         total_score_1 = serialized_coll_1['totalScore']
         self.assertEqual(total_score_1, 8)
         Session.objects.create(
@@ -166,7 +166,7 @@ class TestExperimentCollectionViews(TestCase):
             finished_at=timezone.now(),
             final_score=8
         )
-        serialized_coll_2 = serialize_experiment_collection_group(intermediate_group, self.participant)
+        serialized_coll_2 = serialize_phase(intermediate_group, self.participant)
         total_score_2 = serialized_coll_2['totalScore']
         self.assertEqual(total_score_2, 16)
 

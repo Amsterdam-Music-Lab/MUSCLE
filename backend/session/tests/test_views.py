@@ -1,6 +1,6 @@
 from django.test import TestCase
 
-from experiment.models import Experiment, ExperimentCollection, ExperimentCollectionGroup, GroupedExperiment
+from experiment.models import Experiment, ExperimentCollection, Phase, GroupedExperiment
 from experiment.actions.utils import COLLECTION_KEY
 from participant.models import Participant
 from section.models import Playlist
@@ -68,7 +68,7 @@ class SessionViewsTest(TestCase):
         assert response
         changed_session = Session.objects.get(pk=session.pk)
         assert changed_session.load_json_data().get(COLLECTION_KEY) is None
-        group = ExperimentCollectionGroup.objects.create(series=collection)
+        group = Phase.objects.create(series=collection)
         GroupedExperiment.objects.create(
             group=group, experiment=self.experiment)
         response = self.client.get(

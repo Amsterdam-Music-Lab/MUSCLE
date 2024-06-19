@@ -7,7 +7,7 @@ from image.serializers import serialize_image
 from participant.models import Participant
 from session.models import Session
 from theme.serializers import serialize_theme
-from .models import Experiment, ExperimentCollection, ExperimentCollectionGroup, GroupedExperiment
+from .models import Experiment, ExperimentCollection, Phase, GroupedExperiment
 
 
 def serialize_actions(actions):
@@ -47,7 +47,10 @@ def serialize_experiment_collection(
     return serialized
 
 
-def serialize_experiment_collection_group(group: ExperimentCollectionGroup, participant: Participant) -> dict:
+def serialize_phase(
+        group: Phase,
+        participant: Participant
+        ) -> dict:
     grouped_experiments = list(GroupedExperiment.objects.filter(
         group_id=group.id).order_by('order'))
 

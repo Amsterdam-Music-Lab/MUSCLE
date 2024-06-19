@@ -6,8 +6,8 @@ from django.forms.models import model_to_dict
 from django.contrib.admin.sites import AdminSite
 from django.urls import reverse
 from django.utils.html import format_html
-from experiment.admin import ExperimentAdmin, ExperimentCollectionAdmin, ExperimentCollectionGroupAdmin
-from experiment.models import Experiment, ExperimentCollection, ExperimentCollectionGroup, GroupedExperiment
+from experiment.admin import ExperimentAdmin, ExperimentCollectionAdmin, PhaseAdmin
+from experiment.models import Experiment, ExperimentCollection, Phase, GroupedExperiment
 from participant.models import Participant
 from result.models import Result
 from session.models import Session
@@ -207,17 +207,19 @@ class TestExperimentCollectionAdmin(TestCase):
         self.assertEqual(response.status_code, 200)
 
 
-class ExperimentCollectionGroupAdminTest(TestCase):
+class PhaseAdminTest(TestCase):
     @classmethod
     def setUpTestData(self):
         self.factory = RequestFactory()
         self.site = AdminSite()
-        self.admin = ExperimentCollectionGroupAdmin(
-            ExperimentCollectionGroup, self.site)
+        self.admin = PhaseAdmin(
+            Phase,
+            self.site
+        )
 
     def test_related_series_with_series(self):
         series = ExperimentCollection.objects.create(name='Test Series')
-        group = ExperimentCollectionGroup.objects.create(
+        group = Phase.objects.create(
             name='Test Group', order=1, randomize=False, series=series, dashboard=True)
         request = self.factory.get('/')
         related_series = self.admin.related_series(group)
@@ -228,14 +230,14 @@ class ExperimentCollectionGroupAdminTest(TestCase):
 
     def test_experiments_with_no_experiments(self):
         series = ExperimentCollection.objects.create(name='Test Series')
-        group = ExperimentCollectionGroup.objects.create(
+        group = Phase.objects.create(
             name='Test Group', order=1, randomize=False, dashboard=True, series=series)
         experiments = self.admin.experiments(group)
         self.assertEqual(experiments, "No experiments")
 
     def test_experiments_with_experiments(self):
         series = ExperimentCollection.objects.create(name='Test Series')
-        group = ExperimentCollectionGroup.objects.create(
+        group = Phase.objects.create(
             name='Test Group', order=1, randomize=False, dashboard=True, series=series)
         experiment1 = Experiment.objects.create(name='Experiment 1', slug='experiment-1')
         experiment2 = Experiment.objects.create(name='Experiment 2', slug='experiment-2')
