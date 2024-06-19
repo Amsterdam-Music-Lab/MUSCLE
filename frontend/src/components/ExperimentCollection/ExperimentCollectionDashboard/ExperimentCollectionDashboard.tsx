@@ -15,25 +15,28 @@ interface ExperimentCollectionDashboardProps {
 
 export const ExperimentCollectionDashboard: React.FC<ExperimentCollectionDashboardProps> = ({ experimentCollection, participantIdUrl, totalScore }) => {
 
-    const dashboard = experimentCollection.dashboard;
-    const nextBlockSlug = experimentCollection.nextExperiment?.slug;
+    const { dashboard, description } = experimentCollection;
+    const { nextExperimentButtonText, aboutButtonText } = experimentCollection.theme?.header || { nextExperimentButtonText: "", aboutButtonText: "" };
 
-    const headerProps = experimentCollection.theme?.header ? {
-        nextBlockSlug,
-        collectionSlug: experimentCollection.slug,
-        ...experimentCollection.theme.header,
-        totalScore,
-        experimentCollectionTitle: experimentCollection.name,
-        experimentCollectionDescription: experimentCollection.description
-    } : null;
+    const scoreDisplayConfig = experimentCollection.theme?.header?.score;
+    const nextBlockSlug = experimentCollection.nextExperiment?.slug;
+    const showHeader = experimentCollection.theme?.header;
 
     const getExperimentHref = (slug: string) => `/${slug}${participantIdUrl ? `?participant_id=${participantIdUrl}` : ""}`;
 
     return (
         <div className="aha__dashboard">
             <Logo logoClickConfirm={null} />
-            {headerProps && (
-                <Header {...headerProps}></Header>
+            {showHeader && (
+                <Header
+                    nextBlockSlug={nextBlockSlug}
+                    collectionSlug={experimentCollection.slug}
+                    totalScore={totalScore}
+                    description={description}
+                    scoreDisplayConfig={scoreDisplayConfig}
+                    nextExperimentButtonText={nextExperimentButtonText}
+                    aboutButtonText={aboutButtonText}
+                />
             )}
             {/* Experiments */}
             <div role="menu" className="dashboard toontjehoger">
@@ -54,7 +57,7 @@ export const ExperimentCollectionDashboard: React.FC<ExperimentCollectionDashboa
     );
 }
 
-const ImageOrPlaceholder = ({ imagePath, alt }: { imagePath: string, alt: string }) => {
+const ImageOrPlaceholder = ({ imagePath, alt }: { imagePath?: string, alt: string }) => {
     const imgSrc = imagePath ?? null;
 
     return imgSrc ? <img src={imgSrc} alt={alt} /> : <div className="placeholder" />;

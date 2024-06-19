@@ -5,32 +5,26 @@ import { Link } from "react-router-dom";
 import Social from "../../Social/Social"
 import HTML from '@/components/HTML/HTML';
 import Score from "../Score/Score";
+import { ScoreDisplayConfig } from "@/types/Theme";
 
 interface HeaderProps {
-    experimentCollectionTitle: string;
-    experimentCollectionDescription: string;
+    description: string;
     nextBlockSlug: string | undefined;
     nextExperimentButtonText: string;
     collectionSlug: string;
     aboutButtonText: string;
-    totalScore: number;
-}
-
-interface Score {
-    scoreClass: string;
-    scoreLabel: string;
-    noScoreLabel: string;
+    totalScore: Number;
+    scoreDisplayConfig?: ScoreDisplayConfig;
 }
 
 export const Header: React.FC<HeaderProps> = ({
-    experimentCollectionTitle,
-    experimentCollectionDescription,
+    description,
     nextBlockSlug,
     nextExperimentButtonText,
-    collectionSlug,
     aboutButtonText,
+    collectionSlug,
     totalScore,
-    score,
+    scoreDisplayConfig,
 }) => {
 
     // TODO: Fix this permanently and localize in and fetch content from the backend
@@ -50,26 +44,26 @@ export const Header: React.FC<HeaderProps> = ({
     return (
         <div className="hero aha__header">
             <div className="intro">
-                <HTML body={experimentCollectionDescription} innerClassName="" />
+                <HTML body={description} innerClassName="" />
                 <nav className="actions">
                     {nextBlockSlug && <a className="btn btn-lg btn-primary" href={`/${nextBlockSlug}`}>{nextExperimentButtonText}</a>}
                     {aboutButtonText && <Link className="btn btn-lg btn-outline-primary" to={`/collection/${collectionSlug}/about`}>{aboutButtonText}</Link>}
                 </nav>
             </div>
-            {score && totalScore !== 0 && (
+            {scoreDisplayConfig && totalScore !== 0 && (
                 <div className="results">
                     <Score
                         score={totalScore}
-                        scoreClass={score.scoreClass}
-                        label={score.scoreLabel}
+                        scoreClass={scoreDisplayConfig.scoreClass}
+                        label={scoreDisplayConfig.scoreLabel}
                     />
                     <Social
                         social={social}
                     />
                 </div>
             )}
-            {score && totalScore === 0 && (
-                <h3>{score.noScoreLabel}</h3>
+            {scoreDisplayConfig && totalScore === 0 && (
+                <h3>{scoreDisplayConfig.noScoreLabel}</h3>
             )}
         </div>
     );
