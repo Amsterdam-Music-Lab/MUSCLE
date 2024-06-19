@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
-import Rank from "../Rank/Rank";
-import Social from "../Social/Social"
+import Rank from "../../Rank/Rank";
+import Social from "../../Social/Social"
 import HTML from '@/components/HTML/HTML';
 
 interface HeaderProps {

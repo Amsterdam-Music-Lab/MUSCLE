@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 import ExperimentCollection from "@/types/ExperimentCollection";
-import Header from "@/components/Header/Header";
+import Header from "@/components/ExperimentCollection/Header/Header";
 import Logo from "@/components/Logo/Logo";
 import IBlock from "@/types/Block";
 
