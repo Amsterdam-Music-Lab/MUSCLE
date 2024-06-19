@@ -36,7 +36,6 @@ const ExperimentCollection = ({ match }: ExperimentCollectionProps) => {
     const displayDashboard = experimentCollection?.dashboard.length;
     const showConsent = experimentCollection?.consent;
     const totalScore = experimentCollection?.totalScore;
-    const score = experimentCollection?.score;
 
     if (experimentCollection?.theme) {
         setTheme(experimentCollection.theme);
@@ -82,7 +81,7 @@ const ExperimentCollection = ({ match }: ExperimentCollectionProps) => {
         <div className="aha__collection">
             <Switch>
                 <Route path={URLS.experimentCollectionAbout} component={() => <ExperimentCollectionAbout content={experimentCollection?.aboutContent} slug={experimentCollection.slug} />} />
-                <Route path={URLS.experimentCollection} exact component={() => <ExperimentCollectionDashboard experimentCollection={experimentCollection} participantIdUrl={participantIdUrl} totalScore={totalScore} score={score} />} />
+                <Route path={URLS.experimentCollection} exact component={() => <ExperimentCollectionDashboard experimentCollection={experimentCollection} participantIdUrl={participantIdUrl} totalScore={totalScore} />} />
             </Switch>
             {experimentCollection.theme?.footer && (
                 <Footer

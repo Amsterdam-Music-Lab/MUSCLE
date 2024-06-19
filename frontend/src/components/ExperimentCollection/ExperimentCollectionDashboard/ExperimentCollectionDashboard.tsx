@@ -25,8 +25,7 @@ export const ExperimentCollectionDashboard: React.FC<ExperimentCollectionDashboa
         totalScore,
         experimentCollectionTitle: experimentCollection.name,
         experimentCollectionDescription: experimentCollection.description
-
-    } : undefined;
+    } : null;
 
     const getExperimentHref = (slug: string) => `/${slug}${participantIdUrl ? `?participant_id=${participantIdUrl}` : ""}`;
 
