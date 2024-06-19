@@ -96,23 +96,22 @@ describe("CountDown", () => {
         const firstContainer = render(<CountDown duration={3} running={true} />);
         let firstHeading = firstContainer.getByText("3");
 
-        expect(firstHeading.classList.contains('aha__count-down')).to.be.true;
-        expect(firstHeading.classList.contains('active')).to.be.true;
-        expect(firstHeading.classList.contains('zero')).to.be.false;
-
-        await new Promise(resolve => setTimeout(resolve, 1));
-
-        // Simulate timer finish
         MockedTimer.mockImplementation(({ onFinish }) => {
             onFinish();
             return vi.fn();
         });
+
         const secondContainer = render(<CountDown duration={5} running={true} />);
 
         const secondHeading = secondContainer.getByText("0");
-        
-        await waitFor(() => {
-            expect(secondHeading.classList.contains('zero')).to.be.true;
-        });
+
+        // First countdown should be active and not zero
+        expect(firstHeading.classList.contains('aha__count-down')).toBe(true);
+        expect(firstHeading.classList.contains('active')).toBe(true);
+        expect(firstHeading.classList.contains('zero')).toBe(false);
+
+        // Second countdown should be active and zero
+        expect(secondHeading.classList.contains('zero')).toBe(true);
     });
+
 });
