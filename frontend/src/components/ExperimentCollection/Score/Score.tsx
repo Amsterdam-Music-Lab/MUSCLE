@@ -1,7 +1,15 @@
+import React from "react";
+
 import Rank from "@/components/Rank/Rank";
 import useAnimatedScore from "@/hooks/useAnimatedScore";
 
-const Score = ({ score, label, scoreClass }) => {
+interface ScoreProps {
+    score: number;
+    label: string;
+    scoreClass: string;
+}
+
+const Score = ({ score, label, scoreClass }: ScoreProps) => {
     const currentScore = useAnimatedScore(score);
 
     return (
