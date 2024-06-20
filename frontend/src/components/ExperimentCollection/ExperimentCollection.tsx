@@ -56,6 +56,10 @@ const ExperimentCollection = ({ match }: ExperimentCollectionProps) => {
         );
     }
 
+    if (!loadingExperimentCollection && !experimentCollection) {
+        return <p className="aha__error">Experiment collection not found</p>;
+    }
+
     if (!hasShownConsent && showConsent) {
         const attrs = {
             participant,
@@ -68,7 +72,6 @@ const ExperimentCollection = ({ match }: ExperimentCollectionProps) => {
                 <Consent {...attrs}/>
             </DefaultPage>
         )
-       
     }
 
     if (!displayDashboard && nextExperiment) {
