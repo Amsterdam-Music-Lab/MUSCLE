@@ -320,3 +320,21 @@ jobs:
       - uses: actions/checkout@v4
       - name: Run E2E tests
         run: cd e2e && bash run-tests
+
+  smoke-tests-production:
+    name: Smoke tests on production environment
+    runs-on: PRD
+    # temporarily true to test smoke tests
+    if: github.ref == 'refs/tags/*' || github.event_name == 'release' || (github.event_name == 'workflow_dispatch' && github.ref == 'refs/tags/*')
+
+    # needs to happen after the deployment to the production environment
+    needs: deploy-production
+
+    env:
+      BASE_URL: "https://app.amsterdammusiclab.nl"
+
+    steps:
+        
+        - uses: actions/checkout@v4
+        - name: Run smoke tests
+          run: cd e2e && bash run-tests --smoke
