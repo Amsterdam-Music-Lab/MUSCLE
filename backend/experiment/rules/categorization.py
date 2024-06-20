@@ -6,8 +6,8 @@ from experiment.actions.form import Form, ChoiceQuestion
 from experiment.actions import Consent, Explainer, Score, Trial, Final
 from experiment.actions.wrappers import two_alternative_forced
 
-from experiment.questions.demographics import EXTRA_DEMOGRAPHICS
-from experiment.questions.utils import question_by_key
+from question.demographics import EXTRA_DEMOGRAPHICS
+from question.utils import question_by_key
 from .base import Base
 import random
 
@@ -21,11 +21,12 @@ class Categorization(Base):
     ID = 'CATEGORIZATION'
 
     def __init__(self):
-        self.questions = [
-            question_by_key('dgf_age', EXTRA_DEMOGRAPHICS),
-            question_by_key('dgf_gender_reduced', EXTRA_DEMOGRAPHICS),
-            question_by_key('dgf_native_language', EXTRA_DEMOGRAPHICS),
-            question_by_key('dgf_musical_experience', EXTRA_DEMOGRAPHICS)
+        self.question_series = [
+            {
+                "name": "Categorization",
+                "keys": ['dgf_age','dgf_gender_reduced','dgf_native_language','dgf_musical_experience'],
+                "randomize": False
+            },
         ]
 
     def first_round(self, experiment):

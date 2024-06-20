@@ -1,3 +1,3 @@
 export default interface Session {
-    id: Number
+    id: number
 }

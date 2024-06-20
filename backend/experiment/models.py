@@ -5,7 +5,6 @@ from django.utils import timezone
 from django.contrib.postgres.fields import ArrayField
 from typing import List, Dict, Tuple, Any
 from experiment.standards.iso_languages import ISO_LANGUAGES
-from .questions import QUESTIONS_CHOICES, get_default_question_keys
 from theme.models import ThemeConfig
 from image.models import Image
 from session.models import Session
@@ -41,6 +40,7 @@ class ExperimentCollection(models.Model):
     # present random_experiments as dashboard
     dashboard = models.BooleanField(default=False)
     about_content = models.TextField(blank=True, default='')
+    active = models.BooleanField(default=True)
 
     def __str__(self):
         return self.name or self.slug
@@ -131,11 +131,6 @@ class Experiment(models.Model):
         blank=True,
         null=True
     )
-    questions = ArrayField(
-                models.TextField(choices=QUESTIONS_CHOICES),
-                blank=True,
-                default=get_default_question_keys
-            )
     consent = models.FileField(upload_to=consent_upload_path,
                                blank=True,
                                default='',
@@ -302,7 +297,26 @@ class Experiment(models.Model):
 
         return 0
 
+    def add_default_question_series(self):
+        """ Add default question_series to experiment"""
+        from experiment.rules import EXPERIMENT_RULES
+        from question.models import Question, QuestionSeries, QuestionInSeries
+        question_series = getattr(EXPERIMENT_RULES[self.rules](), "question_series", None)
+        if question_series:
+            for i,question_series in enumerate(question_series):
+                qs = QuestionSeries.objects.create(
+                    name = question_series['name'],
+                    experiment = self,
+                    index = i+1,
+                    randomize = question_series['randomize'])
+                for i,question in enumerate(question_series['keys']):
+                    qis = QuestionInSeries.objects.create(
+                        question_series = qs,
+                        question = Question.objects.get(pk=question),
+                        index=i+1)
+
 
 class Feedback(models.Model):
     text = models.TextField()
     experiment = models.ForeignKey(Experiment, on_delete=models.CASCADE)
+

@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.test import TestCase
 from django.utils import timezone
 
@@ -77,7 +78,7 @@ class TestExperimentCollectionViews(TestCase):
         # check that first_experiments is returned correctly
         response = self.client.get('/experiment/collection/test_series/')
         self.assertEqual(response.json().get(
-            'next_experiment').get('slug'), 'experiment1')
+            'nextExperiment').get('slug'), 'experiment1')
         # create session
         Session.objects.create(
             experiment=self.experiment1,
@@ -85,7 +86,7 @@ class TestExperimentCollectionViews(TestCase):
             finished_at=timezone.now()
         )
         response = self.client.get('/experiment/collection/test_series/')
-        self.assertIn(response.json().get('next_experiment').get(
+        self.assertIn(response.json().get('nextExperiment').get(
             'slug'), ('experiment2', 'experiment3'))
         self.assertEqual(response.json().get('dashboard'), [])
         Session.objects.create(
@@ -101,12 +102,25 @@ class TestExperimentCollectionViews(TestCase):
         response = self.client.get('/experiment/collection/test_series/')
         response_json = response.json()
         self.assertEqual(response_json.get(
-            'next_experiment').get('slug'), 'experiment4')
+            'nextExperiment').get('slug'), 'experiment4')
         self.assertEqual(response_json.get('dashboard'), [])
         self.assertEqual(response_json.get('theme').get('name'), 'test_theme')
         self.assertEqual(len(response_json['theme']['header']['score']), 3)
         self.assertEqual(response_json.get('theme').get('footer').get(
             'disclaimer'), '<p>Test Disclaimer</p>')
+
+    def test_get_experiment_collection_not_found(self):
+        # if ExperimentCollection does not exist, return 404
+        response = self.client.get('/experiment/collection/not_found/')
+        self.assertEqual(response.status_code, 404)
+
+    def test_get_experiment_collection_inactive(self):
+        # if ExperimentCollection is inactive, return 404
+        collection = ExperimentCollection.objects.get(slug='test_series')
+        collection.active = False
+        collection.save()
+        response = self.client.get('/experiment/collection/test_series/')
+        self.assertEqual(response.status_code, 404)
 
     def test_experiment_collection_with_dashboard(self):
         # if ExperimentCollection has dashboard set True, return list of random experiments
@@ -144,7 +158,7 @@ class TestExperimentCollectionViews(TestCase):
         intermediate_group.dashboard = True
         intermediate_group.save()
         serialized_coll_1 = serialize_experiment_collection_group(intermediate_group, self.participant)
-        total_score_1 = serialized_coll_1['total_score']
+        total_score_1 = serialized_coll_1['totalScore']
         self.assertEqual(total_score_1, 8)
         Session.objects.create(
             experiment=self.experiment3,
@@ -153,7 +167,7 @@ class TestExperimentCollectionViews(TestCase):
             final_score=8
         )
         serialized_coll_2 = serialize_experiment_collection_group(intermediate_group, self.participant)
-        total_score_2 = serialized_coll_2['total_score']
+        total_score_2 = serialized_coll_2['totalScore']
         self.assertEqual(total_score_2, 16)
 
 
@@ -166,7 +180,13 @@ class ExperimentViewsTest(TestCase):
             name='Test Experiment',
             description='This is a test experiment',
             image=Image.objects.create(
-                file='test-image.jpg'
+                title='Test',
+                description='',
+                file='test-image.jpg',
+                alt='Test',
+                href='https://www.example.com',
+                rel='',
+                target='_self',
             ),
             theme_config=create_theme_config()
         )
@@ -189,13 +209,16 @@ class ExperimentViewsTest(TestCase):
             serialized_experiment['description'], 'This is a test experiment'
         )
         self.assertEqual(
-            serialized_experiment['image'], '/upload/test-image.jpg'
-        )
-        self.assertEqual(
-            serialized_experiment['finished_session_count'], 3
-        )
-        self.assertEqual(
-            serialized_experiment['started_session_count'], 3
+            serialized_experiment['image'], {
+                'title': 'Test',
+                'description': '',
+                'file': f'{settings.BASE_URL}/upload/test-image.jpg',
+                'href': 'https://www.example.com',
+                'alt': 'Test',
+                'rel': '',
+                'target': '_self',
+                'tags': []
+            }
         )
 
     def test_get_experiment(self):

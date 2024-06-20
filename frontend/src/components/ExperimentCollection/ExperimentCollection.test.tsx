@@ -11,7 +11,6 @@ const getExperiment = (overrides = {}) => {
     return {
         slug: 'some_slug',
         name: 'Some Experiment',
-        finished_session_count: 0,
         ...overrides
     };
 }
@@ -26,7 +25,15 @@ const theme = {
     bodyFontUrl: 'bodyFontUrl.com',
     description: 'Description of the theme',
     headingFontUrl: 'headingFontUrl.com',
-    logoUrl: 'logoUrl.com',
+    logo: {
+        title: 'Logo title',
+        description: 'Logo description',
+        file: 'logo.jpg',
+        alt: 'Logo alt',
+        href: 'https://www.example.com',
+        rel: 'noopener noreferrer',
+        target: '_blank'
+    },
     name: 'Awesome theme',
     footer: {
         disclaimer: 'disclaimer',
@@ -46,7 +53,7 @@ const experimentWithAllProps = getExperiment({ image: 'some_image.jpg', descript
 describe('ExperimentCollection', () => {
 
     it('forwards to a single experiment if it receives an empty dashboard array', async () => {
-        mock.onGet().replyOnce(200, {dashboard: [], next_experiment: experiment1});
+        mock.onGet().replyOnce(200, {dashboard: [], nextExperiment: experiment1});
         render(
         <MemoryRouter>
             <ExperimentCollection match={{params: {slug: 'some_collection'}}}/>
@@ -69,7 +76,7 @@ describe('ExperimentCollection', () => {
     });
 
     it('shows a placeholder if no image is available', () => {
-        mock.onGet().replyOnce(200, { dashboard: [experiment1], next_experiment: experiment1 });
+        mock.onGet().replyOnce(200, { dashboard: [experiment1], nextExperiment: experiment1 });
         render(
         <MemoryRouter>
             <ExperimentCollection match={{params: {slug: 'some_collection'}}}/>
@@ -81,7 +88,7 @@ describe('ExperimentCollection', () => {
     });
 
     it('shows the image if it is available', () => {
-        mock.onGet().replyOnce(200, { dashboard: [experimentWithAllProps], next_experiment: experiment1 });
+        mock.onGet().replyOnce(200, { dashboard: [experimentWithAllProps], nextExperiment: experiment1 });
         render(
         <MemoryRouter>
             <ExperimentCollection match={{params: {slug: 'some_collection'}}}/>
@@ -93,7 +100,7 @@ describe('ExperimentCollection', () => {
     });
 
     it('shows the description if it is available', () => {
-        mock.onGet().replyOnce(200, { dashboard: [experimentWithAllProps], next_experiment: experiment1 });
+        mock.onGet().replyOnce(200, { dashboard: [experimentWithAllProps], nextExperiment: experiment1 });
         render(
         <MemoryRouter>
             <ExperimentCollection match={{params: {slug: 'some_collection'}}}/>
@@ -105,7 +112,7 @@ describe('ExperimentCollection', () => {
     });
 
     it('shows consent first if available', async () => {
-        mock.onGet().replyOnce(200, { consent: '<p>This is our consent form!</p>', dashboard: [experimentWithAllProps], next_experiment: experiment1} );
+        mock.onGet().replyOnce(200, { consent: '<p>This is our consent form!</p>', dashboard: [experimentWithAllProps], nextExperiment: experiment1} );
         render(
             <MemoryRouter>
                 <ExperimentCollection match={{params: {slug: 'some_collection'}}}/>
@@ -117,7 +124,7 @@ describe('ExperimentCollection', () => {
     });
 
     it('shows a footer if a theme with footer is available', async () => {
-        mock.onGet().replyOnce(200, { dashboard: [experimentWithAllProps], next_experiment: experiment1, theme });
+        mock.onGet().replyOnce(200, { dashboard: [experimentWithAllProps], nextExperiment: experiment1, theme });
         render(
             <MemoryRouter>
                 <ExperimentCollection match={{params: {slug: 'some_collection'}}}/>

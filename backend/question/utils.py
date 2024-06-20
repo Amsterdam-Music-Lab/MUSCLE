@@ -3,8 +3,6 @@ import random
 
 from result.utils import prepare_profile_result
 
-from .demographics import DEMOGRAPHICS
-
 
 def copy_shuffle(questions):
     qcopy = deepcopy(questions)
@@ -12,13 +10,13 @@ def copy_shuffle(questions):
     return qcopy
 
 
-def total_unanswered_questions(participant, questions=DEMOGRAPHICS):
+def total_unanswered_questions(participant, questions):
     """ Return how many questions have not been answered yet by the participant"""
     profile_questions = participant.profile().values_list('question_key', flat=True)
     return len([question for question in questions if question.key not in profile_questions])
 
 
-def question_by_key(key, questions=DEMOGRAPHICS, is_skippable=None, drop_choices=[]):
+def question_by_key(key, questions, is_skippable=None, drop_choices=[]):
     """Return question by given key"""
     for question in questions:
         if question.key == key:

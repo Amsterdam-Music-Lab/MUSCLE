@@ -51,7 +51,7 @@ class ToontjeHogerKids1Mozart(ToontjeHoger1Mozart):
 
         # Final
         final_text = "Goed gedaan!" if session.final_score >= 2 * \
-            self.SCORE_CORRECT else "Dat bleek toch even lastig!"
+            self.SCORE_CORRECT else "Best lastig!"
         final = Final(
             session=session,
             final_text=final_text,
@@ -60,13 +60,18 @@ class ToontjeHogerKids1Mozart(ToontjeHoger1Mozart):
         )
 
         # Info page
+        debrief_message = "Merkte je dat de puzzel beter ging na het \
+            horen van Mozart? Dit noemen we het 'Mozart effect'! Wil je meer weten over het Mozart effect? Bekijk dan de filmpjes!"
         body = render_to_string(
-            join('info', 'toontjehoger', 'experiment1.html'))
+            join('info', 'toontjehogerkids', 'debrief.html'),
+            {'debrief': debrief_message,
+             'vid1': "https://www.youtube.com/embed/hW12-q4781Q?si=PPorbSo_PdyDeS_Y",
+             'vid2': "https://www.youtube.com/embed/DHx7cJ22MZI?si=wMK09bLSrsDY6nyl"})
         info = Info(
             body=body,
             heading="Het Mozart effect",
-            button_label="Terug naar ToontjeHoger",
-            button_link="/toontjehoger"
+            button_label="Terug naar ToontjeHogerKids",
+            button_link="/collection/thkids"
         )
 
         return [*answer_explainer, *score, final, info]

@@ -2,6 +2,9 @@ import { API_BASE_URL } from "@/config";
 import useGet from "./util/useGet";
 import axios from "axios";
 import qs from "qs";
+import Experiment from "@/types/Experiment";
+import Participant from "./types/Participant";
+import Session from "./types/Session";
 
 // API handles the calls to the Hooked-server api
 
@@ -11,11 +14,11 @@ axios.defaults.withCredentials = true;
 // API endpoints
 export const URLS = {
     experiment: {
-        get: (slug) => "/experiment/" + slug + "/",
-        feedback: (slug) => "/experiment/" + slug + "/feedback/",
+        get: (slug: string) => "/experiment/" + slug + "/",
+        feedback: (slug: string) => "/experiment/" + slug + "/feedback/",
     },
     experiment_collection: {
-        get: (slug) => `/experiment/collection/${slug}/`
+        get: (slug: string) => `/experiment/collection/${slug}/`
     },
     participant: {
         current: "/participant/",
@@ -24,7 +27,7 @@ export const URLS = {
         share: "/participant/share/",
     },
     result: {
-        get: (question) => "/result/" + question + "/",
+        get: (question: string) => "/result/" + question + "/",
         current: "/result/current_profile",
         score: "/result/score/",
         intermediateScore: "/result/intermediate_score/",
@@ -32,19 +35,18 @@ export const URLS = {
     },
     session: {
         create: "/session/create/",
-        register_playlist: (id) => "/session/" + id + "/register_playlist/",
-        next_round: (id) => "/session/" + id + "/next_round/",
-        finalize: (id) => "/session/" + id + "/finalize/"
+        next_round: (id: string) => "/session/" + id + "/next_round/",
+        finalize: (id: string) => "/session/" + id + "/finalize/"
     },
     theme: {
-        get: (id) => `/theme/${id}`,
+        get: (id: string) => `/theme/${id}`,
     }
 };
 
-export const useExperiment = (slug) =>
+export const useExperiment = (slug: string) =>
     useGet(API_BASE_URL + URLS.experiment.get(slug));
 
-export const useExperimentCollection = (slug) => {
+export const useExperimentCollection = (slug: string) => {
     const data = useGet(API_BASE_URL + URLS.experiment_collection.get(slug));
     return data; // snakeToCamel(collection), loading
 }
@@ -55,11 +57,16 @@ export const useParticipantScores = () =>
 export const useParticipantLink = () =>
     useGet(API_BASE_URL + URLS.participant.link);
 
-export const useConsent = (slug) =>
+export const useConsent = (slug: string) =>
     useGet(API_BASE_URL + URLS.result.get('consent_' + slug));
 
+interface CreateConsentParams {
+    experiment: Experiment;
+    participant: Participant;
+}
+
 // Create consent for given experiment
-export const createConsent = async ({ experiment, participant }) => {
+export const createConsent = async ({ experiment, participant }: CreateConsentParams) => {
     try {
         const response = await axios.post(
             API_BASE_URL + URLS.result.consent,
@@ -80,8 +87,14 @@ export const createConsent = async ({ experiment, participant }) => {
     }
 };
 
+interface CreateSessionParams {
+    experiment: Experiment;
+    participant: Participant;
+    playlist: { current: string };
+}
+
 // Create a new session for given experiment
-export const createSession = async ( {experiment, participant, playlist} ) => {
+export const createSession = async ({experiment, participant, playlist}: CreateSessionParams) => {
     try {
         const response = await axios.post(
             API_BASE_URL + URLS.session.create,
@@ -98,20 +111,18 @@ export const createSession = async ( {experiment, participant, playlist} ) => {
     }
 };
 
-export const registerPlaylist = async (playlistId, participant, session) => {
-    try {
-        const response = await axios.post(
-            API_BASE_URL + URLS.session.register_playlist(session.id),
-            qs.stringify({
-                playlist_id: playlistId,
-                csrfmiddlewaretoken: participant.csrf_token
-            })
-        )
-        return response.data;
-    } catch(err) {
-        console.error(err);
-        return null;
-    }
+interface ScoreResultParams {
+    session: Session;
+    participant: Participant;
+    result: unknown;
+    section?: { id: number };
+}
+
+interface ScoreResultPayload {
+    session_id: number;
+    json_data: string;
+    csrfmiddlewaretoken: string;
+    section_id?: number;
 }
 
 // Create result for given session
@@ -120,9 +131,9 @@ export const scoreResult = async ({
     section,
     participant,
     result,
-}) => {
+}: ScoreResultParams) => {
     try {
-        const vars = {
+        const vars: ScoreResultPayload = {
             session_id: session.id,
             json_data: JSON.stringify(result),
             csrfmiddlewaretoken: participant.csrf_token,
@@ -143,11 +154,17 @@ export const scoreResult = async ({
     }
 };
 
+interface ScoreIntermediateResultParams {
+    session: Session;
+    participant: Participant;
+    result: unknown;
+}
+
 export const scoreIntermediateResult = async ({
     session,
     participant,
     result,
-}) => {
+}: ScoreIntermediateResultParams) => {
     try {
         const vars = {
             session_id: session.id,
@@ -165,12 +182,19 @@ export const scoreIntermediateResult = async ({
         return null;
     }
 };
+
+interface GetNextRoundParams {
+    session: Session;
+}
        
 
 // Get next_round from server
-export const getNextRound = async ({ session }) => {
+export const getNextRound = async ({ session }: GetNextRoundParams) => {
+
+    const sessionId = session.id.toString();
+
     try {
-        const response = await axios.get( API_BASE_URL + URLS.session.next_round(session.id));
+        const response = await axios.get(API_BASE_URL + URLS.session.next_round(sessionId));
         return response.data;
     } catch (err) {
         console.error(err);
@@ -178,11 +202,19 @@ export const getNextRound = async ({ session }) => {
     }
 };
 
+interface FinalizeSessionParams {
+    session: Session;
+    participant: Participant;
+}
+
 // Tell the backend that the session is finished
-export const finalizeSession = async ({ session, participant }) => {
+export const finalizeSession = async ({ session, participant }: FinalizeSessionParams) => {
+
+    const sessionId = session.id.toString();
+
     try {
         const response = await axios.post(
-            API_BASE_URL + URLS.session.finalize(session.id),
+            API_BASE_URL + URLS.session.finalize(sessionId),
             qs.stringify({
                 csrfmiddlewaretoken: participant.csrf_token,
             })
@@ -194,8 +226,13 @@ export const finalizeSession = async ({ session, participant }) => {
     }
 }
 
+interface ShareParticipantParams {
+    email: string;
+    participant: Participant;
+}
+
 // Share participant
-export const shareParticipant = async ({ email, participant }) => {
+export const shareParticipant = async ({ email, participant }: ShareParticipantParams) => {
     try {
         const response = await axios.post(
             API_BASE_URL + URLS.participant.share,
@@ -211,8 +248,14 @@ export const shareParticipant = async ({ email, participant }) => {
     }
 };
 
+interface PostFeedbackParams {
+    experimentSlug: string;
+    feedback: string;
+    participant: Participant;
+}
+
 // Collect user feedback
-export const postFeedback = async({ experimentSlug, feedback, participant }) => {
+export const postFeedback = async({ experimentSlug, feedback, participant }: PostFeedbackParams) => {
     const endpoint = API_BASE_URL + URLS.experiment.feedback(experimentSlug)
     try {
         const response = await axios.post(

@@ -14,7 +14,7 @@ from session.models import Session
 
 
 # Expected field count per model
-EXPECTED_EXPERIMENT_FIELDS = 16
+EXPECTED_EXPERIMENT_FIELDS = 15
 EXPECTED_SESSION_FIELDS = 9
 EXPECTED_RESULT_FIELDS = 12
 EXPECTED_PARTICIPANT_FIELDS = 5
@@ -180,7 +180,14 @@ class TestExperimentCollectionAdmin(TestCase):
     def test_experiment_series_admin_list_display(self):
         self.assertEqual(
             ExperimentCollectionAdmin.list_display,
-            ('name', 'slug_link', 'description_excerpt', 'dashboard', 'groups')
+            (
+                'name',
+                'slug_link',
+                'description_excerpt',
+                'dashboard',
+                'groups',
+                'active',
+            )
         )
 
     def test_experiment_series_admin_description_excerpt(self):

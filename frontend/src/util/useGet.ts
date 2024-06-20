@@ -2,8 +2,8 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 
 // useGet is a react hook for getting data from a given url
-export const useGet = (url) => {
-    const [data, setData] = useState(null);
+export const useGet = <T,>(url: string): [T | null, boolean] => {
+    const [data, setData] = useState<T | null>(null);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {

@@ -1,13 +1,8 @@
-export interface Header {
-    nextExperimentButtonText: string;
-    aboutButtonText: string;
-    showScore: boolean;    
-};
+import Image from "./Image";
 
 export interface Header {
     nextExperimentButtonText: string;
     aboutButtonText: string;
-    showScore: boolean;
 };
 
 export interface Logo {
@@ -22,13 +17,12 @@ export interface Footer {
     privacy: string;
 }
 
-
 export default interface Theme {
     backgroundUrl: string;
     bodyFontUrl: string;
     description: string;
     headingFontUrl: string;
-    logoUrl: string;
+    logo: Image;
     name: string;
     footer: Footer | null;
     header: Header | null;

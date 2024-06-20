@@ -1,13 +1,16 @@
+import re
 import logging
 import random
 from os.path import join
 from django.template.loader import render_to_string
+from section.models import Playlist
 from experiment.utils import non_breaking_spaces
 from .toontjehoger_1_mozart import toontjehoger_ranks
 from experiment.actions import Trial, Explainer, Step, Score, Final, Info
 from experiment.actions.form import ButtonArrayQuestion, Form
+from experiment.actions.frontend_style import FrontendStyle, EFrontendStyle
 from experiment.actions.playback import Multiplayer
-from experiment.actions.styles import STYLE_NEUTRAL
+from experiment.actions.styles import STYLE_NEUTRAL_INVERTED
 from experiment.utils import create_player_labels
 from .base import Base
 from result.utils import prepare_result
@@ -92,7 +95,11 @@ class ToontjeHoger4Absolute(Base):
         random.shuffle(sections)
 
         # Player
-        playback = Multiplayer(sections, labels=create_player_labels(len(sections), 'alphabetic'))
+        playback = Multiplayer(
+            sections,
+            labels=create_player_labels(len(sections), 'alphabetic'),
+            style=FrontendStyle(EFrontendStyle.NEUTRAL_INVERTED)
+        )
 
         # Question
         key = 'pitch'
@@ -108,7 +115,7 @@ class ToontjeHoger4Absolute(Base):
                 key, session, section=section1,
                 expected_response="A" if sections[0].id == section1.id else "B"
             ),
-            style=STYLE_NEUTRAL
+            style=STYLE_NEUTRAL_INVERTED
         )
         form = Form([question])
 
@@ -144,7 +151,7 @@ class ToontjeHoger4Absolute(Base):
         config = {'show_total_score': True}
         score = Score(session, config=config, feedback=feedback)
         return [score]
- 
+
     def get_final_round(self, session):
 
         # Finish session.
@@ -179,3 +186,42 @@ class ToontjeHoger4Absolute(Base):
         )
 
         return [*score, final, info]
+
+    def validate_playlist_groups(self, groups):
+        integer_groups = []
+        integer_pattern = re.compile(r'^-?\d+$')
+        for group in groups:
+            if not integer_pattern.match(str(group)):
+                return ["Groups in playlist sections should be numbers. This playlist has groups: {}".format(groups)]
+
+            integer_groups.append(int(group))
+
+        # Check if the groups are sequential and unique
+        integer_groups.sort()
+        if integer_groups != list(range(1, len(groups) + 1)):
+            return ['Groups in playlist sections should be sequential numbers starting from 1 to the number of items in the playlist ({}). E.g. "1, 2, 3, ... {}"'.format(self.PLAYLIST_ITEMS, self.PLAYLIST_ITEMS)]
+
+        return []
+
+    def validate_playlist(self, playlist: Playlist):
+        errors = super().validate_playlist(playlist)
+
+        # Get group values from sections, ordered by group
+        groups = list(playlist.section_set.values_list(
+            'group', flat=True).distinct())
+
+        # Check if the groups are sequential and unique
+        errors += self.validate_playlist_groups(groups)
+
+        # Check if the tags are 'a', 'b' or 'c'
+        tags = list(
+            playlist.section_set
+            .values_list('tag', flat=True)
+            .distinct()
+            .order_by('tag')
+        )
+
+        if tags != ['a', 'b', 'c']:
+            errors.append("Tags in playlist sections should be 'a', 'b' or 'c'. This playlist has tags: {}".format(tags))
+
+        return errors

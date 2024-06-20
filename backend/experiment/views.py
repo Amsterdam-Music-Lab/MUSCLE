@@ -11,6 +11,7 @@ from section.models import Playlist
 from experiment.serializers import serialize_actions, serialize_experiment_collection, serialize_experiment_collection_group
 from experiment.rules import EXPERIMENT_RULES
 from experiment.actions.utils import COLLECTION_KEY
+from image.serializers import serialize_image
 from participant.utils import get_participant
 from theme.serializers import serialize_theme
 
@@ -36,7 +37,7 @@ def get_experiment(request, slug):
         'name': experiment.name,
         'theme': serialize_theme(experiment.theme_config) if experiment.theme_config else None,
         'description': experiment.description,
-        'image': experiment.image.file.url if experiment.image else '',
+        'image': serialize_image(experiment.image) if experiment.image else None,
         'class_name': class_name,  # can be used to override style
         'rounds': experiment.rounds,
         'playlists': [
@@ -73,11 +74,17 @@ def experiment_or_404(slug):
         raise Http404("Experiment does not exist")
 
 
-def default_questions(request, rules):
-    return JsonResponse({'default_questions': [q.key for q in EXPERIMENT_RULES[rules]().questions]})
+def add_default_question_series(request, id):
+    if request.method == "POST":
+        Experiment.objects.get(pk=id).add_default_question_series()
+    return JsonResponse({})
 
 
-def get_experiment_collection(request: HttpRequest, slug: str, group_index: int = 0) -> JsonResponse:
+def get_experiment_collection(
+            request: HttpRequest,
+            slug: str,
+            group_index: int = 0,
+        ) -> JsonResponse:
     '''
     check which `ExperimentCollectionGroup` objects are related to the `ExperimentCollection` with the given slug
     retrieve the group with the lowest order (= current_group)
@@ -86,9 +93,16 @@ def get_experiment_collection(request: HttpRequest, slug: str, group_index: int 
     then all experiments of the current_group will be returned as an array (also those with finished session)
     '''
     try:
-        collection = ExperimentCollection.objects.get(slug=slug)
-    except:
-        return Http404
+        collection = ExperimentCollection.objects.get(slug=slug, active=True)
+    except ExperimentCollection.DoesNotExist:
+        raise Http404("Experiment collection does not exist or is not active")
+    except Exception as e:
+        logger.error(e)
+        return JsonResponse(
+            {'error': 'Something went wrong while fetching the experiment collection. Please try again later.'},
+            status=500
+        )
+
     request.session[COLLECTION_KEY] = slug
     participant = get_participant(request)
     groups = list(ExperimentCollectionGroup.objects.filter(

@@ -32,10 +32,10 @@ const ExperimentCollection = ({ match }: ExperimentCollectionProps) => {
     const participant = useBoundStore((state) => state.participant);
     const setTheme = useBoundStore((state) => state.setTheme);
     const participantIdUrl = participant?.participant_id_url;
-    const nextExperiment = experimentCollection?.next_experiment;
+    const nextExperiment = experimentCollection?.nextExperiment;
     const displayDashboard = experimentCollection?.dashboard.length;
     const showConsent = experimentCollection?.consent;
-    const totalScore = experimentCollection?.total_score;
+    const totalScore = experimentCollection?.totalScore;
     const score = experimentCollection?.score;
 
     if (experimentCollection?.theme) {

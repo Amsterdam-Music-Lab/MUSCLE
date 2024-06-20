@@ -2,13 +2,9 @@ import logging
 from django.template.loader import render_to_string
 
 from .toontjehoger_1_mozart import toontjehoger_ranks
-from experiment.actions import Trial, Explainer, Step, Score, Final, Playlist, Info, HTML
-from experiment.actions.form import ButtonArrayQuestion, ChoiceQuestion, Form
-from experiment.actions.playback import ImagePlayer
-from experiment.actions.styles import STYLE_NEUTRAL
+from experiment.actions import Explainer, Step, Score, Final, Info
 from .toontjehoger_2_preverbal import ToontjeHoger2Preverbal
 from os.path import join
-from result.utils import prepare_result
 
 logger = logging.getLogger(__name__)
 
@@ -24,11 +20,11 @@ class ToontjeHogerKids2Preverbal(ToontjeHoger2Preverbal):
             instruction="Het eerste luisteren",
             steps=[
                 Step(
-                    "Je krijgt straks plaatjes te zien, een soort grafieken van een geluid. In een filmpje zie je zo een korte uitleg."),
+                    "Je krijgt straks een soort grafieken van geluid te zien, met een uitlegfilmpje."),
                 Step(
-                    "Welk plaatje denk jij dat er hoort bij de stem van een mens?"),
+                    "Welk plaatje denk jij dat hoort bij de stem van een mens?"),
                 Step(
-                    "Daarna volgt een vraag over twee baby huiltjes, kun jij het verschil horen?"),
+                    "En hoor jij het verschil tussen twee babyhuiltjes?"),
             ],
             step_numbers=True,
             button_label="Start"
@@ -45,7 +41,7 @@ class ToontjeHogerKids2Preverbal(ToontjeHoger2Preverbal):
     def get_spectrogram_info(self):
         image_url = "/images/experiments/toontjehoger/spectrogram_info_nl.webp"
         description = "Dit is een spectogram. Wil je weten hoe dat werkt? Kijk dan het filmpje!"
-        video = 'https://www.youtube.com/embed/Mw5u3fe9aMI?si=lWc7xFpoj4gBZj2d'
+        video = 'https://www.youtube.com/embed/7uDw3aC-1nc?si=xTvhO7Lx6XeqwkJM'
         body = f'<div class="center"><img src="{image_url}"></div><p>{description}</p><iframe width="100%" height="315" src={video}></iframe>'
 
         # Return answer info view
@@ -82,10 +78,10 @@ class ToontjeHogerKids2Preverbal(ToontjeHoger2Preverbal):
         return [score]
 
     def get_round1_question(self):
-        return "Welk plaatje denk jij dat er hoort bij de stem van een mens?"
+        return "Welk plaatje denk jij dat hoort bij de stem van een mens?"
 
     def get_round2_question(self):
-        return "Hierboven zie je twee spectogrammen van baby huiltjes. Een van een Duitse baby en een van een Franse baby. De talen Frans en Duits klinken heel anders. Kun jij bedenken welke van deze baby’s de Franse baby is?"
+        return "Hierboven zie je twee spectrogrammen van babyhuiltjes.  Eentje is een Duitse baby en eentje is een Franse baby. De talen Frans en Duits klinken heel anders. Kun jij bedenken welke van deze baby’s de Franse baby is?"
 
     def get_final_round(self, session):
 
@@ -98,7 +94,7 @@ class ToontjeHogerKids2Preverbal(ToontjeHoger2Preverbal):
 
         # Final
         final_text = "Goed gedaan!" if session.final_score >= 2 * \
-            self.SCORE_CORRECT else "Dat bleek toch even lastig!"
+            self.SCORE_CORRECT else "Best lastig!"
         final = Final(
             session=session,
             final_text=final_text,
@@ -107,13 +103,17 @@ class ToontjeHogerKids2Preverbal(ToontjeHoger2Preverbal):
         )
 
         # Info page
+        debrief_message = "Had jij dat gedacht, dat Franse en Duitse baby's anders huilen? Waarom zouden ze dat doen denk je? Bekijk de filmpjes om dit uit te vinden!"
         body = render_to_string(
-            join('info', 'toontjehoger', 'experiment2.html'))
+            join('info', 'toontjehogerkids', 'debrief.html'),
+            {'debrief': debrief_message,
+             'vid1': 'https://www.youtube.com/embed/QV9rM_7HE3s?si=V4SKnbDgdBLhPivt',
+             'vid2': 'https://www.youtube.com/embed/w1f9Rr0yXIs?si=Cjz2CU9wUlm-ST8c'})
         info = Info(
             body=body,
             heading="Het eerste luisteren",
-            button_label="Terug naar ToontjeHoger",
-            button_link="/toontjehoger"
+            button_label="Terug naar ToontjeHogerKids",
+            button_link="/collection/thkids"
         )
 
         return [*score, final, info]

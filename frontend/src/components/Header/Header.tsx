@@ -1,27 +1,36 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 import Rank from "../Rank/Rank";
 import Social from "../Social/Social"
+import HTML from '@/components/HTML/HTML';
 
 interface HeaderProps {
+    experimentCollectionTitle: string;
+    experimentCollectionDescription: string;
     nextExperimentSlug: string | undefined;
     nextExperimentButtonText: string;
     collectionSlug: string;
     aboutButtonText: string;
-    showScore: boolean;
     totalScore: Number;
-    score: Object;    
 }
 
-interface score {
+interface Score {
     scoreClass: string;
     scoreLabel: string;
     noScoreLabel: string;
 }
 
-export const Header: React.FC<HeaderProps> = ({ nextExperimentSlug, nextExperimentButtonText, collectionSlug, aboutButtonText, showScore, totalScore, score }) => {
-    
+export const Header: React.FC<HeaderProps> = ({
+    experimentCollectionDescription,
+    nextExperimentSlug,
+    nextExperimentButtonText,
+    collectionSlug,
+    aboutButtonText,
+    totalScore,
+    score,
+}) => {
+
     const social = {
         'apps': ['facebook', 'twitter'],
         'message': `I scored ${totalScore} points`,
@@ -31,40 +40,40 @@ export const Header: React.FC<HeaderProps> = ({ nextExperimentSlug, nextExperime
 
     const useAnimatedScore = (targetScore: number) => {
         const [score, setScore] = useState(0);
-    
+
         useEffect(() => {
             if (targetScore === 0) {
                 setScore(0);
                 return;
             }
-    
+
             let animationFrameId: number;
-    
+
             const nextStep = () => {
                 setScore((prevScore) => {
                     const difference = targetScore - prevScore;
                     const scoreStep = Math.max(1, Math.min(10, Math.ceil(Math.abs(difference) / 10)));
-    
+
                     if (difference === 0) {
                         cancelAnimationFrame(animationFrameId);
                         return prevScore;
                     }
-    
+
                     const newScore = prevScore + Math.sign(difference) * scoreStep;
                     animationFrameId = requestAnimationFrame(nextStep);
                     return newScore;
                 });
             };
-    
+
             // Start the animation
             animationFrameId = requestAnimationFrame(nextStep);
-    
+
             // Cleanup function to cancel the animation frame
             return () => {
                 cancelAnimationFrame(animationFrameId);
             };
         }, [targetScore]);
-    
+
         return score;
     };
 
@@ -81,10 +90,11 @@ export const Header: React.FC<HeaderProps> = ({ nextExperimentSlug, nextExperime
             </div>
         );
     };
-    
+
     return (
         <div className="hero aha__header">
             <div className="intro">
+                <HTML body={experimentCollectionDescription} innerClassName="" />
                 <nav className="actions">
                     {nextExperimentSlug && <a className="btn btn-lg btn-primary" href={`/${nextExperimentSlug}`}>{nextExperimentButtonText}</a>}
                     {aboutButtonText && <Link className="btn btn-lg btn-outline-primary" to={`/collection/${collectionSlug}/about`}>{aboutButtonText}</Link>}
@@ -93,14 +103,14 @@ export const Header: React.FC<HeaderProps> = ({ nextExperimentSlug, nextExperime
             {score && totalScore !== 0 && (
                 <div className="results">
                     <Score
-                    score={totalScore}
-                    scoreClass={score.scoreClass}
-                    label={score.scoreLabel}
+                        score={totalScore}
+                        scoreClass={score.scoreClass}
+                        label={score.scoreLabel}
                     />
                     <Social
-                        social={social}                        
+                        social={social}
                     />
-                </div>                
+                </div>
             )}
             {score && totalScore === 0 && (
                 <h3>{score.noScoreLabel}</h3>
@@ -108,5 +118,7 @@ export const Header: React.FC<HeaderProps> = ({ nextExperimentSlug, nextExperime
         </div>
     );
 }
+
+
 
 export default Header;

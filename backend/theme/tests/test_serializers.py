@@ -12,14 +12,19 @@ class ThemeConfigSerializerTest(TestCase):
     @classmethod
     def setUpTestData(cls):
         logo_image = Image.objects.create(
+            title='Image',
+            description='',
             file='someimage.jpg',
-            href='someurl.com',
-            alt='Alt text'
+            href='https://example.com',
+            alt='Alt text',
+            target='_self',
+            rel='',
         )
         background_image = Image.objects.create(
             file='anotherimage.png',
-            href='another.url.com',
-            alt='Another alt text'
+            href='https://other.example.com',
+            alt='Another alt text',
+            target='',
         )
         cls.theme = ThemeConfig.objects.create(
             name='Default',
@@ -46,14 +51,24 @@ class ThemeConfigSerializerTest(TestCase):
             'disclaimer': '<p>Some <a href="https://example.com/our-team">information</a></p>',
             'logos': [
                 {
-                    'file': f'{settings.MEDIA_URL}someimage.jpg',
-                    'href': 'someurl.com',
-                    'alt': 'Alt text'
+                    'file': f'{settings.BASE_URL}{settings.MEDIA_URL}someimage.jpg',
+                    'href': 'https://example.com',
+                    'alt': 'Alt text',
+                    'title': 'Image',
+                    'description': '',
+                    'rel': '',
+                    'target': '_self',
+                    'tags': [],
                 },
                 {
-                    'file': f'{settings.MEDIA_URL}anotherimage.png',
-                    'href': 'another.url.com',
-                    'alt': 'Another alt text'
+                    'file': f'{settings.BASE_URL}{settings.MEDIA_URL}anotherimage.png',
+                    'href': 'https://other.example.com',
+                    'alt': 'Another alt text',
+                    'title': '',
+                    'description': '',
+                    'rel': '',
+                    'tags': [],
+                    'target': '',
                 }
             ],
             'privacy': '<p>Some privacy message</p>'
@@ -78,8 +93,17 @@ class ThemeConfigSerializerTest(TestCase):
             'description': 'Default theme configuration',
             'headingFontUrl': 'https://example.com/heading_font',
             'bodyFontUrl': 'https://example.com/body_font',
-            'logoUrl': f'{settings.MEDIA_URL}someimage.jpg',
-            'backgroundUrl': f'{settings.MEDIA_URL}anotherimage.png',
+            'logo': {
+                'file': f'{settings.BASE_URL}{settings.MEDIA_URL}someimage.jpg',
+                'href': 'https://example.com',
+                'alt': 'Alt text',
+                'title': 'Image',
+                'description': '',
+                'rel': '',
+                'tags': [],
+                'target': '_self',
+            },
+            'backgroundUrl': f'{settings.BASE_URL}{settings.MEDIA_URL}anotherimage.png',
             'footer': serialize_footer(self.footer),
             'header': serialize_header(self.header),
         }
@@ -95,7 +119,7 @@ class ThemeConfigSerializerTest(TestCase):
             'description': 'Default theme configuration',
             'headingFontUrl': 'https://example.com/heading_font',
             'bodyFontUrl': 'https://example.com/body_font',
-            'logoUrl': None,
+            'logo': None,
             'backgroundUrl': None,
             'footer': serialize_footer(self.footer),
             'header': serialize_header(self.header),
@@ -109,8 +133,17 @@ class ThemeConfigSerializerTest(TestCase):
             'description': 'Default theme configuration',
             'headingFontUrl': 'https://example.com/heading_font',
             'bodyFontUrl': 'https://example.com/body_font',
-            'logoUrl': f'{settings.MEDIA_URL}someimage.jpg',
-            'backgroundUrl': f'{settings.MEDIA_URL}anotherimage.png',
+            'logo': {
+                'file': f'{settings.BASE_URL}{settings.MEDIA_URL}someimage.jpg',
+                'href': 'https://example.com',
+                'alt': 'Alt text',
+                'title': 'Image',
+                'description': '',
+                'rel': '',
+                'target': '_self',
+                'tags': [],
+            },
+            'backgroundUrl': f'{settings.BASE_URL}{settings.MEDIA_URL}anotherimage.png',
             'header': serialize_header(self.header),
             'footer': None,
         }
@@ -123,8 +156,17 @@ class ThemeConfigSerializerTest(TestCase):
             'description': 'Default theme configuration',
             'headingFontUrl': 'https://example.com/heading_font',
             'bodyFontUrl': 'https://example.com/body_font',
-            'logoUrl': f'{settings.MEDIA_URL}someimage.jpg',
-            'backgroundUrl': f'{settings.MEDIA_URL}anotherimage.png',
+            'logo': {
+                'file': f'{settings.BASE_URL}{settings.MEDIA_URL}someimage.jpg',
+                'href': 'https://example.com',
+                'alt': 'Alt text',
+                'title': 'Image',
+                'description': '',
+                'rel': '',
+                'target': '_self',
+                'tags': [],
+            },
+            'backgroundUrl': f'{settings.BASE_URL}{settings.MEDIA_URL}anotherimage.png',
             'header': None,
             'footer': serialize_footer(self.footer),
         }

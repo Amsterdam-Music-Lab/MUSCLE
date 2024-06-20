@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     'session',
     'section',
     'theme',
+    'question'
 ]
 
 MIDDLEWARE = [
@@ -190,8 +191,8 @@ else:
 
 MARKUP_SETTINGS = {
     'markdown': {
-        'safe_mode': True
+        'safe_mode': False
     }
 }
 
-SUBPATH = os.getenv('AML_SUBPATH', None)
+SUBPATH = os.getenv('AML_SUBPATH', '')

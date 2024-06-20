@@ -32,18 +32,19 @@ class Playback(BaseAction):
         - resume_play: if the playback should resume from where a previous view left off
     '''
 
-    def __init__(self,
-                 sections,
-                 preload_message='',
-                 instruction='',
-                 play_from=0,
-                 show_animation=False,
-                 mute=False,
-                 timeout_after_playback=None,
-                 stop_audio_after=None,
-                 resume_play=False,
-                 style=FrontendStyle()
-                 ):
+    def __init__(
+        self,
+        sections,
+        preload_message='',
+        instruction='',
+        play_from=0,
+        show_animation=False,
+        mute=False,
+        timeout_after_playback=None,
+        stop_audio_after=None,
+        resume_play=False,
+        style=FrontendStyle()
+    ):
         self.sections = [{'id': s.id, 'url': s.absolute_url(), 'group': s.group}
                          for s in sections]
         self.play_method = determine_play_method(sections[0])
@@ -85,14 +86,21 @@ class Multiplayer(PlayButton):
     '''
     This is a player with multiple play buttons
     - stop_audio_after: after how many seconds to stop audio
-    - label_style: set if players should be labeled in alphabetic / numeric  / roman style (based on player index)
     - labels: pass list of strings if players should have custom labels
     '''
 
-    def __init__(self, sections, stop_audio_after=5, labels=[], **kwargs):
+    def __init__(
+        self,
+        sections,
+        stop_audio_after=5,
+        labels=[],
+        style=FrontendStyle(),
+        **kwargs,
+    ):
         super().__init__(sections, **kwargs)
         self.ID = TYPE_MULTIPLAYER
         self.stop_audio_after = stop_audio_after
+        self.style = style
         if labels:
             if len(labels) != len(self.sections):
                 raise UserWarning(
@@ -100,7 +108,7 @@ class Multiplayer(PlayButton):
             self.labels = labels
 
 
-class ImagePlayer(PlayButton):
+class ImagePlayer(Multiplayer):
     '''
     This is a special case of the Multiplayer:
     it shows an image next to each play button
