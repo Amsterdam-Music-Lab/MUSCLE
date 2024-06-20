@@ -1,8 +1,40 @@
-{% extends "admin/base_site.html" %} {% load inline_action_tags %} {% block content %}
+{% extends "admin/base_site.html" %} {% load inline_action_tags %} {% block content %}{% load static %}
+<script src="{% static 'collection_dashboard_sessions.js' %}"></script>
 <style>
+    input {
+        margin-right: 1rem;
+    }
+    input[value="close"] {
+        float: right;
+
+    }
     table {
         width: 100%;
         margin-bottom: 3rem;
+    }
+    #all-sessions tr {
+        background-color: var(--body-bg)
+    }
+    td, th {
+        vertical-align: middle;        
+        width: auto;        
+    }
+    td {
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+    td.table-sessions {
+        width: 6rem;
+    }
+    td.table-results {
+        width: 8rem;
+    }
+    td.participants-overview {
+        max-width: 25vw;        
+    }
+    pre {
+        color: black;
+        font-size: 1rem;
     }
     .hide {
         display: none;
@@ -11,89 +43,272 @@
         font-weight: 600;
         margin: 2rem 0px 2rem 0px;
     }
+    .pop-up {        
+        background-color: var(--body-bg);
+        box-shadow: 0px 0px 10px var(--primary);
+        position: fixed;
+       
+        padding: 2rem;        
+        border-style: solid;
+        border-color: var(--primary);
+        border-width: 1px;   
+        border-radius: 1px;
+        overflow-y: scroll;
+    }
+    .pop-up-big {
+        top: 4.2rem;
+        left: 10vw;        
+        width: calc(80vw - 34px);
+        height: 80vh;        
+
+    }
+    .pop-up-small {
+        top: 6.2rem;
+        left: 12vw;
+        width: calc(76vw - 51px);
+        height: 70vh;
+    }
+
+
+
 </style>
 
 <h1>Experiments in collection: {{ collection.name }}</h1>
 <p>
     <form action="" method="post">
+        <!-- Show all participants and sessions -->
         {% csrf_token %}{% render_inline_action_fields %}
-        <input type="submit" name="_participants" value="Participants" id="participant-button" />
-        <input type="submit" name="_sessions" value="Sessions" id="session-button" />
-        <input type="submit" name="_results" value="Results" id="result-button" />
+        <input type="button" value="{{ collect_data.participant_count }} participants" id="show-participants" />
+        <input type="button" value="{{ collect_data.session_count }} sessions" id="show-sessions" />
     </form>   
 </p>
 
+<!-- Experiments table -->
 <table>
     <caption class="dashboard-caption">Experiments</caption>
-    <tbody>
+    <thead>
         <tr>
-            <th>Experiment</th>
+            <th>Experiment *</th>
             <th>Times started</th>
             <th>Times finished</th>
-            <th>Participants</th>
+            <th>Participant count</th>
+            <th>Participants *</th>
             <th>Sessions</th>           
-        </tr>        
-        {% for exp in experiments %}
+        </tr>
+    </thead>
         
+    <tbody>
+        <!-- List experiments in this collection -->
+        {% for exp in experiments %}        
         <tr>
             <td>
-                <p>{{ exp.name }}</p>
+                <p>
+                    <a href="{% url 'admin:experiment_experiment_change' exp.id %}" target="_blank">
+                    {{ exp.name }}</a>
+                </p>                
             </td>
+
             <td>
-                <p>{{ exp.name }}</p>
+                <p>{{ exp.started }}</p>
             </td>
+
             <td>
-                <p>{{ exp.name }}</p>
+                <p>{{ exp.finished }}</p>
             </td>
+
             <td>
-                
+                <p>{{ exp.participant_count }}</p>
             </td>
-            <td>
-                <a href="#all-sessions"><p id="toggle-sessions-{{ exp.id }}">Show Sessions</p></a>
+
+            <td class="participants-overview">
+                <p>
+                    <!-- List participants for this experiment -->
+                    {% for participant in exp.participants %}
+                        
+                        {% if participant.participant_id_url %}
+                            <a href="{% url 'admin:participant_participant_change' participant.id %}" target="_blank" title="Participant URL id">
+                                {{ participant.participant_id_url }}
+                            </a>
+                        {% else %}
+                            <a href="{% url 'admin:participant_participant_change' participant.id %}" target="_blank" title="Participant object id">
+                                {{ participant.id }}
+                            </a>
+                        {% endif %}
+                    <span>, </span>
+                    {% endfor %}
+                </p>                
+            </td>
+            
+            <td class="table-sessions">
+                <input type="button" value="Sessions" id="show-sessions-{{ exp.id }}" />
                 <script>
-                    document.getElementById("toggle-sessions-{{ exp.id }}").addEventListener("click", function() {                            
-                        document.querySelectorAll(".experiment-{{ exp.id }}").forEach(function (element) {
-                            element.classList.toggle("hide");
-                        })
-                    })
+                    // Show all session for this experiment in popup
+                    showExperimentSessions({{ exp.id }})                                        
                 </script>
             </td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
 
-<table id="all-sessions">
-    <caption class="dashboard-caption">Sessions</caption>
-    <tbody>
-        <tr>
-            <th>Session</th>
-            <th>Participant</th>
-            <th>Times finished</th>
-            <th>Participants</th>
-            <th>Results</th>           
         </tr>        
-        {% for session in sessions %}                
-            <tr class="session-row hide experiment-{{ session.experiment.id }}">
-                <td>
-                    <p>{{ session.id }}</p>
-                </td>
-                <td>
-                    <p>{{ session.participant.id }}</p>
-                </td>
-                <td>
-                    <p>{{ session.name }}</p>
-                </td>
-                <td>
-                    
-                </td>
-                <td>
-                    <p>Preview results</p>
-                </td>
-            </tr>
         {% endfor %}
-    </tbody>
+    </tbody>    
 </table>
+<p class="help-text mini">* Click to edit in a new window</p>
 
+<!-- session table -->
+<div id="all-sessions" class="pop-up pop-up-big hide">
+    <input type="button" value="close" onClick="closeSessions()" />
+    <table>
+        <caption class="dashboard-caption">Sessions</caption>
+        <thead>
+            <tr>
+                <th>Session *</th>
+                <th>Experiment *</th>
+                <th>Participant *</th>
+                <th>Started</th>
+                <th>Finished</th>
+                <th>Final score</th>
+                <th>Results</th>
+                <th>Preview</th>          
+            </tr>
+        </thead>
 
+        <tbody>
+            <!-- List and hide all sessions in this collection with a unique id per experiment -->  
+            {% for session in sessions %}                
+                <tr class="session-row hide experiment-{{ session.experiment.id }} participant-session-{{ session.participant.id }}">
+
+                    <td>
+                        <p>
+                            <a href="{% url 'admin:session_session_change' session.id %}" target="_blank">
+                            {{ session.id }}</a>
+                        </p>
+                    </td>
+
+                    <td>
+                        <p>
+                            <a href="{% url 'admin:experiment_experiment_change' session.experiment.id %}" target="_blank">
+                            {{ session.experiment.name }}</a>
+                        </p>                
+                    </td>
+
+                    <td>
+                        <p>
+                            <a href="{% url 'admin:participant_participant_change' session.participant.id %}" target="_blank">
+                            {{ session.participant.participant_id_url }}</a>
+                        </p>                        
+                    </td>
+
+                    <td>
+                        <p>{{ session.started_at }}</p>
+                    </td>
+
+                    <td>
+                        <p>{{ session.finished_at }}</p>
+                    </td>
+
+                    <td>
+                        <p>{{ session.final_score }}</p>
+                    </td>
+
+                    <td>
+                        <a href="{% url 'admin:session_session_change' session.id %}" target="_blank">
+                            <button class="button">Results</button>
+                        </a>
+                    </td>
+
+                    <td class="table-results">
+                        <input type="button" value="Preview results" onClick="showResults({{ session.id }})" />
+                    </td>                    
+                </tr>
+                
+                <!-- Popup with results for this session -->
+                <div class="pop-up pop-up-small hide show-results" id="results-{{ session.id }}">
+                    <input type="button" value="close" onClick="closeResults()" />
+
+                    {% for result in session.export_results %}
+                    <h2>Result : <a href="{% url 'admin:session_session_change' session.id %}" target="_blank">{{ result.id }}</a></h2>
+                    <h3>
+                        Session: <a href="{% url 'admin:session_session_change' session.id %}" target="_blank">{{ session.id }}</a><br>                       
+                        Participant: <a href="{% url 'admin:participant_participant_change' session.participant.id %}" target="_blank">{{ session.participant.participant_id_url }}</a><br>                        
+                        Experiment: <a href="{% url 'admin:experiment_experiment_change' session.experiment.id %}" target="_blank">{{ session.experiment.name }}</a>
+                    </h3>
+                    
+                    <pre>
+Created:            {{ result.created_at }}
+Section:            {{ result.section.filename }}
+Question key:       {{ result.question_key }}
+Expected response:  {{ result.expected_response }}
+Given response:     {{ result.given_response }}
+Comment:            {{ result.comment }}
+Score:              {{ result.score }}
+Scoring rule:       {{ result.scoring_rule }}
+                    </pre>
+
+                    <pre id="result-{{ result.id }}"></pre>
+                    <hr>
+                    <!-- Convert django json_data to json const and push to screen -->
+                    {{ result.json_data|json_script:result.id }}
+                    <script>                        
+                        const result{{ result.id }} = JSON.parse(document.getElementById({{ result.id }}).textContent);                        
+                        document.getElementById("result-{{ result.id }}").innerHTML = JSON.stringify(result{{ result.id }}, null, 4);
+                    </script>                     
+                    
+                    {% endfor %}
+                    <input type="button" value="close" onClick="closeResults()" />
+                </div>
+            {% endfor %}
+        </tbody>
+    </table>
+    <p class="help-text mini">* Click to edit in a new window</p>
+    <input type="button" value="close" onClick="closeSessions()" />
+</div>
+
+<!-- Participant table -->
+<div id="all-participants" class="hide pop-up pop-up-big">
+    <h1>All Participants in collection: {{ collection.name }}</h1>
+    <input type="button" value="close" onClick="closeParticipants()" />
+    <table>
+        <thead>
+            <tr>
+                <th>Participant URL id *</th>
+                <th>Participant id *</th>                
+                <th>Sessions</th>                             
+            </tr>        
+        </thead>
+
+        <tbody>
+            {% for participant in participants %}
+                <tr>
+                    
+                    <td>
+                        <p>
+                            <a href="{% url 'admin:participant_participant_change' participant.id %}" target="_blank">
+                                {{ participant.participant_id_url }}
+                            </a>
+                        </p>
+                    </td>
+                    
+                    <td>
+                        <p>
+                            <a href="{% url 'admin:participant_participant_change' participant.id %}" target="_blank">                                
+                                {{ participant.id }}
+                            </a>
+                        </p>
+                    </td>                   
+                    
+                    <td>
+                        
+                        <input type="button" value="Sessions" id="participant-sessions-{{ participant.id }}" />
+                        <script>
+                            // Show all session for this experiment in popup
+                            showParticipantSessions({{ participant.id }})                                       
+                        </script>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <p class="help-text mini">* Click to edit in a new window</p>
+    <input type="button" value="close" onClick="closeParticipants()" />
+</div>
+<script src="{% static 'collection_dashboard.js' %}"></script>
 {% endblock %}

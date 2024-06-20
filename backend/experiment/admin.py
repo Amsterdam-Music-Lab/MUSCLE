@@ -189,6 +189,14 @@ class ExperimentCollectionGroupInline(admin.StackedInline):
     inlines = [GroupedExperimentInline]
 
 
+def current_participants(sessions):
+    """Get distinct list of participants for given sessions"""
+    participants = {}
+    for session in sessions:
+        participants[session.participant.id] = session.participant
+    return participants.values()
+
+
 class ExperimentCollectionAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
     list_display = ('name', 'slug_link', 'description_excerpt', 'dashboard', 'groups')
     fields = ['slug', 'name', 'description', 'consent', 'theme_config', 'dashboard',
@@ -222,39 +230,28 @@ class ExperimentCollectionAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
         all_experiments = obj.associated_experiments()
         all_participants = obj.current_participants()
         all_sessions = obj.export_sessions()
+        collect_data = {
+            'participant_count': len(all_participants),
+            'session_count': len(all_sessions)
+        }
 
-        if '_back' in request.POST:
-            return render(
-                request,
-                'collection-dashboard.html',
-                context={'collection': obj, 
-                         'experiments': all_experiments}
-            )
-        if '_sessions' in request.POST:
-            all_sessions = obj.export_sessions
-            print(all_sessions)
-            return render(
-                request,
-                'collection-sessions.html',
-                context={'collection': obj,
-                         'sessions': all_sessions}
-            )
-        if '_participants' in request.POST:            
-            all_participants = obj.current_participants()
-            return render(
-                request,
-                'collection-participants.html',
-                context={'collection': obj,
-                         'participants': all_participants}
-            )
-    
+        experiments = [{
+            'id': exp.id,
+            'name': exp.name,
+            'started': all_sessions.filter(experiment=exp).count(),
+            'finished': all_sessions.filter(experiment=exp, finished_at__isnull=False).count(),
+            'participant_count': len(current_participants(all_sessions.filter(experiment=exp))),
+            'participants': current_participants(all_sessions.filter(experiment=exp))
+            } for exp in all_experiments]
+        
         return render(
             request,
             'collection-dashboard.html',
             context={'collection': obj,
-                     'experiments': all_experiments,
+                     'experiments': experiments,
                      'sessions': all_sessions,
-                     'participants': all_participants}
+                     'participants': all_participants,
+                     'collect_data': collect_data}
         )
 
 
