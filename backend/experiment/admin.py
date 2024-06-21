@@ -202,14 +202,6 @@ class ExperimentCollectionGroupInline(admin.StackedInline):
     inlines = [GroupedExperimentInline]
 
 
-def current_participants(sessions):
-    """Get distinct list of participants for given sessions"""
-    participants = {}
-    for session in sessions:
-        participants[session.participant.id] = session.participant
-    return participants.values()
-
-
 class ExperimentCollectionAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
     list_display = ('name', 'slug_link', 'description_excerpt',
                     'dashboard', 'groups', 'active')
@@ -253,10 +245,10 @@ class ExperimentCollectionAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
         experiments = [{
             'id': exp.id,
             'name': exp.name,
-            'started': all_sessions.filter(experiment=exp).count(),
-            'finished': all_sessions.filter(experiment=exp, finished_at__isnull=False).count(),
-            'participant_count': len(current_participants(all_sessions.filter(experiment=exp))),
-            'participants': current_participants(all_sessions.filter(experiment=exp))
+            'started': len(all_sessions.filter(experiment=exp)),
+            'finished': len(all_sessions.filter(experiment=exp, finished_at__isnull=False)),
+            'participant_count': len(exp.current_participants()),
+            'participants': exp.current_participants()
             } for exp in all_experiments]
         
         return render(
