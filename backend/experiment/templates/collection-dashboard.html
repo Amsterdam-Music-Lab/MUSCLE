@@ -1,4 +1,4 @@
-{% extends "admin/base_site.html" %} {% load inline_action_tags %} {% block content %}{% load static %}
+{% extends "admin/base_site.html" %} {% block content %}{% load static %}
 <script src="{% static 'collection_dashboard_sessions.js' %}"></script>
 <style>
     input {
@@ -68,16 +68,12 @@
         width: calc(76vw - 51px);
         height: 70vh;
     }
-
-
-
 </style>
 
 <h1>Experiments in collection: {{ collection.name }}</h1>
 <p>
     <form action="" method="post">
-        <!-- Show all participants and sessions -->
-        {% csrf_token %}{% render_inline_action_fields %}
+        <!-- Show all participants and sessions -->        
         <input type="button" value="{{ collect_data.participant_count }} participants" id="show-participants" />
         <input type="button" value="{{ collect_data.session_count }} sessions" id="show-sessions" />
     </form>   
