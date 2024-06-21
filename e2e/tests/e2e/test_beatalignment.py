@@ -33,4 +33,4 @@ class TestBeatAlignment(BaseTest):
         end_heading = self.driver.find_element(By.TAG_NAME, "h4").text == "END"
         if not end_heading:
             raise Exception("End heading not found")
-        print("Beat Alignment Test completed!")
+        print("\n✅ Beat Alignment Test completed!")
