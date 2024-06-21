@@ -1,5 +1,7 @@
 from django.test import TestCase
 from experiment.models import Experiment, ExperimentCollection, ExperimentCollectionGroup, GroupedExperiment
+from session.models import Session
+from participant.models import Participant
 
 
 class TestModelExperiment(TestCase):
@@ -16,6 +18,12 @@ class TestModelExperiment(TestCase):
 
 
 class TestModelExperimentCollection(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        cls.collection = ExperimentCollection.objects.create(name='collection')
+        cls.participant1 = Participant.objects.create(participant_id_url='001')
+        cls.participant2 = Participant.objects.create(participant_id_url='002')
+        cls.participant3 = Participant.objects.create(participant_id_url='003')
 
     def test_verbose_name_plural(self):
         # Get the ExperimentCollection Meta class
@@ -24,7 +32,7 @@ class TestModelExperimentCollection(TestCase):
         self.assertEqual(meta.verbose_name_plural, "Experiment Collections")
 
     def test_associated_experiments(self):
-        collection = ExperimentCollection.objects.create(name='collection')
+        collection = self.collection
         group1 = ExperimentCollectionGroup.objects.create(
             name='first_phase', series=collection)
         group2 = ExperimentCollectionGroup.objects.create(
@@ -43,3 +51,35 @@ class TestModelExperimentCollection(TestCase):
             experiment=experiment3, group=group2)
         self.assertEqual(collection.associated_experiments(), [
                          experiment, experiment2, experiment3])
+
+    def test_export_sessions(self):
+        collection = self.collection
+        group = ExperimentCollectionGroup.objects.create(
+            name='test', series=collection)
+        experiment = Experiment.objects.create(
+            rules='THATS_MY_SONG', slug='hooked', rounds=42)
+        GroupedExperiment.objects.create(
+            experiment=experiment, group=group)
+        Session.objects.bulk_create(
+            [Session(experiment=experiment, participant=self.participant1),
+             Session(experiment=experiment, participant=self.participant2),
+             Session(experiment=experiment, participant=self.participant3)]
+             )
+        sessions = collection.export_sessions()
+        self.assertEqual(len(sessions), 3)
+
+    def test_current_participants(self):
+        collection = self.collection
+        group = ExperimentCollectionGroup.objects.create(
+            name='test', series=collection)
+        experiment = Experiment.objects.create(
+            rules='THATS_MY_SONG', slug='hooked', rounds=42)
+        GroupedExperiment.objects.create(
+            experiment=experiment, group=group)
+        Session.objects.bulk_create(
+            [Session(experiment=experiment, participant=self.participant1),
+             Session(experiment=experiment, participant=self.participant2),
+             Session(experiment=experiment, participant=self.participant3)]
+             )
+        participants = collection.current_participants()
+        self.assertEqual(len(participants), 3)
