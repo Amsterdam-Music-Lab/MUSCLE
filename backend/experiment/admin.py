@@ -33,7 +33,6 @@ from experiment.forms import (
 from section.models import Section, Song
 from result.models import Result
 from participant.models import Participant
-from session.models import Session
 
 
 class FeedbackInline(admin.TabularInline):
