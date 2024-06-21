@@ -307,10 +307,11 @@ jobs:
     name: E2E tests on acceptance environment
     runs-on: ACC
     # temporarily true to test e2e tests
-    if: github.ref == 'refs/heads/main' || github.ref == 'refs/tags/*' || (github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main')
+    if: true || github.ref == 'refs/heads/main' || github.ref == 'refs/tags/*' || (github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main')
 
     # needs to happen after the deployment to the acceptance environment
-    needs: deploy-acceptance
+    # temporarily turned off for testing the tests :-)
+    # needs: deploy-acceptance
 
     env:
       BASE_URL: "https://acc.amsterdammusiclab.nl"
@@ -325,10 +326,11 @@ jobs:
     name: Smoke tests on production environment
     runs-on: PRD
     # temporarily true to test smoke tests
-    if: github.ref == 'refs/tags/*' || github.event_name == 'release' || (github.event_name == 'workflow_dispatch' && github.ref == 'refs/tags/*')
+    if: true || github.ref == 'refs/tags/*' || github.event_name == 'release' || (github.event_name == 'workflow_dispatch' && github.ref == 'refs/tags/*')
 
     # needs to happen after the deployment to the production environment
-    needs: deploy-production
+    # temporarily turned off for testing the tests :-)
+    # needs: deploy-production
 
     env:
       BASE_URL: "https://app.amsterdammusiclab.nl"
