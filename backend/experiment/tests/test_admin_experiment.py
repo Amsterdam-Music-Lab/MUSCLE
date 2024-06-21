@@ -166,7 +166,7 @@ class TestAdminExperimentExport(TestCase):
 
 
 class TestExperimentCollectionAdmin(TestCase):
-    
+
     @classmethod
     def setUpTestData(self):
         self.experiment_series = ExperimentCollection.objects.create(
@@ -200,6 +200,11 @@ class TestExperimentCollectionAdmin(TestCase):
                 ExperimentCollection.objects.create(description='')),
             ''
         )
+
+    def test_experiment_collection_admin_research_dashboard(self):
+        request = RequestFactory().request()
+        response = self.admin.dashboard(request, self.experiment_series)
+        self.assertEqual(response.status_code, 200)
 
 
 class ExperimentCollectionGroupAdminTest(TestCase):
