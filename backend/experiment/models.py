@@ -57,7 +57,7 @@ class ExperimentCollection(models.Model):
         """export sessions for this collection"""
         all_sessions = Session.objects.none()
         for exp in self.associated_experiments():
-            all_sessions |= Session.objects.filter(experiment=exp, json_data__experiment_collection=self.name)
+            all_sessions |= Session.objects.filter(experiment=exp)
         return all_sessions
 
     def current_participants(self):
