@@ -57,7 +57,7 @@ class ExperimentCollection(models.Model):
         """export sessions for this collection"""
         all_sessions = Session.objects.none()
         for exp in self.associated_experiments():
-            all_sessions |= Session.objects.filter(experiment=exp)
+            all_sessions |= Session.objects.filter(experiment=exp).order_by('-started_at')
         return all_sessions
 
     def current_participants(self):
@@ -319,4 +319,3 @@ class Experiment(models.Model):
 class Feedback(models.Model):
     text = models.TextField()
     experiment = models.ForeignKey(Experiment, on_delete=models.CASCADE)
-
