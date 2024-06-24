@@ -13,7 +13,7 @@ axios.defaults.withCredentials = true;
 
 // API endpoints
 export const URLS = {
-    experiment: {
+    block: {
         get: (slug: string) => "/experiment/" + slug + "/",
         feedback: (slug: string) => "/experiment/" + slug + "/feedback/",
     },
@@ -43,8 +43,8 @@ export const URLS = {
     }
 };
 
-export const useExperiment = (slug: string) =>
-    useGet(API_BASE_URL + URLS.experiment.get(slug));
+export const useBlock = (slug: string) =>
+    useGet(API_BASE_URL + URLS.block.get(slug));
 
 export const useExperimentCollection = (slug: string) => {
     const data = useGet(API_BASE_URL + URLS.experiment_collection.get(slug));
@@ -256,7 +256,7 @@ interface PostFeedbackParams {
 
 // Collect user feedback
 export const postFeedback = async({ experimentSlug, feedback, participant }: PostFeedbackParams) => {
-    const endpoint = API_BASE_URL + URLS.experiment.feedback(experimentSlug)
+    const endpoint = API_BASE_URL + URLS.block.feedback(experimentSlug)
     try {
         const response = await axios.post(
             endpoint,

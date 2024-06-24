@@ -4,7 +4,7 @@ import { withRouter } from "react-router-dom";
 import classNames from "classnames";
 
 import useBoundStore from "@/util/stores";
-import { createSession, getNextRound, useExperiment } from "@/API";
+import { createSession, getNextRound, useBlock } from "@/API";
 import Consent from "@/components/Consent/Consent";
 import DefaultPage from "@/components/Page/DefaultPage";
 import ToontjeHoger from "@/components/ToontjeHoger/ToontjeHoger";
@@ -45,7 +45,7 @@ const Block = ({ match }) => {
     const playlist = useRef(null);
 
     // API hooks
-    const [experiment, loadingExperiment] = useExperiment(match.params.slug);
+    const [experiment, loadingExperiment] = useBlock(match.params.slug);
 
     const loadingText = experiment ? experiment.loading_text : "";
     const className = experiment ? experiment.class_name : "";

@@ -56,7 +56,7 @@ const Profile = () => {
                                     <div className="stats">
                                         <h4>
                                             <Link
-                                                to={URLS.experiment.replace(
+                                                to={URLS.block.replace(
                                                     ":slug",
                                                     score.experiment_slug
                                                 )}
