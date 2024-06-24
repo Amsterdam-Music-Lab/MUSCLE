@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import ExperimentCollection from "@/types/ExperimentCollection";
 import Header from "@/components/Header/Header";
 import Logo from "@/components/Logo/Logo";
-import IExperiment from "@/types/Experiment";
+import IBlock from "@/types/Block";
 
 
 interface ExperimentCollectionDashboardProps {
@@ -39,7 +39,7 @@ export const ExperimentCollectionDashboard: React.FC<ExperimentCollectionDashboa
             {/* Experiments */}
             <div role="menu" className="dashboard toontjehoger">
                 <ul>
-                    {dashboard.map((exp: IExperiment) => (
+                    {dashboard.map((exp: IBlock) => (
                         <li key={exp.slug}>
                             <Link to={getExperimentHref(exp.slug)} role="menuitem">
                                 <ImageOrPlaceholder imagePath={exp.image?.file} alt={exp.image?.alt ?? exp.description} />

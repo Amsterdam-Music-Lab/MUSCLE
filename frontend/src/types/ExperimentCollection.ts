@@ -1,4 +1,4 @@
-import Experiment from "./Experiment";
+import Experiment from "./Block";
 import Theme from "./Theme";
 
 export interface Consent {

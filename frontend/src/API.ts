@@ -2,7 +2,7 @@ import { API_BASE_URL } from "@/config";
 import useGet from "./util/useGet";
 import axios from "axios";
 import qs from "qs";
-import Experiment from "@/types/Experiment";
+import Block from "@/types/Block";
 import Participant from "./types/Participant";
 import Session from "./types/Session";
 
@@ -61,7 +61,7 @@ export const useConsent = (slug: string) =>
     useGet(API_BASE_URL + URLS.result.get('consent_' + slug));
 
 interface CreateConsentParams {
-    experiment: Experiment;
+    experiment: Block;
     participant: Participant;
 }
 
@@ -88,7 +88,7 @@ export const createConsent = async ({ experiment, participant }: CreateConsentPa
 };
 
 interface CreateSessionParams {
-    experiment: Experiment;
+    experiment: Block;
     participant: Participant;
     playlist: { current: string };
 }
