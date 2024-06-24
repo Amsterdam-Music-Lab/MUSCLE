@@ -10,7 +10,7 @@ import axios from "axios";
 import { API_BASE_URL, EXPERIMENT_SLUG, URLS } from "@/config";
 import { URLS as API_URLS } from "../../API";
 import useBoundStore from "../../util/stores";
-import Experiment from "../Experiment/Experiment";
+import Block from "../Block/Block";
 import ExperimentCollection from "../ExperimentCollection/ExperimentCollection";
 import LoaderContainer from "../LoaderContainer/LoaderContainer";
 import ConditionalRender from "../ConditionalRender/ConditionalRender";
@@ -83,8 +83,8 @@ const App = () => {
                         {/* Experiment Collection */}
                         <Route path={URLS.experimentCollection} component={ExperimentCollection} />
 
-                        {/* Experiment */}
-                        <Route path={URLS.experiment} component={Experiment} />
+                        {/* Block */}
+                        <Route path={URLS.experiment} component={Block} />
 
                         <Route path={URLS.session} />
 

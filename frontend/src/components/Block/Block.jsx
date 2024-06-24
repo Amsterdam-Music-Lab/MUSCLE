@@ -20,13 +20,13 @@ import UserFeedback from "@/components/UserFeedback/UserFeedback";
 import FontLoader from "@/components/FontLoader/FontLoader";
 import useResultHandler from "@/hooks/useResultHandler";
 
-// Experiment handles the main experiment flow:
+// Block handles the main experiment block flow:
 // - Loads the experiment and participant
 // - Renders the view based on the state that is provided by the server
 // - It handles sending results to the server
 // - Implements participant_id as URL parameter, e.g. http://localhost:3000/bat?participant_id=johnsmith34
 //   Empty URL parameter "participant_id" is the same as no URL parameter at all
-const Experiment = ({ match }) => {
+const Block = ({ match }) => {
     const startState = { view: "LOADING" };
     // Stores
     const setError = useBoundStore(state => state.setError);
@@ -176,7 +176,7 @@ const Experiment = ({ match }) => {
 
         // Show view, based on the unique view ID:
         switch (view) {
-            // Experiment views
+            // Block views
             // -------------------------
             case "TRIAL_VIEW":
                 return <Trial {...attrs} />;
@@ -281,4 +281,4 @@ const Experiment = ({ match }) => {
     );
 };
 
-export default withRouter(Experiment);
+export default withRouter(Block);

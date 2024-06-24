@@ -205,7 +205,7 @@ const ToontjeHogerHome = ({ experiment, config, experiments }) => {
                 </div>
             </div>
 
-            {/* Experiments */}
+            {/* Blocks */}
             <div className="experiments">
                 <ul>
                     {experiments.map((experiment) => (

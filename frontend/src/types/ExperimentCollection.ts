@@ -1,4 +1,4 @@
-import Experiment from "./Block";
+import Block from "./Block";
 import Theme from "./Theme";
 
 export interface Consent {
@@ -13,8 +13,8 @@ export default interface ExperimentCollection {
     slug: string;
     name: string;
     description: string;
-    dashboard: Experiment[];
-    nextExperiment: Experiment | null;
+    dashboard: Block[];
+    nextExperiment: Block | null;
     aboutContent: string;
     consent?: Consent;
     theme?: Theme;
