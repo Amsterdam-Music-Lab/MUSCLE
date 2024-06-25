@@ -1,12 +1,12 @@
 import classNames from "classnames";
 
-interface Rank {
+export interface RankPayload {
     class: string;
     text: string;
 }
 
 interface RankProps {
-    rank: Rank;
+    rank: RankPayload;
 }
 
 // Rank shows a decorated representation of a rank
