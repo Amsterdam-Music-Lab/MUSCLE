@@ -1,11 +1,10 @@
-
-import Question from '../components/Question/Question';
+import Question from "../components/Question/Question";
 
 export default {
-    title: 'Question',
+    title: "Question",
     component: Question,
     parameters: {
-        layout: 'fullscreen',
+        layout: "fullscreen",
     },
 };
 
@@ -17,7 +16,7 @@ export const Default = {
             view: "STRING",
             value: "",
         },
-        onChange: () => { },
+        onChange: () => {},
         id: 0,
         active: true,
         style: {},
@@ -25,7 +24,9 @@ export const Default = {
     },
     decorators: [
         (Story) => (
-            <div style={{ width: '100%', height: '100%', backgroundColor: '#ddd', padding: '1rem' }}>
+            <div
+                style={{ width: "100%", height: "100%", backgroundColor: "#ddd", padding: "1rem" }}
+            >
                 <Story />
             </div>
         ),
@@ -48,7 +49,9 @@ export const WithOnChange = {
     },
     decorators: [
         (Story) => (
-            <div style={{ width: '100%', height: '100%', backgroundColor: '#ddd', padding: '1rem' }}>
+            <div
+                style={{ width: "100%", height: "100%", backgroundColor: "#ddd", padding: "1rem" }}
+            >
                 <Story />
             </div>
         ),
@@ -63,7 +66,7 @@ export const WithActiveFalse = {
             view: "STRING",
             value: "",
         },
-        onChange: () => { },
+        onChange: () => {},
         id: 0,
         active: false,
         style: {},
@@ -71,7 +74,9 @@ export const WithActiveFalse = {
     },
     decorators: [
         (Story) => (
-            <div style={{ width: '100%', height: '100%', backgroundColor: '#ddd', padding: '1rem' }}>
+            <div
+                style={{ width: "100%", height: "100%", backgroundColor: "#ddd", padding: "1rem" }}
+            >
                 <Story />
             </div>
         ),
@@ -86,7 +91,7 @@ export const WithEmphasizeTitle = {
             view: "STRING",
             value: "",
         },
-        onChange: () => { },
+        onChange: () => {},
         id: 0,
         active: true,
         style: {},
@@ -94,7 +99,9 @@ export const WithEmphasizeTitle = {
     },
     decorators: [
         (Story) => (
-            <div style={{ width: '100%', height: '100%', backgroundColor: '#ddd', padding: '1rem' }}>
+            <div
+                style={{ width: "100%", height: "100%", backgroundColor: "#ddd", padding: "1rem" }}
+            >
                 <Story />
             </div>
         ),
@@ -109,7 +116,7 @@ export const WithStyle = {
             view: "STRING",
             value: "",
         },
-        onChange: () => { },
+        onChange: () => {},
         id: 0,
         active: true,
         style: { backgroundColor: "red" },
@@ -117,7 +124,9 @@ export const WithStyle = {
     },
     decorators: [
         (Story) => (
-            <div style={{ width: '100%', height: '100%', backgroundColor: '#ddd', padding: '1rem' }}>
+            <div
+                style={{ width: "100%", height: "100%", backgroundColor: "#ddd", padding: "1rem" }}
+            >
                 <Story />
             </div>
         ),
@@ -131,13 +140,9 @@ export const Checkboxes = {
             explainer: "This is the explainer",
             view: "CHECKBOXES",
             value: "",
-            choices: [
-                "Choice 1",
-                "Choice 2",
-                "Choice 3",
-            ],
+            choices: ["Choice 1", "Choice 2", "Choice 3"],
         },
-        onChange: () => { },
+        onChange: () => {},
         id: 0,
         active: true,
         style: {},
@@ -145,7 +150,9 @@ export const Checkboxes = {
     },
     decorators: [
         (Story) => (
-            <div style={{ width: '100%', height: '100%', backgroundColor: '#ddd', padding: '1rem' }}>
+            <div
+                style={{ width: "100%", height: "100%", backgroundColor: "#ddd", padding: "1rem" }}
+            >
                 <Story />
             </div>
         ),
@@ -159,13 +166,9 @@ export const Dropdown = {
             explainer: "This is the explainer",
             view: "DROPDOWN",
             value: "",
-            choices: [
-                "Choice 1",
-                "Choice 2",
-                "Choice 3",
-            ],
+            choices: ["Choice 1", "Choice 2", "Choice 3"],
         },
-        onChange: () => { },
+        onChange: () => {},
         id: 0,
         active: true,
         style: {},
@@ -173,7 +176,9 @@ export const Dropdown = {
     },
     decorators: [
         (Story) => (
-            <div style={{ width: '100%', height: '100%', backgroundColor: '#ddd', padding: '1rem' }}>
+            <div
+                style={{ width: "100%", height: "100%", backgroundColor: "#ddd", padding: "1rem" }}
+            >
                 <Story />
             </div>
         ),
@@ -197,7 +202,7 @@ export const Autocomplete = {
                 "United States",
             ],
         },
-        onChange: () => { },
+        onChange: () => {},
         id: 0,
         active: true,
         style: {},
@@ -205,7 +210,15 @@ export const Autocomplete = {
     },
     decorators: [
         (Story) => (
-            <div style={{ width: '100%', height: '100%', backgroundColor: '#ddd', padding: '1rem', position: "relative" }}>
+            <div
+                style={{
+                    width: "100%",
+                    height: "100%",
+                    backgroundColor: "#ddd",
+                    padding: "1rem",
+                    position: "relative",
+                }}
+            >
                 <Story />
             </div>
         ),
@@ -219,13 +232,9 @@ export const Radios = {
             explainer: "This is the explainer",
             view: "RADIOS",
             value: "",
-            choices: [
-                "Choice 1",
-                "Choice 2",
-                "Choice 3",
-            ],
+            choices: ["Choice 1", "Choice 2", "Choice 3"],
         },
-        onChange: () => { },
+        onChange: () => {},
         id: 0,
         active: true,
         style: {},
@@ -233,7 +242,15 @@ export const Radios = {
     },
     decorators: [
         (Story) => (
-            <div style={{ width: '100%', height: '100%', backgroundColor: '#ddd', padding: '1rem', position: "relative" }}>
+            <div
+                style={{
+                    width: "100%",
+                    height: "100%",
+                    backgroundColor: "#ddd",
+                    padding: "1rem",
+                    position: "relative",
+                }}
+            >
                 <Story />
             </div>
         ),
@@ -247,15 +264,11 @@ export const Range = {
             explainer: "This is the explainer",
             view: "RANGE",
             value: "",
-            choices: [
-                "Choice 1",
-                "Choice 2",
-                "Choice 3",
-            ],
+            choices: ["Choice 1", "Choice 2", "Choice 3"],
             min_value: 1,
             max_value: 42,
         },
-        onChange: () => { },
+        onChange: () => {},
         id: 0,
         active: true,
         style: {},
@@ -264,7 +277,15 @@ export const Range = {
     decorators: [
         (Story) => {
             return (
-                <div style={{ width: '100%', height: '100%', backgroundColor: '#ddd', padding: '3rem', position: "relative" }}>
+                <div
+                    style={{
+                        width: "100%",
+                        height: "100%",
+                        backgroundColor: "#ddd",
+                        padding: "3rem",
+                        position: "relative",
+                    }}
+                >
                     <Story />
                 </div>
             );
@@ -279,13 +300,9 @@ export const TextRange = {
             explainer: "This is the explainer",
             view: "TEXT_RANGE",
             value: "",
-            choices: [
-                "Choice 1",
-                "Choice 2",
-                "Choice 3",
-            ],
+            choices: ["Choice 1", "Choice 2", "Choice 3"],
         },
-        onChange: () => { },
+        onChange: () => {},
         id: 0,
         active: true,
         style: {},
@@ -294,7 +311,15 @@ export const TextRange = {
     decorators: [
         (Story) => {
             return (
-                <div style={{ width: '100%', height: '100%', backgroundColor: '#ddd', padding: '3rem', position: "relative" }}>
+                <div
+                    style={{
+                        width: "100%",
+                        height: "100%",
+                        backgroundColor: "#ddd",
+                        padding: "3rem",
+                        position: "relative",
+                    }}
+                >
                     <Story />
                 </div>
             );
@@ -310,15 +335,11 @@ export const IconRange = {
             icon: "🌎",
             view: "ICON_RANGE",
             value: "",
-            choices: [
-                "fa-globe",
-                "fa-pencil",
-                "fa-bicycle",
-            ],
+            choices: ["fa-globe", "fa-pencil", "fa-bicycle"],
             min_value: 1,
             max_value: 42,
         },
-        onChange: () => { },
+        onChange: () => {},
         id: 0,
         active: true,
         style: {},
@@ -327,7 +348,15 @@ export const IconRange = {
     decorators: [
         (Story) => {
             return (
-                <div style={{ width: '100%', height: '100%', backgroundColor: '#ddd', padding: '3rem', position: "relative" }}>
+                <div
+                    style={{
+                        width: "100%",
+                        height: "100%",
+                        backgroundColor: "#ddd",
+                        padding: "3rem",
+                        position: "relative",
+                    }}
+                >
                     <Story />
                 </div>
             );

@@ -4,7 +4,7 @@ import copy
 from django.utils.translation import gettext_lazy as _
 
 from .base import Base
-from experiment.actions import Trial, Explainer, Consent, Step
+from experiment.actions import Trial, Explainer, Step
 from experiment.actions.form import ChoiceQuestion, Form
 from experiment.actions.playback import Autoplay
 from experiment.actions.utils import final_action_with_optional_button, render_feedback_trivia
@@ -38,12 +38,8 @@ class BeatAlignment(Base):
             step_numbers=True
         )
 
-        # 2. Consent with admin text or default text
-        consent = Consent(experiment.consent)
-
         return [
             explainer,
-            consent,
         ]
 
     def next_round(self, session):

@@ -83,21 +83,21 @@ class MatchingPairsTest(TestCase):
         self.session.save()
         self.session_data = {'session_id': self.session.id}
         sections = self.playlist.section_set.all()
-        data = {'lastCard': {'id': sections[0].id},
-                'currentCard': {'id': sections[1].id}}
+        data = {'first_card': {'id': sections[0].id},
+                'second_card': {'id': sections[1].id}}
         result = self.intermediate_score_request(data)
         assert result.score == 10
         assert result.given_response == 'lucky match'
-        data['currentCard'].update({'seen': True})
+        data['second_card'].update({'seen': True})
         result = self.intermediate_score_request(data)
         assert result.score == 20
         assert result.given_response == 'match'
-        data['currentCard'] = {'id': sections[3].id, 'seen': True}
+        data['second_card'] = {'id': sections[3].id, 'seen': True}
         result = self.intermediate_score_request(data)
         assert result.score == -10
         assert result.given_response == 'misremembered'
-        data['lastCard'].update({'seen': True})
-        data['currentCard'].pop('seen')
+        data['first_card'].update({'seen': True})
+        data['second_card'].pop('seen')
         result = self.intermediate_score_request(data)
         assert result.score == 0
         assert result.given_response == 'no match'

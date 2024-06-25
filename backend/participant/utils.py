@@ -71,7 +71,7 @@ def visitor_ip_address(request):
     return request.META.get('REMOTE_ADDR')
 
 
-def get_participant(request):
+def get_participant(request) -> Participant:
     # get participant from session
     participant_id = request.session.get(PARTICIPANT_KEY, -1)
     try:
@@ -81,12 +81,10 @@ def get_participant(request):
         raise
 
 
-def get_or_create_participant(request):
+def get_or_create_participant(request) -> Participant:
     """Get a participant from URL, the session, or create/add a new one"""
-
     # check if query string contains  participant
-    participant_id_url = request.GET.get("participant_id") # can be None
-
+    participant_id_url = request.GET.get("participant_id")  # can be None
     try:
         if participant_id_url:
             # get participant from query string
@@ -97,10 +95,6 @@ def get_or_create_participant(request):
             # Get participant from session
             participant = get_participant(request)
 
-            # if no participant_id URL parameter in request, but previous participant was created from URL, do not use it and create a new participant
-            if participant.participant_id_url:
-                raise Participant.DoesNotExist
-
     except Participant.DoesNotExist:
         # create new participant
         country_code = country(request)
@@ -110,7 +104,6 @@ def get_or_create_participant(request):
         participant = Participant(country_code=country_code, access_info=access_info, participant_id_url=participant_id_url)
         participant.save()
         set_participant(request, participant)
-
     return participant
 
 

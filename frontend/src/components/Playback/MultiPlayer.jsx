@@ -9,12 +9,14 @@ const MultiPlayer = ({
     labels,
     disabledPlayers,
     extraContent,
+    style,
 }) => {
     return (
         <div
             className={classNames(
                 "aha__multiplayer d-flex justify-content-around",
-                "player-count-" + sections.length
+                "player-count-" + sections.length,
+                style?.root
             )}
         >
             {Object.keys(sections).map((index) => (

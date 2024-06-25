@@ -96,7 +96,7 @@ class ScoringTest(TestCase):
             tag=0
         )
         cls.experiment = Experiment.objects.create(
-            rules='LISTENING_CONDITIONS',
+            rules='RHYTHM_BATTERY_INTRO',
             slug='test')
         cls.session = Session.objects.create(
             experiment=cls.experiment,

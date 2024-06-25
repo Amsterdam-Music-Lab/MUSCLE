@@ -132,7 +132,6 @@ class Kuiper2020(Hooked):
         playback = Autoplay(
             [section],
             show_animation=True,
-            ready_time=3,
             preload_message=_('Get ready!')
         )
         expected_result=novelty[round_number]

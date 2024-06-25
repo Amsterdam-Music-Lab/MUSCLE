@@ -10,7 +10,6 @@ class ExperimentFormTest(TestCase):
         self.assertIn('slug', form.fields)
         self.assertIn('active', form.fields)
         self.assertIn('rules', form.fields)
-        self.assertIn('questions', form.fields)
         self.assertIn('rounds', form.fields)
         self.assertIn('bonus_points', form.fields)
         self.assertIn('playlists', form.fields)

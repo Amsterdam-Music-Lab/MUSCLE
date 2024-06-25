@@ -1,11 +1,10 @@
-
-import Circle from '../components/Circle/Circle';
+import Circle from "../components/Circle/Circle";
 
 export default {
-    title: 'Circle',
+    title: "Circle",
     component: Circle,
     parameters: {
-        layout: 'fullscreen',
+        layout: "fullscreen",
     },
 };
 
@@ -20,7 +19,9 @@ export const Default = {
     },
     decorators: [
         (Story) => (
-            <div style={{ width: '100%', height: '100%', backgroundColor: '#666', padding: '1rem' }}>
+            <div
+                style={{ width: "100%", height: "100%", backgroundColor: "#666", padding: "1rem" }}
+            >
                 <Story />
             </div>
         ),
@@ -38,7 +39,9 @@ export const NoAnimation = {
     },
     decorators: [
         (Story) => (
-            <div style={{ width: '100%', height: '100%', backgroundColor: '#666', padding: '1rem' }}>
+            <div
+                style={{ width: "100%", height: "100%", backgroundColor: "#666", padding: "1rem" }}
+            >
                 <Story />
             </div>
         ),
@@ -56,7 +59,9 @@ export const NoRunning = {
     },
     decorators: [
         (Story) => (
-            <div style={{ width: '100%', height: '100%', backgroundColor: '#666', padding: '1rem' }}>
+            <div
+                style={{ width: "100%", height: "100%", backgroundColor: "#666", padding: "1rem" }}
+            >
                 <Story />
             </div>
         ),
@@ -74,7 +79,9 @@ export const NoAnimationNoRunning = {
     },
     decorators: [
         (Story) => (
-            <div style={{ width: '100%', height: '100%', backgroundColor: '#666', padding: '1rem' }}>
+            <div
+                style={{ width: "100%", height: "100%", backgroundColor: "#666", padding: "1rem" }}
+            >
                 <Story />
             </div>
         ),
@@ -92,7 +99,9 @@ export const ShortDuration = {
     },
     decorators: [
         (Story) => (
-            <div style={{ width: '100%', height: '100%', backgroundColor: '#666', padding: '1rem' }}>
+            <div
+                style={{ width: "100%", height: "100%", backgroundColor: "#666", padding: "1rem" }}
+            >
                 <Story />
             </div>
         ),
@@ -110,7 +119,9 @@ export const LongDuration = {
     },
     decorators: [
         (Story) => (
-            <div style={{ width: '100%', height: '100%', backgroundColor: '#666', padding: '1rem' }}>
+            <div
+                style={{ width: "100%", height: "100%", backgroundColor: "#666", padding: "1rem" }}
+            >
                 <Story />
             </div>
         ),
@@ -128,7 +139,9 @@ export const NoDuration = {
     },
     decorators: [
         (Story) => (
-            <div style={{ width: '100%', height: '100%', backgroundColor: '#666', padding: '1rem' }}>
+            <div
+                style={{ width: "100%", height: "100%", backgroundColor: "#666", padding: "1rem" }}
+            >
                 <Story />
             </div>
         ),
@@ -146,7 +159,17 @@ export const ThickStroke = {
     },
     decorators: [
         (Story) => (
-            <div style={{ width: '100%', height: '100%', backgroundColor: '#666', padding: '1rem', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+            <div
+                style={{
+                    width: "100%",
+                    height: "100%",
+                    backgroundColor: "#666",
+                    padding: "1rem",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                }}
+            >
                 <Story />
             </div>
         ),
@@ -166,7 +189,19 @@ export const OnTickOnFinish = {
     },
     decorators: [
         (Story) => (
-            <div style={{ width: '100%', height: '100%', padding: '1rem', color: 'white', backgroundColor: '#666', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+            <div
+                style={{
+                    width: "100%",
+                    height: "100%",
+                    padding: "1rem",
+                    color: "white",
+                    backgroundColor: "#666",
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "center",
+                    alignItems: "center",
+                }}
+            >
                 <p>Check the console</p>
                 <Story />
             </div>

@@ -1,38 +1,38 @@
+import Playback from "../components/Preload/Preload";
 
-import Playback from '../components/Preload/Preload';
-
-import audio from './assets/audio.wav';
-
+import audio from "./assets/audio.wav";
 
 export default {
-  title: 'Preload',
-  component: Playback,
-  parameters: {
-    layout: 'fullscreen',
-  },
+    title: "Preload",
+    component: Playback,
+    parameters: {
+        layout: "fullscreen",
+    },
 };
-
 
 export const External = {
     args: {
-        instruction: 'Click the button to play the audio.',
-        pageTitle: 'Listen to the audio',
+        instruction: "Click the button to play the audio.",
+        pageTitle: "Listen to the audio",
         duration: 0,
-        sections: [{
-            id: 1,
-            url: audio,
-        }],
+        sections: [
+            {
+                id: 1,
+                url: audio,
+            },
+        ],
         playConfig: {
-            play_method: 'EXTERNAL',
+            play_method: "EXTERNAL",
         },
         onNext: () => {},
     },
     decorators: [
         (Story) => (
-            <div style={{ width: '100%', height: '100%', backgroundColor: '#ddd', padding: '1rem' }}>
+            <div
+                style={{ width: "100%", height: "100%", backgroundColor: "#ddd", padding: "1rem" }}
+            >
                 <Story />
             </div>
         ),
     ],
-
 };

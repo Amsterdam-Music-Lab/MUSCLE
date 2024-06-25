@@ -1,14 +1,12 @@
-
-import Histogram from '../components/Histogram/Histogram';
+import Histogram from "../components/Histogram/Histogram";
 
 export default {
-  title: 'Histogram',
-  component: Histogram,
-  parameters: {
-    layout: 'fullscreen',
-  },
+    title: "Histogram",
+    component: Histogram,
+    parameters: {
+        layout: "fullscreen",
+    },
 };
-
 
 export const Default = {
     args: {
@@ -19,11 +17,19 @@ export const Default = {
         marginLeft: 0,
         marginTop: 0,
         backgroundColor: undefined,
-        borderRadius: '0.15rem',
+        borderRadius: "0.15rem",
     },
     decorators: [
         (Story) => (
-            <div style={{ width: '128px', height: '128px', margin: '1rem auto', backgroundColor: 'purple', padding: '1rem' }}>
+            <div
+                style={{
+                    width: "128px",
+                    height: "128px",
+                    margin: "1rem auto",
+                    backgroundColor: "purple",
+                    padding: "1rem",
+                }}
+            >
                 <Story />
             </div>
         ),

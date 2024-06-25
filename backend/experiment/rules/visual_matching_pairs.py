@@ -6,8 +6,8 @@ from django.template.loader import render_to_string
 from .base import Base
 from experiment.actions import Consent, Explainer, Final, Playlist, Step, Trial
 from experiment.actions.playback import VisualMatchingPairs
-from experiment.questions.demographics import EXTRA_DEMOGRAPHICS
-from experiment.questions.utils import question_by_key
+from question.demographics import EXTRA_DEMOGRAPHICS
+from question.utils import question_by_key
 from result.utils import prepare_result
 
 from section.models import Section
@@ -19,12 +19,18 @@ class VisualMatchingPairsGame(Base):
     contact_email = 'aml.tunetwins@gmail.com'
 
     def __init__(self):
-        self.questions = [
-            question_by_key('dgf_gender_identity'),
-            question_by_key('dgf_generation'),
-            question_by_key('dgf_musical_experience', EXTRA_DEMOGRAPHICS),
-            question_by_key('dgf_country_of_origin'),
-            question_by_key('dgf_education', drop_choices=['isced-2', 'isced-5'])
+        self.question_series = [
+            {
+                "name": "Demographics",
+                "keys": [
+                    'dgf_gender_identity',
+                    'dgf_generation',
+                    'dgf_musical_experience',
+                    'dgf_country_of_origin',
+                    'dgf_education_matching_pairs',
+                ],
+                "randomize": False
+            },
         ]
 
     def first_round(self, experiment):
@@ -55,7 +61,7 @@ class VisualMatchingPairsGame(Base):
             playlist,
             explainer
         ]
-    
+
     def next_round(self, session):
         if session.rounds_passed() < 1:       
             trials = self.get_questionnaire(session)
@@ -80,6 +86,7 @@ class VisualMatchingPairsGame(Base):
                 final_text='Can you score higher than your friends and family? Share and let them try!',
                 button={
                     'text': 'Play again',
+                    'link': self.get_play_again_url(session)
                 },
                 rank=self.rank(session, exclude_unfinished=False),
                 social=social_info,
@@ -88,7 +95,7 @@ class VisualMatchingPairsGame(Base):
             cont = self.get_visual_matching_pairs_trial(session)
 
             return [score, cont]
-    
+
     def get_visual_matching_pairs_trial(self, session):
 
         player_sections = list(session.playlist.section_set.filter(tag__contains='vmp'))
@@ -112,5 +119,5 @@ class VisualMatchingPairsGame(Base):
         for m in moves:
             m['filename'] = str(Section.objects.get(pk=m.get('selectedSection')).filename)
         score = data.get('result').get('score')
-        
+
         return score

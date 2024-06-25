@@ -12,7 +12,6 @@ COPY . /client/
 COPY .env /client/
 
 RUN yarn
-RUN yarn scss
 RUN yarn build
 
 # Runner image that serves the built app using nginx

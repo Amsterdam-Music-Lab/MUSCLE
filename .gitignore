@@ -9,3 +9,5 @@ yarn.lock
 tests/*.ini
 tests/*.log
 tests/__pycache__
+
+e2e/screenshots

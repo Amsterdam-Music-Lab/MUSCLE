@@ -1,13 +1,6 @@
 import roman
 
 
-def serialize(actions):
-    ''' Serialize an array of actions '''
-    if isinstance(actions, list):
-        return [a.action() for a in actions]
-    return actions.action()
-
-
 def slugify(text):
     """Create a slug from given string"""
     non_url_safe = ['"', '#', '$', '%', '&', '+',

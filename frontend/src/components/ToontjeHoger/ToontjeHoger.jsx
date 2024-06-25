@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
-import { LOGO_TITLE } from "../../config";
+import { LOGO_TITLE } from "@/config";
 import { Switch, Route, Link } from "react-router-dom";
 import Rank from "../Rank/Rank";
 
