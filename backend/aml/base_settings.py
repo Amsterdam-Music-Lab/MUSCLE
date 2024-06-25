@@ -39,8 +39,6 @@ ALLOWED_HOSTS = os.getenv("AML_ALLOWED_HOSTS", "localhost").split(",")
 
 # Application definition
 
-# Trigger backend test & lint jobs
-
 INSTALLED_APPS = [
     'admin_interface',
     'django.contrib.admin',
