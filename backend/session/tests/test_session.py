@@ -115,11 +115,12 @@ class SessionTest(TestCase):
         last_song = self.session.last_song()
         assert last_song == 'Beavis - Butthead'
 
-    def test_get_used_section(self):
+    def test_get_unused_section(self):
         csv = ("Artist 1,Name 1,0.0,10.0,test/file1.mp3,1,0\n"
-               "Artist 1,Name 2,0.0,10.0,test/file2.mp3,1,0\n"
-               "Artist 2,Name 1,0.0,10.0,test/file3.mp3,0,0\n"
-               "Artist 2,Name 2,0.0,10.0,test/file4.mp3,0,0\n"
+               "Artist 1,Name 1,15.0,30.0,test/file2.mp3,1,0\n"
+               "Artist 1,Name 2,0.0,10.0,test/file3.mp3,1,0\n"
+               "Artist 2,Name 1,0.0,10.0,test/file4.mp3,0,0\n"
+               "Artist 2,Name 2,0.0,10.0,test/file5.mp3,0,0\n"
                )
         self.playlist.csv = csv
         self.playlist.update_sections()
@@ -127,11 +128,13 @@ class SessionTest(TestCase):
         assert first_section.song.artist == 'Artist 1'
         assert first_section.song.name == 'Name 1'
         Result.objects.create(session=self.session, section=first_section)
-        next_section = self.session.section_from_unused_song({'tag': '1'})
+        next_section = self.session.get_unused_section(
+            {'tag': '1'}, {'song__id': first_section.song.pk})
         assert next_section.song.artist == 'Artist 1'
         assert next_section.song.name == 'Name 2'
         Result.objects.create(session=self.session, section=next_section)
-        another_section = self.session.section_from_unused_song()
+        another_section = self.session.get_unused_section(
+            exclude={'song__id': first_section.song.pk})
         assert another_section.song.artist == 'Artist 2'
 
     def test_json_data(self):
