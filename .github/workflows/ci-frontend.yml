@@ -4,9 +4,11 @@ on:
   push:
     paths:
       - 'frontend/**'
+      - '.yarn'
   pull_request:
     paths:
       - 'frontend/**'
+      - '.yarn'
 
 jobs:
 
