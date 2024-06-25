@@ -6,8 +6,8 @@ from django.forms.models import model_to_dict
 from django.contrib.admin.sites import AdminSite
 from django.urls import reverse
 from django.utils.html import format_html
-from experiment.admin import ExperimentAdmin, ExperimentCollectionAdmin, ExperimentCollectionGroupAdmin
-from experiment.models import Experiment, ExperimentCollection, ExperimentCollectionGroup, GroupedExperiment
+from experiment.admin import ExperimentAdmin, ExperimentCollectionAdmin, PhaseAdmin
+from experiment.models import Experiment, ExperimentCollection, Phase, GroupedExperiment
 from participant.models import Participant
 from result.models import Result
 from session.models import Session
@@ -185,7 +185,7 @@ class TestExperimentCollectionAdmin(TestCase):
                 'slug_link',
                 'description_excerpt',
                 'dashboard',
-                'groups',
+                'phases',
                 'active',
             )
         )
@@ -207,20 +207,22 @@ class TestExperimentCollectionAdmin(TestCase):
         self.assertEqual(response.status_code, 200)
 
 
-class ExperimentCollectionGroupAdminTest(TestCase):
+class PhaseAdminTest(TestCase):
     @classmethod
     def setUpTestData(self):
         self.factory = RequestFactory()
         self.site = AdminSite()
-        self.admin = ExperimentCollectionGroupAdmin(
-            ExperimentCollectionGroup, self.site)
+        self.admin = PhaseAdmin(
+            Phase,
+            self.site
+        )
 
     def test_related_series_with_series(self):
         series = ExperimentCollection.objects.create(name='Test Series')
-        group = ExperimentCollectionGroup.objects.create(
+        phase = Phase.objects.create(
             name='Test Group', order=1, randomize=False, series=series, dashboard=True)
         request = self.factory.get('/')
-        related_series = self.admin.related_series(group)
+        related_series = self.admin.related_series(phase)
         expected_url = reverse(
             "admin:experiment_experimentcollection_change", args=[series.pk])
         expected_related_series = format_html('<a href="{}">{}</a>', expected_url, series.name)
@@ -228,22 +230,22 @@ class ExperimentCollectionGroupAdminTest(TestCase):
 
     def test_experiments_with_no_experiments(self):
         series = ExperimentCollection.objects.create(name='Test Series')
-        group = ExperimentCollectionGroup.objects.create(
+        phase = Phase.objects.create(
             name='Test Group', order=1, randomize=False, dashboard=True, series=series)
-        experiments = self.admin.experiments(group)
+        experiments = self.admin.experiments(phase)
         self.assertEqual(experiments, "No experiments")
 
     def test_experiments_with_experiments(self):
         series = ExperimentCollection.objects.create(name='Test Series')
-        group = ExperimentCollectionGroup.objects.create(
+        phase = Phase.objects.create(
             name='Test Group', order=1, randomize=False, dashboard=True, series=series)
         experiment1 = Experiment.objects.create(name='Experiment 1', slug='experiment-1')
         experiment2 = Experiment.objects.create(name='Experiment 2', slug='experiment-2')
-        grouped_experiment1 = GroupedExperiment.objects.create(group=group, experiment=experiment1)
-        grouped_experiment2 = GroupedExperiment.objects.create(group=group, experiment=experiment2)
+        grouped_experiment1 = GroupedExperiment.objects.create(phase=phase, experiment=experiment1)
+        grouped_experiment2 = GroupedExperiment.objects.create(phase=phase, experiment=experiment2)
         
         request = self.factory.get('/')
-        experiments = self.admin.experiments(group)
+        experiments = self.admin.experiments(phase)
         expected_experiments = format_html(
             ', '.join([
                 f'<a href="/admin/experiment/groupedexperiment/{experiment.id}/change/">{experiment.experiment.name}</a>'

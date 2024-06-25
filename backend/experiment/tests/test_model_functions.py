@@ -1,7 +1,7 @@
 from django.test import TestCase
-from experiment.models import Experiment, ExperimentCollection, ExperimentCollectionGroup, GroupedExperiment
 from session.models import Session
 from participant.models import Participant
+from experiment.models import Experiment, ExperimentCollection, Phase, GroupedExperiment
 
 
 class TestModelExperiment(TestCase):
@@ -33,9 +33,9 @@ class TestModelExperimentCollection(TestCase):
 
     def test_associated_experiments(self):
         collection = self.collection
-        group1 = ExperimentCollectionGroup.objects.create(
+        phase1 = Phase.objects.create(
             name='first_phase', series=collection)
-        group2 = ExperimentCollectionGroup.objects.create(
+        phase2 = Phase.objects.create(
             name='second_phase', series=collection)
         experiment = Experiment.objects.create(
             rules='THATS_MY_SONG', slug='hooked', rounds=42)
@@ -44,22 +44,22 @@ class TestModelExperimentCollection(TestCase):
         experiment3 = Experiment.objects.create(
             rules='THATS_MY_SONG', slug='derailed', rounds=42)
         GroupedExperiment.objects.create(
-            experiment=experiment, group=group1)
+            experiment=experiment, phase=phase1)
         GroupedExperiment.objects.create(
-            experiment=experiment2, group=group2)
+            experiment=experiment2, phase=phase2)
         GroupedExperiment.objects.create(
-            experiment=experiment3, group=group2)
+            experiment=experiment3, phase=phase2)
         self.assertEqual(collection.associated_experiments(), [
                          experiment, experiment2, experiment3])
 
     def test_export_sessions(self):
         collection = self.collection
-        group = ExperimentCollectionGroup.objects.create(
+        phase = Phase.objects.create(
             name='test', series=collection)
         experiment = Experiment.objects.create(
             rules='THATS_MY_SONG', slug='hooked', rounds=42)
         GroupedExperiment.objects.create(
-            experiment=experiment, group=group)
+            experiment=experiment, phase=phase)
         Session.objects.bulk_create(
             [Session(experiment=experiment, participant=self.participant1),
              Session(experiment=experiment, participant=self.participant2),
@@ -70,12 +70,12 @@ class TestModelExperimentCollection(TestCase):
 
     def test_current_participants(self):
         collection = self.collection
-        group = ExperimentCollectionGroup.objects.create(
+        phase = Phase.objects.create(
             name='test', series=collection)
         experiment = Experiment.objects.create(
             rules='THATS_MY_SONG', slug='hooked', rounds=42)
         GroupedExperiment.objects.create(
-            experiment=experiment, group=group)
+            experiment=experiment, phase=phase)
         Session.objects.bulk_create(
             [Session(experiment=experiment, participant=self.participant1),
              Session(experiment=experiment, participant=self.participant2),
