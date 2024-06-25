@@ -13,7 +13,7 @@ interface HeaderProps {
     nextExperimentButtonText: string;
     collectionSlug: string;
     aboutButtonText: string;
-    totalScore: Number;
+    totalScore: number;
     scoreDisplayConfig?: ScoreDisplayConfig;
 }
 
