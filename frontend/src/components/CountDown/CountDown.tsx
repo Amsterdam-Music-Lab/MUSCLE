@@ -22,7 +22,7 @@ const CountDown = ({ duration, running = true }: CountDownProps) => {
         return Timer({
             duration,
             onTick: (t) => setTime(Math.min(t, duration)),
-            onFinish: () => { console.log('bafu'); return setZero(true) },
+            onFinish: () => setZero(true),
         });
     }, [duration, running]);
 
