@@ -68,9 +68,9 @@ class SessionViewsTest(TestCase):
         assert response
         changed_session = Session.objects.get(pk=session.pk)
         assert changed_session.load_json_data().get(COLLECTION_KEY) is None
-        group = Phase.objects.create(series=collection)
+        phase = Phase.objects.create(series=collection)
         GroupedExperiment.objects.create(
-            group=group, experiment=self.experiment)
+            phase=phase, experiment=self.experiment)
         response = self.client.get(
             f'/session/{session.id}/next_round/')
         changed_session = Session.objects.get(pk=session.pk)

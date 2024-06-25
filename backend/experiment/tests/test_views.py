@@ -30,7 +30,7 @@ class TestExperimentCollectionViews(TestCase):
             slug='test_series',
             theme_config=theme_config
         )
-        introductory_group = Phase.objects.create(
+        introductory_phase = Phase.objects.create(
             name='introduction',
             series=collection,
             order=1
@@ -39,9 +39,9 @@ class TestExperimentCollectionViews(TestCase):
             name='experiment1', slug='experiment1')
         GroupedExperiment.objects.create(
             experiment=cls.experiment1,
-            group=introductory_group
+            phase=introductory_phase
         )
-        intermediate_group = Phase.objects.create(
+        intermediate_phase = Phase.objects.create(
             name='intermediate',
             series=collection,
             order=2
@@ -52,13 +52,13 @@ class TestExperimentCollectionViews(TestCase):
             name='experiment3', slug='experiment3')
         GroupedExperiment.objects.create(
             experiment=cls.experiment2,
-            group=intermediate_group
+            phase=intermediate_phase
         )
         GroupedExperiment.objects.create(
             experiment=cls.experiment3,
-            group=intermediate_group
+            phase=intermediate_phase
         )
-        final_group = Phase.objects.create(
+        final_phase = Phase.objects.create(
             name='final',
             series=collection,
             order=3
@@ -67,7 +67,7 @@ class TestExperimentCollectionViews(TestCase):
             name='experiment4', slug='experiment4')
         GroupedExperiment.objects.create(
             experiment=cls.experiment4,
-            group=final_group
+            phase=final_phase
         )
 
     def test_get_experiment_collection(self):
@@ -132,11 +132,11 @@ class TestExperimentCollectionViews(TestCase):
             participant=self.participant,
             finished_at=timezone.now()
         )
-        intermediate_group = Phase.objects.get(
+        intermediate_phase = Phase.objects.get(
             name='intermediate'
         )
-        intermediate_group.dashboard = True
-        intermediate_group.save()
+        intermediate_phase.dashboard = True
+        intermediate_phase.save()
         # check that first_experiments is returned correctly
         response = self.client.get('/experiment/collection/test_series/')
         self.assertEqual(type(response.json().get('dashboard')), list)
@@ -152,12 +152,12 @@ class TestExperimentCollectionViews(TestCase):
             finished_at=timezone.now(),
             final_score=8
         )
-        intermediate_group = Phase.objects.get(
+        intermediate_phase = Phase.objects.get(
             name='intermediate'
         )
-        intermediate_group.dashboard = True
-        intermediate_group.save()
-        serialized_coll_1 = serialize_phase(intermediate_group, self.participant)
+        intermediate_phase.dashboard = True
+        intermediate_phase.save()
+        serialized_coll_1 = serialize_phase(intermediate_phase, self.participant)
         total_score_1 = serialized_coll_1['totalScore']
         self.assertEqual(total_score_1, 8)
         Session.objects.create(
@@ -166,7 +166,7 @@ class TestExperimentCollectionViews(TestCase):
             finished_at=timezone.now(),
             final_score=8
         )
-        serialized_coll_2 = serialize_phase(intermediate_group, self.participant)
+        serialized_coll_2 = serialize_phase(intermediate_phase, self.participant)
         total_score_2 = serialized_coll_2['totalScore']
         self.assertEqual(total_score_2, 16)
 

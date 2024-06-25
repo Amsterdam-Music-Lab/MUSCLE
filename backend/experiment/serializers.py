@@ -48,17 +48,17 @@ def serialize_experiment_collection(
 
 
 def serialize_phase(
-        group: Phase,
+        phase: Phase,
         participant: Participant
         ) -> dict:
     grouped_experiments = list(GroupedExperiment.objects.filter(
-        group_id=group.id).order_by('order'))
+        phase_id=phase.id).order_by('order'))
 
-    if group.randomize:
+    if phase.randomize:
         shuffle(grouped_experiments)
 
     next_experiment = get_upcoming_experiment(
-        grouped_experiments, participant, group.dashboard)
+        grouped_experiments, participant, phase.dashboard)
 
     total_score = get_total_score(grouped_experiments, participant)
 
@@ -66,7 +66,7 @@ def serialize_phase(
         return None
 
     return {
-        'dashboard': [serialize_experiment(experiment.experiment, participant) for experiment in grouped_experiments] if group.dashboard else [],
+        'dashboard': [serialize_experiment(experiment.experiment, participant) for experiment in grouped_experiments] if phase.dashboard else [],
         'nextExperiment': next_experiment,
         'totalScore': total_score
     }

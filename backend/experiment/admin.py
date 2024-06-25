@@ -281,7 +281,7 @@ class PhaseAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
         return format_html('<a href="{}">{}</a>', url, obj.series.name)
 
     def experiments(self, obj):
-        experiments = GroupedExperiment.objects.filter(group=obj)
+        experiments = GroupedExperiment.objects.filter(phase=obj)
 
         if not experiments:
             return "No experiments"

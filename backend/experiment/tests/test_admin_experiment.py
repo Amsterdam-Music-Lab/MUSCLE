@@ -219,10 +219,10 @@ class PhaseAdminTest(TestCase):
 
     def test_related_series_with_series(self):
         series = ExperimentCollection.objects.create(name='Test Series')
-        group = Phase.objects.create(
+        phase = Phase.objects.create(
             name='Test Group', order=1, randomize=False, series=series, dashboard=True)
         request = self.factory.get('/')
-        related_series = self.admin.related_series(group)
+        related_series = self.admin.related_series(phase)
         expected_url = reverse(
             "admin:experiment_experimentcollection_change", args=[series.pk])
         expected_related_series = format_html('<a href="{}">{}</a>', expected_url, series.name)
@@ -230,22 +230,22 @@ class PhaseAdminTest(TestCase):
 
     def test_experiments_with_no_experiments(self):
         series = ExperimentCollection.objects.create(name='Test Series')
-        group = Phase.objects.create(
+        phase = Phase.objects.create(
             name='Test Group', order=1, randomize=False, dashboard=True, series=series)
-        experiments = self.admin.experiments(group)
+        experiments = self.admin.experiments(phase)
         self.assertEqual(experiments, "No experiments")
 
     def test_experiments_with_experiments(self):
         series = ExperimentCollection.objects.create(name='Test Series')
-        group = Phase.objects.create(
+        phase = Phase.objects.create(
             name='Test Group', order=1, randomize=False, dashboard=True, series=series)
         experiment1 = Experiment.objects.create(name='Experiment 1', slug='experiment-1')
         experiment2 = Experiment.objects.create(name='Experiment 2', slug='experiment-2')
-        grouped_experiment1 = GroupedExperiment.objects.create(group=group, experiment=experiment1)
-        grouped_experiment2 = GroupedExperiment.objects.create(group=group, experiment=experiment2)
+        grouped_experiment1 = GroupedExperiment.objects.create(phase=phase, experiment=experiment1)
+        grouped_experiment2 = GroupedExperiment.objects.create(phase=phase, experiment=experiment2)
         
         request = self.factory.get('/')
-        experiments = self.admin.experiments(group)
+        experiments = self.admin.experiments(phase)
         expected_experiments = format_html(
             ', '.join([
                 f'<a href="/admin/experiment/groupedexperiment/{experiment.id}/change/">{experiment.experiment.name}</a>'
