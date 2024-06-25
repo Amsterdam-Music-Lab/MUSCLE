@@ -99,7 +99,7 @@ class GroupedExperiment(models.Model):
     order = models.IntegerField(default=0, help_text='Order of the experiment in the group. Lower numbers come first.')
 
     def __str__(self):
-        return f'{self.experiment.name} - {self.group.name} - {self.order}'
+        return f'{self.experiment.name} - {self.phase.name} - {self.order}'
 
     class Meta:
         ordering = ['order']
