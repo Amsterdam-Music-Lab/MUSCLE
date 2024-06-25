@@ -1,3 +1,18 @@
+/**
+ * OnTick callback type
+ * @param time - current time in seconds
+ * @param delta - time since last tick in seconds
+ */
+type TOnTick = (time: number, delta: number) => void;
+
+interface TimerParams {
+    time?: number;          // initial time in seconds
+    duration: number;       // duration in seconds
+    onTick?: TOnTick;
+    onFinish?: () => void;
+    interval?: number;
+}
+
 // Timer component with callback
 export const Timer = ({
     time = 0,
@@ -5,12 +20,12 @@ export const Timer = ({
     onTick,
     onFinish,
     interval = 0.1,
-}) => {
+}: TimerParams) => {
     let lastTimestamp = performance.now();
     let lastTime = time;
     let running = true;
 
-    const callback = (timestamp) => {
+    const callback = (timestamp: number) => {
         if (!running) {
             return;
         }

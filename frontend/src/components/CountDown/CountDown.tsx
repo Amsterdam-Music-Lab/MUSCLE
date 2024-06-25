@@ -2,8 +2,13 @@ import React, { useState, useEffect } from "react";
 import Timer from "@/util/timer";
 import classNames from "classnames";
 
+interface CountDownProps {
+    duration: number;
+    running?: boolean;
+}
+
 // CountDown to zero
-const CountDown = ({ duration, running = true }) => {
+const CountDown = ({ duration, running = true }: CountDownProps) => {
     // automatic timer
     const [time, setTime] = useState(0);
     const [zero, setZero] = useState(false);
@@ -16,12 +21,8 @@ const CountDown = ({ duration, running = true }) => {
         // start time when running
         return Timer({
             duration,
-            onTick: (t) => {
-                setTime(Math.min(t, duration));
-            },
-            onFinish: () => {
-                setZero(true);
-            },
+            onTick: (t) => setTime(Math.min(t, duration)),
+            onFinish: () => setZero(true),
         });
     }, [duration, running]);
 
