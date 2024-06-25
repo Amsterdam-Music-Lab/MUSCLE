@@ -37,8 +37,15 @@
 
                     <td>
                         <p>
-                            <a href="{% url 'admin:participant_participant_change' session.participant.id %}" target="_blank">
-                            {{ session.participant.participant_id_url }}</a>
+                            {% if session.participant.participant_id_url %}
+                                <a href="{% url 'admin:participant_participant_change' session.participant.id %}" target="_blank" title="Participant URL id">
+                                    {{ session.participant.participant_id_url }}
+                                </a>
+                            {% else %}
+                                <a href="{% url 'admin:participant_participant_change' session.participant.id %}" target="_blank" title="Participant object id">
+                                    {{ session.participant.id }}
+                                </a>
+                            {% endif %}                            
                         </p>                        
                     </td>
 
@@ -46,8 +53,12 @@
                         <p>{{ session.started_at }}</p>
                     </td>
 
-                    <td>
-                        <p>{{ session.finished_at }}</p>
+                    <td>                        
+                        {% if session.finished_at %}
+                            <p>{{ session.finished_at }}</p>
+                        {% else %}
+                            <p> - </p>
+                        {% endif %}
                     </td>
 
                     <td>
