@@ -36,7 +36,11 @@ export const Header: React.FC<HeaderProps> = ({
     // Get locale from browser (this is meant to be temporary until we have a proper solution for localization in the backend)
     const locale = navigator.language || 'en-US';
     const localeIsEnglish = locale.includes('en');
-    const currentUrl = window.location.href;
+
+    console.log({ locale })
+
+    // Get current URL minus the query string
+    const currentUrl = window.location.href.split('?')[0];
 
     const social = {
         'apps': ['facebook', 'twitter'],
