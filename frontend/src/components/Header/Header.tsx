@@ -31,10 +31,17 @@ export const Header: React.FC<HeaderProps> = ({
     score,
 }) => {
 
+    // TODO: Fix this permanently and localize in the backend
+    // See also: https://github.com/Amsterdam-Music-Lab/MUSCLE/issues/1151
+    // Get locale from browser (this is meant to be temporary until we have a proper solution for localization in the backend)
+    const locale = navigator.language || 'en-US';
+    const localeIsEnglish = locale.includes('en');
+    const currentUrl = window.location.href;
+
     const social = {
         'apps': ['facebook', 'twitter'],
-        'message': `I scored ${totalScore} points`,
-        'url': 'wwww.amsterdammusiclab.nl',
+        'message': localeIsEnglish ? `I scored ${totalScore} points` : `Ik heb ${totalScore} punten gescoord`,
+        'url': currentUrl,
         'hashtags': ["amsterdammusiclab", "citizenscience"]
     }
 
