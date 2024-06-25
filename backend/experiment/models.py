@@ -7,6 +7,7 @@ from typing import List, Dict, Tuple, Any
 from experiment.standards.iso_languages import ISO_LANGUAGES
 from theme.models import ThemeConfig
 from image.models import Image
+from session.models import Session
 
 from .validators import markdown_html_validator, experiment_slug_validator
 
@@ -51,6 +52,20 @@ class ExperimentCollection(models.Model):
         groups = self.groups.all()
         return [
             experiment.experiment for group in groups for experiment in list(group.experiments.all())]
+
+    def export_sessions(self):
+        """export sessions for this collection"""
+        all_sessions = Session.objects.none()
+        for exp in self.associated_experiments():
+            all_sessions |= Session.objects.filter(experiment=exp).order_by('-started_at')
+        return all_sessions
+
+    def current_participants(self):
+        """Get distinct list of participants"""
+        participants = {}
+        for session in self.export_sessions():
+            participants[session.participant.id] = session.participant
+        return participants.values()
 
 
 class ExperimentCollectionGroup(models.Model):
@@ -304,4 +319,3 @@ class Experiment(models.Model):
 class Feedback(models.Model):
     text = models.TextField()
     experiment = models.ForeignKey(Experiment, on_delete=models.CASCADE)
-

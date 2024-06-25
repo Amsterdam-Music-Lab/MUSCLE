@@ -207,6 +207,7 @@ class ExperimentCollectionAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
     fields = ['slug', 'name', 'active', 'description',
               'consent', 'theme_config', 'dashboard',
               'about_content']
+    inline_actions = ['dashboard']
     form = ExperimentCollectionForm
     inlines = [ExperimentCollectionGroupInline]
 
@@ -229,6 +230,35 @@ class ExperimentCollectionAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
         return format_html(', '.join([f'<a href="/admin/experiment/experimentcollectiongroup/{group.id}/change/">{group.name}</a>' for group in groups]))
     
     slug_link.short_description = "Slug"
+
+    def dashboard(self, request, obj, parent_obj=None):
+        """Open researchers dashboard for a collection"""
+        all_experiments = obj.associated_experiments()
+        all_participants = obj.current_participants()
+        all_sessions = obj.export_sessions()
+        collect_data = {
+            'participant_count': len(all_participants),
+            'session_count': len(all_sessions)
+        }
+
+        experiments = [{
+            'id': exp.id,
+            'name': exp.name,
+            'started': len(all_sessions.filter(experiment=exp)),
+            'finished': len(all_sessions.filter(experiment=exp, finished_at__isnull=False)),
+            'participant_count': len(exp.current_participants()),
+            'participants': exp.current_participants()
+            } for exp in all_experiments]
+        
+        return render(
+            request,
+            'collection-dashboard.html',
+            context={'collection': obj,
+                     'experiments': experiments,
+                     'sessions': all_sessions,
+                     'participants': all_participants,
+                     'collect_data': collect_data}
+        )
 
 
 admin.site.register(ExperimentCollection, ExperimentCollectionAdmin)
