@@ -2,9 +2,6 @@ name: Test suite
 
 on:
   push:
-    paths:
-      - 'backend/**'
-      - 'frontend/**'
 
 jobs:
 
