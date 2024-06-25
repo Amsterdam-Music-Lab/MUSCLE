@@ -77,7 +77,7 @@ const App = () => {
                         <Route path={URLS.profile} exact>
                             <Profile slug={EXPERIMENT_SLUG} />
                         </Route>
-                      
+
                         <Route path={URLS.internalRedirect} component={InternalRedirect} />
 
                         {/* Experiment Collection */}
