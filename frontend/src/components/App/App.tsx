@@ -55,8 +55,6 @@ const App = () => {
         return <p className="aha__error">Error: {error}</p>;
     }
 
-    // test comment to trigger tests
-
     return (
         <>
             <Helmet />
