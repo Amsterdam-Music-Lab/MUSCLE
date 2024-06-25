@@ -57,7 +57,7 @@ const ExperimentCollection = ({ match }: ExperimentCollectionProps) => {
     }
 
     if (!loadingExperimentCollection && !experimentCollection) {
-        return <p className="aha__error">Experiment collection not found</p>;
+        return <p className="aha__error">Experiment not found</p>;
     }
 
     if (!hasShownConsent && showConsent) {
