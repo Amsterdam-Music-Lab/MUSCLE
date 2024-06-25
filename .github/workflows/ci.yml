@@ -2,12 +2,17 @@ name: Test suite
 
 on:
   push:
+    paths:
+      - 'backend/**'
+      - 'frontend/**'
 
 jobs:
 
   backend-test:
     name: Test Backend
     runs-on: ubuntu-latest
+    # run only when files have changed in the backend directory
+    if: ${{ github.event_name == 'push' && contains(github.event.head_commit.modified, 'backend/') }}
     steps:
       - uses: actions/checkout@v3
       - name: Run Backend Tests
@@ -51,6 +56,8 @@ jobs:
   backend-lint:
     name: Lint Backend
     runs-on: ubuntu-latest
+    # run only when files have changed in the backend directory
+    if: ${{ github.event_name == 'push' && contains(github.event.head_commit.modified, 'backend/') }}
     steps:
       - uses: actions/checkout@v3
       - name: Lint Backend
@@ -60,6 +67,8 @@ jobs:
   frontend-test:
     name: Test Frontend
     runs-on: ubuntu-latest
+    # run only when files have changed in the frontend directory
+    if: ${{ github.event_name == 'push' && contains(github.event.head_commit.modified, 'frontend/') }}
     steps:
       - uses: actions/checkout@v3
       - name: Run Frontend Tests
@@ -104,6 +113,8 @@ jobs:
   frontend-lint:
     name: Lint Frontend
     runs-on: ubuntu-latest
+    # run only when files have changed in the frontend directory
+    if: ${{ github.event_name == 'push' && contains(github.event.head_commit.modified, 'frontend/') }}
     steps:
       - uses: actions/checkout@v3
       - run: sudo docker-compose --env-file .env-github-actions run client yarn lint
