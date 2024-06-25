@@ -1,10 +1,12 @@
 import classNames from "classnames";
 
+interface Rank {
+    class: string;
+    text: string;
+}
+
 interface RankProps {
-    rank: {
-        class: string;
-        text: string;
-    };
+    rank: Rank;
 }
 
 // Rank shows a decorated representation of a rank
