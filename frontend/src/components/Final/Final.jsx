@@ -60,7 +60,8 @@ const Final = ({ block, participant, score, final_text, action_texts, button,
             {rank && (
                 <div className="text-center">
                     <Rank rank={rank} />
-                    <h1 className="total-score title" data-testid="score">{showScore} {points}</h1>
+                    <h1 className="total-score title" data-testid="score">{showScore} {points}
+                    </h1>
                 </div>
             )}
             <div className="text-center">

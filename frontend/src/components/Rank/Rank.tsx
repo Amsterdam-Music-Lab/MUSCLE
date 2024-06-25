@@ -17,7 +17,7 @@ const Rank = ({ rank }: RankProps) => (
         })}
         data-testid="rank"
     >
-        <div className="cup-animation" data-testid="cup-animation" />
+        <div className="cup" data-testid="cup-animation" />
         <h4 data-testid="rank-text">{rank.text}</h4>
     </div >
 );

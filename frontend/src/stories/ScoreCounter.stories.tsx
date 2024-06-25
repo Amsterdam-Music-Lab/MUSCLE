@@ -1,31 +1,19 @@
 import { BrowserRouter as Router } from "react-router-dom";
 
-import ScoreV2 from "../components/ExperimentCollection/Score/Score";
+import ScoreCounter from "../components/ScoreCounter/ScoreCounter";
 
 export default {
-  title: "ExperimentCollection/Score",
-  component: ScoreV2,
+  title: "ScoreCounter",
+  component: ScoreCounter,
   parameters: {
     layout: "fullscreen",
   },
-  argTypes: {
-    "rank.class": {
-      control: {
-        type: "select",
-      },
-      options: ['diamond', 'platinum', 'gold', 'silver', 'bronze', 'plastic'],
-    },
-  }
 };
 
 function getScoreData(overrides = {}) {
   return {
     score: 100,
     label: "points",
-    rank: {
-      class: "gold",
-      text: "Gold",
-    },
     ...overrides,
   };
 }
@@ -46,12 +34,12 @@ export const Default = {
 };
 
 export const ZeroScore = {
-  args: getScoreData({ score: 0, scoreClass: "scoreCircleZero" }),
+  args: getScoreData({ score: 0 }),
   decorators: [getDecorator],
 };
 
 export const NegativeScore = {
-  args: getScoreData({ score: -100, scoreClass: "scoreCircleNegative" }),
+  args: getScoreData({ score: -100 }),
   decorators: [getDecorator],
 };
 
@@ -62,15 +50,5 @@ export const ScoreWithoutLabel = {
 
 export const CustomLabel = {
   args: getScoreData({ label: "points earned" }),
-  decorators: [getDecorator],
-};
-
-export const CustomScoreClass = {
-  args: getScoreData({ scoreClass: "silver" }),
-  decorators: [getDecorator],
-};
-
-export const SelectableScoreClass = {
-  args: getScoreData(),
   decorators: [getDecorator],
 };

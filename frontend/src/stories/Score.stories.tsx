@@ -1,10 +1,10 @@
 import { BrowserRouter as Router } from "react-router-dom";
 
-import ScoreV1 from "../components/Score/Score";
+import Score from "../components/Score/Score";
 
 export default {
-  title: "ScoreV1",
-  component: ScoreV1,
+  title: "Score",
+  component: Score,
   parameters: {
     layout: "fullscreen",
   },
