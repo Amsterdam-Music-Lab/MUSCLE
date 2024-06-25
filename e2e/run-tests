@@ -1,0 +1,22 @@
+
+#!/bin/bash
+
+# This script builds a Docker image and either runs tests in a container or opens an interactive bash terminal based on the supplied option.
+
+# Build the docker image
+docker build -t selenium-tests .
+
+# if BASE_URL is not set, throw an error
+if [ -z "$BASE_URL" ]; then
+    echo "BASE_URL is not set. Please set the BASE_URL environment variable to the URL of the application you want to test."
+    exit 1
+fi
+
+# Check for '-i' parameter to decide the mode of operation
+if [[ "$1" == "-i" ]]; then
+    # If '-i' is supplied, start the container with an interactive bash shell
+    docker run --rm -it --network="host" -e BASE_URL=$BASE_URL --name selenium-tests-container -v $(pwd):/usr/src/app --entrypoint bash selenium-tests
+else
+    # If no '-i' is supplied, run the python test script
+    docker run --rm -it --network="host" -e BASE_URL=$BASE_URL --name selenium-tests-container -v $(pwd):/usr/src/app selenium-tests python tests-selenium.py
+fi

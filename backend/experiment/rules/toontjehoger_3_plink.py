@@ -1,5 +1,7 @@
 import logging
 from os.path import join
+import re
+
 from django.template.loader import render_to_string
 
 from .toontjehoger_1_mozart import toontjehoger_ranks
@@ -7,10 +9,9 @@ from experiment.actions import Explainer, Step, Score, Final, Playlist, Info, Tr
 from experiment.actions.playback import PlayButton
 from experiment.actions.form import AutoCompleteQuestion, RadiosQuestion, Form
 from .base import Base
-
 from experiment.utils import non_breaking_spaces
-
 from result.utils import prepare_result
+from section.models import Playlist
 
 logger = logging.getLogger(__name__)
 
@@ -23,6 +24,42 @@ class ToontjeHoger3Plink(Base):
     SCORE_EXTRA_1_CORRECT = 4
     SCORE_EXTRA_2_CORRECT = 4
     SCORE_EXTRA_WRONG = 0
+
+    def validate_playlist(self, playlist: Playlist):
+        """ The original Toontjehoger (Plink) playlist has the following format:
+        ```
+        Billy Joel,Piano Man,0.0,1.0,toontjehoger/plink/2021-005.mp3,70s,vrolijk
+        Boudewijn de Groot,Avond,0.0,1.0,toontjehoger/plink/2021-010.mp3,90s,tederheid
+        Bruce Springsteen,The River,0.0,1.0,toontjehoger/plink/2021-016.mp3,80s,droevig
+        ```
+        """
+        errors = []
+        sections = playlist.section_set.all()
+        if not [s.song for s in sections]:
+            errors.append(
+                'Sections should have associated song objects.')
+        artist_titles = sections.values_list(
+            'song__name', 'song__artist').distinct()
+        if len(artist_titles) != len(sections):
+            errors.append(
+                'Sections should have unique combinations of song.artist and song.name fields.')
+        errors += self.validate_era_and_mood(sections)
+        return errors
+
+    def validate_era_and_mood(self, sections):
+        errors = []
+        eras = sorted(sections.order_by('tag').values_list(
+            'tag', flat=True).distinct())
+        if not all(re.match(r'[0-9]0s', e) for e in eras):
+            errors.append(
+                'The sections should be tagged with an era in the format [0-9]0s, e.g., 90s')
+        moods = sorted(sections.order_by('group').values_list(
+            'group', flat=True).distinct())
+        if 'droevig' not in moods:
+            errors.append(
+                "The sections' groups should be indications of the songs' moods in Dutch"
+            )
+        return errors
 
     def first_round(self, experiment):
         """Create data for the first experiment rounds."""
@@ -41,12 +78,8 @@ class ToontjeHoger3Plink(Base):
             button_label="Start"
         )
 
-        # 2. Choose playlist.
-        playlist = Playlist(experiment.playlists.all())
-
         return [
             explainer,
-            playlist,
         ]
 
     def next_round(self, session):
@@ -210,7 +243,7 @@ class ToontjeHoger3Plink(Base):
                 'era',
                 session,
                 section=section,
-                expected_response=section.group.split(';')[0]
+                expected_response=section.tag
             )
         )
 
@@ -232,7 +265,7 @@ class ToontjeHoger3Plink(Base):
                 'emotion',
                 session,
                 section=section,
-                expected_response=section.group.split(';')[1]
+                expected_response=section.group
             )
         )
 

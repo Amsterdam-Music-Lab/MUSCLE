@@ -1,3 +1,5 @@
+from unittest.mock import patch
+
 from django.test import TestCase
 
 from experiment.models import Experiment
@@ -5,26 +7,37 @@ from participant.models import Participant
 from result.models import Result
 from section.models import Playlist as PlaylistModel, Section, Song
 from session.models import Session
-from experiment.actions import Explainer, Trial, Final, Playlist as PlaylistAction
+from experiment.actions import (
+    Explainer, Trial, Final, Playlist as PlaylistAction
+)
 
 from experiment.rules.congosamediff import CongoSameDiff
 
 
 class CongoSameDiffTest(TestCase):
 
+    def setUp(self):
+        # Mock the file_exists_validator function from section.models
+        # instead of section.validators as it is imported in the Playlist class
+        # which is in the section.models module
+        patcher = patch('section.models.file_exists_validator')
+        self.mock_file_exists_validator = patcher.start()
+        self.mock_file_exists_validator.return_value = None
+        self.addCleanup(patcher.stop)
+
     @classmethod
     def setUpTestData(self):
         self.section_csv = (
             "Dave,m1_contour_practice,0.0,20.0,samediff/melody_1_contour.wav,practice,1\n"
             "Dave,m2_same_practice,0.0,20.0,samediff/melody_1_same.wav,practice,1\n"
-            "Dave,m1_same,0.0,20.0,samediff/melody_1_same.wav,'',1\n"
-            "Dave,m1_scale,0.0,20.0,samediff/melody_1_scale.wav,'',1\n"
-            "Dave,m1_contour,0.0,20.0,samediff/melody_1_contour.wav,'',1\n"
-            "Dave,m1_interval,0.0,20.0,samediff/melody_1_interval.wav,'',1\n"
-            "Dave,m1_same,0.0,20.0,samediff/melody_1_same.wav,'',2\n"
-            "Dave,m1_scale,0.0,20.0,samediff/melody_1_scale.wav,'',2\n"
-            "Dave,m1_contour,0.0,20.0,samediff/melody_1_contour.wav,'',2\n"
-            "Dave,m1_interval,0.0,20.0,samediff/melody_1_interval.wav,'',2\n"
+            "Dave,m1_same,0.0,20.0,samediff/melody_1_same.wav,A,1\n"
+            "Dave,m1_scale,0.0,20.0,samediff/melody_1_scale.wav,B,1\n"
+            "Dave,m1_contour,0.0,20.0,samediff/melody_1_contour.wav,C,1\n"
+            "Dave,m1_interval,0.0,20.0,samediff/melody_1_interval.wav,D,1\n"
+            "Dave,m1_same,0.0,20.0,samediff/melody_1_same.wav,A,2\n"
+            "Dave,m1_scale,0.0,20.0,samediff/melody_1_scale.wav,B,2\n"
+            "Dave,m1_contour,0.0,20.0,samediff/melody_1_contour.wav,C,2\n"
+            "Dave,m1_interval,0.0,20.0,samediff/melody_1_interval.wav,D,2\n"
         )
         self.playlist = PlaylistModel.objects.create(name='CongoSameDiff')
         self.playlist.csv = self.section_csv
@@ -215,3 +228,108 @@ class CongoSameDiffTest(TestCase):
         # practice trials + post-practice question + non-practice trials
         # 2 + 1 + 2 = 5
         assert total_trials_count == 5
+
+    def test_get_participant_group_variant(self):
+        csd = CongoSameDiff()
+
+        # Test with small number of groups and variants
+        self.assertEqual(csd.get_participant_group_variant(1, 1, 2, 2), 'A')
+        self.assertEqual(csd.get_participant_group_variant(1, 2, 2, 2), 'B')
+        self.assertEqual(csd.get_participant_group_variant(2, 1, 2, 2), 'B')
+        self.assertEqual(csd.get_participant_group_variant(2, 2, 2, 2), 'A')
+
+        # Test with more variants than groups
+        self.assertEqual(csd.get_participant_group_variant(1, 1, 2, 3), 'A')
+        self.assertEqual(csd.get_participant_group_variant(1, 2, 2, 3), 'B')
+        self.assertEqual(csd.get_participant_group_variant(2, 1, 2, 3), 'B')
+        self.assertEqual(csd.get_participant_group_variant(2, 2, 2, 3), 'C')
+        self.assertEqual(csd.get_participant_group_variant(3, 1, 2, 3), 'C')
+        self.assertEqual(csd.get_participant_group_variant(3, 2, 2, 3), 'A')
+
+        # Test for participant 1 to 6 to match the expected sequence and reverses
+        self.assertEqual(csd.get_participant_group_variant(1, 1, 3, 3), 'A')
+        self.assertEqual(csd.get_participant_group_variant(1, 2, 3, 3), 'B')
+        self.assertEqual(csd.get_participant_group_variant(1, 3, 3, 3), 'C')
+
+        self.assertEqual(csd.get_participant_group_variant(2, 1, 3, 3), 'B')
+        self.assertEqual(csd.get_participant_group_variant(2, 2, 3, 3), 'C')
+        self.assertEqual(csd.get_participant_group_variant(2, 3, 3, 3), 'A')
+
+        self.assertEqual(csd.get_participant_group_variant(3, 1, 3, 3), 'C')
+        self.assertEqual(csd.get_participant_group_variant(3, 2, 3, 3), 'A')
+        self.assertEqual(csd.get_participant_group_variant(3, 3, 3, 3), 'B')
+
+        self.assertEqual(csd.get_participant_group_variant(4, 1, 3, 3), 'A')
+        self.assertEqual(csd.get_participant_group_variant(4, 2, 3, 3), 'C')
+        self.assertEqual(csd.get_participant_group_variant(4, 3, 3, 3), 'B')
+
+        self.assertEqual(csd.get_participant_group_variant(5, 1, 3, 3), 'B')
+        self.assertEqual(csd.get_participant_group_variant(5, 2, 3, 3), 'A')
+        self.assertEqual(csd.get_participant_group_variant(5, 3, 3, 3), 'C')
+
+        self.assertEqual(csd.get_participant_group_variant(6, 1, 3, 3), 'C')
+        self.assertEqual(csd.get_participant_group_variant(6, 2, 3, 3), 'B')
+        self.assertEqual(csd.get_participant_group_variant(6, 3, 3, 3), 'A')
+
+        # Test for participant 7 to 12 to match the expected sequence and reverses
+        self.assertEqual(csd.get_participant_group_variant(7, 1, 3, 3), 'A')
+        self.assertEqual(csd.get_participant_group_variant(7, 2, 3, 3), 'B')
+        self.assertEqual(csd.get_participant_group_variant(7, 3, 3, 3), 'C')
+
+        self.assertEqual(csd.get_participant_group_variant(8, 1, 3, 3), 'B')
+        self.assertEqual(csd.get_participant_group_variant(8, 2, 3, 3), 'C')
+        self.assertEqual(csd.get_participant_group_variant(8, 3, 3, 3), 'A')
+
+        self.assertEqual(csd.get_participant_group_variant(9, 1, 3, 3), 'C')
+        self.assertEqual(csd.get_participant_group_variant(9, 2, 3, 3), 'A')
+        self.assertEqual(csd.get_participant_group_variant(9, 3, 3, 3), 'B')
+
+        self.assertEqual(csd.get_participant_group_variant(10, 1, 3, 3), 'A')
+        self.assertEqual(csd.get_participant_group_variant(10, 2, 3, 3), 'C')
+        self.assertEqual(csd.get_participant_group_variant(10, 3, 3, 3), 'B')
+
+        self.assertEqual(csd.get_participant_group_variant(11, 1, 3, 3), 'B')
+        self.assertEqual(csd.get_participant_group_variant(11, 2, 3, 3), 'A')
+        self.assertEqual(csd.get_participant_group_variant(11, 3, 3, 3), 'C')
+
+        self.assertEqual(csd.get_participant_group_variant(12, 1, 3, 3), 'C')
+        self.assertEqual(csd.get_participant_group_variant(12, 2, 3, 3), 'B')
+        self.assertEqual(csd.get_participant_group_variant(12, 3, 3, 3), 'A')
+
+        # Test with more groups than variants
+        self.assertEqual(csd.get_participant_group_variant(1, 1, 4, 3), 'A')
+        self.assertEqual(csd.get_participant_group_variant(1, 2, 4, 3), 'B')
+        self.assertEqual(csd.get_participant_group_variant(1, 3, 4, 3), 'C')
+        self.assertEqual(csd.get_participant_group_variant(1, 4, 4, 3), 'A')
+
+        self.assertEqual(csd.get_participant_group_variant(2, 1, 4, 3), 'B')
+        self.assertEqual(csd.get_participant_group_variant(2, 2, 4, 3), 'C')
+        self.assertEqual(csd.get_participant_group_variant(2, 3, 4, 3), 'A')
+        self.assertEqual(csd.get_participant_group_variant(2, 4, 4, 3), 'B')
+
+        self.assertEqual(csd.get_participant_group_variant(4, 1, 4, 3), 'A')
+        self.assertEqual(csd.get_participant_group_variant(4, 2, 4, 3), 'C')
+        self.assertEqual(csd.get_participant_group_variant(4, 3, 4, 3), 'B')
+        self.assertEqual(csd.get_participant_group_variant(4, 4, 4, 3), 'A')
+
+        self.assertEqual(csd.get_participant_group_variant(7, 1, 4, 3), 'A')
+        self.assertEqual(csd.get_participant_group_variant(7, 2, 4, 3), 'B')
+        self.assertEqual(csd.get_participant_group_variant(7, 3, 4, 3), 'C')
+        self.assertEqual(csd.get_participant_group_variant(7, 4, 4, 3), 'A')
+
+    def test_edge_cases(self):
+        congo_same_diff = CongoSameDiff()
+
+        # Test edge cases
+        self.assertEqual(congo_same_diff.get_participant_group_variant(1, 4, 4, 3), 'A')  # Group number exceeds variants
+        self.assertEqual(congo_same_diff.get_participant_group_variant(12, 1, 2, 3), 'C')  # Reversed, with fewer groups than variants
+
+    def test_invalid_parameters(self):
+        congo_same_diff = CongoSameDiff()
+
+        # Test scenarios with invalid parameters (should raise exceptions or handle gracefully)
+        with self.assertRaises(ValueError):  # Assuming your method raises ValueError for invalid inputs
+            congo_same_diff.get_participant_group_variant(-1, 1, 3, 3)  # Negative participant ID
+            congo_same_diff.get_participant_group_variant(1, -1, 3, 3)  # Negative group number
+            congo_same_diff.get_participant_group_variant(1, 1, -1, 3)  # Negative groups amount
+            congo_same_diff.get_participant_group_variant(1, 1, 3, -1)  # Negative variants amount

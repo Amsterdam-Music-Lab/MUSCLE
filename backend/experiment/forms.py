@@ -1,8 +1,7 @@
 from django.forms import CheckboxSelectMultiple, ModelForm, ChoiceField, Form, MultipleChoiceField, ModelMultipleChoiceField, Select, TypedMultipleChoiceField, CheckboxSelectMultiple, TextInput
-from experiment.models import ExperimentSeries, Experiment
+from experiment.models import ExperimentCollection, Experiment
 from experiment.rules import EXPERIMENT_RULES
 
-from .questions import QUESTIONS_CHOICES
 
 # session_keys for Export CSV
 SESSION_CHOICES = [('experiment_id', 'Experiment ID'),
@@ -128,31 +127,12 @@ class MarkdownPreviewTextInput(TextInput):
     template_name = 'widgets/markdown_preview_text_input.html'
 
 
-class ExperimentSeriesForm(ModelForm):
+class ExperimentCollectionForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super(ModelForm, self).__init__(*args, **kwargs)
-        experiments = Experiment.objects.all()
-        self.fields['first_experiments'] = ModelFormFieldAsJSON(
-            queryset=experiments,
-            required=False,
-            help_text=('This field will be deprecated in the nearby future. '
-                       'Please use experiment series groups (see bottom of form).')
-        )
-        self.fields['random_experiments'] = ModelFormFieldAsJSON(
-            queryset=experiments,
-            required=False,
-            help_text=('This field will be deprecated in the nearby future. '
-                       'Please use experiment series groups (see bottom of form).')
-        )
-        self.fields['last_experiments'] = ModelFormFieldAsJSON(
-            queryset=experiments,
-            required=False,
-            help_text=('This field will be deprecated in the nearby future. '
-                       'Please use experiment series groups (see bottom of form).')
-        )
         self.fields['dashboard'].help_text = (
             'This field will be deprecated in the nearby future. '
-            'Please use experiment series groups for dashboard configuration. (see bottom of form). <br><br>'
+            'Please use experiment phases for dashboard configuration. (see bottom of form). <br><br>'
             'Legacy behavior: If you check "dashboard", the experiment collection will have a '
             'dashboard that shows all or a subgroup of related experiments along '
             'with a description, footer, and about page. If you leave it unchecked, '
@@ -160,9 +140,8 @@ class ExperimentSeriesForm(ModelForm):
         self.fields['about_content'].widget = MarkdownPreviewTextInput()
 
     class Meta:
-        model = ExperimentSeries
-        fields = ['slug', 'first_experiments',
-                  'random_experiments', 'last_experiments',
+        model = ExperimentCollection
+        fields = ['slug', 'description',
                   'dashboard', 'about_content']
 
     class Media:
@@ -184,11 +163,35 @@ class ExperimentForm(ModelForm):
             choices=sorted(choices)
         )
 
-        self.fields['questions'] = TypedMultipleChoiceField(
-            choices=QUESTIONS_CHOICES,
-            widget=CheckboxSelectMultiple,
-            required=False
-        )
+    def clean_playlists(self):
+
+        # Check if there is a rules id selected and key exists
+        if 'rules' not in self.cleaned_data:
+            return
+
+        # Validat the rules' playlist
+        rule_id = self.cleaned_data['rules']
+        cl = EXPERIMENT_RULES[rule_id]
+        rules = cl()
+
+        playlists = self.cleaned_data['playlists']
+
+        if not playlists:
+            return self.cleaned_data['playlists']
+        
+        playlist_errors = []
+
+        # Validate playlists
+        for playlist in playlists:
+            errors = rules.validate_playlist(playlist)
+
+            for error in errors:
+                playlist_errors.append(f"Playlist [{playlist.name}]: {error}")
+
+        if playlist_errors:
+            self.add_error('playlists', playlist_errors)
+
+        return playlists
 
     class Meta:
         model = Experiment
@@ -229,3 +232,8 @@ class TemplateForm(Form):
     select_template = ChoiceField(
         widget=Select,
         choices=TEMPLATE_CHOICES)
+
+
+class QuestionSeriesAdminForm(ModelForm):
+    class Media:
+        js = ["questionseries_admin.js"]

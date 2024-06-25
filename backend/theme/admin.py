@@ -1,17 +1,32 @@
 import re
+
+from django.conf import settings
 from django.contrib import admin
 from django.utils.html import format_html
 from django.utils.safestring import mark_safe
-from .models import ThemeConfig
-from .forms import ThemeConfigForm
+from .models import FooterConfig, HeaderConfig, ThemeConfig
+from .forms import ThemeConfigForm, FooterConfigForm
+
+
+class FooterConfigInline(admin.StackedInline):
+    model = FooterConfig
+    form = FooterConfigForm
+    fields = ['disclaimer', 'logos', 'privacy']
+
+
+class HeaderConfigInline(admin.StackedInline):
+    model = HeaderConfig
+    fields = ['show_score']
 
 
 @admin.register(ThemeConfig)
 class ThemeConfigAdmin(admin.ModelAdmin):
 
     form = ThemeConfigForm
+    inlines = [HeaderConfigInline, FooterConfigInline]
 
-    list_display = ('id', 'name_link', 'heading_font_preview', 'body_font_preview', 'logo_preview', 'background_preview')
+    list_display = ('name', 'header_overview', 'heading_font_preview',
+                    'body_font_preview', 'logo_preview', 'background_preview', 'footer_overview')
     search_fields = ('name', 'description')
     ordering = ('name',)
     fieldsets = (
@@ -27,15 +42,18 @@ class ThemeConfigAdmin(admin.ModelAdmin):
             'fields': ('body_font_url',)
         }),
         ('Logo Configuration', {
-            'fields': ('logo_url',)
+            'fields': ('logo_image',)
         }),
         ('Background Configuration', {
-            'fields': ('background_url',)
+            'fields': ('background_image',)
         }),
     )
 
-    def name_link(self, obj):
-        return format_html('<a href="{}">{}</a>', f'/admin/theme/themeconfig/{obj.id}/change/', obj.name)
+    def header_overview(self, obj):
+        return 'Header set' if obj.header else ''
+
+    def footer_overview(self, obj):
+        return f'Footer with {obj.footer.logos.count()} logos'
 
     def heading_font_preview(self, obj):
         if obj.heading_font_url:
@@ -88,13 +106,13 @@ class ThemeConfigAdmin(admin.ModelAdmin):
         return "No font selected"
 
     def logo_preview(self, obj):
-        if obj.logo_url:
-            return mark_safe(f'<img src="{obj.logo_url}" style="max-height: 50px;"/>')
+        if obj.logo_image:
+            return mark_safe(f'<img src="{settings.MEDIA_URL}{obj.logo_image.file}" style="max-height: 50px;"/>')
         return ""
 
     def background_preview(self, obj):
-        if obj.background_url:
-            return mark_safe(f'<div style="background-image: url({obj.background_url}); height: 50px; width: 100px; background-size: cover;"></div>')
+        if obj.background_image:
+            return mark_safe(f'<div style="background-image: url({settings.MEDIA_URL}{obj.background_image.file}); height: 50px; width: 100px; background-size: cover;"></div>')
         return ""
 
     heading_font_preview.short_description = 'Heading Font Preview'

@@ -40,11 +40,11 @@ docutils==0.20.1
     #   python-creole
 genbadge[coverage]==1.1.1
     # via -r requirements.in/base.txt
-gunicorn==20.1.0
+gunicorn==22.0.0
     # via -r requirements.in/prod.txt
 html5lib==1.1
     # via textile
-idna==3.6
+idna==3.7
     # via requests
 iptocc==2.1.2
     # via -r requirements.in/base.txt
@@ -72,7 +72,7 @@ pytz==2023.3
     # via pandas
 regex==2023.12.25
     # via textile
-requests==2.31.0
+requests==2.32.0
     # via genbadge
 roman==4.1
     # via -r requirements.in/base.txt
@@ -85,14 +85,14 @@ six==1.16.0
     #   python-dateutil
 smartypants==2.0.1
     # via django-markup
-sqlparse==0.4.4
+sqlparse==0.5.0
     # via django
 textile==4.0.2
     # via django-markup
-tqdm==4.65.0
+tqdm==4.66.3
     # via -r requirements.in/base.txt
 typing-extensions==4.10.0
-    # via psycopg
+    # via asgiref
 urllib3==2.1.0
     # via
     #   requests

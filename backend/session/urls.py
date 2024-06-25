@@ -1,8 +1,13 @@
 from django.urls import path
-from .views import create_session, continue_session, next_round, finalize_session
+from .views import (
+    create_session,
+    continue_session,
+    next_round,
+    finalize_session
+)
 
 
-app_name='session'
+app_name = 'session'
 
 urlpatterns = [
     path('create/',

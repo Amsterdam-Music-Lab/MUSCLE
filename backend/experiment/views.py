@@ -1,18 +1,19 @@
 import json
 import logging
-from random import shuffle
 
-from django.http import Http404, JsonResponse
+from django.http import Http404, HttpRequest, JsonResponse
 from django.conf import settings
 from django.utils.translation import activate, gettext_lazy as _
 from django_markup.markup import formatter
 
-from .models import Experiment, ExperimentSeries, ExperimentSeriesGroup, Feedback, GroupedExperiment
-from .utils import serialize
-from participant.utils import get_participant
-from session.models import Session
+from .models import Experiment, ExperimentCollection, Phase, Feedback
+from section.models import Playlist
+from experiment.serializers import serialize_actions, serialize_experiment_collection, serialize_phase
 from experiment.rules import EXPERIMENT_RULES
 from experiment.actions.utils import COLLECTION_KEY
+from image.serializers import serialize_image
+from participant.utils import get_participant
+from theme.serializers import serialize_theme
 
 logger = logging.getLogger(__name__)
 
@@ -34,7 +35,9 @@ def get_experiment(request, slug):
         'id': experiment.id,
         'slug': experiment.slug,
         'name': experiment.name,
-        'theme': experiment.theme_config.__to_json__() if experiment.theme_config else None,
+        'theme': serialize_theme(experiment.theme_config) if experiment.theme_config else None,
+        'description': experiment.description,
+        'image': serialize_image(experiment.image) if experiment.image else None,
         'class_name': class_name,  # can be used to override style
         'rounds': experiment.rounds,
         'playlists': [
@@ -42,7 +45,7 @@ def get_experiment(request, slug):
             for playlist in experiment.playlists.all()
         ],
         'feedback_info': experiment.get_rules().feedback_info(),
-        'next_round': serialize(experiment.get_rules().first_round(experiment)),
+        'next_round': serialize_actions(experiment.get_rules().first_round(experiment)),
         'loading_text': _('Loading')
     }
 
@@ -71,138 +74,62 @@ def experiment_or_404(slug):
         raise Http404("Experiment does not exist")
 
 
-def default_questions(request, rules):
-    return JsonResponse({'default_questions': [q.key for q in EXPERIMENT_RULES[rules]().questions]})
+def add_default_question_series(request, id):
+    if request.method == "POST":
+        Experiment.objects.get(pk=id).add_default_question_series()
+    return JsonResponse({})
 
 
-def get_experiment_collection(request, slug):
-    ''' this view goes through all experiment in an ExperimentSeries in this order:
-    first_experiments (fixed order)
-    random_experiments (random order)
-    last_experiments (fixed order)
-    it will return the next experiment from one of these fields which has an unfinished session
-    except if ExperimentSeries.dashboard = True,
-    then all random_experiments will be returned as an array (also those with finished session)
+def get_experiment_collection(
+            request: HttpRequest,
+            slug: str,
+            phase_index: int = 0,
+        ) -> JsonResponse:
+    '''
+    check which `Phase` objects are related to the `ExperimentCollection` with the given slug
+    retrieve the phase with the lowest order (= current_phase)
+    return the next experiment from the current_phase without a finished session
+    except if Phase.dashboard = True,
+    then all experiments of the current_phase will be returned as an array (also those with finished session)
     '''
     try:
-        collection = ExperimentSeries.objects.get(slug=slug)
-    except:
-        return Http404
+        collection = ExperimentCollection.objects.get(slug=slug, active=True)
+    except ExperimentCollection.DoesNotExist:
+        raise Http404("Experiment collection does not exist or is not active")
+    except Exception as e:
+        logger.error(e)
+        return JsonResponse(
+            {'error': 'Something went wrong while fetching the experiment collection. Please try again later.'},
+            status=500
+        )
+
     request.session[COLLECTION_KEY] = slug
     participant = get_participant(request)
-    if collection.first_experiments:
-        experiments = get_associated_experiments(collection.first_experiments)
-        upcoming_experiment = get_upcoming_experiment(experiments, participant)
-        if upcoming_experiment:
-            return JsonResponse(
-                serialize_experiment_series(
-                    collection,
-                    redirect_to=upcoming_experiment
-                )
-            )
-    if collection.random_experiments:
-        experiments = get_associated_experiments(collection.random_experiments)
-        shuffle(experiments)
-        if collection.dashboard:
-            serialized = [
-                serialize_experiment(
-                    experiment,
-                    get_finished_session_count(experiment, participant)
-                ) for experiment in experiments]
-            return JsonResponse(
-                serialize_experiment_series(
-                    collection,
-                    dashboard=serialized
-                )
-            )
-        else:
-            upcoming_experiment = get_upcoming_experiment(
-                experiments, participant)
-            if upcoming_experiment:
-                return JsonResponse(
-                    serialize_experiment_series(
-                        collection,
-                        redirect_to=upcoming_experiment
-                    )
-                )
-    if collection.last_experiments:
-        experiments = get_associated_experiments(collection.last_experiments)
-        upcoming_experiment = get_upcoming_experiment(experiments, participant)
-        if upcoming_experiment:
-            return JsonResponse(
-                serialize_experiment_series(
-                    collection,
-                    redirect_to=upcoming_experiment
-                )
-            )
-    return JsonResponse()
-
-
-def serialize_experiment_series_group(group: ExperimentSeriesGroup):
-    grouped_experiments = GroupedExperiment.objects.filter(group_id=group.id).order_by('order')
-
-    if group.randomize:
-        grouped_experiments = list(grouped_experiments)
-        shuffle(grouped_experiments)
-
-    return {
-        'name': group.name,
-        'dashboard': group.dashboard,
-        'experiments': [serialize_experiment(experiment.experiment) for experiment in grouped_experiments]
-    }
-
-
-def serialize_experiment_series(
-    experiment_series: ExperimentSeries,
-    dashboard: list = [],
-    redirect_to: Experiment = None
-):
-    groups = ExperimentSeriesGroup.objects.filter(series_id=experiment_series.id)
-    serialized_groups = [serialize_experiment_series_group(group) for group in groups]
-    about_content = experiment_series.about_content
-
-    if about_content:
-        about_content = formatter(about_content, filter_name='markdown')
-
-    return {
-        'slug': experiment_series.slug,
-        'name': experiment_series.name,
-        'description': experiment_series.description,
-        'dashboard': dashboard,
-        'redirect_to': redirect_to,
-        'groups': serialized_groups,
-        'about_content': about_content,
-    }
-
-
-def serialize_experiment(experiment_object: Experiment, finished=0):
-    return {
-        'slug': experiment_object.slug,
-        'name': experiment_object.name,
-        'finished_session_count': finished,
-        'description': experiment_object.description,
-        'image': experiment_object.image.file.url if experiment_object.image else '',
-    }
-
-
-def get_finished_session_count(experiment, participant):
-    ''' Get the number of finished sessions for this experiment and participant '''
-    count = Session.objects.filter(
-        experiment=experiment, participant=participant, finished_at__isnull=False).count()
-    return count
+    phases = list(Phase.objects.filter(
+        series=collection.id).order_by('order'))
+    try:
+        current_phase = phases[phase_index]
+        serialized_phase = serialize_phase(
+            current_phase, participant)
+        if not serialized_phase:
+            # if the current phase is not a dashboard and has no unfinished experiments, it will return None
+            # set it to finished and continue to next phase
+            phase_index += 1
+            return get_experiment_collection(request, slug, phase_index=phase_index)
+    except IndexError:
+        serialized_phase = {
+            'dashboard': [],
+            'next_experiment': None
+        }
+    return JsonResponse({
+        **serialize_experiment_collection(collection),
+        **serialized_phase
+    })
 
 
 def get_associated_experiments(pk_list):
-    ''' get all the experiment objects registered in an ExperimentSeries field'''
+    ''' get all the experiment objects registered in an ExperimentCollection field'''
     return [Experiment.objects.get(pk=pk) for pk in pk_list]
-
-
-def get_upcoming_experiment(experiment_list, participant):
-    ''' get next experiment for which there is no finished session for this participant '''
-    upcoming = next((experiment for experiment in experiment_list if
-                     get_finished_session_count(experiment, participant) == 0), None)
-    if upcoming:
-        return serialize_experiment(upcoming)
 
 
 def render_markdown(request):
@@ -223,3 +150,48 @@ def render_markdown(request):
         return JsonResponse({'html': formatter(markdown, filter_name='markdown')})
 
     return JsonResponse({'html': ''})
+
+
+def validate_experiment_playlist(
+        request: HttpRequest,
+        rules_id: str
+        ) -> JsonResponse:
+    """
+    Validate the playlist of an experiment based on the used rules
+    """
+
+    if request.method != 'POST':
+        return JsonResponse({'status': 'error', 'message': 'Only POST requests are allowed'})
+
+    if not request.body:
+        return JsonResponse({'status': 'error', 'message': 'No body found in request'})
+
+    if request.content_type != 'application/json':
+        return JsonResponse({'status': 'error', 'message': 'Only application/json content type is allowed'})
+
+    json_body = json.loads(request.body)
+    playlist_ids = json_body.get('playlists', [])
+    playlists = Playlist.objects.filter(id__in=playlist_ids)
+
+    if not playlists:
+        return JsonResponse({'status': 'error', 'message': 'The experiment must have a playlist.'})
+
+    rules = EXPERIMENT_RULES[rules_id]()
+
+    if not rules.validate_playlist:
+        return JsonResponse({'status': 'warn', 'message': 'This rulesset does not have a playlist validation.'})
+
+    playlist_errors = []
+
+    for playlist in playlists:
+        errors = rules.validate_playlist(playlist)
+        if errors:
+            playlist_errors.append({
+                'playlist': playlist.name,
+                'errors': errors
+                })
+
+    if playlist_errors:
+        return JsonResponse({'status': 'error', 'message': 'There are errors in the playlist.', 'errors': playlist_errors})
+
+    return JsonResponse({'status': 'ok', 'message': 'The playlist is valid.'})

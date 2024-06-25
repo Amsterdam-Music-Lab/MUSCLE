@@ -57,7 +57,7 @@ genbadge[coverage]==1.1.1
     # via -r requirements.in/base.txt
 html5lib==1.1
     # via textile
-idna==3.3
+idna==3.7
     # via requests
 iptocc==2.1.2
     # via -r requirements.in/base.txt
@@ -114,7 +114,7 @@ pytz==2021.3
     # via pandas
 regex==2023.12.25
     # via textile
-requests==2.31.0
+requests==2.32.0
     # via
     #   -r requirements.in/dev.txt
     #   genbadge
@@ -129,19 +129,28 @@ six==1.16.0
     #   python-dateutil
 smartypants==2.0.1
     # via django-markup
-sqlparse==0.4.4
+sqlparse==0.5.0
     # via
     #   django
     #   django-debug-toolbar
 textile==4.0.2
     # via django-markup
-tomlkit==0.12.4
-    # via pylint
+toml==0.10.2
+    # via
+    #   autopep8
+    #   pylint
+tomli==2.0.1
+    # via
+    #   build
+    #   pip-tools
+    #   pyproject-hooks
 tqdm==4.65.0
-    # via -r requirements.in/base.txt
+    # via -r requirements.in\base.txt
 typing-extensions==4.10.0
-    # via psycopg
-urllib3==1.26.18
+    # via
+    #   astroid
+    #   pylint
+urllib3==1.26.19
     # via
     #   requests
     #   sentry-sdk

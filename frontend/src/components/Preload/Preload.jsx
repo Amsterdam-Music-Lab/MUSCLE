@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import classNames from "classnames";
 
-import { MEDIA_ROOT } from "../../config";
 import ListenFeedback from "../Listen/ListenFeedback";
 import CountDown from "../CountDown/CountDown";
 import * as audio from "../../util/audio";
@@ -9,13 +8,11 @@ import * as webAudio from "../../util/webAudio";
 
 // Preload is an experiment screen that continues after a given time or after an audio file has been preloaded
 const Preload = ({ sections, playMethod, duration, preloadMessage, pageTitle, onNext }) => {
-    const [timePassed, setTimePassed] = useState(false);
     const [audioAvailable, setAudioAvailable] = useState(false);
     const [overtime, setOvertime] = useState(false);
     const [loaderDuration, setLoaderDuration] = useState(duration);
     
     const onTimePassed = () => {
-        setTimePassed(true)
         setLoaderDuration(0);
         setOvertime(true);
         if (audioAvailable) {
@@ -28,20 +25,22 @@ const Preload = ({ sections, playMethod, duration, preloadMessage, pageTitle, on
         const preloadResources = async () => {
             if (playMethod === 'NOAUDIO') {
 
-                await Promise.all(sections.map((section) => fetch(MEDIA_ROOT + section.url, {mode: 'no-cors'})));
+                await Promise.all(sections.map((section) => fetch(section.url)));
 
                 return onNext();
             }
 
             if (playMethod === 'BUFFER') {
-
                 // Use Web-audio and preload sections in buffers            
-                sections.map((section, index) => {
+                sections.forEach((section, index) => {
                     // skip Preload if the section has already been loaded in the previous action
                     if (webAudio.checkSectionLoaded(section)) {
-                        onNext();
-                        return undefined;
+                        if (index === (sections.length - 1)) {                            
+                            setAudioAvailable(true);                       
+                        }
+                        return;
                     }
+                    
                     // Clear buffers if this is the first section
                     if (index === 0) {
                         webAudio.clearBuffers();
@@ -50,10 +49,7 @@ const Preload = ({ sections, playMethod, duration, preloadMessage, pageTitle, on
                     // Load sections in buffer                
                     return webAudio.loadBuffer(section.id, section.url, () => {                    
                         if (index === (sections.length - 1)) {                            
-                            if (timePassed) {
-                                setAudioAvailable(true);
-                                onNext();
-                            }                        
+                            setAudioAvailable(true);                  
                         }                                        
                     });
                 })
@@ -62,18 +58,19 @@ const Preload = ({ sections, playMethod, duration, preloadMessage, pageTitle, on
                     webAudio.closeWebAudio();        
                 }
                 // Load audio until available
-                // Return remove listener   
-                return audio.loadUntilAvailable(sections[0].url, () => {
-                    setAudioAvailable(true);
-                    if (timePassed) {
-                        onNext();
-                    }
-                });            
+                // Return remove listener
+                sections.forEach((section, index) => {
+                    return audio.loadUntilAvailable(section.url, () => {
+                        if (index === (sections.length - 1)) {                            
+                            setAudioAvailable(true);                  
+                        }
+                    });
+                })       
             }
         }
 
-        preloadResources();     
-    }, [sections, playMethod, onNext, timePassed]);
+        preloadResources();
+    }, [sections, playMethod, onNext]);
     
     return (
         <ListenFeedback

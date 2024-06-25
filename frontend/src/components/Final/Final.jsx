@@ -4,11 +4,12 @@ import { withRouter } from "react-router-dom";
 import Rank from "../Rank/Rank";
 import Social from "../Social/Social";
 
-import { URLS } from "../../config";
+import { URLS } from "@/config";
 import { finalizeSession } from "../../API";
 import useBoundStore from "../../util/stores";
 import ParticipantLink from "../ParticipantLink/ParticipantLink";
 import UserFeedback from "../UserFeedback/UserFeedback";
+import FinalButton from "./FinalButton";
 
 // Final is an experiment view that shows the final scores of the experiment
 // It can only be the last view of an experiment
@@ -65,9 +66,10 @@ const Final = ({ experiment, participant, score, final_text, action_texts, butto
             </div>
             {button && (
                 <div className="text-center pt-4">
-                    <a className='btn btn-primary btn-lg' href={button.link} onClick={button.link ? undefined : onNext}>
-                        {button.text}
-                    </a>
+                    <FinalButton
+                        button={button}
+                        onNext={onNext}
+                    />
                 </div>
             )}
             {logo && (

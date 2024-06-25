@@ -1,35 +1,36 @@
-import UserFeedback from '@/components/UserFeedback/UserFeedback';
-import FloatingActionButton from '@/components/FloatingActionButton/FloatingActionButton';
+import UserFeedback from "@/components/UserFeedback/UserFeedback";
+import FloatingActionButton from "@/components/FloatingActionButton/FloatingActionButton";
 
 export default {
-    title: 'FloatingActionButton',
+    title: "FloatingActionButton",
     component: FloatingActionButton,
     parameters: {
-        layout: 'fullscreen',
+        layout: "fullscreen",
     },
 };
 
 const userFeedbackProps = {
-    experimentSlug: 'test',
-    participant: 'test',
+    experimentSlug: "test",
+    participant: "test",
     feedbackInfo: {
-        header: 'Feedback',
-        button: 'Submit',
-        thank_you: 'Thank you for your feedback!',
-        contact_body: '<p>Please contact us at <a href="mailto:info@example.com">info@example.com</a> if you have any questions.</p>'
+        header: "Feedback",
+        button: "Submit",
+        thank_you: "Thank you for your feedback!",
+        contact_body:
+            '<p>Please contact us at <a href="mailto:info@example.com">info@example.com</a> if you have any questions.</p>',
     },
-    inline: false
-}
+    inline: false,
+};
 
 export const Default = {
     args: {
-        children: (
-            <UserFeedback {...userFeedbackProps} />
-        ),
+        children: <UserFeedback {...userFeedbackProps} />,
     },
     decorators: [
         (Story) => (
-            <div style={{ width: '100%', height: '100%', backgroundColor: '#aaa', padding: '1rem' }}>
+            <div
+                style={{ width: "100%", height: "100%", backgroundColor: "#aaa", padding: "1rem" }}
+            >
                 <Story />
             </div>
         ),
@@ -38,14 +39,14 @@ export const Default = {
 
 export const TopLeft = {
     args: {
-        position: 'top-left',
-        children: (
-            <UserFeedback {...userFeedbackProps} />
-        ),
+        position: "top-left",
+        children: <UserFeedback {...userFeedbackProps} />,
     },
     decorators: [
         (Story) => (
-            <div style={{ width: '100%', height: '100%', backgroundColor: '#aaa', padding: '1rem' }}>
+            <div
+                style={{ width: "100%", height: "100%", backgroundColor: "#aaa", padding: "1rem" }}
+            >
                 <Story />
             </div>
         ),
@@ -54,14 +55,14 @@ export const TopLeft = {
 
 export const TopRight = {
     args: {
-        position: 'top-right',
-        children: (
-            <UserFeedback {...userFeedbackProps} />
-        ),
+        position: "top-right",
+        children: <UserFeedback {...userFeedbackProps} />,
     },
     decorators: [
         (Story) => (
-            <div style={{ width: '100%', height: '100%', backgroundColor: '#aaa', padding: '1rem' }}>
+            <div
+                style={{ width: "100%", height: "100%", backgroundColor: "#aaa", padding: "1rem" }}
+            >
                 <Story />
             </div>
         ),
@@ -70,14 +71,14 @@ export const TopRight = {
 
 export const BottomLeft = {
     args: {
-        position: 'bottom-left',
-        children: (
-            <UserFeedback {...userFeedbackProps} />
-        ),
+        position: "bottom-left",
+        children: <UserFeedback {...userFeedbackProps} />,
     },
     decorators: [
         (Story) => (
-            <div style={{ width: '100%', height: '100%', backgroundColor: '#aaa', padding: '1rem' }}>
+            <div
+                style={{ width: "100%", height: "100%", backgroundColor: "#aaa", padding: "1rem" }}
+            >
                 <Story />
             </div>
         ),
@@ -86,14 +87,14 @@ export const BottomLeft = {
 
 export const BottomRight = {
     args: {
-        position: 'bottom-right',
-        children: (
-            <UserFeedback {...userFeedbackProps} />
-        ),
+        position: "bottom-right",
+        children: <UserFeedback {...userFeedbackProps} />,
     },
     decorators: [
         (Story) => (
-            <div style={{ width: '100%', height: '100%', backgroundColor: '#aaa', padding: '1rem' }}>
+            <div
+                style={{ width: "100%", height: "100%", backgroundColor: "#aaa", padding: "1rem" }}
+            >
                 <Story />
             </div>
         ),
@@ -102,14 +103,14 @@ export const BottomRight = {
 
 export const CenterLeft = {
     args: {
-        position: 'center-left',
-        children: (
-            <UserFeedback {...userFeedbackProps} />
-        ),
+        position: "center-left",
+        children: <UserFeedback {...userFeedbackProps} />,
     },
     decorators: [
         (Story) => (
-            <div style={{ width: '100%', height: '100%', backgroundColor: '#aaa', padding: '1rem' }}>
+            <div
+                style={{ width: "100%", height: "100%", backgroundColor: "#aaa", padding: "1rem" }}
+            >
                 <Story />
             </div>
         ),
@@ -118,14 +119,14 @@ export const CenterLeft = {
 
 export const CenterRight = {
     args: {
-        position: 'center-right',
-        children: (
-            <UserFeedback {...userFeedbackProps} />
-        ),
+        position: "center-right",
+        children: <UserFeedback {...userFeedbackProps} />,
     },
     decorators: [
         (Story) => (
-            <div style={{ width: '100%', height: '100%', backgroundColor: '#aaa', padding: '1rem' }}>
+            <div
+                style={{ width: "100%", height: "100%", backgroundColor: "#aaa", padding: "1rem" }}
+            >
                 <Story />
             </div>
         ),

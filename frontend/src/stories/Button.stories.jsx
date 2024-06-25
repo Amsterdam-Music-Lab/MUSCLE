@@ -1,23 +1,23 @@
-
-import Button from '../components/Button/Button';
+import Button from "../components/Button/Button";
 
 export default {
-  title: 'Button',
-  component: Button,
-  parameters: {
-    layout: 'fullscreen',
-  },
+    title: "Button",
+    component: Button,
+    parameters: {
+        layout: "fullscreen",
+    },
 };
-
 
 export const Default = {
     args: {
-        title: 'Click me',
+        title: "Click me",
         onClick: () => {},
     },
     decorators: [
         (Story) => (
-            <div style={{ width: '100%', height: '100%', backgroundColor: '#ddd', padding: '1rem' }}>
+            <div
+                style={{ width: "100%", height: "100%", backgroundColor: "#ddd", padding: "1rem" }}
+            >
                 <Story />
             </div>
         ),
@@ -26,13 +26,15 @@ export const Default = {
 
 export const Inactive = {
     args: {
-        title: 'Click me',
+        title: "Click me",
         onClick: () => {},
         active: false,
     },
     decorators: [
         (Story) => (
-            <div style={{ width: '100%', height: '100%', backgroundColor: '#ddd', padding: '1rem' }}>
+            <div
+                style={{ width: "100%", height: "100%", backgroundColor: "#ddd", padding: "1rem" }}
+            >
                 <Story />
             </div>
         ),
@@ -41,13 +43,15 @@ export const Inactive = {
 
 export const WithValue = {
     args: {
-        title: 'Click me',
+        title: "Click me",
         onClick: () => {},
-        value: 'value',
+        value: "value",
     },
     decorators: [
         (Story) => (
-            <div style={{ width: '100%', height: '100%', backgroundColor: '#ddd', padding: '1rem' }}>
+            <div
+                style={{ width: "100%", height: "100%", backgroundColor: "#ddd", padding: "1rem" }}
+            >
                 <Story />
             </div>
         ),
@@ -56,13 +60,15 @@ export const WithValue = {
 
 export const Primary = {
     args: {
-        title: 'Click me',
+        title: "Click me",
         onClick: () => {},
-        className: 'btn-primary',
+        className: "btn-primary",
     },
     decorators: [
         (Story) => (
-            <div style={{ width: '100%', height: '100%', backgroundColor: '#ddd', padding: '1rem' }}>
+            <div
+                style={{ width: "100%", height: "100%", backgroundColor: "#ddd", padding: "1rem" }}
+            >
                 <Story />
             </div>
         ),
@@ -71,13 +77,15 @@ export const Primary = {
 
 export const Secondary = {
     args: {
-        title: 'Click me',
+        title: "Click me",
         onClick: () => {},
-        className: 'btn-secondary',
+        className: "btn-secondary",
     },
     decorators: [
         (Story) => (
-            <div style={{ width: '100%', height: '100%', backgroundColor: '#ddd', padding: '1rem' }}>
+            <div
+                style={{ width: "100%", height: "100%", backgroundColor: "#ddd", padding: "1rem" }}
+            >
                 <Story />
             </div>
         ),
@@ -86,13 +94,15 @@ export const Secondary = {
 
 export const Success = {
     args: {
-        title: 'Click me',
+        title: "Click me",
         onClick: () => {},
-        className: 'btn-success',
+        className: "btn-success",
     },
     decorators: [
         (Story) => (
-            <div style={{ width: '100%', height: '100%', backgroundColor: '#ddd', padding: '1rem' }}>
+            <div
+                style={{ width: "100%", height: "100%", backgroundColor: "#ddd", padding: "1rem" }}
+            >
                 <Story />
             </div>
         ),
@@ -101,13 +111,15 @@ export const Success = {
 
 export const Danger = {
     args: {
-        title: 'Click me',
+        title: "Click me",
         onClick: () => {},
-        className: 'btn-danger',
+        className: "btn-danger",
     },
     decorators: [
         (Story) => (
-            <div style={{ width: '100%', height: '100%', backgroundColor: '#ddd', padding: '1rem' }}>
+            <div
+                style={{ width: "100%", height: "100%", backgroundColor: "#ddd", padding: "1rem" }}
+            >
                 <Story />
             </div>
         ),
@@ -116,13 +128,15 @@ export const Danger = {
 
 export const Warning = {
     args: {
-        title: 'Click me',
+        title: "Click me",
         onClick: () => {},
-        className: 'btn-warning',
+        className: "btn-warning",
     },
     decorators: [
         (Story) => (
-            <div style={{ width: '100%', height: '100%', backgroundColor: '#ddd', padding: '1rem' }}>
+            <div
+                style={{ width: "100%", height: "100%", backgroundColor: "#ddd", padding: "1rem" }}
+            >
                 <div className="btn-group">
                     <Story />
                 </div>
@@ -133,13 +147,15 @@ export const Warning = {
 
 export const Info = {
     args: {
-        title: 'Click me',
+        title: "Click me",
         onClick: () => {},
-        className: 'btn-info',
+        className: "btn-info",
     },
     decorators: [
         (Story) => (
-            <div style={{ width: '100%', height: '100%', backgroundColor: '#ddd', padding: '1rem'}}>
+            <div
+                style={{ width: "100%", height: "100%", backgroundColor: "#ddd", padding: "1rem" }}
+            >
                 <Story />
             </div>
         ),
@@ -148,13 +164,15 @@ export const Info = {
 
 export const WithAlternativePadding = {
     args: {
-        title: 'Click me',
+        title: "Click me",
         onClick: () => {},
-        padding: 'px-2',
+        padding: "px-2",
     },
     decorators: [
         (Story) => (
-            <div style={{ width: '100%', height: '100%', backgroundColor: '#ddd', padding: '1rem' }}>
+            <div
+                style={{ width: "100%", height: "100%", backgroundColor: "#ddd", padding: "1rem" }}
+            >
                 <Story />
             </div>
         ),
@@ -163,12 +181,12 @@ export const WithAlternativePadding = {
 
 export const WithOnClick = {
     args: {
-        title: 'Click me',
-        onClick: () => alert('Clicked!'),
+        title: "Click me",
+        onClick: () => alert("Clicked!"),
     },
     decorators: [
         (Story) => (
-            <div style={{ width: '100%', height: '100%', backgroundColor: '#ddd'}}>
+            <div style={{ width: "100%", height: "100%", backgroundColor: "#ddd" }}>
                 <Story />
             </div>
         ),

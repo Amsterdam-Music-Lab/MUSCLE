@@ -4,8 +4,8 @@ from django.template.loader import render_to_string
 
 from experiment.actions import Consent, BooleanQuestion, Explainer, Final, Form, Playlist, Step, Trial
 from experiment.actions.playback import Autoplay
-from experiment.questions.demographics import EXTRA_DEMOGRAPHICS
-from experiment.questions.utils import question_by_key
+from question.demographics import EXTRA_DEMOGRAPHICS
+from question.utils import question_by_key
 from experiment.rules.base import Base
 from result.utils import prepare_result
 
@@ -18,13 +18,18 @@ class NewExperimentRuleset(Base):
     def __init__(self):
 
         # Add your questions here
-        self.questions = [
-            question_by_key('dgf_gender_identity'),
-            question_by_key('dgf_generation'),
-            question_by_key('dgf_musical_experience', EXTRA_DEMOGRAPHICS),
-            question_by_key('dgf_country_of_origin'),
-            question_by_key('dgf_education', drop_choices=[
-                            'isced-2', 'isced-5'])
+        self.question_series = [
+            {
+                "name": "Demographics",
+                "keys": [
+                    'dgf_gender_identity',
+                    'dgf_generation',
+                    'dgf_musical_experience',
+                    'dgf_country_of_origin',
+                    'dgf_education_matching_pairs'
+                ],
+                "randomize": False
+            },
         ]
 
     def first_round(self, experiment):

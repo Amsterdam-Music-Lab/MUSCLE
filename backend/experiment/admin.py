@@ -15,8 +15,21 @@ from django.http import HttpResponse
 from inline_actions.admin import InlineActionsModelAdminMixin
 from django.urls import reverse
 from django.utils.html import format_html
-from experiment.models import Experiment, ExperimentSeries, ExperimentSeriesGroup, Feedback, GroupedExperiment
-from experiment.forms import ExperimentSeriesForm, ExperimentForm, ExportForm, TemplateForm, EXPORT_TEMPLATES
+from experiment.models import (
+    Experiment,
+    ExperimentCollection,
+    Phase,
+    Feedback,
+    GroupedExperiment
+)
+from question.admin import QuestionSeriesInline
+from experiment.forms import (
+    ExperimentCollectionForm,
+    ExperimentForm,
+    ExportForm,
+    TemplateForm,
+    EXPORT_TEMPLATES,
+)
 from section.models import Section, Song
 from result.models import Result
 from participant.models import Participant
@@ -43,8 +56,8 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
               'slug', 'url', 'hashtag', 'theme_config', 
               'language', 'active', 'rules',
               'rounds', 'bonus_points', 'playlists',
-              'consent', 'questions']
-    inlines = [FeedbackInline]
+              'consent']
+    inlines = [QuestionSeriesInline, FeedbackInline]
     form = ExperimentForm
 
     # make playlists fields a list of checkboxes
@@ -182,23 +195,21 @@ class GroupedExperimentInline(admin.StackedInline):
     extra = 0
 
 
-class ExperimentSeriesGroupInline(admin.StackedInline):
-    model = ExperimentSeriesGroup
+class PhaseInline(admin.StackedInline):
+    model = Phase
     extra = 0
     inlines = [GroupedExperimentInline]
 
 
-class MarkdownPreviewTextInput(TextInput):
-    template_name = 'widgets/markdown_preview_text_input.html'
-
-
-class ExperimentSeriesAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
-    list_display = ('name', 'slug_link', 'description_excerpt', 'dashboard', 'groups')
-    fields = ['slug', 'name', 'description', 'first_experiments',
-              'random_experiments', 'last_experiments', 'dashboard',
+class ExperimentCollectionAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
+    list_display = ('name', 'slug_link', 'description_excerpt',
+                    'dashboard', 'phases', 'active')
+    fields = ['slug', 'name', 'active', 'description',
+              'consent', 'theme_config', 'dashboard',
               'about_content']
-    form = ExperimentSeriesForm
-    inlines = [ExperimentSeriesGroupInline]
+    inline_actions = ['dashboard']
+    form = ExperimentCollectionForm
+    inlines = [PhaseInline]
 
     def slug_link(self, obj):
         dev_mode = settings.DEBUG is True
@@ -214,32 +225,63 @@ class ExperimentSeriesAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
 
         return obj.description[:50] + '...'
 
-    def groups(self, obj):
-        groups = ExperimentSeriesGroup.objects.filter(series=obj)
-        return format_html(', '.join([f'<a href="/admin/experiment/experimentseriesgroup/{group.id}/change/">{group.name}</a>' for group in groups]))
+    def phases(self, obj):
+        phases = Phase.objects.filter(series=obj)
+        return format_html(', '.join([f'<a href="/admin/experiment/phase/{phase.id}/change/">{phase.name}</a>' for phase in phases]))
     
     slug_link.short_description = "Slug"
 
+    def dashboard(self, request, obj, parent_obj=None):
+        """Open researchers dashboard for a collection"""
+        all_experiments = obj.associated_experiments()
+        all_participants = obj.current_participants()
+        all_sessions = obj.export_sessions()
+        collect_data = {
+            'participant_count': len(all_participants),
+            'session_count': len(all_sessions)
+        }
 
-admin.site.register(ExperimentSeries, ExperimentSeriesAdmin)
+        experiments = [{
+            'id': exp.id,
+            'name': exp.name,
+            'started': len(all_sessions.filter(experiment=exp)),
+            'finished': len(all_sessions.filter(experiment=exp, finished_at__isnull=False)),
+            'participant_count': len(exp.current_participants()),
+            'participants': exp.current_participants()
+            } for exp in all_experiments]
+        
+        return render(
+            request,
+            'collection-dashboard.html',
+            context={'collection': obj,
+                     'experiments': experiments,
+                     'sessions': all_sessions,
+                     'participants': all_participants,
+                     'collect_data': collect_data}
+        )
 
 
-class ExperimentSeriesGroupAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
+admin.site.register(ExperimentCollection, ExperimentCollectionAdmin)
+
+
+class PhaseAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
     list_display = ('name_link', 'related_series', 'order', 'dashboard', 'randomize', 'experiments')
     fields = ['name', 'series', 'order', 'dashboard', 'randomize']
     inlines = [GroupedExperimentInline]
 
     def name_link(self, obj):
         obj_name = obj.__str__()
-        url = reverse("admin:experiment_experimentseriesgroup_change", args=[obj.pk])
+        url = reverse(
+            "admin:experiment_phase_change", args=[obj.pk])
         return format_html('<a href="{}">{}</a>', url, obj_name)
 
     def related_series(self, obj):
-        url = reverse("admin:experiment_experimentseries_change", args=[obj.series.pk])
+        url = reverse(
+            "admin:experiment_experimentcollection_change", args=[obj.series.pk])
         return format_html('<a href="{}">{}</a>', url, obj.series.name)
 
     def experiments(self, obj):
-        experiments = GroupedExperiment.objects.filter(group=obj)
+        experiments = GroupedExperiment.objects.filter(phase=obj)
 
         if not experiments:
             return "No experiments"
@@ -247,4 +289,4 @@ class ExperimentSeriesGroupAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin)
         return format_html(', '.join([f'<a href="/admin/experiment/groupedexperiment/{experiment.id}/change/">{experiment.experiment.name}</a>' for experiment in experiments]))
 
 
-admin.site.register(ExperimentSeriesGroup, ExperimentSeriesGroupAdmin)
+admin.site.register(Phase, PhaseAdmin)

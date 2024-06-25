@@ -43,9 +43,9 @@
             <th>Artist</th>
             <th>Name</th>
             <th>Start-time</th>
-            <th>Duration</th>
-            <th>Group</th>
+            <th>Duration</th>            
             <th>Tag</th>
+            <th>Group</th>
         </tr>        
         {% for section in sections %}
         <tr {% if not section.song %} class="song-padding" {% endif %}>
@@ -72,13 +72,13 @@
                     id="{{section.id}}_duration" value="{{ section.duration}}">
             </td>
             <td>
-                <input type="text" name="{{section.id}}_group" maxlength="128" id="{{section.id}}_group"
-                    value="{{ section.group}}">
-            </td>
-            <td>
                 <input type="text" name="{{section.id}}_tag" maxlength="128" id="{{section.id}}_tag"
                     value="{{ section.tag}}">
             </td>
+            <td>
+                <input type="text" name="{{section.id}}_group" maxlength="128" id="{{section.id}}_group"
+                    value="{{ section.group}}">
+            </td>            
         </tr>
         {% endfor %}
         <tr class="song-padding">

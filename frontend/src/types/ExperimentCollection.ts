@@ -1,14 +1,22 @@
 import Experiment from "./Experiment";
+import Theme from "./Theme";
+
+export interface Consent {
+    text: string;
+    title: string;
+    confirm: string;
+    deny: string;
+    view: 'CONSENT';
+}
 
 export default interface ExperimentCollection {
-    id: number;
     slug: string;
     name: string;
     description: string;
     dashboard: Experiment[];
-    redirect_to: Experiment | null;
-
-    // New properties that do not yet exist in the backend
-    next_experiment: Experiment | null;
-    about_content: string;
+    nextExperiment: Experiment | null;
+    aboutContent: string;
+    consent?: Consent;
+    theme?: Theme;
+    totalScore: Number;
 }

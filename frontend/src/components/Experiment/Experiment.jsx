@@ -3,22 +3,22 @@ import { TransitionGroup, CSSTransition } from "react-transition-group";
 import { withRouter } from "react-router-dom";
 import classNames from "classnames";
 
-import useBoundStore from "../../util/stores";
-import { createSession, getNextRound, useExperiment } from "../../API";
-import Consent from "../Consent/Consent";
-import DefaultPage from "../Page/DefaultPage";
-import ToontjeHoger from "../ToontjeHoger/ToontjeHoger";
-import Explainer from "../Explainer/Explainer";
-import Final from "../Final/Final";
-import Loading from "../Loading/Loading";
-import Playlist from "../Playlist/Playlist";
-import Score from "../Score/Score";
-import Trial from "../Trial/Trial";
-import useResultHandler from "../../hooks/useResultHandler";
-import Info from "../Info/Info";
+import useBoundStore from "@/util/stores";
+import { createSession, getNextRound, useExperiment } from "@/API";
+import Consent from "@/components/Consent/Consent";
+import DefaultPage from "@/components/Page/DefaultPage";
+import ToontjeHoger from "@/components/ToontjeHoger/ToontjeHoger";
+import Explainer from "@/components/Explainer/Explainer";
+import Final from "@/components/Final/Final";
+import Loading from "@/components/Loading/Loading";
+import Playlist from "@/components/Playlist/Playlist";
+import Score from "@/components/Score/Score";
+import Trial from "@/components/Trial/Trial";
+import Info from "@/components/Info/Info";
 import FloatingActionButton from "@/components/FloatingActionButton/FloatingActionButton";
 import UserFeedback from "@/components/UserFeedback/UserFeedback";
 import FontLoader from "@/components/FontLoader/FontLoader";
+import useResultHandler from "@/hooks/useResultHandler";
 
 // Experiment handles the main experiment flow:
 // - Loads the experiment and participant
@@ -35,6 +35,9 @@ const Experiment = ({ match }) => {
     const session = useBoundStore((state) => state.session);
     const theme = useBoundStore((state) => state.theme);
     const setTheme = useBoundStore((state) => state.setTheme);
+
+    const setHeadData = useBoundStore((state) => state.setHeadData);
+    const resetHeadData = useBoundStore((state) => state.resetHeadData);
 
     // Current experiment state
     const [actions, setActions] = useState([]);
@@ -72,7 +75,7 @@ const Experiment = ({ match }) => {
             return newSession;
         }
         catch (err) {
-            setError(`Could not create a session: ${err}`)
+            setError(`Could not create a session: ${err}`, err)
         };
     };
 
@@ -93,7 +96,7 @@ const Experiment = ({ match }) => {
     };
 
     // trigger next action from next_round array, or call session/next_round
-    const onNext = async (doBreak) => {
+    const onNext = async (doBreak = false) => {
         if (!doBreak && actions.length) {
             updateActions(actions);
         } else {
@@ -107,6 +110,18 @@ const Experiment = ({ match }) => {
         if (!loadingExperiment && participant) {
             // Loading succeeded
             if (experiment) {
+                setSession(null);
+                // Set Helmet Head data
+                setHeadData({
+                    title: experiment.name,
+                    description: experiment.description,
+                    image: experiment.image?.file,
+                    url: window.location.href,
+                    structuredData: {
+                        "@type": "Experiment",
+                    },
+                });
+
                 // Set theme
                 if (experiment.theme) {
                     setTheme(experiment.theme);
@@ -124,6 +139,11 @@ const Experiment = ({ match }) => {
                 setError("Could not load experiment");
             }
         }
+
+        // Cleanup
+        return () => {
+            resetHeadData();
+        };
     }, [
         experiment,
         loadingExperiment,
@@ -226,7 +246,7 @@ const Experiment = ({ match }) => {
                     <DefaultPage
                         title={state.title}
                         logoClickConfirm={
-                            ["FINAL", "ERROR", "TOONTJEHOGER"].includes(view) ||
+                            ["FINAL", "ERROR"].includes(view) ||
                                 // Info pages at end of experiment
                                 (view === "INFO" &&
                                     (!state.next_round || !state.next_round.length))

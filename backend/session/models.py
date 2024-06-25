@@ -85,7 +85,7 @@ class Session(models.Model):
             'json_data': self.load_json_data(),
             'results': [result.export_admin() for result in self.result_set.all()]
         }
-    
+
     def export_results(self):
         # export session result objects
         return self.result_set.all()
@@ -145,11 +145,15 @@ class Session(models.Model):
         To ensure appropriate IP restrictions, most rules should use this
         method instead of operating on the playlist directly.
         """
-        
+
         pks = self.filter_songs(filter_by)
         if pks:
             # Return a random section
-            sections = self.playlist.section_set.filter(song_id=random.choice(pks))
+            sections = self.playlist.section_set.filter(
+                song_id=random.choice(pks)
+            ).filter(
+                **filter_by
+            )
             return random.choice(sections)
 
     def all_sections(self, filter_by={}):
