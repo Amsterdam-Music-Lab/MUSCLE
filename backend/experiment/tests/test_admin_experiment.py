@@ -185,7 +185,7 @@ class TestExperimentCollectionAdmin(TestCase):
                 'slug_link',
                 'description_excerpt',
                 'dashboard',
-                'groups',
+                'phases',
                 'active',
             )
         )

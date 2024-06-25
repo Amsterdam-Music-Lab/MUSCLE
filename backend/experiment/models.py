@@ -49,9 +49,9 @@ class ExperimentCollection(models.Model):
         verbose_name_plural = "Experiment Collections"
 
     def associated_experiments(self):
-        groups = self.groups.all()
+        phases = self.phases.all()
         return [
-            experiment.experiment for group in groups for experiment in list(group.experiments.all())]
+            experiment.experiment for phase in phases for experiment in list(phase.experiments.all())]
 
     def export_sessions(self):
         """export sessions for this collection"""
@@ -71,14 +71,14 @@ class ExperimentCollection(models.Model):
 class Phase(models.Model):
     name = models.CharField(max_length=64, blank=True, default='')
     series = models.ForeignKey(ExperimentCollection,
-                               on_delete=models.CASCADE, related_name='groups')
-    order = models.IntegerField(default=0, help_text='Order of the group in the series. Lower numbers come first.')
+                               on_delete=models.CASCADE, related_name='phases')
+    order = models.IntegerField(default=0, help_text='Order of the phase in the series. Lower numbers come first.')
     dashboard = models.BooleanField(default=False)
     randomize = models.BooleanField(
-        default=False, help_text='Randomize the order of the experiments in this group.')
+        default=False, help_text='Randomize the order of the experiments in this phase.')
 
     def __str__(self):
-        compound_name = self.name or self.series.name or self.series.slug or 'Unnamed group'
+        compound_name = self.name or self.series.name or self.series.slug or 'Unnamed phase'
 
         if not self.name:
             return f'{compound_name} ({self.order})'
@@ -91,7 +91,7 @@ class Phase(models.Model):
 
 class GroupedExperiment(models.Model):
     experiment = models.ForeignKey('Experiment', on_delete=models.CASCADE)
-    group = models.ForeignKey(
+    phase = models.ForeignKey(
         Phase,
         on_delete=models.CASCADE,
         related_name='experiments'

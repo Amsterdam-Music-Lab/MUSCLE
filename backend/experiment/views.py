@@ -83,14 +83,14 @@ def add_default_question_series(request, id):
 def get_experiment_collection(
             request: HttpRequest,
             slug: str,
-            group_index: int = 0,
+            phase_index: int = 0,
         ) -> JsonResponse:
     '''
     check which `Phase` objects are related to the `ExperimentCollection` with the given slug
-    retrieve the group with the lowest order (= current_group)
-    return the next experiment from the current_group without a finished session
+    retrieve the phase with the lowest order (= current_phase)
+    return the next experiment from the current_phase without a finished session
     except if Phase.dashboard = True,
-    then all experiments of the current_group will be returned as an array (also those with finished session)
+    then all experiments of the current_phase will be returned as an array (also those with finished session)
     '''
     try:
         collection = ExperimentCollection.objects.get(slug=slug, active=True)
@@ -105,25 +105,25 @@ def get_experiment_collection(
 
     request.session[COLLECTION_KEY] = slug
     participant = get_participant(request)
-    groups = list(Phase.objects.filter(
+    phases = list(Phase.objects.filter(
         series=collection.id).order_by('order'))
     try:
-        current_group = groups[group_index]
-        serialized_group = serialize_phase(
-            current_group, participant)
-        if not serialized_group:
-            # if the current group is not a dashboard and has no unfinished experiments, it will return None
-            # set it to finished and continue to next group
-            group_index += 1
-            return get_experiment_collection(request, slug, group_index=group_index)
+        current_phase = phases[phase_index]
+        serialized_phase = serialize_phase(
+            current_phase, participant)
+        if not serialized_phase:
+            # if the current phase is not a dashboard and has no unfinished experiments, it will return None
+            # set it to finished and continue to next phase
+            phase_index += 1
+            return get_experiment_collection(request, slug, phase_index=phase_index)
     except IndexError:
-        serialized_group = {
+        serialized_phase = {
             'dashboard': [],
             'next_experiment': None
         }
     return JsonResponse({
         **serialize_experiment_collection(collection),
-        **serialized_group
+        **serialized_phase
     })
 
 

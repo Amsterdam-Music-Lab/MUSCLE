@@ -203,7 +203,7 @@ class PhaseInline(admin.StackedInline):
 
 class ExperimentCollectionAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
     list_display = ('name', 'slug_link', 'description_excerpt',
-                    'dashboard', 'groups', 'active')
+                    'dashboard', 'phases', 'active')
     fields = ['slug', 'name', 'active', 'description',
               'consent', 'theme_config', 'dashboard',
               'about_content']
@@ -225,9 +225,9 @@ class ExperimentCollectionAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
 
         return obj.description[:50] + '...'
 
-    def groups(self, obj):
-        groups = Phase.objects.filter(series=obj)
-        return format_html(', '.join([f'<a href="/admin/experiment/phase/{group.id}/change/">{group.name}</a>' for group in groups]))
+    def phases(self, obj):
+        phases = Phase.objects.filter(series=obj)
+        return format_html(', '.join([f'<a href="/admin/experiment/phase/{phase.id}/change/">{phase.name}</a>' for phase in phases]))
     
     slug_link.short_description = "Slug"
 

@@ -44,11 +44,11 @@ class TestModelExperimentCollection(TestCase):
         experiment3 = Experiment.objects.create(
             rules='THATS_MY_SONG', slug='derailed', rounds=42)
         GroupedExperiment.objects.create(
-            experiment=experiment, group=phase1)
+            experiment=experiment, phase=phase1)
         GroupedExperiment.objects.create(
-            experiment=experiment2, group=phase2)
+            experiment=experiment2, phase=phase2)
         GroupedExperiment.objects.create(
-            experiment=experiment3, group=phase2)
+            experiment=experiment3, phase=phase2)
         self.assertEqual(collection.associated_experiments(), [
                          experiment, experiment2, experiment3])
 
@@ -59,7 +59,7 @@ class TestModelExperimentCollection(TestCase):
         experiment = Experiment.objects.create(
             rules='THATS_MY_SONG', slug='hooked', rounds=42)
         GroupedExperiment.objects.create(
-            experiment=experiment, group=phase)
+            experiment=experiment, phase=phase)
         Session.objects.bulk_create(
             [Session(experiment=experiment, participant=self.participant1),
              Session(experiment=experiment, participant=self.participant2),
@@ -75,7 +75,7 @@ class TestModelExperimentCollection(TestCase):
         experiment = Experiment.objects.create(
             rules='THATS_MY_SONG', slug='hooked', rounds=42)
         GroupedExperiment.objects.create(
-            experiment=experiment, group=phase)
+            experiment=experiment, phase=phase)
         Session.objects.bulk_create(
             [Session(experiment=experiment, participant=self.participant1),
              Session(experiment=experiment, participant=self.participant2),
