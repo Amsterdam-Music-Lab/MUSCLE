@@ -8,6 +8,14 @@ export default {
   parameters: {
     layout: "fullscreen",
   },
+  argTypes: {
+    scoreClass: {
+      control: {
+        type: "select",
+      },
+      options: ['diamond', 'platinum', 'gold', 'silver', 'bronze', 'plastic'],
+    }
+  }
 };
 
 function getScoreData(overrides = {}) {
@@ -51,5 +59,15 @@ export const ScoreWithoutLabel = {
 
 export const CustomLabel = {
   args: getScoreData({ label: "points earned" }),
+  decorators: [getDecorator],
+};
+
+export const CustomScoreClass = {
+  args: getScoreData({ scoreClass: "silver" }),
+  decorators: [getDecorator],
+};
+
+export const SelectableScoreClass = {
+  args: getScoreData(),
   decorators: [getDecorator],
 };
