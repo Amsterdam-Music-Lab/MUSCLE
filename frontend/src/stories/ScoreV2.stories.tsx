@@ -9,12 +9,12 @@ export default {
     layout: "fullscreen",
   },
   argTypes: {
-    scoreClass: {
+    "rank.class": {
       control: {
         type: "select",
       },
       options: ['diamond', 'platinum', 'gold', 'silver', 'bronze', 'plastic'],
-    }
+    },
   }
 };
 
@@ -22,7 +22,10 @@ function getScoreData(overrides = {}) {
   return {
     score: 100,
     label: "points",
-    scoreClass: "scoreCirclePositive",
+    rank: {
+      class: "gold",
+      text: "Gold",
+    },
     ...overrides,
   };
 }

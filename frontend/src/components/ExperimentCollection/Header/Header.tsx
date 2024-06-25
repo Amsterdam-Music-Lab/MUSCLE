@@ -54,7 +54,7 @@ export const Header: React.FC<HeaderProps> = ({
                 <div className="results">
                     <Score
                         score={totalScore}
-                        scoreClass={scoreDisplayConfig.scoreClass}
+                        rank={{ class: scoreDisplayConfig.scoreClass, text: '' }}
                         label={scoreDisplayConfig.scoreLabel}
                     />
                     <Social

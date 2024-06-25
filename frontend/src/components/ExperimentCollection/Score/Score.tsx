@@ -1,21 +1,16 @@
 import React from "react";
 
-import Rank from "@/components/Rank/Rank";
+import Rank, { RankPayload } from "@/components/Rank/Rank";
 import useAnimatedScore from "@/hooks/useAnimatedScore";
 
 interface ScoreProps {
     score: number;
     label: string;
-    scoreClass: string; // The rank class, e.g. diamond, platinum, gold, silver, bronze, plastic
+    rank: RankPayload;
 }
 
-const Score = ({ score, label, scoreClass }: ScoreProps) => {
+const Score = ({ score, label, rank }: ScoreProps) => {
     const currentScore = useAnimatedScore(score);
-
-    const rank = {
-        class: scoreClass,
-        text: "",
-    }
 
     return (
         <div className="score">
