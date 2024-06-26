@@ -37,8 +37,6 @@ export const Header: React.FC<HeaderProps> = ({
     const locale = navigator.language || 'en-US';
     const localeIsEnglish = locale.includes('en');
 
-    console.log({ locale })
-
     // Get current URL minus the query string
     const currentUrl = window.location.href.split('?')[0];
 
