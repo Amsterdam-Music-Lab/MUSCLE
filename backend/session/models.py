@@ -47,7 +47,7 @@ class Session(models.Model):
         return self.result_set.last()
 
     def last_song(self):
-        """Return artist and name of previous song, 
+        """Return artist and name of previous song,
         or return empty string if no scores are set
         """
         section = self.previous_section()
@@ -65,7 +65,7 @@ class Session(models.Model):
         return None
 
     def save_json_data(self, data):
-        """Merge data with json_data, overwriting duplicate keys.        
+        """Merge data with json_data, overwriting duplicate keys.
         """
         new_data = self.load_json_data()
         new_data.update(data)
@@ -86,7 +86,7 @@ class Session(models.Model):
             'json_data': self.load_json_data(),
             'results': [result.export_admin() for result in self.result_set.all()]
         }
-    
+
     def export_results(self):
         # export session result objects
         return self.result_set.all()
@@ -138,7 +138,7 @@ class Session(models.Model):
         used_song_ids = self.song_ids()
         return list(set(song_ids) - set(used_song_ids))
 
-    def get_used_section(self, filter_by={}, exclude={}):
+    def get_used_section(self, filter_by: dict = {}, exclude: dict = {}) -> Section:
         ''' get a section from the playlist which has been used previously in this session
         :param filter_by: a dictionary with which to filter by section fields
         :param exclude: a dictionary with which to exclude certain sections
@@ -153,7 +153,7 @@ class Session(models.Model):
             return random.choice(sections)
         raise Section.DoesNotExist
 
-    def get_unused_section(self, filter_by={}, exclude={}):
+    def get_unused_section(self, filter_by: dict = {}, exclude: dict = {}) -> Section:
         ''' get a section from the playlist which has not yet been used in this session
         :param filter_by: a dictionary with which to filter by section fields
         :param exclude: a dictionary with which to exclude certain sections
@@ -169,8 +169,8 @@ class Session(models.Model):
                 return random.choice(sections)
         raise Section.DoesNotExist
 
-    def get_random_section(self, filter_by={}, exclude={}):
-        ''' return a section from the playlist randomly 
+    def get_random_section(self, filter_by: dict = {}, exclude: dict = {}) -> Section:
+        ''' return a section from the playlist randomly
         :param filter_by: a dictionary with which to filter by section fields
         :param exclude: a dictionary with which to exclude certain sections
         '''
@@ -220,7 +220,7 @@ class Session(models.Model):
     def answered_questions(self):
         """Get number of answered (non-empty) profile questions for this session"""
         return self.result_set.exclude(given_response="").count()
-    
+
     def get_relevant_results(self, question_keys=[]):
         results = self.result_set
         if question_keys:

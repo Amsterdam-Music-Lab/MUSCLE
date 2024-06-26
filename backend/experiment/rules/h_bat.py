@@ -59,7 +59,7 @@ class HBat(Base):
                 session.result_set.order_by('-created_at').first().delete()
                 action = self.finalize_experiment(session)
             return action
-    
+
     def first_round(self, experiment):
         explainer = self.intro_explainer()
         # Consent with admin text or default text
@@ -111,7 +111,7 @@ class HBat(Base):
             }
         )
         return view
-    
+
     def intro_explainer(self):
         return Explainer(
             instruction=_(
@@ -132,7 +132,7 @@ class HBat(Base):
             step_numbers=True,
             button_label='Ok'
         )
-    
+
     def response_explainer(self, correct, slower, button_label=_('Next fragment')):
         if correct:
             if slower:
@@ -153,7 +153,7 @@ class HBat(Base):
             steps=[],
             button_label=button_label
         )
-    
+
     def finalize_experiment(self, session):
         """ if either the max_turnpoints have been reached,
         or if the section couldn't be found (outlier), stop the experiment
@@ -169,7 +169,7 @@ class HBat(Base):
         session.finish()
         session.save()
         return final_action_with_optional_button(session, final_text)
-    
+
     def get_trivia(self):
         return _("When people listen to music, they often perceive an underlying regular pulse, like the woodblock \
             in this task. This allows us to clap along with the music at a concert and dance together in synchrony.")

@@ -24,7 +24,7 @@ n_rounds_per_block = n_trials_per_block * 2  # each trial has two rounds
 class Speech2Song(Base):
     """ Rules for a speech-to-song experiment """
     ID = 'SPEECH_TO_SONG'
-    
+
     def __init__(self):
         self.question_series = [
             {
@@ -179,7 +179,7 @@ def next_single_representation(session: Session, is_speech: bool, group_id: int)
     and several repeated representations of the sound,
     with a final question"""
     filter_by = {'group': group_id}
-    section = session.section_from_unused_song(filter_by)
+    section = session.get_unused_section(filter_by)
     actions = [sound(section), speech_or_sound_question(session, section, is_speech)]
     return actions
 

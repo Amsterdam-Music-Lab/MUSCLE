@@ -14,6 +14,7 @@ from experiment.actions.styles import STYLE_NEUTRAL_INVERTED
 from experiment.utils import create_player_labels
 from .base import Base
 from result.utils import prepare_result
+from session.models import Session
 
 logger = logging.getLogger(__name__)
 
@@ -66,7 +67,7 @@ class ToontjeHoger4Absolute(Base):
     def get_trial_question(self):
         return "Welk fragment heeft de juiste toonhoogte?"
 
-    def get_round(self, session):
+    def get_round(self, session: Session):
         # Get available section groups
         results = session.result_set.all()
         available_groups = list(map(str, range(1, self.PLAYLIST_ITEMS)))
@@ -76,7 +77,7 @@ class ToontjeHoger4Absolute(Base):
         # Get sections
 
         # Original (A)
-        section1 = session.section_from_any_song(
+        section1 = session.get_random_section(
             filter_by={'tag': 'a', 'group__in': available_groups})
         if not section1:
             raise Exception(
@@ -84,7 +85,7 @@ class ToontjeHoger4Absolute(Base):
 
         # Changed (B/C)
         variant = random.choice(["b", "c"])
-        section2 = session.section_from_any_song(
+        section2 = session.get_random_section(
             filter_by={'tag': variant, 'group': section1.group})
         if not section2:
             raise Exception(
