@@ -21,10 +21,7 @@ class Base(object):
     contact_email = settings.CONTACT_MAIL
 
     def __init__(self):
-        self.question_series = [
-            {"name": "DEMOGRAPHICS", "keys": QUESTION_GROUPS["DEMOGRAPHICS"], "randomize": False},
-            {"name": "MSI_OTHER", "keys": ['msi_39_best_instrument'], "randomize": False},
-        ]
+        pass
 
     def feedback_info(self):
         feedback_body = render_to_string('feedback/user_feedback.html', {'email': self.contact_email})
@@ -59,7 +56,7 @@ class Base(object):
         return f'/{session.experiment.slug}{participant_id_url_param}'
 
     def calculate_intermediate_score(self, session, result):
-        """ process result data during a trial (i.e., between next_round calls) 
+        """ process result data during a trial (i.e., between next_round calls)
         return score
         """
         return 0

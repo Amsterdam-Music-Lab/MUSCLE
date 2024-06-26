@@ -17,9 +17,6 @@ class CongoSameDiff(Base):
     ID = 'CONGOSAMEDIFF'
     contact_email = 'aml.tunetwins@gmail.com'
 
-    def __init__(self):
-        pass
-
     def first_round(self, experiment: Experiment):
         """ Provide the first rounds of the experiment,
         before session creation
