@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-11 15:02+0200\n"
+"POT-Creation-Date: 2024-06-25 21:58+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -130,33 +130,34 @@ msgstr ""
 msgid "Select a Playlist"
 msgstr ""
 
-#: experiment/actions/score.py:31
-msgid "Round {session.rounds_passed()} / {self.session.experiment.rounds}"
-msgstr ""
+#: experiment/actions/score.py:30
+#, python-brace-format
+msgid "Round {rounds_passed} / {total_rounds}"
+msgstr "Ronde {rounds_passed} van {total_rounds}"
 
-#: experiment/actions/score.py:43
+#: experiment/actions/score.py:45
 #, fuzzy
 #| msgid "Final score"
 msgid "Total Score"
 msgstr "Eindscore"
 
-#: experiment/actions/score.py:44 experiment/rules/musical_preferences.py:125
+#: experiment/actions/score.py:46 experiment/rules/musical_preferences.py:125
 msgid "Next"
 msgstr "Volgende"
 
-#: experiment/actions/score.py:45
+#: experiment/actions/score.py:47
 msgid "You listened to:"
 msgstr "Je luisterde naar:"
 
-#: experiment/actions/score.py:77
+#: experiment/actions/score.py:79
 msgid "No points"
 msgstr "Geen punten"
 
-#: experiment/actions/score.py:80
+#: experiment/actions/score.py:82
 msgid "Incorrect"
 msgstr "Onjuist"
 
-#: experiment/actions/score.py:83
+#: experiment/actions/score.py:85
 msgid "Correct"
 msgstr "Correct"
 
@@ -4025,7 +4026,9 @@ msgstr "punten"
 msgid "No points yet!"
 msgstr "Nog geen punten!"
 
-#~ msgid "Round {} / {}"
+#, fuzzy, python-format
+#~| msgid "Round {} / {}"
+#~ msgid "Round %s / %s"
 #~ msgstr "Ronde {} / {}"
 
 #, python-format

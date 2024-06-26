@@ -232,7 +232,7 @@ class ToontjeHoger1Mozart(Base):
             body=body,
             heading="Het Mozart effect",
             button_label="Terug naar ToontjeHoger",
-            button_link="/toontjehoger"
+            button_link="/collection/toontjehoger"
         )
 
         return [*answer_explainer, *score, final, info]

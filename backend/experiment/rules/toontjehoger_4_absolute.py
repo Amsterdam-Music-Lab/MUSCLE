@@ -182,7 +182,7 @@ class ToontjeHoger4Absolute(Base):
             body=body,
             heading="Absoluut gehoor",
             button_label="Terug naar ToontjeHoger",
-            button_link="/toontjehoger"
+            button_link="/collection/toontjehoger"
         )
 
         return [*score, final, info]

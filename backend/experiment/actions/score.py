@@ -27,8 +27,10 @@ class Score(BaseAction):  # pylint: disable=too-few-public-methods
         - feedback: An additional feedback text
         """
         self.session = session
-        self.title = title or _(
-            f'Round {session.rounds_passed()} / {self.session.experiment.rounds}')
+        self.title = title or _('Round {rounds_passed} / {total_rounds}').format(
+            rounds_passed=session.rounds_passed(),
+            total_rounds=self.session.experiment.rounds
+        )
         self.score = score or session.last_score()
         self.score_message = score_message or self.default_score_message
         self.feedback = feedback
