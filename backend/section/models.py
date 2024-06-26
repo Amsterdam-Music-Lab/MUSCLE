@@ -275,8 +275,8 @@ class Section(models.Model):
 
     def __str__(self):
         return "{} - {} ({}-{})".format(
-            self.song.artist,
-            self.song.name,
+            self.song.artist if self.song else '',
+            self.song.name if self.song else '',
             self.start_time_str(),
             self.end_time_str()
         )
