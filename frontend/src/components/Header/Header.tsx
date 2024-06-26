@@ -22,6 +22,7 @@ interface Score {
 }
 
 export const Header: React.FC<HeaderProps> = ({
+    experimentCollectionTitle,
     experimentCollectionDescription,
     nextExperimentSlug,
     nextExperimentButtonText,
@@ -39,12 +40,13 @@ export const Header: React.FC<HeaderProps> = ({
 
     // Get current URL minus the query string
     const currentUrl = window.location.href.split('?')[0];
+    const hashtags = [experimentCollectionTitle ? experimentCollectionTitle.replace(/ /g, '').toLowerCase() : 'amsterdammusiclab'];
 
     const social = {
-        'apps': ['facebook', 'twitter'],
-        'message': localeIsEnglish ? `I scored ${totalScore} points` : `Ik heb ${totalScore} punten gescoord`,
-        'url': currentUrl,
-        'hashtags': ["amsterdammusiclab", "citizenscience"]
+        apps: ['facebook', 'twitter'],
+        message: localeIsEnglish ? `I scored ${totalScore} points` : `Ik heb ${totalScore} punten gescoord`,
+        url: currentUrl,
+        hashtags
     }
 
     const useAnimatedScore = (targetScore: number) => {
