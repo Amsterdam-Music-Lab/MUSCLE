@@ -12,7 +12,7 @@ interface HeaderProps {
     nextExperimentButtonText: string;
     collectionSlug: string;
     aboutButtonText: string;
-    totalScore: Number;
+    totalScore: number;
 }
 
 interface Score {
@@ -32,21 +32,18 @@ export const Header: React.FC<HeaderProps> = ({
     score,
 }) => {
 
-    // TODO: Fix this permanently and localize in the backend
+    // TODO: Fix this permanently and localize in and fetch content from the backend
     // See also: https://github.com/Amsterdam-Music-Lab/MUSCLE/issues/1151
-    // Get locale from browser (this is meant to be temporary until we have a proper solution for localization in the backend)
-    const locale = navigator.language || 'en-US';
-    const localeIsEnglish = locale.includes('en');
-
     // Get current URL minus the query string
     const currentUrl = window.location.href.split('?')[0];
-    const hashtags = [experimentCollectionTitle ? experimentCollectionTitle.replace(/ /g, '').toLowerCase() : 'amsterdammusiclab'];
+    const message = totalScore > 0 ? `Ha! Ik ben muzikaler dan ik dacht - heb maar liefst ${totalScore} punten! Speel mee met #ToontjeHoger` : "Ha! Speel mee met #ToontjeHoger en laat je verrassen: je bent muzikaler dat je denkt!";
+    const hashtags = [experimentCollectionTitle ? experimentCollectionTitle.replace(/ /g, '') : 'amsterdammusiclab'];
 
     const social = {
         apps: ['facebook', 'twitter'],
-        message: localeIsEnglish ? `I scored ${totalScore} points` : `Ik heb ${totalScore} punten gescoord`,
+        message,
         url: currentUrl,
-        hashtags
+        hashtags,
     }
 
     const useAnimatedScore = (targetScore: number) => {
