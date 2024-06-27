@@ -311,7 +311,7 @@ class ToontjeHoger3Plink(Base):
             body=body,
             heading="Muziekherkenning",
             button_label="Terug naar ToontjeHoger",
-            button_link="/toontjehoger"
+            button_link="/collection/toontjehoger"
         )
 
         return [score, final, info]

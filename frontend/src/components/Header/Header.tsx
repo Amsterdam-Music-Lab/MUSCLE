@@ -12,7 +12,7 @@ interface HeaderProps {
     nextExperimentButtonText: string;
     collectionSlug: string;
     aboutButtonText: string;
-    totalScore: Number;
+    totalScore: number;
 }
 
 interface Score {
@@ -22,6 +22,7 @@ interface Score {
 }
 
 export const Header: React.FC<HeaderProps> = ({
+    experimentCollectionTitle,
     experimentCollectionDescription,
     nextExperimentSlug,
     nextExperimentButtonText,
@@ -31,11 +32,18 @@ export const Header: React.FC<HeaderProps> = ({
     score,
 }) => {
 
+    // TODO: Fix this permanently and localize in and fetch content from the backend
+    // See also: https://github.com/Amsterdam-Music-Lab/MUSCLE/issues/1151
+    // Get current URL minus the query string
+    const currentUrl = window.location.href.split('?')[0];
+    const message = totalScore > 0 ? `Ha! Ik ben muzikaler dan ik dacht - heb maar liefst ${totalScore} punten! Speel mee met #ToontjeHoger` : "Ha! Speel mee met #ToontjeHoger en laat je verrassen: je bent muzikaler dat je denkt!";
+    const hashtags = [experimentCollectionTitle ? experimentCollectionTitle.replace(/ /g, '') : 'amsterdammusiclab'];
+
     const social = {
-        'apps': ['facebook', 'twitter'],
-        'message': `I scored ${totalScore} points`,
-        'url': 'wwww.amsterdammusiclab.nl',
-        'hashtags': ["amsterdammusiclab", "citizenscience"]
+        apps: ['facebook', 'twitter'],
+        message,
+        url: currentUrl,
+        hashtags,
     }
 
     const useAnimatedScore = (targetScore: number) => {
