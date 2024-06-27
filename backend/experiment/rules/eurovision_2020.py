@@ -34,11 +34,11 @@ class Eurovision2020(Hooked):
         n_free = session.experiment.rounds - 2 * n_old - n_new
 
         # Assign songs.
-        old_songs = random.sample(old_new_song_set, k=n_old)
-        free_songs = random.sample(free_song_set - set(old_songs), k=n_free)
+        old_songs = random.sample(list(old_new_song_set), k=n_old)
+        free_songs = random.sample(list(free_song_set - set(old_songs)), k=n_free)
         new_songs = \
             random.sample(
-                free_song_set - set(old_songs + free_songs),
+                list(free_song_set - set(old_songs + free_songs)),
                 k=n_new
             )
 

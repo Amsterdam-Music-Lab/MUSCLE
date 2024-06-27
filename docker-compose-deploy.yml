@@ -43,6 +43,7 @@ services:
       - /home/github-runner/podman-volumes/server-uploads:/server/upload
     environment:
       - AML_ALLOWED_HOSTS=${AML_ALLOWED_HOSTS}
+      - CSRF_TRUSTED_ORIGINS=${CSRF_TRUSTED_ORIGINS}
       - AML_DEBUG=${AML_DEBUG}
       - AML_CORS_ORIGIN_WHITELIST=${AML_CORS_ORIGIN_WHITELIST}
       - AML_LOCATION_PROVIDER=${AML_LOCATION_PROVIDER}

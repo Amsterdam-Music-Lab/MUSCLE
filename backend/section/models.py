@@ -53,7 +53,7 @@ class Playlist(models.Model):
 
     def save(self, *args, **kwargs):
         """Update playlist csv field on every save"""
-        if self.process_csv is False:
+        if self.process_csv is False and self.id:
             self.csv = self.update_admin_csv()
         if self.url_prefix and self.url_prefix[-1] != '/':
             self.url_prefix += '/'
@@ -219,7 +219,7 @@ class Playlist(models.Model):
     def update_admin_csv(self):
         """Update csv data for admin"""
         csvfile = CsvStringBuilder()
-        writer = csv.writer(csvfile)
+        writer = csv.writer(csvfile)        
         for section in self.section_set.all():
             if section.song:
                 this_artist = section.song.artist

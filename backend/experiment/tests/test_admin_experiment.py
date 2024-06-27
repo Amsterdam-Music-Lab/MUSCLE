@@ -26,9 +26,6 @@ class MockRequest:
 
 request = MockRequest()
 
-this_experiment_admin = ExperimentAdmin(
-    model=Experiment, admin_site=AdminSite)
-
 
 class TestAdminExperiment(TestCase):
 
@@ -46,6 +43,11 @@ class TestAdminExperiment(TestCase):
         Result.objects.create(
             session=Session.objects.first()
         )
+
+    def setUp(self):
+        self.admin = ExperimentAdmin(model=Experiment,
+                                     admin_site=AdminSite
+                                     )
 
     def test_experiment_model_fields(self):
         experiment = model_to_dict(Experiment.objects.first())
@@ -109,9 +111,12 @@ class TestAdminExperimentExport(TestCase):
 
     def setUp(self):
         self.client = Client()
-
+        self.admin = ExperimentAdmin(model=Experiment,
+                                     admin_site=AdminSite
+                                     )
+    
     def test_admin_export(self):
-        response = this_experiment_admin.export(request, self.experiment)
+        response = self.admin.export(request, self.experiment)
         zip_buffer = BytesIO(response.content)
         with ZipFile(zip_buffer, 'r') as test_zip:
             # Test files inside zip
@@ -174,8 +179,11 @@ class TestExperimentCollectionAdmin(TestCase):
             description='test description very long like the tea of oolong and the song of the bird in the morning',
             slug='TEST',
         )
-        self.site = AdminSite()
-        self.admin = ExperimentCollectionAdmin(ExperimentCollection, self.site)
+
+    def setUp(self):
+        self.admin = ExperimentCollectionAdmin(model=ExperimentCollection,
+                                               admin_site=AdminSite
+                                               )
 
     def test_experiment_series_admin_list_display(self):
         self.assertEqual(
@@ -208,20 +216,16 @@ class TestExperimentCollectionAdmin(TestCase):
 
 
 class PhaseAdminTest(TestCase):
-    @classmethod
-    def setUpTestData(self):
-        self.factory = RequestFactory()
-        self.site = AdminSite()
-        self.admin = PhaseAdmin(
-            Phase,
-            self.site
-        )
+
+    def setUp(self):
+        self.admin = PhaseAdmin(model=Phase,
+                                admin_site=AdminSite
+                                )
 
     def test_related_series_with_series(self):
         series = ExperimentCollection.objects.create(name='Test Series')
         phase = Phase.objects.create(
             name='Test Group', order=1, randomize=False, series=series, dashboard=True)
-        request = self.factory.get('/')
         related_series = self.admin.related_series(phase)
         expected_url = reverse(
             "admin:experiment_experimentcollection_change", args=[series.pk])
@@ -243,8 +247,7 @@ class PhaseAdminTest(TestCase):
         experiment2 = Experiment.objects.create(name='Experiment 2', slug='experiment-2')
         grouped_experiment1 = GroupedExperiment.objects.create(phase=phase, experiment=experiment1)
         grouped_experiment2 = GroupedExperiment.objects.create(phase=phase, experiment=experiment2)
-        
-        request = self.factory.get('/')
+
         experiments = self.admin.experiments(phase)
         expected_experiments = format_html(
             ', '.join([

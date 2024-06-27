@@ -164,7 +164,7 @@ class Base(object):
             'hashtags': [experiment.hashtag or experiment.slug, "amsterdammusiclab", "citizenscience"]
         }
 
-    def validate_playlist(self, playlist: Playlist):
+    def validate_playlist(self, playlist: None):
         errors = []
         # Common validations across experiments
         if not playlist:
@@ -177,7 +177,7 @@ class Base(object):
             errors.append('The experiment must have at least one section.')
 
         try:
-            Playlist.clean_csv(playlist)
+            playlist.clean_csv()
         except ValidationError as e:
             errors += e.error_list
 

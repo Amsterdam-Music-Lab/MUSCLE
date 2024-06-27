@@ -66,6 +66,6 @@ class BaseTest(TestCase):
         errors = base.validate_playlist(playlist)
         self.assertEqual(errors, ['The experiment must have a playlist.'])
 
-        playlist = Playlist()
+        playlist = Playlist.objects.create()
         errors = base.validate_playlist(playlist)
         self.assertEqual(errors, ['The experiment must have at least one section.'])
