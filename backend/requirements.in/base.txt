@@ -33,3 +33,6 @@ genbadge[coverage]
 
 # Convert markdown to html
 django-markup[all_filter_dependencies]
+
+# Numpy
+numpy

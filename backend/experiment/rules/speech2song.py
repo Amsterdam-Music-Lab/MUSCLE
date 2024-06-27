@@ -24,7 +24,7 @@ n_rounds_per_block = n_trials_per_block * 2  # each trial has two rounds
 class Speech2Song(Base):
     """ Rules for a speech-to-song experiment """
     ID = 'SPEECH_TO_SONG'
-    
+
     def __init__(self):
         self.question_series = [
             {

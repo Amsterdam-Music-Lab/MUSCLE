@@ -67,6 +67,8 @@ mccabe==0.7.0
     # via
     #   flake8
     #   pylint
+numpy==2.0.0
+    # via -r requirements.in/base.txt
 packaging==23.2
     # via build
 pillow==10.3.0

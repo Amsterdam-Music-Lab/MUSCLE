@@ -48,6 +48,8 @@ idna==3.7
     # via requests
 markdown==3.5.2
     # via django-markup
+numpy==2.0.0
+    # via -r requirements.in/base.txt
 packaging==24.1
     # via gunicorn
 pillow==10.3.0
