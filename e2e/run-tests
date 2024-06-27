@@ -18,5 +18,5 @@ if [[ "$1" == "-i" ]]; then
     docker run --rm -it --network="host" -e BASE_URL=$BASE_URL --name selenium-tests-container -v $(pwd):/usr/src/app --entrypoint bash selenium-tests
 else
     # If no '-i' is supplied, run the python test script
-    docker run --rm -it --network="host" -e BASE_URL=$BASE_URL --name selenium-tests-container -v $(pwd):/usr/src/app selenium-tests python tests-selenium.py
+    docker run --rm -it --network="host" -e BASE_URL=$BASE_URL --name selenium-tests-container -v $(pwd):/usr/src/app selenium-tests python run_tests.py $@
 fi
