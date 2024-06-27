@@ -43,7 +43,7 @@ class TestEurovision(BaseTest):
                 h4_text = WebDriverWait(self.driver, 5).until(expected_conditions.presence_of_element_located((By.TAG_NAME,"h4"))).text
 
                 print(f"Round {h4_text} started...")
-                
+
                 if "ROUND " in h4_text:
 
                     for i in range(2):
