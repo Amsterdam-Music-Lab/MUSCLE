@@ -1,4 +1,4 @@
-import numpy as np
+import random
 
 from django.utils.translation import gettext as _
 from django.template.loader import render_to_string
@@ -75,8 +75,8 @@ class Speech2Song(Base):
     def next_round(self, session):
         blocks = [1, 2, 3]
         # shuffle blocks based on session.id as seed -> always same order for same session
-        np.random.seed(session.id)
-        np.random.shuffle(blocks)
+        random.seed(session.id)
+        random.shuffle(blocks)
         # group_ids for practice (0), or one of the speech blocks (1-3)
         actions = []
         is_speech = True

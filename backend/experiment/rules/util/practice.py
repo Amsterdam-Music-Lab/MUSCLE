@@ -1,5 +1,4 @@
 import random
-import numpy as np
 
 from django.utils.translation import gettext as _
 
@@ -135,5 +134,5 @@ def get_trial_condition(n_choices):
     """ get randomized trial condition
     return an integer between 0 and n_choices-2
     """
-    options = np.arange(n_choices)
-    return np.random.choice(options)
+    options = list(range(n_choices))
+    return random.choice(options)
