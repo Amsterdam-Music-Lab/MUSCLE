@@ -8,7 +8,7 @@ The AML experiment client if the user facing part of the AML experiments. It mai
 
 ### Block views
 
--   To use a new block view, add it to the experiment rules in your AML experiment server.
+-   To use a new block view, add it to the block rules in your AML experiment server.
     -   The unique view ID (e.g. `MY_COMPONENT`) should match the component in the client
 -   Create a new component
 
