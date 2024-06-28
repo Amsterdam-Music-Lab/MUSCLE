@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useEffect } from "react";
 import { withRouter } from "react-router-dom";
 
 import Rank from "../Rank/Rank";
@@ -18,7 +18,6 @@ import FinalButton from "./FinalButton";
 const Final = ({ block, participant, score, final_text, action_texts, button,
     onNext, history, show_participant_link, participant_id_only,
     show_profile_link, social, feedback_info, points, rank, logo }) => {
-    const [showScore, setShowScore] = useState(0);
     const session = useBoundStore((state) => state.session);
 
     useEffect(() => {
