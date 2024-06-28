@@ -8,10 +8,10 @@ interface RankProps {
 
 // Rank shows a decorated representation of a rank
 const Rank = ({ cup, score }: RankProps) => (
-    <div data-testid="rank">
+    <div data-testid="rank" >
         <Cup className={cup.className} text={cup.text} />
         <ScoreCounter score={score.score} label={score.label} />
-    </div>
+    </div >
 );
 
 export default Rank;
