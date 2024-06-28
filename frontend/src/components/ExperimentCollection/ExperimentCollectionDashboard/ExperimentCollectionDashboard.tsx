@@ -15,7 +15,7 @@ interface ExperimentCollectionDashboardProps {
 
 export const ExperimentCollectionDashboard: React.FC<ExperimentCollectionDashboardProps> = ({ experimentCollection, participantIdUrl, totalScore }) => {
 
-    const { dashboard, description } = experimentCollection;
+    const { dashboard, description, name } = experimentCollection;
     const { nextExperimentButtonText, aboutButtonText } = experimentCollection.theme?.header || { nextExperimentButtonText: "", aboutButtonText: "" };
 
     const scoreDisplayConfig = experimentCollection.theme?.header?.score;
@@ -32,9 +32,10 @@ export const ExperimentCollectionDashboard: React.FC<ExperimentCollectionDashboa
                     nextBlockSlug={nextBlockSlug}
                     collectionSlug={experimentCollection.slug}
                     totalScore={totalScore}
+                    name={name}
                     description={description}
                     scoreDisplayConfig={scoreDisplayConfig}
-                    nextExperimentButtonText={nextExperimentButtonText}
+                    nextBlockButtonText={nextExperimentButtonText}
                     aboutButtonText={aboutButtonText}
                 />
             )}

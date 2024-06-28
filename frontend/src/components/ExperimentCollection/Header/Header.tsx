@@ -9,9 +9,10 @@ import { ScoreDisplayConfig } from "@/types/Theme";
 import Rank from "@/components/Rank/Rank";
 
 interface HeaderProps {
+    name: string;
     description: string;
     nextBlockSlug: string | undefined;
-    nextExperimentButtonText: string;
+    nextBlockButtonText: string;
     collectionSlug: string;
     aboutButtonText: string;
     totalScore: number;
@@ -19,9 +20,10 @@ interface HeaderProps {
 }
 
 export const Header: React.FC<HeaderProps> = ({
+    name,
     description,
     nextBlockSlug,
-    nextExperimentButtonText,
+    nextBlockButtonText,
     aboutButtonText,
     collectionSlug,
     totalScore,
@@ -33,7 +35,7 @@ export const Header: React.FC<HeaderProps> = ({
     // Get current URL minus the query string
     const currentUrl = window.location.href.split('?')[0];
     const message = totalScore > 0 ? `Ha! Ik ben muzikaler dan ik dacht - heb maar liefst ${totalScore} punten! Speel mee met #ToontjeHoger` : "Ha! Speel mee met #ToontjeHoger en laat je verrassen: je bent muzikaler dat je denkt!";
-    const hashtags = [experimentCollectionTitle ? experimentCollectionTitle.replace(/ /g, '') : 'amsterdammusiclab'];
+    const hashtags = [name ? name.replace(/ /g, '') : 'amsterdammusiclab'];
 
     const social = {
         apps: ['facebook', 'twitter'],
@@ -47,7 +49,7 @@ export const Header: React.FC<HeaderProps> = ({
             <div className="intro">
                 <HTML body={description} innerClassName="" />
                 <nav className="actions">
-                    {nextBlockSlug && <a className="btn btn-lg btn-primary" href={`/${nextBlockSlug}`}>{nextExperimentButtonText}</a>}
+                    {nextBlockSlug && <a className="btn btn-lg btn-primary" href={`/${nextBlockSlug}`}>{nextBlockButtonText}</a>}
                     {aboutButtonText && <Link className="btn btn-lg btn-outline-primary" to={`/collection/${collectionSlug}/about`}>{aboutButtonText}</Link>}
                 </nav>
             </div>

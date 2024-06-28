@@ -32,7 +32,7 @@ const experiment2 = getExperiment({
 const collectionWithDashboard = { dashboard: [experiment1, experiment2] }
 
 const header = {
-    nextExperimentButtonText: 'Next experiment',
+    nextBlockButtonText: 'Next experiment',
     aboutButtonText: 'About us',
 }
 const collectionWithTheme = {
