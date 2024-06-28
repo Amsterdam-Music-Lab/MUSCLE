@@ -1,6 +1,6 @@
 import IImage from "@/types/Image";
 
-export default interface Experiment {
+export default interface Block {
     id: number;
     name: string;
     slug: string;

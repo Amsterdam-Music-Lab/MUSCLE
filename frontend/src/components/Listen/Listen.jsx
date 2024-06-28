@@ -1,7 +1,7 @@
 import React, { useRef } from "react";
 import Circle from "../Circle/Circle";
 
-// Listen is a base view for experiment views without user input
+/** Listen is a base view for block views without user input */
 const Listen = ({
     circleContent = null,
     instruction,

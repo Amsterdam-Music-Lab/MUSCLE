@@ -11,9 +11,11 @@ import ParticipantLink from "../ParticipantLink/ParticipantLink";
 import UserFeedback from "../UserFeedback/UserFeedback";
 import FinalButton from "./FinalButton";
 
-// Final is an experiment view that shows the final scores of the experiment
-// It can only be the last view of an experiment
-const Final = ({ experiment, participant, score, final_text, action_texts, button,
+/**
+ * Final is an block view that shows the final scores of the block
+ * It can only be the last view of a block
+ */
+const Final = ({ block, participant, score, final_text, action_texts, button,
     onNext, history, show_participant_link, participant_id_only,
     show_profile_link, social, feedback_info, points, rank, logo }) => {
     const [showScore, setShowScore] = useState(0);
@@ -103,7 +105,7 @@ const Final = ({ experiment, participant, score, final_text, action_texts, butto
                 />
             )}
             {feedback_info && (<UserFeedback
-                experimentSlug={experiment.slug}
+                blockSlug={block.slug}
                 participant={participant}
                 feedbackInfo={feedback_info}
             />)}

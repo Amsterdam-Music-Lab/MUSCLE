@@ -10,7 +10,7 @@ export default {
 };
 
 const userFeedbackProps = {
-    experimentSlug: "test",
+    blockSlug: "test",
     participant: "test",
     feedbackInfo: {
         header: "Feedback",

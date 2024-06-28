@@ -4,7 +4,7 @@ import { withRouter } from "react-router-dom";
 import classNames from "classnames";
 
 import useBoundStore from "@/util/stores";
-import { createSession, getNextRound, useExperiment } from "@/API";
+import { createSession, getNextRound, useBlock } from "@/API";
 import Consent from "@/components/Consent/Consent";
 import DefaultPage from "@/components/Page/DefaultPage";
 import ToontjeHoger from "@/components/ToontjeHoger/ToontjeHoger";
@@ -20,13 +20,13 @@ import UserFeedback from "@/components/UserFeedback/UserFeedback";
 import FontLoader from "@/components/FontLoader/FontLoader";
 import useResultHandler from "@/hooks/useResultHandler";
 
-// Experiment handles the main experiment flow:
-// - Loads the experiment and participant
+// Block handles the main (experiment) block flow:
+// - Loads the block and participant
 // - Renders the view based on the state that is provided by the server
 // - It handles sending results to the server
 // - Implements participant_id as URL parameter, e.g. http://localhost:3000/bat?participant_id=johnsmith34
 //   Empty URL parameter "participant_id" is the same as no URL parameter at all
-const Experiment = ({ match }) => {
+const Block = ({ match }) => {
     const startState = { view: "LOADING" };
     // Stores
     const setError = useBoundStore(state => state.setError);
@@ -39,16 +39,16 @@ const Experiment = ({ match }) => {
     const setHeadData = useBoundStore((state) => state.setHeadData);
     const resetHeadData = useBoundStore((state) => state.resetHeadData);
 
-    // Current experiment state
+    // Current block state
     const [actions, setActions] = useState([]);
     const [state, setState] = useState(startState);
     const playlist = useRef(null);
 
     // API hooks
-    const [experiment, loadingExperiment] = useExperiment(match.params.slug);
+    const [block, loadingBlock] = useBlock(match.params.slug);
 
-    const loadingText = experiment ? experiment.loading_text : "";
-    const className = experiment ? experiment.class_name : "";
+    const loadingText = block ? block.loading_text : "";
+    const className = block ? block.class_name : "";
 
     // set random key before setting state
     // this will assure that `state` will be recognized as an updated object
@@ -70,7 +70,7 @@ const Experiment = ({ match }) => {
             return session;
         }
         try {
-            const newSession = await createSession({ experiment, participant, playlist })
+            const newSession = await createSession({ block, participant, playlist })
             setSession(newSession);
             return newSession;
         }
@@ -104,18 +104,18 @@ const Experiment = ({ match }) => {
         }
     };
 
-    // Start first_round when experiment and partipant have been loaded
+    // Start first_round when block and partipant have been loaded
     useEffect(() => {
         // Check if done loading
-        if (!loadingExperiment && participant) {
+        if (!loadingBlock && participant) {
             // Loading succeeded
-            if (experiment) {
+            if (block) {
                 setSession(null);
                 // Set Helmet Head data
                 setHeadData({
-                    title: experiment.name,
-                    description: experiment.description,
-                    image: experiment.image?.file,
+                    title: block.name,
+                    description: block.description,
+                    image: block.image?.file,
                     url: window.location.href,
                     structuredData: {
                         "@type": "Experiment",
@@ -123,20 +123,20 @@ const Experiment = ({ match }) => {
                 });
 
                 // Set theme
-                if (experiment.theme) {
-                    setTheme(experiment.theme);
-                } else if (!experiment.theme && theme) {
+                if (block.theme) {
+                    setTheme(block.theme);
+                } else if (!block.theme && theme) {
                     setTheme(null);
                 }
 
-                if (experiment.next_round.length) {
-                    updateActions([...experiment.next_round]);
+                if (block.next_round.length) {
+                    updateActions([...block.next_round]);
                 } else {
                     setError("The first_round array from the ruleset is empty")
                 }
             } else {
                 // Loading error
-                setError("Could not load experiment");
+                setError("Could not load block");
             }
         }
 
@@ -145,8 +145,8 @@ const Experiment = ({ match }) => {
             resetHeadData();
         };
     }, [
-        experiment,
-        loadingExperiment,
+        block,
+        loadingBlock,
         participant,
         setError,
         updateActions,
@@ -161,11 +161,11 @@ const Experiment = ({ match }) => {
         state,
     });
 
-    // Render experiment state
+    // Render block state
     const render = (view) => {
         // Default attributes for every view
         const attrs = {
-            experiment,
+            block,
             participant,
             loadingText,
             onResult,
@@ -176,7 +176,7 @@ const Experiment = ({ match }) => {
 
         // Show view, based on the unique view ID:
         switch (view) {
-            // Experiment views
+            // Block views
             // -------------------------
             case "TRIAL_VIEW":
                 return <Trial {...attrs} />;
@@ -230,8 +230,8 @@ const Experiment = ({ match }) => {
         <TransitionGroup
             className={classNames(
                 "aha__experiment",
-                !loadingExperiment && experiment
-                    ? "experiment-" + experiment.slug
+                !loadingBlock && block
+                    ? "experiment-" + block.slug
                     : ""
             )}
             data-testid="experiment-wrapper"
@@ -242,12 +242,12 @@ const Experiment = ({ match }) => {
                 classNames={"transition"}
                 unmountOnExit
             >
-                {(!loadingExperiment && experiment) || view === "ERROR" ? (
+                {(!loadingBlock && block) || view === "ERROR" ? (
                     <DefaultPage
                         title={state.title}
                         logoClickConfirm={
                             ["FINAL", "ERROR"].includes(view) ||
-                                // Info pages at end of experiment
+                                // Info pages at end of block
                                 (view === "INFO" &&
                                     (!state.next_round || !state.next_round.length))
                                 ? null
@@ -257,12 +257,12 @@ const Experiment = ({ match }) => {
                     >
                         {render(view)}
 
-                        {experiment?.feedback_info?.show_float_button && (
+                        {block?.feedback_info?.show_float_button && (
                             <FloatingActionButton>
                                 <UserFeedback
-                                    experimentSlug={experiment.slug}
+                                    blockSlug={block.slug}
                                     participant={participant}
-                                    feedbackInfo={experiment.feedback_info}
+                                    feedbackInfo={block.feedback_info}
                                     inline={false} />
                             </FloatingActionButton>
                         )}
@@ -281,4 +281,4 @@ const Experiment = ({ match }) => {
     );
 };
 
-export default withRouter(Experiment);
+export default withRouter(Block);

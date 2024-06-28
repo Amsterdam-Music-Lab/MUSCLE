@@ -22,7 +22,7 @@ export const TEXT_RANGE = "TEXT_RANGE";
 export const ICON_RANGE = "ICON_RANGE";
 export const STRING = "STRING";
 
-// Question is an experiment view that shows a question and handles storing the answer
+/** Question is an block view that shows a question and handles storing the answer */
 const Question = ({
     question,
     onChange,
@@ -78,7 +78,7 @@ const Question = ({
             {question.explainer && (
                 <p className="explainer">{question.explainer}</p>
             )}
-            <h3 className={classNames({title: emphasizeTitle})}>{question.question}</h3>
+            <h3 className={classNames({ title: emphasizeTitle })}>{question.question}</h3>
             <div className="question">{render(question.view)}</div>
             {question.expected_response &&
                 /* Will only be visible when the backend settings has TESTING=True */

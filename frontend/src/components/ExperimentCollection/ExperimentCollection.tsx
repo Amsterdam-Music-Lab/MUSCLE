@@ -64,12 +64,12 @@ const ExperimentCollection = ({ match }: ExperimentCollectionProps) => {
         const attrs = {
             participant,
             onNext,
-            experiment: experimentCollection,
+            block: experimentCollection,
             ...experimentCollection.consent,
         }
         return (
             <DefaultPage className='aha__consent-wrapper' title={experimentCollection.name}>
-                <Consent {...attrs}/>
+                <Consent {...attrs} />
             </DefaultPage>
         )
     }

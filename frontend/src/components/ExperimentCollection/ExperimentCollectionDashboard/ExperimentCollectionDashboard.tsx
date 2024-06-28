@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import ExperimentCollection from "@/types/ExperimentCollection";
 import Header from "@/components/Header/Header";
 import Logo from "@/components/Logo/Logo";
-import IExperiment from "@/types/Experiment";
+import IBlock from "@/types/Block";
 
 
 interface ExperimentCollectionDashboardProps {
@@ -16,10 +16,10 @@ interface ExperimentCollectionDashboardProps {
 export const ExperimentCollectionDashboard: React.FC<ExperimentCollectionDashboardProps> = ({ experimentCollection, participantIdUrl, totalScore }) => {
 
     const dashboard = experimentCollection.dashboard;
-    const nextExperimentSlug = experimentCollection.nextExperiment?.slug;
+    const nextBlockSlug = experimentCollection.nextExperiment?.slug;
 
     const headerProps = experimentCollection.theme?.header ? {
-        nextExperimentSlug,
+        nextBlockSlug,
         collectionSlug: experimentCollection.slug,
         ...experimentCollection.theme.header,
         totalScore,
@@ -39,7 +39,7 @@ export const ExperimentCollectionDashboard: React.FC<ExperimentCollectionDashboa
             {/* Experiments */}
             <div role="menu" className="dashboard toontjehoger">
                 <ul>
-                    {dashboard.map((exp: IExperiment) => (
+                    {dashboard.map((exp: IBlock) => (
                         <li key={exp.slug}>
                             <Link to={getExperimentHref(exp.slug)} role="menuitem">
                                 <ImageOrPlaceholder imagePath={exp.image?.file} alt={exp.image?.alt ?? exp.description} />

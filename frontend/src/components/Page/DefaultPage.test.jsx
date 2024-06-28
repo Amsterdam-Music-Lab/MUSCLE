@@ -17,20 +17,20 @@ describe("DefaultPage Component Tests", () => {
     }
 
     const defaultProps = {
-        className:'aha__default',
+        className: 'aha__default',
         title: "Default page title",
         logoClickConfirm: null,
         collectionSlug: 'some_collection',
-        nextExperimentSlug: 'some_experiment',
+        nextBlockSlug: 'some_experiment',
     }
 
     it('renders itself with children', async () => {
         render(
-            <DefaultPage { ...defaultProps }>
-                <Explainer { ...explainerProps } />
+            <DefaultPage {...defaultProps}>
+                <Explainer {...explainerProps} />
             </DefaultPage>
         )
         await screen.findByText('Some instruction');
     })
-    
+
 });

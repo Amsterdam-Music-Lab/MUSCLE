@@ -2,7 +2,7 @@ import { API_BASE_URL } from "@/config";
 import useGet from "./util/useGet";
 import axios from "axios";
 import qs from "qs";
-import Experiment from "@/types/Experiment";
+import Block from "@/types/Block";
 import Participant from "./types/Participant";
 import Session from "./types/Session";
 
@@ -13,7 +13,7 @@ axios.defaults.withCredentials = true;
 
 // API endpoints
 export const URLS = {
-    experiment: {
+    block: {
         get: (slug: string) => "/experiment/" + slug + "/",
         feedback: (slug: string) => "/experiment/" + slug + "/feedback/",
     },
@@ -43,8 +43,8 @@ export const URLS = {
     }
 };
 
-export const useExperiment = (slug: string) =>
-    useGet(API_BASE_URL + URLS.experiment.get(slug));
+export const useBlock = (slug: string) =>
+    useGet(API_BASE_URL + URLS.block.get(slug));
 
 export const useExperimentCollection = (slug: string) => {
     const data = useGet(API_BASE_URL + URLS.experiment_collection.get(slug));
@@ -61,19 +61,19 @@ export const useConsent = (slug: string) =>
     useGet(API_BASE_URL + URLS.result.get('consent_' + slug));
 
 interface CreateConsentParams {
-    experiment: Experiment;
+    block: Block;
     participant: Participant;
 }
 
-// Create consent for given experiment
-export const createConsent = async ({ experiment, participant }: CreateConsentParams) => {
+/** Create consent for given experiment */
+export const createConsent = async ({ block, participant }: CreateConsentParams) => {
     try {
         const response = await axios.post(
             API_BASE_URL + URLS.result.consent,
             qs.stringify({
                 json_data: JSON.stringify(
                     {
-                        key: "consent_" + experiment.slug,
+                        key: "consent_" + block.slug,
                         value: true,
                     }
                 ),
@@ -88,18 +88,18 @@ export const createConsent = async ({ experiment, participant }: CreateConsentPa
 };
 
 interface CreateSessionParams {
-    experiment: Experiment;
+    block: Block;
     participant: Participant;
     playlist: { current: string };
 }
 
 // Create a new session for given experiment
-export const createSession = async ({experiment, participant, playlist}: CreateSessionParams) => {
+export const createSession = async ({ block, participant, playlist }: CreateSessionParams) => {
     try {
         const response = await axios.post(
             API_BASE_URL + URLS.session.create,
             qs.stringify({
-                experiment_id: experiment.id,
+                experiment_id: block.id,
                 playlist_id: playlist.current,
                 csrfmiddlewaretoken: participant.csrf_token,
             })
@@ -186,7 +186,7 @@ export const scoreIntermediateResult = async ({
 interface GetNextRoundParams {
     session: Session;
 }
-       
+
 
 // Get next_round from server
 export const getNextRound = async ({ session }: GetNextRoundParams) => {
@@ -249,14 +249,14 @@ export const shareParticipant = async ({ email, participant }: ShareParticipantP
 };
 
 interface PostFeedbackParams {
-    experimentSlug: string;
+    blockSlug: string;
     feedback: string;
     participant: Participant;
 }
 
 // Collect user feedback
-export const postFeedback = async({ experimentSlug, feedback, participant }: PostFeedbackParams) => {
-    const endpoint = API_BASE_URL + URLS.experiment.feedback(experimentSlug)
+export const postFeedback = async ({ blockSlug, feedback, participant }: PostFeedbackParams) => {
+    const endpoint = API_BASE_URL + URLS.block.feedback(blockSlug)
     try {
         const response = await axios.post(
             endpoint,

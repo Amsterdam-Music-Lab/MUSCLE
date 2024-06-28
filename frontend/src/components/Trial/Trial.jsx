@@ -7,11 +7,12 @@ import HTML from "../HTML/HTML";
 import Playback from "../Playback/Playback";
 import Button from "../Button/Button";
 
-/** Trial is an experiment view to present information to the user and/or collect user feedback
-If "playback" is provided, it will play audio through the Playback component
-If "html" is provided, it will show html content
-If "feedback_form" is provided, it will present a form of questions to the user
-**/
+/**
+ * Trial is an block view to present information to the user and/or collect user feedback
+ * If "playback" is provided, it will play audio through the Playback component
+ * If "html" is provided, it will show html content
+ * If "feedback_form" is provided, it will present a form of questions to the user
+ */
 const Trial = ({
     playback,
     html,

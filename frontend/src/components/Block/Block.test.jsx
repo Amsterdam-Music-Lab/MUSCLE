@@ -4,7 +4,7 @@ import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { vi } from 'vitest';
 import MockAdapter from 'axios-mock-adapter';
 import axios from 'axios';
-import Experiment from './Experiment';
+import Block from './Block';
 import * as API from '../../API'; 
 
 let mock = new MockAdapter(axios);
@@ -44,7 +44,7 @@ vi.mock('../../util/stores', () => ({
     useBoundStore: vi.fn()
 }));  
 
-describe('Experiment Component', () => {
+describe('Block Component', () => {
 
     afterEach(() => {
         mock.reset();
@@ -55,7 +55,7 @@ describe('Experiment Component', () => {
         mock.onGet().replyOnce(200, experimentObj);
         render(
             <MemoryRouter>
-                <Experiment match={ {params: {slug: 'test'}} }/>
+                <Block match={ {params: {slug: 'test'}} }/>
             </MemoryRouter>
         );
         await screen.findByText('Continue');
@@ -67,7 +67,7 @@ describe('Experiment Component', () => {
 
         render(
             <MemoryRouter initialEntries={['/test']}>
-                <Route path="/:slug" component={Experiment} />
+                <Route path="/:slug" component={Block} />
             </MemoryRouter>
         );
         const button = await screen.findByText('Continue');

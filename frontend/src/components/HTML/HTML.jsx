@@ -2,7 +2,7 @@ import React from "react";
 import classNames from "classnames";
 
 
-// HTML is an experiment view, that shows custom HTML and a Form
+/** HTML is an block view, that shows custom HTML and a Form */
 const HTML = ({ body, innerClassName = "text-center pb-3" }) => {
 
     return (
