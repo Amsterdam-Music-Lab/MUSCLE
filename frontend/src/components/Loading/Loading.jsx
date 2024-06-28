@@ -3,7 +3,7 @@ import React from "react";
 import Circle from "../Circle/Circle";
 
 /**
- * Loading is an experiment view that shows a loading screen
+ * Loading is an block view that shows a loading screen
  * It is normally set by code during loading of data
  */
 const Loading = ({ duration = 2, loadingText }) => {

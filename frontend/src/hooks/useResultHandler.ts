@@ -10,10 +10,12 @@ interface ResultData {
     section?: unknown;
 }
 
-// useResult provides a reusable function to handle experiment view data
-// - collect results in a buffer
-// - handles advancing to next round
-// - finally submits the data to the API and loads the new state
+/**
+ * useResult provides a reusable function to handle block view data
+ * - collect results in a buffer
+ * - handles advancing to next round
+ * - finally submits the data to the API and loads the new state
+ */
 const useResultHandler = ({ session, participant, onNext, state }) => {
     const resultBuffer = useRef([]);
 
