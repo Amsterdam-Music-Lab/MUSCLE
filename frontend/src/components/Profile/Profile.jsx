@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import DefaultPage from "../Page/DefaultPage";
 import Loading from "../Loading/Loading";
-import Rank from "../Rank/Rank";
+import Cup from "../Cup/Cup";
 import { useParticipantScores } from "../../API";
 import { URLS } from "@/config";
 import ParticipantLink from "../ParticipantLink/ParticipantLink";
@@ -33,8 +33,8 @@ const Profile = () => {
                 a.finished_at === b.finished_at
                     ? 0
                     : a.finished_at > b.finished_at
-                    ? -1
-                    : 1
+                        ? -1
+                        : 1
             );
             view = (
                 <>
@@ -51,7 +51,7 @@ const Profile = () => {
                             {data.scores.map((score, index) => (
                                 <div key={index} className="score">
                                     <div className="rank">
-                                        <Rank rank={score.rank} />
+                                        <Cup className={score.rank.class} text={score.rank.text} />
                                     </div>
                                     <div className="stats">
                                         <h4>

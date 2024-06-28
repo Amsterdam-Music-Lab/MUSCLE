@@ -1,6 +1,6 @@
 import useAnimatedScore from "@/hooks/useAnimatedScore";
 
-interface ScoreCounterProps {
+export interface ScoreCounterProps {
     score: number;
     label: string;
 }
@@ -9,7 +9,7 @@ const ScoreCounter = ({ score, label }: ScoreCounterProps) => {
     const currentScore = useAnimatedScore(score);
 
     return (
-        <h3>
+        <h3 data-testid="score">
             {currentScore || currentScore === 0 ? currentScore + " " : ""}
             {label}
         </h3>

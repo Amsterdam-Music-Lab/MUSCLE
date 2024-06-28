@@ -21,36 +21,6 @@ const Final = ({ block, participant, score, final_text, action_texts, button,
     const [showScore, setShowScore] = useState(0);
     const session = useBoundStore((state) => state.session);
 
-    // Use a ref to prevent doing multiple increments
-    // when the render is skipped
-    const scoreValue = useRef(0);
-
-    useEffect(() => {
-        if (score === 0) {
-            return;
-        }
-
-        const id = setTimeout(() => {
-            // Score step
-            const scoreStep = Math.max(
-                1,
-                Math.min(10, Math.ceil(Math.abs(scoreValue.current - score) / 10))
-            );
-
-            // Score are equal, stop
-            if (score === scoreValue.current) {
-                return;
-            }
-            // Add / subtract score
-            scoreValue.current += Math.sign(score - scoreValue.current) * scoreStep;
-            setShowScore(scoreValue.current);
-        }, 50);
-
-        return () => {
-            clearTimeout(id);
-        };
-    }, [score, showScore]);
-
     useEffect(() => {
         finalizeSession({ session, participant });
     }, [session, participant]);
@@ -59,9 +29,7 @@ const Final = ({ block, participant, score, final_text, action_texts, button,
         <div className="aha__final d-flex flex-column justify-content-center">
             {rank && (
                 <div className="text-center">
-                    <Rank rank={rank} />
-                    <h1 className="total-score title" data-testid="score">{showScore} {points}
-                    </h1>
+                    <Rank cup={{ className: rank.class, text: rank.text }} score={{ score, label: points }} />
                 </div>
             )}
             <div className="text-center">

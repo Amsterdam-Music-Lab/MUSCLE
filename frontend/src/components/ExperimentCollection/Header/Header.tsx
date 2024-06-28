@@ -4,7 +4,6 @@ import { Link } from "react-router-dom";
 
 import Social from "../../Social/Social"
 import HTML from '@/components/HTML/HTML';
-import Score from "@/components/ScoreCounter/ScoreCounter";
 import { ScoreDisplayConfig } from "@/types/Theme";
 import Rank from "@/components/Rank/Rank";
 
@@ -55,10 +54,9 @@ export const Header: React.FC<HeaderProps> = ({
             </div>
             {scoreDisplayConfig && totalScore !== 0 && (
                 <div className="results">
-                    <Rank rank={{ class: scoreDisplayConfig.scoreClass, text: '' }} />
-                    <Score
-                        score={totalScore}
-                        label={scoreDisplayConfig.scoreLabel}
+                    <Rank
+                        cup={{ className: scoreDisplayConfig.scoreClass, text: '' }}
+                        score={{ score: totalScore, label: scoreDisplayConfig.scoreLabel }}
                     />
                     <Social
                         social={social}
