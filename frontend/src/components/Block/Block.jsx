@@ -70,7 +70,7 @@ const Block = ({ match }) => {
             return session;
         }
         try {
-            const newSession = await createSession({ experiment: block, participant, playlist })
+            const newSession = await createSession({ block, participant, playlist })
             setSession(newSession);
             return newSession;
         }
@@ -165,7 +165,7 @@ const Block = ({ match }) => {
     const render = (view) => {
         // Default attributes for every view
         const attrs = {
-            experiment: block,
+            block,
             participant,
             loadingText,
             onResult,
@@ -260,7 +260,7 @@ const Block = ({ match }) => {
                         {block?.feedback_info?.show_float_button && (
                             <FloatingActionButton>
                                 <UserFeedback
-                                    experimentSlug={block.slug}
+                                    blockSlug={block.slug}
                                     participant={participant}
                                     feedbackInfo={block.feedback_info}
                                     inline={false} />

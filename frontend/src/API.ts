@@ -61,19 +61,19 @@ export const useConsent = (slug: string) =>
     useGet(API_BASE_URL + URLS.result.get('consent_' + slug));
 
 interface CreateConsentParams {
-    experiment: Block;
+    block: Block;
     participant: Participant;
 }
 
-// Create consent for given experiment
-export const createConsent = async ({ experiment, participant }: CreateConsentParams) => {
+/** Create consent for given experiment */
+export const createConsent = async ({ block, participant }: CreateConsentParams) => {
     try {
         const response = await axios.post(
             API_BASE_URL + URLS.result.consent,
             qs.stringify({
                 json_data: JSON.stringify(
                     {
-                        key: "consent_" + experiment.slug,
+                        key: "consent_" + block.slug,
                         value: true,
                     }
                 ),
@@ -88,18 +88,18 @@ export const createConsent = async ({ experiment, participant }: CreateConsentPa
 };
 
 interface CreateSessionParams {
-    experiment: Block;
+    block: Block;
     participant: Participant;
     playlist: { current: string };
 }
 
 // Create a new session for given experiment
-export const createSession = async ({experiment, participant, playlist}: CreateSessionParams) => {
+export const createSession = async ({ block, participant, playlist }: CreateSessionParams) => {
     try {
         const response = await axios.post(
             API_BASE_URL + URLS.session.create,
             qs.stringify({
-                experiment_id: experiment.id,
+                experiment_id: block.id,
                 playlist_id: playlist.current,
                 csrfmiddlewaretoken: participant.csrf_token,
             })
@@ -186,7 +186,7 @@ export const scoreIntermediateResult = async ({
 interface GetNextRoundParams {
     session: Session;
 }
-       
+
 
 // Get next_round from server
 export const getNextRound = async ({ session }: GetNextRoundParams) => {
@@ -249,14 +249,14 @@ export const shareParticipant = async ({ email, participant }: ShareParticipantP
 };
 
 interface PostFeedbackParams {
-    experimentSlug: string;
+    blockSlug: string;
     feedback: string;
     participant: Participant;
 }
 
 // Collect user feedback
-export const postFeedback = async({ experimentSlug, feedback, participant }: PostFeedbackParams) => {
-    const endpoint = API_BASE_URL + URLS.block.feedback(experimentSlug)
+export const postFeedback = async ({ blockSlug, feedback, participant }: PostFeedbackParams) => {
+    const endpoint = API_BASE_URL + URLS.block.feedback(blockSlug)
     try {
         const response = await axios.post(
             endpoint,

@@ -8,7 +8,7 @@ import HTML from '@/components/HTML/HTML';
 interface HeaderProps {
     experimentCollectionTitle: string;
     experimentCollectionDescription: string;
-    nextExperimentSlug: string | undefined;
+    nextBlockSlug: string | undefined;
     nextExperimentButtonText: string;
     collectionSlug: string;
     aboutButtonText: string;
@@ -24,7 +24,7 @@ interface Score {
 export const Header: React.FC<HeaderProps> = ({
     experimentCollectionTitle,
     experimentCollectionDescription,
-    nextExperimentSlug,
+    nextBlockSlug,
     nextExperimentButtonText,
     collectionSlug,
     aboutButtonText,
@@ -104,7 +104,7 @@ export const Header: React.FC<HeaderProps> = ({
             <div className="intro">
                 <HTML body={experimentCollectionDescription} innerClassName="" />
                 <nav className="actions">
-                    {nextExperimentSlug && <a className="btn btn-lg btn-primary" href={`/${nextExperimentSlug}`}>{nextExperimentButtonText}</a>}
+                    {nextBlockSlug && <a className="btn btn-lg btn-primary" href={`/${nextBlockSlug}`}>{nextExperimentButtonText}</a>}
                     {aboutButtonText && <Link className="btn btn-lg btn-outline-primary" to={`/collection/${collectionSlug}/about`}>{aboutButtonText}</Link>}
                 </nav>
             </div>

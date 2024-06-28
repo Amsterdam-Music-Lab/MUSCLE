@@ -16,10 +16,10 @@ interface ExperimentCollectionDashboardProps {
 export const ExperimentCollectionDashboard: React.FC<ExperimentCollectionDashboardProps> = ({ experimentCollection, participantIdUrl, totalScore }) => {
 
     const dashboard = experimentCollection.dashboard;
-    const nextExperimentSlug = experimentCollection.nextExperiment?.slug;
+    const nextBlockSlug = experimentCollection.nextExperiment?.slug;
 
     const headerProps = experimentCollection.theme?.header ? {
-        nextExperimentSlug,
+        nextBlockSlug,
         collectionSlug: experimentCollection.slug,
         ...experimentCollection.theme.header,
         totalScore,

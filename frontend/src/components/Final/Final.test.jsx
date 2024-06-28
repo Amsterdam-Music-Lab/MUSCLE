@@ -15,7 +15,7 @@ vi.mock('../../util/stores', () => ({
             session: 1,
             participant: 'participant-id',
         };
-        
+
         return fn(state);
     },
     useBoundStore: vi.fn()
@@ -43,7 +43,7 @@ describe('Final Component', () => {
         render(
             <BrowserRouter>
                 <Final
-                    experiment={{ slug: 'test-experiment' }}
+                    block={{ slug: 'test-experiment' }}
                     participant="participant-id"
                     score={100}
                     final_text="<p>Final Text</p>"
@@ -127,7 +127,7 @@ describe('Final Component', () => {
             <BrowserRouter>
                 <Final
                     participant="participant-id"
-session="session-id"
+                    session="session-id"
                 />
             </BrowserRouter>
         );

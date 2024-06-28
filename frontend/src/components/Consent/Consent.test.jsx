@@ -29,20 +29,20 @@ const mockBlock = {
 describe('Consent', () => {
     it('renders loading state correctly', () => {
         useConsent.mockReturnValue([null, true]); // Mock loading state
-        const { getByText } = render(<Consent experiment={{ slug: 'test-experiment', loading_text: 'Loading...' }} />);
+        const { getByText } = render(<Consent block={{ slug: 'test-experiment', loading_text: 'Loading...' }} />);
         expect(document.body.contains(getByText('Loading...'))).to.be.true;
     });
 
     it('renders consent text when not loading', () => {
         useConsent.mockReturnValue([null, false]);
-        const { getByText } = render(<Consent text="<p>Consent Text</p>" experiment={mockBlock} />);
+        const { getByText } = render(<Consent text="<p>Consent Text</p>" block={mockBlock} />);
         expect(document.body.contains(getByText('Consent Text'))).to.be.true;
     });
 
     it('calls onNext when Agree button is clicked', async () => {
         useConsent.mockReturnValue([null, false]);
         const onNext = vi.fn();
-        const { getByText } = render(<Consent onNext={onNext} confirm="Agree" experiment={mockBlock} />);
+        const { getByText } = render(<Consent onNext={onNext} confirm="Agree" block={mockBlock} />);
         fireEvent.click(getByText('Agree'));
 
         await waitFor(() => expect(onNext).toHaveBeenCalled());
@@ -50,7 +50,7 @@ describe('Consent', () => {
 
     it('triggers download when Download button is clicked', async () => {
         useConsent.mockReturnValue([null, false]);
-        const { getByTestId } = render(<Consent text="<p>Consent Text</p>" experiment={mockBlock} />);
+        const { getByTestId } = render(<Consent text="<p>Consent Text</p>" block={mockBlock} />);
         fireEvent.click(getByTestId('download-button'));
 
         await waitFor(() => expect(saveAs).toHaveBeenCalled());
@@ -59,14 +59,14 @@ describe('Consent', () => {
     it('auto advances if consent is already given', () => {
         useConsent.mockReturnValue([true, false]);
         const onNext = vi.fn();
-        render(<Consent onNext={onNext} experiment={mockBlock} />);
+        render(<Consent onNext={onNext} block={mockBlock} />);
         expect(onNext).toHaveBeenCalled();
     });
 
     it('calculates style for consent text correctly', () => {
         useConsent.mockReturnValue([null, false]);
         Object.defineProperty(window, 'innerHeight', { writable: true, configurable: true, value: 800 });
-        const { getByTestId } = render(<Consent text="<p>Consent Text</p>" experiment={mockBlock} />);
+        const { getByTestId } = render(<Consent text="<p>Consent Text</p>" block={mockBlock} />);
         const consentText = getByTestId('consent-text');
         expect(consentText.style.height).toBe('500px');
     });
