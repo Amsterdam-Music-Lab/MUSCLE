@@ -69,7 +69,7 @@ const App = () => {
                         {/* Default experiment */}
                         <Route path="/" exact>
                             <Redirect
-                                to={URLS.experiment.replace(":slug", EXPERIMENT_SLUG)}
+                                to={URLS.block.replace(":slug", EXPERIMENT_SLUG)}
                             />
                         </Route>
 
@@ -77,14 +77,14 @@ const App = () => {
                         <Route path={URLS.profile} exact>
                             <Profile slug={EXPERIMENT_SLUG} />
                         </Route>
-                      
+
                         <Route path={URLS.internalRedirect} component={InternalRedirect} />
 
                         {/* Experiment Collection */}
                         <Route path={URLS.experimentCollection} component={ExperimentCollection} />
 
                         {/* Block */}
-                        <Route path={URLS.experiment} component={Block} />
+                        <Route path={URLS.block} component={Block} />
 
                         <Route path={URLS.session} />
 
