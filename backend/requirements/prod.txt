@@ -46,16 +46,10 @@ html5lib==1.1
     # via textile
 idna==3.7
     # via requests
-iptocc==2.1.2
-    # via -r requirements.in/base.txt
 markdown==3.5.2
     # via django-markup
-numpy==1.24.3
-    # via pandas
 packaging==24.1
     # via gunicorn
-pandas==1.5.3
-    # via iptocc
 pillow==10.3.0
     # via genbadge
 psycopg[binary]==3.1.18
@@ -66,12 +60,8 @@ pygments==2.17.2
     # via django-markup
 python-creole==1.4.10
     # via django-markup
-python-dateutil==2.8.2
-    # via pandas
 python-dotenv==1.0.0
     # via -r requirements.in/base.txt
-pytz==2023.3
-    # via pandas
 regex==2023.12.25
     # via textile
 requests==2.32.0
@@ -84,7 +74,6 @@ six==1.16.0
     # via
     #   bleach
     #   html5lib
-    #   python-dateutil
 smartypants==2.0.1
     # via django-markup
 sqlparse==0.5.0

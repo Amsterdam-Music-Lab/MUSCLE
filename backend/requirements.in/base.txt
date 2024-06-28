@@ -13,10 +13,6 @@ django-cors-headers
 # Dotenv, for loading configuration from .env file
 python-dotenv
 
-# Get country code from IP address;
-# It uses a local DB the get its data from the regional Internet registries
-IPToCC
-
 # PostgrSQL database client
 psycopg[binary]
 
