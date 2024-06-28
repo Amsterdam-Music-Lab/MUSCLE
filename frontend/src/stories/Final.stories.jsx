@@ -48,7 +48,7 @@ function getFinalData(overrides = {}) {
             contact_body:
                 '<p>Please contact us at <a href="mailto:info@example.com">',
         },
-        experiment: {
+        block: {
             slug: "test",
         },
         participant: "test",

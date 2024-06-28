@@ -1,5 +1,5 @@
 import React from 'react';
-import { vi } from 'vitest';
+import { vi, expect, describe, it } from 'vitest';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { BrowserRouter, Router } from 'react-router-dom';
 import { createMemoryHistory } from 'history'
@@ -52,8 +52,8 @@ describe('Final Component', () => {
             </BrowserRouter>
         );
 
-        expect(screen.queryByText(/Final Text/i)).to.exist;
-        expect(screen.queryByTestId('score')).to.exist;
+        expect(document.body.contains(screen.queryByText('Final Text'))).toBe(true);
+        expect(document.body.contains(screen.queryByTestId('score'))).toBe(true);
     });
 
     it('calls onNext prop when button is clicked', async () => {
@@ -85,8 +85,8 @@ describe('Final Component', () => {
             </BrowserRouter>
         );
 
-        expect(screen.queryByText('Rank')).to.not.exist;
-        expect(screen.queryByText('Social')).to.not.exist;
+        expect(document.body.contains(screen.queryByTestId('rank'))).toBe(false);
+        expect(document.body.contains(screen.queryByTestId('social'))).toBe(false);
     });
 
     it('navigates to profile page when profile link is clicked', async () => {
@@ -109,7 +109,7 @@ describe('Final Component', () => {
 
         const profileLink = screen.getByTestId('profile-link');
 
-        expect(profileLink).to.exist;
+        expect(document.body.contains(profileLink)).toBe(true);
 
         expect(history.location.pathname).toBe('/');
 
@@ -145,7 +145,7 @@ describe('Final Component', () => {
         );
 
         const el = screen.getByTestId('button-link');
-        expect(el).to.exist;
+        expect(document.body.contains(el)).toBe(true);
         expect(el.getAttribute('href')).toBe('/redirect/aml');
     });
 
@@ -159,7 +159,7 @@ describe('Final Component', () => {
         );
 
         const el = screen.getByTestId('button-link');
-        expect(el).to.exist;
+        expect(document.body.contains(el)).toBe(true);
         expect(el.getAttribute('href')).toBe('https://example.com');
     });
 

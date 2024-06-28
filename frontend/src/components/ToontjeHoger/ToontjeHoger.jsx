@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import { LOGO_TITLE } from "@/config";
 import { Switch, Route, Link } from "react-router-dom";
-import Rank from "../Rank/Rank";
+import Cup from "../Cup/Cup";
 
 const LOGO_URL = "/images/experiments/toontjehoger/logo.svg";
 
@@ -143,7 +143,7 @@ const Score = ({ score, label, scoreClass }) => {
 
     return (
         <div className="score">
-            <Rank rank={{ class: scoreClass }} />
+            <Cup cup={{ className: scoreClass }} />
             <h3>
                 {currentScore ? currentScore + " " : ""}
                 {label}

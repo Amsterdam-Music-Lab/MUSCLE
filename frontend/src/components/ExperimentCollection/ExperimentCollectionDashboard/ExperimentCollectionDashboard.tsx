@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 import ExperimentCollection from "@/types/ExperimentCollection";
-import Header from "@/components/Header/Header";
+import Header from "@/components/ExperimentCollection/Header/Header";
 import Logo from "@/components/Logo/Logo";
 import IBlock from "@/types/Block";
 
@@ -15,26 +15,29 @@ interface ExperimentCollectionDashboardProps {
 
 export const ExperimentCollectionDashboard: React.FC<ExperimentCollectionDashboardProps> = ({ experimentCollection, participantIdUrl, totalScore }) => {
 
-    const dashboard = experimentCollection.dashboard;
+    const { dashboard, description, name } = experimentCollection;
+    const { nextExperimentButtonText, aboutButtonText } = experimentCollection.theme?.header || { nextExperimentButtonText: "", aboutButtonText: "" };
+
+    const scoreDisplayConfig = experimentCollection.theme?.header?.score;
     const nextBlockSlug = experimentCollection.nextExperiment?.slug;
-
-    const headerProps = experimentCollection.theme?.header ? {
-        nextBlockSlug,
-        collectionSlug: experimentCollection.slug,
-        ...experimentCollection.theme.header,
-        totalScore,
-        experimentCollectionTitle: experimentCollection.name,
-        experimentCollectionDescription: experimentCollection.description
-
-    } : undefined;
+    const showHeader = experimentCollection.theme?.header;
 
     const getExperimentHref = (slug: string) => `/${slug}${participantIdUrl ? `?participant_id=${participantIdUrl}` : ""}`;
 
     return (
         <div className="aha__dashboard">
             <Logo logoClickConfirm={null} />
-            {headerProps && (
-                <Header {...headerProps}></Header>
+            {showHeader && (
+                <Header
+                    nextBlockSlug={nextBlockSlug}
+                    collectionSlug={experimentCollection.slug}
+                    totalScore={totalScore}
+                    name={name}
+                    description={description}
+                    scoreDisplayConfig={scoreDisplayConfig}
+                    nextBlockButtonText={nextExperimentButtonText}
+                    aboutButtonText={aboutButtonText}
+                />
             )}
             {/* Experiments */}
             <div role="menu" className="dashboard toontjehoger">
@@ -55,7 +58,7 @@ export const ExperimentCollectionDashboard: React.FC<ExperimentCollectionDashboa
     );
 }
 
-const ImageOrPlaceholder = ({ imagePath, alt }: { imagePath: string, alt: string }) => {
+const ImageOrPlaceholder = ({ imagePath, alt }: { imagePath?: string, alt: string }) => {
     const imgSrc = imagePath ?? null;
 
     return imgSrc ? <img src={imgSrc} alt={alt} /> : <div className="placeholder" />;
