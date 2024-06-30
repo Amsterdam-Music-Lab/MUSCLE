@@ -60,7 +60,6 @@ def song_sync(session: Session, section: Section, title: str,
             submits=True
         )]),
         playback=Autoplay([section], show_animation=True,
-                          ready_time=3,
                           preload_message=_('Get ready!'),
                           instruction=_('Do you recognize the song?'),
                           ),

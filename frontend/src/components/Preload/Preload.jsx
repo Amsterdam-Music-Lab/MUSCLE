@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import classNames from "classnames";
 
-import { MEDIA_ROOT } from "@/config";
 import ListenFeedback from "../Listen/ListenFeedback";
 import CountDown from "../CountDown/CountDown";
 import * as audio from "../../util/audio";
@@ -26,7 +25,7 @@ const Preload = ({ sections, playMethod, duration, preloadMessage, pageTitle, on
         const preloadResources = async () => {
             if (playMethod === 'NOAUDIO') {
 
-                await Promise.all(sections.map((section) => fetch(MEDIA_ROOT + section.url)));
+                await Promise.all(sections.map((section) => fetch(section.url)));
 
                 return onNext();
             }
@@ -40,6 +39,11 @@ const Preload = ({ sections, playMethod, duration, preloadMessage, pageTitle, on
                             setAudioAvailable(true);                       
                         }
                         return;
+                    }
+                    
+                    // Clear buffers if this is the first section
+                    if (index === 0) {
+                        webAudio.clearBuffers();
                     }
 
                     // Load sections in buffer                
@@ -66,8 +70,6 @@ const Preload = ({ sections, playMethod, duration, preloadMessage, pageTitle, on
         }
 
         preloadResources();
-        // on destroy, clean up buffers
-        return webAudio.clearBuffers();    
     }, [sections, playMethod, onNext]);
     
     return (

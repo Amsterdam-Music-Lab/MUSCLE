@@ -4,12 +4,16 @@ from django.contrib.auth.models import User
 
 from experiment.models import Experiment
 from section.models import Playlist
+from question.questions import create_default_questions
 
 
 class Command(BaseCommand):
     """ Command for creating a superuser and an experiment if they do not yet exist """
 
     def handle(self, *args, **options):
+
+        create_default_questions()
+
         if User.objects.count() == 0:
             management.call_command('createsuperuser', '--no-input')
             print('Created superuser')
@@ -23,5 +27,6 @@ class Command(BaseCommand):
                 slug='gold-msi',
             )
             experiment.playlists.add(playlist)
+            experiment.add_default_question_series()
             print('Created default experiment')
 

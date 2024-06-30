@@ -1,4 +1,4 @@
-import numpy as np
+import random
 
 from django.utils.translation import gettext as _
 from django.template.loader import render_to_string
@@ -8,9 +8,11 @@ from .base import Base
 from experiment.actions import Consent, Explainer, Step, Final, Playlist, Trial
 from experiment.actions.form import Form, RadiosQuestion
 from experiment.actions.playback import Autoplay
-from experiment.questions.demographics import EXTRA_DEMOGRAPHICS
-from experiment.questions.languages import LANGUAGE, LanguageQuestion
-from experiment.questions.utils import question_by_key
+from question.demographics import EXTRA_DEMOGRAPHICS
+from question.languages import LANGUAGE, LanguageQuestion
+from question.utils import question_by_key
+
+from session.models import Session
 
 from result.utils import prepare_result
 
@@ -22,19 +24,25 @@ n_rounds_per_block = n_trials_per_block * 2  # each trial has two rounds
 class Speech2Song(Base):
     """ Rules for a speech-to-song experiment """
     ID = 'SPEECH_TO_SONG'
-    
+
     def __init__(self):
-        self.questions = [
-            question_by_key('dgf_age', EXTRA_DEMOGRAPHICS),
-            question_by_key('dgf_gender_identity'),
-            question_by_key('dgf_country_of_origin_open', EXTRA_DEMOGRAPHICS),
-            question_by_key('dgf_country_of_residence_open', EXTRA_DEMOGRAPHICS),
-            question_by_key('lang_mother', LANGUAGE),
-            question_by_key('lang_second', LANGUAGE),
-            question_by_key('lang_third', LANGUAGE),
-            LanguageQuestion(_('English')).exposure_question(),
-            LanguageQuestion(_('Brazilian Portuguese')).exposure_question(),
-            LanguageQuestion(_('Mandarin Chinese')).exposure_question()
+        self.question_series = [
+            {
+                "name": "Question series Speech2Song",
+                "keys": [
+                    'dgf_age',
+                    'dgf_gender_identity',
+                    'dgf_country_of_origin_open',
+                    'dgf_country_of_residence_open',
+                    'lang_mother',
+                    'lang_second',
+                    'lang_third',
+                    LanguageQuestion(_('English')).exposure_question().key,
+                    LanguageQuestion(_('Brazilian Portuguese')).exposure_question().key,
+                    LanguageQuestion(_('Mandarin Chinese')).exposure_question().key
+                ],
+                "randomize": False
+            },
         ]
 
     def first_round(self, experiment):
@@ -59,16 +67,16 @@ class Speech2Song(Base):
         playlist = Playlist(experiment.playlists.all())
 
         return [
-            explainer,
             consent,
             playlist,
+            explainer,
         ]
 
     def next_round(self, session):
         blocks = [1, 2, 3]
         # shuffle blocks based on session.id as seed -> always same order for same session
-        np.random.seed(session.id)
-        np.random.shuffle(blocks)
+        random.seed(session.id)
+        random.shuffle(blocks)
         # group_ids for practice (0), or one of the speech blocks (1-3)
         actions = []
         is_speech = True
@@ -152,7 +160,7 @@ class Speech2Song(Base):
             return Final(
                 title=_('End of experiment'),
                 session=session,
-                score_message=_(
+                final_text=_(
                     'Thank you for contributing your time to science!')
             )
         if session.current_round % 2 == 0:
@@ -166,7 +174,7 @@ class Speech2Song(Base):
         return actions
 
 
-def next_single_representation(session, is_speech, group_id):
+def next_single_representation(session: Session, is_speech: bool, group_id: int) -> list:
     """ combine a question after the first representation,
     and several repeated representations of the sound,
     with a final question"""
@@ -176,18 +184,18 @@ def next_single_representation(session, is_speech, group_id):
     return actions
 
 
-def next_repeated_representation(session, is_speech, group_id=-1):
-    if group_id >= 0:
+def next_repeated_representation(session: Session, is_speech: bool, group_id: int = -1) -> list:
+    if group_id == 0:
         # for the Test case, there is no previous section to look at
         section = session.playlist.section_set.get(group=group_id)
     else:
         section = session.previous_section()
-    actions = [sound(section, i) for i in range(1, n_representations+1)]
+    actions = [sound(section)] * n_representations
     actions.append(speech_or_sound_question(session, section, is_speech))
     return actions
 
 
-def speech_or_sound_question(session, section, is_speech):
+def speech_or_sound_question(session, section, is_speech) -> Trial:
     if is_speech:
         question = question_speech(session, section)
     else:
@@ -226,15 +234,10 @@ def question_sound(session, section):
     )
 
 
-def sound(section, n_representation=None):
-    if n_representation and n_representation > 1:
-        ready_time = 0
-    else:
-        ready_time = 1
+def sound(section):
     title = _('Listen carefully')
     playback = Autoplay(
-        sections = [section],
-        ready_time = ready_time,
+        sections=[section],
     )
     view = Trial(
             playback=playback,

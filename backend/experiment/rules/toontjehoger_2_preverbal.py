@@ -1,14 +1,18 @@
 import logging
+from os.path import join
+
 from django.template.loader import render_to_string
 
 from .toontjehoger_1_mozart import toontjehoger_ranks
 from experiment.actions import Trial, Explainer, Step, Score, Final, Playlist, Info, HTML
 from experiment.actions.form import ButtonArrayQuestion, ChoiceQuestion, Form
 from experiment.actions.playback import ImagePlayer
-from experiment.actions.styles import STYLE_NEUTRAL
+from experiment.actions.styles import STYLE_NEUTRAL_INVERTED
+from experiment.actions.frontend_style import FrontendStyle, EFrontendStyle
+from experiment.utils import create_player_labels
 from .base import Base
-from os.path import join
 from result.utils import prepare_result
+from section.models import Playlist
 
 logger = logging.getLogger(__name__)
 
@@ -18,6 +22,41 @@ class ToontjeHoger2Preverbal(Base):
     TITLE = ""
     SCORE_CORRECT = 50
     SCORE_WRONG = 0
+
+    def validate_playlist(self, playlist: Playlist):
+        ''' This is the original ToontjeHoger2Preverbal playlist:
+        ```
+        AML,Duitse baby,0.0,1.0,/toontjehoger/preverbal/4_duitse_baby.mp3,b,2
+        AML,Franse baby,0.0,1.0,/toontjehoger/preverbal/5_franse_baby.mp3,a,2
+        AML,Mens,0.0,1.0,/toontjehoger/preverbal/1_mens.mp3,c,1
+        AML,Trompet,0.0,1.0,/toontjehoger/preverbal/3_trompet.mp3,a,1
+        AML,Walvis,0.0,1.0,/toontjehoger/preverbal/2_walvis.mp3,b,1
+        ```
+        '''
+        sections = playlist.section_set.all()
+        errors = []
+        if len(sections) != 5:
+            errors.append('The playlist should contain exactly 5 sections')
+
+        first_round_sections = sections.filter(group='1')
+        if first_round_sections.count() != 3:
+            errors.append(
+                'There should be 3 sections with group 1 (first round)')
+        if sorted(first_round_sections.values_list('tag', flat=True).distinct()) != ['a', 'b', 'c']:
+            errors.append(
+                'The first round sections should have tags a, b, c'
+            )
+
+        second_round_sections = sections.filter(group='2')
+        if second_round_sections.count() != 2:
+            errors.append(
+                'There should be 2 sections with group 2 (second round)')
+        if sorted(second_round_sections.values_list('tag', flat=True).distinct()) != ['a', 'b']:
+            errors.append(
+                'The second round sections should have tags a, b'
+            )
+
+        return errors
 
     def first_round(self, experiment):
         """Create data for the first experiment rounds."""
@@ -40,13 +79,9 @@ class ToontjeHoger2Preverbal(Base):
         # 2 Spectrogram information
         spectrogram_info = self.get_spectrogram_info()
 
-        # 3. Choose playlist.
-        playlist = Playlist(experiment.playlists.all())
-
         return [
             explainer,
             spectrogram_info,
-            playlist,
         ]
 
     def get_spectrogram_info(self):
@@ -109,7 +144,7 @@ class ToontjeHoger2Preverbal(Base):
         # Question
         key = 'expected_spectrogram'
         question = ButtonArrayQuestion(
-            question="Welk spectrogram toont het geluid van een mens?",
+            question=self.get_round1_question(),
             key=key,
             choices={
                 'A': 'A',
@@ -120,7 +155,8 @@ class ToontjeHoger2Preverbal(Base):
             submits=True,
             result_id=prepare_result(
                 key, session, expected_response="C"
-            )
+            ),
+            style=STYLE_NEUTRAL_INVERTED
         )
         form = Form([question])
 
@@ -133,7 +169,13 @@ class ToontjeHoger2Preverbal(Base):
         )
 
         return [image_trial]
-    
+
+    def get_round1_question(self):
+        return "Welk spectrogram toont het geluid van een mens?"
+
+    def get_round_2_question(self):
+        return "Welke baby is in Frankrijk geboren?"
+
     def get_round1_playback(self, session):
         # Get sections
         sectionA = session.section_from_any_song(
@@ -155,18 +197,19 @@ class ToontjeHoger2Preverbal(Base):
                 "Error: could not find section C for round 1")
 
         # Player
+        sections = [sectionA, sectionB, sectionC]
         playback = ImagePlayer(
-            [sectionA, sectionB, sectionC],
-            label_style='ALPHABETIC',
+            sections,
+            labels=create_player_labels(len(sections), 'alphabetic'),
             images=["/images/experiments/toontjehoger/spectrogram-trumpet.webp", "/images/experiments/toontjehoger/spectrogram-whale.webp", "/images/experiments/toontjehoger/spectrogram-human.webp"],
-            image_labels = ['Trompet', 'Walvis', 'Mens']
+            image_labels=['Trompet', 'Walvis', 'Mens'],
+            style=FrontendStyle(EFrontendStyle.NEUTRAL_INVERTED)
         )
 
         trial = Trial(
             playback=playback,
             feedback_form=None,
-            title=self.TITLE,
-            style='primary-form'
+            title=self.TITLE
         )
         return [trial]
     
@@ -187,16 +230,18 @@ class ToontjeHoger2Preverbal(Base):
                 "Error: could not find section B for round 2")
 
         # Player
+        sections = [sectionA, sectionB]
         playback = ImagePlayer(
-            [sectionA, sectionB],
-            label_style='ALPHABETIC',
+            sections,
+            labels=create_player_labels(len(sections), 'alphabetic'),
             images=["/images/experiments/toontjehoger/spectrogram-baby-french.webp", "/images/experiments/toontjehoger/spectrogram-baby-german.webp"],
+            style=FrontendStyle(EFrontendStyle.NEUTRAL_INVERTED)
         )
 
         # Question
         key = 'baby'
         question = ChoiceQuestion(
-            question="Welke baby is in Frankrijk geboren?",
+            question=self.get_round_2_question(),
             key=key,
             choices={
                 "A": "A",
@@ -205,7 +250,7 @@ class ToontjeHoger2Preverbal(Base):
             view='BUTTON_ARRAY',
             submits=True,
             result_id=prepare_result(key, session, expected_response="A"),
-            style=STYLE_NEUTRAL
+            style=STYLE_NEUTRAL_INVERTED
         )
         form = Form([question])
 
@@ -245,7 +290,7 @@ class ToontjeHoger2Preverbal(Base):
             body=body,
             heading="Het eerste luisteren",
             button_label="Terug naar ToontjeHoger",
-            button_link="/toontjehoger"
+            button_link="/collection/toontjehoger"
         )
 
         return [*score, final, info]

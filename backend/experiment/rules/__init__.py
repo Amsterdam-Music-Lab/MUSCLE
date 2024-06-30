@@ -29,6 +29,12 @@ from .toontjehoger_4_absolute import ToontjeHoger4Absolute
 from .toontjehoger_5_tempo import ToontjeHoger5Tempo
 from .toontjehoger_6_relative import ToontjeHoger6Relative
 from .rules_template import RulesTemplate
+from .toontjehogerkids_1_mozart import ToontjeHogerKids1Mozart
+from .toontjehogerkids_2_preverbal import ToontjeHogerKids2Preverbal
+from .toontjehogerkids_3_plink import ToontjeHogerKids3Plink
+from .toontjehogerkids_4_absolute import ToontjeHogerKids4Absolute
+from .toontjehogerkids_5_tempo import ToontjeHogerKids5Tempo
+from .toontjehogerkids_6_relative import ToontjeHogerKids6Relative
 from .toontjehoger_home import ToontjeHogerHome
 from .visual_matching_pairs import VisualMatchingPairsGame
 
@@ -69,5 +75,11 @@ EXPERIMENT_RULES = {
     ToontjeHoger5Tempo.ID: ToontjeHoger5Tempo,
     ToontjeHoger6Relative.ID: ToontjeHoger6Relative,
     ToontjeHogerHome.ID: ToontjeHogerHome,
+    ToontjeHogerKids1Mozart.ID: ToontjeHogerKids1Mozart,
+    ToontjeHogerKids2Preverbal.ID: ToontjeHogerKids2Preverbal,
+    ToontjeHogerKids3Plink.ID: ToontjeHogerKids3Plink,
+    ToontjeHogerKids4Absolute.ID: ToontjeHogerKids4Absolute,
+    ToontjeHogerKids5Tempo.ID: ToontjeHogerKids5Tempo,
+    ToontjeHogerKids6Relative.ID: ToontjeHogerKids6Relative,
     VisualMatchingPairsGame.ID: VisualMatchingPairsGame
 }

@@ -6,15 +6,15 @@ from django.forms.models import model_to_dict
 from django.contrib.admin.sites import AdminSite
 from django.urls import reverse
 from django.utils.html import format_html
-from experiment.admin import ExperimentAdmin, ExperimentCollectionAdmin, ExperimentCollectionGroupAdmin
-from experiment.models import Experiment, ExperimentCollection, ExperimentCollectionGroup, GroupedExperiment
+from experiment.admin import ExperimentAdmin, ExperimentCollectionAdmin, PhaseAdmin
+from experiment.models import Experiment, ExperimentCollection, Phase, GroupedExperiment
 from participant.models import Participant
 from result.models import Result
 from session.models import Session
 
 
 # Expected field count per model
-EXPECTED_EXPERIMENT_FIELDS = 16
+EXPECTED_EXPERIMENT_FIELDS = 15
 EXPECTED_SESSION_FIELDS = 9
 EXPECTED_RESULT_FIELDS = 12
 EXPECTED_PARTICIPANT_FIELDS = 5
@@ -25,9 +25,6 @@ class MockRequest:
 
 
 request = MockRequest()
-
-this_experiment_admin = ExperimentAdmin(
-    model=Experiment, admin_site=AdminSite)
 
 
 class TestAdminExperiment(TestCase):
@@ -46,6 +43,11 @@ class TestAdminExperiment(TestCase):
         Result.objects.create(
             session=Session.objects.first()
         )
+
+    def setUp(self):
+        self.admin = ExperimentAdmin(model=Experiment,
+                                     admin_site=AdminSite
+                                     )
 
     def test_experiment_model_fields(self):
         experiment = model_to_dict(Experiment.objects.first())
@@ -109,9 +111,12 @@ class TestAdminExperimentExport(TestCase):
 
     def setUp(self):
         self.client = Client()
-
+        self.admin = ExperimentAdmin(model=Experiment,
+                                     admin_site=AdminSite
+                                     )
+    
     def test_admin_export(self):
-        response = this_experiment_admin.export(request, self.experiment)
+        response = self.admin.export(request, self.experiment)
         zip_buffer = BytesIO(response.content)
         with ZipFile(zip_buffer, 'r') as test_zip:
             # Test files inside zip
@@ -166,7 +171,7 @@ class TestAdminExperimentExport(TestCase):
 
 
 class TestExperimentCollectionAdmin(TestCase):
-    
+
     @classmethod
     def setUpTestData(self):
         self.experiment_series = ExperimentCollection.objects.create(
@@ -174,13 +179,23 @@ class TestExperimentCollectionAdmin(TestCase):
             description='test description very long like the tea of oolong and the song of the bird in the morning',
             slug='TEST',
         )
-        self.site = AdminSite()
-        self.admin = ExperimentCollectionAdmin(ExperimentCollection, self.site)
+
+    def setUp(self):
+        self.admin = ExperimentCollectionAdmin(model=ExperimentCollection,
+                                               admin_site=AdminSite
+                                               )
 
     def test_experiment_series_admin_list_display(self):
         self.assertEqual(
             ExperimentCollectionAdmin.list_display,
-            ('name', 'slug_link', 'description_excerpt', 'dashboard', 'groups')
+            (
+                'name',
+                'slug_link',
+                'description_excerpt',
+                'dashboard',
+                'phases',
+                'active',
+            )
         )
 
     def test_experiment_series_admin_description_excerpt(self):
@@ -194,21 +209,24 @@ class TestExperimentCollectionAdmin(TestCase):
             ''
         )
 
+    def test_experiment_collection_admin_research_dashboard(self):
+        request = RequestFactory().request()
+        response = self.admin.dashboard(request, self.experiment_series)
+        self.assertEqual(response.status_code, 200)
 
-class ExperimentCollectionGroupAdminTest(TestCase):
-    @classmethod
-    def setUpTestData(self):
-        self.factory = RequestFactory()
-        self.site = AdminSite()
-        self.admin = ExperimentCollectionGroupAdmin(
-            ExperimentCollectionGroup, self.site)
+
+class PhaseAdminTest(TestCase):
+
+    def setUp(self):
+        self.admin = PhaseAdmin(model=Phase,
+                                admin_site=AdminSite
+                                )
 
     def test_related_series_with_series(self):
         series = ExperimentCollection.objects.create(name='Test Series')
-        group = ExperimentCollectionGroup.objects.create(
+        phase = Phase.objects.create(
             name='Test Group', order=1, randomize=False, series=series, dashboard=True)
-        request = self.factory.get('/')
-        related_series = self.admin.related_series(group)
+        related_series = self.admin.related_series(phase)
         expected_url = reverse(
             "admin:experiment_experimentcollection_change", args=[series.pk])
         expected_related_series = format_html('<a href="{}">{}</a>', expected_url, series.name)
@@ -216,22 +234,21 @@ class ExperimentCollectionGroupAdminTest(TestCase):
 
     def test_experiments_with_no_experiments(self):
         series = ExperimentCollection.objects.create(name='Test Series')
-        group = ExperimentCollectionGroup.objects.create(
+        phase = Phase.objects.create(
             name='Test Group', order=1, randomize=False, dashboard=True, series=series)
-        experiments = self.admin.experiments(group)
+        experiments = self.admin.experiments(phase)
         self.assertEqual(experiments, "No experiments")
 
     def test_experiments_with_experiments(self):
         series = ExperimentCollection.objects.create(name='Test Series')
-        group = ExperimentCollectionGroup.objects.create(
+        phase = Phase.objects.create(
             name='Test Group', order=1, randomize=False, dashboard=True, series=series)
         experiment1 = Experiment.objects.create(name='Experiment 1', slug='experiment-1')
         experiment2 = Experiment.objects.create(name='Experiment 2', slug='experiment-2')
-        grouped_experiment1 = GroupedExperiment.objects.create(group=group, experiment=experiment1)
-        grouped_experiment2 = GroupedExperiment.objects.create(group=group, experiment=experiment2)
-        
-        request = self.factory.get('/')
-        experiments = self.admin.experiments(group)
+        grouped_experiment1 = GroupedExperiment.objects.create(phase=phase, experiment=experiment1)
+        grouped_experiment2 = GroupedExperiment.objects.create(phase=phase, experiment=experiment2)
+
+        experiments = self.admin.experiments(phase)
         expected_experiments = format_html(
             ', '.join([
                 f'<a href="/admin/experiment/groupedexperiment/{experiment.id}/change/">{experiment.experiment.name}</a>'

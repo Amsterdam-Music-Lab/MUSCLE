@@ -6,8 +6,8 @@ from django.utils.translation import gettext_lazy as _
 from .base import Base
 from experiment.actions import Consent, Explainer, Final, Playlist, Step, Trial
 from experiment.actions.playback import MatchingPairs
-from experiment.questions.demographics import EXTRA_DEMOGRAPHICS
-from experiment.questions.utils import question_by_key
+from question.demographics import EXTRA_DEMOGRAPHICS
+from question.utils import question_by_key
 from result.utils import prepare_result
 
 from section.models import Section
@@ -22,12 +22,18 @@ class MatchingPairsGame(Base):
     random_seed = None
 
     def __init__(self):
-        self.questions = [
-            question_by_key('dgf_gender_identity'),
-            question_by_key('dgf_generation'),
-            question_by_key('dgf_musical_experience', EXTRA_DEMOGRAPHICS),
-            question_by_key('dgf_country_of_origin'),
-            question_by_key('dgf_education', drop_choices=['isced-2', 'isced-5'])
+        self.question_series = [
+            {
+                "name": "Demographics",
+                "keys": [
+                    'dgf_gender_identity',
+                    'dgf_generation',
+                    'dgf_musical_experience',
+                    'dgf_country_of_origin',
+                    'dgf_education_matching_pairs',
+                ],
+                "randomize": False
+            },
         ]
 
     def first_round(self, experiment):
@@ -81,7 +87,7 @@ class MatchingPairsGame(Base):
                 final_text='Can you score higher than your friends and family? Share and let them try!',
                 button={
                     'text': 'Play again',
-                    'link': f'/{session.experiment.slug}'
+                    'link': self.get_play_again_url(session)
                 },
                 rank=self.rank(session, exclude_unfinished=False),
                 social=social_info,

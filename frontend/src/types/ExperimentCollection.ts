@@ -1,6 +1,7 @@
-import Experiment from "./Experiment";
+import Block from "./Block";
+import Theme from "./Theme";
 
-export default interface Consent {
+export interface Consent {
     text: string;
     title: string;
     confirm: string;
@@ -12,8 +13,10 @@ export default interface ExperimentCollection {
     slug: string;
     name: string;
     description: string;
-    consent: Consent | null;
-    dashboard: Experiment[];
-    next_experiment: Experiment | null;
-    about_content: string;
+    dashboard: Block[];
+    nextExperiment: Block | null;
+    aboutContent: string;
+    consent?: Consent;
+    theme?: Theme;
+    totalScore: number;
 }

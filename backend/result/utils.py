@@ -1,7 +1,7 @@
 from session.models import Session
 from .models import Result
 
-from experiment.questions.profile_scoring_rules import PROFILE_SCORING_RULES
+from question.profile_scoring_rules import PROFILE_SCORING_RULES
 from result.score import SCORING_RULES
 
 

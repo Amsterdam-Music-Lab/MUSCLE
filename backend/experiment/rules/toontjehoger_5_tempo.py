@@ -1,12 +1,15 @@
+import re
 import logging
 import random
 from os.path import join
 from django.template.loader import render_to_string
 from .toontjehoger_1_mozart import toontjehoger_ranks
-from experiment.actions import Trial, Explainer, Step, Score, Final, Playlist, Info
+from experiment.actions import Trial, Explainer, Step, Score, Final, Info
 from experiment.actions.form import ButtonArrayQuestion, Form
+from experiment.actions.frontend_style import FrontendStyle, EFrontendStyle
 from experiment.actions.playback import Multiplayer
-from experiment.actions.styles import STYLE_NEUTRAL
+from experiment.actions.styles import STYLE_NEUTRAL_INVERTED
+from section.models import Playlist
 from .base import Base
 from experiment.utils import create_player_labels, non_breaking_spaces
 
@@ -39,12 +42,8 @@ class ToontjeHoger5Tempo(Base):
             button_label="Start"
         )
 
-        # 2. Choose playlist.
-        playlist = Playlist(experiment.playlists.all())
-
         return [
             explainer,
-            playlist,
         ]
 
     def next_round(self, session):
@@ -86,7 +85,7 @@ class ToontjeHoger5Tempo(Base):
         valid_tag = False
         tag_base = ""
         tag_original = ""
-        while(not valid_tag):
+        while (not valid_tag):
             track = random.choice([1, 2, 3, 4, 5])
             pair = random.choice([1, 2])
             tag_base = "{}{}_P{}_".format(genre.upper(), track, pair, )
@@ -115,7 +114,7 @@ class ToontjeHoger5Tempo(Base):
         sections = [section_original, section_changed]
         random.shuffle(sections)
         return sections
- 
+
     def get_section_changed(self, session, tag):
         section_changed = session.section_from_any_song(
             filter_by={'tag': tag, 'group': "ch"})
@@ -124,20 +123,27 @@ class ToontjeHoger5Tempo(Base):
                 "Error: could not find changed section: {}".format(tag))
         return section_changed
 
+    def get_trial_question(self):
+        return "Welk fragment wordt in het originele tempo afgespeeld?"
+
     def get_round(self, session, round):
         # Get sections
         genre = ["C", "J", "R"][round % 3]
 
         sections = self.get_random_section_pair(session, genre)
-        section_original = sections[0] if sections[0].group == "or" else sections[1]  
+        section_original = sections[0] if sections[0].group == "or" else sections[1]
 
         # Player
-        playback = Multiplayer(sections, labels=create_player_labels(len(sections), 'alphabetic'))
+        playback = Multiplayer(
+            sections,
+            labels=create_player_labels(len(sections), 'alphabetic'),
+            style=FrontendStyle(EFrontendStyle.NEUTRAL_INVERTED)
+        )
 
         # Question
         key = 'pitch'
         question = ButtonArrayQuestion(
-            question="Welk fragment wordt in het originele tempo afgespeeld?",
+            question=self.get_trial_question(),
             key=key,
             choices={
                 "A": "A",
@@ -148,7 +154,7 @@ class ToontjeHoger5Tempo(Base):
                 key, session, section=section_original,
                 expected_response="A" if sections[0].id == section_original.id else "B"
             ),
-            style=STYLE_NEUTRAL
+            style=STYLE_NEUTRAL_INVERTED
         )
         form = Form([question])
 
@@ -158,10 +164,10 @@ class ToontjeHoger5Tempo(Base):
             title=self.TITLE,
         )
         return [trial]
-   
+
     def calculate_score(self, result, data):
         return self.SCORE_CORRECT if result.expected_response == result.given_response else self.SCORE_WRONG
-    
+
     def get_section_pair_from_result(self, result):
         section_original = result.section
 
@@ -245,7 +251,43 @@ class ToontjeHoger5Tempo(Base):
             body=body,
             heading="Timing en tempo",
             button_label="Terug naar ToontjeHoger",
-            button_link="/toontjehoger"
+            button_link="/collection/toontjehoger"
         )
 
         return [*score, final, info]
+
+    def validate_tags(self, tags):
+
+        errors = []
+        erroneous_tags = []
+
+        for tag in tags:
+            if not re.match(r'^[CJR][1-5]_P[12]_(OR|CH)$', tag):
+                erroneous_tags.append(tag)
+
+        if erroneous_tags:
+            errors.append(
+                "Tags should start with either 'C', 'J' or 'R', followed by a number between 1 and 5, "
+                "followed by '_P', followed by either 1 or 2, followed by either '_OR' or '_CH'. "
+                "Invalid tags: {}".format(", ".join(erroneous_tags))
+            )
+
+        return errors
+
+    def validate_playlist(self, playlist: Playlist):
+
+        errors = super().validate_playlist(playlist)
+        sections = playlist.section_set.all()
+        groups = sorted(list(set([section.group for section in sections])))
+
+        if groups != ['ch', 'or']:
+            errors.append(
+                "The playlist must contain two groups: 'or' and 'ch'. Found: {}".format(groups)
+            )
+
+        tags = sorted(list(set([section.tag for section in sections])))
+
+        # Check if all tags are valid
+        errors += self.validate_tags(tags)
+
+        return errors

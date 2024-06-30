@@ -5,14 +5,21 @@ on:
     branches:
       - develop
       - main
+    tags:
+      - '*'
   workflow_dispatch:
+  release:
+    types: [created]
 
 jobs:
+
   deploy-test:
     name: Deploy to test environment
     environment: Test
     runs-on: tst
-    if: github.event_name == 'workflow_dispatch' || github.ref == 'refs/heads/develop'
+
+    # this job runs only on commits to the develop branch or when manually triggered for a branch other than main
+    if: github.ref == 'refs/heads/develop' || (github.event_name == 'workflow_dispatch' && github.ref != 'refs/heads/main')
     concurrency:
       group: ${{ github.workflow }}-${{ github.ref }}
     env:
@@ -20,10 +27,12 @@ jobs:
       # Variables
       AML_ALLOWED_HOSTS: ${{ vars.AML_ALLOWED_HOSTS }}
       AML_CORS_ORIGIN_WHITELIST: ${{ vars.AML_CORS_ORIGIN_WHITELIST }}
+      CSRF_TRUSTED_ORIGINS: ${{ vars.CSRF_TRUSTED_ORIGINS }}
       AML_DEBUG: ${{ vars.AML_DEBUG }}
       AML_LOCATION_PROVIDER: ${{ vars.AML_LOCATION_PROVIDER }}
       AML_SUBPATH: ${{ vars.AML_SUBPATH }}
       DJANGO_SETTINGS_MODULE: ${{ vars.DJANGO_SETTINGS_MODULE }}
+      SENTRY_ENVIRONMENT: "test"
       SQL_DATABASE: ${{ vars.SQL_DATABASE }}
       SQL_HOST: ${{ vars.SQL_HOST }}
       SQL_PORT: ${{ vars.SQL_PORT }}
@@ -31,6 +40,13 @@ jobs:
       FRONTEND_EXPERIMENT_SLUG: ${{ vars.FRONTEND_EXPERIMENT_SLUG }}
       FRONTEND_AML_HOME: ${{ vars.FRONTEND_AML_HOME }}
       FRONTEND_HTML_PAGE_TITLE: ${{ vars.FRONTEND_HTML_PAGE_TITLE }}
+      FRONTEND_HTML_FAVICON: ${{ vars.FRONTEND_HTML_FAVICON || '' }}
+      FRONTEND_LOGO_URL: ${{ vars.FRONTEND_LOGO_URL || '' }}
+      FRONTEND_HTML_OG_DESCRIPTION: ${{ vars.FRONTEND_HTML_OG_DESCRIPTION || '' }}
+      FRONTEND_HTML_OG_IMAGE: ${{ vars.FRONTEND_HTML_OG_IMAGE || '' }}
+      FRONTEND_HTML_OG_TITLE: ${{ vars.FRONTEND_HTML_OG_TITLE || '' }}
+      FRONTEND_HTML_OG_URL: ${{ vars.FRONTEND_HTML_OG_URL || '' }}
+      FRONTEND_HTML_BODY_CLASS: ${{ vars.FRONTEND_HTML_BODY_CLASS || '' }}
 
       # Secrets
       AML_SECRET_KEY: ${{ secrets.AML_SECRET_KEY }}
@@ -50,16 +66,25 @@ jobs:
       - name: Create .env file
         run: |
           touch .env
-          echo "FRONTEND_API_ROOT=$FRONTEND_API_ROOT" >> .env
-          echo "FRONTEND_EXPERIMENT_SLUG=$FRONTEND_EXPERIMENT_SLUG" >> .env
-          echo "FRONTEND_AML_HOME=$FRONTEND_AML_HOME" >> .env
-          echo "FRONTEND_HTML_PAGE_TITLE=$FRONTEND_HTML_PAGE_TITLE" >> .env
-          echo "FRONTEND_SENTRY_DSN=$FRONTEND_SENTRY_DSN" >> .env
+          echo "VITE_API_ROOT=$FRONTEND_API_ROOT" >> .env
+          echo "VITE_EXPERIMENT_SLUG=$FRONTEND_EXPERIMENT_SLUG" >> .env
+          echo "VITE_AML_HOME=$FRONTEND_AML_HOME" >> .env
+          echo "VITE_LOGO_URL=$FRONTEND_LOGO_URL" >> .env
+          echo "VITE_HTML_FAVICON=$FRONTEND_HTML_FAVICON" >> .env
+          echo "VITE_HTML_PAGE_TITLE=$FRONTEND_HTML_PAGE_TITLE" >> .env
+          echo "VITE_HTML_OG_DESCRIPTION=$FRONTEND_HTML_OG_DESCRIPTION" >> .env
+          echo "VITE_HTML_OG_IMAGE=$FRONTEND_HTML_OG_IMAGE" >> .env
+          echo "VITE_HTML_OG_TITLE=$FRONTEND_HTML_OG_TITLE" >> .env
+          echo "VITE_HTML_OG_URL=$FRONTEND_HTML_OG_URL" >> .env
+          echo "VITE_HTML_BODY_CLASS=$FRONTEND_HTML_BODY_CLASS" >> .env
+          echo "VITE_SENTRY_DSN=$FRONTEND_SENTRY_DSN" >> .env
           cp .env frontend/.env
       - name: Build Podman images
         run: podman-compose -f docker-compose-deploy.yml build
+      - name: Shut down running containers
+        run: podman compose -f docker-compose-deploy.yml down
       - name: Deploy Podman images
-        run: podman-compose -f docker-compose-deploy.yml up -d --force-recreate
+        run: podman-compose -f docker-compose-deploy.yml up -d
       - name: Notify Sentry of new release
         run: |
             curl -X POST "https://sentry.io/api/0/organizations/uva-aml/releases/" \
@@ -81,11 +106,22 @@ jobs:
       - name: Check logs
         run: podman-compose -f docker-compose-deploy.yml logs
 
+  backup-acceptance:
+    name: Backup acceptance database before deployment
+    # this job runs only on commits to the main branch, tags, or when manually triggered for the main branch
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/tags/*' || (github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main')
+    uses: ./.github/workflows/db-backup-template.yml
+    with:
+      runner: ACC
+
   deploy-acceptance:
     name: Deploy to acceptance environment
     environment: Acceptance
     runs-on: ACC
-    if: github.ref == 'refs/heads/main' || github.ref == 'refs/tags/*'
+    needs: backup-acceptance
+
+    # this job runs only on commits to the main branch, tags, or when manually triggered for the main branch
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/tags/*' || (github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main')
     concurrency:
       group: ${{ github.workflow }}-${{ github.ref }}
     env:
@@ -97,6 +133,7 @@ jobs:
         AML_LOCATION_PROVIDER: ${{ vars.AML_LOCATION_PROVIDER }}
         AML_SUBPATH: ${{ vars.AML_SUBPATH }}
         DJANGO_SETTINGS_MODULE: ${{ vars.DJANGO_SETTINGS_MODULE }}
+        SENTRY_ENVIRONMENT: "acceptance"
         SQL_DATABASE: ${{ vars.SQL_DATABASE }}
         SQL_HOST: ${{ vars.SQL_HOST }}
         SQL_PORT: ${{ vars.SQL_PORT }}
@@ -104,6 +141,13 @@ jobs:
         FRONTEND_EXPERIMENT_SLUG: ${{ vars.FRONTEND_EXPERIMENT_SLUG }}
         FRONTEND_AML_HOME: ${{ vars.FRONTEND_AML_HOME }}
         FRONTEND_HTML_PAGE_TITLE: ${{ vars.FRONTEND_HTML_PAGE_TITLE }}
+        FRONTEND_HTML_FAVICON: ${{ vars.FRONTEND_HTML_FAVICON || '' }}
+        FRONTEND_LOGO_URL: ${{ vars.FRONTEND_LOGO_URL || '' }}
+        FRONTEND_HTML_OG_DESCRIPTION: ${{ vars.FRONTEND_HTML_OG_DESCRIPTION || '' }}
+        FRONTEND_HTML_OG_IMAGE: ${{ vars.FRONTEND_HTML_OG_IMAGE || '' }}
+        FRONTEND_HTML_OG_TITLE: ${{ vars.FRONTEND_HTML_OG_TITLE || '' }}
+        FRONTEND_HTML_OG_URL: ${{ vars.FRONTEND_HTML_OG_URL || '' }}
+        FRONTEND_HTML_BODY_CLASS: ${{ vars.FRONTEND_HTML_BODY_CLASS || '' }}
 
         # Secrets
         AML_SECRET_KEY: ${{ secrets.AML_SECRET_KEY }}
@@ -123,16 +167,25 @@ jobs:
       - name: Create .env file
         run: |
           touch .env
-          echo "FRONTEND_API_ROOT=$FRONTEND_API_ROOT" >> .env
-          echo "FRONTEND_EXPERIMENT_SLUG=$FRONTEND_EXPERIMENT_SLUG" >> .env
-          echo "FRONTEND_AML_HOME=$FRONTEND_AML_HOME" >> .env
-          echo "FRONTEND_HTML_PAGE_TITLE=$FRONTEND_HTML_PAGE_TITLE" >> .env
-          echo "FRONTEND_SENTRY_DSN=$FRONTEND_SENTRY_DSN" >> .env
+          echo "VITE_API_ROOT=$FRONTEND_API_ROOT" >> .env
+          echo "VITE_EXPERIMENT_SLUG=$FRONTEND_EXPERIMENT_SLUG" >> .env
+          echo "VITE_AML_HOME=$FRONTEND_AML_HOME" >> .env
+          echo "VITE_LOGO_URL=$FRONTEND_LOGO_URL" >> .env
+          echo "VITE_HTML_FAVICON=$FRONTEND_HTML_FAVICON" >> .env
+          echo "VITE_HTML_PAGE_TITLE=$FRONTEND_HTML_PAGE_TITLE" >> .env
+          echo "VITE_HTML_OG_DESCRIPTION=$FRONTEND_HTML_OG_DESCRIPTION" >> .env
+          echo "VITE_HTML_OG_IMAGE=$FRONTEND_HTML_OG_IMAGE" >> .env
+          echo "VITE_HTML_OG_TITLE=$FRONTEND_HTML_OG_TITLE" >> .env
+          echo "VITE_HTML_OG_URL=$FRONTEND_HTML_OG_URL" >> .env
+          echo "VITE_HTML_BODY_CLASS=$FRONTEND_HTML_BODY_CLASS" >> .env
+          echo "VITE_SENTRY_DSN=$FRONTEND_SENTRY_DSN" >> .env
           cp .env frontend/.env
       - name: Build Podman images
         run: podman-compose -f docker-compose-deploy.yml build
+      - name: Shut down running containers
+        run: podman compose -f docker-compose-deploy.yml down
       - name: Deploy Podman images
-        run: podman-compose -f docker-compose-deploy.yml up -d --force-recreate
+        run: podman-compose -f docker-compose-deploy.yml up -d
       - name: Notify Sentry of new release
         run: |
           curl -X POST "https://sentry.io/api/0/organizations/uva-aml/releases/" \
@@ -154,3 +207,132 @@ jobs:
       - name: Check logs
         run: podman-compose -f docker-compose-deploy.yml logs
 
+  backup-production:
+    name: Backup production database before deployment
+    # this job runs only on tags or when a release is created, or when manually triggered for a tag
+    if: github.ref == 'refs/tags/*' || github.event_name == 'release' || (github.event_name == 'workflow_dispatch' && github.ref == 'refs/tags/*')
+    uses: ./.github/workflows/db-backup-template.yml
+    with:
+      runner: PRD
+
+  deploy-production:
+    name: Deploy to production environment
+    environment: Production
+    runs-on: PRD
+    needs: backup-production
+
+    # this job runs only on tags or when a release is created, or when manually triggered for a tag
+    if: github.ref == 'refs/tags/*' || github.event_name == 'release' || (github.event_name == 'workflow_dispatch' && github.ref == 'refs/tags/*')
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.ref }}
+    env:
+      # Variables
+      AML_ALLOWED_HOSTS: ${{ vars.AML_ALLOWED_HOSTS }}
+      AML_CORS_ORIGIN_WHITELIST: ${{ vars.AML_CORS_ORIGIN_WHITELIST }}
+      AML_DEBUG: ${{ vars.AML_DEBUG }}
+      AML_LOCATION_PROVIDER: ${{ vars.AML_LOCATION_PROVIDER }}
+      AML_SUBPATH: ${{ vars.AML_SUBPATH }}
+      DJANGO_SETTINGS_MODULE: ${{ vars.DJANGO_SETTINGS_MODULE }}
+      SENTRY_ENVIRONMENT: "production"
+      SQL_DATABASE: ${{ vars.SQL_DATABASE }}
+      SQL_HOST: ${{ vars.SQL_HOST }}
+      SQL_PORT: ${{ vars.SQL_PORT }}
+      FRONTEND_API_ROOT: ${{ vars.FRONTEND_API_ROOT }}
+      FRONTEND_EXPERIMENT_SLUG: ${{ vars.FRONTEND_EXPERIMENT_SLUG }}
+      FRONTEND_AML_HOME: ${{ vars.FRONTEND_AML_HOME }}
+      FRONTEND_HTML_PAGE_TITLE: ${{ vars.FRONTEND_HTML_PAGE_TITLE }}
+      FRONTEND_HTML_FAVICON: ${{ vars.FRONTEND_HTML_FAVICON || '' }}
+      FRONTEND_LOGO_URL: ${{ vars.FRONTEND_LOGO_URL || '' }}
+      FRONTEND_HTML_OG_DESCRIPTION: ${{ vars.FRONTEND_HTML_OG_DESCRIPTION || '' }}
+      FRONTEND_HTML_OG_IMAGE: ${{ vars.FRONTEND_HTML_OG_IMAGE || '' }}
+      FRONTEND_HTML_OG_TITLE: ${{ vars.FRONTEND_HTML_OG_TITLE || '' }}
+      FRONTEND_HTML_OG_URL: ${{ vars.FRONTEND_HTML_OG_URL || '' }}
+      FRONTEND_HTML_BODY_CLASS: ${{ vars.FRONTEND_HTML_BODY_CLASS || '' }}
+
+      # Secrets
+      AML_SECRET_KEY: ${{ secrets.AML_SECRET_KEY }}
+      SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
+      SQL_USER: ${{ secrets.SQL_USER }}
+      SQL_PASSWORD: ${{ secrets.SQL_PASSWORD }}
+      FRONTEND_SENTRY_DSN: ${{ secrets.FRONTEND_SENTRY_DSN }}
+      DJANGO_SUPERUSER_USERNAME: ${{ secrets.DJANGO_SUPERUSER_USERNAME }}
+      DJANGO_SUPERUSER_PASSWORD: ${{ secrets.DJANGO_SUPERUSER_PASSWORD }}
+      DJANGO_SUPERUSER_EMAIL: ${{ secrets.DJANGO_SUPERUSER_EMAIL }}
+      # Prevent podman services from exiting after startup
+      RUNNER_TRACKING_ID: ""
+    steps:
+      - uses: actions/checkout@v4
+      - name: Create .env file
+        run: |
+          touch .env
+          echo "VITE_API_ROOT=$FRONTEND_API_ROOT" >> .env
+          echo "VITE_EXPERIMENT_SLUG=$FRONTEND_EXPERIMENT_SLUG" >> .env
+          echo "VITE_AML_HOME=$FRONTEND_AML_HOME" >> .env
+          echo "VITE_LOGO_URL=$FRONTEND_LOGO_URL" >> .env
+          echo "VITE_HTML_FAVICON=$FRONTEND_HTML_FAVICON" >> .env
+          echo "VITE_HTML_PAGE_TITLE=$FRONTEND_HTML_PAGE_TITLE" >> .env
+          echo "VITE_HTML_OG_DESCRIPTION=$FRONTEND_HTML_OG_DESCRIPTION" >> .env
+          echo "VITE_HTML_OG_IMAGE=$FRONTEND_HTML_OG_IMAGE" >> .env
+          echo "VITE_HTML_OG_TITLE=$FRONTEND_HTML_OG_TITLE" >> .env
+          echo "VITE_HTML_OG_URL=$FRONTEND_HTML_OG_URL" >> .env
+          echo "VITE_HTML_BODY_CLASS=$FRONTEND_HTML_BODY_CLASS" >> .env
+          echo "VITE_SENTRY_DSN=$FRONTEND_SENTRY_DSN" >> .env
+          cp .env frontend/.env
+      - name: Build Podman images
+        run: podman-compose -f docker-compose-deploy.yml build
+      - name: Shut down running containers
+        run: podman compose -f docker-compose-deploy.yml down
+      - name: Deploy Podman images
+        run: podman-compose -f docker-compose-deploy.yml up -d
+      - name: Notify Sentry of new release
+        run: |
+          curl -X POST "https://sentry.io/api/0/organizations/uva-aml/releases/" \
+          -H "Authorization: Bearer ${{ secrets.SENTRY_AUTH_TOKEN }}" \
+          -H "Content-Type: application/json" \
+          -d '{
+            "version": "${{ github.sha }}",
+            "refs": [{
+              "repository": "Amsterdam-Music-Lab/MUSCLE",
+              "commit": "${{ github.sha }}"
+            }],
+            "projects": ["muscle-frontend", "muscle-backend"],
+            "environment": "production"
+          }'
+      - name: Prune old images
+        run: podman image prune -a -f
+      - name: Check Podman images
+        run: podman-compose -f docker-compose-deploy.yml ps
+
+  e2e-acceptance:
+    name: E2E tests on acceptance environment
+    runs-on: ACC
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/tags/*' || (github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main')
+
+    # needs to happen after the deployment to the acceptance environment
+    needs: deploy-acceptance
+
+    env:
+      BASE_URL: "https://acc.amsterdammusiclab.nl"
+
+    steps:
+
+      - uses: actions/checkout@v4
+      - name: Run E2E tests
+        run: cd e2e && bash run-tests
+
+  smoke-tests-production:
+    name: Smoke tests on production environment
+    runs-on: PRD
+    if: github.ref == 'refs/tags/*' || github.event_name == 'release' || (github.event_name == 'workflow_dispatch' && github.ref == 'refs/tags/*')
+
+    # needs to happen after the deployment to the production environment
+    needs: deploy-production
+
+    env:
+      BASE_URL: "https://app.amsterdammusiclab.nl"
+
+    steps:
+
+        - uses: actions/checkout@v4
+        - name: Run smoke tests
+          run: cd e2e && bash run-tests --smoke

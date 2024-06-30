@@ -237,7 +237,7 @@ class MarkdownPreview extends HTMLElement {
 
     function renderMarkdown(textarea, markdownPreview) {
         // render markdown through http post request to /experiment/render_markdown
-        return fetch('/experiment/render_markdown/', {
+        return fetch('{% url "experiment:render_markdown" %}', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

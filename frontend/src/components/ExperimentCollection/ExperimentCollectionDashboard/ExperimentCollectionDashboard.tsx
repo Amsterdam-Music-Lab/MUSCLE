@@ -1,51 +1,65 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-import { API_ROOT } from "@/config";
 import ExperimentCollection from "@/types/ExperimentCollection";
+import Header from "@/components/ExperimentCollection/Header/Header";
+import Logo from "@/components/Logo/Logo";
+import IBlock from "@/types/Block";
 
 
 interface ExperimentCollectionDashboardProps {
     experimentCollection: ExperimentCollection;
     participantIdUrl: string | null;
+    totalScore: number;
 }
 
-export const ExperimentCollectionDashboard: React.FC<ExperimentCollectionDashboardProps> = ({ experimentCollection, participantIdUrl }) => {
+export const ExperimentCollectionDashboard: React.FC<ExperimentCollectionDashboardProps> = ({ experimentCollection, participantIdUrl, totalScore }) => {
 
-    const dashboard = experimentCollection?.dashboard;
+    const { dashboard, description, name } = experimentCollection;
+    const { nextExperimentButtonText, aboutButtonText } = experimentCollection.theme?.header || { nextExperimentButtonText: "", aboutButtonText: "" };
 
-    // TODO: get next experiment and about link from experimentCollection
-    const nextExperiment = experimentCollection.next_experiment; // TODO: get next_experiment from experimentCollection
-    const aboutContent = experimentCollection.about_content;
+    const scoreDisplayConfig = experimentCollection.theme?.header?.score;
+    const nextBlockSlug = experimentCollection.nextExperiment?.slug;
+    const showHeader = experimentCollection.theme?.header;
 
     const getExperimentHref = (slug: string) => `/${slug}${participantIdUrl ? `?participant_id=${participantIdUrl}` : ""}`;
 
     return (
-        <>
+        <div className="aha__dashboard">
+            <Logo logoClickConfirm={null} />
+            {showHeader && (
+                <Header
+                    nextBlockSlug={nextBlockSlug}
+                    collectionSlug={experimentCollection.slug}
+                    totalScore={totalScore}
+                    name={name}
+                    description={description}
+                    scoreDisplayConfig={scoreDisplayConfig}
+                    nextBlockButtonText={nextExperimentButtonText}
+                    aboutButtonText={aboutButtonText}
+                />
+            )}
             {/* Experiments */}
-            <div role="menu" className="dashboard">
+            <div role="menu" className="dashboard toontjehoger">
                 <ul>
-                    {dashboard.map((exp) => (
+                    {dashboard.map((exp: IBlock) => (
                         <li key={exp.slug}>
                             <Link to={getExperimentHref(exp.slug)} role="menuitem">
-                                <ImageOrPlaceholder imagePath={exp.image} alt={exp.description} />
+                                <ImageOrPlaceholder imagePath={exp.image?.file} alt={exp.image?.alt ?? exp.description} />
                                 <h3>{exp.name}</h3>
-                                <div className="status-bar">
-                                    <span title={`Started ${exp.started_session_count} times`} role="status" className="counter">{exp.started_session_count}</span>
-                                    <span title={`Started ${exp.finished_session_count} times`} role="status" className="counter">{exp.finished_session_count}</span>
-                                </div>
+                                <p>{exp.description}</p>
                             </Link>
                         </li>
                     ))}
                     {dashboard.length === 0 && <p>No experiments found</p>}
                 </ul>
             </div>
-        </>
+        </div>
     );
 }
 
-const ImageOrPlaceholder = ({ imagePath, alt }: { imagePath: string, alt: string }) => {
-    const imgSrc = imagePath ? `${API_ROOT}/${imagePath}` : null;
+const ImageOrPlaceholder = ({ imagePath, alt }: { imagePath?: string, alt: string }) => {
+    const imgSrc = imagePath ?? null;
 
     return imgSrc ? <img src={imgSrc} alt={alt} /> : <div className="placeholder" />;
 }

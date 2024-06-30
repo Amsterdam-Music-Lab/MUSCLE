@@ -7,9 +7,9 @@ import Loading from "../Loading/Loading";
 import { createConsent, useConsent } from "../../API";
 import classNames from "classnames";
 
-// Consent is an experiment view that shows the consent text, and handles agreement/stop actions
-const Consent = ({ title, text, experiment, participant, onNext, confirm, deny }) => {
-    const [consent, loadingConsent] = useConsent(experiment.slug);
+/** Consent is an block view that shows the consent text, and handles agreement/stop actions */
+const Consent = ({ title, text, block, participant, onNext, confirm, deny }) => {
+    const [consent, loadingConsent] = useConsent(block.slug);
     const urlQueryString = window.location.search;
 
     // Listen for consent, and auto advance if already given
@@ -22,7 +22,7 @@ const Consent = ({ title, text, experiment, participant, onNext, confirm, deny }
     // Click on agree button
     const onAgree = async () => {
         // Store consent
-        await createConsent({ experiment, participant });
+        await createConsent({ block, participant });
 
         // Next!
         onNext();
@@ -31,14 +31,14 @@ const Consent = ({ title, text, experiment, participant, onNext, confirm, deny }
     const onDownload = async () => {
         const doc = new DOMParser().parseFromString(text, 'text/html');
         const txt = doc.body.textContent.split('  ').join('');
-        const blob = new Blob([txt], {type: "text/plain;charset=utf-8"});
+        const blob = new Blob([txt], { type: "text/plain;charset=utf-8" });
         saveAs(blob, 'consent.txt');
     }
 
     // Loader in case consent is being loaded
     // or it was already given
     if (loadingConsent || consent) {
-        return <Loading loadingText={experiment.loading_text} />;
+        return <Loading loadingText={block.loading_text} />;
     }
 
     // Calculate height for consent text to prevent overlapping browser chrome

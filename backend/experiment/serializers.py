@@ -3,9 +3,11 @@ from random import shuffle
 from django_markup.markup import formatter
 
 from experiment.actions.consent import Consent
+from image.serializers import serialize_image
 from participant.models import Participant
 from session.models import Session
-from .models import Experiment, ExperimentCollection, ExperimentCollectionGroup, GroupedExperiment
+from theme.serializers import serialize_theme
+from .models import Experiment, ExperimentCollection, Phase, GroupedExperiment
 
 
 def serialize_actions(actions):
@@ -18,41 +20,55 @@ def serialize_actions(actions):
 def serialize_experiment_collection(
     experiment_collection: ExperimentCollection
 ) -> dict:
-    about_content = experiment_collection.about_content
 
-    if about_content:
-        about_content = formatter(about_content, filter_name='markdown')
-
-    if experiment_collection.consent:
-        consent = Consent(experiment_collection.consent).action()
-    else:
-        consent = None
-
-    return {
+    serialized = {
         'slug': experiment_collection.slug,
         'name': experiment_collection.name,
-        'description': experiment_collection.description,
-        'consent': consent,
-        'about_content': about_content,
+        'description': formatter(
+            experiment_collection.description,
+            filter_name='markdown'
+        ),
     }
 
+    if experiment_collection.consent:
+        serialized['consent'] = Consent(experiment_collection.consent).action()
 
-def serialize_experiment_collection_group(group: ExperimentCollectionGroup, participant: Participant) -> dict:
+    if experiment_collection.theme_config:
+        serialized['theme'] = serialize_theme(
+            experiment_collection.theme_config
+        )
+
+    if experiment_collection.about_content:
+        serialized['aboutContent'] = formatter(
+            experiment_collection.about_content,
+            filter_name='markdown'
+        )
+
+    return serialized
+
+
+def serialize_phase(
+        phase: Phase,
+        participant: Participant
+        ) -> dict:
     grouped_experiments = list(GroupedExperiment.objects.filter(
-        group_id=group.id).order_by('order'))
+        phase_id=phase.id).order_by('order'))
 
-    if group.randomize:
+    if phase.randomize:
         shuffle(grouped_experiments)
 
     next_experiment = get_upcoming_experiment(
-        grouped_experiments, participant, group.dashboard)
+        grouped_experiments, participant, phase.dashboard)
+
+    total_score = get_total_score(grouped_experiments, participant)
 
     if not next_experiment:
         return None
 
     return {
-        'dashboard': [serialize_experiment(experiment.experiment, participant) for experiment in grouped_experiments] if group.dashboard else [],
-        'next_experiment': next_experiment
+        'dashboard': [serialize_experiment(experiment.experiment, participant) for experiment in grouped_experiments] if phase.dashboard else [],
+        'nextExperiment': next_experiment,
+        'totalScore': total_score
     }
 
 
@@ -60,10 +76,8 @@ def serialize_experiment(experiment_object: Experiment, participant: Participant
     return {
         'slug': experiment_object.slug,
         'name': experiment_object.name,
-        'started_session_count': get_started_session_count(experiment_object, participant),
-        'finished_session_count': get_finished_session_count(experiment_object, participant),
         'description': experiment_object.description,
-        'image': experiment_object.image.file.url if experiment_object.image else '',
+        'image': serialize_image(experiment_object.image) if experiment_object.image else None,
     }
 
 
@@ -90,3 +104,13 @@ def get_finished_session_count(experiment, participant):
     count = Session.objects.filter(
         experiment=experiment, participant=participant, finished_at__isnull=False).count()
     return count
+
+
+def get_total_score(grouped_experiments, participant):
+    '''Calculate total score of all experiments on the dashboard'''
+    total_score = 0
+    for grouped_experiment in grouped_experiments:
+        sessions = Session.objects.filter(experiment=grouped_experiment.experiment, participant=participant)
+        for session in sessions:
+            total_score += session.final_score
+    return total_score

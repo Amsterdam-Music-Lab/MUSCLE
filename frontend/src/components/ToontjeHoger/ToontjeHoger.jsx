@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import { LOGO_TITLE } from "@/config";
 import { Switch, Route, Link } from "react-router-dom";
-import Rank from "../Rank/Rank";
+import Cup from "../Cup/Cup";
 
 const LOGO_URL = "/images/experiments/toontjehoger/logo.svg";
 
@@ -143,7 +143,7 @@ const Score = ({ score, label, scoreClass }) => {
 
     return (
         <div className="score">
-            <Rank rank={{ class: scoreClass }} />
+            <Cup cup={{ className: scoreClass }} />
             <h3>
                 {currentScore ? currentScore + " " : ""}
                 {label}
@@ -162,11 +162,11 @@ const Privacy = ({ description }) => (
     </div>
 );
 
-// ToontjeHoger is an experiment view that shows the ToontjeHoger home
-const ToontjeHogerHome = ({ experiment, config, experiments }) => {
+/** ToontjeHoger is an block view that shows the ToontjeHoger home */
+const ToontjeHogerHome = ({ block, config, experiments }) => {
     return (
         <div className="aha__toontjehoger">
-            <Logo homeUrl={`/${experiment.slug}`} />
+            <Logo homeUrl={`/${block.slug}`} />
 
             {/* Hero */}
             <div className="hero">
@@ -182,7 +182,7 @@ const ToontjeHogerHome = ({ experiment, config, experiments }) => {
                         {config.intro_read_more && (
                             <Link
                                 className="btn btn-lg btn-outline-primary"
-                                to={`/${experiment.slug}/about`}
+                                to={`/${block.slug}/about`}
                             >
                                 {config.intro_read_more}
                             </Link>
@@ -205,7 +205,7 @@ const ToontjeHogerHome = ({ experiment, config, experiments }) => {
                 </div>
             </div>
 
-            {/* Experiments */}
+            {/* Blocks */}
             <div className="experiments">
                 <ul>
                     {experiments.map((experiment) => (
@@ -240,11 +240,11 @@ const ToontjeHogerHome = ({ experiment, config, experiments }) => {
     );
 };
 
-// ToontjeHoger is an experiment view that shows the ToontjeHoger home
-const ToontjeHogerAbout = ({ experiment, config, experiments }) => {
+/** ToontjeHoger is an block view that shows the ToontjeHoger home */
+const ToontjeHogerAbout = ({ block, config }) => {
     return (
         <div className="aha__toontjehoger about">
-            <Logo homeUrl={`/${experiment.slug}`} />
+            <Logo homeUrl={`/${block.slug}`} />
             {/* Project */}
             <div className="project">
                 <h3 className="title">{config.intro_read_more}</h3>
@@ -306,10 +306,10 @@ const ToontjeHogerAbout = ({ experiment, config, experiments }) => {
 };
 
 const ToontjeHoger = (props) => {
-    return props.experiment ? (
+    return props.block ? (
         <>
             <Switch>
-                <Route path={`/${props.experiment.slug}/about`} exact>
+                <Route path={`/${props.block.slug}/about`} exact>
                     <ToontjeHogerAbout {...props} />
                 </Route>
                 <Route path="*">

@@ -15,6 +15,11 @@ import logging
 from corsheaders.defaults import default_headers
 import sentry_sdk
 
+# Workaround for deprecated ugettext_lazy in django-inline-actions
+import django
+from django.utils.translation import gettext_lazy
+django.utils.translation.ugettext_lazy = gettext_lazy
+
 logger = logging.getLogger(__name__)
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -35,6 +40,7 @@ ALLOWED_HOSTS = os.getenv("AML_ALLOWED_HOSTS", "localhost").split(",")
 # Application definition
 
 INSTALLED_APPS = [
+    'admin_interface',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -52,6 +58,7 @@ INSTALLED_APPS = [
     'session',
     'section',
     'theme',
+    'question'
 ]
 
 MIDDLEWARE = [
@@ -154,6 +161,7 @@ CORS_ORIGIN_WHITELIST = os.getenv(
     "http://localhost:3000,http://127.0.0.1:3000,{}".format(HOMEPAGE)
 ).split(",")
 
+
 # CORS
 CORS_ORIGIN_ALLOW_ALL = False
 CORS_ALLOW_CREDENTIALS = True
@@ -162,6 +170,8 @@ CORS_ALLOW_HEADERS = list(default_headers) + [
     'sentry-trace',
     'baggage',
 ]
+
+CSRF_TRUSTED_ORIGINS = [os.getenv('CSRF_TRUSTED_ORIGINS')]
 
 SESSION_SAVE_EVERY_REQUEST = False # Do not set to True, because it will break session-based participant_id
 
@@ -181,14 +191,16 @@ if os.getenv("SENTRY_DSN"):
         # of sampled transactions.
         # We recommend adjusting this value in production.
         profiles_sample_rate=0.2,
+        # Set environment
+        environment=os.getenv("SENTRY_ENVIRONMENT", "unknown"),
     )
 else:
     logger.info("SENTRY_DSN is not defined. Skipping Sentry initialization.")
 
 MARKUP_SETTINGS = {
     'markdown': {
-        'safe_mode': True
+        'safe_mode': False
     }
 }
 
-SUBPATH = os.getenv('AML_SUBPATH', None)
+SUBPATH = os.getenv('AML_SUBPATH', '')

@@ -1,7 +1,5 @@
 
-import random
 import re
-import math
 import string
 from django.utils.translation import gettext_lazy as _
 from experiment.actions.utils import final_action_with_optional_button
@@ -30,7 +28,9 @@ class CongoSameDiff(Base):
         """
 
         # Do a validity check on the experiment
-        self.validate(experiment)
+        errors = self.validate_playlist(experiment.playlists.first())
+        if errors:
+            raise ValueError('The experiment playlist is not valid: \n- ' + '\n- '.join(errors))
 
         # 1. Playlist
         playlist = Playlist(experiment.playlists.all())
@@ -241,12 +241,14 @@ class CongoSameDiff(Base):
         total_trials_count = practice_trials_count + total_unique_exp_trials_count + 1
         return total_trials_count
 
-    def validate(self, experiment: Experiment):
+    def validate_playlist(self, playlist: PlaylistModel):
 
         errors = []
 
+        errors += super().validate_playlist(playlist)  # Call the base class validate_playlist to perform common checks
+
         # All sections need to have a group value
-        sections = experiment.playlists.first().section_set.all()
+        sections = playlist.section_set.all()
         for section in sections:
             file_name = section.song.name if section.song else 'No name'
             # every section.group should consist of a number
@@ -265,7 +267,7 @@ class CongoSameDiff(Base):
         if not sections.exclude(tag__contains='practice').exists():
             errors.append('At least one section should not have the tag "practice"')
 
-        # Every non-practice group should have the same number of variants 
+        # Every non-practice group should have the same number of variants
         # that should be labeled with a single uppercase letter
         groups = sections.values('group').distinct()
         variants = sections.exclude(tag__contains='practice').values('tag')
@@ -283,8 +285,7 @@ class CongoSameDiff(Base):
                 total_variants_stringified = ', '.join(unique_variants)
                 errors.append(f'Group {group["group"]} should have the same number of variants as the total amount of variants ({variants_count}; {total_variants_stringified}) but has {group_variants.count()} ({group_variants_stringified})')
 
-        if errors:
-            raise ValueError('The experiment playlist is not valid: \n- ' + '\n- '.join(errors))
+        return errors
 
     def get_participant_group_variant(self, participant_id: int, group_number: int, groups_amount: int, variants_amount: int) -> str:
 

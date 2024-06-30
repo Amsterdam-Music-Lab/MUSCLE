@@ -3,14 +3,14 @@ import logging
 from django.template.loader import render_to_string
 from django.utils.translation import gettext_lazy as _
 from django.conf import settings
+from django.core.exceptions import ValidationError
 
 from experiment.actions import Final, Form, Trial
-from experiment.questions.demographics import DEMOGRAPHICS
-from experiment.questions.goldsmiths import MSI_OTHER
-from experiment.questions.utils import question_by_key, unanswered_questions
+from question.utils import unanswered_questions
+from question.questions import get_questions_from_series, QUESTION_GROUPS
 from result.score import SCORING_RULES
-
-from experiment.questions import get_questions_from_keys
+from section.models import Playlist
+from session.models import Session
 
 logger = logging.getLogger(__name__)
 
@@ -21,7 +21,10 @@ class Base(object):
     contact_email = settings.CONTACT_MAIL
 
     def __init__(self):
-        self.questions = DEMOGRAPHICS + [question_by_key('msi_39_best_instrument', MSI_OTHER)]
+        self.question_series = [
+            {"name": "DEMOGRAPHICS", "keys": QUESTION_GROUPS["DEMOGRAPHICS"], "randomize": False},
+            {"name": "MSI_OTHER", "keys": ['msi_39_best_instrument'], "randomize": False},
+        ]
 
     def feedback_info(self):
         feedback_body = render_to_string('feedback/user_feedback.html', {'email': self.contact_email})
@@ -50,7 +53,11 @@ class Base(object):
         if scoring_rule:
             return scoring_rule(result, data)
         return None
-    
+
+    def get_play_again_url(self, session: Session):
+        participant_id_url_param = f'?participant_id={session.participant.participant_id_url}' if session.participant.participant_id_url else ""
+        return f'/{session.experiment.slug}{participant_id_url_param}'
+
     def calculate_intermediate_score(self, session, result):
         """ process result data during a trial (i.e., between next_round calls) 
         return score
@@ -121,7 +128,7 @@ class Base(object):
         Participants will not continue to the next question set until they
         have completed their current one.
         """
-        questionnaire = unanswered_questions(session.participant, self.questions, randomize)
+        questionnaire = unanswered_questions(session.participant, get_questions_from_series(session.experiment.questionseries_set.all()), randomize)
         try:
             question = next(questionnaire)
             return Trial(
@@ -134,7 +141,7 @@ class Base(object):
         ''' Get a list of questions to be asked in succession '''
 
         trials = []
-        questions = list(unanswered_questions(session.participant, get_questions_from_keys(session.experiment.questions), randomize, cutoff_index))
+        questions = list(unanswered_questions(session.participant, get_questions_from_series(session.experiment.questionseries_set.all()), randomize, cutoff_index))
         open_questions = len(questions)
         if not open_questions:
             return None
@@ -156,3 +163,22 @@ class Base(object):
             'url': experiment.url or current_url,
             'hashtags': [experiment.hashtag or experiment.slug, "amsterdammusiclab", "citizenscience"]
         }
+
+    def validate_playlist(self, playlist: None):
+        errors = []
+        # Common validations across experiments
+        if not playlist:
+            errors.append('The experiment must have a playlist.')
+            return errors
+
+        sections = playlist.section_set.all()
+
+        if not sections:
+            errors.append('The experiment must have at least one section.')
+
+        try:
+            playlist.clean_csv()
+        except ValidationError as e:
+            errors += e.error_list
+
+        return errors

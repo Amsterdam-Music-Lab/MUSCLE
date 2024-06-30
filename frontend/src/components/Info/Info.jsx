@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 
 import Button from "../Button/Button";
 
-// Info is an experiment view that shows the Info text, and handles agreement/stop actions
+/** Info is an block view that shows the Info text, and handles agreement/stop actions */
 const Info = ({ heading, body, button_label, button_link, onNext }) => {
     const [maxHeight, setMaxHeight] = useState(getMaxHeight());
 

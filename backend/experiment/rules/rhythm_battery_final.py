@@ -1,10 +1,8 @@
 from django.utils.translation import gettext_lazy as _
 from django.template.loader import render_to_string
 
+from question.questions import QUESTION_GROUPS
 from experiment.actions import Explainer, Final, Step
-from experiment.questions.goldsmiths import MSI_F3_MUSICAL_TRAINING
-from experiment.questions.demographics import EXTRA_DEMOGRAPHICS
-from experiment.questions.utils import question_by_key
 
 from .base import Base
 
@@ -16,16 +14,25 @@ class RhythmBatteryFinal(Base):
     show_participant_final = False
 
     def __init__(self):
-        demographics = [
-            question_by_key('dgf_gender_identity'),
-            question_by_key('dgf_age', EXTRA_DEMOGRAPHICS),
-            question_by_key('dgf_education', drop_choices=['isced-1']),
-            question_by_key('dgf_highest_qualification_expectation',
-                            EXTRA_DEMOGRAPHICS),
-            question_by_key('dgf_country_of_residence'),
-            question_by_key('dgf_country_of_origin'),
+        self.question_series = [
+            {
+                "name": "MSI_F3_MUSICAL_TRAINING",
+                "keys": QUESTION_GROUPS["MSI_F3_MUSICAL_TRAINING"],
+                "randomize": True
+            },
+            {
+                "name": "Demographics",
+                "keys": [
+                    'dgf_gender_identity',
+                    'dgf_age',
+                    'dgf_education_gold_msi',
+                    'dgf_highest_qualification_expectation',
+                    'dgf_country_of_residence',
+                    'dgf_country_of_origin'
+                ],
+                "randomize": False
+            },
         ]
-        self.questions = MSI_F3_MUSICAL_TRAINING + demographics
 
     def first_round(self, experiment):
         explainer = Explainer(

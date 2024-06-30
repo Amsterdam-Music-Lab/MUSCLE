@@ -2,7 +2,7 @@ import React, { useRef } from "react";
 import Circle from "../Circle/Circle";
 import Button from "../Button/Button";
 
-// ListenFeedback is a base view for experiment views with a yes and no button
+/** ListenFeedback is a base view for block views with a yes and no button */
 const ListenFeedback = ({
     circleContent = null,
     instruction,
@@ -44,34 +44,34 @@ const ListenFeedback = ({
 
             {/* Instruction */}
             {instruction && (
-            <div className="instruction d-flex justify-content-center align-items-center">
-                <h3 className="text-center">{instruction}</h3>
-            </div>
+                <div className="instruction d-flex justify-content-center align-items-center">
+                    <h3 className="text-center">{instruction}</h3>
+                </div>
             )}
 
             {/* Buttons */}
             {buttons && (
-            <div className="buttons d-flex justify-content-around p-3 w-100">
-                {/* No-button */}
-                {onNoClick && (
-                    <Button
-                        key={"no"}
-                        className="btn-negative"
-                        onClick={onNoClick}
-                        title={buttons.no}
-                    />
-                )}
+                <div className="buttons d-flex justify-content-around p-3 w-100">
+                    {/* No-button */}
+                    {onNoClick && (
+                        <Button
+                            key={"no"}
+                            className="btn-negative"
+                            onClick={onNoClick}
+                            title={buttons.no}
+                        />
+                    )}
 
-                {/* Yes-button */}
-                {onYesClick && (
-                    <Button
-                        key={"yes"}
-                        className="btn-positive"
-                        onClick={onYesClick}
-                        title={buttons.yes}
-                    />
-                )}
-            </div>
+                    {/* Yes-button */}
+                    {onYesClick && (
+                        <Button
+                            key={"yes"}
+                            className="btn-positive"
+                            onClick={onYesClick}
+                            title={buttons.yes}
+                        />
+                    )}
+                </div>
             )}
         </div>
     );

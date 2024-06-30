@@ -1,6 +1,60 @@
-import { create, StateCreator } from "zustand";
 import * as Sentry from '@sentry/react';
-import { Participant } from "@/types/Participant";
+import { StateCreator, create } from "zustand";
+
+import IParticipant from "@/types/Participant";
+import ISession from "@/types/Session";
+import ITheme from "@/types/Theme";
+
+interface StructuredData {
+    "@context": string;
+    "@type": string;
+    url: string;
+    logo: string;
+    name: string;
+    description: string;
+}
+
+interface HeadData {
+    title: string;
+    description: string;
+    image: string;
+    url: string;
+    structuredData: Partial<StructuredData>;
+}
+
+interface DocumentHeadSlice {
+    headData: HeadData;
+    setHeadData: (headData: HeadData) => void;
+    patchHeadData: (headData: Partial<HeadData>) => void;
+    resetHeadData: () => void;
+}
+
+const createDocumentHeadSlice: StateCreator<DocumentHeadSlice> = (set) => ({
+    headData: {
+        title: "",
+        description: "",
+        image: "",
+        url: "",
+        structuredData: {
+            "@context": "http://schema.org",
+            "@type": "Organization",
+            url: import.meta.env.VITE_OG_URL ?? "",
+            logo: import.meta.env.VITE_OG_IMAGE ?? "",
+            name: import.meta.env.VITE_OG_TITLE ?? "",
+            description: import.meta.env.VITE_OG_DESCRIPTION ?? "",
+        }
+    },
+    setHeadData: (headData) => set(() => ({ headData })),
+    patchHeadData: (headData) => set((state) => ({ headData: { ...state.headData, ...headData } })),
+    resetHeadData: () => set(() => ({
+        headData: {
+            title: import.meta.env.VITE_OG_TITLE ?? "",
+            description: import.meta.env.VITE_OG_DESCRIPTION ?? "",
+            image: import.meta.env.VITE_OG_IMAGE ?? "",
+            url: import.meta.env.VITE_OG_URL ?? "",
+        }
+    }))
+});
 
 interface ErrorSlice {
     error: string | null;
@@ -18,40 +72,41 @@ const createErrorSlice: StateCreator<ErrorSlice> = (set) => ({
 });
 
 interface ParticipantSlice {
-    participant: Participant | null;
+    participant: IParticipant | null;
     participantLoading: boolean;
-    setParticipant: (participant: Participant) => void;
+    setParticipant: (participant: IParticipant) => void;
     setParticipantLoading: (participantLoading: boolean) => void;
 }
 
 const createParticipantSlice: StateCreator<ParticipantSlice> = (set) => ({
     participant: null,
     participantLoading: true,
-    setParticipant: (participant) => set(() => ({ participant })),
-    setParticipantLoading: (participantLoading) => set(() => ({ participantLoading }))
+    setParticipant: (participant: IParticipant) => set(() => ({ participant })),
+    setParticipantLoading: (participantLoading: boolean) => set(() => ({ participantLoading }))
 });
 
 interface SessionSlice {
-    session: string | null;
-    setSession: (session: string) => void;
+    session: ISession | null;
+    setSession: (session: ISession) => void;
 }
 
 const createSessionSlice: StateCreator<SessionSlice> = (set) => ({
     session: null,
-    setSession: (session) => set(() => ({ session }))
+    setSession: (session: ISession) => set(() => ({ session })),
 });
 
 interface ThemeSlice {
-    theme: string | null;
-    setTheme: (theme: string) => void;
+    theme: ITheme | null;
+    setTheme: (theme: ITheme) => void;
 }
 
 const createThemeSlice: StateCreator<ThemeSlice> = (set) => ({
     theme: null,
-    setTheme: (theme) => set(() => ({ theme })),
+    setTheme: (theme: ITheme) => set(() => ({ theme })),
 });
 
-export const useBoundStore = create<ErrorSlice & ParticipantSlice & SessionSlice & ThemeSlice>((...args) => ({
+export const useBoundStore = create<DocumentHeadSlice & ErrorSlice & ParticipantSlice & SessionSlice & ThemeSlice>((...args) => ({
+    ...createDocumentHeadSlice(...args),
     ...createErrorSlice(...args),
     ...createParticipantSlice(...args),
     ...createSessionSlice(...args),

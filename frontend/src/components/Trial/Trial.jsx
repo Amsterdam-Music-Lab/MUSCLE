@@ -7,11 +7,12 @@ import HTML from "../HTML/HTML";
 import Playback from "../Playback/Playback";
 import Button from "../Button/Button";
 
-/** Trial is an experiment view to present information to the user and/or collect user feedback
-If "playback" is provided, it will play audio through the Playback component
-If "html" is provided, it will show html content
-If "feedback_form" is provided, it will present a form of questions to the user
-**/
+/**
+ * Trial is an block view to present information to the user and/or collect user feedback
+ * If "playback" is provided, it will play audio through the Playback component
+ * If "html" is provided, it will show html content
+ * If "feedback_form" is provided, it will present a form of questions to the user
+ */
 const Trial = ({
     playback,
     html,
@@ -23,7 +24,8 @@ const Trial = ({
 }) => {
     // Main component state
     const [formActive, setFormActive] = useState(!config.listen_first);
-    const [preloadReady, setPreloadReady] = useState(!(playback?.ready_time));
+    // Preload is immediately set to ready if we don't have a playback object
+    const [preloadReady, setPreloadReady] = useState(!playback);
 
     const submitted = useRef(false);
 
@@ -54,21 +56,26 @@ const Trial = ({
                 if (feedback_form.is_skippable) {
                     form.map((formElement => (formElement.value = formElement.value || '')))
                 }
-                await onResult({
-                    decision_time: getAndStoreDecisionTime(),
-                    form,
-                    config
-                });
-                if (config.break_round_on) {
-                    const values = form.map((formElement) => formElement.value);
-                    if (checkBreakRound(values, config.break_round_on)) {
-                        // one of the break conditions is met:
-                        // onNext will request next_round from server,
-                        // and ignore further rounds in the current array
-                        onNext(true)
-                    }
 
+                const breakRoundOn = config.break_round_on;
+                const shouldBreakRound = breakRoundOn && checkBreakRound(form.map((formElement) => formElement.value), breakRoundOn);
+                const shouldCallOnNextInOnResult = !shouldBreakRound
+
+                await onResult(
+                    {
+                        decision_time: getAndStoreDecisionTime(),
+                        form,
+                        config
+                    },
+                    false,
+                    // if we break the round, we don't want to call onNext in onResult
+                    shouldCallOnNextInOnResult
+                );
+
+                if (shouldBreakRound) {
+                    onNext(true);
                 }
+
             } else {
                 if (result_id) {
                     onResult({
@@ -108,7 +115,7 @@ const Trial = ({
         if (config.auto_advance) {
 
             // Create a time_passed result
-            if (config.auto_advance_timer != null) {                
+            if (config.auto_advance_timer != null) {
                 if (playback.view === 'BUTTON') {
                     startTime.current = getCurrentTime();
                 }

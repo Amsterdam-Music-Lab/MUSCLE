@@ -27,14 +27,14 @@ Setup experiment data in the admin panel
     * Rules: RuleTemplate
     * Rounds: 5
     * Playlists: rules_template
-    * Save
+    * Save and continue editing
+    * QUESTION SERIES -> Add rules' default and save
 """
 
 from .base import Base
 from experiment.actions import Consent, Explainer, Trial, Final
 from experiment.actions.playback import PlayButton
-from experiment.questions.demographics import EXTRA_DEMOGRAPHICS
-from experiment.questions.utils import question_by_key
+from question.utils import question_by_key
 from django.db.models import Avg
 from experiment.actions.form import Form, ChoiceQuestion
 from result.utils import prepare_result
@@ -53,12 +53,11 @@ class RulesTemplate(Base):
 
     def __init__(self):
         # Create questionaire to ask for age, gender, native language and musical experience. It will be run after a session is created.
-        self.questions = [
-            question_by_key('dgf_age', EXTRA_DEMOGRAPHICS),
-            question_by_key('dgf_gender_reduced', EXTRA_DEMOGRAPHICS),
-            question_by_key('dgf_native_language', EXTRA_DEMOGRAPHICS),
-            question_by_key('dgf_musical_experience', EXTRA_DEMOGRAPHICS)
-        ]
+        self.question_series = [{
+            "name": "EXTRA_DEMOGRAPHICS",
+            "keys": ['dgf_age', 'dgf_gender_reduced', 'dgf_native_language', 'dgf_musical_experience'],
+            "randomize": False
+        }]
 
     def first_round(self, experiment):
         """
@@ -71,13 +70,12 @@ class RulesTemplate(Base):
             button_label='Ok'
         )
 
-        # Add consent from file or admin (admin has priority)
+        # Add consent, text in admin
         consent = Consent(
             experiment.consent,
             title='Informed consent',
             confirm='I agree',
             deny='Stop',
-            url='consent/consent_rules_template.html'
             )
         return [consent, explainer]
 
@@ -116,6 +114,7 @@ class RulesTemplate(Base):
     def next_trial_action(self, session):
         """
         Returns the next trial action for the experiment. Not necessary as a separate method, but often used for convenience.
+        An existing function experiment.actions.wrappers.two_alternative_forced() could be used to simplify the steps below
         """
 
         # Retrieve next section in the sequence

@@ -2,7 +2,6 @@ from django.forms import CheckboxSelectMultiple, ModelForm, ChoiceField, Form, M
 from experiment.models import ExperimentCollection, Experiment
 from experiment.rules import EXPERIMENT_RULES
 
-from .questions import QUESTIONS_CHOICES
 
 # session_keys for Export CSV
 SESSION_CHOICES = [('experiment_id', 'Experiment ID'),
@@ -133,7 +132,7 @@ class ExperimentCollectionForm(ModelForm):
         super(ModelForm, self).__init__(*args, **kwargs)
         self.fields['dashboard'].help_text = (
             'This field will be deprecated in the nearby future. '
-            'Please use experiment series groups for dashboard configuration. (see bottom of form). <br><br>'
+            'Please use experiment phases for dashboard configuration. (see bottom of form). <br><br>'
             'Legacy behavior: If you check "dashboard", the experiment collection will have a '
             'dashboard that shows all or a subgroup of related experiments along '
             'with a description, footer, and about page. If you leave it unchecked, '
@@ -164,11 +163,35 @@ class ExperimentForm(ModelForm):
             choices=sorted(choices)
         )
 
-        self.fields['questions'] = TypedMultipleChoiceField(
-            choices=QUESTIONS_CHOICES,
-            widget=CheckboxSelectMultiple,
-            required=False
-        )
+    def clean_playlists(self):
+
+        # Check if there is a rules id selected and key exists
+        if 'rules' not in self.cleaned_data:
+            return
+
+        # Validat the rules' playlist
+        rule_id = self.cleaned_data['rules']
+        cl = EXPERIMENT_RULES[rule_id]
+        rules = cl()
+
+        playlists = self.cleaned_data['playlists']
+
+        if not playlists:
+            return self.cleaned_data['playlists']
+        
+        playlist_errors = []
+
+        # Validate playlists
+        for playlist in playlists:
+            errors = rules.validate_playlist(playlist)
+
+            for error in errors:
+                playlist_errors.append(f"Playlist [{playlist.name}]: {error}")
+
+        if playlist_errors:
+            self.add_error('playlists', playlist_errors)
+
+        return playlists
 
     class Meta:
         model = Experiment
@@ -209,3 +232,8 @@ class TemplateForm(Form):
     select_template = ChoiceField(
         widget=Select,
         choices=TEMPLATE_CHOICES)
+
+
+class QuestionSeriesAdminForm(ModelForm):
+    class Media:
+        js = ["questionseries_admin.js"]

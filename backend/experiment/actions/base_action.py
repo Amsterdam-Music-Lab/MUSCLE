@@ -13,7 +13,8 @@ class BaseAction(object):
         action_dict = self.__dict__
         action_dict['view'] = self.ID
 
-        if self.style is not None:
+        # we may have already converted the style object to a dictionary, e.g., after copying an Action object
+        if self.style is not None and type(self.style) is not dict:
             action_dict['style'] = self.style.to_dict()
 
         return action_dict

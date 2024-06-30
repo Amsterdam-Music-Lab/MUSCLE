@@ -1,27 +1,11 @@
 .aha__collection {
-    // this scss is adopted from Toontjehoger
-    // logo / hero / score / about will also be adopted in time.
-    .logo {
-        height: 90px;
-        width: 100%;
-        max-width: 300px;
-        font-size: 0;
-        margin: 0 auto 15px;
-        background-size: contain;
-        background-position: center center;
-        background-repeat: no-repeat;
-        display: block;
-
-        @media (max-width: 720px) {
-            margin-bottom: 15px;
-        }
-    }
 
     .hero {
         display: flex;
         justify-content: center;
         align-items: center;
         padding-bottom: 30px;
+        gap: 30px;
         position: relative;
         color: var(--white);
 
@@ -36,11 +20,13 @@
         }
 
         .intro {
-            padding: 30px 15px 40px;
+            padding: 30px 20px 0px;
 
             @media (min-width: 720px) {
                 width: 50%;
                 max-width: 650px;
+                padding: 0;
+                padding-top: 30px;
             }
 
             @media (min-width: 1024px) {
@@ -146,10 +132,14 @@
         padding-bottom: 50px;
         background-color: rgba(white, 0.2);
         max-width: 1200px;
-        margin: 0 auto;
+        margin: 0 1.25rem;
 
         @media (max-width: 720px) {
             padding: 15px 15px;
+        }
+
+        @media (min-width: $breakpoint-xl) {
+            margin: 0 auto;
         }
 
         ul {

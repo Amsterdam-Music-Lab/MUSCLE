@@ -10,8 +10,8 @@ export default {
     },
 };
 
-export const Default = {
-    args: {
+function getFinalData(overrides = {}) {
+    return {
         score: 100,
         rank: {
             text: "Rank",
@@ -21,15 +21,15 @@ export const Default = {
         points: "points",
         button: {
             text: "Button",
-            link: "https://www.google.com",
+            link: "https://www.example.com",
         },
         logo: {
             image: "https://via.placeholder.com/150",
-            link: "https://www.google.com",
+            link: "https://www.example.com",
         },
         social: {
             apps: ["facebook", "whatsapp", "twitter", "weibo", "share", "clipboard"],
-            url: "https://www.google.com",
+            url: "https://www.example.com",
             message: "Message",
             hashtags: ["hashtag"],
             text: "Text",
@@ -46,22 +46,61 @@ export const Default = {
             button: "Submit",
             thank_you: "Thank you for your feedback!",
             contact_body:
-                '<p>Please contact us at <a href="mailto:info@example.com">info@example.com</a> if you have any questions.</p>',
+                '<p>Please contact us at <a href="mailto:info@example.com">',
         },
-        experiment: {
+        block: {
             slug: "test",
         },
         participant: "test",
-    },
-    decorators: [
-        (Story) => (
-            <div
-                style={{ width: "100%", height: "100%", backgroundColor: "#aaa", padding: "1rem" }}
-            >
-                <Router>
-                    <Story />
-                </Router>
-            </div>
-        ),
-    ],
+        onNext: () => { alert("Next"); },
+        ...overrides,
+    };
+}
+
+const getDecorator = (Story) => (
+    <div
+        style={{ width: "100%", height: "100%", backgroundColor: "#aaa", padding: "1rem" }}
+    >
+        <Router>
+            <Story />
+        </Router>
+    </div>
+);
+
+export const Default = {
+    args: getFinalData(),
+    decorators: [getDecorator],
+};
+
+// with relative button.link
+export const RelativeButtonLink = {
+    args: getFinalData({
+        button: {
+            text: "Play again",
+            link: "/profile",
+        },
+    }),
+    decorators: [getDecorator],
+};
+
+// with absolute button.link
+export const AbsoluteButtonLink = {
+    args: getFinalData({
+        button: {
+            text: "Button",
+            link: "https://www.example.com",
+        },
+    }),
+    decorators: [getDecorator],
+};
+
+// without button.link
+export const NoButtonLink = {
+    args: getFinalData({
+        button: {
+            text: "Button",
+            link: "",
+        },
+    }),
+    decorators: [getDecorator],
 };
