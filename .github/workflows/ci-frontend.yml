@@ -5,10 +5,14 @@ on:
     paths:
       - 'frontend/**'
       - '.yarn'
+      - '.github/workflows/ci-frontend.yml'
+      - 'docker-compose.yaml'
   pull_request:
     paths:
       - 'frontend/**'
       - '.yarn'
+      - '.github/workflows/ci-frontend.yml'
+      - 'docker-compose.yaml'
 
 jobs:
 
