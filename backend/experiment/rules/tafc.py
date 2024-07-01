@@ -1,32 +1,32 @@
 """
 Setup experiment data in the admin panel
 
-* Choose a slug for the experiment ('rt')
+* Choose a slug for the experiment ('tafc')
 
 * Upload sound files
     * Find the root directory name of the uploaded sound files. It is backend/upload on your local machine. On a server, ask the administrator.
-    * Create a new directory within the root directory, use slug 'rt' for the name
+    * Create a new directory within the root directory, use slug 'tafc' for the name
     * Copy files (sample_1.wav - sample_5.wav)
 
 * Create playlist:
     * Playlists -> Add
-    * Name: rules_template
+    * Name: tafc
     * Process CSV: yes
     * CSV (see format explanation at the bottom of text entry field):
-        Sample Artist 1,Sample Song 1,0.0,1.25,rt/sample_1.wav,A,CRV
-        Sample Artist 2,Sample Song 2,0.0,1.25,rt/sample_2.wav,B,MTW
-        Sample Artist 3,Sample Song 3,0.0,1.25,rt/sample_3.wav,A,CRV
-        Sample Artist 4,Sample Song 4,0.0,1.25,rt/sample_4.wav,A,GWN
-        Sample Artist 5,Sample Song 5,0.0,1.25,rt/sample_5.wav,B,CGB
+        Sample Artist 1,Sample Song 1,0.0,1.25,tafc/sample_1.wav,A,CRV
+        Sample Artist 2,Sample Song 2,0.0,1.25,tafc/sample_2.wav,B,MTW
+        Sample Artist 3,Sample Song 3,0.0,1.25,tafc/sample_3.wav,A,CRV
+        Sample Artist 4,Sample Song 4,0.0,1.25,tafc/sample_4.wav,A,GWN
+        Sample Artist 5,Sample Song 5,0.0,1.25,tafc/sample_5.wav,B,CGB
     * Save
 
 * Create experiment
     * Admin panel -> Experiments -> Add
-    * Choose name: rules_template
-    * Slug: rt
-    * Rules: RuleTemplate
+    * Choose name: TwoAlternativeForced
+    * Slug: tafc
+    * Rules: TwoAlternativeForced
     * Rounds: 5
-    * Playlists: rules_template
+    * Playlists: tafc
     * Save and continue editing
     * QUESTION SERIES -> Add rules' default and save
 """
@@ -40,16 +40,16 @@ from experiment.actions.form import Form, ChoiceQuestion
 from result.utils import prepare_result
 
 
-class RulesTemplate(Base):
+class TwoAlternativeForced(Base):
     """
     first_round() and next_round() are required methods for the class.
     """
 
     # Add to __init.py__ file in the same directory as the current file:
-    #    from .rules_template import RulesTemplate
+    #    from .tafc import TwoAlternativeForced
     # To EXPERIMENT_RULES dictionary in __init.py__
-    #    RulesTemplate.ID: RulesTemplate
-    ID = 'RULES_TEMPLATE'
+    #    TwoAlternativeForced.ID: TwoAlternativeForced
+    ID = 'TWO_ALTERNATIVE_FORCED'
 
     def __init__(self):
         # Create questionaire to ask for age, gender, native language and musical experience. It will be run after a session is created.
@@ -122,7 +122,7 @@ class RulesTemplate(Base):
 
         # Determine expected response, in this case section tag (A or B)
         expected_response = section.tag
-        print("Expected response: ", expected_response)
+
         # Build Trial action, configure through config argument. Trial has Playback and Form with ChoiceQuestion to submit response.
 
         playback = PlayButton([section])

@@ -28,7 +28,7 @@ from .toontjehoger_3_plink import ToontjeHoger3Plink
 from .toontjehoger_4_absolute import ToontjeHoger4Absolute
 from .toontjehoger_5_tempo import ToontjeHoger5Tempo
 from .toontjehoger_6_relative import ToontjeHoger6Relative
-from .rules_template import RulesTemplate
+from .tafc import TwoAlternativeForced
 from .toontjehogerkids_1_mozart import ToontjeHogerKids1Mozart
 from .toontjehogerkids_2_preverbal import ToontjeHogerKids2Preverbal
 from .toontjehogerkids_3_plink import ToontjeHogerKids3Plink
@@ -65,7 +65,7 @@ EXPERIMENT_RULES = {
     RhythmBatteryFinal.ID: RhythmBatteryFinal,
     RhythmBatteryIntro.ID: RhythmBatteryIntro,
     RhythmDiscrimination.ID: RhythmDiscrimination,
-    RulesTemplate.ID: RulesTemplate,
+    TwoAlternativeForced.ID: TwoAlternativeForced,
     Speech2Song.ID: Speech2Song,
     ThatsMySong.ID: ThatsMySong,
     ToontjeHoger1Mozart.ID: ToontjeHoger1Mozart,
