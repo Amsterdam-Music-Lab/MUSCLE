@@ -7,7 +7,6 @@ import useBoundStore from "@/util/stores";
 import { createSession, getNextRound, useBlock } from "@/API";
 import Consent from "@/components/Consent/Consent";
 import DefaultPage from "@/components/Page/DefaultPage";
-import ToontjeHoger from "@/components/ToontjeHoger/ToontjeHoger";
 import Explainer from "@/components/Explainer/Explainer";
 import Final from "@/components/Final/Final";
 import Loading from "@/components/Loading/Loading";
@@ -202,11 +201,6 @@ const Block = ({ match }) => {
                 return <Info {...attrs} />;
             case "REDIRECT":
                 return window.location.replace(state.url);
-
-            // Specials
-            // -------------------------
-            case "TOONTJEHOGER":
-                return <ToontjeHoger {...attrs} />;
 
             default:
                 return (
