@@ -64,7 +64,7 @@ class MatchingPairsGame(Base):
             playlist,
             explainer
         ]
-    
+
     def next_round(self, session):
         if session.rounds_passed() < 1:
             trials = self.get_questionnaire(session)
@@ -104,7 +104,7 @@ class MatchingPairsGame(Base):
             random.shuffle(pairs)
         selected_pairs = pairs[:self.num_pairs]
         session.save_json_data({'pairs': pairs[self.num_pairs:]})
-        originals = session.playlist.section_set.filter(group__in=selected_pairs, tag='Original')  
+        originals = session.playlist.section_set.filter(group__in=selected_pairs, tag='Original')
         degradations = json_data.get('degradations')
         if not degradations:
             degradations = ['Original', '1stDegradation', '2ndDegradation']
@@ -141,7 +141,7 @@ class MatchingPairsGame(Base):
     def calculate_score(self, result, data):
         ''' not used in this experiment '''
         pass
-    
+
     def calculate_intermediate_score(self, session, result):
         ''' will be called every time two cards have been turned '''
         result_data = json.loads(result)
@@ -168,5 +168,3 @@ class MatchingPairsGame(Base):
         prepare_result('move', session, json_data=result_data,
                        score=score, given_response=given_response)
         return score
-
-        
