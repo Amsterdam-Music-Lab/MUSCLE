@@ -5,7 +5,7 @@ import { vi } from 'vitest';
 import MockAdapter from 'axios-mock-adapter';
 import axios from 'axios';
 import Block from './Block';
-import * as API from '../../API'; 
+import * as API from '../../API';
 
 let mock = new MockAdapter(axios);
 
@@ -37,12 +37,13 @@ vi.mock('../../util/stores', () => ({
             setSession: vi.fn(),
             setHeadData: vi.fn(),
             resetHeadData: vi.fn(),
+            setBlock: vi.fn(),
         };
-        
+
         return fn(state);
     },
     useBoundStore: vi.fn()
-}));  
+}));
 
 describe('Block Component', () => {
 
@@ -55,7 +56,7 @@ describe('Block Component', () => {
         mock.onGet().replyOnce(200, experimentObj);
         render(
             <MemoryRouter>
-                <Block match={ {params: {slug: 'test'}} }/>
+                <Block match={{ params: { slug: 'test' } }} />
             </MemoryRouter>
         );
         await screen.findByText('Continue');
