@@ -1,5 +1,5 @@
 import React from 'react';
-import { vi } from 'vitest';
+import { vi, describe, beforeEach, afterEach, test, expect } from 'vitest';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import MockAdapter from 'axios-mock-adapter';
 import axios from 'axios';
@@ -7,7 +7,7 @@ import * as API from '../../API';
 
 import MatchingPairs, { SCORE_FEEDBACK_DISPLAY } from './MatchingPairs';
 
-let mock;
+let mock: MockAdapter;
 
 vi.mock("@/components/PlayButton/PlayCard", () => ({
     default: props => <div data-testid="play-card" {...props} />

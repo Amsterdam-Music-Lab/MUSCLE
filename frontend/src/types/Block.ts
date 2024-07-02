@@ -6,4 +6,5 @@ export default interface Block {
     slug: string;
     description: string;
     image?: IImage;
+    bonus_points: number;
 }
