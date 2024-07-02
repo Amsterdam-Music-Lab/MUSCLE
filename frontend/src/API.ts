@@ -160,11 +160,15 @@ interface ScoreIntermediateResultParams {
     result: unknown;
 }
 
+interface ScoreIntermediateResultResponse {
+    score: number;
+}
+
 export const scoreIntermediateResult = async ({
     session,
     participant,
     result,
-}: ScoreIntermediateResultParams) => {
+}: ScoreIntermediateResultParams): Promise<ScoreIntermediateResultResponse | null> => {
     try {
         const vars = {
             session_id: session.id,
