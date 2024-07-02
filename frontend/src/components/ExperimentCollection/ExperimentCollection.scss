@@ -252,7 +252,7 @@
                         }
                     }
                 }
-                
+
             }
         }
     }
@@ -384,32 +384,4 @@
             opacity: 0.7;
         }
     }
-}
-
-// Global styling tweaks
-// =========================
-
-.aha__experiment.experiment-toontjehoger {
-    // Hide app bar
-    .aha__app-bar {
-        display: none;
-    }
-    // Fix page width
-    @media (min-width: 800px) {
-        .aha__page .container {
-            max-width: calc(100% - 50px) !important;
-            padding-top: 0;
-        }
-    }
-}
-
-body.toontjehoger .aha__experiment:not(.experiment-toontjehoger) .aha__toontjehoger {
-    display: none;
-}
-
-body.toontjehoger,
-body.toontjehoger .aha__page {
-    background-image: url("/public/images/background-blur.webp");
-    background-color: #202e30;
-    background-position: top center;
 }
