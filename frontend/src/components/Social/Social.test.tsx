@@ -54,7 +54,7 @@ describe('Social Component', () => {
         });
 
         render(<Social social={mockSocial} />);
-        expect(screen.getByTestId('share')).toBeDefined();
+        expect(screen.getByTestId('navigator-share')).toBeDefined();
     });
 
     it('calls navigator.share when share button is clicked', () => {
@@ -69,7 +69,7 @@ describe('Social Component', () => {
         });
 
         render(<Social social={mockSocial} />);
-        fireEvent.click(screen.getByTestId('share'));
+        fireEvent.click(screen.getByTestId('navigator-share'));
         expect(shareMock).toHaveBeenCalledWith({
             text: mockSocial.text,
             url: mockSocial.url
@@ -84,7 +84,7 @@ describe('Social Component', () => {
         });
 
         render(<Social social={mockSocial} />);
-        const clipboardButton = screen.getByTestId('clipboard');
+        const clipboardButton = screen.getByTestId('clipboard-share');
         expect(clipboardButton).toBeDefined();
 
         fireEvent.click(clipboardButton);
