@@ -53,7 +53,7 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
     search_fields = ['name']
     inline_actions = ['export', 'export_csv']
     fields = ['name', 'description', 'image',
-              'slug', 'url', 'hashtag', 'theme_config', 
+              'slug', 'url', 'hashtag', 'theme_config',
               'language', 'active', 'rules',
               'rounds', 'bonus_points', 'playlists',
               'consent']
@@ -104,7 +104,7 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
         # create forced download response
         response = HttpResponse(zip_buffer.getbuffer())
         response['Content-Type'] = 'application/x-zip-compressed'
-        response['Content-Disposition'] = 'attachment; filename="'+obj.slug+'-'+timezone.now().isoformat()+'.zip"'        
+        response['Content-Disposition'] = 'attachment; filename="'+obj.slug+'-'+timezone.now().isoformat()+'.zip"'
         return response
 
     export.short_description = "Export JSON"
@@ -228,7 +228,7 @@ class ExperimentCollectionAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
     def phases(self, obj):
         phases = Phase.objects.filter(series=obj)
         return format_html(', '.join([f'<a href="/admin/experiment/phase/{phase.id}/change/">{phase.name}</a>' for phase in phases]))
-    
+
     slug_link.short_description = "Slug"
 
     def dashboard(self, request, obj, parent_obj=None):
@@ -249,7 +249,7 @@ class ExperimentCollectionAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
             'participant_count': len(exp.current_participants()),
             'participants': exp.current_participants()
             } for exp in all_experiments]
-        
+
         return render(
             request,
             'collection-dashboard.html',
@@ -265,8 +265,8 @@ admin.site.register(ExperimentCollection, ExperimentCollectionAdmin)
 
 
 class PhaseAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
-    list_display = ('name_link', 'related_series', 'order', 'dashboard', 'randomize', 'experiments')
-    fields = ['name', 'series', 'order', 'dashboard', 'randomize']
+    list_display = ('name_link', 'related_series', 'index', 'dashboard', 'randomize', 'experiments')
+    fields = ['name', 'series', 'index', 'dashboard', 'randomize']
     inlines = [GroupedExperimentInline]
 
     def name_link(self, obj):
