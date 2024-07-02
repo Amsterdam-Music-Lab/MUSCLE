@@ -72,7 +72,7 @@ class Phase(models.Model):
     name = models.CharField(max_length=64, blank=True, default='')
     series = models.ForeignKey(ExperimentCollection,
                                on_delete=models.CASCADE, related_name='phases')
-    order = models.IntegerField(default=0, help_text='Order of the phase in the series. Lower numbers come first.')
+    index = models.IntegerField(default=0, help_text='Index of the phase in the series. Lower numbers come first.')
     dashboard = models.BooleanField(default=False)
     randomize = models.BooleanField(
         default=False, help_text='Randomize the order of the experiments in this phase.')
@@ -86,7 +86,7 @@ class Phase(models.Model):
         return f'{compound_name}'
 
     class Meta:
-        ordering = ['order']
+        ordering = ['index']
 
 
 class GroupedExperiment(models.Model):

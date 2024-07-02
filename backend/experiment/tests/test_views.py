@@ -33,7 +33,7 @@ class TestExperimentCollectionViews(TestCase):
         introductory_phase = Phase.objects.create(
             name='introduction',
             series=collection,
-            order=1
+            index=1
         )
         cls.experiment1 = Experiment.objects.create(
             name='experiment1', slug='experiment1')
@@ -44,7 +44,7 @@ class TestExperimentCollectionViews(TestCase):
         intermediate_phase = Phase.objects.create(
             name='intermediate',
             series=collection,
-            order=2
+            index=2
         )
         cls.experiment2 = Experiment.objects.create(
             name='experiment2', slug='experiment2', theme_config=theme_config)
@@ -61,7 +61,7 @@ class TestExperimentCollectionViews(TestCase):
         final_phase = Phase.objects.create(
             name='final',
             series=collection,
-            order=3
+            index=3
         )
         cls.experiment4 = Experiment.objects.create(
             name='experiment4', slug='experiment4')

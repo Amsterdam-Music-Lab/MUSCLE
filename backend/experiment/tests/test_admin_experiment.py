@@ -114,7 +114,7 @@ class TestAdminExperimentExport(TestCase):
         self.admin = ExperimentAdmin(model=Experiment,
                                      admin_site=AdminSite
                                      )
-    
+
     def test_admin_export(self):
         response = self.admin.export(request, self.experiment)
         zip_buffer = BytesIO(response.content)
@@ -225,7 +225,7 @@ class PhaseAdminTest(TestCase):
     def test_related_series_with_series(self):
         series = ExperimentCollection.objects.create(name='Test Series')
         phase = Phase.objects.create(
-            name='Test Group', order=1, randomize=False, series=series, dashboard=True)
+            name='Test Group', index=1, randomize=False, series=series, dashboard=True)
         related_series = self.admin.related_series(phase)
         expected_url = reverse(
             "admin:experiment_experimentcollection_change", args=[series.pk])
@@ -235,14 +235,14 @@ class PhaseAdminTest(TestCase):
     def test_experiments_with_no_experiments(self):
         series = ExperimentCollection.objects.create(name='Test Series')
         phase = Phase.objects.create(
-            name='Test Group', order=1, randomize=False, dashboard=True, series=series)
+            name='Test Group', index=1, randomize=False, dashboard=True, series=series)
         experiments = self.admin.experiments(phase)
         self.assertEqual(experiments, "No experiments")
 
     def test_experiments_with_experiments(self):
         series = ExperimentCollection.objects.create(name='Test Series')
         phase = Phase.objects.create(
-            name='Test Group', order=1, randomize=False, dashboard=True, series=series)
+            name='Test Group', index=1, randomize=False, dashboard=True, series=series)
         experiment1 = Experiment.objects.create(name='Experiment 1', slug='experiment-1')
         experiment2 = Experiment.objects.create(name='Experiment 2', slug='experiment-2')
         grouped_experiment1 = GroupedExperiment.objects.create(phase=phase, experiment=experiment1)

@@ -106,7 +106,7 @@ def get_experiment_collection(
     request.session[COLLECTION_KEY] = slug
     participant = get_participant(request)
     phases = list(Phase.objects.filter(
-        series=collection.id).order_by('order'))
+        series=collection.id).order_by('index'))
     try:
         current_phase = phases[phase_index]
         serialized_phase = serialize_phase(
