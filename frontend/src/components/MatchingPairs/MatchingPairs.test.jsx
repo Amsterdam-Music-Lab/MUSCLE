@@ -19,7 +19,8 @@ vi.mock("../../util/stores", () => ({
         const state = {
             participant: 1,
             session: 1,
-            setError: vi.fn()
+            setError: vi.fn(),
+            block: { bonus_points: 42 }
         };
         return fn(state);
     },
@@ -74,7 +75,7 @@ describe('MatchingPairs Component', () => {
         fireEvent.click(cards[0]);
         fireEvent.click(cards[2]);
 
-        await waitFor(() => expect(getByText('Score: 110')).not.toBeNull());
+        await waitFor(() => expect(getByText('Score: 52')).not.toBeNull());
     });
 
     test.skip('has a blocking overlay in-between turns', async () => {
@@ -88,7 +89,7 @@ describe('MatchingPairs Component', () => {
         fireEvent.click(cards[1]);
 
         await new Promise(r => setTimeout(r, 1));
-        expect(screen.getByTestId('overlay').style.display).toBe('block')   
+        expect(screen.getByTestId('overlay').style.display).toBe('block')
     });
 
     test.skip('calls scoreIntermediateResult after each turn', async () => {
@@ -121,7 +122,7 @@ describe('MatchingPairs Component', () => {
         fireEvent.click(screen.getByTestId('overlay'));
         await new Promise(r => setTimeout(r, 1));
 
-        expect(screen.getByTestId('score').textContent).toBe('Score: 110');
+        expect(screen.getByTestId('score').textContent).toBe('Score: 10');
         expect(cards[0].classList.contains('disabled')).toBe(true);
         expect(cards[2].classList.contains('disabled')).toBe(true);
 
@@ -130,7 +131,7 @@ describe('MatchingPairs Component', () => {
         await new Promise(r => setTimeout(r, 1));
         fireEvent.click(screen.getByTestId('overlay'));
         await new Promise(r => setTimeout(r, 1));
-        expect(screen.getByTestId('score').textContent).toBe('Score: 120');
+        expect(screen.getByTestId('score').textContent).toBe('Score: 20');
         expect(cards[1].classList.contains('disabled')).toBe(true);
         expect(cards[3].classList.contains('disabled')).toBe(true);
         expect(submitResult).toHaveBeenCalled();
