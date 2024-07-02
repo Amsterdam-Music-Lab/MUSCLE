@@ -352,8 +352,12 @@ class SocialMediaConfig(models.Model):
     )
 
     SOCIAL_MEDIA_CHANNELS = [
-        ('twitter', _('Twitter')),
         ('facebook', _('Facebook')),
+        ('whatsapp', _('WhatsApp')),
+        ('twitter', _('Twitter')),
+        ('weibo', _('Weibo')),
+        ('share', _('Share')),
+        ('clipboard', _('Clipboard')),
     ]
     channels = ArrayField(
         models.CharField(max_length=20, choices=SOCIAL_MEDIA_CHANNELS),
