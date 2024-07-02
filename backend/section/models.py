@@ -148,7 +148,7 @@ class Playlist(models.Model):
             # if same section already exists, update it with new info
             for ex_section in existing_sections:
                 if ex_section.filename == section.filename:
-                    if song:                        
+                    if song:
                         ex_section.song = song
                         ex_section.save()
                     ex_section.start_time = section.start_time
@@ -183,10 +183,10 @@ class Playlist(models.Model):
             'message': "Sections processed from CSV. Added: " + str(len(sections)) + " - Updated: " + str(updated) + " - Removed: " + str(len(delete_ids))
         }
 
-    def song_ids(self, filter_by={}):
+    def get_available_song_ids(self):
         """Get a list of distinct song ids"""
         # order_by is required to make distinct work with values_list
-        return self.section_set.filter(**filter_by).order_by('song').values_list('song_id', flat=True).distinct()
+        return self.section_set.order_by('song').values_list('song_id', flat=True).distinct()
 
     def get_section(self, filter_by={}, song_ids=[]):
         """Get a random section from this playlist

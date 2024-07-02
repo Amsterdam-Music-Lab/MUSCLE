@@ -204,7 +204,7 @@ class MusicalPreferences(Base):
                 n_songs-1,
                 top_all
             )]
-        used_songs = session.song_ids()
+        used_songs = session.get_used_song_ids()
         section = session.get_unused_section(
             exclude={'song__id__in': used_songs})
         like_key = 'like_song'

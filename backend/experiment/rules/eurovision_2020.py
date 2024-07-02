@@ -7,6 +7,8 @@ from experiment.actions.form import BooleanQuestion, Form
 from experiment.actions.styles import STYLE_BOOLEAN_NEGATIVE_FIRST
 from experiment.actions.wrappers import song_sync
 from result.utils import prepare_result
+from section.models import Song
+from session.models import Session
 
 
 class Eurovision2020(Hooked):
@@ -85,6 +87,24 @@ class Eurovision2020(Hooked):
         session.save_json_data({'plan': plan})
         # session.save() is required for persistence
         session.save()
+
+    def get_song_sync_sections(self, session: Session, songs: list[Song], n_song_sync_rounds: int) -> list[int]:
+        n_returning_sections = round(n_song_sync_rounds / 4)
+        returning_sections = [session.get_random_section(
+            {'song__id': song.id, 'tag__gt': 0}).id for song in songs[:n_returning_sections]]
+        free_sections = [session.get_random_section(
+            {'song__id': song.id, 'tag__lt': 3}).id for song in songs[n_returning_sections:n_song_sync_rounds]]
+        return returning_sections + free_sections
+
+    def get_heard_before_old_sections(self, session: Session, song_sync_sections: list[int], n_heard_before_old_rounds: int) -> list[int]:
+        condition = random.sample('same', 'different', 'karaoke')
+        session.save_json_data({'condition': condition})
+        if condition == 'same':
+            return [song_sync_sections[:n_heard_before_old_rounds]]
+        elif condition == 'karaoke':
+            return [session.get_random_section({'song__id': section.song.id, 'tag': 3}).id for section in song_sync_sections[:n_heard_before_old_rounds]]
+        else:
+            return [session.get_random_section({'song__id': section.song.id}, exclude={'tag': section.tag}) for section in song_sync_sections[:n_heard_before_old_rounds]]
 
     def next_song_sync_action(self, session):
         """Get next song_sync section for this session."""

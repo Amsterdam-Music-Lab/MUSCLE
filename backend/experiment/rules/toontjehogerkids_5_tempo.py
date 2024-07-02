@@ -43,7 +43,7 @@ class ToontjeHogerKids5Tempo(ToontjeHoger5Tempo):
           return a section from an unused song, in both its original and changed variant
         """
 
-        section_original = session.section_from_unused_song(
+        section_original = session.get_unused_section(
             filter_by={'group': "or"})
 
         if not section_original:
