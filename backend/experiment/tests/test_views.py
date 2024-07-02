@@ -12,6 +12,7 @@ from experiment.models import (
     ExperimentCollection,
     Phase,
     GroupedExperiment,
+    SocialMediaConfig,
 )
 from experiment.rules.hooked import Hooked
 from participant.models import Participant
@@ -28,8 +29,9 @@ class TestExperimentCollectionViews(TestCase):
         collection = ExperimentCollection.objects.create(
             name='Test Series',
             slug='test_series',
-            theme_config=theme_config
+            theme_config=theme_config,
         )
+        collection.social_media_config = create_social_media_config(collection)
         introductory_phase = Phase.objects.create(
             name='introduction',
             series=collection,
@@ -108,6 +110,10 @@ class TestExperimentCollectionViews(TestCase):
         self.assertEqual(len(response_json['theme']['header']['score']), 3)
         self.assertEqual(response_json.get('theme').get('footer').get(
             'disclaimer'), '<p>Test Disclaimer</p>')
+        self.assertEqual(response_json.get('socialMedia').get('url'), 'https://www.example.com')
+        self.assertEqual(response_json.get('socialMedia').get('content'), 'Test Content')
+        self.assertEqual(response_json.get('socialMedia').get('tags'), ['aml', 'toontjehoger'])
+        self.assertEqual(response_json.get('socialMedia').get('channels'), ['facebook', 'twitter', 'weibo'])
 
     def test_get_experiment_collection_not_found(self):
         # if ExperimentCollection does not exist, return 404
@@ -257,7 +263,7 @@ class ExperimentViewsTest(TestCase):
         )
 
 
-def create_theme_config():
+def create_theme_config() -> ThemeConfig:
     theme_config = ThemeConfig.objects.create(
             name='test_theme',
             description='Test Theme',
@@ -278,3 +284,14 @@ def create_theme_config():
     footer_config.logos.add(Image.objects.create(file='test-logo.jpg'))
 
     return theme_config
+
+
+def create_social_media_config(
+        collection: ExperimentCollection) -> SocialMediaConfig:
+    return SocialMediaConfig.objects.create(
+        experiment_collection=collection,
+        url='https://www.example.com',
+        content='Test Content',
+        channels=['facebook', 'twitter', 'weibo'],
+        tags=['aml', 'toontjehoger']
+    )
