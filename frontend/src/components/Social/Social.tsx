@@ -81,12 +81,12 @@ const Social = ({ social }: SocialProps) => {
                 </WeiboShareButton>
             )}
             {showShare.current && social.apps.includes('share') && (
-                <div onClick={() => shareContent(social.text, social.url)}>
+                <div onClick={() => shareContent(social.text, social.url)} data-testid="share">
                     <i className="fa-solid fa-share-nodes fa-2x"></i>
                 </div>
             )}
             {social.apps.includes('clipboard') && (
-                <div onClick={() => copyToClipboard(social.url)}>
+                <div onClick={() => copyToClipboard(social.url)} data-testid="clipboard">
                     <i className="fa-solid fa-clipboard fa-2x"></i>
                 </div>
             )}
