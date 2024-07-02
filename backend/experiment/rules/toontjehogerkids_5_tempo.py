@@ -5,7 +5,7 @@ from django.template.loader import render_to_string
 from .toontjehoger_1_mozart import toontjehoger_ranks
 from .toontjehoger_5_tempo import ToontjeHoger5Tempo
 from experiment.actions import Explainer, Step, Score, Final, Info
-from experiment.utils import non_breaking_spaces
+from experiment.actions.utils import get_current_collection_url
 
 logger = logging.getLogger(__name__)
 
@@ -126,7 +126,7 @@ class ToontjeHogerKids5Tempo(ToontjeHoger5Tempo):
             body=body,
             heading="Timing en tempo",
             button_label="Terug naar ToontjeHogerKids",
-            button_link="/collection/thkids"
+            button_link=get_current_collection_url(session)
         )
 
         return [*score, final, info]

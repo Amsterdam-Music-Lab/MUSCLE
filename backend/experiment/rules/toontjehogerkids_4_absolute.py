@@ -2,6 +2,7 @@ from os.path import join
 from django.template.loader import render_to_string
 from .toontjehoger_1_mozart import toontjehoger_ranks
 from experiment.actions import Explainer, Step, Final, Info
+from experiment.actions.utils import get_current_collection_url
 from .toontjehoger_4_absolute import ToontjeHoger4Absolute
 
 
@@ -66,7 +67,7 @@ class ToontjeHogerKids4Absolute(ToontjeHoger4Absolute):
             body=body,
             heading="Absoluut gehoor",
             button_label="Terug naar ToontjeHogerKids",
-            button_link="/collection/thkids"
+            button_link=get_current_collection_url(session)
         )
 
         return [*score, final, info]

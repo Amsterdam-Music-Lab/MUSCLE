@@ -9,6 +9,7 @@ from experiment.actions.form import ButtonArrayQuestion, ChoiceQuestion, Form
 from experiment.actions.playback import ImagePlayer
 from experiment.actions.styles import STYLE_NEUTRAL_INVERTED
 from experiment.actions.frontend_style import FrontendStyle, EFrontendStyle
+from experiment.actions.utils import get_current_collection_url
 from experiment.utils import create_player_labels
 from .base import Base
 from result.utils import prepare_result
@@ -97,7 +98,7 @@ class ToontjeHoger2Preverbal(Base):
             button_label="Volgende",
         )
         return info
-    
+
     def next_round(self, session):
         """Get action data for the next round"""
 
@@ -114,7 +115,7 @@ class ToontjeHoger2Preverbal(Base):
 
         # Final
         return self.get_final_round(session)
-    
+
     def get_score(self, session, rounds_passed):
         # Feedback
         last_result = session.last_result()
@@ -139,7 +140,7 @@ class ToontjeHoger2Preverbal(Base):
         config = {'show_total_score': True}
         score = Score(session, config=config, feedback=feedback)
         return [score]
- 
+
     def get_round1(self, session):
         # Question
         key = 'expected_spectrogram'
@@ -212,7 +213,7 @@ class ToontjeHoger2Preverbal(Base):
             title=self.TITLE
         )
         return [trial]
-    
+
     def get_round2(self, round, session):
 
         # Get sections
@@ -260,10 +261,10 @@ class ToontjeHoger2Preverbal(Base):
             title=self.TITLE,
         )
         return [trial]
- 
+
     def calculate_score(self, result, data):
         return self.SCORE_CORRECT if result.expected_response == result.given_response else self.SCORE_WRONG
-    
+
     def get_final_round(self, session):
 
         # Finish session.
@@ -290,7 +291,7 @@ class ToontjeHoger2Preverbal(Base):
             body=body,
             heading="Het eerste luisteren",
             button_label="Terug naar ToontjeHoger",
-            button_link="/collection/toontjehoger"
+            button_link=get_current_collection_url(session)
         )
 
         return [*score, final, info]
