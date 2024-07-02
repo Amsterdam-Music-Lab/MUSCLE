@@ -9,6 +9,7 @@ from experiment.standards.iso_languages import ISO_LANGUAGES
 from theme.models import ThemeConfig
 from image.models import Image
 from session.models import Session
+from typing import Optional
 
 from .validators import markdown_html_validator, experiment_slug_validator
 
@@ -42,6 +43,7 @@ class ExperimentCollection(models.Model):
     dashboard = models.BooleanField(default=False)
     about_content = models.TextField(blank=True, default='')
     active = models.BooleanField(default=True)
+    social_media_config: Optional['SocialMediaConfig']
 
     def __str__(self):
         return self.name or self.slug

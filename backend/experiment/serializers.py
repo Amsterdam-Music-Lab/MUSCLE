@@ -7,7 +7,7 @@ from image.serializers import serialize_image
 from participant.models import Participant
 from session.models import Session
 from theme.serializers import serialize_theme
-from .models import Experiment, ExperimentCollection, Phase, GroupedExperiment
+from .models import Experiment, ExperimentCollection, Phase, GroupedExperiment, SocialMediaConfig
 
 
 def serialize_actions(actions):
@@ -44,7 +44,23 @@ def serialize_experiment_collection(
             filter_name='markdown'
         )
 
+    if experiment_collection.social_media_config:
+        serialized['socialMedia'] = serialize_social_media_config(
+            experiment_collection.social_media_config
+        )
+
     return serialized
+
+
+def serialize_social_media_config(
+        social_media_config: SocialMediaConfig
+        ) -> dict:
+    return {
+        'tags': social_media_config.tags,
+        'url': social_media_config.url,
+        'content': social_media_config.content,
+        'channels': social_media_config.channels,
+    }
 
 
 def serialize_phase(
