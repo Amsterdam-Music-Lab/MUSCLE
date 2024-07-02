@@ -23,6 +23,8 @@ const MatchingPairs = ({
     view
 }) => {
 
+    const block = useBoundStore(state => state.block);
+    const bonusPoints = block?.bonus_points || 0;
     const xPosition = useRef(-1);
     const yPosition = useRef(-1);
     const [firstCard, setFirstCard] = useState({});
@@ -31,7 +33,7 @@ const MatchingPairs = ({
     const [feedbackClass, setFeedbackClass] = useState('');
     const [inBetweenTurns, setInBetweenTurns] = useState(false);
     const [score, setScore] = useState(null);
-    const [total, setTotal] = useState(100);
+    const [total, setTotal] = useState(bonusPoints);
 
     const columnCount = sections.length > 6 ? 4 : 3;
 
@@ -89,13 +91,13 @@ const MatchingPairs = ({
         if (turnedCards.length < 2) {
             if (turnedCards.length === 1) {
                 // This is the second card to be turned
-                currentCard.turned = true;                
+                currentCard.turned = true;
                 setSecondCard(currentCard);
                 // set no mouse events for all but current
                 sections.forEach(section => section.noevents = true);
                 currentCard.noevents = true;
                 currentCard.boardposition = parseInt(index) + 1;
-                currentCard.timestamp = performance.now();                
+                currentCard.timestamp = performance.now();
                 currentCard.response_interval_ms = Math.round(currentCard.timestamp - firstCard.timestamp);
                 // check for match
                 const first_card = firstCard;
@@ -113,7 +115,7 @@ const MatchingPairs = ({
                 setFirstCard(currentCard);
                 // turn first card, disable events
                 currentCard.turned = true;
-                currentCard.noevents = true;                
+                currentCard.noevents = true;
                 currentCard.boardposition = parseInt(index) + 1;
                 currentCard.timestamp = performance.now();
                 // reset response interval in case this card has a value from a previous turn
@@ -144,7 +146,7 @@ const MatchingPairs = ({
             // submit empty result, which will trigger a call to `next_round`
             submitResult({});
             setFeedbackText('');
-        } else { 
+        } else {
             setFeedbackText('Pick a card');
             setScore('');
             setFeedbackClass('');
@@ -156,13 +158,13 @@ const MatchingPairs = ({
         <div className="aha__matching-pairs">
 
             <div>
-                {scoreFeedbackDisplay !== SCORE_FEEDBACK_DISPLAY.HIDDEN && 
+                {scoreFeedbackDisplay !== SCORE_FEEDBACK_DISPLAY.HIDDEN &&
                     <ScoreFeedback
                         score={score}
                         total={total}
                         feedbackClass={feedbackClass}
                         feedbackText={feedbackText}
-                        scoreFeedbackDisplay={scoreFeedbackDisplay} 
+                        scoreFeedbackDisplay={scoreFeedbackDisplay}
                     />}
 
                 <div className={classNames("playing-board", columnCount === 3 && "playing-board--three-columns")}>
@@ -211,7 +213,7 @@ const ScoreFeedback = ({
         >
             <div className="col-6 align-self-start">
                 <div className={classNames("matching-pairs__feedback", feedbackClass)}>
-                    {score} <br/> {feedbackText}
+                    {score} <br /> {feedbackText}
                 </div>
             </div>
             <div className="col-6 align-self-end">
@@ -222,4 +224,3 @@ const ScoreFeedback = ({
 }
 
 export default MatchingPairs;
-
