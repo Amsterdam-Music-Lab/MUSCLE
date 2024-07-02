@@ -40,6 +40,7 @@ def get_experiment(request, slug):
         'image': serialize_image(experiment.image) if experiment.image else None,
         'class_name': class_name,  # can be used to override style
         'rounds': experiment.rounds,
+        'bonus_points': experiment.bonus_points,
         'playlists': [
             {'id': playlist.id, 'name': playlist.name}
             for playlist in experiment.playlists.all()
