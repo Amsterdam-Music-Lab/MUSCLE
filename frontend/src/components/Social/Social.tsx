@@ -1,35 +1,45 @@
-import React, { useRef } from "react";
+import { useRef } from "react";
 import {
     FacebookShareButton, TwitterShareButton, WeiboShareButton, WhatsappShareButton
-  } from 'next-share'
-  
+} from 'next-share'
 
-const Social = ({ social }) => {
-    /* Social is a view which returns social media links with icons
-    if render_social is set to false, returns an empty diff
-    */
+interface SocialProps {
+    social: {
+        apps: 'facebook' | 'whatsapp' | 'twitter' | 'weibo' | 'share' | 'clipboard',
+        url: string,
+        message: string,
+        hashtags: string[],
+        text: string
+    }
+}
+
+/**
+ * Social is a view which returns social media links with icons
+ * if render_social is set to false, returns an empty diff
+*/
+const Social = ({ social }: SocialProps) => {
 
     const showShare = useRef(
         navigator.share !== undefined && navigator.canShare !== undefined
     )
-    
-    const shareContent = (text, url) => {
+
+    const shareContent = (text: string, url: string) => {
         const shareData = {
             text: text,
             url: url
         }
         if (navigator.canShare(shareData)) {
             navigator.share(shareData).then(
-                (success) => {},
-                (error) => {console.error(error)}
+                () => void 0,
+                (error) => { console.error(error) }
             );
         }
     }
 
-    const copyToClipboard = async (url) => {
+    const copyToClipboard = async (url: string) => {
         await navigator.clipboard.writeText(url);
     }
-    
+
     return (
         <div className="aha__share d-flex justify-content-center mt-4">
             {social.apps.includes('facebook') && (
@@ -71,12 +81,12 @@ const Social = ({ social }) => {
                 </WeiboShareButton>
             )}
             {showShare.current && social.apps.includes('share') && (
-                <div onClick={() => shareContent(social.text, social.url)}>
+                <div onClick={() => shareContent(social.text, social.url)} data-testid="navigator-share">
                     <i className="fa-solid fa-share-nodes fa-2x"></i>
                 </div>
             )}
             {social.apps.includes('clipboard') && (
-                <div onClick={() => copyToClipboard(social.url)}>
+                <div onClick={() => copyToClipboard(social.url)} data-testid="clipboard-share">
                     <i className="fa-solid fa-clipboard fa-2x"></i>
                 </div>
             )}

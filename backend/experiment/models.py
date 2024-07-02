@@ -2,12 +2,14 @@ import copy
 
 from django.db import models
 from django.utils import timezone
+from django.utils.translation import gettext_lazy as _
 from django.contrib.postgres.fields import ArrayField
 from typing import List, Dict, Tuple, Any
 from experiment.standards.iso_languages import ISO_LANGUAGES
 from theme.models import ThemeConfig
 from image.models import Image
 from session.models import Session
+from typing import Optional
 
 from .validators import markdown_html_validator, experiment_slug_validator
 
@@ -41,6 +43,7 @@ class ExperimentCollection(models.Model):
     dashboard = models.BooleanField(default=False)
     about_content = models.TextField(blank=True, default='')
     active = models.BooleanField(default=True)
+    social_media_config: Optional['SocialMediaConfig']
 
     def __str__(self):
         return self.name or self.slug
@@ -321,3 +324,59 @@ class Experiment(models.Model):
 class Feedback(models.Model):
     text = models.TextField()
     experiment = models.ForeignKey(Experiment, on_delete=models.CASCADE)
+
+
+class SocialMediaConfig(models.Model):
+    experiment_collection = models.OneToOneField(
+        ExperimentCollection,
+        on_delete=models.CASCADE,
+        related_name='social_media_config'
+    )
+
+    tags = ArrayField(
+        models.CharField(max_length=100),
+        blank=True,
+        default=list,
+        help_text=_("List of tags for social media sharing")
+    )
+
+    url = models.URLField(
+        blank=True,
+        help_text=_("URL to be shared on social media. If empty, the experiment URL will be used.")
+    )
+
+    content = models.TextField(
+        blank=True,
+        help_text=_("Content for social media sharing. Use {points} and {experiment_name} as placeholders."),
+        default="I scored {points} points in {experiment_name}!"
+    )
+
+    SOCIAL_MEDIA_CHANNELS = [
+        ('facebook', _('Facebook')),
+        ('whatsapp', _('WhatsApp')),
+        ('twitter', _('Twitter')),
+        ('weibo', _('Weibo')),
+        ('share', _('Share')),
+        ('clipboard', _('Clipboard')),
+    ]
+    channels = ArrayField(
+        models.CharField(max_length=20, choices=SOCIAL_MEDIA_CHANNELS),
+        blank=True,
+        default=list,
+        help_text=_("Selected social media channels for sharing")
+    )
+
+    def get_content(self, score: int = None, experiment_name: str = None):
+        if self.content:
+            return self.content
+
+        if not score or not experiment_name:
+            raise ValueError("score and experiment_name are required")
+
+        return _("I scored {points} points in {experiment_name}").format(
+            score=self.experiment_collection.points,
+            experiment_name=self.experiment_collection.name
+        )
+
+    def __str__(self):
+        return f"Social Media for {self.experiment_collection.name}"

@@ -1,5 +1,6 @@
 from django.forms import CheckboxSelectMultiple, ModelForm, ChoiceField, Form, MultipleChoiceField, ModelMultipleChoiceField, Select, TypedMultipleChoiceField, CheckboxSelectMultiple, TextInput
-from experiment.models import ExperimentCollection, Experiment
+from django.contrib.postgres.forms import SimpleArrayField
+from experiment.models import ExperimentCollection, Experiment, SocialMediaConfig
 from experiment.rules import EXPERIMENT_RULES
 
 
@@ -178,7 +179,7 @@ class ExperimentForm(ModelForm):
 
         if not playlists:
             return self.cleaned_data['playlists']
-        
+
         playlist_errors = []
 
         # Validate playlists
@@ -237,3 +238,15 @@ class TemplateForm(Form):
 class QuestionSeriesAdminForm(ModelForm):
     class Media:
         js = ["questionseries_admin.js"]
+
+
+class SocialMediaConfigForm(ModelForm):
+    channels = MultipleChoiceField(
+        widget=CheckboxSelectMultiple,
+        choices=SocialMediaConfig.SOCIAL_MEDIA_CHANNELS,
+        required=False
+    )
+
+    class Meta:
+        model = SocialMediaConfig
+        fields = '__all__'

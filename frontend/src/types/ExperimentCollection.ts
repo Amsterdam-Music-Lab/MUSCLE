@@ -9,6 +9,13 @@ export interface Consent {
     view: 'CONSENT';
 }
 
+export interface SocialMediaConfig {
+    tags: string[];
+    url: string;
+    content: string;
+    channels: string[];
+}
+
 export default interface ExperimentCollection {
     slug: string;
     name: string;
@@ -19,4 +26,5 @@ export default interface ExperimentCollection {
     consent?: Consent;
     theme?: Theme;
     totalScore: number;
+    socialMediaConfig?: SocialMediaConfig;
 }

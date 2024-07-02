@@ -10,7 +10,7 @@ from django.db import models
 from django.utils import timezone
 from django.core import serializers
 from django.shortcuts import render, redirect
-from django.forms import CheckboxSelectMultiple, ModelForm, TextInput
+from django.forms import CheckboxSelectMultiple
 from django.http import HttpResponse
 from inline_actions.admin import InlineActionsModelAdminMixin
 from django.urls import reverse
@@ -20,7 +20,8 @@ from experiment.models import (
     ExperimentCollection,
     Phase,
     Feedback,
-    GroupedExperiment
+    GroupedExperiment,
+    SocialMediaConfig,
 )
 from question.admin import QuestionSeriesInline
 from experiment.forms import (
@@ -28,6 +29,7 @@ from experiment.forms import (
     ExperimentForm,
     ExportForm,
     TemplateForm,
+    SocialMediaConfigForm,
     EXPORT_TEMPLATES,
 )
 from section.models import Section, Song
@@ -201,6 +203,12 @@ class PhaseInline(admin.StackedInline):
     inlines = [GroupedExperimentInline]
 
 
+class SocialMediaConfigInline(admin.StackedInline):
+    form = SocialMediaConfigForm
+    model = SocialMediaConfig
+    extra = 0
+
+
 class ExperimentCollectionAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
     list_display = ('name', 'slug_link', 'description_excerpt',
                     'dashboard', 'phases', 'active')
@@ -209,7 +217,10 @@ class ExperimentCollectionAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
               'about_content']
     inline_actions = ['dashboard']
     form = ExperimentCollectionForm
-    inlines = [PhaseInline]
+    inlines = [
+        PhaseInline,
+        SocialMediaConfigInline,
+    ]
 
     def slug_link(self, obj):
         dev_mode = settings.DEBUG is True
@@ -245,7 +256,10 @@ class ExperimentCollectionAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
             'id': exp.id,
             'name': exp.name,
             'started': len(all_sessions.filter(experiment=exp)),
-            'finished': len(all_sessions.filter(experiment=exp, finished_at__isnull=False)),
+            'finished': len(all_sessions.filter(
+                experiment=exp,
+                finished_at__isnull=False,
+            )),
             'participant_count': len(exp.current_participants()),
             'participants': exp.current_participants()
             } for exp in all_experiments]
