@@ -1,6 +1,6 @@
 from django.forms import CheckboxSelectMultiple, ModelForm, ChoiceField, Form, MultipleChoiceField, ModelMultipleChoiceField, Select, TypedMultipleChoiceField, CheckboxSelectMultiple, TextInput
 from experiment.models import ExperimentCollection, Block, SocialMediaConfig
-from experiment.rules import EXPERIMENT_RULES
+from experiment.rules import BLOCK_RULES
 
 
 # session_keys for Export CSV
@@ -155,8 +155,8 @@ class ExperimentForm(ModelForm):
         super(ModelForm, self).__init__(*args, **kwargs)
 
         choices = tuple()
-        for i in EXPERIMENT_RULES:
-            choices += ((i, EXPERIMENT_RULES[i].__name__),)
+        for i in BLOCK_RULES:
+            choices += ((i, BLOCK_RULES[i].__name__),)
         choices += (("", "---------"),)
 
         self.fields['rules'] = ChoiceField(
@@ -171,7 +171,7 @@ class ExperimentForm(ModelForm):
 
         # Validat the rules' playlist
         rule_id = self.cleaned_data['rules']
-        cl = EXPERIMENT_RULES[rule_id]
+        cl = BLOCK_RULES[rule_id]
         rules = cl()
 
         playlists = self.cleaned_data['playlists']

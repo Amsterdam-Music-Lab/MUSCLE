@@ -25,7 +25,7 @@ class HookedTest(TestCase):
             participant=self.participant,
             playlist=playlist
         )
-        rules = session.experiment_rules()
+        rules = session.block_rules()
         rules.plan_sections(session)
         plan = session.load_json_data().get('plan')
         assert plan is not None
@@ -45,7 +45,7 @@ class HookedTest(TestCase):
             participant=self.participant,
             playlist=playlist
         )
-        rules = session.experiment_rules()
+        rules = session.block_rules()
         for i in range(0, experiment.rounds):
             actions = rules.next_round(session)
             assert actions
@@ -60,7 +60,7 @@ class HookedTest(TestCase):
             participant=self.participant,
             playlist=playlist
         )
-        rules = session.experiment_rules()
+        rules = session.block_rules()
         assert rules.feedback_info() is None
 
         for i in range(0, experiment.rounds):
@@ -125,12 +125,10 @@ class HookedTest(TestCase):
             participant=self.participant,
             playlist=playlist
         )
-        rules = session.experiment_rules()
+        rules = session.block_rules()
         assert rules.feedback_info() is not None
         question_trials = rules.get_questionnaire(session)
         # assert len(question_trials) == len(rules.questions)
         keys = [q.feedback_form.form[0].key for q in question_trials]
         questions = rules.question_series[0]['keys'][0:3]
         assert set(keys).difference(set(questions)) == set()
-
-

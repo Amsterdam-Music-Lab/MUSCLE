@@ -9,7 +9,7 @@ from django_markup.markup import formatter
 from .models import Block, ExperimentCollection, Phase, Feedback
 from section.models import Playlist
 from experiment.serializers import serialize_actions, serialize_experiment_collection, serialize_phase
-from experiment.rules import EXPERIMENT_RULES
+from experiment.rules import BLOCK_RULES
 from experiment.actions.utils import COLLECTION_KEY
 from image.serializers import serialize_image
 from participant.utils import get_participant
@@ -177,7 +177,7 @@ def validate_experiment_playlist(
     if not playlists:
         return JsonResponse({'status': 'error', 'message': 'The experiment must have a playlist.'})
 
-    rules = EXPERIMENT_RULES[rules_id]()
+    rules = BLOCK_RULES[rules_id]()
 
     if not rules.validate_playlist:
         return JsonResponse({'status': 'warn', 'message': 'This rulesset does not have a playlist validation.'})

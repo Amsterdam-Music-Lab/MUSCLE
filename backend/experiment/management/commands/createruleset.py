@@ -39,8 +39,8 @@ class Command(BaseCommand):
             with open('./experiment/management/commands/templates/experiment.py', 'r') as template:
                 f.write(template.read()
                     .replace('NewExperimentRuleset', ruleset_name_pascal_case)
-                    .replace('new_experiment_ruleset', ruleset_name_snake_case)
-                    .replace('NEW_EXPERIMENT_RULESET', ruleset_name_snake_case_upper)
+                    .replace('new_block_ruleset', ruleset_name_snake_case)
+                    .replace('NEW_BLOCK_RULESET', ruleset_name_snake_case_upper)
                     .replace('New Experiment Ruleset', ruleset_name.title())
                 )
 
@@ -64,8 +64,8 @@ class Command(BaseCommand):
         import_index = next(i for i, line in enumerate(lines) if line.startswith('from .') and line > new_import)
         lines.insert(import_index, new_import)
 
-        # Find the line to insert the new dictionary entry, maintaining alphabetical order within the EXPERIMENT_RULES
-        dict_start_index = lines.index("EXPERIMENT_RULES = {\n") + 1  # Start after the opening brace
+        # Find the line to insert the new dictionary entry, maintaining alphabetical order within the BLOCK_RULES
+        dict_start_index = lines.index("BLOCK_RULES = {\n") + 1  # Start after the opening brace
         dict_end_index = lines.index("}\n", dict_start_index)  # Find the closing brace
         dict_entry_index = next((i for i, line in enumerate(lines[dict_start_index:dict_end_index], dict_start_index) if line > new_dict_entry), dict_end_index)
         lines.insert(dict_entry_index, new_dict_entry)
@@ -93,8 +93,8 @@ class Command(BaseCommand):
             with open('./experiment/management/commands/templates/test_experiment.py', 'r') as template:
                 f.write(template.read()
                     .replace('NewExperimentRuleset', ruleset_name_pascal_case)
-                    .replace('new_experiment_ruleset', ruleset_name_snake_case)
-                    .replace('NEW_EXPERIMENT_RULESET', ruleset_name_snake_case_upper)
+                    .replace('new_block_ruleset', ruleset_name_snake_case)
+                    .replace('NEW_BLOCK_RULESET', ruleset_name_snake_case_upper)
                     .replace('New Experiment Ruleset', ruleset_name.title())
                 )
 

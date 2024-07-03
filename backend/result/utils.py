@@ -63,7 +63,7 @@ def prepare_result(question_key: str, session: Session, **kwargs) -> int:
     - session: the session on which the Result is going to be registered
     possible kwargs:
         - section: optionally, provide a section to which the Result is going to be tied
-        - expected_response: optionally, provide the correct answer, used for scoring  
+        - expected_response: optionally, provide the correct answer, used for scoring
         - json_data: optionally, provide json data tied to this result
         - comment: optionally, provide a comment to be saved in the database, e.g. "training phase"
         - scoring_rule: optionally, provide a scoring rule
@@ -94,7 +94,7 @@ def score_result(data, session):
     # Calculate score: by default, apply a scoring rule
     # Can be overridden by defining calculate_score in the rules file
     if result.session:
-        score = session.experiment_rules().calculate_score(result, data)
+        score = session.block_rules().calculate_score(result, data)
         # refresh session data in case anything was changed within calculate_score function
         session.refresh_from_db()
     else:

@@ -52,7 +52,7 @@ def continue_session(request, session_id):
     session = get_object_or_404(Session, pk=session_id)
 
     # Get next round for given session
-    action = serialize_actions(session.experiment_rules().next_round(session))
+    action = serialize_actions(session.block_rules().next_round(session))
     return JsonResponse(action, json_dumps_params={'indent': 4})
 
 
@@ -78,7 +78,7 @@ def next_round(request, session_id):
                 session.save_json_data({COLLECTION_KEY: collection_slug})
 
     # Get next round for given session
-    actions = serialize_actions(session.experiment_rules().next_round(session))
+    actions = serialize_actions(session.block_rules().next_round(session))
 
     if not isinstance(actions, list):
         if actions.get('redirect'):

@@ -286,12 +286,12 @@ class Block(models.Model):
 
     def get_rules(self):
         """Get instance of rules class to be used for this session"""
-        from experiment.rules import EXPERIMENT_RULES
+        from experiment.rules import BLOCK_RULES
 
-        if self.rules not in EXPERIMENT_RULES:
+        if self.rules not in BLOCK_RULES:
             raise ValueError(f"Rules do not exist (anymore): {self.rules} for block {self.name} ({self.slug})")
 
-        cl = EXPERIMENT_RULES[self.rules]
+        cl = BLOCK_RULES[self.rules]
         return cl()
 
     def max_score(self):
@@ -305,9 +305,9 @@ class Block(models.Model):
 
     def add_default_question_series(self):
         """ Add default question_series to block"""
-        from experiment.rules import EXPERIMENT_RULES
+        from experiment.rules import BLOCK_RULES
         from question.models import Question, QuestionSeries, QuestionInSeries
-        question_series = getattr(EXPERIMENT_RULES[self.rules](), "question_series", None)
+        question_series = getattr(BLOCK_RULES[self.rules](), "question_series", None)
         if question_series:
             for i, question_series in enumerate(question_series):
                 qs = QuestionSeries.objects.create(

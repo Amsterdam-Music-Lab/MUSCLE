@@ -22,8 +22,8 @@ class HBatTest(TestCase):
             participant=cls.participant,
             playlist=cls.playlist
         )
-        cls.rules = cls.session.experiment_rules()
-    
+        cls.rules = cls.session.block_rules()
+
     def test_trial_action(self):
         level = 4
         slower_trial = self.rules.next_trial_action(self.session, 1, level)
@@ -54,8 +54,8 @@ class HBat_BST_Test(TestCase):
             participant=cls.participant,
             playlist=cls.playlist
         )
-        cls.rules = cls.session.experiment_rules()
-    
+        cls.rules = cls.session.block_rules()
+
     def test_trial_action(self):
         in2 = self.rules.next_trial_action(self.session, 1, 3)
         assert in2

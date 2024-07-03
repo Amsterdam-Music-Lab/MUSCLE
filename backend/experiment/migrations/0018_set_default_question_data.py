@@ -1,11 +1,11 @@
 from django.db import migrations
-from experiment.rules import EXPERIMENT_RULES
+from experiment.rules import BLOCK_RULES as EXPERIMENT_RULES
 
 
 def set_default_question_data(apps, schema_editor):
 
     Experiment = apps.get_model("experiment", "Experiment")
-    
+
     for experiment in Experiment.objects.all():
         experiment.questions = [q.key for q in EXPERIMENT_RULES[experiment.rules]().questions]
         experiment.save()

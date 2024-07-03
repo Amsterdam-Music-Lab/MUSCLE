@@ -36,13 +36,13 @@ class TestMatchingPairsVariants(TestCase):
             participant=self.participant,
             playlist=self.playlist
         )
-        first_trial = session.experiment_rules().get_matching_pairs_trial(session)
+        first_trial = session.block_rules().get_matching_pairs_trial(session)
         another_session = Session.objects.create(
             experiment=experiment,
             participant=self.participant,
             playlist=self.playlist
         )
-        second_trial = another_session.experiment_rules(
+        second_trial = another_session.block_rules(
         ).get_matching_pairs_trial(another_session)
         assert isinstance(first_trial, Trial)
         assert isinstance(second_trial, Trial)
@@ -56,13 +56,13 @@ class TestMatchingPairsVariants(TestCase):
             participant=self.participant,
             playlist=self.playlist
         )
-        first_trial = session.experiment_rules().get_matching_pairs_trial(session)
+        first_trial = session.block_rules().get_matching_pairs_trial(session)
         another_session = Session.objects.create(
             experiment=experiment,
             participant=self.participant,
             playlist=self.playlist
         )
-        second_trial = another_session.experiment_rules(
+        second_trial = another_session.block_rules(
         ).get_matching_pairs_trial(another_session)
         assert isinstance(first_trial, Trial)
         assert isinstance(second_trial, Trial)

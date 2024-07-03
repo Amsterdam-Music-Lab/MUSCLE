@@ -1,7 +1,7 @@
 
 from django.db import migrations
 from experiment.models import Block as Experiment
-from experiment.rules import EXPERIMENT_RULES
+from experiment.rules import BLOCK_RULES as EXPERIMENT_RULES
 
 
 def add_default_question_series(apps, schema_editor):

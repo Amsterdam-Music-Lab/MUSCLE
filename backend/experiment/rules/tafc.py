@@ -47,7 +47,7 @@ class TwoAlternativeForced(Base):
 
     # Add to __init.py__ file in the same directory as the current file:
     #    from .tafc import TwoAlternativeForced
-    # To EXPERIMENT_RULES dictionary in __init.py__
+    # To BLOCK_RULES dictionary in __init.py__
     #    TwoAlternativeForced.ID: TwoAlternativeForced
     ID = 'TWO_ALTERNATIVE_FORCED'
 
@@ -90,7 +90,7 @@ class TwoAlternativeForced(Base):
         if actions:
             return actions
 
-        if session.rounds_passed() == 0: 
+        if session.rounds_passed() == 0:
             # Beginning of experiment, return an explainer and the next trial action, no feedback on previous trial
 
             explainer2 = Explainer(
@@ -104,13 +104,13 @@ class TwoAlternativeForced(Base):
             # Combine two actions, feedback on previous action and next trial action
             return [self.get_feedback(session), self.next_trial_action(session)]
 
-        else:  
+        else:
             # All sections have been played, finalize the experiment and return feedback
             session.finish()
             session.save()
 
             return [self.get_feedback(session), self.get_final_view(session)]
- 
+
     def next_trial_action(self, session):
         """
         Returns the next trial action for the experiment. Not necessary as a separate method, but often used for convenience.

@@ -40,11 +40,11 @@ class MatchingPairsTest(TestCase):
             participant=cls.participant,
             playlist=cls.playlist
         )
-        cls.rules = cls.session.experiment_rules()
-    
+        cls.rules = cls.session.block_rules()
+
     def test_matching_pairs_trial(self):
         self.rules.num_pairs = 2
-        for i in range(6):    
+        for i in range(6):
             trial = self.rules.get_matching_pairs_trial(self.session)
             assert trial
             data = self.session.load_json_data()

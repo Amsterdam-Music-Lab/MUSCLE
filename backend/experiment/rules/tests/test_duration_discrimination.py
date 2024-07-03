@@ -21,7 +21,7 @@ class DDITest(TestCase):
             participant=cls.participant,
             playlist=cls.playlist
         )
-        cls.rules = cls.session.experiment_rules()
+        cls.rules = cls.session.block_rules()
 
     def test_trial_action(self):
         difference = 200000
@@ -53,8 +53,8 @@ class AnisochronyTest(TestCase):
             participant=cls.participant,
             playlist=cls.playlist
         )
-        cls.rules = cls.session.experiment_rules()
-    
+        cls.rules = cls.session.block_rules()
+
     def test_trial_action(self):
         difficulty = 1001
         catch_section = Section.objects.get(playlist=self.playlist.id, song__name=0)

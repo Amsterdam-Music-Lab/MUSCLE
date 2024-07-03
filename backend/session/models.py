@@ -209,7 +209,7 @@ class Session(models.Model):
         # Return a random section
         return self.section_from_song(song_id)
 
-    def experiment_rules(self):
+    def block_rules(self):
         """Get rules class to be used for this session"""
         return self.block.get_rules()
 

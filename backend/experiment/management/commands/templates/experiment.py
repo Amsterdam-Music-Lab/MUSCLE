@@ -12,7 +12,7 @@ from result.utils import prepare_result
 
 class NewExperimentRuleset(Base):
     ''' An experiment type that could be used to test musical preferences '''
-    ID = 'NEW_EXPERIMENT_RULESET'
+    ID = 'NEW_BLOCK_RULESET'
     contact_email = 'info@example.com'
 
     def __init__(self):
@@ -33,7 +33,7 @@ class NewExperimentRuleset(Base):
         ]
 
     def first_round(self, experiment):
-        ''' Provide the first rounds of the experiment, 
+        ''' Provide the first rounds of the experiment,
         before session creation
         The first_round must return at least one Info or Explainer action
         Consent and Playlist are often desired, but optional
@@ -41,9 +41,9 @@ class NewExperimentRuleset(Base):
         # 1. Informed consent (optional)
         consent = Consent(experiment.consent,
                             title=_('Informed consent'),
-                            confirm=_('I agree'), 
+                            confirm=_('I agree'),
                             deny=_('Stop'))
-        
+
         # 2. Choose playlist (optional, only relevant if there are multiple playlists the participant can choose from)
         playlist = Playlist(experiment.playlists.all())
 
@@ -57,13 +57,13 @@ class NewExperimentRuleset(Base):
             ],
             step_numbers=True
         )
-        
+
         return [
             consent,
             playlist,
             explainer
         ]
-    
+
     def next_round(self, session):
         # ask any questions defined in the admin interface
         actions = self.get_questionnaire(session)
@@ -109,4 +109,3 @@ class NewExperimentRuleset(Base):
             }
         )
         return view
-    

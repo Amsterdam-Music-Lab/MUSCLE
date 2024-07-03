@@ -9,7 +9,7 @@ import json
 from django.core.management.base import BaseCommand, CommandError
 from django.conf import settings
 
-from experiment.rules import EXPERIMENT_RULES
+from experiment.rules import BLOCK_RULES
 
 
 class Command(BaseCommand):
@@ -63,7 +63,7 @@ class Command(BaseCommand):
                     artist_name = song_names[audio_file_clean]
                     song_name = basename(audio_file)[:-4]
                 elif experiment_option:
-                    rules = EXPERIMENT_RULES.get(experiment_option)
+                    rules = BLOCK_RULES.get(experiment_option)
                     info = rules.get_info_playlist(rules, audio_file_clean)
                     artist_name = info.get('artist')
                     song_name = info.get('song')
