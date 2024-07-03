@@ -3,7 +3,7 @@ from django.shortcuts import get_object_or_404, redirect
 from django.views.decorators.http import require_POST
 
 from .models import Session
-from experiment.models import Experiment, ExperimentCollection
+from experiment.models import Block, ExperimentCollection
 from experiment.serializers import serialize_actions
 from experiment.actions.utils import COLLECTION_KEY
 from section.models import Playlist
@@ -22,9 +22,9 @@ def create_session(request):
     if not experiment_id:
         return HttpResponseBadRequest("experiment_id not defined")
     try:
-        experiment = Experiment.objects.get(pk=experiment_id, active=True)
-    except Experiment.DoesNotExist:
-        raise Http404("Experiment does not exist")
+        experiment = Block.objects.get(pk=experiment_id, active=True)
+    except Block.DoesNotExist:
+        raise Http404("Block does not exist")
 
     # Create new session
     session = Session(experiment=experiment, participant=participant)
@@ -48,7 +48,7 @@ def create_session(request):
 
 def continue_session(request, session_id):
     """ given a session_id, continue where we left off """
-    
+
     session = get_object_or_404(Session, pk=session_id)
 
     # Get next round for given session
@@ -64,7 +64,7 @@ def next_round(request, session_id):
     # Current participant
     participant = get_participant(request)
 
-    session = get_object_or_404(Session, 
+    session = get_object_or_404(Session,
             pk=session_id, participant__id=participant.id)
 
     # check if this experiment is part of an ExperimentCollection
@@ -79,7 +79,7 @@ def next_round(request, session_id):
 
     # Get next round for given session
     actions = serialize_actions(session.experiment_rules().next_round(session))
-    
+
     if not isinstance(actions, list):
         if actions.get('redirect'):
             return redirect(actions.get('redirect'))

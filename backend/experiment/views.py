@@ -6,7 +6,7 @@ from django.conf import settings
 from django.utils.translation import activate, gettext_lazy as _
 from django_markup.markup import formatter
 
-from .models import Experiment, ExperimentCollection, Phase, Feedback
+from .models import Block, ExperimentCollection, Phase, Feedback
 from section.models import Playlist
 from experiment.serializers import serialize_actions, serialize_experiment_collection, serialize_phase
 from experiment.rules import EXPERIMENT_RULES
@@ -70,14 +70,14 @@ def post_feedback(request, slug):
 def experiment_or_404(slug):
     # get experiment
     try:
-        return Experiment.objects.get(slug=slug, active=True)
-    except Experiment.DoesNotExist:
-        raise Http404("Experiment does not exist")
+        return Block.objects.get(slug=slug, active=True)
+    except Block.DoesNotExist:
+        raise Http404("Block does not exist")
 
 
 def add_default_question_series(request, id):
     if request.method == "POST":
-        Experiment.objects.get(pk=id).add_default_question_series()
+        Block.objects.get(pk=id).add_default_question_series()
     return JsonResponse({})
 
 
@@ -130,7 +130,7 @@ def get_experiment_collection(
 
 def get_associated_experiments(pk_list):
     ''' get all the experiment objects registered in an ExperimentCollection field'''
-    return [Experiment.objects.get(pk=pk) for pk in pk_list]
+    return [Block.objects.get(pk=pk) for pk in pk_list]
 
 
 def render_markdown(request):

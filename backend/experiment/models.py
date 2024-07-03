@@ -18,13 +18,13 @@ language_choices[0] = ('', 'Unset')
 
 
 def consent_upload_path(instance, filename):
-    """Generate path to save consent file based on experiment.slug"""
+    """Generate path to save consent file based on block.slug"""
     folder_name = instance.slug
     return f'consent/{folder_name}/{filename}'
 
 
 class ExperimentCollection(models.Model):
-    """ A model to allow nesting multiple experiments into a 'parent' experiment """
+    """ A model to allow nesting multiple phases with blocks into a 'parent' experiment """
     name = models.CharField(max_length=64, default='')
     description = models.TextField(blank=True, default='')
     slug = models.SlugField(max_length=64, default='')
@@ -44,6 +44,7 @@ class ExperimentCollection(models.Model):
     about_content = models.TextField(blank=True, default='')
     active = models.BooleanField(default=True)
     social_media_config: Optional['SocialMediaConfig']
+    phases: models.QuerySet['Phase']
 
     def __str__(self):
         return self.name or self.slug
@@ -60,7 +61,7 @@ class ExperimentCollection(models.Model):
         """export sessions for this collection"""
         all_sessions = Session.objects.none()
         for exp in self.associated_experiments():
-            all_sessions |= Session.objects.filter(experiment=exp).order_by('-started_at')
+            all_sessions |= Session.objects.filter(block=exp).order_by('-started_at')
         return all_sessions
 
     def current_participants(self):
@@ -84,7 +85,7 @@ class Phase(models.Model):
         compound_name = self.name or self.series.name or self.series.slug or 'Unnamed phase'
 
         if not self.name:
-            return f'{compound_name} ({self.order})'
+            return f'{compound_name} ({self.index})'
 
         return f'{compound_name}'
 
@@ -92,25 +93,25 @@ class Phase(models.Model):
         ordering = ['index']
 
 
-class GroupedExperiment(models.Model):
-    experiment = models.ForeignKey('Experiment', on_delete=models.CASCADE)
+class GroupedBlock(models.Model):
+    block = models.ForeignKey('Block', on_delete=models.CASCADE)
     phase = models.ForeignKey(
         Phase,
         on_delete=models.CASCADE,
-        related_name='experiments'
+        related_name='blocks'
     )
-    order = models.IntegerField(default=0, help_text='Order of the experiment in the group. Lower numbers come first.')
+    index = models.IntegerField(default=0, help_text='Order of the block in the phase. Lower numbers come first.')
 
     def __str__(self):
-        return f'{self.experiment.name} - {self.phase.name} - {self.order}'
+        return f'{self.block.name} - {self.phase.name} - {self.index}'
 
     class Meta:
-        ordering = ['order']
-        verbose_name_plural = "Grouped Experiments"
+        ordering = ['index']
+        verbose_name_plural = "Grouped Blocks"
 
 
-class Experiment(models.Model):
-    """Root entity for configuring experiments"""
+class Block(models.Model):
+    """Root entity for configuring experiment blocks"""
 
     playlists = models.ManyToManyField('section.Playlist', blank=True)
     name = models.CharField(db_index=True, max_length=64)
@@ -122,7 +123,7 @@ class Experiment(models.Model):
         null=True
     )
     slug = models.SlugField(db_index=True, max_length=64, unique=True, validators=[experiment_slug_validator])
-    url = models.CharField(verbose_name='URL with more information about the experiment', max_length=100, blank=True, default='')
+    url = models.CharField(verbose_name='URL with more information about the block', max_length=100, blank=True, default='')
     hashtag = models.CharField(verbose_name='hashtag for social media', max_length=20, blank=True, default='')
     active = models.BooleanField(default=True)
     rounds = models.PositiveIntegerField(default=10)
@@ -170,7 +171,7 @@ class Experiment(models.Model):
         """Export data for admin"""
         return {
             'exportedAt': timezone.now().isoformat(),
-            'experiment': {
+            'block': {
                 'id': self.id,
                 'name': self.name,
                 'sessions': [session.export_admin() for session in self.session_set.all()],
@@ -198,8 +199,8 @@ class Experiment(models.Model):
             session_finished = session.finished_at.isoformat() if session.finished_at else None
             # Get data for all potential session fields
             full_row = {
-                'experiment_id': self.id,
-                'experiment_name': self.name,
+                'block_id': self.id,
+                'block_name': self.name,
                 'participant_id': profile['id'],
                 'participant_country': profile['country_code'],
                 'participant_access_info': profile['access_info'],
@@ -288,7 +289,7 @@ class Experiment(models.Model):
         from experiment.rules import EXPERIMENT_RULES
 
         if self.rules not in EXPERIMENT_RULES:
-            raise ValueError(f"Rules do not exist (anymore): {self.rules} for experiment {self.name} ({self.slug})")
+            raise ValueError(f"Rules do not exist (anymore): {self.rules} for block {self.name} ({self.slug})")
 
         cl = EXPERIMENT_RULES[self.rules]
         return cl()
@@ -303,27 +304,27 @@ class Experiment(models.Model):
         return 0
 
     def add_default_question_series(self):
-        """ Add default question_series to experiment"""
+        """ Add default question_series to block"""
         from experiment.rules import EXPERIMENT_RULES
         from question.models import Question, QuestionSeries, QuestionInSeries
         question_series = getattr(EXPERIMENT_RULES[self.rules](), "question_series", None)
         if question_series:
-            for i,question_series in enumerate(question_series):
+            for i, question_series in enumerate(question_series):
                 qs = QuestionSeries.objects.create(
-                    name = question_series['name'],
-                    experiment = self,
-                    index = i+1,
-                    randomize = question_series['randomize'])
-                for i,question in enumerate(question_series['keys']):
-                    qis = QuestionInSeries.objects.create(
-                        question_series = qs,
-                        question = Question.objects.get(pk=question),
+                    name=question_series['name'],
+                    block=self,
+                    index=i+1,
+                    randomize=question_series['randomize'])
+                for i, question in enumerate(question_series['keys']):
+                    QuestionInSeries.objects.create(
+                        question_series=qs,
+                        question=Question.objects.get(pk=question),
                         index=i+1)
 
 
 class Feedback(models.Model):
     text = models.TextField()
-    experiment = models.ForeignKey(Experiment, on_delete=models.CASCADE)
+    block = models.ForeignKey(Block, on_delete=models.CASCADE)
 
 
 class SocialMediaConfig(models.Model):
@@ -366,7 +367,9 @@ class SocialMediaConfig(models.Model):
         help_text=_("Selected social media channels for sharing")
     )
 
-    def get_content(self, score: int = None, experiment_name: str = None):
+    def get_content(
+            self, score: int | None = None, experiment_name: str | None = None
+            ) -> str:
         if self.content:
             return self.content
 
@@ -374,8 +377,8 @@ class SocialMediaConfig(models.Model):
             raise ValueError("score and experiment_name are required")
 
         return _("I scored {points} points in {experiment_name}").format(
-            score=self.experiment_collection.points,
-            experiment_name=self.experiment_collection.name
+            score=score,
+            experiment_name=experiment_name
         )
 
     def __str__(self):

@@ -1,6 +1,5 @@
 from django.forms import CheckboxSelectMultiple, ModelForm, ChoiceField, Form, MultipleChoiceField, ModelMultipleChoiceField, Select, TypedMultipleChoiceField, CheckboxSelectMultiple, TextInput
-from django.contrib.postgres.forms import SimpleArrayField
-from experiment.models import ExperimentCollection, Experiment, SocialMediaConfig
+from experiment.models import ExperimentCollection, Block, SocialMediaConfig
 from experiment.rules import EXPERIMENT_RULES
 
 
@@ -195,7 +194,7 @@ class ExperimentForm(ModelForm):
         return playlists
 
     class Meta:
-        model = Experiment
+        model = Block
         fields = ['name', 'slug', 'active', 'rules',
                   'rounds', 'bonus_points', 'playlists',]
         help_texts = {

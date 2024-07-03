@@ -16,11 +16,11 @@ from inline_actions.admin import InlineActionsModelAdminMixin
 from django.urls import reverse
 from django.utils.html import format_html
 from experiment.models import (
-    Experiment,
+    Block,
     ExperimentCollection,
     Phase,
     Feedback,
-    GroupedExperiment,
+    GroupedBlock,
     SocialMediaConfig,
 )
 from question.admin import QuestionSeriesInline
@@ -189,18 +189,18 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
     experiment_slug_link.short_description = "Slug"
 
 
-admin.site.register(Experiment, ExperimentAdmin)
+admin.site.register(Block, ExperimentAdmin)
 
 
-class GroupedExperimentInline(admin.StackedInline):
-    model = GroupedExperiment
+class GroupedBlockInline(admin.StackedInline):
+    model = GroupedBlock
     extra = 0
 
 
 class PhaseInline(admin.StackedInline):
     model = Phase
     extra = 0
-    inlines = [GroupedExperimentInline]
+    inlines = [GroupedBlockInline]
 
 
 class SocialMediaConfigInline(admin.StackedInline):
@@ -209,7 +209,8 @@ class SocialMediaConfigInline(admin.StackedInline):
     extra = 0
 
 
-class ExperimentCollectionAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
+class ExperimentCollectionAdmin(
+        InlineActionsModelAdminMixin, admin.ModelAdmin):
     list_display = ('name', 'slug_link', 'description_excerpt',
                     'dashboard', 'phases', 'active')
     fields = ['slug', 'name', 'active', 'description',
@@ -281,7 +282,7 @@ admin.site.register(ExperimentCollection, ExperimentCollectionAdmin)
 class PhaseAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
     list_display = ('name_link', 'related_series', 'index', 'dashboard', 'randomize', 'experiments')
     fields = ['name', 'series', 'index', 'dashboard', 'randomize']
-    inlines = [GroupedExperimentInline]
+    inlines = [GroupedBlockInline]
 
     def name_link(self, obj):
         obj_name = obj.__str__()
@@ -295,12 +296,12 @@ class PhaseAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
         return format_html('<a href="{}">{}</a>', url, obj.series.name)
 
     def experiments(self, obj):
-        experiments = GroupedExperiment.objects.filter(phase=obj)
+        experiments = GroupedBlock.objects.filter(phase=obj)
 
         if not experiments:
             return "No experiments"
 
-        return format_html(', '.join([f'<a href="/admin/experiment/groupedexperiment/{experiment.id}/change/">{experiment.experiment.name}</a>' for experiment in experiments]))
+        return format_html(', '.join([f'<a href="/admin/experiment/groupedexperiment/{experiment.id}/change/">{experiment.block.name}</a>' for experiment in experiments]))
 
 
 admin.site.register(Phase, PhaseAdmin)

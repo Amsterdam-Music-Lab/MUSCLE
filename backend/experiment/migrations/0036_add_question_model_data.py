@@ -1,6 +1,6 @@
 
 from django.db import migrations
-from experiment.models import Experiment
+from experiment.models import Block as Experiment
 from experiment.rules import EXPERIMENT_RULES
 
 

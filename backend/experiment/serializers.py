@@ -7,7 +7,7 @@ from image.serializers import serialize_image
 from participant.models import Participant
 from session.models import Session
 from theme.serializers import serialize_theme
-from .models import Experiment, ExperimentCollection, Phase, GroupedExperiment, SocialMediaConfig
+from .models import Block, ExperimentCollection, Phase, GroupedBlock, SocialMediaConfig
 
 
 def serialize_actions(actions):
@@ -67,7 +67,7 @@ def serialize_phase(
         phase: Phase,
         participant: Participant
         ) -> dict:
-    grouped_experiments = list(GroupedExperiment.objects.filter(
+    grouped_experiments = list(GroupedBlock.objects.filter(
         phase_id=phase.id).order_by('order'))
 
     if phase.randomize:
@@ -82,13 +82,13 @@ def serialize_phase(
         return None
 
     return {
-        'dashboard': [serialize_experiment(experiment.experiment, participant) for experiment in grouped_experiments] if phase.dashboard else [],
+        'dashboard': [serialize_experiment(experiment.block, participant) for experiment in grouped_experiments] if phase.dashboard else [],
         'nextExperiment': next_experiment,
         'totalScore': total_score
     }
 
 
-def serialize_experiment(experiment_object: Experiment, participant: Participant):
+def serialize_experiment(experiment_object: Block, participant: Participant):
     return {
         'slug': experiment_object.slug,
         'name': experiment_object.name,

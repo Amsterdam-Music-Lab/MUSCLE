@@ -1,7 +1,7 @@
 from django.test import TestCase
 from session.models import Session
 from participant.models import Participant
-from experiment.models import Experiment, ExperimentCollection, Phase, GroupedExperiment
+from experiment.models import Experiment, ExperimentCollection, Phase, GroupedBlock
 
 
 class TestModelExperiment(TestCase):
@@ -43,11 +43,11 @@ class TestModelExperimentCollection(TestCase):
             rules='THATS_MY_SONG', slug='unhinged', rounds=42)
         experiment3 = Experiment.objects.create(
             rules='THATS_MY_SONG', slug='derailed', rounds=42)
-        GroupedExperiment.objects.create(
+        GroupedBlock.objects.create(
             experiment=experiment, phase=phase1)
-        GroupedExperiment.objects.create(
+        GroupedBlock.objects.create(
             experiment=experiment2, phase=phase2)
-        GroupedExperiment.objects.create(
+        GroupedBlock.objects.create(
             experiment=experiment3, phase=phase2)
         self.assertEqual(collection.associated_experiments(), [
                          experiment, experiment2, experiment3])
@@ -58,7 +58,7 @@ class TestModelExperimentCollection(TestCase):
             name='test', series=collection)
         experiment = Experiment.objects.create(
             rules='THATS_MY_SONG', slug='hooked', rounds=42)
-        GroupedExperiment.objects.create(
+        GroupedBlock.objects.create(
             experiment=experiment, phase=phase)
         Session.objects.bulk_create(
             [Session(experiment=experiment, participant=self.participant1),
@@ -74,7 +74,7 @@ class TestModelExperimentCollection(TestCase):
             name='test', series=collection)
         experiment = Experiment.objects.create(
             rules='THATS_MY_SONG', slug='hooked', rounds=42)
-        GroupedExperiment.objects.create(
+        GroupedBlock.objects.create(
             experiment=experiment, phase=phase)
         Session.objects.bulk_create(
             [Session(experiment=experiment, participant=self.participant1),

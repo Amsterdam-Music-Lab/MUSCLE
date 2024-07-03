@@ -7,7 +7,7 @@ from django.contrib.admin.sites import AdminSite
 from django.urls import reverse
 from django.utils.html import format_html
 from experiment.admin import ExperimentAdmin, ExperimentCollectionAdmin, PhaseAdmin
-from experiment.models import Experiment, ExperimentCollection, Phase, GroupedExperiment
+from experiment.models import Experiment, ExperimentCollection, Phase, GroupedBlock
 from participant.models import Participant
 from result.models import Result
 from session.models import Session
@@ -245,8 +245,8 @@ class PhaseAdminTest(TestCase):
             name='Test Group', index=1, randomize=False, dashboard=True, series=series)
         experiment1 = Experiment.objects.create(name='Experiment 1', slug='experiment-1')
         experiment2 = Experiment.objects.create(name='Experiment 2', slug='experiment-2')
-        grouped_experiment1 = GroupedExperiment.objects.create(phase=phase, experiment=experiment1)
-        grouped_experiment2 = GroupedExperiment.objects.create(phase=phase, experiment=experiment2)
+        grouped_experiment1 = GroupedBlock.objects.create(phase=phase, experiment=experiment1)
+        grouped_experiment2 = GroupedBlock.objects.create(phase=phase, experiment=experiment2)
 
         experiments = self.admin.experiments(phase)
         expected_experiments = format_html(

@@ -3,7 +3,7 @@ import re
 import string
 from django.utils.translation import gettext_lazy as _
 from experiment.actions.utils import final_action_with_optional_button
-from experiment.models import Experiment
+from experiment.models import Block
 from section.models import Playlist as PlaylistModel
 from session.models import Session
 from experiment.actions import ChoiceQuestion, Explainer, Form, Playlist, Trial
@@ -20,7 +20,7 @@ class CongoSameDiff(Base):
     def __init__(self):
         pass
 
-    def first_round(self, experiment: Experiment):
+    def first_round(self, experiment: Block):
         """ Provide the first rounds of the experiment,
         before session creation
         The first_round must return at least one Info or Explainer action
@@ -206,7 +206,7 @@ class CongoSameDiff(Base):
         )
         form = Form([question])
         playback = PlayButton([section], play_once=False)
-        experiment_name = session.experiment.name if session.experiment else 'Musicality Battery Experiment'
+        experiment_name = session.experiment.name if session.experiment else 'Musicality Battery Block'
         view = Trial(
             playback=playback,
             feedback_form=form,

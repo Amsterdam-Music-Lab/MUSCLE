@@ -11,7 +11,7 @@ from experiment.models import (
     Experiment,
     ExperimentCollection,
     Phase,
-    GroupedExperiment,
+    GroupedBlock,
     SocialMediaConfig,
 )
 from experiment.rules.hooked import Hooked
@@ -39,7 +39,7 @@ class TestExperimentCollectionViews(TestCase):
         )
         cls.experiment1 = Experiment.objects.create(
             name='experiment1', slug='experiment1')
-        GroupedExperiment.objects.create(
+        GroupedBlock.objects.create(
             experiment=cls.experiment1,
             phase=introductory_phase
         )
@@ -52,11 +52,11 @@ class TestExperimentCollectionViews(TestCase):
             name='experiment2', slug='experiment2', theme_config=theme_config)
         cls.experiment3 = Experiment.objects.create(
             name='experiment3', slug='experiment3')
-        GroupedExperiment.objects.create(
+        GroupedBlock.objects.create(
             experiment=cls.experiment2,
             phase=intermediate_phase
         )
-        GroupedExperiment.objects.create(
+        GroupedBlock.objects.create(
             experiment=cls.experiment3,
             phase=intermediate_phase
         )
@@ -67,7 +67,7 @@ class TestExperimentCollectionViews(TestCase):
         )
         cls.experiment4 = Experiment.objects.create(
             name='experiment4', slug='experiment4')
-        GroupedExperiment.objects.create(
+        GroupedBlock.objects.create(
             experiment=cls.experiment4,
             phase=final_phase
         )

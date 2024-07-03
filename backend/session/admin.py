@@ -21,16 +21,16 @@ class ResultInline(admin.TabularInline):
 class SessionAdmin(admin.ModelAdmin):
     list_per_page = 50
     inlines = [ResultInline]
-    list_display = ('experiment',
+    list_display = ('block',
                     'playlist',
                     'started_at',
                     'finished_at',
                     'result_count',
                     'final_score')
 
-    # experiment/playlist list_filter will only show up when there are >= 2 choices available
+    # block/playlist list_filter will only show up when there are >= 2 choices available
     list_filter = [
-        ('experiment', admin.RelatedOnlyFieldListFilter),
+        ('block', admin.RelatedOnlyFieldListFilter),
         ('playlist', admin.RelatedOnlyFieldListFilter),
         'started_at',
         'finished_at',
