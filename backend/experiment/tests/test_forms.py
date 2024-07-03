@@ -1,11 +1,11 @@
 from django.test import TestCase
 
-from experiment.forms import ExperimentForm, ExportForm, TemplateForm, BLOCK_RULES, SESSION_CHOICES, RESULT_CHOICES, EXPORT_OPTIONS, TEMPLATE_CHOICES
+from experiment.forms import BlockForm, ExportForm, TemplateForm, BLOCK_RULES, SESSION_CHOICES, RESULT_CHOICES, EXPORT_OPTIONS, TEMPLATE_CHOICES
 
 
-class ExperimentFormTest(TestCase):
+class BlockFormTest(TestCase):
     def test_form_fields(self):
-        form = ExperimentForm()
+        form = BlockForm()
         self.assertIn('name', form.fields)
         self.assertIn('slug', form.fields)
         self.assertIn('active', form.fields)
@@ -15,7 +15,7 @@ class ExperimentFormTest(TestCase):
         self.assertIn('playlists', form.fields)
 
     def test_rules_field_choices(self):
-        form = ExperimentForm()
+        form = BlockForm()
         expected_choices = [(i, BLOCK_RULES[i].__name__) for i in BLOCK_RULES]
         expected_choices.append(("", "---------"))
         self.assertEqual(form.fields['rules'].choices, sorted(expected_choices))

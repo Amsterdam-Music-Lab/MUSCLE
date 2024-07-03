@@ -17,28 +17,28 @@ def create_session(request):
     # Current participant
     participant = get_participant(request)
 
-    # Get experiment
-    experiment_id = request.POST.get("experiment_id")
-    if not experiment_id:
-        return HttpResponseBadRequest("experiment_id not defined")
+    # Get block
+    block_id = request.POST.get("block_id")
+    if not block_id:
+        return HttpResponseBadRequest("block_id not defined")
     try:
-        experiment = Block.objects.get(pk=experiment_id, active=True)
+        block = Block.objects.get(pk=block_id, active=True)
     except Block.DoesNotExist:
         raise Http404("Block does not exist")
 
     # Create new session
-    session = Session(experiment=experiment, participant=participant)
+    session = Session(block=block, participant=participant)
 
     if request.POST.get("playlist_id"):
         try:
             playlist = Playlist.objects.get(
-                pk=request.POST.get("playlist_id"), experiment__id=session.experiment.id)
+                pk=request.POST.get("playlist_id"), block__id=session.block.id)
             session.playlist = playlist
         except:
             raise Http404("Playlist does not exist")
-    elif experiment.playlists.count() >= 1:
+    elif block.playlists.count() >= 1:
         # register first playlist
-        session.playlist = experiment.playlists.first()
+        session.playlist = block.playlists.first()
 
     # Save session
     session.save()
@@ -58,7 +58,7 @@ def continue_session(request, session_id):
 
 def next_round(request, session_id):
     """
-    Fall back to continue an experiment is case next_round data is missing
+    Fall back to continue an block is case next_round data is missing
     This data is normally provided in: result()
     """
     # Current participant
@@ -67,14 +67,14 @@ def next_round(request, session_id):
     session = get_object_or_404(Session,
             pk=session_id, participant__id=participant.id)
 
-    # check if this experiment is part of an ExperimentCollection
+    # check if this block is part of an ExperimentCollection
     collection_slug = request.session.get(COLLECTION_KEY)
     if collection_slug:
         # check that current session does not have the collection information saved yet
         if not session.load_json_data().get(COLLECTION_KEY):
             # set information of the ExperimentCollection to the session
             collection = ExperimentCollection.objects.get(slug=collection_slug)
-            if collection and session.experiment in collection.associated_experiments():
+            if collection and session.block in collection.associated_blocks():
                 session.save_json_data({COLLECTION_KEY: collection_slug})
 
     # Get next round for given session

@@ -11,8 +11,8 @@ COLLECTION_KEY = 'experiment_collection'
 
 
 def final_action_with_optional_button(session, final_text='', title=_('End'), button_text=_('Continue')):
-    """ given a session, a score message and an optional session dictionary from an experiment series,
-    return a Final.action, which has a button to continue to the next experiment if series is defined
+    """ given a session, a score message and an optional session dictionary from an experiment collection,
+    return a Final.action, which has a button to continue to the next block if series is defined
     """
     collection_slug = session.load_json_data().get(COLLECTION_KEY)
 
@@ -49,7 +49,7 @@ def render_feedback_trivia(feedback, trivia):
 
 
 def get_average_difference(session, num_turnpoints, initial_value):
-    """ 
+    """
     return the average difference in milliseconds participants could hear
     """
     last_turnpoints = get_last_n_turnpoints(session, num_turnpoints)
@@ -58,8 +58,8 @@ def get_average_difference(session, num_turnpoints, initial_value):
         if last_result:
             return float(last_result.section.song.name)
         else:
-            # this cannot happen in DurationDiscrimination style experiments
-            # for future compatibility, still catch the condition that there may be no results                 
+            # this cannot happen in DurationDiscrimination style blocks
+            # for future compatibility, still catch the condition that there may be no results
             return initial_value
     return (sum([int(result.section.song.name) for result in last_turnpoints]) / last_turnpoints.count())
 
@@ -78,7 +78,7 @@ def get_average_difference_level_based(session, num_turnpoints, initial_value):
             # no results right after the practice rounds
             return initial_value
     # Difference by level starts at initial value (which is level 1, so 20/(2^0)) and then halves for every next level
-    return sum([initial_value / (2 ** (int(result.section.song.name.split('_')[-1]) - 1)) for result in last_turnpoints]) / last_turnpoints.count() 
+    return sum([initial_value / (2 ** (int(result.section.song.name.split('_')[-1]) - 1)) for result in last_turnpoints]) / last_turnpoints.count()
 
 
 def get_fallback_result(session):

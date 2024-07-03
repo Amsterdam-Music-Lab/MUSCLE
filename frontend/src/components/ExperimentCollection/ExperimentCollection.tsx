@@ -32,7 +32,7 @@ const ExperimentCollection = ({ match }: ExperimentCollectionProps) => {
     const participant = useBoundStore((state) => state.participant);
     const setTheme = useBoundStore((state) => state.setTheme);
     const participantIdUrl = participant?.participant_id_url;
-    const nextExperiment = experimentCollection?.nextExperiment;
+    const nextBlock = experimentCollection?.nextBlock;
     const displayDashboard = experimentCollection?.dashboard.length;
     const showConsent = experimentCollection?.consent;
     const totalScore = experimentCollection?.totalScore;
@@ -73,8 +73,8 @@ const ExperimentCollection = ({ match }: ExperimentCollectionProps) => {
         )
     }
 
-    if (!displayDashboard && nextExperiment) {
-        return <Redirect to={getExperimentHref(nextExperiment.slug)} />
+    if (!displayDashboard && nextBlock) {
+        return <Redirect to={getExperimentHref(nextBlock.slug)} />
     }
 
     return (

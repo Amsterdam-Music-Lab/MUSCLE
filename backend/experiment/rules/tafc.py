@@ -1,7 +1,7 @@
 """
-Setup experiment data in the admin panel
+Setup block data in the admin panel
 
-* Choose a slug for the experiment ('tafc')
+* Choose a slug for the block ('tafc')
 
 * Upload sound files
     * Find the root directory name of the uploaded sound files. It is backend/upload on your local machine. On a server, ask the administrator.
@@ -21,7 +21,7 @@ Setup experiment data in the admin panel
     * Save
 
 * Create experiment
-    * Admin panel -> Experiments -> Add
+    * Admin panel -> Blocks -> Add
     * Choose name: TwoAlternativeForced
     * Slug: tafc
     * Rules: TwoAlternativeForced
@@ -59,7 +59,7 @@ class TwoAlternativeForced(Base):
             "randomize": False
         }]
 
-    def first_round(self, experiment):
+    def first_round(self, block):
         """
         Returns a list of actions. Actions used here: Explainer, Consent.
         """
@@ -72,7 +72,7 @@ class TwoAlternativeForced(Base):
 
         # Add consent, text in admin
         consent = Consent(
-            experiment.consent,
+            block.consent,
             title='Informed consent',
             confirm='I agree',
             deny='Stop',

@@ -66,7 +66,7 @@ class Trial(BaseAction):  # pylint: disable=too-few-public-methods
 
     def action(self):
         """
-        Serialize data for experiment action
+        Serialize data for a block action
 
         """
         # Create action

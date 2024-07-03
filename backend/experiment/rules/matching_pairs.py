@@ -36,17 +36,17 @@ class MatchingPairsGame(Base):
             },
         ]
 
-    def first_round(self, experiment):
+    def first_round(self, block):
         # Add consent from file or admin (admin has priority)
         consent = Consent(
-            experiment.consent,
+            block.consent,
             title=_('Informed consent'),
             confirm=_('I agree'),
             deny=_('Stop'),
             url='consent/consent_matching_pairs.html'
             )
         # 2. Choose playlist.
-        playlist = Playlist(experiment.playlists.all())
+        playlist = Playlist(block.playlists.all())
 
         explainer = Explainer(
             instruction='',
@@ -79,7 +79,7 @@ class MatchingPairsGame(Base):
                 return [trial]
         else:
             # final score saves the result from the cleared board into account
-            social_info = self.social_media_info(session.experiment, session.final_score)
+            social_info = self.social_media_info(session.block, session.final_score)
             social_info['apps'].append('clipboard')
             score = Final(
                 session,

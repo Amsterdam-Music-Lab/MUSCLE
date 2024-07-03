@@ -11,7 +11,7 @@ from image.models import Image
 from session.models import Session
 from typing import Optional
 
-from .validators import markdown_html_validator, experiment_slug_validator
+from .validators import markdown_html_validator, block_slug_validator
 
 language_choices = [(key, ISO_LANGUAGES[key]) for key in ISO_LANGUAGES.keys()]
 language_choices[0] = ('', 'Unset')
@@ -52,15 +52,15 @@ class ExperimentCollection(models.Model):
     class Meta:
         verbose_name_plural = "Experiment Collections"
 
-    def associated_experiments(self):
+    def associated_blocks(self):
         phases = self.phases.all()
         return [
-            experiment.experiment for phase in phases for experiment in list(phase.experiments.all())]
+            experiment.block for phase in phases for experiment in list(phase.blocks.all())]
 
     def export_sessions(self):
         """export sessions for this collection"""
         all_sessions = Session.objects.none()
-        for exp in self.associated_experiments():
+        for exp in self.associated_blocks():
             all_sessions |= Session.objects.filter(block=exp).order_by('-started_at')
         return all_sessions
 
@@ -122,7 +122,7 @@ class Block(models.Model):
         blank=True,
         null=True
     )
-    slug = models.SlugField(db_index=True, max_length=64, unique=True, validators=[experiment_slug_validator])
+    slug = models.SlugField(db_index=True, max_length=64, unique=True, validators=[block_slug_validator])
     url = models.CharField(verbose_name='URL with more information about the block', max_length=100, blank=True, default='')
     hashtag = models.CharField(verbose_name='hashtag for social media', max_length=20, blank=True, default='')
     active = models.BooleanField(default=True)
@@ -348,8 +348,8 @@ class SocialMediaConfig(models.Model):
 
     content = models.TextField(
         blank=True,
-        help_text=_("Content for social media sharing. Use {points} and {experiment_name} as placeholders."),
-        default="I scored {points} points in {experiment_name}!"
+        help_text=_("Content for social media sharing. Use {points} and {block_name} as placeholders."),
+        default="I scored {points} points in {block_name}!"
     )
 
     SOCIAL_MEDIA_CHANNELS = [
@@ -368,17 +368,17 @@ class SocialMediaConfig(models.Model):
     )
 
     def get_content(
-            self, score: int | None = None, experiment_name: str | None = None
+            self, score: int | None = None, block_name: str | None = None
             ) -> str:
         if self.content:
             return self.content
 
-        if not score or not experiment_name:
-            raise ValueError("score and experiment_name are required")
+        if not score or not block_name:
+            raise ValueError("score and block_name are required")
 
-        return _("I scored {points} points in {experiment_name}").format(
+        return _("I scored {points} points in {block_name}").format(
             score=score,
-            experiment_name=experiment_name
+            block_name=block_name
         )
 
     def __str__(self):

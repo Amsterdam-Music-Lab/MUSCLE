@@ -43,7 +43,7 @@ describe('Final Component', () => {
         render(
             <BrowserRouter>
                 <Final
-                    block={{ slug: 'test-experiment' }}
+                    block={{ slug: 'test-block' }}
                     participant="participant-id"
                     score={100}
                     final_text="<p>Final Text</p>"
@@ -77,7 +77,7 @@ describe('Final Component', () => {
         render(
             <BrowserRouter>
                 <Final
-                    experiment={{ slug: 'test-experiment' }}
+                    block={{ slug: 'test-block' }}
                     participant="participant-id"
                     score={100}
                     final_text="<p>Final Text</p>"
@@ -94,7 +94,7 @@ describe('Final Component', () => {
         const history = createMemoryHistory();
 
         const mockActionTexts = {
-            all_experiments: 'All Experiments',
+            all_blocks: 'All Blocks',
             profile: 'Profile',
         };
 

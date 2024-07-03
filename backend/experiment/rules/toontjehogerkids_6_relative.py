@@ -11,8 +11,8 @@ logger = logging.getLogger(__name__)
 class ToontjeHogerKids6Relative(ToontjeHoger6Relative):
     ID = 'TOONTJE_HOGER_KIDS_6_RELATIVE'
 
-    def first_round(self, experiment):
-        """Create data for the first experiment rounds."""
+    def first_round(self, block):
+        """Create data for the first block rounds."""
 
         # 1. Explain game.
         explainer = Explainer(

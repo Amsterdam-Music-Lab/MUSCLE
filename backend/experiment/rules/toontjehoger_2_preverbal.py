@@ -58,8 +58,8 @@ class ToontjeHoger2Preverbal(Base):
 
         return errors
 
-    def first_round(self, experiment):
-        """Create data for the first experiment rounds."""
+    def first_round(self, block):
+        """Create data for the first block rounds."""
 
         # 1. Explain game.
         explainer = Explainer(
@@ -97,7 +97,7 @@ class ToontjeHoger2Preverbal(Base):
             button_label="Volgende",
         )
         return info
-    
+
     def next_round(self, session):
         """Get action data for the next round"""
 
@@ -114,7 +114,7 @@ class ToontjeHoger2Preverbal(Base):
 
         # Final
         return self.get_final_round(session)
-    
+
     def get_score(self, session, rounds_passed):
         # Feedback
         last_result = session.last_result()
@@ -139,7 +139,7 @@ class ToontjeHoger2Preverbal(Base):
         config = {'show_total_score': True}
         score = Score(session, config=config, feedback=feedback)
         return [score]
- 
+
     def get_round1(self, session):
         # Question
         key = 'expected_spectrogram'
@@ -212,7 +212,7 @@ class ToontjeHoger2Preverbal(Base):
             title=self.TITLE
         )
         return [trial]
-    
+
     def get_round2(self, round, session):
 
         # Get sections
@@ -260,10 +260,10 @@ class ToontjeHoger2Preverbal(Base):
             title=self.TITLE,
         )
         return [trial]
- 
+
     def calculate_score(self, result, data):
         return self.SCORE_CORRECT if result.expected_response == result.given_response else self.SCORE_WRONG
-    
+
     def get_final_round(self, session):
 
         # Finish session.

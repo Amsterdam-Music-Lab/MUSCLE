@@ -3,7 +3,7 @@ from django.db.models import Avg
 
 from experiment.rules.musical_preferences import MusicalPreferences
 
-from experiment.models import Experiment
+from experiment.models import Block
 from participant.models import Participant
 from result.models import Result
 from section.models import Playlist
@@ -12,7 +12,7 @@ from session.models import Session
 
 class MusicalPreferencesTest(TestCase):
     fixtures = ['playlist', 'experiment']
-    
+
     @classmethod
     def setUpTestData(cls):
         cls.participant = Participant.objects.create()
@@ -24,9 +24,9 @@ class MusicalPreferencesTest(TestCase):
                "AwfulArtist,AwfulSong,0.0,10.0,bat/artist5.mp3,0,0,0\n")
         cls.playlist.csv = csv
         cls.playlist.update_sections()
-        cls.experiment = Experiment.objects.create(name='MusicalPreferences', rounds=5)
+        cls.block = Block.objects.create(name='MusicalPreferences', rounds=5)
         cls.session = Session.objects.create(
-            experiment=cls.experiment,
+            block=cls.block,
             participant=cls.participant,
             playlist=cls.playlist
         )
@@ -59,7 +59,7 @@ class MusicalPreferencesTest(TestCase):
                 )
 
         other_session = Session.objects.create(
-            experiment=self.experiment,
+            block=self.block,
             participant=self.participant,
             playlist=self.playlist
         )
@@ -74,8 +74,8 @@ class MusicalPreferencesTest(TestCase):
         mp = MusicalPreferences()
 
         # Go to the last round (top_all = ... caused the error)
-        for i in range(self.session.experiment.rounds + 1):
+        for i in range(self.session.block.rounds + 1):
             self.session.increment_round()
-        
+
         # get_preferred_songs() called by top_all = ... in the final round should not raise an error
         mp.next_round(self.session)

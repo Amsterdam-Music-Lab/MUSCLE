@@ -1,6 +1,6 @@
 from django.test import TestCase
 
-from experiment.models import Experiment
+from experiment.models import Block
 from experiment.rules import HBat, BST
 from participant.models import Participant
 from result.models import Result
@@ -16,9 +16,9 @@ class HBatTest(TestCase):
         cls.participant = Participant.objects.create()
         cls.playlist = Playlist.objects.get(name='HBAT-BIT')
         cls.playlist.update_sections()
-        cls.experiment = Experiment.objects.get(name='HBAT-BIT')
+        cls.block = Block.objects.get(name='HBAT-BIT')
         cls.session = Session.objects.create(
-            experiment=cls.experiment,
+            block=cls.block,
             participant=cls.participant,
             playlist=cls.playlist
         )
@@ -48,9 +48,9 @@ class HBat_BST_Test(TestCase):
         cls.participant = Participant.objects.create()
         cls.playlist = Playlist.objects.get(name='HBAT-BST')
         cls.playlist.update_sections()
-        cls.experiment = Experiment.objects.get(name='HBAT-BST')
+        cls.block = Block.objects.get(name='HBAT-BST')
         cls.session = Session.objects.create(
-            experiment=cls.experiment,
+            block=cls.block,
             participant=cls.participant,
             playlist=cls.playlist
         )

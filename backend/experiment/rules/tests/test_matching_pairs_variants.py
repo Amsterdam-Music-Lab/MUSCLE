@@ -1,7 +1,7 @@
 from django.test import TestCase
 
 from experiment.actions import Trial
-from experiment.models import Experiment
+from experiment.models import Block
 from participant.models import Participant
 from section.models import Playlist
 from session.models import Session
@@ -28,17 +28,17 @@ class TestMatchingPairsVariants(TestCase):
         self.participant = Participant.objects.create()
 
     def test_lite_version(self):
-        experiment = Experiment.objects.create(
+        block = Block.objects.create(
             rules='MATCHING_PAIRS_LITE', slug='mpairs_lite'
         )
         session = Session.objects.create(
-            experiment=experiment,
+            block=block,
             participant=self.participant,
             playlist=self.playlist
         )
         first_trial = session.block_rules().get_matching_pairs_trial(session)
         another_session = Session.objects.create(
-            experiment=experiment,
+            block=block,
             participant=self.participant,
             playlist=self.playlist
         )
@@ -49,16 +49,16 @@ class TestMatchingPairsVariants(TestCase):
         assert first_trial.playback.sections != second_trial.playback.sections
 
     def test_fixed_order_sections(self):
-        experiment = Experiment.objects.create(
+        block = Block.objects.create(
             rules='MATCHING_PAIRS_FIXED', slug='mpairs_fixed')
         session = Session.objects.create(
-            experiment=experiment,
+            block=block,
             participant=self.participant,
             playlist=self.playlist
         )
         first_trial = session.block_rules().get_matching_pairs_trial(session)
         another_session = Session.objects.create(
-            experiment=experiment,
+            block=block,
             participant=self.participant,
             playlist=self.playlist
         )

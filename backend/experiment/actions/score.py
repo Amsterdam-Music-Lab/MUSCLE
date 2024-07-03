@@ -29,7 +29,7 @@ class Score(BaseAction):  # pylint: disable=too-few-public-methods
         self.session = session
         self.title = title or _('Round {rounds_passed} / {total_rounds}').format(
             rounds_passed=session.rounds_passed(),
-            total_rounds=self.session.experiment.rounds
+            total_rounds=self.session.block.rounds
         )
         self.score = score or session.last_score()
         self.score_message = score_message or self.default_score_message

@@ -38,7 +38,7 @@ def render_html_or_markdown(dry_text: str, render_format: str) -> str:
 class Consent(BaseAction):  # pylint: disable=too-few-public-methods
     """
     Provide data for a view that ask consent for using the experiment data
-    - text: Uploaded file via experiment.consent (fileField)
+    - text: Uploaded file via block.consent (fileField)
     - title: The title to be displayed
     - confirm: The text on the confirm button
     - deny: The text on the deny button
@@ -49,7 +49,7 @@ class Consent(BaseAction):  # pylint: disable=too-few-public-methods
     Relates to client component: Consent.js
     """
 
-    # default consent text, that can be used for multiple experiments
+    # default consent text, that can be used for multiple blocks
     ID = 'CONSENT'
 
     default_text = "Lorem ipsum dolor sit amet, nec te atqui scribentur. Diam \
@@ -62,11 +62,11 @@ class Consent(BaseAction):  # pylint: disable=too-few-public-methods
                 contentiones, vix ex maiorum denique! Lorem ipsum dolor sit \
                 amet, nec te atqui scribentur. Diam molestie posidonium te sit, \
                 ea sea expetenda suscipiantur contentiones."
-    
+
     def __init__(self, text, title='Informed consent', confirm='I agree', deny='Stop', url=''):
         # Determine which text to use
         if text!='':
-            # Uploaded consent via file field: experiment.consent (High priority)
+            # Uploaded consent via file field: block.consent (High priority)
             with text.open('r') as f:
                 dry_text = f.read()
             render_format = get_render_format(text.url)

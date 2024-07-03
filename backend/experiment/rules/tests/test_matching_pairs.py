@@ -2,7 +2,7 @@ import json
 
 from django.test import TestCase
 
-from experiment.models import Experiment
+from experiment.models import Block
 from participant.models import Participant
 from result.models import Result
 from section.models import Playlist
@@ -34,9 +34,9 @@ class MatchingPairsTest(TestCase):
         cls.playlist.csv = section_csv
         cls.playlist.update_sections()
         cls.participant = Participant.objects.create()
-        cls.experiment = Experiment.objects.create(rules='MATCHING_PAIRS', slug='mpairs', rounds=42)
+        cls.block = Block.objects.create(rules='MATCHING_PAIRS', slug='mpairs', rounds=42)
         cls.session = Session.objects.create(
-            experiment=cls.experiment,
+            block=cls.block,
             participant=cls.participant,
             playlist=cls.playlist
         )

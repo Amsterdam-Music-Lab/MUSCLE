@@ -3,7 +3,7 @@ from unittest import mock
 
 from experiment.actions import Trial
 from experiment.actions.wrappers import song_sync
-from experiment.models import Experiment
+from experiment.models import Block
 from participant.models import Participant
 from section.models import Playlist, Section
 from session.models import Session
@@ -15,9 +15,9 @@ class ActionWrappersTest(TestCase):
         self.participant = Participant.objects.create()
         self.section = Section.objects.create(
             filename='some/audio/file.mp3', playlist=self.playlist)
-        self.experiment = Experiment.objects.create(name='TestExperiment')
+        self.block = Block.objects.create(name='TestBlock')
         self.session = Session.objects.create(
-            experiment=self.experiment, participant=self.participant, playlist=self.playlist)
+            block=self.block, participant=self.participant, playlist=self.playlist)
 
     def test_song_sync(self):
         actions = song_sync(self.session, self.section, 'HookedTest')

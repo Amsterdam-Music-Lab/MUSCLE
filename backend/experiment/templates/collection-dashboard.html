@@ -16,8 +16,8 @@
         background-color: var(--body-bg)
     }
     td, th {
-        vertical-align: middle;        
-        width: auto;        
+        vertical-align: middle;
+        width: auto;
     }
     td {
         padding-left: 1rem;
@@ -30,7 +30,7 @@
         width: 8rem;
     }
     td.participants-overview {
-        max-width: 25vw;        
+        max-width: 25vw;
     }
     pre {
         color: black;
@@ -43,23 +43,23 @@
         font-weight: 600;
         margin: 2rem 0px 2rem 0px;
     }
-    .pop-up {        
+    .pop-up {
         background-color: var(--body-bg);
         box-shadow: 0px 0px 10px var(--primary);
         position: fixed;
-       
-        padding: 2rem;        
+
+        padding: 2rem;
         border-style: solid;
         border-color: var(--primary);
-        border-width: 1px;   
+        border-width: 1px;
         border-radius: 1px;
         overflow-y: scroll;
     }
     .pop-up-big {
         top: 4.2rem;
-        left: 10vw;        
+        left: 10vw;
         width: calc(80vw - 34px);
-        height: 80vh;        
+        height: 80vh;
 
     }
     .pop-up-small {
@@ -73,10 +73,10 @@
 <h1>Experiments in collection: {{ collection.name }}</h1>
 <p>
     <form action="" method="post">
-        <!-- Show all participants and sessions -->        
+        <!-- Show all participants and sessions -->
         <input type="button" value="{{ collect_data.participant_count }} participants" id="show-participants" />
         <input type="button" value="{{ collect_data.session_count }} sessions" id="show-sessions" />
-    </form>   
+    </form>
 </p>
 
 <!-- Experiments table -->
@@ -89,19 +89,19 @@
             <th>Times finished</th>
             <th>Participant count</th>
             <th>Participants *</th>
-            <th>Sessions</th>           
+            <th>Sessions</th>
         </tr>
     </thead>
-        
+
     <tbody>
         <!-- List experiments in this collection -->
-        {% for exp in experiments %}        
+        {% for exp in experiments %}
         <tr>
             <td>
                 <p>
-                    <a href="{% url 'admin:experiment_experiment_change' exp.id %}" target="_blank">
+                    <a href="{% url 'admin:experiment_block_change' exp.id %}" target="_blank">
                     {{ exp.name }}</a>
-                </p>                
+                </p>
             </td>
 
             <td>
@@ -120,7 +120,7 @@
                 <p>
                     <!-- List participants for this experiment -->
                     {% for participant in exp.participants %}
-                        
+
                         {% if participant.participant_id_url %}
                             <a href="{% url 'admin:participant_participant_change' participant.id %}" target="_blank" title="Participant URL id">
                                 {{ participant.participant_id_url }}
@@ -132,20 +132,20 @@
                         {% endif %}
                     <span>, </span>
                     {% endfor %}
-                </p>                
+                </p>
             </td>
-            
+
             <td class="table-sessions">
                 <input type="button" value="Sessions" id="show-sessions-{{ exp.id }}" />
                 <script>
                     // Show all session for this experiment in popup
-                    showExperimentSessions({{ exp.id }})                                        
+                    showExperimentSessions({{ exp.id }})
                 </script>
             </td>
 
-        </tr>        
+        </tr>
         {% endfor %}
-    </tbody>    
+    </tbody>
 </table>
 <p class="help-text mini">* Click to edit in a new window</p>
 

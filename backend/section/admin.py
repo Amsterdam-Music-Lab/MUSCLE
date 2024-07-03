@@ -49,7 +49,7 @@ admin.site.register(Song, SongAdmin)
 class PlaylistAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
     form = PlaylistAdminForm
     change_form_template = 'change_form.html'
-    list_display = ('name', 'section_count', 'experiment_count')
+    list_display = ('name', 'section_count', 'block_count')
     search_fields = ['name', 'section__song__artist', 'section__song__name']
     inline_actions = ['add_sections',
                       'edit_sections', 'export_csv']
@@ -147,7 +147,7 @@ class PlaylistAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
                 # Retrieve or create Song object
                 song = None
                 if this_artist or this_name:
-                    song = get_or_create_song(this_artist, this_name)                
+                    song = get_or_create_song(this_artist, this_name)
                 section.song = song
 
                 section.start_time = request.POST.get(pre_fix + '_start_time')

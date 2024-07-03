@@ -21,7 +21,7 @@ export default interface ExperimentCollection {
     name: string;
     description: string;
     dashboard: Block[];
-    nextExperiment: Block | null;
+    nextBlock: Block | null;
     aboutContent: string;
     consent?: Consent;
     theme?: Theme;

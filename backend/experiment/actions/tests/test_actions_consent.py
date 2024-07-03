@@ -1,25 +1,25 @@
 from django.test import TestCase
 from django.core.files.uploadedfile import SimpleUploadedFile
 
-from experiment.models import Experiment
+from experiment.models import Block
 from experiment.actions.consent import Consent
 
 
 class ConsentTest(TestCase):
 
     @classmethod
-    def setUpTestData(cls):       
-        Experiment.objects.create(
+    def setUpTestData(cls):
+        Block.objects.create(
             name='test_md',
             slug='MARKDOWN',
             consent=SimpleUploadedFile('consent.md', b'#test', content_type='text/html')
         )
-        Experiment.objects.create(
+        Block.objects.create(
             name='test_html',
             slug='HTML',
             consent=SimpleUploadedFile('consent.html', b'<h1>test</h1>', content_type='text/html')
         )
-        Experiment.objects.create(
+        Block.objects.create(
             name='test_template',
             slug='TEMPLATE',
             consent=SimpleUploadedFile('template.html', b'{% load i18n %}{% blocktranslate %}<p>test</p>{% endblocktranslate %}', content_type='text/html')
@@ -34,16 +34,16 @@ class ConsentTest(TestCase):
         self.assertEqual(consent.text, '<h1>test</h1>')
 
     def test_uploaded_markdown_rendering(self):
-        experiment = Experiment.objects.get(slug='MARKDOWN')
-        consent = Consent(experiment.consent)
+        block = Block.objects.get(slug='MARKDOWN')
+        consent = Consent(block.consent)
         self.assertEqual(consent.text, '<h1>test</h1>')
 
     def test_uploaded_html_rendering(self):
-        experiment = Experiment.objects.get(slug='HTML')
-        consent = Consent(experiment.consent)
+        block = Block.objects.get(slug='HTML')
+        consent = Consent(block.consent)
         self.assertEqual(consent.text, '<h1>test</h1>')
 
     def test_template_language_rendering(self):
-        experiment = Experiment.objects.get(slug='TEMPLATE')
-        consent = Consent(experiment.consent)
+        block = Block.objects.get(slug='TEMPLATE')
+        consent = Consent(block.consent)
         self.assertEqual(consent.text, '<p>test</p>')

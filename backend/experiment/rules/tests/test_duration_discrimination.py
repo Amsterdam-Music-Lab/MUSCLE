@@ -1,6 +1,6 @@
 from django.test import TestCase
 
-from experiment.models import Experiment
+from experiment.models import Block
 from experiment.rules import Anisochrony, DurationDiscrimination
 from participant.models import Participant
 from section.models import Playlist, Section
@@ -15,9 +15,9 @@ class DDITest(TestCase):
         cls.participant = Participant.objects.create()
         cls.playlist = Playlist.objects.get(name='DurationDiscrimination')
         cls.playlist.update_sections()
-        cls.experiment = Experiment.objects.get(name='DurationDiscrimination')
+        cls.block = Block.objects.get(name='DurationDiscrimination')
         cls.session = Session.objects.create(
-            experiment=cls.experiment,
+            block=cls.block,
             participant=cls.participant,
             playlist=cls.playlist
         )
@@ -47,9 +47,9 @@ class AnisochronyTest(TestCase):
         cls.participant = Participant.objects.create()
         cls.playlist = Playlist.objects.get(name='Anisochrony')
         cls.playlist.update_sections()
-        cls.experiment = Experiment.objects.get(name='Anisochrony')
+        cls.block = Block.objects.get(name='Anisochrony')
         cls.session = Session.objects.create(
-            experiment=cls.experiment,
+            block=cls.block,
             participant=cls.participant,
             playlist=cls.playlist
         )

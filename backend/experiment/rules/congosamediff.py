@@ -13,31 +13,31 @@ from result.utils import prepare_result
 
 
 class CongoSameDiff(Base):
-    """ A micro-PROMS inspired experiment that tests the participant's ability to distinguish between different sounds. """
+    """ A micro-PROMS inspired experiment block that tests the participant's ability to distinguish between different sounds. """
     ID = 'CONGOSAMEDIFF'
     contact_email = 'aml.tunetwins@gmail.com'
 
     def __init__(self):
         pass
 
-    def first_round(self, experiment: Block):
-        """ Provide the first rounds of the experiment,
+    def first_round(self, block: Block):
+        """ Provide the first rounds of the block,
         before session creation
         The first_round must return at least one Info or Explainer action
         Consent and Playlist are often desired, but optional
         """
 
-        # Do a validity check on the experiment
-        errors = self.validate_playlist(experiment.playlists.first())
+        # Do a validity check on the block
+        errors = self.validate_playlist(block.playlists.first())
         if errors:
-            raise ValueError('The experiment playlist is not valid: \n- ' + '\n- '.join(errors))
+            raise ValueError('The block playlist is not valid: \n- ' + '\n- '.join(errors))
 
         # 1. Playlist
-        playlist = Playlist(experiment.playlists.all())
+        playlist = Playlist(block.playlists.all())
 
         # 2. Explainer
         explainer = Explainer(
-            instruction='Welcome to this Musicality Battery experiment',
+            instruction='Welcome to this Musicality Battery block',
             steps=[],
         )
 
@@ -206,11 +206,11 @@ class CongoSameDiff(Base):
         )
         form = Form([question])
         playback = PlayButton([section], play_once=False)
-        experiment_name = session.experiment.name if session.experiment else 'Musicality Battery Block'
+        block_name = session.block.name if session.block else 'Musicality Battery Block'
         view = Trial(
             playback=playback,
             feedback_form=form,
-            title=_(experiment_name),
+            title=_(block_name),
             config={
                 'response_time': section.duration,
                 'listen_first': False,

@@ -2,7 +2,7 @@ from django.test import TestCase
 from section.models import Section, Song, Playlist as PlaylistModel
 from participant.models import Participant
 from session.models import Session
-from experiment.models import Experiment
+from experiment.models import Block
 from experiment.rules.rhythm_battery_intro import RhythmBatteryIntro
 from experiment.actions import Explainer, Final, Playback, Trial, Form
 from experiment.actions.form import Form
@@ -25,25 +25,25 @@ class RhythmBatteryIntroTest(TestCase):
             filename="not/to_be_found.mp3",
             tag=0
         )
-        self.experiment = Experiment.objects.create(
+        self.block = Block.objects.create(
             name='test',
             slug='TEST',
         )
         participant = Participant.objects.create()
         self.session = Session.objects.create(
-            experiment=Experiment.objects.first(),
+            block=Block.objects.first(),
             participant=participant,
             playlist=playlist
         )
 
     def test_first_round(self):
         listening_conditions = RhythmBatteryIntro()
-        actions = listening_conditions.first_round(self.experiment)
+        actions = listening_conditions.first_round(self.block)
         self.assertIsInstance(actions[0], Explainer)
 
     def test_next_round_first_round(self):
         listening_conditions = RhythmBatteryIntro()
-        listening_conditions.first_round(self.experiment)
+        listening_conditions.first_round(self.block)
         actions = listening_conditions.next_round(self.session)
 
         self.assertIsInstance(actions[0], Trial)
@@ -54,7 +54,7 @@ class RhythmBatteryIntroTest(TestCase):
 
     def test_next_round_final_round(self):
         listening_conditions = RhythmBatteryIntro()
-        listening_conditions.first_round(self.experiment)
+        listening_conditions.first_round(self.block)
         listening_conditions.next_round(self.session)
         listening_conditions.next_round(self.session)
         listening_conditions.next_round(self.session)

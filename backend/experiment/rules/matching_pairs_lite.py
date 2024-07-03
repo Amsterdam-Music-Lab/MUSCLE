@@ -3,7 +3,7 @@ import random
 from django.utils.translation import gettext_lazy as _
 
 from .matching_pairs import MatchingPairsGame
-from experiment.actions import Final, Playlist, Info
+from experiment.actions import Playlist, Info
 from experiment.actions.utils import final_action_with_optional_button
 
 
@@ -14,9 +14,9 @@ class MatchingPairsLite(MatchingPairsGame):
     score_feedback_display = 'small-bottom-right'
     contact_email = 'aml.tunetwins@gmail.com'
 
-    def first_round(self, experiment):     
+    def first_round(self, block):
         # 2. Choose playlist.
-        playlist = Playlist(experiment.playlists.all())
+        playlist = Playlist(block.playlists.all())
         info = Info('',
                     heading='Press start to enter the game',
                     button_label='Start')
