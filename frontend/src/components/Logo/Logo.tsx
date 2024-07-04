@@ -2,16 +2,19 @@ import { URLS, LOGO_URL, LOGO_TITLE } from "@/config";
 import { Link } from "react-router-dom";
 import useBoundStore from "@/util/stores";
 
+interface LogoProps {
+    logoClickConfirm: string | null;
+}
 
-const Logo: React.FC<{ logoClickConfirm: string | null }> = ({ logoClickConfirm = null }) => {
+const Logo: React.FC<LogoProps> = ({ logoClickConfirm }) => {
     const theme = useBoundStore((state) => state.theme);
 
     const { alt, title, file, target, rel } = theme?.logo || {};
     const href = theme?.logo?.href || URLS.AMLHome;
     const logoUrl = file ?? LOGO_URL;
 
-    // Handle click on logo, to optionally confirm navigating
-    const onLogoClick = (e) => {
+    /** Handle click on logo, to optionally confirm navigating */
+    const onLogoClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
         if (logoClickConfirm) {
             if (!window.confirm(logoClickConfirm)) {
                 e.preventDefault();
@@ -22,7 +25,7 @@ const Logo: React.FC<{ logoClickConfirm: string | null }> = ({ logoClickConfirm 
 
     // Logo is a Link in case of relative url (/abc),
     // and a-element for absolute urls (https://www.example.com/)
-    const logoProps = {
+    const logoProps: React.HTMLProps<HTMLAnchorElement> = {
         onClick: onLogoClick,
         className: "aha__logo",
         "aria-label": "Logo",
