@@ -1,6 +1,5 @@
-import React from 'react';
 import { render, screen } from '@testing-library/react';
-import { vi } from 'vitest';
+import { vi, describe, it, expect } from 'vitest';
 
 import Explainer from './Explainer';
 
@@ -18,9 +17,6 @@ describe('Explainer Component', () => {
         render(
             <Explainer {...props} />
         );
-        expect(screen.getByTestId('explainer')).to.exist;
+        expect(screen.getByTestId('explainer')).toBeTruthy();
     })
-
-
-
 });
