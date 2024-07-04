@@ -16,7 +16,7 @@ describe('AppBar', () => {
         const { getByText } = render(<AppBar title="Test Title" />, { wrapper: Router });
 
         const titleElement = getByText('Test Title');
-        expect(document.body.contains(titleElement)).to.be.true;
+        expect(document.body.contains(titleElement)).toBe(true);
     });
 
     it('renders logo as Link for relative URL', () => {
