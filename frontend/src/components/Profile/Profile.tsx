@@ -1,4 +1,3 @@
-import React from "react";
 import { Link } from "react-router-dom";
 import DefaultPage from "../Page/DefaultPage";
 import Loading from "../Loading/Loading";
@@ -7,10 +6,10 @@ import { useParticipantScores } from "../../API";
 import { URLS } from "@/config";
 import ParticipantLink from "../ParticipantLink/ParticipantLink";
 
-// Profile loads and shows the profile of a participant for a given experiment
+/** Profile loads and shows the profile of a participant for a given experiment */
 const Profile = () => {
     // API hooks
-    const [data, loadingData] = useParticipantScores();
+    const [data, loadingData] = useParticipantScores<ProfileViewProps>();
 
     // View
     let view = null;
@@ -37,7 +36,29 @@ const Profile = () => {
     return <DefaultPage className="aha__profile">{view}</DefaultPage>;
 };
 
-export const ProfileView = (data) => {
+interface ProfileViewProps {
+    messages: {
+        title: string;
+        summary: string;
+        continue: string;
+        points: string;
+    };
+    scores: {
+        // This might need to be renamed to block_slug and experiment_slug
+        // after the great refactor of Summer 2024
+        experiment_slug: string;
+        experiment_name: string;
+        score: number;
+        date: string;
+        rank: {
+            class: string;
+            text: string;
+        };
+        finished_at: string;
+    }[];
+}
+
+export const ProfileView = (data: ProfileViewProps) => {
 
     // Highest score
     data.scores.sort((a, b) =>
