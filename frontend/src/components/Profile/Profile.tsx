@@ -97,7 +97,7 @@ export const ProfileView = (data: ProfileViewProps) => {
                                         {score.block_name}
                                     </Link>
                                 </h4>
-                                <h5>{score.score} {data.points}</h5>
+                                <h5>{score.score} {data.messages.points}</h5>
                                 <p>{score.date}</p>
                             </div>
                         </div>
