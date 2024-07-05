@@ -7,18 +7,16 @@ import RangeTitle from "./_RangeTitle";
 
 /**
  * TextRange is a question view that makes you select a value within the given range, using a slider from a list of choices
- * Values are multiplied by 10 to be displayed as a slider. 
+ * Values are multiplied by 10 to be displayed as a slider.
  * This to ensure that the slider is centered initially, even if we don't have a center value
- *  */ 
+ *  */
 const TextRange = ({ question, value, onChange, emphasizeTitle }) => {
     const emptyValue = !value;
 
     const keys = Object.keys(question.choices);
     const choices = Object.values(question.choices);
 
-    const onSliderChange = (index) => {
-        onChange(keys[Math.round(index/10)]);
-    };
+    const onSliderChange = (index) => onChange(keys[Math.round(index / 10)]);
 
     let sliderValue = 0;
     if (emptyValue) {
@@ -48,7 +46,7 @@ const TextRange = ({ question, value, onChange, emphasizeTitle }) => {
 
             <RangeLimits
                 minVal={choices[0]}
-                maxVal={choices[choices.length-1]}
+                maxVal={choices[choices.length - 1]}
             />
         </div>
     );
