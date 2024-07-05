@@ -16,7 +16,7 @@ bleach==6.1.0
     # via django-markup
 build==1.0.3
     # via pip-tools
-certifi==2023.7.22
+certifi==2024.7.4
     # via
     #   requests
     #   sentry-sdk
