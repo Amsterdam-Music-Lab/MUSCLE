@@ -1,9 +1,20 @@
-import React, { useState, useRef } from "react";
+import { useState, useRef } from "react";
 
 import Question from "../Question/Question";
 import Button from "../Button/Button";
+import IQuestion from "@/types/Question";
 
-// FeedbackForm
+interface FeedbackFormProps {
+    formActive: boolean;
+    form: IQuestion[];
+    buttonLabel: string;
+    skipLabel: string;
+    isSkippable: boolean;
+    onResult: (result: any) => void;
+    emphasizeTitle?: boolean;
+}
+
+/** FeedbackForm */
 const FeedbackForm = ({
     formActive,
     form,
@@ -12,7 +23,7 @@ const FeedbackForm = ({
     isSkippable,
     onResult,
     emphasizeTitle = false,
-}) => {
+}: FeedbackFormProps) => {
     const isSubmitted = useRef(false);
     const showSubmitButtons =
         form.filter((formElement) => formElement.submits).length === 0;
@@ -32,10 +43,10 @@ const FeedbackForm = ({
         });
     };
 
-    const onChange = (value, question_key) => {
+    const onChange = (value: string | number | boolean, question_key: number) => {
         form[question_key].value = value;
         if (form[question_key].submits) {
-            onSubmit(form);
+            onSubmit();
         }
         // for every non-skippable question, check that we have a value
         const validFormElements = form.filter(formElement => {
@@ -48,7 +59,7 @@ const FeedbackForm = ({
         else setFormValid(false);
     };
 
-    function validateFormElement(formElement) {
+    function validateFormElement(formElement: IQuestion) {
         // For multiple choices in CHECKBOXES view, formElement.value is a string of comma-separated values
         if (formElement.view === "CHECKBOXES" && formElement.min_values && (formElement.value.split(",").length < formElement.min_values)) {
             return false;
@@ -59,7 +70,7 @@ const FeedbackForm = ({
     return (
         <div className="aha__feedback justify-content-center">
             <form>
-                {Object.keys(form).map((index) => (
+                {form.map((_question, index) => (
                     <Question
                         key={index}
                         id={index}

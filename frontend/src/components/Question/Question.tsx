@@ -12,12 +12,12 @@ import Checkboxes from "./_Checkboxes";
 import DropDown from "./_DropDown";
 import AutoComplete from "./_AutoComplete";
 
-import TQuestion, { QuestionViews } from "@/types/Question";
+import IQuestion, { QuestionViews } from "@/types/Question";
 
 interface QuestionProps {
-    question: TQuestion;
-    onChange: (value: any, id: string) => void;
-    id: string;
+    question: IQuestion;
+    onChange: (value: string | number | boolean, id: number) => void;
+    id: number;
     disabled?: boolean;
     emphasizeTitle?: boolean;
 }
@@ -32,7 +32,7 @@ const Question = ({
 }: QuestionProps) => {
     const [value, setValue] = useState(question.value || "");
 
-    const registerChange = (value: unknown) => {
+    const registerChange = (value: string | number | boolean) => {
         onChange(value, id);
         setValue(value);
     };

@@ -79,7 +79,8 @@ class ChoiceQuestion(Question):
     def __init__(self, choices, min_values=1, **kwargs):
         super().__init__(**kwargs)
         self.choices = choices
-        self.min_values = min_values # minimal number of values to be selected, 1 or more
+        # minimal number of values to be selected, 1 or more
+        self.min_values = min_values
 
 
 class DropdownQuestion(Question):

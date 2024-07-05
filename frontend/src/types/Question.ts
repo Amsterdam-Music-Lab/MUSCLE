@@ -18,4 +18,9 @@ export default interface Question {
     explainer?: string;
     expected_response?: string;
     choices?: { [key: string]: string };
+    submits?: boolean;
+    is_skippable?: boolean;
+    min_values?: number;
+    min_value?: number;
+    max_value?: number;
 }
