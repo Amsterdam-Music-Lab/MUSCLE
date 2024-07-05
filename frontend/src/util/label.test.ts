@@ -1,6 +1,8 @@
 import { render } from '@testing-library/react';
 import { renderLabel } from "./label";
 
+import { describe, it, expect } from 'vitest';
+
 describe('renderLabel', () => {
 
     it('renders FontAwesome label correctly', () => {
@@ -13,7 +15,7 @@ describe('renderLabel', () => {
         const { getByText } = render(renderLabel(label));
 
         const labelElement = getByText(label)
-        expect(document.body.contains(labelElement)).to.be.true;
+        expect(document.body.contains(labelElement)).toBe(true);
     });
 
     it('handles empty or undefined labels correctly', () => {
