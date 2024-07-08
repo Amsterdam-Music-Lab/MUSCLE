@@ -4,6 +4,7 @@ from django.conf import settings
 from django.contrib import admin
 from django.utils.html import format_html
 from django.utils.safestring import mark_safe
+from modeltranslation.admin import TranslationAdmin
 from .models import FooterConfig, HeaderConfig, ThemeConfig
 from .forms import ThemeConfigForm, FooterConfigForm
 
@@ -20,7 +21,7 @@ class HeaderConfigInline(admin.StackedInline):
 
 
 @admin.register(ThemeConfig)
-class ThemeConfigAdmin(admin.ModelAdmin):
+class ThemeConfigAdmin(TranslationAdmin):
 
     form = ThemeConfigForm
     inlines = [HeaderConfigInline, FooterConfigInline]
@@ -79,7 +80,7 @@ class ThemeConfigAdmin(admin.ModelAdmin):
                     font=obj.heading_font_url
                 )
         return "No font selected"
-    
+
     def body_font_preview(self, obj):
         if obj.body_font_url:
             # Check if the font field contains a URL

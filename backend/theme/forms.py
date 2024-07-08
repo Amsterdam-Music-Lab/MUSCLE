@@ -1,4 +1,5 @@
 from django import forms
+from modeltranslation.forms import TranslationModelForm
 from .models import ThemeConfig
 from experiment.forms import MarkdownPreviewTextInput
 
