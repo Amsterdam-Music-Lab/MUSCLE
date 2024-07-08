@@ -7,9 +7,17 @@ class ThemeConfig(models.Model):
     heading_font_url = models.CharField(blank=True, max_length=255, default='')
     body_font_url = models.CharField(blank=True, max_length=255, default='')
     logo_image = models.ForeignKey(
-        'image.Image', blank=True, null=True, on_delete=models.SET_NULL, related_name='theme_logo')
+        'image.Image',
+        blank=True,
+        null=True,
+        on_delete=models.SET_NULL,
+        related_name='theme_logo')
     background_image = models.ForeignKey(
-        'image.Image', blank=True, null=True, on_delete=models.SET_NULL, related_name='theme_background')
+        'image.Image',
+        blank=True,
+        null=True,
+        on_delete=models.SET_NULL,
+        related_name='theme_background')
 
     def __str__(self):
         return self.name
