@@ -28,11 +28,14 @@ django==4.2.14
     #   django-cors-headers
     #   django-inline-actions
     #   django-markup
+    #   django-modeltranslation
 django-cors-headers==4.0.0
     # via -r requirements.in/base.txt
 django-inline-actions==2.4.0
     # via -r requirements.in/base.txt
 django-markup[all-filter-dependencies,all_filter_dependencies]==1.8.1
+    # via -r requirements.in/base.txt
+django-modeltranslation==0.19.5
     # via -r requirements.in/base.txt
 docutils==0.20.1
     # via
