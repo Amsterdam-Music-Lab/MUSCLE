@@ -41,6 +41,7 @@ ALLOWED_HOSTS = os.getenv("AML_ALLOWED_HOSTS", "localhost").split(",")
 
 INSTALLED_APPS = [
     'admin_interface',
+    'modeltranslation',  # Must be before django.contrib.admin
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -58,7 +59,7 @@ INSTALLED_APPS = [
     'session',
     'section',
     'theme',
-    'question'
+    'question',
 ]
 
 MIDDLEWARE = [
@@ -116,8 +117,6 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/3.0/topics/i18n/
 
-# LANGUAGE_CODE = 'en-us'
-
 TIME_ZONE = 'Europe/Amsterdam'
 
 USE_I18N = True
@@ -125,6 +124,18 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
+
+
+def gettext(s):
+    return s
+
+
+LANGUAGES = (
+    ('nl', gettext('Dutch')),
+    ('en', gettext('English')),
+    ('pt', gettext('Portuguese')),
+    ('zh-hans', gettext('Chinese')),
+)
 
 # Increase django limits for large data sets
 # A request timeout should be set in the webserver
