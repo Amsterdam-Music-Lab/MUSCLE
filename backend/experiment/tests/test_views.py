@@ -237,7 +237,9 @@ class ExperimentViewsTest(TestCase):
                 file='test-image.jpg'
             ),
             rules=Hooked.ID,
-            theme_config=create_theme_config()
+            theme_config=create_theme_config(),
+            rounds=3,
+            bonus_points=42,
         )
         participant = Participant.objects.create()
         Session.objects.bulk_create([
@@ -260,6 +262,12 @@ class ExperimentViewsTest(TestCase):
         )
         self.assertEqual(
             response.json()['theme']['footer']['disclaimer'], '<p>Test Disclaimer</p>'
+        )
+        self.assertEqual(
+            response.json()['rounds'], 3
+        )
+        self.assertEqual(
+            response.json()['bonus_points'], 42
         )
 
 
