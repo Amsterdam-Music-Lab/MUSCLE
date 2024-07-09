@@ -4,6 +4,7 @@ from os.path import join
 from .toontjehoger_1_mozart import toontjehoger_ranks
 from .toontjehoger_6_relative import ToontjeHoger6Relative
 from experiment.actions import Explainer, Step, Score, Final, Info
+from experiment.actions.utils import get_current_collection_url
 
 logger = logging.getLogger(__name__)
 
@@ -82,7 +83,7 @@ class ToontjeHogerKids6Relative(ToontjeHoger6Relative):
             body=body,
             heading="Relatief gehoor",
             button_label="Terug naar ToontjeHogerKids",
-            button_link="/collection/thkids"
+            button_link=get_current_collection_url(session)
         )
 
         return [*score, final, info]

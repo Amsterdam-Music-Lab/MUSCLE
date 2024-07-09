@@ -9,6 +9,7 @@ from experiment.actions.form import ButtonArrayQuestion, ChoiceQuestion, Form
 from experiment.actions.playback import ImagePlayer
 from experiment.actions.styles import STYLE_NEUTRAL_INVERTED
 from experiment.actions.frontend_style import FrontendStyle, EFrontendStyle
+from experiment.actions.utils import get_current_collection_url
 from experiment.utils import create_player_labels
 from .base import Base
 from result.utils import prepare_result
@@ -290,7 +291,7 @@ class ToontjeHoger2Preverbal(Base):
             body=body,
             heading="Het eerste luisteren",
             button_label="Terug naar ToontjeHoger",
-            button_link="/collection/toontjehoger"
+            button_link=get_current_collection_url(session)
         )
 
         return [*score, final, info]

@@ -11,6 +11,7 @@ from experiment.actions.form import ButtonArrayQuestion, Form
 from experiment.actions.frontend_style import FrontendStyle, EFrontendStyle
 from experiment.actions.playback import Multiplayer
 from experiment.actions.styles import STYLE_NEUTRAL_INVERTED
+from experiment.actions.utils import get_current_collection_url
 from experiment.utils import create_player_labels
 from .base import Base
 from result.utils import prepare_result
@@ -182,7 +183,7 @@ class ToontjeHoger4Absolute(Base):
             body=body,
             heading="Absoluut gehoor",
             button_label="Terug naar ToontjeHoger",
-            button_link="/collection/toontjehoger"
+            button_link=get_current_collection_url(session)
         )
 
         return [*score, final, info]

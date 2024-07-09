@@ -6,23 +6,30 @@ from django.utils.translation import gettext_lazy as _
 from django.template.loader import render_to_string
 
 from experiment.actions import Final
+from session.models import Session
 
 COLLECTION_KEY = 'experiment_collection'
+
+
+def get_current_collection_url(session: Session) -> str:
+    collection_slug = session.load_json_data().get(COLLECTION_KEY)
+    if not collection_slug:
+        return None
+
+    if session.participant.participant_id_url:
+        participant_id_url = session.participant.participant_id_url
+        return f'/collection/{collection_slug}?participant_id={participant_id_url}'
+    else:
+        return f'/collection/{collection_slug}'
 
 
 def final_action_with_optional_button(session, final_text='', title=_('End'), button_text=_('Continue')):
     """ given a session, a score message and an optional session dictionary from an experiment collection,
     return a Final.action, which has a button to continue to the next block if series is defined
     """
-    collection_slug = session.load_json_data().get(COLLECTION_KEY)
+    redirect_url = get_current_collection_url(session)
 
-    if session.participant.participant_id_url:
-        participant_id_url = session.participant.participant_id_url
-        redirect_url = f'/collection/{collection_slug}?participant_id_url={participant_id_url}'
-    else:
-        redirect_url = f'/collection/{collection_slug}'
-
-    if collection_slug:
+    if redirect_url:
         return Final(
             title=title,
             session=session,

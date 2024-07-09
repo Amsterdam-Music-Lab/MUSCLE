@@ -9,5 +9,4 @@ from .playback import Playback
 from .playlist import Playlist
 from .redirect import Redirect
 from .score import Score
-from .toontjehoger import ToontjeHoger
 from .trial import Trial
