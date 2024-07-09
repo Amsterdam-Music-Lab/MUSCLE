@@ -1,12 +1,13 @@
 import React from 'react';
+import { vi } from 'vitest';
 import { render, fireEvent } from '@testing-library/react';
 import ButtonArray from './_ButtonArray';
-import { vi } from 'vitest';
+import { QuestionViews } from '@/types/Question'
 
 const getProps = (overrides = {}) => ({
     question: {
         "key": "know_song",
-        "view": "BUTTON_ARRAY",
+        "view": QuestionViews.BUTTON_ARRAY,
         "explainer": "",
         "question": "1. Do you know this song?",
         "result_id": 12345,
@@ -27,6 +28,7 @@ const getProps = (overrides = {}) => ({
 });
 
 describe('ButtonArray', () => {
+
     it('adds the "checked" class to a button when it is selected', () => {
         const props = getProps({ value: 'yes' });
         const { getByText } = render(<ButtonArray {...props} />);

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 
 import classNames from "classnames";
 
@@ -12,15 +12,15 @@ import Checkboxes from "./_Checkboxes";
 import DropDown from "./_DropDown";
 import AutoComplete from "./_AutoComplete";
 
-export const AUTOCOMPLETE = "AUTOCOMPLETE";
-export const BUTTON_ARRAY = "BUTTON_ARRAY";
-export const CHECKBOXES = "CHECKBOXES";
-export const DROPDOWN = "DROPDOWN";
-export const RADIOS = "RADIOS";
-export const RANGE = "RANGE";
-export const TEXT_RANGE = "TEXT_RANGE";
-export const ICON_RANGE = "ICON_RANGE";
-export const STRING = "STRING";
+import IQuestion, { QuestionViews } from "@/types/Question";
+
+interface QuestionProps {
+    question: IQuestion;
+    onChange: (value: string | number | boolean, id: number) => void;
+    id: number;
+    disabled?: boolean;
+    emphasizeTitle?: boolean;
+}
 
 /** Question is an block view that shows a question and handles storing the answer */
 const Question = ({
@@ -29,16 +29,16 @@ const Question = ({
     id,
     disabled = false,
     emphasizeTitle = false,
-}) => {
+}: QuestionProps) => {
     const [value, setValue] = useState(question.value || "");
 
-    const registerChange = (value) => {
+    const registerChange = (value: string | number | boolean) => {
         onChange(value, id);
         setValue(value);
     };
 
     // render view
-    const render = (view) => {
+    const render = (view: QuestionViews) => {
         const attrs = {
             value,
             question,
@@ -49,23 +49,23 @@ const Question = ({
         };
 
         switch (view) {
-            case BUTTON_ARRAY:
+            case QuestionViews.BUTTON_ARRAY:
                 return <ButtonArray {...attrs} />;
-            case CHECKBOXES:
+            case QuestionViews.CHECKBOXES:
                 return <Checkboxes {...attrs} />;
-            case DROPDOWN:
+            case QuestionViews.DROPDOWN:
                 return <DropDown {...attrs} />;
-            case AUTOCOMPLETE:
+            case QuestionViews.AUTOCOMPLETE:
                 return <AutoComplete {...attrs} />;
-            case RADIOS:
+            case QuestionViews.RADIOS:
                 return <Radios {...attrs} />;
-            case RANGE:
+            case QuestionViews.RANGE:
                 return <Range {...attrs} />;
-            case TEXT_RANGE:
+            case QuestionViews.TEXT_RANGE:
                 return <TextRange {...attrs} />;
-            case ICON_RANGE:
+            case QuestionViews.ICON_RANGE:
                 return <IconRange {...attrs} />;
-            case STRING:
+            case QuestionViews.STRING:
                 return <String {...attrs} />;
 
             default:

@@ -1,11 +1,15 @@
-import React from "react";
-
 import { renderLabel } from "../../util/label";
 
-const RangeLimits = ({ minVal, maxVal, labels}) => {
+interface RangeLimitsProps {
+    minVal: string;
+    maxVal: string;
+    labels?: string[];
+}
+
+const RangeLimits = ({ minVal, maxVal, labels }: RangeLimitsProps) => {
     return (
         <div className="limits">
-            { labels ?
+            {labels ?
                 <div className="labels">
                     {labels.map(label => (
                         <span>{renderLabel(label)}</span>

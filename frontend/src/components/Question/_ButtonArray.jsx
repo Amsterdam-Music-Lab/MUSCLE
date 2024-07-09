@@ -25,7 +25,7 @@ const ButtonArray = ({ question, disabled, onChange, value }) => {
                         value={val}
                         index={index}
                         name={question.key}
-                        key={question.key + index}
+                        key={`${question.key}-${index}`}
                         onChange={buttonPress}
                         disabled={disabled}
                         checked={value === val}
@@ -54,6 +54,7 @@ const ToggleButton = ({ label, value, index, name, disabled, onChange, checked }
                 disabled={disabled}
                 onChange={() => onChange(value)}
                 onKeyPress={() => onChange(value)}
+                data-testid={`toggle-button-${value}`}
             />
             {renderLabel(label)}
         </label>)
