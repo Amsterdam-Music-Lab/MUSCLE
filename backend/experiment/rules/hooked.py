@@ -44,8 +44,8 @@ class Hooked(Base):
             {"name": "TIPI", "keys": QUESTION_GROUPS["TIPI"], "randomize": True}, # 5. TIPI (10 questions)
         ]
 
-    def first_round(self, experiment):
-        """Create data for the first experiment rounds."""
+    def first_round(self, block):
+        """Create data for the first block rounds."""
 
         # 1. Explain game.
         explainer = Explainer(
@@ -63,15 +63,15 @@ class Hooked(Base):
 
         # 2. Add consent from file or admin (admin has priority)
         consent = Consent(
-            experiment.consent,
+            block.consent,
             title=_('Informed consent'),
             confirm=_('I agree'),
             deny=_('Stop'),
             url=self.consent_file
             )
-        
+
         # 3. Choose playlist.
-        playlist = Playlist(experiment.playlists.all())
+        playlist = Playlist(block.playlists.all())
 
         return [
             consent,
@@ -84,9 +84,9 @@ class Hooked(Base):
         json_data = session.load_json_data()
         round_number = self.get_current_round(session)
 
-        # If the number of results equals the number of experiment.rounds,
+        # If the number of results equals the number of block.rounds,
         # close the session and return data for the final_score view.
-        if round_number == session.experiment.rounds:
+        if round_number == session.block.rounds:
 
             # Finish session.
             session.finish()
@@ -101,7 +101,7 @@ class Hooked(Base):
                     final_text=self.final_score_message(session),
                     rank=self.rank(session),
                     social=self.social_media_info(
-                        session.experiment, total_score),
+                        session.block, total_score),
                     show_profile_link=True,
                     button={
                         'text': _('Play again'),
@@ -202,7 +202,7 @@ class Hooked(Base):
 
     def get_trial_title(self, session, round_number):
         return _("Round %(number)d / %(total)d") %\
-            {'number': round_number+1, 'total': session.experiment.rounds}
+            {'number': round_number+1, 'total': session.block.rounds}
 
     def plan_sections(self, session, filter_by={}):
         """Set the plan of tracks for a session.
@@ -216,7 +216,7 @@ class Hooked(Base):
         # 2/3 of the rounds are SongSync, of which 1/4 old songs, 3/4 "free"
         # 1/3 of the rounds are "heard before", of which 1/2 old songs
         # e.g. 30 rounds -> 20 SongSync with 5 songs to be repeated later
-        n_rounds = session.experiment.rounds
+        n_rounds = session.block.rounds
         n_old = round(0.17 * n_rounds)
         n_new = round(0.17 * n_rounds)
         n_free = n_rounds - 2 * n_old - n_new

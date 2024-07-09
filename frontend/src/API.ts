@@ -101,7 +101,7 @@ export const createSession = async ({ block, participant, playlist }: CreateSess
         const response = await axios.post(
             API_BASE_URL + URLS.session.create,
             qs.stringify({
-                experiment_id: block.id,
+                block_id: block.id,
                 playlist_id: playlist.current,
                 csrfmiddlewaretoken: participant.csrf_token,
             })

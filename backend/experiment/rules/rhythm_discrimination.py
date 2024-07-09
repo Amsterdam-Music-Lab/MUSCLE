@@ -80,8 +80,8 @@ STIMULI = {
 class RhythmDiscrimination(Base):
     ID = 'RHYTHM_DISCRIMINATION'
 
-    def first_round(self, experiment):
-        """Create data for the first experiment rounds"""
+    def first_round(self, block):
+        """Create data for the first block rounds"""
         explainer = intro_explainer()
         explainer2 = practice_explainer()
 
@@ -112,7 +112,7 @@ def next_trial_actions(session, round_number):
         return actions
 
     if len(plan) == round_number-1:
-        return [finalize_experiment(session)]
+        return [finalize_block(session)]
 
     condition = plan[round_number-1]
 
@@ -213,10 +213,10 @@ def plan_stimuli(session):
         {'rhythm': STIMULI['practice']['nonmetric']['deviant'],
             'tag': random.choice(tempi), 'group': '0'},
     ]
-    experiment = metric_deviants + metric_standard + \
+    block = metric_deviants + metric_standard + \
         nonmetric_deviants + nonmetric_standard
-    random.shuffle(experiment)
-    plan = practice + experiment
+    random.shuffle(block)
+    plan = practice + block
     session.save_json_data({'plan': plan})
     session.save()
 
@@ -259,7 +259,7 @@ def response_explainer(correct, same, button_label=_('Next fragment')):
     )
 
 
-def finalize_experiment(session):
+def finalize_block(session):
     # we had 4 practice trials and 60 experiment trials
     percentage = (sum([res.score for res in session.result_set.all()]
                       ) / session.result_set.count()) * 100

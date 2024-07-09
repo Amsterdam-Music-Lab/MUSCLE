@@ -13,8 +13,8 @@ logger = logging.getLogger(__name__)
 class ToontjeHogerKids5Tempo(ToontjeHoger5Tempo):
     ID = 'TOONTJE_HOGER_KIDS_5_TEMPO'
 
-    def first_round(self, experiment):
-        """Create data for the first experiment rounds."""
+    def first_round(self, block):
+        """Create data for the first block rounds."""
 
         # 1. Explain game.
         explainer = Explainer(
@@ -105,7 +105,7 @@ class ToontjeHogerKids5Tempo(ToontjeHoger5Tempo):
 
         # Final
         final_text = "Best lastig!"
-        if session.final_score >= session.experiment.rounds * 0.5 * self.SCORE_CORRECT:
+        if session.final_score >= session.block.rounds * 0.5 * self.SCORE_CORRECT:
             final_text = "Goed gedaan!"
 
         final = Final(

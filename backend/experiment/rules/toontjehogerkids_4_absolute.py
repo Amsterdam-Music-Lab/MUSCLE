@@ -9,8 +9,8 @@ class ToontjeHogerKids4Absolute(ToontjeHoger4Absolute):
     ID = 'TOONTJE_HOGER_KIDS_4_ABSOLUTE'
     PLAYLIST_ITEMS = 12
 
-    def first_round(self, experiment):
-        """Create data for the first experiment rounds."""
+    def first_round(self, block):
+        """Create data for the first block rounds."""
 
         # 1. Explain game.
         explainer = Explainer(
@@ -44,7 +44,7 @@ class ToontjeHogerKids4Absolute(ToontjeHoger4Absolute):
 
         # Final
         final_text = "Best lastig!"
-        if session.final_score >= session.experiment.rounds * 0.5 * self.SCORE_CORRECT:
+        if session.final_score >= session.block.rounds * 0.5 * self.SCORE_CORRECT:
             final_text = "Goed gedaan!"
 
         final = Final(

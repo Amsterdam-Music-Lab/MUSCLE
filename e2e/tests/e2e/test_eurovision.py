@@ -12,15 +12,15 @@ class TestEurovision(BaseTest):
 
     def test_eurovision(self):
 
-        experiment_name = "eurovision"
+        block_name = "eurovision"
 
         try:
 
-            experiment_slug = self.config['experiment_slugs'][experiment_name]
-            self.driver.get(f"{self.base_url}/{experiment_slug}")
+            block_slug = self.config['block_slugs'][block_name]
+            self.driver.get(f"{self.base_url}/{block_slug}")
 
             # if page body contains the word "Error", raise an exception
-            self.check_for_error(experiment_name, experiment_slug)
+            self.check_for_error(block_name, block_slug)
 
             # Check & Agree to Informed Consent
             self.agree_to_consent()
@@ -130,4 +130,4 @@ class TestEurovision(BaseTest):
             print("Eurovision Test completed!")
 
         except Exception as e:
-            self.handle_error(e, experiment_name)
+            self.handle_error(e, block_name)

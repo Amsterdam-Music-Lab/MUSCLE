@@ -38,8 +38,8 @@ class ToontjeHoger6Relative(Base):
             errors.append('The sections should have the tags a, b, c')
         return errors
 
-    def first_round(self, experiment):
-        """Create data for the first experiment rounds."""
+    def first_round(self, block):
+        """Create data for the first block rounds."""
 
         # 1. Explain game.
         explainer = Explainer(

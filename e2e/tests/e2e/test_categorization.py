@@ -12,16 +12,16 @@ class TestCategorization(BaseTest):
 
     def test_categorization(self):
 
-        experiment_name = "categorization"
+        block_name = "categorization"
 
         try:
             self.driver.delete_all_cookies()
 
-            experiment_slug = self.config['experiment_slugs'][experiment_name]
-            self.driver.get(f"{self.base_url}/{experiment_slug}")
+            block_slug = self.config['block_slugs'][block_name]
+            self.driver.get(f"{self.base_url}/{block_slug}")
 
             # if page body contains the word "Error", raise an exception
-            self.check_for_error(experiment_name, experiment_slug)
+            self.check_for_error(block_name, block_slug)
 
             # wait until h4 element is present and contains "INFORMED CONSENT" text (case-insensitive)
             WebDriverWait(self.driver, 5) \
@@ -129,4 +129,4 @@ class TestCategorization(BaseTest):
                     training = False
 
         except Exception as e:
-            self.handle_error(e, experiment_name)
+            self.handle_error(e, block_name)

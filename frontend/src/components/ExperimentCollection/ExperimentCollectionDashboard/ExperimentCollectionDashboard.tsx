@@ -16,10 +16,10 @@ interface ExperimentCollectionDashboardProps {
 export const ExperimentCollectionDashboard: React.FC<ExperimentCollectionDashboardProps> = ({ experimentCollection, participantIdUrl, totalScore }) => {
 
     const { dashboard, description } = experimentCollection;
-    const { nextExperimentButtonText, aboutButtonText } = experimentCollection.theme?.header || { nextExperimentButtonText: "", aboutButtonText: "" };
+    const { nextBlockButtonText, aboutButtonText } = experimentCollection.theme?.header || { nextBlockButtonText: "", aboutButtonText: "" };
 
     const scoreDisplayConfig = experimentCollection.theme?.header?.score;
-    const nextBlockSlug = experimentCollection.nextExperiment?.slug;
+    const nextBlockSlug = experimentCollection.nextBlock?.slug;
     const showHeader = experimentCollection.theme?.header;
     const socialMediaConfig = experimentCollection.socialMediaConfig;
 
@@ -35,7 +35,7 @@ export const ExperimentCollectionDashboard: React.FC<ExperimentCollectionDashboa
                     totalScore={totalScore}
                     description={description}
                     scoreDisplayConfig={scoreDisplayConfig}
-                    nextBlockButtonText={nextExperimentButtonText}
+                    nextBlockButtonText={nextBlockButtonText}
                     aboutButtonText={aboutButtonText}
                     socialMediaConfig={socialMediaConfig}
                 />

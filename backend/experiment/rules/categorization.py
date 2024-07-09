@@ -29,7 +29,7 @@ class Categorization(Base):
             },
         ]
 
-    def first_round(self, experiment):
+    def first_round(self, block):
         explainer = Explainer(
             instruction="This is a listening experiment in which you have to respond to short sound sequences.",
             steps=[],
@@ -37,7 +37,7 @@ class Categorization(Base):
         )
         # Add consent from file or admin (admin has priority)
         consent = Consent(
-            experiment.consent,
+            block.consent,
             title='Informed consent',
             confirm='I agree',
             deny='Stop',
@@ -80,7 +80,7 @@ class Categorization(Base):
 
         # Calculate round number from passed training rounds
         rounds_passed = (session.rounds_passed() -
-                         int(json_data['training_rounds']))            
+                         int(json_data['training_rounds']))
         # Change phase to enable collecting results of second half of training-1
         if session.rounds_passed() == 10:
             json_data['phase'] = 'training-1B'
@@ -185,8 +185,8 @@ class Categorization(Base):
             feedback = self.get_feedback(session)
             return [feedback, explainer]
 
-        elif json_data['phase'] == 'testing':           
-            if rounds_passed < len(json_data['sequence']):                
+        elif json_data['phase'] == 'testing':
+            if rounds_passed < len(json_data['sequence']):
                 # Determine wether this round has feedback
                 if rounds_passed in json_data['feedback_sequence']:
                     return self.get_trial_with_feedback(session)
@@ -258,7 +258,7 @@ class Categorization(Base):
         """
 
         # Check for unfinished sessions older then 24 hours caused by closed browser
-        all_sessions = session.experiment.session_set.filter(
+        all_sessions = session.block.session_set.filter(
             finished_at=None).filter(
             started_at__lte=timezone.now()-timezone.timedelta(hours=24)).exclude(
             json_data__contains='ABORTED').exclude(
@@ -276,18 +276,18 @@ class Categorization(Base):
 
         # Count sessions per assigned group
         used_groups = [
-            session.experiment.session_set.filter(
+            session.block.session_set.filter(
                 json_data__contains='S1').count(),
-            session.experiment.session_set.filter(
+            session.block.session_set.filter(
                 json_data__contains='S2').count(),
-            session.experiment.session_set.filter(
+            session.block.session_set.filter(
                 json_data__contains='C1').count(),
-            session.experiment.session_set.filter(
+            session.block.session_set.filter(
                 json_data__contains='C2').count()
         ]
 
         # Get sessions for current participant
-        current_sessions = session.experiment.session_set.filter(
+        current_sessions = session.block.session_set.filter(
             participant=session.participant)
 
         # Check if this participant already has a previous session

@@ -15,8 +15,8 @@ class ToontjeHogerKids1Mozart(ToontjeHoger1Mozart):
     ANSWER_URL1 = "/images/experiments/toontjehogerkids/mozart-effect1-answer.webp"
     ANSWER_URL2 = "/images/experiments/toontjehogerkids/mozart-effect2-answer.webp"
 
-    def first_round(self, experiment):
-        """Create data for the first experiment rounds."""
+    def first_round(self, block):
+        """Create data for the first block rounds."""
 
         # 1. Explain game.
         explainer = Explainer(

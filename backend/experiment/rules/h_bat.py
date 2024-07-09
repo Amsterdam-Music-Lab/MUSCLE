@@ -48,19 +48,19 @@ class HBat(Base):
             action = self.next_trial_action(session, trial_condition, 1)
             if not action:
                 # participant answered first trial incorrectly (outlier)
-                action = self.finalize_experiment(session)
+                action = self.finalize_block(session)
         else:
             action = staircasing(session, self.next_trial_action)
             if not action:
                 # action is None if the audio file doesn't exist
-                action = self.finalize_experiment(session)
+                action = self.finalize_block(session)
             if session.final_score == MAX_TURNPOINTS+1:
                 # delete result created before this check
                 session.result_set.order_by('-created_at').first().delete()
-                action = self.finalize_experiment(session)
+                action = self.finalize_block(session)
             return action
-    
-    def first_round(self, experiment):
+
+    def first_round(self, block):
         explainer = self.intro_explainer()
         # Consent with admin text or default text
         explainer2 = practice_explainer()
@@ -71,7 +71,7 @@ class HBat(Base):
 
     def next_trial_action(self, session, trial_condition, level=1, *kwargs):
         """
-        Get the next actions for the experiment
+        Get the next actions for the block
         trial_condition is either 1 or 0
         level can be 1 (20 ms) or higher (10, 5, 2.5 ms...)
         """
@@ -111,7 +111,7 @@ class HBat(Base):
             }
         )
         return view
-    
+
     def intro_explainer(self):
         return Explainer(
             instruction=_(
@@ -132,7 +132,7 @@ class HBat(Base):
             step_numbers=True,
             button_label='Ok'
         )
-    
+
     def response_explainer(self, correct, slower, button_label=_('Next fragment')):
         if correct:
             if slower:
@@ -153,8 +153,8 @@ class HBat(Base):
             steps=[],
             button_label=button_label
         )
-    
-    def finalize_experiment(self, session):
+
+    def finalize_block(self, session):
         """ if either the max_turnpoints have been reached,
         or if the section couldn't be found (outlier), stop the experiment
         """
@@ -169,7 +169,7 @@ class HBat(Base):
         session.finish()
         session.save()
         return final_action_with_optional_button(session, final_text)
-    
+
     def get_trivia(self):
         return _("When people listen to music, they often perceive an underlying regular pulse, like the woodblock \
             in this task. This allows us to clap along with the music at a concert and dance together in synchrony.")

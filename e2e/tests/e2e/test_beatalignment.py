@@ -9,11 +9,11 @@ from tests.base_test import BaseTest
 class TestBeatAlignment(BaseTest):
 
     def test_beatalignment(self):
-        experiment_name = "beat_alignment"
-        experiment_slug = self.config['experiment_slugs'][experiment_name]
-        self.driver.get(f"{self.base_url}/{experiment_slug}")
+        block_name = "beat_alignment"
+        block_slug = self.config['block_slugs'][block_name]
+        self.driver.get(f"{self.base_url}/{block_slug}")
 
-        self.check_for_error(experiment_name, experiment_slug)
+        self.check_for_error(block_name, block_slug)
 
         WebDriverWait(self.driver, 5).until(expected_conditions.element_to_be_clickable((By.XPATH, '//button[text()="Ok"]'))).click()
 

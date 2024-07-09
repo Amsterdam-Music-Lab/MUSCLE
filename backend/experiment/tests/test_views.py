@@ -4,14 +4,14 @@ from django.utils import timezone
 
 from image.models import Image
 from experiment.serializers import (
-    serialize_experiment,
+    serialize_block,
     serialize_phase
 )
 from experiment.models import (
-    Experiment,
+    Block,
     ExperimentCollection,
     Phase,
-    GroupedExperiment,
+    GroupedBlock,
     SocialMediaConfig,
 )
 from experiment.rules.hooked import Hooked
@@ -37,10 +37,10 @@ class TestExperimentCollectionViews(TestCase):
             series=collection,
             index=1
         )
-        cls.experiment1 = Experiment.objects.create(
-            name='experiment1', slug='experiment1')
-        GroupedExperiment.objects.create(
-            experiment=cls.experiment1,
+        cls.block1 = Block.objects.create(
+            name='block1', slug='block1')
+        GroupedBlock.objects.create(
+            block=cls.block1,
             phase=introductory_phase
         )
         intermediate_phase = Phase.objects.create(
@@ -48,16 +48,16 @@ class TestExperimentCollectionViews(TestCase):
             series=collection,
             index=2
         )
-        cls.experiment2 = Experiment.objects.create(
-            name='experiment2', slug='experiment2', theme_config=theme_config)
-        cls.experiment3 = Experiment.objects.create(
-            name='experiment3', slug='experiment3')
-        GroupedExperiment.objects.create(
-            experiment=cls.experiment2,
+        cls.block2 = Block.objects.create(
+            name='block2', slug='block2', theme_config=theme_config)
+        cls.block3 = Block.objects.create(
+            name='block3', slug='block3')
+        GroupedBlock.objects.create(
+            block=cls.block2,
             phase=intermediate_phase
         )
-        GroupedExperiment.objects.create(
-            experiment=cls.experiment3,
+        GroupedBlock.objects.create(
+            block=cls.block3,
             phase=intermediate_phase
         )
         final_phase = Phase.objects.create(
@@ -65,10 +65,10 @@ class TestExperimentCollectionViews(TestCase):
             series=collection,
             index=3
         )
-        cls.experiment4 = Experiment.objects.create(
-            name='experiment4', slug='experiment4')
-        GroupedExperiment.objects.create(
-            experiment=cls.experiment4,
+        cls.block4 = Block.objects.create(
+            name='block4', slug='block4')
+        GroupedBlock.objects.create(
+            block=cls.block4,
             phase=final_phase
         )
 
@@ -80,31 +80,31 @@ class TestExperimentCollectionViews(TestCase):
         # check that first_experiments is returned correctly
         response = self.client.get('/experiment/collection/test_series/')
         self.assertEqual(response.json().get(
-            'nextExperiment').get('slug'), 'experiment1')
+            'nextBlock').get('slug'), 'block1')
         # create session
         Session.objects.create(
-            experiment=self.experiment1,
+            block=self.block1,
             participant=self.participant,
             finished_at=timezone.now()
         )
         response = self.client.get('/experiment/collection/test_series/')
-        self.assertIn(response.json().get('nextExperiment').get(
-            'slug'), ('experiment2', 'experiment3'))
+        self.assertIn(response.json().get('nextBlock').get(
+            'slug'), ('block2', 'block3'))
         self.assertEqual(response.json().get('dashboard'), [])
         Session.objects.create(
-            experiment=self.experiment2,
+            block=self.block2,
             participant=self.participant,
             finished_at=timezone.now()
         )
         Session.objects.create(
-            experiment=self.experiment3,
+            block=self.block3,
             participant=self.participant,
             finished_at=timezone.now()
         )
         response = self.client.get('/experiment/collection/test_series/')
         response_json = response.json()
         self.assertEqual(response_json.get(
-            'nextExperiment').get('slug'), 'experiment4')
+            'nextBlock').get('slug'), 'block4')
         self.assertEqual(response_json.get('dashboard'), [])
         self.assertEqual(response_json.get('theme').get('name'), 'test_theme')
         self.assertEqual(len(response_json['theme']['header']['score']), 3)
@@ -129,12 +129,12 @@ class TestExperimentCollectionViews(TestCase):
         self.assertEqual(response.status_code, 404)
 
     def test_experiment_collection_with_dashboard(self):
-        # if ExperimentCollection has dashboard set True, return list of random experiments
+        # if ExperimentCollection has dashboard set True, return list of random blocks
         session = self.client.session
         session['participant_id'] = self.participant.id
         session.save()
         Session.objects.create(
-            experiment=self.experiment1,
+            block=self.block1,
             participant=self.participant,
             finished_at=timezone.now()
         )
@@ -148,12 +148,12 @@ class TestExperimentCollectionViews(TestCase):
         self.assertEqual(type(response.json().get('dashboard')), list)
 
     def test_experiment_collection_total_score(self):
-        """ Test calculation of total score for grouped experiment on dashboard """
+        """ Test calculation of total score for grouped block on dashboard """
         session = self.client.session
         session['participant_id'] = self.participant.id
         session.save()
         Session.objects.create(
-            experiment=self.experiment2,
+            block=self.block2,
             participant=self.participant,
             finished_at=timezone.now(),
             final_score=8
@@ -167,7 +167,7 @@ class TestExperimentCollectionViews(TestCase):
         total_score_1 = serialized_coll_1['totalScore']
         self.assertEqual(total_score_1, 8)
         Session.objects.create(
-            experiment=self.experiment3,
+            block=self.block3,
             participant=self.participant,
             finished_at=timezone.now(),
             final_score=8
@@ -179,12 +179,12 @@ class TestExperimentCollectionViews(TestCase):
 
 class ExperimentViewsTest(TestCase):
 
-    def test_serialize_experiment(self):
-        # Create an experiment
-        experiment = Experiment.objects.create(
-            slug='test-experiment',
-            name='Test Experiment',
-            description='This is a test experiment',
+    def test_serialize_block(self):
+        # Create an block
+        block = Block.objects.create(
+            slug='test-block',
+            name='Test Block',
+            description='This is a test block',
             image=Image.objects.create(
                 title='Test',
                 description='',
@@ -198,24 +198,24 @@ class ExperimentViewsTest(TestCase):
         )
         participant = Participant.objects.create()
         Session.objects.bulk_create([
-            Session(experiment=experiment, participant=participant, finished_at=timezone.now()) for index in range(3)
+            Session(block=block, participant=participant, finished_at=timezone.now()) for index in range(3)
         ])
 
-        # Call the serialize_experiment function
-        serialized_experiment = serialize_experiment(experiment, participant)
+        # Call the serialize_block function
+        serialized_block = serialize_block(block, participant)
 
         # Assert the serialized data
         self.assertEqual(
-            serialized_experiment['slug'], 'test-experiment'
+            serialized_block['slug'], 'test-block'
         )
         self.assertEqual(
-            serialized_experiment['name'], 'Test Experiment'
+            serialized_block['name'], 'Test Block'
         )
         self.assertEqual(
-            serialized_experiment['description'], 'This is a test experiment'
+            serialized_block['description'], 'This is a test block'
         )
         self.assertEqual(
-            serialized_experiment['image'], {
+            serialized_block['image'], {
                 'title': 'Test',
                 'description': '',
                 'file': f'{settings.BASE_URL}/upload/test-image.jpg',
@@ -227,12 +227,12 @@ class ExperimentViewsTest(TestCase):
             }
         )
 
-    def test_get_experiment(self):
-        # Create an experiment
-        experiment = Experiment.objects.create(
-            slug='test-experiment',
-            name='Test Experiment',
-            description='This is a test experiment',
+    def test_get_block(self):
+        # Create an block
+        block = Block.objects.create(
+            slug='test-block',
+            name='Test Block',
+            description='This is a test block',
             image=Image.objects.create(
                 file='test-image.jpg'
             ),
@@ -243,16 +243,16 @@ class ExperimentViewsTest(TestCase):
         )
         participant = Participant.objects.create()
         Session.objects.bulk_create([
-            Session(experiment=experiment, participant=participant, finished_at=timezone.now()) for index in range(3)
+            Session(block=block, participant=participant, finished_at=timezone.now()) for index in range(3)
         ])
 
-        response = self.client.get('/experiment/test-experiment/')
+        response = self.client.get('/experiment/test-block/')
 
         self.assertEqual(
-            response.json()['slug'], 'test-experiment'
+            response.json()['slug'], 'test-block'
         )
         self.assertEqual(
-            response.json()['name'], 'Test Experiment'
+            response.json()['name'], 'Test Block'
         )
         self.assertEqual(
             response.json()['theme']['name'], 'test_theme'

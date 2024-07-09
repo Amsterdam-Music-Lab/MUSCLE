@@ -1,6 +1,6 @@
 from django.test import TestCase
 
-from experiment.models import Experiment
+from experiment.models import Block
 from question.musicgens import MUSICGENS_17_W_VARIANTS
 from participant.models import Participant
 from result.models import Result
@@ -17,15 +17,15 @@ class HookedTest(TestCase):
         cls.participant = Participant.objects.create()
 
     def test_hooked(self):
-        experiment = Experiment.objects.create(name='Hooked', rules='HOOKED', rounds=3)
+        block = Block.objects.create(name='Hooked', rules='HOOKED', rounds=3)
         playlist = Playlist.objects.get(name='Eurovision 2021')
         playlist.update_sections()
         session = Session.objects.create(
-            experiment=experiment,
+            block=block,
             participant=self.participant,
             playlist=playlist
         )
-        rules = session.experiment_rules()
+        rules = session.block_rules()
         rules.plan_sections(session)
         plan = session.load_json_data().get('plan')
         assert plan is not None
@@ -37,35 +37,35 @@ class HookedTest(TestCase):
         assert action is not None
 
     def test_eurovision(self):
-        experiment = Experiment.objects.get(name='Hooked-Eurovision')
+        block = Block.objects.get(name='Hooked-Eurovision')
         playlist = Playlist.objects.get(name='Eurovision 2021')
         playlist.update_sections()
         session = Session.objects.create(
-            experiment=experiment,
+            block=block,
             participant=self.participant,
             playlist=playlist
         )
-        rules = session.experiment_rules()
-        for i in range(0, experiment.rounds):
+        rules = session.block_rules()
+        for i in range(0, block.rounds):
             actions = rules.next_round(session)
             assert actions
 
     def test_thats_my_song(self):
         musicgen_keys = [q.key for q in MUSICGENS_17_W_VARIANTS]
-        experiment = Experiment.objects.get(name='ThatsMySong')
+        block = Block.objects.get(name='ThatsMySong')
         playlist = Playlist.objects.get(name='ThatsMySong')
         playlist.update_sections()
         session = Session.objects.create(
-            experiment=experiment,
+            block=block,
             participant=self.participant,
             playlist=playlist
         )
-        rules = session.experiment_rules()
+        rules = session.block_rules()
         assert rules.feedback_info() is None
 
-        for i in range(0, experiment.rounds):
+        for i in range(0, block.rounds):
             actions = rules.next_round(session)
-            if i == experiment.rounds + 1:
+            if i == block.rounds + 1:
                 assert len(actions) == 2
                 assert actions[1].ID == 'FINAL'
             elif i == 0:
@@ -117,20 +117,18 @@ class HookedTest(TestCase):
                     assert actions[2].feedback_form.form[0].key == 'heard_before'
 
     def test_hooked_china(self):
-        experiment = Experiment.objects.get(name='Hooked-China')
+        block = Block.objects.get(name='Hooked-China')
         playlist = Playlist.objects.get(name='普通话')
         playlist.update_sections()
         session = Session.objects.create(
-            experiment=experiment,
+            block=block,
             participant=self.participant,
             playlist=playlist
         )
-        rules = session.experiment_rules()
+        rules = session.block_rules()
         assert rules.feedback_info() is not None
         question_trials = rules.get_questionnaire(session)
         # assert len(question_trials) == len(rules.questions)
         keys = [q.feedback_form.form[0].key for q in question_trials]
         questions = rules.question_series[0]['keys'][0:3]
         assert set(keys).difference(set(questions)) == set()
-
-

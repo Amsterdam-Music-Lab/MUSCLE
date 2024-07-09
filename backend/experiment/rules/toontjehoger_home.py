@@ -70,12 +70,12 @@ class ToontjeHogerHome(Base):
                        ),
     ]
 
-    def first_round(self, experiment):
-        """Create data for the first experiment round"""
+    def first_round(self, block):
+        """Create data for the first block round"""
 
         # Session history
         sessions = self.get_sessions(participant) # To be fixed in the future
-        next_experiment_slug = self.get_next_experiment_slug(sessions)
+        next_block_slug = self.get_next_block_slug(sessions)
 
         # Score
         score = self.get_score(sessions)
@@ -95,10 +95,10 @@ class ToontjeHogerHome(Base):
             score_class = "diamond"
 
         # Main button shows
-        # - 'next experiment' when user does not have completed all experiments yet
-        # - 'random experiment' when user has completed all experiments
-        main_button_label = "Volgende experiment" if next_experiment_slug else "Willekeurig experiment"
-        main_button_url = "/{}".format(next_experiment_slug) if next_experiment_slug else random.choice([
+        # - 'next experiment' when user does not have completed all blocks yet
+        # - 'random experiment' when user has completed all blocks
+        main_button_label = "Volgende experiment" if next_block_slug else "Willekeurig experiment"
+        main_button_url = "/{}".format(next_block_slug) if next_block_slug else random.choice([
             experiment.slug for experiment in self.EXPERIMENT_DATA])
 
         # Home
@@ -143,25 +143,25 @@ class ToontjeHogerHome(Base):
 
     def get_sessions(self, participant):
         from session.models import Session
-        from experiment.models import Experiment
+        from experiment.models import Block
 
-        experiment_slugs = [
-            experiment.slug for experiment in self.EXPERIMENT_DATA]
+        block_slugs = [
+            block.slug for block in self.EXPERIMENT_DATA]
 
-        experiment_ids = Experiment.objects.filter(slug__in=experiment_slugs)
+        block_ids = Block.objects.filter(slug__in=block_slugs)
 
         sessions = Session.objects.filter(participant=participant,
-                                          experiment_id__in=experiment_ids)
+                                          block_id__in=block_ids)
         return sessions
 
-    def get_next_experiment_slug(self, sessions):
-        experiment_slugs = [
-            experiment.slug for experiment in self.EXPERIMENT_DATA]
+    def get_next_block_slug(self, sessions):
+        block_slugs = [
+            block.slug for block in self.EXPERIMENT_DATA]
         for session in sessions:
-            if session.experiment.slug in experiment_slugs:
-                experiment_slugs.remove(session.experiment.slug)
+            if session.block.slug in block_slugs:
+                block_slugs.remove(session.block.slug)
 
-        if len(experiment_slugs) > 0:
-            return experiment_slugs[0]
+        if len(block_slugs) > 0:
+            return block_slugs[0]
 
         return ''

@@ -7,7 +7,7 @@ from image.serializers import serialize_image
 from participant.models import Participant
 from session.models import Session
 from theme.serializers import serialize_theme
-from .models import Experiment, ExperimentCollection, Phase, GroupedExperiment, SocialMediaConfig
+from .models import Block, ExperimentCollection, Phase, GroupedBlock, SocialMediaConfig
 
 
 def serialize_actions(actions):
@@ -67,66 +67,66 @@ def serialize_phase(
         phase: Phase,
         participant: Participant
         ) -> dict:
-    grouped_experiments = list(GroupedExperiment.objects.filter(
-        phase_id=phase.id).order_by('order'))
+    grouped_blocks = list(GroupedBlock.objects.filter(
+        phase_id=phase.id).order_by('index'))
 
     if phase.randomize:
-        shuffle(grouped_experiments)
+        shuffle(grouped_blocks)
 
-    next_experiment = get_upcoming_experiment(
-        grouped_experiments, participant, phase.dashboard)
+    next_block = get_upcoming_block(
+        grouped_blocks, participant, phase.dashboard)
 
-    total_score = get_total_score(grouped_experiments, participant)
+    total_score = get_total_score(grouped_blocks, participant)
 
-    if not next_experiment:
+    if not next_block:
         return None
 
     return {
-        'dashboard': [serialize_experiment(experiment.experiment, participant) for experiment in grouped_experiments] if phase.dashboard else [],
-        'nextExperiment': next_experiment,
+        'dashboard': [serialize_block(block.block, participant) for block in grouped_blocks] if phase.dashboard else [],
+        'nextBlock': next_block,
         'totalScore': total_score
     }
 
 
-def serialize_experiment(experiment_object: Experiment, participant: Participant):
+def serialize_block(block_object: Block, participant: Participant):
     return {
-        'slug': experiment_object.slug,
-        'name': experiment_object.name,
-        'description': experiment_object.description,
-        'image': serialize_image(experiment_object.image) if experiment_object.image else None,
+        'slug': block_object.slug,
+        'name': block_object.name,
+        'description': block_object.description,
+        'image': serialize_image(block_object.image) if block_object.image else None,
     }
 
 
-def get_upcoming_experiment(experiment_list, participant, repeat_allowed=True):
-    ''' return next experiment with minimum finished sessions for this participant
-     if repeated experiments are not allowed (dashboard=False) and there are only finished sessions, return None '''
+def get_upcoming_block(block_list, participant, repeat_allowed=True):
+    ''' return next block with minimum finished sessions for this participant
+     if repeated blocks are not allowed (dashboard=False) and there are only finished sessions, return None '''
     finished_session_counts = [get_finished_session_count(
-        experiment.experiment, participant) for experiment in experiment_list]
+        block.block, participant) for block in block_list]
     minimum_session_count = min(finished_session_counts)
     if not repeat_allowed and minimum_session_count != 0:
         return None
-    return serialize_experiment(experiment_list[finished_session_counts.index(minimum_session_count)].experiment, participant)
+    return serialize_block(block_list[finished_session_counts.index(minimum_session_count)].block, participant)
 
 
-def get_started_session_count(experiment, participant):
-    ''' Get the number of started sessions for this experiment and participant '''
+def get_started_session_count(block, participant):
+    ''' Get the number of started sessions for this block and participant '''
     count = Session.objects.filter(
-        experiment=experiment, participant=participant).count()
+        block=block, participant=participant).count()
     return count
 
 
-def get_finished_session_count(experiment, participant):
-    ''' Get the number of finished sessions for this experiment and participant '''
+def get_finished_session_count(block, participant):
+    ''' Get the number of finished sessions for this block and participant '''
     count = Session.objects.filter(
-        experiment=experiment, participant=participant, finished_at__isnull=False).count()
+        block=block, participant=participant, finished_at__isnull=False).count()
     return count
 
 
-def get_total_score(grouped_experiments, participant):
-    '''Calculate total score of all experiments on the dashboard'''
+def get_total_score(grouped_blocks, participant):
+    '''Calculate total score of all blocks on the dashboard'''
     total_score = 0
-    for grouped_experiment in grouped_experiments:
-        sessions = Session.objects.filter(experiment=grouped_experiment.experiment, participant=participant)
+    for grouped_block in grouped_blocks:
+        sessions = Session.objects.filter(block=grouped_block.block, participant=participant)
         for session in sessions:
             total_score += session.final_score
     return total_score

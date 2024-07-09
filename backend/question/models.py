@@ -1,5 +1,5 @@
 from django.db import models
-from experiment.models import Experiment
+from experiment.models import Block
 
 
 class Question(models.Model):
@@ -17,7 +17,7 @@ class Question(models.Model):
 
 
 class QuestionGroup(models.Model):
-    """Convenience model for groups of questions to add at once to Experiment QuestionSeries from admin"""
+    """Convenience model for groups of questions to add at once to Block QuestionSeries from admin"""
 
     key = models.CharField(primary_key=True, max_length=128)
     questions = models.ManyToManyField(Question)
@@ -32,11 +32,11 @@ class QuestionGroup(models.Model):
 
 
 class QuestionSeries(models.Model):
-    """Series of Questions asked in an Experiment"""
+    """Series of Questions asked in an Block"""
 
     name = models.CharField(default='', max_length=128)
-    experiment = models.ForeignKey(Experiment, on_delete=models.CASCADE)
-    index = models.PositiveIntegerField() # index of QuestionSeries within Experiment
+    block = models.ForeignKey(Block, on_delete=models.CASCADE)
+    index = models.PositiveIntegerField() # index of QuestionSeries within Block
     questions = models.ManyToManyField(Question, through='QuestionInSeries')
     randomize = models.BooleanField(default=False) # randomize questions within QuestionSeries
 
@@ -59,4 +59,3 @@ class QuestionInSeries(models.Model):
         unique_together = ('question_series', 'question')
         ordering = ["index"]
         verbose_name_plural = "Question In Series objects"
-

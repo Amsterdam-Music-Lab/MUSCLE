@@ -10,9 +10,9 @@ from experiment.rules.base import Base
 from result.utils import prepare_result
 
 
-class NewExperimentRuleset(Base):
-    ''' An experiment type that could be used to test musical preferences '''
-    ID = 'NEW_EXPERIMENT_RULESET'
+class NewBlockRuleset(Base):
+    ''' An block type that could be used to test musical preferences '''
+    ID = 'NEW_BLOCK_RULESET'
     contact_email = 'info@example.com'
 
     def __init__(self):
@@ -32,20 +32,20 @@ class NewExperimentRuleset(Base):
             },
         ]
 
-    def first_round(self, experiment):
-        ''' Provide the first rounds of the experiment, 
+    def first_round(self, block):
+        ''' Provide the first rounds of the block,
         before session creation
         The first_round must return at least one Info or Explainer action
         Consent and Playlist are often desired, but optional
         '''
         # 1. Informed consent (optional)
-        consent = Consent(experiment.consent,
+        consent = Consent(block.consent,
                             title=_('Informed consent'),
-                            confirm=_('I agree'), 
+                            confirm=_('I agree'),
                             deny=_('Stop'))
-        
+
         # 2. Choose playlist (optional, only relevant if there are multiple playlists the participant can choose from)
-        playlist = Playlist(experiment.playlists.all())
+        playlist = Playlist(block.playlists.all())
 
         # 3. Explainer (optional)
         explainer = Explainer(
@@ -57,13 +57,13 @@ class NewExperimentRuleset(Base):
             ],
             step_numbers=True
         )
-        
+
         return [
             consent,
             playlist,
             explainer
         ]
-    
+
     def next_round(self, session):
         # ask any questions defined in the admin interface
         actions = self.get_questionnaire(session)
@@ -71,7 +71,7 @@ class NewExperimentRuleset(Base):
             return actions
 
         elif session.rounds_complete():
-            # we have as many results as rounds in this experiment
+            # we have as many results as rounds in this block
             # finish session and show Final view
             session.finish()
             session.save()
@@ -102,11 +102,10 @@ class NewExperimentRuleset(Base):
         view = Trial(
             playback=playback,
             feedback_form=form,
-            title=_('Test experiment'),
+            title=_('Test block'),
             config={
                 'response_time': section.duration,
                 'listen_first': True
             }
         )
         return view
-    

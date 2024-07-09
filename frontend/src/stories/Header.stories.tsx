@@ -13,7 +13,7 @@ export default {
 function getHeaderData(overrides = {}) {
     return {
         description: "<h1>Experiment ABC</h1><p>This is the experiment description</p>",
-        nextExperimentSlug: '/th1-mozart',
+        nextBlockSlug: '/th1-mozart',
         nextBlockButtonText: 'Volgende experiment',
         collectionSlug: '/collection/thkids',
         aboutButtonText: 'Over ons',
