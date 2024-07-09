@@ -18,7 +18,7 @@ def get_current_collection_url(session: Session) -> str:
 
     if session.participant.participant_id_url:
         participant_id_url = session.participant.participant_id_url
-        return f'/collection/{collection_slug}?participant_id_url={participant_id_url}'
+        return f'/collection/{collection_slug}?participant_id={participant_id_url}'
     else:
         return f'/collection/{collection_slug}'
 
