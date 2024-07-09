@@ -2,7 +2,7 @@
 document.addEventListener("DOMContentLoaded", (event) => {
 
     // Get experiment id from URL
-    match = window.location.href.match(/\/experiment\/experiment\/(.+)\/change/)
+    match = window.location.href.match(/\/experiment\/block\/(.+)\/change/)
     experiment_id = match && match[1]
 
     let buttonAddDefaultQuestions = document.createElement("input")
@@ -23,12 +23,12 @@ document.addEventListener("DOMContentLoaded", (event) => {
     function toggleButton(e) {
 
         // Check if we are on a Change Experiment (not Add Experiment) and if selection for Experiment rules has not changed
-        if ( experiment_id && (selectRules[selectRules.selectedIndex] === selectRules.querySelector("option[selected]")) ) {
+        if (experiment_id && (selectRules[selectRules.selectedIndex] === selectRules.querySelector("option[selected]"))) {
             buttonAddDefaultQuestions.disabled = false
             message.innerText = ""
         } else {
             buttonAddDefaultQuestions.disabled = true
-            message.innerText = "Save Experiment first"
+            message.innerText = "Save Block first"
         }
     }
 
@@ -36,7 +36,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
 
         const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
         let response = await fetch(`/experiment/add_default_question_series/${experiment_id}/`,
-            {method:"POST", mode: 'same-origin',headers: {'X-CSRFToken': csrftoken}})
+            { method: "POST", mode: 'same-origin', headers: { 'X-CSRFToken': csrftoken } })
 
         if (response.ok) {
             location.reload()
