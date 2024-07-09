@@ -6,15 +6,15 @@ from django.forms.models import model_to_dict
 from django.contrib.admin.sites import AdminSite
 from django.urls import reverse
 from django.utils.html import format_html
-from experiment.admin import ExperimentAdmin, ExperimentCollectionAdmin, PhaseAdmin
-from experiment.models import Experiment, ExperimentCollection, Phase, GroupedExperiment
+from experiment.admin import BlockAdmin, ExperimentCollectionAdmin, PhaseAdmin
+from experiment.models import Block, ExperimentCollection, Phase, GroupedBlock
 from participant.models import Participant
 from result.models import Result
 from session.models import Session
 
 
 # Expected field count per model
-EXPECTED_EXPERIMENT_FIELDS = 15
+EXPECTED_BLOCK_FIELDS = 15
 EXPECTED_SESSION_FIELDS = 9
 EXPECTED_RESULT_FIELDS = 12
 EXPECTED_PARTICIPANT_FIELDS = 5
@@ -31,13 +31,13 @@ class TestAdminExperiment(TestCase):
 
     @classmethod
     def setUpTestData(cls):
-        Experiment.objects.create(
+        Block.objects.create(
                     name='test',
                     slug='TEST'
                 )
         Participant.objects.create()
         Session.objects.create(
-            experiment=Experiment.objects.first(),
+            block=Block.objects.first(),
             participant=Participant.objects.first()
         )
         Result.objects.create(
@@ -45,14 +45,15 @@ class TestAdminExperiment(TestCase):
         )
 
     def setUp(self):
-        self.admin = ExperimentAdmin(model=Experiment,
-                                     admin_site=AdminSite
-                                     )
+        self.admin = BlockAdmin(
+            model=Block,
+            admin_site=AdminSite,
+            )
 
-    def test_experiment_model_fields(self):
-        experiment = model_to_dict(Experiment.objects.first())
-        experiment_fields = [key for key in experiment]
-        self.assertEqual(len(experiment_fields), EXPECTED_EXPERIMENT_FIELDS)
+    def test_block_model_fields(self):
+        block = model_to_dict(Block.objects.first())
+        block_fields = [key for key in block]
+        self.assertEqual(len(block_fields), EXPECTED_BLOCK_FIELDS)
 
     def test_session_model_fields(self):
         session = model_to_dict(Session.objects.first())
@@ -69,31 +70,31 @@ class TestAdminExperiment(TestCase):
         participant_fields = [key for key in participant]
         self.assertEqual(len(participant_fields), EXPECTED_PARTICIPANT_FIELDS)
 
-    def test_experiment_link(self):
-        experiment = Experiment.objects.create(name="Test Experiment")
+    def test_block_link(self):
+        block = Block.objects.create(name="Test Block")
         site = AdminSite()
-        admin = ExperimentAdmin(experiment, site)
-        link = admin.experiment_name_link(experiment)
+        admin = BlockAdmin(block, site)
+        link = admin.block_name_link(block)
         expected_url = reverse(
-            "admin:experiment_experiment_change", args=[experiment.pk])
-        expected_name = "Test Experiment"
+            "admin:experiment_block_change", args=[block.pk])
+        expected_name = "Test Block"
         expected_link = format_html(
             '<a href="{}">{}</a>', expected_url, expected_name)
         self.assertEqual(link, expected_link)
 
 
-class TestAdminExperimentExport(TestCase):
+class TestAdminBlockExport(TestCase):
 
     fixtures = ['playlist', 'experiment']
 
     @classmethod
     def setUpTestData(cls):
         cls.participant = Participant.objects.create(unique_hash=42)
-        cls.experiment = Experiment.objects.get(name='Hooked-China')
-        for playlist in cls.experiment.playlists.all():
+        cls.block = Block.objects.get(name='Hooked-China')
+        for playlist in cls.block.playlists.all():
             playlist.update_sections()
         cls.session = Session.objects.create(
-            experiment=cls.experiment,
+            block=cls.block,
             participant=cls.participant,
         )
         for i in range(5):
@@ -111,12 +112,13 @@ class TestAdminExperimentExport(TestCase):
 
     def setUp(self):
         self.client = Client()
-        self.admin = ExperimentAdmin(model=Experiment,
-                                     admin_site=AdminSite
-                                     )
+        self.admin = BlockAdmin(
+            model=Block,
+            admin_site=AdminSite
+            )
 
     def test_admin_export(self):
-        response = self.admin.export(request, self.experiment)
+        response = self.admin.export(request, self.block)
         zip_buffer = BytesIO(response.content)
         with ZipFile(zip_buffer, 'r') as test_zip:
             # Test files inside zip
@@ -145,7 +147,7 @@ class TestAdminExperimentExport(TestCase):
             these_sessions = json.loads(test_zip.read('sessions.json').decode("utf-8"))
 
             self.assertEqual(len(these_sessions), 1)
-            self.assertEqual(these_sessions[0]['fields']['experiment'], 14)
+            self.assertEqual(these_sessions[0]['fields']['block'], 14)
 
             these_songs = json.loads(test_zip.read('songs.json').decode("utf-8"))
             self.assertEqual(len(these_songs), 100)
@@ -160,7 +162,7 @@ class TestAdminExperimentExport(TestCase):
         export_options = ['convert_result_json']  # Adjust based on your needs
 
         # Call the method under test
-        rows, fieldnames = self.experiment.export_table(session_keys, result_keys, export_options)
+        rows, fieldnames = self.block.export_table(session_keys, result_keys, export_options)
 
         # Assert that 'question_key' is in the fieldnames and check its value in rows
         self.assertIn('question_key', fieldnames)
@@ -232,27 +234,27 @@ class PhaseAdminTest(TestCase):
         expected_related_series = format_html('<a href="{}">{}</a>', expected_url, series.name)
         self.assertEqual(related_series, expected_related_series)
 
-    def test_experiments_with_no_experiments(self):
+    def test_blocks_with_no_blocks(self):
         series = ExperimentCollection.objects.create(name='Test Series')
         phase = Phase.objects.create(
             name='Test Group', index=1, randomize=False, dashboard=True, series=series)
-        experiments = self.admin.experiments(phase)
-        self.assertEqual(experiments, "No experiments")
+        blocks = self.admin.blocks(phase)
+        self.assertEqual(blocks, "No blocks")
 
-    def test_experiments_with_experiments(self):
+    def test_blocks_with_blocks(self):
         series = ExperimentCollection.objects.create(name='Test Series')
         phase = Phase.objects.create(
             name='Test Group', index=1, randomize=False, dashboard=True, series=series)
-        experiment1 = Experiment.objects.create(name='Experiment 1', slug='experiment-1')
-        experiment2 = Experiment.objects.create(name='Experiment 2', slug='experiment-2')
-        grouped_experiment1 = GroupedExperiment.objects.create(phase=phase, experiment=experiment1)
-        grouped_experiment2 = GroupedExperiment.objects.create(phase=phase, experiment=experiment2)
+        block1 = Block.objects.create(name='Block 1', slug='block-1')
+        block2 = Block.objects.create(name='Block 2', slug='block-2')
+        grouped_block1 = GroupedBlock.objects.create(phase=phase, block=block1)
+        grouped_block2 = GroupedBlock.objects.create(phase=phase, block=block2)
 
-        experiments = self.admin.experiments(phase)
-        expected_experiments = format_html(
+        blocks = self.admin.blocks(phase)
+        expected_blocks = format_html(
             ', '.join([
-                f'<a href="/admin/experiment/groupedexperiment/{experiment.id}/change/">{experiment.experiment.name}</a>'
-                for experiment in [grouped_experiment1, grouped_experiment2]
+                f'<a href="/admin/experiment/groupedblock/{block.id}/change/">{block.block.name}</a>'
+                for block in [grouped_block1, grouped_block2]
             ])
         )
-        self.assertEqual(experiments, expected_experiments)
+        self.assertEqual(blocks, expected_blocks)

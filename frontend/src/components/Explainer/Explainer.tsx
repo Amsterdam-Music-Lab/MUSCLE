@@ -1,12 +1,25 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import Button from "../Button/Button";
+
+interface ExplainerStep {
+    number: number;
+    description: string;
+}
+
+interface ExplainerProps {
+    instruction: string;
+    button_label: string;
+    steps?: Array<ExplainerStep>;
+    timer: number | null;
+    onNext: () => void;
+}
 
 /**
  * Explainer is an block view that shows a list of steps
  * If the button has not been clicked, onNext will be called automatically after the timer expires (in milliseconds).
  * If timer == null, onNext will only be called after the button is clicked.
  */
-const Explainer = ({ instruction, button_label, steps = [], timer = null, onNext }) => {
+const Explainer = ({ instruction, button_label, steps = [], timer = null, onNext }: ExplainerProps) => {
 
     useEffect(() => {
         if (timer != null) {
@@ -42,8 +55,14 @@ const Explainer = ({ instruction, button_label, steps = [], timer = null, onNext
     );
 };
 
-// ExplainerItems renders an item in the explainer list, with optional icon or number
-const ExplainerItem = ({ number = null, description, delay = 0 }) => (
+interface ExplainerItemProps {
+    number: number | null;
+    description: string;
+    delay?: number;
+}
+
+/** ExplainerItems renders an item in the explainer list, with optional icon or number */
+const ExplainerItem = ({ number = null, description, delay = 0 }: ExplainerItemProps) => (
     <li
         className="anim anim-fade-in-slide-left anim-speed-300"
         style={{ animationDelay: delay + "ms" }}

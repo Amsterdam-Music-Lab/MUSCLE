@@ -2,13 +2,13 @@ from django.test import TestCase
 
 from image.models import Image
 from theme.models import ThemeConfig
-from experiment.models import Experiment, ExperimentCollection
+from experiment.models import Block, ExperimentCollection
 from participant.models import Participant
 from session.models import Session
 from result.models import Result
 
 
-class ExperimentModelTest(TestCase):
+class BlockModelTest(TestCase):
     @classmethod
     def setUpTestData(cls):
         logo_image = Image.objects.create(
@@ -25,11 +25,11 @@ class ExperimentModelTest(TestCase):
             logo_image=logo_image,
             background_image=background_image,
         )
-        Experiment.objects.create(
-            name='Test Experiment',
-            description='Test experiment description',
-            slug='test-experiment',
-            url='https://example.com/experiment',
+        Block.objects.create(
+            name='Test Block',
+            description='Test block description',
+            slug='test-block',
+            url='https://example.com/block',
             hashtag='test',
             rounds=5,
             bonus_points=10,
@@ -38,40 +38,40 @@ class ExperimentModelTest(TestCase):
             theme_config=ThemeConfig.objects.get(name='Default'),
         )
 
-    def test_experiment_str(self):
-        experiment = Experiment.objects.get(name='Test Experiment')
-        self.assertEqual(str(experiment), 'Test Experiment')
+    def test_block_str(self):
+        block = Block.objects.get(name='Test Block')
+        self.assertEqual(str(block), 'Test Block')
 
-    def test_experiment_session_count(self):
-        experiment = Experiment.objects.get(name='Test Experiment')
-        self.assertEqual(experiment.session_count(), 0)
+    def test_block_session_count(self):
+        block = Block.objects.get(name='Test Block')
+        self.assertEqual(block.session_count(), 0)
 
-    def test_experiment_playlist_count(self):
-        experiment = Experiment.objects.get(name='Test Experiment')
-        self.assertEqual(experiment.playlist_count(), 0)
+    def test_block_playlist_count(self):
+        block = Block.objects.get(name='Test Block')
+        self.assertEqual(block.playlist_count(), 0)
 
-    def test_experiment_current_participants(self):
-        experiment = Experiment.objects.get(name='Test Experiment')
-        participants = experiment.current_participants()
+    def test_block_current_participants(self):
+        block = Block.objects.get(name='Test Block')
+        participants = block.current_participants()
         self.assertEqual(len(participants), 0)
 
-    def test_experiment_export_admin(self):
-        experiment = Experiment.objects.get(name='Test Experiment')
-        exported_data = experiment.export_admin()
-        self.assertEqual(exported_data['experiment']['name'], 'Test Experiment')
+    def test_block_export_admin(self):
+        block = Block.objects.get(name='Test Block')
+        exported_data = block.export_admin()
+        self.assertEqual(exported_data['block']['name'], 'Test Block')
 
-    def test_experiment_export_sessions(self):
-        experiment = Experiment.objects.get(name='Test Experiment')
-        sessions = experiment.export_sessions()
+    def test_block_export_sessions(self):
+        block = Block.objects.get(name='Test Block')
+        sessions = block.export_sessions()
         self.assertEqual(len(sessions), 0)
 
-    def test_experiment_export_table(self):
-        experiment = Experiment.objects.get(name='Test Experiment')
+    def test_block_export_table(self):
+        block = Block.objects.get(name='Test Block')
         amount_of_sessions = 3
 
         for i in range(amount_of_sessions):
             session = Session.objects.create(
-                experiment=experiment,
+                block=block,
                 participant=Participant.objects.create()
             )
             Result.objects.create(
@@ -81,10 +81,10 @@ class ExperimentModelTest(TestCase):
                 question_key='test_question_1',
             )
 
-        session_keys = ['experiment_id', 'experiment_name']
+        session_keys = ['block_id', 'block_name']
         result_keys = ['section_name', 'result_created_at']
         export_options = {'wide_format': True}
-        rows, fieldnames = experiment.export_table(
+        rows, fieldnames = block.export_table(
             session_keys,
             result_keys,
             export_options
@@ -93,19 +93,19 @@ class ExperimentModelTest(TestCase):
         self.assertEqual(len(rows), amount_of_sessions)
         self.assertEqual(len(fieldnames), len(session_keys) + len(result_keys))
 
-    def test_experiment_get_rules(self):
-        experiment = Experiment.objects.get(name='Test Experiment')
-        rules = experiment.get_rules()
+    def test_block_get_rules(self):
+        block = Block.objects.get(name='Test Block')
+        rules = block.get_rules()
         self.assertIsNotNone(rules)
 
-    def test_experiment_max_score(self):
-        experiment = Experiment.objects.get(name='Test Experiment')
+    def test_block_max_score(self):
+        block = Block.objects.get(name='Test Block')
 
         amount_of_results = 3
         question_score = 1
 
         session = Session.objects.create(
-            experiment=experiment,
+            block=block,
             participant=Participant.objects.create()
         )
         for j in range(amount_of_results):
@@ -120,8 +120,8 @@ class ExperimentModelTest(TestCase):
         session.save()
 
         question_scores = amount_of_results * question_score
-        bonus_points = experiment.bonus_points
-        max_score = experiment.max_score()
+        bonus_points = block.bonus_points
+        max_score = block.max_score()
         self.assertEqual(max_score, question_scores + bonus_points)
         self.assertEqual(max_score, 13.0)
 

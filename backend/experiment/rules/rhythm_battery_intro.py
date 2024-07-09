@@ -127,7 +127,7 @@ class RhythmBatteryIntro(Base):
             button_label=_("Continue")
         )
 
-    def first_round(self, experiment):
+    def first_round(self, block):
         intro_explainer = self.intro_explainer()
         explainer = Explainer(
             instruction=_(

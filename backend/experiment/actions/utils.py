@@ -24,8 +24,8 @@ def get_current_collection_url(session: Session) -> str:
 
 
 def final_action_with_optional_button(session, final_text='', title=_('End'), button_text=_('Continue')):
-    """ given a session, a score message and an optional session dictionary from an experiment series,
-    return a Final.action, which has a button to continue to the next experiment if series is defined
+    """ given a session, a score message and an optional session dictionary from an experiment collection,
+    return a Final.action, which has a button to continue to the next block if series is defined
     """
     redirect_url = get_current_collection_url(session)
 
@@ -65,7 +65,7 @@ def get_average_difference(session, num_turnpoints, initial_value):
         if last_result:
             return float(last_result.section.song.name)
         else:
-            # this cannot happen in DurationDiscrimination style experiments
+            # this cannot happen in DurationDiscrimination style blocks
             # for future compatibility, still catch the condition that there may be no results
             return initial_value
     return (sum([int(result.section.song.name) for result in last_turnpoints]) / last_turnpoints.count())

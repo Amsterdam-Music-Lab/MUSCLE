@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { saveAs } from 'file-saver';
 
 import { URLS } from "@/config";
@@ -6,9 +6,20 @@ import Button from "../Button/Button";
 import Loading from "../Loading/Loading";
 import { createConsent, useConsent } from "../../API";
 import classNames from "classnames";
+import Participant from "@/types/Participant";
+
+export interface ConsentProps {
+    title: string;
+    text: string;
+    block: any;
+    participant: Pick<Participant, 'csrf_token'>;
+    onNext: () => void;
+    confirm: string;
+    deny: string;
+}
 
 /** Consent is an block view that shows the consent text, and handles agreement/stop actions */
-const Consent = ({ title, text, block, participant, onNext, confirm, deny }) => {
+const Consent = ({ title, text, block, participant, onNext, confirm, deny }: ConsentProps) => {
     const [consent, loadingConsent] = useConsent(block.slug);
     const urlQueryString = window.location.search;
 
@@ -30,7 +41,7 @@ const Consent = ({ title, text, block, participant, onNext, confirm, deny }) => 
 
     const onDownload = async () => {
         const doc = new DOMParser().parseFromString(text, 'text/html');
-        const txt = doc.body.textContent.split('  ').join('');
+        const txt = doc.body.textContent ? doc.body.textContent.split('  ').join('') : '';
         const blob = new Blob([txt], { type: "text/plain;charset=utf-8" });
         saveAs(blob, 'consent.txt');
     }

@@ -45,7 +45,7 @@ class Speech2Song(Base):
             },
         ]
 
-    def first_round(self, experiment):
+    def first_round(self, block):
         explainer = Explainer(
             instruction=_("This is an experiment about an auditory illusion."),
             steps=[
@@ -57,14 +57,14 @@ class Speech2Song(Base):
         )
         # Add consent from file or admin (admin has priority)
         consent = Consent(
-            experiment.consent,
+            block.consent,
             title=_('Informed consent'),
             confirm=_('I agree'),
             deny=_('Stop'),
             url='consent/consent_speech2song.html'
             )
 
-        playlist = Playlist(experiment.playlists.all())
+        playlist = Playlist(block.playlists.all())
 
         return [
             consent,

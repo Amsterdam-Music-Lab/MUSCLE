@@ -23,7 +23,7 @@ def serialize_footer(footer: FooterConfig) -> dict:
 
 def serialize_header(header: HeaderConfig) -> dict:
     return {
-        'nextExperimentButtonText': _('Next experiment'),
+        'nextBlockButtonText': _('Next experiment'),
         'aboutButtonText': _('About us'),
         'score': {
             'scoreClass': 'gold',

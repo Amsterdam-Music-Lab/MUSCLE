@@ -53,7 +53,7 @@ const blockWithAllProps = getBlock({ image: 'some_image.jpg', description: 'Some
 describe('ExperimentCollection', () => {
 
     it('forwards to a single block if it receives an empty dashboard array', async () => {
-        mock.onGet().replyOnce(200, { dashboard: [], nextExperiment: block1 });
+        mock.onGet().replyOnce(200, { dashboard: [], nextBlock: block1 });
         render(
             <MemoryRouter>
                 <ExperimentCollection match={{ params: { slug: 'some_collection' } }} />
@@ -76,7 +76,7 @@ describe('ExperimentCollection', () => {
     });
 
     it('shows a placeholder if no image is available', () => {
-        mock.onGet().replyOnce(200, { dashboard: [block1], nextExperiment: block1 });
+        mock.onGet().replyOnce(200, { dashboard: [block1], nextBlock: block1 });
         render(
             <MemoryRouter>
                 <ExperimentCollection match={{ params: { slug: 'some_collection' } }} />
@@ -88,7 +88,7 @@ describe('ExperimentCollection', () => {
     });
 
     it('shows the image if it is available', () => {
-        mock.onGet().replyOnce(200, { dashboard: [blockWithAllProps], nextExperiment: block1 });
+        mock.onGet().replyOnce(200, { dashboard: [blockWithAllProps], nextBlock: block1 });
         render(
             <MemoryRouter>
                 <ExperimentCollection match={{ params: { slug: 'some_collection' } }} />
@@ -100,7 +100,7 @@ describe('ExperimentCollection', () => {
     });
 
     it('shows the description if it is available', () => {
-        mock.onGet().replyOnce(200, { dashboard: [blockWithAllProps], nextExperiment: block1 });
+        mock.onGet().replyOnce(200, { dashboard: [blockWithAllProps], nextBlock: block1 });
         render(
             <MemoryRouter>
                 <ExperimentCollection match={{ params: { slug: 'some_collection' } }} />
@@ -112,7 +112,7 @@ describe('ExperimentCollection', () => {
     });
 
     it('shows consent first if available', async () => {
-        mock.onGet().replyOnce(200, { consent: '<p>This is our consent form!</p>', dashboard: [blockWithAllProps], nextExperiment: block1 });
+        mock.onGet().replyOnce(200, { consent: '<p>This is our consent form!</p>', dashboard: [blockWithAllProps], nextBlock: block1 });
         render(
             <MemoryRouter>
                 <ExperimentCollection match={{ params: { slug: 'some_collection' } }} />
@@ -124,7 +124,7 @@ describe('ExperimentCollection', () => {
     });
 
     it('shows a footer if a theme with footer is available', async () => {
-        mock.onGet().replyOnce(200, { dashboard: [blockWithAllProps], nextExperiment: block1, theme });
+        mock.onGet().replyOnce(200, { dashboard: [blockWithAllProps], nextBlock: block1, theme });
         render(
             <MemoryRouter>
                 <ExperimentCollection match={{ params: { slug: 'some_collection' } }} />

@@ -43,7 +43,7 @@ const String = ({ question, value = "", onChange }) => {
                 value={value}
                 ref={input}
                 onChange={handleChange}
-                onKeyPress={(e) => { handleKey(e) }}                
+                onKeyPress={(e) => { handleKey(e) }}
             />
         </div>
     );

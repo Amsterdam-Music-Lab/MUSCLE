@@ -1,6 +1,6 @@
 
 from django.test import TestCase
-from experiment.models import Experiment
+from experiment.models import Block
 from result.models import Result
 from section.models import Playlist
 from session.models import Session
@@ -32,9 +32,9 @@ class BeatAlignmentRuleTest(TestCase):
         playlist.csv = csv
         playlist.update_sections()
         # rules is BeatAlignment.ID in beat_alignment.py
-        cls.experiment = Experiment.objects.create(
+        cls.block = Block.objects.create(
             rules='BEAT_ALIGNMENT', slug='ba', rounds=13)
-        cls.experiment.playlists.add(playlist)
+        cls.block.playlists.add(playlist)
 
     def load_json(self, response):
         '''Asserts response status 200 OK, asserts content type json, loads and returns response.content json in a dictionary'''
@@ -42,7 +42,7 @@ class BeatAlignmentRuleTest(TestCase):
         self.assertEqual(response['content-type'], 'application/json')
         return json.loads(response.content)
 
-    def test_experiment(self):
+    def test_block(self):
         response = self.client.get('/experiment/ba/')
         response_json = self.load_json(response)
         self.assertTrue({'id', 'slug', 'name', 'class_name', 'rounds',
@@ -70,7 +70,7 @@ class BeatAlignmentRuleTest(TestCase):
         self.assertTrue(response_json['status'], 'ok')
 
         # Can throw an error if some of the tags in playlist not zero, cannot find a section to play
-        data = {"experiment_id": self.experiment.id, "playlist_id": "",
+        data = {"block_id": self.block.id, "playlist_id": "",
                 "json_data": "", "csrfmiddlewaretoken": csrf_token}
         response = self.client.post('/session/create/', data)
         response_json = self.load_json(response)
@@ -84,7 +84,7 @@ class BeatAlignmentRuleTest(TestCase):
         rounds = response_json.get('next_round')
         assert len(rounds) == 4
         assert rounds[0].get('title') == 'Example 1'
-        rounds_n = self.experiment.rounds  # Default 10
+        rounds_n = self.block.rounds  # Default 10
         views_exp = ['TRIAL_VIEW']*(rounds_n)
         for i in range(len(views_exp)):
             response = self.client.post(

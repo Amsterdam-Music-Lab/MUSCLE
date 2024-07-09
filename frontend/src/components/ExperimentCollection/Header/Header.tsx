@@ -6,9 +6,9 @@ import Social from "../../Social/Social"
 import HTML from '@/components/HTML/HTML';
 import { ScoreDisplayConfig } from "@/types/Theme";
 import Rank from "@/components/Rank/Rank";
+import { SocialMediaConfig } from "@/types/ExperimentCollection";
 
 interface HeaderProps {
-    name: string;
     description: string;
     nextBlockSlug: string | undefined;
     nextBlockButtonText: string;
@@ -16,10 +16,10 @@ interface HeaderProps {
     aboutButtonText: string;
     totalScore: number;
     scoreDisplayConfig?: ScoreDisplayConfig;
+    socialMediaConfig?: SocialMediaConfig;
 }
 
 export const Header: React.FC<HeaderProps> = ({
-    name,
     description,
     nextBlockSlug,
     nextBlockButtonText,
@@ -27,20 +27,17 @@ export const Header: React.FC<HeaderProps> = ({
     collectionSlug,
     totalScore,
     scoreDisplayConfig,
+    socialMediaConfig
 }) => {
 
-    // TODO: Fix this permanently and localize in and fetch content from the backend
-    // See also: https://github.com/Amsterdam-Music-Lab/MUSCLE/issues/1151
     // Get current URL minus the query string
     const currentUrl = window.location.href.split('?')[0];
-    const message = totalScore > 0 ? `Ha! Ik ben muzikaler dan ik dacht - heb maar liefst ${totalScore} punten! Speel mee met #ToontjeHoger` : "Ha! Speel mee met #ToontjeHoger en laat je verrassen: je bent muzikaler dat je denkt!";
-    const hashtags = [name ? name.replace(/ /g, '') : 'amsterdammusiclab'];
 
     const social = {
-        apps: ['facebook', 'twitter'],
-        message,
-        url: currentUrl,
-        hashtags,
+        apps: socialMediaConfig?.channels || [],
+        message: socialMediaConfig?.content || '',
+        url: socialMediaConfig?.url || currentUrl,
+        hashtags: socialMediaConfig?.tags || [],
     }
 
     return (
@@ -58,9 +55,11 @@ export const Header: React.FC<HeaderProps> = ({
                         cup={{ className: scoreDisplayConfig.scoreClass, text: '' }}
                         score={{ score: totalScore, label: scoreDisplayConfig.scoreLabel }}
                     />
-                    <Social
-                        social={social}
-                    />
+                    {socialMediaConfig?.channels?.length && (
+                        <Social
+                            social={social}
+                        />
+                    )}
                 </div>
             )}
             {scoreDisplayConfig && totalScore === 0 && (

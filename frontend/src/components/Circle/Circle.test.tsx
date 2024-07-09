@@ -1,7 +1,6 @@
-import React from 'react';
 import { render, waitFor } from '@testing-library/react';
 import Circle from './Circle';
-import { vi } from 'vitest';
+import { vi, describe, it, beforeEach, expect } from 'vitest';
 import Timer from '@/util/timer';
 
 vi.mock('@/util/timer', () => {
@@ -10,8 +9,6 @@ vi.mock('@/util/timer', () => {
         default: vi.fn(),
     };
 });
-
-
 
 global.performance = {
     now: () => Date.now(),
@@ -45,7 +42,7 @@ describe('Circle', () => {
     it('renders correctly with default props', () => {
         const { container } = render(<Circle />);
 
-        expect(document.body.contains(container.querySelector('.aha__circle'))).to.be.true;
+        expect(document.body.contains(container.querySelector('.aha__circle'))).toBe(true);
         expect(container.querySelectorAll('circle').length).toBe(2);
     });
 
@@ -87,7 +84,7 @@ describe('Circle', () => {
 
         const percentageCircle = container.querySelector('.circle-percentage');
 
-        expect(percentageCircle.style.strokeDashoffset).to.equal('0.5340707511102648');
+        expect(percentageCircle.style.strokeDashoffset).toEqual('0.5340707511102648');
     });
 
 });

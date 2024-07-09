@@ -41,7 +41,7 @@ from .visual_matching_pairs import VisualMatchingPairsGame
 # If you create new Rules, add them to the list
 # so they can be referred to by the admin
 
-EXPERIMENT_RULES = {
+BLOCK_RULES = {
     Anisochrony.ID: Anisochrony,
     BeatAlignment.ID: BeatAlignment,
     BST.ID: BST,

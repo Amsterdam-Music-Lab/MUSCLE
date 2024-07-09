@@ -38,7 +38,7 @@ def score(request):
 def intermediate_score(request):
     session = verify_session(request)
     result = request.POST.get("json_data")
-    score = session.experiment_rules().calculate_intermediate_score(session, result)
+    score = session.block_rules().calculate_intermediate_score(session, result)
     return JsonResponse({'score': score})
 
 

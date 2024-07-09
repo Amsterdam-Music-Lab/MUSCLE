@@ -7,7 +7,7 @@ from django.utils import timezone
 class Session(models.Model):
     """Experiment session by a participant"""
 
-    experiment = models.ForeignKey('experiment.Experiment', on_delete=models.CASCADE, blank=True, null=True)
+    block = models.ForeignKey('experiment.Block', on_delete=models.CASCADE, blank=True, null=True)
     participant = models.ForeignKey('participant.Participant', on_delete=models.CASCADE)
     playlist = models.ForeignKey('section.Playlist', on_delete=models.SET_NULL,
                                  blank=True, null=True)
@@ -31,7 +31,7 @@ class Session(models.Model):
     def total_score(self):
         """Sum of all result scores"""
         score = self.result_set.aggregate(models.Sum('score'))
-        return self.experiment.bonus_points + (score['score__sum'] if score['score__sum'] else 0)
+        return self.block.bonus_points + (score['score__sum'] if score['score__sum'] else 0)
 
     def last_score(self):
         """Get last score, or return 0 if no scores are set"""
@@ -46,7 +46,7 @@ class Session(models.Model):
         return self.result_set.last()
 
     def last_song(self):
-        """Return artist and name of previous song, 
+        """Return artist and name of previous song,
         or return empty string if no scores are set
         """
         section = self.previous_section()
@@ -64,7 +64,7 @@ class Session(models.Model):
         return None
 
     def save_json_data(self, data):
-        """Merge data with json_data, overwriting duplicate keys.        
+        """Merge data with json_data, overwriting duplicate keys.
         """
         new_data = self.load_json_data()
         new_data.update(data)
@@ -96,7 +96,7 @@ class Session(models.Model):
 
     def rounds_complete(self):
         """Determine if there are results for each experiment round"""
-        return self.rounds_passed() >= self.experiment.rounds
+        return self.rounds_passed() >= self.block.rounds
 
     def rounds_passed(self):
         """Get number of rounds passed"""
@@ -128,7 +128,7 @@ class Session(models.Model):
     def song_ids(self):
         """Get a list of song ids from the sections of this session's results"""
         return (res.section.song.id for res in self.result_set.filter(section__isnull=False))
-    
+
     def filter_songs(self, filter_by={}):
         # Get pks from sections with given filter and song_id
         pks = self.playlist.section_set.filter(**filter_by).values_list('song_id', flat=True)
@@ -209,9 +209,9 @@ class Session(models.Model):
         # Return a random section
         return self.section_from_song(song_id)
 
-    def experiment_rules(self):
+    def block_rules(self):
         """Get rules class to be used for this session"""
-        return self.experiment.get_rules()
+        return self.block.get_rules()
 
     def finish(self):
         """Finish current session"""
@@ -220,11 +220,11 @@ class Session(models.Model):
 
     def rank(self):
         """Get session rank based on final_score, within current experiment"""
-        return self.experiment.session_set.filter(final_score__gte=self.final_score).values('final_score').annotate(total=models.Count('final_score')).count()
+        return self.block.session_set.filter(final_score__gte=self.final_score).values('final_score').annotate(total=models.Count('final_score')).count()
 
     def percentile_rank(self, exclude_unfinished):
         """Get session percentile rank based on final_score, within current experiment"""
-        session_set = self.experiment.session_set
+        session_set = self.block.session_set
         if exclude_unfinished:
             session_set = session_set.filter(finished_at__isnull=False)
         n_session = session_set.count()
@@ -250,7 +250,7 @@ class Session(models.Model):
     def answered_questions(self):
         """Get number of answered (non-empty) profile questions for this session"""
         return self.result_set.exclude(given_response="").count()
-    
+
     def get_relevant_results(self, question_keys=[]):
         results = self.result_set
         if question_keys:

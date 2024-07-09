@@ -29,9 +29,9 @@ class Eurovision2020(Hooked):
         old_new_song_set = set(session.playlist.song_ids({'tag__gt': 0}))
 
         # How many sections do we need?
-        n_old = round(0.17 * session.experiment.rounds)
-        n_new = round(0.33 * session.experiment.rounds) - n_old
-        n_free = session.experiment.rounds - 2 * n_old - n_new
+        n_old = round(0.17 * session.block.rounds)
+        n_new = round(0.33 * session.block.rounds) - n_old
+        n_free = session.block.rounds - 2 * n_old - n_new
 
         # Assign songs.
         old_songs = random.sample(list(old_new_song_set), k=n_old)

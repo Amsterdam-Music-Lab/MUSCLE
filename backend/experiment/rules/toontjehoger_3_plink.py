@@ -62,15 +62,15 @@ class ToontjeHoger3Plink(Base):
             )
         return errors
 
-    def first_round(self, experiment):
-        """Create data for the first experiment rounds."""
+    def first_round(self, block):
+        """Create data for the first block rounds."""
 
         # 1. Explain game.
         explainer = Explainer(
             instruction="Muziekherkenning",
             steps=[
                 Step("Je krijgt {} zeer korte muziekfragmenten te horen.".format(
-                    experiment.rounds)),
+                    block.rounds)),
                 Step("Ken je het nummer? Noem de juiste artiest en titel!"),
                 Step(
                     "Weet je het niet? Beantwoord dan extra vragen over de tijdsperiode en emotie van het nummer.")
@@ -92,8 +92,8 @@ class ToontjeHoger3Plink(Base):
         if rounds_passed == 0:
             return self.get_plink_round(session)
 
-        # Round 2-experiments.rounds
-        if rounds_passed < session.experiment.rounds:
+        # Round 2-blocks.rounds
+        if rounds_passed < session.block.rounds:
             return self.get_plink_round(session, present_score=True)
 
         # Final
@@ -159,7 +159,7 @@ class ToontjeHoger3Plink(Base):
         config = {'show_total_score': True}
         round_number = session.get_relevant_results(['plink']).count() - 1
         score_title = "Ronde %(number)d / %(total)d" %\
-            {'number': round_number+1, 'total': session.experiment.rounds}
+            {'number': round_number+1, 'total': session.block.rounds}
         return Score(session, config=config, feedback=feedback, score=score, title=score_title)
 
     def get_plink_round(self, session, present_score=False):

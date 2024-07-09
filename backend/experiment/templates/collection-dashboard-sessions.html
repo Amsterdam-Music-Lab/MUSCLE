@@ -6,20 +6,20 @@
         <thead>
             <tr>
                 <th>Session *</th>
-                <th>Experiment *</th>
+                <th>Block *</th>
                 <th>Participant *</th>
                 <th>Started</th>
                 <th>Finished</th>
                 <th>Final score</th>
                 <th>Results</th>
-                <th>Preview</th>          
+                <th>Preview</th>
             </tr>
         </thead>
 
         <tbody>
-            <!-- List and hide all sessions in this collection with a unique id per experiment -->  
-            {% for session in sessions %}                
-                <tr class="session-row hide experiment-{{ session.experiment.id }} participant-session-{{ session.participant.id }}">
+            <!-- List and hide all sessions in this collection with a unique id per block -->
+            {% for session in sessions %}
+                <tr class="session-row hide experiment-{{ session.block.id }} participant-session-{{ session.participant.id }}">
 
                     <td>
                         <p>
@@ -30,9 +30,9 @@
 
                     <td>
                         <p>
-                            <a href="{% url 'admin:experiment_experiment_change' session.experiment.id %}" target="_blank">
-                            {{ session.experiment.name }}</a>
-                        </p>                
+                            <a href="{% url 'admin:experiment_block_change' session.block.id %}" target="_blank">
+                            {{ session.block.name }}</a>
+                        </p>
                     </td>
 
                     <td>
@@ -45,15 +45,15 @@
                                 <a href="{% url 'admin:participant_participant_change' session.participant.id %}" target="_blank" title="Participant object id">
                                     {{ session.participant.id }}
                                 </a>
-                            {% endif %}                            
-                        </p>                        
+                            {% endif %}
+                        </p>
                     </td>
 
                     <td>
                         <p>{{ session.started_at }}</p>
                     </td>
 
-                    <td>                        
+                    <td>
                         {% if session.finished_at %}
                             <p>{{ session.finished_at }}</p>
                         {% else %}
@@ -73,9 +73,9 @@
 
                     <td class="table-results">
                         <input type="button" value="Preview results" onClick="showResults({{ session.id }})" />
-                    </td>                    
+                    </td>
                 </tr>
-                
+
                 <!-- Popup with results for this session -->
                 <div class="pop-up pop-up-small hide show-results" id="results-{{ session.id }}">
                     <input type="button" value="close" onClick="closeResults()" />
@@ -83,11 +83,11 @@
                     {% for result in session.export_results %}
                     <h2>Result : <a href="{% url 'admin:session_session_change' session.id %}" target="_blank">{{ result.id }}</a></h2>
                     <h3>
-                        Session: <a href="{% url 'admin:session_session_change' session.id %}" target="_blank">{{ session.id }}</a><br>                       
-                        Participant: <a href="{% url 'admin:participant_participant_change' session.participant.id %}" target="_blank">{{ session.participant.participant_id_url }}</a><br>                        
-                        Experiment: <a href="{% url 'admin:experiment_experiment_change' session.experiment.id %}" target="_blank">{{ session.experiment.name }}</a>
+                        Session: <a href="{% url 'admin:session_session_change' session.id %}" target="_blank">{{ session.id }}</a><br>
+                        Participant: <a href="{% url 'admin:participant_participant_change' session.participant.id %}" target="_blank">{{ session.participant.participant_id_url }}</a><br>
+                        Block: <a href="{% url 'admin:experiment_block_change' session.block.id %}" target="_blank">{{ session.block.name }}</a>
                     </h3>
-                    
+
                     <pre>
 Created:            {{ result.created_at }}
 Section:            {{ result.section.filename }}
@@ -103,11 +103,11 @@ Scoring rule:       {{ result.scoring_rule }}
                     <hr>
                     <!-- Convert django json_data to json const and push to screen -->
                     {{ result.json_data|json_script:result.id }}
-                    <script>                        
-                        const result{{ result.id }} = JSON.parse(document.getElementById({{ result.id }}).textContent);                        
+                    <script>
+                        const result{{ result.id }} = JSON.parse(document.getElementById({{ result.id }}).textContent);
                         document.getElementById("result-{{ result.id }}").innerHTML = JSON.stringify(result{{ result.id }}, null, 4);
-                    </script>                     
-                    
+                    </script>
+
                     {% endfor %}
                     <input type="button" value="close" onClick="closeResults()" />
                 </div>

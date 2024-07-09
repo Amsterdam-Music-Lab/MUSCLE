@@ -72,11 +72,11 @@ class Playlist(models.Model):
 
     section_count.short_description = "Sections"
 
-    def experiment_count(self):
-        """Number of Experiments"""
-        return self.experiment_set.count()
+    def block_count(self):
+        """Number of Blocks"""
+        return self.block_set.count()
 
-    experiment_count.short_description = "Experiments"
+    block_count.short_description = "Blocks"
 
     def update_sections(self):
         """Update the sections from the csv file"""
@@ -148,7 +148,7 @@ class Playlist(models.Model):
             # if same section already exists, update it with new info
             for ex_section in existing_sections:
                 if ex_section.filename == section.filename:
-                    if song:                        
+                    if song:
                         ex_section.song = song
                         ex_section.save()
                     ex_section.start_time = section.start_time
@@ -219,7 +219,7 @@ class Playlist(models.Model):
     def update_admin_csv(self):
         """Update csv data for admin"""
         csvfile = CsvStringBuilder()
-        writer = csv.writer(csvfile)        
+        writer = csv.writer(csvfile)
         for section in self.section_set.all():
             if section.song:
                 this_artist = section.song.artist

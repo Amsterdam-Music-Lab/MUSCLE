@@ -33,17 +33,17 @@ class VisualMatchingPairsGame(Base):
             },
         ]
 
-    def first_round(self, experiment):
+    def first_round(self, block):
         # Add consent from file or admin (admin has priority)
         consent = Consent(
-            experiment.consent,
+            block.consent,
             title=_('Informed consent'),
             confirm=_('I agree'),
             deny=_('Stop'),
             url='consent/consent_matching_pairs.html'
             )
 
-        playlist = Playlist(experiment.playlists.all())
+        playlist = Playlist(block.playlists.all())
 
         explainer = Explainer(
             instruction='',
@@ -63,7 +63,7 @@ class VisualMatchingPairsGame(Base):
         ]
 
     def next_round(self, session):
-        if session.rounds_passed() < 1:       
+        if session.rounds_passed() < 1:
             trials = self.get_questionnaire(session)
             if trials:
                 intro_questions = Explainer(
@@ -78,7 +78,7 @@ class VisualMatchingPairsGame(Base):
             session.final_score += session.result_set.filter(
                 question_key='visual_matching_pairs').last().score
             session.save()
-            social_info = self.social_media_info(session.experiment, session.final_score)
+            social_info = self.social_media_info(session.block, session.final_score)
             social_info['apps'].append('clipboard')
             score = Final(
                 session,

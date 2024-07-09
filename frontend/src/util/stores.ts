@@ -4,6 +4,17 @@ import { StateCreator, create } from "zustand";
 import IParticipant from "@/types/Participant";
 import ISession from "@/types/Session";
 import ITheme from "@/types/Theme";
+import IBlock from "@/types/Block";
+
+interface BlockSlice {
+    block?: IBlock;
+    setBlock: (block: IBlock) => void;
+}
+
+const createBlockSlice: StateCreator<BlockSlice> = (set) => ({
+    block: undefined,
+    setBlock: (block) => set(() => ({ block })),
+});
 
 interface StructuredData {
     "@context": string;
@@ -105,7 +116,8 @@ const createThemeSlice: StateCreator<ThemeSlice> = (set) => ({
     setTheme: (theme: ITheme) => set(() => ({ theme })),
 });
 
-export const useBoundStore = create<DocumentHeadSlice & ErrorSlice & ParticipantSlice & SessionSlice & ThemeSlice>((...args) => ({
+export const useBoundStore = create<BlockSlice & DocumentHeadSlice & ErrorSlice & ParticipantSlice & SessionSlice & ThemeSlice>((...args) => ({
+    ...createBlockSlice(...args),
     ...createDocumentHeadSlice(...args),
     ...createErrorSlice(...args),
     ...createParticipantSlice(...args),

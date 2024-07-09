@@ -9,7 +9,7 @@ import json
 from django.core.management.base import BaseCommand, CommandError
 from django.conf import settings
 
-from experiment.rules import EXPERIMENT_RULES
+from experiment.rules import BLOCK_RULES
 
 
 class Command(BaseCommand):
@@ -49,7 +49,7 @@ class Command(BaseCommand):
         if song_names_option:
             with open(join(playlist_dir, song_names_option)) as json_file:
                 song_names = json.load(json_file)
-        experiment_option = options.get('experiment')
+        block_option = options.get('experiment')
         with open(join(playlist_dir, 'audiofiles.csv'), 'w+') as f:
             csv_writer = csv.writer(f)
             for i, audio_file in enumerate(search_critera):
@@ -62,8 +62,8 @@ class Command(BaseCommand):
                 if song_names_option:
                     artist_name = song_names[audio_file_clean]
                     song_name = basename(audio_file)[:-4]
-                elif experiment_option:
-                    rules = EXPERIMENT_RULES.get(experiment_option)
+                elif block_option:
+                    rules = BLOCK_RULES.get(block_option)
                     info = rules.get_info_playlist(rules, audio_file_clean)
                     artist_name = info.get('artist')
                     song_name = info.get('song')
@@ -84,34 +84,34 @@ class Command(BaseCommand):
                 csv_writer.writerow(row)
 
 
-def calculate_group_tag(filename, experiment, index):
+def calculate_group_tag(filename, block, index):
     identifier = splitext(pathsplit(filename)[-1])[0]
-    if experiment == 'huang2022':
+    if block == 'huang2022':
         parts = identifier.split('.')
         group = parts[-1]
         tag = None
     else:
         parts = identifier.split('_')
-    if experiment == 'hbat':
-        # H-BAT style experiments:
+    if block == 'hbat':
+        # H-BAT style blocks:
         # level gets encoded as group
         # slower (1) or faster (0) gets encoded as tag
         group = int(parts[-1])
         tag = 1 if parts[-3] == 'S' else 0
-    elif experiment == 'bst':
-        # BST experiments:
+    elif block == 'bst':
+        # BST blocks:
         # level gets encoded as group
         # duple (1) / triple (0) gets encoded as tag
         group = int(parts[-1])
         tag = 1 if parts[-3] == 'D' else 0
-    elif experiment == 'rhdi':
-        # rhythm discrimination experiment:
+    elif block == 'rhdi':
+        # rhythm discrimination block:
         # standard (1) / deviant (0) gets encoded as group
         # tempo (160 - 200) gets encoded as tag
         group = 1 if parts[-2] == 'Standard' else 0
         tag = int(parts[-1])
-    elif experiment == 'cat':
-        # categorization experiment
+    elif block == 'cat':
+        # categorization block
         # Pair1: 1A, 1B / Pair2: 2A, 2B gets encodes as tag
         # Same direction: SAME, Crossed direction: CROSSED gets encoded as group
         if identifier[-2:] == '1A':
@@ -123,7 +123,7 @@ def calculate_group_tag(filename, experiment, index):
         elif identifier[-2:] == '2B':
             tag = '2B'
         group = 'SAME' if identifier[0] == 'S' else 'CROSSED'
-    elif experiment == 'matching_pairs':
+    elif block == 'matching_pairs':
         group = index
         tag = pathsplit(pathsplit(filename)[0])[1]
     return group, tag

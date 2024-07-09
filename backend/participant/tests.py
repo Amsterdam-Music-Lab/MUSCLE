@@ -3,7 +3,7 @@ import json
 from django.test import Client, TestCase
 
 from .models import Participant
-from experiment.models import Experiment
+from experiment.models import Block
 from session.models import Session
 from result.models import Result
 
@@ -13,10 +13,10 @@ class ParticipantTest(TestCase):
     @classmethod
     def setUpTestData(cls):
         cls.participant = Participant.objects.create(unique_hash=42)
-        cls.experiment = Experiment.objects.create(
+        cls.block = Block.objects.create(
             rules='RHYTHM_BATTERY_INTRO', slug='test')
         cls.session = Session.objects.create(
-            experiment=cls.experiment,
+            block=cls.block,
             participant=cls.participant,
         )
         cls.result1 = Result.objects.create(
@@ -67,5 +67,3 @@ class ParticipantTest(TestCase):
         self.client.get('/participant/')
         participant = Participant.objects.last()
         assert participant.country_code == 'BLA'
-
-

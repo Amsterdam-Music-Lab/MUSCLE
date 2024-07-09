@@ -2,6 +2,8 @@ import React from "react";
 import { render, screen } from '@testing-library/react';
 import { vi } from 'vitest';
 
+import { QuestionViews } from "@/types/Question";
+
 import Trial from "./Trial";
 
 vi.mock("../../util/stores");
@@ -9,9 +11,9 @@ vi.mock("../../util/stores");
 const feedback_form = {
     form: [{
         key: 'test_question',
-        view: 'BUTTON_ARRAY',
+        view: QuestionViews.BUTTON_ARRAY,
         question: ['What is the average speed of a Swallow?'],
-        choices: {'slow': '1 km/h', 'fast': '42 km/h'}
+        choices: { 'slow': '1 km/h', 'fast': '42 km/h' }
     },
     ]
 }
@@ -26,7 +28,7 @@ describe('Trial', () => {
         render(<Trial
             feedback_form={feedback_form}
             config={config}
-            />);
+        />);
         expect(screen.queryByRole('presentation')).to.exist;
     });
 
@@ -35,7 +37,7 @@ describe('Trial', () => {
         render(<Trial
             feedback_form={feedback_form}
             config={config}
-            />
+        />
         )
         const presentation = screen.queryByRole('presentation');
         expect(presentation.classList.contains('boolean')).toBe(true);

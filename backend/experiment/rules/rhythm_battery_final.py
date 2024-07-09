@@ -34,7 +34,7 @@ class RhythmBatteryFinal(Base):
             },
         ]
 
-    def first_round(self, experiment):
+    def first_round(self, block):
         explainer = Explainer(
             _('Finally, we would like to ask you to answer some questions about your musical and demographic background.'),
             steps=[

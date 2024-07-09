@@ -34,6 +34,7 @@ const Block = ({ match }) => {
     const session = useBoundStore((state) => state.session);
     const theme = useBoundStore((state) => state.theme);
     const setTheme = useBoundStore((state) => state.setTheme);
+    const setBlock = useBoundStore((state) => state.setBlock);
 
     const setHeadData = useBoundStore((state) => state.setHeadData);
     const resetHeadData = useBoundStore((state) => state.resetHeadData);
@@ -120,6 +121,8 @@ const Block = ({ match }) => {
                         "@type": "Experiment",
                     },
                 });
+
+                setBlock(block);
 
                 // Set theme
                 if (block.theme) {

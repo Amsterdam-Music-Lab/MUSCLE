@@ -73,7 +73,7 @@ export const ProfileView = (data) => {
                                             score.experiment_slug
                                         )}
                                     >
-                                        {score.experiment_name}
+                                        {score.block_name}
                                     </Link>
                                 </h4>
                                 <h5>{score.score} {data.points}</h5>

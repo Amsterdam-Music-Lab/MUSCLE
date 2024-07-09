@@ -1,6 +1,6 @@
 from django.test import TestCase
 
-from experiment.models import Experiment
+from experiment.models import Block
 from experiment.rules import VisualMatchingPairsGame
 from participant.models import Participant
 from section.models import Playlist
@@ -28,10 +28,10 @@ class VisualMatchingPairsTest(TestCase):
         self.sections = list(self.playlist.section_set.filter(tag__contains='vmp'))
 
         self.participant = Participant.objects.create()
-        self.experiment = Experiment.objects.create(rules='VISUAL_MATCHING_PAIRS', slug='vmpairs', rounds=3)
+        self.block = Block.objects.create(rules='VISUAL_MATCHING_PAIRS', slug='vmpairs', rounds=3)
 
         self.session = Session.objects.create(
-            experiment=self.experiment,
+            block=self.block,
             participant=self.participant,
             playlist=self.playlist
         )

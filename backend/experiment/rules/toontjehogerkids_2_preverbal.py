@@ -13,8 +13,8 @@ logger = logging.getLogger(__name__)
 class ToontjeHogerKids2Preverbal(ToontjeHoger2Preverbal):
     ID = 'TOONTJE_HOGER_KIDS_2_PREVERBAL'
 
-    def first_round(self, experiment):
-        """Create data for the first experiment rounds."""
+    def first_round(self, block):
+        """Create data for the first block rounds."""
 
         # 1. Explain game.
         explainer = Explainer(

@@ -57,12 +57,14 @@ export const useParticipantScores = () =>
 export const useParticipantLink = () =>
     useGet(API_BASE_URL + URLS.participant.link);
 
+type ConsentResponse = boolean | null;
+
 export const useConsent = (slug: string) =>
-    useGet(API_BASE_URL + URLS.result.get('consent_' + slug));
+    useGet<ConsentResponse>(API_BASE_URL + URLS.result.get('consent_' + slug));
 
 interface CreateConsentParams {
     block: Block;
-    participant: Participant;
+    participant: Pick<Participant, 'csrf_token'>;
 }
 
 /** Create consent for given experiment */
@@ -99,7 +101,7 @@ export const createSession = async ({ block, participant, playlist }: CreateSess
         const response = await axios.post(
             API_BASE_URL + URLS.session.create,
             qs.stringify({
-                experiment_id: block.id,
+                block_id: block.id,
                 playlist_id: playlist.current,
                 csrfmiddlewaretoken: participant.csrf_token,
             })
@@ -160,11 +162,15 @@ interface ScoreIntermediateResultParams {
     result: unknown;
 }
 
+interface ScoreIntermediateResultResponse {
+    score: number;
+}
+
 export const scoreIntermediateResult = async ({
     session,
     participant,
     result,
-}: ScoreIntermediateResultParams) => {
+}: ScoreIntermediateResultParams): Promise<ScoreIntermediateResultResponse | null> => {
     try {
         const vars = {
             session_id: session.id,

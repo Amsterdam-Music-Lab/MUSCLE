@@ -79,16 +79,16 @@ class BaseTest(unittest.TestCase):
 
         print("I agree button clicked")
 
-    def check_for_error(self, experiment_name, experiment_slug='[no slug provided]'):
+    def check_for_error(self, block_name, block_slug='[no slug provided]'):
         if "Error" in self.driver.find_element(By.TAG_NAME, "body").text:
-            raise Exception(f"Could not load {experiment_name} experiment, please check the server logs and make sure the slug ({experiment_slug}) is correct.")
+            raise Exception(f"Could not load {block_name} experiment, please check the server logs and make sure the slug ({block_slug}) is correct.")
 
-    def take_screenshot(self, experiment_name, notes=""):
+    def take_screenshot(self, block_name, notes=""):
         current_time = time.strftime("%Y-%m-%d-%H-%M-%S")
-        screen_shot_path = f"screenshots/{experiment_name}-{current_time}.png"
+        screen_shot_path = f"screenshots/{block_name}-{current_time}.png"
         print('Capturing screenshot to', screen_shot_path, notes)
         self.driver.get_screenshot_as_file(screen_shot_path)
 
-    def handle_error(self, e, experiment_name):
-        self.take_screenshot(experiment_name, str(e))
+    def handle_error(self, e, block_name):
+        self.take_screenshot(block_name, str(e))
         self.fail(e)

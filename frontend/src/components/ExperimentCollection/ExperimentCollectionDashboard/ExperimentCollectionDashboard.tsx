@@ -15,12 +15,13 @@ interface ExperimentCollectionDashboardProps {
 
 export const ExperimentCollectionDashboard: React.FC<ExperimentCollectionDashboardProps> = ({ experimentCollection, participantIdUrl, totalScore }) => {
 
-    const { dashboard, description, name } = experimentCollection;
-    const { nextExperimentButtonText, aboutButtonText } = experimentCollection.theme?.header || { nextExperimentButtonText: "", aboutButtonText: "" };
+    const { dashboard, description } = experimentCollection;
+    const { nextBlockButtonText, aboutButtonText } = experimentCollection.theme?.header || { nextBlockButtonText: "", aboutButtonText: "" };
 
     const scoreDisplayConfig = experimentCollection.theme?.header?.score;
-    const nextBlockSlug = experimentCollection.nextExperiment?.slug;
+    const nextBlockSlug = experimentCollection.nextBlock?.slug;
     const showHeader = experimentCollection.theme?.header;
+    const socialMediaConfig = experimentCollection.socialMediaConfig;
 
     const getExperimentHref = (slug: string) => `/${slug}${participantIdUrl ? `?participant_id=${participantIdUrl}` : ""}`;
 
@@ -32,11 +33,11 @@ export const ExperimentCollectionDashboard: React.FC<ExperimentCollectionDashboa
                     nextBlockSlug={nextBlockSlug}
                     collectionSlug={experimentCollection.slug}
                     totalScore={totalScore}
-                    name={name}
                     description={description}
                     scoreDisplayConfig={scoreDisplayConfig}
-                    nextBlockButtonText={nextExperimentButtonText}
+                    nextBlockButtonText={nextBlockButtonText}
                     aboutButtonText={aboutButtonText}
+                    socialMediaConfig={socialMediaConfig}
                 />
             )}
             {/* Experiments */}

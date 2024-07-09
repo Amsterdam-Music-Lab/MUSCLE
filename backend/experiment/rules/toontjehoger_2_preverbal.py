@@ -59,8 +59,8 @@ class ToontjeHoger2Preverbal(Base):
 
         return errors
 
-    def first_round(self, experiment):
-        """Create data for the first experiment rounds."""
+    def first_round(self, block):
+        """Create data for the first block rounds."""
 
         # 1. Explain game.
         explainer = Explainer(

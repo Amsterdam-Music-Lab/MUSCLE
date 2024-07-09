@@ -56,10 +56,10 @@ class Base(object):
 
     def get_play_again_url(self, session: Session):
         participant_id_url_param = f'?participant_id={session.participant.participant_id_url}' if session.participant.participant_id_url else ""
-        return f'/{session.experiment.slug}{participant_id_url_param}'
+        return f'/{session.block.slug}{participant_id_url_param}'
 
     def calculate_intermediate_score(self, session, result):
-        """ process result data during a trial (i.e., between next_round calls) 
+        """ process result data during a trial (i.e., between next_round calls)
         return score
         """
         return 0
@@ -128,7 +128,7 @@ class Base(object):
         Participants will not continue to the next question set until they
         have completed their current one.
         """
-        questionnaire = unanswered_questions(session.participant, get_questions_from_series(session.experiment.questionseries_set.all()), randomize)
+        questionnaire = unanswered_questions(session.participant, get_questions_from_series(session.block.questionseries_set.all()), randomize)
         try:
             question = next(questionnaire)
             return Trial(
@@ -141,7 +141,7 @@ class Base(object):
         ''' Get a list of questions to be asked in succession '''
 
         trials = []
-        questions = list(unanswered_questions(session.participant, get_questions_from_series(session.experiment.questionseries_set.all()), randomize, cutoff_index))
+        questions = list(unanswered_questions(session.participant, get_questions_from_series(session.block.questionseries_set.all()), randomize, cutoff_index))
         open_questions = len(questions)
         if not open_questions:
             return None
@@ -152,29 +152,30 @@ class Base(object):
             ))
         return trials
 
-    def social_media_info(self, experiment, score):
-        current_url = f"{settings.RELOAD_PARTICIPANT_TARGET}/{experiment.slug}"
+    def social_media_info(self, block, score):
+        ''' ⚠️ Deprecated. The social media info will eventually be present on the Experiment level, not the Block level. '''
+        current_url = f"{settings.RELOAD_PARTICIPANT_TARGET}/{block.slug}"
         return {
             'apps': ['facebook', 'twitter'],
             'message': _("I scored %(score)i points on %(url)s") % {
                 'score': score,
                 'url': current_url
             },
-            'url': experiment.url or current_url,
-            'hashtags': [experiment.hashtag or experiment.slug, "amsterdammusiclab", "citizenscience"]
+            'url': block.url or current_url,
+            'hashtags': [block.hashtag or block.slug, "amsterdammusiclab", "citizenscience"]
         }
 
     def validate_playlist(self, playlist: None):
         errors = []
-        # Common validations across experiments
+        # Common validations across blocks
         if not playlist:
-            errors.append('The experiment must have a playlist.')
+            errors.append('The block must have a playlist.')
             return errors
 
         sections = playlist.section_set.all()
 
         if not sections:
-            errors.append('The experiment must have at least one section.')
+            errors.append('The block must have at least one section.')
 
         try:
             playlist.clean_csv()
