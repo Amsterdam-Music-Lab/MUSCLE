@@ -23,7 +23,6 @@ class TestActions(TestCase):
         self.participant.participant_id_url = 'participant42'
         self.assertEqual(get_current_collection_url(self.session), '/collection/superdupercollection?participant_id=participant42')
 
-
     def test_randomize_playhead(self):
         min_jitter = 5
         max_jitter = 10
