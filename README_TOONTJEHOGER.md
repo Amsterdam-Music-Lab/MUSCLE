@@ -1,38 +1,4 @@
-# ToontjeHoger
-
-This repository contains the experiments for ToontjeHoger (2022), a website that shows music related research to a wider audience.
-
-## Homepage
-
-The ToontjeHoger homepage backend code can be found in:
-
-```
-backend/experiment/rules/toontjehoger_home.py
-```
-
--   To add/remove change experiments, update the contents of EXPERIMENT_DATA
--   Note that the ToontjeHoger experiment slugs are hard coded here
--   This file contains all textual content that is shown on the home/about page
-
-It uses a custom experiment view which contains both the home and about page:
-
-```
-backend/experiment/rules/views/toontjehoger.py
-```
-
-With corresponding frontend view:
-
-```
-frontend/src/components/ToontjeHoger/ToontjeHoger.js
-```
-
-Styling for the home and about page, as well as the general ToontjeHoger experiments styling (e.g. background image) can be found in:
-
-```
-frontend/src/components/ToontjeHoger/ToontjeHoger.scss
-```
-
-### Experiment config
+### Experiment config of ToontjeHoger experiments
 
 Set the following experiment values in the admin:
 
@@ -87,22 +53,6 @@ backend/templates/info/toontjehoger/experiment3.html
 backend/templates/info/toontjehoger/experiment4.html
 backend/templates/info/toontjehoger/experiment5.html
 backend/templates/info/toontjehoger/experiment6.html
-```
-
-## Environment
-
-Use the following .env variables to configure your ToontjeHoger instance:
-
-```
-FRONTEND_EXPERIMENT_SLUG=toontjehoger
-FRONTEND_AML_HOME=/toontjehoger
-FRONTEND_LOGO_URL=/images/experiments/toontjehoger/logo-white.svg
-FRONTEND_HTML_PAGE_TITLE=ToontjeHoger
-FRONTEND_HTML_OG_DESCRIPTION=ToontjeHoger is een website met spelletjes die de luisteraar laat inzien dat zij muzikaler is dan je zou denken.
-FRONTEND_HTML_OG_IMAGE=https://toontjehoger.changeme.example.com/images/og-hooked.jpg
-FRONTEND_HTML_OG_TITLE=ToontjeHoger
-FRONTEND_HTML_OG_URL=https://toontjehoger.changeme.example.com/
-FRONTEND_HTML_BODY_CLASS=toontjehoger
 ```
 
 ## Playlists

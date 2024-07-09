@@ -1,38 +1,38 @@
 import { vi } from "vitest";
-import { renderHook } from "@testing-library/react-hooks";
+import { renderHook } from '@testing-library/react'
 import { waitFor } from "@testing-library/react";
 import useDisableRightClickOnTouchDevices from "./useDisableRightClickOnTouchDevices";
 
 describe("useDisableRightClickOnTouchDevices", () => {
 
-  afterEach(() => {
-    vi.unstubAllGlobals();
-  });
+    afterEach(() => {
+        vi.unstubAllGlobals();
+    });
 
-  test("should prevent context menu on touch devices", async () => {
-    vi.stubGlobal("ontouchstart", true);
+    test("should prevent context menu on touch devices", async () => {
+        vi.stubGlobal("ontouchstart", true);
 
-    const mockEvent = new MouseEvent('contextmenu');
-    mockEvent.preventDefault = vi.fn();
+        const mockEvent = new MouseEvent('contextmenu');
+        mockEvent.preventDefault = vi.fn();
 
-    const spy = vi.spyOn(mockEvent, 'preventDefault').mockImplementation(() => { });
+        const spy = vi.spyOn(mockEvent, 'preventDefault').mockImplementation(() => { });
 
-    renderHook(() => useDisableRightClickOnTouchDevices());
+        renderHook(() => useDisableRightClickOnTouchDevices());
 
-    await waitFor(() => document.dispatchEvent(mockEvent));
-    await waitFor(() => expect(spy).toHaveBeenCalledTimes(1));
-  });
+        await waitFor(() => document.dispatchEvent(mockEvent));
+        await waitFor(() => expect(spy).toHaveBeenCalledTimes(1));
+    });
 
-  test("should not prevent context menu on non-touch devices", () => {
-    const mockEvent = new MouseEvent('contextmenu');
-    mockEvent.preventDefault = vi.fn();
+    test("should not prevent context menu on non-touch devices", () => {
+        const mockEvent = new MouseEvent('contextmenu');
+        mockEvent.preventDefault = vi.fn();
 
-    const spy = vi.spyOn(mockEvent, 'preventDefault').mockImplementation(() => { console.log("Drikus!") });
+        const spy = vi.spyOn(mockEvent, 'preventDefault').mockImplementation(() => { console.log("Drikus!") });
 
-    renderHook(() => useDisableRightClickOnTouchDevices());
+        renderHook(() => useDisableRightClickOnTouchDevices());
 
-    document.dispatchEvent(mockEvent);
-    expect(spy).not.toHaveBeenCalled();
-  });
+        document.dispatchEvent(mockEvent);
+        expect(spy).not.toHaveBeenCalled();
+    });
 
 });

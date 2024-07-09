@@ -8,6 +8,7 @@ from experiment.actions.playback import Autoplay
 from experiment.actions.styles import STYLE_TOONTJEHOGER
 from .base import Base
 from experiment.utils import non_breaking_spaces
+from experiment.actions.utils import get_current_collection_url
 
 from result.utils import prepare_result
 
@@ -37,8 +38,8 @@ class ToontjeHoger1Mozart(Base):
     ANSWER_URL1 = "/images/experiments/toontjehoger/mozart-effect1-answer.webp"
     ANSWER_URL2 = "/images/experiments/toontjehoger/mozart-effect2-answer.webp"
 
-    def first_round(self, experiment):
-        """Create data for the first experiment rounds."""
+    def first_round(self, block):
+        """Create data for the first block rounds."""
 
         # 1. Explain game.
         explainer = Explainer(
@@ -232,7 +233,7 @@ class ToontjeHoger1Mozart(Base):
             body=body,
             heading="Het Mozart effect",
             button_label="Terug naar ToontjeHoger",
-            button_link="/toontjehoger"
+            button_link=get_current_collection_url(session)
         )
 
         return [*answer_explainer, *score, final, info]

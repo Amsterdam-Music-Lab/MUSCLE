@@ -1,8 +1,15 @@
 import Image from "./Image";
 
+export interface ScoreDisplayConfig {
+    scoreClass: string;
+    scoreLabel: string;
+    noScoreLabel: string;
+}
+
 export interface Header {
-    nextExperimentButtonText: string;
+    nextBlockButtonText: string;
     aboutButtonText: string;
+    score: ScoreDisplayConfig;
 };
 
 export interface Logo {

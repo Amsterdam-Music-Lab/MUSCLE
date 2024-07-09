@@ -2,6 +2,7 @@ from os.path import join
 from django.template.loader import render_to_string
 from .toontjehoger_1_mozart import toontjehoger_ranks
 from experiment.actions import Explainer, Step, Final, Info
+from experiment.actions.utils import get_current_collection_url
 from .toontjehoger_4_absolute import ToontjeHoger4Absolute
 
 
@@ -9,8 +10,8 @@ class ToontjeHogerKids4Absolute(ToontjeHoger4Absolute):
     ID = 'TOONTJE_HOGER_KIDS_4_ABSOLUTE'
     PLAYLIST_ITEMS = 12
 
-    def first_round(self, experiment):
-        """Create data for the first experiment rounds."""
+    def first_round(self, block):
+        """Create data for the first block rounds."""
 
         # 1. Explain game.
         explainer = Explainer(
@@ -44,7 +45,7 @@ class ToontjeHogerKids4Absolute(ToontjeHoger4Absolute):
 
         # Final
         final_text = "Best lastig!"
-        if session.final_score >= session.experiment.rounds * 0.5 * self.SCORE_CORRECT:
+        if session.final_score >= session.block.rounds * 0.5 * self.SCORE_CORRECT:
             final_text = "Goed gedaan!"
 
         final = Final(
@@ -66,7 +67,7 @@ class ToontjeHogerKids4Absolute(ToontjeHoger4Absolute):
             body=body,
             heading="Absoluut gehoor",
             button_label="Terug naar ToontjeHogerKids",
-            button_link="/collection/thkids"
+            button_link=get_current_collection_url(session)
         )
 
         return [*score, final, info]

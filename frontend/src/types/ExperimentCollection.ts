@@ -1,4 +1,4 @@
-import Experiment from "./Experiment";
+import Block from "./Block";
 import Theme from "./Theme";
 
 export interface Consent {
@@ -9,14 +9,22 @@ export interface Consent {
     view: 'CONSENT';
 }
 
+export interface SocialMediaConfig {
+    tags: string[];
+    url: string;
+    content: string;
+    channels: string[];
+}
+
 export default interface ExperimentCollection {
     slug: string;
     name: string;
     description: string;
-    dashboard: Experiment[];
-    nextExperiment: Experiment | null;
+    dashboard: Block[];
+    nextBlock: Block | null;
     aboutContent: string;
     consent?: Consent;
     theme?: Theme;
-    totalScore: Number;
+    totalScore: number;
+    socialMediaConfig?: SocialMediaConfig;
 }

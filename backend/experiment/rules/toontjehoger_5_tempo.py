@@ -9,6 +9,7 @@ from experiment.actions.form import ButtonArrayQuestion, Form
 from experiment.actions.frontend_style import FrontendStyle, EFrontendStyle
 from experiment.actions.playback import Multiplayer
 from experiment.actions.styles import STYLE_NEUTRAL_INVERTED
+from experiment.actions.utils import get_current_collection_url
 from section.models import Playlist
 from session.models import Session
 from .base import Base
@@ -25,8 +26,8 @@ class ToontjeHoger5Tempo(Base):
     SCORE_CORRECT = 20
     SCORE_WRONG = 0
 
-    def first_round(self, experiment):
-        """Create data for the first experiment rounds."""
+    def first_round(self, block):
+        """Create data for the first block rounds."""
 
         # 1. Explain game.
         explainer = Explainer(
@@ -58,7 +59,7 @@ class ToontjeHoger5Tempo(Base):
             return self.get_round(session, rounds_passed)
 
         # Round 2
-        if rounds_passed < session.experiment.rounds:
+        if rounds_passed < session.block.rounds:
             return [*self.get_score(session), *self.get_round(session, rounds_passed)]
 
         # Final
@@ -234,9 +235,9 @@ class ToontjeHoger5Tempo(Base):
 
         # Final
         final_text = "Dat bleek toch even lastig!"
-        if session.final_score >= session.experiment.rounds * 0.8 * self.SCORE_CORRECT:
+        if session.final_score >= session.block.rounds * 0.8 * self.SCORE_CORRECT:
             final_text = "Goed gedaan! Jouw timing is uitstekend!"
-        elif session.final_score >= session.experiment.rounds * 0.5 * self.SCORE_CORRECT:
+        elif session.final_score >= session.block.rounds * 0.5 * self.SCORE_CORRECT:
             final_text = "Goed gedaan! Jouw timing is best OK!"
 
         final = Final(
@@ -253,7 +254,7 @@ class ToontjeHoger5Tempo(Base):
             body=body,
             heading="Timing en tempo",
             button_label="Terug naar ToontjeHoger",
-            button_link="/toontjehoger"
+            button_link=get_current_collection_url(session)
         )
 
         return [*score, final, info]

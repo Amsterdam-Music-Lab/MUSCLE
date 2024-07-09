@@ -2,9 +2,9 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 import ExperimentCollection from "@/types/ExperimentCollection";
-import Header from "@/components/Header/Header";
+import Header from "@/components/ExperimentCollection/Header/Header";
 import Logo from "@/components/Logo/Logo";
-import IExperiment from "@/types/Experiment";
+import IBlock from "@/types/Block";
 
 
 interface ExperimentCollectionDashboardProps {
@@ -15,30 +15,35 @@ interface ExperimentCollectionDashboardProps {
 
 export const ExperimentCollectionDashboard: React.FC<ExperimentCollectionDashboardProps> = ({ experimentCollection, participantIdUrl, totalScore }) => {
 
-    const dashboard = experimentCollection.dashboard;
-    const nextExperimentSlug = experimentCollection.nextExperiment?.slug;
+    const { dashboard, description } = experimentCollection;
+    const { nextBlockButtonText, aboutButtonText } = experimentCollection.theme?.header || { nextBlockButtonText: "", aboutButtonText: "" };
 
-    const headerProps = experimentCollection.theme?.header ? {
-        nextExperimentSlug,
-        collectionSlug: experimentCollection.slug,
-        ...experimentCollection.theme.header,
-        totalScore,
-        experimentCollectionDescription: experimentCollection.description
-
-    } : undefined;
+    const scoreDisplayConfig = experimentCollection.theme?.header?.score;
+    const nextBlockSlug = experimentCollection.nextBlock?.slug;
+    const showHeader = experimentCollection.theme?.header;
+    const socialMediaConfig = experimentCollection.socialMediaConfig;
 
     const getExperimentHref = (slug: string) => `/${slug}${participantIdUrl ? `?participant_id=${participantIdUrl}` : ""}`;
 
     return (
         <div className="aha__dashboard">
             <Logo logoClickConfirm={null} />
-            {headerProps && (
-                <Header {...headerProps}></Header>
+            {showHeader && (
+                <Header
+                    nextBlockSlug={nextBlockSlug}
+                    collectionSlug={experimentCollection.slug}
+                    totalScore={totalScore}
+                    description={description}
+                    scoreDisplayConfig={scoreDisplayConfig}
+                    nextBlockButtonText={nextBlockButtonText}
+                    aboutButtonText={aboutButtonText}
+                    socialMediaConfig={socialMediaConfig}
+                />
             )}
             {/* Experiments */}
             <div role="menu" className="dashboard toontjehoger">
                 <ul>
-                    {dashboard.map((exp: IExperiment) => (
+                    {dashboard.map((exp: IBlock) => (
                         <li key={exp.slug}>
                             <Link to={getExperimentHref(exp.slug)} role="menuitem">
                                 <ImageOrPlaceholder imagePath={exp.image?.file} alt={exp.image?.alt ?? exp.description} />
@@ -54,7 +59,7 @@ export const ExperimentCollectionDashboard: React.FC<ExperimentCollectionDashboa
     );
 }
 
-const ImageOrPlaceholder = ({ imagePath, alt }: { imagePath: string, alt: string }) => {
+const ImageOrPlaceholder = ({ imagePath, alt }: { imagePath?: string, alt: string }) => {
     const imgSrc = imagePath ?? null;
 
     return imgSrc ? <img src={imgSrc} alt={alt} /> : <div className="placeholder" />;

@@ -3,6 +3,7 @@ from django.template.loader import render_to_string
 
 from .toontjehoger_1_mozart import toontjehoger_ranks
 from experiment.actions import Explainer, Step, Score, Final, Info
+from experiment.actions.utils import get_current_collection_url
 from .toontjehoger_2_preverbal import ToontjeHoger2Preverbal
 from os.path import join
 
@@ -12,8 +13,8 @@ logger = logging.getLogger(__name__)
 class ToontjeHogerKids2Preverbal(ToontjeHoger2Preverbal):
     ID = 'TOONTJE_HOGER_KIDS_2_PREVERBAL'
 
-    def first_round(self, experiment):
-        """Create data for the first experiment rounds."""
+    def first_round(self, block):
+        """Create data for the first block rounds."""
 
         # 1. Explain game.
         explainer = Explainer(
@@ -113,7 +114,7 @@ class ToontjeHogerKids2Preverbal(ToontjeHoger2Preverbal):
             body=body,
             heading="Het eerste luisteren",
             button_label="Terug naar ToontjeHogerKids",
-            button_link="/collection/thkids"
+            button_link=get_current_collection_url(session)
         )
 
         return [*score, final, info]

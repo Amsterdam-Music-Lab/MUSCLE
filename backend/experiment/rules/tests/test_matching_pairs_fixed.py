@@ -1,6 +1,6 @@
 from django.test import TestCase
 
-from experiment.models import Experiment
+from experiment.models import Block
 from participant.models import Participant
 from section.models import Playlist, Section
 from session.models import Session
@@ -10,7 +10,7 @@ from experiment.rules.matching_pairs_fixed import MatchingPairsFixed
 class MatchingPairsFixedTest(TestCase):
     @classmethod
     def setUpTestData(self):
-        self.experiment = Experiment.objects.create(
+        self.block = Block.objects.create(
             name='Test Experiment Matching Pairs Fixed',
             slug='test-experiment-matching-pairs-fixed',
             rules='matching_pairs_lite'
@@ -73,7 +73,7 @@ class MatchingPairsFixedTest(TestCase):
             unique_hash='testhash'
         )
         self.session = Session.objects.create(
-            experiment=self.experiment,
+            block=self.block,
             participant=self.participant,
             playlist=self.playlist,
         )
@@ -158,7 +158,7 @@ class MatchingPairsFixedTest(TestCase):
             unique_hash='testhash'
         )
         self.session = Session.objects.create(
-            experiment=self.experiment,
+            block=self.block,
             participant=self.participant,
             playlist=self.playlist,
         )

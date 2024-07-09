@@ -1,8 +1,10 @@
 import React, { useEffect } from "react";
 
-// Playlist is an experiment view, that handles (auto)selection of a playlist
-const Playlist = ({ experiment, instruction, onNext, playlist }) => {
-    const playlists = experiment.playlists;
+/**
+ * Playlist is an block view, that handles (auto)selection of a playlist
+ */
+const Playlist = ({ block, instruction, onNext, playlist }) => {
+    const playlists = block.playlists;
 
     useEffect(() => {
         if (playlists.length < 2) {

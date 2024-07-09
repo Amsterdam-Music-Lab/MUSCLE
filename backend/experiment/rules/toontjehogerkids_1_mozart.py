@@ -2,6 +2,7 @@ import logging
 from django.template.loader import render_to_string
 from os.path import join
 from experiment.actions import Explainer, Step, Final, Info
+from experiment.actions.utils import get_current_collection_url
 from .toontjehoger_1_mozart import toontjehoger_ranks, ToontjeHoger1Mozart
 
 logger = logging.getLogger(__name__)
@@ -15,8 +16,8 @@ class ToontjeHogerKids1Mozart(ToontjeHoger1Mozart):
     ANSWER_URL1 = "/images/experiments/toontjehogerkids/mozart-effect1-answer.webp"
     ANSWER_URL2 = "/images/experiments/toontjehogerkids/mozart-effect2-answer.webp"
 
-    def first_round(self, experiment):
-        """Create data for the first experiment rounds."""
+    def first_round(self, block):
+        """Create data for the first block rounds."""
 
         # 1. Explain game.
         explainer = Explainer(
@@ -71,7 +72,7 @@ class ToontjeHogerKids1Mozart(ToontjeHoger1Mozart):
             body=body,
             heading="Het Mozart effect",
             button_label="Terug naar ToontjeHogerKids",
-            button_link="/collection/thkids"
+            button_link=get_current_collection_url(session)
         )
 
         return [*answer_explainer, *score, final, info]

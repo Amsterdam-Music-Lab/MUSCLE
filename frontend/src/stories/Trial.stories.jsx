@@ -169,12 +169,10 @@ export const ToontjeHoger4Absolute = {
                 {
                     "id": 2,
                     "url": "http://localhost:8000/section/2/13319/",
-                    "group": "1"
                 },
                 {
                     "id": 3,
                     "url": "http://localhost:8000/section/3/94320/",
-                    "group": "1"
                 }
             ],
             play_method: "EXTERNAL",

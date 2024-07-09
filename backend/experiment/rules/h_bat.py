@@ -48,19 +48,19 @@ class HBat(Base):
             action = self.next_trial_action(session, trial_condition, 1)
             if not action:
                 # participant answered first trial incorrectly (outlier)
-                action = self.finalize_experiment(session)
+                action = self.finalize_block(session)
         else:
             action = staircasing(session, self.next_trial_action)
             if not action:
                 # action is None if the audio file doesn't exist
-                action = self.finalize_experiment(session)
+                action = self.finalize_block(session)
             if session.final_score == MAX_TURNPOINTS+1:
                 # delete result created before this check
                 session.result_set.order_by('-created_at').first().delete()
-                action = self.finalize_experiment(session)
+                action = self.finalize_block(session)
             return action
 
-    def first_round(self, experiment):
+    def first_round(self, block):
         explainer = self.intro_explainer()
         # Consent with admin text or default text
         explainer2 = practice_explainer()
@@ -71,7 +71,7 @@ class HBat(Base):
 
     def next_trial_action(self, session, trial_condition, level=1, *kwargs):
         """
-        Get the next actions for the experiment
+        Get the next actions for the block
         trial_condition is either 1 or 0
         level can be 1 (20 ms) or higher (10, 5, 2.5 ms...)
         """
@@ -154,7 +154,7 @@ class HBat(Base):
             button_label=button_label
         )
 
-    def finalize_experiment(self, session):
+    def finalize_block(self, session):
         """ if either the max_turnpoints have been reached,
         or if the section couldn't be found (outlier), stop the experiment
         """

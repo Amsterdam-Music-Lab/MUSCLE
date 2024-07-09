@@ -30,8 +30,8 @@ class DurationDiscrimination(Base):
     increase_difficulty_multiplier = .5
     decrease_difficulty_multiplier = 1.5
 
-    def first_round(self, experiment):
-        """Create data for the first experiment rounds"""
+    def first_round(self, block):
+        """Create data for the first block rounds"""
         explainer = self.intro_explanation()
         explainer2 = practice_explainer()
 
@@ -131,7 +131,7 @@ class DurationDiscrimination(Base):
             submits=True
         )
         # create Result object and save expected result to database
-        
+
         playback = Autoplay([section])
         form = Form([question])
         view = Trial(
@@ -172,7 +172,7 @@ class DurationDiscrimination(Base):
     def get_introduction(self):
         return _('In this test you will hear two time durations for each trial, which are marked by two tones.')
 
-    def finalize_experiment(self, session):
+    def finalize_block(self, session):
         ''' After 8 turnpoints, finalize experiment
         Give participant feedback
         '''
@@ -273,7 +273,7 @@ class DurationDiscrimination(Base):
                         difficulty)
         if not action:
             # action is None if the audio file doesn't exist
-            return self.finalize_experiment(session)
+            return self.finalize_block(session)
         return action
 
     def get_difficulty(self, session, multiplier=1.0):
@@ -291,7 +291,7 @@ class DurationDiscrimination(Base):
         # return rounded difficulty
         # this uses the decimal module, since round() does not work entirely as expected
         return int(Decimal(str(current_difficulty)).quantize(Decimal('0'), rounding=ROUND_HALF_UP))
-    
+
     def last_non_catch_correct(self, previous_results):
         """ check if previous responses (before the current one, which is correct)
         have been catch or non-catch, and if non-catch, if they were correct

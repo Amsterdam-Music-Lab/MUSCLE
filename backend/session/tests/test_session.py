@@ -3,7 +3,7 @@ import json
 from django.test import TestCase
 from django.utils import timezone
 
-from experiment.models import Experiment
+from experiment.models import Block
 from participant.models import Participant
 from section.models import Playlist, Section, Song
 from result.models import Result
@@ -14,25 +14,25 @@ class SessionTest(TestCase):
 
     @classmethod
     def setUpTestData(cls):
-        
+
         cls.participant = Participant.objects.create(unique_hash=42)
-        cls.experiment = Experiment.objects.create(
+        cls.block = Block.objects.create(
             rules='RHYTHM_BATTERY_INTRO', slug='test')
         cls.playlist = Playlist.objects.create(
             name='Test playlist'
         )
         cls.session = Session.objects.create(
-            experiment=cls.experiment,
+            block=cls.block,
             participant=cls.participant,
             playlist=cls.playlist
         )
-    
+
     def test_create(self):
         data = {
-            'experiment_id': self.experiment.pk,
+            'block_id': self.block.pk,
             'playlist_id': self.playlist.pk,
             'participant_id': self.participant.pk
-        } 
+        }
         response = self.client.post('/session/create', data)
         assert response.status_code != 500
 
@@ -42,7 +42,7 @@ class SessionTest(TestCase):
         csrf_token = response_data.get('csrf_token')
         participant = Participant.objects.get(pk=response_data.get('id'))
         session = Session.objects.create(
-            experiment=self.experiment,
+            block=self.block,
             participant=participant)
         data = {
             'csrfmiddlewaretoken:': csrf_token
@@ -51,13 +51,13 @@ class SessionTest(TestCase):
         assert response.status_code == 200
         assert Session.objects.filter(finished_at__isnull=False).count() == 1
 
-    def test_total_questions(self):   
+    def test_total_questions(self):
         assert self.session.total_questions() == 0
         Result.objects.create(
             session=self.session
         )
         assert self.session.total_questions() == 1
-    
+
     def test_skipped_answered_questions(self):
         Result.objects.create(
             session=self.session,
@@ -75,23 +75,23 @@ class SessionTest(TestCase):
             given_response=''
         )
         assert self.session.skipped_questions() == 2
-    
+
     def test_percentile_rank(self):
         # create one session with relatively low score
         Session.objects.create(
-            experiment=self.experiment,
+            block=self.block,
             participant=self.participant,
             final_score=24,
             finished_at=timezone.now()
         )
         # create one unfinished session with relatively high score
         Session.objects.create(
-            experiment=self.experiment,
+            block=self.block,
             participant=self.participant,
             final_score=180
         )
         finished_session = Session.objects.create(
-            experiment=self.experiment,
+            block=self.block,
             participant=self.participant,
             final_score=42,
             finished_at=timezone.now()
@@ -143,10 +143,10 @@ class SessionTest(TestCase):
         self.session.save_json_data({'test_len': 'tested_len'})
         self.assertEqual(len(self.session.json_data), 2)
 
-    def test_json_data_direct(self):        
+    def test_json_data_direct(self):
         self.session.json_data.update({'test_direct': 'tested_direct'})
         self.session.save()
-        self.assertEqual(self.session.json_data['test_direct'], 'tested_direct') 
+        self.assertEqual(self.session.json_data['test_direct'], 'tested_direct')
         self.session.save_json_data({'test_direct_len': 'tested_direct_len'})
         self.session.save()
         self.assertEqual(len(self.session.json_data), 2)

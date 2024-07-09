@@ -4,42 +4,72 @@
 # High Priority: Security and Correctness
 # These issues are critical and should be addressed first.
 extend-ignore =
-    E722, # Do not use bare 'except'
-    F722, # Syntax error identified by pyflakes
-    F821, # Undefined name
+    # Do not use bare 'except'
+    E722,
+    # Syntax error identified by pyflakes
+    F722,
+     # Undefined name 
+    F821,
 
 # Medium Priority: Code Maintainability and Readability
 # Improving these can greatly enhance code readability and maintainability.
-    E501, # Line too long
-    F401, # Unused import
-    F403, # 'from module import *' used; unable to detect undefined names
-    F405, # Name may be undefined, or defined from star imports
-    F811, # Redefinition of unused name from line N
-    F841, # Local variable name is assigned to but never used
+    # Line too long
+    E501,
+    # Unused import
+    F401,
+    # 'from module import *' used; unable to detect undefined names
+    F403,
+     # Name may be undefined, or defined from star imports
+    F405,
+    # Redefinition of unused name from line N
+    F811,
+    # Local variable name is assigned to but never used
+    F841,
 
 # Low Priority: Style Guide Adherence
 # These are mostly about whitespace and indentation, which can be adjusted later.
-    E201, # Whitespace after '('
-    E202, # Whitespace before ')'
-    E203, # Whitespace before ':'
-    E222, # Multiple spaces after operator
-    E225, # Missing whitespace around operator
-    E231, # Missing whitespace after ','
-    E251, # Unexpected spaces around keyword / parameter equals
-    E262, # Inline comment should start with '# '
-    E122, # Continuation line missing indentation or outdented
-    E124, # Closing bracket does not match visual indentation
-    E125, # Continuation line with same indent as next logical line
-    E127, # Continuation line over-indented for visual indent
-    E128, # Continuation line under-indented for visual indent
-    E131, # Continuation line unaligned for hanging indent
-    E261, # At least two spaces before inline comment
-    W191, # Indentation contains tabs
-    W291, # Trailing whitespace
-    W292, # No newline at end of file
-    W293, # Blank line contains whitespace
-    W391, # Blank line at end of file
-    W503, # Line break occurred before a binary operator
+    # Whitespace after '('
+    E201,
+    # Whitespace before ')'
+    E202,
+    # Whitespace before ':'
+    E203,
+    # Multiple spaces after operator
+    E222,
+    # Missing whitespace around operator
+    E225,
+    # Missing whitespace after ','
+    E231,
+    # Unexpected spaces around keyword / parameter equals
+    E251,
+    # Inline comment should start with '# '
+    E262,
+    # Continuation line missing indentation or outdented
+    E122,
+    # Closing bracket does not match visual indentation
+    E124,
+    # Continuation line with same indent as next logical line
+    E125,
+    # Continuation line over-indented for visual indent
+    E127,
+    # Continuation line under-indented for visual indent
+    E128,
+    # Continuation line unaligned for hanging indent
+    E131,
+    # At least two spaces before inline comment
+    E261,
+    # Indentation contains tabs
+    W191,
+    # Trailing whitespace
+    W291,
+    # No newline at end of file
+    W292,
+    # Blank line contains whitespace
+    W293,
+    # Blank line at end of file
+    W391,
+    # Line break occurred before a binary operator
+    W503,
 
 # General Configuration
 max-line-length = 120

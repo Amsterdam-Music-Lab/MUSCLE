@@ -7,6 +7,7 @@ from experiment.actions.form import ChoiceQuestion, Form
 from experiment.actions.playback import Multiplayer
 from experiment.actions.frontend_style import FrontendStyle, EFrontendStyle
 from experiment.actions.styles import STYLE_BOOLEAN
+from experiment.actions.utils import get_current_collection_url
 from section.models import Playlist
 from session.models import Session
 from .base import Base
@@ -39,8 +40,8 @@ class ToontjeHoger6Relative(Base):
             errors.append('The sections should have the tags a, b, c')
         return errors
 
-    def first_round(self, experiment):
-        """Create data for the first experiment rounds."""
+    def first_round(self, block):
+        """Create data for the first block rounds."""
 
         # 1. Explain game.
         explainer = Explainer(
@@ -183,7 +184,7 @@ class ToontjeHoger6Relative(Base):
             body=body,
             heading="Relatief gehoor",
             button_label="Terug naar ToontjeHoger",
-            button_link="/toontjehoger"
+            button_link=get_current_collection_url(session)
         )
 
         return [*score, final, info]

@@ -53,16 +53,15 @@ class MusicalPreferences(Base):
             },
         ]
 
-    def first_round(self, experiment):
-
+    def first_round(self, block):
         consent = Consent(
-            experiment.consent,
+            block.consent,
             title=_('Informed consent'),
             confirm=_('I consent and continue.'),
             deny=_('I do not consent.'),
             url=self.consent_file
         )
-        playlist = Playlist(experiment.playlists.all())
+        playlist = Playlist(block.playlists.all())
         explainer = Explainer(
             instruction=_('Welcome to the Musical Preferences experiment!'),
             steps=[
@@ -176,7 +175,7 @@ class MusicalPreferences(Base):
                 }))
             )
             actions = [feedback]
-        elif n_songs == session.experiment.rounds + 1:
+        elif n_songs == session.block.rounds + 1:
             like_results = session.result_set.filter(question_key='like_song')
             known_songs = session.result_set.filter(
                 question_key='know_song', score=2).count()
@@ -233,7 +232,7 @@ class MusicalPreferences(Base):
             playback=playback,
             feedback_form=form,
             title=_('Song %(round)s/%(total)s') % {
-                'round': n_songs, 'total': session.experiment.rounds},
+                'round': n_songs, 'total': session.block.rounds},
             config={
                 'response_time': section.duration + .1,
             }
@@ -247,9 +246,10 @@ class MusicalPreferences(Base):
         else:
             return super().calculate_score(result, data)
 
-    def social_media_info(self, experiment, top_participant, known_songs, n_songs, top_all):
+    def social_media_info(self, block, top_participant, known_songs, n_songs, top_all):
+        ''' ⚠️ Deprecated. The social media info will eventually be present on the Experiment level, not the Block level. '''
         current_url = "{}/{}".format(settings.RELOAD_PARTICIPANT_TARGET,
-                                     experiment.slug
+                                     block.slug
                                      )
 
         def format_songs(songs): return ', '.join(
@@ -263,14 +263,14 @@ class MusicalPreferences(Base):
                 'n_songs': n_songs,
                 'top_all': format_songs(top_all)
             },
-            'url': experiment.url or current_url,
-            'hashtags': [experiment.hashtag or experiment.slug, "amsterdammusiclab", "citizenscience"]
+            'url': block.url or current_url,
+            'hashtags': [block.hashtag or block.slug, "amsterdammusiclab", "citizenscience"]
         }
 
     def get_final_view(self, session, top_participant, known_songs, n_songs, top_all):
-        # finalize experiment
+        # finalize block
         social_info = self.social_media_info(
-            session.experiment,
+            session.block,
             top_participant,
             known_songs,
             n_songs,

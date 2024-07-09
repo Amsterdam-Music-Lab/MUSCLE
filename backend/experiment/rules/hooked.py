@@ -31,6 +31,7 @@ class Hooked(Base):
     # if the track continutes in the wrong place: maximal shift forward (in seconds)
     max_jitter = 15
     heard_before_time = 15  # response time for "Have you heard this song in previous rounds?"
+    question_offset = 5 # how many rounds will be presented without questions
     questions = True
     relevant_keys = ['recognize', 'heard_before']
     round_modifier = 0
@@ -46,8 +47,8 @@ class Hooked(Base):
             {"name": "TIPI", "keys": QUESTION_GROUPS["TIPI"], "randomize": True}, # 5. TIPI (10 questions)
         ]
 
-    def first_round(self, experiment):
-        """Create data for the first experiment rounds."""
+    def first_round(self, block):
+        """Create data for the first block rounds."""
 
         # 1. Explain game.
         explainer = Explainer(
@@ -65,7 +66,7 @@ class Hooked(Base):
 
         # 2. Add consent from file or admin (admin has priority)
         consent = Consent(
-            experiment.consent,
+            block.consent,
             title=_('Informed consent'),
             confirm=_('I agree'),
             deny=_('Stop'),
@@ -73,7 +74,7 @@ class Hooked(Base):
             )
 
         # 3. Choose playlist.
-        playlist = Playlist(experiment.playlists.all())
+        playlist = Playlist(block.playlists.all())
 
         return [
             consent,
@@ -86,9 +87,9 @@ class Hooked(Base):
         json_data = session.load_json_data()
         round_number = self.get_current_round(session)
 
-        # If the number of results equals the number of experiment.rounds,
+        # If the number of results equals the number of block.rounds,
         # close the session and return data for the final_score view.
-        if round_number == session.experiment.rounds:
+        if round_number == session.block.rounds:
 
             # Finish session.
             session.finish()
@@ -103,7 +104,7 @@ class Hooked(Base):
                     final_text=self.final_score_message(session),
                     rank=self.rank(session),
                     social=self.social_media_info(
-                        session.experiment, total_score),
+                        session.block, total_score),
                     show_profile_link=True,
                     button={
                         'text': _('Play again'),
@@ -122,20 +123,20 @@ class Hooked(Base):
             # Plan sections
             self.plan_sections(session)
             # Go to SongSync straight away.
-            actions.extend(self.next_song_sync_action(session))
+            actions.extend(self.next_song_sync_action(session, round_number))
         else:
             # Create a score action.
             actions.append(self.get_score(session, round_number))
 
             # Load the heard_before offset.
             plan = json_data.get('plan')
-            heard_before_offset = plan['n_song_sync']
+            heard_before_offset = len(plan['song_sync_sections'])
 
-            # SongSync rounds. Skip questions until Round 5.
-            if round_number in range(1, 5):
+            # SongSync rounds. Skip questions until round indicated by question_offset.
+            if round_number in range(1, self.question_offset):
                 actions.extend(self.next_song_sync_action(
                     session, round_number))
-            if round_number in range(5, heard_before_offset):
+            if round_number in range(self.question_offset, heard_before_offset):
                 question_trial = self.get_single_question(session)
                 if question_trial:
                     actions.append(question_trial)
@@ -206,14 +207,14 @@ class Hooked(Base):
 
     def get_trial_title(self, session: Session, round_number):
         return _("Round %(number)d / %(total)d") %\
-            {'number': round_number+1, 'total': session.experiment.rounds}
+            {'number': round_number+1, 'total': session.block.rounds}
 
-    def plan_sections(self, session: Session):
+    def plan_sections(self, session: Session, filter_by={}):
         """Set the plan of tracks for a session.
         """
         # Get available songs and pick a section for each
-        available_songs = list(session.playlist.get_available_song_ids())
-        n_rounds = session.experiment.rounds
+        available_songs = list(session.playlist.get_available_song_ids(filter_by))
+        n_rounds = session.block.rounds
 
         # How many sections do we need?
         # 2/3 of the rounds are SongSync, of which 1/4 old songs, 3/4 "free"
@@ -243,10 +244,10 @@ class Hooked(Base):
         # Save, overwriting existing plan if one exists.
         session.save_json_data({'plan': plan})
 
-    def get_song_sync_sections(self, session: Session, songs: list[Song], n_song_sync_rounds: int) -> list[int]:
+    def get_song_sync_sections(self, session: Session, songs: list[int], n_song_sync_rounds: int) -> list[int]:
         ''' return sections to be used for the song_sync rounds from the list of songs'''
         return [session.get_random_section(
-            {'song__id': song.id}).id for song in songs[:n_song_sync_rounds]]
+            {'song__id': song}).id for song in songs[:n_song_sync_rounds]]
 
     def get_heard_before_old_sections(self, session: Session, song_sync_sections: list[int], n_heard_before_old_rounds: int) -> list[int]:
         ''' return the old sections for the heard_before rounds, given the song_sync_sections '''
@@ -255,7 +256,7 @@ class Hooked(Base):
     def get_heard_before_new_sections(self, session: Session, songs: list[Song], n_heard_before_new_rounds: int) -> list[int]:
         ''' return the new sections for the heard_before rounds from the list of songs '''
         return [session.get_random_section(
-            {'song__id': song.id}).id for song in songs[-n_heard_before_new_rounds:]
+            {'song__id': song}).id for song in songs[-n_heard_before_new_rounds:]
         ]
 
     def select_sections(self, session: Session, songs: list[Song]) -> list[Section]:
@@ -304,7 +305,7 @@ class Hooked(Base):
                     pk=section_id)
             except:
                 logger.warning("Warning: no heard_before section found")
-                section = session.get_random_section()
+                section = session.get_random_section().id
         playback = Autoplay(
             [section],
             show_animation=True,

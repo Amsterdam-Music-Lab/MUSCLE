@@ -3,7 +3,7 @@ import { render, screen, waitFor } from '@testing-library/react';
 import { describe, it, expect } from 'vitest';
 
 import ExperimentCollectionDashboard from './ExperimentCollectionDashboard';
-import Experiment from '@/types/Experiment';
+import Block from '@/types/Block';
 
 const getExperiment = (overrides = {}) => {
     return {
@@ -13,7 +13,7 @@ const getExperiment = (overrides = {}) => {
         description: 'Some description',
         image: {},
         ...overrides
-    } as Experiment
+    } as Block
 }
 
 const experiment1 = getExperiment({
@@ -32,7 +32,7 @@ const experiment2 = getExperiment({
 const collectionWithDashboard = { dashboard: [experiment1, experiment2] }
 
 const header = {
-    nextExperimentButtonText: 'Next experiment',
+    nextBlockButtonText: 'Next experiment',
     aboutButtonText: 'About us',
 }
 const collectionWithTheme = {

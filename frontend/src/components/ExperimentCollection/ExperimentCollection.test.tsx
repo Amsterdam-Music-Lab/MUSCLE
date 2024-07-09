@@ -7,17 +7,17 @@ import axios from 'axios';
 import ExperimentCollection from './ExperimentCollection';
 let mock = new MockAdapter(axios);
 
-const getExperiment = (overrides = {}) => {
+const getBlock = (overrides = {}) => {
     return {
         slug: 'some_slug',
-        name: 'Some Experiment',
+        name: 'Some Block',
         ...overrides
     };
 }
 
-const experiment1 = getExperiment({
+const block1 = getBlock({
     slug: 'some_slug',
-    name: 'Some Experiment'
+    name: 'Some Block'
 });
 
 const theme = {
@@ -48,27 +48,27 @@ const theme = {
     }
 }
 
-const experimentWithAllProps = getExperiment({ image: 'some_image.jpg', description: 'Some description' });
+const blockWithAllProps = getBlock({ image: 'some_image.jpg', description: 'Some description' });
 
 describe('ExperimentCollection', () => {
 
-    it('forwards to a single experiment if it receives an empty dashboard array', async () => {
-        mock.onGet().replyOnce(200, {dashboard: [], nextExperiment: experiment1});
+    it('forwards to a single block if it receives an empty dashboard array', async () => {
+        mock.onGet().replyOnce(200, { dashboard: [], nextBlock: block1 });
         render(
-        <MemoryRouter>
-            <ExperimentCollection match={{params: {slug: 'some_collection'}}}/>
-        </MemoryRouter>);
+            <MemoryRouter>
+                <ExperimentCollection match={{ params: { slug: 'some_collection' } }} />
+            </MemoryRouter>);
         await waitFor(() => {
             expect(screen.queryByRole('menu')).toBeFalsy();
         })
     });
 
     it('shows a loading spinner while loading', () => {
-        mock.onGet().replyOnce(200, new Promise(() => {}));
+        mock.onGet().replyOnce(200, new Promise(() => { }));
         render(
-        <MemoryRouter>
-            <ExperimentCollection match={{params: {slug: 'some_collection'}}}/>
-        </MemoryRouter>
+            <MemoryRouter>
+                <ExperimentCollection match={{ params: { slug: 'some_collection' } }} />
+            </MemoryRouter>
         );
         waitFor(() => {
             expect(document.querySelector('.loader-container')).not.toBeNull();
@@ -76,11 +76,11 @@ describe('ExperimentCollection', () => {
     });
 
     it('shows a placeholder if no image is available', () => {
-        mock.onGet().replyOnce(200, { dashboard: [experiment1], nextExperiment: experiment1 });
+        mock.onGet().replyOnce(200, { dashboard: [block1], nextBlock: block1 });
         render(
-        <MemoryRouter>
-            <ExperimentCollection match={{params: {slug: 'some_collection'}}}/>
-        </MemoryRouter>
+            <MemoryRouter>
+                <ExperimentCollection match={{ params: { slug: 'some_collection' } }} />
+            </MemoryRouter>
         );
         waitFor(() => {
             expect(document.querySelector('.loader-container')).not.toBeNull();
@@ -88,11 +88,11 @@ describe('ExperimentCollection', () => {
     });
 
     it('shows the image if it is available', () => {
-        mock.onGet().replyOnce(200, { dashboard: [experimentWithAllProps], nextExperiment: experiment1 });
+        mock.onGet().replyOnce(200, { dashboard: [blockWithAllProps], nextBlock: block1 });
         render(
-        <MemoryRouter>
-            <ExperimentCollection match={{params: {slug: 'some_collection'}}}/>
-        </MemoryRouter>
+            <MemoryRouter>
+                <ExperimentCollection match={{ params: { slug: 'some_collection' } }} />
+            </MemoryRouter>
         );
         waitFor(() => {
             expect(document.querySelector('img')).not.toBeNull();
@@ -100,11 +100,11 @@ describe('ExperimentCollection', () => {
     });
 
     it('shows the description if it is available', () => {
-        mock.onGet().replyOnce(200, { dashboard: [experimentWithAllProps], nextExperiment: experiment1 });
+        mock.onGet().replyOnce(200, { dashboard: [blockWithAllProps], nextBlock: block1 });
         render(
-        <MemoryRouter>
-            <ExperimentCollection match={{params: {slug: 'some_collection'}}}/>
-        </MemoryRouter>
+            <MemoryRouter>
+                <ExperimentCollection match={{ params: { slug: 'some_collection' } }} />
+            </MemoryRouter>
         );
         waitFor(() => {
             expect(screen.getByText('Some description')).toBeInTheDocument();
@@ -112,10 +112,10 @@ describe('ExperimentCollection', () => {
     });
 
     it('shows consent first if available', async () => {
-        mock.onGet().replyOnce(200, { consent: '<p>This is our consent form!</p>', dashboard: [experimentWithAllProps], nextExperiment: experiment1} );
+        mock.onGet().replyOnce(200, { consent: '<p>This is our consent form!</p>', dashboard: [blockWithAllProps], nextBlock: block1 });
         render(
             <MemoryRouter>
-                <ExperimentCollection match={{params: {slug: 'some_collection'}}}/>
+                <ExperimentCollection match={{ params: { slug: 'some_collection' } }} />
             </MemoryRouter>
         );
         await waitFor(() => {
@@ -124,13 +124,13 @@ describe('ExperimentCollection', () => {
     });
 
     it('shows a footer if a theme with footer is available', async () => {
-        mock.onGet().replyOnce(200, { dashboard: [experimentWithAllProps], nextExperiment: experiment1, theme });
+        mock.onGet().replyOnce(200, { dashboard: [blockWithAllProps], nextBlock: block1, theme });
         render(
             <MemoryRouter>
-                <ExperimentCollection match={{params: {slug: 'some_collection'}}}/>
+                <ExperimentCollection match={{ params: { slug: 'some_collection' } }} />
             </MemoryRouter>
         );
-        await waitFor( () => {
+        await waitFor(() => {
             expect(document.querySelector('.aha__footer')).not.toBeNull();
         })
     })

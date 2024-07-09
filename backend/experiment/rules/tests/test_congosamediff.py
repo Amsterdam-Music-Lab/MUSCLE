@@ -2,7 +2,7 @@ from unittest.mock import patch
 
 from django.test import TestCase
 
-from experiment.models import Experiment
+from experiment.models import Block
 from participant.models import Participant
 from result.models import Result
 from section.models import Playlist as PlaylistModel, Section, Song
@@ -43,13 +43,13 @@ class CongoSameDiffTest(TestCase):
         self.playlist.csv = self.section_csv
         self.playlist.update_sections()
         self.participant = Participant.objects.create()
-        self.experiment = Experiment.objects.create(
+        self.block = Block.objects.create(
             name='CongoSameDiff',
             slug='congosamediff',
             rounds=4,
         )
         self.session = Session.objects.create(
-            experiment=self.experiment,
+            block=self.block,
             participant=self.participant,
             playlist=self.playlist
         )
@@ -61,10 +61,10 @@ class CongoSameDiffTest(TestCase):
 
     def test_first_round(self):
         congo_same_diff = CongoSameDiff()
-        experiment = Experiment(id=1, name='CongoSameDiff', slug='congosamediff_first_round', rounds=4)
-        experiment.save()
-        experiment.playlists.set([self.playlist])
-        actions = congo_same_diff.first_round(experiment)
+        block = Block(id=1, name='CongoSameDiff', slug='congosamediff_first_round', rounds=4)
+        block.save()
+        block.playlists.set([self.playlist])
+        actions = congo_same_diff.first_round(block)
         assert len(actions) >= 1
         assert isinstance(actions[0], PlaylistAction)
         assert isinstance(actions[1], Explainer)
@@ -122,8 +122,8 @@ class CongoSameDiffTest(TestCase):
 
     def test_throw_exception_if_trial_without_group(self):
         congo_same_diff = CongoSameDiff()
-        experiment = Experiment(id=1, name='CongoSameDiff', slug='congosamediff_first_round', rounds=4)
-        experiment.save()
+        block = Block(id=1, name='CongoSameDiff', slug='congosamediff_first_round', rounds=4)
+        block.save()
         playlist = PlaylistModel.objects.create(name='CongoSameDiff')
         Section.objects.create(
             playlist=playlist,
@@ -133,14 +133,14 @@ class CongoSameDiffTest(TestCase):
             tag='practice_contour',
             group=''
         )
-        experiment.playlists.set([playlist])
+        block.playlists.set([playlist])
         with self.assertRaisesRegex(ValueError, "Section no_group should have a group value"):
-            congo_same_diff.first_round(experiment)
+            congo_same_diff.first_round(block)
 
     def test_throw_exception_if_trial_group_not_int(self):
         congo_same_diff = CongoSameDiff()
-        experiment = Experiment(id=1, name='CongoSameDiff', slug='congosamediff_first_round', rounds=4)
-        experiment.save()
+        block = Block(id=1, name='CongoSameDiff', slug='congosamediff_first_round', rounds=4)
+        block.save()
         playlist = PlaylistModel.objects.create(name='CongoSameDiff')
         Section.objects.create(
             playlist=playlist,
@@ -150,14 +150,14 @@ class CongoSameDiffTest(TestCase):
             tag='practice_contour',
             group='not_int_42'
         )
-        experiment.playlists.set([playlist])
+        block.playlists.set([playlist])
         with self.assertRaisesRegex(ValueError, "Section group_not_int should have a group value containing only digits"):
-            congo_same_diff.first_round(experiment)
+            congo_same_diff.first_round(block)
 
     def test_throw_exception_if_no_practice_rounds(self):
         congo_same_diff = CongoSameDiff()
-        experiment = Experiment(id=1, name='CongoSameDiff', slug='congosamediff_first_round', rounds=4)
-        experiment.save()
+        block = Block(id=1, name='CongoSameDiff', slug='congosamediff_first_round', rounds=4)
+        block.save()
         playlist = PlaylistModel.objects.create(name='CongoSameDiff')
         Section.objects.create(
             playlist=playlist,
@@ -167,14 +167,14 @@ class CongoSameDiffTest(TestCase):
             tag='',
             group='1'
         )
-        experiment.playlists.set([playlist])
+        block.playlists.set([playlist])
         with self.assertRaisesRegex(ValueError, 'At least one section should have the tag "practice"'):
-            congo_same_diff.first_round(experiment)
+            congo_same_diff.first_round(block)
 
     def test_throw_exception_if_no_normal_rounds(self):
         congo_same_diff = CongoSameDiff()
-        experiment = Experiment(id=1, name='CongoSameDiff', slug='congosamediff_first_round', rounds=4)
-        experiment.save()
+        block = Block(id=1, name='CongoSameDiff', slug='congosamediff_first_round', rounds=4)
+        block.save()
         playlist = PlaylistModel.objects.create(name='CongoSameDiff')
         Section.objects.create(
             playlist=playlist,
@@ -184,14 +184,14 @@ class CongoSameDiffTest(TestCase):
             tag='practice_contour',
             group='42'
         )
-        experiment.playlists.set([playlist])
+        block.playlists.set([playlist])
         with self.assertRaisesRegex(ValueError, 'At least one section should not have the tag "practice"'):
-            congo_same_diff.first_round(experiment)
+            congo_same_diff.first_round(block)
 
     def test_throw_combined_exceptions_if_multiple_errors(self):
         congo_same_diff = CongoSameDiff()
-        experiment = Experiment(id=1, name='CongoSameDiff', slug='congosamediff_first_round', rounds=4)
-        experiment.save()
+        block = Block(id=1, name='CongoSameDiff', slug='congosamediff_first_round', rounds=4)
+        block.save()
         playlist = PlaylistModel.objects.create(name='CongoSameDiff')
         Section.objects.create(
             playlist=playlist,
@@ -217,9 +217,9 @@ class CongoSameDiffTest(TestCase):
             tag='practice_contour',
             group='42'
         )
-        experiment.playlists.set([playlist])
-        with self.assertRaisesRegex(ValueError, "The experiment playlist is not valid: \n- Section group_not_int should have a group value containing only digits\n- Section no_group should have a group value containing only digits\n- At least one section should not have the tag \"practice\""):
-            congo_same_diff.first_round(experiment)
+        block.playlists.set([playlist])
+        with self.assertRaisesRegex(ValueError, "The block playlist is not valid: \n- Section group_not_int should have a group value containing only digits\n- Section no_group should have a group value containing only digits\n- At least one section should not have the tag \"practice\""):
+            congo_same_diff.first_round(block)
 
     def test_get_total_trials_count(self):
         congo_same_diff = CongoSameDiff()

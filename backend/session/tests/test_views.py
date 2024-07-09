@@ -1,6 +1,6 @@
 from django.test import TestCase
 
-from experiment.models import Experiment, ExperimentCollection, ExperimentCollectionGroup, GroupedExperiment
+from experiment.models import Block, ExperimentCollection, Phase, GroupedBlock
 from experiment.actions.utils import COLLECTION_KEY
 from participant.models import Participant
 from section.models import Playlist
@@ -13,12 +13,12 @@ class SessionViewsTest(TestCase):
         cls.participant = Participant.objects.create(unique_hash=42)
         cls.playlist1 = Playlist.objects.create(name='First Playlist')
         cls.playlist2 = Playlist.objects.create(name='Second Playlist')
-        cls.experiment = Experiment.objects.create(
+        cls.block = Block.objects.create(
             name='TestViews',
             slug='testviews',
             rules='RHYTHM_BATTERY_INTRO'
         )
-        cls.experiment.playlists.add(
+        cls.block.playlists.add(
             cls.playlist1, cls.playlist2
         )
 
@@ -29,28 +29,28 @@ class SessionViewsTest(TestCase):
 
     def test_create_with_playlist(self):
         request = {
-            "experiment_id": self.experiment.id,
+            "block_id": self.block.id,
             "playlist_id": self.playlist2.id
         }
         self.client.post('/session/create/', request)
         new_session = Session.objects.get(
-            experiment=self.experiment, participant=self.participant)
+            block=self.block, participant=self.participant)
         assert new_session
         assert new_session.playlist == self.playlist2
 
     def test_create_without_playlist(self):
         request = {
-            "experiment_id": self.experiment.id
+            "block_id": self.block.id
         }
         self.client.post('/session/create/', request)
         new_session = Session.objects.get(
-            experiment=self.experiment, participant=self.participant)
+            block=self.block, participant=self.participant)
         assert new_session
         assert new_session.playlist == self.playlist1
 
     def test_next_round(self):
         session = Session.objects.create(
-            experiment=self.experiment, participant=self.participant)
+            block=self.block, participant=self.participant)
         response = self.client.get(
             f'/session/{session.id}/next_round/')
         assert response
@@ -62,15 +62,15 @@ class SessionViewsTest(TestCase):
         request_session[COLLECTION_KEY] = slug
         request_session.save()
         session = Session.objects.create(
-            experiment=self.experiment, participant=self.participant)
+            block=self.block, participant=self.participant)
         response = self.client.get(
             f'/session/{session.id}/next_round/')
         assert response
         changed_session = Session.objects.get(pk=session.pk)
         assert changed_session.load_json_data().get(COLLECTION_KEY) is None
-        group = ExperimentCollectionGroup.objects.create(series=collection)
-        GroupedExperiment.objects.create(
-            group=group, experiment=self.experiment)
+        phase = Phase.objects.create(series=collection)
+        GroupedBlock.objects.create(
+            phase=phase, block=self.block)
         response = self.client.get(
             f'/session/{session.id}/next_round/')
         changed_session = Session.objects.get(pk=session.pk)

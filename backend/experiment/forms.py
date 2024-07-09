@@ -1,11 +1,11 @@
 from django.forms import CheckboxSelectMultiple, ModelForm, ChoiceField, Form, MultipleChoiceField, ModelMultipleChoiceField, Select, TypedMultipleChoiceField, CheckboxSelectMultiple, TextInput
-from experiment.models import ExperimentCollection, Experiment
-from experiment.rules import EXPERIMENT_RULES
+from experiment.models import ExperimentCollection, Block, SocialMediaConfig
+from experiment.rules import BLOCK_RULES
 
 
 # session_keys for Export CSV
-SESSION_CHOICES = [('experiment_id', 'Experiment ID'),
-                   ('experiment_name', 'Experiment name'),
+SESSION_CHOICES = [('block_id', 'Block ID'),
+                   ('block_name', 'Block name'),
                    ('participant_id', 'Participant ID'),
                    ('participant_country', 'Participant Country'),
                    ('participant_access_info', 'Participant access info'),
@@ -36,61 +36,61 @@ EXPORT_OPTIONS = [('export_profile', "Include participants' profile Q&A"),
 
 # Export templates for Export CSV
 EXPORT_TEMPLATES = {'wide':
-                    [['experiment_id', 'experiment_name', 'participant_id',
+                    [['block_id', 'block_name', 'participant_id',
                       'participant_country', 'participant_access_info', 'session_start', 'session_end', 'final_score'],
                      ['section_name', 'result_created_at', 'result_score', 'result_comment',
                       'expected_response', 'given_response'],
                      ['export_profile', 'session_data', 'convert_session_json', 'decision_time', 'result_config',
                       'convert_result_json', 'wide_format']],
                     'wide_json':
-                    [['experiment_id', 'experiment_name', 'participant_id',
+                    [['block_id', 'block_name', 'participant_id',
                       'participant_country', 'participant_access_info', 'session_start', 'session_end', 'final_score'],
                      ['section_name', 'result_created_at', 'result_score', 'result_comment',
                       'expected_response', 'given_response'],
                      ['export_profile', 'session_data', 'decision_time', 'result_config', 'wide_format']],
                     'wide_results':
-                    [['experiment_name', 'participant_id', 'session_start', 'session_end', 'final_score'],
+                    [['block_name', 'participant_id', 'session_start', 'session_end', 'final_score'],
                      ['section_name', 'result_created_at', 'result_score', 'result_comment',
                       'expected_response', 'given_response'],
                      ['session_data', 'convert_session_json', 'decision_time', 'wide_format']],
 
                     'wide_results_json':
-                    [['experiment_name', 'participant_id', 'session_start', 'session_end', 'final_score'],
+                    [['block_name', 'participant_id', 'session_start', 'session_end', 'final_score'],
                      ['section_name', 'result_created_at', 'result_score', 'result_comment',
                       'expected_response', 'given_response'],
                      ['session_data', 'decision_time', 'result_config', 'wide_format']],
                     'wide_profile':
-                    [['experiment_name', 'participant_id',
+                    [['block_name', 'participant_id',
                       'participant_country', 'participant_access_info'],
                      [],
                      ['export_profile', 'wide_format']],
 
                     'long':
-                    [['experiment_id', 'experiment_name', 'participant_id',
+                    [['block_id', 'block_name', 'participant_id',
                       'participant_country', 'participant_access_info', 'session_start', 'session_end', 'final_score'],
                      ['section_name', 'result_created_at', 'result_score', 'result_comment',
                       'expected_response', 'given_response'],
                      ['export_profile', 'session_data', 'convert_session_json', 'decision_time', 'result_config',
                       'convert_result_json']],
                     'long_json':
-                    [['experiment_id', 'experiment_name', 'participant_id',
+                    [['block_id', 'block_name', 'participant_id',
                       'participant_country', 'participant_access_info', 'session_start', 'session_end', 'final_score'],
                      ['section_name', 'result_created_at', 'result_score', 'result_comment',
                       'expected_response', 'given_response'],
                      ['export_profile', 'session_data', 'decision_time', 'result_config'
                       ]],
                     'long_results':
-                    [['experiment_name', 'participant_id', 'session_start', 'session_end', 'final_score'],
+                    [['block_name', 'participant_id', 'session_start', 'session_end', 'final_score'],
                      ['section_name', 'result_created_at', 'result_score', 'result_comment',
                       'expected_response', 'given_response'],
                      ['session_data', 'convert_session_json', 'decision_time']],
                     'long_results_json':
-                    [['experiment_name', 'participant_id', 'session_start', 'session_end', 'final_score'],
+                    [['block_name', 'participant_id', 'session_start', 'session_end', 'final_score'],
                      ['section_name', 'result_created_at', 'result_score', 'result_comment',
                       'expected_response', 'given_response'],
                      ['session_data', 'decision_time', 'result_config']],
                     'long_profile':
-                    [['experiment_name', 'participant_id',
+                    [['block_name', 'participant_id',
                       'participant_country', 'participant_access_info'],
                      [],
                      ['export_profile']]
@@ -132,9 +132,9 @@ class ExperimentCollectionForm(ModelForm):
         super(ModelForm, self).__init__(*args, **kwargs)
         self.fields['dashboard'].help_text = (
             'This field will be deprecated in the nearby future. '
-            'Please use experiment series groups for dashboard configuration. (see bottom of form). <br><br>'
+            'Please use experiment phases for dashboard configuration. (see bottom of form). <br><br>'
             'Legacy behavior: If you check "dashboard", the experiment collection will have a '
-            'dashboard that shows all or a subgroup of related experiments along '
+            'dashboard that shows all or a subgroup of related blocks along '
             'with a description, footer, and about page. If you leave it unchecked, '
             'the experiment collection will redirect to the first experiment.')
         self.fields['about_content'].widget = MarkdownPreviewTextInput()
@@ -149,14 +149,14 @@ class ExperimentCollectionForm(ModelForm):
         css = {"all": ["experiment_series_admin.css"]}
 
 
-class ExperimentForm(ModelForm):
+class BlockForm(ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(ModelForm, self).__init__(*args, **kwargs)
 
         choices = tuple()
-        for i in EXPERIMENT_RULES:
-            choices += ((i, EXPERIMENT_RULES[i].__name__),)
+        for i in BLOCK_RULES:
+            choices += ((i, BLOCK_RULES[i].__name__),)
         choices += (("", "---------"),)
 
         self.fields['rules'] = ChoiceField(
@@ -171,14 +171,14 @@ class ExperimentForm(ModelForm):
 
         # Validat the rules' playlist
         rule_id = self.cleaned_data['rules']
-        cl = EXPERIMENT_RULES[rule_id]
+        cl = BLOCK_RULES[rule_id]
         rules = cl()
 
         playlists = self.cleaned_data['playlists']
 
         if not playlists:
             return self.cleaned_data['playlists']
-        
+
         playlist_errors = []
 
         # Validate playlists
@@ -194,23 +194,23 @@ class ExperimentForm(ModelForm):
         return playlists
 
     class Meta:
-        model = Experiment
+        model = Block
         fields = ['name', 'slug', 'active', 'rules',
                   'rounds', 'bonus_points', 'playlists',]
         help_texts = {
-            'description': 'A short description of the experiment that will be displayed on the experiment collection page and as a meta description in search engines.',
+            'description': 'A short description of the block that will be displayed on the experiment collection page and as a meta description in search engines.',
             'image': 'An image that will be displayed on the experiment collection page and as a meta image in search engines.',
             'consent': 'Upload an HTML (.html) or MARKDOWN (.md) file with a text to ask a user its consent<br> \
-                      for using the experiment data for this instance of the experiment.<br> \
+                      for using the block data for this instance of the block.<br> \
                       This field will override any consent text loaded from the rules file. <br>\
                       HTML files also allow django template tags so that the text can be translated',
-            'slug': 'The slug is used to identify the experiment in the URL so you can access it on the web as follows: app.amsterdammusiclab.nl/{slug} <br>\
-            It must be unique, lowercase and contain only letters, numbers, and hyphens. Nor can it start with any of the following reserved words: admin, server, experiment, participant, result, section, session, static.',
+            'slug': 'The slug is used to identify the block in the URL so you can access it on the web as follows: app.amsterdammusiclab.nl/{slug} <br>\
+            It must be unique, lowercase and contain only letters, numbers, and hyphens. Nor can it start with any of the following reserved words: admin, server, block, participant, result, section, session, static.',
         }
 
     class Media:
-        js = ["experiment_admin.js"]
-        css = {"all": ["experiment_admin.css"]}
+        js = ["block_admin.js"]
+        css = {"all": ["block_admin.css"]}
 
 
 class ExportForm(Form):
@@ -237,3 +237,15 @@ class TemplateForm(Form):
 class QuestionSeriesAdminForm(ModelForm):
     class Media:
         js = ["questionseries_admin.js"]
+
+
+class SocialMediaConfigForm(ModelForm):
+    channels = MultipleChoiceField(
+        widget=CheckboxSelectMultiple,
+        choices=SocialMediaConfig.SOCIAL_MEDIA_CHANNELS,
+        required=False
+    )
+
+    class Meta:
+        model = SocialMediaConfig
+        fields = '__all__'

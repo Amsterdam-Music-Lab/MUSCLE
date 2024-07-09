@@ -5,7 +5,17 @@ on:
     branches:
       - main
       - develop
+    paths:
+      - 'frontend/**'
+      - '.github/workflows/storybook.yml'
+      - '.yarn/**'
+      - '.storybook/**'
   pull_request:
+    paths:
+      - 'frontend/**'
+      - '.github/workflows/storybook.yml'
+      - '.yarn/**'
+      - '.storybook/**'
 
 permissions:
   contents: read

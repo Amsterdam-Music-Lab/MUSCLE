@@ -8,7 +8,7 @@ from section.models import Section
 class Session(models.Model):
     """Experiment session by a participant"""
 
-    experiment = models.ForeignKey('experiment.Experiment', on_delete=models.CASCADE, blank=True, null=True)
+    block = models.ForeignKey('experiment.Block', on_delete=models.CASCADE, blank=True, null=True)
     participant = models.ForeignKey('participant.Participant', on_delete=models.CASCADE)
     playlist = models.ForeignKey('section.Playlist', on_delete=models.SET_NULL,
                                  blank=True, null=True)
@@ -32,7 +32,7 @@ class Session(models.Model):
     def total_score(self):
         """Sum of all result scores"""
         score = self.result_set.aggregate(models.Sum('score'))
-        return self.experiment.bonus_points + (score['score__sum'] if score['score__sum'] else 0)
+        return self.block.bonus_points + (score['score__sum'] if score['score__sum'] else 0)
 
     def last_score(self):
         """Get last score, or return 0 if no scores are set"""
@@ -97,7 +97,7 @@ class Session(models.Model):
 
     def rounds_complete(self):
         """Determine if there are results for each experiment round"""
-        return self.rounds_passed() >= self.experiment.rounds
+        return self.rounds_passed() >= self.block.rounds
 
     def rounds_passed(self):
         """Get number of rounds passed"""
@@ -179,9 +179,9 @@ class Session(models.Model):
             raise Section.DoesNotExist
         return random.choice(sections)
 
-    def experiment_rules(self):
+    def block_rules(self):
         """Get rules class to be used for this session"""
-        return self.experiment.get_rules()
+        return self.block.get_rules()
 
     def finish(self):
         """Finish current session"""
@@ -190,11 +190,11 @@ class Session(models.Model):
 
     def rank(self):
         """Get session rank based on final_score, within current experiment"""
-        return self.experiment.session_set.filter(final_score__gte=self.final_score).values('final_score').annotate(total=models.Count('final_score')).count()
+        return self.block.session_set.filter(final_score__gte=self.final_score).values('final_score').annotate(total=models.Count('final_score')).count()
 
     def percentile_rank(self, exclude_unfinished):
         """Get session percentile rank based on final_score, within current experiment"""
-        session_set = self.experiment.session_set
+        session_set = self.block.session_set
         if exclude_unfinished:
             session_set = session_set.filter(finished_at__isnull=False)
         n_session = session_set.count()

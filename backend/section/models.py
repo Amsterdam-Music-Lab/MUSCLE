@@ -53,7 +53,7 @@ class Playlist(models.Model):
 
     def save(self, *args, **kwargs):
         """Update playlist csv field on every save"""
-        if self.process_csv is False:
+        if self.process_csv is False and self.id:
             self.csv = self.update_admin_csv()
         if self.url_prefix and self.url_prefix[-1] != '/':
             self.url_prefix += '/'
@@ -72,11 +72,11 @@ class Playlist(models.Model):
 
     section_count.short_description = "Sections"
 
-    def experiment_count(self):
-        """Number of Experiments"""
-        return self.experiment_set.count()
+    def block_count(self):
+        """Number of Blocks"""
+        return self.block_set.count()
 
-    experiment_count.short_description = "Experiments"
+    block_count.short_description = "Blocks"
 
     def update_sections(self):
         """Update the sections from the csv file"""
@@ -183,10 +183,10 @@ class Playlist(models.Model):
             'message': "Sections processed from CSV. Added: " + str(len(sections)) + " - Updated: " + str(updated) + " - Removed: " + str(len(delete_ids))
         }
 
-    def get_available_song_ids(self):
+    def get_available_song_ids(self, filter_by={}):
         """Get a list of distinct song ids"""
         # order_by is required to make distinct work with values_list
-        return self.section_set.order_by('song').values_list('song_id', flat=True).distinct()
+        return self.section_set.filter(**filter_by).order_by('song').values_list('song_id', flat=True).distinct()
 
     def get_section(self, filter_by={}, song_ids=[]):
         """Get a random section from this playlist
@@ -275,8 +275,8 @@ class Section(models.Model):
 
     def __str__(self):
         return "{} - {} ({}-{})".format(
-            self.artist_name(),
-            self.song_name(),
+            self.song.artist if self.song else '',
+            self.song.name if self.song else '',
             self.start_time_str(),
             self.end_time_str()
         )

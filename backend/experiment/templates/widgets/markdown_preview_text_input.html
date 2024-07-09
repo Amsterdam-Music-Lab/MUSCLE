@@ -8,7 +8,7 @@
     <div class="tab-content active" id="tab-content-edit">
         <textarea rows="{{ widget.attrs.rows|default:'16' }}" name="{{ widget.name }}" value="{{ widget.value|default:'' }}" placeholder="{{ widget.placeholder|default:''}}" {% include "django/forms/widgets/attrs.html" %}>{{ widget.value|default:'' }}</textarea>
     </div>
-    
+
     <div class="tab-content" id="tab-content-preview">
         <markdown-preview id="markdownPreview"></markdown-preview>
     </div>
@@ -65,7 +65,7 @@
         display: block;
     }
 
-    textarea {
+    .tab-content textarea {
         width: 100%;
         min-height: 256px !important;
         height: 100%;
@@ -103,7 +103,7 @@ class MarkdownPreview extends HTMLElement {
                     font-family: inherit;
                     box-sizing: border-box;
                 }
-                
+
                 h1, h2, h3, h4, h5, h6 {
                     display: block;
                     color: var(--text-fg);
@@ -237,7 +237,7 @@ class MarkdownPreview extends HTMLElement {
 
     function renderMarkdown(textarea, markdownPreview) {
         // render markdown through http post request to /experiment/render_markdown
-        return fetch('/experiment/render_markdown/', {
+        return fetch('{% url "experiment:render_markdown" %}', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -286,7 +286,7 @@ class MarkdownPreview extends HTMLElement {
 
             renderMarkdown(textarea, markdownPreview);
         });
-        
+
     });
 
 </script>

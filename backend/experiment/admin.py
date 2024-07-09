@@ -10,14 +10,28 @@ from django.db import models
 from django.utils import timezone
 from django.core import serializers
 from django.shortcuts import render, redirect
-from django.forms import CheckboxSelectMultiple, ModelForm, TextInput
+from django.forms import CheckboxSelectMultiple
 from django.http import HttpResponse
 from inline_actions.admin import InlineActionsModelAdminMixin
 from django.urls import reverse
 from django.utils.html import format_html
-from experiment.models import Experiment, ExperimentCollection, ExperimentCollectionGroup, Feedback, GroupedExperiment
+from experiment.models import (
+    Block,
+    ExperimentCollection,
+    Phase,
+    Feedback,
+    GroupedBlock,
+    SocialMediaConfig,
+)
 from question.admin import QuestionSeriesInline
-from experiment.forms import ExperimentCollectionForm, ExperimentForm, ExportForm, TemplateForm, EXPORT_TEMPLATES, QuestionSeriesAdminForm
+from experiment.forms import (
+    ExperimentCollectionForm,
+    BlockForm,
+    ExportForm,
+    TemplateForm,
+    SocialMediaConfigForm,
+    EXPORT_TEMPLATES,
+)
 from section.models import Section, Song
 from result.models import Result
 from participant.models import Participant
@@ -32,21 +46,21 @@ class FeedbackInline(admin.TabularInline):
     extra = 0
 
 
-class ExperimentAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
-    list_display = ('image_preview', 'experiment_name_link',
-                    'experiment_slug_link', 'rules',
+class BlockAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
+    list_display = ('image_preview', 'block_name_link',
+                    'block_slug_link', 'rules',
                     'rounds', 'playlist_count',
                     'session_count', 'active')
     list_filter = ['active']
     search_fields = ['name']
     inline_actions = ['export', 'export_csv']
     fields = ['name', 'description', 'image',
-              'slug', 'url', 'hashtag', 'theme_config', 
+              'slug', 'url', 'hashtag', 'theme_config',
               'language', 'active', 'rules',
               'rounds', 'bonus_points', 'playlists',
               'consent']
     inlines = [QuestionSeriesInline, FeedbackInline]
-    form = ExperimentForm
+    form = BlockForm
 
     # make playlists fields a list of checkboxes
     formfield_overrides = {
@@ -54,7 +68,7 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
     }
 
     def export(self, request, obj, parent_obj=None):
-        """Export experiment JSON data as zip archive, force download"""
+        """Export block JSON data as zip archive, force download"""
 
         # Init empty querysets
         all_results = Result.objects.none()
@@ -92,13 +106,13 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
         # create forced download response
         response = HttpResponse(zip_buffer.getbuffer())
         response['Content-Type'] = 'application/x-zip-compressed'
-        response['Content-Disposition'] = 'attachment; filename="'+obj.slug+'-'+timezone.now().isoformat()+'.zip"'        
+        response['Content-Disposition'] = 'attachment; filename="'+obj.slug+'-'+timezone.now().isoformat()+'.zip"'
         return response
 
     export.short_description = "Export JSON"
 
     def export_csv(self, request, obj, parent_obj=None):
-        """Export experiment data in CSV, force download"""
+        """Export block data in CSV, force download"""
         # Handle export command from intermediate form
         if '_export' in request.POST:
             session_keys = []
@@ -116,16 +130,16 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
             response['Content-Disposition'] = 'attachment; filename="{}.csv"'.format(
                 obj.slug)
             # Get filtered data
-            experiment_table, fieldnames = obj.export_table(
+            block_table, fieldnames = obj.export_table(
                 session_keys, result_keys, export_options)
             fieldnames.sort()
             writer = csv.DictWriter(response, fieldnames)
             writer.writeheader()
-            writer.writerows(experiment_table)
+            writer.writerows(block_table)
             return response
-        # Go back to admin experiment overview
+        # Go back to admin block overview
         if '_back' in request.POST:
-            return redirect('/admin/experiment/experiment')
+            return redirect('/admin/experiment/block')
         # Load a template in the export form
         if '_template' in request.POST:
             selected_template = request.POST.get('select_template')
@@ -156,45 +170,58 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
             return mark_safe(f'<img src="{img_src}" style="max-height: 50px;"/>')
         return ""
 
-    def experiment_name_link(self, obj):
-        """Generate a link to the experiment's admin change page."""
-        url = reverse("admin:experiment_experiment_change", args=[obj.pk])
+    def block_name_link(self, obj):
+        """Generate a link to the block's admin change page."""
+        url = reverse("admin:experiment_block_change", args=[obj.pk])
         name = obj.name or obj.slug or "No name"
         return format_html('<a href="{}">{}</a>', url, name)
 
-    def experiment_slug_link(self, obj):
+    def block_slug_link(self, obj):
         dev_mode = settings.DEBUG is True
         url = f"http://localhost:3000/{obj.slug}" if dev_mode else f"/{obj.slug}"
 
         return format_html(
-            f'<a href="{url}" target="_blank" rel="noopener noreferrer" title="Open {obj.slug} experiment in new tab" >{obj.slug}&nbsp;<small>&#8599;</small></a>')
+            f'<a href="{url}" target="_blank" rel="noopener noreferrer" title="Open {obj.slug} block in new tab" >{obj.slug}&nbsp;<small>&#8599;</small></a>')
 
     # Name the columns
     image_preview.short_description = "Image"
-    experiment_name_link.short_description = "Name"
-    experiment_slug_link.short_description = "Slug"
+    block_name_link.short_description = "Name"
+    block_slug_link.short_description = "Slug"
 
 
-admin.site.register(Experiment, ExperimentAdmin)
+admin.site.register(Block, BlockAdmin)
 
 
-class GroupedExperimentInline(admin.StackedInline):
-    model = GroupedExperiment
+class GroupedBlockInline(admin.StackedInline):
+    model = GroupedBlock
     extra = 0
 
 
-class ExperimentCollectionGroupInline(admin.StackedInline):
-    model = ExperimentCollectionGroup
+class PhaseInline(admin.StackedInline):
+    model = Phase
     extra = 0
-    inlines = [GroupedExperimentInline]
+    inlines = [GroupedBlockInline]
 
 
-class ExperimentCollectionAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
-    list_display = ('name', 'slug_link', 'description_excerpt', 'dashboard', 'groups')
-    fields = ['slug', 'name', 'description', 'consent', 'theme_config', 'dashboard',
+class SocialMediaConfigInline(admin.StackedInline):
+    form = SocialMediaConfigForm
+    model = SocialMediaConfig
+    extra = 0
+
+
+class ExperimentCollectionAdmin(
+        InlineActionsModelAdminMixin, admin.ModelAdmin):
+    list_display = ('name', 'slug_link', 'description_excerpt',
+                    'dashboard', 'phases', 'active')
+    fields = ['slug', 'name', 'active', 'description',
+              'consent', 'theme_config', 'dashboard',
               'about_content']
+    inline_actions = ['dashboard']
     form = ExperimentCollectionForm
-    inlines = [ExperimentCollectionGroupInline]
+    inlines = [
+        PhaseInline,
+        SocialMediaConfigInline,
+    ]
 
     def slug_link(self, obj):
         dev_mode = settings.DEBUG is True
@@ -210,25 +237,57 @@ class ExperimentCollectionAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
 
         return obj.description[:50] + '...'
 
-    def groups(self, obj):
-        groups = ExperimentCollectionGroup.objects.filter(series=obj)
-        return format_html(', '.join([f'<a href="/admin/experiment/experimentcollectiongroup/{group.id}/change/">{group.name}</a>' for group in groups]))
-    
+    def phases(self, obj):
+        phases = Phase.objects.filter(series=obj)
+        return format_html(', '.join([f'<a href="/admin/experiment/phase/{phase.id}/change/">{phase.name}</a>' for phase in phases]))
+
     slug_link.short_description = "Slug"
+
+    def dashboard(self, request, obj, parent_obj=None):
+        """Open researchers dashboard for a collection"""
+        all_blocks = obj.associated_blocks()
+        all_participants = obj.current_participants()
+        all_sessions = obj.export_sessions()
+        collect_data = {
+            'participant_count': len(all_participants),
+            'session_count': len(all_sessions)
+        }
+
+        blocks = [{
+            'id': block.id,
+            'name': block.name,
+            'started': len(all_sessions.filter(block=block)),
+            'finished': len(all_sessions.filter(
+                block=block,
+                finished_at__isnull=False,
+            )),
+            'participant_count': len(block.current_participants()),
+            'participants': block.current_participants()
+            } for block in all_blocks]
+
+        return render(
+            request,
+            'collection-dashboard.html',
+            context={'collection': obj,
+                     'blocks': blocks,
+                     'sessions': all_sessions,
+                     'participants': all_participants,
+                     'collect_data': collect_data}
+        )
 
 
 admin.site.register(ExperimentCollection, ExperimentCollectionAdmin)
 
 
-class ExperimentCollectionGroupAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
-    list_display = ('name_link', 'related_series', 'order', 'dashboard', 'randomize', 'experiments')
-    fields = ['name', 'series', 'order', 'dashboard', 'randomize']
-    inlines = [GroupedExperimentInline]
+class PhaseAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
+    list_display = ('name_link', 'related_series', 'index', 'dashboard', 'randomize', 'blocks')
+    fields = ['name', 'series', 'index', 'dashboard', 'randomize']
+    inlines = [GroupedBlockInline]
 
     def name_link(self, obj):
         obj_name = obj.__str__()
         url = reverse(
-            "admin:experiment_experimentcollectiongroup_change", args=[obj.pk])
+            "admin:experiment_phase_change", args=[obj.pk])
         return format_html('<a href="{}">{}</a>', url, obj_name)
 
     def related_series(self, obj):
@@ -236,13 +295,13 @@ class ExperimentCollectionGroupAdmin(InlineActionsModelAdminMixin, admin.ModelAd
             "admin:experiment_experimentcollection_change", args=[obj.series.pk])
         return format_html('<a href="{}">{}</a>', url, obj.series.name)
 
-    def experiments(self, obj):
-        experiments = GroupedExperiment.objects.filter(group=obj)
+    def blocks(self, obj):
+        blocks = GroupedBlock.objects.filter(phase=obj)
 
-        if not experiments:
-            return "No experiments"
+        if not blocks:
+            return "No blocks"
 
-        return format_html(', '.join([f'<a href="/admin/experiment/groupedexperiment/{experiment.id}/change/">{experiment.experiment.name}</a>' for experiment in experiments]))
+        return format_html(', '.join([f'<a href="/admin/experiment/groupedblock/{block.id}/change/">{block.block.name}</a>' for block in blocks]))
 
 
-admin.site.register(ExperimentCollectionGroup, ExperimentCollectionGroupAdmin)
+admin.site.register(Phase, PhaseAdmin)

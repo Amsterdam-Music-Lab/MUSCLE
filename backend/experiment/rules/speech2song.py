@@ -1,4 +1,4 @@
-import numpy as np
+import random
 
 from django.utils.translation import gettext as _
 from django.template.loader import render_to_string
@@ -45,7 +45,7 @@ class Speech2Song(Base):
             },
         ]
 
-    def first_round(self, experiment):
+    def first_round(self, block):
         explainer = Explainer(
             instruction=_("This is an experiment about an auditory illusion."),
             steps=[
@@ -57,14 +57,14 @@ class Speech2Song(Base):
         )
         # Add consent from file or admin (admin has priority)
         consent = Consent(
-            experiment.consent,
+            block.consent,
             title=_('Informed consent'),
             confirm=_('I agree'),
             deny=_('Stop'),
             url='consent/consent_speech2song.html'
             )
 
-        playlist = Playlist(experiment.playlists.all())
+        playlist = Playlist(block.playlists.all())
 
         return [
             consent,
@@ -75,8 +75,8 @@ class Speech2Song(Base):
     def next_round(self, session):
         blocks = [1, 2, 3]
         # shuffle blocks based on session.id as seed -> always same order for same session
-        np.random.seed(session.id)
-        np.random.shuffle(blocks)
+        random.seed(session.id)
+        random.shuffle(blocks)
         # group_ids for practice (0), or one of the speech blocks (1-3)
         actions = []
         is_speech = True

@@ -19,7 +19,7 @@ export default {
 };
 
 const getDefaultArgs = (overrides = {}) => ({
-    playSection: () => {},
+    playSection: () => { },
     sections: [
         {
             id: 1,
@@ -27,7 +27,6 @@ const getDefaultArgs = (overrides = {}) => ({
             turned: false,
             lucky: false,
             memory: false,
-            group: 1,
         },
         {
             id: 2,
@@ -35,7 +34,6 @@ const getDefaultArgs = (overrides = {}) => ({
             turned: false,
             lucky: false,
             memory: false,
-            group: 2,
         },
         {
             id: 3,
@@ -43,7 +41,6 @@ const getDefaultArgs = (overrides = {}) => ({
             turned: false,
             lucky: false,
             memory: false,
-            group: 3,
         },
         {
             id: 4,
@@ -51,7 +48,6 @@ const getDefaultArgs = (overrides = {}) => ({
             turned: false,
             lucky: false,
             memory: false,
-            group: 2,
         },
         {
             id: 5,
@@ -59,7 +55,6 @@ const getDefaultArgs = (overrides = {}) => ({
             turned: false,
             lucky: false,
             memory: false,
-            group: 1,
         },
         {
             id: 6,
@@ -67,11 +62,10 @@ const getDefaultArgs = (overrides = {}) => ({
             turned: false,
             lucky: false,
             memory: false,
-            group: 3,
         },
     ],
     playerIndex: 0,
-    stopAudio: () => {},
+    stopAudio: () => { },
     submitResult: (args) => {
         alert("submitResult: " + JSON.stringify(args, null, 2));
     },
@@ -117,7 +111,6 @@ export const MoreCards = {
                     turned: false,
                     lucky: false,
                     memory: false,
-                    group: 1,
                 },
                 {
                     id: 2,
@@ -125,7 +118,6 @@ export const MoreCards = {
                     turned: false,
                     lucky: false,
                     memory: false,
-                    group: 2,
                 },
                 {
                     id: 3,
@@ -133,7 +125,6 @@ export const MoreCards = {
                     turned: false,
                     lucky: false,
                     memory: false,
-                    group: 3,
                 },
                 {
                     id: 4,
@@ -141,7 +132,6 @@ export const MoreCards = {
                     turned: false,
                     lucky: false,
                     memory: false,
-                    group: 2,
                 },
                 {
                     id: 5,
@@ -149,7 +139,6 @@ export const MoreCards = {
                     turned: false,
                     lucky: false,
                     memory: false,
-                    group: 1,
                 },
                 {
                     id: 6,
@@ -157,7 +146,6 @@ export const MoreCards = {
                     turned: false,
                     lucky: false,
                     memory: false,
-                    group: 3,
                 },
                 {
                     id: 7,
@@ -165,7 +153,6 @@ export const MoreCards = {
                     turned: false,
                     lucky: false,
                     memory: false,
-                    group: 1,
                 },
                 {
                     id: 8,
@@ -173,7 +160,6 @@ export const MoreCards = {
                     turned: false,
                     lucky: false,
                     memory: false,
-                    group: 2,
                 },
                 {
                     id: 9,
@@ -181,7 +167,6 @@ export const MoreCards = {
                     turned: false,
                     lucky: false,
                     memory: false,
-                    group: 3,
                 },
                 {
                     id: 10,
@@ -189,7 +174,6 @@ export const MoreCards = {
                     turned: false,
                     lucky: false,
                     memory: false,
-                    group: 2,
                 },
                 {
                     id: 11,
@@ -197,7 +181,6 @@ export const MoreCards = {
                     turned: false,
                     lucky: false,
                     memory: false,
-                    group: 1,
                 },
                 {
                     id: 12,
@@ -205,7 +188,6 @@ export const MoreCards = {
                     turned: false,
                     lucky: false,
                     memory: false,
-                    group: 3,
                 },
             ],
         }),

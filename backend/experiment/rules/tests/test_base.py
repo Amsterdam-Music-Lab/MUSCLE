@@ -1,6 +1,6 @@
 from django.test import TestCase
 from django.conf import settings
-from experiment.models import Experiment
+from experiment.models import Block
 from session.models import Session
 from participant.models import Participant
 from section.models import Playlist
@@ -12,13 +12,13 @@ class BaseTest(TestCase):
     def test_social_media_info(self):
         reload_participant_target = settings.RELOAD_PARTICIPANT_TARGET
         slug = 'music-lab'
-        experiment = Experiment.objects.create(
+        block = Block.objects.create(
             name='Music Lab',
             slug=slug,
         )
         base = Base()
         social_media_info = base.social_media_info(
-            experiment=experiment,
+            block=block,
             score=100,
         )
 
@@ -32,12 +32,12 @@ class BaseTest(TestCase):
         self.assertEqual(social_media_info['hashtags'], ['music-lab', 'amsterdammusiclab', 'citizenscience'])
 
     def test_get_play_again_url(self):
-        experiment = Experiment.objects.create(
+        block = Block.objects.create(
             name='Music Lab',
             slug='music-lab',
         )
         session = Session.objects.create(
-            experiment=experiment,
+            block=block,
             participant=Participant.objects.create(),
         )
         base = Base()
@@ -45,7 +45,7 @@ class BaseTest(TestCase):
         self.assertEqual(play_again_url, '/music-lab')
 
     def test_get_play_again_url_with_participant_id(self):
-        experiment = Experiment.objects.create(
+        block = Block.objects.create(
             name='Music Lab',
             slug='music-lab',
         )
@@ -53,7 +53,7 @@ class BaseTest(TestCase):
             participant_id_url='42',
         )
         session = Session.objects.create(
-            experiment=experiment,
+            block=block,
             participant=participant,
         )
         base = Base()
@@ -64,8 +64,8 @@ class BaseTest(TestCase):
         base = Base()
         playlist = None
         errors = base.validate_playlist(playlist)
-        self.assertEqual(errors, ['The experiment must have a playlist.'])
+        self.assertEqual(errors, ['The block must have a playlist.'])
 
-        playlist = Playlist()
+        playlist = Playlist.objects.create()
         errors = base.validate_playlist(playlist)
-        self.assertEqual(errors, ['The experiment must have at least one section.'])
+        self.assertEqual(errors, ['The block must have at least one section.'])

@@ -10,7 +10,7 @@ export default {
 
 export const Default = {
     args: {
-        experimentSlug: "test",
+        blockSlug: "test",
         participant: "test",
         feedbackInfo: {
             header: "Feedback",
@@ -34,7 +34,7 @@ export const Default = {
 
 export const Vertical = {
     args: {
-        experimentSlug: "test",
+        blockSlug: "test",
         participant: "test",
         feedbackInfo: {
             header: "Feedback",

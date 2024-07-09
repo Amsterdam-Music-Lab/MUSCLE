@@ -6,6 +6,7 @@ from .toontjehoger_1_mozart import toontjehoger_ranks
 from experiment.actions import Explainer, Step, Score, Final, Info, Trial
 from experiment.actions.playback import PlayButton
 from experiment.actions.form import AutoCompleteQuestion, Form
+from experiment.actions.utils import get_current_collection_url
 from experiment.utils import non_breaking_spaces
 from section.models import Section
 from session.models import Session
@@ -30,14 +31,14 @@ class ToontjeHogerKids3Plink(ToontjeHoger3Plink):
     def validate_era_and_mood(self, sections):
         return []
 
-    def first_round(self, experiment):
-        """Create data for the first experiment rounds."""
+    def first_round(self, block):
+        """Create data for the first block rounds."""
 
         explainer = Explainer(
             instruction="Muziekherkenning",
             steps=[
                 Step("Je hoort zo een heel kort stukje van {} liedjes.".format(
-                    experiment.rounds)),
+                    block.rounds)),
                 Step("Herken je de liedjes? Kies dan steeds de juiste artiest en titel!"),
                 Step(
                     "Weet je het niet zeker? Doe dan maar een gok.")
@@ -76,7 +77,7 @@ class ToontjeHogerKids3Plink(ToontjeHoger3Plink):
         config = {'show_total_score': True}
         round_number = session.get_relevant_results(['plink']).count() - 1
         score_title = "Ronde %(number)d / %(total)d" %\
-            {'number': round_number+1, 'total': session.experiment.rounds}
+            {'number': round_number+1, 'total': session.block.rounds}
         return Score(session, config=config, feedback=feedback, score=score, title=score_title)
 
     def get_plink_trials(self, session: Session, section: Section, choices: dict, expected_response: str) -> list:
@@ -140,7 +141,7 @@ class ToontjeHogerKids3Plink(ToontjeHoger3Plink):
             body=body,
             heading="Muziekherkenning",
             button_label="Terug naar ToontjeHogerKids",
-            button_link="/collection/thkids"
+            button_link=get_current_collection_url(session)
         )
 
         return [score, final, info]

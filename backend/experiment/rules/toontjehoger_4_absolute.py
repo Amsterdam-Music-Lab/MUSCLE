@@ -11,6 +11,7 @@ from experiment.actions.form import ButtonArrayQuestion, Form
 from experiment.actions.frontend_style import FrontendStyle, EFrontendStyle
 from experiment.actions.playback import Multiplayer
 from experiment.actions.styles import STYLE_NEUTRAL_INVERTED
+from experiment.actions.utils import get_current_collection_url
 from experiment.utils import create_player_labels
 from .base import Base
 from result.utils import prepare_result
@@ -27,8 +28,8 @@ class ToontjeHoger4Absolute(Base):
     # number of songs (each with a,b,c version) in the playlist
     PLAYLIST_ITEMS = 13
 
-    def first_round(self, experiment):
-        """Create data for the first experiment rounds."""
+    def first_round(self, block):
+        """Create data for the first block rounds."""
 
         # 1. Explain game.
         explainer = Explainer(
@@ -58,7 +59,7 @@ class ToontjeHoger4Absolute(Base):
             return self.get_round(session)
 
         # Round 2 - 4
-        if rounds_passed < session.experiment.rounds:
+        if rounds_passed < session.block.rounds:
             return [*self.get_score(session), *self.get_round(session)]
 
         # Final
@@ -164,9 +165,9 @@ class ToontjeHoger4Absolute(Base):
 
         # Final
         final_text = "Dat bleek toch even lastig!"
-        if session.final_score >= session.experiment.rounds * 0.8 * self.SCORE_CORRECT:
+        if session.final_score >= session.block.rounds * 0.8 * self.SCORE_CORRECT:
             final_text = "Goed gedaan! Jouw absolute gehoor is uitstekend!"
-        elif session.final_score >= session.experiment.rounds * 0.5 * self.SCORE_CORRECT:
+        elif session.final_score >= session.block.rounds * 0.5 * self.SCORE_CORRECT:
             final_text = "Goed gedaan! Jouw absolute gehoor is best OK!"
 
         final = Final(
@@ -183,7 +184,7 @@ class ToontjeHoger4Absolute(Base):
             body=body,
             heading="Absoluut gehoor",
             button_label="Terug naar ToontjeHoger",
-            button_link="/toontjehoger"
+            button_link=get_current_collection_url(session)
         )
 
         return [*score, final, info]

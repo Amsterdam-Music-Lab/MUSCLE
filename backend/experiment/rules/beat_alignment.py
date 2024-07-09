@@ -18,8 +18,8 @@ class BeatAlignment(Base):
 
     ID = 'BEAT_ALIGNMENT'
 
-    def first_round(self, experiment):
-        """Create data for the first experiment rounds"""
+    def first_round(self, block):
+        """Create data for the first block rounds"""
 
         # 1. General explainer
         explainer = Explainer(
@@ -45,21 +45,21 @@ class BeatAlignment(Base):
     def next_round(self, session):
         """Get action data for the next round"""
 
-        # If the number of results equals the number of experiment.rounds
+        # If the number of results equals the number of block.rounds
         # Close the session and return data for the final_score view
         if session.rounds_complete():
             # Finish session
             session.finish()
             session.save()
             percentage = int(
-                (sum([r.score for r in session.result_set.all()]) / session.experiment.rounds) * 100)
+                (sum([r.score for r in session.result_set.all()]) / session.block.rounds) * 100)
             feedback = _('Well done! You’ve answered {} percent correctly!').format(
                 percentage)
             trivia = _('In the UK, over 140.000 people did \
                 this test when it was first developed?')
             final_text = render_feedback_trivia(feedback, trivia)
             return final_action_with_optional_button(session, final_text)
-        
+
         # Next round number, can be used to return different actions
         next_round_number = session.get_next_round()
 

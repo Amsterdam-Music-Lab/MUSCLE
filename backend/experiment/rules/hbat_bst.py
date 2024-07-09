@@ -95,7 +95,7 @@ class BST(HBat):
             button_label=button_label
         )
 
-    def finalize_experiment(self, session):
+    def finalize_block(self, session):
         """ if either the max_turnpoints have been reached,
         or if the section couldn't be found (outlier), stop the experiment
         """

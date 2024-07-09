@@ -4,14 +4,15 @@ from django.utils import timezone
 
 from image.models import Image
 from experiment.serializers import (
-    serialize_experiment,
-    serialize_experiment_collection_group
+    serialize_block,
+    serialize_phase
 )
 from experiment.models import (
-    Experiment,
+    Block,
     ExperimentCollection,
-    ExperimentCollectionGroup,
-    GroupedExperiment,
+    Phase,
+    GroupedBlock,
+    SocialMediaConfig,
 )
 from experiment.rules.hooked import Hooked
 from participant.models import Participant
@@ -28,46 +29,47 @@ class TestExperimentCollectionViews(TestCase):
         collection = ExperimentCollection.objects.create(
             name='Test Series',
             slug='test_series',
-            theme_config=theme_config
+            theme_config=theme_config,
         )
-        introductory_group = ExperimentCollectionGroup.objects.create(
+        collection.social_media_config = create_social_media_config(collection)
+        introductory_phase = Phase.objects.create(
             name='introduction',
             series=collection,
-            order=1
+            index=1
         )
-        cls.experiment1 = Experiment.objects.create(
-            name='experiment1', slug='experiment1')
-        GroupedExperiment.objects.create(
-            experiment=cls.experiment1,
-            group=introductory_group
+        cls.block1 = Block.objects.create(
+            name='block1', slug='block1')
+        GroupedBlock.objects.create(
+            block=cls.block1,
+            phase=introductory_phase
         )
-        intermediate_group = ExperimentCollectionGroup.objects.create(
+        intermediate_phase = Phase.objects.create(
             name='intermediate',
             series=collection,
-            order=2
+            index=2
         )
-        cls.experiment2 = Experiment.objects.create(
-            name='experiment2', slug='experiment2', theme_config=theme_config)
-        cls.experiment3 = Experiment.objects.create(
-            name='experiment3', slug='experiment3')
-        GroupedExperiment.objects.create(
-            experiment=cls.experiment2,
-            group=intermediate_group
+        cls.block2 = Block.objects.create(
+            name='block2', slug='block2', theme_config=theme_config)
+        cls.block3 = Block.objects.create(
+            name='block3', slug='block3')
+        GroupedBlock.objects.create(
+            block=cls.block2,
+            phase=intermediate_phase
         )
-        GroupedExperiment.objects.create(
-            experiment=cls.experiment3,
-            group=intermediate_group
+        GroupedBlock.objects.create(
+            block=cls.block3,
+            phase=intermediate_phase
         )
-        final_group = ExperimentCollectionGroup.objects.create(
+        final_phase = Phase.objects.create(
             name='final',
             series=collection,
-            order=3
+            index=3
         )
-        cls.experiment4 = Experiment.objects.create(
-            name='experiment4', slug='experiment4')
-        GroupedExperiment.objects.create(
-            experiment=cls.experiment4,
-            group=final_group
+        cls.block4 = Block.objects.create(
+            name='block4', slug='block4')
+        GroupedBlock.objects.create(
+            block=cls.block4,
+            phase=final_phase
         )
 
     def test_get_experiment_collection(self):
@@ -78,94 +80,111 @@ class TestExperimentCollectionViews(TestCase):
         # check that first_experiments is returned correctly
         response = self.client.get('/experiment/collection/test_series/')
         self.assertEqual(response.json().get(
-            'nextExperiment').get('slug'), 'experiment1')
+            'nextBlock').get('slug'), 'block1')
         # create session
         Session.objects.create(
-            experiment=self.experiment1,
+            block=self.block1,
             participant=self.participant,
             finished_at=timezone.now()
         )
         response = self.client.get('/experiment/collection/test_series/')
-        self.assertIn(response.json().get('nextExperiment').get(
-            'slug'), ('experiment2', 'experiment3'))
+        self.assertIn(response.json().get('nextBlock').get(
+            'slug'), ('block2', 'block3'))
         self.assertEqual(response.json().get('dashboard'), [])
         Session.objects.create(
-            experiment=self.experiment2,
+            block=self.block2,
             participant=self.participant,
             finished_at=timezone.now()
         )
         Session.objects.create(
-            experiment=self.experiment3,
+            block=self.block3,
             participant=self.participant,
             finished_at=timezone.now()
         )
         response = self.client.get('/experiment/collection/test_series/')
         response_json = response.json()
         self.assertEqual(response_json.get(
-            'nextExperiment').get('slug'), 'experiment4')
+            'nextBlock').get('slug'), 'block4')
         self.assertEqual(response_json.get('dashboard'), [])
         self.assertEqual(response_json.get('theme').get('name'), 'test_theme')
         self.assertEqual(len(response_json['theme']['header']['score']), 3)
         self.assertEqual(response_json.get('theme').get('footer').get(
             'disclaimer'), '<p>Test Disclaimer</p>')
+        self.assertEqual(response_json.get('socialMedia').get('url'), 'https://www.example.com')
+        self.assertEqual(response_json.get('socialMedia').get('content'), 'Test Content')
+        self.assertEqual(response_json.get('socialMedia').get('tags'), ['aml', 'toontjehoger'])
+        self.assertEqual(response_json.get('socialMedia').get('channels'), ['facebook', 'twitter', 'weibo'])
+
+    def test_get_experiment_collection_not_found(self):
+        # if ExperimentCollection does not exist, return 404
+        response = self.client.get('/experiment/collection/not_found/')
+        self.assertEqual(response.status_code, 404)
+
+    def test_get_experiment_collection_inactive(self):
+        # if ExperimentCollection is inactive, return 404
+        collection = ExperimentCollection.objects.get(slug='test_series')
+        collection.active = False
+        collection.save()
+        response = self.client.get('/experiment/collection/test_series/')
+        self.assertEqual(response.status_code, 404)
 
     def test_experiment_collection_with_dashboard(self):
-        # if ExperimentCollection has dashboard set True, return list of random experiments
+        # if ExperimentCollection has dashboard set True, return list of random blocks
         session = self.client.session
         session['participant_id'] = self.participant.id
         session.save()
         Session.objects.create(
-            experiment=self.experiment1,
+            block=self.block1,
             participant=self.participant,
             finished_at=timezone.now()
         )
-        intermediate_group = ExperimentCollectionGroup.objects.get(
+        intermediate_phase = Phase.objects.get(
             name='intermediate'
         )
-        intermediate_group.dashboard = True
-        intermediate_group.save()
+        intermediate_phase.dashboard = True
+        intermediate_phase.save()
         # check that first_experiments is returned correctly
         response = self.client.get('/experiment/collection/test_series/')
         self.assertEqual(type(response.json().get('dashboard')), list)
 
     def test_experiment_collection_total_score(self):
-        """ Test calculation of total score for grouped experiment on dashboard """
+        """ Test calculation of total score for grouped block on dashboard """
         session = self.client.session
         session['participant_id'] = self.participant.id
         session.save()
         Session.objects.create(
-            experiment=self.experiment2,
+            block=self.block2,
             participant=self.participant,
             finished_at=timezone.now(),
             final_score=8
         )
-        intermediate_group = ExperimentCollectionGroup.objects.get(
+        intermediate_phase = Phase.objects.get(
             name='intermediate'
         )
-        intermediate_group.dashboard = True
-        intermediate_group.save()
-        serialized_coll_1 = serialize_experiment_collection_group(intermediate_group, self.participant)
+        intermediate_phase.dashboard = True
+        intermediate_phase.save()
+        serialized_coll_1 = serialize_phase(intermediate_phase, self.participant)
         total_score_1 = serialized_coll_1['totalScore']
         self.assertEqual(total_score_1, 8)
         Session.objects.create(
-            experiment=self.experiment3,
+            block=self.block3,
             participant=self.participant,
             finished_at=timezone.now(),
             final_score=8
         )
-        serialized_coll_2 = serialize_experiment_collection_group(intermediate_group, self.participant)
+        serialized_coll_2 = serialize_phase(intermediate_phase, self.participant)
         total_score_2 = serialized_coll_2['totalScore']
         self.assertEqual(total_score_2, 16)
 
 
 class ExperimentViewsTest(TestCase):
 
-    def test_serialize_experiment(self):
-        # Create an experiment
-        experiment = Experiment.objects.create(
-            slug='test-experiment',
-            name='Test Experiment',
-            description='This is a test experiment',
+    def test_serialize_block(self):
+        # Create an block
+        block = Block.objects.create(
+            slug='test-block',
+            name='Test Block',
+            description='This is a test block',
             image=Image.objects.create(
                 title='Test',
                 description='',
@@ -179,24 +198,24 @@ class ExperimentViewsTest(TestCase):
         )
         participant = Participant.objects.create()
         Session.objects.bulk_create([
-            Session(experiment=experiment, participant=participant, finished_at=timezone.now()) for index in range(3)
+            Session(block=block, participant=participant, finished_at=timezone.now()) for index in range(3)
         ])
 
-        # Call the serialize_experiment function
-        serialized_experiment = serialize_experiment(experiment, participant)
+        # Call the serialize_block function
+        serialized_block = serialize_block(block, participant)
 
         # Assert the serialized data
         self.assertEqual(
-            serialized_experiment['slug'], 'test-experiment'
+            serialized_block['slug'], 'test-block'
         )
         self.assertEqual(
-            serialized_experiment['name'], 'Test Experiment'
+            serialized_block['name'], 'Test Block'
         )
         self.assertEqual(
-            serialized_experiment['description'], 'This is a test experiment'
+            serialized_block['description'], 'This is a test block'
         )
         self.assertEqual(
-            serialized_experiment['image'], {
+            serialized_block['image'], {
                 'title': 'Test',
                 'description': '',
                 'file': f'{settings.BASE_URL}/upload/test-image.jpg',
@@ -208,30 +227,32 @@ class ExperimentViewsTest(TestCase):
             }
         )
 
-    def test_get_experiment(self):
-        # Create an experiment
-        experiment = Experiment.objects.create(
-            slug='test-experiment',
-            name='Test Experiment',
-            description='This is a test experiment',
+    def test_get_block(self):
+        # Create an block
+        block = Block.objects.create(
+            slug='test-block',
+            name='Test Block',
+            description='This is a test block',
             image=Image.objects.create(
                 file='test-image.jpg'
             ),
             rules=Hooked.ID,
-            theme_config=create_theme_config()
+            theme_config=create_theme_config(),
+            rounds=3,
+            bonus_points=42,
         )
         participant = Participant.objects.create()
         Session.objects.bulk_create([
-            Session(experiment=experiment, participant=participant, finished_at=timezone.now()) for index in range(3)
+            Session(block=block, participant=participant, finished_at=timezone.now()) for index in range(3)
         ])
 
-        response = self.client.get('/experiment/test-experiment/')
+        response = self.client.get('/experiment/test-block/')
 
         self.assertEqual(
-            response.json()['slug'], 'test-experiment'
+            response.json()['slug'], 'test-block'
         )
         self.assertEqual(
-            response.json()['name'], 'Test Experiment'
+            response.json()['name'], 'Test Block'
         )
         self.assertEqual(
             response.json()['theme']['name'], 'test_theme'
@@ -242,9 +263,15 @@ class ExperimentViewsTest(TestCase):
         self.assertEqual(
             response.json()['theme']['footer']['disclaimer'], '<p>Test Disclaimer</p>'
         )
+        self.assertEqual(
+            response.json()['rounds'], 3
+        )
+        self.assertEqual(
+            response.json()['bonus_points'], 42
+        )
 
 
-def create_theme_config():
+def create_theme_config() -> ThemeConfig:
     theme_config = ThemeConfig.objects.create(
             name='test_theme',
             description='Test Theme',
@@ -265,3 +292,14 @@ def create_theme_config():
     footer_config.logos.add(Image.objects.create(file='test-logo.jpg'))
 
     return theme_config
+
+
+def create_social_media_config(
+        collection: ExperimentCollection) -> SocialMediaConfig:
+    return SocialMediaConfig.objects.create(
+        experiment_collection=collection,
+        url='https://www.example.com',
+        content='Test Content',
+        channels=['facebook', 'twitter', 'weibo'],
+        tags=['aml', 'toontjehoger']
+    )

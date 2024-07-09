@@ -28,7 +28,7 @@ export const URLS = {
     about: "/about",
     profile: "/profile",
     storeProfile: "/profile/store",
-    experiment: "/:slug",
+    block: "/:slug",
     experimentCollectionAbout: "/collection/:slug/about",
     experimentCollection: "/collection/:slug",
     internalRedirect: "/redirect/:path",
