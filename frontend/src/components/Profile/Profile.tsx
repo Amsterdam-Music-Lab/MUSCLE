@@ -44,10 +44,8 @@ interface ProfileViewProps {
         points: string;
     };
     scores: {
-        // This might need to be renamed to block_slug and experiment_slug
-        // after the great refactor of Summer 2024
-        experiment_slug: string;
-        experiment_name: string;
+        block_slug: string;
+        block_name: string;
         score: number;
         date: string;
         rank: {
@@ -91,7 +89,7 @@ export const ProfileView = (data: ProfileViewProps) => {
                                     <Link
                                         to={URLS.block.replace(
                                             ":slug",
-                                            score.experiment_slug
+                                            score.block_slug
                                         )}
                                     >
                                         {score.block_name}

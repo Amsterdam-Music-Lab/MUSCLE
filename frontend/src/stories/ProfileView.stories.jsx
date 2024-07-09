@@ -26,7 +26,7 @@ function getProfileData(overrides = {}) {
                 score: 100,
                 points: "points",
                 date: "2021-09-20",
-                experiment_slug: "experiment-slug",
+                block_slug: "block-slug",
             },
             {
                 finished_at: "2021-09-21T12:00:00Z",
@@ -37,7 +37,7 @@ function getProfileData(overrides = {}) {
                 score: 50,
                 points: "points",
                 date: "2021-09-21",
-                experiment_slug: "experiment-slug",
+                block_slug: "block-slug",
             },
         ],
         ...overrides,
