@@ -153,6 +153,7 @@ class Base(object):
         return trials
 
     def social_media_info(self, block, score):
+        ''' ⚠️ Deprecated. The social media info will eventually be present on the Experiment level, not the Block level. '''
         current_url = f"{settings.RELOAD_PARTICIPANT_TARGET}/{block.slug}"
         return {
             'apps': ['facebook', 'twitter'],
