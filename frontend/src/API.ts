@@ -57,12 +57,14 @@ export const useParticipantScores = () =>
 export const useParticipantLink = () =>
     useGet(API_BASE_URL + URLS.participant.link);
 
+type ConsentResponse = boolean | null;
+
 export const useConsent = (slug: string) =>
-    useGet(API_BASE_URL + URLS.result.get('consent_' + slug));
+    useGet<ConsentResponse>(API_BASE_URL + URLS.result.get('consent_' + slug));
 
 interface CreateConsentParams {
     block: Block;
-    participant: Participant;
+    participant: Pick<Participant, 'csrf_token'>;
 }
 
 /** Create consent for given experiment */
