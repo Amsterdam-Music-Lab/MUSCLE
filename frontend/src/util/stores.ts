@@ -8,16 +8,12 @@ import IBlock from "@/types/Block";
 
 interface BlockSlice {
     block?: IBlock;
-    blockLoading: boolean;
     setBlock: (block: IBlock) => void;
-    setBlockLoading: (blockLoading: boolean) => void;
 }
 
 const createBlockSlice: StateCreator<BlockSlice> = (set) => ({
     block: undefined,
-    blockLoading: true,
     setBlock: (block) => set(() => ({ block })),
-    setBlockLoading: (blockLoading) => set(() => ({ blockLoading }))
 });
 
 interface StructuredData {
