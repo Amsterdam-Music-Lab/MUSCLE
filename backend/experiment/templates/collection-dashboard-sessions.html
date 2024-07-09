@@ -6,7 +6,7 @@
         <thead>
             <tr>
                 <th>Session *</th>
-                <th>Experiment *</th>
+                <th>Block *</th>
                 <th>Participant *</th>
                 <th>Started</th>
                 <th>Finished</th>
@@ -17,7 +17,7 @@
         </thead>
 
         <tbody>
-            <!-- List and hide all sessions in this collection with a unique id per experiment -->
+            <!-- List and hide all sessions in this collection with a unique id per block -->
             {% for session in sessions %}
                 <tr class="session-row hide experiment-{{ session.block.id }} participant-session-{{ session.participant.id }}">
 
@@ -85,7 +85,7 @@
                     <h3>
                         Session: <a href="{% url 'admin:session_session_change' session.id %}" target="_blank">{{ session.id }}</a><br>
                         Participant: <a href="{% url 'admin:participant_participant_change' session.participant.id %}" target="_blank">{{ session.participant.participant_id_url }}</a><br>
-                        Experiment: <a href="{% url 'admin:experiment_block_change' session.block.id %}" target="_blank">{{ session.block.name }}</a>
+                        Block: <a href="{% url 'admin:experiment_block_change' session.block.id %}" target="_blank">{{ session.block.name }}</a>
                     </h3>
 
                     <pre>
