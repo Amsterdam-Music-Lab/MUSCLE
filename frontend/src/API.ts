@@ -51,8 +51,8 @@ export const useExperimentCollection = (slug: string) => {
     return data; // snakeToCamel(collection), loading
 }
 
-export const useParticipantScores = () =>
-    useGet(API_BASE_URL + URLS.participant.score);
+export const useParticipantScores = <T>() =>
+    useGet<T>(API_BASE_URL + URLS.participant.score);
 
 export const useParticipantLink = () =>
     useGet(API_BASE_URL + URLS.participant.link);
