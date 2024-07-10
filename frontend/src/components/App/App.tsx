@@ -69,7 +69,7 @@ const App = () => {
                         {/* Default experiment */}
                         <Route path="/" exact>
                             <Redirect
-                                to={URLS.block.replace(":slug", EXPERIMENT_SLUG)}
+                                to={URLS.experimentCollection.replace(":slug", EXPERIMENT_SLUG)}
                             />
                         </Route>
 
