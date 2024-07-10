@@ -178,7 +178,7 @@ class BlockAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
 
     def block_slug_link(self, obj):
         dev_mode = settings.DEBUG is True
-        url = f"http://localhost:3000/{obj.slug}" if dev_mode else f"/{obj.slug}"
+        url = f"http://localhost:3000/block/{obj.slug}" if dev_mode else f"/block/{obj.slug}"
 
         return format_html(
             f'<a href="{url}" target="_blank" rel="noopener noreferrer" title="Open {obj.slug} block in new tab" >{obj.slug}&nbsp;<small>&#8599;</small></a>')
