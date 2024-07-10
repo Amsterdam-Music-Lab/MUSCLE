@@ -11,7 +11,7 @@ class TestBeatAlignment(BaseTest):
     def test_beatalignment(self):
         block_name = "beat_alignment"
         block_slug = self.config['block_slugs'][block_name]
-        self.driver.get(f"{self.base_url}/{block_slug}")
+        self.driver.get(f"{self.base_url}/block/{block_slug}")
 
         self.check_for_error(block_name, block_slug)
 
