@@ -15,7 +15,7 @@ function getHeaderData(overrides = {}) {
         description: "<h1>Experiment ABC</h1><p>This is the experiment description</p>",
         nextBlockSlug: '/th1-mozart',
         nextBlockButtonText: 'Volgende experiment',
-        collectionSlug: '/collection/thkids',
+        collectionSlug: '/thkids',
         aboutButtonText: 'Over ons',
         totalScore: 420,
         scoreDisplayConfig: {

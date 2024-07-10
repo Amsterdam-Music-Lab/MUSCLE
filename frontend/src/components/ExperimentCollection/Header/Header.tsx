@@ -45,8 +45,8 @@ export const Header: React.FC<HeaderProps> = ({
             <div className="intro">
                 <HTML body={description} innerClassName="" />
                 <nav className="actions">
-                    {nextBlockSlug && <a className="btn btn-lg btn-primary" href={`/${nextBlockSlug}`}>{nextBlockButtonText}</a>}
-                    {aboutButtonText && <Link className="btn btn-lg btn-outline-primary" to={`/collection/${collectionSlug}/about`}>{aboutButtonText}</Link>}
+                    {nextBlockSlug && <a className="btn btn-lg btn-primary" href={`/block/${nextBlockSlug}`}>{nextBlockButtonText}</a>}
+                    {aboutButtonText && <Link className="btn btn-lg btn-outline-primary" to={`/${collectionSlug}/about`}>{aboutButtonText}</Link>}
                 </nav>
             </div>
             {scoreDisplayConfig && totalScore !== 0 && (

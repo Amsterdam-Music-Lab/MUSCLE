@@ -43,7 +43,7 @@ class BeatAlignmentRuleTest(TestCase):
         return json.loads(response.content)
 
     def test_block(self):
-        response = self.client.get('/experiment/ba/')
+        response = self.client.get('/experiment/block/ba/')
         response_json = self.load_json(response)
         self.assertTrue({'id', 'slug', 'name', 'class_name', 'rounds',
                         'playlists', 'next_round', 'loading_text'} <= response_json.keys())

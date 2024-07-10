@@ -13,7 +13,7 @@ export const ExperimentCollectionAbout: React.FC<ExperimentCollectionAboutProps>
 
     return (
         <div className="container">
-            <Link className="btn btn-lg btn-outline-primary mt-3" to={`/collection/${slug}`}>
+            <Link className="btn btn-lg btn-outline-primary mt-3" to={`/${slug}`}>
                 <i className="fas fa-arrow-left mr-2"></i>
                 Terug
             </Link>

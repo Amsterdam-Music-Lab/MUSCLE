@@ -80,11 +80,11 @@ const App = () => {
 
                         <Route path={URLS.internalRedirect} component={InternalRedirect} />
 
-                        {/* Experiment Collection */}
-                        <Route path={URLS.experimentCollection} component={ExperimentCollection} />
-
                         {/* Block */}
                         <Route path={URLS.block} component={Block} />
+
+                        {/* Experiment */}
+                        <Route path={URLS.experimentCollection} component={ExperimentCollection} />
 
                         <Route path={URLS.session} />
 

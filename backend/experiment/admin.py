@@ -225,7 +225,7 @@ class ExperimentCollectionAdmin(
 
     def slug_link(self, obj):
         dev_mode = settings.DEBUG is True
-        url = f"http://localhost:3000/collection/{obj.slug}" if dev_mode else f"/collection/{obj.slug}"
+        url = f"http://localhost:3000/{obj.slug}" if dev_mode else f"/{obj.slug}"
 
         return format_html(
             f'<a href="{url}" target="_blank" rel="noopener noreferrer" title="Open {obj.slug} experiment group in new tab" >{obj.slug}&nbsp;<small>&#8599;</small></a>')
