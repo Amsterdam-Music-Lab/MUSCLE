@@ -27,7 +27,7 @@ class MockRequest:
 request = MockRequest()
 
 
-class TestAdminBlcok(TestCase):
+class TestAdminBlock(TestCase):
 
     @classmethod
     def setUpTestData(cls):
