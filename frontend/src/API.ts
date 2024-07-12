@@ -14,11 +14,11 @@ axios.defaults.withCredentials = true;
 // API endpoints
 export const URLS = {
     block: {
-        get: (slug: string) => "/experiment/" + slug + "/",
-        feedback: (slug: string) => "/experiment/" + slug + "/feedback/",
+        get: (slug: string) => "/experiment/block/" + slug + "/",
+        feedback: (slug: string) => "/experiment/block/" + slug + "/feedback/",
     },
     experiment_collection: {
-        get: (slug: string) => `/experiment/collection/${slug}/`
+        get: (slug: string) => `/experiment/${slug}/`
     },
     participant: {
         current: "/participant/",

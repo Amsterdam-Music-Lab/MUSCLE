@@ -67,8 +67,8 @@ describe('Block Component', () => {
         const spy = vi.spyOn(API, 'getNextRound');
 
         render(
-            <MemoryRouter initialEntries={['/test']}>
-                <Route path="/:slug" component={Block} />
+            <MemoryRouter initialEntries={['/block/test']}>
+                <Route path="/block/:slug" component={Block} />
             </MemoryRouter>
         );
         const button = await screen.findByText('Continue');

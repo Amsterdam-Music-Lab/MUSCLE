@@ -27,7 +27,7 @@ class MockRequest:
 request = MockRequest()
 
 
-class TestAdminExperiment(TestCase):
+class TestAdminBlock(TestCase):
 
     @classmethod
     def setUpTestData(cls):
@@ -80,6 +80,15 @@ class TestAdminExperiment(TestCase):
         expected_name = "Test Block"
         expected_link = format_html(
             '<a href="{}">{}</a>', expected_url, expected_name)
+        self.assertEqual(link, expected_link)
+
+    def test_block_slug_link(self):
+        block = Block.objects.create(name="Test Block", slug="test-block")
+        site = AdminSite()
+        admin = BlockAdmin(block, site)
+        link = admin.block_slug_link(block)
+
+        expected_link = '<a href="/block/test-block" target="_blank" rel="noopener noreferrer" title="Open test-block block in new tab" >test-block&nbsp;<small>&#8599;</small></a>'
         self.assertEqual(link, expected_link)
 
 

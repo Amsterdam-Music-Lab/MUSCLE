@@ -1,6 +1,7 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import { BrowserRouter as Router } from 'react-router-dom';
+import { it, expect, describe } from 'vitest';
 
 import ExperimentCollectionAbout from './ExperimentCollectionAbout';
 
@@ -29,6 +30,6 @@ describe('ExperimentCollectionAbout', () => {
         )
 
         expect(screen.getByRole('link').innerHTML).toContain('Terug');
-        expect(screen.getByRole('link').getAttribute('href')).toBe('/collection/some_slug');
+        expect(screen.getByRole('link').getAttribute('href')).toBe('/some_slug');
     });
 })

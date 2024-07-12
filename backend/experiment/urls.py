@@ -9,9 +9,9 @@ urlpatterns = [
     # Experiment
     path('render_markdown/', render_markdown, name='render_markdown'),
     path('validate_playlist/<str:rules_id>', validate_block_playlist, name='validate_block_playlist'),
-    path('<slug:slug>/', get_block, name='experiment'),
-    path('<slug:slug>/feedback/', post_feedback, name='feedback'),
-    path('collection/<slug:slug>/', get_experiment_collection,
+    path('block/<slug:slug>/', get_block, name='block'),
+    path('block/<slug:slug>/feedback/', post_feedback, name='feedback'),
+    path('<slug:slug>/', get_experiment_collection,
          name='experiment_collection'),
 
     # Robots.txt

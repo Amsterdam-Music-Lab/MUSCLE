@@ -23,7 +23,7 @@ export const ExperimentCollectionDashboard: React.FC<ExperimentCollectionDashboa
     const showHeader = experimentCollection.theme?.header;
     const socialMediaConfig = experimentCollection.socialMediaConfig;
 
-    const getExperimentHref = (slug: string) => `/${slug}${participantIdUrl ? `?participant_id=${participantIdUrl}` : ""}`;
+    const getExperimentHref = (slug: string) => `/block/${slug}${participantIdUrl ? `?participant_id=${participantIdUrl}` : ""}`;
 
     return (
         <div className="aha__dashboard">

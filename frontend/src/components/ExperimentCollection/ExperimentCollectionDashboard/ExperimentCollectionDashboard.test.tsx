@@ -89,7 +89,7 @@ describe('ExperimentCollectionDashboard', () => {
         );
         await waitFor(() => {
             expect(screen.getByRole('menu')).toBeTruthy();
-            expect(screen.getByRole('menu').querySelector('a').getAttribute('href')).toBe('/some_slug');
+            expect(screen.getByRole('menu').querySelector('a').getAttribute('href')).toBe('/block/some_slug');
         });
     });
 
@@ -101,7 +101,7 @@ describe('ExperimentCollectionDashboard', () => {
         );
         await waitFor(() => {
             expect(screen.getByRole('menu')).toBeTruthy();
-            expect(screen.getByRole('menu').querySelector('a').getAttribute('href')).toBe('/some_slug?participant_id=some_id');
+            expect(screen.getByRole('menu').querySelector('a').getAttribute('href')).toBe('/block/some_slug?participant_id=some_id');
         });
     });
 

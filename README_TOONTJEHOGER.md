@@ -6,9 +6,9 @@ Set the following experiment values in the admin:
 | ---------- | ------------ | ------ |
 | home       | toontjehoger | 0      |
 
-## Experiments
+## Experiment blocks
 
-The ToontjeHoger experiment rules can be found in:
+The ToontjeHoger experiment block rules can be found in:
 
 ```
 backend/experiment/rules/toontjehoger_1_mozart.py
@@ -19,13 +19,13 @@ backend/experiment/rules/toontjehoger_5_tempo.py
 backend/experiment/rules/toontjehoger_6_relative.py
 ```
 
--   These rules contain all textual content that is shown during the experiment
+-   These rules contain all textual content that is shown during the block
 
-**Per experiment config**
+**Per block config**
 
-Set the following per-experiment values in the admin:
+Set the following per-block values in the admin:
 
-| Experiment | Slug                     | Rounds |
+| Block | Slug                     | Rounds |
 | ---------- | ------------------------ | ------ |
 | 1          | toontjehoger_1_mozart    | 2      |
 | 2          | toontjehoger_2_preverbal | 2      |
@@ -34,7 +34,7 @@ Set the following per-experiment values in the admin:
 | 5          | toontjehoger_5_tempo     | 5      |
 | 6          | toontjehoger_6_relative  | 2      |
 
-### Experiment images
+### Block images
 
 Images for the ToontjeHoger experiments can be found in:
 
@@ -42,7 +42,7 @@ Images for the ToontjeHoger experiments can be found in:
 frontend/public/images/experiments/toontjehoger/*
 ```
 
-### Experiment information pages
+### Block information pages
 
 The information pages are shown after each experiment can be found in:
 
@@ -57,9 +57,9 @@ backend/templates/info/toontjehoger/experiment6.html
 
 ## Playlists
 
-Each experiment uses a playlist with additional information in the tag/group field.
+Each block uses a playlist with additional information in the tag/group field.
 
-### Experiment 1
+### Block 1
 
 The group field contains the round.
 
@@ -68,7 +68,7 @@ The group field contains the round.
 "Wolfgang Amadeus Mozart","Sonate voor twee pianos in D groot, KV 448 (uitgevoerd door Lucas en Arthur Jussen)",0,28.0,"/toontjehoger/mozart/fragment_b.mp3",0,0,2
 ```
 
-### Experiment 2
+### Block 2
 
 The group field contains the round.
 
@@ -80,7 +80,7 @@ AML,Franse baby,0,1,/toontjehoger/preverbal/5_franse_baby.mp3,0,a,2
 AML,Duitse baby,0,1,/toontjehoger/preverbal/4_duitse_baby.mp3,0,b,2
 ```
 
-### Experiment 3
+### Block 3
 
 The group field contains a semi-colon separated list of time-period and emotion, e.g. 70s;vrolijk
 
@@ -112,7 +112,7 @@ David Bowie,Heroes,0,1,toontjehoger/plink/2021-024.mp3,0,0,70s;vrolijk
 Dire Straits,Sultans Of Swing,0,1,toontjehoger/plink/2021-025.mp3,0,0,70s;vrolijk
 ```
 
-### Experiment 4
+### Block 4
 
 The tag field contains indicates if the section pitch is original (a) or it it changed (b,c).
 The group field contains a song identifier.
@@ -159,7 +159,7 @@ AML,Breaking Bad,0,1,/toontjehoger/absolute/4_Toonhoogte_Item13_b.mp3,0,b,13
 AML,Breaking Bad,0,1,/toontjehoger/absolute/4_Toonhoogte_Item13_c.mp3,0,c,13
 ```
 
-### Experiment 5
+### Block 5
 
 The tag field contains an identifier. The group field shows if it is an original (or) or changed (ch) track.
 
@@ -226,7 +226,7 @@ The Stooges,Now I Wanna Be Your Dog,0,1,/toontjehoger/tempo/R5_P2_CH_155.mp3,0,R
 Iggy Pop,Now I Wanna Be Your Dog,0,1,/toontjehoger/tempo/R5_P2_OR_155.mp3,0,R5_P2_OR,or
 ```
 
-### Experiment 6
+### Block 6
 
 The tag field indicates if the section in a, b or c.
 

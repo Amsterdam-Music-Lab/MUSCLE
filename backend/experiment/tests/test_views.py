@@ -78,7 +78,7 @@ class TestExperimentCollectionViews(TestCase):
         session['participant_id'] = self.participant.id
         session.save()
         # check that first_experiments is returned correctly
-        response = self.client.get('/experiment/collection/test_series/')
+        response = self.client.get('/experiment/test_series/')
         self.assertEqual(response.json().get(
             'nextBlock').get('slug'), 'block1')
         # create session
@@ -87,7 +87,7 @@ class TestExperimentCollectionViews(TestCase):
             participant=self.participant,
             finished_at=timezone.now()
         )
-        response = self.client.get('/experiment/collection/test_series/')
+        response = self.client.get('/experiment/test_series/')
         self.assertIn(response.json().get('nextBlock').get(
             'slug'), ('block2', 'block3'))
         self.assertEqual(response.json().get('dashboard'), [])
@@ -101,7 +101,7 @@ class TestExperimentCollectionViews(TestCase):
             participant=self.participant,
             finished_at=timezone.now()
         )
-        response = self.client.get('/experiment/collection/test_series/')
+        response = self.client.get('/experiment/test_series/')
         response_json = response.json()
         self.assertEqual(response_json.get(
             'nextBlock').get('slug'), 'block4')
@@ -117,7 +117,7 @@ class TestExperimentCollectionViews(TestCase):
 
     def test_get_experiment_collection_not_found(self):
         # if ExperimentCollection does not exist, return 404
-        response = self.client.get('/experiment/collection/not_found/')
+        response = self.client.get('/experiment/not_found/')
         self.assertEqual(response.status_code, 404)
 
     def test_get_experiment_collection_inactive(self):
@@ -125,7 +125,7 @@ class TestExperimentCollectionViews(TestCase):
         collection = ExperimentCollection.objects.get(slug='test_series')
         collection.active = False
         collection.save()
-        response = self.client.get('/experiment/collection/test_series/')
+        response = self.client.get('/experiment/test_series/')
         self.assertEqual(response.status_code, 404)
 
     def test_experiment_collection_with_dashboard(self):
@@ -144,7 +144,7 @@ class TestExperimentCollectionViews(TestCase):
         intermediate_phase.dashboard = True
         intermediate_phase.save()
         # check that first_experiments is returned correctly
-        response = self.client.get('/experiment/collection/test_series/')
+        response = self.client.get('/experiment/test_series/')
         self.assertEqual(type(response.json().get('dashboard')), list)
 
     def test_experiment_collection_total_score(self):
@@ -246,7 +246,7 @@ class ExperimentViewsTest(TestCase):
             Session(block=block, participant=participant, finished_at=timezone.now()) for index in range(3)
         ])
 
-        response = self.client.get('/experiment/test-block/')
+        response = self.client.get('/experiment/block/test-block/')
 
         self.assertEqual(
             response.json()['slug'], 'test-block'

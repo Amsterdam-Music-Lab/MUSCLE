@@ -45,7 +45,7 @@ const ExperimentCollection = ({ match }: ExperimentCollectionProps) => {
         setHasShownConsent(true);
     }
 
-    const getExperimentHref = (slug: string) => `/${slug}${participantIdUrl ? `?participant_id=${participantIdUrl}` : ""}`;
+    const getBlockHref = (slug: string) => `/block/${slug}${participantIdUrl ? `?participant_id=${participantIdUrl}` : ""}`;
 
     if (loadingExperimentCollection) {
         return (
@@ -74,7 +74,7 @@ const ExperimentCollection = ({ match }: ExperimentCollectionProps) => {
     }
 
     if (!displayDashboard && nextBlock) {
-        return <Redirect to={getExperimentHref(nextBlock.slug)} />
+        return <Redirect to={getBlockHref(nextBlock.slug)} />
     }
 
     return (

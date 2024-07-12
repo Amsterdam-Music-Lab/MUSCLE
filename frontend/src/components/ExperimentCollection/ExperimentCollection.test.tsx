@@ -1,6 +1,6 @@
-import React from 'react';
 import { MemoryRouter } from 'react-router-dom';
 import { render, screen, waitFor } from '@testing-library/react';
+import { it, expect, describe } from 'vitest';
 import MockAdapter from "axios-mock-adapter";
 import axios from 'axios';
 

@@ -7,7 +7,7 @@ import time
 
 class TestTHKids(BaseTest):
     def test_th_kids(self):
-        self.driver.get(f"{self.base_url}/collection/thkids")
+        self.driver.get(f"{self.base_url}/thkids")
 
         dashboard = WebDriverWait(self.driver, 5).until(expected_conditions.presence_of_element_located((By.CLASS_NAME, "dashboard")))
         print("\n✅ The frontend is working and the thkids collection page is working!")
