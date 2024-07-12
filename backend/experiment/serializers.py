@@ -44,7 +44,8 @@ def serialize_experiment_collection(
             filter_name='markdown'
         )
 
-    if experiment_collection.social_media_config:
+    if (hasattr(experiment_collection, 'social_media_config')
+            and experiment_collection.social_media_config):
         serialized['socialMedia'] = serialize_social_media_config(
             experiment_collection.social_media_config
         )

@@ -128,6 +128,32 @@ class TestExperimentCollectionViews(TestCase):
         response = self.client.get('/experiment/test_series/')
         self.assertEqual(response.status_code, 404)
 
+    def test_get_experiment_without_social_media(self):
+        session = self.client.session
+        session['participant_id'] = self.participant.id
+        session.save()
+        Session.objects.create(
+            block=self.block1,
+            participant=self.participant,
+            finished_at=timezone.now()
+        )
+        intermediate_phase = Phase.objects.get(
+            name='intermediate'
+        )
+        intermediate_phase.dashboard = True
+        intermediate_phase.save()
+
+        ExperimentCollection.objects.create(
+            name='No Social Media',
+            slug='no_social_media',
+            theme_config=create_theme_config(name='no_social_media')
+        )
+
+        response = self.client.get('/experiment/no_social_media/')
+
+        self.assertEqual(response.status_code, 200)
+        self.assertNotIn('socialMedia', response.json())
+
     def test_experiment_collection_with_dashboard(self):
         # if ExperimentCollection has dashboard set True, return list of random blocks
         session = self.client.session
@@ -271,9 +297,9 @@ class ExperimentViewsTest(TestCase):
         )
 
 
-def create_theme_config() -> ThemeConfig:
+def create_theme_config(name='test_theme') -> ThemeConfig:
     theme_config = ThemeConfig.objects.create(
-            name='test_theme',
+            name=name,
             description='Test Theme',
             heading_font_url='https://fonts.googleapis.com/css2?family=Architects+Daughter&family=Micro+5&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap',
             body_font_url='https://fonts.googleapis.com/css2?family=Architects+Daughter&family=Micro+5&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap',
