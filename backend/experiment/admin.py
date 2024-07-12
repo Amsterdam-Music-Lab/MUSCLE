@@ -17,7 +17,7 @@ from django.urls import reverse
 from django.utils.html import format_html
 from experiment.models import (
     Block,
-    ExperimentCollection,
+    Experiment,
     Phase,
     Feedback,
     GroupedBlock,
@@ -25,7 +25,7 @@ from experiment.models import (
 )
 from question.admin import QuestionSeriesInline
 from experiment.forms import (
-    ExperimentCollectionForm,
+    ExperimentForm,
     BlockForm,
     ExportForm,
     TemplateForm,
@@ -209,7 +209,7 @@ class SocialMediaConfigInline(admin.StackedInline):
     extra = 0
 
 
-class ExperimentCollectionAdmin(
+class ExperimentAdmin(
         InlineActionsModelAdminMixin, admin.ModelAdmin):
     list_display = ('name', 'slug_link', 'description_excerpt',
                     'dashboard', 'phases', 'active')
@@ -217,7 +217,7 @@ class ExperimentCollectionAdmin(
               'consent', 'theme_config', 'dashboard',
               'about_content']
     inline_actions = ['dashboard']
-    form = ExperimentCollectionForm
+    form = ExperimentForm
     inlines = [
         PhaseInline,
         SocialMediaConfigInline,
@@ -244,7 +244,7 @@ class ExperimentCollectionAdmin(
     slug_link.short_description = "Slug"
 
     def dashboard(self, request, obj, parent_obj=None):
-        """Open researchers dashboard for a collection"""
+        """Open researchers dashboard for an experiment"""
         all_blocks = obj.associated_blocks()
         all_participants = obj.current_participants()
         all_sessions = obj.export_sessions()
@@ -267,8 +267,8 @@ class ExperimentCollectionAdmin(
 
         return render(
             request,
-            'collection-dashboard.html',
-            context={'collection': obj,
+            'experiment-dashboard.html',
+            context={'experiment': obj,
                      'blocks': blocks,
                      'sessions': all_sessions,
                      'participants': all_participants,
@@ -276,7 +276,7 @@ class ExperimentCollectionAdmin(
         )
 
 
-admin.site.register(ExperimentCollection, ExperimentCollectionAdmin)
+admin.site.register(Experiment, ExperimentAdmin)
 
 
 class PhaseAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
@@ -292,7 +292,7 @@ class PhaseAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
 
     def related_series(self, obj):
         url = reverse(
-            "admin:experiment_experimentcollection_change", args=[obj.series.pk])
+            "admin:experiment_experiment_change", args=[obj.series.pk])
         return format_html('<a href="{}">{}</a>', url, obj.series.name)
 
     def blocks(self, obj):

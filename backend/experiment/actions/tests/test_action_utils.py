@@ -1,6 +1,6 @@
 from django.test import TestCase
 
-from experiment.actions.utils import COLLECTION_KEY, get_current_collection_url, randomize_playhead
+from experiment.actions.utils import EXPERIMENT_KEY, get_current_experiment_url, randomize_playhead
 from experiment.models import Block
 from participant.models import Participant
 from section.models import Playlist
@@ -16,12 +16,12 @@ class TestActions(TestCase):
         self.session = Session.objects.create(
             block=self.block, participant=self.participant, playlist=self.playlist)
 
-    def test_collection_url(self):
-        self.assertEqual(get_current_collection_url(self.session), None)
-        self.session.save_json_data({COLLECTION_KEY: 'superdupercollection'})
-        self.assertEqual(get_current_collection_url(self.session), '/superdupercollection')
+    def test_experiment_url(self):
+        self.assertEqual(get_current_experiment_url(self.session), None)
+        self.session.save_json_data({EXPERIMENT_KEY: 'superduperexperiment'})
+        self.assertEqual(get_current_experiment_url(self.session), '/superduperexperiment')
         self.participant.participant_id_url = 'participant42'
-        self.assertEqual(get_current_collection_url(self.session), '/superdupercollection?participant_id=participant42')
+        self.assertEqual(get_current_experiment_url(self.session), '/superduperexperiment?participant_id=participant42')
 
     def test_randomize_playhead(self):
         min_jitter = 5

@@ -7,7 +7,7 @@ from experiment.actions.form import ChoiceQuestion, Form
 from experiment.actions.playback import Multiplayer
 from experiment.actions.frontend_style import FrontendStyle, EFrontendStyle
 from experiment.actions.styles import STYLE_BOOLEAN
-from experiment.actions.utils import get_current_collection_url
+from experiment.actions.utils import get_current_experiment_url
 from section.models import Playlist
 from .base import Base
 from .toontjehoger_1_mozart import toontjehoger_ranks
@@ -181,7 +181,7 @@ class ToontjeHoger6Relative(Base):
             body=body,
             heading="Relatief gehoor",
             button_label="Terug naar ToontjeHoger",
-            button_link=get_current_collection_url(session)
+            button_link=get_current_experiment_url(session)
         )
 
         return [*score, final, info]

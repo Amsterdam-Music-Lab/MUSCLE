@@ -1,5 +1,5 @@
 from django.forms import CheckboxSelectMultiple, ModelForm, ChoiceField, Form, MultipleChoiceField, ModelMultipleChoiceField, Select, TypedMultipleChoiceField, CheckboxSelectMultiple, TextInput
-from experiment.models import ExperimentCollection, Block, SocialMediaConfig
+from experiment.models import Experiment, Block, SocialMediaConfig
 from experiment.rules import BLOCK_RULES
 
 
@@ -127,20 +127,20 @@ class MarkdownPreviewTextInput(TextInput):
     template_name = 'widgets/markdown_preview_text_input.html'
 
 
-class ExperimentCollectionForm(ModelForm):
+class ExperimentForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super(ModelForm, self).__init__(*args, **kwargs)
         self.fields['dashboard'].help_text = (
             'This field will be deprecated in the nearby future. '
             'Please use experiment phases for dashboard configuration. (see bottom of form). <br><br>'
-            'Legacy behavior: If you check "dashboard", the experiment collection will have a '
+            'Legacy behavior: If you check "dashboard", the experiment will have a '
             'dashboard that shows all or a subgroup of related blocks along '
             'with a description, footer, and about page. If you leave it unchecked, '
-            'the experiment collection will redirect to the first experiment.')
+            'the experiment will redirect to the first block.')
         self.fields['about_content'].widget = MarkdownPreviewTextInput()
 
     class Meta:
-        model = ExperimentCollection
+        model = Experiment
         fields = ['slug', 'description',
                   'dashboard', 'about_content']
 
@@ -198,8 +198,8 @@ class BlockForm(ModelForm):
         fields = ['name', 'slug', 'active', 'rules',
                   'rounds', 'bonus_points', 'playlists',]
         help_texts = {
-            'description': 'A short description of the block that will be displayed on the experiment collection page and as a meta description in search engines.',
-            'image': 'An image that will be displayed on the experiment collection page and as a meta image in search engines.',
+            'description': 'A short description of the block that will be displayed on the experiment page and as a meta description in search engines.',
+            'image': 'An image that will be displayed on the experiment page and as a meta image in search engines.',
             'consent': 'Upload an HTML (.html) or MARKDOWN (.md) file with a text to ask a user its consent<br> \
                       for using the block data for this instance of the block.<br> \
                       This field will override any consent text loaded from the rules file. <br>\

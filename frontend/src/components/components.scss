@@ -20,8 +20,8 @@
 // Experiment
 @import "./Consent/Consent";
 @import "./Block/Block";
-@import "./ExperimentCollection/ExperimentCollection";
-@import "./ExperimentCollection/ExperimentCollectionDashboard/ExperimentCollectionDashboard";
+@import "./Experiment/Experiment";
+@import "./Experiment/ExperimentDashboard/ExperimentDashboard";
 @import "./Explainer/Explainer";
 @import "./Final/Final";
 @import "./FloatingActionButton/FloatingActionButton";
@@ -44,5 +44,5 @@
 @import "./FeedbackForm/FeedbackForm";
 @import "./UserFeedback/UserFeedback";
 
-// ExperimentCollection
+// Experiment
 @import "./Footer/Footer";

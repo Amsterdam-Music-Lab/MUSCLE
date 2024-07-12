@@ -1,5 +1,5 @@
 {% extends "admin/base_site.html" %} {% block content %}{% load static %}
-<script src="{% static 'collection_dashboard_sessions.js' %}"></script>
+<script src="{% static 'experiment_dashboard_sessions.js' %}"></script>
 <style>
     input {
         margin-right: 1rem;
@@ -70,7 +70,7 @@
     }
 </style>
 
-<h1>Experiments in collection: {{ collection.name }}</h1>
+<h1>Experiments in experiment: {{ experiment.name }}</h1>
 <p>
     <form action="" method="post">
         <!-- Show all participants and sessions -->
@@ -94,32 +94,32 @@
     </thead>
 
     <tbody>
-        <!-- List experiments in this collection -->
-        {% for exp in experiments %}
+        <!-- List blocks in this experiment -->
+        {% for block in blocks %}
         <tr>
             <td>
                 <p>
-                    <a href="{% url 'admin:experiment_block_change' exp.id %}" target="_blank">
-                    {{ exp.name }}</a>
+                    <a href="{% url 'admin:experiment_block_change' block.id %}" target="_blank">
+                    {{ block.name }}</a>
                 </p>
             </td>
 
             <td>
-                <p>{{ exp.started }}</p>
+                <p>{{ block.started }}</p>
             </td>
 
             <td>
-                <p>{{ exp.finished }}</p>
+                <p>{{ block.finished }}</p>
             </td>
 
             <td>
-                <p>{{ exp.participant_count }}</p>
+                <p>{{ block.participant_count }}</p>
             </td>
 
             <td class="participants-overview">
                 <p>
-                    <!-- List participants for this experiment -->
-                    {% for participant in exp.participants %}
+                    <!-- List participants for this block -->
+                    {% for participant in block.participants %}
 
                         {% if participant.participant_id_url %}
                             <a href="{% url 'admin:participant_participant_change' participant.id %}" target="_blank" title="Participant URL id">
@@ -136,10 +136,10 @@
             </td>
 
             <td class="table-sessions">
-                <input type="button" value="Sessions" id="show-sessions-{{ exp.id }}" />
+                <input type="button" value="Sessions" id="show-sessions-{{ block.id }}" />
                 <script>
-                    // Show all session for this experiment in popup
-                    showBlockSessions({{ exp.id }})
+                    // Show all session for this block in popup
+                    showBlockSessions({{ block.id }})
                 </script>
             </td>
 
@@ -149,9 +149,9 @@
 </table>
 <p class="help-text mini">* Click to edit in a new window</p>
 
-{% include "collection-dashboard-sessions.html" %}
+{% include "experiment-dashboard-sessions.html" %}
 
-{% include "collection-dashboard-participants.html" %}
+{% include "experiment-dashboard-participants.html" %}
 
-<script src="{% static 'collection_dashboard.js' %}"></script>
+<script src="{% static 'experiment_dashboard.js' %}"></script>
 {% endblock %}

@@ -6,13 +6,13 @@ import Social from "../../Social/Social"
 import HTML from '@/components/HTML/HTML';
 import { ScoreDisplayConfig } from "@/types/Theme";
 import Rank from "@/components/Rank/Rank";
-import { SocialMediaConfig } from "@/types/ExperimentCollection";
+import { SocialMediaConfig } from "@/types/Experiment";
 
 interface HeaderProps {
     description: string;
     nextBlockSlug: string | undefined;
     nextBlockButtonText: string;
-    collectionSlug: string;
+    experimentSlug: string;
     aboutButtonText: string;
     totalScore: number;
     scoreDisplayConfig?: ScoreDisplayConfig;
@@ -24,7 +24,7 @@ export const Header: React.FC<HeaderProps> = ({
     nextBlockSlug,
     nextBlockButtonText,
     aboutButtonText,
-    collectionSlug,
+    experimentSlug,
     totalScore,
     scoreDisplayConfig,
     socialMediaConfig
@@ -46,7 +46,7 @@ export const Header: React.FC<HeaderProps> = ({
                 <HTML body={description} innerClassName="" />
                 <nav className="actions">
                     {nextBlockSlug && <a className="btn btn-lg btn-primary" href={`/block/${nextBlockSlug}`}>{nextBlockButtonText}</a>}
-                    {aboutButtonText && <Link className="btn btn-lg btn-outline-primary" to={`/${collectionSlug}/about`}>{aboutButtonText}</Link>}
+                    {aboutButtonText && <Link className="btn btn-lg btn-outline-primary" to={`/${experimentSlug}/about`}>{aboutButtonText}</Link>}
                 </nav>
             </div>
             {scoreDisplayConfig && totalScore !== 0 && (

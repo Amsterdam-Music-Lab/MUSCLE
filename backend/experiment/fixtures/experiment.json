@@ -1,6 +1,6 @@
 [
     {
-        "model": "experiment.ExperimentCollection",
+        "model": "experiment.Experiment",
         "pk": 1,
         "fields": {
             "slug": "RhythmTestSeries",

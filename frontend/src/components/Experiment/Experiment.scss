@@ -1,4 +1,4 @@
-.aha__collection {
+.aha__experiment {
 
     .hero {
         display: flex;
@@ -53,13 +53,11 @@
             }
 
             .score {
-                background: radial-gradient(
-                    circle at center,
-                    rgba(white, 0.6),
-                    rgba(white, 0.2),
-                    rgba(white, 0),
-                    rgba(white, 0)
-                );
+                background: radial-gradient(circle at center,
+                        rgba(white, 0.6),
+                        rgba(white, 0.2),
+                        rgba(white, 0),
+                        rgba(white, 0));
                 width: 270px;
                 height: 240px;
                 text-align: center;
@@ -81,8 +79,10 @@
                     text-align: center;
                     font-size: 1.1em;
                 }
+
                 .social {
                     display: flex;
+
                     a {
                         $shareSize: 50px;
                         color: white;
@@ -225,6 +225,7 @@
                         padding: 15px 15px 10px;
                         margin: 0;
                     }
+
                     p {
                         margin: 0;
                         padding: 0 15px 15px;
@@ -240,6 +241,7 @@
                         align-items: center;
                         column-gap: .25rem;
                     }
+
                     .counter {
                         color: var(--white);
                         background-color: rgba(0, 0, 0, 0.3);
@@ -301,6 +303,7 @@
                 &.aml {
                     width: 140px;
                 }
+
                 &.uva {
                     width: 250px;
                 }
@@ -375,6 +378,7 @@
             width: 100%;
             border-radius: 3px;
         }
+
         p {
             font-size: 0.9em;
             font-style: italic;

@@ -2,12 +2,12 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import HTML from '../../HTML/HTML';
 
-interface ExperimentCollectionAboutProps {
+interface ExperimentAboutProps {
     content: string;
     slug: string;
 }
 
-export const ExperimentCollectionAbout: React.FC<ExperimentCollectionAboutProps> = (props: ExperimentCollectionAboutProps) => {
+export const ExperimentAbout: React.FC<ExperimentAboutProps> = (props: ExperimentAboutProps) => {
 
     const { content, slug } = props;
 
@@ -24,4 +24,4 @@ export const ExperimentCollectionAbout: React.FC<ExperimentCollectionAboutProps>
     );
 };
 
-export default ExperimentCollectionAbout;
+export default ExperimentAbout;
