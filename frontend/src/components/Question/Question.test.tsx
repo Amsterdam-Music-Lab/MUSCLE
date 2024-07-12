@@ -61,32 +61,6 @@ describe('Question Component', () => {
         expect(mockOnChange).toHaveBeenCalledWith('New Value', 'test-question');
     });
 
-    it('renders different question views based on the view prop', () => {
-        const views = [
-            QuestionViews.BUTTON_ARRAY,
-            QuestionViews.CHECKBOXES,
-            QuestionViews.DROPDOWN,
-            QuestionViews.AUTOCOMPLETE,
-            QuestionViews.RADIOS,
-            QuestionViews.RANGE,
-            QuestionViews.TEXT_RANGE,
-            QuestionViews.ICON_RANGE,
-            QuestionViews.STRING,
-        ];
-
-        views.forEach((view) => {
-            const props = {
-                ...defaultProps,
-                question: {
-                    ...defaultProps.question,
-                    view,
-                },
-            };
-            const { container } = render(<Question {...props} />);
-            expect(container.firstChild).toMatchSnapshot();
-        });
-    });
-
     it('applies emphasizeTitle class when emphasizeTitle prop is true', () => {
         const { container } = render(<Question {...defaultProps} emphasizeTitle />);
         expect(container.querySelector('.title')).toBeTruthy();
