@@ -149,7 +149,7 @@ class TestExperimentCollectionViews(TestCase):
             theme_config=create_theme_config(name='no_social_media')
         )
 
-        response = self.client.get('/experiment/collection/no_social_media/')
+        response = self.client.get('/experiment/no_social_media/')
 
         self.assertEqual(response.status_code, 200)
         self.assertNotIn('socialMedia', response.json())
