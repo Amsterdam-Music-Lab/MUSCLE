@@ -23,7 +23,8 @@ services:
         image: extrawurst/ip2country:latest
         ports:
             - 8854:5000
-    server:
+    backend:
+        image: ghcr.io/amsterdam-music-lab/muscle-backend:latest
         build:
             context: ./backend
             dockerfile: DockerfileDevelop
@@ -54,7 +55,8 @@ services:
         ports:
             - 8000:8000
         command: bash -c "python manage.py migrate && python manage.py bootstrap && python manage.py runserver 0.0.0.0:8000"
-    client:
+    frontend:
+        image: ghcr.io/amsterdam-music-lab/muscle-frontend:latest
         build:
             context: ./frontend
             dockerfile: DockerfileDevelop
