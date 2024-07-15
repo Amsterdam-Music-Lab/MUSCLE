@@ -2,31 +2,43 @@ import re
 
 from django.conf import settings
 from django.contrib import admin
+from nested_admin import (
+  NestedModelAdmin,
+  NestedStackedInline,
+  NestedTabularInline
+)
 from django.utils.html import format_html
 from django.utils.safestring import mark_safe
-from .models import FooterConfig, HeaderConfig, ThemeConfig
+from .models import FooterConfig, HeaderConfig, ThemeConfig, SponsorImage
 from .forms import ThemeConfigForm, FooterConfigForm
 
 
-class FooterConfigInline(admin.StackedInline):
+class SponsorImageInline(NestedTabularInline):
+    model = SponsorImage
+    extra = 1
+    ordering = ['index']
+
+
+class FooterConfigInline(NestedStackedInline):
     model = FooterConfig
     form = FooterConfigForm
-    fields = ['disclaimer', 'logos', 'privacy']
+    inlines = [SponsorImageInline]
+    fields = ['disclaimer', 'privacy']
 
 
-class HeaderConfigInline(admin.StackedInline):
+class HeaderConfigInline(NestedStackedInline):
     model = HeaderConfig
     fields = ['show_score']
 
 
 @admin.register(ThemeConfig)
-class ThemeConfigAdmin(admin.ModelAdmin):
-
+class ThemeConfigAdmin(NestedModelAdmin):  # Change this line
     form = ThemeConfigForm
     inlines = [HeaderConfigInline, FooterConfigInline]
 
     list_display = ('name', 'header_overview', 'heading_font_preview',
-                    'body_font_preview', 'logo_preview', 'background_preview', 'footer_overview')
+                    'body_font_preview', 'logo_preview', 'background_preview',
+                    'footer_overview')
     search_fields = ('name', 'description')
     ordering = ('name',)
     fieldsets = (
@@ -53,7 +65,7 @@ class ThemeConfigAdmin(admin.ModelAdmin):
         return 'Header set' if obj.header else ''
 
     def footer_overview(self, obj):
-        return f'Footer with {obj.footer.logos.count()} logos'
+        return f'Footer with {obj.footer.sponsor_images.count()} logos'
 
     def heading_font_preview(self, obj):
         if obj.heading_font_url:
@@ -79,7 +91,7 @@ class ThemeConfigAdmin(admin.ModelAdmin):
                     font=obj.heading_font_url
                 )
         return "No font selected"
-    
+
     def body_font_preview(self, obj):
         if obj.body_font_url:
             # Check if the font field contains a URL
