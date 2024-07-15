@@ -32,7 +32,7 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v6
         with:
-          context: backend/.
+          context: frontend/.
           push: true
           tags: "ghcr.io/amsterdam-music-lab/muscle-frontend:latest"
           cache-from: type=registry,ref=ghcr.io/amsterdam-music-lab/muscle-frontend:latest
