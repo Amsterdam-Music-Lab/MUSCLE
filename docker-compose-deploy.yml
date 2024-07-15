@@ -29,7 +29,7 @@ services:
     server:
         build:
             context: ./backend
-            dockerfile: Dockerfile
+            dockerfile: DockerfileDeploy
         depends_on:
             db:
                 condition: service_healthy
@@ -65,7 +65,7 @@ services:
     client-builder:
         build:
             context: ./frontend
-            dockerfile: Dockerfile
+            dockerfile: DockerfileDeploy
             target: builder
         volumes:
             - type: bind

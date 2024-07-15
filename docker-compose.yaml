@@ -27,7 +27,6 @@ services:
         image: ghcr.io/amsterdam-music-lab/muscle-backend:latest
         build:
             context: ./backend
-            dockerfile: DockerfileDevelop
         depends_on:
             db:
                 condition: service_healthy
@@ -59,7 +58,6 @@ services:
         image: ghcr.io/amsterdam-music-lab/muscle-frontend:latest
         build:
             context: ./frontend
-            dockerfile: DockerfileDevelop
         volumes:
             - type: bind
               source: ./frontend/src

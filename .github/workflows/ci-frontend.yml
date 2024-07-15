@@ -33,7 +33,6 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           context: frontend/.
-          file: frontend/DockerfileDevelop
           push: true
           tags: "ghcr.io/amsterdam-music-lab/muscle-frontend:latest"
           cache-from: type=registry,ref=ghcr.io/amsterdam-music-lab/muscle-frontend:latest
