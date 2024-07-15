@@ -3,6 +3,7 @@
 from django.db import migrations, models
 import django.db.models.deletion
 
+
 # Copy old logos to new SponsorImage model
 def migrate_logos(apps, schema_editor):
     FooterConfig = apps.get_model('theme', 'FooterConfig')
@@ -16,13 +17,15 @@ def migrate_logos(apps, schema_editor):
                 index=index
             )
 
+
 # Copy new logos back to old logos field
 def reverse_migrate_logos(apps, schema_editor):
     FooterConfig = apps.get_model('theme', 'FooterConfig')
     SponsorImage = apps.get_model('theme', 'SponsorImage')
 
     for footer in FooterConfig.objects.all():
-        footer.logos.set(SponsorImage.objects.filter(footer_config=footer).values_list('image', flat=True))
+        footer.logos.set(SponsorImage.objects.filter(footer_config=footer)
+                         .values_list('image', flat=True))
 
 
 class Migration(migrations.Migration):
