@@ -17,7 +17,7 @@ export const URLS = {
         get: (slug: string) => "/experiment/block/" + slug + "/",
         feedback: (slug: string) => "/experiment/block/" + slug + "/feedback/",
     },
-    experiment_collection: {
+    experiment: {
         get: (slug: string) => `/experiment/${slug}/`
     },
     participant: {
@@ -46,9 +46,9 @@ export const URLS = {
 export const useBlock = (slug: string) =>
     useGet(API_BASE_URL + URLS.block.get(slug));
 
-export const useExperimentCollection = (slug: string) => {
-    const data = useGet(API_BASE_URL + URLS.experiment_collection.get(slug));
-    return data; // snakeToCamel(collection), loading
+export const useExperiment = (slug: string) => {
+    const data = useGet(API_BASE_URL + URLS.experiment.get(slug));
+    return data;
 }
 
 export const useParticipantScores = <T>() =>

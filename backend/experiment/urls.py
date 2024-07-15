@@ -1,6 +1,6 @@
 from django.urls import path
 from django.views.generic.base import TemplateView
-from .views import get_block, get_experiment_collection, post_feedback, render_markdown, add_default_question_series, validate_block_playlist
+from .views import get_block, get_experiment, post_feedback, render_markdown, add_default_question_series, validate_block_playlist
 
 app_name = 'experiment'
 
@@ -11,8 +11,8 @@ urlpatterns = [
     path('validate_playlist/<str:rules_id>', validate_block_playlist, name='validate_block_playlist'),
     path('block/<slug:slug>/', get_block, name='block'),
     path('block/<slug:slug>/feedback/', post_feedback, name='feedback'),
-    path('<slug:slug>/', get_experiment_collection,
-         name='experiment_collection'),
+    path('<slug:slug>/', get_experiment,
+         name='experiment'),
 
     # Robots.txt
     path(

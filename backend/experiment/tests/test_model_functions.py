@@ -1,10 +1,10 @@
 from django.test import TestCase
 from session.models import Session
 from participant.models import Participant
-from experiment.models import Block, ExperimentCollection, Phase, GroupedBlock
+from experiment.models import Block, Experiment, Phase, GroupedBlock
 
 
-class TestModelExperiment(TestCase):
+class TestModelBlock(TestCase):
     @classmethod
     def setUpTestData(cls):
         cls.block = Block.objects.create(rules='THATS_MY_SONG', slug='hooked', rounds=42)
@@ -17,26 +17,26 @@ class TestModelExperiment(TestCase):
         assert keys1 == keys2
 
 
-class TestModelExperimentCollection(TestCase):
+class TestModelExperiment(TestCase):
     @classmethod
     def setUpTestData(cls):
-        cls.collection = ExperimentCollection.objects.create(name='collection')
+        cls.experiment = Experiment.objects.create(name='experiment')
         cls.participant1 = Participant.objects.create(participant_id_url='001')
         cls.participant2 = Participant.objects.create(participant_id_url='002')
         cls.participant3 = Participant.objects.create(participant_id_url='003')
 
     def test_verbose_name_plural(self):
-        # Get the ExperimentCollection Meta class
-        meta = ExperimentCollection._meta
+        # Get the Experiment Meta class
+        meta = Experiment._meta
         # Check if verbose_name_plural is correctly set
-        self.assertEqual(meta.verbose_name_plural, "Experiment Collections")
+        self.assertEqual(meta.verbose_name_plural, "Experiments")
 
     def test_associated_blocks(self):
-        collection = self.collection
+        experiment = self.experiment
         phase1 = Phase.objects.create(
-            name='first_phase', series=collection)
+            name='first_phase', series=experiment)
         phase2 = Phase.objects.create(
-            name='second_phase', series=collection)
+            name='second_phase', series=experiment)
         block = Block.objects.create(
             rules='THATS_MY_SONG', slug='hooked', rounds=42)
         block2 = Block.objects.create(
@@ -49,13 +49,13 @@ class TestModelExperimentCollection(TestCase):
             block=block2, phase=phase2)
         GroupedBlock.objects.create(
             block=block3, phase=phase2)
-        self.assertEqual(collection.associated_blocks(), [
+        self.assertEqual(experiment.associated_blocks(), [
                          block, block2, block3])
 
     def test_export_sessions(self):
-        collection = self.collection
+        experiment = self.experiment
         phase = Phase.objects.create(
-            name='test', series=collection)
+            name='test', series=experiment)
         block = Block.objects.create(
             rules='THATS_MY_SONG', slug='hooked', rounds=42)
         GroupedBlock.objects.create(
@@ -65,13 +65,13 @@ class TestModelExperimentCollection(TestCase):
              Session(block=block, participant=self.participant2),
              Session(block=block, participant=self.participant3)]
              )
-        sessions = collection.export_sessions()
+        sessions = experiment.export_sessions()
         self.assertEqual(len(sessions), 3)
 
     def test_current_participants(self):
-        collection = self.collection
+        experiment = self.experiment
         phase = Phase.objects.create(
-            name='test', series=collection)
+            name='test', series=experiment)
         block = Block.objects.create(
             rules='THATS_MY_SONG', slug='hooked', rounds=42)
         GroupedBlock.objects.create(
@@ -81,5 +81,5 @@ class TestModelExperimentCollection(TestCase):
              Session(block=block, participant=self.participant2),
              Session(block=block, participant=self.participant3)]
              )
-        participants = collection.current_participants()
+        participants = experiment.current_participants()
         self.assertEqual(len(participants), 3)

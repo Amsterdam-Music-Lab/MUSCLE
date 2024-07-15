@@ -11,7 +11,7 @@ import { API_BASE_URL, EXPERIMENT_SLUG, URLS } from "@/config";
 import { URLS as API_URLS } from "../../API";
 import useBoundStore from "../../util/stores";
 import Block from "../Block/Block";
-import ExperimentCollection from "../ExperimentCollection/ExperimentCollection";
+import Experiment from "../Experiment/Experiment";
 import LoaderContainer from "../LoaderContainer/LoaderContainer";
 import ConditionalRender from "../ConditionalRender/ConditionalRender";
 import Profile from "../Profile/Profile";
@@ -69,7 +69,7 @@ const App = () => {
                         {/* Default experiment */}
                         <Route path="/" exact>
                             <Redirect
-                                to={URLS.experimentCollection.replace(":slug", EXPERIMENT_SLUG)}
+                                to={URLS.experiment.replace(":slug", EXPERIMENT_SLUG)}
                             />
                         </Route>
 
@@ -84,8 +84,9 @@ const App = () => {
                         <Route path={URLS.block} component={Block} />
 
                         {/* Experiment */}
-                        <Route path={URLS.experimentCollection} component={ExperimentCollection} />
+                        <Route path={URLS.experiment} component={Experiment} />
 
+                        {/* Session - ⚠️ What is the purpose of this non-functional route? */}
                         <Route path={URLS.session} />
 
                         {/* Store profile */}

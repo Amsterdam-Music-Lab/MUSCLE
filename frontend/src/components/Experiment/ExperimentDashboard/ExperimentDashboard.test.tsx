@@ -2,7 +2,7 @@ import { MemoryRouter } from 'react-router-dom';
 import { render, screen, waitFor } from '@testing-library/react';
 import { describe, it, expect } from 'vitest';
 
-import ExperimentCollectionDashboard from './ExperimentCollectionDashboard';
+import ExperimentDashboard from './ExperimentDashboard';
 import Block from '@/types/Block';
 
 const getExperiment = (overrides = {}) => {
@@ -29,13 +29,13 @@ const experiment2 = getExperiment({
     description: 'Some description',
 });
 
-const collectionWithDashboard = { dashboard: [experiment1, experiment2] }
+const experimentWithDashboard = { dashboard: [experiment1, experiment2] }
 
 const header = {
     nextBlockButtonText: 'Next experiment',
     aboutButtonText: 'About us',
 }
-const collectionWithTheme = {
+const experimentWithTheme = {
     dashboard: [experiment1, experiment2],
     theme: {
         backgroundUrl: 'some/url.com',
@@ -51,17 +51,17 @@ const collectionWithTheme = {
             rel: 'noopener noreferrer',
             target: '_blank'
         },
-        name: 'Collection name',
+        name: 'Experiment name',
         header: header
     }
 }
 
-describe('ExperimentCollectionDashboard', () => {
+describe('ExperimentDashboard', () => {
 
     it('shows a dashboard of multiple experiments if it receives an array', async () => {
         render(
             <MemoryRouter>
-                <ExperimentCollectionDashboard experimentCollection={collectionWithDashboard} />
+                <ExperimentDashboard experiment={experimentWithDashboard} />
             </MemoryRouter>
         );
         await waitFor(() => {
@@ -72,7 +72,7 @@ describe('ExperimentCollectionDashboard', () => {
     it('shows a placeholder if an experiment has no image', async () => {
         render(
             <MemoryRouter>
-                <ExperimentCollectionDashboard experimentCollection={collectionWithDashboard} />
+                <ExperimentDashboard experiment={experimentWithDashboard} />
             </MemoryRouter>
         );
         await waitFor(() => {
@@ -84,7 +84,7 @@ describe('ExperimentCollectionDashboard', () => {
     it('links to the experiment with the correct slug', async () => {
         render(
             <MemoryRouter>
-                <ExperimentCollectionDashboard experimentCollection={collectionWithDashboard} />
+                <ExperimentDashboard experiment={experimentWithDashboard} />
             </MemoryRouter>
         );
         await waitFor(() => {
@@ -96,7 +96,7 @@ describe('ExperimentCollectionDashboard', () => {
     it('links to the experiment with the correct slug and participant id if the participand id url is present', async () => {
         render(
             <MemoryRouter>
-                <ExperimentCollectionDashboard experimentCollection={collectionWithDashboard} participantIdUrl="some_id" />
+                <ExperimentDashboard experiment={experimentWithDashboard} participantIdUrl="some_id" />
             </MemoryRouter>
         );
         await waitFor(() => {
@@ -108,7 +108,7 @@ describe('ExperimentCollectionDashboard', () => {
     it('does not show a header if no theme.header is present', () => {
         render(
             <MemoryRouter>
-                <ExperimentCollectionDashboard experimentCollection={collectionWithDashboard} participantIdUrl="some_id" />
+                <ExperimentDashboard experiment={experimentWithDashboard} participantIdUrl="some_id" />
             </MemoryRouter>
         );
         const aboutButton = screen.queryByText('About us')
@@ -118,7 +118,7 @@ describe('ExperimentCollectionDashboard', () => {
     it('shows a header if a theme.header is present', async () => {
         render(
             <MemoryRouter>
-                <ExperimentCollectionDashboard experimentCollection={collectionWithTheme} participantIdUrl="some_id" />
+                <ExperimentDashboard experiment={experimentWithTheme} participantIdUrl="some_id" />
             </MemoryRouter>
         );
         await screen.findByText('About us');

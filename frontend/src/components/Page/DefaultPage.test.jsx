@@ -20,7 +20,7 @@ describe("DefaultPage Component Tests", () => {
         className: 'aha__default',
         title: "Default page title",
         logoClickConfirm: null,
-        collectionSlug: 'some_collection',
+        experimentSlug: 'some_experiment',
         nextBlockSlug: 'some_experiment',
     }
 

@@ -8,7 +8,7 @@ from experiment.actions.playback import Autoplay
 from experiment.actions.styles import STYLE_TOONTJEHOGER
 from .base import Base
 from experiment.utils import non_breaking_spaces
-from experiment.actions.utils import get_current_collection_url
+from experiment.actions.utils import get_current_experiment_url
 
 from result.utils import prepare_result
 
@@ -233,7 +233,7 @@ class ToontjeHoger1Mozart(Base):
             body=body,
             heading="Het Mozart effect",
             button_label="Terug naar ToontjeHoger",
-            button_link=get_current_collection_url(session)
+            button_link=get_current_experiment_url(session)
         )
 
         return [*answer_explainer, *score, final, info]

@@ -226,7 +226,7 @@ const Block = ({ match }) => {
         <FontLoader fontUrl={theme?.body_font_url} fontType="body" />
         <TransitionGroup
             className={classNames(
-                "aha__experiment",
+                "aha__block",
                 !loadingBlock && block
                     ? "experiment-" + block.slug
                     : ""

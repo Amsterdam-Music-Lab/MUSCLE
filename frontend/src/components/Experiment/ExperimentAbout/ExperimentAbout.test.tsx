@@ -1,18 +1,17 @@
-import React from 'react';
 import { render, screen } from '@testing-library/react';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { it, expect, describe } from 'vitest';
 
-import ExperimentCollectionAbout from './ExperimentCollectionAbout';
+import ExperimentAbout from './ExperimentAbout';
 
-describe('ExperimentCollectionAbout', () => {
+describe('ExperimentAbout', () => {
 
     it('shows the about page content', () => {
 
         const content = '## Hello World!\n\n**Lorem ipsum**';
 
         render(
-            <ExperimentCollectionAbout content={content} />,
+            <ExperimentAbout content={content} />,
             { wrapper: Router }
         );
 
@@ -25,7 +24,7 @@ describe('ExperimentCollectionAbout', () => {
         const content = '## Hello World!\n\n**Lorem ipsum**';
 
         render(
-            <ExperimentCollectionAbout content={content} slug="some_slug" />,
+            <ExperimentAbout content={content} slug="some_slug" />,
             { wrapper: Router }
         )
 

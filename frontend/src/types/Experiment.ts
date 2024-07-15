@@ -16,7 +16,7 @@ export interface SocialMediaConfig {
     channels: string[];
 }
 
-export default interface ExperimentCollection {
+export default interface Experiment {
     slug: string;
     name: string;
     description: string;

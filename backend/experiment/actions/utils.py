@@ -8,26 +8,26 @@ from django.template.loader import render_to_string
 from experiment.actions import Final
 from session.models import Session
 
-COLLECTION_KEY = 'experiment_collection'
+EXPERIMENT_KEY = 'experiment'
 
 
-def get_current_collection_url(session: Session) -> str:
-    collection_slug = session.load_json_data().get(COLLECTION_KEY)
-    if not collection_slug:
+def get_current_experiment_url(session: Session) -> str:
+    experiment_slug = session.load_json_data().get(EXPERIMENT_KEY)
+    if not experiment_slug:
         return None
 
     if session.participant.participant_id_url:
         participant_id_url = session.participant.participant_id_url
-        return f'/{collection_slug}?participant_id={participant_id_url}'
+        return f'/{experiment_slug}?participant_id={participant_id_url}'
     else:
-        return f'/{collection_slug}'
+        return f'/{experiment_slug}'
 
 
 def final_action_with_optional_button(session, final_text='', title=_('End'), button_text=_('Continue')):
-    """ given a session, a score message and an optional session dictionary from an experiment collection,
+    """ given a session, a score message and an optional session dictionary from an experiment,
     return a Final.action, which has a button to continue to the next block if series is defined
     """
-    redirect_url = get_current_collection_url(session)
+    redirect_url = get_current_experiment_url(session)
 
     if redirect_url:
         return Final(
