@@ -130,13 +130,12 @@ class Hooked(Base):
 
             # Load the heard_before offset.
             plan = json_data.get('plan')
-            heard_before_offset = len(plan['song_sync_sections'])
 
             # SongSync rounds. Skip questions until round indicated by question_offset.
             if round_number in range(1, self.question_offset):
                 actions.extend(self.next_song_sync_action(
                     session, round_number))
-            if round_number in range(self.question_offset, heard_before_offset):
+            if round_number in range(self.question_offset, self.heard_before_offset):
                 question_trial = self.get_single_question(session)
                 if question_trial:
                     actions.append(question_trial)
@@ -144,12 +143,12 @@ class Hooked(Base):
                     session, round_number))
 
             # HeardBefore rounds
-            if round_number == heard_before_offset:
+            if round_number == self.heard_before_offset:
                 # Introduce new round type with Explainer.
                 actions.append(self.heard_before_explainer())
                 actions.append(
                     self.next_heard_before_action(session, round_number))
-            if round_number > heard_before_offset:
+            if round_number > self.heard_before_offset:
                 question_trial = self.get_single_question(session)
                 if question_trial:
                     actions.append(question_trial)
@@ -209,109 +208,90 @@ class Hooked(Base):
         return _("Round %(number)d / %(total)d") %\
             {'number': round_number+1, 'total': session.block.rounds}
 
-    def plan_sections(self, session: Session, filter_by={}):
+    def plan_sections(self, session: Session):
         """Set the plan of tracks for a session.
         """
         # Get available songs and pick a section for each
-        available_songs = list(session.playlist.get_available_song_ids(filter_by))
         n_rounds = session.block.rounds
 
         # How many sections do we need?
-        # 2/3 of the rounds are SongSync, of which 1/4 old songs, 3/4 "free"
+        # 2/3 of the rounds are SongSync, of which 1/4 songs will return, 3/4 songs are "free", i.e., won't return
         # 1/3 of the rounds are "heard before", of which 1/2 old songs
         # e.g. 30 rounds -> 20 SongSync with 5 songs to be repeated later
         n_song_sync_rounds = round(2/3 * n_rounds)
+        self.heard_before_offset = n_song_sync_rounds
+        n_returning_rounds = round(1/4 * n_song_sync_rounds)
+        song_sync_condtions = ['returning'] * n_returning_rounds + ['free'] * (n_song_sync_rounds - n_returning_rounds)
+        random.shuffle(song_sync_condtions)
         n_heard_before_rounds = n_rounds - n_song_sync_rounds
-        n_heard_before_rounds_old = round(0.5) * n_heard_before_rounds
+        n_heard_before_rounds_old = round(0.5 * n_heard_before_rounds)
         n_heard_before_rounds_new = n_heard_before_rounds - n_heard_before_rounds_old
-        songs = random.sample(available_songs, n_rounds -
-                              n_heard_before_rounds_old)
-
-        song_sync_sections = self.get_song_sync_sections(
-            session, songs, n_song_sync_rounds)
-        heard_before_sections = self.get_heard_before_old_sections(
-            session, song_sync_sections, n_heard_before_rounds_old) + self.get_heard_before_new_sections(
-            session, songs, n_heard_before_rounds_new
-        )
-        random.shuffle(song_sync_sections)
-        random.shuffle(heard_before_sections)
-
-        plan = {
-            'song_sync_sections': song_sync_sections,
-            'heard_before_sections': heard_before_sections
-        }
+        heard_before_conditions = ['old'] * n_heard_before_rounds_old + ['new'] * n_heard_before_rounds_new
+        random.shuffle(heard_before_conditions)
+        plan = song_sync_condtions + heard_before_conditions
 
         # Save, overwriting existing plan if one exists.
         session.save_json_data({'plan': plan})
 
-    def get_song_sync_sections(self, session: Session, songs: list[int], n_song_sync_rounds: int) -> list[int]:
-        ''' return sections to be used for the song_sync rounds from the list of songs'''
-        return [session.get_random_section(
-            {'song__id': song}).id for song in songs[:n_song_sync_rounds]]
-
-    def get_heard_before_old_sections(self, session: Session, song_sync_sections: list[int], n_heard_before_old_rounds: int) -> list[int]:
-        ''' return the old sections for the heard_before rounds, given the song_sync_sections '''
-        return random.sample(song_sync_sections, n_heard_before_old_rounds)
-
-    def get_heard_before_new_sections(self, session: Session, songs: list[Song], n_heard_before_new_rounds: int) -> list[int]:
-        ''' return the new sections for the heard_before rounds from the list of songs '''
-        return [session.get_random_section(
-            {'song__id': song}).id for song in songs[-n_heard_before_new_rounds:]
-        ]
-
-    def select_sections(self, session: Session, songs: list[Song]) -> list[Section]:
-        sections = [session.get_random_section(
-            filter_by={'song__id': song.id}) for song in songs]
-        return sections
-
+    def select_song_sync_section(self, session: Session, condition, filter_by={}) -> Section:
+        return session.playlist.get_section(filter_by, song_ids=session.get_unused_song_ids())
 
     def next_song_sync_action(self, session: Session, round_number: int) -> Trial:
         """Get next song_sync section for this session."""
         try:
             plan = session.load_json_data()['plan']
-            sections = plan['song_sync_sections']
         except KeyError as error:
             logger.error('Missing plan key: %s' % str(error))
             return None
 
-        # Get section.
-        section = None
-        if round_number <= len(sections):
-            section = Section.objects.get(pk=sections[round_number])
-        if not section:
-            logger.warning("Warning: no next_song_sync section found")
-            section = session.get_random_section()
+        condition = plan[round_number]
+        section = self.select_song_sync_section(session, condition)
+        if condition == 'returning':
+            played_sections = session.load_json_data().get('played_sections', [])
+            played_sections.append(section.id)
+            session.save_json_data({'played_sections': played_sections})
         return song_sync(session, section, title=self.get_trial_title(session, round_number),
                          recognition_time=self.recognition_time, sync_time=self.sync_time,
                          min_jitter=self.min_jitter, max_jitter=self.max_jitter)
+
+    def select_heard_before_section(self, session: Session, condition: str, filter_by = {}) -> Section:
+        """ select a section for the `heard_before` rounds
+        to play (variants of) sections which were presented in the song_sync rounds,
+
+        """
+        if condition == 'old':
+            current_section_id  = self.get_current_section_id(session)
+            return Section.objects.get(pk=current_section_id)
+        else:
+            song_ids = session.get_unused_song_ids()
+            return session.playlist.get_section(filter_by, song_ids=song_ids)
+
+    def get_current_section_id(self, session: Session) -> int:
+        ''' read the list of `played_sections`, select and return a random item,
+        save `played_sections` without this item
+        '''
+        played_sections = session.load_json_data().get('played_sections')
+        random.shuffle(played_sections)
+        current_section_id = played_sections.pop()
+        session.save_json_data({'played_sections': played_sections})
+        return current_section_id
 
     def next_heard_before_action(self, session: Session, round_number: int) -> Trial:
         """Get next heard_before action for this session."""
         # Load plan.
         try:
             plan = session.load_json_data()['plan']
-            sections = plan['heard_before_sections']
-            song_sync_sections = plan['song_sync_sections']
-            heard_before_offset = len(song_sync_sections)
         except KeyError as error:
             logger.error('Missing plan key: %s' % str(error))
             return None
         # Get section.
-        section = None
-        if round_number - heard_before_offset <= len(sections):
-            try:
-                section_id = sections[round_number - heard_before_offset]
-                section = Section.objects.get(
-                    pk=section_id)
-            except:
-                logger.warning("Warning: no heard_before section found")
-                section = session.get_random_section().id
+        condition = plan[round_number]
+        section = self.select_heard_before_section(session, condition)
         playback = Autoplay(
             [section],
             show_animation=True,
             preload_message=_('Get ready!')
         )
-        expected_response = 'old' if section_id in song_sync_sections else 'new'
         # create Result object and save expected result to database
         key = 'heard_before'
         form = Form([BooleanQuestion(
@@ -322,7 +302,7 @@ class Hooked(Base):
             },
             question=_("Did you hear this song in previous rounds?"),
             result_id=prepare_result(
-                key, session, section=section, expected_response=expected_response, scoring_rule='REACTION_TIME',),
+                key, session, section=section, expected_response=condition, scoring_rule='REACTION_TIME',),
             submits=True,
             style={STYLE_BOOLEAN_NEGATIVE_FIRST: True, 'buttons-large-gap': True})
         ])

@@ -9,7 +9,6 @@ from experiment.actions import Final, Form, Trial
 from question.utils import unanswered_questions
 from question.questions import get_questions_from_series, QUESTION_GROUPS
 from result.score import SCORING_RULES
-from section.models import Playlist
 from session.models import Session
 
 logger = logging.getLogger(__name__)

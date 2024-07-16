@@ -126,14 +126,15 @@ class Session(models.Model):
         self.current_round -= 1
         self.save()
 
-    def get_used_song_ids(self):
+    def get_used_song_ids(self, exclude={}):
         """Get a list of song ids from the sections of this session's results"""
-        return (res.section.song.id for res in self.result_set.filter(section__isnull=False))
+        return (res.section.song.id for res in self.result_set.exclude(**exclude).filter(section__isnull=False))
 
-    def get_unused_song_ids(self):
+    def get_unused_song_ids(self, filter_by={}):
         """Get a list of unused song ids from this session's playlist"""
         # Get all song ids from the current playlist
-        song_ids = self.playlist.get_available_song_ids()
+        song_ids = self.playlist.section_set.filter(
+            **filter_by).order_by('song').values_list('song_id', flat=True).distinct()
         # Get all song ids from results
         used_song_ids = self.get_used_song_ids()
         return list(set(song_ids) - set(used_song_ids))

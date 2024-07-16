@@ -4,6 +4,7 @@ from experiment.actions import Final, Trial
 from experiment.actions.form import Form, ChoiceQuestion
 from question.questions import QUESTION_GROUPS
 from result.utils import prepare_result
+from section.models import Section
 from session.models import Session
 from .hooked import Hooked
 
@@ -119,33 +120,28 @@ class ThatsMySong(Hooked):
 
         # Go to SongSync
         elif round_number == 1:
-            decades = session.result_set.first().given_response.split(',')
-            self.plan_sections(session, {'group__in': decades})
+            self.plan_sections(session)
             actions.extend(self.next_song_sync_action(session, round_number))
         else:
             # Create a score action.
             actions.append(self.get_score(session, round_number - self.round_modifier))
 
-            # Load the heard_before offset.
-            plan = json_data.get('plan')
-            heard_before_offset = len(plan['song_sync_sections'])
-
             # SongSync rounds. Skip questions until Round 5.
             if round_number in range(2, 5):
                 actions.extend(self.next_song_sync_action(session, round_number))
-            if round_number in range(5, heard_before_offset):
+            if round_number in range(5, self.heard_before_offset):
                 question = self.get_single_question(session, randomize=True)
                 if question:
                     actions.append(question)
                 actions.extend(self.next_song_sync_action(session, round_number))
 
             # HeardBefore rounds
-            if round_number == heard_before_offset:
+            if round_number == self.heard_before_offset:
                 # Introduce new round type with Explainer.
                 actions.append(self.heard_before_explainer())
                 actions.append(
                     self.next_heard_before_action(session, round_number))
-            if round_number > heard_before_offset:
+            if round_number > self.heard_before_offset:
                 question = self.get_single_question(session, randomize=True)
                 if question:
                     actions.append(question)
@@ -153,3 +149,11 @@ class ThatsMySong(Hooked):
                     self.next_heard_before_action(session, round_number))
 
         return actions
+
+    def select_song_sync_section(self, session: Session, condition) -> Section:
+        decades = session.result_set.first().given_response.split(',')
+        return super().select_song_sync_section(session, condition, filter_by={'group__in': decades})
+
+    def select_heard_before_section(self, session: Session, condition: str) -> Section:
+        decades = session.result_set.first().given_response.split(',')
+        return super().select_heard_before_section(session, condition, filter_by={'group__in': decades})
