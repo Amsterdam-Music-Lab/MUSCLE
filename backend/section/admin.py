@@ -78,7 +78,7 @@ class PlaylistAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
                 messages.add_message(request, messages.INFO,
                                      csv_result['message'])
 
-    def add_sections(self, request, obj, parent_obj=None):
+    def add_sections(self, request, obj):
         """Add multiple sections
         """
         sections = Section.objects.filter(playlist=obj)
@@ -131,7 +131,7 @@ class PlaylistAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
                      'form': form}
         )
 
-    def edit_sections(self, request, obj, parent_obj=None):
+    def edit_sections(self, request, obj):
         """Edit multiple section in a playlist
         """
         sections = Section.objects.filter(playlist=obj)
@@ -167,7 +167,7 @@ class PlaylistAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
                      'sections': sections}
         )
 
-    def export_csv(self, request, obj, parent_obj=None):
+    def export_csv(self, request, obj):
         """Export playlist sections to csv, force download"""
 
         response = HttpResponse(content_type='text/csv')

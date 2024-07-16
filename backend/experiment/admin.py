@@ -84,7 +84,7 @@ class BlockAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
         models.ManyToManyField: {"widget": CheckboxSelectMultiple},
     }
 
-    def export(self, request, obj, parent_obj=None):
+    def export(self, request, obj):
         """Export block JSON data as zip archive, force download"""
 
         # Init empty querysets
@@ -163,7 +163,7 @@ class BlockAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
 
     export.short_description = "Export JSON"
 
-    def export_csv(self, request, obj, parent_obj=None):
+    def export_csv(self, request, obj):
         """Export block data in CSV, force download"""
         # Handle export command from intermediate form
         if "_export" in request.POST:
@@ -319,7 +319,7 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, NestedModelAdmin):
 
     slug_link.short_description = "Slug"
 
-    def dashboard(self, request, obj, parent_obj=None):
+    def dashboard(self, request, obj):
         """Open researchers dashboard for an experiment"""
         all_blocks = obj.associated_blocks()
         all_participants = obj.current_participants()
