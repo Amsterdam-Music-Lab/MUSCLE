@@ -16,6 +16,7 @@ from .forms import ThemeConfigForm, FooterConfigForm
 class SponsorImageInline(NestedTabularInline):
     model = SponsorImage
     extra = 1
+    sortable_field_name = 'index'
     ordering = ['index']
 
 
