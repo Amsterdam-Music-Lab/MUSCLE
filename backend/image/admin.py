@@ -8,7 +8,7 @@ class TagsListFilter(admin.SimpleListFilter):
     title = 'tags'
     parameter_name = 'tags'
 
-    def lookups(self):
+    def lookups(self, request, model_admin):
         tags = Image.objects.values_list('tags', flat=True)
         unique_tags = set(tag for sublist in tags for tag in sublist)
         return [(tag, tag) for tag in unique_tags]
