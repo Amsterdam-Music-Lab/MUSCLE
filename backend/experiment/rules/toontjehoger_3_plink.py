@@ -175,7 +175,7 @@ class ToontjeHoger3Plink(Base):
             choices[section.pk] = label
 
         # Get section to recognize
-        section = session.get_unused_section()
+        section = session.playlist.get_section(song_ids=session.get_unused_song_ids())
 
         expected_response = section.pk
 

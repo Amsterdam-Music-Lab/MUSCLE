@@ -43,11 +43,12 @@ class MatchingPairsLite(MatchingPairsGame):
         )
         if degradations:
             sections = list(originals) + list(degradations)
-            random.seed(self.random_seed)
-            random.shuffle(sections)
-            return sections
+            return self.shuffle_sections(sections)
         else:
             sections = list(originals) * 2
-            random.seed(self.random_seed)
-            random.shuffle(sections)
-            return sections
+            return self.shuffle_sections(sections)
+
+    def shuffle_sections(self, sections):
+        random.seed(self.random_seed)
+        random.shuffle(sections)
+        return sections

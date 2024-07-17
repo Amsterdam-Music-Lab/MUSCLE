@@ -85,11 +85,11 @@ class BeatAlignment(Base):
             session.save_json_data({'done_practice': True})
             return practice_rounds
 
-        return self.next_trial_action(session, next_round_number)
+        return self.next_trial_action(session)
 
     def next_practice_action(self, session, count):
         """Get action data for the next practice round"""
-        section = session.get_unused_section(
+        section = session.playlist.get_section(
             {'song__name__startswith': f'ex{count}'})
         if not section:
             return None
@@ -119,7 +119,7 @@ class BeatAlignment(Base):
     def next_trial_action(self, session):
         """Get next section for given session"""
         filter_by = {'tag': '0'}
-        section = session.get_unused_section(filter_by)
+        section = session.playlist.get_section(filter_by, song_ids=session.get_unused_song_ids())
         condition = section.song.name.split('_')[-1][:-4]
         expected_response = 'ON' if condition == 'on' else 'OFF'
         key = 'aligned'

@@ -183,7 +183,7 @@ class Playlist(models.Model):
             'message': "Sections processed from CSV. Added: " + str(len(sections)) + " - Updated: " + str(updated) + " - Removed: " + str(len(delete_ids))
         }
 
-    def get_section(self, filter_by={}, song_ids=[]):
+    def get_section(self, filter_by={}, exclude={}, song_ids=[]):
         """Get a random section from this playlist
             Optionally, limit to specific song_ids and filter conditions
         """
@@ -191,7 +191,7 @@ class Playlist(models.Model):
             sections = self.section_set.filter(song__id__in=song_ids)
         else:
             sections = self.section_set
-        pks = sections.filter(**filter_by).values_list('pk', flat=True)
+        pks = sections.exclude(**exclude).filter(**filter_by).values_list('pk', flat=True)
         if len(pks) == 0:
             raise Section.DoesNotExist
         return self.section_set.get(pk=random.choice(pks))

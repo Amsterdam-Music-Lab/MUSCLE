@@ -103,7 +103,7 @@ class ToontjeHoger6Relative(Base):
         # -----------------
         # section 1 is always section 'a'
         try:
-            section1 = session.get_random_section(
+            section1 = session.playlist.get_section(
                 filter_by={'tag': 'a'})
         except:
             raise Exception(
@@ -112,7 +112,7 @@ class ToontjeHoger6Relative(Base):
         # Get correct tag for round 0 or 1
         tag = 'b' if round == 0 else 'c'
         try:
-            section2 = session.get_random_section(
+            section2 = session.playlist.get_section(
                 filter_by={'tag': tag})
         except:
             raise Exception(

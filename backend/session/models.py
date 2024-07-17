@@ -139,47 +139,6 @@ class Session(models.Model):
         used_song_ids = self.get_used_song_ids()
         return list(set(song_ids) - set(used_song_ids))
 
-    def get_used_section(self, filter_by: dict = {}, exclude: dict = {}) -> Section:
-        ''' get a section from the playlist which has been used previously in this session
-        :param filter_by: a dictionary with which to filter by section fields
-        :param exclude: a dictionary with which to exclude certain sections
-        '''
-        used_sections = [
-            result.section.id for result in self.result_set.filter(section__isnull=False)]
-        if not used_sections:
-            raise Section.DoesNotExist
-        sections = self.playlist.section_set.all().filter(
-            pk__in=used_sections).exclude(**exclude).filter(**filter_by)
-        if sections:
-            return random.choice(sections)
-        raise Section.DoesNotExist
-
-    def get_unused_section(self, filter_by: dict = {}, exclude: dict = {}) -> Section:
-        ''' get a section from the playlist which has not yet been used in this session
-        :param filter_by: a dictionary with which to filter by section fields
-        :param exclude: a dictionary with which to exclude certain sections
-        '''
-        used_sections = [
-            result.section.id for result in self.result_set.filter(section__isnull=False)]
-        if not used_sections:
-            return self.get_random_section()
-        else:
-            sections = self.playlist.section_set.all().exclude(
-                pk__in=used_sections).exclude(**exclude).filter(**filter_by)
-            if sections:
-                return random.choice(sections)
-        raise Section.DoesNotExist
-
-    def get_random_section(self, filter_by: dict = {}, exclude: dict = {}) -> Section:
-        ''' return a section from the playlist randomly
-        :param filter_by: a dictionary with which to filter by section fields
-        :param exclude: a dictionary with which to exclude certain sections
-        '''
-        sections = self.playlist.section_set.all().exclude(**exclude).filter(**filter_by)
-        if not sections:
-            raise Section.DoesNotExist
-        return random.choice(sections)
-
     def block_rules(self):
         """Get rules class to be used for this session"""
         return self.block.get_rules()

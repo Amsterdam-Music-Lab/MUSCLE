@@ -103,7 +103,7 @@ class ToontjeHoger5Tempo(Base):
 
         tag_changed = tag_base + "CH"
 
-        section_original = session.get_random_section(
+        section_original = session.playlist.get_section(
             filter_by={'tag': tag_original, 'group': "or"})
 
         if not section_original:
@@ -119,7 +119,7 @@ class ToontjeHoger5Tempo(Base):
 
     def get_section_changed(self, session, tag):
         try:
-            section_changed = session.get_random_section(
+            section_changed = session.playlist.get_section(
                 filter_by={'tag': tag, 'group': "ch"})
         except:
             raise Exception(

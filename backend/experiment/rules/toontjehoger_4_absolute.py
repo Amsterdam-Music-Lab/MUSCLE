@@ -78,7 +78,7 @@ class ToontjeHoger4Absolute(Base):
         # Get sections
 
         # Original (A)
-        section1 = session.get_random_section(
+        section1 = session.playlist.get_section(
             filter_by={'tag': 'a', 'group__in': available_groups})
         if not section1:
             raise Exception(
@@ -86,7 +86,7 @@ class ToontjeHoger4Absolute(Base):
 
         # Changed (B/C)
         variant = random.choice(["b", "c"])
-        section2 = session.get_random_section(
+        section2 = session.playlist.get_section(
             filter_by={'tag': variant, 'group': section1.group})
         if not section2:
             raise Exception(

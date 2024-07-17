@@ -28,9 +28,8 @@ class Kuiper2020(Hooked):
         else:
             current_section_id = self.get_current_section_id(session)
             played_section = Section.objects.get(pk=current_section_id)
-            allowed_tags = ['0', '1', '2', '3']
-            allowed_tags.remove(played_section.tag)
-            return session.playlist.get_section({'song__id': played_section.song.id, 'tag__in': allowed_tags})
+            breakpoint()
+            return session.playlist.get_section({'song__id': played_section.song.id}, exclude={'group': played_section.group})
 
     def get_session_type(self, session):
         random.seed(session.id)
