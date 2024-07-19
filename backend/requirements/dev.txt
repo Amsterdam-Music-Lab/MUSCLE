@@ -47,6 +47,8 @@ django-inline-actions==2.4.0
     # via -r requirements.in/base.txt
 django-markup[all-filter-dependencies,all_filter_dependencies]==1.8.1
     # via -r requirements.in/base.txt
+django-nested-admin==4.1.0
+    # via -r requirements.in/base.txt
 docutils==0.20.1
     # via
     #   django-markup
@@ -102,6 +104,8 @@ python-creole==1.4.10
     # via django-markup
 python-dotenv==0.19.1
     # via -r requirements.in/base.txt
+python-monkey-business==1.1.0
+    # via django-nested-admin
 regex==2023.12.25
     # via textile
 requests==2.32.0

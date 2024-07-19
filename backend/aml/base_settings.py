@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'django.contrib.humanize',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'nested_admin',
     'inline_actions',
     'django_markup',
     'corsheaders',
