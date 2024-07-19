@@ -1,7 +1,7 @@
 from django.test import TestCase
 from session.models import Session
 from participant.models import Participant
-from experiment.models import Block, Experiment, Phase, GroupedBlock
+from experiment.models import Block, Experiment, Phase
 
 
 class TestModelBlock(TestCase):
@@ -38,17 +38,12 @@ class TestModelExperiment(TestCase):
         phase2 = Phase.objects.create(
             name='second_phase', series=experiment)
         block = Block.objects.create(
-            rules='THATS_MY_SONG', slug='hooked', rounds=42)
+            rules='THATS_MY_SONG', slug='hooked', rounds=42, phase=phase1)
         block2 = Block.objects.create(
-            rules='THATS_MY_SONG', slug='unhinged', rounds=42)
+            rules='THATS_MY_SONG', slug='unhinged', rounds=42, phase=phase2)
         block3 = Block.objects.create(
-            rules='THATS_MY_SONG', slug='derailed', rounds=42)
-        GroupedBlock.objects.create(
-            block=block, phase=phase1)
-        GroupedBlock.objects.create(
-            block=block2, phase=phase2)
-        GroupedBlock.objects.create(
-            block=block3, phase=phase2)
+            rules='THATS_MY_SONG', slug='derailed', rounds=42, phase=phase2)
+
         self.assertEqual(experiment.associated_blocks(), [
                          block, block2, block3])
 
@@ -57,9 +52,7 @@ class TestModelExperiment(TestCase):
         phase = Phase.objects.create(
             name='test', series=experiment)
         block = Block.objects.create(
-            rules='THATS_MY_SONG', slug='hooked', rounds=42)
-        GroupedBlock.objects.create(
-            block=block, phase=phase)
+            rules='THATS_MY_SONG', slug='hooked', rounds=42, phase=phase)
         Session.objects.bulk_create(
             [Session(block=block, participant=self.participant1),
              Session(block=block, participant=self.participant2),
@@ -73,9 +66,7 @@ class TestModelExperiment(TestCase):
         phase = Phase.objects.create(
             name='test', series=experiment)
         block = Block.objects.create(
-            rules='THATS_MY_SONG', slug='hooked', rounds=42)
-        GroupedBlock.objects.create(
-            block=block, phase=phase)
+            rules='THATS_MY_SONG', slug='hooked', rounds=42, phase=phase)
         Session.objects.bulk_create(
             [Session(block=block, participant=self.participant1),
              Session(block=block, participant=self.participant2),

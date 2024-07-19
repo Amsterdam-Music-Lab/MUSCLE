@@ -11,7 +11,6 @@ from experiment.models import (
     Block,
     Experiment,
     Phase,
-    GroupedBlock,
     SocialMediaConfig,
 )
 from experiment.rules.hooked import Hooked
@@ -38,39 +37,23 @@ class TestExperimentViews(TestCase):
             index=1
         )
         cls.block1 = Block.objects.create(
-            name='block1', slug='block1')
-        GroupedBlock.objects.create(
-            block=cls.block1,
-            phase=introductory_phase
-        )
+            name='block1', slug='block1', phase=introductory_phase)
         intermediate_phase = Phase.objects.create(
             name='intermediate',
             series=experiment,
             index=2
         )
         cls.block2 = Block.objects.create(
-            name='block2', slug='block2', theme_config=theme_config)
+            name='block2', slug='block2', theme_config=theme_config, phase=intermediate_phase)
         cls.block3 = Block.objects.create(
-            name='block3', slug='block3')
-        GroupedBlock.objects.create(
-            block=cls.block2,
-            phase=intermediate_phase
-        )
-        GroupedBlock.objects.create(
-            block=cls.block3,
-            phase=intermediate_phase
-        )
+            name='block3', slug='block3', phase=intermediate_phase)
         final_phase = Phase.objects.create(
             name='final',
             series=experiment,
             index=3
         )
         cls.block4 = Block.objects.create(
-            name='block4', slug='block4')
-        GroupedBlock.objects.create(
-            block=cls.block4,
-            phase=final_phase
-        )
+            name='block4', slug='block4', phase=final_phase)
 
     def test_get_experiment(self):
         # save participant data to request session

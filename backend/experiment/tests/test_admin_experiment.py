@@ -7,14 +7,14 @@ from django.contrib.admin.sites import AdminSite
 from django.urls import reverse
 from django.utils.html import format_html
 from experiment.admin import BlockAdmin, ExperimentAdmin, PhaseAdmin
-from experiment.models import Block, Experiment, Phase, GroupedBlock
+from experiment.models import Block, Experiment, Phase
 from participant.models import Participant
 from result.models import Result
 from session.models import Session
 
 
 # Expected field count per model
-EXPECTED_BLOCK_FIELDS = 15
+EXPECTED_BLOCK_FIELDS = 17
 EXPECTED_SESSION_FIELDS = 9
 EXPECTED_RESULT_FIELDS = 12
 EXPECTED_PARTICIPANT_FIELDS = 5
@@ -236,7 +236,12 @@ class PhaseAdminTest(TestCase):
     def test_related_series_with_series(self):
         series = Experiment.objects.create(name='Test Series')
         phase = Phase.objects.create(
-            name='Test Group', index=1, randomize=False, series=series, dashboard=True)
+            name='Test Group',
+            index=1,
+            randomize=False,
+            series=series,
+            dashboard=True
+            )
         related_series = self.admin.related_series(phase)
         expected_url = reverse(
             "admin:experiment_experiment_change", args=[series.pk])
@@ -246,24 +251,40 @@ class PhaseAdminTest(TestCase):
     def test_blocks_with_no_blocks(self):
         series = Experiment.objects.create(name='Test Series')
         phase = Phase.objects.create(
-            name='Test Group', index=1, randomize=False, dashboard=True, series=series)
+            name='Test Group',
+            index=1,
+            randomize=False,
+            dashboard=True,
+            series=series
+            )
         blocks = self.admin.blocks(phase)
         self.assertEqual(blocks, "No blocks")
 
     def test_blocks_with_blocks(self):
         series = Experiment.objects.create(name='Test Series')
         phase = Phase.objects.create(
-            name='Test Group', index=1, randomize=False, dashboard=True, series=series)
-        block1 = Block.objects.create(name='Block 1', slug='block-1')
-        block2 = Block.objects.create(name='Block 2', slug='block-2')
-        grouped_block1 = GroupedBlock.objects.create(phase=phase, block=block1)
-        grouped_block2 = GroupedBlock.objects.create(phase=phase, block=block2)
+            name='Test Group',
+            index=1,
+            randomize=False,
+            dashboard=True,
+            series=series
+            )
+        block1 = Block.objects.create(
+            name='Block 1',
+            slug='block-1',
+            phase=phase
+            )
+        block2 = Block.objects.create(
+            name='Block 2',
+            slug='block-2',
+            phase=phase
+            )
 
         blocks = self.admin.blocks(phase)
         expected_blocks = format_html(
             ', '.join([
-                f'<a href="/admin/experiment/groupedblock/{block.id}/change/">{block.block.name}</a>'
-                for block in [grouped_block1, grouped_block2]
+                f'<a href="/admin/experiment/block/{block.id}/change/">{block.name}</a>'
+                for block in [block1, block2]
             ])
         )
         self.assertEqual(blocks, expected_blocks)

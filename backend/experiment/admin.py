@@ -22,7 +22,6 @@ from experiment.models import (
     Experiment,
     Phase,
     Feedback,
-    GroupedBlock,
     SocialMediaConfig,
 )
 from question.admin import QuestionSeriesInline
@@ -247,18 +246,16 @@ class BlockAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
 
 admin.site.register(Block, BlockAdmin)
 
-
-class GroupedBlockInline(NestedTabularInline):
-    model = GroupedBlock
-    extra = 1
+class BlockInline(admin.StackedInline):
+    model = Block
+    extra = 0
     sortable_field_name = "index"
-
 
 class PhaseInline(NestedTabularInline):
     model = Phase
     extra = 1
     sortable_field_name = "index"
-    inlines = [GroupedBlockInline]
+    inlines = [BlockInline]
 
 
 class SocialMediaConfigInline(NestedStackedInline):
@@ -365,16 +362,9 @@ admin.site.register(Experiment, ExperimentAdmin)
 
 
 class PhaseAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
-    list_display = (
-        "name_link",
-        "related_series",
-        "index",
-        "dashboard",
-        "randomize",
-        "blocks",
-    )
-    fields = ["name", "series", "index", "dashboard", "randomize"]
-    inlines = [GroupedBlockInline]
+    list_display = ('name_link', 'related_series', 'index', 'dashboard', 'randomize', 'blocks')
+    fields = ['name', 'series', 'index', 'dashboard', 'randomize']
+    inlines = [BlockInline]
 
     def name_link(self, obj):
         obj_name = obj.__str__()
@@ -386,19 +376,12 @@ class PhaseAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
         return format_html('<a href="{}">{}</a>', url, obj.series.name)
 
     def blocks(self, obj):
-        blocks = GroupedBlock.objects.filter(phase=obj)
+        blocks = Block.objects.filter(phase=obj)
 
         if not blocks:
             return "No blocks"
 
-        return format_html(
-            ", ".join(
-                [
-                    f'<a href="/admin/experiment/groupedblock/{block.id}/change/">{block.block.name}</a>'
-                    for block in blocks
-                ]
-            )
-        )
+        return format_html(', '.join([f'<a href="/admin/experiment/block/{block.id}/change/">{block.name}</a>' for block in blocks]))
 
 
 admin.site.register(Phase, PhaseAdmin)
