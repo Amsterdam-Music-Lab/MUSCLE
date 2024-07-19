@@ -250,13 +250,13 @@ admin.site.register(Block, BlockAdmin)
 
 class GroupedBlockInline(NestedTabularInline):
     model = GroupedBlock
-    extra = 0
+    extra = 1
     sortable_field_name = "index"
 
 
 class PhaseInline(NestedTabularInline):
     model = Phase
-    extra = 0
+    extra = 1
     sortable_field_name = "index"
     inlines = [GroupedBlockInline]
 
