@@ -110,7 +110,7 @@ requests==2.32.0
     #   genbadge
 roman==4.1
     # via -r requirements.in/base.txt
-sentry-sdk==1.38.0
+sentry-sdk==2.8.0
     # via -r requirements.in/base.txt
 six==1.16.0
     # via
