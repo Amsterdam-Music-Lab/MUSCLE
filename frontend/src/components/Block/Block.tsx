@@ -18,6 +18,7 @@ import FloatingActionButton from "@/components/FloatingActionButton/FloatingActi
 import UserFeedback from "@/components/UserFeedback/UserFeedback";
 import FontLoader from "@/components/FontLoader/FontLoader";
 import useResultHandler from "@/hooks/useResultHandler";
+import Session from "@/types/Session";
 
 // Block handles the main (experiment) block flow:
 // - Loads the block and participant
@@ -66,10 +67,20 @@ const Block = () => {
         updateState(newState);
     }, [updateState]);
 
-    const checkSession = async () => {
+    /**
+     * @deprecated
+     */
+    const checkSession = async (): Promise<Session | void> => {
         if (session) {
             return session;
         }
+
+        if (block?.session_id) {
+            const newSession = { id: block.session_id };
+            setSession(newSession);
+            return newSession;
+        }
+
         try {
             const newSession = await createSession({ block, participant, playlist })
             setSession(newSession);
@@ -77,6 +88,7 @@ const Block = () => {
         }
         catch (err) {
             setError(`Could not create a session: ${err}`, err)
+            return;
         };
     };
 
@@ -124,6 +136,10 @@ const Block = () => {
                 });
 
                 setBlock(block);
+
+                if (block.session_id) {
+                    setSession({ id: block.session_id });
+                }
 
                 // Set theme
                 if (block.theme) {
