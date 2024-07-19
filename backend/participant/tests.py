@@ -1,8 +1,8 @@
 import json
 
 from django.test import Client, TestCase
-
 from .models import Participant
+from .utils import get_participant, PARTICIPANT_KEY
 from experiment.models import Block
 from session.models import Session
 from result.models import Result
@@ -37,6 +37,43 @@ class ParticipantTest(TestCase):
         self.session = self.client.session
         self.session['country_code'] = 'BLA'
         self.session.save()
+
+    def test_get_participant(self):
+        participant = Participant.objects.create()
+        participant.save()
+
+        session = self.client.session
+        session.update({PARTICIPANT_KEY: participant.id})
+        session.save()
+
+        request = self.client.request().wsgi_request
+        request.session = session
+
+        self.assertEqual(get_participant(request), participant)
+
+    def test_get_participant_no_participant_in_session(self):
+        request = self.client.request().wsgi_request
+        request.session = self.client.session
+
+        with self.assertRaisesMessage(
+            Participant.DoesNotExist,
+            'No participant in session'
+        ):
+            get_participant(request)
+
+    def test_get_participant_no_participant(self):
+        session = self.client.session
+        session.update({PARTICIPANT_KEY: 1234567890})
+        session.save()
+
+        request = self.client.request().wsgi_request
+        request.session = session
+
+        with self.assertRaisesMessage(
+            Participant.DoesNotExist,
+            'Participant matching query does not exist.'
+        ):
+            get_participant(request)
 
     def set_participant(self):
         self.session['participant_id'] = self.participant.id

@@ -15,6 +15,7 @@ from experiment.models import (
 )
 from experiment.rules.hooked import Hooked
 from participant.models import Participant
+from participant.utils import PARTICIPANT_KEY
 from session.models import Session
 from theme.models import ThemeConfig, FooterConfig, HeaderConfig
 
@@ -251,6 +252,14 @@ class ExperimentViewsTest(TestCase):
             bonus_points=42,
         )
         participant = Participant.objects.create()
+        participant.save()
+
+        # Request session (not to be confused with experiment block session)
+        request_session = self.client.session
+        request_session.update({PARTICIPANT_KEY: participant.id})
+        request_session.save()
+
+        # Experiment block session
         Session.objects.bulk_create([
             Session(block=block, participant=participant, finished_at=timezone.now()) for index in range(3)
         ])

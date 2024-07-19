@@ -22,7 +22,7 @@ from theme.serializers import serialize_theme
 logger = logging.getLogger(__name__)
 
 
-def get_block(request, slug):
+def get_block(request: HttpRequest, slug: str) -> JsonResponse:
     """Get block data from active block with given :slug
     DO NOT modify session data here, it will break participant_id system
        (/participant and /block/<slug> are called at the same time by the frontend)"""
