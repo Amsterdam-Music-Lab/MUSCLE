@@ -18,8 +18,8 @@ def migrate_grouped_blocks(apps, schema_editor):
         if exists:
             block.pk = None
             block.slug = f"{block.slug}-{index}"
-            block.index = grouped_block.index
 
+        block.index = grouped_block.index
         block.phase = phase
         block.save()
 
