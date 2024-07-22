@@ -246,10 +246,12 @@ class BlockAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
 
 admin.site.register(Block, BlockAdmin)
 
+
 class BlockInline(admin.StackedInline):
     model = Block
-    extra = 0
+    extra = 1
     sortable_field_name = "index"
+
 
 class PhaseInline(NestedTabularInline):
     model = Phase
