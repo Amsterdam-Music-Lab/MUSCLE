@@ -34,6 +34,7 @@ def reverse_migrate_grouped_blocks(apps, schema_editor):
         grouped_block = GroupedBlock.objects.create(
             phase=block.phase,
             block=block,
+            index=block.index,
         )
         grouped_block.save()
 
