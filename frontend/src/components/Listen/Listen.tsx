@@ -1,6 +1,16 @@
 import React, { useRef } from "react";
 import Circle from "../Circle/Circle";
 
+interface ListenProps {
+    circleContent?: React.ReactNode;
+    instruction: string;
+    duration?: number;
+    onFinish: () => void;
+    color?: string;
+    running?: boolean;
+    className?: string;
+}
+
 /** Listen is a base view for block views without user input */
 const Listen = ({
     circleContent = null,
@@ -10,11 +20,11 @@ const Listen = ({
     color = "white",
     running = true,
     className = "",
-}) => {
+}: ListenProps) => {
     // Time ref, stores the time without updating the view
     const time = useRef(0);
 
-    const onCircleTimerTick = (t) => {
+    const onCircleTimerTick = (t: number) => {
         time.current = t;
     };
 
