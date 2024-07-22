@@ -7,8 +7,8 @@ describe('FloatingActionButton', () => {
         const { getByTestId } = render(<FloatingActionButton icon="fa-comment" >Test Content</FloatingActionButton>);
         const icon = getByTestId('floating-action-button__icon');
 
-        expect(icon).to.exist;
-        expect(icon.classList.contains('fa-comment')).to.be.true;
+        expect(document.body.contains(icon)).toBe(true);
+        expect(icon.classList.contains('fa-comment')).toBe(true);
     });
 
     it('toggles the content on click', () => {
@@ -18,10 +18,10 @@ describe('FloatingActionButton', () => {
         fireEvent.click(toggleButton);
 
         const content = getByTestId('floating-action-button');
-        expect(content.classList.contains('floating-action-button--expanded')).to.be.true;
+        expect(content.classList.contains('floating-action-button--expanded')).toBe(true);
 
         fireEvent.click(toggleButton);
-        expect(content.classList.contains('floating-action-button--expanded')).to.be.false;
+        expect(content.classList.contains('floating-action-button--expanded')).toBe(false);
     });
 
     it('displays the correct icon when expanded', () => {
@@ -32,8 +32,8 @@ describe('FloatingActionButton', () => {
 
         const icon = getByTestId('floating-action-button__icon');
 
-        expect(icon).to.exist;
-        expect(icon.classList.contains('fa-times')).to.be.true;
+        expect(document.body.contains(icon)).toBe(true);
+        expect(icon.classList.contains('fa-times')).toBe(true);
     });
 
     it('closes the expanded content when the overlay is clicked', () => {
@@ -46,32 +46,32 @@ describe('FloatingActionButton', () => {
         fireEvent.click(overlay);
 
         const content = getByTestId('floating-action-button__content');
-        expect(content.classList.contains('floating-action-button--expanded')).to.be.false;
+        expect(content.classList.contains('floating-action-button--expanded')).toBe(false);
     });
 
     it('initially renders in a collapsed state', () => {
         const { getByTestId } = render(<FloatingActionButton icon="fa-comment"><div>Test Content</div></FloatingActionButton>);
-        expect(getByTestId('floating-action-button').classList.contains('floating-action-button--expanded')).to.be.false;
+        expect(getByTestId('floating-action-button').classList.contains('floating-action-button--expanded')).toBe(false);
     });
 
     it('correctly applies position classes', () => {
         const { getByTestId } = render(<FloatingActionButton position="bottom-left">Test Content</FloatingActionButton>);
-        expect(getByTestId('floating-action-button').classList.contains('floating-action-button--bottom')).to.be.true;
-        expect(getByTestId('floating-action-button').classList.contains('floating-action-button--left')).to.be.true;
+        expect(getByTestId('floating-action-button').classList.contains('floating-action-button--bottom')).toBe(true);
+        expect(getByTestId('floating-action-button').classList.contains('floating-action-button--left')).toBe(true);
     });
 
     it('applies custom class name', () => {
         const { getByTestId } = render(<FloatingActionButton className="custom-class">Test Content</FloatingActionButton>);
         const button = getByTestId('floating-action-button');
-        expect(button.classList.contains('custom-class')).to.be.true;
+        expect(button.classList.contains('custom-class')).toBe(true);
     });
 
     it('updates aria-hidden attribute of overlay correctly', () => {
-        const { getByTestId } = render(<FloatingActionButton>Test Content</FloatingActionButton>
+        const { getByTestId } = render(<FloatingActionButton>Test Content</FloatingActionButton>);
         const overlay = getByTestId('floating-action-button__overlay');
-        expect(overlay.attributes.getNamedItem('aria-hidden').value).to.equal('true');
+        expect(overlay.attributes.getNamedItem('aria-hidden').value).toEqual('true');
 
         fireEvent.click(getByTestId('floating-action-button__toggle-button'));
-        expect(overlay.attributes.getNamedItem('aria-hidden').value).to.equal('false');
+        expect(overlay.attributes.getNamedItem('aria-hidden').value).toEqual('false');
     });
 });
