@@ -1,8 +1,8 @@
 import { useState } from "react";
 import {
     Route,
-    RouteComponentProps,
-    Switch
+    Routes,
+    useParams
 } from "react-router-dom";
 
 import useBoundStore from "../../util/stores";
@@ -15,19 +15,12 @@ import ExperimentAbout from "./ExperimentAbout/ExperimentAbout";
 import ExperimentDashboard from "./ExperimentDashboard/ExperimentDashboard";
 import { URLS } from "@/config";
 import IExperiment from "@/types/Experiment";
-import IParticipant from "@/types/Participant";
 import Redirect from "@/components/Redirect/Redirect";
 
-interface RouteParams {
-    slug: string
-}
+const Experiment = () => {
+    const { slug } = useParams();
 
-interface ExperimentProps extends RouteComponentProps<RouteParams> {
-    participant: IParticipant
-}
-
-const Experiment = ({ match }: ExperimentProps) => {
-    const [experiment, loadingExperiment] = useExperiment(match.params.slug) as [IExperiment, boolean];
+    const [experiment, loadingExperiment] = useExperiment(slug!) as [IExperiment, boolean];
     const [hasShownConsent, setHasShownConsent] = useState(false);
     const participant = useBoundStore((state) => state.participant);
     const setTheme = useBoundStore((state) => state.setTheme);
@@ -79,10 +72,10 @@ const Experiment = ({ match }: ExperimentProps) => {
 
     return (
         <div className="aha__experiment">
-            <Switch>
-                <Route path={URLS.experimentAbout} component={() => <ExperimentAbout content={experiment?.aboutContent} slug={experiment.slug} />} />
-                <Route path={URLS.experiment} exact component={() => <ExperimentDashboard experiment={experiment} participantIdUrl={participantIdUrl} totalScore={totalScore} />} />
-            </Switch>
+            <Routes>
+                <Route path={URLS.experimentAbout} element={<ExperimentAbout content={experiment?.aboutContent} slug={experiment.slug} />} />
+                <Route path={URLS.experiment} exact element={<ExperimentDashboard experiment={experiment} participantIdUrl={participantIdUrl} totalScore={totalScore} />} />
+            </Routes>
             {experiment.theme?.footer && (
                 <Footer
                     disclaimer={experiment.theme.footer.disclaimer}
