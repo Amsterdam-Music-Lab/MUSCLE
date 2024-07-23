@@ -33,7 +33,7 @@
         "test": "vitest",
         "test:ci": "vitest --watch=false --coverage",
         "generate-badge": "coverage-badges -s coverage/coverage-summary.json -o coverage-frontend-badge-new.svg --label 'Frontend Code Coverage'",
-        "storybook": "storybook dev -p 6006",
+        "storybook": "storybook dev -p 6006 --no-open",
         "storybook:build": "storybook build",
         "lint": "eslint src/**/*.{js,jsx,ts,tsx}",
         "lint:fix": "eslint --fix src/**/*.js",
@@ -70,15 +70,15 @@
         ]
     },
     "devDependencies": {
-        "@chromatic-com/storybook": "^1.6.0",
-        "@storybook/addon-essentials": "^8.1.11",
-        "@storybook/addon-interactions": "^8.1.11",
-        "@storybook/addon-links": "^8.1.11",
-        "@storybook/addon-onboarding": "^8.1.11",
-        "@storybook/blocks": "^8.1.11",
-        "@storybook/react": "^8.1.11",
-        "@storybook/react-vite": "^8.1.11",
-        "@storybook/test": "^8.1.11",
+        "@chromatic-com/storybook": "^1.6.1",
+        "@storybook/addon-essentials": "^8.2.5",
+        "@storybook/addon-interactions": "^8.2.5",
+        "@storybook/addon-links": "^8.2.5",
+        "@storybook/addon-onboarding": "^8.2.5",
+        "@storybook/blocks": "^8.2.5",
+        "@storybook/react": "^8.2.5",
+        "@storybook/react-vite": "^8.2.5",
+        "@storybook/test": "^8.2.5",
         "@testing-library/dom": "^10.2.0",
         "@testing-library/react": "^16.0.0",
         "@testing-library/user-event": "^14.5.1",
@@ -98,7 +98,7 @@
         "happy-dom": "^12.10.3",
         "history": "^5.3.0",
         "prop-types": "15.8.1",
-        "storybook": "^8.1.11",
+        "storybook": "^8.2.5",
         "vitest": "^1.4.0"
     }
 }
