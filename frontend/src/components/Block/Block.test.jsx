@@ -1,7 +1,7 @@
 import React from 'react';
-import { Route, MemoryRouter } from 'react-router-dom';
+import { Route, MemoryRouter, Routes } from 'react-router-dom';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
-import { vi } from 'vitest';
+import { beforeEach, vi } from 'vitest';
 import MockAdapter from 'axios-mock-adapter';
 import axios from 'axios';
 import Block from './Block';
@@ -11,6 +11,15 @@ let mock = new MockAdapter(axios);
 
 vi.mock("../../util/stores");
 
+let mockUseParams = vi.fn();
+
+vi.mock('react-router-dom', async () => {
+    const actual = await vi.importActual('react-router-dom');
+    return {
+        ...actual,
+        useParams: () => mockUseParams()
+    };
+});
 
 const experimentObj = {
     id: 24, slug: 'test', name: 'Test', playlists: [{ id: 42, name: 'TestPlaylist' }],
@@ -47,6 +56,10 @@ vi.mock('../../util/stores', () => ({
 
 describe('Block Component', () => {
 
+    beforeEach(() => {
+        mockUseParams.mockReturnValue({ slug: 'test' });
+    });
+
     afterEach(() => {
         mock.reset();
     });
@@ -56,7 +69,7 @@ describe('Block Component', () => {
         mock.onGet().replyOnce(200, experimentObj);
         render(
             <MemoryRouter>
-                <Block match={{ params: { slug: 'test' } }} />
+                <Block />
             </MemoryRouter>
         );
         await screen.findByText('Continue');
@@ -68,7 +81,9 @@ describe('Block Component', () => {
 
         render(
             <MemoryRouter initialEntries={['/block/test']}>
-                <Route path="/block/:slug" component={Block} />
+                <Routes>
+                    <Route path="/block/:slug" element={<Block />} />
+                </Routes>
             </MemoryRouter>
         );
         const button = await screen.findByText('Continue');
