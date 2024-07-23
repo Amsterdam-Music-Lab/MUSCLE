@@ -1,15 +1,15 @@
 import React, { useState } from "react";
 import classNames from "classnames";
-import { Link, withRouter } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import * as EmailValidator from "email-validator";
 import { URLS } from "@/config";
 import useBoundStore from "../../util/stores";
-import { shareParticipant} from "../../API";
+import { shareParticipant } from "../../API";
 import DefaultPage from "../Page/DefaultPage";
 import Loading from "../Loading/Loading";
 
 // StoreProfile enables participants to store their profile for later access
-const StoreProfile = ({ history }) => {
+const StoreProfile = () => {
     const [email, setEmail] = useState("");
 
     const validEmail = email && EmailValidator.validate(email);
@@ -25,7 +25,7 @@ const StoreProfile = ({ history }) => {
             } else {
                 alert("You will receive an e-mail shortly");
             }
-            history.push(URLS.profile);
+            navigate(URLS.profile);
         }
     };
 
@@ -74,4 +74,4 @@ const StoreProfile = ({ history }) => {
     );
 };
 
-export default withRouter(StoreProfile);
+export default StoreProfile;
