@@ -20,7 +20,7 @@ class Base(object):
     contact_email = settings.CONTACT_MAIL
 
     def __init__(self):
-        pass
+        self.question_series = []
 
     def feedback_info(self):
         feedback_body = render_to_string('feedback/user_feedback.html', {'email': self.contact_email})
