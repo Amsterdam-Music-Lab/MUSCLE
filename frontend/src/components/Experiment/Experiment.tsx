@@ -1,7 +1,6 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import {
     Route,
-    Redirect,
     RouteComponentProps,
     Switch
 } from "react-router-dom";
@@ -17,6 +16,7 @@ import ExperimentDashboard from "./ExperimentDashboard/ExperimentDashboard";
 import { URLS } from "@/config";
 import IExperiment from "@/types/Experiment";
 import IParticipant from "@/types/Participant";
+import Redirect from "@/components/Redirect/Redirect";
 
 interface RouteParams {
     slug: string

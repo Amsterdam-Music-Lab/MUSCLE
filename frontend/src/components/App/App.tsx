@@ -3,7 +3,6 @@ import {
     BrowserRouter as Router,
     Switch,
     Route,
-    Redirect
 } from "react-router-dom";
 import axios from "axios";
 
@@ -20,6 +19,7 @@ import StoreProfile from "../StoreProfile/StoreProfile";
 import useDisableRightClickOnTouchDevices from "../../hooks/useDisableRightClickOnTouchDevices";
 import { InternalRedirect } from "../InternalRedirect/InternalRedirect";
 import Helmet from "@/components/Helmet/Helmet";
+import Redirect from "@/components/Redirect/Redirect";
 
 // App is the root component of our application
 const App = () => {

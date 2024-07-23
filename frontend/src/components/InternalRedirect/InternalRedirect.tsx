@@ -1,8 +1,9 @@
 import React from 'react';
-import { Redirect, RouteComponentProps } from 'react-router-dom';
+import { RouteComponentProps } from 'react-router-dom';
+import Redirect from '@/components/Redirect/Redirect';
 
 // this component is a route, so it will receive the route props
-interface InternalRedirectProps extends RouteComponentProps {}
+interface InternalRedirectProps extends RouteComponentProps { }
 
 export const InternalRedirect: React.FC<InternalRedirectProps> = (props) => {
     const { path } = props.match.params as { path: string };
