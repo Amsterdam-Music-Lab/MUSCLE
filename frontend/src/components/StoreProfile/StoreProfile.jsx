@@ -10,6 +10,7 @@ import Loading from "../Loading/Loading";
 
 // StoreProfile enables participants to store their profile for later access
 const StoreProfile = () => {
+    const navigate = useNavigate();
     const [email, setEmail] = useState("");
 
     const validEmail = email && EmailValidator.validate(email);
