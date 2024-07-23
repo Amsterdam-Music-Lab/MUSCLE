@@ -22,6 +22,7 @@ interface FinalProps {
     action_texts: {
         all_experiments: string;
         profile: string;
+        play_again: string;
     }
     button: {
         text: string;
