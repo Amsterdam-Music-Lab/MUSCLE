@@ -34,7 +34,6 @@ class Hooked(Base):
     question_offset = 5 # how many rounds will be presented without questions
     questions = True
     relevant_keys = ['recognize', 'heard_before']
-    round_modifier = 0
     play_method = 'BUFFER'
 
     def __init__(self):
@@ -252,7 +251,7 @@ class Hooked(Base):
             played_sections = session.load_json_data().get('played_sections', [])
             played_sections.append(section.id)
             session.save_json_data({'played_sections': played_sections})
-        return song_sync(session, section, title=self.get_trial_title(session, round_number),
+        return song_sync(session, section, title=self.get_trial_title(session, round_number + 1),
                          recognition_time=self.recognition_time, sync_time=self.sync_time,
                          min_jitter=self.min_jitter, max_jitter=self.max_jitter)
 
@@ -315,7 +314,7 @@ class Hooked(Base):
             'response_time': self.heard_before_time
         }
         trial = Trial(
-            title=self.get_trial_title(session, round_number),
+            title=self.get_trial_title(session, round_number + 1),
             playback=playback,
             feedback_form=form,
             config=config,
