@@ -73,8 +73,14 @@ const Experiment = () => {
     return (
         <div className="aha__experiment">
             <Routes>
-                <Route path={URLS.experimentAbout} element={<ExperimentAbout content={experiment?.aboutContent} slug={experiment.slug} />} />
-                <Route path={URLS.experiment} exact element={<ExperimentDashboard experiment={experiment} participantIdUrl={participantIdUrl} totalScore={totalScore} />} />
+                <Route
+                    path={'/about'}
+                    element={<ExperimentAbout content={experiment?.aboutContent} slug={experiment.slug} />}
+                />
+                <Route
+                    path={'*'}
+                    element={<ExperimentDashboard experiment={experiment} participantIdUrl={participantIdUrl} totalScore={totalScore} />}
+                />
             </Routes>
             {experiment.theme?.footer && (
                 <Footer
