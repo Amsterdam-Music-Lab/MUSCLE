@@ -106,8 +106,8 @@ class MatchingPairsFixedTest(TestCase):
             code = section.code
             self.assertEqual(code, deterministic_order[index])
 
-    @patch('experiment.rules.matching_pairs_fixed.MatchingPairsFixed.shuffle_sections')
-    def test_select_sections_original_original(self, mock_shuffle_sections):
+    @patch('experiment.rules.matching_pairs_fixed.MatchingPairsFixed')
+    def test_select_sections_original_original(self, MockMatchingPairsFixed):
         self.section1 = Section.objects.create(
             playlist=self.playlist,
             code='1',
@@ -167,7 +167,7 @@ class MatchingPairsFixedTest(TestCase):
 
         rule = MatchingPairsFixed()
         deterministic_order = [1, 2, 5, 4, 6, 5, 7, 3, 2, 6, 8, 7, 8, 3, 1, 4]
-        mock_shuffle_sections.return_value = [Section.objects.get(code=code) for code in deterministic_order]
+        MockMatchingPairsFixed.shuffle_sections.return_value = [Section.objects.get(code=code) for code in deterministic_order]
         sections = rule.select_sections(self.session)
 
         self.assertEqual(len(sections), 16)

@@ -28,9 +28,9 @@ class Eurovision2020(Hooked):
 
     def select_heard_before_section(self, session: Session, condition: str) -> Section:
         session_type = self.get_session_type(session)
-        if condition == 'old' or session_type == 'same':
+        if condition == 'new' or session_type == 'same':
             return super().select_heard_before_section(session, condition)
-        current_section_id = self.get_current_section_id(session)
+        current_section_id = self.get_returning_section_id(session)
         played_section = Section.objects.get(pk=current_section_id)
         filter = {'song__id': played_section.song.id}
         if session_type == 'karaoke':
@@ -43,7 +43,7 @@ class Eurovision2020(Hooked):
 
     def get_session_type(self, session: Session) -> str:
         ''' get same / different / karaoke condition
-        as we set the random seed to the session.id, the value will be the same for every session
+        as we set the random seed to the session.id, the value will be the same throughout the session
         '''
         random.seed(session.id)
         return random.choice(['same', 'different', 'karaoke'])

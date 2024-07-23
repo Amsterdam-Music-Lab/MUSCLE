@@ -12,8 +12,6 @@ class ThatsMySong(Hooked):
 
     ID = 'THATS_MY_SONG'
     consent_file = ''
-    relevant_keys = ['recognize', 'heard_before', 'playlist_decades']
-    round_modifier = 1
 
     def __init__(self):
         self.question_series = [
@@ -57,12 +55,11 @@ class ThatsMySong(Hooked):
 
     def next_round(self, session: Session):
         """Get action data for the next round"""
-        json_data = session.load_json_data()
         round_number = self.get_current_round(session)
 
         # If the number of results equals the number of block.rounds,
         # close the session and return data for the final_score view.
-        if round_number == session.block.rounds + self.round_modifier:
+        if round_number == session.block.rounds:
 
             # Finish session.
             session.finish()
@@ -71,7 +68,7 @@ class ThatsMySong(Hooked):
             # Return a score and final score action.
             social_info = self.social_media_info(session.block, session.final_score)
             return [
-                self.get_score(session, round_number - self.round_modifier),
+                self.get_score(session, round_number),
                 Final(
                     session=session,
                     final_text=self.final_score_message(session) + " For more information about this experiment, visit the Vanderbilt University Medical Center Music Cognition Lab.",
@@ -93,55 +90,58 @@ class ThatsMySong(Hooked):
         actions = []
         if round_number == 0:
             # get list of trials for demographic questions (first 2 questions)
-            questions = self.get_questionnaire(session, cutoff_index=2)
-            if questions:
-                for q in questions:
-                    actions.append(q)
+            if session.result_set.filter(question_key='playlist_decades').count() == 0:
+                questions = self.get_questionnaire(session, cutoff_index=2)
+                if questions:
+                    for q in questions:
+                        actions.append(q)
 
-            question = ChoiceQuestion(
-                key='playlist_decades',
-                view='CHECKBOXES',
-                question=_("Choose two or more decades of music"),
-                choices={
-                    '1960s': '1960s',
-                    '1970s': '1970s',
-                    '1980s': '1980s',
-                    '1990s': '1990s',
-                    '2000s': '2000s'
-                },
-                min_values = 2,
-                result_id=prepare_result('playlist_decades', session=session)
-            )
-            actions.append(
-                Trial(
-                title=_("Playlist selection"),
-                feedback_form=Form([question]))
-            )
+                question = ChoiceQuestion(
+                    key='playlist_decades',
+                    view='CHECKBOXES',
+                    question=_("Choose two or more decades of music"),
+                    choices={
+                        '1960s': '1960s',
+                        '1970s': '1970s',
+                        '1980s': '1980s',
+                        '1990s': '1990s',
+                        '2000s': '2000s'
+                    },
+                    min_values = 2,
+                    result_id=prepare_result('playlist_decades', session=session)
+                )
+                actions.append(
+                    Trial(
+                    title=_("Playlist selection"),
+                    feedback_form=Form([question]))
+                )
+                return actions
 
-        # Go to SongSync
-        elif round_number == 1:
-            self.plan_sections(session)
-            actions.extend(self.next_song_sync_action(session, round_number))
+            # Go to SongSync
+            else:
+                self.plan_sections(session)
+                actions.extend(self.next_song_sync_action(session, round_number))
         else:
             # Create a score action.
-            actions.append(self.get_score(session, round_number - self.round_modifier))
+            actions.append(self.get_score(session, round_number))
+            heard_before_offset = session.load_json_data().get('heard_before_offset')
 
-            # SongSync rounds. Skip questions until Round 5.
-            if round_number in range(2, 5):
+            # SongSync rounds. Skip questions until Round 5 (defined in question_offset).
+            if round_number in range(1, self.question_offset):
                 actions.extend(self.next_song_sync_action(session, round_number))
-            if round_number in range(5, self.heard_before_offset):
+            if round_number in range(self.question_offset, heard_before_offset):
                 question = self.get_single_question(session, randomize=True)
                 if question:
                     actions.append(question)
                 actions.extend(self.next_song_sync_action(session, round_number))
 
             # HeardBefore rounds
-            if round_number == self.heard_before_offset:
+            if round_number == heard_before_offset:
                 # Introduce new round type with Explainer.
                 actions.append(self.heard_before_explainer())
                 actions.append(
                     self.next_heard_before_action(session, round_number))
-            if round_number > self.heard_before_offset:
+            if round_number > heard_before_offset:
                 question = self.get_single_question(session, randomize=True)
                 if question:
                     actions.append(question)
@@ -150,7 +150,7 @@ class ThatsMySong(Hooked):
 
         return actions
 
-    def select_song_sync_section(self, session: Session, condition) -> Section:
+    def select_song_sync_section(self, session: Session, condition: str) -> Section:
         decades = session.result_set.first().given_response.split(',')
         return super().select_song_sync_section(session, condition, filter_by={'group__in': decades})
 

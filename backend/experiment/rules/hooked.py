@@ -12,7 +12,7 @@ from experiment.actions.styles import STYLE_BOOLEAN_NEGATIVE_FIRST
 from experiment.actions.wrappers import song_sync
 from question.questions import QUESTION_GROUPS
 from result.utils import prepare_result
-from section.models import Section, Song
+from section.models import Section
 from session.models import Session
 
 
@@ -84,7 +84,6 @@ class Hooked(Base):
 
     def next_round(self, session: Session):
         """Get action data for the next round"""
-        json_data = session.load_json_data()
         round_number = self.get_current_round(session)
 
         # If the number of results equals the number of block.rounds,
@@ -127,15 +126,13 @@ class Hooked(Base):
         else:
             # Create a score action.
             actions.append(self.get_score(session, round_number))
-
-            # Load the heard_before offset.
-            plan = json_data.get('plan')
+            heard_before_offset = session.load_json_data().get('heard_before_offset')
 
             # SongSync rounds. Skip questions until round indicated by question_offset.
             if round_number in range(1, self.question_offset):
                 actions.extend(self.next_song_sync_action(
                     session, round_number))
-            if round_number in range(self.question_offset, self.heard_before_offset):
+            elif round_number in range(self.question_offset, heard_before_offset):
                 question_trial = self.get_single_question(session)
                 if question_trial:
                     actions.append(question_trial)
@@ -143,12 +140,12 @@ class Hooked(Base):
                     session, round_number))
 
             # HeardBefore rounds
-            if round_number == self.heard_before_offset:
+            elif round_number == heard_before_offset:
                 # Introduce new round type with Explainer.
                 actions.append(self.heard_before_explainer())
                 actions.append(
                     self.next_heard_before_action(session, round_number))
-            if round_number > self.heard_before_offset:
+            elif round_number > heard_before_offset:
                 question_trial = self.get_single_question(session)
                 if question_trial:
                     actions.append(question_trial)
@@ -206,7 +203,7 @@ class Hooked(Base):
 
     def get_trial_title(self, session: Session, round_number):
         return _("Round %(number)d / %(total)d") %\
-            {'number': round_number+1, 'total': session.block.rounds}
+            {'number': round_number, 'total': session.block.rounds}
 
     def plan_sections(self, session: Session):
         """Set the plan of tracks for a session.
@@ -219,7 +216,6 @@ class Hooked(Base):
         # 1/3 of the rounds are "heard before", of which 1/2 old songs
         # e.g. 30 rounds -> 20 SongSync with 5 songs to be repeated later
         n_song_sync_rounds = round(2/3 * n_rounds)
-        self.heard_before_offset = n_song_sync_rounds
         n_returning_rounds = round(1/4 * n_song_sync_rounds)
         song_sync_condtions = ['returning'] * n_returning_rounds + ['free'] * (n_song_sync_rounds - n_returning_rounds)
         random.shuffle(song_sync_condtions)
@@ -231,9 +227,15 @@ class Hooked(Base):
         plan = song_sync_condtions + heard_before_conditions
 
         # Save, overwriting existing plan if one exists.
-        session.save_json_data({'plan': plan})
+        session.save_json_data({'plan': plan, 'heard_before_offset': n_song_sync_rounds})
 
     def select_song_sync_section(self, session: Session, condition, filter_by={}) -> Section:
+        ''' Return a section for the song_sync round
+        parameters:
+            - session
+            - condition: can be "new" or "returning"
+            - filter_by: may be used to filter sections
+        '''
         return session.playlist.get_section(filter_by, song_ids=session.get_unused_song_ids())
 
     def next_song_sync_action(self, session: Session, round_number: int) -> Trial:
@@ -256,17 +258,19 @@ class Hooked(Base):
 
     def select_heard_before_section(self, session: Session, condition: str, filter_by = {}) -> Section:
         """ select a section for the `heard_before` rounds
-        to play (variants of) sections which were presented in the song_sync rounds,
-
+        parameters:
+            - session
+            - condition: 'old' or 'new'
+            - filter_by: dictionary to restrict the types of sections returned, e.g., to play a section with a different tag
         """
         if condition == 'old':
-            current_section_id  = self.get_current_section_id(session)
+            current_section_id  = self.get_returning_section_id(session)
             return Section.objects.get(pk=current_section_id)
         else:
             song_ids = session.get_unused_song_ids()
             return session.playlist.get_section(filter_by, song_ids=song_ids)
 
-    def get_current_section_id(self, session: Session) -> int:
+    def get_returning_section_id(self, session: Session) -> int:
         ''' read the list of `played_sections`, select and return a random item,
         save `played_sections` without this item
         '''
@@ -320,7 +324,7 @@ class Hooked(Base):
 
     def get_score(self, session, round_number):
         config = {'show_section': True, 'show_total_score': True}
-        title = self.get_trial_title(session, round_number - 1)
+        title = self.get_trial_title(session, round_number)
         previous_score = session.get_previous_result(self.relevant_keys).score
         return Score(session,
                      config=config,

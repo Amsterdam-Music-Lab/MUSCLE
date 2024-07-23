@@ -155,8 +155,7 @@ class Huang2022(Hooked):
                     actions.extend([explainer, explainer_devices, *self.next_song_sync_action(session, round_number)])
         else:
             # Load the heard_before offset.
-
-            heard_before_offset = len(plan['song_sync_sections'])
+            heard_before_offset = session.load_json_data().get('heard_before_offset')
 
             # show score
             score = self.get_score(session, round_number)
