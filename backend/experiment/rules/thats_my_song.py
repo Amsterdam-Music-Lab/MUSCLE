@@ -8,6 +8,7 @@ from section.models import Section
 from session.models import Session
 from .hooked import Hooked
 
+
 class ThatsMySong(Hooked):
 
     ID = 'THATS_MY_SONG'

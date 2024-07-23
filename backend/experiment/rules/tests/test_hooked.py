@@ -64,7 +64,7 @@ class HookedTest(TestCase):
 
     def score_results(self, actions):
         for action in actions:
-            if type(action) == Trial and action.feedback_form:
+            if isinstance(action, Trial) and action.feedback_form:
                 result_id = action.feedback_form.form[0].result_id
                 result = Result.objects.get(pk=result_id)
                 result.score = 42

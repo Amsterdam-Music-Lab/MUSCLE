@@ -263,7 +263,7 @@ class Hooked(Base):
             - filter_by: dictionary to restrict the types of sections returned, e.g., to play a section with a different tag
         """
         if condition == 'old':
-            current_section_id  = self.get_returning_section_id(session)
+            current_section_id = self.get_returning_section_id(session)
             return Section.objects.get(pk=current_section_id)
         else:
             song_ids = session.get_unused_song_ids()
