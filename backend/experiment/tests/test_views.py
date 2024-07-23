@@ -9,7 +9,7 @@ from experiment.serializers import (
 )
 from experiment.models import (
     Block,
-    ExperimentCollection,
+    Experiment,
     Phase,
     GroupedBlock,
     SocialMediaConfig,
@@ -20,21 +20,21 @@ from session.models import Session
 from theme.models import ThemeConfig, FooterConfig, HeaderConfig
 
 
-class TestExperimentCollectionViews(TestCase):
+class TestExperimentViews(TestCase):
 
     @classmethod
     def setUpTestData(cls):
         cls.participant = Participant.objects.create()
         theme_config = create_theme_config()
-        collection = ExperimentCollection.objects.create(
+        experiment = Experiment.objects.create(
             name='Test Series',
             slug='test_series',
             theme_config=theme_config,
         )
-        collection.social_media_config = create_social_media_config(collection)
+        experiment.social_media_config = create_social_media_config(experiment)
         introductory_phase = Phase.objects.create(
             name='introduction',
-            series=collection,
+            series=experiment,
             index=1
         )
         cls.block1 = Block.objects.create(
@@ -45,7 +45,7 @@ class TestExperimentCollectionViews(TestCase):
         )
         intermediate_phase = Phase.objects.create(
             name='intermediate',
-            series=collection,
+            series=experiment,
             index=2
         )
         cls.block2 = Block.objects.create(
@@ -62,7 +62,7 @@ class TestExperimentCollectionViews(TestCase):
         )
         final_phase = Phase.objects.create(
             name='final',
-            series=collection,
+            series=experiment,
             index=3
         )
         cls.block4 = Block.objects.create(
@@ -72,13 +72,13 @@ class TestExperimentCollectionViews(TestCase):
             phase=final_phase
         )
 
-    def test_get_experiment_collection(self):
+    def test_get_experiment(self):
         # save participant data to request session
         session = self.client.session
         session['participant_id'] = self.participant.id
         session.save()
         # check that first_experiments is returned correctly
-        response = self.client.get('/experiment/collection/test_series/')
+        response = self.client.get('/experiment/test_series/')
         self.assertEqual(response.json().get(
             'nextBlock').get('slug'), 'block1')
         # create session
@@ -87,7 +87,7 @@ class TestExperimentCollectionViews(TestCase):
             participant=self.participant,
             finished_at=timezone.now()
         )
-        response = self.client.get('/experiment/collection/test_series/')
+        response = self.client.get('/experiment/test_series/')
         self.assertIn(response.json().get('nextBlock').get(
             'slug'), ('block2', 'block3'))
         self.assertEqual(response.json().get('dashboard'), [])
@@ -101,7 +101,7 @@ class TestExperimentCollectionViews(TestCase):
             participant=self.participant,
             finished_at=timezone.now()
         )
-        response = self.client.get('/experiment/collection/test_series/')
+        response = self.client.get('/experiment/test_series/')
         response_json = response.json()
         self.assertEqual(response_json.get(
             'nextBlock').get('slug'), 'block4')
@@ -115,21 +115,47 @@ class TestExperimentCollectionViews(TestCase):
         self.assertEqual(response_json.get('socialMedia').get('tags'), ['aml', 'toontjehoger'])
         self.assertEqual(response_json.get('socialMedia').get('channels'), ['facebook', 'twitter', 'weibo'])
 
-    def test_get_experiment_collection_not_found(self):
-        # if ExperimentCollection does not exist, return 404
-        response = self.client.get('/experiment/collection/not_found/')
+    def test_get_experiment_not_found(self):
+        # if Experiment does not exist, return 404
+        response = self.client.get('/experiment/not_found/')
         self.assertEqual(response.status_code, 404)
 
-    def test_get_experiment_collection_inactive(self):
-        # if ExperimentCollection is inactive, return 404
-        collection = ExperimentCollection.objects.get(slug='test_series')
-        collection.active = False
-        collection.save()
-        response = self.client.get('/experiment/collection/test_series/')
+    def test_get_experiment_inactive(self):
+        # if Experiment is inactive, return 404
+        experiment = Experiment.objects.get(slug='test_series')
+        experiment.active = False
+        experiment.save()
+        response = self.client.get('/experiment/test_series/')
         self.assertEqual(response.status_code, 404)
 
-    def test_experiment_collection_with_dashboard(self):
-        # if ExperimentCollection has dashboard set True, return list of random blocks
+    def test_get_experiment_without_social_media(self):
+        session = self.client.session
+        session['participant_id'] = self.participant.id
+        session.save()
+        Session.objects.create(
+            block=self.block1,
+            participant=self.participant,
+            finished_at=timezone.now()
+        )
+        intermediate_phase = Phase.objects.get(
+            name='intermediate'
+        )
+        intermediate_phase.dashboard = True
+        intermediate_phase.save()
+
+        Experiment.objects.create(
+            name='No Social Media',
+            slug='no_social_media',
+            theme_config=create_theme_config(name='no_social_media')
+        )
+
+        response = self.client.get('/experiment/no_social_media/')
+
+        self.assertEqual(response.status_code, 200)
+        self.assertNotIn('socialMedia', response.json())
+
+    def test_experiment_with_dashboard(self):
+        # if Experiment has dashboard set True, return list of random blocks
         session = self.client.session
         session['participant_id'] = self.participant.id
         session.save()
@@ -144,10 +170,10 @@ class TestExperimentCollectionViews(TestCase):
         intermediate_phase.dashboard = True
         intermediate_phase.save()
         # check that first_experiments is returned correctly
-        response = self.client.get('/experiment/collection/test_series/')
+        response = self.client.get('/experiment/test_series/')
         self.assertEqual(type(response.json().get('dashboard')), list)
 
-    def test_experiment_collection_total_score(self):
+    def test_experiment_total_score(self):
         """ Test calculation of total score for grouped block on dashboard """
         session = self.client.session
         session['participant_id'] = self.participant.id
@@ -246,7 +272,7 @@ class ExperimentViewsTest(TestCase):
             Session(block=block, participant=participant, finished_at=timezone.now()) for index in range(3)
         ])
 
-        response = self.client.get('/experiment/test-block/')
+        response = self.client.get('/experiment/block/test-block/')
 
         self.assertEqual(
             response.json()['slug'], 'test-block'
@@ -271,9 +297,9 @@ class ExperimentViewsTest(TestCase):
         )
 
 
-def create_theme_config() -> ThemeConfig:
+def create_theme_config(name='test_theme') -> ThemeConfig:
     theme_config = ThemeConfig.objects.create(
-            name='test_theme',
+            name=name,
             description='Test Theme',
             heading_font_url='https://fonts.googleapis.com/css2?family=Architects+Daughter&family=Micro+5&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap',
             body_font_url='https://fonts.googleapis.com/css2?family=Architects+Daughter&family=Micro+5&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap',
@@ -295,9 +321,9 @@ def create_theme_config() -> ThemeConfig:
 
 
 def create_social_media_config(
-        collection: ExperimentCollection) -> SocialMediaConfig:
+        experiment: Experiment) -> SocialMediaConfig:
     return SocialMediaConfig.objects.create(
-        experiment_collection=collection,
+        experiment=experiment,
         url='https://www.example.com',
         content='Test Content',
         channels=['facebook', 'twitter', 'weibo'],

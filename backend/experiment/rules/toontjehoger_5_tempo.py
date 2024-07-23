@@ -9,7 +9,7 @@ from experiment.actions.form import ButtonArrayQuestion, Form
 from experiment.actions.frontend_style import FrontendStyle, EFrontendStyle
 from experiment.actions.playback import Multiplayer
 from experiment.actions.styles import STYLE_NEUTRAL_INVERTED
-from experiment.actions.utils import get_current_collection_url
+from experiment.actions.utils import get_current_experiment_url
 from section.models import Playlist
 from session.models import Session
 from .base import Base
@@ -254,7 +254,7 @@ class ToontjeHoger5Tempo(Base):
             body=body,
             heading="Timing en tempo",
             button_label="Terug naar ToontjeHoger",
-            button_link=get_current_collection_url(session)
+            button_link=get_current_experiment_url(session)
         )
 
         return [*score, final, info]

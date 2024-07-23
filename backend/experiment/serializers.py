@@ -7,7 +7,7 @@ from image.serializers import serialize_image
 from participant.models import Participant
 from session.models import Session
 from theme.serializers import serialize_theme
-from .models import Block, ExperimentCollection, Phase, GroupedBlock, SocialMediaConfig
+from .models import Block, Experiment, Phase, GroupedBlock, SocialMediaConfig
 
 
 def serialize_actions(actions):
@@ -17,36 +17,37 @@ def serialize_actions(actions):
     return actions.action()
 
 
-def serialize_experiment_collection(
-    experiment_collection: ExperimentCollection
+def serialize_experiment(
+    experiment: Experiment
 ) -> dict:
 
     serialized = {
-        'slug': experiment_collection.slug,
-        'name': experiment_collection.name,
+        'slug': experiment.slug,
+        'name': experiment.name,
         'description': formatter(
-            experiment_collection.description,
+            experiment.description,
             filter_name='markdown'
         ),
     }
 
-    if experiment_collection.consent:
-        serialized['consent'] = Consent(experiment_collection.consent).action()
+    if experiment.consent:
+        serialized['consent'] = Consent(experiment.consent).action()
 
-    if experiment_collection.theme_config:
+    if experiment.theme_config:
         serialized['theme'] = serialize_theme(
-            experiment_collection.theme_config
+            experiment.theme_config
         )
 
-    if experiment_collection.about_content:
+    if experiment.about_content:
         serialized['aboutContent'] = formatter(
-            experiment_collection.about_content,
+            experiment.about_content,
             filter_name='markdown'
         )
 
-    if experiment_collection.social_media_config:
+    if (hasattr(experiment, 'social_media_config')
+            and experiment.social_media_config):
         serialized['socialMedia'] = serialize_social_media_config(
-            experiment_collection.social_media_config
+            experiment.social_media_config
         )
 
     return serialized

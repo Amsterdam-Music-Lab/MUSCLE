@@ -2,18 +2,18 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import HTML from '../../HTML/HTML';
 
-interface ExperimentCollectionAboutProps {
+interface ExperimentAboutProps {
     content: string;
     slug: string;
 }
 
-export const ExperimentCollectionAbout: React.FC<ExperimentCollectionAboutProps> = (props: ExperimentCollectionAboutProps) => {
+export const ExperimentAbout: React.FC<ExperimentAboutProps> = (props: ExperimentAboutProps) => {
 
     const { content, slug } = props;
 
     return (
         <div className="container">
-            <Link className="btn btn-lg btn-outline-primary mt-3" to={`/collection/${slug}`}>
+            <Link className="btn btn-lg btn-outline-primary mt-3" to={`/${slug}`}>
                 <i className="fas fa-arrow-left mr-2"></i>
                 Terug
             </Link>
@@ -24,4 +24,4 @@ export const ExperimentCollectionAbout: React.FC<ExperimentCollectionAboutProps>
     );
 };
 
-export default ExperimentCollectionAbout;
+export default ExperimentAbout;

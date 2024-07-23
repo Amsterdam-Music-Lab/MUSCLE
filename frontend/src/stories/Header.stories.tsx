@@ -1,6 +1,6 @@
 import { BrowserRouter as Router } from "react-router-dom";
 
-import Header from "../components/ExperimentCollection/Header/Header";
+import Header from "../components/Experiment/Header/Header";
 
 export default {
     title: "Header",
@@ -15,7 +15,7 @@ function getHeaderData(overrides = {}) {
         description: "<h1>Experiment ABC</h1><p>This is the experiment description</p>",
         nextBlockSlug: '/th1-mozart',
         nextBlockButtonText: 'Volgende experiment',
-        collectionSlug: '/collection/thkids',
+        experimentSlug: '/thkids',
         aboutButtonText: 'Over ons',
         totalScore: 420,
         scoreDisplayConfig: {
@@ -28,7 +28,7 @@ function getHeaderData(overrides = {}) {
 
 const getDecorator = (Story) => (
     <div
-        className="aha__collection"
+        className="aha__experiment"
         style={{ width: "100%", height: "100%", backgroundColor: "#aaa", padding: "1rem" }}
     >
         <Router>

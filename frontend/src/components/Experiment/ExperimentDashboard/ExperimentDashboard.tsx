@@ -1,29 +1,29 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-import ExperimentCollection from "@/types/ExperimentCollection";
-import Header from "@/components/ExperimentCollection/Header/Header";
+import Experiment from "@/types/Experiment";
+import Header from "@/components/Experiment/Header/Header";
 import Logo from "@/components/Logo/Logo";
 import IBlock from "@/types/Block";
 
 
-interface ExperimentCollectionDashboardProps {
-    experimentCollection: ExperimentCollection;
+interface ExperimentDashboardProps {
+    experiment: Experiment;
     participantIdUrl: string | null;
     totalScore: number;
 }
 
-export const ExperimentCollectionDashboard: React.FC<ExperimentCollectionDashboardProps> = ({ experimentCollection, participantIdUrl, totalScore }) => {
+export const ExperimentDashboard: React.FC<ExperimentDashboardProps> = ({ experiment, participantIdUrl, totalScore }) => {
 
-    const { dashboard, description } = experimentCollection;
-    const { nextBlockButtonText, aboutButtonText } = experimentCollection.theme?.header || { nextBlockButtonText: "", aboutButtonText: "" };
+    const { dashboard, description } = experiment;
+    const { nextBlockButtonText, aboutButtonText } = experiment.theme?.header || { nextBlockButtonText: "", aboutButtonText: "" };
 
-    const scoreDisplayConfig = experimentCollection.theme?.header?.score;
-    const nextBlockSlug = experimentCollection.nextBlock?.slug;
-    const showHeader = experimentCollection.theme?.header;
-    const socialMediaConfig = experimentCollection.socialMediaConfig;
+    const scoreDisplayConfig = experiment.theme?.header?.score;
+    const nextBlockSlug = experiment.nextBlock?.slug;
+    const showHeader = experiment.theme?.header;
+    const socialMediaConfig = experiment.socialMediaConfig;
 
-    const getExperimentHref = (slug: string) => `/${slug}${participantIdUrl ? `?participant_id=${participantIdUrl}` : ""}`;
+    const getExperimentHref = (slug: string) => `/block/${slug}${participantIdUrl ? `?participant_id=${participantIdUrl}` : ""}`;
 
     return (
         <div className="aha__dashboard">
@@ -31,7 +31,7 @@ export const ExperimentCollectionDashboard: React.FC<ExperimentCollectionDashboa
             {showHeader && (
                 <Header
                     nextBlockSlug={nextBlockSlug}
-                    collectionSlug={experimentCollection.slug}
+                    experimentSlug={experiment.slug}
                     totalScore={totalScore}
                     description={description}
                     scoreDisplayConfig={scoreDisplayConfig}
@@ -65,4 +65,4 @@ const ImageOrPlaceholder = ({ imagePath, alt }: { imagePath?: string, alt: strin
     return imgSrc ? <img src={imgSrc} alt={alt} /> : <div className="placeholder" />;
 }
 
-export default ExperimentCollectionDashboard;
+export default ExperimentDashboard;

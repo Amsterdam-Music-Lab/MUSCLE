@@ -2,7 +2,7 @@ import logging
 from django.template.loader import render_to_string
 from os.path import join
 from experiment.actions import Explainer, Step, Final, Info
-from experiment.actions.utils import get_current_collection_url
+from experiment.actions.utils import get_current_experiment_url
 from .toontjehoger_1_mozart import toontjehoger_ranks, ToontjeHoger1Mozart
 
 logger = logging.getLogger(__name__)
@@ -72,7 +72,7 @@ class ToontjeHogerKids1Mozart(ToontjeHoger1Mozart):
             body=body,
             heading="Het Mozart effect",
             button_label="Terug naar ToontjeHogerKids",
-            button_link=get_current_collection_url(session)
+            button_link=get_current_experiment_url(session)
         )
 
         return [*answer_explainer, *score, final, info]

@@ -23,7 +23,7 @@ def consent_upload_path(instance, filename):
     return f'consent/{folder_name}/{filename}'
 
 
-class ExperimentCollection(models.Model):
+class Experiment(models.Model):
     """ A model to allow nesting multiple phases with blocks into a 'parent' experiment """
     name = models.CharField(max_length=64, default='')
     description = models.TextField(blank=True, default='')
@@ -50,7 +50,7 @@ class ExperimentCollection(models.Model):
         return self.name or self.slug
 
     class Meta:
-        verbose_name_plural = "Experiment Collections"
+        verbose_name_plural = "Experiments"
 
     def associated_blocks(self):
         phases = self.phases.all()
@@ -58,10 +58,10 @@ class ExperimentCollection(models.Model):
             experiment.block for phase in phases for experiment in list(phase.blocks.all())]
 
     def export_sessions(self):
-        """export sessions for this collection"""
+        """export sessions for this experiment"""
         all_sessions = Session.objects.none()
-        for exp in self.associated_blocks():
-            all_sessions |= Session.objects.filter(block=exp).order_by('-started_at')
+        for block in self.associated_blocks():
+            all_sessions |= Session.objects.filter(block=block).order_by('-started_at')
         return all_sessions
 
     def current_participants(self):
@@ -74,7 +74,7 @@ class ExperimentCollection(models.Model):
 
 class Phase(models.Model):
     name = models.CharField(max_length=64, blank=True, default='')
-    series = models.ForeignKey(ExperimentCollection,
+    series = models.ForeignKey(Experiment,
                                on_delete=models.CASCADE, related_name='phases')
     index = models.IntegerField(default=0, help_text='Index of the phase in the series. Lower numbers come first.')
     dashboard = models.BooleanField(default=False)
@@ -328,8 +328,8 @@ class Feedback(models.Model):
 
 
 class SocialMediaConfig(models.Model):
-    experiment_collection = models.OneToOneField(
-        ExperimentCollection,
+    experiment = models.OneToOneField(
+        Experiment,
         on_delete=models.CASCADE,
         related_name='social_media_config'
     )
@@ -382,4 +382,4 @@ class SocialMediaConfig(models.Model):
         )
 
     def __str__(self):
-        return f"Social Media for {self.experiment_collection.name}"
+        return f"Social Media for {self.experiment.name}"

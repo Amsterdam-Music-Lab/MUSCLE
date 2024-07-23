@@ -6,11 +6,11 @@ from django.conf import settings
 from django.utils.translation import activate, gettext_lazy as _
 from django_markup.markup import formatter
 
-from .models import Block, ExperimentCollection, Phase, Feedback
+from .models import Block, Experiment, Phase, Feedback
 from section.models import Playlist
-from experiment.serializers import serialize_actions, serialize_experiment_collection, serialize_phase
+from experiment.serializers import serialize_actions, serialize_experiment, serialize_phase
 from experiment.rules import BLOCK_RULES
-from experiment.actions.utils import COLLECTION_KEY
+from experiment.actions.utils import EXPERIMENT_KEY
 from image.serializers import serialize_image
 from participant.utils import get_participant
 from theme.serializers import serialize_theme
@@ -81,33 +81,33 @@ def add_default_question_series(request, id):
     return JsonResponse({})
 
 
-def get_experiment_collection(
+def get_experiment(
             request: HttpRequest,
             slug: str,
             phase_index: int = 0,
         ) -> JsonResponse:
     '''
-    check which `Phase` objects are related to the `ExperimentCollection` with the given slug
+    check which `Phase` objects are related to the `Experiment` with the given slug
     retrieve the phase with the lowest order (= current_phase)
     return the next block from the current_phase without a finished session
     except if Phase.dashboard = True,
     then all blocks of the current_phase will be returned as an array (also those with finished session)
     '''
     try:
-        collection = ExperimentCollection.objects.get(slug=slug, active=True)
-    except ExperimentCollection.DoesNotExist:
-        raise Http404("Experiment collection does not exist or is not active")
+        experiment = Experiment.objects.get(slug=slug, active=True)
+    except Experiment.DoesNotExist:
+        raise Http404("Experiment does not exist or is not active")
     except Exception as e:
         logger.error(e)
         return JsonResponse(
-            {'error': 'Something went wrong while fetching the experiment collection. Please try again later.'},
+            {'error': 'Something went wrong while fetching the experiment. Please try again later.'},
             status=500
         )
 
-    request.session[COLLECTION_KEY] = slug
+    request.session[EXPERIMENT_KEY] = slug
     participant = get_participant(request)
     phases = list(Phase.objects.filter(
-        series=collection.id).order_by('index'))
+        series=experiment.id).order_by('index'))
     try:
         current_phase = phases[phase_index]
         serialized_phase = serialize_phase(
@@ -116,20 +116,20 @@ def get_experiment_collection(
             # if the current phase is not a dashboard and has no unfinished blocks, it will return None
             # set it to finished and continue to next phase
             phase_index += 1
-            return get_experiment_collection(request, slug, phase_index=phase_index)
+            return get_experiment(request, slug, phase_index=phase_index)
     except IndexError:
         serialized_phase = {
             'dashboard': [],
             'next_block': None
         }
     return JsonResponse({
-        **serialize_experiment_collection(collection),
+        **serialize_experiment(experiment),
         **serialized_phase
     })
 
 
 def get_associated_blocks(pk_list):
-    ''' get all the experiment objects registered in an ExperimentCollection field'''
+    ''' get all the experiment objects registered in an Experiment field'''
     return [Block.objects.get(pk=pk) for pk in pk_list]
 
 

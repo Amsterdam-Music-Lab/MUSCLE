@@ -6,8 +6,8 @@ from django.forms.models import model_to_dict
 from django.contrib.admin.sites import AdminSite
 from django.urls import reverse
 from django.utils.html import format_html
-from experiment.admin import BlockAdmin, ExperimentCollectionAdmin, PhaseAdmin
-from experiment.models import Block, ExperimentCollection, Phase, GroupedBlock
+from experiment.admin import BlockAdmin, ExperimentAdmin, PhaseAdmin
+from experiment.models import Block, Experiment, Phase, GroupedBlock
 from participant.models import Participant
 from result.models import Result
 from session.models import Session
@@ -27,7 +27,7 @@ class MockRequest:
 request = MockRequest()
 
 
-class TestAdminExperiment(TestCase):
+class TestAdminBlock(TestCase):
 
     @classmethod
     def setUpTestData(cls):
@@ -80,6 +80,15 @@ class TestAdminExperiment(TestCase):
         expected_name = "Test Block"
         expected_link = format_html(
             '<a href="{}">{}</a>', expected_url, expected_name)
+        self.assertEqual(link, expected_link)
+
+    def test_block_slug_link(self):
+        block = Block.objects.create(name="Test Block", slug="test-block")
+        site = AdminSite()
+        admin = BlockAdmin(block, site)
+        link = admin.block_slug_link(block)
+
+        expected_link = '<a href="/block/test-block" target="_blank" rel="noopener noreferrer" title="Open test-block block in new tab" >test-block&nbsp;<small>&#8599;</small></a>'
         self.assertEqual(link, expected_link)
 
 
@@ -172,24 +181,24 @@ class TestAdminBlockExport(TestCase):
             self.assertEqual(row['question_key'], 'test_question_' + str(i))
 
 
-class TestExperimentCollectionAdmin(TestCase):
+class TestExperimentAdmin(TestCase):
 
     @classmethod
     def setUpTestData(self):
-        self.experiment_series = ExperimentCollection.objects.create(
+        self.experiment_series = Experiment.objects.create(
             name='test',
             description='test description very long like the tea of oolong and the song of the bird in the morning',
             slug='TEST',
         )
 
     def setUp(self):
-        self.admin = ExperimentCollectionAdmin(model=ExperimentCollection,
+        self.admin = ExperimentAdmin(model=Experiment,
                                                admin_site=AdminSite
                                                )
 
     def test_experiment_series_admin_list_display(self):
         self.assertEqual(
-            ExperimentCollectionAdmin.list_display,
+            ExperimentAdmin.list_display,
             (
                 'name',
                 'slug_link',
@@ -207,11 +216,11 @@ class TestExperimentCollectionAdmin(TestCase):
         )
         self.assertEqual(
             self.admin.description_excerpt(
-                ExperimentCollection.objects.create(description='')),
+                Experiment.objects.create(description='')),
             ''
         )
 
-    def test_experiment_collection_admin_research_dashboard(self):
+    def test_experiment_admin_research_dashboard(self):
         request = RequestFactory().request()
         response = self.admin.dashboard(request, self.experiment_series)
         self.assertEqual(response.status_code, 200)
@@ -225,24 +234,24 @@ class PhaseAdminTest(TestCase):
                                 )
 
     def test_related_series_with_series(self):
-        series = ExperimentCollection.objects.create(name='Test Series')
+        series = Experiment.objects.create(name='Test Series')
         phase = Phase.objects.create(
             name='Test Group', index=1, randomize=False, series=series, dashboard=True)
         related_series = self.admin.related_series(phase)
         expected_url = reverse(
-            "admin:experiment_experimentcollection_change", args=[series.pk])
+            "admin:experiment_experiment_change", args=[series.pk])
         expected_related_series = format_html('<a href="{}">{}</a>', expected_url, series.name)
         self.assertEqual(related_series, expected_related_series)
 
     def test_blocks_with_no_blocks(self):
-        series = ExperimentCollection.objects.create(name='Test Series')
+        series = Experiment.objects.create(name='Test Series')
         phase = Phase.objects.create(
             name='Test Group', index=1, randomize=False, dashboard=True, series=series)
         blocks = self.admin.blocks(phase)
         self.assertEqual(blocks, "No blocks")
 
     def test_blocks_with_blocks(self):
-        series = ExperimentCollection.objects.create(name='Test Series')
+        series = Experiment.objects.create(name='Test Series')
         phase = Phase.objects.create(
             name='Test Group', index=1, randomize=False, dashboard=True, series=series)
         block1 = Block.objects.create(name='Block 1', slug='block-1')

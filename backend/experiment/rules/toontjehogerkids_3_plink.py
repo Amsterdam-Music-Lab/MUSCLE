@@ -6,11 +6,7 @@ from .toontjehoger_1_mozart import toontjehoger_ranks
 from experiment.actions import Explainer, Step, Score, Final, Info, Trial
 from experiment.actions.playback import PlayButton
 from experiment.actions.form import AutoCompleteQuestion, Form
-from experiment.actions.utils import get_current_collection_url
-from experiment.utils import non_breaking_spaces
-from section.models import Section
-from session.models import Session
-
+from experiment.actions.utils import get_current_experiment_url
 from .toontjehoger_3_plink import ToontjeHoger3Plink
 
 
@@ -141,7 +137,7 @@ class ToontjeHogerKids3Plink(ToontjeHoger3Plink):
             body=body,
             heading="Muziekherkenning",
             button_label="Terug naar ToontjeHogerKids",
-            button_link=get_current_collection_url(session)
+            button_link=get_current_experiment_url(session)
         )
 
         return [score, final, info]

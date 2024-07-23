@@ -18,7 +18,7 @@ class TestCategorization(BaseTest):
             self.driver.delete_all_cookies()
 
             block_slug = self.config['block_slugs'][block_name]
-            self.driver.get(f"{self.base_url}/{block_slug}")
+            self.driver.get(f"{self.base_url}/block/{block_slug}")
 
             # if page body contains the word "Error", raise an exception
             self.check_for_error(block_name, block_slug)

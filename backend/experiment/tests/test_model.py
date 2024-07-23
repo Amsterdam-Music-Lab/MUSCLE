@@ -2,7 +2,7 @@ from django.test import TestCase
 
 from image.models import Image
 from theme.models import ThemeConfig
-from experiment.models import Block, ExperimentCollection
+from experiment.models import Block, Experiment
 from participant.models import Participant
 from session.models import Session
 from result.models import Result
@@ -126,18 +126,18 @@ class BlockModelTest(TestCase):
         self.assertEqual(max_score, 13.0)
 
 
-class ExperimentCollectionModelTest(TestCase):
+class ExperimentModelTest(TestCase):
 
     @classmethod
     def setUpTestData(self):
-        self.experiment_series = ExperimentCollection.objects.create(
+        self.experiment_series = Experiment.objects.create(
             slug='test-series',
             name='Test Series',
             description='Test series description with a very long description. From here to the moon and from the moon to the stars.',
         )
 
     def test_experiment_series_str(self):
-        experiment_series_no_name = ExperimentCollection.objects.create(
+        experiment_series_no_name = Experiment.objects.create(
             slug='test-series-no-name',
         )
 

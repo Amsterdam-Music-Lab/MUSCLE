@@ -1,4 +1,3 @@
-import React from "react";
 import { Link } from "react-router-dom";
 import DefaultPage from "../Page/DefaultPage";
 import Loading from "../Loading/Loading";
@@ -7,10 +6,10 @@ import { useParticipantScores } from "../../API";
 import { URLS } from "@/config";
 import ParticipantLink from "../ParticipantLink/ParticipantLink";
 
-// Profile loads and shows the profile of a participant for a given experiment
+/** Profile loads and shows the profile of a participant for a given experiment */
 const Profile = () => {
     // API hooks
-    const [data, loadingData] = useParticipantScores();
+    const [data, loadingData] = useParticipantScores<ProfileViewProps>();
 
     // View
     let view = null;
@@ -37,7 +36,27 @@ const Profile = () => {
     return <DefaultPage className="aha__profile">{view}</DefaultPage>;
 };
 
-export const ProfileView = (data) => {
+interface ProfileViewProps {
+    messages: {
+        title: string;
+        summary: string;
+        continue: string;
+        points: string;
+    };
+    scores: {
+        block_slug: string;
+        block_name: string;
+        score: number;
+        date: string;
+        rank: {
+            class: string;
+            text: string;
+        };
+        finished_at: string;
+    }[];
+}
+
+export const ProfileView = (data: ProfileViewProps) => {
 
     // Highest score
     data.scores.sort((a, b) =>
@@ -70,13 +89,13 @@ export const ProfileView = (data) => {
                                     <Link
                                         to={URLS.block.replace(
                                             ":slug",
-                                            score.experiment_slug
+                                            score.block_slug
                                         )}
                                     >
                                         {score.block_name}
                                     </Link>
                                 </h4>
-                                <h5>{score.score} {data.points}</h5>
+                                <h5>{score.score} {data.messages.points}</h5>
                                 <p>{score.date}</p>
                             </div>
                         </div>
