@@ -67,7 +67,6 @@ const App = () => {
                         {/* Default experiment */}
                         <Route
                             path="/"
-                            exact
                             element={<Redirect to={URLS.experiment.replace(":slug", EXPERIMENT_SLUG)} />}
                         />
 
@@ -78,7 +77,7 @@ const App = () => {
                         <Route path={URLS.internalRedirect} element={<InternalRedirect />} />
 
                         {/* Block */}
-                        <Route path={URLS.block} element={Block} />
+                        <Route path={URLS.block} element={<Block />} />
 
                         {/* Experiment */}
                         <Route path={URLS.experiment} element={<Experiment />} />
