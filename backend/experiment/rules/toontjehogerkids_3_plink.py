@@ -7,7 +7,10 @@ from experiment.actions import Explainer, Step, Score, Final, Info, Trial
 from experiment.actions.playback import PlayButton
 from experiment.actions.form import AutoCompleteQuestion, Form
 from experiment.actions.utils import get_current_experiment_url
+from experiment.utils import non_breaking_spaces
 from .toontjehoger_3_plink import ToontjeHoger3Plink
+from section.models import Section
+from session.models import Session
 
 
 from result.utils import prepare_result
