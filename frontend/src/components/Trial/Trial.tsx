@@ -13,15 +13,18 @@ import Button from "../Button/Button";
  * If "html" is provided, it will show html content
  * If "feedback_form" is provided, it will present a form of questions to the user
  */
-const Trial = ({
-    playback,
-    html,
-    feedback_form,
-    config,
-    result_id,
-    onNext,
-    onResult,
-}) => {
+const Trial = (props) => {
+
+    const {
+        playback,
+        html,
+        feedback_form,
+        config,
+        result_id,
+        onNext,
+        onResult,
+    } = props;
+
     // Main component state
     const [formActive, setFormActive] = useState(!config.listen_first);
     // Preload is immediately set to ready if we don't have a playback object
