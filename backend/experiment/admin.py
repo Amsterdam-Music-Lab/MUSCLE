@@ -301,7 +301,6 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, NestedModelAdmin):
         )
 
     def description_excerpt(self, obj):
-
         if len(obj.description) < 50:
             return obj.description
 
@@ -364,8 +363,15 @@ admin.site.register(Experiment, ExperimentAdmin)
 
 
 class PhaseAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
-    list_display = ('name_link', 'related_series', 'index', 'dashboard', 'randomize', 'blocks')
-    fields = ['name', 'series', 'index', 'dashboard', 'randomize']
+    list_display = (
+        "name_link",
+        "related_experiment",
+        "index",
+        "dashboard",
+        "randomize",
+        "blocks",
+    )
+    fields = ["name", "series", "index", "dashboard", "randomize"]
     inlines = [BlockInline]
 
     def name_link(self, obj):
@@ -373,7 +379,7 @@ class PhaseAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
         url = reverse("admin:experiment_phase_change", args=[obj.pk])
         return format_html('<a href="{}">{}</a>', url, obj_name)
 
-    def related_series(self, obj):
+    def related_experiment(self, obj):
         url = reverse("admin:experiment_experiment_change", args=[obj.series.pk])
         return format_html('<a href="{}">{}</a>', url, obj.series.name)
 
@@ -383,7 +389,14 @@ class PhaseAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
         if not blocks:
             return "No blocks"
 
-        return format_html(', '.join([f'<a href="/admin/experiment/block/{block.id}/change/">{block.name}</a>' for block in blocks]))
+        return format_html(
+            ", ".join(
+                [
+                    f'<a href="/admin/experiment/block/{block.id}/change/">{block.name}</a>'
+                    for block in blocks
+                ]
+            )
+        )
 
 
 admin.site.register(Phase, PhaseAdmin)
