@@ -28,8 +28,8 @@ exclude = [
     "venv",
 ]
 
-# Same as Black.
-line-length = 88
+# Set line length to match flake8 configuration
+line-length = 120
 indent-width = 4
 
 # Assume Python 3.8
@@ -40,7 +40,33 @@ target-version = "py38"
 # Unlike Flake8, Ruff doesn't enable pycodestyle warnings (`W`) or
 # McCabe complexity (`C901`) by default.
 select = ["E4", "E7", "E9", "F"]
-ignore = []
+
+# Disable a variety of commonly ignored rules.
+ignore = [
+    "E722", # Do not use bare 'except'
+    "F722", # Syntax error identified by pyflakes
+    "F821", # Undefined name
+    "E501", # Line too long
+    "F401", # Unused import
+    "F403", # 'from module import *' used; unable to detect undefined names
+    "F405", # Name may be undefined, or defined from star imports
+    "F811", # Redefinition of unused name from line N
+    "F841", # Local variable name is assigned to but never used
+    "E201", # Whitespace after '('
+    "E202", # Whitespace before ')'
+    "E203", # Whitespace before ':'
+    "E222", # Multiple spaces after operator
+    "E225", # Missing whitespace around operator
+    "E231", # Missing whitespace after ','
+    "E251", # Unexpected spaces around keyword / parameter equals
+    "E262", # Inline comment should start with '# '
+    "E261", # At least two spaces before inline comment
+    "W191", # Indentation contains tabs
+    "W291", # Trailing whitespace
+    "W292", # No newline at end of file
+    "W293", # Blank line contains whitespace
+    "W391", # Blank line at end of file
+]
 
 # Allow fix for all enabled rules (when `--fix`) is provided.
 fixable = ["ALL"]
@@ -62,16 +88,8 @@ skip-magic-trailing-comma = false
 # Like Black, automatically detect the appropriate line ending.
 line-ending = "auto"
 
-# Enable auto-formatting of code examples in docstrings. Markdown,
-# reStructuredText code/literal blocks and doctests are all supported.
-#
-# This is currently disabled by default, but it is planned for this
-# to be opt-out in the future.
+# Disable auto-formatting of code examples in docstrings to match flake8 behavior.
 docstring-code-format = false
 
-# Set the line length limit used when formatting code snippets in
-# docstrings.
-#
-# This only has an effect when the `docstring-code-format` setting is
-# enabled.
+# Set the line length limit used when formatting code snippets in docstrings.
 docstring-code-line-length = "dynamic"
