@@ -1,7 +1,6 @@
 import csv
 from zipfile import ZipFile
 from io import BytesIO
-from django.utils.safestring import mark_safe
 
 from django.conf import settings
 from django.contrib import admin
@@ -217,7 +216,7 @@ class BlockAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
     def image_preview(self, obj):
         if obj.image and obj.image.file:
             img_src = obj.image.file.url
-            return mark_safe(f'<img src="{img_src}" style="max-height: 50px;"/>')
+            return format_html(f'<img src="{img_src}" style="max-height: 50px;"/>')
         return ""
 
     def block_name_link(self, obj):
