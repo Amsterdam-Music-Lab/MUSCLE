@@ -80,16 +80,6 @@ class Session(models.Model):
         """Get json data as object"""
         return self.json_data if self.json_data else {}
 
-    def save_json_data_key(self, key: str, value):
-        """Set json data key"""
-        data = self.load_json_data()
-        data[key] = value
-        self.save_json_data(data)
-
-    def load_json_data_key(self, key: str, default=None):
-        """Get json data key"""
-        return self.load_json_data()[key] if key in self.load_json_data() else default
-
     def export_admin(self):
         """Export data for admin"""
         return {
