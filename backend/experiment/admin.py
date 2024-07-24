@@ -22,7 +22,6 @@ from experiment.models import (
     Experiment,
     Phase,
     Feedback,
-    GroupedBlock,
     SocialMediaConfig,
 )
 from question.admin import QuestionSeriesInline
@@ -248,8 +247,8 @@ class BlockAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
 admin.site.register(Block, BlockAdmin)
 
 
-class GroupedBlockInline(NestedTabularInline):
-    model = GroupedBlock
+class BlockInline(NestedStackedInline):
+    model = Block
     extra = 1
     sortable_field_name = "index"
 
@@ -258,7 +257,7 @@ class PhaseInline(NestedTabularInline):
     model = Phase
     extra = 1
     sortable_field_name = "index"
-    inlines = [GroupedBlockInline]
+    inlines = [BlockInline]
 
 
 class SocialMediaConfigInline(NestedStackedInline):
@@ -302,7 +301,6 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, NestedModelAdmin):
         )
 
     def description_excerpt(self, obj):
-
         if len(obj.description) < 50:
             return obj.description
 
@@ -367,26 +365,26 @@ admin.site.register(Experiment, ExperimentAdmin)
 class PhaseAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
     list_display = (
         "name_link",
-        "related_series",
+        "related_experiment",
         "index",
         "dashboard",
         "randomize",
         "blocks",
     )
     fields = ["name", "series", "index", "dashboard", "randomize"]
-    inlines = [GroupedBlockInline]
+    inlines = [BlockInline]
 
     def name_link(self, obj):
         obj_name = obj.__str__()
         url = reverse("admin:experiment_phase_change", args=[obj.pk])
         return format_html('<a href="{}">{}</a>', url, obj_name)
 
-    def related_series(self, obj):
+    def related_experiment(self, obj):
         url = reverse("admin:experiment_experiment_change", args=[obj.series.pk])
         return format_html('<a href="{}">{}</a>', url, obj.series.name)
 
     def blocks(self, obj):
-        blocks = GroupedBlock.objects.filter(phase=obj)
+        blocks = Block.objects.filter(phase=obj)
 
         if not blocks:
             return "No blocks"
@@ -394,7 +392,7 @@ class PhaseAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
         return format_html(
             ", ".join(
                 [
-                    f'<a href="/admin/experiment/groupedblock/{block.id}/change/">{block.block.name}</a>'
+                    f'<a href="/admin/experiment/block/{block.id}/change/">{block.name}</a>'
                     for block in blocks
                 ]
             )
