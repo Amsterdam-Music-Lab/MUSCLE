@@ -34,7 +34,7 @@ describe('Info Component', () => {
         expect(button?.tagName).toBe('BUTTON');
     });
 
-    test('does not renders button without link and onNext when only button_label is provided', () => {
+    test('does not render button without link and onNext when only button_label is provided', () => {
         render(<Info body="Test body" button_label="Click me" />);
         expect(screen.queryByRole('button')).toBeNull();
     });
