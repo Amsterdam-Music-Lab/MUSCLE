@@ -247,7 +247,7 @@ class BlockAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
 admin.site.register(Block, BlockAdmin)
 
 
-class BlockInline(admin.StackedInline):
+class BlockInline(NestedStackedInline):
     model = Block
     extra = 1
     sortable_field_name = "index"
