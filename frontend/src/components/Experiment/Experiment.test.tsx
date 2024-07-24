@@ -141,7 +141,6 @@ describe('Experiment', () => {
 
     it('shows a footer if a theme with footer is available', async () => {
         mock.onGet().replyOnce(200, { dashboard: [blockWithAllProps], nextBlock: block1, theme });
-        console.log("Knalvis deluxe!")
         render(
             <MemoryRouter>
                 <Experiment />
