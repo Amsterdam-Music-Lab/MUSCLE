@@ -315,7 +315,14 @@ def create_theme_config(name='test_theme') -> ThemeConfig:
         disclaimer='Test Disclaimer',
         privacy='Test Privacy',
     )
-    footer_config.logos.add(Image.objects.create(file='test-logo.jpg'))
+    footer_config.logos.add(
+        Image.objects.create(file='test-logo-b.jpg'),
+        through_defaults={'index': 1}
+        )
+    footer_config.logos.add(
+        Image.objects.create(file='test-logo-a.jpg'),
+        through_defaults={'index': 0}
+        )
 
     return theme_config
 

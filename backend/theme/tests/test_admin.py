@@ -3,7 +3,7 @@ from django.test import TestCase
 
 from image.models import Image
 from theme.admin import ThemeConfigAdmin
-from theme.models import FooterConfig, ThemeConfig
+from theme.models import FooterConfig, ThemeConfig, SponsorImage
 
 
 class ThemeConfigAdminTest(TestCase):
@@ -62,8 +62,13 @@ class ThemeConfigAdminTest(TestCase):
     def test_footer_overview(self):
         theme = ThemeConfig.objects.create(name='MyTheme')
         footer = FooterConfig.objects.create(theme=theme)
-        image1 = Image.objects.create(file='path/to/image.jpg')
-        image2 = Image.objects.create(file='path/to/another/image.png')
-        footer.logos.add(image1, image2)
+        footer.logos.add(
+            Image.objects.create(file='path/to/image.jpg'),
+            through_defaults={'index': 1}
+        )
+        footer.logos.add(
+            Image.objects.create(file='path/to/another/image.png'),
+            through_defaults={'index': 0}
+        )
         preview = self.admin.footer_overview(theme)
         self.assertEqual(preview, "Footer with 2 logos")
