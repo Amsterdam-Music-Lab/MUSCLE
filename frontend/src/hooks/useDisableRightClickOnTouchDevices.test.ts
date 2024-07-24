@@ -1,4 +1,4 @@
-import { vi } from "vitest";
+import { vi, describe, afterEach, test, expect } from "vitest";
 import { renderHook } from '@testing-library/react'
 import { waitFor } from "@testing-library/react";
 import useDisableRightClickOnTouchDevices from "./useDisableRightClickOnTouchDevices";
@@ -27,7 +27,7 @@ describe("useDisableRightClickOnTouchDevices", () => {
         const mockEvent = new MouseEvent('contextmenu');
         mockEvent.preventDefault = vi.fn();
 
-        const spy = vi.spyOn(mockEvent, 'preventDefault').mockImplementation(() => { console.log("Drikus!") });
+        const spy = vi.spyOn(mockEvent, 'preventDefault').mockImplementation(() => void 0);
 
         renderHook(() => useDisableRightClickOnTouchDevices());
 

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import { TransitionGroup, CSSTransition } from "react-transition-group";
-import { withRouter } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import classNames from "classnames";
 
 import useBoundStore from "@/util/stores";
@@ -25,7 +25,8 @@ import useResultHandler from "@/hooks/useResultHandler";
 // - It handles sending results to the server
 // - Implements participant_id as URL parameter, e.g. http://localhost:3000/bat?participant_id=johnsmith34
 //   Empty URL parameter "participant_id" is the same as no URL parameter at all
-const Block = ({ match }) => {
+const Block = () => {
+    const { slug } = useParams();
     const startState = { view: "LOADING" };
     // Stores
     const setError = useBoundStore(state => state.setError);
@@ -45,7 +46,7 @@ const Block = ({ match }) => {
     const playlist = useRef(null);
 
     // API hooks
-    const [block, loadingBlock] = useBlock(match.params.slug);
+    const [block, loadingBlock] = useBlock(slug);
 
     const loadingText = block ? block.loading_text : "";
     const className = block ? block.class_name : "";
@@ -278,4 +279,4 @@ const Block = ({ match }) => {
     );
 };
 
-export default withRouter(Block);
+export default Block;

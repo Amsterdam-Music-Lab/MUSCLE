@@ -30,7 +30,7 @@ export const URLS = {
     storeProfile: "/profile/store",
     block: "/block/:slug",
     experimentAbout: "/:slug/about",
-    experiment: "/:slug",
+    experiment: "/:slug/*",
     internalRedirect: "/redirect/:path",
     reloadParticipant: "/participant/reload/:id/:hash",
     theme: "/theme/:id",

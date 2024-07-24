@@ -1,11 +1,21 @@
 import { MemoryRouter } from 'react-router-dom';
 import { render, screen, waitFor } from '@testing-library/react';
-import { it, expect, describe } from 'vitest';
+import { vi, it, expect, describe, beforeEach } from 'vitest';
 import MockAdapter from "axios-mock-adapter";
 import axios from 'axios';
 
 import Experiment from './Experiment';
 let mock = new MockAdapter(axios);
+
+let mockUseParams = vi.fn();
+
+vi.mock('react-router-dom', async () => {
+    const actual = await vi.importActual('react-router-dom');
+    return {
+        ...actual,
+        useParams: () => mockUseParams()
+    };
+});
 
 const getBlock = (overrides = {}) => {
     return {
@@ -52,11 +62,16 @@ const blockWithAllProps = getBlock({ image: 'some_image.jpg', description: 'Some
 
 describe('Experiment', () => {
 
+    beforeEach(() => {
+        mockUseParams.mockReturnValue({ slug: 'some_experiment' });
+    });
+
     it('forwards to a single block if it receives an empty dashboard array', async () => {
         mock.onGet().replyOnce(200, { dashboard: [], nextBlock: block1 });
+
         render(
             <MemoryRouter>
-                <Experiment match={{ params: { slug: 'some_experiment' } }} />
+                <Experiment />
             </MemoryRouter>);
         await waitFor(() => {
             expect(screen.queryByRole('menu')).toBeFalsy();
@@ -67,7 +82,7 @@ describe('Experiment', () => {
         mock.onGet().replyOnce(200, new Promise(() => { }));
         render(
             <MemoryRouter>
-                <Experiment match={{ params: { slug: 'some_experiment' } }} />
+                <Experiment />
             </MemoryRouter>
         );
         waitFor(() => {
@@ -79,7 +94,7 @@ describe('Experiment', () => {
         mock.onGet().replyOnce(200, { dashboard: [block1], nextBlock: block1 });
         render(
             <MemoryRouter>
-                <Experiment match={{ params: { slug: 'some_experiment' } }} />
+                <Experiment />
             </MemoryRouter>
         );
         waitFor(() => {
@@ -91,7 +106,7 @@ describe('Experiment', () => {
         mock.onGet().replyOnce(200, { dashboard: [blockWithAllProps], nextBlock: block1 });
         render(
             <MemoryRouter>
-                <Experiment match={{ params: { slug: 'some_experiment' } }} />
+                <Experiment />
             </MemoryRouter>
         );
         waitFor(() => {
@@ -103,11 +118,12 @@ describe('Experiment', () => {
         mock.onGet().replyOnce(200, { dashboard: [blockWithAllProps], nextBlock: block1 });
         render(
             <MemoryRouter>
-                <Experiment match={{ params: { slug: 'some_experiment' } }} />
+                <Experiment />
             </MemoryRouter>
         );
         waitFor(() => {
-            expect(screen.getByText('Some description')).toBeInTheDocument();
+            const description = screen.getByText('Some description');
+            expect(description).not.toBeNull();
         })
     });
 
@@ -115,7 +131,7 @@ describe('Experiment', () => {
         mock.onGet().replyOnce(200, { consent: '<p>This is our consent form!</p>', dashboard: [blockWithAllProps], nextBlock: block1 });
         render(
             <MemoryRouter>
-                <Experiment match={{ params: { slug: 'some_experiment' } }} />
+                <Experiment />
             </MemoryRouter>
         );
         await waitFor(() => {
@@ -127,7 +143,7 @@ describe('Experiment', () => {
         mock.onGet().replyOnce(200, { dashboard: [blockWithAllProps], nextBlock: block1, theme });
         render(
             <MemoryRouter>
-                <Experiment match={{ params: { slug: 'some_experiment' } }} />
+                <Experiment />
             </MemoryRouter>
         );
         await waitFor(() => {

@@ -2,15 +2,10 @@ import { useRef } from "react";
 import {
     FacebookShareButton, TwitterShareButton, WeiboShareButton, WhatsappShareButton
 } from 'next-share'
+import ISocial from "@/types/Social";
 
-interface SocialProps {
-    social: {
-        apps: 'facebook' | 'whatsapp' | 'twitter' | 'weibo' | 'share' | 'clipboard',
-        url: string,
-        message: string,
-        hashtags: string[],
-        text: string
-    }
+export interface SocialProps {
+    social: ISocial
 }
 
 /**
