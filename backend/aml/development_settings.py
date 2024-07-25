@@ -1,31 +1,41 @@
 """Settings for development environment"""
 
+import os
 from aml.base_settings import *
 
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.getenv('SQL_DATABASE'),
-        'USER': os.getenv('SQL_USER'),
-        'PASSWORD': os.getenv('SQL_PASSWORD'),
-        'HOST': os.getenv('SQL_HOST'),
-        'PORT': os.getenv('SQL_PORT'),
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": os.getenv("SQL_DATABASE"),
+        "USER": os.getenv("SQL_USER"),
+        "PASSWORD": os.getenv("SQL_PASSWORD"),
+        "HOST": os.getenv("SQL_HOST"),
+        "PORT": os.getenv("SQL_PORT"),
     }
 }
 
-INSTALLED_APPS += ['debug_toolbar']
+# Some installed apps neeed to be prepended to the list
+INSTALLED_APPS = ["django_extensions"] + INSTALLED_APPS
 
-MIDDLEWARE = ['debug_toolbar.middleware.DebugToolbarMiddleware'] + MIDDLEWARE
+# And some need to be appended
+INSTALLED_APPS += ["debug_toolbar"]
+
+MIDDLEWARE = ["debug_toolbar.middleware.DebugToolbarMiddleware"] + MIDDLEWARE
 
 INTERNAL_IPS = [
-    '127.0.0.1',
+    "127.0.0.1",
 ]
 
 CORS_ALLOW_ALL_ORIGINS = True
 
 TESTING = DEBUG
 
-BASE_URL = os.getenv('BASE_URL') or 'http://localhost:8000'
+BASE_URL = os.getenv("BASE_URL") or "http://localhost:8000"
+
+GRAPH_MODELS = {
+    "all_applications": True,
+    "group_models": True,
+}
