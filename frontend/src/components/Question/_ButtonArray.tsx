@@ -41,9 +41,9 @@ const ButtonArray = ({ question, disabled, onChange, value }: ButtonArrayProps) 
         <div className="aha__buttons buttons d-flex flex-wrap justify-content-center p-3 w-100">
 
             <div className={classNames("btn-group-toggle-custom", question.style)} role="group" data-toggle="buttons" aria-label="Button Array">
-                {Object.keys(question.choices).map((val, index) => (
+                {Object.keys(choices).map((val, index) => (
                     <ToggleButton
-                        label={question.choices[val]}
+                        label={choices[val]}
                         value={val}
                         index={index}
                         name={question.key}
