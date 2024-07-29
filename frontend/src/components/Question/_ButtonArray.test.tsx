@@ -1,8 +1,8 @@
-import React from 'react';
 import { vi } from 'vitest';
 import { render, fireEvent } from '@testing-library/react';
 import ButtonArray from './_ButtonArray';
 import { QuestionViews } from '@/types/Question'
+import { expect, describe, it } from 'vitest';
 
 const getProps = (overrides = {}) => ({
     question: {
@@ -66,4 +66,16 @@ describe('ButtonArray', () => {
 
         expect(props.onChange).not.toHaveBeenCalled();
     });
+
+    it('throws an error if the question has no choices', () => {
+        const props = getProps({ question: { ...getProps().question, choices: {} } });
+
+        expect(() => render(<ButtonArray {...props} />)).toThrowError('ButtonArray question must have choices');
+
+        const props2 = getProps({ question: { ...getProps().question } });
+        delete props2.question.choices;
+
+        expect(() => render(<ButtonArray {...props2} />)).toThrowError('ButtonArray question must have choices');
+    });
+
 });
