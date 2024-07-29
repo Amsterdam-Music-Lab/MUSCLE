@@ -72,7 +72,6 @@ class VisualMatchingPairsTest(TestCase):
         self.assertEqual(score, 10)
 
     def test_next_round_logic(self):
-        self.session.increment_round()
         next_round = self.rules.next_round(self.session)
         self.assertEqual(len(next_round), 1)
         self.assertEqual(next_round[0].title, 'Visual Tune twins')

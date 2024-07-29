@@ -63,7 +63,6 @@ class MatchingPairsTest(TestCase):
                 # two more pairs are selected for this round, one saved for next
                 assert len(pairs) == 1
                 assert len(degradations) == 0
-            self.session.increment_round()
 
     def intermediate_score_request(self, data):
         request_data = {'json_data': json.dumps(

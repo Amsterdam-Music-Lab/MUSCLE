@@ -26,6 +26,7 @@ class ToontjeHoger3Plink(Base):
     SCORE_EXTRA_1_CORRECT = 4
     SCORE_EXTRA_2_CORRECT = 4
     SCORE_EXTRA_WRONG = 0
+    relevant_results = ['plink']
 
     def validate_playlist(self, playlist: Playlist):
         """ The original Toontjehoger (Plink) playlist has the following format:
@@ -87,7 +88,7 @@ class ToontjeHoger3Plink(Base):
     def next_round(self, session):
         """Get action data for the next round"""
 
-        rounds_passed = session.get_relevant_results(['plink']).count()
+        rounds_passed = session.round_passed()
 
         # Round 1
         if rounds_passed == 0:
@@ -158,9 +159,9 @@ class ToontjeHoger3Plink(Base):
                 feedback_prefix, question_part, section_part)
 
         config = {'show_total_score': True}
-        round_number = session.get_relevant_results(['plink']).count() - 1
+        round_number = session.round_passed()
         score_title = "Ronde %(number)d / %(total)d" %\
-            {'number': round_number+1, 'total': session.block.rounds}
+            {'number': round_number, 'total': session.block.rounds}
         return Score(session, config=config, feedback=feedback, score=score, title=score_title)
 
     def get_plink_round(self, session: Session, present_score=False):

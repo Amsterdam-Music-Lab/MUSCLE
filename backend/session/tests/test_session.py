@@ -51,31 +51,6 @@ class SessionTest(TestCase):
         assert response.status_code == 200
         assert Session.objects.filter(finished_at__isnull=False).count() == 1
 
-    def test_total_questions(self):
-        assert self.session.total_questions() == 0
-        Result.objects.create(
-            session=self.session
-        )
-        assert self.session.total_questions() == 1
-
-    def test_skipped_answered_questions(self):
-        Result.objects.create(
-            session=self.session,
-            given_response=''
-        )
-        assert self.session.answered_questions() == 0
-        Result.objects.create(
-            session=self.session,
-            given_response='Something really elaborate'
-        )
-        assert self.session.skipped_questions() == 1
-        assert self.session.answered_questions() == 1
-        Result.objects.create(
-            session=self.session,
-            given_response=''
-        )
-        assert self.session.skipped_questions() == 2
-
     def test_percentile_rank(self):
         # create one session with relatively low score
         Session.objects.create(
@@ -114,6 +89,18 @@ class SessionTest(TestCase):
         assert previous_section
         last_song = self.session.last_song()
         assert last_song == 'Beavis - Butthead'
+
+    def test_previous_score(self):
+        for i in range(10):
+            keys = ['a', 'a', 'b', 'b', 'b', 'b', 'c', 'c', 'c', 'd']
+            Result.objects.create(
+                session=self.session,
+                question_key=keys[i],
+                score=i
+            )
+        result = self.session.get_previous_result(['c', 'd'])
+        assert result.score == 9
+
 
     def test_json_data(self):
         self.session.save_json_data({'test': 'tested'})

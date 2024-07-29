@@ -83,7 +83,7 @@ class Hooked(Base):
 
     def next_round(self, session: Session):
         """Get action data for the next round"""
-        round_number = self.get_current_round(session)
+        round_number = session.rounds_passed(self.relevant_keys)
 
         # If the number of results equals the number of block.rounds,
         # close the session and return data for the final_score view.
@@ -152,9 +152,6 @@ class Hooked(Base):
                     self.next_heard_before_action(session, round_number))
 
         return actions
-
-    def get_current_round(self, session: Session):
-        return session.get_relevant_results(self.relevant_keys).count()
 
     def heard_before_explainer(self):
         """Explainer for heard-before rounds"""

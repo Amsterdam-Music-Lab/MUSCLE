@@ -91,9 +91,9 @@ class RhythmDiscrimination(Base):
         ]
 
     def next_round(self, session):
-        next_round_number = session.get_next_round()
+        next_round_number = session.rounds_passed()
 
-        if next_round_number == 1:
+        if next_round_number == 0:
             plan_stimuli(session)
 
         return next_trial_actions(
@@ -111,10 +111,10 @@ def next_trial_actions(session, round_number):
         print('Missing plan key: %s' % str(error))
         return actions
 
-    if len(plan) == round_number-1:
+    if len(plan) == round_number:
         return [finalize_block(session)]
 
-    condition = plan[round_number-1]
+    condition = plan[round_number]
 
     if session.final_score == 0:
         # practice: add feedback on previous result
@@ -124,7 +124,7 @@ def next_trial_actions(session, round_number):
             actions.append(
                 response_explainer(previous_results.first().score, same)
             )
-        if round_number == 5:
+        if round_number == 4:
             total_score = sum(
                 [res.score for res in previous_results.all()[:4]])
             if total_score < 2:
