@@ -34,6 +34,7 @@ const Checkboxes = ({ question, value, onChange }: CheckboxesProps) => {
             {Object.keys(choices).map((val, index) => (
                 <Checkbox
                     key={index}
+                    // This prop does not exist on Checkbox
                     name={question.key}
                     label={choices[val]}
                     value={val}
