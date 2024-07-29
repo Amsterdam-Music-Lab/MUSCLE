@@ -72,4 +72,19 @@ describe('AutoComplete', () => {
         expect(scrollToSpy).toHaveBeenCalledWith(0, 0);
         scrollToSpy.mockRestore();
     });
+
+    it('throws an error if question has no choices', () => {
+        const mockQuestionNoChoices: Question = {
+            key: 'test-autocomplete',
+            choices: {}
+        };
+
+        expect(() => render(<AutoComplete question={mockQuestionNoChoices} value="" onChange={() => { }} />)).toThrowError();
+
+        const mockQuestionNoChoices2: Question = {
+            key: 'test-autocomplete',
+        };
+
+        expect(() => render(<AutoComplete question={mockQuestionNoChoices2} value="" onChange={() => { }} />)).toThrowError();
+    });
 });

@@ -18,7 +18,7 @@ const AutoComplete = ({ question, value, onChange }: AutoCompleteProps) => {
 
     const choices = question.choices;
 
-    if (!choices) {
+    if (!choices || Object.keys(choices).length <= 0) {
         throw new Error("AutoComplete question must have choices");
     }
 
