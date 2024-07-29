@@ -11,6 +11,7 @@ export enum QuestionViews {
 }
 
 export default interface Question {
+    key: string;
     question: string;
     view: QuestionViews;
     value?: any;
