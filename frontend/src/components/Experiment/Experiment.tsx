@@ -13,7 +13,6 @@ import DefaultPage from "../Page/DefaultPage";
 import Loading from "../Loading/Loading";
 import ExperimentAbout from "./ExperimentAbout/ExperimentAbout";
 import ExperimentDashboard from "./ExperimentDashboard/ExperimentDashboard";
-import { URLS } from "@/config";
 import IExperiment from "@/types/Experiment";
 import Redirect from "@/components/Redirect/Redirect";
 

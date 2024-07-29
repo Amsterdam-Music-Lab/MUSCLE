@@ -46,11 +46,10 @@ const Radio = ({ label, value, checked, onChange }: RadioProps) => {
     return (
         <div
             className={classNames("radio", { checked })}
-            onClick={() => {
-                onChange(value);
-            }}
+            onClick={() => onChange(value)}
             tabIndex={0}
             role="radio"
+            aria-checked={checked}
             onKeyDown={() => onChange(value)}
         >
             <i></i>

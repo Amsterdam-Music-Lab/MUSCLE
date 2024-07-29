@@ -12,7 +12,7 @@ interface RangeProps {
 const Range = ({ question, value, onChange }: RangeProps) => {
     const emptyValue = !value;
 
-    if (!question.min_value && question.min_value !== 0 || !question.max_value && question.max_value !== 0) {
+    if ((!question.min_value && question.min_value !== 0) || (!question.max_value && question.max_value !== 0)) {
         throw new Error('min_value and max_value are required for the Range component');
     }
 

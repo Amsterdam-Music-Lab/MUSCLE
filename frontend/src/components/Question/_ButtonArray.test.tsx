@@ -35,7 +35,7 @@ describe('ButtonArray', () => {
 
         const button = getByText('Yes');
 
-        expect(button.classList.contains('checked')).to.be.true;
+        expect(button.classList.contains('checked')).toBeTruthy();
     });
 
     it('does not add the "checked" class to a button when it is not selected', () => {
@@ -44,7 +44,7 @@ describe('ButtonArray', () => {
 
         const button = getByText('Unsure');
 
-        expect(button.classList.contains('checked')).to.be.false;
+        expect(button.classList.contains('checked')).toBeFalsy();
     });
 
     it('calls the onChange function when a button is clicked', () => {
