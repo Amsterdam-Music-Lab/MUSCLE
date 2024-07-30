@@ -55,7 +55,7 @@ class Experiment(models.Model):
     def associated_blocks(self):
         phases = self.phases.all()
         return [
-            experiment.block for phase in phases for experiment in list(phase.blocks.all())]
+            block for phase in phases for block in list(phase.blocks.all())]
 
     def export_sessions(self):
         """export sessions for this experiment"""
@@ -93,26 +93,17 @@ class Phase(models.Model):
         ordering = ['index']
 
 
-class GroupedBlock(models.Model):
-    block = models.ForeignKey('Block', on_delete=models.CASCADE)
-    phase = models.ForeignKey(
-        Phase,
-        on_delete=models.CASCADE,
-        related_name='blocks'
-    )
-    index = models.IntegerField(default=0, help_text='Order of the block in the phase. Lower numbers come first.')
-
-    def __str__(self):
-        return f'{self.block.name} - {self.phase.name} - {self.index}'
-
-    class Meta:
-        ordering = ['index']
-        verbose_name_plural = "Grouped Blocks"
-
-
 class Block(models.Model):
     """Root entity for configuring experiment blocks"""
 
+    phase = models.ForeignKey(
+        Phase,
+        on_delete=models.CASCADE,
+        related_name='blocks',
+        blank=True,
+        null=True
+    )
+    index = models.IntegerField(default=0, help_text='Index of the block in the phase. Lower numbers come first.')
     playlists = models.ManyToManyField('section.Playlist', blank=True)
     name = models.CharField(db_index=True, max_length=64)
     description = models.TextField(blank=True, default='')

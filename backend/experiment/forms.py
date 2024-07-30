@@ -145,8 +145,8 @@ class ExperimentForm(ModelForm):
                   'dashboard', 'about_content']
 
     class Media:
-        js = ["experiment_series_admin.js"]
-        css = {"all": ["experiment_series_admin.css"]}
+        js = ["experiment_admin.js"]
+        css = {"all": ["experiment_admin.css"]}
 
 
 class BlockForm(ModelForm):

@@ -11,11 +11,11 @@ from experiment.models import (
     Block,
     Experiment,
     Phase,
-    GroupedBlock,
     SocialMediaConfig,
 )
 from experiment.rules.hooked import Hooked
 from participant.models import Participant
+from participant.utils import PARTICIPANT_KEY
 from session.models import Session
 from theme.models import ThemeConfig, FooterConfig, HeaderConfig
 
@@ -38,39 +38,23 @@ class TestExperimentViews(TestCase):
             index=1
         )
         cls.block1 = Block.objects.create(
-            name='block1', slug='block1')
-        GroupedBlock.objects.create(
-            block=cls.block1,
-            phase=introductory_phase
-        )
+            name='block1', slug='block1', phase=introductory_phase)
         intermediate_phase = Phase.objects.create(
             name='intermediate',
             series=experiment,
             index=2
         )
         cls.block2 = Block.objects.create(
-            name='block2', slug='block2', theme_config=theme_config)
+            name='block2', slug='block2', theme_config=theme_config, phase=intermediate_phase)
         cls.block3 = Block.objects.create(
-            name='block3', slug='block3')
-        GroupedBlock.objects.create(
-            block=cls.block2,
-            phase=intermediate_phase
-        )
-        GroupedBlock.objects.create(
-            block=cls.block3,
-            phase=intermediate_phase
-        )
+            name='block3', slug='block3', phase=intermediate_phase)
         final_phase = Phase.objects.create(
             name='final',
             series=experiment,
             index=3
         )
         cls.block4 = Block.objects.create(
-            name='block4', slug='block4')
-        GroupedBlock.objects.create(
-            block=cls.block4,
-            phase=final_phase
-        )
+            name='block4', slug='block4', phase=final_phase)
 
     def test_get_experiment(self):
         # save participant data to request session
@@ -268,6 +252,14 @@ class ExperimentViewsTest(TestCase):
             bonus_points=42,
         )
         participant = Participant.objects.create()
+        participant.save()
+
+        # Request session (not to be confused with experiment block session)
+        request_session = self.client.session
+        request_session.update({PARTICIPANT_KEY: participant.id})
+        request_session.save()
+
+        # Experiment block session
         Session.objects.bulk_create([
             Session(block=block, participant=participant, finished_at=timezone.now()) for index in range(3)
         ])
@@ -315,7 +307,14 @@ def create_theme_config(name='test_theme') -> ThemeConfig:
         disclaimer='Test Disclaimer',
         privacy='Test Privacy',
     )
-    footer_config.logos.add(Image.objects.create(file='test-logo.jpg'))
+    footer_config.logos.add(
+        Image.objects.create(file='test-logo-b.jpg'),
+        through_defaults={'index': 1}
+        )
+    footer_config.logos.add(
+        Image.objects.create(file='test-logo-a.jpg'),
+        through_defaults={'index': 0}
+        )
 
     return theme_config
 

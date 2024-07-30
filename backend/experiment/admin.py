@@ -1,8 +1,6 @@
 import csv
-from urllib import request
 from zipfile import ZipFile
 from io import BytesIO
-from django.utils.safestring import mark_safe
 
 from django.conf import settings
 from django.contrib import admin
@@ -15,12 +13,14 @@ from django.http import HttpResponse
 from inline_actions.admin import InlineActionsModelAdminMixin
 from django.urls import reverse
 from django.utils.html import format_html
+
+from nested_admin import NestedModelAdmin, NestedStackedInline, NestedTabularInline
+
 from experiment.models import (
     Block,
     Experiment,
     Phase,
     Feedback,
-    GroupedBlock,
     SocialMediaConfig,
 )
 from question.admin import QuestionSeriesInline
@@ -38,33 +38,49 @@ from participant.models import Participant
 
 
 class FeedbackInline(admin.TabularInline):
-    """Inline to show results linked to given participant
-    """
+    """Inline to show results linked to given participant"""
 
     model = Feedback
-    fields = ['text']
+    fields = ["text"]
     extra = 0
 
 
 class BlockAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
-    list_display = ('image_preview', 'block_name_link',
-                    'block_slug_link', 'rules',
-                    'rounds', 'playlist_count',
-                    'session_count', 'active')
-    list_filter = ['active']
-    search_fields = ['name']
-    inline_actions = ['export', 'export_csv']
-    fields = ['name', 'description', 'image',
-              'slug', 'url', 'hashtag', 'theme_config',
-              'language', 'active', 'rules',
-              'rounds', 'bonus_points', 'playlists',
-              'consent']
+    list_display = (
+        "image_preview",
+        "block_name_link",
+        "block_slug_link",
+        "rules",
+        "rounds",
+        "playlist_count",
+        "session_count",
+        "active",
+    )
+    list_filter = ["active"]
+    search_fields = ["name"]
+    inline_actions = ["export", "export_csv"]
+    fields = [
+        "name",
+        "description",
+        "image",
+        "slug",
+        "url",
+        "hashtag",
+        "theme_config",
+        "language",
+        "active",
+        "rules",
+        "rounds",
+        "bonus_points",
+        "playlists",
+        "consent",
+    ]
     inlines = [QuestionSeriesInline, FeedbackInline]
     form = BlockForm
 
     # make playlists fields a list of checkboxes
     formfield_overrides = {
-        models.ManyToManyField: {'widget': CheckboxSelectMultiple},
+        models.ManyToManyField: {"widget": CheckboxSelectMultiple},
     }
 
     def export(self, request, obj, parent_obj=None):
@@ -78,7 +94,7 @@ class BlockAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
         all_profiles = Result.objects.none()
 
         # Collect data
-        all_sessions = obj.export_sessions().order_by('pk')
+        all_sessions = obj.export_sessions().order_by("pk")
 
         for session in all_sessions:
             all_results |= session.export_results()
@@ -94,19 +110,54 @@ class BlockAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
 
         # create empty zip file in memory
         zip_buffer = BytesIO()
-        with ZipFile(zip_buffer, 'w') as new_zip:
+        with ZipFile(zip_buffer, "w") as new_zip:
             # serialize data to new json files within the zip file
-            new_zip.writestr('sessions.json', data=str(serializers.serialize("json", all_sessions)))
-            new_zip.writestr('participants.json', data=str(serializers.serialize("json", all_participants.order_by('pk'))))
-            new_zip.writestr('profiles.json', data=str(serializers.serialize("json", all_profiles.order_by('participant', 'pk'))))
-            new_zip.writestr('results.json', data=str(serializers.serialize("json", all_results.order_by('session'))))
-            new_zip.writestr('sections.json', data=str(serializers.serialize("json", all_sections.order_by('playlist', 'pk'))))
-            new_zip.writestr('songs.json', data=str(serializers.serialize("json", all_songs.order_by('pk'))))
+            new_zip.writestr(
+                "sessions.json", data=str(serializers.serialize("json", all_sessions))
+            )
+            new_zip.writestr(
+                "participants.json",
+                data=str(
+                    serializers.serialize("json", all_participants.order_by("pk"))
+                ),
+            )
+            new_zip.writestr(
+                "profiles.json",
+                data=str(
+                    serializers.serialize(
+                        "json", all_profiles.order_by("participant", "pk")
+                    )
+                ),
+            )
+            new_zip.writestr(
+                "results.json",
+                data=str(
+                    serializers.serialize("json", all_results.order_by("session"))
+                ),
+            )
+            new_zip.writestr(
+                "sections.json",
+                data=str(
+                    serializers.serialize(
+                        "json", all_sections.order_by("playlist", "pk")
+                    )
+                ),
+            )
+            new_zip.writestr(
+                "songs.json",
+                data=str(serializers.serialize("json", all_songs.order_by("pk"))),
+            )
 
         # create forced download response
         response = HttpResponse(zip_buffer.getbuffer())
-        response['Content-Type'] = 'application/x-zip-compressed'
-        response['Content-Disposition'] = 'attachment; filename="'+obj.slug+'-'+timezone.now().isoformat()+'.zip"'
+        response["Content-Type"] = "application/x-zip-compressed"
+        response["Content-Disposition"] = (
+            'attachment; filename="'
+            + obj.slug
+            + "-"
+            + timezone.now().isoformat()
+            + '.zip"'
+        )
         return response
 
     export.short_description = "Export JSON"
@@ -114,52 +165,50 @@ class BlockAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
     def export_csv(self, request, obj, parent_obj=None):
         """Export block data in CSV, force download"""
         # Handle export command from intermediate form
-        if '_export' in request.POST:
+        if "_export" in request.POST:
             session_keys = []
             result_keys = []
             export_options = []
             # Get all export options
-            session_keys = [key for key in request.POST.getlist(
-                'export_session_fields')]
-            result_keys = [key for key in request.POST.getlist(
-                'export_result_fields')]
-            export_options = [
-                key for key in request.POST.getlist('export_options')]
+            session_keys = [
+                key for key in request.POST.getlist("export_session_fields")
+            ]
+            result_keys = [key for key in request.POST.getlist("export_result_fields")]
+            export_options = [key for key in request.POST.getlist("export_options")]
 
-            response = HttpResponse(content_type='text/csv')
-            response['Content-Disposition'] = 'attachment; filename="{}.csv"'.format(
-                obj.slug)
+            response = HttpResponse(content_type="text/csv")
+            response["Content-Disposition"] = 'attachment; filename="{}.csv"'.format(
+                obj.slug
+            )
             # Get filtered data
             block_table, fieldnames = obj.export_table(
-                session_keys, result_keys, export_options)
+                session_keys, result_keys, export_options
+            )
             fieldnames.sort()
             writer = csv.DictWriter(response, fieldnames)
             writer.writeheader()
             writer.writerows(block_table)
             return response
         # Go back to admin block overview
-        if '_back' in request.POST:
-            return redirect('/admin/experiment/block')
+        if "_back" in request.POST:
+            return redirect("/admin/experiment/block")
         # Load a template in the export form
-        if '_template' in request.POST:
-            selected_template = request.POST.get('select_template')
+        if "_template" in request.POST:
+            selected_template = request.POST.get("select_template")
         else:
-            selected_template = 'wide'
+            selected_template = "wide"
 
-        initial_fields = {'export_session_fields': EXPORT_TEMPLATES[selected_template][0],
-                          'export_result_fields': EXPORT_TEMPLATES[selected_template][1],
-                          'export_options': EXPORT_TEMPLATES[selected_template][2]
-                          }
-        form = ExportForm(
-            initial=initial_fields)
-        template_form = TemplateForm(
-            initial={'select_template': selected_template})
+        initial_fields = {
+            "export_session_fields": EXPORT_TEMPLATES[selected_template][0],
+            "export_result_fields": EXPORT_TEMPLATES[selected_template][1],
+            "export_options": EXPORT_TEMPLATES[selected_template][2],
+        }
+        form = ExportForm(initial=initial_fields)
+        template_form = TemplateForm(initial={"select_template": selected_template})
         return render(
             request,
-            'csv-export.html',
-            context={'experiment': obj,
-                     'form': form,
-                     'template_form': template_form}
+            "csv-export.html",
+            context={"experiment": obj, "form": form, "template_form": template_form},
         )
 
     export_csv.short_description = "Export CSV"
@@ -167,7 +216,7 @@ class BlockAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
     def image_preview(self, obj):
         if obj.image and obj.image.file:
             img_src = obj.image.file.url
-            return mark_safe(f'<img src="{img_src}" style="max-height: 50px;"/>')
+            return format_html(f'<img src="{img_src}" style="max-height: 50px;"/>')
         return ""
 
     def block_name_link(self, obj):
@@ -178,10 +227,15 @@ class BlockAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
 
     def block_slug_link(self, obj):
         dev_mode = settings.DEBUG is True
-        url = f"http://localhost:3000/block/{obj.slug}" if dev_mode else f"/block/{obj.slug}"
+        url = (
+            f"http://localhost:3000/block/{obj.slug}"
+            if dev_mode
+            else f"/block/{obj.slug}"
+        )
 
         return format_html(
-            f'<a href="{url}" target="_blank" rel="noopener noreferrer" title="Open {obj.slug} block in new tab" >{obj.slug}&nbsp;<small>&#8599;</small></a>')
+            f'<a href="{url}" target="_blank" rel="noopener noreferrer" title="Open {obj.slug} block in new tab" >{obj.slug}&nbsp;<small>&#8599;</small></a>'
+        )
 
     # Name the columns
     image_preview.short_description = "Image"
@@ -192,31 +246,45 @@ class BlockAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
 admin.site.register(Block, BlockAdmin)
 
 
-class GroupedBlockInline(admin.StackedInline):
-    model = GroupedBlock
-    extra = 0
+class BlockInline(NestedStackedInline):
+    model = Block
+    extra = 1
+    sortable_field_name = "index"
 
 
-class PhaseInline(admin.StackedInline):
+class PhaseInline(NestedTabularInline):
     model = Phase
-    extra = 0
-    inlines = [GroupedBlockInline]
+    extra = 1
+    sortable_field_name = "index"
+    inlines = [BlockInline]
 
 
-class SocialMediaConfigInline(admin.StackedInline):
+class SocialMediaConfigInline(NestedStackedInline):
     form = SocialMediaConfigForm
     model = SocialMediaConfig
     extra = 0
 
 
-class ExperimentAdmin(
-        InlineActionsModelAdminMixin, admin.ModelAdmin):
-    list_display = ('name', 'slug_link', 'description_excerpt',
-                    'dashboard', 'phases', 'active')
-    fields = ['slug', 'name', 'active', 'description',
-              'consent', 'theme_config', 'dashboard',
-              'about_content']
-    inline_actions = ['dashboard']
+class ExperimentAdmin(InlineActionsModelAdminMixin, NestedModelAdmin):
+    list_display = (
+        "name",
+        "slug_link",
+        "description_excerpt",
+        "dashboard",
+        "phases",
+        "active",
+    )
+    fields = [
+        "slug",
+        "name",
+        "active",
+        "description",
+        "consent",
+        "theme_config",
+        "dashboard",
+        "about_content",
+    ]
+    inline_actions = ["dashboard"]
     form = ExperimentForm
     inlines = [
         PhaseInline,
@@ -228,18 +296,25 @@ class ExperimentAdmin(
         url = f"http://localhost:3000/{obj.slug}" if dev_mode else f"/{obj.slug}"
 
         return format_html(
-            f'<a href="{url}" target="_blank" rel="noopener noreferrer" title="Open {obj.slug} experiment group in new tab" >{obj.slug}&nbsp;<small>&#8599;</small></a>')
+            f'<a href="{url}" target="_blank" rel="noopener noreferrer" title="Open {obj.slug} experiment group in new tab" >{obj.slug}&nbsp;<small>&#8599;</small></a>'
+        )
 
     def description_excerpt(self, obj):
-
         if len(obj.description) < 50:
             return obj.description
 
-        return obj.description[:50] + '...'
+        return obj.description[:50] + "..."
 
     def phases(self, obj):
         phases = Phase.objects.filter(series=obj)
-        return format_html(', '.join([f'<a href="/admin/experiment/phase/{phase.id}/change/">{phase.name}</a>' for phase in phases]))
+        return format_html(
+            ", ".join(
+                [
+                    f'<a href="/admin/experiment/phase/{phase.id}/change/">{phase.name}</a>'
+                    for phase in phases
+                ]
+            )
+        )
 
     slug_link.short_description = "Slug"
 
@@ -249,30 +324,37 @@ class ExperimentAdmin(
         all_participants = obj.current_participants()
         all_sessions = obj.export_sessions()
         collect_data = {
-            'participant_count': len(all_participants),
-            'session_count': len(all_sessions)
+            "participant_count": len(all_participants),
+            "session_count": len(all_sessions),
         }
 
-        blocks = [{
-            'id': block.id,
-            'name': block.name,
-            'started': len(all_sessions.filter(block=block)),
-            'finished': len(all_sessions.filter(
-                block=block,
-                finished_at__isnull=False,
-            )),
-            'participant_count': len(block.current_participants()),
-            'participants': block.current_participants()
-            } for block in all_blocks]
+        blocks = [
+            {
+                "id": block.id,
+                "name": block.name,
+                "started": len(all_sessions.filter(block=block)),
+                "finished": len(
+                    all_sessions.filter(
+                        block=block,
+                        finished_at__isnull=False,
+                    )
+                ),
+                "participant_count": len(block.current_participants()),
+                "participants": block.current_participants(),
+            }
+            for block in all_blocks
+        ]
 
         return render(
             request,
-            'experiment-dashboard.html',
-            context={'experiment': obj,
-                     'blocks': blocks,
-                     'sessions': all_sessions,
-                     'participants': all_participants,
-                     'collect_data': collect_data}
+            "experiment-dashboard.html",
+            context={
+                "experiment": obj,
+                "blocks": blocks,
+                "sessions": all_sessions,
+                "participants": all_participants,
+                "collect_data": collect_data,
+            },
         )
 
 
@@ -280,28 +362,40 @@ admin.site.register(Experiment, ExperimentAdmin)
 
 
 class PhaseAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
-    list_display = ('name_link', 'related_series', 'index', 'dashboard', 'randomize', 'blocks')
-    fields = ['name', 'series', 'index', 'dashboard', 'randomize']
-    inlines = [GroupedBlockInline]
+    list_display = (
+        "name_link",
+        "related_experiment",
+        "index",
+        "dashboard",
+        "randomize",
+        "blocks",
+    )
+    fields = ["name", "series", "index", "dashboard", "randomize"]
+    inlines = [BlockInline]
 
     def name_link(self, obj):
         obj_name = obj.__str__()
-        url = reverse(
-            "admin:experiment_phase_change", args=[obj.pk])
+        url = reverse("admin:experiment_phase_change", args=[obj.pk])
         return format_html('<a href="{}">{}</a>', url, obj_name)
 
-    def related_series(self, obj):
-        url = reverse(
-            "admin:experiment_experiment_change", args=[obj.series.pk])
+    def related_experiment(self, obj):
+        url = reverse("admin:experiment_experiment_change", args=[obj.series.pk])
         return format_html('<a href="{}">{}</a>', url, obj.series.name)
 
     def blocks(self, obj):
-        blocks = GroupedBlock.objects.filter(phase=obj)
+        blocks = Block.objects.filter(phase=obj)
 
         if not blocks:
             return "No blocks"
 
-        return format_html(', '.join([f'<a href="/admin/experiment/groupedblock/{block.id}/change/">{block.block.name}</a>' for block in blocks]))
+        return format_html(
+            ", ".join(
+                [
+                    f'<a href="/admin/experiment/block/{block.id}/change/">{block.name}</a>'
+                    for block in blocks
+                ]
+            )
+        )
 
 
 admin.site.register(Phase, PhaseAdmin)

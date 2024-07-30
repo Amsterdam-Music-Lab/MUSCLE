@@ -1,15 +1,13 @@
-import React from 'react';
 import { vi, expect, describe, it } from 'vitest';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import { BrowserRouter, Router } from 'react-router-dom';
-import { createMemoryHistory } from 'history'
+import { BrowserRouter } from 'react-router-dom';
 import * as API from '../../API';
 
 import Final from './Final'; // Adjust the import path as necessary
 
 vi.mock('../../util/stores', () => ({
     __esModule: true,
-    default: (fn) => {
+    default: (fn: (state: any) => any) => {
         const state = {
             setSession: vi.fn(),
             session: 1,
@@ -25,8 +23,6 @@ vi.mock('../../API', () => ({
     finalizeSession: vi.fn(),
 }));
 
-vi.mock('../../API');
-
 vi.mock('../../config', () => {
     return {
         SILENT_MP3: '',
@@ -36,6 +32,16 @@ vi.mock('../../config', () => {
             profile: '/profile',
         }
     }
+});
+
+let mockNavigate = vi.fn();
+
+vi.mock('react-router-dom', async () => {
+    const actual = await vi.importActual('react-router-dom');
+    return {
+        ...actual,
+        useNavigate: () => mockNavigate,
+    };
 });
 
 describe('Final Component', () => {
@@ -91,32 +97,31 @@ describe('Final Component', () => {
 
     it('navigates to profile page when profile link is clicked', async () => {
 
-        const history = createMemoryHistory();
+        mockNavigate = vi.fn();
 
         const mockActionTexts = {
-            all_blocks: 'All Blocks',
+            all_experiments: 'All Blocks',
             profile: 'Profile',
+            play_again: 'Play Again',
         };
 
         render(
-            <Router history={history}>
+            <BrowserRouter>
                 <Final
                     show_profile_link={true}
+                    final_text={'<p>Final Text</p>'}
                     action_texts={mockActionTexts}
                 />
-            </Router>
+            </BrowserRouter>
         );
 
         const profileLink = screen.getByTestId('profile-link');
 
         expect(document.body.contains(profileLink)).toBe(true);
 
-        expect(history.location.pathname).toBe('/');
-
         fireEvent.click(profileLink)
 
-        expect(history.location.pathname).toBe('/profile');
-
+        expect(mockNavigate).toHaveBeenCalledWith('/profile');
     });
 
     it('calls finalizeSession with correct arguments', () => {

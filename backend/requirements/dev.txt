@@ -10,8 +10,6 @@ astroid==3.1.0
     # via pylint
 audioread==3.0.1
     # via -r requirements.in/base.txt
-autopep8==2.0.4
-    # via -r requirements.in/dev.txt
 bleach==6.1.0
     # via django-markup
 build==1.0.3
@@ -47,12 +45,12 @@ django-inline-actions==2.4.0
     # via -r requirements.in/base.txt
 django-markup[all-filter-dependencies,all_filter_dependencies]==1.8.1
     # via -r requirements.in/base.txt
+django-nested-admin==4.1.0
+    # via -r requirements.in/base.txt
 docutils==0.20.1
     # via
     #   django-markup
     #   python-creole
-flake8==7.0.0
-    # via -r requirements.in/dev.txt
 genbadge[coverage]==1.1.1
     # via -r requirements.in/base.txt
 html5lib==1.1
@@ -64,9 +62,7 @@ isort==5.13.2
 markdown==3.5.2
     # via django-markup
 mccabe==0.7.0
-    # via
-    #   flake8
-    #   pylint
+    # via pylint
 packaging==23.2
     # via build
 pillow==10.3.0
@@ -79,12 +75,6 @@ psycopg[binary]==3.1.18
     # via -r requirements.in/base.txt
 psycopg-binary==3.1.18
     # via psycopg
-pycodestyle==2.11.1
-    # via
-    #   autopep8
-    #   flake8
-pyflakes==3.2.0
-    # via flake8
 pygments==2.17.2
     # via django-markup
 pylint==3.1.0
@@ -102,6 +92,8 @@ python-creole==1.4.10
     # via django-markup
 python-dotenv==0.19.1
     # via -r requirements.in/base.txt
+python-monkey-business==1.1.0
+    # via django-nested-admin
 regex==2023.12.25
     # via textile
 requests==2.32.0
@@ -110,6 +102,8 @@ requests==2.32.0
     #   genbadge
 roman==4.1
     # via -r requirements.in/base.txt
+ruff==0.5.4
+    # via -r requirements.in/dev.txt
 sentry-sdk==2.8.0
     # via -r requirements.in/base.txt
 six==1.16.0

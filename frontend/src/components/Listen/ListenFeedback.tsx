@@ -2,6 +2,22 @@ import React, { useRef } from "react";
 import Circle from "../Circle/Circle";
 import Button from "../Button/Button";
 
+interface ListenFeedbackProps {
+    circleContent?: React.ReactNode;
+    instruction: string;
+    duration?: number;
+    onFinish: () => void;
+    color?: string;
+    running?: boolean;
+    className?: string;
+    onNoClick?: () => void;
+    onYesClick?: () => void;
+    buttons?: {
+        no: string;
+        yes: string;
+    };
+}
+
 /** ListenFeedback is a base view for block views with a yes and no button */
 const ListenFeedback = ({
     circleContent = null,
@@ -14,11 +30,11 @@ const ListenFeedback = ({
     onNoClick,
     onYesClick,
     buttons
-}) => {
+}: ListenFeedbackProps) => {
     // Time ref, stores the time without updating the view
     const time = useRef(0);
 
-    const onCircleTimerTick = (t) => {
+    const onCircleTimerTick = (t: number) => {
         time.current = t;
     };
 

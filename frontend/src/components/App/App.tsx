@@ -1,9 +1,8 @@
 import { useEffect } from "react";
 import {
     BrowserRouter as Router,
-    Switch,
     Route,
-    Redirect
+    Routes
 } from "react-router-dom";
 import axios from "axios";
 
@@ -20,6 +19,7 @@ import StoreProfile from "../StoreProfile/StoreProfile";
 import useDisableRightClickOnTouchDevices from "../../hooks/useDisableRightClickOnTouchDevices";
 import { InternalRedirect } from "../InternalRedirect/InternalRedirect";
 import Helmet from "@/components/Helmet/Helmet";
+import Redirect from "@/components/Redirect/Redirect";
 
 // App is the root component of our application
 const App = () => {
@@ -60,31 +60,27 @@ const App = () => {
             <Helmet />
             <Router className="aha__app">
                 <ConditionalRender condition={!!participant} fallback={<LoaderContainer />}>
-                    <Switch>
+                    <Routes>
                         {/* Request reload for given participant */}
-                        <Route path={URLS.reloadParticipant}>
-                            <Reload />
-                        </Route>
+                        <Route path={URLS.reloadParticipant} element={<Reload />} />
 
                         {/* Default experiment */}
-                        <Route path="/" exact>
-                            <Redirect
-                                to={URLS.experiment.replace(":slug", EXPERIMENT_SLUG)}
-                            />
-                        </Route>
+                        <Route
+                            path="/"
+                            element={<Redirect to={URLS.experiment.replace(":slug", EXPERIMENT_SLUG)} />}
+                        />
 
                         {/* Profile */}
-                        <Route path={URLS.profile} exact>
-                            <Profile slug={EXPERIMENT_SLUG} />
-                        </Route>
+                        <Route path={URLS.profile} exact element={<Profile />} />
 
-                        <Route path={URLS.internalRedirect} component={InternalRedirect} />
+                        {/* Internal redirect */}
+                        <Route path={URLS.internalRedirect} element={<InternalRedirect />} />
 
                         {/* Block */}
-                        <Route path={URLS.block} component={Block} />
+                        <Route path={URLS.block} element={<Block />} />
 
                         {/* Experiment */}
-                        <Route path={URLS.experiment} component={Experiment} />
+                        <Route path={URLS.experiment} element={<Experiment />} />
 
                         {/* Session - ⚠️ What is the purpose of this non-functional route? */}
                         <Route path={URLS.session} />
@@ -93,9 +89,9 @@ const App = () => {
                         <Route
                             path={URLS.storeProfile}
                             exact
-                            component={StoreProfile}
+                            element={StoreProfile}
                         />
-                    </Switch>
+                    </Routes>
                 </ConditionalRender>
             </Router >
         </>

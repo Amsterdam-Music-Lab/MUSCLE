@@ -7,7 +7,7 @@ from image.serializers import serialize_image
 from participant.models import Participant
 from session.models import Session
 from theme.serializers import serialize_theme
-from .models import Block, Experiment, Phase, GroupedBlock, SocialMediaConfig
+from .models import Block, Experiment, Phase, SocialMediaConfig
 
 
 def serialize_actions(actions):
@@ -68,22 +68,22 @@ def serialize_phase(
         phase: Phase,
         participant: Participant
         ) -> dict:
-    grouped_blocks = list(GroupedBlock.objects.filter(
-        phase_id=phase.id).order_by('index'))
+    blocks = list(Block.objects.filter(
+        phase=phase.id).order_by('index'))
 
     if phase.randomize:
-        shuffle(grouped_blocks)
+        shuffle(blocks)
 
     next_block = get_upcoming_block(
-        grouped_blocks, participant, phase.dashboard)
+        blocks, participant, phase.dashboard)
 
-    total_score = get_total_score(grouped_blocks, participant)
+    total_score = get_total_score(blocks, participant)
 
     if not next_block:
         return None
 
     return {
-        'dashboard': [serialize_block(block.block, participant) for block in grouped_blocks] if phase.dashboard else [],
+        'dashboard': [serialize_block(block, participant) for block in blocks] if phase.dashboard else [],
         'nextBlock': next_block,
         'totalScore': total_score
     }
@@ -102,11 +102,11 @@ def get_upcoming_block(block_list, participant, repeat_allowed=True):
     ''' return next block with minimum finished sessions for this participant
      if repeated blocks are not allowed (dashboard=False) and there are only finished sessions, return None '''
     finished_session_counts = [get_finished_session_count(
-        block.block, participant) for block in block_list]
+        block, participant) for block in block_list]
     minimum_session_count = min(finished_session_counts)
     if not repeat_allowed and minimum_session_count != 0:
         return None
-    return serialize_block(block_list[finished_session_counts.index(minimum_session_count)].block, participant)
+    return serialize_block(block_list[finished_session_counts.index(minimum_session_count)], participant)
 
 
 def get_started_session_count(block, participant):
@@ -123,11 +123,14 @@ def get_finished_session_count(block, participant):
     return count
 
 
-def get_total_score(grouped_blocks, participant):
+def get_total_score(blocks, participant):
     '''Calculate total score of all blocks on the dashboard'''
     total_score = 0
-    for grouped_block in grouped_blocks:
-        sessions = Session.objects.filter(block=grouped_block.block, participant=participant)
+    for block in blocks:
+        sessions = Session.objects.filter(
+            block=block,
+            participant=participant
+            )
         for session in sessions:
             total_score += session.final_score
     return total_score

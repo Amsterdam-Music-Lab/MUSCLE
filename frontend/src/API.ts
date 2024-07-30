@@ -2,7 +2,7 @@ import { API_BASE_URL } from "@/config";
 import useGet from "./util/useGet";
 import axios from "axios";
 import qs from "qs";
-import Block from "@/types/Block";
+import Block, { ExtendedBlock } from "@/types/Block";
 import Participant from "./types/Participant";
 import Session from "./types/Session";
 
@@ -43,8 +43,8 @@ export const URLS = {
     }
 };
 
-export const useBlock = (slug: string) =>
-    useGet(API_BASE_URL + URLS.block.get(slug));
+export const useBlock = (slug: string): [ExtendedBlock | null, boolean] =>
+    useGet<ExtendedBlock>(API_BASE_URL + URLS.block.get(slug));
 
 export const useExperiment = (slug: string) => {
     const data = useGet(API_BASE_URL + URLS.experiment.get(slug));

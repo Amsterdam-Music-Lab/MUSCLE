@@ -6,9 +6,13 @@ from django.conf import settings
 from django.utils.translation import activate, gettext_lazy as _
 from django_markup.markup import formatter
 
-from .models import Block, Experiment, Phase, Feedback
+from .models import Block, Experiment, Phase, Feedback, Session
 from section.models import Playlist
-from experiment.serializers import serialize_actions, serialize_experiment, serialize_phase
+from experiment.serializers import (
+    serialize_actions,
+    serialize_experiment,
+    serialize_phase,
+)
 from experiment.rules import BLOCK_RULES
 from experiment.actions.utils import EXPERIMENT_KEY
 from image.serializers import serialize_image
@@ -18,7 +22,7 @@ from theme.serializers import serialize_theme
 logger = logging.getLogger(__name__)
 
 
-def get_block(request, slug):
+def get_block(request: HttpRequest, slug: str) -> JsonResponse:
     """Get block data from active block with given :slug
     DO NOT modify session data here, it will break participant_id system
        (/participant and /block/<slug> are called at the same time by the frontend)"""
@@ -29,6 +33,15 @@ def get_block(request, slug):
 
     if block.language:
         activate(block.language)
+
+    participant = get_participant(request)
+    session = Session(block=block, participant=participant)
+
+    playlist = block.playlists.first()
+    if playlist:
+        session.playlist = playlist
+
+    session.save()
 
     # create data
     block_data = {
@@ -46,8 +59,17 @@ def get_block(request, slug):
             for playlist in block.playlists.all()
         ],
         'feedback_info': block.get_rules().feedback_info(),
-        'next_round': serialize_actions(block.get_rules().first_round(block)),
-        'loading_text': _('Loading')
+
+        # only call first round if the (deprecated) first_round method exists
+        # otherwise, call next_round
+        'next_round': (
+            serialize_actions(block.get_rules().first_round(block))
+            if hasattr(block.get_rules(), "first_round")
+            and block.get_rules().first_round
+            else serialize_actions(block.get_rules().next_round(session))
+        ),
+        'loading_text': _('Loading'),
+        'session_id': session.id,
     }
 
     response = JsonResponse(block_data, json_dumps_params={'indent': 4})
@@ -82,10 +104,10 @@ def add_default_question_series(request, id):
 
 
 def get_experiment(
-            request: HttpRequest,
-            slug: str,
-            phase_index: int = 0,
-        ) -> JsonResponse:
+    request: HttpRequest,
+    slug: str,
+    phase_index: int = 0,
+) -> JsonResponse:
     '''
     check which `Phase` objects are related to the `Experiment` with the given slug
     retrieve the phase with the lowest order (= current_phase)
@@ -100,8 +122,10 @@ def get_experiment(
     except Exception as e:
         logger.error(e)
         return JsonResponse(
-            {'error': 'Something went wrong while fetching the experiment. Please try again later.'},
-            status=500
+            {
+                "error": "Something went wrong while fetching the experiment. Please try again later."
+            },
+            status=500,
         )
 
     request.session[EXPERIMENT_KEY] = slug
