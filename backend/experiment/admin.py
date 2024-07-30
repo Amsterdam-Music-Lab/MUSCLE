@@ -208,7 +208,7 @@ class BlockAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
         return render(
             request,
             "csv-export.html",
-            context={"experiment": obj, "form": form, "template_form": template_form},
+            context={"exp_block": obj, "form": form, "template_form": template_form},
         )
 
     export_csv.short_description = "Export CSV"
