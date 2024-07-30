@@ -22,8 +22,8 @@ describe('Score component', () => {
         };
 
         render(<Score {...props} />);
-        expect(document.body.contains(screen.getByText('Great job!'))).to.be.true;
-        expect(document.body.contains(screen.getByText('Test Song'))).to.be.true;
+        expect(document.body.contains(screen.getByText('Great job!'))).toBe(true);
+        expect(document.body.contains(screen.getByText('Test Song'))).toBe(true);
     });
 
 

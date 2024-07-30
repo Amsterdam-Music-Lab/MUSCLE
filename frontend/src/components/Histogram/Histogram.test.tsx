@@ -55,7 +55,7 @@ describe('Histogram', () => {
             throw new Error('Histogram not found');
         }
 
-        expect(histogram.classList.contains('active')).to.be.true;
+        expect(histogram.classList.contains('active')).toBe(true);
     });
 
     it('does not have active class when not running', () => {
@@ -66,7 +66,7 @@ describe('Histogram', () => {
             throw new Error('Histogram not found');
         }
 
-        expect(histogram.classList.contains('active')).to.be.false;
+        expect(histogram.classList.contains('active')).toBe(false);
     });
 
     it('updates bar heights when running', async () => {
