@@ -1,16 +1,27 @@
-import React from "react";
 import Slider from "react-rangeslider";
 import classNames from "classnames";
-
 import RangeTitle from "./_RangeTitle";
+import Question from "@/types/Question";
 
-const IconRange = ({ question, value, style, onChange, emphasizeTitle }) => {
+interface IconRangeProps {
+    question: Question;
+    value: any;
+    style: any;
+    onChange: any;
+    emphasizeTitle: any;
+}
+
+const IconRange = ({ question, value, style, onChange, emphasizeTitle }: IconRangeProps) => {
     const emptyValue = !value;
+
+    if (!question.choices || Object.keys(question.choices).length <= 0) {
+        throw new Error("IconRange question must have choices");
+    }
 
     const keys = Object.keys(question.choices);
     const choices = Object.values(question.choices);
 
-    const onSliderChange = (index) => {
+    const onSliderChange = (index: number) => {
         onChange(keys[index]);
     };
 
@@ -24,6 +35,7 @@ const IconRange = ({ question, value, style, onChange, emphasizeTitle }) => {
     return (
         <div className={classNames("aha__text-range", style, { empty: emptyValue })}>
             <RangeTitle
+                // this prop does not exist on RangeTitle
                 emphasizeTitle={emphasizeTitle}
                 question={question}
                 value={value}

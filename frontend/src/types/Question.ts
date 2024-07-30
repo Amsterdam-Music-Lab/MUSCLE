@@ -11,6 +11,7 @@ export enum QuestionViews {
 }
 
 export default interface Question {
+    key: string;
     question: string;
     view: QuestionViews;
     value?: any;
@@ -23,4 +24,6 @@ export default interface Question {
     min_values?: number;
     min_value?: number;
     max_value?: number;
+    max_length?: number;
+    input_type?: 'number' | 'text';
 }
