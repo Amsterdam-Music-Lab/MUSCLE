@@ -17,6 +17,7 @@ from result.utils import prepare_result
 from result.models import Result
 
 from section.models import Section
+from session.models import Session
 
 from .base import Base
 from .huang_2022 import get_test_playback
@@ -53,7 +54,6 @@ class MusicalPreferences(Base):
         ]
 
     def first_round(self, block):
-
         consent = Consent(
             block.consent,
             title=_('Informed consent'),
@@ -75,7 +75,7 @@ class MusicalPreferences(Base):
             explainer,
         ]
 
-    def next_round(self, session):
+    def next_round(self, session: Session):
         next_round_number = session.get_current_round()
         actions = []
         if next_round_number == 1:
@@ -203,8 +203,7 @@ class MusicalPreferences(Base):
                 n_songs-1,
                 top_all
             )]
-
-        section = session.section_from_unused_song()
+        section = session.playlist.get_section(song_ids=session.get_unused_song_ids())
         like_key = 'like_song'
         likert = LikertQuestionIcon(
             question=_('2. How much do you like this song?'),

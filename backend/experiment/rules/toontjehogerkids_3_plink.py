@@ -7,9 +7,11 @@ from experiment.actions import Explainer, Step, Score, Final, Info, Trial
 from experiment.actions.playback import PlayButton
 from experiment.actions.form import AutoCompleteQuestion, Form
 from experiment.actions.utils import get_current_experiment_url
-from .toontjehoger_3_plink import ToontjeHoger3Plink
-
 from experiment.utils import non_breaking_spaces
+from .toontjehoger_3_plink import ToontjeHoger3Plink
+from section.models import Section
+from session.models import Session
+
 
 from result.utils import prepare_result
 
@@ -77,24 +79,8 @@ class ToontjeHogerKids3Plink(ToontjeHoger3Plink):
             {'number': round_number+1, 'total': session.block.rounds}
         return Score(session, config=config, feedback=feedback, score=score, title=score_title)
 
-    def get_plink_round(self, session, present_score=False):
+    def get_plink_trials(self, session: Session, section: Section, choices: dict, expected_response: str) -> list:
         next_round = []
-        if present_score:
-            next_round.append(self.get_score_view(session))
-        # Get all song sections
-        all_sections = session.all_sections()
-        choices = {}
-        for section in all_sections:
-            label = section.song_label()
-            choices[section.pk] = label
-
-        # Get section to recognize
-        section = session.section_from_unused_song()
-        if section is None:
-            raise Exception("Error: could not find section")
-
-        expected_response = section.pk
-
         question1 = AutoCompleteQuestion(
             key='plink',
             choices=choices,

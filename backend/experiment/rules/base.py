@@ -9,7 +9,6 @@ from experiment.actions import Final, Form, Trial
 from question.utils import unanswered_questions
 from question.questions import get_questions_from_series, QUESTION_GROUPS
 from result.score import SCORING_RULES
-from section.models import Playlist
 from session.models import Session
 
 logger = logging.getLogger(__name__)
@@ -21,10 +20,7 @@ class Base(object):
     contact_email = settings.CONTACT_MAIL
 
     def __init__(self):
-        self.question_series = [
-            {"name": "DEMOGRAPHICS", "keys": QUESTION_GROUPS["DEMOGRAPHICS"], "randomize": False},
-            {"name": "MSI_OTHER", "keys": ['msi_39_best_instrument'], "randomize": False},
-        ]
+        self.question_series = []
 
     def feedback_info(self):
         feedback_body = render_to_string('feedback/user_feedback.html', {'email': self.contact_email})

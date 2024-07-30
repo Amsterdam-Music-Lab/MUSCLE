@@ -9,6 +9,7 @@ from experiment.actions.frontend_style import FrontendStyle, EFrontendStyle
 from experiment.actions.styles import STYLE_BOOLEAN
 from experiment.actions.utils import get_current_experiment_url
 from section.models import Playlist
+from session.models import Session
 from .base import Base
 from .toontjehoger_1_mozart import toontjehoger_ranks
 
@@ -96,22 +97,24 @@ class ToontjeHoger6Relative(Base):
         score = Score(session, config=config, feedback=feedback)
         return [score]
 
-    def get_round(self, round, session):
+    def get_round(self, round: int, session: Session):
 
         # Config
         # -----------------
         # section 1 is always section 'a'
-        section1 = session.section_from_any_song(
-            filter_by={'tag': 'a'})
-        if section1 is None:
+        try:
+            section1 = session.playlist.get_section(
+                filter_by={'tag': 'a'})
+        except:
             raise Exception(
                 "Error: could not find section1 for round {}".format(round))
 
         # Get correct tag for round 0 or 1
         tag = 'b' if round == 0 else 'c'
-        section2 = session.section_from_any_song(
-            filter_by={'tag': tag})
-        if section2 is None:
+        try:
+            section2 = session.playlist.get_section(
+                filter_by={'tag': tag})
+        except:
             raise Exception(
                 "Error: could not find section2 for round {}".format(round))
 

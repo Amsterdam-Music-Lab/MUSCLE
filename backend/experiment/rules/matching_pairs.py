@@ -6,8 +6,6 @@ from django.utils.translation import gettext_lazy as _
 from .base import Base
 from experiment.actions import Consent, Explainer, Final, Playlist, Step, Trial
 from experiment.actions.playback import MatchingPairs
-from question.demographics import EXTRA_DEMOGRAPHICS
-from question.utils import question_by_key
 from result.utils import prepare_result
 
 from section.models import Section
@@ -104,7 +102,8 @@ class MatchingPairsGame(Base):
             random.shuffle(pairs)
         selected_pairs = pairs[:self.num_pairs]
         session.save_json_data({'pairs': pairs[self.num_pairs:]})
-        originals = session.playlist.section_set.filter(group__in=selected_pairs, tag='Original')
+        originals = session.playlist.section_set.filter(
+            group__in=selected_pairs, tag='Original')
         degradations = json_data.get('degradations')
         if not degradations:
             degradations = ['Original', '1stDegradation', '2ndDegradation']

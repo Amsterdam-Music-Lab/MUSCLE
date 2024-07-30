@@ -1,4 +1,5 @@
 from django.test import TestCase
+from unittest.mock import patch
 
 from experiment.models import Block
 from participant.models import Participant
@@ -79,6 +80,7 @@ class MatchingPairsFixedTest(TestCase):
         )
 
         rule = MatchingPairsFixed()
+
         sections = rule.select_sections(self.session)
         deterministic_order = [6, 5, 1, 4, 7, 8, 2, 3]
 
@@ -104,8 +106,8 @@ class MatchingPairsFixedTest(TestCase):
             code = section.code
             self.assertEqual(code, deterministic_order[index])
 
-    def test_select_sections_original_original(self):
-
+    @patch('experiment.rules.matching_pairs_fixed.MatchingPairsFixed')
+    def test_select_sections_original_original(self, MockMatchingPairsFixed):
         self.section1 = Section.objects.create(
             playlist=self.playlist,
             code='1',
@@ -164,8 +166,9 @@ class MatchingPairsFixedTest(TestCase):
         )
 
         rule = MatchingPairsFixed()
-        sections = rule.select_sections(self.session)
         deterministic_order = [1, 2, 5, 4, 6, 5, 7, 3, 2, 6, 8, 7, 8, 3, 1, 4]
+        MockMatchingPairsFixed.shuffle_sections.return_value = [Section.objects.get(code=code) for code in deterministic_order]
+        sections = rule.select_sections(self.session)
 
         self.assertEqual(len(sections), 16)
         self.assertIn(self.section1, sections)

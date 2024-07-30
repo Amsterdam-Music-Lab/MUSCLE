@@ -11,6 +11,7 @@ from experiment.actions.playback import Multiplayer
 from experiment.actions.styles import STYLE_NEUTRAL_INVERTED
 from experiment.actions.utils import get_current_experiment_url
 from section.models import Playlist
+from session.models import Session
 from .base import Base
 from experiment.utils import create_player_labels, non_breaking_spaces
 
@@ -64,7 +65,7 @@ class ToontjeHoger5Tempo(Base):
         # Final
         return self.get_final_round(session)
 
-    def get_random_section_pair(self, session, genre):
+    def get_random_section_pair(self, session: Session, genre: str):
         """
         - session: current Session
         - genre: (C)lassic (J)azz (R)ock
@@ -105,7 +106,8 @@ class ToontjeHoger5Tempo(Base):
 
         tag_changed = tag_base + "CH"
 
-        section_original = session.section_from_any_song(filter_by={"tag": tag_original, "group": "or"})
+        section_original = session.playlist.get_section(
+            filter_by={'tag': tag_original, 'group': "or"})
 
         if not section_original:
             raise Exception("Error: could not find original section: {}".format(tag_original))
@@ -117,9 +119,12 @@ class ToontjeHoger5Tempo(Base):
         return sections
 
     def get_section_changed(self, session, tag):
-        section_changed = session.section_from_any_song(filter_by={"tag": tag, "group": "ch"})
-        if not section_changed:
-            raise Exception("Error: could not find changed section: {}".format(tag))
+        try:
+            section_changed = session.playlist.get_section(
+                filter_by={'tag': tag, 'group': "ch"})
+        except:
+            raise Exception(
+                "Error: could not find changed section: {}".format(tag))
         return section_changed
 
     def get_trial_question(self):

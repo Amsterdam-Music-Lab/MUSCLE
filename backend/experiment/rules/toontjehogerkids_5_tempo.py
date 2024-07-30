@@ -43,8 +43,8 @@ class ToontjeHogerKids5Tempo(ToontjeHoger5Tempo):
           return a section from an unused song, in both its original and changed variant
         """
 
-        section_original = session.section_from_unused_song(
-            filter_by={'group': "or"})
+        section_original = session.playlist.get_section(
+            filter_by={'group': "or"}, song_ids=session.get_unused_song_ids())
 
         if not section_original:
             raise Exception(
@@ -58,9 +58,9 @@ class ToontjeHogerKids5Tempo(ToontjeHoger5Tempo):
         return sections
 
     def get_section_changed(self, session, song):
-        section_changed = session.playlist.section_set.get(
-            song__name=song.name, song__artist=song.artist, group='ch'
-        )
+        section_changed = session.playlist.get_section({
+            'song__name': song.name, 'song__artist': song.artist, 'group': 'ch'
+        })
         if not section_changed:
             raise Exception(
                 "Error: could not find changed section: {}".format(song))

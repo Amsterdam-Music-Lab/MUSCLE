@@ -1,7 +1,8 @@
-import json
 import random
 from django.db import models
 from django.utils import timezone
+
+from section.models import Section
 
 
 class Session(models.Model):
@@ -130,91 +131,18 @@ class Session(models.Model):
         self.current_round -= 1
         self.save()
 
-    def song_ids(self):
+    def get_used_song_ids(self, exclude={}):
         """Get a list of song ids from the sections of this session's results"""
-        return (
-            res.section.song.id for res in self.result_set.filter(section__isnull=False)
-        )
+        return (res.section.song.id for res in self.result_set.exclude(**exclude).filter(section__isnull=False))
 
-    def filter_songs(self, filter_by={}):
-        # Get pks from sections with given filter and song_id
-        pks = self.playlist.section_set.filter(**filter_by).values_list(
-            "song_id", flat=True
-        )
-
-        # Return None if nothing matches
-        if len(pks) == 0:
-            return None
-
-        return pks
-
-    def section_from_any_song(self, filter_by={}):
-        """Get a random section with a Dutch IP check.
-
-        To ensure appropriate IP restrictions, most rules should use this
-        method instead of operating on the playlist directly.
-        """
-
-        pks = self.filter_songs(filter_by)
-        if pks:
-            # Return a random section
-            sections = self.playlist.section_set.filter(
-                song_id=random.choice(pks)
-            ).filter(**filter_by)
-            return random.choice(sections)
-
-    def all_sections(self, filter_by={}):
-        """Get all section with a Dutch IP check.
-
-        To ensure appropriate IP restrictions, most rules should use this
-        method instead of operating on the playlist directly.
-        """
-        pks = self.filter_songs(filter_by)
-        # Return all sections
-        if pks:
-            return self.playlist.section_set.filter(song_id__in=pks)
-
-    def section_from_song(self, song_id, filter_by={}):
-        """Get a random section from a particular song"""
-        return self.section_from_any_song({**filter_by, "song_id": song_id})
-
-    def unused_song_ids(self, filter_by={}):
+    def get_unused_song_ids(self, filter_by={}):
         """Get a list of unused song ids from this session's playlist"""
-        # Get all song ids from playlists
-        song_ids = self.playlist.song_ids(filter_by)
-
+        # Get all song ids from the current playlist
+        song_ids = self.playlist.section_set.filter(
+            **filter_by).order_by('song').values_list('song_id', flat=True).distinct()
         # Get all song ids from results
-        used_song_ids = self.song_ids()
-
+        used_song_ids = self.get_used_song_ids()
         return list(set(song_ids) - set(used_song_ids))
-
-    def section_from_unused_song(self, filter_by={}):
-        """Get a random section from any unused song"""
-
-        song_ids = self.unused_song_ids(filter_by)
-
-        if len(song_ids) == 0:
-            return None
-
-        # Get a random song_id
-        song_id = random.choice(song_ids)
-
-        # Return a random section
-        return self.section_from_song(song_id, filter_by)
-
-    def section_from_used_song(self):
-        """Get a random section from any used song"""
-
-        song_ids = self.song_ids()
-
-        if len(song_ids) == 0:
-            return None
-
-        # Get a random song_id
-        song_id = random.choice(song_ids)
-
-        # Return a random section
-        return self.section_from_song(song_id)
 
     def block_rules(self):
         """Get rules class to be used for this session"""

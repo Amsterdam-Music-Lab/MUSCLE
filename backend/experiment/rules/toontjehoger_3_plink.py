@@ -12,7 +12,8 @@ from experiment.actions.utils import get_current_experiment_url
 from .base import Base
 from experiment.utils import non_breaking_spaces
 from result.utils import prepare_result
-from section.models import Playlist
+from section.models import Playlist, Section
+from session.models import Session
 
 logger = logging.getLogger(__name__)
 
@@ -162,24 +163,28 @@ class ToontjeHoger3Plink(Base):
             {'number': round_number+1, 'total': session.block.rounds}
         return Score(session, config=config, feedback=feedback, score=score, title=score_title)
 
-    def get_plink_round(self, session, present_score=False):
+    def get_plink_round(self, session: Session, present_score=False):
         next_round = []
         if present_score:
             next_round.append(self.get_score_view(session))
         # Get all song sections
-        all_sections = session.all_sections()
+        all_sections = session.playlist.section_set.all()
         choices = {}
         for section in all_sections:
             label = section.song_label()
             choices[section.pk] = label
 
         # Get section to recognize
-        section = session.section_from_unused_song()
-        if section is None:
-            raise Exception("Error: could not find section")
+        section = session.playlist.get_section(song_ids=session.get_unused_song_ids())
 
         expected_response = section.pk
 
+        trials = self.get_plink_trials(
+            session, section, choices, expected_response)
+        return [*next_round, *trials]
+
+    def get_plink_trials(self, session: Session, section: Section, choices: dict, expected_response: str) -> list:
+        plink_trials = []
         question1 = AutoCompleteQuestion(
             key='plink',
             choices=choices,
@@ -191,7 +196,7 @@ class ToontjeHoger3Plink(Base):
                 expected_response=expected_response
             )
         )
-        next_round.append(Trial(
+        plink_trials.append(Trial(
             playback=PlayButton(
                 sections=[section]
             ),
@@ -216,14 +221,14 @@ class ToontjeHoger3Plink(Base):
                 ],
                 button_label="Start"
             )
-            next_round.append(extra_questions_intro)
+            plink_trials.append(extra_questions_intro)
 
-        extra_rounds = [
+        extra_trials = [
             self.get_era_question(session, section),
             self.get_emotion_question(session, section)
         ]
 
-        return [*next_round, *extra_rounds]
+        return [*plink_trials, *extra_trials]
 
     def get_era_question(self, session, section):
 

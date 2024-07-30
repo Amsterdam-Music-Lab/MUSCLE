@@ -59,6 +59,8 @@ class PlaylistModelTest(TestCase):
         song2 = Song.objects.get(name='Like a Surgeon')
         section = playlist.get_section(filter_by={'tag': 'tag2'}, song_ids=[song2.id])
         assert section.tag == 'tag2' and section.song.id == song2.id
+        with self.assertRaises(Section.DoesNotExist):
+            playlist.get_section(filter_by={'tag': 'non-existing tag'})
 
     def test_valid_csv(self):
         playlist = Playlist.objects.get(name='TestPlaylist')
@@ -100,7 +102,7 @@ class MockRequest:
 
 this_playlist_admin = PlaylistAdmin(
     model=Playlist, admin_site=AdminSite)
-    
+
 
 class TestAdminEditSection(TestCase):
 
@@ -194,7 +196,7 @@ class TestAdminEditSection(TestCase):
         }
         this_playlist = Playlist.objects.first()
         response = this_playlist_admin.edit_sections(request, this_playlist)
-        updated_section = Section.objects.first()        
+        updated_section = Section.objects.first()
         self.assertEqual(updated_section.song, None)
         self.assertEqual(response.status_code, 302)
         all_songs = Song.objects.all()
