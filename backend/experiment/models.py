@@ -26,12 +26,7 @@ def consent_upload_path(instance, filename):
 class Experiment(models.Model):
     """A model to allow nesting multiple phases with blocks into a 'parent' experiment"""
 
-    name = models.CharField(max_length=64, default="")
-    description = models.TextField(blank=True, default="")
     slug = models.SlugField(max_length=64, default="")
-    consent = models.FileField(
-        upload_to=consent_upload_path, blank=True, default="", validators=[markdown_html_validator()]
-    )
     translated_content = models.QuerySet["ExperimentTranslatedContent"]
     theme_config = models.ForeignKey("theme.ThemeConfig", blank=True, null=True, on_delete=models.SET_NULL)
     # first experiments in a test series, in fixed order
@@ -41,13 +36,13 @@ class Experiment(models.Model):
     last_experiments = models.JSONField(blank=True, null=True, default=dict)
     # present random_experiments as dashboard
     dashboard = models.BooleanField(default=False)
-    about_content = models.TextField(blank=True, default="")
     active = models.BooleanField(default=True)
     social_media_config: Optional["SocialMediaConfig"]
     phases: models.QuerySet["Phase"]
 
     def __str__(self):
-        return self.name or self.slug
+        translated_content = self.get_primary_content()
+        return translated_content.name if translated_content else self.slug
 
     class Meta:
         verbose_name_plural = "Experiments"
@@ -70,6 +65,15 @@ class Experiment(models.Model):
             participants[session.participant.id] = session.participant
         return participants.values()
 
+    def get_primary_content(self):
+        """Get primary content for the experiment"""
+        return self.translated_content.order_by("index").first()
+
+    def get_content(self, language: str):
+        """Get content for a specific language"""
+        content = self.translated_content.filter(language=language).first()
+        return content if content else self.get_primary_content()
+
 
 class Phase(models.Model):
     name = models.CharField(max_length=64, blank=True, default="")
@@ -79,7 +83,9 @@ class Phase(models.Model):
     randomize = models.BooleanField(default=False, help_text="Randomize the order of the experiments in this phase.")
 
     def __str__(self):
-        compound_name = self.name or self.series.name or self.series.slug or "Unnamed phase"
+        default_content = self.series.get_primary_content()
+        experiment_name = default_content.name if default_content else None
+        compound_name = self.name or experiment_name or self.series.slug or "Unnamed phase"
 
         if not self.name:
             return f"{compound_name} ({self.index})"
@@ -348,4 +354,8 @@ class SocialMediaConfig(models.Model):
         return _("I scored {points} points in {block_name}").format(score=score, block_name=block_name)
 
     def __str__(self):
-        return f"Social Media for {self.experiment.name}"
+        primary_content = self.experiment.get_primary_content()
+        if primary_content:
+            return f"Social Media for {primary_content.name}"
+
+        return f"Social Media for {self.experiment.slug}"
