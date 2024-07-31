@@ -20,7 +20,23 @@ def migrate_experiment_content(apps, schema_editor):
 
 
 def reverse_migrate_experiment_content(apps, schema_editor):
+    Experiment = apps.get_model("experiment", "Experiment")
     ExperimentTranslatedContent = apps.get_model("experiment", "ExperimentTranslatedContent")
+
+    for experiment in Experiment.objects.all():
+        # find the English translation or the first one (lowest index)
+        experiment_translations = ExperimentTranslatedContent.objects.filter(experiment=experiment)
+        primary_translation = experiment_translations.order_by("index").first()
+
+        if not primary_translation:
+            continue
+
+        experiment.name = primary_translation.name
+        experiment.description = primary_translation.description
+        experiment.consent = primary_translation.consent
+        experiment.about_content = primary_translation.about_content
+        experiment.save()
+
     ExperimentTranslatedContent.objects.filter(language="en").delete()
 
 
