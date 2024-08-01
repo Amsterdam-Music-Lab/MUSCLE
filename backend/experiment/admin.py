@@ -48,8 +48,12 @@ class FeedbackInline(admin.TabularInline):
 
 class ExperimentTranslatedContentInline(NestedStackedInline):
     model = ExperimentTranslatedContent
-    extra = 1
     sortable_field_name = "index"
+
+    def get_extra(self, request, obj=None, **kwargs):
+        if obj:
+            return 0
+        return 1
 
 
 class BlockAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
@@ -227,21 +231,33 @@ admin.site.register(Block, BlockAdmin)
 
 class BlockInline(NestedStackedInline):
     model = Block
-    extra = 1
     sortable_field_name = "index"
+
+    def get_extra(self, request, obj=None, **kwargs):
+        if obj:
+            return 0
+        return 1
 
 
 class PhaseInline(NestedTabularInline):
     model = Phase
-    extra = 1
     sortable_field_name = "index"
     inlines = [BlockInline]
+
+    def get_extra(self, request, obj=None, **kwargs):
+        if obj:
+            return 0
+        return 1
 
 
 class SocialMediaConfigInline(NestedStackedInline):
     form = SocialMediaConfigForm
     model = SocialMediaConfig
-    extra = 0
+
+    def get_extra(self, request, obj=None, **kwargs):
+        if obj:
+            return 0
+        return 1
 
 
 class ExperimentAdmin(InlineActionsModelAdminMixin, NestedModelAdmin):
