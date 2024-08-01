@@ -41,7 +41,7 @@ class Experiment(models.Model):
     phases: models.QuerySet["Phase"]
 
     def __str__(self):
-        translated_content = self.get_primary_content()
+        translated_content = self.get_fallback_content()
         return translated_content.name if translated_content else self.slug
 
     class Meta:
@@ -65,7 +65,7 @@ class Experiment(models.Model):
             participants[session.participant.id] = session.participant
         return participants.values()
 
-    def get_primary_content(self):
+    def get_fallback_content(self):
         """Get primary content for the experiment"""
         return self.translated_content.order_by("index").first()
 
@@ -74,7 +74,12 @@ class Experiment(models.Model):
         content = self.translated_content.filter(language=language).first()
 
         if not content and fallback:
-            return self.get_primary_content()
+            fallback_content = self.get_fallback_content()
+
+            if not fallback_content:
+                raise ValueError("No primary content found for experiment")
+
+            return fallback_content
 
         if not content:
             raise ValueError(f"No content found for language {language}")
@@ -90,7 +95,7 @@ class Phase(models.Model):
     randomize = models.BooleanField(default=False, help_text="Randomize the order of the experiments in this phase.")
 
     def __str__(self):
-        default_content = self.series.get_primary_content()
+        default_content = self.series.get_fallback_content()
         experiment_name = default_content.name if default_content else None
         compound_name = self.name or experiment_name or self.series.slug or "Unnamed phase"
 
@@ -361,8 +366,8 @@ class SocialMediaConfig(models.Model):
         return _("I scored {points} points in {block_name}").format(score=score, block_name=block_name)
 
     def __str__(self):
-        primary_content = self.experiment.get_primary_content()
-        if primary_content:
-            return f"Social Media for {primary_content.name}"
+        fallback_content = self.experiment.get_fallback_content()
+        if fallback_content:
+            return f"Social Media for {fallback_content.name}"
 
         return f"Social Media for {self.experiment.slug}"

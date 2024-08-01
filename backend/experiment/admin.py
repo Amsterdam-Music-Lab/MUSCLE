@@ -284,7 +284,7 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, NestedModelAdmin):
     ]
 
     def name(self, obj):
-        content = obj.get_primary_content()
+        content = obj.get_fallback_content()
         return content.name if content else "No name"
 
     def slug_link(self, obj):
@@ -296,7 +296,7 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, NestedModelAdmin):
         )
 
     def description_excerpt(self, obj):
-        description = obj.get_primary_content().description or "No description"
+        description = obj.get_fallback_content().description or "No description"
         if len(description) < 50:
             return description
 

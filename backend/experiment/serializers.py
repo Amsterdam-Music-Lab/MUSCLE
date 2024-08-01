@@ -31,6 +31,8 @@ def serialize_experiment(experiment: Experiment, language="en") -> dict:
 
     if translated_content.consent:
         serialized["consent"] = Consent(translated_content.consent).action()
+    elif experiment.get_fallback_content() and experiment.get_fallback_content().consent:
+        serialized["consent"] = Consent(experiment.get_fallback_content().consent).action()
 
     if experiment.theme_config:
         serialized["theme"] = serialize_theme(experiment.theme_config)
