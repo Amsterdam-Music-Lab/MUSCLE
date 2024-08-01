@@ -372,7 +372,9 @@ class PhaseAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
 
     def related_experiment(self, obj):
         url = reverse("admin:experiment_experiment_change", args=[obj.series.pk])
-        return format_html('<a href="{}">{}</a>', url, obj.series.name)
+        content = obj.series.get_fallback_content()
+        experiment_name = content.name if content else "No name"
+        return format_html('<a href="{}">{}</a>', url, experiment_name)
 
     def blocks(self, obj):
         blocks = Block.objects.filter(phase=obj)
