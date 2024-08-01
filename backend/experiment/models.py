@@ -69,10 +69,17 @@ class Experiment(models.Model):
         """Get primary content for the experiment"""
         return self.translated_content.order_by("index").first()
 
-    def get_content(self, language: str):
+    def get_translated_content(self, language: str, fallback: bool = True):
         """Get content for a specific language"""
         content = self.translated_content.filter(language=language).first()
-        return content if content else self.get_primary_content()
+
+        if not content and fallback:
+            return self.get_primary_content()
+
+        if not content:
+            raise ValueError(f"No content found for language {language}")
+
+        return content
 
 
 class Phase(models.Model):
