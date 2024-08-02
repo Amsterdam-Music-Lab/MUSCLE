@@ -28,8 +28,9 @@ def get_block(request: HttpRequest, slug: str) -> JsonResponse:
        (/participant and /block/<slug> are called at the same time by the frontend)"""
     block = block_or_404(slug)
     class_name = ""
+    active_language = get_language()
 
-    if request.LANGUAGE_CODE.startswith("zh"):
+    if active_language.startswith("zh"):
         class_name = "chinese"
 
     if block.language:
