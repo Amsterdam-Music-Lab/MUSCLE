@@ -66,7 +66,7 @@ class Experiment(models.Model):
         return participants.values()
 
     def get_fallback_content(self):
-        """Get primary content for the experiment"""
+        """Get fallback content for the experiment"""
         return self.translated_content.order_by("index").first()
 
     def get_translated_content(self, language: str, fallback: bool = True):
@@ -77,7 +77,7 @@ class Experiment(models.Model):
             fallback_content = self.get_fallback_content()
 
             if not fallback_content:
-                raise ValueError("No primary content found for experiment")
+                raise ValueError("No fallback content found for experiment")
 
             return fallback_content
 
