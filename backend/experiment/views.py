@@ -33,9 +33,6 @@ def get_block(request: HttpRequest, slug: str) -> JsonResponse:
     if active_language.startswith("zh"):
         class_name = "chinese"
 
-    if block.language:
-        activate(block.language)
-
     participant = get_participant(request)
     session = Session(block=block, participant=participant)
 
