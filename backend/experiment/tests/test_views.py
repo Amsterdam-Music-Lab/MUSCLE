@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.test import TestCase
 from django.utils import timezone
+from django.utils.translation import activate, get_language
 
 from image.models import Image
 from experiment.serializers import serialize_block, serialize_phase
@@ -136,6 +137,55 @@ class TestExperimentViews(TestCase):
         serialized_coll_2 = serialize_phase(intermediate_phase, self.participant)
         total_score_2 = serialized_coll_2["totalScore"]
         self.assertEqual(total_score_2, 16)
+
+    def test_experiment_get_translated_content(self):
+        """Test get_translated_content method"""
+        experiment = Experiment.objects.get(slug="test_series")
+        translated_content = experiment.get_translated_content("en")
+        self.assertEqual(translated_content.name, "Test Series")
+
+    def test_experiment_get_fallback_content(self):
+        """Test get_fallback_content method"""
+
+        experiment = Experiment.objects.create(slug="test_experiment_translated_content")
+        ExperimentTranslatedContent.objects.create(
+            experiment=experiment,
+            index=0,
+            language="en",
+            name="Test Experiment Fallback Content",
+            description="Test experiment description in English.",
+        )
+        ExperimentTranslatedContent.objects.create(
+            experiment=experiment,
+            index=1,
+            language="es",
+            name="Experimento de Prueba",
+            description="Descripción de la experimento de prueba en español.",
+        )
+
+        session = self.client.session
+        session["participant_id"] = self.participant.id
+        session.save()
+
+        # request experiment with language set to English (British)
+        response = self.client.get(
+            "/experiment/test_experiment_translated_content/", headers={"Accept-Language": "en-Gb"}
+        )
+
+        # since English translation is available, the English content should be returned
+        self.assertEqual(response.json().get("name"), "Test Experiment Fallback Content")
+
+        # request experiment with language set to Spanish
+        response = self.client.get("/experiment/test_experiment_translated_content/", headers={"Accept-Language": "es"})
+
+        # since Spanish translation is available, the Spanish content should be returned
+        self.assertEqual(response.json().get("name"), "Experimento de Prueba")
+
+        # request experiment with language set to Dutch
+        response = self.client.get("/experiment/test_experiment_translated_content/", headers={"Accept-Language": "nl"})
+
+        # since no Dutch translation is available, the fallback content should be returned
+        self.assertEqual(response.json().get("name"), "Test Experiment Fallback Content")
 
 
 class ExperimentViewsTest(TestCase):

@@ -143,9 +143,6 @@ def get_experiment(
 
     response = JsonResponse({**serialize_experiment(experiment, language_code), **serialized_phase})
 
-    # set the language cookie
-    response.set_cookie(settings.LANGUAGE_COOKIE_NAME, experiment_language)
-
     return response
 
 
