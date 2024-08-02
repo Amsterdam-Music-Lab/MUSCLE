@@ -67,11 +67,7 @@ def get_block(request: HttpRequest, slug: str) -> JsonResponse:
     }
 
     response = JsonResponse(block_data, json_dumps_params={"indent": 4})
-    if block.language:
-        response.set_cookie(settings.LANGUAGE_COOKIE_NAME, block.language)
-    else:
-        # avoid carrying over language cookie from other blocks
-        response.set_cookie(settings.LANGUAGE_COOKIE_NAME, None)
+
     return response
 
 
@@ -144,7 +140,13 @@ def get_experiment(
             return get_experiment(request, slug, phase_index=phase_index)
     except IndexError:
         serialized_phase = {"dashboard": [], "next_block": None}
-    return JsonResponse({**serialize_experiment(experiment, language_code), **serialized_phase})
+
+    response = JsonResponse({**serialize_experiment(experiment, language_code), **serialized_phase})
+
+    # set the language cookie
+    response.set_cookie(settings.LANGUAGE_COOKIE_NAME, experiment_language)
+
+    return response
 
 
 def get_associated_blocks(pk_list):
