@@ -1,9 +1,17 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 import Button from "../Button/Button";
 
+interface InfoProps {
+    heading?: string;
+    body: string | TrustedHTML;
+    button_label?: string;
+    button_link?: string;
+    onNext?: () => void;
+}
+
 /** Info is an block view that shows the Info text, and handles agreement/stop actions */
-const Info = ({ heading, body, button_label, button_link, onNext }) => {
+const Info = ({ heading, body, button_label, button_link, onNext }: InfoProps) => {
     const [maxHeight, setMaxHeight] = useState(getMaxHeight());
 
     useEffect(() => {
@@ -17,7 +25,6 @@ const Info = ({ heading, body, button_label, button_link, onNext }) => {
         };
     }, []);
 
-    // Show Info
     return (
         <div className="aha__info">
             {heading && (
@@ -32,6 +39,7 @@ const Info = ({ heading, body, button_label, button_link, onNext }) => {
                 className="info-body"
                 style={{ maxHeight }}
                 dangerouslySetInnerHTML={{ __html: body }}
+                data-testid="info-body"
             />
 
             {button_label && (
@@ -45,21 +53,22 @@ const Info = ({ heading, body, button_label, button_link, onNext }) => {
                         >
                             {button_label}
                         </a>
-                    ) : (
+                    ) : onNext ? (
                         <Button
                             className="btn-primary"
                             onClick={onNext}
                             title={button_label}
                         />
-                    )}
+                    ) : null
+                    }
                 </div>
             )}
         </div>
     );
 };
 
+/** Calculate height for Info text to prevent overlapping browser chrome */
 const getMaxHeight = () => {
-    // Calculate height for Info text to prevent overlapping browser chrome
     const height = document.documentElement?.clientHeight || window.innerHeight;
 
     const width = document.documentElement?.clientWidth || window.innerWidth;

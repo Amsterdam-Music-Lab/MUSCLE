@@ -2,6 +2,8 @@
 from django.test import TestCase
 from experiment.models import Block
 from result.models import Result
+from participant.models import Participant
+from participant.utils import PARTICIPANT_KEY
 from section.models import Playlist
 from session.models import Session
 import json
@@ -43,7 +45,15 @@ class BeatAlignmentRuleTest(TestCase):
         return json.loads(response.content)
 
     def test_block(self):
+        participant = Participant.objects.create()
+        participant.save()
+
+        session = self.client.session
+        session.update({PARTICIPANT_KEY: participant.id})
+        session.save()
+
         response = self.client.get('/experiment/block/ba/')
+
         response_json = self.load_json(response)
         self.assertTrue({'id', 'slug', 'name', 'class_name', 'rounds',
                         'playlists', 'next_round', 'loading_text'} <= response_json.keys())

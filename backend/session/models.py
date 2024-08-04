@@ -7,14 +7,18 @@ from result.models import Result
 class Session(models.Model):
     """Experiment session by a participant"""
 
-    block = models.ForeignKey('experiment.Block', on_delete=models.CASCADE, blank=True, null=True)
-    participant = models.ForeignKey('participant.Participant', on_delete=models.CASCADE)
-    playlist = models.ForeignKey('section.Playlist', on_delete=models.SET_NULL,
-                                 blank=True, null=True)
+    block = models.ForeignKey(
+        "experiment.Block", on_delete=models.CASCADE, blank=True, null=True
+    )
+    participant = models.ForeignKey("participant.Participant", on_delete=models.CASCADE)
+    playlist = models.ForeignKey(
+        "section.Playlist", on_delete=models.SET_NULL, blank=True, null=True
+    )
 
     started_at = models.DateTimeField(db_index=True, default=timezone.now)
     finished_at = models.DateTimeField(
-        db_index=True, default=None, null=True, blank=True)
+        db_index=True, default=None, null=True, blank=True
+    )
     json_data = models.JSONField(default=dict, blank=True, null=True)
     final_score = models.FloatField(db_index=True, default=0.0)
     current_round = models.IntegerField(default=1)
@@ -30,8 +34,10 @@ class Session(models.Model):
 
     def total_score(self):
         """Sum of all result scores"""
-        score = self.result_set.aggregate(models.Sum('score'))
-        return self.block.bonus_points + (score['score__sum'] if score['score__sum'] else 0)
+        score = self.result_set.aggregate(models.Sum("score"))
+        return self.block.bonus_points + (
+            score["score__sum"] if score["score__sum"] else 0
+        )
 
     def last_score(self):
         """Get last score, or return 0 if no scores are set"""
@@ -55,7 +61,7 @@ class Session(models.Model):
         return ""
 
     def previous_section(self):
-        """ Get previous song presented in an experiment """
+        """Get previous song presented in an experiment"""
         valid_results = self.result_set.filter(score__isnull=False)
         if valid_results.count() > 0:
             result = valid_results.last()
@@ -64,8 +70,7 @@ class Session(models.Model):
         return None
 
     def save_json_data(self, data):
-        """Merge data with json_data, overwriting duplicate keys.
-        """
+        """Merge data with json_data, overwriting duplicate keys."""
         new_data = self.load_json_data()
         new_data.update(data)
         self.json_data = new_data
@@ -78,12 +83,12 @@ class Session(models.Model):
     def export_admin(self):
         """Export data for admin"""
         return {
-            'session_id': self.id,
-            'participant': self.participant.id,
-            'started_at': self.started_at.isoformat(),
-            'finished_at': self.finished_at.isoformat() if self.finished_at else None,
-            'json_data': self.load_json_data(),
-            'results': [result.export_admin() for result in self.result_set.all()]
+            "session_id": self.id,
+            "participant": self.participant.id,
+            "started_at": self.started_at.isoformat(),
+            "finished_at": self.finished_at.isoformat() if self.finished_at else None,
+            "json_data": self.load_json_data(),
+            "results": [result.export_admin() for result in self.result_set.all()],
         }
 
     def export_results(self):
@@ -134,7 +139,12 @@ class Session(models.Model):
 
     def rank(self) -> int:
         """Get session rank based on final_score, within current experiment"""
-        return self.block.session_set.filter(final_score__gte=self.final_score).values('final_score').annotate(total=models.Count('final_score')).count()
+        return (
+            self.block.session_set.filter(final_score__gte=self.final_score)
+            .values("final_score")
+            .annotate(total=models.Count("final_score"))
+            .count()
+        )
 
     def percentile_rank(self, exclude_unfinished: bool) -> float:
         """Get session percentile rank based on final_score, within current experiment"""
@@ -144,8 +154,7 @@ class Session(models.Model):
         n_session = session_set.count()
         if n_session == 0:
             return 0.0  # Should be impossible but avoids x/0
-        n_lte = \
-            session_set.filter(final_score__lte=self.final_score).count()
+        n_lte = session_set.filter(final_score__lte=self.final_score).count()
         n_eq = session_set.filter(final_score=self.final_score).count()
         return 100.0 * (n_lte - (0.5 * n_eq)) / n_session
 

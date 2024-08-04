@@ -363,3 +363,66 @@ export const IconRange = {
         },
     ],
 };
+
+export const StringNumberRange = {
+    args: {
+        question: {
+            question: "This is the question",
+            explainer: "This is the explainer",
+            view: "STRING",
+            input_type: "number",
+            min_value: 1,
+            max_value: 42,
+        },
+        onChange: () => { },
+        value: "",
+    },
+    decorators: [
+        (Story) => {
+            return (
+                <div
+                    style={{
+                        width: "100%",
+                        height: "100%",
+                        backgroundColor: "#ddd",
+                        padding: "3rem",
+                        position: "relative",
+                    }}
+                >
+                    <Story />
+                </div>
+            );
+        },
+    ],
+};
+
+export const StringTextRange = {
+    args: {
+        question: {
+            question: "This is the question",
+            explainer: "This is the explainer",
+            view: "STRING",
+            input_type: "text",
+            max_length: 9,
+        },
+        onChange: () => { },
+        value: "",
+    },
+    decorators: [
+        (Story) => {
+            return (
+                <div
+                    style={{
+                        width: "100%",
+                        height: "100%",
+                        backgroundColor: "#ddd",
+                        padding: "3rem",
+                        position: "relative",
+                    }}
+                >
+                    <Story />
+                </div>
+            );
+        },
+    ],
+};

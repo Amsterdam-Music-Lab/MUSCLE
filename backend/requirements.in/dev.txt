@@ -9,14 +9,11 @@ pylint
 # Improve django code analysis
 pylint-django
 
-# Autoformatter
-autopep8
-
 # for simulating http requests in tests
 requests
 
 # Add pip-tools so we can use pip-compile in our develop environment
 pip-tools
 
-# Flake8 for linting
-flake8
+# Ruff for linting
+ruff

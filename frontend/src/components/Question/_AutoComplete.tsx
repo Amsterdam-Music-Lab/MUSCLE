@@ -1,5 +1,11 @@
-import React from "react";
+import Question from "@/types/Question";
 import Select from "react-select";
+
+interface AutoCompleteProps {
+    question: Question;
+    value: string;
+    onChange: (value: string) => void;
+}
 
 // When using Safari iOS the browser may scroll the page when using the react-select Select.
 // Therefore we scroll back to top when the select is blurred
@@ -8,11 +14,18 @@ const scrollToTop = () => {
 };
 
 // AutoComplete is a question view for selecting a single option from a dropdown list with autocompletion
-const AutoComplete = ({ question, value, onChange, emphasizeTitle = false }) => {
-    const options = Object.keys(question.choices)
-        .map((val, index) => ({
+const AutoComplete = ({ question, value, onChange }: AutoCompleteProps) => {
+
+    const choices = question.choices;
+
+    if (!choices || Object.keys(choices).length <= 0) {
+        throw new Error("AutoComplete question must have choices");
+    }
+
+    const options = Object.keys(choices)
+        .map((val) => ({
             value: val,
-            label: question.choices[val],
+            label: choices[val],
         }))
         .sort((a, b) => a.label.localeCompare(b.label));
 
@@ -21,12 +34,10 @@ const AutoComplete = ({ question, value, onChange, emphasizeTitle = false }) => 
             <div className="control">
                 <Select
                     options={options}
-                    tabIndex="0"
+                    tabIndex={0}
                     name={question.key}
                     value={options.find((option) => option.value === value)}
-                    onChange={(choice) => {
-                        onChange(choice.value);
-                    }}
+                    onChange={(choice) => onChange(choice.value)}
                     onBlur={scrollToTop}
                 />
             </div>

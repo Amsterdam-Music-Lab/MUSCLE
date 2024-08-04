@@ -474,7 +474,7 @@ class Categorization(Base):
                          int(json_data['training_rounds']))
         sequence = json_data['sequence']
         this_section = sequence[rounds_passed]
-        section = session.section_from_song(this_section)
+        section = session.playlist.get_section(song_ids=[this_section])
         # Determine expected response
         if section.tag == '1A' or section.tag == '2A':
             expected_response = 'A'
