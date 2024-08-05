@@ -31,7 +31,7 @@ export const URLS = {
     block: "/block/:slug",
     experimentAbout: "/:slug/about",
     experiment: "/:slug/*",
-    internalRedirect: "/redirect/:path",
+    internalRedirect: "/redirect/*",
     reloadParticipant: "/participant/reload/:id/:hash",
     theme: "/theme/:id",
     AMLHome:
