@@ -37,7 +37,7 @@ def reverse_migrate_experiment_content(apps, schema_editor):
         experiment.about_content = primary_translation.about_content
         experiment.save()
 
-    ExperimentTranslatedContent.objects.filter(language="en").delete()
+    ExperimentTranslatedContent.objects.all().delete()
 
 
 class Migration(migrations.Migration):
