@@ -189,6 +189,7 @@ class TestExperimentAdmin(TestCase):
                 "name",
                 "slug_link",
                 "description_excerpt",
+                "remarks",
                 "dashboard",
                 "phases",
                 "active",
