@@ -17,11 +17,8 @@ DATABASES = {
     }
 }
 
-# Some installed apps neeed to be prepended to the list
-INSTALLED_APPS = ["django_extensions"] + INSTALLED_APPS
-
-# And some need to be appended
-INSTALLED_APPS += ["debug_toolbar"]
+# Some installed apps neeed to be prepended to the list and some appended
+INSTALLED_APPS = ["django_extensions"] + INSTALLED_APPS + ["debug_toolbar"]
 
 MIDDLEWARE = ["debug_toolbar.middleware.DebugToolbarMiddleware"] + MIDDLEWARE
 
