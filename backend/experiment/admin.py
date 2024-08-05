@@ -385,6 +385,17 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, NestedModelAdmin):
         if not remarks_array:
             remarks_array.append({"level": "success", "message": "✅ All good", "title": "No issues found."})
 
+        supported_languages = obj.translated_content.values_list("language", flat=True).distinct()
+
+        # TODO: Check if all blocks support the same languages as the experiment
+        # Implement this when the blocks have been updated to support multiple languages
+
+        # TODO: Check if all theme configs support the same languages as the experiment
+        # Implement this when the theme configs have been updated to support multiple languages
+
+        # TODO: Check if all social media configs support the same languages as the experiment
+        # Implement this when the social media configs have been updated to support multiple languages
+
         return format_html(
             "\n".join(
                 [
