@@ -80,7 +80,7 @@ class Huang2022(Hooked):
         json_data = session.load_json_data()
         # Get next round number and initialise actions list. Two thirds of
         # rounds will be song_sync; the remainder heard_before.
-        round_number = session.rounds_passed()
+        round_number = session.rounds_passed(self.relevant_keys)
         total_rounds = session.block.rounds
 
         # Collect actions.
