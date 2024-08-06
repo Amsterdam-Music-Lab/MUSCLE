@@ -378,7 +378,7 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, NestedModelAdmin):
                 {
                     "level": "info",
                     "message": "📋 No consent form",
-                    "title": "Please add at least one consent form to this experiment.",
+                    "title": "You may want to add a consent form (approved by an ethical board) to this experiment.",
                 }
             )
 
