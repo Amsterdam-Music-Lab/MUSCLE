@@ -94,7 +94,7 @@ class HookedTest(TestCase):
                 self.assertEqual(len([p for p in plan if p == 'returning']), 3)
                 self.assertEqual(len([p for p in plan if p == 'new']), 3)
                 self.assertEqual(len([p for p in plan if p == 'old']), 3)
-                self.assertEqual(len(actions), 3)
+                self.assertEqual(len(actions), 5)
                 self.assertEqual(session.result_set.filter(question_key='recognize').count(), 1)
                 self.assertEqual(session.result_set.filter(question_key='correct_place').count(), 1)
             elif i == 1:
@@ -267,10 +267,10 @@ class HookedTest(TestCase):
                 assert len(actions) == 2
                 assert actions[1].ID == 'FINAL'
             elif i == 0:
-                assert len(actions) == 3
-                assert actions[0].feedback_form.form[0].key == 'dgf_generation'
-                assert actions[1].feedback_form.form[0].key == 'dgf_gender_identity'
-                assert actions[2].feedback_form.form[0].key == 'playlist_decades'
+                self.assertEqual(len(actions), 4)
+                self.assertEqual(actions[1].feedback_form.form[0].key,  'dgf_generation')
+                self.assertEqual(actions[2].feedback_form.form[0].key, 'dgf_gender_identity')
+                self.assertEqual(actions[3].feedback_form.form[0].key, 'playlist_decades')
                 result = Result.objects.get(
                     session=session,
                     question_key='playlist_decades'
