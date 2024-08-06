@@ -57,7 +57,7 @@ class NumberQuestion(Question):
 
 
 class TextQuestion(Question):
-    def __init__(self, input_type='text', max_length=None, **kwargs):
+    def __init__(self, input_type='text', max_length=64, **kwargs):
         super().__init__(**kwargs)
         self.max_length = max_length
         self.input_type = input_type
