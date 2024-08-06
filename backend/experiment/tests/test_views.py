@@ -47,7 +47,7 @@ class TestExperimentViews(TestCase):
         session = self.client.session
         session["participant_id"] = self.participant.id
         session.save()
-        # check that first_experiments is returned correctly
+        # check that the correct block is returned correctly
         response = self.client.get("/experiment/test_series/")
         self.assertEqual(response.json().get("nextBlock").get("slug"), "block1")
         # create session
@@ -113,7 +113,7 @@ class TestExperimentViews(TestCase):
         intermediate_phase = Phase.objects.get(name="intermediate")
         intermediate_phase.dashboard = True
         intermediate_phase.save()
-        # check that first_experiments is returned correctly
+        # check that the dashboard is returned correctly
         response = self.client.get("/experiment/test_series/")
         self.assertEqual(type(response.json().get("dashboard")), list)
 

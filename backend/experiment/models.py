@@ -29,11 +29,6 @@ class Experiment(models.Model):
     slug = models.SlugField(max_length=64, default="")
     translated_content = models.QuerySet["ExperimentTranslatedContent"]
     theme_config = models.ForeignKey("theme.ThemeConfig", blank=True, null=True, on_delete=models.SET_NULL)
-    # first experiments in a test series, in fixed order
-    first_experiments = models.JSONField(blank=True, null=True, default=dict)
-    random_experiments = models.JSONField(blank=True, null=True, default=dict)
-    # last experiments in a test series, in fixed order
-    last_experiments = models.JSONField(blank=True, null=True, default=dict)
     # present random_experiments as dashboard
     dashboard = models.BooleanField(default=False)
     active = models.BooleanField(default=True)
