@@ -19,6 +19,7 @@ SCORE_AVG_MIN_TRAINING = 0.8
 
 class Categorization(Base):
     ID = 'CATEGORIZATION'
+    default_consent_file = 'consent/consent_categorization.html'
 
     def __init__(self):
         self.question_series = [
@@ -29,21 +30,12 @@ class Categorization(Base):
             },
         ]
 
-    def first_round(self, block):
-        explainer = Explainer(
+    def intro_explainer(self):
+        return Explainer(
             instruction="This is a listening experiment in which you have to respond to short sound sequences.",
             steps=[],
             button_label='Ok'
         )
-        # Add consent from file or admin (admin has priority)
-        consent = Consent(
-            block.consent,
-            title='Informed consent',
-            confirm='I agree',
-            deny='Stop',
-            url='consent/consent_categorization.html'
-            )
-        return [consent, explainer]
 
     def next_round(self, session):
         actions = self.get_questionnaire(session)
@@ -111,13 +103,14 @@ class Categorization(Base):
 
         if 'training' in json_data['phase']:
             if get_rounds_passed == 0:
+                intro_explainer = self.intro_explainer()
                 explainer2 = Explainer(
                     instruction="The experiment will now begin. Please don't close the browser during the experiment. You can only run it once. Click to start a sound sequence.",
                     steps=[],
                     button_label='Ok'
                 )
                 trial = self.next_trial_action(session)
-                return [explainer2, trial]
+                return [intro_explainer, explainer2, trial]
 
             # Get next training action
             elif get_rounds_passed < len(json_data['sequence']):

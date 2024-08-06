@@ -59,11 +59,8 @@ class ToontjeHoger2Preverbal(Base):
 
         return errors
 
-    def first_round(self, block):
-        """Create data for the first block rounds."""
-
-        # 1. Explain game.
-        explainer = Explainer(
+    def intro_explainer(self):
+        return Explainer(
             instruction="Het eerste luisteren",
             steps=[
                 Step(
@@ -107,7 +104,7 @@ class ToontjeHoger2Preverbal(Base):
         # Round 1
         if get_rounds_passed == 0:
             # No combine_actions because of inconsistent next_round array wrapping in first round
-            return self.get_round1(session)
+            return [self.get_intro_explainer(), self.get_spectrogram_info(), self.get_round1(session)]
 
         # Round 2
         if get_rounds_passed == 1:
@@ -169,7 +166,7 @@ class ToontjeHoger2Preverbal(Base):
             title=self.TITLE,
         )
 
-        return [image_trial]
+        return image_trial
 
     def get_round1_question(self):
         return "Welk spectrogram toont het geluid van een mens?"

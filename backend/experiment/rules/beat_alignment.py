@@ -18,11 +18,9 @@ class BeatAlignment(Base):
 
     ID = 'BEAT_ALIGNMENT'
 
-    def first_round(self, block):
-        """Create data for the first block rounds"""
-
-        # 1. General explainer
-        explainer = Explainer(
+    def intro_explainer(self):
+        """ Explainer at start of experiment """
+        return Explainer(
             instruction=_(
                 "This test measures your ability to recognize the beat in a piece of music."),
             steps=[
@@ -37,10 +35,6 @@ class BeatAlignment(Base):
             button_label=_('Ok'),
             step_numbers=True
         )
-
-        return [
-            explainer,
-        ]
 
     def next_round(self, session):
         """Get action data for the next round"""
@@ -62,7 +56,7 @@ class BeatAlignment(Base):
 
         # Practice rounds
         if not session.load_json_data().get('done_practice'):
-            practice_rounds = []
+            practice_rounds = [self.intro_explainer()]
             for i in range(1, 4):
                 this_round = self.next_practice_action(session, i)
                 practice_rounds.append(copy.deepcopy(this_round))

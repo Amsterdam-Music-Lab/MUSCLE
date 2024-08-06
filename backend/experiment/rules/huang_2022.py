@@ -23,6 +23,7 @@ class Huang2022(Hooked):
     timeout = 15
     contact_email = 'musicexp_china@163.com'
     play_method = 'EXTERNAL'
+    default_consent_file = 'consent/consent_huang2021.html'
 
     def __init__(self):
         self.question_series = [
@@ -47,23 +48,6 @@ class Huang2022(Hooked):
                 ],
                 "randomize": False
             },
-        ]
-
-    def first_round(self, block):
-        """Create data for the first block rounds."""
-        # Add consent from file or admin (admin has priority)
-        consent = Consent(
-            block.consent,
-            title=_('Informed consent'),
-            confirm=_('I agree'),
-            deny=_('Stop'),
-            url='consent/consent_huang2021.html'
-            )
-        playlist = Playlist(block.playlists.all())
-
-        return [
-            consent,
-            playlist,
         ]
 
     def feedback_info(self):

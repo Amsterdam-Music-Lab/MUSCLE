@@ -39,10 +39,6 @@ class ToontjeHoger1Mozart(Base):
     ANSWER_URL1 = "/images/experiments/toontjehoger/mozart-effect1-answer.webp"
     ANSWER_URL2 = "/images/experiments/toontjehoger/mozart-effect2-answer.webp"
 
-    def _first_round(self, block):
-        """@deprecated. Use next_round instead."""
-        """Create data for the first block rounds."""
-
     def next_round(self, session: Session):
         """Get action data for the next round"""
         get_rounds_passed = session.get_rounds_passed()

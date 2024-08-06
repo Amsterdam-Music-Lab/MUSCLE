@@ -17,7 +17,22 @@ class RhythmBatteryIntro(Base):
         round_number = session.get_rounds_passed()
         playback = None
         feedback_form = None
-        if round_number == 0:
+        actions = []
+        if round_number == 1:
+            explainer = Explainer(
+                instruction=_(
+                    'General listening instructions:'),
+                steps=[
+                    Step(_(
+                        "To make sure that you can do the experiment as well as possible, please do it a quiet room with a stable internet connection."),
+                    ),
+                    Step(_("Please use headphones, and turn off sound notifications from other devices and applications (e.g., e-mail, phone messages)."),
+                         )],
+                step_numbers=True,
+                button_label=_('Ok')
+            )
+            actions.append(self.intro_explainer())
+            actions.append(explainer)
             key = 'quiet_room'
             result_pk = prepare_result(key, session, expected_response=key)
             feedback_form = Form([
@@ -103,8 +118,8 @@ class RhythmBatteryIntro(Base):
             return actions
 
         view = Trial(playback, feedback_form=feedback_form)
-
-        return [view]
+        actions.append(view)
+        return actions
 
     def intro_explainer(self):
         return Explainer(
@@ -126,22 +141,3 @@ class RhythmBatteryIntro(Base):
             ],
             button_label=_("Continue")
         )
-
-    def first_round(self, block):
-        intro_explainer = self.intro_explainer()
-        explainer = Explainer(
-            instruction=_(
-                'General listening instructions:'),
-            steps=[
-                Step(_(
-                    "To make sure that you can do the experiment as well as possible, please do it a quiet room with a stable internet connection."),
-                ),
-                Step(_("Please use headphones, and turn off sound notifications from other devices and applications (e.g., e-mail, phone messages)."),
-                     )],
-            step_numbers=True,
-            button_label=_('Ok')
-        )
-        return [
-            intro_explainer,
-            explainer,
-        ]

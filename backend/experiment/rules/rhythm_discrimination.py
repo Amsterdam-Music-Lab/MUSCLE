@@ -80,21 +80,12 @@ STIMULI = {
 class RhythmDiscrimination(Base):
     ID = 'RHYTHM_DISCRIMINATION'
 
-    def first_round(self, block):
-        """Create data for the first block rounds"""
-        explainer = intro_explainer()
-        explainer2 = practice_explainer()
-
-        return [
-            explainer,
-            explainer2,
-        ]
-
     def next_round(self, session):
         next_round_number = session.get_rounds_passed()
 
         if next_round_number == 0:
             plan_stimuli(session)
+            return [intro_explainer(), practice_explainer(), *next_trial_actions]
 
         return next_trial_actions(
             session, next_round_number)

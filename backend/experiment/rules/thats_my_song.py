@@ -49,11 +49,6 @@ class ThatsMySong(Hooked):
             'group': decade
         }
 
-    def first_round(self, block):
-        actions = super().first_round(block)
-        # skip Consent and Playlist action
-        return [actions[2]]
-
     def next_round(self, session: Session):
         """Get action data for the next round"""
         round_number = session.get_rounds_passed(self.counted_result_keys)
@@ -84,14 +79,10 @@ class ThatsMySong(Hooked):
                 )
             ]
 
-        # Initialise actions list. Two thirds of
-        # rounds will be song_sync; the remainder heard_before.
-
-        # Collect actions.
-        actions = []
         if round_number == 0:
             # get list of trials for demographic questions (first 2 questions)
             if session.result_set.filter(question_key='playlist_decades').count() == 0:
+                actions = [self.intro_explainer()]
                 questions = self.get_questionnaire(session, cutoff_index=2)
                 if questions:
                     for q in questions:
@@ -121,10 +112,10 @@ class ThatsMySong(Hooked):
             # Go to SongSync
             else:
                 self.plan_sections(session)
-                actions.extend(self.next_song_sync_action(session, round_number))
+                return self.next_song_sync_action(session, round_number)
         else:
             # Create a score action.
-            actions.append(self.get_score(session, round_number))
+            actions = [self.get_score(session, round_number)]
             heard_before_offset = session.load_json_data().get('heard_before_offset')
 
             # SongSync rounds. Skip questions until Round 5 (defined in question_offset).

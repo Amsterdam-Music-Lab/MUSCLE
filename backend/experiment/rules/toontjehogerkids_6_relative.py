@@ -12,11 +12,8 @@ logger = logging.getLogger(__name__)
 class ToontjeHogerKids6Relative(ToontjeHoger6Relative):
     ID = 'TOONTJE_HOGER_KIDS_6_RELATIVE'
 
-    def first_round(self, block):
-        """Create data for the first block rounds."""
-
-        # 1. Explain game.
-        explainer = Explainer(
+    def intro_explainer(self):
+        return Explainer(
             instruction="Relatief Gehoor",
             steps=[
                 Step("In dit testje kun je jouw relatief gehoor testen!"),
@@ -30,10 +27,6 @@ class ToontjeHogerKids6Relative(ToontjeHoger6Relative):
             ],
             button_label="Start"
         )
-
-        return [
-            explainer,
-        ]
 
     def get_score(self, session):
         # Feedback

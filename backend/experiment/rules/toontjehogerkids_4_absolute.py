@@ -10,11 +10,8 @@ class ToontjeHogerKids4Absolute(ToontjeHoger4Absolute):
     ID = 'TOONTJE_HOGER_KIDS_4_ABSOLUTE'
     PLAYLIST_ITEMS = 12
 
-    def first_round(self, block):
-        """Create data for the first block rounds."""
-
-        # 1. Explain game.
-        explainer = Explainer(
+    def intro_explainer(self):
+        return Explainer(
             instruction="Absoluut gehoor",
             steps=[
                 Step(
@@ -26,10 +23,6 @@ class ToontjeHogerKids4Absolute(ToontjeHoger4Absolute):
             step_numbers=True,
             button_label="Start"
         )
-
-        return [
-            explainer,
-        ]
 
     def get_trial_question(self):
         return "Welke van deze twee stukjes muziek klinkt precies zo hoog of laag als jij 'm kent?"
