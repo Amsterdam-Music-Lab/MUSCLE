@@ -367,7 +367,7 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, NestedModelAdmin):
                 {
                     "level": "warning",
                     "message": "📝 No content",
-                    "title": "Please add at least one translated content to this experiment.",
+                    "title": "Add content in at least one language to this experiment.",
                 }
             )
 
