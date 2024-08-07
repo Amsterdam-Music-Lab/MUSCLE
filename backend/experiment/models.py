@@ -1,4 +1,5 @@
 import copy
+from os.path import join
 
 from django.db import models
 from django.utils import timezone
@@ -20,7 +21,7 @@ language_choices[0] = ('', 'Unset')
 def consent_upload_path(instance, filename):
     """Generate path to save consent file based on block.slug"""
     folder_name = instance.slug
-    return f'consent/{folder_name}/{filename}'
+    return join('consent', folder_name, filename)
 
 
 class Experiment(models.Model):
