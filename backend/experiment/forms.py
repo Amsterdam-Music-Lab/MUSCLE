@@ -257,7 +257,6 @@ class BlockForm(ModelForm):
     class Meta:
         model = Block
         fields = [
-            "name",
             "slug",
             "active",
             "rules",

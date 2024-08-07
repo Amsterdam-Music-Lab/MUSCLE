@@ -300,17 +300,15 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, NestedModelAdmin):
         )
 
     def description_excerpt(self, obj):
-        fallback_content = obj.get_fallback_content()
-        description = (
-            fallback_content.description if fallback_content and fallback_content.description else "No description"
-        )
+        experiment_fallback_content = obj.get_fallback_content()
+        description = experiment_fallback_content.description if experiment_fallback_content else "No description"
         if len(description) < 50:
             return description
 
         return description[:50] + "..."
 
     def phases(self, obj):
-        phases = Phase.objects.filter(series=obj)
+        phases = Phase.objects.filter(experiment=obj)
         return format_html(
             ", ".join([f'<a href="/admin/experiment/phase/{phase.id}/change/">{phase.name}</a>' for phase in phases])
         )
@@ -418,7 +416,7 @@ class PhaseAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
         "randomize",
         "blocks",
     )
-    fields = ["name", "series", "index", "dashboard", "randomize"]
+    fields = ["name", "experiment", "index", "dashboard", "randomize"]
     inlines = [BlockInline]
 
     def name_link(self, obj):
@@ -427,8 +425,8 @@ class PhaseAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
         return format_html('<a href="{}">{}</a>', url, obj_name)
 
     def related_experiment(self, obj):
-        url = reverse("admin:experiment_experiment_change", args=[obj.series.pk])
-        content = obj.series.get_fallback_content()
+        url = reverse("admin:experiment_experiment_change", args=[obj.experiment.pk])
+        content = obj.experiment.get_fallback_content()
         experiment_name = content.name if content else "No name"
         return format_html('<a href="{}">{}</a>', url, experiment_name)
 
