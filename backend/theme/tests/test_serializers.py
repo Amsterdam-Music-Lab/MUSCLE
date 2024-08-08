@@ -1,3 +1,5 @@
+from urllib.parse import urljoin
+
 from django.conf import settings
 from django.test import TestCase
 
@@ -61,7 +63,7 @@ class ThemeConfigSerializerTest(TestCase):
             'disclaimer': '<p>Some <a href="https://example.com/our-team">information</a></p>',
             'logos': [
                 {
-                    'file': f'{settings.BASE_URL}{settings.MEDIA_URL}anotherimage.png',
+                    'file': urljoin(settings.BASE_URL, 'upload/anotherimage.png'),
                     'href': 'https://other.example.com',
                     'alt': 'Another alt text',
                     'title': '',
@@ -71,7 +73,7 @@ class ThemeConfigSerializerTest(TestCase):
                     'target': '',
                 },
                 {
-                    'file': f'{settings.BASE_URL}{settings.MEDIA_URL}someimage.jpg',
+                    'file': urljoin(settings.BASE_URL, 'upload/someimage.jpg'),
                     'href': 'https://example.com',
                     'alt': 'Alt text',
                     'title': 'Image',
@@ -81,7 +83,7 @@ class ThemeConfigSerializerTest(TestCase):
                     'tags': [],
                 },
                 {
-                    'file': f'{settings.BASE_URL}{settings.MEDIA_URL}thirdimage.jpg',
+                    'file': urljoin(settings.BASE_URL, 'upload/thirdimage.jpg'),
                     'href': 'https://third.example.com',
                     'alt': 'Third alt text',
                     'title': '',
@@ -114,7 +116,7 @@ class ThemeConfigSerializerTest(TestCase):
             'headingFontUrl': 'https://example.com/heading_font',
             'bodyFontUrl': 'https://example.com/body_font',
             'logo': {
-                'file': f'{settings.BASE_URL}{settings.MEDIA_URL}someimage.jpg',
+                'file': urljoin(settings.BASE_URL, 'upload/someimage.jpg'),
                 'href': 'https://example.com',
                 'alt': 'Alt text',
                 'title': 'Image',
@@ -123,7 +125,7 @@ class ThemeConfigSerializerTest(TestCase):
                 'tags': [],
                 'target': '_self',
             },
-            'backgroundUrl': f'{settings.BASE_URL}{settings.MEDIA_URL}anotherimage.png',
+            'backgroundUrl': urljoin(settings.BASE_URL, 'upload/anotherimage.png'),
             'footer': serialize_footer(self.footer),
             'header': serialize_header(self.header),
         }
@@ -154,7 +156,7 @@ class ThemeConfigSerializerTest(TestCase):
             'headingFontUrl': 'https://example.com/heading_font',
             'bodyFontUrl': 'https://example.com/body_font',
             'logo': {
-                'file': f'{settings.BASE_URL}{settings.MEDIA_URL}someimage.jpg',
+                'file': urljoin(settings.BASE_URL, 'upload/someimage.jpg'),
                 'href': 'https://example.com',
                 'alt': 'Alt text',
                 'title': 'Image',
@@ -163,7 +165,7 @@ class ThemeConfigSerializerTest(TestCase):
                 'target': '_self',
                 'tags': [],
             },
-            'backgroundUrl': f'{settings.BASE_URL}{settings.MEDIA_URL}anotherimage.png',
+            'backgroundUrl': urljoin(settings.BASE_URL, 'upload/anotherimage.png'),
             'header': serialize_header(self.header),
             'footer': None,
         }
@@ -177,7 +179,7 @@ class ThemeConfigSerializerTest(TestCase):
             'headingFontUrl': 'https://example.com/heading_font',
             'bodyFontUrl': 'https://example.com/body_font',
             'logo': {
-                'file': f'{settings.BASE_URL}{settings.MEDIA_URL}someimage.jpg',
+                'file': urljoin(settings.BASE_URL, 'upload/someimage.jpg'),
                 'href': 'https://example.com',
                 'alt': 'Alt text',
                 'title': 'Image',
@@ -186,7 +188,7 @@ class ThemeConfigSerializerTest(TestCase):
                 'target': '_self',
                 'tags': [],
             },
-            'backgroundUrl': f'{settings.BASE_URL}{settings.MEDIA_URL}anotherimage.png',
+            'backgroundUrl': urljoin(settings.BASE_URL, 'upload/anotherimage.png'),
             'header': None,
             'footer': serialize_footer(self.footer),
         }

@@ -1,4 +1,4 @@
-from os.path import join
+from urllib.parse import urljoin
 
 from django.conf import settings
 from django.utils.translation import gettext_lazy as _
@@ -41,7 +41,7 @@ def serialize_theme(theme: ThemeConfig) -> dict:
         'headingFontUrl': theme.heading_font_url,
         'bodyFontUrl': theme.body_font_url,
         'logo': serialize_image(theme.logo_image) if theme.logo_image else None,
-        'backgroundUrl': f'{settings.BASE_URL.strip("/")}/{settings.MEDIA_URL.strip("/")}/{str(theme.background_image.file)}' if theme.background_image else None,
+        'backgroundUrl': urljoin(settings.BASE_URL, theme.background_image.file.url) if theme.background_image else None,
         'footer': serialize_footer(theme.footer) if hasattr(theme, 'footer') else None,
         'header': serialize_header(theme.header) if hasattr(theme, 'header') else None
     }

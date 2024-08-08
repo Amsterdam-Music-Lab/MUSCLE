@@ -1,3 +1,5 @@
+from urllib.parse import urljoin
+
 from django.conf import settings
 from django.test import TestCase
 from django.utils import timezone
@@ -228,7 +230,7 @@ class ExperimentViewsTest(TestCase):
             serialized_block['image'], {
                 'title': 'Test',
                 'description': '',
-                'file': f'{settings.BASE_URL}/upload/test-image.jpg',
+                'file': urljoin(settings.BASE_URL, 'upload/test-image.jpg'),
                 'href': 'https://www.example.com',
                 'alt': 'Test',
                 'rel': '',

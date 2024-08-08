@@ -2,6 +2,7 @@ import datetime
 import random
 import csv
 from os.path import join
+from urllib.parse import urljoin
 
 from django.db import models
 from django.utils import timezone
@@ -305,10 +306,9 @@ class Section(models.Model):
         self.play_count += 1
 
     def absolute_url(self):
-        """Return absolute url for this section"""
-        base_url = getattr(settings, 'BASE_URL', '')
-        sections_url = reverse('section:section', args=[self.pk, self.code])
-        return base_url.rstrip('/') + sections_url
+        """Return absolute url for this section"""        
+        sections_url = reverse('section:section', args=[self.pk, self.code])        
+        return urljoin(settings.BASE_URL, sections_url)
 
     def simple_object(self):
         return {'id': self.id, 'url': self.absolute_url()}

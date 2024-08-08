@@ -1,13 +1,12 @@
-from os.path import join
-
+from urllib.parse import urljoin
 from django.conf import settings
 
 from .models import Image
 
 
-def serialize_image(image: Image) -> dict:
+def serialize_image(image: Image) -> dict:   
     return {
-        'file': f'{settings.BASE_URL.strip("/")}/{settings.MEDIA_URL.strip("/")}/{image.file}',
+        'file': urljoin(settings.BASE_URL, image.file.url),
         'href': image.href,
         'alt': image.alt,
         'rel': image.rel,
