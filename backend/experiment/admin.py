@@ -22,6 +22,7 @@ from experiment.models import (
     Phase,
     Feedback,
     SocialMediaConfig,
+    ExperimentTranslatedContent,
 )
 from question.admin import QuestionSeriesInline
 from experiment.forms import (
@@ -43,6 +44,16 @@ class FeedbackInline(admin.TabularInline):
     model = Feedback
     fields = ["text"]
     extra = 0
+
+
+class ExperimentTranslatedContentInline(NestedStackedInline):
+    model = ExperimentTranslatedContent
+    sortable_field_name = "index"
+
+    def get_extra(self, request, obj=None, **kwargs):
+        if obj:
+            return 0
+        return 1
 
 
 class BlockAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
@@ -112,36 +123,22 @@ class BlockAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
         zip_buffer = BytesIO()
         with ZipFile(zip_buffer, "w") as new_zip:
             # serialize data to new json files within the zip file
-            new_zip.writestr(
-                "sessions.json", data=str(serializers.serialize("json", all_sessions))
-            )
+            new_zip.writestr("sessions.json", data=str(serializers.serialize("json", all_sessions)))
             new_zip.writestr(
                 "participants.json",
-                data=str(
-                    serializers.serialize("json", all_participants.order_by("pk"))
-                ),
+                data=str(serializers.serialize("json", all_participants.order_by("pk"))),
             )
             new_zip.writestr(
                 "profiles.json",
-                data=str(
-                    serializers.serialize(
-                        "json", all_profiles.order_by("participant", "pk")
-                    )
-                ),
+                data=str(serializers.serialize("json", all_profiles.order_by("participant", "pk"))),
             )
             new_zip.writestr(
                 "results.json",
-                data=str(
-                    serializers.serialize("json", all_results.order_by("session"))
-                ),
+                data=str(serializers.serialize("json", all_results.order_by("session"))),
             )
             new_zip.writestr(
                 "sections.json",
-                data=str(
-                    serializers.serialize(
-                        "json", all_sections.order_by("playlist", "pk")
-                    )
-                ),
+                data=str(serializers.serialize("json", all_sections.order_by("playlist", "pk"))),
             )
             new_zip.writestr(
                 "songs.json",
@@ -152,11 +149,7 @@ class BlockAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
         response = HttpResponse(zip_buffer.getbuffer())
         response["Content-Type"] = "application/x-zip-compressed"
         response["Content-Disposition"] = (
-            'attachment; filename="'
-            + obj.slug
-            + "-"
-            + timezone.now().isoformat()
-            + '.zip"'
+            'attachment; filename="' + obj.slug + "-" + timezone.now().isoformat() + '.zip"'
         )
         return response
 
@@ -170,20 +163,14 @@ class BlockAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
             result_keys = []
             export_options = []
             # Get all export options
-            session_keys = [
-                key for key in request.POST.getlist("export_session_fields")
-            ]
+            session_keys = [key for key in request.POST.getlist("export_session_fields")]
             result_keys = [key for key in request.POST.getlist("export_result_fields")]
             export_options = [key for key in request.POST.getlist("export_options")]
 
             response = HttpResponse(content_type="text/csv")
-            response["Content-Disposition"] = 'attachment; filename="{}.csv"'.format(
-                obj.slug
-            )
+            response["Content-Disposition"] = 'attachment; filename="{}.csv"'.format(obj.slug)
             # Get filtered data
-            block_table, fieldnames = obj.export_table(
-                session_keys, result_keys, export_options
-            )
+            block_table, fieldnames = obj.export_table(session_keys, result_keys, export_options)
             fieldnames.sort()
             writer = csv.DictWriter(response, fieldnames)
             writer.writeheader()
@@ -227,11 +214,7 @@ class BlockAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
 
     def block_slug_link(self, obj):
         dev_mode = settings.DEBUG is True
-        url = (
-            f"http://localhost:3000/block/{obj.slug}"
-            if dev_mode
-            else f"/block/{obj.slug}"
-        )
+        url = f"http://localhost:3000/block/{obj.slug}" if dev_mode else f"/block/{obj.slug}"
 
         return format_html(
             f'<a href="{url}" target="_blank" rel="noopener noreferrer" title="Open {obj.slug} block in new tab" >{obj.slug}&nbsp;<small>&#8599;</small></a>'
@@ -248,21 +231,33 @@ admin.site.register(Block, BlockAdmin)
 
 class BlockInline(NestedStackedInline):
     model = Block
-    extra = 1
     sortable_field_name = "index"
+
+    def get_extra(self, request, obj=None, **kwargs):
+        if obj:
+            return 0
+        return 1
 
 
 class PhaseInline(NestedTabularInline):
     model = Phase
-    extra = 1
     sortable_field_name = "index"
     inlines = [BlockInline]
+
+    def get_extra(self, request, obj=None, **kwargs):
+        if obj:
+            return 0
+        return 1
 
 
 class SocialMediaConfigInline(NestedStackedInline):
     form = SocialMediaConfigForm
     model = SocialMediaConfig
-    extra = 0
+
+    def get_extra(self, request, obj=None, **kwargs):
+        if obj:
+            return 0
+        return 1
 
 
 class ExperimentAdmin(InlineActionsModelAdminMixin, NestedModelAdmin):
@@ -276,20 +271,21 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, NestedModelAdmin):
     )
     fields = [
         "slug",
-        "name",
         "active",
-        "description",
-        "consent",
         "theme_config",
         "dashboard",
-        "about_content",
     ]
     inline_actions = ["dashboard"]
     form = ExperimentForm
     inlines = [
+        ExperimentTranslatedContentInline,
         PhaseInline,
         SocialMediaConfigInline,
     ]
+
+    def name(self, obj):
+        content = obj.get_fallback_content()
+        return content.name if content else "No name"
 
     def slug_link(self, obj):
         dev_mode = settings.DEBUG is True
@@ -300,20 +296,16 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, NestedModelAdmin):
         )
 
     def description_excerpt(self, obj):
-        if len(obj.description) < 50:
-            return obj.description
+        description = obj.get_fallback_content().description or "No description"
+        if len(description) < 50:
+            return description
 
-        return obj.description[:50] + "..."
+        return description[:50] + "..."
 
     def phases(self, obj):
         phases = Phase.objects.filter(series=obj)
         return format_html(
-            ", ".join(
-                [
-                    f'<a href="/admin/experiment/phase/{phase.id}/change/">{phase.name}</a>'
-                    for phase in phases
-                ]
-            )
+            ", ".join([f'<a href="/admin/experiment/phase/{phase.id}/change/">{phase.name}</a>' for phase in phases])
         )
 
     slug_link.short_description = "Slug"
@@ -380,7 +372,9 @@ class PhaseAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
 
     def related_experiment(self, obj):
         url = reverse("admin:experiment_experiment_change", args=[obj.series.pk])
-        return format_html('<a href="{}">{}</a>', url, obj.series.name)
+        content = obj.series.get_fallback_content()
+        experiment_name = content.name if content else "No name"
+        return format_html('<a href="{}">{}</a>', url, experiment_name)
 
     def blocks(self, obj):
         blocks = Block.objects.filter(phase=obj)
@@ -389,12 +383,7 @@ class PhaseAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
             return "No blocks"
 
         return format_html(
-            ", ".join(
-                [
-                    f'<a href="/admin/experiment/block/{block.id}/change/">{block.name}</a>'
-                    for block in blocks
-                ]
-            )
+            ", ".join([f'<a href="/admin/experiment/block/{block.id}/change/">{block.name}</a>' for block in blocks])
         )
 
 

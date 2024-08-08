@@ -20,9 +20,9 @@ jobs:
     name: Test Frontend
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Run Frontend Tests
-        run: sudo docker-compose --env-file .env-github-actions run client yarn test:ci
+        run: sudo docker compose --env-file .env-github-actions run client yarn test:ci
 
   frontend-coverage-badge:
     name: Generate Frontend Coverage Badge
@@ -30,11 +30,11 @@ jobs:
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/develop'
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Generate Frontend Coverage Report (XML) and Badge
         run: |
-          sudo docker-compose --env-file .env-github-actions run client yarn test:ci
-          sudo docker-compose --env-file .env-github-actions run client yarn coverage-badges -s public/coverage/coverage-summary.json -o public/coverage/coverage-frontend-badge-new.svg --label 'Frontend Code Coverage'
+          sudo docker compose --env-file .env-github-actions run client yarn test:ci
+          sudo docker compose --env-file .env-github-actions run client yarn coverage-badges -s public/coverage/coverage-summary.json -o public/coverage/coverage-frontend-badge-new.svg --label 'Frontend Code Coverage'
       - name: Push Frontend Coverage Badge to separate branch
         continue-on-error: true
         run: |
@@ -64,5 +64,5 @@ jobs:
     name: Lint Frontend
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - run: sudo docker-compose --env-file .env-github-actions run client yarn lint
+      - uses: actions/checkout@v4
+      - run: sudo docker compose --env-file .env-github-actions run client yarn lint

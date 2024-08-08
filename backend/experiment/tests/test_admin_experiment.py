@@ -7,7 +7,7 @@ from django.contrib.admin.sites import AdminSite
 from django.urls import reverse
 from django.utils.html import format_html
 from experiment.admin import BlockAdmin, ExperimentAdmin, PhaseAdmin
-from experiment.models import Block, Experiment, Phase
+from experiment.models import Block, Experiment, Phase, ExperimentTranslatedContent
 from participant.models import Participant
 from result.models import Result
 from session.models import Session
@@ -32,9 +32,7 @@ class TestAdminBlock(TestCase):
     def setUpTestData(cls):
         Block.objects.create(name="test", slug="TEST")
         Participant.objects.create()
-        Session.objects.create(
-            block=Block.objects.first(), participant=Participant.objects.first()
-        )
+        Session.objects.create(block=Block.objects.first(), participant=Participant.objects.first())
         Result.objects.create(session=Session.objects.first())
 
     def setUp(self):
@@ -127,9 +125,7 @@ class TestAdminBlockExport(TestCase):
             self.assertEqual(len(test_zip.namelist()), 6)
 
             # test content of the json files in the zip
-            these_participants = json.loads(
-                test_zip.read("participants.json").decode("utf-8")
-            )
+            these_participants = json.loads(test_zip.read("participants.json").decode("utf-8"))
             self.assertEqual(len(these_participants), 1)
             self.assertEqual(Participant.objects.first().unique_hash, "42")
 
@@ -160,9 +156,7 @@ class TestAdminBlockExport(TestCase):
         export_options = ["convert_result_json"]  # Adjust based on your needs
 
         # Call the method under test
-        rows, fieldnames = self.block.export_table(
-            session_keys, result_keys, export_options
-        )
+        rows, fieldnames = self.block.export_table(session_keys, result_keys, export_options)
 
         # Assert that 'question_key' is in the fieldnames and check its value in rows
         self.assertIn("question_key", fieldnames)
@@ -175,16 +169,20 @@ class TestAdminBlockExport(TestCase):
 class TestExperimentAdmin(TestCase):
     @classmethod
     def setUpTestData(self):
-        self.experiment_series = Experiment.objects.create(
+        self.experiment = Experiment.objects.create(
+            slug="TEST",
+        )
+        ExperimentTranslatedContent.objects.create(
+            experiment=self.experiment,
+            language="en",
             name="test",
             description="test description very long like the tea of oolong and the song of the bird in the morning",
-            slug="TEST",
         )
 
     def setUp(self):
         self.admin = ExperimentAdmin(model=Experiment, admin_site=AdminSite)
 
-    def test_experiment_series_admin_list_display(self):
+    def test_experiment_admin_list_display(self):
         self.assertEqual(
             ExperimentAdmin.list_display,
             (
@@ -197,19 +195,28 @@ class TestExperimentAdmin(TestCase):
             ),
         )
 
-    def test_experiment_series_admin_description_excerpt(self):
+    def test_experiment_admin_description_excerpt(self):
         self.assertEqual(
-            self.admin.description_excerpt(self.experiment_series),
+            self.admin.description_excerpt(self.experiment),
             "test description very long like the tea of oolong ...",
         )
+
+        experiment = Experiment.objects.create(slug="TEST2")
+        ExperimentTranslatedContent.objects.create(
+            experiment=experiment,
+            language="en",
+            name="test",
+            description="Do you like oolong tea or do you prefer the song of the bird in the morning?",
+        )
+
         self.assertEqual(
-            self.admin.description_excerpt(Experiment.objects.create(description="")),
-            "",
+            self.admin.description_excerpt(experiment),
+            "Do you like oolong tea or do you prefer the song o...",
         )
 
     def test_experiment_admin_research_dashboard(self):
         request = RequestFactory().request()
-        response = self.admin.dashboard(request, self.experiment_series)
+        response = self.admin.dashboard(request, self.experiment)
         self.assertEqual(response.status_code, 200)
 
 
@@ -218,40 +225,42 @@ class PhaseAdminTest(TestCase):
         self.admin = PhaseAdmin(model=Phase, admin_site=AdminSite)
 
     def test_related_experiment_with_experiment(self):
-        series = Experiment.objects.create(name="Test Experiment")
-        phase = Phase.objects.create(
-            name="Test Phase", index=1, randomize=False, series=series, dashboard=True
-        )
+        experiment = Experiment.objects.create(slug="test-experiment")
+        ExperimentTranslatedContent.objects.create(experiment=experiment, language="en", name="Test Experiment")
+        phase = Phase.objects.create(name="Test Phase", index=1, randomize=False, series=experiment, dashboard=True)
         related_experiment = self.admin.related_experiment(phase)
-        expected_url = reverse("admin:experiment_experiment_change", args=[series.pk])
+        expected_url = reverse("admin:experiment_experiment_change", args=[experiment.pk])
         expected_related_experiment = format_html(
-            '<a href="{}">{}</a>', expected_url, series.name
+            '<a href="{}">{}</a>', expected_url, experiment.get_fallback_content().name
         )
         self.assertEqual(related_experiment, expected_related_experiment)
 
     def test_experiment_with_no_blocks(self):
-        series = Experiment.objects.create(name="Test Series")
-        phase = Phase.objects.create(
-            name="Test Group", index=1, randomize=False, dashboard=True, series=series
+        experiment = Experiment.objects.create(slug="no-blocks")
+        ExperimentTranslatedContent.objects.create(
+            experiment=experiment,
+            language="en",
+            name="No Blocks",
         )
+        phase = Phase.objects.create(name="Test Group", index=1, randomize=False, dashboard=True, series=experiment)
         blocks = self.admin.blocks(phase)
         self.assertEqual(blocks, "No blocks")
 
     def test_experiment_with_blocks(self):
-        series = Experiment.objects.create(name="Test Series")
-        phase = Phase.objects.create(
-            name="Test Group", index=1, randomize=False, dashboard=True, series=series
+        experiment = Experiment.objects.create(slug="with-blocks")
+        ExperimentTranslatedContent.objects.create(
+            experiment=experiment,
+            language="en",
+            name="With Blocks",
         )
+        phase = Phase.objects.create(name="Test Phase", index=1, randomize=False, dashboard=True, series=experiment)
         block1 = Block.objects.create(name="Block 1", slug="block-1", phase=phase)
         block2 = Block.objects.create(name="Block 2", slug="block-2", phase=phase)
 
         blocks = self.admin.blocks(phase)
         expected_blocks = format_html(
             ", ".join(
-                [
-                    f'<a href="/admin/experiment/block/{block.id}/change/">{block.name}</a>'
-                    for block in [block1, block2]
-                ]
+                [f'<a href="/admin/experiment/block/{block.id}/change/">{block.name}</a>' for block in [block1, block2]]
             )
         )
         self.assertEqual(blocks, expected_blocks)

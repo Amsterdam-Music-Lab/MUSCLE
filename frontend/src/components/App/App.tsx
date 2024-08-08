@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import {
     BrowserRouter as Router,
     Route,
-    Routes
+    Routes,
 } from "react-router-dom";
 import axios from "axios";
 
