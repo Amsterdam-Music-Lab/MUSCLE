@@ -88,14 +88,14 @@ class ToontjeHoger3Plink(Base):
     def next_round(self, session):
         """Get action data for the next round"""
 
-        rounds_passed = session.round_passed()
+        get_rounds_passed = session.round_passed()
 
         # Round 1
-        if rounds_passed == 0:
+        if get_rounds_passed == 0:
             return self.get_plink_round(session)
 
         # Round 2-blocks.rounds
-        if rounds_passed < session.block.rounds:
+        if get_rounds_passed < session.block.rounds:
             return self.get_plink_round(session, present_score=True)
 
         # Final

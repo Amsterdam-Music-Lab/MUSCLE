@@ -74,7 +74,7 @@ class ToontjeHogerKids3Plink(ToontjeHoger3Plink):
                 section.song.name), non_breaking_spaces(section.song.artist))
 
         config = {'show_total_score': True}
-        round_number = session.rounds_passed()
+        round_number = session.get_rounds_passed()
         score_title = "Ronde %(number)d / %(total)d" %\
             {'number': round_number, 'total': session.block.rounds}
         return Score(session, config=config, feedback=feedback, score=score, title=score_title)

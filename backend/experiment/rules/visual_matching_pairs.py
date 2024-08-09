@@ -63,7 +63,7 @@ class VisualMatchingPairsGame(Base):
         ]
 
     def next_round(self, session):
-        if session.rounds_passed() < 1:
+        if session.get_rounds_passed() < 1:
             trials = self.get_questionnaire(session)
             if trials:
                 intro_questions = Explainer(

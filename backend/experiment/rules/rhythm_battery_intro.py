@@ -14,7 +14,7 @@ class RhythmBatteryIntro(Base):
     ID = 'RHYTHM_BATTERY_INTRO'
 
     def next_round(self, session):
-        round_number = session.rounds_passed()
+        round_number = session.get_rounds_passed()
         playback = None
         feedback_form = None
         if round_number == 0:

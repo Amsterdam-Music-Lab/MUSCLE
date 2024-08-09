@@ -24,7 +24,7 @@ class MusicalPreferences(Base):
     preference_offset = 20
     knowledge_offset = 42
     contact_email = 'musicexp_china@163.com'
-    relevant_keys = ['like_song']
+    counted_result_keys = ['like_song']
 
     know_score = {
         'yes': 2,
@@ -71,7 +71,7 @@ class MusicalPreferences(Base):
         ]
 
     def next_round(self, session: Session):
-        round_number = session.rounds_passed(self.relevant_keys)
+        round_number = session.get_rounds_passed(self.counted_result_keys)
         actions = []
         if round_number == 0:
             last_result = session.result_set.last()

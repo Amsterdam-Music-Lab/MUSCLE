@@ -58,7 +58,7 @@ class CongoSameDiffTest(TestCase):
             given_response='YES'
         )
 
-        self.session.rounds_passed = lambda x: 2
+        self.session.get_rounds_passed = lambda x: 2
         final_action = congo_same_diff.next_round(self.session)
         assert isinstance(final_action, Final)
 

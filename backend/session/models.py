@@ -101,18 +101,18 @@ class Session(models.Model):
 
     def rounds_complete(self):
         """Determine if there are results for each experiment round"""
-        return self.rounds_passed() >= self.block.rounds
+        return self.get_rounds_passed() >= self.block.rounds
 
-    def rounds_passed(self, relevant_question_keys: list = []):
+    def get_rounds_passed(self, counted_result_keys: list = []):
         """Get number of rounds passed, measured by the number of results on this session,
-        taking into account the `relevant_keys` array that may be defined per rules file
+        taking into account the `counted_result_keys` array that may be defined per rules file
         - params:
             exclude_irrelevant: specify if question_keys which are not in the
-            `relevant_keys` array of the rules file should be counted
+            `counted_result_keys` array of the rules file should be counted
         """
         results = self.result_set
-        if relevant_question_keys:
-            results = results.filter(question_key__in=relevant_question_keys)
+        if counted_result_keys:
+            results = results.filter(question_key__in=counted_result_keys)
         return results.count()
 
     def get_used_song_ids(self, exclude={}):

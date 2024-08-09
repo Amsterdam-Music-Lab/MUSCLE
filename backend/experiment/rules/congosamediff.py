@@ -15,7 +15,7 @@ class CongoSameDiff(Base):
     """ A micro-PROMS inspired experiment block that tests the participant's ability to distinguish between different sounds. """
     ID = 'CONGOSAMEDIFF'
     contact_email = 'aml.tunetwins@gmail.com'
-    relevant_keys = ['samediff_NORMAL']
+    counted_result_keys = ['samediff_NORMAL']
 
     def next_round(self, session: Session):
         practice_done = session.result_set.filter(
@@ -24,7 +24,7 @@ class CongoSameDiff(Base):
         ).exists()
 
         if practice_done:
-            round_number = session.rounds_passed(self.relevant_keys)
+            round_number = session.get_rounds_passed(self.counted_result_keys)
             total_trials_count = self.get_total_trials_count(session)
 
             # if the participant has completed all trials, return the final round
@@ -63,7 +63,7 @@ class CongoSameDiff(Base):
         else:
             # practice is not done yet;
             # load the practice trials
-            round_number = session.rounds_passed()
+            round_number = session.get_rounds_passed()
             practice_trials_subset = session.playlist.section_set.filter(
                 tag__contains='practice'
             )

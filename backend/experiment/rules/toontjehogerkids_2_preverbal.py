@@ -53,7 +53,7 @@ class ToontjeHogerKids2Preverbal(ToontjeHoger2Preverbal):
         )
         return info
 
-    def get_score(self, session, rounds_passed):
+    def get_score(self, session, get_rounds_passed):
         # Feedback
         last_result = session.last_result()
         feedback = ""
@@ -61,13 +61,13 @@ class ToontjeHogerKids2Preverbal(ToontjeHoger2Preverbal):
             logger.error("No last result")
             feedback = "Er is een fout opgetreden"
         else:
-            if rounds_passed == 1:
+            if get_rounds_passed == 1:
                 appendix = "Op het volgende scherm kun je de drie geluiden beluisteren."
                 if last_result.score == self.SCORE_CORRECT:
                     feedback = "Goedzo! Op plaatje C zie je inderdaad de stem van een mens. " + appendix
                 else:
                     feedback = "Helaas! Je antwoord was onjuist. Op plaatje C zag je de stem van een mens. " + appendix
-            elif rounds_passed == 2:
+            elif get_rounds_passed == 2:
                 if last_result.score == self.SCORE_CORRECT:
                     feedback = "Goedzo! Geluid A is inderdaad de Franse baby."
                 else:
@@ -91,7 +91,7 @@ class ToontjeHogerKids2Preverbal(ToontjeHoger2Preverbal):
         session.save()
 
         # Score
-        score = self.get_score(session, session.rounds_passed())
+        score = self.get_score(session, session.get_rounds_passed())
 
         # Final
         final_text = "Goed gedaan!" if session.final_score >= 2 * \

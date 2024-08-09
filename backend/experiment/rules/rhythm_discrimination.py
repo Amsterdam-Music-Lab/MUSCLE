@@ -91,7 +91,7 @@ class RhythmDiscrimination(Base):
         ]
 
     def next_round(self, session):
-        next_round_number = session.rounds_passed()
+        next_round_number = session.get_rounds_passed()
 
         if next_round_number == 0:
             plan_stimuli(session)

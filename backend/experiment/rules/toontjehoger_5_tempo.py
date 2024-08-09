@@ -51,16 +51,16 @@ class ToontjeHoger5Tempo(Base):
     def next_round(self, session):
         """Get action data for the next round"""
 
-        rounds_passed = session.rounds_passed()
+        get_rounds_passed = session.get_rounds_passed()
 
         # Round 1
-        if rounds_passed == 0:
+        if get_rounds_passed == 0:
             # No combine_actions because of inconsistent next_round array wrapping in first round
-            return self.get_round(session, rounds_passed)
+            return self.get_round(session, get_rounds_passed)
 
         # Round 2
-        if rounds_passed < session.block.rounds:
-            return [*self.get_score(session), *self.get_round(session, rounds_passed)]
+        if get_rounds_passed < session.block.rounds:
+            return [*self.get_score(session), *self.get_round(session, get_rounds_passed)]
 
         # Final
         return self.get_final_round(session)
