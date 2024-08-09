@@ -19,6 +19,18 @@ import UserFeedback from "@/components/UserFeedback/UserFeedback";
 import FontLoader from "@/components/FontLoader/FontLoader";
 import useResultHandler from "@/hooks/useResultHandler";
 import Session from "@/types/Session";
+import { PlaybackView } from "@/types/Playback";
+
+type BlockView = PlaybackView | "TRIAL_VIEW" | "EXPLAINER" | "SCORE" | "FINAL" | "PLAYLIST" | "LOADING" | "CONSENT" | "INFO" | "REDIRECT";
+
+interface BlockState {
+    view: BlockView;
+    key: number;
+    title?: string;
+    url?: string;
+    next_round?: any[];
+}
+
 
 // Block handles the main (experiment) block flow:
 // - Loads the block and participant
@@ -28,7 +40,7 @@ import Session from "@/types/Session";
 //   Empty URL parameter "participant_id" is the same as no URL parameter at all
 const Block = () => {
     const { slug } = useParams();
-    const startState = { view: "LOADING" };
+    const startState = { view: "LOADING", key: Math.random() } as BlockState;
     // Stores
     const setError = useBoundStore(state => state.setError);
     const participant = useBoundStore((state) => state.participant);
@@ -43,7 +55,7 @@ const Block = () => {
 
     // Current block state
     const [actions, setActions] = useState([]);
-    const [state, setState] = useState(startState);
+    const [state, setState] = useState<BlockState | null>(startState);
     const playlist = useRef(null);
 
     // API hooks
@@ -52,12 +64,18 @@ const Block = () => {
     const loadingText = block ? block.loading_text : "";
     const className = block ? block.class_name : "";
 
-    // set random key before setting state
-    // this will assure that `state` will be recognized as an updated object
-    const updateState = useCallback((state) => {
+    /** set random key before setting state
+     * this will assure that `state` will be recognized as an updated object
+     */
+    const updateState = useCallback((state: BlockState) => {
         if (!state) return;
-        state.key = Math.random();
-        setState(state);
+
+        const newState = {
+            ...state,
+            key: Math.random(),
+        };
+
+        setState(newState);
     }, []);
 
     const updateActions = useCallback((currentActions) => {
@@ -104,7 +122,7 @@ const Block = () => {
             setError(
                 "An error occured while loading the data, please try to reload the page. (Error: next_round data unavailable)"
             );
-            setState(undefined);
+            setState(null);
         }
     };
 
@@ -181,7 +199,7 @@ const Block = () => {
     });
 
     // Render block state
-    const render = (view) => {
+    const render = (view: BlockView) => {
         // Default attributes for every view
         const attrs = {
             block,
@@ -198,27 +216,27 @@ const Block = () => {
             // Block views
             // -------------------------
             case "TRIAL_VIEW":
-                return <Trial {...attrs} />;
+                return <Trial {...attrs} key={state?.key} />;
 
             // Information & Scoring
             // -------------------------
             case "EXPLAINER":
-                return <Explainer {...attrs} />;
+                return <Explainer {...attrs} key={state?.key} />;
             case "SCORE":
-                return <Score {...attrs} />;
+                return <Score {...attrs} key={state?.key} />;
             case "FINAL":
-                return <Final {...attrs} />;
+                return <Final {...attrs} key={state?.key} />;
 
             // Generic / helpers
             // -------------------------
             case "PLAYLIST":
-                return <Playlist {...attrs} />;
+                return <Playlist {...attrs} key={state?.key} />;
             case "LOADING":
-                return <Loading {...attrs} />;
+                return <Loading {...attrs} key={state?.key} />;
             case "CONSENT":
-                return <Consent {...attrs} />;
+                return <Consent {...attrs} key={state?.key} />;
             case "INFO":
-                return <Info {...attrs} />;
+                return <Info {...attrs} key={state?.key} />;
             case "REDIRECT":
                 return window.location.replace(state.url);
 
@@ -236,7 +254,7 @@ const Block = () => {
         setError('No valid state');
     }
 
-    const view = state.view;
+    const view = state?.view;
 
     return (<>
         <FontLoader fontUrl={theme?.heading_font_url} fontType="heading" />
