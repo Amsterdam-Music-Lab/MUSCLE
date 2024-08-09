@@ -1,11 +1,21 @@
-let track;
-let source;
-let buffers = {};
-let audioContext;
-let previousSource;
+import Section from "@/types/Section";
+
+let track: MediaElementAudioSourceNode;
+let source: AudioBufferSourceNode;
+let buffers: { [key: string]: AudioBuffer } = {};
+let audioContext: AudioContext;
+let previousSource: string;
 
 export let audioInitialized = false;
-    
+
+// Declare audio property on window object
+declare global {
+    interface Window {
+        audio: HTMLAudioElement;
+        webkitAudioContext?: typeof AudioContext;
+    }
+}
+
 // Create the AudioContext object after a user action
 // after that other audio can be started programmatically
 // More info: https://developer.mozilla.org/en-US/docs/Web/Media/Autoplay_guide
@@ -41,14 +51,14 @@ export const getTotalLatency = () => {
     let baseLatency = audioContext.baseLatency;
     let outputLatency = audioContext.outputLatency;
 
-    // Check if the response is a valid number 
+    // Check if the response is a valid number
     if (isNaN(baseLatency)) {
         baseLatency = 0;
     }
     if (isNaN(outputLatency)) {
         outputLatency = 0;
     }
-    
+
     let totalLatency = (baseLatency + outputLatency) * 1000;
     return totalLatency;
 };
@@ -64,14 +74,14 @@ export const getOutputLatency = () => {
 };
 
 // Adjust gain
-export const changeGain = (level) => {
+export const changeGain = (level: number) => {
     const gainNode = audioContext.createGain();
     track.connect(gainNode).connect(audioContext.destination);
     gainNode.gain.value = level;
 };
 
 // load sound data and store in buffers object
-export const loadBuffer = async (id, src, canPlay) => {
+export const loadBuffer = async (id: number, src: string, canPlay: () => void) => {
     await fetch(src, {})
         // Return the data as an ArrayBuffer
         .then(response => response.arrayBuffer())
@@ -85,7 +95,7 @@ export const loadBuffer = async (id, src, canPlay) => {
         });
 };
 
-export const checkSectionLoaded = (section) => {
+export const checkSectionLoaded = (section: Section) => {
     if (section.url === previousSource) {
         return true;
     };
@@ -104,7 +114,7 @@ export const stopBuffer = () => {
 };
 
 // Play buffer from given time
-export const playBufferFrom = (id, time) => {
+export const playBufferFrom = (id: string, time: number) => {
     source = audioContext.createBufferSource();
     source.buffer = buffers[id];
     source.connect(audioContext.destination);
@@ -123,7 +133,7 @@ export const resume = () => {
 
 // Listen once to the given event
 // After that remove listener
-export const listenOnce = (event, callback) => {
+export const listenOnce = (event: string, callback: () => void) => {
     const remove = () => {
         source.removeEventListener(event, _callback);
     };
@@ -141,8 +151,14 @@ export const compatibleDevice = () => {
     let compatible = true;
     // Disable webaudio for ios versions below 17
     if ((userAgentString.indexOf('iPhone') > -1 || userAgentString.indexOf('iPad') > -1) && (userAgentString.indexOf('OS') > -1)) {
-        const iosVersion = userAgentString.substring(userAgentString.indexOf('OS') + 3, userAgentString.indexOf('OS') + 5)
-        if (iosVersion < 17) {
+        const iosVersion = userAgentString
+            .substring(userAgentString
+                .indexOf('OS') + 3, userAgentString
+                    .indexOf('OS') + 5)
+
+        const iosVersionInt = parseInt(iosVersion);
+
+        if (iosVersionInt < 17) {
             compatible = false;
         }
     }

@@ -3,6 +3,7 @@ import { useState, useRef } from "react";
 import Question from "../Question/Question";
 import Button from "../Button/Button";
 import IQuestion from "@/types/Question";
+import { OnResultType } from "@/hooks/useResultHandler";
 
 interface FeedbackFormProps {
     formActive: boolean;
@@ -10,7 +11,7 @@ interface FeedbackFormProps {
     buttonLabel: string;
     skipLabel: string;
     isSkippable: boolean;
-    onResult: (result: any) => void;
+    onResult: OnResultType
     emphasizeTitle?: boolean;
 }
 

@@ -265,6 +265,7 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, NestedModelAdmin):
         "name",
         "slug_link",
         "description_excerpt",
+        "remarks",
         "dashboard",
         "phases",
         "active",
@@ -283,6 +284,9 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, NestedModelAdmin):
         SocialMediaConfigInline,
     ]
 
+    class Media:
+        css = {"all": ("experiment_admin.css",)}
+
     def name(self, obj):
         content = obj.get_fallback_content()
         return content.name if content else "No name"
@@ -296,7 +300,10 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, NestedModelAdmin):
         )
 
     def description_excerpt(self, obj):
-        description = obj.get_fallback_content().description or "No description"
+        fallback_content = obj.get_fallback_content()
+        description = (
+            fallback_content.description if fallback_content and fallback_content.description else "No description"
+        )
         if len(description) < 50:
             return description
 
@@ -347,6 +354,55 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, NestedModelAdmin):
                 "participants": all_participants,
                 "collect_data": collect_data,
             },
+        )
+
+    def remarks(self, obj):
+        remarks_array = []
+
+        # Check if there is any translated content
+        content = obj.translated_content.first()
+
+        if not content:
+            remarks_array.append(
+                {
+                    "level": "warning",
+                    "message": "📝 No content",
+                    "title": "Add content in at least one language to this experiment.",
+                }
+            )
+
+        has_consent = obj.translated_content.filter(consent__isnull=False).exclude(consent="").first()
+
+        if not has_consent:
+            remarks_array.append(
+                {
+                    "level": "info",
+                    "message": "📋 No consent form",
+                    "title": "You may want to add a consent form (approved by an ethical board) to this experiment.",
+                }
+            )
+
+        if not remarks_array:
+            remarks_array.append({"level": "success", "message": "✅ All good", "title": "No issues found."})
+
+        supported_languages = obj.translated_content.values_list("language", flat=True).distinct()
+
+        # TODO: Check if all blocks support the same languages as the experiment
+        # Implement this when the blocks have been updated to support multiple languages
+
+        # TODO: Check if all theme configs support the same languages as the experiment
+        # Implement this when the theme configs have been updated to support multiple languages
+
+        # TODO: Check if all social media configs support the same languages as the experiment
+        # Implement this when the social media configs have been updated to support multiple languages
+
+        return format_html(
+            "\n".join(
+                [
+                    f'<span class="badge badge-{remark["level"]} whitespace-nowrap text-xs mt-1" title="{remark.get("title") if remark.get("title") else remark["message"]}">{remark["message"]}</span>'
+                    for remark in remarks_array
+                ]
+            )
         )
 
 

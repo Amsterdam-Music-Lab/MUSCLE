@@ -198,8 +198,8 @@ class ExperimentForm(ModelForm):
         ]
 
     class Media:
-        js = ["experiment_admin.js"]
-        css = {"all": ["experiment_admin.css"]}
+        js = ["experiment_form.js"]
+        css = {"all": ["experiment_form.css"]}
 
 
 class ExperimentTranslatedContentForm(ModelForm):

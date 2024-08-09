@@ -1,0 +1,8 @@
+/* Add cursor pointer to inline group headings as they are clickable to toggle the form underneath */
+.inline-group .inline-heading {
+    cursor: pointer;
+}
+
+.inline-group .inline-heading:hover {
+    text-decoration: underline;
+}

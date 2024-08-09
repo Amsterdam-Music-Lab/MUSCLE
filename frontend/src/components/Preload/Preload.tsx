@@ -1,17 +1,27 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import classNames from "classnames";
 
 import ListenFeedback from "../Listen/ListenFeedback";
 import CountDown from "../CountDown/CountDown";
 import * as audio from "../../util/audio";
 import * as webAudio from "../../util/webAudio";
+import Section from "@/types/Section";
 
-// Preload is an experiment screen that continues after a given time or after an audio file has been preloaded
-const Preload = ({ sections, playMethod, duration, preloadMessage, pageTitle, onNext }) => {
+interface PreloadProps {
+    sections: Section[];
+    playMethod: string;
+    duration: number;
+    preloadMessage: string;
+    pageTitle: string;
+    onNext: () => void;
+}
+
+/** Preload is an experiment screen that continues after a given time or after an audio file has been preloaded */
+const Preload = ({ sections, playMethod, duration, preloadMessage, pageTitle, onNext }: PreloadProps) => {
     const [audioAvailable, setAudioAvailable] = useState(false);
     const [overtime, setOvertime] = useState(false);
     const [loaderDuration, setLoaderDuration] = useState(duration);
-    
+
     const onTimePassed = () => {
         setLoaderDuration(0);
         setOvertime(true);
@@ -31,47 +41,50 @@ const Preload = ({ sections, playMethod, duration, preloadMessage, pageTitle, on
             }
 
             if (playMethod === 'BUFFER') {
-                // Use Web-audio and preload sections in buffers            
+
+                // Use Web-audio and preload sections in buffers
+
                 sections.forEach((section, index) => {
+
                     // skip Preload if the section has already been loaded in the previous action
                     if (webAudio.checkSectionLoaded(section)) {
-                        if (index === (sections.length - 1)) {                            
-                            setAudioAvailable(true);                       
+                        if (index === (sections.length - 1)) {
+                            setAudioAvailable(true);
                         }
                         return;
                     }
-                    
+
                     // Clear buffers if this is the first section
                     if (index === 0) {
                         webAudio.clearBuffers();
                     }
 
-                    // Load sections in buffer                
-                    return webAudio.loadBuffer(section.id, section.url, () => {                    
-                        if (index === (sections.length - 1)) {                            
-                            setAudioAvailable(true);                  
-                        }                                        
+                    // Load sections in buffer
+                    return webAudio.loadBuffer(section.id, section.url, () => {
+                        if (index === (sections.length - 1)) {
+                            setAudioAvailable(true);
+                        }
                     });
                 })
             } else {
-                if (playMethod === 'EXTERNAL') {                    
-                    webAudio.closeWebAudio();        
+                if (playMethod === 'EXTERNAL') {
+                    webAudio.closeWebAudio();
                 }
                 // Load audio until available
                 // Return remove listener
                 sections.forEach((section, index) => {
                     return audio.loadUntilAvailable(section.url, () => {
-                        if (index === (sections.length - 1)) {                            
-                            setAudioAvailable(true);                  
+                        if (index === (sections.length - 1)) {
+                            setAudioAvailable(true);
                         }
                     });
-                })       
+                })
             }
         }
 
         preloadResources();
     }, [sections, playMethod, onNext]);
-    
+
     return (
         <ListenFeedback
             className={classNames({ pulse: overtime || duration === 0 })}

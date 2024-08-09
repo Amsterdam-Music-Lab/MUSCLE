@@ -1,4 +1,4 @@
-import React, { useState, useRef, useCallback } from "react";
+import { useState, useRef, useCallback } from "react";
 import classNames from "classnames";
 
 import { getCurrentTime, getTimeSince } from "../../util/time";
@@ -6,6 +6,26 @@ import FeedbackForm from "../FeedbackForm/FeedbackForm";
 import HTML from "../HTML/HTML";
 import Playback from "../Playback/Playback";
 import Button from "../Button/Button";
+import Question from "@/types/Question";
+import { OnResultType } from "@/hooks/useResultHandler";
+import { TrialConfig } from "@/types/Trial";
+
+interface IFeedbackForm {
+    form: Question[];
+    submit_label: string;
+    skip_label: string;
+    is_skippable: boolean;
+}
+
+interface TrialProps {
+    playback: any;
+    html: { body: string | TrustedHTML };
+    feedback_form: IFeedbackForm;
+    config: TrialConfig;
+    result_id: string;
+    onNext: (breakRound?: boolean) => void;
+    onResult: OnResultType;
+}
 
 /**
  * Trial is an block view to present information to the user and/or collect user feedback
@@ -13,7 +33,7 @@ import Button from "../Button/Button";
  * If "html" is provided, it will show html content
  * If "feedback_form" is provided, it will present a form of questions to the user
  */
-const Trial = (props) => {
+const Trial = (props: TrialProps) => {
 
     const {
         playback,
@@ -41,13 +61,15 @@ const Trial = (props) => {
 
     // Create result data
     const makeResult = useCallback(
-        async (result) => {
+        async (result: { type: 'time_passed' }) => {
             // Prevent multiple submissions
             if (submitted.current) {
                 return;
             }
             submitted.current = true;
 
+            // TODO: Check if we can find another solution for
+            // the default value of form than [{}]
             const form = feedback_form ? feedback_form.form : [{}];
 
             if (result.type === "time_passed") {
@@ -97,7 +119,8 @@ const Trial = (props) => {
     const checkBreakRound = (values, breakConditions) => {
         switch (Object.keys(breakConditions)[0]) {
             case 'EQUALS':
-                return values.some(val => breakConditions['EQUALS'].includes(val));
+                return values.some(val => breakConditions['EQUALS']
+                    .includes(val));
             case 'NOT':
                 return !values.some(val => breakConditions['NOT'].includes(val));
             default:

@@ -1,7 +1,18 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import classNames from "classnames";
 
-// Histogram with random bar movement for decoration
+interface HistogramProps {
+    bars?: number;
+    spacing?: number;
+    interval?: number;
+    running?: boolean;
+    marginLeft?: number;
+    marginTop?: number;
+    backgroundColor?: string;
+    borderRadius?: string;
+}
+
+/** Histogram with random bar movement for decoration */
 const Histogram = ({
     bars = 7,
     spacing = 6,
@@ -11,7 +22,7 @@ const Histogram = ({
     marginTop = 0,
     backgroundColor = undefined,
     borderRadius = '0.15rem',
-}) => {
+}: HistogramProps) => {
     const [pulse, setPulse] = useState(true);
 
     useEffect(() => {
@@ -40,7 +51,7 @@ const Histogram = ({
     return (
         <div
             className={classNames("aha__histogram", { active: running })}
-            style={{ height: '100%', marginLeft, marginTop, backgroundColor, width: '100%', borderRadius: borderRadius, border: backgroundColor? `10px solid ${backgroundColor}` : undefined}}
+            style={{ height: '100%', marginLeft, marginTop, backgroundColor, width: '100%', borderRadius: borderRadius, border: backgroundColor ? `10px solid ${backgroundColor}` : undefined }}
         >
             {_bars}
         </div>
