@@ -226,7 +226,7 @@ export const VisualMatchingPairs = {
             url: `http://localhost:6006/${catImage}`,
             turned: true,
         },
-        view: "VISUALMATCHINGPAIRS",
+        view: "MATCHINGPAIRS",
     }),
     decorators: [
         (Story) => (
