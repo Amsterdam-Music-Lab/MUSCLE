@@ -83,9 +83,9 @@ class Huang2022(Hooked):
                         scoring_rule='BOOLEAN'),
                     submits=True,
                     style=STYLE_BOOLEAN_NEGATIVE_FIRST)])
-                return Trial(playback=playback, feedback_form=form, html=html,
+                return [Trial(playback=playback, feedback_form=form, html=html,
                              config={'response_time': 15},
-                             title=_("Audio check"))
+                             title=_("Audio check"))]
             else:
                 if last_result.score == 0:
                     # user indicated they couldn't hear the music
@@ -99,9 +99,9 @@ class Huang2022(Hooked):
                             submits=True,
                             style=STYLE_BOOLEAN_NEGATIVE_FIRST
                         )])
-                        return Trial(playback=playback, html=html, feedback_form=form,
+                        return [Trial(playback=playback, html=html, feedback_form=form,
                                      config={'response_time': 15},
-                                     title=_("Ready to experiment"))
+                                     title=_("Ready to experiment"))]
                     else:
                         # finish and redirect
                         session.finish()

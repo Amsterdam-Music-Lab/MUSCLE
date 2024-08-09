@@ -1,18 +1,16 @@
+import random
+
+from django.conf import settings
 from django.utils import timezone
 from django.template.loader import render_to_string
 from django.db.models import Avg
 
 from experiment.actions.form import Form, ChoiceQuestion
-from experiment.actions import Consent, Explainer, Score, Trial, Final
+from experiment.actions import Explainer, Score, Trial, Final
 from experiment.actions.wrappers import two_alternative_forced
+from session.models import Session
 
-from question.demographics import EXTRA_DEMOGRAPHICS
-from question.utils import question_by_key
 from .base import Base
-import random
-
-from django.conf import settings
-
 
 SCORE_AVG_MIN_TRAINING = 0.8
 
@@ -37,9 +35,12 @@ class Categorization(Base):
             button_label='Ok'
         )
 
-    def next_round(self, session):
-        actions = self.get_questionnaire(session)
-        if actions:
+    def next_round(self, session: Session):
+        if session.get_rounds_passed() == 0:
+            actions = [self.intro_explainer()]
+            questions = self.get_questionnaire(session)
+            if questions:
+                actions.extend(questions)
             return actions
 
         json_data = session.load_json_data()
@@ -103,17 +104,16 @@ class Categorization(Base):
 
         if 'training' in json_data['phase']:
             if rounds_passed == 0:
-                intro_explainer = self.intro_explainer()
                 explainer2 = Explainer(
                     instruction="The experiment will now begin. Please don't close the browser during the experiment. You can only run it once. Click to start a sound sequence.",
                     steps=[],
                     button_label='Ok'
                 )
                 trial = self.next_trial_action(session)
-                return [intro_explainer, explainer2, trial]
+                return [explainer2, trial]
 
             # Get next training action
-            elif get_rounds_passed < len(json_data['sequence']):
+            elif rounds_passed < len(json_data['sequence']):
                 return self.get_trial_with_feedback(session)
 
             # Training phase completed, get the results
@@ -179,9 +179,9 @@ class Categorization(Base):
             return [feedback, explainer]
 
         elif json_data['phase'] == 'testing':
-            if get_rounds_passed < len(json_data['sequence']):
+            if rounds_passed < len(json_data['sequence']):
                 # Determine wether this round has feedback
-                if get_rounds_passed in json_data['feedback_sequence']:
+                if rounds_passed in json_data['feedback_sequence']:
                     return self.get_trial_with_feedback(session)
                 return self.next_trial_action(session)
 

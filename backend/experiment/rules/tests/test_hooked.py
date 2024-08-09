@@ -1,14 +1,14 @@
-import random
-
 from django.test import TestCase
+from django.core.files.uploadedfile import SimpleUploadedFile
 from unittest.mock import Mock
+
 from experiment.actions import Explainer, Final, Score, Trial
 from experiment.models import Block
 from question.musicgens import MUSICGENS_17_W_VARIANTS
 from participant.models import Participant
 from question.questions import get_questions_from_series
 from result.models import Result
-from section.models import Playlist, Section
+from section.models import Playlist, Section, Song
 from session.models import Session
 
 
@@ -324,6 +324,17 @@ class HookedTest(TestCase):
         )
         rules = session.block_rules()
         self.assertIsNotNone(rules.feedback_info())
+
+        # check that first round is an audio check
+        song = Song.objects.create(name='audiocheck')
+        Section.objects.create(playlist=playlist, song=song, filename=SimpleUploadedFile(
+            'some_audio.wav', b''
+        ))
+        actions = rules.next_round(session)
+        self.assertIsInstance(actions[0], Trial)
+        self.assertEqual(actions[0].feedback_form.form[0].key, 'audio_check1')
+
+        # check that question trials are as expected
         question_trials = rules.get_questionnaire(session)
         total_questions = get_questions_from_series(block.questionseries_set.all())
         self.assertEqual(len(question_trials), len(total_questions))

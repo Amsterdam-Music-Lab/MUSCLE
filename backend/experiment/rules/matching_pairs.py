@@ -53,17 +53,16 @@ class MatchingPairsGame(Base):
             intro_explainer = self.intro_explainer()
             playlist = Playlist(session.block.playlists.all())
             actions = [intro_explainer, playlist]
-            trials = self.get_questionnaire(session)
-            if trials:
+            questions = self.get_questionnaire(session)
+            if questions:
                 intro_questions = Explainer(
-                    instruction=_('Before starting the game, we would like to ask you %i demographic questions.' % (len(trials))),
+                    instruction=_('Before starting the game, we would like to ask you %i demographic questions.' % (len(questions))),
                     steps=[]
                 )
                 actions.append(intro_questions)
-                actions.extend(trials)
-            else:
-                trial = self.get_matching_pairs_trial(session)
-                actions.append(trial)
+                actions.extend(questions)
+            trial = self.get_matching_pairs_trial(session)
+            actions.append(trial)
             return actions
         else:
             # final score saves the result from the cleared board into account

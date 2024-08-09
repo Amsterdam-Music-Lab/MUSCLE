@@ -1,12 +1,13 @@
 from django.test import TestCase
-from django.db.models import Avg
+from django.core.files.uploadedfile import SimpleUploadedFile
 
 from experiment.rules.musical_preferences import MusicalPreferences
 
+from experiment.actions import Trial
 from experiment.models import Block
 from participant.models import Participant
 from result.models import Result
-from section.models import Playlist
+from section.models import Playlist, Section, Song
 from session.models import Session
 
 
@@ -32,6 +33,20 @@ class MusicalPreferencesTest(TestCase):
             participant=cls.participant,
             playlist=cls.playlist
         )
+        audiocheck_playlist = Playlist.objects.create(name='test_audiocheck')
+        song = Song.objects.create(name='audiocheck')
+        Section.objects.create(
+            playlist=audiocheck_playlist, song=song, filename=SimpleUploadedFile(
+                'some_audio.wav', b''
+            )
+        )
+
+    def test_first_rounds(self):
+        rules = self.block.get_rules()
+        actions = rules.next_round(self.session)
+        self.assertEqual(len(actions), 2)
+        self.assertIsInstance(actions[1], Trial)
+        self.assertEqual(actions[1].feedback_form.form[0].key, 'audio_check1')
 
     def test_preferred_songs(self):
         for index, section in enumerate(list(self.playlist.section_set.all())):

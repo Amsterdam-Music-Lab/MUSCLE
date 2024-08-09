@@ -138,7 +138,7 @@ class ToontjeHoger1Mozart(Base):
     ):
         # Config
         # -----------------
-        section = session.section_from_any_song(filter_by={"group": section_group})
+        section = session.playlist.get_section(filter_by={"group": section_group})
         if section is None:
             raise Exception("Error: could not find section")
 

@@ -47,7 +47,7 @@ class RhythmBatteryFinal(Base):
     def next_round(self, session):
         questions = self.get_questionnaire(session)
         if questions:
-            return [self.intro_explainer, *questions]
+            return [self.intro_explainer(), *questions]
         else:
             rendered = render_to_string(self.debrief_form)
             return Final(

@@ -96,7 +96,7 @@ class MusicalPreferences(Base):
                             ],
                             button_label=_("Start")
                         )
-                        return [playlist, explainer]
+                        actions = [playlist, explainer]
                 else:
                     if last_result.question_key == 'audio_check1':
                         playback = get_test_playback()
@@ -113,7 +113,7 @@ class MusicalPreferences(Base):
                                      config={'response_time': 15},
                                      title=_("Tech check"))
                     else:
-                        # participant had persistent audio problems, delete session and redirect
+                        # participant had persistent audio problems, finish session and redirect
                         session.finish()
                         session.save()
                         return Redirect(settings.HOMEPAGE)

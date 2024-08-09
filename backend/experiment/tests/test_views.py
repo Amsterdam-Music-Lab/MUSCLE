@@ -11,7 +11,7 @@ from experiment.models import (
     SocialMediaConfig,
     ExperimentTranslatedContent,
 )
-from experiment.rules.matching_pairs import MatchingPairsGame
+from experiment.rules.rhythm_battery_intro import RhythmBatteryIntro
 from participant.models import Participant
 from participant.utils import PARTICIPANT_KEY
 from session.models import Session
@@ -238,12 +238,11 @@ class ExperimentViewsTest(TestCase):
             name="Test Block",
             description="This is a test block",
             image=Image.objects.create(file="test-image.jpg"),
-            rules=MatchingPairsGame.ID,
+            rules=RhythmBatteryIntro.ID,
             theme_config=create_theme_config(),
             rounds=3,
             bonus_points=42,
         )
-        block.add_default_question_series() # the `next_round` call will only return explainers and questions
         participant = Participant.objects.create()
         participant.save()
 

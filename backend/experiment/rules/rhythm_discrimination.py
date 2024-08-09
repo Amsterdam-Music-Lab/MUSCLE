@@ -85,7 +85,7 @@ class RhythmDiscrimination(Base):
 
         if next_round_number == 0:
             plan_stimuli(session)
-            return [intro_explainer(), practice_explainer(), *next_trial_actions]
+            return [intro_explainer(), practice_explainer(), *next_trial_actions(session, next_round_number)]
 
         return next_trial_actions(
             session, next_round_number)
