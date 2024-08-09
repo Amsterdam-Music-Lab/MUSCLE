@@ -9,21 +9,27 @@ export type PlaybackView = typeof AUTOPLAY | typeof BUTTON | typeof MULTIPLAYER 
 
 type PlaybackMethod = "EXTERNAL" | "HTML" | "BUFFER" | "NOAUDIO";
 
+interface FrontendStyle {
+    root: string | FrontendStyle;
+    [key: string]: string | FrontendStyle;
+}
+
 export interface PlaybackArgs {
     view: PlaybackView;
     play_method: PlaybackMethod;
-    mute: boolean;
-    play_once: boolean;
-    resume_play: boolean;
     show_animation: boolean;
-    timeout_after_playback: number;
     preload_message: string;
     instruction: string;
-    labels: { [key: string]: string };
-    images: { [key: string]: string };
     sections: any[];
-    style: any;
-    stop_audio_after: number;
     play_from: number;
-    score_feedback_display: string;
+
+    labels?: { [key: string]: string };
+    style?: FrontendStyle;
+    images?: { [key: string]: string };
+    mute?: boolean;
+    play_once?: boolean;
+    resume_play?: boolean;
+    stop_audio_after?: number;
+    timeout_after_playback?: number;
+    score_feedback_display?: string;
 }
