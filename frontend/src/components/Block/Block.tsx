@@ -21,8 +21,10 @@ import useResultHandler from "@/hooks/useResultHandler";
 import Session from "@/types/Session";
 import { PlaybackView } from "@/types/Playback";
 
+type BlockView = PlaybackView | "TRIAL_VIEW" | "EXPLAINER" | "SCORE" | "FINAL" | "PLAYLIST" | "LOADING" | "CONSENT" | "INFO" | "REDIRECT";
+
 interface BlockState {
-    view: PlaybackView;
+    view: BlockView;
     key: number;
     title?: string;
     url?: string;
@@ -38,7 +40,7 @@ interface BlockState {
 //   Empty URL parameter "participant_id" is the same as no URL parameter at all
 const Block = () => {
     const { slug } = useParams();
-    const startState = { view: "LOADING", key: Math.random() };
+    const startState = { view: "LOADING", key: Math.random() } as BlockState;
     // Stores
     const setError = useBoundStore(state => state.setError);
     const participant = useBoundStore((state) => state.participant);
@@ -62,9 +64,10 @@ const Block = () => {
     const loadingText = block ? block.loading_text : "";
     const className = block ? block.class_name : "";
 
-    // set random key before setting state
-    // this will assure that `state` will be recognized as an updated object
-    const updateState = useCallback((state: typeof startState) => {
+    /** set random key before setting state
+     * this will assure that `state` will be recognized as an updated object
+     */
+    const updateState = useCallback((state: BlockState) => {
         if (!state) return;
 
         const newState = {
@@ -196,7 +199,7 @@ const Block = () => {
     });
 
     // Render block state
-    const render = (view) => {
+    const render = (view: BlockView) => {
         // Default attributes for every view
         const attrs = {
             block,
@@ -251,7 +254,7 @@ const Block = () => {
         setError('No valid state');
     }
 
-    const view = state.view;
+    const view = state?.view;
 
     return (<>
         <FontLoader fontUrl={theme?.heading_font_url} fontType="heading" />
