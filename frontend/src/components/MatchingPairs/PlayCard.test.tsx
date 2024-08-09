@@ -1,5 +1,4 @@
-import React from "react";
-import { vi } from "vitest";
+import { vi, describe, it, expect } from "vitest";
 import { render, fireEvent, screen } from "@testing-library/react";
 import PlayCard from "./PlayCard";
 

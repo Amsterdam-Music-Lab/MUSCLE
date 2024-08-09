@@ -5,7 +5,7 @@ import { scoreIntermediateResult } from "../../API";
 import useBoundStore from "@/util/stores";
 
 import PlayCard from "./PlayCard";
-import Section from "@/types/Section";
+import { Card } from "@/types/Section";
 import Session from "@/types/Session";
 import Participant from "@/types/Participant";
 
@@ -13,17 +13,6 @@ export const SCORE_FEEDBACK_DISPLAY = {
     SMALL_BOTTOM_RIGHT: 'small-bottom-right',
     LARGE_TOP: 'large-top',
     HIDDEN: 'hidden',
-}
-
-interface Card extends Section {
-    turned: boolean;
-    inactive: boolean;
-    matchClass: string;
-    seen: boolean;
-    noevents: boolean;
-    boardposition: number;
-    timestamp: number;
-    response_interval_ms: number | string;
 }
 
 interface MatchingPairsProps {
@@ -39,8 +28,8 @@ interface MatchingPairsProps {
 
 const MatchingPairs = ({
     playSection,
-    // technically these are Sections, but we're adding some extra properties to them in a hacky way,
-    // which should be fixed in the future
+    /** FIXME: technically these are Sections, but we're adding some extra properties to them in a hacky way,
+    // which should be fixed in the future */
     sections,
     playerIndex,
     showAnimation,
