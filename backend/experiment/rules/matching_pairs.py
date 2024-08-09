@@ -60,7 +60,7 @@ class MatchingPairsGame(Base):
                     steps=[]
                 )
                 actions.append(intro_questions)
-                actions.extend(*trials)
+                actions.extend(trials)
             else:
                 trial = self.get_matching_pairs_trial(session)
                 actions.append(trial)

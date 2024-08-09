@@ -1,7 +1,6 @@
 from django.conf import settings
 from django.test import TestCase
 from django.utils import timezone
-from django.utils.translation import activate, get_language
 
 from image.models import Image
 from experiment.serializers import serialize_block, serialize_phase
@@ -12,7 +11,7 @@ from experiment.models import (
     SocialMediaConfig,
     ExperimentTranslatedContent,
 )
-from experiment.rules.hooked import Hooked
+from experiment.rules.matching_pairs import MatchingPairsGame
 from participant.models import Participant
 from participant.utils import PARTICIPANT_KEY
 from session.models import Session
@@ -239,11 +238,12 @@ class ExperimentViewsTest(TestCase):
             name="Test Block",
             description="This is a test block",
             image=Image.objects.create(file="test-image.jpg"),
-            rules=Hooked.ID,
+            rules=MatchingPairsGame.ID,
             theme_config=create_theme_config(),
             rounds=3,
             bonus_points=42,
         )
+        block.add_default_question_series() # the `next_round` call will only return explainers and questions
         participant = Participant.objects.create()
         participant.save()
 

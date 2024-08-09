@@ -18,7 +18,7 @@ class RhythmBatteryIntro(Base):
         playback = None
         feedback_form = None
         actions = []
-        if round_number == 1:
+        if round_number == 0:
             explainer = Explainer(
                 instruction=_(
                     'General listening instructions:'),
