@@ -1,5 +1,4 @@
-import React from "react";
-import { vi } from "vitest";
+import { it, describe, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
 
 import DefaultPage from "./DefaultPage";
