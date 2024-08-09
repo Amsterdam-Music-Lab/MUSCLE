@@ -1,18 +1,27 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 import Circle from "../Circle/Circle";
 import ListenCircle from "../ListenCircle/ListenCircle";
 
-const AutoPlay = ({instruction, showAnimation, playSection, startedPlaying, finishedPlaying, responseTime, className=''}) => {
-    
+interface AutoPlayProps {
+    instruction?: string;
+    showAnimation: boolean;
+    playSection: (section: number) => void;
+    startedPlaying: boolean;
+    finishedPlaying: () => void;
+    responseTime: number;
+    className?: string;
+}
+
+const AutoPlay = ({ instruction, showAnimation, playSection, startedPlaying, finishedPlaying, responseTime, className = '' }: AutoPlayProps) => {
+
     const [running, setRunning] = useState(true);
 
     // Handle view logic
-    useEffect(() => {        
+    useEffect(() => {
         playSection(0)
     }, [playSection, startedPlaying]);
 
-    // Render component
     return (
         <div>
             <div className="circle">
@@ -40,17 +49,14 @@ const AutoPlay = ({instruction, showAnimation, playSection, startedPlaying, fini
                     }
                 </div>
             </div>
-            <div className={
-                "aha__listen d-flex flex-column justify-content-center align-items-center " +
-                className
-            }
+            <div className={"aha__listen d-flex flex-column justify-content-center align-items-center " + className}
             >
-            {/* Instruction */}
-            {instruction && (<div className="instruction d-flex justify-content-center align-items-center">
-                <h3 className="text-center">{instruction}</h3>
-            </div>)}
+                {/* Instruction */}
+                {instruction && (<div className="instruction d-flex justify-content-center align-items-center">
+                    <h3 className="text-center">{instruction}</h3>
+                </div>)}
+            </div>
         </div>
-    </div>
-    )   
+    )
 }
 export default AutoPlay;
