@@ -1,6 +1,18 @@
 import React from "react";
 import PlayerSmall from "../PlayButton/PlayerSmall";
 import classNames from "classnames";
+import { PlaybackArgs } from "@/types/Playback";
+import Section from "@/types/Section";
+
+interface MultiPlayerProps {
+    playSection: (index: number) => void;
+    sections: Section[];
+    playerIndex: string;
+    labels?: PlaybackArgs["labels"];
+    disabledPlayers?: number[];
+    extraContent?: (index: string) => React.ReactNode;
+    style?: PlaybackArgs["style"];
+}
 
 const MultiPlayer = ({
     playSection,
@@ -10,7 +22,7 @@ const MultiPlayer = ({
     disabledPlayers,
     extraContent,
     style,
-}) => {
+}: MultiPlayerProps) => {
     return (
         <div
             className={classNames(
@@ -23,14 +35,14 @@ const MultiPlayer = ({
                 <div className="player-wrapper" key={index}>
                     <PlayerSmall
                         onClick={() => {
-                            playSection(index);
+                            playSection(parseInt(index));
                         }}
                         disabled={
                             Array.isArray(disabledPlayers) &&
                             disabledPlayers.includes(parseInt(index))
                         }
                         label={
-                            labels? labels[index] : ""
+                            labels ? labels[index] : ""
                         }
                         playing={playerIndex === index}
                     />

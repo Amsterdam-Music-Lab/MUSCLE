@@ -1,3 +1,5 @@
+import Section from "./Section";
+
 export const AUTOPLAY = "AUTOPLAY";
 export const BUTTON = "BUTTON";
 export const MULTIPLAYER = "MULTIPLAYER";
@@ -14,16 +16,18 @@ interface FrontendStyle {
     [key: string]: string | FrontendStyle;
 }
 
+type Labels = { [key: string]: string };
+
 export interface PlaybackArgs {
     view: PlaybackView;
     play_method: PlaybackMethod;
     show_animation: boolean;
     preload_message: string;
     instruction: string;
-    sections: any[];
+    sections: Section[];
     play_from: number;
 
-    labels?: { [key: string]: string };
+    labels?: Labels;
     style?: FrontendStyle;
     images?: { [key: string]: string };
     mute?: boolean;
