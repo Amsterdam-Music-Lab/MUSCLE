@@ -59,7 +59,7 @@ class NumberQuestion(Question):
 class TextQuestion(Question):
     def __init__(self, input_type='text', max_length=64, **kwargs):
         super().__init__(**kwargs)
-        self.max_length = max_length
+        self.max_length = max_length # the maximum length of the question's answer in characters
         self.input_type = input_type
         self.view = 'STRING'
 
