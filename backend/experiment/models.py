@@ -18,9 +18,12 @@ language_choices[0] = ("", "Unset")
 
 
 def consent_upload_path(instance, filename):
-    """Generate path to save consent file based on block.slug"""
-    folder_name = instance.slug
-    return f"consent/{folder_name}/{filename}"
+    """Generate path to save consent file based on experiment.slug and language"""
+    experiment = instance.experiment
+    folder_name = experiment.slug
+    language = instance.language
+
+    return f"consent/{folder_name}/{language}-{filename}"
 
 
 class Experiment(models.Model):
