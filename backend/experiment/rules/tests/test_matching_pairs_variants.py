@@ -67,3 +67,31 @@ class TestMatchingPairsVariants(TestCase):
         assert isinstance(first_trial, Trial)
         assert isinstance(second_trial, Trial)
         assert first_trial.playback.sections == second_trial.playback.sections
+
+    def test_visual_matching_pairs(self):
+        section_csv = (
+            "owner,George,0.0,1.0,https://m.media-amazon.com/images/M/MV5BMTUyNjE0NzAzMl5BMl5BanBnXkFtZTYwMjQzMzU3._V1_FMjpg_UX1000_.jpg,vmp,3\n"
+            "owner,George,0.0,1.0,https://m.media-amazon.com/images/M/MV5BMTUyNjE0NzAzMl5BMl5BanBnXkFtZTYwMjQzMzU3._V1_FMjpg_UX1000_.jpg,vmp,3\n"
+            "owner,John,0.0,1.0,https://m.media-amazon.com/images/M/MV5BMTYwMDE4MzgzMF5BMl5BanBnXkFtZTYwMDQzMzU3._V1_FMjpg_UX1000_.jpg,vmp,1\n"
+            "owner,John,0.0,1.0,https://m.media-amazon.com/images/M/MV5BMTYwMDE4MzgzMF5BMl5BanBnXkFtZTYwMDQzMzU3._V1_FMjpg_UX1000_.jpg,vmp,1\n"
+            "owner,Paul,0.0,1.0,https://m.media-amazon.com/images/M/MV5BMTkyNTY0MzUxOV5BMl5BanBnXkFtZTYwNTQzMzU3._V1_.jpg,vmp,2\n"
+            "owner,Paul,0.0,1.0,https://m.media-amazon.com/images/M/MV5BMTkyNTY0MzUxOV5BMl5BanBnXkFtZTYwNTQzMzU3._V1_.jpg,vmp,2\n"
+            "owner,Ringo,0.0,1.0,https://m.media-amazon.com/images/M/MV5BMTU1NjY5NTY4N15BMl5BanBnXkFtZTYwNzQzMzU3._V1_.jpg,vmp,4\n"
+            "owner,Ringo,0.0,1.0,https://m.media-amazon.com/images/M/MV5BMTU1NjY5NTY4N15BMl5BanBnXkFtZTYwNzQzMzU3._V1_.jpg,vmp,4\n"
+        )
+        playlist = Playlist.objects.create(name='TestVisualMatchingPairs')
+        playlist.csv = section_csv
+        playlist.update_sections()
+
+        block = Block.objects.create(rules='MATCHING_PAIRS_LITE', slug='vmpairs', rounds=3)
+
+        session = Session.objects.create(
+            block=block,
+            participant=self.participant,
+            playlist=playlist
+        )
+
+        rules = session.block_rules()
+        trial = rules.get_matching_pairs_trial(session)
+        self.assertIsInstance(trial, Trial)
+        self.assertEqual(trial.playback.play_method, 'NOAUDIO')
