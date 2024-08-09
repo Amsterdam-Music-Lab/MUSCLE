@@ -99,15 +99,15 @@ class ToontjeHoger2Preverbal(Base):
     def next_round(self, session):
         """Get action data for the next round"""
 
-        get_rounds_passed = session.get_rounds_passed()
+        rounds_passed = session.get_rounds_passed()
 
         # Round 1
-        if get_rounds_passed == 0:
+        if rounds_passed == 0:
             # No combine_actions because of inconsistent next_round array wrapping in first round
             return [self.get_intro_explainer(), self.get_spectrogram_info(), self.get_round1(session)]
 
         # Round 2
-        if get_rounds_passed == 1:
+        if rounds_passed == 1:
             return [*self.get_score(session, get_rounds_passed), *self.get_round1_playback(session), *self.get_round2(round, session)]
 
         # Final
@@ -121,13 +121,13 @@ class ToontjeHoger2Preverbal(Base):
             logger.error("No last result")
             feedback = "Er is een fout opgetreden"
         else:
-            if get_rounds_passed == 1:
+            if rounds_passed == 1:
                 appendix = "Op het volgende scherm kun je de geluiden beluisteren."
                 if last_result.score == self.SCORE_CORRECT:
                     feedback = "Dat is correct! Spectrogram C is inderdaad van een mens. " + appendix
                 else:
                     feedback = "Helaas! Je antwoord was onjuist. Het geluid van spectrogram C is van een mens. " + appendix
-            elif get_rounds_passed == 2:
+            elif rounds_passed == 2:
                 if last_result.score == self.SCORE_CORRECT:
                     feedback = "Dat is correct! Geluid A is inderdaad de Franse baby."
                 else:

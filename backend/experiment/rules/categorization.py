@@ -71,7 +71,7 @@ class Categorization(Base):
             return final
 
         # Calculate round number from passed training rounds
-        get_rounds_passed = (session.get_rounds_passed() -
+        rounds_passed = (session.get_rounds_passed() -
                          int(json_data['training_rounds']))
         # Change phase to enable collecting results of second half of training-1
         if session.get_rounds_passed() == 10:
@@ -79,7 +79,7 @@ class Categorization(Base):
             session.save_json_data(json_data)
             session.save()
 
-        if get_rounds_passed == 0:
+        if rounds_passed == 0:
             # Check if participants wants to exit after failed traning
             profiles = session.participant.profile()
             for profile in profiles:
@@ -102,7 +102,7 @@ class Categorization(Base):
             json_data = self.plan_phase(session)
 
         if 'training' in json_data['phase']:
-            if get_rounds_passed == 0:
+            if rounds_passed == 0:
                 intro_explainer = self.intro_explainer()
                 explainer2 = Explainer(
                     instruction="The experiment will now begin. Please don't close the browser during the experiment. You can only run it once. Click to start a sound sequence.",
@@ -463,7 +463,7 @@ class Categorization(Base):
         json_data = session.load_json_data()
 
         # Retrieve next section in the sequence
-        get_rounds_passed = (session.get_rounds_passed() -
+        rounds_passed = (session.get_rounds_passed() -
                          int(json_data['training_rounds']))
         sequence = json_data['sequence']
         this_section = sequence[get_rounds_passed]
@@ -487,7 +487,7 @@ class Categorization(Base):
 
     def get_title(self, session):
         json_data = session.load_json_data()
-        get_rounds_passed = (session.get_rounds_passed() -
+        rounds_passed = (session.get_rounds_passed() -
                          int(json_data['training_rounds'])+1)
         return f"Round {get_rounds_passed} / {len(json_data['sequence'])}"
 

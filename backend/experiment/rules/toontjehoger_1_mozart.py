@@ -41,7 +41,7 @@ class ToontjeHoger1Mozart(Base):
 
     def next_round(self, session: Session):
         """Get action data for the next round"""
-        get_rounds_passed = session.get_rounds_passed()
+        rounds_passed = session.get_rounds_passed()
 
         # Round 1
         # 1. Explain game.
@@ -56,7 +56,7 @@ class ToontjeHoger1Mozart(Base):
             button_label="Start",
         )
 
-        if get_rounds_passed == 0:
+        if rounds_passed == 0:
             round = self.get_image_trial(
                 session,
                 section_group="1",
@@ -68,7 +68,7 @@ class ToontjeHoger1Mozart(Base):
             return [explainer, *round]
 
         # Round 2
-        if get_rounds_passed == 1:
+        if rounds_passed == 1:
             answer_explainer = self.get_answer_explainer(session, round=1)
             score = self.get_score(session)
             round = self.get_image_trial(
