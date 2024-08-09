@@ -52,14 +52,14 @@ class ToontjeHoger4Absolute(Base):
     def next_round(self, session):
         """Get action data for the next round"""
 
-        rounds_passed = session.rounds_passed()
+        get_rounds_passed = session.get_rounds_passed()
 
         # Round 1
-        if rounds_passed == 0:
+        if get_rounds_passed == 0:
             return self.get_round(session)
 
         # Round 2 - 4
-        if rounds_passed < session.block.rounds:
+        if get_rounds_passed < session.block.rounds:
             return [*self.get_score(session), *self.get_round(session)]
 
         # Final

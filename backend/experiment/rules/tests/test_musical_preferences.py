@@ -24,7 +24,9 @@ class MusicalPreferencesTest(TestCase):
                "AwfulArtist,AwfulSong,0.0,10.0,bat/artist5.mp3,0,0,0\n")
         cls.playlist.csv = csv
         cls.playlist.update_sections()
-        cls.block = Block.objects.create(name='MusicalPreferences', rounds=5)
+        cls.block = Block.objects.create(name='MusicalPreferences',
+                                         rules="MUSICAL_PREFERENCES",
+                                         rounds=5)
         cls.session = Session.objects.create(
             block=cls.block,
             participant=cls.participant,
@@ -75,7 +77,7 @@ class MusicalPreferencesTest(TestCase):
 
         # Go to the last round (top_all = ... caused the error)
         for i in range(self.session.block.rounds + 1):
-            self.session.increment_round()
+            actions = mp.next_round(self.session)
+            if i == self.session.block.rounds + 1:
+                self.assertIsNotNone(actions)
 
-        # get_preferred_songs() called by top_all = ... in the final round should not raise an error
-        mp.next_round(self.session)

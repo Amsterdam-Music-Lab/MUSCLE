@@ -90,7 +90,7 @@ class TwoAlternativeForced(Base):
         if actions:
             return actions
 
-        if session.rounds_passed() == 0:
+        if session.get_rounds_passed() == 0:
             # Beginning of experiment, return an explainer and the next trial action, no feedback on previous trial
 
             explainer2 = Explainer(
@@ -118,7 +118,7 @@ class TwoAlternativeForced(Base):
         """
 
         # Retrieve next section in the sequence
-        section = session.playlist.section_set.all()[session.rounds_passed()]
+        section = session.playlist.section_set.all()[session.get_rounds_passed()]
 
         # Determine expected response, in this case section tag (A or B)
         expected_response = section.tag
@@ -154,7 +154,7 @@ class TwoAlternativeForced(Base):
         trial = Trial(
             playback=playback,
             feedback_form=feedback_form,
-            title=f"Round {session.rounds_passed()} / {len(session.playlist.section_set.all())}",
+            title=f"Round {session.get_rounds_passed()} / {len(session.playlist.section_set.all())}",
             config = {'listen_first': True, 'decision_time': section.duration + .1}
         )
 

@@ -25,7 +25,7 @@ class MatchingPairsLite(MatchingPairsGame):
         ]
 
     def next_round(self, session):
-        if session.rounds_passed() < 1:
+        if session.get_rounds_passed() < 1:
             trial = self.get_matching_pairs_trial(session)
             return [trial]
         else:

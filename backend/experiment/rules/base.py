@@ -18,6 +18,7 @@ class Base(object):
     """Base class for other rules classes"""
 
     contact_email = settings.CONTACT_MAIL
+    counted_result_keys = []
 
     def __init__(self):
         self.question_series = []

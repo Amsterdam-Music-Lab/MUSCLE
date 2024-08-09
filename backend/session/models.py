@@ -1,8 +1,7 @@
-import random
 from django.db import models
 from django.utils import timezone
 
-from section.models import Section
+from result.models import Result
 
 
 class Session(models.Model):
@@ -102,34 +101,19 @@ class Session(models.Model):
 
     def rounds_complete(self):
         """Determine if there are results for each experiment round"""
-        return self.rounds_passed() >= self.block.rounds
+        return self.get_rounds_passed() >= self.block.rounds
 
-    def rounds_passed(self):
-        """Get number of rounds passed"""
-        return self.result_set.count()
-
-    def get_next_round(self):
-        """Get next round number"""
-        return self.rounds_passed() + 1
-
-    def get_current_round(self):
-        return self.current_round
-
-    def set_current_round(self, round_number):
-        self.current_round = round_number
-        self.save()
-
-    def reset_rounds(self):
-        self.current_round = 1
-        self.save()
-
-    def increment_round(self):
-        self.current_round += 1
-        self.save()
-
-    def decrement_round(self):
-        self.current_round -= 1
-        self.save()
+    def get_rounds_passed(self, counted_result_keys: list = []):
+        """Get number of rounds passed, measured by the number of results on this session,
+        taking into account the `counted_result_keys` array that may be defined per rules file
+        - params:
+            exclude_irrelevant: specify if question_keys which are not in the
+            `counted_result_keys` array of the rules file should be counted
+        """
+        results = self.result_set
+        if counted_result_keys:
+            results = results.filter(question_key__in=counted_result_keys)
+        return results.count()
 
     def get_used_song_ids(self, exclude={}):
         """Get a list of song ids from the sections of this session's results"""
@@ -153,7 +137,7 @@ class Session(models.Model):
         self.finished_at = timezone.now()
         self.final_score = self.total_score()
 
-    def rank(self):
+    def rank(self) -> int:
         """Get session rank based on final_score, within current experiment"""
         return (
             self.block.session_set.filter(final_score__gte=self.final_score)
@@ -162,7 +146,7 @@ class Session(models.Model):
             .count()
         )
 
-    def percentile_rank(self, exclude_unfinished):
+    def percentile_rank(self, exclude_unfinished: bool) -> float:
         """Get session percentile rank based on final_score, within current experiment"""
         session_set = self.block.session_set
         if exclude_unfinished:
@@ -174,28 +158,8 @@ class Session(models.Model):
         n_eq = session_set.filter(final_score=self.final_score).count()
         return 100.0 * (n_lte - (0.5 * n_eq)) / n_session
 
-    def question_bonus(self, bonus=100, skip_penalty=5):
-        """Get the question bonus, given by the bonus reduced with number of skipped questions times the skip_penalty"""
-        return bonus + self.skipped_questions() * skip_penalty
-
-    def total_questions(self):
-        """Get total number of profile questions in this session"""
-        return self.result_count()
-
-    def skipped_questions(self):
-        """Get number of skipped (empty) profile questions for this session"""
-        return self.result_set.filter(given_response="").count()
-
-    def answered_questions(self):
-        """Get number of answered (non-empty) profile questions for this session"""
-        return self.result_set.exclude(given_response="").count()
-
-    def get_relevant_results(self, question_keys=[]):
+    def get_previous_result(self, question_keys: list = []) -> Result:
         results = self.result_set
         if question_keys:
-            return results.filter(question_key__in=question_keys)
-        return results
-
-    def get_previous_result(self, question_keys=[]):
-        results = self.get_relevant_results(question_keys)
-        return results.order_by("-created_at").first()
+            results = results.filter(question_key__in=question_keys)
+        return results.order_by('-created_at').first()

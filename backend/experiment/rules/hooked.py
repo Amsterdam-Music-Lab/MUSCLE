@@ -33,7 +33,7 @@ class Hooked(Base):
     heard_before_time = 15  # response time for "Have you heard this song in previous rounds?"
     question_offset = 5 # how many rounds will be presented without questions
     questions = True
-    relevant_keys = ['recognize', 'heard_before']
+    counted_result_keys = ['recognize', 'heard_before']
     play_method = 'BUFFER'
 
     def __init__(self):
@@ -83,7 +83,7 @@ class Hooked(Base):
 
     def next_round(self, session: Session):
         """Get action data for the next round"""
-        round_number = self.get_current_round(session)
+        round_number = session.get_rounds_passed(self.counted_result_keys)
 
         # If the number of results equals the number of block.rounds,
         # close the session and return data for the final_score view.
@@ -152,9 +152,6 @@ class Hooked(Base):
                     self.next_heard_before_action(session, round_number))
 
         return actions
-
-    def get_current_round(self, session: Session):
-        return session.get_relevant_results(self.relevant_keys).count()
 
     def heard_before_explainer(self):
         """Explainer for heard-before rounds"""
@@ -324,7 +321,7 @@ class Hooked(Base):
     def get_score(self, session, round_number):
         config = {'show_section': True, 'show_total_score': True}
         title = self.get_trial_title(session, round_number)
-        previous_score = session.get_previous_result(self.relevant_keys).score
+        previous_score = session.get_previous_result(self.counted_result_keys).score
         return Score(session,
                      config=config,
                      title=title,

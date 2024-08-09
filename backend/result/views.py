@@ -25,9 +25,6 @@ def score(request):
         result = handle_results(result_data, session)
         if not result:
             return HttpResponseServerError("Could not create result from data")
-        if result.session:
-            # increment the round number if this was a session type result
-            session.increment_round()
     except ValueError:
         return HttpResponseServerError("Invalid data")
 

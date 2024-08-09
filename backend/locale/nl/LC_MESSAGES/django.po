@@ -132,8 +132,8 @@ msgstr ""
 
 #: experiment/actions/score.py:30
 #, python-brace-format
-msgid "Round {rounds_passed} / {total_rounds}"
-msgstr "Ronde {rounds_passed} van {total_rounds}"
+msgid "Round {get_rounds_passed} / {total_rounds}"
+msgstr "Ronde {get_rounds_passed} van {total_rounds}"
 
 #: experiment/actions/score.py:45
 #, fuzzy

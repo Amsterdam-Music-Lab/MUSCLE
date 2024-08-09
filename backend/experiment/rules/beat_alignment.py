@@ -60,9 +60,6 @@ class BeatAlignment(Base):
             final_text = render_feedback_trivia(feedback, trivia)
             return final_action_with_optional_button(session, final_text)
 
-        # Next round number, can be used to return different actions
-        next_round_number = session.get_next_round()
-
         # Practice rounds
         if not session.load_json_data().get('done_practice'):
             practice_rounds = []

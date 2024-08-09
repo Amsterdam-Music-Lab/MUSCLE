@@ -28,6 +28,7 @@ class RhythmBatteryIntroTest(TestCase):
         self.block = Block.objects.create(
             name='test',
             slug='TEST',
+            rules='RHYTHM_BATTERY_INTRO'
         )
         participant = Participant.objects.create()
         self.session = Session.objects.create(
@@ -41,20 +42,16 @@ class RhythmBatteryIntroTest(TestCase):
         actions = listening_conditions.first_round(self.block)
         self.assertIsInstance(actions[0], Explainer)
 
-    def test_next_round_first_round(self):
+    def test_next_round_first_time(self):
         listening_conditions = RhythmBatteryIntro()
-        listening_conditions.first_round(self.block)
         actions = listening_conditions.next_round(self.session)
-
         self.assertIsInstance(actions[0], Trial)
-
         self.assertIsInstance(actions[0].feedback_form, Form)
         self.assertEqual(len(actions[0].feedback_form.form), 1)
         self.assertEqual(actions[0].feedback_form.form[0].key, 'quiet_room')
 
-    def test_next_round_final_round(self):
+    def test_next_round_last_time(self):
         listening_conditions = RhythmBatteryIntro()
-        listening_conditions.first_round(self.block)
         listening_conditions.next_round(self.session)
         listening_conditions.next_round(self.session)
         listening_conditions.next_round(self.session)

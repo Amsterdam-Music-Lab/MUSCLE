@@ -29,15 +29,6 @@ class SessionUtilsTest(TestCase):
                 score=i
             )
 
-    def test_relevant_results_without_filter(self):
-        results = self.session.get_relevant_results()
-        assert results.count() == n_results
-
-    def test_relevant_results_with_filter(self):
-        results = self.session.get_relevant_results(['a', 'b'])
-        assert results.count() == 6
-        assert 'd' not in results.values_list('question_key')
-
     def test_previous_score(self):
         result = self.session.get_previous_result(['c', 'd'])
         assert result.score == 9

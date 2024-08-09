@@ -65,15 +65,15 @@ class ToontjeHoger6Relative(Base):
     def next_round(self, session):
         """Get action data for the next round"""
 
-        rounds_passed = session.rounds_passed()
+        get_rounds_passed = session.get_rounds_passed()
 
         # Round 1
-        if rounds_passed == 0:
+        if get_rounds_passed == 0:
             # No combine_actions because of inconsistent next_round array wrapping in first round
-            return self.get_round(rounds_passed, session)
+            return self.get_round(get_rounds_passed, session)
 
         # Round 2
-        if rounds_passed == 1:
+        if get_rounds_passed == 1:
             return [*self.get_score(session), *self.get_round(round, session)]
 
         # Final
