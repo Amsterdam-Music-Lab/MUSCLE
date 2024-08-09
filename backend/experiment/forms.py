@@ -9,8 +9,11 @@ from django.forms import (
     CheckboxSelectMultiple,
     TextInput,
 )
-from experiment.models import Experiment, Block, SocialMediaConfig, ExperimentTranslatedContent
+from django.contrib.admin.widgets import RelatedFieldWidgetWrapper
+
+from experiment.models import BlockTranslatedContent, Experiment, Block, SocialMediaConfig, ExperimentTranslatedContent
 from experiment.rules import BLOCK_RULES
+from django.db.models.fields.related import ManyToManyRel
 
 
 # session_keys for Export CSV

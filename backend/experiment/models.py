@@ -111,7 +111,7 @@ class Block(models.Model):
 
     phase = models.ForeignKey(Phase, on_delete=models.CASCADE, related_name="blocks", blank=True, null=True)
     index = models.IntegerField(default=0, help_text="Index of the block in the phase. Lower numbers come first.")
-    translated_content = models.QuerySet["BlockTranslatedContent"]
+    translated_content = models.ManyToManyField("BlockTranslatedContent", blank=True)
     playlists = models.ManyToManyField("section.Playlist", blank=True)
 
     # to be deleted
@@ -371,10 +371,12 @@ class ExperimentTranslatedContent(models.Model):
 
 
 class BlockTranslatedContent(models.Model):
-    block = models.ManyToManyField(Block, related_name="translated_content")
     language = models.CharField(default="", blank=True, choices=language_choices, max_length=2)
     name = models.CharField(max_length=64, default="")
     description = models.TextField(blank=True, default="")
+
+    def __str__(self):
+        return f"{self.name} ({self.language})"
 
 
 class Feedback(models.Model):

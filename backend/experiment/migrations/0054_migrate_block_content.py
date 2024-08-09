@@ -18,7 +18,7 @@ def migrate_block_content(apps, schema_editor):
             name=block.name,
             description=block.description,
         )
-        block_translated_content.block.add(block)
+        block.translated_content.add(block_translated_content)
 
         if block.phase:
             continue

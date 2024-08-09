@@ -218,7 +218,11 @@ class Migration(migrations.Migration):
                 ),
                 ("name", models.CharField(default="", max_length=64)),
                 ("description", models.TextField(blank=True, default="")),
-                ("block", models.ManyToManyField(related_name="translated_content", to="experiment.block")),
             ],
+        ),
+        migrations.AddField(
+            model_name="block",
+            name="translated_content",
+            field=models.ManyToManyField(blank=True, to="experiment.blocktranslatedcontent"),
         ),
     ]

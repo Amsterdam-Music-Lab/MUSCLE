@@ -23,6 +23,7 @@ from experiment.models import (
     Feedback,
     SocialMediaConfig,
     ExperimentTranslatedContent,
+    BlockTranslatedContent,
 )
 from question.admin import QuestionSeriesInline
 from experiment.forms import (
@@ -84,6 +85,7 @@ class BlockAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
         "rounds",
         "bonus_points",
         "playlists",
+        "translated_content",
         "consent",
     ]
     inlines = [QuestionSeriesInline, FeedbackInline]
@@ -442,3 +444,24 @@ class PhaseAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
 
 
 admin.site.register(Phase, PhaseAdmin)
+
+
+@admin.register(BlockTranslatedContent)
+class BlockTranslatedContentAdmin(admin.ModelAdmin):
+    list_display = ["name", "blocks", "language"]
+    list_filter = ["language"]
+    search_fields = [
+        "name",
+        "blocks__name",
+    ]
+
+    def blocks(self, obj):
+        # Block is manytomany, so we need to find it through the related name
+        blocks = Block.objects.filter(translated_content=obj)
+
+        if not blocks:
+            return "No block"
+
+        return format_html(
+            ", ".join([f'<a href="/admin/experiment/block/{block.id}/change/">{block.name}</a>' for block in blocks])
+        )
