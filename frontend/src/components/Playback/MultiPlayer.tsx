@@ -1,6 +1,18 @@
 import React from "react";
 import PlayerSmall from "../PlayButton/PlayerSmall";
 import classNames from "classnames";
+import { PlaybackArgs } from "@/types/Playback";
+import Section from "@/types/Section";
+
+interface MultiPlayerProps {
+    playSection: (index: number) => void;
+    sections: Section[];
+    playerIndex: string;
+    labels?: PlaybackArgs["labels"];
+    disabledPlayers?: number[];
+    extraContent?: (index: number) => JSX.Element;
+    style?: PlaybackArgs["style"];
+}
 
 const MultiPlayer = ({
     playSection,
@@ -10,16 +22,17 @@ const MultiPlayer = ({
     disabledPlayers,
     extraContent,
     style,
-}) => {
+}: MultiPlayerProps) => {
     return (
         <div
+            data-testid="multiplayer"
             className={classNames(
                 "aha__multiplayer d-flex justify-content-around",
                 "player-count-" + sections.length,
                 style?.root
             )}
         >
-            {Object.keys(sections).map((index) => (
+            {sections.map((_section, index) => (
                 <div className="player-wrapper" key={index}>
                     <PlayerSmall
                         onClick={() => {
@@ -27,12 +40,12 @@ const MultiPlayer = ({
                         }}
                         disabled={
                             Array.isArray(disabledPlayers) &&
-                            disabledPlayers.includes(parseInt(index))
+                            disabledPlayers.includes(index)
                         }
                         label={
-                            labels? labels[index] : ""
+                            labels ? labels[index] : ""
                         }
-                        playing={playerIndex === index}
+                        playing={parseInt(playerIndex) === index}
                     />
                     {extraContent && extraContent(index)}
                 </div>)

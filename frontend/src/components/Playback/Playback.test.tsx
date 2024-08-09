@@ -1,8 +1,8 @@
-import React from 'react';
-import { vi } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { render } from '@testing-library/react';
 
 import Playback from './Playback';
+import { PlaybackArgs } from '@/types/Playback';
 
 vi.mock("../../util/stores");
 
@@ -17,21 +17,22 @@ describe('Playback', () => {
         submitResult: vi.fn(),
     }
 
-    let playbackArgs = {
+    let playbackArgs: PlaybackArgs = {
         view: 'BUTTON',
         show_animation: false,
         instruction: 'Listen, just listen!',
         play_method: 'HTML',
         preload_message: 'Get ready',
-        sections: [{id: 13, url: 'some/fancy/tune.mp3'}]
+        sections: [{ id: 13, url: 'some/fancy/tune.mp3' }],
+        play_from: 0,
     };
 
     it('renders itself', () => {
         const { container } = render(
-        <Playback 
-            {... basicProps} playbackArgs={playbackArgs}
-        />);
-        expect(document.body.contains(container.querySelector('.aha__playback'))).to.be.true;
+            <Playback
+                {...basicProps} playbackArgs={playbackArgs}
+            />);
+        expect(document.body.contains(container.querySelector('.aha__playback'))).toBe(true);
     });
 
 })

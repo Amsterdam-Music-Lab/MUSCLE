@@ -2,15 +2,25 @@ import classNames from "classnames";
 
 import Histogram from "../Histogram/Histogram";
 import { API_ROOT } from "@/config";
+import { Card } from "@/types/Section";
 
-const PlayCard = ({ onClick, registerUserClicks, playing, section, view, showAnimation }) => {
-    const getImgSrc = (url) => {
+interface PlayCardProps {
+    onClick: () => void;
+    registerUserClicks: (x: number, y: number) => void;
+    playing: boolean;
+    section: Card;
+    view: string;
+    showAnimation: boolean;
+}
+
+const PlayCard = ({ onClick, registerUserClicks, playing, section, view, showAnimation }: PlayCardProps) => {
+    const getImgSrc = (url: string) => {
         if (url.startsWith("http")) {
             return url;
         }
         return API_ROOT + url;
     }
-    const matchClass = showAnimation? section.matchClass : '';
+    const matchClass = showAnimation ? section.matchClass : '';
 
     const histogramBars = showAnimation ? 5 : 0;
 
@@ -44,7 +54,6 @@ const PlayCard = ({ onClick, registerUserClicks, playing, section, view, showAni
                     <Histogram
                         running={playing}
                         bars={histogramBars}
-                        marginBottom={0}
                         backgroundColor="purple"
                         borderRadius=".5rem"
                     />
