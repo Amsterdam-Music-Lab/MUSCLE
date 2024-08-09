@@ -36,7 +36,7 @@ describe("PlayCard Component Tests", () => {
     it("should display the front of the card when turned", () => {
         render(<PlayCard onClick={mockOnClick} registerUserClicks={mockRegisterUserClicks} section={{ ...sectionProps, turned: true }} />);
         expect(document.body.contains(screen.getByTestId("play-card").querySelector(".aha__histogram"))).toBe(true);
-        expect(document.body.contains(screen.getByTestId("play-card").querySelector(".front"))).to.not.be.true;
+        expect(document.body.contains(screen.getByTestId("play-card").querySelector(".front"))).not.toBe(true);
     });
 
     it("should display image for visual matching pairs view", () => {
@@ -96,11 +96,11 @@ describe("PlayCard Component Tests", () => {
 
     it("should display a card without a histogram when not turned and playing", () => {
         render(<PlayCard onClick={mockOnClick} registerUserClicks={mockRegisterUserClicks} playing section={sectionProps} />);
-        expect(document.body.contains(screen.getByTestId("play-card").querySelector(".aha__histogram"))).to.not.be.true;
+        expect(document.body.contains(screen.getByTestId("play-card").querySelector(".aha__histogram"))).not.toBe(true);
     });
 
     it("should display a card without a histogram when not turned and not playing", () => {
         render(<PlayCard onClick={mockOnClick} registerUserClicks={mockRegisterUserClicks} playing={false} section={sectionProps} />);
-        expect(document.body.contains(screen.getByTestId("play-card").querySelector(".aha__histogram"))).to.not.be.true;
+        expect(document.body.contains(screen.getByTestId("play-card").querySelector(".aha__histogram"))).not.toBe(true);
     });
 });
