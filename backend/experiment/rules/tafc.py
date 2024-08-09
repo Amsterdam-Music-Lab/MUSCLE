@@ -42,7 +42,7 @@ from result.utils import prepare_result
 
 class TwoAlternativeForced(Base):
     """
-    first_round() and next_round() are required methods for the class.
+    next_round() is a required method for this class.
     """
 
     # Add to __init.py__ file in the same directory as the current file:
@@ -59,25 +59,15 @@ class TwoAlternativeForced(Base):
             "randomize": False
         }]
 
-    def first_round(self, block):
+    def intro_explainer(self):
         """
-        Returns a list of actions. Actions used here: Explainer, Consent.
+        Returns an introductory explanation of the experiment.
         """
-
-        explainer = Explainer(
+        return Explainer(
             instruction="This is a listening experiment in which you have to respond to short sound sequences",
             steps=[],
             button_label='Ok'
         )
-
-        # Add consent, text in admin
-        consent = Consent(
-            block.consent,
-            title='Informed consent',
-            confirm='I agree',
-            deny='Stop',
-            )
-        return [consent, explainer]
 
     def next_round(self, session):
         """
@@ -92,13 +82,7 @@ class TwoAlternativeForced(Base):
 
         if session.get_rounds_passed() == 0:
             # Beginning of experiment, return an explainer and the next trial action, no feedback on previous trial
-
-            explainer2 = Explainer(
-                instruction="The experiment will now begin",
-                steps=[],
-                button_label='Ok'
-            )
-            return [explainer2, self.next_trial_action(session)]
+            return [self.intro_explainer(), self.next_trial_action(session)]
 
         elif not session.rounds_complete():
             # Combine two actions, feedback on previous action and next trial action

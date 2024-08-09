@@ -30,14 +30,12 @@ class ToontjeHogerKids3Plink(ToontjeHoger3Plink):
     def validate_era_and_mood(self, sections):
         return []
 
-    def first_round(self, block):
-        """Create data for the first block rounds."""
-
-        explainer = Explainer(
+    def intro_explainer(self, n_rounds):
+        return Explainer(
             instruction="Muziekherkenning",
             steps=[
                 Step("Je hoort zo een heel kort stukje van {} liedjes.".format(
-                    block.rounds)),
+                    n_rounds)),
                 Step("Herken je de liedjes? Kies dan steeds de juiste artiest en titel!"),
                 Step(
                     "Weet je het niet zeker? Doe dan maar een gok.")
@@ -45,10 +43,6 @@ class ToontjeHogerKids3Plink(ToontjeHoger3Plink):
             step_numbers=True,
             button_label="Start"
         )
-
-        return [
-            explainer
-        ]
 
     def get_last_result(self, session):
         ''' get the last score, based on question (plink)

@@ -24,6 +24,7 @@ n_rounds_per_block = n_trials_per_block * 2  # each trial has two rounds
 class Speech2Song(Base):
     """ Rules for a speech-to-song experiment """
     ID = 'SPEECH_TO_SONG'
+    default_consent_file = 'consent/consent_speech2song.html'
 
     def __init__(self):
         self.question_series = [
@@ -45,8 +46,8 @@ class Speech2Song(Base):
             },
         ]
 
-    def first_round(self, block):
-        explainer = Explainer(
+    def intro_explainer(self):
+        return Explainer(
             instruction=_("This is an experiment about an auditory illusion."),
             steps=[
                 Step(
@@ -55,22 +56,6 @@ class Speech2Song(Base):
             ],
             button_label=_('Start')
         )
-        # Add consent from file or admin (admin has priority)
-        consent = Consent(
-            block.consent,
-            title=_('Informed consent'),
-            confirm=_('I agree'),
-            deny=_('Stop'),
-            url='consent/consent_speech2song.html'
-            )
-
-        playlist = Playlist(block.playlists.all())
-
-        return [
-            consent,
-            playlist,
-            explainer,
-        ]
 
     def next_round(self, session):
         blocks = [1, 2, 3]
@@ -81,9 +66,9 @@ class Speech2Song(Base):
         actions = []
         is_speech = True
         if session.current_round == 1:
-            question_trial = self.get_questionnaire(session)
-            if question_trial:
-                return question_trial
+            question_trials = self.get_questionnaire(session)
+            if question_trials:
+                return [self.intro_explainer(), *question_trials]
 
             explainer = Explainer(
                 instruction=_(

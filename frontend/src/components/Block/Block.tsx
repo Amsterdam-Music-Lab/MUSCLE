@@ -80,16 +80,6 @@ const Block = () => {
             setSession(newSession);
             return newSession;
         }
-
-        try {
-            const newSession = await createSession({ block, participant, playlist })
-            setSession(newSession);
-            return newSession;
-        }
-        catch (err) {
-            setError(`Could not create a session: ${err}`, err)
-            return;
-        };
     };
 
     const continueToNextRound = async () => {

@@ -4,17 +4,16 @@ from decimal import Decimal, ROUND_HALF_UP
 from django.utils.translation import gettext_lazy as _
 
 from .base import Base
-from section.models import Section
 from experiment.actions import Trial, Explainer, Step
 from experiment.actions.form import ChoiceQuestion, Form
 from experiment.actions.playback import Autoplay
-
 from experiment.rules.util.practice import get_practice_views, practice_explainer, get_trial_condition, get_trial_condition_block
 from experiment.actions.utils import final_action_with_optional_button, render_feedback_trivia
 from experiment.actions.utils import get_average_difference_level_based
 from experiment.rules.util.staircasing import register_turnpoint
-
 from result.utils import prepare_result
+from section.models import Section
+from session.models import Session
 
 logger = logging.getLogger(__name__)
 
@@ -27,7 +26,7 @@ class HBat(Base):
     ID = 'H_BAT'
     start_diff = 20
 
-    def next_round(self, session):
+    def next_round(self, session: Session):
         if session.final_score == 0:
             # we are practicing
             actions = get_practice_views(
@@ -59,15 +58,6 @@ class HBat(Base):
                 session.result_set.order_by('-created_at').first().delete()
                 action = self.finalize_block(session)
             return action
-
-    def first_round(self, block):
-        explainer = self.intro_explainer()
-        # Consent with admin text or default text
-        explainer2 = practice_explainer()
-        return [
-            explainer,
-            explainer2,
-        ]
 
     def next_trial_action(self, session, trial_condition, level=1, *kwargs):
         """
