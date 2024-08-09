@@ -1,14 +1,21 @@
-import React, { useCallback } from "react";
+import { useCallback } from "react";
 import MultiPlayer from "./MultiPlayer";
 
-const ImagePlayer = (props) => {
+interface ImagePlayerProps {
+    images: string[];
+    // FIXME: image_labels is never passed as a prop by any parent component
+    image_labels?: string[];
+    playSection: (index: number) => void;
+}
+
+const ImagePlayer = (props: ImagePlayerProps) => {
     const playSection = props.playSection;
 
     // extraContent callback can be used to add content to each player
     const extraContent = useCallback(
-        (index) => {
+        (index: number) => {
             const images = props.images;
-            if (!images) {
+            if (!images || images.length === 0) {
                 return <p>Warning: No images found</p>;
             }
             const labels = props.image_labels;
