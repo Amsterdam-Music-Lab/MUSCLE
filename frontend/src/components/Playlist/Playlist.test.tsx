@@ -1,14 +1,19 @@
-import React from 'react';
 import { fireEvent, render, screen } from '@testing-library/react';
-import { vi } from 'vitest';
+import { vi, describe, it, expect, } from 'vitest';
 
 import Playlist from './Playlist';
 
 vi.mock("../../util/stores");
 
 describe('Playlist Component', () => {
-    const playlist = { current: 25 };
-    const block = { slug: 'test-experiment', playlists: [{ id: 42 }, { id: 43 }] };
+    const playlist = { current: '42' };
+    const block = {
+        slug: 'test-experiment',
+        playlists: [
+            { id: '42', name: 'Playlist A' },
+            { id: '43', name: 'Playlist B' }
+        ]
+    };
     const onNext = vi.fn();
 
     it('renders correctly with given props', () => {
@@ -25,15 +30,15 @@ describe('Playlist Component', () => {
             <Playlist block={block} instruction="instruction" onNext={onNext} playlist={playlist} />
         )
         fireEvent.click(screen.getAllByTestId('playlist-item')[0]);
-        expect((onNext).toHaveBeenCalled);
+        expect(onNext).toHaveBeenCalled();
     })
 
     it('does not render with less than 2 playlists', () => {
-        block.playlists = [{ id: 42 }]
+        block.playlists = [{ id: '42', name: 'Playlist A' }];
         render(
             <Playlist block={block} instruction="instruction" onNext={onNext} playlist={playlist} />
         )
-        expect((onNext).toHaveBeenCalled);
+        expect(onNext).toHaveBeenCalled();
         expect(screen.queryByTestId('playlist-instruction')).not.to.exist;
     });
 });
