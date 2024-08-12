@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import AutoPlay from './AutoPlay';
+import AutoPlay from '@/components/Playback/Autoplay';
 
 // Mock the Circle and ListenCircle components
 vi.mock('../Circle/Circle', () => ({
