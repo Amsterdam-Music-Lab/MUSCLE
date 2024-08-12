@@ -1,5 +1,4 @@
-import React from 'react';
-import { vi } from 'vitest';
+import { vi, describe, it, expect, } from 'vitest';
 import { render, fireEvent, waitFor } from '@testing-library/react';
 import UserFeedback from './UserFeedback';
 import { postFeedback } from '../../API';
@@ -16,7 +15,8 @@ describe('UserFeedback', () => {
         header: 'Your Feedback',
         button: 'Submit',
         contact_body: 'Contact us at test@example.com',
-        thank_you: 'Thank you for your feedback!'
+        thank_you: 'Thank you for your feedback!',
+        show_float_button: true,
     };
 
     it('renders the feedback form', () => {

@@ -4,8 +4,16 @@ import { postFeedback } from '../../API';
 import Button from '../Button/Button';
 import HTML from '../HTML/HTML';
 import classNames from '@/util/classNames';
+import { FeedbackInfo } from '@/types/Block';
 
-const UserFeedback = ({ blockSlug, participant, feedbackInfo, inline = true }) => {
+interface UserFeedbackProps {
+    blockSlug: string;
+    participant: any;
+    feedbackInfo: FeedbackInfo;
+    inline?: boolean;
+}
+
+const UserFeedback = ({ blockSlug, participant, feedbackInfo, inline = true }: UserFeedbackProps) => {
     const [value, setValue] = useState('');
     const [showForm, setShowForm] = useState(true);
 
@@ -20,7 +28,7 @@ const UserFeedback = ({ blockSlug, participant, feedbackInfo, inline = true }) =
         return;
     }
 
-    const handleChange = (event) => {
+    const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
         setValue(event.target.value);
     }
 
@@ -34,7 +42,6 @@ const UserFeedback = ({ blockSlug, participant, feedbackInfo, inline = true }) =
                     <div className="user-feedback__form">
                         <textarea
                             className="user-feedback__input"
-                            type="text"
                             onChange={handleChange}
                             value={value}
                         ></textarea>

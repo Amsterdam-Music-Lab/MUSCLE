@@ -10,9 +10,17 @@ export default interface Block {
     bonus_points: number;
 }
 
-interface Playlist {
+export interface Playlist {
     id: string;
     name: string;
+}
+
+export interface FeedbackInfo {
+    header: string;
+    button: string;
+    contact_body: string;
+    thank_you: string;
+    show_float_button: boolean;
 }
 
 export interface ExtendedBlock extends Block {
@@ -20,13 +28,7 @@ export interface ExtendedBlock extends Block {
     class_name: string;
     rounds: number;
     playlists: Playlist[];
-    feedback_info: {
-        header: string;
-        button: string;
-        contact_body: string;
-        thank_you: string;
-        show_float_button: boolean;
-    }
+    feedback_info: FeedbackInfo;
     session_id: number;
     loading_text: string;
 }
