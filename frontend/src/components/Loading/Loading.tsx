@@ -11,7 +11,7 @@ interface LoadingProps {
  */
 const Loading = ({ duration = 2, loadingText = '' }: LoadingProps) => {
     return (
-        <div className="aha__loading d-flex justify-content-center">
+        <div className="aha__loading d-flex justify-content-center" data-testid="loading">
             <Circle
                 duration={duration}
                 startTime={0.1 * duration}
