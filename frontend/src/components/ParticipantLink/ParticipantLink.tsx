@@ -41,8 +41,8 @@ const ParticipantLink = ({ participantIDOnly = false }: ParticipantLinkProps) =>
     return (
         <div className="aha__participant_link">
             <div className="copy">
-                <input ref={linkInput} value={formatLink(link.url)} readOnly role="textbox" />
-                <button onClick={copyLink} onKeyDown={copyLink} role="button">
+                <input ref={linkInput} value={formatLink(link.url)} readOnly data-testid="participant-link" />
+                <button onClick={copyLink} onKeyDown={copyLink} data-testid="copy-button">
                     {link.copy_message}
                 </button>
             </div>

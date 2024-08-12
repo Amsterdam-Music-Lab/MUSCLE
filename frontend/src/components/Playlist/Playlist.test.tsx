@@ -20,7 +20,7 @@ describe('Playlist Component', () => {
         render(
             <Playlist block={block} instruction="instruction" onNext={onNext} playlist={playlist} />
         )
-        expect(screen.getByTestId('playlist-instruction')).to.exist;
+        expect(screen.getByTestId('playlist-instruction')).toBeTruthy();
         const playlistItems = screen.getAllByTestId('playlist-item');
         expect(playlistItems.length === 2);
     });
@@ -39,6 +39,6 @@ describe('Playlist Component', () => {
             <Playlist block={block} instruction="instruction" onNext={onNext} playlist={playlist} />
         )
         expect(onNext).toHaveBeenCalled();
-        expect(screen.queryByTestId('playlist-instruction')).not.to.exist;
+        expect(screen.queryByTestId('playlist-instruction')).toBeNull();
     });
 });

@@ -3,8 +3,6 @@ import { vi, describe, it, expect, beforeEach } from 'vitest';
 import { QuestionViews } from "@/types/Question";
 import Trial from "./Trial";
 
-const mockOnPreloadReady = vi.fn();
-
 vi.mock("../../util/stores");
 vi.mock("../Playback/Playback", () => ({
     default: vi.fn(({ finishedPlaying, onPreloadReady }) => (

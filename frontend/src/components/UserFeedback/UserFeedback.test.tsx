@@ -28,9 +28,9 @@ describe('UserFeedback', () => {
             />
         );
 
-        expect(getByText(mockFeedbackInfo.header)).to.exist;
-        expect(getByRole('textbox')).to.exist;
-        expect(getByText(mockFeedbackInfo.button)).to.exist;
+        expect(getByText(mockFeedbackInfo.header)).toBeTruthy();
+        expect(getByRole('textbox')).toBeTruthy();
+        expect(getByText(mockFeedbackInfo.button)).toBeTruthy();
     });
 
     it('allows input to be entered', () => {
@@ -68,8 +68,8 @@ describe('UserFeedback', () => {
                 feedback: 'Great experience!',
                 participant: mockParticipant
             });
-            expect(queryByText(mockFeedbackInfo.header)).to.not.exist;
-            expect(getByText(mockFeedbackInfo.thank_you)).to.exist;
+            expect(queryByText(mockFeedbackInfo.header)).toBeNull();
+            expect(getByText(mockFeedbackInfo.thank_you)).toBeTruthy();
         });
     });
 });

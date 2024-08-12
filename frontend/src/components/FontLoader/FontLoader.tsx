@@ -7,11 +7,7 @@ interface FontLoaderProps {
 
 const FontLoader = ({ fontUrl, fontType = 'heading' }: FontLoaderProps) => {
 
-    if (!fontUrl) {
-        return null;
-    }
-
-    const fontMatch = /family=([^&:]+)/.exec(fontUrl);
+    const fontMatch = /family=([^&:]+)/.exec(fontUrl || '');
     const font = fontMatch ? fontMatch[1].replace(/\+/g, ' ') : "sans-serif";
     const selector = fontType === 'heading' ? 'h1, h2, h3, h4, h5, h6, .btn:not(.fa*)' : 'body';
 
