@@ -77,7 +77,6 @@ def create_question_db(key):
     choices = {}
     if question.choices:
         for line in question.choices.split('\n'):
-            print("line=",line)
             key, text = line.split(":")
             choices[key] = text
 
