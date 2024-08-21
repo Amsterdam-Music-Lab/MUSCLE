@@ -6,12 +6,14 @@ from result.models import Result
 from session.models import Session
 from .demographics import DEMOGRAPHICS
 from .utils import unanswered_questions, total_unanswered_questions
+from question.questions import create_default_questions
 
 
 class UtilsTestCase(TestCase):
 
     @classmethod
     def setUpTestData(cls):
+        create_default_questions()
         cls.participant = Participant.objects.create(unique_hash=42)
         cls.block = Block.objects.create(
             rules='RHYTHM_BATTERY_INTRO', slug='test')
