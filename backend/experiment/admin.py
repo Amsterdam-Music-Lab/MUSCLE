@@ -3,18 +3,21 @@ from zipfile import ZipFile
 from io import BytesIO
 
 from django.conf import settings
-from django.contrib import admin
+from django.contrib import admin, messages
 from django.db import models
 from django.utils import timezone
 from django.core import serializers
 from django.shortcuts import render, redirect
 from django.forms import CheckboxSelectMultiple
 from django.http import HttpResponse
+
 from inline_actions.admin import InlineActionsModelAdminMixin
 from django.urls import reverse
 from django.utils.html import format_html
 
 from nested_admin import NestedModelAdmin, NestedStackedInline, NestedTabularInline
+
+from experiment.utils import check_missing_translations, get_flag_emoji, get_missing_content_blocks
 
 from experiment.models import (
     Block,
@@ -271,6 +274,7 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, NestedModelAdmin):
         "dashboard",
         "phases",
         "active",
+        "status",
     )
     fields = [
         "slug",
@@ -291,6 +295,7 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, NestedModelAdmin):
 
     def name(self, obj):
         content = obj.get_fallback_content()
+
         return content.name if content else "No name"
 
     def slug_link(self, obj):
@@ -404,6 +409,24 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, NestedModelAdmin):
                 ]
             )
         )
+
+    def status(self, obj):
+        return check_missing_translations(obj)
+
+    def save_model(self, request, obj, form, change):
+        # Check for missing translations
+        missing_content_blocks = get_missing_content_blocks(obj)
+
+        if missing_content_blocks:
+            for block, missing_languages in missing_content_blocks:
+                missing_language_flags = [get_flag_emoji(language) for language in missing_languages]
+                self.message_user(
+                    request,
+                    f"Block {block.name} does not have content in {', '.join(missing_language_flags)}",
+                    level=messages.WARNING,
+                )
+
+        super().save_model(request, obj, form, change)
 
 
 admin.site.register(Experiment, ExperimentAdmin)

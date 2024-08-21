@@ -114,19 +114,19 @@ class Block(models.Model):
     translated_content = models.ManyToManyField("BlockTranslatedContent", blank=True)
     playlists = models.ManyToManyField("section.Playlist", blank=True)
 
-    # to be deleted
+    # TODO: to be deleted
     name = models.CharField(db_index=True, max_length=64)
-    # # to be deleted
+    # TODO: to be deleted
     description = models.TextField(blank=True, default="")
 
     image = models.ForeignKey(Image, on_delete=models.SET_NULL, blank=True, null=True)
     slug = models.SlugField(db_index=True, max_length=64, unique=True, validators=[block_slug_validator])
 
-    # to be deleted
+    # TODO: to be deleted
     url = models.CharField(
         verbose_name="URL with more information about the block", max_length=100, blank=True, default=""
     )
-    # to be deleted
+    # TODO: to be deleted
     hashtag = models.CharField(verbose_name="hashtag for social media", max_length=20, blank=True, default="")
 
     active = models.BooleanField(default=True)
@@ -134,12 +134,12 @@ class Block(models.Model):
     bonus_points = models.PositiveIntegerField(default=0)
     rules = models.CharField(default="", max_length=64)
 
-    # to be deleted
+    # TODO: to be deleted
     language = models.CharField(default="", blank=True, choices=language_choices, max_length=2)
 
     theme_config = models.ForeignKey(ThemeConfig, on_delete=models.SET_NULL, blank=True, null=True)
 
-    # to be deleted
+    # TODO: to be deleted
     consent = models.FileField(
         upload_to=consent_upload_path, blank=True, default="", validators=[markdown_html_validator()]
     )
