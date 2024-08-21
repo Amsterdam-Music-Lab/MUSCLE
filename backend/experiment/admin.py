@@ -270,7 +270,6 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, NestedModelAdmin):
         "dashboard",
         "phases",
         "active",
-        "status",
     )
     fields = [
         "slug",
@@ -383,13 +382,23 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, NestedModelAdmin):
                 }
             )
 
-        if not remarks_array:
-            remarks_array.append({"level": "success", "message": "✅ All good", "title": "No issues found."})
-
         supported_languages = obj.translated_content.values_list("language", flat=True).distinct()
 
-        # TODO: Check if all blocks support the same languages as the experiment
-        # Implement this when the blocks have been updated to support multiple languages
+        missing_content_block_translations = check_missing_translations(obj)
+
+        print(missing_content_block_translations)
+
+        if missing_content_block_translations:
+            remarks_array.append(
+                {
+                    "level": "warning",
+                    "message": "🌍 Missing block content",
+                    "title": missing_content_block_translations,
+                }
+            )
+
+        if not remarks_array:
+            remarks_array.append({"level": "success", "message": "✅ All good", "title": "No issues found."})
 
         # TODO: Check if all theme configs support the same languages as the experiment
         # Implement this when the theme configs have been updated to support multiple languages
@@ -400,14 +409,11 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, NestedModelAdmin):
         return format_html(
             "\n".join(
                 [
-                    f'<span class="badge badge-{remark["level"]} whitespace-nowrap text-xs mt-1" title="{remark.get("title") if remark.get("title") else remark["message"]}">{remark["message"]}</span>'
+                    f'<span class="badge badge-{remark["level"]} whitespace-nowrap text-xs mt-1" title="{remark.get("title") if remark.get("title") else remark["message"]}">{remark["message"]}</span><br>'
                     for remark in remarks_array
                 ]
             )
         )
-
-    def status(self, obj):
-        return check_missing_translations(obj)
 
     def save_model(self, request, obj, form, change):
         # Check for missing translations

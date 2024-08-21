@@ -110,7 +110,7 @@ def get_missing_content_blocks(experiment: Experiment) -> List[Tuple[Block, List
     return missing_content_blocks
 
 
-def check_missing_translations(experiment: Experiment):
+def check_missing_translations(experiment: Experiment) -> str:
     warnings = []
 
     missing_content_blocks = get_missing_content_blocks(experiment)
@@ -118,15 +118,8 @@ def check_missing_translations(experiment: Experiment):
         missing_language_flags = [get_flag_emoji(language) for language in missing_languages]
         warnings.append(f"Block {block.name} does not have content in {', '.join(missing_language_flags)}")
 
-    if not warnings:
-        return format_html(
-            '<span class="success-sign"><img src="/static/admin/img/icon-yes.svg" alt="No problems"></span>'
-        )
+    warnings_text = "\n".join(warnings)
 
-    warnings_html = format_html(
-        '<span class="warning-sign" data-toggle="tooltip" title="{}"> <img src="/static/admin/img/icon-alert.svg" alt="Warning"> </span>'.format(
-            "\n".join(warnings)
-        )
-    )
+    print(warnings_text)
 
-    return warnings_html
+    return warnings_text
