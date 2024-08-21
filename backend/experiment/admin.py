@@ -79,17 +79,13 @@ class BlockAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
         "description",
         "image",
         "slug",
-        "url",
-        "hashtag",
         "theme_config",
-        "language",
         "active",
         "rules",
         "rounds",
         "bonus_points",
         "playlists",
         "translated_content",
-        "consent",
     ]
     inlines = [QuestionSeriesInline, FeedbackInline]
     form = BlockForm

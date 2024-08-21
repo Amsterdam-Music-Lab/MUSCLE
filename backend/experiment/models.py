@@ -122,27 +122,12 @@ class Block(models.Model):
     image = models.ForeignKey(Image, on_delete=models.SET_NULL, blank=True, null=True)
     slug = models.SlugField(db_index=True, max_length=64, unique=True, validators=[block_slug_validator])
 
-    # TODO: to be deleted
-    url = models.CharField(
-        verbose_name="URL with more information about the block", max_length=100, blank=True, default=""
-    )
-    # TODO: to be deleted
-    hashtag = models.CharField(verbose_name="hashtag for social media", max_length=20, blank=True, default="")
-
     active = models.BooleanField(default=True)
     rounds = models.PositiveIntegerField(default=10)
     bonus_points = models.PositiveIntegerField(default=0)
     rules = models.CharField(default="", max_length=64)
 
-    # TODO: to be deleted
-    language = models.CharField(default="", blank=True, choices=language_choices, max_length=2)
-
     theme_config = models.ForeignKey(ThemeConfig, on_delete=models.SET_NULL, blank=True, null=True)
-
-    # TODO: to be deleted
-    consent = models.FileField(
-        upload_to=consent_upload_path, blank=True, default="", validators=[markdown_html_validator()]
-    )
 
     def __str__(self):
         content = self.get_fallback_content()
