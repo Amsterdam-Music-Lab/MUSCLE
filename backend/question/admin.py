@@ -3,6 +3,7 @@ from django.db import models
 from question.models import Question, QuestionGroup, QuestionSeries, QuestionInSeries
 from django.forms import CheckboxSelectMultiple
 from experiment.forms import QuestionSeriesAdminForm
+from question.forms import QuestionForm
 
 
 class QuestionInSeriesInline(admin.TabularInline):
@@ -17,8 +18,34 @@ class QuestionSeriesInline(admin.TabularInline):
 
 
 class QuestionAdmin(admin.ModelAdmin):
+
+    form = QuestionForm
+
     def has_change_permission(self, request, obj=None):
         return obj.editable if obj else False
+
+    def get_fields(self, request, obj=None):
+
+        if not obj:
+            fields = ["key","question","type"]
+        elif not obj.editable:
+            fields = ["key","question"]
+        else:
+            fields = ["key","question","type","explainer"]
+            if obj.type == "LikertQuestion":
+                fields += ["choices","scale_steps","profile_scoring_rule"]
+            elif obj.type == "LikertQuestionIcon":
+                fields += ["profile_scoring_rule"]
+            elif obj.type in ["NumberQuestion"]:
+                fields += ["min_value","max_value"]
+            elif obj.type == "TextQuestion":
+                fields += ["max_length"]
+            elif obj.type in ("BooleanQuestion","AutoCompleteQuestion"):
+                fields += ["choices"]
+            elif obj.type == "ChoiceQuestion":
+                fields += ["choices", "view","min_values"]
+
+        return fields
 
 
 class QuestionGroupAdmin(admin.ModelAdmin):

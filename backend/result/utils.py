@@ -4,6 +4,7 @@ from .models import Result
 from question.profile_scoring_rules import PROFILE_SCORING_RULES
 from result.score import SCORING_RULES
 
+from question.models import Question
 
 def get_result(session, data):
     result_id = data.get('result_id')
@@ -47,7 +48,7 @@ def prepare_profile_result(question_key, participant, **kwargs):
         - comment: optionally, provide a comment to be saved in the database
         - scoring_rule: optionally, provide a scoring rule
     '''
-    scoring_rule = PROFILE_SCORING_RULES.get(question_key, '')
+    scoring_rule = PROFILE_SCORING_RULES.get(question_key, get_profile_scoring_rule_db(question_key))
     result, created = Result.objects.get_or_create(
         question_key=question_key,
         participant=participant,
@@ -55,6 +56,11 @@ def prepare_profile_result(question_key, participant, **kwargs):
         **kwargs
     )
     return result
+
+
+def get_profile_scoring_rule_db(question_key):
+    """ Returns profile_scoring_rule for Question in the database"""
+    return Question.objects.get(key=question_key).profile_scoring_rule
 
 
 def prepare_result(question_key: str, session: Session, **kwargs) -> int:
