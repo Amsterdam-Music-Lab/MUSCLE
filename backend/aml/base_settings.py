@@ -41,6 +41,7 @@ ALLOWED_HOSTS = os.getenv("AML_ALLOWED_HOSTS", "localhost").split(",")
 
 INSTALLED_APPS = [
     'admin_interface',
+    'modeltranslation', # Must be before django.contrib.admin
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -126,6 +127,8 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
+
+MODELTRANSLATION_LANGUAGES = ('en', 'nl', 'pt')
 
 # Increase django limits for large data sets
 # A request timeout should be set in the webserver
