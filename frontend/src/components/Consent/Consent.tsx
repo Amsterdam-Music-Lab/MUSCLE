@@ -18,7 +18,7 @@ export interface ConsentProps {
     deny: string;
 }
 
-/** Consent is an block view that shows the consent text, and handles agreement/stop actions */
+/** Consent is a block view that shows the consent text, and handles agreement/stop actions */
 const Consent = ({ title, text, block, participant, onNext, confirm, deny }: ConsentProps) => {
     const [consent, loadingConsent] = useConsent(block.slug);
     const urlQueryString = window.location.search;

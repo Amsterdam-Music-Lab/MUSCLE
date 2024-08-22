@@ -1,8 +1,8 @@
 from django.test import TestCase
-from django.core.files.uploadedfile import SimpleUploadedFile
 from experiment.actions import Explainer
 from experiment.models import Experiment, ExperimentTranslatedContent, Block
 from experiment.rules.rhythm_battery_final import RhythmBatteryFinal
+from django.core.files.uploadedfile import SimpleUploadedFile
 
 
 class TestRhythmBatteryFinal(TestCase):
@@ -18,7 +18,7 @@ class TestRhythmBatteryFinal(TestCase):
         )
         Block.objects.create(
             name="test_md",
-            slug="MARKDOWN_BLOCK",
+            slug="MARKDOWN",
         )
 
     def test_init(self):

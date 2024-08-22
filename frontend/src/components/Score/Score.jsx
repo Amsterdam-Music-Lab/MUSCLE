@@ -3,7 +3,7 @@ import classNames from "classnames";
 import Circle from "../Circle/Circle";
 import Button from "../Button/Button";
 
-/** Score is an block view that shows an intermediate and total score */
+/** Score is a block view that shows an intermediate and total score */
 const Score = ({
     last_song,
     score,

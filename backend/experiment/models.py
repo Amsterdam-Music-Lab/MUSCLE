@@ -2,7 +2,7 @@ import copy
 
 from django.db import models
 from django.utils import timezone
-from django.utils.translation import gettext_lazy as _
+from django.utils.translation import gettext_lazy as _, get_language
 from django.contrib.postgres.fields import ArrayField
 from typing import List, Dict, Tuple, Any
 from experiment.standards.iso_languages import ISO_LANGUAGES
@@ -301,18 +301,6 @@ class Block(models.Model):
                     QuestionInSeries.objects.create(
                         question_series=qs, question=Question.objects.get(pk=question), index=i + 1
                     )
-
-    # @property
-    # def name(self):
-    #     """Get name of the block"""
-    #     content = self.get_fallback_content()
-    #     return content.name if content and content.name else self.slug
-
-    # @property
-    # def description(self):
-    #     """Get description of the block"""
-    #     content = self.get_fallback_content()
-    #     return content.description if content and content.description else ""
 
     def get_fallback_content(self):
         """Get fallback content for the block"""

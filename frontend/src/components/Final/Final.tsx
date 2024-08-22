@@ -46,7 +46,7 @@ interface FinalProps {
 }
 
 /**
- * Final is an block view that shows the final scores of the block
+ * Final is a block view that shows the final scores of the block
  * It can only be the last view of a block
  */
 const Final = ({

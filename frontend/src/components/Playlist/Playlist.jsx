@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 
 /**
- * Playlist is an block view, that handles (auto)selection of a playlist
+ * Playlist is a block view, that handles (auto)selection of a playlist
  */
 const Playlist = ({ block, instruction, onNext, playlist }) => {
     const playlists = block.playlists;

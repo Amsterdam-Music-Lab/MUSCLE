@@ -28,7 +28,7 @@ interface TrialProps {
 }
 
 /**
- * Trial is an block view to present information to the user and/or collect user feedback
+ * Trial is a block view to present information to the user and/or collect user feedback
  * If "playback" is provided, it will play audio through the Playback component
  * If "html" is provided, it will show html content
  * If "feedback_form" is provided, it will present a form of questions to the user

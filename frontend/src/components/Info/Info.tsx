@@ -10,7 +10,7 @@ interface InfoProps {
     onNext?: () => void;
 }
 
-/** Info is an block view that shows the Info text, and handles agreement/stop actions */
+/** Info is a block view that shows the Info text, and handles agreement/stop actions */
 const Info = ({ heading, body, button_label, button_link, onNext }: InfoProps) => {
     const [maxHeight, setMaxHeight] = useState(getMaxHeight());
 
