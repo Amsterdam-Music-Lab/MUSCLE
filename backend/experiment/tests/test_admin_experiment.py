@@ -193,7 +193,6 @@ class TestExperimentAdmin(TestCase):
                 "dashboard",
                 "phases",
                 "active",
-                "status",
             ),
         )
 
