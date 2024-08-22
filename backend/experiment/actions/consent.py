@@ -3,6 +3,7 @@ from os.path import splitext
 from django.template.loader import render_to_string
 from django.template import Template, Context
 from django_markup.markup import formatter
+from django.core.files import File
 
 from .base_action import BaseAction
 
@@ -63,7 +64,7 @@ class Consent(BaseAction):  # pylint: disable=too-few-public-methods
                 amet, nec te atqui scribentur. Diam molestie posidonium te sit, \
                 ea sea expetenda suscipiantur contentiones."
 
-    def __init__(self, text, title="Informed consent", confirm="I agree", deny="Stop", url=""):
+    def __init__(self, text: File, title="Informed consent", confirm="I agree", deny="Stop", url=""):
         # Determine which text to use
         if text != "":
             # Uploaded consent via file field: block.consent (High priority)

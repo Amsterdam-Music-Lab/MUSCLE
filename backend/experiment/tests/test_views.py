@@ -2,6 +2,7 @@ from django.conf import settings
 from django.test import TestCase
 from django.utils import timezone
 from django.utils.translation import activate, get_language
+from django.core.files.uploadedfile import SimpleUploadedFile
 
 from image.models import Image
 from experiment.serializers import serialize_block, serialize_phase
@@ -240,6 +241,13 @@ class ExperimentViewsTest(TestCase):
     def test_get_block(self):
         # Create a block
         experiment = Experiment.objects.create(slug="test-experiment")
+        ExperimentTranslatedContent.objects.create(
+            experiment=experiment,
+            language="en",
+            name="Test Experiment",
+            description="Test Description",
+            consent=SimpleUploadedFile("test-consent.md", b"test consent"),
+        )
         phase = Phase.objects.create(experiment=experiment)
         block = Block.objects.create(
             slug="test-block",

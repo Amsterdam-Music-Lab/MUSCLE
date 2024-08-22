@@ -32,12 +32,14 @@ class NewBlockRuleset(Base):
             },
         ]
 
+    # FIXME: We don't use first_round anymore so we can remove it
     def first_round(self, block):
         ''' Provide the first rounds of the block,
         before session creation
         The first_round must return at least one Info or Explainer action
         Consent and Playlist are often desired, but optional
         '''
+
         # 1. Informed consent (optional)
         consent = Consent(block.consent,
                             title=_('Informed consent'),

@@ -84,6 +84,11 @@ class Experiment(models.Model):
 
         return content
 
+    def get_current_content(self, fallback: bool = True):
+        """Get content for the 'current' language"""
+        language = get_language()
+        return self.get_translated_content(language, fallback)
+
 
 class Phase(models.Model):
     name = models.CharField(max_length=64, blank=True, default="")
@@ -114,9 +119,9 @@ class Block(models.Model):
     translated_content = models.ManyToManyField("BlockTranslatedContent", blank=True)
     playlists = models.ManyToManyField("section.Playlist", blank=True)
 
-    # TODO: to be deleted
+    # TODO: to be deleted?
     name = models.CharField(db_index=True, max_length=64)
-    # TODO: to be deleted
+    # TODO: to be deleted?
     description = models.TextField(blank=True, default="")
 
     image = models.ForeignKey(Image, on_delete=models.SET_NULL, blank=True, null=True)
@@ -130,6 +135,9 @@ class Block(models.Model):
     theme_config = models.ForeignKey(ThemeConfig, on_delete=models.SET_NULL, blank=True, null=True)
 
     def __str__(self):
+        if self.name:
+            return self.name
+
         content = self.get_fallback_content()
 
         return content.name if content and content.name else self.slug
@@ -329,6 +337,11 @@ class Block(models.Model):
             raise ValueError(f"No content found for language {language}")
 
         return content
+
+    def get_current_content(self, fallback: bool = True):
+        """Get content for the 'current' language"""
+        language = get_language()
+        return self.get_translated_content(language, fallback)
 
 
 class ExperimentTranslatedContent(models.Model):

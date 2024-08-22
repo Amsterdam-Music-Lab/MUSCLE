@@ -31,7 +31,9 @@ class MusicalPreferencesTest(TestCase):
             experiment=cls.experiment, url="https://app.amsterdammusiclab.nl/mpref"
         )
         cls.phase = Phase.objects.create(experiment=cls.experiment)
-        cls.block = Block.objects.create(name="MusicalPreferences", rules="MUSICAL_PREFERENCES", rounds=5)
+        cls.block = Block.objects.create(
+            name="MusicalPreferences", phase=cls.phase, rules="MUSICAL_PREFERENCES", rounds=5
+        )
         cls.session = Session.objects.create(block=cls.block, participant=cls.participant, playlist=cls.playlist)
 
     def test_preferred_songs(self):

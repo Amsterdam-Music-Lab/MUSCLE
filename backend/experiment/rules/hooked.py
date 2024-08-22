@@ -87,8 +87,10 @@ class Hooked(Base):
         )
 
         # 2. Add consent from file or admin (admin has priority)
+        experiment_content = block.phase.experiment.get_current_content()
+        consent_file = experiment_content.consent
         consent = Consent(
-            block.consent, title=_("Informed consent"), confirm=_("I agree"), deny=_("Stop"), url=self.consent_file
+            consent_file, title=_("Informed consent"), confirm=_("I agree"), deny=_("Stop"), url=self.consent_file
         )
 
         # 3. Choose playlist.
