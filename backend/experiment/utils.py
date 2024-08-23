@@ -64,6 +64,10 @@ def format_label(number, label_style):
 
 
 def get_flag_emoji(country_code):
+    # If the country code is not provided or is empty, return "Unknown"
+    if not country_code:
+        return "🏳️"
+
     # Convert the country code to uppercase
     country_code = country_code.upper()
 
@@ -104,7 +108,7 @@ def get_missing_content_blocks(experiment: Experiment) -> List[Tuple[Block, List
             if not block_content:
                 missing_languages.append(language)
 
-        if missing_languages:
+        if len(missing_languages) > 0:
             missing_content_blocks.append((block, missing_languages))
 
     return missing_content_blocks
@@ -114,12 +118,11 @@ def check_missing_translations(experiment: Experiment) -> str:
     warnings = []
 
     missing_content_blocks = get_missing_content_blocks(experiment)
+
     for block, missing_languages in missing_content_blocks:
         missing_language_flags = [get_flag_emoji(language) for language in missing_languages]
         warnings.append(f"Block {block.name} does not have content in {', '.join(missing_language_flags)}")
 
     warnings_text = "\n".join(warnings)
-
-    print(warnings_text)
 
     return warnings_text

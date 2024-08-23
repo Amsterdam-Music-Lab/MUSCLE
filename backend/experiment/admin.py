@@ -386,8 +386,6 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, NestedModelAdmin):
 
         missing_content_block_translations = check_missing_translations(obj)
 
-        print(missing_content_block_translations)
-
         if missing_content_block_translations:
             remarks_array.append(
                 {
