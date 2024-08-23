@@ -416,7 +416,10 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, NestedModelAdmin):
         )
 
     def save_model(self, request, obj, form, change):
-        # Check for missing translations
+        # Save the model
+        super().save_model(request, obj, form, change)
+
+        # Check for missing translations after saving
         missing_content_blocks = get_missing_content_blocks(obj)
 
         if missing_content_blocks:
@@ -427,8 +430,6 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, NestedModelAdmin):
                     f"Block {block.name} does not have content in {', '.join(missing_language_flags)}",
                     level=messages.WARNING,
                 )
-
-        super().save_model(request, obj, form, change)
 
 
 admin.site.register(Experiment, ExperimentAdmin)
