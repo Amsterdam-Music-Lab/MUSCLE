@@ -59,7 +59,7 @@ class ToontjeHoger2Preverbal(Base):
 
         return errors
 
-    def intro_explainer(self):
+    def get_intro_explainer(self):
         return Explainer(
             instruction="Het eerste luisteren",
             steps=[
@@ -104,7 +104,7 @@ class ToontjeHoger2Preverbal(Base):
         # Round 1
         if rounds_passed == 0:
             # No combine_actions because of inconsistent next_round array wrapping in first round
-            return [self.get_intro_explainer(), self.get_spectrogram_info(), self.get_round1(session)]
+            return [self.get_get_intro_explainer(), self.get_spectrogram_info(), self.get_round1(session)]
 
         # Round 2
         if rounds_passed == 1:

@@ -59,7 +59,7 @@ class TwoAlternativeForced(Base):
             "randomize": False
         }]
 
-    def intro_explainer(self):
+    def get_intro_explainer(self):
         """
         Returns an introductory explanation of the experiment.
         """
@@ -82,7 +82,7 @@ class TwoAlternativeForced(Base):
 
         if session.get_rounds_passed() == 0:
             # Beginning of experiment, return an explainer and the next trial action, no feedback on previous trial
-            return [self.intro_explainer(), self.next_trial_action(session)]
+            return [self.get_intro_explainer(), self.next_trial_action(session)]
 
         elif not session.rounds_complete():
             # Combine two actions, feedback on previous action and next trial action

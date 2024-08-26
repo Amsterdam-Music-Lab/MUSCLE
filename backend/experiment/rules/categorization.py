@@ -28,7 +28,7 @@ class Categorization(Base):
             },
         ]
 
-    def intro_explainer(self):
+    def get_intro_explainer(self):
         return Explainer(
             instruction="This is a listening experiment in which you have to respond to short sound sequences.",
             steps=[],
@@ -37,7 +37,7 @@ class Categorization(Base):
 
     def next_round(self, session: Session):
         if session.get_rounds_passed() == 0:
-            actions = [self.intro_explainer()]
+            actions = [self.get_intro_explainer()]
             questions = self.get_questionnaire(session)
             if questions:
                 actions.extend(questions)

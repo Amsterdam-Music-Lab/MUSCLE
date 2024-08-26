@@ -12,7 +12,7 @@ logger = logging.getLogger(__name__)
 class ToontjeHogerKids6Relative(ToontjeHoger6Relative):
     ID = 'TOONTJE_HOGER_KIDS_6_RELATIVE'
 
-    def intro_explainer(self):
+    def get_intro_explainer(self):
         return Explainer(
             instruction="Relatief Gehoor",
             steps=[

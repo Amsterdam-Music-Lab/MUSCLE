@@ -40,7 +40,7 @@ class ToontjeHoger6Relative(Base):
             errors.append('The sections should have the tags a, b, c')
         return errors
 
-    def intro_explainer(self):
+    def get_intro_explainer(self):
         return Explainer(
             instruction="Relatief Gehoor",
             steps=[
@@ -63,7 +63,7 @@ class ToontjeHoger6Relative(Base):
         # Round 1
         if rounds_passed == 0:
             # No combine_actions because of inconsistent next_round array wrapping in first round
-            return [self.intro_explainer(), *self.get_round(rounds_passed, session)]
+            return [self.get_intro_explainer(), *self.get_round(rounds_passed, session)]
 
         # Round 2
         if rounds_passed == 1:

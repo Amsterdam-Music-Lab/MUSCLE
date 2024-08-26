@@ -10,7 +10,7 @@ class ToontjeHogerKids4Absolute(ToontjeHoger4Absolute):
     ID = 'TOONTJE_HOGER_KIDS_4_ABSOLUTE'
     PLAYLIST_ITEMS = 12
 
-    def intro_explainer(self):
+    def get_intro_explainer(self):
         return Explainer(
             instruction="Absoluut gehoor",
             steps=[

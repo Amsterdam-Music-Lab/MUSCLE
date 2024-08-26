@@ -37,7 +37,7 @@ class DurationDiscrimination(Base):
             # we are practicing
             actions = get_practice_views(
                 session,
-                self.intro_explainer(),
+                self.get_intro_explainer(),
                 self.staircasing_blocks,
                 self.next_trial_action,
                 self.get_response_explainer,
@@ -140,7 +140,7 @@ class DurationDiscrimination(Base):
     def get_question_text(self):
         return _("Is the second interval EQUALLY LONG as the first interval or LONGER?")
 
-    def intro_explainer(self):
+    def get_intro_explainer(self):
         return Explainer(
             instruction=self.get_introduction(),
             steps=[

@@ -31,7 +31,7 @@ class HBat(Base):
             # we are practicing
             actions = get_practice_views(
                 session,
-                self.intro_explainer(),
+                self.get_intro_explainer(),
                 staircasing,
                 self.next_trial_action,
                 self.response_explainer,
@@ -102,7 +102,7 @@ class HBat(Base):
         )
         return view
 
-    def intro_explainer(self):
+    def get_intro_explainer(self):
         return Explainer(
             instruction=_(
                 'In this test you will hear a series of tones for each trial.'),

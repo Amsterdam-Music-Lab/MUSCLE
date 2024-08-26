@@ -46,7 +46,7 @@ class Speech2Song(Base):
             },
         ]
 
-    def intro_explainer(self):
+    def get_intro_explainer(self):
         return Explainer(
             instruction=_("This is an experiment about an auditory illusion."),
             steps=[
@@ -68,7 +68,7 @@ class Speech2Song(Base):
         if session.current_round == 1:
             question_trials = self.get_questionnaire(session)
             if question_trials:
-                return [self.intro_explainer(), *question_trials]
+                return [self.get_intro_explainer(), *question_trials]
 
             explainer = Explainer(
                 instruction=_(

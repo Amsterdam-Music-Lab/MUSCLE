@@ -18,7 +18,7 @@ class BeatAlignment(Base):
 
     ID = 'BEAT_ALIGNMENT'
 
-    def intro_explainer(self):
+    def get_intro_explainer(self):
         """ Explainer at start of experiment """
         return Explainer(
             instruction=_(
@@ -56,7 +56,7 @@ class BeatAlignment(Base):
 
         # Practice rounds
         if not session.load_json_data().get('done_practice'):
-            practice_rounds = [self.intro_explainer()]
+            practice_rounds = [self.get_intro_explainer()]
             for i in range(1, 4):
                 this_round = self.next_practice_action(session, i)
                 practice_rounds.append(copy.deepcopy(this_round))

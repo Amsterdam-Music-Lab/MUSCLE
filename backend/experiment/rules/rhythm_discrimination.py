@@ -85,7 +85,7 @@ class RhythmDiscrimination(Base):
 
         if next_round_number == 0:
             plan_stimuli(session)
-            return [intro_explainer(), practice_explainer(), *next_trial_actions(session, next_round_number)]
+            return [get_intro_explainer(), practice_explainer(), *next_trial_actions(session, next_round_number)]
 
         return next_trial_actions(
             session, next_round_number)
@@ -121,7 +121,7 @@ def next_trial_actions(session, round_number):
             if total_score < 2:
                 # start practice over
                 actions.append(practice_again_explainer())
-                actions.append(intro_explainer())
+                actions.append(get_intro_explainer())
                 session.result_set.all().delete()
                 session.save()
             else:
@@ -212,7 +212,7 @@ def plan_stimuli(session):
     session.save()
 
 
-def intro_explainer():
+def get_intro_explainer():
     return Explainer(
         instruction=_(
             'In this test you will hear the same rhythm twice. After that, you will hear a third rhythm.'),

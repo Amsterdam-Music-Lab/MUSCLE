@@ -13,7 +13,7 @@ logger = logging.getLogger(__name__)
 class ToontjeHogerKids2Preverbal(ToontjeHoger2Preverbal):
     ID = 'TOONTJE_HOGER_KIDS_2_PREVERBAL'
 
-    def intro_explainer(self):
+    def get_intro_explainer(self):
         return Explainer(
             instruction="Het eerste luisteren",
             steps=[

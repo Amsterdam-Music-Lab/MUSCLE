@@ -13,7 +13,7 @@ logger = logging.getLogger(__name__)
 class ToontjeHogerKids5Tempo(ToontjeHoger5Tempo):
     ID = 'TOONTJE_HOGER_KIDS_5_TEMPO'
 
-    def intro_explainer(self):
+    def get_intro_explainer(self):
         return Explainer(
             instruction="Maatgevoel",
             steps=[

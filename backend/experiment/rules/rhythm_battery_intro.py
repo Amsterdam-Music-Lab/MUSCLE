@@ -31,7 +31,7 @@ class RhythmBatteryIntro(Base):
                 step_numbers=True,
                 button_label=_('Ok')
             )
-            actions.append(self.intro_explainer())
+            actions.append(self.get_intro_explainer())
             actions.append(explainer)
             key = 'quiet_room'
             result_pk = prepare_result(key, session, expected_response=key)
@@ -121,7 +121,7 @@ class RhythmBatteryIntro(Base):
         actions.append(view)
         return actions
 
-    def intro_explainer(self):
+    def get_intro_explainer(self):
         return Explainer(
             instruction=_(
                 "You are about to take part in an experiment about rhythm perception."),

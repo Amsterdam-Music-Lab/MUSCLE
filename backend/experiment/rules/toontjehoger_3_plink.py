@@ -64,7 +64,7 @@ class ToontjeHoger3Plink(Base):
             )
         return errors
 
-    def intro_explainer(self, n_rounds):
+    def get_intro_explainer(self, n_rounds):
         return Explainer(
             instruction="Muziekherkenning",
             steps=[
@@ -85,7 +85,7 @@ class ToontjeHoger3Plink(Base):
 
         # Round 1
         if rounds_passed == 0:
-            return [self.intro_explainer(session.block.rounds), *self.get_plink_round(session)]
+            return [self.get_intro_explainer(session.block.rounds), *self.get_plink_round(session)]
 
         # Round 2-blocks.rounds
         if rounds_passed < session.block.rounds:

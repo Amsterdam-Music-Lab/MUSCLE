@@ -26,7 +26,7 @@ class ToontjeHoger5Tempo(Base):
     SCORE_CORRECT = 20
     SCORE_WRONG = 0
 
-    def intro_explainer(self):
+    def get_intro_explainer(self):
         return Explainer(
             instruction="Timing en tempo",
             steps=[
@@ -49,7 +49,7 @@ class ToontjeHoger5Tempo(Base):
         # Round 1
         if rounds_passed == 0:
             # No combine_actions because of inconsistent next_round array wrapping in first round
-            return [self.intro_explainer(), *self.get_round(session, rounds_passed)]
+            return [self.get_intro_explainer(), *self.get_round(session, rounds_passed)]
 
         # Round 2
         if rounds_passed < session.block.rounds:

@@ -46,7 +46,7 @@ class Hooked(Base):
             {"name": "TIPI", "keys": QUESTION_GROUPS["TIPI"], "randomize": True}, # 5. TIPI (10 questions)
         ]
 
-    def intro_explainer(self):
+    def get_intro_explainer(self):
         """ Explain the game """
         return Explainer(
             instruction="How to Play",
@@ -99,7 +99,7 @@ class Hooked(Base):
 
         if round_number == 0:
             # Intro explainer
-            actions.append(self.intro_explainer())
+            actions.append(self.get_intro_explainer())
             # Choose playlist
             actions.append(Playlist(session.block.playlists.all()))
 

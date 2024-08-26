@@ -34,7 +34,7 @@ class RhythmBatteryFinal(Base):
             },
         ]
 
-    def intro_explainer(self):
+    def get_intro_explainer(self):
         return Explainer(
             _('Finally, we would like to ask you to answer some questions about your musical and demographic background.'),
             steps=[
@@ -47,7 +47,7 @@ class RhythmBatteryFinal(Base):
     def next_round(self, session):
         questions = self.get_questionnaire(session)
         if questions:
-            return [self.intro_explainer(), *questions]
+            return [self.get_intro_explainer(), *questions]
         else:
             rendered = render_to_string(self.debrief_form)
             return Final(

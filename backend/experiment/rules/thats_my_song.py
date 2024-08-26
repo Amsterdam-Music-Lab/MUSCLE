@@ -82,7 +82,7 @@ class ThatsMySong(Hooked):
         if round_number == 0:
             # get list of trials for demographic questions (first 2 questions)
             if session.result_set.filter(question_key='playlist_decades').count() == 0:
-                actions = [self.intro_explainer()]
+                actions = [self.get_intro_explainer()]
                 questions = self.get_questionnaire(session, cutoff_index=2)
                 if questions:
                     for q in questions:

@@ -30,7 +30,7 @@ class ToontjeHogerKids3Plink(ToontjeHoger3Plink):
     def validate_era_and_mood(self, sections):
         return []
 
-    def intro_explainer(self, n_rounds):
+    def get_intro_explainer(self, n_rounds):
         return Explainer(
             instruction="Muziekherkenning",
             steps=[

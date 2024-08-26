@@ -48,7 +48,7 @@ class MusicalPreferences(Base):
             },
         ]
 
-    def intro_explainer(self):
+    def get_intro_explainer(self):
         return Explainer(
             instruction=_('Welcome to the Musical Preferences experiment!'),
             steps=[
@@ -128,7 +128,7 @@ class MusicalPreferences(Base):
                                              scoring_rule='BOOLEAN'),
                     submits=True,
                     style=STYLE_BOOLEAN_NEGATIVE_FIRST)])
-                return [self.intro_explainer(), Trial(playback=playback, feedback_form=form, html=html,
+                return [self.get_intro_explainer(), Trial(playback=playback, feedback_form=form, html=html,
                              config={'response_time': 15},
                              title=_("Audio check"))]
         if round_number == self.preference_offset + 1:

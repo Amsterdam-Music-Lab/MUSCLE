@@ -35,7 +35,7 @@ class MatchingPairsGame(Base):
             },
         ]
 
-    def intro_explainer(self):
+    def get_intro_explainer(self):
         return Explainer(
             instruction='',
             steps=[
@@ -50,7 +50,7 @@ class MatchingPairsGame(Base):
 
     def next_round(self, session):
         if session.get_rounds_passed() < 1:
-            intro_explainer = self.intro_explainer()
+            intro_explainer = self.get_intro_explainer()
             playlist = Playlist(session.block.playlists.all())
             actions = [intro_explainer, playlist]
             questions = self.get_questionnaire(session)

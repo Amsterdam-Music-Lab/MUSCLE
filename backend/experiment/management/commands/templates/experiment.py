@@ -30,7 +30,7 @@ class NewBlockRuleset(Base):
             },
         ]
 
-    def intro_explainer(self):
+    def get_intro_explainer(self):
         return Explainer(
             instruction='Welcome to this new experiment',
             steps=[
@@ -44,7 +44,7 @@ class NewBlockRuleset(Base):
     def next_round(self, session: Session):
         # ask any questions defined in the admin interface
         if session.get_rounds_passed() == 0:
-            actions = [self.intro_explainer()]
+            actions = [self.get_intro_explainer()]
             questions = self.get_questionnaire(session)
             if questions:
                 actions.extend(questions)
