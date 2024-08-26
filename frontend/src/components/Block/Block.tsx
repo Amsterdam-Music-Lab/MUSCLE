@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { TransitionGroup, CSSTransition } from "react-transition-group";
 import { useParams } from "react-router-dom";
 import classNames from "classnames";
@@ -25,7 +25,6 @@ type BlockView = PlaybackView | "TRIAL_VIEW" | "EXPLAINER" | "SCORE" | "FINAL" |
 
 interface BlockState {
     view: BlockView;
-    key: number;
     title?: string;
     url?: string;
     next_round?: any[];
@@ -40,7 +39,7 @@ interface BlockState {
 //   Empty URL parameter "participant_id" is the same as no URL parameter at all
 const Block = () => {
     const { slug } = useParams();
-    const startState = { view: "LOADING", key: Math.random() } as BlockState;
+    const startState = { view: "LOADING" } as BlockState;
     // Stores
     const setError = useBoundStore(state => state.setError);
     const participant = useBoundStore((state) => state.participant);
@@ -64,18 +63,11 @@ const Block = () => {
     const loadingText = block ? block.loading_text : "";
     const className = block ? block.class_name : "";
 
-    /** set random key before setting state
-     * this will assure that `state` will be recognized as an updated object
-     */
+    /** Set new state as spread of current state to force re-render */
     const updateState = useCallback((state: BlockState) => {
         if (!state) return;
 
-        const newState = {
-            ...state,
-            key: Math.random(),
-        };
-
-        setState(newState);
+        setState({ ...state });
     }, []);
 
     const updateActions = useCallback((currentActions) => {
@@ -216,27 +208,27 @@ const Block = () => {
             // Block views
             // -------------------------
             case "TRIAL_VIEW":
-                return <Trial {...attrs} key={state?.key} />;
+                return <Trial {...attrs} />;
 
             // Information & Scoring
             // -------------------------
             case "EXPLAINER":
-                return <Explainer {...attrs} key={state?.key} />;
+                return <Explainer {...attrs} />;
             case "SCORE":
-                return <Score {...attrs} key={state?.key} />;
+                return <Score {...attrs} />;
             case "FINAL":
-                return <Final {...attrs} key={state?.key} />;
+                return <Final {...attrs} />;
 
             // Generic / helpers
             // -------------------------
             case "PLAYLIST":
-                return <Playlist {...attrs} key={state?.key} />;
+                return <Playlist {...attrs} />;
             case "LOADING":
-                return <Loading {...attrs} key={state?.key} />;
+                return <Loading {...attrs} />;
             case "CONSENT":
-                return <Consent {...attrs} key={state?.key} />;
+                return <Consent {...attrs} />;
             case "INFO":
-                return <Info {...attrs} key={state?.key} />;
+                return <Info {...attrs} />;
             case "REDIRECT":
                 return window.location.replace(state.url);
 
@@ -269,7 +261,6 @@ const Block = () => {
             data-testid="experiment-wrapper"
         >
             <CSSTransition
-                key={view}
                 timeout={{ enter: 300, exit: 0 }}
                 classNames={"transition"}
                 unmountOnExit
