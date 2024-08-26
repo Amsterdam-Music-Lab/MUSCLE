@@ -1,7 +1,7 @@
 from django.test import TestCase
 
-from experiment.models import Block, ExperimentCollection, Phase, GroupedBlock
-from experiment.actions.utils import COLLECTION_KEY
+from experiment.models import Block, Experiment, Phase
+from experiment.actions.utils import EXPERIMENT_KEY
 from participant.models import Participant
 from section.models import Playlist
 from session.models import Session
@@ -55,11 +55,11 @@ class SessionViewsTest(TestCase):
             f'/session/{session.id}/next_round/')
         assert response
 
-    def test_next_round_with_collection(self):
-        slug = 'mycollection'
-        collection = ExperimentCollection.objects.create(slug=slug)
+    def test_next_round_with_experiment(self):
+        slug = 'myexperiment'
+        experiment = Experiment.objects.create(slug=slug)
         request_session = self.client.session
-        request_session[COLLECTION_KEY] = slug
+        request_session[EXPERIMENT_KEY] = slug
         request_session.save()
         session = Session.objects.create(
             block=self.block, participant=self.participant)
@@ -67,11 +67,11 @@ class SessionViewsTest(TestCase):
             f'/session/{session.id}/next_round/')
         assert response
         changed_session = Session.objects.get(pk=session.pk)
-        assert changed_session.load_json_data().get(COLLECTION_KEY) is None
-        phase = Phase.objects.create(series=collection)
-        GroupedBlock.objects.create(
-            phase=phase, block=self.block)
+        assert changed_session.load_json_data().get(EXPERIMENT_KEY) is None
+        phase = Phase.objects.create(series=experiment)
+        self.block.phase = phase
+        self.block.save()
         response = self.client.get(
             f'/session/{session.id}/next_round/')
         changed_session = Session.objects.get(pk=session.pk)
-        assert changed_session.load_json_data().get(COLLECTION_KEY) == slug
+        assert changed_session.load_json_data().get(EXPERIMENT_KEY) == slug

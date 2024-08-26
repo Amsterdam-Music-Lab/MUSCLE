@@ -179,7 +179,7 @@ def next_single_representation(session: Session, is_speech: bool, group_id: int)
     and several repeated representations of the sound,
     with a final question"""
     filter_by = {'group': group_id}
-    section = session.section_from_unused_song(filter_by)
+    section = session.playlist.get_section(filter_by, song_ids=session.get_unused_song_ids())
     actions = [sound(section), speech_or_sound_question(session, section, is_speech)]
     return actions
 

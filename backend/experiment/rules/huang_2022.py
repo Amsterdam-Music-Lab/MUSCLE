@@ -10,6 +10,7 @@ from experiment.actions.playback import Autoplay
 from experiment.actions.styles import STYLE_BOOLEAN_NEGATIVE_FIRST
 from question.questions import QUESTION_GROUPS
 from result.utils import prepare_result
+from session.models import Session
 from .hooked import Hooked
 
 logger = logging.getLogger(__name__)
@@ -71,7 +72,7 @@ class Huang2022(Hooked):
         info['thank_you'] = _("Thank you for your feedback!")
         return info
 
-    def next_round(self, session):
+    def next_round(self, session: Session):
         """Get action data for the next round"""
 
         # If the number of results equals the number of block.rounds,
@@ -79,7 +80,7 @@ class Huang2022(Hooked):
         json_data = session.load_json_data()
         # Get next round number and initialise actions list. Two thirds of
         # rounds will be song_sync; the remainder heard_before.
-        round_number = self.get_current_round(session)
+        round_number = session.get_rounds_passed(self.counted_result_keys)
         total_rounds = session.block.rounds
 
         # Collect actions.
@@ -151,11 +152,10 @@ class Huang2022(Hooked):
                         step_numbers=True,
                         button_label=_("Continue")
                     )
-                    actions.extend([explainer, explainer_devices, *self.next_song_sync_action(session)])
+                    actions.extend([explainer, explainer_devices, *self.next_song_sync_action(session, round_number)])
         else:
             # Load the heard_before offset.
-
-            heard_before_offset = len(plan['song_sync_sections'])
+            heard_before_offset = session.load_json_data().get('heard_before_offset')
 
             # show score
             score = self.get_score(session, round_number)
@@ -163,16 +163,16 @@ class Huang2022(Hooked):
 
             # SongSync rounds
             if round_number < heard_before_offset:
-                actions.extend(self.next_song_sync_action(session))
+                actions.extend(self.next_song_sync_action(session, round_number))
             # HeardBefore rounds
             elif round_number == heard_before_offset:
                 # Introduce new round type with Explainer.
                 actions.append(self.heard_before_explainer())
                 actions.append(
-                    self.next_heard_before_action(session))
+                    self.next_heard_before_action(session, round_number))
             elif heard_before_offset < round_number < total_rounds:
                 actions.append(
-                    self.next_heard_before_action(session))
+                    self.next_heard_before_action(session, round_number))
             else:
                 questionnaire = self.get_questionnaire(session)
                 if questionnaire:

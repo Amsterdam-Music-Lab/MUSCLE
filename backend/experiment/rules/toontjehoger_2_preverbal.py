@@ -9,7 +9,7 @@ from experiment.actions.form import ButtonArrayQuestion, ChoiceQuestion, Form
 from experiment.actions.playback import ImagePlayer
 from experiment.actions.styles import STYLE_NEUTRAL_INVERTED
 from experiment.actions.frontend_style import FrontendStyle, EFrontendStyle
-from experiment.actions.utils import get_current_collection_url
+from experiment.actions.utils import get_current_experiment_url
 from experiment.utils import create_player_labels
 from .base import Base
 from result.utils import prepare_result
@@ -102,21 +102,21 @@ class ToontjeHoger2Preverbal(Base):
     def next_round(self, session):
         """Get action data for the next round"""
 
-        rounds_passed = session.rounds_passed()
+        get_rounds_passed = session.get_rounds_passed()
 
         # Round 1
-        if rounds_passed == 0:
+        if get_rounds_passed == 0:
             # No combine_actions because of inconsistent next_round array wrapping in first round
             return self.get_round1(session)
 
         # Round 2
-        if rounds_passed == 1:
-            return [*self.get_score(session, rounds_passed), *self.get_round1_playback(session), *self.get_round2(round, session)]
+        if get_rounds_passed == 1:
+            return [*self.get_score(session, get_rounds_passed), *self.get_round1_playback(session), *self.get_round2(round, session)]
 
         # Final
         return self.get_final_round(session)
 
-    def get_score(self, session, rounds_passed):
+    def get_score(self, session, get_rounds_passed):
         # Feedback
         last_result = session.last_result()
         feedback = ""
@@ -124,13 +124,13 @@ class ToontjeHoger2Preverbal(Base):
             logger.error("No last result")
             feedback = "Er is een fout opgetreden"
         else:
-            if rounds_passed == 1:
+            if get_rounds_passed == 1:
                 appendix = "Op het volgende scherm kun je de geluiden beluisteren."
                 if last_result.score == self.SCORE_CORRECT:
                     feedback = "Dat is correct! Spectrogram C is inderdaad van een mens. " + appendix
                 else:
                     feedback = "Helaas! Je antwoord was onjuist. Het geluid van spectrogram C is van een mens. " + appendix
-            elif rounds_passed == 2:
+            elif get_rounds_passed == 2:
                 if last_result.score == self.SCORE_CORRECT:
                     feedback = "Dat is correct! Geluid A is inderdaad de Franse baby."
                 else:
@@ -272,7 +272,7 @@ class ToontjeHoger2Preverbal(Base):
         session.save()
 
         # Score
-        score = self.get_score(session, session.rounds_passed())
+        score = self.get_score(session, session.get_rounds_passed())
 
         # Final
         final_text = "Goed gedaan! Je hebt beide vragen correct beantwoord!" if session.final_score >= 2 * \
@@ -291,7 +291,7 @@ class ToontjeHoger2Preverbal(Base):
             body=body,
             heading="Het eerste luisteren",
             button_label="Terug naar ToontjeHoger",
-            button_link=get_current_collection_url(session)
+            button_link=get_current_experiment_url(session)
         )
 
         return [*score, final, info]

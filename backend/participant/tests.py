@@ -1,8 +1,8 @@
 import json
 
 from django.test import Client, TestCase
-
 from .models import Participant
+from .utils import get_participant, PARTICIPANT_KEY
 from experiment.models import Block
 from session.models import Session
 from result.models import Result
@@ -30,6 +30,25 @@ class ParticipantTest(TestCase):
             question_key='test2'
         )
 
+        cls.result3 = Result.objects.create(
+            participant=cls.participant,
+            question_key='msi_01_music_activities',
+            score=1
+        )
+
+        cls.result4 = Result.objects.create(
+            participant=cls.participant,
+            question_key='msi_08_intrigued_styles',
+            score=2
+        )
+
+        cls.result5 = Result.objects.create(
+            participant=cls.participant,
+            question_key='msi_24_music_addiction',
+            score=5
+        )
+
+
     def setUp(self):
         self.client = Client(
             HTTP_USER_AGENT='Agent 007'
@@ -37,6 +56,43 @@ class ParticipantTest(TestCase):
         self.session = self.client.session
         self.session['country_code'] = 'BLA'
         self.session.save()
+
+    def test_get_participant(self):
+        participant = Participant.objects.create()
+        participant.save()
+
+        session = self.client.session
+        session.update({PARTICIPANT_KEY: participant.id})
+        session.save()
+
+        request = self.client.request().wsgi_request
+        request.session = session
+
+        self.assertEqual(get_participant(request), participant)
+
+    def test_get_participant_no_participant_in_session(self):
+        request = self.client.request().wsgi_request
+        request.session = self.client.session
+
+        with self.assertRaisesMessage(
+            Participant.DoesNotExist,
+            'No participant in session'
+        ):
+            get_participant(request)
+
+    def test_get_participant_no_participant(self):
+        session = self.client.session
+        session.update({PARTICIPANT_KEY: 1234567890})
+        session.save()
+
+        request = self.client.request().wsgi_request
+        request.session = session
+
+        with self.assertRaisesMessage(
+            Participant.DoesNotExist,
+            'Participant matching query does not exist.'
+        ):
+            get_participant(request)
 
     def set_participant(self):
         self.session['participant_id'] = self.participant.id
@@ -67,3 +123,9 @@ class ParticipantTest(TestCase):
         self.client.get('/participant/')
         participant = Participant.objects.last()
         assert participant.country_code == 'BLA'
+
+    def test_score_sum(self):
+        score_sum = self.participant.score_sum("MSI_F1_ACTIVE_ENGAGEMENT")
+        assert score_sum == 8
+        score_sum = self.participant.score_sum("MSI_F2_PERCEPTUAL_ABILITIES")
+        assert score_sum is None

@@ -7,8 +7,9 @@ from experiment.actions.form import ChoiceQuestion, Form
 from experiment.actions.playback import Multiplayer
 from experiment.actions.frontend_style import FrontendStyle, EFrontendStyle
 from experiment.actions.styles import STYLE_BOOLEAN
-from experiment.actions.utils import get_current_collection_url
+from experiment.actions.utils import get_current_experiment_url
 from section.models import Playlist
+from session.models import Session
 from .base import Base
 from .toontjehoger_1_mozart import toontjehoger_ranks
 
@@ -64,15 +65,15 @@ class ToontjeHoger6Relative(Base):
     def next_round(self, session):
         """Get action data for the next round"""
 
-        rounds_passed = session.rounds_passed()
+        get_rounds_passed = session.get_rounds_passed()
 
         # Round 1
-        if rounds_passed == 0:
+        if get_rounds_passed == 0:
             # No combine_actions because of inconsistent next_round array wrapping in first round
-            return self.get_round(rounds_passed, session)
+            return self.get_round(get_rounds_passed, session)
 
         # Round 2
-        if rounds_passed == 1:
+        if get_rounds_passed == 1:
             return [*self.get_score(session), *self.get_round(round, session)]
 
         # Final
@@ -96,22 +97,24 @@ class ToontjeHoger6Relative(Base):
         score = Score(session, config=config, feedback=feedback)
         return [score]
 
-    def get_round(self, round, session):
+    def get_round(self, round: int, session: Session):
 
         # Config
         # -----------------
         # section 1 is always section 'a'
-        section1 = session.section_from_any_song(
-            filter_by={'tag': 'a'})
-        if section1 is None:
+        try:
+            section1 = session.playlist.get_section(
+                filter_by={'tag': 'a'})
+        except:
             raise Exception(
                 "Error: could not find section1 for round {}".format(round))
 
         # Get correct tag for round 0 or 1
         tag = 'b' if round == 0 else 'c'
-        section2 = session.section_from_any_song(
-            filter_by={'tag': tag})
-        if section2 is None:
+        try:
+            section2 = session.playlist.get_section(
+                filter_by={'tag': tag})
+        except:
             raise Exception(
                 "Error: could not find section2 for round {}".format(round))
 
@@ -181,7 +184,7 @@ class ToontjeHoger6Relative(Base):
             body=body,
             heading="Relatief gehoor",
             button_label="Terug naar ToontjeHoger",
-            button_link=get_current_collection_url(session)
+            button_link=get_current_experiment_url(session)
         )
 
         return [*score, final, info]

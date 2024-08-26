@@ -5,7 +5,7 @@ from django.template.loader import render_to_string
 from .toontjehoger_1_mozart import toontjehoger_ranks
 from .toontjehoger_5_tempo import ToontjeHoger5Tempo
 from experiment.actions import Explainer, Step, Score, Final, Info
-from experiment.actions.utils import get_current_collection_url
+from experiment.actions.utils import get_current_experiment_url
 
 logger = logging.getLogger(__name__)
 
@@ -43,8 +43,8 @@ class ToontjeHogerKids5Tempo(ToontjeHoger5Tempo):
           return a section from an unused song, in both its original and changed variant
         """
 
-        section_original = session.section_from_unused_song(
-            filter_by={'group': "or"})
+        section_original = session.playlist.get_section(
+            filter_by={'group': "or"}, song_ids=session.get_unused_song_ids())
 
         if not section_original:
             raise Exception(
@@ -58,9 +58,9 @@ class ToontjeHogerKids5Tempo(ToontjeHoger5Tempo):
         return sections
 
     def get_section_changed(self, session, song):
-        section_changed = session.playlist.section_set.get(
-            song__name=song.name, song__artist=song.artist, group='ch'
-        )
+        section_changed = session.playlist.get_section({
+            'song__name': song.name, 'song__artist': song.artist, 'group': 'ch'
+        })
         if not section_changed:
             raise Exception(
                 "Error: could not find changed section: {}".format(song))
@@ -126,7 +126,7 @@ class ToontjeHogerKids5Tempo(ToontjeHoger5Tempo):
             body=body,
             heading="Timing en tempo",
             button_label="Terug naar ToontjeHogerKids",
-            button_link=get_current_collection_url(session)
+            button_link=get_current_experiment_url(session)
         )
 
         return [*score, final, info]

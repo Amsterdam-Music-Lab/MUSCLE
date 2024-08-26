@@ -4,6 +4,8 @@ import uuid
 from django.contrib.humanize.templatetags.humanize import naturalday
 from django.db import models
 
+from question.models import QuestionGroup
+from django.db.models import Sum
 
 class Participant(models.Model):
     """Main participant, base for profile and sessions"""
@@ -92,3 +94,10 @@ class Participant(models.Model):
             })
 
         return scores
+
+    def score_sum(self, question_group_key):
+        """ Sums scores of all profile results with questions in a question group"""
+
+        question_keys = QuestionGroup.objects.get(key=question_group_key).questions.values_list("key", flat=True)
+
+        return self.result_set.all().filter(question_key__in=question_keys).aggregate(Sum("score"))['score__sum']

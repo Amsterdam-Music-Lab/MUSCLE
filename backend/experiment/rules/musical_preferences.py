@@ -3,11 +3,6 @@ from django.conf import settings
 from django.utils.translation import gettext_lazy as _
 from django.template.loader import render_to_string
 
-from question.utils import question_by_key
-from question.demographics import EXTRA_DEMOGRAPHICS
-from question.goldsmiths import MSI_F1_ACTIVE_ENGAGEMENT
-from question.other import OTHER
-
 from experiment.actions import Consent, Explainer, Final, HTML, Playlist, Redirect, Step, Trial
 from experiment.actions.form import BooleanQuestion, ChoiceQuestion, Form, LikertQuestionIcon
 from experiment.actions.playback import Autoplay
@@ -17,6 +12,7 @@ from result.utils import prepare_result
 from result.models import Result
 
 from section.models import Section
+from session.models import Session
 
 from .base import Base
 from .huang_2022 import get_test_playback
@@ -27,8 +23,8 @@ class MusicalPreferences(Base):
     consent_file = 'consent/consent_musical_preferences.html'
     preference_offset = 20
     knowledge_offset = 42
-    round_increment = 1
     contact_email = 'musicexp_china@163.com'
+    counted_result_keys = ['like_song']
 
     know_score = {
         'yes': 2,
@@ -53,7 +49,6 @@ class MusicalPreferences(Base):
         ]
 
     def first_round(self, block):
-
         consent = Consent(
             block.consent,
             title=_('Informed consent'),
@@ -75,10 +70,10 @@ class MusicalPreferences(Base):
             explainer,
         ]
 
-    def next_round(self, session):
-        next_round_number = session.get_current_round()
+    def next_round(self, session: Session):
+        round_number = session.get_rounds_passed(self.counted_result_keys)
         actions = []
-        if next_round_number == 1:
+        if round_number == 0:
             last_result = session.result_set.last()
             if last_result:
                 if last_result.score == 1:
@@ -98,7 +93,6 @@ class MusicalPreferences(Base):
                         )
                         return [explainer, *question_trials]
                     else:
-                        session.increment_round()
                         explainer = Explainer(
                             instruction=_("How to play"),
                             steps=[
@@ -116,7 +110,6 @@ class MusicalPreferences(Base):
                         )
                         return [explainer]
                 else:
-                    session.decrement_round()
                     if last_result.question_key == 'audio_check1':
                         playback = get_test_playback()
                         html = HTML(body=render_to_string('html/huang_2022/audio_check.html'))
@@ -137,7 +130,6 @@ class MusicalPreferences(Base):
                         session.save()
                         return Redirect(settings.HOMEPAGE)
             else:
-                session.decrement_round()
                 playback = get_test_playback()
                 html = HTML(
                     body='<h4>{}</h4>'.format(_('Do you hear the music?')))
@@ -151,31 +143,30 @@ class MusicalPreferences(Base):
                 return Trial(playback=playback, feedback_form=form, html=html,
                              config={'response_time': 15},
                              title=_("Audio check"))
-        n_songs = next_round_number - self.round_increment
-        if n_songs == self.preference_offset + 1:
+        if round_number == self.preference_offset + 1:
             like_results = session.result_set.filter(question_key='like_song')
             feedback = Trial(
                 html=HTML(body=render_to_string('html/musical_preferences/feedback.html', {
                     'unlocked': _("Love unlocked"),
-                    'n_songs': n_songs - 1,
+                    'n_songs': round_number,
                     'top_participant': self.get_preferred_songs(like_results, 3)
                 }))
             )
             actions = [feedback]
-        elif n_songs == self.knowledge_offset + 1:
+        elif round_number == self.knowledge_offset:
             like_results = session.result_set.filter(question_key='like_song')
             known_songs = session.result_set.filter(
                 question_key='know_song', score=2).count()
             feedback = Trial(
                 html=HTML(body=render_to_string('html/musical_preferences/feedback.html', {
                     'unlocked': _("Knowledge unlocked"),
-                    'n_songs': n_songs - 1,
+                    'n_songs': round_number - 1,
                     'top_participant': self.get_preferred_songs(like_results, 3),
                     'n_known_songs': known_songs
                 }))
             )
             actions = [feedback]
-        elif n_songs == session.block.rounds + 1:
+        elif round_number == session.block.rounds:
             like_results = session.result_set.filter(question_key='like_song')
             known_songs = session.result_set.filter(
                 question_key='know_song', score=2).count()
@@ -188,7 +179,7 @@ class MusicalPreferences(Base):
             feedback = Trial(
                 html=HTML(body=render_to_string('html/musical_preferences/feedback.html', {
                     'unlocked': _("Connection unlocked"),
-                    'n_songs': n_songs - 1,
+                    'n_songs': round_number,
                     'top_participant': top_participant,
                     'n_known_songs': known_songs,
                     'top_all': top_all
@@ -200,11 +191,10 @@ class MusicalPreferences(Base):
                 session,
                 top_participant,
                 known_songs,
-                n_songs-1,
+                round_number,
                 top_all
             )]
-
-        section = session.section_from_unused_song()
+        section = session.playlist.get_section(song_ids=session.get_unused_song_ids())
         like_key = 'like_song'
         likert = LikertQuestionIcon(
             question=_('2. How much do you like this song?'),
@@ -231,7 +221,7 @@ class MusicalPreferences(Base):
             playback=playback,
             feedback_form=form,
             title=_('Song %(round)s/%(total)s') % {
-                'round': n_songs, 'total': session.block.rounds},
+                'round': round_number, 'total': session.block.rounds},
             config={
                 'response_time': section.duration + .1,
             }

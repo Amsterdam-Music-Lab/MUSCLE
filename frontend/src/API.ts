@@ -2,8 +2,8 @@ import { API_BASE_URL } from "@/config";
 import useGet from "./util/useGet";
 import axios from "axios";
 import qs from "qs";
-import Block from "@/types/Block";
-import Participant from "./types/Participant";
+import Block, { ExtendedBlock } from "@/types/Block";
+import Participant, { ParticipantLink } from "./types/Participant";
 import Session from "./types/Session";
 
 // API handles the calls to the Hooked-server api
@@ -17,7 +17,7 @@ export const URLS = {
         get: (slug: string) => "/experiment/block/" + slug + "/",
         feedback: (slug: string) => "/experiment/block/" + slug + "/feedback/",
     },
-    experiment_collection: {
+    experiment: {
         get: (slug: string) => `/experiment/${slug}/`
     },
     participant: {
@@ -43,19 +43,19 @@ export const URLS = {
     }
 };
 
-export const useBlock = (slug: string) =>
-    useGet(API_BASE_URL + URLS.block.get(slug));
+export const useBlock = (slug: string): [ExtendedBlock | null, boolean] =>
+    useGet<ExtendedBlock>(API_BASE_URL + URLS.block.get(slug));
 
-export const useExperimentCollection = (slug: string) => {
-    const data = useGet(API_BASE_URL + URLS.experiment_collection.get(slug));
-    return data; // snakeToCamel(collection), loading
+export const useExperiment = (slug: string) => {
+    const data = useGet(API_BASE_URL + URLS.experiment.get(slug));
+    return data;
 }
 
 export const useParticipantScores = <T>() =>
     useGet<T>(API_BASE_URL + URLS.participant.score);
 
 export const useParticipantLink = () =>
-    useGet(API_BASE_URL + URLS.participant.link);
+    useGet<ParticipantLink>(API_BASE_URL + URLS.participant.link);
 
 type ConsentResponse = boolean | null;
 

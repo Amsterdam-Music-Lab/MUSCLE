@@ -79,15 +79,15 @@ class Categorization(Base):
             return final
 
         # Calculate round number from passed training rounds
-        rounds_passed = (session.rounds_passed() -
+        get_rounds_passed = (session.get_rounds_passed() -
                          int(json_data['training_rounds']))
         # Change phase to enable collecting results of second half of training-1
-        if session.rounds_passed() == 10:
+        if session.get_rounds_passed() == 10:
             json_data['phase'] = 'training-1B'
             session.save_json_data(json_data)
             session.save()
 
-        if rounds_passed == 0:
+        if get_rounds_passed == 0:
             # Check if participants wants to exit after failed traning
             profiles = session.participant.profile()
             for profile in profiles:
@@ -110,7 +110,7 @@ class Categorization(Base):
             json_data = self.plan_phase(session)
 
         if 'training' in json_data['phase']:
-            if rounds_passed == 0:
+            if get_rounds_passed == 0:
                 explainer2 = Explainer(
                     instruction="The experiment will now begin. Please don't close the browser during the experiment. You can only run it once. Click to start a sound sequence.",
                     steps=[],
@@ -120,7 +120,7 @@ class Categorization(Base):
                 return [explainer2, trial]
 
             # Get next training action
-            elif rounds_passed < len(json_data['sequence']):
+            elif get_rounds_passed < len(json_data['sequence']):
                 return self.get_trial_with_feedback(session)
 
             # Training phase completed, get the results
@@ -138,7 +138,7 @@ class Categorization(Base):
             # End of training?
             if score_avg >= SCORE_AVG_MIN_TRAINING:
                 json_data['phase'] = "testing"
-                json_data['training_rounds'] = session.rounds_passed()
+                json_data['training_rounds'] = session.get_rounds_passed()
                 session.save_json_data(json_data)
                 session.save()
                 explainer = Explainer(
@@ -148,7 +148,7 @@ class Categorization(Base):
                 )
             else:
                 # Update passed training rounds for calc round_number
-                json_data['training_rounds'] = session.rounds_passed()
+                json_data['training_rounds'] = session.get_rounds_passed()
                 session.save_json_data(json_data)
                 session.save()
 
@@ -186,9 +186,9 @@ class Categorization(Base):
             return [feedback, explainer]
 
         elif json_data['phase'] == 'testing':
-            if rounds_passed < len(json_data['sequence']):
+            if get_rounds_passed < len(json_data['sequence']):
                 # Determine wether this round has feedback
-                if rounds_passed in json_data['feedback_sequence']:
+                if get_rounds_passed in json_data['feedback_sequence']:
                     return self.get_trial_with_feedback(session)
                 return self.next_trial_action(session)
 
@@ -470,11 +470,11 @@ class Categorization(Base):
         json_data = session.load_json_data()
 
         # Retrieve next section in the sequence
-        rounds_passed = (session.rounds_passed() -
+        get_rounds_passed = (session.get_rounds_passed() -
                          int(json_data['training_rounds']))
         sequence = json_data['sequence']
-        this_section = sequence[rounds_passed]
-        section = session.section_from_song(this_section)
+        this_section = sequence[get_rounds_passed]
+        section = session.playlist.get_section(song_ids=[this_section])
         # Determine expected response
         if section.tag == '1A' or section.tag == '2A':
             expected_response = 'A'
@@ -494,9 +494,9 @@ class Categorization(Base):
 
     def get_title(self, session):
         json_data = session.load_json_data()
-        rounds_passed = (session.rounds_passed() -
+        get_rounds_passed = (session.get_rounds_passed() -
                          int(json_data['training_rounds'])+1)
-        return f"Round {rounds_passed} / {len(json_data['sequence'])}"
+        return f"Round {get_rounds_passed} / {len(json_data['sequence'])}"
 
 
 repeat_training_or_quit = ChoiceQuestion(

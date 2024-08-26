@@ -1,25 +1,9 @@
 [
     {
-        "model": "experiment.ExperimentCollection",
+        "model": "experiment.Experiment",
         "pk": 1,
         "fields": {
-            "slug": "RhythmTestSeries",
-            "first_experiments": [
-                "10"
-            ],
-            "random_experiments": [
-                "7",
-                "3",
-                "1",
-                "2",
-                "5",
-                "4",
-                "6",
-                "8"
-            ],
-            "last_experiments": [
-                "9"
-            ]
+            "slug": "RhythmTestSeries"
         }
     },
     {

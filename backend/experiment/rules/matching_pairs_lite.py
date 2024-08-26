@@ -25,7 +25,7 @@ class MatchingPairsLite(MatchingPairsGame):
         ]
 
     def next_round(self, session):
-        if session.rounds_passed() < 1:
+        if session.get_rounds_passed() < 1:
             trial = self.get_matching_pairs_trial(session)
             return [trial]
         else:
@@ -43,11 +43,12 @@ class MatchingPairsLite(MatchingPairsGame):
         )
         if degradations:
             sections = list(originals) + list(degradations)
-            random.seed(self.random_seed)
-            random.shuffle(sections)
-            return sections
+            return self.shuffle_sections(sections)
         else:
             sections = list(originals) * 2
-            random.seed(self.random_seed)
-            random.shuffle(sections)
-            return sections
+            return self.shuffle_sections(sections)
+
+    def shuffle_sections(self, sections):
+        random.seed(self.random_seed)
+        random.shuffle(sections)
+        return sections

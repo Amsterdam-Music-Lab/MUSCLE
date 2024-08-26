@@ -29,9 +29,9 @@ export const URLS = {
     profile: "/profile",
     storeProfile: "/profile/store",
     block: "/block/:slug",
-    experimentCollectionAbout: "/:slug/about",
-    experimentCollection: "/:slug",
-    internalRedirect: "/redirect/:path",
+    experimentAbout: "/:slug/about",
+    experiment: "/:slug/*",
+    internalRedirect: "/redirect/*",
     reloadParticipant: "/participant/reload/:id/:hash",
     theme: "/theme/:id",
     AMLHome:

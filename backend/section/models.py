@@ -183,12 +183,7 @@ class Playlist(models.Model):
             'message': "Sections processed from CSV. Added: " + str(len(sections)) + " - Updated: " + str(updated) + " - Removed: " + str(len(delete_ids))
         }
 
-    def song_ids(self, filter_by={}):
-        """Get a list of distinct song ids"""
-        # order_by is required to make distinct work with values_list
-        return self.section_set.filter(**filter_by).order_by('song').values_list('song_id', flat=True).distinct()
-
-    def get_section(self, filter_by={}, song_ids=[]):
+    def get_section(self, filter_by={}, exclude={}, song_ids=[]):
         """Get a random section from this playlist
             Optionally, limit to specific song_ids and filter conditions
         """
@@ -196,9 +191,9 @@ class Playlist(models.Model):
             sections = self.section_set.filter(song__id__in=song_ids)
         else:
             sections = self.section_set
-        pks = sections.filter(**filter_by).values_list('pk', flat=True)
+        pks = sections.exclude(**exclude).filter(**filter_by).values_list('pk', flat=True)
         if len(pks) == 0:
-            return None
+            raise Section.DoesNotExist
         return self.section_set.get(pk=random.choice(pks))
 
     def export_admin(self):
@@ -310,9 +305,8 @@ class Section(models.Model):
 
     def absolute_url(self):
         """Return absolute url for this section"""
-        base_url = settings.BASE_URL if hasattr(settings, 'BASE_URL') else ''
+        base_url = getattr(settings, 'BASE_URL', '')
         sections_url = reverse('section:section', args=[self.pk, self.code])
-
         return base_url.rstrip('/') + sections_url
 
     def simple_object(self):
