@@ -16,11 +16,8 @@ class ToontjeHogerKids1Mozart(ToontjeHoger1Mozart):
     ANSWER_URL1 = "/images/experiments/toontjehogerkids/mozart-effect1-answer.webp"
     ANSWER_URL2 = "/images/experiments/toontjehogerkids/mozart-effect2-answer.webp"
 
-    def first_round(self, block):
-        """Create data for the first block rounds."""
-
-        # 1. Explain game.
-        explainer = Explainer(
+    def intro_explaliner(self):
+        return Explainer(
             instruction="Het Mozart effect",
             steps=[
                 Step("Je hoort zo een kort stukje muziek."),
@@ -30,10 +27,6 @@ class ToontjeHogerKids1Mozart(ToontjeHoger1Mozart):
             step_numbers=True,
             button_label="Start"
         )
-
-        return [
-            explainer
-        ]
 
     def get_task_explainer(self):
         return "Je vouwt een papier en knipt er twee hoekjes af, precies zoals op het plaatje. Welke vorm krijgt het papier dan?"

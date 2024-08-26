@@ -64,15 +64,12 @@ class ToontjeHoger3Plink(Base):
             )
         return errors
 
-    def first_round(self, block):
-        """Create data for the first block rounds."""
-
-        # 1. Explain game.
-        explainer = Explainer(
+    def get_intro_explainer(self, n_rounds):
+        return Explainer(
             instruction="Muziekherkenning",
             steps=[
                 Step("Je krijgt {} zeer korte muziekfragmenten te horen.".format(
-                    block.rounds)),
+                    n_rounds)),
                 Step("Ken je het nummer? Noem de juiste artiest en titel!"),
                 Step(
                     "Weet je het niet? Beantwoord dan extra vragen over de tijdsperiode en emotie van het nummer.")
@@ -81,21 +78,17 @@ class ToontjeHoger3Plink(Base):
             button_label="Start"
         )
 
-        return [
-            explainer,
-        ]
-
-    def next_round(self, session):
+    def next_round(self, session: Session):
         """Get action data for the next round"""
 
-        get_rounds_passed = session.round_passed()
+        rounds_passed = session.get_rounds_passed()
 
         # Round 1
-        if get_rounds_passed == 0:
-            return self.get_plink_round(session)
+        if rounds_passed == 0:
+            return [self.get_intro_explainer(session.block.rounds), *self.get_plink_round(session)]
 
         # Round 2-blocks.rounds
-        if get_rounds_passed < session.block.rounds:
+        if rounds_passed < session.block.rounds:
             return self.get_plink_round(session, present_score=True)
 
         # Final

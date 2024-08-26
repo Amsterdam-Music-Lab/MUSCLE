@@ -3,7 +3,7 @@ from django.conf import settings
 from django.utils.translation import gettext_lazy as _
 from django.template.loader import render_to_string
 
-from experiment.actions import Consent, Explainer, Final, HTML, Playlist, Redirect, Step, Trial
+from experiment.actions import Explainer, Final, HTML, Playlist, Redirect, Step, Trial
 from experiment.actions.form import BooleanQuestion, ChoiceQuestion, Form, LikertQuestionIcon
 from experiment.actions.playback import Autoplay
 from experiment.actions.styles import STYLE_BOOLEAN, STYLE_BOOLEAN_NEGATIVE_FIRST
@@ -20,7 +20,7 @@ from .huang_2022 import get_test_playback
 
 class MusicalPreferences(Base):
     ID = 'MUSICAL_PREFERENCES'
-    consent_file = 'consent/consent_musical_preferences.html'
+    default_consent_file = 'consent/consent_musical_preferences.html'
     preference_offset = 20
     knowledge_offset = 42
     contact_email = 'musicexp_china@163.com'
@@ -48,27 +48,14 @@ class MusicalPreferences(Base):
             },
         ]
 
-    def first_round(self, block):
-        consent = Consent(
-            block.consent,
-            title=_('Informed consent'),
-            confirm=_('I consent and continue.'),
-            deny=_('I do not consent.'),
-            url=self.consent_file
-        )
-        playlist = Playlist(block.playlists.all())
-        explainer = Explainer(
+    def get_intro_explainer(self):
+        return Explainer(
             instruction=_('Welcome to the Musical Preferences experiment!'),
             steps=[
                 Step(_('Please start by checking your connection quality.'))
             ],
             button_label=_('OK')
         )
-        return [
-            consent,
-            playlist,
-            explainer,
-        ]
 
     def next_round(self, session: Session):
         round_number = session.get_rounds_passed(self.counted_result_keys)
@@ -77,7 +64,7 @@ class MusicalPreferences(Base):
             last_result = session.result_set.last()
             if last_result:
                 if last_result.score == 1:
-                    question_trials = self.get_questionnaire(session)
+                    question_trials = self.get_open_questions(session)
                     if question_trials:
                         n_questions = len(question_trials)
                         explainer = Explainer(
@@ -93,6 +80,7 @@ class MusicalPreferences(Base):
                         )
                         return [explainer, *question_trials]
                     else:
+                        playlist = Playlist(session.block.playlists.all())
                         explainer = Explainer(
                             instruction=_("How to play"),
                             steps=[
@@ -108,7 +96,7 @@ class MusicalPreferences(Base):
                             ],
                             button_label=_("Start")
                         )
-                        return [explainer]
+                        actions = [playlist, explainer]
                 else:
                     if last_result.question_key == 'audio_check1':
                         playback = get_test_playback()
@@ -125,7 +113,7 @@ class MusicalPreferences(Base):
                                      config={'response_time': 15},
                                      title=_("Tech check"))
                     else:
-                        # participant had persistent audio problems, delete session and redirect
+                        # participant had persistent audio problems, finish session and redirect
                         session.finish()
                         session.save()
                         return Redirect(settings.HOMEPAGE)
@@ -140,9 +128,9 @@ class MusicalPreferences(Base):
                                              scoring_rule='BOOLEAN'),
                     submits=True,
                     style=STYLE_BOOLEAN_NEGATIVE_FIRST)])
-                return Trial(playback=playback, feedback_form=form, html=html,
+                return [self.get_intro_explainer(), Trial(playback=playback, feedback_form=form, html=html,
                              config={'response_time': 15},
-                             title=_("Audio check"))
+                             title=_("Audio check"))]
         if round_number == self.preference_offset + 1:
             like_results = session.result_set.filter(question_key='like_song')
             feedback = Trial(

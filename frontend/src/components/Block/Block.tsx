@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom";
 import classNames from "classnames";
 
 import useBoundStore from "@/util/stores";
-import { createSession, getNextRound, useBlock } from "@/API";
+import { getNextRound, useBlock } from "@/API";
 import Consent from "@/components/Consent/Consent";
 import DefaultPage from "@/components/Page/DefaultPage";
 import Explainer from "@/components/Explainer/Explainer";
@@ -145,16 +145,6 @@ const Block = () => {
             setSession(newSession);
             return newSession;
         }
-
-        try {
-            const newSession = await createSession({ block, participant, playlist })
-            setSession(newSession);
-            return newSession;
-        }
-        catch (err) {
-            setError(`Could not create a session: ${err}`, err)
-            return;
-        };
     };
 
     const continueToNextRound = async () => {

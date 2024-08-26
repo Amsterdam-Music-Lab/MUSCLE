@@ -1,4 +1,5 @@
 import logging
+from typing import Union
 
 from django.template.loader import render_to_string
 from django.utils.translation import gettext_lazy as _
@@ -7,7 +8,7 @@ from django.core.exceptions import ValidationError
 
 from experiment.actions import Final, Form, Trial
 from question.utils import unanswered_questions
-from question.questions import get_questions_from_series, QUESTION_GROUPS
+from question.questions import get_questions_from_series
 from result.score import SCORING_RULES
 from session.models import Session
 
@@ -134,8 +135,8 @@ class Base(object):
         except StopIteration:
             return None
 
-    def get_questionnaire(self, session, randomize=False, cutoff_index=None):
-        ''' Get a list of questions to be asked in succession '''
+    def get_open_questions(self, session, randomize=False, cutoff_index=None) -> Union[list, None]:
+        ''' Get a list of trials for questions not yet answered by the user '''
 
         trials = []
         questions = list(unanswered_questions(session.participant, get_questions_from_series(session.block.questionseries_set.all()), randomize, cutoff_index))

@@ -39,16 +39,13 @@ class RhythmBatteryIntroTest(TestCase):
 
     def test_first_round(self):
         listening_conditions = RhythmBatteryIntro()
-        actions = listening_conditions.first_round(self.block)
-        self.assertIsInstance(actions[0], Explainer)
-
-    def test_next_round_first_time(self):
-        listening_conditions = RhythmBatteryIntro()
         actions = listening_conditions.next_round(self.session)
-        self.assertIsInstance(actions[0], Trial)
-        self.assertIsInstance(actions[0].feedback_form, Form)
-        self.assertEqual(len(actions[0].feedback_form.form), 1)
-        self.assertEqual(actions[0].feedback_form.form[0].key, 'quiet_room')
+        self.assertIsInstance(actions[0], Explainer)
+        self.assertIsInstance(actions[1], Explainer)
+        self.assertIsInstance(actions[2], Trial)
+        self.assertIsInstance(actions[2].feedback_form, Form)
+        self.assertEqual(len(actions[2].feedback_form.form), 1)
+        self.assertEqual(actions[2].feedback_form.form[0].key, 'quiet_room')
 
     def test_next_round_last_time(self):
         listening_conditions = RhythmBatteryIntro()
