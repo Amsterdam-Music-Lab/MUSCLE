@@ -7,7 +7,7 @@ from .base import Base
 from experiment.actions import Trial, Explainer, Step
 from experiment.actions.form import ChoiceQuestion, Form
 from experiment.actions.playback import Autoplay
-from experiment.rules.util.practice import get_practice_views, practice_explainer, get_trial_condition, get_trial_condition_block
+from experiment.rules.util.practice import get_practice_views, get_trial_condition
 from experiment.actions.utils import final_action_with_optional_button, render_feedback_trivia
 from experiment.actions.utils import get_average_difference_level_based
 from experiment.rules.util.staircasing import register_turnpoint

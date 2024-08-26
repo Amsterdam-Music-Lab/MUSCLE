@@ -10,7 +10,7 @@ from experiment.actions.form import ChoiceQuestion, Form
 from experiment.actions.playback import Autoplay
 from experiment.actions.utils import final_action_with_optional_button, render_feedback_trivia
 from experiment.actions.utils import get_average_difference
-from experiment.rules.util.practice import get_trial_condition_block, get_practice_views, practice_explainer
+from experiment.rules.util.practice import get_trial_condition_block, get_practice_views
 from experiment.rules.util.staircasing import register_turnpoint
 from result.utils import prepare_result
 from session.models import Session

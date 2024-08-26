@@ -4,7 +4,7 @@ import logging
 from django.utils.translation import gettext_lazy as _
 
 from experiment.actions.utils import final_action_with_optional_button, render_feedback_trivia
-from experiment.rules.util.practice import practice_explainer, practice_again_explainer, start_experiment_explainer
+from experiment.rules.util.practice import get_practice_explainer, practice_again_explainer, start_experiment_explainer
 from experiment.actions import Trial, Explainer, Step
 from experiment.actions.playback import Autoplay
 from experiment.actions.form import ChoiceQuestion, Form
