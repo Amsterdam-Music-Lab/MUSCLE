@@ -10,6 +10,7 @@ from question.questions import get_questions_from_series
 from result.models import Result
 from section.models import Playlist, Section
 from session.models import Session
+from django.core.management import call_command
 
 
 class HookedTest(TestCase):
@@ -18,6 +19,7 @@ class HookedTest(TestCase):
     @classmethod
     def setUpTestData(cls):
         ''' set up data for Hooked base class '''
+        call_command('bootstrap')
         cls.participant = Participant.objects.create()
         cls.playlist = Playlist.objects.create(name='Test Eurovision')
         cls.playlist.csv = (

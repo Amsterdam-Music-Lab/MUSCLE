@@ -11,7 +11,9 @@ class QuestionForm(ModelForm):
             self.fields['type'].help_text = "Click 'Save and view' to customize"
 
         else:
-            self.fields["type"].disabled = True
+            type = self.fields.get("type", None)
+            if type:
+                self.fields["type"].disabled = True
 
     def clean_choices(self):
 

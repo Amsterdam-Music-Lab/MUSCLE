@@ -4,6 +4,10 @@ from django.test import TestCase
 
 class CreateQuestionsTest(TestCase):
 
+    @classmethod
+    def setUpTestData(cls):
+        call_command('bootstrap')
+
     def test_createquestions(self):
         from question.models import Question, QuestionGroup
         self.assertEqual(len(Question.objects.all()), 161) # Only built-in questions in test database

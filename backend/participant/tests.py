@@ -6,12 +6,14 @@ from .utils import get_participant, PARTICIPANT_KEY
 from experiment.models import Block
 from session.models import Session
 from result.models import Result
+from django.core.management import call_command
 
 
 class ParticipantTest(TestCase):
 
     @classmethod
     def setUpTestData(cls):
+        call_command('bootstrap')
         cls.participant = Participant.objects.create(unique_hash=42)
         cls.block = Block.objects.create(
             rules='RHYTHM_BATTERY_INTRO', slug='test')
