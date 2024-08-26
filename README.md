@@ -34,8 +34,8 @@ Start Docker (the app icon is a whale carrying containers). Then, open a termina
 This command starts up the containers defined in `docker-compose.yaml`:
 - a PostgreSQL container, for storing experiment/user/playlist data, saved on the host machine in the Docker user data, represented in the volume `db_data`. Data added to the database will persist if the container is shut down.
 - a ip2country container, which provides country codes for ip addresses, used for demographic information of users.
-- a container of the server, defined in DockerfileDevelop in `backend`. The Dockerfile defines the Python version and installs development dependencies. The startup command runs migrations and then starts up a Django development server.
-- a container of the client, defined in DockerfileDevelop in `frontend`. The Dockerfile defines the node version and installs node modules. The startup command kicks off a React development server.
+- a container of the backend, defined in Dockerfile in `backend`. The Dockerfile defines the Python version and installs development dependencies. The startup command runs migrations and then starts up a Django development server.
+- a container of the frontend, defined in Dockerfile in `frontend`. The Dockerfile defines the node version and installs node modules. The startup command kicks off a React development server.
 
 Once you see all containers have started up, open your browser and navigate to [localhost:3000](http://localhost:3000). You should now be able to see the first screen of the Goldsmiths Musical Sophistication Index questionnaire.
 
