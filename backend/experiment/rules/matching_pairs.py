@@ -53,7 +53,7 @@ class MatchingPairsGame(Base):
             intro_explainer = self.get_intro_explainer()
             playlist = Playlist(session.block.playlists.all())
             actions = [intro_explainer, playlist]
-            questions = self.get_questionnaire(session)
+            questions = self.get_open_questions(session)
             if questions:
                 intro_questions = Explainer(
                     instruction=_('Before starting the game, we would like to ask you %i demographic questions.' % (len(questions))),

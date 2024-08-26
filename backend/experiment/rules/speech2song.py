@@ -66,7 +66,7 @@ class Speech2Song(Base):
         actions = []
         is_speech = True
         if session.current_round == 1:
-            question_trials = self.get_questionnaire(session)
+            question_trials = self.get_open_questions(session)
             if question_trials:
                 return [self.get_intro_explainer(), *question_trials]
 

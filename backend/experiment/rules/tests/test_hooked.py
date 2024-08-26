@@ -335,7 +335,7 @@ class HookedTest(TestCase):
         self.assertEqual(actions[0].feedback_form.form[0].key, 'audio_check1')
 
         # check that question trials are as expected
-        question_trials = rules.get_questionnaire(session)
+        question_trials = rules.get_open_questions(session)
         total_questions = get_questions_from_series(block.questionseries_set.all())
         self.assertEqual(len(question_trials), len(total_questions))
         keys = [q.feedback_form.form[0].key for q in question_trials]

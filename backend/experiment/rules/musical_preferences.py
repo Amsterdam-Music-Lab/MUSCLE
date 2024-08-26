@@ -64,7 +64,7 @@ class MusicalPreferences(Base):
             last_result = session.result_set.last()
             if last_result:
                 if last_result.score == 1:
-                    question_trials = self.get_questionnaire(session)
+                    question_trials = self.get_open_questions(session)
                     if question_trials:
                         n_questions = len(question_trials)
                         explainer = Explainer(

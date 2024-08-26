@@ -38,7 +38,7 @@ class Categorization(Base):
     def next_round(self, session: Session):
         if session.get_rounds_passed() == 0:
             actions = [self.get_intro_explainer()]
-            questions = self.get_questionnaire(session)
+            questions = self.get_open_questions(session)
             if questions:
                 actions.extend(questions)
             return actions
