@@ -5,4 +5,4 @@
 # It uses the `ruff check` command to lint the codebase.
 # The `--watch` flag tells Ruff to watch the codebase for changes and re-lint the codebase when changes are detected.
 # The `--fix` flag tells Ruff to automatically fix any linting errors that it can.
-docker compose run --rm server bash -c "ruff check $@"
+docker compose run --rm backend bash -c "ruff check $@"

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Compile requirements for development and production in one container instance
-docker compose run --rm server /bin/bash -c "\
+docker compose run --rm backend /bin/bash -c "\
 pip-compile --output-file=requirements/dev.txt requirements.in/dev.txt && \
 pip-compile --output-file=requirements/prod.txt requirements.in/prod.txt \
 "

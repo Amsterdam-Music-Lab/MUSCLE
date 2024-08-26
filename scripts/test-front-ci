@@ -1,2 +1,2 @@
 #!/bin/bash
-docker compose run --rm client yarn test:ci
+docker compose run --rm frontend yarn test:ci
