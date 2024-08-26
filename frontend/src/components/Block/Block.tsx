@@ -12,14 +12,17 @@ import Final from "@/components/Final/Final";
 import Loading from "@/components/Loading/Loading";
 import Playlist from "@/components/Playlist/Playlist";
 import Score from "@/components/Score/Score";
-import Trial from "@/components/Trial/Trial";
+import Trial, { IFeedbackForm } from "@/components/Trial/Trial";
 import Info from "@/components/Info/Info";
 import FloatingActionButton from "@/components/FloatingActionButton/FloatingActionButton";
 import UserFeedback from "@/components/UserFeedback/UserFeedback";
 import FontLoader from "@/components/FontLoader/FontLoader";
 import useResultHandler from "@/hooks/useResultHandler";
 import Session from "@/types/Session";
-import { PlaybackView } from "@/types/Playback";
+import { PlaybackArgs, PlaybackView } from "@/types/Playback";
+import { FeedbackInfo, Step } from "@/types/Block";
+import { TrialConfig } from "@/types/Trial";
+import Social from "@/types/Social";
 
 type BlockView = PlaybackView | "TRIAL_VIEW" | "EXPLAINER" | "SCORE" | "FINAL" | "PLAYLIST" | "LOADING" | "CONSENT" | "INFO" | "REDIRECT";
 
@@ -28,6 +31,58 @@ interface BlockState {
     title?: string;
     url?: string;
     next_round?: any[];
+
+    // Some views require additional data
+    button_label?: string;
+    instruction?: string;
+    timer?: number;
+    steps: Step[];
+    body?: string;
+    html?: string;
+    feedback_form?: IFeedbackForm;
+    playback?: PlaybackArgs;
+    config?: TrialConfig;
+
+    // TODO: Think about how to properly handle the typing of different views
+
+    // Score-related
+    score?: number;
+    score_message?: string;
+    texts?: {
+        score: string;
+        next: string;
+        listen_explainer: string;
+    };
+    feedback?: string;
+    icon?: string;
+
+    // Final related
+    feedback_info?: FeedbackInfo;
+    rank?: string;
+    button?: {
+        text: string;
+        link: string;
+    };
+    final_text?: string | TrustedHTML;
+    show_participant_link?: boolean;
+    participant_id_only?: boolean;
+    show_profile_link?: boolean;
+    action_texts?: {
+        all_experiments: string;
+        profile: string;
+        play_again: string;
+    }
+    points?: string;
+    social?: Social;
+    logo?: {
+        image: string;
+        link: string;
+    };
+
+    // Consent related
+    text?: string;
+    confirm?: string;
+    deny?: string;
 }
 
 
