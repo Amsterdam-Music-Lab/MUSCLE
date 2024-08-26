@@ -39,8 +39,9 @@ const Playback = ({
     const lastPlayerIndex = useRef(-1);
     const activeAudioEndedListener = useRef<() => void>();
     const [state, setState] = useState<PlaybackState>({ view: PRELOAD });
-    const setView = (view: PlaybackView, data = {}) => {
-        setState({ view, ...data });
+
+    const setView = (view: PlaybackView) => {
+        setState({ view });
     }
 
     // check if the users device is webaudio compatible

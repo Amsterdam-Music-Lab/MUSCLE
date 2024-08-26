@@ -23,6 +23,11 @@ export interface FeedbackInfo {
     show_float_button: boolean;
 }
 
+export interface Step {
+    id: number;
+    description: string;
+}
+
 export interface ExtendedBlock extends Block {
     theme?: Theme;
     class_name: string;
@@ -31,4 +36,6 @@ export interface ExtendedBlock extends Block {
     feedback_info: FeedbackInfo;
     session_id: number;
     loading_text: string;
+    timer?: number;
+    steps?: Step[];
 }

@@ -10,7 +10,7 @@ import Question from "@/types/Question";
 import { OnResultType } from "@/hooks/useResultHandler";
 import { TrialConfig } from "@/types/Trial";
 
-interface IFeedbackForm {
+export interface IFeedbackForm {
     form: Question[];
     submit_label: string;
     skip_label: string;
