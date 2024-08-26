@@ -44,7 +44,7 @@ const Block = () => {
     // Current block state
     const [actions, setActions] = useState([]);
     const [state, setState] = useState(startState);
-    const playlist = useRef(null);
+    const playlist = useRef<string>(null);
 
     // API hooks
     const [block, loadingBlock] = useBlock(slug);

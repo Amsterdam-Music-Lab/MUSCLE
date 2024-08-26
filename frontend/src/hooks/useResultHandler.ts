@@ -20,9 +20,17 @@ interface UseResultHandlerParams {
 }
 
 interface OnResultParams {
-    form: Question[];
+
+    // If feedback form is provided
+    form?: Question[];
     decision_time?: number;
     config?: TrialConfig
+
+    // If no feedback form is provided
+    result?: {
+        type: string;
+    }
+    result_id?: string;
 }
 
 /**
