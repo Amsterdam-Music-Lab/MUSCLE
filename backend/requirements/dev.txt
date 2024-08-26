@@ -125,7 +125,7 @@ textile==4.0.2
     # via django-markup
 tomlkit==0.12.5
     # via pylint
-tqdm==4.65.0
+tqdm==4.66.3
     # via -r requirements.in/base.txt
 typing-extensions==4.10.0
     # via psycopg

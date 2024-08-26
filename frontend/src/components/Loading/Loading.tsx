@@ -1,14 +1,17 @@
-import React from "react";
-
 import Circle from "../Circle/Circle";
+
+interface LoadingProps {
+    duration?: number;
+    loadingText?: string;
+}
 
 /**
  * Loading is an block view that shows a loading screen
  * It is normally set by code during loading of data
  */
-const Loading = ({ duration = 2, loadingText }) => {
+const Loading = ({ duration = 2, loadingText = '' }: LoadingProps) => {
     return (
-        <div className="aha__loading d-flex justify-content-center">
+        <div className="aha__loading d-flex justify-content-center" data-testid="loading">
             <Circle
                 duration={duration}
                 startTime={0.1 * duration}
