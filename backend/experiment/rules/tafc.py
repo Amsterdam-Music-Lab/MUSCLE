@@ -41,10 +41,6 @@ from result.utils import prepare_result
 
 
 class TwoAlternativeForced(Base):
-    """
-    next_round() is a required method for this class.
-    """
-
     # Add to __init.py__ file in the same directory as the current file:
     #    from .tafc import TwoAlternativeForced
     # To BLOCK_RULES dictionary in __init.py__
@@ -59,7 +55,7 @@ class TwoAlternativeForced(Base):
             "randomize": False
         }]
 
-    def get_intro_explainer(self):
+    def get_intro_explainer(self) -> Explainer:
         """
         Returns an introductory explanation of the experiment.
         """
