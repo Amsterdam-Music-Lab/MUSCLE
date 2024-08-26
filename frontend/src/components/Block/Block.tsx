@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { TransitionGroup, CSSTransition } from "react-transition-group";
 import { useParams } from "react-router-dom";
 import classNames from "classnames";
@@ -12,13 +12,79 @@ import Final from "@/components/Final/Final";
 import Loading from "@/components/Loading/Loading";
 import Playlist from "@/components/Playlist/Playlist";
 import Score from "@/components/Score/Score";
-import Trial from "@/components/Trial/Trial";
+import Trial, { IFeedbackForm } from "@/components/Trial/Trial";
 import Info from "@/components/Info/Info";
 import FloatingActionButton from "@/components/FloatingActionButton/FloatingActionButton";
 import UserFeedback from "@/components/UserFeedback/UserFeedback";
 import FontLoader from "@/components/FontLoader/FontLoader";
 import useResultHandler from "@/hooks/useResultHandler";
 import Session from "@/types/Session";
+import { PlaybackArgs, PlaybackView } from "@/types/Playback";
+import { FeedbackInfo, Step } from "@/types/Block";
+import { TrialConfig } from "@/types/Trial";
+import Social from "@/types/Social";
+
+type BlockView = PlaybackView | "TRIAL_VIEW" | "EXPLAINER" | "SCORE" | "FINAL" | "PLAYLIST" | "LOADING" | "CONSENT" | "INFO" | "REDIRECT";
+
+interface BlockState {
+    view: BlockView;
+    title?: string;
+    url?: string;
+    next_round?: any[];
+
+    // Some views require additional data
+    button_label?: string;
+    instruction?: string;
+    timer?: number;
+    steps: Step[];
+    body?: string;
+    html?: string;
+    feedback_form?: IFeedbackForm;
+    playback?: PlaybackArgs;
+    config?: TrialConfig;
+
+    // TODO: Think about how to properly handle the typing of different views
+
+    // Score-related
+    score?: number;
+    score_message?: string;
+    texts?: {
+        score: string;
+        next: string;
+        listen_explainer: string;
+    };
+    feedback?: string;
+    icon?: string;
+
+    // Final related
+    feedback_info?: FeedbackInfo;
+    rank?: string;
+    button?: {
+        text: string;
+        link: string;
+    };
+    final_text?: string | TrustedHTML;
+    show_participant_link?: boolean;
+    participant_id_only?: boolean;
+    show_profile_link?: boolean;
+    action_texts?: {
+        all_experiments: string;
+        profile: string;
+        play_again: string;
+    }
+    points?: string;
+    social?: Social;
+    logo?: {
+        image: string;
+        link: string;
+    };
+
+    // Consent related
+    text?: string;
+    confirm?: string;
+    deny?: string;
+}
+
 
 // Block handles the main (experiment) block flow:
 // - Loads the block and participant
@@ -28,7 +94,7 @@ import Session from "@/types/Session";
 //   Empty URL parameter "participant_id" is the same as no URL parameter at all
 const Block = () => {
     const { slug } = useParams();
-    const startState = { view: "LOADING" };
+    const startState = { view: "LOADING" } as BlockState;
     // Stores
     const setError = useBoundStore(state => state.setError);
     const participant = useBoundStore((state) => state.participant);
@@ -43,8 +109,8 @@ const Block = () => {
 
     // Current block state
     const [actions, setActions] = useState([]);
-    const [state, setState] = useState(startState);
-    const playlist = useRef<string>(null);
+    const [state, setState] = useState<BlockState | null>(startState);
+    const playlist = useRef(null);
 
     // API hooks
     const [block, loadingBlock] = useBlock(slug);
@@ -52,12 +118,11 @@ const Block = () => {
     const loadingText = block ? block.loading_text : "";
     const className = block ? block.class_name : "";
 
-    // set random key before setting state
-    // this will assure that `state` will be recognized as an updated object
-    const updateState = useCallback((state) => {
+    /** Set new state as spread of current state to force re-render */
+    const updateState = useCallback((state: BlockState) => {
         if (!state) return;
-        state.key = Math.random();
-        setState(state);
+
+        setState({ ...state });
     }, []);
 
     const updateActions = useCallback((currentActions) => {
@@ -104,7 +169,7 @@ const Block = () => {
             setError(
                 "An error occured while loading the data, please try to reload the page. (Error: next_round data unavailable)"
             );
-            setState(undefined);
+            setState(null);
         }
     };
 
@@ -181,7 +246,7 @@ const Block = () => {
     });
 
     // Render block state
-    const render = (view) => {
+    const render = (view: BlockView) => {
         // Default attributes for every view
         const attrs = {
             block,
@@ -236,7 +301,7 @@ const Block = () => {
         setError('No valid state');
     }
 
-    const view = state.view;
+    const view = state?.view;
 
     return (<>
         <FontLoader fontUrl={theme?.heading_font_url} fontType="heading" />
@@ -251,7 +316,6 @@ const Block = () => {
             data-testid="experiment-wrapper"
         >
             <CSSTransition
-                key={view}
                 timeout={{ enter: 300, exit: 0 }}
                 classNames={"transition"}
                 unmountOnExit
