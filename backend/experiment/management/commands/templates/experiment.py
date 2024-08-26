@@ -69,7 +69,7 @@ class NewBlockRuleset(Base):
         # define a key, by which responses to this trial can be found in the database
         key = 'test_trial'
         # get a random section
-        section = session.section_from_any_song()
+        section = session.playlist.get_section()
         question = BooleanQuestion(
             question=_(
                 "Do you like this song?"),
