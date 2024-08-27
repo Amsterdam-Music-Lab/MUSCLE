@@ -27,6 +27,9 @@ import Social from "@/types/Social";
 type BlockView = PlaybackView | "TRIAL_VIEW" | "EXPLAINER" | "SCORE" | "FINAL" | "PLAYLIST" | "LOADING" | "CONSENT" | "INFO" | "REDIRECT";
 
 interface BlockState {
+    // Unique key to force re-render
+    key: number;
+
     view: BlockView;
     title?: string;
     url?: string;
@@ -121,7 +124,9 @@ const Block = () => {
     const updateState = useCallback((state: BlockState) => {
         if (!state) return;
 
-        setState({ ...state });
+        const key = state.key ? state.key + 1 : 1;
+
+        setState({ ...state, key });
     }, []);
 
     const updateActions = useCallback((currentActions: []) => {
