@@ -2,4 +2,4 @@
 
 # This script will generate a visual representation of the database schema
 # See also: https://django-extensions.readthedocs.io/en/latest/graph_models.html
-docker-compose run --rm server python manage.py graph_models -a -g -o muscle-db-schema.png
+docker-compose run --rm backend python manage.py graph_models -a -g -o muscle-db-schema.png
