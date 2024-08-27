@@ -16,8 +16,9 @@ def add_experiment_and_phase(apps, schema_editor):
                     )
             rules = block.get_rules()
             try:
-                consent_path = Path(rules.default_consent_file)
+                consent_path = Path('experiment', 'templates', rules.default_consent_file)
                 with consent_path.open(mode='rb') as f:
+                    breakpoint()
                     content.consent = File(f, name=consent_path.name)
                     content.save()
             except:
@@ -30,11 +31,12 @@ def remove_experiment_and_phase(apps, schema_editor):
     blocks = Block.objects.all()
     for block in blocks:
         if block.phase and block.phase.name == f'{block.name}_phase':
-            phase = Phase.objects.get(block.phase)
-            Experiment.objects.delete(phase.series)
+            phase = Phase.objects.get(pk=block.phase.id)
+            experiment = Experiment.objects.get(pk=phase.series.id)
             block.phase = None
             block.save()
             phase.delete()
+            experiment.delete()
 
 
 class Migration(migrations.Migration):
