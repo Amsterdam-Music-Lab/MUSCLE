@@ -1,16 +1,13 @@
 import random
 
 from django.utils.translation import gettext as _
-from django.template.loader import render_to_string
 
 from .base import Base
 
-from experiment.actions import Consent, Explainer, Step, Final, Playlist, Trial
+from experiment.actions import Explainer, Step, Final, Trial
 from experiment.actions.form import Form, RadiosQuestion
 from experiment.actions.playback import Autoplay
-from question.demographics import EXTRA_DEMOGRAPHICS
-from question.languages import LANGUAGE, LanguageQuestion
-from question.utils import question_by_key
+from question.languages import LanguageQuestion
 
 from session.models import Session
 
@@ -57,7 +54,7 @@ class Speech2Song(Base):
             button_label=_('Start')
         )
 
-    def next_round(self, session):
+    def next_round(self, session: Session):
         blocks = [1, 2, 3]
         # shuffle blocks based on session.id as seed -> always same order for same session
         random.seed(session.id)
@@ -65,31 +62,39 @@ class Speech2Song(Base):
         # group_ids for practice (0), or one of the speech blocks (1-3)
         actions = []
         is_speech = True
-        if session.current_round == 1:
+        rounds_passed = session.get_rounds_passed(self.counted_result_keys)
+        print(rounds_passed)
+        if rounds_passed == 0:
             question_trials = self.get_open_questions(session)
             if question_trials:
+                session.save_json_data({'quesionnaire': True})
                 return [self.get_intro_explainer(), *question_trials]
-
-            explainer = Explainer(
-                instruction=_(
-                    'Thank you for answering these questions about your background!'),
-                steps=[
-                    Step(
-                        description=_(
-                            'Now you will hear a sound repeated multiple times.')
-                    ),
-                    Step(
-                        description=_(
-                            'Please listen to the following segment carefully, if possible with headphones.')
-                    ),
-                ],
-                button_label=_('OK')
-            )
-            return [
-                explainer,
-                *next_repeated_representation(session, is_speech, 0)
-            ]
-        if session.current_round == 2:
+            elif session.load_json_data().get('questionnaire'):
+                explainer = Explainer(
+                    instruction=_(
+                        'Thank you for answering these questions about your background!'),
+                    steps=[
+                        Step(
+                            description=_(
+                                'Now you will hear a sound repeated multiple times.')
+                        ),
+                        Step(
+                            description=_(
+                                'Please listen to the following segment carefully, if possible with headphones.')
+                        ),
+                    ],
+                    button_label=_('OK')
+                )
+                return [
+                    explainer,
+                    *next_repeated_representation(session, is_speech, 0)
+                ]
+            else:
+                return [
+                    self.get_intro_explainer(),
+                    *next_repeated_representation(session, is_speech, 0)
+                ]
+        elif rounds_passed == 1:
             e1 = Explainer(
                 instruction=_('Previous studies have shown that many people perceive the segment you just heard as song-like after repetition, but it is no problem if you do not share that perception because there is a wide range of individual differences.'),
                 steps=[],
@@ -107,13 +112,13 @@ class Speech2Song(Base):
             )
             actions.extend([e1, e2])
             group_id = blocks[0]
-        elif 2 < session.current_round <= n_rounds_per_block + 1:
+        elif 2 <= rounds_passed <= n_rounds_per_block:
             group_id = blocks[0]
-        elif n_rounds_per_block + 1 < session.current_round <= 2 * n_rounds_per_block + 1:
+        elif n_rounds_per_block < rounds_passed <= 2 * n_rounds_per_block:
             group_id = blocks[1]
-        elif 2 * n_rounds_per_block + 1 < session.current_round <= 3 * n_rounds_per_block + 1:
+        elif 2 * n_rounds_per_block < rounds_passed <= 3 * n_rounds_per_block:
             group_id = blocks[2]
-        elif session.current_round == 3 * n_rounds_per_block + 2:
+        elif rounds_passed == 3 * n_rounds_per_block:
             # Final block (environmental sounds)
             e3 = Explainer(
                 instruction=_('Part2'),
@@ -134,7 +139,7 @@ class Speech2Song(Base):
             actions.append(e3)
             group_id = 4
             is_speech = False
-        elif 3 * n_rounds_per_block + 2 < session.current_round <= 4 * n_rounds_per_block + 1:
+        elif 3 * n_rounds_per_block < rounds_passed <= 4 * n_rounds_per_block:
             group_id = 4
             is_speech = False
         else:
@@ -148,7 +153,7 @@ class Speech2Song(Base):
                 final_text=_(
                     'Thank you for contributing your time to science!')
             )
-        if session.current_round % 2 == 0:
+        if rounds_passed % 2 == 1:
             # even round: single representation (first round are questions only)
             actions.extend(next_single_representation(
                 session, is_speech, group_id))
