@@ -67,7 +67,7 @@ const Block = () => {
     // Current block state
     const [actions, setActions] = useState([]);
     const [state, setState] = useState<ActionProps | null>(startState);
-    const [key, setKey] = useState(null);
+    const [key, setKey] = useState<number>(Math.random());
     const playlist = useRef(null);
 
     // API hooks
@@ -213,6 +213,7 @@ const Block = () => {
             onResult,
             onNext,
             playlist,
+            key,
             ...state,
         };
 
@@ -221,27 +222,27 @@ const Block = () => {
             // Block views
             // -------------------------
             case "TRIAL_VIEW":
-                return <Trial key={key} {...attrs} />;
+                return <Trial {...attrs} />;
 
             // Information & Scoring
             // -------------------------
             case "EXPLAINER":
-                return <Explainer key={key} {...attrs} />;
+                return <Explainer {...attrs} />;
             case "SCORE":
-                return <Score key={key} {...attrs} />;
+                return <Score {...attrs} />;
             case "FINAL":
-                return <Final key={key} {...attrs} />;
+                return <Final {...attrs} />;
 
             // Generic / helpers
             // -------------------------
             case "PLAYLIST":
-                return <Playlist key={key} {...attrs} />;
+                return <Playlist {...attrs} />;
             case "LOADING":
-                return <Loading key={key} {...attrs} />;
+                return <Loading {...attrs} />;
             case "CONSENT":
-                return <Consent key={key} {...attrs} />;
+                return <Consent {...attrs} />;
             case "INFO":
-                return <Info key={key} {...attrs} />;
+                return <Info {...attrs} />;
             case "REDIRECT":
                 window.location.replace(state.url);
                 return null;
