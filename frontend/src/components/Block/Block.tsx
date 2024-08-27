@@ -124,32 +124,17 @@ const Block = () => {
         setState({ ...state });
     }, []);
 
-    const updateActions = useCallback((currentActions) => {
+    const updateActions = useCallback((currentActions: []) => {
         const newActions = currentActions;
         setActions(newActions);
         const newState = newActions.shift();
         updateState(newState);
     }, [updateState]);
 
-    /**
-     * @deprecated
-     */
-    const checkSession = async (): Promise<Session | void> => {
-        if (session) {
-            return session;
-        }
-
-        if (block?.session_id) {
-            const newSession = { id: block.session_id };
-            setSession(newSession);
-            return newSession;
-        }
-    };
-
-    const continueToNextRound = async () => {
+    const continueToNextRound = async (activeSession: Session) => {
         // Try to get next_round data from server
         const round = await getNextRound({
-            session: session
+            session: activeSession
         });
         if (round) {
             updateActions(round.next_round);
@@ -166,7 +151,7 @@ const Block = () => {
         if (!doBreak && actions.length) {
             updateActions(actions);
         } else {
-            continueToNextRound();
+            continueToNextRound(session as Session);
         }
     };
 
@@ -192,7 +177,7 @@ const Block = () => {
                 if (block.session_id) {
                     setSession({ id: block.session_id });
                 } else if (!block.session_id && session) {
-                    setSession(null);
+                    setError('Session could not be created');
                 }
 
                 // Set theme
@@ -202,6 +187,7 @@ const Block = () => {
                     setTheme(null);
                 }
 
+                continueToNextRound({ id: block.session_id });
 
             } else {
                 // Loading error
