@@ -26,9 +26,7 @@ import Social from "@/types/Social";
 
 type BlockView = PlaybackView | "TRIAL_VIEW" | "EXPLAINER" | "SCORE" | "FINAL" | "PLAYLIST" | "LOADING" | "CONSENT" | "INFO" | "REDIRECT";
 
-interface BlockState {
-    // Unique key to force re-render
-    key: number;
+interface ActionProps {
 
     view: BlockView;
     title?: string;
@@ -97,7 +95,7 @@ interface BlockState {
 //   Empty URL parameter "participant_id" is the same as no URL parameter at all
 const Block = () => {
     const { slug } = useParams();
-    const startState = { view: "LOADING" } as BlockState;
+    const startState = { view: "LOADING" } as ActionProps;
     // Stores
     const setError = useBoundStore(state => state.setError);
     const participant = useBoundStore((state) => state.participant);
@@ -112,7 +110,8 @@ const Block = () => {
 
     // Current block state
     const [actions, setActions] = useState([]);
-    const [state, setState] = useState<BlockState | null>(startState);
+    const [state, setState] = useState<ActionProps | null>(startState);
+    const [key, setKey] = useState(null);
     const playlist = useRef(null);
 
     // API hooks
@@ -122,12 +121,11 @@ const Block = () => {
     const className = block ? block.class_name : "";
 
     /** Set new state as spread of current state to force re-render */
-    const updateState = useCallback((state: BlockState) => {
+    const updateState = useCallback((state: ActionProps) => {
         if (!state) return;
 
-        const key = state.key ? state.key + 1 : 1;
-
-        setState({ ...state, key });
+        setState({ ...state });
+        setKey(Math.random());
     }, []);
 
     const updateActions = useCallback((currentActions) => {
@@ -258,27 +256,27 @@ const Block = () => {
             // Block views
             // -------------------------
             case "TRIAL_VIEW":
-                return <Trial {...attrs} />;
+                return <Trial key={key} {...attrs} />;
 
             // Information & Scoring
             // -------------------------
             case "EXPLAINER":
-                return <Explainer {...attrs} />;
+                return <Explainer key={key} {...attrs}/>;
             case "SCORE":
-                return <Score {...attrs} />;
+                return <Score key={key} {...attrs} />;
             case "FINAL":
-                return <Final {...attrs} />;
+                return <Final key={key} {...attrs} />;
 
             // Generic / helpers
             // -------------------------
             case "PLAYLIST":
-                return <Playlist {...attrs} />;
+                return <Playlist key={key} {...attrs} />;
             case "LOADING":
-                return <Loading {...attrs} />;
+                return <Loading key={key} {...attrs} />;
             case "CONSENT":
-                return <Consent {...attrs} />;
+                return <Consent key={key} {...attrs} />;
             case "INFO":
-                return <Info {...attrs} />;
+                return <Info key={key} {...attrs} />;
             case "REDIRECT":
                 return window.location.replace(state.url);
 
