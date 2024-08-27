@@ -17,7 +17,7 @@ export interface IFeedbackForm {
     is_skippable: boolean;
 }
 
-interface TrialProps {
+export interface TrialProps {
     playback: any;
     html: { body: string | TrustedHTML };
     feedback_form: IFeedbackForm;

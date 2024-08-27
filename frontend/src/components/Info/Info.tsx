@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 
 import Button from "../Button/Button";
 
-interface InfoProps {
+export interface InfoProps {
     heading?: string;
     body: string | TrustedHTML;
     button_label?: string;
