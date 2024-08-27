@@ -5,7 +5,6 @@ import classNames from "classnames";
 
 import useBoundStore from "@/util/stores";
 import { getNextRound, useBlock } from "@/API";
-import Consent from "@/components/Consent/Consent";
 import DefaultPage from "@/components/Page/DefaultPage";
 import Explainer from "@/components/Explainer/Explainer";
 import Final from "@/components/Final/Final";
@@ -19,15 +18,14 @@ import UserFeedback from "@/components/UserFeedback/UserFeedback";
 import FontLoader from "@/components/FontLoader/FontLoader";
 import useResultHandler from "@/hooks/useResultHandler";
 import Session from "@/types/Session";
-import { PlaybackArgs, PlaybackView } from "@/types/Playback";
+import { PlaybackArgs } from "@/types/Playback";
 import { FeedbackInfo, Step } from "@/types/Block";
 import { TrialConfig } from "@/types/Trial";
 import Social from "@/types/Social";
 
-type BlockView = PlaybackView | "TRIAL_VIEW" | "EXPLAINER" | "SCORE" | "FINAL" | "PLAYLIST" | "LOADING" | "CONSENT" | "INFO" | "REDIRECT";
+type BlockView = "TRIAL_VIEW" | "EXPLAINER" | "SCORE" | "FINAL" | "PLAYLIST" | "LOADING" | "CONSENT" | "INFO" | "REDIRECT";
 
 interface ActionProps {
-
     view: BlockView;
     title?: string;
     url?: string;
@@ -78,11 +76,6 @@ interface ActionProps {
         image: string;
         link: string;
     };
-
-    // Consent related
-    text?: string;
-    confirm?: string;
-    deny?: string;
 }
 
 
@@ -254,8 +247,6 @@ const Block = () => {
                 return <Playlist key={key} {...attrs} />;
             case "LOADING":
                 return <Loading key={key} {...attrs} />;
-            case "CONSENT":
-                return <Consent key={key} {...attrs} />;
             case "INFO":
                 return <Info key={key} {...attrs} />;
             case "REDIRECT":
