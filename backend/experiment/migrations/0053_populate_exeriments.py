@@ -10,17 +10,31 @@ def add_experiment_and_phase(apps, schema_editor):
     for block in blocks:
         if block.phase is None:
             experiment = Experiment.objects.create(slug=block.slug)
-            rules = block.get_rules()
-            consent_path = Path(rules.default_consent_file)
-            if consent_path:
-                with consent_path.open(mode='rb') as f:
-                    ExperimentTranslatedContent.objects.create(
+            content = ExperimentTranslatedContent.objects.create(
                         experiment=experiment,
-                        consent=File(f, name=consent_path.name)
+                        name=block.name
                     )
+            rules = block.get_rules()
+            try:
+                consent_path = Path(rules.default_consent_file)
+                with consent_path.open(mode='rb') as f:
+                    content.consent = File(f, name=consent_path.name)
+                    content.save()
+            except:
+                pass
             phase = Phase.objects.create(name=f'{block.name}_phase', series=experiment)
             block.phase = phase
             block.save()
+
+def remove_experiment_and_phase(apps, schema_editor):
+    blocks = Block.objects.all()
+    for block in blocks:
+        if block.phase and block.phase.name == f'{block.name}_phase':
+            phase = Phase.objects.get(block.phase)
+            Experiment.objects.delete(phase.series)
+            block.phase = None
+            block.save()
+            phase.delete()
 
 
 class Migration(migrations.Migration):
@@ -30,5 +44,5 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RunPython(add_experiment_and_phase)
+        migrations.RunPython(add_experiment_and_phase, remove_experiment_and_phase),
     ]
