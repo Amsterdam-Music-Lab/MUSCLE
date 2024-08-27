@@ -19,10 +19,7 @@ import UserFeedback from "@/components/UserFeedback/UserFeedback";
 import FontLoader from "@/components/FontLoader/FontLoader";
 import useResultHandler from "@/hooks/useResultHandler";
 import Session from "@/types/Session";
-import { PlaybackView } from "@/types/Playback";
 import { RedirectProps } from "../Redirect/Redirect";
-
-type BlockView = PlaybackView | "TRIAL_VIEW" | "EXPLAINER" | "SCORE" | "FINAL" | "PLAYLIST" | "LOADING" | "CONSENT" | "INFO" | "REDIRECT";
 
 interface SharedActionProps {
     title?: string;
