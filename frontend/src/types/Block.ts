@@ -8,6 +8,13 @@ export default interface Block {
     description: string;
     image?: IImage;
     bonus_points: number;
+    theme?: Theme;
+    class_name: string;
+    rounds: number;
+    playlists: Playlist[];
+    feedback_info: FeedbackInfo;
+    session_id: number;
+    loading_text: string;
 }
 
 export interface Playlist {
@@ -36,6 +43,4 @@ export interface ExtendedBlock extends Block {
     feedback_info: FeedbackInfo;
     session_id: number;
     loading_text: string;
-    timer?: number;
-    steps?: Step[];
 }

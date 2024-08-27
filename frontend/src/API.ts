@@ -2,7 +2,8 @@ import { API_BASE_URL } from "@/config";
 import useGet from "./util/useGet";
 import axios from "axios";
 import qs from "qs";
-import Block, { ExtendedBlock } from "@/types/Block";
+import IBlock from "@/types/Block";
+import IExperiment from "@/types/Experiment";
 import Participant, { ParticipantLink } from "./types/Participant";
 import Session from "./types/Session";
 
@@ -43,8 +44,8 @@ export const URLS = {
     }
 };
 
-export const useBlock = (slug: string): [ExtendedBlock | null, boolean] =>
-    useGet<ExtendedBlock>(API_BASE_URL + URLS.block.get(slug));
+export const useBlock = (slug: string): [IBlock | null, boolean] =>
+    useGet<IBlock>(API_BASE_URL + URLS.block.get(slug));
 
 export const useExperiment = (slug: string) => {
     const data = useGet(API_BASE_URL + URLS.experiment.get(slug));
@@ -63,19 +64,19 @@ export const useConsent = (slug: string) =>
     useGet<ConsentResponse>(API_BASE_URL + URLS.result.get('consent_' + slug));
 
 interface CreateConsentParams {
-    block: Block;
+    experiment: IExperiment;
     participant: Pick<Participant, 'csrf_token'>;
 }
 
 /** Create consent for given experiment */
-export const createConsent = async ({ block, participant }: CreateConsentParams) => {
+export const createConsent = async ({ experiment, participant }: CreateConsentParams) => {
     try {
         const response = await axios.post(
             API_BASE_URL + URLS.result.consent,
             qs.stringify({
                 json_data: JSON.stringify(
                     {
-                        key: "consent_" + block.slug,
+                        key: "consent_" + experiment.slug,
                         value: true,
                     }
                 ),
