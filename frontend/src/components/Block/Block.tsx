@@ -30,7 +30,6 @@ interface BlockState {
     view: BlockView;
     title?: string;
     url?: string;
-    next_round?: any[];
 
     // Some views require additional data
     button_label?: string;
@@ -148,10 +147,9 @@ const Block = () => {
     };
 
     const continueToNextRound = async () => {
-        const thisSession = await checkSession();
         // Try to get next_round data from server
         const round = await getNextRound({
-            session: thisSession
+            session: session
         });
         if (round) {
             updateActions(round.next_round);
@@ -178,7 +176,6 @@ const Block = () => {
         if (!loadingBlock && participant) {
             // Loading succeeded
             if (block) {
-                setSession(null);
                 // Set Helmet Head data
                 setHeadData({
                     title: block.name,
@@ -194,6 +191,8 @@ const Block = () => {
 
                 if (block.session_id) {
                     setSession({ id: block.session_id });
+                } else if (!block.session_id && session) {
+                    setSession(null);
                 }
 
                 // Set theme
@@ -203,11 +202,7 @@ const Block = () => {
                     setTheme(null);
                 }
 
-                if (block.next_round.length) {
-                    updateActions([...block.next_round]);
-                } else {
-                    setError("The first_round array from the ruleset is empty")
-                }
+
             } else {
                 // Loading error
                 setError("Could not load block");
