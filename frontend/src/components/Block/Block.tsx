@@ -275,10 +275,10 @@ const Block = () => {
             className={classNames(
                 "aha__block",
                 !loadingBlock && block
-                    ? "experiment-" + block.slug
+                    ? "block-" + block.slug
                     : ""
             )}
-            data-testid="experiment-wrapper"
+            data-testid="block-wrapper"
         >
             <CSSTransition
                 timeout={{ enter: 300, exit: 0 }}
@@ -312,7 +312,7 @@ const Block = () => {
                     </DefaultPage>
                 ) : (
                     <div className="loader-container">
-                        <Loading />
+                        <Loading loadingText={loadingText} />
                     </div>
                 )}
 
