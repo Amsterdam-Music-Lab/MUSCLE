@@ -1,4 +1,4 @@
-# This bas Docker image is used to build a development image
+# This base Docker image is used to build a development image
 # which is used in local development and CI/CD pipelines
 FROM docker.io/python:3.11 AS base
 ENV PYTHONUNBUFFERED=1
