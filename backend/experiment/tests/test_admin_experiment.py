@@ -44,7 +44,6 @@ class TestAdminBlock(TestCase):
     def test_block_model_fields(self):
         block = model_to_dict(Block.objects.first())
         block_fields = [key for key in block]
-        print(block_fields)
         self.assertEqual(len(block_fields), EXPECTED_BLOCK_FIELDS)
 
     def test_session_model_fields(self):
