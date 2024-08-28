@@ -213,6 +213,11 @@ class ExperimentTranslatedContentForm(ModelForm):
     class Meta:
         model = ExperimentTranslatedContent
         fields = [
+            "index",
+            "language",
+            "name",
+            "description",
+            "consent",
             "about_content",
         ]
 
@@ -260,6 +265,7 @@ class BlockForm(ModelForm):
     class Meta:
         model = Block
         fields = [
+            "index",
             "name",
             "slug",
             "active",

@@ -31,6 +31,7 @@ from experiment.models import (
 from question.admin import QuestionSeriesInline
 from experiment.forms import (
     ExperimentForm,
+    ExperimentTranslatedContentForm,
     BlockForm,
     ExportForm,
     TemplateForm,
@@ -53,6 +54,7 @@ class FeedbackInline(admin.TabularInline):
 class ExperimentTranslatedContentInline(NestedStackedInline):
     model = ExperimentTranslatedContent
     sortable_field_name = "index"
+    form = ExperimentTranslatedContentForm
 
     def get_extra(self, request, obj=None, **kwargs):
         if obj:
@@ -243,6 +245,7 @@ class BlockInline(NestedStackedInline):
     model = Block
     sortable_field_name = "index"
     inlines = [BlockTranslatedContentInline]
+    form = BlockForm
 
     def get_extra(self, request, obj=None, **kwargs):
         if obj:
