@@ -11,14 +11,14 @@ def migrate_block_content(apps, schema_editor):
     ExperimentTranslatedContent = apps.get_model("experiment", "ExperimentTranslatedContent")
 
     for block in Block.objects.all():
-        language = block.language if block.language else "en"
+        language = block.language if hasattr(block, "language") and block.language else "en"
 
-        block_translated_content = BlockTranslatedContent.objects.create(
+        BlockTranslatedContent.objects.create(
+            block=block,
             language=language,
             name=block.name,
             description=block.description,
         )
-        block.translated_content.add(block_translated_content)
 
         if block.phase:
             continue
@@ -34,12 +34,14 @@ def migrate_block_content(apps, schema_editor):
             language=language,
             name=block.name,
             description=block.description,
-            consent=block.consent if block.consent else "",
+            consent=block.consent if hasattr(block, "consent") and block.consent else "",
         )
-        Phase.objects.create(
+        phase = Phase.objects.create(
             experiment=experiment,
             index=0,
         )
+        block.phase = phase
+        block.save()
 
 
 def reverse_migrate_block_content(apps, schema_editor):
@@ -49,19 +51,19 @@ def reverse_migrate_block_content(apps, schema_editor):
     ExperimentTranslatedContent = apps.get_model("experiment", "ExperimentTranslatedContent")
 
     for block in Block.objects.all():
-        block_fallback_content = BlockTranslatedContent.objects.filter(block=block).first()
+        block_fallback_content = block.translated_contents.first()
 
         phase = block.phase
-        experiment = Experiment.objects.filter(phases=phase).first()
+        experiment = phase.experiment if phase else None
         experiment_fallback_content = (
             ExperimentTranslatedContent.objects.filter(experiment=experiment).order_by("index").first()
+            if experiment
+            else None
         )
 
         if experiment_fallback_content:
             language = experiment_fallback_content.language
-            possible_block_fallback_content = BlockTranslatedContent.objects.filter(
-                language=language, block=block
-            ).first()
+            possible_block_fallback_content = block.translated_contents.filter(language=language).first()
             if possible_block_fallback_content:
                 block_fallback_content = possible_block_fallback_content
 
@@ -70,11 +72,8 @@ def reverse_migrate_block_content(apps, schema_editor):
 
         block.name = block_fallback_content.name if block_fallback_content.name else block.slug
         block.description = block_fallback_content.description if block_fallback_content.description else ""
-        block.consent = (
-            experiment_fallback_content.consent
-            if experiment_fallback_content and experiment_fallback_content.consent
-            else ""
-        )
+        if experiment_fallback_content and experiment_fallback_content.consent:
+            block.consent = experiment_fallback_content.consent
         block.save()
 
     BlockTranslatedContent.objects.all().delete()

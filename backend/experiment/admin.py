@@ -85,7 +85,7 @@ class BlockAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
         "rounds",
         "bonus_points",
         "playlists",
-        "translated_content",
+        "translated_contents",
     ]
     inlines = [QuestionSeriesInline, FeedbackInline]
     form = BlockForm
@@ -230,9 +230,19 @@ class BlockAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
 admin.site.register(Block, BlockAdmin)
 
 
+class BlockTranslatedContentInline(NestedStackedInline):
+    model = BlockTranslatedContent
+
+    def get_extra(self, request, obj=None, **kwargs):
+        if obj:
+            return 0
+        return 1
+
+
 class BlockInline(NestedStackedInline):
     model = Block
     sortable_field_name = "index"
+    inlines = [BlockTranslatedContentInline]
 
     def get_extra(self, request, obj=None, **kwargs):
         if obj:
@@ -472,16 +482,16 @@ admin.site.register(Phase, PhaseAdmin)
 
 @admin.register(BlockTranslatedContent)
 class BlockTranslatedContentAdmin(admin.ModelAdmin):
-    list_display = ["name", "blocks", "language"]
+    list_display = ["name", "block", "language"]
     list_filter = ["language"]
     search_fields = [
         "name",
-        "blocks__name",
+        "block__name",
     ]
 
     def blocks(self, obj):
         # Block is manytomany, so we need to find it through the related name
-        blocks = Block.objects.filter(translated_content=obj)
+        blocks = Block.objects.filter(translated_contents=obj)
 
         if not blocks:
             return "No block"

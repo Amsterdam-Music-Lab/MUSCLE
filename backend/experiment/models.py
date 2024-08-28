@@ -116,7 +116,6 @@ class Block(models.Model):
 
     phase = models.ForeignKey(Phase, on_delete=models.CASCADE, related_name="blocks", blank=True, null=True)
     index = models.IntegerField(default=0, help_text="Index of the block in the phase. Lower numbers come first.")
-    translated_content = models.ManyToManyField("BlockTranslatedContent", blank=True)
     playlists = models.ManyToManyField("section.Playlist", blank=True)
 
     # TODO: to be deleted?
@@ -131,6 +130,8 @@ class Block(models.Model):
     rounds = models.PositiveIntegerField(default=10)
     bonus_points = models.PositiveIntegerField(default=0)
     rules = models.CharField(default="", max_length=64)
+
+    translated_contents = models.QuerySet["BlockTranslatedContent"]
 
     theme_config = models.ForeignKey(ThemeConfig, on_delete=models.SET_NULL, blank=True, null=True)
 
@@ -313,17 +314,17 @@ class Block(models.Model):
     def get_fallback_content(self):
         """Get fallback content for the block"""
         if not self.phase or self.phase.experiment:
-            return self.translated_content.first()
+            return self.translated_contents.first()
 
         experiment = self.phase.experiment
         fallback_language = experiment.get_fallback_content().language
-        fallback_content = self.translated_content.filter(language=fallback_language).first()
+        fallback_content = self.translated_contents.filter(language=fallback_language).first()
 
         return fallback_content
 
     def get_translated_content(self, language: str, fallback: bool = True):
         """Get content for a specific language"""
-        content = self.translated_content.filter(language=language).first()
+        content = self.translated_contents.filter(language=language).first()
 
         if not content and fallback:
             fallback_content = self.get_fallback_content()
@@ -357,12 +358,17 @@ class ExperimentTranslatedContent(models.Model):
 
 
 class BlockTranslatedContent(models.Model):
+    block = models.ForeignKey(Block, on_delete=models.CASCADE, related_name="translated_contents")
     language = models.CharField(default="", blank=True, choices=language_choices, max_length=2)
     name = models.CharField(max_length=64, default="")
     description = models.TextField(blank=True, default="")
 
     def __str__(self):
         return f"{self.name} ({self.language})"
+
+    class Meta:
+        # Assures that there is only one translation per language
+        unique_together = ["block", "language"]
 
 
 class Feedback(models.Model):
