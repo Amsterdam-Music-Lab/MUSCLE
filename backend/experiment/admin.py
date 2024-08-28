@@ -230,7 +230,7 @@ class BlockAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
 admin.site.register(Block, BlockAdmin)
 
 
-class BlockTranslatedContentInline(NestedStackedInline):
+class BlockTranslatedContentInline(NestedTabularInline):
     model = BlockTranslatedContent
 
     def get_extra(self, request, obj=None, **kwargs):
