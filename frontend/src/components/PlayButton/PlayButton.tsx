@@ -1,7 +1,13 @@
-import React from "react";
 import classNames from "classnames";
 
-const PlayButton = ({ playSection, isPlaying, className = "", disabled }) => {
+interface PlayButtonProps {
+    playSection?: (section: number) => void;
+    isPlaying: boolean;
+    className?: string;
+    disabled?: boolean;
+}
+
+const PlayButton = ({ playSection, isPlaying, className = "", disabled }: PlayButtonProps) => {
 
     return (
         <>
@@ -9,11 +15,10 @@ const PlayButton = ({ playSection, isPlaying, className = "", disabled }) => {
                 className={classNames("aha__play-button btn-blue border-outside", "btn", {
                     stop: isPlaying, disabled: disabled || isPlaying
                 }, className)}
+                role="button"
                 onClick={playSection && !disabled ? () => playSection(0) : undefined}
-                tabIndex="0"
-                onKeyPress={(e) => {
-                    playSection && playSection(0)
-                }}
+                tabIndex={0}
+                onKeyDown={playSection && !disabled ? () => playSection(0) : undefined}
             >
             </div>
             <div className="playbutton-spacer"></div>

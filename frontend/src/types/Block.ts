@@ -10,17 +10,32 @@ export default interface Block {
     bonus_points: number;
 }
 
+export interface Playlist {
+    id: string;
+    name: string;
+}
+
+export interface FeedbackInfo {
+    header: string;
+    button: string;
+    contact_body: string;
+    thank_you: string;
+    show_float_button: boolean;
+}
+
+export interface Step {
+    id: number;
+    description: string;
+}
+
 export interface ExtendedBlock extends Block {
     theme?: Theme;
     class_name: string;
     rounds: number;
-    playlists: { id: number; name: string }[];
-    feedback_info: {
-        header: string;
-        button: string;
-        contact_body: string;
-        thank_you: string;
-        show_float_button: boolean;
-    }
+    playlists: Playlist[];
+    feedback_info: FeedbackInfo;
     session_id: number;
+    loading_text: string;
+    timer?: number;
+    steps?: Step[];
 }

@@ -10,7 +10,7 @@ import Question from "@/types/Question";
 import { OnResultType } from "@/hooks/useResultHandler";
 import { TrialConfig } from "@/types/Trial";
 
-interface IFeedbackForm {
+export interface IFeedbackForm {
     form: Question[];
     submit_label: string;
     skip_label: string;
@@ -102,6 +102,8 @@ const Trial = (props: TrialProps) => {
                 }
 
             } else {
+
+
                 if (result_id) {
                     onResult({
                         result,
@@ -140,13 +142,16 @@ const Trial = (props: TrialProps) => {
 
         if (config.auto_advance) {
 
+
             // Create a time_passed result
             if (config.auto_advance_timer != null) {
                 if (playback.view === 'BUTTON') {
                     startTime.current = getCurrentTime();
                 }
 
-                setTimeout(() => { makeResult({ type: "time_passed", }); }, config.auto_advance_timer);
+                setTimeout(() => {
+                    makeResult({ type: "time_passed", });
+                }, config.auto_advance_timer);
             } else {
 
                 makeResult({
@@ -188,7 +193,7 @@ const Trial = (props: TrialProps) => {
                     isSkippable={feedback_form.is_skippable}
                     onResult={makeResult}
                 // emphasizeTitle={feedback_form.is_profile}
-                // to do: if we want left-aligned text with a pink divider,
+                // TODO: if we want left-aligned text with a pink divider,
                 // make this style option available again (used in Question.scss)
                 />
             )}

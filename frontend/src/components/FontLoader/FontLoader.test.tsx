@@ -1,10 +1,11 @@
-import React, { act } from 'react';
-import { createRoot } from 'react-dom/client';
+import { act } from 'react';
+import { Root, createRoot } from 'react-dom/client';
 import FontLoader from './FontLoader';
+import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 
 describe('FontLoader', () => {
-    let container = null;
-    let root = null;
+    let container: HTMLDivElement | null;
+    let root: Root;
 
     beforeEach(() => {
         container = document.createElement('div');
@@ -13,7 +14,7 @@ describe('FontLoader', () => {
 
     afterEach(() => {
         document.head.querySelectorAll('link, style').forEach(el => el.remove());
-        container.remove();
+        container!.remove();
         container = null;
         root.unmount();
     });

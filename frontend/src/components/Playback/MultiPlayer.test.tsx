@@ -1,4 +1,3 @@
-import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, test, expect, beforeEach, vi } from 'vitest';
 import MultiPlayer from './MultiPlayer';
@@ -24,7 +23,7 @@ describe('MultiPlayer Component', () => {
 
     test('renders correct number of PlayerSmall components', () => {
         render(<MultiPlayer {...defaultProps} />);
-        const players = screen.getAllByRole('button');
+        const players = screen.getAllByTestId('player-small');
         expect(players.length).toBe(mockSections.length);
     });
 
@@ -45,7 +44,7 @@ describe('MultiPlayer Component', () => {
 
     test('calls playSection with correct index when PlayerSmall is clicked', () => {
         render(<MultiPlayer {...defaultProps} />);
-        const players = screen.getAllByRole('button');
+        const players = screen.getAllByTestId('player-small');
         fireEvent.click(players[1]);
         expect(mockPlaySection).toHaveBeenCalledWith(1);
     });

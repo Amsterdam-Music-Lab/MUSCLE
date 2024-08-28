@@ -4,7 +4,7 @@ import { audioInitialized } from "../../util/audio";
 
 interface ButtonProps {
     title: string;
-    onClick: (value: string) => void;
+    onClick: (value?: string | boolean) => void;
     className?: string;
     padding?: string;
     style?: React.CSSProperties;

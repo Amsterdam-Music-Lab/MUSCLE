@@ -1,7 +1,6 @@
 from django.conf import settings
 from django.test import TestCase
 from django.utils import timezone
-from django.utils.translation import activate, get_language
 from django.core.files.uploadedfile import SimpleUploadedFile
 
 from image.models import Image
@@ -13,7 +12,7 @@ from experiment.models import (
     SocialMediaConfig,
     ExperimentTranslatedContent,
 )
-from experiment.rules.hooked import Hooked
+from experiment.rules.rhythm_battery_intro import RhythmBatteryIntro
 from participant.models import Participant
 from participant.utils import PARTICIPANT_KEY
 from session.models import Session
@@ -254,7 +253,7 @@ class ExperimentViewsTest(TestCase):
             name="Test Block",
             description="This is a test block",
             image=Image.objects.create(file="test-image.jpg"),
-            rules=Hooked.ID,
+            rules=RhythmBatteryIntro.ID,
             theme_config=create_theme_config(),
             rounds=3,
             bonus_points=42,

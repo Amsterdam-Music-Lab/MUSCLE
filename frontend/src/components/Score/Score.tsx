@@ -1,9 +1,25 @@
-import React, { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import classNames from "classnames";
 import Circle from "../Circle/Circle";
 import Button from "../Button/Button";
 
-/** Score is a block view that shows an intermediate and total score */
+interface ScoreProps {
+    last_song?: string;
+    score: number;
+    score_message: string;
+    total_score?: number;
+    texts: {
+        score: string;
+        next: string;
+        listen_explainer: string;
+    };
+    icon?: string;
+    feedback?: string;
+    timer?: number;
+    onNext: () => void;
+}
+
+/** Score is an block view that shows an intermediate and total score */
 const Score = ({
     last_song,
     score,
@@ -14,7 +30,7 @@ const Score = ({
     feedback,
     timer,
     onNext,
-}) => {
+}: ScoreProps) => {
     const [showScore, setShowScore] = useState(0);
     // Use a ref to prevent doing multiple increments
     // when the render is skipped

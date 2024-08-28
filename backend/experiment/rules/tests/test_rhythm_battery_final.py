@@ -1,8 +1,11 @@
 from django.test import TestCase
+from django.core.files.uploadedfile import SimpleUploadedFile
 from experiment.actions import Explainer
 from experiment.models import Experiment, ExperimentTranslatedContent, Block
 from experiment.rules.rhythm_battery_final import RhythmBatteryFinal
-from django.core.files.uploadedfile import SimpleUploadedFile
+from participant.models import Participant
+from section.models import Playlist
+from session.models import Session
 
 
 class TestRhythmBatteryFinal(TestCase):
@@ -16,18 +19,19 @@ class TestRhythmBatteryFinal(TestCase):
             language="en",
             consent=SimpleUploadedFile("consent.md", b"# test", content_type="text/html"),
         )
-        Block.objects.create(
-            name="test_md",
-            slug="MARKDOWN",
+        block = Block.objects.create(name="test_md", slug="MARKDOWN_BLOCK", rules=RhythmBatteryFinal.ID)
+        block.add_default_question_series()
+        Session.objects.create(
+            block=block, playlist=Playlist.objects.create(name="test"), participant=Participant.objects.create()
         )
 
     def test_init(self):
         rhythm_final = RhythmBatteryFinal()
         self.assertEqual(rhythm_final.ID, "RHYTHM_BATTERY_FINAL")
 
-    def test_first_round(self):
-        block = Block.objects.first()
+    def test_next_round(self):
+        session = Session.objects.first()
         goldMSI = RhythmBatteryFinal()
-        actions = goldMSI.first_round(block)
+        actions = goldMSI.next_round(session)
 
         self.assertIsInstance(actions[0], Explainer)

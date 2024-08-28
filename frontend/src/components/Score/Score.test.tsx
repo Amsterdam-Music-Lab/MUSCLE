@@ -1,8 +1,8 @@
-import React, { act } from 'react';
+import { act } from 'react';
 import { fireEvent, render, screen } from '@testing-library/react';
 import Score from './Score';
 import makeDefaultScoreProps from '../../util/testUtils/makeDefaultScoreProps';
-import { vi } from 'vitest';
+import { vi, describe, expect, it } from 'vitest';
 
 vi.useFakeTimers();
 
@@ -40,10 +40,10 @@ describe('Score component', () => {
 
     it('conditionally renders elements', () => {
         const { rerender } = render(<Score {...{ ...makeDefaultScoreProps({ icon: null }) }} />);
-        expect(document.body.contains(screen.queryByTestId('icon-element'))).to.not.be.true;
+        expect(document.body.contains(screen.queryByTestId('icon-element'))).not.toBeTruthy();
 
         rerender(<Score {...{ ...makeDefaultScoreProps({ last_song: null }) }} />);
-        expect(document.body.contains(screen.queryByText('Test Song'))).to.not.be.true;
+        expect(document.body.contains(screen.queryByText('Test Song'))).not.toBeTruthy();
     });
 
     it('calls onNext when button is clicked and no timer', () => {

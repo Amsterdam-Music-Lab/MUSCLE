@@ -14,20 +14,14 @@ class MatchingPairsLite(MatchingPairsGame):
     score_feedback_display = 'small-bottom-right'
     contact_email = 'aml.tunetwins@gmail.com'
 
-    def first_round(self, block):
-        # 2. Choose playlist.
-        playlist = Playlist(block.playlists.all())
-        info = Info('',
-                    heading='Press start to enter the game',
-                    button_label='Start')
-        return [
-            playlist, info
-        ]
-
     def next_round(self, session):
+        playlist = Playlist(session.block.playlists.all())
+        info = Info('',
+            heading='Press start to enter the game',
+            button_label='Start')
         if session.get_rounds_passed() < 1:
             trial = self.get_matching_pairs_trial(session)
-            return [trial]
+            return [playlist, info, trial]
         else:
             return final_action_with_optional_button(session, final_text='End of the game', title='Score', button_text='Back to dashboard')
 

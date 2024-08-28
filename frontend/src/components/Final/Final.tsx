@@ -11,7 +11,7 @@ import ParticipantLink from "../ParticipantLink/ParticipantLink";
 import UserFeedback from "../UserFeedback/UserFeedback";
 import FinalButton from "./FinalButton";
 import ISocial from "@/types/Social";
-import Block from "@/types/Block";
+import Block, { FeedbackInfo } from "@/types/Block";
 import Participant from "@/types/Participant";
 
 interface FinalProps {
@@ -33,7 +33,7 @@ interface FinalProps {
     participant_id_only: boolean;
     show_profile_link: boolean;
     social: ISocial;
-    feedback_info: any;
+    feedback_info?: FeedbackInfo;
     points: string;
     rank: {
         class: string;

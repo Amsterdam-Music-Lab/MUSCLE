@@ -1,9 +1,17 @@
-import React, { useEffect } from "react";
+import { ExtendedBlock } from "@/types/Block";
+import { MutableRefObject, useEffect } from "react";
+
+interface PlaylistProps {
+    block: ExtendedBlock;
+    instruction: string;
+    onNext: () => void;
+    playlist: MutableRefObject<string>;
+}
 
 /**
  * Playlist is a block view, that handles (auto)selection of a playlist
  */
-const Playlist = ({ block, instruction, onNext, playlist }) => {
+const Playlist = ({ block, instruction, onNext, playlist }: PlaylistProps) => {
     const playlists = block.playlists;
 
     useEffect(() => {
@@ -36,7 +44,13 @@ const Playlist = ({ block, instruction, onNext, playlist }) => {
     } else { return null };
 };
 
-const PlaylistItem = ({ delay, playlist, onClick }) => (
+interface PlaylistItemProps {
+    delay: number;
+    playlist: { id: string, name: string };
+    onClick: (playlistId: string) => void;
+}
+
+const PlaylistItem = ({ delay, playlist, onClick }: PlaylistItemProps) => (
     <li
         data-testid="playlist-item"
         onClick={() => {
@@ -45,7 +59,7 @@ const PlaylistItem = ({ delay, playlist, onClick }) => (
         onKeyPress={() => {
             onClick(playlist.id);
         }}
-        tabIndex="0"
+        tabIndex={0}
         className="anim anim-fade-in-slide-left anim-speed-300"
         style={{ animationDelay: delay + "ms" }}
     >

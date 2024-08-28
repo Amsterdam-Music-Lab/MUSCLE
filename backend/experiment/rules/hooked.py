@@ -22,9 +22,7 @@ logger = logging.getLogger(__name__)
 class Hooked(Base):
     """Superclass for Hooked experiment rules"""
 
-    ID = "HOOKED"
-
-    consent_file = "consent/consent_hooked.html"
+    default_consent_file = "consent/consent_hooked.html"
     recognition_time = 15  # response time for "Do you know this song?"
     sync_time = 15  # response time for "Did the track come back in the right place?"
     # if the track continues in the wrong place: minimal shift forward (in seconds)
@@ -59,11 +57,9 @@ class Hooked(Base):
             {"name": "TIPI", "keys": QUESTION_GROUPS["TIPI"], "randomize": True},  # 5. TIPI (10 questions)
         ]
 
-    def first_round(self, block):
-        """Create data for the first block rounds."""
-
-        # 1. Explain game.
-        explainer = Explainer(
+    def get_intro_explainer(self):
+        """Explain the game"""
+        return Explainer(
             instruction="How to Play",
             steps=[
                 Step(
@@ -85,22 +81,6 @@ class Hooked(Base):
             step_numbers=True,
             button_label=_("Let's go!"),
         )
-
-        # 2. Add consent from file or admin (admin has priority)
-        experiment_content = block.phase.experiment.get_current_content()
-        consent_file = experiment_content.consent
-        consent = Consent(
-            consent_file, title=_("Informed consent"), confirm=_("I agree"), deny=_("Stop"), url=self.consent_file
-        )
-
-        # 3. Choose playlist.
-        playlist = Playlist(block.playlists.all())
-
-        return [
-            consent,
-            playlist,
-            explainer,
-        ]
 
     def next_round(self, session: Session):
         """Get action data for the next round"""
@@ -137,6 +117,11 @@ class Hooked(Base):
         actions = []
 
         if round_number == 0:
+            # Intro explainer
+            actions.append(self.get_intro_explainer())
+            # Choose playlist
+            actions.append(Playlist(session.block.playlists.all()))
+
             # Plan sections
             self.plan_sections(session)
             # Go to SongSync straight away.

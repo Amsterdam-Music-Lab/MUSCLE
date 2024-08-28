@@ -1,14 +1,14 @@
-import random
-
 from django.test import TestCase
+from django.core.files.uploadedfile import SimpleUploadedFile
 from unittest.mock import Mock
+
 from experiment.actions import Explainer, Final, Score, Trial
 from experiment.models import Experiment, Phase, Block, SocialMediaConfig
 from question.musicgens import MUSICGENS_17_W_VARIANTS
 from participant.models import Participant
 from question.questions import get_questions_from_series
 from result.models import Result
-from section.models import Playlist, Section
+from section.models import Playlist, Section, Song
 from session.models import Session
 
 
@@ -93,7 +93,7 @@ class HookedTest(TestCase):
                 self.assertEqual(len([p for p in plan if p == "returning"]), 3)
                 self.assertEqual(len([p for p in plan if p == "new"]), 3)
                 self.assertEqual(len([p for p in plan if p == "old"]), 3)
-                self.assertEqual(len(actions), 3)
+                self.assertEqual(len(actions), 5)
                 self.assertEqual(session.result_set.filter(question_key="recognize").count(), 1)
                 self.assertEqual(session.result_set.filter(question_key="correct_place").count(), 1)
             elif i == 1:
@@ -262,10 +262,10 @@ class HookedTest(TestCase):
                 assert len(actions) == 2
                 assert actions[1].ID == "FINAL"
             elif i == 0:
-                assert len(actions) == 3
-                assert actions[0].feedback_form.form[0].key == "dgf_generation"
-                assert actions[1].feedback_form.form[0].key == "dgf_gender_identity"
-                assert actions[2].feedback_form.form[0].key == "playlist_decades"
+                self.assertEqual(len(actions), 4)
+                self.assertEqual(actions[1].feedback_form.form[0].key, "dgf_generation")
+                self.assertEqual(actions[2].feedback_form.form[0].key, "dgf_gender_identity")
+                self.assertEqual(actions[3].feedback_form.form[0].key, "playlist_decades")
                 result = Result.objects.get(session=session, question_key="playlist_decades")
                 result.given_response = "1960s,1970s,1980s"
                 result.save()
@@ -306,7 +306,16 @@ class HookedTest(TestCase):
         session = Session.objects.create(block=block, participant=self.participant, playlist=playlist)
         rules = session.block_rules()
         self.assertIsNotNone(rules.feedback_info())
-        question_trials = rules.get_questionnaire(session)
+
+        # check that first round is an audio check
+        song = Song.objects.create(name="audiocheck")
+        Section.objects.create(playlist=playlist, song=song, filename=SimpleUploadedFile("some_audio.wav", b""))
+        actions = rules.next_round(session)
+        self.assertIsInstance(actions[0], Trial)
+        self.assertEqual(actions[0].feedback_form.form[0].key, "audio_check1")
+
+        # check that question trials are as expected
+        question_trials = rules.get_open_questions(session)
         total_questions = get_questions_from_series(block.questionseries_set.all())
         self.assertEqual(len(question_trials), len(total_questions))
         keys = [q.feedback_form.form[0].key for q in question_trials]

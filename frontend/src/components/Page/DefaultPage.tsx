@@ -2,8 +2,15 @@ import React from "react";
 import Page from "./Page";
 import AppBar from "../AppBar/AppBar";
 
-// DefaultPage is a Page with an AppBar and a width-restricted container for content
-const DefaultPage = ({ className, title, logoClickConfirm, children }) => {
+interface DefaultPageProps {
+    className?: string;
+    title: string;
+    logoClickConfirm: string;
+    children: React.ReactNode;
+}
+
+/** DefaultPage is a Page with an AppBar and a width-restricted container for content */
+const DefaultPage = ({ className, title, logoClickConfirm, children }: DefaultPageProps) => {
     return (
         <Page className={className}>
             <AppBar title={title} logoClickConfirm={logoClickConfirm} />

@@ -13,6 +13,7 @@ from section.models import Section
 
 class MatchingPairsGame(Base):
     ID = 'MATCHING_PAIRS'
+    default_consent_file = 'consent/consent_matching_pairs.html'
     num_pairs = 8
     show_animation = True
     score_feedback_display = 'large-top'
@@ -34,19 +35,8 @@ class MatchingPairsGame(Base):
             },
         ]
 
-    def first_round(self, block):
-        # Add consent from file or admin (admin has priority)
-        consent = Consent(
-            block.consent,
-            title=_('Informed consent'),
-            confirm=_('I agree'),
-            deny=_('Stop'),
-            url='consent/consent_matching_pairs.html'
-            )
-        # 2. Choose playlist.
-        playlist = Playlist(block.playlists.all())
-
-        explainer = Explainer(
+    def get_intro_explainer(self):
+        return Explainer(
             instruction='',
             steps=[
                 Step(description=_('TuneTwins is a musical version of "Memory". It consists of 16 musical fragments. Your task is to listen and find the 8 matching pairs.')),
@@ -55,26 +45,25 @@ class MatchingPairsGame(Base):
                 Step(description=_('Finding a match removes the pair from the board.')),
                 Step(description=_('Listen carefully to avoid mistakes and earn more points.'))
             ],
-            step_numbers=True)
-
-        return [
-            consent,
-            playlist,
-            explainer
-        ]
+            step_numbers=True
+        )
 
     def next_round(self, session):
         if session.get_rounds_passed() < 1:
-            trials = self.get_questionnaire(session)
-            if trials:
+            intro_explainer = self.get_intro_explainer()
+            playlist = Playlist(session.block.playlists.all())
+            actions = [intro_explainer, playlist]
+            questions = self.get_open_questions(session)
+            if questions:
                 intro_questions = Explainer(
-                    instruction=_('Before starting the game, we would like to ask you %i demographic questions.' % (len(trials))),
+                    instruction=_('Before starting the game, we would like to ask you %i demographic questions.' % (len(questions))),
                     steps=[]
                 )
-                return [intro_questions, *trials]
-            else:
-                trial = self.get_matching_pairs_trial(session)
-                return [trial]
+                actions.append(intro_questions)
+                actions.extend(questions)
+            trial = self.get_matching_pairs_trial(session)
+            actions.append(trial)
+            return actions
         else:
             # final score saves the result from the cleared board into account
             social_info = self.social_media_info(session.block, session.final_score)

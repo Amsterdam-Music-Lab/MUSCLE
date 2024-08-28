@@ -3,7 +3,7 @@ import useGet from "./util/useGet";
 import axios from "axios";
 import qs from "qs";
 import Block, { ExtendedBlock } from "@/types/Block";
-import Participant from "./types/Participant";
+import Participant, { ParticipantLink } from "./types/Participant";
 import Session from "./types/Session";
 
 // API handles the calls to the Hooked-server api
@@ -55,7 +55,7 @@ export const useParticipantScores = <T>() =>
     useGet<T>(API_BASE_URL + URLS.participant.score);
 
 export const useParticipantLink = () =>
-    useGet(API_BASE_URL + URLS.participant.link);
+    useGet<ParticipantLink>(API_BASE_URL + URLS.participant.link);
 
 type ConsentResponse = boolean | null;
 
@@ -83,30 +83,6 @@ export const createConsent = async ({ block, participant }: CreateConsentParams)
             }),
         );
         return response.data;
-    } catch (err) {
-        console.error(err);
-        return null;
-    }
-};
-
-interface CreateSessionParams {
-    block: Block;
-    participant: Participant;
-    playlist: { current: string };
-}
-
-// Create a new session for given experiment
-export const createSession = async ({ block, participant, playlist }: CreateSessionParams) => {
-    try {
-        const response = await axios.post(
-            API_BASE_URL + URLS.session.create,
-            qs.stringify({
-                block_id: block.id,
-                playlist_id: playlist.current,
-                csrfmiddlewaretoken: participant.csrf_token,
-            })
-        );
-        return response.data.session;
     } catch (err) {
         console.error(err);
         return null;

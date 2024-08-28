@@ -13,11 +13,8 @@ logger = logging.getLogger(__name__)
 class ToontjeHogerKids2Preverbal(ToontjeHoger2Preverbal):
     ID = 'TOONTJE_HOGER_KIDS_2_PREVERBAL'
 
-    def first_round(self, block):
-        """Create data for the first block rounds."""
-
-        # 1. Explain game.
-        explainer = Explainer(
+    def get_intro_explainer(self):
+        return Explainer(
             instruction="Het eerste luisteren",
             steps=[
                 Step(
@@ -30,14 +27,6 @@ class ToontjeHogerKids2Preverbal(ToontjeHoger2Preverbal):
             step_numbers=True,
             button_label="Start"
         )
-
-        # 2 Spectrogram information
-        spectrogram_info = self.get_spectrogram_info()
-
-        return [
-            explainer,
-            spectrogram_info,
-        ]
 
     def get_spectrogram_info(self):
         image_url = "/images/experiments/toontjehoger/spectrogram_info_nl.webp"
@@ -61,13 +50,13 @@ class ToontjeHogerKids2Preverbal(ToontjeHoger2Preverbal):
             logger.error("No last result")
             feedback = "Er is een fout opgetreden"
         else:
-            if get_rounds_passed == 1:
+            if rounds_passed == 1:
                 appendix = "Op het volgende scherm kun je de drie geluiden beluisteren."
                 if last_result.score == self.SCORE_CORRECT:
                     feedback = "Goedzo! Op plaatje C zie je inderdaad de stem van een mens. " + appendix
                 else:
                     feedback = "Helaas! Je antwoord was onjuist. Op plaatje C zag je de stem van een mens. " + appendix
-            elif get_rounds_passed == 2:
+            elif rounds_passed == 2:
                 if last_result.score == self.SCORE_CORRECT:
                     feedback = "Goedzo! Geluid A is inderdaad de Franse baby."
                 else:
