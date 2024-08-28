@@ -22,6 +22,7 @@ logger = logging.getLogger(__name__)
 class Hooked(Base):
     """Superclass for Hooked experiment rules"""
 
+    ID = "HOOKED"
     default_consent_file = "consent/consent_hooked.html"
     recognition_time = 15  # response time for "Do you know this song?"
     sync_time = 15  # response time for "Did the track come back in the right place?"
