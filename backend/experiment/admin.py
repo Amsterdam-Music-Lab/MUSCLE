@@ -51,6 +51,15 @@ class FeedbackInline(admin.TabularInline):
     extra = 0
 
 
+class BlockTranslatedContentInline(NestedTabularInline):
+    model = BlockTranslatedContent
+
+    def get_extra(self, request, obj=None, **kwargs):
+        if obj:
+            return 0
+        return 1
+
+
 class ExperimentTranslatedContentInline(NestedStackedInline):
     model = ExperimentTranslatedContent
     sortable_field_name = "index"
@@ -87,9 +96,8 @@ class BlockAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
         "rounds",
         "bonus_points",
         "playlists",
-        "translated_contents",
     ]
-    inlines = [QuestionSeriesInline, FeedbackInline]
+    inlines = [QuestionSeriesInline, FeedbackInline, BlockTranslatedContentInline]
     form = BlockForm
 
     # make playlists fields a list of checkboxes
@@ -230,15 +238,6 @@ class BlockAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
 
 
 admin.site.register(Block, BlockAdmin)
-
-
-class BlockTranslatedContentInline(NestedTabularInline):
-    model = BlockTranslatedContent
-
-    def get_extra(self, request, obj=None, **kwargs):
-        if obj:
-            return 0
-        return 1
 
 
 class BlockInline(NestedStackedInline):
