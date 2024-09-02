@@ -21,7 +21,7 @@ from .huang_2022 import get_test_playback
 class MusicalPreferences(Base):
     ID = 'MUSICAL_PREFERENCES'
     default_consent_file = 'consent/consent_musical_preferences.html'
-    preference_offset = 20
+    preference_offset = 21
     knowledge_offset = 42
     contact_email = 'musicexp_china@163.com'
     counted_result_keys = ['like_song']
@@ -130,7 +130,7 @@ class MusicalPreferences(Base):
                 return [self.get_intro_explainer(), Trial(playback=playback, feedback_form=form, html=html,
                              config={'response_time': 15},
                              title=_("Audio check"))]
-        if round_number == self.preference_offset + 1:
+        if round_number == self.preference_offset:
             like_results = session.result_set.filter(question_key='like_song')
             feedback = Trial(
                 html=HTML(body=render_to_string('html/musical_preferences/feedback.html', {
