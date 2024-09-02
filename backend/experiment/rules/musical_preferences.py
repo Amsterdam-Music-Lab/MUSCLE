@@ -208,7 +208,7 @@ class MusicalPreferences(Base):
             playback=playback,
             feedback_form=form,
             title=_('Song %(round)s/%(total)s') % {
-                'round': round_number, 'total': session.block.rounds},
+                'round': round_number +  1, 'total': session.block.rounds},
             config={
                 'response_time': section.duration + .1,
             }
