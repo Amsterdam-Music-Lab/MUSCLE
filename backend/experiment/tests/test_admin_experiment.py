@@ -225,7 +225,7 @@ class PhaseAdminTest(TestCase):
     def setUp(self):
         self.admin = PhaseAdmin(model=Phase, admin_site=AdminSite)
 
-    def test_related_experiment_with_experiment(self):
+    def test_phase_admin_related_experiment_method(self):
         experiment = Experiment.objects.create(slug="test-experiment")
         ExperimentTranslatedContent.objects.create(experiment=experiment, language="en", name="Test Experiment")
         phase = Phase.objects.create(name="Test Phase", index=1, randomize=False, experiment=experiment, dashboard=True)
