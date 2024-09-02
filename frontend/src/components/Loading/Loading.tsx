@@ -1,6 +1,6 @@
 import Circle from "../Circle/Circle";
 
-interface LoadingProps {
+export interface LoadingProps {
     duration?: number;
     loadingText?: string;
 }

@@ -5,87 +5,40 @@ import classNames from "classnames";
 
 import useBoundStore from "@/util/stores";
 import { getNextRound, useBlock } from "@/API";
-import Consent from "@/components/Consent/Consent";
+import Consent, { ConsentProps } from "@/components/Consent/Consent";
 import DefaultPage from "@/components/Page/DefaultPage";
-import Explainer from "@/components/Explainer/Explainer";
-import Final from "@/components/Final/Final";
-import Loading from "@/components/Loading/Loading";
-import Playlist from "@/components/Playlist/Playlist";
-import Score from "@/components/Score/Score";
-import Trial, { IFeedbackForm } from "@/components/Trial/Trial";
-import Info from "@/components/Info/Info";
+import Explainer, { ExplainerProps } from "@/components/Explainer/Explainer";
+import Final, { FinalProps } from "@/components/Final/Final";
+import Loading, { LoadingProps } from "@/components/Loading/Loading";
+import Playlist, { PlaylistProps } from "@/components/Playlist/Playlist";
+import Score, { ScoreProps } from "@/components/Score/Score";
+import Trial, { TrialProps } from "@/components/Trial/Trial";
+import Info, { InfoProps } from "@/components/Info/Info";
 import FloatingActionButton from "@/components/FloatingActionButton/FloatingActionButton";
 import UserFeedback from "@/components/UserFeedback/UserFeedback";
 import FontLoader from "@/components/FontLoader/FontLoader";
 import useResultHandler from "@/hooks/useResultHandler";
 import Session from "@/types/Session";
-import { PlaybackArgs, PlaybackView } from "@/types/Playback";
-import { FeedbackInfo, Step } from "@/types/Block";
-import { TrialConfig } from "@/types/Trial";
-import Social from "@/types/Social";
+import { RedirectProps } from "../Redirect/Redirect";
 
-type BlockView = PlaybackView | "TRIAL_VIEW" | "EXPLAINER" | "SCORE" | "FINAL" | "PLAYLIST" | "LOADING" | "CONSENT" | "INFO" | "REDIRECT";
-
-interface ActionProps {
-
-    view: BlockView;
+interface SharedActionProps {
     title?: string;
-    url?: string;
-    next_round?: any[];
-
-    // Some views require additional data
-    button_label?: string;
-    instruction?: string;
-    timer?: number;
-    steps: Step[];
-    body?: string;
-    html?: string;
-    feedback_form?: IFeedbackForm;
-    playback?: PlaybackArgs;
-    config?: TrialConfig;
-
-    // TODO: Think about how to properly handle the typing of different views
-
-    // Score-related
-    score?: number;
-    score_message?: string;
-    texts?: {
-        score: string;
-        next: string;
-        listen_explainer: string;
-    };
-    feedback?: string;
-    icon?: string;
-
-    // Final related
-    feedback_info?: FeedbackInfo;
-    rank?: string;
-    button?: {
-        text: string;
-        link: string;
-    };
-    final_text?: string | TrustedHTML;
-    show_participant_link?: boolean;
-    participant_id_only?: boolean;
-    show_profile_link?: boolean;
-    action_texts?: {
-        all_experiments: string;
-        profile: string;
-        play_again: string;
-    }
-    points?: string;
-    social?: Social;
-    logo?: {
-        image: string;
-        link: string;
-    };
-
-    // Consent related
-    text?: string;
-    confirm?: string;
-    deny?: string;
+    config?: object;
+    style?: object;
 }
 
+type ActionProps = SharedActionProps &
+    (
+        | { view: "CONSENT" } & ConsentProps
+        | { view: "EXPLAINER" } & ExplainerProps
+        | { view: "INFO" } & InfoProps
+        | { view: "TRIAL_VIEW" } & TrialProps
+        | { view: 'SCORE' } & ScoreProps
+        | { view: 'FINAL' } & FinalProps
+        | { view: 'PLAYLIST' } & PlaylistProps
+        | { view: 'REDIRECT' } & RedirectProps
+        | { view: "LOADING" } & LoadingProps
+    )
 
 // Block handles the main (experiment) block flow:
 // - Loads the block and participant
@@ -111,7 +64,7 @@ const Block = () => {
     // Current block state
     const [actions, setActions] = useState([]);
     const [state, setState] = useState<ActionProps | null>(startState);
-    const [key, setKey] = useState(null);
+    const [key, setKey] = useState<number>(Math.random());
     const playlist = useRef(null);
 
     // API hooks
@@ -239,46 +192,57 @@ const Block = () => {
     });
 
     // Render block state
-    const render = (view: BlockView) => {
+    const render = () => {
+
+        if (!state) {
+            return (
+                <div className="text-white bg-danger">
+                    No valid state
+                </div>
+            );
+        }
+
         // Default attributes for every view
         const attrs = {
-            block,
-            participant,
+            block: block!,
+            participant: participant!,
             loadingText,
             onResult,
             onNext,
             playlist,
+            key,
             ...state,
         };
 
         // Show view, based on the unique view ID:
-        switch (view) {
+        switch (attrs.view) {
             // Block views
             // -------------------------
             case "TRIAL_VIEW":
-                return <Trial key={key} {...attrs} />;
+                return <Trial {...attrs} />;
 
             // Information & Scoring
             // -------------------------
             case "EXPLAINER":
-                return <Explainer key={key} {...attrs}/>;
+                return <Explainer {...attrs} />;
             case "SCORE":
-                return <Score key={key} {...attrs} />;
+                return <Score {...attrs} />;
             case "FINAL":
-                return <Final key={key} {...attrs} />;
+                return <Final {...attrs} />;
 
             // Generic / helpers
             // -------------------------
             case "PLAYLIST":
-                return <Playlist key={key} {...attrs} />;
+                return <Playlist {...attrs} />;
             case "LOADING":
-                return <Loading key={key} {...attrs} />;
+                return <Loading {...attrs} />;
             case "CONSENT":
-                return <Consent key={key} {...attrs} />;
+                return <Consent {...attrs} />;
             case "INFO":
-                return <Info key={key} {...attrs} />;
+                return <Info {...attrs} />;
             case "REDIRECT":
-                return window.location.replace(state.url);
+                window.location.replace(state.url);
+                return null;
 
             default:
                 return (
@@ -326,7 +290,7 @@ const Block = () => {
                         }
                         className={className}
                     >
-                        {render(view)}
+                        {render()}
 
                         {block?.feedback_info?.show_float_button && (
                             <FloatingActionButton>
