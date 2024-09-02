@@ -80,7 +80,6 @@ class MusicalPreferences(Base):
                         )
                         return [explainer, *question_trials]
                     else:
-                        playlist = Playlist(session.block.playlists.all())
                         explainer = Explainer(
                             instruction=_("How to play"),
                             steps=[
@@ -96,7 +95,7 @@ class MusicalPreferences(Base):
                             ],
                             button_label=_("Start")
                         )
-                        actions = [playlist, explainer]
+                        actions = [explainer]
                 else:
                     if last_result.question_key == 'audio_check1':
                         playback = get_test_playback()
