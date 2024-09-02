@@ -6,7 +6,7 @@ interface ExplainerStep {
     description: string;
 }
 
-interface ExplainerProps {
+export interface ExplainerProps {
     instruction: string;
     button_label: string;
     steps?: Array<ExplainerStep>;
