@@ -1,7 +1,7 @@
 import { useState, useRef, useCallback } from "react";
 import classNames from "classnames";
 
-import { getCurrentTime, getTimeSince } from "../../util/time";
+import { getCurrentTime, getTimeSince } from "@/util/time";
 import FeedbackForm from "../FeedbackForm/FeedbackForm";
 import HTML from "../HTML/HTML";
 import Playback from "../Playback/Playback";
@@ -9,6 +9,7 @@ import Button from "../Button/Button";
 import Question from "@/types/Question";
 import { OnResultType } from "@/hooks/useResultHandler";
 import { TrialConfig } from "@/types/Trial";
+import { PlaybackArgs } from "@/types/Playback";
 
 export interface IFeedbackForm {
     form: Question[];
@@ -18,7 +19,7 @@ export interface IFeedbackForm {
 }
 
 export interface TrialProps {
-    playback: any;
+    playback: PlaybackArgs;
     html: { body: string | TrustedHTML };
     feedback_form: IFeedbackForm;
     config: TrialConfig;
