@@ -63,7 +63,6 @@ class Speech2Song(Base):
         actions = []
         is_speech = True
         rounds_passed = session.get_rounds_passed(self.counted_result_keys)
-        print(rounds_passed)
         if rounds_passed == 0:
             question_trials = self.get_open_questions(session)
             if question_trials:
@@ -118,7 +117,7 @@ class Speech2Song(Base):
             group_id = blocks[1]
         elif 2 * n_rounds_per_block < rounds_passed <= 3 * n_rounds_per_block:
             group_id = blocks[2]
-        elif rounds_passed == 3 * n_rounds_per_block:
+        elif rounds_passed == 3 * n_rounds_per_block + 1:
             # Final block (environmental sounds)
             e3 = Explainer(
                 instruction=_('Part2'),
