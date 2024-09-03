@@ -13,15 +13,15 @@ from session.models import Session
 
 from result.utils import prepare_result
 
-n_representations = 8
-n_trials_per_block = 8
-n_rounds_per_block = n_trials_per_block * 2  # each trial has two rounds
-
 
 class Speech2Song(Base):
     """ Rules for a speech-to-song experiment """
     ID = 'SPEECH_TO_SONG'
     default_consent_file = 'consent/consent_speech2song.html'
+
+    n_presentations = 8
+    n_trials_per_block = 8
+    n_rounds_per_trial = 2
 
     def __init__(self):
         self.question_series = [
@@ -86,12 +86,12 @@ class Speech2Song(Base):
                 )
                 return [
                     explainer,
-                    *next_repeated_representation(session, is_speech, 0)
+                    *self.next_repeated_representation(session, is_speech, 0)
                 ]
             else:
                 return [
                     self.get_intro_explainer(),
-                    *next_repeated_representation(session, is_speech, 0)
+                    *self.next_repeated_representation(session, is_speech, 0)
                 ]
         elif rounds_passed == 1:
             e1 = Explainer(
@@ -111,13 +111,13 @@ class Speech2Song(Base):
             )
             actions.extend([e1, e2])
             group_id = blocks[0]
-        elif 2 <= rounds_passed <= n_rounds_per_block:
+        elif 2 <= rounds_passed <= self.n_trials_per_block * self.n_rounds_per_trial:
             group_id = blocks[0]
-        elif n_rounds_per_block < rounds_passed <= 2 * n_rounds_per_block:
+        elif self.n_trials_per_block * self.n_rounds_per_trial < rounds_passed <= 2 * self.n_trials_per_block * self.n_rounds_per_trial:
             group_id = blocks[1]
-        elif 2 * n_rounds_per_block < rounds_passed <= 3 * n_rounds_per_block:
+        elif 2 * self.n_trials_per_block * self.n_rounds_per_trial < rounds_passed <= 3 * self.n_trials_per_block * self.n_rounds_per_trial:
             group_id = blocks[2]
-        elif rounds_passed == 3 * n_rounds_per_block + 1:
+        elif rounds_passed == 3 * self.n_trials_per_block * self.n_rounds_per_trial + 1:
             # Final block (environmental sounds)
             e3 = Explainer(
                 instruction=_('Part2'),
@@ -138,7 +138,7 @@ class Speech2Song(Base):
             actions.append(e3)
             group_id = 4
             is_speech = False
-        elif 3 * n_rounds_per_block < rounds_passed <= 4 * n_rounds_per_block:
+        elif 3 * self.n_trials_per_block * self.n_rounds_per_trial < rounds_passed <= 4 * self.n_trials_per_block * self.n_rounds_per_trial:
             group_id = 4
             is_speech = False
         else:
@@ -154,42 +154,42 @@ class Speech2Song(Base):
             )
         if rounds_passed % 2 == 1:
             # even round: single representation (first round are questions only)
-            actions.extend(next_single_representation(
+            actions.extend(self.next_single_representation(
                 session, is_speech, group_id))
         else:
             # uneven round: repeated representation
-            actions.extend(next_repeated_representation(
+            actions.extend(self.next_repeated_representation(
                 session, is_speech))
         return actions
 
 
-def next_single_representation(session: Session, is_speech: bool, group_id: int) -> list:
-    """ combine a question after the first representation,
-    and several repeated representations of the sound,
-    with a final question"""
-    filter_by = {'group': group_id}
-    section = session.playlist.get_section(filter_by, song_ids=session.get_unused_song_ids())
-    actions = [sound(section), speech_or_sound_question(session, section, is_speech)]
-    return actions
+    def next_single_representation(self, session: Session, is_speech: bool, group_id: int) -> list:
+        """ combine a question after the first representation,
+        and several repeated representations of the sound,
+        with a final question"""
+        filter_by = {'group': group_id}
+        section = session.playlist.get_section(filter_by, song_ids=session.get_unused_song_ids())
+        actions = [sound(section), self.speech_or_sound_question(session, section, is_speech)]
+        return actions
 
 
-def next_repeated_representation(session: Session, is_speech: bool, group_id: int = -1) -> list:
-    if group_id == 0:
-        # for the Test case, there is no previous section to look at
-        section = session.playlist.section_set.get(group=group_id)
-    else:
-        section = session.previous_section()
-    actions = [sound(section)] * n_representations
-    actions.append(speech_or_sound_question(session, section, is_speech))
-    return actions
+    def next_repeated_representation(self, session: Session, is_speech: bool, group_id: int = -1) -> list:
+        if group_id == 0:
+            # for the Test case, there is no previous section to look at
+            section = session.playlist.section_set.get(group=group_id)
+        else:
+            section = session.previous_section()
+        actions = [sound(section)] * self.n_presentations
+        actions.append(self.speech_or_sound_question(session, section, is_speech))
+        return actions
 
 
-def speech_or_sound_question(session, section, is_speech) -> Trial:
-    if is_speech:
-        question = question_speech(session, section)
-    else:
-        question = question_sound(session, section)
-    return Trial(playback=None, feedback_form=Form([question]))
+    def speech_or_sound_question(self, session, section, is_speech) -> Trial:
+        if is_speech:
+            question = question_speech(session, section)
+        else:
+            question = question_sound(session, section)
+        return Trial(playback=None, feedback_form=Form([question]))
 
 
 def question_speech(session, section):
