@@ -16,8 +16,6 @@ interface FrontendStyle {
     [key: string]: string | FrontendStyle;
 }
 
-type Labels = { [key: string]: string };
-
 export interface PlaybackArgs {
     view: PlaybackView;
     play_method: PlaybackMethod;
@@ -27,9 +25,10 @@ export interface PlaybackArgs {
     sections: Section[];
     play_from: number;
 
-    labels?: Labels;
+    labels?: string[];
+    image_labels?: string[];
+    images?: string[];
     style?: FrontendStyle;
-    images?: { [key: string]: string };
     mute?: boolean;
     play_once?: boolean;
     resume_play?: boolean;
