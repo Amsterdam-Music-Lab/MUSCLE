@@ -3,7 +3,7 @@ import classNames from "classnames";
 import Circle from "../Circle/Circle";
 import Button from "../Button/Button";
 
-interface ScoreProps {
+export interface ScoreProps {
     last_song?: string;
     score: number;
     score_message: string;

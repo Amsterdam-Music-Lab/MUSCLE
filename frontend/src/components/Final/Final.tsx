@@ -14,7 +14,7 @@ import ISocial from "@/types/Social";
 import Block, { FeedbackInfo } from "@/types/Block";
 import Participant from "@/types/Participant";
 
-interface FinalProps {
+export interface FinalProps {
     block: Block;
     participant: Participant;
     score: number;

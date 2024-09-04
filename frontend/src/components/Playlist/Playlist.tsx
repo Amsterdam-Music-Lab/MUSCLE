@@ -1,7 +1,7 @@
 import Block from "@/types/Block";
 import { MutableRefObject, useEffect } from "react";
 
-interface PlaylistProps {
+export interface PlaylistProps {
     block: Block;
     instruction: string;
     onNext: () => void;
