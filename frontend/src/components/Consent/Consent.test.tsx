@@ -20,15 +20,15 @@ vi.mock('../../API', () => ({
     useConsent: vi.fn(),
 }));
 
-const mockBlock = {
+const mockExperiment = {
     slug: 'test-experiment',
-    loading_text: 'Loading...',
+    name: 'Test'
 };
 
 const getConsentProps: (overrides?: Partial<ConsentProps>) => ConsentProps = (overrides) => ({
     title: 'Consent',
     text: '<p>Consent Text</p>',
-    block: mockBlock,
+    experiment: mockExperiment,
     participant: { csrf_token: '42' },
     onNext: vi.fn(),
     confirm: 'Agree',
@@ -37,15 +37,16 @@ const getConsentProps: (overrides?: Partial<ConsentProps>) => ConsentProps = (ov
 });
 
 describe('Consent', () => {
-    it('renders loading state correctly', () => {
+    it('renders circle while loading', () => {
         (useConsent as Mock).mockReturnValue([null, true]); // Mock loading state
-        const { getByText } = render(<Consent {...getConsentProps({ block: { slug: 'test-experiment', loading_text: 'Loading...' } })} />);
-        expect(document.body.contains(getByText('Loading...'))).toBe(true);
+        const { container } = render(<Consent {...getConsentProps({ experiment: mockExperiment })} />);
+
+        expect(document.body.contains(container.querySelector('.aha__circle'))).toBe(true);
     });
 
     it('renders consent text when not loading', () => {
         (useConsent as Mock).mockReturnValue([null, false]);
-        const { getByText } = render(<Consent {...getConsentProps({ text: '<p>Consent Text</p>', block: { slug: 'test-experiment', loading_text: 'Loading...' } })} />);
+        const { getByText } = render(<Consent {...getConsentProps({ text: '<p>Consent Text</p>', experiment: mockExperiment })} />);
 
         expect(document.body.contains(getByText('Consent Text'))).toBe(true);
     });
@@ -53,7 +54,7 @@ describe('Consent', () => {
     it('calls onNext when Agree button is clicked', async () => {
         (useConsent as Mock).mockReturnValue([null, false]);
         const onNext = vi.fn();
-        const { getByText } = render(<Consent {...getConsentProps({ confirm: 'Agree', block: mockBlock, onNext })} />);
+        const { getByText } = render(<Consent {...getConsentProps({ confirm: 'Agree', experiment: mockExperiment, onNext })} />);
         fireEvent.click(getByText('Agree'));
 
         await waitFor(() => expect(onNext).toHaveBeenCalled());
@@ -70,7 +71,7 @@ describe('Consent', () => {
     it('auto advances if consent is already given', () => {
         (useConsent as Mock).mockReturnValue([true, false]);
         const onNext = vi.fn();
-        render(<Consent {...getConsentProps({ block: mockBlock, onNext })} />);
+        render(<Consent {...getConsentProps({ experiment: mockExperiment, onNext })} />);
         expect(onNext).toHaveBeenCalled();
     });
 
