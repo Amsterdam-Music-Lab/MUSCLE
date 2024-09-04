@@ -9,8 +9,11 @@ from django.forms import (
     CheckboxSelectMultiple,
     TextInput,
 )
-from experiment.models import Experiment, Block, SocialMediaConfig, ExperimentTranslatedContent
+from django.contrib.admin.widgets import RelatedFieldWidgetWrapper
+
+from experiment.models import BlockTranslatedContent, Experiment, Block, SocialMediaConfig, ExperimentTranslatedContent
 from experiment.rules import BLOCK_RULES
+from django.db.models.fields.related import ManyToManyRel
 
 
 # session_keys for Export CSV
@@ -210,6 +213,11 @@ class ExperimentTranslatedContentForm(ModelForm):
     class Meta:
         model = ExperimentTranslatedContent
         fields = [
+            "index",
+            "language",
+            "name",
+            "description",
+            "consent",
             "about_content",
         ]
 
@@ -257,6 +265,7 @@ class BlockForm(ModelForm):
     class Meta:
         model = Block
         fields = [
+            "index",
             "name",
             "slug",
             "active",

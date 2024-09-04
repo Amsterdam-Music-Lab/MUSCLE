@@ -9,7 +9,7 @@ export interface PlaylistProps {
 }
 
 /**
- * Playlist is an block view, that handles (auto)selection of a playlist
+ * Playlist is a block view, that handles (auto)selection of a playlist
  */
 const Playlist = ({ block, instruction, onNext, playlist }: PlaylistProps) => {
     const playlists = block.playlists;

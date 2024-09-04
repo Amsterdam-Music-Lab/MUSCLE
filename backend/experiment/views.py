@@ -122,7 +122,7 @@ def get_experiment(
     experiment_language = translated_content.language
     activate(experiment_language)
 
-    phases = list(Phase.objects.filter(series=experiment.id).order_by("index"))
+    phases = list(Phase.objects.filter(experiment=experiment.id).order_by("index"))
     try:
         current_phase = phases[phase_index]
         serialized_phase = serialize_phase(current_phase, participant)

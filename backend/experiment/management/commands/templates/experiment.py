@@ -9,7 +9,7 @@ from session.models import Session
 
 
 class NewBlockRuleset(Base):
-    ''' An block type that could be used to test musical preferences '''
+    ''' A block type that could be used to test musical preferences '''
     ID = 'NEW_BLOCK_RULESET'
     contact_email = 'info@example.com'
 

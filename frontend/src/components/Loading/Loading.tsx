@@ -6,7 +6,7 @@ export interface LoadingProps {
 }
 
 /**
- * Loading is an block view that shows a loading screen
+ * Loading is a block view that shows a loading screen
  * It is normally set by code during loading of data
  */
 const Loading = ({ duration = 2, loadingText = '' }: LoadingProps) => {
