@@ -55,7 +55,7 @@ const Experiment = () => {
         const attrs = {
             participant,
             onNext,
-            experiment: experiment,
+            experiment,
             ...experiment.consent,
         }
         return (
