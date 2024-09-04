@@ -5,7 +5,6 @@ import classNames from "classnames";
 
 import useBoundStore from "@/util/stores";
 import { getNextRound, useBlock } from "@/API";
-import Consent, { ConsentProps } from "@/components/Consent/Consent";
 import DefaultPage from "@/components/Page/DefaultPage";
 import Explainer, { ExplainerProps } from "@/components/Explainer/Explainer";
 import Final, { FinalProps } from "@/components/Final/Final";
@@ -29,7 +28,6 @@ interface SharedActionProps {
 
 type ActionProps = SharedActionProps &
     (
-        | { view: "CONSENT" } & ConsentProps
         | { view: "EXPLAINER" } & ExplainerProps
         | { view: "INFO" } & InfoProps
         | { view: "TRIAL_VIEW" } & TrialProps
@@ -81,33 +79,17 @@ const Block = () => {
         setKey(Math.random());
     }, []);
 
-    const updateActions = useCallback((currentActions) => {
+    const updateActions = useCallback((currentActions: []) => {
         const newActions = currentActions;
         setActions(newActions);
         const newState = newActions.shift();
         updateState(newState);
     }, [updateState]);
 
-    /**
-     * @deprecated
-     */
-    const checkSession = async (): Promise<Session | void> => {
-        if (session) {
-            return session;
-        }
-
-        if (block?.session_id) {
-            const newSession = { id: block.session_id };
-            setSession(newSession);
-            return newSession;
-        }
-    };
-
-    const continueToNextRound = async () => {
-        const thisSession = await checkSession();
+    const continueToNextRound = async (activeSession: Session) => {
         // Try to get next_round data from server
         const round = await getNextRound({
-            session: thisSession
+            session: activeSession
         });
         if (round) {
             updateActions(round.next_round);
@@ -124,7 +106,7 @@ const Block = () => {
         if (!doBreak && actions.length) {
             updateActions(actions);
         } else {
-            continueToNextRound();
+            continueToNextRound(session as Session);
         }
     };
 
@@ -134,7 +116,6 @@ const Block = () => {
         if (!loadingBlock && participant) {
             // Loading succeeded
             if (block) {
-                setSession(null);
                 // Set Helmet Head data
                 setHeadData({
                     title: block.name,
@@ -150,6 +131,8 @@ const Block = () => {
 
                 if (block.session_id) {
                     setSession({ id: block.session_id });
+                } else if (!block.session_id && session) {
+                    setError('Session could not be created');
                 }
 
                 // Set theme
@@ -159,11 +142,8 @@ const Block = () => {
                     setTheme(null);
                 }
 
-                if (block.next_round.length) {
-                    updateActions([...block.next_round]);
-                } else {
-                    setError("The first_round array from the ruleset is empty")
-                }
+                continueToNextRound({ id: block.session_id });
+
             } else {
                 // Loading error
                 setError("Could not load block");
@@ -235,9 +215,7 @@ const Block = () => {
             case "PLAYLIST":
                 return <Playlist {...attrs} />;
             case "LOADING":
-                return <Loading {...attrs} />;
-            case "CONSENT":
-                return <Consent {...attrs} />;
+                return <Loading key={key} {...attrs} />;
             case "INFO":
                 return <Info {...attrs} />;
             case "REDIRECT":
@@ -267,10 +245,10 @@ const Block = () => {
             className={classNames(
                 "aha__block",
                 !loadingBlock && block
-                    ? "experiment-" + block.slug
+                    ? "block-" + block.slug
                     : ""
             )}
-            data-testid="experiment-wrapper"
+            data-testid="block-wrapper"
         >
             <CSSTransition
                 timeout={{ enter: 300, exit: 0 }}
@@ -304,7 +282,7 @@ const Block = () => {
                     </DefaultPage>
                 ) : (
                     <div className="loader-container">
-                        <Loading />
+                        <Loading loadingText={loadingText} />
                     </div>
                 )}
 

@@ -1,8 +1,8 @@
-import { ExtendedBlock } from "@/types/Block";
+import Block from "@/types/Block";
 import { MutableRefObject, useEffect } from "react";
 
 export interface PlaylistProps {
-    block: ExtendedBlock;
+    block: Block;
     instruction: string;
     onNext: () => void;
     playlist: MutableRefObject<string>;
