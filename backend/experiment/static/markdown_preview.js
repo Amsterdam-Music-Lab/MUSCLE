@@ -1,6 +1,5 @@
 class MarkdownPreview extends HTMLElement {
     constructor() {
-
         super();
         const shadow = this.attachShadow({ mode: 'open' });
 
@@ -175,38 +174,76 @@ function renderMarkdown(textarea, markdownPreview) {
         });
 }
 
-document.addEventListener('DOMContentLoaded', function () {
+function initializeMarkdownWidget(widget) {
+    const tabs = widget.querySelectorAll('.tab');
+    const textarea = widget.querySelector('textarea');
+    const markdownPreview = widget.querySelector('markdown-preview');
 
-    const markdownWidgets = document.querySelectorAll('.markdown-preview-text-input');
-
-    markdownWidgets.forEach(function (widget) {
-        const tabs = widget.querySelectorAll('.tab');
-        const tabContents = widget.querySelectorAll('.tab-content');
-
-        tabs.forEach(function (tab, index) {
-            tab.addEventListener('click', function () {
-                tabs.forEach(function (tab) {
-                    tab.classList.remove('active');
-                });
-
-                tab.classList.add('active');
-
-                tabContents.forEach(function (tabContent) {
-                    tabContent.classList.remove('active');
-                });
-
-                tabContents[index].classList.add('active');
-            });
-        });
-
-        const textarea = widget.querySelector('textarea');
-        const markdownPreview = widget.querySelector('#markdownPreview');
-
-        textarea.addEventListener('blur', function () {
-            renderMarkdown(textarea, markdownPreview);
-        });
-
-        renderMarkdown(textarea, markdownPreview);
+    // Remove existing event listeners before adding new ones
+    tabs.forEach(tab => {
+        tab.removeEventListener('click', tabClickHandler);
+        tab.addEventListener('click', tabClickHandler);
     });
 
+    textarea.removeEventListener('blur', textareaBlurHandler);
+    textarea.addEventListener('blur', textareaBlurHandler);
+
+    // Initial render
+    renderMarkdown(textarea, markdownPreview);
+}
+
+function tabClickHandler(event) {
+    const widget = event.target.closest('.markdown-preview-text-input');
+    const tabs = widget.querySelectorAll('.tab');
+    const tabContents = widget.querySelectorAll('.tab-content');
+    const clickedIndex = Array.from(tabs).indexOf(event.target);
+
+    tabs.forEach(tab => tab.classList.remove('active'));
+    event.target.classList.add('active');
+
+    tabContents.forEach(content => content.classList.remove('active'));
+    tabContents[clickedIndex].classList.add('active');
+}
+
+function textareaBlurHandler(event) {
+    const widget = event.target.closest('.markdown-preview-text-input');
+    const markdownPreview = widget.querySelector('markdown-preview');
+    renderMarkdown(event.target, markdownPreview);
+}
+
+function initializeAllMarkdownWidgets() {
+    const markdownWidgets = document.querySelectorAll('.markdown-preview-text-input');
+    markdownWidgets.forEach(initializeMarkdownWidget);
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+    initializeAllMarkdownWidgets();
+
+    // Set up a MutationObserver to watch for new elements
+    const targetNode = document.body;
+    const config = { childList: true, subtree: true };
+
+    const callback = function (mutationsList, observer) {
+        for (let mutation of mutationsList) {
+            if (mutation.type === 'childList') {
+                mutation.addedNodes.forEach(node => {
+                    if (node.nodeType === Node.ELEMENT_NODE) {
+                        const newWidgets = node.querySelectorAll('.markdown-preview-text-input');
+                        newWidgets.forEach(initializeMarkdownWidget);
+                    }
+                });
+            }
+        }
+    };
+
+    const observer = new MutationObserver(callback);
+    observer.observe(targetNode, config);
+});
+
+// Handle Django's formset 'add' button
+document.addEventListener('click', function (event) {
+    if (event.target.classList.contains('add-form-row')) {
+        // Wait for Django to add the new form to the DOM
+        setTimeout(initializeAllMarkdownWidgets, 0);
+    }
 });
