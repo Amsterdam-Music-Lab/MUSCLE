@@ -119,13 +119,20 @@ const Trial = (props: TrialProps) => {
         [feedback_form, config, onNext, onResult, result_id]
     );
 
-    const checkBreakRound = (values, breakConditions) => {
+    const checkBreakRound = (
+        values: string[],
+        breakConditions: TrialConfig['break_round_on']
+    ) => {
         switch (Object.keys(breakConditions)[0]) {
             case 'EQUALS':
-                return values.some(val => breakConditions['EQUALS']
-                    .includes(val));
+                return values
+                    .some(
+                        val => breakConditions['EQUALS']!.includes(val)
+                    );
             case 'NOT':
-                return !values.some(val => breakConditions['NOT'].includes(val));
+                return !values.some(
+                    val => breakConditions['NOT']!.includes(val)
+                );
             default:
                 return false;
         }
