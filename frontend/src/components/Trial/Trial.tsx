@@ -83,9 +83,7 @@ const Trial = (props: TrialProps) => {
                 return;
             }
 
-            // TODO: Check if we can find another solution for
-            // the default value of form than [{}]
-            const form = feedback_form ? feedback_form.form : [{}];
+            const { form } = feedback_form;
 
             if (result.type === "time_passed") {
                 form.map((formElement) => (formElement.value = "TIMEOUT"));
