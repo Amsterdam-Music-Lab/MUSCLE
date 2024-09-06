@@ -69,41 +69,7 @@ const Trial = (props: TrialProps) => {
             }
             submitted.current = true;
 
-            if (feedback_form) {
-
-                // TODO: Check if we can find another solution for
-                // the default value of form than [{}]
-                const form = feedback_form ? feedback_form.form : [{}];
-
-                if (result.type === "time_passed") {
-                    form.map((formElement) => (formElement.value = "TIMEOUT"));
-                }
-
-                if (feedback_form.is_skippable) {
-                    form.map((formElement => (formElement.value = formElement.value || '')))
-                }
-
-                const breakRoundOn = config.break_round_on;
-                const shouldBreakRound = breakRoundOn && checkBreakRound(form.map((formElement) => formElement.value), breakRoundOn);
-                const shouldCallOnNextInOnResult = !shouldBreakRound
-
-                await onResult(
-                    {
-                        decision_time: getAndStoreDecisionTime(),
-                        form,
-                        config
-                    },
-                    false,
-                    // if we break the round, we don't want to call onNext in onResult
-                    shouldCallOnNextInOnResult
-                );
-
-                if (shouldBreakRound) {
-                    onNext(true);
-                }
-
-            } else {
-
+            if (!feedback_form) {
 
                 if (result_id) {
                     onResult({
@@ -114,7 +80,40 @@ const Trial = (props: TrialProps) => {
                     onNext();
                 }
 
+                return;
             }
+
+            // TODO: Check if we can find another solution for
+            // the default value of form than [{}]
+            const form = feedback_form ? feedback_form.form : [{}];
+
+            if (result.type === "time_passed") {
+                form.map((formElement) => (formElement.value = "TIMEOUT"));
+            }
+
+            if (feedback_form.is_skippable) {
+                form.map((formElement => (formElement.value = formElement.value || '')))
+            }
+
+            const breakRoundOn = config.break_round_on;
+            const shouldBreakRound = breakRoundOn && checkBreakRound(form.map((formElement) => formElement.value), breakRoundOn);
+            const shouldCallOnNextInOnResult = !shouldBreakRound
+
+            await onResult(
+                {
+                    decision_time: getAndStoreDecisionTime(),
+                    form,
+                    config
+                },
+                false,
+                // if we break the round, we don't want to call onNext in onResult
+                shouldCallOnNextInOnResult
+            );
+
+            if (shouldBreakRound) {
+                onNext(true);
+            }
+
         },
         [feedback_form, config, onNext, onResult, result_id]
     );
