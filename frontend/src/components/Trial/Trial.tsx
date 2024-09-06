@@ -69,15 +69,15 @@ const Trial = (props: TrialProps) => {
             }
             submitted.current = true;
 
-            // TODO: Check if we can find another solution for
-            // the default value of form than [{}]
-            const form = feedback_form ? feedback_form.form : [{}];
-
-            if (result.type === "time_passed") {
-                form.map((formElement) => (formElement.value = "TIMEOUT"));
-            }
-
             if (feedback_form) {
+
+                // TODO: Check if we can find another solution for
+                // the default value of form than [{}]
+                const form = feedback_form ? feedback_form.form : [{}];
+
+                if (result.type === "time_passed") {
+                    form.map((formElement) => (formElement.value = "TIMEOUT"));
+                }
 
                 if (feedback_form.is_skippable) {
                     form.map((formElement => (formElement.value = formElement.value || '')))
