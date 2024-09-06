@@ -158,4 +158,65 @@ describe('Trial', () => {
             );
         });
     });
+
+    it("calls onResult when form is not defined", async () => {
+        const formless_feedback_form = {
+            ...feedback_form,
+            form: undefined
+        };
+        render(<Trial
+            config={defaultConfig}
+            onNext={mockOnNext}
+            onResult={mockOnResult}
+            feedback_form={formless_feedback_form}
+        />);
+        fireEvent.click(screen.getByTestId('mock-feedback-form'));
+        await waitFor(() => {
+            expect(mockOnResult).toHaveBeenCalled();
+        });
+    });
+
+    it("calls onResult and onNext when form is not defined and break_round_on is met", async () => {
+        const formless_feedback_form = {
+            ...feedback_form,
+            form: undefined
+        };
+        const config = {
+            ...defaultConfig,
+            break_round_on: { NOT: ['fast'] }
+        };
+        render(<Trial
+            config={config}
+            onNext={mockOnNext}
+            onResult={mockOnResult}
+            feedback_form={formless_feedback_form}
+        />);
+        fireEvent.click(screen.getByTestId('mock-feedback-form'));
+        await waitFor(() => {
+            expect(mockOnResult).toHaveBeenCalled();
+            expect(mockOnNext).toHaveBeenCalledTimes(1);
+        });
+    });
+
+    it("calls only onResult when form is not defined and break_round_on is NOT met", async () => {
+        const formless_feedback_form = {
+            ...feedback_form,
+            form: undefined
+        };
+        const config = {
+            ...defaultConfig,
+            break_round_on: { NOT: ['slow'] }
+        };
+        render(<Trial
+            config={config}
+            onNext={mockOnNext}
+            onResult={mockOnResult}
+            feedback_form={formless_feedback_form}
+        />);
+        fireEvent.click(screen.getByTestId('mock-feedback-form'));
+        await waitFor(() => {
+            expect(mockOnResult).toHaveBeenCalled();
+            expect(mockOnNext).not.toHaveBeenCalled();
+        });
+    });
 });

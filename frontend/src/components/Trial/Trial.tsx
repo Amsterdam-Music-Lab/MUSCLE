@@ -63,10 +63,12 @@ const Trial = (props: TrialProps) => {
     // Create result data
     const makeResult = useCallback(
         async (result: { type: 'time_passed' }) => {
+
             // Prevent multiple submissions
             if (submitted.current) {
                 return;
             }
+
             submitted.current = true;
 
             if (!feedback_form) {
@@ -83,7 +85,7 @@ const Trial = (props: TrialProps) => {
                 return;
             }
 
-            const { form } = feedback_form;
+            const { form = [] } = feedback_form;
 
             if (result.type === "time_passed") {
                 form.map((formElement) => (formElement.value = "TIMEOUT"));
