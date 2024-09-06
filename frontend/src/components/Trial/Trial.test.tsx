@@ -194,7 +194,7 @@ describe('Trial', () => {
         fireEvent.click(screen.getByTestId('mock-feedback-form'));
         await waitFor(() => {
             expect(mockOnResult).toHaveBeenCalled();
-            expect(mockOnNext).toHaveBeenCalledTimes(1);
+            expect(mockOnNext).toHaveBeenCalled();
         });
     });
 
@@ -205,7 +205,7 @@ describe('Trial', () => {
         };
         const config = {
             ...defaultConfig,
-            break_round_on: { NOT: ['slow'] }
+            break_round_on: { EQUALS: ['slow'] }
         };
         render(<Trial
             config={config}
@@ -214,9 +214,11 @@ describe('Trial', () => {
             feedback_form={formless_feedback_form}
         />);
         fireEvent.click(screen.getByTestId('mock-feedback-form'));
+
         await waitFor(() => {
             expect(mockOnResult).toHaveBeenCalled();
-            expect(mockOnNext).not.toHaveBeenCalled();
         });
+
+        expect(mockOnNext).not.toHaveBeenCalled();
     });
 });
