@@ -5,6 +5,17 @@ from django.core.files.base import File
 from pathlib import Path
 
 
+def get_rules(block):
+    """Get instance of rules class to be used for this session"""
+    from experiment.rules import BLOCK_RULES
+
+    if block.rules not in BLOCK_RULES:
+        raise ValueError(f"Rules do not exist (anymore): {block.rules} for block {block.name} ({block.slug})")
+
+    cl = BLOCK_RULES[block.rules]
+    return cl()
+
+
 def migrate_block_content(apps, schema_editor):
     Block = apps.get_model("experiment", "Block")
     BlockTranslatedContent = apps.get_model("experiment", "BlockTranslatedContent")
@@ -35,9 +46,9 @@ def migrate_block_content(apps, schema_editor):
             description=block.description,
         )
 
+        # Attempt to add consent file
         try:
-            # Attempt to add consent file
-            rules = block.get_rules()
+            rules = get_rules(block)
             consent_path = Path("experiment", "templates", rules.default_consent_file)
             with consent_path.open(mode="rb") as f:
                 content.consent = File(f, name=consent_path.name)
