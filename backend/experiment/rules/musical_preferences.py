@@ -3,7 +3,7 @@ from django.conf import settings
 from django.utils.translation import gettext_lazy as _
 from django.template.loader import render_to_string
 
-from experiment.actions import Explainer, Final, HTML, Playlist, Redirect, Step, Trial
+from experiment.actions import Explainer, Final, HTML, Redirect, Step, Trial
 from experiment.actions.form import BooleanQuestion, ChoiceQuestion, Form, LikertQuestionIcon
 from experiment.actions.playback import Autoplay
 from experiment.actions.styles import STYLE_BOOLEAN, STYLE_BOOLEAN_NEGATIVE_FIRST
@@ -19,10 +19,15 @@ from .huang_2022 import get_test_playback
 
 
 class MusicalPreferences(Base):
+    ''' This rules file presents repeated trials with a combined form:
+    participants are asked to state how much they like the song, and whether they know the song
+    after 21 and 42 rounds, participants see summaries of their choices,
+    and at the final round, participants see other participants' preferred songs
+    '''
     ID = 'MUSICAL_PREFERENCES'
     default_consent_file = 'consent/consent_musical_preferences.html'
-    preference_offset = 21
-    knowledge_offset = 42
+    preference_offset = 21 # after this many rounds rounds, show information with the participant's preferences
+    knowledge_offset = 42 # after this many rounds, show additionally how many songs the participant knows
     contact_email = 'musicexp_china@163.com'
     counted_result_keys = ['like_song']
 
