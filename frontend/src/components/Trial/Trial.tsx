@@ -95,9 +95,8 @@ const Trial = (props: TrialProps) => {
                 form.map((formElement => (formElement.value = formElement.value || '')))
             }
 
-            const breakRoundOn = config.break_round_on;
-            const shouldBreakRound = breakRoundOn && checkBreakRound(form.map((formElement) => formElement.value), breakRoundOn);
-            const shouldCallOnNextInOnResult = !shouldBreakRound
+            const breakRoundConditions = config.break_round_on;
+            const shouldBreakRound = breakRoundConditions && checkBreakRound(form.map((formElement) => formElement.value), breakRoundConditions);
 
             await onResult(
                 {
@@ -106,8 +105,9 @@ const Trial = (props: TrialProps) => {
                     config
                 },
                 false,
-                // if we break the round, we don't want to call onNext in onResult
-                shouldCallOnNextInOnResult
+                // if we break the round, we don't want to call `onNext` in `onResult`
+                // as it does not allow us to pass a `breakRound` flag
+                !shouldBreakRound
             );
 
             if (shouldBreakRound) {
