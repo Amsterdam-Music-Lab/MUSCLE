@@ -35,9 +35,9 @@ def migrate_block_content(apps, schema_editor):
             description=block.description,
         )
 
-        # Attempt to add consent file
-        rules = block.get_rules()
         try:
+            # Attempt to add consent file
+            rules = block.get_rules()
             consent_path = Path("experiment", "templates", rules.default_consent_file)
             with consent_path.open(mode="rb") as f:
                 content.consent = File(f, name=consent_path.name)
