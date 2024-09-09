@@ -3,6 +3,9 @@
 from django.db import migrations
 from django.core.files.base import File
 from pathlib import Path
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 def get_rules(block):
@@ -59,6 +62,10 @@ def migrate_block_content(apps, schema_editor):
                 content.save()
         except Exception:
             # If there's an error, we'll just skip adding the consent file
+            # and log the error
+            rules_id = block.rules if hasattr(block, "rules") else "No rules"
+            logger.error(f"Error adding consent file for block {block.name} ({block.slug}) with rules {rules_id}")
+
             pass
 
 
