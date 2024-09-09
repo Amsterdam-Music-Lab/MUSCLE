@@ -180,6 +180,10 @@ class ModelFormFieldAsJSON(ModelMultipleChoiceField):
 class MarkdownPreviewTextInput(TextInput):
     template_name = "widgets/markdown_preview_text_input.html"
 
+    class Media:
+        css = {"all": ["markdown_preview.css"]}
+        js = ["markdown_preview.js"]
+
 
 class ExperimentForm(ModelForm):
     def __init__(self, *args, **kwargs):
