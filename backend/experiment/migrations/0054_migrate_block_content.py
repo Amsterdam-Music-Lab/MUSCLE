@@ -3,6 +3,20 @@
 from django.db import migrations
 from django.core.files.base import File
 from pathlib import Path
+import logging
+
+logger = logging.getLogger(__name__)
+
+
+def get_rules(block):
+    """Get instance of rules class to be used for this session"""
+    from experiment.rules import BLOCK_RULES
+
+    if block.rules not in BLOCK_RULES:
+        raise ValueError(f"Rules do not exist (anymore): {block.rules} for block {block.name} ({block.slug})")
+
+    cl = BLOCK_RULES[block.rules]
+    return cl()
 
 
 def migrate_block_content(apps, schema_editor):
@@ -35,20 +49,22 @@ def migrate_block_content(apps, schema_editor):
             description=block.description,
         )
 
+        phase = Phase.objects.create(experiment=experiment, index=0, name=f"{block.name}_phase")
+        block.phase = phase
+        block.save()
+
         # Attempt to add consent file
-        rules = block.get_rules()
         try:
+            rules = get_rules(block)
             consent_path = Path("experiment", "templates", rules.default_consent_file)
             with consent_path.open(mode="rb") as f:
                 content.consent = File(f, name=consent_path.name)
                 content.save()
         except Exception:
             # If there's an error, we'll just skip adding the consent file
-            pass
-
-        phase = Phase.objects.create(experiment=experiment, index=0, name=f"{block.name}_phase")
-        block.phase = phase
-        block.save()
+            # and log the error
+            rules_id = block.rules if hasattr(block, "rules") else "No rules"
+            logger.error(f"Error adding consent file for block {block.name} ({block.slug}) with rules {rules_id}")
 
 
 def reverse_migrate_block_content(apps, schema_editor):
