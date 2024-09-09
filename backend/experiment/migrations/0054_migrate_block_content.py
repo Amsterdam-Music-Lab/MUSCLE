@@ -46,6 +46,10 @@ def migrate_block_content(apps, schema_editor):
             description=block.description,
         )
 
+        phase = Phase.objects.create(experiment=experiment, index=0, name=f"{block.name}_phase")
+        block.phase = phase
+        block.save()
+
         # Attempt to add consent file
         try:
             rules = get_rules(block)
@@ -56,10 +60,6 @@ def migrate_block_content(apps, schema_editor):
         except Exception:
             # If there's an error, we'll just skip adding the consent file
             pass
-
-        phase = Phase.objects.create(experiment=experiment, index=0, name=f"{block.name}_phase")
-        block.phase = phase
-        block.save()
 
 
 def reverse_migrate_block_content(apps, schema_editor):
