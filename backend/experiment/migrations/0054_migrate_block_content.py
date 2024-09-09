@@ -66,8 +66,6 @@ def migrate_block_content(apps, schema_editor):
             rules_id = block.rules if hasattr(block, "rules") else "No rules"
             logger.error(f"Error adding consent file for block {block.name} ({block.slug}) with rules {rules_id}")
 
-            pass
-
 
 def reverse_migrate_block_content(apps, schema_editor):
     Block = apps.get_model("experiment", "Block")
