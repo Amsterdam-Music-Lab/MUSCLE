@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.test import TestCase
 from django.utils import timezone
+from django.core.files.uploadedfile import SimpleUploadedFile
 
 from image.models import Image
 from experiment.serializers import serialize_block, serialize_phase
@@ -31,14 +32,14 @@ class TestExperimentViews(TestCase):
             experiment=experiment, language="en", name="Test Series", description="Test Description"
         )
         experiment.social_media_config = create_social_media_config(experiment)
-        introductory_phase = Phase.objects.create(name="introduction", series=experiment, index=1)
+        introductory_phase = Phase.objects.create(name="introduction", experiment=experiment, index=1)
         cls.block1 = Block.objects.create(name="block1", slug="block1", phase=introductory_phase)
-        intermediate_phase = Phase.objects.create(name="intermediate", series=experiment, index=2)
+        intermediate_phase = Phase.objects.create(name="intermediate", experiment=experiment, index=2)
         cls.block2 = Block.objects.create(
             name="block2", slug="block2", theme_config=theme_config, phase=intermediate_phase
         )
         cls.block3 = Block.objects.create(name="block3", slug="block3", phase=intermediate_phase)
-        final_phase = Phase.objects.create(name="final", series=experiment, index=3)
+        final_phase = Phase.objects.create(name="final", experiment=experiment, index=3)
         cls.block4 = Block.objects.create(name="block4", slug="block4", phase=final_phase)
 
     def test_get_experiment(self):
@@ -189,7 +190,11 @@ class TestExperimentViews(TestCase):
 
 class ExperimentViewsTest(TestCase):
     def test_serialize_block(self):
-        # Create an block
+        # Create the experiment & phase for the block
+        experiment = Experiment.objects.create(slug="test-experiment")
+        phase = Phase.objects.create(experiment=experiment)
+
+        # Create a block
         block = Block.objects.create(
             slug="test-block",
             name="Test Block",
@@ -204,6 +209,7 @@ class ExperimentViewsTest(TestCase):
                 target="_self",
             ),
             theme_config=create_theme_config(),
+            phase=phase,
         )
         participant = Participant.objects.create()
         Session.objects.bulk_create(
@@ -232,7 +238,16 @@ class ExperimentViewsTest(TestCase):
         )
 
     def test_get_block(self):
-        # Create an block
+        # Create a block
+        experiment = Experiment.objects.create(slug="test-experiment")
+        ExperimentTranslatedContent.objects.create(
+            experiment=experiment,
+            language="en",
+            name="Test Experiment",
+            description="Test Description",
+            consent=SimpleUploadedFile("test-consent.md", b"test consent"),
+        )
+        phase = Phase.objects.create(experiment=experiment)
         block = Block.objects.create(
             slug="test-block",
             name="Test Block",
@@ -242,6 +257,7 @@ class ExperimentViewsTest(TestCase):
             theme_config=create_theme_config(),
             rounds=3,
             bonus_points=42,
+            phase=phase,
         )
         participant = Participant.objects.create()
         participant.save()

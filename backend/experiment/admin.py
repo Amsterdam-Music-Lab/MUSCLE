@@ -3,18 +3,21 @@ from zipfile import ZipFile
 from io import BytesIO
 
 from django.conf import settings
-from django.contrib import admin
+from django.contrib import admin, messages
 from django.db import models
 from django.utils import timezone
 from django.core import serializers
 from django.shortcuts import render, redirect
 from django.forms import CheckboxSelectMultiple
 from django.http import HttpResponse
+
 from inline_actions.admin import InlineActionsModelAdminMixin
 from django.urls import reverse
 from django.utils.html import format_html
 
 from nested_admin import NestedModelAdmin, NestedStackedInline, NestedTabularInline
+
+from experiment.utils import check_missing_translations, get_flag_emoji, get_missing_content_blocks
 
 from experiment.models import (
     Block,
@@ -23,10 +26,12 @@ from experiment.models import (
     Feedback,
     SocialMediaConfig,
     ExperimentTranslatedContent,
+    BlockTranslatedContent,
 )
 from question.admin import QuestionSeriesInline
 from experiment.forms import (
     ExperimentForm,
+    ExperimentTranslatedContentForm,
     BlockForm,
     ExportForm,
     TemplateForm,
@@ -46,9 +51,19 @@ class FeedbackInline(admin.TabularInline):
     extra = 0
 
 
+class BlockTranslatedContentInline(NestedTabularInline):
+    model = BlockTranslatedContent
+
+    def get_extra(self, request, obj=None, **kwargs):
+        if obj:
+            return 0
+        return 1
+
+
 class ExperimentTranslatedContentInline(NestedStackedInline):
     model = ExperimentTranslatedContent
     sortable_field_name = "index"
+    form = ExperimentTranslatedContentForm
 
     def get_extra(self, request, obj=None, **kwargs):
         if obj:
@@ -75,18 +90,14 @@ class BlockAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
         "description",
         "image",
         "slug",
-        "url",
-        "hashtag",
         "theme_config",
-        "language",
         "active",
         "rules",
         "rounds",
         "bonus_points",
         "playlists",
-        "consent",
     ]
-    inlines = [QuestionSeriesInline, FeedbackInline]
+    inlines = [QuestionSeriesInline, FeedbackInline, BlockTranslatedContentInline]
     form = BlockForm
 
     # make playlists fields a list of checkboxes
@@ -232,6 +243,8 @@ admin.site.register(Block, BlockAdmin)
 class BlockInline(NestedStackedInline):
     model = Block
     sortable_field_name = "index"
+    inlines = [BlockTranslatedContentInline]
+    form = BlockForm
 
     def get_extra(self, request, obj=None, **kwargs):
         if obj:
@@ -289,6 +302,7 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, NestedModelAdmin):
 
     def name(self, obj):
         content = obj.get_fallback_content()
+
         return content.name if content else "No name"
 
     def slug_link(self, obj):
@@ -300,17 +314,15 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, NestedModelAdmin):
         )
 
     def description_excerpt(self, obj):
-        fallback_content = obj.get_fallback_content()
-        description = (
-            fallback_content.description if fallback_content and fallback_content.description else "No description"
-        )
+        experiment_fallback_content = obj.get_fallback_content()
+        description = experiment_fallback_content.description if experiment_fallback_content else "No description"
         if len(description) < 50:
             return description
 
         return description[:50] + "..."
 
     def phases(self, obj):
-        phases = Phase.objects.filter(series=obj)
+        phases = Phase.objects.filter(experiment=obj)
         return format_html(
             ", ".join([f'<a href="/admin/experiment/phase/{phase.id}/change/">{phase.name}</a>' for phase in phases])
         )
@@ -382,13 +394,21 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, NestedModelAdmin):
                 }
             )
 
-        if not remarks_array:
-            remarks_array.append({"level": "success", "message": "✅ All good", "title": "No issues found."})
-
         supported_languages = obj.translated_content.values_list("language", flat=True).distinct()
 
-        # TODO: Check if all blocks support the same languages as the experiment
-        # Implement this when the blocks have been updated to support multiple languages
+        missing_content_block_translations = check_missing_translations(obj)
+
+        if missing_content_block_translations:
+            remarks_array.append(
+                {
+                    "level": "warning",
+                    "message": "🌍 Missing block content",
+                    "title": missing_content_block_translations,
+                }
+            )
+
+        if not remarks_array:
+            remarks_array.append({"level": "success", "message": "✅ All good", "title": "No issues found."})
 
         # TODO: Check if all theme configs support the same languages as the experiment
         # Implement this when the theme configs have been updated to support multiple languages
@@ -399,11 +419,27 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, NestedModelAdmin):
         return format_html(
             "\n".join(
                 [
-                    f'<span class="badge badge-{remark["level"]} whitespace-nowrap text-xs mt-1" title="{remark.get("title") if remark.get("title") else remark["message"]}">{remark["message"]}</span>'
+                    f'<span class="badge badge-{remark["level"]} whitespace-nowrap text-xs mt-1" title="{remark.get("title") if remark.get("title") else remark["message"]}">{remark["message"]}</span><br>'
                     for remark in remarks_array
                 ]
             )
         )
+
+    def save_model(self, request, obj, form, change):
+        # Save the model
+        super().save_model(request, obj, form, change)
+
+        # Check for missing translations after saving
+        missing_content_blocks = get_missing_content_blocks(obj)
+
+        if missing_content_blocks:
+            for block, missing_languages in missing_content_blocks:
+                missing_language_flags = [get_flag_emoji(language) for language in missing_languages]
+                self.message_user(
+                    request,
+                    f"Block {block.name} does not have content in {', '.join(missing_language_flags)}",
+                    level=messages.WARNING,
+                )
 
 
 admin.site.register(Experiment, ExperimentAdmin)
@@ -418,7 +454,7 @@ class PhaseAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
         "randomize",
         "blocks",
     )
-    fields = ["name", "series", "index", "dashboard", "randomize"]
+    fields = ["name", "experiment", "index", "dashboard", "randomize"]
     inlines = [BlockInline]
 
     def name_link(self, obj):
@@ -427,8 +463,8 @@ class PhaseAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
         return format_html('<a href="{}">{}</a>', url, obj_name)
 
     def related_experiment(self, obj):
-        url = reverse("admin:experiment_experiment_change", args=[obj.series.pk])
-        content = obj.series.get_fallback_content()
+        url = reverse("admin:experiment_experiment_change", args=[obj.experiment.pk])
+        content = obj.experiment.get_fallback_content()
         experiment_name = content.name if content else "No name"
         return format_html('<a href="{}">{}</a>', url, experiment_name)
 
@@ -444,3 +480,24 @@ class PhaseAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
 
 
 admin.site.register(Phase, PhaseAdmin)
+
+
+@admin.register(BlockTranslatedContent)
+class BlockTranslatedContentAdmin(admin.ModelAdmin):
+    list_display = ["name", "block", "language"]
+    list_filter = ["language"]
+    search_fields = [
+        "name",
+        "block__name",
+    ]
+
+    def blocks(self, obj):
+        # Block is manytomany, so we need to find it through the related name
+        blocks = Block.objects.filter(translated_contents=obj)
+
+        if not blocks:
+            return "No block"
+
+        return format_html(
+            ", ".join([f'<a href="/admin/experiment/block/{block.id}/change/">{block.name}</a>' for block in blocks])
+        )

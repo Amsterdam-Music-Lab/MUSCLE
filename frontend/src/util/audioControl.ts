@@ -1,24 +1,26 @@
+import Section from "@/types/Section";
 import * as audio from "./audio";
 import * as webAudio from "./webAudio";
+import { PlaybackArgs } from "@/types/Playback";
 
-export const playAudio = (section, playMethod, playheadShift=0) => {
+export const playAudio = (section: Section, playMethod: PlaybackArgs['play_method'], playheadShift = 0) => {
     let latency = 0;
 
     if (playMethod === 'BUFFER') {
-        
+
         // Determine latency for current audio device
         latency = webAudio.getTotalLatency()
         // Play audio
-        webAudio.playBufferFrom(section.id, playheadShift);
+        webAudio.playBufferFrom(section.id.toString(), playheadShift);
 
         return latency
-    } else {        
+    } else {
 
         // Only initialize webaudio if section is hosted local
         if (playMethod !== 'EXTERNAL') {
             // Determine latency for current audio device
             latency = webAudio.getTotalLatency()
-            webAudio.initWebAudio();            
+            webAudio.initWebAudio();
         }
 
         // Volume 1
@@ -28,15 +30,15 @@ export const playAudio = (section, playMethod, playheadShift=0) => {
         audio.loadUntilAvailable(section.url, () => {
             audio.playFrom(Math.max(0, playheadShift));
         });
-        
+
         return latency
     }
 }
 
-export const pauseAudio = (playMethod) => {
+export const pauseAudio = (playMethod: PlaybackArgs['play_method']) => {
     if (playMethod === 'BUFFER') {
         webAudio.stopBuffer();
     } else {
         audio.stop();
-    }    
+    }
 }

@@ -16,7 +16,6 @@
             "rounds": 100,
             "bonus_points": 0,
             "rules": "DURATION_DISCRIMINATION",
-            "language": "",
             "playlists": [
                 5
             ]
@@ -32,7 +31,6 @@
             "rounds": 100,
             "bonus_points": 0,
             "rules": "DURATION_DISCRIMINATION_TONE",
-            "language": "",
             "playlists": [
                 4
             ]
@@ -48,7 +46,6 @@
             "rounds": 17,
             "bonus_points": 0,
             "rules": "BEAT_ALIGNMENT",
-            "language": "",
             "playlists": [
                 7
             ]
@@ -64,7 +61,6 @@
             "rounds": 100,
             "bonus_points": 0,
             "rules": "H_BAT",
-            "language": "",
             "playlists": [
                 9
             ]
@@ -80,7 +76,6 @@
             "rounds": 100,
             "bonus_points": 0,
             "rules": "H_BAT_BFIT",
-            "language": "",
             "playlists": [
                 8
             ]
@@ -96,7 +91,6 @@
             "rounds": 100,
             "bonus_points": 0,
             "rules": "BST",
-            "language": "",
             "playlists": [
                 10
             ]
@@ -112,7 +106,6 @@
             "rounds": 100,
             "bonus_points": 0,
             "rules": "ANISOCHRONY",
-            "language": "",
             "playlists": [
                 3
             ]
@@ -128,7 +121,6 @@
             "rounds": 40,
             "bonus_points": 0,
             "rules": "RHYTHM_DISCRIMINATION",
-            "language": "",
             "playlists": [
                 6
             ]
@@ -144,7 +136,6 @@
             "rounds": 10,
             "bonus_points": 0,
             "rules": "RHYTHM_BATTERY_FINAL",
-            "language": "",
             "playlists": [
                 3
             ]
@@ -160,7 +151,6 @@
             "rounds": 10,
             "bonus_points": 0,
             "rules": "RHYTHM_BATTERY_INTRO",
-            "language": "",
             "playlists": [
                 11
             ]
@@ -176,7 +166,6 @@
             "rounds": 30,
             "bonus_points": 0,
             "rules": "HUANG_2022",
-            "language": "zh",
             "playlists": [
                 13,
                 2,
@@ -194,7 +183,6 @@
             "rounds": 10,
             "bonus_points": 0,
             "rules": "CATEGORIZATION",
-            "language": "en",
             "playlists": [
                 12
             ]
@@ -210,7 +198,6 @@
             "rounds": 10,
             "bonus_points": 0,
             "rules": "MATCHING_PAIRS",
-            "language": "en",
             "playlists": [
                 14
             ]
@@ -226,7 +213,6 @@
             "rounds": 30,
             "bonus_points": 0,
             "rules": "EUROVISION_2020",
-            "language": "en",
             "playlists": [
                 16
             ]
@@ -242,7 +228,6 @@
             "rounds": 30,
             "bonus_points": 0,
             "rules": "KUIPER_2020",
-            "language": "en",
             "playlists": [
                 17
             ]
@@ -258,7 +243,6 @@
             "rounds": 10,
             "bonus_points": 0,
             "rules": "THATS_MY_SONG",
-            "language": "",
             "playlists": [
                 18
             ]

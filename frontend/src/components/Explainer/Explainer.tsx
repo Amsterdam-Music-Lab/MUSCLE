@@ -6,7 +6,7 @@ interface ExplainerStep {
     description: string;
 }
 
-interface ExplainerProps {
+export interface ExplainerProps {
     instruction: string;
     button_label: string;
     steps?: Array<ExplainerStep>;
@@ -15,7 +15,7 @@ interface ExplainerProps {
 }
 
 /**
- * Explainer is an block view that shows a list of steps
+ * Explainer is a block view that shows a list of steps
  * If the button has not been clicked, onNext will be called automatically after the timer expires (in milliseconds).
  * If timer == null, onNext will only be called after the button is clicked.
  */

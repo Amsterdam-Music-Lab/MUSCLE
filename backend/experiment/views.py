@@ -55,13 +55,6 @@ def get_block(request: HttpRequest, slug: str) -> JsonResponse:
         "bonus_points": block.bonus_points,
         "playlists": [{"id": playlist.id, "name": playlist.name} for playlist in block.playlists.all()],
         "feedback_info": block.get_rules().feedback_info(),
-        # only call first round if the (deprecated) first_round method exists
-        # otherwise, call next_round
-        "next_round": (
-            serialize_actions(block.get_rules().first_round(block))
-            if hasattr(block.get_rules(), "first_round") and block.get_rules().first_round
-            else serialize_actions(block.get_rules().next_round(session))
-        ),
         "loading_text": _("Loading"),
         "session_id": session.id,
     }
@@ -129,7 +122,7 @@ def get_experiment(
     experiment_language = translated_content.language
     activate(experiment_language)
 
-    phases = list(Phase.objects.filter(series=experiment.id).order_by("index"))
+    phases = list(Phase.objects.filter(experiment=experiment.id).order_by("index"))
     try:
         current_phase = phases[phase_index]
         serialized_phase = serialize_phase(current_phase, participant)

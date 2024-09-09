@@ -230,6 +230,7 @@ const Playback = ({
                     <ImagePlayer
                         {...attrs}
                         images={playbackArgs.images}
+                        image_labels={playbackArgs.image_labels}
                         disabledPlayers={playbackArgs.play_once ? hasPlayed : undefined}
                     />
                 );
