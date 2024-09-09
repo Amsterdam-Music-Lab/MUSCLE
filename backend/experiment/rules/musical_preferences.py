@@ -3,7 +3,7 @@ from django.conf import settings
 from django.utils.translation import gettext_lazy as _
 from django.template.loader import render_to_string
 
-from experiment.actions import Explainer, Final, HTML, Playlist, Redirect, Step, Trial
+from experiment.actions import Explainer, Final, HTML, Redirect, Step, Trial
 from experiment.actions.form import BooleanQuestion, ChoiceQuestion, Form, LikertQuestionIcon
 from experiment.actions.playback import Autoplay
 from experiment.actions.styles import STYLE_BOOLEAN, STYLE_BOOLEAN_NEGATIVE_FIRST
@@ -19,13 +19,23 @@ from .huang_2022 import get_test_playback
 
 
 class MusicalPreferences(Base):
-    ID = "MUSICAL_PREFERENCES"
-    default_consent_file = "consent/consent_musical_preferences.html"
-    preference_offset = 20
-    knowledge_offset = 42
-    contact_email = "musicexp_china@163.com"
-    counted_result_keys = ["like_song"]
-    know_score = {"yes": 2, "unsure": 1, "no": 0}
+    ''' This rules file presents repeated trials with a combined form:
+    participants are asked to state how much they like the song, and whether they know the song
+    after 21 and 42 rounds, participants see summaries of their choices,
+    and at the final round, participants see other participants' preferred songs
+    '''
+    ID = 'MUSICAL_PREFERENCES'
+    default_consent_file = 'consent/consent_musical_preferences.html'
+    preference_offset = 21 # after this many rounds rounds, show information with the participant's preferences
+    knowledge_offset = 42 # after this many rounds, show additionally how many songs the participant knows
+    contact_email = 'musicexp_china@163.com'
+    counted_result_keys = ['like_song']
+
+    know_score = {
+        'yes': 2,
+        'unsure': 1,
+        'no': 0
+    }
 
     def __init__(self):
         self.question_series = [
@@ -76,7 +86,6 @@ class MusicalPreferences(Base):
                         )
                         return [explainer, *question_trials]
                     else:
-                        playlist = Playlist(session.block.playlists.all())
                         explainer = Explainer(
                             instruction=_("How to play"),
                             steps=[
@@ -88,7 +97,7 @@ class MusicalPreferences(Base):
                             ],
                             button_label=_("Start"),
                         )
-                        actions = [playlist, explainer]
+                        actions = [explainer]
                 else:
                     if last_result.question_key == "audio_check1":
                         playback = get_test_playback()
@@ -118,30 +127,20 @@ class MusicalPreferences(Base):
                         return Redirect(settings.HOMEPAGE)
             else:
                 playback = get_test_playback()
-                html = HTML(body="<h4>{}</h4>".format(_("Do you hear the music?")))
-                form = Form(
-                    form=[
-                        BooleanQuestion(
-                            key="audio_check1",
-                            choices={"no": _("No"), "yes": _("Yes")},
-                            result_id=prepare_result("audio_check1", session, scoring_rule="BOOLEAN"),
-                            submits=True,
-                            style=STYLE_BOOLEAN_NEGATIVE_FIRST,
-                        )
-                    ]
-                )
-                return [
-                    self.get_intro_explainer(),
-                    Trial(
-                        playback=playback,
-                        feedback_form=form,
-                        html=html,
-                        config={"response_time": 15},
-                        title=_("Audio check"),
-                    ),
-                ]
-        if round_number == self.preference_offset + 1:
-            like_results = session.result_set.filter(question_key="like_song")
+                html = HTML(
+                    body='<h4>{}</h4>'.format(_('Do you hear the music?')))
+                form = Form(form=[BooleanQuestion(
+                    key='audio_check1',
+                    choices={'no': _('No'), 'yes': _('Yes')},
+                    result_id=prepare_result('audio_check1', session,
+                                             scoring_rule='BOOLEAN'),
+                    submits=True,
+                    style=STYLE_BOOLEAN_NEGATIVE_FIRST)])
+                return [self.get_intro_explainer(), Trial(playback=playback, feedback_form=form, html=html,
+                             config={'response_time': 15},
+                             title=_("Audio check"))]
+        if round_number == self.preference_offset:
+            like_results = session.result_set.filter(question_key='like_song')
             feedback = Trial(
                 html=HTML(
                     body=render_to_string(
@@ -216,7 +215,8 @@ class MusicalPreferences(Base):
         view = Trial(
             playback=playback,
             feedback_form=form,
-            title=_("Song %(round)s/%(total)s") % {"round": round_number, "total": session.block.rounds},
+            title=_('Song %(round)s/%(total)s') % {
+                'round': round_number +  1, 'total': session.block.rounds},
             config={
                 "response_time": section.duration + 0.1,
             },

@@ -6,8 +6,8 @@ from result.models import Result
 from section.models import Playlist
 from session.models import Session
 
-from experiment.actions import Trial
-from experiment.rules.speech2song import next_repeated_representation, next_single_representation, sound, Speech2Song
+from experiment.actions import Explainer, Final, Trial
+from experiment.rules.speech2song import sound, Speech2Song
 from experiment.serializers import serialize_actions
 
 
@@ -30,7 +30,7 @@ class Speech2SongTest(TestCase):
         cls.playlist.update_sections()
         cls.participant = Participant.objects.create()
         cls.block = Block.objects.create(
-            rules='SPEECH_TO_SONG', slug='s2s', rounds=42)
+            rules='SPEECH_TO_SONG', slug='s2s', rounds=16)
         cls.session = Session.objects.create(
             block=cls.block,
             participant=cls.participant,
@@ -44,7 +44,7 @@ class Speech2SongTest(TestCase):
 
     def test_single_presentation(self):
         group = self.playlist.section_set.first().group
-        actions = next_single_representation(self.session, True, int(group))
+        actions = self.session.block_rules().next_single_representation(self.session, True, int(group))
         self.assertEqual(type(actions), list)
 
     def test_repeated_presentation(self):
@@ -55,7 +55,7 @@ class Speech2SongTest(TestCase):
             section=section,
             score=2
         )
-        actions = next_repeated_representation(self.session, True)
+        actions = self.session.block_rules().next_repeated_representation(self.session, True)
         self.assertEqual(type(actions), list)
 
     def test_next_round(self):
@@ -70,3 +70,30 @@ class Speech2SongTest(TestCase):
         self.assertEqual(type(serialized), list)
         for s in serialized:
             self.assertEqual(type(s), dict)
+
+    def test_runthrough(self):
+        speech2song = self.session.block_rules()
+        speech2song.n_trials_per_block = 2
+        for i in range(self.block.rounds - 1):
+            actions = speech2song.next_round(self.session)
+            feedback_trial = next((a for a in actions if a.__dict__.get('feedback_form')))
+            result = Result.objects.get(pk=feedback_trial.feedback_form.form[0].result_id)
+            result.score = 42
+            result.save()
+            if i == 0:
+                self.assertEqual(self._number_of_sound_trials(actions), speech2song.n_presentations)
+            elif i == 1:
+                self.assertIsInstance(actions[0], Explainer)
+                self.assertEqual(self._number_of_sound_trials(actions), 1)
+            elif i == self.block.rounds - 1:
+                self.assertIsInstance(actions[0], Final)
+            elif i == speech2song.n_trials_per_block * 2 * 3 + 1:
+                self.assertIsInstance(actions[0], Explainer)
+            elif i % 2 == 0:
+                self.assertEqual(self._number_of_sound_trials(actions), speech2song.n_presentations)
+            elif i % 2 == 1:
+                self.assertEqual(self._number_of_sound_trials(actions), 1)
+
+    def _number_of_sound_trials(self, actions):
+        sound_actions = [a for a in actions if a.__dict__.get('playback')]
+        return len(sound_actions)

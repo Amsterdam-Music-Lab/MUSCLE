@@ -136,7 +136,8 @@ class Huang2022(Hooked):
                         step_numbers=True,
                         button_label=_("Continue")
                     )
-                    actions.extend([explainer, explainer_devices, *self.next_song_sync_action(session, round_number)])
+                    playlist = Playlist(session.block.playlists.all())
+                    actions.extend([explainer, explainer_devices, playlist, *self.next_song_sync_action(session, round_number)])
         else:
             # Load the heard_before offset.
             heard_before_offset = session.load_json_data().get('heard_before_offset')
