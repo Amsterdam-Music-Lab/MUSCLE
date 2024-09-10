@@ -123,7 +123,7 @@ const Trial = (props: TrialProps) => {
     const getAndStoreDecisionTime = () => {
         const decisionTime = getTimeSince(startTime.current);
         // keep decisionTime in sessionStorage to be used by subsequent renders
-        window.sessionStorage.setItem('decisionTime', decisionTime);
+        window.sessionStorage.setItem('decisionTime', decisionTime.toString());
         return decisionTime;
     }
 
