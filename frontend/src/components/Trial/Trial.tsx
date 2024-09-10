@@ -94,15 +94,9 @@ const Trial = (props: TrialProps) => {
                     form,
                     config
                 },
-                false,
-                // if we break the round, we don't want to call `onNext` in `onResult`
-                // as it does not allow us to pass a `breakRound` flag
-                !shouldBreakRound
             );
 
-            if (shouldBreakRound) {
-                onNext(true);
-            }
+            return onNext(shouldBreakRound);
 
         },
         [feedback_form, config, onNext, onResult, result_id]

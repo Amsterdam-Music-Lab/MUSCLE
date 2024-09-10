@@ -39,25 +39,15 @@ interface OnResultParams {
  * - handles advancing to next round
  * - finally submits the data to the API and loads the new state
  */
-const useResultHandler = ({ session, participant, onNext, state }: UseResultHandlerParams) => {
+const useResultHandler = ({ session, participant }: UseResultHandlerParams) => {
     const resultBuffer = useRef([]);
 
     const onResult = useCallback(
         async (
             result: OnResultParams,
-            forceSubmit = false,
-            goToNextAction = true
         ) => {
             // Add data to result buffer
             resultBuffer.current.push(result || {});
-
-            // Check if there is another round data available
-            // can be forced by forceSubmit
-            const hasNextRound = state && state.next_round && state.next_round.length;
-            if (hasNextRound && !forceSubmit && goToNextAction) {
-                onNext();
-                return;
-            }
 
             // Merge result data with data from resultBuffer
             // NB: result data with same properties will be overwritten by later results
@@ -84,14 +74,8 @@ const useResultHandler = ({ session, participant, onNext, state }: UseResultHand
 
             // Clear resultBuffer
             resultBuffer.current = [];
-
-            // Advance to next round
-            if (goToNextAction) {
-                onNext();
-            }
-
         },
-        [participant, session, onNext, state]
+        [participant, session]
     );
 
     return onResult;
