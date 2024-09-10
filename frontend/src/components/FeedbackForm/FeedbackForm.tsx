@@ -11,7 +11,8 @@ interface FeedbackFormProps {
     buttonLabel: string;
     skipLabel: string;
     isSkippable: boolean;
-    makeResult: OnResultType
+    onResult: OnResultType
+    onNext: () => void;
     emphasizeTitle?: boolean;
 }
 
@@ -22,7 +23,8 @@ const FeedbackForm = ({
     buttonLabel,
     skipLabel,
     isSkippable,
-    makeResult,
+    onResult,
+    onNext,
     emphasizeTitle = false,
 }: FeedbackFormProps) => {
     const isSubmitted = useRef(false);
@@ -31,17 +33,19 @@ const FeedbackForm = ({
 
     const [formValid, setFormValid] = useState(false);
 
-    const onSubmit = () => {
+    const onSubmit = async () => {
         // Prevent double submit
         if (isSubmitted.current) {
             return;
         }
         isSubmitted.current = true;
 
-        // Callback makeResult with question data
-        makeResult({
+        // Callback onResult with question data
+        await onResult({
             form,
         });
+
+        onNext();
     };
 
     const onChange = (value: string | number | boolean, question_index: number) => {
