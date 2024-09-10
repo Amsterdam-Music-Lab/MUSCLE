@@ -11,7 +11,7 @@ interface FeedbackFormProps {
     buttonLabel: string;
     skipLabel: string;
     isSkippable: boolean;
-    onResult: OnResultType
+    makeResult: OnResultType
     emphasizeTitle?: boolean;
 }
 
@@ -22,7 +22,7 @@ const FeedbackForm = ({
     buttonLabel,
     skipLabel,
     isSkippable,
-    onResult,
+    makeResult,
     emphasizeTitle = false,
 }: FeedbackFormProps) => {
     const isSubmitted = useRef(false);
