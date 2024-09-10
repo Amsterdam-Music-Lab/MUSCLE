@@ -7,8 +7,8 @@ from .duration_discrimination import DurationDiscrimination
 
 class DurationDiscriminationTone(DurationDiscrimination):
     ID = 'DURATION_DISCRIMINATION_TONE'
-    condition = _('tone')
- 
+    subtask = _("Tone")
+
     def get_final_text(self, difference):
         milliseconds = round(difference / 1000)
         feedback = _('Well done! You managed to hear the difference between tones that \
@@ -32,7 +32,7 @@ class DurationDiscriminationTone(DurationDiscrimination):
             steps=[],
             button_label=button_label
         )
- 
+
     def get_question_text(self):
         return _("Is the second tone EQUALLY LONG as the first tone or LONGER?")
 

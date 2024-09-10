@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models.query import QuerySet
 from django.utils import timezone
 
 from result.models import Result
@@ -158,8 +159,35 @@ class Session(models.Model):
         n_eq = session_set.filter(final_score=self.final_score).count()
         return 100.0 * (n_lte - (0.5 * n_eq)) / n_session
 
+    def get_previous_n_results(
+        self, question_keys: list = [], n_results: int = 1
+    ) -> list:
+        """Retrieve previous n results
+
+        Args:
+            question_keys: a list of question keys for which results should be retrieved, if empty, any results will be returned
+            n_results: number of results to return
+
+        Returns:
+            list of Result objects with the given question keys
+        """
+        results = self._filter_results(question_keys)
+        return list(results.order_by("-created_at")[:n_results])
+
     def get_previous_result(self, question_keys: list = []) -> Result:
+        """Retrieve last result in the session
+
+        Args:
+            question_key: list of question keys for which the result should be returned; if empty, any result will be returned
+
+        Returns:
+            the last result object with one of the given question keys
+        """
+        results = self._filter_results(question_keys)
+        return results.order_by("-created_at").first()
+
+    def _filter_results(self, question_keys) -> QuerySet:
         results = self.result_set
         if question_keys:
             results = results.filter(question_key__in=question_keys)
-        return results.order_by('-created_at').first()
+        return results

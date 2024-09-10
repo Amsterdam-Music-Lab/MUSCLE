@@ -1,84 +1,107 @@
 import logging
 from decimal import Decimal, ROUND_HALF_UP
+import random
 
 from django.utils.translation import gettext_lazy as _
 
-from .base import Base
+from .practice import Practice
 from section.models import Section
 from experiment.actions import Trial, Explainer, Step
 from experiment.actions.form import ChoiceQuestion, Form
 from experiment.actions.playback import Autoplay
 from experiment.actions.utils import final_action_with_optional_button, render_feedback_trivia
 from experiment.actions.utils import get_average_difference
-from experiment.rules.util.practice import get_trial_condition_block, get_practice_views
 from experiment.rules.util.staircasing import register_turnpoint
+from result.models import Result
 from result.utils import prepare_result
 from session.models import Session
 
 logger = logging.getLogger(__name__)
 
 
-class DurationDiscrimination(Base):
+class DurationDiscrimination(Practice):
     """
     These rules make use of the session's final_score to register turnpoints
     """
     ID = 'DURATION_DISCRIMINATION'
-    condition = _('interval')
+    task_description = _("Duration discrimination")
+    subtask = _("Interval")
     start_diff = 400000
     max_turnpoints = 8
-    catch_condition = 'EQUAL'
+    first_condition = "longer"
+    first_condition_i18n = _("LONGER")
+    second_condition = "equal"  # second condition is 'catch' condition
+    second_condition_i18n = _("EQUAL")
+    n_practice_rounds_second_condition = 2
     block_size = 5
     increase_difficulty_multiplier = .5
     decrease_difficulty_multiplier = 1.5
 
-    def next_round(self, session: Session):
-        if session.final_score == 0:
-            self.register_difficulty(session)
+    def next_round(self, session: Session) -> list:
+        round_number = session.get_rounds_passed()
+        practice_finished = session.load_json_data().get("practice_finished")
+        if not practice_finished:
             # we are practicing
-            actions = get_practice_views(
-                session,
-                self.get_intro_explainer(),
-                self.staircasing_blocks,
-                self.next_trial_action,
-                self.get_response_explainer,
-                self.get_previous_condition,
-                self.get_difficulty(session))
-            return actions
+            condition = self.get_condition(session)
+            difficulty = self.get_difficulty(session)
+            if round_number == 0:
+                return [
+                    self.get_intro_explainer(),
+                    self.next_trial_action(session, condition, difficulty),
+                ]
+            if round_number % self.n_practice_rounds == 0:
+                if self.practice_successful(session):
+                    feedback_explainer = self.get_feedback_explainer(session)
+                    session.save_json_data({"practice_finished": True})
+                    session.result_set.all().delete()
+                    return [
+                        feedback_explainer,
+                        self.get_continuation_explainer(),
+                    ]
+                else:
+                    return [
+                        self.get_feedback_explainer(session),
+                        self.get_restart_explainer(),
+                        self.get_intro_explainer(),
+                        self.next_trial_action(session, condition, difficulty),
+                    ]
+            else:
+                return [
+                    self.get_feedback_explainer(session),
+                    self.next_trial_action(session, condition, difficulty),
+                ]
 
         else:
             # Actual trials
-            action = self.staircasing_blocks(
-                session, self.next_trial_action)
+            action = self.staircasing_blocks(session)
             return action
 
-    def calculate_score(self, result, data):
+    def calculate_score(self, result: Result, data: dict) -> int:
         # a result's score is used to keep track of how many correct results were in a row
-        # for catch trial, set score to 2 -> not counted for calculating turnpoints
+        # for catch condition, set score to 2 -> not counted for calculating turnpoints
         try:
             expected_response = result.expected_response
         except Exception as e:
             logger.log(e)
             expected_response = None
         if expected_response and expected_response == result.given_response:
-            if expected_response == 'LONGER':
+            if expected_response == self.first_condition:
                 return 1
             else:
                 return 2
         else:
             return 0
 
-    def register_difficulty(self, session):
-        session.save_json_data({'difficulty': self.start_diff})
-        session.save()
-
-    def get_previous_condition(self, last_result):
-        return last_result.expected_response
-
-    def get_response_explainer(self, correct, correct_response, button_label=_('Next fragment')):
-        preposition = _('than') if correct_response == 'LONGER' else _('as')
-        correct_response = _(
-            'LONGER') if correct_response == 'LONGER' else _('EQUAL')
-        if correct:
+    def get_feedback_explainer(self, session):
+        button_label = _("Next fragment")
+        last_result = session.get_previous_result()
+        correct_response = (
+            self.first_condition_i18n
+            if last_result.expected_response == self.first_condition
+            else self.second_condition_i18n
+        )
+        preposition = _("than") if correct_response == self.first_condition else _("as")
+        if last_result.given_response == last_result.expected_response:
             instruction = _(
                 'The second interval was %(correct_response)s %(preposition)s the first interval. Your answer was CORRECT.') % {'correct_response': correct_response, 'preposition': preposition}
         else:
@@ -90,15 +113,18 @@ class DurationDiscrimination(Base):
             button_label=button_label
         )
 
-    def next_trial_action(self, session, trial_condition, difficulty):
+    def next_trial_action(
+        self, session: Session, trial_condition: str, difficulty: str
+    ) -> Trial:
         """
         Provide the next trial action
-        Arguments:
-        - session: the session
-        - trial_condition: 1 for catch trial, 0 for normal trial
-        - difficulty: difficulty of the trial (translates to file name)
+
+        Args:
+            session: the session
+            trial_condition: string defined by second_condition for catch trial, first_condition for normal trial
+            difficulty: difficulty of the trial (translates to file name)
         """
-        if trial_condition == 1:
+        if trial_condition == self.second_condition:
             # catch trial
             difference = 0
         else:
@@ -107,33 +133,30 @@ class DurationDiscrimination(Base):
             section = session.playlist.section_set.get(song__name=difference)
         except Section.DoesNotExist:
             raise
-        expected_response = 'EQUAL' if difference == 0 else 'LONGER'
         question_text = self.get_question_text()
-        key = 'longer_or_equal'
+        key = self.task_description.replace(" ", "_")
         question = ChoiceQuestion(
             question=question_text,
             key=key,
             choices={
-                'EQUAL': _('EQUALLY LONG'),
-                'LONGER': _('LONGER')
+                self.first_condition: self.first_condition_i18n,
+                self.second_condition: self.second_condition_i18n,
             },
-            view='BUTTON_ARRAY',
-            result_id=prepare_result(key, session, section=section, expected_response=expected_response),
-            submits=True
+            view="BUTTON_ARRAY",
+            result_id=prepare_result(
+                key, session, section=section, expected_response=trial_condition
+            ),
+            submits=True,
         )
-        # create Result object and save expected result to database
 
         playback = Autoplay([section])
         form = Form([question])
         view = Trial(
             playback=playback,
             feedback_form=form,
-            title=_('%(title)s duration discrimination') % {
-                'title': self.condition},
-            config={
-                'listen_first': True,
-                'response_time': section.duration + .1
-            }
+            title=_("%(title)s %(task)s")
+            % {"title": self.subtask, "task": self.task_description},
+            config={"listen_first": True, "response_time": section.duration + 0.1},
         )
         return view
 
@@ -183,28 +206,27 @@ class DurationDiscrimination(Base):
             for shorter durations, people can hear even smaller differences than for longer durations.")
         return render_feedback_trivia(feedback, trivia)
 
-    def staircasing_blocks(self, session, trial_action_callback):
-        """ Calculate staircasing procedure in blocks of 5 trials with one catch trial
-        Arguments:
-        - session: the session
-        - trial_action_callback: function to build a trial action
-        - optional: condition: if the explainers from duration_discrimination are reused, set condition
+    def staircasing_blocks(self, session):
+        """Calculate staircasing procedure in blocks of 5 trials with one catch trial
+
+        Args:
+            session: the session
+
+        Returns:
+            a Trial object
         """
         previous_results = session.result_set.order_by('-created_at')
-        trial_condition = get_trial_condition_block(session, self.block_size)
+        trial_condition = self.get_trial_condition(session)
         if not previous_results.count():
             # first trial
             difficulty = self.get_difficulty(session)
-            return trial_action_callback(session, trial_condition, difficulty)
+            return self.next_trial_action(session, trial_condition, difficulty)
         previous_condition = previous_results.first().expected_response
-        if previous_condition == self.catch_condition:
+        if previous_condition == self.second_condition:
             # last trial was catch trial, don't calculate turnpoints
             # don't manipulate duration
             difficulty = self.get_difficulty(session)
-            action = trial_action_callback(
-                session,
-                trial_condition,
-                difficulty)
+            action = self.next_trial_action(session, trial_condition, difficulty)
         else:
             if previous_results.first().score == 0:
                 # the previous response was incorrect
@@ -226,10 +248,9 @@ class DurationDiscrimination(Base):
                     # decrease difficulty
                     difficulty = self.get_difficulty(
                         session, self.decrease_difficulty_multiplier)
-                    action = trial_action_callback(
-                        session,
-                        trial_condition,
-                        difficulty)
+                    action = self.next_trial_action(
+                        session, trial_condition, difficulty
+                    )
             else:
                 # the previous response was correct - check if previous non-catch trial was 1
                 if previous_results.count() > 1 and self.last_non_catch_correct(previous_results.all()):
@@ -252,30 +273,36 @@ class DurationDiscrimination(Base):
                         # increase difficulty
                         difficulty = self.get_difficulty(
                             session, self.increase_difficulty_multiplier)
-                        action = trial_action_callback(
-                            session,
-                            trial_condition,
-                            difficulty)
+                        action = self.next_trial_action(
+                            session, trial_condition, difficulty
+                        )
                 else:
                     difficulty = self.get_difficulty(session)
-                    action = trial_action_callback(
-                        session,
-                        trial_condition,
-                        difficulty)
+                    action = self.next_trial_action(
+                        session, trial_condition, difficulty
+                    )
         if not action:
             # action is None if the audio file doesn't exist
             return self.finalize_block(session)
         return action
 
-    def get_difficulty(self, session, multiplier=1.0):
-        '''
-         - multiplier:
-            1.5 multiplier for difference *increase*
-            1 if difference should stay the same
-            0.5 for difference *decrease*
-        '''
-        json_data = session.load_json_data()
-        difficulty = json_data.get('difficulty')
+    def get_difficulty(self, session: Session, multiplier: float = 1.0) -> int:
+        """
+        Args:
+            session: the session
+            multiplier: float with three different possible values:
+                1.5 multiplier for difference *increase*
+                1 if difference should stay the same
+                0.5 for difference *decrease*
+
+        Returns:
+            an integer indicating the inter-onset-interval in milliseconds
+        """
+        difficulty = session.load_json_data().get("difficulty")
+        if not difficulty:
+            difficulty = self.start_diff
+            session.save_json_data({"difficulty": self.start_diff})
+            session.save()
         current_difficulty = difficulty * multiplier
         session.save_json_data({'difficulty': current_difficulty})
         session.save()
@@ -283,7 +310,7 @@ class DurationDiscrimination(Base):
         # this uses the decimal module, since round() does not work entirely as expected
         return int(Decimal(str(current_difficulty)).quantize(Decimal('0'), rounding=ROUND_HALF_UP))
 
-    def last_non_catch_correct(self, previous_results):
+    def last_non_catch_correct(self, previous_results: list[Result]) -> bool:
         """ check if previous responses (before the current one, which is correct)
         have been catch or non-catch, and if non-catch, if they were correct
         """
@@ -301,8 +328,27 @@ class DurationDiscrimination(Base):
                 else:
                     answer = True
                     break
-            elif result.expected_response == self.catch_condition:
+            elif result.expected_response == self.second_condition:
                 continue
             else:
                 break
         return answer
+
+    def practice_successful(self, session: Session) -> bool:
+        previous_results = session.get_previous_n_results(n_results=2)
+        return all(r.score > 0 for r in previous_results)
+
+    def get_trial_condition(self, session: Session) -> str:
+        """make a list of the {block_size} conditions, of which one is a catch condition
+        store updates in the session.json_data field
+        """
+        current_trials = session.load_json_data().get("current_trials")
+        if not current_trials:
+            current_trials = [self.first_condition] * (self.block_size - 1) + [
+                self.second_condition
+            ]
+            random.shuffle(current_trials)
+        condition = current_trials.pop()
+        session.save_json_data({"current_trials": current_trials})
+        session.save()
+        return condition

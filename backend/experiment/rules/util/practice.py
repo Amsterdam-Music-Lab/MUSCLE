@@ -130,7 +130,7 @@ def get_trial_condition_block(session, n_trials_per_block):
     return condition
 
 
-def get_trial_condition(n_choices):
+def get_trial_condition(n_choices: int) -> int:
     """ get randomized trial condition
     return an integer between 0 and n_choices-2
     """
