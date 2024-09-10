@@ -1,4 +1,4 @@
-name: Build & Publish Storybook
+name: Build & Publish Docs & Storybook
 
 on:
   push:
@@ -7,13 +7,13 @@ on:
       - develop
     paths:
       - 'frontend/**'
-      - '.github/workflows/storybook.yml'
+      - '.github/workflows/docs.yml'
       - '.yarn/**'
       - '.storybook/**'
   pull_request:
     paths:
       - 'frontend/**'
-      - '.github/workflows/storybook.yml'
+      - '.github/workflows/docs.yml'
       - '.yarn/**'
       - '.storybook/**'
 
@@ -27,27 +27,39 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
+      - name: Create main index.html
+        run: |
+          mkdir -p docs
+          echo '<html><head><title>Project Documentation</title></head><body><h1>Project Documentation</h1><ul><li><a href="/storybook">Storybook</a></li><li><a href="/api">API Documentation</a></li></ul></body></html>' > ./docs/index.html
+
       - name: Install dependencies
         run: yarn
         working-directory: ./frontend
+
       - name: Build Storybook
-        run: yarn storybook:build
+        run: yarn storybook:build --output-dir ../docs/storybook --base-path /storybook
         working-directory: ./frontend
+
+
       - name: Setup Github Pages
         uses: actions/configure-pages@v2
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v1
         with:
-          path: ./frontend/storybook-static
+          path: ./docs
+
       - name: Archive production artifacts
         uses: actions/upload-artifact@v3
         with:
           name: build
-          path: ./frontend/storybook-static
+          path: ./docs
 
   deploy-gh-pages:
     # only deploy on develop branch
-    if: github.ref == 'refs/heads/develop'
+    # temporarily turn off for testing
+    # if: github.ref == 'refs/heads/develop'
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
