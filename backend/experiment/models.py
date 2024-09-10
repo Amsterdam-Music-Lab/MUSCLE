@@ -128,6 +128,16 @@ class Block(models.Model):
         content = self.get_fallback_content()
         return content.name if content and content.name else self.slug
 
+    @property
+    def name(self):
+        content = self.get_fallback_content()
+        return content.name if content and content.name else ""
+
+    @property
+    def description(self):
+        content = self.get_fallback_content()
+        return content.description if content and content.description else ""
+
     def session_count(self):
         """Number of sessions"""
         return self.session_set.count()

@@ -97,7 +97,6 @@ class CongoSameDiff(Base):
                     True
                 )
 
-
     def get_practice_done_view(self, session: Session):
 
         key = 'practice_done'
@@ -161,7 +160,7 @@ class CongoSameDiff(Base):
         )
         form = Form([question])
         playback = PlayButton([section], play_once=False)
-        block_name = session.block.name if session.block else 'Musicality Battery Block'
+        block_name = session.block.slug if session.block else "Musicality Battery Block"
         view = Trial(
             playback=playback,
             feedback_form=form,

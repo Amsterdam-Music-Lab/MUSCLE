@@ -14,7 +14,7 @@ from session.models import Session
 
 
 # Expected field count per model
-EXPECTED_BLOCK_FIELDS = 13
+EXPECTED_BLOCK_FIELDS = 10
 EXPECTED_SESSION_FIELDS = 9
 EXPECTED_RESULT_FIELDS = 12
 EXPECTED_PARTICIPANT_FIELDS = 5
@@ -30,7 +30,7 @@ request = MockRequest()
 class TestAdminBlock(TestCase):
     @classmethod
     def setUpTestData(cls):
-        Block.objects.create(name="test", slug="TEST")
+        Block.objects.create(slug="test")
         Participant.objects.create()
         Session.objects.create(block=Block.objects.first(), participant=Participant.objects.first())
         Result.objects.create(session=Session.objects.first())
@@ -61,17 +61,8 @@ class TestAdminBlock(TestCase):
         participant_fields = [key for key in participant]
         self.assertEqual(len(participant_fields), EXPECTED_PARTICIPANT_FIELDS)
 
-    def test_block_link(self):
-        block = Block.objects.create(name="Test Block")
-        site = AdminSite()
-        admin = BlockAdmin(block, site)
-        link = admin.block_name_link(block)
-        expected_name = "Test Block"
-        expected_link = format_html('<a href="{}">{}</a>', expected_name)
-        self.assertEqual(link, expected_link)
-
     def test_block_slug_link(self):
-        block = Block.objects.create(name="Test Block", slug="test-block")
+        block = Block.objects.create(slug="test-block")
         site = AdminSite()
         admin = BlockAdmin(block, site)
         link = admin.block_slug_link(block)
@@ -86,7 +77,7 @@ class TestAdminBlockExport(TestCase):
     @classmethod
     def setUpTestData(cls):
         cls.participant = Participant.objects.create(unique_hash=42)
-        cls.block = Block.objects.get(name="Hooked-China")
+        cls.block = Block.objects.get(slug="huang_2022")
         for playlist in cls.block.playlists.all():
             playlist.update_sections()
         cls.session = Session.objects.create(
@@ -189,7 +180,6 @@ class TestExperimentAdmin(TestCase):
                 "slug_link",
                 "description_excerpt",
                 "remarks",
-                "dashboard",
                 "phases",
                 "active",
             ),
@@ -216,7 +206,7 @@ class TestExperimentAdmin(TestCase):
 
     def test_experiment_admin_research_dashboard(self):
         request = RequestFactory().request()
-        response = self.admin.dashboard(request, self.experiment)
+        response = self.admin.experimenter_dashboard(request, self.experiment)
         self.assertEqual(response.status_code, 200)
 
 
@@ -227,7 +217,9 @@ class PhaseAdminTest(TestCase):
     def test_phase_admin_related_experiment_method(self):
         experiment = Experiment.objects.create(slug="test-experiment")
         ExperimentTranslatedContent.objects.create(experiment=experiment, language="en", name="Test Experiment")
-        phase = Phase.objects.create(name="Test Phase", index=1, randomize=False, experiment=experiment, dashboard=True)
+        phase = Phase.objects.create(
+            index=1, randomize=False, experiment=experiment, dashboard=True
+        )
         related_experiment = self.admin.related_experiment(phase)
         expected_url = reverse("admin:experiment_experiment_change", args=[experiment.pk])
         expected_related_experiment = format_html(
@@ -242,7 +234,9 @@ class PhaseAdminTest(TestCase):
             language="en",
             name="No Blocks",
         )
-        phase = Phase.objects.create(name="Test Group", index=1, randomize=False, dashboard=True, experiment=experiment)
+        phase = Phase.objects.create(
+            index=1, randomize=False, dashboard=True, experiment=experiment
+        )
         blocks = self.admin.blocks(phase)
         self.assertEqual(blocks, "No blocks")
 
@@ -253,14 +247,14 @@ class PhaseAdminTest(TestCase):
             language="en",
             name="With Blocks",
         )
-        phase = Phase.objects.create(name="Test Phase", index=1, randomize=False, dashboard=True, experiment=experiment)
-        block1 = Block.objects.create(name="Block 1", slug="block-1", phase=phase)
-        block2 = Block.objects.create(name="Block 2", slug="block-2", phase=phase)
+        phase = Phase.objects.create(
+            index=1, randomize=False, dashboard=True, experiment=experiment
+        )
+        block1 = Block.objects.create(slug="block-1", phase=phase)
+        block2 = Block.objects.create(slug="block-2", phase=phase)
 
         blocks = self.admin.blocks(phase)
         expected_blocks = format_html(
-            ", ".join(
-                [f'<a href="/admin/experiment/block/{block.id}/change/">{block.name}</a>' for block in [block1, block2]]
-            )
+            ", ".join([f"{block.slug}" for block in [block1, block2]])
         )
         self.assertEqual(blocks, expected_blocks)

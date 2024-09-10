@@ -2,7 +2,6 @@ import IImage from "@/types/Image";
 import Theme from "./Theme";
 
 export default interface Block {
-    id: number;
     slug: string;
     name: string;
     description: string;

@@ -32,10 +32,7 @@ class CongoSameDiffTest(TestCase):
         self.playlist.update_sections()
         self.participant = Participant.objects.create()
         self.block = Block.objects.create(
-            name='CongoSameDiff',
-            slug='congosamediff',
-            rules='CONGOSAMEDIFF',
-            rounds=4
+            slug="congosamediff", rules="CONGOSAMEDIFF", rounds=4
         )
         self.session = Session.objects.create(
             block=self.block,
@@ -204,7 +201,6 @@ class CongoSameDiffTest(TestCase):
         self.assertIn('Section group_not_int should have a group value containing only digits', errors)
         self.assertIn('Section no_group should have a group value containing only digits', errors)
         self.assertIn('At least one section should not have the tag "practice"', errors)
-
 
     def test_get_total_trials_count(self):
         congo_same_diff = CongoSameDiff()

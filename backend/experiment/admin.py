@@ -458,14 +458,7 @@ class PhaseAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
         if not blocks:
             return "No blocks"
 
-        return format_html(
-            ", ".join(
-                [
-                    f'<a href="/admin/experiment/block/{block.id}/change/">{block.slug}</a>'
-                    for block in blocks
-                ]
-            )
-        )
+        return format_html(", ".join([block.slug for block in blocks]))
 
 class BlockTranslatedContentAdmin(admin.ModelAdmin):
     list_display = ["name", "block", "language"]

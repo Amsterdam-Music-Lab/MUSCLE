@@ -7,6 +7,7 @@ from image.models import Image
 from experiment.serializers import serialize_block, serialize_phase
 from experiment.models import (
     Block,
+    BlockTranslatedContent,
     Experiment,
     Phase,
     SocialMediaConfig,
@@ -32,15 +33,15 @@ class TestExperimentViews(TestCase):
             experiment=experiment, language="en", name="Test Series", description="Test Description"
         )
         experiment.social_media_config = create_social_media_config(experiment)
-        introductory_phase = Phase.objects.create(name="introduction", experiment=experiment, index=1)
-        cls.block1 = Block.objects.create(name="block1", slug="block1", phase=introductory_phase)
-        intermediate_phase = Phase.objects.create(name="intermediate", experiment=experiment, index=2)
+        cls.introductory_phase = Phase.objects.create(experiment=experiment, index=1)
+        cls.block1 = Block.objects.create(slug="block1", phase=cls.introductory_phase)
+        cls.intermediate_phase = Phase.objects.create(experiment=experiment, index=2)
         cls.block2 = Block.objects.create(
-            name="block2", slug="block2", theme_config=theme_config, phase=intermediate_phase
+            slug="block2", theme_config=theme_config, phase=cls.intermediate_phase
         )
-        cls.block3 = Block.objects.create(name="block3", slug="block3", phase=intermediate_phase)
-        final_phase = Phase.objects.create(name="final", experiment=experiment, index=3)
-        cls.block4 = Block.objects.create(name="block4", slug="block4", phase=final_phase)
+        cls.block3 = Block.objects.create(slug="block3", phase=cls.intermediate_phase)
+        cls.final_phase = Phase.objects.create(experiment=experiment, index=3)
+        cls.block4 = Block.objects.create(slug="block4", phase=cls.final_phase)
 
     def test_get_experiment(self):
         # save participant data to request session
@@ -87,9 +88,8 @@ class TestExperimentViews(TestCase):
         session["participant_id"] = self.participant.id
         session.save()
         Session.objects.create(block=self.block1, participant=self.participant, finished_at=timezone.now())
-        intermediate_phase = Phase.objects.get(name="intermediate")
-        intermediate_phase.dashboard = True
-        intermediate_phase.save()
+        self.intermediate_phase.dashboard = True
+        self.intermediate_phase.save()
 
         experiment = Experiment.objects.create(
             slug="no_social_media",
@@ -110,9 +110,8 @@ class TestExperimentViews(TestCase):
         session["participant_id"] = self.participant.id
         session.save()
         Session.objects.create(block=self.block1, participant=self.participant, finished_at=timezone.now())
-        intermediate_phase = Phase.objects.get(name="intermediate")
-        intermediate_phase.dashboard = True
-        intermediate_phase.save()
+        self.intermediate_phase.dashboard = True
+        self.intermediate_phase.save()
         # check that the dashboard is returned correctly
         response = self.client.get("/experiment/test_series/")
         self.assertEqual(type(response.json().get("dashboard")), list)
@@ -125,16 +124,15 @@ class TestExperimentViews(TestCase):
         Session.objects.create(
             block=self.block2, participant=self.participant, finished_at=timezone.now(), final_score=8
         )
-        intermediate_phase = Phase.objects.get(name="intermediate")
-        intermediate_phase.dashboard = True
-        intermediate_phase.save()
-        serialized_coll_1 = serialize_phase(intermediate_phase, self.participant)
+        self.intermediate_phase.dashboard = True
+        self.intermediate_phase.save()
+        serialized_coll_1 = serialize_phase(self.intermediate_phase, self.participant)
         total_score_1 = serialized_coll_1["totalScore"]
         self.assertEqual(total_score_1, 8)
         Session.objects.create(
             block=self.block3, participant=self.participant, finished_at=timezone.now(), final_score=8
         )
-        serialized_coll_2 = serialize_phase(intermediate_phase, self.participant)
+        serialized_coll_2 = serialize_phase(self.intermediate_phase, self.participant)
         total_score_2 = serialized_coll_2["totalScore"]
         self.assertEqual(total_score_2, 16)
 
@@ -197,8 +195,6 @@ class ExperimentViewsTest(TestCase):
         # Create a block
         block = Block.objects.create(
             slug="test-block",
-            name="Test Block",
-            description="This is a test block",
             image=Image.objects.create(
                 title="Test",
                 description="",
@@ -210,6 +206,12 @@ class ExperimentViewsTest(TestCase):
             ),
             theme_config=create_theme_config(),
             phase=phase,
+        )
+        BlockTranslatedContent.objects.create(
+            block=block,
+            language="en",
+            name="Test Block",
+            description="This is a test block",
         )
         participant = Participant.objects.create()
         Session.objects.bulk_create(
@@ -250,14 +252,18 @@ class ExperimentViewsTest(TestCase):
         phase = Phase.objects.create(experiment=experiment)
         block = Block.objects.create(
             slug="test-block",
-            name="Test Block",
-            description="This is a test block",
             image=Image.objects.create(file="test-image.jpg"),
             rules=RhythmBatteryIntro.ID,
             theme_config=create_theme_config(),
             rounds=3,
             bonus_points=42,
             phase=phase,
+        )
+        BlockTranslatedContent.objects.create(
+            block=block,
+            name="Test Block",
+            description="This is a test block",
+            language="en",
         )
         participant = Participant.objects.create()
         participant.save()

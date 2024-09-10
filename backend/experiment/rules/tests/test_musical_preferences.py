@@ -33,7 +33,7 @@ class MusicalPreferencesTest(TestCase):
         )
         cls.phase = Phase.objects.create(experiment=cls.experiment)
         cls.block = Block.objects.create(
-            name="MusicalPreferences", phase=cls.phase, rules="MUSICAL_PREFERENCES", rounds=5
+            slug="mpref", phase=cls.phase, rules="MUSICAL_PREFERENCES", rounds=5
         )
         cls.session = Session.objects.create(block=cls.block, participant=cls.participant, playlist=cls.playlist)
         audiocheck_playlist = Playlist.objects.create(name="test_audiocheck")
