@@ -13,8 +13,8 @@ vi.mock("../Playback/Playback", () => ({
     )),
 }));
 vi.mock("../FeedbackForm/FeedbackForm", () => ({
-    default: vi.fn(({ makeResult }) => (
-        <div data-testid="mock-feedback-form" onClick={() => makeResult(false)}>Mock Feedback Form</div>
+    default: vi.fn(({ onResult, onNext }) => (
+        <div data-testid="mock-feedback-form" onClick={() => { onResult(); onNext(); }}>Mock Feedback Form</div>
     )),
 }));
 vi.mock("../HTML/HTML", () => ({
@@ -154,7 +154,15 @@ describe('Trial', () => {
         await waitFor(() => {
             expect(mockOnResult).toHaveBeenCalled();
             expect(mockOnResult).toHaveBeenCalledWith(
-                expect.objectContaining({ result: { type: 'time_passed' }, }),
+                expect.objectContaining({
+                    decision_time: expect.any(Number),
+                    form: expect.arrayContaining([
+                        expect.objectContaining({
+                            key: 'test_question',
+                            value: 'TIMEOUT'
+                        })
+                    ])
+                })
             );
         });
     });
@@ -196,29 +204,5 @@ describe('Trial', () => {
             expect(mockOnResult).toHaveBeenCalled();
             expect(mockOnNext).toHaveBeenCalled();
         });
-    });
-
-    it("calls only onResult when form is not defined and break_round_on is NOT met", async () => {
-        const formless_feedback_form = {
-            ...feedback_form,
-            form: undefined
-        };
-        const config = {
-            ...defaultConfig,
-            break_round_on: { EQUALS: ['slow'] }
-        };
-        render(<Trial
-            config={config}
-            onNext={mockOnNext}
-            onResult={mockOnResult}
-            feedback_form={formless_feedback_form}
-        />);
-        fireEvent.click(screen.getByTestId('mock-feedback-form'));
-
-        await waitFor(() => {
-            expect(mockOnResult).toHaveBeenCalled();
-        });
-
-        expect(mockOnNext).not.toHaveBeenCalled();
     });
 });
