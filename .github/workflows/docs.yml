@@ -28,10 +28,18 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      # Replace this step with the ER/MKDOCS build step
       - name: Create dummy index.html
         run: |
           mkdir -p docs-pages
           echo '<html><head><title>Project Documentation</title></head><body><h1>Project Documentation</h1><ul><li><a href="/MUSCLE/storybook">Storybook</a></li></ul></body></html>' > ./docs-pages/index.html
+
+      # Build ER/MKDOCS documentation site,
+      # @Evert-R - for you to fix :-)
+      # - name: Build ER/MKDOCS site
+      #   run: |
+      #     mkdocs build -d ../docs-pages
+      #   working-directory: ./backend
 
       - name: Install dependencies
         run: yarn
