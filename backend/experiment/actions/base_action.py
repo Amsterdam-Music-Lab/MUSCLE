@@ -14,7 +14,7 @@ class BaseAction(object):
         pass
 
     def action(self) -> dict:
-        """The action that can be send to the frontend
+        """The action that can be sent to the frontend
     
         Returns:
             action_dict (dict): Frontend component configuration        
