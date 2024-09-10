@@ -28,7 +28,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Create main index.html
+      - name: Create dummy index.html
         run: |
           mkdir -p docs-pages
           echo '<html><head><title>Project Documentation</title></head><body><h1>Project Documentation</h1><ul><li><a href="/MUSCLE/storybook">Storybook</a></li></ul></body></html>' > ./docs-pages/index.html
