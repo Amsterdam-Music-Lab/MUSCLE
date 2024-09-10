@@ -260,7 +260,6 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, NestedModelAdmin):
         "slug_link",
         "description_excerpt",
         "remarks",
-        "phases",
         "active",
     )
     fields = [
@@ -299,17 +298,6 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, NestedModelAdmin):
             return description
 
         return description[:50] + "..."
-
-    def phases(self, obj):
-        phases = Phase.objects.filter(experiment=obj)
-        return format_html(
-            ", ".join(
-                [
-                    f'<a href="/admin/experiment/phase/{phase.id}/change/">{phase.id}</a>'
-                    for phase in phases
-                ]
-            )
-        )
 
     slug_link.short_description = "Slug"
 

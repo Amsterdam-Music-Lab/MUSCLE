@@ -180,7 +180,6 @@ class TestExperimentAdmin(TestCase):
                 "slug_link",
                 "description_excerpt",
                 "remarks",
-                "phases",
                 "active",
             ),
         )
