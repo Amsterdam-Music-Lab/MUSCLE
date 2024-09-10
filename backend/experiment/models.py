@@ -9,7 +9,7 @@ from experiment.standards.iso_languages import ISO_LANGUAGES
 from theme.models import ThemeConfig
 from image.models import Image
 from session.models import Session
-from typing import Optional
+from typing import Optional, Union
 
 from .validators import markdown_html_validator, block_slug_validator
 
@@ -17,8 +17,19 @@ language_choices = [(key, ISO_LANGUAGES[key]) for key in ISO_LANGUAGES.keys()]
 language_choices[0] = ("", "Unset")
 
 
-def consent_upload_path(instance, filename):
-    """Generate path to save consent file based on experiment.slug and language"""
+def consent_upload_path(instance: models.Model, filename: str) -> str:
+    """Generate path to save consent file based on experiment.slug and language
+    
+    Args:
+        instance (Experiment): Experiment instance to determine folder name
+        filename (str): Name of the consent file to be uploaded
+
+    Returns:
+        upload_to (str): Path for uploading the consent file
+
+    Note:
+        Used by the Block model for uploading consent file        
+    """
     experiment = instance.experiment
     folder_name = experiment.slug
     language = instance.language
@@ -27,7 +38,17 @@ def consent_upload_path(instance, filename):
 
 
 class Experiment(models.Model):
-    """A model to allow nesting multiple phases with blocks into a 'parent' experiment"""
+    """A model to allow nesting multiple phases with blocks into a 'parent' experiment
+    
+    Attributes:
+        slug (str): Slug
+        translated_content (list[ExperimentTranslatedContent]): Translated content
+        theme_config (theme.ThemeConfig): ThemeConfig instance
+        dashboard (bool): Show dashboard?
+        active (bool): Set experiment active
+        social_media_config (SocialMediaConfig): SocialMediaConfig instance
+        phases (list[Phase]): Queryset of Phase instances
+    """
 
     slug = models.SlugField(max_length=64, default="")
     translated_content = models.QuerySet["ExperimentTranslatedContent"]
@@ -45,30 +66,60 @@ class Experiment(models.Model):
     class Meta:
         verbose_name_plural = "Experiments"
 
-    def associated_blocks(self):
+    def associated_blocks(self) -> list[models.Model]:
+        """Return a list of all associated blocks for this experiment
+
+        Returns:
+            (list[Block]): Associated blocks
+        """
+
         phases = self.phases.all()
         return [block for phase in phases for block in list(phase.blocks.all())]
 
-    def export_sessions(self):
-        """export sessions for this experiment"""
+    def export_sessions(self) -> list[models.Model]:
+        """export sessions for this experiment
+
+        Returns:
+            (list[session.models.Session]): Associated sessions
+        """
+
         all_sessions = Session.objects.none()
         for block in self.associated_blocks():
             all_sessions |= Session.objects.filter(block=block).order_by("-started_at")
         return all_sessions
 
-    def current_participants(self):
-        """Get distinct list of participants"""
+    def current_participants(self) -> list[models.Model]:
+        """Get distinct list of participants
+
+        Returns:
+            (list[participant.models.Participant]): Associated participants
+        """
+
         participants = {}
         for session in self.export_sessions():
             participants[session.participant.id] = session.participant
         return participants.values()
 
-    def get_fallback_content(self):
-        """Get fallback content for the experiment"""
+    def get_fallback_content(self) -> list[models.Model]:
+        """Get fallback content for the experiment
+
+        Returns:
+            (list[ExperimentTranslatedContent]): Translated content
+        """
+
         return self.translated_content.order_by("index").first()
 
-    def get_translated_content(self, language: str, fallback: bool = True):
-        """Get content for a specific language"""
+    def get_translated_content(self, language: str, fallback: bool = True) -> list[models.Model]:
+        """Get content for a specific language
+        
+        Args:
+            language (str): Language code
+            fallback (bool): Return fallback language if language isn't available
+
+        Returns:
+            (list[ExperimentTranslatedContent]): Translated content
+        """
+
         content = self.translated_content.filter(language=language).first()
 
         if not content and fallback:
@@ -86,6 +137,8 @@ class Experiment(models.Model):
 
 
 class Phase(models.Model):
+    """Root entity for configuring experiment phases"""
+
     name = models.CharField(max_length=64, blank=True, default="")
     series = models.ForeignKey(Experiment, on_delete=models.CASCADE, related_name="phases")
     index = models.IntegerField(default=0, help_text="Index of the phase in the series. Lower numbers come first.")
@@ -136,27 +189,47 @@ class Block(models.Model):
     def __str__(self):
         return self.name
 
-    def session_count(self):
-        """Number of sessions"""
+    def session_count(self) -> int:
+        """Number of sessions
+        
+        Returns:
+            (int): Number of sessions
+        """
+
         return self.session_set.count()
 
     session_count.short_description = "Sessions"
 
-    def playlist_count(self):
-        """Number of playlists"""
+    def playlist_count(self) -> int:
+        """Number of playlists
+        
+        Returns:
+            (int): Number of playlists        
+        """
+
         return self.playlists.count()
 
     playlist_count.short_description = "Playlists"
 
-    def current_participants(self):
-        """Get distinct list of participants"""
+    def current_participants(self) -> List[models.Model]:
+        """Get distinct list of participants
+
+        Returns:
+            (list[participant.models.Participant]): Associated participants
+        """
+
         participants = {}
         for session in self.session_set.all():
             participants[session.participant.id] = session.participant
         return participants.values()
 
-    def export_admin(self):
-        """Export data for admin"""
+    def export_admin(self) -> dict:
+        """Export data for admin
+        
+        Returns:
+            (dict): Export data for admin
+        
+        """
         return {
             "exportedAt": timezone.now().isoformat(),
             "block": {
@@ -171,14 +244,20 @@ class Block(models.Model):
         # export session objects
         return self.session_set.all()
 
-    def export_table(
-        self, session_keys: List[str], result_keys: List[str], export_options: Dict[str, Any]
-    ) -> Tuple[List[Dict[str, Any]], List[str]]:
+    def export_table(self, session_keys: list[str],
+                     result_keys: list[str],
+                     export_options: dict[str, Any]) -> tuple[list[dict[str, Any]], list[str]]:
         """Export filtered tabular data for admin
-        session_keys : session fieldnames to be included
-        result_keys : result fieldnames to be included
-        export_options : export options (see admin/forms.py)
+
+        Args:
+            session_keys (list[str]): session fieldnames to be included  
+            result_keys (list[str]): result fieldnames to be included  
+            export_options (dict[str, Any]): export options (see admin/forms.py)
+
+        Returns:
+            csv rows, field names
         """
+
         rows = []  # a list of dictionaries
         fieldnames = set()  # keep track of all potential fieldnames
         result_prefix = ""
@@ -271,17 +350,27 @@ class Block(models.Model):
         return rows, list(fieldnames)
 
     def get_rules(self):
-        """Get instance of rules class to be used for this session"""
+        """Get instance of rules class to be used for this session
+        
+        Returns:
+            (experiment.rules.base.Base): Rules class
+        """
+
         from experiment.rules import BLOCK_RULES
 
         if self.rules not in BLOCK_RULES:
             raise ValueError(f"Rules do not exist (anymore): {self.rules} for block {self.name} ({self.slug})")
 
-        cl = BLOCK_RULES[self.rules]
+        cl = BLOCK_RULES[self.rules]        
         return cl()
 
-    def max_score(self):
-        """Get max score from all sessions with a positive score"""
+    def max_score(self) -> int:
+        """Get max score from all sessions with a positive score
+        
+        Returns:
+            (int): max score from all sessions with a positive score        
+        """
+
         score = self.session_set.filter(final_score__gte=0).aggregate(models.Max("final_score"))
         if "final_score__max" in score:
             return score["final_score__max"]
@@ -306,6 +395,8 @@ class Block(models.Model):
 
 
 class ExperimentTranslatedContent(models.Model):
+    """Translated content for an Experiment"""
+
     experiment = models.ForeignKey(Experiment, on_delete=models.CASCADE, related_name="translated_content")
     index = models.IntegerField(default=0)
     language = models.CharField(default="", blank=True, choices=language_choices, max_length=2)
@@ -318,6 +409,8 @@ class ExperimentTranslatedContent(models.Model):
 
 
 class Feedback(models.Model):
+    """A model for adding feedback to an experiment block"""
+    
     text = models.TextField()
     block = models.ForeignKey(Block, on_delete=models.CASCADE)
 
