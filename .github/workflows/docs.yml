@@ -31,7 +31,7 @@ jobs:
       - name: Create main index.html
         run: |
           mkdir -p docs
-          echo '<html><head><title>Project Documentation</title></head><body><h1>Project Documentation</h1><ul><li><a href="/storybook">Storybook</a></li><li><a href="/api">API Documentation</a></li></ul></body></html>' > ./docs/index.html
+          echo '<html><head><title>Project Documentation</title></head><body><h1>Project Documentation</h1><ul><li><a href="/MUSCLE/storybook">Storybook</a></li></ul></body></html>' > ./docs/index.html
 
       - name: Install dependencies
         run: yarn
