@@ -72,17 +72,7 @@ const Trial = (props: TrialProps) => {
             submitted.current = true;
 
             if (!feedback_form) {
-
-                if (result_id) {
-                    onResult({
-                        result,
-                        result_id
-                    });
-                } else {
-                    onNext();
-                }
-
-                return;
+                return onNext();
             }
 
             const { form = [] } = feedback_form;
