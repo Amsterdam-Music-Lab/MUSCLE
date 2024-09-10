@@ -148,13 +148,12 @@ describe('Trial', () => {
             config={config}
             onNext={mockOnNext}
             onResult={mockOnResult}
-            result_id={"123"}
         />);
         fireEvent.click(screen.getByTestId('mock-playback'));
         await waitFor(() => {
             expect(mockOnResult).toHaveBeenCalled();
             expect(mockOnResult).toHaveBeenCalledWith(
-                expect.objectContaining({ result: { type: 'time_passed' }, result_id: "123" }),
+                expect.objectContaining({ result: { type: 'time_passed' }, }),
             );
         });
     });

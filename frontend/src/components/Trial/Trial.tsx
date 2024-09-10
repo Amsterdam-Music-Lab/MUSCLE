@@ -23,7 +23,6 @@ export interface TrialProps {
     html: { body: string | TrustedHTML };
     feedback_form: IFeedbackForm;
     config: TrialConfig;
-    result_id: string;
     onNext: (breakRound?: boolean) => void;
     onResult: OnResultType;
 }
@@ -41,7 +40,6 @@ const Trial = (props: TrialProps) => {
         html,
         feedback_form,
         config,
-        result_id,
         onNext,
         onResult,
     } = props;
@@ -92,14 +90,14 @@ const Trial = (props: TrialProps) => {
                 {
                     decision_time: getAndStoreDecisionTime(),
                     form,
-                    config
+                    config,
                 },
             );
 
             return onNext(shouldBreakRound);
 
         },
-        [feedback_form, config, onNext, onResult, result_id]
+        [feedback_form, config, onNext, onResult]
     );
 
     const checkBreakRound = (
