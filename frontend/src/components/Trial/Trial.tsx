@@ -198,7 +198,7 @@ const Trial = (props: TrialProps) => {
                     buttonLabel={feedback_form.submit_label}
                     skipLabel={feedback_form.skip_label}
                     isSkippable={feedback_form.is_skippable}
-                    onResult={makeResult}
+                    makeResult={makeResult}
                 // emphasizeTitle={feedback_form.is_profile}
                 // TODO: if we want left-aligned text with a pink divider,
                 // make this style option available again (used in Question.scss)

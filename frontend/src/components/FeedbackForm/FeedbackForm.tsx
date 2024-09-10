@@ -38,8 +38,8 @@ const FeedbackForm = ({
         }
         isSubmitted.current = true;
 
-        // Callback onResult with question data
-        onResult({
+        // Callback makeResult with question data
+        makeResult({
             form,
         });
     };
