@@ -178,29 +178,9 @@ class TestExperimentAdmin(TestCase):
             (
                 "name",
                 "slug_link",
-                "description_excerpt",
                 "remarks",
                 "active",
             ),
-        )
-
-    def test_experiment_admin_description_excerpt(self):
-        self.assertEqual(
-            self.admin.description_excerpt(self.experiment),
-            "test description very long like the tea of oolong ...",
-        )
-
-        experiment = Experiment.objects.create(slug="TEST2")
-        ExperimentTranslatedContent.objects.create(
-            experiment=experiment,
-            language="en",
-            name="test",
-            description="Do you like oolong tea or do you prefer the song of the bird in the morning?",
-        )
-
-        self.assertEqual(
-            self.admin.description_excerpt(experiment),
-            "Do you like oolong tea or do you prefer the song o...",
         )
 
     def test_experiment_admin_research_dashboard(self):

@@ -258,7 +258,6 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, NestedModelAdmin):
     list_display = (
         "name",
         "slug_link",
-        "description_excerpt",
         "remarks",
         "active",
     )
@@ -290,14 +289,6 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, NestedModelAdmin):
         return format_html(
             f'<a href="{url}" target="_blank" rel="noopener noreferrer" title="Open {obj.slug} experiment group in new tab" >{obj.slug}&nbsp;<small>&#8599;</small></a>'
         )
-
-    def description_excerpt(self, obj):
-        experiment_fallback_content = obj.get_fallback_content()
-        description = experiment_fallback_content.description if experiment_fallback_content else "No description"
-        if len(description) < 50:
-            return description
-
-        return description[:50] + "..."
 
     slug_link.short_description = "Slug"
 
