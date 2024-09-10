@@ -6,7 +6,7 @@ from result.score import SCORING_RULES
 
 
 def get_result(session, data):
-    result_id = data.get('result_id')
+    result_id = data.get("result_id")
     try:
         result = Result.objects.get(pk=result_id, session=session)
     except Result.DoesNotExist:
@@ -23,12 +23,7 @@ def handle_results(data, session):
     if the given_result is an array of results, retrieve and save results for all of them
     else, handle results at top level
     """
-    try:
-        form = data.pop('form')
-    except KeyError:
-        # no form, handle results at top level
-        result = score_result(data, session)
-        return result
+    form = data.pop("form")
     for form_element in form:
         result = get_result(session, form_element)
         # save relevant data such as config and decision time (except for the popped form)
@@ -39,26 +34,23 @@ def handle_results(data, session):
 
 
 def prepare_profile_result(question_key, participant, **kwargs):
-    ''' Create a Result object, and provide its id to be serialized
+    """Create a Result object, and provide its id to be serialized
     - question_key: the key of the question in the questionnaire dictionaries
     - participant: the participant on which the Result is going to be registered
     possible kwargs:
         - expected_response: optionally, provide the correct answer, used for scoring
         - comment: optionally, provide a comment to be saved in the database
         - scoring_rule: optionally, provide a scoring rule
-    '''
-    scoring_rule = PROFILE_SCORING_RULES.get(question_key, '')
+    """
+    scoring_rule = PROFILE_SCORING_RULES.get(question_key, "")
     result, created = Result.objects.get_or_create(
-        question_key=question_key,
-        participant=participant,
-        scoring_rule=scoring_rule,
-        **kwargs
+        question_key=question_key, participant=participant, scoring_rule=scoring_rule, **kwargs
     )
     return result
 
 
 def prepare_result(question_key: str, session: Session, **kwargs) -> int:
-    ''' Create a Result object, and provide its id to be serialized
+    """Create a Result object, and provide its id to be serialized
     - question_key: the key of the question in the questionnaire dictionaries
     - session: the session on which the Result is going to be registered
     possible kwargs:
@@ -67,12 +59,8 @@ def prepare_result(question_key: str, session: Session, **kwargs) -> int:
         - json_data: optionally, provide json data tied to this result
         - comment: optionally, provide a comment to be saved in the database, e.g. "training phase"
         - scoring_rule: optionally, provide a scoring rule
-    '''
-    result = Result.objects.create(
-        question_key=question_key,
-        session=session,
-        **kwargs
-    )
+    """
+    result = Result.objects.create(question_key=question_key, session=session, **kwargs)
     return result.id
 
 
@@ -90,7 +78,7 @@ def score_result(data, session):
     """
     result = get_result(session, data)
     result.save_json_data(data)
-    result.given_response = data.get('value')
+    result.given_response = data.get("value")
     # Calculate score: by default, apply a scoring rule
     # Can be overridden by defining calculate_score in the rules file
     if result.session:
