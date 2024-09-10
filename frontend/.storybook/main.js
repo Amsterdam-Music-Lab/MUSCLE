@@ -30,6 +30,7 @@ const config = {
 
     viteFinal: (config) => {
         return mergeConfig(config, {
+            base: "/storybook/",
             resolve: {
                 alias: {
                     '@/': '/src/',
