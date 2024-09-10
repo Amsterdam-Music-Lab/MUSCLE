@@ -11,10 +11,10 @@ import ParticipantLink from "../ParticipantLink/ParticipantLink";
 import UserFeedback from "../UserFeedback/UserFeedback";
 import FinalButton from "./FinalButton";
 import ISocial from "@/types/Social";
-import Block from "@/types/Block";
+import Block, { FeedbackInfo } from "@/types/Block";
 import Participant from "@/types/Participant";
 
-interface FinalProps {
+export interface FinalProps {
     block: Block;
     participant: Participant;
     score: number;
@@ -33,7 +33,7 @@ interface FinalProps {
     participant_id_only: boolean;
     show_profile_link: boolean;
     social: ISocial;
-    feedback_info: any;
+    feedback_info?: FeedbackInfo;
     points: string;
     rank: {
         class: string;
@@ -46,7 +46,7 @@ interface FinalProps {
 }
 
 /**
- * Final is an block view that shows the final scores of the block
+ * Final is a block view that shows the final scores of the block
  * It can only be the last view of a block
  */
 const Final = ({

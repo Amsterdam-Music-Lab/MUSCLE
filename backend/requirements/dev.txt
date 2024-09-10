@@ -43,20 +43,17 @@ django==4.2.15
     #   -r requirements.in/base.txt
     #   django-cors-headers
     #   django-debug-toolbar
-    #   django-extensions
     #   django-inline-actions
     #   django-markup
 django-cors-headers==3.10.0
     # via -r requirements.in/base.txt
 django-debug-toolbar==4.3.0
     # via -r requirements.in/dev.txt
-django-extensions==3.2.3
-    # via -r requirements.in/dev.txt
 django-inline-actions==2.4.0
     # via -r requirements.in/base.txt
 django-markup[all-filter-dependencies,all_filter_dependencies]==1.8.1
     # via -r requirements.in/base.txt
-django-nested-admin==4.1.0
+django-nested-admin==4.1.1
     # via -r requirements.in/base.txt
 docutils==0.20.1
     # via
@@ -144,8 +141,6 @@ pygments==2.17.2
     # via
     #   django-markup
     #   mkdocs-material
-pygraphviz==1.13
-    # via -r requirements.in/dev.txt
 pylint==3.1.0
     # via
     #   -r requirements.in/dev.txt
@@ -207,7 +202,7 @@ textile==4.0.2
     # via django-markup
 tomlkit==0.12.5
     # via pylint
-tqdm==4.65.0
+tqdm==4.66.3
     # via -r requirements.in/base.txt
 typing-extensions==4.10.0
     # via psycopg

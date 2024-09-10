@@ -1,10 +1,8 @@
 import { useCallback } from "react";
 import MultiPlayer from "./MultiPlayer";
+import { PlaybackArgs } from "@/types/Playback";
 
-interface ImagePlayerProps {
-    images: string[];
-    // FIXME: image_labels is never passed as a prop by any parent component
-    image_labels?: string[];
+interface ImagePlayerProps extends Pick<PlaybackArgs, "images" | "image_labels"> {
     playSection: (index: number) => void;
 }
 

@@ -23,6 +23,7 @@ class Huang2022(Hooked):
     timeout = 15
     contact_email = 'musicexp_china@163.com'
     play_method = 'EXTERNAL'
+    default_consent_file = 'consent/consent_huang2021.html'
 
     def __init__(self):
         self.question_series = [
@@ -47,23 +48,6 @@ class Huang2022(Hooked):
                 ],
                 "randomize": False
             },
-        ]
-
-    def first_round(self, block):
-        """Create data for the first block rounds."""
-        # Add consent from file or admin (admin has priority)
-        consent = Consent(
-            block.consent,
-            title=_('Informed consent'),
-            confirm=_('I agree'),
-            deny=_('Stop'),
-            url='consent/consent_huang2021.html'
-            )
-        playlist = Playlist(block.playlists.all())
-
-        return [
-            consent,
-            playlist,
         ]
 
     def feedback_info(self):
@@ -99,9 +83,9 @@ class Huang2022(Hooked):
                         scoring_rule='BOOLEAN'),
                     submits=True,
                     style=STYLE_BOOLEAN_NEGATIVE_FIRST)])
-                return Trial(playback=playback, feedback_form=form, html=html,
+                return [Trial(playback=playback, feedback_form=form, html=html,
                              config={'response_time': 15},
-                             title=_("Audio check"))
+                             title=_("Audio check"))]
             else:
                 if last_result.score == 0:
                     # user indicated they couldn't hear the music
@@ -115,9 +99,9 @@ class Huang2022(Hooked):
                             submits=True,
                             style=STYLE_BOOLEAN_NEGATIVE_FIRST
                         )])
-                        return Trial(playback=playback, html=html, feedback_form=form,
+                        return [Trial(playback=playback, html=html, feedback_form=form,
                                      config={'response_time': 15},
-                                     title=_("Ready to experiment"))
+                                     title=_("Ready to experiment"))]
                     else:
                         # finish and redirect
                         session.finish()
@@ -152,7 +136,8 @@ class Huang2022(Hooked):
                         step_numbers=True,
                         button_label=_("Continue")
                     )
-                    actions.extend([explainer, explainer_devices, *self.next_song_sync_action(session, round_number)])
+                    playlist = Playlist(session.block.playlists.all())
+                    actions.extend([explainer, explainer_devices, playlist, *self.next_song_sync_action(session, round_number)])
         else:
             # Load the heard_before offset.
             heard_before_offset = session.load_json_data().get('heard_before_offset')
@@ -174,7 +159,7 @@ class Huang2022(Hooked):
                 actions.append(
                     self.next_heard_before_action(session, round_number))
             else:
-                questionnaire = self.get_questionnaire(session)
+                questionnaire = self.get_open_questions(session)
                 if questionnaire:
                     actions.extend([Explainer(
                         instruction=_("Please answer some questions \

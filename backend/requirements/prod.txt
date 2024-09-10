@@ -43,7 +43,7 @@ django-inline-actions==2.4.0
     # via -r requirements.in/base.txt
 django-markup[all-filter-dependencies,all_filter_dependencies]==1.8.1
     # via -r requirements.in/base.txt
-django-nested-admin==4.1.0
+django-nested-admin==4.1.1
     # via -r requirements.in/base.txt
 docutils==0.20.1
     # via

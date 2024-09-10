@@ -1,7 +1,7 @@
 import { useState, useRef, useCallback } from "react";
 import classNames from "classnames";
 
-import { getCurrentTime, getTimeSince } from "../../util/time";
+import { getCurrentTime, getTimeSince } from "@/util/time";
 import FeedbackForm from "../FeedbackForm/FeedbackForm";
 import HTML from "../HTML/HTML";
 import Playback from "../Playback/Playback";
@@ -9,16 +9,17 @@ import Button from "../Button/Button";
 import Question from "@/types/Question";
 import { OnResultType } from "@/hooks/useResultHandler";
 import { TrialConfig } from "@/types/Trial";
+import { PlaybackArgs } from "@/types/Playback";
 
-interface IFeedbackForm {
+export interface IFeedbackForm {
     form: Question[];
     submit_label: string;
     skip_label: string;
     is_skippable: boolean;
 }
 
-interface TrialProps {
-    playback: any;
+export interface TrialProps {
+    playback: PlaybackArgs;
     html: { body: string | TrustedHTML };
     feedback_form: IFeedbackForm;
     config: TrialConfig;
@@ -28,7 +29,7 @@ interface TrialProps {
 }
 
 /**
- * Trial is an block view to present information to the user and/or collect user feedback
+ * Trial is a block view to present information to the user and/or collect user feedback
  * If "playback" is provided, it will play audio through the Playback component
  * If "html" is provided, it will show html content
  * If "feedback_form" is provided, it will present a form of questions to the user
@@ -102,6 +103,8 @@ const Trial = (props: TrialProps) => {
                 }
 
             } else {
+
+
                 if (result_id) {
                     onResult({
                         result,
@@ -140,13 +143,16 @@ const Trial = (props: TrialProps) => {
 
         if (config.auto_advance) {
 
+
             // Create a time_passed result
             if (config.auto_advance_timer != null) {
                 if (playback.view === 'BUTTON') {
                     startTime.current = getCurrentTime();
                 }
 
-                setTimeout(() => { makeResult({ type: "time_passed", }); }, config.auto_advance_timer);
+                setTimeout(() => {
+                    makeResult({ type: "time_passed", });
+                }, config.auto_advance_timer);
             } else {
 
                 makeResult({
@@ -188,7 +194,7 @@ const Trial = (props: TrialProps) => {
                     isSkippable={feedback_form.is_skippable}
                     onResult={makeResult}
                 // emphasizeTitle={feedback_form.is_profile}
-                // to do: if we want left-aligned text with a pink divider,
+                // TODO: if we want left-aligned text with a pink divider,
                 // make this style option available again (used in Question.scss)
                 />
             )}

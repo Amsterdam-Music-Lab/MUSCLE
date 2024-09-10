@@ -2,7 +2,7 @@ import copy
 
 from django.db import models
 from django.utils import timezone
-from django.utils.translation import gettext_lazy as _
+from django.utils.translation import gettext_lazy as _, get_language
 from django.contrib.postgres.fields import ArrayField
 from typing import List, Dict, Tuple, Any
 from experiment.standards.iso_languages import ISO_LANGUAGES
@@ -135,20 +135,25 @@ class Experiment(models.Model):
 
         return content
 
+    def get_current_content(self, fallback: bool = True):
+        """Get content for the 'current' language"""
+        language = get_language()
+        return self.get_translated_content(language, fallback)
+
 
 class Phase(models.Model):
     """Root entity for configuring experiment phases"""
 
     name = models.CharField(max_length=64, blank=True, default="")
-    series = models.ForeignKey(Experiment, on_delete=models.CASCADE, related_name="phases")
+    experiment = models.ForeignKey(Experiment, on_delete=models.CASCADE, related_name="phases")
     index = models.IntegerField(default=0, help_text="Index of the phase in the series. Lower numbers come first.")
     dashboard = models.BooleanField(default=False)
     randomize = models.BooleanField(default=False, help_text="Randomize the order of the experiments in this phase.")
 
     def __str__(self):
-        default_content = self.series.get_fallback_content()
+        default_content = self.experiment.get_fallback_content()
         experiment_name = default_content.name if default_content else None
-        compound_name = self.name or experiment_name or self.series.slug or "Unnamed phase"
+        compound_name = self.name or experiment_name or self.experiment.slug or "Unnamed phase"
 
         if not self.name:
             return f"{compound_name} ({self.index})"
@@ -165,29 +170,31 @@ class Block(models.Model):
     phase = models.ForeignKey(Phase, on_delete=models.CASCADE, related_name="blocks", blank=True, null=True)
     index = models.IntegerField(default=0, help_text="Index of the block in the phase. Lower numbers come first.")
     playlists = models.ManyToManyField("section.Playlist", blank=True)
+
+    # TODO: to be deleted?
     name = models.CharField(db_index=True, max_length=64)
+    # TODO: to be deleted?
     description = models.TextField(blank=True, default="")
+
     image = models.ForeignKey(Image, on_delete=models.SET_NULL, blank=True, null=True)
     slug = models.SlugField(db_index=True, max_length=64, unique=True, validators=[block_slug_validator])
-    url = models.CharField(
-        verbose_name="URL with more information about the block", max_length=100, blank=True, default=""
-    )
-    hashtag = models.CharField(verbose_name="hashtag for social media", max_length=20, blank=True, default="")
+
     active = models.BooleanField(default=True)
     rounds = models.PositiveIntegerField(default=10)
     bonus_points = models.PositiveIntegerField(default=0)
     rules = models.CharField(default="", max_length=64)
-    language = models.CharField(default="", blank=True, choices=language_choices, max_length=2)
-    theme_config = models.ForeignKey(ThemeConfig, on_delete=models.SET_NULL, blank=True, null=True)
-    consent = models.FileField(
-        upload_to=consent_upload_path, blank=True, default="", validators=[markdown_html_validator()]
-    )
 
-    class Meta:
-        ordering = ["name"]
+    translated_contents = models.QuerySet["BlockTranslatedContent"]
+
+    theme_config = models.ForeignKey(ThemeConfig, on_delete=models.SET_NULL, blank=True, null=True)
 
     def __str__(self):
-        return self.name
+        if self.name:
+            return self.name
+
+        content = self.get_fallback_content()
+
+        return content.name if content and content.name else self.slug
 
     def session_count(self) -> int:
         """Number of sessions
@@ -393,6 +400,39 @@ class Block(models.Model):
                         question_series=qs, question=Question.objects.get(pk=question), index=i + 1
                     )
 
+    def get_fallback_content(self):
+        """Get fallback content for the block"""
+        if not self.phase or self.phase.experiment:
+            return self.translated_contents.first()
+
+        experiment = self.phase.experiment
+        fallback_language = experiment.get_fallback_content().language
+        fallback_content = self.translated_contents.filter(language=fallback_language).first()
+
+        return fallback_content
+
+    def get_translated_content(self, language: str, fallback: bool = True):
+        """Get content for a specific language"""
+        content = self.translated_contents.filter(language=language).first()
+
+        if not content and fallback:
+            fallback_content = self.get_fallback_content()
+
+            if not fallback_content:
+                raise ValueError("No fallback content found for block")
+
+            return fallback_content
+
+        if not content:
+            raise ValueError(f"No content found for language {language}")
+
+        return content
+
+    def get_current_content(self, fallback: bool = True):
+        """Get content for the 'current' language"""
+        language = get_language()
+        return self.get_translated_content(language, fallback)
+
 
 class ExperimentTranslatedContent(models.Model):
     """Translated content for an Experiment"""
@@ -406,6 +446,20 @@ class ExperimentTranslatedContent(models.Model):
         upload_to=consent_upload_path, blank=True, default="", validators=[markdown_html_validator()]
     )
     about_content = models.TextField(blank=True, default="")
+
+
+class BlockTranslatedContent(models.Model):
+    block = models.ForeignKey(Block, on_delete=models.CASCADE, related_name="translated_contents")
+    language = models.CharField(default="", blank=True, choices=language_choices, max_length=2)
+    name = models.CharField(max_length=64, default="")
+    description = models.TextField(blank=True, default="")
+
+    def __str__(self):
+        return f"{self.name} ({self.language})"
+
+    class Meta:
+        # Assures that there is only one translation per language
+        unique_together = ["block", "language"]
 
 
 class Feedback(models.Model):

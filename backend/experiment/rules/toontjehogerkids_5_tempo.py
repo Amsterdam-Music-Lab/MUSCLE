@@ -13,11 +13,8 @@ logger = logging.getLogger(__name__)
 class ToontjeHogerKids5Tempo(ToontjeHoger5Tempo):
     ID = 'TOONTJE_HOGER_KIDS_5_TEMPO'
 
-    def first_round(self, block):
-        """Create data for the first block rounds."""
-
-        # 1. Explain game.
-        explainer = Explainer(
+    def get_intro_explainer(self):
+        return Explainer(
             instruction="Maatgevoel",
             steps=[
                 Step(
@@ -30,10 +27,6 @@ class ToontjeHogerKids5Tempo(ToontjeHoger5Tempo):
             step_numbers=True,
             button_label="Start"
         )
-
-        return [
-            explainer
-        ]
 
     def get_random_section_pair(self, session, genre):
         """

@@ -17,7 +17,7 @@ def get_render_format(url: str) -> str:
 
 
 def render_html_or_markdown(dry_text: str, render_format: str) -> str:
-    '''render html or markdown
+    """render html or markdown
 
     Args:
         dry_text (str): contents of a markdown or html file
@@ -25,7 +25,7 @@ def render_html_or_markdown(dry_text: str, render_format: str) -> str:
 
     Returns:
         (str): content rendered to html
-    '''
+    """
 
     if render_format == 'HTML':
         template = Template(dry_text)
@@ -39,7 +39,7 @@ class Consent(BaseAction):  # pylint: disable=too-few-public-methods
     """Provide data for a view that ask consent for using the experiment data
 
     Args:
-        text (str): Uploaded file via block.consent (fileField)
+        text (str): Uploaded file via an experiment's translated content's consent (fileField)
         title (str): The title to be displayed
         confirm: The text on the confirm button
         deny: The text on the deny button
@@ -65,7 +65,7 @@ class Consent(BaseAction):  # pylint: disable=too-few-public-methods
                 amet, nec te atqui scribentur. Diam molestie posidonium te sit, \
                 ea sea expetenda suscipiantur contentiones."
 
-    def __init__(self, text: str, title:str='Informed consent', confirm:str='I agree', deny:str='Stop', url:str=''):
+    def __init__(self, text: str, title:str="Informed consent", confirm:str="I agree", deny:str="Stop", url:str=""):
         # Determine which text to use
         if text!='':
             # Uploaded consent via file field: block.consent (High priority)
