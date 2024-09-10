@@ -13,8 +13,8 @@ vi.mock("../Playback/Playback", () => ({
     )),
 }));
 vi.mock("../FeedbackForm/FeedbackForm", () => ({
-    default: vi.fn(({ onResult }) => (
-        <div data-testid="mock-feedback-form" onClick={() => onResult({ type: 'feedback' })}>Mock Feedback Form</div>
+    default: vi.fn(({ makeResult }) => (
+        <div data-testid="mock-feedback-form" onClick={() => makeResult(false)}>Mock Feedback Form</div>
     )),
 }));
 vi.mock("../HTML/HTML", () => ({
@@ -131,7 +131,7 @@ describe('Trial', () => {
     it("calls finishedPlaying when Playback component finishes", () => {
         const config = { ...defaultConfig, auto_advance: true };
         render(<Trial
-            playback={{ somePlaybackProp: true }}
+            playback={{ view: 'AUTOPLAY' }}
             config={config}
             onNext={mockOnNext}
             onResult={mockOnResult}
@@ -146,6 +146,7 @@ describe('Trial', () => {
         render(<Trial
             playback={{ view: 'BUTTON' }}
             config={config}
+            feedback_form={feedback_form}
             onNext={mockOnNext}
             onResult={mockOnResult}
         />);

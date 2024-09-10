@@ -60,22 +60,22 @@ const Trial = (props: TrialProps) => {
 
     // Create result data
     const makeResult = useCallback(
-        async (result: { type: 'time_passed' }) => {
+        async (hasTimedOut: boolean) => {
 
             // Prevent multiple submissions
             if (submitted.current) {
                 return;
             }
-
             submitted.current = true;
 
             if (!feedback_form) {
                 return onNext();
             }
 
+
             const { form = [] } = feedback_form;
 
-            if (result.type === "time_passed") {
+            if (hasTimedOut) {
                 form.map((formElement) => (formElement.value = "TIMEOUT"));
             }
 
@@ -131,7 +131,6 @@ const Trial = (props: TrialProps) => {
 
         if (config.auto_advance) {
 
-
             // Create a time_passed result
             if (config.auto_advance_timer != null) {
                 if (playback.view === 'BUTTON') {
@@ -139,14 +138,10 @@ const Trial = (props: TrialProps) => {
                 }
 
                 setTimeout(() => {
-                    makeResult({ type: "time_passed", });
+                    makeResult(true);
                 }, config.auto_advance_timer);
             } else {
-
-                makeResult({
-                    type: "time_passed",
-                });
-
+                makeResult(true);
             }
         }
         setFormActive(true);
