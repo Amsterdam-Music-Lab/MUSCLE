@@ -75,11 +75,12 @@ def serialize_phase(phase: Phase, participant: Participant) -> dict:
     }
 
 
-def serialize_block(block_object: Block, participant: Participant):
+def serialize_block(block_object: Block, language="en"):
+    block_content = block_object.get_translated_content(language)
     return {
         "slug": block_object.slug,
-        "name": block_object.name,
-        "description": block_object.description,
+        "name": block_content.name,
+        "description": block_content.description,
         "image": serialize_image(block_object.image) if block_object.image else None,
     }
 

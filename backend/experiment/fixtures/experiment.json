@@ -12,7 +12,6 @@
         "fields": {
             "name": "DurationDiscrimination",
             "slug": "ddi",
-            "active": true,
             "rounds": 100,
             "bonus_points": 0,
             "rules": "DURATION_DISCRIMINATION",
@@ -27,7 +26,6 @@
         "fields": {
             "name": "DurationDiscriminationTone",
             "slug": "ddit",
-            "active": true,
             "rounds": 100,
             "bonus_points": 0,
             "rules": "DURATION_DISCRIMINATION_TONE",
@@ -42,7 +40,6 @@
         "fields": {
             "name": "BeatAlignment",
             "slug": "bat",
-            "active": true,
             "rounds": 17,
             "bonus_points": 0,
             "rules": "BEAT_ALIGNMENT",
@@ -57,7 +54,6 @@
         "fields": {
             "name": "HBAT-BIT",
             "slug": "hbat_bit",
-            "active": true,
             "rounds": 100,
             "bonus_points": 0,
             "rules": "H_BAT",
@@ -72,7 +68,6 @@
         "fields": {
             "name": "HBAT-BFIT",
             "slug": "hbat_bfit",
-            "active": true,
             "rounds": 100,
             "bonus_points": 0,
             "rules": "H_BAT_BFIT",
@@ -87,7 +82,6 @@
         "fields": {
             "name": "HBAT-BST",
             "slug": "hbat_bst",
-            "active": true,
             "rounds": 100,
             "bonus_points": 0,
             "rules": "BST",
@@ -102,7 +96,6 @@
         "fields": {
             "name": "Anisochrony",
             "slug": "anis",
-            "active": true,
             "rounds": 100,
             "bonus_points": 0,
             "rules": "ANISOCHRONY",
@@ -117,7 +110,6 @@
         "fields": {
             "name": "RhythmDiscrimination",
             "slug": "rhdis",
-            "active": true,
             "rounds": 40,
             "bonus_points": 0,
             "rules": "RHYTHM_DISCRIMINATION",
@@ -132,7 +124,6 @@
         "fields": {
             "name": "Rhythm Battery Final",
             "slug": "rhythm_outro",
-            "active": true,
             "rounds": 10,
             "bonus_points": 0,
             "rules": "RHYTHM_BATTERY_FINAL",
@@ -147,7 +138,6 @@
         "fields": {
             "name": "Rhythm Battery Intro",
             "slug": "rhythm_intro",
-            "active": true,
             "rounds": 10,
             "bonus_points": 0,
             "rules": "RHYTHM_BATTERY_INTRO",
@@ -162,7 +152,6 @@
         "fields": {
             "name": "Hooked-China",
             "slug": "huang_2022",
-            "active": true,
             "rounds": 30,
             "bonus_points": 0,
             "rules": "HUANG_2022",
@@ -179,7 +168,6 @@
         "fields": {
             "name": "Categorization",
             "slug": "cat",
-            "active": true,
             "rounds": 10,
             "bonus_points": 0,
             "rules": "CATEGORIZATION",
@@ -194,7 +182,6 @@
         "fields": {
             "name": "TuneTwins",
             "slug": "tunetwins",
-            "active": true,
             "rounds": 10,
             "bonus_points": 0,
             "rules": "MATCHING_PAIRS",
@@ -209,7 +196,6 @@
         "fields": {
             "name": "Hooked-Eurovision",
             "slug": "eurovision_2021",
-            "active": true,
             "rounds": 30,
             "bonus_points": 0,
             "rules": "EUROVISION_2020",
@@ -224,7 +210,6 @@
         "fields": {
             "name": "Hooked-Christmas",
             "slug": "christmas_2020",
-            "active": true,
             "rounds": 30,
             "bonus_points": 0,
             "rules": "KUIPER_2020",
@@ -239,7 +224,6 @@
         "fields": {
             "name": "ThatsMySong",
             "slug": "thats_my_song",
-            "active": false,
             "rounds": 10,
             "bonus_points": 0,
             "rules": "THATS_MY_SONG",

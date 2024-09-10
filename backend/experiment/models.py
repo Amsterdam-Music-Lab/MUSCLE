@@ -31,9 +31,9 @@ class Experiment(models.Model):
 
     slug = models.SlugField(max_length=64, default="")
     translated_content = models.QuerySet["ExperimentTranslatedContent"]
-    theme_config = models.ForeignKey("theme.ThemeConfig", blank=True, null=True, on_delete=models.SET_NULL)
-    # present random_experiments as dashboard
-    dashboard = models.BooleanField(default=False)
+    theme_config = models.ForeignKey(
+        "theme.ThemeConfig", blank=True, null=True, on_delete=models.SET_NULL
+    )
     active = models.BooleanField(default=True)
     social_media_config: Optional["SocialMediaConfig"]
     phases: models.QuerySet["Phase"]
@@ -91,7 +91,6 @@ class Experiment(models.Model):
 
 
 class Phase(models.Model):
-    name = models.CharField(max_length=64, blank=True, default="")
     experiment = models.ForeignKey(Experiment, on_delete=models.CASCADE, related_name="phases")
     index = models.IntegerField(default=0, help_text="Index of the phase in the series. Lower numbers come first.")
     dashboard = models.BooleanField(default=False)
@@ -100,12 +99,8 @@ class Phase(models.Model):
     def __str__(self):
         default_content = self.experiment.get_fallback_content()
         experiment_name = default_content.name if default_content else None
-        compound_name = self.name or experiment_name or self.experiment.slug or "Unnamed phase"
-
-        if not self.name:
-            return f"{compound_name} ({self.index})"
-
-        return f"{compound_name}"
+        compound_name = experiment_name or self.experiment.slug or "Unnamed phase"
+        return f"{compound_name} ({self.index})"
 
     class Meta:
         ordering = ["index"]
@@ -118,15 +113,9 @@ class Block(models.Model):
     index = models.IntegerField(default=0, help_text="Index of the block in the phase. Lower numbers come first.")
     playlists = models.ManyToManyField("section.Playlist", blank=True)
 
-    # TODO: to be deleted?
-    name = models.CharField(db_index=True, max_length=64)
-    # TODO: to be deleted?
-    description = models.TextField(blank=True, default="")
-
     image = models.ForeignKey(Image, on_delete=models.SET_NULL, blank=True, null=True)
     slug = models.SlugField(db_index=True, max_length=64, unique=True, validators=[block_slug_validator])
 
-    active = models.BooleanField(default=True)
     rounds = models.PositiveIntegerField(default=10)
     bonus_points = models.PositiveIntegerField(default=0)
     rules = models.CharField(default="", max_length=64)
@@ -136,11 +125,7 @@ class Block(models.Model):
     theme_config = models.ForeignKey(ThemeConfig, on_delete=models.SET_NULL, blank=True, null=True)
 
     def __str__(self):
-        if self.name:
-            return self.name
-
         content = self.get_fallback_content()
-
         return content.name if content and content.name else self.slug
 
     def session_count(self):

@@ -66,9 +66,8 @@ class TestAdminBlock(TestCase):
         site = AdminSite()
         admin = BlockAdmin(block, site)
         link = admin.block_name_link(block)
-        expected_url = reverse("admin:experiment_block_change", args=[block.pk])
         expected_name = "Test Block"
-        expected_link = format_html('<a href="{}">{}</a>', expected_url, expected_name)
+        expected_link = format_html('<a href="{}">{}</a>', expected_name)
         self.assertEqual(link, expected_link)
 
     def test_block_slug_link(self):
