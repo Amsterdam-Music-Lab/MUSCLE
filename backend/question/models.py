@@ -5,7 +5,7 @@ from experiment.models import Block
 class Question(models.Model):
     """A model that refers to a built-in or customized question"""
 
-    key = models.CharField(primary_key=True, max_length=128)
+    key = models.SlugField(primary_key=True, max_length=128)
     question = models.CharField(max_length=1024)
     editable = models.BooleanField(default=True, editable=False)
 
@@ -22,7 +22,6 @@ class Question(models.Model):
     type = models.CharField(max_length=128, default="", choices=TYPES)
 
     explainer=models.TextField(blank=True, default="")
-    choices = models.TextField(blank=True, default="")
 
     SCALE_STEPS = [(5,5),(7,7)]
     scale_steps = models.IntegerField(choices=SCALE_STEPS, default=7)
@@ -56,6 +55,17 @@ class Question(models.Model):
 
     class Meta:
         ordering = ["key"]
+
+
+class Choice(models.Model):
+
+    key = models.SlugField(primary_key=True, max_length=128)
+    text = models.TextField(default="")
+    index = models.PositiveIntegerField()
+    question = models.ForeignKey(Question, on_delete=models.CASCADE)
+
+    class Meta:
+        ordering = ["index"]
 
 
 class QuestionGroup(models.Model):

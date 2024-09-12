@@ -75,10 +75,8 @@ def create_question_db(key):
     question = Question.objects.get(key=key)
 
     choices = {}
-    if question.choices:
-        for line in question.choices.split('\n'):
-            key, text = line.split(":")
-            choices[key] = text
+    for choice in question.choice_set.all():
+        choices[choice.key] = choice.text
 
     if question.type == "LikertQuestion":
         return LikertQuestion(

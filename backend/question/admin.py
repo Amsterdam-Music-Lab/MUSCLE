@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.db import models
-from question.models import Question, QuestionGroup, QuestionSeries, QuestionInSeries
+from question.models import Question, QuestionGroup, QuestionSeries, QuestionInSeries, Choice
 from django.forms import CheckboxSelectMultiple
 from experiment.forms import QuestionSeriesAdminForm
 from question.forms import QuestionForm
@@ -16,6 +16,10 @@ class QuestionSeriesInline(admin.TabularInline):
     extra = 0
     show_change_link = True
 
+class ChoiceInline(admin.TabularInline):
+    model = Choice
+    extra = 0
+    show_change_link = True
 
 class QuestionAdmin(admin.ModelAdmin):
 
@@ -33,19 +37,24 @@ class QuestionAdmin(admin.ModelAdmin):
         else:
             fields = ["key","question","type","explainer"]
             if obj.type == "LikertQuestion":
-                fields += ["choices","scale_steps","profile_scoring_rule"]
+                fields += ["scale_steps","profile_scoring_rule"]
             elif obj.type == "LikertQuestionIcon":
                 fields += ["profile_scoring_rule"]
             elif obj.type in ["NumberQuestion"]:
                 fields += ["min_value","max_value"]
             elif obj.type == "TextQuestion":
                 fields += ["max_length"]
-            elif obj.type in ("BooleanQuestion","AutoCompleteQuestion"):
-                fields += ["choices"]
             elif obj.type == "ChoiceQuestion":
-                fields += ["choices", "view","min_values"]
+                fields += ["view","min_values"]
 
         return fields
+
+    def get_inlines(self, request, obj=None):
+
+        inlines = []
+        if obj and obj.type in ("LikertQuestion","BooleanQuestion","AutoCompleteQuestion","ChoiceQuestion"):
+            inlines = [ChoiceInline]
+        return inlines
 
 
 class QuestionGroupAdmin(admin.ModelAdmin):

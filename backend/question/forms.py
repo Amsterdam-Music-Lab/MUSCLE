@@ -32,7 +32,7 @@ class QuestionForm(ModelForm):
     class Meta:
         help_texts = {
             "choices" : "Enter each choice on a separate line as key:text",
-            "scale_steps" : "Non-emtpy choices field overrides this value",
+            "scale_steps" : "Non-empty choices field overrides this value",
             "min_values" : "Only affects CHECKBOXES view"
         }
    
