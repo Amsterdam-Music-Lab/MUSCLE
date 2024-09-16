@@ -18,10 +18,8 @@ class HookedTest(TestCase):
 
     @classmethod
     def setUpTestData(cls):
-        ''' set up data for Hooked base class '''
-        
+        """set up data for Hooked base class"""
         create_default_questions()
-
         cls.participant = Participant.objects.create()
         cls.playlist = Playlist.objects.create(name="Test Eurovision")
         cls.playlist.csv = (

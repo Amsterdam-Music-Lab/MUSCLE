@@ -12,9 +12,7 @@ from question.questions import create_default_questions
 class TestRhythmBatteryFinal(TestCase):
     @classmethod
     def setUpTestData(cls):
-
         create_default_questions()
-
         Experiment.objects.create(
             slug="MARKDOWN_EXPERIMENT",
         )
