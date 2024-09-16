@@ -1,5 +1,6 @@
 document.addEventListener("DOMContentLoaded", function () {
     initCollapsibleInlineForms();
+    floatingSubmitRow();
 });
 
 function initCollapsibleInlineForms() {
@@ -36,5 +37,24 @@ function initCollapsibleInlineForms() {
                 collapsedInfo.innerText = ' (-)';
             }
         });
+    });
+}
+
+function floatingSubmitRow() {
+    const submitRow = document.querySelector('.submit-row');
+
+    if (!submitRow) {
+        console.error('No submit row found');
+        return;
+    }
+
+    const submitRowOffset = submitRow.offsetTop;
+
+    window.addEventListener('scroll', function () {
+        if (window.pageYOffset + window.innerHeight < submitRowOffset + 20) {
+            submitRow.classList.add('floating');
+        } else {
+            submitRow.classList.remove('floating');
+        }
     });
 }

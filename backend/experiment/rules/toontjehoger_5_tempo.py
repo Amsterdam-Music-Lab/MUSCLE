@@ -26,11 +26,8 @@ class ToontjeHoger5Tempo(Base):
     SCORE_CORRECT = 20
     SCORE_WRONG = 0
 
-    def first_round(self, block):
-        """Create data for the first block rounds."""
-
-        # 1. Explain game.
-        explainer = Explainer(
+    def get_intro_explainer(self):
+        return Explainer(
             instruction="Timing en tempo",
             steps=[
                 Step("Je krijgt dadelijk twee verschillende uitvoeringen van hetzelfde stuk te horen."),
@@ -44,23 +41,19 @@ class ToontjeHoger5Tempo(Base):
             button_label="Start",
         )
 
-        return [
-            explainer,
-        ]
-
     def next_round(self, session):
         """Get action data for the next round"""
 
-        get_rounds_passed = session.get_rounds_passed()
+        rounds_passed = session.get_rounds_passed()
 
         # Round 1
-        if get_rounds_passed == 0:
+        if rounds_passed == 0:
             # No combine_actions because of inconsistent next_round array wrapping in first round
-            return self.get_round(session, get_rounds_passed)
+            return [self.get_intro_explainer(), *self.get_round(session, rounds_passed)]
 
         # Round 2
-        if get_rounds_passed < session.block.rounds:
-            return [*self.get_score(session), *self.get_round(session, get_rounds_passed)]
+        if rounds_passed < session.block.rounds:
+            return [*self.get_score(session), *self.get_round(session, rounds_passed)]
 
         # Final
         return self.get_final_round(session)

@@ -51,7 +51,7 @@ class Question(models.Model):
     view = models.CharField(max_length=128, default="", choices=VIEWS)
 
     def __str__(self):
-        return "("+self.key+") "+ self.question
+        return "(" + self.key + ") " + self.question
 
     class Meta:
         ordering = ["key"]
@@ -84,13 +84,13 @@ class QuestionGroup(models.Model):
 
 
 class QuestionSeries(models.Model):
-    """Series of Questions asked in an Block"""
+    """Series of Questions asked in a Block"""
 
-    name = models.CharField(default='', max_length=128)
+    name = models.CharField(default="", max_length=128)
     block = models.ForeignKey(Block, on_delete=models.CASCADE)
-    index = models.PositiveIntegerField() # index of QuestionSeries within Block
-    questions = models.ManyToManyField(Question, through='QuestionInSeries')
-    randomize = models.BooleanField(default=False) # randomize questions within QuestionSeries
+    index = models.PositiveIntegerField()  # index of QuestionSeries within Block
+    questions = models.ManyToManyField(Question, through="QuestionInSeries")
+    randomize = models.BooleanField(default=False)  # randomize questions within QuestionSeries
 
     class Meta:
         ordering = ["index"]
@@ -108,6 +108,6 @@ class QuestionInSeries(models.Model):
     index = models.PositiveIntegerField()
 
     class Meta:
-        unique_together = ('question_series', 'question')
+        unique_together = ("question_series", "question")
         ordering = ["index"]
         verbose_name_plural = "Question In Series objects"

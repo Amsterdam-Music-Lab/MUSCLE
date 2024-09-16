@@ -22,7 +22,7 @@ interface QuestionProps {
     emphasizeTitle?: boolean;
 }
 
-/** Question is an block view that shows a question and handles storing the answer */
+/** Question is a block view that shows a question and handles storing the answer */
 const Question = ({
     question,
     onChange,

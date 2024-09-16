@@ -41,10 +41,6 @@ from result.utils import prepare_result
 
 
 class TwoAlternativeForced(Base):
-    """
-    first_round() and next_round() are required methods for the class.
-    """
-
     # Add to __init.py__ file in the same directory as the current file:
     #    from .tafc import TwoAlternativeForced
     # To BLOCK_RULES dictionary in __init.py__
@@ -59,46 +55,30 @@ class TwoAlternativeForced(Base):
             "randomize": False
         }]
 
-    def first_round(self, block):
+    def get_intro_explainer(self) -> Explainer:
         """
-        Returns a list of actions. Actions used here: Explainer, Consent.
+        Returns an introductory explanation of the experiment.
         """
-
-        explainer = Explainer(
+        return Explainer(
             instruction="This is a listening experiment in which you have to respond to short sound sequences",
             steps=[],
             button_label='Ok'
         )
 
-        # Add consent, text in admin
-        consent = Consent(
-            block.consent,
-            title='Informed consent',
-            confirm='I agree',
-            deny='Stop',
-            )
-        return [consent, explainer]
-
     def next_round(self, session):
         """
         Returns a list of actions.
-        Actions used here: Final, Trial (returned by get_questionnaire(), next_trial_action()), Explainer (also returned by get_feedback())
+        Actions used here: Final, Trial (returned by get_open_questions(), next_trial_action()), Explainer (also returned by get_feedback())
         """
 
-        # get_questionnaire() returns questions that haven't been asked yet
-        actions = self.get_questionnaire(session)
+        # get_open_questions() returns questions that haven't been asked yet
+        actions = self.get_open_questions(session)
         if actions:
             return actions
 
         if session.get_rounds_passed() == 0:
             # Beginning of experiment, return an explainer and the next trial action, no feedback on previous trial
-
-            explainer2 = Explainer(
-                instruction="The experiment will now begin",
-                steps=[],
-                button_label='Ok'
-            )
-            return [explainer2, self.next_trial_action(session)]
+            return [self.get_intro_explainer(), self.next_trial_action(session)]
 
         elif not session.rounds_complete():
             # Combine two actions, feedback on previous action and next trial action

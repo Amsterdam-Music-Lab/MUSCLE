@@ -1,4 +1,5 @@
 import logging
+from typing import Union
 
 from django.template.loader import render_to_string
 from django.utils.translation import gettext_lazy as _
@@ -7,7 +8,7 @@ from django.core.exceptions import ValidationError
 
 from experiment.actions import Final, Form, Trial
 from question.utils import unanswered_questions
-from question.questions import get_questions_from_series, QUESTION_GROUPS
+from question.questions import get_questions_from_series
 from result.score import SCORING_RULES
 from session.models import Session
 
@@ -24,22 +25,18 @@ class Base(object):
         self.question_series = []
 
     def feedback_info(self):
-        feedback_body = render_to_string('feedback/user_feedback.html', {'email': self.contact_email})
+        feedback_body = render_to_string("feedback/user_feedback.html", {"email": self.contact_email})
         return {
             # Header above the feedback form
-            'header': _("Do you have any remarks or questions?"),
-
+            "header": _("Do you have any remarks or questions?"),
             # Button text
-            'button': _("Submit"),
-
+            "button": _("Submit"),
             # Body of the feedback form, can be HTML. Shown under the button
-            'contact_body': feedback_body,
-
+            "contact_body": feedback_body,
             # Thank you message after submitting feedback
-            'thank_you': _("We appreciate your feedback!"),
-
+            "thank_you": _("We appreciate your feedback!"),
             # Show a floating button on the right side of the screen to open the feedback form
-            'show_float_button': False,
+            "show_float_button": False,
         }
 
     def calculate_score(self, result, data):
@@ -52,11 +49,15 @@ class Base(object):
         return None
 
     def get_play_again_url(self, session: Session):
-        participant_id_url_param = f'?participant_id={session.participant.participant_id_url}' if session.participant.participant_id_url else ""
-        return f'/{session.block.slug}{participant_id_url_param}'
+        participant_id_url_param = (
+            f"?participant_id={session.participant.participant_id_url}"
+            if session.participant.participant_id_url
+            else ""
+        )
+        return f"/{session.block.slug}{participant_id_url_param}"
 
     def calculate_intermediate_score(self, session, result):
-        """ process result data during a trial (i.e., between next_round calls)
+        """process result data during a trial (i.e., between next_round calls)
         return score
         """
         return 0
@@ -77,10 +78,7 @@ class Base(object):
                     correct += 1
 
         score_message = "Well done!" if session.final_score > 0 else "Too bad!"
-        message = "You correctly identified {} out of {} recognized songs!".format(
-            correct,
-            total
-        )
+        message = "You correctly identified {} out of {} recognized songs!".format(correct, total)
         return score_message + " " + message
 
     def rank(self, session, exclude_unfinished=True):
@@ -90,21 +88,19 @@ class Base(object):
 
         # Few or negative points or no score, always return lowest plastic score
         if score <= 0 or not score:
-            return ranks['PLASTIC']
+            return ranks["PLASTIC"]
 
         # Buckets for positive scores:
         # rank: starts percentage
         buckets = [
             # ~ stanines 1-3
-            {'rank': ranks['BRONZE'],   'min_percentile':   0.0},
+            {"rank": ranks["BRONZE"], "min_percentile": 0.0},
             # ~ stanines 4-6
-            {'rank': ranks['SILVER'],   'min_percentile':  25.0},
+            {"rank": ranks["SILVER"], "min_percentile": 25.0},
             # ~ stanine 7
-            {'rank': ranks['GOLD'],     'min_percentile':  75.0},
-            {'rank': ranks['PLATINUM'],
-                'min_percentile':  90.0},   # ~ stanine 8
-            {'rank': ranks['DIAMOND'],
-                'min_percentile':  95.0},   # ~ stanine 9
+            {"rank": ranks["GOLD"], "min_percentile": 75.0},
+            {"rank": ranks["PLATINUM"], "min_percentile": 90.0},  # ~ stanine 8
+            {"rank": ranks["DIAMOND"], "min_percentile": 95.0},  # ~ stanine 9
         ]
 
         percentile = session.percentile_rank(exclude_unfinished)
@@ -113,11 +109,11 @@ class Base(object):
         # If the percentile rank is higher than the min_percentile
         # return the rank
         for bucket in reversed(buckets):
-            if percentile >= bucket['min_percentile']:
-                return bucket['rank']
+            if percentile >= bucket["min_percentile"]:
+                return bucket["rank"]
 
         # Default return, in case score isn't in the buckets
-        return ranks['PLASTIC']
+        return ranks["PLASTIC"]
 
     def get_single_question(self, session, randomize=False):
         """Get a random question from each question list, in priority completion order.
@@ -125,54 +121,66 @@ class Base(object):
         Participants will not continue to the next question set until they
         have completed their current one.
         """
-        questionnaire = unanswered_questions(session.participant, get_questions_from_series(session.block.questionseries_set.all()), randomize)
+        questionnaire = unanswered_questions(
+            session.participant, get_questions_from_series(session.block.questionseries_set.all()), randomize
+        )
         try:
             question = next(questionnaire)
-            return Trial(
-                title=_("Questionnaire"),
-                feedback_form=Form([question], is_skippable=question.is_skippable))
+            return Trial(title=_("Questionnaire"), feedback_form=Form([question], is_skippable=question.is_skippable))
         except StopIteration:
             return None
 
-    def get_questionnaire(self, session, randomize=False, cutoff_index=None):
-        ''' Get a list of questions to be asked in succession '''
+    def get_open_questions(self, session, randomize=False, cutoff_index=None) -> Union[list, None]:
+        """Get a list of trials for questions not yet answered by the user"""
 
         trials = []
-        questions = list(unanswered_questions(session.participant, get_questions_from_series(session.block.questionseries_set.all()), randomize, cutoff_index))
+        questions = list(
+            unanswered_questions(
+                session.participant,
+                get_questions_from_series(session.block.questionseries_set.all()),
+                randomize,
+                cutoff_index,
+            )
+        )
         open_questions = len(questions)
         if not open_questions:
             return None
         for index, question in enumerate(questions):
-            trials.append(Trial(
-                title=_("Questionnaire %(index)i / %(total)i") % {'index': index+1, 'total': open_questions},
-                feedback_form=Form([question], is_skippable=question.is_skippable)
-            ))
+            trials.append(
+                Trial(
+                    title=_("Questionnaire %(index)i / %(total)i") % {"index": index + 1, "total": open_questions},
+                    feedback_form=Form([question], is_skippable=question.is_skippable),
+                )
+            )
         return trials
 
     def social_media_info(self, block, score):
-        ''' ⚠️ Deprecated. The social media info will eventually be present on the Experiment level, not the Block level. '''
+        """⚠️ Deprecated. The social media info will eventually be present on the Experiment level, not the Block level."""
         current_url = f"{settings.RELOAD_PARTICIPANT_TARGET}/{block.slug}"
+
+        experiment = block.phase.experiment
+        social_media_config = experiment.social_media_config
+        tags = social_media_config.tags if social_media_config.tags else []
+        url = social_media_config.url or current_url
+
         return {
-            'apps': ['facebook', 'twitter'],
-            'message': _("I scored %(score)i points on %(url)s") % {
-                'score': score,
-                'url': current_url
-            },
-            'url': block.url or current_url,
-            'hashtags': [block.hashtag or block.slug, "amsterdammusiclab", "citizenscience"]
+            "apps": ["facebook", "twitter"],
+            "message": _("I scored %(score)i points on %(url)s") % {"score": score, "url": current_url},
+            "url": url,
+            "hashtags": [*tags, "amsterdammusiclab", "citizenscience"],
         }
 
     def validate_playlist(self, playlist: None):
         errors = []
         # Common validations across blocks
         if not playlist:
-            errors.append('The block must have a playlist.')
+            errors.append("The block must have a playlist.")
             return errors
 
         sections = playlist.section_set.all()
 
         if not sections:
-            errors.append('The block must have at least one section.')
+            errors.append("The block must have at least one section.")
 
         try:
             playlist.clean_csv()

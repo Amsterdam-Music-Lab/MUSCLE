@@ -1,4 +1,5 @@
 import classNames from './classNames';
+import { describe, expect, it } from 'vitest';
 
 describe('classNames function', () => {
     it('joins multiple string arguments', () => {

@@ -30,7 +30,7 @@ def get_practice_views(
     previous_results = session.result_set.order_by('-created_at')
     if not results_count:
         # first practice trial
-        return trial_callback(session, trial_condition, difficulty)
+        return [intro_explainer, get_practice_explainer(), trial_callback(session, trial_condition, difficulty)]
     last_result = previous_results.first()
     if results_count < 4:
         # practice trial
@@ -70,12 +70,12 @@ def get_practice_views(
                 response_explainer,
                 practice_again_explainer(),
                 intro_explainer,
-                practice_explainer(),
+                get_practice_explainer(),
                 next_trial
             ]
 
 
-def practice_explainer():
+def get_practice_explainer():
     return Explainer(
         instruction=_('We will now practice first.'),
         steps=[

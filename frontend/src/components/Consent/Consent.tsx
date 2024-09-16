@@ -11,16 +11,16 @@ import Participant from "@/types/Participant";
 export interface ConsentProps {
     title: string;
     text: string;
-    block: any;
+    experiment: any;
     participant: Pick<Participant, 'csrf_token'>;
     onNext: () => void;
     confirm: string;
     deny: string;
 }
 
-/** Consent is an block view that shows the consent text, and handles agreement/stop actions */
-const Consent = ({ title, text, block, participant, onNext, confirm, deny }: ConsentProps) => {
-    const [consent, loadingConsent] = useConsent(block.slug);
+/** Consent is an experiment view that shows the consent text, and handles agreement/stop actions */
+const Consent = ({ title, text, experiment, participant, onNext, confirm, deny }: ConsentProps) => {
+    const [consent, loadingConsent] = useConsent(experiment.slug);
     const urlQueryString = window.location.search;
 
     // Listen for consent, and auto advance if already given
@@ -33,7 +33,7 @@ const Consent = ({ title, text, block, participant, onNext, confirm, deny }: Con
     // Click on agree button
     const onAgree = async () => {
         // Store consent
-        await createConsent({ block, participant });
+        await createConsent({ experiment, participant });
 
         // Next!
         onNext();
@@ -49,7 +49,7 @@ const Consent = ({ title, text, block, participant, onNext, confirm, deny }: Con
     // Loader in case consent is being loaded
     // or it was already given
     if (loadingConsent || consent) {
-        return <Loading loadingText={block.loading_text} />;
+        return <Loading />;
     }
 
     // Calculate height for consent text to prevent overlapping browser chrome

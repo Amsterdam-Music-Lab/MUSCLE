@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import classNames from "classnames";
 import { Link, useNavigate } from "react-router-dom";
 import * as EmailValidator from "email-validator";
@@ -7,6 +7,7 @@ import useBoundStore from "../../util/stores";
 import { shareParticipant } from "../../API";
 import DefaultPage from "../Page/DefaultPage";
 import Loading from "../Loading/Loading";
+import Participant from "@/types/Participant";
 
 // StoreProfile enables participants to store their profile for later access
 const StoreProfile = () => {
@@ -16,7 +17,8 @@ const StoreProfile = () => {
     const validEmail = email && EmailValidator.validate(email);
     const participant = useBoundStore((state) => state.participant);
 
-    const sendLink = async () => {
+    const sendLink = async (participant: Participant) => {
+
         if (validEmail) {
             const result = await shareParticipant({ email, participant });
             if (!result) {
@@ -35,6 +37,7 @@ const StoreProfile = () => {
     }
 
     return (
+        // FIXME: backLink does not exist in DefaultPageProps and title & logoClickConfirm are missing
         <DefaultPage className="aha__store-profile" backLink={URLS.profile}>
             <h3 className="title">Personal Link</h3>
             <p>
@@ -66,7 +69,7 @@ const StoreProfile = () => {
                     className={classNames("btn btn-primary btn-lg", {
                         disabled: !validEmail,
                     })}
-                    onClick={sendLink}
+                    onClick={() => sendLink(participant)}
                 >
                     Send me the link
                 </div>

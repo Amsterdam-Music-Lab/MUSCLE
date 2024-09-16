@@ -8,25 +8,22 @@ from question.questions import create_default_questions
 
 
 class Command(BaseCommand):
-    """ Command for creating a superuser and an block if they do not yet exist """
+    """Command for creating a superuser and a block if they do not yet exist"""
 
     def handle(self, *args, **options):
-
         create_default_questions()
         management.call_command('update_translation_fields') # needed for django-modeltranslation migrations
 
         if User.objects.count() == 0:
-            management.call_command('createsuperuser', '--no-input')
-            print('Created superuser')
+            management.call_command("createsuperuser", "--no-input")
+            print("Created superuser")
         if Block.objects.count() == 0:
-            playlist = Playlist.objects.create(
-                name='Empty Playlist'
-            )
+            playlist = Playlist.objects.create(name="Empty Playlist")
             block = Block.objects.create(
-                name='Goldsmiths Musical Sophistication Index',
-                rules='RHYTHM_BATTERY_FINAL',
-                slug='gold-msi',
+                name="Goldsmiths Musical Sophistication Index",
+                rules="RHYTHM_BATTERY_FINAL",
+                slug="gold-msi",
             )
             block.playlists.add(playlist)
             block.add_default_question_series()
-            print('Created default block')
+            print("Created default block")

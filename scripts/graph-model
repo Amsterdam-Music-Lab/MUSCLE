@@ -1,5 +1,14 @@
 #!/bin/bash
 
-# This script will generate a visual representation of the database schema
-# See also: https://django-extensions.readthedocs.io/en/latest/graph_models.html
-docker-compose run --rm server python manage.py graph_models -a -g -o muscle-db-schema.png
+# Get the absolute path of the project root directory
+PROJECT_ROOT=$(cd "$(dirname "$0")/.." && pwd)
+
+# Build the image using the backend directory as the context
+docker build --target graphviz -t muscle-db-schema-generator -f "$PROJECT_ROOT/backend/DockerfileDevelop" "$PROJECT_ROOT/backend"
+
+# Run the container to generate the image
+docker run --rm \
+    -e DJANGO_SETTINGS_MODULE=aml.graphviz_settings \
+    -v "$PROJECT_ROOT/backend:/server" \
+    -v "$PROJECT_ROOT/backend/static:/server/static" \
+    muscle-db-schema-generator

@@ -25,12 +25,9 @@ class BlockModelTest(TestCase):
             name="Test Block",
             description="Test block description",
             slug="test-block",
-            url="https://example.com/block",
-            hashtag="test",
             rounds=5,
             bonus_points=10,
             rules="RHYTHM_BATTERY_FINAL",
-            language="en",
             theme_config=ThemeConfig.objects.get(name="Default"),
         )
 
