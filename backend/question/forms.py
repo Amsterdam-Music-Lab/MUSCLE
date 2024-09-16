@@ -1,4 +1,4 @@
-from django.forms import ModelForm, ValidationError, ChoiceField
+from django.forms import ModelForm, ValidationError, ChoiceField, BaseInlineFormSet
 
 
 class QuestionForm(ModelForm):
@@ -11,28 +11,31 @@ class QuestionForm(ModelForm):
             self.fields['type'].help_text = "Click 'Save and view' to customize"
 
         else:
+
+            if not kwargs.get('instance').editable:
+                self.fields["key"].disabled = True
+
             type = self.fields.get("type", None)
             if type:
                 self.fields["type"].disabled = True
 
-    def clean_choices(self):
-
-        choices = self.cleaned_data['choices']
-
-        if choices:
-            for line in choices.split('\n'):
-                if len(line.split(":")) != 2:
-                    raise ValidationError("Enter each choice on a separate line as key:text")
-
-        if self.instance.type in ("ChoiceQuestion","AutoCompleteQuestion") and not choices:
-            raise ValidationError("Choices cannot be empty")
-
-        return choices
-
     class Meta:
         help_texts = {
-            "choices" : "Enter each choice on a separate line as key:text",
             "scale_steps" : "Non-empty choices field overrides this value",
             "min_values" : "Only affects CHECKBOXES view"
         }
    
+
+class ChoiceInlineFormset(BaseInlineFormSet):
+
+    def clean(self):
+
+        choices_n = len(self.cleaned_data)
+        deletes_n = 0
+
+        for choice in self.cleaned_data:
+            if choice['DELETE']:
+                deletes_n += 1
+
+        if choices_n == 0 or (choices_n == deletes_n):
+            raise ValidationError('Choices cannot be empty!')

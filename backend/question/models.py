@@ -9,6 +9,8 @@ class Question(models.Model):
     question = models.CharField(max_length=1024)
     editable = models.BooleanField(default=True, editable=False)
 
+    explainer=models.TextField(blank=True, default="")
+
     TYPES = [
         ("", "---------"),
         ("BooleanQuestion", "BooleanQuestion"),
@@ -20,8 +22,6 @@ class Question(models.Model):
         ("AutoCompleteQuestion", "AutoCompleteQuestion"),
     ]
     type = models.CharField(max_length=128, default="", choices=TYPES)
-
-    explainer=models.TextField(blank=True, default="")
 
     SCALE_STEPS = [(5,5),(7,7)]
     scale_steps = models.IntegerField(choices=SCALE_STEPS, default=7)
@@ -60,7 +60,7 @@ class Question(models.Model):
 class Choice(models.Model):
 
     key = models.SlugField(primary_key=True, max_length=128)
-    text = models.TextField(default="")
+    text = models.CharField()
     index = models.PositiveIntegerField()
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
 

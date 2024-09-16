@@ -3,7 +3,8 @@ from django.db import models
 from question.models import Question, QuestionGroup, QuestionSeries, QuestionInSeries, Choice
 from django.forms import CheckboxSelectMultiple
 from experiment.forms import QuestionSeriesAdminForm
-from question.forms import QuestionForm
+from question.forms import QuestionForm, ChoiceInlineFormset
+from modeltranslation.admin import TabbedTranslationAdmin, TranslationTabularInline
 
 
 class QuestionInSeriesInline(admin.TabularInline):
@@ -16,38 +17,46 @@ class QuestionSeriesInline(admin.TabularInline):
     extra = 0
     show_change_link = True
 
-class ChoiceInline(admin.TabularInline):
+class ChoiceInline(TranslationTabularInline):
     model = Choice
     extra = 0
     show_change_link = True
+    formset = ChoiceInlineFormset
 
-class QuestionAdmin(admin.ModelAdmin):
+class QuestionAdmin(TabbedTranslationAdmin):
 
     form = QuestionForm
 
-    def has_change_permission(self, request, obj=None):
-        return obj.editable if obj else False
+    def get_fieldsets(self, request, obj=None):
 
-    def get_fields(self, request, obj=None):
+        fieldsets = super().get_fieldsets(request, obj)
+
+        fields = fieldsets[0][1]["fields"]
+        fields_to_show = set() # in addition to key, question(_lang), explainer(_lang), type
+        fields_to_remove_all = {'scale_steps', 'profile_scoring_rule', 'min_value', 'max_value', 'max_length', 'min_values', 'view'}
+        fields_to_remove_extra = set()
 
         if not obj:
-            fields = ["key","question","type"]
+            pass
         elif not obj.editable:
-            fields = ["key","question"]
+            fields_to_remove_extra = {"type"}
         else:
-            fields = ["key","question","type","explainer"]
             if obj.type == "LikertQuestion":
-                fields += ["scale_steps","profile_scoring_rule"]
+                fields_to_show = {"scale_steps","profile_scoring_rule"}
             elif obj.type == "LikertQuestionIcon":
-                fields += ["profile_scoring_rule"]
+                fields_to_show = {"profile_scoring_rule"}
             elif obj.type in ["NumberQuestion"]:
-                fields += ["min_value","max_value"]
+                fields_to_show = {"min_value","max_value"}
             elif obj.type == "TextQuestion":
-                fields += ["max_length"]
+                fields_to_show = {"max_length"}
             elif obj.type == "ChoiceQuestion":
-                fields += ["view","min_values"]
+                fields_to_show = {"view","min_values"}
 
-        return fields
+        fields_to_remove = (fields_to_remove_all - fields_to_show) | fields_to_remove_extra
+        for f in fields_to_remove:
+            fields.remove(f)
+
+        return fieldsets
 
     def get_inlines(self, request, obj=None):
 

@@ -38,6 +38,7 @@ django==4.2.15
     #   django-extensions
     #   django-inline-actions
     #   django-markup
+    #   django-modeltranslation
 django-cors-headers==3.10.0
     # via -r requirements.in/base.txt
 django-debug-toolbar==4.3.0
@@ -47,6 +48,8 @@ django-extensions==3.2.3
 django-inline-actions==2.4.0
     # via -r requirements.in/base.txt
 django-markup[all-filter-dependencies,all_filter_dependencies]==1.8.1
+    # via -r requirements.in/base.txt
+django-modeltranslation==0.19.9
     # via -r requirements.in/base.txt
 django-nested-admin==4.1.0
     # via -r requirements.in/base.txt
