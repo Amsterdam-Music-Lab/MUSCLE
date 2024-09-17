@@ -6,9 +6,7 @@ from experiment.forms import BlockForm, ExportForm, TemplateForm, BLOCK_RULES, S
 class BlockFormTest(TestCase):
     def test_form_fields(self):
         form = BlockForm()
-        self.assertIn('name', form.fields)
-        self.assertIn('slug', form.fields)
-        self.assertIn('active', form.fields)
+        self.assertIn("slug", form.fields)
         self.assertIn('rules', form.fields)
         self.assertIn('rounds', form.fields)
         self.assertIn('bonus_points', form.fields)

@@ -13,7 +13,7 @@ class SessionViewsTest(TestCase):
         cls.participant = Participant.objects.create(unique_hash=42)
         cls.playlist1 = Playlist.objects.create(name="First Playlist")
         cls.playlist2 = Playlist.objects.create(name="Second Playlist")
-        cls.block = Block.objects.create(name="TestViews", slug="testviews", rules="RHYTHM_BATTERY_INTRO")
+        cls.block = Block.objects.create(slug="testviews", rules="RHYTHM_BATTERY_INTRO")
         cls.block.playlists.add(cls.playlist1, cls.playlist2)
 
     def setUp(self):

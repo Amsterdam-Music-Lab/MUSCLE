@@ -75,7 +75,9 @@ class HookedTest(TestCase):
         experiment = Experiment.objects.create(slug="HOOKED")
         SocialMediaConfig.objects.create(experiment=experiment, url="https://app.amsterdammusiclab.nl/hooked")
         phase = Phase.objects.create(experiment=experiment)
-        block = Block.objects.create(name="Hooked", rules="HOOKED", rounds=n_rounds, phase=phase)
+        block = Block.objects.create(
+            slug="Hooked", rules="HOOKED", rounds=n_rounds, phase=phase
+        )
         block.add_default_question_series()
         session = Session.objects.create(block=block, participant=self.participant, playlist=self.playlist)
         rules = session.block_rules()
@@ -129,7 +131,9 @@ class HookedTest(TestCase):
 
     def _run_eurovision(self, session_type):
         n_rounds = 6
-        block = Block.objects.create(name="Test-Eurovision", rules="EUROVISION_2020", rounds=n_rounds)
+        block = Block.objects.create(
+            slug="Test-Eurovision", rules="EUROVISION_2020", rounds=n_rounds
+        )
         session = Session.objects.create(block=block, participant=self.participant, playlist=self.playlist)
         rules = session.block_rules()
         rules.question_offset = 3
@@ -173,7 +177,9 @@ class HookedTest(TestCase):
     def _run_kuiper(self, session_type):
         self.assertEqual(Result.objects.count(), 0)
         n_rounds = 6
-        block = Block.objects.create(name="Test-Christmas", rules="KUIPER_2020", rounds=n_rounds)
+        block = Block.objects.create(
+            slug="Test-Christmas", rules="KUIPER_2020", rounds=n_rounds
+        )
         playlist = Playlist.objects.create(name="Test-Christmas")
         playlist.csv = (
             "Band Aid,1984 - Do They Know It’s Christmas,1.017,45.0,Kerstmuziek/Do They Know It_s Christmas00.01.017.i.s.mp3,0,100000707\n"
@@ -246,7 +252,7 @@ class HookedTest(TestCase):
 
     def test_thats_my_song(self):
         musicgen_keys = [q.key for q in MUSICGENS_17_W_VARIANTS]
-        block = Block.objects.get(name="ThatsMySong")
+        block = Block.objects.get(slug="thats_my_song")
         block.add_default_question_series()
         playlist = Playlist.objects.get(name="ThatsMySong")
         playlist.update_sections()
@@ -299,7 +305,7 @@ class HookedTest(TestCase):
                     assert actions[2].feedback_form.form[0].key == "heard_before"
 
     def test_hooked_china(self):
-        block = Block.objects.get(name="Hooked-China")
+        block = Block.objects.get(slug="huang_2022")
         block.add_default_question_series()
         playlist = Playlist.objects.get(name="普通话")
         playlist.update_sections()

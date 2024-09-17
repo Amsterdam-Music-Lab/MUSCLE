@@ -75,7 +75,7 @@ def serialize_phase(phase: Phase, participant: Participant) -> dict:
     }
 
 
-def serialize_block(block_object: Block, participant: Participant):
+def serialize_block(block_object: Block, language="en"):
     return {
         "slug": block_object.slug,
         "name": block_object.name,

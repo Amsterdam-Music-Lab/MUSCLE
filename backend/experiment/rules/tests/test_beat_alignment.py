@@ -1,4 +1,3 @@
-
 from django.test import TestCase
 from experiment.models import Block
 from result.models import Result
@@ -55,8 +54,17 @@ class BeatAlignmentRuleTest(TestCase):
         block_response = self.client.get('/experiment/block/ba/')
 
         block_json = self.load_json(block_response)
-        self.assertTrue({'id', 'slug', 'name', 'class_name', 'rounds',
-                        'playlists', 'loading_text', 'session_id'} <= block_json.keys())
+        self.assertTrue(
+            {
+                "slug",
+                "class_name",
+                "rounds",
+                "playlists",
+                "loading_text",
+                "session_id",
+            }
+            <= block_json.keys()
+        )
         session_id = block_json['session_id']
         response = self.client.post(
                 f'/session/{session_id}/next_round/')
