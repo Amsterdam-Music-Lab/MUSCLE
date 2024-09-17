@@ -19,7 +19,6 @@ class Command(BaseCommand):
         if Block.objects.count() == 0:
             playlist = Playlist.objects.create(name="Empty Playlist")
             block = Block.objects.create(
-                name="Goldsmiths Musical Sophistication Index",
                 rules="RHYTHM_BATTERY_FINAL",
                 slug="gold-msi",
             )
