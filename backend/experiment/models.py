@@ -153,15 +153,13 @@ def consent_upload_path(instance: Experiment, filename: str) -> str:
 class Phase(models.Model):
     """Root entity for configuring experiment phases
 
-    Attributes:
-        name (str): Name
+    Attributes:       
         experiment (Experiment): Instance of an Experiment
         index (int): Index of the phase
         dashboard (bool): Should the dashbopard be displayed for this phase?
         randomize (bool): Should the block of this phase be randomized?    
     """
-
-    name = models.CharField(max_length=64, blank=True, default="")
+    
     experiment = models.ForeignKey(Experiment, on_delete=models.CASCADE, related_name="phases")
     index = models.IntegerField(default=0, help_text="Index of the phase in the series. Lower numbers come first.")
     dashboard = models.BooleanField(default=False)
