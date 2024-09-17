@@ -85,13 +85,14 @@ class Participant(models.Model):
 
             hits[session.block.slug] = True
 
-            scores.append({
-                'block_slug': session.block.slug,
-                'block_name': session.block.name,
-                'rank': session.block.get_rules().rank(session),
-                'score': session.final_score,
-                'date': naturalday(session.finished_at),
-            })
+            scores.append(
+                {
+                    "block_slug": session.block.slug,
+                    "rank": session.block.get_rules().rank(session),
+                    "score": session.final_score,
+                    "date": naturalday(session.finished_at),
+                }
+            )
 
         return scores
 

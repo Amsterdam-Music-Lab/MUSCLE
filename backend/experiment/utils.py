@@ -164,7 +164,9 @@ def check_missing_translations(experiment: Experiment) -> str:
 
     for block, missing_languages in missing_content_blocks:
         missing_language_flags = [get_flag_emoji(language) for language in missing_languages]
-        warnings.append(f"Block {block.name} does not have content in {', '.join(missing_language_flags)}")
+        warnings.append(
+            f"Block {block.slug} does not have content in {', '.join(missing_language_flags)}"
+        )
 
     warnings_text = "\n".join(warnings)
 

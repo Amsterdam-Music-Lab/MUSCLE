@@ -63,47 +63,15 @@ const Trial = (props: TrialProps) => {
     // Create result data
     const makeResult = useCallback(
         async (result: { type: 'time_passed' }) => {
+
             // Prevent multiple submissions
             if (submitted.current) {
                 return;
             }
+
             submitted.current = true;
 
-            // TODO: Check if we can find another solution for
-            // the default value of form than [{}]
-            const form = feedback_form ? feedback_form.form : [{}];
-
-            if (result.type === "time_passed") {
-                form.map((formElement) => (formElement.value = "TIMEOUT"));
-            }
-
-            if (feedback_form) {
-
-                if (feedback_form.is_skippable) {
-                    form.map((formElement => (formElement.value = formElement.value || '')))
-                }
-
-                const breakRoundOn = config.break_round_on;
-                const shouldBreakRound = breakRoundOn && checkBreakRound(form.map((formElement) => formElement.value), breakRoundOn);
-                const shouldCallOnNextInOnResult = !shouldBreakRound
-
-                await onResult(
-                    {
-                        decision_time: getAndStoreDecisionTime(),
-                        form,
-                        config
-                    },
-                    false,
-                    // if we break the round, we don't want to call onNext in onResult
-                    shouldCallOnNextInOnResult
-                );
-
-                if (shouldBreakRound) {
-                    onNext(true);
-                }
-
-            } else {
-
+            if (!feedback_form) {
 
                 if (result_id) {
                     onResult({
@@ -114,18 +82,56 @@ const Trial = (props: TrialProps) => {
                     onNext();
                 }
 
+                return;
             }
+
+            const { form = [] } = feedback_form;
+
+            if (result.type === "time_passed") {
+                form.map((formElement) => (formElement.value = "TIMEOUT"));
+            }
+
+            if (feedback_form.is_skippable) {
+                form.map((formElement => (formElement.value = formElement.value || '')))
+            }
+
+            const breakRoundConditions = config.break_round_on;
+            const shouldBreakRound = breakRoundConditions && checkBreakRound(form.map((formElement) => formElement.value), breakRoundConditions);
+
+            await onResult(
+                {
+                    decision_time: getAndStoreDecisionTime(),
+                    form,
+                    config
+                },
+                false,
+                // if we break the round, we don't want to call `onNext` in `onResult`
+                // as it does not allow us to pass a `breakRound` flag
+                !shouldBreakRound
+            );
+
+            if (shouldBreakRound) {
+                onNext(true);
+            }
+
         },
         [feedback_form, config, onNext, onResult, result_id]
     );
 
-    const checkBreakRound = (values, breakConditions) => {
+    const checkBreakRound = (
+        values: string[],
+        breakConditions: TrialConfig['break_round_on']
+    ) => {
         switch (Object.keys(breakConditions)[0]) {
             case 'EQUALS':
-                return values.some(val => breakConditions['EQUALS']
-                    .includes(val));
+                return values
+                    .some(
+                        val => breakConditions['EQUALS']!.includes(val)
+                    );
             case 'NOT':
-                return !values.some(val => breakConditions['NOT'].includes(val));
+                return !values.some(
+                    val => breakConditions['NOT']!.includes(val)
+                );
             default:
                 return false;
         }

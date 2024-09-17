@@ -23,7 +23,6 @@ class BaseTest(TestCase):
             experiment=experiment,
         )
         block = Block.objects.create(
-            name="Music Lab",
             slug=slug,
             phase=phase,
         )
@@ -46,7 +45,6 @@ class BaseTest(TestCase):
 
     def test_get_play_again_url(self):
         block = Block.objects.create(
-            name="Music Lab",
             slug="music-lab",
         )
         session = Session.objects.create(
@@ -59,7 +57,6 @@ class BaseTest(TestCase):
 
     def test_get_play_again_url_with_participant_id(self):
         block = Block.objects.create(
-            name="Music Lab",
             slug="music-lab",
         )
         participant = Participant.objects.create(

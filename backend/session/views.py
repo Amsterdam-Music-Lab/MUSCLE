@@ -22,7 +22,7 @@ def create_session(request):
     if not block_id:
         return HttpResponseBadRequest("block_id not defined")
     try:
-        block = Block.objects.get(pk=block_id, active=True)
+        block = Block.objects.get(pk=block_id)
     except Block.DoesNotExist:
         raise Http404("Block does not exist")
 

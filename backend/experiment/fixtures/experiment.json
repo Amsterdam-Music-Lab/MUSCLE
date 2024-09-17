@@ -10,9 +10,7 @@
         "model": "experiment.Block",
         "pk": 1,
         "fields": {
-            "name": "DurationDiscrimination",
             "slug": "ddi",
-            "active": true,
             "rounds": 100,
             "bonus_points": 0,
             "rules": "DURATION_DISCRIMINATION",
@@ -25,9 +23,7 @@
         "model": "experiment.Block",
         "pk": 2,
         "fields": {
-            "name": "DurationDiscriminationTone",
             "slug": "ddit",
-            "active": true,
             "rounds": 100,
             "bonus_points": 0,
             "rules": "DURATION_DISCRIMINATION_TONE",
@@ -40,9 +36,7 @@
         "model": "experiment.Block",
         "pk": 3,
         "fields": {
-            "name": "BeatAlignment",
             "slug": "bat",
-            "active": true,
             "rounds": 17,
             "bonus_points": 0,
             "rules": "BEAT_ALIGNMENT",
@@ -55,9 +49,7 @@
         "model": "experiment.Block",
         "pk": 4,
         "fields": {
-            "name": "HBAT-BIT",
             "slug": "hbat_bit",
-            "active": true,
             "rounds": 100,
             "bonus_points": 0,
             "rules": "H_BAT",
@@ -70,9 +62,7 @@
         "model": "experiment.Block",
         "pk": 5,
         "fields": {
-            "name": "HBAT-BFIT",
             "slug": "hbat_bfit",
-            "active": true,
             "rounds": 100,
             "bonus_points": 0,
             "rules": "H_BAT_BFIT",
@@ -85,9 +75,7 @@
         "model": "experiment.Block",
         "pk": 6,
         "fields": {
-            "name": "HBAT-BST",
             "slug": "hbat_bst",
-            "active": true,
             "rounds": 100,
             "bonus_points": 0,
             "rules": "BST",
@@ -100,9 +88,7 @@
         "model": "experiment.Block",
         "pk": 7,
         "fields": {
-            "name": "Anisochrony",
             "slug": "anis",
-            "active": true,
             "rounds": 100,
             "bonus_points": 0,
             "rules": "ANISOCHRONY",
@@ -115,9 +101,7 @@
         "model": "experiment.Block",
         "pk": 8,
         "fields": {
-            "name": "RhythmDiscrimination",
             "slug": "rhdis",
-            "active": true,
             "rounds": 40,
             "bonus_points": 0,
             "rules": "RHYTHM_DISCRIMINATION",
@@ -130,9 +114,7 @@
         "model": "experiment.Block",
         "pk": 9,
         "fields": {
-            "name": "Rhythm Battery Final",
             "slug": "rhythm_outro",
-            "active": true,
             "rounds": 10,
             "bonus_points": 0,
             "rules": "RHYTHM_BATTERY_FINAL",
@@ -145,9 +127,7 @@
         "model": "experiment.Block",
         "pk": 10,
         "fields": {
-            "name": "Rhythm Battery Intro",
             "slug": "rhythm_intro",
-            "active": true,
             "rounds": 10,
             "bonus_points": 0,
             "rules": "RHYTHM_BATTERY_INTRO",
@@ -160,9 +140,7 @@
         "model": "experiment.Block",
         "pk": 14,
         "fields": {
-            "name": "Hooked-China",
             "slug": "huang_2022",
-            "active": true,
             "rounds": 30,
             "bonus_points": 0,
             "rules": "HUANG_2022",
@@ -177,9 +155,7 @@
         "model": "experiment.Block",
         "pk": 16,
         "fields": {
-            "name": "Categorization",
             "slug": "cat",
-            "active": true,
             "rounds": 10,
             "bonus_points": 0,
             "rules": "CATEGORIZATION",
@@ -192,9 +168,7 @@
         "model": "experiment.Block",
         "pk": 17,
         "fields": {
-            "name": "TuneTwins",
             "slug": "tunetwins",
-            "active": true,
             "rounds": 10,
             "bonus_points": 0,
             "rules": "MATCHING_PAIRS",
@@ -207,9 +181,7 @@
         "model": "experiment.Block",
         "pk": 18,
         "fields": {
-            "name": "Hooked-Eurovision",
             "slug": "eurovision_2021",
-            "active": true,
             "rounds": 30,
             "bonus_points": 0,
             "rules": "EUROVISION_2020",
@@ -222,9 +194,7 @@
         "model": "experiment.Block",
         "pk": 19,
         "fields": {
-            "name": "Hooked-Christmas",
             "slug": "christmas_2020",
-            "active": true,
             "rounds": 30,
             "bonus_points": 0,
             "rules": "KUIPER_2020",
@@ -237,9 +207,7 @@
         "model": "experiment.Block",
         "pk": 20,
         "fields": {
-            "name": "ThatsMySong",
             "slug": "thats_my_song",
-            "active": false,
             "rounds": 10,
             "bonus_points": 0,
             "rules": "THATS_MY_SONG",
