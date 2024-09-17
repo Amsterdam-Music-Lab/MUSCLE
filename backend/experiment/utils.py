@@ -5,8 +5,16 @@ from django.db.models.query import QuerySet
 from experiment.models import Experiment, Phase, Block, BlockTranslatedContent
 
 
-def slugify(text):
-    """Create a slug from given string"""
+def slugify(text: str) -> str:
+    """Create a slug from given string
+    
+    Args:
+        text: Input text (str)
+
+    Returns:
+        slug
+    """
+
     non_url_safe = [
         '"',
         "#",
@@ -38,23 +46,58 @@ def slugify(text):
     return text.lower()
 
 
-def non_breaking_spaces(s):
-    # Convert regular spaces to non breaking spacing
-    # on the given string
+def non_breaking_spaces(input_string: str) -> str:
+    """Convert regular spaces to non breaking spacing on the given string
+    Args:
+        input_string: Input string
+
+    Returns:
+        String with non breaking spaces
+    """
+
     non_breaking_space = chr(160)
-    return s.replace(" ", non_breaking_space)
+    return input_string.replace(" ", non_breaking_space)
 
 
-def external_url(text, url):
-    # Create a HTML element for an external url
+def external_url(text: str, url) -> str:
+    """ Create a HTML element for an external url
+
+    Args:
+        text: Text
+        url: Url
+
+    Returns:
+        HTML element
+    """
+
     return '<a href="{}" target="_blank" rel="noopener noreferrer" >{}</a>'.format(url, text)
 
 
-def create_player_labels(num_labels, label_style="number"):
+def create_player_labels(num_labels: int, label_style: str="number") -> list[str]:
+    """Create player labels
+
+    Args:
+        num_labels: Number of labels
+        label_style: 'number', 'alphabetic', 'roman'
+
+    Returns:
+        Player label
+    """
+
     return [format_label(i, label_style) for i in range(num_labels)]
 
 
-def format_label(number, label_style):
+def format_label(number: int, label_style: str) -> str:
+    """Generate player_label for create_player_label()
+
+    Args:
+        number: index
+        label_style: 'number', 'alphabetic', 'roman'
+
+    Returns:
+        Player label
+    """
+
     if label_style == "alphabetic":
         return chr(number + 65)
     elif label_style == "roman":
@@ -128,3 +171,22 @@ def check_missing_translations(experiment: Experiment) -> str:
     warnings_text = "\n".join(warnings)
 
     return warnings_text
+
+def consent_upload_path(instance: Experiment, filename: str) -> str:
+    """Generate path to save consent file based on experiment.slug and language
+    
+    Args:
+        instance: Experiment instance to determine folder name
+        filename: Name of the consent file to be uploaded
+
+    Returns:
+        upload_to: Path for uploading the consent file
+
+    Note:
+        Used by the Block model for uploading consent file        
+    """
+    experiment = instance.experiment
+    folder_name = experiment.slug
+    language = instance.language
+
+    return f"consent/{folder_name}/{language}-{filename}"
