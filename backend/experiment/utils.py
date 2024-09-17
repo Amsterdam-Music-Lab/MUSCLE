@@ -169,3 +169,22 @@ def check_missing_translations(experiment: Experiment) -> str:
     warnings_text = "\n".join(warnings)
 
     return warnings_text
+
+def consent_upload_path(instance: Experiment, filename: str) -> str:
+    """Generate path to save consent file based on experiment.slug and language
+    
+    Args:
+        instance (Experiment): Experiment instance to determine folder name
+        filename (str): Name of the consent file to be uploaded
+
+    Returns:
+        upload_to (str): Path for uploading the consent file
+
+    Note:
+        Used by the Block model for uploading consent file        
+    """
+    experiment = instance.experiment
+    folder_name = experiment.slug
+    language = instance.language
+
+    return f"consent/{folder_name}/{language}-{filename}"

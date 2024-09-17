@@ -11,6 +11,13 @@ from .base_action import BaseAction
 def get_render_format(url: str) -> str:
     """
     Detect markdown file based on file extension
+
+    Args:
+        url: Url of the consent file
+
+    Returns:
+        File format
+
     """
     if splitext(url)[1] == ".md":
         return "MARKDOWN"
@@ -21,11 +28,11 @@ def render_html_or_markdown(dry_text: str, render_format: str) -> str:
     """render html or markdown
 
     Args:
-        dry_text (str): contents of a markdown or html file
-        render_format (str): type of contents, either 'HTML' or 'MARKDOWN'
+        dry_text: contents of a markdown or html file
+        render_format: type of contents, either 'HTML' or 'MARKDOWN'
 
     Returns:
-        (str): content rendered to html
+        Content rendered to html
     """
 
     if render_format == "HTML":
@@ -40,11 +47,11 @@ class Consent(BaseAction):  # pylint: disable=too-few-public-methods
     """Provide data for a view that ask consent for using the experiment data
 
     Args:
-        text (str): Uploaded file via an experiment's translated content's consent (fileField)
-        title (str): The title to be displayed
-        confirm (str): The text on the confirm button
-        deny (str): The text on the deny button
-        url (str):  If no text is provided the url will be used to load a template (HTML or MARKDOWN)
+        text: Uploaded file via an experiment's translated content's consent (fileField)
+        title: The title to be displayed
+        confirm: The text on the confirm button
+        deny: The text on the deny button
+        url:  If no text is provided the url will be used to load a template (HTML or MARKDOWN)
                     HTML: (default) Allowed tags: html, django template language
                     MARKDOWN: Allowed tags: Markdown language
 
