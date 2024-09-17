@@ -19,16 +19,10 @@ class TestRhythmBatteryFinal(TestCase):
             language="en",
             consent=SimpleUploadedFile("consent.md", b"# test", content_type="text/html"),
         )
-        block = Block.objects.create(
-            name="test_md",
-            slug="MARKDOWN_BLOCK",
-            rules=RhythmBatteryFinal.ID
-        )
+        block = Block.objects.create(slug="test_md", rules=RhythmBatteryFinal.ID)
         block.add_default_question_series()
         Session.objects.create(
-            block=block,
-            playlist=Playlist.objects.create(name='test'),
-            participant=Participant.objects.create()
+            block=block, playlist=Playlist.objects.create(name="test"), participant=Participant.objects.create()
         )
 
     def test_init(self):

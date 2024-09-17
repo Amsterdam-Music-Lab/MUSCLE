@@ -3,18 +3,21 @@ from zipfile import ZipFile
 from io import BytesIO
 
 from django.conf import settings
-from django.contrib import admin
+from django.contrib import admin, messages
 from django.db import models
 from django.utils import timezone
 from django.core import serializers
 from django.shortcuts import render, redirect
 from django.forms import CheckboxSelectMultiple
 from django.http import HttpResponse
+
 from inline_actions.admin import InlineActionsModelAdminMixin
 from django.urls import reverse
 from django.utils.html import format_html
 
 from nested_admin import NestedModelAdmin, NestedStackedInline, NestedTabularInline
+
+from experiment.utils import check_missing_translations, get_flag_emoji, get_missing_content_blocks
 
 from experiment.models import (
     Block,
@@ -23,10 +26,12 @@ from experiment.models import (
     Feedback,
     SocialMediaConfig,
     ExperimentTranslatedContent,
+    BlockTranslatedContent,
 )
 from question.admin import QuestionSeriesInline
 from experiment.forms import (
     ExperimentForm,
+    ExperimentTranslatedContentForm,
     BlockForm,
     ExportForm,
     TemplateForm,
@@ -46,9 +51,19 @@ class FeedbackInline(admin.TabularInline):
     extra = 0
 
 
+class BlockTranslatedContentInline(NestedTabularInline):
+    model = BlockTranslatedContent
+
+    def get_extra(self, request, obj=None, **kwargs):
+        if obj:
+            return 0
+        return 1
+
+
 class ExperimentTranslatedContentInline(NestedStackedInline):
     model = ExperimentTranslatedContent
     sortable_field_name = "index"
+    form = ExperimentTranslatedContentForm
 
     def get_extra(self, request, obj=None, **kwargs):
         if obj:
@@ -59,34 +74,23 @@ class ExperimentTranslatedContentInline(NestedStackedInline):
 class BlockAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
     list_display = (
         "image_preview",
-        "block_name_link",
         "block_slug_link",
         "rules",
         "rounds",
         "playlist_count",
         "session_count",
-        "active",
     )
-    list_filter = ["active"]
-    search_fields = ["name"]
     inline_actions = ["export", "export_csv"]
     fields = [
-        "name",
-        "description",
         "image",
         "slug",
-        "url",
-        "hashtag",
         "theme_config",
-        "language",
-        "active",
         "rules",
         "rounds",
         "bonus_points",
         "playlists",
-        "consent",
     ]
-    inlines = [QuestionSeriesInline, FeedbackInline]
+    inlines = [QuestionSeriesInline, FeedbackInline, BlockTranslatedContentInline]
     form = BlockForm
 
     # make playlists fields a list of checkboxes
@@ -176,9 +180,7 @@ class BlockAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
             writer.writeheader()
             writer.writerows(block_table)
             return response
-        # Go back to admin block overview
-        if "_back" in request.POST:
-            return redirect("/admin/experiment/block")
+
         # Load a template in the export form
         if "_template" in request.POST:
             selected_template = request.POST.get("select_template")
@@ -206,12 +208,6 @@ class BlockAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
             return format_html(f'<img src="{img_src}" style="max-height: 50px;"/>')
         return ""
 
-    def block_name_link(self, obj):
-        """Generate a link to the block's admin change page."""
-        url = reverse("admin:experiment_block_change", args=[obj.pk])
-        name = obj.name or obj.slug or "No name"
-        return format_html('<a href="{}">{}</a>', url, name)
-
     def block_slug_link(self, obj):
         dev_mode = settings.DEBUG is True
         url = f"http://localhost:3000/block/{obj.slug}" if dev_mode else f"/block/{obj.slug}"
@@ -222,16 +218,14 @@ class BlockAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
 
     # Name the columns
     image_preview.short_description = "Image"
-    block_name_link.short_description = "Name"
     block_slug_link.short_description = "Slug"
-
-
-admin.site.register(Block, BlockAdmin)
 
 
 class BlockInline(NestedStackedInline):
     model = Block
     sortable_field_name = "index"
+    inlines = [BlockTranslatedContentInline]
+    form = BlockForm
 
     def get_extra(self, request, obj=None, **kwargs):
         if obj:
@@ -264,19 +258,15 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, NestedModelAdmin):
     list_display = (
         "name",
         "slug_link",
-        "description_excerpt",
         "remarks",
-        "dashboard",
-        "phases",
         "active",
     )
     fields = [
         "slug",
         "active",
         "theme_config",
-        "dashboard",
     ]
-    inline_actions = ["dashboard"]
+    inline_actions = ["experimenter_dashboard"]
     form = ExperimentForm
     inlines = [
         ExperimentTranslatedContentInline,
@@ -289,6 +279,7 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, NestedModelAdmin):
 
     def name(self, obj):
         content = obj.get_fallback_content()
+
         return content.name if content else "No name"
 
     def slug_link(self, obj):
@@ -299,25 +290,9 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, NestedModelAdmin):
             f'<a href="{url}" target="_blank" rel="noopener noreferrer" title="Open {obj.slug} experiment group in new tab" >{obj.slug}&nbsp;<small>&#8599;</small></a>'
         )
 
-    def description_excerpt(self, obj):
-        fallback_content = obj.get_fallback_content()
-        description = (
-            fallback_content.description if fallback_content and fallback_content.description else "No description"
-        )
-        if len(description) < 50:
-            return description
-
-        return description[:50] + "..."
-
-    def phases(self, obj):
-        phases = Phase.objects.filter(series=obj)
-        return format_html(
-            ", ".join([f'<a href="/admin/experiment/phase/{phase.id}/change/">{phase.name}</a>' for phase in phases])
-        )
-
     slug_link.short_description = "Slug"
 
-    def dashboard(self, request, obj, parent_obj=None):
+    def experimenter_dashboard(self, request, obj, parent_obj=None):
         """Open researchers dashboard for an experiment"""
         all_blocks = obj.associated_blocks()
         all_participants = obj.current_participants()
@@ -330,7 +305,7 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, NestedModelAdmin):
         blocks = [
             {
                 "id": block.id,
-                "name": block.name,
+                "slug": block.slug,
                 "started": len(all_sessions.filter(block=block)),
                 "finished": len(
                     all_sessions.filter(
@@ -382,13 +357,21 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, NestedModelAdmin):
                 }
             )
 
-        if not remarks_array:
-            remarks_array.append({"level": "success", "message": "✅ All good", "title": "No issues found."})
-
         supported_languages = obj.translated_content.values_list("language", flat=True).distinct()
 
-        # TODO: Check if all blocks support the same languages as the experiment
-        # Implement this when the blocks have been updated to support multiple languages
+        missing_content_block_translations = check_missing_translations(obj)
+
+        if missing_content_block_translations:
+            remarks_array.append(
+                {
+                    "level": "warning",
+                    "message": "🌍 Missing block content",
+                    "title": missing_content_block_translations,
+                }
+            )
+
+        if not remarks_array:
+            remarks_array.append({"level": "success", "message": "✅ All good", "title": "No issues found."})
 
         # TODO: Check if all theme configs support the same languages as the experiment
         # Implement this when the theme configs have been updated to support multiple languages
@@ -399,11 +382,27 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, NestedModelAdmin):
         return format_html(
             "\n".join(
                 [
-                    f'<span class="badge badge-{remark["level"]} whitespace-nowrap text-xs mt-1" title="{remark.get("title") if remark.get("title") else remark["message"]}">{remark["message"]}</span>'
+                    f'<span class="badge badge-{remark["level"]} whitespace-nowrap text-xs mt-1" title="{remark.get("title") if remark.get("title") else remark["message"]}">{remark["message"]}</span><br>'
                     for remark in remarks_array
                 ]
             )
         )
+
+    def save_model(self, request, obj, form, change):
+        # Save the model
+        super().save_model(request, obj, form, change)
+
+        # Check for missing translations after saving
+        missing_content_blocks = get_missing_content_blocks(obj)
+
+        if missing_content_blocks:
+            for block, missing_languages in missing_content_blocks:
+                missing_language_flags = [get_flag_emoji(language) for language in missing_languages]
+                self.message_user(
+                    request,
+                    f"Block {block.slug} does not have content in {', '.join(missing_language_flags)}",
+                    level=messages.WARNING,
+                )
 
 
 admin.site.register(Experiment, ExperimentAdmin)
@@ -418,7 +417,7 @@ class PhaseAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
         "randomize",
         "blocks",
     )
-    fields = ["name", "series", "index", "dashboard", "randomize"]
+    fields = ["name", "experiment", "index", "dashboard", "randomize"]
     inlines = [BlockInline]
 
     def name_link(self, obj):
@@ -427,8 +426,8 @@ class PhaseAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
         return format_html('<a href="{}">{}</a>', url, obj_name)
 
     def related_experiment(self, obj):
-        url = reverse("admin:experiment_experiment_change", args=[obj.series.pk])
-        content = obj.series.get_fallback_content()
+        url = reverse("admin:experiment_experiment_change", args=[obj.experiment.pk])
+        content = obj.experiment.get_fallback_content()
         experiment_name = content.name if content else "No name"
         return format_html('<a href="{}">{}</a>', url, experiment_name)
 
@@ -438,9 +437,23 @@ class PhaseAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
         if not blocks:
             return "No blocks"
 
+        return format_html(", ".join([block.slug for block in blocks]))
+
+class BlockTranslatedContentAdmin(admin.ModelAdmin):
+    list_display = ["name", "block", "language"]
+    list_filter = ["language"]
+    search_fields = [
+        "name",
+        "block__name",
+    ]
+
+    def blocks(self, obj):
+        # Block is manytomany, so we need to find it through the related name
+        blocks = Block.objects.filter(translated_contents=obj)
+
+        if not blocks:
+            return "No block"
+
         return format_html(
             ", ".join([f'<a href="/admin/experiment/block/{block.id}/change/">{block.name}</a>' for block in blocks])
         )
-
-
-admin.site.register(Phase, PhaseAdmin)

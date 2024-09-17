@@ -1,12 +1,8 @@
 import { Route, MemoryRouter, Routes } from 'react-router-dom';
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
-import { beforeEach, vi } from 'vitest';
-import MockAdapter from 'axios-mock-adapter';
-import axios from 'axios';
+import { render, screen, waitFor } from '@testing-library/react';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import Block from './Block';
 import * as API from '../../API';
-
-let mock = new MockAdapter(axios);
 
 vi.mock("../../util/stores");
 
@@ -20,12 +16,14 @@ vi.mock('react-router-dom', async () => {
     };
 });
 
-const experimentObj = {
-    id: 24, slug: 'test', name: 'Test', playlists: [{ id: 42, name: 'TestPlaylist' }],
-    next_round: [{ view: 'INFO', button_label: 'Continue' }]
+const blockObj = {
+    id: 24, slug: 'test', name: 'Test',
+    playlists: [{ id: 42, name: 'TestPlaylist' }],
+    session_id: 42,
+    loadingText: 'Patience!'
 };
 
-const nextRoundObj = { next_round: [{ view: 'EXPLAINER', instruction: 'Instruction' }] };
+const nextRoundObj = { next_round: [{ view: 'EXPLAINER', instruction: 'Instruction', title: 'Some title' }] };
 
 const mockSessionStore = { id: 1 };
 const mockParticipantStore = {
@@ -36,12 +34,19 @@ const mockParticipantStore = {
     country: 'nl',
 };
 
+vi.mock('../../API', () => ({
+    useBlock: () => [Promise.resolve(blockObj), false],
+    getNextRound: () => Promise.resolve(nextRoundObj)
+}));
+
+
 vi.mock('../../util/stores', () => ({
     __esModule: true,
     default: (fn) => {
         const state = {
             session: mockSessionStore,
             participant: mockParticipantStore,
+            setError: vi.fn(),
             setSession: vi.fn(),
             setHeadData: vi.fn(),
             resetHeadData: vi.fn(),
@@ -60,23 +65,23 @@ describe('Block Component', () => {
     });
 
     afterEach(() => {
-        mock.reset();
+        vi.clearAllMocks();
     });
 
-    // fix/remove this implementation after merging #810
-    test('renders with given props', async () => {
-        mock.onGet().replyOnce(200, experimentObj);
+    it('renders with given props', async () => {
+        // Mock the useParticipantLink hook
+
         render(
             <MemoryRouter>
                 <Block />
             </MemoryRouter>
         );
-        await screen.findByText('Continue');
+        await screen.findByText('Instruction');
     });
 
-    test('calls onNext', async () => {
-        mock.onGet().replyOnce(200, experimentObj);
+    it('calls onNext', async () => {
         const spy = vi.spyOn(API, 'getNextRound');
+        spy.mockImplementationOnce(() => Promise.resolve(nextRoundObj))
 
         render(
             <MemoryRouter initialEntries={['/block/test']}>
@@ -85,9 +90,6 @@ describe('Block Component', () => {
                 </Routes>
             </MemoryRouter>
         );
-        const button = await screen.findByText('Continue');
-        fireEvent.click(button);
-        mock.onGet().replyOnce(200, nextRoundObj);
         await waitFor(() => expect(spy).toHaveBeenCalled());
     });
 

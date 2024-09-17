@@ -9,7 +9,7 @@ from django_markup.markup import formatter
 from .models import Block, Experiment, Phase, Feedback, Session
 from section.models import Playlist
 from experiment.serializers import (
-    serialize_actions,
+    serialize_block,
     serialize_experiment,
     serialize_phase,
 )
@@ -44,24 +44,16 @@ def get_block(request: HttpRequest, slug: str) -> JsonResponse:
 
     # create data
     block_data = {
-        "id": block.id,
-        "slug": block.slug,
-        "name": block.name,
+        **serialize_block(block),
         "theme": serialize_theme(block.theme_config) if block.theme_config else None,
-        "description": block.description,
-        "image": serialize_image(block.image) if block.image else None,
         "class_name": class_name,  # can be used to override style
         "rounds": block.rounds,
         "bonus_points": block.bonus_points,
-        "playlists": [{"id": playlist.id, "name": playlist.name} for playlist in block.playlists.all()],
+        "playlists": [
+            {"id": playlist.id, "name": playlist.name}
+            for playlist in block.playlists.all()
+        ],
         "feedback_info": block.get_rules().feedback_info(),
-        # only call first round if the (deprecated) first_round method exists
-        # otherwise, call next_round
-        "next_round": (
-            serialize_actions(block.get_rules().first_round(block))
-            if hasattr(block.get_rules(), "first_round") and block.get_rules().first_round
-            else serialize_actions(block.get_rules().next_round(session))
-        ),
         "loading_text": _("Loading"),
         "session_id": session.id,
     }
@@ -82,7 +74,7 @@ def post_feedback(request, slug):
 def block_or_404(slug):
     # get block
     try:
-        return Block.objects.get(slug=slug, active=True)
+        return Block.objects.get(slug=slug)
     except Block.DoesNotExist:
         raise Http404("Block does not exist")
 
@@ -129,7 +121,7 @@ def get_experiment(
     experiment_language = translated_content.language
     activate(experiment_language)
 
-    phases = list(Phase.objects.filter(series=experiment.id).order_by("index"))
+    phases = list(Phase.objects.filter(experiment=experiment.id).order_by("index"))
     try:
         current_phase = phases[phase_index]
         serialized_phase = serialize_phase(current_phase, participant)

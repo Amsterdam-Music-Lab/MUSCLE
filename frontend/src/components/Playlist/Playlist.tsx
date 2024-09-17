@@ -1,15 +1,15 @@
-import { ExtendedBlock } from "@/types/Block";
+import Block from "@/types/Block";
 import { MutableRefObject, useEffect } from "react";
 
 export interface PlaylistProps {
-    block: ExtendedBlock;
+    block: Block;
     instruction: string;
     onNext: () => void;
     playlist: MutableRefObject<string>;
 }
 
 /**
- * Playlist is an block view, that handles (auto)selection of a playlist
+ * Playlist is a block view, that handles (auto)selection of a playlist
  */
 const Playlist = ({ block, instruction, onNext, playlist }: PlaylistProps) => {
     const playlists = block.playlists;

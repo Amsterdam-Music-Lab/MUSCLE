@@ -176,19 +176,19 @@ class ToontjeHoger2Preverbal(Base):
 
     def get_round1_playback(self, session):
         # Get sections
-        sectionA = session.section_from_any_song(
+        sectionA = session.playlist.get_section(
             filter_by={'tag': 'a', 'group': '1'})
         if not sectionA:
             raise Exception(
                 "Error: could not find section A for round 1")
 
-        sectionB = session.section_from_any_song(
+        sectionB = session.playlist.get_section(
             filter_by={'tag': 'b', 'group': '1'})
         if not sectionB:
             raise Exception(
                 "Error: could not find section B for round 1")
 
-        sectionC = session.section_from_any_song(
+        sectionC = session.playlist.get_section(
             filter_by={'tag': 'c', 'group': '1'})
         if not sectionB:
             raise Exception(
@@ -215,13 +215,13 @@ class ToontjeHoger2Preverbal(Base):
 
         # Get sections
         # French
-        sectionA = session.section_from_any_song(
+        sectionA = session.playlist.get_section(
             filter_by={'tag': 'a', 'group': '2'})
         if not sectionA:
             raise Exception(
                 "Error: could not find section A for round 2")
         # German
-        sectionB = session.section_from_any_song(
+        sectionB = session.playlist.get_section(
             filter_by={'tag': 'b', 'group': '2'})
         if not sectionB:
             raise Exception(

@@ -1,4 +1,3 @@
-
 from django.test import TestCase
 from experiment.models import Block
 from result.models import Result
@@ -55,18 +54,31 @@ class BeatAlignmentRuleTest(TestCase):
         block_response = self.client.get('/experiment/block/ba/')
 
         block_json = self.load_json(block_response)
-        self.assertTrue({'id', 'slug', 'name', 'class_name', 'rounds',
-                        'playlists', 'next_round', 'loading_text', 'session_id'} <= block_json.keys())
-        rounds = block_json.get('next_round')
+        self.assertTrue(
+            {
+                "slug",
+                "class_name",
+                "rounds",
+                "playlists",
+                "loading_text",
+                "session_id",
+            }
+            <= block_json.keys()
+        )
+        session_id = block_json['session_id']
+        response = self.client.post(
+                f'/session/{session_id}/next_round/')
+        rounds = self.load_json(response).get('next_round')
+
         # check that we get the intro explainer, 3 practice rounds and another explainer
         self.assertEqual(len(rounds), 5)
         self.assertEqual(
-            block_json['next_round'][0]['view'], 'EXPLAINER')
+            rounds[0]['view'], 'EXPLAINER')
         # check practice rounds
         self.assertEqual(rounds[1].get('title'), 'Example 1')
         self.assertEqual(rounds[3].get('title'), 'Example 3')
         self.assertEqual(
-            block_json['next_round'][4]['view'], 'EXPLAINER')
+            rounds[4]['view'], 'EXPLAINER')
 
         header = {'HTTP_USER_AGENT': "Test device with test browser"}
         participant_response = self.client.get('/participant/', **header)
@@ -85,12 +97,11 @@ class BeatAlignmentRuleTest(TestCase):
         self.assertTrue(consent_json['status'], 'ok')
 
         # test remaining rounds with request to `/session/{session_id}/next_round/`
-        session_id = block_json['session_id']
         rounds_n = self.block.rounds  # Default 10
         views_exp = ['TRIAL_VIEW']*(rounds_n)
         for i in range(len(views_exp)):
             response = self.client.post(
-                '/session/{}/next_round/'.format(session_id))
+                f'/session/{session_id}/next_round/')
             response_json = self.load_json(response)
             result_id = response_json.get(
                 'next_round')[0]['feedback_form']['form'][0]['result_id']

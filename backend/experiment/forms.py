@@ -9,7 +9,13 @@ from django.forms import (
     CheckboxSelectMultiple,
     TextInput,
 )
-from experiment.models import Experiment, Block, SocialMediaConfig, ExperimentTranslatedContent
+
+from experiment.models import (
+    Experiment,
+    Block,
+    SocialMediaConfig,
+    ExperimentTranslatedContent,
+)
 from experiment.rules import BLOCK_RULES
 
 
@@ -177,24 +183,17 @@ class ModelFormFieldAsJSON(ModelMultipleChoiceField):
 class MarkdownPreviewTextInput(TextInput):
     template_name = "widgets/markdown_preview_text_input.html"
 
+    class Media:
+        css = {"all": ["markdown_preview.css"]}
+        js = ["markdown_preview.js"]
+
 
 class ExperimentForm(ModelForm):
-    def __init__(self, *args, **kwargs):
-        super(ModelForm, self).__init__(*args, **kwargs)
-        self.fields["dashboard"].help_text = (
-            "This field will be deprecated in the nearby future. "
-            "Please use experiment phases for dashboard configuration. (see bottom of form). <br><br>"
-            'Legacy behavior: If you check "dashboard", the experiment will have a '
-            "dashboard that shows all or a subgroup of related blocks along "
-            "with a description, footer, and about page. If you leave it unchecked, "
-            "the experiment will redirect to the first block."
-        )
 
     class Meta:
         model = Experiment
         fields = [
             "slug",
-            "dashboard",
         ]
 
     class Media:
@@ -210,6 +209,11 @@ class ExperimentTranslatedContentForm(ModelForm):
     class Meta:
         model = ExperimentTranslatedContent
         fields = [
+            "index",
+            "language",
+            "name",
+            "description",
+            "consent",
             "about_content",
         ]
 
@@ -257,21 +261,15 @@ class BlockForm(ModelForm):
     class Meta:
         model = Block
         fields = [
-            "name",
+            "index",
             "slug",
-            "active",
             "rules",
             "rounds",
             "bonus_points",
             "playlists",
         ]
         help_texts = {
-            "description": "A short description of the block that will be displayed on the experiment page and as a meta description in search engines.",
             "image": "An image that will be displayed on the experiment page and as a meta image in search engines.",
-            "consent": "Upload an HTML (.html) or MARKDOWN (.md) file with a text to ask a user its consent<br> \
-                      for using the block data for this instance of the block.<br> \
-                      This field will override any consent text loaded from the rules file. <br>\
-                      HTML files also allow django template tags so that the text can be translated",
             "slug": "The slug is used to identify the block in the URL so you can access it on the web as follows: app.amsterdammusiclab.nl/{slug} <br>\
             It must be unique, lowercase and contain only letters, numbers, and hyphens. Nor can it start with any of the following reserved words: admin, server, block, participant, result, section, session, static.",
         }

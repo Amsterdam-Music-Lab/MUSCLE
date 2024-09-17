@@ -25,11 +25,7 @@ class RhythmBatteryIntroTest(TestCase):
             filename="not/to_be_found.mp3",
             tag=0
         )
-        self.block = Block.objects.create(
-            name='test',
-            slug='TEST',
-            rules='RHYTHM_BATTERY_INTRO'
-        )
+        self.block = Block.objects.create(slug="TEST", rules="RHYTHM_BATTERY_INTRO")
         participant = Participant.objects.create()
         self.session = Session.objects.create(
             block=Block.objects.first(),

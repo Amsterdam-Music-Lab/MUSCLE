@@ -3,7 +3,7 @@ from django.core.files.uploadedfile import SimpleUploadedFile
 from unittest.mock import Mock
 
 from experiment.actions import Explainer, Final, Score, Trial
-from experiment.models import Block
+from experiment.models import Experiment, Phase, Block, SocialMediaConfig
 from question.musicgens import MUSICGENS_17_W_VARIANTS
 from participant.models import Participant
 from question.questions import get_questions_from_series
@@ -13,13 +13,13 @@ from session.models import Session
 
 
 class HookedTest(TestCase):
-    fixtures = ['playlist', 'experiment']
+    fixtures = ["playlist", "experiment"]
 
     @classmethod
     def setUpTestData(cls):
-        ''' set up data for Hooked base class '''
+        """set up data for Hooked base class"""
         cls.participant = Participant.objects.create()
-        cls.playlist = Playlist.objects.create(name='Test Eurovision')
+        cls.playlist = Playlist.objects.create(name="Test Eurovision")
         cls.playlist.csv = (
             "Albania 2018 - Eugent Bushpepa,Mall,7.046,45.0,euro2/Karaoke/2018-11-00-07-046-k.mp3,3,201811007\n"
             "Albania 2018 - Eugent Bushpepa,Mall,7.046,45.0,euro2/V1/2018-11-00-07-046-v1.mp3,1,201811007\n"
@@ -72,36 +72,37 @@ class HookedTest(TestCase):
 
     def test_hooked(self):
         n_rounds = 18
-        block = Block.objects.create(name='Hooked', rules='HOOKED', rounds=n_rounds)
-        block.add_default_question_series()
-        session = Session.objects.create(
-            block=block,
-            participant=self.participant,
-            playlist=self.playlist
+        experiment = Experiment.objects.create(slug="HOOKED")
+        SocialMediaConfig.objects.create(experiment=experiment, url="https://app.amsterdammusiclab.nl/hooked")
+        phase = Phase.objects.create(experiment=experiment)
+        block = Block.objects.create(
+            slug="Hooked", rules="HOOKED", rounds=n_rounds, phase=phase
         )
+        block.add_default_question_series()
+        session = Session.objects.create(block=block, participant=self.participant, playlist=self.playlist)
         rules = session.block_rules()
         for i in range(n_rounds + 1):
             actions = rules.next_round(session)
             self.assertNotEqual(actions, None)
             self.score_results(actions)
-            heard_before_offset = session.load_json_data().get('heard_before_offset')
+            heard_before_offset = session.load_json_data().get("heard_before_offset")
             self.assertEqual(heard_before_offset, 12)
             if i == 0:
-                plan = session.load_json_data().get('plan')
+                plan = session.load_json_data().get("plan")
                 self.assertIsNotNone(plan)
                 self.assertEqual(len(plan), n_rounds)
-                self.assertEqual(len([p for p in plan if p == 'free']), 9)
-                self.assertEqual(len([p for p in plan if p == 'returning']), 3)
-                self.assertEqual(len([p for p in plan if p == 'new']), 3)
-                self.assertEqual(len([p for p in plan if p == 'old']), 3)
+                self.assertEqual(len([p for p in plan if p == "free"]), 9)
+                self.assertEqual(len([p for p in plan if p == "returning"]), 3)
+                self.assertEqual(len([p for p in plan if p == "new"]), 3)
+                self.assertEqual(len([p for p in plan if p == "old"]), 3)
                 self.assertEqual(len(actions), 5)
-                self.assertEqual(session.result_set.filter(question_key='recognize').count(), 1)
-                self.assertEqual(session.result_set.filter(question_key='correct_place').count(), 1)
+                self.assertEqual(session.result_set.filter(question_key="recognize").count(), 1)
+                self.assertEqual(session.result_set.filter(question_key="correct_place").count(), 1)
             elif i == 1:
                 self.assertEqual(len(actions), 4)
                 self.assertEqual(type(actions[0]), Score)
-                self.assertEqual(session.result_set.filter(question_key='recognize').count(), 2)
-                self.assertEqual(session.result_set.filter(question_key='correct_place').count(), 2)
+                self.assertEqual(session.result_set.filter(question_key="recognize").count(), 2)
+                self.assertEqual(session.result_set.filter(question_key="correct_place").count(), 2)
             elif i == rules.question_offset:
                 self.assertEqual(len(actions), 5)
                 self.assertEqual(self.participant.result_set.count(), 1)
@@ -113,29 +114,27 @@ class HookedTest(TestCase):
                 # we have a score, heard_before trial, and a question trial
                 self.assertEqual(len(actions), 3)
                 # at least one heard_before result should have been created
-                self.assertGreater(session.result_set.filter(question_key='heard_before').count(), 0)
+                self.assertGreater(session.result_set.filter(question_key="heard_before").count(), 0)
             elif i == n_rounds:
                 # final round
                 self.assertEqual(type(actions[0]), Score)
                 self.assertEqual(type(actions[1]), Final)
 
     def test_eurovision_same(self):
-        self._run_eurovision('same')
+        self._run_eurovision("same")
 
     def test_eurovision_different(self):
-        self._run_eurovision('different')
+        self._run_eurovision("different")
 
     def test_eurovision_karaoke(self):
-        self._run_eurovision('karaoke')
+        self._run_eurovision("karaoke")
 
     def _run_eurovision(self, session_type):
         n_rounds = 6
-        block = Block.objects.create(name='Test-Eurovision', rules='EUROVISION_2020', rounds=n_rounds)
-        session = Session.objects.create(
-            block=block,
-            participant=self.participant,
-            playlist=self.playlist
+        block = Block.objects.create(
+            slug="Test-Eurovision", rules="EUROVISION_2020", rounds=n_rounds
         )
+        session = Session.objects.create(block=block, participant=self.participant, playlist=self.playlist)
         rules = session.block_rules()
         rules.question_offset = 3
         mock_session_type = Mock(return_value=session_type)
@@ -143,41 +142,45 @@ class HookedTest(TestCase):
         for i in range(block.rounds):
             actions = rules.next_round(session)
             self.score_results(actions)
-            heard_before_offset = session.load_json_data().get('heard_before_offset')
-            plan = session.load_json_data().get('plan')
+            heard_before_offset = session.load_json_data().get("heard_before_offset")
+            plan = session.load_json_data().get("plan")
             self.assertIsNotNone(actions)
             if i == heard_before_offset - 1:
-                played_sections = session.load_json_data().get('played_sections')
+                played_sections = session.load_json_data().get("played_sections")
                 self.assertIsNotNone(played_sections)
 
             elif i >= heard_before_offset:
-                plan = session.load_json_data().get('plan')
-                song_sync_sections = list(session.result_set.filter(question_key='recognize').values_list('section', flat=True))
-                heard_before_section = session.result_set.filter(question_key='heard_before').last().section
+                plan = session.load_json_data().get("plan")
+                song_sync_sections = list(
+                    session.result_set.filter(question_key="recognize").values_list("section", flat=True)
+                )
+                heard_before_section = session.result_set.filter(question_key="heard_before").last().section
                 song_sync_songs = [Section.objects.get(pk=section).song for section in song_sync_sections]
-                if plan[i] == 'old':
-                    if session_type == 'same':
+                if plan[i] == "old":
+                    if session_type == "same":
                         self.assertIn(heard_before_section.id, song_sync_sections)
-                    elif session_type == 'different':
+                    elif session_type == "different":
                         self.assertIn(heard_before_section.song, song_sync_songs)
                         self.assertNotIn(heard_before_section, song_sync_sections)
-                        self.assertNotEqual(heard_before_section.tag, '3')
-                    elif session_type == 'karaoke':
+                        self.assertNotEqual(heard_before_section.tag, "3")
+                    elif session_type == "karaoke":
                         self.assertIn(heard_before_section.song, song_sync_songs)
                         self.assertNotIn(heard_before_section, song_sync_sections)
-                        self.assertEqual(heard_before_section.tag, '3')
+                        self.assertEqual(heard_before_section.tag, "3")
 
     def test_kuiper_same(self):
-        self._run_kuiper('same')
+        self._run_kuiper("same")
 
     def test_kuiper_different(self):
-        self._run_kuiper('different')
+        self._run_kuiper("different")
 
     def _run_kuiper(self, session_type):
         self.assertEqual(Result.objects.count(), 0)
         n_rounds = 6
-        block = Block.objects.create(name='Test-Christmas', rules='KUIPER_2020', rounds=n_rounds)
-        playlist = Playlist.objects.create(name='Test-Christmas')
+        block = Block.objects.create(
+            slug="Test-Christmas", rules="KUIPER_2020", rounds=n_rounds
+        )
+        playlist = Playlist.objects.create(name="Test-Christmas")
         playlist.csv = (
             "Band Aid,1984 - Do They Know It’s Christmas,1.017,45.0,Kerstmuziek/Do They Know It_s Christmas00.01.017.i.s.mp3,0,100000707\n"
             "Band Aid,1984 - Do They Know It’s Christmas,8.393,45.0,Kerstmuziek/Do They Know It_s Christmas00.08.393.v1.s.mp3,0,100000713\n"
@@ -211,11 +214,7 @@ class HookedTest(TestCase):
             "Chuck Berry,1959 - Run Rudolph Run,113.301,45.0,Kerstmuziek/Run Rudolph Run01.53.301.v2.s.mp3,0,100002714\n"
         )
         playlist.update_sections()
-        session = Session.objects.create(
-            block=block,
-            participant=self.participant,
-            playlist=playlist
-        )
+        session = Session.objects.create(block=block, participant=self.participant, playlist=playlist)
         rules = session.block_rules()
         rules.question_offset = 3
         mock_session_type = Mock(return_value=session_type)
@@ -223,23 +222,29 @@ class HookedTest(TestCase):
         for i in range(n_rounds):
             actions = rules.next_round(session)
             self.score_results(actions)
-            heard_before_offset = session.load_json_data().get('heard_before_offset')
+            heard_before_offset = session.load_json_data().get("heard_before_offset")
             if i == heard_before_offset - 1:
-                played_sections = session.load_json_data().get('played_sections')
-                song_sync_sections = list(session.result_set.filter(question_key='recognize').values_list('section', flat=True))
+                played_sections = session.load_json_data().get("played_sections")
+                song_sync_sections = list(
+                    session.result_set.filter(question_key="recognize").values_list("section", flat=True)
+                )
                 self.assertEqual(len(song_sync_sections), 4)
                 self.assertEqual(len(played_sections), 1)
                 self.assertIn(played_sections[0], song_sync_sections)
             elif i in range(heard_before_offset, n_rounds):
-                plan = session.load_json_data().get('plan')
-                song_sync_sections = list(session.result_set.filter(question_key='recognize').values_list('section', flat=True))
-                heard_before_section = session.result_set.filter(question_key='heard_before').last().section
-                if plan[i] == 'old':
-                    if session_type == 'same':
+                plan = session.load_json_data().get("plan")
+                song_sync_sections = list(
+                    session.result_set.filter(question_key="recognize").values_list("section", flat=True)
+                )
+                heard_before_section = session.result_set.filter(question_key="heard_before").last().section
+                if plan[i] == "old":
+                    if session_type == "same":
                         self.assertIn(heard_before_section.id, song_sync_sections)
-                    if session_type == 'different':
+                    if session_type == "different":
                         song_sync_songs = [Section.objects.get(pk=section).song for section in song_sync_sections]
-                        repeated_song = next((song for song in song_sync_songs if song == heard_before_section.song), None)
+                        repeated_song = next(
+                            (song for song in song_sync_songs if song == heard_before_section.song), None
+                        )
                         self.assertIsNotNone(repeated_song)
                         self.assertNotIn(heard_before_section, song_sync_sections)
                 else:
@@ -247,98 +252,79 @@ class HookedTest(TestCase):
 
     def test_thats_my_song(self):
         musicgen_keys = [q.key for q in MUSICGENS_17_W_VARIANTS]
-        block = Block.objects.get(name='ThatsMySong')
+        block = Block.objects.get(slug="thats_my_song")
         block.add_default_question_series()
-        playlist = Playlist.objects.get(name='ThatsMySong')
+        playlist = Playlist.objects.get(name="ThatsMySong")
         playlist.update_sections()
-        session = Session.objects.create(
-            block=block,
-            participant=self.participant,
-            playlist=playlist
-        )
+        session = Session.objects.create(block=block, participant=self.participant, playlist=playlist)
         rules = session.block_rules()
         assert rules.feedback_info() is None
 
         # need to add 1 to the index, as there is double round counted as 0 in the rules files
         for i in range(0, block.rounds + 1):
             actions = rules.next_round(session)
-            heard_before_offset = session.load_json_data().get('heard_before_offset')
+            heard_before_offset = session.load_json_data().get("heard_before_offset")
             if i == block.rounds + 1:
                 assert len(actions) == 2
-                assert actions[1].ID == 'FINAL'
+                assert actions[1].ID == "FINAL"
             elif i == 0:
                 self.assertEqual(len(actions), 4)
-                self.assertEqual(actions[1].feedback_form.form[0].key,  'dgf_generation')
-                self.assertEqual(actions[2].feedback_form.form[0].key, 'dgf_gender_identity')
-                self.assertEqual(actions[3].feedback_form.form[0].key, 'playlist_decades')
-                result = Result.objects.get(
-                    session=session,
-                    question_key='playlist_decades'
-                )
-                result.given_response = '1960s,1970s,1980s'
+                self.assertEqual(actions[1].feedback_form.form[0].key, "dgf_generation")
+                self.assertEqual(actions[2].feedback_form.form[0].key, "dgf_gender_identity")
+                self.assertEqual(actions[3].feedback_form.form[0].key, "playlist_decades")
+                result = Result.objects.get(session=session, question_key="playlist_decades")
+                result.given_response = "1960s,1970s,1980s"
                 result.save()
-                generation = Result.objects.get(
-                    participant=self.participant,
-                    question_key='dgf_generation'
-                )
-                generation.given_response = 'something'
+                generation = Result.objects.get(participant=self.participant, question_key="dgf_generation")
+                generation.given_response = "something"
                 generation.save()
-                gender = Result.objects.get(
-                    participant=self.participant,
-                    question_key='dgf_gender_identity'
-                )
-                gender.given_response = 'and another thing'
+                gender = Result.objects.get(participant=self.participant, question_key="dgf_gender_identity")
+                gender.given_response = "and another thing"
                 gender.save()
             elif i == 1:
                 assert session.result_set.count() == 3
-                assert session.load_json_data().get('plan') is not None
+                assert session.load_json_data().get("plan") is not None
                 assert len(actions) == 3
-                assert actions[0].feedback_form.form[0].key == 'recognize'
-                assert actions[2].feedback_form.form[0].key == 'correct_place'
+                assert actions[0].feedback_form.form[0].key == "recognize"
+                assert actions[2].feedback_form.form[0].key == "correct_place"
             else:
-                assert actions[0].ID == 'SCORE'
+                assert actions[0].ID == "SCORE"
                 if i < rules.question_offset + 1:
                     assert len(actions) == 4
-                    assert actions[1].feedback_form.form[0].key == 'recognize'
+                    assert actions[1].feedback_form.form[0].key == "recognize"
                 elif i < heard_before_offset + 1:
                     assert len(actions) == 5
                     assert actions[1].feedback_form.form[0].key in musicgen_keys
                 elif i == heard_before_offset + 1:
                     assert len(actions) == 3
-                    assert actions[1].ID == 'EXPLAINER'
-                    assert actions[2].feedback_form.form[0].key == 'heard_before'
+                    assert actions[1].ID == "EXPLAINER"
+                    assert actions[2].feedback_form.form[0].key == "heard_before"
                 else:
                     assert len(actions) == 3
                     assert actions[1].feedback_form.form[0].key in musicgen_keys
-                    assert actions[2].feedback_form.form[0].key == 'heard_before'
+                    assert actions[2].feedback_form.form[0].key == "heard_before"
 
     def test_hooked_china(self):
-        block = Block.objects.get(name='Hooked-China')
+        block = Block.objects.get(slug="huang_2022")
         block.add_default_question_series()
-        playlist = Playlist.objects.get(name='普通话')
+        playlist = Playlist.objects.get(name="普通话")
         playlist.update_sections()
-        session = Session.objects.create(
-            block=block,
-            participant=self.participant,
-            playlist=playlist
-        )
+        session = Session.objects.create(block=block, participant=self.participant, playlist=playlist)
         rules = session.block_rules()
         self.assertIsNotNone(rules.feedback_info())
 
         # check that first round is an audio check
-        song = Song.objects.create(name='audiocheck')
-        Section.objects.create(playlist=playlist, song=song, filename=SimpleUploadedFile(
-            'some_audio.wav', b''
-        ))
+        song = Song.objects.create(name="audiocheck")
+        Section.objects.create(playlist=playlist, song=song, filename=SimpleUploadedFile("some_audio.wav", b""))
         actions = rules.next_round(session)
         self.assertIsInstance(actions[0], Trial)
-        self.assertEqual(actions[0].feedback_form.form[0].key, 'audio_check1')
+        self.assertEqual(actions[0].feedback_form.form[0].key, "audio_check1")
 
         # check that question trials are as expected
         question_trials = rules.get_open_questions(session)
         total_questions = get_questions_from_series(block.questionseries_set.all())
         self.assertEqual(len(question_trials), len(total_questions))
         keys = [q.feedback_form.form[0].key for q in question_trials]
-        questions = rules.question_series[0]['keys'][0:3]
+        questions = rules.question_series[0]["keys"][0:3]
         for question in questions:
             self.assertIn(question, keys)
