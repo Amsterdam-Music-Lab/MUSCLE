@@ -7,6 +7,7 @@ from .tipi import TIPI
 from .other import OTHER
 import random
 from .models import QuestionGroup, Question
+from experiment.actions.form import BooleanQuestion, ChoiceQuestion, LikertQuestion, LikertQuestionIcon, NumberQuestion, TextQuestion, AutoCompleteQuestion#, #RangeQuestion
 
 # Default QuestionGroups used by command createquestions
 QUESTION_GROUPS_DEFAULT = { "DEMOGRAPHICS" : DEMOGRAPHICS,
@@ -48,7 +49,7 @@ def get_questions_from_series(questionseries_set):
             random.shuffle(keys)
         keys_all.extend(keys)
 
-    return [QUESTIONS[key] for key in keys_all]
+    return [QUESTIONS.get(key, create_question_db(key)) for key in keys_all]
 
 
 def create_default_questions():
@@ -68,3 +69,65 @@ def create_default_questions():
                 q = Question.objects.get(key = question.key)
             group.questions.add(q)
 
+def create_question_db(key):
+    """ Creates form.question object from a Question in the database with key"""
+
+    question = Question.objects.get(key=key)
+
+    choices = {}
+    for choice in question.choice_set.all():
+        choices[choice.key] = choice.text
+
+    if question.type == "LikertQuestion":
+        return LikertQuestion(
+            key=question.key,
+            question=question.question,
+            explainer = question.explainer,
+            scale_steps = question.scale_steps,
+            choices = choices
+            )
+    elif question.type == "LikertQuestionIcon":
+        return LikertQuestionIcon(
+            key=question.key,
+            question=question.question,
+            explainer = question.explainer,
+            scale_steps = question.scale_steps
+            )
+    elif question.type == "NumberQuestion":
+        return NumberQuestion(
+            key=question.key,
+            question=question.question,
+            explainer = question.explainer,
+            min_value = question.min_value,
+            max_value = question.max_value
+            )
+    elif question.type == "TextQuestion":
+        return TextQuestion(
+            key=question.key,
+            question=question.question,
+            explainer = question.explainer,
+            max_length=question.max_length
+            )
+    elif question.type == "BooleanQuestion":
+        return BooleanQuestion(
+            key=question.key,
+            question=question.question,
+            explainer = question.explainer,
+            choices = choices
+            )
+    elif question.type == "ChoiceQuestion":
+        return ChoiceQuestion(
+            key=question.key,
+            question=question.question,
+            explainer = question.explainer,
+            choices = choices,
+            min_values=question.min_values,
+            view=question.view
+            )
+    elif question.type == "AutoCompleteQuestion":
+        return AutoCompleteQuestion(
+            key=question.key,
+            question=question.question,
+            explainer = question.explainer,
+            choices = choices
+            )
