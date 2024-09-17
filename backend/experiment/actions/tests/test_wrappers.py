@@ -15,7 +15,7 @@ class ActionWrappersTest(TestCase):
         self.participant = Participant.objects.create()
         self.section = Section.objects.create(
             filename='some/audio/file.mp3', playlist=self.playlist)
-        self.block = Block.objects.create(slug="TestBlock")
+        self.block = Block.objects.create(slug="test-block")
         self.session = Session.objects.create(
             block=self.block, participant=self.participant, playlist=self.playlist)
 
