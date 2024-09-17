@@ -73,7 +73,7 @@ class Consent(BaseAction):  # pylint: disable=too-few-public-methods
                 amet, nec te atqui scribentur. Diam molestie posidonium te sit, \
                 ea sea expetenda suscipiantur contentiones."
 
-    def __init__(self, text: File, title: str="Informed consent", confirm: str="I agree", deny: str="Stop", url: str=""):
+    def __init__(self, text: File, title: str="Informed consent", confirm: str="I agree", deny: str="Stop", url: str="") -> dict:
         # Determine which text to use
         if text != "":
             # Uploaded consent via file field: block.consent (High priority)
