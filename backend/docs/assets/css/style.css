@@ -188,9 +188,12 @@ details.note {
     margin-left: 1rem;    
 }
 
-.doc-function {
-    margin-top: 3rem;    
+.doc-function {        
     border-top-style: none;
     border-width: 1px;
     border-color: rgb(202, 202, 202);
+}
+
+.doc-heading {
+    padding-top: 3rem;
 }
