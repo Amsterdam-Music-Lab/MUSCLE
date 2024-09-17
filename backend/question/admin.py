@@ -3,7 +3,7 @@ from django.db import models
 from question.models import Question, QuestionGroup, QuestionSeries, QuestionInSeries, Choice
 from django.forms import CheckboxSelectMultiple
 from experiment.forms import QuestionSeriesAdminForm
-from question.forms import QuestionForm, ChoiceInlineFormset
+from question.forms import QuestionForm
 from modeltranslation.admin import TabbedTranslationAdmin, TranslationTabularInline
 
 
@@ -21,7 +21,6 @@ class ChoiceInline(TranslationTabularInline):
     model = Choice
     extra = 0
     show_change_link = True
-    formset = ChoiceInlineFormset
 
 class QuestionAdmin(TabbedTranslationAdmin):
 

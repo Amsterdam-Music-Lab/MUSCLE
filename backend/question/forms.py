@@ -24,18 +24,4 @@ class QuestionForm(ModelForm):
             "scale_steps" : "Non-empty choices field overrides this value",
             "min_values" : "Only affects CHECKBOXES view"
         }
-   
 
-class ChoiceInlineFormset(BaseInlineFormSet):
-
-    def clean(self):
-
-        choices_n = len(self.cleaned_data)
-        deletes_n = 0
-
-        for choice in self.cleaned_data:
-            if choice['DELETE']:
-                deletes_n += 1
-
-        if choices_n == 0 or (choices_n == deletes_n):
-            raise ValidationError('Choices cannot be empty!')
