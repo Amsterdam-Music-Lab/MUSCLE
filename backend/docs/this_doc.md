@@ -13,7 +13,7 @@ The default folder is `backend/site`
 
 ## serve the documentation with mkdocs
 
-`mkdocs serve --dev-addr localhost:8080`
+`mkdocs serve`
 
 For this to work you either have to install mkdocs and its requirements locally or connect the  workspace in your IDE to the `server` docker/podman container.
 
@@ -33,13 +33,13 @@ For this to work you either have to install mkdocs and its requirements locally 
     """Description of the class or function    
 
     Args:
-        Param (type): description
+        Param: description (The type will be read from the function definition)
 
     Attributes:
-        attr (type): description
+        attr (type): description (For django models add the type here in the docstring)
 
     Returns:
-        (type): description
+        description (The type will be read from the function definition)
 
     Raises:
         Error-code: description
