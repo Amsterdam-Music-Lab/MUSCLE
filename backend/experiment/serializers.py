@@ -17,14 +17,14 @@ def serialize_actions(actions):
     return actions.action()
 
 
-def serialize_experiment(experiment: Experiment, language="en") -> dict:
+def serialize_experiment(experiment: Experiment, language: str="en") -> dict:
     """Serialize experiment
 
     Args:
-        experiment (experiment.models.Experiment): Experiment instance
+        experiment: Experiment instance
 
     Returns:
-        (dict): Basic info about an experiment    
+        Basic info about an experiment    
     """
 
     translated_content = experiment.get_translated_content(language)
@@ -59,10 +59,10 @@ def serialize_social_media_config(social_media_config: SocialMediaConfig) -> dic
     """Serialize social media config
     
     Args:
-        social_media_config (experiment.models.SocialMediaConfig): SocialMediaConfig instance
+        social_media_config: SocialMediaConfig instance
 
     returns:
-        (dict): Basic social media info    
+        Basic social media info    
     """
 
     return {
@@ -77,11 +77,11 @@ def serialize_phase(phase: Phase, participant: Participant) -> dict:
     """Serialize phase
     
     Args:
-        phase (experiment.models.Phase): Phase instance
-        participant (participant.models.Participant): Participant instance
+        phase: Phase instance
+        participant: Participant instance
 
     Returns:
-        (dict): Dashboard info for a participant 
+        Dashboard info for a participant 
     """
 
     blocks = list(Block.objects.filter(phase=phase.id).order_by("index"))
@@ -103,7 +103,7 @@ def serialize_phase(phase: Phase, participant: Participant) -> dict:
     }
 
 
-def serialize_block(block_object: Block, language="en") -> dict:
+def serialize_block(block_object: Block, language: str="en") -> dict:
     """Serialize block
 
     Args:
@@ -111,7 +111,7 @@ def serialize_block(block_object: Block, language="en") -> dict:
         language: Language code
 
     Returns:
-        (dict): Block info for a participant    
+        Block info for a participant    
     """
 
     return {
@@ -122,14 +122,14 @@ def serialize_block(block_object: Block, language="en") -> dict:
     }
 
 
-def get_upcoming_block(block_list, participant, repeat_allowed=True):
+def get_upcoming_block(block_list: list[Block], participant: Participant, repeat_allowed: bool=True):
     """return next block with minimum finished sessions for this participant
     if repeated blocks are not allowed (dashboard=False) and there are only finished sessions, return None
     
     Args:
-        block_list (list[experiment.models.Block]): List of Block instances
-        participant (participant.models.Participant): Participant instance
-        repeat_allowed (bool): Allow repeating a block    
+        block_list: List of Block instances
+        participant: Participant instance
+        repeat_allowed: Allow repeating a block    
     """
     
     finished_session_counts = [get_finished_session_count(block, participant) for block in block_list]
@@ -139,30 +139,30 @@ def get_upcoming_block(block_list, participant, repeat_allowed=True):
     return serialize_block(block_list[finished_session_counts.index(minimum_session_count)], participant)
 
 
-def get_started_session_count(block, participant) -> int:
+def get_started_session_count(block: Block, participant: Participant) -> int:
     """Get the number of started sessions for this block and participant
     
     Args:
-        block (experiment.models.Block): Block instance
-        participant (participant.models.Participant): Participant instance
+        block: Block instance
+        participant: Participant instance
 
     Returns:
-        (int): Number of started sessions for this block and participant
+        Number of started sessions for this block and participant
     """
 
     count = Session.objects.filter(block=block, participant=participant).count()
     return count
 
 
-def get_finished_session_count(block, participant) -> int:
+def get_finished_session_count(block: Block, participant: Participant) -> int:
     """Get the number of finished sessions for this block and participant
     
     Args:
-        block (experiment.models.Block): Block instance
-        participant (participant.models.Participant): Participant instance
+        block: Block instance
+        participant: Participant instance
 
     Returns:
-        (int): Number of finished sessions for this block and participant
+        Number of finished sessions for this block and participant
     """
 
     count = Session.objects.filter(block=block, participant=participant, finished_at__isnull=False).count()
@@ -173,11 +173,11 @@ def get_total_score(blocks: list, participant: dict) -> int:
     """Calculate total score of all blocks on the dashboard
     
     Args:
-        blocks (list[experiment.models.Block]): All blocks on the dashboard
-        participant (participant.models.Participant): The participant we want the total score from
+        blocks: All blocks on the dashboard
+        participant: The participant we want the total score from
 
     Returns:
-        total_score (int): Total score of given the blocks for this participant
+        Total score of given the blocks for this participant
     """
 
     total_score = 0
