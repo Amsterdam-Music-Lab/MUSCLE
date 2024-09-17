@@ -3,11 +3,10 @@ from decimal import Decimal, ROUND_HALF_UP
 
 from django.utils.translation import gettext_lazy as _
 
-from .base import Base
+from .practice import Practice
 from experiment.actions import Trial, Explainer, Step
 from experiment.actions.form import ChoiceQuestion, Form
 from experiment.actions.playback import Autoplay
-from experiment.rules.util.practice import get_practice_views, get_trial_condition
 from experiment.actions.utils import final_action_with_optional_button, render_feedback_trivia
 from experiment.actions.utils import get_average_difference_level_based
 from experiment.rules.util.staircasing import register_turnpoint
@@ -20,44 +19,65 @@ logger = logging.getLogger(__name__)
 MAX_TURNPOINTS = 6
 
 
-class HBat(Base):
+class HBat(Practice):
     """ section.group (and possibly section.tag) must be convertable to int"""
 
     ID = 'H_BAT'
     start_diff = 20
+    n_practice_rounds_second_condition = 2
 
-    def next_round(self, session: Session):
-        if session.final_score == 0:
-            # we are practicing
-            actions = get_practice_views(
-                session,
-                self.get_intro_explainer(),
-                staircasing,
-                self.next_trial_action,
-                self.response_explainer,
-                get_previous_condition,
-                1
-            )
-            return actions
-        # actual experiment
-        previous_results = session.result_set.order_by('-created_at')
-        trial_condition = get_trial_condition(2)
-        if not previous_results.count():
-            # first trial
-            action = self.next_trial_action(session, trial_condition, 1)
-            if not action:
-                # participant answered first trial incorrectly (outlier)
-                action = self.finalize_block(session)
+    def next_round(self, session: Session) -> list:
+        round_number = session.get_rounds_passed()
+        practice_finished = session.load_json_data().get("practice_finished")
+        if not practice_finished:
+            difficulty = 1
+            condition = self.get_condition(session)
+            if round_number == 0:
+                return [
+                    self.get_intro_explainer(),
+                    self.next_trial_action(session, condition, difficulty),
+                ]
+            if round_number % self.n_practice_rounds == 0:
+                if self.practice_successful(session):
+                    feedback_explainer = self.get_feedback_explainer(session)
+                    session.save_json_data({"practice_finished": True})
+                    session.result_set.all().delete()
+                    return [
+                        feedback_explainer,
+                        self.get_continuation_explainer(),
+                    ]
+                else:
+                    return [
+                        self.get_feedback_explainer(session),
+                        self.get_restart_explainer(),
+                        self.get_intro_explainer(),
+                        self.next_trial_action(session, condition, difficulty),
+                    ]
+            else:
+                return [
+                    self.get_feedback_explainer(session),
+                    self.next_trial_action(session, condition, difficulty),
+                ]
         else:
-            action = staircasing(session, self.next_trial_action)
-            if not action:
-                # action is None if the audio file doesn't exist
-                action = self.finalize_block(session)
-            if session.final_score == MAX_TURNPOINTS+1:
-                # delete result created before this check
-                session.result_set.order_by('-created_at').first().delete()
-                action = self.finalize_block(session)
-            return action
+            # actual experiment
+            previous_result = session.get_previous_result()
+            trial_condition = self.get_condition(2)
+            if not previous_result:
+                # first trial
+                action = self.next_trial_action(session, trial_condition, 1)
+                if not action:
+                    # participant answered first trial incorrectly (outlier)
+                    action = self.finalize_block(session)
+            else:
+                action = staircasing(session, self.next_trial_action)
+                if not action:
+                    # action is None if the audio file doesn't exist
+                    action = self.finalize_block(session)
+                if session.final_score == MAX_TURNPOINTS + 1:
+                    # delete result created before this check
+                    session.result_set.order_by("-created_at").first().delete()
+                    action = self.finalize_block(session)
+                return action
 
     def next_trial_action(self, session, trial_condition, level=1, *kwargs):
         """
@@ -175,7 +195,7 @@ def get_previous_level(previous_result):
 
 
 def staircasing(session, trial_action_callback):
-    trial_condition = get_trial_condition(2)
+    trial_condition = trial_action_callback(2)
     previous_results = session.result_set.order_by('-created_at')
     last_result = previous_results.first()
     if not last_result:
