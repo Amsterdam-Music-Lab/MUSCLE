@@ -54,6 +54,7 @@ const Block = () => {
     const session = useBoundStore((state) => state.session);
     const theme = useBoundStore((state) => state.theme);
     const setTheme = useBoundStore((state) => state.setTheme);
+    const resetTheme = useBoundStore((state) => state.resetTheme);
     const setBlock = useBoundStore((state) => state.setBlock);
 
     const setHeadData = useBoundStore((state) => state.setHeadData);
@@ -135,13 +136,6 @@ const Block = () => {
                     setError('Session could not be created');
                 }
 
-                // Set theme
-                if (block.theme) {
-                    setTheme(block.theme);
-                } else if (!block.theme && theme) {
-                    setTheme(null);
-                }
-
                 continueToNextRound({ id: block.session_id });
 
             } else {
@@ -160,9 +154,17 @@ const Block = () => {
         participant,
         setError,
         updateActions,
-        theme,
-        setTheme,
     ]);
+
+    useEffect(() => {
+        if (block?.theme) {
+            // Set theme if block has theme
+            setTheme(block.theme);
+        } else if (!block?.theme && theme) {
+            // Reset theme if new block has no theme
+            resetTheme();
+        }
+    }, [block, theme, setTheme, resetTheme]);
 
     const onResult = useResultHandler({
         session,
