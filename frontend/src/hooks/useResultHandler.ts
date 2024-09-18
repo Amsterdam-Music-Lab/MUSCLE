@@ -5,20 +5,12 @@ import Participant from "@/types/Participant";
 import Question from "@/types/Question";
 import { TrialConfig } from "@/types/Trial";
 
-interface ResultData {
-    session: Session;
-    participant: Participant;
-    result: unknown;
-    section?: unknown;
-}
-
 interface UseResultHandlerParams {
     session: Session;
     participant: Participant;
 }
 
 interface OnResultParams {
-
     // If feedback form is provided
     form: Question[];
     decision_time?: number;
@@ -37,15 +29,11 @@ const useResultHandler = ({ session, participant }: UseResultHandlerParams) => {
             result: OnResultParams,
         ) => {
 
-            // Merge result data with data from resultBuffer
-            // NB: result data with same properties will be overwritten by later results
-            const mergedResults = result;
-
             // Create result data
-            const data: ResultData = {
+            const data = {
                 session,
                 participant,
-                result: mergedResults,
+                result,
             };
 
             // Send data to API
