@@ -584,14 +584,26 @@ class SocialMediaConfig(models.Model):
 
         Returns:
             Social media shared text
+
+        Raises:
+            ValueError: If required parameters are missing when needed
         """
-
         translated_content = self.experiment.get_current_content()
-        if translated_content.social_media_message:
-            return translated_content.social_media_message
+        social_message = translated_content.social_media_message
 
-        if not score or not block_name:
-            raise ValueError("score and block_name are required")
+        if social_message:
+            has_placeholders = "{points}" in social_message and "{block_name}" in social_message
+
+            if not has_placeholders:
+                return social_message
+
+            if has_placeholders and (score is None or block_name is None):
+                raise ValueError("score and block_name are required for placeholder substitution")
+
+            return social_message.format(points=score, block_name=block_name)
+
+        if score is None or block_name is None:
+            raise ValueError("score and block_name are required when no social media message is provided")
 
         return _("I scored {points} points in {block_name}").format(score=score, block_name=block_name)
 
