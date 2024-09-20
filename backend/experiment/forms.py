@@ -189,7 +189,6 @@ class MarkdownPreviewTextInput(TextInput):
 
 
 class ExperimentForm(ModelForm):
-
     class Meta:
         model = Experiment
         fields = [
@@ -215,6 +214,7 @@ class ExperimentTranslatedContentForm(ModelForm):
             "description",
             "consent",
             "about_content",
+            "social_media_message",
         ]
 
 

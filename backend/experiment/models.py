@@ -20,7 +20,7 @@ language_choices[0] = ("", "Unset")
 
 class Experiment(models.Model):
     """A model to allow nesting multiple phases with blocks into a 'parent' experiment
-    
+
     Attributes:
         slug (str): Slug
         translated_content (Queryset[ExperimentTranslatedContent]): Translated content
@@ -33,9 +33,7 @@ class Experiment(models.Model):
 
     slug = models.SlugField(max_length=64, default="")
     translated_content = models.QuerySet["ExperimentTranslatedContent"]
-    theme_config = models.ForeignKey(
-        "theme.ThemeConfig", blank=True, null=True, on_delete=models.SET_NULL
-    )
+    theme_config = models.ForeignKey("theme.ThemeConfig", blank=True, null=True, on_delete=models.SET_NULL)
     active = models.BooleanField(default=True)
     social_media_config: Optional["SocialMediaConfig"]
     phases: models.QuerySet["Phase"]
@@ -47,7 +45,7 @@ class Experiment(models.Model):
     class Meta:
         verbose_name_plural = "Experiments"
 
-    def associated_blocks(self) -> list['Block']:
+    def associated_blocks(self) -> list["Block"]:
         """Return a list of all associated blocks for this experiment
 
         Returns:
@@ -69,7 +67,7 @@ class Experiment(models.Model):
             all_sessions |= Session.objects.filter(block=block).order_by("-started_at")
         return all_sessions
 
-    def current_participants(self) -> list['Participant']:
+    def current_participants(self) -> list["Participant"]:
         """Get distinct list of participants
 
         Returns:
@@ -81,7 +79,7 @@ class Experiment(models.Model):
             participants[session.participant.id] = session.participant
         return participants.values()
 
-    def get_fallback_content(self) -> 'ExperimentTranslatedContent':
+    def get_fallback_content(self) -> "ExperimentTranslatedContent":
         """Get fallback content for the experiment
 
         Returns:
@@ -90,9 +88,9 @@ class Experiment(models.Model):
 
         return self.translated_content.order_by("index").first()
 
-    def get_translated_content(self, language: str, fallback: bool = True) -> 'ExperimentTranslatedContent':
+    def get_translated_content(self, language: str, fallback: bool = True) -> "ExperimentTranslatedContent":
         """Get content for a specific language
-        
+
         Args:
             language: Language code
             fallback: Return fallback language if language isn't available
@@ -116,23 +114,23 @@ class Experiment(models.Model):
 
         return content
 
-    def get_current_content(self, fallback: bool = True) -> 'ExperimentTranslatedContent':
+    def get_current_content(self, fallback: bool = True) -> "ExperimentTranslatedContent":
         """Get content for the 'current' language
-        
+
         Args:
             fallback: Return fallback language if language isn't available
 
         Returns:
-            Translated content        
+            Translated content
         """
 
         language = get_language()
         return self.get_translated_content(language, fallback)
-    
-    
+
+
 def consent_upload_path(instance: Experiment, filename: str) -> str:
     """Generate path to save consent file based on experiment.slug and language
-    
+
     Args:
         instance (Experiment): Experiment instance to determine folder name
         filename (str): Name of the consent file to be uploaded
@@ -141,7 +139,7 @@ def consent_upload_path(instance: Experiment, filename: str) -> str:
         upload_to (str): Path for uploading the consent file
 
     Note:
-        Used by the Block model for uploading consent file        
+        Used by the Block model for uploading consent file
     """
     experiment = instance.experiment
     folder_name = experiment.slug
@@ -153,13 +151,13 @@ def consent_upload_path(instance: Experiment, filename: str) -> str:
 class Phase(models.Model):
     """Root entity for configuring experiment phases
 
-    Attributes:       
+    Attributes:
         experiment (Experiment): Instance of an Experiment
         index (int): Index of the phase
         dashboard (bool): Should the dashbopard be displayed for this phase?
-        randomize (bool): Should the block of this phase be randomized?    
+        randomize (bool): Should the block of this phase be randomized?
     """
-    
+
     experiment = models.ForeignKey(Experiment, on_delete=models.CASCADE, related_name="phases")
     index = models.IntegerField(default=0, help_text="Index of the phase in the series. Lower numbers come first.")
     dashboard = models.BooleanField(default=False)
@@ -177,7 +175,7 @@ class Phase(models.Model):
 
 class Block(models.Model):
     """Root entity for configuring experiment blocks
-    
+
     Attributes:
         phase (Phase): The phase this block belongs to
         index (int): Index of this phase
@@ -225,7 +223,7 @@ class Block(models.Model):
 
     def session_count(self) -> int:
         """Number of sessions
-        
+
         Returns:
             Number of sessions
         """
@@ -236,16 +234,16 @@ class Block(models.Model):
 
     def playlist_count(self) -> int:
         """Number of playlists
-        
+
         Returns:
-            Number of playlists        
+            Number of playlists
         """
 
         return self.playlists.count()
 
     playlist_count.short_description = "Playlists"
 
-    def current_participants(self) -> List['participant.models.Participant']:
+    def current_participants(self) -> List["participant.models.Participant"]:
         """Get distinct list of participants
 
         Returns:
@@ -259,10 +257,10 @@ class Block(models.Model):
 
     def export_admin(self) -> dict:
         """Export data for admin
-        
+
         Returns:
             Export data for admin
-        
+
         """
         return {
             "exportedAt": timezone.now().isoformat(),
@@ -278,14 +276,14 @@ class Block(models.Model):
         # export session objects
         return self.session_set.all()
 
-    def export_table(self, session_keys: list[str],
-                     result_keys: list[str],
-                     export_options: dict[str, Any]) -> tuple[list[dict[str, Any]], list[str]]:
+    def export_table(
+        self, session_keys: list[str], result_keys: list[str], export_options: dict[str, Any]
+    ) -> tuple[list[dict[str, Any]], list[str]]:
         """Export filtered tabular data for admin
 
         Args:
-            session_keys: session fieldnames to be included  
-            result_keys: result fieldnames to be included  
+            session_keys: session fieldnames to be included
+            result_keys: result fieldnames to be included
             export_options: export options (see admin/forms.py)
 
         Returns:
@@ -383,9 +381,9 @@ class Block(models.Model):
                     rows.append(this_row)
         return rows, list(fieldnames)
 
-    def get_rules(self) -> 'experiment.rules.base.Base':
+    def get_rules(self) -> "experiment.rules.base.Base":
         """Get instance of rules class to be used for this session
-        
+
         Returns:
             Rules
         """
@@ -395,14 +393,14 @@ class Block(models.Model):
         if self.rules not in BLOCK_RULES:
             raise ValueError(f"Rules do not exist (anymore): {self.rules} for block {self.name} ({self.slug})")
 
-        cl = BLOCK_RULES[self.rules]        
+        cl = BLOCK_RULES[self.rules]
         return cl()
 
     def max_score(self) -> int:
         """Get max score from all sessions with a positive score
-        
+
         Returns:
-            max score from all sessions with a positive score        
+            max score from all sessions with a positive score
         """
 
         score = self.session_set.filter(final_score__gte=0).aggregate(models.Max("final_score"))
@@ -428,11 +426,11 @@ class Block(models.Model):
                         question_series=qs, question=Question.objects.get(pk=question), index=i + 1
                     )
 
-    def get_fallback_content(self) -> 'BlockTranslatedContent':
+    def get_fallback_content(self) -> "BlockTranslatedContent":
         """Get fallback content for the block
-        
+
         Returns:
-            Fallback content        
+            Fallback content
         """
 
         if not self.phase or self.phase.experiment:
@@ -444,7 +442,7 @@ class Block(models.Model):
 
         return fallback_content
 
-    def get_translated_content(self, language: str, fallback: bool = True) -> 'BlockTranslatedContent':
+    def get_translated_content(self, language: str, fallback: bool = True) -> "BlockTranslatedContent":
         """Get content for a specific language
 
         Returns:
@@ -466,12 +464,12 @@ class Block(models.Model):
 
         return content
 
-    def get_current_content(self, fallback: bool = True) -> 'BlockTranslatedContent':
+    def get_current_content(self, fallback: bool = True) -> "BlockTranslatedContent":
         """Get content for the 'current' language
-        
+
         Returns:
             Translated content
-        
+
         """
         language = get_language()
         return self.get_translated_content(language, fallback)
@@ -479,14 +477,14 @@ class Block(models.Model):
 
 class ExperimentTranslatedContent(models.Model):
     """Translated content for an Experiment
-    
+
     Attributes:
         experiment (Experiment): Associated experiment
         index (int): Index
         language (str): Language code
         description (str): Description
         consent (FileField): Consent text markdown or html
-        about_content (str): About text    
+        about_content (str): About text
     """
 
     experiment = models.ForeignKey(Experiment, on_delete=models.CASCADE, related_name="translated_content")
@@ -498,19 +496,24 @@ class ExperimentTranslatedContent(models.Model):
         upload_to=consent_upload_path, blank=True, default="", validators=[markdown_html_validator()]
     )
     about_content = models.TextField(blank=True, default="")
+    social_media_message = models.TextField(
+        blank=True,
+        help_text=_("Content for social media sharing. Use {points} and {block_name} as placeholders."),
+        default="I scored {points} points in {block_name}!",
+    )
 
 
 class BlockTranslatedContent(models.Model):
     """Translated content for a Block
-    
+
     Attributes:
         block (Block): Associated block
         language (str): Language code
         name (str): Block name
         description (str): Description
-    
+
     """
-    
+
     block = models.ForeignKey(Block, on_delete=models.CASCADE, related_name="translated_contents")
     language = models.CharField(default="", blank=True, choices=language_choices, max_length=2)
     name = models.CharField(max_length=64, default="")
@@ -526,19 +529,19 @@ class BlockTranslatedContent(models.Model):
 
 class Feedback(models.Model):
     """A model for adding feedback to an experiment block
-    
+
     Attributes:
         text (str): Text
         block (Block): Associated block
     """
-    
+
     text = models.TextField()
     block = models.ForeignKey(Block, on_delete=models.CASCADE)
 
 
 class SocialMediaConfig(models.Model):
     """Social media config for an experiment
-    
+
     Attributes:
         experiment (Experiment): Experiment instance
         tags (list[str]): Tags
@@ -555,12 +558,6 @@ class SocialMediaConfig(models.Model):
 
     url = models.URLField(
         blank=True, help_text=_("URL to be shared on social media. If empty, the experiment URL will be used.")
-    )
-
-    content = models.TextField(
-        blank=True,
-        help_text=_("Content for social media sharing. Use {points} and {block_name} as placeholders."),
-        default="I scored {points} points in {block_name}!",
     )
 
     SOCIAL_MEDIA_CHANNELS = [
@@ -580,17 +577,18 @@ class SocialMediaConfig(models.Model):
 
     def get_content(self, score: int | None = None, block_name: str | None = None) -> str:
         """Get social media share content
-        
+
         Args:
             score: Score
             block_name: Block name
-        
+
         Returns:
-            Social media shared text        
+            Social media shared text
         """
-        
-        if self.content:
-            return self.content
+
+        translated_content = self.experiment.get_current_content()
+        if translated_content.social_media_message:
+            return translated_content.social_media_message
 
         if not score or not block_name:
             raise ValueError("score and block_name are required")
