@@ -40,8 +40,10 @@ class ToontjeHogerKids2Preverbal(ToontjeHoger2Preverbal):
 
     def get_spectrogram_info(self):
         image_url = "/images/experiments/toontjehoger/spectrogram_info_nl.webp"
-        description = "Dit is een spectogram. Wil je weten hoe dat werkt? Kijk dan het filmpje!"
-        video = 'https://www.youtube.com/embed/7uDw3aC-1nc?si=xTvhO7Lx6XeqwkJM'
+        description = (
+            "Dit is een spectrogram. Wil je weten hoe dat werkt? Kijk dan het filmpje!"
+        )
+        video = "https://video.leidenuniv.nl/embed/secure/iframe/entryId/1_trd2yc58/uiConfId/441104 01/st/0"
         body = f'<div class="center"><img src="{image_url}"></div><p>{description}</p><iframe width="100%" height="315" src={video}></iframe>'
 
         # Return answer info view
