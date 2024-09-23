@@ -25,6 +25,10 @@ class HBat(Practice):
     ID = 'H_BAT'
     start_diff = 20
     n_practice_rounds_second_condition = 2
+    first_condition = 0
+    first_condition_i18n = _("SLOWER")
+    second_condition = 1
+    second_condition_i18n = _("FASTER")
 
     def next_round(self, session: Session) -> list:
         round_number = session.get_rounds_passed()
@@ -86,8 +90,10 @@ class HBat(Practice):
         level can be 1 (20 ms) or higher (10, 5, 2.5 ms...)
         """
         try:
-            section = session.playlist.section_set.filter(
-                group=str(level)).get(tag=str(trial_condition))
+            print(level, trial_condition)
+            section = session.playlist.get_section(
+                {"group": str(level), "tag": str(trial_condition)}
+            )
         except Section.DoesNotExist:
             raise
         expected_response = 'SLOWER' if trial_condition else 'FASTER'
