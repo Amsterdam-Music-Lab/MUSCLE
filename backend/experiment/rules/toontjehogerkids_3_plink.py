@@ -150,9 +150,9 @@ class ToontjeHogerKids3Plink(ToontjeHoger3Plink):
             join("info", "toontjehogerkids", "debrief.html"),
             {
                 "debrief": debrief_message,
-                "vid1": "https://video.leidenuniv.nl/embed/secure/iframe/entryId/1_ylw2npmb/uiConfId/44110 401/st/0",
+                "vid1": "https://video.leidenuniv.nl/embed/secure/iframe/entryId/1_ylw2npmb/uiConfId/44110401/st/0",
                 "vid1_title": "Super snel liedjes herkennen!",
-                "vid2": "https://video.leidenuniv.nl/embed/secure/iframe/entryId/1_xo33dvth/uiConfId/441104 01/st/0",
+                "vid2": "https://video.leidenuniv.nl/embed/secure/iframe/entryId/1_xo33dvth/uiConfId/44110401/st/0",
                 "vid2_title": "Kun je elk liedje zo snel herkennen?",
             },
         )

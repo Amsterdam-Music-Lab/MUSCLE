@@ -20,14 +20,13 @@ class ToontjeHogerKids2Preverbal(ToontjeHoger2Preverbal):
             instruction="Het eerste luisteren",
             steps=[
                 Step(
-                    "Je krijgt straks een soort grafieken van geluid te zien, met een uitlegfilmpje."),
-                Step(
-                    "Welk plaatje denk jij dat hoort bij de stem van een mens?"),
-                Step(
-                    "En hoor jij het verschil tussen twee babyhuiltjes?"),
+                    "Je krijgt straks een soort grafieken van geluid te zien, met een uitlegfilmpje."
+                ),
+                Step("Welk plaatje denk jij dat hoort bij de stem van een mens?"),
+                Step("En hoor jij het verschil tussen twee babyhuiltjes?"),
             ],
             step_numbers=True,
-            button_label="Start"
+            button_label="Start",
         )
 
         # 2 Spectrogram information
@@ -43,8 +42,8 @@ class ToontjeHogerKids2Preverbal(ToontjeHoger2Preverbal):
         description = (
             "Dit is een spectrogram. Wil je weten hoe dat werkt? Kijk dan het filmpje!"
         )
-        video = "https://video.leidenuniv.nl/embed/secure/iframe/entryId/1_trd2yc58/uiConfId/441104 01/st/0"
-        body = f'<div class="center"><img src="{image_url}"></div><p>{description}</p><iframe width="100%" height="315" src={video}></iframe>'
+        video = "https://video.leidenuniv.nl/embed/secure/iframe/entryId/1_ghoti6z2/uiConfId/44110401/st/0"
+        body = f'<div class="center"><img src="{image_url}"></div><p>{description}</p><div style="max-width:608px"><div style="position:relative;padding-bottom:66.118421052632%"><iframe width="608" height="402" src="{video}" class="kmsembed" frameborder="0" title="Hoe werkt een spectrogram?" style="position:absolute;top:0;left:0;width:100%;height:100%;border:0"></iframe></div></div>'
 
         # Return answer info view
         info = Info(
@@ -110,9 +109,9 @@ class ToontjeHogerKids2Preverbal(ToontjeHoger2Preverbal):
             join("info", "toontjehogerkids", "debrief.html"),
             {
                 "debrief": debrief_message,
-                "vid1": "https://video.leidenuniv.nl/embed/secure/iframe/entryId/1_q8r74zji/uiConfId/4411040 1/st/0",
+                "vid1": "https://video.leidenuniv.nl/embed/secure/iframe/entryId/1_q8r74zji/uiConfId/44110401/st/0",
                 "vid1_title": "Franse en Duitse baby",
-                "vid2": "https://video.leidenuniv.nl/embed/secure/iframe/entryId/1_rteiyere/uiConfId/4411040 1/st/0",
+                "vid2": "https://video.leidenuniv.nl/embed/secure/iframe/entryId/1_rteiyere/uiConfId/44110401/st/0",
                 "vid2_title": "Geluiden in Duitsland en Frankrijk",
             },
         )
@@ -120,7 +119,7 @@ class ToontjeHogerKids2Preverbal(ToontjeHoger2Preverbal):
             body=body,
             heading="Het eerste luisteren",
             button_label="Terug naar ToontjeHogerKids",
-            button_link="/collection/thkids"
+            button_link="/collection/thkids",
         )
 
         return [*score, final, info]
