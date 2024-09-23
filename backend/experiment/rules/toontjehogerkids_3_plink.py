@@ -5,7 +5,7 @@ from django.template.loader import render_to_string
 from .toontjehoger_1_mozart import toontjehoger_ranks
 from experiment.actions import Explainer, Step, Score, Final, Info, Trial
 from experiment.actions.playback import PlayButton
-from experiment.actions.form import AutoCompleteQuestion, Form
+from experiment.actions.form import DropdownQuestion, Form
 from .toontjehoger_3_plink import ToontjeHoger3Plink
 
 from experiment.utils import non_breaking_spaces
@@ -33,14 +33,19 @@ class ToontjeHogerKids3Plink(ToontjeHoger3Plink):
         explainer = Explainer(
             instruction="Muziekherkenning",
             steps=[
-                Step("Je hoort zo een heel kort stukje van {} liedjes.".format(
-                    experiment.rounds)),
-                Step("Herken je de liedjes? Kies dan steeds de juiste artiest en titel!"),
                 Step(
-                    "Weet je het niet zeker? Doe dan maar een gok.")
+                    "Je hoort zo een heel kort stukje van {} liedjes.".format(
+                        experiment.rounds
+                    )
+                ),
+                Step(
+                    "Herken je de liedjes? Kies dan steeds de juiste artiest en titel!"
+                ),
+                Step("Weet je het niet zeker? Doe dan maar een gok."),
+                Step("Herken jij er meer dan 3?"),
             ],
             step_numbers=True,
-            button_label="Start"
+            button_label="Start",
         )
 
         return [
@@ -94,16 +99,13 @@ class ToontjeHogerKids3Plink(ToontjeHoger3Plink):
 
         expected_response = section.pk
 
-        question1 = AutoCompleteQuestion(
-            key='plink',
+        question1 = DropdownQuestion(
+            key="plink",
             choices=choices,
-            question='Kies de artiest en de titel van het nummer',
+            question="Kies de artiest en de titel van het nummer",
             result_id=prepare_result(
-                'plink',
-                session,
-                section=section,
-                expected_response=expected_response
-            )
+                "plink", session, section=section, expected_response=expected_response
+            ),
         )
         next_round.append(Trial(
             playback=PlayButton(
