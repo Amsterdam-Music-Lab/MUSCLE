@@ -7,18 +7,12 @@ from result.models import Result
 class Session(models.Model):
     """Experiment session by a participant"""
 
-    block = models.ForeignKey(
-        "experiment.Block", on_delete=models.CASCADE, blank=True, null=True
-    )
+    block = models.ForeignKey("experiment.Block", on_delete=models.CASCADE, blank=True, null=True)
     participant = models.ForeignKey("participant.Participant", on_delete=models.CASCADE)
-    playlist = models.ForeignKey(
-        "section.Playlist", on_delete=models.SET_NULL, blank=True, null=True
-    )
+    playlist = models.ForeignKey("section.Playlist", on_delete=models.SET_NULL, blank=True, null=True)
 
     started_at = models.DateTimeField(db_index=True, default=timezone.now)
-    finished_at = models.DateTimeField(
-        db_index=True, default=None, null=True, blank=True
-    )
+    finished_at = models.DateTimeField(db_index=True, default=None, null=True, blank=True)
     json_data = models.JSONField(default=dict, blank=True, null=True)
     final_score = models.FloatField(db_index=True, default=0.0)
     current_round = models.IntegerField(default=1)
@@ -35,9 +29,7 @@ class Session(models.Model):
     def total_score(self):
         """Sum of all result scores"""
         score = self.result_set.aggregate(models.Sum("score"))
-        return self.block.bonus_points + (
-            score["score__sum"] if score["score__sum"] else 0
-        )
+        return self.block.bonus_points + (score["score__sum"] if score["score__sum"] else 0)
 
     def last_score(self):
         """Get last score, or return 0 if no scores are set"""
@@ -49,7 +41,9 @@ class Session(models.Model):
 
     def last_result(self):
         """Get last result"""
-        return self.result_set.last()
+        result = self.result_set.last()
+
+        return Result.objects.get(pk=result.id)
 
     def last_song(self):
         """Return artist and name of previous song,
@@ -122,8 +116,9 @@ class Session(models.Model):
     def get_unused_song_ids(self, filter_by={}):
         """Get a list of unused song ids from this session's playlist"""
         # Get all song ids from the current playlist
-        song_ids = self.playlist.section_set.filter(
-            **filter_by).order_by('song').values_list('song_id', flat=True).distinct()
+        song_ids = (
+            self.playlist.section_set.filter(**filter_by).order_by("song").values_list("song_id", flat=True).distinct()
+        )
         # Get all song ids from results
         used_song_ids = self.get_used_song_ids()
         return list(set(song_ids) - set(used_song_ids))
@@ -162,4 +157,4 @@ class Session(models.Model):
         results = self.result_set
         if question_keys:
             results = results.filter(question_key__in=question_keys)
-        return results.order_by('-created_at').first()
+        return results.order_by("-created_at").first()

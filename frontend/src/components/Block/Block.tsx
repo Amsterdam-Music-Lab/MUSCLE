@@ -169,8 +169,6 @@ const Block = () => {
     const onResult = useResultHandler({
         session,
         participant,
-        onNext,
-        state,
     });
 
     // Render block state

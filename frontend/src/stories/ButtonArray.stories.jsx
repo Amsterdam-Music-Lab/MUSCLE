@@ -16,7 +16,7 @@ const defaultArgs = {
         value: "",
         choices: ["Choice 1", "Choice 2", "Choice 3"],
     },
-    onChange: () => {},
+    onChange: () => { },
     id: 0,
     active: true,
     style: {},
@@ -94,7 +94,6 @@ export const CategorizationWithHiddenTextDisabled = {
             view: "BUTTON_ARRAY",
             explainer: "",
             question: "",
-            result_id: 16549,
             is_skippable: false,
             submits: true,
             style: {
