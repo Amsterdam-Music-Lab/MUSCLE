@@ -60,9 +60,9 @@ class ToontjeHogerKids1Mozart(ToontjeHoger1Mozart):
             join("info", "toontjehogerkids", "debrief.html"),
             {
                 "debrief": debrief_message,
-                "vid1": "https://video.leidenuniv.nl/embed/secure/iframe/entryId/1_moxxt7x6/uiConfId/44110 401/st/0",
+                "vid1": "https://video.leidenuniv.nl/embed/secure/iframe/entryId/1_moxxt7x6/uiConfId/44110401/st/0",
                 "vid1_title": "Wat is het Mozart effect?",
-                "vid2": "https://video.leidenuniv.nl/embed/secure/iframe/entryId/1_trd2yc58/uiConfId/441104 01/st/0",
+                "vid2": "https://video.leidenuniv.nl/embed/secure/iframe/entryId/1_trd2yc58/uiConfId/44110401/st/0",
                 "vid2_title": "Hoe werkt het Mozart effect?",
             },
         )

@@ -33,8 +33,8 @@ class ToontjeHogerKids2Preverbal(ToontjeHoger2Preverbal):
         description = (
             "Dit is een spectrogram. Wil je weten hoe dat werkt? Kijk dan het filmpje!"
         )
-        video = "https://video.leidenuniv.nl/embed/secure/iframe/entryId/1_df3fmqg8/uiConfId/44110401/st/0"
-        body = f'<div class="center"><img src="{image_url}"></div><p>{description}</p><iframe width="608" height="402" src="{video}" class="kmsembed" allowfullscreen webkitallowfullscreen mozAllowFullScreen allow="autoplay *; fullscreen *; encrypted-media *" referrerPolicy="no-referrer-when-downgrade" sandbox="allow-downloads allow-forms allow-same-origin allow-scripts allow-top-navigation allow-pointer-lock allow-popups allow-modals allow-orientation-lock allow-popups-to-escape-sandbox allow-presentation allow-top-navigation-by-user-activation" frameborder="0" title="Hoe werkt een spectrogram?"></iframe>'
+        video = "https://video.leidenuniv.nl/embed/secure/iframe/entryId/1_ghoti6z2/uiConfId/44110401/st/0"
+        body = f'<div class="center"><img src="{image_url}"></div><p>{description}</p><div style="max-width:608px"><div style="position:relative;padding-bottom:66.118421052632%"><iframe width="608" height="402" src="{video}" class="kmsembed" frameborder="0" title="Hoe werkt een spectrogram?" style="position:absolute;top:0;left:0;width:100%;height:100%;border:0"></iframe></div></div>'
 
         # Return answer info view
         info = Info(
@@ -100,9 +100,9 @@ class ToontjeHogerKids2Preverbal(ToontjeHoger2Preverbal):
             join("info", "toontjehogerkids", "debrief.html"),
             {
                 "debrief": debrief_message,
-                "vid1": "https://video.leidenuniv.nl/embed/secure/iframe/entryId/1_q8r74zji/uiConfId/4411040 1/st/0",
+                "vid1": "https://video.leidenuniv.nl/embed/secure/iframe/entryId/1_q8r74zji/uiConfId/44110401/st/0",
                 "vid1_title": "Franse en Duitse baby",
-                "vid2": "https://video.leidenuniv.nl/embed/secure/iframe/entryId/1_rteiyere/uiConfId/4411040 1/st/0",
+                "vid2": "https://video.leidenuniv.nl/embed/secure/iframe/entryId/1_rteiyere/uiConfId/44110401/st/0",
                 "vid2_title": "Geluiden in Duitsland en Frankrijk",
             },
         )

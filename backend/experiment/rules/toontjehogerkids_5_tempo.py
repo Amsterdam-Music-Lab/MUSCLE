@@ -114,9 +114,9 @@ class ToontjeHogerKids5Tempo(ToontjeHoger5Tempo):
             join("info", "toontjehogerkids", "debrief.html"),
             {
                 "debrief": debrief_message,
-                "vid1": "https://video.leidenuniv.nl/embed/secure/iframe/entryId/1_7wpdkmyv/uiConfId/4411 0401/st/0",
+                "vid1": "https://video.leidenuniv.nl/embed/secure/iframe/entryId/1_7wpdkmyv/uiConfId/44110401/st/0",
                 "vid1_title": "Maatgevoel en dansen",
-                "vid2": "https://video.leidenuniv.nl/embed/secure/iframe/entryId/1_eolyptz7/uiConfId/441104 01/st/0",
+                "vid2": "https://video.leidenuniv.nl/embed/secure/iframe/entryId/1_eolyptz7/uiConfId/44110401/st/0",
                 "vid2_title": "Maatgevoel en muziekles",
             },
         )

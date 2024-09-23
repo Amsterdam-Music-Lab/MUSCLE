@@ -71,9 +71,9 @@ class ToontjeHogerKids6Relative(ToontjeHoger6Relative):
             join("info", "toontjehogerkids", "debrief.html"),
             {
                 "debrief": debrief_message,
-                "vid1": "https://video.leidenuniv.nl/embed/secure/iframe/entryId/1_pdz2mqpl/uiConfId/44110 401/st/0",
+                "vid1": "https://video.leidenuniv.nl/embed/secure/iframe/entryId/1_pdz2mqpl/uiConfId/44110401/st/0",
                 "vid1_title": "Relatief gehoor, wat is dat?",
-                "vid2": "https://video.leidenuniv.nl/embed/secure/iframe/entryId/1_su0gq56f/uiConfId/441104 01/st/0",
+                "vid2": "https://video.leidenuniv.nl/embed/secure/iframe/entryId/1_su0gq56f/uiConfId/44110401/st/0",
                 "vid2_title": "Relatief gehoor en toonladders",
             },
         )
