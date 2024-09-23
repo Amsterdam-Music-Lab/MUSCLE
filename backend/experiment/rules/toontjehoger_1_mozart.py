@@ -39,13 +39,9 @@ class ToontjeHoger1Mozart(Base):
     ANSWER_URL1 = "/images/experiments/toontjehoger/mozart-effect1-answer.webp"
     ANSWER_URL2 = "/images/experiments/toontjehoger/mozart-effect2-answer.webp"
 
-    def _first_round(self, block):
-        """@deprecated. Use next_round instead."""
-        """Create data for the first block rounds."""
-
     def next_round(self, session: Session):
         """Get action data for the next round"""
-        rounds_passed = session.rounds_passed()
+        rounds_passed = session.get_rounds_passed()
 
         # Round 1
         # 1. Explain game.
@@ -142,7 +138,7 @@ class ToontjeHoger1Mozart(Base):
     ):
         # Config
         # -----------------
-        section = session.section_from_any_song(filter_by={"group": section_group})
+        section = session.playlist.get_section(filter_by={"group": section_group})
         if section is None:
             raise Exception("Error: could not find section")
 

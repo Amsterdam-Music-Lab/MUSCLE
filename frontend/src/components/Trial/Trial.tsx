@@ -1,26 +1,45 @@
-import React, { useState, useRef, useCallback } from "react";
+import { useState, useRef, useCallback } from "react";
 import classNames from "classnames";
 
-import { getCurrentTime, getTimeSince } from "../../util/time";
+import { getCurrentTime, getTimeSince } from "@/util/time";
 import FeedbackForm from "../FeedbackForm/FeedbackForm";
 import HTML from "../HTML/HTML";
 import Playback from "../Playback/Playback";
 import Button from "../Button/Button";
+import Question from "@/types/Question";
+import { OnResultType } from "@/hooks/useResultHandler";
+import { TrialConfig } from "@/types/Trial";
+import { PlaybackArgs } from "@/types/Playback";
+
+export interface IFeedbackForm {
+    form: Question[];
+    submit_label: string;
+    skip_label: string;
+    is_skippable: boolean;
+}
+
+export interface TrialProps {
+    playback: PlaybackArgs;
+    html: { body: string | TrustedHTML };
+    feedback_form: IFeedbackForm;
+    config: TrialConfig;
+    onNext: (breakRound?: boolean) => void;
+    onResult: OnResultType;
+}
 
 /**
- * Trial is an block view to present information to the user and/or collect user feedback
+ * Trial is a block view to present information to the user and/or collect user feedback
  * If "playback" is provided, it will play audio through the Playback component
  * If "html" is provided, it will show html content
  * If "feedback_form" is provided, it will present a form of questions to the user
  */
-const Trial = (props) => {
+const Trial = (props: TrialProps) => {
 
     const {
         playback,
         html,
         feedback_form,
         config,
-        result_id,
         onNext,
         onResult,
     } = props;
@@ -41,65 +60,60 @@ const Trial = (props) => {
 
     // Create result data
     const makeResult = useCallback(
-        async (result) => {
+        async (hasTimedOut: boolean) => {
+
             // Prevent multiple submissions
             if (submitted.current) {
                 return;
             }
             submitted.current = true;
 
-            const form = feedback_form ? feedback_form.form : [{}];
+            if (!feedback_form) {
+                return onNext();
+            }
 
-            if (result.type === "time_passed") {
+
+            const { form = [] } = feedback_form;
+
+            if (hasTimedOut) {
                 form.map((formElement) => (formElement.value = "TIMEOUT"));
             }
 
-            if (feedback_form) {
-
-                if (feedback_form.is_skippable) {
-                    form.map((formElement => (formElement.value = formElement.value || '')))
-                }
-
-                const breakRoundOn = config.break_round_on;
-                const shouldBreakRound = breakRoundOn && checkBreakRound(form.map((formElement) => formElement.value), breakRoundOn);
-                const shouldCallOnNextInOnResult = !shouldBreakRound
-
-                await onResult(
-                    {
-                        decision_time: getAndStoreDecisionTime(),
-                        form,
-                        config
-                    },
-                    false,
-                    // if we break the round, we don't want to call onNext in onResult
-                    shouldCallOnNextInOnResult
-                );
-
-                if (shouldBreakRound) {
-                    onNext(true);
-                }
-
-            } else {
-                if (result_id) {
-                    onResult({
-                        result,
-                        result_id
-                    });
-                } else {
-                    onNext();
-                }
-
+            if (feedback_form.is_skippable) {
+                form.map((formElement => (formElement.value = formElement.value || '')))
             }
+
+            const breakRoundConditions = config.break_round_on;
+            const shouldBreakRound = breakRoundConditions && checkBreakRound(form.map((formElement) => formElement.value), breakRoundConditions);
+
+            await onResult(
+                {
+                    decision_time: getAndStoreDecisionTime(),
+                    form,
+                    config,
+                },
+            );
+
+            return onNext(shouldBreakRound);
+
         },
-        [feedback_form, config, onNext, onResult, result_id]
+        [feedback_form, config, onNext, onResult]
     );
 
-    const checkBreakRound = (values, breakConditions) => {
+    const checkBreakRound = (
+        values: string[],
+        breakConditions: TrialConfig['break_round_on']
+    ) => {
         switch (Object.keys(breakConditions)[0]) {
             case 'EQUALS':
-                return values.some(val => breakConditions['EQUALS'].includes(val));
+                return values
+                    .some(
+                        val => breakConditions['EQUALS']!.includes(val)
+                    );
             case 'NOT':
-                return !values.some(val => breakConditions['NOT'].includes(val));
+                return !values.some(
+                    val => breakConditions['NOT']!.includes(val)
+                );
             default:
                 return false;
         }
@@ -109,7 +123,7 @@ const Trial = (props) => {
     const getAndStoreDecisionTime = () => {
         const decisionTime = getTimeSince(startTime.current);
         // keep decisionTime in sessionStorage to be used by subsequent renders
-        window.sessionStorage.setItem('decisionTime', decisionTime);
+        window.sessionStorage.setItem('decisionTime', decisionTime.toString());
         return decisionTime;
     }
 
@@ -123,13 +137,11 @@ const Trial = (props) => {
                     startTime.current = getCurrentTime();
                 }
 
-                setTimeout(() => { makeResult({ type: "time_passed", }); }, config.auto_advance_timer);
+                setTimeout(() => {
+                    makeResult(true);
+                }, config.auto_advance_timer);
             } else {
-
-                makeResult({
-                    type: "time_passed",
-                });
-
+                makeResult(true);
             }
         }
         setFormActive(true);
@@ -163,9 +175,10 @@ const Trial = (props) => {
                     buttonLabel={feedback_form.submit_label}
                     skipLabel={feedback_form.skip_label}
                     isSkippable={feedback_form.is_skippable}
-                    onResult={makeResult}
+                    onResult={onResult}
+                    onNext={onNext}
                 // emphasizeTitle={feedback_form.is_profile}
-                // to do: if we want left-aligned text with a pink divider,
+                // TODO: if we want left-aligned text with a pink divider,
                 // make this style option available again (used in Question.scss)
                 />
             )}

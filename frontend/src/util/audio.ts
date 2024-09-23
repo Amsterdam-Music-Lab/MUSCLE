@@ -6,7 +6,7 @@ import Timer from "./timer";
 // <audio /> docs: https://developer.mozilla.org/en-US/docs/Web/HTML/Element/audio
 const audio = document.createElement("audio");
 audio.id = "audio-player";
-audio.controls = "controls";
+audio.controls = true;
 audio.src = SILENT_MP3;
 
 // switch to cors anonymous for local development (needed for webaudio)
@@ -27,7 +27,7 @@ document.body.appendChild(audio);
 // expose global
 window.audio = audio;
 
-let _stopFadeTimer = null;
+let _stopFadeTimer: () => void | null = null;
 export let audioInitialized = false;
 
 // Play a silent mp3 to make the audio element play after a user action
@@ -95,7 +95,7 @@ export const fadeOut = (duration = 0.1) => {
 };
 
 // Set audio volume
-export const setVolume = (volume) => {
+export const setVolume = (volume: number) => {
     audio.volume = volume;
 };
 
@@ -114,7 +114,7 @@ export const play = () => {
 };
 
 // Play audio from given time
-export const playFrom = (time) => {
+export const playFrom = (time: number) => {
     setVolume(1);
     play();
     setCurrentTime(time);
@@ -131,7 +131,7 @@ export const stop = () => {
 };
 
 // Load audio from given source
-export const load = (src) => {
+export const load = (src: string) => {
     stop();
     audio.src = src;
 
@@ -140,7 +140,7 @@ export const load = (src) => {
 };
 
 // Set current time t
-export const setCurrentTime = (t) => {
+export const setCurrentTime = (t: number) => {
     audio.currentTime = t;
 };
 
@@ -151,7 +151,7 @@ export const getCurrentTime = () => {
 
 // Add a time update listener that sends current time to the callback
 // Return a function to remove the event listener
-export const onTimeUpdate = (onTimeUpdate) => {
+export const onTimeUpdate = (onTimeUpdate: (time: number) => void) => {
     const callback = () => {
         onTimeUpdate(audio.currentTime);
     };
@@ -164,7 +164,7 @@ export const onTimeUpdate = (onTimeUpdate) => {
 };
 
 // Load audio, and call canPlay when audio is ready
-export const loadUntilAvailable = (src, canPlay) => {
+export const loadUntilAvailable = (src: string, canPlay: () => void) => {
     // The canplaythrough event is fired when the user agent can play the media,
     // and estimates that enough data has been loaded to play the media up to its end
     // without having to stop for further buffering of content.
@@ -178,7 +178,7 @@ export const loadUntilAvailable = (src, canPlay) => {
     if (audio.readyState > 3) {
         removeListener();
         canPlay();
-        return () => {};
+        return () => { };
     }
 
     return removeListener;
@@ -186,7 +186,7 @@ export const loadUntilAvailable = (src, canPlay) => {
 
 // Listen once to the given event
 // After that remove listener
-export const listenOnce = (event, callback) => {
+export const listenOnce = (event: string, callback: () => void) => {
     const remove = () => {
         audio.removeEventListener(event, _callback);
     };

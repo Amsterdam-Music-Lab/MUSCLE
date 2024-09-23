@@ -11,8 +11,8 @@ class NewBlockRulesetTest(TestCase):
     @classmethod
     def setUpTestData(self):
         self.participant = Participant.objects.create()
-        self.playlist = Playlist.objects.create(name='NewBlockRuleset')
-        self.block = Block.objects.create(name='NewBlockRuleset', rounds=5)
+        self.playlist = Playlist.objects.create(name="NewBlockPlaylist")
+        self.block = Block.objects.create(slug="new_block", rounds=5)
         self.session = Session.objects.create(
             block=self.block,
             participant=self.participant,
@@ -20,4 +20,4 @@ class NewBlockRulesetTest(TestCase):
         )
 
     def test_initializes_correctly(self):
-        assert self.block.name == 'NewBlockRuleset'
+        assert self.block.slug == "new_block"

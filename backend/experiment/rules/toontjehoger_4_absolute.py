@@ -28,11 +28,8 @@ class ToontjeHoger4Absolute(Base):
     # number of songs (each with a,b,c version) in the playlist
     PLAYLIST_ITEMS = 13
 
-    def first_round(self, block):
-        """Create data for the first block rounds."""
-
-        # 1. Explain game.
-        explainer = Explainer(
+    def get_intro_explainer(self):
+        return Explainer(
             instruction="Absoluut gehoor",
             steps=[
                 Step(
@@ -45,18 +42,14 @@ class ToontjeHoger4Absolute(Base):
             button_label="Start"
         )
 
-        return [
-            explainer,
-        ]
-
     def next_round(self, session):
         """Get action data for the next round"""
 
-        rounds_passed = session.rounds_passed()
+        rounds_passed = session.get_rounds_passed()
 
         # Round 1
         if rounds_passed == 0:
-            return self.get_round(session)
+            return [self.get_intro_explainer(), *self.get_round(session)]
 
         # Round 2 - 4
         if rounds_passed < session.block.rounds:

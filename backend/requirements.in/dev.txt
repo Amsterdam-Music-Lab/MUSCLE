@@ -17,9 +17,3 @@ pip-tools
 
 # Ruff for linting
 ruff
-
-# Django extensions for some useful commands
-django-extensions
-
-# For generating database ER diagrams
-pygraphviz

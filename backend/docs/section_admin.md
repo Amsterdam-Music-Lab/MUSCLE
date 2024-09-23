@@ -1,0 +1,3 @@
+## section.admin
+
+::: section.admin

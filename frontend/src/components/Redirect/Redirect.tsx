@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
-interface RedirectProps {
+export interface RedirectProps {
     to: string;
 }
 

@@ -26,6 +26,7 @@ class ToontjeHoger3Plink(Base):
     SCORE_EXTRA_1_CORRECT = 4
     SCORE_EXTRA_2_CORRECT = 4
     SCORE_EXTRA_WRONG = 0
+    relevant_results = ['plink']
 
     def validate_playlist(self, playlist: Playlist):
         """ The original Toontjehoger (Plink) playlist has the following format:
@@ -63,15 +64,12 @@ class ToontjeHoger3Plink(Base):
             )
         return errors
 
-    def first_round(self, block):
-        """Create data for the first block rounds."""
-
-        # 1. Explain game.
-        explainer = Explainer(
+    def get_intro_explainer(self, n_rounds):
+        return Explainer(
             instruction="Muziekherkenning",
             steps=[
                 Step("Je krijgt {} zeer korte muziekfragmenten te horen.".format(
-                    block.rounds)),
+                    n_rounds)),
                 Step("Ken je het nummer? Noem de juiste artiest en titel!"),
                 Step(
                     "Weet je het niet? Beantwoord dan extra vragen over de tijdsperiode en emotie van het nummer.")
@@ -80,18 +78,14 @@ class ToontjeHoger3Plink(Base):
             button_label="Start"
         )
 
-        return [
-            explainer,
-        ]
-
-    def next_round(self, session):
+    def next_round(self, session: Session):
         """Get action data for the next round"""
 
-        rounds_passed = session.get_relevant_results(['plink']).count()
+        rounds_passed = session.get_rounds_passed()
 
         # Round 1
         if rounds_passed == 0:
-            return self.get_plink_round(session)
+            return [self.get_intro_explainer(session.block.rounds), *self.get_plink_round(session)]
 
         # Round 2-blocks.rounds
         if rounds_passed < session.block.rounds:
@@ -158,9 +152,9 @@ class ToontjeHoger3Plink(Base):
                 feedback_prefix, question_part, section_part)
 
         config = {'show_total_score': True}
-        round_number = session.get_relevant_results(['plink']).count() - 1
+        round_number = session.round_passed()
         score_title = "Ronde %(number)d / %(total)d" %\
-            {'number': round_number+1, 'total': session.block.rounds}
+            {'number': round_number, 'total': session.block.rounds}
         return Score(session, config=config, feedback=feedback, score=score, title=score_title)
 
     def get_plink_round(self, session: Session, present_score=False):

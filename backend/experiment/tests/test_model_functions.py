@@ -36,8 +36,8 @@ class TestModelExperiment(TestCase):
 
     def test_associated_blocks(self):
         experiment = self.experiment
-        phase1 = Phase.objects.create(name="first_phase", series=experiment)
-        phase2 = Phase.objects.create(name="second_phase", series=experiment)
+        phase1 = Phase.objects.create(experiment=experiment)
+        phase2 = Phase.objects.create(experiment=experiment)
         block = Block.objects.create(rules="THATS_MY_SONG", slug="hooked", rounds=42, phase=phase1)
         block2 = Block.objects.create(rules="THATS_MY_SONG", slug="unhinged", rounds=42, phase=phase2)
         block3 = Block.objects.create(rules="THATS_MY_SONG", slug="derailed", rounds=42, phase=phase2)
@@ -46,7 +46,7 @@ class TestModelExperiment(TestCase):
 
     def test_export_sessions(self):
         experiment = self.experiment
-        phase = Phase.objects.create(name="test", series=experiment)
+        phase = Phase.objects.create(experiment=experiment)
         block = Block.objects.create(rules="THATS_MY_SONG", slug="hooked", rounds=42, phase=phase)
         Session.objects.bulk_create(
             [
@@ -60,7 +60,7 @@ class TestModelExperiment(TestCase):
 
     def test_current_participants(self):
         experiment = self.experiment
-        phase = Phase.objects.create(name="test", series=experiment)
+        phase = Phase.objects.create(experiment=experiment)
         block = Block.objects.create(rules="THATS_MY_SONG", slug="hooked", rounds=42, phase=phase)
         Session.objects.bulk_create(
             [

@@ -30,14 +30,12 @@ class ToontjeHogerKids3Plink(ToontjeHoger3Plink):
     def validate_era_and_mood(self, sections):
         return []
 
-    def first_round(self, block):
-        """Create data for the first block rounds."""
-
-        explainer = Explainer(
+    def get_intro_explainer(self, n_rounds):
+        return Explainer(
             instruction="Muziekherkenning",
             steps=[
                 Step("Je hoort zo een heel kort stukje van {} liedjes.".format(
-                    block.rounds)),
+                    n_rounds)),
                 Step("Herken je de liedjes? Kies dan steeds de juiste artiest en titel!"),
                 Step(
                     "Weet je het niet zeker? Doe dan maar een gok.")
@@ -45,10 +43,6 @@ class ToontjeHogerKids3Plink(ToontjeHoger3Plink):
             step_numbers=True,
             button_label="Start"
         )
-
-        return [
-            explainer
-        ]
 
     def get_last_result(self, session):
         ''' get the last score, based on question (plink)
@@ -74,9 +68,9 @@ class ToontjeHogerKids3Plink(ToontjeHoger3Plink):
                 section.song.name), non_breaking_spaces(section.song.artist))
 
         config = {'show_total_score': True}
-        round_number = session.get_relevant_results(['plink']).count() - 1
+        round_number = session.get_rounds_passed()
         score_title = "Ronde %(number)d / %(total)d" %\
-            {'number': round_number+1, 'total': session.block.rounds}
+            {'number': round_number, 'total': session.block.rounds}
         return Score(session, config=config, feedback=feedback, score=score, title=score_title)
 
     def get_plink_trials(self, session: Session, section: Section, choices: dict, expected_response: str) -> list:

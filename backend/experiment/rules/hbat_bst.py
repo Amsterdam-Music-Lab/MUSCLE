@@ -16,7 +16,7 @@ class BST(HBat):
     the HBAT rules. """
     ID = 'BST'
 
-    def intro_explainer(self):
+    def get_intro_explainer(self):
         return Explainer(
             instruction=_(
                 'In this test you will hear a number of rhythms which have a regular beat.'),

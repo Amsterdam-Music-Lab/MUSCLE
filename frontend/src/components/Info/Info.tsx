@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 
 import Button from "../Button/Button";
 
-interface InfoProps {
+export interface InfoProps {
     heading?: string;
     body: string | TrustedHTML;
     button_label?: string;
@@ -10,7 +10,7 @@ interface InfoProps {
     onNext?: () => void;
 }
 
-/** Info is an block view that shows the Info text, and handles agreement/stop actions */
+/** Info is a block view that shows the Info text, and handles agreement/stop actions */
 const Info = ({ heading, body, button_label, button_link, onNext }: InfoProps) => {
     const [maxHeight, setMaxHeight] = useState(getMaxHeight());
 

@@ -10,7 +10,6 @@ const getProps = (overrides = {}) => ({
         "view": QuestionViews.BUTTON_ARRAY,
         "explainer": "",
         "question": "1. Do you know this song?",
-        "result_id": 12345,
         "is_skippable": false,
         "submits": false,
         "style": "boolean",

@@ -4,7 +4,7 @@ import logging
 from django.utils.translation import gettext_lazy as _
 
 from experiment.actions.utils import final_action_with_optional_button, render_feedback_trivia
-from experiment.rules.util.practice import practice_explainer, practice_again_explainer, start_experiment_explainer
+from experiment.rules.util.practice import get_practice_explainer, practice_again_explainer, start_experiment_explainer
 from experiment.actions import Trial, Explainer, Step
 from experiment.actions.playback import Autoplay
 from experiment.actions.form import ChoiceQuestion, Form
@@ -80,21 +80,12 @@ STIMULI = {
 class RhythmDiscrimination(Base):
     ID = 'RHYTHM_DISCRIMINATION'
 
-    def first_round(self, block):
-        """Create data for the first block rounds"""
-        explainer = intro_explainer()
-        explainer2 = practice_explainer()
-
-        return [
-            explainer,
-            explainer2,
-        ]
-
     def next_round(self, session):
-        next_round_number = session.get_next_round()
+        next_round_number = session.get_rounds_passed()
 
-        if next_round_number == 1:
+        if next_round_number == 0:
             plan_stimuli(session)
+            return [get_intro_explainer(), get_practice_explainer(), *next_trial_actions(session, next_round_number)]
 
         return next_trial_actions(
             session, next_round_number)
@@ -111,10 +102,10 @@ def next_trial_actions(session, round_number):
         print('Missing plan key: %s' % str(error))
         return actions
 
-    if len(plan) == round_number-1:
+    if len(plan) == round_number:
         return [finalize_block(session)]
 
-    condition = plan[round_number-1]
+    condition = plan[round_number]
 
     if session.final_score == 0:
         # practice: add feedback on previous result
@@ -124,13 +115,13 @@ def next_trial_actions(session, round_number):
             actions.append(
                 response_explainer(previous_results.first().score, same)
             )
-        if round_number == 5:
+        if round_number == 4:
             total_score = sum(
                 [res.score for res in previous_results.all()[:4]])
             if total_score < 2:
                 # start practice over
                 actions.append(practice_again_explainer())
-                actions.append(intro_explainer())
+                actions.append(get_intro_explainer())
                 session.result_set.all().delete()
                 session.save()
             else:
@@ -221,7 +212,7 @@ def plan_stimuli(session):
     session.save()
 
 
-def intro_explainer():
+def get_intro_explainer():
     return Explainer(
         instruction=_(
             'In this test you will hear the same rhythm twice. After that, you will hear a third rhythm.'),

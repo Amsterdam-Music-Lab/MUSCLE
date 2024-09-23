@@ -12,7 +12,7 @@ class TestActions(TestCase):
     def setUp(self) -> None:
         self.playlist = Playlist.objects.create(name='TestPlaylist')
         self.participant = Participant.objects.create()
-        self.block = Block.objects.create(name='TestBlock')
+        self.block = Block.objects.create(slug="TestBlock")
         self.session = Session.objects.create(
             block=self.block, participant=self.participant, playlist=self.playlist)
 

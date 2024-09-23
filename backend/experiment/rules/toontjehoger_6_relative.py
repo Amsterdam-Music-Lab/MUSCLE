@@ -40,11 +40,8 @@ class ToontjeHoger6Relative(Base):
             errors.append('The sections should have the tags a, b, c')
         return errors
 
-    def first_round(self, block):
-        """Create data for the first block rounds."""
-
-        # 1. Explain game.
-        explainer = Explainer(
+    def get_intro_explainer(self):
+        return Explainer(
             instruction="Relatief Gehoor",
             steps=[
                 Step("In dit experiment kun je testen hoe goed jouw relatieve gehoor is! Relatief gehoor is het vermogen om een melodie te herkennen, ongeacht of deze nu wat hoger of lager in toonhoogte wordt afgespeeld."),
@@ -58,19 +55,15 @@ class ToontjeHoger6Relative(Base):
             button_label="Start"
         )
 
-        return [
-            explainer,
-        ]
-
-    def next_round(self, session):
+    def next_round(self, session: Session):
         """Get action data for the next round"""
 
-        rounds_passed = session.rounds_passed()
+        rounds_passed = session.get_rounds_passed()
 
         # Round 1
         if rounds_passed == 0:
             # No combine_actions because of inconsistent next_round array wrapping in first round
-            return self.get_round(rounds_passed, session)
+            return [self.get_intro_explainer(), *self.get_round(rounds_passed, session)]
 
         # Round 2
         if rounds_passed == 1:

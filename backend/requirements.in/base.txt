@@ -35,4 +35,9 @@ genbadge[coverage]
 django-markup[all_filter_dependencies]
 
 # Nested inline forms
-django-nested-admin
+django-nested-admin>=4.1.1
+
+# Generate python documentation
+mkdocs
+mkdocstrings[python]
+mkdocs-material

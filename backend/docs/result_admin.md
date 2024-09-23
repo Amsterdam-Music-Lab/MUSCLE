@@ -1,0 +1,3 @@
+## result.admin
+
+::: result.admin

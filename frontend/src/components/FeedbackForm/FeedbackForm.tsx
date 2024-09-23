@@ -3,6 +3,7 @@ import { useState, useRef } from "react";
 import Question from "../Question/Question";
 import Button from "../Button/Button";
 import IQuestion from "@/types/Question";
+import { OnResultType } from "@/hooks/useResultHandler";
 
 interface FeedbackFormProps {
     formActive: boolean;
@@ -10,7 +11,8 @@ interface FeedbackFormProps {
     buttonLabel: string;
     skipLabel: string;
     isSkippable: boolean;
-    onResult: (result: any) => void;
+    onResult: OnResultType
+    onNext: () => void;
     emphasizeTitle?: boolean;
 }
 
@@ -22,6 +24,7 @@ const FeedbackForm = ({
     skipLabel,
     isSkippable,
     onResult,
+    onNext,
     emphasizeTitle = false,
 }: FeedbackFormProps) => {
     const isSubmitted = useRef(false);
@@ -30,7 +33,7 @@ const FeedbackForm = ({
 
     const [formValid, setFormValid] = useState(false);
 
-    const onSubmit = () => {
+    const onSubmit = async () => {
         // Prevent double submit
         if (isSubmitted.current) {
             return;
@@ -38,9 +41,11 @@ const FeedbackForm = ({
         isSubmitted.current = true;
 
         // Callback onResult with question data
-        onResult({
+        await onResult({
             form,
         });
+
+        onNext();
     };
 
     const onChange = (value: string | number | boolean, question_index: number) => {

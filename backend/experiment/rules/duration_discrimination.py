@@ -10,9 +10,10 @@ from experiment.actions.form import ChoiceQuestion, Form
 from experiment.actions.playback import Autoplay
 from experiment.actions.utils import final_action_with_optional_button, render_feedback_trivia
 from experiment.actions.utils import get_average_difference
-from experiment.rules.util.practice import get_trial_condition_block, get_practice_views, practice_explainer
+from experiment.rules.util.practice import get_trial_condition_block, get_practice_views
 from experiment.rules.util.staircasing import register_turnpoint
 from result.utils import prepare_result
+from session.models import Session
 
 logger = logging.getLogger(__name__)
 
@@ -30,23 +31,13 @@ class DurationDiscrimination(Base):
     increase_difficulty_multiplier = .5
     decrease_difficulty_multiplier = 1.5
 
-    def first_round(self, block):
-        """Create data for the first block rounds"""
-        explainer = self.intro_explanation()
-        explainer2 = practice_explainer()
-
-        return [
-            explainer,
-            explainer2,
-        ]
-
-    def next_round(self, session):
+    def next_round(self, session: Session):
         if session.final_score == 0:
             self.register_difficulty(session)
             # we are practicing
             actions = get_practice_views(
                 session,
-                self.intro_explanation(),
+                self.get_intro_explainer(),
                 self.staircasing_blocks,
                 self.next_trial_action,
                 self.get_response_explainer,
@@ -149,7 +140,7 @@ class DurationDiscrimination(Base):
     def get_question_text(self):
         return _("Is the second interval EQUALLY LONG as the first interval or LONGER?")
 
-    def intro_explanation(self):
+    def get_intro_explainer(self):
         return Explainer(
             instruction=self.get_introduction(),
             steps=[

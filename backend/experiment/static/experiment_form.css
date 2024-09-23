@@ -1,0 +1,33 @@
+/* Add cursor pointer to inline group headings as they are clickable to toggle the form underneath */
+.inline-group .inline-heading {
+    cursor: pointer;
+}
+
+.inline-group .inline-heading:hover {
+    text-decoration: underline;
+}
+
+/* Floating class for the submit row */
+.submit-row.floating {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    filter: drop-shadow(0 -2px 5px rgba(0, 0, 0, 0.1));
+    border-radius: 0;
+    margin: 0;
+
+    /* Grid with two columns */
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+@media (min-width: 768px) {
+    .submit-row.floating {
+        /* Make the bar float over the form part of the screen */
+        max-width: calc(100% - 299px);
+        margin-left: 299px;
+        display: flex;
+    }
+}

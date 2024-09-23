@@ -2,7 +2,12 @@ from django.test import TestCase
 
 from image.models import Image
 from theme.models import ThemeConfig
-from experiment.models import Block, Experiment, ExperimentTranslatedContent
+from experiment.models import (
+    Block,
+    BlockTranslatedContent,
+    Experiment,
+    ExperimentTranslatedContent,
+)
 from participant.models import Participant
 from session.models import Session
 from result.models import Result
@@ -21,48 +26,49 @@ class BlockModelTest(TestCase):
             logo_image=logo_image,
             background_image=background_image,
         )
-        Block.objects.create(
-            name="Test Block",
-            description="Test block description",
+        block = Block.objects.create(
             slug="test-block",
-            url="https://example.com/block",
-            hashtag="test",
             rounds=5,
             bonus_points=10,
             rules="RHYTHM_BATTERY_FINAL",
-            language="en",
             theme_config=ThemeConfig.objects.get(name="Default"),
+        )
+        BlockTranslatedContent.objects.create(
+            block=block,
+            language="en",
+            name="Test Block",
+            description="Test block description",
         )
 
     def test_block_str(self):
-        block = Block.objects.get(name="Test Block")
+        block = Block.objects.get(slug="test-block")
         self.assertEqual(str(block), "Test Block")
 
     def test_block_session_count(self):
-        block = Block.objects.get(name="Test Block")
+        block = Block.objects.get(slug="test-block")
         self.assertEqual(block.session_count(), 0)
 
     def test_block_playlist_count(self):
-        block = Block.objects.get(name="Test Block")
+        block = Block.objects.get(slug="test-block")
         self.assertEqual(block.playlist_count(), 0)
 
     def test_block_current_participants(self):
-        block = Block.objects.get(name="Test Block")
+        block = Block.objects.get(slug="test-block")
         participants = block.current_participants()
         self.assertEqual(len(participants), 0)
 
     def test_block_export_admin(self):
-        block = Block.objects.get(name="Test Block")
+        block = Block.objects.get(slug="test-block")
         exported_data = block.export_admin()
         self.assertEqual(exported_data["block"]["name"], "Test Block")
 
     def test_block_export_sessions(self):
-        block = Block.objects.get(name="Test Block")
+        block = Block.objects.get(slug="test-block")
         sessions = block.export_sessions()
         self.assertEqual(len(sessions), 0)
 
     def test_block_export_table(self):
-        block = Block.objects.get(name="Test Block")
+        block = Block.objects.get(slug="test-block")
         amount_of_sessions = 3
 
         for i in range(amount_of_sessions):
@@ -83,12 +89,12 @@ class BlockModelTest(TestCase):
         self.assertEqual(len(fieldnames), len(session_keys) + len(result_keys))
 
     def test_block_get_rules(self):
-        block = Block.objects.get(name="Test Block")
+        block = Block.objects.get(slug="test-block")
         rules = block.get_rules()
         self.assertIsNotNone(rules)
 
     def test_block_max_score(self):
-        block = Block.objects.get(name="Test Block")
+        block = Block.objects.get(slug="test-block")
 
         amount_of_results = 3
         question_score = 1

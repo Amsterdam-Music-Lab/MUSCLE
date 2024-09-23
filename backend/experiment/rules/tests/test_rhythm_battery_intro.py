@@ -25,10 +25,7 @@ class RhythmBatteryIntroTest(TestCase):
             filename="not/to_be_found.mp3",
             tag=0
         )
-        self.block = Block.objects.create(
-            name='test',
-            slug='TEST',
-        )
+        self.block = Block.objects.create(slug="TEST", rules="RHYTHM_BATTERY_INTRO")
         participant = Participant.objects.create()
         self.session = Session.objects.create(
             block=Block.objects.first(),
@@ -38,23 +35,16 @@ class RhythmBatteryIntroTest(TestCase):
 
     def test_first_round(self):
         listening_conditions = RhythmBatteryIntro()
-        actions = listening_conditions.first_round(self.block)
-        self.assertIsInstance(actions[0], Explainer)
-
-    def test_next_round_first_round(self):
-        listening_conditions = RhythmBatteryIntro()
-        listening_conditions.first_round(self.block)
         actions = listening_conditions.next_round(self.session)
+        self.assertIsInstance(actions[0], Explainer)
+        self.assertIsInstance(actions[1], Explainer)
+        self.assertIsInstance(actions[2], Trial)
+        self.assertIsInstance(actions[2].feedback_form, Form)
+        self.assertEqual(len(actions[2].feedback_form.form), 1)
+        self.assertEqual(actions[2].feedback_form.form[0].key, 'quiet_room')
 
-        self.assertIsInstance(actions[0], Trial)
-
-        self.assertIsInstance(actions[0].feedback_form, Form)
-        self.assertEqual(len(actions[0].feedback_form.form), 1)
-        self.assertEqual(actions[0].feedback_form.form[0].key, 'quiet_room')
-
-    def test_next_round_final_round(self):
+    def test_next_round_last_time(self):
         listening_conditions = RhythmBatteryIntro()
-        listening_conditions.first_round(self.block)
         listening_conditions.next_round(self.session)
         listening_conditions.next_round(self.session)
         listening_conditions.next_round(self.session)

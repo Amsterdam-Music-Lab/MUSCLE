@@ -59,11 +59,8 @@ class ToontjeHoger2Preverbal(Base):
 
         return errors
 
-    def first_round(self, block):
-        """Create data for the first block rounds."""
-
-        # 1. Explain game.
-        explainer = Explainer(
+    def get_intro_explainer(self):
+        return Explainer(
             instruction="Het eerste luisteren",
             steps=[
                 Step(
@@ -102,21 +99,21 @@ class ToontjeHoger2Preverbal(Base):
     def next_round(self, session):
         """Get action data for the next round"""
 
-        rounds_passed = session.rounds_passed()
+        rounds_passed = session.get_rounds_passed()
 
         # Round 1
         if rounds_passed == 0:
             # No combine_actions because of inconsistent next_round array wrapping in first round
-            return self.get_round1(session)
+            return [self.get_get_intro_explainer(), self.get_spectrogram_info(), self.get_round1(session)]
 
         # Round 2
         if rounds_passed == 1:
-            return [*self.get_score(session, rounds_passed), *self.get_round1_playback(session), *self.get_round2(round, session)]
+            return [*self.get_score(session, get_rounds_passed), *self.get_round1_playback(session), *self.get_round2(round, session)]
 
         # Final
         return self.get_final_round(session)
 
-    def get_score(self, session, rounds_passed):
+    def get_score(self, session, get_rounds_passed):
         # Feedback
         last_result = session.last_result()
         feedback = ""
@@ -169,7 +166,7 @@ class ToontjeHoger2Preverbal(Base):
             title=self.TITLE,
         )
 
-        return [image_trial]
+        return image_trial
 
     def get_round1_question(self):
         return "Welk spectrogram toont het geluid van een mens?"
@@ -179,19 +176,19 @@ class ToontjeHoger2Preverbal(Base):
 
     def get_round1_playback(self, session):
         # Get sections
-        sectionA = session.section_from_any_song(
+        sectionA = session.playlist.get_section(
             filter_by={'tag': 'a', 'group': '1'})
         if not sectionA:
             raise Exception(
                 "Error: could not find section A for round 1")
 
-        sectionB = session.section_from_any_song(
+        sectionB = session.playlist.get_section(
             filter_by={'tag': 'b', 'group': '1'})
         if not sectionB:
             raise Exception(
                 "Error: could not find section B for round 1")
 
-        sectionC = session.section_from_any_song(
+        sectionC = session.playlist.get_section(
             filter_by={'tag': 'c', 'group': '1'})
         if not sectionB:
             raise Exception(
@@ -218,13 +215,13 @@ class ToontjeHoger2Preverbal(Base):
 
         # Get sections
         # French
-        sectionA = session.section_from_any_song(
+        sectionA = session.playlist.get_section(
             filter_by={'tag': 'a', 'group': '2'})
         if not sectionA:
             raise Exception(
                 "Error: could not find section A for round 2")
         # German
-        sectionB = session.section_from_any_song(
+        sectionB = session.playlist.get_section(
             filter_by={'tag': 'b', 'group': '2'})
         if not sectionB:
             raise Exception(
@@ -272,7 +269,7 @@ class ToontjeHoger2Preverbal(Base):
         session.save()
 
         # Score
-        score = self.get_score(session, session.rounds_passed())
+        score = self.get_score(session, session.get_rounds_passed())
 
         # Final
         final_text = "Goed gedaan! Je hebt beide vragen correct beantwoord!" if session.final_score >= 2 * \

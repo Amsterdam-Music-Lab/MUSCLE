@@ -13,11 +13,8 @@ logger = logging.getLogger(__name__)
 class ToontjeHogerKids2Preverbal(ToontjeHoger2Preverbal):
     ID = 'TOONTJE_HOGER_KIDS_2_PREVERBAL'
 
-    def first_round(self, block):
-        """Create data for the first block rounds."""
-
-        # 1. Explain game.
-        explainer = Explainer(
+    def get_intro_explainer(self):
+        return Explainer(
             instruction="Het eerste luisteren",
             steps=[
                 Step(
@@ -30,14 +27,6 @@ class ToontjeHogerKids2Preverbal(ToontjeHoger2Preverbal):
             step_numbers=True,
             button_label="Start"
         )
-
-        # 2 Spectrogram information
-        spectrogram_info = self.get_spectrogram_info()
-
-        return [
-            explainer,
-            spectrogram_info,
-        ]
 
     def get_spectrogram_info(self):
         image_url = "/images/experiments/toontjehoger/spectrogram_info_nl.webp"
@@ -53,7 +42,7 @@ class ToontjeHogerKids2Preverbal(ToontjeHoger2Preverbal):
         )
         return info
 
-    def get_score(self, session, rounds_passed):
+    def get_score(self, session, get_rounds_passed):
         # Feedback
         last_result = session.last_result()
         feedback = ""
@@ -91,7 +80,7 @@ class ToontjeHogerKids2Preverbal(ToontjeHoger2Preverbal):
         session.save()
 
         # Score
-        score = self.get_score(session, session.rounds_passed())
+        score = self.get_score(session, session.get_rounds_passed())
 
         # Final
         final_text = "Goed gedaan!" if session.final_score >= 2 * \

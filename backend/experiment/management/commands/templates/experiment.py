@@ -1,17 +1,15 @@
 from typing import Final
 from django.utils.translation import gettext_lazy as _
-from django.template.loader import render_to_string
 
-from experiment.actions import Consent, BooleanQuestion, Explainer, Final, Form, Playlist, Step, Trial
+from experiment.actions import BooleanQuestion, Explainer, Final, Form, Step, Trial
 from experiment.actions.playback import Autoplay
-from question.demographics import EXTRA_DEMOGRAPHICS
-from question.utils import question_by_key
 from experiment.rules.base import Base
 from result.utils import prepare_result
+from session.models import Session
 
 
 class NewBlockRuleset(Base):
-    ''' An block type that could be used to test musical preferences '''
+    ''' A block type that could be used to test musical preferences '''
     ID = 'NEW_BLOCK_RULESET'
     contact_email = 'info@example.com'
 
@@ -32,23 +30,8 @@ class NewBlockRuleset(Base):
             },
         ]
 
-    def first_round(self, block):
-        ''' Provide the first rounds of the block,
-        before session creation
-        The first_round must return at least one Info or Explainer action
-        Consent and Playlist are often desired, but optional
-        '''
-        # 1. Informed consent (optional)
-        consent = Consent(block.consent,
-                            title=_('Informed consent'),
-                            confirm=_('I agree'),
-                            deny=_('Stop'))
-
-        # 2. Choose playlist (optional, only relevant if there are multiple playlists the participant can choose from)
-        playlist = Playlist(block.playlists.all())
-
-        # 3. Explainer (optional)
-        explainer = Explainer(
+    def get_intro_explainer(self):
+        return Explainer(
             instruction='Welcome to this new experiment',
             steps=[
                 Step(description=_('Please read the instructions carefully')),
@@ -58,16 +41,13 @@ class NewBlockRuleset(Base):
             step_numbers=True
         )
 
-        return [
-            consent,
-            playlist,
-            explainer
-        ]
-
-    def next_round(self, session):
+    def next_round(self, session: Session):
         # ask any questions defined in the admin interface
-        actions = self.get_questionnaire(session)
-        if actions:
+        if session.get_rounds_passed() == 0:
+            actions = [self.get_intro_explainer()]
+            questions = self.get_open_questions(session)
+            if questions:
+                actions.extend(questions)
             return actions
 
         elif session.rounds_complete():
@@ -89,7 +69,7 @@ class NewBlockRuleset(Base):
         # define a key, by which responses to this trial can be found in the database
         key = 'test_trial'
         # get a random section
-        section = session.section_from_any_song()
+        section = session.playlist.get_section()
         question = BooleanQuestion(
             question=_(
                 "Do you like this song?"),
