@@ -58,6 +58,7 @@ export const CategorizationWithHiddenText = {
             view: "BUTTON_ARRAY",
             explainer: "",
             question: "",
+            result_id: 16549,
             is_skippable: false,
             submits: true,
             style: {
