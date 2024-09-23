@@ -23,7 +23,6 @@ export interface TrialProps {
     html: { body: string | TrustedHTML };
     feedback_form: IFeedbackForm;
     config: TrialConfig;
-    result_id: string;
     onNext: (breakRound?: boolean) => void;
     onResult: OnResultType;
 }
@@ -41,7 +40,6 @@ const Trial = (props: TrialProps) => {
         html,
         feedback_form,
         config,
-        result_id,
         onNext,
         onResult,
     } = props;
@@ -62,32 +60,22 @@ const Trial = (props: TrialProps) => {
 
     // Create result data
     const makeResult = useCallback(
-        async (result: { type: 'time_passed' }) => {
+        async (hasTimedOut: boolean) => {
 
             // Prevent multiple submissions
             if (submitted.current) {
                 return;
             }
-
             submitted.current = true;
 
             if (!feedback_form) {
-
-                if (result_id) {
-                    onResult({
-                        result,
-                        result_id
-                    });
-                } else {
-                    onNext();
-                }
-
-                return;
+                return onNext();
             }
+
 
             const { form = [] } = feedback_form;
 
-            if (result.type === "time_passed") {
+            if (hasTimedOut) {
                 form.map((formElement) => (formElement.value = "TIMEOUT"));
             }
 
@@ -102,20 +90,14 @@ const Trial = (props: TrialProps) => {
                 {
                     decision_time: getAndStoreDecisionTime(),
                     form,
-                    config
+                    config,
                 },
-                false,
-                // if we break the round, we don't want to call `onNext` in `onResult`
-                // as it does not allow us to pass a `breakRound` flag
-                !shouldBreakRound
             );
 
-            if (shouldBreakRound) {
-                onNext(true);
-            }
+            return onNext(shouldBreakRound);
 
         },
-        [feedback_form, config, onNext, onResult, result_id]
+        [feedback_form, config, onNext, onResult]
     );
 
     const checkBreakRound = (
@@ -141,14 +123,13 @@ const Trial = (props: TrialProps) => {
     const getAndStoreDecisionTime = () => {
         const decisionTime = getTimeSince(startTime.current);
         // keep decisionTime in sessionStorage to be used by subsequent renders
-        window.sessionStorage.setItem('decisionTime', decisionTime);
+        window.sessionStorage.setItem('decisionTime', decisionTime.toString());
         return decisionTime;
     }
 
     const finishedPlaying = useCallback(() => {
 
         if (config.auto_advance) {
-
 
             // Create a time_passed result
             if (config.auto_advance_timer != null) {
@@ -157,14 +138,10 @@ const Trial = (props: TrialProps) => {
                 }
 
                 setTimeout(() => {
-                    makeResult({ type: "time_passed", });
+                    makeResult(true);
                 }, config.auto_advance_timer);
             } else {
-
-                makeResult({
-                    type: "time_passed",
-                });
-
+                makeResult(true);
             }
         }
         setFormActive(true);
@@ -198,7 +175,8 @@ const Trial = (props: TrialProps) => {
                     buttonLabel={feedback_form.submit_label}
                     skipLabel={feedback_form.skip_label}
                     isSkippable={feedback_form.is_skippable}
-                    onResult={makeResult}
+                    onResult={onResult}
+                    onNext={onNext}
                 // emphasizeTitle={feedback_form.is_profile}
                 // TODO: if we want left-aligned text with a pink divider,
                 // make this style option available again (used in Question.scss)
