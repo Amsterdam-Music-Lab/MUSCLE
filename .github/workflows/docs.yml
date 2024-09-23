@@ -58,8 +58,7 @@ jobs:
 
   deploy-gh-pages:
     # only deploy on develop branch
-    # temporarily turn off for testing
-    # if: github.ref == 'refs/heads/develop'
+    if: github.ref == 'refs/heads/develop'
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
