@@ -111,10 +111,15 @@ class ToontjeHogerKids5Tempo(ToontjeHoger5Tempo):
         # Info page
         debrief_message = "Dit is een test die maatgevoel meet. Onderzoekers hebben laten zien dat de meeste mensen goed maatgevoel hebben. Maar als je nou niet zo goed kan dansen, heb jij dan toch niet zo'n goed maatgevoel? En kan je dit leren? Bekijk de filmpjes voor het antwoord!"
         body = render_to_string(
-            join('info', 'toontjehogerkids', 'debrief.html'),
-            {'debrief': debrief_message,
-             'vid1': 'https://www.youtube.com/embed/lsQx-mJ4-cA?si=BuO5FO56I4rThTAY',
-             'vid2': 'https://www.youtube.com/embed/9LSmfsiEXhI?si=WsxrYN3UnHiiG8qT'})
+            join("info", "toontjehogerkids", "debrief.html"),
+            {
+                "debrief": debrief_message,
+                "vid1": "https://video.leidenuniv.nl/embed/secure/iframe/entryId/1_7wpdkmyv/uiConfId/4411 0401/st/0",
+                "vid1_title": "Maatgevoel en dansen",
+                "vid2": "https://video.leidenuniv.nl/embed/secure/iframe/entryId/1_eolyptz7/uiConfId/441104 01/st/0",
+                "vid2_title": "Maatgevoel en muziekles",
+            },
+        )
         info = Info(
             body=body,
             heading="Timing en tempo",

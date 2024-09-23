@@ -5,7 +5,7 @@ from django.template.loader import render_to_string
 from .toontjehoger_1_mozart import toontjehoger_ranks
 from experiment.actions import Explainer, Step, Score, Final, Info, Trial
 from experiment.actions.playback import PlayButton
-from experiment.actions.form import AutoCompleteQuestion, Form
+from experiment.actions.form import DropdownQuestion, Form
 from experiment.actions.utils import get_current_experiment_url
 from experiment.utils import non_breaking_spaces
 from .toontjehoger_3_plink import ToontjeHoger3Plink
@@ -34,14 +34,19 @@ class ToontjeHogerKids3Plink(ToontjeHoger3Plink):
         return Explainer(
             instruction="Muziekherkenning",
             steps=[
-                Step("Je hoort zo een heel kort stukje van {} liedjes.".format(
-                    n_rounds)),
-                Step("Herken je de liedjes? Kies dan steeds de juiste artiest en titel!"),
                 Step(
-                    "Weet je het niet zeker? Doe dan maar een gok.")
+                    "Je hoort zo een heel kort stukje van {} liedjes.".format(
+                        n_rounds
+                    )
+                ),
+                Step(
+                    "Herken je de liedjes? Kies dan steeds de juiste artiest en titel!"
+                ),
+                Step("Weet je het niet zeker? Doe dan maar een gok."),
+                Step("Herken jij er meer dan 3?"),
             ],
             step_numbers=True,
-            button_label="Start"
+            button_label="Start",
         )
 
     def get_last_result(self, session):
@@ -75,16 +80,13 @@ class ToontjeHogerKids3Plink(ToontjeHoger3Plink):
 
     def get_plink_trials(self, session: Session, section: Section, choices: dict, expected_response: str) -> list:
         next_round = []
-        question1 = AutoCompleteQuestion(
+        question1 = DropdownQuestion(
             key='plink',
             choices=choices,
-            question='Kies de artiest en de titel van het nummer',
+            question="Kies de artiest en de titel van het nummer",
             result_id=prepare_result(
-                'plink',
-                session,
-                section=section,
-                expected_response=expected_response
-            )
+                "plink", session, section=section, expected_response=expected_response
+            ),
         )
         next_round.append(Trial(
             playback=PlayButton(
@@ -126,10 +128,15 @@ class ToontjeHogerKids3Plink(ToontjeHoger3Plink):
         debrief_message = "Hoe snel denk je dat je een popliedje kunt herkennen? Binnen tien seconden?\
             Binnen twee seconden? Of nog minder? Kijk de filmpjes voor het antwoord!"
         body = render_to_string(
-            join('info', 'toontjehogerkids', 'debrief.html'),
-            {'debrief': debrief_message,
-             'vid1': 'https://www.youtube.com/embed/JF8uq1UllMo?si=9H51MMVyg9JcTSAh',
-             'vid2': 'https://www.youtube.com/embed/qUXd1ql6gLc?si=RIKb_QI67baWGEbA'})
+            join("info", "toontjehogerkids", "debrief.html"),
+            {
+                "debrief": debrief_message,
+                "vid1": "https://video.leidenuniv.nl/embed/secure/iframe/entryId/1_ylw2npmb/uiConfId/44110 401/st/0",
+                "vid1_title": "Super snel liedjes herkennen!",
+                "vid2": "https://video.leidenuniv.nl/embed/secure/iframe/entryId/1_xo33dvth/uiConfId/441104 01/st/0",
+                "vid2_title": "Kun je elk liedje zo snel herkennen?",
+            },
+        )
         info = Info(
             body=body,
             heading="Muziekherkenning",

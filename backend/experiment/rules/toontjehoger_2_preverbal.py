@@ -64,23 +64,18 @@ class ToontjeHoger2Preverbal(Base):
             instruction="Het eerste luisteren",
             steps=[
                 Step(
-                    "Je krijgt drie spectrogrammen te zien met de vraag: welk geluid is van een mens?"),
+                    "Je krijgt drie spectrogrammen te zien met de vraag: welk geluid is van een mens?"
+                ),
                 Step(
-                    "Daarvoor eerst nog wat uitleg van wat een spectrogram is, natuurlijk."),
+                    "Daarvoor eerst nog wat uitleg van wat een spectrogram is, natuurlijk."
+                ),
                 Step(
-                    "Tenslotte krijg je twee geluiden te horen met de vraag: welke baby is in Frankrijk geboren?"),
+                    "Tenslotte krijg je twee geluiden te horen met de vraag: welke baby is in Frankrijk geboren?"
+                ),
             ],
             step_numbers=True,
-            button_label="Start"
+            button_label="Start",
         )
-
-        # 2 Spectrogram information
-        spectrogram_info = self.get_spectrogram_info()
-
-        return [
-            explainer,
-            spectrogram_info,
-        ]
 
     def get_spectrogram_info(self):
         image_url = "/images/experiments/toontjehoger/spectrogram_info_nl.webp"
@@ -104,16 +99,24 @@ class ToontjeHoger2Preverbal(Base):
         # Round 1
         if rounds_passed == 0:
             # No combine_actions because of inconsistent next_round array wrapping in first round
-            return [self.get_get_intro_explainer(), self.get_spectrogram_info(), self.get_round1(session)]
+            return [
+                self.get_intro_explainer(),
+                self.get_spectrogram_info(),
+                self.get_round1(session),
+            ]
 
         # Round 2
         if rounds_passed == 1:
-            return [*self.get_score(session, get_rounds_passed), *self.get_round1_playback(session), *self.get_round2(round, session)]
+            return [
+                *self.get_score(session, rounds_passed),
+                *self.get_round1_playback(session),
+                *self.get_round2(round, session),
+            ]
 
         # Final
         return self.get_final_round(session)
 
-    def get_score(self, session, get_rounds_passed):
+    def get_score(self, session, rounds_passed):
         # Feedback
         last_result = session.last_result()
         feedback = ""
