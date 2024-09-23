@@ -31,9 +31,7 @@ jobs:
       - name: Build ER/MKDOCS site
         run: |
           mkdir -p docs-pages
-          pip install mkdocs
-          mkdocs build -d ../docs-pages
-        working-directory: ./backend
+          sudo docker compose --env-file .env-github-actions run server bash -c "mkdocs build -d ../docs-pages"
 
       - name: Install dependencies
         run: yarn
