@@ -147,10 +147,15 @@ class ToontjeHogerKids3Plink(ToontjeHoger3Plink):
         debrief_message = "Hoe snel denk je dat je een popliedje kunt herkennen? Binnen tien seconden?\
             Binnen twee seconden? Of nog minder? Kijk de filmpjes voor het antwoord!"
         body = render_to_string(
-            join('info', 'toontjehogerkids', 'debrief.html'),
-            {'debrief': debrief_message,
-             'vid1': 'https://www.youtube.com/embed/JF8uq1UllMo?si=9H51MMVyg9JcTSAh',
-             'vid2': 'https://www.youtube.com/embed/qUXd1ql6gLc?si=RIKb_QI67baWGEbA'})
+            join("info", "toontjehogerkids", "debrief.html"),
+            {
+                "debrief": debrief_message,
+                "vid1": "https://video.leidenuniv.nl/embed/secure/iframe/entryId/1_ylw2npmb/uiConfId/44110 401/st/0",
+                "vid1_title": "Super snel liedjes herkennen!",
+                "vid2": "https://video.leidenuniv.nl/embed/secure/iframe/entryId/1_xo33dvth/uiConfId/441104 01/st/0",
+                "vid2_title": "Kun je elk liedje zo snel herkennen?",
+            },
+        )
         info = Info(
             body=body,
             heading="Muziekherkenning",

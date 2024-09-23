@@ -107,10 +107,15 @@ class ToontjeHogerKids2Preverbal(ToontjeHoger2Preverbal):
         # Info page
         debrief_message = "Had jij dat gedacht, dat Franse en Duitse baby's anders huilen? Waarom zouden ze dat doen denk je? Bekijk de filmpjes om dit uit te vinden!"
         body = render_to_string(
-            join('info', 'toontjehogerkids', 'debrief.html'),
-            {'debrief': debrief_message,
-             'vid1': 'https://www.youtube.com/embed/QV9rM_7HE3s?si=V4SKnbDgdBLhPivt',
-             'vid2': 'https://www.youtube.com/embed/w1f9Rr0yXIs?si=Cjz2CU9wUlm-ST8c'})
+            join("info", "toontjehogerkids", "debrief.html"),
+            {
+                "debrief": debrief_message,
+                "vid1": "https://video.leidenuniv.nl/embed/secure/iframe/entryId/1_q8r74zji/uiConfId/4411040 1/st/0",
+                "vid1_title": "Franse en Duitse baby",
+                "vid2": "https://video.leidenuniv.nl/embed/secure/iframe/entryId/1_rteiyere/uiConfId/4411040 1/st/0",
+                "vid2_title": "Geluiden in Duitsland en Frankrijk",
+            },
+        )
         info = Info(
             body=body,
             heading="Het eerste luisteren",
