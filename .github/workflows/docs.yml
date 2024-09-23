@@ -31,7 +31,7 @@ jobs:
       - name: Build ER/MKDOCS site
         run: |
           mkdir -p docs-pages
-          mkdocs build -d ../docs-pages
+          sudo docker compose --env-file .env-github-actions run server bash -c "mkdocs build -d ../docs-pages"
         working-directory: ./backend
 
       - name: Install dependencies
@@ -41,7 +41,6 @@ jobs:
       - name: Build Storybook
         run: yarn storybook:build --output-dir ../docs-pages/storybook
         working-directory: ./frontend
-
 
       - name: Setup Github Pages
         uses: actions/configure-pages@v2
