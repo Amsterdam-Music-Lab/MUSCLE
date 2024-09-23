@@ -1,4 +1,4 @@
-[![DOI](https://zenodo.org/badge/418963353.svg)](https://zenodo.org/badge/latestdoi/418963353) [![Test](https://github.com/Amsterdam-Music-Lab/MUSCLE/actions/workflows/ci.yml/badge.svg)](https://github.com/Amsterdam-Music-Lab/MUSCLE/actions/workflows/test.yml/badge.svg)
+[![DOI](https://zenodo.org/badge/418963353.svg)](https://zenodo.org/badge/latestdoi/418963353) ![CI Backend](https://github.com/Amsterdam-Music-Lab/MUSCLE/actions/workflows/ci-backend.yml/badge.svg) ![CI Frontend](https://github.com/Amsterdam-Music-Lab/MUSCLE/actions/workflows/ci-frontend.yml/badge.svg) ![Test](https://github.com/Amsterdam-Music-Lab/MUSCLE/actions/workflows/test.yml/badge.svg)
 ![Backend Code Coverage Percentage](https://raw.githubusercontent.com/Amsterdam-Music-Lab/MUSCLE/code-coverage-badges/backend/coverage-backend-badge.svg)
 ![Frontend Code Coverage Percentage](https://raw.githubusercontent.com/Amsterdam-Music-Lab/MUSCLE/code-coverage-badges/frontend/coverage-frontend-badge.svg)
 
