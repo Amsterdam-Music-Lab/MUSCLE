@@ -12,7 +12,18 @@
 
     .btn-group-toggle-custom {
         display: flex;
-        column-gap: 2.5vw;
+        &:has(> :last-child:nth-child(2)) {
+            column-gap: 8vw;
+        }
+        &:has(> :last-child:nth-child(3)) {
+            column-gap: 6vw;
+        }
+        &:has(> :last-child:nth-child(4)) {
+            column-gap: 3vw;
+        }
+        &:has(> :last-child:nth-child(5)) {
+            column-gap: 2vw;
+        }
 
         &.buttons-large-gap {
             column-gap: 5rem;
