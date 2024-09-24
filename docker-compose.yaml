@@ -1,4 +1,4 @@
-# Docker-compose definition for development
+# docker compose definition for development
 
 version: '2.4'
 
