@@ -6,6 +6,9 @@ body.root {
     background-position: center center;
     background-repeat: no-repeat;
     min-height: 100vh;
+
+    /* disable pinch zoom on iOS */
+    touch-action: manipulation;
 }
 
 #root {
