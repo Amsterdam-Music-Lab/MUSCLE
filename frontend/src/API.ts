@@ -6,6 +6,7 @@ import IBlock from "@/types/Block";
 import IExperiment from "@/types/Experiment";
 import Participant, { ParticipantLink } from "./types/Participant";
 import Session from "./types/Session";
+import Experiment from "@/types/Experiment";
 
 // API handles the calls to the Hooked-server api
 
@@ -48,7 +49,7 @@ export const useBlock = (slug: string): [IBlock | null, boolean] =>
     useGet<IBlock>(API_BASE_URL + URLS.block.get(slug));
 
 export const useExperiment = (slug: string) => {
-    const data = useGet(API_BASE_URL + URLS.experiment.get(slug));
+    const data = useGet<Experiment>(API_BASE_URL + URLS.experiment.get(slug));
     return data;
 }
 
