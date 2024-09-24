@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import IExperiment from "@/types/Experiment";
 import { DocumentHeadSlice } from '@/util/stores';
 
-const useHeadDataFromExperiment = (experiment: IExperiment, setHeadData: DocumentHeadSlice['setHeadData'], resetHeadData: DocumentHeadSlice['resetHeadData']) => {
+const useHeadDataFromExperiment = (experiment: IExperiment | null, setHeadData: DocumentHeadSlice['setHeadData'], resetHeadData: DocumentHeadSlice['resetHeadData']) => {
     useEffect(() => {
         if (experiment) {
             // De-htmlify the description's HTML string
