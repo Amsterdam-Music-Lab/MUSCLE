@@ -113,7 +113,7 @@ export const LongDuration = {
         radius: 100,
         strokeWidth: 5,
         color: "white",
-        duration: 30,
+        duration: 60,
         animateCircle: true,
         running: true,
     },
