@@ -155,19 +155,24 @@ class Base(object):
         return trials
 
     def social_media_info(self, block, score):
-        """⚠️ Deprecated. The social media info will eventually be present on the Experiment level, not the Block level."""
+        """
+        ⚠️ Note: You can use this method to customize the social media message for a Final action in a block,
+        but the content will come from the experiment's social media config model
+        """
         current_url = f"{settings.RELOAD_PARTICIPANT_TARGET}/{block.slug}"
 
         experiment = block.phase.experiment
+        experiment_name = experiment.get_current_content().name
         social_media_config = experiment.social_media_config
-        tags = social_media_config.tags if social_media_config.tags else []
+        tags = social_media_config.tags if social_media_config.tags else ["amsterdammusiclab", "citizenscience"]
         url = social_media_config.url or current_url
+        message = social_media_config.get_content(score=score, experiment_name=experiment_name)
 
         return {
-            "apps": ["facebook", "twitter"],
-            "message": _("I scored %(score)i points on %(url)s") % {"score": score, "url": current_url},
+            "apps": social_media_config.channels or ["facebook", "twitter"],
+            "message": message,
             "url": url,
-            "hashtags": [*tags, "amsterdammusiclab", "citizenscience"],
+            "hashtags": tags,
         }
 
     def validate_playlist(self, playlist: None):
