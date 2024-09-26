@@ -498,8 +498,8 @@ class ExperimentTranslatedContent(models.Model):
     about_content = models.TextField(blank=True, default="")
     social_media_message = models.TextField(
         blank=True,
-        help_text=_("Content for social media sharing. Use {points} and {block_name} as placeholders."),
-        default="I scored {points} points in {block_name}!",
+        help_text=_("Content for social media sharing. Use {points} and {experiment_name} as placeholders."),
+        default="I scored {points} points in {experiment_name}!",
     )
 
 

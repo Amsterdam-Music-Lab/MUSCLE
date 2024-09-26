@@ -102,7 +102,7 @@ class Hooked(Base):
                     session=session,
                     final_text=self.final_score_message(session),
                     rank=self.rank(session),
-                    social=self.social_media_info(session.block, total_score),
+                    social=self.social_media_info(session),
                     show_profile_link=True,
                     button={
                         "text": _("Play again"),

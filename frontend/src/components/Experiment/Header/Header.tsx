@@ -33,14 +33,6 @@ export const Header: React.FC<HeaderProps> = ({
     // Get current URL minus the query string
     const currentUrl = window.location.href.split('?')[0];
 
-    // Map social media config to social object
-    const social = {
-        apps: socialMediaConfig?.channels || [],
-        message: socialMediaConfig?.content || '',
-        url: socialMediaConfig?.url || currentUrl,
-        hashtags: socialMediaConfig?.tags || [],
-    }
-
     return (
         <div className="hero">
             <div className="intro">
@@ -58,7 +50,7 @@ export const Header: React.FC<HeaderProps> = ({
                     />
                     {socialMediaConfig?.channels?.length && (
                         <Social
-                            social={social}
+                            social={socialMediaConfig}
                         />
                     )}
                 </div>

@@ -2,6 +2,7 @@ import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import Social from './Social'; // Adjust the import path as necessary
+import ISocial from '@/types/Social';
 
 // Mock the next-share components
 vi.mock('next-share', () => ({
@@ -12,12 +13,11 @@ vi.mock('next-share', () => ({
 }));
 
 describe('Social Component', () => {
-    const mockSocial = {
-        apps: ['facebook', 'whatsapp', 'twitter', 'weibo', 'share', 'clipboard'],
+    const mockSocial: ISocial = {
+        channels: ['facebook', 'whatsapp', 'twitter', 'weibo', 'share', 'clipboard'],
         url: 'https://example.com',
-        message: 'Check this out!',
-        hashtags: ['test', 'vitest'],
-        text: 'Share this content'
+        content: 'Check this out!',
+        tags: ['test', 'vitest'],
     };
 
     beforeEach(() => {
@@ -34,7 +34,7 @@ describe('Social Component', () => {
     });
 
     it('renders only specified social media buttons', () => {
-        const limitedSocial = { ...mockSocial, apps: ['facebook', 'twitter'] };
+        const limitedSocial: ISocial = { ...mockSocial, channels: ['facebook', 'twitter'] };
         render(<Social social={limitedSocial} />);
         expect(screen.getByTestId('facebook-share')).toBeDefined();
         expect(screen.getByTestId('twitter-share')).toBeDefined();
@@ -71,7 +71,7 @@ describe('Social Component', () => {
         render(<Social social={mockSocial} />);
         fireEvent.click(screen.getByTestId('navigator-share'));
         expect(shareMock).toHaveBeenCalledWith({
-            text: mockSocial.text,
+            text: mockSocial.content,
             url: mockSocial.url
         });
     });
