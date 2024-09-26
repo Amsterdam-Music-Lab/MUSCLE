@@ -33,6 +33,7 @@ export const Header: React.FC<HeaderProps> = ({
     // Get current URL minus the query string
     const currentUrl = window.location.href.split('?')[0];
 
+    // Map social media config to social object
     const social = {
         apps: socialMediaConfig?.channels || [],
         message: socialMediaConfig?.content || '',

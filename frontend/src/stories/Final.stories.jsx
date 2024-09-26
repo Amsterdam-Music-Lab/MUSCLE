@@ -30,9 +30,8 @@ function getFinalData(overrides = {}) {
         social: {
             apps: ["facebook", "whatsapp", "twitter", "weibo", "share", "clipboard"],
             url: "https://www.example.com",
-            message: "Message",
-            hashtags: ["hashtag"],
-            text: "Text",
+            message: "Hey! Check out this cool experiment",
+            hashtags: ["coolexperiment", "awesome"],
         },
         show_profile_link: true,
         action_texts: {

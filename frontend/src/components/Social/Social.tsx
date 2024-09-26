@@ -20,8 +20,8 @@ const Social = ({ social }: SocialProps) => {
 
     const shareContent = (text: string, url: string) => {
         const shareData = {
-            text: text,
-            url: url
+            text,
+            url
         }
         if (navigator.canShare(shareData)) {
             navigator.share(shareData).then(
@@ -76,7 +76,7 @@ const Social = ({ social }: SocialProps) => {
                 </WeiboShareButton>
             )}
             {showShare.current && social.apps.includes('share') && (
-                <div onClick={() => shareContent(social.text, social.url)} data-testid="navigator-share">
+                <div onClick={() => shareContent(social.message, social.url)} data-testid="navigator-share">
                     <i className="fa-solid fa-share-nodes fa-2x"></i>
                 </div>
             )}
