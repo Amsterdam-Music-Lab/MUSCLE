@@ -575,12 +575,12 @@ class SocialMediaConfig(models.Model):
         help_text=_("Selected social media channels for sharing"),
     )
 
-    def get_content(self, score: int | None = None, block_name: str | None = None) -> str:
+    def get_content(self, score: int | None = None, experiment_name: str | None = None) -> str:
         """Get social media share content
 
         Args:
             score: Score
-            block_name: Block name
+            experiment_name: Block name
 
         Returns:
             Social media shared text
@@ -592,20 +592,20 @@ class SocialMediaConfig(models.Model):
         social_message = translated_content.social_media_message
 
         if social_message:
-            has_placeholders = "{points}" in social_message and "{block_name}" in social_message
+            has_placeholders = "{points}" in social_message and "{experiment_name}" in social_message
 
             if not has_placeholders:
                 return social_message
 
-            if has_placeholders and (score is None or block_name is None):
-                raise ValueError("score and block_name are required for placeholder substitution")
+            if has_placeholders and (score is None or experiment_name is None):
+                raise ValueError("score and experiment_name are required for placeholder substitution")
 
-            return social_message.format(points=score, block_name=block_name)
+            return social_message.format(points=score, experiment_name=experiment_name)
 
-        if score is None or block_name is None:
-            raise ValueError("score and block_name are required when no social media message is provided")
+        if score is None or experiment_name is None:
+            raise ValueError("score and experiment_name are required when no social media message is provided")
 
-        return _("I scored {points} points in {block_name}").format(score=score, block_name=block_name)
+        return _("I scored {points} points in {experiment_name}").format(score=score, experiment_name=experiment_name)
 
     def __str__(self):
         fallback_content = self.experiment.get_fallback_content()
