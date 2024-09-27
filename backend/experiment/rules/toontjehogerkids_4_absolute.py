@@ -61,9 +61,9 @@ class ToontjeHogerKids4Absolute(ToontjeHoger4Absolute):
             join("info", "toontjehogerkids", "debrief.html"),
             {
                 "debrief": debrief_message,
-                "vid1": "https://video.leidenuniv.nl/embed/secure/iframe/entryId/1_mgbpg5wi/uiConfId/44110401/st/0",
+                "vid1": "https://player.vimeo.com/video/1012705794?h=f8aa6548a9",
                 "vid1_title": "Absoluut gehoor, wat betekent dat?",
-                "vid2": "https://video.leidenuniv.nl/embed/secure/iframe/entryId/1_237ounbc/uiConfId/44110401/st/0",
+                "vid2": "https://player.vimeo.com/video/1012705982?h=a37c718512",
                 "vid2_title": "Is een absoluut gehoor bijzonder?",
             },
         )

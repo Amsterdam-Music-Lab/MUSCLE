@@ -42,8 +42,8 @@ class ToontjeHogerKids2Preverbal(ToontjeHoger2Preverbal):
         description = (
             "Dit is een spectrogram. Wil je weten hoe dat werkt? Kijk dan het filmpje!"
         )
-        video = "https://video.leidenuniv.nl/embed/secure/iframe/entryId/1_ghoti6z2/uiConfId/44110401/st/0"
-        body = f'<div class="center"><img src="{image_url}"></div><p>{description}</p><div style="max-width:608px"><div style="position:relative;padding-bottom:66.118421052632%"><iframe width="608" height="402" src="{video}" class="kmsembed" frameborder="0" title="Hoe werkt een spectrogram?" style="position:absolute;top:0;left:0;width:100%;height:100%;border:0"></iframe></div></div>'
+        video = "https://player.vimeo.com/video/1012736887?h=bac11b4075"
+        body = f'<div class="center"><img src="{image_url}"></div><p>{description}</p><div style="padding:56.25% 0 0 0;position:relative;margin-bottom:2vh;"><iframe src="{video}" frameborder="0" style="position:absolute;top:0;left:0;width:100%;height:100%;" title="Hoe werkt een spectrogram?"></iframe></div><script src=https://player.vimeo.com/api/player.js></script>'
 
         # Return answer info view
         info = Info(
@@ -109,9 +109,9 @@ class ToontjeHogerKids2Preverbal(ToontjeHoger2Preverbal):
             join("info", "toontjehogerkids", "debrief.html"),
             {
                 "debrief": debrief_message,
-                "vid1": "https://video.leidenuniv.nl/embed/secure/iframe/entryId/1_q8r74zji/uiConfId/44110401/st/0",
+                "vid1": "https://player.vimeo.com/video/1012712004?h=1ec875caec",
                 "vid1_title": "Franse en Duitse baby",
-                "vid2": "https://video.leidenuniv.nl/embed/secure/iframe/entryId/1_rteiyere/uiConfId/44110401/st/0",
+                "vid2": "https://player.vimeo.com/video/1012712095?h=020b0bfc37",
                 "vid2_title": "Geluiden in Duitsland en Frankrijk",
             },
         )
