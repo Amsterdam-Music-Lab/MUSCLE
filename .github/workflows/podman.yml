@@ -282,7 +282,7 @@ jobs:
       - name: Prune old images
         run: podman image prune -a -f
       - name: Check Podman images
-        run: podman-compose -f docker compose-deploy.yml ps
+        run: podman-compose -f docker-compose-deploy.yml ps
 
   e2e-acceptance:
     name: E2E tests on acceptance environment

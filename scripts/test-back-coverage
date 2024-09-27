@@ -1,3 +1,2 @@
 #!/bin/bash
 docker compose run --rm server bash -c "coverage run manage.py test && coverage report --show-missing"
-
