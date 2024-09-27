@@ -58,10 +58,15 @@ class ToontjeHogerKids4Absolute(ToontjeHoger4Absolute):
         debrief_message = "Lukte het jou om het juiste antwoord te kiezen? Dan heb je goed onthouden hoe hoog of laag die muziekjes normaal altijd klinken! Sommige mensen noemen dit absoluut gehoor. \
             Is dat eigenlijk bijzonder? Kijk de filmpjes om daar achter te komen!"
         body = render_to_string(
-            join('info', 'toontjehogerkids', 'debrief.html'),
-            {'debrief': debrief_message,
-             'vid1': 'https://www.youtube.com/embed/AkbIazK9Jcc?si=yjJLjXQa8wQbvSrf',
-             'vid2': 'https://www.youtube.com/embed/KVB6d0Oy_5o?si=zxj1gUzjME_n-fQ5'})
+            join("info", "toontjehogerkids", "debrief.html"),
+            {
+                "debrief": debrief_message,
+                "vid1": "https://player.vimeo.com/video/1012705794?h=f8aa6548a9",
+                "vid1_title": "Absoluut gehoor, wat betekent dat?",
+                "vid2": "https://player.vimeo.com/video/1012705982?h=a37c718512",
+                "vid2_title": "Is een absoluut gehoor bijzonder?",
+            },
+        )
         info = Info(
             body=body,
             heading="Absoluut gehoor",

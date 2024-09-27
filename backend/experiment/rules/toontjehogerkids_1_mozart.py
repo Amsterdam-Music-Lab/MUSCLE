@@ -63,10 +63,15 @@ class ToontjeHogerKids1Mozart(ToontjeHoger1Mozart):
         debrief_message = "Merkte je dat de puzzel beter ging na het \
             horen van Mozart? Dit noemen we het 'Mozart effect'! Wil je meer weten over het Mozart effect? Bekijk dan de filmpjes!"
         body = render_to_string(
-            join('info', 'toontjehogerkids', 'debrief.html'),
-            {'debrief': debrief_message,
-             'vid1': "https://www.youtube.com/embed/hW12-q4781Q?si=PPorbSo_PdyDeS_Y",
-             'vid2': "https://www.youtube.com/embed/DHx7cJ22MZI?si=wMK09bLSrsDY6nyl"})
+            join("info", "toontjehogerkids", "debrief.html"),
+            {
+                "debrief": debrief_message,
+                "vid1": "https://player.vimeo.com/video/1012736186?h=82640b5e3a",
+                "vid1_title": "Wat is het Mozart effect?",
+                "vid2": "https://player.vimeo.com/video/1012736336?h=e90fff89cd",
+                "vid2_title": "Hoe werkt het Mozart effect?",
+            },
+        )
         info = Info(
             body=body,
             heading="Het Mozart effect",

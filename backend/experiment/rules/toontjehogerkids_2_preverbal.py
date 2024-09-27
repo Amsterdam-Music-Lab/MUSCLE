@@ -20,14 +20,13 @@ class ToontjeHogerKids2Preverbal(ToontjeHoger2Preverbal):
             instruction="Het eerste luisteren",
             steps=[
                 Step(
-                    "Je krijgt straks een soort grafieken van geluid te zien, met een uitlegfilmpje."),
-                Step(
-                    "Welk plaatje denk jij dat hoort bij de stem van een mens?"),
-                Step(
-                    "En hoor jij het verschil tussen twee babyhuiltjes?"),
+                    "Je krijgt straks een soort grafieken van geluid te zien, met een uitlegfilmpje."
+                ),
+                Step("Welk plaatje denk jij dat hoort bij de stem van een mens?"),
+                Step("En hoor jij het verschil tussen twee babyhuiltjes?"),
             ],
             step_numbers=True,
-            button_label="Start"
+            button_label="Start",
         )
 
         # 2 Spectrogram information
@@ -40,9 +39,11 @@ class ToontjeHogerKids2Preverbal(ToontjeHoger2Preverbal):
 
     def get_spectrogram_info(self):
         image_url = "/images/experiments/toontjehoger/spectrogram_info_nl.webp"
-        description = "Dit is een spectogram. Wil je weten hoe dat werkt? Kijk dan het filmpje!"
-        video = 'https://www.youtube.com/embed/7uDw3aC-1nc?si=xTvhO7Lx6XeqwkJM'
-        body = f'<div class="center"><img src="{image_url}"></div><p>{description}</p><iframe width="100%" height="315" src={video}></iframe>'
+        description = (
+            "Dit is een spectrogram. Wil je weten hoe dat werkt? Kijk dan het filmpje!"
+        )
+        video = "https://player.vimeo.com/video/1012736887?h=bac11b4075"
+        body = f'<div class="center"><img src="{image_url}"></div><p>{description}</p><div style="padding:56.25% 0 0 0;position:relative;margin-bottom:2vh;"><iframe src="{video}" frameborder="0" style="position:absolute;top:0;left:0;width:100%;height:100%;" title="Hoe werkt een spectrogram?"></iframe></div><script src=https://player.vimeo.com/api/player.js></script>'
 
         # Return answer info view
         info = Info(
@@ -105,15 +106,20 @@ class ToontjeHogerKids2Preverbal(ToontjeHoger2Preverbal):
         # Info page
         debrief_message = "Had jij dat gedacht, dat Franse en Duitse baby's anders huilen? Waarom zouden ze dat doen denk je? Bekijk de filmpjes om dit uit te vinden!"
         body = render_to_string(
-            join('info', 'toontjehogerkids', 'debrief.html'),
-            {'debrief': debrief_message,
-             'vid1': 'https://www.youtube.com/embed/QV9rM_7HE3s?si=V4SKnbDgdBLhPivt',
-             'vid2': 'https://www.youtube.com/embed/w1f9Rr0yXIs?si=Cjz2CU9wUlm-ST8c'})
+            join("info", "toontjehogerkids", "debrief.html"),
+            {
+                "debrief": debrief_message,
+                "vid1": "https://player.vimeo.com/video/1012712004?h=1ec875caec",
+                "vid1_title": "Franse en Duitse baby",
+                "vid2": "https://player.vimeo.com/video/1012712095?h=020b0bfc37",
+                "vid2_title": "Geluiden in Duitsland en Frankrijk",
+            },
+        )
         info = Info(
             body=body,
             heading="Het eerste luisteren",
             button_label="Terug naar ToontjeHogerKids",
-            button_link="/collection/thkids"
+            button_link="/collection/thkids",
         )
 
         return [*score, final, info]

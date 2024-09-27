@@ -79,11 +79,11 @@ jobs:
           echo "VITE_SENTRY_DSN=$FRONTEND_SENTRY_DSN" >> .env
           cp .env frontend/.env
       - name: Build Podman images
-        run: podman-compose -f docker-compose-deploy.yml build
+        run: podman-compose -f docker compose-deploy.yml build
       - name: Shut down running containers
-        run: podman compose -f docker-compose-deploy.yml down
+        run: podman compose -f docker compose-deploy.yml down
       - name: Deploy Podman images
-        run: podman-compose -f docker-compose-deploy.yml up -d
+        run: podman-compose -f docker compose-deploy.yml up -d
       - name: Notify Sentry of new release
         run: |
             curl -X POST "https://sentry.io/api/0/organizations/uva-aml/releases/" \
@@ -101,9 +101,9 @@ jobs:
       - name: Prune old images
         run: podman image prune -a -f
       - name: Check Podman images
-        run: podman-compose -f docker-compose-deploy.yml ps
+        run: podman-compose -f docker compose-deploy.yml ps
       - name: Check logs
-        run: podman-compose -f docker-compose-deploy.yml logs
+        run: podman-compose -f docker compose-deploy.yml logs
 
   deploy-acceptance:
     name: Deploy to acceptance environment
@@ -171,11 +171,11 @@ jobs:
           echo "VITE_SENTRY_DSN=$FRONTEND_SENTRY_DSN" >> .env
           cp .env frontend/.env
       - name: Build Podman images
-        run: podman-compose -f docker-compose-deploy.yml build
+        run: podman-compose -f docker compose-deploy.yml build
       - name: Shut down running containers
-        run: podman compose -f docker-compose-deploy.yml down
+        run: podman compose -f docker compose-deploy.yml down
       - name: Deploy Podman images
-        run: podman-compose -f docker-compose-deploy.yml up -d
+        run: podman-compose -f docker compose-deploy.yml up -d
       - name: Notify Sentry of new release
         run: |
           curl -X POST "https://sentry.io/api/0/organizations/uva-aml/releases/" \
@@ -193,9 +193,9 @@ jobs:
       - name: Prune old images
         run: podman image prune -a -f
       - name: Check Podman images
-        run: podman-compose -f docker-compose-deploy.yml ps
+        run: podman-compose -f docker compose-deploy.yml ps
       - name: Check logs
-        run: podman-compose -f docker-compose-deploy.yml logs
+        run: podman-compose -f docker compose-deploy.yml logs
 
   deploy-production:
     name: Deploy to production environment
@@ -260,11 +260,11 @@ jobs:
           echo "VITE_SENTRY_DSN=$FRONTEND_SENTRY_DSN" >> .env
           cp .env frontend/.env
       - name: Build Podman images
-        run: podman-compose -f docker-compose-deploy.yml build
+        run: podman-compose -f docker compose-deploy.yml build
       - name: Shut down running containers
-        run: podman compose -f docker-compose-deploy.yml down
+        run: podman compose -f docker compose-deploy.yml down
       - name: Deploy Podman images
-        run: podman-compose -f docker-compose-deploy.yml up -d
+        run: podman-compose -f docker compose-deploy.yml up -d
       - name: Notify Sentry of new release
         run: |
           curl -X POST "https://sentry.io/api/0/organizations/uva-aml/releases/" \
