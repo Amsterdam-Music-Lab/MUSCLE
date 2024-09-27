@@ -12,13 +12,12 @@
 
     >svg {
         @extend .circleIntro;
+
+        transform: rotate(-90deg);
+        transform-origin: 50% 50%;
     }
 
     .circle-percentage {
         transition: stroke-dashoffset 0.1s linear;
-
-        // 102.5px is the radius of the circle
-        // translateX because the circle is rotated -90deg
-        transform: rotate(-90deg) translateX(calc(-102.5px * 2));
     }
 }
