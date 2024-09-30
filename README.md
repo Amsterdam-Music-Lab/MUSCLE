@@ -8,7 +8,7 @@ This application provides an easy way to implement and run online listening expe
 ## Try MUSCLE
 - Try the already implemented experiments at the [Amsterdam Music Lab Website](https://www.amsterdammusiclab.nl/experiments/).
 
-- For documentation on how to use the infrastructure, refer to our [documentation]([https://github.com/Amsterdam-Music-Lab/aml-experiments/wiki](https://amsterdam-music-lab.github.io/MUSCLE/)).
+- For documentation on how to use the infrastructure, refer to our [documentation](https://amsterdam-music-lab.github.io/MUSCLE/).
 
 - We are also happy if you file a feature request in our [issues list](https://github.com/Amsterdam-Music-Lab/aml-experiments/issues), or if you fork this repository to add your own code.
 
