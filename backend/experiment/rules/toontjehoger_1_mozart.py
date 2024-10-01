@@ -7,7 +7,7 @@ from experiment.actions.form import ButtonArrayQuestion, Form
 from experiment.actions.playback import Autoplay
 from experiment.actions.styles import STYLE_TOONTJEHOGER
 from .base import Base
-from experiment.utils import non_breaking_spaces
+from experiment.actions.utils import get_current_experiment_url
 
 from result.utils import prepare_result
 
@@ -118,8 +118,11 @@ class ToontjeHoger1Mozart(Base):
         # Feedback message
         last_result = session.last_result()
         section = last_result.section
-        feedback = "Je hoorde {} van {}.".format(
-            section.song.name, non_breaking_spaces(section.song.artist)) if section else ""
+        feedback = (
+            "Je hoorde {} van {}.".format(section.song.name, section.song.artist)
+            if section
+            else ""
+        )
 
         # Return score view
         config = {'show_total_score': True}
@@ -177,8 +180,10 @@ class ToontjeHoger1Mozart(Base):
 
         image_trial = Trial(
             html=HTML(
-                body='<img src="{}" style="height:calc(100% - 260px);max-height:326px;max-width: 100%;"/>'.format(
-                image_url)),
+                body='<img src="{}" style="max-height:326px;max-width: 100%;"/>'.format(
+                    image_url
+                )
+            ),
             feedback_form=form,
             title=self.TITLE,
         )
