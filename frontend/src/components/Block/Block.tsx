@@ -257,15 +257,7 @@ const Block = () => {
             >
                 {(!loadingBlock && block) || view === "ERROR" ? (
                     <DefaultPage
-                        title={state.title}
-                        logoClickConfirm={
-                            ["FINAL", "ERROR"].includes(view) ||
-                                // Info pages at end of block
-                                (view === "INFO" &&
-                                    (!state.next_round || !state.next_round.length))
-                                ? null
-                                : "Are you sure you want to stop this experiment?"
-                        }
+                        title={state?.title!}
                         className={className}
                     >
                         {render()}
