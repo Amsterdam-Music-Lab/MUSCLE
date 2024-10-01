@@ -66,19 +66,19 @@ class Playlist(models.Model):
     def __str__(self):
         return self.name
 
-    def section_count(self):
-        """Number of sections"""
+    def _section_count(self):
+        """Number of sections, as displayed in the admin interface"""
         return self.section_set.count()
 
-    section_count.short_description = "Sections"
+    _section_count.short_description = "Sections"
 
-    def block_count(self):
+    def _block_count(self):
         """Number of Blocks"""
         return self.block_set.count()
 
-    block_count.short_description = "Blocks"
+    _block_count.short_description = "Blocks"
 
-    def update_sections(self):
+    def _update_sections(self):
         """Update the sections from the csv file"""
         # CSV empty
         if len(self.csv) == 0:

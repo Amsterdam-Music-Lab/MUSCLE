@@ -28,6 +28,8 @@ extra:
       link: https://www.facebook.com/AmsterdamMusicLab
       name: Amsterdam Music Lab (AML)
 
+exclude_docs: _*
+
 plugins:
 - search
 - mkdocstrings:

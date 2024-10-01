@@ -27,7 +27,7 @@ class Speech2SongTest(TestCase):
                        )
         cls.playlist = Playlist.objects.create(name='TestSpeech2Song')
         cls.playlist.csv = section_csv
-        cls.playlist.update_sections()
+        cls.playlist._update_sections()
         cls.participant = Participant.objects.create()
         cls.block = Block.objects.create(
             rules='SPEECH_TO_SONG', slug='s2s', rounds=16)

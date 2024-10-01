@@ -38,7 +38,7 @@ class TestToontjeHoger4Absolute(TestCase):
         )
         playlist = PlaylistModel.objects.create(name='TestToontjeHoger4Absolute')
         playlist.csv = csv_data
-        playlist.update_sections()
+        playlist._update_sections()
 
         toontje_hoger_4_absolute = ToontjeHoger4Absolute()
         self.assertEqual(
@@ -56,10 +56,10 @@ class TestToontjeHoger4Absolute(TestCase):
         )
         playlist = PlaylistModel.objects.create(name='TestToontjeHoger4Absolute')
         playlist.csv = csv_data
-        playlist.update_sections()
+        playlist._update_sections()
 
         toontje_hoger_4_absolute = ToontjeHoger4Absolute()
-        
+
         self.assertEqual(
             toontje_hoger_4_absolute.validate_playlist(playlist),
             ["Groups in playlist sections should be numbers. This playlist has groups: ['11', '2', '4', '7', 'a']"]
@@ -76,7 +76,7 @@ class TestToontjeHoger4Absolute(TestCase):
         )
         playlist = PlaylistModel.objects.create(name='TestToontjeHoger4Absolute')
         playlist.csv = csv_data
-        playlist.update_sections()
+        playlist._update_sections()
 
         toontje_hoger_4_absolute = ToontjeHoger4Absolute()
 
@@ -96,7 +96,7 @@ class TestToontjeHoger4Absolute(TestCase):
         )
         playlist = PlaylistModel.objects.create(name='TestToontjeHoger4AbsoluteInvalidTags')
         playlist.csv = csv_data
-        playlist.update_sections()
+        playlist._update_sections()
 
         toontje_hoger_4_absolute = ToontjeHoger4Absolute()
         self.assertEqual(
