@@ -245,14 +245,6 @@ const Experiment = ({ match }) => {
                 {(!loadingExperiment && experiment) || view === "ERROR" ? (
                     <DefaultPage
                         title={state.title}
-                        logoClickConfirm={
-                            ["FINAL", "ERROR"].includes(view) ||
-                                // Info pages at end of experiment
-                                (view === "INFO" &&
-                                    (!state.next_round || !state.next_round.length))
-                                ? null
-                                : "Are you sure you want to stop this experiment?"
-                        }
                         className={className}
                     >
                         {render(view)}
