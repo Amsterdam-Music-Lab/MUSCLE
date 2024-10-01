@@ -43,7 +43,7 @@ class ToontjeHogerKids5TempoTest(TestCase):
         )
         playlist = Playlist.objects.create(name='TestToontjeHoger5Tempo')
         playlist.csv = csv_data
-        playlist.update_sections()
+        playlist._update_sections()
 
         toontje_hoger_5_tempo_rules = ToontjeHogerKids5Tempo()
         self.assertEqual(

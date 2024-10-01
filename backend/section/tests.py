@@ -17,7 +17,7 @@ class PlaylistModelTest(TestCase):
     def test_update_sections_csv_empty(self):
         playlist = Playlist.objects.get(name='TestPlaylist')
         playlist.csv = ''
-        s = playlist.update_sections()
+        s = playlist._update_sections()
         self.assertFalse(playlist.section_set.all())
         self.assertEqual(s['status'], playlist.CSV_OK)
 
@@ -28,7 +28,7 @@ class PlaylistModelTest(TestCase):
                         "Duncan Laurence,Arcade,0.0,10.0,bat/laurence.mp3,0,0\n"
                         "Netta,Toy,0.0,10.0,0,0\n"
                         "Salvador Sobral,Amar pelos dois,0.0,10.0,bat/sobral.mp3,0,0\n")
-        s = playlist.update_sections()
+        s = playlist._update_sections()
         self.assertEqual(s['status'], playlist.CSV_ERROR)
 
     def test_update_sections_not_number(self):
@@ -38,7 +38,7 @@ class PlaylistModelTest(TestCase):
                         "Duncan Laurence,Arcade,0.0,10.0,bat/laurence.mp3,0,0\n"
                         "Netta,Toy,string,string,bat/netta.mp3,string,tag,group\n"
                         "Salvador Sobral,Amar pelos dois,0.0,10.0,bat/sobral.mp3,0,0\n")
-        s = playlist.update_sections()
+        s = playlist._update_sections()
         self.assertEqual(s['status'], playlist.CSV_ERROR)
 
     def test_get_section(self):
@@ -49,7 +49,7 @@ class PlaylistModelTest(TestCase):
                         "Weird Al,Like a Surgeon,0.0,10.0,some/otherfile.mp3,tag1,0\n"
                         "Weird Al,Like a Surgeon,10.0,20.0,some/otherfile.mp3,tag2,0\n"
                         )
-        playlist.update_sections()
+        playlist._update_sections()
         assert Song.objects.count() == 2
         song1 = Song.objects.get(name='Eat It')
         section = playlist.get_section(song_ids=[song1.id])
@@ -68,7 +68,7 @@ class PlaylistModelTest(TestCase):
                         "Duncan Laurence,Arcade,0.0,10.0,bat/laurence.mp3,1,2\n"
                         "Netta,Toy,0.0,10.0,bat/netta.mp3,tag,group\n"
                         "Salvador Sobral,Amar pelos dois,0.0,10.0,bat/sobral.mp3,0,0\n")
-        s = playlist.update_sections()
+        s = playlist._update_sections()
         self.assertEqual(s['status'], playlist.CSV_OK)
         sections = playlist.section_set.all()
         self.assertEqual(len(sections), 4)
