@@ -121,10 +121,10 @@ const Block = () => {
                 setHeadData({
                     title: block.name,
                     description: block.description,
-                    image: block.image?.file,
+                    image: block.image?.file ?? "",
                     url: window.location.href,
                     structuredData: {
-                        "@type": "Experiment",
+                        "@type": "Block",
                     },
                 });
 
