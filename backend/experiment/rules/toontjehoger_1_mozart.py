@@ -7,7 +7,6 @@ from experiment.actions.form import ButtonArrayQuestion, Form
 from experiment.actions.playback import Autoplay
 from experiment.actions.styles import STYLE_TOONTJEHOGER
 from .base import Base
-from experiment.actions.utils import get_current_experiment_url
 
 from result.utils import prepare_result
 
