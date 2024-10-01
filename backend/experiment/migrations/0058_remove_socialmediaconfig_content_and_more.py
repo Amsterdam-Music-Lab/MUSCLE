@@ -47,8 +47,8 @@ class Migration(migrations.Migration):
             name="social_media_message",
             field=models.TextField(
                 blank=True,
-                default="I scored {points} points in {block_name}!",
-                help_text="Content for social media sharing. Use {points} and {block_name} as placeholders.",
+                default="I scored {points} points in {experiment_name}!",
+                help_text="Content for social media sharing. Use {points} and {experiment_name} as placeholders.",
             ),
         ),
         migrations.RunPython(migrate_social_media_message, reverse_migrate_social_media_message),
