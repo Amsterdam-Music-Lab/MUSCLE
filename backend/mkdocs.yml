@@ -39,6 +39,7 @@ plugins:
         options:
           heading_level: 3
           docstring_style: google
+          show_if_no_docstring: false
 
 extra_css:
     - assets/css/style.css

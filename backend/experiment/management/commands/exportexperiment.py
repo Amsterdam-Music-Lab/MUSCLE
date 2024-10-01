@@ -37,4 +37,4 @@ class Command(BaseCommand):
         if indent > 0:
             options = {'indent': indent}
 
-        self.stdout.write(json.dumps(block.export_admin(), **options))
+        self.stdout.write(json.dumps(block._export_admin(), **options))

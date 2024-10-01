@@ -171,7 +171,7 @@ class PlaylistAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
 
         writer = csv.writer(response)
         for section in obj.section_set.all():
-            writer.writerow(section.export_admin_csv())
+            writer.writerow(section._export_admin_csv())
 
         # force download attachment
         response["Content-Disposition"] = (
