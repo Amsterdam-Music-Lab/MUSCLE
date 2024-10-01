@@ -7,7 +7,7 @@ from experiment.models import Experiment, Phase, Block, BlockTranslatedContent
 
 def slugify(text: str) -> str:
     """Create a slug from given string
-    
+
     Args:
         text: Input text (str)
 
@@ -60,7 +60,7 @@ def non_breaking_spaces(input_string: str) -> str:
 
 
 def external_url(text: str, url) -> str:
-    """ Create a HTML element for an external url
+    """Create a HTML element for an external url
 
     Args:
         text: Text
@@ -73,7 +73,7 @@ def external_url(text: str, url) -> str:
     return '<a href="{}" target="_blank" rel="noopener noreferrer" >{}</a>'.format(url, text)
 
 
-def create_player_labels(num_labels: int, label_style: str="number") -> list[str]:
+def create_player_labels(num_labels: int, label_style: str = "number") -> list[str]:
     """Create player labels
 
     Args:
@@ -164,17 +164,16 @@ def check_missing_translations(experiment: Experiment) -> str:
 
     for block, missing_languages in missing_content_blocks:
         missing_language_flags = [get_flag_emoji(language) for language in missing_languages]
-        warnings.append(
-            f"Block {block.slug} does not have content in {', '.join(missing_language_flags)}"
-        )
+        warnings.append(f"Block {block.slug} does not have content in {', '.join(missing_language_flags)}")
 
     warnings_text = "\n".join(warnings)
 
     return warnings_text
 
+
 def consent_upload_path(instance: Experiment, filename: str) -> str:
     """Generate path to save consent file based on experiment.slug and language
-    
+
     Args:
         instance: Experiment instance to determine folder name
         filename: Name of the consent file to be uploaded
@@ -183,7 +182,7 @@ def consent_upload_path(instance: Experiment, filename: str) -> str:
         upload_to: Path for uploading the consent file
 
     Note:
-        Used by the Block model for uploading consent file        
+        Used by the Block model for uploading consent file
     """
     experiment = instance.experiment
     folder_name = experiment.slug
