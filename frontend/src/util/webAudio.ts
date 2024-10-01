@@ -5,6 +5,7 @@ let source: AudioBufferSourceNode;
 let buffers: { [key: string]: AudioBuffer } = {};
 let audioContext: AudioContext;
 let previousSource: string;
+let analyzer: AnalyserNode;
 
 export let audioInitialized = false;
 
@@ -13,6 +14,8 @@ declare global {
     interface Window {
         audio: HTMLAudioElement;
         webkitAudioContext?: typeof AudioContext;
+        audioContext: AudioContext;
+        analyzer: AnalyserNode;
     }
 }
 
@@ -21,6 +24,10 @@ declare global {
 // More info: https://developer.mozilla.org/en-US/docs/Web/Media/Autoplay_guide
 export const init = () => {
     audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    analyzer = audioContext.createAnalyser();
+    analyzer.fftSize = 32;
+    window.audioContext = audioContext;
+    window.analyzer = analyzer;
 };
 
 // init webaudio after first user action on page
@@ -117,7 +124,8 @@ export const stopBuffer = () => {
 export const playBufferFrom = (id: string, time: number) => {
     source = audioContext.createBufferSource();
     source.buffer = buffers[id];
-    source.connect(audioContext.destination);
+    source.connect(analyzer);
+    analyzer.connect(audioContext.destination);
     source.start(0, time);
 };
 
