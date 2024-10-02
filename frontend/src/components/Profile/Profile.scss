@@ -19,35 +19,32 @@
         .scores {
             padding: 10px;
             display: flex;
+            gap: 1rem;
 
             @media (min-width: 720px) {
                 flex-wrap: wrap;
                 justify-content: center;
                 width: auto !important;
             }
+
             .score {
-                width: 290px;
                 display: flex;
-                justify-content: stretch;
                 align-items: center;
+                justify-content: center;
+                gap: 1rem;
                 border: 1px solid rgba(white, 0.3);
                 border-radius: 5px;
-                margin-right: 5px;
-                padding-right: 5px;
+                padding: 2rem;
 
                 @media (min-width: 720px) {
-                    margin-bottom: 10px;
                     flex-direction: column;
-                    width: 40%;
                     justify-content: center;
-                    padding-bottom: 10px;
+                    padding: 2rem;
                 }
 
                 .rank {
-                    margin-right: 5px;
-                    width: 210px;
-                    height: 140px;
                     position: relative;
+
                     @media (min-width: 720px) {
                         margin-right: 0;
                         width: 100%;
@@ -76,6 +73,7 @@
                     padding-left: 10px;
                     flex-grow: 1;
                     width: 100%;
+
                     @media (min-width: 720px) {
                         text-align: center;
                         padding-left: 0;
@@ -84,15 +82,18 @@
                     h5 {
                         margin-bottom: 0;
                     }
+
                     a {
                         color: white;
                         transition: opacity 0.3s ease-out;
                         border-bottom: 2px solid $pink;
                         text-decoration: none !important;
+
                         &:hover {
                             opacity: 0.8;
                         }
                     }
+
                     p {
                         color: $gray;
                         margin-bottom: 0;
@@ -102,12 +103,15 @@
             }
         }
     }
+
     .store {
         padding-top: 10px;
+
         .copy {
             width: 100%;
             display: flex;
             justify-content: stretch;
+
             input {
                 width: 100%;
                 border-top-left-radius: 3px;
