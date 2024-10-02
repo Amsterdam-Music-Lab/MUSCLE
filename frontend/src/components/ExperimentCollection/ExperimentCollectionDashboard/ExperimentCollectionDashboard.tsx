@@ -32,7 +32,7 @@ export const ExperimentCollectionDashboard: React.FC<ExperimentCollectionDashboa
 
     return (
         <div className="aha__dashboard">
-            <Logo logoClickConfirm={null} />
+            <Logo />
             {headerProps && (
                 <Header {...headerProps}></Header>
             )}
