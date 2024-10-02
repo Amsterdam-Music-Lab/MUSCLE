@@ -71,7 +71,7 @@ const App = () => {
                         />
 
                         {/* Profile */}
-                        <Route path={URLS.profile} exact element={<Profile />} />
+                        <Route path={URLS.profile} element={<Profile />} />
 
                         {/* Internal redirect */}
                         <Route path={URLS.internalRedirect} element={<InternalRedirect />} />
@@ -82,13 +82,9 @@ const App = () => {
                         {/* Experiment */}
                         <Route path={URLS.experiment} element={<Experiment />} />
 
-                        {/* Session - ⚠️ What is the purpose of this non-functional route? */}
-                        <Route path={URLS.session} />
-
                         {/* Store profile */}
                         <Route
                             path={URLS.storeProfile}
-                            exact
                             element={StoreProfile}
                         />
                     </Routes>
