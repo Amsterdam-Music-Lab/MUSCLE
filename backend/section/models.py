@@ -297,6 +297,12 @@ class Song(models.Model):
         unique_together = ("artist", "name")
 
 
+def _audio_upload_path(instance, filename: str) -> str:
+    """Generate path to save audio based on playlist.name"""
+    folder_name = instance.playlist.name.replace(" ", "")
+    return "{0}/{1}".format(folder_name, filename)
+
+
 class Section(models.Model):
     """A snippet/section of a song, belonging to a Playlist
 
@@ -314,11 +320,6 @@ class Section(models.Model):
     Examples:
         After adding the example playlist, the database would contain 8 Section objects
     """
-
-    def _audio_upload_path(instance, filename):
-        """Generate path to save audio based on playlist.name"""
-        folder_name = instance.playlist.name.replace(" ", "")
-        return "{0}/{1}".format(folder_name, filename)
 
     def _random_code():
         """Generate a random code for this section"""
