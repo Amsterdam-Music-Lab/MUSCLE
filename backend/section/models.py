@@ -309,8 +309,8 @@ class Section(models.Model):
     Attributes:
         playlist (models.ForeignKey): a Many-To-One relationship to a Playlist object
         song (models.ForeignKey): a Many-To-One relationship to a Playlist object (can be null)
-        start_time (float): the start time of the section, typically 0.0
-        duration (float): the duration of the section, typically the duration of the audio file
+        start_time (float): the start time of the section in seconds, typically 0.0
+        duration (float): the duration of the section in seconds, typically the duration of the audio file
         filename (str): the filename on the local file system or a link to an external file
         play_count (int): a counter for how often a given section has been played
         code (int): a random code which will make it difficult to infer filepaths
@@ -327,8 +327,8 @@ class Section(models.Model):
 
     playlist = models.ForeignKey(Playlist, on_delete=models.CASCADE)
     song = models.ForeignKey(Song, on_delete=models.CASCADE, blank=True, null=True)
-    start_time = models.FloatField(db_index=True, default=0.0)  # sec
-    duration = models.FloatField(default=0.0)  # sec
+    start_time = models.FloatField(db_index=True, default=0.0)  # start time in seconds
+    duration = models.FloatField(default=0.0)  # end time in seconds
     filename = models.FileField(
         upload_to=_audio_upload_path,
         max_length=255,
@@ -343,30 +343,39 @@ class Section(models.Model):
         ordering = ['song__artist', 'song__name', 'start_time']
 
     def __str__(self):
-        return "{} - {} ({}-{})".format(
-            self.artist_name, self.song_name, self.start_time_str(), self.end_time_str()
-        )
+        return f"{self.song_label()} ({self.start_time_str()}-{self.end_time_str()})"
 
     def artist_name(self, placeholder=""):
+        "return artist of associated song, if available"
         if self.song:
             return self.song.artist
         else:
             return placeholder
 
-    def song_name(self, placeholder=""):
+    def song_name(self, placeholder: str = "") -> str:
+        "return name of associated song, if available"
         if self.song:
             return self.song.name
         else:
             return placeholder
 
-    def song_label(self):
-        return "{} - {}".format(self.artist_name(), self.song_name())
+    def song_label(self) -> str:
+        "return formatted artist and name of associated song, if available"
+        if self.artist_name() or self.song_name():
+            return f"{self.artist_name()} - {self.song_name()}"
+        return ""
 
-    def start_time_str(self):
-        return str(datetime.timedelta(seconds=self.start_time)).rstrip('0')
+    def start_time_str(self) -> str:
+        "return the start time in minutes:seconds.milliseconds format"
+        return datetime.datetime.strftime(
+            datetime.datetime.fromtimestamp(self.start_time), "%M:%S.%f"
+        )[:-3]
 
-    def end_time_str(self):
-        return str(datetime.timedelta(seconds=self.start_time + self.duration)).rstrip('0')
+    def end_time_str(self) -> str:
+        "return the end time in minutes:seconds.milliseconds format"
+        return datetime.datetime.strftime(
+            datetime.datetime.fromtimestamp(self.start_time + self.duration), "%M:%S.%f"
+        )[:-3]
 
     def add_play_count(self):
         """Increase play count for this section"""
@@ -376,7 +385,7 @@ class Section(models.Model):
         """Return absolute url for this section
 
         Returns:
-            a url consisting of the BASE_URL configured for Django, plus the database value
+            a url consisting of the BASE_URL configured for Django, plus the filename
         """
         base_url = getattr(settings, 'BASE_URL', '')
         sections_url = reverse('section:section', args=[self.pk, self.code])
