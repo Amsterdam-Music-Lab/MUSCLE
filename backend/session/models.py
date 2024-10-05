@@ -51,7 +51,7 @@ class Session(models.Model):
         """
         section = self.previous_section()
         if section:
-            return "{} - {}".format(section.song.artist, section.song.name)
+            return "{} - {}".format(section.artist_name(), section.song_name())
         return ""
 
     def previous_section(self):

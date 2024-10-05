@@ -230,8 +230,8 @@ class Playlist(models.Model):
         writer = csv.writer(csvfile)
         for section in self.section_set.all():
             if section.song:
-                this_artist = section.song.artist
-                this_name = section.song.name
+                this_artist = section.artist_name()
+                this_name = section.song_name()
             else:
                 this_artist = ''
                 this_name = ''
@@ -346,17 +346,17 @@ class Section(models.Model):
             self.artist_name, self.song_name, self.start_time_str(), self.end_time_str()
         )
 
-    def artist_name(self):
+    def artist_name(self, placeholder=""):
         if self.song:
             return self.song.artist
         else:
-            return ''
+            return placeholder
 
-    def song_name(self):
+    def song_name(self, placeholder=""):
         if self.song:
             return self.song.name
         else:
-            return ''
+            return placeholder
 
     def song_label(self):
         return "{} - {}".format(self.artist_name(), self.song_name())

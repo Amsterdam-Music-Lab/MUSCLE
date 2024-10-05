@@ -122,10 +122,14 @@ class ToontjeHoger3Plink(Base):
             # plink result
             if last_results[0].expected_response == last_results[0].given_response:
                 feedback = "Goedzo! Je hoorde inderdaad {} van {}.".format(
-                    non_breaking_spaces(section.song.name), non_breaking_spaces(section.song.artist))
+                    non_breaking_spaces(section.song_name()),
+                    non_breaking_spaces(section.artist_name()),
+                )
             else:
-                feedback = "Helaas! Je hoorde {} van {}.".format(non_breaking_spaces(
-                    section.song.name), non_breaking_spaces(section.song.artist))
+                feedback = "Helaas! Je hoorde {} van {}.".format(
+                    non_breaking_spaces(section.song_name()),
+                    non_breaking_spaces(section.artist_name()),
+                )
         else:
             if score == 2 * self.SCORE_EXTRA_WRONG:
                 feedback_prefix = "Helaas!"
@@ -145,7 +149,9 @@ class ToontjeHoger3Plink(Base):
             question_part = "Het nummer komt uit de {} en de emotie is {}.".format(
                 time_period, emotion)
             section_part = "Je hoorde {} van {}.".format(
-                non_breaking_spaces(section.song.name), non_breaking_spaces(section.song.artist))
+                non_breaking_spaces(section.song_name()),
+                non_breaking_spaces(section.artist_name()),
+            )
 
             # The \n results in a linebreak
             feedback = "{} {} \n {}".format(
