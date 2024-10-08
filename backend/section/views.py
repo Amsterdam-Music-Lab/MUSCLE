@@ -1,3 +1,5 @@
+from os.path import join
+
 from django.http import Http404, HttpRequest, FileResponse
 from django.conf import settings
 from django.shortcuts import redirect
@@ -38,7 +40,7 @@ def get_section(request: HttpRequest, section_id: int, code: int) -> Section:
         # Advantage: keeps url secure, correct play_count value
         # Disadvantage: potential high server load
 
-        filename = settings.BASE_DIR + settings.MEDIA_URL + str(section.filename)
+        filename = join(settings.BASE_DIR, settings.MEDIA_ROOT, str(section.filename))
 
         # Uncomment to only use example file in development
         # if settings.DEBUG:
