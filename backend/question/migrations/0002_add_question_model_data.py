@@ -4,8 +4,7 @@ from question.questions import create_default_questions
 
 
 def default_questions(apps, schema_editor):
-
-    create_default_questions()
+    pass
 
 
 class Migration(migrations.Migration):
