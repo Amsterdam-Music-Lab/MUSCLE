@@ -57,9 +57,9 @@ class BlockModelTest(TestCase):
         participants = block.current_participants()
         self.assertEqual(len(participants), 0)
 
-    def test_block_export_admin(self):
+    def test_block__export_admin(self):
         block = Block.objects.get(slug="test-block")
-        exported_data = block.export_admin()
+        exported_data = block._export_admin()
         self.assertEqual(exported_data["block"]["name"], "Test Block")
 
     def test_block_export_sessions(self):

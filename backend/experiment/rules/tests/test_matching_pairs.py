@@ -32,7 +32,7 @@ class MatchingPairsTest(TestCase):
         )
         cls.playlist = Playlist.objects.create(name='TestMatchingPairs')
         cls.playlist.csv = section_csv
-        cls.playlist.update_sections()
+        cls.playlist._update_sections()
         cls.participant = Participant.objects.create()
         cls.block = Block.objects.create(rules='MATCHING_PAIRS', slug='mpairs', rounds=42)
         cls.session = Session.objects.create(

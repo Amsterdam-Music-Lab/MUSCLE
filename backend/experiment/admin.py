@@ -117,7 +117,7 @@ class BlockAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
             all_profiles |= session.participant.export_profiles()
 
         for playlist in obj.playlists.all():
-            these_sections = playlist.export_sections()
+            these_sections = playlist._export_sections()
             all_sections |= these_sections
             for section in these_sections:
                 if section.song:

@@ -1,13 +1,13 @@
-from django.http import Http404, FileResponse
-from django.core.exceptions import PermissionDenied
+from os.path import join
+
+from django.http import Http404, HttpRequest, FileResponse
 from django.conf import settings
 from django.shortcuts import redirect
 
 from .models import Section
-from participant.utils import located_in_nl
 
 
-def get_section(request, section_id, code):
+def get_section(request: HttpRequest, section_id: int, code: int) -> Section:
     """Get section by given id"""
     try:
         section = Section.objects.get(pk=section_id, code=code)
@@ -26,7 +26,7 @@ def get_section(request, section_id, code):
         if str(section.filename).startswith('http'):
             # external link, redirect
             return redirect(str(section.filename))
-        
+
         if section.playlist.url_prefix:
             # Make link external using url_prefix
             return redirect(section.playlist.url_prefix + str(section.filename))
@@ -40,7 +40,7 @@ def get_section(request, section_id, code):
         # Advantage: keeps url secure, correct play_count value
         # Disadvantage: potential high server load
 
-        filename = settings.BASE_DIR + settings.MEDIA_URL + str(section.filename)
+        filename = join(settings.BASE_DIR, settings.MEDIA_ROOT, str(section.filename))
 
         # Uncomment to only use example file in development
         # if settings.DEBUG:

@@ -12,18 +12,24 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.AlterField(
-            model_name='section',
-            name='filename',
-            field=models.FileField(max_length=255, upload_to=section.models.audio_upload_path),
+            model_name="section",
+            name="filename",
+            field=models.FileField(
+                max_length=255, upload_to=section.models._audio_upload_path
+            ),
         ),
         migrations.AlterField(
-            model_name='song',
-            name='artist',
-            field=models.CharField(blank=True, db_index=True, default='', max_length=128),
+            model_name="song",
+            name="artist",
+            field=models.CharField(
+                blank=True, db_index=True, default="", max_length=128
+            ),
         ),
         migrations.AlterField(
-            model_name='song',
-            name='name',
-            field=models.CharField(blank=True, db_index=True, default='', max_length=128),
+            model_name="song",
+            name="name",
+            field=models.CharField(
+                blank=True, db_index=True, default="", max_length=128
+            ),
         ),
     ]

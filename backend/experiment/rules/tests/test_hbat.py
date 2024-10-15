@@ -14,7 +14,7 @@ class HBatTest(TestCase):
     def setUpTestData(cls):
         cls.participant = Participant.objects.create()
         cls.playlist = Playlist.objects.get(name='HBAT-BIT')
-        cls.playlist.update_sections()
+        cls.playlist._update_sections()
         cls.block = Block.objects.get(slug="hbat_bit")
         cls.session = Session.objects.create(
             block=cls.block,
@@ -46,7 +46,7 @@ class HBat_BST_Test(TestCase):
     def setUpTestData(cls):
         cls.participant = Participant.objects.create()
         cls.playlist = Playlist.objects.get(name='HBAT-BST')
-        cls.playlist.update_sections()
+        cls.playlist._update_sections()
         cls.block = Block.objects.get(slug="hbat_bst")
         cls.session = Session.objects.create(
             block=cls.block,

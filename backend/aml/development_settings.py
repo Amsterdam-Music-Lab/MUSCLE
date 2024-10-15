@@ -17,18 +17,19 @@ DATABASES = {
     }
 }
 
-# Some installed apps neeed to be appended
-INSTALLED_APPS = INSTALLED_APPS + ["debug_toolbar"]
+TESTING = DEBUG
 
-MIDDLEWARE = ["debug_toolbar.middleware.DebugToolbarMiddleware"] + MIDDLEWARE
+if DEBUG and not TESTING:
+    # apps & middleware neeed to be appended for the debug toolbar
+    INSTALLED_APPS += ["debug_toolbar"]
+
+    MIDDLEWARE += ["debug_toolbar.middleware.DebugToolbarMiddleware"]
 
 INTERNAL_IPS = [
     "127.0.0.1",
 ]
 
 CORS_ALLOW_ALL_ORIGINS = True
-
-TESTING = DEBUG
 
 BASE_URL = os.getenv("BASE_URL") or "http://localhost:8000"
 

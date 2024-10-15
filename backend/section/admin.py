@@ -55,7 +55,7 @@ admin.site.register(Song, SongAdmin)
 class PlaylistAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
     form = PlaylistAdminForm
     change_form_template = "change_form.html"
-    list_display = ("name", "section_count", "block_count")
+    list_display = ("name", "_section_count", "_block_count")
     search_fields = ["name", "section__song__artist", "section__song__name"]
     inline_actions = ["add_sections", "edit_sections", "export_csv"]
 
@@ -71,7 +71,7 @@ class PlaylistAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
 
         # process csv
         if process_csv:
-            csv_result = obj.update_sections()
+            csv_result = obj._update_sections()
 
             # create message based on csv_result (CSV_ERROR or CSV_OK)
             if csv_result["status"] == Playlist.CSV_ERROR:
@@ -171,7 +171,7 @@ class PlaylistAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
 
         writer = csv.writer(response)
         for section in obj.section_set.all():
-            writer.writerow(section.export_admin_csv())
+            writer.writerow(section._export_admin_csv())
 
         # force download attachment
         response["Content-Disposition"] = (

@@ -25,7 +25,7 @@ class MusicalPreferencesTest(TestCase):
             "AwfulArtist,AwfulSong,0.0,10.0,bat/artist5.mp3,0,0,0\n"
         )
         cls.playlist.csv = csv
-        cls.playlist.update_sections()
+        cls.playlist._update_sections()
 
         cls.experiment = Experiment.objects.create(slug="music-lab")
         ExperimentTranslatedContent.objects.create(

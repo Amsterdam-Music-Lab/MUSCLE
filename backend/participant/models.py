@@ -34,7 +34,7 @@ class Participant(models.Model):
 
     result_count.short_description = 'Results'
 
-    def export_admin(self):
+    def _export_admin(self):
         """Export data to admin"""
         return {
             "id": self.id,
