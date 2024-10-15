@@ -328,8 +328,8 @@ class Hooked(Base):
         )
         return trial
 
-    def get_score(self, session, round_number):
+    def get_score(self, session: Session, round_number: int):
         config = {"show_section": True, "show_total_score": True}
         title = self.get_trial_title(session, round_number)
-        previous_score = session.get_previous_result(self.counted_result_keys).score
+        previous_score = session.last_result(self.counted_result_keys).score
         return Score(session, config=config, title=title, score=previous_score)

@@ -16,7 +16,7 @@ class Session(models.Model):
         started_at (datetime): a timestamp when a session is created, auto-populated
         finished_at (datetime): a timestamp of when `session.finish()` was called
         json_data (json): a field to keep track of progress through a blocks' rules in a session
-        final_score: the final score of the session, usually the sum of all `Result` objects on the session
+        final_score (float): the final score of the session, usually the sum of all `Result` objects on the session
     """
     block = models.ForeignKey("experiment.Block", on_delete=models.CASCADE, blank=True, null=True)
     participant = models.ForeignKey("participant.Participant", on_delete=models.CASCADE)
@@ -58,14 +58,20 @@ class Session(models.Model):
 
         return 0
 
-    def last_result(self) -> Result:
+    def last_result(self, question_keys: list = []) -> Result:
         """
+        Attributes:
+            question_keys: array of the Result.question_key strings whish should be taken into account; if empty, return last result, irrespective of its question_key
+
         Returns:
-            last Result object
+            last relevant `Result` object added to the database for this session
         """
-        result = self.result_set.last()
+        results = self.result_set
+        if question_keys:
+            results = results.filter(question_key__in=question_keys)
+        last_result = results.order_by("-created_at").first()
         # retrieve updated Result object from database
-        return Result.objects.get(pk=result.id)
+        return Result.objects.get(pk=last_result.id)
 
     def last_song(self) -> str:
         """
@@ -103,7 +109,7 @@ class Session(models.Model):
     def load_json_data(self) -> dict:
         """
         Returns:
-            json data as object
+            json data as Python dictionary
         """
         return self.json_data if self.json_data else {}
 
@@ -123,7 +129,10 @@ class Session(models.Model):
         return self.result_set.all()
 
     def _is_finished(self) -> bool:
-        """Determine if the session is finished"""
+        """
+        Returns:
+            a boolean to indicate whether the session is finished
+        """
         return self.finished_at
 
     def rounds_complete(self) -> bool:
@@ -138,7 +147,7 @@ class Session(models.Model):
         taking into account the `counted_result_keys` array that may be defined per rules file
 
         Attributes:
-            counted_result_keys: array of the Result.key strings whish should be taken into account for counting rounds; if empty, all results will be counted.
+            counted_result_keys: array of the Result.question_key strings whish should be taken into account for counting rounds; if empty, all results will be counted.
 
         Returns:
             number of results, filtered by `counted_result_keys`, if supplied
@@ -179,20 +188,25 @@ class Session(models.Model):
     def block_rules(self):
         """
         Returns:
-            rules class to be used for this session
+            (experiment.rules.Base) rules class to be used for this session
         """
         return self.block.get_rules()
 
     def finish(self):
         """Finish current session with the following steps:
-        - set the `finished_at` timestamp to the current moment
-        - set the `final_score` field to the sum of all results' scores
+
+        1. set the `finished_at` timestamp to the current moment
+
+        2. set the `final_score` field to the sum of all results' scores
         """
         self.finished_at = timezone.now()
         self.final_score = self.total_score()
 
     def rank(self) -> int:
-        """Get session rank based on final_score, within current experiment"""
+        """
+        Returns:
+            rank of the current session for the associated block, based on `final_score`
+        """
         return (
             self.block.session_set.filter(final_score__gte=self.final_score)
             .values("final_score")
@@ -201,7 +215,10 @@ class Session(models.Model):
         )
 
     def percentile_rank(self, exclude_unfinished: bool) -> float:
-        """Get session percentile rank based on final_score, within current experiment"""
+        """
+        Returns:
+            Percentile rank of this session for the associated block, based on `final_score`
+        """
         session_set = self.block.session_set
         if exclude_unfinished:
             session_set = session_set.filter(finished_at__isnull=False)
@@ -211,9 +228,3 @@ class Session(models.Model):
         n_lte = session_set.filter(final_score__lte=self.final_score).count()
         n_eq = session_set.filter(final_score=self.final_score).count()
         return 100.0 * (n_lte - (0.5 * n_eq)) / n_session
-
-    def get_previous_result(self, question_keys: list = []) -> Result:
-        results = self.result_set
-        if question_keys:
-            results = results.filter(question_key__in=question_keys)
-        return results.order_by("-created_at").first()

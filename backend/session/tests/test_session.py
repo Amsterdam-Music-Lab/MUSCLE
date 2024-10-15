@@ -89,7 +89,7 @@ class SessionTest(TestCase):
         last_song = self.session.last_song()
         assert last_song == 'Beavis - Butthead'
 
-    def test_previous_score(self):
+    def test_last_score(self):
         for i in range(10):
             keys = ['a', 'a', 'b', 'b', 'b', 'b', 'c', 'c', 'c', 'd']
             Result.objects.create(
@@ -97,7 +97,7 @@ class SessionTest(TestCase):
                 question_key=keys[i],
                 score=i
             )
-        result = self.session.get_previous_result(['c', 'd'])
+        result = self.session.last_result(["c", "d"])
         assert result.score == 9
 
     def test_get_rounds_passed(self):
