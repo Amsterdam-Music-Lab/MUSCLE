@@ -13,8 +13,8 @@ vi.mock("../Playback/Playback", () => ({
     )),
 }));
 vi.mock("../FeedbackForm/FeedbackForm", () => ({
-    default: vi.fn(({ onResult, onNext }) => (
-        <div data-testid="mock-feedback-form" onClick={() => { onResult(); onNext(); }}>Mock Feedback Form</div>
+    default: vi.fn(({ submitResult }) => (
+        <div data-testid="mock-feedback-form" onClick={() => { submitResult(); }}>Mock Feedback Form</div>
     )),
 }));
 vi.mock("../HTML/HTML", () => ({
@@ -43,6 +43,7 @@ const defaultConfig = {
 describe('Trial', () => {
     const mockOnNext = vi.fn();
     const mockOnResult = vi.fn();
+    const mockMakeResult = vi.fn();
 
     beforeEach(() => {
         vi.clearAllMocks();
