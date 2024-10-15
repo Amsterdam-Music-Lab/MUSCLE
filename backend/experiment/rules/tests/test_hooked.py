@@ -3,7 +3,7 @@ from django.core.files.uploadedfile import SimpleUploadedFile
 from unittest.mock import Mock
 
 from experiment.actions import Explainer, Final, Score, Trial
-from experiment.models import Experiment, Phase, Block, SocialMediaConfig
+from experiment.models import Experiment, Phase, Block, ExperimentTranslatedContent, SocialMediaConfig
 from question.musicgens import MUSICGENS_17_W_VARIANTS
 from participant.models import Participant
 from question.questions import get_questions_from_series
@@ -73,11 +73,12 @@ class HookedTest(TestCase):
     def test_hooked(self):
         n_rounds = 18
         experiment = Experiment.objects.create(slug="HOOKED")
+        ExperimentTranslatedContent.objects.create(
+            experiment=experiment, language="en", name="Hooked", description="Test Hooked"
+        )
         SocialMediaConfig.objects.create(experiment=experiment, url="https://app.amsterdammusiclab.nl/hooked")
         phase = Phase.objects.create(experiment=experiment)
-        block = Block.objects.create(
-            slug="Hooked", rules="HOOKED", rounds=n_rounds, phase=phase
-        )
+        block = Block.objects.create(slug="Hooked", rules="HOOKED", rounds=n_rounds, phase=phase)
         block.add_default_question_series()
         session = Session.objects.create(block=block, participant=self.participant, playlist=self.playlist)
         rules = session.block_rules()
@@ -131,9 +132,7 @@ class HookedTest(TestCase):
 
     def _run_eurovision(self, session_type):
         n_rounds = 6
-        block = Block.objects.create(
-            slug="Test-Eurovision", rules="EUROVISION_2020", rounds=n_rounds
-        )
+        block = Block.objects.create(slug="Test-Eurovision", rules="EUROVISION_2020", rounds=n_rounds)
         session = Session.objects.create(block=block, participant=self.participant, playlist=self.playlist)
         rules = session.block_rules()
         rules.question_offset = 3
@@ -177,9 +176,7 @@ class HookedTest(TestCase):
     def _run_kuiper(self, session_type):
         self.assertEqual(Result.objects.count(), 0)
         n_rounds = 6
-        block = Block.objects.create(
-            slug="Test-Christmas", rules="KUIPER_2020", rounds=n_rounds
-        )
+        block = Block.objects.create(slug="Test-Christmas", rules="KUIPER_2020", rounds=n_rounds)
         playlist = Playlist.objects.create(name="Test-Christmas")
         playlist.csv = (
             "Band Aid,1984 - Do They Know It’s Christmas,1.017,45.0,Kerstmuziek/Do They Know It_s Christmas00.01.017.i.s.mp3,0,100000707\n"

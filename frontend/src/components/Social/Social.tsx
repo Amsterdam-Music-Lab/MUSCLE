@@ -20,8 +20,8 @@ const Social = ({ social }: SocialProps) => {
 
     const shareContent = (text: string, url: string) => {
         const shareData = {
-            text: text,
-            url: url
+            text,
+            url
         }
         if (navigator.canShare(shareData)) {
             navigator.share(shareData).then(
@@ -37,50 +37,50 @@ const Social = ({ social }: SocialProps) => {
 
     return (
         <div className="aha__share d-flex justify-content-center mt-4">
-            {social.apps.includes('facebook') && (
+            {social.channels.includes('facebook') && (
                 <FacebookShareButton
                     url={social.url}
-                    title={social.message}
-                    hashtag={social.hashtags[0]}
-                    blankTarget="true"
+                    title={social.content}
+                    hashtag={social.tags[0]}
+                    blankTarget={true}
                 >
                     <i className="fa-brands fa-facebook-f fa-2x"></i>
                 </FacebookShareButton>
             )}
-            {social.apps.includes('whatsapp') && (
+            {social.channels.includes('whatsapp') && (
                 <WhatsappShareButton
                     url={social.url}
-                    title={social.message}
-                    blankTarget="true"
+                    title={social.content}
+                    blankTarget={true}
                 >
                     <i className="fa-brands fa-whatsapp fa-2x"></i>
                 </WhatsappShareButton>
             )}
-            {social.apps.includes('twitter') && (
+            {social.channels.includes('twitter') && (
                 <TwitterShareButton
                     url={social.url}
-                    title={social.message}
-                    hashtags={social.hashtags}
-                    blankTarget="true"
+                    title={social.content}
+                    hashtags={social.tags}
+                    blankTarget={true}
                 >
                     <i className="fa-brands fa-x-twitter fa-2x"></i>
                 </TwitterShareButton>
             )}
-            {social.apps.includes('weibo') && (
+            {social.channels.includes('weibo') && (
                 <WeiboShareButton
                     url={social.url}
-                    title={social.message}
-                    blankTarget="true"
+                    title={social.content}
+                    blankTarget={true}
                 >
                     <i className="fa-brands fa-weibo fa-2x"></i>
                 </WeiboShareButton>
             )}
-            {showShare.current && social.apps.includes('share') && (
-                <div onClick={() => shareContent(social.text, social.url)} data-testid="navigator-share">
+            {showShare.current && social.channels.includes('share') && (
+                <div onClick={() => shareContent(social.content, social.url)} data-testid="navigator-share">
                     <i className="fa-solid fa-share-nodes fa-2x"></i>
                 </div>
             )}
-            {social.apps.includes('clipboard') && (
+            {social.channels.includes('clipboard') && (
                 <div onClick={() => copyToClipboard(social.url)} data-testid="clipboard-share">
                     <i className="fa-solid fa-clipboard fa-2x"></i>
                 </div>

@@ -10,12 +10,27 @@ export default defineConfig({
     coverage: {
       reportsDirectory: 'public/coverage',
       provider: 'v8',
-      reporter: "json-summary",
+      reporter: ["text", "json-summary"],
+      exclude: [
+        'node_modules/**',
+        'storybook-static/**',
+        'src/stories/**',
+        'src/config/**',
+        'src/**/*.stories.{js,jsx,ts,tsx}',
+        'src/index.tsx',
+        'src/serviceWorker.js',
+        '.pnp.cjs',
+        '.pnp.loader.mjs',
+        '.storybook/**',
+        '.yarn/**',
+        'src/util/testUtils/useEffectDebugger.js',
+        'src/util/__mocks__/**',
+      ],
     },
   },
   resolve: {
     alias: {
-        '@/': '/src/',
+      '@/': '/src/',
     },
-},
+  },
 })

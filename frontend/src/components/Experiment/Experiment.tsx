@@ -15,6 +15,7 @@ import ExperimentAbout from "./ExperimentAbout/ExperimentAbout";
 import ExperimentDashboard from "./ExperimentDashboard/ExperimentDashboard";
 import IExperiment from "@/types/Experiment";
 import Redirect from "@/components/Redirect/Redirect";
+import useHeadDataFromExperiment from "@/hooks/useHeadDataFromExperiment";
 
 const Experiment = () => {
     const { slug } = useParams();
@@ -23,11 +24,15 @@ const Experiment = () => {
     const [hasShownConsent, setHasShownConsent] = useState(false);
     const participant = useBoundStore((state) => state.participant);
     const setTheme = useBoundStore((state) => state.setTheme);
+    const setHeadData = useBoundStore((state) => state.setHeadData);
+    const resetHeadData = useBoundStore((state) => state.resetHeadData);
     const participantIdUrl = participant?.participant_id_url;
     const nextBlock = experiment?.nextBlock;
     const displayDashboard = experiment?.dashboard.length;
     const showConsent = experiment?.consent;
     const totalScore = experiment?.totalScore;
+
+    useHeadDataFromExperiment(experiment, setHeadData, resetHeadData);
 
     if (experiment?.theme) {
         setTheme(experiment.theme);

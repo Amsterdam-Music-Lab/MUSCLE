@@ -13,7 +13,7 @@ export interface SocialMediaConfig {
     tags: string[];
     url: string;
     content: string;
-    channels: string[];
+    channels: Array<'facebook' | 'whatsapp' | 'twitter' | 'weibo' | 'share' | 'clipboard'>;
 }
 
 export default interface Experiment {
