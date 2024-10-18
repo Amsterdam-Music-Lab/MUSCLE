@@ -15,7 +15,7 @@ class RhythmDiscriminationTest(TestCase):
     def setUpTestData(cls):
         cls.participant = Participant.objects.create()
         cls.playlist = Playlist.objects.get(name='RhythmDiscrimination')
-        cls.playlist.update_sections()
+        cls.playlist._update_sections()
         cls.block = Block.objects.get(slug="rhdis")
         cls.session = Session.objects.create(
             block=cls.block,

@@ -79,7 +79,7 @@ class TestAdminBlockExport(TestCase):
         cls.participant = Participant.objects.create(unique_hash=42)
         cls.block = Block.objects.get(slug="huang_2022")
         for playlist in cls.block.playlists.all():
-            playlist.update_sections()
+            playlist._update_sections()
         cls.session = Session.objects.create(
             block=cls.block,
             participant=cls.participant,

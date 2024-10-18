@@ -258,5 +258,7 @@ class MusicalPreferences(Base):
         out_list = []
         for result in top_results.all():
             section = Section.objects.get(pk=result.section.id)
-            out_list.append({"artist": section.song.artist, "name": section.song.name})
+            out_list.append(
+                {"artist": section.artist_name(), "name": section.song_name()}
+            )
         return out_list

@@ -255,7 +255,7 @@ class Block(models.Model):
             participants[session.participant.id] = session.participant
         return participants.values()
 
-    def export_admin(self) -> dict:
+    def _export_admin(self) -> dict:
         """Export data for admin
 
         Returns:
@@ -267,8 +267,13 @@ class Block(models.Model):
             "block": {
                 "id": self.id,
                 "name": self.name,
-                "sessions": [session.export_admin() for session in self.session_set.all()],
-                "participants": [participant.export_admin() for participant in self.current_participants()],
+                "sessions": [
+                    session._export_admin() for session in self.session_set.all()
+                ],
+                "participants": [
+                    participant._export_admin()
+                    for participant in self.current_participants()
+                ],
             },
         }
 
@@ -294,7 +299,7 @@ class Block(models.Model):
         fieldnames = set()  # keep track of all potential fieldnames
         result_prefix = ""
         for session in self.session_set.all():
-            profile = session.participant.export_admin()
+            profile = session.participant._export_admin()
             session_finished = session.finished_at.isoformat() if session.finished_at else None
             # Get data for all potential session fields
             full_row = {

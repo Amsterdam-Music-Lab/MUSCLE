@@ -60,7 +60,7 @@ class HookedTest(TestCase):
             "United Kingdom 2017 - Lucie Jones,Never Give Up on You,94.575,45.0,euro/2017-15-01-34-575-c2.mp3,0,201715095\n"
             "United Kingdom 2017 - Lucie Jones,Never Give Up on You,124.004,45.0,euro/2017-15-02-04-004-b.mp3,0,201715124\n"
         )
-        cls.playlist.update_sections()
+        cls.playlist._update_sections()
 
     def score_results(self, actions):
         for action in actions:
@@ -210,7 +210,7 @@ class HookedTest(TestCase):
             "Chuck Berry,1959 - Run Rudolph Run,73.941,45.0,Kerstmuziek/Run Rudolph Run01.13.941.b.s.mp3,0,100002701\n"
             "Chuck Berry,1959 - Run Rudolph Run,113.301,45.0,Kerstmuziek/Run Rudolph Run01.53.301.v2.s.mp3,0,100002714\n"
         )
-        playlist.update_sections()
+        playlist._update_sections()
         session = Session.objects.create(block=block, participant=self.participant, playlist=playlist)
         rules = session.block_rules()
         rules.question_offset = 3
@@ -252,7 +252,7 @@ class HookedTest(TestCase):
         block = Block.objects.get(slug="thats_my_song")
         block.add_default_question_series()
         playlist = Playlist.objects.get(name="ThatsMySong")
-        playlist.update_sections()
+        playlist._update_sections()
         session = Session.objects.create(block=block, participant=self.participant, playlist=playlist)
         rules = session.block_rules()
         assert rules.feedback_info() is None
@@ -305,7 +305,7 @@ class HookedTest(TestCase):
         block = Block.objects.get(slug="huang_2022")
         block.add_default_question_series()
         playlist = Playlist.objects.get(name="普通话")
-        playlist.update_sections()
+        playlist._update_sections()
         session = Session.objects.create(block=block, participant=self.participant, playlist=playlist)
         rules = session.block_rules()
         self.assertIsNotNone(rules.feedback_info())

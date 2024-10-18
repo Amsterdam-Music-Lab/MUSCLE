@@ -67,10 +67,14 @@ class ToontjeHogerKids3Plink(ToontjeHoger3Plink):
 
         if last_result.expected_response == last_result.given_response:
             feedback = "Goedzo! Je hoorde inderdaad {} van {}.".format(
-                non_breaking_spaces(section.song.name), non_breaking_spaces(section.song.artist))
+                non_breaking_spaces(section.song_name()),
+                non_breaking_spaces(section.artist_name()),
+            )
         else:
-            feedback = "Helaas! Je hoorde {} van {}.".format(non_breaking_spaces(
-                section.song.name), non_breaking_spaces(section.song.artist))
+            feedback = "Helaas! Je hoorde {} van {}.".format(
+                non_breaking_spaces(section.song_name()),
+                non_breaking_spaces(section.artist_name()),
+            )
 
         config = {'show_total_score': True}
         round_number = session.get_rounds_passed()

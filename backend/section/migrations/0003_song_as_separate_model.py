@@ -16,7 +16,7 @@ class Migration(migrations.Migration):
                     song.restricted = [{"nl": "The Netherlands"}]
                 section.song = song
                 section.save()
-    
+
     def move_songs_backwards(apps, schema_editor):
         Section = apps.get_model('section', 'Section')
         for section in Section.objects.all():
@@ -27,7 +27,7 @@ class Migration(migrations.Migration):
                 section.artist = section.song.artist
                 if len(section.song.restricted):
                     section.restrict_to_nl = 1
-            section.save()          
+            section.save()
 
     dependencies = [
         ('section', '0002_alter_section_filename'),
