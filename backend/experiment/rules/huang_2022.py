@@ -72,7 +72,7 @@ class Huang2022(Hooked):
         plan = json_data.get('plan')
 
         if not plan:
-            last_result = session.result_set.last()
+            last_result = session.last_result()
             if not last_result:
                 playback = get_test_playback()
                 html = HTML(body='<h4>{}</h4>'.format(_('Do you hear the music?')))
