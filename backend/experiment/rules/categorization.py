@@ -46,6 +46,8 @@ class Categorization(Base):
             session.save_json_data({"started": True})
             return actions
 
+        json_data = session.json_data
+
         # Plan experiment on the first call to next_round
         if not json_data.get("phase"):
             json_data = self.plan_experiment(session)
@@ -54,7 +56,6 @@ class Categorization(Base):
         if json_data == "REPEAT":
             json_data = {"phase": "REPEAT"}
             session.save_json_data(json_data)
-            session.save()
             final = Final(
                 session=session,
                 final_text="You already have participated in this experiment.",
@@ -338,7 +339,7 @@ class Categorization(Base):
         return json_data
 
     def plan_phase(self, session):
-        json_data = session.load_json_data()
+        json_data = session.json_data
         if "training" in json_data["phase"]:
             # Retrieve training stimuli for the assigned group
             if json_data["group"] == "S1":
@@ -461,7 +462,7 @@ class Categorization(Base):
         """
         Get the next action for the experiment
         """
-        json_data = session.load_json_data()
+        json_data = session.json_data
 
         # Retrieve next section in the sequence
         rounds_passed = session.get_rounds_passed() - int(json_data["training_rounds"])
@@ -491,7 +492,7 @@ class Categorization(Base):
         return trial
 
     def get_title(self, session):
-        json_data = session.load_json_data()
+        json_data = session.json_data
         rounds_passed = session.get_rounds_passed() - int(json_data["training_rounds"]) + 1
         return f"Round {rounds_passed} / {len(json_data['sequence'])}"
 

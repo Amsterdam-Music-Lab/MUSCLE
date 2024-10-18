@@ -30,7 +30,9 @@ class ActionWrappersTest(TestCase):
         mock_random_choice.return_value = True
         song_sync(self.session, self.section, 'HookedTest')
         inspect_session = Session.objects.first()
-        saved_jitter = inspect_session.load_json_data().get('continuation_offset')
+        saved_jitter = inspect_session.last_result().json_data.get(
+            "continuation_offset"
+        )
         assert saved_jitter == 0
 
     @mock.patch("random.choice")
@@ -38,5 +40,7 @@ class ActionWrappersTest(TestCase):
         mock_random_choice.return_value = False
         song_sync(self.session, self.section, 'HookedTest')
         inspect_session = Session.objects.first()
-        saved_jitter = inspect_session.load_json_data().get('continuation_offset')
+        saved_jitter = inspect_session.last_result().json_data.get(
+            "continuation_offset"
+        )
         assert saved_jitter != 0

@@ -56,7 +56,7 @@ class MatchingPairsTest(TestCase):
         for i in range(6):
             trial = self.rules.get_matching_pairs_trial(self.session)
             assert trial
-            data = self.session.load_json_data()
+            data = self.session.json_data
             pairs = data.get('pairs')
             degradations = data.get('degradations')
             # degradations cycle through list of two, list of one, empty list

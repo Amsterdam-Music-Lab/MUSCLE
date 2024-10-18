@@ -55,7 +55,7 @@ class BeatAlignment(Base):
             return final_action_with_optional_button(session, final_text)
 
         # Practice rounds
-        if not session.load_json_data().get('done_practice'):
+        if not session.json_data.get("done_practice"):
             practice_rounds = [self.get_intro_explainer()]
             for i in range(1, 4):
                 this_round = self.next_practice_action(session, i)

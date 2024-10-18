@@ -44,7 +44,7 @@ def categories_likert_score(result, data):
 
 def reaction_time_score(result, data):
     expected_response = check_expected_response(result)
-    json_data = result.load_json_data()
+    json_data = result.json_data
     if expected_response and json_data:
         time = json_data.get('decision_time')
         timeout = json_data.get('config').get('response_time')
@@ -57,7 +57,7 @@ def reaction_time_score(result, data):
 def song_sync_recognition_score(result, data):
     if result.given_response == 'TIMEOUT' or result.given_response == 'no':
         return 0
-    json_data = result.load_json_data()
+    json_data = result.json_data
     if json_data:
         time = json_data.get('decision_time')
         timeout = json_data.get('config').get('response_time')

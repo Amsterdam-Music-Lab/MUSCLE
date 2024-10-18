@@ -97,7 +97,7 @@ def next_trial_actions(session, round_number):
     """
     actions = []
     try:
-        plan = session.load_json_data()['plan']
+        plan = session.json_data["plan"]
     except KeyError as error:
         print('Missing plan key: %s' % str(error))
         return actions

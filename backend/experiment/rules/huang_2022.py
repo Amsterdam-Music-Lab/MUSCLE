@@ -61,7 +61,7 @@ class Huang2022(Hooked):
 
         # If the number of results equals the number of block.rounds,
         # close the session and return data for the final_score view.
-        json_data = session.load_json_data()
+        json_data = session.json_data
         # Get next round number and initialise actions list. Two thirds of
         # rounds will be song_sync; the remainder heard_before.
         round_number = session.get_rounds_passed(self.counted_result_keys)
@@ -140,7 +140,7 @@ class Huang2022(Hooked):
                     actions.extend([explainer, explainer_devices, playlist, *self.next_song_sync_action(session, round_number)])
         else:
             # Load the heard_before offset.
-            heard_before_offset = session.load_json_data().get('heard_before_offset')
+            heard_before_offset = session.json_data.get("heard_before_offset")
 
             # show score
             score = self.get_score(session, round_number)
@@ -192,7 +192,7 @@ class Huang2022(Hooked):
         n_old_new_correct = 0
 
         for result in session.result_set.all():
-            json_data = result.load_json_data()
+            json_data = result.json_data
             if json_data.get('result') and json_data['result']['type'] == 'recognized':
                 n_sync_guessed += 1
                 sync_time += json_data['result']['recognition_time']

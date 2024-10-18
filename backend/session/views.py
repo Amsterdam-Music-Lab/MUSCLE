@@ -69,7 +69,7 @@ def next_round(request, session_id):
     experiment_slug = request.session.get(EXPERIMENT_KEY)
     if experiment_slug:
         # check that current session does not have the experiment information saved yet
-        if not session.load_json_data().get(EXPERIMENT_KEY):
+        if not session.json_data.get(EXPERIMENT_KEY):
             # set information of the Experiment to the session
             experiment = Experiment.objects.get(slug=experiment_slug)
             if experiment and session.block in experiment.associated_blocks():

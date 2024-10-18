@@ -208,7 +208,7 @@ class DurationDiscrimination(Base):
         else:
             if previous_results.first().score == 0:
                 # the previous response was incorrect
-                json_data = session.load_json_data()
+                json_data = session.json_data
                 direction = json_data.get('direction')
                 last_result = previous_results.first()
                 last_result.comment = 'decrease difficulty'
@@ -234,7 +234,7 @@ class DurationDiscrimination(Base):
                 # the previous response was correct - check if previous non-catch trial was 1
                 if previous_results.count() > 1 and self.last_non_catch_correct(previous_results.all()):
                     # the previous two responses were correct
-                    json_data = session.load_json_data()
+                    json_data = session.json_data
                     direction = json_data.get('direction')
                     last_correct_result = previous_results.first()
                     last_correct_result.comment = 'increase difficulty'
@@ -274,7 +274,7 @@ class DurationDiscrimination(Base):
             1 if difference should stay the same
             0.5 for difference *decrease*
         '''
-        json_data = session.load_json_data()
+        json_data = session.json_data
         difficulty = json_data.get('difficulty')
         current_difficulty = difficulty * multiplier
         session.save_json_data({'difficulty': current_difficulty})

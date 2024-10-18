@@ -130,7 +130,7 @@ class Hooked(Base):
         else:
             # Create a score action.
             actions.append(self.get_score(session, round_number))
-            heard_before_offset = session.load_json_data().get("heard_before_offset")
+            heard_before_offset = session.json_data.get("heard_before_offset")
 
             # SongSync rounds. Skip questions until round indicated by question_offset.
             if round_number in range(1, self.question_offset):
@@ -179,7 +179,7 @@ class Hooked(Base):
             if result.question_key == "recognize":
                 if result.given_response == "yes":
                     n_sync_guessed += 1
-                    json_data = result.load_json_data()
+                    json_data = result.json_data
                     sync_time += json_data.get("decision_time")
                     if result.score > 0:
                         n_sync_correct += 1
@@ -239,7 +239,7 @@ class Hooked(Base):
     def next_song_sync_action(self, session: Session, round_number: int) -> Trial:
         """Get next song_sync section for this session."""
         try:
-            plan = session.load_json_data()["plan"]
+            plan = session.json_data["plan"]
         except KeyError as error:
             logger.error("Missing plan key: %s" % str(error))
             return None
@@ -247,7 +247,7 @@ class Hooked(Base):
         condition = plan[round_number]
         section = self.select_song_sync_section(session, condition)
         if condition == "returning":
-            played_sections = session.load_json_data().get("played_sections", [])
+            played_sections = session.json_data.get("played_sections", [])
             played_sections.append(section.id)
             session.save_json_data({"played_sections": played_sections})
         return song_sync(
@@ -278,7 +278,7 @@ class Hooked(Base):
         """read the list of `played_sections`, select and return a random item,
         save `played_sections` without this item
         """
-        played_sections = session.load_json_data().get("played_sections")
+        played_sections = session.json_data.get("played_sections")
         random.shuffle(played_sections)
         current_section_id = played_sections.pop()
         session.save_json_data({"played_sections": played_sections})
@@ -288,7 +288,7 @@ class Hooked(Base):
         """Get next heard_before action for this session."""
         # Load plan.
         try:
-            plan = session.load_json_data()["plan"]
+            plan = session.json_data["plan"]
         except KeyError as error:
             logger.error("Missing plan key: %s" % str(error))
             return None

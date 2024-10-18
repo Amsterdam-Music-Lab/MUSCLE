@@ -50,10 +50,10 @@ class SessionViewsTest(TestCase):
         response = self.client.get(f"/session/{session.id}/next_round/")
         assert response
         changed_session = Session.objects.get(pk=session.pk)
-        assert changed_session.load_json_data().get(EXPERIMENT_KEY) is None
+        assert changed_session.json_data.get(EXPERIMENT_KEY) is None
         phase = Phase.objects.create(experiment=experiment)
         self.block.phase = phase
         self.block.save()
         response = self.client.get(f"/session/{session.id}/next_round/")
         changed_session = Session.objects.get(pk=session.pk)
-        assert changed_session.load_json_data().get(EXPERIMENT_KEY) == slug
+        assert changed_session.json_data.get(EXPERIMENT_KEY) == slug
