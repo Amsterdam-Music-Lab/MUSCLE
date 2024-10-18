@@ -97,8 +97,8 @@ class SessionTest(TestCase):
                 question_key=keys[i],
                 score=i
             )
-        result = self.session.last_result(["c", "d"])
-        assert result.score == 9
+        score = self.session.last_score(["c", "d"])
+        self.assertEqual(score, 9)
 
     def test_get_rounds_passed(self):
         Result.objects.create(session=self.session, question_key='some random key')
