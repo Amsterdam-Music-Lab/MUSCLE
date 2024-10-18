@@ -84,8 +84,8 @@ class SessionTest(TestCase):
             question_key='preference',
             score=0
         )
-        previous_section = self.session.previous_section()
-        assert previous_section
+        last_section = self.session.last_section()
+        assert last_section
         last_song = self.session.last_song()
         assert last_song == 'Beavis - Butthead'
 

@@ -79,7 +79,7 @@
                 <div class="pop-up pop-up-small hide show-results" id="results-{{ session.id }}">
                     <input type="button" value="close" onClick="closeResults()" />
 
-                    {% for result in session._export_results %}
+                    {% for result in session.export_results %}
                     <h2>Result : <a href="{% url 'admin:session_session_change' session.id %}" target="_blank">{{ result.id }}</a></h2>
                     <h3>
                         Session: <a href="{% url 'admin:session_session_change' session.id %}" target="_blank">{{ session.id }}</a><br>

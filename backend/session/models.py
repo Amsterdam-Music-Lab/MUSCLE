@@ -47,17 +47,6 @@ class Session(models.Model):
         score = self.result_set.aggregate(models.Sum("score"))
         return self.block.bonus_points + (score["score__sum"] if score["score__sum"] else 0)
 
-    def last_score(self) -> float:
-        """
-        Returns:
-            score of last result, or return 0 if there are no results yet
-        """
-
-        if self.result_set.count() > 0:
-            return self.result_set.last().score
-
-        return 0
-
     def last_result(self, question_keys: list = []) -> Result:
         """
         Attributes:
@@ -69,31 +58,37 @@ class Session(models.Model):
         results = self.result_set
         if question_keys:
             results = results.filter(question_key__in=question_keys)
-        last_result = results.order_by("-created_at").first()
-        # retrieve updated Result object from database
-        return Result.objects.get(pk=last_result.id)
+        return results.order_by("-created_at").first()
 
-    def last_song(self) -> str:
-        """
-        Returns:
-            artist and name of section tied to previous result, if available, or an empty string
-        """
-        section = self.previous_section()
-        if section:
-            return section.song_label()
-        return ""
-
-    def previous_section(self) -> Union[Section, None]:
+    def last_section(self, question_keys: list[str] = []) -> Union[Section, None]:
         """
         Returns:
             Section tied to previous result, if that result has a score and section, else None
         """
-        valid_results = self.result_set.filter(score__isnull=False)
-        if valid_results.count() > 0:
-            result = valid_results.last()
-            if result.section:
-                return result.section
+        result = self.last_result(question_keys)
+        if result.section and result.score != None:
+            return result.section
         return None
+
+    def last_score(self, question_keys: list[str] = []) -> float:
+        """
+        Returns:
+            score of last result, or return 0 if there are no results yet
+        """
+        result = self.last_result(question_keys)
+        if result:
+            return result.score
+        return 0
+
+    def last_song(self, question_keys: list[str] = []) -> str:
+        """
+        Returns:
+            artist and name of section tied to previous result, if available, or an empty string
+        """
+        section = self.last_section(question_keys)
+        if section:
+            return section.song_label()
+        return ""
 
     def save_json_data(self, data: dict):
         """Merge data with json_data, overwriting duplicate keys.
@@ -101,7 +96,7 @@ class Session(models.Model):
         Attributes:
             data: a dictionary of data to save to the `json_data` field
         """
-        new_data = self.load_json_data()
+        new_data = self.json_data
         new_data.update(data)
         self.json_data = new_data
         self.save()
@@ -120,11 +115,11 @@ class Session(models.Model):
             "participant": self.participant.id,
             "started_at": self.started_at.isoformat(),
             "finished_at": self.finished_at.isoformat() if self.finished_at else None,
-            "json_data": self.load_json_data(),
+            "json_data": self.json_data,
             "results": [result._export_admin() for result in self.result_set.all()],
         }
 
-    def _export_results(self):
+    def export_results(self):
         # export session result objects
         return self.result_set.all()
 
@@ -135,19 +130,22 @@ class Session(models.Model):
         """
         return self.finished_at
 
-    def rounds_complete(self) -> bool:
+    def rounds_complete(self, counted_result_keys: list[str] = []) -> bool:
         """
+        Attributes:
+            counted_result_keys: array of the Result.question_key strings which should be taken into account for counting rounds; if empty, all results will be counted.
+
         Returns:
             True if there are results for each experiment round
         """
-        return self.get_rounds_passed() >= self.block.rounds
+        return self.get_rounds_passed(counted_result_keys) >= self.block.rounds
 
     def get_rounds_passed(self, counted_result_keys: list = []) -> int:
         """Get number of rounds passed, measured by the number of results on this session,
         taking into account the `counted_result_keys` array that may be defined per rules file
 
         Attributes:
-            counted_result_keys: array of the Result.question_key strings whish should be taken into account for counting rounds; if empty, all results will be counted.
+            counted_result_keys: array of the Result.question_key strings which should be taken into account for counting rounds; if empty, all results will be counted.
 
         Returns:
             number of results, filtered by `counted_result_keys`, if supplied
