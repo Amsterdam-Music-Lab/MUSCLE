@@ -129,7 +129,7 @@ class Session(models.Model):
             Section tied to previous result, if that result has a score and section, else None
         """
         result = self.last_result(question_keys)
-        if result.section and result.score != None:
+        if result.section and result.score is not None:
             return result.section
         return None
 
