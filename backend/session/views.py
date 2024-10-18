@@ -45,16 +45,6 @@ def create_session(request):
     return JsonResponse({"session": {"id": session.id}})
 
 
-def continue_session(request, session_id):
-    """given a session_id, continue where we left off"""
-
-    session = get_object_or_404(Session, pk=session_id)
-
-    # Get next round for given session
-    action = serialize_actions(session.block_rules().next_round(session))
-    return JsonResponse(action, json_dumps_params={"indent": 4})
-
-
 def next_round(request, session_id):
     """
     Fall back to continue a block is case next_round data is missing
@@ -69,7 +59,7 @@ def next_round(request, session_id):
     experiment_slug = request.session.get(EXPERIMENT_KEY)
     if experiment_slug:
         # check that current session does not have the experiment information saved yet
-        if not session.load_json_data().get(EXPERIMENT_KEY):
+        if not session.json_data.get(EXPERIMENT_KEY):
             # set information of the Experiment to the session
             experiment = Experiment.objects.get(slug=experiment_slug)
             if experiment and session.block in experiment.associated_blocks():

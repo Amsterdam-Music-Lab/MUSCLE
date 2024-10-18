@@ -56,7 +56,7 @@ class DDITest(TestCase):
         self.assertEqual(self.session.final_score, 1)
 
     def populate_result_score(self, session: Session, score: int):
-        result = session.result_set.last()
+        result = session.last_result()
         result.score = score
         result.save()
 

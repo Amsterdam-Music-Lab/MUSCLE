@@ -1,4 +1,3 @@
-
 from django.test import TestCase
 
 from experiment.models import Block
@@ -30,5 +29,5 @@ class SessionUtilsTest(TestCase):
             )
 
     def test_previous_score(self):
-        result = self.session.get_previous_result(['c', 'd'])
+        result = self.session.last_result(["c", "d"])
         assert result.score == 9

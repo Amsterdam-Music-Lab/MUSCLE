@@ -61,7 +61,7 @@ class MusicalPreferences(Base):
         round_number = session.get_rounds_passed(self.counted_result_keys)
         actions = []
         if round_number == 0:
-            last_result = session.result_set.last()
+            last_result = session.last_result()
             if last_result:
                 if last_result.score == 1:
                     question_trials = self.get_open_questions(session)

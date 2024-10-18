@@ -40,7 +40,7 @@ class Result(models.Model):
 
     def save_json_data(self, data):
         """Merge data with json_data, overwriting duplicate keys."""
-        new_data = self.load_json_data()
+        new_data = self.json_data
         new_data.update(data)
         self.json_data = new_data
         self.save()
@@ -48,12 +48,14 @@ class Result(models.Model):
     def _export_admin(self):
         """Export data for admin"""
         return {
-            'created_at': self.created_at.isoformat(),
-            'section_id': self.section.id if self.section else None,
-            'section_name': self.section.song.name if self.section and self.section.song else None,
-            'score': self.score,
-            'expected_response': self.expected_response,
-            'given_response': self.given_response,
-            'comment': self.comment,
-            'details': self.load_json_data(),
+            "created_at": self.created_at.isoformat(),
+            "section_id": self.section.id if self.section else None,
+            "section_name": (
+                self.section.song.name if self.section and self.section.song else None
+            ),
+            "score": self.score,
+            "expected_response": self.expected_response,
+            "given_response": self.given_response,
+            "comment": self.comment,
+            "details": self.json_data,
         }

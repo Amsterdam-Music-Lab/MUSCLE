@@ -324,9 +324,9 @@ class Block(models.Model):
                 if "session_data" in export_options:
                     # Convert json session data to csv columns if selected
                     if "convert_session_json" in export_options:
-                        row.update(session.load_json_data())
+                        row.update(session.json_data)
                     else:
-                        row["session_data"] = session.load_json_data()
+                        row["session_data"] = session.json_data
             fieldnames.update(row.keys())
             if session.result_set.count() == 0:
                 # some sessions may have only profile questions
@@ -367,14 +367,18 @@ class Block(models.Model):
                         # convert result json data to csv columns if selected
                         if "convert_result_json" in export_options:
                             if "decision_time" in export_options:
-                                result_data[result_prefix + "decision_time"] = result.load_json_data().get(
-                                    "decision_time", ""
+                                result_data[result_prefix + "decision_time"] = (
+                                    result.json_data.get("decision_time", "")
                                 )
                             if "result_config" in export_options:
-                                result_data[result_prefix + "result_config"] = result.load_json_data().get("config", "")
+                                result_data[result_prefix + "result_config"] = (
+                                    result.json_data.get("config", "")
+                                )
                         else:
                             if "result_config" in export_options:
-                                result_data[result_prefix + "result_data"] = result.load_json_data()
+                                result_data[result_prefix + "result_data"] = (
+                                    result.json_data
+                                )
                     this_row.update(result_data)
                     fieldnames.update(result_data.keys())
                     result_counter += 1

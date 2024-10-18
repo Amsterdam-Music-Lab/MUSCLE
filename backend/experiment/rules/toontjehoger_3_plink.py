@@ -208,7 +208,7 @@ class ToontjeHoger3Plink(Base):
             ),
             config={'break_round_on': {'NOT': ['']}}
         ))
-        json_data = session.load_json_data()
+        json_data = session.json_data
         if not json_data.get('extra_questions_intro_shown'):
             # Extra questions intro: only show first time
             # --------------------
