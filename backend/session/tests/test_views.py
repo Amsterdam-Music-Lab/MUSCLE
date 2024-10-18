@@ -21,12 +21,23 @@ class SessionViewsTest(TestCase):
         session["participant_id"] = self.participant.id
         session.save()
 
+    def test_create_with_invalid_block(self):
+        request = {}
+        response = self.client.post("/session/create/", request)
+        self.assertEqual(response.status_code, 400)
+        request = {"block_id": self.block.id + 1}
+        response = self.client.post("/session/create/", request)
+        self.assertEqual(response.status_code, 404)
+
     def test_create_with_playlist(self):
+        request = {"block_id": self.block.id, "playlist_id": self.playlist2.id + 1}
+        response = self.client.post("/session/create/", request)
+        self.assertEqual(response.status_code, 404)
         request = {"block_id": self.block.id, "playlist_id": self.playlist2.id}
         self.client.post("/session/create/", request)
         new_session = Session.objects.get(block=self.block, participant=self.participant)
-        assert new_session
-        assert new_session.playlist == self.playlist2
+        self.assertTrue(new_session)
+        self.assertEqual(new_session.playlist, self.playlist2)
 
     def test_create_without_playlist(self):
         request = {"block_id": self.block.id}
