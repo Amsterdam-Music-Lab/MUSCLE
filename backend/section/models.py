@@ -307,23 +307,18 @@ class Section(models.Model):
     """A snippet/section of a song, belonging to a Playlist
 
     Attributes:
-        playlist (models.ForeignKey): a Many-To-One relationship to a Playlist object
-        song (models.ForeignKey): a Many-To-One relationship to a Playlist object (can be null)
+        playlist (Playlist): a Many-To-One relationship to a Playlist object
+        song (Song): a Many-To-One relationship to a Playlist object (can be null)
         start_time (float): the start time of the section in seconds, typically 0.0
         duration (float): the duration of the section in seconds, typically the duration of the audio file
         filename (str): the filename on the local file system or a link to an external file
         play_count (int): a counter for how often a given section has been played
-        code (int): a random code which will make it difficult to infer filepaths
         tag (str): a string with which to categorize the section
         group (str): another string with which to categorize the section
 
     Examples:
         After adding the example playlist, the database would contain 8 Section objects
     """
-
-    def _random_code():
-        """Generate a random code for this section"""
-        return random.randint(10000, 99999)
 
     playlist = models.ForeignKey(Playlist, on_delete=models.CASCADE)
     song = models.ForeignKey(Song, on_delete=models.CASCADE, blank=True, null=True)
@@ -335,7 +330,6 @@ class Section(models.Model):
         validators=[audio_file_validator()],
     )
     play_count = models.PositiveIntegerField(default=0)
-    code = models.PositiveIntegerField(default=_random_code)
     tag = models.CharField(max_length=128, default='0', blank=True)
     group = models.CharField(max_length=128, default='0', blank=True)
 
@@ -345,34 +339,55 @@ class Section(models.Model):
     def __str__(self):
         return f"{self.song_label()} ({self.start_time_str()}-{self.end_time_str()})"
 
-    def artist_name(self, placeholder=""):
-        "return artist of associated song, if available"
+    def artist_name(self, placeholder: str = "") -> str:
+        """
+        Attributes:
+            placeholder: a placeholder in case the section does not have an associated Song
+
+        Returns:
+            artist of associated song or placeholder
+        """
         if self.song:
             return self.song.artist
         else:
             return placeholder
 
     def song_name(self, placeholder: str = "") -> str:
-        "return name of associated song, if available"
+        """
+        Attributes:
+            placeholder: a placeholder in case the section does not have an associated Song
+
+        Returns:
+            name of associated song or placeholder
+        """
         if self.song:
             return self.song.name
         else:
             return placeholder
 
     def song_label(self) -> str:
-        "return formatted artist and name of associated song, if available"
+        """
+        Returns:
+            formatted artist and name of associated song, if available
+        """
         if self.artist_name() or self.song_name():
             return f"{self.artist_name()} - {self.song_name()}"
         return ""
 
     def start_time_str(self) -> str:
-        "return the start time in minutes:seconds.milliseconds format"
+        """
+        Returns:
+            the start time in minutes:seconds.milliseconds format
+        """
         return datetime.datetime.strftime(
             datetime.datetime.fromtimestamp(self.start_time), "%M:%S.%f"
         )[:-3]
 
     def end_time_str(self) -> str:
-        "return the end time in minutes:seconds.milliseconds format"
+        """
+        Returns:
+            the end time in minutes:seconds.milliseconds format
+        """
         return datetime.datetime.strftime(
             datetime.datetime.fromtimestamp(self.start_time + self.duration), "%M:%S.%f"
         )[:-3]
@@ -382,13 +397,12 @@ class Section(models.Model):
         self.play_count += 1
 
     def absolute_url(self) -> str:
-        """Return absolute url for this section
-
+        """
         Returns:
             a url consisting of the BASE_URL configured for Django, plus the filename
         """
         base_url = getattr(settings, 'BASE_URL', '')
-        sections_url = reverse('section:section', args=[self.pk, self.code])
+        sections_url = reverse("section:section", args=[self.pk])
         return base_url.rstrip('/') + sections_url
 
     def _export_admin(self):

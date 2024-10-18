@@ -14,7 +14,7 @@ class SectionViewTest(TestCase):
     @override_settings(DEBUG=True)
     def test_get_section_development(self):
         section = Section.objects.create(playlist=self.playlist, filename="example.mp3")
-        response = self.client.get(f"/section/{section.id}/{section.code}/")
+        response = self.client.get(f"/section/{section.id}/")
         # need to fetch the updated Section object in order to get the updated play_count
         self.assertEqual(Section.objects.get(pk=section.id).play_count, 1)
         self.assertEqual(type(response), FileResponse)
@@ -25,7 +25,7 @@ class SectionViewTest(TestCase):
             playlist=self.playlist,
             filename="http://some/imaginary/audio.mp3",
         )
-        response = self.client.get(f"/section/{section.id}/{section.code}/")
+        response = self.client.get(f"/section/{section.id}/")
         self.assertEqual(response.status_code, 302)
         assert response.url.startswith("http://some/")
 
@@ -38,13 +38,13 @@ class SectionViewTest(TestCase):
             playlist=playlist,
             filename="audio.mp3",
         )
-        response = self.client.get(f"/section/{section.id}/{section.code}/")
+        response = self.client.get(f"/section/{section.id}/")
         self.assertEqual(response.status_code, 302)
         assert response.url.startswith("https://another")
 
     def test_get_section_production(self):
         section = Section.objects.create(playlist=self.playlist, filename="example.mp3")
-        response = self.client.get(f"/section/{section.id}/{section.code}/")
+        response = self.client.get(f"/section/{section.id}/")
         self.assertEqual(response.status_code, 302)
         assert response.url.startswith(settings.MEDIA_URL)
 

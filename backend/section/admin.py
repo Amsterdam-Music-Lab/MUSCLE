@@ -25,11 +25,10 @@ class SectionAdmin(admin.ModelAdmin):
         "start_time",
         "play_count",
         "playlist",
-        "code",
     )
     list_filter = [("playlist", admin.RelatedOnlyFieldListFilter)]
     search_fields = ["song__artist", "song__name", "playlist__name"]
-    readonly_fields = ("play_count", "code")
+    readonly_fields = ["play_count"]
 
     # Prevent large inner join
     list_select_related = ()

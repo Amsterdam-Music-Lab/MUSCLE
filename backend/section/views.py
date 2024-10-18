@@ -7,10 +7,10 @@ from django.shortcuts import redirect
 from .models import Section
 
 
-def get_section(request: HttpRequest, section_id: int, code: int) -> Section:
+def get_section(request: HttpRequest, section_id: int) -> Section:
     """Get section by given id"""
     try:
-        section = Section.objects.get(pk=section_id, code=code)
+        section = Section.objects.get(pk=section_id)
 
         # Section will be served, so increase play count
         # On your local development server you can receive multiple requests on
