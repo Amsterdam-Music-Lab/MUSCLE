@@ -33,7 +33,7 @@ interface HeadData {
     structuredData: Partial<StructuredData>;
 }
 
-interface DocumentHeadSlice {
+export interface DocumentHeadSlice {
     headData: HeadData;
     setHeadData: (headData: HeadData) => void;
     patchHeadData: (headData: Partial<HeadData>) => void;
