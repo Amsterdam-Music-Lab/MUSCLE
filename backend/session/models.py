@@ -96,17 +96,8 @@ class Session(models.Model):
         Attributes:
             data: a dictionary of data to save to the `json_data` field
         """
-        new_data = self.json_data
-        new_data.update(data)
-        self.json_data = new_data
+        self.json_data.update(data)
         self.save()
-
-    def load_json_data(self) -> dict:
-        """
-        Returns:
-            json data as Python dictionary
-        """
-        return self.json_data if self.json_data else {}
 
     def _export_admin(self):
         """Export data for admin"""

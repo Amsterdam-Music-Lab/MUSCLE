@@ -117,7 +117,7 @@ class SessionTest(TestCase):
 
     def test_json_data(self):
         self.session.save_json_data({'test': 'tested'})
-        self.assertEqual(self.session.load_json_data(), {'test': 'tested'})
+        self.assertEqual(self.session.json_data, {"test": "tested"})
         self.session.save_json_data({'test_len': 'tested_len'})
         self.assertEqual(len(self.session.json_data), 2)
 

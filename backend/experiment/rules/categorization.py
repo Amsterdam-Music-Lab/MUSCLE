@@ -36,7 +36,7 @@ class Categorization(Base):
         )
 
     def next_round(self, session: Session):
-        json_data = session.load_json_data()
+        json_data = session.json_data
 
         if json_data.get("started"):
             actions = [self.get_intro_explainer()]
