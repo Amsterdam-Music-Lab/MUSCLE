@@ -112,7 +112,7 @@ class BlockAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
         all_sessions = obj.export_sessions().order_by("pk")
 
         for session in all_sessions:
-            all_results |= session.result_set
+            all_results |= session.result_set.all()
             all_participants |= Participant.objects.filter(pk=session.participant.pk)
             all_profiles |= session.participant.export_profiles()
 
