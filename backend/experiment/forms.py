@@ -189,7 +189,6 @@ class MarkdownPreviewTextInput(TextInput):
 
 
 class ExperimentForm(ModelForm):
-
     class Meta:
         model = Experiment
         fields = [
@@ -215,6 +214,7 @@ class ExperimentTranslatedContentForm(ModelForm):
             "description",
             "consent",
             "about_content",
+            "social_media_message",
         ]
 
 
@@ -267,6 +267,7 @@ class BlockForm(ModelForm):
             "rounds",
             "bonus_points",
             "playlists",
+            "theme_config",
         ]
         help_texts = {
             "image": "An image that will be displayed on the experiment page and as a meta image in search engines.",

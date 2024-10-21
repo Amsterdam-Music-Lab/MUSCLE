@@ -3,7 +3,7 @@ from django.core.files.uploadedfile import SimpleUploadedFile
 
 from experiment.rules.musical_preferences import MusicalPreferences
 from experiment.actions import Trial
-from experiment.models import Experiment, Phase, Block, SocialMediaConfig
+from experiment.models import Experiment, Phase, Block, ExperimentTranslatedContent, SocialMediaConfig
 from participant.models import Participant
 from result.models import Result
 from section.models import Playlist, Section, Song
@@ -25,16 +25,17 @@ class MusicalPreferencesTest(TestCase):
             "AwfulArtist,AwfulSong,0.0,10.0,bat/artist5.mp3,0,0,0\n"
         )
         cls.playlist.csv = csv
-        cls.playlist.update_sections()
+        cls.playlist._update_sections()
 
         cls.experiment = Experiment.objects.create(slug="music-lab")
+        ExperimentTranslatedContent.objects.create(
+            experiment=cls.experiment, language="en", name="Musical Preferences", description="Test musical preferences"
+        )
         cls.social_media_config = SocialMediaConfig.objects.create(
             experiment=cls.experiment, url="https://app.amsterdammusiclab.nl/mpref"
         )
         cls.phase = Phase.objects.create(experiment=cls.experiment)
-        cls.block = Block.objects.create(
-            slug="mpref", phase=cls.phase, rules="MUSICAL_PREFERENCES", rounds=5
-        )
+        cls.block = Block.objects.create(slug="mpref", phase=cls.phase, rules="MUSICAL_PREFERENCES", rounds=5)
         cls.session = Session.objects.create(block=cls.block, participant=cls.participant, playlist=cls.playlist)
         audiocheck_playlist = Playlist.objects.create(name="test_audiocheck")
         song = Song.objects.create(name="audiocheck")

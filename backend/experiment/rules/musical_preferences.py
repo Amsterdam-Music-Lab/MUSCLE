@@ -19,23 +19,20 @@ from .huang_2022 import get_test_playback
 
 
 class MusicalPreferences(Base):
-    ''' This rules file presents repeated trials with a combined form:
+    """This rules file presents repeated trials with a combined form:
     participants are asked to state how much they like the song, and whether they know the song
     after 21 and 42 rounds, participants see summaries of their choices,
     and at the final round, participants see other participants' preferred songs
-    '''
-    ID = 'MUSICAL_PREFERENCES'
-    default_consent_file = 'consent/consent_musical_preferences.html'
-    preference_offset = 21 # after this many rounds rounds, show information with the participant's preferences
-    knowledge_offset = 42 # after this many rounds, show additionally how many songs the participant knows
-    contact_email = 'musicexp_china@163.com'
-    counted_result_keys = ['like_song']
+    """
 
-    know_score = {
-        'yes': 2,
-        'unsure': 1,
-        'no': 0
-    }
+    ID = "MUSICAL_PREFERENCES"
+    default_consent_file = "consent/consent_musical_preferences.html"
+    preference_offset = 21  # after this many rounds rounds, show information with the participant's preferences
+    knowledge_offset = 42  # after this many rounds, show additionally how many songs the participant knows
+    contact_email = "musicexp_china@163.com"
+    counted_result_keys = ["like_song"]
+
+    know_score = {"yes": 2, "unsure": 1, "no": 0}
 
     def __init__(self):
         self.question_series = [
@@ -127,20 +124,30 @@ class MusicalPreferences(Base):
                         return Redirect(settings.HOMEPAGE)
             else:
                 playback = get_test_playback()
-                html = HTML(
-                    body='<h4>{}</h4>'.format(_('Do you hear the music?')))
-                form = Form(form=[BooleanQuestion(
-                    key='audio_check1',
-                    choices={'no': _('No'), 'yes': _('Yes')},
-                    result_id=prepare_result('audio_check1', session,
-                                             scoring_rule='BOOLEAN'),
-                    submits=True,
-                    style=STYLE_BOOLEAN_NEGATIVE_FIRST)])
-                return [self.get_intro_explainer(), Trial(playback=playback, feedback_form=form, html=html,
-                             config={'response_time': 15},
-                             title=_("Audio check"))]
+                html = HTML(body="<h4>{}</h4>".format(_("Do you hear the music?")))
+                form = Form(
+                    form=[
+                        BooleanQuestion(
+                            key="audio_check1",
+                            choices={"no": _("No"), "yes": _("Yes")},
+                            result_id=prepare_result("audio_check1", session, scoring_rule="BOOLEAN"),
+                            submits=True,
+                            style=STYLE_BOOLEAN_NEGATIVE_FIRST,
+                        )
+                    ]
+                )
+                return [
+                    self.get_intro_explainer(),
+                    Trial(
+                        playback=playback,
+                        feedback_form=form,
+                        html=html,
+                        config={"response_time": 15},
+                        title=_("Audio check"),
+                    ),
+                ]
         if round_number == self.preference_offset:
-            like_results = session.result_set.filter(question_key='like_song')
+            like_results = session.result_set.filter(question_key="like_song")
             feedback = Trial(
                 html=HTML(
                     body=render_to_string(
@@ -215,8 +222,7 @@ class MusicalPreferences(Base):
         view = Trial(
             playback=playback,
             feedback_form=form,
-            title=_('Song %(round)s/%(total)s') % {
-                'round': round_number +  1, 'total': session.block.rounds},
+            title=_("Song %(round)s/%(total)s") % {"round": round_number + 1, "total": session.block.rounds},
             config={
                 "response_time": section.duration + 0.1,
             },
@@ -230,38 +236,9 @@ class MusicalPreferences(Base):
         else:
             return super().calculate_score(result, data)
 
-    def social_media_info(self, block, top_participant, known_songs, n_songs, top_all):
-        """⚠️ Deprecated. The social media info will eventually be present on the Experiment level, not the Block level."""
-        current_url = "{}/{}".format(settings.RELOAD_PARTICIPANT_TARGET, block.slug)
-
-        experiment = block.phase.experiment
-        social_media_config = experiment.social_media_config
-        tags = social_media_config.tags if social_media_config.tags else []
-        url = social_media_config.url or current_url
-
-        def format_songs(songs):
-            return ", ".join([song["name"] for song in songs])
-
-        return {
-            "apps": ["weibo", "share"],
-            "message": _(
-                "I explored musical preferences on %(url)s! My top 3 favorite songs: %(top_participant)s. I know %(known_songs)i out of %(n_songs)i songs. All players' top 3 songs: %(top_all)s"
-            )
-            % {
-                "url": current_url,
-                "top_participant": format_songs(top_participant),
-                "known_songs": known_songs,
-                "n_songs": n_songs,
-                "top_all": format_songs(top_all),
-            },
-            "url": url,
-            "hashtags": [*tags, "amsterdammusiclab", "citizenscience"],
-        }
-
     def get_final_view(self, session, top_participant, known_songs, n_songs, top_all):
         # finalize block
-        social_info = self.social_media_info(session.block, top_participant, known_songs, n_songs, top_all)
-        social_info["apps"] = ["weibo", "share"]
+        social_info = self.social_media_info(session)
         view = Final(
             session,
             title=_("End"),
@@ -281,5 +258,7 @@ class MusicalPreferences(Base):
         out_list = []
         for result in top_results.all():
             section = Section.objects.get(pk=result.section.id)
-            out_list.append({"artist": section.song.artist, "name": section.song.name})
+            out_list.append(
+                {"artist": section.artist_name(), "name": section.song_name()}
+            )
         return out_list

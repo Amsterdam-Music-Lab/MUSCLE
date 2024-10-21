@@ -33,7 +33,7 @@ interface HeadData {
     structuredData: Partial<StructuredData>;
 }
 
-interface DocumentHeadSlice {
+export interface DocumentHeadSlice {
     headData: HeadData;
     setHeadData: (headData: HeadData) => void;
     patchHeadData: (headData: Partial<HeadData>) => void;
@@ -109,11 +109,13 @@ const createSessionSlice: StateCreator<SessionSlice> = (set) => ({
 interface ThemeSlice {
     theme: ITheme | null;
     setTheme: (theme: ITheme) => void;
+    resetTheme: () => void;
 }
 
 const createThemeSlice: StateCreator<ThemeSlice> = (set) => ({
     theme: null,
     setTheme: (theme: ITheme) => set(() => ({ theme })),
+    resetTheme: () => set(() => ({ theme: null })),
 });
 
 export const useBoundStore = create<BlockSlice & DocumentHeadSlice & ErrorSlice & ParticipantSlice & SessionSlice & ThemeSlice>((...args) => ({

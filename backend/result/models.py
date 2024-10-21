@@ -37,16 +37,15 @@ class Result(models.Model):
     def load_json_data(self):
         """Get json_data as object"""
         return self.json_data if self.json_data else {}
-    
+
     def save_json_data(self, data):
-        """Merge data with json_data, overwriting duplicate keys.        
-        """
+        """Merge data with json_data, overwriting duplicate keys."""
         new_data = self.load_json_data()
         new_data.update(data)
         self.json_data = new_data
         self.save()
 
-    def export_admin(self):
+    def _export_admin(self):
         """Export data for admin"""
         return {
             'created_at': self.created_at.isoformat(),

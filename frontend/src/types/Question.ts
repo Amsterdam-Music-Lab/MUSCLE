@@ -26,4 +26,5 @@ export default interface Question {
     max_value?: number;
     max_length?: number;
     input_type?: 'number' | 'text';
+    result_id?: number;
 }

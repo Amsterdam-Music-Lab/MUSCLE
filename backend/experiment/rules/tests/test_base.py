@@ -1,6 +1,6 @@
 from django.test import TestCase
 from django.conf import settings
-from experiment.models import Experiment, Phase, Block, SocialMediaConfig
+from experiment.models import Experiment, Phase, Block, ExperimentTranslatedContent, SocialMediaConfig
 from session.models import Session
 from participant.models import Participant
 from section.models import Playlist
@@ -13,6 +13,9 @@ class BaseTest(TestCase):
         slug = "music-lab"
         experiment = Experiment.objects.create(
             slug=slug,
+        )
+        ExperimentTranslatedContent.objects.create(
+            experiment=experiment, language="en", name="Music Lab", description="Test music lab"
         )
         SocialMediaConfig.objects.create(
             experiment=experiment,
@@ -27,21 +30,21 @@ class BaseTest(TestCase):
             phase=phase,
         )
         base = Base()
-        social_media_info = base.social_media_info(
+        session = Session.objects.create(
             block=block,
-            score=100,
+            participant=Participant.objects.create(),
+            final_score=101,
         )
+        social_media_info = base.social_media_info(session)
 
         expected_url = f"{reload_participant_target}/{slug}"
 
-        self.assertEqual(social_media_info["apps"], ["facebook", "twitter"])
-        self.assertEqual(
-            social_media_info["message"], "I scored 100 points on https://app.amsterdammusiclab.nl/music-lab"
-        )
+        self.assertEqual(social_media_info["channels"], ["facebook", "twitter"])
+        self.assertEqual(social_media_info["content"], "I scored 101 points in Music Lab!")
         self.assertEqual(social_media_info["url"], expected_url)
         # Check for double slashes
         self.assertNotIn(social_media_info["url"], "//")
-        self.assertEqual(social_media_info["hashtags"], ["music-lab", "amsterdammusiclab", "citizenscience"])
+        self.assertEqual(social_media_info["tags"], ["music-lab"])
 
     def test_get_play_again_url(self):
         block = Block.objects.create(

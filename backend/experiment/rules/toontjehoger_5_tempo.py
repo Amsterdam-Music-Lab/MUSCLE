@@ -199,17 +199,20 @@ class ToontjeHoger5Tempo(Base):
             # Create feedback message
             # - Track names are always the same
             # - Artist could be different
-            if section_original.song.artist == section_changed.song.artist:
-                feedback += " Je hoorde {}, in beide fragmenten uitgevoerd door {}.".format(
-                    last_result.section.song.name, last_result.section.song.artist
+            if section_original.artist_name() == section_changed.artist_name():
+                feedback += (
+                    " Je hoorde {}, in beide fragmenten uitgevoerd door {}.".format(
+                        last_result.section.song_name(),
+                        last_result.section.arist_name(),
+                    )
                 )
             else:
                 section_a = section_original if last_result.expected_response == "A" else section_changed
                 section_b = section_changed if section_a.id == section_original.id else section_original
                 feedback += " Je hoorde {} uitgevoerd door A) {} en B) {}.".format(
-                    section_a.song.name,
-                    non_breaking_spaces(section_a.song.artist),
-                    non_breaking_spaces(section_b.song.artist),
+                    section_a.song_name(),
+                    non_breaking_spaces(section_a.artist_name()),
+                    non_breaking_spaces(section_b.artist_name()),
                 )
 
         # Return score view

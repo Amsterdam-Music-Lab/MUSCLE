@@ -30,15 +30,17 @@ class TestExperimentViews(TestCase):
             theme_config=theme_config,
         )
         ExperimentTranslatedContent.objects.create(
-            experiment=experiment, language="en", name="Test Series", description="Test Description"
+            experiment=experiment,
+            language="en",
+            name="Test Series",
+            description="Test Description",
+            social_media_message="Please play this Test experiment!",
         )
         experiment.social_media_config = create_social_media_config(experiment)
         cls.introductory_phase = Phase.objects.create(experiment=experiment, index=1)
         cls.block1 = Block.objects.create(slug="block1", phase=cls.introductory_phase)
         cls.intermediate_phase = Phase.objects.create(experiment=experiment, index=2)
-        cls.block2 = Block.objects.create(
-            slug="block2", theme_config=theme_config, phase=cls.intermediate_phase
-        )
+        cls.block2 = Block.objects.create(slug="block2", theme_config=theme_config, phase=cls.intermediate_phase)
         cls.block3 = Block.objects.create(slug="block3", phase=cls.intermediate_phase)
         cls.final_phase = Phase.objects.create(experiment=experiment, index=3)
         cls.block4 = Block.objects.create(slug="block4", phase=cls.final_phase)
@@ -66,7 +68,7 @@ class TestExperimentViews(TestCase):
         self.assertEqual(len(response_json["theme"]["header"]["score"]), 3)
         self.assertEqual(response_json.get("theme").get("footer").get("disclaimer"), "<p>Test Disclaimer</p>")
         self.assertEqual(response_json.get("socialMedia").get("url"), "https://www.example.com")
-        self.assertEqual(response_json.get("socialMedia").get("content"), "Test Content")
+        self.assertEqual(response_json.get("socialMedia").get("content"), "Please play this Test experiment!")
         self.assertEqual(response_json.get("socialMedia").get("tags"), ["aml", "toontjehoger"])
         self.assertEqual(response_json.get("socialMedia").get("channels"), ["facebook", "twitter", "weibo"])
 
@@ -314,7 +316,6 @@ def create_social_media_config(experiment: Experiment) -> SocialMediaConfig:
     return SocialMediaConfig.objects.create(
         experiment=experiment,
         url="https://www.example.com",
-        content="Test Content",
         channels=["facebook", "twitter", "weibo"],
         tags=["aml", "toontjehoger"],
     )

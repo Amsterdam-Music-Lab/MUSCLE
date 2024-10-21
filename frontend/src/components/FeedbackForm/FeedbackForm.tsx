@@ -1,9 +1,9 @@
-import { useState, useRef } from "react";
+import { useState } from "react";
 
 import Question from "../Question/Question";
 import Button from "../Button/Button";
 import IQuestion from "@/types/Question";
-import { OnResultType } from "@/hooks/useResultHandler";
+import { submitResultType } from "@/hooks/useResultHandler";
 
 interface FeedbackFormProps {
     formActive: boolean;
@@ -11,7 +11,7 @@ interface FeedbackFormProps {
     buttonLabel: string;
     skipLabel: string;
     isSkippable: boolean;
-    onResult: OnResultType
+    submitResult: submitResultType
     emphasizeTitle?: boolean;
 }
 
@@ -22,32 +22,18 @@ const FeedbackForm = ({
     buttonLabel,
     skipLabel,
     isSkippable,
-    onResult,
+    submitResult,
     emphasizeTitle = false,
 }: FeedbackFormProps) => {
-    const isSubmitted = useRef(false);
     const showSubmitButtons =
         form.filter((formElement) => formElement.submits).length === 0;
 
     const [formValid, setFormValid] = useState(false);
 
-    const onSubmit = () => {
-        // Prevent double submit
-        if (isSubmitted.current) {
-            return;
-        }
-        isSubmitted.current = true;
-
-        // Callback onResult with question data
-        onResult({
-            form,
-        });
-    };
-
     const onChange = (value: string | number | boolean, question_index: number) => {
         form[question_index].value = value;
         if (form[question_index].submits) {
-            onSubmit();
+            submitResult();
         }
         // for every non-skippable question, check that we have a value
         const validFormElements = form.filter(formElement => {
@@ -89,7 +75,7 @@ const FeedbackForm = ({
                             // skip button
                             <Button
                                 onClick={() => {
-                                    onSubmit();
+                                    submitResult();
                                 }}
                                 className={"btn-gray col-4 align-self-start"
                                 }
@@ -97,7 +83,7 @@ const FeedbackForm = ({
                             />)}
                         <Button
                             onClick={() => {
-                                onSubmit();
+                                submitResult();
                             }}
                             className={
                                 "submit col-4"
