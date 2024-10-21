@@ -12,7 +12,7 @@ from experiment.actions.utils import final_action_with_optional_button, render_f
 from experiment.actions.utils import get_average_difference_level_based
 from experiment.rules.util.staircasing import register_turnpoint
 from result.utils import prepare_result
-from section.models import Section
+from section.models import Playlist, Section
 from session.models import Session
 
 logger = logging.getLogger(__name__)
@@ -163,6 +163,28 @@ class HBat(Base):
     def get_trivia(self):
         return _("When people listen to music, they often perceive an underlying regular pulse, like the woodblock \
             in this task. This allows us to clap along with the music at a concert and dance together in synchrony.")
+
+    def validate_playlist(self, playlist: Playlist):
+        errors = []
+        errors += super().validate_playlist(playlist)
+        sections = playlist.section_set.all()
+        if sections.count() != 32:
+            errors.append("This block should have a playlist with 32 sections")
+        groups, tags = zip(*[(s.group, s.tag) for s in sections])
+        try:
+            group_numbers = sorted(list(set([int(g) for g in groups])))
+            if group_numbers != [*range(1, 17)]:
+                errors.append("Groups should be ascending integers from 1 to 16")
+        except:
+            errors.append("The groups should be integers")
+        try:
+            tag_numbers = sorted(list(set([int(t) for t in tags])))
+            if tag_numbers != [0, 1]:
+                errors.append("Tags should be 0 and 1")
+        except:
+            errors.append("Tags should be integers")
+
+        return errors
 
 
 def get_previous_condition(previous_result):
