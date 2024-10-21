@@ -179,10 +179,10 @@ class Session(models.Model):
             the last result object with one of the given question keys
         """
         results = self._filter_results(question_keys)
-        return results.order_by("-created_at").first()
+        return results.first()
 
     def _filter_results(self, question_keys) -> QuerySet:
         results = self.result_set
         if question_keys:
             results = results.filter(question_key__in=question_keys)
-        return results.order_by("-created_at").first()
+        return results.order_by("-created_at")

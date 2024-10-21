@@ -1,5 +1,6 @@
 import logging
 from decimal import Decimal, ROUND_HALF_UP
+import random
 
 from django.utils.translation import gettext_lazy as _
 
@@ -25,9 +26,9 @@ class HBat(Practice):
     ID = 'H_BAT'
     start_diff = 20
     n_practice_rounds_second_condition = 2
-    first_condition = 0
+    first_condition = "0"
     first_condition_i18n = _("SLOWER")
-    second_condition = 1
+    second_condition = "1"
     second_condition_i18n = _("FASTER")
 
     def next_round(self, session: Session) -> list:
@@ -64,8 +65,8 @@ class HBat(Practice):
                 ]
         else:
             # actual experiment
-            previous_result = session.get_previous_result()
-            trial_condition = self.get_condition(2)
+            previous_result = session.last_result()
+            trial_condition = self.get_condition(session)
             if not previous_result:
                 # first trial
                 action = self.next_trial_action(session, trial_condition, 1)
@@ -81,7 +82,7 @@ class HBat(Practice):
                     # delete result created before this check
                     session.result_set.order_by("-created_at").first().delete()
                     action = self.finalize_block(session)
-                return action
+            return action
 
     def next_trial_action(self, session, trial_condition, level=1, *kwargs):
         """
@@ -90,31 +91,31 @@ class HBat(Practice):
         level can be 1 (20 ms) or higher (10, 5, 2.5 ms...)
         """
         try:
-            print(level, trial_condition)
             section = session.playlist.get_section(
                 {"group": str(level), "tag": str(trial_condition)}
             )
         except Section.DoesNotExist:
             raise
-        expected_response = 'SLOWER' if trial_condition else 'FASTER'
-        key = 'longer_or_equal'
+        expected_response = (
+            self.first_condition if int(trial_condition) else self.second_condition
+        )
+        key = "slower_or_faster"
         question = ChoiceQuestion(
             key=key,
-            question=_(
-                "Is the rhythm going SLOWER or FASTER?"),
+            question=_("Is the rhythm going SLOWER or FASTER?"),
             choices={
-                'SLOWER': _('SLOWER'),
-                'FASTER': _('FASTER')
+                self.first_condition: self.first_condition_i18n,
+                self.second_condition: self.second_condition_i18n,
             },
             result_id=prepare_result(
                 key,
                 session,
                 section=section,
                 expected_response=expected_response,
-                scoring_rule='CORRECTNESS'
+                scoring_rule="CORRECTNESS",
             ),
-            view='BUTTON_ARRAY',
-            submits=True
+            view="BUTTON_ARRAY",
+            submits=True,
         )
         playback = Autoplay([section])
         form = Form([question])
@@ -149,25 +150,18 @@ class HBat(Practice):
             button_label='Ok'
         )
 
-    def response_explainer(self, correct, slower, button_label=_('Next fragment')):
-        if correct:
-            if slower:
-                instruction = _(
-                    'The rhythm went SLOWER. Your response was CORRECT.')
-            else:
-                instruction = _(
-                    'The rhythm went FASTER. Your response was CORRECT.')
+    def get_feedback_explainer(self, session: Session):
+        correct_response, is_correct = self.get_condition_and_correctness(session)
+        if is_correct:
+            instruction = _(
+                "The rhythm went %(correct_response)s. Your response was CORRECT."
+            ) % {"correct_response": correct_response}
         else:
-            if slower:
-                instruction = _(
-                    'The rhythm went SLOWER. Your response was INCORRECT.')
-            else:
-                instruction = _(
-                    'The rhythm went FASTER. Your response was INCORRECT.')
+            instruction = _(
+                "The rhythm went %(correct_response)s. Your response was INCORRECT."
+            ) % {"correct_response": correct_response}
         return Explainer(
-            instruction=instruction,
-            steps=[],
-            button_label=button_label
+            instruction=instruction, steps=[], button_label=_("Next fragment")
         )
 
     def finalize_block(self, session):
@@ -191,17 +185,8 @@ class HBat(Practice):
             in this task. This allows us to clap along with the music at a concert and dance together in synchrony.")
 
 
-def get_previous_condition(previous_result):
-    """ check if previous section was slower / in 2 (1) or faster / in 3 (0) """
-    return int(previous_result.section.tag)
-
-
-def get_previous_level(previous_result):
-    return int(previous_result.section.group)
-
-
 def staircasing(session, trial_action_callback):
-    trial_condition = trial_action_callback(2)
+    trial_condition = random.randint(2)
     previous_results = session.result_set.order_by('-created_at')
     last_result = previous_results.first()
     if not last_result:
@@ -219,7 +204,7 @@ def staircasing(session, trial_action_callback):
         # register decreasing difficulty
         session.save_json_data({'direction': 'decrease'})
         session.save()
-        level = get_previous_level(last_result) - 1  # decrease difficulty
+        level = int(last_result.group) - 1  # decrease difficulty
         action = trial_action_callback(
             session, trial_condition, level)
     else:
@@ -239,13 +224,13 @@ def staircasing(session, trial_action_callback):
             # register increasing difficulty
             session.save_json_data({'direction': 'increase'})
             session.save()
-            level = get_previous_level(last_result) + 1  # increase difficulty
+            level = int(last_result.group) + 1  # increase difficulty
             action = trial_action_callback(
                 session, trial_condition, level)
         else:
             # previous answer was correct
             # but we didn't yet get two correct in a row
-            level = get_previous_level(last_result)
+            level = int(last_result.group)
             action = trial_action_callback(
                 session, trial_condition, level)
     if not action:

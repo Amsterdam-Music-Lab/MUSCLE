@@ -94,14 +94,9 @@ class DurationDiscrimination(Practice):
 
     def get_feedback_explainer(self, session):
         button_label = _("Next fragment")
-        last_result = session.get_previous_result()
-        correct_response = (
-            self.first_condition_i18n
-            if last_result.expected_response == self.first_condition
-            else self.second_condition_i18n
-        )
-        preposition = _("than") if correct_response == self.first_condition else _("as")
-        if last_result.given_response == last_result.expected_response:
+        correct_response, is_correct = self.get_condition_and_correctness(session)
+        preposition = _("than") if is_correct else _("as")
+        if is_correct:
             instruction = _(
                 'The second interval was %(correct_response)s %(preposition)s the first interval. Your answer was CORRECT.') % {'correct_response': correct_response, 'preposition': preposition}
         else:

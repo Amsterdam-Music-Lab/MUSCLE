@@ -1,5 +1,6 @@
 import math
 import random
+from typing import Tuple
 
 from django.utils.translation import gettext_lazy as _
 
@@ -104,13 +105,8 @@ class Practice(Base):
         )
 
     def get_feedback_explainer(self, session: Session) -> Explainer:
-        last_result = session.get_previous_result()
-        correct_response = (
-            self.first_condition_i18n
-            if last_result.expected_response == self.first_condition
-            else self.second_condition_i18n
-        )
-        if last_result.expected_response == last_result.given_response:
+        correct_response, is_correct = self.get_condition_and_correctness(session)
+        if is_correct:
             instruction = _(
                 "The second tone was %(correct_response)s than the first tone. Your answer was CORRECT."
             ) % {"correct_response": correct_response}
@@ -122,6 +118,18 @@ class Practice(Base):
             instruction=instruction,
             steps=[],
             button_label=_('Ok')
+        )
+
+    def get_condition_and_correctness(self, session) -> Tuple[str, bool]:
+        last_result = session.last_result()
+        correct_response = (
+            self.first_condition_i18n
+            if last_result.expected_response == self.first_condition
+            else self.second_condition_i18n
+        )
+        return (
+            correct_response,
+            last_result.expected_response == last_result.given_response,
         )
 
     def get_condition(self, session) -> str:
