@@ -87,7 +87,6 @@ Contains a list of all the sessions that were logged by running this block.
         - The rest of the data varies per `Block` type and generally contains configuration data sent by the backend, that is used while running this `Block` of the experiment. During the `Session` this data can be changed by the backend to log information on the progress of this `Block` and/or the user's actions. This data can then be used to dynamically alter the course of the `Session`.
     *e.g., The user can only continue to a next stage, when certain training trials have been completed successfully.*
     - `final_score`: The final score calculated upon completion of the `Session`. Unfinished sessions will have a value of `0,0`
-    - `current_round`: Used by the backend to keep track of the progress of a `Session`. This is based on the number of trial results that have already been logged.
 
 ***
 #### participants.json

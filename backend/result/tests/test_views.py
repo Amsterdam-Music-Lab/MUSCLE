@@ -268,4 +268,4 @@ class ScoringTest(TestCase):
         client_request = self.song_sync_continue_request('no')
         response = self.client.post('/result/score/', client_request)
         assert response.status_code == 200
-        assert self.session.get_previous_result(['recognize']).score == -5
+        assert self.session.last_result(["recognize"]).score == -5

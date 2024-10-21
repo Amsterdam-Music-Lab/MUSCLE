@@ -100,7 +100,7 @@ class ThatsMySong(Hooked):
         else:
             # Create a score action.
             actions = [self.get_score(session, round_number)]
-            heard_before_offset = session.load_json_data().get("heard_before_offset")
+            heard_before_offset = session.json_data.get("heard_before_offset")
 
             # SongSync rounds. Skip questions until Round 5 (defined in question_offset).
             if round_number in range(1, self.question_offset):

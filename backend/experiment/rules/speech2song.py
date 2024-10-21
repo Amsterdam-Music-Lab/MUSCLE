@@ -68,7 +68,7 @@ class Speech2Song(Base):
             if question_trials:
                 session.save_json_data({'quesionnaire': True})
                 return [self.get_intro_explainer(), *question_trials]
-            elif session.load_json_data().get('questionnaire'):
+            elif session.json_data.get("questionnaire"):
                 explainer = Explainer(
                     instruction=_(
                         'Thank you for answering these questions about your background!'),
@@ -178,7 +178,7 @@ class Speech2Song(Base):
             # for the Test case, there is no previous section to look at
             section = session.playlist.section_set.get(group=group_id)
         else:
-            section = session.previous_section()
+            section = session.last_section()
         actions = [sound(section)] * self.n_presentations
         actions.append(self.speech_or_sound_question(session, section, is_speech))
         return actions
