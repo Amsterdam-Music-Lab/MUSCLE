@@ -99,7 +99,7 @@ class Session(models.Model):
         used_song_ids = self.get_used_song_ids()
         return list(set(song_ids) - set(used_song_ids))
 
-    def last_result(self, question_keys: list[str] = []) -> Result:
+    def last_result(self, question_keys: list[str] = []) -> Union[Result, None]:
         """
         Utility function to retrieve the last result, optionally filtering by relevant question keys.
         If more than one result needs to be processed, or for more advanced filtering,
@@ -113,6 +113,8 @@ class Session(models.Model):
             last relevant [Result](result_models.md#Result) object added to the database for this session
         """
         results = self.result_set
+        if not results.count():
+            return None
         if question_keys:
             results = results.filter(question_key__in=question_keys)
         return results.order_by("-created_at").first()
@@ -129,7 +131,7 @@ class Session(models.Model):
             Section tied to previous result, if that result has a score and section, else None
         """
         result = self.last_result(question_keys)
-        if result.section and result.score is not None:
+        if result and result.section and result.score is not None:
             return result.section
         return None
 
