@@ -10,6 +10,7 @@ from experiment.actions.playback import Autoplay
 from experiment.actions.form import ChoiceQuestion, Form
 
 from result.utils import prepare_result
+from section.models import Playlist
 
 from .base import Base
 
@@ -89,6 +90,50 @@ class RhythmDiscrimination(Base):
 
         return next_trial_actions(
             session, next_round_number)
+
+    def validate_playlist(self, playlist: Playlist):
+        errors = []
+        errors += super().validate_playlist(playlist)
+        sections = playlist.section_set.all()
+        if not sections.count():
+            return errors
+        if sections.count() != 720:
+            errors.append("The block needs a playlist with 720 sections")
+        tags, groups = zip(*[(s.tag, s.group) for s in sections])
+        try:
+            tag_numbers = sorted(list(set([int(t) for t in tags])))
+            if tag_numbers != [150, 160, 170, 180, 190, 200]:
+                errors.append("Tags should have values 150, 160, 170, 180, 190, 200")
+        except:
+            errors.append("The sections should have integer tags")
+        try:
+            group_numbers = sorted(list(set([int(g) for g in groups])))
+            if group_numbers != [0, 1]:
+                errors.append("Groups should have values 0, 1")
+        except:
+            errors.append("The sections should have integer groups")
+
+        def pattern_error(pattern: str) -> str:
+            return f"There should be 12 sections with pattern {pattern}"
+
+        metric_standard = STIMULI["metric"]["standard"]
+        for m in metric_standard:
+            if sections.filter(song__name__startswith=m).count() != 12:
+                errors.append(pattern_error(m))
+        metric_deviant = STIMULI["metric"]["deviant"]
+        for m in metric_deviant:
+            if sections.filter(song__name__startswith=m).count() != 12:
+                errors.append(pattern_error(m))
+        nonmetric_standard = STIMULI["nonmetric"]["standard"]
+        for n in nonmetric_standard:
+            if sections.filter(song__name__startswith=n).count() != 12:
+                errors.append(pattern_error(n))
+        nonmetric_deviant = STIMULI["nonmetric"]["deviant"]
+        for n in nonmetric_deviant:
+            if sections.filter(song__name__startswith=n).count() != 12:
+                errors.append(pattern_error(n))
+
+        return errors
 
 
 def next_trial_actions(session, round_number):

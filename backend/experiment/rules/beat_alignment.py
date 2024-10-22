@@ -9,6 +9,7 @@ from experiment.actions.form import ChoiceQuestion, Form
 from experiment.actions.playback import Autoplay
 from experiment.actions.utils import final_action_with_optional_button, render_feedback_trivia
 from result.utils import prepare_result
+from section.models import Playlist
 
 logger = logging.getLogger(__name__)
 
@@ -139,3 +140,34 @@ class BeatAlignment(Base):
             }
         )
         return view
+
+    def validate_playlist(self, playlist: Playlist):
+        errors = []
+        errors += super().validate_playlist(playlist)
+        sections = playlist.section_set.all()
+        n_examples = sections.filter(song__name__startswith="ex").count()
+        if n_examples != 3:
+            errors.append(
+                "There should be three example files, with associated song objects whose names start with `ex`"
+            )
+        trial_stimuli = sections.exclude(song__name__startswith="ex")
+        if trial_stimuli.count() != 17:
+            errors.append("There should be 17 files to be played during the experiment")
+        song_names = trial_stimuli.values_list("song__name", flat=True)
+        try:
+            groups, tags = zip(*[s.split("_") for s in song_names])
+            try:
+                [int(g) for g in groups]
+            except:
+                errors.append("The first part of the song name should be an integer")
+            if len(list(set(groups))) != 9:
+                errors.append("There should be 9 different audio files")
+            if sorted(list(set(tags))) != ["on", "phase", "tempo"]:
+                errors.append(
+                    "The sections should have song names which contain condition on, phase or tempo"
+                )
+        except:
+            errors.append(
+                "The sections should have song names with an integer, followed by a condition"
+            )
+        return errors
