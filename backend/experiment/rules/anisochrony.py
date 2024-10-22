@@ -78,7 +78,7 @@ class Anisochrony(DurationDiscrimination):
         return render_feedback_trivia(feedback, trivia)
 
     def get_difficulty(self, session, multiplier=1.0):
-        if not session.load_json_data().get("practice_done"):
+        if not session.json_data.get("practice_done"):
             return self.practice_diff
         else:
             return super().get_difficulty(session, multiplier)

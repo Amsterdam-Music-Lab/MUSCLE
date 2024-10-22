@@ -173,6 +173,12 @@ class HBat(Practice):
         return _("When people listen to music, they often perceive an underlying regular pulse, like the woodblock \
             in this task. This allows us to clap along with the music at a concert and dance together in synchrony.")
 
+    def practice_successful(self, session: Session) -> bool:
+        penultimate_score = session.result_set.order_by("-created_at")[1].score
+        if session.last_score() > 0 and penultimate_score > 0:
+            return True
+        return False
+
 
 def staircasing(session, trial_action_callback):
     previous_results = session.result_set.order_by('-created_at')

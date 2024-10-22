@@ -172,6 +172,12 @@ class DurationDiscrimination(Practice):
             for shorter durations, people can hear even smaller differences than for longer durations.")
         return render_feedback_trivia(feedback, trivia)
 
+    def practice_successful(self, session: Session) -> bool:
+        penultimate_score = session.result_set.order_by("-created_at")[1].score
+        if session.last_score() > 0 and penultimate_score > 0:
+            return True
+        return False
+
     def staircasing_blocks(self, session):
         """Calculate staircasing procedure in blocks of 5 trials with one catch trial
 
@@ -249,7 +255,10 @@ class DurationDiscrimination(Practice):
             an integer indicating the inter-onset-interval in milliseconds
         """
         difficulty = session.load_json_data().get("difficulty")
-        multiplier = session.last_result().json_data.get("multiplier", 1.0)
+        last_result = session.last_result()
+        if not last_result:
+            return difficulty
+        multiplier = last_result.json_data.get("multiplier", 1.0)
         if not difficulty:
             difficulty = self.start_diff
             session.save_json_data({"difficulty": self.start_diff})
@@ -289,7 +298,7 @@ class DurationDiscrimination(Practice):
 
     def get_condition(self, session: Session) -> str:
         if not session.json_data.get("practice_done"):
-            return super().get_condition(self)
+            return super().get_condition(session)
         else:
             return self.get_trial_condition(session)
 

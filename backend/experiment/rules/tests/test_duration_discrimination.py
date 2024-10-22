@@ -60,16 +60,20 @@ class DDITest(TestCase):
         result.score = score
         result.save()
 
-    def test_trial_action(self):
+    def test_get_next_trial(self):
         difference = 200000
         catch_section = Section.objects.get(playlist=self.playlist.id, song__name=0)
         diff_section = Section.objects.get(playlist=self.playlist.id, song__name=difference)
-        catch_trial = self.rules.next_trial_action(self.session, 1, difference)
+        self.session.save_json_data(
+            {"practice_done": True, "difficulty": 200000, "current_trials": ["equal"]}
+        )
+        catch_trial = self.rules.get_next_trial(self.session)
         assert catch_trial
         assert catch_trial.feedback_form
         section = catch_trial.playback.sections[0]
         assert section['id'] == catch_section.id
-        regular_trial = self.rules.next_trial_action(self.session, 0, difference)
+        self.session.save_json_data({"current_trials": ["longer"]})
+        regular_trial = self.rules.get_next_trial(self.session)
         assert regular_trial
         assert regular_trial.feedback_form
         section = regular_trial.playback.sections[0]
@@ -96,12 +100,12 @@ class AnisochronyTest(TestCase):
         difficulty = 1001
         catch_section = Section.objects.get(playlist=self.playlist.id, song__name=0)
         diff_section = Section.objects.get(playlist=self.playlist.id, song__name=difficulty)
-        catch_trial = self.rules.next_trial_action(self.session, 1, difficulty)
+        catch_trial = self.rules.get_next_trial(self.session)
         assert catch_trial
         assert catch_trial.feedback_form
         section = catch_trial.playback.sections[0]
         assert section['id'] == catch_section.id
-        regular_trial = self.rules.next_trial_action(self.session, 0, difficulty)
+        regular_trial = self.rules.get_next_trial(self.session)
         assert regular_trial
         assert regular_trial.feedback_form
         section = regular_trial.playback.sections[0]
