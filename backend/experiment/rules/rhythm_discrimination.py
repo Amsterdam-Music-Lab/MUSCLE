@@ -112,7 +112,10 @@ class RhythmDiscrimination(Base):
                 errors.append("Groups should have values 0, 1")
         except:
             errors.append("The sections should have integer groups")
-        pattern_error = lambda x: f"There should be 12 sections with pattern {m}"
+
+        def pattern_error(pattern: str) -> str:
+            return f"There should be 12 sections with pattern {pattern}"
+
         metric_standard = STIMULI["metric"]["standard"]
         for m in metric_standard:
             if sections.filter(song__name__startswith=m).count() != 12:
