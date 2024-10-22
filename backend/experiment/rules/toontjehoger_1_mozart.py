@@ -122,7 +122,7 @@ class ToontjeHoger1Mozart(Base):
         section = last_result.section
         feedback = (
             "Je hoorde {} van {}.".format(
-                section.song.name, non_breaking_spaces(section.song.artist)
+                section.song.name, non_breaking_spaces(section.artist_name())
             )
             if section
             else ""

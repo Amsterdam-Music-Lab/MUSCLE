@@ -24,7 +24,7 @@ class TestMatchingPairsVariants(TestCase):
         )
         self.playlist = Playlist.objects.create(name='TestMatchingPairs')
         self.playlist.csv = section_csv
-        self.playlist.update_sections()
+        self.playlist._update_sections()
         self.participant = Participant.objects.create()
 
     def test_lite_version(self):
@@ -81,7 +81,7 @@ class TestMatchingPairsVariants(TestCase):
         )
         playlist = Playlist.objects.create(name='TestVisualMatchingPairs')
         playlist.csv = section_csv
-        playlist.update_sections()
+        playlist._update_sections()
 
         block = Block.objects.create(rules='MATCHING_PAIRS_LITE', slug='vmpairs', rounds=3)
 

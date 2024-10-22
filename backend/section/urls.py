@@ -6,6 +6,5 @@ app_name = 'section'
 
 urlpatterns = [
     # Section
-    path('<int:section_id>/<int:code>/',
-        get_section, name='section'),
+    path("<int:section_id>/", get_section, name="section"),
 ]

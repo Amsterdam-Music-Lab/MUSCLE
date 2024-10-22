@@ -36,14 +36,15 @@ class Categorization(Base):
         )
 
     def next_round(self, session: Session):
-        if session.get_rounds_passed() == 0:
+        json_data = session.load_json_data()
+
+        if json_data.get("started"):
             actions = [self.get_intro_explainer()]
             questions = self.get_open_questions(session)
             if questions:
                 actions.extend(questions)
+            session.save_json_data({"started": True})
             return actions
-
-        json_data = session.load_json_data()
 
         # Plan experiment on the first call to next_round
         if not json_data.get("phase"):
@@ -465,7 +466,7 @@ class Categorization(Base):
         # Retrieve next section in the sequence
         rounds_passed = session.get_rounds_passed() - int(json_data["training_rounds"])
         sequence = json_data["sequence"]
-        this_section = sequence[get_rounds_passed]
+        this_section = sequence[rounds_passed]
         section = session.playlist.get_section(song_ids=[this_section])
         # Determine expected response
         if section.tag == "1A" or section.tag == "2A":
@@ -492,7 +493,7 @@ class Categorization(Base):
     def get_title(self, session):
         json_data = session.load_json_data()
         rounds_passed = session.get_rounds_passed() - int(json_data["training_rounds"]) + 1
-        return f"Round {get_rounds_passed} / {len(json_data['sequence'])}"
+        return f"Round {rounds_passed} / {len(json_data['sequence'])}"
 
 
 repeat_training_or_quit = ChoiceQuestion(

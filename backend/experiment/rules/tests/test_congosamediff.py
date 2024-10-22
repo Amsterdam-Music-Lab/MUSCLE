@@ -29,7 +29,7 @@ class CongoSameDiffTest(TestCase):
         )
         self.playlist = Playlist.objects.create(name='CongoSameDiff')
         self.playlist.csv = self.section_csv
-        self.playlist.update_sections()
+        self.playlist._update_sections()
         self.participant = Participant.objects.create()
         self.block = Block.objects.create(
             slug="congosamediff", rules="CONGOSAMEDIFF", rounds=4

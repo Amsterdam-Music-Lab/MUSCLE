@@ -21,9 +21,9 @@ Each file contains a list of objects, which are instances of a specific Django [
 
 To link these objects together we use a field with a [Foreign key](https://docs.djangoproject.com/en/4.2/topics/db/models/#relationships) which relates to the [Primary Key](https://docs.djangoproject.com/en/4.2/ref/models/fields/#django.db.models.Field.primary_key) of the linked object.
 
-The `Result` model is used twice, for different purposes: 
-- In `profiles.json`, which contains the profile (or `Participant`) questions. Recognizable by:  
-    - A foreign key value on the `Participant` field.  
+The `Result` model is used twice, for different purposes:
+- In `profiles.json`, which contains the profile (or `Participant`) questions. Recognizable by:
+    - A foreign key value on the `Participant` field.
     - A `null` value on the `Session` field.
 - In `results.json`, which contains the trial (or `Session`) results. Recognizable by:
     - A foreign key value on the `Session` field.
@@ -32,7 +32,7 @@ The `Result` model is used twice, for different purposes:
 ***
 #### sessions.json
 
-Contains a list of all the sessions that were logged by running this block.  
+Contains a list of all the sessions that were logged by running this block.
 ###### Example of an object of the `Session` model:
 
 ```
@@ -52,8 +52,8 @@ Contains a list of all the sessions that were logged by running this block.
                     "A": "___",
                     "B": "___"
                 },
-                "sequence": [4, 57, 51, 57, 12, 40, 35, 51, 57,  57, 35, 40, 33, 33, 37, 51, 13, 37, 29, 44, 37, 29, 4, 51, 57, 45, 45, 
-                            44, 12, 29, 57, 51, 35, 33, 51, 40, 44, 57, 4, 51, 37, 57, 57, 33, 40, 13, 13, 51, 29, 44, 57, 12, 51, 40, 
+                "sequence": [4, 57, 51, 57, 12, 40, 35, 51, 57,  57, 35, 40, 33, 33, 37, 51, 13, 37, 29, 44, 37, 29, 4, 51, 57, 45, 45,
+                            44, 12, 29, 57, 51, 35, 33, 51, 40, 44, 57, 4, 51, 37, 57, 57, 33, 40, 13, 13, 51, 29, 44, 57, 12, 51, 40,
                             12, 51, 37, 57, 33, 45, 12, 35, 45, 45, 44, 51, 13, 51, 51, 51, 35, 51, 4, 57, 57, 4, 13, 29, 57, 57
                 ],
                 "stimuli_a": "ORANGE",
@@ -80,11 +80,11 @@ Contains a list of all the sessions that were logged by running this block.
     - `Participant`: Foreign key `fk` relates to the `Participant` object. (`participant.pk`)
     - `playlist`: Foreign key `fk` relates to the `playlist` object. (`playlist.pk`)
     - `started_at`: Timestamp logged on creation of this `Session` object. (Set in the timezone of the server)
-    - `finished_at`: Timestamp logged on finishing the `Session`. (Set in the timezone of the server)  
+    - `finished_at`: Timestamp logged on finishing the `Session`. (Set in the timezone of the server)
     This will be set to `null` if the `Participant` hasn't completed the `Session`.
-    - `json_data`: 
-        - `experiment`: Slug of the experiment that this block is a part of.  
-        - The rest of the data varies per `Block` type and generally contains configuration data sent by the backend, that is used while running this `Block` of the experiment. During the `Session` this data can be changed by the backend to log information on the progress of this `Block` and/or the user's actions. This data can then be used to dynamically alter the course of the `Session`.  
+    - `json_data`:
+        - `experiment`: Slug of the experiment that this block is a part of.
+        - The rest of the data varies per `Block` type and generally contains configuration data sent by the backend, that is used while running this `Block` of the experiment. During the `Session` this data can be changed by the backend to log information on the progress of this `Block` and/or the user's actions. This data can then be used to dynamically alter the course of the `Session`.
     *e.g., The user can only continue to a next stage, when certain training trials have been completed successfully.*
     - `final_score`: The final score calculated upon completion of the `Session`. Unfinished sessions will have a value of `0,0`
     - `current_round`: Used by the backend to keep track of the progress of a `Session`. This is based on the number of trial results that have already been logged.
@@ -92,7 +92,7 @@ Contains a list of all the sessions that were logged by running this block.
 ***
 #### participants.json
 
-Contains a list of all the participants that started a `Session` with this block.  
+Contains a list of all the participants that started a `Session` with this block.
 ###### Example of an object of the `Participant` model:
 ```
     {
@@ -113,13 +113,13 @@ Contains a list of all the participants that started a `Session` with this block
     - `unique_hash`: The unique hash code, for this `Participant`.
     - `country_code`: The participant's country code derived from the ip address.
     - `access_info`: The participant's browser and operating system info, as provided by the [`User-Agent`](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/User-Agent) request header, which is logged upon creation of this object.
-    - `participant_id_url`: An optional custom identifier for this `Participant`, which is set through the URL of the experiment:  
-    *e.g., `localhost:3000/my_experiment?participant_id=<custom_id>`* 
+    - `participant_id_url`: An optional custom identifier for this `Participant`, which is set through the URL of the experiment:
+    *e.g., `localhost:3000/my_experiment?participant_id=<custom_id>`*
 
 ***
 #### profiles.json
 
-A list of `Result` objects containing the participant's anwers to the profile questions in this `Session`.  
+A list of `Result` objects containing the participant's anwers to the profile questions in this `Session`.
 ###### Example of an object of the `Result` model:
 ```
     {
@@ -171,7 +171,7 @@ A list of `Result` objects containing the participant's anwers to the profile qu
 - `pk`: Primary Key of this `Result` object.
 - `fields`:
     - `Session`: Not used for profile (`Participant`) results.
-    - `participant`: Foreign key `fk` relates to the `Participant` object. (`participant.pk`) 
+    - `participant`: Foreign key `fk` relates to the `Participant` object. (`participant.pk`)
     - `Section`: Not used for profile (`Participant`) results.
     - `created_at`: Timestamp logged on creation of this `Result` object. (Set in the timezone of the server)
     - `question_key`: Unique identifier for this question.
@@ -181,13 +181,13 @@ A list of `Result` objects containing the participant's anwers to the profile qu
     - `score`: Not used for profile (`Participant`) results.
     - `score`: The scoring rule used to calculate the score for this `Result`.
     - `json_data`:
-        - `decision_time`: Logged time in seconds. Measured from presenting the question until the participant's response.  
+        - `decision_time`: Logged time in seconds. Measured from presenting the question until the participant's response.
         - The rest of the data varies per `Question` type and generally contains configuration data sent by the backend to render a `Question` on the frontend.
 
 ***
 #### results.json
 
-A list of session `Result` objects containing the participant's responses to the trials in this `Session`.  
+A list of session `Result` objects containing the participant's responses to the trials in this `Session`.
 ###### Example of an object of the `Result` model:
 
 ```
@@ -244,24 +244,24 @@ A list of session `Result` objects containing the participant's responses to the
 - `model`: Name of the django app followed by the name of the model (or database table).
 - `pk`: Primary Key of this `Result` object.
 - `fields`:
-    - `Session`: Foreign key `fk` relates to the `Session` object. (`session.pk`) 
+    - `Session`: Foreign key `fk` relates to the `Session` object. (`session.pk`)
     - `Participant`: Not used for trial `Session` results.
-    - `section`: Foreign key `fk` relates to the `Section` object used for this trial. (`Section.pk`) 
+    - `section`: Foreign key `fk` relates to the `Section` object used for this trial. (`Section.pk`)
     - `created_at`: Timestamp logged on creation of this `Result` object.
-    - `question_key`: Unique identifier for the `Question` type in this trial. 
+    - `question_key`: Unique identifier for the `Question` type in this trial.
     - `expected_response`: The expected/correct response to this trial.
     - `given_response`: Participant's response to this trial.
     - `comment`: Optional comment, sent by the backend.
     - `score`: The participant's score for this trial.
     - `scoring_rule`: The scoring rule used to calculate the score for this trial `Result`.
     - `json_data`:
-        - `decision_time`: Logged response time in seconds. The start time can either be set the moment the trial has been loaded, or set after the sound has stopped playing. In this example `listen_first` is set in the `config` of the widget, so the time is measured from the moment the sound stopped playing until the response of the `Participant`.  
+        - `decision_time`: Logged response time in seconds. The start time can either be set the moment the trial has been loaded, or set after the sound has stopped playing. In this example `listen_first` is set in the `config` of the widget, so the time is measured from the moment the sound stopped playing until the response of the `Participant`.
         - The rest of the data varies per trial and widget type and generally contains configuration data sent by the backend to render a trial on the frontend.
 
 ***
 #### sections.json
 
-A list of `Section` objects used in the trials of this `Session`.  
+A list of `Section` objects used in the trials of this `Session`.
 ###### Example of an object of the `Section` model:
 ```
   {
@@ -274,7 +274,6 @@ A list of `Section` objects used in the trials of this `Session`.
             "duration": 1.25,
             "filename": "CAT/C3FcP1A.wav",
             "play_count": 31,
-            "code": 58066,
             "tag": "1A",
             "group": "CROSSED"
         }
@@ -284,25 +283,24 @@ A list of `Section` objects used in the trials of this `Session`.
 - `model`: Name of the django app followed by the name of the model (or database table).
 - `pk`: Primary Key of this `Section` object.
 - `fields`:
-    - `playlist`: Foreign key `fk` relates to the `Playlist` object used for this trial. (`playlist.pk`)  
+    - `playlist`: Foreign key `fk` relates to the `Playlist` object used for this trial. (`playlist.pk`)
     The `Playlist` object is not included in this export, as it's merely used to create a collection of sections and in itself doesn't provide additional data.
-    -  `song`: Foreign key `fk` relates to the `Song` object of this `Section`. (`song.pk`)  
+    -  `song`: Foreign key `fk` relates to the `Song` object of this `Section`. (`song.pk`)
     A `Song` object for a section is only created if an artist or name is provided upon creation of the `Section` object.
     - `start_time`: The offset time in seconds from the beginning of the audio file at which the player starts to play this `Section`.
-    - `duration`: The duration in seconds of this section.  
+    - `duration`: The duration in seconds of this section.
     The duration of a `Section` is calculated when a playlist is compiled with the [compileplaylist](https://github.com/Amsterdam-Music-Lab/MUSCLE/wiki/04.-Creating-playlists#manually-uploading-sound-files) command, or when the `Section` is uploaded via the [admin interface](https://github.com/Amsterdam-Music-Lab/MUSCLE/wiki/04.-Creating-playlists#uploading-sound-files-through-the-admin-interface).
     - `filename`: The actual folder and filename, relative to the `backend/upload` folder, where the audio file for this `Section` is stored.
     - `play_count`: How many times this `Section` has been played.
-    - `code`: A unique code for this `Section`.
-    - `tag`: A tag that can be used by the backend to identify sections for different purposes.  
+    - `tag`: A tag that can be used by the backend to identify sections for different purposes.
     *e.g., This section is the right or wrong response to a certain trial.*
-    - `group`: A tag that can be used by the backend to group `Section`s for different purposes.  
+    - `group`: A tag that can be used by the backend to group `Section`s for different purposes.
     *e.g., This `Section` belongs to the group of deprecated sections.*
 
 ***
 #### songs.json
 
-A list of `Song` objects that belong to the sections of the trials used for this `Session`.  
+A list of `Song` objects that belong to the sections of the trials used for this `Session`.
 ###### Example of an object of the `Section` model:
 ```
 {
@@ -340,10 +338,10 @@ You will be presented with a screen that lets you choose the fields that you wan
     - [Click here](#resultsjson) for a description of the raw trial `Result` data.
 3. Select options to adjust the format of the exported CSV file.
 4. Select to include the session's [`json_data`](#sessionsjson) field.
-5. Select to convert the session's [`json_data`](#sessionsjson) field to seperate columns. The data in this field will vary in size per block type. Therefore converting this data to columns can in some situations cause the CSV file to become unreadable. 
+5. Select to convert the session's [`json_data`](#sessionsjson) field to seperate columns. The data in this field will vary in size per block type. Therefore converting this data to columns can in some situations cause the CSV file to become unreadable.
 6. Select to include the trial result's [`json_data`](#resultsjson) field.
 7. Select to convert the trial result's [`json_data`](#resultsjson) field to seperate columns. The data in this field will vary in size per trial type. Therefore converting this data to columns can in some situations cause the CSV file to become unreadable.
-8. Choose a format for the CSV file: 
+8. Choose a format for the CSV file:
     - Long format: (*default*)
         - Each result is a row.
     - Wide format:

@@ -31,7 +31,7 @@ class BeatAlignmentRuleTest(TestCase):
 
         playlist = Playlist.objects.create(name='TestBAT')
         playlist.csv = csv
-        playlist.update_sections()
+        playlist._update_sections()
         # rules is BeatAlignment.ID in beat_alignment.py
         cls.block = Block.objects.create(
             rules='BEAT_ALIGNMENT', slug='ba', rounds=13)

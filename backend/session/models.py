@@ -51,7 +51,7 @@ class Session(models.Model):
         """
         section = self.previous_section()
         if section:
-            return "{} - {}".format(section.song.artist, section.song.name)
+            return "{} - {}".format(section.artist_name(), section.song_name())
         return ""
 
     def previous_section(self):
@@ -74,7 +74,7 @@ class Session(models.Model):
         """Get json data as object"""
         return self.json_data if self.json_data else {}
 
-    def export_admin(self):
+    def _export_admin(self):
         """Export data for admin"""
         return {
             "session_id": self.id,
@@ -82,7 +82,7 @@ class Session(models.Model):
             "started_at": self.started_at.isoformat(),
             "finished_at": self.finished_at.isoformat() if self.finished_at else None,
             "json_data": self.load_json_data(),
-            "results": [result.export_admin() for result in self.result_set.all()],
+            "results": [result._export_admin() for result in self.result_set.all()],
         }
 
     def export_results(self):

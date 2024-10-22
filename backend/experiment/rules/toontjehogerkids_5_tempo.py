@@ -80,7 +80,8 @@ class ToontjeHogerKids5Tempo(ToontjeHoger5Tempo):
             # Create feedback message
             # - Track names are always the same
             feedback += " Je hoorde '{}' van {}.".format(
-                last_result.section.song.name, last_result.section.song.artist)
+                last_result.section.song_name(), last_result.section.artist_name()
+            )
 
         # Return score view
         config = {'show_total_score': True}
