@@ -108,7 +108,7 @@ class DurationDiscrimination(Base):
         try:
             section = session.playlist.section_set.get(song__name=difference)
         except Section.DoesNotExist:
-            raise
+            return None
         expected_response = 'EQUAL' if difference == 0 else 'LONGER'
         question_text = self.get_question_text()
         key = 'longer_or_equal'

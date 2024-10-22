@@ -69,7 +69,7 @@ class HBat(Base):
             section = session.playlist.section_set.filter(
                 group=str(level)).get(tag=str(trial_condition))
         except Section.DoesNotExist:
-            raise
+            return None
         expected_response = 'SLOWER' if trial_condition else 'FASTER'
         key = 'longer_or_equal'
         question = ChoiceQuestion(
