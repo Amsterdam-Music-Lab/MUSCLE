@@ -266,7 +266,7 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, NestedModelAdmin):
         "active",
         "theme_config",
     ]
-    inline_actions = ["experimenter_dashboard"]
+    inline_actions = ["experimenter_dashboard", "duplicate"]
     form = ExperimentForm
     inlines = [
         ExperimentTranslatedContentInline,
@@ -281,6 +281,9 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, NestedModelAdmin):
         content = obj.get_fallback_content()
 
         return content.name if content else "No name"
+    
+    def redirect_to_overview(self):
+        return redirect(reverse("admin:experiment_experiment_changelist"))
 
     def slug_link(self, obj):
         dev_mode = settings.DEBUG is True
@@ -291,6 +294,76 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, NestedModelAdmin):
         )
 
     slug_link.short_description = "Slug"
+
+    def duplicate(self, request, obj, parent_obj=None):
+        """Duplicate an experiment"""
+
+        if "_duplicate" in request.POST:
+            # Get slug from the form
+            slug_extention = request.POST.get("slug-extention")
+            if slug_extention == "":
+                slug_extention = "copy"
+            # Strip slug from non-alphanumeric characters
+            clean_slug = '-'.join(char for char in slug_extention if char.isalnum())
+
+            exp_contents = obj.translated_content.all()
+            exp_phases = obj.phases.all()
+
+            # Duplicate Experiment object
+            exp_copy = obj
+            exp_copy.pk = None
+            exp_copy._state.adding = True
+            exp_copy.slug = obj.slug + clean_slug
+            exp_copy.save()
+
+            # Duplicate experiment translated content objects
+            for content in exp_contents:
+                exp_content_copy = content
+                exp_content_copy.pk = None
+                exp_content_copy._state.adding = True
+                exp_content_copy.experiment = exp_copy
+                exp_content_copy.save()
+
+            # Duplicate phases
+            for phase in exp_phases:
+                these_blocks = Block.objects.filter(phase=phase)
+
+                phase_copy = phase
+                phase_copy.pk = None
+                phase_copy._state.adding = True
+                phase_copy.save()
+
+                # Duplicate blocks in this phase
+                for block in these_blocks:
+                    block_contents = block.translated_contents.all()
+
+                    block_copy = block
+                    block_copy.pk = None
+                    block_copy._state.adding = True
+                    block_copy.slug = block.slug + clean_slug
+                    block_copy.phase = phase_copy
+                    block_copy.save()
+
+                    # Duplicate Block translated content objects
+                    for content in block_contents:          
+                        block_content_copy = content
+                        block_content_copy.pk = None
+                        block_content_copy._state.adding = True
+                        block_content_copy.block = block_copy
+                        block_content_copy.save()
+            return
+        
+        # Go back to experiment overview
+        if "_back" in request.POST:
+            return self.redirect_to_overview()
+        
+        # Show experiment duplicate form
+        else:
+            return render(
+                request,
+                "duplicate-experiment.html",
+                context={"exp": obj},
+        )
 
     def experimenter_dashboard(self, request, obj, parent_obj=None):
         """Open researchers dashboard for an experiment"""
