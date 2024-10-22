@@ -21,7 +21,9 @@ MAX_TURNPOINTS = 6
 
 
 class HBat(Practice):
-    """ section.group (and possibly section.tag) must be convertable to int"""
+    """Harvard Beat Assessment Test (H-BAT)
+    Fujii & Schlaug, 2013
+    """
 
     ID = 'H_BAT'
     start_diff = 20
@@ -32,70 +34,57 @@ class HBat(Practice):
     second_condition_i18n = _("FASTER")
 
     def next_round(self, session: Session) -> list:
-        round_number = session.get_rounds_passed()
         practice_finished = session.load_json_data().get("practice_finished")
         if not practice_finished:
-            difficulty = 1
-            condition = self.get_condition(session)
-            if round_number == 0:
-                return [
-                    self.get_intro_explainer(),
-                    self.next_trial_action(session, condition, difficulty),
-                ]
-            if round_number % self.n_practice_rounds == 0:
-                if self.practice_successful(session):
-                    feedback_explainer = self.get_feedback_explainer(session)
-                    session.save_json_data({"practice_finished": True})
-                    session.result_set.all().delete()
-                    return [
-                        feedback_explainer,
-                        self.get_continuation_explainer(),
-                    ]
-                else:
-                    return [
-                        self.get_feedback_explainer(session),
-                        self.get_restart_explainer(),
-                        self.get_intro_explainer(),
-                        self.next_trial_action(session, condition, difficulty),
-                    ]
-            else:
-                return [
-                    self.get_feedback_explainer(session),
-                    self.next_trial_action(session, condition, difficulty),
-                ]
+            return self.next_practice_round(session)
         else:
             # actual experiment
-            previous_result = session.last_result()
-            trial_condition = self.get_condition(session)
-            if not previous_result:
-                # first trial
-                action = self.next_trial_action(session, trial_condition, 1)
-                if not action:
-                    # participant answered first trial incorrectly (outlier)
-                    action = self.finalize_block(session)
-            else:
-                action = staircasing(session, self.next_trial_action)
-                if not action:
-                    # action is None if the audio file doesn't exist
-                    action = self.finalize_block(session)
-                if session.final_score == MAX_TURNPOINTS + 1:
-                    # delete result created before this check
-                    session.result_set.order_by("-created_at").first().delete()
-                    action = self.finalize_block(session)
+            action = staircasing(session, self.get_next_trial)
+            if not action:
+                # action is None if the audio file doesn't exist
+                action = self.finalize_block(session)
+            if session.final_score == MAX_TURNPOINTS + 1:
+                # delete result created before this check
+                session.result_set.order_by("-created_at").first().delete()
+                action = self.finalize_block(session)
             return action
 
-    def next_trial_action(self, session, trial_condition, level=1, *kwargs):
+    def get_condition(self, session) -> int:
+        """get the condition of the trial, which depends either on json data (practice),
+        or is random choice between faster / slower
+        """
+        if not session.json_data.get("practice_finished"):
+            return int(super().get_condition(session))
+        else:
+            return random.choice([0, 1])
+
+    def get_difficulty(self, session: Session) -> int:
+        last_result = session.last_result()
+        if not last_result:
+            return 1
+        else:
+            current_difficulty = last_result.section.group
+            if last_result.json_data.get("difficulty") == "decrease":
+                return current_difficulty - 1
+            elif last_result.json_data.get("difficulty") == "increase":
+                return current_difficulty + 1
+            return current_difficulty
+
+    def get_next_trial(self, session: Session, *kwargs) -> Trial:
         """
         Get the next actions for the block
         trial_condition is either 1 or 0
         level can be 1 (20 ms) or higher (10, 5, 2.5 ms...)
         """
+        level = self.get_difficulty(session)
+        trial_condition = self.get_condition(session)
         try:
             section = session.playlist.get_section(
                 {"group": str(level), "tag": str(trial_condition)}
             )
         except Section.DoesNotExist:
-            raise
+            # we are out of valid sections, end experiment
+            return None
         expected_response = (
             self.first_condition if int(trial_condition) else self.second_condition
         )
@@ -186,53 +175,42 @@ class HBat(Practice):
 
 
 def staircasing(session, trial_action_callback):
-    trial_condition = random.randint(2)
     previous_results = session.result_set.order_by('-created_at')
     last_result = previous_results.first()
     if not last_result:
         # first trial
-        action = trial_action_callback(
-            session, trial_condition, 1)
+        action = trial_action_callback(session)
     elif last_result.score == 0:
         # the previous response was incorrect
         json_data = session.load_json_data()
+        # we keep track of increasing / decreasing difficulty both on the session and results
+        # that way, it is easy to detect turnpoints
         direction = json_data.get('direction')
-        last_result.comment = 'decrease difficulty'
+        last_result.save_json_data({"difficulty": "decrease"})
         last_result.save()
         if direction == 'increase':
             register_turnpoint(session, last_result)
         # register decreasing difficulty
-        session.save_json_data({'direction': 'decrease'})
-        session.save()
-        level = int(last_result.group) - 1  # decrease difficulty
-        action = trial_action_callback(
-            session, trial_condition, level)
+        session.save_json_data({"direction": "decrease"})
+        action = trial_action_callback(session)
     else:
         if previous_results.count() == 1:
             # this is the second trial, so the level is still 1
-            action = trial_action_callback(
-                session, trial_condition, 1)
+            action = trial_action_callback(session)
         elif previous_results.all()[1].score == 1 and not previous_results.all()[1].comment:
             # the previous two responses were correct
-            json_data = session.load_json_data()
-            direction = json_data.get('direction')
-            last_result.comment = 'increase difficulty'
-            last_result.save()
+            direction = session.json_data.get("direction")
+            last_result.save_json_data({"difficulty": "increase"})
             if direction == 'decrease':
                 # mark the turnpoint
                 register_turnpoint(session, last_result)
             # register increasing difficulty
-            session.save_json_data({'direction': 'increase'})
-            session.save()
-            level = int(last_result.group) + 1  # increase difficulty
-            action = trial_action_callback(
-                session, trial_condition, level)
+            session.save_json_data({"direction": "increase"})
+            action = trial_action_callback(session)
         else:
             # previous answer was correct
             # but we didn't yet get two correct in a row
-            level = int(last_result.group)
-            action = trial_action_callback(
-                session, trial_condition, level)
+            action = trial_action_callback(session)
     if not action:
         # action is None if the audio file doesn't exist
         return None

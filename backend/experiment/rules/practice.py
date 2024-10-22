@@ -25,11 +25,18 @@ class Practice(Base):
     n_correct = 1 # how many trials need to be answered correctly to proceed
 
     def next_round(self, session: Session) -> list:
+        return self.next_practice_round(session)
+
+    def next_practice_round(self, session: Session) -> list:
         round_number = session.get_rounds_passed()
         if round_number == 0:
-            return [self.get_intro_explainer(), self.get_practice_trial(session, round_number)]
+            return [
+                self.get_intro_explainer(),
+                self.get_next_trial(session),
+            ]
         if round_number % self.n_practice_rounds == 0:
             if self.practice_successful(session):
+                self.finalize_practice(session)
                 return [
                     self.get_feedback_explainer(session),
                     self.get_continuation_explainer(),
@@ -39,10 +46,16 @@ class Practice(Base):
                     self.get_feedback_explainer(session),
                     self.get_restart_explainer(),
                     self.get_intro_explainer(),
-                    self.get_practice_trial(session, round_number),
+                    self.get_next_trial(session),
                 ]
         else:
-            return [self.get_feedback_explainer(session), self.get_practice_trial(session, round_number)]
+            return [
+                self.get_feedback_explainer(session),
+                self.get_next_trial(session),
+            ]
+
+    def finalize_practice(session):
+        session.save_json_data({"practice_done": True})
 
     def get_intro_explainer(self) -> Explainer:
         return Explainer(
@@ -149,17 +162,17 @@ class Practice(Base):
         session.save()
         return condition
 
-    def get_practice_trial(self, session: Session, round_number: int) -> Trial:
+    def get_next_trial(self, session: Session) -> Trial:
         """
         Provide the next trial action
 
         Args:
             session: the session
-            round_number: the current round
 
         Returns:
             Trial object
         """
+        round_number = session.get_rounds_passed()
         condition = self.get_condition(session)
         try:
             section = session.playlist.get_section(

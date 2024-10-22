@@ -38,43 +38,14 @@ class DurationDiscrimination(Practice):
     decrease_difficulty_multiplier = 1.5
 
     def next_round(self, session: Session) -> list:
-        round_number = session.get_rounds_passed()
         practice_finished = session.load_json_data().get("practice_finished")
         if not practice_finished:
             # we are practicing
-            condition = self.get_condition(session)
-            difficulty = self.get_difficulty(session)
-            if round_number == 0:
-                return [
-                    self.get_intro_explainer(),
-                    self.next_trial_action(session, condition, difficulty),
-                ]
-            if round_number % self.n_practice_rounds == 0:
-                if self.practice_successful(session):
-                    feedback_explainer = self.get_feedback_explainer(session)
-                    session.save_json_data({"practice_finished": True})
-                    session.result_set.all().delete()
-                    return [
-                        feedback_explainer,
-                        self.get_continuation_explainer(),
-                    ]
-                else:
-                    return [
-                        self.get_feedback_explainer(session),
-                        self.get_restart_explainer(),
-                        self.get_intro_explainer(),
-                        self.next_trial_action(session, condition, difficulty),
-                    ]
-            else:
-                return [
-                    self.get_feedback_explainer(session),
-                    self.next_trial_action(session, condition, difficulty),
-                ]
+            return self.next_practice_round(session)
 
         else:
             # Actual trials
-            action = self.staircasing_blocks(session)
-            return action
+            return self.staircasing_blocks(session)
 
     def calculate_score(self, result: Result, data: dict) -> int:
         # a result's score is used to keep track of how many correct results were in a row
@@ -108,9 +79,7 @@ class DurationDiscrimination(Practice):
             button_label=button_label
         )
 
-    def next_trial_action(
-        self, session: Session, trial_condition: str, difficulty: str
-    ) -> Trial:
+    def get_next_trial(self, session: Session) -> Trial:
         """
         Provide the next trial action
 
@@ -119,6 +88,8 @@ class DurationDiscrimination(Practice):
             trial_condition: string defined by second_condition for catch trial, first_condition for normal trial
             difficulty: difficulty of the trial (translates to file name)
         """
+        trial_condition = self.get_condition(session)
+        difficulty = self.get_difficulty(session)
         if trial_condition == self.second_condition:
             # catch trial
             difference = 0
@@ -210,51 +181,43 @@ class DurationDiscrimination(Practice):
         Returns:
             a Trial object
         """
-        previous_results = session.result_set.order_by('-created_at')
-        trial_condition = self.get_trial_condition(session)
+        previous_results = session.result_set.order_by("-created_at")
         if not previous_results.count():
             # first trial
-            difficulty = self.get_difficulty(session)
-            return self.next_trial_action(session, trial_condition, difficulty)
+            return self.get_next_trial(session)
         previous_condition = previous_results.first().expected_response
         if previous_condition == self.second_condition:
             # last trial was catch trial, don't calculate turnpoints
             # don't manipulate duration
-            difficulty = self.get_difficulty(session)
-            action = self.next_trial_action(session, trial_condition, difficulty)
+            action = self.get_next_trial(session)
         else:
             if previous_results.first().score == 0:
                 # the previous response was incorrect
-                json_data = session.load_json_data()
-                direction = json_data.get('direction')
+                direction = session.json_data.get("direction")
                 last_result = previous_results.first()
-                last_result.comment = 'decrease difficulty'
-                last_result.save()
+                last_result.save_json_data(
+                    {"multiplier": self.decrease_difficulty_multiplier}
+                )
                 if direction == 'increase':
                     # register turnpoint
                     register_turnpoint(session, last_result)
                 if session.final_score == self.max_turnpoints + 1:
                     # experiment is finished, None will be replaced by final view
-                    action = None
+                    return None
                 else:
                     # register decreasing difficulty
-                    session.save_json_data({'direction': 'decrease'})
-                    session.save()
+                    session.save_json_data({"direction": "decrease"})
                     # decrease difficulty
-                    difficulty = self.get_difficulty(
-                        session, self.decrease_difficulty_multiplier)
-                    action = self.next_trial_action(
-                        session, trial_condition, difficulty
-                    )
+                    action = self.get_next_trial(session)
             else:
                 # the previous response was correct - check if previous non-catch trial was 1
                 if previous_results.count() > 1 and self.last_non_catch_correct(previous_results.all()):
                     # the previous two responses were correct
-                    json_data = session.load_json_data()
-                    direction = json_data.get('direction')
+                    direction = session.json_data.get("direction")
                     last_correct_result = previous_results.first()
-                    last_correct_result.comment = 'increase difficulty'
-                    last_correct_result.save()
+                    last_correct_result.save_json_data(
+                        {"multiplier": self.increase_difficulty_multiplier}
+                    )
                     if direction == 'decrease':
                         # register turnpoint
                         register_turnpoint(session, last_correct_result)
@@ -263,25 +226,17 @@ class DurationDiscrimination(Practice):
                         action = None
                     else:
                         # register increasing difficulty
-                        session.save_json_data({'direction': 'increase'})
-                        session.save()
+                        session.save_json_data({"direction": "increase"})
                         # increase difficulty
-                        difficulty = self.get_difficulty(
-                            session, self.increase_difficulty_multiplier)
-                        action = self.next_trial_action(
-                            session, trial_condition, difficulty
-                        )
+                        action = self.get_next_trial(session)
                 else:
-                    difficulty = self.get_difficulty(session)
-                    action = self.next_trial_action(
-                        session, trial_condition, difficulty
-                    )
+                    action = self.get_next_trial(session)
         if not action:
             # action is None if the audio file doesn't exist
             return self.finalize_block(session)
         return action
 
-    def get_difficulty(self, session: Session, multiplier: float = 1.0) -> int:
+    def get_difficulty(self, session: Session) -> int:
         """
         Args:
             session: the session
@@ -294,13 +249,12 @@ class DurationDiscrimination(Practice):
             an integer indicating the inter-onset-interval in milliseconds
         """
         difficulty = session.load_json_data().get("difficulty")
+        multiplier = session.last_result().json_data.get("multiplier", 1.0)
         if not difficulty:
             difficulty = self.start_diff
             session.save_json_data({"difficulty": self.start_diff})
-            session.save()
         current_difficulty = difficulty * multiplier
-        session.save_json_data({'difficulty': current_difficulty})
-        session.save()
+        session.save_json_data({"difficulty": current_difficulty})
         # return rounded difficulty
         # this uses the decimal module, since round() does not work entirely as expected
         return int(Decimal(str(current_difficulty)).quantize(Decimal('0'), rounding=ROUND_HALF_UP))
@@ -332,6 +286,12 @@ class DurationDiscrimination(Practice):
     def practice_successful(self, session: Session) -> bool:
         previous_results = session.get_previous_n_results(n_results=2)
         return all(r.score > 0 for r in previous_results)
+
+    def get_condition(self, session: Session) -> str:
+        if not session.json_data.get("practice_done"):
+            return super().get_condition(self)
+        else:
+            return self.get_trial_condition(session)
 
     def get_trial_condition(self, session: Session) -> str:
         """make a list of the {block_size} conditions, of which one is a catch condition
