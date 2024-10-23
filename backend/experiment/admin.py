@@ -304,10 +304,12 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, NestedModelAdmin):
             if slug_extention == "":
                 slug_extention = "copy"
             # Strip slug from non-alphanumeric characters
-            clean_slug = '-'.join(char for char in slug_extention if char.isalnum())
+            clean_slug = "-" + "".join(char for char in slug_extention if char.isalnum())
 
-            exp_contents = obj.translated_content.all()
-            exp_phases = obj.phases.all()
+            exp_contents = obj.translated_content.order_by('name').all()
+            
+            exp_phases = obj.phases.order_by('index').all()
+            
 
             # Duplicate Experiment object
             exp_copy = obj
@@ -335,7 +337,7 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, NestedModelAdmin):
 
                 # Duplicate blocks in this phase
                 for block in these_blocks:
-                    block_contents = block.translated_contents.all()
+                    block_contents = block.translated_contents.order_by('name').all()                    
 
                     block_copy = block
                     block_copy.pk = None
@@ -358,11 +360,11 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, NestedModelAdmin):
             return self.redirect_to_overview()
         
         # Show experiment duplicate form
-        else:
-            return render(
-                request,
-                "duplicate-experiment.html",
-                context={"exp": obj},
+        
+        return render(
+            request,
+            "duplicate-experiment.html",
+            context={"exp": obj},
         )
 
     def experimenter_dashboard(self, request, obj, parent_obj=None):
