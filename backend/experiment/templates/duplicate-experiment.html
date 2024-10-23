@@ -2,7 +2,7 @@
 <style>
     form {
         margin-top: 3rem;
-        max-width: 1024px;     
+        max-width: 1024px;
     }
 
     label {
@@ -19,19 +19,19 @@
     }
 
     .help {
-        color: var(--body-quiet-color);        
-        font-size: 12px;        
+        color: var(--body-quiet-color);
+        font-size: 12px;
     }
     #back-button {
         float: right;
     }
-    
+
 </style>
 <h1>Duplicate experiment with slug: {{exp.slug}}</h1>
 <p>The following objects will be duplicated:</p>
 <ul>
     <li>Experiment</li>
-    <li>Experiment translated content</li>    
+    <li>Experiment translated content</li>
     <li>Phases</li>
     <li>Blocks</li>
     <li>Block translated content</li>
@@ -48,10 +48,10 @@
 <form action="" method="post">
     {% csrf_token %}{% render_inline_action_fields %}
     <label for="slug-extention">Enter an extention to add to the slugs in the dupicated experiment:</label>
-    <input type="text" pattern="[a-zA-Z0-9-]+" name="slug-extention" maxlength="128" id="slug-extention" required><br>
+    <input type="text" name="slug-extention" maxlength="128" id="slug-extention" ><br>
     <p class="help">E.g. entering 'copy' here will add '-copy' to the existing Experiment and Block slugs.</p>
     <input type="submit" name="_duplicate" value="Duplicate" id="duplicate" /><br>
-    
+
     <input type="submit" name="_back" value="Go back" id="back-button" />
 </form>
 {% endblock %}
