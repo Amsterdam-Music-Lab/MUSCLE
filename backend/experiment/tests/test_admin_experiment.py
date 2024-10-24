@@ -7,7 +7,7 @@ from django.contrib.admin.sites import AdminSite
 from django.urls import reverse
 from django.utils.html import format_html
 from experiment.admin import BlockAdmin, ExperimentAdmin, PhaseAdmin
-from experiment.models import Block, Experiment, Phase, ExperimentTranslatedContent
+from experiment.models import Block, Experiment, Phase, ExperimentTranslatedContent, BlockTranslatedContent
 from participant.models import Participant
 from result.models import Result
 from session.models import Session
@@ -237,3 +237,100 @@ class PhaseAdminTest(TestCase):
             ", ".join([f"{block.slug}" for block in [block1, block2]])
         )
         self.assertEqual(blocks, expected_blocks)
+
+
+class TestDuplicateExperiment(TestCase):
+
+    @classmethod
+    def setUpTestData(cls):
+        cls.experiment = Experiment.objects.create(slug="original")
+        ExperimentTranslatedContent.objects.create(
+            experiment=cls.experiment,
+            language="en",
+            name="original experiment",
+        )
+        ExperimentTranslatedContent.objects.create(
+            experiment=cls.experiment,
+            language="nl",
+            name="origineel experiment",
+        )
+        cls.first_phase = Phase.objects.create(
+            index=1, randomize=False, dashboard=True, experiment=cls.experiment
+        )
+        cls.second_phase = Phase.objects.create(
+            index=2, randomize=False, dashboard=True, experiment=cls.experiment
+        )
+        cls.block1 = Block.objects.create(slug="block-1", phase=cls.first_phase)
+        cls.block2 = Block.objects.create(slug="block-2", phase=cls.first_phase)
+        cls.block3 = Block.objects.create(slug="block-3", phase=cls.second_phase)
+        cls.block4 = Block.objects.create(slug="block-4", phase=cls.second_phase)
+        BlockTranslatedContent.objects.create(
+            block=cls.block1,
+            language="en",
+            name="First block",
+            description="Block1 description"
+        )
+        BlockTranslatedContent.objects.create(
+            block=cls.block1,
+            language="nl",
+            name="Eerste blok",
+            description="Block1 omschrijving"
+        )
+        BlockTranslatedContent.objects.create(
+            block=cls.block2,
+            language="en",
+            name="Second block",
+            description="Block2 description"
+        )
+        BlockTranslatedContent.objects.create(
+            block=cls.block2,
+            language="nl",
+            name="Tweede blok",
+            description="Block2 omschrijving"
+        )
+        BlockTranslatedContent.objects.create(
+            block=cls.block3,
+            language="en",
+            name="Third block",
+            description="Block3 description"
+        )
+        BlockTranslatedContent.objects.create(
+            block=cls.block3,
+            language="nl",
+            name="Derde blok",
+            description="Block3 omschrijving"
+        )
+        BlockTranslatedContent.objects.create(
+            block=cls.block4,
+            language="en",
+            name="Fourth block",
+            description="Block4 description"
+        )
+        BlockTranslatedContent.objects.create(
+            block=cls.block4,
+            language="nl",
+            name="Vierde blok",
+            description="Block4 omschrijving"
+        )
+
+    def setUp(self):
+        self.admin = ExperimentAdmin(model=Experiment, admin_site=AdminSite)
+
+    def test_duplicate_experiment(self):
+        request = MockRequest()
+        request.POST = {"_duplicate": "",
+                        "slug-extention": "dup%^&*litest  "}
+        response = self.admin.duplicate(request, self.experiment)
+        all_experiments = Experiment.objects.all()
+        all_exp_content = ExperimentTranslatedContent.objects.all()
+        all_phases = Phase.objects.all()
+        all_blocks = Block.objects.all()
+        all_block_content = BlockTranslatedContent.objects.all()
+        new_exp = Experiment.objects.last()
+        self.assertEqual(all_experiments.count(), 2)
+        self.assertEqual(all_exp_content.count(), 4)
+        self.assertEqual(all_phases.count(), 4)
+        self.assertEqual(all_blocks.count(), 8)
+        self.assertEqual(all_block_content.count(), 16)
+        self.assertEqual(new_exp.slug, 'original-duplitest')
+        self.assertEqual(response.status_code, 302)
