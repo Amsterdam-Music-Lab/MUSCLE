@@ -313,10 +313,10 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, NestedModelAdmin):
             # Strip slug from non-alphanumeric characters
             clean_slug = "-" + "".join(char for char in slug_extention if char.isalnum())
 
+            # order_by is inserted here to prevent a query error
             exp_contents = obj.translated_content.order_by('name').all()
-            
+            # order_by is inserted here to prevent a query error
             exp_phases = obj.phases.order_by('index').all()
-            
 
             # Duplicate Experiment object
             exp_copy = obj
@@ -344,6 +344,7 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, NestedModelAdmin):
 
                 # Duplicate blocks in this phase
                 for block in these_blocks:
+                    # order_by is inserted here to prevent a query error
                     block_contents = block.translated_contents.order_by('name').all()                    
 
                     block_copy = block
@@ -360,14 +361,13 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, NestedModelAdmin):
                         block_content_copy._state.adding = True
                         block_content_copy.block = block_copy
                         block_content_copy.save()
-            return
+            return self.redirect_to_overview()
         
         # Go back to experiment overview
         if "_back" in request.POST:
             return self.redirect_to_overview()
         
         # Show experiment duplicate form
-        
         return render(
             request,
             "duplicate-experiment.html",
