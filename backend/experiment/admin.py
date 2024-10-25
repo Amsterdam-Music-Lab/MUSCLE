@@ -346,6 +346,7 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, NestedModelAdmin):
                 for block in these_blocks:
                     # order_by is inserted here to prevent a query error
                     block_contents = block.translated_contents.order_by('name').all()                    
+                    these_playlists = block.playlists.all()
 
                     block_copy = block
                     block_copy.pk = None
@@ -353,6 +354,7 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, NestedModelAdmin):
                     block_copy.slug = block.slug + clean_slug
                     block_copy.phase = phase_copy
                     block_copy.save()
+                    block_copy.playlists.set(these_playlists)
 
                     # Duplicate Block translated content objects
                     for content in block_contents:          
