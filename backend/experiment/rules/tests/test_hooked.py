@@ -10,6 +10,7 @@ from question.questions import get_questions_from_series
 from result.models import Result
 from section.models import Playlist, Section, Song
 from session.models import Session
+from question.questions import create_default_questions
 
 
 class HookedTest(TestCase):
@@ -18,6 +19,7 @@ class HookedTest(TestCase):
     @classmethod
     def setUpTestData(cls):
         """set up data for Hooked base class"""
+        create_default_questions()
         cls.participant = Participant.objects.create()
         cls.playlist = Playlist.objects.create(name="Test Eurovision")
         cls.playlist.csv = (
