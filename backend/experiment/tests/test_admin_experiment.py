@@ -329,7 +329,7 @@ class TestDuplicateExperiment(TestCase):
     def test_duplicate_experiment(self):
         request = MockRequest()
         request.POST = {"_duplicate": "",
-                        "slug-extention": "dup%^&*litest  "}
+                        "slug-extension": "dup%^&*litest  "}
         response = self.admin.duplicate(request, self.experiment)
         all_experiments = Experiment.objects.all()
         all_exp_content = ExperimentTranslatedContent.objects.all()

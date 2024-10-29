@@ -308,10 +308,10 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, NestedModelAdmin):
         if "_duplicate" in request.POST:
             # Get slug from the form
             slug_extension = request.POST.get("slug-extension")
-            if slug_extention == "":
-                slug_extention = "copy"
+            if slug_extension == "":
+                slug_extension = "copy"
             # Strip slug from non-alphanumeric characters
-            clean_slug = "-" + "".join(char for char in slug_extention if char.isalnum())
+            clean_slug = "-" + "".join(char for char in slug_extension if char.isalnum())
 
             # order_by is inserted here to prevent a query error
             exp_contents = obj.translated_content.order_by('name').all()
