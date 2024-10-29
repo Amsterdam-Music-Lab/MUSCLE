@@ -118,7 +118,7 @@ def get_trial_condition_block(session, n_trials_per_block):
     """ make a list of n_trials_per_blocks conditions, of which one is catch (=1)
     store updates in the session.json_data field
     """
-    json_data = session.load_json_data()
+    json_data = session.json_data
     block = json_data.get('block')
     if not block:
         block = [0] * n_trials_per_block
