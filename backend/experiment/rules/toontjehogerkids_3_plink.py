@@ -52,7 +52,7 @@ class ToontjeHogerKids3Plink(ToontjeHoger3Plink):
     def get_last_result(self, session):
         ''' get the last score, based on question (plink)
         '''
-        last_result = session.result_set.last()
+        last_result = session.last_result()
 
         if not last_result:
             logger.error("No last result")

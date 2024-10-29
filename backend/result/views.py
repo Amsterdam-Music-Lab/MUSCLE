@@ -88,7 +88,7 @@ def verify_session(request):
         return HttpResponseServerError("No session found")
 
     # Prevent creating results when session is finished
-    if session.is_finished():
+    if session._is_finished():
         return HttpResponseServerError("Session has already finished")
 
     return session

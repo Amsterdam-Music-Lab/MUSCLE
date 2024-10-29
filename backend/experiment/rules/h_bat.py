@@ -206,7 +206,7 @@ def staircasing(session, trial_action_callback):
             session, trial_condition, 1)
     elif last_result.score == 0:
         # the previous response was incorrect
-        json_data = session.load_json_data()
+        json_data = session.json_data
         direction = json_data.get('direction')
         last_result.comment = 'decrease difficulty'
         last_result.save()
@@ -225,7 +225,7 @@ def staircasing(session, trial_action_callback):
                 session, trial_condition, 1)
         elif previous_results.all()[1].score == 1 and not previous_results.all()[1].comment:
             # the previous two responses were correct
-            json_data = session.load_json_data()
+            json_data = session.json_data
             direction = json_data.get('direction')
             last_result.comment = 'increase difficulty'
             last_result.save()
