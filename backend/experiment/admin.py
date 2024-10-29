@@ -307,7 +307,7 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, NestedModelAdmin):
 
         if "_duplicate" in request.POST:
             # Get slug from the form
-            slug_extention = request.POST.get("slug-extention")
+            slug_extension = request.POST.get("slug-extension")
             if slug_extention == "":
                 slug_extention = "copy"
             # Strip slug from non-alphanumeric characters
