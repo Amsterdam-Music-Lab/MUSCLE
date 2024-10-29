@@ -238,13 +238,13 @@ class MusicalPreferences(Base):
 
     def get_final_view(self, session, top_participant, known_songs, n_songs, top_all):
         # finalize block
-        social_info = self.social_media_info(session)
         view = Final(
             session,
             title=_("End"),
-            final_text=_("Thank you for your participation and contribution to science!"),
+            final_text=_(
+                "Thank you for your participation and contribution to science!"
+            ),
             feedback_info=self.feedback_info(),
-            social=social_info,
         )
         return view
 

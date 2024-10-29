@@ -77,15 +77,12 @@ class MatchingPairsGame(Base):
             return actions
         else:
             # final score saves the result from the cleared board into account
-            social_info = self.social_media_info(session)
-            social_info["channels"].append("clipboard")
             score = Final(
                 session,
                 title="Score",
                 final_text="Can you score higher than your friends and family? Share and let them try!",
                 button={"text": "Play again", "link": self.get_play_again_url(session)},
                 rank=self.rank(session, exclude_unfinished=False),
-                social=social_info,
                 feedback_info=self.feedback_info(),
             )
             return [score]
