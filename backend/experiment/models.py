@@ -601,7 +601,9 @@ class SocialMediaConfig(models.Model):
         social_message = translated_content.social_media_message
 
         if social_message:
-            has_placeholders = "{points}" in social_message and "{experiment_name}" in social_message
+            has_placeholders = (
+                "{points}" in social_message and "{block_name}" in social_message
+            )
 
             if not has_placeholders:
                 return social_message
@@ -609,16 +611,16 @@ class SocialMediaConfig(models.Model):
             if has_placeholders and (score is None or name is None):
                 raise ValueError("score and experiment_name are required for placeholder substitution")
 
-            return social_message.format(points=score, experiment_name=name)
+            return social_message.format(points=score, block_name=name)
 
         if score is None or name is None:
             raise ValueError(
                 "score and name are required when no social media message is provided"
             )
 
-        return _("I scored %(score)d points in %(experiment_name)s") % {
+        return _("I scored %(score)d points in %(block_name)s") % {
             "score": score,
-            "experiment_name": name,
+            "block_name": name,
         }
 
     def __str__(self):
