@@ -555,7 +555,6 @@ class SocialMediaConfig(models.Model):
         experiment (Experiment): Experiment instance
         tags (list[str]): Tags
         url (str): Url to be shared
-        content (str): Shared text
         channels (list[str]): Social media channel
     """
 
@@ -584,7 +583,7 @@ class SocialMediaConfig(models.Model):
         help_text=_("Selected social media channels for sharing"),
     )
 
-    def get_content(self, score: int | None = None, experiment_name: str | None = None) -> str:
+    def get_content(self, score: float, block_name: Optional[str]) -> str:
         """Get social media share content
 
         Args:
@@ -598,6 +597,7 @@ class SocialMediaConfig(models.Model):
             ValueError: If required parameters are missing when needed
         """
         translated_content = self.experiment.get_current_content()
+        name = block_name or translated_content.name
         social_message = translated_content.social_media_message
 
         if social_message:
@@ -606,15 +606,20 @@ class SocialMediaConfig(models.Model):
             if not has_placeholders:
                 return social_message
 
-            if has_placeholders and (score is None or experiment_name is None):
+            if has_placeholders and (score is None or name is None):
                 raise ValueError("score and experiment_name are required for placeholder substitution")
 
-            return social_message.format(points=score, experiment_name=experiment_name)
+            return social_message.format(points=score, experiment_name=name)
 
-        if score is None or experiment_name is None:
-            raise ValueError("score and experiment_name are required when no social media message is provided")
+        if score is None or name is None:
+            raise ValueError(
+                "score and name are required when no social media message is provided"
+            )
 
-        return _("I scored {points} points in {experiment_name}").format(score=score, experiment_name=experiment_name)
+        return _("I scored %(score)d points in %(experiment_name)s") % {
+            "score": score,
+            "experiment_name": name,
+        }
 
     def __str__(self):
         fallback_content = self.experiment.get_fallback_content()

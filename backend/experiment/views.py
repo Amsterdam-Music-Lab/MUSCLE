@@ -2,8 +2,7 @@ import json
 import logging
 
 from django.http import Http404, HttpRequest, JsonResponse
-from django.conf import settings
-from django.utils.translation import activate, gettext_lazy as _, get_language
+from django.utils.translation import gettext_lazy as _, get_language
 from django_markup.markup import formatter
 
 from .models import Block, Experiment, Phase, Feedback, Session
@@ -111,15 +110,6 @@ def get_experiment(
 
     request.session[EXPERIMENT_KEY] = slug
     participant = get_participant(request)
-    language_code = get_language()[0:2]
-
-    translated_content = experiment.get_translated_content(language_code)
-
-    if not translated_content:
-        raise ValueError("No translated content found for this experiment")
-
-    experiment_language = translated_content.language
-    activate(experiment_language)
 
     phases = list(Phase.objects.filter(experiment=experiment.id).order_by("index"))
     try:
@@ -133,7 +123,7 @@ def get_experiment(
     except IndexError:
         serialized_phase = {"dashboard": [], "next_block": None}
 
-    response = JsonResponse({**serialize_experiment(experiment, language_code), **serialized_phase})
+    response = JsonResponse({**serialize_experiment(experiment), **serialized_phase})
 
     return response
 
