@@ -1,5 +1,5 @@
 from django.test import TestCase
-from experiment.models import Block
+from experiment.models import Block, Experiment, Phase
 from result.models import Result
 from participant.models import Participant
 from participant.utils import PARTICIPANT_KEY
@@ -32,9 +32,12 @@ class BeatAlignmentRuleTest(TestCase):
         playlist = Playlist.objects.create(name='TestBAT')
         playlist.csv = csv
         playlist._update_sections()
+        experiment = Experiment.objects.create(slug="bat_test")
+        phase = Phase.objects.create(experiment=experiment)
         # rules is BeatAlignment.ID in beat_alignment.py
         cls.block = Block.objects.create(
-            rules='BEAT_ALIGNMENT', slug='ba', rounds=13)
+            phase=phase, rules="BEAT_ALIGNMENT", slug="ba", rounds=13
+        )
         cls.block.playlists.add(playlist)
 
     def load_json(self, response):
