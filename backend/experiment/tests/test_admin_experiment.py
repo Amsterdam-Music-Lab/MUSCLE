@@ -11,6 +11,8 @@ from experiment.models import Block, Experiment, Phase, ExperimentTranslatedCont
 from participant.models import Participant
 from result.models import Result
 from session.models import Session
+from section.models import Playlist
+from theme.models import ThemeConfig
 
 
 # Expected field count per model
@@ -240,7 +242,6 @@ class PhaseAdminTest(TestCase):
 
 
 class TestDuplicateExperiment(TestCase):
-
     @classmethod
     def setUpTestData(cls):
         cls.experiment = Experiment.objects.create(slug="original")
@@ -260,10 +261,19 @@ class TestDuplicateExperiment(TestCase):
         cls.second_phase = Phase.objects.create(
             index=2, randomize=False, dashboard=True, experiment=cls.experiment
         )
-        cls.block1 = Block.objects.create(slug="block-1", phase=cls.first_phase)
-        cls.block2 = Block.objects.create(slug="block-2", phase=cls.first_phase)
-        cls.block3 = Block.objects.create(slug="block-3", phase=cls.second_phase)
-        cls.block4 = Block.objects.create(slug="block-4", phase=cls.second_phase)
+        cls.playlist1 = Playlist.objects.create(name="first")
+        cls.playlist2 = Playlist.objects.create(name="second")
+        cls.theme = ThemeConfig.objects.create(name='test_theme')
+
+        cls.block1 = Block.objects.create(slug="block1", phase=cls.first_phase, theme_config=cls.theme)
+        cls.block2 = Block.objects.create(slug="block2", phase=cls.first_phase, theme_config=cls.theme)
+        cls.block3 = Block.objects.create(slug="block3", phase=cls.second_phase, theme_config=cls.theme)
+        cls.block4 = Block.objects.create(slug="block4", phase=cls.second_phase, theme_config=cls.theme)
+
+        cls.block1.playlists.add(cls.playlist1)
+        cls.block1.playlists.add(cls.playlist2)
+        cls.block1.save()
+
         BlockTranslatedContent.objects.create(
             block=cls.block1,
             language="en",
@@ -325,12 +335,18 @@ class TestDuplicateExperiment(TestCase):
         all_exp_content = ExperimentTranslatedContent.objects.all()
         all_phases = Phase.objects.all()
         all_blocks = Block.objects.all()
+        last_block = Block.objects.last()
         all_block_content = BlockTranslatedContent.objects.all()
         new_exp = Experiment.objects.last()
+        new_block1 = Block.objects.get(slug="block1-duplitest")
+
         self.assertEqual(all_experiments.count(), 2)
         self.assertEqual(all_exp_content.count(), 4)
         self.assertEqual(all_phases.count(), 4)
         self.assertEqual(all_blocks.count(), 8)
         self.assertEqual(all_block_content.count(), 16)
         self.assertEqual(new_exp.slug, 'original-duplitest')
+        self.assertEqual(last_block.slug, 'block4-duplitest')
+        self.assertEqual(last_block.theme_config.name, 'test_theme')
+        self.assertEqual(new_block1.playlists.all().count(), 2)
         self.assertEqual(response.status_code, 302)
