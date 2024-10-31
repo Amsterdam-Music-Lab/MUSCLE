@@ -151,11 +151,7 @@ def get_upcoming_block(block_list: list[Block], participant: Participant, repeat
 
     finished_session_counts = [get_finished_session_count(block, participant) for block in block_list]
     minimum_session_count = min(finished_session_counts)
-    if (
-        block_list[0].phase.dashboard
-        and not repeat_allowed
-        and minimum_session_count != 0
-    ):
+    if not repeat_allowed and minimum_session_count != 0:
         return None
     return serialize_block(block_list[finished_session_counts.index(minimum_session_count)], participant)
 
