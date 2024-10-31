@@ -89,5 +89,5 @@ class Final(BaseAction):  # pylint: disable=too-few-public-methods
             and experiment.social_media_config
         ):
             return serialize_social_media_config(
-                experiment.social_media_config, session.total_score
+                experiment.social_media_config, session.total_score()
             )
