@@ -38,19 +38,13 @@ class Categorization(Base):
     def next_round(self, session: Session):
         json_data = session.json_data
 
-        if json_data.get("started"):
+        if not json_data.get("phase"):
             actions = [self.get_intro_explainer()]
             questions = self.get_open_questions(session)
             if questions:
                 actions.extend(questions)
-            session.save_json_data({"started": True})
-            return actions
-
-        json_data = session.json_data
-
-        # Plan experiment on the first call to next_round
-        if not json_data.get("phase"):
             json_data = self.plan_experiment(session)
+            return actions
 
         # Check if this participant already has a session
         if json_data == "REPEAT":
@@ -232,6 +226,7 @@ class Categorization(Base):
                 session=session,
                 final_text=final_text + final_message,
                 total_score=round(score_percent),
+                rank=rank,
                 points="% correct",
             )
             return final
