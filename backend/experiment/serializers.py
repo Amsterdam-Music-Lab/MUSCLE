@@ -72,7 +72,6 @@ def serialize_experiment(experiment: Experiment) -> dict:
 def serialize_social_media_config(
     social_media_config: SocialMediaConfig,
     score: Optional[float] = 0,
-    block_name: Optional[str] = None,
 ) -> dict:
     """Serialize social media config
 
@@ -86,7 +85,7 @@ def serialize_social_media_config(
     return {
         "tags": social_media_config.tags or ["amsterdammusiclab", "citizenscience"],
         "url": social_media_config.url,
-        "content": social_media_config.get_content(score, block_name),
+        "content": social_media_config.get_content(score),
         "channels": social_media_config.channels or ["facebook", "twitter"],
     }
 

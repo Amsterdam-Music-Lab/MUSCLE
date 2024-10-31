@@ -25,7 +25,6 @@ class Experiment(models.Model):
         slug (str): Slug
         translated_content (Queryset[ExperimentTranslatedContent]): Translated content
         theme_config (theme.ThemeConfig): ThemeConfig instance
-        dashboard (bool): Show dashboard?
         active (bool): Set experiment active
         social_media_config (SocialMediaConfig): SocialMediaConfig instance
         phases (Queryset[Phase]): Queryset of Phase instances
@@ -155,7 +154,7 @@ class Phase(models.Model):
         experiment (Experiment): Instance of an Experiment
         index (int): Index of the phase
         dashboard (bool): Should the dashbopard be displayed for this phase?
-        randomize (bool): Should the block of this phase be randomized?
+        randomize (bool): Should the blocks of this phase be randomized?
     """
 
     experiment = models.ForeignKey(Experiment, on_delete=models.CASCADE, related_name="phases")
@@ -494,6 +493,7 @@ class ExperimentTranslatedContent(models.Model):
         description (str): Description
         consent (FileField): Consent text markdown or html
         about_content (str): About text
+        social_media_message (str): Message to post with on social media. Can contain {points} and {experiment_name} placeholders
     """
 
     experiment = models.ForeignKey(Experiment, on_delete=models.CASCADE, related_name="translated_content")
@@ -583,12 +583,12 @@ class SocialMediaConfig(models.Model):
         help_text=_("Selected social media channels for sharing"),
     )
 
-    def get_content(self, score: float, block_name: Optional[str]) -> str:
+    def get_content(self, score: float) -> str:
         """Get social media share content
 
         Args:
             score: Score
-            experiment_name: Block name
+            experiment_name: Experiment name
 
         Returns:
             Social media shared text
@@ -597,30 +597,30 @@ class SocialMediaConfig(models.Model):
             ValueError: If required parameters are missing when needed
         """
         translated_content = self.experiment.get_current_content()
-        name = block_name or translated_content.name
         social_message = translated_content.social_media_message
+        experiment_name = translated_content.name
 
         if social_message:
             has_placeholders = (
-                "{points}" in social_message and "{block_name}" in social_message
+                "{points}" in social_message and "{experiment_name}" in social_message
             )
 
             if not has_placeholders:
                 return social_message
 
-            if has_placeholders and (score is None or name is None):
+            if has_placeholders and (score is None or experiment_name is None):
                 raise ValueError("score and experiment_name are required for placeholder substitution")
 
-            return social_message.format(points=score, block_name=name)
+            return social_message.format(points=score, experiment_name=experiment_name)
 
-        if score is None or name is None:
+        if score is None or experiment_name is None:
             raise ValueError(
                 "score and name are required when no social media message is provided"
             )
 
-        return _("I scored %(score)d points in %(block_name)s") % {
+        return _("I scored %(score)d points in %(experiment_name)s") % {
             "score": score,
-            "block_name": name,
+            "experiment_name": experiment_name,
         }
 
     def __str__(self):
