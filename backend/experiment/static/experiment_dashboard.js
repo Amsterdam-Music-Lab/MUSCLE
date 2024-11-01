@@ -1,6 +1,6 @@
 // Hide all sessions
 const closeSessions = () => {
-    document.getElementById("all-sessions").classList.add("hide");
+    document.getElementById("all-sessions").close();
     document.querySelectorAll(".session-row").forEach(function (element) {
         element.classList.add("hide");
     })
@@ -39,7 +39,7 @@ document.getElementById("show-participants").addEventListener("click", () => {
 
 // Attach event to show all sessions button
 document.getElementById("show-sessions").addEventListener("click", () => {
-    document.getElementById("all-sessions").classList.remove("hide");
+    document.getElementById("all-sessions").showModal();
     document.querySelectorAll(".session-row").forEach(function (element) {
         element.classList.remove("hide");
     })
