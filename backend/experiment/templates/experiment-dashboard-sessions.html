@@ -71,7 +71,16 @@
                     </td>
 
                     <td class="table-results">
-                        <input type="button" value="Preview results" onClick="showResults({{ session.id }})" />
+                        <button
+                            class="button button-full"
+                            type="button"
+                            {% if session.result_set.count == 0 %}
+                                disabled
+                            {% endif %}
+                            onClick="showResults({{ session.id }})"
+                        >
+                            Preview <span class="badge badge-white">{{ session.result_set.count }}</span>
+                        </button>
                     </td>
                 </tr>
 
