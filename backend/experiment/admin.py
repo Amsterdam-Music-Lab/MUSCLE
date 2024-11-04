@@ -323,6 +323,16 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, NestedModelAdmin):
             exp_copy.pk = None
             exp_copy._state.adding = True
             exp_copy.slug = obj.slug + clean_slug
+
+            # Check for duplicate experiment slugs
+            for exp in Experiment.objects.all():
+                if exp.slug == exp_copy.slug:
+                    # Reload form with error message
+                    return render(request,
+                                  "duplicate-experiment.html",
+                                  context={"exp": obj,
+                                           "slug_error":"An experiment with the slug '" + exp_copy.slug + "' already exists."},
+                                           )
             exp_copy.save()
 
             # Duplicate experiment translated content objects
@@ -352,6 +362,16 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, NestedModelAdmin):
                     block_copy.pk = None
                     block_copy._state.adding = True
                     block_copy.slug = block.slug + clean_slug
+
+                    # Check for duplicate Block slugs
+                    for existing_block in Block.objects.all():
+                        if existing_block.slug == block_copy.slug:
+                            # Reload form with error message
+                            return render(request,
+                                  "duplicate-experiment.html",
+                                  context={"exp": obj,
+                                           "slug_error":"A Block with the slug '" + block_copy.slug + "' already exists."},
+                                           )
                     block_copy.phase = phase_copy
                     block_copy.save()
                     block_copy.playlists.set(these_playlists)
