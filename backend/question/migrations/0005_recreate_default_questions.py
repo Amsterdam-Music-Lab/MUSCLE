@@ -1,23 +1,33 @@
 from django.db import migrations
 from question.questions import create_default_questions
 from question.models import QuestionInSeries, Question
-
+from django.core import management
+from django.utils import translation
+import modeltranslation
 
 def recreate_default_questions(apps, schema_editor):
 
+    QuestionH = apps.get_model("question", "Question")
+    ChoiceH = apps.get_model("question", "Choice")
+    QuestionGroupH = apps.get_model("question", "QuestionGroup")
+    QuestionInSeriesH = apps.get_model("question", "QuestionInSeries")
+
     # Save info of all QuestionInSeries objects, because they will be deleted when recreating questions
-    qis_all = QuestionInSeries.objects.all()
+    qis_all = QuestionInSeriesH.objects.all()
     qis_all_list = []
     for qis in qis_all:
         qis_all_list.append({'question_series':qis.question_series, "question_key":qis.question.key, "index":qis.index})
 
-    create_default_questions(overwrite=True)
+    # Delete old default questions
+    QuestionH.objects.all().delete()
+
+    create_default_questions(Question=QuestionH, Choice=ChoiceH, QuestionGroup=QuestionGroupH)
 
     # Recreate QuestionInSeries objects with new question objects
     for qis in qis_all_list:
-        QuestionInSeries.objects.create(
+        QuestionInSeriesH.objects.create(
             question_series=qis["question_series"],
-            question=Question.objects.get(key=qis["question_key"]),
+            question=QuestionH.objects.get(key=qis["question_key"]),
             index=qis["index"]
         )
 
