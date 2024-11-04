@@ -1,5 +1,6 @@
 from typing import List, Tuple
 import roman
+from os.path import join
 from django.utils.html import format_html
 from django.db.models.query import QuerySet
 from experiment.models import Experiment, Phase, Block, BlockTranslatedContent
@@ -187,5 +188,6 @@ def consent_upload_path(instance: Experiment, filename: str) -> str:
     experiment = instance.experiment
     folder_name = experiment.slug
     language = instance.language
+    new_filename = language + '-' + filename
 
-    return f"consent/{folder_name}/{language}-{filename}"
+    return join('consent', folder_name, new_filename)
