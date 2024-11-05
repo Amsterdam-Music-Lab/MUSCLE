@@ -32,6 +32,7 @@ class Practice(Base):
         if round_number == 0:
             return [
                 self.get_intro_explainer(),
+                self.get_practice_explainer(),
                 self.get_next_trial(session),
             ]
         if round_number % self.n_practice_rounds == 0:
@@ -46,6 +47,7 @@ class Practice(Base):
                     self.get_feedback_explainer(session),
                     self.get_restart_explainer(),
                     self.get_intro_explainer(),
+                    self.get_practice_explainer(),
                     self.get_next_trial(session),
                 ]
         else:
@@ -54,7 +56,7 @@ class Practice(Base):
                 self.get_next_trial(session),
             ]
 
-    def finalize_practice(session):
+    def finalize_practice(self, session):
         session.save_json_data({"practice_done": True})
 
     def get_intro_explainer(self) -> Explainer:
@@ -88,6 +90,15 @@ class Practice(Base):
             ],
             button_label="Ok",
             step_numbers=True,
+        )
+
+    def get_practice_explainer(self):
+        return Explainer(
+            instruction=_("We will now practice first."),
+            steps=[
+                Step(description=_("First you will hear 4 practice trials.")),
+            ],
+            button_label=_("Begin experiment"),
         )
 
     def get_restart_explainer(self) -> Explainer:

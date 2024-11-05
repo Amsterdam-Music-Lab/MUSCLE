@@ -28,9 +28,9 @@ class HBat(Practice):
     ID = 'H_BAT'
     start_diff = 20
     n_practice_rounds_second_condition = 2
-    first_condition = "0"
+    first_condition = "slower"
     first_condition_i18n = _("SLOWER")
-    second_condition = "1"
+    second_condition = "faster"
     second_condition_i18n = _("FASTER")
 
     def next_round(self, session: Session) -> list:
@@ -54,9 +54,9 @@ class HBat(Practice):
         or is random choice between faster / slower
         """
         if not session.json_data.get("practice_finished"):
-            return int(super().get_condition(session))
+            return super().get_condition(session)
         else:
-            return random.choice([0, 1])
+            return random.choice([self.first_condition, self.second_condition])
 
     def get_difficulty(self, session: Session) -> int:
         last_result = session.last_result()
@@ -78,20 +78,19 @@ class HBat(Practice):
         """
         level = self.get_difficulty(session)
         trial_condition = self.get_condition(session)
+        trial_tag = "0" if trial_condition == self.first_condition else "1"
         try:
             section = session.playlist.get_section(
-                {"group": str(level), "tag": str(trial_condition)}
+                {"group": str(level), "tag": trial_tag}
             )
         except Section.DoesNotExist:
             # we are out of valid sections, end experiment
             return None
-        expected_response = (
-            self.first_condition if int(trial_condition) else self.second_condition
-        )
+
         key = "slower_or_faster"
         question = ChoiceQuestion(
             key=key,
-            question=_("Is the rhythm going SLOWER or FASTER?"),
+            question=self.get_trial_question(),
             choices={
                 self.first_condition: self.first_condition_i18n,
                 self.second_condition: self.second_condition_i18n,
@@ -100,7 +99,7 @@ class HBat(Practice):
                 key,
                 session,
                 section=section,
-                expected_response=expected_response,
+                expected_response=trial_condition,
                 scoring_rule="CORRECTNESS",
             ),
             view="BUTTON_ARRAY",
@@ -111,12 +110,16 @@ class HBat(Practice):
         view = Trial(
             playback=playback,
             feedback_form=form,
-            title=_('Beat acceleration'),
-            config={
-                'response_time': section.duration + .1
-            }
+            title=self.get_trial_title(),
+            config={"response_time": section.duration + 0.1},
         )
         return view
+
+    def get_trial_question(self):
+        return _("Is the rhythm going SLOWER or FASTER?")
+
+    def get_trial_title(self):
+        return _("Beat acceleration")
 
     def get_intro_explainer(self):
         return Explainer(

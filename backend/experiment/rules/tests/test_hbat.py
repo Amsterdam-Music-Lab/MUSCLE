@@ -24,18 +24,20 @@ class HBatTest(TestCase):
         cls.rules = cls.session.block_rules()
 
     def test_get_next_trial(self):
+        self.session.save_json_data({"conditions": ["slower"]})
         slower_trial = self.rules.get_next_trial(self.session)
         assert slower_trial
         result_id = slower_trial.feedback_form.form[0].result_id
         result = Result.objects.get(pk=result_id)
         assert result
-        assert result.expected_response == 'SLOWER'
+        assert result.expected_response == "slower"
+        self.session.save_json_data({"conditions": ["faster"]})
         faster_trial = self.rules.get_next_trial(self.session)
         assert faster_trial
         result_id = faster_trial.feedback_form.form[0].result_id
         result = Result.objects.get(pk=result_id)
         assert result
-        assert result.expected_response == 'FASTER'
+        assert result.expected_response == "faster"
 
 
 class HBat_BST_Test(TestCase):
@@ -55,12 +57,14 @@ class HBat_BST_Test(TestCase):
         cls.rules = cls.session.block_rules()
 
     def test_trial_action(self):
+        self.session.save_json_data({"conditions": ["in2"]})
         in2 = self.rules.get_next_trial(self.session)
         assert in2
         result_id = in2.feedback_form.form[0].result_id
         result = Result.objects.get(pk=result_id)
         assert result
         assert result.expected_response == 'in2'
+        self.session.save_json_data({"conditions": ["in3"]})
         in3 = self.rules.get_next_trial(self.session)
         assert in3
         result_id = in3.feedback_form.form[0].result_id

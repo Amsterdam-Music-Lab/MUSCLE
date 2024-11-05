@@ -78,8 +78,8 @@ class Anisochrony(DurationDiscrimination):
             Our brains use this to process rhythm even better!")
         return render_feedback_trivia(feedback, trivia)
 
-    def get_difficulty(self, session, multiplier=1.0):
+    def get_difficulty(self, session):
         if not session.json_data.get("practice_done"):
             return self.practice_diff
         else:
-            return super().get_difficulty(session, multiplier)
+            return super().get_difficulty(session)
