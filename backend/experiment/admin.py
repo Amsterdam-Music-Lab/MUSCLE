@@ -41,6 +41,7 @@ from experiment.forms import (
 from section.models import Section, Song
 from result.models import Result
 from participant.models import Participant
+from question.models import QuestionSeries
 
 
 class FeedbackInline(admin.TabularInline):
@@ -357,6 +358,7 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, NestedModelAdmin):
                     # order_by is inserted here to prevent a query error
                     block_contents = block.translated_contents.order_by('name').all()                    
                     these_playlists = block.playlists.all()
+                    question_series = QuestionSeries.objects.filter(block=block)
 
                     block_copy = block
                     block_copy.pk = None
@@ -383,6 +385,16 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, NestedModelAdmin):
                         block_content_copy._state.adding = True
                         block_content_copy.block = block_copy
                         block_content_copy.save()
+
+                    for series in question_series:
+                        these_questions = series.questions.all()
+                        series_copy = series
+                        series_copy.pk = None
+                        series_copy._state.adding = True
+                        series_copy.block = block_copy
+                        series_copy.save()
+                        series_copy.questions.set(these_questions)
+
             return self.redirect_to_overview()
         
         # Go back to experiment overview
