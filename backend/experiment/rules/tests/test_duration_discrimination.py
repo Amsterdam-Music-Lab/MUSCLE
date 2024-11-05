@@ -37,16 +37,16 @@ class DDITest(TestCase):
             self.assertIsInstance(actions[0], Explainer)
             self.assertIsInstance(actions[1], Trial)
         self.populate_result_score(self.session, 1)
-        actions = self.block.get_rules().next_round(self.session)
         # practice failed, we get the same actions as in round 0, plus 2 more explainers
         self.assertIsNone(self.session.json_data.get("practice_done"))
+        actions = self.block.get_rules().next_round(self.session)
         self.assertEqual(len(actions), 5)
         for i in range(4):
             self.assertIsInstance(actions[i], Explainer)
         self.assertIsInstance(actions[4], Trial)
         for i in range(3):
-            self.populate_result_score(self.session, 1)
             actions = self.block.get_rules().next_round(self.session)
+            self.populate_result_score(self.session, 1)
             self.assertEqual(len(actions), 2)
             self.assertIsInstance(actions[0], Explainer)
             self.assertIsInstance(actions[1], Trial)

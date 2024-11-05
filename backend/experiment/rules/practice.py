@@ -43,8 +43,11 @@ class Practice(Base):
                     self.get_continuation_explainer(),
                 ]
             else:
+                # generate feedback, then delete all results so far and start over
+                feedback = self.get_feedback_explainer(session)
+                session.result_set.all().delete()
                 return [
-                    self.get_feedback_explainer(session),
+                    feedback,
                     self.get_restart_explainer(),
                     self.get_intro_explainer(),
                     self.get_practice_explainer(),
@@ -57,6 +60,7 @@ class Practice(Base):
             ]
 
     def finalize_practice(self, session):
+        """Finalize practice"""
         session.save_json_data({"practice_done": True})
 
     def get_intro_explainer(self) -> Explainer:
@@ -236,6 +240,6 @@ class Practice(Base):
         )
 
     def practice_successful(self, session: Session) -> bool:
-        results = session.get_last_n_results(n_results=self.n_practice_rounds)
+        results = session.last_n_results(n_results=self.n_practice_rounds)
         correct = sum(result.score for result in results)
         return correct >= self.n_correct

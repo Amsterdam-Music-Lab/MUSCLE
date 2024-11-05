@@ -255,7 +255,11 @@ class DurationDiscrimination(Practice):
             difficulty = self.start_diff
             session.save_json_data({"difficulty": self.start_diff})
             return difficulty
+        if not session.json_data.get("practice_done"):
+            return difficulty
         last_result = session.last_result()
+        if not last_result:
+            return difficulty
         multiplier = last_result.json_data.get("multiplier", 1.0)
         current_difficulty = difficulty * multiplier
         session.save_json_data({"difficulty": current_difficulty})
@@ -288,7 +292,7 @@ class DurationDiscrimination(Practice):
         return answer
 
     def practice_successful(self, session: Session) -> bool:
-        previous_results = session.get_last_n_results(n_results=2)
+        previous_results = session.last_n_results(n_results=2)
         return all(r.score > 0 for r in previous_results)
 
     def get_condition(self, session: Session) -> str:

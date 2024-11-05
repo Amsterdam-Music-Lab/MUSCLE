@@ -1,9 +1,7 @@
 from django.test import TestCase
 
 from experiment.models import Block
-from experiment.rules.rhythm_discrimination import next_trial_actions, plan_stimuli
 from participant.models import Participant
-from result.models import Result
 from section.models import Playlist
 from session.models import Session
 
@@ -24,8 +22,8 @@ class RhythmDiscriminationTest(TestCase):
         )
 
     def test_next_trial_actions(self):
-        plan_stimuli(self.session)
-        self.session.final_score = 1
-        self.session.save()
-        trial = next_trial_actions(self.session, 6)
+        rules = self.block.get_rules()
+        rules.plan_stimuli(self.session)
+        self.session.save_json_data({"practice_done": True})
+        trial = rules.get_next_trial(self.session)
         assert trial
