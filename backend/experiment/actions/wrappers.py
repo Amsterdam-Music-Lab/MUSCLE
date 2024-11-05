@@ -81,27 +81,33 @@ def song_sync(session: Session, section: Section, title: str,
         title=title
     )
     continuation_correctness = random.choice([True, False])
-    jitter = randomize_playhead(
-        min_jitter, max_jitter, continuation_correctness)
-    session.save_json_data({'continuation_offset': jitter})
+    jitter = randomize_playhead(min_jitter, max_jitter, continuation_correctness)
     trial_config['response_time'] = sync_time
     correct_place = Trial(
-        feedback_form=Form([BooleanQuestion(
-            key='correct_place',
-            submits=True,
-            result_id=prepare_result('correct_place',
-                                     session,
-                                     section=section,
-                                     scoring_rule='SONG_SYNC_CONTINUATION',
-                                     expected_response='yes' if continuation_correctness else 'no')
-        )]),
-        playback=Autoplay([section],
-                          instruction=_(
-                              'Did the track come back in the right place?'),
-                          show_animation=True,
-                          play_from=silence_time + jitter,
-                          resume_play=True),
+        feedback_form=Form(
+            [
+                BooleanQuestion(
+                    key="correct_place",
+                    submits=True,
+                    result_id=prepare_result(
+                        "correct_place",
+                        session,
+                        section=section,
+                        scoring_rule="SONG_SYNC_CONTINUATION",
+                        json_data={"continuation_offset": jitter},
+                        expected_response="yes" if continuation_correctness else "no",
+                    ),
+                )
+            ]
+        ),
+        playback=Autoplay(
+            [section],
+            instruction=_("Did the track come back in the right place?"),
+            show_animation=True,
+            play_from=silence_time + jitter,
+            resume_play=True,
+        ),
         config=trial_config,
-        title=title
+        title=title,
     )
     return [recognize, silence, correct_place]

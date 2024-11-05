@@ -12,7 +12,7 @@ EXPERIMENT_KEY = 'experiment'
 
 
 def get_current_experiment_url(session: Session) -> str:
-    experiment_slug = session.load_json_data().get(EXPERIMENT_KEY)
+    experiment_slug = session.json_data.get(EXPERIMENT_KEY)
     if not experiment_slug:
         return None
 

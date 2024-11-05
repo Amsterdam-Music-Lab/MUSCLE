@@ -84,12 +84,12 @@ class SessionTest(TestCase):
             question_key='preference',
             score=0
         )
-        previous_section = self.session.previous_section()
-        assert previous_section
+        last_section = self.session.last_section()
+        assert last_section
         last_song = self.session.last_song()
         assert last_song == 'Beavis - Butthead'
 
-    def test_previous_score(self):
+    def test_last_score(self):
         for i in range(10):
             keys = ['a', 'a', 'b', 'b', 'b', 'b', 'c', 'c', 'c', 'd']
             Result.objects.create(
@@ -97,8 +97,8 @@ class SessionTest(TestCase):
                 question_key=keys[i],
                 score=i
             )
-        result = self.session.get_previous_result(['c', 'd'])
-        assert result.score == 9
+        score = self.session.last_score(["c", "d"])
+        self.assertEqual(score, 9)
 
     def test_get_rounds_passed(self):
         Result.objects.create(session=self.session, question_key='some random key')
@@ -117,7 +117,7 @@ class SessionTest(TestCase):
 
     def test_json_data(self):
         self.session.save_json_data({'test': 'tested'})
-        self.assertEqual(self.session.load_json_data(), {'test': 'tested'})
+        self.assertEqual(self.session.json_data, {"test": "tested"})
         self.session.save_json_data({'test_len': 'tested_len'})
         self.assertEqual(len(self.session.json_data), 2)
 

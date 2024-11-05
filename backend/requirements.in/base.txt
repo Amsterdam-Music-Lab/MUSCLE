@@ -41,3 +41,7 @@ django-nested-admin>=4.1.1
 mkdocs
 mkdocstrings[python]
 mkdocs-material
+
+# Translate fields in Django models
+django-modeltranslation
+

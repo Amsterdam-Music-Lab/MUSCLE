@@ -14,6 +14,7 @@ from experiment.actions.utils import get_average_difference
 from experiment.rules.util.staircasing import register_turnpoint
 from result.models import Result
 from result.utils import prepare_result
+from section.models import Playlist
 from session.models import Session
 
 logger = logging.getLogger(__name__)
@@ -34,6 +35,7 @@ class DurationDiscrimination(Practice):
     second_condition_i18n = _("EQUAL")
     n_practice_rounds_second_condition = 2
     block_size = 5
+    section_count = 247
     increase_difficulty_multiplier = .5
     decrease_difficulty_multiplier = 1.5
 
@@ -98,7 +100,7 @@ class DurationDiscrimination(Practice):
         try:
             section = session.playlist.section_set.get(song__name=difference)
         except Section.DoesNotExist:
-            raise
+            return None
         question_text = self.get_question_text()
         key = self.task_description.replace(" ", "_")
         question = ChoiceQuestion(
@@ -316,3 +318,21 @@ class DurationDiscrimination(Practice):
         session.save_json_data({"current_trials": current_trials})
         session.save()
         return condition
+    def validate_playlist(self, playlist: Playlist):
+        errors = []
+        errors += super().validate_playlist(playlist)
+        sections = playlist.section_set.all()
+        if sections.count() is not self.section_count:
+            errors.append("The playlist should contain 247 sections")
+        try:
+            numerical_song_names = [int(section.song_name()) for section in sections]
+            if self.start_diff not in numerical_song_names:
+                errors.append(
+                    f"The file for the starting difference of {self.start_diff} is missing"
+                )
+        except:
+            errors.append(
+                "The sections should have an associated song with an integer name"
+            )
+
+        return errors

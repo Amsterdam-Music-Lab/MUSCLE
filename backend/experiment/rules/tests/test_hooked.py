@@ -10,6 +10,7 @@ from question.questions import get_questions_from_series
 from result.models import Result
 from section.models import Playlist, Section, Song
 from session.models import Session
+from question.questions import create_default_questions
 
 
 class HookedTest(TestCase):
@@ -18,6 +19,7 @@ class HookedTest(TestCase):
     @classmethod
     def setUpTestData(cls):
         """set up data for Hooked base class"""
+        create_default_questions()
         cls.participant = Participant.objects.create()
         cls.playlist = Playlist.objects.create(name="Test Eurovision")
         cls.playlist.csv = (
@@ -86,10 +88,10 @@ class HookedTest(TestCase):
             actions = rules.next_round(session)
             self.assertNotEqual(actions, None)
             self.score_results(actions)
-            heard_before_offset = session.load_json_data().get("heard_before_offset")
+            heard_before_offset = session.json_data.get("heard_before_offset")
             self.assertEqual(heard_before_offset, 12)
             if i == 0:
-                plan = session.load_json_data().get("plan")
+                plan = session.json_data.get("plan")
                 self.assertIsNotNone(plan)
                 self.assertEqual(len(plan), n_rounds)
                 self.assertEqual(len([p for p in plan if p == "free"]), 9)
@@ -141,15 +143,15 @@ class HookedTest(TestCase):
         for i in range(block.rounds):
             actions = rules.next_round(session)
             self.score_results(actions)
-            heard_before_offset = session.load_json_data().get("heard_before_offset")
-            plan = session.load_json_data().get("plan")
+            heard_before_offset = session.json_data.get("heard_before_offset")
+            plan = session.json_data.get("plan")
             self.assertIsNotNone(actions)
             if i == heard_before_offset - 1:
-                played_sections = session.load_json_data().get("played_sections")
+                played_sections = session.json_data.get("played_sections")
                 self.assertIsNotNone(played_sections)
 
             elif i >= heard_before_offset:
-                plan = session.load_json_data().get("plan")
+                plan = session.json_data.get("plan")
                 song_sync_sections = list(
                     session.result_set.filter(question_key="recognize").values_list("section", flat=True)
                 )
@@ -219,9 +221,9 @@ class HookedTest(TestCase):
         for i in range(n_rounds):
             actions = rules.next_round(session)
             self.score_results(actions)
-            heard_before_offset = session.load_json_data().get("heard_before_offset")
+            heard_before_offset = session.json_data.get("heard_before_offset")
             if i == heard_before_offset - 1:
-                played_sections = session.load_json_data().get("played_sections")
+                played_sections = session.json_data.get("played_sections")
                 song_sync_sections = list(
                     session.result_set.filter(question_key="recognize").values_list("section", flat=True)
                 )
@@ -229,7 +231,7 @@ class HookedTest(TestCase):
                 self.assertEqual(len(played_sections), 1)
                 self.assertIn(played_sections[0], song_sync_sections)
             elif i in range(heard_before_offset, n_rounds):
-                plan = session.load_json_data().get("plan")
+                plan = session.json_data.get("plan")
                 song_sync_sections = list(
                     session.result_set.filter(question_key="recognize").values_list("section", flat=True)
                 )
@@ -260,7 +262,7 @@ class HookedTest(TestCase):
         # need to add 1 to the index, as there is double round counted as 0 in the rules files
         for i in range(0, block.rounds + 1):
             actions = rules.next_round(session)
-            heard_before_offset = session.load_json_data().get("heard_before_offset")
+            heard_before_offset = session.json_data.get("heard_before_offset")
             if i == block.rounds + 1:
                 assert len(actions) == 2
                 assert actions[1].ID == "FINAL"
@@ -280,7 +282,7 @@ class HookedTest(TestCase):
                 gender.save()
             elif i == 1:
                 assert session.result_set.count() == 3
-                assert session.load_json_data().get("plan") is not None
+                assert session.json_data.get("plan") is not None
                 assert len(actions) == 3
                 assert actions[0].feedback_form.form[0].key == "recognize"
                 assert actions[2].feedback_form.form[0].key == "correct_place"

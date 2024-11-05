@@ -12,7 +12,7 @@ from experiment.actions.utils import final_action_with_optional_button, render_f
 from experiment.actions.utils import get_average_difference_level_based
 from experiment.rules.util.staircasing import register_turnpoint
 from result.utils import prepare_result
-from section.models import Section
+from section.models import Playlist, Section
 from session.models import Session
 
 logger = logging.getLogger(__name__)
@@ -179,6 +179,37 @@ class HBat(Practice):
             return True
         return False
 
+    def validate_playlist(self, playlist: Playlist):
+        errors = []
+        errors += super().validate_playlist(playlist)
+        sections = playlist.section_set.all()
+        if sections.count() != 32:
+            errors.append("This block should have a playlist with 32 sections")
+        groups, tags = zip(*[(s.group, s.tag) for s in sections])
+        try:
+            group_numbers = sorted(list(set([int(g) for g in groups])))
+            if group_numbers != [*range(1, 17)]:
+                errors.append("Groups should be ascending integers from 1 to 16")
+        except:
+            errors.append("The groups should be integers")
+        try:
+            tag_numbers = sorted(list(set([int(t) for t in tags])))
+            if tag_numbers != [0, 1]:
+                errors.append("Tags should be 0 and 1")
+        except:
+            errors.append("Tags should be integers")
+
+        return errors
+
+
+def get_previous_condition(previous_result):
+    """ check if previous section was slower / in 2 (1) or faster / in 3 (0) """
+    return int(previous_result.section.tag)
+
+
+def get_previous_level(previous_result):
+    return int(previous_result.section.group)
+
 
 def staircasing(session, trial_action_callback):
     previous_results = session.result_set.order_by('-created_at')
@@ -188,10 +219,7 @@ def staircasing(session, trial_action_callback):
         action = trial_action_callback(session)
     elif last_result.score == 0:
         # the previous response was incorrect
-        json_data = session.load_json_data()
-        # we keep track of increasing / decreasing difficulty both on the session and results
-        # that way, it is easy to detect turnpoints
-        direction = json_data.get('direction')
+        direction = session.json_data.get('direction')
         last_result.save_json_data({"difficulty": "decrease"})
         last_result.save()
         if direction == 'increase':

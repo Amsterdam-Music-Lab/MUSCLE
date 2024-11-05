@@ -7,12 +7,14 @@ from participant.models import Participant
 from result.models import Result
 from section.models import Playlist
 from session.models import Session
+from question.questions import create_default_questions
 
 
 class MatchingPairsTest(TestCase):
 
     @classmethod
     def setUpTestData(cls):
+        create_default_questions()
         section_csv = (
             "default,Crown_1_E1,0.0,10.0,MatchingPairs/Original/Crown_1_E1.mp3,Original,6\n"
             "default,Crown_1_E1,0.0,10.0,MatchingPairs/1stDegradation/Crown_1_E1.mp3,1stDegradation,6\n"
@@ -56,7 +58,7 @@ class MatchingPairsTest(TestCase):
         for i in range(6):
             trial = self.rules.get_matching_pairs_trial(self.session)
             assert trial
-            data = self.session.load_json_data()
+            data = self.session.json_data
             pairs = data.get('pairs')
             degradations = data.get('degradations')
             # degradations cycle through list of two, list of one, empty list

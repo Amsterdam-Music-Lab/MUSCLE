@@ -91,7 +91,7 @@ class MatchingPairsGame(Base):
             return [score]
 
     def select_sections(self, session):
-        json_data = session.load_json_data()
+        json_data = session.json_data
         pairs = json_data.get("pairs", [])
         if len(pairs) < self.num_pairs:
             pairs = list(session.playlist.section_set.order_by().distinct("group").values_list("group", flat=True))

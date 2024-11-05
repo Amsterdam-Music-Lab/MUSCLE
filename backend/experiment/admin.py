@@ -74,6 +74,7 @@ class ExperimentTranslatedContentInline(NestedStackedInline):
 class BlockAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
     list_display = (
         "image_preview",
+        "block_name_link",
         "block_slug_link",
         "rules",
         "rounds",
@@ -112,7 +113,7 @@ class BlockAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
         all_sessions = obj.export_sessions().order_by("pk")
 
         for session in all_sessions:
-            all_results |= session.export_results()
+            all_results |= session.result_set.all()
             all_participants |= Participant.objects.filter(pk=session.participant.pk)
             all_profiles |= session.participant.export_profiles()
 
@@ -216,8 +217,14 @@ class BlockAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
             f'<a href="{url}" target="_blank" rel="noopener noreferrer" title="Open {obj.slug} block in new tab" >{obj.slug}&nbsp;<small>&#8599;</small></a>'
         )
 
+    def block_name_link(self, obj):
+        obj_name = obj.__str__()
+        url = reverse("admin:experiment_block_change", args=[obj.pk])
+        return format_html('<a href="{}">{}</a>', url, obj_name)
+
     # Name the columns
     image_preview.short_description = "Image"
+    block_name_link.short_description = "Name"
     block_slug_link.short_description = "Slug"
 
 
@@ -404,10 +411,6 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, NestedModelAdmin):
                     level=messages.WARNING,
                 )
 
-
-admin.site.register(Experiment, ExperimentAdmin)
-
-
 class PhaseAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
     list_display = (
         "name_link",
@@ -457,3 +460,6 @@ class BlockTranslatedContentAdmin(admin.ModelAdmin):
         return format_html(
             ", ".join([f'<a href="/admin/experiment/block/{block.id}/change/">{block.name}</a>' for block in blocks])
         )
+
+admin.site.register(Block, BlockAdmin)
+admin.site.register(Experiment, ExperimentAdmin)

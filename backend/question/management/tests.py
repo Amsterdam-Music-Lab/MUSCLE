@@ -1,8 +1,12 @@
-from django.core.management import call_command
 from django.test import TestCase
+from question.questions import create_default_questions
 
 
 class CreateQuestionsTest(TestCase):
+
+    @classmethod
+    def setUpTestData(cls):
+        create_default_questions()
 
     def test_createquestions(self):
         from question.models import Question, QuestionGroup

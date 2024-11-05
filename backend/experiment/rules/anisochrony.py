@@ -19,6 +19,7 @@ class Anisochrony(DurationDiscrimination):
     second_condition = "regular"
     first_condition_i18n = _("IRREGULAR")
     second_condition_i18n = _("REGULAR")
+    section_count = 249
 
     def get_feedback_explainer(self, session):
         button_label = _("Next fragment")
