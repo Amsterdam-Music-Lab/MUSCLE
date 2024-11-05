@@ -188,6 +188,5 @@ def consent_upload_path(instance: Experiment, filename: str) -> str:
     experiment = instance.experiment
     folder_name = experiment.slug
     language = instance.language
-    new_filename = language + '-' + filename
 
-    return join('consent', folder_name, new_filename)
+    join("consent", folder_name, f"{language}-{filename}")
