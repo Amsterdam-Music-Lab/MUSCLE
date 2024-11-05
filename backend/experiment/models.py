@@ -146,7 +146,7 @@ def consent_upload_path(instance: Experiment, filename: str) -> str:
     folder_name = experiment.slug
     language = instance.language
 
-    return join('consent', folder_name, f"{language}-{filename}")
+    return join("consent", folder_name, f"{language}-{filename}")
 
 
 class Phase(models.Model):
