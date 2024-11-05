@@ -62,6 +62,8 @@ const MatchingPairs = ({
         yPosition.current = posY;
     }
 
+    let startOfTurn = performance.now();
+
     // Show (animated) feedback after second click on second card or finished playing
     const showFeedback = (score: number) => {
 
@@ -142,6 +144,7 @@ const MatchingPairs = ({
                 currentCard.noevents = true;
                 currentCard.boardposition = index + 1;
                 currentCard.timestamp = performance.now();
+                currentCard.start_of_turn = startOfTurn;
                 // reset response interval in case this card has a value from a previous turn
                 currentCard.response_interval_ms = '';
                 // clear feedback text
@@ -152,6 +155,7 @@ const MatchingPairs = ({
     };
 
     const finishTurn = () => {
+        startOfTurn = performance.now();
         finishedPlaying();
         // remove matched cards from the board
         if (score === 10 || score === 20) {
