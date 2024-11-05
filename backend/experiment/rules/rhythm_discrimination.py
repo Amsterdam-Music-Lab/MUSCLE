@@ -280,9 +280,9 @@ class RhythmDiscrimination(Practice):
         return final_action_with_optional_button(session, final_text)
 
     def practice_successful(self, session: Session) -> bool:
-        """Check if practice was successful: at least one answer correct"""
+        """Check if practice was successful: at least two answers correct"""
         results = session.last_n_results(n_results=4)
-        return any([r.score > 0 for r in results])
+        return len([r.score > 0 for r in results]) >= 2
 
     def validate_playlist(self, playlist: Playlist):
         errors = []
