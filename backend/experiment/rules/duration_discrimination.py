@@ -40,7 +40,7 @@ class DurationDiscrimination(Practice):
     decrease_difficulty_multiplier = 1.5
 
     def next_round(self, session: Session) -> list:
-        practice_finished = session.json_data.get("practice_finished")
+        practice_finished = session.json_data.get("practice_done")
         if not practice_finished:
             # we are practicing
             return self.next_practice_round(session)

@@ -34,7 +34,7 @@ class HBat(Practice):
     second_condition_i18n = _("FASTER")
 
     def next_round(self, session: Session) -> list:
-        practice_finished = session.json_data.get("practice_finished")
+        practice_finished = session.json_data.get("practice_done")
         if not practice_finished:
             return self.next_practice_round(session)
         else:
@@ -53,7 +53,7 @@ class HBat(Practice):
         """get the condition of the trial, which depends either on json data (practice),
         or is random choice between faster / slower
         """
-        if not session.json_data.get("practice_finished"):
+        if not session.json_data.get("practice_done"):
             return super().get_condition(session)
         else:
             return random.choice([self.first_condition, self.second_condition])
