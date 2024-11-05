@@ -54,19 +54,40 @@
         border-width: 1px;
         border-radius: 1px;
         overflow-y: scroll;
+        z-index: 1;
+    }
+    .popup::backdrop {
+        background-color: rgba(0, 0, 0, 0.25);
     }
     .pop-up-big {
         top: 4.2rem;
         left: 10vw;
         width: calc(80vw - 34px);
         height: 80vh;
-
     }
     .pop-up-small {
         top: 6.2rem;
         left: 12vw;
         width: calc(76vw - 51px);
         height: 70vh;
+        z-index: 1;
+    }
+    .button-full {
+        width: 100%;
+    }
+    .badge {
+        padding: 0.25rem 0.4rem;
+        font-size: 75%;
+        font-weight: 700;
+        line-height: 1;
+        text-align: center;
+        white-space: nowrap;
+        vertical-align: baseline;
+        border-radius: 0.25rem;
+    }
+    .badge-white {
+        background: var(--button-fg);
+        color: var(--button-bg);
     }
 </style>
 
