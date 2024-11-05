@@ -17,6 +17,7 @@ import Profile from "../Profile/Profile";
 import Reload from "../Reload/Reload";
 import StoreProfile from "../StoreProfile/StoreProfile";
 import useDisableRightClickOnTouchDevices from "../../hooks/useDisableRightClickOnTouchDevices";
+import useDisableIOSPinchZoomOnTouchDevices from "@/hooks/useDisableIOSPinchZoomOnTouchDevices";
 import { InternalRedirect } from "../InternalRedirect/InternalRedirect";
 import Helmet from "@/components/Helmet/Helmet";
 import Redirect from "@/components/Redirect/Redirect";
@@ -31,6 +32,7 @@ const App = () => {
     const queryParams = window.location.search;
 
     useDisableRightClickOnTouchDevices();
+    useDisableIOSPinchZoomOnTouchDevices();
 
     useEffect(() => {
         const urlParams = new URLSearchParams(queryParams);

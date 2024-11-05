@@ -27,7 +27,7 @@ export const ExperimentDashboard: React.FC<ExperimentDashboardProps> = ({ experi
 
     return (
         <div className="aha__dashboard">
-            <Logo logoClickConfirm={null} />
+            <Logo />
             {showHeader && (
                 <Header
                     nextBlockSlug={nextBlockSlug}

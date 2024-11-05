@@ -163,8 +163,10 @@ class ToontjeHoger2Preverbal(Base):
 
         image_trial = Trial(
             html=HTML(
-            body='<img src="{}" style="height:calc(100% - 260px);max-height:326px;max-width: 100%;"/>'.format(
-                "/images/experiments/toontjehoger/preverbal_1.webp")),
+                body='<img src="{}" style="max-height:326px;max-width: 100%;"/>'.format(
+                    "/images/experiments/toontjehoger/preverbal_1.webp"
+                )
+            ),
             feedback_form=form,
             title=self.TITLE,
         )

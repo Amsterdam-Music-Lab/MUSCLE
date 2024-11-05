@@ -93,13 +93,9 @@ class ToontjeHoger1Mozart(Base):
 
         heading = "Goed gedaan!" if correct_answer_given else "Helaas!"
 
-        feedback_correct = "Het juiste antwoord was inderdaad {}.".format(
-            last_result.expected_response
-        )
-        feedback_incorrect = (
-            "Antwoord {} is niet goed! Het juiste antwoord was {}.".format(
-                last_result.given_response, last_result.expected_response
-            )
+        feedback_correct = "Het juiste antwoord was inderdaad {}.".format(last_result.expected_response)
+        feedback_incorrect = "Antwoord {} is niet goed! Het juiste antwoord was {}.".format(
+            last_result.given_response, last_result.expected_response
         )
         feedback = feedback_correct if correct_answer_given else feedback_incorrect
 
@@ -120,22 +116,14 @@ class ToontjeHoger1Mozart(Base):
         # Feedback message
         last_result = session.last_result()
         section = last_result.section
-        feedback = (
-            "Je hoorde {} van {}.".format(
-                section.song.name, non_breaking_spaces(section.artist_name())
-            )
-            if section
-            else ""
-        )
+        feedback = "Je hoorde {} van {}.".format(section.song.name, section.artist_name()) if section else ""
 
         # Return score view
         config = {"show_total_score": True}
         score = Score(session, config=config, feedback=feedback)
         return [score]
 
-    def get_image_trial(
-        self, session, section_group, image_url, question, expected_response
-    ):
+    def get_image_trial(self, session, section_group, image_url, question, expected_response):
         # Config
         # -----------------
         section = session.playlist.get_section(filter_by={"group": section_group})
@@ -176,20 +164,14 @@ class ToontjeHoger1Mozart(Base):
                 "E": "E",
             },
             view="BUTTON_ARRAY",
-            result_id=prepare_result(
-                key, session, section=section, expected_response=expected_response
-            ),
+            result_id=prepare_result(key, session, section=section, expected_response=expected_response),
             submits=True,
             style=STYLE_TOONTJEHOGER,
         )
         form = Form([question])
 
         image_trial = Trial(
-            html=HTML(
-                body='<img src="{}" style="height:calc(100% - 260px);max-height:326px;max-width: 100%;"/>'.format(
-                    image_url
-                )
-            ),
+            html=HTML(body='<img src="{}" style="max-height:326px;max-width: 100%;"/>'.format(image_url)),
             feedback_form=form,
             title=self.TITLE,
         )
@@ -211,15 +193,10 @@ class ToontjeHoger1Mozart(Base):
         return [explainer]
 
     def calculate_score(self, result, data):
-        score = (
-            self.SCORE_CORRECT
-            if result.expected_response == result.given_response
-            else self.SCORE_WRONG
-        )
+        score = self.SCORE_CORRECT if result.expected_response == result.given_response else self.SCORE_WRONG
         return score
 
     def get_final_round(self, session):
-
         # Finish session.
         session.finish()
         session.save()
@@ -255,7 +232,6 @@ class ToontjeHoger1Mozart(Base):
         return [*answer_explainer, *score, final, info]
 
     def validate_playlist(self, playlist: Playlist):
-
         errors = []
 
         errors += super().validate_playlist(playlist)
