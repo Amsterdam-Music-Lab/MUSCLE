@@ -41,7 +41,7 @@ from experiment.forms import (
 from section.models import Section, Song
 from result.models import Result
 from participant.models import Participant
-from question.models import QuestionSeries
+from question.models import QuestionSeries, QuestionInSeries
 
 
 class FeedbackInline(admin.TabularInline):
@@ -386,13 +386,24 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, NestedModelAdmin):
                         block_content_copy.block = block_copy
                         block_content_copy.save()
 
+                    # Duplicate the Block QuestionSeries
                     for series in question_series:
+                        all_in_series = QuestionInSeries.objects.filter(question_series=series)
                         these_questions = series.questions.all()
                         series_copy = series
                         series_copy.pk = None
                         series_copy._state.adding = True
                         series_copy.block = block_copy
+                        series_copy.index = block.index
                         series_copy.save()
+
+                        # Duplicate the QuestionSeries QuestionInSeries
+                        for in_series in all_in_series:
+                            in_series_copy = in_series
+                            in_series_copy.pk = None
+                            in_series_copy._state.adding = True
+                            in_series_copy.question_series = series
+                            in_series_copy.save()
                         series_copy.questions.set(these_questions)
 
             return self.redirect_to_overview()
