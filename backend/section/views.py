@@ -39,14 +39,16 @@ def get_section(request: HttpRequest, section_id: int) -> Section:
         # Option 2: stream file through Django
         # Advantage: keeps url secure, correct play_count value
         # Disadvantage: potential high server load
-
-        filename = join(settings.BASE_DIR, settings.MEDIA_ROOT, str(section.filename))
+        filename = str(section.filename)
+        if filename.startswith("/"):
+            # remove initial slash in filename, as otherwise os.path.join considers it an absolute path
+            filename = filename[1:]
+        filepath = join(settings.MEDIA_ROOT, filename)
 
         # Uncomment to only use example file in development
         # if settings.DEBUG:
         #    filename = settings.BASE_DIR + "/upload/example.mp3"
-
-        response = FileResponse(open(filename, 'rb'))
+        response = FileResponse(open(filepath, "rb"))
 
         # Header is required to make seeking work in Chrome
         response['Accept-Ranges'] = 'bytes'

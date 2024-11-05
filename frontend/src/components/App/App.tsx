@@ -17,6 +17,7 @@ import Profile from "../Profile/Profile";
 import Reload from "../Reload/Reload";
 import StoreProfile from "../StoreProfile/StoreProfile";
 import useDisableRightClickOnTouchDevices from "../../hooks/useDisableRightClickOnTouchDevices";
+import useDisableIOSPinchZoomOnTouchDevices from "@/hooks/useDisableIOSPinchZoomOnTouchDevices";
 import { InternalRedirect } from "../InternalRedirect/InternalRedirect";
 import Helmet from "@/components/Helmet/Helmet";
 import Redirect from "@/components/Redirect/Redirect";
@@ -31,6 +32,7 @@ const App = () => {
     const queryParams = window.location.search;
 
     useDisableRightClickOnTouchDevices();
+    useDisableIOSPinchZoomOnTouchDevices();
 
     useEffect(() => {
         const urlParams = new URLSearchParams(queryParams);
@@ -71,7 +73,7 @@ const App = () => {
                         />
 
                         {/* Profile */}
-                        <Route path={URLS.profile} exact element={<Profile />} />
+                        <Route path={URLS.profile} element={<Profile />} />
 
                         {/* Internal redirect */}
                         <Route path={URLS.internalRedirect} element={<InternalRedirect />} />
@@ -82,13 +84,9 @@ const App = () => {
                         {/* Experiment */}
                         <Route path={URLS.experiment} element={<Experiment />} />
 
-                        {/* Session - ⚠️ What is the purpose of this non-functional route? */}
-                        <Route path={URLS.session} />
-
                         {/* Store profile */}
                         <Route
                             path={URLS.storeProfile}
-                            exact
                             element={StoreProfile}
                         />
                     </Routes>

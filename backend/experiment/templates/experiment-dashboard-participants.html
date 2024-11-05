@@ -1,7 +1,7 @@
 <!-- Participant table -->
-<div id="all-participants" class="hide pop-up pop-up-big">
+<dialog id="all-participants" class="pop-up pop-up-big">
     <h1>All Participants in experiment: {{ experiment.name }}</h1>
-    <input type="button" value="close" onClick="closeParticipants()" />
+    <input type="button" value="close" onClick="closeParticipants()" autofocus />
     <table>
         <thead>
             <tr>
@@ -45,4 +45,4 @@
     </table>
     <p class="help-text mini">* Click to edit in a new window</p>
     <input type="button" value="close" onClick="closeParticipants()" />
-</div>
+</dialog>

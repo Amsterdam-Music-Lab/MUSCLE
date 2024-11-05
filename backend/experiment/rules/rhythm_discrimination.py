@@ -259,7 +259,7 @@ class RhythmDiscrimination(Practice):
             instruction=instruction, steps=[], button_label=_("Next fragment")
         )
 
-    def finalize_block(session):
+    def finalize_block(self, session):
         # we had 4 practice trials and 60 experiment trials
         percentage = (
             sum([res.score for res in session.result_set.all()])

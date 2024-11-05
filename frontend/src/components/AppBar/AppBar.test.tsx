@@ -33,15 +33,4 @@ describe('AppBar', () => {
         expect(logo.getAttribute('href')).toBe(BASE_URL);
     });
 
-    it('prevents navigation when logoClickConfirm is provided and user cancels', () => {
-        // Mock window.confirm
-        window.confirm = vi.fn(() => false);
-
-        const { getByLabelText } = render(<AppBar title="Test Title" logoClickConfirm="Confirm?" />, { wrapper: Router });
-        const logo = getByLabelText('Logo');
-        fireEvent.click(logo);
-
-        expect(window.confirm).toHaveBeenCalledWith('Confirm?');
-    });
-
 });

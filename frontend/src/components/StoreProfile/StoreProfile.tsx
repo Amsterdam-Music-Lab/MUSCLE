@@ -37,8 +37,7 @@ const StoreProfile = () => {
     }
 
     return (
-        // FIXME: backLink does not exist in DefaultPageProps and title & logoClickConfirm are missing
-        <DefaultPage className="aha__store-profile" backLink={URLS.profile}>
+        <DefaultPage className="aha__store-profile" title="Store Profile">
             <h3 className="title">Personal Link</h3>
             <p>
                 We will send you a personal link by email, which provides access
