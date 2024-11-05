@@ -288,7 +288,7 @@ class DurationDiscrimination(Practice):
         return answer
 
     def practice_successful(self, session: Session) -> bool:
-        previous_results = session.get_previous_n_results(n_results=2)
+        previous_results = session.get_last_n_results(n_results=2)
         return all(r.score > 0 for r in previous_results)
 
     def get_condition(self, session: Session) -> str:

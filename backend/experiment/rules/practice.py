@@ -236,6 +236,6 @@ class Practice(Base):
         )
 
     def practice_successful(self, session: Session) -> bool:
-        results = session.get_previous_n_results(n_results=self.n_practice_rounds)
+        results = session.get_last_n_results(n_results=self.n_practice_rounds)
         correct = sum(result.score for result in results)
         return correct >= self.n_correct

@@ -57,27 +57,6 @@ class Session(models.Model):
         self.finished_at = timezone.now()
         self.final_score = self.total_score()
 
-    def get_previous_n_results(
-        self, question_keys: list[str] = [], n_results: int = 1
-    ) -> list[Result]:
-        """Retrieve previous n results.
-
-        Args:
-            question_keys: a list of question keys for which results should be retrieved, if empty, any results will be returned
-            n_results: number of results to return
-
-        Returns:
-            list of Result objects with the given question keys
-        """
-        results = self._filter_results(question_keys)
-        return list(results.order_by("-created_at")[:n_results])
-
-    def _filter_results(self, question_keys) -> QuerySet:
-        results = self.result_set
-        if question_keys:
-            results = results.filter(question_key__in=question_keys)
-        return results.order_by("-created_at")
-
     def get_rounds_passed(self, counted_result_keys: list = []) -> int:
         """Get number of rounds passed, measured by the number of results on this session,
         taking into account the `counted_result_keys` array that may be defined per rules file
@@ -121,6 +100,12 @@ class Session(models.Model):
         used_song_ids = self.get_used_song_ids()
         return list(set(song_ids) - set(used_song_ids))
 
+    def _filter_results(self, question_keys) -> QuerySet:
+        results = self.result_set
+        if question_keys:
+            results = results.filter(question_key__in=question_keys)
+        return results.order_by("-created_at")
+
     def last_result(self, question_keys: list[str] = []) -> Optional[Result]:
         """
         Utility function to retrieve the last result, optionally filtering by relevant question keys.
@@ -136,6 +121,21 @@ class Session(models.Model):
         """
         results = self._filter_results(question_keys)
         return results.first()
+
+    def last_n_results(
+        self, question_keys: list[str] = [], n_results: int = 1
+    ) -> list[Result]:
+        """Retrieve previous n results.
+
+        Args:
+            question_keys: a list of question keys for which results should be retrieved, if empty, any results will be returned
+            n_results: number of results to return
+
+        Returns:
+            list of Result objects with the given question keys
+        """
+        results = self._filter_results(question_keys)
+        return list(results.order_by("-created_at")[:n_results])
 
     def last_section(self, question_keys: list[str] = []) -> Union[Section, None]:
         """
