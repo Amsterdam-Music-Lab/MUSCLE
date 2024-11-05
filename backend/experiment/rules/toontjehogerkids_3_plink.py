@@ -19,7 +19,7 @@ logger = logging.getLogger(__name__)
 
 
 class ToontjeHogerKids3Plink(ToontjeHoger3Plink):
-    ID = 'TOONTJE_HOGER_KIDS_3_PLINK'
+    ID = "TOONTJE_HOGER_KIDS_3_PLINK"
     TITLE = ""
     SCORE_MAIN_CORRECT = 10
     SCORE_MAIN_WRONG = 0
@@ -34,14 +34,8 @@ class ToontjeHogerKids3Plink(ToontjeHoger3Plink):
         return Explainer(
             instruction="Muziekherkenning",
             steps=[
-                Step(
-                    "Je hoort zo een heel kort stukje van {} liedjes.".format(
-                        n_rounds
-                    )
-                ),
-                Step(
-                    "Herken je de liedjes? Kies dan steeds de juiste artiest en titel!"
-                ),
+                Step("Je hoort zo een heel kort stukje van {} liedjes.".format(n_rounds)),
+                Step("Herken je de liedjes? Kies dan steeds de juiste artiest en titel!"),
                 Step("Weet je het niet zeker? Doe dan maar een gok."),
                 Step("Herken jij er meer dan 3?"),
             ],
@@ -50,8 +44,7 @@ class ToontjeHogerKids3Plink(ToontjeHoger3Plink):
         )
 
     def get_last_result(self, session):
-        ''' get the last score, based on question (plink)
-        '''
+        """get the last score, based on question (plink)"""
         last_result = session.last_result()
 
         if not last_result:
@@ -76,31 +69,22 @@ class ToontjeHogerKids3Plink(ToontjeHoger3Plink):
                 non_breaking_spaces(section.artist_name()),
             )
 
-        config = {'show_total_score': True}
+        config = {"show_total_score": True}
         round_number = session.get_rounds_passed()
-        score_title = "Ronde %(number)d / %(total)d" %\
-            {'number': round_number, 'total': session.block.rounds}
+        score_title = "Ronde %(number)d / %(total)d" % {"number": round_number, "total": session.block.rounds}
         return Score(session, config=config, feedback=feedback, score=score, title=score_title)
 
     def get_plink_trials(self, session: Session, section: Section, choices: dict, expected_response: str) -> list:
         next_round = []
         question1 = DropdownQuestion(
-            key='plink',
+            key="plink",
             choices=choices,
             question="Kies de artiest en de titel van het nummer",
-            result_id=prepare_result(
-                "plink", session, section=section, expected_response=expected_response
-            ),
+            result_id=prepare_result("plink", session, section=section, expected_response=expected_response),
         )
-        next_round.append(Trial(
-            playback=PlayButton(
-                sections=[section]
-            ),
-            feedback_form=Form(
-                [question1],
-                submit_label='Volgende'
-            )
-        ))
+        next_round.append(
+            Trial(playback=PlayButton(sections=[section]), feedback_form=Form([question1], submit_label="Volgende"))
+        )
         return next_round
 
     def calculate_score(self, result, data):
@@ -110,7 +94,6 @@ class ToontjeHogerKids3Plink(ToontjeHoger3Plink):
         return self.SCORE_MAIN_CORRECT if result.expected_response == result.given_response else self.SCORE_MAIN_WRONG
 
     def get_final_round(self, session):
-
         # Finish session.
         session.finish()
         session.save()
@@ -119,13 +102,12 @@ class ToontjeHogerKids3Plink(ToontjeHoger3Plink):
         score = self.get_score_view(session)
 
         # Final
-        final_text = "Goed gedaan!" if session.final_score >= 4 * \
-            self.SCORE_MAIN_CORRECT else "Best lastig!"
+        final_text = "Goed gedaan!" if session.final_score >= 4 * self.SCORE_MAIN_CORRECT else "Best lastig!"
         final = Final(
             session=session,
             final_text=final_text,
             rank=toontjehoger_ranks(session),
-            button={'text': 'Wat hebben we getest?'}
+            button={"text": "Wat hebben we getest?"},
         )
 
         # Info page
@@ -135,9 +117,9 @@ class ToontjeHogerKids3Plink(ToontjeHoger3Plink):
             join("info", "toontjehogerkids", "debrief.html"),
             {
                 "debrief": debrief_message,
-                "vid1": "https://video.leidenuniv.nl/embed/secure/iframe/entryId/1_ylw2npmb/uiConfId/44110401/st/0",
+                "vid1": "https://player.vimeo.com/video/1012062402?h=342dd7ab90",
                 "vid1_title": "Super snel liedjes herkennen!",
-                "vid2": "https://video.leidenuniv.nl/embed/secure/iframe/entryId/1_xo33dvth/uiConfId/44110401/st/0",
+                "vid2": "https://player.vimeo.com/video/1012062961?h=bf5749901d",
                 "vid2_title": "Kun je elk liedje zo snel herkennen?",
             },
         )
@@ -145,7 +127,7 @@ class ToontjeHogerKids3Plink(ToontjeHoger3Plink):
             body=body,
             heading="Muziekherkenning",
             button_label="Terug naar ToontjeHogerKids",
-            button_link=get_current_experiment_url(session)
+            button_link=get_current_experiment_url(session),
         )
 
         return [score, final, info]
