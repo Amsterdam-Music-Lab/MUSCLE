@@ -94,7 +94,7 @@ class RhythmDiscrimination(Practice):
             self.plan_stimuli(session)
 
         if not session.json_data.get("practice_done"):
-            return self.next_practice_round()
+            return self.next_practice_round(session)
 
         else:
             plan = session.json_data.get("plan")
@@ -154,12 +154,14 @@ class RhythmDiscrimination(Practice):
         return Trial(
             playback=playback,
             feedback_form=form,
-            title=_("Rhythm discrimination: %s" % (self.get_title(session))),
+            title=_("Rhythm discrimination: %s" % (self.get_title_counter(session))),
             config={"listen_first": True, "response_time": section.duration + 0.5},
         )
 
-    def get_title(self, session):
+    def get_title_counter(self, session):
         round_number = session.get_rounds_passed()
+        if not session.json_data.get("practice_done"):
+            return _("practice %(index)d of 4") % {"index": round_number}
         plan = session.json_data.get("plan")
         return _("trial %(index)d of %(total)d") % (
             {"index": round_number - 4, "total": len(plan) - 4}
