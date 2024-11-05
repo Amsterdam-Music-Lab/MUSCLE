@@ -90,11 +90,10 @@ def serialize_phase(phase: Phase, participant: Participant) -> dict:
         shuffle(blocks)
 
     next_block = get_upcoming_block(blocks, participant, phase.dashboard)
-
-    total_score = get_total_score(blocks, participant)
-
     if not next_block:
         return None
+
+    total_score = get_total_score(blocks, participant)
 
     return {
         "dashboard": [serialize_block(block, participant) for block in blocks] if phase.dashboard else [],
@@ -133,10 +132,17 @@ def get_upcoming_block(block_list: list[Block], participant: Participant, repeat
     """
 
     finished_session_counts = [get_finished_session_count(block, participant) for block in block_list]
-    minimum_session_count = min(finished_session_counts)
-    if not repeat_allowed and minimum_session_count != 0:
-        return None
-    return serialize_block(block_list[finished_session_counts.index(minimum_session_count)], participant)
+    maximum_session_count = max(finished_session_counts)
+    least_played_block_count = next(
+        (count for count in finished_session_counts if count < maximum_session_count),
+        None,
+    )
+    if not least_played_block_count:
+        return serialize_block(block_list[0])
+
+    return serialize_block(
+        block_list[finished_session_counts.index(least_played_block_count)], participant
+    )
 
 
 def get_started_session_count(block: Block, participant: Participant) -> int:
