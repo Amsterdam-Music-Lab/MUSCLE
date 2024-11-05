@@ -125,7 +125,7 @@ const MatchingPairs = ({
                 const first_card = firstCard;
                 const second_card = currentCard;
                 try {
-                    const scoreResponse = await scoreIntermediateResult({ session, participant, result: { "start_timestamp": StartOfTurn, first_card, second_card } });
+                    const scoreResponse = await scoreIntermediateResult({ session, participant, result: { "start_timestamp": startOfTurn, first_card, second_card } });
                     if (!scoreResponse) {
                         throw new Error('We cannot currently proceed with the game. Try again later');
                     }
@@ -154,7 +154,7 @@ const MatchingPairs = ({
     };
 
     const finishTurn = () => {
-        startOfTurn = performance.now();
+        setStartOfTurn(performance.now());
         finishedPlaying();
         // remove matched cards from the board
         if (score === 10 || score === 20) {
