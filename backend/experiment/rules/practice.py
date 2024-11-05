@@ -146,7 +146,7 @@ class Practice(Base):
         )
 
     def get_condition(self, session) -> str:
-        conditions = session.load_json_data().get('conditions')
+        conditions = session.json_data.get("conditions")
         if not conditions:
             conditions = [
                 self.first_condition

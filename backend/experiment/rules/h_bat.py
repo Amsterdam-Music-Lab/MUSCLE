@@ -34,7 +34,7 @@ class HBat(Practice):
     second_condition_i18n = _("FASTER")
 
     def next_round(self, session: Session) -> list:
-        practice_finished = session.load_json_data().get("practice_finished")
+        practice_finished = session.json_data.get("practice_finished")
         if not practice_finished:
             return self.next_practice_round(session)
         else:

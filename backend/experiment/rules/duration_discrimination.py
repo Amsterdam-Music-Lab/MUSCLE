@@ -40,7 +40,7 @@ class DurationDiscrimination(Practice):
     decrease_difficulty_multiplier = 1.5
 
     def next_round(self, session: Session) -> list:
-        practice_finished = session.load_json_data().get("practice_finished")
+        practice_finished = session.json_data.get("practice_finished")
         if not practice_finished:
             # we are practicing
             return self.next_practice_round(session)
@@ -256,7 +256,7 @@ class DurationDiscrimination(Practice):
         Returns:
             an integer indicating the inter-onset-interval in milliseconds
         """
-        difficulty = session.load_json_data().get("difficulty")
+        difficulty = session.json_data.get("difficulty")
         last_result = session.last_result()
         if not last_result:
             return difficulty
@@ -308,7 +308,7 @@ class DurationDiscrimination(Practice):
         """make a list of the {block_size} conditions, of which one is a catch condition
         store updates in the session.json_data field
         """
-        current_trials = session.load_json_data().get("current_trials")
+        current_trials = session.json_data.get("current_trials")
         if not current_trials:
             current_trials = [self.first_condition] * (self.block_size - 1) + [
                 self.second_condition

@@ -23,7 +23,7 @@ class Anisochrony(DurationDiscrimination):
 
     def get_feedback_explainer(self, session):
         button_label = _("Next fragment")
-        last_result = session.get_previous_result()
+        last_result = session.last_result()
         correct_response = (
             self.first_condition_i18n
             if last_result.expected_response == self.first_condition
