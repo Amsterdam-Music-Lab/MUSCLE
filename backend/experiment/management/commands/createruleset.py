@@ -81,7 +81,7 @@ class Command(BaseCommand):
         ruleset_name_snake_case, ruleset_name_snake_case_upper, ruleset_name_pascal_case = self.get_ruleset_name_cases(ruleset_name)
 
         # Create a new file for the block class
-        filename = join('.', 'experiment', 'rules', 'tests', 'test_' + ruleset_name_snake_case + '.py')
+        filename = join(".", "experiment", "rules", "tests", f"test_{ruleset_name_snake_case}.py")
 
         # Check if the file already exists
         if isfile(filename):
