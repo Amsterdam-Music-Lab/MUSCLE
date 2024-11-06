@@ -57,7 +57,7 @@ const RAW_RUNTIME_STATE =
           ["eslint-plugin-chai-friendly", "virtual:74792effab46f58ba1849ed2d34bd613b5659d762979dea959819ade1937f6e3f71378429c07ee0ed12a2f529924b755998205bbacdbe5f616b371b307f52d67#npm:0.7.2"],\
           ["eslint-plugin-storybook", "virtual:74792effab46f58ba1849ed2d34bd613b5659d762979dea959819ade1937f6e3f71378429c07ee0ed12a2f529924b755998205bbacdbe5f616b371b307f52d67#npm:0.8.0"],\
           ["file-saver", "npm:2.0.5"],\
-          ["happy-dom", "npm:12.10.3"],\
+          ["happy-dom", "npm:15.10.2"],\
           ["history", "npm:5.3.0"],\
           ["next-share", "virtual:74792effab46f58ba1849ed2d34bd613b5659d762979dea959819ade1937f6e3f71378429c07ee0ed12a2f529924b755998205bbacdbe5f616b371b307f52d67#npm:0.27.0"],\
           ["prop-types", "npm:15.8.1"],\
@@ -9096,7 +9096,7 @@ const RAW_RUNTIME_STATE =
           ["eslint-plugin-chai-friendly", "virtual:74792effab46f58ba1849ed2d34bd613b5659d762979dea959819ade1937f6e3f71378429c07ee0ed12a2f529924b755998205bbacdbe5f616b371b307f52d67#npm:0.7.2"],\
           ["eslint-plugin-storybook", "virtual:74792effab46f58ba1849ed2d34bd613b5659d762979dea959819ade1937f6e3f71378429c07ee0ed12a2f529924b755998205bbacdbe5f616b371b307f52d67#npm:0.8.0"],\
           ["file-saver", "npm:2.0.5"],\
-          ["happy-dom", "npm:12.10.3"],\
+          ["happy-dom", "npm:15.10.2"],\
           ["history", "npm:5.3.0"],\
           ["next-share", "virtual:74792effab46f58ba1849ed2d34bd613b5659d762979dea959819ade1937f6e3f71378429c07ee0ed12a2f529924b755998205bbacdbe5f616b371b307f52d67#npm:0.27.0"],\
           ["prop-types", "npm:15.8.1"],\
@@ -12201,15 +12201,12 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["happy-dom", [\
-      ["npm:12.10.3", {\
-        "packageLocation": "../../../.yarn/berry/cache/happy-dom-npm-12.10.3-5cca1a5e23-10c0.zip/node_modules/happy-dom/",\
+      ["npm:15.10.2", {\
+        "packageLocation": "../../../.yarn/berry/cache/happy-dom-npm-15.10.2-3eadf189bc-10c0.zip/node_modules/happy-dom/",\
         "packageDependencies": [\
-          ["happy-dom", "npm:12.10.3"],\
-          ["css.escape", "npm:1.5.1"],\
+          ["happy-dom", "npm:15.10.2"],\
           ["entities", "npm:4.5.0"],\
-          ["iconv-lite", "npm:0.6.3"],\
           ["webidl-conversions", "npm:7.0.0"],\
-          ["whatwg-encoding", "npm:2.0.0"],\
           ["whatwg-mimetype", "npm:3.0.0"]\
         ],\
         "linkType": "HARD"\
@@ -17041,7 +17038,7 @@ const RAW_RUNTIME_STATE =
           ["chai", "npm:4.3.10"],\
           ["debug", "virtual:088d1bae551712e30edb3cb49147628c22e7097f1d212dd42d93076023bf76fad49f4808cd2b0d50ae3644e85dcbdd3c0d141e9646770b84a91d8637667dcadd#npm:4.3.4"],\
           ["execa", "npm:8.0.1"],\
-          ["happy-dom", "npm:12.10.3"],\
+          ["happy-dom", "npm:15.10.2"],\
           ["jsdom", null],\
           ["local-pkg", "npm:0.5.0"],\
           ["magic-string", "npm:0.30.5"],\
@@ -17113,16 +17110,6 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "../../../.yarn/berry/cache/webpack-virtual-modules-npm-0.5.0-314fd879d0-10c0.zip/node_modules/webpack-virtual-modules/",\
         "packageDependencies": [\
           ["webpack-virtual-modules", "npm:0.5.0"]\
-        ],\
-        "linkType": "HARD"\
-      }]\
-    ]],\
-    ["whatwg-encoding", [\
-      ["npm:2.0.0", {\
-        "packageLocation": "../../../.yarn/berry/cache/whatwg-encoding-npm-2.0.0-d7451f51b4-10c0.zip/node_modules/whatwg-encoding/",\
-        "packageDependencies": [\
-          ["whatwg-encoding", "npm:2.0.0"],\
-          ["iconv-lite", "npm:0.6.3"]\
         ],\
         "linkType": "HARD"\
       }]\
