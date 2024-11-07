@@ -13,7 +13,8 @@ from result.models import Result
 from session.models import Session
 from section.models import Playlist
 from theme.models import ThemeConfig
-
+from question.models import QuestionSeries, QuestionInSeries, Question
+from question.questions import create_default_questions
 
 # Expected field count per model
 EXPECTED_BLOCK_FIELDS = 10
@@ -273,6 +274,17 @@ class TestDuplicateExperiment(TestCase):
         cls.block1.playlists.add(cls.playlist1)
         cls.block1.playlists.add(cls.playlist2)
         cls.block1.save()
+        create_default_questions()
+        cls.question_series = QuestionSeries.objects.create(block=cls.block2, index=0)
+        cls.questions = Question.objects.all()
+        index = 0
+        for question in cls.questions:
+            QuestionInSeries.objects.create(question_series = cls.question_series,
+                                            question=question,
+                                            index=index)
+            index += 1
+
+        cls.questions_in_series = QuestionInSeries.objects.all()
 
         BlockTranslatedContent.objects.create(
             block=cls.block1,
@@ -331,22 +343,35 @@ class TestDuplicateExperiment(TestCase):
         request.POST = {"_duplicate": "",
                         "slug-extension": "dup%^&*litest  "}
         response = self.admin.duplicate(request, self.experiment)
+
+        new_exp = Experiment.objects.last()
         all_experiments = Experiment.objects.all()
         all_exp_content = ExperimentTranslatedContent.objects.all()
+
         all_phases = Phase.objects.all()
+
         all_blocks = Block.objects.all()
         last_block = Block.objects.last()
         all_block_content = BlockTranslatedContent.objects.all()
-        new_exp = Experiment.objects.last()
         new_block1 = Block.objects.get(slug="block1-duplitest")
+
+        all_question_series = QuestionSeries.objects.all()
+        all_questions = Question.objects.all()
 
         self.assertEqual(all_experiments.count(), 2)
         self.assertEqual(all_exp_content.count(), 4)
+        self.assertEqual(new_exp.slug, 'original-duplitest')
+
         self.assertEqual(all_phases.count(), 4)
+
         self.assertEqual(all_blocks.count(), 8)
         self.assertEqual(all_block_content.count(), 16)
-        self.assertEqual(new_exp.slug, 'original-duplitest')
         self.assertEqual(last_block.slug, 'block4-duplitest')
         self.assertEqual(last_block.theme_config.name, 'test_theme')
+
         self.assertEqual(new_block1.playlists.all().count(), 2)
+
+        self.assertEqual(all_question_series.count(), 2)
+        self.assertEqual(self.questions.count(), (all_questions.count()))
+
         self.assertEqual(response.status_code, 302)
