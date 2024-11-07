@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { render, act } from '@testing-library/react';
+import { render, act, waitFor } from '@testing-library/react';
 import Histogram from './Histogram';
 
 // Mock requestAnimationFrame and cancelAnimationFrame
@@ -19,7 +19,7 @@ describe('Histogram', () => {
     };
 
     beforeEach(() => {
-        vi.useFakeTimers();
+        vi.useFakeTimers({ toFake: ['requestAnimationFrame'] });
 
         // Mock the Web Audio API
         mockAnalyser = {
@@ -31,6 +31,7 @@ describe('Histogram', () => {
     });
 
     afterEach(() => {
+        vi.useRealTimers();
         vi.restoreAllMocks();
     });
 
@@ -142,8 +143,8 @@ describe('Histogram', () => {
         const initialHeights = getHeights();
 
         // Advance timers and trigger animation frame
-        await act(async () => {
-            vi.advanceTimersByTime(100);
+        await waitFor(async () => {
+            vi.advanceTimersToNextFrame();
         });
 
         rerender(<Histogram running={false} bars={bars} />);
