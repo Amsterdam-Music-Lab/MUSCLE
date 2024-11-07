@@ -4,7 +4,7 @@ const showBlockSessions = (id) => {
         document.querySelectorAll(`.experiment-${id}`).forEach(function (element) {
             element.classList.remove("hide");
         })
-        document.getElementById("all-sessions").classList.remove("hide");
+        document.getElementById("all-sessions").showModal();
     })
 }
 
@@ -14,7 +14,7 @@ const showParticipantSessions = (id) => {
         document.querySelectorAll(`.participant-session-${id}`).forEach(function (element) {
             element.classList.remove("hide");
         })
-        document.getElementById("all-participants").classList.add("hide");
-        document.getElementById("all-sessions").classList.remove("hide");
+        document.getElementById("all-participants").close();
+        document.getElementById("all-sessions").showModal();
     })
 }

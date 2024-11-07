@@ -18,7 +18,6 @@ describe("DefaultPage Component Tests", () => {
     const defaultProps = {
         className: 'aha__default',
         title: "Default page title",
-        logoClickConfirm: null,
         experimentSlug: 'some_experiment',
         nextBlockSlug: 'some_experiment',
     }

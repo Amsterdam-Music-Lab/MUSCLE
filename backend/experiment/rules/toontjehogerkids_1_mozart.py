@@ -9,7 +9,7 @@ logger = logging.getLogger(__name__)
 
 
 class ToontjeHogerKids1Mozart(ToontjeHoger1Mozart):
-    ID = 'TOONTJE_HOGER_KIDS_1_MOZART'
+    ID = "TOONTJE_HOGER_KIDS_1_MOZART"
 
     QUESTION_URL1 = "/images/experiments/toontjehogerkids/mozart-effect1.webp"
     QUESTION_URL2 = "/images/experiments/toontjehogerkids/mozart-effect2.webp"
@@ -25,14 +25,13 @@ class ToontjeHogerKids1Mozart(ToontjeHoger1Mozart):
                 Step("Kun jij het juiste antwoord vinden?"),
             ],
             step_numbers=True,
-            button_label="Start"
+            button_label="Start",
         )
 
     def get_task_explainer(self):
         return "Je vouwt een papier en knipt er twee hoekjes af, precies zoals op het plaatje. Welke vorm krijgt het papier dan?"
 
     def get_final_round(self, session):
-
         # Finish session.
         session.finish()
         session.save()
@@ -44,13 +43,12 @@ class ToontjeHogerKids1Mozart(ToontjeHoger1Mozart):
         score = self.get_score(session)
 
         # Final
-        final_text = "Goed gedaan!" if session.final_score >= 2 * \
-            self.SCORE_CORRECT else "Best lastig!"
+        final_text = "Goed gedaan!" if session.final_score >= 2 * self.SCORE_CORRECT else "Best lastig!"
         final = Final(
             session=session,
             final_text=final_text,
             rank=toontjehoger_ranks(session),
-            button={'text': 'Wat hebben we getest?'}
+            button={"text": "Wat hebben we getest?"},
         )
 
         # Info page
@@ -60,9 +58,9 @@ class ToontjeHogerKids1Mozart(ToontjeHoger1Mozart):
             join("info", "toontjehogerkids", "debrief.html"),
             {
                 "debrief": debrief_message,
-                "vid1": "https://video.leidenuniv.nl/embed/secure/iframe/entryId/1_moxxt7x6/uiConfId/44110401/st/0",
+                "vid1": "https://player.vimeo.com/video/1012736186?h=82640b5e3a",
                 "vid1_title": "Wat is het Mozart effect?",
-                "vid2": "https://video.leidenuniv.nl/embed/secure/iframe/entryId/1_trd2yc58/uiConfId/44110401/st/0",
+                "vid2": "https://player.vimeo.com/video/1012736336?h=e90fff89cd",
                 "vid2_title": "Hoe werkt het Mozart effect?",
             },
         )
@@ -70,7 +68,7 @@ class ToontjeHogerKids1Mozart(ToontjeHoger1Mozart):
             body=body,
             heading="Het Mozart effect",
             button_label="Terug naar ToontjeHogerKids",
-            button_link=get_current_experiment_url(session)
+            button_link=get_current_experiment_url(session),
         )
 
         return [*answer_explainer, *score, final, info]
