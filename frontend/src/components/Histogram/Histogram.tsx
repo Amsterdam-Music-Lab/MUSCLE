@@ -12,7 +12,7 @@ interface HistogramProps {
 }
 
 const Histogram: React.FC<HistogramProps> = ({
-    bars = 10,
+    bars = 8,
     spacing = 4,
     running = true,
     marginLeft = 0,
@@ -36,9 +36,11 @@ const Histogram: React.FC<HistogramProps> = ({
 
         const updateFrequencyData = () => {
             if (window.audioContext && window.analyzer) {
-                const data = new Uint8Array(bars);
+                const data = new Uint8Array(bars + 3);
                 window.analyzer.getByteFrequencyData(data);
-                setFrequencyData(data);
+                // Remove the lower end of the frequency data
+                const dataWithoutExtremes = data.slice(3, bars + 3);
+                setFrequencyData(dataWithoutExtremes);
             }
             requestRef.current = requestAnimationFrame(updateFrequencyData);
         };
