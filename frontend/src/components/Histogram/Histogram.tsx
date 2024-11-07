@@ -27,6 +27,8 @@ const Histogram: React.FC<HistogramProps> = ({
     useEffect(() => {
         if (!running) {
             if (requestRef.current) {
+                const emptyHistogram = new Uint8Array(bars);
+                setFrequencyData(emptyHistogram);
                 cancelAnimationFrame(requestRef.current);
             }
             return;
