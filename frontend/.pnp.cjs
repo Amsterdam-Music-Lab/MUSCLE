@@ -48,7 +48,6 @@ const RAW_RUNTIME_STATE =
           ["@vitest/coverage-v8", "virtual:74792effab46f58ba1849ed2d34bd613b5659d762979dea959819ade1937f6e3f71378429c07ee0ed12a2f529924b755998205bbacdbe5f616b371b307f52d67#npm:2.1.4"],\
           ["axios", "npm:1.7.5"],\
           ["axios-mock-adapter", "virtual:74792effab46f58ba1849ed2d34bd613b5659d762979dea959819ade1937f6e3f71378429c07ee0ed12a2f529924b755998205bbacdbe5f616b371b307f52d67#npm:1.22.0"],\
-          ["babel-plugin-named-exports-order", "npm:0.0.2"],\
           ["classnames", "npm:2.3.2"],\
           ["coverage-badges-cli", "npm:1.2.5"],\
           ["email-validator", "npm:2.0.4"],\
@@ -6663,7 +6662,6 @@ const RAW_RUNTIME_STATE =
           ["@vitest/coverage-v8", "virtual:74792effab46f58ba1849ed2d34bd613b5659d762979dea959819ade1937f6e3f71378429c07ee0ed12a2f529924b755998205bbacdbe5f616b371b307f52d67#npm:2.1.4"],\
           ["axios", "npm:1.7.5"],\
           ["axios-mock-adapter", "virtual:74792effab46f58ba1849ed2d34bd613b5659d762979dea959819ade1937f6e3f71378429c07ee0ed12a2f529924b755998205bbacdbe5f616b371b307f52d67#npm:1.22.0"],\
-          ["babel-plugin-named-exports-order", "npm:0.0.2"],\
           ["classnames", "npm:2.3.2"],\
           ["coverage-badges-cli", "npm:1.2.5"],\
           ["email-validator", "npm:2.0.4"],\
@@ -6996,15 +6994,6 @@ const RAW_RUNTIME_STATE =
           ["@babel/runtime", "npm:7.22.11"],\
           ["cosmiconfig", "npm:7.1.0"],\
           ["resolve", "patch:resolve@npm%3A1.22.4#optional!builtin<compat/resolve>::version=1.22.4&hash=c3c19d"]\
-        ],\
-        "linkType": "HARD"\
-      }]\
-    ]],\
-    ["babel-plugin-named-exports-order", [\
-      ["npm:0.0.2", {\
-        "packageLocation": "../../../.yarn/berry/cache/babel-plugin-named-exports-order-npm-0.0.2-4bf2bfe8f6-10c0.zip/node_modules/babel-plugin-named-exports-order/",\
-        "packageDependencies": [\
-          ["babel-plugin-named-exports-order", "npm:0.0.2"]\
         ],\
         "linkType": "HARD"\
       }]\

@@ -4353,7 +4353,6 @@ __metadata:
     "@vitest/coverage-v8": "npm:^2.1.4"
     axios: "npm:>=1.7.4"
     axios-mock-adapter: "npm:^1.22.0"
-    babel-plugin-named-exports-order: "npm:0.0.2"
     classnames: "npm:^2.2.6"
     coverage-badges-cli: "npm:^1.2.5"
     email-validator: "npm:^2.0.4"
@@ -4644,13 +4643,6 @@ __metadata:
     cosmiconfig: "npm:^7.0.0"
     resolve: "npm:^1.19.0"
   checksum: 10c0/c6dfb15de96f67871d95bd2e8c58b0c81edc08b9b087dc16755e7157f357dc1090a8dc60ebab955e92587a9101f02eba07e730adc253a1e4cf593ca3ebd3839c
-  languageName: node
-  linkType: hard
-
-"babel-plugin-named-exports-order@npm:0.0.2":
-  version: 0.0.2
-  resolution: "babel-plugin-named-exports-order@npm:0.0.2"
-  checksum: 10c0/e1d001722bddabc296b74f7cd020418a3cce9ca7052d5dd5dbd2870745d9566e286d14707c0bbfc9d4b4b643031052b358124ec735069f214d22b0b6768daf9d
   languageName: node
   linkType: hard
 
