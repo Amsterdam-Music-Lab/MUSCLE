@@ -202,11 +202,11 @@ def next_trial_actions(session, round_number):
     )
     form = Form([question])
     playback = Autoplay([section])
-    if round_number < 5:
+    if round_number < 4:
         title = _('practice')
     else:
         title = _('trial %(index)d of %(total)d') % (
-            {'index': round_number - 4, 'total': len(plan) - 4})
+            {'index': round_number - 3, 'total': len(plan) - 4})
     view = Trial(
         playback=playback,
         feedback_form=form,
