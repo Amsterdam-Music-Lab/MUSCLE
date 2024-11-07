@@ -118,14 +118,11 @@ const MatchingPairs = ({
                 currentCard.boardposition = index + 1;
                 currentCard.timestamp = performance.now();
 
-                const firstCardTimestamp = firstCard?.timestamp ?? 0;
-                currentCard.response_interval_ms = Math.round(currentCard.timestamp - firstCardTimestamp);
-
                 // check for match
                 const first_card = firstCard;
                 const second_card = currentCard;
                 try {
-                    const scoreResponse = await scoreIntermediateResult({ session, participant, result: { "start_timestamp": startOfTurn, first_card, second_card } });
+                    const scoreResponse = await scoreIntermediateResult({ session, participant, result: { "start_of_turn": startOfTurn, first_card, second_card } });
                     if (!scoreResponse) {
                         throw new Error('We cannot currently proceed with the game. Try again later');
                     }
@@ -142,10 +139,7 @@ const MatchingPairs = ({
                 currentCard.turned = true;
                 currentCard.noevents = true;
                 currentCard.boardposition = index + 1;
-                setStartOfTurn(performance.now());
                 currentCard.start_of_turn = startOfTurn;
-                // reset response interval in case this card has a value from a previous turn
-                currentCard.response_interval_ms = '';
                 // clear feedback text
                 setFeedbackText('');
             }
