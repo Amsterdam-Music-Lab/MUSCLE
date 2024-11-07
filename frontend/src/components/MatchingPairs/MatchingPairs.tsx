@@ -139,6 +139,7 @@ const MatchingPairs = ({
                 currentCard.turned = true;
                 currentCard.noevents = true;
                 currentCard.boardposition = index + 1;
+                currentCard.timestamp = performance.now();
                 // clear feedback text
                 setFeedbackText('');
             }
