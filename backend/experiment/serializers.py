@@ -1,6 +1,8 @@
 from random import shuffle
+from typing import Optional
 
 from django_markup.markup import formatter
+from django.utils.translation import activate, get_language
 
 from experiment.actions.consent import Consent
 from image.serializers import serialize_image
@@ -18,7 +20,20 @@ def serialize_actions(actions):
     return actions.action()
 
 
-def serialize_experiment(experiment: Experiment, language: str = "en") -> dict:
+def get_experiment_translated_content(experiment):
+    language_code = get_language()[0:2]
+
+    translated_content = experiment.get_translated_content(language_code)
+
+    if not translated_content:
+        raise ValueError("No translated content found for this experiment")
+
+    # set language cookie to the first available translation for this experiment
+    activate(translated_content.language)
+    return translated_content
+
+
+def serialize_experiment(experiment: Experiment) -> dict:
     """Serialize experiment
 
     Args:
@@ -28,10 +43,7 @@ def serialize_experiment(experiment: Experiment, language: str = "en") -> dict:
         Basic info about an experiment
     """
 
-    translated_content = experiment.get_translated_content(language)
-
-    if not translated_content:
-        raise ValueError("No translated content found for experiment")
+    translated_content = get_experiment_translated_content(experiment)
 
     serialized = {
         "slug": experiment.slug,
@@ -51,12 +63,17 @@ def serialize_experiment(experiment: Experiment, language: str = "en") -> dict:
         serialized["aboutContent"] = formatter(translated_content.about_content, filter_name="markdown")
 
     if hasattr(experiment, "social_media_config") and experiment.social_media_config:
-        serialized["socialMedia"] = serialize_social_media_config(experiment.social_media_config)
+        serialized["socialMedia"] = serialize_social_media_config(
+            experiment.social_media_config
+        )
 
     return serialized
 
 
-def serialize_social_media_config(social_media_config: SocialMediaConfig) -> dict:
+def serialize_social_media_config(
+    social_media_config: SocialMediaConfig,
+    score: Optional[float] = 0,
+) -> dict:
     """Serialize social media config
 
     Args:
@@ -67,10 +84,10 @@ def serialize_social_media_config(social_media_config: SocialMediaConfig) -> dic
     """
 
     return {
-        "tags": social_media_config.tags,
+        "tags": social_media_config.tags or ["amsterdammusiclab", "citizenscience"],
         "url": social_media_config.url,
-        "content": social_media_config.get_content(),
-        "channels": social_media_config.channels,
+        "content": social_media_config.get_content(score),
+        "channels": social_media_config.channels or ["facebook", "twitter"],
     }
 
 
@@ -179,7 +196,7 @@ def get_finished_session_count(block: Block, participant: Participant) -> int:
     return count
 
 
-def get_total_score(blocks: list, participant: dict) -> int:
+def get_total_score(blocks: list, participant: Participant) -> int:
     """Calculate total score of all blocks on the dashboard
 
     Args:
