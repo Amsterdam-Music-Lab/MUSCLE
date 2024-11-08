@@ -5,6 +5,7 @@ from django_markup.markup import formatter
 from experiment.actions.consent import Consent
 from image.serializers import serialize_image
 from participant.models import Participant
+from result.models import Result
 from session.models import Session
 from theme.serializers import serialize_theme
 from .models import Block, Experiment, Phase, SocialMediaConfig
@@ -83,13 +84,12 @@ def serialize_phase(phase: Phase, participant: Participant) -> dict:
     Returns:
         Dashboard info for a participant
     """
-
     blocks = list(Block.objects.filter(phase=phase.id).order_by("index"))
 
     if phase.randomize:
         shuffle(blocks)
 
-    next_block = get_upcoming_block(blocks, participant, phase.dashboard)
+    next_block = get_upcoming_block(phase, participant, blocks)
     if not next_block:
         return None
 
@@ -121,7 +121,7 @@ def serialize_block(block_object: Block, language: str = "en") -> dict:
     }
 
 
-def get_upcoming_block(block_list: list[Block], participant: Participant, repeat_allowed: bool = True):
+def get_upcoming_block(phase: Phase, participant: Participant, block_list: list[Block]):
     """return next block with minimum finished sessions for this participant
     if repeated blocks are not allowed (dashboard=False) and there are only finished sessions, return None
 
@@ -130,19 +130,23 @@ def get_upcoming_block(block_list: list[Block], participant: Participant, repeat
         participant: Participant instance
         repeat_allowed: Allow repeating a block
     """
+    finished_session_counts = [
+        get_finished_session_count(block, participant) for block in block_list
+    ]
 
-    finished_session_counts = [get_finished_session_count(block, participant) for block in block_list]
-    maximum_session_count = max(finished_session_counts)
-    least_played_block_count = next(
-        (count for count in finished_session_counts if count < maximum_session_count),
-        None,
-    )
-    if not least_played_block_count:
-        return serialize_block(block_list[0])
-
-    return serialize_block(
-        block_list[finished_session_counts.index(least_played_block_count)], participant
-    )
+    min_session_count = min(finished_session_counts)
+    if not phase.dashboard:
+        phase_profile, _created = Result.objects.get_or_create(
+            participant=participant, question_key=f"{str(phase)}-xplayed"
+        )
+        max_session_count = max(finished_session_counts)
+        if max_session_count == min_session_count:
+            if phase_profile.score != min_session_count:
+                phase_profile.score += 1
+                phase_profile.save()
+                return None
+    next_block_index = finished_session_counts.index(min_session_count)
+    return serialize_block(block_list[next_block_index])
 
 
 def get_started_session_count(block: Block, participant: Participant) -> int:

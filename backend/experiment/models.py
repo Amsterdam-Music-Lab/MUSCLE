@@ -166,7 +166,7 @@ class Phase(models.Model):
     def __str__(self):
         default_content = self.experiment.get_fallback_content()
         experiment_name = default_content.name if default_content else None
-        compound_name = experiment_name or self.experiment.slug or "Unnamed phase"
+        compound_name = experiment_name or self.experiment.slug or "Unnamed experiment"
         return f"{compound_name} ({self.index})"
 
     class Meta:
