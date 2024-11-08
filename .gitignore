@@ -1,6 +1,7 @@
 .env
 .vscode/*
 !.vscode/extensions.json
+!.vscode/launch.json
 .DS_Store
 
 node_modules/
