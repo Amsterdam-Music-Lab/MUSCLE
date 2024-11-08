@@ -125,6 +125,27 @@ def create_default_questions(overwrite = False):
             group.questions.add(q)
     print("Done")
 
+
+def populate_translation_fields(lang):
+    cur_lang = translation.get_language()
+    translation.activate(lang)
+    for group_key, questions in QUESTION_GROUPS_DEFAULT.items():
+        for question in questions:
+            q = Question.objects.get(key = question.key)
+            q.question = str(question.question)
+            q.explainer = str(question.explainer)
+            q.save()
+
+            if hasattr(question,'choices'):
+                keys = question.choices.keys() if hasattr(question.choices,'keys') else range(0, len(question.choices))
+                for key in keys:
+                    choice = q.choice_set.all().get(key=key)
+                    choice.text = str(question.choices[key])
+                    choice.save()
+
+    translation.activate(cur_lang)
+
+
 def create_question_db(key):
     """ Creates form.question object from a Question in the database with key"""
 
