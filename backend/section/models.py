@@ -19,6 +19,7 @@ Our examples will assume that a playlist with the following csv data has been ad
 import datetime
 import random
 import csv
+from os.path import join
 
 from django.db import models
 from django.utils import timezone
@@ -300,7 +301,7 @@ class Song(models.Model):
 def _audio_upload_path(instance, filename: str) -> str:
     """Generate path to save audio based on playlist.name"""
     folder_name = instance.playlist.name.replace(" ", "")
-    return "{0}/{1}".format(folder_name, filename)
+    return join(folder_name, filename)
 
 
 class Section(models.Model):
