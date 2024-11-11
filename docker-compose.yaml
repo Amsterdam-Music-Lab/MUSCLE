@@ -27,7 +27,7 @@ services:
         build:
             context: ./backend
             dockerfile: DockerfileDevelop
-            target: base # Set to debug to use debugpy
+            target: base
         depends_on:
             db:
                 condition: service_healthy
@@ -58,7 +58,7 @@ services:
         command: >
             bash -c "python manage.py migrate &&
                     python manage.py bootstrap &&
-                    python -m debugpy --listen 0.0.0.0:5678 --wait-for-client manage.py runserver 0.0.0.0:8000"
+                    ${DEBUG_COMMAND:-python manage.py runserver 0.0.0.0:8000}"
     client:
         build:
             context: ./frontend

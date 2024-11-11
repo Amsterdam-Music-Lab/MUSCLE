@@ -17,3 +17,6 @@ pip-tools
 
 # Ruff for linting
 ruff
+
+# Debugpy for debugging in vscode
+debugpy
