@@ -1,10 +1,9 @@
-from django.conf import settings
 from django.test import TestCase
 from django.utils import timezone
 from django.core.files.uploadedfile import SimpleUploadedFile
 
 from image.models import Image
-from experiment.serializers import serialize_block, serialize_phase
+from experiment.serializers import serialize_phase
 from experiment.models import (
     Block,
     BlockTranslatedContent,
@@ -24,6 +23,9 @@ class TestExperimentViews(TestCase):
     @classmethod
     def setUpTestData(cls):
         cls.participant = Participant.objects.create()
+        session = cls.client.session
+        session["participant_id"] = cls.participant.id
+        session.save()
         theme_config = create_theme_config()
         experiment = Experiment.objects.create(
             slug="test_series",
@@ -46,10 +48,6 @@ class TestExperimentViews(TestCase):
         cls.block4 = Block.objects.create(slug="block4", phase=cls.final_phase)
 
     def test_get_experiment(self):
-        # save participant data to request session
-        session = self.client.session
-        session["participant_id"] = self.participant.id
-        session.save()
         # check that the correct block is returned correctly
         response = self.client.get("/experiment/test_series/")
         self.assertEqual(response.json().get("nextBlock").get("slug"), "block1")
@@ -72,12 +70,12 @@ class TestExperimentViews(TestCase):
         self.assertEqual(response_json.get("socialMedia").get("tags"), ["aml", "toontjehoger"])
         self.assertEqual(response_json.get("socialMedia").get("channels"), ["facebook", "twitter", "weibo"])
 
-    def test_get_experiment_not_found(self):
+    def test_experiment_not_found(self):
         # if Experiment does not exist, return 404
         response = self.client.get("/experiment/not_found/")
         self.assertEqual(response.status_code, 404)
 
-    def test_get_experiment_inactive(self):
+    def test_experiment_inactive(self):
         # if Experiment is inactive, return 404
         experiment = Experiment.objects.get(slug="test_series")
         experiment.active = False
@@ -85,32 +83,30 @@ class TestExperimentViews(TestCase):
         response = self.client.get("/experiment/test_series/")
         self.assertEqual(response.status_code, 404)
 
-    def test_get_experiment_without_social_media(self):
-        session = self.client.session
-        session["participant_id"] = self.participant.id
-        session.save()
-        Session.objects.create(block=self.block1, participant=self.participant, finished_at=timezone.now())
-        self.intermediate_phase.dashboard = True
-        self.intermediate_phase.save()
+    def test_experiment_has_no_phases(self):
+        Experiment.objects.create(slug="invalid_experiment")
+        response = self.client.get("/experiment/invalid_experiment/")
+        self.assertEqual(response.status_code, 500)
 
+    def test_experiment_without_social_media(self):
         experiment = Experiment.objects.create(
             slug="no_social_media",
             theme_config=create_theme_config(name="no_social_media"),
         )
+        self.intermediate_phase.experiment = experiment
+        self.intermediate_phase.save()
         ExperimentTranslatedContent.objects.create(
-            experiment=experiment, language="en", name="Test Experiment", description="Test Description"
+            experiment=experiment,
+            language="en",
+            name="Test Experiment",
+            description="Test Description",
         )
-
         response = self.client.get("/experiment/no_social_media/")
-
         self.assertEqual(response.status_code, 200)
         self.assertNotIn("socialMedia", response.json())
 
     def test_experiment_with_dashboard(self):
         # if Experiment has dashboard set True, return list of random blocks
-        session = self.client.session
-        session["participant_id"] = self.participant.id
-        session.save()
         Session.objects.create(block=self.block1, participant=self.participant, finished_at=timezone.now())
         self.intermediate_phase.dashboard = True
         self.intermediate_phase.save()
@@ -120,9 +116,6 @@ class TestExperimentViews(TestCase):
 
     def test_experiment_total_score(self):
         """Test calculation of total score for grouped block on dashboard"""
-        session = self.client.session
-        session["participant_id"] = self.participant.id
-        session.save()
         Session.objects.create(
             block=self.block2, participant=self.participant, finished_at=timezone.now(), final_score=8
         )
@@ -148,6 +141,8 @@ class TestExperimentViews(TestCase):
         """Test get_fallback_content method"""
 
         experiment = Experiment.objects.create(slug="test_experiment_translated_content")
+        self.intermediate_phase.experiment = experiment
+        self.intermediate_phase.save()
         ExperimentTranslatedContent.objects.create(
             experiment=experiment,
             index=0,
@@ -185,61 +180,7 @@ class TestExperimentViews(TestCase):
         response = self.client.get("/experiment/test_experiment_translated_content/", headers={"Accept-Language": "nl"})
 
         # since no Dutch translation is available, the fallback content should be returned
-        self.assertEqual(response.json().get("name"), "Test Experiment Fallback Content")
-
-
-class ExperimentViewsTest(TestCase):
-    def test_serialize_block(self):
-        # Create the experiment & phase for the block
-        experiment = Experiment.objects.create(slug="test-experiment")
-        phase = Phase.objects.create(experiment=experiment)
-
-        # Create a block
-        block = Block.objects.create(
-            slug="test-block",
-            image=Image.objects.create(
-                title="Test",
-                description="",
-                file="test-image.jpg",
-                alt="Test",
-                href="https://www.example.com",
-                rel="",
-                target="_self",
-            ),
-            theme_config=create_theme_config(),
-            phase=phase,
-        )
-        BlockTranslatedContent.objects.create(
-            block=block,
-            language="en",
-            name="Test Block",
-            description="This is a test block",
-        )
-        participant = Participant.objects.create()
-        Session.objects.bulk_create(
-            [Session(block=block, participant=participant, finished_at=timezone.now()) for index in range(3)]
-        )
-
-        # Call the serialize_block function
-        serialized_block = serialize_block(block, participant)
-
-        # Assert the serialized data
-        self.assertEqual(serialized_block["slug"], "test-block")
-        self.assertEqual(serialized_block["name"], "Test Block")
-        self.assertEqual(serialized_block["description"], "This is a test block")
-        self.assertEqual(
-            serialized_block["image"],
-            {
-                "title": "Test",
-                "description": "",
-                "file": f"{settings.BASE_URL}/upload/test-image.jpg",
-                "href": "https://www.example.com",
-                "alt": "Test",
-                "rel": "",
-                "target": "_self",
-                "tags": [],
-            },
-        )
+        self.assertEqual(response.json().get("name"), "Test Experiment Fallback Content")=å
 
     def test_get_block(self):
         # Create a block

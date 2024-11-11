@@ -99,18 +99,17 @@ def serialize_phase(phase: Phase, participant: Participant) -> dict:
         participant: Participant instance
 
     Returns:
-        Dashboard info for a participant
+        A dictionary of the dashboard (if applicable), the next block, and the total score of the phase
     """
-    blocks = list(Block.objects.filter(phase=phase.id).order_by("index"))
+    blocks = list(phase.blocks.order_by("index").all())
 
-    if phase.randomize:
-        shuffle(blocks)
-
-    next_block = get_upcoming_block(phase, participant, blocks)
+    next_block = get_upcoming_block(phase, participant)
     if not next_block:
         return None
 
     total_score = get_total_score(blocks, participant)
+    if phase.randomize:
+        shuffle(blocks)
 
     return {
         "dashboard": [serialize_block(block, participant) for block in blocks] if phase.dashboard else [],
@@ -138,17 +137,19 @@ def serialize_block(block_object: Block, language: str = "en") -> dict:
     }
 
 
-def get_upcoming_block(phase: Phase, participant: Participant, block_list: list[Block]):
+def get_upcoming_block(phase: Phase, participant: Participant):
     """return next block with minimum finished sessions for this participant
-    if repeated blocks are not allowed (dashboard=False) and there are only finished sessions, return None
+    if all blocks have been played an equal number of times, return None
 
     Args:
-        block_list: List of Block instances
-        participant: Participant instance
-        repeat_allowed: Allow repeating a block
+        phase: Phase for which next block needs to be picked
+        participant: Participant for which next block needs to be picked
     """
+    blocks = list(phase.blocks.all())
+
+    shuffle(blocks)
     finished_session_counts = [
-        get_finished_session_count(block, participant) for block in block_list
+        get_finished_session_count(block, participant) for block in blocks
     ]
 
     min_session_count = min(finished_session_counts)
@@ -163,7 +164,7 @@ def get_upcoming_block(phase: Phase, participant: Participant, block_list: list[
                 phase_profile.save()
                 return None
     next_block_index = finished_session_counts.index(min_session_count)
-    return serialize_block(block_list[next_block_index])
+    return serialize_block(blocks[next_block_index])
 
 
 def get_started_session_count(block: Block, participant: Participant) -> int:
@@ -192,8 +193,9 @@ def get_finished_session_count(block: Block, participant: Participant) -> int:
         Number of finished sessions for this block and participant
     """
 
-    count = Session.objects.filter(block=block, participant=participant, finished_at__isnull=False).count()
-    return count
+    return Session.objects.filter(
+        block=block, participant=participant, finished_at__isnull=False
+    ).count()
 
 
 def get_total_score(blocks: list, participant: Participant) -> int:
