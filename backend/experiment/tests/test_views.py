@@ -138,13 +138,17 @@ class TestExperimentViews(TestCase):
         )
         self.intermediate_phase.dashboard = True
         self.intermediate_phase.save()
-        serialized_coll_1 = serialize_phase(self.intermediate_phase, self.participant)
+        serialized_coll_1 = serialize_phase(
+            self.intermediate_phase, self.participant, 0
+        )
         total_score_1 = serialized_coll_1["totalScore"]
         self.assertEqual(total_score_1, 8)
         Session.objects.create(
             block=self.block3, participant=self.participant, finished_at=timezone.now(), final_score=8
         )
-        serialized_coll_2 = serialize_phase(self.intermediate_phase, self.participant)
+        serialized_coll_2 = serialize_phase(
+            self.intermediate_phase, self.participant, 0
+        )
         total_score_2 = serialized_coll_2["totalScore"]
         self.assertEqual(total_score_2, 16)
 
@@ -216,7 +220,7 @@ class TestExperimentViews(TestCase):
             slug="test-block",
             image=Image.objects.create(file="test-image.jpg"),
             rules=RhythmBatteryIntro.ID,
-            theme_config=create_theme_config(),
+            theme_config=create_theme_config("new-theme"),
             rounds=3,
             bonus_points=42,
             phase=phase,
@@ -244,7 +248,7 @@ class TestExperimentViews(TestCase):
 
         self.assertEqual(response.json()["slug"], "test-block")
         self.assertEqual(response.json()["name"], "Test Block")
-        self.assertEqual(response.json()["theme"]["name"], "test_theme")
+        self.assertEqual(response.json()["theme"]["name"], "new-theme")
         self.assertEqual(len(response.json()["theme"]["header"]["score"]), 3)
         self.assertEqual(response.json()["theme"]["footer"]["disclaimer"], "<p>Test Disclaimer</p>")
         self.assertEqual(response.json()["rounds"], 3)
