@@ -4,21 +4,38 @@
 Make sure you're logged in to the admin interface (see previous step).
 
 Then, next to "Experiments" click "Add".
-<img width="1002" alt="AddExperiment" src="https://github.com/Amsterdam-Music-Lab/MUSCLE/assets/11174072/f71e77a1-1308-40f3-b8d5-e6f81f2ae0c0">
+<img alt="AddExperiment" src="/assets/images/experiments/AddExperiment.png">
 
 ## The Experiment form
 The form which appears lets you select the following fields:
-1. a name for your new experiment (required)
-2. a slug for the experiment (required). The slug is the part of the part of the URL which will be used to find the experiment from the frontend. In this case, the experiment will be available from `localhost:3000/someslug`.
-3. a URL with more information about the experiment (optional)
-4. a hashtag for posting about the experiment on social media (optional)
-5. a preferred language in which the experiment should be shown (optional). If this field is left "Unset", this means that the language will be determined based on the user's browser settings. Otherwise, the set language will be shown, with a fallback to English in case no translation is available.
-6. the rules of the experiment (required). This sets which logic the experiment follows. You can select implemented "rules" that have already been implemented in Python.
-7. the number of rounds the experiment should run (optional). This is set to 10 by default, which is usually fine. Not all rules files use rounds to control when specific "phases" of the experiment start or end. Think of staircasing experiments, which will present more or less difficult stimuli depending on the user's responses. These rules just ignore the "Rounds" field.
-8. bonus points (optional). Few experiments use this field, but you can use this to give bonus points to a participant who completed the experiment.
-9. a playlist (optional). For most experiments (except for those which are questionnaires) you will want to select a playlist here.
-<img width="828" alt="AddExperimentPart1" src="https://github.com/Amsterdam-Music-Lab/MUSCLE/assets/11174072/97d57e23-aa26-40db-83ec-a1312873fdf4">
 
-10. an experiment series (optional). This is used to string several experiments together. Best to leave alone, may be deprecated.
-11. questions (optional). You can select any questions you want to ask your participants before starting an audio experiment here.
-<img width="992" alt="AddExperimentPart2" src="https://github.com/Amsterdam-Music-Lab/MUSCLE/assets/11174072/d8253af5-9be2-4428-a90a-9e612c863fb8">
+1. a unique slug for your new experiment (required) If you test locally, the experiment will be available from `localhost:3000/someslug`.
+
+2. a checkbox indicating whether the experiment is active
+
+3. optional: a theme config (through which you can change the background, logos, etc.)
+
+4. `Translated Content` containing information about the experiment, a consent file, and messages to be displayed on social media, in a given language.
+
+5. Phases (required): a phase of your experiment, which may contain one or more blocks. Note that every experiment needs to have at least one phase with one block configured.
+
+    If you select "dashboard", the phase will appear as a dashboard, from which users can select which block to play. If "dashboard" is false, the blocks will be presented in linear order to the participant. If you select "randomize", the blocks will be shuffled, either in the dashboard view, or the linear procedure.
+
+    Within a phase, you have the option to add one or more **blocks**, with the following options:
+
+    - Index: order in which block should appear in the phase (will be ignored when `phase.randomize` is set)
+
+    - Slug: unique slug of the block
+
+    - Rules: the ruleset for the block
+
+    - Rounds: how many rounds should be presented to the participant (*used in some, but not all rulesets!*)
+
+    - Bonus points: bonus points to be awarded to the participant under given conditions (*used by very few rulesets*)
+
+    - Playlists: select one or more playlists to be associated with the block (*note that some rulesets require a very specific format for the playlist, this will be checked when you save the experiment, and may generate warnings*)
+
+    - BlockTranslatedContent: a name and description of the block in a given language, will only be shown in the dashboard view
+
+6. a Social Media Config to customize the tags and url which should be shown when participants share that they played the experiment on social media, as well as the channels in which they can share
+

@@ -1,54 +1,60 @@
 # Custom questions
+You can add questions to the MUSCLE infrastructure through the admin interface.
 
-## The backend directory
-To add questions that haven't yet been added to the MUSCLE infrastructure, you'll have to navigate to the backend directory. It has the following file structure:
-```bash
-.
-├── aml
-├── experiment
-├── locale
-├── logs
-├── participant
-├── requirements
-├── requirements.in
-├── result
-├── section
-├── session
-└── upload
-```
+In the admin overview, you can see the question app with three models:
+<img width="656" alt="adminList" src="/assets/images/questions/QuestionApp.png">
 
-The backend is written in Python, so a little bit of familiarity with programming is required. Within the backend directory, go to the `experiment` directory. Within, you find the following file structure:
-```bash
-.
-├── actions
-├── fixtures
-├── management
-├── migrations
-├── questions
-├── rules
-├── standards
-├── templates
-└── tests
-```
+## Question Groups
+Question Groups are sets of questions which are predefined, such as "Demographics" or question sets from the Goldsmith MSI questionnaire. We recommend not editing these, but you can add your own Question Group if you want to reuse the same set of questions in multiple experiments.
+<img width="500" alt="adminList" src="/assets/images/questions/QuestionGroup.png">
 
-The files in the `rules` directory specify the logic of experiments. We'll turn to those later.
+## Question Series
+Question Series are sets of questions you can attach to a given block in your experiment. If you click "Add", you will see the following form:
+<img alt="adminList" src="/assets/images/questions/QuestionSeries.png">
 
-The files in the `questions` directory contain the questions, as Python classes. For instance, if you look into the file `goldsmiths.py` you'll see the following:
-<img width="720" alt="Screenshot 2023-11-14 at 14 30 51" src="https://github.com/Amsterdam-Music-Lab/MUSCLE/assets/11174072/723f1add-602c-4e34-ae01-4b683af56157">
+You need to give the Question Series a descriptive name, and choose the block with which it is associated (important: the block will only display questions if its ruleset has a method that presents these questions to the participant), and an index, used for handling order if you have multiple `QuestionSeries` attached to a given block.
 
-We have different question types available, all imported from `backend/experiment/actions/forms.py`:
-- NumberQuestion (number field)
-- TextQuestion (text field)
-- BooleanQuestion (yes/no buttons)
-- ButtonArrayQuestion (more than 2 buttons)
-- RadiosQuestion (radio buttons)
-- DropdownQuestion (dropdown menu)
-- AutoCompleteQuestion (dropdown menu with autocomplete)
-- RangeQuestion (slider)
-- LikertQuestion (slider in which chosen category is displayed on top)
+You can also choose whether or not the questions in the Question Series should be presented in randomized order.
 
-As you can see, the Goldsmith's Musical Sophistication Index uses many LikertQuestions. LikertQuestions can be initialized with a `key` and a `question` argument. The key helps us find the responses to the question back in the database, so it's a good idea to use a unique, recognizable key. The key should not contain other characters than numbers, letters and underscores.
+To add questions to the Question Series, you can either select from a list of questions, or add all questions from a Question Group. You can then remove or add other questions as you wish.
 
-The `question` is the prompt shown to a participant. Here, it is wrapped in a translation tag (represented by `_( )`): this means the question can be translated into different languages.
+## Questions
+Questions are the actual question objects. Many questions are already configured. If you click "Add", you will see the following form:
+<img alt="adminList" src="/assets/images/questions/Question.png">
 
-If you wish to add questions to the infrastructure, you are of course welcome to so in a fork of the project. However, if you think the questions may be of interest to other users, consider making a [git branch](https://git-scm.com/book/en/v2/Git-Branching-Basic-Branching-and-Merging) and contribute to this repository with a [pull request](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request).
+On the top, you can choose the language(s) in which you wish to enter the question. The languages that are shown can be configured through the `MODELTRANSLATION_LANGUAGES` settings in Django. Note that it is not necessary to provide translations, but that a question will be much more reusable if it has translations to multiple languages.
+
+Enter a descriptive question key, e.g., `favorite_food_open_question`. Note that the key can only contain letters, numbers, and underscores.
+
+The Question is the actual question text that will be asked to the participant. Optionally, you can also add an Explainer with instructions to the participant, e.g., "Rate on a scale of 1 to 7".
+
+Indicate the *Type* of question, which influences the widget participants will see:
+
+- AutoCompleteQuestion will show a dropdown which will autocomplete if a participant starts typing
+
+- BooleanQuestion will show yes/no buttons
+
+- ChoiceQuestion will show a select menu (can be further configured as radio / dropdown etc.)
+
+- LikertQuestion will show a slider with different answer options
+
+- LikertQuestionIcon will show icons instead of text for different answer options
+
+- NumberQuestion will show a number selector
+
+- TextQuestion will show a text field - use this for open questions
+
+Finally, you can indicate whether your question can be skipped by the participant.
+
+Clicking "Save and continue editing" on all questions but `TextQuestion` will bring up another menu:
+<img alt="adminList" src="/assets/images/questions/QuestionChoice.png">
+
+You can select different widgets:
+- BUTTON_ARRAY: a horizontal array of buttons with the answer options (one answer possible)
+- CHECKBOXES: a vertical array of checkboxes (multiple answers possible)
+- DROPDOWN: a dropdown menu (one answer possible)
+- RADIOS: a vertical array of radio buttons (one answer possible)
+
+For CHECKBOXES, you also need to indicate how many answers need to be minimally checked before the participant can click the "submit" button
+
+Finally, you can add Choices, which are again a combination of a descriptive key (consisting of letters, numbers, and underscores), and a translatable text. The index controls the order in which choices will appear.
