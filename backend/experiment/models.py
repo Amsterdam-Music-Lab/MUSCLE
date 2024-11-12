@@ -1,4 +1,5 @@
 import copy
+from os.path import join
 
 from django.db import models
 from django.utils import timezone
@@ -144,7 +145,7 @@ def consent_upload_path(instance: Experiment, filename: str) -> str:
     folder_name = experiment.slug
     language = instance.language
 
-    return f"consent/{folder_name}/{language}-{filename}"
+    return join("consent", folder_name, f"{language}-{filename}")
 
 
 class Phase(models.Model):
