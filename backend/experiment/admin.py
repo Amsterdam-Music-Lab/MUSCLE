@@ -308,11 +308,39 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, NestedModelAdmin):
 
         if "_duplicate" in request.POST:
             # Get slug from the form
-            slug_extension = request.POST.get("slug-extension")
-            if slug_extension == "":
-                slug_extension = "copy"
-            # Strip slug from non-alphanumeric characters
-            clean_slug = "-" + "".join(char for char in slug_extension if char.isalnum())
+            extension = request.POST.get("slug-extension")
+            if extension == "":
+                extension = "copy"
+            slug_extension = f"-{extension}"
+
+            # Validate slug
+            if not extension.isalnum():
+                messages.add_message(request,
+                                     messages.ERROR,
+                                     f"{extension} is nog a valid slug extension. Only alphanumeric characters are allowed.")
+            if extension.lower() != extension:
+                messages.add_message(request,
+                                     messages.ERROR,
+                                     f"{extension} is nog a valid slug extension. Only lowercase characters are allowed.")
+            # Check for duplicate slugs
+            for exp in Experiment.objects.all():
+                if exp.slug == f"{obj.slug}{slug_extension}":
+                    messages.add_message(request,
+                                     messages.ERROR,
+                                     f"An experiment with slug: {obj.slug}{slug_extension} already exists. Please choose a different slug extension.")
+            for as_block in obj.associated_blocks():
+                for block in Block.objects.all():
+                    if f"{as_block.slug}{slug_extension}" == block.slug:
+                        messages.add_message(request,
+                                        messages.ERROR,
+                                        f"A block with slug: {block.slug}{slug_extension} already exists. Please choose a different slug extension.")
+            # Return to form with error messages
+            if len(messages.get_messages(request)) != 0:
+                return render(
+                    request,
+                    "duplicate-experiment.html",
+                    context={"exp": obj},
+                )
 
             # order_by is inserted here to prevent a query error
             exp_contents = obj.translated_content.order_by('name').all()
@@ -323,17 +351,7 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, NestedModelAdmin):
             exp_copy = obj
             exp_copy.pk = None
             exp_copy._state.adding = True
-            exp_copy.slug = obj.slug + clean_slug
-
-            # Check for duplicate experiment slugs
-            for exp in Experiment.objects.all():
-                if exp.slug == exp_copy.slug:
-                    # Reload form with error message
-                    return render(request,
-                                  "duplicate-experiment.html",
-                                  context={"exp": obj,
-                                           "slug_error":"An experiment with the slug '" + exp_copy.slug + "' already exists."},
-                                           )
+            exp_copy.slug = f"{obj.slug}{slug_extension}"
             exp_copy.save()
 
             # Duplicate experiment translated content objects
@@ -363,17 +381,7 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, NestedModelAdmin):
                     block_copy = block
                     block_copy.pk = None
                     block_copy._state.adding = True
-                    block_copy.slug = block.slug + clean_slug
-
-                    # Check for duplicate Block slugs
-                    for existing_block in Block.objects.all():
-                        if existing_block.slug == block_copy.slug:
-                            # Reload form with error message
-                            return render(request,
-                                  "duplicate-experiment.html",
-                                  context={"exp": obj,
-                                           "slug_error":"A Block with the slug '" + block_copy.slug + "' already exists."},
-                                           )
+                    block_copy.slug = f"{block.slug}{slug_extension}"
                     block_copy.phase = phase_copy
                     block_copy.save()
                     block_copy.playlists.set(these_playlists)
@@ -411,7 +419,7 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, NestedModelAdmin):
         # Go back to experiment overview
         if "_back" in request.POST:
             return self.redirect_to_overview()
-        
+
         # Show experiment duplicate form
         return render(
             request,

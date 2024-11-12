@@ -341,7 +341,7 @@ class TestDuplicateExperiment(TestCase):
     def test_duplicate_experiment(self):
         request = MockRequest()
         request.POST = {"_duplicate": "",
-                        "slug-extension": "dup%^&*litest  "}
+                        "slug-extension": "duplitest"}
         response = self.admin.duplicate(request, self.experiment)
 
         new_exp = Experiment.objects.last()
