@@ -23,9 +23,6 @@ class TestExperimentViews(TestCase):
     @classmethod
     def setUpTestData(cls):
         cls.participant = Participant.objects.create()
-        session = cls.client.session
-        session["participant_id"] = cls.participant.id
-        session.save()
         theme_config = create_theme_config()
         experiment = Experiment.objects.create(
             slug="test_series",
@@ -46,6 +43,11 @@ class TestExperimentViews(TestCase):
         cls.block3 = Block.objects.create(slug="block3", phase=cls.intermediate_phase)
         cls.final_phase = Phase.objects.create(experiment=experiment, index=3)
         cls.block4 = Block.objects.create(slug="block4", phase=cls.final_phase)
+
+    def setUp(self):
+        session = self.client.session
+        session["participant_id"] = self.participant.id
+        session.save()
 
     def test_get_experiment(self):
         # check that the correct block is returned correctly
@@ -69,6 +71,21 @@ class TestExperimentViews(TestCase):
         self.assertEqual(response_json.get("socialMedia").get("content"), "Please play this Test experiment!")
         self.assertEqual(response_json.get("socialMedia").get("tags"), ["aml", "toontjehoger"])
         self.assertEqual(response_json.get("socialMedia").get("channels"), ["facebook", "twitter", "weibo"])
+        Session.objects.create(
+            block=self.block4, participant=self.participant, finished_at=timezone.now()
+        )
+        # starting second round of experiment
+        response = self.client.get("/experiment/test_series/")
+        response_json = response.json()
+        self.assertIsNotNone(response_json)
+        self.assertEqual(response_json.get("nextBlock").get("slug"), "block1")
+        Session.objects.create(
+            block=self.block1, participant=self.participant, finished_at=timezone.now()
+        )
+        response = self.client.get("/experiment/test_series/")
+        response_json = response.json()
+        self.assertIsNotNone(response_json)
+        self.assertIn(response_json.get("nextBlock").get("slug"), ("block2", "block3"))
 
     def test_experiment_not_found(self):
         # if Experiment does not exist, return 404
@@ -164,9 +181,9 @@ class TestExperimentViews(TestCase):
 
         # request experiment with language set to English (British)
         response = self.client.get(
-            "/experiment/test_experiment_translated_content/", headers={"Accept-Language": "en-Gb"}
+            "/experiment/test_experiment_translated_content/",
+            headers={"Accept-Language": "en-Gb"},
         )
-
         # since English translation is available, the English content should be returned
         self.assertEqual(response.json().get("name"), "Test Experiment Fallback Content")
 
@@ -180,7 +197,9 @@ class TestExperimentViews(TestCase):
         response = self.client.get("/experiment/test_experiment_translated_content/", headers={"Accept-Language": "nl"})
 
         # since no Dutch translation is available, the fallback content should be returned
-        self.assertEqual(response.json().get("name"), "Test Experiment Fallback Content")=å
+        self.assertEqual(
+            response.json().get("name"), "Test Experiment Fallback Content"
+        )
 
     def test_get_block(self):
         # Create a block

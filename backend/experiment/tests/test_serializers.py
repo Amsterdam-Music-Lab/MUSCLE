@@ -39,7 +39,7 @@ class SerializerTest(TestCase):
         block.save()
 
     def test_serialize_phase(self):
-        phase = serialize_phase(self.phase1, self.participant)
+        phase = serialize_phase(self.phase1, self.participant, 0)
         self.assertIsNotNone(phase)
         next_block_slug = phase.get("nextBlock").get("slug")
         self.assertEqual(phase.get("dashboard"), [])
@@ -50,21 +50,21 @@ class SerializerTest(TestCase):
             block=Block.objects.get(slug=next_block_slug),
             finished_at=timezone.now(),
         )
-        phase = serialize_phase(self.phase1, self.participant)
+        phase = serialize_phase(self.phase1, self.participant, 0)
         self.assertIsNone(phase)
 
     def test_upcoming_block(self):
-        block = get_upcoming_block(self.phase1, self.participant)
+        block = get_upcoming_block(self.phase1, self.participant, 0)
         self.assertEqual(block.get("slug"), "rhythm_intro")
         Session.objects.create(
             block=Block.objects.get(slug=block.get("slug")),
             participant=self.participant,
             finished_at=timezone.now(),
         )
-        block = get_upcoming_block(self.phase1, self.participant)
+        block = get_upcoming_block(self.phase1, self.participant, 0)
         self.assertIsNone(block)
         for i in range(3):
-            block = get_upcoming_block(self.phase2, self.participant)
+            block = get_upcoming_block(self.phase2, self.participant, 0)
             self.assertIsNotNone(block)
             self.assertIn(block.get("slug"), ["ddi", "hbat_bit", "rhdis"])
             Session.objects.create(
@@ -72,8 +72,10 @@ class SerializerTest(TestCase):
                 participant=self.participant,
                 finished_at=timezone.now(),
             )
-        block = get_upcoming_block(self.phase2, self.participant)
+        block = get_upcoming_block(self.phase2, self.participant, 0)
         self.assertIsNone(block)
+        block = get_upcoming_block(self.phase1, self.participant, 1)
+        self.assertIsNotNone(block)
 
     def test_serialize_block(self):
         # Create the experiment & phase for the block

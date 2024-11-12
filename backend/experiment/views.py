@@ -116,15 +116,18 @@ def get_experiment(
             {"error": "This experiment does not have phases and blocks configured"},
             status=500,
         )
-    phase_key = 'f"{slug}-phase"'
-    phase_index = request.session.get(phase_key, 0)
-    if phase_index == len(phases):
-        phase_index = 0
-    serialized_phase = serialize_phase(phases[phase_index], participant)
-    if not serialized_phase:
-        phase_index += 1
-        request.session[phase_key] = phase_index
-        serialized_phase = serialize_phase(phases[phase_index], participant)
+    times_played_key = 'f"{slug}-xplayed"'
+    times_played = request.session.get(times_played_key, 0)
+    for phase in phases:
+        serialized_phase = serialize_phase(phase, participant, times_played)
+        if serialized_phase:
+            return JsonResponse(
+                {**serialize_experiment(experiment), **serialized_phase}
+            )
+    # if no phase was found, start from scratch by incrementing times_pleyd
+    times_played += 1
+    request.session[times_played_key] = times_played
+    serialized_phase = serialize_phase(phases[0], participant, times_played)
     return JsonResponse({**serialize_experiment(experiment), **serialized_phase})
 
 

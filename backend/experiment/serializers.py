@@ -91,7 +91,7 @@ def serialize_social_media_config(
     }
 
 
-def serialize_phase(phase: Phase, participant: Participant) -> dict:
+def serialize_phase(phase: Phase, participant: Participant, times_played: int) -> dict:
     """Serialize phase
 
     Args:
@@ -103,7 +103,7 @@ def serialize_phase(phase: Phase, participant: Participant) -> dict:
     """
     blocks = list(phase.blocks.order_by("index").all())
 
-    next_block = get_upcoming_block(phase, participant)
+    next_block = get_upcoming_block(phase, participant, times_played)
     if not next_block:
         return None
 
@@ -137,7 +137,7 @@ def serialize_block(block_object: Block, language: str = "en") -> dict:
     }
 
 
-def get_upcoming_block(phase: Phase, participant: Participant):
+def get_upcoming_block(phase: Phase, participant: Participant, times_played: int):
     """return next block with minimum finished sessions for this participant
     if all blocks have been played an equal number of times, return None
 
@@ -154,15 +154,8 @@ def get_upcoming_block(phase: Phase, participant: Participant):
 
     min_session_count = min(finished_session_counts)
     if not phase.dashboard:
-        phase_profile, _created = Result.objects.get_or_create(
-            participant=participant, question_key=f"{str(phase)}-xplayed"
-        )
-        max_session_count = max(finished_session_counts)
-        if max_session_count == min_session_count:
-            if phase_profile.score != min_session_count:
-                phase_profile.score += 1
-                phase_profile.save()
-                return None
+        if times_played != min_session_count:
+            return None
     next_block_index = finished_session_counts.index(min_session_count)
     return serialize_block(blocks[next_block_index])
 
