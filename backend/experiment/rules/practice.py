@@ -1,10 +1,10 @@
 import math
 import random
-from typing import Tuple
+from typing import Tuple, Union
 
 from django.utils.translation import gettext_lazy as _
 
-from experiment.actions import ChoiceQuestion, Form, Explainer, Score, Step, Trial
+from experiment.actions import ChoiceQuestion, Form, Explainer, Step, Trial
 from experiment.actions.playback import Autoplay
 from experiment.rules.base import Base
 from result.utils import prepare_result
@@ -12,22 +12,50 @@ from section.models import Section
 from session.models import Session
 
 class Practice(Base):
-    ''' Practice is a rules class which presents a trial n_practice_round times
-    At the end of a set of practice rounds, it tests whether the partcipant performed well enough to proceed
-    '''
+    """Practice is a rules class which presents a trial a given number of times.
+    At these practice trials, it tests whether the partcipant performed well enough to proceed.
+
+    Use this class as a base for your ruleset if you need a practice phase.
+    This practice class is now written towards 2 alternative forced choice rulesets, but may be extended in the future.
+
+    Arguments:
+        task_description (str): will appear in the title of the experiment
+        first_condition (str): the first condition that trials may have (e.g., lower pitch)
+        first_condition_i18n (str): the way the condition will appear to participants, can be translated if you use _() around the string
+        second_condition (str): the second condition that trials may have (e.g., higher pitch)
+        second_condition_i18n (str): the way the condition will appear to participants, can be translated if you use _() around the string
+        n_practice_rounds (int): adjust to the number of practice rounds that should be presented
+        n_practice_rounds_second_condition (int): how often the second condition appears in the practice rounds, e.g., one "catch" trial, or half the practice trials
+        n_correct (int): how many answers of the participant need to be correct to proceed
+    """
     task_description = "Pitch discrimination"
     first_condition = 'lower'
     first_condition_i18n = _("LOWER")
     second_condition = 'higher'
     second_condition_i18n = _("HIGHER")
     n_practice_rounds = 4
-    n_practice_rounds_second_condition = 1  # how many trials have first condition
+    n_practice_rounds_second_condition = 1  # how many trials have second condition
     n_correct = 1 # how many trials need to be answered correctly to proceed
 
     def next_round(self, session: Session) -> list:
         return self.next_practice_round(session)
 
-    def next_practice_round(self, session: Session) -> list:
+    def next_practice_round(self, session: Session) -> list[Union[Trial, Explainer]]:
+        """This method implements the logic for presenting explainers, practice rounds,
+        and checking after the practice rounds if the participant was successful.
+
+        - if so: proceed to the next stage of the experiment. `session.json_data` will have set `{'practice_done': True}`, which you can check for in your `next_round` logic.
+
+        - if not: delete all results so far, and restart the practice.
+
+        You can call this method from your ruleset's `next_round` function.
+
+        Arguments:
+            session: the Session object, as also supplied to `next_round`
+
+        Returns:
+            list of Trial and/or Explainer objects
+        """
         round_number = session.get_rounds_passed()
         if round_number == 0:
             return [
@@ -59,11 +87,20 @@ class Practice(Base):
                 self.get_next_trial(session),
             ]
 
-    def finalize_practice(self, session):
-        """Finalize practice"""
+    def finalize_practice(self, session: Session):
+        """Finalize practice: set `{"practice_done": True}` in `session.json_data`
+
+        Arguments:
+            session: the Session object, as supplied to the `next_round` method
+        """
         session.save_json_data({"practice_done": True})
 
     def get_intro_explainer(self) -> Explainer:
+        """Override this method to explain the procedure of the current block to your participants.
+
+        Returns:
+            Explainer object
+        """
         return Explainer(
             instruction=_("In this test you will hear two tones"),
             steps=[
@@ -96,28 +133,48 @@ class Practice(Base):
             step_numbers=True,
         )
 
-    def get_practice_explainer(self):
+    def get_practice_explainer(self) -> Explainer:
+        """Override this method if you want to give extra information about the practice itself.
+
+        Returns:
+            Explainer object
+        """
         return Explainer(
             instruction=_("We will now practice first."),
             steps=[
-                Step(description=_("First you will hear 4 practice trials.")),
+                Step(
+                    description=_(
+                        "First you will hear %(n_practice_rounds)d practice trials."
+                    )
+                    % {"n_practice_rounds": self.n_practice_rounds}
+                ),
             ],
             button_label=_("Begin experiment"),
         )
 
     def get_restart_explainer(self) -> Explainer:
+        """Override this method if you want to adjust the feedback to why participants need to practice again.
+
+        Returns:
+            Explainer object
+        """
         return Explainer(
             instruction=_(
-                "You have answered 1 or more practice trials incorrectly."),
+                "You have answered %(n_correct)s or more practice trials incorrectly."
+            )
+            % {"n_correct": self.n_correct},
             steps=[
                 Step(_("We will therefore practice again.")),
-                Step(_(
-                    'But first, you can read the instructions again.')),
+                Step(_("But first, you can read the instructions again.")),
             ],
-            button_label=_('Continue')
+            button_label=_("Continue"),
         )
 
     def get_continuation_explainer(self) -> Explainer:
+        """Override this explainer if you want to give extra information to the participant before the actual test phase starts.
+        Returns:
+            Explainer object
+        """
         return Explainer(
             instruction=_(
                 'Now we will start the real experiment.'),
@@ -133,6 +190,11 @@ class Practice(Base):
         )
 
     def get_feedback_explainer(self, session: Session) -> Explainer:
+        """Override this explainer if you need to give different feedback to participants about whether or not they answered correctly.
+
+        Returns:
+            Explainer object
+        """
         correct_response, is_correct = self.get_condition_and_correctness(session)
         if is_correct:
             instruction = _(
@@ -148,7 +210,16 @@ class Practice(Base):
             button_label=_('Ok')
         )
 
-    def get_condition_and_correctness(self, session) -> Tuple[str, bool]:
+    def get_condition_and_correctness(self, session: Session) -> Tuple[str, bool]:
+        """Checks whether the condition of the last Trial, and whether the response of the participant was correct.
+        This method is called from `get_feedback_explainer`.
+
+        Args:
+            session: Session object, as supplied to the `next_round` method
+
+        Returns:
+            a tuple of the last trial's condition, and whether it was answered correctly
+        """
         last_result = session.last_result()
         correct_response = (
             self.first_condition_i18n
@@ -160,7 +231,17 @@ class Practice(Base):
             last_result.expected_response == last_result.given_response,
         )
 
-    def get_condition(self, session) -> str:
+    def get_condition(self, session: Session) -> str:
+        """Keep track of the conditions presented in the practice phase through the `session.json_data`.
+        In the default implementation, it will generate `n_practice_rounds` conditions, with `n_second_condition` times the second condition,
+        and `n_practice_rounds - n_second_condition` times the first condition, shuffle these randomly,
+        and then present one condition each round.
+
+        Override this method if you need a different setup.
+
+        Arguments:
+            session: the Session object, as supplied to the `next_round` method
+        """
         conditions = session.json_data.get("conditions")
         if not conditions:
             conditions = [
@@ -182,7 +263,7 @@ class Practice(Base):
         Provide the next trial action
 
         Args:
-            session: the session
+            session: the Session object, as supplied to the `next_round` function
 
         Returns:
             Trial object
@@ -240,6 +321,16 @@ class Practice(Base):
         )
 
     def practice_successful(self, session: Session) -> bool:
+        """Checks if the practice is correct, i.e., that at the participant gave at least `n_correct` correct responses.
+
+        Override this method if you need different logic.
+
+        Arguments:
+            session: the Session object, as supplied to the `next_round` method
+
+        Returns:
+            a boolean indicating whether or not the practice was successful
+        """
         results = session.last_n_results(n_results=self.n_practice_rounds)
         correct = sum(result.score for result in results)
         return correct >= self.n_correct
