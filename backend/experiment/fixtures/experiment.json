@@ -7,6 +7,14 @@
         }
     },
     {
+        "model": "experiment.Phase",
+        "pk": 1,
+        "fields": {
+            "experiment": 1,
+            "index": 0
+        }
+    },
+    {
         "model": "experiment.Block",
         "pk": 1,
         "fields": {
@@ -101,6 +109,7 @@
         "model": "experiment.Block",
         "pk": 8,
         "fields": {
+            "phase": 1,
             "slug": "rhdis",
             "rounds": 40,
             "bonus_points": 0,
