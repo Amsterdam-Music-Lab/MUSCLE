@@ -1,4 +1,4 @@
-import os.path
+from os.path import isfile, join
 
 from django.core.management.base import BaseCommand
 
@@ -27,10 +27,10 @@ class Command(BaseCommand):
         ruleset_name_snake_case, ruleset_name_snake_case_upper, ruleset_name_pascal_case = self.get_ruleset_name_cases(ruleset_name)
 
         # Create a new file for the block rules class
-        filename = f"./experiment/rules/{ruleset_name_snake_case}.py"
+        filename = join(".", "experiment", "rules", f"{ruleset_name_snake_case}.py")
 
         # Check if the file already exists
-        if os.path.isfile(filename):
+        if isfile(filename):
             self.stdout.write(self.style.ERROR(f"Experiment block ruleset \"{ruleset_name}\" already exists. Exiting without creating file(s)."))
             return
 
@@ -81,10 +81,10 @@ class Command(BaseCommand):
         ruleset_name_snake_case, ruleset_name_snake_case_upper, ruleset_name_pascal_case = self.get_ruleset_name_cases(ruleset_name)
 
         # Create a new file for the block class
-        filename = f"./experiment/rules/tests/test_{ruleset_name_snake_case}.py"
+        filename = join(".", "experiment", "rules", "tests", f"test_{ruleset_name_snake_case}.py")
 
         # Check if the file already exists
-        if os.path.isfile(filename):
+        if isfile(filename):
             self.stdout.write(self.style.ERROR(f"File {filename} already exists. Exiting without creating file."))
             return
 
