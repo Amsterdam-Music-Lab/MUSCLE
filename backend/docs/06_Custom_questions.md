@@ -2,15 +2,15 @@
 You can add questions to the MUSCLE infrastructure through the admin interface.
 
 In the admin overview, you can see the question app with three models:
-<img width="656" alt="adminList" src="/assets/images/questions/QuestionApp.png">
+<img width="656" alt="The Question App" src="/assets/images/QuestionApp.png">
 
 ## Question Groups
 Question Groups are sets of questions which are predefined, such as "Demographics" or question sets from the Goldsmith MSI questionnaire. We recommend not editing these, but you can add your own Question Group if you want to reuse the same set of questions in multiple experiments.
-<img width="500" alt="adminList" src="/assets/images/questions/QuestionGroup.png">
+<img width="500" alt="Question Group" src="/assets/images/QuestionGroup.png">
 
 ## Question Series
 Question Series are sets of questions you can attach to a given block in your experiment. If you click "Add", you will see the following form:
-<img alt="adminList" src="/assets/images/questions/QuestionSeries.png">
+<img alt="Question Series" src="/assets/images/QuestionSeries.png">
 
 You need to give the Question Series a descriptive name, and choose the block with which it is associated (important: the block will only display questions if its ruleset has a method that presents these questions to the participant), and an index, used for handling order if you have multiple `QuestionSeries` attached to a given block.
 
@@ -20,7 +20,7 @@ To add questions to the Question Series, you can either select from a list of qu
 
 ## Questions
 Questions are the actual question objects. Many questions are already configured. If you click "Add", you will see the following form:
-<img alt="adminList" src="/assets/images/questions/Question.png">
+<img alt="Question" src="/assets/images/Question.png">
 
 On the top, you can choose the language(s) in which you wish to enter the question. The languages that are shown can be configured through the `MODELTRANSLATION_LANGUAGES` settings in Django. Note that it is not necessary to provide translations, but that a question will be much more reusable if it has translations to multiple languages.
 
@@ -47,7 +47,7 @@ Indicate the *Type* of question, which influences the widget participants will s
 Finally, you can indicate whether your question can be skipped by the participant.
 
 Clicking "Save and continue editing" on all questions but `TextQuestion` will bring up another menu:
-<img alt="adminList" src="/assets/images/questions/QuestionChoice.png">
+<img alt="adminList" src="/assets/images/QuestionChoice.png">
 
 You can select different widgets:
 - BUTTON_ARRAY: a horizontal array of buttons with the answer options (one answer possible)

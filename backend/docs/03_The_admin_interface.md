@@ -12,7 +12,7 @@ Log in:
 (This is set through the .env file. Obviously, these passwords are only suitable for local development!)
 
 You can see an overview of different Django apps:
-<img width="656" alt="adminList" src="/assets/images/admin/AdminInterface.png">
+<img width="656" alt="adminList" src="/assets/images/AdminInterface.png">
 
 - **Admin_Interface** to customize how this admin interface appears to you
 - **Authentication and Authorization** to give other researchers access to this admin interface

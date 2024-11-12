@@ -4,7 +4,7 @@
 Make sure you're logged in to the admin interface (see previous step).
 
 Then, next to "Experiments" click "Add".
-<img alt="AddExperiment" src="/assets/images/experiments/AddExperiment.png">
+<img alt="AddExperiment" src="/assets/images/AddExperiment.png">
 
 ## The Experiment form
 The form which appears lets you select the following fields:
