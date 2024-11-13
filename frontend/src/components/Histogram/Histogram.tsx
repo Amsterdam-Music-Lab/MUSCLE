@@ -10,7 +10,12 @@ interface HistogramProps {
     backgroundColor?: string;
     borderRadius?: string;
     random?: boolean;
-    interval?: number; // Added the 'interval' prop
+    /**
+     * If `random` is `true`, this prop sets the update interval in milliseconds.
+     * Default is 100 ms.
+     * Ignored when `random` is `false`.
+     */
+    interval?: number;
 }
 
 const Histogram: React.FC<HistogramProps> = ({
@@ -22,20 +27,23 @@ const Histogram: React.FC<HistogramProps> = ({
     backgroundColor = undefined,
     borderRadius = '0.15rem',
     random = false,
-    interval = 10, // Default value set to 100 milliseconds
+    interval = 100,
 }) => {
     const [frequencyData, setFrequencyData] = useState<Uint8Array>(new Uint8Array(bars));
 
+    const animationFrameRef = useRef<number>();
     const intervalRef = useRef<number>();
-    const lastUpdateTimeRef = useRef<number>(0);
 
     useEffect(() => {
         if (!running) {
+            if (animationFrameRef.current) {
+                cancelAnimationFrame(animationFrameRef.current);
+            }
             if (intervalRef.current) {
-                const emptyHistogram = new Uint8Array(bars);
-                setFrequencyData(emptyHistogram);
                 clearInterval(intervalRef.current);
             }
+            const emptyHistogram = new Uint8Array(bars);
+            setFrequencyData(emptyHistogram);
             return;
         }
 
@@ -48,27 +56,39 @@ const Histogram: React.FC<HistogramProps> = ({
                 for (let i = 0; i < bars; i++) {
                     dataWithoutExtremes[i] = Math.floor(Math.random() * 256);
                 }
+                setFrequencyData(dataWithoutExtremes);
             } else if (window.audioContext && window.analyzer) {
                 const data = new Uint8Array(bars + 3);
                 window.analyzer.getByteFrequencyData(data);
                 // Remove the lower end of the frequency data
                 dataWithoutExtremes = data.slice(3, bars + 3);
+                setFrequencyData(dataWithoutExtremes);
+                animationFrameRef.current = requestAnimationFrame(updateFrequencyData);
+                return; // Exit the function to prevent setting another interval
             } else {
                 dataWithoutExtremes = new Uint8Array(bars);
+                setFrequencyData(dataWithoutExtremes);
             }
-
-            setFrequencyData(dataWithoutExtremes);
         };
 
-        // Clear any existing interval
-        if (intervalRef.current) {
-            clearInterval(intervalRef.current);
+        if (random) {
+            // Use setInterval when random is true
+            if (intervalRef.current) {
+                clearInterval(intervalRef.current);
+            }
+            intervalRef.current = window.setInterval(updateFrequencyData, interval);
+        } else {
+            // Use requestAnimationFrame when random is false
+            if (animationFrameRef.current) {
+                cancelAnimationFrame(animationFrameRef.current);
+            }
+            animationFrameRef.current = requestAnimationFrame(updateFrequencyData);
         }
 
-        // Set up the interval to update frequency data
-        intervalRef.current = window.setInterval(updateFrequencyData, interval);
-
         return () => {
+            if (animationFrameRef.current) {
+                cancelAnimationFrame(animationFrameRef.current);
+            }
             if (intervalRef.current) {
                 clearInterval(intervalRef.current);
             }
@@ -100,7 +120,9 @@ const Histogram: React.FC<HistogramProps> = ({
                         height: `${(frequencyData[index] / 255) * 100}%`,
                         backgroundColor: 'currentColor',
                         marginRight: index < bars - 1 ? spacing : 0,
-                        transition: `height ${interval / 1000}s ease`,
+                        transition: random
+                            ? `height ${interval / 1000}s ease`
+                            : 'height 0.05s ease',
                     }}
                 />
             ))}
