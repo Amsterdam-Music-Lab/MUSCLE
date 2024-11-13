@@ -1,11 +1,13 @@
+import type { Meta } from '@storybook/react';
 import Histogram from "../components/Histogram/Histogram";
 
-export default {
+const meta: Meta<typeof Histogram> = {
     title: "Histogram",
     component: Histogram,
     parameters: {
         layout: "fullscreen",
     },
+    tags: ["autodocs"],
 };
 
 export const Default = {
@@ -65,3 +67,5 @@ export const Random = {
         ),
     ],
 };
+
+export default meta;
