@@ -9,7 +9,8 @@ interface HistogramProps {
     marginTop?: number;
     backgroundColor?: string;
     borderRadius?: string;
-    random?: boolean; // Added the 'random' prop
+    random?: boolean;
+    interval?: number; // Added the 'interval' prop
 }
 
 const Histogram: React.FC<HistogramProps> = ({
@@ -20,18 +21,20 @@ const Histogram: React.FC<HistogramProps> = ({
     marginTop = 0,
     backgroundColor = undefined,
     borderRadius = '0.15rem',
-    random = false, // Default value set to false
+    random = false,
+    interval = 10, // Default value set to 100 milliseconds
 }) => {
     const [frequencyData, setFrequencyData] = useState<Uint8Array>(new Uint8Array(bars));
 
-    const requestRef = useRef<number>();
+    const intervalRef = useRef<number>();
+    const lastUpdateTimeRef = useRef<number>(0);
 
     useEffect(() => {
         if (!running) {
-            if (requestRef.current) {
+            if (intervalRef.current) {
                 const emptyHistogram = new Uint8Array(bars);
                 setFrequencyData(emptyHistogram);
-                cancelAnimationFrame(requestRef.current);
+                clearInterval(intervalRef.current);
             }
             return;
         }
@@ -55,17 +58,22 @@ const Histogram: React.FC<HistogramProps> = ({
             }
 
             setFrequencyData(dataWithoutExtremes);
-            requestRef.current = requestAnimationFrame(updateFrequencyData);
         };
 
-        requestRef.current = requestAnimationFrame(updateFrequencyData);
+        // Clear any existing interval
+        if (intervalRef.current) {
+            clearInterval(intervalRef.current);
+        }
+
+        // Set up the interval to update frequency data
+        intervalRef.current = window.setInterval(updateFrequencyData, interval);
 
         return () => {
-            if (requestRef.current) {
-                cancelAnimationFrame(requestRef.current);
+            if (intervalRef.current) {
+                clearInterval(intervalRef.current);
             }
         };
-    }, [running, bars, random]); // Added 'random' to dependency array
+    }, [running, bars, random, interval]);
 
     const barWidth = `calc((100% - ${(bars - 1) * spacing}px) / ${bars})`;
 
@@ -92,7 +100,7 @@ const Histogram: React.FC<HistogramProps> = ({
                         height: `${(frequencyData[index] / 255) * 100}%`,
                         backgroundColor: 'currentColor',
                         marginRight: index < bars - 1 ? spacing : 0,
-                        transition: 'height 0.05s ease',
+                        transition: `height ${interval / 1000}s ease`,
                     }}
                 />
             ))}

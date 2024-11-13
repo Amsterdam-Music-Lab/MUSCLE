@@ -57,6 +57,7 @@ const PlayCard = ({ onClick, registerUserClicks, playing, section, view, showAni
                         backgroundColor="purple"
                         borderRadius=".5rem"
                         random={true}
+                        interval={100}
                     />
                 :
                 <div
