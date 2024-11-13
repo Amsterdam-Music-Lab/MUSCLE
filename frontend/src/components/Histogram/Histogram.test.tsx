@@ -154,4 +154,51 @@ describe('Histogram', () => {
         expect(initialHeights).to.deep.equal(updatedHeights);
         expect(mockAnalyser.getByteFrequencyData).not.toHaveBeenCalled();
     });
+
+    it('updates bar heights based on random data when random is true and running is true', async () => {
+        const bars = 5;
+
+        // Ensure the analyser does not provide data
+        mockAnalyser.getByteFrequencyData.mockImplementation(() => { });
+
+        const { container, rerender } = render(
+            <Histogram running={true} bars={bars} random={true} />
+        );
+
+        const getHeights = () =>
+            Array.from(container.querySelectorAll('.aha__histogram > div')).map(
+                (bar) => bar.style.height
+            );
+
+        const initialHeights = getHeights();
+
+        // Advance timers and trigger animation frame
+        await act(async () => {
+            vi.advanceTimersByTime(100);
+        });
+
+        rerender(<Histogram running={true} bars={bars} random={true} />);
+
+        const updatedHeights = getHeights();
+
+        expect(initialHeights).not.to.deep.equal(updatedHeights);
+        expect(mockAnalyser.getByteFrequencyData).not.toHaveBeenCalled();
+    });
+
+    it('does not call getByteFrequencyData when random is true', async () => {
+        const bars = 5;
+
+        const { rerender } = render(
+            <Histogram running={true} bars={bars} random={true} />
+        );
+
+        // Advance timers and trigger animation frame
+        await act(async () => {
+            vi.advanceTimersByTime(100);
+        });
+
+        rerender(<Histogram running={true} bars={bars} random={true} />);
+
+        expect(mockAnalyser.getByteFrequencyData).not.toHaveBeenCalled();
+    });
 });

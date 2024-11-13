@@ -9,6 +9,7 @@ interface HistogramProps {
     marginTop?: number;
     backgroundColor?: string;
     borderRadius?: string;
+    random?: boolean; // Added the 'random' prop
 }
 
 const Histogram: React.FC<HistogramProps> = ({
@@ -19,6 +20,7 @@ const Histogram: React.FC<HistogramProps> = ({
     marginTop = 0,
     backgroundColor = undefined,
     borderRadius = '0.15rem',
+    random = false, // Default value set to false
 }) => {
     const [frequencyData, setFrequencyData] = useState<Uint8Array>(new Uint8Array(bars));
 
@@ -35,13 +37,24 @@ const Histogram: React.FC<HistogramProps> = ({
         }
 
         const updateFrequencyData = () => {
-            if (window.audioContext && window.analyzer) {
+            let dataWithoutExtremes: Uint8Array;
+
+            if (random) {
+                // Generate random frequency data
+                dataWithoutExtremes = new Uint8Array(bars);
+                for (let i = 0; i < bars; i++) {
+                    dataWithoutExtremes[i] = Math.floor(Math.random() * 256);
+                }
+            } else if (window.audioContext && window.analyzer) {
                 const data = new Uint8Array(bars + 3);
                 window.analyzer.getByteFrequencyData(data);
                 // Remove the lower end of the frequency data
-                const dataWithoutExtremes = data.slice(3, bars + 3);
-                setFrequencyData(dataWithoutExtremes);
+                dataWithoutExtremes = data.slice(3, bars + 3);
+            } else {
+                dataWithoutExtremes = new Uint8Array(bars);
             }
+
+            setFrequencyData(dataWithoutExtremes);
             requestRef.current = requestAnimationFrame(updateFrequencyData);
         };
 
@@ -52,7 +65,7 @@ const Histogram: React.FC<HistogramProps> = ({
                 cancelAnimationFrame(requestRef.current);
             }
         };
-    }, [running, bars]);
+    }, [running, bars, random]); // Added 'random' to dependency array
 
     const barWidth = `calc((100% - ${(bars - 1) * spacing}px) / ${bars})`;
 
