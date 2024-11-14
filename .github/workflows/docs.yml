@@ -1,18 +1,21 @@
 name: Build & Publish Docs & Storybook
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - main
       - develop
     paths:
       - 'frontend/**'
+      - 'backend/docs/**'
       - '.github/workflows/docs.yml'
       - '.yarn/**'
       - '.storybook/**'
   pull_request:
     paths:
       - 'frontend/**'
+      - 'backend/docs/**'
       - '.github/workflows/docs.yml'
       - '.yarn/**'
       - '.storybook/**'

@@ -1,12 +1,12 @@
 {
     "name": "muscle",
-    "version": "2.2.4",
+    "version": "2.2.7",
     "private": false,
     "description": "The MUSCLE platform is an application that provides an easy way to implement and run online listening experiments for music research.",
     "license": "MIT",
     "scripts": {
-        "test-front": "sudo docker-compose run client yarn test --watchAll=false",
-        "test-back": "sudo docker-compose run server bash -c 'python manage.py test'"
+        "test-front": "sudo docker compose run client yarn test --watchAll=false",
+        "test-back": "sudo docker compose run server bash -c 'python manage.py test'"
     },
     "packageManager": "yarn@4.1.1"
 }

@@ -41,6 +41,7 @@ from experiment.forms import (
 from section.models import Section, Song
 from result.models import Result
 from participant.models import Participant
+from question.models import QuestionSeries, QuestionInSeries
 
 
 class FeedbackInline(admin.TabularInline):
@@ -273,7 +274,7 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, NestedModelAdmin):
         "active",
         "theme_config",
     ]
-    inline_actions = ["experimenter_dashboard"]
+    inline_actions = ["experimenter_dashboard", "duplicate"]
     form = ExperimentForm
     inlines = [
         ExperimentTranslatedContentInline,
@@ -288,6 +289,9 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, NestedModelAdmin):
         content = obj.get_fallback_content()
 
         return content.name if content else "No name"
+    
+    def redirect_to_overview(self):
+        return redirect(reverse("admin:experiment_experiment_changelist"))
 
     def slug_link(self, obj):
         dev_mode = settings.DEBUG is True
@@ -298,6 +302,130 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, NestedModelAdmin):
         )
 
     slug_link.short_description = "Slug"
+
+    def duplicate(self, request, obj, parent_obj=None):
+        """Duplicate an experiment"""
+
+        if "_duplicate" in request.POST:
+            # Get slug from the form
+            extension = request.POST.get("slug-extension")
+            if extension == "":
+                extension = "copy"
+            slug_extension = f"-{extension}"
+
+            # Validate slug
+            if not extension.isalnum():
+                messages.add_message(request,
+                                     messages.ERROR,
+                                     f"{extension} is nog a valid slug extension. Only alphanumeric characters are allowed.")
+            if extension.lower() != extension:
+                messages.add_message(request,
+                                     messages.ERROR,
+                                     f"{extension} is nog a valid slug extension. Only lowercase characters are allowed.")
+            # Check for duplicate slugs
+            for exp in Experiment.objects.all():
+                if exp.slug == f"{obj.slug}{slug_extension}":
+                    messages.add_message(request,
+                                     messages.ERROR,
+                                     f"An experiment with slug: {obj.slug}{slug_extension} already exists. Please choose a different slug extension.")
+            for as_block in obj.associated_blocks():
+                for block in Block.objects.all():
+                    if f"{as_block.slug}{slug_extension}" == block.slug:
+                        messages.add_message(request,
+                                        messages.ERROR,
+                                        f"A block with slug: {block.slug}{slug_extension} already exists. Please choose a different slug extension.")
+            # Return to form with error messages
+            if len(messages.get_messages(request)) != 0:
+                return render(
+                    request,
+                    "duplicate-experiment.html",
+                    context={"exp": obj},
+                )
+
+            # order_by is inserted here to prevent a query error
+            exp_contents = obj.translated_content.order_by('name').all()
+            # order_by is inserted here to prevent a query error
+            exp_phases = obj.phases.order_by('index').all()
+
+            # Duplicate Experiment object
+            exp_copy = obj
+            exp_copy.pk = None
+            exp_copy._state.adding = True
+            exp_copy.slug = f"{obj.slug}{slug_extension}"
+            exp_copy.save()
+
+            # Duplicate experiment translated content objects
+            for content in exp_contents:
+                exp_content_copy = content
+                exp_content_copy.pk = None
+                exp_content_copy._state.adding = True
+                exp_content_copy.experiment = exp_copy
+                exp_content_copy.save()
+
+            # Duplicate phases
+            for phase in exp_phases:
+                these_blocks = Block.objects.filter(phase=phase)
+
+                phase_copy = phase
+                phase_copy.pk = None
+                phase_copy._state.adding = True
+                phase_copy.save()
+
+                # Duplicate blocks in this phase
+                for block in these_blocks:
+                    # order_by is inserted here to prevent a query error
+                    block_contents = block.translated_contents.order_by('name').all()                    
+                    these_playlists = block.playlists.all()
+                    question_series = QuestionSeries.objects.filter(block=block)
+
+                    block_copy = block
+                    block_copy.pk = None
+                    block_copy._state.adding = True
+                    block_copy.slug = f"{block.slug}{slug_extension}"
+                    block_copy.phase = phase_copy
+                    block_copy.save()
+                    block_copy.playlists.set(these_playlists)
+
+                    # Duplicate Block translated content objects
+                    for content in block_contents:          
+                        block_content_copy = content
+                        block_content_copy.pk = None
+                        block_content_copy._state.adding = True
+                        block_content_copy.block = block_copy
+                        block_content_copy.save()
+
+                    # Duplicate the Block QuestionSeries
+                    for series in question_series:
+                        all_in_series = QuestionInSeries.objects.filter(question_series=series)
+                        these_questions = series.questions.all()
+                        series_copy = series
+                        series_copy.pk = None
+                        series_copy._state.adding = True
+                        series_copy.block = block_copy
+                        series_copy.index = block.index
+                        series_copy.save()
+
+                        # Duplicate the QuestionSeries QuestionInSeries
+                        for in_series in all_in_series:
+                            in_series_copy = in_series
+                            in_series_copy.pk = None
+                            in_series_copy._state.adding = True
+                            in_series_copy.question_series = series
+                            in_series_copy.save()
+                        series_copy.questions.set(these_questions)
+
+            return self.redirect_to_overview()
+        
+        # Go back to experiment overview
+        if "_back" in request.POST:
+            return self.redirect_to_overview()
+
+        # Show experiment duplicate form
+        return render(
+            request,
+            "duplicate-experiment.html",
+            context={"exp": obj},
+        )
 
     def experimenter_dashboard(self, request, obj, parent_obj=None):
         """Open researchers dashboard for an experiment"""

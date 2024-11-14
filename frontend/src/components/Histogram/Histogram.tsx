@@ -1,10 +1,9 @@
-import { useEffect, useState } from "react";
-import classNames from "classnames";
+import React, { useEffect, useRef, useState } from 'react';
+import classNames from 'classnames';
 
 interface HistogramProps {
     bars?: number;
     spacing?: number;
-    interval?: number;
     running?: boolean;
     marginLeft?: number;
     marginTop?: number;
@@ -12,48 +11,78 @@ interface HistogramProps {
     borderRadius?: string;
 }
 
-/** Histogram with random bar movement for decoration */
-const Histogram = ({
-    bars = 7,
-    spacing = 6,
-    interval = 100,
+const Histogram: React.FC<HistogramProps> = ({
+    bars = 8,
+    spacing = 4,
     running = true,
     marginLeft = 0,
     marginTop = 0,
     backgroundColor = undefined,
     borderRadius = '0.15rem',
-}: HistogramProps) => {
-    const [pulse, setPulse] = useState(true);
+}) => {
+    const [frequencyData, setFrequencyData] = useState<Uint8Array>(new Uint8Array(bars));
+
+    const requestRef = useRef<number>();
 
     useEffect(() => {
-        const id = setTimeout(() => {
-            setPulse(!pulse);
-        }, interval);
+        if (!running) {
+            if (requestRef.current) {
+                const emptyHistogram = new Uint8Array(bars);
+                setFrequencyData(emptyHistogram);
+                cancelAnimationFrame(requestRef.current);
+            }
+            return;
+        }
+
+        const updateFrequencyData = () => {
+            if (window.audioContext && window.analyzer) {
+                const data = new Uint8Array(bars + 3);
+                window.analyzer.getByteFrequencyData(data);
+                // Remove the lower end of the frequency data
+                const dataWithoutExtremes = data.slice(3, bars + 3);
+                setFrequencyData(dataWithoutExtremes);
+            }
+            requestRef.current = requestAnimationFrame(updateFrequencyData);
+        };
+
+        requestRef.current = requestAnimationFrame(updateFrequencyData);
 
         return () => {
-            clearTimeout(id);
+            if (requestRef.current) {
+                cancelAnimationFrame(requestRef.current);
+            }
         };
-    });
+    }, [running, bars]);
 
-    const _bars = Array.from(Array(bars)).map((_, index) => (
-        <div
-            key={index}
-            style={{
-                width: '80%',
-                height: running
-                    ? `${Math.random() * 100}%`
-                    : '10%',
-                marginRight: index < bars - 1 ? spacing : 0,
-            }}
-        />
-    ));
+    const barWidth = `calc((100% - ${(bars - 1) * spacing}px) / ${bars})`;
 
     return (
         <div
-            className={classNames("aha__histogram", { active: running })}
-            style={{ height: '100%', marginLeft, marginTop, backgroundColor, width: '100%', borderRadius: borderRadius, border: backgroundColor ? `10px solid ${backgroundColor}` : undefined }}
+            className={classNames('aha__histogram', { active: running })}
+            style={{
+                height: '100%',
+                marginLeft,
+                marginTop,
+                backgroundColor,
+                width: '100%',
+                borderRadius,
+                border: backgroundColor ? `10px solid ${backgroundColor}` : undefined,
+                display: 'flex',
+                alignItems: 'flex-start',
+            }}
         >
-            {_bars}
+            {Array.from({ length: bars }, (_, index) => (
+                <div
+                    key={index}
+                    style={{
+                        width: barWidth,
+                        height: `${(frequencyData[index] / 255) * 100}%`,
+                        backgroundColor: 'currentColor',
+                        marginRight: index < bars - 1 ? spacing : 0,
+                        transition: 'height 0.05s ease',
+                    }}
+                />
+            ))}
         </div>
     );
 };

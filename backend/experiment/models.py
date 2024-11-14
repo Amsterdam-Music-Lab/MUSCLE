@@ -1,4 +1,5 @@
 import copy
+from os.path import join
 
 from django.db import models
 from django.utils import timezone
@@ -25,7 +26,6 @@ class Experiment(models.Model):
         slug (str): Slug
         translated_content (Queryset[ExperimentTranslatedContent]): Translated content
         theme_config (theme.ThemeConfig): ThemeConfig instance
-        dashboard (bool): Show dashboard?
         active (bool): Set experiment active
         social_media_config (SocialMediaConfig): SocialMediaConfig instance
         phases (Queryset[Phase]): Queryset of Phase instances
@@ -145,7 +145,7 @@ def consent_upload_path(instance: Experiment, filename: str) -> str:
     folder_name = experiment.slug
     language = instance.language
 
-    return f"consent/{folder_name}/{language}-{filename}"
+    return join("consent", folder_name, f"{language}-{filename}")
 
 
 class Phase(models.Model):
@@ -155,7 +155,7 @@ class Phase(models.Model):
         experiment (Experiment): Instance of an Experiment
         index (int): Index of the phase
         dashboard (bool): Should the dashbopard be displayed for this phase?
-        randomize (bool): Should the block of this phase be randomized?
+        randomize (bool): Should the blocks of this phase be randomized?
     """
 
     experiment = models.ForeignKey(Experiment, on_delete=models.CASCADE, related_name="phases")
@@ -166,7 +166,7 @@ class Phase(models.Model):
     def __str__(self):
         default_content = self.experiment.get_fallback_content()
         experiment_name = default_content.name if default_content else None
-        compound_name = experiment_name or self.experiment.slug or "Unnamed phase"
+        compound_name = experiment_name or self.experiment.slug or "Unnamed experiment"
         return f"{compound_name} ({self.index})"
 
     class Meta:
@@ -494,6 +494,7 @@ class ExperimentTranslatedContent(models.Model):
         description (str): Description
         consent (FileField): Consent text markdown or html
         about_content (str): About text
+        social_media_message (str): Message to post with on social media. Can contain {points} and {experiment_name} placeholders
     """
 
     experiment = models.ForeignKey(Experiment, on_delete=models.CASCADE, related_name="translated_content")
@@ -555,7 +556,6 @@ class SocialMediaConfig(models.Model):
         experiment (Experiment): Experiment instance
         tags (list[str]): Tags
         url (str): Url to be shared
-        content (str): Shared text
         channels (list[str]): Social media channel
     """
 
@@ -584,12 +584,12 @@ class SocialMediaConfig(models.Model):
         help_text=_("Selected social media channels for sharing"),
     )
 
-    def get_content(self, score: int | None = None, experiment_name: str | None = None) -> str:
+    def get_content(self, score: float) -> str:
         """Get social media share content
 
         Args:
             score: Score
-            experiment_name: Block name
+            experiment_name: Experiment name
 
         Returns:
             Social media shared text
@@ -599,9 +599,12 @@ class SocialMediaConfig(models.Model):
         """
         translated_content = self.experiment.get_current_content()
         social_message = translated_content.social_media_message
+        experiment_name = translated_content.name
 
         if social_message:
-            has_placeholders = "{points}" in social_message and "{experiment_name}" in social_message
+            has_placeholders = (
+                "{points}" in social_message and "{experiment_name}" in social_message
+            )
 
             if not has_placeholders:
                 return social_message
@@ -612,9 +615,14 @@ class SocialMediaConfig(models.Model):
             return social_message.format(points=score, experiment_name=experiment_name)
 
         if score is None or experiment_name is None:
-            raise ValueError("score and experiment_name are required when no social media message is provided")
+            raise ValueError(
+                "score and name are required when no social media message is provided"
+            )
 
-        return _("I scored {points} points in {experiment_name}").format(score=score, experiment_name=experiment_name)
+        return _("I scored %(score)d points in %(experiment_name)s") % {
+            "score": score,
+            "experiment_name": experiment_name,
+        }
 
     def __str__(self):
         fallback_content = self.experiment.get_fallback_content()
