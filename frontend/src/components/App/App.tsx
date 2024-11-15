@@ -86,7 +86,7 @@ const App = () => {
                         <Route path={URLS.experiment} element={<Experiment />} />
 
                         {/* ExperimentAbout */}
-                        <Route path={URLS.experiment} element={<ExperimentAbout />} />
+                        <Route path={URLS.experimentAbout} element={<ExperimentAbout />} />
 
                         {/* Store profile */}
                         <Route
