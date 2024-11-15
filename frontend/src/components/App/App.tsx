@@ -11,6 +11,7 @@ import { URLS as API_URLS } from "../../API";
 import useBoundStore from "../../util/stores";
 import Block from "../Block/Block";
 import Experiment from "../Experiment/Experiment";
+import ExperimentAbout from "../Experiment/ExperimentAbout/ExperimentAbout";
 import LoaderContainer from "../LoaderContainer/LoaderContainer";
 import ConditionalRender from "../ConditionalRender/ConditionalRender";
 import Profile from "../Profile/Profile";
@@ -83,6 +84,9 @@ const App = () => {
 
                         {/* Experiment */}
                         <Route path={URLS.experiment} element={<Experiment />} />
+
+                        {/* ExperimentAbout */}
+                        <Route path={URLS.experiment} element={<ExperimentAbout />} />
 
                         {/* Store profile */}
                         <Route
