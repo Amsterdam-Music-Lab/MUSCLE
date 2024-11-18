@@ -39,24 +39,10 @@ describe('ProgressBar', () => {
         expect(percentageElement).toBeNull();
     });
 
-    it('hides percentage when showPercentage is false', () => {
-        const { container } = render(<ProgressBar value={75} showPercentage={false} />);
-        const percentageElement = container.querySelector('.aml__progress-bar-content-percentage');
-        expect(percentageElement).toBeFalsy();
-    });
-
-    it('calculates percentage correctly with custom max value when showPercentage is true', () => {
-        const { container, getByText } = render(<ProgressBar value={150} max={200} showPercentage={true} />);
+    it('calculates percentage correctly with custom max value', () => {
+        const { container } = render(<ProgressBar value={150} max={200} />);
         const progressFill = container.querySelector('.aml__progress-bar-fill');
 
         expect(progressFill?.getAttribute('style')).toBe('width: 75%;');
-        expect(getByText('75%')).toBeTruthy();
-    });
-
-    it('displays both label and percentage when both are provided', () => {
-        const { getByText } = render(<ProgressBar value={50} label="Loading..." showPercentage={true} />);
-
-        expect(getByText('Loading...')).toBeTruthy();
-        expect(getByText('50%')).toBeTruthy();
     });
 });

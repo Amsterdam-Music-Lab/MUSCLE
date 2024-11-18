@@ -11,10 +11,6 @@ interface ProgressBarProps {
      */
     max?: number;
     /**
-     * Show percentage text (defaults to true)
-     */
-    showPercentage?: boolean;
-    /**
      * Optional label text to display above progress bar
      */
     label?: string;
@@ -23,7 +19,6 @@ interface ProgressBarProps {
 const ProgressBar: React.FC<ProgressBarProps> = ({
     value,
     max = 100,
-    showPercentage = false,
     label,
 }) => {
     const clampedValue = Math.min(Math.max(0, value), max);
@@ -40,11 +35,6 @@ const ProgressBar: React.FC<ProgressBarProps> = ({
                     {label && (
                         <span className="aml__progress-bar-content-text">
                             {label}
-                        </span>
-                    )}
-                    {showPercentage && (
-                        <span className="aml__progress-bar-content-percentage">
-                            {percentage}%
                         </span>
                     )}
                 </div>
