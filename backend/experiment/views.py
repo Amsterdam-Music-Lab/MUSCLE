@@ -124,11 +124,10 @@ def get_experiment(
             return JsonResponse(
                 {**serialize_experiment(experiment), **serialized_phase}
             )
-    # if no phase was found, start from scratch by incrementing times_pleyd
+    # if no phase was found, start from scratch by incrementing times_played
     times_played += 1
     request.session[times_played_key] = times_played
-    serialized_phase = serialize_phase(phases[0], participant, times_played)
-    return JsonResponse({**serialize_experiment(experiment), **serialized_phase})
+    return get_experiment(request, slug)
 
 
 def get_associated_blocks(pk_list):
