@@ -48,7 +48,7 @@ class ImageAdminForm(forms.ModelForm):
     alt = forms.CharField(
         max_length=255,
         required=False,
-        help_text="Alternative text that describes the image - important for accessibility and SEO. "
+        help_text="Alternative text that describes the image - important for accessibility and SEO. This text is read aloud by screen readers or whenever the image cannot be loaded."
         "This text is displayed if the image fails to load and is read by screen readers.",
     )
 
