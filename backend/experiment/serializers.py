@@ -1,5 +1,5 @@
 from random import shuffle
-from typing import Optional
+from typing import Optional, Union
 
 from django_markup.markup import formatter
 from django.utils.translation import activate, get_language
@@ -104,8 +104,8 @@ def serialize_phase(phase: Phase, participant: Participant, times_played: int) -
     blocks = list(phase.blocks.order_by("index").all())
 
     next_block = get_upcoming_block(phase, participant, times_played)
-    if not next_block:
-        return None
+    if isinstance(next_block, int):
+        return next_block
 
     total_score = get_total_score(blocks, participant)
     if phase.randomize:
@@ -137,7 +137,9 @@ def serialize_block(block_object: Block, language: str = "en") -> dict:
     }
 
 
-def get_upcoming_block(phase: Phase, participant: Participant, times_played: int):
+def get_upcoming_block(
+    phase: Phase, participant: Participant, times_played: int
+) -> Union[dict, int]:
     """return next block with minimum finished sessions for this participant
     if all blocks have been played an equal number of times, return None
 
@@ -155,7 +157,7 @@ def get_upcoming_block(phase: Phase, participant: Participant, times_played: int
     min_session_count = min(finished_session_counts)
     if not phase.dashboard:
         if times_played != min_session_count:
-            return None
+            return min_session_count
     next_block_index = finished_session_counts.index(min_session_count)
     return serialize_block(blocks[next_block_index])
 

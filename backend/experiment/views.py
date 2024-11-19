@@ -119,14 +119,18 @@ def get_experiment(
     times_played_key = 'f"{slug}-xplayed"'
     times_played = request.session.get(times_played_key, 0)
     for phase in phases:
-        serialized_phase = serialize_phase(phase, participant, times_played)
-        if serialized_phase:
+        serialized_phase_or_min_session_count = serialize_phase(
+            phase, participant, times_played
+        )
+        if isinstance(serialized_phase_or_min_session_count, dict):
             return JsonResponse(
-                {**serialize_experiment(experiment), **serialized_phase}
+                {
+                    **serialize_experiment(experiment),
+                    **serialized_phase_or_min_session_count,
+                }
             )
-    # if no phase was found, start from scratch by incrementing times_played
-    times_played += 1
-    request.session[times_played_key] = times_played
+    # if no phase was found, start from scratch with the minimum session count
+    request.session[times_played_key] = serialized_phase_or_min_session_count
     return get_experiment(request, slug)
 
 
