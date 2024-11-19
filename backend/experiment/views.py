@@ -5,7 +5,7 @@ from django.http import Http404, HttpRequest, JsonResponse
 from django.utils.translation import gettext_lazy as _, get_language
 from django_markup.markup import formatter
 
-from .models import Block, Experiment, Phase, Feedback, Session
+from .models import Block, Experiment, Feedback, Session
 from section.models import Playlist
 from experiment.serializers import (
     serialize_block,
@@ -14,7 +14,7 @@ from experiment.serializers import (
 )
 from experiment.rules import BLOCK_RULES
 from experiment.actions.utils import EXPERIMENT_KEY
-from image.serializers import serialize_image
+from participant.models import Participant
 from participant.utils import get_participant
 from theme.serializers import serialize_theme
 
@@ -119,19 +119,32 @@ def get_experiment(
     times_played_key = 'f"{slug}-xplayed"'
     times_played = request.session.get(times_played_key, 0)
     for phase in phases:
-        serialized_phase_or_min_session_count = serialize_phase(
-            phase, participant, times_played
-        )
-        if isinstance(serialized_phase_or_min_session_count, dict):
+        serialized_phase = serialize_phase(phase, participant, times_played)
+        if serialized_phase:
             return JsonResponse(
                 {
                     **serialize_experiment(experiment),
-                    **serialized_phase_or_min_session_count,
+                    **serialized_phase,
                 }
             )
     # if no phase was found, start from scratch with the minimum session count
-    request.session[times_played_key] = serialized_phase_or_min_session_count
+    request.session[times_played_key] = _get_min_session_count(experiment, participant)
     return get_experiment(request, slug)
+
+
+def _get_min_session_count(experiment: Experiment, participant: Participant) -> int:
+    phases = experiment.phases.all()
+    session_counts = []
+    for phase in phases:
+        session_counts.extend(
+            [
+                Session.objects.exclude(finished_at__isnull=True)
+                .filter(block=block, participant=participant)
+                .count()
+                for block in phase.blocks.all()
+            ]
+        )
+    return min(session_counts)
 
 
 def get_associated_blocks(pk_list):
