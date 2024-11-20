@@ -4363,7 +4363,6 @@ __metadata:
     file-saver: "npm:^2.0.5"
     happy-dom: "npm:^15.10.2"
     history: "npm:^5.3.0"
-    next-share: "npm:^0.27.0"
     prop-types: "npm:15.8.1"
     qs: "npm:^6.10.3"
     react: "npm:18.3.1"
@@ -4373,6 +4372,7 @@ __metadata:
     react-router: "npm:^6.25.1"
     react-router-dom: "npm:^6.25.1"
     react-select: "npm:^5.4.0"
+    react-share: "npm:^5.1.1"
     react-transition-group: "npm:^4.4.5"
     sass: "npm:^1.69.5"
     storybook: "npm:^8.4.2"
@@ -4975,6 +4975,13 @@ __metadata:
   version: 2.3.2
   resolution: "classnames@npm:2.3.2"
   checksum: 10c0/cd50ead57b4f97436aaa9f9885c6926323efc7c2bea8e3d4eb10e4e972aa6a1cfca1c7a0e06f8a199ca7498d4339e30bb6002e589e61c9f21248cbf3e8b0b18d
+  languageName: node
+  linkType: hard
+
+"classnames@npm:^2.3.2":
+  version: 2.5.1
+  resolution: "classnames@npm:2.5.1"
+  checksum: 10c0/afff4f77e62cea2d79c39962980bf316bacb0d7c49e13a21adaadb9221e1c6b9d3cdb829d8bb1b23c406f4e740507f37e1dcf506f7e3b7113d17c5bab787aa69
   languageName: node
   linkType: hard
 
@@ -7631,17 +7638,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"next-share@npm:^0.27.0":
-  version: 0.27.0
-  resolution: "next-share@npm:0.27.0"
-  dependencies:
-    jsonp: "npm:^0.2.1"
-  peerDependencies:
-    react: ">=17.0.2"
-  checksum: 10c0/0b1e6a408f1cacf42d4f9d63c31ad52939f8838a6239e46031ea64565483f01528dde730fcccb1a607ba1061a7ff169bdfb33df5ff0d33eec4dba9cd402904e7
-  languageName: node
-  linkType: hard
-
 "node-gyp@npm:latest":
   version: 10.0.1
   resolution: "node-gyp@npm:10.0.1"
@@ -8221,6 +8217,18 @@ __metadata:
     react: ^16.8.0 || ^17.0.0 || ^18.0.0
     react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
   checksum: 10c0/06d167180cfdd77714e40747ac74c1d00f60ce2b4d63c7befd2704aacf692e146204b6285f2aa8cf9663c6cf62eabec08e90b925adccfad9990f0101026f02c5
+  languageName: node
+  linkType: hard
+
+"react-share@npm:^5.1.1":
+  version: 5.1.1
+  resolution: "react-share@npm:5.1.1"
+  dependencies:
+    classnames: "npm:^2.3.2"
+    jsonp: "npm:^0.2.1"
+  peerDependencies:
+    react: ^17 || ^18
+  checksum: 10c0/f2959d324d456197f29779d95333110fa1f2708ea5859bf0e02efd7ea09346bb12e2577217279162813a75542e11cfcb0159bf5c9718187018dc968efccafdb8
   languageName: node
   linkType: hard
 
