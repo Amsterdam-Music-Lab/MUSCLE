@@ -1,6 +1,7 @@
 """Settings for development environment"""
 
 import os
+import socket
 from aml.base_settings import *
 
 # Database
@@ -24,6 +25,26 @@ if DEBUG and not TESTING:
     INSTALLED_APPS += ["debug_toolbar"]
 
     MIDDLEWARE += ["debug_toolbar.middleware.DebugToolbarMiddleware"]
+
+
+def is_debugpy_running(port):
+    """Check if debugpy is already running on the specified port."""
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+        return s.connect_ex(("127.0.0.1", port)) == 0
+
+
+if DEBUG:
+    try:
+        import debugpy
+
+        if not is_debugpy_running(5678):
+            print("Starting debugpy on port 5678 🐛")
+            debugpy.listen(("0.0.0.0", 5678))
+        else:
+            print("Debugpy is already running on port 5678 👍")
+
+    except Exception as e:
+        print(f"Failed to attach debugger: {e}")
 
 INTERNAL_IPS = [
     "127.0.0.1",
