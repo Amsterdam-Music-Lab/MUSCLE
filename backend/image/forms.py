@@ -61,6 +61,7 @@ class ImageAdminForm(forms.ModelForm):
     rel = forms.CharField(
         max_length=255,
         required=False,
+        initial="noreferrer",
         help_text='The relationship attribute for the link (e.g., "nofollow" for SEO, '
         '"noopener noreferrer" for security when linking to external sites)',
     )
