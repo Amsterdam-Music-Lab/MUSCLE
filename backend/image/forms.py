@@ -62,8 +62,7 @@ class ImageAdminForm(forms.ModelForm):
         max_length=255,
         required=False,
         initial="noreferrer",
-        help_text='The relationship attribute for the link (e.g., "nofollow" for SEO, '
-        '"noopener noreferrer" for security when linking to external sites)',
+        help_text='Choose "nofollow" to prevent search engines from following the link, "noopener" to ensure security when opening links in new tabs, or "noreferrer" for stricter privacy when linking to external sites.',
     )
 
     target = forms.ChoiceField(
