@@ -7,7 +7,7 @@ function initializeBlockForm(blockForm) {
   if (header && !header.querySelector('.collapse-toggle')) {
     const toggleBtn = document.createElement('span');
     toggleBtn.className = 'collapse-toggle';
-    toggleBtn.innerHTML = '▲';
+    toggleBtn.innerHTML = '▼';
     toggleBtn.style.marginLeft = '10px';
     toggleBtn.style.cursor = 'pointer';
     header.appendChild(toggleBtn);
@@ -55,10 +55,10 @@ function toggleBlockVisibility(blockForm) {
   });
 
   if (isCollapsed) {
-    toggleBtn.innerHTML = '▼';
+    toggleBtn.innerHTML = '▲';
     blockForm.classList.remove('collapsed');
   } else {
-    toggleBtn.innerHTML = '▲';
+    toggleBtn.innerHTML = '▼';
     blockForm.classList.add('collapsed');
   }
 }
@@ -74,7 +74,6 @@ document.addEventListener('DOMContentLoaded', function () {
   if (firstBlock) {
     const buttonsContainer = document.createElement('div');
     buttonsContainer.className = 'collapse-buttons-container';
-    buttonsContainer.style.marginBottom = '10px';
 
     const expandAllBtn = document.createElement('button');
     expandAllBtn.type = 'button';
@@ -103,6 +102,7 @@ document.addEventListener('DOMContentLoaded', function () {
     buttonsContainer.appendChild(expandAllBtn);
     buttonsContainer.appendChild(collapseAllBtn);
     firstBlock.parentNode.insertBefore(buttonsContainer, firstBlock);
+    firstBlock.parentNode.parentNode.querySelector('h2').appendChild(buttonsContainer);
   }
 });
 
