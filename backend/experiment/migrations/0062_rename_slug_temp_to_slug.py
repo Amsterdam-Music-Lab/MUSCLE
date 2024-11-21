@@ -19,5 +19,9 @@ class Migration(migrations.Migration):
             model_name='Experiment',
             old_name='slug_temp',
             new_name='slug'
-        )
+        ),
+        migrations.RemoveField(
+            model_name='Experiment',
+            name='old_slug',
+        ),
     ]
