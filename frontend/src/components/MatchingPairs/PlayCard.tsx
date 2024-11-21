@@ -56,6 +56,8 @@ const PlayCard = ({ onClick, registerUserClicks, playing, section, view, showAni
                         bars={histogramBars}
                         backgroundColor="purple"
                         borderRadius=".5rem"
+                        random={true}
+                        interval={200}
                     />
                 :
                 <div

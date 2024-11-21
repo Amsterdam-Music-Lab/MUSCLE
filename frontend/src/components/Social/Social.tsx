@@ -1,7 +1,7 @@
 import { useRef } from "react";
 import {
     FacebookShareButton, TwitterShareButton, WeiboShareButton, WhatsappShareButton
-} from 'next-share'
+} from 'react-share'
 import ISocial from "@/types/Social";
 
 export interface SocialProps {
@@ -42,7 +42,6 @@ const Social = ({ social }: SocialProps) => {
                     url={social.url}
                     title={social.content}
                     hashtag={social.tags[0]}
-                    blankTarget={true}
                 >
                     <i className="fa-brands fa-facebook-f fa-2x"></i>
                 </FacebookShareButton>
@@ -51,7 +50,6 @@ const Social = ({ social }: SocialProps) => {
                 <WhatsappShareButton
                     url={social.url}
                     title={social.content}
-                    blankTarget={true}
                 >
                     <i className="fa-brands fa-whatsapp fa-2x"></i>
                 </WhatsappShareButton>
@@ -61,7 +59,6 @@ const Social = ({ social }: SocialProps) => {
                     url={social.url}
                     title={social.content}
                     hashtags={social.tags}
-                    blankTarget={true}
                 >
                     <i className="fa-brands fa-x-twitter fa-2x"></i>
                 </TwitterShareButton>
@@ -70,7 +67,6 @@ const Social = ({ social }: SocialProps) => {
                 <WeiboShareButton
                     url={social.url}
                     title={social.content}
-                    blankTarget={true}
                 >
                     <i className="fa-brands fa-weibo fa-2x"></i>
                 </WeiboShareButton>
