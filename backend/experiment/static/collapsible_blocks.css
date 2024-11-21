@@ -3,8 +3,8 @@
 .djn-group-nested .djn-inline-form[data-inline-model="experiment-block"] {
   border: none;
   border-radius: 0px;
-  margin-bottom: 1rem;
-  border: 1px solid #ccc;
+  margin-top: 10px;
+  margin-bottom: 10px;
 }
 
 .djn-group-nested .djn-inline-form[data-inline-model="experiment-block"]>h3 {
@@ -15,8 +15,7 @@
   border-radius: 0;
   background: #f8f9fa;
   transition: background-color 0.2s;
-  '
-
+  color: #495057;
 }
 
 .djn-group-nested .djn-inline-form[data-inline-model="experiment-block"]>h3:hover {
@@ -25,7 +24,6 @@
 
 .djn-group-nested .djn-inline-form[data-inline-model="experiment-block"].collapsed {
   border: none;
-  margin-bottom: 10px;
 }
 
 .djn-group-nested .djn-inline-form[data-inline-model="experiment-block"]>h3>b {
@@ -33,14 +31,13 @@
 }
 
 .djn-group-nested .djn-inline-form[data-inline-model="experiment-block"] .collapse-toggle {
-  color: #666;
   transition: transform 0.2s;
-  font-size: 1rem;
+  font-size: .75rem;
+  color: #495057;
 }
 
 .djn-group-nested .djn-inline-form[data-inline-model="experiment-block"]>h3 .inline_label {
   font-weight: bold;
-  color: #666;
   font-size: .75rem;
 }
 
@@ -53,19 +50,21 @@
 
 /* Style for expand/collapse all buttons */
 .collapse-buttons-container {
-  margin-top: .5rem;
-  margin-bottom: .5rem;
-  text-align: right;
+  display: inline-block;
+  margin-top: 0rem;
+  margin-bottom: 0rem;
+  margin-left: auto;
+  align-self: flex-end;
 }
 
 .collapse-buttons-container button {
-  margin-left: 10px;
-  padding: 5px 10px;
-  border: 1px solid #ccc;
+  margin-left: .5rem;
+  padding: .25rem;
   border-radius: 4px;
   background: #fff;
   cursor: pointer;
-  font-size: 12px;
+  font-size: .75rem;
+  border: 0px solid #ccc;
 }
 
 .collapse-buttons-container button:hover {
