@@ -7,7 +7,7 @@ function initializeBlockForm(blockForm) {
   if (header && !header.querySelector('.collapse-toggle')) {
     const toggleBtn = document.createElement('span');
     toggleBtn.className = 'collapse-toggle';
-    toggleBtn.innerHTML = '►';  // Start collapsed
+    toggleBtn.innerHTML = '▲';
     toggleBtn.style.marginLeft = '10px';
     toggleBtn.style.cursor = 'pointer';
     header.appendChild(toggleBtn);
@@ -58,7 +58,7 @@ function toggleBlockVisibility(blockForm) {
     toggleBtn.innerHTML = '▼';
     blockForm.classList.remove('collapsed');
   } else {
-    toggleBtn.innerHTML = '►';
+    toggleBtn.innerHTML = '▲';
     blockForm.classList.add('collapsed');
   }
 }
