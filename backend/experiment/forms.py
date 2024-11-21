@@ -9,6 +9,7 @@ from django.forms import (
     CheckboxSelectMultiple,
     TextInput,
 )
+from django_select2.forms import Select2MultipleWidget
 
 from experiment.models import (
     Experiment,
@@ -269,6 +270,9 @@ class BlockForm(ModelForm):
             "playlists",
             "theme_config",
         ]
+        widgets = {
+            "playlists": Select2MultipleWidget,  # Use Select2 for the playlists field
+        }
         help_texts = {
             "image": "An image that will be displayed on the experiment page and as a meta image in search engines.",
             "slug": "The slug is used to identify the block in the URL so you can access it on the web as follows: app.amsterdammusiclab.nl/{slug} <br>\
