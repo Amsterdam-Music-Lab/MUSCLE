@@ -1,0 +1,63 @@
+/* collapsible_blocks.css */
+
+.djn-inline-form[data-inline-model="experiment-block"]>h3 {
+  cursor: pointer;
+  user-select: none;
+  padding: 10px;
+  margin: 0;
+  border-radius: 4px 4px 0 0;
+  background: #f8f9fa;
+  transition: background-color 0.2s;
+}
+
+.djn-inline-form[data-inline-model="experiment-block"]>h3:hover {
+  background: #e9ecef;
+}
+
+.djn-inline-form[data-inline-model="experiment-block"].collapsed {
+  margin-bottom: 10px;
+}
+
+.djn-inline-form[data-inline-model="experiment-block"] .collapse-toggle {
+  color: #666;
+  transition: transform 0.2s;
+}
+
+.djn-inline-form[data-inline-model="experiment-block"]>h3 .inline_label {
+  font-weight: normal;
+  color: #666;
+}
+
+/* Style adjustments for the block form when collapsed */
+.djn-inline-form[data-inline-model="experiment-block"].collapsed>h3 {
+  border-radius: 4px;
+  margin-bottom: 5px;
+}
+
+/* Style for expand/collapse all buttons */
+.collapse-buttons-container {
+  margin-top: .5rem;
+  text-align: right;
+}
+
+.collapse-buttons-container button {
+  margin-left: 10px;
+  padding: 5px 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background: #fff;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.collapse-buttons-container button:hover {
+  background: #f8f9fa;
+}
+
+.expand-all-btn {
+  color: #28a745;
+}
+
+.collapse-all-btn {
+  color: #dc3545;
+}
