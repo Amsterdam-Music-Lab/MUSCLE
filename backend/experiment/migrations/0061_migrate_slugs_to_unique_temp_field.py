@@ -8,7 +8,10 @@ class Migration(migrations.Migration):
     def forwards_func(apps, schema_editor):
         Experiment = apps.get_model('experiment', 'Experiment')
         for experiment in Experiment.objects.all():
-            experiment.slug_temp = experiment.slug
+            if Experiment.objects.filter(slug=experiment.slug).count() > 1:
+                experiment.slug_temp = f"{experiment.slug}-{experiment.id}"
+            else:
+                experiment.slug_temp = experiment.slug
             experiment.save()
 
     def reverse_func(apps, schema_editor):
