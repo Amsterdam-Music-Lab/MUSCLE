@@ -79,6 +79,11 @@ document.addEventListener('DOMContentLoaded', function () {
   // Initialize all existing blocks
   document.querySelectorAll('.djn-inline-form[data-inline-model="experiment-block"]').forEach(blockForm => {
     initializeBlockForm(blockForm);
+
+    // Expand block form if there are errors in it (i.e. .errors or .errorlist)
+    if (blockForm.querySelector('.errors, .errorlist')) {
+      toggleBlockVisibility(blockForm);
+    }
   });
 
   // Add expand/collapse all buttons at the top
