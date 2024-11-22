@@ -4,7 +4,7 @@
     "type": "module",
     "license": "MIT",
     "dependencies": {
-        "@sentry/react": "^8.19.0",
+        "@sentry/react": "^8.40.0",
         "@vitejs/plugin-react": "^4.2.1",
         "axios": ">=1.7.4",
         "classnames": "^2.2.6",
