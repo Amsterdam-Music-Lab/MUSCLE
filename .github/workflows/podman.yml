@@ -129,6 +129,7 @@ jobs:
         # Variables
         AML_ALLOWED_HOSTS: ${{ vars.AML_ALLOWED_HOSTS }}
         AML_CORS_ORIGIN_WHITELIST: ${{ vars.AML_CORS_ORIGIN_WHITELIST }}
+        CSRF_TRUSTED_ORIGINS: ${{ vars.CSRF_TRUSTED_ORIGINS }}
         AML_DEBUG: ${{ vars.AML_DEBUG }}
         AML_LOCATION_PROVIDER: ${{ vars.AML_LOCATION_PROVIDER }}
         AML_SUBPATH: ${{ vars.AML_SUBPATH }}
@@ -229,6 +230,7 @@ jobs:
       # Variables
       AML_ALLOWED_HOSTS: ${{ vars.AML_ALLOWED_HOSTS }}
       AML_CORS_ORIGIN_WHITELIST: ${{ vars.AML_CORS_ORIGIN_WHITELIST }}
+      CSRF_TRUSTED_ORIGINS: ${{ vars.CSRF_TRUSTED_ORIGINS }}
       AML_DEBUG: ${{ vars.AML_DEBUG }}
       AML_LOCATION_PROVIDER: ${{ vars.AML_LOCATION_PROVIDER }}
       AML_SUBPATH: ${{ vars.AML_SUBPATH }}
