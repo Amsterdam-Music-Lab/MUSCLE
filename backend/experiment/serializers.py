@@ -1,5 +1,5 @@
 from random import shuffle
-from typing import Optional
+from typing import Optional, Union
 
 from django_markup.markup import formatter
 from django.utils.translation import activate, get_language
@@ -137,7 +137,9 @@ def serialize_block(block_object: Block, language: str = "en") -> dict:
     }
 
 
-def get_upcoming_block(phase: Phase, participant: Participant, times_played: int):
+def get_upcoming_block(
+    phase: Phase, participant: Participant, times_played: int
+) -> dict:
     """return next block with minimum finished sessions for this participant
     if all blocks have been played an equal number of times, return None
 
