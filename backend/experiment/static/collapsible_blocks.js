@@ -1,5 +1,9 @@
-// collapsible_blocks.js
-
+/**
+ * Initializes an (inline) block form by adding a collapsible toggle button to the header
+ * and setting up the initial collapsed state of the form.
+ *
+ * @param {HTMLElement} blockForm - The block form element to initialize.
+ */
 function initializeBlockForm(blockForm) {
   let header = blockForm.querySelector('h3');
 
@@ -116,7 +120,7 @@ document.addEventListener('DOMContentLoaded', function () {
     firstBlock.parentNode.parentNode.querySelector('h2').appendChild(buttonsContainer);
   }
 
-  // Add observer for dynamically added blocks
+  // Add observer for dynamically added blocks (e.g. when adding a new block)
   const observer = new MutationObserver(function (mutations) {
     mutations.forEach(function (mutation) {
       mutation.addedNodes.forEach(function (node) {
