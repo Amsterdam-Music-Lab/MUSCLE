@@ -1,7 +1,7 @@
 // collapsible_blocks.js
 
 function initializeBlockForm(blockForm) {
-  const header = blockForm.querySelector('h3');
+  let header = blockForm.querySelector('h3');
 
   // Only add toggle button if it doesn't exist
   if (header && !header.querySelector('.collapse-toggle')) {
@@ -11,7 +11,14 @@ function initializeBlockForm(blockForm) {
     toggleBtn.style.marginLeft = '10px';
     toggleBtn.style.cursor = 'pointer';
     header.appendChild(toggleBtn);
+  }
 
+  header = blockForm.querySelector('h3');
+
+  // If collapse-toggle does not have a click handler yet, add one
+  const toggleBtn = blockForm.querySelector('.collapse-toggle');
+
+  if (toggleBtn && !toggleBtn.onclick) {
     // Add click handler to header
     header.addEventListener('click', function (e) {
       // Don't trigger if clicking on other buttons in the header
@@ -40,6 +47,7 @@ function initializeBlockForm(blockForm) {
 }
 
 function toggleBlockVisibility(blockForm) {
+
   const contentSections = [
     blockForm.querySelector('fieldset'),                                            // Main block form
     blockForm.querySelector('.djn-group-nested[data-inline-model="experiment-blocktranslatedcontent"]')  // Translated content form
@@ -71,6 +79,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
   // Add expand/collapse all buttons at the top
   const firstBlock = document.querySelector('.djn-inline-form[data-inline-model="experiment-block"]');
+
   if (firstBlock) {
     const buttonsContainer = document.createElement('div');
     buttonsContainer.className = 'collapse-buttons-container';
@@ -79,6 +88,7 @@ document.addEventListener('DOMContentLoaded', function () {
     expandAllBtn.type = 'button';
     expandAllBtn.innerText = 'Expand All Blocks';
     expandAllBtn.className = 'expand-all-btn';
+
     expandAllBtn.onclick = function () {
       document.querySelectorAll('.djn-inline-form[data-inline-model="experiment-block"]').forEach(blockForm => {
         if (blockForm.classList.contains('collapsed')) {
@@ -91,6 +101,7 @@ document.addEventListener('DOMContentLoaded', function () {
     collapseAllBtn.type = 'button';
     collapseAllBtn.innerText = 'Collapse All Blocks';
     collapseAllBtn.className = 'collapse-all-btn';
+
     collapseAllBtn.onclick = function () {
       document.querySelectorAll('.djn-inline-form[data-inline-model="experiment-block"]').forEach(blockForm => {
         if (!blockForm.classList.contains('collapsed')) {
@@ -104,20 +115,26 @@ document.addEventListener('DOMContentLoaded', function () {
     firstBlock.parentNode.insertBefore(buttonsContainer, firstBlock);
     firstBlock.parentNode.parentNode.querySelector('h2').appendChild(buttonsContainer);
   }
-});
 
-// Add observer for dynamically added blocks
-const observer = new MutationObserver(function (mutations) {
-  mutations.forEach(function (mutation) {
-    mutation.addedNodes.forEach(function (node) {
-      if (node.nodeType === 1 && node.matches('.djn-inline-form[data-inline-model="experiment-block"]')) {
-        initializeBlockForm(node);
-      }
+  // Add observer for dynamically added blocks
+  const observer = new MutationObserver(function (mutations) {
+    mutations.forEach(function (mutation) {
+      mutation.addedNodes.forEach(function (node) {
+        if (node.nodeType === 1 && node.matches('.djn-inline-form[data-inline-model="experiment-block"]')) {
+
+          // Initialize newly added block by adding toggle button, etc.
+          initializeBlockForm(node);
+
+          // Expand every newly added inline block form
+          toggleBlockVisibility(node);
+        }
+      });
     });
   });
-});
 
-observer.observe(document.body, {
-  childList: true,
-  subtree: true
+  observer.observe(document.body, {
+    childList: true,
+    subtree: true
+  });
+
 });
