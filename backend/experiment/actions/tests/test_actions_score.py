@@ -11,8 +11,8 @@ class TestScore(unittest.TestCase):
         self.mock_session.last_score.return_value = 10
         self.mock_session.last_song.return_value = "Test Song"
         self.mock_session.total_score.return_value = 50
-        self.mock_session.rounds_passed.return_value = 2
-        self.mock_session.experiment.rounds = 5
+        self.mock_session.get_rounds_passed.return_value = 2
+        self.mock_session.block.rounds = 5
 
     def test_initialization_full_parameters(self):
         score = Score(

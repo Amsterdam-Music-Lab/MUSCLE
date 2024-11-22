@@ -11,7 +11,8 @@ function getAbsolutePath(value) {
 
 /** @type { import('@storybook/react-vite').StorybookConfig } */
 const config = {
-    stories: ["../src/**/*.mdx", "../src/**/*.stories.@(js|jsx|mjs|ts|tsx)"],
+    stories: ["../src/**/*.stories.@(js|jsx|mjs|ts|tsx)"],
+
     addons: [
         getAbsolutePath("@storybook/addon-onboarding"),
         getAbsolutePath("@storybook/addon-links"),
@@ -19,15 +20,17 @@ const config = {
         getAbsolutePath("@chromatic-com/storybook"),
         getAbsolutePath("@storybook/addon-interactions"),
     ],
+
     framework: {
         name: getAbsolutePath("@storybook/react-vite"),
         options: {},
     },
-    docs: {
-        autodocs: "tag",
-    },
+
+    docs: {},
+
     viteFinal: (config) => {
         return mergeConfig(config, {
+            base: "/MUSCLE/storybook/",
             resolve: {
                 alias: {
                     '@/': '/src/',
@@ -35,9 +38,15 @@ const config = {
             },
         });
     },
+
     staticDirs: ["../public"],
+
     env: {
         VITE_API_ROOT: "http://localhost:8000",
     },
+
+    typescript: {
+        reactDocgen: "react-docgen-typescript"
+    }
 };
 export default config;

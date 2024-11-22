@@ -1,113 +1,213 @@
 from random import shuffle
+from typing import Optional, Union
 
 from django_markup.markup import formatter
+from django.utils.translation import activate, get_language
 
 from experiment.actions.consent import Consent
 from image.serializers import serialize_image
 from participant.models import Participant
+from result.models import Result
 from session.models import Session
 from theme.serializers import serialize_theme
-from .models import Experiment, ExperimentCollection, ExperimentCollectionGroup, GroupedExperiment
+from .models import Block, Experiment, Phase, SocialMediaConfig
 
 
 def serialize_actions(actions):
-    ''' Serialize an array of actions '''
+    """Serialize an array of actions"""
     if isinstance(actions, list):
         return [a.action() for a in actions]
     return actions.action()
 
 
-def serialize_experiment_collection(
-    experiment_collection: ExperimentCollection
-) -> dict:
+def get_experiment_translated_content(experiment):
+    language_code = get_language()[0:2]
+
+    translated_content = experiment.get_translated_content(language_code)
+
+    if not translated_content:
+        raise ValueError("No translated content found for this experiment")
+
+    # set language cookie to the first available translation for this experiment
+    activate(translated_content.language)
+    return translated_content
+
+
+def serialize_experiment(experiment: Experiment) -> dict:
+    """Serialize experiment
+
+    Args:
+        experiment: Experiment instance
+
+    Returns:
+        Basic info about an experiment
+    """
+
+    translated_content = get_experiment_translated_content(experiment)
 
     serialized = {
-        'slug': experiment_collection.slug,
-        'name': experiment_collection.name,
-        'description': formatter(
-            experiment_collection.description,
-            filter_name='markdown'
-        ),
+        "slug": experiment.slug,
+        "name": translated_content.name,
+        "description": formatter(translated_content.description, filter_name="markdown"),
     }
 
-    if experiment_collection.consent:
-        serialized['consent'] = Consent(experiment_collection.consent).action()
+    if translated_content.consent:
+        serialized["consent"] = Consent(translated_content.consent).action()
+    elif experiment.get_fallback_content() and experiment.get_fallback_content().consent:
+        serialized["consent"] = Consent(experiment.get_fallback_content().consent).action()
 
-    if experiment_collection.theme_config:
-        serialized['theme'] = serialize_theme(
-            experiment_collection.theme_config
-        )
+    if experiment.theme_config:
+        serialized["theme"] = serialize_theme(experiment.theme_config)
 
-    if experiment_collection.about_content:
-        serialized['aboutContent'] = formatter(
-            experiment_collection.about_content,
-            filter_name='markdown'
+    if translated_content.about_content:
+        serialized["aboutContent"] = formatter(translated_content.about_content, filter_name="markdown")
+
+    if hasattr(experiment, "social_media_config") and experiment.social_media_config:
+        serialized["socialMedia"] = serialize_social_media_config(
+            experiment.social_media_config
         )
 
     return serialized
 
 
-def serialize_experiment_collection_group(group: ExperimentCollectionGroup, participant: Participant) -> dict:
-    grouped_experiments = list(GroupedExperiment.objects.filter(
-        group_id=group.id).order_by('order'))
+def serialize_social_media_config(
+    social_media_config: SocialMediaConfig,
+    score: Optional[float] = 0,
+) -> dict:
+    """Serialize social media config
 
-    if group.randomize:
-        shuffle(grouped_experiments)
+    Args:
+        social_media_config: SocialMediaConfig instance
 
-    next_experiment = get_upcoming_experiment(
-        grouped_experiments, participant, group.dashboard)
-
-    total_score = get_total_score(grouped_experiments, participant)
-
-    if not next_experiment:
-        return None
+    returns:
+        Basic social media info
+    """
 
     return {
-        'dashboard': [serialize_experiment(experiment.experiment, participant) for experiment in grouped_experiments] if group.dashboard else [],
-        'nextExperiment': next_experiment,
-        'totalScore': total_score
+        "tags": social_media_config.tags or ["amsterdammusiclab", "citizenscience"],
+        "url": social_media_config.url,
+        "content": social_media_config.get_content(score),
+        "channels": social_media_config.channels or ["facebook", "twitter"],
     }
 
 
-def serialize_experiment(experiment_object: Experiment, participant: Participant):
+def serialize_phase(phase: Phase, participant: Participant, times_played: int) -> dict:
+    """Serialize phase
+
+    Args:
+        phase: Phase instance
+        participant: Participant instance
+
+    Returns:
+        A dictionary of the dashboard (if applicable), the next block, and the total score of the phase
+    """
+    blocks = list(phase.blocks.order_by("index").all())
+
+    next_block = get_upcoming_block(phase, participant, times_played)
+    if not next_block:
+        return None
+
+    total_score = get_total_score(blocks, participant)
+    if phase.randomize:
+        shuffle(blocks)
+
     return {
-        'slug': experiment_object.slug,
-        'name': experiment_object.name,
-        'description': experiment_object.description,
-        'image': serialize_image(experiment_object.image) if experiment_object.image else None,
+        "dashboard": [serialize_block(block, participant) for block in blocks] if phase.dashboard else [],
+        "nextBlock": next_block,
+        "totalScore": total_score,
     }
 
 
-def get_upcoming_experiment(experiment_list, participant, repeat_allowed=True):
-    ''' return next experiment with minimum finished sessions for this participant
-     if repeated experiments are not allowed (dashboard=False) and there are only finished sessions, return None '''
-    finished_session_counts = [get_finished_session_count(
-        experiment.experiment, participant) for experiment in experiment_list]
-    minimum_session_count = min(finished_session_counts)
-    if not repeat_allowed and minimum_session_count != 0:
-        return None
-    return serialize_experiment(experiment_list[finished_session_counts.index(minimum_session_count)].experiment, participant)
+def serialize_block(block_object: Block, language: str = "en") -> dict:
+    """Serialize block
+
+    Args:
+        block_object: Block instance
+        language: Language code
+
+    Returns:
+        Block info for a participant
+    """
+
+    return {
+        "slug": block_object.slug,
+        "name": block_object.name,
+        "description": block_object.description,
+        "image": serialize_image(block_object.image) if block_object.image else None,
+    }
 
 
-def get_started_session_count(experiment, participant):
-    ''' Get the number of started sessions for this experiment and participant '''
-    count = Session.objects.filter(
-        experiment=experiment, participant=participant).count()
+def get_upcoming_block(
+    phase: Phase, participant: Participant, times_played: int
+) -> dict:
+    """return next block with minimum finished sessions for this participant
+    if all blocks have been played an equal number of times, return None
+
+    Args:
+        phase: Phase for which next block needs to be picked
+        participant: Participant for which next block needs to be picked
+    """
+    blocks = list(phase.blocks.all())
+
+    shuffle(blocks)
+    finished_session_counts = [
+        get_finished_session_count(block, participant) for block in blocks
+    ]
+
+    min_session_count = min(finished_session_counts)
+    if not phase.dashboard:
+        if times_played != min_session_count:
+            return None
+    next_block_index = finished_session_counts.index(min_session_count)
+    return serialize_block(blocks[next_block_index])
+
+
+def get_started_session_count(block: Block, participant: Participant) -> int:
+    """Get the number of started sessions for this block and participant
+
+    Args:
+        block: Block instance
+        participant: Participant instance
+
+    Returns:
+        Number of started sessions for this block and participant
+    """
+
+    count = Session.objects.filter(block=block, participant=participant).count()
     return count
 
 
-def get_finished_session_count(experiment, participant):
-    ''' Get the number of finished sessions for this experiment and participant '''
-    count = Session.objects.filter(
-        experiment=experiment, participant=participant, finished_at__isnull=False).count()
-    return count
+def get_finished_session_count(block: Block, participant: Participant) -> int:
+    """Get the number of finished sessions for this block and participant
+
+    Args:
+        block: Block instance
+        participant: Participant instance
+
+    Returns:
+        Number of finished sessions for this block and participant
+    """
+
+    return Session.objects.filter(
+        block=block, participant=participant, finished_at__isnull=False
+    ).count()
 
 
-def get_total_score(grouped_experiments, participant):
-    '''Calculate total score of all experiments on the dashboard'''
+def get_total_score(blocks: list, participant: Participant) -> int:
+    """Calculate total score of all blocks on the dashboard
+
+    Args:
+        blocks: All blocks on the dashboard
+        participant: The participant we want the total score from
+
+    Returns:
+        Total score of given the blocks for this participant
+    """
+
     total_score = 0
-    for grouped_experiment in grouped_experiments:
-        sessions = Session.objects.filter(experiment=grouped_experiment.experiment, participant=participant)
+    for block in blocks:
+        sessions = Session.objects.filter(block=block, participant=participant)
+
         for session in sessions:
             total_score += session.final_score
     return total_score

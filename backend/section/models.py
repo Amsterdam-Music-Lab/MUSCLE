@@ -1,6 +1,25 @@
+"""
+Models for managing audio files used in experiments
+
+Our examples will assume that a playlist with the following csv data has been added to an empty database:
+```
+(
+    "Lion King,Hakuna Matata,0.0,10.0,/my/experiment/lionking1.mp3,Disney,happy"
+    "Lion King,Hakuna Matata,30.0,10.0,/my/experiment/lionking2.mp3,Disney,happy"
+    "Frozen,Let It Go,0.0,10.0,/my/experiment/frozen1.mp3,Disney,sad"
+    "Frozen,Let It Go,30.0,10.0,/my/experiment/frozen2.mp3,Disney,sad"
+    "West Side Story,America,0.0,10.0,/my/experiment/westsidestory1.mp3,Musical,happy"
+    "West Side Story,America,30.0,10.0,/my/experiment/westsidestory2.mp3,Musical,happy"
+    "Porgy & Bess,Summertime,0.0,10.0,/my/experiment/porgyandbess1.mp3,Musical,sad"
+    "Porgy & Bess,Summertime,30.0,10.0,/my/experiment/porgyandbess2.mp3,Musical,sad"
+)
+```
+"""
+
 import datetime
 import random
 import csv
+from os.path import join
 
 from django.db import models
 from django.utils import timezone
@@ -15,7 +34,14 @@ from section.validators import (
 
 
 class Playlist(models.Model):
-    """List of sections to be used in an Experiment"""
+    """A model defining a list of sections to be played in a Block
+
+    Attributes:
+        name (str): playlist name
+        url_prefix (str): prefix for sections served from an external site
+        process_csv (bool): whether a csv file should be processed to create or edit this playlist
+        csv (str): a csv file which can be processed to create or edit this playlist
+    """
 
     name = models.CharField(db_index=True, max_length=64)
     url_prefix = models.CharField(max_length=128,
@@ -52,9 +78,8 @@ class Playlist(models.Model):
         return self.csv
 
     def save(self, *args, **kwargs):
-        """Update playlist csv field on every save"""
-        if self.process_csv is False:
-            self.csv = self.update_admin_csv()
+        if self.process_csv is False and self.id:
+            self.csv = self._update_admin_csv()
         if self.url_prefix and self.url_prefix[-1] != '/':
             self.url_prefix += '/'
         self.process_csv = False
@@ -66,20 +91,20 @@ class Playlist(models.Model):
     def __str__(self):
         return self.name
 
-    def section_count(self):
-        """Number of sections"""
+    def _section_count(self):
+        """Number of sections, as displayed in the admin interface"""
         return self.section_set.count()
 
-    section_count.short_description = "Sections"
+    _section_count.short_description = "Sections"
 
-    def experiment_count(self):
-        """Number of Experiments"""
-        return self.experiment_set.count()
+    def _block_count(self):
+        """Number of Blocks"""
+        return self.block_set.count()
 
-    experiment_count.short_description = "Experiments"
+    _block_count.short_description = "Blocks"
 
-    def update_sections(self):
-        """Update the sections from the csv file"""
+    def _update_sections(self):
+        """update sections associated with a Playlist object based on its `csv` field"""
         # CSV empty
         if len(self.csv) == 0:
             # Delete all existing sections
@@ -148,7 +173,7 @@ class Playlist(models.Model):
             # if same section already exists, update it with new info
             for ex_section in existing_sections:
                 if ex_section.filename == section.filename:
-                    if song:                        
+                    if song:
                         ex_section.song = song
                         ex_section.save()
                     ex_section.start_time = section.start_time
@@ -183,47 +208,31 @@ class Playlist(models.Model):
             'message': "Sections processed from CSV. Added: " + str(len(sections)) + " - Updated: " + str(updated) + " - Removed: " + str(len(delete_ids))
         }
 
-    def song_ids(self, filter_by={}):
-        """Get a list of distinct song ids"""
-        # order_by is required to make distinct work with values_list
-        return self.section_set.filter(**filter_by).order_by('song').values_list('song_id', flat=True).distinct()
-
-    def get_section(self, filter_by={}, song_ids=[]):
-        """Get a random section from this playlist
-            Optionally, limit to specific song_ids and filter conditions
-        """
-        if song_ids:
-            sections = self.section_set.filter(song__id__in=song_ids)
-        else:
-            sections = self.section_set
-        pks = sections.filter(**filter_by).values_list('pk', flat=True)
-        if len(pks) == 0:
-            return None
-        return self.section_set.get(pk=random.choice(pks))
-
-    def export_admin(self):
+    def _export_admin(self):
         """Export data for admin"""
         return {
-            'exportedAt': timezone.now().isoformat(),
-            'playlist': {
-                'id': self.id,
-                'name': self.name,
-                'sections': [section.export_admin() for section in self.section_set.all()],
+            "exportedAt": timezone.now().isoformat(),
+            "playlist": {
+                "id": self.id,
+                "name": self.name,
+                "sections": [
+                    section._export_admin() for section in self.section_set.all()
+                ],
             },
         }
 
-    def export_sections(self):
+    def _export_sections(self):
         # export section objects
         return self.section_set.all()
 
-    def update_admin_csv(self):
+    def _update_admin_csv(self):
         """Update csv data for admin"""
         csvfile = CsvStringBuilder()
         writer = csv.writer(csvfile)
         for section in self.section_set.all():
             if section.song:
-                this_artist = section.song.artist
-                this_name = section.song.name
+                this_artist = section.artist_name()
+                this_name = section.song_name()
             else:
                 this_artist = ''
                 this_name = ''
@@ -237,9 +246,51 @@ class Playlist(models.Model):
         csv_string = csvfile.csv_string
         return ''.join(csv_string)
 
+    def get_section(
+        self, filter_by: dict = {}, exclude: dict = {}, song_ids: list = []
+    ):
+        """Get a random section from this playlist
+        Optionally, limit to specific song_ids and filter conditions
+        `filter_by` and `exclude` use [Django's querying syntax](https://docs.djangoproject.com/en/4.2/topics/db/queries/)
+
+        Attributes:
+            filter_by: a dictionary defining conditions a section should meet
+            exclude: a dictionary defining conditions by which to exclude sections from selection
+            song_ids: a list of identifiers of `Song` objects from which the section should be sampled
+
+        Examples:
+            >>> playlist.get_section(exclude={'group': 'Disney})
+            West Side Story - America (0.0 - 10.0) OR West Side Story - America (30.0 - 40.0) OR
+            Porgy and Bess - Summertime (0.0 - 10.0) OR Porgy and Bess - Summertime (30.0 - 40.0)
+
+            >>> example_playlist.get_section({'tag': 'happy', 'start_time__gt': 20.0})
+            West Side Story - America (30.0 - 40.0) OR Lion King - Hakuna Matata (30.0 - 40.0)
+
+            >>> playlist.get_section(song_ids=[1])
+            Frozen - Let It Go (0.0 - 10.0) OR Frozen - Let It Go (30.0 - 40.0)
+        """
+        if song_ids:
+            sections = self.section_set.filter(song__id__in=song_ids)
+        else:
+            sections = self.section_set
+        pks = (
+            sections.exclude(**exclude).filter(**filter_by).values_list("pk", flat=True)
+        )
+        if len(pks) == 0:
+            raise Section.DoesNotExist
+        return self.section_set.get(pk=random.choice(pks))
+
 
 class Song(models.Model):
-    """ A Song object with an artist and name (unique together)"""
+    """A Song object with an artist and name, artist / name combinations must be unique
+
+    Attributes:
+        artist (str): the artist of a song
+        name (str): the name of a song
+
+    Examples:
+        After adding the example playlist, the database would contain 4 Song objects
+    """
     artist = models.CharField(db_index=True, blank=True, default='', max_length=128)
     name = models.CharField(db_index=True, blank=True, default='', max_length=128)
 
@@ -247,26 +298,39 @@ class Song(models.Model):
         unique_together = ("artist", "name")
 
 
-def audio_upload_path(instance, filename):
+def _audio_upload_path(instance, filename: str) -> str:
     """Generate path to save audio based on playlist.name"""
-    folder_name = instance.playlist.name.replace(' ', '')
-    return '{0}/{1}'.format(folder_name, filename)
+    folder_name = instance.playlist.name.replace(" ", "")
+    return join(folder_name, filename)
 
 
 class Section(models.Model):
-    """A snippet/section of a song, belonging to a Playlist"""
+    """A snippet/section of a song, belonging to a Playlist
 
-    def random_code():
-        """Generate a random code for this section"""
-        return random.randint(10000, 99999)
+    Attributes:
+        playlist (Playlist): a Many-To-One relationship to a Playlist object
+        song (Song): a Many-To-One relationship to a Playlist object (can be null)
+        start_time (float): the start time of the section in seconds, typically 0.0
+        duration (float): the duration of the section in seconds, typically the duration of the audio file
+        filename (str): the filename on the local file system or a link to an external file
+        play_count (int): a counter for how often a given section has been played
+        tag (str): a string with which to categorize the section
+        group (str): another string with which to categorize the section
+
+    Examples:
+        After adding the example playlist, the database would contain 8 Section objects
+    """
 
     playlist = models.ForeignKey(Playlist, on_delete=models.CASCADE)
     song = models.ForeignKey(Song, on_delete=models.CASCADE, blank=True, null=True)
-    start_time = models.FloatField(db_index=True, default=0.0)  # sec
-    duration = models.FloatField(default=0.0)  # sec
-    filename = models.FileField(upload_to=audio_upload_path, max_length=255, validators=[audio_file_validator()])
+    start_time = models.FloatField(db_index=True, default=0.0)  # start time in seconds
+    duration = models.FloatField(default=0.0)  # end time in seconds
+    filename = models.FileField(
+        upload_to=_audio_upload_path,
+        max_length=255,
+        validators=[audio_file_validator()],
+    )
     play_count = models.PositiveIntegerField(default=0)
-    code = models.PositiveIntegerField(default=random_code)
     tag = models.CharField(max_length=128, default='0', blank=True)
     group = models.CharField(max_length=128, default='0', blank=True)
 
@@ -274,51 +338,75 @@ class Section(models.Model):
         ordering = ['song__artist', 'song__name', 'start_time']
 
     def __str__(self):
-        return "{} - {} ({}-{})".format(
-            self.song.artist,
-            self.song.name,
-            self.start_time_str(),
-            self.end_time_str()
-        )
+        return f"{self.song_label()} ({self.start_time_str()}-{self.end_time_str()})"
 
-    def artist_name(self):
+    def artist_name(self, placeholder: str = "") -> str:
+        """
+        Attributes:
+            placeholder: a placeholder in case the section does not have an associated Song
+
+        Returns:
+            artist of associated song or placeholder
+        """
         if self.song:
             return self.song.artist
         else:
-            return ''
+            return placeholder
 
-    def song_name(self):
+    def song_name(self, placeholder: str = "") -> str:
+        """
+        Attributes:
+            placeholder: a placeholder in case the section does not have an associated Song
+
+        Returns:
+            name of associated song or placeholder
+        """
         if self.song:
             return self.song.name
         else:
-            return ''
+            return placeholder
 
-    def song_label(self):
-        return "{} - {}".format(self.artist_name(), self.song_name())
+    def song_label(self) -> str:
+        """
+        Returns:
+            formatted artist and name of associated song, if available
+        """
+        if self.artist_name() or self.song_name():
+            return f"{self.artist_name()} - {self.song_name()}"
+        return ""
 
-    def start_time_str(self):
-        """Create start time string 0:01:01.nn"""
-        return str(datetime.timedelta(seconds=self.start_time)).rstrip('0')
+    def start_time_str(self) -> str:
+        """
+        Returns:
+            the start time in minutes:seconds.milliseconds format
+        """
+        return datetime.datetime.strftime(
+            datetime.datetime.fromtimestamp(self.start_time), "%M:%S.%f"
+        )[:-3]
 
-    def end_time_str(self):
-        """Create end time string 0:02:02.nn"""
-        return str(datetime.timedelta(seconds=self.start_time + self.duration)).rstrip('0')
+    def end_time_str(self) -> str:
+        """
+        Returns:
+            the end time in minutes:seconds.milliseconds format
+        """
+        return datetime.datetime.strftime(
+            datetime.datetime.fromtimestamp(self.start_time + self.duration), "%M:%S.%f"
+        )[:-3]
 
     def add_play_count(self):
-        """Increase play count for this session"""
+        """Increase play count for this section"""
         self.play_count += 1
 
-    def absolute_url(self):
-        """Return absolute url for this section"""
-        base_url = settings.BASE_URL if hasattr(settings, 'BASE_URL') else ''
-        sections_url = reverse('section:section', args=[self.pk, self.code])
-
+    def absolute_url(self) -> str:
+        """
+        Returns:
+            a url consisting of the BASE_URL configured for Django, plus the filename
+        """
+        base_url = getattr(settings, 'BASE_URL', '')
+        sections_url = reverse("section:section", args=[self.pk])
         return base_url.rstrip('/') + sections_url
 
-    def simple_object(self):
-        return {'id': self.id, 'url': self.absolute_url()}
-
-    def export_admin(self):
+    def _export_admin(self):
         """Export data for admin"""
         return {
             'id': self.id,
@@ -327,10 +415,7 @@ class Section(models.Model):
             'play_count': self.play_count
         }
 
-    def export_song(self):
-        return self.instance
-
-    def export_admin_csv(self):
+    def _export_admin_csv(self):
         """Export csv data for admin"""
         return [
             self.song.artist,

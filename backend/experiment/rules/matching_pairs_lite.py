@@ -3,7 +3,7 @@ import random
 from django.utils.translation import gettext_lazy as _
 
 from .matching_pairs import MatchingPairsGame
-from experiment.actions import Final, Playlist, Info
+from experiment.actions import Playlist, Info
 from experiment.actions.utils import final_action_with_optional_button
 
 
@@ -14,20 +14,14 @@ class MatchingPairsLite(MatchingPairsGame):
     score_feedback_display = 'small-bottom-right'
     contact_email = 'aml.tunetwins@gmail.com'
 
-    def first_round(self, experiment):     
-        # 2. Choose playlist.
-        playlist = Playlist(experiment.playlists.all())
-        info = Info('',
-                    heading='Press start to enter the game',
-                    button_label='Start')
-        return [
-            playlist, info
-        ]
-
     def next_round(self, session):
-        if session.rounds_passed() < 1:
+        playlist = Playlist(session.block.playlists.all())
+        info = Info('',
+            heading='Press start to enter the game',
+            button_label='Start')
+        if session.get_rounds_passed() < 1:
             trial = self.get_matching_pairs_trial(session)
-            return [trial]
+            return [playlist, info, trial]
         else:
             return final_action_with_optional_button(session, final_text='End of the game', title='Score', button_text='Back to dashboard')
 
@@ -43,11 +37,12 @@ class MatchingPairsLite(MatchingPairsGame):
         )
         if degradations:
             sections = list(originals) + list(degradations)
-            random.seed(self.random_seed)
-            random.shuffle(sections)
-            return sections
+            return self.shuffle_sections(sections)
         else:
             sections = list(originals) * 2
-            random.seed(self.random_seed)
-            random.shuffle(sections)
-            return sections
+            return self.shuffle_sections(sections)
+
+    def shuffle_sections(self, sections):
+        random.seed(self.random_seed)
+        random.shuffle(sections)
+        return sections

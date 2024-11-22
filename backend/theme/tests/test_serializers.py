@@ -2,7 +2,7 @@ from django.conf import settings
 from django.test import TestCase
 
 from image.models import Image
-from theme.models import FooterConfig, HeaderConfig, ThemeConfig
+from theme.models import FooterConfig, HeaderConfig, ThemeConfig, SponsorImage
 from theme.serializers import serialize_footer, serialize_header, serialize_theme
 
 
@@ -26,6 +26,12 @@ class ThemeConfigSerializerTest(TestCase):
             alt='Another alt text',
             target='',
         )
+        third_image = Image.objects.create(
+            file='thirdimage.jpg',
+            href='https://third.example.com',
+            alt='Third alt text',
+            target='',
+        )
         cls.theme = ThemeConfig.objects.create(
             name='Default',
             description='Default theme configuration',
@@ -39,8 +45,12 @@ class ThemeConfigSerializerTest(TestCase):
             disclaimer='Some [information](https://example.com/our-team)',
             privacy='Some privacy message'
         )
-        cls.footer.logos.add(logo_image)
-        cls.footer.logos.add(background_image)
+        # The order of the logos should be determined by the
+        # index field in the through model and not by the order in
+        # which they are added to the many-to-many field
+        cls.footer.logos.add(logo_image, through_defaults={'index': 1})
+        cls.footer.logos.add(background_image, through_defaults={'index': 0})
+        cls.footer.logos.add(third_image, through_defaults={'index': 2})
         cls.header = HeaderConfig.objects.create(
             theme=cls.theme,
             show_score=True
@@ -50,6 +60,16 @@ class ThemeConfigSerializerTest(TestCase):
         expected_json = {
             'disclaimer': '<p>Some <a href="https://example.com/our-team">information</a></p>',
             'logos': [
+                {
+                    'file': f'{settings.BASE_URL}{settings.MEDIA_URL}anotherimage.png',
+                    'href': 'https://other.example.com',
+                    'alt': 'Another alt text',
+                    'title': '',
+                    'description': '',
+                    'rel': '',
+                    'tags': [],
+                    'target': '',
+                },
                 {
                     'file': f'{settings.BASE_URL}{settings.MEDIA_URL}someimage.jpg',
                     'href': 'https://example.com',
@@ -61,9 +81,9 @@ class ThemeConfigSerializerTest(TestCase):
                     'tags': [],
                 },
                 {
-                    'file': f'{settings.BASE_URL}{settings.MEDIA_URL}anotherimage.png',
-                    'href': 'https://other.example.com',
-                    'alt': 'Another alt text',
+                    'file': f'{settings.BASE_URL}{settings.MEDIA_URL}thirdimage.jpg',
+                    'href': 'https://third.example.com',
+                    'alt': 'Third alt text',
                     'title': '',
                     'description': '',
                     'rel': '',
@@ -76,8 +96,8 @@ class ThemeConfigSerializerTest(TestCase):
         self.assertEqual(serialize_footer(self.footer), expected_json)
 
     def test_header_serializer(self):
-        expected_json = {            
-            'nextExperimentButtonText': 'Next experiment',
+        expected_json = {
+            'nextBlockButtonText': 'Next experiment',
             'aboutButtonText': 'About us',
             'score': {
                 'scoreClass': 'gold',

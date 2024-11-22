@@ -17,6 +17,7 @@ class Anisochrony(DurationDiscrimination):
     practice_diff = 270000
     max_turnpoints = 8
     catch_condition = 'REGULAR'
+    section_count = 249
 
     def get_response_explainer(self, correct, correct_response, button_label=_('Next fragment')):
         correct_response = _('REGULAR') if correct_response=='REGULAR' else _('IRREGULAR')
@@ -64,7 +65,7 @@ class Anisochrony(DurationDiscrimination):
             result_id=prepare_result(key, session, section=section, expected_response=expected_response),
             submits=True
         )
-        
+
         playback = Autoplay([section])
         form = Form([question])
         config = {

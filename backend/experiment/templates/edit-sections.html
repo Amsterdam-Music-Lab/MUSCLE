@@ -5,7 +5,7 @@
     }
 
     td {
-        padding: 8px 2px;        
+        padding: 8px 2px;
     }
     p.form-filename {
         max-width: 200px;
@@ -15,11 +15,11 @@
         height: 2rem;
     }
     .song-help {
-        position: absolute;        
+        position: absolute;
         overflow-x:visible;
-        color: var(--body-quiet-color);        
+        color: var(--body-quiet-color);
         margin-left: 2.5rem;
-        font-size: 12px;        
+        font-size: 12px;
     }
     #back-button {
         float: right;
@@ -43,10 +43,10 @@
             <th>Artist</th>
             <th>Name</th>
             <th>Start-time</th>
-            <th>Duration</th>            
+            <th>Duration</th>
             <th>Tag</th>
             <th>Group</th>
-        </tr>        
+        </tr>
         {% for section in sections %}
         <tr {% if not section.song %} class="song-padding" {% endif %}>
             <td>
@@ -57,11 +57,11 @@
             </td>
             <td>
                 <input type="text" name="{{section.id}}_artist" maxlength="128" id="{{section.id}}_artist"
-                    value="{{ section.song.artist}}" {% if not section.song %} placeholder="*" {% endif %} >
+                    value="{{ section.artist_name}}" placeholder="*">
             </td>
             <td>
                 <input type="text" name="{{section.id}}_name" maxlength="128" id="{{section.id}}_name"
-                    value="{{ section.song.name}}" {% if not section.song %} placeholder="*" {% endif %}>
+                    value="{{ section.song_name}}" placeholder="*">
             </td>
             <td>
                 <input type="number" name="{{section.id}}_start_time" maxlength="128" required=""
@@ -78,7 +78,7 @@
             <td>
                 <input type="text" name="{{section.id}}_group" maxlength="128" id="{{section.id}}_group"
                     value="{{ section.group}}">
-            </td>            
+            </td>
         </tr>
         {% endfor %}
         <tr class="song-padding">

@@ -37,4 +37,4 @@ class Command(BaseCommand):
         if indent > 0:
             options = {'indent': indent}
 
-        self.stdout.write(json.dumps(playlist.export_admin(), **options))
+        self.stdout.write(json.dumps(playlist._export_admin(), **options))

@@ -8,7 +8,7 @@ const defaultArgs = {
     },
     confirm: "Confirm",
     deny: "Deny",
-    experiment: {
+    block: {
         slug: "experiment-slug",
     },
 };
@@ -33,7 +33,7 @@ export const Default = {
         },
         confirm: "Confirm",
         deny: "Deny",
-        experiment: {
+        block: {
             slug: "experiment-slug",
         },
     },

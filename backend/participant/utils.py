@@ -2,6 +2,8 @@ import logging
 import urllib
 import urllib.request
 from django.conf import settings
+from django.http import HttpRequest
+
 
 from .models import Participant
 PARTICIPANT_KEY = 'participant_id'
@@ -71,9 +73,13 @@ def visitor_ip_address(request):
     return request.META.get('REMOTE_ADDR')
 
 
-def get_participant(request) -> Participant:
+def get_participant(request: HttpRequest) -> Participant:
     # get participant from session
     participant_id = request.session.get(PARTICIPANT_KEY, -1)
+
+    if not participant_id or participant_id == -1:
+        raise Participant.DoesNotExist("No participant in session")
+
     try:
         return Participant.objects.get(
                 pk=int(participant_id))

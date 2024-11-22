@@ -1,39 +1,75 @@
-import { renderHook, act } from "@testing-library/react";
+import { act } from "react";
+import { renderHook, } from "@testing-library/react";
 import useResultHandler from "./useResultHandler";
-import { vi } from 'vitest';
+import { vi, beforeEach, describe, it, expect, } from 'vitest';
 
-import * as API from '@/API';
+import { scoreResult } from '@/API';
+import Session from "@/types/Session";
+import Participant from "@/types/Participant";
+import { QuestionViews } from "@/types/Question";
 
 vi.mock('@/API');
 
 describe('useResultHandler', () => {
 
-    const mockOnNext = vi.fn();
-    const initialState = { next_round: ['round2'] }; // Example initial state
-    const mockSession = 'session-id';
-    const mockParticipant = 'participant-id';
+    const mockSession: Session = { id: 42 };
+    const mockParticipant: Participant = { id: 13, hash: 'hash', csrf_token: 'token', participant_id_url: 'url', country: 'country' };
 
-    it('buffers results correctly', async () => {
+
+    beforeEach(() => {
+        vi.clearAllMocks();
+    });
+
+    it('should call scoreResult with correct data', async () => {
         const { result } = renderHook(() =>
-            useResultHandler({ session: mockSession, participant: mockParticipant, onNext: mockOnNext, state: initialState })
+            useResultHandler({
+                session: mockSession,
+                participant: mockParticipant,
+            })
         );
 
+        const mockResult = {
+            form: [{ id: 'q1', type: 'text', key: 'test_question', value: 'test', question: 'What is the average speed of a Swallow?', view: QuestionViews.BUTTON_ARRAY, choices: { 'slow': '1 km/h', 'fast': '42 km/h' } }],
+            decision_time: 1000,
+            config: { trialType: 'A' },
+        };
+
         await act(async () => {
-            await result.current({ testResult: 'result1' }, false);
-            await result.current({ testResult: 'result2' }, false);
+            await result.current(mockResult);
         });
 
-        expect(API.scoreResult).not.toHaveBeenCalled();
-
-        await act(async () => {
-            await result.current({ testResult: 'result3' }, true);
-        });
-
-        expect(API.scoreResult).toHaveBeenCalledWith({
-            session: 'session-id',
-            participant: 'participant-id',
-            result: { testResult: 'result3' },
+        expect(scoreResult).toHaveBeenCalledWith({
+            session: mockSession,
+            participant: mockParticipant,
+            result: mockResult,
         });
     });
+
+    it('should not include section in data if not provided', async () => {
+        const { result } = renderHook(() =>
+            useResultHandler({
+                session: mockSession,
+                participant: mockParticipant,
+            })
+        );
+
+        const mockResult = {
+            result: { type: 'failure' },
+        };
+
+        await act(async () => {
+            await result.current(mockResult);
+        });
+
+        expect(scoreResult).toHaveBeenCalledWith({
+            session: mockSession,
+            participant: mockParticipant,
+            result: mockResult,
+        });
+        expect(scoreResult).not.toHaveBeenCalledWith(
+            expect.objectContaining({ section: expect.anything() })
+        );
+    });
+
 
 });

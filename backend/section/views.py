@@ -1,16 +1,16 @@
-from django.http import Http404, FileResponse
-from django.core.exceptions import PermissionDenied
+from os.path import join
+
+from django.http import Http404, HttpRequest, FileResponse
 from django.conf import settings
 from django.shortcuts import redirect
 
 from .models import Section
-from participant.utils import located_in_nl
 
 
-def get_section(request, section_id, code):
+def get_section(request: HttpRequest, section_id: int) -> Section:
     """Get section by given id"""
     try:
-        section = Section.objects.get(pk=section_id, code=code)
+        section = Section.objects.get(pk=section_id)
 
         # Section will be served, so increase play count
         # On your local development server you can receive multiple requests on
@@ -26,7 +26,7 @@ def get_section(request, section_id, code):
         if str(section.filename).startswith('http'):
             # external link, redirect
             return redirect(str(section.filename))
-        
+
         if section.playlist.url_prefix:
             # Make link external using url_prefix
             return redirect(section.playlist.url_prefix + str(section.filename))
@@ -39,14 +39,16 @@ def get_section(request, section_id, code):
         # Option 2: stream file through Django
         # Advantage: keeps url secure, correct play_count value
         # Disadvantage: potential high server load
-
-        filename = settings.BASE_DIR + settings.MEDIA_URL + str(section.filename)
+        filename = str(section.filename)
+        if filename.startswith("/"):
+            # remove initial slash in filename, as otherwise os.path.join considers it an absolute path
+            filename = filename[1:]
+        filepath = join(settings.MEDIA_ROOT, filename)
 
         # Uncomment to only use example file in development
         # if settings.DEBUG:
         #    filename = settings.BASE_DIR + "/upload/example.mp3"
-
-        response = FileResponse(open(filename, 'rb'))
+        response = FileResponse(open(filepath, "rb"))
 
         # Header is required to make seeking work in Chrome
         response['Accept-Ranges'] = 'bytes'

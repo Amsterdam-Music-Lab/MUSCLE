@@ -3,7 +3,7 @@ import json
 from django.test import TestCase
 from django.utils import timezone
 
-from experiment.models import Experiment
+from experiment.models import Block
 from participant.models import Participant
 from section.models import Playlist, Section, Song
 from result.models import Result
@@ -14,25 +14,24 @@ class SessionTest(TestCase):
 
     @classmethod
     def setUpTestData(cls):
-        
         cls.participant = Participant.objects.create(unique_hash=42)
-        cls.experiment = Experiment.objects.create(
+        cls.block = Block.objects.create(
             rules='RHYTHM_BATTERY_INTRO', slug='test')
         cls.playlist = Playlist.objects.create(
             name='Test playlist'
         )
         cls.session = Session.objects.create(
-            experiment=cls.experiment,
+            block=cls.block,
             participant=cls.participant,
             playlist=cls.playlist
         )
-    
+
     def test_create(self):
         data = {
-            'experiment_id': self.experiment.pk,
+            'block_id': self.block.pk,
             'playlist_id': self.playlist.pk,
             'participant_id': self.participant.pk
-        } 
+        }
         response = self.client.post('/session/create', data)
         assert response.status_code != 500
 
@@ -42,7 +41,7 @@ class SessionTest(TestCase):
         csrf_token = response_data.get('csrf_token')
         participant = Participant.objects.get(pk=response_data.get('id'))
         session = Session.objects.create(
-            experiment=self.experiment,
+            block=self.block,
             participant=participant)
         data = {
             'csrfmiddlewaretoken:': csrf_token
@@ -51,47 +50,22 @@ class SessionTest(TestCase):
         assert response.status_code == 200
         assert Session.objects.filter(finished_at__isnull=False).count() == 1
 
-    def test_total_questions(self):   
-        assert self.session.total_questions() == 0
-        Result.objects.create(
-            session=self.session
-        )
-        assert self.session.total_questions() == 1
-    
-    def test_skipped_answered_questions(self):
-        Result.objects.create(
-            session=self.session,
-            given_response=''
-        )
-        assert self.session.answered_questions() == 0
-        Result.objects.create(
-            session=self.session,
-            given_response='Something really elaborate'
-        )
-        assert self.session.skipped_questions() == 1
-        assert self.session.answered_questions() == 1
-        Result.objects.create(
-            session=self.session,
-            given_response=''
-        )
-        assert self.session.skipped_questions() == 2
-    
     def test_percentile_rank(self):
         # create one session with relatively low score
         Session.objects.create(
-            experiment=self.experiment,
+            block=self.block,
             participant=self.participant,
             final_score=24,
             finished_at=timezone.now()
         )
         # create one unfinished session with relatively high score
         Session.objects.create(
-            experiment=self.experiment,
+            block=self.block,
             participant=self.participant,
             final_score=180
         )
         finished_session = Session.objects.create(
-            experiment=self.experiment,
+            block=self.block,
             participant=self.participant,
             final_score=42,
             finished_at=timezone.now()
@@ -110,40 +84,47 @@ class SessionTest(TestCase):
             question_key='preference',
             score=0
         )
-        previous_section = self.session.previous_section()
-        assert previous_section
+        last_section = self.session.last_section()
+        assert last_section
         last_song = self.session.last_song()
         assert last_song == 'Beavis - Butthead'
 
-    def test_section_from_unused_song(self):
-        csv = ("Artist 1,Name 1,0.0,10.0,test/file1.mp3,1,0\n"
-               "Artist 1,Name 2,0.0,10.0,test/file2.mp3,1,0\n"
-               "Artist 2,Name 1,0.0,10.0,test/file3.mp3,0,0\n"
-               "Artist 2,Name 2,0.0,10.0,test/file4.mp3,0,0\n"
-               )
-        self.playlist.csv = csv
-        self.playlist.update_sections()
-        first_section = Section.objects.first()
-        assert first_section.song.artist == 'Artist 1'
-        assert first_section.song.name == 'Name 1'
-        Result.objects.create(session=self.session, section=first_section)
-        next_section = self.session.section_from_unused_song({'tag': '1'})
-        assert next_section.song.artist == 'Artist 1'
-        assert next_section.song.name == 'Name 2'
-        Result.objects.create(session=self.session, section=next_section)
-        another_section = self.session.section_from_unused_song()
-        assert another_section.song.artist == 'Artist 2'
+    def test_last_score(self):
+        for i in range(10):
+            keys = ['a', 'a', 'b', 'b', 'b', 'b', 'c', 'c', 'c', 'd']
+            Result.objects.create(
+                session=self.session,
+                question_key=keys[i],
+                score=i
+            )
+        score = self.session.last_score(["c", "d"])
+        self.assertEqual(score, 9)
+
+    def test_get_rounds_passed(self):
+        Result.objects.create(session=self.session, question_key='some random key')
+        self.assertEqual(self.session.get_rounds_passed(), 1)
+        self.assertEqual(self.session.get_rounds_passed(self.block.get_rules().counted_result_keys), 1)
+        new_block = Block.objects.create(rules='HOOKED', slug='hooked_test')
+        new_playlist = Playlist.objects.create(name='another_test')
+        new_session = Session.objects.create(block=new_block, playlist=new_playlist, participant=self.participant)
+        self.assertEqual(new_session.get_rounds_passed(new_block.get_rules().counted_result_keys), 0)
+        Result.objects.create(session=new_session, question_key='recognize')
+        self.assertEqual(new_session.get_rounds_passed(new_block.get_rules().counted_result_keys), 1)
+        Result.objects.create(session=new_session, question_key='another random key')
+        self.assertEqual(new_session.get_rounds_passed(new_block.get_rules().counted_result_keys), 1)
+        Result.objects.create(session=new_session, question_key='heard_before')
+        self.assertEqual(new_session.get_rounds_passed(new_block.get_rules().counted_result_keys), 2)
 
     def test_json_data(self):
         self.session.save_json_data({'test': 'tested'})
-        self.assertEqual(self.session.load_json_data(), {'test': 'tested'})
+        self.assertEqual(self.session.json_data, {"test": "tested"})
         self.session.save_json_data({'test_len': 'tested_len'})
         self.assertEqual(len(self.session.json_data), 2)
 
-    def test_json_data_direct(self):        
+    def test_json_data_direct(self):
         self.session.json_data.update({'test_direct': 'tested_direct'})
         self.session.save()
-        self.assertEqual(self.session.json_data['test_direct'], 'tested_direct') 
+        self.assertEqual(self.session.json_data['test_direct'], 'tested_direct')
         self.session.save_json_data({'test_direct_len': 'tested_direct_len'})
         self.session.save()
         self.assertEqual(len(self.session.json_data), 2)

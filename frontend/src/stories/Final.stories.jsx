@@ -28,11 +28,10 @@ function getFinalData(overrides = {}) {
             link: "https://www.example.com",
         },
         social: {
-            apps: ["facebook", "whatsapp", "twitter", "weibo", "share", "clipboard"],
+            channels: ["facebook", "whatsapp", "twitter", "weibo", "share", "clipboard"],
             url: "https://www.example.com",
-            message: "Message",
-            hashtags: ["hashtag"],
-            text: "Text",
+            content: "Hey! Check out this cool experiment",
+            tags: ["coolexperiment", "awesome"],
         },
         show_profile_link: true,
         action_texts: {
@@ -48,7 +47,7 @@ function getFinalData(overrides = {}) {
             contact_body:
                 '<p>Please contact us at <a href="mailto:info@example.com">',
         },
-        experiment: {
+        block: {
             slug: "test",
         },
         participant: "test",

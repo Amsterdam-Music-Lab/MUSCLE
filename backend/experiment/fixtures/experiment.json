@@ -1,283 +1,228 @@
 [
-{
-  "model": "experiment.ExperimentCollection",
-  "pk": 1,
-  "fields": {
-    "slug": "RhythmTestSeries",
-    "first_experiments": [
-      "10"
-    ],
-    "random_experiments": [
-      "7",
-      "3",
-      "1",
-      "2",
-      "5",
-      "4",
-      "6",
-      "8"
-    ],
-    "last_experiments": [
-      "9"
-    ]
-  }
-},
-{
-  "model": "experiment.experiment",
-  "pk": 1,
-  "fields": {
-    "name": "DurationDiscrimination",
-    "slug": "ddi",
-    "active": true,
-    "rounds": 100,
-    "bonus_points": 0,
-    "rules": "DURATION_DISCRIMINATION",
-    "language": "",
-    "playlists": [
-      5
-    ]
-  }
-},
-{
-  "model": "experiment.experiment",
-  "pk": 2,
-  "fields": {
-    "name": "DurationDiscriminationTone",
-    "slug": "ddit",
-    "active": true,
-    "rounds": 100,
-    "bonus_points": 0,
-    "rules": "DURATION_DISCRIMINATION_TONE",
-    "language": "",
-    "playlists": [
-      4
-    ]
-  }
-},
-{
-  "model": "experiment.experiment",
-  "pk": 3,
-  "fields": {
-    "name": "BeatAlignment",
-    "slug": "bat",
-    "active": true,
-    "rounds": 17,
-    "bonus_points": 0,
-    "rules": "BEAT_ALIGNMENT",
-    "language": "",
-    "playlists": [
-      7
-    ]
-  }
-},
-{
-  "model": "experiment.experiment",
-  "pk": 4,
-  "fields": {
-    "name": "HBAT-BIT",
-    "slug": "hbat_bit",
-    "active": true,
-    "rounds": 100,
-    "bonus_points": 0,
-    "rules": "H_BAT",
-    "language": "",
-    "playlists": [
-      9
-    ]
-  }
-},
-{
-  "model": "experiment.experiment",
-  "pk": 5,
-  "fields": {
-    "name": "HBAT-BFIT",
-    "slug": "hbat_bfit",
-    "active": true,
-    "rounds": 100,
-    "bonus_points": 0,
-    "rules": "H_BAT_BFIT",
-    "language": "",
-    "playlists": [
-      8
-    ]
-  }
-},
-{
-  "model": "experiment.experiment",
-  "pk": 6,
-  "fields": {
-    "name": "HBAT-BST",
-    "slug": "hbat_bst",
-    "active": true,
-    "rounds": 100,
-    "bonus_points": 0,
-    "rules": "BST",
-    "language": "",
-    "playlists": [
-      10
-    ]
-  }
-},
-{
-  "model": "experiment.experiment",
-  "pk": 7,
-  "fields": {
-    "name": "Anisochrony",
-    "slug": "anis",
-    "active": true,
-    "rounds": 100,
-    "bonus_points": 0,
-    "rules": "ANISOCHRONY",
-    "language": "",
-    "playlists": [
-      3
-    ]
-  }
-},
-{
-  "model": "experiment.experiment",
-  "pk": 8,
-  "fields": {
-    "name": "RhythmDiscrimination",
-    "slug": "rhdis",
-    "active": true,
-    "rounds": 40,
-    "bonus_points": 0,
-    "rules": "RHYTHM_DISCRIMINATION",
-    "language": "",
-    "playlists": [
-      6
-    ]
-  }
-},
-{
-  "model": "experiment.experiment",
-  "pk": 9,
-  "fields": {
-    "name": "Rhythm Battery Final",
-    "slug": "rhythm_outro",
-    "active": true,
-    "rounds": 10,
-    "bonus_points": 0,
-    "rules": "RHYTHM_BATTERY_FINAL",
-    "language": "",
-    "playlists": [
-      3
-    ]
-  }
-},
-{
-  "model": "experiment.experiment",
-  "pk": 10,
-  "fields": {
-    "name": "Rhythm Battery Intro",
-    "slug": "rhythm_intro",
-    "active": true,
-    "rounds": 10,
-    "bonus_points": 0,
-    "rules": "RHYTHM_BATTERY_INTRO",
-    "language": "",
-    "playlists": [
-      11
-    ]
-  }
-},
-{
-  "model": "experiment.experiment",
-  "pk": 14,
-  "fields": {
-    "name": "Hooked-China",
-    "slug": "huang_2022",
-    "active": true,
-    "rounds": 30,
-    "bonus_points": 0,
-    "rules": "HUANG_2022",
-    "language": "zh",
-    "playlists": [
-      13,
-      2,
-      1
-    ]
-  }
-},
-{
-  "model": "experiment.experiment",
-  "pk": 16,
-  "fields": {
-    "name": "Categorization",
-    "slug": "cat",
-    "active": true,
-    "rounds": 10,
-    "bonus_points": 0,
-    "rules": "CATEGORIZATION",
-    "language": "en",
-    "playlists": [
-      12
-    ]
-  }
-},
-{
-  "model": "experiment.experiment",
-  "pk": 17,
-  "fields": {
-    "name": "TuneTwins",
-    "slug": "tunetwins",
-    "active": true,
-    "rounds": 10,
-    "bonus_points": 0,
-    "rules": "MATCHING_PAIRS",
-    "language": "en",
-    "playlists": [
-      14
-    ]
-  }
-},
-{
-  "model": "experiment.experiment",
-  "pk": 18,
-  "fields": {
-    "name": "Hooked-Eurovision",
-    "slug": "eurovision_2021",
-    "active": true,
-    "rounds": 30,
-    "bonus_points": 0,
-    "rules": "EUROVISION_2020",
-    "language": "en",
-    "playlists": [
-      16
-    ]
-  }
-},
-{
-  "model": "experiment.experiment",
-  "pk": 19,
-  "fields": {
-    "name": "Hooked-Christmas",
-    "slug": "christmas_2020",
-    "active": true,
-    "rounds": 30,
-    "bonus_points": 0,
-    "rules": "KUIPER_2020",
-    "language": "en",
-    "playlists": [
-      17
-    ]
-  }
-},
-{
-  "model": "experiment.experiment",
-  "pk": 20,
-  "fields": {
-    "name": "ThatsMySong",
-    "slug": "thats_my_song",
-    "active": false,
-    "rounds": 10,
-    "bonus_points": 0,
-    "rules": "THATS_MY_SONG",
-    "language": "",
-    "playlists": [
-      18
-    ]
-  }
-}
+    {
+        "model": "experiment.Experiment",
+        "pk": 1,
+        "fields": {
+            "slug": "RhythmTestSeries"
+        }
+    },
+    {
+        "model": "experiment.Phase",
+        "pk": 1,
+        "fields": {
+            "experiment": 1,
+            "index": 0
+        }
+    },
+    {
+        "model": "experiment.Block",
+        "pk": 1,
+        "fields": {
+            "slug": "ddi",
+            "rounds": 100,
+            "bonus_points": 0,
+            "rules": "DURATION_DISCRIMINATION",
+            "playlists": [
+                5
+            ]
+        }
+    },
+    {
+        "model": "experiment.Block",
+        "pk": 2,
+        "fields": {
+            "slug": "ddit",
+            "rounds": 100,
+            "bonus_points": 0,
+            "rules": "DURATION_DISCRIMINATION_TONE",
+            "playlists": [
+                4
+            ]
+        }
+    },
+    {
+        "model": "experiment.Block",
+        "pk": 3,
+        "fields": {
+            "slug": "bat",
+            "rounds": 17,
+            "bonus_points": 0,
+            "rules": "BEAT_ALIGNMENT",
+            "playlists": [
+                7
+            ]
+        }
+    },
+    {
+        "model": "experiment.Block",
+        "pk": 4,
+        "fields": {
+            "slug": "hbat_bit",
+            "rounds": 100,
+            "bonus_points": 0,
+            "rules": "H_BAT",
+            "playlists": [
+                9
+            ]
+        }
+    },
+    {
+        "model": "experiment.Block",
+        "pk": 5,
+        "fields": {
+            "slug": "hbat_bfit",
+            "rounds": 100,
+            "bonus_points": 0,
+            "rules": "H_BAT_BFIT",
+            "playlists": [
+                8
+            ]
+        }
+    },
+    {
+        "model": "experiment.Block",
+        "pk": 6,
+        "fields": {
+            "slug": "hbat_bst",
+            "rounds": 100,
+            "bonus_points": 0,
+            "rules": "BST",
+            "playlists": [
+                10
+            ]
+        }
+    },
+    {
+        "model": "experiment.Block",
+        "pk": 7,
+        "fields": {
+            "slug": "anis",
+            "rounds": 100,
+            "bonus_points": 0,
+            "rules": "ANISOCHRONY",
+            "playlists": [
+                3
+            ]
+        }
+    },
+    {
+        "model": "experiment.Block",
+        "pk": 8,
+        "fields": {
+            "phase": 1,
+            "slug": "rhdis",
+            "rounds": 40,
+            "bonus_points": 0,
+            "rules": "RHYTHM_DISCRIMINATION",
+            "playlists": [
+                6
+            ]
+        }
+    },
+    {
+        "model": "experiment.Block",
+        "pk": 9,
+        "fields": {
+            "slug": "rhythm_outro",
+            "rounds": 10,
+            "bonus_points": 0,
+            "rules": "RHYTHM_BATTERY_FINAL",
+            "playlists": [
+                3
+            ]
+        }
+    },
+    {
+        "model": "experiment.Block",
+        "pk": 10,
+        "fields": {
+            "slug": "rhythm_intro",
+            "rounds": 10,
+            "bonus_points": 0,
+            "rules": "RHYTHM_BATTERY_INTRO",
+            "playlists": [
+                11
+            ]
+        }
+    },
+    {
+        "model": "experiment.Block",
+        "pk": 14,
+        "fields": {
+            "slug": "huang_2022",
+            "rounds": 30,
+            "bonus_points": 0,
+            "rules": "HUANG_2022",
+            "playlists": [
+                13,
+                2,
+                1
+            ]
+        }
+    },
+    {
+        "model": "experiment.Block",
+        "pk": 16,
+        "fields": {
+            "slug": "cat",
+            "rounds": 10,
+            "bonus_points": 0,
+            "rules": "CATEGORIZATION",
+            "playlists": [
+                12
+            ]
+        }
+    },
+    {
+        "model": "experiment.Block",
+        "pk": 17,
+        "fields": {
+            "slug": "tunetwins",
+            "rounds": 10,
+            "bonus_points": 0,
+            "rules": "MATCHING_PAIRS",
+            "playlists": [
+                14
+            ]
+        }
+    },
+    {
+        "model": "experiment.Block",
+        "pk": 18,
+        "fields": {
+            "slug": "eurovision_2021",
+            "rounds": 30,
+            "bonus_points": 0,
+            "rules": "EUROVISION_2020",
+            "playlists": [
+                16
+            ]
+        }
+    },
+    {
+        "model": "experiment.Block",
+        "pk": 19,
+        "fields": {
+            "slug": "christmas_2020",
+            "rounds": 30,
+            "bonus_points": 0,
+            "rules": "KUIPER_2020",
+            "playlists": [
+                17
+            ]
+        }
+    },
+    {
+        "model": "experiment.Block",
+        "pk": 20,
+        "fields": {
+            "slug": "thats_my_song",
+            "rounds": 10,
+            "bonus_points": 0,
+            "rules": "THATS_MY_SONG",
+            "playlists": [
+                18
+            ]
+        }
+    }
 ]

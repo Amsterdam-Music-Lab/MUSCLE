@@ -9,7 +9,9 @@ from experiment.actions.form import ButtonArrayQuestion, Form
 from experiment.actions.frontend_style import FrontendStyle, EFrontendStyle
 from experiment.actions.playback import Multiplayer
 from experiment.actions.styles import STYLE_NEUTRAL_INVERTED
+from experiment.actions.utils import get_current_experiment_url
 from section.models import Playlist
+from session.models import Session
 from .base import Base
 from experiment.utils import create_player_labels, non_breaking_spaces
 
@@ -19,65 +21,57 @@ logger = logging.getLogger(__name__)
 
 
 class ToontjeHoger5Tempo(Base):
-    ID = 'TOONTJE_HOGER_5_TEMPO'
+    ID = "TOONTJE_HOGER_5_TEMPO"
     TITLE = ""
     SCORE_CORRECT = 20
     SCORE_WRONG = 0
 
-    def first_round(self, experiment):
-        """Create data for the first experiment rounds."""
-
-        # 1. Explain game.
-        explainer = Explainer(
+    def get_intro_explainer(self):
+        return Explainer(
             instruction="Timing en tempo",
             steps=[
+                Step("Je krijgt dadelijk twee verschillende uitvoeringen van hetzelfde stuk te horen."),
                 Step(
-                    "Je krijgt dadelijk twee verschillende uitvoeringen van hetzelfde stuk te horen."),
-                Step("Eén wordt op de originele snelheid (tempo) afgespeeld, terwijl de ander iets is versneld of vertraagd."),
-                Step(
-                    "Kan jij horen welke het origineel is?"),
-                Step("Let hierbij vooral op de timing van de muzikanten.")
+                    "Eén wordt op de originele snelheid (tempo) afgespeeld, terwijl de ander iets is versneld of vertraagd."
+                ),
+                Step("Kan jij horen welke het origineel is?"),
+                Step("Let hierbij vooral op de timing van de muzikanten."),
             ],
             step_numbers=True,
-            button_label="Start"
+            button_label="Start",
         )
-
-        return [
-            explainer,
-        ]
 
     def next_round(self, session):
         """Get action data for the next round"""
 
-        rounds_passed = session.rounds_passed()
+        rounds_passed = session.get_rounds_passed()
 
         # Round 1
         if rounds_passed == 0:
             # No combine_actions because of inconsistent next_round array wrapping in first round
-            return self.get_round(session, rounds_passed)
+            return [self.get_intro_explainer(), *self.get_round(session, rounds_passed)]
 
         # Round 2
-        if rounds_passed < session.experiment.rounds:
+        if rounds_passed < session.block.rounds:
             return [*self.get_score(session), *self.get_round(session, rounds_passed)]
 
         # Final
         return self.get_final_round(session)
 
-    def get_random_section_pair(self, session, genre):
+    def get_random_section_pair(self, session: Session, genre: str):
         """
-          - session: current Session
-          - genre: (C)lassic (J)azz (R)ock
+        - session: current Session
+        - genre: (C)lassic (J)azz (R)ock
 
-          Voor de track: genereer drie random integers van 1-5 (bijv. [4 2 4])
-          Plak deze aan de letters C, J en R (bijv. [C4, J2, R4])
-          Voor het paar: genereer drie random integers van 1-2 (bijv. [1 2 2])
-          Plak deze aan de letter P (bijv. P1, P2, P2)
-          We willen zowel de originele als de veranderde versie van het paar. Dus combineer
-          bovenstaande met OR en CH (bijv. “C4_P1_OR”, “C4_P1_CH”, etc.)
+        Voor de track: genereer drie random integers van 1-5 (bijv. [4 2 4])
+        Plak deze aan de letters C, J en R (bijv. [C4, J2, R4])
+        Voor het paar: genereer drie random integers van 1-2 (bijv. [1 2 2])
+        Plak deze aan de letter P (bijv. P1, P2, P2)
+        We willen zowel de originele als de veranderde versie van het paar. Dus combineer
+        bovenstaande met OR en CH (bijv. “C4_P1_OR”, “C4_P1_CH”, etc.)
         """
         # Previous tags
-        previous_tags = [
-            result.section.tag for result in session.result_set.all()]
+        previous_tags = [result.section.tag for result in session.result_set.all()]
 
         # Get a random, unused track
         # Loop until there is a valid tag
@@ -85,12 +79,16 @@ class ToontjeHoger5Tempo(Base):
         valid_tag = False
         tag_base = ""
         tag_original = ""
-        while (not valid_tag):
+        while not valid_tag:
             track = random.choice([1, 2, 3, 4, 5])
             pair = random.choice([1, 2])
-            tag_base = "{}{}_P{}_".format(genre.upper(), track, pair, )
+            tag_base = "{}{}_P{}_".format(
+                genre.upper(),
+                track,
+                pair,
+            )
             tag_original = tag_base + "OR"
-            if not (tag_original in previous_tags):
+            if tag_original not in previous_tags:
                 valid_tag = True
 
             # Failsafe: prevent infinite loop
@@ -101,24 +99,23 @@ class ToontjeHoger5Tempo(Base):
 
         tag_changed = tag_base + "CH"
 
-        section_original = session.section_from_any_song(
+        section_original = session.playlist.get_section(
             filter_by={'tag': tag_original, 'group': "or"})
 
         if not section_original:
-            raise Exception(
-                "Error: could not find original section: {}".format(tag_original))
+            raise Exception("Error: could not find original section: {}".format(tag_original))
 
-        section_changed = self.get_section_changed(
-            session=session, tag=tag_changed)
+        section_changed = self.get_section_changed(session=session, tag=tag_changed)
 
         sections = [section_original, section_changed]
         random.shuffle(sections)
         return sections
 
     def get_section_changed(self, session, tag):
-        section_changed = session.section_from_any_song(
-            filter_by={'tag': tag, 'group': "ch"})
-        if not section_changed:
+        try:
+            section_changed = session.playlist.get_section(
+                filter_by={'tag': tag, 'group': "ch"})
+        except:
             raise Exception(
                 "Error: could not find changed section: {}".format(tag))
         return section_changed
@@ -136,12 +133,12 @@ class ToontjeHoger5Tempo(Base):
         # Player
         playback = Multiplayer(
             sections,
-            labels=create_player_labels(len(sections), 'alphabetic'),
-            style=FrontendStyle(EFrontendStyle.NEUTRAL_INVERTED)
+            labels=create_player_labels(len(sections), "alphabetic"),
+            style=FrontendStyle(EFrontendStyle.NEUTRAL_INVERTED),
         )
 
         # Question
-        key = 'pitch'
+        key = "pitch"
         question = ButtonArrayQuestion(
             question=self.get_trial_question(),
             key=key,
@@ -151,10 +148,12 @@ class ToontjeHoger5Tempo(Base):
             },
             submits=True,
             result_id=prepare_result(
-                key, session, section=section_original,
-                expected_response="A" if sections[0].id == section_original.id else "B"
+                key,
+                session,
+                section=section_original,
+                expected_response="A" if sections[0].id == section_original.id else "B",
             ),
-            style=STYLE_NEUTRAL_INVERTED
+            style=STYLE_NEUTRAL_INVERTED,
         )
         form = Form([question])
 
@@ -172,17 +171,13 @@ class ToontjeHoger5Tempo(Base):
         section_original = result.section
 
         if section_original is None:
-            raise Exception(
-                "Error: could not get section from result")
+            raise Exception("Error: could not get section from result")
 
         tag_changed = section_original.tag.replace("OR", "CH")
-        section_changed = self.get_section_changed(
-            session=result.session, tag=tag_changed)
+        section_changed = self.get_section_changed(session=result.session, tag=tag_changed)
 
         if section_changed is None:
-            raise Exception(
-                "Error: could not get changed section for tag: {}".format(
-                    tag_changed))
+            raise Exception("Error: could not get changed section for tag: {}".format(tag_changed))
 
         return (section_original, section_changed)
 
@@ -195,34 +190,37 @@ class ToontjeHoger5Tempo(Base):
             feedback = "Er is een fout opgetreden"
         else:
             if last_result.score == self.SCORE_CORRECT:
-                feedback = "Goedzo! Het was inderdaad antwoord {}!".format(
-                    last_result.expected_response.upper())
+                feedback = "Goedzo! Het was inderdaad antwoord {}!".format(last_result.expected_response.upper())
             else:
-                feedback = "Helaas! Het juiste antwoord was {}.".format(
-                    last_result.expected_response.upper())
+                feedback = "Helaas! Het juiste antwoord was {}.".format(last_result.expected_response.upper())
 
-            section_original, section_changed = self.get_section_pair_from_result(
-                last_result)
+            section_original, section_changed = self.get_section_pair_from_result(last_result)
 
             # Create feedback message
             # - Track names are always the same
             # - Artist could be different
-            if section_original.song.artist == section_changed.song.artist:
-                feedback += " Je hoorde {}, in beide fragmenten uitgevoerd door {}.".format(
-                    last_result.section.song.name, last_result.section.song.artist)
+            if section_original.artist_name() == section_changed.artist_name():
+                feedback += (
+                    " Je hoorde {}, in beide fragmenten uitgevoerd door {}.".format(
+                        last_result.section.song_name(),
+                        last_result.section.arist_name(),
+                    )
+                )
             else:
                 section_a = section_original if last_result.expected_response == "A" else section_changed
                 section_b = section_changed if section_a.id == section_original.id else section_original
                 feedback += " Je hoorde {} uitgevoerd door A) {} en B) {}.".format(
-                    section_a.song.name, non_breaking_spaces(section_a.song.artist), non_breaking_spaces(section_b.song.artist))
+                    section_a.song_name(),
+                    non_breaking_spaces(section_a.artist_name()),
+                    non_breaking_spaces(section_b.artist_name()),
+                )
 
         # Return score view
-        config = {'show_total_score': True}
+        config = {"show_total_score": True}
         score = Score(session, config=config, feedback=feedback)
         return [score]
 
     def get_final_round(self, session):
-
         # Finish session.
         session.finish()
         session.save()
@@ -232,37 +230,35 @@ class ToontjeHoger5Tempo(Base):
 
         # Final
         final_text = "Dat bleek toch even lastig!"
-        if session.final_score >= session.experiment.rounds * 0.8 * self.SCORE_CORRECT:
+        if session.final_score >= session.block.rounds * 0.8 * self.SCORE_CORRECT:
             final_text = "Goed gedaan! Jouw timing is uitstekend!"
-        elif session.final_score >= session.experiment.rounds * 0.5 * self.SCORE_CORRECT:
+        elif session.final_score >= session.block.rounds * 0.5 * self.SCORE_CORRECT:
             final_text = "Goed gedaan! Jouw timing is best OK!"
 
         final = Final(
             session=session,
             final_text=final_text,
             rank=toontjehoger_ranks(session),
-            button={'text': 'Wat hebben we getest?'}
+            button={"text": "Wat hebben we getest?"},
         )
 
         # Info page
-        body = render_to_string(
-            join('info', 'toontjehoger', 'experiment5.html'))
+        body = render_to_string(join("info", "toontjehoger", "experiment5.html"))
         info = Info(
             body=body,
             heading="Timing en tempo",
             button_label="Terug naar ToontjeHoger",
-            button_link="/collection/toontjehoger"
+            button_link=get_current_experiment_url(session),
         )
 
         return [*score, final, info]
 
     def validate_tags(self, tags):
-
         errors = []
         erroneous_tags = []
 
         for tag in tags:
-            if not re.match(r'^[CJR][1-5]_P[12]_(OR|CH)$', tag):
+            if not re.match(r"^[CJR][1-5]_P[12]_(OR|CH)$", tag):
                 erroneous_tags.append(tag)
 
         if erroneous_tags:
@@ -275,15 +271,12 @@ class ToontjeHoger5Tempo(Base):
         return errors
 
     def validate_playlist(self, playlist: Playlist):
-
         errors = super().validate_playlist(playlist)
         sections = playlist.section_set.all()
         groups = sorted(list(set([section.group for section in sections])))
 
-        if groups != ['ch', 'or']:
-            errors.append(
-                "The playlist must contain two groups: 'or' and 'ch'. Found: {}".format(groups)
-            )
+        if groups != ["ch", "or"]:
+            errors.append("The playlist must contain two groups: 'or' and 'ch'. Found: {}".format(groups))
 
         tags = sorted(list(set([section.tag for section in sections])))
 

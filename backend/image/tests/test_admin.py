@@ -1,22 +1,23 @@
-from django.test import TestCase, RequestFactory
+from django.test import TestCase
 from django.contrib.admin.sites import AdminSite
-from django.utils.safestring import mark_safe
+from django.utils.html import format_html
+
 
 from image.admin import ImageAdmin, TagsListFilter
 from image.models import Image
 
 
 class ImageAdminTest(TestCase):
-    @classmethod
-    def setUpTestData(cls):
-        cls.factory = RequestFactory()
-        cls.site = AdminSite()
-        cls.admin = ImageAdmin(Image, cls.site)
+
+    def setUp(self):
+        self.admin = ImageAdmin(model=Image,
+                                admin_site=AdminSite
+                                )
 
     def test_image_preview_with_file(self):
         image = Image.objects.create(file='path/to/image.jpg')
         preview = self.admin.image_preview(image)
-        expected_preview = mark_safe(
+        expected_preview = format_html(
             '<img src="/upload/path/to/image.jpg" style="max-height: 50px;"/>')
         self.assertEqual(preview, expected_preview)
 

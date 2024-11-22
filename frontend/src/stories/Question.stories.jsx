@@ -16,7 +16,7 @@ export const Default = {
             view: "STRING",
             value: "",
         },
-        onChange: () => {},
+        onChange: () => { },
         id: 0,
         active: true,
         style: {},
@@ -58,7 +58,7 @@ export const WithOnChange = {
     ],
 };
 
-export const WithActiveFalse = {
+export const WithDisabledTrue = {
     args: {
         question: {
             question: "This is the question",
@@ -66,9 +66,9 @@ export const WithActiveFalse = {
             view: "STRING",
             value: "",
         },
-        onChange: () => {},
+        onChange: () => { },
         id: 0,
-        active: false,
+        disabled: true,
         style: {},
         emphasizeTitle: false,
     },
@@ -91,7 +91,7 @@ export const WithEmphasizeTitle = {
             view: "STRING",
             value: "",
         },
-        onChange: () => {},
+        onChange: () => { },
         id: 0,
         active: true,
         style: {},
@@ -116,7 +116,7 @@ export const WithStyle = {
             view: "STRING",
             value: "",
         },
-        onChange: () => {},
+        onChange: () => { },
         id: 0,
         active: true,
         style: { backgroundColor: "red" },
@@ -142,7 +142,7 @@ export const Checkboxes = {
             value: "",
             choices: ["Choice 1", "Choice 2", "Choice 3"],
         },
-        onChange: () => {},
+        onChange: () => { },
         id: 0,
         active: true,
         style: {},
@@ -168,7 +168,7 @@ export const Dropdown = {
             value: "",
             choices: ["Choice 1", "Choice 2", "Choice 3"],
         },
-        onChange: () => {},
+        onChange: () => { },
         id: 0,
         active: true,
         style: {},
@@ -202,7 +202,7 @@ export const Autocomplete = {
                 "United States",
             ],
         },
-        onChange: () => {},
+        onChange: () => { },
         id: 0,
         active: true,
         style: {},
@@ -234,7 +234,7 @@ export const Radios = {
             value: "",
             choices: ["Choice 1", "Choice 2", "Choice 3"],
         },
-        onChange: () => {},
+        onChange: () => { },
         id: 0,
         active: true,
         style: {},
@@ -268,7 +268,7 @@ export const Range = {
             min_value: 1,
             max_value: 42,
         },
-        onChange: () => {},
+        onChange: () => { },
         id: 0,
         active: true,
         style: {},
@@ -302,7 +302,7 @@ export const TextRange = {
             value: "",
             choices: ["Choice 1", "Choice 2", "Choice 3"],
         },
-        onChange: () => {},
+        onChange: () => { },
         id: 0,
         active: true,
         style: {},
@@ -339,11 +339,74 @@ export const IconRange = {
             min_value: 1,
             max_value: 42,
         },
-        onChange: () => {},
+        onChange: () => { },
         id: 0,
         active: true,
         style: {},
         emphasizeTitle: false,
+    },
+    decorators: [
+        (Story) => {
+            return (
+                <div
+                    style={{
+                        width: "100%",
+                        height: "100%",
+                        backgroundColor: "#ddd",
+                        padding: "3rem",
+                        position: "relative",
+                    }}
+                >
+                    <Story />
+                </div>
+            );
+        },
+    ],
+};
+
+export const StringNumberRange = {
+    args: {
+        question: {
+            question: "This is the question",
+            explainer: "This is the explainer",
+            view: "STRING",
+            input_type: "number",
+            min_value: 1,
+            max_value: 42,
+        },
+        onChange: () => { },
+        value: "",
+    },
+    decorators: [
+        (Story) => {
+            return (
+                <div
+                    style={{
+                        width: "100%",
+                        height: "100%",
+                        backgroundColor: "#ddd",
+                        padding: "3rem",
+                        position: "relative",
+                    }}
+                >
+                    <Story />
+                </div>
+            );
+        },
+    ],
+};
+
+export const StringTextRange = {
+    args: {
+        question: {
+            question: "This is the question",
+            explainer: "This is the explainer",
+            view: "STRING",
+            input_type: "text",
+            max_length: 9,
+        },
+        onChange: () => { },
+        value: "",
     },
     decorators: [
         (Story) => {

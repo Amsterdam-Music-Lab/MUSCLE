@@ -1,143 +1,101 @@
-
+import itertools
 import re
-import string
+
 from django.utils.translation import gettext_lazy as _
 from experiment.actions.utils import final_action_with_optional_button
-from experiment.models import Experiment
-from section.models import Playlist as PlaylistModel
+from section.models import Playlist, Section
 from session.models import Session
-from experiment.actions import ChoiceQuestion, Explainer, Form, Playlist, Trial
+from experiment.actions import ChoiceQuestion, Explainer, Form, Trial
 from experiment.actions.playback import PlayButton
 from .base import Base
 from result.utils import prepare_result
 
 
 class CongoSameDiff(Base):
-    """ A micro-PROMS inspired experiment that tests the participant's ability to distinguish between different sounds. """
+    """ A micro-PROMS inspired experiment block that tests the participant's ability to distinguish between different sounds. """
     ID = 'CONGOSAMEDIFF'
     contact_email = 'aml.tunetwins@gmail.com'
-
-    def __init__(self):
-        pass
-
-    def first_round(self, experiment: Experiment):
-        """ Provide the first rounds of the experiment,
-        before session creation
-        The first_round must return at least one Info or Explainer action
-        Consent and Playlist are often desired, but optional
-        """
-
-        # Do a validity check on the experiment
-        errors = self.validate_playlist(experiment.playlists.first())
-        if errors:
-            raise ValueError('The experiment playlist is not valid: \n- ' + '\n- '.join(errors))
-
-        # 1. Playlist
-        playlist = Playlist(experiment.playlists.all())
-
-        # 2. Explainer
-        explainer = Explainer(
-            instruction='Welcome to this Musicality Battery experiment',
-            steps=[],
-        )
-
-        return [
-            playlist,
-            explainer
-        ]
+    counted_result_keys = ['samediff_NORMAL']
 
     def next_round(self, session: Session):
-
-        next_round_number = session.get_current_round()
-
-        # practice trials + post-practice question + non-practice trials
-        total_trials_count = self.get_total_trials_count(session)
-
         practice_done = session.result_set.filter(
             question_key='practice_done',
             given_response='YES'
         ).exists()
 
-        # if the participant has completed all trials, return the final round
-        if next_round_number > total_trials_count:
-            return self.get_final_round(session)
+        if practice_done:
+            round_number = session.get_rounds_passed(self.counted_result_keys)
+            total_trials_count = self.get_total_trials_count(session)
 
-        # load the practice trials
-        practice_trials_subset = session.playlist.section_set.filter(
-            tag__contains='practice'
-        )
+            # if the participant has completed all trials, return the final round
+            if round_number == total_trials_count:
+                return self.get_final_round(session)
 
-        # count of practice rounds (excluding the post-practice round)
-        practice_trials_count = practice_trials_subset.count()
-
-        # if the user hasn't completed the practice trials
-        # return the next practice trial
-        if next_round_number <= practice_trials_count:
-            return self.get_next_trial(
-                session,
-                practice_trials_subset,
-                next_round_number,
-                True
+            # otherwise, return a normal trial
+            # load the non-practice group variants for the group number
+            real_trial_variants = session.playlist.section_set.exclude(
+                tag__contains='practice'
             )
 
-        # if the participant has not completed the practice trials correctly
-        # reset the rounds and return the first practice trial
-        if next_round_number > practice_trials_count + 1 and not practice_done:
-            session.reset_rounds()
+            # inventorize the groups, and the number of variants in each group
+            groups = real_trial_variants.values_list('group', flat=True).order_by().distinct()
+            variants = real_trial_variants.values_list('tag', flat=True).order_by().distinct()
+
+            # get the participant's group variant based on the participant's id # else default to random number between 1 and variants_amount
+            participant_id = session.participant.id
+            group = groups[participant_id % len(groups)]
+            variant_tag = self.get_participant_group_variant(
+                participant_id,
+                round_number,
+                groups,
+                variants
+            )
+            section = real_trial_variants.get(group=group, tag=variant_tag)
 
             return self.get_next_trial(
                 session,
-                practice_trials_subset,
-                1,  # first practice trial
-                True
+                section,
+                round_number,
+                total_trials_count,
+                False
             )
 
-        # if the participant has completed the practice trials
-        # ask if the participant has completed the practice trials correctly
-        # yes will move the participant to the non-practice trials
-        # no will reset the rounds and return the first practice trial
-        if next_round_number == practice_trials_count + 1 and not practice_done:
-            return self.get_practice_done_view(session)
+        else:
+            # practice is not done yet;
+            # load the practice trials
+            round_number = session.get_rounds_passed()
+            practice_trials_subset = session.playlist.section_set.filter(
+                tag__contains='practice'
+            )
 
-        # group number of the trial to be played
-        group_number = next_round_number - practice_trials_count - 1
+            # count of practice rounds (excluding the post-practice round)
+            practice_trials_count = practice_trials_subset.count()
+            practice_round_index = round_number % practice_trials_count
+            section = practice_trials_subset.all()[practice_round_index]
 
-        # load the non-practice group variants for the group number
-        real_trial_variants = session.playlist.section_set.exclude(
-            tag__contains='practice'
-        ).filter(
-            group=group_number
-        )
-
-        # patterns amount is the number of groups times the number of variants in each group
-        groups_amount = session.playlist.section_set.values('group').distinct().count()
-        variants_amount = real_trial_variants.count()
-
-        # get the participant's group variant based on the participant's id # else default to random number between 1 and variants_amount
-        participant_id = session.participant.id
-        participant_group_variant = self.get_participant_group_variant(
-            participant_id,
-            group_number,
-            groups_amount,
-            variants_amount
-        )
-
-        # get the index of the participant's group variant in the real_trial_variants
-        # aka the index of the variant whose tag matches the participant's group variant
-        real_trial_variants_list = list(real_trial_variants)
-        pattern_group_variants_index = [
-            i for i, variant in enumerate(real_trial_variants_list)
-            if variant.tag == participant_group_variant
-        ][0]
-
-        # if the next_round_number is greater than the no. of practice trials,
-        # return a non-practice trial
-        return self.get_next_trial(
-            session,
-            real_trial_variants,
-            pattern_group_variants_index + 1,
-            False
-        )
+            if round_number == 0:
+                explainer = Explainer(
+                    instruction='Welcome to this Musicality Battery block',
+                    steps=[],
+                )
+                return [explainer, self.get_next_trial(
+                    session,
+                    section,
+                    round_number,
+                    practice_trials_count,
+                    True
+                )]
+            # check if the practice was successful according to experimenter
+            elif practice_round_index == 0:
+                return self.get_practice_done_view(session)
+            else:
+                return self.get_next_trial(
+                    session,
+                    section,
+                    round_number,
+                    practice_trials_count,
+                    True
+                )
 
     def get_practice_done_view(self, session: Session):
 
@@ -163,33 +121,29 @@ class CongoSameDiff(Base):
             title='Practice Done',
         )
 
-        return [trial]
+        return trial
 
     def get_next_trial(
             self,
             session: Session,
-            subset: PlaylistModel,
+            section: Section,
             trial_index: int,
+            trials_count: int,
             is_practice=False
     ):
-        # get a section based on the practice tag and the trial_index
-        section = subset.all()[trial_index - 1]
-        subset_count = subset.count()
-
         practice_label = 'PRACTICE' if is_practice else 'NORMAL'
         section_name = section.song.name if section.song else 'no_name'
         section_tag = section.tag if section.tag else 'no_tag'
         section_group = section.group if section.group else 'no_group'
-        section_artist = section.song.artist if section.song else 'NO_EXPECTED_RESPONSE'
 
         # define a key, by which responses to this trial can be found in the database
-        key = f'samediff_trial_{section_group}_{section_name}'
+        key = f'samediff_{practice_label}'
 
         # set artist field as expected_response in the results
-        expected_response = section_artist
+        expected_response = section.filename
 
         question = ChoiceQuestion(
-            explainer=f'{practice_label} ({trial_index}/{subset_count}) | {section_name} | {section_tag} | {section_group}',
+            explainer=f'{practice_label} ({trial_index}/{trials_count}) | {section_name} | {section_tag} | {section_group}',
             question=_('Is the third sound the SAME or DIFFERENT as the first two sounds?'),
             view='BUTTON_ARRAY',
             choices={
@@ -206,11 +160,11 @@ class CongoSameDiff(Base):
         )
         form = Form([question])
         playback = PlayButton([section], play_once=False)
-        experiment_name = session.experiment.name if session.experiment else 'Musicality Battery Experiment'
+        block_name = session.block.slug if session.block else "Musicality Battery Block"
         view = Trial(
             playback=playback,
             feedback_form=form,
-            title=_(experiment_name),
+            title=_(block_name),
             config={
                 'response_time': section.duration,
                 'listen_first': False,
@@ -230,18 +184,13 @@ class CongoSameDiff(Base):
         )
 
     def get_total_trials_count(self, session: Session):
-        practice_trials_subset = session.playlist.section_set.filter(
-            tag__contains='practice'
-        )
-        practice_trials_count = practice_trials_subset.count()
         total_exp_variants = session.playlist.section_set.exclude(
             tag__contains='practice'
         )
-        total_unique_exp_trials_count = total_exp_variants.values('group').distinct().count()
-        total_trials_count = practice_trials_count + total_unique_exp_trials_count + 1
+        total_trials_count = total_exp_variants.values('group').distinct().count()
         return total_trials_count
 
-    def validate_playlist(self, playlist: PlaylistModel):
+    def validate_playlist(self, playlist: Playlist):
 
         errors = []
 
@@ -287,36 +236,22 @@ class CongoSameDiff(Base):
 
         return errors
 
-    def get_participant_group_variant(self, participant_id: int, group_number: int, groups_amount: int, variants_amount: int) -> str:
+    def get_participant_group_variant(self, participant_id: int, round_number: int, groups: list[int], variants: list[int]) -> tuple[int, str]:
+        ''' A participant is part of a group (1, 2, ...)'''
+        ''' They will be presented with variants (A, B, C, D), registered as tags'''
+        if participant_id < 0:
+            raise ValueError(f"Participant id ({participant_id}) should be equal to or larger than 0")
 
-        if participant_id <= 0:
-            raise ValueError(f"Participant id ({participant_id}) should be larger than 0")
+        if round_number < 0:
+            raise ValueError(f"Group number ({round_number}) should be equal to or larger than 0")
 
-        if group_number <= 0:
-            raise ValueError(f"Group number ({group_number}) should be larger than 0")
+        if len(groups) < 1:
+            raise ValueError(f"Groups ({groups}) should not be an empty list")
 
-        if groups_amount <= 0:
-            raise ValueError(f"Groups amount ({groups_amount}) should be larger than 0")
+        if len(variants) < 1:
+            raise ValueError(f"Variants ({variants}) should not be an empty list")
 
-        if variants_amount <= 0:
-            raise ValueError(f"Variants amount ({variants_amount}) should be larger than 0")
-
-        # Generate variant labels (e.g., ['A', 'B', 'C'])
-        variants = list(string.ascii_uppercase)[:variants_amount]
-
-        total_patterns = len(variants)
-
-        participant_index = participant_id - 1
-
-        group_index = group_number - 1
-
-        # Determine if the pattern should be reversed (every 4th, 5th, 6th participant)
-        reversed_pattern = participant_index % (variants_amount * 2) >= variants_amount
-
-        # Calculate the participant's group variant
-        if reversed_pattern:
-            variant_index = (participant_index - group_index) % total_patterns
-        else:
-            variant_index = (participant_index + group_index) % total_patterns
-
-        return variants[variant_index]
+        variant_orders = list(itertools.permutations(variants))
+        participant_index = participant_id % len(variant_orders)
+        variant_index = round_number % len(variants)
+        return variant_orders[participant_index][variant_index]

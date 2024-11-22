@@ -2,17 +2,19 @@ import json
 
 from django.test import TestCase
 
-from experiment.models import Experiment
+from experiment.models import Block
 from participant.models import Participant
 from result.models import Result
 from section.models import Playlist
 from session.models import Session
+from question.questions import create_default_questions
 
 
 class MatchingPairsTest(TestCase):
 
     @classmethod
     def setUpTestData(cls):
+        create_default_questions()
         section_csv = (
             "default,Crown_1_E1,0.0,10.0,MatchingPairs/Original/Crown_1_E1.mp3,Original,6\n"
             "default,Crown_1_E1,0.0,10.0,MatchingPairs/1stDegradation/Crown_1_E1.mp3,1stDegradation,6\n"
@@ -32,22 +34,31 @@ class MatchingPairsTest(TestCase):
         )
         cls.playlist = Playlist.objects.create(name='TestMatchingPairs')
         cls.playlist.csv = section_csv
-        cls.playlist.update_sections()
+        cls.playlist._update_sections()
         cls.participant = Participant.objects.create()
-        cls.experiment = Experiment.objects.create(rules='MATCHING_PAIRS', slug='mpairs', rounds=42)
+        cls.block = Block.objects.create(rules='MATCHING_PAIRS', slug='mpairs', rounds=42)
         cls.session = Session.objects.create(
-            experiment=cls.experiment,
+            block=cls.block,
             participant=cls.participant,
             playlist=cls.playlist
         )
-        cls.rules = cls.session.experiment_rules()
-    
+        cls.rules = cls.session.block_rules()
+
+    def test_next_round(self):
+        self.rules.num_pairs = 2
+        actions = self.rules.next_round(self.session)
+        self.assertEqual(len(actions), 3)
+        self.block.add_default_question_series()
+        actions = self.rules.next_round(self.session)
+        # expect five extra question rounds and one extra explainer
+        self.assertEqual(len(actions), 9)
+
     def test_matching_pairs_trial(self):
         self.rules.num_pairs = 2
-        for i in range(6):    
+        for i in range(6):
             trial = self.rules.get_matching_pairs_trial(self.session)
             assert trial
-            data = self.session.load_json_data()
+            data = self.session.json_data
             pairs = data.get('pairs')
             degradations = data.get('degradations')
             # degradations cycle through list of two, list of one, empty list
@@ -63,7 +74,6 @@ class MatchingPairsTest(TestCase):
                 # two more pairs are selected for this round, one saved for next
                 assert len(pairs) == 1
                 assert len(degradations) == 0
-            self.session.increment_round()
 
     def intermediate_score_request(self, data):
         request_data = {'json_data': json.dumps(

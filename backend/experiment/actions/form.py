@@ -57,9 +57,9 @@ class NumberQuestion(Question):
 
 
 class TextQuestion(Question):
-    def __init__(self, input_type='text', max_length=None, **kwargs):
+    def __init__(self, input_type='text', max_length=64, **kwargs):
         super().__init__(**kwargs)
-        self.max_length = max_length
+        self.max_length = max_length # the maximum length of the question's answer in characters
         self.input_type = input_type
         self.view = 'STRING'
 
@@ -79,7 +79,8 @@ class ChoiceQuestion(Question):
     def __init__(self, choices, min_values=1, **kwargs):
         super().__init__(**kwargs)
         self.choices = choices
-        self.min_values = min_values # minimal number of values to be selected, 1 or more
+        # minimal number of values to be selected, 1 or more
+        self.min_values = min_values
 
 
 class DropdownQuestion(Question):

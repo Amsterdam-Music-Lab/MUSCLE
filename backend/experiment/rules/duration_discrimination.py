@@ -10,9 +10,11 @@ from experiment.actions.form import ChoiceQuestion, Form
 from experiment.actions.playback import Autoplay
 from experiment.actions.utils import final_action_with_optional_button, render_feedback_trivia
 from experiment.actions.utils import get_average_difference
-from experiment.rules.util.practice import get_trial_condition_block, get_practice_views, practice_explainer
+from experiment.rules.util.practice import get_trial_condition_block, get_practice_views
 from experiment.rules.util.staircasing import register_turnpoint
 from result.utils import prepare_result
+from section.models import Playlist
+from session.models import Session
 
 logger = logging.getLogger(__name__)
 
@@ -27,26 +29,17 @@ class DurationDiscrimination(Base):
     max_turnpoints = 8
     catch_condition = 'EQUAL'
     block_size = 5
+    section_count = 247
     increase_difficulty_multiplier = .5
     decrease_difficulty_multiplier = 1.5
 
-    def first_round(self, experiment):
-        """Create data for the first experiment rounds"""
-        explainer = self.intro_explanation()
-        explainer2 = practice_explainer()
-
-        return [
-            explainer,
-            explainer2,
-        ]
-
-    def next_round(self, session):
+    def next_round(self, session: Session):
         if session.final_score == 0:
             self.register_difficulty(session)
             # we are practicing
             actions = get_practice_views(
                 session,
-                self.intro_explanation(),
+                self.get_intro_explainer(),
                 self.staircasing_blocks,
                 self.next_trial_action,
                 self.get_response_explainer,
@@ -115,7 +108,7 @@ class DurationDiscrimination(Base):
         try:
             section = session.playlist.section_set.get(song__name=difference)
         except Section.DoesNotExist:
-            raise
+            return None
         expected_response = 'EQUAL' if difference == 0 else 'LONGER'
         question_text = self.get_question_text()
         key = 'longer_or_equal'
@@ -131,7 +124,7 @@ class DurationDiscrimination(Base):
             submits=True
         )
         # create Result object and save expected result to database
-        
+
         playback = Autoplay([section])
         form = Form([question])
         view = Trial(
@@ -149,7 +142,7 @@ class DurationDiscrimination(Base):
     def get_question_text(self):
         return _("Is the second interval EQUALLY LONG as the first interval or LONGER?")
 
-    def intro_explanation(self):
+    def get_intro_explainer(self):
         return Explainer(
             instruction=self.get_introduction(),
             steps=[
@@ -172,7 +165,7 @@ class DurationDiscrimination(Base):
     def get_introduction(self):
         return _('In this test you will hear two time durations for each trial, which are marked by two tones.')
 
-    def finalize_experiment(self, session):
+    def finalize_block(self, session):
         ''' After 8 turnpoints, finalize experiment
         Give participant feedback
         '''
@@ -217,7 +210,7 @@ class DurationDiscrimination(Base):
         else:
             if previous_results.first().score == 0:
                 # the previous response was incorrect
-                json_data = session.load_json_data()
+                json_data = session.json_data
                 direction = json_data.get('direction')
                 last_result = previous_results.first()
                 last_result.comment = 'decrease difficulty'
@@ -243,7 +236,7 @@ class DurationDiscrimination(Base):
                 # the previous response was correct - check if previous non-catch trial was 1
                 if previous_results.count() > 1 and self.last_non_catch_correct(previous_results.all()):
                     # the previous two responses were correct
-                    json_data = session.load_json_data()
+                    json_data = session.json_data
                     direction = json_data.get('direction')
                     last_correct_result = previous_results.first()
                     last_correct_result.comment = 'increase difficulty'
@@ -273,7 +266,7 @@ class DurationDiscrimination(Base):
                         difficulty)
         if not action:
             # action is None if the audio file doesn't exist
-            return self.finalize_experiment(session)
+            return self.finalize_block(session)
         return action
 
     def get_difficulty(self, session, multiplier=1.0):
@@ -283,7 +276,7 @@ class DurationDiscrimination(Base):
             1 if difference should stay the same
             0.5 for difference *decrease*
         '''
-        json_data = session.load_json_data()
+        json_data = session.json_data
         difficulty = json_data.get('difficulty')
         current_difficulty = difficulty * multiplier
         session.save_json_data({'difficulty': current_difficulty})
@@ -291,7 +284,7 @@ class DurationDiscrimination(Base):
         # return rounded difficulty
         # this uses the decimal module, since round() does not work entirely as expected
         return int(Decimal(str(current_difficulty)).quantize(Decimal('0'), rounding=ROUND_HALF_UP))
-    
+
     def last_non_catch_correct(self, previous_results):
         """ check if previous responses (before the current one, which is correct)
         have been catch or non-catch, and if non-catch, if they were correct
@@ -315,3 +308,22 @@ class DurationDiscrimination(Base):
             else:
                 break
         return answer
+
+    def validate_playlist(self, playlist: Playlist):
+        errors = []
+        errors += super().validate_playlist(playlist)
+        sections = playlist.section_set.all()
+        if sections.count() is not self.section_count:
+            errors.append("The playlist should contain 247 sections")
+        try:
+            numerical_song_names = [int(section.song_name()) for section in sections]
+            if self.start_diff not in numerical_song_names:
+                errors.append(
+                    f"The file for the starting difference of {self.start_diff} is missing"
+                )
+        except:
+            errors.append(
+                "The sections should have an associated song with an integer name"
+            )
+
+        return errors

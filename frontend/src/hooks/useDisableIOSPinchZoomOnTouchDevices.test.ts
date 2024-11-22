@@ -1,5 +1,5 @@
 import { vi, describe, test, expect, afterEach } from "vitest";
-import { renderHook } from "@testing-library/react-hooks";
+import { renderHook } from '@testing-library/react'
 import { waitFor } from "@testing-library/react";
 import useDisableIOSPinchZoomOnTouchDevices from "./useDisableIOSPinchZoomOnTouchDevices";
 

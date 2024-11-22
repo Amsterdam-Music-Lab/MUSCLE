@@ -8,8 +8,8 @@ def markdown_html_validator():
     return FileExtensionValidator(allowed_extensions=valid_extensions)
 
 
-def experiment_slug_validator(value):
-    
+def block_slug_validator(value):
+
     disallowed_slugs = [
         'admin',
         'server',
@@ -19,6 +19,7 @@ def experiment_slug_validator(value):
         'section',
         'session',
         'static',
+        'block',
     ]
 
     # Slug cannot start with a disallowed slug
@@ -26,6 +27,10 @@ def experiment_slug_validator(value):
         if value.lower().startswith(slug):
             raise ValidationError(f'The slug cannot start with "{slug}".')
 
-    # Slugs must be lowercase    
+    # Slugs must be lowercase
     if value.lower() != value:
         raise ValidationError('Slugs must be lowercase.')
+
+
+# This is the validator that is used in the migration file
+experiment_slug_validator = block_slug_validator

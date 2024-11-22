@@ -2,7 +2,7 @@
 audioread
 
 # Django Framework
-Django<4.0
+Django~=4.2.0
 
 # Django inline actions, admin extension
 django-inline-actions
@@ -13,12 +13,8 @@ django-cors-headers
 # Dotenv, for loading configuration from .env file
 python-dotenv
 
-# Get country code from IP address;
-# It uses a local DB the get its data from the regional Internet registries
-IPToCC
-
 # PostgrSQL database client
-psycopg2
+psycopg[binary]
 
 # to convert labels to Roman numerals
 roman
@@ -37,3 +33,17 @@ genbadge[coverage]
 
 # Convert markdown to html
 django-markup[all_filter_dependencies]
+
+# Nested inline forms
+django-nested-admin>=4.1.1
+
+# Generate python documentation
+mkdocs
+mkdocstrings[python]
+mkdocs-material
+
+# Translate fields in Django models
+django-modeltranslation
+
+# Django multiselect with search
+django-select2

@@ -1,5 +1,6 @@
 .env
-.vscode
+.vscode/*
+!.vscode/extensions.json
 .DS_Store
 
 node_modules/
@@ -11,3 +12,6 @@ tests/*.log
 tests/__pycache__
 
 e2e/screenshots
+e2e/tests/__pycache__
+
+temp/

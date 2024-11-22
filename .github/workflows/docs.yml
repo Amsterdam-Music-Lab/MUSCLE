@@ -1,0 +1,73 @@
+name: Build & Publish Docs & Storybook
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+      - develop
+    paths:
+      - 'frontend/**'
+      - 'backend/docs/**'
+      - '.github/workflows/docs.yml'
+      - '.yarn/**'
+      - '.storybook/**'
+  pull_request:
+    paths:
+      - 'frontend/**'
+      - 'backend/docs/**'
+      - '.github/workflows/docs.yml'
+      - '.yarn/**'
+      - '.storybook/**'
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build ER/MKDOCS site
+        run: |
+          mkdir -p docs-pages
+          sudo docker compose --env-file .env-github-actions run server bash -c "mkdocs build -d ./docs-pages-build"
+          cp -r ./backend/docs-pages-build/* ./docs-pages
+
+      - name: Install dependencies
+        run: yarn
+        working-directory: ./frontend
+
+      - name: Build Storybook
+        run: yarn storybook:build --output-dir ../docs-pages/storybook
+        working-directory: ./frontend
+
+      - name: Setup Github Pages
+        uses: actions/configure-pages@v2
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v1
+        with:
+          path: ./docs-pages
+
+      - name: Archive production artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: build
+          path: ./docs-pages
+
+  deploy-gh-pages:
+    # only deploy on develop branch
+    if: github.ref == 'refs/heads/develop'
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v1

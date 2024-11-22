@@ -1,0 +1,61 @@
+{% extends "admin/base_site.html" %} {% load inline_action_tags %} {% block content %}
+<style>
+    form {
+        margin-top: 3rem;
+        max-width: 1024px;
+    }
+
+    label {
+        display: block;
+        margin-bottom: 1rem;
+    }
+
+    input[type="text"] {
+        width: 25rem;
+    }
+
+    input[type="submit"] {
+        margin-top: 3rem;
+    }
+
+    .help,
+    .error {
+        color: var(--body-quiet-color);
+        font-size: 12px;
+    }
+    .error {
+        color: var(--error-fg);
+    }
+    #back-button {
+        float: right;
+    }
+
+</style>
+<h1>Duplicate experiment with slug: {{exp.slug}}</h1>
+<p>The following objects will be duplicated:</p>
+<ul>
+    <li>Experiment, ExperimentTranslatedContent</li>
+    <li>Phase</li>
+    <li>Block, BlockTranslatedContent</li>
+    <li>QuestionSeries, QuestionInSeries</li>
+</ul>
+<p>The following existing objects and files will be reused and assigned to the duplicated objects:</p>
+<ul>
+    <li>Playlist</li>
+    <li>ThemeConfig</li>
+    <li>Question</li>
+    <li>Consent files</li>
+</ul>
+
+<form action="" method="post">
+    {% csrf_token %}{% render_inline_action_fields %}
+
+    <label for="slug-extension">Enter an extension to add to the slugs in the duplicated experiment:</label>
+    <input type="text" name="slug-extension" maxlength="128" id="slug-extension" autocapitalize="off"><br>
+
+    <p class="help">E.g. entering 'copy' here will add '-copy' to the existing Experiment and Block slugs.</p>
+
+    <input type="submit" name="_duplicate" value="Duplicate" id="duplicate" /><br>
+    <input type="submit" name="_back" value="Go back" id="back-button" />
+</form>
+{% endblock %}

@@ -1,7 +1,6 @@
 from django.test import TestCase
 
-from experiment.models import Experiment
-from experiment.rules import HBat, BST
+from experiment.models import Block
 from participant.models import Participant
 from result.models import Result
 from section.models import Playlist
@@ -15,15 +14,15 @@ class HBatTest(TestCase):
     def setUpTestData(cls):
         cls.participant = Participant.objects.create()
         cls.playlist = Playlist.objects.get(name='HBAT-BIT')
-        cls.playlist.update_sections()
-        cls.experiment = Experiment.objects.get(name='HBAT-BIT')
+        cls.playlist._update_sections()
+        cls.block = Block.objects.get(slug="hbat_bit")
         cls.session = Session.objects.create(
-            experiment=cls.experiment,
+            block=cls.block,
             participant=cls.participant,
             playlist=cls.playlist
         )
-        cls.rules = cls.session.experiment_rules()
-    
+        cls.rules = cls.session.block_rules()
+
     def test_trial_action(self):
         level = 4
         slower_trial = self.rules.next_trial_action(self.session, 1, level)
@@ -47,15 +46,15 @@ class HBat_BST_Test(TestCase):
     def setUpTestData(cls):
         cls.participant = Participant.objects.create()
         cls.playlist = Playlist.objects.get(name='HBAT-BST')
-        cls.playlist.update_sections()
-        cls.experiment = Experiment.objects.get(name='HBAT-BST')
+        cls.playlist._update_sections()
+        cls.block = Block.objects.get(slug="hbat_bst")
         cls.session = Session.objects.create(
-            experiment=cls.experiment,
+            block=cls.block,
             participant=cls.participant,
             playlist=cls.playlist
         )
-        cls.rules = cls.session.experiment_rules()
-    
+        cls.rules = cls.session.block_rules()
+
     def test_trial_action(self):
         in2 = self.rules.next_trial_action(self.session, 1, 3)
         assert in2

@@ -1,5 +1,5 @@
 import React from "react";
-import { Link, withRouter } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 interface FinalButtonProps {
     button: {
@@ -47,4 +47,4 @@ const FinalButton: React.FC<FinalButtonProps> = ({ button, onNext }) => {
     )
 }
 
-export default withRouter(FinalButton);
+export default FinalButton;

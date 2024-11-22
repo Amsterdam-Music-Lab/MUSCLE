@@ -2,7 +2,6 @@ import { URLS, LOGO_URL, LOGO_TITLE } from "@/config";
 import { Link } from "react-router-dom";
 import useBoundStore from "@/util/stores";
 
-
 const Logo: React.FC = () => {
     const theme = useBoundStore((state) => state.theme);
 

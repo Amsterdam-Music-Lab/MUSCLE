@@ -78,7 +78,7 @@ class PlaylistAdminForm(forms.ModelForm):
 
         # Handle uploaded CSV file
         csv_file = self.cleaned_data.get('csv_file')
-        if csv_file:
+        if csv_file and playlist.process_csv:
             # Read and process the CSV file
             playlist.csv = csv_file.read().decode('utf-8')
 

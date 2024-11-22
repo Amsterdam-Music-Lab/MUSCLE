@@ -1,0 +1,69 @@
+name: Backend Test & Lint
+
+on:
+  push:
+    paths:
+      - 'backend/**'
+      - '.github/workflows/ci-backend.yml'
+      - 'docker-compose.yaml'
+      - '.env-github-actions'
+  pull_request:
+    paths:
+      - 'backend/**'
+      - '.github/workflows/ci-backend.yml'
+      - 'docker-compose.yaml'
+      - '.env-github-actions'
+
+jobs:
+
+  backend-test:
+    name: Test Backend
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run Backend Tests
+        run: sudo docker compose --env-file .env-github-actions run server bash -c "coverage run manage.py test"
+      - name: Generate Backend Coverage Report (Inline)
+        run: sudo docker compose --env-file .env-github-actions run server bash -c "coverage report --show-missing"
+
+      # Generate coverage badge (only for main and develop branches)
+      - name: Generate Backend Coverage Report (XML) and Badge
+        if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop'
+        run: |
+          sudo docker compose --env-file .env-github-actions run server bash -c "coverage xml"
+          sudo docker compose --env-file .env-github-actions run server bash -c "genbadge coverage -i coverage.xml -o coverage-backend-badge-new.svg -n \"Backend Code Coverage\""
+      # Push coverage badge to separate branch (only for main and develop branches)
+      - name: Push Backend Coverage Badge to separate branch
+        continue-on-error: true
+        if: github.ref == 'refs/heads/develop'
+        run: |
+          if git ls-remote --heads origin code-coverage-badges; then
+            git fetch origin code-coverage-badges
+            git checkout code-coverage-badges
+          else
+            git checkout -b code-coverage-badges
+            git push origin code-coverage-badges
+          fi
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git config --global user.name "github-actions[bot]"
+          rm backend/coverage-backend-badge.svg -f
+          mv backend/coverage-backend-badge-new.svg backend/coverage-backend-badge.svg
+          git add backend/coverage-backend-badge.svg
+          git commit -m "Add backend coverage badge for commit $GITHUB_SHA"
+          git push origin code-coverage-badges
+          # Check if there are any changes
+          if git diff --staged --quiet; then
+            echo "No changes in coverage badge. Skipping commit and push."
+          else
+            git commit -m "Add backend coverage badge for commit $GITHUB_SHA"
+            git push origin code-coverage-badges
+          fi
+
+  backend-lint:
+    name: Lint Backend
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Lint Backend
+        continue-on-error: false
+        run: sudo docker compose --env-file .env-github-actions run server bash -c "ruff check"

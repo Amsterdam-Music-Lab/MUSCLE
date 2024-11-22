@@ -4,6 +4,8 @@ import uuid
 from django.contrib.humanize.templatetags.humanize import naturalday
 from django.db import models
 
+from question.models import QuestionGroup
+from django.db.models import Sum
 
 class Participant(models.Model):
     """Main participant, base for profile and sessions"""
@@ -32,7 +34,7 @@ class Participant(models.Model):
 
     result_count.short_description = 'Results'
 
-    def export_admin(self):
+    def _export_admin(self):
         """Export data to admin"""
         return {
             "id": self.id,
@@ -78,17 +80,25 @@ class Participant(models.Model):
         # Create best rank/score data per experiment session
         for session in sessions:
 
-            if session.experiment.slug in hits:
+            if session.block.slug in hits:
                 continue
 
-            hits[session.experiment.slug] = True
+            hits[session.block.slug] = True
 
-            scores.append({
-                'experiment_slug': session.experiment.slug,
-                'experiment_name': session.experiment.name,
-                'rank': session.experiment.get_rules().rank(session),
-                'score': session.final_score,
-                'date': naturalday(session.finished_at),
-            })
+            scores.append(
+                {
+                    "block_slug": session.block.slug,
+                    "rank": session.block.get_rules().rank(session),
+                    "score": session.final_score,
+                    "date": naturalday(session.finished_at),
+                }
+            )
 
         return scores
+
+    def score_sum(self, question_group_key):
+        """ Sums scores of all profile results with questions in a question group"""
+
+        question_keys = QuestionGroup.objects.get(key=question_group_key).questions.values_list("key", flat=True)
+
+        return self.result_set.all().filter(question_key__in=question_keys).aggregate(Sum("score"))['score__sum']

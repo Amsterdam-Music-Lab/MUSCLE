@@ -1,9 +1,9 @@
-import Experiment from "../components/Experiment/Experiment";
+import Block from "../components/Block/Block";
 import { MemoryRouter, Route } from "react-router-dom";
 
 export default {
-    title: "Experiment",
-    component: Experiment,
+    title: "Block",
+    component: Block,
     parameters: {
         layout: "fullscreen",
         // Adding controls for slug and participant_id
@@ -20,10 +20,10 @@ export default {
     },
 };
 
-const ExperimentWrapper = ({ slug }) => (
+const BlockWrapper = ({ slug }) => (
     <Route
         path="/:slug"
-        render={({ match, location }) => <Experiment match={match} location={location} />}
+        render={({ match, location }) => <Block match={match} location={location} />}
     />
 );
 
@@ -52,5 +52,5 @@ export const Default = {
             </MemoryRouter>
         ),
     ],
-    render: (args) => <ExperimentWrapper {...args} />,
+    render: (args) => <BlockWrapper {...args} />,
 };

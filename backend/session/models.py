@@ -1,262 +1,242 @@
-import json
-import random
+from typing import Iterable, Union
+
 from django.db import models
 from django.utils import timezone
 
+from result.models import Result
+from section.models import Section
 
 class Session(models.Model):
-    """Experiment session by a participant"""
+    """A model defining a session of an experiment block of a participant
 
-    experiment = models.ForeignKey('experiment.Experiment', on_delete=models.CASCADE, blank=True, null=True)
-    participant = models.ForeignKey('participant.Participant', on_delete=models.CASCADE)
-    playlist = models.ForeignKey('section.Playlist', on_delete=models.SET_NULL,
-                                 blank=True, null=True)
+    Attributes:
+        block (experiment.models.Block): each session is tied to a block
+        participant (participant.models.Participant): each session is tied to a participant
+        playlist (section.models.Playlist): most sessions will also be tied to a playlist
+        started_at (datetime): a timestamp when a session is created, auto-populated
+        finished_at (datetime): a timestamp of when `session.finish()` was called
+        json_data (json): a field to keep track of progress through a blocks' rules in a session
+        final_score (float): the final score of the session, usually the sum of all `Result` objects on the session
+    """
+    block = models.ForeignKey("experiment.Block", on_delete=models.CASCADE, blank=True, null=True)
+    participant = models.ForeignKey("participant.Participant", on_delete=models.CASCADE)
+    playlist = models.ForeignKey("section.Playlist", on_delete=models.SET_NULL, blank=True, null=True)
 
     started_at = models.DateTimeField(db_index=True, default=timezone.now)
-    finished_at = models.DateTimeField(
-        db_index=True, default=None, null=True, blank=True)
+    finished_at = models.DateTimeField(db_index=True, default=None, null=True, blank=True)
     json_data = models.JSONField(default=dict, blank=True, null=True)
     final_score = models.FloatField(db_index=True, default=0.0)
-    current_round = models.IntegerField(default=1)
 
     def __str__(self):
         return "Session {}".format(self.id)
 
-    def result_count(self):
-        """Number of results"""
+    def result_count(self) -> int:
+        """
+        Returns:
+            number of results for this session
+        """
         return self.result_set.count()
 
     result_count.short_description = "Results"
 
-    def total_score(self):
-        """Sum of all result scores"""
-        score = self.result_set.aggregate(models.Sum('score'))
-        return self.experiment.bonus_points + (score['score__sum'] if score['score__sum'] else 0)
-
-    def last_score(self):
-        """Get last score, or return 0 if no scores are set"""
-
-        if self.result_set.count() > 0:
-            return self.result_set.last().score
-
-        return 0
-
-    def last_result(self):
-        """Get last result"""
-        return self.result_set.last()
-
-    def last_song(self):
-        """Return artist and name of previous song, 
-        or return empty string if no scores are set
+    def block_rules(self):
         """
-        section = self.previous_section()
-        if section:
-            return "{} - {}".format(section.song.artist, section.song.name)
-        return ""
-
-    def previous_section(self):
-        """ Get previous song presented in an experiment """
-        valid_results = self.result_set.filter(score__isnull=False)
-        if valid_results.count() > 0:
-            result = valid_results.last()
-            if result.section:
-                return result.section
-        return None
-
-    def save_json_data(self, data):
-        """Merge data with json_data, overwriting duplicate keys.        
+        Returns:
+            (experiment.rules.Base) rules class to be used for this session
         """
-        new_data = self.load_json_data()
-        new_data.update(data)
-        self.json_data = new_data
-        self.save()
-
-    def load_json_data(self):
-        """Get json data as object"""
-        return self.json_data if self.json_data else {}
-
-    def export_admin(self):
-        """Export data for admin"""
-        return {
-            'session_id': self.id,
-            'participant': self.participant.id,
-            'started_at': self.started_at.isoformat(),
-            'finished_at': self.finished_at.isoformat() if self.finished_at else None,
-            'json_data': self.load_json_data(),
-            'results': [result.export_admin() for result in self.result_set.all()]
-        }
-    
-    def export_results(self):
-        # export session result objects
-        return self.result_set.all()
-
-    def is_finished(self):
-        """Determine if the session is finished"""
-        return self.finished_at
-
-    def rounds_complete(self):
-        """Determine if there are results for each experiment round"""
-        return self.rounds_passed() >= self.experiment.rounds
-
-    def rounds_passed(self):
-        """Get number of rounds passed"""
-        return self.result_set.count()
-
-    def get_next_round(self):
-        """Get next round number"""
-        return self.rounds_passed() + 1
-
-    def get_current_round(self):
-        return self.current_round
-
-    def set_current_round(self, round_number):
-        self.current_round = round_number
-        self.save()
-
-    def reset_rounds(self):
-        self.current_round = 1
-        self.save()
-
-    def increment_round(self):
-        self.current_round += 1
-        self.save()
-
-    def decrement_round(self):
-        self.current_round -= 1
-        self.save()
-
-    def song_ids(self):
-        """Get a list of song ids from the sections of this session's results"""
-        return (res.section.song.id for res in self.result_set.filter(section__isnull=False))
-    
-    def filter_songs(self, filter_by={}):
-        # Get pks from sections with given filter and song_id
-        pks = self.playlist.section_set.filter(**filter_by).values_list('song_id', flat=True)
-
-        # Return None if nothing matches
-        if len(pks) == 0:
-            return None
-
-        return pks
-
-    def section_from_any_song(self, filter_by={}):
-        """Get a random section with a Dutch IP check.
-
-        To ensure appropriate IP restrictions, most rules should use this
-        method instead of operating on the playlist directly.
-        """
-
-        pks = self.filter_songs(filter_by)
-        if pks:
-            # Return a random section
-            sections = self.playlist.section_set.filter(
-                song_id=random.choice(pks)
-            ).filter(
-                **filter_by
-            )
-            return random.choice(sections)
-
-    def all_sections(self, filter_by={}):
-        """Get all section with a Dutch IP check.
-
-        To ensure appropriate IP restrictions, most rules should use this
-        method instead of operating on the playlist directly.
-        """
-        pks = self.filter_songs(filter_by)
-        # Return all sections
-        if pks:
-            return self.playlist.section_set.filter(song_id__in=pks)
-
-    def section_from_song(self, song_id, filter_by={}):
-        """Get a random section from a particular song"""
-        return self.section_from_any_song({**filter_by, 'song_id': song_id})
-
-    def unused_song_ids(self, filter_by={}):
-        """Get a list of unused song ids from this session's playlist"""
-        # Get all song ids from playlists
-        song_ids = self.playlist.song_ids(filter_by)
-
-        # Get all song ids from results
-        used_song_ids = self.song_ids()
-
-        return list(set(song_ids) - set(used_song_ids))
-
-    def section_from_unused_song(self, filter_by={}):
-        """Get a random section from any unused song"""
-
-        song_ids = self.unused_song_ids(filter_by)
-
-        if len(song_ids) == 0:
-            return None
-
-        # Get a random song_id
-        song_id = random.choice(song_ids)
-
-        # Return a random section
-        return self.section_from_song(song_id, filter_by)
-
-    def section_from_used_song(self):
-        """Get a random section from any used song"""
-
-        song_ids = self.song_ids()
-
-        if len(song_ids) == 0:
-            return None
-
-        # Get a random song_id
-        song_id = random.choice(song_ids)
-
-        # Return a random section
-        return self.section_from_song(song_id)
-
-    def experiment_rules(self):
-        """Get rules class to be used for this session"""
-        return self.experiment.get_rules()
+        return self.block.get_rules()
 
     def finish(self):
-        """Finish current session"""
+        """Finish current session with the following steps:
+
+        1. set the `finished_at` timestamp to the current moment
+
+        2. set the `final_score` field to the sum of all results' scores
+        """
         self.finished_at = timezone.now()
         self.final_score = self.total_score()
 
-    def rank(self):
-        """Get session rank based on final_score, within current experiment"""
-        return self.experiment.session_set.filter(final_score__gte=self.final_score).values('final_score').annotate(total=models.Count('final_score')).count()
+    def get_rounds_passed(self, counted_result_keys: list = []) -> int:
+        """Get number of rounds passed, measured by the number of results on this session,
+        taking into account the `counted_result_keys` array that may be defined per rules file
 
-    def percentile_rank(self, exclude_unfinished):
-        """Get session percentile rank based on final_score, within current experiment"""
-        session_set = self.experiment.session_set
+        Attributes:
+            counted_result_keys: array of the Result.question_key strings which should be taken into account for counting rounds; if empty, all results will be counted.
+
+        Returns:
+            number of results, filtered by `counted_result_keys`, if supplied
+        """
+        results = self.result_set
+        if counted_result_keys:
+            results = results.filter(question_key__in=counted_result_keys)
+        return results.count()
+
+    def get_used_song_ids(self, exclude: dict = {}) -> Iterable[int]:
+        """Get a list of song ids already used in this session
+
+        Attributes:
+            exclude: a dictionary by which to exclude specific results in this session, using [Django's querying syntax](https://docs.djangoproject.com/en/4.2/topics/db/queries/)
+
+        Returns:
+            a list of song ids from the sections of this session's results
+        """
+        return (res.section.song.id for res in self.result_set.exclude(**exclude).filter(section__isnull=False))
+
+    def get_unused_song_ids(self, filter_by: dict = {}) -> Iterable[int]:
+        """Get a list of unused song ids from this session's playlist
+
+        Attributes:
+            filter_by: a dictionary by which to select sections from the playlist (e.g., a certain tag), using [Django's querying syntax](https://docs.djangoproject.com/en/4.2/topics/db/queries/)
+
+        Returns:
+            a list of song ids which haven't been used in this session yet
+        """
+        # Get all song ids from the current playlist
+        song_ids = (
+            self.playlist.section_set.filter(**filter_by).order_by("song").values_list("song_id", flat=True).distinct()
+        )
+        # Get all song ids from results
+        used_song_ids = self.get_used_song_ids()
+        return list(set(song_ids) - set(used_song_ids))
+
+    def last_result(self, question_keys: list[str] = []) -> Union[Result, None]:
+        """
+        Utility function to retrieve the last result, optionally filtering by relevant question keys.
+        If more than one result needs to be processed, or for more advanced filtering,
+        you can refer to the results on a session by `session.result_set` and query using the
+        [Django's querying syntax](https://docs.djangoproject.com/en/4.2/topics/db/queries/)
+
+        Attributes:
+            question_keys: array of Result.question_key strings to specify whish results should be taken into account; if empty, return last result, irrespective of its question_key
+
+        Returns:
+            last relevant [Result](result_models.md#Result) object added to the database for this session
+        """
+        results = self.result_set
+        if not results.count():
+            return None
+        if question_keys:
+            results = results.filter(question_key__in=question_keys)
+        return results.order_by("-created_at").first()
+
+    def last_section(self, question_keys: list[str] = []) -> Union[Section, None]:
+        """
+        Utility function to retrieve the last section played in the session, optinally filtering by result question keys.
+        Uses [last_result](session_models.md#Session.last_result) underneath.
+
+        Attributes:
+            question_keys: array of the Result.question_key strings whish should be taken into account; if empty, return last section, irrespective of question_key
+
+        Returns:
+            Section tied to previous result, if that result has a score and section, else None
+        """
+        result = self.last_result(question_keys)
+        if result and result.section and result.score is not None:
+            return result.section
+        return None
+
+    def last_score(self, question_keys: list[str] = []) -> float:
+        """
+        Utility function to retrieve last score logged to the session, optionally filtering by result question keys.
+        Uses `last_result` underneath.
+
+        Attributes:
+            question_keys: array of the Result.question_key strings whish should be taken into account; if empty, return last score, irrespective of question_key
+
+        Returns:
+            score of last result, or return 0 if there are no results yet
+        """
+        result = self.last_result(question_keys)
+        if result:
+            return result.score
+        return 0
+
+    def last_song(self, question_keys: list[str] = []) -> str:
+        """
+        Utility function to retrieve label (artist - name) of last song played in session, optionally filtering by result question keys.
+        Uses `last_result` underneath.
+
+        Attributes:
+            question_keys: array of the Result.question_key strings whish should be taken into account; if empty, return last played song, irrespective of question_key
+
+        Returns:
+            artist and name of section tied to previous result, if available, or an empty string
+        """
+        section = self.last_section(question_keys)
+        if section:
+            return section.song_label()
+        return ""
+
+    def percentile_rank(self, exclude_unfinished: bool) -> float:
+        """
+        Returns:
+            Percentile rank of this session for the associated block, based on `final_score`
+        """
+        session_set = self.block.session_set
         if exclude_unfinished:
             session_set = session_set.filter(finished_at__isnull=False)
         n_session = session_set.count()
         if n_session == 0:
             return 0.0  # Should be impossible but avoids x/0
-        n_lte = \
-            session_set.filter(final_score__lte=self.final_score).count()
+        n_lte = session_set.filter(final_score__lte=self.final_score).count()
         n_eq = session_set.filter(final_score=self.final_score).count()
         return 100.0 * (n_lte - (0.5 * n_eq)) / n_session
 
-    def question_bonus(self, bonus=100, skip_penalty=5):
-        """Get the question bonus, given by the bonus reduced with number of skipped questions times the skip_penalty"""
-        return bonus + self.skipped_questions() * skip_penalty
+    def rank(self) -> int:
+        """
+        Returns:
+            rank of the current session for the associated block, based on `final_score`
+        """
+        return (
+            self.block.session_set.filter(final_score__gte=self.final_score)
+            .values("final_score")
+            .annotate(total=models.Count("final_score"))
+            .count()
+        )
 
-    def total_questions(self):
-        """ Get total number of profile questions in this session """
-        return self.result_count()
+    def rounds_complete(self, counted_result_keys: list[str] = []) -> bool:
+        """
+        Attributes:
+            counted_result_keys: array of the Result.question_key strings which should be taken into account for counting rounds; if empty, all results will be counted.
 
-    def skipped_questions(self):
-        """Get number of skipped (empty) profile questions for this session"""
-        return self.result_set.filter(given_response="").count()
+        Returns:
+            True if there are results for each experiment round
+        """
+        return self.get_rounds_passed(counted_result_keys) >= self.block.rounds
 
-    def answered_questions(self):
-        """Get number of answered (non-empty) profile questions for this session"""
-        return self.result_set.exclude(given_response="").count()
-    
-    def get_relevant_results(self, question_keys=[]):
-        results = self.result_set
-        if question_keys:
-            return results.filter(question_key__in=question_keys)
-        return results
+    def total_score(self) -> float:
+        """
+        Returns:
+            sum of all result scores
+        """
+        score = self.result_set.aggregate(models.Sum("score"))
+        return self.block.bonus_points + (
+            score["score__sum"] if score["score__sum"] else 0
+        )
 
-    def get_previous_result(self, question_keys=[]):
-        results = self.get_relevant_results(question_keys)
-        return results.order_by('-created_at').first()
+    def save_json_data(self, data: dict):
+        """Merge data with json_data, overwriting duplicate keys.
+
+        Attributes:
+            data: a dictionary of data to save to the `json_data` field
+        """
+        self.json_data.update(data)
+        self.save()
+
+    def _export_admin(self):
+        """Export data for admin"""
+        return {
+            "session_id": self.id,
+            "participant": self.participant.id,
+            "started_at": self.started_at.isoformat(),
+            "finished_at": self.finished_at.isoformat() if self.finished_at else None,
+            "json_data": self.json_data,
+            "results": [result._export_admin() for result in self.result_set.all()],
+        }
+
+    def _is_finished(self) -> bool:
+        """
+        Returns:
+            a boolean to indicate whether the session is finished
+        """
+        return self.finished_at

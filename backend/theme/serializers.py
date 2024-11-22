@@ -14,7 +14,8 @@ def serialize_footer(footer: FooterConfig) -> dict:
         'disclaimer': formatter(
             footer.disclaimer, filter_name='markdown'),
         'logos': [
-            serialize_image(logo) for logo in footer.logos.all()
+            serialize_image(logo)
+            for logo in footer.logos.all().order_by('sponsorimage__index')
         ],
         'privacy': formatter(
             footer.privacy, filter_name='markdown'),
@@ -23,7 +24,7 @@ def serialize_footer(footer: FooterConfig) -> dict:
 
 def serialize_header(header: HeaderConfig) -> dict:
     return {
-        'nextExperimentButtonText': _('Next experiment'),
+        'nextBlockButtonText': _('Next experiment'),
         'aboutButtonText': _('About us'),
         'score': {
             'scoreClass': 'gold',

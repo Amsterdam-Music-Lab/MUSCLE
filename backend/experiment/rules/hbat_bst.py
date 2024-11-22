@@ -16,7 +16,7 @@ class BST(HBat):
     the HBAT rules. """
     ID = 'BST'
 
-    def intro_explainer(self):
+    def get_intro_explainer(self):
         return Explainer(
             instruction=_(
                 'In this test you will hear a number of rhythms which have a regular beat.'),
@@ -34,7 +34,7 @@ class BST(HBat):
             ],
             button_label='Ok'
         )
-    
+
     def next_trial_action(self, session, trial_condition, level=1):
         """
         Get the next actions for the experiment
@@ -73,7 +73,7 @@ class BST(HBat):
             }
         )
         return view
-    
+
     def response_explainer(self, correct, in2, button_label=_('Next fragment')):
         if correct:
             if in2:
@@ -94,8 +94,8 @@ class BST(HBat):
             steps=[],
             button_label=button_label
         )
-    
-    def finalize_experiment(self, session):
+
+    def finalize_block(self, session):
         """ if either the max_turnpoints have been reached,
         or if the section couldn't be found (outlier), stop the experiment
         """

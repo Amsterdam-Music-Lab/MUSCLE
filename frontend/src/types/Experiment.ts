@@ -1,9 +1,30 @@
-import IImage from "@/types/Image";
+import Block from "./Block";
+import Theme from "./Theme";
+
+export interface Consent {
+    text: string;
+    title: string;
+    confirm: string;
+    deny: string;
+    view: 'CONSENT';
+}
+
+export interface SocialMediaConfig {
+    tags: string[];
+    url: string;
+    content: string;
+    channels: Array<'facebook' | 'whatsapp' | 'twitter' | 'weibo' | 'share' | 'clipboard'>;
+}
 
 export default interface Experiment {
-    id: number;
-    name: string;
     slug: string;
+    name: string;
     description: string;
-    image?: IImage;
+    dashboard: Block[];
+    nextBlock: Block | null;
+    aboutContent: string;
+    consent?: Consent;
+    theme?: Theme;
+    totalScore: number;
+    socialMediaConfig?: SocialMediaConfig;
 }

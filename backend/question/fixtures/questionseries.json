@@ -1,20 +1,20 @@
 [
-  {
-    "model": "question.questionseries",
-    "pk": 1,
-    "fields": {
-      "experiment": 14,
-      "index": 1,
-      "randomize": false
+    {
+        "model": "question.questionseries",
+        "pk": 1,
+        "fields": {
+            "block": 14,
+            "index": 1,
+            "randomize": false
+        }
+    },
+    {
+        "model": "question.questionseries",
+        "pk": 2,
+        "fields": {
+            "block": 20,
+            "index": 1,
+            "randomize": false
+        }
     }
-  },
-  {
-    "model": "question.questionseries",
-    "pk": 2,
-    "fields": {
-      "experiment": 20,
-      "index": 1,
-      "randomize": false
-    }
-  }
 ]

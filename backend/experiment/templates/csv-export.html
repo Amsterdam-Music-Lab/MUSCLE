@@ -1,5 +1,5 @@
-{% extends "admin/base_site.html" %} 
-{% load inline_action_tags %} 
+{% extends "admin/base_site.html" %}
+{% load inline_action_tags %}
 {% block content %}
 <style>
     .template-selector,
@@ -38,11 +38,11 @@
         margin-right: 2em;
     }
 </style>
-<h1>Export results for experiment: {{experiment.name}}</h1>
+<h1>Export results for block: {{ <exp_block class="slug"></exp_block> }}</h1>
 <form action="" method="post">
     <div class="select-fields">
-        {% csrf_token %} 
-        {{ form.as_p }} 
+        {% csrf_token %}
+        {{ form.as_p }}
         {% render_inline_action_fields %}
         <input type="submit" name="_back" value="Go back" id="back-button" />
     </div>

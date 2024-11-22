@@ -10,7 +10,6 @@ TYPE_BUTTON = 'BUTTON'
 TYPE_IMAGE = 'IMAGE'
 TYPE_MULTIPLAYER = 'MULTIPLAYER'
 TYPE_MATCHINGPAIRS = 'MATCHINGPAIRS'
-TYPE_VISUALMATCHINGPAIRS = 'VISUALMATCHINGPAIRS'
 
 # playback methods
 PLAY_EXTERNAL = 'EXTERNAL'
@@ -140,19 +139,6 @@ class MatchingPairs(Multiplayer):
         super().__init__(sections, **kwargs)
         self.ID = TYPE_MATCHINGPAIRS
         self.score_feedback_display = score_feedback_display
-
-
-class VisualMatchingPairs(MatchingPairs):
-    '''
-    This is a special case of multiplayer:
-    play buttons are represented as cards
-    this player does not play audio, but displays images instead
-    '''
-
-    def __init__(self, sections, **kwargs):
-        super().__init__(sections, **kwargs)
-        self.ID = TYPE_VISUALMATCHINGPAIRS
-        self.play_method = PLAY_NOAUDIO
 
 
 def determine_play_method(section):

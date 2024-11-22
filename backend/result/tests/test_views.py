@@ -2,7 +2,7 @@ import json
 
 from django.test import Client, TestCase
 
-from experiment.models import Experiment
+from experiment.models import Block
 from participant.models import Participant
 from result.models import Result
 from section.models import Playlist, Section, Song
@@ -16,10 +16,10 @@ class ResultTest(TestCase):
     @classmethod
     def setUpTestData(cls):
         cls.participant = Participant.objects.create(unique_hash=42)
-        cls.experiment = Experiment.objects.create(
+        cls.block = Block.objects.create(
             rules='MUSICAL_PREFERENCES', slug='test')
         cls.session = Session.objects.create(
-            experiment=cls.experiment,
+            block=cls.block,
             participant=cls.participant,
         )
 
@@ -95,11 +95,11 @@ class ScoringTest(TestCase):
             filename="not/to_be_found.mp3",
             tag=0
         )
-        cls.experiment = Experiment.objects.create(
+        cls.block = Block.objects.create(
             rules='RHYTHM_BATTERY_INTRO',
             slug='test')
         cls.session = Session.objects.create(
-            experiment=cls.experiment,
+            block=cls.block,
             participant=cls.participant,
             playlist=playlist
         )
@@ -268,5 +268,4 @@ class ScoringTest(TestCase):
         client_request = self.song_sync_continue_request('no')
         response = self.client.post('/result/score/', client_request)
         assert response.status_code == 200
-        assert self.session.get_previous_result(['recognize']).score == -5
-
+        assert self.session.last_result(["recognize"]).score == -5

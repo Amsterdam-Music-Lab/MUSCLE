@@ -1,5 +1,4 @@
 import random
-import numpy as np
 
 from django.utils.translation import gettext as _
 
@@ -7,7 +6,7 @@ from experiment.actions import Explainer, Step
 
 
 def get_practice_views(
-    session, 
+    session,
     intro_explainer,
     first_trial_callback,
     trial_callback,
@@ -30,8 +29,8 @@ def get_practice_views(
     trial_condition = get_trial_condition_block(session, 2)
     previous_results = session.result_set.order_by('-created_at')
     if not results_count:
-        # first practice trial 
-        return trial_callback(session, trial_condition, difficulty)
+        # first practice trial
+        return [intro_explainer, get_practice_explainer(), trial_callback(session, trial_condition, difficulty)]
     last_result = previous_results.first()
     if results_count < 4:
         # practice trial
@@ -71,12 +70,12 @@ def get_practice_views(
                 response_explainer,
                 practice_again_explainer(),
                 intro_explainer,
-                practice_explainer(),
+                get_practice_explainer(),
                 next_trial
             ]
 
 
-def practice_explainer():
+def get_practice_explainer():
     return Explainer(
         instruction=_('We will now practice first.'),
         steps=[
@@ -116,10 +115,10 @@ def start_experiment_explainer():
 
 
 def get_trial_condition_block(session, n_trials_per_block):
-    """ make a list of n_trials_per_blocks conditions, of which one is catch (=1) 
+    """ make a list of n_trials_per_blocks conditions, of which one is catch (=1)
     store updates in the session.json_data field
     """
-    json_data = session.load_json_data()
+    json_data = session.json_data
     block = json_data.get('block')
     if not block:
         block = [0] * n_trials_per_block
@@ -132,9 +131,8 @@ def get_trial_condition_block(session, n_trials_per_block):
 
 
 def get_trial_condition(n_choices):
-    """ get randomized trial condition 
+    """ get randomized trial condition
     return an integer between 0 and n_choices-2
     """
-    options = np.arange(n_choices)
-    return np.random.choice(options)
-    
+    options = list(range(n_choices))
+    return random.choice(options)

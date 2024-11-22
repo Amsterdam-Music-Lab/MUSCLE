@@ -13,18 +13,26 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.AlterField(
-            model_name='section',
-            name='filename',
-            field=models.FileField(max_length=255, upload_to=section.models.audio_upload_path, validators=[django.core.validators.FileExtensionValidator(allowed_extensions=['wav', 'mp3', 'aiff', 'flac', 'ogg'])]),
+            model_name="section",
+            name="filename",
+            field=models.FileField(
+                max_length=255,
+                upload_to=section.models._audio_upload_path,
+                validators=[
+                    django.core.validators.FileExtensionValidator(
+                        allowed_extensions=["wav", "mp3", "aiff", "flac", "ogg"]
+                    )
+                ],
+            ),
         ),
         migrations.AlterField(
-            model_name='section',
-            name='group',
-            field=models.CharField(blank=True, default='0', max_length=128),
+            model_name="section",
+            name="group",
+            field=models.CharField(blank=True, default="0", max_length=128),
         ),
         migrations.AlterField(
-            model_name='section',
-            name='tag',
-            field=models.CharField(blank=True, default='0', max_length=128),
+            model_name="section",
+            name="tag",
+            field=models.CharField(blank=True, default="0", max_length=128),
         ),
     ]

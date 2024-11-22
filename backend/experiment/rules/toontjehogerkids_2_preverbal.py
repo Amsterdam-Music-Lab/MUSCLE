@@ -3,6 +3,7 @@ from django.template.loader import render_to_string
 
 from .toontjehoger_1_mozart import toontjehoger_ranks
 from experiment.actions import Explainer, Step, Score, Final, Info
+from experiment.actions.utils import get_current_experiment_url
 from .toontjehoger_2_preverbal import ToontjeHoger2Preverbal
 from os.path import join
 
@@ -10,18 +11,13 @@ logger = logging.getLogger(__name__)
 
 
 class ToontjeHogerKids2Preverbal(ToontjeHoger2Preverbal):
-    ID = 'TOONTJE_HOGER_KIDS_2_PREVERBAL'
+    ID = "TOONTJE_HOGER_KIDS_2_PREVERBAL"
 
-    def first_round(self, experiment):
-        """Create data for the first experiment rounds."""
-
-        # 1. Explain game.
-        explainer = Explainer(
+    def get_intro_explainer(self):
+        return Explainer(
             instruction="Het eerste luisteren",
             steps=[
-                Step(
-                    "Je krijgt straks een soort grafieken van geluid te zien, met een uitlegfilmpje."
-                ),
+                Step("Je krijgt straks een soort grafieken van geluid te zien, met een uitlegfilmpje."),
                 Step("Welk plaatje denk jij dat hoort bij de stem van een mens?"),
                 Step("En hoor jij het verschil tussen twee babyhuiltjes?"),
             ],
@@ -29,19 +25,9 @@ class ToontjeHogerKids2Preverbal(ToontjeHoger2Preverbal):
             button_label="Start",
         )
 
-        # 2 Spectrogram information
-        spectrogram_info = self.get_spectrogram_info()
-
-        return [
-            explainer,
-            spectrogram_info,
-        ]
-
     def get_spectrogram_info(self):
         image_url = "/images/experiments/toontjehoger/spectrogram_info_nl.webp"
-        description = (
-            "Dit is een spectrogram. Wil je weten hoe dat werkt? Kijk dan het filmpje!"
-        )
+        description = "Dit is een spectrogram. Wil je weten hoe dat werkt? Kijk dan het filmpje!"
         video = "https://player.vimeo.com/video/1012736887?h=bac11b4075"
         body = f'<div class="center"><img src="{image_url}"></div><p>{description}</p><div style="padding:56.25% 0 0 0;position:relative;margin-bottom:2vh;"><iframe src="{video}" frameborder="0" style="position:absolute;top:0;left:0;width:100%;height:100%;" title="Hoe werkt een spectrogram?"></iframe></div><script src=https://player.vimeo.com/api/player.js></script>'
 
@@ -74,7 +60,7 @@ class ToontjeHogerKids2Preverbal(ToontjeHoger2Preverbal):
                     feedback = "Helaas! Geluid A is de Franse baby."
 
         # Return score view
-        config = {'show_total_score': True}
+        config = {"show_total_score": True}
         score = Score(session, config=config, feedback=feedback)
         return [score]
 
@@ -85,22 +71,20 @@ class ToontjeHogerKids2Preverbal(ToontjeHoger2Preverbal):
         return "Hierboven zie je twee spectrogrammen van babyhuiltjes.  Eentje is een Duitse baby en eentje is een Franse baby. De talen Frans en Duits klinken heel anders. Kun jij bedenken welke van deze baby’s de Franse baby is?"
 
     def get_final_round(self, session):
-
         # Finish session.
         session.finish()
         session.save()
 
         # Score
-        score = self.get_score(session, session.rounds_passed())
+        score = self.get_score(session, session.get_rounds_passed())
 
         # Final
-        final_text = "Goed gedaan!" if session.final_score >= 2 * \
-            self.SCORE_CORRECT else "Best lastig!"
+        final_text = "Goed gedaan!" if session.final_score >= 2 * self.SCORE_CORRECT else "Best lastig!"
         final = Final(
             session=session,
             final_text=final_text,
             rank=toontjehoger_ranks(session),
-            button={'text': 'Wat hebben we getest?'}
+            button={"text": "Wat hebben we getest?"},
         )
 
         # Info page

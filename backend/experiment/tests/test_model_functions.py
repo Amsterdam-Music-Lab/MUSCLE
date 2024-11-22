@@ -1,45 +1,73 @@
 from django.test import TestCase
-from experiment.models import Experiment, ExperimentCollection, ExperimentCollectionGroup, GroupedExperiment
+from session.models import Session
+from participant.models import Participant
+from experiment.models import Block, Experiment, Phase, ExperimentTranslatedContent
+
+
+class TestModelBlock(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        cls.block = Block.objects.create(rules="THATS_MY_SONG", slug="hooked", rounds=42)
+
+    def test_separate_rules_instance(self):
+        rules1 = self.block.get_rules()
+        rules2 = self.block.get_rules()
+        keys1 = rules1.question_series[0]["keys"] + rules1.question_series[1]["keys"]
+        keys2 = rules2.question_series[0]["keys"] + rules2.question_series[1]["keys"]
+        assert keys1 == keys2
 
 
 class TestModelExperiment(TestCase):
     @classmethod
     def setUpTestData(cls):
-        cls.experiment = Experiment.objects.create(rules='THATS_MY_SONG', slug='hooked', rounds=42)
-
-    def test_separate_rules_instance(self):
-        rules1 = self.experiment.get_rules()
-        rules2 = self.experiment.get_rules()
-        keys1 = rules1.question_series[0]['keys'] + rules1.question_series[1]['keys']
-        keys2 = rules2.question_series[0]['keys'] + rules2.question_series[1]['keys']
-        assert keys1 == keys2
-
-
-class TestModelExperimentCollection(TestCase):
+        cls.experiment = Experiment.objects.create()
+        cls.experiment_translated_content = ExperimentTranslatedContent.objects.create(
+            experiment=cls.experiment, language="en", name="test_experiment", description="test_description"
+        )
+        cls.participant1 = Participant.objects.create(participant_id_url="001")
+        cls.participant2 = Participant.objects.create(participant_id_url="002")
+        cls.participant3 = Participant.objects.create(participant_id_url="003")
 
     def test_verbose_name_plural(self):
-        # Get the ExperimentCollection Meta class
-        meta = ExperimentCollection._meta
+        # Get the Experiment Meta class
+        meta = Experiment._meta
         # Check if verbose_name_plural is correctly set
-        self.assertEqual(meta.verbose_name_plural, "Experiment Collections")
+        self.assertEqual(meta.verbose_name_plural, "Experiments")
 
-    def test_associated_experiments(self):
-        collection = ExperimentCollection.objects.create(name='collection')
-        group1 = ExperimentCollectionGroup.objects.create(
-            name='first_phase', series=collection)
-        group2 = ExperimentCollectionGroup.objects.create(
-            name='second_phase', series=collection)
-        experiment = Experiment.objects.create(
-            rules='THATS_MY_SONG', slug='hooked', rounds=42)
-        experiment2 = Experiment.objects.create(
-            rules='THATS_MY_SONG', slug='unhinged', rounds=42)
-        experiment3 = Experiment.objects.create(
-            rules='THATS_MY_SONG', slug='derailed', rounds=42)
-        GroupedExperiment.objects.create(
-            experiment=experiment, group=group1)
-        GroupedExperiment.objects.create(
-            experiment=experiment2, group=group2)
-        GroupedExperiment.objects.create(
-            experiment=experiment3, group=group2)
-        self.assertEqual(collection.associated_experiments(), [
-                         experiment, experiment2, experiment3])
+    def test_associated_blocks(self):
+        experiment = self.experiment
+        phase1 = Phase.objects.create(experiment=experiment)
+        phase2 = Phase.objects.create(experiment=experiment)
+        block = Block.objects.create(rules="THATS_MY_SONG", slug="hooked", rounds=42, phase=phase1)
+        block2 = Block.objects.create(rules="THATS_MY_SONG", slug="unhinged", rounds=42, phase=phase2)
+        block3 = Block.objects.create(rules="THATS_MY_SONG", slug="derailed", rounds=42, phase=phase2)
+
+        self.assertEqual(experiment.associated_blocks(), [block, block2, block3])
+
+    def test_export_sessions(self):
+        experiment = self.experiment
+        phase = Phase.objects.create(experiment=experiment)
+        block = Block.objects.create(rules="THATS_MY_SONG", slug="hooked", rounds=42, phase=phase)
+        Session.objects.bulk_create(
+            [
+                Session(block=block, participant=self.participant1),
+                Session(block=block, participant=self.participant2),
+                Session(block=block, participant=self.participant3),
+            ]
+        )
+        sessions = experiment.export_sessions()
+        self.assertEqual(len(sessions), 3)
+
+    def test_current_participants(self):
+        experiment = self.experiment
+        phase = Phase.objects.create(experiment=experiment)
+        block = Block.objects.create(rules="THATS_MY_SONG", slug="hooked", rounds=42, phase=phase)
+        Session.objects.bulk_create(
+            [
+                Session(block=block, participant=self.participant1),
+                Session(block=block, participant=self.participant2),
+                Session(block=block, participant=self.participant3),
+            ]
+        )
+        participants = experiment.current_participants()
+        self.assertEqual(len(participants), 3)

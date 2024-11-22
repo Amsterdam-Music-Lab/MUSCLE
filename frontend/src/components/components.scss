@@ -8,7 +8,7 @@
 @import "./Circle/Circle";
 @import "./CountDown/CountDown";
 @import "./Histogram/Histogram";
-@import "./Rank/Rank";
+@import "./Cup/Cup";
 @import "./Logo/Logo";
 
 // Profile
@@ -19,9 +19,9 @@
 
 // Experiment
 @import "./Consent/Consent";
+@import "./Block/Block";
 @import "./Experiment/Experiment";
-@import "./ExperimentCollection/ExperimentCollection";
-@import "./ExperimentCollection/ExperimentCollectionDashboard/ExperimentCollectionDashboard";
+@import "./Experiment/ExperimentDashboard/ExperimentDashboard";
 @import "./Explainer/Explainer";
 @import "./Final/Final";
 @import "./FloatingActionButton/FloatingActionButton";
@@ -42,8 +42,7 @@
 @import "./Score/Score";
 @import "./Trial/Trial";
 @import "./FeedbackForm/FeedbackForm";
-@import "./ToontjeHoger/ToontjeHoger";
 @import "./UserFeedback/UserFeedback";
 
-// ExperimentCollection
+// Experiment
 @import "./Footer/Footer";

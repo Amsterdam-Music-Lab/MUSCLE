@@ -18,7 +18,6 @@ const getDefaultArgs = (overrides = {}) => ({
     section: {
         id: 32,
         url: "/section/32/78165/",
-        group: "\t1",
     },
     showAnimation: true,
     view: "MATCHINGPAIRS",
@@ -48,7 +47,6 @@ export const Turned = {
         section: {
             id: 32,
             url: "/section/32/78165/",
-            group: "\t1",
             turned: true,
         },
     }),
@@ -73,7 +71,6 @@ export const Seen = {
         section: {
             id: 32,
             url: "/section/32/78165/",
-            group: "\t1",
             seen: true,
         },
     }),
@@ -98,7 +95,6 @@ export const Memory = {
         section: {
             id: 32,
             url: "/section/32/78165/",
-            group: "\t1",
             memory: true,
         },
     }),
@@ -123,7 +119,6 @@ export const Lucky = {
         section: {
             id: 32,
             url: "/section/32/78165/",
-            group: "\t1",
             lucky: true,
         },
     }),
@@ -148,7 +143,6 @@ export const NoEvents = {
         section: {
             id: 32,
             url: "/section/32/78165/",
-            group: "\t1",
             noevents: true,
         },
     }),
@@ -173,7 +167,6 @@ export const Inactive = {
         section: {
             id: 32,
             url: "/section/32/78165/",
-            group: "\t1",
             inactive: true,
         },
     }),
@@ -202,7 +195,6 @@ export const Playing = {
         section: {
             id: 32,
             url: "/section/32/78165/",
-            group: "\t1",
             turned: true,
         },
     }),
@@ -232,10 +224,9 @@ export const VisualMatchingPairs = {
         section: {
             id: 32,
             url: `http://localhost:6006/${catImage}`,
-            group: "\t1",
             turned: true,
         },
-        view: "VISUALMATCHINGPAIRS",
+        view: "MATCHINGPAIRS",
     }),
     decorators: [
         (Story) => (

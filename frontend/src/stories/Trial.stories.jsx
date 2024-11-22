@@ -51,7 +51,6 @@ const getDefaultArgs = (overrides = {}) => ({
                 view: "BUTTON_ARRAY",
                 explainer: "",
                 question: "1. Do you know this song?",
-                result_id: 17242,
                 is_skippable: false,
                 submits: false,
                 style: "boolean",
@@ -67,7 +66,6 @@ const getDefaultArgs = (overrides = {}) => ({
                 view: "ICON_RANGE",
                 explainer: "",
                 question: "2. How much do you like this song?",
-                result_id: 17241,
                 is_skippable: false,
                 submits: false,
                 style: "gradient-7",
@@ -169,12 +167,10 @@ export const ToontjeHoger4Absolute = {
                 {
                     "id": 2,
                     "url": "http://localhost:8000/section/2/13319/",
-                    "group": "1"
                 },
                 {
                     "id": 3,
                     "url": "http://localhost:8000/section/3/94320/",
-                    "group": "1"
                 }
             ],
             play_method: "EXTERNAL",
@@ -204,7 +200,6 @@ export const ToontjeHoger4Absolute = {
                     view: "BUTTON_ARRAY",
                     explainer: "",
                     question: "Welk fragment heeft de juiste toonhoogte?",
-                    result_id: 3,
                     is_skippable: false,
                     submits: true,
                     style: "neutral-inverted",

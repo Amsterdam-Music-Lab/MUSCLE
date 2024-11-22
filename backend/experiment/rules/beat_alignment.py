@@ -9,6 +9,7 @@ from experiment.actions.form import ChoiceQuestion, Form
 from experiment.actions.playback import Autoplay
 from experiment.actions.utils import final_action_with_optional_button, render_feedback_trivia
 from result.utils import prepare_result
+from section.models import Playlist
 
 logger = logging.getLogger(__name__)
 
@@ -18,11 +19,9 @@ class BeatAlignment(Base):
 
     ID = 'BEAT_ALIGNMENT'
 
-    def first_round(self, experiment):
-        """Create data for the first experiment rounds"""
-
-        # 1. General explainer
-        explainer = Explainer(
+    def get_intro_explainer(self):
+        """ Explainer at start of experiment """
+        return Explainer(
             instruction=_(
                 "This test measures your ability to recognize the beat in a piece of music."),
             steps=[
@@ -38,37 +37,29 @@ class BeatAlignment(Base):
             step_numbers=True
         )
 
-        return [
-            explainer,
-        ]
-
     def next_round(self, session):
         """Get action data for the next round"""
 
-        # If the number of results equals the number of experiment.rounds
+        # If the number of results equals the number of block.rounds
         # Close the session and return data for the final_score view
         if session.rounds_complete():
             # Finish session
             session.finish()
             session.save()
             percentage = int(
-                (sum([r.score for r in session.result_set.all()]) / session.experiment.rounds) * 100)
+                (sum([r.score for r in session.result_set.all()]) / session.block.rounds) * 100)
             feedback = _('Well done! You’ve answered {} percent correctly!').format(
                 percentage)
             trivia = _('In the UK, over 140.000 people did \
                 this test when it was first developed?')
             final_text = render_feedback_trivia(feedback, trivia)
             return final_action_with_optional_button(session, final_text)
-        
-        # Next round number, can be used to return different actions
-        next_round_number = session.get_next_round()
 
         # Practice rounds
-        if not session.load_json_data().get('done_practice'):
-            practice_list = session.playlist
-            practice_rounds = []
+        if not session.json_data.get("done_practice"):
+            practice_rounds = [self.get_intro_explainer()]
             for i in range(1, 4):
-                this_round = self.next_practice_action(practice_list, i)
+                this_round = self.next_practice_action(session, i)
                 practice_rounds.append(copy.deepcopy(this_round))
             practice_rounds.append(Explainer(
                 instruction=_('You will now hear 17 music fragments.'),
@@ -86,12 +77,12 @@ class BeatAlignment(Base):
             session.save_json_data({'done_practice': True})
             return practice_rounds
 
-        return self.next_trial_action(session, next_round_number)
+        return self.next_trial_action(session)
 
-    def next_practice_action(self, playlist, count):
+    def next_practice_action(self, session, count):
         """Get action data for the next practice round"""
-        section = playlist.section_set.filter(
-            song__name__startswith='ex{}'.format(count)).first()
+        section = session.playlist.get_section(
+            {'song__name__startswith': f'ex{count}'})
         if not section:
             return None
 
@@ -117,10 +108,10 @@ class BeatAlignment(Base):
         )
         return view
 
-    def next_trial_action(self, session, this_round):
+    def next_trial_action(self, session):
         """Get next section for given session"""
         filter_by = {'tag': '0'}
-        section = session.section_from_unused_song(filter_by)
+        section = session.playlist.get_section(filter_by, song_ids=session.get_unused_song_ids())
         condition = section.song.name.split('_')[-1][:-4]
         expected_response = 'ON' if condition == 'on' else 'OFF'
         key = 'aligned'
@@ -149,3 +140,34 @@ class BeatAlignment(Base):
             }
         )
         return view
+
+    def validate_playlist(self, playlist: Playlist):
+        errors = []
+        errors += super().validate_playlist(playlist)
+        sections = playlist.section_set.all()
+        n_examples = sections.filter(song__name__startswith="ex").count()
+        if n_examples != 3:
+            errors.append(
+                "There should be three example files, with associated song objects whose names start with `ex`"
+            )
+        trial_stimuli = sections.exclude(song__name__startswith="ex")
+        if trial_stimuli.count() != 17:
+            errors.append("There should be 17 files to be played during the experiment")
+        song_names = trial_stimuli.values_list("song__name", flat=True)
+        try:
+            groups, tags = zip(*[s.split("_") for s in song_names])
+            try:
+                [int(g) for g in groups]
+            except:
+                errors.append("The first part of the song name should be an integer")
+            if len(list(set(groups))) != 9:
+                errors.append("There should be 9 different audio files")
+            if sorted(list(set(tags))) != ["on", "phase", "tempo"]:
+                errors.append(
+                    "The sections should have song names which contain condition on, phase or tempo"
+                )
+        except:
+            errors.append(
+                "The sections should have song names with an integer, followed by a condition"
+            )
+        return errors

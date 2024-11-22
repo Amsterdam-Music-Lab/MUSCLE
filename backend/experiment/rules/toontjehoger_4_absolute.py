@@ -11,9 +11,11 @@ from experiment.actions.form import ButtonArrayQuestion, Form
 from experiment.actions.frontend_style import FrontendStyle, EFrontendStyle
 from experiment.actions.playback import Multiplayer
 from experiment.actions.styles import STYLE_NEUTRAL_INVERTED
+from experiment.actions.utils import get_current_experiment_url
 from experiment.utils import create_player_labels
 from .base import Base
 from result.utils import prepare_result
+from session.models import Session
 
 logger = logging.getLogger(__name__)
 
@@ -26,11 +28,8 @@ class ToontjeHoger4Absolute(Base):
     # number of songs (each with a,b,c version) in the playlist
     PLAYLIST_ITEMS = 13
 
-    def first_round(self, experiment):
-        """Create data for the first experiment rounds."""
-
-        # 1. Explain game.
-        explainer = Explainer(
+    def get_intro_explainer(self):
+        return Explainer(
             instruction="Absoluut gehoor",
             steps=[
                 Step(
@@ -43,21 +42,17 @@ class ToontjeHoger4Absolute(Base):
             button_label="Start"
         )
 
-        return [
-            explainer,
-        ]
-
     def next_round(self, session):
         """Get action data for the next round"""
 
-        rounds_passed = session.rounds_passed()
+        rounds_passed = session.get_rounds_passed()
 
         # Round 1
         if rounds_passed == 0:
-            return self.get_round(session)
+            return [self.get_intro_explainer(), *self.get_round(session)]
 
         # Round 2 - 4
-        if rounds_passed < session.experiment.rounds:
+        if rounds_passed < session.block.rounds:
             return [*self.get_score(session), *self.get_round(session)]
 
         # Final
@@ -66,7 +61,7 @@ class ToontjeHoger4Absolute(Base):
     def get_trial_question(self):
         return "Welk fragment heeft de juiste toonhoogte?"
 
-    def get_round(self, session):
+    def get_round(self, session: Session):
         # Get available section groups
         results = session.result_set.all()
         available_groups = list(map(str, range(1, self.PLAYLIST_ITEMS)))
@@ -76,7 +71,7 @@ class ToontjeHoger4Absolute(Base):
         # Get sections
 
         # Original (A)
-        section1 = session.section_from_any_song(
+        section1 = session.playlist.get_section(
             filter_by={'tag': 'a', 'group__in': available_groups})
         if not section1:
             raise Exception(
@@ -84,7 +79,7 @@ class ToontjeHoger4Absolute(Base):
 
         # Changed (B/C)
         variant = random.choice(["b", "c"])
-        section2 = session.section_from_any_song(
+        section2 = session.playlist.get_section(
             filter_by={'tag': variant, 'group': section1.group})
         if not section2:
             raise Exception(
@@ -163,9 +158,9 @@ class ToontjeHoger4Absolute(Base):
 
         # Final
         final_text = "Dat bleek toch even lastig!"
-        if session.final_score >= session.experiment.rounds * 0.8 * self.SCORE_CORRECT:
+        if session.final_score >= session.block.rounds * 0.8 * self.SCORE_CORRECT:
             final_text = "Goed gedaan! Jouw absolute gehoor is uitstekend!"
-        elif session.final_score >= session.experiment.rounds * 0.5 * self.SCORE_CORRECT:
+        elif session.final_score >= session.block.rounds * 0.5 * self.SCORE_CORRECT:
             final_text = "Goed gedaan! Jouw absolute gehoor is best OK!"
 
         final = Final(
@@ -182,7 +177,7 @@ class ToontjeHoger4Absolute(Base):
             body=body,
             heading="Absoluut gehoor",
             button_label="Terug naar ToontjeHoger",
-            button_link="/collection/toontjehoger"
+            button_link=get_current_experiment_url(session)
         )
 
         return [*score, final, info]

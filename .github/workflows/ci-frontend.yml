@@ -1,0 +1,68 @@
+name: Frontend Test & Lint
+
+on:
+  push:
+    paths:
+      - 'frontend/**'
+      - '.yarn'
+      - '.github/workflows/ci-frontend.yml'
+      - 'docker-compose.yaml'
+  pull_request:
+    paths:
+      - 'frontend/**'
+      - '.yarn'
+      - '.github/workflows/ci-frontend.yml'
+      - 'docker-compose.yaml'
+
+jobs:
+
+  frontend-test:
+    name: Test Frontend
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run Frontend Tests
+        run: sudo docker compose --env-file .env-github-actions run client yarn test:ci
+
+  frontend-coverage-badge:
+    name: Generate Frontend Coverage Badge
+    needs: frontend-test
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/develop'
+    steps:
+      - uses: actions/checkout@v4
+      - name: Generate Frontend Coverage Report (XML) and Badge
+        run: |
+          sudo docker compose --env-file .env-github-actions run client yarn test:ci
+          sudo docker compose --env-file .env-github-actions run client yarn coverage-badges -s public/coverage/coverage-summary.json -o public/coverage/coverage-frontend-badge-new.svg --label 'Frontend Code Coverage'
+      - name: Push Frontend Coverage Badge to separate branch
+        continue-on-error: true
+        run: |
+          if git ls-remote --heads origin code-coverage-badges; then
+            git fetch origin code-coverage-badges
+            git checkout code-coverage-badges
+          else
+            git checkout -b code-coverage-badges
+            git push origin code-coverage-badges
+          fi
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git config --global user.name "github-actions[bot]"
+          rm frontend/coverage-frontend-badge.svg -f
+          sudo mv frontend/public/coverage/coverage-frontend-badge-new.svg frontend/coverage-frontend-badge.svg
+          git add frontend/coverage-frontend-badge.svg
+          git commit -m "Add frontend coverage badge for commit $GITHUB_SHA"
+          git push origin code-coverage-badges
+          # Check if there are any changes
+          if git diff --staged --quiet; then
+            echo "No changes in coverage badge. Skipping commit and push."
+          else
+            git commit -m "Add frontend coverage badge for commit $GITHUB_SHA"
+            git push origin code-coverage-badges
+          fi
+
+  frontend-lint:
+    name: Lint Frontend
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: sudo docker compose --env-file .env-github-actions run client yarn lint

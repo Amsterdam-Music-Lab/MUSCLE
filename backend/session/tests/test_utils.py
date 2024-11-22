@@ -1,7 +1,6 @@
-
 from django.test import TestCase
 
-from experiment.models import Experiment
+from experiment.models import Block
 from participant.models import Participant
 from result.models import Result
 from session.models import Session
@@ -14,10 +13,10 @@ class SessionUtilsTest(TestCase):
     @classmethod
     def setUpTestData(cls):
         cls.participant = Participant.objects.create(unique_hash=42)
-        cls.experiment = Experiment.objects.create(
+        cls.block = Block.objects.create(
             rules='MUSICAL_PREFERENCES', slug='test')
         cls.session = Session.objects.create(
-            experiment=cls.experiment,
+            block=cls.block,
             participant=cls.participant,
         )
         # create results with various question_keys, and scores from 0 to 9
@@ -28,17 +27,7 @@ class SessionUtilsTest(TestCase):
                 question_key=keys[i],
                 score=i
             )
-    
-    def test_relevant_results_without_filter(self):
-        results = self.session.get_relevant_results()
-        assert results.count() == n_results
-    
-    def test_relevant_results_with_filter(self):
-        results = self.session.get_relevant_results(['a', 'b'])
-        assert results.count() == 6
-        assert 'd' not in results.values_list('question_key')
-    
+
     def test_previous_score(self):
-        result = self.session.get_previous_result(['c', 'd'])
+        result = self.session.last_result(["c", "d"])
         assert result.score == 9
-        

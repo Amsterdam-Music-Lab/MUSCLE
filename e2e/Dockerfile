@@ -15,7 +15,7 @@ RUN apt update
 RUN apt install -y chromium chromium-driver curl
 
 # Run the tests
-CMD ["python", "tests-selenium.py"]
+CMD ["python", "run_tests.py"]
 
 # Set ENV DISPLAY to 99
 ENV DISPLAY=:99
