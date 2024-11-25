@@ -19,6 +19,7 @@ import FontLoader from "@/components/FontLoader/FontLoader";
 import useResultHandler from "@/hooks/useResultHandler";
 import Session from "@/types/Session";
 import { Action } from "@/types/Action";
+import { Round } from "@/types/Round";
 
 // Block handles the main (experiment) block flow:
 // - Loads the block and participant
@@ -46,7 +47,7 @@ const Block = () => {
     const resetHeadData = useBoundStore((state) => state.resetHeadData);
 
     // Current block state
-    const [actions, setActions] = useState([]);
+    const [actions, setActions] = useState<Round>([]);
     const [state, setState] = useState<Action | null>(startState);
     const [key, setKey] = useState<number>(Math.random());
     const playlist = useRef(null);
@@ -65,7 +66,7 @@ const Block = () => {
         setKey(Math.random());
     }, []);
 
-    const updateActions = useCallback((currentActions: []) => {
+    const updateActions = useCallback((currentActions: Round) => {
         const newActions = currentActions;
         setActions(newActions);
         setCurrentAction(0);
