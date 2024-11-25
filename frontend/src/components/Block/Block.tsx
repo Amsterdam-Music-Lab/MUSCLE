@@ -56,6 +56,9 @@ const Block = () => {
     const setTheme = useBoundStore((state) => state.setTheme);
     const resetTheme = useBoundStore((state) => state.resetTheme);
     const setBlock = useBoundStore((state) => state.setBlock);
+    const setRound = useBoundStore((state) => state.setRound);
+    const setCurrentAction = useBoundStore((state) => state.setCurrentAction);
+    const currentActionIndex = useBoundStore((state) => state.currentActionIndex);
 
     const setHeadData = useBoundStore((state) => state.setHeadData);
     const resetHeadData = useBoundStore((state) => state.resetHeadData);
@@ -67,7 +70,7 @@ const Block = () => {
     const playlist = useRef(null);
 
     // API hooks
-    const [block, loadingBlock] = useBlock(slug);
+    const [block, loadingBlock] = useBlock(slug!);
 
     const loadingText = block ? block.loading_text : "";
     const className = block ? block.class_name : "";
@@ -83,6 +86,7 @@ const Block = () => {
     const updateActions = useCallback((currentActions: []) => {
         const newActions = currentActions;
         setActions(newActions);
+        setCurrentAction(0);
         const newState = newActions.shift();
         updateState(newState);
     }, [updateState]);
@@ -93,6 +97,7 @@ const Block = () => {
             session: activeSession
         });
         if (round) {
+            setRound({ ...round.next_round }); // Make a deep copy of the round as the 'round' object will be mutated by the updateActions
             updateActions(round.next_round);
         } else {
             setError(
@@ -106,6 +111,7 @@ const Block = () => {
     const onNext = async (doBreak = false) => {
         if (!doBreak && actions.length) {
             updateActions(actions);
+            setCurrentAction(currentActionIndex! + 1); // Increment current action index
         } else {
             continueToNextRound(session as Session);
         }

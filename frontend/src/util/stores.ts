@@ -5,6 +5,7 @@ import IParticipant from "@/types/Participant";
 import ISession from "@/types/Session";
 import ITheme from "@/types/Theme";
 import IBlock from "@/types/Block";
+import { Action, Round } from '@/types/Round';
 
 interface BlockSlice {
     block?: IBlock;
@@ -96,6 +97,28 @@ const createParticipantSlice: StateCreator<ParticipantSlice> = (set) => ({
     setParticipantLoading: (participantLoading: boolean) => set(() => ({ participantLoading }))
 });
 
+interface RoundSlice {
+    round: Round;
+    setRound: (round: Round) => void;
+    currentActionIndex: number | null;
+    setCurrentAction: (index: number) => void;
+    currentAction: () => Action | null;
+}
+
+const createRoundSlice: StateCreator<RoundSlice> = (set, get) => ({
+    round: [],
+    setRound: (round: Round) => set(() => ({ round })),
+    currentActionIndex: null,
+    setCurrentAction: (index: number) => set(() => ({ currentActionIndex: index })),
+    currentAction: () => {
+        const index = get().currentActionIndex;
+        if (index === null) {
+            return null;
+        }
+        return get().round[index];
+    },
+});
+
 interface SessionSlice {
     session: ISession | null;
     setSession: (session: ISession) => void;
@@ -118,11 +141,12 @@ const createThemeSlice: StateCreator<ThemeSlice> = (set) => ({
     resetTheme: () => set(() => ({ theme: null })),
 });
 
-export const useBoundStore = create<BlockSlice & DocumentHeadSlice & ErrorSlice & ParticipantSlice & SessionSlice & ThemeSlice>((...args) => ({
+export const useBoundStore = create<BlockSlice & DocumentHeadSlice & ErrorSlice & ParticipantSlice & RoundSlice & SessionSlice & ThemeSlice>((...args) => ({
     ...createBlockSlice(...args),
     ...createDocumentHeadSlice(...args),
     ...createErrorSlice(...args),
     ...createParticipantSlice(...args),
+    ...createRoundSlice(...args),
     ...createSessionSlice(...args),
     ...createThemeSlice(...args),
 }));
