@@ -7,6 +7,7 @@ export default defineConfig({
     include: ['**/*.test.js', '**/*.test.jsx', '**/*.test.ts', '**/*.test.tsx'],
     globals: true,
     environment: 'happy-dom',
+    allowOnly: true,
     coverage: {
       reportsDirectory: 'public/coverage',
       provider: 'v8',
