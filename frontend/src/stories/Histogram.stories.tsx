@@ -22,7 +22,7 @@ export const Default = {
         borderRadius: "0.15rem",
     },
     decorators: [
-        (Story) => (
+        (Story: any) => (
             <div
                 style={{
                     width: "128px",
