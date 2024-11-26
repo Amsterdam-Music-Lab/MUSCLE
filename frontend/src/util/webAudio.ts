@@ -103,7 +103,7 @@ export const loadBuffer = async (id: number, src: string, canPlay: () => void) =
 };
 
 export const checkSectionLoaded = (section: Section) => {
-    if (section.url === previousSource) {
+    if (buffers.hasOwnProperty(section.id)) {
         return true;
     };
 };
