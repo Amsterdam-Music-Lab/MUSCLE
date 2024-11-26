@@ -418,7 +418,7 @@ class Categorization(Base):
         else:
             pass  # throw error
 
-        return Score(session, icon=icon, timer=1, title=self.get_title(session))
+        return Score(session, icon=icon, timer=1, title=" ")
 
     def get_trial_with_feedback(self, session):
         score = self.get_feedback(session)
