@@ -9,6 +9,7 @@ from django.forms import (
     CheckboxSelectMultiple,
     TextInput,
 )
+from django_select2.forms import Select2MultipleWidget
 
 from experiment.models import (
     Experiment,
@@ -264,7 +265,15 @@ class BlockForm(ModelForm):
 
     class Meta:
         model = Block
-        fields = "__all__"
+        fields = [
+            "index",
+            "slug",
+            "rules",
+            "rounds",
+            "bonus_points",
+            "playlists",
+            "theme_config",
+        ]
         widgets = {
             "playlists": Select2MultipleWidget,  # Use Select2 for the playlists field
         }

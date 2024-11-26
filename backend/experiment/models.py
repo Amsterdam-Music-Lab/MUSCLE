@@ -13,7 +13,7 @@ from image.models import Image
 from session.models import Session
 from typing import Optional, Union
 
-from .validators import markdown_html_validator, block_slug_validator
+from .validators import markdown_html_validator, block_slug_validator, experiment_slug_validator
 
 language_choices = [(key, ISO_LANGUAGES[key]) for key in ISO_LANGUAGES.keys()]
 language_choices[0] = ("", "Unset")
@@ -31,7 +31,11 @@ class Experiment(models.Model):
         phases (Queryset[Phase]): Queryset of Phase instances
     """
 
-    slug = models.SlugField(max_length=64, default="")
+    slug = models.SlugField(db_index=True,
+                                 max_length=64,
+                                 unique=True,
+                                 null=True,
+                                 validators=[experiment_slug_validator])
     translated_content = models.QuerySet["ExperimentTranslatedContent"]
     theme_config = models.ForeignKey("theme.ThemeConfig", blank=True, null=True, on_delete=models.SET_NULL)
     active = models.BooleanField(default=True)
