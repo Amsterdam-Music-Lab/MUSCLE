@@ -87,6 +87,32 @@ class TestExperimentViews(TestCase):
         self.assertIsNotNone(response_json)
         self.assertIn(response_json.get("nextBlock").get("slug"), ("block2", "block3"))
 
+    def test_get_experiment_returning_participant(self):
+        Session.objects.bulk_create(
+            self._get_session_objects(
+                [
+                    self.block1,
+                    self.block2,
+                    self.block3,
+                    self.block4,
+                    self.block1,
+                    self.block2,
+                    self.block3,
+                    self.block4,
+                ]
+            )
+        )
+        response = self.client.get("/experiment/test_series/")
+        self.assertEqual(response.json().get("nextBlock").get("slug"), "block1")
+
+    def _get_session_objects(self, block_list: list[Block]) -> list[Session]:
+        return [
+            Session(
+                block=block, participant=self.participant, finished_at=timezone.now()
+            )
+            for block in block_list
+        ]
+
     def test_experiment_not_found(self):
         # if Experiment does not exist, return 404
         response = self.client.get("/experiment/not_found/")

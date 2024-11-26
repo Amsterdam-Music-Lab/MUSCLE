@@ -3,24 +3,23 @@ import { render, act, waitFor } from '@testing-library/react';
 import Histogram from './Histogram';
 
 // Mock requestAnimationFrame and cancelAnimationFrame
-vi.mock('global', () => ({
-    requestAnimationFrame: (callback: FrameRequestCallback): number => {
-        return setTimeout(callback, 0);
-    },
-    cancelAnimationFrame: (handle: number): void => {
-        clearTimeout(handle);
-    }
-}));
+vi.stubGlobal('requestAnimationFrame', (callback: FrameRequestCallback): number => {
+    return setTimeout(callback, 16); // Approximate 60 FPS
+});
+
+vi.stubGlobal('cancelAnimationFrame', (handle: number): void => {
+    clearTimeout(handle);
+});
+
+// Mock setInterval and clearInterval
+vi.useFakeTimers();
 
 describe('Histogram', () => {
-
     let mockAnalyser: {
         getByteFrequencyData: vi.Mock;
     };
 
     beforeEach(() => {
-        vi.useFakeTimers({ toFake: ['requestAnimationFrame'] });
-
         // Mock the Web Audio API
         mockAnalyser = {
             getByteFrequencyData: vi.fn(),
@@ -31,7 +30,7 @@ describe('Histogram', () => {
     });
 
     afterEach(() => {
-        vi.useRealTimers();
+        vi.clearAllTimers();
         vi.restoreAllMocks();
     });
 
@@ -126,7 +125,105 @@ describe('Histogram', () => {
         expect(mockAnalyser.getByteFrequencyData).toHaveBeenCalled();
     });
 
-    it('does not update bar heights when not running', async () => {
+    it('does not update bar heights when not running', () => {
+        const bars = 5;
+        mockAnalyser.getByteFrequencyData.mockImplementation(() => {
+            // This should not be called when running is false
+        });
+
+        const { container } = render(<Histogram running={false} bars={bars} />);
+
+        const getHeights = () =>
+            Array.from(container.querySelectorAll('.aha__histogram > div')).map(
+                (bar) => bar.style.height
+            );
+
+        const initialHeights = getHeights();
+
+        // Advance timers to simulate time passing
+        act(() => {
+            vi.advanceTimersByTime(1000); // Advance time by 1 second
+        });
+
+        const updatedHeights = getHeights();
+
+        expect(initialHeights).to.deep.equal(updatedHeights);
+        expect(mockAnalyser.getByteFrequencyData).not.toHaveBeenCalled();
+    });
+
+    it('updates bar heights based on random data when random is true and running is true', async () => {
+        const bars = 5;
+
+        // Ensure the analyser does not provide data
+        mockAnalyser.getByteFrequencyData.mockImplementation(() => { });
+
+        const { container, rerender } = render(
+            <Histogram running={true} bars={bars} random={true} />
+        );
+
+        const getHeights = () =>
+            Array.from(container.querySelectorAll('.aha__histogram > div')).map(
+                (bar) => bar.style.height
+            );
+
+        const initialHeights = getHeights();
+
+        // Advance timers and trigger animation frame
+        await act(async () => {
+            vi.advanceTimersByTime(100);
+        });
+
+        rerender(<Histogram running={true} bars={bars} random={true} />);
+
+        const updatedHeights = getHeights();
+
+        expect(initialHeights).not.to.deep.equal(updatedHeights);
+        expect(mockAnalyser.getByteFrequencyData).not.toHaveBeenCalled();
+    });
+
+    it('does not call getByteFrequencyData when random is true', async () => {
+        const bars = 5;
+
+        const { rerender } = render(
+            <Histogram running={true} bars={bars} random={true} />
+        );
+
+        // Advance timers and trigger animation frame
+        await act(async () => {
+            vi.advanceTimersByTime(100);
+        });
+
+        rerender(<Histogram running={true} bars={bars} random={true} />);
+
+        expect(mockAnalyser.getByteFrequencyData).not.toHaveBeenCalled();
+    });
+
+    it('updates bar heights based on random data at the specified interval', async () => {
+        const bars = 5;
+        const interval = 200;
+
+        const { container } = render(
+            <Histogram running={true} bars={bars} random={true} interval={interval} />
+        );
+
+        const getHeights = () =>
+            Array.from(container.querySelectorAll('.aha__histogram > div')).map(
+                (bar) => bar.style.height
+            );
+
+        const initialHeights = getHeights();
+
+        // Advance timers by the interval to trigger the update
+        await act(async () => {
+            vi.advanceTimersByTime(interval);
+        });
+
+        const updatedHeights = getHeights();
+
+        expect(initialHeights).not.to.deep.equal(updatedHeights);
+    });
+
+    it('updates bar heights based on frequency data using requestAnimationFrame', async () => {
         const bars = 5;
         mockAnalyser.getByteFrequencyData.mockImplementation((array) => {
             for (let i = 0; i < array.length; i++) {
@@ -134,24 +231,23 @@ describe('Histogram', () => {
             }
         });
 
-        const { container, rerender } = render(<Histogram running={false} bars={bars} />);
+        const { container } = render(<Histogram running={true} bars={bars} />);
 
-        const getHeights = () => Array.from(container.querySelectorAll('.aha__histogram > div')).map(
-            (bar) => bar.style.height
-        );
+        const getHeights = () =>
+            Array.from(container.querySelectorAll('.aha__histogram > div')).map(
+                (bar) => bar.style.height
+            );
 
         const initialHeights = getHeights();
 
-        // Advance timers and trigger animation frame
-        await waitFor(async () => {
-            vi.advanceTimersToNextFrame();
+        // Advance timers to simulate requestAnimationFrame calls
+        await act(async () => {
+            vi.advanceTimersByTime(16); // Approximate time for one frame at 60 FPS
         });
-
-        rerender(<Histogram running={false} bars={bars} />);
 
         const updatedHeights = getHeights();
 
-        expect(initialHeights).to.deep.equal(updatedHeights);
-        expect(mockAnalyser.getByteFrequencyData).not.toHaveBeenCalled();
+        expect(initialHeights).not.to.deep.equal(updatedHeights);
+        expect(mockAnalyser.getByteFrequencyData).toHaveBeenCalled();
     });
 });
