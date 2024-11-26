@@ -6,7 +6,7 @@ Using the admin interface you can export all relevant result data from the sessi
 
 To do so, navigate to [localhost:8000/admin/experiment/block](http://localhost:8000/admin/experiment/block) and click the `Export JSON` button next to the block that you want to export.
 
-After downloading and extracting the zip file you will have 6 JSON files containing the raw data as it is stored in the database by Django :
+After downloading and extracting the zip file you will have 7 JSON files containing the raw data as it is stored in the database by Django :
 
 - [`sessions.json`](#sessionsjson) - All sessions that were logged by running this block.
 - [`participants.json`](#participantsjson) - All participants that started a `Session` with this block.
@@ -14,6 +14,7 @@ After downloading and extracting the zip file you will have 6 JSON files contain
 - [`results.json`](#resultsjson) - All results from the trials of this block.
 - [`sections.json`](#sectionsjson) - All sections (sounds, images, stimuli, etc.) used in this block.
 - [`songs.json`](#songsjson) - All `Song` objects that belong to the sections that were used in this block.
+- [`feedback.json`](#feedbackjson) - All `Feedback` objects that belong to this block.
 
 ### Format of the exported data
 
@@ -317,6 +318,28 @@ A list of `Song` objects that belong to the sections of the trials used for this
 - `fields`:
     - `artist`: The artist's name of this `Song`.
     - `name`: The name of this `Song`.
+
+***
+#### feedback.json
+
+A list of `Feedback` objects that belong to this `Block`.
+###### Example of an object of the `Feedback` model:
+```
+{
+        "model": "experiment.feedback",
+        "pk": 1,
+        "fields": {
+            "text": "Lorem.",
+            "block": 3
+        }
+    }
+```
+
+- `model`: Name of the django app followed by the name of the model (or database table).
+- `pk`: Primary Key of this `Feedback` object.
+- `fields`:
+    - `text`: The feedback on this block given by an anonymous participant.
+    - `block`: Foreign key `fk` relates to the `Block` object.
 
 ## Export selected result data in CSV format
 

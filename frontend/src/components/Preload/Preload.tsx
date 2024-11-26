@@ -47,10 +47,8 @@ const Preload = ({ sections, playMethod, duration, preloadMessage, pageTitle, on
                 sections.forEach((section, index) => {
 
                     // skip Preload if the section has already been loaded in the previous action
-                    if (webAudio.checkSectionLoaded(section)) {
-                        if (index === (sections.length - 1)) {
-                            setAudioAvailable(true);
-                        }
+                    if (webAudio.checkSectionLoaded(section) && sections.length === 1) {
+                        setAudioAvailable(true);
                         return;
                     }
 
