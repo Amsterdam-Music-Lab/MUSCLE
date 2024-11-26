@@ -1,0 +1,15 @@
+.tabs-container {
+    height: 15px;
+}
+
+.translated-content-tab, .djn-group[id^='translated_content'] .djn-add-item {
+    border: .5px;
+    border-bottom: 0px;
+    border-top-right-radius: 5px;
+    border-top-left-radius: 5px;
+    margin-right: 5px;
+    margin-top: 5px;
+    width: 60px;
+    padding: 2px;
+    float: left;
+}

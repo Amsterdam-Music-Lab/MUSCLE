@@ -484,7 +484,25 @@ class Block(models.Model):
         return self.get_translated_content(language, fallback)
 
 
-class ExperimentTranslatedContent(models.Model):
+class TranslatedContent(models.Model):
+    index = models.IntegerField(default=0)
+    language = models.CharField(
+        default="", blank=True, choices=language_choices, max_length=2
+    )
+
+    @property
+    def langcode(self):
+        selected = next(
+            (code for code, lang in ISO_LANGUAGES.items() if lang == self.language),
+            'unset',
+        )
+        return selected
+
+    class Meta:
+        abstract = True
+
+
+class ExperimentTranslatedContent(TranslatedContent):
     """Translated content for an Experiment
 
     Attributes:
@@ -497,9 +515,9 @@ class ExperimentTranslatedContent(models.Model):
         social_media_message (str): Message to post with on social media. Can contain {points} and {experiment_name} placeholders
     """
 
-    experiment = models.ForeignKey(Experiment, on_delete=models.CASCADE, related_name="translated_content")
-    index = models.IntegerField(default=0)
-    language = models.CharField(default="", blank=True, choices=language_choices, max_length=2)
+    experiment = models.ForeignKey(
+        Experiment, on_delete=models.CASCADE, related_name="translated_content"
+    )
     name = models.CharField(max_length=64, default="")
     description = models.TextField(blank=True, default="")
     consent = models.FileField(
@@ -513,7 +531,7 @@ class ExperimentTranslatedContent(models.Model):
     )
 
 
-class BlockTranslatedContent(models.Model):
+class BlockTranslatedContent(TranslatedContent):
     """Translated content for a Block
 
     Attributes:
@@ -524,8 +542,9 @@ class BlockTranslatedContent(models.Model):
 
     """
 
-    block = models.ForeignKey(Block, on_delete=models.CASCADE, related_name="translated_contents")
-    language = models.CharField(default="", blank=True, choices=language_choices, max_length=2)
+    block = models.ForeignKey(
+        Block, on_delete=models.CASCADE, related_name="translated_contents"
+    )
     name = models.CharField(max_length=64, default="")
     description = models.TextField(blank=True, default="")
 

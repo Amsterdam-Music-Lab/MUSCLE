@@ -200,22 +200,26 @@ class ExperimentForm(ModelForm):
         css = {"all": ["experiment_form.css"]}
 
 
-class ExperimentTranslatedContentForm(ModelForm):
+class TranslatedContentMixin(Form):
+
+    class Media:
+        js = ["translated_content.js"]
+        css = {"all": ["translated_content.css"]}
+
+
+class ExperimentTranslatedContentForm(ModelForm, TranslatedContentMixin):
     def __init__(self, *args, **kwargs):
+        instance = kwargs.get('instance')
+        if instance:
+            kwargs["initial"] = {"langcode": instance.langcode}
         super(ModelForm, self).__init__(*args, **kwargs)
         self.fields["about_content"].widget = MarkdownPreviewTextInput()
+        self.fields["description"].widget.attrs["style"] = "height:40px"
+        self.fields["social_media_message"].widget.attrs["style"] = "height:15px"
 
     class Meta:
         model = ExperimentTranslatedContent
-        fields = [
-            "index",
-            "language",
-            "name",
-            "description",
-            "consent",
-            "about_content",
-            "social_media_message",
-        ]
+        fields = "__all__"
 
 
 class BlockForm(ModelForm):
@@ -260,15 +264,10 @@ class BlockForm(ModelForm):
 
     class Meta:
         model = Block
-        fields = [
-            "index",
-            "slug",
-            "rules",
-            "rounds",
-            "bonus_points",
-            "playlists",
-            "theme_config",
-        ]
+        fields = "__all__"
+        widgets = {
+            "playlists": Select2MultipleWidget,  # Use Select2 for the playlists field
+        }
         help_texts = {
             "image": "An image that will be displayed on the experiment page and as a meta image in search engines.",
             "slug": "The slug is used to identify the block in the URL so you can access it on the web as follows: app.amsterdammusiclab.nl/{slug} <br>\
