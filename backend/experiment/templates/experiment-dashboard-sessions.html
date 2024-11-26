@@ -1,5 +1,6 @@
 <!-- session table -->
 <dialog id="all-sessions" class="pop-up pop-up-big">
+    <h1>Sessions in experiment: {{ experiment.name }}</h1>
     <input type="button" value="close" onClick="closeSessions()" autofocus />
     <table>
         <caption class="dashboard-caption">Sessions</caption>
@@ -19,7 +20,7 @@
         <tbody>
             <!-- List and hide all sessions in this experiment with a unique id per block -->
             {% for session in sessions %}
-                <tr class="session-row hide experiment-{{ session.block.id }} participant-session-{{ session.participant.id }}">
+                <tr class="session-row hide block-{{ session.block.id }} participant-session-{{ session.participant.id }}">
 
                     <td>
                         <p>

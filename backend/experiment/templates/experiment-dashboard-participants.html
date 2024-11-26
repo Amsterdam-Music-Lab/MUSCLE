@@ -1,8 +1,9 @@
 <!-- Participant table -->
 <dialog id="all-participants" class="pop-up pop-up-big">
-    <h1>All Participants in experiment: {{ experiment.name }}</h1>
+    <h1>All participants in experiment: {{ experiment.name }}</h1>
     <input type="button" value="close" onClick="closeParticipants()" autofocus />
     <table>
+        <caption class="dashboard-caption">Participants</caption>
         <thead>
             <tr>
                 <th>Participant URL id *</th>

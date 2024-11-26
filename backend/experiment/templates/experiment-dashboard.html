@@ -1,5 +1,6 @@
 {% extends "admin/base_site.html" %} {% block content %}{% load static %}
 <script src="{% static 'experiment_dashboard_sessions.js' %}"></script>
+<script src="{% static 'experiment_dashboard_feedback.js' %}"></script>
 <style>
     input {
         margin-right: 1rem;
@@ -14,6 +15,10 @@
     }
     #all-sessions tr {
         background-color: var(--body-bg)
+    }
+    #all-feedback p {
+        font-weight: 400;
+        background-color: var(--darkened-bg)
     }
     td, th {
         vertical-align: middle;
@@ -61,13 +66,11 @@
     }
     .pop-up-big {
         top: 4.2rem;
-        left: 10vw;
         width: calc(80vw - 34px);
         height: 80vh;
     }
     .pop-up-small {
         top: 6.2rem;
-        left: 12vw;
         width: calc(76vw - 51px);
         height: 70vh;
         z-index: 1;
@@ -89,6 +92,28 @@
         background: var(--button-fg);
         color: var(--button-bg);
     }
+    .feedback-list {
+        margin-top: 4rem;
+    }
+    .feedback-row {
+        width: 66%;
+        margin: 1rem auto 0px auto;
+        padding: 1rem;
+        border-radius: 1rem;
+        background-color: var(--darkened-bg);
+    }
+    .feedback-list h2 {
+        font-size: 0.875rem;
+        color: var(--body-fg);
+        font-weight: 600;
+        text-align: center;
+    }
+    .feedback-row h3 {
+        color: var(--body-fg);
+        font-weight: 600;
+        text-align: left;
+        margin-bottom: 1rem;
+    }
 </style>
 
 <h1>Blocks in Experiment: {{ experiment.name }}</h1>
@@ -97,6 +122,7 @@
         <!-- Show all participants and sessions -->
         <input type="button" value="{{ collect_data.participant_count }} participants" id="show-participants" />
         <input type="button" value="{{ collect_data.session_count }} sessions" id="show-sessions" />
+        <input type="button" value="{{ collect_data.feedback_count }} feedback" id="show-feedback" />
     </form>
 </p>
 
@@ -111,6 +137,7 @@
             <th>Participant count</th>
             <th>Participants *</th>
             <th>Sessions</th>
+            <th>Feedback</th>
         </tr>
     </thead>
 
@@ -163,6 +190,14 @@
                 </script>
             </td>
 
+            <td class="table=feedback">
+                <input type="button" value="Feedback" id="show-feedback-{{ block.id }}" />
+                <script>
+                    // Show all session for this block in popup
+                    showBlockFeedback({{ block.id }})
+                </script>
+            </td>
+
         </tr>
         {% endfor %}
     </tbody>
@@ -172,6 +207,8 @@
 {% include "experiment-dashboard-sessions.html" %}
 
 {% include "experiment-dashboard-participants.html" %}
+
+{% include "experiment-dashboard-feedback.html" %}
 
 <script src="{% static 'experiment_dashboard.js' %}"></script>
 {% endblock %}

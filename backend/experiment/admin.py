@@ -44,14 +44,6 @@ from participant.models import Participant
 from question.models import QuestionSeries, QuestionInSeries
 
 
-class FeedbackInline(admin.TabularInline):
-    """Inline to show results linked to given participant"""
-
-    model = Feedback
-    fields = ["text"]
-    extra = 0
-
-
 class BlockTranslatedContentInline(NestedTabularInline):
     model = BlockTranslatedContent
 
@@ -92,7 +84,7 @@ class BlockAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
         "bonus_points",
         "playlists",
     ]
-    inlines = [QuestionSeriesInline, FeedbackInline, BlockTranslatedContentInline]
+    inlines = [QuestionSeriesInline, BlockTranslatedContentInline]
     form = BlockForm
 
     # make playlists fields a list of checkboxes
@@ -432,9 +424,11 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, NestedModelAdmin):
         all_blocks = obj.associated_blocks()
         all_participants = obj.current_participants()
         all_sessions = obj.export_sessions()
+        all_feedback = obj.export_feedback()
         collect_data = {
             "participant_count": len(all_participants),
             "session_count": len(all_sessions),
+            "feedback_count": len(all_feedback),
         }
 
         blocks = [
@@ -462,6 +456,7 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, NestedModelAdmin):
                 "blocks": blocks,
                 "sessions": all_sessions,
                 "participants": all_participants,
+                'feedback': all_feedback,
                 "collect_data": collect_data,
             },
         )

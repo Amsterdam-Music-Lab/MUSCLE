@@ -1,0 +1,19 @@
+<!-- session table -->
+<dialog id="all-feedback" class="pop-up pop-up-big">
+    <h1>Feedback in experiment: {{ experiment.name }}</h1>
+    <input type="button" value="close" onClick="closeFeedback()" autofocus />
+
+    <!-- List and hide all sessions in this experiment with a unique id per block -->
+    <div class="feedback-list">
+        <h2>Feedback</h2>
+        {% for item in feedback %}
+
+            <div class="feedback-row hide block-{{ item.block.id }}">
+                <h3>Feedback for block: {{ item.block.name }}</h3>
+                <p>{{ item.text }}</p>
+            </div>
+
+        {% endfor %}
+        </div>
+    <input type="button" value="close" onClick="closeFeedback()" />
+</dialog>
