@@ -102,7 +102,7 @@ interface ActionSlice {
     setCurrentAction: (action: Action) => void;
 }
 
-const createActionSlice: StateCreator<ActionSlice> = (set, get) => ({
+const createActionSlice: StateCreator<ActionSlice> = (set) => ({
     setCurrentAction: (action: Action) => set(() => ({ currentAction: action })),
     currentAction: null,
 });
