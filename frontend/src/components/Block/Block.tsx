@@ -69,7 +69,7 @@ const Block = () => {
         setActions(newActions);
         const newState = newActions.shift();
         const currentAction = newState ? newState : null;
-        setCurrentAction(currentAction);
+        setCurrentAction({ ...currentAction });
         updateState(newState);
     }, [updateState]);
 
@@ -84,6 +84,7 @@ const Block = () => {
             setError(
                 "An error occured while loading the data, please try to reload the page. (Error: next_round data unavailable)"
             );
+            setCurrentAction(null);
             setState(null);
         }
     };
