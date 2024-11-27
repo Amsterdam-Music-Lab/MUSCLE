@@ -10,39 +10,10 @@ import useBoundStore from "../../util/stores";
 import ParticipantLink from "../ParticipantLink/ParticipantLink";
 import UserFeedback from "../UserFeedback/UserFeedback";
 import FinalButton from "./FinalButton";
-import ISocial from "@/types/Social";
-import Block, { FeedbackInfo } from "@/types/Block";
-import Participant from "@/types/Participant";
+import { Final } from "@/types/Action";
 
-export interface FinalProps {
-    block: Block;
-    participant: Participant;
-    score: number;
-    final_text: string | TrustedHTML;
-    action_texts: {
-        all_experiments: string;
-        profile: string;
-        play_again: string;
-    }
-    button: {
-        text: string;
-        link: string;
-    };
+export interface FinalProps extends Final {
     onNext: () => void;
-    show_participant_link: boolean;
-    participant_id_only: boolean;
-    show_profile_link: boolean;
-    social: ISocial;
-    feedback_info?: FeedbackInfo;
-    points: string;
-    rank: {
-        class: string;
-        text: string;
-    }
-    logo: {
-        image: string;
-        link: string;
-    };
 }
 
 /**

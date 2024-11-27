@@ -1,12 +1,9 @@
 import { useEffect, useState } from "react";
 
 import Button from "../Button/Button";
+import { Info } from "@/types/Action";
 
-export interface InfoProps {
-    heading?: string;
-    body: string | TrustedHTML;
-    button_label?: string;
-    button_link?: string;
+export interface InfoProps extends Info {
     onNext?: () => void;
 }
 

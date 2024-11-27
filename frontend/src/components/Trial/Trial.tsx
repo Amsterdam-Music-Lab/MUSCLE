@@ -6,23 +6,11 @@ import FeedbackForm from "../FeedbackForm/FeedbackForm";
 import HTML from "../HTML/HTML";
 import Playback from "../Playback/Playback";
 import Button from "../Button/Button";
-import Question from "@/types/Question";
 import { OnResultType } from "@/hooks/useResultHandler";
 import { TrialConfig } from "@/types/Trial";
-import { PlaybackArgs } from "@/types/Playback";
+import { Trial } from "@/types/Action";
 
-export interface IFeedbackForm {
-    form: Question[];
-    submit_label: string;
-    skip_label: string;
-    is_skippable: boolean;
-}
-
-export interface TrialProps {
-    playback: PlaybackArgs;
-    html: { body: string | TrustedHTML };
-    feedback_form: IFeedbackForm;
-    config: TrialConfig;
+export interface TrialProps extends Trial {
     onNext: (breakRound?: boolean) => void;
     onResult: OnResultType;
 }

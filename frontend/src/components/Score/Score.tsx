@@ -2,20 +2,9 @@ import { useState, useEffect, useRef } from "react";
 import classNames from "classnames";
 import Circle from "../Circle/Circle";
 import Button from "../Button/Button";
+import { Score } from "@/types/Action";
 
-export interface ScoreProps {
-    last_song?: string;
-    score: number;
-    score_message: string;
-    total_score?: number;
-    texts: {
-        score: string;
-        next: string;
-        listen_explainer: string;
-    };
-    icon?: string;
-    feedback?: string;
-    timer?: number;
+export interface ScoreProps extends Score {
     onNext: () => void;
 }
 
