@@ -8,9 +8,9 @@ import Playback from "../Playback/Playback";
 import Button from "../Button/Button";
 import { OnResultType } from "@/hooks/useResultHandler";
 import { TrialConfig } from "@/types/Trial";
-import { Trial } from "@/types/Action";
+import { Trial as TrialAction } from "@/types/Action";
 
-export interface TrialProps extends Trial {
+export interface TrialProps extends TrialAction {
     onNext: (breakRound?: boolean) => void;
     onResult: OnResultType;
 }

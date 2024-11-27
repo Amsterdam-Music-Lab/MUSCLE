@@ -2,9 +2,9 @@ import { useState, useEffect, useRef } from "react";
 import classNames from "classnames";
 import Circle from "../Circle/Circle";
 import Button from "../Button/Button";
-import { Score } from "@/types/Action";
+import { Score as ScoreAction } from "@/types/Action";
 
-export interface ScoreProps extends Score {
+export interface ScoreProps extends ScoreAction {
     onNext: () => void;
 }
 

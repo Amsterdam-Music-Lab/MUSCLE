@@ -10,9 +10,9 @@ import useBoundStore from "../../util/stores";
 import ParticipantLink from "../ParticipantLink/ParticipantLink";
 import UserFeedback from "../UserFeedback/UserFeedback";
 import FinalButton from "./FinalButton";
-import { Final } from "@/types/Action";
+import { Final as FinalAction } from "@/types/Action";
 
-export interface FinalProps extends Final {
+export interface FinalProps extends FinalAction {
     onNext: () => void;
 }
 

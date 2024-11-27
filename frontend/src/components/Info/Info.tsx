@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 
 import Button from "../Button/Button";
-import { Info } from "@/types/Action";
+import { Info as InfoAction } from "@/types/Action";
 
-export interface InfoProps extends Info {
+export interface InfoProps extends InfoAction {
     onNext?: () => void;
 }
 

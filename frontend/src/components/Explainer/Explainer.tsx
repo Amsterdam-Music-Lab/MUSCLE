@@ -1,8 +1,8 @@
 import { useEffect } from "react";
 import Button from "../Button/Button";
-import { Explainer } from "@/types/Action";
+import { Explainer as ExplainerAction } from "@/types/Action";
 
-export interface ExplainerProps extends Explainer {
+export interface ExplainerProps extends ExplainerAction {
     onNext: () => void;
 }
 
