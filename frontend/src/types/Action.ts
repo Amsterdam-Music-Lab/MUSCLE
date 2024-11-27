@@ -1,7 +1,3 @@
-import { LoadingProps } from "@/components/Loading/Loading";
-import { PlaylistProps } from "@/components/Playlist/Playlist";
-import { RedirectProps } from "@/components/Redirect/Redirect";
-import { ScoreProps } from "@/components/Score/Score";
 import Social from "@/types/Social";
 import Block, { FeedbackInfo } from "@/types/Block";
 import Participant from "@/types/Participant";

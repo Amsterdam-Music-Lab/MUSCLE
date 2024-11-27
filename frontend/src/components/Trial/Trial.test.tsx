@@ -43,7 +43,6 @@ const defaultConfig = {
 describe('Trial', () => {
     const mockOnNext = vi.fn();
     const mockOnResult = vi.fn();
-    const mockMakeResult = vi.fn();
 
     beforeEach(() => {
         vi.clearAllMocks();

@@ -5,7 +5,7 @@ import IParticipant from "@/types/Participant";
 import ISession from "@/types/Session";
 import ITheme from "@/types/Theme";
 import IBlock from "@/types/Block";
-import { Action, Round } from '@/types/Round';
+import { Action } from '@/types/Action';
 
 interface BlockSlice {
     block?: IBlock;

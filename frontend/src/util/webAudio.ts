@@ -4,7 +4,6 @@ let track: MediaElementAudioSourceNode;
 let source: AudioBufferSourceNode;
 let buffers: { [key: string]: AudioBuffer } = {};
 let audioContext: AudioContext;
-let previousSource: string;
 let analyzer: AnalyserNode;
 
 export let audioInitialized = false;
@@ -97,7 +96,6 @@ export const loadBuffer = async (id: number, src: string, canPlay: () => void) =
         // store buffer in buffers object
         .then(decodedData => {
             buffers[id] = decodedData;
-            previousSource = src;
             canPlay();
         });
 };

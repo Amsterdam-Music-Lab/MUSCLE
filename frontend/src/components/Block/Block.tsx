@@ -71,7 +71,7 @@ const Block = () => {
         const currentAction = newState ? newState : null;
         setCurrentAction({ ...currentAction });
         updateState(newState);
-    }, [updateState]);
+    }, [updateState, setCurrentAction]);
 
     const continueToNextRound = async (activeSession: Session) => {
         // Try to get next_round data from server
