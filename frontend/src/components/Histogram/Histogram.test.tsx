@@ -18,7 +18,7 @@ vi.mock('../../util/stores', () => ({
     __esModule: true,
     default: (fn: any) => {
         const state = {
-            currentAction: vi.fn().mockReturnValue({ playback: { play_method: 'BUFFER' } }),
+            currentAction: { playback: { play_method: 'BUFFER' } },
         };
 
         return fn(state);
