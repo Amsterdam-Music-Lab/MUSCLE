@@ -1,103 +1,103 @@
 {
-  "name": "aml-frontend",
-  "description": "The React Frontend for the MUSCLE platform",
-  "type": "module",
-  "license": "MIT",
-  "dependencies": {
-    "@sentry/react": "^8.40.0",
-    "@vitejs/plugin-react": "^4.2.1",
-    "axios": ">=1.7.4",
-    "classnames": "^2.2.6",
-    "email-validator": "^2.0.4",
-    "file-saver": "^2.0.5",
-    "qs": "^6.10.3",
-    "react": "18.3.1",
-    "react-dom": "18.3.1",
-    "react-helmet": "^6.1.0",
-    "react-rangeslider": "^2.2.0",
-    "react-router": "^6.25.1",
-    "react-router-dom": "^6.25.1",
-    "react-select": "^5.4.0",
-    "react-share": "^5.1.1",
-    "react-transition-group": "^4.4.5",
-    "sass": "^1.69.5",
-    "typescript": "^5.3.3",
-    "vite": "^5.2.14",
-    "vite-tsconfig-paths": "^4.3.2",
-    "zustand": "^4.4.7"
-  },
-  "scripts": {
-    "start": "vite --host",
-    "build": "vite build",
-    "preview": "vite preview",
-    "test": "vitest",
-    "test:ci": "vitest --watch=false --coverage",
-    "generate-badge": "coverage-badges -s coverage/coverage-summary.json -o coverage-frontend-badge-new.svg --label 'Frontend Code Coverage'",
-    "storybook": "storybook dev -p 6006 --no-open",
-    "storybook:build": "storybook build",
-    "lint": "eslint src/**/*.{js,jsx,ts,tsx}",
-    "lint:fix": "eslint --fix src/**/*.js",
-    "build-storybook": "storybook build"
-  },
-  "eslintConfig": {
-    "plugins": [
-      "chai-friendly"
-    ],
-    "extends": [
-      "react-app",
-      "plugin:storybook/recommended"
-    ],
-    "rules": {
-      "no-unused-expressions": 0,
-      "chai-friendly/no-unused-expressions": [
-        "error",
-        {
-          "allowShortCircuit": true
+    "name": "aml-frontend",
+    "description": "The React Frontend for the MUSCLE platform",
+    "type": "module",
+    "license": "MIT",
+    "dependencies": {
+        "@sentry/react": "^8.40.0",
+        "@vitejs/plugin-react": "^4.2.1",
+        "axios": ">=1.7.4",
+        "classnames": "^2.2.6",
+        "email-validator": "^2.0.4",
+        "file-saver": "^2.0.5",
+        "qs": "^6.10.3",
+        "react": "18.3.1",
+        "react-dom": "18.3.1",
+        "react-helmet": "^6.1.0",
+        "react-rangeslider": "^2.2.0",
+        "react-router": "^6.25.1",
+        "react-router-dom": "^6.25.1",
+        "react-select": "^5.4.0",
+        "react-share": "^5.1.1",
+        "react-transition-group": "^4.4.5",
+        "sass": "^1.69.5",
+        "typescript": "^5.3.3",
+        "vite": "^5.2.14",
+        "vite-tsconfig-paths": "^4.3.2",
+        "zustand": "^4.4.7"
+    },
+    "scripts": {
+        "start": "vite --host",
+        "build": "vite build",
+        "preview": "vite preview",
+        "test": "vitest",
+        "test:ci": "vitest --watch=false --coverage",
+        "generate-badge": "coverage-badges -s coverage/coverage-summary.json -o coverage-frontend-badge-new.svg --label 'Frontend Code Coverage'",
+        "storybook": "storybook dev -p 6006 --no-open",
+        "storybook:build": "storybook build",
+        "lint": "eslint src/**/*.{js,jsx,ts,tsx}",
+        "lint:fix": "eslint --fix src/**/*.{js,jsx,ts,tsx}",
+        "build-storybook": "storybook build"
+    },
+    "eslintConfig": {
+        "plugins": [
+            "chai-friendly"
+        ],
+        "extends": [
+            "react-app",
+            "plugin:storybook/recommended"
+        ],
+        "rules": {
+            "no-unused-expressions": 0,
+            "chai-friendly/no-unused-expressions": [
+                "error",
+                {
+                    "allowShortCircuit": true
+                }
+            ]
         }
-      ]
+    },
+    "browserslist": {
+        "production": [
+            ">0.2%",
+            "not dead",
+            "not op_mini all"
+        ],
+        "development": [
+            "last 1 chrome version",
+            "last 1 firefox version",
+            "last 1 safari version"
+        ]
+    },
+    "devDependencies": {
+        "@chromatic-com/storybook": "^3.2.2",
+        "@storybook/addon-essentials": "^8.4.6",
+        "@storybook/addon-interactions": "^8.4.6",
+        "@storybook/addon-links": "^8.4.6",
+        "@storybook/addon-onboarding": "^8.4.6",
+        "@storybook/blocks": "^8.4.6",
+        "@storybook/react": "^8.4.6",
+        "@storybook/react-vite": "^8.4.6",
+        "@storybook/test": "^8.4.6",
+        "@testing-library/dom": "^10.2.0",
+        "@testing-library/react": "^16.0.0",
+        "@testing-library/user-event": "^14.5.1",
+        "@types/react": "^18.3.3",
+        "@types/react-dom": "^18.3.0",
+        "@types/react-helmet": "^6",
+        "@types/react-router-dom": "^5.3.3",
+        "@vitest/coverage-istanbul": "^2.1.4",
+        "@vitest/coverage-v8": "^2.1.4",
+        "axios-mock-adapter": "^1.22.0",
+        "coverage-badges-cli": "^1.2.5",
+        "eslint": "^8.54.0",
+        "eslint-config-react-app": "^7.0.1",
+        "eslint-plugin-chai-friendly": "^0.7.2",
+        "eslint-plugin-storybook": "^0.11.1",
+        "happy-dom": "^15.10.2",
+        "history": "^5.3.0",
+        "prop-types": "15.8.1",
+        "storybook": "^8.4.6",
+        "vitest": "^2.1.4"
     }
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
-  },
-  "devDependencies": {
-    "@chromatic-com/storybook": "^3.2.2",
-    "@storybook/addon-essentials": "^8.4.6",
-    "@storybook/addon-interactions": "^8.4.6",
-    "@storybook/addon-links": "^8.4.6",
-    "@storybook/addon-onboarding": "^8.4.6",
-    "@storybook/blocks": "^8.4.6",
-    "@storybook/react": "^8.4.6",
-    "@storybook/react-vite": "^8.4.6",
-    "@storybook/test": "^8.4.6",
-    "@testing-library/dom": "^10.2.0",
-    "@testing-library/react": "^16.0.0",
-    "@testing-library/user-event": "^14.5.1",
-    "@types/react": "^18.3.3",
-    "@types/react-dom": "^18.3.0",
-    "@types/react-helmet": "^6",
-    "@types/react-router-dom": "^5.3.3",
-    "@vitest/coverage-istanbul": "^2.1.4",
-    "@vitest/coverage-v8": "^2.1.4",
-    "axios-mock-adapter": "^1.22.0",
-    "coverage-badges-cli": "^1.2.5",
-    "eslint": "^8.54.0",
-    "eslint-config-react-app": "^7.0.1",
-    "eslint-plugin-chai-friendly": "^0.7.2",
-    "eslint-plugin-storybook": "^0.11.1",
-    "happy-dom": "^15.10.2",
-    "history": "^5.3.0",
-    "prop-types": "15.8.1",
-    "storybook": "^8.4.6",
-    "vitest": "^2.1.4"
-  }
 }
