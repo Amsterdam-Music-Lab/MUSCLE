@@ -51,7 +51,6 @@ vi.mock('../../util/stores', () => ({
             setHeadData: vi.fn(),
             resetHeadData: vi.fn(),
             setBlock: vi.fn(),
-            setRound: vi.fn(),
             setCurrentAction: vi.fn(),
         };
 

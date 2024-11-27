@@ -32,7 +32,7 @@ const Histogram: React.FC<HistogramProps> = ({
 }) => {
     const [frequencyData, setFrequencyData] = useState<Uint8Array>(new Uint8Array(bars));
 
-    const currentAction = useBoundStore((state) => state.currentAction());
+    const currentAction = useBoundStore((state) => state.currentAction);
     const isBuffer = currentAction?.playback?.play_method === 'BUFFER';
 
     const shouldRandomize = random || !isBuffer;

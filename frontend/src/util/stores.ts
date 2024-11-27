@@ -97,26 +97,14 @@ const createParticipantSlice: StateCreator<ParticipantSlice> = (set) => ({
     setParticipantLoading: (participantLoading: boolean) => set(() => ({ participantLoading }))
 });
 
-interface RoundSlice {
-    round: Round;
-    setRound: (round: Round) => void;
-    currentActionIndex: number | null;
-    setCurrentAction: (index: number) => void;
-    currentAction: () => Action | null;
+interface ActionSlice {
+    currentAction: Action | null;
+    setCurrentAction: (action: Action) => void;
 }
 
-const createRoundSlice: StateCreator<RoundSlice> = (set, get) => ({
-    round: [],
-    setRound: (round: Round) => set(() => ({ round })),
-    currentActionIndex: null,
-    setCurrentAction: (index: number) => set(() => ({ currentActionIndex: index })),
-    currentAction: () => {
-        const index = get().currentActionIndex;
-        if (index === null) {
-            return null;
-        }
-        return get().round[index];
-    },
+const createActionSlice: StateCreator<ActionSlice> = (set, get) => ({
+    setCurrentAction: (action: Action) => set(() => ({ currentAction: action })),
+    currentAction: null,
 });
 
 interface SessionSlice {
@@ -141,12 +129,12 @@ const createThemeSlice: StateCreator<ThemeSlice> = (set) => ({
     resetTheme: () => set(() => ({ theme: null })),
 });
 
-export const useBoundStore = create<BlockSlice & DocumentHeadSlice & ErrorSlice & ParticipantSlice & RoundSlice & SessionSlice & ThemeSlice>((...args) => ({
+export const useBoundStore = create<BlockSlice & DocumentHeadSlice & ErrorSlice & ParticipantSlice & ActionSlice & SessionSlice & ThemeSlice>((...args) => ({
     ...createBlockSlice(...args),
     ...createDocumentHeadSlice(...args),
     ...createErrorSlice(...args),
     ...createParticipantSlice(...args),
-    ...createRoundSlice(...args),
+    ...createActionSlice(...args),
     ...createSessionSlice(...args),
     ...createThemeSlice(...args),
 }));

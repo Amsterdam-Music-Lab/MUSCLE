@@ -18,9 +18,8 @@ export default {
 const createCommonDecorator = (play_method: "BUFFER" | "EXTERNAL") => (Story: StoryFn) => {
     const [initialized, setInitialized] = useState(false);
 
-    const setRound = useBoundStore((state) => state.setRound);
     const setCurrentAction = useBoundStore((state) => state.setCurrentAction);
-    setRound([{
+    setCurrentAction({
         view: "TRIAL_VIEW",
         playback: {
             view: AUTOPLAY,
@@ -32,8 +31,7 @@ const createCommonDecorator = (play_method: "BUFFER" | "EXTERNAL") => (Story: St
             play_from: 0.0,
             resume_play: false,
         }
-    }]);
-    setCurrentAction(0);
+    });
 
     if (!initialized) {
         return (
