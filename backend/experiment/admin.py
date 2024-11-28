@@ -435,6 +435,7 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, NestedModelAdmin):
             {
                 "id": block.id,
                 "slug": block.slug,
+                "name": block,
                 "started": len(all_sessions.filter(block=block)),
                 "finished": len(
                     all_sessions.filter(
