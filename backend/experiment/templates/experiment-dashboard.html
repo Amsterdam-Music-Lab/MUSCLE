@@ -50,12 +50,11 @@
     }
     .pop-up {
         background-color: var(--body-bg);
-        box-shadow: 0px 0px 10px var(--primary);
+        box-shadow: 0px 0px 10px var(--body-quiet-color);
         position: fixed;
-
         padding: 2rem;
         border-style: solid;
-        border-color: var(--primary);
+        border-color: var(--body-quiet-color);
         border-width: 1px;
         border-radius: 1px;
         overflow-y: scroll;
@@ -116,7 +115,9 @@
     }
 </style>
 
-<h1>Blocks in Experiment: {{ experiment.name }}</h1>
+<h1>
+    Blocks in Experiment: <a href="{% url 'admin:experiment_experiment_change' experiment.id %}" target="_blank">{{ experiment }}</a>
+</h1>
 <p>
     <form action="" method="post">
         <!-- Show all participants and sessions -->
@@ -147,7 +148,9 @@
         <tr>
             <td>
                 <p>
-                    {{ block.slug }}
+                    <a href="{% url 'admin:experiment_block_change' block.id %}" target="_blank" title="Block URL id">
+                            {{ block.name }}
+                    </a>
                 </p>
             </td>
 
