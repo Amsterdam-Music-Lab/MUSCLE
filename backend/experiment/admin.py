@@ -101,6 +101,7 @@ class BlockAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
         all_sections = Section.objects.none()
         all_participants = Participant.objects.none()
         all_profiles = Result.objects.none()
+        all_feedback = Feedback.objects.filter(block=obj)
 
         # Collect data
         all_sessions = obj.export_sessions().order_by("pk")
@@ -142,6 +143,11 @@ class BlockAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
                 "songs.json",
                 data=str(serializers.serialize("json", all_songs.order_by("pk"))),
             )
+            new_zip.writestr(
+                "feedback.json",
+                data=str(serializers.serialize("json", all_feedback.order_by("pk"))),
+            )
+
 
         # create forced download response
         response = HttpResponse(zip_buffer.getbuffer())
