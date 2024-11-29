@@ -158,7 +158,7 @@ class ToontjeHoger3Plink(Base):
                 feedback_prefix, question_part, section_part)
 
         config = {'show_total_score': True}
-        round_number = session.round_passed()
+        round_number = session.get_rounds_passed()
         score_title = "Ronde %(number)d / %(total)d" %\
             {'number': round_number, 'total': session.block.rounds}
         return Score(session, config=config, feedback=feedback, score=score, title=score_title)
