@@ -2,6 +2,8 @@ import random
 
 from django.utils.translation import gettext as _
 
+from result.models import Result
+from session.models import Session
 from .base_action import BaseAction
 
 
@@ -14,10 +16,23 @@ class Score(BaseAction):  # pylint: disable=too-few-public-methods
 
     ID = 'SCORE'
 
-    def __init__(self, session, title: str = None, score=None, score_message=None, config=None, icon=None, timer=None, feedback=None):
-        """ Score presents feedback to a participant after a Trial
+    def __init__(
+        self,
+        session: Session,
+        title: str = '',
+        result: Result = None,
+        score: float = None,
+        score_message: str = '',
+        config: dict = {},
+        icon: str = None,
+        timer: int = None,
+        feedback: str = None,
+    ):
+        """Score presents feedback to a participant after a Trial
         - session: a Session object
         - title: the title of the score page
+        - result: the result for which section or score should be reported
+        - score: the score to report, will override result.score
         - score_message: a function which constructs feedback text based on the score
         - config: a dict with the following settings:
             - show_section: whether metadata of the previous section should be shown
@@ -31,7 +46,9 @@ class Score(BaseAction):  # pylint: disable=too-few-public-methods
             get_rounds_passed=session.get_rounds_passed(),
             total_rounds=self.session.block.rounds
         )
-        self.score = score or session.last_score()
+        self.score = (
+            score if score else result.score if result else session.last_score()
+        )
         self.score_message = score_message or self.default_score_message
         self.feedback = feedback
         self.config = {
@@ -46,6 +63,7 @@ class Score(BaseAction):  # pylint: disable=too-few-public-methods
             'next': _('Next'),
             'listen_explainer': _('You listened to:')
         }
+        self.last_song = result.section.song_label() if result else session.last_song()
         self.timer = timer
 
     def action(self):
@@ -62,7 +80,7 @@ class Score(BaseAction):  # pylint: disable=too-few-public-methods
             'timer': self.timer
         }
         if self.config['show_section']:
-            action['last_song'] = self.session.last_song()
+            action['last_song'] = self.last_song
         if self.config['show_total_score']:
             action['total_score'] = self.session.total_score()
         return action

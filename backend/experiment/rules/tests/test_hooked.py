@@ -103,7 +103,11 @@ class HookedTest(TestCase):
                 self.assertEqual(session.result_set.filter(question_key="correct_place").count(), 1)
             elif i == 1:
                 self.assertEqual(len(actions), 4)
-                self.assertEqual(type(actions[0]), Score)
+                score_action = actions[0]
+                self.assertEqual(type(score_action), Score)
+                self.assertIsNotNone(score_action.last_song)
+                # the last_song method returns the most recent result, without filtering
+                self.assertNotEqual(score_action.last_song, session.last_song())
                 self.assertEqual(session.result_set.filter(question_key="recognize").count(), 2)
                 self.assertEqual(session.result_set.filter(question_key="correct_place").count(), 2)
             elif i == rules.question_offset:
