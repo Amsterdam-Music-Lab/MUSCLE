@@ -11,5 +11,14 @@
     margin-top: 5px;
     width: 60px;
     padding: 2px;
+    background-color: var(--default-button-bg);
     float: left;
 }
+
+.translated-content-tab.active {
+    background-color: var(--button-bg);
+}
+
+/* .djn-add-item.translated-content {
+    align-items: center;
+} */

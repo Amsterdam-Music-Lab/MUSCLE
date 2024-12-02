@@ -8,7 +8,7 @@ from django.db import models
 from django.utils import timezone
 from django.core import serializers
 from django.shortcuts import render, redirect
-from django.forms import CheckboxSelectMultiple
+from django.forms import BaseInlineFormSet, CheckboxSelectMultiple
 from django.http import HttpResponse
 
 from inline_actions.admin import InlineActionsModelAdminMixin
@@ -27,6 +27,7 @@ from experiment.models import (
     SocialMediaConfig,
     ExperimentTranslatedContent,
     BlockTranslatedContent,
+    TranslatedContent,
 )
 from question.admin import QuestionSeriesInline
 from experiment.forms import (
@@ -52,8 +53,18 @@ class FeedbackInline(admin.TabularInline):
     extra = 0
 
 
-class BlockTranslatedContentInline(NestedTabularInline):
+class BlockTranslatedContentInline(NestedStackedInline):
     model = BlockTranslatedContent
+
+    sortable_field_name = "index"
+    readonly_fields = ['langcode']
+    fields = [
+        "index",
+        "language",
+        "langcode",
+        "name",
+        "description",
+    ]
 
     def get_extra(self, request, obj=None, **kwargs):
         if obj:
@@ -61,10 +72,28 @@ class BlockTranslatedContentInline(NestedTabularInline):
         return 1
 
 
+class TranslatedContentInline(BaseInlineFormSet):
+    model = TranslatedContent
+    fields = ["index", "language", "langcode"]
+    sortable_field_name = "index"
+    readonly_fields = ['langcode']
+
+
 class ExperimentTranslatedContentInline(NestedStackedInline):
     model = ExperimentTranslatedContent
     sortable_field_name = "index"
     form = ExperimentTranslatedContentForm
+    readonly_fields = ['langcode']
+    fields = [
+        "index",
+        "language",
+        "langcode",
+        "name",
+        "description",
+        "consent",
+        "about_content",
+        "social_media_message",
+    ]
 
     def get_extra(self, request, obj=None, **kwargs):
         if obj:
@@ -289,7 +318,7 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, NestedModelAdmin):
         content = obj.get_fallback_content()
 
         return content.name if content else "No name"
-    
+
     def redirect_to_overview(self):
         return redirect(reverse("admin:experiment_experiment_changelist"))
 
@@ -374,7 +403,7 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, NestedModelAdmin):
                 # Duplicate blocks in this phase
                 for block in these_blocks:
                     # order_by is inserted here to prevent a query error
-                    block_contents = block.translated_contents.order_by('name').all()                    
+                    block_contents = block.translated_contents.order_by('name').all()
                     these_playlists = block.playlists.all()
                     question_series = QuestionSeries.objects.filter(block=block)
 
@@ -387,7 +416,7 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, NestedModelAdmin):
                     block_copy.playlists.set(these_playlists)
 
                     # Duplicate Block translated content objects
-                    for content in block_contents:          
+                    for content in block_contents:
                         block_content_copy = content
                         block_content_copy.pk = None
                         block_content_copy._state.adding = True
@@ -415,7 +444,7 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, NestedModelAdmin):
                         series_copy.questions.set(these_questions)
 
             return self.redirect_to_overview()
-        
+
         # Go back to experiment overview
         if "_back" in request.POST:
             return self.redirect_to_overview()

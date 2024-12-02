@@ -208,11 +208,9 @@ class TranslatedContentMixin(Form):
         css = {"all": ["translated_content.css"]}
 
 
-class ExperimentTranslatedContentForm(ModelForm, TranslatedContentMixin):
+class ExperimentTranslatedContentForm(ModelForm):
+
     def __init__(self, *args, **kwargs):
-        instance = kwargs.get('instance')
-        if instance:
-            kwargs["initial"] = {"langcode": instance.langcode}
         super(ModelForm, self).__init__(*args, **kwargs)
         self.fields["about_content"].widget = MarkdownPreviewTextInput()
         self.fields["description"].widget.attrs["style"] = "height:40px"

@@ -496,11 +496,7 @@ class TranslatedContent(models.Model):
 
     @property
     def langcode(self):
-        selected = next(
-            (code for code, lang in ISO_LANGUAGES.items() if lang == self.language),
-            'unset',
-        )
-        return selected
+        return self.language or 'unset'
 
     class Meta:
         abstract = True
