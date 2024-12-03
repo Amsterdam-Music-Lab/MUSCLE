@@ -1,5 +1,5 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { render, act, waitFor } from '@testing-library/react';
+import { describe, it, expect, vi, beforeEach, afterEach, Mock, } from 'vitest';
+import { render, act } from '@testing-library/react';
 import Histogram from './Histogram';
 
 // Mock requestAnimationFrame and cancelAnimationFrame
@@ -14,9 +14,21 @@ vi.stubGlobal('cancelAnimationFrame', (handle: number): void => {
 // Mock setInterval and clearInterval
 vi.useFakeTimers();
 
+vi.mock('../../util/stores', () => ({
+    __esModule: true,
+    default: (fn: any) => {
+        const state = {
+            currentAction: { playback: { play_method: 'BUFFER' } },
+        };
+
+        return fn(state);
+    },
+    useBoundStore: vi.fn()
+}));
+
 describe('Histogram', () => {
     let mockAnalyser: {
-        getByteFrequencyData: vi.Mock;
+        getByteFrequencyData: Mock
     };
 
     beforeEach(() => {
@@ -154,11 +166,8 @@ describe('Histogram', () => {
     it('updates bar heights based on random data when random is true and running is true', async () => {
         const bars = 5;
 
-        // Ensure the analyser does not provide data
-        mockAnalyser.getByteFrequencyData.mockImplementation(() => { });
-
         const { container, rerender } = render(
-            <Histogram running={true} bars={bars} random={true} />
+            <Histogram running={true} bars={bars} random={true} interval={200} />
         );
 
         const getHeights = () =>
@@ -168,9 +177,9 @@ describe('Histogram', () => {
 
         const initialHeights = getHeights();
 
-        // Advance timers and trigger animation frame
+        // Advance timers by at least one interval
         await act(async () => {
-            vi.advanceTimersByTime(100);
+            vi.advanceTimersByTime(200);
         });
 
         rerender(<Histogram running={true} bars={bars} random={true} />);
@@ -178,7 +187,6 @@ describe('Histogram', () => {
         const updatedHeights = getHeights();
 
         expect(initialHeights).not.to.deep.equal(updatedHeights);
-        expect(mockAnalyser.getByteFrequencyData).not.toHaveBeenCalled();
     });
 
     it('does not call getByteFrequencyData when random is true', async () => {
@@ -225,6 +233,7 @@ describe('Histogram', () => {
 
     it('updates bar heights based on frequency data using requestAnimationFrame', async () => {
         const bars = 5;
+
         mockAnalyser.getByteFrequencyData.mockImplementation((array) => {
             for (let i = 0; i < array.length; i++) {
                 array[i] = Math.floor(Math.random() * 256);
