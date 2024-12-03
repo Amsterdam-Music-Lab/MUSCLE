@@ -5,6 +5,9 @@
  * @param {HTMLElement} blockForm - The block form element to initialize.
  */
 function initializeBlockForm(blockForm) {
+
+  console.log('initializeBlockForm');
+
   let header = blockForm.querySelector('h3');
 
   // Only add toggle button if it doesn't exist
@@ -19,24 +22,16 @@ function initializeBlockForm(blockForm) {
 
   header = blockForm.querySelector('h3');
 
-  // If collapse-toggle does not have a click handler yet, add one
-  const toggleBtn = blockForm.querySelector('.collapse-toggle');
+  const hasClickEventListener = header.getAttribute('data-initialized') === 'true';
 
-  if (toggleBtn && !toggleBtn.onclick) {
-    // Remove click handler from header if it exists to prevent multiple click handlers on the same element
-    header.removeEventListener('click', toggleVisibilityClickHandler);
-
+  if (!hasClickEventListener) {
     // Add click handler to header
     header.addEventListener('click', toggleVisibilityClickHandler);
   }
 
-  function toggleVisibilityClickHandler(e) {
-    // Don't trigger if clicking on other buttons in the header
-    if (e.target.classList.contains('djn-remove-handler') ||
-      e.target.classList.contains('inline-deletelink')) {
-      return;
-    }
+  header.setAttribute('data-initialized', 'true');
 
+  function toggleVisibilityClickHandler(e) {
     toggleBlockVisibility(blockForm);
   }
 
@@ -56,6 +51,8 @@ function initializeBlockForm(blockForm) {
 }
 
 function toggleBlockVisibility(blockForm) {
+
+  console.log('toggleBlockVisibility');
 
   const contentSections = [
     blockForm.querySelector('fieldset'),                                            // Main block form
@@ -103,26 +100,31 @@ document.addEventListener('DOMContentLoaded', function () {
     expandAllBtn.innerText = 'Expand All Blocks';
     expandAllBtn.className = 'expand-all-btn';
 
-    expandAllBtn.onclick = function () {
+    // Add click handler to expand all blocks
+    expandAllBtn.addEventListener('click', function (e) {
+      e.stopPropagation();
+
       document.querySelectorAll('.djn-inline-form[data-inline-model="experiment-block"]').forEach(blockForm => {
         if (blockForm.classList.contains('collapsed')) {
           toggleBlockVisibility(blockForm);
         }
       });
-    };
+    });
 
     const collapseAllBtn = document.createElement('button');
     collapseAllBtn.type = 'button';
     collapseAllBtn.innerText = 'Collapse All Blocks';
     collapseAllBtn.className = 'collapse-all-btn';
 
-    collapseAllBtn.onclick = function () {
+    collapseAllBtn.addEventListener('click', function (e) {
+      e.stopPropagation();
+
       document.querySelectorAll('.djn-inline-form[data-inline-model="experiment-block"]').forEach(blockForm => {
         if (!blockForm.classList.contains('collapsed')) {
           toggleBlockVisibility(blockForm);
         }
       });
-    };
+    });
 
     buttonsContainer.appendChild(expandAllBtn);
     buttonsContainer.appendChild(collapseAllBtn);
