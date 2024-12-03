@@ -23,16 +23,21 @@ function initializeBlockForm(blockForm) {
   const toggleBtn = blockForm.querySelector('.collapse-toggle');
 
   if (toggleBtn && !toggleBtn.onclick) {
-    // Add click handler to header
-    header.addEventListener('click', function (e) {
-      // Don't trigger if clicking on other buttons in the header
-      if (e.target.classList.contains('djn-remove-handler') ||
-        e.target.classList.contains('inline-deletelink')) {
-        return;
-      }
+    // Remove click handler from header if it exists to prevent multiple click handlers on the same element
+    header.removeEventListener('click', toggleVisibilityClickHandler);
 
-      toggleBlockVisibility(blockForm);
-    });
+    // Add click handler to header
+    header.addEventListener('click', toggleVisibilityClickHandler);
+  }
+
+  function toggleVisibilityClickHandler(e) {
+    // Don't trigger if clicking on other buttons in the header
+    if (e.target.classList.contains('djn-remove-handler') ||
+      e.target.classList.contains('inline-deletelink')) {
+      return;
+    }
+
+    toggleBlockVisibility(blockForm);
   }
 
   // Initialize as collapsed by default
