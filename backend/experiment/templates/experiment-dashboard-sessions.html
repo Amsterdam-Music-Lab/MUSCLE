@@ -1,5 +1,8 @@
 <!-- session table -->
 <dialog id="all-sessions" class="pop-up pop-up-big">
+    <h1>
+        Sessions in experiment: <a href="{% url 'admin:experiment_experiment_change' experiment.id %}" target="_blank">{{ experiment }}</a>
+    </h1>
     <input type="button" value="close" onClick="closeSessions()" autofocus />
     <table>
         <caption class="dashboard-caption">Sessions</caption>
@@ -19,18 +22,19 @@
         <tbody>
             <!-- List and hide all sessions in this experiment with a unique id per block -->
             {% for session in sessions %}
-                <tr class="session-row hide experiment-{{ session.block.id }} participant-session-{{ session.participant.id }}">
+                <tr class="session-row hide block-{{ session.block.id }} participant-session-{{ session.participant.id }}">
 
                     <td>
                         <p>
                             <a href="{% url 'admin:session_session_change' session.id %}" target="_blank">
-                            {{ session.id }}</a>
+                                {{ session.id }}
+                            </a>
                         </p>
                     </td>
 
                     <td>
                         <p>
-                            {{ session.block.slug }}
+                            {{ session.block }}
                         </p>
                     </td>
 
@@ -94,7 +98,7 @@
                         <h3>
                             Session: <a href="{% url 'admin:session_session_change' session.id %}" target="_blank">{{ session.id }}</a><br>
                             Participant: <a href="{% url 'admin:participant_participant_change' session.participant.id %}" target="_blank">{{ session.participant.participant_id_url }}</a><br>
-                            Block: {{ session.block.slug }}
+                            Block: <a href="{% url 'admin:experiment_block_change' session.block.id %}" target="_blank" title="Block URL id">{{ session.block }}</a>
                         </h3>
 
                         <pre>

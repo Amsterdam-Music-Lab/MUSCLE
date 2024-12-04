@@ -1,7 +1,7 @@
-// Show sessions for a specific experiment
+// Show sessions for a specific block
 const showBlockSessions = (id) => {
     document.getElementById(`show-sessions-${id}`).addEventListener("click", function () {
-        document.querySelectorAll(`.experiment-${id}`).forEach(function (element) {
+        document.querySelectorAll(`.block-${id}`).forEach(function (element) {
             element.classList.remove("hide");
         })
         document.getElementById("all-sessions").showModal();

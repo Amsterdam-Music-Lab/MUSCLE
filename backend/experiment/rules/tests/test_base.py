@@ -1,6 +1,5 @@
 from django.test import TestCase
-from django.conf import settings
-from experiment.models import Experiment, Phase, Block, ExperimentTranslatedContent, SocialMediaConfig
+from experiment.models import Block
 from session.models import Session
 from participant.models import Participant
 from section.models import Playlist
@@ -8,7 +7,6 @@ from ..base import Base
 
 
 class BaseTest(TestCase):
-
     def test_get_play_again_url(self):
         block = Block.objects.create(
             slug="music-lab",
@@ -19,7 +17,7 @@ class BaseTest(TestCase):
         )
         base = Base()
         play_again_url = base.get_play_again_url(session)
-        self.assertEqual(play_again_url, "/music-lab")
+        self.assertEqual(play_again_url, "/block/music-lab")
 
     def test_get_play_again_url_with_participant_id(self):
         block = Block.objects.create(
@@ -34,7 +32,7 @@ class BaseTest(TestCase):
         )
         base = Base()
         play_again_url = base.get_play_again_url(session)
-        self.assertEqual(play_again_url, "/music-lab?participant_id=42")
+        self.assertEqual(play_again_url, "/block/music-lab?participant_id=42")
 
     def test_validate_playlist(self):
         base = Base()

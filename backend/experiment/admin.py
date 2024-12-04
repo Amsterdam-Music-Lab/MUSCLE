@@ -44,14 +44,6 @@ from participant.models import Participant
 from question.models import QuestionSeries, QuestionInSeries
 
 
-class FeedbackInline(admin.TabularInline):
-    """Inline to show results linked to given participant"""
-
-    model = Feedback
-    fields = ["text"]
-    extra = 0
-
-
 class BlockTranslatedContentInline(NestedTabularInline):
     model = BlockTranslatedContent
 
@@ -92,7 +84,7 @@ class BlockAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
         "bonus_points",
         "playlists",
     ]
-    inlines = [QuestionSeriesInline, FeedbackInline, BlockTranslatedContentInline]
+    inlines = [QuestionSeriesInline, BlockTranslatedContentInline]
     form = BlockForm
 
     # make playlists fields a list of checkboxes
@@ -155,7 +147,6 @@ class BlockAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
                 "feedback.json",
                 data=str(serializers.serialize("json", all_feedback.order_by("pk"))),
             )
-
 
         # create forced download response
         response = HttpResponse(zip_buffer.getbuffer())
@@ -295,7 +286,7 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, NestedModelAdmin):
         content = obj.get_fallback_content()
 
         return content.name if content else "No name"
-    
+
     def redirect_to_overview(self):
         return redirect(reverse("admin:experiment_experiment_changelist"))
 
@@ -321,25 +312,33 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, NestedModelAdmin):
 
             # Validate slug
             if not extension.isalnum():
-                messages.add_message(request,
-                                     messages.ERROR,
-                                     f"{extension} is nog a valid slug extension. Only alphanumeric characters are allowed.")
+                messages.add_message(
+                    request,
+                    messages.ERROR,
+                    f"{extension} is nog a valid slug extension. Only alphanumeric characters are allowed.",
+                )
             if extension.lower() != extension:
-                messages.add_message(request,
-                                     messages.ERROR,
-                                     f"{extension} is nog a valid slug extension. Only lowercase characters are allowed.")
+                messages.add_message(
+                    request,
+                    messages.ERROR,
+                    f"{extension} is nog a valid slug extension. Only lowercase characters are allowed.",
+                )
             # Check for duplicate slugs
             for exp in Experiment.objects.all():
                 if exp.slug == f"{obj.slug}{slug_extension}":
-                    messages.add_message(request,
-                                     messages.ERROR,
-                                     f"An experiment with slug: {obj.slug}{slug_extension} already exists. Please choose a different slug extension.")
+                    messages.add_message(
+                        request,
+                        messages.ERROR,
+                        f"An experiment with slug: {obj.slug}{slug_extension} already exists. Please choose a different slug extension.",
+                    )
             for as_block in obj.associated_blocks():
                 for block in Block.objects.all():
                     if f"{as_block.slug}{slug_extension}" == block.slug:
-                        messages.add_message(request,
-                                        messages.ERROR,
-                                        f"A block with slug: {block.slug}{slug_extension} already exists. Please choose a different slug extension.")
+                        messages.add_message(
+                            request,
+                            messages.ERROR,
+                            f"A block with slug: {block.slug}{slug_extension} already exists. Please choose a different slug extension.",
+                        )
             # Return to form with error messages
             if len(messages.get_messages(request)) != 0:
                 return render(
@@ -349,9 +348,9 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, NestedModelAdmin):
                 )
 
             # order_by is inserted here to prevent a query error
-            exp_contents = obj.translated_content.order_by('name').all()
+            exp_contents = obj.translated_content.order_by("name").all()
             # order_by is inserted here to prevent a query error
-            exp_phases = obj.phases.order_by('index').all()
+            exp_phases = obj.phases.order_by("index").all()
 
             # Duplicate Experiment object
             exp_copy = obj
@@ -380,7 +379,7 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, NestedModelAdmin):
                 # Duplicate blocks in this phase
                 for block in these_blocks:
                     # order_by is inserted here to prevent a query error
-                    block_contents = block.translated_contents.order_by('name').all()                    
+                    block_contents = block.translated_contents.order_by("name").all()
                     these_playlists = block.playlists.all()
                     question_series = QuestionSeries.objects.filter(block=block)
 
@@ -393,7 +392,7 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, NestedModelAdmin):
                     block_copy.playlists.set(these_playlists)
 
                     # Duplicate Block translated content objects
-                    for content in block_contents:          
+                    for content in block_contents:
                         block_content_copy = content
                         block_content_copy.pk = None
                         block_content_copy._state.adding = True
@@ -421,7 +420,7 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, NestedModelAdmin):
                         series_copy.questions.set(these_questions)
 
             return self.redirect_to_overview()
-        
+
         # Go back to experiment overview
         if "_back" in request.POST:
             return self.redirect_to_overview()
@@ -438,15 +437,18 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, NestedModelAdmin):
         all_blocks = obj.associated_blocks()
         all_participants = obj.current_participants()
         all_sessions = obj.export_sessions()
+        all_feedback = obj.export_feedback()
         collect_data = {
             "participant_count": len(all_participants),
             "session_count": len(all_sessions),
+            "feedback_count": len(all_feedback),
         }
 
         blocks = [
             {
                 "id": block.id,
                 "slug": block.slug,
+                "name": block,
                 "started": len(all_sessions.filter(block=block)),
                 "finished": len(
                     all_sessions.filter(
@@ -468,6 +470,7 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, NestedModelAdmin):
                 "blocks": blocks,
                 "sessions": all_sessions,
                 "participants": all_participants,
+                "feedback": all_feedback,
                 "collect_data": collect_data,
             },
         )
@@ -545,6 +548,7 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, NestedModelAdmin):
                     level=messages.WARNING,
                 )
 
+
 class PhaseAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
     list_display = (
         "name_link",
@@ -576,6 +580,7 @@ class PhaseAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
 
         return format_html(", ".join([block.slug for block in blocks]))
 
+
 class BlockTranslatedContentAdmin(admin.ModelAdmin):
     list_display = ["name", "block", "language"]
     list_filter = ["language"]
@@ -594,6 +599,7 @@ class BlockTranslatedContentAdmin(admin.ModelAdmin):
         return format_html(
             ", ".join([f'<a href="/admin/experiment/block/{block.id}/change/">{block.name}</a>' for block in blocks])
         )
+
 
 admin.site.register(Block, BlockAdmin)
 admin.site.register(Experiment, ExperimentAdmin)

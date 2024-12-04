@@ -99,8 +99,7 @@ class ToontjeHoger5Tempo(Base):
 
         tag_changed = tag_base + "CH"
 
-        section_original = session.playlist.get_section(
-            filter_by={'tag': tag_original, 'group': "or"})
+        section_original = session.playlist.get_section(filter_by={"tag": tag_original, "group": "or"})
 
         if not section_original:
             raise Exception("Error: could not find original section: {}".format(tag_original))
@@ -113,11 +112,9 @@ class ToontjeHoger5Tempo(Base):
 
     def get_section_changed(self, session, tag):
         try:
-            section_changed = session.playlist.get_section(
-                filter_by={'tag': tag, 'group': "ch"})
+            section_changed = session.playlist.get_section(filter_by={"tag": tag, "group": "ch"})
         except:
-            raise Exception(
-                "Error: could not find changed section: {}".format(tag))
+            raise Exception("Error: could not find changed section: {}".format(tag))
         return section_changed
 
     def get_trial_question(self):
@@ -200,11 +197,9 @@ class ToontjeHoger5Tempo(Base):
             # - Track names are always the same
             # - Artist could be different
             if section_original.artist_name() == section_changed.artist_name():
-                feedback += (
-                    " Je hoorde {}, in beide fragmenten uitgevoerd door {}.".format(
-                        last_result.section.song_name(),
-                        last_result.section.arist_name(),
-                    )
+                feedback += " Je hoorde {}, in beide fragmenten uitgevoerd door {}.".format(
+                    last_result.section.song_name(),
+                    last_result.section.artist_name(),
                 )
             else:
                 section_a = section_original if last_result.expected_response == "A" else section_changed
