@@ -1,21 +1,23 @@
 from django.forms import (
+    CharField,
     CheckboxSelectMultiple,
-    ModelForm,
     ChoiceField,
     Form,
-    MultipleChoiceField,
+    IntegerField,
+    ModelForm,
     ModelMultipleChoiceField,
+    MultipleChoiceField,
     Select,
-    CheckboxSelectMultiple,
     TextInput,
 )
 from django_select2.forms import Select2MultipleWidget
 
 from experiment.models import (
     Experiment,
-    Block,
-    SocialMediaConfig,
     ExperimentTranslatedContent,
+    Block,
+    language_choices,
+    SocialMediaConfig,
 )
 from experiment.rules import BLOCK_RULES
 
@@ -201,14 +203,15 @@ class ExperimentForm(ModelForm):
         css = {"all": ["experiment_form.css"]}
 
 
-class TranslatedContentMixin(Form):
+class TranslatedContentInline(Form):
 
     class Media:
         js = ["translated_content.js"]
         css = {"all": ["translated_content.css"]}
 
 
-class ExperimentTranslatedContentForm(ModelForm):
+class ExperimentTranslatedContentForm(TranslatedContentInline, ModelForm):
+    prefix = 'experiment'
 
     def __init__(self, *args, **kwargs):
         super(ModelForm, self).__init__(*args, **kwargs)
@@ -217,8 +220,16 @@ class ExperimentTranslatedContentForm(ModelForm):
         self.fields["social_media_message"].widget.attrs["style"] = "height:15px"
 
     class Meta:
+        prefix = 'experiment_translated_content'
         model = ExperimentTranslatedContent
-        fields = "__all__"
+        fields = [
+            "index",
+            "language",
+            "description",
+            "about_content",
+            "consent",
+            "social_media_message",
+        ]
 
 
 class BlockForm(ModelForm):

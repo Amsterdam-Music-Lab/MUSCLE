@@ -494,10 +494,6 @@ class TranslatedContent(models.Model):
         default="", blank=True, choices=language_choices, max_length=2
     )
 
-    @property
-    def langcode(self):
-        return self.language or 'unset'
-
     class Meta:
         abstract = True
 

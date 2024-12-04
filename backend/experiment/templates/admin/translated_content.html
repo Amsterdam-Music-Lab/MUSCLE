@@ -1,0 +1,21 @@
+{% load custom_filters %}
+<div>
+    <div class="tabs-container">
+    {% for langcode in inline_admin_formset|get_langcode %}
+        <a class="translated-content-tab">{{langcode}}</a>
+    {% endfor %}
+    </div>
+    {{ inline_admin_formset.formset.management_form }}
+    {{ inline_admin_formset.formset.non_form_errors }}
+    <div>
+    {% for inline_admin_form in inline_admin_formset %}
+        {% with parent_counter=forloop.counter0 %}
+            {% for fieldset in inline_admin_form %}
+                <div class="translated-content-form">
+                {% include "admin/includes/fieldset.html" with heading_level=4 prefix=fieldset.formset.prefix id_prefix=parent_counter id_suffix=forloop.counter0 %}
+                </div>
+            {% endfor %}
+        {% endwith %}
+    {% endfor %}
+    </div>
+</div>

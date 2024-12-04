@@ -8,7 +8,7 @@ from django.db import models
 from django.utils import timezone
 from django.core import serializers
 from django.shortcuts import render, redirect
-from django.forms import BaseInlineFormSet, CheckboxSelectMultiple
+from django.forms import CheckboxSelectMultiple
 from django.http import HttpResponse
 
 from inline_actions.admin import InlineActionsModelAdminMixin
@@ -17,7 +17,11 @@ from django.utils.html import format_html
 
 from nested_admin import NestedModelAdmin, NestedStackedInline, NestedTabularInline
 
-from experiment.utils import check_missing_translations, get_flag_emoji, get_missing_content_blocks
+from experiment.utils import (
+    check_missing_translations,
+    get_flag_emoji,
+    get_missing_content_blocks,
+)
 
 from experiment.models import (
     Block,
@@ -27,7 +31,7 @@ from experiment.models import (
     SocialMediaConfig,
     ExperimentTranslatedContent,
     BlockTranslatedContent,
-    TranslatedContent,
+    ExperimentTranslatedContent,
 )
 from question.admin import QuestionSeriesInline
 from experiment.forms import (
@@ -57,11 +61,9 @@ class BlockTranslatedContentInline(NestedStackedInline):
     model = BlockTranslatedContent
 
     sortable_field_name = "index"
-    readonly_fields = ['langcode']
     fields = [
         "index",
         "language",
-        "langcode",
         "name",
         "description",
     ]
@@ -71,29 +73,11 @@ class BlockTranslatedContentInline(NestedStackedInline):
             return 0
         return 1
 
-
-class TranslatedContentInline(BaseInlineFormSet):
-    model = TranslatedContent
-    fields = ["index", "language", "langcode"]
-    sortable_field_name = "index"
-    readonly_fields = ['langcode']
-
-
 class ExperimentTranslatedContentInline(NestedStackedInline):
     model = ExperimentTranslatedContent
-    sortable_field_name = "index"
     form = ExperimentTranslatedContentForm
-    readonly_fields = ['langcode']
-    fields = [
-        "index",
-        "language",
-        "langcode",
-        "name",
-        "description",
-        "consent",
-        "about_content",
-        "social_media_message",
-    ]
+    template = "admin/translated_content.html"
+    prefix = "experiment"
 
     def get_extra(self, request, obj=None, **kwargs):
         if obj:
@@ -158,22 +142,36 @@ class BlockAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
         zip_buffer = BytesIO()
         with ZipFile(zip_buffer, "w") as new_zip:
             # serialize data to new json files within the zip file
-            new_zip.writestr("sessions.json", data=str(serializers.serialize("json", all_sessions)))
+            new_zip.writestr(
+                "sessions.json", data=str(serializers.serialize("json", all_sessions))
+            )
             new_zip.writestr(
                 "participants.json",
-                data=str(serializers.serialize("json", all_participants.order_by("pk"))),
+                data=str(
+                    serializers.serialize("json", all_participants.order_by("pk"))
+                ),
             )
             new_zip.writestr(
                 "profiles.json",
-                data=str(serializers.serialize("json", all_profiles.order_by("participant", "pk"))),
+                data=str(
+                    serializers.serialize(
+                        "json", all_profiles.order_by("participant", "pk")
+                    )
+                ),
             )
             new_zip.writestr(
                 "results.json",
-                data=str(serializers.serialize("json", all_results.order_by("session"))),
+                data=str(
+                    serializers.serialize("json", all_results.order_by("session"))
+                ),
             )
             new_zip.writestr(
                 "sections.json",
-                data=str(serializers.serialize("json", all_sections.order_by("playlist", "pk"))),
+                data=str(
+                    serializers.serialize(
+                        "json", all_sections.order_by("playlist", "pk")
+                    )
+                ),
             )
             new_zip.writestr(
                 "songs.json",
@@ -184,7 +182,11 @@ class BlockAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
         response = HttpResponse(zip_buffer.getbuffer())
         response["Content-Type"] = "application/x-zip-compressed"
         response["Content-Disposition"] = (
-            'attachment; filename="' + obj.slug + "-" + timezone.now().isoformat() + '.zip"'
+            'attachment; filename="'
+            + obj.slug
+            + "-"
+            + timezone.now().isoformat()
+            + '.zip"'
         )
         return response
 
@@ -198,14 +200,20 @@ class BlockAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
             result_keys = []
             export_options = []
             # Get all export options
-            session_keys = [key for key in request.POST.getlist("export_session_fields")]
+            session_keys = [
+                key for key in request.POST.getlist("export_session_fields")
+            ]
             result_keys = [key for key in request.POST.getlist("export_result_fields")]
             export_options = [key for key in request.POST.getlist("export_options")]
 
             response = HttpResponse(content_type="text/csv")
-            response["Content-Disposition"] = 'attachment; filename="{}.csv"'.format(obj.slug)
+            response["Content-Disposition"] = 'attachment; filename="{}.csv"'.format(
+                obj.slug
+            )
             # Get filtered data
-            block_table, fieldnames = obj.export_table(session_keys, result_keys, export_options)
+            block_table, fieldnames = obj.export_table(
+                session_keys, result_keys, export_options
+            )
             fieldnames.sort()
             writer = csv.DictWriter(response, fieldnames)
             writer.writeheader()
@@ -241,7 +249,11 @@ class BlockAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
 
     def block_slug_link(self, obj):
         dev_mode = settings.DEBUG is True
-        url = f"http://localhost:3000/block/{obj.slug}" if dev_mode else f"/block/{obj.slug}"
+        url = (
+            f"http://localhost:3000/block/{obj.slug}"
+            if dev_mode
+            else f"/block/{obj.slug}"
+        )
 
         return format_html(
             f'<a href="{url}" target="_blank" rel="noopener noreferrer" title="Open {obj.slug} block in new tab" >{obj.slug}&nbsp;<small>&#8599;</small></a>'
@@ -263,6 +275,7 @@ class BlockInline(NestedStackedInline):
     sortable_field_name = "index"
     inlines = [BlockTranslatedContentInline]
     form = BlockForm
+    classes = ["collapse"]
 
     def get_extra(self, request, obj=None, **kwargs):
         if obj:
@@ -274,6 +287,7 @@ class PhaseInline(NestedTabularInline):
     model = Phase
     sortable_field_name = "index"
     inlines = [BlockInline]
+    classes = ['collapse']
 
     def get_extra(self, request, obj=None, **kwargs):
         if obj:
@@ -344,25 +358,33 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, NestedModelAdmin):
 
             # Validate slug
             if not extension.isalnum():
-                messages.add_message(request,
-                                     messages.ERROR,
-                                     f"{extension} is nog a valid slug extension. Only alphanumeric characters are allowed.")
+                messages.add_message(
+                    request,
+                    messages.ERROR,
+                    f"{extension} is nog a valid slug extension. Only alphanumeric characters are allowed.",
+                )
             if extension.lower() != extension:
-                messages.add_message(request,
-                                     messages.ERROR,
-                                     f"{extension} is nog a valid slug extension. Only lowercase characters are allowed.")
+                messages.add_message(
+                    request,
+                    messages.ERROR,
+                    f"{extension} is nog a valid slug extension. Only lowercase characters are allowed.",
+                )
             # Check for duplicate slugs
             for exp in Experiment.objects.all():
                 if exp.slug == f"{obj.slug}{slug_extension}":
-                    messages.add_message(request,
-                                     messages.ERROR,
-                                     f"An experiment with slug: {obj.slug}{slug_extension} already exists. Please choose a different slug extension.")
+                    messages.add_message(
+                        request,
+                        messages.ERROR,
+                        f"An experiment with slug: {obj.slug}{slug_extension} already exists. Please choose a different slug extension.",
+                    )
             for as_block in obj.associated_blocks():
                 for block in Block.objects.all():
                     if f"{as_block.slug}{slug_extension}" == block.slug:
-                        messages.add_message(request,
-                                        messages.ERROR,
-                                        f"A block with slug: {block.slug}{slug_extension} already exists. Please choose a different slug extension.")
+                        messages.add_message(
+                            request,
+                            messages.ERROR,
+                            f"A block with slug: {block.slug}{slug_extension} already exists. Please choose a different slug extension.",
+                        )
             # Return to form with error messages
             if len(messages.get_messages(request)) != 0:
                 return render(
@@ -425,7 +447,9 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, NestedModelAdmin):
 
                     # Duplicate the Block QuestionSeries
                     for series in question_series:
-                        all_in_series = QuestionInSeries.objects.filter(question_series=series)
+                        all_in_series = QuestionInSeries.objects.filter(
+                            question_series=series
+                        )
                         these_questions = series.questions.all()
                         series_copy = series
                         series_copy.pk = None
@@ -510,7 +534,11 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, NestedModelAdmin):
                 }
             )
 
-        has_consent = obj.translated_content.filter(consent__isnull=False).exclude(consent="").first()
+        has_consent = (
+            obj.translated_content.filter(consent__isnull=False)
+            .exclude(consent="")
+            .first()
+        )
 
         if not has_consent:
             remarks_array.append(
@@ -521,7 +549,9 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, NestedModelAdmin):
                 }
             )
 
-        supported_languages = obj.translated_content.values_list("language", flat=True).distinct()
+        supported_languages = obj.translated_content.values_list(
+            "language", flat=True
+        ).distinct()
 
         missing_content_block_translations = check_missing_translations(obj)
 
@@ -535,7 +565,13 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, NestedModelAdmin):
             )
 
         if not remarks_array:
-            remarks_array.append({"level": "success", "message": "✅ All good", "title": "No issues found."})
+            remarks_array.append(
+                {
+                    "level": "success",
+                    "message": "✅ All good",
+                    "title": "No issues found.",
+                }
+            )
 
         # TODO: Check if all theme configs support the same languages as the experiment
         # Implement this when the theme configs have been updated to support multiple languages
@@ -561,12 +597,15 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, NestedModelAdmin):
 
         if missing_content_blocks:
             for block, missing_languages in missing_content_blocks:
-                missing_language_flags = [get_flag_emoji(language) for language in missing_languages]
+                missing_language_flags = [
+                    get_flag_emoji(language) for language in missing_languages
+                ]
                 self.message_user(
                     request,
                     f"Block {block.slug} does not have content in {', '.join(missing_language_flags)}",
                     level=messages.WARNING,
                 )
+
 
 class PhaseAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
     list_display = (
@@ -599,6 +638,7 @@ class PhaseAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
 
         return format_html(", ".join([block.slug for block in blocks]))
 
+
 class BlockTranslatedContentAdmin(admin.ModelAdmin):
     list_display = ["name", "block", "language"]
     list_filter = ["language"]
@@ -615,8 +655,14 @@ class BlockTranslatedContentAdmin(admin.ModelAdmin):
             return "No block"
 
         return format_html(
-            ", ".join([f'<a href="/admin/experiment/block/{block.id}/change/">{block.name}</a>' for block in blocks])
+            ", ".join(
+                [
+                    f'<a href="/admin/experiment/block/{block.id}/change/">{block.name}</a>'
+                    for block in blocks
+                ]
+            )
         )
+
 
 admin.site.register(Block, BlockAdmin)
 admin.site.register(Experiment, ExperimentAdmin)

@@ -2,7 +2,7 @@
     height: 15px;
 }
 
-.translated-content-tab, .djn-group[id^='translated_content'] .djn-add-item {
+.translated-content-tab {
     border: .5px;
     border-bottom: 0px;
     border-top-right-radius: 5px;
@@ -11,14 +11,14 @@
     margin-top: 5px;
     width: 60px;
     padding: 2px;
-    background-color: var(--default-button-bg);
+    background-color: var(--button-bg);
     float: left;
 }
 
 .translated-content-tab.active {
-    background-color: var(--button-bg);
+    background-color: var(--default-button-bg);
 }
 
-/* .djn-add-item.translated-content {
-    align-items: center;
-} */
+.translated-content-form {
+    float: left;
+}
