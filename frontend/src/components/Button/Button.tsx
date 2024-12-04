@@ -10,9 +10,10 @@ interface ButtonProps {
     style?: React.CSSProperties;
     disabled?: boolean;
     value?: string;
+    clickOnce?: boolean;
 }
 
-// Button is a button that can only be clicked one time
+// Button is a button that can only be clicked one time by default
 const Button = ({
     title,
     onClick,
@@ -21,11 +22,17 @@ const Button = ({
     style = {},
     disabled = false,
     value = "",
+    clickOnce = true,
 }: ButtonProps) => {
     const clicked = useRef(false);
 
     // Only handle the first click
-    const clickOnce = () => {
+    const clickOnceGuard = () => {
+
+        if (!clickOnce) {
+            return onClick(value);
+        }
+
         if (disabled || clicked.current) {
             return;
         }
@@ -38,9 +45,9 @@ const Button = ({
     // Without the browser having registered any user interaction (e.g. click)
     const touchEvent = audioInitialized
         ? {
-            onTouchStart: (e) => {
+            onTouchStart: (e: React.TouchEvent) => {
                 e.stopPropagation();
-                clickOnce();
+                clickOnceGuard();
                 return false;
             },
         }
@@ -50,13 +57,13 @@ const Button = ({
         <button
             className={classNames({ disabled }, className, padding, "aha__button btn btn-lg")}
             onClick={(e) => {
-                clickOnce();
+                clickOnceGuard();
             }}
             disabled={disabled}
             style={style}
-            tabIndex="0"
+            tabIndex={0}
             onKeyPress={(e) => {
-                clickOnce();
+                clickOnceGuard();
             }}
             type="button"
             {...touchEvent}
