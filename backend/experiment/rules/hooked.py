@@ -330,5 +330,5 @@ class Hooked(Base):
     def get_score(self, session: Session, round_number: int) -> Score:
         config = {"show_section": True, "show_total_score": True}
         title = self.get_trial_title(session, round_number)
-        previous_score = session.last_result(self.counted_result_keys).score
-        return Score(session, config=config, title=title, score=previous_score)
+        previous_result = session.last_result(self.counted_result_keys)
+        return Score(session, config=config, title=title, result=previous_result)
