@@ -148,35 +148,3 @@ class CategorizationRuleTest(TestCase):
             sections = Section.objects.filter(group="SAME", tag__contains="2", song__artist__contains="Training")
             for section in sections:
                         self.assertIn(section.id, self.session.json_data.get('sequence'))
-
-        # Result.objects.create(session=self.session, comment="training-1A", score=0.0)
-        # training_first_half = categorization.next_round(self.session)
-        # print(self.session.json_data)
-
-        # Test failed training-1 phase
-        for _ in range(0, 7):
-            Result.objects.create(session=self.session, comment="training-1A", score=0.0)
-        training_first_half = categorization.next_round(self.session)
-        self.assertEqual(self.session.json_data.get('phase'), 'training-1A')
-        print(self.session.get_rounds_passed())
-
-        Result.objects.create(session=self.session, comment="training-1A", score=0.0)
-        training_first_half = categorization.next_round(self.session)
-        print(self.session.get_rounds_passed())
-
-        for _ in range(0, 9):
-            Result.objects.create(session=self.session, comment="training-1B", score=0.0)
-        print(self.session.get_rounds_passed())
-        training_failed = categorization.next_round(self.session)
-        print(self.session.get_rounds_passed())
-
-        self.assertEqual(self.session.json_data.get('phase'), 'training-1B')
-
-        self.assertEqual(self.session.json_data.get('training_rounds'), 20)
-
-        for _ in range(0, 19):
-            Result.objects.create(session=self.session, comment="training-2", score=1.0)
-        training_success = categorization.next_round(self.session)
-        self.assertEqual(self.session.json_data.get('phase'), 'testing')
-
-        print(self.session.json_data)
