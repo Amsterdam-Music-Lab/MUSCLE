@@ -1,13 +1,14 @@
 import { useRef, useState } from "react";
 import classNames from "classnames";
 
-import { scoreIntermediateResult } from "../../API";
+import { scoreIntermediateResult } from "@/API";
 import useBoundStore from "@/util/stores";
 
 import PlayCard from "./PlayCard";
 import { Card } from "@/types/Section";
 import Session from "@/types/Session";
 import Participant from "@/types/Participant";
+import Overlay from "../Overlay/Overlay";
 
 export const SCORE_FEEDBACK_DISPLAY = {
     SMALL_BOTTOM_RIGHT: 'small-bottom-right',
@@ -23,8 +24,11 @@ interface MatchingPairsProps {
     finishedPlaying: () => void;
     scoreFeedbackDisplay?: string;
     submitResult: (result: any) => void;
+    tutorial?: { [key: string]: string };
     view: string;
 }
+
+type ScoreType = 'lucky_match' | 'memory_match' | 'no_match' | 'misremembered';
 
 const MatchingPairs = ({
     playSection,
@@ -36,6 +40,7 @@ const MatchingPairs = ({
     finishedPlaying,
     scoreFeedbackDisplay = SCORE_FEEDBACK_DISPLAY.LARGE_TOP,
     submitResult,
+    tutorial,
     view
 }: MatchingPairsProps) => {
 
@@ -51,6 +56,13 @@ const MatchingPairs = ({
     const [score, setScore] = useState<number | null>(null);
     const [total, setTotal] = useState(bonusPoints);
     const [startOfTurn, setStartOfTurn] = useState(performance.now());
+
+    const [tutorialOverlayState, setTutorialOverlayState] = useState({
+        isOpen: false,
+        title: '',
+        content: '',
+        completed: [] as ScoreType[],
+    })
 
     const columnCount = sections.length > 6 ? 4 : 3;
 
@@ -98,8 +110,49 @@ const MatchingPairs = ({
             turnedCards[0].matchClass = turnedCards[1].matchClass = fbclass;
             turnedCards[0].seen = turnedCards[1].seen = true;
             setInBetweenTurns(true);
+
             return;
         }
+    }
+
+    const showOverlay = (score: number) => {
+
+        let scoreType: ScoreType = 'no_match';
+
+        switch (score) {
+            case 10:
+                scoreType = 'lucky_match';
+                break;
+            case 20:
+                scoreType = 'memory_match';
+                break;
+            case 0:
+                scoreType = 'no_match';
+                break;
+            case -10:
+                scoreType = 'misremembered';
+                break;
+        }
+
+        // check if the scoreType has already been shown
+        if (tutorialOverlayState.completed.includes(scoreType)) {
+            return false;
+        }
+
+        // check if the scoreType is in the tutorial object
+        if (!tutorial || !tutorial[scoreType]) {
+            return false;
+        }
+
+        // show the overlay
+        setTutorialOverlayState({
+            isOpen: true,
+            title: '',
+            content: tutorial[scoreType],
+            completed: [...tutorialOverlayState.completed, scoreType],
+        });
+
+        return true;
     }
 
     const checkMatchingPairs = async (index: number) => {
@@ -128,6 +181,7 @@ const MatchingPairs = ({
                     }
                     setScore(scoreResponse.score);
                     showFeedback(scoreResponse.score);
+                    showOverlay(scoreResponse.score);
                 } catch {
                     setError('We cannot currently proceed with the game. Try again later');
                     return;
@@ -199,7 +253,6 @@ const MatchingPairs = ({
                             registerUserClicks={registerUserClicks}
                             playing={playerIndex === index}
                             section={sections[index]}
-                            onFinish={showFeedback}
                             showAnimation={showAnimation}
                             view={view}
                         />
@@ -213,6 +266,15 @@ const MatchingPairs = ({
                     data-testid="overlay"
                 ></div>
             </div>
+            <Overlay
+                isOpen={tutorialOverlayState.isOpen}
+                title={tutorialOverlayState.title}
+                content={tutorialOverlayState.content}
+                onClose={() => {
+                    finishTurn();
+                    setTutorialOverlayState({ ...tutorialOverlayState, isOpen: false });
+                }}
+            />
         </div>
 
     )
