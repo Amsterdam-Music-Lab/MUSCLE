@@ -1,3 +1,4 @@
+import { initialize, mswLoader } from 'msw-storybook-addon'
 import "../public/vendor/bootstrap/bootstrap.min.css";
 import "../src/index.scss";
 import { initAudioListener } from "../src/util/audio";
@@ -6,6 +7,9 @@ import { initWebAudioListener } from "../src/util/webAudio";
 // Init audio listener
 initAudioListener();
 initWebAudioListener();
+
+// Initialize MSW
+initialize()
 
 /** @type { import('@storybook/react').Preview } */
 const preview = {
@@ -17,6 +21,8 @@ const preview = {
             },
         },
     },
+    // Provide the MSW addon loader globally
+    loaders: [mswLoader],
 };
 
 
