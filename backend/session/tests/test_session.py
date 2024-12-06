@@ -75,6 +75,28 @@ class SessionTest(TestCase):
         rank = finished_session.percentile_rank(exclude_unfinished=False)
         assert rank == 62.5
 
+    def test_last_result(self):
+        result = self.session.last_result()
+        self.assertIsNone(result)
+        Result.objects.create(session=self.session, question_key="ins")
+        Result.objects.create(session=self.session, question_key="outs")
+        result = self.session.last_result()
+        self.assertIsNotNone(result)
+        self.assertEqual(result.question_key, "outs")
+        result = self.session.last_result(question_keys=["ins"])
+        self.assertIsNotNone(result)
+        self.assertEqual(result.question_key, "ins")
+
+    def test_last_n_results(self):
+        results = self.session.last_n_results()
+        self.assertEqual(results, [])
+        Result.objects.create(session=self.session, question_key="ins")
+        Result.objects.create(session=self.session, question_key="outs")
+        results = self.session.last_n_results(n_results=2)
+        self.assertEqual(len(results), 2)
+        results = self.session.last_n_results(question_keys=["ins"], n_results=2)
+        self.assertEqual(len(results), 1)
+
     def test_last_song(self):
         song = Song.objects.create(artist='Beavis', name='Butthead')
         section = Section.objects.create(playlist=self.playlist, song=song)

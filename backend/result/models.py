@@ -34,10 +34,6 @@ class Result(models.Model):
     class Meta:
         ordering = ['created_at']
 
-    def load_json_data(self):
-        """Get json_data as object"""
-        return self.json_data if self.json_data else {}
-
     def save_json_data(self, data):
         """Merge data with json_data, overwriting duplicate keys."""
         new_data = self.json_data
