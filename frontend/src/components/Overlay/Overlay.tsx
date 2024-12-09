@@ -44,6 +44,7 @@ const Overlay: React.FC<OverlayProps> = ({
     <div
       className={`overlay ${isOpen ? 'visible' : ''}`}
       aria-hidden={!isOpen}
+      role="presentation"
       onClick={handleOverlayClick}
     >
       <div
