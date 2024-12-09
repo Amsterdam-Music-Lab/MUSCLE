@@ -1,5 +1,8 @@
 /* Add cursor pointer to inline group headings as they are clickable to toggle the form underneath */
 .inline-group .inline-heading {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
     cursor: pointer;
 }
 

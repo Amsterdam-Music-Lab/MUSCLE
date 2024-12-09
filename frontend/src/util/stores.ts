@@ -5,6 +5,7 @@ import IParticipant from "@/types/Participant";
 import ISession from "@/types/Session";
 import ITheme from "@/types/Theme";
 import IBlock from "@/types/Block";
+import { Action } from '@/types/Action';
 
 interface BlockSlice {
     block?: IBlock;
@@ -96,6 +97,16 @@ const createParticipantSlice: StateCreator<ParticipantSlice> = (set) => ({
     setParticipantLoading: (participantLoading: boolean) => set(() => ({ participantLoading }))
 });
 
+interface ActionSlice {
+    currentAction: Action | null;
+    setCurrentAction: (action: Action) => void;
+}
+
+const createActionSlice: StateCreator<ActionSlice> = (set) => ({
+    setCurrentAction: (action: Action) => set(() => ({ currentAction: action })),
+    currentAction: null,
+});
+
 interface SessionSlice {
     session: ISession | null;
     setSession: (session: ISession) => void;
@@ -118,11 +129,12 @@ const createThemeSlice: StateCreator<ThemeSlice> = (set) => ({
     resetTheme: () => set(() => ({ theme: null })),
 });
 
-export const useBoundStore = create<BlockSlice & DocumentHeadSlice & ErrorSlice & ParticipantSlice & SessionSlice & ThemeSlice>((...args) => ({
+export const useBoundStore = create<BlockSlice & DocumentHeadSlice & ErrorSlice & ParticipantSlice & ActionSlice & SessionSlice & ThemeSlice>((...args) => ({
     ...createBlockSlice(...args),
     ...createDocumentHeadSlice(...args),
     ...createErrorSlice(...args),
     ...createParticipantSlice(...args),
+    ...createActionSlice(...args),
     ...createSessionSlice(...args),
     ...createThemeSlice(...args),
 }));

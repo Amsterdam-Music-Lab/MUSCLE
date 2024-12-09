@@ -19,15 +19,15 @@ class TestScore(unittest.TestCase):
             session=self.mock_session,
             title="Test Title",
             score=100,
-            score_message=lambda x: f"Score is {x}",
+            score_message="Score is 100",
             config={'show_section': True, 'show_total_score': True},
             icon="icon-test",
             timer=5,
-            feedback="Test Feedback"
+            feedback="Test Feedback",
         )
         self.assertEqual(score.title, "Test Title")
         self.assertEqual(score.score, 100)
-        self.assertEqual(score.score_message(score.score), "Score is 100")
+        self.assertEqual(score.score_message, "Score is 100")
         self.assertEqual(score.feedback, "Test Feedback")
         self.assertEqual(
             score.config, {'show_section': True, 'show_total_score': True})
@@ -43,7 +43,7 @@ class TestScore(unittest.TestCase):
         score = Score(session=self.mock_session)
         self.assertIn('Round', score.title)
         self.assertEqual(score.score, 10)
-        self.assertEqual(score.score_message, score.default_score_message)
+        self.assertEqual(score.score_message, score.default_score_message(score.score))
         self.assertIsNone(score.feedback)
         self.assertEqual(
             score.config, {'show_section': False, 'show_total_score': False})

@@ -56,7 +56,6 @@ class ToontjeHogerKids3Plink(ToontjeHoger3Plink):
     def get_score_view(self, session):
         last_result = self.get_last_result(session)
         section = last_result.section
-        score = last_result.score
 
         if last_result.expected_response == last_result.given_response:
             feedback = "Goedzo! Je hoorde inderdaad {} van {}.".format(
@@ -72,7 +71,13 @@ class ToontjeHogerKids3Plink(ToontjeHoger3Plink):
         config = {"show_total_score": True}
         round_number = session.get_rounds_passed()
         score_title = "Ronde %(number)d / %(total)d" % {"number": round_number, "total": session.block.rounds}
-        return Score(session, config=config, feedback=feedback, score=score, title=score_title)
+        return Score(
+            session,
+            config=config,
+            feedback=feedback,
+            result=last_result,
+            title=score_title,
+        )
 
     def get_plink_trials(self, session: Session, section: Section, choices: dict, expected_response: str) -> list:
         next_round = []

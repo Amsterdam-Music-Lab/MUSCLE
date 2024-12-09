@@ -36,7 +36,7 @@
         "storybook": "storybook dev -p 6006 --no-open",
         "storybook:build": "storybook build",
         "lint": "eslint src/**/*.{js,jsx,ts,tsx}",
-        "lint:fix": "eslint --fix src/**/*.js",
+        "lint:fix": "eslint --fix src/**/*.{js,jsx,ts,tsx}",
         "build-storybook": "storybook build"
     },
     "eslintConfig": {
@@ -71,14 +71,14 @@
     },
     "devDependencies": {
         "@chromatic-com/storybook": "^3.2.2",
-        "@storybook/addon-essentials": "^8.4.2",
-        "@storybook/addon-interactions": "^8.4.2",
-        "@storybook/addon-links": "^8.4.2",
-        "@storybook/addon-onboarding": "^8.4.2",
-        "@storybook/blocks": "^8.4.2",
-        "@storybook/react": "^8.4.2",
-        "@storybook/react-vite": "^8.4.2",
-        "@storybook/test": "^8.4.2",
+        "@storybook/addon-essentials": "^8.4.6",
+        "@storybook/addon-interactions": "^8.4.6",
+        "@storybook/addon-links": "^8.4.6",
+        "@storybook/addon-onboarding": "^8.4.6",
+        "@storybook/blocks": "^8.4.6",
+        "@storybook/react": "^8.4.6",
+        "@storybook/react-vite": "^8.4.6",
+        "@storybook/test": "^8.4.6",
         "@testing-library/dom": "^10.2.0",
         "@testing-library/react": "^16.0.0",
         "@testing-library/user-event": "^14.5.1",
@@ -93,11 +93,11 @@
         "eslint": "^8.54.0",
         "eslint-config-react-app": "^7.0.1",
         "eslint-plugin-chai-friendly": "^0.7.2",
-        "eslint-plugin-storybook": "^0.11.0",
+        "eslint-plugin-storybook": "^0.11.1",
         "happy-dom": "^15.10.2",
         "history": "^5.3.0",
         "prop-types": "15.8.1",
-        "storybook": "^8.4.2",
+        "storybook": "^8.4.6",
         "vitest": "^2.1.4"
     }
 }

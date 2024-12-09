@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import classNames from 'classnames';
+import useBoundStore from '@/util/stores';
 
 interface HistogramProps {
     bars?: number;
@@ -27,9 +28,14 @@ const Histogram: React.FC<HistogramProps> = ({
     backgroundColor = undefined,
     borderRadius = '0.15rem',
     random = false,
-    interval = 100,
+    interval = 200,
 }) => {
     const [frequencyData, setFrequencyData] = useState<Uint8Array>(new Uint8Array(bars));
+
+    const currentAction = useBoundStore((state) => state.currentAction);
+    const isBuffer = currentAction?.playback?.play_method === 'BUFFER';
+
+    const shouldRandomize = random || !isBuffer;
 
     const animationFrameRef = useRef<number>();
     const intervalRef = useRef<number>();
@@ -50,7 +56,7 @@ const Histogram: React.FC<HistogramProps> = ({
         const updateFrequencyData = () => {
             let dataWithoutExtremes: Uint8Array;
 
-            if (random) {
+            if (shouldRandomize) {
                 // Generate random frequency data
                 dataWithoutExtremes = new Uint8Array(bars);
                 for (let i = 0; i < bars; i++) {
@@ -71,14 +77,14 @@ const Histogram: React.FC<HistogramProps> = ({
             }
         };
 
-        if (random) {
-            // Use setInterval when random is true
+        if (shouldRandomize) {
+            // Use setInterval when shouldRandomize is true
             if (intervalRef.current) {
                 clearInterval(intervalRef.current);
             }
             intervalRef.current = window.setInterval(updateFrequencyData, interval);
         } else {
-            // Use requestAnimationFrame when random is false
+            // Use requestAnimationFrame when shouldRandomize is false
             if (animationFrameRef.current) {
                 cancelAnimationFrame(animationFrameRef.current);
             }
@@ -93,7 +99,7 @@ const Histogram: React.FC<HistogramProps> = ({
                 clearInterval(intervalRef.current);
             }
         };
-    }, [running, bars, random, interval]);
+    }, [running, bars, shouldRandomize, interval]);
 
     const barWidth = `calc((100% - ${(bars - 1) * spacing}px) / ${bars})`;
 
@@ -120,7 +126,7 @@ const Histogram: React.FC<HistogramProps> = ({
                         height: `${(frequencyData[index] / 255) * 100}%`,
                         backgroundColor: 'currentColor',
                         marginRight: index < bars - 1 ? spacing : 0,
-                        transition: random
+                        transition: shouldRandomize
                             ? `height ${interval / 1000}s ease`
                             : 'height 0.05s ease',
                     }}

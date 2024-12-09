@@ -280,8 +280,8 @@ class BlockForm(ModelForm):
         }
 
     class Media:
-        js = ["block_admin.js"]
-        css = {"all": ["block_admin.css"]}
+        js = ["block_admin.js", "collapsible_blocks.js"]
+        css = {"all": ["block_admin.css", "collapsible_blocks.css"]}
 
 
 class ExportForm(Form):

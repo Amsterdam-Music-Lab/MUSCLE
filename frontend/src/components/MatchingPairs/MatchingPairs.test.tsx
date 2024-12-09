@@ -10,17 +10,18 @@ import MatchingPairs, { SCORE_FEEDBACK_DISPLAY } from './MatchingPairs';
 let mock: MockAdapter;
 
 vi.mock("@/components/PlayButton/PlayCard", () => ({
-    default: props => <div data-testid="play-card" {...props} />
+    default: (props: any) => <div data-testid="play-card" {...props} />
 }));
 
 vi.mock("../../util/stores", () => ({
     __esModule: true,
-    default: (fn) => {
+    default: (fn: any) => {
         const state = {
             participant: 1,
             session: 1,
             setError: vi.fn(),
-            block: { bonus_points: 42 }
+            block: { bonus_points: 42 },
+            currentAction: () => ({ view: 'TRIAL_VIEW' }),
         };
         return fn(state);
     },

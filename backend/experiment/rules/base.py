@@ -54,7 +54,7 @@ class Base(object):
             if session.participant.participant_id_url
             else ""
         )
-        return f"/{session.block.slug}{participant_id_url_param}"
+        return f"/block/{session.block.slug}{participant_id_url_param}"
 
     def calculate_intermediate_score(self, session, result):
         """process result data during a trial (i.e., between next_round calls)
