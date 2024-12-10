@@ -12,17 +12,19 @@ vi.mock("@/components/PlayButton/PlayCard", () => ({
     default: (props: any) => <div data-testid="play-card" {...props} />
 }));
 
+const initialState = {
+    participant: 1,
+    session: 1,
+    setError: vi.fn(),
+    block: { bonus_points: 42 },
+    currentAction: () => ({ view: 'TRIAL_VIEW' }),
+};
+
 vi.mock("../../util/stores", () => ({
     __esModule: true,
     default: (fn: any) => {
-        const state = {
-            participant: 1,
-            session: 1,
-            setError: vi.fn(),
-            block: { bonus_points: 42 },
-            currentAction: () => ({ view: 'TRIAL_VIEW' }),
-        };
-        return fn(state);
+
+        return fn(initialState);
     },
     useBoundStore: vi.fn()
 }));
@@ -32,11 +34,6 @@ describe('MatchingPairs Component', () => {
         vi.resetAllMocks();
         mock = new MockAdapter(axios);
         mock.onPost().reply(200, { score: 10 });
-
-        // Reset the sections' state
-        // This is probably because we mutate properties of the sections prop in the component, which is not a good practice and should be fixed in the future.
-        // FIXME: Fix the component to not mutate the sections prop
-        mockSections = mockSections.map((section) => ({ ...section, turned: false, seen: false }));
     });
 
     afterEach(() => {
@@ -90,7 +87,7 @@ describe('MatchingPairs Component', () => {
         await waitFor(() => expect(getByText('Score: 52')).not.toBeNull());
     });
 
-    test.skip('has a blocking overlay in-between turns', async () => {
+    test('has a blocking overlay in-between turns', async () => {
         mock.onPost().replyOnce(200, { score: 0 });
         render(<MatchingPairs {...baseProps} sections={mockSections} setPlayerIndex={vi.fn()} />);
         const cards = screen.getAllByRole('button');
@@ -104,23 +101,33 @@ describe('MatchingPairs Component', () => {
         expect(screen.getByTestId('overlay').style.display).toBe('block')
     });
 
-    test.skip('calls scoreIntermediateResult after each turn', async () => {
+    test('calls scoreIntermediateResult after each turn', async () => {
         mock.onPost().reply(200, { score: 10 });
         const spy = vi.spyOn(API, 'scoreIntermediateResult');
-        render(<MatchingPairs {...baseProps} sections={mockSections} setPlayerIndex={vi.fn()} />);
+        render(<MatchingPairs {...baseProps} sections={mockSections} tutorial={undefined} setPlayerIndex={vi.fn()} />);
         const cards = screen.getAllByTestId('play-card');
 
+        mock.onPost().reply(200, { score: 10 });
         fireEvent.click(cards[0]);
         fireEvent.click(cards[2]);
         await new Promise(r => setTimeout(r, 1));
+
+
         fireEvent.click(screen.getByTestId('overlay'));
         await new Promise(r => setTimeout(r, 1));
 
         await waitFor(() => screen.getByText('Pick a card'));
         expect(spy).toHaveBeenCalled();
+
+        // cleanup spy
+        spy.mockRestore();
     })
 
-    test.skip('ends the game when all pairs are matched', async () => {
+    test('ends the game when all pairs are matched', async () => {
+
+        const expectedFirstScore = initialState.block.bonus_points + 10;
+        const expectedSecondScore = expectedFirstScore + 20;
+
         mock.onPost().reply(200, { score: 10 });
         const submitResult = vi.fn();
         render(
@@ -134,19 +141,24 @@ describe('MatchingPairs Component', () => {
         fireEvent.click(screen.getByTestId('overlay'));
         await new Promise(r => setTimeout(r, 1));
 
-        expect(screen.getByTestId('score').textContent).toBe('Score: 10');
-        expect(cards[0].classList.contains('disabled')).toBe(true);
-        expect(cards[2].classList.contains('disabled')).toBe(true);
+        waitFor(() => {
+            expect(screen.getByTestId('score').textContent).toBe(`Score: ${expectedFirstScore}`);
+            expect(cards[0].classList.contains('disabled')).toBe(true);
+            expect(cards[2].classList.contains('disabled')).toBe(true);
+        });
 
+        mock.onPost().reply(200, { score: 20 });
         fireEvent.click(cards[1]);
         fireEvent.click(cards[3]);
         await new Promise(r => setTimeout(r, 1));
         fireEvent.click(screen.getByTestId('overlay'));
         await new Promise(r => setTimeout(r, 1));
-        expect(screen.getByTestId('score').textContent).toBe('Score: 20');
-        expect(cards[1].classList.contains('disabled')).toBe(true);
-        expect(cards[3].classList.contains('disabled')).toBe(true);
-        expect(submitResult).toHaveBeenCalled();
+        waitFor(() => {
+            expect(screen.getByTestId('score').textContent).toBe(`Score: ${expectedSecondScore}`);
+            expect(cards[1].classList.contains('disabled')).toBe(true);
+            expect(cards[3].classList.contains('disabled')).toBe(true);
+            expect(submitResult).toHaveBeenCalled();
+        });
     });
 
     test('displays three columns when sections length is less than or equal to 6', () => {
