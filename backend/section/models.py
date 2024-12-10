@@ -139,7 +139,7 @@ class Playlist(models.Model):
         updated = 0
         lines = 0
         csv_messages = []
-        fatal_errors = 0
+        global_errors = 0
         for row in reader:
             lines += 1
             iteration_error = False
@@ -149,7 +149,7 @@ class Playlist(models.Model):
                 csv_messages.append(f"Error: Invalid row length, line: {str(lines)}")
                 # Skip adding or altering this row
                 iteration_error = True
-                fatal_errors += 1
+                global_errors += 1
 
             # check for valid numbers
             if not (is_number(row['start_time'])
@@ -157,23 +157,24 @@ class Playlist(models.Model):
                 csv_messages.append(f"Error: Expected number fields on line: {str(lines)}")
                 # Skip adding or altering this row
                 iteration_error = True
-                fatal_errors += 1
+                global_errors += 1
 
             # Check if the duration in the csv exceeds the actual duration of the audio file
             file_path = join(settings.MEDIA_ROOT, str(row['filename']))
+
             try:
                 # while running tests this would throw an error
                 with audioread.audio_open(file_path) as f:
                     actual_duration = f.duration
-                if float(row['duration']) > actual_duration:
+                if row['duration'] > actual_duration:
                     # Add or edit this row, but show an error message containing the actual saved duration
                     row['duration'] = actual_duration
-                    fatal_errors += 1                
+                    global_errors += 1
                     csv_messages.append(f"Error: The duration of {row['filename']} exceeds the actual duration of the audio file and has been set to {actual_duration} seconds.")
             except:
                 pass
                 
-            # Make the changes if there are no fatal errors in this row
+            # Make the changes if there are no global errors in this row
             if not iteration_error:
                 # Retrieve or create Song object
                 song = None
@@ -212,8 +213,8 @@ class Playlist(models.Model):
                 if section:
                     sections.append(section)
 
-        # No fatal errors 
-        if fatal_errors == 0:
+        # No global errors
+        if global_errors == 0:
 
             # Add sections
             Section.objects.bulk_create(sections)
@@ -231,7 +232,7 @@ class Playlist(models.Model):
                 'message':
                   f"Sections processed from CSV. Added: {str(len(sections))} - Updated: {str(updated)} - Removed: {str(len(delete_ids))}"
             }
-        
+
         return {
                     'status': self.CSV_ERROR,
                     'messages': csv_messages,
