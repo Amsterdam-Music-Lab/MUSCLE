@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import classNames from "classnames";
 
 import { scoreIntermediateResult } from "@/API";
@@ -226,7 +226,7 @@ const MatchingPairs = ({
         setStartOfTurn(performance.now());
         finishedPlaying();
 
-        setSections(prev => prev.map(section => {
+        const updatedSections = sections.map(section => {
             if (score === 10 || score === 20) {
                 if (section.id === firstCard?.id || section.id === secondCard?.id) {
                     section.inactive = true;
@@ -238,13 +238,16 @@ const MatchingPairs = ({
                 noevents: false,
                 matchClass: ''
             };
-        }));
+        });
+
+        setSections(updatedSections);
 
         setFirstCard(null);
         setSecondCard(null);
         setScore(null);
 
-        if (sections.filter(s => s.inactive).length === sections.length) {
+        // Check if the board is empty
+        if (updatedSections.filter(s => s.inactive).length === sections.length) {
             submitResult({});
             setFeedbackText('');
         } else {
