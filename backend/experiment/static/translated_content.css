@@ -2,20 +2,23 @@
     height: 15px;
 }
 
-.translated-content-tab {
+.translated-content-tab, .addlink.translated-content-tab {
     border: .5px;
     border-bottom: 0px;
     border-top-right-radius: 5px;
     border-top-left-radius: 5px;
     margin-right: 5px;
     margin-top: 5px;
-    width: 60px;
-    padding: 2px;
+    width: 30px;
+    height:20px;
+    padding: 5px;
     background-color: var(--button-bg);
     float: left;
+    cursor: pointer;
+    background-position: center;
 }
 
-.translated-content-tab.active {
+.translated-content-tab.active, .addlink.translated-content-tab.active {
     background-color: var(--default-button-bg);
 }
 

@@ -3,19 +3,24 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 function initTabbedTranslation() {
-    const tabButtons = document.querySelectorAll('.translated-content-tab');
-    const forms = document.querySelectorAll('.translated-content-form');
-    tabButtons[0].classList.toggle("active");
-    forms.forEach(form => form.classList.toggle("hidden"));
-    forms[0].classList.toggle("hidden");
-    tabButtons.forEach(tabButton => {
-        tabButton.addEventListener("click", () => {
-            if (!tabButton.classList.contains("active")) {
-                tabButtons.forEach( button => button.classList.toggle("active"));
-                forms.forEach(form => {
-                    form.classList.toggle("hidden");
-                });
-            }
+    const parentElements = document.querySelectorAll('.translated-content-parent')
+    parentElements.forEach(parent => {
+        const tabButtons = parent.querySelectorAll('.translated-content-tab');
+        const forms = parent.querySelectorAll('.translated-content-form');
+        tabButtons[0].classList.add("active");
+        forms.forEach(form => form.classList.add("hidden"));
+        forms[0].classList.remove("hidden");
+        tabButtons.forEach((tabButton, index) => {
+            tabButton.addEventListener("click", () => {
+                if (!tabButton.classList.contains("active")) {
+                    tabButtons.forEach( button => button.classList.remove("active"));
+                    tabButton.classList.add("active");
+                    forms.forEach(form => {
+                        form.classList.add("hidden");
+                    });
+                    forms[index].classList.remove("hidden");
+                }
+            });
         });
     });
 }

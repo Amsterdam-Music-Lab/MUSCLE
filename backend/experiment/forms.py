@@ -1,9 +1,7 @@
 from django.forms import (
-    CharField,
     CheckboxSelectMultiple,
     ChoiceField,
     Form,
-    IntegerField,
     ModelForm,
     ModelMultipleChoiceField,
     MultipleChoiceField,
@@ -16,7 +14,7 @@ from experiment.models import (
     Experiment,
     ExperimentTranslatedContent,
     Block,
-    language_choices,
+    BlockTranslatedContent,
     SocialMediaConfig,
 )
 from experiment.rules import BLOCK_RULES
@@ -211,7 +209,6 @@ class TranslatedContentInline(Form):
 
 
 class ExperimentTranslatedContentForm(TranslatedContentInline, ModelForm):
-    prefix = 'experiment'
 
     def __init__(self, *args, **kwargs):
         super(ModelForm, self).__init__(*args, **kwargs)
@@ -220,7 +217,7 @@ class ExperimentTranslatedContentForm(TranslatedContentInline, ModelForm):
         self.fields["social_media_message"].widget.attrs["style"] = "height:15px"
 
     class Meta:
-        prefix = 'experiment_translated_content'
+        prefix = 'experiment'
         model = ExperimentTranslatedContent
         fields = [
             "index",
@@ -230,6 +227,14 @@ class ExperimentTranslatedContentForm(TranslatedContentInline, ModelForm):
             "consent",
             "social_media_message",
         ]
+
+
+class BlockTranslatedContentForm(TranslatedContentInline, ModelForm):
+
+    class Meta:
+        prefix = "block"
+        model = BlockTranslatedContent
+        fields = "__all__"
 
 
 class BlockForm(ModelForm):

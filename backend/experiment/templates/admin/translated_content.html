@@ -1,12 +1,10 @@
 {% load custom_filters %}
-<div>
+<div class="translated-content-parent">
     <div class="tabs-container">
     {% for langcode in inline_admin_formset|get_langcode %}
         <a class="translated-content-tab">{{langcode}}</a>
     {% endfor %}
-    </div>
-    {{ inline_admin_formset.formset.management_form }}
-    {{ inline_admin_formset.formset.non_form_errors }}
+    <a class="addlink translated-content-tab"></a>
     <div>
     {% for inline_admin_form in inline_admin_formset %}
         {% with parent_counter=forloop.counter0 %}
@@ -17,5 +15,8 @@
             {% endfor %}
         {% endwith %}
     {% endfor %}
+    <div class="translated-content-form">
+        {% include "admin/includes/fieldset.html" with heading_level=4 prefix=fieldset.formset.prefix id_suffix="new" %}
+    </div>
     </div>
 </div>

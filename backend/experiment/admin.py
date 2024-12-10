@@ -35,9 +35,10 @@ from experiment.models import (
 )
 from question.admin import QuestionSeriesInline
 from experiment.forms import (
+    BlockForm,
+    BlockTranslatedContentForm,
     ExperimentForm,
     ExperimentTranslatedContentForm,
-    BlockForm,
     ExportForm,
     TemplateForm,
     SocialMediaConfigForm,
@@ -59,6 +60,8 @@ class FeedbackInline(admin.TabularInline):
 
 class BlockTranslatedContentInline(NestedStackedInline):
     model = BlockTranslatedContent
+    form = BlockTranslatedContentForm
+    template = "admin/translated_content.html"
 
     sortable_field_name = "index"
     fields = [
@@ -272,7 +275,6 @@ class BlockAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
 
 class BlockInline(NestedStackedInline):
     model = Block
-    sortable_field_name = "index"
     inlines = [BlockTranslatedContentInline]
     form = BlockForm
     classes = ["collapse"]
