@@ -74,7 +74,8 @@ class PlaylistAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
 
             # create message based on csv_result (CSV_ERROR or CSV_OK)
             if csv_result["status"] == Playlist.CSV_ERROR:
-                messages.add_message(request, messages.ERROR, csv_result["message"])
+                for message in csv_result["messages"]:
+                    messages.add_message(request, messages.ERROR, message)
 
             elif csv_result["status"] == Playlist.CSV_OK:
                 messages.add_message(request, messages.INFO, csv_result["message"])

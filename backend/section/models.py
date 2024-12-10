@@ -20,6 +20,7 @@ import datetime
 import random
 import csv
 from os.path import join
+import audioread
 
 from django.db import models
 from django.utils import timezone
@@ -137,76 +138,104 @@ class Playlist(models.Model):
         sections = []
         updated = 0
         lines = 0
+        csv_messages = []
+        fatal_errors = 0
         for row in reader:
             lines += 1
-
-            # Check for valid row length in csv. If it has less than 8 entries, csv.DictReader will assign None to values of missing keys
+            iteration_error = False
+            
+            # Check for valid row length in csv. If it has less than 8 entries, csv.DictReader will assign None to values of missing keys            
             if None in row.values():
-                return {
-                    'status': self.CSV_ERROR,
-                    'message': "Error: Invalid row length, line: " + str(lines)
-                }
+                csv_messages.append(f"Error: Invalid row length, line: {str(lines)}")
+                # Skip adding or altering this row
+                iteration_error = True
+                fatal_errors += 1
 
             # check for valid numbers
             if not (is_number(row['start_time'])
                     and is_number(row['duration'])):
-                return {
-                    'status': self.CSV_ERROR,
-                    'message': "Error: Expected number fields on line: " + str(lines)
-                }
+                csv_messages.append(f"Error: Expected number fields on line: {str(lines)}")
+                # Skip adding or altering this row
+                iteration_error = True
+                fatal_errors += 1
 
-            # Retrieve or create Song object
-            song = None
-            if row['artist'] or row['name']:
-                song = get_or_create_song(row['artist'], row['name'])
+            # Check if the duration in the csv exceeds the actual duration of the audio file
+            file_path = join(settings.MEDIA_ROOT, str(row['filename']))
+            try:
+                # while running tests this would throw an error
+                with audioread.audio_open(file_path) as f:
+                    actual_duration = f.duration
+                if float(row['duration']) > actual_duration:
+                    # Add or edit this row, but show an error message containing the actual saved duration
+                    row['duration'] = actual_duration
+                    fatal_errors += 1                
+                    csv_messages.append(f"Error: The duration of {row['filename']} exceeds the actual duration of the audio file and has been set to {actual_duration} seconds.")
+            except:
+                pass
+                
+            # Make the changes if there are no fatal errors in this row
+            if not iteration_error:
+                # Retrieve or create Song object
+                song = None
+                if row['artist'] or row['name']:
+                    song = get_or_create_song(row['artist'], row['name'])
 
-            # create new section
-            section = Section(playlist=self,
-                              start_time=float(row['start_time']),
-                              duration=float(row['duration']),
-                              filename=row['filename'],
-                              tag=row['tag'],
-                              group=row['group'],
-                              )
-            section.song = song
+                # create new section
+                section = Section(playlist=self,
+                                start_time=float(row['start_time']),
+                                duration=float(row['duration']),
+                                filename=row['filename'],
+                                tag=row['tag'],
+                                group=row['group'],
+                                )
+                section.song = song
 
-            # if same section already exists, update it with new info
-            for ex_section in existing_sections:
-                if ex_section.filename == section.filename:
-                    if song:
-                        ex_section.song = song
+                # if same section already exists, update it with new info
+                for ex_section in existing_sections:
+                    if ex_section.filename == section.filename:
+                        if song:
+                            ex_section.song = song
+                            ex_section.save()
+                        ex_section.start_time = section.start_time
+                        ex_section.duration = section.duration
+                        ex_section.tag = section.tag
+                        ex_section.group = section.group
                         ex_section.save()
-                    ex_section.start_time = section.start_time
-                    ex_section.duration = section.duration
-                    ex_section.tag = section.tag
-                    ex_section.group = section.group
-                    ex_section.save()
-                    updated += 1
+                        updated += 1
 
-                    # Remove from existing sections list
-                    existing_sections.remove(ex_section)
-                    section = None
-                    break
+                        # Remove from existing sections list
+                        existing_sections.remove(ex_section)
+                        section = None
+                        break
 
-            # append section
-            if section:
-                sections.append(section)
+                # append section
+                if section:
+                    sections.append(section)
 
-        # Add sections
-        Section.objects.bulk_create(sections)
+        # No fatal errors 
+        if fatal_errors == 0:
 
-        # Remove obsolete sections
-        delete_ids = [ex_section.id for ex_section in existing_sections]
-        self.section_set.filter(pk__in=delete_ids).delete()
+            # Add sections
+            Section.objects.bulk_create(sections)
 
-        # Reset process csv option and save playlist
-        self.process_csv = False
-        self.save()
+            # Remove obsolete sections
+            delete_ids = [ex_section.id for ex_section in existing_sections]
+            self.section_set.filter(pk__in=delete_ids).delete()
 
+            # Reset process csv option and save playlist
+            self.process_csv = False
+            self.save()
+            
+            return {
+                'status': self.CSV_OK,
+                'message':
+                  f"Sections processed from CSV. Added: {str(len(sections))} - Updated: {str(updated)} - Removed: {str(len(delete_ids))}"
+            }
+        
         return {
-            'status': self.CSV_OK,
-            'message': "Sections processed from CSV. Added: " + str(len(sections)) + " - Updated: " + str(updated) + " - Removed: " + str(len(delete_ids))
-        }
+                    'status': self.CSV_ERROR,
+                    'messages': csv_messages,
+                }
 
     def _export_admin(self):
         """Export data for admin"""
