@@ -256,7 +256,6 @@ const MatchingPairs = ({
 
     return (
         <div className="aha__matching-pairs">
-            in between turns: {inBetweenTurns.toString()}
             <div>
                 {scoreFeedbackDisplay !== SCORE_FEEDBACK_DISPLAY.HIDDEN &&
                     <ScoreFeedback
