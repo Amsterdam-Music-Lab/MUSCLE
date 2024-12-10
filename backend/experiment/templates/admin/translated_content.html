@@ -1,11 +1,17 @@
 {% load custom_filters %}
+<div class="js-inline-admin-formset inline-group"
+     id="{{ inline_admin_formset.formset.prefix }}-group"
+     data-inline-type="stacked">
 <div class="translated-content-parent">
     <div class="tabs-container">
-    {% for langcode in inline_admin_formset|get_langcode %}
-        <a class="translated-content-tab">{{langcode}}</a>
-    {% endfor %}
-    <a class="addlink translated-content-tab"></a>
+        {% for langcode in inline_admin_formset|get_langcode %}
+            <a class="translated-content-tab">{{langcode}}</a>
+        {% endfor %}
+        <a class="addlink translated-content-tab"></a>
+    </div>
     <div>
+    {{ inline_admin_formset.formset.management_form }}
+    {{ inline_admin_formset.formset.non_form_errors }}
     {% for inline_admin_form in inline_admin_formset %}
         {% with parent_counter=forloop.counter0 %}
             {% for fieldset in inline_admin_form %}
@@ -19,4 +25,5 @@
         {% include "admin/includes/fieldset.html" with heading_level=4 prefix=fieldset.formset.prefix id_suffix="new" %}
     </div>
     </div>
+</div>
 </div>
