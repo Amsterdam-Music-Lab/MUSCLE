@@ -4,7 +4,7 @@ import json
 from django.utils.translation import gettext_lazy as _
 
 from .base import Base
-from experiment.actions import Consent, Explainer, Final, Playlist, Step, Trial
+from experiment.actions import Explainer, Final, Playlist, Step, Trial
 from experiment.actions.playback import MatchingPairs
 from result.utils import prepare_result
 
@@ -17,6 +17,18 @@ class MatchingPairsGame(Base):
     num_pairs = 8
     show_animation = True
     score_feedback_display = "large-top"
+    tutorial = {
+        "no_match": _(
+            "This was not a match, so you get 0 points. Please try again to see if you can find a matching pair."
+        ),
+        "lucky_match": _(
+            "You got a matching pair, but you didn't hear both cards before. This is considered a lucky match. You get 10 points."
+        ),
+        "memory_match": _("You got a matching pair. You get 20 points."),
+        "misremembered": _(
+            "You thought you found a matching pair, but you didn't. This is considered a misremembered pair. You lose 10 points."
+        ),
+    }
     contact_email = "aml.tunetwins@gmail.com"
     random_seed = None
 
@@ -121,6 +133,7 @@ class MatchingPairsGame(Base):
             stop_audio_after=5,
             show_animation=self.show_animation,
             score_feedback_display=self.score_feedback_display,
+            tutorial=self.tutorial,
         )
         trial = Trial(title="Tune twins", playback=playback, feedback_form=None, config={"show_continue_button": False})
         return trial
