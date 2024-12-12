@@ -56,7 +56,7 @@ class Consent(BaseAction):  # pylint: disable=too-few-public-methods
                     MARKDOWN: Allowed tags: Markdown language
 
     Note:
-        Relates to client component: Consent.js
+        Relates to client component: Consent.tsx
     """
 
     # default consent text, that can be used for multiple blocks
@@ -73,7 +73,9 @@ class Consent(BaseAction):  # pylint: disable=too-few-public-methods
                 amet, nec te atqui scribentur. Diam molestie posidonium te sit, \
                 ea sea expetenda suscipiantur contentiones."
 
-    def __init__(self, text: File, title: str="Informed consent", confirm: str="I agree", deny: str="Stop", url: str="") -> dict:
+    def __init__(
+        self, text: File, title: str = "Informed consent", confirm: str = "I agree", deny: str = "Stop", url: str = ""
+    ) -> dict:
         # Determine which text to use
         if text != "":
             # Uploaded consent via file field: block.consent (High priority)
