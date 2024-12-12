@@ -35,10 +35,10 @@ describe("Overlay Component Tests", () => {
     expect(mockOnClose).toHaveBeenCalledTimes(1);
   });
 
-  it("should call onClose when clicking the 'Got it!' button", () => {
+  it("should call onClose when clicking the 'Continue' button", () => {
     render(<Overlay {...defaultProps} />);
     waitFor(() => {
-      fireEvent.click(screen.getByTitle("Got it!"));
+      fireEvent.click(screen.getByTitle("Continue"));
       expect(mockOnClose).toHaveBeenCalledTimes(1);
     });
   });
