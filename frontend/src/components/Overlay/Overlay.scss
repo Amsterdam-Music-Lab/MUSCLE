@@ -11,7 +11,7 @@
   justify-content: center;
   z-index: 1000;
   pointer-events: none;
-  transition: background-color 0.3s ease-out;
+  transition: background-color 0.3s ease-in-out;
 
   &.visible {
     background-color: rgba(0, 0, 0, 0.66);
@@ -32,8 +32,8 @@
     max-height: 90vh;
     overflow-y: auto;
     opacity: 0;
-    transform: translateY(20px);
-    transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+    transform: translateY(-100px);
+    transition: transform .3s ease-in-out, opacity 0.3s ease-in-out;
   }
 }
 
