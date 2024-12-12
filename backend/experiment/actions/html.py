@@ -2,16 +2,20 @@ from django.utils.translation import gettext_lazy as _
 from .base_action import BaseAction
 
 
-class HTML(BaseAction):  # pylint: disable=too-few-public-methods
-    """
-    A custom view that handles a custom HTML question
-    Relates to client component: HTML.js    
+class HTML(BaseAction):
+    """An action that renders HTML content.
+
+    Attributes:
+        ID (str): Identifier for the HTML action.
+        body (str): The HTML body content.
     """
 
-    ID = 'HTML'
+    ID = "HTML"
 
-    def __init__(self, body):
-        """
-        - body: HTML body
+    def __init__(self, body: str):
+        """Initialize an HTML action.
+
+        Args:
+            body (str): The HTML body content.
         """
         self.body = body
