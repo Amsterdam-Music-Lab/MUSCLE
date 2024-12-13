@@ -17,18 +17,6 @@ class MatchingPairsGame(Base):
     num_pairs = 8
     show_animation = True
     score_feedback_display = "large-top"
-    tutorial = {
-        "no_match": _(
-            "This was not a match, so you get 0 points. Please try again to see if you can find a matching pair."
-        ),
-        "lucky_match": _(
-            "You got a matching pair, but you didn't hear both cards before. This is considered a lucky match. You get 10 points."
-        ),
-        "memory_match": _("You got a matching pair. You get 20 points."),
-        "misremembered": _(
-            "You thought you found a matching pair, but you didn't. This is considered a misremembered pair. You lose 10 points."
-        ),
-    }
     contact_email = "aml.tunetwins@gmail.com"
     random_seed = None
 

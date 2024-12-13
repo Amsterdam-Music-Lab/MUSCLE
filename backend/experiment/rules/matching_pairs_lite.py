@@ -13,7 +13,6 @@ class MatchingPairsLite(MatchingPairsGame):
     show_animation = False
     score_feedback_display = "small-bottom-right"
     contact_email = "aml.tunetwins@gmail.com"
-    tutorial = None
 
     def next_round(self, session):
         playlist = Playlist(session.block.playlists.all())
