@@ -14,6 +14,7 @@
         {% with parent_counter=forloop.counter0 %}
             {% for fieldset in inline_admin_form %}
                 <div class="translated-content-form">
+                    <span class="delete">{{ inline_admin_form.deletion_field.field }} {{ inline_admin_form.deletion_field.label_tag }}</span>
                 {% include "admin/includes/fieldset.html" with heading_level=4 prefix=fieldset.formset.prefix id_prefix=parent_counter id_suffix=forloop.counter0 %}
                 </div>
             {% endfor %}
