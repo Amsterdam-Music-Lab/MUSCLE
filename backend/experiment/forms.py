@@ -207,6 +207,11 @@ class TranslatedContentInline(Form):
         js = ["translated_content.js"]
         css = {"all": ["translated_content.css"]}
 
+    def clean(self):
+        cleaned_data = super().clean()
+        # provide instance id in cleaned data, as the custom form doesn't do that
+        cleaned_data['id'] = self.instance.id
+
 
 class ExperimentTranslatedContentForm(TranslatedContentInline, ModelForm):
 
@@ -217,22 +222,13 @@ class ExperimentTranslatedContentForm(TranslatedContentInline, ModelForm):
         self.fields["social_media_message"].widget.attrs["style"] = "height:15px"
 
     class Meta:
-        prefix = 'experiment'
         model = ExperimentTranslatedContent
-        fields = [
-            "index",
-            "language",
-            "description",
-            "about_content",
-            "consent",
-            "social_media_message",
-        ]
+        fields = "__all__"
 
 
 class BlockTranslatedContentForm(TranslatedContentInline, ModelForm):
 
     class Meta:
-        prefix = "block"
         model = BlockTranslatedContent
         fields = "__all__"
 

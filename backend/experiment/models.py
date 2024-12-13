@@ -491,11 +491,12 @@ class Block(models.Model):
 class TranslatedContent(models.Model):
     index = models.IntegerField(default=0)
     language = models.CharField(
-        default="", blank=True, choices=language_choices, max_length=2
+        default="en", blank=True, choices=language_choices, max_length=2
     )
 
     class Meta:
         abstract = True
+        ordering = ["index"]
 
 
 class ExperimentTranslatedContent(TranslatedContent):
@@ -525,6 +526,9 @@ class ExperimentTranslatedContent(TranslatedContent):
         help_text=_("Content for social media sharing. Use {points} and {experiment_name} as placeholders."),
         default="I scored {points} points in {experiment_name}!",
     )
+
+    class Meta:
+        unique_together = ["experiment", "language"]
 
 
 class BlockTranslatedContent(TranslatedContent):

@@ -62,8 +62,7 @@ class BlockTranslatedContentInline(NestedStackedInline):
     model = BlockTranslatedContent
     form = BlockTranslatedContentForm
     template = "admin/translated_content.html"
-
-    sortable_field_name = "index"
+    extra = 1
     fields = [
         "index",
         "language",
@@ -71,21 +70,12 @@ class BlockTranslatedContentInline(NestedStackedInline):
         "description",
     ]
 
-    def get_extra(self, request, obj=None, **kwargs):
-        if obj:
-            return 0
-        return 1
 
 class ExperimentTranslatedContentInline(NestedStackedInline):
     model = ExperimentTranslatedContent
     form = ExperimentTranslatedContentForm
     template = "admin/translated_content.html"
-    prefix = "experiment"
-
-    def get_extra(self, request, obj=None, **kwargs):
-        if obj:
-            return 0
-        return 1
+    extra = 1
 
 
 class BlockAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
@@ -277,7 +267,8 @@ class BlockInline(NestedStackedInline):
     model = Block
     inlines = [BlockTranslatedContentInline]
     form = BlockForm
-    classes = ["collapse"]
+    classes = ["collapse", "wide"]
+    show_change_link = True
 
     def get_extra(self, request, obj=None, **kwargs):
         if obj:
