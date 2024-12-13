@@ -496,7 +496,6 @@ class TranslatedContent(models.Model):
 
     class Meta:
         abstract = True
-        ordering = ["index"]
 
 
 class ExperimentTranslatedContent(TranslatedContent):
@@ -529,6 +528,7 @@ class ExperimentTranslatedContent(TranslatedContent):
 
     class Meta:
         unique_together = ["experiment", "language"]
+        ordering = ["index"]
 
 
 class BlockTranslatedContent(TranslatedContent):
@@ -554,6 +554,7 @@ class BlockTranslatedContent(TranslatedContent):
     class Meta:
         # Assures that there is only one translation per language
         unique_together = ["block", "language"]
+        ordering = ["index"]
 
 
 class Feedback(models.Model):
