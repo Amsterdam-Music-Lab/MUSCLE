@@ -52,6 +52,7 @@ const MatchingPairs = ({
     const [score, setScore] = useState<number | null>(null);
     const [total, setTotal] = useState(bonusPoints);
     const [startOfTurn, setStartOfTurn] = useState(performance.now());
+    const [overlayWasShown, setOverlayWasShown] = useState(false);
 
     // New state to track card states
     const [sections, setSections] = useState(() => initialSections.map(section => ({
@@ -191,14 +192,15 @@ const MatchingPairs = ({
                     const scoreResponse = await scoreIntermediateResult({
                         session,
                         participant,
-                        result: { "start_of_turn": startOfTurn, first_card: firstCard, second_card: currentCard }
+                        result: { "start_of_turn": startOfTurn, first_card: firstCard, second_card: currentCard, overlay_was_shown: overlayWasShown, },
                     });
                     if (!scoreResponse) {
                         throw new Error('We cannot currently proceed with the game. Try again later');
                     }
                     setScore(scoreResponse.score);
                     showFeedback(scoreResponse.score);
-                    showOverlay(scoreResponse.score);
+                    const isShowingOverlay = showOverlay(scoreResponse.score);
+                    setOverlayWasShown(isShowingOverlay);
                 } catch {
                     setError('We cannot currently proceed with the game. Try again later');
                     return;
