@@ -8,14 +8,17 @@ class HTML(BaseAction):
     Attributes:
         ID (str): Identifier for the HTML action.
         body (str): The HTML body content.
+
+    Args:
+        body (str): The HTML body content
+
+    Examples:
+        To render a simple HTML snippet with a title and a paragraph:
+
+        >>> html_action = HTML('<h1>Hello, world!</h1><p>This is a simple HTML snippet.</p>')
     """
 
     ID = "HTML"
 
     def __init__(self, body: str):
-        """Initialize an HTML action.
-
-        Args:
-            body (str): The HTML body content.
-        """
         self.body = body
