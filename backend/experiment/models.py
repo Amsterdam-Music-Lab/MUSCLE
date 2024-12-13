@@ -16,8 +16,6 @@ from typing import Optional, Union
 from .validators import markdown_html_validator, block_slug_validator, experiment_slug_validator
 
 language_choices = [(key, ISO_LANGUAGES[key]) for key in ISO_LANGUAGES.keys()]
-language_choices[0] = ("", "Unset")
-
 
 class Experiment(models.Model):
     """A model to allow nesting multiple phases with blocks into a 'parent' experiment
