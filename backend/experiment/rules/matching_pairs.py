@@ -17,6 +17,7 @@ class MatchingPairsGame(Base):
     num_pairs = 8
     show_animation = True
     score_feedback_display = "large-top"
+    tutorial = None
     contact_email = "aml.tunetwins@gmail.com"
     random_seed = None
 
