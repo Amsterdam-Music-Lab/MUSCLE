@@ -1,4 +1,4 @@
-import type { Meta } from '@storybook/react';
+import type { Meta, StoryFn } from '@storybook/react';
 import Histogram from "../components/Histogram/Histogram";
 
 const meta: Meta<typeof Histogram> = {
@@ -22,7 +22,7 @@ export const Default = {
         borderRadius: "0.15rem",
     },
     decorators: [
-        (Story) => (
+        (Story: any) => (
             <div
                 style={{
                     width: "128px",
@@ -42,17 +42,16 @@ export const Random = {
     args: {
         bars: 7,
         spacing: 6,
-        interval: 100,
         running: true,
         marginLeft: 0,
         marginTop: 0,
         backgroundColor: undefined,
         borderRadius: "0.15rem",
         random: true,
-        interval: 150,
+        interval: 200,
     },
     decorators: [
-        (Story) => (
+        (Story: StoryFn) => (
             <div
                 style={{
                     width: "128px",

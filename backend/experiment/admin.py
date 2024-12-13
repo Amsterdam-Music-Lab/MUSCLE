@@ -50,15 +50,7 @@ from participant.models import Participant
 from question.models import QuestionSeries, QuestionInSeries
 
 
-class FeedbackInline(admin.TabularInline):
-    """Inline to show results linked to given participant"""
-
-    model = Feedback
-    fields = ["text"]
-    extra = 0
-
-
-class BlockTranslatedContentInline(NestedStackedInline):
+class BlockTranslatedContentInline(NestedTabularInline):
     model = BlockTranslatedContent
     form = BlockTranslatedContentForm
     template = "admin/translated_content.html"
@@ -98,7 +90,7 @@ class BlockAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
         "bonus_points",
         "playlists",
     ]
-    inlines = [QuestionSeriesInline, FeedbackInline, BlockTranslatedContentInline]
+    inlines = [QuestionSeriesInline, BlockTranslatedContentInline]
     form = BlockForm
 
     # make playlists fields a list of checkboxes
@@ -115,6 +107,7 @@ class BlockAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
         all_sections = Section.objects.none()
         all_participants = Participant.objects.none()
         all_profiles = Result.objects.none()
+        all_feedback = Feedback.objects.filter(block=obj)
 
         # Collect data
         all_sessions = obj.export_sessions().order_by("pk")
@@ -169,6 +162,10 @@ class BlockAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
             new_zip.writestr(
                 "songs.json",
                 data=str(serializers.serialize("json", all_songs.order_by("pk"))),
+            )
+            new_zip.writestr(
+                "feedback.json",
+                data=str(serializers.serialize("json", all_feedback.order_by("pk"))),
             )
 
         # create forced download response
@@ -387,9 +384,9 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, NestedModelAdmin):
                 )
 
             # order_by is inserted here to prevent a query error
-            exp_contents = obj.translated_content.order_by('name').all()
+            exp_contents = obj.translated_content.order_by("name").all()
             # order_by is inserted here to prevent a query error
-            exp_phases = obj.phases.order_by('index').all()
+            exp_phases = obj.phases.order_by("index").all()
 
             # Duplicate Experiment object
             exp_copy = obj
@@ -478,15 +475,18 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, NestedModelAdmin):
         all_blocks = obj.associated_blocks()
         all_participants = obj.current_participants()
         all_sessions = obj.export_sessions()
+        all_feedback = obj.export_feedback()
         collect_data = {
             "participant_count": len(all_participants),
             "session_count": len(all_sessions),
+            "feedback_count": len(all_feedback),
         }
 
         blocks = [
             {
                 "id": block.id,
                 "slug": block.slug,
+                "name": block,
                 "started": len(all_sessions.filter(block=block)),
                 "finished": len(
                     all_sessions.filter(
@@ -508,6 +508,7 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, NestedModelAdmin):
                 "blocks": blocks,
                 "sessions": all_sessions,
                 "participants": all_participants,
+                "feedback": all_feedback,
                 "collect_data": collect_data,
             },
         )

@@ -7,7 +7,7 @@ from django.contrib.admin.sites import AdminSite
 from django.urls import reverse
 from django.utils.html import format_html
 from experiment.admin import BlockAdmin, ExperimentAdmin, PhaseAdmin
-from experiment.models import Block, Experiment, Phase, ExperimentTranslatedContent, BlockTranslatedContent
+from experiment.models import Block, Experiment, Phase, ExperimentTranslatedContent, BlockTranslatedContent, Feedback
 from participant.models import Participant
 from result.models import Result
 from session.models import Session
@@ -87,6 +87,7 @@ class TestAdminBlockExport(TestCase):
             block=cls.block,
             participant=cls.participant,
         )
+
         for i in range(5):
             Result.objects.create(
                 session=Session.objects.first(),
@@ -99,6 +100,15 @@ class TestAdminBlockExport(TestCase):
                 question_key=i,
                 given_response=i,
             )
+
+        Feedback.objects.create(
+            block=cls.block,
+            text="Lorem",
+        )
+        Feedback.objects.create(
+            block=cls.block,
+            text="Ipsum",
+        )
 
     def setUp(self):
         self.client = Client()
@@ -115,7 +125,8 @@ class TestAdminBlockExport(TestCase):
             self.assertIn("sections.json", test_zip.namelist())
             self.assertIn("sessions.json", test_zip.namelist())
             self.assertIn("songs.json", test_zip.namelist())
-            self.assertEqual(len(test_zip.namelist()), 6)
+            self.assertIn("feedback.json", test_zip.namelist())
+            self.assertEqual(len(test_zip.namelist()), 7)
 
             # test content of the json files in the zip
             these_participants = json.loads(test_zip.read("participants.json").decode("utf-8"))
@@ -138,6 +149,9 @@ class TestAdminBlockExport(TestCase):
 
             these_songs = json.loads(test_zip.read("songs.json").decode("utf-8"))
             self.assertEqual(len(these_songs), 100)
+
+            this_feedback = json.loads(test_zip.read("feedback.json").decode("utf-8"))
+            self.assertEqual(len(this_feedback), 2)
 
         # test response from forced download
         self.assertEqual(response.status_code, 200)

@@ -6,6 +6,14 @@ const closeSessions = () => {
     })
 }
 
+// Hide all feedback
+const closeFeedback = () => {
+    document.getElementById("all-feedback").close();
+    document.querySelectorAll(".feedback-row").forEach(function (element) {
+        element.classList.add("hide");
+    })
+}
+
 // Hide all participants
 const closeParticipants = () => {
     document.getElementById("all-participants").close();
@@ -41,6 +49,14 @@ document.getElementById("show-participants").addEventListener("click", () => {
 document.getElementById("show-sessions").addEventListener("click", () => {
     document.getElementById("all-sessions").showModal();
     document.querySelectorAll(".session-row").forEach(function (element) {
+        element.classList.remove("hide");
+    })
+})
+
+// Attach event to show all feedback button
+document.getElementById("show-feedback").addEventListener("click", () => {
+    document.getElementById("all-feedback").showModal();
+    document.querySelectorAll(".feedback-row").forEach(function (element) {
         element.classList.remove("hide");
     })
 })

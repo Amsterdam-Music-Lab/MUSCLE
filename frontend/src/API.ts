@@ -7,6 +7,7 @@ import IExperiment from "@/types/Experiment";
 import Participant, { ParticipantLink } from "./types/Participant";
 import Session from "./types/Session";
 import Experiment from "@/types/Experiment";
+import { RoundResponse } from "./types/Round";
 
 // API handles the calls to the Hooked-server api
 
@@ -173,7 +174,7 @@ interface GetNextRoundParams {
 
 
 // Get next_round from server
-export const getNextRound = async ({ session }: GetNextRoundParams) => {
+export const getNextRound = async ({ session }: GetNextRoundParams): Promise<RoundResponse | null> => {
 
     const sessionId = session.id.toString();
 

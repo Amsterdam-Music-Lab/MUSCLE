@@ -44,6 +44,11 @@ class Experiment(models.Model):
         translated_content = self.get_fallback_content()
         return translated_content.name if translated_content else self.slug
 
+    @property
+    def name(self):
+        content = self.get_fallback_content()
+        return content.name if content and content.name else ""
+
     class Meta:
         verbose_name_plural = "Experiments"
 
@@ -80,6 +85,18 @@ class Experiment(models.Model):
         for session in self.export_sessions():
             participants[session.participant.id] = session.participant
         return participants.values()
+
+    def export_feedback(self) -> QuerySet[Session]:
+        """export feedback for the blocks in this experiment
+
+        Returns:
+            Associated block feedback
+        """
+
+        all_feedback = Feedback.objects.none()
+        for block in self.associated_blocks():
+            all_feedback |= Feedback.objects.filter(block=block)
+        return all_feedback
 
     def get_fallback_content(self) -> "ExperimentTranslatedContent":
         """Get fallback content for the experiment
