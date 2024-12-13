@@ -543,10 +543,6 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, NestedModelAdmin):
                 }
             )
 
-        supported_languages = obj.translated_content.values_list(
-            "language", flat=True
-        ).distinct()
-
         missing_content_block_translations = check_missing_translations(obj)
 
         if missing_content_block_translations:

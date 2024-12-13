@@ -1,17 +1,17 @@
 import copy
 from os.path import join
+from typing import Any, List, Optional
 
 from django.db import models
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _, get_language
 from django.contrib.postgres.fields import ArrayField
 from django.db.models.query import QuerySet
-from typing import List, Dict, Tuple, Any
+
 from experiment.standards.iso_languages import ISO_LANGUAGES
 from theme.models import ThemeConfig
 from image.models import Image
 from session.models import Session
-from typing import Optional, Union
 
 from .validators import markdown_html_validator, block_slug_validator, experiment_slug_validator
 
