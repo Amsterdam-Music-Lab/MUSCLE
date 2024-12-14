@@ -45,3 +45,5 @@ mkdocs-material
 # Translate fields in Django models
 django-modeltranslation
 
+# Django multiselect with search
+django-select2

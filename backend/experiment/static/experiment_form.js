@@ -18,8 +18,10 @@ function initCollapsibleInlineForms() {
             // create text element in button to show that the form is collapsed
             collapsedInfo = document.createElement('small');
             collapsedInfo.id = 'collapsed-info';
-            collapsedInfo.innerText = ' (-)';
+
+            collapsedInfo.innerText = ' \u25b2';
             collapsedInfo.style.color = '#fff';
+            collapsedInfo.style.fontSize = '.75rem';
             toggleButton.appendChild(collapsedInfo);
         }
 
@@ -31,10 +33,10 @@ function initCollapsibleInlineForms() {
 
             if (currentlyHidden) {
                 // create text element in button to show that the form is collapsed
-                collapsedInfo.innerText = ' (+)';
+                collapsedInfo.innerText = ' \u25bc';
             } else {
                 // remove the text element in button to show that the form is expanded
-                collapsedInfo.innerText = ' (-)';
+                collapsedInfo.innerText = ' \u25b2';
             }
         });
     });

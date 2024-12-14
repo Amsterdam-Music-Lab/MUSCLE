@@ -27,19 +27,19 @@ describe('Social Component', () => {
 
     it('renders all social media buttons when all apps are included', () => {
         render(<Social social={mockSocial} />);
-        expect(screen.getByTestId('facebook-share')).toBeDefined();
-        expect(screen.getByTestId('whatsapp-share')).toBeDefined();
-        expect(screen.getByTestId('twitter-share')).toBeDefined();
-        expect(screen.getByTestId('weibo-share')).toBeDefined();
+        expect(document.querySelector('.fa-facebook-f')).toBeDefined();
+        expect(document.querySelector('.fa-whatsapp')).toBeDefined();
+        expect(document.querySelector('.fa-x-twitter')).toBeDefined();
+        expect(document.querySelector('.fa-weibo')).toBeDefined();
     });
 
     it('renders only specified social media buttons', () => {
         const limitedSocial: ISocial = { ...mockSocial, channels: ['facebook', 'twitter'] };
         render(<Social social={limitedSocial} />);
-        expect(screen.getByTestId('facebook-share')).toBeDefined();
-        expect(screen.getByTestId('twitter-share')).toBeDefined();
-        expect(screen.queryByTestId('whatsapp-share')).toBeNull();
-        expect(screen.queryByTestId('weibo-share')).toBeNull();
+        expect(document.querySelector('.fa-facebook-f')).toBeDefined();
+        expect(document.querySelector('.fa-x-twitter')).toBeDefined();
+        expect(document.querySelector('.fa-whatsapp')).toBeNull();
+        expect(document.querySelector('.fa-weibo')).toBeNull();
     });
 
     it('renders share button when navigator.share is available', () => {

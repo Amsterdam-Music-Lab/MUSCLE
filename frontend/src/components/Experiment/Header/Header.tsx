@@ -30,9 +30,6 @@ export const Header: React.FC<HeaderProps> = ({
     socialMediaConfig
 }) => {
 
-    // Get current URL minus the query string
-    const currentUrl = window.location.href.split('?')[0];
-
     return (
         <div className="hero">
             <div className="intro">

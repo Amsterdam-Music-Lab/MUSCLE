@@ -6,37 +6,20 @@ import classNames from "classnames";
 import useBoundStore from "@/util/stores";
 import { getNextRound, useBlock } from "@/API";
 import DefaultPage from "@/components/Page/DefaultPage";
-import Explainer, { ExplainerProps } from "@/components/Explainer/Explainer";
-import Final, { FinalProps } from "@/components/Final/Final";
-import Loading, { LoadingProps } from "@/components/Loading/Loading";
-import Playlist, { PlaylistProps } from "@/components/Playlist/Playlist";
-import Score, { ScoreProps } from "@/components/Score/Score";
-import Trial, { TrialProps } from "@/components/Trial/Trial";
-import Info, { InfoProps } from "@/components/Info/Info";
+import Explainer from "@/components/Explainer/Explainer";
+import Final from "@/components/Final/Final";
+import Loading from "@/components/Loading/Loading";
+import Playlist from "@/components/Playlist/Playlist";
+import Score from "@/components/Score/Score";
+import Trial from "@/components/Trial/Trial";
+import Info from "@/components/Info/Info";
 import FloatingActionButton from "@/components/FloatingActionButton/FloatingActionButton";
 import UserFeedback from "@/components/UserFeedback/UserFeedback";
 import FontLoader from "@/components/FontLoader/FontLoader";
 import useResultHandler from "@/hooks/useResultHandler";
 import Session from "@/types/Session";
-import { RedirectProps } from "../Redirect/Redirect";
-
-interface SharedActionProps {
-    title?: string;
-    config?: object;
-    style?: object;
-}
-
-type ActionProps = SharedActionProps &
-    (
-        | { view: "EXPLAINER" } & ExplainerProps
-        | { view: "INFO" } & InfoProps
-        | { view: "TRIAL_VIEW" } & TrialProps
-        | { view: 'SCORE' } & ScoreProps
-        | { view: 'FINAL' } & FinalProps
-        | { view: 'PLAYLIST' } & PlaylistProps
-        | { view: 'REDIRECT' } & RedirectProps
-        | { view: "LOADING" } & LoadingProps
-    )
+import { Action } from "@/types/Action";
+import { Round } from "@/types/Round";
 
 // Block handles the main (experiment) block flow:
 // - Loads the block and participant
@@ -46,7 +29,7 @@ type ActionProps = SharedActionProps &
 //   Empty URL parameter "participant_id" is the same as no URL parameter at all
 const Block = () => {
     const { slug } = useParams();
-    const startState = { view: "LOADING" } as ActionProps;
+    const startState = { view: "LOADING" } as Action;
     // Stores
     const setError = useBoundStore(state => state.setError);
     const participant = useBoundStore((state) => state.participant);
@@ -56,36 +39,39 @@ const Block = () => {
     const setTheme = useBoundStore((state) => state.setTheme);
     const resetTheme = useBoundStore((state) => state.resetTheme);
     const setBlock = useBoundStore((state) => state.setBlock);
+    const setCurrentAction = useBoundStore((state) => state.setCurrentAction);
 
     const setHeadData = useBoundStore((state) => state.setHeadData);
     const resetHeadData = useBoundStore((state) => state.resetHeadData);
 
     // Current block state
-    const [actions, setActions] = useState([]);
-    const [state, setState] = useState<ActionProps | null>(startState);
+    const [actions, setActions] = useState<Round>([]);
+    const [state, setState] = useState<Action | null>(startState);
     const [key, setKey] = useState<number>(Math.random());
     const playlist = useRef(null);
 
     // API hooks
-    const [block, loadingBlock] = useBlock(slug);
+    const [block, loadingBlock] = useBlock(slug!);
 
     const loadingText = block ? block.loading_text : "";
     const className = block ? block.class_name : "";
 
     /** Set new state as spread of current state to force re-render */
-    const updateState = useCallback((state: ActionProps) => {
+    const updateState = useCallback((state: Action) => {
         if (!state) return;
 
         setState({ ...state });
         setKey(Math.random());
     }, []);
 
-    const updateActions = useCallback((currentActions: []) => {
+    const updateActions = useCallback((currentActions: Round) => {
         const newActions = currentActions;
         setActions(newActions);
         const newState = newActions.shift();
+        const currentAction = newState ? newState : null;
+        setCurrentAction({ ...currentAction });
         updateState(newState);
-    }, [updateState]);
+    }, [updateState, setCurrentAction]);
 
     const continueToNextRound = async (activeSession: Session) => {
         // Try to get next_round data from server
@@ -98,6 +84,7 @@ const Block = () => {
             setError(
                 "An error occured while loading the data, please try to reload the page. (Error: next_round data unavailable)"
             );
+            setCurrentAction(null);
             setState(null);
         }
     };
@@ -258,14 +245,6 @@ const Block = () => {
                 {(!loadingBlock && block) || view === "ERROR" ? (
                     <DefaultPage
                         title={state.title}
-                        logoClickConfirm={
-                            ["FINAL", "ERROR"].includes(view) ||
-                                // Info pages at end of block
-                                (view === "INFO" &&
-                                    (!state.next_round || !state.next_round.length))
-                                ? null
-                                : "Are you sure you want to stop this experiment?"
-                        }
                         className={className}
                     >
                         {render()}

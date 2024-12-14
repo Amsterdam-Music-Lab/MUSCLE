@@ -1,10 +1,13 @@
 from random import shuffle
+from typing import Optional, Union
 
 from django_markup.markup import formatter
+from django.utils.translation import activate, get_language
 
 from experiment.actions.consent import Consent
 from image.serializers import serialize_image
 from participant.models import Participant
+from result.models import Result
 from session.models import Session
 from theme.serializers import serialize_theme
 from .models import Block, Experiment, Phase, SocialMediaConfig
@@ -17,7 +20,20 @@ def serialize_actions(actions):
     return actions.action()
 
 
-def serialize_experiment(experiment: Experiment, language: str = "en") -> dict:
+def get_experiment_translated_content(experiment):
+    language_code = get_language()[0:2]
+
+    translated_content = experiment.get_translated_content(language_code)
+
+    if not translated_content:
+        raise ValueError("No translated content found for this experiment")
+
+    # set language cookie to the first available translation for this experiment
+    activate(translated_content.language)
+    return translated_content
+
+
+def serialize_experiment(experiment: Experiment) -> dict:
     """Serialize experiment
 
     Args:
@@ -27,10 +43,7 @@ def serialize_experiment(experiment: Experiment, language: str = "en") -> dict:
         Basic info about an experiment
     """
 
-    translated_content = experiment.get_translated_content(language)
-
-    if not translated_content:
-        raise ValueError("No translated content found for experiment")
+    translated_content = get_experiment_translated_content(experiment)
 
     serialized = {
         "slug": experiment.slug,
@@ -50,12 +63,17 @@ def serialize_experiment(experiment: Experiment, language: str = "en") -> dict:
         serialized["aboutContent"] = formatter(translated_content.about_content, filter_name="markdown")
 
     if hasattr(experiment, "social_media_config") and experiment.social_media_config:
-        serialized["socialMedia"] = serialize_social_media_config(experiment.social_media_config)
+        serialized["socialMedia"] = serialize_social_media_config(
+            experiment.social_media_config
+        )
 
     return serialized
 
 
-def serialize_social_media_config(social_media_config: SocialMediaConfig) -> dict:
+def serialize_social_media_config(
+    social_media_config: SocialMediaConfig,
+    score: Optional[float] = 0,
+) -> dict:
     """Serialize social media config
 
     Args:
@@ -66,14 +84,14 @@ def serialize_social_media_config(social_media_config: SocialMediaConfig) -> dic
     """
 
     return {
-        "tags": social_media_config.tags,
+        "tags": social_media_config.tags or ["amsterdammusiclab", "citizenscience"],
         "url": social_media_config.url,
-        "content": social_media_config.get_content(),
-        "channels": social_media_config.channels,
+        "content": social_media_config.get_content(score),
+        "channels": social_media_config.channels or ["facebook", "twitter"],
     }
 
 
-def serialize_phase(phase: Phase, participant: Participant) -> dict:
+def serialize_phase(phase: Phase, participant: Participant, times_played: int) -> dict:
     """Serialize phase
 
     Args:
@@ -81,20 +99,17 @@ def serialize_phase(phase: Phase, participant: Participant) -> dict:
         participant: Participant instance
 
     Returns:
-        Dashboard info for a participant
+        A dictionary of the dashboard (if applicable), the next block, and the total score of the phase
     """
+    blocks = list(phase.blocks.order_by("index").all())
 
-    blocks = list(Block.objects.filter(phase=phase.id).order_by("index"))
-
-    if phase.randomize:
-        shuffle(blocks)
-
-    next_block = get_upcoming_block(blocks, participant, phase.dashboard)
-
-    total_score = get_total_score(blocks, participant)
-
+    next_block = get_upcoming_block(phase, participant, times_played)
     if not next_block:
         return None
+
+    total_score = get_total_score(blocks, participant)
+    if phase.randomize:
+        shuffle(blocks)
 
     return {
         "dashboard": [serialize_block(block, participant) for block in blocks] if phase.dashboard else [],
@@ -122,21 +137,29 @@ def serialize_block(block_object: Block, language: str = "en") -> dict:
     }
 
 
-def get_upcoming_block(block_list: list[Block], participant: Participant, repeat_allowed: bool = True):
+def get_upcoming_block(
+    phase: Phase, participant: Participant, times_played: int
+) -> dict:
     """return next block with minimum finished sessions for this participant
-    if repeated blocks are not allowed (dashboard=False) and there are only finished sessions, return None
+    if all blocks have been played an equal number of times, return None
 
     Args:
-        block_list: List of Block instances
-        participant: Participant instance
-        repeat_allowed: Allow repeating a block
+        phase: Phase for which next block needs to be picked
+        participant: Participant for which next block needs to be picked
     """
+    blocks = list(phase.blocks.all())
 
-    finished_session_counts = [get_finished_session_count(block, participant) for block in block_list]
-    minimum_session_count = min(finished_session_counts)
-    if not repeat_allowed and minimum_session_count != 0:
-        return None
-    return serialize_block(block_list[finished_session_counts.index(minimum_session_count)], participant)
+    shuffle(blocks)
+    finished_session_counts = [
+        get_finished_session_count(block, participant) for block in blocks
+    ]
+
+    min_session_count = min(finished_session_counts)
+    if not phase.dashboard:
+        if times_played != min_session_count:
+            return None
+    next_block_index = finished_session_counts.index(min_session_count)
+    return serialize_block(blocks[next_block_index])
 
 
 def get_started_session_count(block: Block, participant: Participant) -> int:
@@ -165,11 +188,12 @@ def get_finished_session_count(block: Block, participant: Participant) -> int:
         Number of finished sessions for this block and participant
     """
 
-    count = Session.objects.filter(block=block, participant=participant, finished_at__isnull=False).count()
-    return count
+    return Session.objects.filter(
+        block=block, participant=participant, finished_at__isnull=False
+    ).count()
 
 
-def get_total_score(blocks: list, participant: dict) -> int:
+def get_total_score(blocks: list, participant: Participant) -> int:
     """Calculate total score of all blocks on the dashboard
 
     Args:

@@ -1,6 +1,9 @@
 <!-- session table -->
-<div id="all-sessions" class="pop-up pop-up-big hide">
-    <input type="button" value="close" onClick="closeSessions()" />
+<dialog id="all-sessions" class="pop-up pop-up-big">
+    <h1>
+        Sessions in experiment: <a href="{% url 'admin:experiment_experiment_change' experiment.id %}" target="_blank">{{ experiment }}</a>
+    </h1>
+    <input type="button" value="close" onClick="closeSessions()" autofocus />
     <table>
         <caption class="dashboard-caption">Sessions</caption>
         <thead>
@@ -19,18 +22,19 @@
         <tbody>
             <!-- List and hide all sessions in this experiment with a unique id per block -->
             {% for session in sessions %}
-                <tr class="session-row hide experiment-{{ session.block.id }} participant-session-{{ session.participant.id }}">
+                <tr class="session-row hide block-{{ session.block.id }} participant-session-{{ session.participant.id }}">
 
                     <td>
                         <p>
                             <a href="{% url 'admin:session_session_change' session.id %}" target="_blank">
-                            {{ session.id }}</a>
+                                {{ session.id }}
+                            </a>
                         </p>
                     </td>
 
                     <td>
                         <p>
-                            {{ session.block.slug }}
+                            {{ session.block }}
                         </p>
                     </td>
 
@@ -71,48 +75,58 @@
                     </td>
 
                     <td class="table-results">
-                        <input type="button" value="Preview results" onClick="showResults({{ session.id }})" />
+                        <button
+                            class="button button-full"
+                            type="button"
+                            {% if session.result_set.count == 0 %}
+                                disabled
+                            {% endif %}
+                            onClick="showResults({{ session.id }})"
+                        >
+                            Preview <span class="badge badge-white">{{ session.result_set.count }}</span>
+                        </button>
                     </td>
                 </tr>
 
                 <!-- Popup with results for this session -->
-                <div class="pop-up pop-up-small hide show-results" id="results-{{ session.id }}">
-                    <input type="button" value="close" onClick="closeResults()" />
+                <dialog class="pop-up pop-up-small show-results" id="results-{{ session.id }}">
 
-                    {% for result in session.result_set %}
-                    <h2>Result : <a href="{% url 'admin:session_session_change' session.id %}" target="_blank">{{ result.id }}</a></h2>
-                    <h3>
-                        Session: <a href="{% url 'admin:session_session_change' session.id %}" target="_blank">{{ session.id }}</a><br>
-                        Participant: <a href="{% url 'admin:participant_participant_change' session.participant.id %}" target="_blank">{{ session.participant.participant_id_url }}</a><br>
-                        Block: {{ session.block.slug }}
-                    </h3>
+                    <input type="button" value="close" onClick="closeResults()" autofocus />
 
-                    <pre>
-Created:            {{ result.created_at }}
-Section:            {{ result.section.filename }}
-Question key:       {{ result.question_key }}
-Expected response:  {{ result.expected_response }}
-Given response:     {{ result.given_response }}
-Comment:            {{ result.comment }}
-Score:              {{ result.score }}
-Scoring rule:       {{ result.scoring_rule }}
-                    </pre>
+                    {% for result in session.result_set.all %}
+                        <h2>Result : <a href="{% url 'admin:session_session_change' session.id %}" target="_blank">{{ result.id }}</a></h2>
+                        <h3>
+                            Session: <a href="{% url 'admin:session_session_change' session.id %}" target="_blank">{{ session.id }}</a><br>
+                            Participant: <a href="{% url 'admin:participant_participant_change' session.participant.id %}" target="_blank">{{ session.participant.participant_id_url }}</a><br>
+                            Block: <a href="{% url 'admin:experiment_block_change' session.block.id %}" target="_blank" title="Block URL id">{{ session.block }}</a>
+                        </h3>
 
-                    <pre id="result-{{ result.id }}"></pre>
-                    <hr>
-                    <!-- Convert django json_data to json const and push to screen -->
-                    {{ result.json_data|json_script:result.id }}
-                    <script>
-                        const result{{ result.id }} = JSON.parse(document.getElementById({{ result.id }}).textContent);
-                        document.getElementById("result-{{ result.id }}").innerHTML = JSON.stringify(result{{ result.id }}, null, 4);
-                    </script>
+                        <pre>
+    Created:            {{ result.created_at }}
+    Section:            {{ result.section.filename }}
+    Question key:       {{ result.question_key }}
+    Expected response:  {{ result.expected_response }}
+    Given response:     {{ result.given_response }}
+    Comment:            {{ result.comment }}
+    Score:              {{ result.score }}
+    Scoring rule:       {{ result.scoring_rule }}
+                        </pre>
+
+                        <pre id="result-{{ result.id }}"></pre>
+                        <hr>
+                        <!-- Convert django json_data to json const and push to screen -->
+                        {{ result.json_data|json_script:result.id }}
+                        <script>
+                            const result{{ result.id }} = JSON.parse(document.getElementById({{ result.id }}).textContent);
+                            document.getElementById("result-{{ result.id }}").innerHTML = JSON.stringify(result{{ result.id }}, null, 4);
+                        </script>
 
                     {% endfor %}
                     <input type="button" value="close" onClick="closeResults()" />
-                </div>
+                </dialog>
             {% endfor %}
         </tbody>
     </table>
     <p class="help-text mini">* Click to edit in a new window</p>
     <input type="button" value="close" onClick="closeSessions()" />
-</div>
+</dialog>

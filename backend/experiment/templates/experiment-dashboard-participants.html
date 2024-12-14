@@ -1,8 +1,11 @@
 <!-- Participant table -->
-<div id="all-participants" class="hide pop-up pop-up-big">
-    <h1>All Participants in experiment: {{ experiment.name }}</h1>
-    <input type="button" value="close" onClick="closeParticipants()" />
+<dialog id="all-participants" class="pop-up pop-up-big">
+    <h1>
+        All participants in Experiment: <a href="{% url 'admin:experiment_experiment_change' experiment.id %}" target="_blank">{{ experiment }}</a>
+    </h1>
+    <input type="button" value="close" onClick="closeParticipants()" autofocus />
     <table>
+        <caption class="dashboard-caption">Participants</caption>
         <thead>
             <tr>
                 <th>Participant URL id *</th>
@@ -45,4 +48,4 @@
     </table>
     <p class="help-text mini">* Click to edit in a new window</p>
     <input type="button" value="close" onClick="closeParticipants()" />
-</div>
+</dialog>

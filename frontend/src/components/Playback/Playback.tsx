@@ -12,7 +12,7 @@ import MatchingPairs from "../MatchingPairs/MatchingPairs";
 import Preload from "../Preload/Preload";
 import { AUTOPLAY, BUTTON, IMAGE, MATCHINGPAIRS, MULTIPLAYER, PRELOAD, PlaybackArgs, PlaybackView } from "@/types/Playback";
 
-interface PlaybackProps {
+export interface PlaybackProps {
     playbackArgs: PlaybackArgs;
     onPreloadReady: () => void;
     autoAdvance: boolean;

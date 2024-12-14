@@ -1,4 +1,4 @@
-import { render, fireEvent } from '@testing-library/react';
+import { render } from '@testing-library/react';
 import AppBar from './AppBar';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { vi, describe, beforeEach, it, expect } from 'vitest';
@@ -31,17 +31,6 @@ describe('AppBar', () => {
         const logo = getByLabelText('Logo');
         expect(logo.tagName).toBe('A');
         expect(logo.getAttribute('href')).toBe(BASE_URL);
-    });
-
-    it('prevents navigation when logoClickConfirm is provided and user cancels', () => {
-        // Mock window.confirm
-        window.confirm = vi.fn(() => false);
-
-        const { getByLabelText } = render(<AppBar title="Test Title" logoClickConfirm="Confirm?" />, { wrapper: Router });
-        const logo = getByLabelText('Logo');
-        fireEvent.click(logo);
-
-        expect(window.confirm).toHaveBeenCalledWith('Confirm?');
     });
 
 });

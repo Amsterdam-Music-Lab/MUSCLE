@@ -1,5 +1,12 @@
-//...
 import * as Sentry from "@sentry/react";
+
+import { useEffect } from "react";
+import {
+    createRoutesFromChildren,
+    matchRoutes,
+    useLocation,
+    useNavigationType,
+} from "react-router-dom";
 
 const SENTRY_DSN = import.meta.env.VITE_SENTRY_DSN;
 
@@ -13,11 +20,14 @@ export const initSentry = () => {
     return Sentry.init({
         dsn: SENTRY_DSN,
         integrations: [
-            new Sentry.BrowserTracing({
-                // Set 'tracePropagationTargets' to control for which URLs distributed tracing should be enabled
-                tracePropagationTargets: ["localhost", /^https:\/\/yourserver\.io\/api/],
+            Sentry.reactRouterV6BrowserTracingIntegration({
+                useEffect,
+                useLocation,
+                useNavigationType,
+                createRoutesFromChildren,
+                matchRoutes,
             }),
-            new Sentry.Replay(),
+            Sentry.replayIntegration(),
         ],
         // Performance Monitoring
         tracesSampleRate: 0.1, // Capture 100% of the transactions

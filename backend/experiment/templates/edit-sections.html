@@ -57,11 +57,11 @@
             </td>
             <td>
                 <input type="text" name="{{section.id}}_artist" maxlength="128" id="{{section.id}}_artist"
-                    value="{{ section.artist_name('*')}}" >
+                    value="{{ section.artist_name}}" placeholder="*">
             </td>
             <td>
                 <input type="text" name="{{section.id}}_name" maxlength="128" id="{{section.id}}_name"
-                    value="{{ section.song_name('*')}}" >
+                    value="{{ section.song_name}}" placeholder="*">
             </td>
             <td>
                 <input type="number" name="{{section.id}}_start_time" maxlength="128" required=""
