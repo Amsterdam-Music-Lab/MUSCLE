@@ -149,7 +149,26 @@ class PlaylistAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
                 section.song = song
 
                 section.start_time = request.POST.get(pre_fix + "_start_time")
-                section.duration = request.POST.get(pre_fix + "_duration")
+
+                new_duration = float(request.POST.get(pre_fix + "_duration"))
+                # while running tests this would throw an error
+                try:
+                    # Check if the duration in the csv exceeds the actual duration of the audio file
+                    file_path = join(settings.MEDIA_ROOT, str(section.filename))
+
+                    # while running tests this would throw an error
+                    with audioread.audio_open(file_path) as f:
+                        actual_duration = f.duration
+                    if new_duration > actual_duration:
+                        # Add or edit this row, but show an error message containing the actual saved duration
+                        section.duration = actual_duration
+
+                        messages.error(request, f"Error: The duration of {section.filename} exceeds the actual duration of the audio file and has been set to {actual_duration} seconds.")
+                    else:
+                        section.duration = new_duration
+                except:
+                    section.duration = new_duration
+
                 section.tag = request.POST.get(pre_fix + "_tag")
                 section.group = request.POST.get(pre_fix + "_group")
                 section.save()
