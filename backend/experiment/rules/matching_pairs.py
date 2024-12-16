@@ -140,7 +140,6 @@ class MatchingPairsGame(Base):
         second_card = result_data["second_card"]
         second_section = Section.objects.get(pk=second_card["id"])
         second_card["filename"] = str(second_section.filename)
-        overlay_was_shown = result_data["overlay_was_shown"]
         if first_section.group == second_section.group:
             if "seen" in second_card and second_card["seen"]:
                 score = 20
