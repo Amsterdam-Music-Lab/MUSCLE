@@ -5,10 +5,6 @@ from .base_action import BaseAction
 class HTML(BaseAction):
     """An action that renders HTML content.
 
-    Attributes:
-        ID (str): Identifier for the HTML action.
-        body (str): The HTML body content.
-
     Args:
         body (str): The HTML body content
 
