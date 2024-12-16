@@ -1,6 +1,5 @@
 from django.utils.translation import gettext_lazy as _
-from dataclasses import dataclass
-from typing import Optional, Dict
+from typing import Optional, Dict, TypedDict
 
 from experiment.serializers import serialize_social_media_config, SocialMediaConfigResponse
 from session.models import Session
@@ -8,8 +7,7 @@ from session.models import Session
 from .base_action import BaseAction
 
 
-@dataclass
-class ButtonResponse:
+class ButtonResponse(TypedDict):
     """
     Button configuration for an optional call-to-action button.
 
@@ -22,8 +20,7 @@ class ButtonResponse:
     link: str
 
 
-@dataclass
-class LogoResponse:
+class LogoResponse(TypedDict):
     """
     Logo configuration for branding or visual identification on the final screen.
 
@@ -36,8 +33,7 @@ class LogoResponse:
     link: str
 
 
-@dataclass
-class FinalActionResponse:
+class FinalActionResponse(TypedDict):
     """
     FinalActionResponse represents the structure of the final action data.
 
@@ -158,26 +154,26 @@ class Final(BaseAction):  # pylint: disable=too-few-public-methods
             self.points = points
 
     def action(self) -> FinalActionResponse:
-        return FinalActionResponse(
-            view=self.ID,
-            score=self.total_score,
-            rank=self.rank,
-            final_text=self.final_text,
-            button=self.button,
-            points=self.points,
-            action_texts={
+        return {
+            "view": self.ID,
+            "score": self.total_score,
+            "rank": self.rank,
+            "final_text": self.final_text,
+            "button": self.button,
+            "points": self.points,
+            "action_texts": {
                 "play_again": _("Play again"),
                 "profile": _("My profile"),
                 "all_experiments": _("All experiments"),
             },
-            title=self.title,
-            social=self.get_social_media_config(self.session),
-            show_profile_link=self.show_profile_link,
-            show_participant_link=self.show_participant_link,
-            feedback_info=self.feedback_info,
-            participant_id_only=self.show_participant_id_only,
-            logo=self.logo,
-        )
+            "title": self.title,
+            "social": self.get_social_media_config(self.session),
+            "show_profile_link": self.show_profile_link,
+            "show_participant_link": self.show_participant_link,
+            "feedback_info": self.feedback_info,
+            "participant_id_only": self.show_participant_id_only,
+            "logo": self.logo,
+        }
 
     def get_social_media_config(self, session: Session) -> Optional[SocialMediaConfigResponse]:
         experiment = session.block.phase.experiment

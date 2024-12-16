@@ -1,6 +1,5 @@
 from random import shuffle
-from typing import Optional, Literal
-from dataclasses import dataclass
+from typing import Optional, TypedDict, Literal
 
 from django_markup.markup import formatter
 from django.utils.translation import activate, get_language
@@ -69,8 +68,7 @@ def serialize_experiment(experiment: Experiment) -> dict:
     return serialized
 
 
-@dataclass
-class SocialMediaConfigResponse:
+class SocialMediaConfigResponse(TypedDict):
     channels: list[Literal["facebook", "whatsapp", "twitter", "weibo", "share", "clipboard"]] | list[str]
     url: str
     content: str
@@ -79,14 +77,14 @@ class SocialMediaConfigResponse:
 
 def serialize_social_media_config(
     social_media_config: SocialMediaConfig,
-    score: float = 0.0,
-):
-    return SocialMediaConfigResponse(
-        tags=social_media_config.tags or ["amsterdammusiclab", "citizenscience"],
-        url=social_media_config.url,
-        content=social_media_config.get_content(score),
-        channels=social_media_config.channels or ["facebook", "twitter"],
-    )
+    score: Optional[float] = 0,
+) -> SocialMediaConfigResponse:
+    return {
+        "tags": social_media_config.tags or ["amsterdammusiclab", "citizenscience"],
+        "url": social_media_config.url,
+        "content": social_media_config.get_content(score),
+        "channels": social_media_config.channels or ["facebook", "twitter"],
+    }
 
 
 def serialize_phase(phase: Phase, participant: Participant, times_played: int) -> dict:
