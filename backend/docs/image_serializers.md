@@ -1,3 +1,0 @@
-## image.serializers
-
-::: image.serializers

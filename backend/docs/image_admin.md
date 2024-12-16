@@ -1,3 +1,0 @@
-## image.admin
-
-::: image.admin

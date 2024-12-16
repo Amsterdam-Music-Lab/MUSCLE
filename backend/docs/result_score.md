@@ -1,3 +1,0 @@
-## result.score
-
-::: result.score

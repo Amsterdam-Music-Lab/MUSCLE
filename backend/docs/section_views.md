@@ -1,3 +1,0 @@
-## section.views
-
-::: section.views
