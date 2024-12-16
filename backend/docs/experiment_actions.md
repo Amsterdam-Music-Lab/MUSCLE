@@ -1,7 +1,3 @@
-## experiment.actions.base_action
-
-::: experiment.actions.base_action
-
 ## experiment.actions.consent
 
 ::: experiment.actions.consent
