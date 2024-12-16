@@ -107,20 +107,6 @@ class Final(BaseAction):  # pylint: disable=too-few-public-methods
         logo (LogoDto): Optional logo configuration for branding. For example:
                         {"image": "/static/logo.png", "link": "https://example.com"}.
 
-    Attributes:
-        session (Session): The session object for the current participant.
-        title (str): The title for the final view.
-        final_text (str): A concluding message for the participant.
-        button (ButtonDto): Configuration for an optional CTA button.
-        rank (str): The participant's performance rank.
-        show_profile_link (bool): Whether to show a profile link.
-        show_participant_link (bool): Whether to show participant-related data.
-        show_participant_id_only (bool): Whether only to display the participant ID.
-        feedback_info (dict): Information for a feedback section.
-        logo (LogoDto): Configuration for a logo displayed in the final view.
-        total_score (float): The participant’s final score.
-        points (str): Label for the scoring unit.
-
     Note:
         The `action()` method returns a `FinalActionDto` that can be consumed by the frontend
         to render the final screen.
@@ -152,23 +138,6 @@ class Final(BaseAction):  # pylint: disable=too-few-public-methods
         total_score: float | None = None,
         logo: LogoDto | None = None,
     ):
-        """
-        Initialize the final action data.
-
-        Args:
-            session (Session): The current participant's session.
-            title (str, optional): The final view's title. Defaults to "Final score".
-            final_text (str, optional): Concluding message text. Defaults to None.
-            button (ButtonDto, optional): CTA button configuration. Defaults to None.
-            points (str, optional): Label for points. Defaults to "points".
-            rank (str, optional): Participant's rank (e.g., 'GOLD'). Defaults to None.
-            show_profile_link (bool, optional): Show profile link if True. Defaults to False.
-            show_participant_link (bool, optional): Show participant data link if True. Defaults to False.
-            show_participant_id_only (bool, optional): Show only participant ID if True. Defaults to False.
-            feedback_info (dict, optional): Feedback data. Defaults to None.
-            total_score (float, optional): Explicit score. If None, derived from session. Defaults to None.
-            logo (LogoDto, optional): Logo configuration. Defaults to None.
-        """
         self.session = session
         self.title = title
         self.final_text = final_text
@@ -191,12 +160,6 @@ class Final(BaseAction):  # pylint: disable=too-few-public-methods
             self.points = points
 
     def action(self) -> FinalActionDto:
-        """
-        Get the final action data for rendering the final view.
-
-        Returns:
-            FinalActionDto: The final action data serialized for the client.
-        """
         return {
             "view": self.ID,
             "score": self.total_score,
