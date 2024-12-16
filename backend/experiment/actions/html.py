@@ -3,7 +3,7 @@ from .base_action import BaseAction
 
 
 class HTML(BaseAction):
-    """An action that renders HTML content.
+    """An action that renders HTML content. See also the `HTML.tsx` component in the frontend project.
 
     Args:
         body (str): The HTML body content
