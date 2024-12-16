@@ -1,5 +1,6 @@
 from random import shuffle
-from typing import Optional, TypedDict, Literal
+from typing import Optional, Literal
+from dataclasses import dataclass
 
 from django_markup.markup import formatter
 from django.utils.translation import activate, get_language
@@ -68,21 +69,8 @@ def serialize_experiment(experiment: Experiment) -> dict:
     return serialized
 
 
-class SocialMediaConfigDto(TypedDict):
-    """
-    SocialMediaConfigDto is a TypedDict that represents the configuration for social media sharing.
-
-    Attributes:
-        channels (list[Literal["facebook", "whatsapp", "twitter", "weibo", "share", "clipboard"]] | list[str]):
-            A list of social media channels or a list of strings representing the channels.
-        url (str):
-            The URL to be shared on social media.
-        content (str):
-            The content or message to be shared on social media, if applicable (does not work for facebook).
-        tags (list[str]):
-            A list of tags or hashtags to be included in the social media post, if applicable.
-    """
-
+@dataclass
+class SocialMediaConfigResponse:
     channels: list[Literal["facebook", "whatsapp", "twitter", "weibo", "share", "clipboard"]] | list[str]
     url: str
     content: str
@@ -91,23 +79,14 @@ class SocialMediaConfigDto(TypedDict):
 
 def serialize_social_media_config(
     social_media_config: SocialMediaConfig,
-    score: Optional[float] = 0,
-) -> SocialMediaConfigDto:
-    """Serialize social media config
-
-    Args:
-        social_media_config: SocialMediaConfig instance
-
-    returns:
-        Basic social media info
-    """
-
-    return {
-        "tags": social_media_config.tags or ["amsterdammusiclab", "citizenscience"],
-        "url": social_media_config.url,
-        "content": social_media_config.get_content(score),
-        "channels": social_media_config.channels or ["facebook", "twitter"],
-    }
+    score: float = 0.0,
+):
+    return SocialMediaConfigResponse(
+        tags=social_media_config.tags or ["amsterdammusiclab", "citizenscience"],
+        url=social_media_config.url,
+        content=social_media_config.get_content(score),
+        channels=social_media_config.channels or ["facebook", "twitter"],
+    )
 
 
 def serialize_phase(phase: Phase, participant: Participant, times_played: int) -> dict:

@@ -2,7 +2,7 @@ from django.utils.translation import gettext_lazy as _
 from dataclasses import dataclass
 from typing import Optional, Dict
 
-from experiment.serializers import serialize_social_media_config, SocialMediaConfigDto
+from experiment.serializers import serialize_social_media_config, SocialMediaConfigResponse
 from session.models import Session
 
 from .base_action import BaseAction
@@ -50,7 +50,7 @@ class FinalActionResponse:
         points (str): The label for the scoring unit (e.g., "points"), typically localized.
         action_texts (Dict[str, str]): A dictionary of localized strings for various interactive elements.
         title (str): The title displayed prominently on the final screen, typically summarizing the result.
-        social (Optional[SocialMediaConfigDto]): Configuration for social media sharing.
+        social (Optional[SocialMediaConfigResponse]): Configuration for social media sharing.
         show_profile_link (bool): Whether to display a link to the participant's profile.
         show_participant_link (bool): Whether to show a participant-related link or data.
         feedback_info (Optional[Dict[str, str]]): Additional details enabling a feedback section.
@@ -66,7 +66,7 @@ class FinalActionResponse:
     points: str
     action_texts: Dict[str, str]
     title: str
-    social: Optional[SocialMediaConfigDto]
+    social: Optional[SocialMediaConfigResponse]
     show_profile_link: bool
     show_participant_link: bool
     feedback_info: Optional[Dict[str, str]]
@@ -179,17 +179,7 @@ class Final(BaseAction):  # pylint: disable=too-few-public-methods
             logo=self.logo,
         )
 
-    def get_social_media_config(self, session: Session) -> Optional[SocialMediaConfigDto]:
-        """
-        Retrieve social media configuration related to the experiment.
-
-        Args:
-            session (Session): The current participant's session object.
-
-        Returns:
-            Optional[SocialMediaConfigDto]: Social media configuration for sharing results.
-            Returns None if no configuration is available.
-        """
+    def get_social_media_config(self, session: Session) -> Optional[SocialMediaConfigResponse]:
         experiment = session.block.phase.experiment
         if hasattr(experiment, "social_media_config") and experiment.social_media_config:
             return serialize_social_media_config(experiment.social_media_config, session.total_score())
