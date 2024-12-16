@@ -1,13 +1,13 @@
 from django.utils.translation import gettext_lazy as _
 from typing import Optional, Dict, TypedDict
 
-from experiment.serializers import serialize_social_media_config, SocialMediaConfigResponse
+from experiment.serializers import serialize_social_media_config, SocialMediaConfigConfiguration
 from session.models import Session
 
 from .base_action import BaseAction
 
 
-class ButtonResponse(TypedDict):
+class ButtonConfiguration(TypedDict):
     """
     Button configuration for an optional call-to-action button.
 
@@ -20,7 +20,7 @@ class ButtonResponse(TypedDict):
     link: str
 
 
-class LogoResponse(TypedDict):
+class LogoConfiguration(TypedDict):
     """
     Logo configuration for branding or visual identification on the final screen.
 
@@ -34,40 +34,20 @@ class LogoResponse(TypedDict):
 
 
 class FinalActionResponse(TypedDict):
-    """
-    FinalActionResponse represents the structure of the final action data.
-
-    Attributes:
-        view (str): A string identifying the view type, usually "FINAL".
-        score (float): The participant’s final numeric score at the end of the experiment or session.
-        rank (Optional[str]): The participant’s performance rank (e.g., "GOLD", "SILVER") or None if no rank is determined.
-        final_text (Optional[str]): A concluding message encouraging sharing, replaying, or reflecting on the results.
-        button (Optional[ButtonResponse]): Configuration for an optional call-to-action button.
-        points (str): The label for the scoring unit (e.g., "points"), typically localized.
-        action_texts (Dict[str, str]): A dictionary of localized strings for various interactive elements.
-        title (str): The title displayed prominently on the final screen, typically summarizing the result.
-        social (Optional[SocialMediaConfigResponse]): Configuration for social media sharing.
-        show_profile_link (bool): Whether to display a link to the participant's profile.
-        show_participant_link (bool): Whether to show a participant-related link or data.
-        feedback_info (Optional[Dict[str, str]]): Additional details enabling a feedback section.
-        participant_id_only (bool): If True, only display the participant ID without linking it.
-        logo (Optional[LogoResponse]): Optional logo configuration for branding.
-    """
-
     view: str
     score: float
     rank: Optional[str]
     final_text: Optional[str]
-    button: Optional[ButtonResponse]
+    button: Optional[ButtonConfiguration]
     points: str
     action_texts: Dict[str, str]
     title: str
-    social: Optional[SocialMediaConfigResponse]
+    social: Optional[SocialMediaConfigConfiguration]
     show_profile_link: bool
     show_participant_link: bool
     feedback_info: Optional[Dict[str, str]]
     participant_id_only: bool
-    logo: Optional[LogoResponse]
+    logo: Optional[LogoConfiguration]
 
 
 class Final(BaseAction):  # pylint: disable=too-few-public-methods
@@ -88,7 +68,7 @@ class Final(BaseAction):  # pylint: disable=too-few-public-methods
         session (Session): The current session object associated with the participant.
         title (str): The title displayed at the top of the final view. Defaults to a localized "Final score".
         final_text (Optional[str]): An optional concluding message (e.g., "Thanks for participating!").
-        button (Optional[ButtonResponse]): Optional call-to-action button configuration. For example:
+        button (Optional[ButtonConfiguration]): Optional call-to-action button configuration. For example:
                                             {"text": "Play again", "link": "/{experiment_slug}"}.
         points (Optional[str]): The label for the score units (e.g., "points"). Defaults to a localized "points".
         rank (Optional[str]): The participant's rank (e.g., "GOLD"). If not provided, no rank is displayed.
@@ -98,7 +78,7 @@ class Final(BaseAction):  # pylint: disable=too-few-public-methods
         feedback_info (Optional[Dict[str, str]]): Optional dictionary containing feedback-related data. For example:
                                                   {"header": "Feedback", "prompt": "Tell us what you think", "button_text": "Submit"}.
         total_score (Optional[float]): Explicit final score. If None, this is derived from the session.
-        logo (Optional[LogoResponse]): Optional logo configuration for branding. For example:
+        logo (Optional[LogoConfiguration]): Optional logo configuration for branding. For example:
                                         {"image": "/static/logo.png", "link": "https://example.com"}.
 
     Note:
@@ -122,7 +102,7 @@ class Final(BaseAction):  # pylint: disable=too-few-public-methods
         session: Session,
         title: str = _("Final score"),
         final_text: Optional[str] = None,
-        button: Optional[ButtonResponse] = None,
+        button: Optional[ButtonConfiguration] = None,
         points: Optional[str] = None,
         rank: Optional[str] = None,
         show_profile_link: bool = False,
@@ -130,7 +110,7 @@ class Final(BaseAction):  # pylint: disable=too-few-public-methods
         show_participant_id_only: bool = False,
         feedback_info: Optional[Dict[str, str]] = None,
         total_score: Optional[float] = None,
-        logo: Optional[LogoResponse] = None,
+        logo: Optional[LogoConfiguration] = None,
     ):
         self.session = session
         self.title = title
@@ -175,7 +155,7 @@ class Final(BaseAction):  # pylint: disable=too-few-public-methods
             "logo": self.logo,
         }
 
-    def get_social_media_config(self, session: Session) -> Optional[SocialMediaConfigResponse]:
+    def get_social_media_config(self, session: Session) -> Optional[SocialMediaConfigConfiguration]:
         experiment = session.block.phase.experiment
         if hasattr(experiment, "social_media_config") and experiment.social_media_config:
             return serialize_social_media_config(experiment.social_media_config, session.total_score())

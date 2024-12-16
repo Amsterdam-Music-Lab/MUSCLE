@@ -68,7 +68,7 @@ def serialize_experiment(experiment: Experiment) -> dict:
     return serialized
 
 
-class SocialMediaConfigResponse(TypedDict):
+class SocialMediaConfigConfiguration(TypedDict):
     channels: list[Literal["facebook", "whatsapp", "twitter", "weibo", "share", "clipboard"]] | list[str]
     url: str
     content: str
@@ -78,7 +78,7 @@ class SocialMediaConfigResponse(TypedDict):
 def serialize_social_media_config(
     social_media_config: SocialMediaConfig,
     score: Optional[float] = 0,
-) -> SocialMediaConfigResponse:
+) -> SocialMediaConfigConfiguration:
     return {
         "tags": social_media_config.tags or ["amsterdammusiclab", "citizenscience"],
         "url": social_media_config.url,
