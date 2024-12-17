@@ -12,7 +12,6 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         create_default_questions()
-        management.call_command('update_translation_fields') # needed for django-modeltranslation migrations
 
         if User.objects.count() == 0:
             management.call_command("createsuperuser", "--no-input")
