@@ -504,7 +504,6 @@ class Block(models.Model):
 
 
 class TranslatedContent(models.Model):
-    index = models.IntegerField(default=0)
     language = models.CharField(
         default="en", blank=True, choices=language_choices, max_length=2
     )
@@ -529,6 +528,7 @@ class ExperimentTranslatedContent(TranslatedContent):
     experiment = models.ForeignKey(
         Experiment, on_delete=models.CASCADE, related_name="translated_content"
     )
+    index = models.IntegerField(default=0)
     name = models.CharField(max_length=64, default="")
     description = models.TextField(blank=True, default="")
     consent = models.FileField(
@@ -569,7 +569,6 @@ class BlockTranslatedContent(TranslatedContent):
     class Meta:
         # Assures that there is only one translation per language
         unique_together = ["block", "language"]
-        ordering = ["index"]
 
 
 class Feedback(models.Model):

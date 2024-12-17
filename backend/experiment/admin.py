@@ -53,10 +53,9 @@ from question.models import QuestionSeries, QuestionInSeries
 class BlockTranslatedContentInline(NestedTabularInline):
     model = BlockTranslatedContent
     form = BlockTranslatedContentForm
-    template = "admin/translated_content.html"
+    # template = "admin/translated_content.html"
     extra = 1
     fields = [
-        "index",
         "language",
         "name",
         "description",

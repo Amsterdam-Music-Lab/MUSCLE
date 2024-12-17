@@ -24,14 +24,10 @@ class Migration(migrations.Migration):
                     btc.delete()
 
     dependencies = [
-        ('experiment', '0063_blocktranslatedcontent_index'),
+        ('experiment', '0062_rename_slug_temp_to_slug'),
     ]
 
     operations = [
-        migrations.AlterModelOptions(
-            name='blocktranslatedcontent',
-            options={'ordering': ['index']},
-        ),
         migrations.AlterModelOptions(
             name='experimenttranslatedcontent',
             options={'ordering': ['index']},
