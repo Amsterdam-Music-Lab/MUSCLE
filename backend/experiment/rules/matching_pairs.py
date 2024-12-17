@@ -4,7 +4,7 @@ import json
 from django.utils.translation import gettext_lazy as _
 
 from .base import Base
-from experiment.actions import Consent, Explainer, Final, Playlist, Step, Trial
+from experiment.actions import Explainer, Final, Playlist, Step, Trial
 from experiment.actions.playback import MatchingPairs
 from result.utils import prepare_result
 
@@ -17,6 +17,7 @@ class MatchingPairsGame(Base):
     num_pairs = 8
     show_animation = True
     score_feedback_display = "large-top"
+    tutorial = None
     contact_email = "aml.tunetwins@gmail.com"
     random_seed = None
 
@@ -121,6 +122,7 @@ class MatchingPairsGame(Base):
             stop_audio_after=5,
             show_animation=self.show_animation,
             score_feedback_display=self.score_feedback_display,
+            tutorial=self.tutorial,
         )
         trial = Trial(title="Tune twins", playback=playback, feedback_form=None, config={"show_continue_button": False})
         return trial
@@ -139,14 +141,14 @@ class MatchingPairsGame(Base):
         second_section = Section.objects.get(pk=second_card["id"])
         second_card["filename"] = str(second_section.filename)
         if first_section.group == second_section.group:
-            if "seen" in second_card:
+            if "seen" in second_card and second_card["seen"]:
                 score = 20
                 given_response = "match"
             else:
                 score = 10
                 given_response = "lucky match"
         else:
-            if "seen" in second_card:
+            if "seen" in second_card and second_card["seen"]:
                 score = -10
                 given_response = "misremembered"
             else:

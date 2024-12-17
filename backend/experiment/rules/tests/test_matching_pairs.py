@@ -11,7 +11,6 @@ from question.questions import create_default_questions
 
 
 class MatchingPairsTest(TestCase):
-
     @classmethod
     def setUpTestData(cls):
         create_default_questions()
@@ -32,16 +31,12 @@ class MatchingPairsTest(TestCase):
             "default,TwinPeaks_0_E1,0.0,10.0,MatchingPairs/2ndDegradation/TwinPeaks_0_E1.mp3,2ndDegradation,86\n"
             "default,TwinPeaks_1_E1,0.0,10.0,MatchingPairs/Original/TwinPeaks_1_E1.mp3,Original,86\n"
         )
-        cls.playlist = Playlist.objects.create(name='TestMatchingPairs')
+        cls.playlist = Playlist.objects.create(name="TestMatchingPairs")
         cls.playlist.csv = section_csv
         cls.playlist._update_sections()
         cls.participant = Participant.objects.create()
-        cls.block = Block.objects.create(rules='MATCHING_PAIRS', slug='mpairs', rounds=42)
-        cls.session = Session.objects.create(
-            block=cls.block,
-            participant=cls.participant,
-            playlist=cls.playlist
-        )
+        cls.block = Block.objects.create(rules="MATCHING_PAIRS", slug="mpairs", rounds=42)
+        cls.session = Session.objects.create(block=cls.block, participant=cls.participant, playlist=cls.playlist)
         cls.rules = cls.session.block_rules()
 
     def test_next_round(self):
@@ -59,8 +54,8 @@ class MatchingPairsTest(TestCase):
             trial = self.rules.get_matching_pairs_trial(self.session)
             assert trial
             data = self.session.json_data
-            pairs = data.get('pairs')
-            degradations = data.get('degradations')
+            pairs = data.get("pairs")
+            degradations = data.get("degradations")
             # degradations cycle through list of two, list of one, empty list
             if i % 2 == 0:
                 # there are 5 pairs available in total from the playlist;
@@ -76,38 +71,40 @@ class MatchingPairsTest(TestCase):
                 assert len(degradations) == 0
 
     def intermediate_score_request(self, data):
-        request_data = {'json_data': json.dumps(
-            data), **self.csrf_token, **self.session_data}
-        self.client.post(
-            '/result/intermediate_score/', request_data)
-        result = Result.objects.filter(
-            question_key='move').last()
+        request_data = {"json_data": json.dumps(data), **self.csrf_token, **self.session_data}
+        self.client.post("/result/intermediate_score/", request_data)
+        result = Result.objects.filter(question_key="move").last()
         return result
 
     def test_intermediate_score(self):
-        participant_info = json.loads(self.client.get('/participant/').content)
-        self.csrf_token = {
-            'csrfmiddlewaretoken': participant_info.get('csrf_token')}
-        self.session.participant = Participant.objects.get(
-            pk=int(participant_info.get('id')))
+        participant_info = json.loads(self.client.get("/participant/").content)
+        self.csrf_token = {"csrfmiddlewaretoken": participant_info.get("csrf_token")}
+        self.session.participant = Participant.objects.get(pk=int(participant_info.get("id")))
         self.session.save()
-        self.session_data = {'session_id': self.session.id}
+        self.session_data = {"session_id": self.session.id}
         sections = self.playlist.section_set.all()
-        data = {'first_card': {'id': sections[0].id},
-                'second_card': {'id': sections[1].id}}
+        data = {"first_card": {"id": sections[0].id}, "second_card": {"id": sections[1].id}, "overlay_was_shown": False}
         result = self.intermediate_score_request(data)
         assert result.score == 10
-        assert result.given_response == 'lucky match'
-        data['second_card'].update({'seen': True})
+        assert result.given_response == "lucky match"
+        data["second_card"].update({"seen": True})
         result = self.intermediate_score_request(data)
         assert result.score == 20
-        assert result.given_response == 'match'
-        data['second_card'] = {'id': sections[3].id, 'seen': True}
+        assert result.given_response == "match"
+        data["second_card"] = {"id": sections[3].id, "seen": True}
         result = self.intermediate_score_request(data)
         assert result.score == -10
-        assert result.given_response == 'misremembered'
-        data['first_card'].update({'seen': True})
-        data['second_card'].pop('seen')
+        assert result.given_response == "misremembered"
+        data["first_card"].update({"seen": True})
+        data["second_card"].pop("seen")
         result = self.intermediate_score_request(data)
         assert result.score == 0
-        assert result.given_response == 'no match'
+        assert result.given_response == "no match"
+
+        data["overlay_was_shown"] = True
+        result = self.intermediate_score_request(data)
+        assert result.json_data["overlay_was_shown"] is True
+
+        data["overlay_was_shown"] = False
+        result = self.intermediate_score_request(data)
+        assert result.json_data["overlay_was_shown"] is False
