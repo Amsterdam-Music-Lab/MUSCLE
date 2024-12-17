@@ -2,10 +2,15 @@ import json
 import logging
 
 from django.http import Http404, HttpRequest, JsonResponse
+from django.views.decorators.http import require_POST
+from django.shortcuts import render
 from django.utils.translation import gettext_lazy as _, get_language
 from django_markup.markup import formatter
+from django.contrib.admin.views.decorators import staff_member_required
+
 
 from .models import Block, Experiment, Feedback, Session
+from .utils import get_block_export_data
 from section.models import Playlist
 from experiment.serializers import (
     serialize_block,
@@ -48,10 +53,7 @@ def get_block(request: HttpRequest, slug: str) -> JsonResponse:
         "class_name": class_name,  # can be used to override style
         "rounds": block.rounds,
         "bonus_points": block.bonus_points,
-        "playlists": [
-            {"id": playlist.id, "name": playlist.name}
-            for playlist in block.playlists.all()
-        ],
+        "playlists": [{"id": playlist.id, "name": playlist.name} for playlist in block.playlists.all()],
         "feedback_info": block.get_rules().feedback_info(),
         "loading_text": _("Loading"),
         "session_id": session.id,
@@ -138,9 +140,7 @@ def _get_min_session_count(experiment: Experiment, participant: Participant) -> 
     for phase in phases:
         session_counts.extend(
             [
-                Session.objects.exclude(finished_at__isnull=True)
-                .filter(block=block, participant=participant)
-                .count()
+                Session.objects.exclude(finished_at__isnull=True).filter(block=block, participant=participant).count()
                 for block in phase.blocks.all()
             ]
         )
@@ -210,3 +210,14 @@ def validate_block_playlist(request: HttpRequest, rules_id: str) -> JsonResponse
         )
 
     return JsonResponse({"status": "ok", "message": "The playlist is valid."})
+
+
+@staff_member_required
+def block_export_data(request: HttpRequest, block_id: int):
+    try:
+        block = Block.objects.get(pk=block_id)
+    except Block.DoesNotExist:
+        raise Http404("Block with this id does not exist")
+
+    data = get_block_export_data(block)
+    return JsonResponse(data)

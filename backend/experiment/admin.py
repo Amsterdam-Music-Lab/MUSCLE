@@ -10,6 +10,7 @@ from django.core import serializers
 from django.shortcuts import render, redirect
 from django.forms import CheckboxSelectMultiple
 from django.http import HttpResponse
+from django.urls import path
 
 from inline_actions.admin import InlineActionsModelAdminMixin
 from django.urls import reverse
@@ -42,6 +43,27 @@ from section.models import Section, Song
 from result.models import Result
 from participant.models import Participant
 from question.models import QuestionSeries, QuestionInSeries
+
+
+original_admin_site = admin.site
+admin_urls = original_admin_site.get_urls
+
+
+def get_urls():
+    from experiment.views import admin_experimenter_analytics, block_export_data
+
+    urls = admin_urls()
+    custom_urls = [
+        path(
+            "api/block/<int:block_id>/export/",
+            original_admin_site.admin_view(block_export_data),
+            name="block_export_data",
+        ),
+    ]
+    return custom_urls + urls
+
+
+original_admin_site.get_urls = get_urls
 
 
 class BlockTranslatedContentInline(NestedTabularInline):
