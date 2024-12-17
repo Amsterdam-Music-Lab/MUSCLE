@@ -45,7 +45,7 @@ extra_css:
     - assets/css/style.css
 
 nav:
-  - MUSCLE:
+  - Getting started:
     - 1. Overview of the application: 'index.md'
     - 2. Start the application: '02_Start_the_application.md'
     - 3. The admin interface: '03_The_admin_interface.md'
@@ -57,9 +57,9 @@ nav:
     - 9. Playback and player widgets: '09_Playback_and_player_widgets.md'
     - 10. Create a custom ruleset: '10_Create_custom_ruleset.md'
     - 11. Exporting result data: '11_Exporting_result_data.md'
-  - Frontend tools:
+  - Preview frontend components:
       - 'Storybook': 'https://amsterdam-music-lab.github.io/MUSCLE/storybook'
-  - Python code documentation:
+  - Technical documentation:
     - Experiment app:
       - Experiment actions: 'experiment_actions.md'
       - Experiment admin: 'experiment_admin.md'
