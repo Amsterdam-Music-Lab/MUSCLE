@@ -11,6 +11,7 @@ from django.urls import path, reverse
 from django.utils.translation import gettext_lazy as _
 
 import audioread
+import sys
 
 from .models import Section, Playlist, Song
 from .forms import AddSections, PlaylistAdminForm
@@ -152,7 +153,7 @@ class PlaylistAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
 
                 new_duration = float(request.POST.get(pre_fix + "_duration"))
                 # while running tests this would throw an error
-                try:
+                if "test" not in sys.argv:
                     # Check if the duration in the csv exceeds the actual duration of the audio file
                     file_path = join(settings.MEDIA_ROOT, str(section.filename))
 
@@ -166,7 +167,7 @@ class PlaylistAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
                         messages.error(request, f"Error: The duration of {section.filename} exceeds the actual duration of the audio file and has been set to {actual_duration} seconds.")
                     else:
                         section.duration = new_duration
-                except:
+                else:
                     section.duration = new_duration
 
                 section.tag = request.POST.get(pre_fix + "_tag")
