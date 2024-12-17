@@ -213,6 +213,17 @@ def validate_block_playlist(request: HttpRequest, rules_id: str) -> JsonResponse
 
 
 @staff_member_required
+def admin_experimenter_analytics(request: HttpRequest, block_id: int):
+    return render(
+        request,
+        "experiment-analytics.html",
+        context={
+            "block_id": block_id,
+        },
+    )
+
+
+@staff_member_required
 def block_export_data(request: HttpRequest, block_id: int):
     try:
         block = Block.objects.get(pk=block_id)

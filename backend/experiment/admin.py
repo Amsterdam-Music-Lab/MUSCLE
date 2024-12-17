@@ -55,6 +55,11 @@ def get_urls():
     urls = admin_urls()
     custom_urls = [
         path(
+            "experiment/analytics/block/<int:block_id>/",
+            original_admin_site.admin_view(admin_experimenter_analytics),
+            name="admin_experimenter_analytics",
+        ),
+        path(
             "api/block/<int:block_id>/export/",
             original_admin_site.admin_view(block_export_data),
             name="block_export_data",

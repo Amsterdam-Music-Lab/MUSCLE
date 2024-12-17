@@ -1,0 +1,58 @@
+{% extends "admin/base_site.html" %}
+{% load inline_action_tags static %}
+{% block content %}
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<!-- api endpoint url -->
+<script type="text/javascript">
+  const BLOCK_EXPORT_DATA_URL = "{% url 'admin:block_export_data' block_id %}";
+  const blockId = "{{ block_id }}";
+</script>
+
+<script src="{% static 'analytics/dist/experiment_analytics.js' %}"></script>
+
+<style>
+  .analytics-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-gap: 20px;
+  }
+</style>
+
+<div id="error"></div>
+
+<div class="analytics-grid">
+  <div>
+    <h2>Final Score Distribution (Bar Chart)</h2>
+    <canvas id="scoreChart"></canvas>
+  </div>
+
+  <div>
+    <h2>Completed Sessions Over Time (Line Chart)</h2>
+    <canvas id="completionChart"></canvas>
+  </div>
+
+  <div>
+    <h2>Participants by Country (Pie Chart)</h2>
+    <canvas id="countryChart"></canvas>
+  </div>
+
+  <div>
+    <h2>Completion Rate by Participant (Grouped Bar)</h2>
+    <canvas id="completionChartTwo"></canvas>
+  </div>
+
+  <div>
+    <h2>Session Duration Distribution (Histogram)</h2>
+    <canvas id="durationChart"></canvas>
+  </div>
+
+  <div>
+    <h2>Daily Accuracy Over Time (Line Chart)</h2>
+    <canvas id="accuracyChart"></canvas>
+  </div>
+
+</div>
+
+{% endblock %}
