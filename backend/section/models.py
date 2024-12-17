@@ -166,7 +166,7 @@ class Playlist(models.Model):
                 # while running tests this would throw an error
                 with audioread.audio_open(file_path) as f:
                     actual_duration = f.duration
-                if row['duration'] > actual_duration:
+                if float(row['duration']) > actual_duration:
                     # Add or edit this row, but show an error message containing the actual saved duration
                     row['duration'] = actual_duration
                     global_errors += 1
