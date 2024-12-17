@@ -172,7 +172,6 @@ class Playlist(models.Model):
                     row['duration'] = actual_duration
                     global_errors += 1
                     csv_messages.append(f"Error: The duration of {row['filename']} exceeds the actual duration of the audio file and has been set to {actual_duration} seconds.")
-                    print('try')
                 
             # Make the changes if there are no global errors in this row
             if not iteration_error:
