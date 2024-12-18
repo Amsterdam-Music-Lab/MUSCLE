@@ -12,14 +12,15 @@
     width: 30px;
     height:20px;
     padding: 5px;
-    background-color: var(--default-button-bg);
+    background-color: var(--secondary);
+    color: var(--button-fg);
     float: left;
     cursor: pointer;
     background-position: center;
 }
 
 .translated-content-tab.active, .addlink.translated-content-tab.active {
-    background-color: var(--button-bg);
+    background-color: var(--primary);
 }
 
 .translated-content-form {

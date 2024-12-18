@@ -2,15 +2,26 @@
     color: var(--error-fg);
 }
 
+div[data-inline-model="experiment-block"] {
+    h3 {
+        font-size: 1rem !important;
+        background-color: var(--primary) !important;
+
+        label {
+            color: var(--button-fg);
+        }
+    }
+}
+
 div[id*="translated_contents-group"]{
     margin-left: 0px !important;
 
     h2, th {
         font-variant: all-petite-caps;
-
+        font-size: 0.8rem;
     }
 
     h2 {
-        background-color: grey;
+        background-color: var(--breadcrumbs-fg) !important;
     }
 }
