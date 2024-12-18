@@ -60,6 +60,8 @@ def serialize_experiment(experiment: Experiment, language: str | None = None) ->
         content = Consent(translated_content.consent).action()
     elif experiment.get_fallback_content() and experiment.get_fallback_content().consent:
         content = Consent(experiment.get_fallback_content().consent).action()
+    else:
+        content = None
 
     theme = serialize_theme(experiment.theme_config) if experiment.theme_config else None
     about_content = translated_content.about_content if translated_content.about_content else None
