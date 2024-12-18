@@ -1,8 +1,6 @@
 import PlayCard from "../components/MatchingPairs/PlayCard";
 import catImage from "./assets/images/cat-01.webp";
 
-console.log(catImage);
-
 export default {
     title: "PlayCard",
     component: PlayCard,
