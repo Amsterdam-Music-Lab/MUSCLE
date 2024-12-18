@@ -1,9 +1,8 @@
 from django.test import TestCase
 
-from experiment.models import Block
+from experiment.models import Block, Experiment, ExperimentTranslatedContent, Phase
 from experiment.rules.rhythm_discrimination import next_trial_actions, plan_stimuli
 from participant.models import Participant
-from result.models import Result
 from section.models import Playlist
 from session.models import Session
 
@@ -17,6 +16,9 @@ class RhythmDiscriminationTest(TestCase):
         cls.playlist = Playlist.objects.get(name="RhythmDiscrimination")
         cls.playlist._update_sections()
         cls.block = Block.objects.get(slug="rhdis")
+        ExperimentTranslatedContent.objects.create(
+            experiment=cls.block.phase.experiment, language="en", name="Rhythm Tests"
+        )
         cls.session = Session.objects.create(block=cls.block, participant=cls.participant, playlist=cls.playlist)
 
     def test_next_trial_actions(self):

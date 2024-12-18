@@ -26,6 +26,14 @@
     grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
+div.inline-related {
+    position: inherit;
+}
+
+div.inline-group {
+    overflow: unset !important;
+}
+
 @media (min-width: 768px) {
     .submit-row.floating {
         /* Make the bar float over the form part of the screen */

@@ -1,11 +1,10 @@
 document.addEventListener("DOMContentLoaded", function () {
-    initCollapsibleInlineForms();
     floatingSubmitRow();
 });
 
 function initCollapsibleInlineForms() {
 
-    const collapsibleInlineForms = document.querySelectorAll('.inline-group');
+    const collapsibleInlineForms = document.querySelectorAll('.inline-group:not([data-inline-model*="translatedcontent"])');
 
     collapsibleInlineForms.forEach(collapsibleInlineForm => {
         const toggleButton = collapsibleInlineForm.querySelector('.inline-heading');
@@ -53,7 +52,7 @@ function floatingSubmitRow() {
     const submitRowOffset = submitRow.offsetTop;
 
     window.addEventListener('scroll', function () {
-        if (window.pageYOffset + window.innerHeight < submitRowOffset + 20) {
+        if (window.scrollY + window.innerHeight < submitRowOffset + 20) {
             submitRow.classList.add('floating');
         } else {
             submitRow.classList.remove('floating');

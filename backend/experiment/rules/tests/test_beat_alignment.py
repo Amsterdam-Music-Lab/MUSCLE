@@ -1,5 +1,5 @@
 from django.test import TestCase
-from experiment.models import Block, Experiment, Phase
+from experiment.models import Block, Experiment, ExperimentTranslatedContent, Phase
 from result.models import Result
 from participant.models import Participant
 from participant.utils import PARTICIPANT_KEY
@@ -33,6 +33,9 @@ class BeatAlignmentRuleTest(TestCase):
         playlist.csv = csv
         playlist._update_sections()
         experiment = Experiment.objects.create(slug="bat_test")
+        ExperimentTranslatedContent.objects.create(
+            experiment=experiment, language="en", name="Beat Alignment Test"
+        )
         phase = Phase.objects.create(experiment=experiment)
         # rules is BeatAlignment.ID in beat_alignment.py
         cls.block = Block.objects.create(
