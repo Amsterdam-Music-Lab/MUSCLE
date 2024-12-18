@@ -12,7 +12,6 @@ export const useGet = <T,>(url: string): [T | null, boolean, (params?: Params) =
         setLoading(true);
         try {
             const response = await axios.get(url, { params });
-            console.log({ response })
             setData(response.data);
         } catch (err) {
             setData(null);

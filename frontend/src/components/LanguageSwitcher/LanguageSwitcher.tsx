@@ -12,7 +12,7 @@ interface LanguageSwitcherProps {
 const LanguageSwitcher: React.FC<LanguageSwitcherProps> = ({ languages, onSwitchLanguage, currentLangCode }) => {
 
   return (
-    <div className="language-switcher">
+    <div className="language-switcher" data-testid="language-switcher">
       <label className='language-switcher__label'>Language:</label>
       {languages.map((lang) => (
         <Button key={lang.code} title={lang.label} onClick={() => onSwitchLanguage(lang.code)} clickOnce={false} className={lang.code === currentLangCode ? 'btn-positive' : 'btn-negative'} size='md'>

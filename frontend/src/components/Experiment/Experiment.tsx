@@ -44,6 +44,7 @@ const Experiment = () => {
     }
 
     const onSwitchLanguage = (code: string) => {
+        if (code === experiment?.language) return;
         return fetchExperiment({ language: code })
     }
 
