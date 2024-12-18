@@ -16,6 +16,11 @@ export interface SocialMediaConfig {
     channels: Array<'facebook' | 'whatsapp' | 'twitter' | 'weibo' | 'share' | 'clipboard'>;
 }
 
+export interface Language {
+    code: string;
+    label: string;
+}
+
 export default interface Experiment {
     slug: string;
     name: string;
@@ -27,4 +32,6 @@ export default interface Experiment {
     theme?: Theme;
     totalScore: number;
     socialMediaConfig?: SocialMediaConfig;
+    languages?: Language[];
+    language: string;
 }

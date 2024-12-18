@@ -8,19 +8,19 @@ import {
 import useBoundStore from "../../util/stores";
 import { useExperiment } from "@/API";
 import Consent from "../Consent/Consent";
+import LanguageSwitcher from "../LanguageSwitcher/LanguageSwitcher";
 import Footer from "../Footer/Footer";
 import DefaultPage from "../Page/DefaultPage";
 import Loading from "../Loading/Loading";
 import ExperimentAbout from "./ExperimentAbout/ExperimentAbout";
 import ExperimentDashboard from "./ExperimentDashboard/ExperimentDashboard";
-import IExperiment from "@/types/Experiment";
 import Redirect from "@/components/Redirect/Redirect";
 import useHeadDataFromExperiment from "@/hooks/useHeadDataFromExperiment";
 
 const Experiment = () => {
     const { slug } = useParams();
 
-    const [experiment, loadingExperiment] = useExperiment(slug!) as [IExperiment, boolean];
+    const [experiment, loadingExperiment, fetchExperiment] = useExperiment(slug!);
     const [hasShownConsent, setHasShownConsent] = useState(false);
     const participant = useBoundStore((state) => state.participant);
     const setTheme = useBoundStore((state) => state.setTheme);
@@ -31,6 +31,7 @@ const Experiment = () => {
     const displayDashboard = experiment?.dashboard.length;
     const showConsent = experiment?.consent;
     const totalScore = experiment?.totalScore;
+    const languages = experiment?.languages || [];
 
     useHeadDataFromExperiment(experiment, setHeadData, resetHeadData);
 
@@ -40,6 +41,10 @@ const Experiment = () => {
 
     const onNext = () => {
         setHasShownConsent(true);
+    }
+
+    const onSwitchLanguage = (code: string) => {
+        return fetchExperiment({ language: code })
     }
 
     const getBlockHref = (slug: string) => `/block/${slug}${participantIdUrl ? `?participant_id=${participantIdUrl}` : ""}`;
@@ -65,6 +70,9 @@ const Experiment = () => {
         }
         return (
             <DefaultPage className='aha__consent-wrapper' title={experiment.name}>
+                {languages.length > 1 && (
+                    <LanguageSwitcher languages={languages} onSwitchLanguage={onSwitchLanguage} currentLangCode={experiment?.language} />
+                )}
                 <Consent {...attrs} />
             </DefaultPage>
         )

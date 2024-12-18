@@ -6,7 +6,7 @@
 
     @media (min-width: 720px) {
         max-width: 500px;
-        margin: -15px auto;
+        margin: 0 auto;
     }
 
     h3 {
@@ -26,6 +26,7 @@
         max-height: calc(100vh - 250px);
         border-bottom: 1px solid $gray;
         margin-bottom: 0;
+
         @media (min-width: 720px) {
             max-height: calc(100vh - 300px);
         }
