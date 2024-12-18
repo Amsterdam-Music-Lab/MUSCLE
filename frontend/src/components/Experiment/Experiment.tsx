@@ -57,7 +57,7 @@ const Experiment = () => {
         );
     }
 
-    if (!loadingExperiment && !experiment) {
+    if (!experiment) {
         return <p className="aha__error">Experiment not found</p>;
     }
 
