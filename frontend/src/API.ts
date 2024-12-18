@@ -1,5 +1,5 @@
 import { API_BASE_URL } from "@/config";
-import useGet, { Params } from "./util/useGet";
+import useGet from "./util/useGet";
 import axios from "axios";
 import qs from "qs";
 import IBlock from "@/types/Block";
