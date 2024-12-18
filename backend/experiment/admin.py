@@ -53,13 +53,16 @@ from question.models import QuestionSeries, QuestionInSeries
 class BlockTranslatedContentInline(NestedTabularInline):
     model = BlockTranslatedContent
     form = BlockTranslatedContentForm
-    # template = "admin/translated_content.html"
-    extra = 1
+    extra = 0
     fields = [
-        "language",
         "name",
         "description",
     ]
+    can_delete = False
+    verbose_name = 'Block Text'
+
+    def has_add_permission(self, request, obj):
+        return False
 
 
 class ExperimentTranslatedContentInline(NestedStackedInline):
@@ -264,7 +267,6 @@ class BlockInline(NestedStackedInline):
     inlines = [BlockTranslatedContentInline]
     form = BlockForm
     classes = ["collapse", "wide"]
-    show_change_link = True
 
     def get_extra(self, request, obj=None, **kwargs):
         if obj:

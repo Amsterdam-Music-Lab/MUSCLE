@@ -228,6 +228,10 @@ class ExperimentTranslatedContentForm(TranslatedContentInline, ModelForm):
 
 class BlockTranslatedContentForm(TranslatedContentInline, ModelForm):
 
+    def __init__(self, *args, **kwargs):
+        super(ModelForm, self).__init__(*args, **kwargs)
+        self.fields["description"].widget.attrs["style"] = "height:40px"
+
     class Meta:
         model = BlockTranslatedContent
         fields = "__all__"
@@ -236,6 +240,7 @@ class BlockTranslatedContentForm(TranslatedContentInline, ModelForm):
 class BlockForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super(ModelForm, self).__init__(*args, **kwargs)
+        self.add_translated_content()
 
         choices = tuple()
         for i in BLOCK_RULES:
@@ -243,6 +248,19 @@ class BlockForm(ModelForm):
         choices += (("", "---------"),)
 
         self.fields["rules"] = ChoiceField(choices=sorted(choices))
+
+    def add_translated_content(self):
+        block = self.instance
+        if not block.phase:
+            return
+        experiment_contents = block.phase.experiment.translated_content.all()
+        for etc in experiment_contents:
+            btc, created = BlockTranslatedContent.objects.get_or_create(
+                language=etc.language, block=block
+            )
+            if created:
+                btc.name = f"{etc.name} block"
+                btc.save()
 
     def clean_playlists(self):
         # Check if there is a rules id selected and key exists

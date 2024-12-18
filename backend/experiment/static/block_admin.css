@@ -1,3 +1,16 @@
 #id_message {
     color: var(--error-fg);
 }
+
+div[id*="translated_contents-group"]{
+    margin-left: 0px !important;
+
+    h2, th {
+        font-variant: all-petite-caps;
+
+    }
+
+    h2 {
+        background-color: grey;
+    }
+}

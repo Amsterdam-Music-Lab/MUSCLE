@@ -564,7 +564,7 @@ class BlockTranslatedContent(TranslatedContent):
     description = models.TextField(blank=True, default="")
 
     def __str__(self):
-        return f"{self.name} ({self.language})"
+        return f"Block text: {ISO_LANGUAGES.get(self.language)}"
 
     class Meta:
         # Assures that there is only one translation per language
