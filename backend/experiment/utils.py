@@ -1,9 +1,12 @@
-from typing import List, Tuple
+from typing import List, Tuple, TypedDict
 import roman
 from os.path import join
-from django.utils.html import format_html
-from django.db.models.query import QuerySet
-from experiment.models import Experiment, Phase, Block, BlockTranslatedContent
+from experiment.models import Experiment, Phase, Block, BlockTranslatedContent, Feedback
+from result.models import Result
+from section.models import Section, Song
+from participant.models import Participant
+from django.utils.translation import gettext_lazy as _
+from django.core import serializers
 
 
 def slugify(text: str) -> str:
@@ -190,3 +193,48 @@ def consent_upload_path(instance: Experiment, filename: str) -> str:
     language = instance.language
 
     join("consent", folder_name, f"{language}-{filename}")
+
+
+class BlockExportData(TypedDict):
+    sessions: list[dict]
+    participants: list[dict]
+    profiles: list[dict]
+    results: list[dict]
+    sections: list[dict]
+    songs: list[dict]
+    feedback: list[dict]
+
+
+def get_block_export_data(obj) -> BlockExportData:
+    # Init empty querysets
+    all_results = Result.objects.none()
+    all_songs = Song.objects.none()
+    all_sections = Section.objects.none()
+    all_participants = Participant.objects.none()
+    all_profiles = Result.objects.none()
+    all_feedback = Feedback.objects.filter(block=obj)
+
+    # Collect data
+    all_sessions = obj.export_sessions().order_by("pk")
+
+    for session in all_sessions:
+        all_results |= session.result_set.all()
+        all_participants |= Participant.objects.filter(pk=session.participant.pk)
+        all_profiles |= session.participant.export_profiles()
+
+    for playlist in obj.playlists.all():
+        these_sections = playlist._export_sections()
+        all_sections |= these_sections
+        for section in these_sections:
+            if section.song:
+                all_songs |= Song.objects.filter(pk=section.song.pk)
+
+    return {
+        "sessions": serializers.serialize("json", all_sessions),
+        "participants": serializers.serialize("json", all_participants),
+        "profiles": serializers.serialize("json", all_profiles),
+        "results": serializers.serialize("json", all_results),
+        "sections": serializers.serialize("json", all_sections),
+        "songs": serializers.serialize("json", all_songs),
+        "feedback": serializers.serialize("json", all_feedback),
+    }

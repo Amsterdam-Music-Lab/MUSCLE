@@ -1,0 +1,8 @@
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "outFile": "dist/experiment_analytics.js",
+    // Cannot find module 'chart.js/auto'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?ts(2792)
+    "moduleResolution": "node",
+  },
+}

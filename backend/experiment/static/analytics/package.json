@@ -1,0 +1,12 @@
+{
+  "name": "analytics",
+  "packageManager": "yarn@4.1.1",
+  "scripts": {
+    "build": "tsc",
+    "dev": "nodemon --watch src/experiment_analytics.ts --exec \"tsc -p tsconfig.json\""
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.9",
+    "typescript": "^5.7.2"
+  }
+}
