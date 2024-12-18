@@ -1,5 +1,5 @@
 from random import shuffle
-from typing import Optional, Union
+from typing import Optional, TypedDict
 
 from django_markup.markup import formatter
 from django.utils.translation import activate, get_language
@@ -7,7 +7,6 @@ from django.utils.translation import activate, get_language
 from experiment.actions.consent import Consent
 from image.serializers import serialize_image
 from participant.models import Participant
-from result.models import Result
 from session.models import Session
 from theme.serializers import serialize_theme
 from .models import Block, Experiment, Phase, SocialMediaConfig
@@ -20,7 +19,7 @@ def serialize_actions(actions):
     return actions.action()
 
 
-def get_experiment_translated_content(experiment):
+def get_experiment_translated_content(experiment, language: str | None = None):
     language_code = get_language()[0:2]
 
     translated_content = experiment.get_translated_content(language_code)
@@ -33,7 +32,19 @@ def get_experiment_translated_content(experiment):
     return translated_content
 
 
-def serialize_experiment(experiment: Experiment) -> dict:
+class ExperimentResponse(TypedDict):
+    slug: str
+    name: str
+    description: str
+    language: str
+    consent: Optional[dict]
+    theme: Optional[dict]
+    aboutContent: Optional[str]
+    socialMedia: Optional[dict]
+    languages: list
+
+
+def serialize_experiment(experiment: Experiment, language: str | None = None) -> ExperimentResponse:
     """Serialize experiment
 
     Args:
@@ -43,29 +54,32 @@ def serialize_experiment(experiment: Experiment) -> dict:
         Basic info about an experiment
     """
 
-    translated_content = get_experiment_translated_content(experiment)
-
-    serialized = {
-        "slug": experiment.slug,
-        "name": translated_content.name,
-        "description": formatter(translated_content.description, filter_name="markdown"),
-    }
+    translated_content = get_experiment_translated_content(experiment, language)
 
     if translated_content.consent:
-        serialized["consent"] = Consent(translated_content.consent).action()
+        content = Consent(translated_content.consent).action()
     elif experiment.get_fallback_content() and experiment.get_fallback_content().consent:
-        serialized["consent"] = Consent(experiment.get_fallback_content().consent).action()
+        content = Consent(experiment.get_fallback_content().consent).action()
 
-    if experiment.theme_config:
-        serialized["theme"] = serialize_theme(experiment.theme_config)
+    theme = serialize_theme(experiment.theme_config) if experiment.theme_config else None
+    about_content = translated_content.about_content if translated_content.about_content else None
+    socialMedia = (
+        serialize_social_media_config(experiment.social_media_config)
+        if hasattr(experiment, "social_media_config") and experiment.social_media_config
+        else None
+    )
 
-    if translated_content.about_content:
-        serialized["aboutContent"] = formatter(translated_content.about_content, filter_name="markdown")
-
-    if hasattr(experiment, "social_media_config") and experiment.social_media_config:
-        serialized["socialMedia"] = serialize_social_media_config(
-            experiment.social_media_config
-        )
+    serialized: ExperimentResponse = {
+        "slug": experiment.slug or "",
+        "name": translated_content.name,
+        "description": formatter(translated_content.description, filter_name="markdown"),
+        "language": translated_content.language,
+        "consent": content,
+        "theme": theme,
+        "aboutContent": about_content,
+        "socialMedia": socialMedia,
+        "languages": experiment.get_supported_languages(),
+    }
 
     return serialized
 
@@ -137,9 +151,7 @@ def serialize_block(block_object: Block, language: str = "en") -> dict:
     }
 
 
-def get_upcoming_block(
-    phase: Phase, participant: Participant, times_played: int
-) -> dict:
+def get_upcoming_block(phase: Phase, participant: Participant, times_played: int) -> dict:
     """return next block with minimum finished sessions for this participant
     if all blocks have been played an equal number of times, return None
 
@@ -150,9 +162,7 @@ def get_upcoming_block(
     blocks = list(phase.blocks.all())
 
     shuffle(blocks)
-    finished_session_counts = [
-        get_finished_session_count(block, participant) for block in blocks
-    ]
+    finished_session_counts = [get_finished_session_count(block, participant) for block in blocks]
 
     min_session_count = min(finished_session_counts)
     if not phase.dashboard:
@@ -188,9 +198,7 @@ def get_finished_session_count(block: Block, participant: Participant) -> int:
         Number of finished sessions for this block and participant
     """
 
-    return Session.objects.filter(
-        block=block, participant=participant, finished_at__isnull=False
-    ).count()
+    return Session.objects.filter(block=block, participant=participant, finished_at__isnull=False).count()
 
 
 def get_total_score(blocks: list, participant: Participant) -> int:

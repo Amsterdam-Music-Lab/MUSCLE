@@ -2,7 +2,7 @@ import json
 import logging
 
 from django.http import Http404, HttpRequest, JsonResponse
-from django.utils.translation import gettext_lazy as _, get_language
+from django.utils.translation import gettext_lazy as _, get_language, activate
 from django_markup.markup import formatter
 
 from .models import Block, Experiment, Feedback, Session
@@ -48,10 +48,7 @@ def get_block(request: HttpRequest, slug: str) -> JsonResponse:
         "class_name": class_name,  # can be used to override style
         "rounds": block.rounds,
         "bonus_points": block.bonus_points,
-        "playlists": [
-            {"id": playlist.id, "name": playlist.name}
-            for playlist in block.playlists.all()
-        ],
+        "playlists": [{"id": playlist.id, "name": playlist.name} for playlist in block.playlists.all()],
         "feedback_info": block.get_rules().feedback_info(),
         "loading_text": _("Loading"),
         "session_id": session.id,
@@ -96,6 +93,11 @@ def get_experiment(
     then all blocks of the current_phase will be returned as an array (also those with finished session)
     """
 
+    language = request.GET.get("language", get_language())
+
+    if language:
+        activate(language)
+
     try:
         experiment = Experiment.objects.get(slug=slug, active=True)
     except Experiment.DoesNotExist:
@@ -123,7 +125,7 @@ def get_experiment(
         if serialized_phase:
             return JsonResponse(
                 {
-                    **serialize_experiment(experiment),
+                    **serialize_experiment(experiment, language),
                     **serialized_phase,
                 }
             )
@@ -138,9 +140,7 @@ def _get_min_session_count(experiment: Experiment, participant: Participant) -> 
     for phase in phases:
         session_counts.extend(
             [
-                Session.objects.exclude(finished_at__isnull=True)
-                .filter(block=block, participant=participant)
-                .count()
+                Session.objects.exclude(finished_at__isnull=True).filter(block=block, participant=participant).count()
                 for block in phase.blocks.all()
             ]
         )

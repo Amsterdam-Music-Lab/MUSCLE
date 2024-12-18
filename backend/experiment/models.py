@@ -6,12 +6,12 @@ from django.utils import timezone
 from django.utils.translation import gettext_lazy as _, get_language
 from django.contrib.postgres.fields import ArrayField
 from django.db.models.query import QuerySet
-from typing import List, Dict, Tuple, Any
+from typing import List, Any
 from experiment.standards.iso_languages import ISO_LANGUAGES
 from theme.models import ThemeConfig
 from image.models import Image
 from session.models import Session
-from typing import Optional, Union
+from typing import Optional
 
 from .validators import markdown_html_validator, block_slug_validator, experiment_slug_validator
 
@@ -31,11 +31,9 @@ class Experiment(models.Model):
         phases (Queryset[Phase]): Queryset of Phase instances
     """
 
-    slug = models.SlugField(db_index=True,
-                                 max_length=64,
-                                 unique=True,
-                                 null=True,
-                                 validators=[experiment_slug_validator])
+    slug = models.SlugField(
+        db_index=True, max_length=64, unique=True, null=True, validators=[experiment_slug_validator]
+    )
     translated_content = models.QuerySet["ExperimentTranslatedContent"]
     theme_config = models.ForeignKey("theme.ThemeConfig", blank=True, null=True, on_delete=models.SET_NULL)
     active = models.BooleanField(default=True)
@@ -147,6 +145,18 @@ class Experiment(models.Model):
 
         language = get_language()
         return self.get_translated_content(language, fallback)
+
+    def get_supported_languages(self):
+        """Get the possible languages in which you can do this experiment
+
+        Returns:
+            List of possible languages
+        """
+
+        return [
+            {"code": content.language, "label": ISO_LANGUAGES[content.language]}
+            for content in self.translated_content.all()
+        ]
 
 
 def consent_upload_path(instance: Experiment, filename: str) -> str:
@@ -288,13 +298,8 @@ class Block(models.Model):
             "block": {
                 "id": self.id,
                 "name": self.name,
-                "sessions": [
-                    session._export_admin() for session in self.session_set.all()
-                ],
-                "participants": [
-                    participant._export_admin()
-                    for participant in self.current_participants()
-                ],
+                "sessions": [session._export_admin() for session in self.session_set.all()],
+                "participants": [participant._export_admin() for participant in self.current_participants()],
             },
         }
 
@@ -388,18 +393,12 @@ class Block(models.Model):
                         # convert result json data to csv columns if selected
                         if "convert_result_json" in export_options:
                             if "decision_time" in export_options:
-                                result_data[result_prefix + "decision_time"] = (
-                                    result.json_data.get("decision_time", "")
-                                )
+                                result_data[result_prefix + "decision_time"] = result.json_data.get("decision_time", "")
                             if "result_config" in export_options:
-                                result_data[result_prefix + "result_config"] = (
-                                    result.json_data.get("config", "")
-                                )
+                                result_data[result_prefix + "result_config"] = result.json_data.get("config", "")
                         else:
                             if "result_config" in export_options:
-                                result_data[result_prefix + "result_data"] = (
-                                    result.json_data
-                                )
+                                result_data[result_prefix + "result_data"] = result.json_data
                     this_row.update(result_data)
                     fieldnames.update(result_data.keys())
                     result_counter += 1
@@ -623,9 +622,7 @@ class SocialMediaConfig(models.Model):
         experiment_name = translated_content.name
 
         if social_message:
-            has_placeholders = (
-                "{points}" in social_message and "{experiment_name}" in social_message
-            )
+            has_placeholders = "{points}" in social_message and "{experiment_name}" in social_message
 
             if not has_placeholders:
                 return social_message
@@ -636,9 +633,7 @@ class SocialMediaConfig(models.Model):
             return social_message.format(points=score, experiment_name=experiment_name)
 
         if score is None or experiment_name is None:
-            raise ValueError(
-                "score and name are required when no social media message is provided"
-            )
+            raise ValueError("score and name are required when no social media message is provided")
 
         return _("I scored %(score)d points in %(experiment_name)s") % {
             "score": score,
