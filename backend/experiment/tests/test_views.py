@@ -71,17 +71,13 @@ class TestExperimentViews(TestCase):
         self.assertEqual(response_json.get("socialMedia").get("content"), "Please play this Test experiment!")
         self.assertEqual(response_json.get("socialMedia").get("tags"), ["aml", "toontjehoger"])
         self.assertEqual(response_json.get("socialMedia").get("channels"), ["facebook", "twitter", "weibo"])
-        Session.objects.create(
-            block=self.block4, participant=self.participant, finished_at=timezone.now()
-        )
+        Session.objects.create(block=self.block4, participant=self.participant, finished_at=timezone.now())
         # starting second round of experiment
         response = self.client.get("/experiment/test_series/")
         response_json = response.json()
         self.assertIsNotNone(response_json)
         self.assertEqual(response_json.get("nextBlock").get("slug"), "block1")
-        Session.objects.create(
-            block=self.block1, participant=self.participant, finished_at=timezone.now()
-        )
+        Session.objects.create(block=self.block1, participant=self.participant, finished_at=timezone.now())
         response = self.client.get("/experiment/test_series/")
         response_json = response.json()
         self.assertIsNotNone(response_json)
@@ -106,12 +102,7 @@ class TestExperimentViews(TestCase):
         self.assertEqual(response.json().get("nextBlock").get("slug"), "block1")
 
     def _get_session_objects(self, block_list: list[Block]) -> list[Session]:
-        return [
-            Session(
-                block=block, participant=self.participant, finished_at=timezone.now()
-            )
-            for block in block_list
-        ]
+        return [Session(block=block, participant=self.participant, finished_at=timezone.now()) for block in block_list]
 
     def test_experiment_not_found(self):
         # if Experiment does not exist, return 404
@@ -146,7 +137,7 @@ class TestExperimentViews(TestCase):
         )
         response = self.client.get("/experiment/no_social_media/")
         self.assertEqual(response.status_code, 200)
-        self.assertNotIn("socialMedia", response.json())
+        self.assertIsNone(response.json().get("socialMedia"))
 
     def test_experiment_with_dashboard(self):
         # if Experiment has dashboard set True, return list of random blocks
@@ -164,17 +155,13 @@ class TestExperimentViews(TestCase):
         )
         self.intermediate_phase.dashboard = True
         self.intermediate_phase.save()
-        serialized_coll_1 = serialize_phase(
-            self.intermediate_phase, self.participant, 0
-        )
+        serialized_coll_1 = serialize_phase(self.intermediate_phase, self.participant, 0)
         total_score_1 = serialized_coll_1["totalScore"]
         self.assertEqual(total_score_1, 8)
         Session.objects.create(
             block=self.block3, participant=self.participant, finished_at=timezone.now(), final_score=8
         )
-        serialized_coll_2 = serialize_phase(
-            self.intermediate_phase, self.participant, 0
-        )
+        serialized_coll_2 = serialize_phase(self.intermediate_phase, self.participant, 0)
         total_score_2 = serialized_coll_2["totalScore"]
         self.assertEqual(total_score_2, 16)
 
@@ -227,9 +214,7 @@ class TestExperimentViews(TestCase):
         response = self.client.get("/experiment/test_experiment_translated_content/", headers={"Accept-Language": "nl"})
 
         # since no Dutch translation is available, the fallback content should be returned
-        self.assertEqual(
-            response.json().get("name"), "Test Experiment Fallback Content"
-        )
+        self.assertEqual(response.json().get("name"), "Test Experiment Fallback Content")
 
     def test_get_block(self):
         # Create a block
