@@ -11,6 +11,7 @@ interface ButtonProps {
     disabled?: boolean;
     value?: string;
     clickOnce?: boolean;
+    size?: "sm" | "md" | "lg";
 }
 
 // Button is a button that can only be clicked one time by default
@@ -23,8 +24,15 @@ const Button = ({
     disabled = false,
     value = "",
     clickOnce = true,
+    size = "lg",
 }: ButtonProps) => {
     const clicked = useRef(false);
+
+    const sizeClass = {
+        sm: "btn-sm",
+        md: "btn-md",
+        lg: "btn-lg",
+    }[size];
 
     // Only handle the first click
     const clickOnceGuard = () => {
@@ -55,7 +63,7 @@ const Button = ({
 
     return (
         <button
-            className={classNames({ disabled }, className, padding, "aha__button btn btn-lg")}
+            className={classNames({ disabled }, className, padding, "aha__button btn", sizeClass)}
             onClick={(e) => {
                 clickOnceGuard();
             }}
