@@ -199,8 +199,6 @@ class Block(models.Model):
         phase (Phase): The phase this block belongs to
         index (int): Index of this phase
         playlists (list(section.models.Playlist)): The playlist(s) used in this block
-        name (str): Name of this block
-        description (str): Description of this block
         image (image.models.Image): Image that will be showed on the dashboard
         slug (str): Slug for this block
         active (bool): Is this block active?
@@ -229,6 +227,7 @@ class Block(models.Model):
 
     @property
     def name(self):
+        """Name of the block, which will be used for dashboards"""
         content = self.get_fallback_content()
         return content.name if content and content.name else ""
 
