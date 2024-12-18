@@ -1,5 +1,5 @@
 import { API_BASE_URL } from "@/config";
-import useGet from "./util/useGet";
+import useGet, { Params } from "./util/useGet";
 import axios from "axios";
 import qs from "qs";
 import IBlock from "@/types/Block";
@@ -46,12 +46,11 @@ export const URLS = {
     }
 };
 
-export const useBlock = (slug: string): [IBlock | null, boolean] =>
+export const useBlock = (slug: string) =>
     useGet<IBlock>(API_BASE_URL + URLS.block.get(slug));
 
 export const useExperiment = (slug: string) => {
-    const data = useGet<Experiment>(API_BASE_URL + URLS.experiment.get(slug));
-    return data;
+    return useGet<Experiment>(API_BASE_URL + URLS.experiment.get(slug));
 }
 
 export const useParticipantScores = <T>() =>
