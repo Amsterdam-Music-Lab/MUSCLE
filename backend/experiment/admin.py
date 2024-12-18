@@ -278,7 +278,7 @@ class PhaseInline(NestedTabularInline):
     model = Phase
     sortable_field_name = "index"
     inlines = [BlockInline]
-    classes = ['collapse']
+    classes = ["collapse"]
 
     def get_extra(self, request, obj=None, **kwargs):
         if obj:
@@ -315,6 +315,12 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, NestedModelAdmin):
         PhaseInline,
         SocialMediaConfigInline,
     ]
+
+    # def save_formset(self, request, form, formset, change):
+    #     if formset.model == Phase:
+    #         for form in formset.forms:
+
+    #     super().save_formset(request, form, formset, change)
 
     class Media:
         css = {"all": ("experiment_admin.css",)}

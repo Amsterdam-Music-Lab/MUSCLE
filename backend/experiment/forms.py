@@ -226,7 +226,7 @@ class ExperimentTranslatedContentForm(TranslatedContentInline, ModelForm):
         fields = "__all__"
 
 
-class BlockTranslatedContentForm(TranslatedContentInline, ModelForm):
+class BlockTranslatedContentForm(ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(ModelForm, self).__init__(*args, **kwargs)
@@ -259,7 +259,7 @@ class BlockForm(ModelForm):
                 language=etc.language, block=block
             )
             if created:
-                btc.name = f"{etc.name} block"
+                btc.name = f"{etc.name}:{block.slug}"
                 btc.save()
 
     def clean_playlists(self):
@@ -300,6 +300,7 @@ class BlockForm(ModelForm):
             "rounds",
             "bonus_points",
             "playlists",
+            "image",
             "theme_config",
         ]
         widgets = {
@@ -312,8 +313,7 @@ class BlockForm(ModelForm):
         }
 
     class Media:
-        js = ["block_admin.js", "collapsible_blocks.js"]
-        css = {"all": ["block_admin.css", "collapsible_blocks.css"]}
+        css = {"all": ["block_admin.css"]}
 
 
 class ExportForm(Form):

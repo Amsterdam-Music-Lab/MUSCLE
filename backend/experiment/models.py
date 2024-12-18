@@ -222,13 +222,10 @@ class Block(models.Model):
     bonus_points = models.PositiveIntegerField(default=0)
     rules = models.CharField(default="", max_length=64)
 
-    translated_contents = models.QuerySet["BlockTranslatedContent"]
-
     theme_config = models.ForeignKey(ThemeConfig, on_delete=models.SET_NULL, blank=True, null=True)
 
     def __str__(self):
-        content = self.get_fallback_content()
-        return content.name if content and content.name else self.slug
+        return self.slug
 
     @property
     def name(self):
@@ -460,10 +457,6 @@ class Block(models.Model):
         Returns:
             Fallback content
         """
-
-        if not self.phase or self.phase.experiment:
-            return self.translated_contents.first()
-
         experiment = self.phase.experiment
         fallback_language = experiment.get_fallback_content().language
         fallback_content = self.translated_contents.filter(language=fallback_language).first()
