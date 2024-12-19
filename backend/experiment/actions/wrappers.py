@@ -18,7 +18,8 @@ def two_alternative_forced(session, section, choices, expected_response=None, st
     shows a question and has two customizable buttons
     """
     playback = PlayButton(
-        [section]
+        [section],
+        {"listen_once": True}
     )
     key = 'choice'
     button_style = {'invisible-text': True,
