@@ -1,0 +1,80 @@
+@import '../../scss/variables.scss';
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  pointer-events: none;
+  transition: background-color 0.3s ease-in-out;
+
+  &.visible {
+    background-color: rgba(0, 0, 0, 0.66);
+    pointer-events: auto;
+
+    .content {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .content {
+    position: relative;
+    border-radius: 8px;
+    padding: 2rem;
+    max-width: 90%;
+    width: 480px;
+    max-height: 90vh;
+    overflow-y: auto;
+    opacity: 0;
+    transform: translateY(-100px);
+    transition: transform .3s ease-in-out, opacity 0.3s ease-in-out;
+  }
+}
+
+.header {
+  margin-bottom: 1.5rem;
+
+  h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: $gray-900;
+    margin: 0;
+  }
+}
+
+.body {
+  font-size: 1.25rem;
+  margin-bottom: 1.5rem;
+  line-height: 1.6;
+  color: white;
+  filter: drop-shadow(0px 0px 3px $primary);
+}
+
+.closeIcon {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: #666;
+  padding: 0.5rem;
+  line-height: 1;
+  transition: color 0.2s ease;
+
+  &:hover {
+    color: #333;
+  }
+}
+
+.footer {
+  display: flex;
+  justify-content: center;
+}

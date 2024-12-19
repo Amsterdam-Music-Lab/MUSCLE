@@ -48,6 +48,9 @@ function initializeBlockForm(blockForm) {
   });
 
   blockForm.classList.add('collapsed');
+
+  // Initialize playlist input
+  django.jQuery('.django-select2').djangoSelect2();
 }
 
 function toggleBlockVisibility(blockForm) {

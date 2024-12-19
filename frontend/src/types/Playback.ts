@@ -35,4 +35,5 @@ export interface PlaybackArgs {
     stop_audio_after?: number;
     timeout_after_playback?: number;
     score_feedback_display?: string;
+    tutorial?: { [key: string]: string };
 }
