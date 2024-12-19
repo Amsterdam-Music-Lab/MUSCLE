@@ -50,7 +50,7 @@ const Experiment = () => {
 
     const getBlockHref = (slug: string) => `/block/${slug}${participantIdUrl ? `?participant_id=${participantIdUrl}` : ""}`;
 
-    if (loadingExperiment) {
+    if (loadingExperiment && !experiment) {
         return (
             <div className="loader-container">
                 <Loading />
