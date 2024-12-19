@@ -9,7 +9,11 @@ initAudioListener();
 initWebAudioListener();
 
 // Initialize MSW
-initialize()
+initialize({
+    serviceWorker: {
+        url: './mockServiceWorker.js',
+    },
+});
 
 /** @type { import('@storybook/react').Preview } */
 const preview = {
