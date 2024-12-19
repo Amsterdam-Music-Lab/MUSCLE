@@ -1,7 +1,7 @@
 from .base_action import BaseAction
 
 
-class Info(BaseAction):  # pylint: disable=too-few-public-methods
+class Info(BaseAction):
     """
     Provide data for a view that presents information using HTML to the participant, along with a customizable (link) button.
 
