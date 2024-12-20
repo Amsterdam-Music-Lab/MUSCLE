@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { createEntityUrl } from '../config';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import Page from './Page';
 import { TranslatedContentForm } from './TranslatedContentForm';
 import { FiSave, FiArrowLeft, FiPlus, FiTrash } from 'react-icons/fi';
@@ -22,6 +22,7 @@ interface ExperimentFormProps {
 }
 
 interface UnsavedChanges {
+  main: boolean;
   translatedContent: boolean;
   phases: boolean;
 }
@@ -38,13 +39,17 @@ const ExperimentForm: React.FC<ExperimentFormProps> = () => {
   const [success, setSuccess] = useState(false);
   const [activeTab, setActiveTab] = useState<'translatedContent' | 'phases'>('translatedContent');
   const [unsavedChanges, setUnsavedChanges] = useState<UnsavedChanges>({
+    main: false,
     translatedContent: false,
     phases: false,
   });
   const [activePhaseIndex, setActivePhaseIndex] = useState(0);
   
+  const navigate = useNavigate();
   const { id: experimentId } = useParams<{ id: string }>();
   const url = createEntityUrl('experiments', experimentId);
+
+  const hasUnsavedChanges = unsavedChanges.main || unsavedChanges.translatedContent || unsavedChanges.phases;
 
   useEffect(() => {
     if (experimentId) {
@@ -68,6 +73,7 @@ const ExperimentForm: React.FC<ExperimentFormProps> = () => {
       ...prev,
       [name]: type === 'checkbox' ? checked : value
     }));
+    setUnsavedChanges(prev => ({ ...prev, main: true }));
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -163,7 +169,7 @@ const ExperimentForm: React.FC<ExperimentFormProps> = () => {
 
   useEffect(() => {
     if (success) {
-      setUnsavedChanges({ translatedContent: false, phases: false });
+      setUnsavedChanges({ main: false, translatedContent: false, phases: false });
     }
   }, [success]);
 
@@ -176,12 +182,21 @@ const ExperimentForm: React.FC<ExperimentFormProps> = () => {
       title={experimentId ? 'Edit Experiment' : 'Create Experiment'}
     >
       <Button
-        to="/experiments"
         variant="secondary"
         icon={<FiArrowLeft />}
         className="mb-4"
+        onClick={(e: React.MouseEvent) => {
+          if (hasUnsavedChanges) {
+            const confirmLeave = confirm('You have unsaved changes. Are you sure you want to leave?');
+            if (!confirmLeave) {
+              e.preventDefault();
+              return;
+            }
+          }
+          navigate('/experiments');
+        }}
       >
-        Back to Experiments
+        {`Back to Experiments${hasUnsavedChanges ? ' *' : ''}`}
       </Button>
 
       <form onSubmit={handleSubmit} className="bg-white shadow-md rounded p-5 space-y-5 max-w-5xl">

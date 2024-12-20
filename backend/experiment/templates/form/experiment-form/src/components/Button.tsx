@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 interface ButtonProps {
   children: ReactNode;
-  onClick?: () => void;
+  onClick?: (e?: React.MouseEvent) => void;
   type?: 'button' | 'submit' | 'reset';
   variant?: 'primary' | 'secondary' | 'danger' | 'success' | 'warning';
   size?: 'sm' | 'md' | 'lg';
@@ -41,7 +41,19 @@ export const Button: React.FC<ButtonProps> = ({
   const baseStyle = 'inline-flex items-center justify-center rounded-md font-medium transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed';
   const styles = `${baseStyle} ${variantStyles[variant]} ${sizeStyles[size]} ${className}`;
 
-  if (to) {
+  if (onClick) {
+    return (
+      <button
+        type={type}
+        onClick={onClick}
+        disabled={disabled}
+        className={styles}
+      >
+        {icon && <span className="mr-2">{icon}</span>}
+        {children}
+      </button>
+    );
+  } else if (to) {
     return (
       <Link to={to} className={styles}>
         {icon && <span className="mr-2">{icon}</span>}
@@ -53,7 +65,6 @@ export const Button: React.FC<ButtonProps> = ({
   return (
     <button
       type={type}
-      onClick={onClick}
       disabled={disabled}
       className={styles}
     >
