@@ -41,8 +41,10 @@ export const TranslatedContentForm: React.FC<TranslatedContentFormProps> = ({ co
   };
 
   const handleRemove = (index: number) => {
-    onChange(contents.filter((_, i) => i !== index));
-    setActiveTabIndex(Math.max(0, activeTabIndex - 1));
+    if (confirm('Are you sure you want to remove this translation?')) {
+      onChange(contents.filter((_, i) => i !== index));
+      setActiveTabIndex(Math.max(0, activeTabIndex - 1));
+    }
   };
 
   const handleChange = (index: number, field: keyof TranslatedContent, value: string) => {
@@ -84,20 +86,16 @@ export const TranslatedContentForm: React.FC<TranslatedContentFormProps> = ({ co
             }))}
             activeTab={activeTabIndex}
             onTabChange={(tabId) => setActiveTabIndex(tabId as number)}
+            actions={[
+              {
+                icon: <FiTrash className="w-4 h-4" />,
+                title: 'Remove translation',
+                onClick: (tabId) => handleRemove(tabId as number),
+              },
+            ]}
           />
 
           <div className="p-4 border rounded-md space-y-3">
-            <div className="flex justify-end">
-              <Button
-                onClick={() => handleRemove(activeTabIndex)}
-                variant="danger"
-                size="sm"
-                icon={<FiTrash />}
-              >
-                Remove Translation
-              </Button>
-            </div>
-
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700">
