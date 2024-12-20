@@ -14,8 +14,8 @@ function App() {
 
   return (
     <Router>
-      <div className="flex">
-        <nav className={`h-screen bg-white shadow-lg transition-all ${isCollapsed ? 'w-16' : 'w-48 xl:w-64'}`}>
+      <div className="flex relative">
+        <nav className={`fixed h-screen bg-white shadow-lg transition ${isCollapsed ? 'w-16' : 'w-40 xl:w-48'}`}>
           <button 
             onClick={() => setIsCollapsed(!isCollapsed)}
             className="w-full p-4 text-left hover:bg-gray-100"
@@ -31,7 +31,7 @@ function App() {
             </a>
           </div>
         </nav>
-        <div className="flex-1 bg-gray-100 min-h-screen p-4">
+        <div className={`absolute right-0 bg-gray-100 min-h-screen p-4 transition max-w-full ${isCollapsed ? 'left-16' : 'left-40 xl:left-48'}`}>
           <h1 className="text-4xl font-bold mb-8">
             MUSCLE forms
           </h1>
