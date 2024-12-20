@@ -3,13 +3,13 @@ import { createEntityUrl } from '../config';
 import { useNavigate, useParams } from 'react-router-dom';
 import Page from './Page';
 import { TranslatedContentForm } from './TranslatedContentForm';
-import { FiSave, FiArrowLeft, FiPlus, FiTrash, FiGlobe, FiLayers } from 'react-icons/fi';
+import { FiSave, FiArrowLeft, FiGlobe, FiLayers } from 'react-icons/fi';
 import { Button } from './Button';
 import { Tabs } from './Tabs';
 import { FormField } from './form/FormField';
 import { Input } from './form/Input';
-import { PhaseForm } from './PhaseForm';
-import { Experiment, Phase, TranslatedContent } from '../types/types';
+import { Experiment, TranslatedContent } from '../types/types';
+import { PhasesForm } from './PhasesForm';
 
 interface ExperimentFormProps {
 }
@@ -100,53 +100,6 @@ const ExperimentForm: React.FC<ExperimentFormProps> = () => {
         setError('Failed to save experiment.');
         setLoading(false);
       });
-  };
-
-  const handleAddPhase = () => {
-    const newPhase = {
-      index: experiment.phases.length,
-      dashboard: false,
-      randomize: false,
-    };
-    setExperiment(prev => ({
-      ...prev,
-      phases: [...prev.phases, newPhase]
-    }));
-    setActivePhaseIndex(experiment.phases.length);
-    setUnsavedChanges(prev => ({ ...prev, phases: true }));
-  };
-
-  const handlePhaseChange = (index: number, updatedPhase: Phase) => {
-    setExperiment(prev => ({
-      ...prev,
-      phases: prev.phases.map((phase, i) => {
-        if (i === index) {
-          // Preserve the existing ID if it exists
-          return { ...updatedPhase, id: phase.id };
-        }
-        return phase;
-      })
-    }));
-    setUnsavedChanges(prev => ({ ...prev, phases: true }));
-  };
-
-  const handlePhaseDelete = (index: number) => {
-    if (confirm('Are you sure you want to remove this phase?')) {
-      setExperiment(prev => ({
-        ...prev,
-        phases: prev.phases.filter((_, i) => i !== index)
-      }));
-      
-      // Adjust activePhaseIndex after deletion
-      setActivePhaseIndex(prevIndex => {
-        if (prevIndex >= index && prevIndex > 0) {
-          return prevIndex - 1;
-        }
-        return 0;
-      });
-      
-      setUnsavedChanges(prev => ({ ...prev, phases: true }));
-    }
   };
 
   const handleTranslatedContentChange = (newContents: TranslatedContent[]) => {
@@ -247,54 +200,13 @@ const ExperimentForm: React.FC<ExperimentFormProps> = () => {
           )}
 
           {activeTab === 'phases' && (
-            <div className="">
-              <h3 className="text-lg font-medium mb-5">Phases</h3>
-
-              <Tabs
-                tabs={[
-                  ...experiment.phases.map((_, index) => ({
-                    id: index,
-                    label: getPhaseTabLabel(index),
-                  })),
-                  {
-                    id: 'new',
-                    label: (
-                      <div className="flex items-center gap-2">
-                        <FiPlus className="w-4 h-4" />
-                        <span>New Phase</span>
-                      </div>
-                    ),
-                  }
-                ]}
-                activeTab={activePhaseIndex}
-                onTabChange={(tabId) => {
-                  if (tabId === 'new') {
-                    handleAddPhase();
-                  } else {
-                    setActivePhaseIndex(tabId as number);
-                  }
-                }}
-                actions={[
-                  {
-                    icon: <FiTrash className="w-4 h-4" />,
-                    title: 'Remove phase',
-                    onClick: (tabId) => handlePhaseDelete(tabId as number),
-                  },
-                ]}
-              />
-
-              {experiment.phases.length > 0 && (
-                <div className='p-5 bg-gray-50'>
-                <div className="p-5 border rounded-md bg-white">
-                  <PhaseForm
-                    phase={experiment.phases[activePhaseIndex]}
-                    onChange={(updatedPhase) => handlePhaseChange(activePhaseIndex, updatedPhase)}
-                    onDelete={() => handlePhaseDelete(activePhaseIndex)}
-                  />
-                </div>
-                </div>
-              )}
-            </div>
+            <PhasesForm
+              phases={experiment.phases}
+              onChange={(newPhases) => {
+                setExperiment(prev => ({ ...prev, phases: newPhases }));
+                setUnsavedChanges(prev => ({ ...prev, phases: true }));
+              }}
+            />
           )}
         </div>
 
