@@ -108,9 +108,13 @@ const ExperimentForm: React.FC<ExperimentFormProps> = () => {
   const handlePhaseChange = (index: number, updatedPhase: Phase) => {
     setExperiment(prev => ({
       ...prev,
-      phases: prev.phases.map((phase, i) => 
-        i === index ? updatedPhase : phase
-      )
+      phases: prev.phases.map((phase, i) => {
+        if (i === index) {
+          // Preserve the existing ID if it exists
+          return { ...updatedPhase, id: phase.id };
+        }
+        return phase;
+      })
     }));
   };
 
