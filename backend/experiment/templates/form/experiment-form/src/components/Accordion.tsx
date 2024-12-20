@@ -14,11 +14,17 @@ export const AccordionItem: React.FC<AccordionItemProps> = ({
   isOpen = false,
   onToggle,
 }) => {
+  const handleClick = (e: React.MouseEvent) => {
+    e.preventDefault(); // Prevent form submission
+    onToggle?.();
+  };
+
   return (
     <div className="border rounded-md mb-2">
       <button
+        type="button" // Explicitly set type to button
         className="w-full px-4 py-2 text-left font-medium flex items-center justify-between bg-gray-50 hover:bg-gray-100"
-        onClick={onToggle}
+        onClick={handleClick}
       >
         <span>{title}</span>
         {isOpen ? <FiChevronDown /> : <FiChevronRight />}
