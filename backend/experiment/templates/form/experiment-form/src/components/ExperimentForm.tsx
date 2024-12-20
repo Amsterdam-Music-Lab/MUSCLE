@@ -3,13 +3,12 @@ import { createEntityUrl } from '../config';
 import { useParams } from 'react-router-dom';
 import Page from './Page';
 import { TranslatedContentForm } from './TranslatedContentForm';
-import { FiSave, FiArrowLeft, FiPlus } from 'react-icons/fi';
+import { FiSave, FiArrowLeft, FiPlus, FiTrash } from 'react-icons/fi';
 import { Button } from './Button';
-import { Accordion } from './Accordion';
-import { PhaseForm } from './PhaseForm';
 import { Tabs } from './Tabs';
 import { FormField } from './form/FormField';
 import { Input } from './form/Input';
+import { PhaseForm } from './PhaseForm';
 
 interface Experiment {
   id?: number;
@@ -42,6 +41,7 @@ const ExperimentForm: React.FC<ExperimentFormProps> = () => {
     translatedContent: false,
     phases: false,
   });
+  const [activePhaseIndex, setActivePhaseIndex] = useState(0);
   
   const { id: experimentId } = useParams<{ id: string }>();
   const url = createEntityUrl('experiments', experimentId);
@@ -104,17 +104,17 @@ const ExperimentForm: React.FC<ExperimentFormProps> = () => {
   };
 
   const handleAddPhase = () => {
+    const newPhase = {
+      index: experiment.phases.length,
+      dashboard: false,
+      randomize: false,
+    };
     setExperiment(prev => ({
       ...prev,
-      phases: [
-        ...prev.phases,
-        {
-          index: prev.phases.length,
-          dashboard: false,
-          randomize: false,
-        }
-      ]
+      phases: [...prev.phases, newPhase]
     }));
+    setActivePhaseIndex(experiment.phases.length);
+    setUnsavedChanges(prev => ({ ...prev, phases: true }));
   };
 
   const handlePhaseChange = (index: number, updatedPhase: Phase) => {
@@ -132,10 +132,22 @@ const ExperimentForm: React.FC<ExperimentFormProps> = () => {
   };
 
   const handlePhaseDelete = (index: number) => {
-    setExperiment(prev => ({
-      ...prev,
-      phases: prev.phases.filter((_, i) => i !== index)
-    }));
+    if (confirm('Are you sure you want to remove this phase?')) {
+      setExperiment(prev => ({
+        ...prev,
+        phases: prev.phases.filter((_, i) => i !== index)
+      }));
+      
+      // Adjust activePhaseIndex after deletion
+      setActivePhaseIndex(prevIndex => {
+        if (prevIndex >= index && prevIndex > 0) {
+          return prevIndex - 1;
+        }
+        return 0;
+      });
+      
+      setUnsavedChanges(prev => ({ ...prev, phases: true }));
+    }
   };
 
   const handleTranslatedContentChange = (newContents: TranslatedContent[]) => {
@@ -146,6 +158,8 @@ const ExperimentForm: React.FC<ExperimentFormProps> = () => {
   const getTabLabel = (label: string, hasChanges: boolean) => {
     return hasChanges ? `${label} *` : label;
   };
+
+  const getPhaseTabLabel = (index: number) => `Phase ${index + 1}`;
 
   useEffect(() => {
     if (success) {
@@ -170,7 +184,7 @@ const ExperimentForm: React.FC<ExperimentFormProps> = () => {
         Back to Experiments
       </Button>
 
-      <form onSubmit={handleSubmit} className="bg-white shadow-md rounded p-5 space-y-5">
+      <form onSubmit={handleSubmit} className="bg-white shadow-md rounded p-5 space-y-5 max-w-5xl">
         {error && <div className="text-red-600 mb-4">{error}</div>}
         {success && <div className="text-green-600 mb-4">Saved successfully!</div>}
 
@@ -223,32 +237,51 @@ const ExperimentForm: React.FC<ExperimentFormProps> = () => {
           )}
 
           {activeTab === 'phases' && (
-            <div>
-              <div className="flex justify-between items-center mb-4">
-                <h3 className="text-lg font-medium">Phases</h3>
-                <Button
-                  variant="primary"
-                  size="sm"
-                  icon={<FiPlus />}
-                  onClick={handleAddPhase}
-                >
-                  Add Phase
-                </Button>
-              </div>
+            <div className="space-y-5">
+              <h3 className="text-lg font-medium">Phases</h3>
 
-              <Accordion
-                items={experiment.phases.map((phase, index) => ({
-                  id: phase.id || index,
-                  title: `Phase ${index + 1}`,
-                  content: (
-                    <PhaseForm
-                      phase={phase}
-                      onChange={(updatedPhase) => handlePhaseChange(index, updatedPhase)}
-                      onDelete={() => handlePhaseDelete(index)}
-                    />
-                  ),
-                }))}
+              <Tabs
+                tabs={[
+                  ...experiment.phases.map((_, index) => ({
+                    id: index,
+                    label: getPhaseTabLabel(index),
+                  })),
+                  {
+                    id: 'new',
+                    label: (
+                      <div className="flex items-center gap-2">
+                        <FiPlus className="w-4 h-4" />
+                        <span>New Phase</span>
+                      </div>
+                    ),
+                  }
+                ]}
+                activeTab={activePhaseIndex}
+                onTabChange={(tabId) => {
+                  if (tabId === 'new') {
+                    handleAddPhase();
+                  } else {
+                    setActivePhaseIndex(tabId as number);
+                  }
+                }}
+                actions={[
+                  {
+                    icon: <FiTrash className="w-4 h-4" />,
+                    title: 'Remove phase',
+                    onClick: (tabId) => handlePhaseDelete(tabId as number),
+                  },
+                ]}
               />
+
+              {experiment.phases.length > 0 && (
+                <div className="p-5 border rounded-md">
+                  <PhaseForm
+                    phase={experiment.phases[activePhaseIndex]}
+                    onChange={(updatedPhase) => handlePhaseChange(activePhaseIndex, updatedPhase)}
+                    onDelete={() => handlePhaseDelete(activePhaseIndex)}
+                  />
+                </div>
+              )}
             </div>
           )}
         </div>
