@@ -7,6 +7,7 @@ import { Input } from './form/Input';
 import { Select } from './form/Select';
 import { Textarea } from './form/Textarea';
 import { TranslatedContent } from '../types/types';
+import { Flag } from './Flag';
 
 interface TranslatedContentFormProps {
   contents: TranslatedContent[];
@@ -52,8 +53,8 @@ export const TranslatedContentForm: React.FC<TranslatedContentFormProps> = ({ co
   };
 
   const getTabLabel = (content: TranslatedContent, index: number) => {
-    if (content.language && ISO_LANGUAGES[content.language]) {
-      return ISO_LANGUAGES[content.language];
+    if (content.language) {
+      return <Flag languageCode={content.language} showLabel={true} />;
     }
     return `Translation ${index + 1}`;
   };

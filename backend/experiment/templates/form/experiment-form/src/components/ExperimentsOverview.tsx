@@ -5,6 +5,7 @@ import Page from "./Page";
 import { FiPlus, FiEdit2, FiTrash2 } from "react-icons/fi";
 import { Experiment, Phase, TranslatedContent } from "../types/types";
 import React from "react";
+import { Flag } from "./Flag";
 
 type Experiment = {
   id?: number;
@@ -34,11 +35,9 @@ const PhasesPills: React.FC<{ phases: Phase[] }> = ({ phases }) => {
 const LanguagePills: React.FC<{ translations: TranslatedContent[] }> = ({ translations }) => {
   const languages = [...new Set(translations.map(t => t.language))];
   return (
-    <div className="flex gap-1">
+    <div className="flex flex-wrap gap-1">
       {languages.map(lang => (
-        <div key={lang} className="px-2 py-1 rounded-full bg-gray-100 text-gray-800 text-xs">
-          {lang.toUpperCase()}
-        </div>
+          <Flag languageCode={lang} className="h-3" />
       ))}
     </div>
   );
