@@ -14,7 +14,7 @@ function App() {
   return (
     <Router>
       <div className="flex">
-        <nav className={`h-screen bg-white shadow-lg transition-all ${isCollapsed ? 'w-16' : 'w-64'}`}>
+        <nav className={`h-screen bg-white shadow-lg transition-all ${isCollapsed ? 'w-16' : 'w-48 xl:w-64'}`}>
           <button 
             onClick={() => setIsCollapsed(!isCollapsed)}
             className="w-full p-4 text-left hover:bg-gray-100"
