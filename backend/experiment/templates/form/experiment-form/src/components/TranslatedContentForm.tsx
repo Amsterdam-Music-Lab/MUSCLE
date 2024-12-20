@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { ISO_LANGUAGES } from '../constants';
 import { Tabs } from './Tabs';
 import { FiPlus, FiTrash } from 'react-icons/fi';
-import { Button } from './Button';
 import { FormField } from './form/FormField';
 import { Input } from './form/Input';
 import { Select } from './form/Select';
