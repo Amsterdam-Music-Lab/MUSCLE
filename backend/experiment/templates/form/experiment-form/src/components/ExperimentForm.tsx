@@ -3,14 +3,17 @@ import { createEntityUrl } from '../config';
 import { useParams } from 'react-router-dom';
 import Page from './Page';
 import { TranslatedContentForm } from './TranslatedContentForm';
-import { FiSave, FiArrowLeft } from 'react-icons/fi';
+import { FiSave, FiArrowLeft, FiPlus } from 'react-icons/fi';
 import { Button } from './Button';
+import { Accordion } from './Accordion';
+import { PhaseForm } from './PhaseForm';
 
 interface Experiment {
   id?: number;
   slug: string;
   active: boolean;
   translated_content: TranslatedContent[];
+  phases: Phase[];
 }
 
 interface ExperimentFormProps {
@@ -21,7 +24,8 @@ const ExperimentForm: React.FC<ExperimentFormProps> = () => {
   const [experiment, setExperiment] = useState<Experiment>({
     slug: '',
     active: true,
-    translated_content: []
+    translated_content: [],
+    phases: []
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -87,6 +91,36 @@ const ExperimentForm: React.FC<ExperimentFormProps> = () => {
       });
   };
 
+  const handleAddPhase = () => {
+    setExperiment(prev => ({
+      ...prev,
+      phases: [
+        ...prev.phases,
+        {
+          index: prev.phases.length,
+          dashboard: false,
+          randomize: false,
+        }
+      ]
+    }));
+  };
+
+  const handlePhaseChange = (index: number, updatedPhase: Phase) => {
+    setExperiment(prev => ({
+      ...prev,
+      phases: prev.phases.map((phase, i) => 
+        i === index ? updatedPhase : phase
+      )
+    }));
+  };
+
+  const handlePhaseDelete = (index: number) => {
+    setExperiment(prev => ({
+      ...prev,
+      phases: prev.phases.filter((_, i) => i !== index)
+    }));
+  };
+
   if (loading && !success && !error && experimentId) {
     return <div className="text-center mt-5">Loading...</div>;
   }
@@ -135,6 +169,34 @@ const ExperimentForm: React.FC<ExperimentFormProps> = () => {
           contents={experiment.translated_content}
           onChange={(newContents) => setExperiment(prev => ({ ...prev, translated_content: newContents }))}
         />
+
+        <div className="mt-6">
+          <div className="flex justify-between items-center mb-4">
+            <h3 className="text-lg font-medium">Phases</h3>
+            <Button
+              variant="primary"
+              size="sm"
+              icon={<FiPlus />}
+              onClick={handleAddPhase}
+            >
+              Add Phase
+            </Button>
+          </div>
+
+          <Accordion
+            items={experiment.phases.map((phase, index) => ({
+              id: phase.id || index,
+              title: `Phase ${index + 1}`,
+              content: (
+                <PhaseForm
+                  phase={phase}
+                  onChange={(updatedPhase) => handlePhaseChange(index, updatedPhase)}
+                  onDelete={() => handlePhaseDelete(index)}
+                />
+              ),
+            }))}
+          />
+        </div>
 
         <Button
           type="submit"

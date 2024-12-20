@@ -20,24 +20,36 @@ class ExperimentTranslatedContentSerializer(serializers.ModelSerializer):
         fields = ["id", "index", "language", "name", "description", "about_content", "social_media_message"]
 
 
+class PhaseSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Phase
+        fields = ["id", "index", "dashboard", "randomize"]
+
+
 class ExperimentSerializer(serializers.ModelSerializer):
     translated_content = ExperimentTranslatedContentSerializer(many=True, required=False)
+    phases = PhaseSerializer(many=True, required=False)
 
     class Meta:
         model = Experiment
-        fields = ["id", "slug", "active", "translated_content"]
+        fields = ["id", "slug", "active", "translated_content", "phases"]
 
     def create(self, validated_data):
         translated_content_data = validated_data.pop("translated_content", [])
+        phases_data = validated_data.pop("phases", [])
         experiment = Experiment.objects.create(**validated_data)
 
         for content_data in translated_content_data:
             ExperimentTranslatedContent.objects.create(experiment=experiment, **content_data)
 
+        for phase_data in phases_data:
+            Phase.objects.create(experiment=experiment, **phase_data)
+
         return experiment
 
     def update(self, instance, validated_data):
         translated_content_data = validated_data.pop("translated_content", [])
+        phases_data = validated_data.pop("phases", [])
 
         # Update experiment fields
         instance.slug = validated_data.get("slug", instance.slug)
@@ -49,6 +61,12 @@ class ExperimentSerializer(serializers.ModelSerializer):
             instance.translated_content.all().delete()  # Remove existing translations
             for content_data in translated_content_data:
                 ExperimentTranslatedContent.objects.create(experiment=instance, **content_data)
+
+        # Update or create phases
+        if phases_data:
+            instance.phases.all().delete()
+            for phase_data in phases_data:
+                Phase.objects.create(experiment=instance, **phase_data)
 
         return instance
 
