@@ -14,6 +14,7 @@ interface OnResultParams {
     // If feedback form is provided
     form: Question[];
     decision_time?: number;
+    audio_latency?: number;
     config?: TrialConfig
 }
 

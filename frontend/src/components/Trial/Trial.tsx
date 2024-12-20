@@ -77,6 +77,7 @@ const Trial = (props: TrialProps) => {
             await onResult(
                 {
                     decision_time: getAndStoreDecisionTime(),
+                    audio_latency_ms: getAudioLatency(),
                     form,
                     config,
                 },
@@ -113,6 +114,14 @@ const Trial = (props: TrialProps) => {
         // keep decisionTime in sessionStorage to be used by subsequent renders
         window.sessionStorage.setItem('decisionTime', decisionTime.toString());
         return decisionTime;
+    }
+
+    const getAudioLatency = () => {
+        if (window.sessionStorage.getItem('audioLatency') !== null) {
+            return window.sessionStorage.getItem('audioLatency');
+        } else {
+            return NaN;
+        }
     }
 
     const finishedPlaying = useCallback(() => {
