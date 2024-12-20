@@ -58,6 +58,21 @@ export const PhaseForm: React.FC<PhaseFormProps> = ({ phase, onChange }) => {
     }
   };
 
+  const handleReorderBlocks = (startIndex: number, endIndex: number) => {
+    const blocks = [...(phase.blocks || [])];
+    const [removed] = blocks.splice(startIndex, 1);
+    blocks.splice(endIndex, 0, removed);
+    
+    // Update the index property of each block
+    const updatedBlocks = blocks.map((block, index) => ({
+      ...block,
+      index,
+    }));
+    
+    handleChange('blocks', updatedBlocks);
+    setActiveBlockIndex(endIndex);
+  };
+
   return (
     <div className="space-y-5">
       <div className="grid sm:grid-cols-2 gap-5">
@@ -87,7 +102,7 @@ export const PhaseForm: React.FC<PhaseFormProps> = ({ phase, onChange }) => {
           tabs={[
             ...(phase.blocks || []).map((_, index) => ({
               id: index,
-              label: `Block ${index + 1}`,
+              label: phase.blocks[index].slug || `Block ${index + 1}`,
             })),
             {
               id: 'new',
@@ -114,6 +129,8 @@ export const PhaseForm: React.FC<PhaseFormProps> = ({ phase, onChange }) => {
               onClick: (tabId) => handleBlockDelete(tabId as number),
             },
           ]}
+          draggable={true}
+          onReorder={handleReorderBlocks}
         />
 
         {phase.blocks && phase.blocks.length > 0 && (

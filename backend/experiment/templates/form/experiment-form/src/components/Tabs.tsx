@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 interface TabAction {
   icon: React.ReactNode;
@@ -17,16 +17,56 @@ interface TabsProps {
   activeTab: string | number;
   onTabChange: (tabId: string | number) => void;
   actions?: TabAction[];
+  onReorder?: (startIndex: number, endIndex: number) => void;
+  draggable?: boolean;
 }
 
-export const Tabs: React.FC<TabsProps> = ({ tabs, activeTab, onTabChange, actions = [] }) => {
+export const Tabs: React.FC<TabsProps> = ({ 
+  tabs, 
+  activeTab, 
+  onTabChange, 
+  actions = [],
+  onReorder,
+  draggable = false 
+}) => {
+  const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
+  const [dragOverIndex, setDragOverIndex] = useState<number | null>(null);
+
+  const handleDragStart = (e: React.DragEvent, index: number) => {
+    if (tabs[index].id === 'new') return;
+    setDraggedIndex(index);
+    e.dataTransfer.effectAllowed = 'move';
+  };
+
+  const handleDragOver = (e: React.DragEvent, index: number) => {
+    e.preventDefault();
+    if (tabs[index].id === 'new') return;
+    setDragOverIndex(index);
+  };
+
+  const handleDragEnd = () => {
+    if (draggedIndex !== null && dragOverIndex !== null && onReorder) {
+      onReorder(draggedIndex, dragOverIndex);
+    }
+    setDraggedIndex(null);
+    setDragOverIndex(null);
+  };
+
   return (
     <div className="border-b border-gray-200">
       <nav className="-mb-px flex" aria-label="Tabs">
-        {tabs.map((tab) => (
+        {tabs.map((tab, index) => (
           <div
             key={tab.id}
-            className="flex items-center group"
+            draggable={draggable && tab.id !== 'new'}
+            onDragStart={(e) => handleDragStart(e, index)}
+            onDragOver={(e) => handleDragOver(e, index)}
+            onDragEnd={handleDragEnd}
+            className={`
+              flex items-center group
+              ${draggedIndex === index ? 'opacity-50' : ''}
+              ${dragOverIndex === index ? 'border-2 border-blue-500 bg-blue-50' : ''}
+            `}
           >
             <button
               type="button"
@@ -37,6 +77,7 @@ export const Tabs: React.FC<TabsProps> = ({ tabs, activeTab, onTabChange, action
                   ? 'border-blue-500 text-blue-600'
                   : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
                 }
+                ${draggable && tab.id !== 'new' ? 'cursor-move' : ''}
               `}
             >
               {tab.icon && <span className="w-4 h-4">{tab.icon}</span>}
