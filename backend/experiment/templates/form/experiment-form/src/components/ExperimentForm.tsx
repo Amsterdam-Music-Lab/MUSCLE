@@ -2,11 +2,13 @@ import React, { useEffect, useState } from 'react';
 import { createEntityUrl } from '../config';
 import { useParams } from 'react-router-dom';
 import Page from './Page';
+import { TranslatedContentForm } from './TranslatedContentForm';
 
 interface Experiment {
   id?: number;
   slug: string;
   active: boolean;
+  translated_content: TranslatedContent[];
 }
 
 interface ExperimentFormProps {
@@ -14,7 +16,11 @@ interface ExperimentFormProps {
 
 
 const ExperimentForm: React.FC<ExperimentFormProps> = () => {
-  const [experiment, setExperiment] = useState<Experiment>({ slug: '', active: true });
+  const [experiment, setExperiment] = useState<Experiment>({
+    slug: '',
+    active: true,
+    translated_content: []
+  });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
@@ -116,10 +122,15 @@ const ExperimentForm: React.FC<ExperimentFormProps> = () => {
           <span className="text-gray-700">Active</span>
         </label>
 
+        <TranslatedContentForm
+          contents={experiment.translated_content}
+          onChange={(newContents) => setExperiment(prev => ({ ...prev, translated_content: newContents }))}
+        />
+
         <button
           type="submit"
           disabled={loading}
-          className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 disabled:opacity-50"
+          className="mt-6 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 disabled:opacity-50"
         >
           {loading ? 'Saving...' : (experimentId ? 'Update Experiment' : 'Create Experiment')}
         </button>

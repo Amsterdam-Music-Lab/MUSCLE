@@ -11,13 +11,46 @@ from participant.models import Participant
 from result.models import Result
 from session.models import Session
 from theme.serializers import serialize_theme
-from .models import Block, Experiment, Phase, SocialMediaConfig
+from .models import Block, Experiment, Phase, SocialMediaConfig, ExperimentTranslatedContent
+
+
+class ExperimentTranslatedContentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ExperimentTranslatedContent
+        fields = ["id", "index", "language", "name", "description", "about_content", "social_media_message"]
 
 
 class ExperimentSerializer(serializers.ModelSerializer):
+    translated_content = ExperimentTranslatedContentSerializer(many=True, required=False)
+
     class Meta:
         model = Experiment
-        fields = ["id", "slug", "active"]
+        fields = ["id", "slug", "active", "translated_content"]
+
+    def create(self, validated_data):
+        translated_content_data = validated_data.pop("translated_content", [])
+        experiment = Experiment.objects.create(**validated_data)
+
+        for content_data in translated_content_data:
+            ExperimentTranslatedContent.objects.create(experiment=experiment, **content_data)
+
+        return experiment
+
+    def update(self, instance, validated_data):
+        translated_content_data = validated_data.pop("translated_content", [])
+
+        # Update experiment fields
+        instance.slug = validated_data.get("slug", instance.slug)
+        instance.active = validated_data.get("active", instance.active)
+        instance.save()
+
+        # Update or create translated content
+        if translated_content_data:
+            instance.translated_content.all().delete()  # Remove existing translations
+            for content_data in translated_content_data:
+                ExperimentTranslatedContent.objects.create(experiment=instance, **content_data)
+
+        return instance
 
 
 def serialize_actions(actions):
