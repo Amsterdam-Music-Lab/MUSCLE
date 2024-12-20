@@ -7,6 +7,7 @@ import { FiSave, FiArrowLeft, FiPlus } from 'react-icons/fi';
 import { Button } from './Button';
 import { Accordion } from './Accordion';
 import { PhaseForm } from './PhaseForm';
+import { Tabs } from './Tabs';
 
 interface Experiment {
   id?: number;
@@ -19,6 +20,10 @@ interface Experiment {
 interface ExperimentFormProps {
 }
 
+interface UnsavedChanges {
+  translatedContent: boolean;
+  phases: boolean;
+}
 
 const ExperimentForm: React.FC<ExperimentFormProps> = () => {
   const [experiment, setExperiment] = useState<Experiment>({
@@ -30,6 +35,11 @@ const ExperimentForm: React.FC<ExperimentFormProps> = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
+  const [activeTab, setActiveTab] = useState<'translatedContent' | 'phases'>('translatedContent');
+  const [unsavedChanges, setUnsavedChanges] = useState<UnsavedChanges>({
+    translatedContent: false,
+    phases: false,
+  });
   
   const { id: experimentId } = useParams<{ id: string }>();
   const url = createEntityUrl('experiments', experimentId);
@@ -116,6 +126,7 @@ const ExperimentForm: React.FC<ExperimentFormProps> = () => {
         return phase;
       })
     }));
+    setUnsavedChanges(prev => ({ ...prev, phases: true }));
   };
 
   const handlePhaseDelete = (index: number) => {
@@ -124,6 +135,21 @@ const ExperimentForm: React.FC<ExperimentFormProps> = () => {
       phases: prev.phases.filter((_, i) => i !== index)
     }));
   };
+
+  const handleTranslatedContentChange = (newContents: TranslatedContent[]) => {
+    setExperiment(prev => ({ ...prev, translated_content: newContents }));
+    setUnsavedChanges(prev => ({ ...prev, translatedContent: true }));
+  };
+
+  const getTabLabel = (label: string, hasChanges: boolean) => {
+    return hasChanges ? `${label} *` : label;
+  };
+
+  useEffect(() => {
+    if (success) {
+      setUnsavedChanges({ translatedContent: false, phases: false });
+    }
+  }, [success]);
 
   if (loading && !success && !error && experimentId) {
     return <div className="text-center mt-5">Loading...</div>;
@@ -146,60 +172,83 @@ const ExperimentForm: React.FC<ExperimentFormProps> = () => {
         {error && <div className="text-red-600 mb-4">{error}</div>}
         {success && <div className="text-green-600 mb-4">Saved successfully!</div>}
 
-        <label className="block mb-2">
-          <span className="text-gray-700">Slug</span>
-          <input
-            type="text"
-            name="slug"
-            value={experiment.slug}
-            onChange={handleChange}
-            required
-            className="mt-1 block w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-blue-500"
-          />
-        </label>
+        <div className="mb-6">
+          <label className="block mb-2">
+            <span className="text-gray-700">Slug</span>
+            <input
+              type="text"
+              name="slug"
+              value={experiment.slug}
+              onChange={handleChange}
+              required
+              className="mt-1 block w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-blue-500"
+            />
+          </label>
 
-        <label className="flex items-center mb-4">
-          <input
-            type="checkbox"
-            name="active"
-            checked={experiment.active}
-            onChange={handleChange}
-            className="mr-2 form-checkbox h-5 w-5 text-blue-600"
-          />
-          <span className="text-gray-700">Active</span>
-        </label>
+          <label className="flex items-center mb-4">
+            <input
+              type="checkbox"
+              name="active"
+              checked={experiment.active}
+              onChange={handleChange}
+              className="mr-2 form-checkbox h-5 w-5 text-blue-600"
+            />
+            <span className="text-gray-700">Active</span>
+          </label>
+        </div>
 
-        <TranslatedContentForm
-          contents={experiment.translated_content}
-          onChange={(newContents) => setExperiment(prev => ({ ...prev, translated_content: newContents }))}
+        <Tabs
+          tabs={[
+            {
+              id: 'translatedContent',
+              label: getTabLabel('Translated Content', unsavedChanges.translatedContent),
+            },
+            {
+              id: 'phases',
+              label: getTabLabel('Phases', unsavedChanges.phases),
+            },
+          ]}
+          activeTab={activeTab}
+          onTabChange={(tabId) => setActiveTab(tabId as 'translatedContent' | 'phases')}
         />
 
-        <div className="mt-6">
-          <div className="flex justify-between items-center mb-4">
-            <h3 className="text-lg font-medium">Phases</h3>
-            <Button
-              variant="primary"
-              size="sm"
-              icon={<FiPlus />}
-              onClick={handleAddPhase}
-            >
-              Add Phase
-            </Button>
-          </div>
+        <div className="mt-4">
+          {activeTab === 'translatedContent' && (
+            <TranslatedContentForm
+              contents={experiment.translated_content}
+              onChange={handleTranslatedContentChange}
+            />
+          )}
 
-          <Accordion
-            items={experiment.phases.map((phase, index) => ({
-              id: phase.id || index,
-              title: `Phase ${index + 1}`,
-              content: (
-                <PhaseForm
-                  phase={phase}
-                  onChange={(updatedPhase) => handlePhaseChange(index, updatedPhase)}
-                  onDelete={() => handlePhaseDelete(index)}
-                />
-              ),
-            }))}
-          />
+          {activeTab === 'phases' && (
+            <div>
+              <div className="flex justify-between items-center mb-4">
+                <h3 className="text-lg font-medium">Phases</h3>
+                <Button
+                  variant="primary"
+                  size="sm"
+                  icon={<FiPlus />}
+                  onClick={handleAddPhase}
+                >
+                  Add Phase
+                </Button>
+              </div>
+
+              <Accordion
+                items={experiment.phases.map((phase, index) => ({
+                  id: phase.id || index,
+                  title: `Phase ${index + 1}`,
+                  content: (
+                    <PhaseForm
+                      phase={phase}
+                      onChange={(updatedPhase) => handlePhaseChange(index, updatedPhase)}
+                      onDelete={() => handlePhaseDelete(index)}
+                    />
+                  ),
+                }))}
+              />
+            </div>
+          )}
         </div>
 
         <Button
