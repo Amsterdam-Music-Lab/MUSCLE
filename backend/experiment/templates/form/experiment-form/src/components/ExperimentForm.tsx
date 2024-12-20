@@ -3,7 +3,7 @@ import { createEntityUrl } from '../config';
 import { useNavigate, useParams } from 'react-router-dom';
 import Page from './Page';
 import { TranslatedContentForm } from './TranslatedContentForm';
-import { FiSave, FiArrowLeft, FiPlus, FiTrash } from 'react-icons/fi';
+import { FiSave, FiArrowLeft, FiPlus, FiTrash, FiGlobe, FiLayers } from 'react-icons/fi';
 import { Button } from './Button';
 import { Tabs } from './Tabs';
 import { FormField } from './form/FormField';
@@ -226,17 +226,19 @@ const ExperimentForm: React.FC<ExperimentFormProps> = () => {
             {
               id: 'translatedContent',
               label: getTabLabel('Translated Content', unsavedChanges.translatedContent),
+              icon: <FiGlobe />
             },
             {
               id: 'phases',
               label: getTabLabel('Phases', unsavedChanges.phases),
+              icon: <FiLayers />
             },
           ]}
           activeTab={activeTab}
           onTabChange={(tabId) => setActiveTab(tabId as 'translatedContent' | 'phases')}
         />
 
-        <div className="mt-4">
+        <div className="mt-4 px-2">
           {activeTab === 'translatedContent' && (
             <TranslatedContentForm
               contents={experiment.translated_content}

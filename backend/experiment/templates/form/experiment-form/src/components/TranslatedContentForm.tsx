@@ -60,8 +60,9 @@ export const TranslatedContentForm: React.FC<TranslatedContentFormProps> = ({ co
   };
 
   return (
-    <div className="space-y-5">
-      <h3 className="text-lg font-medium">Translated Content</h3>
+    <div className="">
+      <h3 className="text-lg font-medium mb-5">
+        Translated Content</h3>
 
       <Tabs
         tabs={[
@@ -97,10 +98,8 @@ export const TranslatedContentForm: React.FC<TranslatedContentFormProps> = ({ co
       />
 
       {contents.length > 0 && (
-        <div className="p-5 border rounded-md space-y-5">
-          <div className="flex justify-end">
-            {/* ...existing remove button... */}
-          </div>
+        <div className='p-5 bg-gray-50'>
+        <div className="p-5 bg-white border rounded-md space-y-5">
 
           <div className="grid sm:grid-cols-2 gap-5">
             <FormField label="Language">
@@ -149,6 +148,7 @@ export const TranslatedContentForm: React.FC<TranslatedContentFormProps> = ({ co
               onChange={(e) => handleChange(activeTabIndex, 'social_media_message', e.target.value)}
             />
           </FormField>
+          </div>
         </div>
       )}
     </div>
