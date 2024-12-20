@@ -20,10 +20,18 @@ class ExperimentTranslatedContentSerializer(serializers.ModelSerializer):
         fields = ["id", "index", "language", "name", "description", "about_content", "social_media_message"]
 
 
+class BlockSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Block
+        fields = ["id", "index", "slug", "rounds", "bonus_points", "rules"]
+
+
 class PhaseSerializer(serializers.ModelSerializer):
+    blocks = BlockSerializer(many=True, required=False)
+
     class Meta:
         model = Phase
-        fields = ["id", "index", "dashboard", "randomize"]
+        fields = ["id", "index", "dashboard", "randomize", "blocks"]
 
 
 class ExperimentSerializer(serializers.ModelSerializer):
@@ -43,7 +51,11 @@ class ExperimentSerializer(serializers.ModelSerializer):
             ExperimentTranslatedContent.objects.create(experiment=experiment, **content_data)
 
         for phase_data in phases_data:
-            Phase.objects.create(experiment=experiment, **phase_data)
+            blocks_data = phase_data.pop("blocks", [])
+            phase = Phase.objects.create(experiment=experiment, **phase_data)
+
+            for block_data in blocks_data:
+                Block.objects.create(phase=phase, **block_data)
 
         return experiment
 
@@ -57,16 +69,20 @@ class ExperimentSerializer(serializers.ModelSerializer):
         instance.save()
 
         # Update or create translated content
-        if translated_content_data:
-            instance.translated_content.all().delete()  # Remove existing translations
+        if translated_content_data is not None:
+            instance.translated_content.all().delete()
             for content_data in translated_content_data:
                 ExperimentTranslatedContent.objects.create(experiment=instance, **content_data)
 
         # Update or create phases
-        if phases_data:
+        if phases_data is not None:
             instance.phases.all().delete()
             for phase_data in phases_data:
-                Phase.objects.create(experiment=instance, **phase_data)
+                blocks_data = phase_data.pop("blocks", [])
+                phase = Phase.objects.create(experiment=instance, **phase_data)
+
+                for block_data in blocks_data:
+                    Block.objects.create(phase=phase, **block_data)
 
         return instance
 

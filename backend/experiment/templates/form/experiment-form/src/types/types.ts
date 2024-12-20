@@ -8,11 +8,21 @@ export interface TranslatedContent {
   social_media_message: string;
 }
 
+export interface Block {
+  id?: number;
+  index: number;
+  slug: string;
+  rounds: number;
+  bonus_points: number;
+  rules: string;
+}
+
 export interface Phase {
   id?: number;
   index: number;
   dashboard: boolean;
   randomize: boolean;
+  blocks?: Block[];
 }
 
 export interface Experiment {

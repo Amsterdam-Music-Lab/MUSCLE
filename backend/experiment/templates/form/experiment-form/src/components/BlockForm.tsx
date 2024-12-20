@@ -1,0 +1,82 @@
+import React from 'react';
+import { FormField } from './form/FormField';
+import { Input } from './form/Input';
+import { Select } from './form/Select';
+import { Block } from '../types/types';
+import { useBlockRules } from '../hooks/useBlockRules';
+
+interface BlockFormProps {
+  block: Block;
+  onChange: (block: Block) => void;
+}
+
+export const BlockForm: React.FC<BlockFormProps> = ({ block, onChange }) => {
+  const { rules, loading, error } = useBlockRules();
+
+  const handleChange = (field: keyof Block, value: string | number) => {
+    onChange({ ...block, [field]: value });
+  };
+
+  return (
+    <div className="space-y-5">
+      <div className="grid sm:grid-cols-2 gap-5">
+        <FormField label="Slug">
+          <Input
+            type="text"
+            value={block.slug}
+            onChange={(e) => handleChange('slug', e.target.value)}
+            required
+          />
+        </FormField>
+
+        <FormField label="Index">
+          <Input
+            type="number"
+            value={block.index}
+            onChange={(e) => handleChange('index', parseInt(e.target.value))}
+            required
+          />
+        </FormField>
+      </div>
+
+      <div className="grid sm:grid-cols-2 gap-5">
+        <FormField label="Rounds">
+          <Input
+            type="number"
+            value={block.rounds}
+            onChange={(e) => handleChange('rounds', parseInt(e.target.value))}
+            required
+          />
+        </FormField>
+
+        <FormField label="Bonus Points">
+          <Input
+            type="number"
+            value={block.bonus_points}
+            onChange={(e) => handleChange('bonus_points', parseInt(e.target.value))}
+          />
+        </FormField>
+      </div>
+
+      <div className="grid sm:grid-cols-2 gap-5">
+        <FormField label="Rules">
+          <Select
+            value={block.rules}
+            onChange={(e) => handleChange('rules', e.target.value)}
+            required
+            disabled={loading}
+          >
+            <option value="">Select rules</option>
+            {rules.map((rule) => (
+              <option key={rule.id} value={rule.id}>
+                {rule.name}
+              </option>
+            ))}
+          </Select>
+          {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
+          {loading && <p className="text-gray-500 text-sm mt-1">Loading rules...</p>}
+        </FormField>
+      </div>
+    </div>
+  );
+};

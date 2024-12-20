@@ -9,6 +9,7 @@ from .views import (
     render_markdown,
     add_default_question_series,
     validate_block_playlist,
+    block_rules,
 )
 
 app_name = "experiment"
@@ -31,4 +32,5 @@ urlpatterns = [
         "robots.txt",
         TemplateView.as_view(template_name="robots.txt", content_type="text/plain"),
     ),
+    path("api/block-rules/", block_rules, name="block-rules"),
 ]

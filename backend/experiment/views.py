@@ -5,6 +5,8 @@ from django.http import Http404, HttpRequest, JsonResponse
 from django.utils.translation import gettext_lazy as _, get_language
 from django_markup.markup import formatter
 from rest_framework import viewsets, permissions
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
 
 from .models import Block, Experiment, Feedback, Session
 from section.models import Playlist
@@ -214,3 +216,10 @@ def validate_block_playlist(request: HttpRequest, rules_id: str) -> JsonResponse
         )
 
     return JsonResponse({"status": "ok", "message": "The playlist is valid."})
+
+
+@api_view(["GET"])
+def block_rules(request):
+    """Return a list of available block rules"""
+    rules = [{"id": rule_id, "name": rule_class.__name__} for rule_id, rule_class in BLOCK_RULES.items()]
+    return Response(rules)
