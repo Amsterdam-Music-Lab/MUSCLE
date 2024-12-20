@@ -27,7 +27,7 @@ export const PhaseForm: React.FC<PhaseFormProps> = ({
   };
 
   return (
-    <div className="space-y-5">
+    <div className="grid sm:grid-cols-2 gap-5">
       <FormField label="Show Dashboard">
         <input
           type="checkbox"
