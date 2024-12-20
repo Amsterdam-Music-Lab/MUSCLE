@@ -17,7 +17,9 @@ const ExperimentsOverview = () => {
   const handleDelete = async (id: number) => {
     if (window.confirm('Are you sure you want to delete this experiment?')) {
       try {
-        await fetch(`${url}/${id}/`, { method: 'DELETE' });
+        await fetch(createEntityUrl('experiments', id.toString()), {
+          method: 'DELETE',
+        });
         // Refresh the page or update the list
         fetchData();
       } catch (error) {
