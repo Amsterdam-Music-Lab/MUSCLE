@@ -47,3 +47,6 @@ django-modeltranslation
 
 # Django multiselect with search
 django-select2
+
+# Django REST framework
+djangorestframework

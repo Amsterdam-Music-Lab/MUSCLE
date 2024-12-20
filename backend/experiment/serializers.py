@@ -3,6 +3,7 @@ from typing import Optional, TypedDict, Literal
 
 from django_markup.markup import formatter
 from django.utils.translation import activate, get_language
+from rest_framework import serializers
 
 from experiment.actions.consent import Consent
 from image.serializers import serialize_image
@@ -11,6 +12,12 @@ from result.models import Result
 from session.models import Session
 from theme.serializers import serialize_theme
 from .models import Block, Experiment, Phase, SocialMediaConfig
+
+
+class ExperimentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Experiment
+        fields = ["id", "slug", "active"]
 
 
 def serialize_actions(actions):

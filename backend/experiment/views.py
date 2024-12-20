@@ -4,6 +4,7 @@ import logging
 from django.http import Http404, HttpRequest, JsonResponse
 from django.utils.translation import gettext_lazy as _, get_language
 from django_markup.markup import formatter
+from rest_framework import viewsets, permissions
 
 from .models import Block, Experiment, Feedback, Session
 from section.models import Playlist
@@ -14,11 +15,19 @@ from experiment.serializers import (
 )
 from experiment.rules import BLOCK_RULES
 from experiment.actions.utils import EXPERIMENT_KEY
+from experiment.serializers import ExperimentSerializer
+
 from participant.models import Participant
 from participant.utils import get_participant
 from theme.serializers import serialize_theme
 
 logger = logging.getLogger(__name__)
+
+
+class ExperimentViewSet(viewsets.ModelViewSet):
+    queryset = Experiment.objects.all()
+    serializer_class = ExperimentSerializer
+    permission_classes = [permissions.AllowAny]
 
 
 def get_block(request: HttpRequest, slug: str) -> JsonResponse:
@@ -48,10 +57,7 @@ def get_block(request: HttpRequest, slug: str) -> JsonResponse:
         "class_name": class_name,  # can be used to override style
         "rounds": block.rounds,
         "bonus_points": block.bonus_points,
-        "playlists": [
-            {"id": playlist.id, "name": playlist.name}
-            for playlist in block.playlists.all()
-        ],
+        "playlists": [{"id": playlist.id, "name": playlist.name} for playlist in block.playlists.all()],
         "feedback_info": block.get_rules().feedback_info(),
         "loading_text": _("Loading"),
         "session_id": session.id,
@@ -138,9 +144,7 @@ def _get_min_session_count(experiment: Experiment, participant: Participant) -> 
     for phase in phases:
         session_counts.extend(
             [
-                Session.objects.exclude(finished_at__isnull=True)
-                .filter(block=block, participant=participant)
-                .count()
+                Session.objects.exclude(finished_at__isnull=True).filter(block=block, participant=participant).count()
                 for block in phase.blocks.all()
             ]
         )

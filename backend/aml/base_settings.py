@@ -41,6 +41,7 @@ ALLOWED_HOSTS = os.getenv("AML_ALLOWED_HOSTS", "localhost").split(",")
 # Application definition
 
 INSTALLED_APPS = [
+    "rest_framework",
     "admin_interface",
     "modeltranslation",  # Must be before django.contrib.admin
     "django.contrib.admin",
