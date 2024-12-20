@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from 'react';
+import { createEntityUrl } from '../config';
+import { useParams } from 'react-router-dom';
 
 interface Experiment {
   id?: number;
@@ -7,19 +9,22 @@ interface Experiment {
 }
 
 interface ExperimentFormProps {
-  experimentId?: number; // If provided, we edit an existing experiment, otherwise we create a new one
 }
 
-const ExperimentForm: React.FC<ExperimentFormProps> = ({ experimentId }) => {
+
+const ExperimentForm: React.FC<ExperimentFormProps> = () => {
   const [experiment, setExperiment] = useState<Experiment>({ slug: '', active: true });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
+  
+  const { id: experimentId } = useParams<{ id: string }>();
+  const url = createEntityUrl('experiments', experimentId);
 
   useEffect(() => {
     if (experimentId) {
       setLoading(true);
-      fetch(`/api/experiments/${experimentId}/`)
+      fetch(url)
         .then(res => res.json())
         .then(data => {
           setExperiment(data);
@@ -47,7 +52,6 @@ const ExperimentForm: React.FC<ExperimentFormProps> = ({ experimentId }) => {
     setSuccess(false);
 
     const method = experimentId ? 'PUT' : 'POST';
-    const url = experimentId ? `/api/experiments/${experimentId}/` : '/api/experiments/';
 
     fetch(url, {
       method,
@@ -79,43 +83,48 @@ const ExperimentForm: React.FC<ExperimentFormProps> = ({ experimentId }) => {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="max-w-md mx-auto p-4 bg-white shadow-md rounded">
-      <h2 className="text-xl font-bold mb-4">{experimentId ? 'Edit Experiment' : 'Create Experiment'}</h2>
+    <>
+      <form onSubmit={handleSubmit} className="max-w-xl mx-auto p-4 bg-white shadow-md rounded">
+        <a href="/experiments" className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 inline-block text-center mx-auto mb-4">
+          &lt; Back to Experiments
+        </a>
+        <h2 className="text-xl font-bold mt-8 mb-4">{experimentId ? 'Edit Experiment' : 'Create Experiment'}</h2>
 
-      {error && <div className="text-red-600 mb-4">{error}</div>}
-      {success && <div className="text-green-600 mb-4">Saved successfully!</div>}
+        {error && <div className="text-red-600 mb-4">{error}</div>}
+        {success && <div className="text-green-600 mb-4">Saved successfully!</div>}
 
-      <label className="block mb-2">
-        <span className="text-gray-700">Slug</span>
-        <input
-          type="text"
-          name="slug"
-          value={experiment.slug}
-          onChange={handleChange}
-          required
-          className="mt-1 block w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-blue-500"
-        />
-      </label>
+        <label className="block mb-2">
+          <span className="text-gray-700">Slug</span>
+          <input
+            type="text"
+            name="slug"
+            value={experiment.slug}
+            onChange={handleChange}
+            required
+            className="mt-1 block w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-blue-500"
+          />
+        </label>
 
-      <label className="flex items-center mb-4">
-        <input
-          type="checkbox"
-          name="active"
-          checked={experiment.active}
-          onChange={handleChange}
-          className="mr-2 form-checkbox h-5 w-5 text-blue-600"
-        />
-        <span className="text-gray-700">Active</span>
-      </label>
+        <label className="flex items-center mb-4">
+          <input
+            type="checkbox"
+            name="active"
+            checked={experiment.active}
+            onChange={handleChange}
+            className="mr-2 form-checkbox h-5 w-5 text-blue-600"
+          />
+          <span className="text-gray-700">Active</span>
+        </label>
 
-      <button
-        type="submit"
-        disabled={loading}
-        className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 disabled:opacity-50"
-      >
-        {loading ? 'Saving...' : (experimentId ? 'Update Experiment' : 'Create Experiment')}
-      </button>
-    </form>
+        <button
+          type="submit"
+          disabled={loading}
+          className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 disabled:opacity-50"
+        >
+          {loading ? 'Saving...' : (experimentId ? 'Update Experiment' : 'Create Experiment')}
+        </button>
+      </form>
+    </>
   );
 };
 
