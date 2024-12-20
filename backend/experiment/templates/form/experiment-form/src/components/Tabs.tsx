@@ -17,6 +17,7 @@ export const Tabs: React.FC<TabsProps> = ({ tabs, activeTab, onTabChange }) => {
       <nav className="-mb-px flex space-x-8" aria-label="Tabs">
         {tabs.map((tab) => (
           <button
+            type="button"
             key={tab.id}
             onClick={() => onTabChange(tab.id)}
             className={`
