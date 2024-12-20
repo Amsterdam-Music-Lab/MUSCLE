@@ -247,8 +247,8 @@ const ExperimentForm: React.FC<ExperimentFormProps> = () => {
           )}
 
           {activeTab === 'phases' && (
-            <div className="space-y-5">
-              <h3 className="text-lg font-medium">Phases</h3>
+            <div className="">
+              <h3 className="text-lg font-medium mb-5">Phases</h3>
 
               <Tabs
                 tabs={[
@@ -284,12 +284,14 @@ const ExperimentForm: React.FC<ExperimentFormProps> = () => {
               />
 
               {experiment.phases.length > 0 && (
-                <div className="p-5 border rounded-md">
+                <div className='p-5 bg-gray-50'>
+                <div className="p-5 border rounded-md bg-white">
                   <PhaseForm
                     phase={experiment.phases[activePhaseIndex]}
                     onChange={(updatedPhase) => handlePhaseChange(activePhaseIndex, updatedPhase)}
                     onDelete={() => handlePhaseDelete(activePhaseIndex)}
                   />
+                </div>
                 </div>
               )}
             </div>
