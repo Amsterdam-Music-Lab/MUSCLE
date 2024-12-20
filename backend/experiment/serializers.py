@@ -119,8 +119,6 @@ class ExperimentSerializer(serializers.ModelSerializer):
                 for block_data in blocks_data:
                     block_id = block_data.get("id")
 
-                    print("MEKKA", block_data, block_id)
-
                     if block_id:
                         block_instance = Block.objects.get(pk=block_id)
                         block_serializer = BlockSerializer(block_instance, data=block_data, partial=True)
