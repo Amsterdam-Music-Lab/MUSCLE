@@ -111,7 +111,7 @@ export const TranslatedContentForm: React.FC<TranslatedContentFormProps> = ({ co
             {/* ...existing remove button... */}
           </div>
 
-          <div className="grid grid-cols-2 gap-5">
+          <div className="grid sm:grid-cols-2 gap-5">
             <FormField label="Language">
               <Select
                 value={contents[activeTabIndex].language}
