@@ -11,7 +11,7 @@ interface PageProps {
 const Page = ({ title, children, backTo, backText = 'Back' }: PageProps) => {
   return (
     <div className="p-4">
-      <div className="mb-6">
+      <div className="mb-5">
         {backTo && (
           <Link
             to={backTo}

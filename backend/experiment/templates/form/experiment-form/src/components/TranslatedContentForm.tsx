@@ -3,6 +3,10 @@ import { ISO_LANGUAGES } from '../constants';
 import { Tabs } from './Tabs';
 import { FiPlus, FiTrash } from 'react-icons/fi';
 import { Button } from './Button';
+import { FormField } from './form/FormField';
+import { Input } from './form/Input';
+import { Select } from './form/Select';
+import { Textarea } from './form/Textarea';
 
 interface TranslatedContent {
   id?: number;
@@ -65,7 +69,7 @@ export const TranslatedContentForm: React.FC<TranslatedContentFormProps> = ({ co
   };
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-5">
       <div className="flex justify-between items-center">
         <h3 className="text-lg font-medium">Translated Content</h3>
         <Button
@@ -95,74 +99,58 @@ export const TranslatedContentForm: React.FC<TranslatedContentFormProps> = ({ co
             ]}
           />
 
-          <div className="p-4 border rounded-md space-y-3">
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700">
-                  Language
-                  <select
-                    value={contents[activeTabIndex].language}
-                    onChange={(e) => handleChange(activeTabIndex, 'language', e.target.value)}
-                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                  >
-                    <option value="">Select language</option>
-                    {Object.entries(ISO_LANGUAGES).map(([code, name]) => (
-                      <option key={code} value={code}>
-                        {name}
-                      </option>
-                    ))}
-                  </select>
-                </label>
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700">
-                  Name
-                  <input
-                    type="text"
-                    value={contents[activeTabIndex].name}
-                    onChange={(e) => handleChange(activeTabIndex, 'name', e.target.value)}
-                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                  />
-                </label>
-              </div>
+          <div className="p-5 border rounded-md space-y-5">
+            <div className="flex justify-end">
+              {/* ...existing remove button... */}
             </div>
 
-            <div>
-              <label className="block text-sm font-medium text-gray-700">
-                Description
-                <textarea
-                  value={contents[activeTabIndex].description}
-                  onChange={(e) => handleChange(activeTabIndex, 'description', e.target.value)}
-                  rows={3}
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                />
-              </label>
-            </div>
+            <div className="grid grid-cols-2 gap-5">
+              <FormField label="Language">
+                <Select
+                  value={contents[activeTabIndex].language}
+                  onChange={(e) => handleChange(activeTabIndex, 'language', e.target.value)}
+                >
+                  <option value="">Select language</option>
+                  {Object.entries(ISO_LANGUAGES).map(([code, name]) => (
+                    <option key={code} value={code}>
+                      {name}
+                    </option>
+                  ))}
+                </Select>
+              </FormField>
 
-            <div>
-              <label className="block text-sm font-medium text-gray-700">
-                About Content
-                <textarea
-                  value={contents[activeTabIndex].about_content}
-                  onChange={(e) => handleChange(activeTabIndex, 'about_content', e.target.value)}
-                  rows={3}
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                />
-              </label>
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700">
-                Social Media Message
-                <input
+              <FormField label="Name">
+                <Input
                   type="text"
-                  value={contents[activeTabIndex].social_media_message}
-                  onChange={(e) => handleChange(activeTabIndex, 'social_media_message', e.target.value)}
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                  value={contents[activeTabIndex].name}
+                  onChange={(e) => handleChange(activeTabIndex, 'name', e.target.value)}
                 />
-              </label>
+              </FormField>
             </div>
+
+            <FormField label="Description">
+              <Textarea
+                value={contents[activeTabIndex].description}
+                onChange={(e) => handleChange(activeTabIndex, 'description', e.target.value)}
+                rows={3}
+              />
+            </FormField>
+
+            <FormField label="About Content">
+              <Textarea
+                value={contents[activeTabIndex].about_content}
+                onChange={(e) => handleChange(activeTabIndex, 'about_content', e.target.value)}
+                rows={3}
+              />
+            </FormField>
+
+            <FormField label="Social Media Message">
+              <Input
+                type="text"
+                value={contents[activeTabIndex].social_media_message}
+                onChange={(e) => handleChange(activeTabIndex, 'social_media_message', e.target.value)}
+              />
+            </FormField>
           </div>
         </>
       )}

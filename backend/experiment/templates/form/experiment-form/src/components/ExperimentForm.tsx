@@ -8,6 +8,8 @@ import { Button } from './Button';
 import { Accordion } from './Accordion';
 import { PhaseForm } from './PhaseForm';
 import { Tabs } from './Tabs';
+import { FormField } from './form/FormField';
+import { Input } from './form/Input';
 
 interface Experiment {
   id?: number;
@@ -168,33 +170,33 @@ const ExperimentForm: React.FC<ExperimentFormProps> = () => {
         Back to Experiments
       </Button>
 
-      <form onSubmit={handleSubmit} className="bg-white shadow-md rounded p-4">
+      <form onSubmit={handleSubmit} className="bg-white shadow-md rounded p-5 space-y-5">
         {error && <div className="text-red-600 mb-4">{error}</div>}
         {success && <div className="text-green-600 mb-4">Saved successfully!</div>}
 
-        <div className="mb-6">
-          <label className="block mb-2">
-            <span className="text-gray-700">Slug</span>
-            <input
+        <div className="space-y-5">
+          <FormField label="Slug">
+            <Input
               type="text"
               name="slug"
               value={experiment.slug}
               onChange={handleChange}
               required
-              className="mt-1 block w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-blue-500"
             />
-          </label>
+          </FormField>
 
-          <label className="flex items-center mb-4">
-            <input
-              type="checkbox"
-              name="active"
-              checked={experiment.active}
-              onChange={handleChange}
-              className="mr-2 form-checkbox h-5 w-5 text-blue-600"
-            />
-            <span className="text-gray-700">Active</span>
-          </label>
+          <FormField label="Status">
+            <label className="flex items-center space-x-3">
+              <input
+                type="checkbox"
+                name="active"
+                checked={experiment.active}
+                onChange={handleChange}
+                className="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50 h-5 w-5"
+              />
+              <span className="text-gray-700">Active</span>
+            </label>
+          </FormField>
         </div>
 
         <Tabs
@@ -256,7 +258,7 @@ const ExperimentForm: React.FC<ExperimentFormProps> = () => {
           disabled={loading}
           variant="success"
           icon={<FiSave />}
-          className="mt-6"
+          className="mt-5"
         >
           {loading ? 'Saving...' : (experimentId ? 'Update Experiment' : 'Create Experiment')}
         </Button>
