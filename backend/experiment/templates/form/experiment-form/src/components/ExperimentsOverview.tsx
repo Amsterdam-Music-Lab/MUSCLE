@@ -3,14 +3,46 @@ import useFetch from "../hooks/useFetch";
 import { Button } from "./Button";
 import Page from "./Page";
 import { FiPlus, FiEdit2, FiTrash2 } from "react-icons/fi";
+import { Experiment, Phase, TranslatedContent } from "../types/types";
+import React from "react";
 
 type Experiment = {
   id?: number;
   slug: string;
   active: boolean;
+  phases: Phase[];
+  translated_content: TranslatedContent[];
 }
 
 const url = createEntityUrl('experiments');
+
+const PhasesPills: React.FC<{ phases: Phase[] }> = ({ phases }) => {
+  return (
+    <div className="flex items-center">
+      {phases.sort((a, b) => a.index - b.index).map((phase, idx) => (
+        <React.Fragment key={phase.id}>
+          {idx > 0 && <div className="h-[1px] w-4 bg-gray-300" />}
+          <div className="px-2 py-1 rounded-full bg-blue-100 text-blue-800 text-xs">
+            {phase.index}
+          </div>
+        </React.Fragment>
+      ))}
+    </div>
+  );
+};
+
+const LanguagePills: React.FC<{ translations: TranslatedContent[] }> = ({ translations }) => {
+  const languages = [...new Set(translations.map(t => t.language))];
+  return (
+    <div className="flex gap-1">
+      {languages.map(lang => (
+        <div key={lang} className="px-2 py-1 rounded-full bg-gray-100 text-gray-800 text-xs">
+          {lang.toUpperCase()}
+        </div>
+      ))}
+    </div>
+  );
+};
 
 const ExperimentsOverview = () => {
   const [experiments, error, loading, fetchData] = useFetch<Experiment[]>(url);
@@ -70,6 +102,8 @@ const ExperimentsOverview = () => {
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Slug</th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Phases</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Languages</th>
                 <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
               </tr>
             </thead>
@@ -83,6 +117,12 @@ const ExperimentsOverview = () => {
                       }`}>
                       {experiment.active ? 'Active' : 'Inactive'}
                     </span>
+                  </td>
+                  <td className="px-6 py-4 text-left whitespace-nowrap">
+                    <PhasesPills phases={experiment.phases} />
+                  </td>
+                  <td className="px-6 py-4 text-left whitespace-nowrap">
+                    <LanguagePills translations={experiment.translated_content} />
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                     <Button
