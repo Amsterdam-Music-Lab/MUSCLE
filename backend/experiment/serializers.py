@@ -1,5 +1,5 @@
 from random import shuffle
-from typing import Optional, Union
+from typing import Optional, TypedDict, Literal
 
 from django_markup.markup import formatter
 from django.utils.translation import activate, get_language
@@ -63,26 +63,22 @@ def serialize_experiment(experiment: Experiment) -> dict:
         serialized["aboutContent"] = formatter(translated_content.about_content, filter_name="markdown")
 
     if hasattr(experiment, "social_media_config") and experiment.social_media_config:
-        serialized["socialMedia"] = serialize_social_media_config(
-            experiment.social_media_config
-        )
+        serialized["socialMedia"] = serialize_social_media_config(experiment.social_media_config)
 
     return serialized
+
+
+class SocialMediaConfigConfiguration(TypedDict):
+    channels: list[Literal["facebook", "whatsapp", "twitter", "weibo", "share", "clipboard"]] | list[str]
+    url: str
+    content: str
+    tags: list[str]
 
 
 def serialize_social_media_config(
     social_media_config: SocialMediaConfig,
     score: Optional[float] = 0,
-) -> dict:
-    """Serialize social media config
-
-    Args:
-        social_media_config: SocialMediaConfig instance
-
-    returns:
-        Basic social media info
-    """
-
+) -> SocialMediaConfigConfiguration:
     return {
         "tags": social_media_config.tags or ["amsterdammusiclab", "citizenscience"],
         "url": social_media_config.url,
@@ -137,9 +133,7 @@ def serialize_block(block_object: Block, language: str = "en") -> dict:
     }
 
 
-def get_upcoming_block(
-    phase: Phase, participant: Participant, times_played: int
-) -> dict:
+def get_upcoming_block(phase: Phase, participant: Participant, times_played: int) -> dict:
     """return next block with minimum finished sessions for this participant
     if all blocks have been played an equal number of times, return None
 
@@ -150,9 +144,7 @@ def get_upcoming_block(
     blocks = list(phase.blocks.all())
 
     shuffle(blocks)
-    finished_session_counts = [
-        get_finished_session_count(block, participant) for block in blocks
-    ]
+    finished_session_counts = [get_finished_session_count(block, participant) for block in blocks]
 
     min_session_count = min(finished_session_counts)
     if not phase.dashboard:
@@ -188,9 +180,7 @@ def get_finished_session_count(block: Block, participant: Participant) -> int:
         Number of finished sessions for this block and participant
     """
 
-    return Session.objects.filter(
-        block=block, participant=participant, finished_at__isnull=False
-    ).count()
+    return Session.objects.filter(block=block, participant=participant, finished_at__isnull=False).count()
 
 
 def get_total_score(blocks: list, participant: Participant) -> int:
