@@ -7,14 +7,6 @@ import { Experiment, Phase, TranslatedContent } from "../types/types";
 import React from "react";
 import { Flag } from "./Flag";
 
-type Experiment = {
-  id?: number;
-  slug: string;
-  active: boolean;
-  phases: Phase[];
-  translated_content: TranslatedContent[];
-}
-
 const url = createEntityUrl('experiments');
 
 const PhasesPills: React.FC<{ phases: Phase[] }> = ({ phases }) => {
