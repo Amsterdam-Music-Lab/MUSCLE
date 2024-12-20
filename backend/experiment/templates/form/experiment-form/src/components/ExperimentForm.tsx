@@ -3,6 +3,8 @@ import { createEntityUrl } from '../config';
 import { useParams } from 'react-router-dom';
 import Page from './Page';
 import { TranslatedContentForm } from './TranslatedContentForm';
+import { FiSave, FiArrowLeft } from 'react-icons/fi';
+import { Button } from './Button';
 
 interface Experiment {
   id?: number;
@@ -92,9 +94,16 @@ const ExperimentForm: React.FC<ExperimentFormProps> = () => {
   return (
     <Page 
       title={experimentId ? 'Edit Experiment' : 'Create Experiment'}
-      backTo="/experiments"
-      backText="Back to Experiments"
     >
+      <Button
+        to="/experiments"
+        variant="secondary"
+        icon={<FiArrowLeft />}
+        className="mb-4"
+      >
+        Back to Experiments
+      </Button>
+
       <form onSubmit={handleSubmit} className="bg-white shadow-md rounded p-4">
         {error && <div className="text-red-600 mb-4">{error}</div>}
         {success && <div className="text-green-600 mb-4">Saved successfully!</div>}
@@ -127,13 +136,15 @@ const ExperimentForm: React.FC<ExperimentFormProps> = () => {
           onChange={(newContents) => setExperiment(prev => ({ ...prev, translated_content: newContents }))}
         />
 
-        <button
+        <Button
           type="submit"
           disabled={loading}
-          className="mt-6 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 disabled:opacity-50"
+          variant="success"
+          icon={<FiSave />}
+          className="mt-6"
         >
           {loading ? 'Saving...' : (experimentId ? 'Update Experiment' : 'Create Experiment')}
-        </button>
+        </Button>
       </form>
     </Page>
   );

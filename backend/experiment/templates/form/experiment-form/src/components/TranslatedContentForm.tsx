@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { ISO_LANGUAGES } from '../constants';
 import { Tabs } from './Tabs';
+import { FiPlus, FiTrash } from 'react-icons/fi';
+import { Button } from './Button';
 
 interface TranslatedContent {
   id?: number;
@@ -64,13 +66,13 @@ export const TranslatedContentForm: React.FC<TranslatedContentFormProps> = ({ co
     <div className="space-y-4">
       <div className="flex justify-between items-center">
         <h3 className="text-lg font-medium">Translated Content</h3>
-        <button
-          type="button"
+        <Button
           onClick={handleAdd}
-          className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+          variant="primary"
+          icon={<FiPlus />}
         >
           Add Translation
-        </button>
+        </Button>
       </div>
 
       {contents.length > 0 && (
@@ -86,13 +88,14 @@ export const TranslatedContentForm: React.FC<TranslatedContentFormProps> = ({ co
 
           <div className="p-4 border rounded-md space-y-3">
             <div className="flex justify-end">
-              <button
-                type="button"
+              <Button
                 onClick={() => handleRemove(activeTabIndex)}
-                className="text-red-600 hover:text-red-800"
+                variant="danger"
+                size="sm"
+                icon={<FiTrash />}
               >
                 Remove Translation
-              </button>
+              </Button>
             </div>
 
             <div className="grid grid-cols-2 gap-4">

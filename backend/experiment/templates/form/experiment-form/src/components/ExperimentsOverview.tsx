@@ -1,7 +1,8 @@
 import { createEntityUrl } from "../config";
 import useFetch from "../hooks/useFetch";
-import { Link } from "react-router-dom";
+import { Button } from "./Button";
 import Page from "./Page";
+import { FiPlus, FiEdit2, FiTrash2 } from "react-icons/fi";
 
 type Experiment = {
   id?: number;
@@ -51,12 +52,13 @@ const ExperimentsOverview = () => {
     <Page title="Experiments">
       <div className={`${loadingClass}`}>
         <div className="flex justify-end mb-4">
-          <button
+          <Button
             onClick={onCreateExperiment}
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+            variant="success"
+            icon={<FiPlus />}
           >
             New Experiment
-          </button>
+          </Button>
         </div>
 
         <div className="overflow-x-auto">
@@ -81,18 +83,23 @@ const ExperimentsOverview = () => {
                     </span>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                    <Link
+                    <Button
                       to={`/experiments/${experiment.id}`}
-                      className="text-indigo-600 hover:text-indigo-900 mr-4"
+                      variant="secondary"
+                      size="sm"
+                      icon={<FiEdit2 />}
+                      className="mr-2"
                     >
                       Edit
-                    </Link>
-                    <button
+                    </Button>
+                    <Button
                       onClick={() => experiment.id && handleDelete(experiment.id)}
-                      className="text-red-600 hover:text-red-900"
+                      variant="danger"
+                      size="sm"
+                      icon={<FiTrash2 />}
                     >
                       Delete
-                    </button>
+                    </Button>
                   </td>
                 </tr>
               ))}
