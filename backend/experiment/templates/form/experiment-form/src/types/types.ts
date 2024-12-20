@@ -15,6 +15,7 @@ export interface Block {
   rounds: number;
   bonus_points: number;
   rules: string;
+  phase?: number;  // Make phase optional
 }
 
 export interface Phase {

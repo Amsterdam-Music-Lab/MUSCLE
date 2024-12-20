@@ -27,19 +27,26 @@ export const PhaseForm: React.FC<PhaseFormProps> = ({ phase, onChange }) => {
   };
 
   const handleAddBlock = () => {
+    const existingBlocks = phase.blocks || [];
     const newBlock = {
       ...defaultBlock,
-      index: phase.blocks?.length || 0,
+      index: existingBlocks.length,
+      // Ensure unique slug for new blocks
+      slug: `block-${existingBlocks.length + 1}`,
     };
-    const blocks = [...(phase.blocks || []), newBlock];
+    const blocks = [...existingBlocks, newBlock];
     handleChange('blocks', blocks);
     setActiveBlockIndex(blocks.length - 1);
   };
 
   const handleBlockChange = (index: number, updatedBlock: Block) => {
-    const blocks = (phase.blocks || []).map((block, i) => 
-      i === index ? updatedBlock : block
-    );
+    const blocks = (phase.blocks || []).map((block, i) => {
+      if (i === index) {
+        // Preserve the existing ID when updating a block
+        return { ...updatedBlock, id: block.id };
+      }
+      return block;
+    });
     handleChange('blocks', blocks);
   };
 

@@ -111,8 +111,6 @@ const ExperimentForm: React.FC<ExperimentFormProps> = () => {
     return hasChanges ? `${label} *` : label;
   };
 
-  const getPhaseTabLabel = (index: number) => `Phase ${index + 1}`;
-
   useEffect(() => {
     if (success) {
       setUnsavedChanges({ main: false, translatedContent: false, phases: false });

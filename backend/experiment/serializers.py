@@ -21,9 +21,21 @@ class ExperimentTranslatedContentSerializer(serializers.ModelSerializer):
 
 
 class BlockSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(required=False)
+
     class Meta:
         model = Block
-        fields = ["id", "index", "slug", "rounds", "bonus_points", "rules"]
+        fields = [
+            "id",
+            "index",
+            "slug",
+            "rounds",
+            "bonus_points",
+            "rules",
+        ]
+        extra_kwargs = {
+            "slug": {"validators": []},
+        }
 
 
 class PhaseSerializer(serializers.ModelSerializer):
@@ -68,21 +80,61 @@ class ExperimentSerializer(serializers.ModelSerializer):
         instance.active = validated_data.get("active", instance.active)
         instance.save()
 
-        # Update or create translated content
+        # Update translated content
         if translated_content_data is not None:
-            instance.translated_content.all().delete()
-            for content_data in translated_content_data:
-                ExperimentTranslatedContent.objects.create(experiment=instance, **content_data)
+            existing_content_ids = set()
 
-        # Update or create phases
+            # Update or create translated content
+            for content_data in translated_content_data:
+                content_id = content_data.get("id")
+                if content_id:
+                    content, _ = ExperimentTranslatedContent.objects.update_or_create(
+                        id=content_id, experiment=instance, defaults=content_data
+                    )
+                else:
+                    content = ExperimentTranslatedContent.objects.create(experiment=instance, **content_data)
+                existing_content_ids.add(content.id)
+
+            # Delete removed content
+            instance.translated_content.exclude(id__in=existing_content_ids).delete()
+
+        # Update phases
         if phases_data is not None:
-            instance.phases.all().delete()
+            existing_phase_ids = set()
+
+            # Update or create phases
             for phase_data in phases_data:
                 blocks_data = phase_data.pop("blocks", [])
-                phase = Phase.objects.create(experiment=instance, **phase_data)
+                phase_id = phase_data.get("id")
+
+                if phase_id:
+                    phase, _ = Phase.objects.update_or_create(id=phase_id, experiment=instance, defaults=phase_data)
+                else:
+                    phase = Phase.objects.create(experiment=instance, **phase_data)
+                existing_phase_ids.add(phase.id)
+
+                # Handle blocks for this phase
+                existing_block_ids = set()
 
                 for block_data in blocks_data:
-                    Block.objects.create(phase=phase, **block_data)
+                    block_id = block_data.get("id")
+
+                    print("MEKKA", block_data, block_id)
+
+                    if block_id:
+                        block_instance = Block.objects.get(pk=block_id)
+                        block_serializer = BlockSerializer(block_instance, data=block_data, partial=True)
+                    else:
+                        block_serializer = BlockSerializer(data=block_data, partial=True)
+                    block_serializer.is_valid(raise_exception=True)
+                    block = block_serializer.save(phase=phase)
+                    existing_block_ids.add(block.id)
+
+                # Delete removed blocks
+                phase.blocks.exclude(id__in=existing_block_ids).delete()
+
+            # Delete removed phases
+            instance.phases.exclude(id__in=existing_phase_ids).delete()
 
         return instance
 
