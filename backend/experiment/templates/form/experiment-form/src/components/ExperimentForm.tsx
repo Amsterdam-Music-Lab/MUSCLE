@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { createEntityUrl } from '../config';
 import { useParams } from 'react-router-dom';
+import Page from './Page';
 
 interface Experiment {
   id?: number;
@@ -83,13 +84,12 @@ const ExperimentForm: React.FC<ExperimentFormProps> = () => {
   }
 
   return (
-    <>
-      <form onSubmit={handleSubmit} className="max-w-xl mx-auto p-4 bg-white shadow-md rounded">
-        <a href="/experiments" className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 inline-block text-center mx-auto mb-4">
-          &lt; Back to Experiments
-        </a>
-        <h2 className="text-xl font-bold mt-8 mb-4">{experimentId ? 'Edit Experiment' : 'Create Experiment'}</h2>
-
+    <Page 
+      title={experimentId ? 'Edit Experiment' : 'Create Experiment'}
+      backTo="/experiments"
+      backText="Back to Experiments"
+    >
+      <form onSubmit={handleSubmit} className="bg-white shadow-md rounded p-4">
         {error && <div className="text-red-600 mb-4">{error}</div>}
         {success && <div className="text-green-600 mb-4">Saved successfully!</div>}
 
@@ -124,7 +124,7 @@ const ExperimentForm: React.FC<ExperimentFormProps> = () => {
           {loading ? 'Saving...' : (experimentId ? 'Update Experiment' : 'Create Experiment')}
         </button>
       </form>
-    </>
+    </Page>
   );
 };
 

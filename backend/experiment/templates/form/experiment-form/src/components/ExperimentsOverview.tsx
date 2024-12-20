@@ -1,6 +1,7 @@
 import { createEntityUrl } from "../config";
 import useFetch from "../hooks/useFetch";
 import { Link } from "react-router-dom";
+import Page from "./Page";
 
 type Experiment = {
   id?: number;
@@ -47,58 +48,59 @@ const ExperimentsOverview = () => {
 
 
   return (
-    <div className={`p-4 ${loadingClass}`}>
-      <div className="flex justify-between items-center mb-4">
-        <h1 className="text-2xl font-bold">Experiments</h1>
-        <button
-          onClick={onCreateExperiment}
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-        >
-          New Experiment
-        </button>
-      </div>
+    <Page title="Experiments">
+      <div className={`${loadingClass}`}>
+        <div className="flex justify-end mb-4">
+          <button
+            onClick={onCreateExperiment}
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+          >
+            New Experiment
+          </button>
+        </div>
 
-      <div className="overflow-x-auto">
-        <table className="min-w-full bg-white shadow-md rounded">
-          <thead className="bg-gray-100">
-            <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Slug</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-              <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-gray-200">
-            {experiments?.map((experiment) => (
-              <tr key={experiment.id} className="hover:bg-gray-50">
-                <td className="px-6 py-4 text-left whitespace-nowrap">{experiment.id}</td>
-                <td className="px-6 py-4 text-left whitespace-nowrap">{experiment.slug}</td>
-                <td className="px-6 py-4 text-left whitespace-nowrap">
-                  <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${experiment.active ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
-                    }`}>
-                    {experiment.active ? 'Active' : 'Inactive'}
-                  </span>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                  <Link
-                    to={`/experiments/${experiment.id}`}
-                    className="text-indigo-600 hover:text-indigo-900 mr-4"
-                  >
-                    Edit
-                  </Link>
-                  <button
-                    onClick={() => experiment.id && handleDelete(experiment.id)}
-                    className="text-red-600 hover:text-red-900"
-                  >
-                    Delete
-                  </button>
-                </td>
+        <div className="overflow-x-auto">
+          <table className="min-w-full bg-white shadow-md rounded">
+            <thead className="bg-gray-100">
+              <tr>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Slug</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody className="divide-y divide-gray-200">
+              {experiments?.map((experiment) => (
+                <tr key={experiment.id} className="hover:bg-gray-50">
+                  <td className="px-6 py-4 text-left whitespace-nowrap">{experiment.id}</td>
+                  <td className="px-6 py-4 text-left whitespace-nowrap">{experiment.slug}</td>
+                  <td className="px-6 py-4 text-left whitespace-nowrap">
+                    <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${experiment.active ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
+                      }`}>
+                      {experiment.active ? 'Active' : 'Inactive'}
+                    </span>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                    <Link
+                      to={`/experiments/${experiment.id}`}
+                      className="text-indigo-600 hover:text-indigo-900 mr-4"
+                    >
+                      Edit
+                    </Link>
+                    <button
+                      onClick={() => experiment.id && handleDelete(experiment.id)}
+                      className="text-red-600 hover:text-red-900"
+                    >
+                      Delete
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
-    </div>
+    </Page>
   );
 };
 
