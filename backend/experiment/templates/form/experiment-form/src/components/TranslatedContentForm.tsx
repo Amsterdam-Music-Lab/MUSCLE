@@ -70,89 +70,95 @@ export const TranslatedContentForm: React.FC<TranslatedContentFormProps> = ({ co
 
   return (
     <div className="space-y-5">
-      <div className="flex justify-between items-center">
-        <h3 className="text-lg font-medium">Translated Content</h3>
-        <Button
-          onClick={handleAdd}
-          variant="primary"
-          icon={<FiPlus />}
-        >
-          Add Translation
-        </Button>
-      </div>
+      <h3 className="text-lg font-medium">Translated Content</h3>
+
+      <Tabs
+        tabs={[
+          ...contents.map((content, index) => ({
+            id: index,
+            label: getTabLabel(content, index),
+          })),
+          {
+            id: 'new',
+            label: (
+              <div className="flex items-center gap-2">
+                <FiPlus className="w-4 h-4" />
+                <span>New Translation</span>
+              </div>
+            ),
+          }
+        ]}
+        activeTab={activeTabIndex}
+        onTabChange={(tabId) => {
+          if (tabId === 'new') {
+            handleAdd();
+          } else {
+            setActiveTabIndex(tabId as number);
+          }
+        }}
+        actions={[
+          {
+            icon: <FiTrash className="w-4 h-4" />,
+            title: 'Remove translation',
+            onClick: (tabId) => handleRemove(tabId as number),
+          },
+        ]}
+      />
 
       {contents.length > 0 && (
-        <>
-          <Tabs
-            tabs={contents.map((content, index) => ({
-              id: index,
-              label: getTabLabel(content, index),
-            }))}
-            activeTab={activeTabIndex}
-            onTabChange={(tabId) => setActiveTabIndex(tabId as number)}
-            actions={[
-              {
-                icon: <FiTrash className="w-4 h-4" />,
-                title: 'Remove translation',
-                onClick: (tabId) => handleRemove(tabId as number),
-              },
-            ]}
-          />
+        <div className="p-5 border rounded-md space-y-5">
+          <div className="flex justify-end">
+            {/* ...existing remove button... */}
+          </div>
 
-          <div className="p-5 border rounded-md space-y-5">
-            <div className="flex justify-end">
-              {/* ...existing remove button... */}
-            </div>
-
-            <div className="grid grid-cols-2 gap-5">
-              <FormField label="Language">
-                <Select
-                  value={contents[activeTabIndex].language}
-                  onChange={(e) => handleChange(activeTabIndex, 'language', e.target.value)}
-                >
-                  <option value="">Select language</option>
-                  {Object.entries(ISO_LANGUAGES).map(([code, name]) => (
-                    <option key={code} value={code}>
-                      {name}
-                    </option>
-                  ))}
-                </Select>
-              </FormField>
-
-              <FormField label="Name">
-                <Input
-                  type="text"
-                  value={contents[activeTabIndex].name}
-                  onChange={(e) => handleChange(activeTabIndex, 'name', e.target.value)}
-                />
-              </FormField>
-            </div>
-
-            <FormField label="Description">
-              <Textarea
-                value={contents[activeTabIndex].description}
-                onChange={(e) => handleChange(activeTabIndex, 'description', e.target.value)}
-                rows={3}
-              />
+          <div className="grid grid-cols-2 gap-5">
+            <FormField label="Language">
+              <Select
+                value={contents[activeTabIndex].language}
+                onChange={(e) => handleChange(activeTabIndex, 'language', e.target.value)}
+              >
+                <option value="">Select language</option>
+                {Object.entries(ISO_LANGUAGES).map(([code, name]) => (
+                  <option key={code} value={code}>
+                    {name}
+                  </option>
+                ))}
+              </Select>
             </FormField>
 
-            <FormField label="About Content">
-              <Textarea
-                value={contents[activeTabIndex].about_content}
-                onChange={(e) => handleChange(activeTabIndex, 'about_content', e.target.value)}
-                rows={3}
-              />
-            </FormField>
-
-            <FormField label="Social Media Message">
+            <FormField label="Name">
               <Input
                 type="text"
-                value={contents[activeTabIndex].social_media_message}
-                onChange={(e) => handleChange(activeTabIndex, 'social_media_message', e.target.value)}
+                value={contents[activeTabIndex].name}
+                onChange={(e) => handleChange(activeTabIndex, 'name', e.target.value)}
               />
             </FormField>
           </div>
-        </>
+
+          <FormField label="Description">
+            <Textarea
+              value={contents[activeTabIndex].description}
+              onChange={(e) => handleChange(activeTabIndex, 'description', e.target.value)}
+              rows={3}
+            />
+          </FormField>
+
+          <FormField label="About Content">
+            <Textarea
+              value={contents[activeTabIndex].about_content}
+              onChange={(e) => handleChange(activeTabIndex, 'about_content', e.target.value)}
+              rows={3}
+            />
+          </FormField>
+
+          <FormField label="Social Media Message">
+            <Input
+              type="text"
+              value={contents[activeTabIndex].social_media_message}
+              onChange={(e) => handleChange(activeTabIndex, 'social_media_message', e.target.value)}
+            />
+          </FormField>
+        </div>
       )}
     </div>
   );
