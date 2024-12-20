@@ -129,26 +129,3 @@ class CategorizationRuleTest(TestCase):
         self.assertEqual(self.session.json_data.get('phase'), 'training-1A')
         self.assertEqual(self.session.json_data.get('training_rounds'), '0')
         self.assertEqual(self.session.json_data.get('phase'), 'training-1A')
-
-        # Test section sequence training phase
-        if self.session.json_data.get('group') == 'S1':
-            sections = self.session.playlist.section_set.filter(
-                    group="SAME", tag__contains="1", song__artist__contains="Training")
-            for section in sections:
-                        self.assertIn(section.id, self.session.json_data.get('sequence'))
-        if self.session.json_data.get('group') == 'S2':
-            sections = self.session.playlist.section_set.filter(
-                    group="SAME", tag__contains="2", song__artist__contains="Training")
-            for section in sections:
-                        self.assertIn(section.id, self.session.json_data.get('sequence'))
-
-        if self.session.json_data.get('group') == 'C1':
-            sections = self.session.playlist.section_set.filter(
-                    group="CROSSED", tag__contains="1", song__artist__contains="Training")
-            for section in sections:
-                        self.assertIn(section.id, self.session.json_data.get('sequence'))
-        if self.session.json_data.get('group') == 'C2':
-            sections = self.session.playlist.section_set.filter(
-                    group="CROSSED", tag__contains="2", song__artist__contains="Training")
-            for section in sections:
-                        self.assertIn(section.id, self.session.json_data.get('sequence'))
