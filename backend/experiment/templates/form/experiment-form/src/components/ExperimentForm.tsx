@@ -9,14 +9,7 @@ import { Tabs } from './Tabs';
 import { FormField } from './form/FormField';
 import { Input } from './form/Input';
 import { PhaseForm } from './PhaseForm';
-
-interface Experiment {
-  id?: number;
-  slug: string;
-  active: boolean;
-  translated_content: TranslatedContent[];
-  phases: Phase[];
-}
+import { Experiment, Phase, TranslatedContent } from '../types/types';
 
 interface ExperimentFormProps {
 }

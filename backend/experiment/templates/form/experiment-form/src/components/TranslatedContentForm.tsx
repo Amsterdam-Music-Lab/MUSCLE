@@ -6,16 +6,7 @@ import { FormField } from './form/FormField';
 import { Input } from './form/Input';
 import { Select } from './form/Select';
 import { Textarea } from './form/Textarea';
-
-interface TranslatedContent {
-  id?: number;
-  index: number;
-  language: string;
-  name: string;
-  description: string;
-  about_content: string;
-  social_media_message: string;
-}
+import { TranslatedContent } from '../types/types';
 
 interface TranslatedContentFormProps {
   contents: TranslatedContent[];

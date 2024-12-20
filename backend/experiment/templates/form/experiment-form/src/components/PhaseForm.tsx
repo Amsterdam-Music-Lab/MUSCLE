@@ -1,12 +1,6 @@
 import React from 'react';
 import { FormField } from './form/FormField';
-
-interface Phase {
-  id?: number;
-  index: number;
-  dashboard: boolean;
-  randomize: boolean;
-}
+import { Phase } from '../types/types';
 
 interface PhaseFormProps {
   phase: Phase;
