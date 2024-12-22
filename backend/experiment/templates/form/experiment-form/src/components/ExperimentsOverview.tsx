@@ -29,7 +29,7 @@ const LanguagePills: React.FC<{ translations: TranslatedContent[] }> = ({ transl
   return (
     <div className="flex flex-wrap gap-1">
       {languages.map(lang => (
-          <Flag languageCode={lang} className="h-3" />
+          <Flag languageCode={lang} className="h-3" key={lang} />
       ))}
     </div>
   );
