@@ -19,6 +19,11 @@ from django.urls import include, path
 from django.conf import settings
 from django.conf.urls.static import static
 
+from rest_framework_simplejwt.views import (
+    TokenObtainPairView,
+    TokenRefreshView,
+)
+
 
 # Admin strings
 admin.site.site_header = "AML Admin"
@@ -36,6 +41,8 @@ urlpatterns = [
     path("theme/", include("theme.urls")),
     path("admin_interface/", include("admin_interface.urls")),
     path("admin/", admin.site.urls),
+    path("api/token/", TokenObtainPairView.as_view(), name="token_obtain_pair"),
+    path("api/token/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
     # Sentry debug (uncomment to test Sentry)
     # path('sentry-debug/', lambda request: 1 / 0),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

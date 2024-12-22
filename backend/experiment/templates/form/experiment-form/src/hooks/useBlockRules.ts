@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { createApiUrl } from '../config';
+import { createExperimentAPIUrl } from '../config';
 
 export interface BlockRule {
   id: string;
@@ -15,7 +15,7 @@ export const useBlockRules = () => {
     const fetchRules = async () => {
       setLoading(true);
       try {
-        const response = await fetch(createApiUrl('block-rules'));
+        const response = await fetch(createExperimentAPIUrl('block-rules'));
         if (!response.ok) throw new Error('Failed to fetch block rules');
         const data = await response.json();
         setRules(data);

@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 
 // useFetch is a react hook for getting data from a given url
-export const useFetch = <T,>(url: string, method: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE' = 'GET', body: any = null, initialFetch = true): [T | null, string | null, boolean, () => void] => {
+export const useFetch = <T,>(url: string, method: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE' = 'GET', body: any = null, jwt?: string): [T | null, string | null, boolean, () => void] => {
 
   const [data, setData] = useState<T | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -14,7 +14,7 @@ export const useFetch = <T,>(url: string, method: 'GET' | 'POST' | 'PUT' | 'PATC
     try {
 
       let options: RequestInit = {
-        method
+        method,
       }
 
       if (body) {
@@ -22,6 +22,18 @@ export const useFetch = <T,>(url: string, method: 'GET' | 'POST' | 'PUT' | 'PATC
           ...options,
           body: JSON.stringify(body),
           headers: { 'Content-Type': 'application/json' }
+        }
+      }
+
+      const jwt = localStorage.getItem('jwt');
+
+      if (jwt) {
+        options = {
+          ...options,
+          headers: {
+            ...options.headers,
+            Authorization: `Bearer ${jwt}`
+          }
         }
       }
 

@@ -7,10 +7,26 @@ import {
 import { AiTwotoneExperiment } from "react-icons/ai";
 import ExperimentsOverview from './components/ExperimentsOverview';
 import ExperimentForm from './components/ExperimentForm';
+import Login from './components/Login';
 import { useState } from 'react';
 
 function App() {
   const [isCollapsed, setIsCollapsed] = useState(false);
+  const [jwt, setJwt] = useState<string | null>(localStorage.getItem('jwt'));
+
+  const handleLogin = (newJwt: string) => {
+    localStorage.setItem('jwt', newJwt);
+    setJwt(newJwt);
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem('jwt');
+    setJwt(null);
+  };
+
+  if (!jwt) {
+    return <Login onLogin={handleLogin} />;
+  }
 
   return (
     <Router>
@@ -30,14 +46,20 @@ function App() {
               {!isCollapsed && 'Experiments'}
             </a>
           </div>
+          <button 
+            onClick={handleLogout}
+            className="w-full p-4 text-left hover:bg-gray-100 text-red-500"
+          >
+            {isCollapsed ? '←' : 'Logout'}
+          </button>
         </nav>
         <div className={`absolute right-0 bg-gray-100 min-h-screen p-4 transition max-w-full ${isCollapsed ? 'left-16' : 'left-40 xl:left-48'}`}>
           <h1 className="text-4xl font-bold mb-8">
             MUSCLE forms
           </h1>
           <Routes>
-            <Route path="/experiments/:id" element={<ExperimentForm />} />
-            <Route path={'/experiments'} element={<ExperimentsOverview />} />
+            <Route path="/experiments/:id" element={<ExperimentForm jwt={jwt} />} />
+            <Route path={'/experiments'} element={<ExperimentsOverview jwt={jwt} />} />
           </Routes>
         </div>
       </div>

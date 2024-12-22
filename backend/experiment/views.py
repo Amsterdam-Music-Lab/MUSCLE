@@ -29,7 +29,7 @@ logger = logging.getLogger(__name__)
 class ExperimentViewSet(viewsets.ModelViewSet):
     queryset = Experiment.objects.all()
     serializer_class = ExperimentSerializer
-    permission_classes = [permissions.AllowAny]
+    permission_classes = [permissions.IsAuthenticated]
 
 
 def get_block(request: HttpRequest, slug: str) -> JsonResponse:

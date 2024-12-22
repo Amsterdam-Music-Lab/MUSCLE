@@ -50,3 +50,6 @@ django-select2
 
 # Django REST framework
 djangorestframework
+
+# Django REST JWT
+djangorestframework-simplejwt
