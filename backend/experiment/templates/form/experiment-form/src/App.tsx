@@ -9,6 +9,7 @@ import ExperimentsOverview from './components/ExperimentsOverview';
 import ExperimentForm from './components/ExperimentForm';
 import Login from './components/Login';
 import { useState } from 'react';
+import { FiLogOut } from 'react-icons/fi';
 
 function App() {
   const [isCollapsed, setIsCollapsed] = useState(false);
@@ -42,16 +43,17 @@ function App() {
             <a href="/experiments"
               className={`transition text-blue-500 hover:bg-gray-100 rounded flex items-center gap-2 ${isCollapsed ? 'p-1' : 'p-2'}`}
               title="Experiments">
-              <AiTwotoneExperiment className="w-5 h-5" />
+              <AiTwotoneExperiment className="w-5 h-5 mr-auto" />
               {!isCollapsed && 'Experiments'}
             </a>
+            <button 
+              onClick={handleLogout}
+              className="transition text-red-500 hover:bg-gray-100 rounded flex items-center gap-2 p-2"
+            >
+              <FiLogOut className="w-5 h-5 mr-auto" />
+              {!isCollapsed && 'Logout'}
+            </button>
           </div>
-          <button 
-            onClick={handleLogout}
-            className="w-full p-4 text-left hover:bg-gray-100 text-red-500"
-          >
-            {isCollapsed ? '←' : 'Logout'}
-          </button>
         </nav>
         <div className={`absolute right-0 bg-gray-100 min-h-screen p-4 transition max-w-full ${isCollapsed ? 'left-16' : 'left-40 xl:left-48'}`}>
           <h1 className="text-4xl font-bold mb-8">
