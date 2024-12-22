@@ -10,6 +10,8 @@ import { FormField } from './form/FormField';
 import { Input } from './form/Input';
 import { Experiment, TranslatedContent } from '../types/types';
 import { PhasesForm } from './PhasesForm';
+import useFetch from '../hooks/useFetch';
+import { useMutation } from '../hooks/useMutation';
 
 interface ExperimentFormProps {
 }
@@ -21,14 +23,20 @@ interface UnsavedChanges {
 }
 
 const ExperimentForm: React.FC<ExperimentFormProps> = () => {
+  const { id: experimentId } = useParams<{ id: string }>();
+  const url = createEntityUrl('experiments', experimentId);
+  const [experimentResource, error, loading, fetchData] = useFetch(url, 'GET', null);
+  const [saveExperiment, { loading: saveLoading, error: saveError }] = useMutation<Experiment>(
+    url,
+    experimentId ? 'PUT' : 'POST'
+  );
+  
   const [experiment, setExperiment] = useState<Experiment>({
     slug: '',
     active: true,
     translated_content: [],
     phases: []
   });
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
   const [activeTab, setActiveTab] = useState<'translatedContent' | 'phases'>('translatedContent');
   const [unsavedChanges, setUnsavedChanges] = useState<UnsavedChanges>({
@@ -36,29 +44,16 @@ const ExperimentForm: React.FC<ExperimentFormProps> = () => {
     translatedContent: false,
     phases: false,
   });
-  const [activePhaseIndex, setActivePhaseIndex] = useState(0);
   
   const navigate = useNavigate();
-  const { id: experimentId } = useParams<{ id: string }>();
-  const url = createEntityUrl('experiments', experimentId);
 
   const hasUnsavedChanges = unsavedChanges.main || unsavedChanges.translatedContent || unsavedChanges.phases;
 
   useEffect(() => {
-    if (experimentId) {
-      setLoading(true);
-      fetch(url)
-        .then(res => res.json())
-        .then(data => {
-          setExperiment(data);
-          setLoading(false);
-        })
-        .catch(err => {
-          setError('Failed to load experiment');
-          setLoading(false);
-        });
+    if (experimentResource) {
+      setExperiment(experimentResource);
     }
-  }, [experimentId]);
+  }, [experimentResource]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, type, checked, value } = e.target;
@@ -69,37 +64,17 @@ const ExperimentForm: React.FC<ExperimentFormProps> = () => {
     setUnsavedChanges(prev => ({ ...prev, main: true }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setLoading(true);
-    setError(null);
     setSuccess(false);
 
-    const method = experimentId ? 'PUT' : 'POST';
-
-    fetch(url, {
-      method,
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(experiment),
-    })
-      .then(res => {
-        if (!res.ok) {
-          return res.json().then(errData => {
-            throw new Error(JSON.stringify(errData));
-          });
-        }
-        return res.json();
-      })
-      .then(data => {
-        setSuccess(true);
-        setLoading(false);
-        setExperiment(data); // update state with returned data
-      })
-      .catch(err => {
-        console.error(err);
-        setError('Failed to save experiment.');
-        setLoading(false);
-      });
+    try {
+      const savedExperiment = await saveExperiment(experiment);
+      setSuccess(true);
+      setExperiment(savedExperiment);
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   const handleTranslatedContentChange = (newContents: TranslatedContent[]) => {
@@ -146,6 +121,7 @@ const ExperimentForm: React.FC<ExperimentFormProps> = () => {
       <form onSubmit={handleSubmit} className="bg-white shadow-md rounded p-5 space-y-5 max-w-5xl">
         {error && <div className="text-red-600 mb-4">{error}</div>}
         {success && <div className="text-green-600 mb-4">Saved successfully!</div>}
+        {saveError && <div className="text-red-600 mb-4">{saveError}</div>}
 
         <div className="space-y-5">
           <FormField label="Slug">
@@ -210,12 +186,12 @@ const ExperimentForm: React.FC<ExperimentFormProps> = () => {
 
         <Button
           type="submit"
-          disabled={loading}
+          disabled={saveLoading}
           variant="success"
           icon={<FiSave />}
           className="mt-5"
         >
-          {loading ? 'Saving...' : (experimentId ? 'Update Experiment' : 'Create Experiment')}
+          {saveLoading ? 'Saving...' : (experimentId ? 'Update Experiment' : 'Create Experiment')}
         </Button>
       </form>
     </Page>

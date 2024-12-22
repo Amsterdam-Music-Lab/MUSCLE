@@ -101,7 +101,11 @@ const ExperimentsOverview = () => {
             <tbody className="divide-y divide-gray-200">
               {experiments?.map((experiment) => (
                 <tr key={experiment.id} className="hover:bg-gray-50">
-                  <td className="px-6 py-4 text-left whitespace-nowrap">{experiment.id}</td>
+                  <td className="px-6 py-4 text-left whitespace-nowrap">
+                    <a href={`/experiments/${experiment.id}`} className="text-blue-500 hover:underline">
+                      {experiment.id}
+                    </a>
+                  </td>
                   <td className="px-6 py-4 text-left whitespace-nowrap">{experiment.slug}</td>
                   <td className="px-6 py-4 text-left whitespace-nowrap">
                     <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${experiment.active ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
