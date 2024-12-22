@@ -39,19 +39,23 @@ function App() {
           >
             {isCollapsed ? '→' : '←'}
           </button>
-          <div className={`transition ${isCollapsed ? 'p-2' : 'p-4'}`}>
+          <div className={`flex flex-col gap-5 transition ${isCollapsed ? 'p-2' : 'p-4'}`}>
             <a href="/experiments"
-              className={`transition text-blue-500 hover:bg-gray-100 rounded flex items-center gap-2 ${isCollapsed ? 'p-1' : 'p-2'}`}
+              className={`transition text-blue-500 hover:bg-gray-100 rounded flex items-center gap-2`}
               title="Experiments">
-              <AiTwotoneExperiment className="w-5 h-5 mr-auto" />
-              {!isCollapsed && 'Experiments'}
+                <AiTwotoneExperiment  className="block min-w-5 h-5" />
+              <div className="flex-shrink-1">
+                {!isCollapsed && 'Experiments'}
+              </div>
             </a>
             <button 
               onClick={handleLogout}
-              className="transition text-red-500 hover:bg-gray-100 rounded flex items-center gap-2 p-2"
+              className="transition text-red-500 hover:bg-gray-100 rounded flex items-center gap-2"
             >
-              <FiLogOut className="w-5 h-5 mr-auto" />
-              {!isCollapsed && 'Logout'}
+                <FiLogOut  className="block min-w-5 h-5" />
+              <div className="flex-shrink-1">
+                {!isCollapsed && 'Logout'}
+              </div>
             </button>
           </div>
         </nav>
