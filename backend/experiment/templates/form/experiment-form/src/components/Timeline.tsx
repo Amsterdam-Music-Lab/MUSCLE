@@ -55,7 +55,7 @@ export const Timeline: React.FC<TimelineProps> = ({
                 `}
                 title={`Phase ${phaseIndex + 1}`}
               >
-                <FiCircle className={`w-6 h-6 group-hover:text-white ${isSelected('phase', phaseIndex) ? 'text-white' : 'text-gray-500'}`} />
+                <FiCircle className={`w-6 h-6 group-hover:text-white ${isSelected('phase', phaseIndex) ? 'text-white' : 'text-gray-600'}`} />
               </button>
 
 
@@ -79,7 +79,7 @@ export const Timeline: React.FC<TimelineProps> = ({
                     `}
                     title={`Block ${blockIndex + 1}`}
                   >
-                    <FiBox className={`w-5 h-5 group-hover:text-white ${isSelected('block', phaseIndex, blockIndex) ? 'text-white' : 'text-gray-500'}`} />
+                    <FiBox className={`w-5 h-5 group-hover:text-white ${isSelected('block', phaseIndex, blockIndex) ? 'text-white' : 'text-gray-600'}`} />
                   </button>
 
                 </React.Fragment>
