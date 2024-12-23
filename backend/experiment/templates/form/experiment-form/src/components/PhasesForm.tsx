@@ -3,6 +3,7 @@ import { Phase, Selection } from '../types/types';
 import { PhaseForm } from './PhaseForm';
 import { Timeline } from './Timeline';
 import { BlockForm } from './BlockForm';
+import { FiTrash2 } from 'react-icons/fi';
 
 const defaultPhase: Phase = {
   index: 0,
@@ -66,6 +67,29 @@ export const PhasesForm: React.FC<PhasesFormProps> = ({ phases, onChange }) => {
 
       onChange(phases.map((p, i) => i === phaseIndex ? updatedPhase : p));
       setTimelineSelection({ type: 'block', phaseIndex, blockIndex: position });
+    }
+  };
+
+  const handleDelete = (type: 'phase' | 'block', phaseIndex: number, blockIndex?: number) => {
+    if (type === 'phase') {
+      if (!confirm('Are you sure you want to delete this phase?')) return;
+
+      const updatedPhases = phases.filter((_, i) => i !== phaseIndex)
+        .map((phase, i) => ({ ...phase, index: i }));
+
+      onChange(updatedPhases);
+      setTimelineSelection(null);
+    } else if (blockIndex !== undefined) {
+      if (!confirm('Are you sure you want to delete this block?')) return;
+
+      const phase = phases[phaseIndex];
+      const updatedBlocks = phase.blocks
+        .filter((_, i) => i !== blockIndex)
+        .map((block, i) => ({ ...block, index: i }));
+
+      const updatedPhase = { ...phase, blocks: updatedBlocks };
+      onChange(phases.map((p, i) => i === phaseIndex ? updatedPhase : p));
+      setTimelineSelection(null);
     }
   };
 
@@ -135,6 +159,7 @@ export const PhasesForm: React.FC<PhasesFormProps> = ({ phases, onChange }) => {
                     i === timelineSelection.phaseIndex ? updatedPhase : p
                   ));
                 }}
+                onDelete={() => handleDelete('phase', timelineSelection.phaseIndex)}
               />
             ) : (
               <BlockForm
@@ -150,6 +175,7 @@ export const PhasesForm: React.FC<PhasesFormProps> = ({ phases, onChange }) => {
                     i === timelineSelection.phaseIndex ? updatedPhase : p
                   ));
                 }}
+                onDelete={() => handleDelete('block', timelineSelection.phaseIndex, timelineSelection.blockIndex)}
               />
             )}
           </div>

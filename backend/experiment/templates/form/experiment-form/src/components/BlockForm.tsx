@@ -4,13 +4,16 @@ import { Input } from './form/Input';
 import { Select } from './form/Select';
 import { Block } from '../types/types';
 import { useBlockRules } from '../hooks/useBlockRules';
+import { FiTrash2 } from 'react-icons/fi';
+import { Button } from './Button';
 
 interface BlockFormProps {
   block: Block;
   onChange: (block: Block) => void;
+  onDelete: () => void;
 }
 
-export const BlockForm: React.FC<BlockFormProps> = ({ block, onChange }) => {
+export const BlockForm: React.FC<BlockFormProps> = ({ block, onChange, onDelete }) => {
   const { rules, loading, error } = useBlockRules();
 
   const handleChange = (field: keyof Block, value: string | number) => {
@@ -19,6 +22,17 @@ export const BlockForm: React.FC<BlockFormProps> = ({ block, onChange }) => {
 
   return (
     <div className="space-y-5">
+      <div className="flex justify-between items-start mb-4">
+        <h3 className="text-lg font-medium">Block Settings</h3>
+        <Button
+          variant="danger"
+          size="sm"
+          icon={<FiTrash2 />}
+          onClick={onDelete}
+        >
+          Delete Block
+        </Button>
+      </div>
       <div className="grid sm:grid-cols-2 gap-5">
         <FormField label="Slug">
           <Input
