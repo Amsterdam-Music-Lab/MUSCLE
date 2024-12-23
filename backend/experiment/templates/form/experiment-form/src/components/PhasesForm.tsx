@@ -3,6 +3,7 @@ import { Phase, Selection } from '../types/types';
 import { PhaseForm } from './PhaseForm';
 import { Timeline } from './Timeline';
 import { BlockForm } from './BlockForm';
+import useBoundStore from '../utils/store';
 
 const defaultPhase: Phase = {
   index: 0,
@@ -17,6 +18,7 @@ interface PhasesFormProps {
 }
 
 export const PhasesForm: React.FC<PhasesFormProps> = ({ phases, onChange }) => {
+  const experiment = useBoundStore(state => state.experiment);
   const [timelineSelection, setTimelineSelection] = useState<Selection | null>(null);
 
   const handleAdd = (type: 'phase' | 'block', phaseIndex: number, blockIndex?: number) => {
@@ -43,10 +45,21 @@ export const PhasesForm: React.FC<PhasesFormProps> = ({ phases, onChange }) => {
 
       const phase = phases[phaseIndex];
       if (!phase) return;
+      if (!experiment) return;
+
+      const experimentSlug = experiment.slug;
+      let blockSlugArray: [string, number] = [experimentSlug, position];
+      let blockSlug = blockSlugArray.join('-');
+
+      // Check if block slug already exists in the experiment
+      while (phase.blocks.some(b => b.slug === blockSlug)) {
+        blockSlugArray[1] += 1;
+        blockSlug = blockSlugArray.join('-');
+      }
 
       const newBlock = {
         index: position,
-        slug: `block-${phase.blocks.length + 1}`,
+        slug: "blockSlug",
         rounds: 10,
         bonus_points: 0,
         rules: '',

@@ -9,7 +9,6 @@ import ExperimentForm from './components/ExperimentForm';
 import Login from './components/Login';
 import { useState } from 'react';
 import { FiLogOut } from 'react-icons/fi';
-import useBoundStore from "./utils/store";
 
 function App() {
   const [isCollapsed, setIsCollapsed] = useState(false);

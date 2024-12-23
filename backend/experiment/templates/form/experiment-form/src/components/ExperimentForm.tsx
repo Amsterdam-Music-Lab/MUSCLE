@@ -34,6 +34,7 @@ const ExperimentForm: React.FC<ExperimentFormProps> = () => {
 
   const experiment = useBoundStore(state => state.experiment);
   const setExperiment = useBoundStore(state => state.setExperiment);
+  const patchExperiment = useBoundStore(state => state.patchExperiment);
 
   const [success, setSuccess] = useState(false);
   const [activeTab, setActiveTab] = useState<'translatedContent' | 'phases'>('translatedContent');
@@ -62,10 +63,9 @@ const ExperimentForm: React.FC<ExperimentFormProps> = () => {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, type, checked, value } = e.target;
-    setExperiment(prev => ({
-      ...prev,
+    patchExperiment({
       [name]: type === 'checkbox' ? checked : value
-    }));
+    });
     setUnsavedChanges(prev => ({ ...prev, main: true }));
   };
 
@@ -83,7 +83,7 @@ const ExperimentForm: React.FC<ExperimentFormProps> = () => {
   };
 
   const handleTranslatedContentChange = (newContents: TranslatedContent[]) => {
-    setExperiment(prev => ({ ...prev, translated_content: newContents }));
+    patchExperiment({ translated_content: newContents });
     setUnsavedChanges(prev => ({ ...prev, translatedContent: true }));
   };
 
@@ -182,7 +182,7 @@ const ExperimentForm: React.FC<ExperimentFormProps> = () => {
             <PhasesForm
               phases={experiment.phases}
               onChange={(newPhases) => {
-                setExperiment(prev => ({ ...prev, phases: newPhases }));
+                patchExperiment({ phases: newPhases });
                 setUnsavedChanges(prev => ({ ...prev, phases: true }));
               }}
             />
