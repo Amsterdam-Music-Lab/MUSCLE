@@ -15,6 +15,9 @@ import logging
 from corsheaders.defaults import default_headers
 import sentry_sdk
 
+# JWT Settings
+from datetime import timedelta
+
 # Workaround for deprecated ugettext_lazy in django-inline-actions
 import django
 from django.utils.translation import gettext_lazy
@@ -214,9 +217,6 @@ SUBPATH = os.getenv("AML_SUBPATH", "")
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": ("rest_framework_simplejwt.authentication.JWTAuthentication",),
 }
-
-# JWT Settings
-from datetime import timedelta
 
 SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(minutes=60),
