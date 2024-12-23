@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { FiPlus, FiCircle, FiBox } from 'react-icons/fi';
 import { Phase, Selection } from '../types/types';
+import { useNavigate, useParams } from 'react-router-dom';
 
 interface TimelineProps {
   phases: Array<Phase>;
@@ -15,12 +16,14 @@ export const Timeline: React.FC<TimelineProps> = ({
   onSelect,
   onAdd,
 }) => {
+  const { id: experimentId } = useParams();
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (!selectedItem && phases.length > 0) {
-      onSelect({ type: 'phase', phaseIndex: 0 });
+      navigate(`/experiments/${experimentId}/phases/0`);
     }
-  }, [selectedItem, phases, onSelect]);
+  }, [selectedItem, phases, experimentId]);
 
   const isSelected = (type: 'phase' | 'block', phaseIndex: number, blockIndex?: number) => {
     return selectedItem?.type === type &&

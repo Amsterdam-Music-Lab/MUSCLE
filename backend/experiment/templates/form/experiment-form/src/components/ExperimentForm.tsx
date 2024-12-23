@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { createEntityUrl } from '../config';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, Routes, Route, useLocation, Navigate } from 'react-router-dom';
 import Page from './Page';
 import { TranslatedContentForm } from './TranslatedContentForm';
 import { FiSave, FiArrowLeft, FiGlobe, FiLayers } from 'react-icons/fi';
@@ -45,6 +45,7 @@ const ExperimentForm: React.FC<ExperimentFormProps> = () => {
   });
 
   const navigate = useNavigate();
+  const location = useLocation();
 
   const hasUnsavedChanges = unsavedChanges.main || unsavedChanges.translatedContent || unsavedChanges.phases;
 
@@ -60,6 +61,15 @@ const ExperimentForm: React.FC<ExperimentFormProps> = () => {
       });
     }
   }, [experimentResource]);
+
+  useEffect(() => {
+    // Set active tab based on URL
+    if (location.pathname.includes('/translated-content')) {
+      setActiveTab('translatedContent');
+    } else if (location.pathname.includes('/phases')) {
+      setActiveTab('phases');
+    }
+  }, [location]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, type, checked, value } = e.target;
@@ -91,6 +101,16 @@ const ExperimentForm: React.FC<ExperimentFormProps> = () => {
     return hasChanges ? `${label} *` : label;
   };
 
+  const handleTabChange = (tabId: string) => {
+    const tab = tabId as 'translatedContent' | 'phases';
+    setActiveTab(tab);
+    if (tab === 'translatedContent') {
+      navigate(`/experiments/${experimentId}/translated-content`);
+    } else {
+      navigate(`/experiments/${experimentId}/phases`);
+    }
+  };
+
   useEffect(() => {
     if (success) {
       setUnsavedChanges({ main: false, translatedContent: false, phases: false });
@@ -100,6 +120,7 @@ const ExperimentForm: React.FC<ExperimentFormProps> = () => {
   if (loading && !success && !error && experimentId) {
     return <div className="text-center mt-5">Loading...</div>;
   }
+
 
   return (
     <Page
@@ -167,26 +188,45 @@ const ExperimentForm: React.FC<ExperimentFormProps> = () => {
             },
           ]}
           activeTab={activeTab}
-          onTabChange={(tabId) => setActiveTab(tabId as 'translatedContent' | 'phases')}
+          onTabChange={handleTabChange}
         />
 
         <div className="mt-4 px-2">
-          {activeTab === 'translatedContent' && (
-            <TranslatedContentForm
-              contents={experiment.translated_content}
-              onChange={handleTranslatedContentChange}
+          <Routes>
+            <Route
+              path="translated-content/:language?"
+              element={
+                <TranslatedContentForm
+                  contents={experiment.translated_content}
+                  onChange={handleTranslatedContentChange}
+                />
+              }
             />
-          )}
-
-          {activeTab === 'phases' && (
-            <PhasesForm
-              phases={experiment.phases}
-              onChange={(newPhases) => {
-                patchExperiment({ phases: newPhases });
-                setUnsavedChanges(prev => ({ ...prev, phases: true }));
-              }}
+            <Route
+              path="phases/*"
+              element={
+                <PhasesForm
+                  phases={experiment.phases}
+                  onChange={(newPhases) => {
+                    patchExperiment({ phases: newPhases });
+                    setUnsavedChanges(prev => ({ ...prev, phases: true }));
+                  }}
+                />
+              }
             />
-          )}
+            <Route
+              path=""
+              element={
+                <Navigate
+                  to={`/experiments/${experimentId}/translated-content${experiment.translated_content.length > 0
+                    ? `/${experiment.translated_content[0].language || '0'}`
+                    : ''
+                    }`}
+                  replace
+                />
+              }
+            />
+          </Routes>
         </div>
 
         <Button

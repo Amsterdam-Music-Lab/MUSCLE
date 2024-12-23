@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect } from 'react';
 import { ISO_LANGUAGES } from '../constants';
 import { Tabs } from './Tabs';
 import { FiPlus, FiTrash } from 'react-icons/fi';
@@ -8,6 +8,7 @@ import { Select } from './form/Select';
 import { Textarea } from './form/Textarea';
 import { TranslatedContent } from '../types/types';
 import { Flag } from './Flag';
+import { useNavigate, useParams } from 'react-router-dom';
 
 interface TranslatedContentFormProps {
   contents: TranslatedContent[];
@@ -24,15 +25,30 @@ const defaultContent: TranslatedContent = {
 };
 
 export const TranslatedContentForm: React.FC<TranslatedContentFormProps> = ({ contents, onChange }) => {
-  const [activeTabIndex, setActiveTabIndex] = useState(0);
+  const navigate = useNavigate();
+  const { id: experimentId, language } = useParams();
+
+  // Find index of current language in contents
+  const languageInContents = contents.find(content => content.language === language);
+  const activeTabIndex = languageInContents ? contents.indexOf(languageInContents) : 0;
+
+  useEffect(() => {
+    // If we have contents but no language in URL, redirect to first language
+    if (contents.length > 0 && !language) {
+      const firstContent = contents[0];
+      navigate(`/experiments/${experimentId}/translated-content/${firstContent.language || '0'}`);
+    }
+  }, [contents, language, experimentId]);
 
   const handleAdd = () => {
     const newContent = {
       ...defaultContent,
       index: contents.length,
     };
-    onChange([...contents, newContent]);
-    setActiveTabIndex(contents.length);
+    const updatedContents = [...contents, newContent];
+    onChange(updatedContents);
+    // Navigate to the new content's tab
+    navigate(`/experiments/${experimentId}/translated-content/${contents.length}`);
   };
 
   const handleRemove = (index: number) => {
@@ -59,6 +75,15 @@ export const TranslatedContentForm: React.FC<TranslatedContentFormProps> = ({ co
     return `Translation ${index + 1}`;
   };
 
+  const handleTabChange = (tabId: string | number) => {
+    if (tabId === 'new') {
+      handleAdd();
+    } else {
+      const content = contents[tabId as number];
+      navigate(`/experiments/${experimentId}/translated-content/${content.language || tabId}`);
+    }
+  };
+
   return (
     <div className="">
       <h3 className="text-lg font-medium mb-5">
@@ -81,13 +106,7 @@ export const TranslatedContentForm: React.FC<TranslatedContentFormProps> = ({ co
           }
         ]}
         activeTab={activeTabIndex}
-        onTabChange={(tabId) => {
-          if (tabId === 'new') {
-            handleAdd();
-          } else {
-            setActiveTabIndex(tabId as number);
-          }
-        }}
+        onTabChange={handleTabChange}
         actions={[
           {
             icon: <FiTrash className="w-4 h-4" />,
@@ -99,55 +118,55 @@ export const TranslatedContentForm: React.FC<TranslatedContentFormProps> = ({ co
 
       {contents.length > 0 && (
         <div className='p-5 bg-gray-50'>
-        <div className="p-5 bg-white border rounded-md space-y-5">
+          <div className="p-5 bg-white border rounded-md space-y-5">
 
-          <div className="grid sm:grid-cols-2 gap-5">
-            <FormField label="Language">
-              <Select
-                value={contents[activeTabIndex].language}
-                onChange={(e) => handleChange(activeTabIndex, 'language', e.target.value)}
-              >
-                <option value="">Select language</option>
-                {Object.entries(ISO_LANGUAGES).map(([code, name]) => (
-                  <option key={code} value={code}>
-                    {name}
-                  </option>
-                ))}
-              </Select>
-            </FormField>
+            <div className="grid sm:grid-cols-2 gap-5">
+              <FormField label="Language">
+                <Select
+                  value={contents[activeTabIndex].language}
+                  onChange={(e) => handleChange(activeTabIndex, 'language', e.target.value)}
+                >
+                  <option value="">Select language</option>
+                  {Object.entries(ISO_LANGUAGES).map(([code, name]) => (
+                    <option key={code} value={code}>
+                      {name}
+                    </option>
+                  ))}
+                </Select>
+              </FormField>
 
-            <FormField label="Name">
-              <Input
-                type="text"
-                value={contents[activeTabIndex].name}
-                onChange={(e) => handleChange(activeTabIndex, 'name', e.target.value)}
+              <FormField label="Name">
+                <Input
+                  type="text"
+                  value={contents[activeTabIndex].name}
+                  onChange={(e) => handleChange(activeTabIndex, 'name', e.target.value)}
+                />
+              </FormField>
+            </div>
+
+            <FormField label="Description">
+              <Textarea
+                value={contents[activeTabIndex].description}
+                onChange={(e) => handleChange(activeTabIndex, 'description', e.target.value)}
+                rows={3}
               />
             </FormField>
-          </div>
 
-          <FormField label="Description">
-            <Textarea
-              value={contents[activeTabIndex].description}
-              onChange={(e) => handleChange(activeTabIndex, 'description', e.target.value)}
-              rows={3}
-            />
-          </FormField>
+            <FormField label="About Content">
+              <Textarea
+                value={contents[activeTabIndex].about_content}
+                onChange={(e) => handleChange(activeTabIndex, 'about_content', e.target.value)}
+                rows={3}
+              />
+            </FormField>
 
-          <FormField label="About Content">
-            <Textarea
-              value={contents[activeTabIndex].about_content}
-              onChange={(e) => handleChange(activeTabIndex, 'about_content', e.target.value)}
-              rows={3}
-            />
-          </FormField>
-
-          <FormField label="Social Media Message">
-            <Input
-              type="text"
-              value={contents[activeTabIndex].social_media_message}
-              onChange={(e) => handleChange(activeTabIndex, 'social_media_message', e.target.value)}
-            />
-          </FormField>
+            <FormField label="Social Media Message">
+              <Input
+                type="text"
+                value={contents[activeTabIndex].social_media_message}
+                onChange={(e) => handleChange(activeTabIndex, 'social_media_message', e.target.value)}
+              />
+            </FormField>
           </div>
         </div>
       )}

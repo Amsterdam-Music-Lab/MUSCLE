@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Phase, Selection } from '../types/types';
 import { PhaseForm } from './PhaseForm';
 import { Timeline } from './Timeline';
 import { BlockForm } from './BlockForm';
 import useBoundStore from '../utils/store';
+import { useNavigate, useParams, useLocation } from 'react-router-dom';
 
 const defaultPhase: Phase = {
   index: 0,
@@ -20,6 +21,39 @@ interface PhasesFormProps {
 export const PhasesForm: React.FC<PhasesFormProps> = ({ phases, onChange }) => {
   const experiment = useBoundStore(state => state.experiment);
   const [timelineSelection, setTimelineSelection] = useState<Selection | null>(null);
+  const navigate = useNavigate();
+  const { id: experimentId } = useParams();
+  const location = useLocation();
+
+  useEffect(() => {
+    // Parse URL to set initial selection
+    const match = location.pathname.match(/\/phases\/(\d+)(?:\/blocks\/(\d+))?/);
+    if (match) {
+      const [_, phaseIndex, blockIndex] = match;
+      if (blockIndex !== undefined) {
+        setTimelineSelection({
+          type: 'block',
+          phaseIndex: parseInt(phaseIndex),
+          blockIndex: parseInt(blockIndex)
+        });
+      } else {
+        setTimelineSelection({
+          type: 'phase',
+          phaseIndex: parseInt(phaseIndex)
+        });
+      }
+    }
+  }, [location]);
+
+  const handleTimelineSelect = (selection: Selection) => {
+    setTimelineSelection(selection);
+    const basePath = `/experiments/${experimentId}/phases`;
+    if (selection.type === 'block') {
+      navigate(`${basePath}/${selection.phaseIndex}/blocks/${selection.blockIndex}`);
+    } else {
+      navigate(`${basePath}/${selection.phaseIndex}`);
+    }
+  };
 
   const handleAdd = (type: 'phase' | 'block', phaseIndex: number, blockIndex?: number) => {
     if (type === 'phase') {
@@ -158,7 +192,7 @@ export const PhasesForm: React.FC<PhasesFormProps> = ({ phases, onChange }) => {
       <Timeline
         phases={phases}
         selectedItem={timelineSelection}
-        onSelect={setTimelineSelection}
+        onSelect={handleTimelineSelect}
         onAdd={handleAdd}
       />
 

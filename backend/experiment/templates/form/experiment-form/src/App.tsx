@@ -74,8 +74,8 @@ function App() {
             MUSCLE forms
           </h1>
           <Routes>
-            <Route path="/experiments/:id" element={<ExperimentForm jwt={jwt} />} />
-            <Route path={'/experiments'} element={<ExperimentsOverview jwt={jwt} />} />
+            <Route path="/experiments" element={<ExperimentsOverview jwt={jwt} />} />
+            <Route path="/experiments/:id/*" element={<ExperimentForm jwt={jwt} />} />
             <Route path="/" element={<ExperimentsOverview jwt={jwt} />} />
           </Routes>
         </div>
