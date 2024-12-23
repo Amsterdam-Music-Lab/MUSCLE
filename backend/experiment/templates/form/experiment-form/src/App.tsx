@@ -27,6 +27,17 @@ function App() {
 
   if (!jwt) {
     return <Login onLogin={handleLogin} />;
+  } else {
+    try {
+      const payload = JSON.parse(atob(jwt.split('.')[1]));
+      if (payload.exp && Date.now() >= payload.exp * 1000) {
+        handleLogout();
+        return <Login onLogin={handleLogin} />;
+      }
+    } catch (error) {
+      handleLogout();
+      return <Login onLogin={handleLogin} />;
+    }
   }
 
   return (
