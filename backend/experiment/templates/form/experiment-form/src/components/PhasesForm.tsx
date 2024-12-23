@@ -3,7 +3,6 @@ import { Phase, Selection } from '../types/types';
 import { PhaseForm } from './PhaseForm';
 import { Timeline } from './Timeline';
 import { BlockForm } from './BlockForm';
-import { FiTrash2 } from 'react-icons/fi';
 
 const defaultPhase: Phase = {
   index: 0,
