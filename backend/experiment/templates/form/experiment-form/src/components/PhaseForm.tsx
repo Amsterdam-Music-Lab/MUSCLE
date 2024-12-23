@@ -1,76 +1,15 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { FormField } from './form/FormField';
-import { Phase, Block } from '../types/types';
-import { BlockForm } from './BlockForm';
-import { Tabs } from './Tabs';
-import { FiPlus, FiTrash } from 'react-icons/fi';
+import { Phase } from '../types/types';
 
 interface PhaseFormProps {
   phase: Phase;
-  onDelete: () => void;
   onChange: (phase: Phase) => void;
 }
 
-const defaultBlock: Block = {
-  index: 0,
-  slug: '',
-  rounds: 10,
-  bonus_points: 0,
-  rules: '',
-};
-
 export const PhaseForm: React.FC<PhaseFormProps> = ({ phase, onChange }) => {
-  const [activeBlockIndex, setActiveBlockIndex] = useState(0);
-
   const handleChange = (field: keyof Phase, value: any) => {
     onChange({ ...phase, [field]: value });
-  };
-
-  const handleAddBlock = () => {
-    const existingBlocks = phase.blocks || [];
-    const newBlock = {
-      ...defaultBlock,
-      index: existingBlocks.length,
-      // Ensure unique slug for new blocks
-      slug: `block-${existingBlocks.length + 1}`,
-    };
-    const blocks = [...existingBlocks, newBlock];
-    handleChange('blocks', blocks);
-    setActiveBlockIndex(blocks.length - 1);
-  };
-
-  const handleBlockChange = (index: number, updatedBlock: Block) => {
-    const blocks = (phase.blocks || []).map((block, i) => {
-      if (i === index) {
-        // Preserve the existing ID when updating a block
-        return { ...updatedBlock, id: block.id };
-      }
-      return block;
-    });
-    handleChange('blocks', blocks);
-  };
-
-  const handleBlockDelete = (index: number) => {
-    if (confirm('Are you sure you want to remove this block?')) {
-      const blocks = (phase.blocks || []).filter((_, i) => i !== index);
-      handleChange('blocks', blocks);
-      setActiveBlockIndex(Math.max(0, activeBlockIndex - 1));
-    }
-  };
-
-  const handleReorderBlocks = (startIndex: number, endIndex: number) => {
-    const blocks = [...(phase.blocks || [])];
-    const [removed] = blocks.splice(startIndex, 1);
-    blocks.splice(endIndex, 0, removed);
-    
-    // Update the index property of each block
-    const updatedBlocks = blocks.map((block, index) => ({
-      ...block,
-      index,
-    }));
-    
-    handleChange('blocks', updatedBlocks);
-    setActiveBlockIndex(endIndex);
   };
 
   return (
@@ -93,54 +32,6 @@ export const PhaseForm: React.FC<PhaseFormProps> = ({ phase, onChange }) => {
             className="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50 h-5 w-5"
           />
         </FormField>
-      </div>
-
-      <div className="mt-8">
-        <h4 className="text-lg font-medium mb-4">Blocks</h4>
-        
-        <Tabs
-          tabs={[
-            ...(phase.blocks || []).map((_, index) => ({
-              id: index,
-              label: phase.blocks[index].slug || `Block ${index + 1}`,
-            })),
-            {
-              id: 'new',
-              label: (
-                <div className="flex items-center gap-2">
-                  <FiPlus className="w-4 h-4" />
-                  <span>New Block</span>
-                </div>
-              ),
-            }
-          ]}
-          activeTab={activeBlockIndex}
-          onTabChange={(tabId) => {
-            if (tabId === 'new') {
-              handleAddBlock();
-            } else {
-              setActiveBlockIndex(tabId as number);
-            }
-          }}
-          actions={[
-            {
-              icon: <FiTrash className="w-4 h-4" />,
-              title: 'Remove block',
-              onClick: (tabId) => handleBlockDelete(tabId as number),
-            },
-          ]}
-          draggable={true}
-          onReorder={handleReorderBlocks}
-        />
-
-        {phase.blocks && phase.blocks.length > 0 && (
-          <div className="mt-4">
-            <BlockForm
-              block={phase.blocks[activeBlockIndex]}
-              onChange={(updatedBlock) => handleBlockChange(activeBlockIndex, updatedBlock)}
-            />
-          </div>
-        )}
       </div>
     </div>
   );

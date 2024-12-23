@@ -23,7 +23,7 @@ export interface Phase {
   index: number;
   dashboard: boolean;
   randomize: boolean;
-  blocks?: Block[];
+  blocks: Block[];
 }
 
 export interface Experiment {
@@ -33,3 +33,9 @@ export interface Experiment {
   translated_content: TranslatedContent[];
   phases: Phase[];
 }
+
+export type Selection = {
+  type: 'phase' | 'block';
+  phaseIndex: number;
+  blockIndex?: number;
+};
