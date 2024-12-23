@@ -27,10 +27,12 @@ export const PhasesForm: React.FC<PhasesFormProps> = ({ phases, onChange }) => {
         blocks: [],
       };
 
-      const updatedPhases = [...phases];
+      let updatedPhases = [...phases];
 
       updatedPhases
         .splice(phaseIndex, 0, newPhase)
+
+      updatedPhases = updatedPhases
         .map((phase, i) => ({ ...phase, index: i }));
 
       onChange(updatedPhases);
