@@ -12,6 +12,7 @@ import { Experiment, TranslatedContent } from '../types/types';
 import { PhasesForm } from './PhasesForm';
 import useFetch from '../hooks/useFetch';
 import { useMutation } from '../hooks/useMutation';
+import useBoundStore from '../utils/store';
 
 interface ExperimentFormProps {
 }
@@ -30,13 +31,10 @@ const ExperimentForm: React.FC<ExperimentFormProps> = () => {
     url,
     experimentId ? 'PUT' : 'POST'
   );
-  
-  const [experiment, setExperiment] = useState<Experiment>({
-    slug: '',
-    active: true,
-    translated_content: [],
-    phases: []
-  });
+
+  const experiment = useBoundStore(state => state.experiment);
+  const setExperiment = useBoundStore(state => state.setExperiment);
+
   const [success, setSuccess] = useState(false);
   const [activeTab, setActiveTab] = useState<'translatedContent' | 'phases'>('translatedContent');
   const [unsavedChanges, setUnsavedChanges] = useState<UnsavedChanges>({
@@ -44,7 +42,7 @@ const ExperimentForm: React.FC<ExperimentFormProps> = () => {
     translatedContent: false,
     phases: false,
   });
-  
+
   const navigate = useNavigate();
 
   const hasUnsavedChanges = unsavedChanges.main || unsavedChanges.translatedContent || unsavedChanges.phases;
@@ -52,6 +50,13 @@ const ExperimentForm: React.FC<ExperimentFormProps> = () => {
   useEffect(() => {
     if (experimentResource) {
       setExperiment(experimentResource);
+    } else {
+      setExperiment({
+        slug: '',
+        active: true,
+        translated_content: [],
+        phases: [],
+      });
     }
   }, [experimentResource]);
 
@@ -97,7 +102,7 @@ const ExperimentForm: React.FC<ExperimentFormProps> = () => {
   }
 
   return (
-    <Page 
+    <Page
       title={experimentId ? 'Edit Experiment' : 'Create Experiment'}
     >
       <Button

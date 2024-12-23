@@ -9,6 +9,7 @@ import ExperimentForm from './components/ExperimentForm';
 import Login from './components/Login';
 import { useState } from 'react';
 import { FiLogOut } from 'react-icons/fi';
+import useBoundStore from "./utils/store";
 
 function App() {
   const [isCollapsed, setIsCollapsed] = useState(false);
@@ -43,7 +44,7 @@ function App() {
     <Router>
       <div className="flex relative">
         <nav className={`fixed h-screen bg-white shadow-lg transition ${isCollapsed ? 'w-16' : 'w-40 xl:w-48'}`}>
-          <button 
+          <button
             onClick={() => setIsCollapsed(!isCollapsed)}
             className="w-full p-4 text-left hover:bg-gray-100"
           >
@@ -53,16 +54,16 @@ function App() {
             <a href="/experiments"
               className={`transition text-blue-500 hover:bg-gray-100 rounded flex items-center gap-2`}
               title="Experiments">
-                <AiTwotoneExperiment  className="block min-w-5 h-5" />
+              <AiTwotoneExperiment className="block min-w-5 h-5" />
               <div className="flex-shrink-1">
                 {!isCollapsed && 'Experiments'}
               </div>
             </a>
-            <button 
+            <button
               onClick={handleLogout}
               className="transition text-red-500 hover:bg-gray-100 rounded flex items-center gap-2"
             >
-                <FiLogOut  className="block min-w-5 h-5" />
+              <FiLogOut className="block min-w-5 h-5" />
               <div className="flex-shrink-1">
                 {!isCollapsed && 'Logout'}
               </div>

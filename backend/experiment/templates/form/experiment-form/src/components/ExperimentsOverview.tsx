@@ -15,8 +15,11 @@ const PhasesPills: React.FC<{ phases: Phase[] }> = ({ phases }) => {
       {phases.sort((a, b) => a.index - b.index).map((phase, idx) => (
         <React.Fragment key={phase.id}>
           {idx > 0 && <div className="h-[1px] w-4 bg-gray-300" />}
-          <div className="px-2 py-1 rounded-full bg-blue-100 text-blue-800 text-xs">
-            {phase.index}
+          <div
+            className={`px-2 py-1 rounded-full text-xs font-semibold ${phase.blocks.length ? 'bg-green-100 text-green-800' : 'bg-orange-100 text-orange-800'}`}
+            title={`${phase.blocks.length ? phase.blocks.map(b => b.slug).join(', ') : 'No blocks'}`}
+          >
+            {phase.blocks.length}
           </div>
         </React.Fragment>
       ))}
@@ -29,7 +32,7 @@ const LanguagePills: React.FC<{ translations: TranslatedContent[] }> = ({ transl
   return (
     <div className="flex flex-wrap gap-1">
       {languages.map(lang => (
-          <Flag languageCode={lang} className="h-3" key={lang} />
+        <Flag languageCode={lang} className="h-3" key={lang} />
       ))}
     </div>
   );
