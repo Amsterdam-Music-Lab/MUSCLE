@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { FiPlus, FiCircle, FiBox } from 'react-icons/fi';
 import { Phase, Selection } from '../types/types';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -19,11 +19,15 @@ export const Timeline: React.FC<TimelineProps> = ({
   const { id: experimentId } = useParams();
   const navigate = useNavigate();
 
-  useEffect(() => {
-    if (!selectedItem && phases.length > 0) {
-      navigate(`/experiments/${experimentId}/phases/0`);
+  const handleSelect = (selection: Selection) => {
+    const basePath = `/experiments/${experimentId}/phases`;
+    if (selection.type === 'block') {
+      navigate(`${basePath}/${selection.phaseIndex}/blocks/${selection.blockIndex}`);
+    } else {
+      navigate(`${basePath}/${selection.phaseIndex}`);
     }
-  }, [selectedItem, phases, experimentId]);
+    onSelect(selection);
+  };
 
   const isSelected = (type: 'phase' | 'block', phaseIndex: number, blockIndex?: number) => {
     return selectedItem?.type === type &&
@@ -50,7 +54,7 @@ export const Timeline: React.FC<TimelineProps> = ({
 
               {/* Phase node */}
               <button
-                onClick={() => onSelect({ type: 'phase', phaseIndex })}
+                onClick={() => handleSelect({ type: 'phase', phaseIndex })}
                 type="button"
                 className={`
                   relative p-2 rounded-full hover:bg-blue-400 group
@@ -74,7 +78,11 @@ export const Timeline: React.FC<TimelineProps> = ({
                     />
                   </div>
                   <button
-                    onClick={() => onSelect({ type: 'block', phaseIndex, blockIndex })}
+                    onClick={() => handleSelect({
+                      type: 'block',
+                      phaseIndex,
+                      blockIndex
+                    })}
                     type="button"
                     className={`
                       relative p-2 rounded-md hover:bg-blue-400 group

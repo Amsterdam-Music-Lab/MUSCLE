@@ -4,14 +4,24 @@ import { Phase } from '../types/types';
 import { FormField } from './form/FormField';
 import { Input } from './form/Input';
 import { Button } from './Button';
+import { useParams } from 'react-router-dom';
+import useBoundStore from '../utils/store';
 
 interface PhaseFormProps {
-  phase: Phase;
   onChange: (phase: Phase) => void;
   onDelete: () => void;
 }
 
-export const PhaseForm: React.FC<PhaseFormProps> = ({ phase, onChange, onDelete }) => {
+export const PhaseForm: React.FC<PhaseFormProps> = ({ onChange, onDelete }) => {
+
+  const experiment = useBoundStore(state => state.experiment);
+
+  const { phaseIndex } = useParams<{ id: string }>();
+
+  console.log({ phaseIndex });
+
+  const phase = experiment.phases[phaseIndex];
+
   const handleChange = (field: keyof Phase, value: any) => {
     onChange({ ...phase, [field]: value });
   };

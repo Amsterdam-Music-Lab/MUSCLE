@@ -4,7 +4,7 @@ import { PhaseForm } from './PhaseForm';
 import { Timeline } from './Timeline';
 import { BlockForm } from './BlockForm';
 import useBoundStore from '../utils/store';
-import { useNavigate, useParams, useLocation } from 'react-router-dom';
+import { useNavigate, useParams, useLocation, Routes, Route, Navigate } from 'react-router-dom';
 
 const defaultPhase: Phase = {
   index: 0,
@@ -22,30 +22,41 @@ export const PhasesForm: React.FC<PhasesFormProps> = ({ phases, onChange }) => {
   const experiment = useBoundStore(state => state.experiment);
   const [timelineSelection, setTimelineSelection] = useState<Selection | null>(null);
   const navigate = useNavigate();
-  const { id: experimentId } = useParams();
+  const params = useParams();
+  const { id: experimentId, phaseIndex, blockIndex } = params;
   const location = useLocation();
+
 
   useEffect(() => {
     // Parse URL to set initial selection
     const match = location.pathname.match(/\/phases\/(\d+)(?:\/blocks\/(\d+))?/);
+
     if (match) {
       const [_, phaseIndex, blockIndex] = match;
       if (blockIndex !== undefined) {
+        // Set block selection
         setTimelineSelection({
           type: 'block',
           phaseIndex: parseInt(phaseIndex),
           blockIndex: parseInt(blockIndex)
         });
       } else {
+        // Set phase selection
         setTimelineSelection({
           type: 'phase',
           phaseIndex: parseInt(phaseIndex)
         });
       }
+    } else if (phases.length > 0) {
+
+
+      // Default to first phase if no selection in URL
+      navigate(`/experiments/${experimentId}/phases/0`);
     }
-  }, [location]);
+  }, [location.pathname, phases]);
 
   const handleTimelineSelect = (selection: Selection) => {
+
     setTimelineSelection(selection);
     const basePath = `/experiments/${experimentId}/phases`;
     if (selection.type === 'block') {
@@ -127,6 +138,7 @@ export const PhasesForm: React.FC<PhasesFormProps> = ({ phases, onChange }) => {
 
       onChange(updatedPhases);
       setTimelineSelection(null);
+      navigate(`/experiments/${experimentId}/phases/0`);
     } else if (blockIndex !== undefined) {
       if (!confirm('Are you sure you want to delete this block?')) return;
 
@@ -138,6 +150,7 @@ export const PhasesForm: React.FC<PhasesFormProps> = ({ phases, onChange }) => {
       const updatedPhase = { ...phase, blocks: updatedBlocks };
       onChange(phases.map((p, i) => i === phaseIndex ? updatedPhase : p));
       setTimelineSelection(null);
+      navigate(`/experiments/${experimentId}/phases/${phaseIndex}`);
     }
   };
 
@@ -196,39 +209,50 @@ export const PhasesForm: React.FC<PhasesFormProps> = ({ phases, onChange }) => {
         onAdd={handleAdd}
       />
 
-      {selected && (
-        <div className="p-5 bg-gray-50 rounded-md">
-          <div className="p-5 border rounded-md bg-white">
-            {selected.type === 'phase' ? (
-              <PhaseForm
-                phase={selected.item}
-                onChange={(updatedPhase) => {
-                  onChange(phases.map((p, i) =>
-                    i === timelineSelection.phaseIndex ? updatedPhase : p
-                  ));
-                }}
-                onDelete={() => handleDelete('phase', timelineSelection.phaseIndex)}
-              />
-            ) : (
-              <BlockForm
-                block={selected.item}
-                onChange={(updatedBlock) => {
-                  const updatedPhase = {
-                    ...selected.phase,
-                    blocks: selected.phase.blocks.map((b, i) =>
-                      i === timelineSelection.blockIndex ? updatedBlock : b
-                    ),
-                  };
-                  onChange(phases.map((p, i) =>
-                    i === timelineSelection.phaseIndex ? updatedPhase : p
-                  ));
-                }}
-                onDelete={() => handleDelete('block', timelineSelection.phaseIndex, timelineSelection.blockIndex)}
-              />
-            )}
-          </div>
-        </div>
-      )}
+      <Routes>
+        <Route path="/:blocks/:blockIndex" element={
+          selected?.type === 'block' && (
+            <div className="p-5 bg-gray-50 rounded-md">
+              <div className="p-5 border rounded-md bg-white">
+                <BlockForm
+                  block={selected.item}
+                  onChange={(updatedBlock) => {
+                    const updatedPhase = {
+                      ...selected.phase,
+                      blocks: selected.phase.blocks.map((b, i) =>
+                        i === timelineSelection.blockIndex ? updatedBlock : b
+                      ),
+                    };
+                    onChange(phases.map((p, i) =>
+                      i === timelineSelection.phaseIndex ? updatedPhase : p
+                    ));
+                  }}
+                  onDelete={() => handleDelete('block', timelineSelection.phaseIndex, timelineSelection.blockIndex)}
+                />
+              </div>
+            </div>
+          )
+        } />
+        <Route path="*" element={
+          selected?.type === 'phase' && (
+            <div className="p-5 bg-gray-50 rounded-md">
+              <div className="p-5 border rounded-md bg-white">
+                <PhaseForm
+                  onChange={(updatedPhase) => {
+                    onChange(phases.map((p, i) =>
+                      i === timelineSelection.phaseIndex ? updatedPhase : p
+                    ));
+                  }}
+                  onDelete={() => handleDelete('phase', timelineSelection.phaseIndex)}
+                />
+              </div>
+            </div>
+          )
+        } />
+        {/* <Route path="" element={
+          phases.length > 0 && <Navigate to={`${experimentId}/phases/0`} replace />
+        } /> */}
+      </Routes>
     </div>
   );
 };

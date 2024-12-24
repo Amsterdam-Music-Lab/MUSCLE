@@ -121,6 +121,10 @@ const ExperimentForm: React.FC<ExperimentFormProps> = () => {
     return <div className="text-center mt-5">Loading...</div>;
   }
 
+  if (loading) {
+    return <div className="text-center mt-5">Loading...</div>;
+  }
+
 
   return (
     <Page
@@ -203,7 +207,7 @@ const ExperimentForm: React.FC<ExperimentFormProps> = () => {
               }
             />
             <Route
-              path="phases/*"
+              path="phases/:phaseIndex?/*"
               element={
                 <PhasesForm
                   phases={experiment.phases}
@@ -211,18 +215,6 @@ const ExperimentForm: React.FC<ExperimentFormProps> = () => {
                     patchExperiment({ phases: newPhases });
                     setUnsavedChanges(prev => ({ ...prev, phases: true }));
                   }}
-                />
-              }
-            />
-            <Route
-              path=""
-              element={
-                <Navigate
-                  to={`/experiments/${experimentId}/translated-content${experiment.translated_content.length > 0
-                    ? `/${experiment.translated_content[0].language || '0'}`
-                    : ''
-                    }`}
-                  replace
                 />
               }
             />
