@@ -16,6 +16,8 @@ interface FrontendStyle {
     [key: string]: string | FrontendStyle;
 }
 
+export type ScoreFeedbackDisplay = "large-top" | "small-bottom-right" | "hidden";
+
 export interface PlaybackArgs {
     view: PlaybackView;
     play_method: PlaybackMethod;
@@ -34,6 +36,6 @@ export interface PlaybackArgs {
     resume_play?: boolean;
     stop_audio_after?: number;
     timeout_after_playback?: number;
-    score_feedback_display?: string;
+    score_feedback_display?: ScoreFeedbackDisplay;
     tutorial?: { [key: string]: string };
 }
