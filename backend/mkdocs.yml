@@ -8,6 +8,13 @@ dev_addr: '127.0.0.1:8080'
 markdown_extensions:
   - smarty
   - toc
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences
 
 theme:
   name: "material"
