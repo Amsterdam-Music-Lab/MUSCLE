@@ -66,7 +66,7 @@ export const PhasesForm: React.FC<PhasesFormProps> = ({ phases, onChange }) => {
     }
   };
 
-  const handleAdd = (type: 'phase' | 'block', phaseIndex: number, blockIndex?: number) => {
+  const addPhaseOrBlock = (type: 'phase' | 'block', phaseIndex: number, blockIndex?: number) => {
     if (type === 'phase') {
       const newPhase: Phase = {
         ...defaultPhase,
@@ -93,7 +93,7 @@ export const PhasesForm: React.FC<PhasesFormProps> = ({ phases, onChange }) => {
       if (!experiment) return;
 
       const experimentSlug = experiment.slug;
-      let blockSlugArray: [string, number] = [experimentSlug, position];
+      let blockSlugArray: [string, number, number] = [experimentSlug, phaseIndex, position];
       let blockSlug = blockSlugArray.join('-');
 
       // Check if block slug already exists in the experiment
@@ -104,7 +104,7 @@ export const PhasesForm: React.FC<PhasesFormProps> = ({ phases, onChange }) => {
 
       const newBlock = {
         index: position,
-        slug: "blockSlug",
+        slug: blockSlug,
         rounds: 10,
         bonus_points: 0,
         rules: '',
@@ -129,16 +129,29 @@ export const PhasesForm: React.FC<PhasesFormProps> = ({ phases, onChange }) => {
     }
   };
 
-  const handleDelete = (type: 'phase' | 'block', phaseIndex: number, blockIndex?: number) => {
+  const handleAdd = (type: 'phase' | 'block', phaseIndex: number, blockIndex?: number) => {
+    addPhaseOrBlock(type, phaseIndex, blockIndex);
+
+    // then navigate to the new block (if the index(es) are different than the current selection)
+    if (type === 'phase') {
+      navigate(`/experiments/${experimentId}/phases/${phaseIndex}`);
+    } else {
+      navigate(`/experiments/${experimentId}/phases/${phaseIndex}/blocks/${blockIndex}`);
+    }
+  };
+
+  const deletePhaseOrBlock = (type: 'phase' | 'block', phaseIndex: number, blockIndex?: number) => {
     if (type === 'phase') {
       if (!confirm('Are you sure you want to delete this phase?')) return;
 
       const updatedPhases = phases.filter((_, i) => i !== phaseIndex)
         .map((phase, i) => ({ ...phase, index: i }));
 
-      onChange(updatedPhases);
       setTimelineSelection(null);
-      navigate(`/experiments/${experimentId}/phases/0`);
+      onChange(updatedPhases);
+
+      return updatedPhases;
+
     } else if (blockIndex !== undefined) {
       if (!confirm('Are you sure you want to delete this block?')) return;
 
@@ -148,9 +161,42 @@ export const PhasesForm: React.FC<PhasesFormProps> = ({ phases, onChange }) => {
         .map((block, i) => ({ ...block, index: i }));
 
       const updatedPhase = { ...phase, blocks: updatedBlocks };
-      onChange(phases.map((p, i) => i === phaseIndex ? updatedPhase : p));
+      const updatedPhases = phases.map((p, i) => i === phaseIndex ? updatedPhase : p);
+
       setTimelineSelection(null);
-      navigate(`/experiments/${experimentId}/phases/${phaseIndex}`);
+      onChange(updatedPhases);
+
+      return updatedPhases;
+    }
+  };
+
+  const handleDelete = (type: 'phase' | 'block', phaseIndex: number, blockIndex?: number) => {
+    const updatedPhases = deletePhaseOrBlock(type, phaseIndex, blockIndex);
+
+    if (!updatedPhases?.length) {
+      navigate(`/experiments/${experimentId}/phases`);
+      return;
+    }
+
+    // navigate to the most appropriate location after deletion
+    if (type === 'phase') {
+      if (phaseIndex === 0) {
+        navigate(`/experiments/${experimentId}/phases/0`);
+      } else {
+        navigate(`/experiments/${experimentId}/phases/${phaseIndex - 1}`);
+      }
+    } else {
+
+      if (blockIndex === undefined) {
+        navigate(`/experiments/${experimentId}/phases/${phaseIndex}`);
+        return;
+      }
+
+      if (blockIndex === 0) {
+        navigate(`/experiments/${experimentId}/phases/${phaseIndex}`);
+      } else {
+        navigate(`/experiments/${experimentId}/phases/${phaseIndex}/blocks/${blockIndex - 1}`);
+      }
     }
   };
 
