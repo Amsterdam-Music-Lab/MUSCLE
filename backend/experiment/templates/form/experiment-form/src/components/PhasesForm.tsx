@@ -295,9 +295,6 @@ export const PhasesForm: React.FC<PhasesFormProps> = ({ phases, onChange }) => {
             </div>
           )
         } />
-        {/* <Route path="" element={
-          phases.length > 0 && <Navigate to={`${experimentId}/phases/0`} replace />
-        } /> */}
       </Routes>
     </div>
   );
