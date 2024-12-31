@@ -83,7 +83,6 @@ export const TranslatedContentForm: React.FC<TranslatedContentFormProps> = ({ co
       handleAdd();
     } else {
       const content = contents[tabIndex as number];
-      console.log('content', content);
       navigate(`/experiments/${experimentId}/translated-content/${content.language || tabIndex}`);
     }
   };

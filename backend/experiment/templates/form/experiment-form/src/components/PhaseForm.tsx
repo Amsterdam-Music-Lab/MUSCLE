@@ -18,8 +18,6 @@ export const PhaseForm: React.FC<PhaseFormProps> = ({ onChange, onDelete }) => {
 
   const { phaseIndex } = useParams<{ id: string }>();
 
-  console.log({ phaseIndex });
-
   const phase = experiment?.phases[phaseIndex];
 
   const handleChange = (field: keyof Phase, value: any) => {
