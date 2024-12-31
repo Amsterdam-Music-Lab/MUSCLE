@@ -24,6 +24,10 @@ export const PhaseForm: React.FC<PhaseFormProps> = ({ onChange, onDelete }) => {
     onChange({ ...phase, [field]: value });
   };
 
+  if (!phase) {
+    return null;
+  }
+
   return (
     <div className="space-y-5">
       <div className="flex justify-between items-start mb-4">
