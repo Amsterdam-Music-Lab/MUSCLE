@@ -51,7 +51,7 @@ export const TranslatedContentForm: React.FC<TranslatedContentFormProps> = ({ co
 
     onChange(updatedContents);
     // Navigate to the new content's tab
-    navigate(`/experiments/${experimentId}/translated-content/${updatedContents.length}`);
+    navigate(`/experiments/${experimentId}/translated-content/${updatedContents.length - 1}`);
   };
 
   const handleRemove = (index: number) => {
@@ -122,7 +122,7 @@ export const TranslatedContentForm: React.FC<TranslatedContentFormProps> = ({ co
       />
 
 
-      {contents.length > 0 && (
+      {contents.length > 0 && !!contents[activeTabIndex] && (
         <div className='p-5 bg-gray-50'>
           <div className="p-5 bg-white border rounded-md space-y-5">
 
