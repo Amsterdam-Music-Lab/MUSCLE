@@ -110,7 +110,7 @@ export const TranslatedContentForm: React.FC<TranslatedContentFormProps> = ({ co
             ),
           }
         ]}
-        wrap={false}
+        wrap={true}
         activeTab={activeTabIndex}
         onTabChange={handleTabChange}
         actions={[
