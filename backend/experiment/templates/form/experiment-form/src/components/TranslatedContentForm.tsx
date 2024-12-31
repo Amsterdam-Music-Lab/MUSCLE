@@ -28,9 +28,11 @@ export const TranslatedContentForm: React.FC<TranslatedContentFormProps> = ({ co
   const navigate = useNavigate();
   const { id: experimentId, language } = useParams();
 
+
   // Find index of current language in contents
   const languageInContents = contents.find(content => content.language === language);
-  const activeTabIndex = languageInContents ? contents.indexOf(languageInContents) : 0;
+  const potentialContentIndex = parseInt(language ?? '0', 10);
+  const activeTabIndex = languageInContents ? contents.indexOf(languageInContents) : potentialContentIndex;
 
   useEffect(() => {
     // If we have contents but no language in URL, redirect to first language
@@ -45,10 +47,11 @@ export const TranslatedContentForm: React.FC<TranslatedContentFormProps> = ({ co
       ...defaultContent,
       index: contents.length,
     };
-    const updatedContents = [...contents, newContent];
+    const updatedContents = [...contents, newContent].map((content, index) => ({ ...content, index }));
+
     onChange(updatedContents);
     // Navigate to the new content's tab
-    navigate(`/experiments/${experimentId}/translated-content/${contents.length}`);
+    navigate(`/experiments/${experimentId}/translated-content/${updatedContents.length}`);
   };
 
   const handleRemove = (index: number) => {
@@ -75,19 +78,21 @@ export const TranslatedContentForm: React.FC<TranslatedContentFormProps> = ({ co
     return `Translation ${index + 1}`;
   };
 
-  const handleTabChange = (tabId: string | number) => {
-    if (tabId === 'new') {
+  const handleTabChange = (tabIndex: string | number) => {
+    if (tabIndex === 'new') {
       handleAdd();
     } else {
-      const content = contents[tabId as number];
-      navigate(`/experiments/${experimentId}/translated-content/${content.language || tabId}`);
+      const content = contents[tabIndex as number];
+      console.log('content', content);
+      navigate(`/experiments/${experimentId}/translated-content/${content.language || tabIndex}`);
     }
   };
 
   return (
     <div className="">
       <h3 className="text-lg font-medium mb-5">
-        Translated Content</h3>
+        Translated Content
+      </h3>
 
       <Tabs
         tabs={[
