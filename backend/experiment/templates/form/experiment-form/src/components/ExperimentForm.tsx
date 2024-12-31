@@ -52,6 +52,7 @@ const ExperimentForm: React.FC<ExperimentFormProps> = () => {
   useEffect(() => {
     if (experimentResource) {
       setExperiment(experimentResource);
+      navigate(`/experiments/${experimentId}/phases`);
     } else {
       setExperiment({
         slug: '',
@@ -181,14 +182,14 @@ const ExperimentForm: React.FC<ExperimentFormProps> = () => {
         <Tabs
           tabs={[
             {
-              id: 'translatedContent',
-              label: getTabLabel('Translated Content', unsavedChanges.translatedContent),
-              icon: <FiGlobe />
-            },
-            {
               id: 'phases',
               label: getTabLabel('Phases', unsavedChanges.phases),
               icon: <FiLayers />
+            },
+            {
+              id: 'translatedContent',
+              label: getTabLabel('Translated Content', unsavedChanges.translatedContent),
+              icon: <FiGlobe />
             },
           ]}
           activeTab={activeTab}
