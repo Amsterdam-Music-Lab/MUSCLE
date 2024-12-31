@@ -6,6 +6,7 @@ import { FiPlus, FiEdit2, FiTrash2 } from "react-icons/fi";
 import { Experiment, Phase, TranslatedContent } from "../types/types";
 import React from "react";
 import { Flag } from "./Flag";
+import { Link } from "react-router-dom";
 
 const url = createEntityUrl('experiments');
 
@@ -105,9 +106,9 @@ const ExperimentsOverview = () => {
               {experiments?.map((experiment) => (
                 <tr key={experiment.id} className="hover:bg-gray-50">
                   <td className="px-6 py-4 text-left whitespace-nowrap">
-                    <a href={`/experiments/${experiment.id}`} className="text-blue-500 hover:underline">
+                    <Link to={`/experiments/${experiment.id}`} className="text-blue-500 hover:underline">
                       {experiment.id}
-                    </a>
+                    </Link>
                   </td>
                   <td className="px-6 py-4 text-left whitespace-nowrap">{experiment.slug}</td>
                   <td className="px-6 py-4 text-left whitespace-nowrap">

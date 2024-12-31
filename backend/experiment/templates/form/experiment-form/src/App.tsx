@@ -2,6 +2,7 @@ import {
   BrowserRouter as Router,
   Route,
   Routes,
+  Link,
 } from "react-router-dom";
 import { AiTwotoneExperiment } from "react-icons/ai";
 import ExperimentsOverview from './components/ExperimentsOverview';
@@ -50,14 +51,14 @@ function App() {
             {isCollapsed ? '→' : '←'}
           </button>
           <div className={`flex flex-col gap-5 transition ${isCollapsed ? 'p-2' : 'p-4'}`}>
-            <a href="/experiments"
+            <Link to="/experiments"
               className={`transition text-blue-500 hover:bg-gray-100 rounded flex items-center gap-2`}
               title="Experiments">
               <AiTwotoneExperiment className="block min-w-5 h-5" />
               <div className="flex-shrink-1">
                 {!isCollapsed && 'Experiments'}
               </div>
-            </a>
+            </Link>
             <button
               onClick={handleLogout}
               className="transition text-red-500 hover:bg-gray-100 rounded flex items-center gap-2"
