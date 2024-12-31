@@ -37,18 +37,18 @@ export const Timeline: React.FC<TimelineProps> = ({
 
   return (
     <div className="w-full overflow-x-auto pt-4">
-      <div className="flex items-center p-4 gap-2 min-w-max relative">
+      <div className="flex flex-col items-start p-4 gap-3 min-w-max relative">
         {phases.map((phase, phaseIndex) => (
           <React.Fragment key={phaseIndex}>
             {/* Add button before phase */}
-            <div className="-mt-2.5 ml-2.5 z-10">
-              {phaseIndex === 0 && (
+            {phaseIndex === 0 && (
+              <div className={`absolute -top-2 -ml-0 z-10 hover:opacity-100 transition-opacity ${isSelected('phase', phaseIndex) ? 'opacity-100' : 'opacity-25'}`}>
                 <AddButton
                   onClick={() => onAdd('phase', 0)}
                   type="phase"
                 />
-              )}
-            </div>
+              </div>
+            )}
 
             <div className={`relative flex items-center gap-1 p-2 pr-5 rounded-full ${phaseIndex === selectedItem?.phaseIndex ? 'bg-blue-100' : 'bg-gray-100'}`}>
 
@@ -65,13 +65,11 @@ export const Timeline: React.FC<TimelineProps> = ({
                 <FiCircle className={`w-6 h-6 group-hover:text-white ${isSelected('phase', phaseIndex) ? 'text-white' : 'text-gray-600'}`} />
               </button>
 
-
-
               {/* Blocks for this phase */}
               {phase.blocks.map((_block, blockIndex) => (
                 <React.Fragment key={blockIndex}>
-                  <div className={`-mt-2.5 flex ${isSelected('block', phaseIndex, blockIndex) ? '' : ''}`}>
-                    {/* Add button after block */}
+                  <div className={`-mt-2.5 flex ${isSelected('block', phaseIndex, blockIndex) || isSelected('block', phaseIndex, blockIndex - 1) ? 'opacity-100' : 'opacity-25'} transition-opacity hover:opacity-100`}>
+                    {/* Add button before block */}
                     <AddButton
                       onClick={() => onAdd('block', phaseIndex, blockIndex)}
                       type="block"
@@ -96,8 +94,12 @@ export const Timeline: React.FC<TimelineProps> = ({
                 </React.Fragment>
               ))}
 
-              {/* Add button for new block if no block is selected */}
-              <div className={`-mt-2.5`}>
+              {/* Add button for new block if no or the last block is selected */}
+              <div className={`-mt-2.5 
+              
+              ${!isSelected('block', phaseIndex) && !isSelected('block', phaseIndex, phase.blocks.length - 1)
+
+                  ? 'opacity-25' : 'opacity-100'} transition-opacity hover:opacity-100`}>
                 {/* Add button after block */}
                 <AddButton
                   onClick={() => onAdd('block', phaseIndex, phase.blocks.length)}
@@ -105,8 +107,14 @@ export const Timeline: React.FC<TimelineProps> = ({
                 />
               </div>
 
+              {/* vertical line between the phases equal to the gap size of gap-2  */}
+              {phaseIndex < phases.length - 1 && (
+                <div className={`absolute -bottom-4 left-6 w-0.5 h-4 ${isSelected('phase', phaseIndex) || isSelected('phase', phaseIndex + 1) ? 'bg-blue-400' : 'bg-gray-200'}`} />
+              )}
+
               {/* Add button after phase */}
-              <div className="absolute -mt-2.5 -right-5 z-10">
+              <div className={`absolute -bottom-3 left-0 z-10 hover:opacity-100 transition-opacity 
+              ${isSelected('phase', phaseIndex) || isSelected('phase', phaseIndex + 1) ? 'opacity-100' : 'opacity-25'} `}>
                 <AddButton
                   onClick={() => onAdd('phase', phaseIndex + 1)}
                   type="phase"
