@@ -110,6 +110,7 @@ export const TranslatedContentForm: React.FC<TranslatedContentFormProps> = ({ co
             ),
           }
         ]}
+        wrap={false}
         activeTab={activeTabIndex}
         onTabChange={handleTabChange}
         actions={[
@@ -120,6 +121,7 @@ export const TranslatedContentForm: React.FC<TranslatedContentFormProps> = ({ co
           },
         ]}
       />
+
 
       {contents.length > 0 && (
         <div className='p-5 bg-gray-50'>

@@ -19,15 +19,17 @@ interface TabsProps {
   actions?: TabAction[];
   onReorder?: (startIndex: number, endIndex: number) => void;
   draggable?: boolean;
+  wrap?: boolean;
 }
 
-export const Tabs: React.FC<TabsProps> = ({ 
-  tabs, 
-  activeTab, 
-  onTabChange, 
+export const Tabs: React.FC<TabsProps> = ({
+  tabs,
+  activeTab,
+  onTabChange,
   actions = [],
   onReorder,
-  draggable = false 
+  draggable = false,
+  wrap = false,
 }) => {
   const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
   const [dragOverIndex, setDragOverIndex] = useState<number | null>(null);
@@ -54,7 +56,8 @@ export const Tabs: React.FC<TabsProps> = ({
 
   return (
     <div className="border-b border-gray-200">
-      <nav className="-mb-px flex" aria-label="Tabs">
+      <nav className={`-mb-px flex ${wrap ? 'flex-wrap' : 'overflow-x-auto'}
+      `} aria-label="Tabs">
         {tabs.map((tab, index) => (
           <div
             key={tab.id}
@@ -63,7 +66,7 @@ export const Tabs: React.FC<TabsProps> = ({
             onDragOver={(e) => handleDragOver(e, index)}
             onDragEnd={handleDragEnd}
             className={`
-              flex items-center group
+              flex items-center group flex-shrink-0
               ${draggedIndex === index ? 'opacity-50' : ''}
               ${dragOverIndex === index ? 'border-2 border-blue-500 bg-blue-50' : ''}
             `}
