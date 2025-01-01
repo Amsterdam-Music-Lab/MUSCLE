@@ -35,6 +35,7 @@ const ExperimentForm: React.FC<ExperimentFormProps> = () => {
   const experiment = useBoundStore(state => state.experiment);
   const setExperiment = useBoundStore(state => state.setExperiment);
   const patchExperiment = useBoundStore(state => state.patchExperiment);
+  const addToast = useBoundStore(state => state.addToast);
 
   const [success, setSuccess] = useState(false);
   const [activeTab, setActiveTab] = useState<'translatedContent' | 'phases'>('translatedContent');
@@ -88,8 +89,18 @@ const ExperimentForm: React.FC<ExperimentFormProps> = () => {
       const savedExperiment = await saveExperiment(experiment);
       setSuccess(true);
       setExperiment(savedExperiment);
+      addToast({
+        message: "Experiment saved successfully!",
+        duration: 3000,
+        level: "info"
+      });
     } catch (err) {
-      console.error(err);
+      addToast({
+        message: "Failed to save experiment. Please try again.",
+        duration: 5000,
+        level: "error"
+      });
+      console.error("Error submitting form:", err);
     }
   };
 

@@ -20,8 +20,33 @@ const createExperimentSlice: StateCreator<ExperimentSlice> = (set) => ({
   })
 });
 
-export const useBoundStore = create<ExperimentSlice>((...args) => ({
+interface Toast {
+  message: string;
+  duration: number;
+  level: "info" | "warning" | "error";
+}
+
+interface ToastsSlice {
+  toasts: Toast[];
+  addToast: (toast: Toast) => void;
+}
+
+const createToastsSlice: StateCreator<ToastsSlice> = (set) => ({
+  toasts: [],
+  addToast: (toast) => {
+    // Add toast to the list of toasts, then, based on the toast's duration, remove it after a certain amount of time
+    set((state) => ({ toasts: [...state.toasts, toast] }));
+    setTimeout(() => {
+      set((state) => ({ toasts: state.toasts.filter((t) => t !== toast) }));
+    }, toast.duration);
+  },
+});
+
+export const useBoundStore = create<
+  ExperimentSlice & ToastsSlice
+>((...args) => ({
   ...createExperimentSlice(...args),
+  ...createToastsSlice(...args),
 }));
 
 export default useBoundStore;
