@@ -20,7 +20,7 @@ const createExperimentSlice: StateCreator<ExperimentSlice> = (set) => ({
   })
 });
 
-interface Toast {
+export interface Toast {
   message: string;
   duration: number;
   level: "info" | "warning" | "error";
