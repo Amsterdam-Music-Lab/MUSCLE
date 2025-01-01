@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { createEntityUrl } from '../config';
 import { useNavigate, useParams, Routes, Route, useLocation, Navigate } from 'react-router-dom';
 import Page from './Page';
-import { TranslatedContentForm } from './TranslatedContentForm';
+import { TranslatedContentForms } from './TranslatedContentForms';
 import { FiSave, FiArrowLeft, FiGlobe, FiLayers } from 'react-icons/fi';
 import { Button } from './Button';
 import { Tabs } from './Tabs';
@@ -201,7 +201,7 @@ const ExperimentForm: React.FC<ExperimentFormProps> = () => {
             <Route
               path="translated-content/:language?"
               element={
-                <TranslatedContentForm
+                <TranslatedContentForms
                   contents={experiment.translated_content}
                   onChange={handleTranslatedContentChange}
                 />
