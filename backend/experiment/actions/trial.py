@@ -42,6 +42,30 @@ class Trial(BaseAction):  # pylint: disable=too-few-public-methods
             boolean: first element is green, second is red
             boolean-negative-first: first element is red, second is green
 
+    Example:
+        ```python
+        key = 'test_trial'
+        section = session.playlist.get_section()
+        question = BooleanQuestion(
+            question=_(
+                "Do you like this song?"),
+            key=key,
+            result_id=prepare_result(key, session, section=section),
+            submits=True
+        )
+        form = Form([question])
+        playback = Autoplay([section])
+        view = Trial(
+            playback=playback,
+            feedback_form=form,
+            title=_('Test block'),
+            config={
+                'response_time': section.duration,
+                'listen_first': True
+            }
+        )
+        ```
+
     Note:
         Relates to client component: Trial.tsx
     """
