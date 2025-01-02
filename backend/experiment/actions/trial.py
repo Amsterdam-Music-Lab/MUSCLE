@@ -9,14 +9,14 @@ from .frontend_style import FrontendStyle
 
 class Config(TypedDict):
     """
-    Configuration for the Trial action
+    Configuration for the Trial action.
 
     Args:
-        response_time: how long to wait until stopping the player / proceeding to the next view
-        auto_advance: proceed to next view after player has stopped
-        listen_first: whether participant can submit before end of sound
-        show_continue_button: whether to show a button to proceed to the next view
-        continue_label: label for the continue button
+      - response_time (int): how long to wait until stopping the player
+      - auto_advance (bool): proceed automatically after stopping
+      - listen_first (bool): block form submission until playback ends
+      - show_continue_button (bool): display a 'Continue' button
+      - continue_label (str): label for the continue button
     """
 
     response_time: int
