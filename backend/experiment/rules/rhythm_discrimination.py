@@ -161,7 +161,10 @@ class RhythmDiscrimination(BaseRules, PracticeMixin):
     def get_title_counter(self, session):
         round_number = session.get_rounds_passed()
         if not session.json_data.get("practice_done"):
-            return _("practice %(index)d of 4") % {"index": round_number}
+            return _("practice %(index)d of %(n_rounds)d") % {
+                "index": round_number,
+                "n_rounds": self.n_practice_rounds,
+            }
         plan = session.json_data.get("plan")
         return _("trial %(index)d of %(total)d") % (
             {"index": round_number - 4, "total": len(plan) - 4}
