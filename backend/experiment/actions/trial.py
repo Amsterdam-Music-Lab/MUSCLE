@@ -35,7 +35,7 @@ class Trial(BaseAction):  # pylint: disable=too-few-public-methods
         html (Optional[str]): HTML to be displayed in this view
         feedback_form (Optional[Form]): array of form elements
         title (Optional(str)): page title - defaults to empty
-        config (Optional[Config]): dictionary with following settings
+        config (Optional[Config]): configuration for the trial with options for response time, auto advance, listen first, show continue button, and continue label
         style (FrontendStyle): style class to add to elements in form and playback
             neutral: first element is blue, second is yellow, third is teal
             neutral-inverted: first element is yellow, second is blue, third is teal
