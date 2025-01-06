@@ -142,7 +142,7 @@ class Multiplayer(PlayButton):
         ```
 
     Raises:
-        UserWarning: If number of labels doesn't match number of sections.
+        UserWarning: If `labels` is defined, and number of labels doesn't match number of sections.
     """
 
     def __init__(
