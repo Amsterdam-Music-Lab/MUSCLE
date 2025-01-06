@@ -79,7 +79,7 @@ class HBat(BaseRules, PracticeMixin):
         """
         level = self.get_difficulty(session)
         trial_condition = self.get_condition(session)
-        trial_tag = "0" if trial_condition == self.first_condition else "1"
+        trial_tag = "1" if trial_condition == self.first_condition else "0"
         try:
             section = session.playlist.get_section(
                 {"group": str(level), "tag": trial_tag}
