@@ -82,7 +82,7 @@ def song_sync(
         title (str): Title to be displayed for the trials.
         recognition_time (int, optional): Response time for recognition.
         sync_time (int, optional): Response time for syncing continuation.
-        min_jitter (int, optional): Minimum playback offset for continuity trial.
+        min_jitter (int, optional): Minimum playback offset for continuation correctness trial.
         max_jitter (int, optional): Maximum playback offset for continuity trial.
 
     Returns:
