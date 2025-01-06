@@ -25,6 +25,8 @@ PlayMethods = Literal["EXTERNAL", "HTML", "BUFFER", "NOAUDIO"]
 class PlaybackSection(TypedDict):
     id: int
     url: str
+
+    # TODO: Remove group from PlaybackSection and from the Playback class itself and make sure everything still works (see also https://github.com/Amsterdam-Music-Lab/MUSCLE/pull/1448#discussion_r1903978068)
     group: str
 
 
