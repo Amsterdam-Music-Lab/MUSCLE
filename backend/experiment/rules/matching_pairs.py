@@ -3,7 +3,7 @@ import json
 
 from django.utils.translation import gettext_lazy as _
 
-from .base import Base
+from .base import BaseRules
 from experiment.actions import Explainer, Final, Playlist, Step, Trial
 from experiment.actions.playback import MatchingPairs
 from result.utils import prepare_result
@@ -11,7 +11,7 @@ from result.utils import prepare_result
 from section.models import Section
 
 
-class MatchingPairsGame(Base):
+class MatchingPairsGame(BaseRules):
     ID = "MATCHING_PAIRS"
     default_consent_file = "consent/consent_matching_pairs.html"
     num_pairs = 8

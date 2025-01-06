@@ -4,7 +4,8 @@ import random
 
 from django.utils.translation import gettext_lazy as _
 
-from .practice import Practice
+from .base import BaseRules
+from .practice import PracticeMixin
 from section.models import Section
 from experiment.actions import Trial, Explainer, Step
 from experiment.actions.form import ChoiceQuestion, Form
@@ -20,7 +21,7 @@ from session.models import Session
 logger = logging.getLogger(__name__)
 
 
-class DurationDiscrimination(Practice):
+class DurationDiscrimination(BaseRules, PracticeMixin):
     """
     These rules make use of the session's final_score to register turnpoints
     """

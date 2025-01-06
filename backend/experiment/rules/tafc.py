@@ -31,7 +31,7 @@ Setup block data in the admin panel
     * QUESTION SERIES -> Add rules' default and save
 """
 
-from .base import Base
+from .base import BaseRules
 from experiment.actions import Consent, Explainer, Trial, Final
 from experiment.actions.playback import PlayButton
 from question.utils import question_by_key
@@ -40,7 +40,7 @@ from experiment.actions.form import Form, ChoiceQuestion
 from result.utils import prepare_result
 
 
-class TwoAlternativeForced(Base):
+class TwoAlternativeForced(BaseRules):
     # Add to __init.py__ file in the same directory as the current file:
     #    from .tafc import TwoAlternativeForced
     # To BLOCK_RULES dictionary in __init.py__

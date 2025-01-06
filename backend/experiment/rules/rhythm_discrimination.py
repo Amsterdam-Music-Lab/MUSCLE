@@ -15,7 +15,8 @@ from result.utils import prepare_result
 from section.models import Playlist
 from session.models import Session
 
-from .practice import Practice
+from .base import BaseRules
+from .practice import PracticeMixin
 
 logger = logging.getLogger(__name__)
 
@@ -81,7 +82,7 @@ STIMULI = {
 }
 
 
-class RhythmDiscrimination(Practice):
+class RhythmDiscrimination(BaseRules, PracticeMixin):
     ID = 'RHYTHM_DISCRIMINATION'
     first_condition = "different"
     first_condition_i18n = _("DIFFERENT")
@@ -89,7 +90,6 @@ class RhythmDiscrimination(Practice):
     second_condition_i18n = _("SAME")
 
     def next_round(self, session):
-
         if session.get_rounds_passed() == 0:
             self.plan_stimuli(session)
 

@@ -4,7 +4,8 @@ import random
 
 from django.utils.translation import gettext_lazy as _
 
-from .practice import Practice
+from .base import BaseRules
+from .practice import PracticeMixin
 from experiment.actions import Trial, Explainer, Step
 from experiment.actions.form import ChoiceQuestion, Form
 from experiment.actions.playback import Autoplay
@@ -20,7 +21,7 @@ logger = logging.getLogger(__name__)
 MAX_TURNPOINTS = 6
 
 
-class HBat(Practice):
+class HBat(BaseRules, PracticeMixin):
     """Harvard Beat Assessment Test (H-BAT)
     Fujii & Schlaug, 2013
     """

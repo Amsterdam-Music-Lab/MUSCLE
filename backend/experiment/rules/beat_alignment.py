@@ -3,7 +3,7 @@ import copy
 
 from django.utils.translation import gettext_lazy as _
 
-from .base import Base
+from .base import BaseRules
 from experiment.actions import Trial, Explainer, Step
 from experiment.actions.form import ChoiceQuestion, Form
 from experiment.actions.playback import Autoplay
@@ -14,7 +14,7 @@ from section.models import Playlist
 logger = logging.getLogger(__name__)
 
 
-class BeatAlignment(Base):
+class BeatAlignment(BaseRules):
     """Rules for the beat alignment test by Mullensiefen et al. (2014)"""
 
     ID = 'BEAT_ALIGNMENT'

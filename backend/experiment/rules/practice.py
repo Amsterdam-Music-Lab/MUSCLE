@@ -6,16 +6,21 @@ from django.utils.translation import gettext_lazy as _
 
 from experiment.actions import ChoiceQuestion, Form, Explainer, Step, Trial
 from experiment.actions.playback import Autoplay
-from experiment.rules.base import Base
 from result.utils import prepare_result
 from section.models import Section
 from session.models import Session
 
-class Practice(Base):
-    """Practice is a rules class which presents a trial a given number of times.
-    At these practice trials, it tests whether the partcipant performed well enough to proceed.
 
-    Use this class as a base for your ruleset if you need a practice phase.
+class PracticeMixin(object):
+    """PracticeMixin can be used to present a trial a given number of times.
+    After these practice trials, it tests whether the partcipant performed well enough to proceed.
+
+    Extend this class in your ruleset if you need a practice run for your participants.
+
+    Note that you could use this class to
+        - create rules for a self-contained block with only the practice run, and define the experiment proper in another rules file;
+        - create rules which include the experiment proper after the practice phase.
+
     This practice class is now written towards 2 alternative forced choice rulesets, but may be extended in the future.
 
     Arguments:
@@ -27,7 +32,27 @@ class Practice(Base):
         n_practice_rounds (int): adjust to the number of practice rounds that should be presented
         n_practice_rounds_second_condition (int): how often the second condition appears in the practice rounds, e.g., one "catch" trial, or half the practice trials
         n_correct (int): how many answers of the participant need to be correct to proceed
+
+
+    Example:
+        This is an example of a rules file which would only present the practice run to the participant:
+        ```python
+        class MyPracticeRun(BaseRules, PracticeMixin):
+            task_description = ""
+            first_condition = 'lower'
+            first_condition_i18n = _("LOWER")
+            second_condition = 'higher'
+            second_condition_i18n = _("HIGHER")
+            n_practice_rounds = 10
+            n_practice_rounds_second_condition = 5
+            n_correct = 3
+
+            def next_round(self, session):
+                return self.next_practice_round(session)
+        ```
+        For a full-blown example, refer to the `duration_discrimination.py` rules file. This implements the experiment proper after the practice run.
     """
+
     task_description = "Pitch discrimination"
     first_condition = 'lower'
     first_condition_i18n = _("LOWER")
@@ -36,9 +61,6 @@ class Practice(Base):
     n_practice_rounds = 4
     n_practice_rounds_second_condition = 1  # how many trials have second condition
     n_correct = 1 # how many trials need to be answered correctly to proceed
-
-    def next_round(self, session: Session) -> list:
-        return self.next_practice_round(session)
 
     def next_practice_round(self, session: Session) -> list[Union[Trial, Explainer]]:
         """This method implements the logic for presenting explainers, practice rounds,

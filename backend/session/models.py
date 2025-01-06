@@ -43,7 +43,7 @@ class Session(models.Model):
     def block_rules(self):
         """
         Returns:
-            (experiment.rules.Base) rules class to be used for this session
+            (experiment.rules.BaseRules) rules class to be used for this session
         """
         return self.block.get_rules()
 
