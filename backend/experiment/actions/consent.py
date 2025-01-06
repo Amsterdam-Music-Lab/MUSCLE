@@ -9,10 +9,8 @@ from typing import Literal
 
 from .base_action import BaseAction
 
-RenderFormat = Literal["HTML", "MARKDOWN"]
 
-
-def get_render_format(url: str) -> RenderFormat:
+def get_render_format(url: str) -> Literal["HTML", "MARKDOWN"]:
     """
     Detect markdown file based on file extension
 
@@ -28,12 +26,12 @@ def get_render_format(url: str) -> RenderFormat:
     return "HTML"
 
 
-def render_html_or_markdown(dry_text: str, render_format: RenderFormat) -> str:
+def render_html_or_markdown(dry_text: str, render_format: Literal["HTML", "MARKDOWN"]) -> str:
     """render html or markdown
 
     Args:
         dry_text (str): contents of a markdown or html file
-        render_format (RenderFormat): type of contents, either 'HTML' or 'MARKDOWN'
+        render_format (Literal["HTML", "MARKDOWN"]): type of contents, either 'HTML' or 'MARKDOWN'
 
     Returns:
         Content rendered to html.
