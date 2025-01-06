@@ -487,7 +487,7 @@ msgstr "IK WEET HET NIET"
 
 #: experiment/rules/duration_discrimination.py:29
 msgid "Duration discrimination"
-msgstr "%(title)slengteverschillen"
+msgstr "lengteverschillen"
 
 #: experiment/rules/duration_discrimination.py:30
 msgid "Interval"
@@ -534,7 +534,7 @@ msgstr ""
 #: experiment/rules/duration_discrimination.py:126
 #, python-format
 msgid "%(title)s %(task)s"
-msgstr ""
+msgstr "%(title)s %(task)s"
 
 #: experiment/rules/duration_discrimination.py:133
 msgid "Is the second interval EQUALLY LONG as the first interval or LONGER?"
