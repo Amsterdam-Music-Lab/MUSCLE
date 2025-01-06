@@ -1,4 +1,4 @@
-import { render, fireEvent } from '@testing-library/react';
+import { render } from '@testing-library/react';
 import AppBar from './AppBar';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { vi, describe, beforeEach, it, expect } from 'vitest';

@@ -1,7 +1,6 @@
 from os.path import join
 import random
 
-from django.conf import settings
 from django.utils.translation import gettext_lazy as _
 from django.template.loader import render_to_string
 

@@ -1,11 +1,10 @@
+import { Playlist as PlaylistAction } from "@/types/Action";
 import Block from "@/types/Block";
-import { MutableRefObject, useEffect } from "react";
+import { useEffect } from "react";
 
-export interface PlaylistProps {
+export interface PlaylistProps extends PlaylistAction {
     block: Block;
-    instruction: string;
     onNext: () => void;
-    playlist: MutableRefObject<string>;
 }
 
 /**

@@ -12,7 +12,7 @@ import MatchingPairs from "../MatchingPairs/MatchingPairs";
 import Preload from "../Preload/Preload";
 import { AUTOPLAY, BUTTON, IMAGE, MATCHINGPAIRS, MULTIPLAYER, PRELOAD, PlaybackArgs, PlaybackView } from "@/types/Playback";
 
-interface PlaybackProps {
+export interface PlaybackProps {
     playbackArgs: PlaybackArgs;
     onPreloadReady: () => void;
     autoAdvance: boolean;
@@ -238,11 +238,10 @@ const Playback = ({
                 return (
                     <MatchingPairs
                         {...attrs}
-                        // FIXME: stopAudioAfter is not a valid prop for MatchingPairs
-                        stopAudioAfter={playbackArgs.stop_audio_after}
                         showAnimation={playbackArgs.show_animation}
                         scoreFeedbackDisplay={playbackArgs.score_feedback_display}
                         view={playMethod === 'NOAUDIO' ? 'visual' : ''}
+                        tutorial={playbackArgs.tutorial}
                     />
                 );
             default:

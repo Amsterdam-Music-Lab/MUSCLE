@@ -2,11 +2,10 @@ import json
 import logging
 
 from django.http import Http404, HttpRequest, JsonResponse
-from django.conf import settings
-from django.utils.translation import activate, gettext_lazy as _, get_language
+from django.utils.translation import gettext_lazy as _, get_language
 from django_markup.markup import formatter
 
-from .models import Block, Experiment, Phase, Feedback, Session
+from .models import Block, Experiment, Feedback, Session
 from section.models import Playlist
 from experiment.serializers import (
     serialize_block,
@@ -15,7 +14,7 @@ from experiment.serializers import (
 )
 from experiment.rules import BLOCK_RULES
 from experiment.actions.utils import EXPERIMENT_KEY
-from image.serializers import serialize_image
+from participant.models import Participant
 from participant.utils import get_participant
 from theme.serializers import serialize_theme
 
@@ -88,7 +87,6 @@ def add_default_question_series(request, id):
 def get_experiment(
     request: HttpRequest,
     slug: str,
-    phase_index: int = 0,
 ) -> JsonResponse:
     """
     check which `Phase` objects are related to the `Experiment` with the given slug
@@ -111,31 +109,42 @@ def get_experiment(
 
     request.session[EXPERIMENT_KEY] = slug
     participant = get_participant(request)
-    language_code = get_language()[0:2]
 
-    translated_content = experiment.get_translated_content(language_code)
+    phases = list(experiment.phases.order_by("index").all())
+    if not len(phases):
+        return JsonResponse(
+            {"error": "This experiment does not have phases and blocks configured"},
+            status=500,
+        )
+    times_played_key = 'f"{slug}-xplayed"'
+    times_played = request.session.get(times_played_key, 0)
+    for phase in phases:
+        serialized_phase = serialize_phase(phase, participant, times_played)
+        if serialized_phase:
+            return JsonResponse(
+                {
+                    **serialize_experiment(experiment),
+                    **serialized_phase,
+                }
+            )
+    # if no phase was found, start from scratch with the minimum session count
+    request.session[times_played_key] = _get_min_session_count(experiment, participant)
+    return get_experiment(request, slug)
 
-    if not translated_content:
-        raise ValueError("No translated content found for this experiment")
 
-    experiment_language = translated_content.language
-    activate(experiment_language)
-
-    phases = list(Phase.objects.filter(experiment=experiment.id).order_by("index"))
-    try:
-        current_phase = phases[phase_index]
-        serialized_phase = serialize_phase(current_phase, participant)
-        if not serialized_phase:
-            # if the current phase is not a dashboard and has no unfinished blocks, it will return None
-            # set it to finished and continue to next phase
-            phase_index += 1
-            return get_experiment(request, slug, phase_index=phase_index)
-    except IndexError:
-        serialized_phase = {"dashboard": [], "next_block": None}
-
-    response = JsonResponse({**serialize_experiment(experiment, language_code), **serialized_phase})
-
-    return response
+def _get_min_session_count(experiment: Experiment, participant: Participant) -> int:
+    phases = experiment.phases.all()
+    session_counts = []
+    for phase in phases:
+        session_counts.extend(
+            [
+                Session.objects.exclude(finished_at__isnull=True)
+                .filter(block=block, participant=participant)
+                .count()
+                for block in phase.blocks.all()
+            ]
+        )
+    return min(session_counts)
 
 
 def get_associated_blocks(pk_list):

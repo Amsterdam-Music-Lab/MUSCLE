@@ -1,16 +1,8 @@
 import { useEffect } from "react";
 import Button from "../Button/Button";
+import { Explainer as ExplainerAction } from "@/types/Action";
 
-interface ExplainerStep {
-    number: number;
-    description: string;
-}
-
-export interface ExplainerProps {
-    instruction: string;
-    button_label: string;
-    steps?: Array<ExplainerStep>;
-    timer: number | null;
+export interface ExplainerProps extends ExplainerAction {
     onNext: () => void;
 }
 

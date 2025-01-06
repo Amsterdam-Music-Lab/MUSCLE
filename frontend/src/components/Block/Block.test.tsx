@@ -42,7 +42,7 @@ vi.mock('../../API', () => ({
 
 vi.mock('../../util/stores', () => ({
     __esModule: true,
-    default: (fn) => {
+    default: (fn: any) => {
         const state = {
             session: mockSessionStore,
             participant: mockParticipantStore,
@@ -51,6 +51,7 @@ vi.mock('../../util/stores', () => ({
             setHeadData: vi.fn(),
             resetHeadData: vi.fn(),
             setBlock: vi.fn(),
+            setCurrentAction: vi.fn(),
         };
 
         return fn(state);
