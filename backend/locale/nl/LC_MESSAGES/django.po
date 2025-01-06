@@ -1047,18 +1047,16 @@ msgid "We will now practice first."
 msgstr "We gaan nu eerst oefenen."
 
 #: experiment/rules/practice.py:169
-#, fuzzy, python-format
-#| msgid "First you will hear 4 practice trials."
 msgid "First you will hear %(n_practice_rounds)d practice trials."
-msgstr "Je krijgt 4 oefentrials te horen."
+msgstr "Je krijgt %(n_practice_rounds)d oefentrials te horen."
 
 #: experiment/rules/practice.py:174
 msgid "Begin experiment"
 msgstr ""
 
 #: experiment/rules/practice.py:185
-msgid "You have answered %(n_correct)s or more practice trials incorrectly."
-msgstr ""
+msgid "You have answered %(n_correct)d or more practice trials incorrectly."
+msgstr "Je hebt %(n_correct)d of meer oefentrials incorrect beantwoord."
 
 #: experiment/rules/practice.py:189
 msgid "We will therefore practice again."

@@ -182,7 +182,7 @@ class PracticeMixin(object):
         """
         return Explainer(
             instruction=_(
-                "You have answered %(n_correct)s or more practice trials incorrectly."
+                "You have answered %(n_correct)d or more practice trials incorrectly."
             )
             % {"n_correct": self.n_correct},
             steps=[
