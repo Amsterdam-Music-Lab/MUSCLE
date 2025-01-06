@@ -13,7 +13,7 @@ div[data-inline-model="experiment-block"] {
     }
 }
 
-div[id*="translated_contents-group"]{
+div[data-inline-model="experiment-blocktranslatedcontent"], div[data-inline-model="question-questionseries"]{
     margin-left: 0px !important;
 
     h2, th {

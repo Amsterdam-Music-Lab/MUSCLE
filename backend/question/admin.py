@@ -1,10 +1,20 @@
 from django.contrib import admin
 from django.db import models
-from question.models import Question, QuestionGroup, QuestionSeries, QuestionInSeries, Choice
+
 from django.forms import CheckboxSelectMultiple
+
+from nested_admin import NestedTabularInline
+from modeltranslation.admin import TabbedTranslationAdmin, TranslationTabularInline
+
+from question.models import (
+    Question,
+    QuestionGroup,
+    QuestionSeries,
+    QuestionInSeries,
+    Choice,
+)
 from experiment.forms import QuestionSeriesAdminForm
 from question.forms import QuestionForm
-from modeltranslation.admin import TabbedTranslationAdmin, TranslationTabularInline
 
 
 class QuestionInSeriesInline(admin.TabularInline):
@@ -12,10 +22,13 @@ class QuestionInSeriesInline(admin.TabularInline):
     extra = 0
 
 
-class QuestionSeriesInline(admin.TabularInline):
+class QuestionSeriesInline(NestedTabularInline):
     model = QuestionSeries
     extra = 0
     show_change_link = True
+
+    template = 'admin/question_series.html'
+
 
 class ChoiceInline(TranslationTabularInline):
     model = Choice

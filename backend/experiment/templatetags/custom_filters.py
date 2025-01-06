@@ -9,3 +9,8 @@ def get_langcode(formset):
     for obj in formset.formset.queryset:
         langcodes.append(obj.language)
     return langcodes
+
+
+@register.filter(name="get_block_slug")
+def get_block_slug(formset):
+    return formset.instance.slug

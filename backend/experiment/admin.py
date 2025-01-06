@@ -264,7 +264,7 @@ class BlockAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
 
 class BlockInline(NestedStackedInline):
     model = Block
-    inlines = [BlockTranslatedContentInline]
+    inlines = [BlockTranslatedContentInline, QuestionSeriesInline]
     form = BlockForm
     classes = ["collapse", "wide"]
 
@@ -315,12 +315,6 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, NestedModelAdmin):
         PhaseInline,
         SocialMediaConfigInline,
     ]
-
-    # def save_formset(self, request, form, formset, change):
-    #     if formset.model == Phase:
-    #         for form in formset.forms:
-
-    #     super().save_formset(request, form, formset, change)
 
     class Media:
         css = {"all": ("experiment_admin.css",)}
