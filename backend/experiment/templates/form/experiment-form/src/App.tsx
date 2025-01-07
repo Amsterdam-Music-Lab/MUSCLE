@@ -11,18 +11,18 @@ import Login from './components/Login';
 import { useState } from 'react';
 import { FiLogOut } from 'react-icons/fi';
 import { Toasts } from './components/Toasts';
+import useBoundStore from "./utils/store";
 
 function App() {
   const [isCollapsed, setIsCollapsed] = useState(false);
-  const [jwt, setJwt] = useState<string | null>(localStorage.getItem('jwt'));
+  const jwt = useBoundStore(state => state.jwt);
+  const setJwt = useBoundStore(state => state.setJwt);
 
   const handleLogin = (newJwt: string) => {
-    localStorage.setItem('jwt', newJwt);
     setJwt(newJwt);
   };
 
   const handleLogout = () => {
-    localStorage.removeItem('jwt');
     setJwt(null);
   };
 

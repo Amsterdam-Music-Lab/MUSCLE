@@ -7,6 +7,7 @@ import { Experiment, Phase, TranslatedContent } from "../types/types";
 import React from "react";
 import { Flag } from "./Flag";
 import { Link } from "react-router-dom";
+import useBoundStore from "../utils/store";
 
 const url = createEntityUrl('experiments');
 
@@ -40,6 +41,7 @@ const LanguagePills: React.FC<{ translations: TranslatedContent[] }> = ({ transl
 };
 
 const ExperimentsOverview = () => {
+  const jwt = useBoundStore(state => state.jwt);
   const [experiments, error, loading, fetchData] = useFetch<Experiment[]>(url);
   const handleDelete = async (id: number) => {
     if (window.confirm('Are you sure you want to delete this experiment?')) {
@@ -59,10 +61,12 @@ const ExperimentsOverview = () => {
   const loadingClass = loading ? 'opacity-50 pointer-events-none' : '';
 
   async function onCreateExperiment() {
+
     const response = await fetch(url, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        Authorization: `Bearer ${jwt}`,
       },
       body: JSON.stringify({ slug: 'new-experiment', active: false }),
     });

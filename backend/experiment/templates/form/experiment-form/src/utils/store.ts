@@ -20,6 +20,23 @@ const createExperimentSlice: StateCreator<ExperimentSlice> = (set) => ({
   })
 });
 
+interface AuthSlice {
+  jwt: string | null;
+  setJwt: (jwt: string | null) => void;
+}
+
+const createAuthSlice: StateCreator<AuthSlice> = (set) => ({
+  jwt: localStorage.getItem("jwt"),
+  setJwt: (jwt) => {
+    if (jwt) {
+      localStorage.setItem("jwt", jwt);
+    } else {
+      localStorage.removeItem("jwt");
+    }
+    set(() => ({ jwt }));
+  },
+});
+
 export interface Toast {
   message: string;
   duration: number;
@@ -43,10 +60,11 @@ const createToastsSlice: StateCreator<ToastsSlice> = (set) => ({
 });
 
 export const useBoundStore = create<
-  ExperimentSlice & ToastsSlice
+  ExperimentSlice & ToastsSlice & AuthSlice
 >((...args) => ({
   ...createExperimentSlice(...args),
   ...createToastsSlice(...args),
+  ...createAuthSlice(...args),
 }));
 
 export default useBoundStore;
