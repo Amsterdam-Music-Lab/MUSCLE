@@ -3,7 +3,6 @@ import { TranslatedContent } from "../types/types";
 import { FormField } from "./form/FormField";
 import { Input } from "./form/Input";
 import { Select } from "./form/Select";
-import { Textarea } from "./form/Textarea";
 import { MarkdownEditor } from "./form/MarkdownEditor";
 
 interface TranslatedContentProps {
@@ -42,10 +41,11 @@ export function TranslatedContentForm({ content, onChange }: TranslatedContentPr
         </div>
 
         <FormField label="Description">
-          <Textarea
+          <MarkdownEditor
             value={content.description}
-            onChange={(e) => onChange({ ...content, description: e.target.value })}
+            onChange={(value) => onChange({ ...content, description: value })}
             rows={3}
+            field="Description"
           />
         </FormField>
 
@@ -54,6 +54,7 @@ export function TranslatedContentForm({ content, onChange }: TranslatedContentPr
             value={content.about_content}
             onChange={(value) => onChange({ ...content, about_content: value })}
             rows={8}
+            field="About Content"
           />
         </FormField>
 

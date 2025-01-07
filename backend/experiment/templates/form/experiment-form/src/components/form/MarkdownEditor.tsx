@@ -6,10 +6,13 @@ interface MarkdownEditorProps {
   value: string;
   onChange: (value: string) => void;
   rows?: number;
+  field?: string;
 }
 
-export function MarkdownEditor({ value, onChange, rows = 10 }: MarkdownEditorProps) {
+export function MarkdownEditor({ field, value, onChange, rows = 10 }: MarkdownEditorProps) {
   const [isPreview, setIsPreview] = useState(false);
+
+  const placeholder = `# ${field ? field : 'Markdown input'}\n\n**Write your _markdown_ content here...**`;
 
   return (
     <div className="relative group">
@@ -42,7 +45,7 @@ export function MarkdownEditor({ value, onChange, rows = 10 }: MarkdownEditorPro
           onChange={(e) => onChange(e.target.value)}
           rows={rows}
           className="w-full p-2 border rounded-md"
-          placeholder="Write your markdown here..."
+          placeholder={placeholder}
         />
       )}
     </div>
