@@ -8,7 +8,7 @@ from result.utils import prepare_result
 from session.models import Session
 
 
-class NewBlockRuleset(Base):
+class NewBlockRuleset(BaseRules):
     ''' A block type that could be used to test musical preferences '''
     ID = 'NEW_BLOCK_RULESET'
     contact_email = 'info@example.com'

@@ -9,7 +9,7 @@ from experiment.actions import Explainer, Step, Score, Final, Playlist, Info, Tr
 from experiment.actions.playback import PlayButton
 from experiment.actions.form import AutoCompleteQuestion, RadiosQuestion, Form
 from experiment.actions.utils import get_current_experiment_url
-from .base import Base
+from .base import BaseRules
 from experiment.utils import non_breaking_spaces
 from result.utils import prepare_result
 from section.models import Playlist, Section
@@ -18,7 +18,7 @@ from session.models import Session
 logger = logging.getLogger(__name__)
 
 
-class ToontjeHoger3Plink(Base):
+class ToontjeHoger3Plink(BaseRules):
     ID = 'TOONTJE_HOGER_3_PLINK'
     TITLE = ""
     SCORE_MAIN_CORRECT = 10

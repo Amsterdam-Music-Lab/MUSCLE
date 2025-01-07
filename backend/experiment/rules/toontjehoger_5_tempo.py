@@ -12,7 +12,7 @@ from experiment.actions.styles import STYLE_NEUTRAL_INVERTED
 from experiment.actions.utils import get_current_experiment_url
 from section.models import Playlist
 from session.models import Session
-from .base import Base
+from .base import BaseRules
 from experiment.utils import create_player_labels, non_breaking_spaces
 
 from result.utils import prepare_result
@@ -20,7 +20,7 @@ from result.utils import prepare_result
 logger = logging.getLogger(__name__)
 
 
-class ToontjeHoger5Tempo(Base):
+class ToontjeHoger5Tempo(BaseRules):
     ID = "TOONTJE_HOGER_5_TEMPO"
     TITLE = ""
     SCORE_CORRECT = 20

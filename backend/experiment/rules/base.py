@@ -15,7 +15,7 @@ from session.models import Session
 logger = logging.getLogger(__name__)
 
 
-class Base(object):
+class BaseRules(object):
     """Base class for other rules classes"""
 
     contact_email = settings.CONTACT_MAIL

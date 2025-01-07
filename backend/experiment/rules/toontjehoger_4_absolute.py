@@ -13,14 +13,14 @@ from experiment.actions.playback import Multiplayer
 from experiment.actions.styles import STYLE_NEUTRAL_INVERTED
 from experiment.actions.utils import get_current_experiment_url
 from experiment.utils import create_player_labels
-from .base import Base
+from .base import BaseRules
 from result.utils import prepare_result
 from session.models import Session
 
 logger = logging.getLogger(__name__)
 
 
-class ToontjeHoger4Absolute(Base):
+class ToontjeHoger4Absolute(BaseRules):
     ID = 'TOONTJE_HOGER_4_ABSOLUTE'
     TITLE = ""
     SCORE_CORRECT = 20

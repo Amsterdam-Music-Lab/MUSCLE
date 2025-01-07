@@ -10,12 +10,12 @@ from experiment.actions import Explainer, Score, Trial, Final
 from experiment.actions.wrappers import two_alternative_forced
 from session.models import Session
 
-from .base import Base
+from .base import BaseRules
 
 SCORE_AVG_MIN_TRAINING = 0.8
 
 
-class Categorization(Base):
+class Categorization(BaseRules):
     ID = "CATEGORIZATION"
     default_consent_file = "consent/consent_categorization.html"
 

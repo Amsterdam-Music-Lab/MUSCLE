@@ -11,14 +11,14 @@ from experiment.actions.styles import STYLE_NEUTRAL_INVERTED
 from experiment.actions.frontend_style import FrontendStyle, EFrontendStyle
 from experiment.actions.utils import get_current_experiment_url
 from experiment.utils import create_player_labels
-from .base import Base
+from .base import BaseRules
 from result.utils import prepare_result
 from section.models import Playlist
 
 logger = logging.getLogger(__name__)
 
 
-class ToontjeHoger2Preverbal(Base):
+class ToontjeHoger2Preverbal(BaseRules):
     ID = 'TOONTJE_HOGER_2_PREVERBAL'
     TITLE = ""
     SCORE_CORRECT = 50

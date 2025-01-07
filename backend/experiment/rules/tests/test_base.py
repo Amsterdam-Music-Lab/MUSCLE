@@ -3,10 +3,10 @@ from experiment.models import Block
 from session.models import Session
 from participant.models import Participant
 from section.models import Playlist
-from ..base import Base
+from ..base import BaseRules
 
 
-class BaseTest(TestCase):
+class BaseRulesTest(TestCase):
     def test_get_play_again_url(self):
         block = Block.objects.create(
             slug="music-lab",
@@ -15,7 +15,7 @@ class BaseTest(TestCase):
             block=block,
             participant=Participant.objects.create(),
         )
-        base = Base()
+        base = BaseRules()
         play_again_url = base.get_play_again_url(session)
         self.assertEqual(play_again_url, "/block/music-lab")
 
@@ -30,12 +30,12 @@ class BaseTest(TestCase):
             block=block,
             participant=participant,
         )
-        base = Base()
+        base = BaseRules()
         play_again_url = base.get_play_again_url(session)
         self.assertEqual(play_again_url, "/block/music-lab?participant_id=42")
 
     def test_validate_playlist(self):
-        base = Base()
+        base = BaseRules()
         playlist = None
         errors = base.validate_playlist(playlist)
         self.assertEqual(errors, ["The block must have a playlist."])

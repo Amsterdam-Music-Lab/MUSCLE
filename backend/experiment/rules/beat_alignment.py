@@ -3,7 +3,7 @@ import copy
 
 from django.utils.translation import gettext_lazy as _
 
-from .base import Base
+from .base import BaseRules
 from experiment.actions import Trial, Explainer, Step
 from experiment.actions.form import ChoiceQuestion, Form
 from experiment.actions.playback import Autoplay
@@ -14,7 +14,7 @@ from section.models import Playlist
 logger = logging.getLogger(__name__)
 
 
-class BeatAlignment(Base):
+class BeatAlignment(BaseRules):
     """Rules for the beat alignment test by Mullensiefen et al. (2014)"""
 
     ID = 'BEAT_ALIGNMENT'
@@ -112,7 +112,7 @@ class BeatAlignment(Base):
         """Get next section for given session"""
         filter_by = {'tag': '0'}
         section = session.playlist.get_section(filter_by, song_ids=session.get_unused_song_ids())
-        condition = section.song.name.split('_')[-1][:-4]
+        condition = section.song.name.split('_')[-1]
         expected_response = 'ON' if condition == 'on' else 'OFF'
         key = 'aligned'
         question = ChoiceQuestion(
