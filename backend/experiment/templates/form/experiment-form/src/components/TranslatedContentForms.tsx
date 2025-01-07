@@ -1,11 +1,6 @@
 import React, { useEffect } from 'react';
-import { ISO_LANGUAGES } from '../constants';
 import { Tabs } from './Tabs';
 import { FiPlus, FiTrash } from 'react-icons/fi';
-import { FormField } from './form/FormField';
-import { Input } from './form/Input';
-import { Select } from './form/Select';
-import { Textarea } from './form/Textarea';
 import { TranslatedContent } from '../types/types';
 import { Flag } from './Flag';
 import { useNavigate, useParams } from 'react-router-dom';

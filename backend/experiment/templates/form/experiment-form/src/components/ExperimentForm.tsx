@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { createEntityUrl } from '../config';
-import { useNavigate, useParams, Routes, Route, useLocation, Navigate } from 'react-router-dom';
+import { useNavigate, useParams, Routes, Route, useLocation } from 'react-router-dom';
 import Page from './Page';
 import { TranslatedContentForms } from './TranslatedContentForms';
 import { FiSave, FiArrowLeft, FiGlobe, FiLayers } from 'react-icons/fi';
@@ -26,8 +26,8 @@ interface UnsavedChanges {
 const ExperimentForm: React.FC<ExperimentFormProps> = () => {
   const { id: experimentId } = useParams<{ id: string }>();
   const url = createEntityUrl('experiments', experimentId);
-  const [experimentResource, error, loading, fetchData] = useFetch(url, 'GET', null);
-  const [saveExperiment, { loading: saveLoading, error: saveError }] = useMutation<Experiment>(
+  const [experimentResource, error, loading] = useFetch(url, 'GET', null);
+  const [saveExperiment, { loading: saveLoading }] = useMutation<Experiment>(
     url,
     experimentId ? 'PUT' : 'POST'
   );

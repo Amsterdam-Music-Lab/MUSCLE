@@ -4,7 +4,7 @@ import { PhaseForm } from './PhaseForm';
 import { Timeline } from './Timeline';
 import { BlockForm } from './BlockForm';
 import useBoundStore from '../utils/store';
-import { useNavigate, useParams, useLocation, Routes, Route, Navigate } from 'react-router-dom';
+import { useNavigate, useParams, useLocation, Routes, Route } from 'react-router-dom';
 import { Button } from './Button';
 import { FiPlus } from 'react-icons/fi';
 
@@ -25,7 +25,7 @@ export const PhasesForm: React.FC<PhasesFormProps> = ({ phases, onChange }) => {
   const [timelineSelection, setTimelineSelection] = useState<Selection | null>(null);
   const navigate = useNavigate();
   const params = useParams();
-  const { id: experimentId, phaseIndex, blockIndex } = params;
+  const { id: experimentId } = params;
   const location = useLocation();
 
 
@@ -95,7 +95,7 @@ export const PhasesForm: React.FC<PhasesFormProps> = ({ phases, onChange }) => {
       if (!experiment) return;
 
       const experimentSlug = experiment.slug;
-      let blockSlugArray: [string, number, number] = [experimentSlug, phaseIndex, position];
+      const blockSlugArray: [string, number, number] = [experimentSlug, phaseIndex, position];
       let blockSlug = blockSlugArray.join('-');
 
       // Check if block slug already exists in the experiment
