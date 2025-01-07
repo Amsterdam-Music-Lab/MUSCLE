@@ -64,7 +64,7 @@ class HBat(BaseRules, PracticeMixin):
         if not last_result:
             return 1
         else:
-            current_difficulty = last_result.section.group
+            current_difficulty = int(last_result.section.group)
             if last_result.json_data.get("difficulty") == "decrease":
                 return current_difficulty - 1
             elif last_result.json_data.get("difficulty") == "increase":
