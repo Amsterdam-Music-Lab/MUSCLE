@@ -1,21 +1,19 @@
 import { ISO_LANGUAGES } from "../constants";
-import { TranslatedContent } from "../types/types";
+import { BlockTranslatedContent } from "../types/types";
 import { FormField } from "./form/FormField";
 import { Input } from "./form/Input";
 import { Select } from "./form/Select";
 import { MarkdownEditor } from "./form/MarkdownEditor";
 
-interface TranslatedContentProps {
-  content: TranslatedContent;
-  onChange: (content: TranslatedContent) => void;
+interface BlockTranslatedContentFormProps {
+  content: BlockTranslatedContent;
+  onChange: (content: BlockTranslatedContent) => void;
 }
 
-export function TranslatedContentForm({ content, onChange }: TranslatedContentProps) {
-
+export function BlockTranslatedContentForm({ content, onChange }: BlockTranslatedContentFormProps) {
   return (
     <div className='p-5 bg-gray-50'>
       <div className="p-5 bg-white border rounded-md space-y-5">
-
         <div className="grid sm:grid-cols-2 gap-5">
           <FormField label="Language">
             <Select
@@ -49,24 +47,7 @@ export function TranslatedContentForm({ content, onChange }: TranslatedContentPr
             field="Description"
           />
         </FormField>
-
-        <FormField label="About Content">
-          <MarkdownEditor
-            value={content.about_content}
-            onChange={(value) => onChange({ ...content, about_content: value })}
-            rows={8}
-            field="About Content"
-          />
-        </FormField>
-
-        <FormField label="Social Media Message">
-          <Input
-            type="text"
-            value={content.social_media_message}
-            onChange={(e) => onChange({ ...content, social_media_message: e.target.value })}
-          />
-        </FormField>
-      </div>
-    </div>
+      </div >
+    </div >
   );
 }

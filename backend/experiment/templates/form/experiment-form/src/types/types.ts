@@ -8,6 +8,13 @@ export interface TranslatedContent {
   social_media_message: string;
 }
 
+export interface BlockTranslatedContent {
+  index: number;
+  language: string;
+  name: string;
+  description: string;
+}
+
 export interface Block {
   id?: number;
   index: number;
@@ -16,6 +23,7 @@ export interface Block {
   bonus_points: number;
   rules: string;
   phase?: number;  // Make phase optional
+  translated_contents: BlockTranslatedContent[];  // Changed from translated_content
 }
 
 export interface Phase {

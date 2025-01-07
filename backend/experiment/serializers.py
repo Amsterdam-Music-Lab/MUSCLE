@@ -11,7 +11,7 @@ from participant.models import Participant
 from result.models import Result
 from session.models import Session
 from theme.serializers import serialize_theme
-from .models import Block, Experiment, Phase, SocialMediaConfig, ExperimentTranslatedContent
+from .models import Block, Experiment, Phase, SocialMediaConfig, ExperimentTranslatedContent, BlockTranslatedContent
 
 
 class ExperimentTranslatedContentSerializer(serializers.ModelSerializer):
@@ -20,8 +20,15 @@ class ExperimentTranslatedContentSerializer(serializers.ModelSerializer):
         fields = ["id", "index", "language", "name", "description", "about_content", "social_media_message"]
 
 
+class BlockTranslatedContentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = BlockTranslatedContent
+        fields = ["language", "name", "description"]
+
+
 class BlockSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(required=False)
+    translated_contents = BlockTranslatedContentSerializer(many=True, required=False, read_only=False)
 
     class Meta:
         model = Block
@@ -32,10 +39,35 @@ class BlockSerializer(serializers.ModelSerializer):
             "rounds",
             "bonus_points",
             "rules",
+            "translated_contents",
         ]
         extra_kwargs = {
             "slug": {"validators": []},
         }
+
+    def create(self, validated_data):
+        translated_contents_data = validated_data.pop("translated_contents", [])
+        block = Block.objects.create(**validated_data)
+
+        for content_data in translated_contents_data:
+            BlockTranslatedContent.objects.create(block=block, **content_data)
+
+        return block
+
+    def update(self, instance, validated_data):
+        translated_contents_data = validated_data.pop("translated_contents", [])
+
+        # Update block fields
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+        instance.save()
+
+        # Clear existing translated contents and create new ones
+        BlockTranslatedContent.objects.filter(block=instance).delete()
+        for content_data in translated_contents_data:
+            BlockTranslatedContent.objects.create(block=instance, **content_data)
+
+        return instance
 
 
 class PhaseSerializer(serializers.ModelSerializer):

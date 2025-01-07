@@ -6,6 +6,7 @@ import { Block } from '../types/types';
 import { useBlockRules } from '../hooks/useBlockRules';
 import { FiTrash2 } from 'react-icons/fi';
 import { Button } from './Button';
+import { BlockTranslatedContentForms } from './BlockTranslatedContentForms';
 
 interface BlockFormProps {
   block: Block;
@@ -16,7 +17,7 @@ interface BlockFormProps {
 export const BlockForm: React.FC<BlockFormProps> = ({ block, onChange, onDelete }) => {
   const { rules, loading, error } = useBlockRules();
 
-  const handleChange = (field: keyof Block, value: string | number) => {
+  const handleChange = (field: keyof Block, value: string | number | BlockTranslatedContent[]) => {
     onChange({ ...block, [field]: value });
   };
 
@@ -91,6 +92,11 @@ export const BlockForm: React.FC<BlockFormProps> = ({ block, onChange, onDelete 
           {loading && <p className="text-gray-500 text-sm mt-1">Loading rules...</p>}
         </FormField>
       </div>
+
+      <BlockTranslatedContentForms
+        contents={block.translated_contents || []}  // Changed from translated_content
+        onChange={(contents) => handleChange('translated_contents', contents)}  // Changed from translated_content
+      />
     </div>
   );
 };
