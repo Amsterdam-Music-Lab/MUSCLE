@@ -516,6 +516,8 @@ class ExperimentTranslatedContent(models.Model):
         consent (FileField): Consent text markdown or html
         about_content (str): About text
         social_media_message (str): Message to post with on social media. Can contain {points} and {experiment_name} placeholders
+        disclaimer (str): Disclaimer text
+        privacy (str): Privacy statement text
     """
 
     experiment = models.ForeignKey(Experiment, on_delete=models.CASCADE, related_name="translated_content")
@@ -532,6 +534,8 @@ class ExperimentTranslatedContent(models.Model):
         help_text=_("Content for social media sharing. Use {points} and {experiment_name} as placeholders."),
         default="I scored {points} points in {experiment_name}!",
     )
+    disclaimer = models.TextField(blank=True, default='')
+    privacy = models.TextField(blank=True, default='')
 
 
 class BlockTranslatedContent(models.Model):
