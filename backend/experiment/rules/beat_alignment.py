@@ -112,7 +112,7 @@ class BeatAlignment(BaseRules):
         """Get next section for given session"""
         filter_by = {'tag': '0'}
         section = session.playlist.get_section(filter_by, song_ids=session.get_unused_song_ids())
-        condition = section.song.name.split('_')[-1][:-4]
+        condition = section.song.name.split('_')[-1]
         expected_response = 'ON' if condition == 'on' else 'OFF'
         key = 'aligned'
         question = ChoiceQuestion(
