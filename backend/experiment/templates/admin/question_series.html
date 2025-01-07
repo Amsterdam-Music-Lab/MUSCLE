@@ -142,22 +142,3 @@
 {% endwith %}{# ends with inline_admin_formset.opts as inline_opts #}
 
 {% endwith %}{# ends {% with inline_admin_formset.formset.is_nested as is_nested %} #}
-
-
-
-<script>
-    let buttonAddDefaultQuestions = document.getElementById('default-questions');
-    buttonAddDefaultQuestions.addEventListener("click", addDefaultQuestions);
-
-    async function addDefaultQuestions(event) {
-        const slug = event.currentTarget.name;
-
-        const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
-        let response = await fetch(`/experiment/block/${slug}/default_question_series/`,
-            { method: "POST", mode: 'same-origin', headers: { 'X-CSRFToken': csrftoken } })
-
-        if (response.ok) {
-            location.reload();
-        }
-    }
-</script>

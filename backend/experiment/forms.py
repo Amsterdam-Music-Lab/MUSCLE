@@ -314,7 +314,7 @@ class BlockForm(ModelForm):
 
     class Media:
         css = {"all": ["block_admin.css"]}
-        # js = ["block_admin.js"]
+        js = ["block_admin.js"]
 
 
 class ExportForm(Form):
@@ -328,11 +328,6 @@ class ExportForm(Form):
 
 class TemplateForm(Form):
     select_template = ChoiceField(widget=Select, choices=TEMPLATE_CHOICES)
-
-
-class QuestionSeriesAdminForm(ModelForm):
-    class Media:
-        js = ["questionseries_admin.js"]
 
 
 class SocialMediaConfigForm(ModelForm):

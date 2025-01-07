@@ -25,3 +25,12 @@ div[data-inline-model="experiment-blocktranslatedcontent"], div[data-inline-mode
         background-color: var(--breadcrumbs-fg) !important;
     }
 }
+
+select[id*="questioninseries_set"] {
+    width: 500px;
+}
+
+#default-questions {
+    height: 30px;
+    background-color: var(--breadcrumbs-fg);
+}
