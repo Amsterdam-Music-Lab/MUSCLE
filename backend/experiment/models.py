@@ -227,6 +227,12 @@ class Block(models.Model):
     theme_config = models.ForeignKey(ThemeConfig, on_delete=models.SET_NULL, blank=True, null=True)
 
     def __str__(self):
+        # If this block is unsaved or being deleted (has no PK),
+        # avoid calling get_fallback_content() (which does a DB query).
+        if not self.pk:
+            # Provide a fallback label or just return self.slug if present.
+            return self.slug or "Deleted/Unsaved Block"
+
         content = self.get_fallback_content()
         return content.name if content and content.name else self.slug
 
@@ -449,10 +455,6 @@ class Block(models.Model):
         Returns:
             Fallback content
         """
-
-        # If the block is not saved yet or is being deleted, there is no fallback content
-        if not self.pk:
-            return None
 
         if not self.phase or self.phase.experiment:
             return self.translated_contents.first()
