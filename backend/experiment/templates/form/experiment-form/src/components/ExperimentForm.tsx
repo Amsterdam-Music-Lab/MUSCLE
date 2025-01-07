@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { createEntityUrl } from '../config';
+import { createExperimentEntityUrl } from '../config';
 import { useNavigate, useParams, Routes, Route, useLocation } from 'react-router-dom';
 import Page from './Page';
 import { TranslatedContentForms } from './TranslatedContentForms';
@@ -25,7 +25,7 @@ interface UnsavedChanges {
 
 const ExperimentForm: React.FC<ExperimentFormProps> = () => {
   const { id: experimentId } = useParams<{ id: string }>();
-  const url = createEntityUrl('experiments', experimentId);
+  const url = createExperimentEntityUrl('experiments', experimentId);
   const [experimentResource, error, loading] = useFetch(url, 'GET', null);
   const [saveExperiment, { loading: saveLoading }] = useMutation<Experiment>(
     url,

@@ -1,4 +1,4 @@
-import { createEntityUrl } from "../config";
+import { createExperimentEntityUrl } from "../config";
 import useFetch from "../hooks/useFetch";
 import { Button } from "./Button";
 import Page from "./Page";
@@ -9,7 +9,7 @@ import { Flag } from "./Flag";
 import { Link } from "react-router-dom";
 import useBoundStore from "../utils/store";
 
-const url = createEntityUrl('experiments');
+const url = createExperimentEntityUrl('experiments');
 
 const PhasesPills: React.FC<{ phases: Phase[] }> = ({ phases }) => {
   return (
@@ -46,7 +46,7 @@ const ExperimentsOverview = () => {
   const handleDelete = async (id: number) => {
     if (window.confirm('Are you sure you want to delete this experiment?')) {
       try {
-        await fetch(createEntityUrl('experiments', id.toString()), {
+        await fetch(createExperimentEntityUrl('experiments', id.toString()), {
           method: 'DELETE',
         });
         // Refresh the page or update the list

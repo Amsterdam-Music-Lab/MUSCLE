@@ -12,6 +12,7 @@ from result.models import Result
 from session.models import Session
 from theme.serializers import serialize_theme
 from .models import Block, Experiment, Phase, SocialMediaConfig, ExperimentTranslatedContent, BlockTranslatedContent
+from section.models import Playlist
 
 
 class ExperimentTranslatedContentSerializer(serializers.ModelSerializer):
@@ -26,9 +27,16 @@ class BlockTranslatedContentSerializer(serializers.ModelSerializer):
         fields = ["language", "name", "description"]
 
 
+class PlaylistSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Playlist
+        fields = ["id", "name"]
+
+
 class BlockSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(required=False)
     translated_contents = BlockTranslatedContentSerializer(many=True, required=False, read_only=False)
+    playlists = PlaylistSerializer(many=True, required=False)
 
     class Meta:
         model = Block
@@ -40,6 +48,7 @@ class BlockSerializer(serializers.ModelSerializer):
             "bonus_points",
             "rules",
             "translated_contents",
+            "playlists",  # many to many field
         ]
         extra_kwargs = {
             "slug": {"validators": []},
@@ -57,12 +66,10 @@ class BlockSerializer(serializers.ModelSerializer):
     def update(self, instance, validated_data):
         translated_contents_data = validated_data.pop("translated_contents", [])
 
-        # Update block fields
         for attr, value in validated_data.items():
             setattr(instance, attr, value)
         instance.save()
 
-        # Clear existing translated contents and create new ones
         BlockTranslatedContent.objects.filter(block=instance).delete()
         for content_data in translated_contents_data:
             BlockTranslatedContent.objects.create(block=instance, **content_data)

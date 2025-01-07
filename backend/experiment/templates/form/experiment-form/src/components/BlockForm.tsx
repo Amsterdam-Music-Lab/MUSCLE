@@ -2,11 +2,12 @@ import React from 'react';
 import { FormField } from './form/FormField';
 import { Input } from './form/Input';
 import { Select } from './form/Select';
-import { Block } from '../types/types';
+import { Block, BlockTranslatedContent } from '../types/types';
 import { useBlockRules } from '../hooks/useBlockRules';
 import { FiTrash2 } from 'react-icons/fi';
 import { Button } from './Button';
 import { BlockTranslatedContentForms } from './BlockTranslatedContentForms';
+import { useBlockPlaylists } from '../hooks/useBlockPlaylists';
 
 interface BlockFormProps {
   block: Block;
@@ -16,6 +17,7 @@ interface BlockFormProps {
 
 export const BlockForm: React.FC<BlockFormProps> = ({ block, onChange, onDelete }) => {
   const { rules, loading, error } = useBlockRules();
+  const { playlists, loading: playlistsLoading, error: playlistsError } = useBlockPlaylists();
 
   const handleChange = (field: keyof Block, value: string | number | BlockTranslatedContent[]) => {
     onChange({ ...block, [field]: value });
