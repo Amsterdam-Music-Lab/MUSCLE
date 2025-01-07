@@ -44,6 +44,22 @@ class BlockModelTest(TestCase):
         block = Block.objects.get(slug="test-block")
         self.assertEqual(str(block), "Test Block")
 
+    def test_block_str_without_content(self):
+        block_no_content = Block.objects.create(slug="test-block-no-content")
+        self.assertEqual(str(block_no_content), "test-block-no-content")
+
+    def test_block_str_without_pk(self):
+        block_no_pk = Block.objects.create()
+        BlockTranslatedContent.objects.create(
+            block=block_no_pk,
+            language="en",
+            name="Not yet deleted test block",
+            description="Deleted test block description",
+        )
+        self.assertEqual(str(block_no_pk), "Not yet deleted test block")
+        block_no_pk.delete()
+        self.assertEqual(str(block_no_pk), "Deleted/Unsaved Block")
+
     def test_block_session_count(self):
         block = Block.objects.get(slug="test-block")
         self.assertEqual(block.session_count(), 0)
