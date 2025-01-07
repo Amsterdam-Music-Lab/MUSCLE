@@ -7,6 +7,7 @@ interface ToastProps {
 export const Toast: React.FC<ToastProps> = ({ toast }) => {
   const bgColorClass = {
     info: 'bg-gray-800',
+    success: 'bg-green-600',
     warning: 'bg-yellow-600',
     error: 'bg-red-600'
   }[toast.level];

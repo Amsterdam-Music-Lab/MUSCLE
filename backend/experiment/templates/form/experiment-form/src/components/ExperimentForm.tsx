@@ -92,7 +92,7 @@ const ExperimentForm: React.FC<ExperimentFormProps> = () => {
       addToast({
         message: "Experiment saved successfully!",
         duration: 3000,
-        level: "info"
+        level: "success"
       });
     } catch (err) {
       addToast({
@@ -161,10 +161,6 @@ const ExperimentForm: React.FC<ExperimentFormProps> = () => {
       </Button>
 
       <form onSubmit={handleSubmit} className="bg-white shadow-md rounded p-5 space-y-5 max-w-5xl">
-        {error && <div className="text-red-600 mb-4">{error}</div>}
-        {success && <div className="text-green-600 mb-4">Saved successfully!</div>}
-        {saveError && <div className="text-red-600 mb-4">{saveError}</div>}
-
         <div className="space-y-5">
           <FormField label="Slug">
             <Input

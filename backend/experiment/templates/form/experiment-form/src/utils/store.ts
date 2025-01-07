@@ -40,7 +40,7 @@ const createAuthSlice: StateCreator<AuthSlice> = (set) => ({
 export interface Toast {
   message: string;
   duration: number;
-  level: "info" | "warning" | "error";
+  level: "info" | "success" | "warning" | "error";
 }
 
 interface ToastsSlice {
