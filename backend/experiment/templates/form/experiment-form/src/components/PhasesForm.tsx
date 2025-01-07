@@ -5,6 +5,8 @@ import { Timeline } from './Timeline';
 import { BlockForm } from './BlockForm';
 import useBoundStore from '../utils/store';
 import { useNavigate, useParams, useLocation, Routes, Route, Navigate } from 'react-router-dom';
+import { Button } from './Button';
+import { FiPlus } from 'react-icons/fi';
 
 const defaultPhase: Phase = {
   index: 0,
@@ -254,6 +256,16 @@ export const PhasesForm: React.FC<PhasesFormProps> = ({ phases, onChange }) => {
         onSelect={handleTimelineSelect}
         onAdd={handleAdd}
       />
+
+      {/* Add new phase button if there are no phases */}
+      {!phases.length && (
+        <Button
+          icon={<FiPlus className="w-4 h-4" />}
+          onClick={() => handleAdd('phase', phases.length)}
+        >
+          Add Phase
+        </Button>
+      )}
 
       <Routes>
         <Route path="/:blocks/:blockIndex" element={
