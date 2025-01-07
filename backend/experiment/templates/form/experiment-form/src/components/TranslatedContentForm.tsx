@@ -4,6 +4,7 @@ import { FormField } from "./form/FormField";
 import { Input } from "./form/Input";
 import { Select } from "./form/Select";
 import { Textarea } from "./form/Textarea";
+import { MarkdownEditor } from "./form/MarkdownEditor";
 
 interface TranslatedContentProps {
   content: TranslatedContent;
@@ -11,8 +12,6 @@ interface TranslatedContentProps {
 }
 
 export function TranslatedContentForm({ content, onChange }: TranslatedContentProps) {
-
-
 
   return (
     <div className='p-5 bg-gray-50'>
@@ -51,10 +50,10 @@ export function TranslatedContentForm({ content, onChange }: TranslatedContentPr
         </FormField>
 
         <FormField label="About Content">
-          <Textarea
+          <MarkdownEditor
             value={content.about_content}
-            onChange={(e) => onChange({ ...content, about_content: e.target.value })}
-            rows={3}
+            onChange={(value) => onChange({ ...content, about_content: value })}
+            rows={8}
           />
         </FormField>
 
