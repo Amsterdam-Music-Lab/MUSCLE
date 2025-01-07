@@ -119,8 +119,8 @@ class BooleanQuestion(Question):
             key="is_student",
             question="Are you a student?",
             choices={
-                "no": "No", # or _("No") for translation
-                "yes": "Yes"
+                "no": "Nope", # Use _("No") for translation (default)
+                "yes": "Yep"
             },
         )
         ```
