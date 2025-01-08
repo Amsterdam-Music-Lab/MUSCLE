@@ -137,6 +137,9 @@ const ExperimentForm: React.FC<ExperimentFormProps> = () => {
     return <div className="text-center mt-5">Loading...</div>;
   }
 
+  if (!experiment) {
+    return <div className="text-center mt-5">Experiment not found</div>;
+  }
 
   return (
     <Page
@@ -190,7 +193,7 @@ const ExperimentForm: React.FC<ExperimentFormProps> = () => {
           tabs={[
             {
               id: 'phases',
-              label: getTabLabel('Phases', unsavedChanges.phases),
+              label: getTabLabel('Phases & Blocks', unsavedChanges.phases),
               icon: <FiLayers />
             },
             {
