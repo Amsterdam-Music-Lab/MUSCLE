@@ -3,7 +3,7 @@ import { createExperimentEntityUrl } from '../config';
 import { useNavigate, useParams, Routes, Route, useLocation } from 'react-router-dom';
 import Page from './Page';
 import { TranslatedContentForms } from './TranslatedContentForms';
-import { FiSave, FiArrowLeft, FiGlobe, FiLayers } from 'react-icons/fi';
+import { FiSave, FiArrowLeft, FiGlobe, FiLayers, FiLoader } from 'react-icons/fi';
 import { Button } from './Button';
 import { Tabs } from './Tabs';
 import { FormField } from './form/FormField';
@@ -72,6 +72,20 @@ const ExperimentForm: React.FC<ExperimentFormProps> = () => {
       setActiveTab('phases');
     }
   }, [location]);
+
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if ((event.ctrlKey || event.metaKey) && event.key === 's') {
+        event.preventDefault();
+        handleSubmit(event as unknown as React.FormEvent);
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [experiment]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, type, checked, value } = e.target;
@@ -236,7 +250,7 @@ const ExperimentForm: React.FC<ExperimentFormProps> = () => {
           type="submit"
           disabled={saveLoading}
           variant="success"
-          icon={<FiSave />}
+          icon={!saveLoading ? <FiSave /> : <div className="animate-spin"><FiLoader /></div>}
           className="mt-5"
         >
           {saveLoading ? 'Saving...' : (experimentId ? 'Update Experiment' : 'Create Experiment')}
