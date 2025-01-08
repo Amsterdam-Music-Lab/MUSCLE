@@ -204,7 +204,7 @@ def get_last_n_turnpoints(session, num_turnpoints) -> QuerySet[Result]:
 
 def randomize_playhead(min_jitter, max_jitter, continuation_correctness) -> float:
     """
-    Description: Randomly create a playhead offset if correctness is not yet established.
+    Description: Randomly add to the playhead offset. If `continuation_correctness=True`, this function returns 0, and has no effect on the playhead.
 
     Args:
         min_jitter (float): Minimum offset.
