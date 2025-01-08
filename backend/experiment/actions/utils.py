@@ -209,7 +209,7 @@ def randomize_playhead(min_jitter, max_jitter, continuation_correctness) -> floa
     Args:
         min_jitter (float): Minimum offset.
         max_jitter (float): Maximum offset.
-        continuation_correctness (bool): Whether the user is already correct.
+        continuation_correctness (bool): whether to add a random increment to the continued audio
 
     Returns:
         (float): The random offset.
