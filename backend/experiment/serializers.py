@@ -28,6 +28,8 @@ class BlockTranslatedContentSerializer(serializers.ModelSerializer):
 
 
 class PlaylistSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(required=False)
+
     class Meta:
         model = Playlist
         fields = ["id", "name"]
@@ -56,23 +58,41 @@ class BlockSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         translated_contents_data = validated_data.pop("translated_contents", [])
+        playlists_data = validated_data.pop("playlists", [])
         block = Block.objects.create(**validated_data)
 
         for content_data in translated_contents_data:
             BlockTranslatedContent.objects.create(block=block, **content_data)
 
+        for playlist_data in playlists_data:
+            playlist = Playlist.objects.get(pk=playlist_data["id"])
+            block.playlists.add(playlist)
+
         return block
 
     def update(self, instance, validated_data):
         translated_contents_data = validated_data.pop("translated_contents", [])
+        playlists_data = validated_data.pop("playlists", [])
 
         for attr, value in validated_data.items():
             setattr(instance, attr, value)
-        instance.save()
 
         BlockTranslatedContent.objects.filter(block=instance).delete()
         for content_data in translated_contents_data:
             BlockTranslatedContent.objects.create(block=instance, **content_data)
+
+        existing_playlist_ids = set()
+        for playlist_data in playlists_data:
+            playlist_id = playlist_data.get("id")
+            if playlist_id:
+                playlist = Playlist.objects.get(pk=playlist_id)
+                instance.playlists.add(playlist)
+                existing_playlist_ids.add(playlist.id)
+
+        # Delete removed playlists
+        instance.playlists.exclude(id__in=existing_playlist_ids).delete()
+
+        instance.save()
 
         return instance
 

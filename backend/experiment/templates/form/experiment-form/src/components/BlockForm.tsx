@@ -93,6 +93,30 @@ export const BlockForm: React.FC<BlockFormProps> = ({ block, onChange, onDelete 
           {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
           {loading && <p className="text-gray-500 text-sm mt-1">Loading rules...</p>}
         </FormField>
+
+        <FormField label="Playlists">
+          <Select
+            value={block.playlists.map((playlist) => playlist.id)}
+            onChange={(e) => {
+              const selectedPlaylists = Array.from(e.target.selectedOptions, (option) => ({
+                id: parseInt(option.value),
+                name: option.text,
+              }));
+              handleChange('playlists', selectedPlaylists);
+            }}
+            multiple
+            required
+            disabled={playlistsLoading}
+          >
+            {playlists.map((playlist) => (
+              <option key={playlist.id} value={parseInt(playlist.id)}>
+                {playlist.name}
+              </option>
+            ))}
+          </Select>
+          {playlistsError && <p className="text-red-500 text-sm mt-1">{playlistsError}</p>}
+          {playlistsLoading && <p className="text-gray-500 text-sm mt-1">Loading playlists...</p>}
+        </FormField>
       </div>
 
       <BlockTranslatedContentForms

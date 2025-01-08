@@ -15,6 +15,11 @@ export interface BlockTranslatedContent {
   description: string;
 }
 
+export interface BlockPlaylist {
+  id: string;
+  name: string;
+}
+
 export interface Block {
   id?: number;
   index: number;
@@ -23,7 +28,8 @@ export interface Block {
   bonus_points: number;
   rules: string;
   phase?: number;  // Make phase optional
-  translated_contents: BlockTranslatedContent[];  // Changed from translated_content
+  translated_contents: BlockTranslatedContent[];
+  playlists: BlockPlaylist[];
 }
 
 export interface Phase {

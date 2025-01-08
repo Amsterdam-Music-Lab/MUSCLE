@@ -110,6 +110,8 @@ export const PhasesForm: React.FC<PhasesFormProps> = ({ phases, onChange }) => {
         rounds: 10,
         bonus_points: 0,
         rules: '',
+        translated_contents: [],
+        playlists: [],
       };
 
       // use splice to insert new block at position
