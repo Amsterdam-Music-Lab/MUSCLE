@@ -9,10 +9,6 @@ class Migration(migrations.Migration):
         ('theme', '0007_sponsorimage_footerconfig_new_logos'),
     ]
 
-    run_before = [
-        ('experiment', '0063_move_disclaimer_and_privacy_to_translated_content'),
-    ]
-
     operations = [
         migrations.RemoveField(
             model_name='footerconfig',
