@@ -11,12 +11,12 @@ class Migration(migrations.Migration):
         FooterConfig = apps.get_model('theme', 'FooterConfig')
         for experiment in Experiment.objects.all():
             if experiment.theme_config:
-                this_footer = FooterConfig.objects.get(theme=experiment.config)
-            if this_footer is not None:
-                content, created = ExperimentTranslatedContent.objects.get_or_create(
-                    experiment=experiment,
-                    language="en",
-                )
+                this_footer = FooterConfig.objects.get(theme=experiment.theme_config)
+                if this_footer is not None:
+                    content, created = ExperimentTranslatedContent.objects.get_or_create(
+                        experiment=experiment,
+                        language="en",
+                    )
                 content.privacy = this_footer.privacy
                 content.disclaimer = this_footer.disclaimer
                 content.save()
@@ -45,6 +45,10 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ('experiment', '0062_rename_slug_temp_to_slug'),
+    ]
+
+    run_before = [
+        ('theme', '0008_remove_footerconfig_disclaimer_and_privacy'),
     ]
 
     operations = [
