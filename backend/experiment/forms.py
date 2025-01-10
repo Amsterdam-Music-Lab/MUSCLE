@@ -205,6 +205,8 @@ class ExperimentTranslatedContentForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super(ModelForm, self).__init__(*args, **kwargs)
         self.fields["about_content"].widget = MarkdownPreviewTextInput()
+        self.fields['disclaimer'].widget = MarkdownPreviewTextInput()
+        self.fields['privacy'].widget = MarkdownPreviewTextInput()
 
     class Meta:
         model = ExperimentTranslatedContent
@@ -215,6 +217,8 @@ class ExperimentTranslatedContentForm(ModelForm):
             "description",
             "consent",
             "about_content",
+            "disclaimer",
+            "privacy",
             "social_media_message",
         ]
 

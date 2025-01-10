@@ -22,9 +22,3 @@ class ThemeConfigForm(forms.ModelForm):
             instance.save()
         return instance
 
-
-class FooterConfigForm(forms.ModelForm):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.fields['disclaimer'].widget = MarkdownPreviewTextInput()
-        self.fields['privacy'].widget = MarkdownPreviewTextInput()
