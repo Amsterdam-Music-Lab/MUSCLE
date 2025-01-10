@@ -6,12 +6,12 @@ from django.utils import timezone
 from django.utils.translation import gettext_lazy as _, get_language
 from django.contrib.postgres.fields import ArrayField
 from django.db.models.query import QuerySet
-from typing import List, Dict, Tuple, Any
+from typing import List, Any
 from experiment.standards.iso_languages import ISO_LANGUAGES
 from theme.models import ThemeConfig
 from image.models import Image
 from session.models import Session
-from typing import Optional, Union
+from typing import Optional
 
 from .validators import markdown_html_validator, block_slug_validator, experiment_slug_validator
 
@@ -31,11 +31,9 @@ class Experiment(models.Model):
         phases (Queryset[Phase]): Queryset of Phase instances
     """
 
-    slug = models.SlugField(db_index=True,
-                                 max_length=64,
-                                 unique=True,
-                                 null=True,
-                                 validators=[experiment_slug_validator])
+    slug = models.SlugField(
+        db_index=True, max_length=64, unique=True, null=True, validators=[experiment_slug_validator]
+    )
     translated_content = models.QuerySet["ExperimentTranslatedContent"]
     theme_config = models.ForeignKey("theme.ThemeConfig", blank=True, null=True, on_delete=models.SET_NULL)
     active = models.BooleanField(default=True)
@@ -229,6 +227,12 @@ class Block(models.Model):
     theme_config = models.ForeignKey(ThemeConfig, on_delete=models.SET_NULL, blank=True, null=True)
 
     def __str__(self):
+        # If this block is unsaved or being deleted (has no PK),
+        # avoid calling get_fallback_content() (which does a DB query).
+        if not self.pk:
+            # Provide a fallback label or just return self.slug if present.
+            return self.slug or "Deleted/Unsaved Block"
+
         content = self.get_fallback_content()
         return content.name if content and content.name else self.slug
 
@@ -288,13 +292,8 @@ class Block(models.Model):
             "block": {
                 "id": self.id,
                 "name": self.name,
-                "sessions": [
-                    session._export_admin() for session in self.session_set.all()
-                ],
-                "participants": [
-                    participant._export_admin()
-                    for participant in self.current_participants()
-                ],
+                "sessions": [session._export_admin() for session in self.session_set.all()],
+                "participants": [participant._export_admin() for participant in self.current_participants()],
             },
         }
 
@@ -388,18 +387,12 @@ class Block(models.Model):
                         # convert result json data to csv columns if selected
                         if "convert_result_json" in export_options:
                             if "decision_time" in export_options:
-                                result_data[result_prefix + "decision_time"] = (
-                                    result.json_data.get("decision_time", "")
-                                )
+                                result_data[result_prefix + "decision_time"] = result.json_data.get("decision_time", "")
                             if "result_config" in export_options:
-                                result_data[result_prefix + "result_config"] = (
-                                    result.json_data.get("config", "")
-                                )
+                                result_data[result_prefix + "result_config"] = result.json_data.get("config", "")
                         else:
                             if "result_config" in export_options:
-                                result_data[result_prefix + "result_data"] = (
-                                    result.json_data
-                                )
+                                result_data[result_prefix + "result_data"] = result.json_data
                     this_row.update(result_data)
                     fieldnames.update(result_data.keys())
                     result_counter += 1
@@ -456,7 +449,7 @@ class Block(models.Model):
                         question_series=qs, question=Question.objects.get(pk=question), index=i + 1
                     )
 
-    def get_fallback_content(self) -> "BlockTranslatedContent":
+    def get_fallback_content(self) -> "BlockTranslatedContent | None":
         """Get fallback content for the block
 
         Returns:
@@ -627,9 +620,7 @@ class SocialMediaConfig(models.Model):
         experiment_name = translated_content.name
 
         if social_message:
-            has_placeholders = (
-                "{points}" in social_message and "{experiment_name}" in social_message
-            )
+            has_placeholders = "{points}" in social_message and "{experiment_name}" in social_message
 
             if not has_placeholders:
                 return social_message
@@ -640,9 +631,7 @@ class SocialMediaConfig(models.Model):
             return social_message.format(points=score, experiment_name=experiment_name)
 
         if score is None or experiment_name is None:
-            raise ValueError(
-                "score and name are required when no social media message is provided"
-            )
+            raise ValueError("score and name are required when no social media message is provided")
 
         return _("I scored %(score)d points in %(experiment_name)s") % {
             "score": score,
