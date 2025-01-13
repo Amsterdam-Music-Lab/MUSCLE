@@ -60,7 +60,6 @@ def get_questions_from_series(questionseries_set):
 def create_default_questions(overwrite = False):
     """Creates default questions and question groups in the database"""
 
-    sys.stdout.write("Creating default questions...")
     for group_key, questions in QUESTION_GROUPS_DEFAULT.items():
 
         if not QuestionGroup.objects.filter(key = group_key).exists():
@@ -123,7 +122,6 @@ def create_default_questions(overwrite = False):
             else:
                 q = Question.objects.get(key = question.key)
             group.questions.add(q)
-    print("Done")
 
 def create_question_db(key):
     """ Creates form.question object from a Question in the database with key"""

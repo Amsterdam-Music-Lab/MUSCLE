@@ -11,6 +11,7 @@ from django.urls import path, reverse
 from django.utils.translation import gettext_lazy as _
 
 import audioread
+import sys
 
 from .models import Section, Playlist, Song
 from .forms import AddSections, PlaylistAdminForm
@@ -74,7 +75,8 @@ class PlaylistAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
 
             # create message based on csv_result (CSV_ERROR or CSV_OK)
             if csv_result["status"] == Playlist.CSV_ERROR:
-                messages.add_message(request, messages.ERROR, csv_result["message"])
+                for message in csv_result["messages"]:
+                    messages.add_message(request, messages.ERROR, message)
 
             elif csv_result["status"] == Playlist.CSV_OK:
                 messages.add_message(request, messages.INFO, csv_result["message"])
@@ -148,7 +150,26 @@ class PlaylistAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
                 section.song = song
 
                 section.start_time = request.POST.get(pre_fix + "_start_time")
-                section.duration = request.POST.get(pre_fix + "_duration")
+
+                new_duration = float(request.POST.get(pre_fix + "_duration"))
+                # while running tests this would throw an error
+                if "test" not in sys.argv:
+                    # Check if the duration in the csv exceeds the actual duration of the audio file
+                    file_path = join(settings.MEDIA_ROOT, str(section.filename))
+
+                    # while running tests this would throw an error
+                    with audioread.audio_open(file_path) as f:
+                        actual_duration = f.duration
+                    if new_duration > actual_duration:
+                        # Add or edit this row, but show an error message containing the actual saved duration
+                        section.duration = actual_duration
+
+                        messages.error(request, f"Error: The duration of {section.filename} exceeds the actual duration of the audio file and has been set to {actual_duration} seconds.")
+                    else:
+                        section.duration = new_duration
+                else:
+                    section.duration = new_duration
+
                 section.tag = request.POST.get(pre_fix + "_tag")
                 section.group = request.POST.get(pre_fix + "_group")
                 section.save()

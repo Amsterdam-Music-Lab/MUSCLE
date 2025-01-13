@@ -2,7 +2,7 @@ import random
 
 from django.utils.translation import gettext as _
 
-from .base import Base
+from .base import BaseRules
 
 from experiment.actions import Explainer, Step, Final, Trial
 from experiment.actions.form import Form, RadiosQuestion
@@ -14,7 +14,7 @@ from session.models import Session
 from result.utils import prepare_result
 
 
-class Speech2Song(Base):
+class Speech2Song(BaseRules):
     """ Rules for a speech-to-song experiment """
     ID = 'SPEECH_TO_SONG'
     default_consent_file = 'consent/consent_speech2song.html'
@@ -162,7 +162,6 @@ class Speech2Song(Base):
                 session, is_speech))
         return actions
 
-
     def next_single_representation(self, session: Session, is_speech: bool, group_id: int) -> list:
         """ combine a question after the first representation,
         and several repeated representations of the sound,
@@ -171,7 +170,6 @@ class Speech2Song(Base):
         section = session.playlist.get_section(filter_by, song_ids=session.get_unused_song_ids())
         actions = [sound(section), self.speech_or_sound_question(session, section, is_speech)]
         return actions
-
 
     def next_repeated_representation(self, session: Session, is_speech: bool, group_id: int = -1) -> list:
         if group_id == 0:
@@ -182,7 +180,6 @@ class Speech2Song(Base):
         actions = [sound(section)] * self.n_presentations
         actions.append(self.speech_or_sound_question(session, section, is_speech))
         return actions
-
 
     def speech_or_sound_question(self, session, section, is_speech) -> Trial:
         if is_speech:

@@ -1,12 +1,10 @@
 from django.utils.translation import gettext_lazy as _
 
-from section.models import Section
-from experiment.actions import Trial, Explainer, Step
-from experiment.actions.form import ChoiceQuestion, Form
-from experiment.actions.playback import Autoplay
+from experiment.actions import Explainer, Step
 from experiment.actions.utils import final_action_with_optional_button, render_feedback_trivia
 from experiment.actions.utils import get_average_difference_level_based
-from result.utils import prepare_result
+
+from session.models import Session
 
 from .h_bat import HBat
 
@@ -15,6 +13,10 @@ class BST(HBat):
     """ Rules for the BST experiment, which follow closely
     the HBAT rules. """
     ID = 'BST'
+    first_condition = "in2"
+    first_condition_i18n = _("DUPLE METER")
+    second_condition = "in3"
+    second_condition_i18n = _("TRIPLE METER")
 
     def get_intro_explainer(self):
         return Explainer(
@@ -35,64 +37,24 @@ class BST(HBat):
             button_label='Ok'
         )
 
-    def next_trial_action(self, session, trial_condition, level=1):
-        """
-        Get the next actions for the experiment
-        trial_condition is either 1 or 0
-        level can be 1 (? dB difference) or higher (smaller differences)
-        """
-        try:
-            section = session.playlist.section_set.filter(group=str(level)).get(tag=str(trial_condition))
-        except Section.DoesNotExist:
-            raise
-        expected_response = 'in2' if trial_condition else 'in3'
-        # create Result object and save expected result to database
-        key = 'longer_or_equal'
-        question = ChoiceQuestion(
-            key=key,
-            question=_(
-                "Is the rhythm a DUPLE METER (MARCH) or a TRIPLE METER (WALTZ)?"),
-            choices={
-                'in2': _('DUPLE METER'),
-                'in3': _('TRIPLE METER')
-            },
-            view='BUTTON_ARRAY',
-            result_id=prepare_result(
-                key, session, section=section,
-                expected_response=expected_response, scoring_rule='CORRECTNESS'),
-            submits=True
-        )
-        playback = Autoplay([section])
-        form = Form([question])
-        view = Trial(
-            playback=playback,
-            feedback_form=form,
-            title=_('Meter detection'),
-            config={
-                'response_time': section.duration + .1
-            }
-        )
-        return view
+    def get_trial_question(self):
+        return _("Is the rhythm a DUPLE METER (MARCH) or a TRIPLE METER (WALTZ)?")
 
-    def response_explainer(self, correct, in2, button_label=_('Next fragment')):
-        if correct:
-            if in2:
-                instruction = _(
-                    'The rhythm was a DUPLE METER. Your answer was CORRECT.')
-            else:
-                instruction = _(
-                    'The rhythm was a TRIPLE METER. Your answer was CORRECT.')
+    def get_trial_title(self):
+        return _("Meter detection")
+
+    def get_feedback_explainer(self, session: Session):
+        correct_response, is_correct = self.get_condition_and_correctness(session)
+        if is_correct:
+            instruction = _(
+                "The rhythm was a %(correct_response)s. Your answer was CORRECT."
+            ) % {"correct_response": correct_response}
         else:
-            if in2:
-                instruction = _(
-                    'The rhythm was a DUPLE METER. Your answer was INCORRECT.')
-            else:
-                instruction = _(
-                    'The rhythm was a TRIPLE METER. Your response was INCORRECT.')
+            instruction = _(
+                "The rhythm was a %(correct_response)s Your answer was INCORRECT."
+            ) % {"correct_response": correct_response}
         return Explainer(
-            instruction=instruction,
-            steps=[],
-            button_label=button_label
+            instruction=instruction, steps=[], button_label=_("Next fragment")
         )
 
     def finalize_block(self, session):

@@ -1,7 +1,6 @@
-
 from django.utils.translation import gettext_lazy as _
 
-from .base import Base
+from .base import BaseRules
 from experiment.actions import Explainer, Step, Trial
 from experiment.actions.form import ChoiceQuestion, Form
 from experiment.actions.playback import Autoplay
@@ -10,7 +9,7 @@ from experiment.actions.utils import final_action_with_optional_button
 from result.utils import prepare_result
 
 
-class RhythmBatteryIntro(Base):
+class RhythmBatteryIntro(BaseRules):
     ID = 'RHYTHM_BATTERY_INTRO'
 
     def next_round(self, session):

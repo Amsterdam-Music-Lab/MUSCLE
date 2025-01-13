@@ -1,11 +1,10 @@
 import logging
 import random
 
-from django.conf import settings
 from django.utils.translation import gettext_lazy as _
 
-from .base import Base
-from experiment.actions import Consent, Explainer, Final, Playlist, Score, Step, Trial
+from .base import BaseRules
+from experiment.actions import Explainer, Final, Playlist, Score, Step, Trial
 from experiment.actions.form import BooleanQuestion, Form
 from experiment.actions.playback import Autoplay
 from experiment.actions.styles import STYLE_BOOLEAN_NEGATIVE_FIRST
@@ -19,7 +18,7 @@ from session.models import Session
 logger = logging.getLogger(__name__)
 
 
-class Hooked(Base):
+class Hooked(BaseRules):
     """Superclass for Hooked experiment rules"""
 
     ID = "HOOKED"

@@ -1,6 +1,7 @@
-from typing import Iterable, Union
+from typing import Iterable, Optional, Union
 
 from django.db import models
+from django.db.models.query import QuerySet
 from django.utils import timezone
 
 from result.models import Result
@@ -42,7 +43,7 @@ class Session(models.Model):
     def block_rules(self):
         """
         Returns:
-            (experiment.rules.Base) rules class to be used for this session
+            (experiment.rules.BaseRules) rules class to be used for this session
         """
         return self.block.get_rules()
 
@@ -99,7 +100,13 @@ class Session(models.Model):
         used_song_ids = self.get_used_song_ids()
         return list(set(song_ids) - set(used_song_ids))
 
-    def last_result(self, question_keys: list[str] = []) -> Union[Result, None]:
+    def _filter_results(self, question_keys) -> QuerySet:
+        results = self.result_set
+        if question_keys:
+            results = results.filter(question_key__in=question_keys)
+        return results.order_by("-created_at")
+
+    def last_result(self, question_keys: list[str] = []) -> Optional[Result]:
         """
         Utility function to retrieve the last result, optionally filtering by relevant question keys.
         If more than one result needs to be processed, or for more advanced filtering,
@@ -112,12 +119,23 @@ class Session(models.Model):
         Returns:
             last relevant [Result](result_models.md#Result) object added to the database for this session
         """
-        results = self.result_set
-        if not results.count():
-            return None
-        if question_keys:
-            results = results.filter(question_key__in=question_keys)
-        return results.order_by("-created_at").first()
+        results = self._filter_results(question_keys)
+        return results.first()
+
+    def last_n_results(
+        self, question_keys: list[str] = [], n_results: int = 1
+    ) -> list[Result]:
+        """Retrieve previous n results.
+
+        Args:
+            question_keys: a list of question keys for which results should be retrieved, if empty, any results will be returned
+            n_results: number of results to return
+
+        Returns:
+            list of Result objects with the given question keys
+        """
+        results = self._filter_results(question_keys)
+        return list(results.order_by("-created_at")[:n_results])
 
     def last_section(self, question_keys: list[str] = []) -> Union[Section, None]:
         """

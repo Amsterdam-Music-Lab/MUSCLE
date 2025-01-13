@@ -8,6 +8,13 @@ dev_addr: '127.0.0.1:8080'
 markdown_extensions:
   - smarty
   - toc
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences
 
 theme:
   name: "material"
@@ -45,7 +52,7 @@ extra_css:
     - assets/css/style.css
 
 nav:
-  - MUSCLE:
+  - Getting started:
     - 1. Overview of the application: 'index.md'
     - 2. Start the application: '02_Start_the_application.md'
     - 3. The admin interface: '03_The_admin_interface.md'
@@ -57,51 +64,55 @@ nav:
     - 9. Playback and player widgets: '09_Playback_and_player_widgets.md'
     - 10. Create a custom ruleset: '10_Create_custom_ruleset.md'
     - 11. Exporting result data: '11_Exporting_result_data.md'
-  - Frontend tools:
+  - Preview frontend components:
       - 'Storybook': 'https://amsterdam-music-lab.github.io/MUSCLE/storybook'
-  - Python code documentation:
-    - Experiment app:
-      - Experiment actions: 'experiment_actions.md'
-      - Experiment admin: 'experiment_admin.md'
-      - Experiment models: 'experiment_models.md'
+  - Ruleset documentation:
+    - Data models:      
+      - Experiment: 'experiment_models.md'      
+      - Image: 'image_models.md'
+      - Participant: 'participant_models.md'      
+      - Question: 'question_models.md'      
+      - Result: 'result_models.md'
+      - Section: 'section_models.md'
+      - Session: 'session_models.md'
+      - Theme: 'theme_models.md'
+    - Rules, actions & utils:
       - Experiment rules: 'experiment_rules.md'
+      - Participant utils: 'participant_utils.md'
+      - Question utils: 'question_utils.md'
+      - Experiment actions: 'experiment_actions.md'
+  - Technical documentation:
+    - Experiment app:      
+      - Experiment admin: 'experiment_admin.md'      
       - Experiment serializers: 'experiment_serializers.md'
       - Experiment utils: 'experiment_utils.md'
       - Experiment views: 'experiment_views.md'
     - Image app:
-      - Image admin: 'image_admin.md'
-      - Image models: 'image_models.md'
+      - Image admin: 'image_admin.md'      
       - Image serializers: 'image_serializers.md'
       - Image validators: 'image_validators.md'
     - Participant app:
       - Participant admin: 'participant_admin.md'
-      - Participant models: 'participant_models.md'
-      - Participant utils: 'participant_utils.md'
       - Participant views: 'participant_views.md'
     - Question app:
-      - Question admin: 'question_admin.md'
-      - Question models: 'question_models.md'
+      - Question admin: 'question_admin.md'      
       - Question utils: 'question_utils.md'
       - Question views: 'question_views.md'
     - Result app:
-      - Result admin: 'result_admin.md'
-      - Result models: 'result_models.md'
+      - Result admin: 'result_admin.md'      
       - Result score: 'result_score.md'
       - Result utils: 'result_utils.md'
       - Result views: 'result_views.md'
     - Section app:
-      - Section admin: 'section_admin.md'
-      - Section models: 'section_models.md'
+      - Section admin: 'section_admin.md'      
       - Section views: 'section_views.md'
       - Section utils: 'section_utils.md'
       - Section validators: 'section_validators.md'
       - Section views: 'section_views.md'
     - Session app:
-      - Session admin: 'session_admin.md'
-      - Session models: 'session_models.md'
+      - Session admin: 'session_admin.md'      
       - Session views: 'session_views.md'
     - Theme app:
-      - Theme admin: 'theme_admin.md'
-      - Theme models: 'theme_models.md'
+      - Theme admin: 'theme_admin.md'      
       - Theme views: 'theme_views.md'
     - About this document: 'this_doc.md'
