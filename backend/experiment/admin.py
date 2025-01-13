@@ -315,6 +315,7 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, NestedModelAdmin):
         PhaseInline,
         SocialMediaConfigInline,
     ]
+    save_on_top = True
 
     class Media:
         css = {"all": ("experiment_admin.css",)}

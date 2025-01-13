@@ -1,5 +1,15 @@
 document.addEventListener("DOMContentLoaded", function () {
-    floatingSubmitRow();
+    const formElement = document.querySelector('#experiment_form');
+    const submitRow = document.querySelectorAll('.submit-row')[1]
+    const activeField = document.querySelector('.form-row.field-active');
+    const themeConfigField = document.querySelector('.form-row.field-theme_config');
+    const fieldsetWrapper = document.createElement('fieldset');
+    fieldsetWrapper.classList.add("aligned");
+    themeConfigField.remove();
+    fieldsetWrapper.append(themeConfigField);
+    activeField.remove();
+    fieldsetWrapper.append(activeField);
+    formElement.insertBefore(fieldsetWrapper, submitRow);
 });
 
 function initCollapsibleInlineForms() {
