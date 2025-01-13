@@ -13,17 +13,17 @@ from question.models import (
     QuestionInSeries,
     Choice,
 )
-from experiment.forms import QuestionSeriesAdminForm
-from question.forms import QuestionForm
+from question.forms import QuestionForm, QuestionSeriesForm
 
 
-class QuestionInSeriesInline(admin.TabularInline):
+class QuestionInSeriesInline(NestedTabularInline):
     model = QuestionInSeries
     extra = 0
 
 
 class QuestionSeriesInline(NestedTabularInline):
     model = QuestionSeries
+    inlines = [QuestionInSeriesInline]
     extra = 0
     show_change_link = True
 
@@ -94,7 +94,7 @@ class QuestionGroupAdmin(admin.ModelAdmin):
 
 class QuestionSeriesAdmin(admin.ModelAdmin):
     inlines = [QuestionInSeriesInline]
-    form = QuestionSeriesAdminForm
+    form = QuestionSeriesForm
 
 
 admin.site.register(Question, QuestionAdmin)
