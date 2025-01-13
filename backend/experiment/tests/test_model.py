@@ -31,9 +31,9 @@ class BlockModelTest(TestCase):
         ExperimentTranslatedContent.objects.create(
             experiment=experiment, language="en", name="Experiment name"
         )
-        phase = Phase.objects.create(experiment=experiment)
+        cls.phase = Phase.objects.create(experiment=experiment)
         block = Block.objects.create(
-            phase=phase,
+            phase=cls.phase,
             slug="test-block",
             rounds=5,
             bonus_points=10,
@@ -49,14 +49,16 @@ class BlockModelTest(TestCase):
 
     def test_block_str(self):
         block = Block.objects.get(slug="test-block")
-        self.assertEqual(str(block), "test-block")
+        self.assertEqual(str(block), "Test Block")
 
     def test_block_str_without_content(self):
-        block_no_content = Block.objects.create(slug="test-block-no-content")
+        block_no_content = Block.objects.create(
+            phase=self.phase, slug="test-block-no-content"
+        )
         self.assertEqual(str(block_no_content), "test-block-no-content")
 
     def test_block_str_without_pk(self):
-        block_no_pk = Block.objects.create()
+        block_no_pk = Block.objects.create(phase=self.phase)
         BlockTranslatedContent.objects.create(
             block=block_no_pk,
             language="en",
