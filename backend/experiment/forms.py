@@ -254,6 +254,7 @@ class BlockForm(ModelForm):
         if not block.phase:
             return
         experiment_contents = block.phase.experiment.translated_content.all()
+        experiment_languages = experiment_contents.values_list('language')
         for etc in experiment_contents:
             btc, created = BlockTranslatedContent.objects.get_or_create(
                 language=etc.language, block=block
@@ -261,6 +262,11 @@ class BlockForm(ModelForm):
             if created:
                 btc.name = f"{etc.name}:{block.slug}"
                 btc.save()
+        # delete all BlockTranslatedContents of languages not defined on experiment level
+        deprecated_block_contents = BlockTranslatedContent.objects.exclude(
+            language__in=experiment_languages
+        )
+        deprecated_block_contents.delete()
 
     def clean_playlists(self):
         # Check if there is a rules id selected and key exists
