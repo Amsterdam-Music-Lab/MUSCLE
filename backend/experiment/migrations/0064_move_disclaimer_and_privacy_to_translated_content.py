@@ -45,7 +45,7 @@ class Migration(migrations.Migration):
                     footer.save()
 
     dependencies = [
-        ('experiment', '0062_rename_slug_temp_to_slug'),
+        ('experiment', '0063_translated_content_ordering_default'),
     ]
 
     run_before = [
