@@ -13,7 +13,7 @@
     "pk": 3,
     "fields": {
         "slug": "thkids",
-        "theme_config": 2,
+        "theme_config": null,
         "active": true
     }
 },
