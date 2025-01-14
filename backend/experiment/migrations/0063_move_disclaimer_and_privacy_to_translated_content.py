@@ -29,7 +29,8 @@ class Migration(migrations.Migration):
         FooterConfig = apps.get_model('theme', 'FooterConfig')
         ThemeConfig = apps.get_model('theme', 'ThemeConfig')
         for experiment in Experiment.objects.all():
-            content = ExperimentTranslatedContent.objects.filter(language="en")
+            content = ExperimentTranslatedContent.objects.filter(experiment=experiment,
+                                                                 language="en")
             if content.count() == 1:
                 if content.privacy != "" and content.disclaimer != "":
                     if not experiment.theme_config:
