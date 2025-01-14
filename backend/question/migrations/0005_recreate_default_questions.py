@@ -21,7 +21,7 @@ def recreate_default_questions(apps, schema_editor):
     # Delete old default questions
     QuestionH.objects.all().delete()
 
-    create_default_questions(Question=QuestionH, Choice=ChoiceH, QuestionGroup=QuestionGroupH)
+    create_default_questions(question_model=QuestionH, choice_model=ChoiceH, question_group_model=QuestionGroupH)
 
     # Recreate QuestionInSeries objects with new question objects
     for qis in qis_all_list:

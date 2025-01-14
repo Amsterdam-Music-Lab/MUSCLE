@@ -57,20 +57,20 @@ def get_questions_from_series(questionseries_set):
     return [create_question_db(key) for key in keys_all]
 
 
-def create_default_questions(Question=Question, Choice=Choice, QuestionGroup=QuestionGroup):
+def create_default_questions(question_model=Question, choice_model=Choice, question_group_model=QuestionGroup):
     """Creates default questions and question groups in the database"""
 
     for group_key, questions in QUESTION_GROUPS_DEFAULT.items():
 
-        if not QuestionGroup.objects.filter(key = group_key).exists():
-            group = QuestionGroup.objects.create(key = group_key, editable = False)
+        if not question_group_model.objects.filter(key = group_key).exists():
+            group = question_group_model.objects.create(key = group_key, editable = False)
         else:
-            group = QuestionGroup.objects.get(key = group_key)
+            group = question_group_model.objects.get(key = group_key)
 
         for question in questions:
 
-            if not Question.objects.filter(key = question.key).exists():
-                q = Question.objects.create(key = question.key, question = question.question, editable = False)
+            if not question_model.objects.filter(key = question.key).exists():
+                q = question_model.objects.create(key = question.key, question = question.question, editable = False)
 
                 # Create translatable fields
                 for lang in settings.MODELTRANSLATION_LANGUAGES:
@@ -91,7 +91,7 @@ def create_default_questions(Question=Question, Choice=Choice, QuestionGroup=Que
                     keys = question.choices.keys() if hasattr(question.choices,'keys') else range(0, len(question.choices))
                     index = 0
                     for key in keys:
-                        choice = Choice(key=key, text=str(question.choices[key]), index=index, question=q)
+                        choice = choice_model(key=key, text=str(question.choices[key]), index=index, question=q)
                         for lang in settings.MODELTRANSLATION_LANGUAGES:
                             lang_field = lang.replace("-","_")
                             translation.activate(lang)
@@ -127,11 +127,11 @@ def create_default_questions(Question=Question, Choice=Choice, QuestionGroup=Que
                 q.save()
 
             else:
-                q = Question.objects.get(key = question.key)
+                q = question_model.objects.get(key = question.key)
             group.questions.add(q)
 
 
-def populate_translation_fields(lang, Question=Question):
+def populate_translation_fields(lang, question_model=Question):
 
     lang_field = lang.replace("-","_")
 
@@ -140,7 +140,7 @@ def populate_translation_fields(lang, Question=Question):
     for group_key, questions in QUESTION_GROUPS_DEFAULT.items():
         for question in questions:
 
-            q = Question.objects.get(key = question.key)
+            q = question_model.objects.get(key = question.key)
 
             # This should work, but doesn't
             #q.question = str(question.question)

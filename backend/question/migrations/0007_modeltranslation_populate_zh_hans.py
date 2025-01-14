@@ -8,7 +8,7 @@ from django.utils import translation
 def populate_translation_fields(apps, schema_editor):
 
     QuestionH = apps.get_model("question", "Question")
-    questions.populate_translation_fields("zh-hans", Question=QuestionH)
+    questions.populate_translation_fields("zh-hans", question_model=QuestionH)
 
 
 class Migration(migrations.Migration):
