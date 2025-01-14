@@ -218,6 +218,8 @@ class ExperimentTranslatedContentForm(TranslatedContentInline, ModelForm):
     def __init__(self, *args, **kwargs):
         super(ModelForm, self).__init__(*args, **kwargs)
         self.fields["about_content"].widget = MarkdownPreviewTextInput()
+        self.fields['disclaimer'].widget = MarkdownPreviewTextInput()
+        self.fields['privacy'].widget = MarkdownPreviewTextInput()
         self.fields["description"].widget.attrs["style"] = "height:40px"
         self.fields["social_media_message"].widget.attrs["style"] = "height:15px"
 

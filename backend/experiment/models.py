@@ -508,6 +508,8 @@ class ExperimentTranslatedContent(TranslatedContent):
         consent (FileField): Consent text markdown or html
         about_content (str): About text
         social_media_message (str): Message to post with on social media. Can contain {points} and {experiment_name} placeholders
+        disclaimer (str): Disclaimer text
+        privacy (str): Privacy statement text
     """
 
     experiment = models.ForeignKey(
@@ -525,6 +527,8 @@ class ExperimentTranslatedContent(TranslatedContent):
         help_text=_("Content for social media sharing. Use {points} and {experiment_name} as placeholders."),
         default="I scored {points} points in {experiment_name}!",
     )
+    disclaimer = models.TextField(blank=True, default='')
+    privacy = models.TextField(blank=True, default='')
 
     class Meta:
         unique_together = ["experiment", "language"]

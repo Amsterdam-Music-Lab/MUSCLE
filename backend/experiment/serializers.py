@@ -62,6 +62,12 @@ def serialize_experiment(experiment: Experiment) -> dict:
     if translated_content.about_content:
         serialized["aboutContent"] = formatter(translated_content.about_content, filter_name="markdown")
 
+    if translated_content.disclaimer:
+        serialized["disclaimer"] = formatter(translated_content.disclaimer, filter_name="markdown")
+
+    if translated_content.privacy:
+        serialized["privacy"] = formatter(translated_content.privacy, filter_name="markdown")
+
     if hasattr(experiment, "social_media_config") and experiment.social_media_config:
         serialized["socialMedia"] = serialize_social_media_config(experiment.social_media_config)
 
