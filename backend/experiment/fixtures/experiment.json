@@ -876,20 +876,6 @@
 },
 {
     "model": "experiment.experimenttranslatedcontent",
-    "pk": 5,
-    "fields": {
-        "experiment": 6,
-        "index": 0,
-        "language": "en",
-        "name": "BrowserTesting",
-        "description": "",
-        "consent": "",
-        "about_content": "",
-        "social_media_message": "I scored {points} points in {experiment_name}!"
-    }
-},
-{
-    "model": "experiment.experimenttranslatedcontent",
     "pk": 6,
     "fields": {
         "experiment": 7,
