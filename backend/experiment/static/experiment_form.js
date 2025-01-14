@@ -1,11 +1,20 @@
 document.addEventListener("DOMContentLoaded", function () {
-    initCollapsibleInlineForms();
-    floatingSubmitRow();
+    const formElement = document.querySelector('#experiment_form');
+    const submitRow = document.querySelectorAll('.submit-row')[1]
+    const activeField = document.querySelector('.form-row.field-active');
+    const themeConfigField = document.querySelector('.form-row.field-theme_config');
+    const fieldsetWrapper = document.createElement('fieldset');
+    fieldsetWrapper.classList.add("aligned");
+    themeConfigField.remove();
+    fieldsetWrapper.append(themeConfigField);
+    activeField.remove();
+    fieldsetWrapper.append(activeField);
+    formElement.insertBefore(fieldsetWrapper, submitRow);
 });
 
 function initCollapsibleInlineForms() {
 
-    const collapsibleInlineForms = document.querySelectorAll('.inline-group');
+    const collapsibleInlineForms = document.querySelectorAll('.inline-group:not([data-inline-model*="translatedcontent"])');
 
     collapsibleInlineForms.forEach(collapsibleInlineForm => {
         const toggleButton = collapsibleInlineForm.querySelector('.inline-heading');
@@ -53,7 +62,7 @@ function floatingSubmitRow() {
     const submitRowOffset = submitRow.offsetTop;
 
     window.addEventListener('scroll', function () {
-        if (window.pageYOffset + window.innerHeight < submitRowOffset + 20) {
+        if (window.scrollY + window.innerHeight < submitRowOffset + 20) {
             submitRow.classList.add('floating');
         } else {
             submitRow.classList.remove('floating');

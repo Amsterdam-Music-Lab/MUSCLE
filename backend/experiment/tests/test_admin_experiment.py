@@ -79,8 +79,14 @@ class TestAdminBlockExport(TestCase):
 
     @classmethod
     def setUpTestData(cls):
+        experiment = Experiment.objects.create(slug="test-experiment")
+        ExperimentTranslatedContent.objects.create(
+            experiment=experiment, language="en", name="Test Experiment"
+        )
+        phase = Phase.objects.create(experiment=experiment)
         cls.participant = Participant.objects.create(unique_hash=42)
         cls.block = Block.objects.get(slug="huang_2022")
+        cls.block.phase = phase
         for playlist in cls.block.playlists.all():
             playlist._update_sections()
         cls.session = Session.objects.create(

@@ -7,7 +7,7 @@ class QuestionForm(ModelForm):
         super().__init__(*args, **kwargs)
 
         if kwargs.get('instance') is None:
-            
+
             self.fields['type'].help_text = "Click 'Save and continue editing' to customize"
 
         else:
@@ -25,3 +25,7 @@ class QuestionForm(ModelForm):
             "min_values" : "Only affects CHECKBOXES view"
         }
 
+
+class QuestionSeriesForm(ModelForm):
+    class Media:
+        js = ["questionseries_admin.js"]
