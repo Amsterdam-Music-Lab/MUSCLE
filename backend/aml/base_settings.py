@@ -182,6 +182,9 @@ SESSION_SAVE_EVERY_REQUEST = False  # Do not set to True, because it will break 
 
 CSRF_USE_SESSIONS = False
 
+# Set session cookie age to 3 months
+SESSION_COOKIE_AGE = 60 * 60 * 24 * 30 * 3
+
 LOCALE_PATHS = [os.path.join(BASE_DIR, "locale")]
 
 DEFAULT_AUTO_FIELD = "django.db.models.AutoField"

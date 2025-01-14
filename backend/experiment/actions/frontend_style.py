@@ -1,66 +1,87 @@
 from enum import Enum
+from typing import Dict, Optional
 
 
 class EFrontendStyle(Enum):
-    EMPTY = ''
-    BOOLEAN = 'boolean'
-    BOOLEAN_NEGATIVE_FIRST = 'boolean-negative-first'
-    NEUTRAL = 'neutral'
-    NEUTRAL_INVERTED = 'neutral-inverted'
-    PRIMARY = 'primary'
-    SECONDARY = 'secondary'
-    SUCCESS = 'success'
-    NEGATIVE = 'negative'
-    INFO = 'info'
-    WARNING = 'warning'
+    """
+    Enumeration of valid frontend styles that can be applied to elements.
+
+    Example:
+        ```python
+        style = EFrontendStyle.PRIMARY
+        ```
+
+    Note:
+        Possible values are: \n
+        - EMPTY \n
+        - BOOLEAN \n
+        - BOOLEAN_NEGATIVE_FIRST \n
+        - NEUTRAL \n
+        - NEUTRAL_INVERTED \n
+        - PRIMARY \n
+        - SECONDARY \n
+        - SUCCESS \n
+        - NEGATIVE \n
+        - INFO \n
+        - WARNING
+    """
+
+    EMPTY = ""
+    BOOLEAN = "boolean"
+    BOOLEAN_NEGATIVE_FIRST = "boolean-negative-first"
+    NEUTRAL = "neutral"
+    NEUTRAL_INVERTED = "neutral-inverted"
+    PRIMARY = "primary"
+    SECONDARY = "secondary"
+    SUCCESS = "success"
+    NEGATIVE = "negative"
+    INFO = "info"
+    WARNING = "warning"
 
     @staticmethod
-    def is_valid(value):
+    def is_valid(value: str) -> bool:
         return value in EFrontendStyle.__members__.values()
 
 
 class FrontendStyle:
+    """
+    A class to manage and apply frontend styles to different elements.
+
+    The FrontendStyle class allows setting and managing styles for various UI elements,
+    with validation against predefined style options. To be used in conjunction with many of the actions like Playback and Trial.
+
+    Args:
+        root_style (EFrontendStyle): The style to apply to the root element. Defaults to EMPTY.
+
+    Example:
+        ```python
+        style = FrontendStyle(EFrontendStyle.PRIMARY)
+        ```
+    """
 
     VALID_STYLES = EFrontendStyle.__members__.values()
 
-    """
-    Initialize the FrontendStyle with a root style.
-    :param root_style: The style name for the root element.
-    """
-    def __init__(self, root_style: EFrontendStyle = EFrontendStyle.EMPTY):
-
+    def __init__(self, root_style: EFrontendStyle = EFrontendStyle.EMPTY) -> None:
         if not EFrontendStyle.is_valid(root_style):
             raise ValueError(f"Invalid root style: {root_style}")
 
-        self.styles = {'root': root_style}
+        self.styles: Dict[str, EFrontendStyle] = {"root": root_style}
 
-    def get_style(self, element: str) -> str:
-        """
-        Get the style for a specific element.
-        :param element: The element identifier for which to get the style.
-        :return: The style name for the given element.
-        """
+    def get_style(self, element: str) -> Optional[EFrontendStyle]:
         return self.styles.get(element, None)
 
-    def apply_style(self, element: str, style: str) -> None:
-        """
-        Apply a specific style to an element after validating the style.
-        :param element: The element identifier to apply the style to.
-        :param style: The style name to apply.
-        """
+    def apply_style(self, element: str, style: EFrontendStyle) -> None:
         if EFrontendStyle.is_valid(style):
             self.styles[element] = style
         else:
-            valid_styles = ', '.join([str(s) for s in self.VALID_STYLES])
+            valid_styles = ", ".join([str(s) for s in self.VALID_STYLES])
             raise ValueError(f"Invalid style: {style}. Valid styles are {valid_styles}.")
 
-    def to_dict(self) -> dict:
-        serialized_styles = { 'root': self.styles['root'].value }
+    def to_dict(self) -> Dict[str, str]:
+        return {"root": self.styles["root"].value}
 
-        return serialized_styles
-    
-    def __str__(self):
+    def __str__(self) -> str:
         return str(self.to_dict())
-    
-    def __json__(self):
+
+    def __json__(self) -> Dict[str, str]:
         return self.to_dict()

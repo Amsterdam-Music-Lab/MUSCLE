@@ -1,13 +1,14 @@
 import logging
 from decimal import Decimal, ROUND_HALF_UP
+import random
 
 from django.utils.translation import gettext_lazy as _
 
-from .base import Base
+from .base import BaseRules
+from .practice import PracticeMixin
 from experiment.actions import Trial, Explainer, Step
 from experiment.actions.form import ChoiceQuestion, Form
 from experiment.actions.playback import Autoplay
-from experiment.rules.util.practice import get_practice_views, get_trial_condition
 from experiment.actions.utils import final_action_with_optional_button, render_feedback_trivia
 from experiment.actions.utils import get_average_difference_level_based
 from experiment.rules.util.staircasing import register_turnpoint
@@ -20,87 +21,106 @@ logger = logging.getLogger(__name__)
 MAX_TURNPOINTS = 6
 
 
-class HBat(Base):
-    """ section.group (and possibly section.tag) must be convertable to int"""
+class HBat(BaseRules, PracticeMixin):
+    """Harvard Beat Assessment Test (H-BAT)
+    Fujii & Schlaug, 2013
+    """
 
     ID = 'H_BAT'
     start_diff = 20
+    n_practice_rounds_second_condition = 2
+    first_condition = "slower"
+    first_condition_i18n = _("SLOWER")
+    second_condition = "faster"
+    second_condition_i18n = _("FASTER")
 
-    def next_round(self, session: Session):
-        if session.final_score == 0:
-            # we are practicing
-            actions = get_practice_views(
-                session,
-                self.get_intro_explainer(),
-                staircasing,
-                self.next_trial_action,
-                self.response_explainer,
-                get_previous_condition,
-                1
-            )
-            return actions
-        # actual experiment
-        previous_results = session.result_set.order_by('-created_at')
-        trial_condition = get_trial_condition(2)
-        if not previous_results.count():
-            # first trial
-            action = self.next_trial_action(session, trial_condition, 1)
-            if not action:
-                # participant answered first trial incorrectly (outlier)
-                action = self.finalize_block(session)
+    def next_round(self, session: Session) -> list:
+        practice_finished = session.json_data.get("practice_done")
+        if not practice_finished:
+            return self.next_practice_round(session)
         else:
-            action = staircasing(session, self.next_trial_action)
+            # actual experiment
+            action = staircasing(session, self.get_next_trial)
             if not action:
                 # action is None if the audio file doesn't exist
                 action = self.finalize_block(session)
-            if session.final_score == MAX_TURNPOINTS+1:
+            if session.final_score == MAX_TURNPOINTS + 1:
                 # delete result created before this check
-                session.result_set.order_by('-created_at').first().delete()
+                session.result_set.order_by("-created_at").first().delete()
                 action = self.finalize_block(session)
             return action
 
-    def next_trial_action(self, session, trial_condition, level=1, *kwargs):
+    def get_condition(self, session) -> int:
+        """get the condition of the trial, which depends either on json data (practice),
+        or is random choice between faster / slower
+        """
+        if not session.json_data.get("practice_done"):
+            return super().get_condition(session)
+        else:
+            return random.choice([self.first_condition, self.second_condition])
+
+    def get_difficulty(self, session: Session) -> int:
+        last_result = session.last_result()
+        if not last_result:
+            return 1
+        else:
+            current_difficulty = int(last_result.section.group)
+            if last_result.json_data.get("difficulty") == "decrease":
+                return current_difficulty - 1
+            elif last_result.json_data.get("difficulty") == "increase":
+                return current_difficulty + 1
+            return current_difficulty
+
+    def get_next_trial(self, session: Session, *kwargs) -> Trial:
         """
         Get the next actions for the block
         trial_condition is either 1 or 0
         level can be 1 (20 ms) or higher (10, 5, 2.5 ms...)
         """
+        level = self.get_difficulty(session)
+        trial_condition = self.get_condition(session)
+        trial_tag = "1" if trial_condition == self.first_condition else "0"
         try:
-            section = session.playlist.section_set.filter(
-                group=str(level)).get(tag=str(trial_condition))
+            section = session.playlist.get_section(
+                {"group": str(level), "tag": trial_tag}
+            )
         except Section.DoesNotExist:
+            # we are out of valid sections, end experiment
             return None
-        expected_response = 'SLOWER' if trial_condition else 'FASTER'
-        key = 'longer_or_equal'
+
+        key = "slower_or_faster"
         question = ChoiceQuestion(
             key=key,
-            question=_(
-                "Is the rhythm going SLOWER or FASTER?"),
+            question=self.get_trial_question(),
             choices={
-                'SLOWER': _('SLOWER'),
-                'FASTER': _('FASTER')
+                self.first_condition: self.first_condition_i18n,
+                self.second_condition: self.second_condition_i18n,
             },
             result_id=prepare_result(
                 key,
                 session,
                 section=section,
-                expected_response=expected_response,
-                scoring_rule='CORRECTNESS'
+                expected_response=trial_condition,
+                scoring_rule="CORRECTNESS",
             ),
-            view='BUTTON_ARRAY',
-            submits=True
+            view="BUTTON_ARRAY",
+            submits=True,
         )
         playback = Autoplay([section])
         form = Form([question])
         view = Trial(
             playback=playback,
             feedback_form=form,
-            title=_('Beat acceleration'),
-            config={
-                'response_time': section.duration + .1
-            }
+            title=self.get_trial_title(),
+            config={"response_time": section.duration + 0.1},
         )
         return view
+
+    def get_trial_question(self):
+        return _("Is the rhythm going SLOWER or FASTER?")
+
+    def get_trial_title(self):
+        return _("Beat acceleration")
 
     def get_intro_explainer(self):
         return Explainer(
@@ -123,25 +143,18 @@ class HBat(Base):
             button_label='Ok'
         )
 
-    def response_explainer(self, correct, slower, button_label=_('Next fragment')):
-        if correct:
-            if slower:
-                instruction = _(
-                    'The rhythm went SLOWER. Your response was CORRECT.')
-            else:
-                instruction = _(
-                    'The rhythm went FASTER. Your response was CORRECT.')
+    def get_feedback_explainer(self, session: Session):
+        correct_response, is_correct = self.get_condition_and_correctness(session)
+        if is_correct:
+            instruction = _(
+                "The rhythm went %(correct_response)s. Your response was CORRECT."
+            ) % {"correct_response": correct_response}
         else:
-            if slower:
-                instruction = _(
-                    'The rhythm went SLOWER. Your response was INCORRECT.')
-            else:
-                instruction = _(
-                    'The rhythm went FASTER. Your response was INCORRECT.')
+            instruction = _(
+                "The rhythm went %(correct_response)s. Your response was INCORRECT."
+            ) % {"correct_response": correct_response}
         return Explainer(
-            instruction=instruction,
-            steps=[],
-            button_label=button_label
+            instruction=instruction, steps=[], button_label=_("Next fragment")
         )
 
     def finalize_block(self, session):
@@ -163,6 +176,10 @@ class HBat(Base):
     def get_trivia(self):
         return _("When people listen to music, they often perceive an underlying regular pulse, like the woodblock \
             in this task. This allows us to clap along with the music at a concert and dance together in synchrony.")
+
+    def practice_successful(self, session: Session) -> bool:
+        previous_results = session.last_n_results(n_results=2)
+        return all(r.score > 0 for r in previous_results)
 
     def validate_playlist(self, playlist: Playlist):
         errors = []
@@ -197,53 +214,39 @@ def get_previous_level(previous_result):
 
 
 def staircasing(session, trial_action_callback):
-    trial_condition = get_trial_condition(2)
     previous_results = session.result_set.order_by('-created_at')
     last_result = previous_results.first()
     if not last_result:
         # first trial
-        action = trial_action_callback(
-            session, trial_condition, 1)
+        action = trial_action_callback(session)
     elif last_result.score == 0:
         # the previous response was incorrect
-        json_data = session.json_data
-        direction = json_data.get('direction')
-        last_result.comment = 'decrease difficulty'
+        direction = session.json_data.get('direction')
+        last_result.save_json_data({"difficulty": "decrease"})
         last_result.save()
         if direction == 'increase':
             register_turnpoint(session, last_result)
         # register decreasing difficulty
-        session.save_json_data({'direction': 'decrease'})
-        session.save()
-        level = get_previous_level(last_result) - 1  # decrease difficulty
-        action = trial_action_callback(
-            session, trial_condition, level)
+        session.save_json_data({"direction": "decrease"})
+        action = trial_action_callback(session)
     else:
         if previous_results.count() == 1:
             # this is the second trial, so the level is still 1
-            action = trial_action_callback(
-                session, trial_condition, 1)
+            action = trial_action_callback(session)
         elif previous_results.all()[1].score == 1 and not previous_results.all()[1].comment:
             # the previous two responses were correct
-            json_data = session.json_data
-            direction = json_data.get('direction')
-            last_result.comment = 'increase difficulty'
-            last_result.save()
+            direction = session.json_data.get("direction")
+            last_result.save_json_data({"difficulty": "increase"})
             if direction == 'decrease':
                 # mark the turnpoint
                 register_turnpoint(session, last_result)
             # register increasing difficulty
-            session.save_json_data({'direction': 'increase'})
-            session.save()
-            level = get_previous_level(last_result) + 1  # increase difficulty
-            action = trial_action_callback(
-                session, trial_condition, level)
+            session.save_json_data({"direction": "increase"})
+            action = trial_action_callback(session)
         else:
             # previous answer was correct
             # but we didn't yet get two correct in a row
-            level = get_previous_level(last_result)
-            action = trial_action_callback(
-                session, trial_condition, level)
+            action = trial_action_callback(session)
     if not action:
         # action is None if the audio file doesn't exist
         return None

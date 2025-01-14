@@ -14,11 +14,11 @@ from result.models import Result
 from section.models import Section
 from session.models import Session
 
-from .base import Base
+from .base import BaseRules
 from .huang_2022 import get_test_playback
 
 
-class MusicalPreferences(Base):
+class MusicalPreferences(BaseRules):
     """This rules file presents repeated trials with a combined form:
     participants are asked to state how much they like the song, and whether they know the song
     after 21 and 42 rounds, participants see summaries of their choices,

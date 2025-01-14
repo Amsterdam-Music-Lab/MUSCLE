@@ -7,11 +7,11 @@ from section.models import Playlist, Section
 from session.models import Session
 from experiment.actions import ChoiceQuestion, Explainer, Form, Trial
 from experiment.actions.playback import PlayButton
-from .base import Base
+from .base import BaseRules
 from result.utils import prepare_result
 
 
-class CongoSameDiff(Base):
+class CongoSameDiff(BaseRules):
     """ A micro-PROMS inspired experiment block that tests the participant's ability to distinguish between different sounds. """
     ID = 'CONGOSAMEDIFF'
     contact_email = 'aml.tunetwins@gmail.com'
