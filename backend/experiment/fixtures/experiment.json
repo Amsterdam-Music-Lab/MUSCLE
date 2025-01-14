@@ -1064,16 +1064,6 @@
 },
 {
     "model": "experiment.blocktranslatedcontent",
-    "pk": 3,
-    "fields": {
-        "block": 2,
-        "language": "en",
-        "name": "BrowserTesting",
-        "description": ""
-    }
-},
-{
-    "model": "experiment.blocktranslatedcontent",
     "pk": 4,
     "fields": {
         "block": 1,
