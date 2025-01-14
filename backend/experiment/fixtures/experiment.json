@@ -37,15 +37,6 @@
 },
 {
     "model": "experiment.experiment",
-    "pk": 6,
-    "fields": {
-        "slug": "test",
-        "theme_config": null,
-        "active": true
-    }
-},
-{
-    "model": "experiment.experiment",
     "pk": 7,
     "fields": {
         "slug": "cat",
@@ -214,16 +205,6 @@
 },
 {
     "model": "experiment.phase",
-    "pk": 7,
-    "fields": {
-        "experiment": 6,
-        "index": 0,
-        "dashboard": false,
-        "randomize": false
-    }
-},
-{
-    "model": "experiment.phase",
     "pk": 8,
     "fields": {
         "experiment": 7,
@@ -353,23 +334,6 @@
         "rounds": 70,
         "bonus_points": 0,
         "rules": "CATEGORIZATION",
-        "theme_config": null,
-        "playlists": [
-            5
-        ]
-    }
-},
-{
-    "model": "experiment.block",
-    "pk": 2,
-    "fields": {
-        "phase": 7,
-        "index": 0,
-        "image": null,
-        "slug": "test",
-        "rounds": 10,
-        "bonus_points": 0,
-        "rules": "H_BAT",
         "theme_config": null,
         "playlists": [
             5
