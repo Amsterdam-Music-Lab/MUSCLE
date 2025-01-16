@@ -1,15 +1,6 @@
-import csv
-from zipfile import ZipFile
-from io import BytesIO
-
 from django.conf import settings
 from django.contrib import admin, messages
-from django.db import models
-from django.utils import timezone
-from django.core import serializers
 from django.shortcuts import render, redirect
-from django.forms import CheckboxSelectMultiple
-from django.http import HttpResponse
 
 from inline_actions.admin import InlineActionsModelAdminMixin
 from django.urls import reverse
@@ -71,112 +62,6 @@ class ExperimentTranslatedContentInline(NestedStackedInline):
     form = ExperimentTranslatedContentForm
     template = "admin/translated_content.html"
     extra = 1
-
-
-class BlockAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
-    list_display = (
-        "image_preview",
-        "block_name_link",
-        "block_slug_link",
-        "rules",
-        "rounds",
-        "playlist_count",
-        "session_count",
-    )
-    inline_actions = ["export_csv"]
-    fields = [
-        "image",
-        "slug",
-        "theme_config",
-        "rules",
-        "rounds",
-        "bonus_points",
-        "playlists",
-    ]
-    inlines = [QuestionSeriesInline, BlockTranslatedContentInline]
-    form = BlockForm
-
-    # make playlists fields a list of checkboxes
-    formfield_overrides = {
-        models.ManyToManyField: {"widget": CheckboxSelectMultiple},
-    }
-
-    def export_csv(self, request, obj, parent_obj=None):
-        """Export block data in CSV, force download"""
-        # Handle export command from intermediate form
-        if "_export" in request.POST:
-            session_keys = []
-            result_keys = []
-            export_options = []
-            # Get all export options
-            session_keys = [
-                key for key in request.POST.getlist("export_session_fields")
-            ]
-            result_keys = [key for key in request.POST.getlist("export_result_fields")]
-            export_options = [key for key in request.POST.getlist("export_options")]
-
-            response = HttpResponse(content_type="text/csv")
-            response["Content-Disposition"] = 'attachment; filename="{}.csv"'.format(
-                obj.slug
-            )
-            # Get filtered data
-            block_table, fieldnames = obj.export_table(
-                session_keys, result_keys, export_options
-            )
-            fieldnames.sort()
-            writer = csv.DictWriter(response, fieldnames)
-            writer.writeheader()
-            writer.writerows(block_table)
-            return response
-
-        # Load a template in the export form
-        if "_template" in request.POST:
-            selected_template = request.POST.get("select_template")
-        else:
-            selected_template = "wide"
-
-        initial_fields = {
-            "export_session_fields": EXPORT_TEMPLATES[selected_template][0],
-            "export_result_fields": EXPORT_TEMPLATES[selected_template][1],
-            "export_options": EXPORT_TEMPLATES[selected_template][2],
-        }
-        form = ExportForm(initial=initial_fields)
-        template_form = TemplateForm(initial={"select_template": selected_template})
-        return render(
-            request,
-            "csv-export.html",
-            context={"exp_block": obj, "form": form, "template_form": template_form},
-        )
-
-    export_csv.short_description = "Export CSV"
-
-    def image_preview(self, obj):
-        if obj.image and obj.image.file:
-            img_src = obj.image.file.url
-            return format_html(f'<img src="{img_src}" style="max-height: 50px;"/>')
-        return ""
-
-    def block_slug_link(self, obj):
-        dev_mode = settings.DEBUG is True
-        url = (
-            f"http://localhost:3000/block/{obj.slug}"
-            if dev_mode
-            else f"/block/{obj.slug}"
-        )
-
-        return format_html(
-            f'<a href="{url}" target="_blank" rel="noopener noreferrer" title="Open {obj.slug} block in new tab" >{obj.slug}&nbsp;<small>&#8599;</small></a>'
-        )
-
-    def block_name_link(self, obj):
-        obj_name = obj.__str__()
-        url = reverse("admin:experiment_block_change", args=[obj.pk])
-        return format_html('<a href="{}">{}</a>', url, obj_name)
-
-    # Name the columns
-    image_preview.short_description = "Image"
-    block_name_link.short_description = "Name"
-    block_slug_link.short_description = "Slug"
 
 
 class BlockInline(NestedStackedInline):
@@ -577,6 +462,4 @@ class BlockTranslatedContentAdmin(admin.ModelAdmin):
             )
         )
 
-
-admin.site.register(Block, BlockAdmin)
 admin.site.register(Experiment, ExperimentAdmin)
