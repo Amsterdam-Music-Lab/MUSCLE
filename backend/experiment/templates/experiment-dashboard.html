@@ -1,4 +1,4 @@
-{% extends "admin/base_site.html" %} {% block content %}{% load static %}
+{% extends "admin/base_site.html" %} {% load inline_action_tags %} {% block content %}{% load static %}
 <script src="{% static 'experiment_dashboard_sessions.js' %}"></script>
 <script src="{% static 'experiment_dashboard_feedback.js' %}"></script>
 <style>
@@ -33,6 +33,9 @@
     }
     td.table-results {
         width: 8rem;
+    }
+    td.table-feedback {
+        width: 6rem;
     }
     td.participants-overview {
         max-width: 25vw;
@@ -119,12 +122,10 @@
     Blocks in Experiment: <a href="{% url 'admin:experiment_experiment_change' experiment.id %}" target="_blank">{{ experiment }}</a>
 </h1>
 <p>
-    <form action="" method="post">
-        <!-- Show all participants and sessions -->
-        <input type="button" value="{{ collect_data.participant_count }} participants" id="show-participants" />
-        <input type="button" value="{{ collect_data.session_count }} sessions" id="show-sessions" />
-        <input type="button" value="{{ collect_data.feedback_count }} feedback" id="show-feedback" />
-    </form>
+<!-- Show all participants and sessions -->
+<input type="button" value="{{ collect_data.participant_count }} participants" id="show-participants" />
+<input type="button" value="{{ collect_data.session_count }} sessions" id="show-sessions" />
+<input type="button" value="{{ collect_data.feedback_count }} feedback" id="show-feedback" />
 </p>
 
 <!-- Blocks table -->
@@ -139,6 +140,7 @@
             <th>Participants *</th>
             <th>Sessions</th>
             <th>Feedback</th>
+            <th>Export results</th>
         </tr>
     </thead>
 
@@ -193,7 +195,7 @@
                 </script>
             </td>
 
-            <td class="table=feedback">
+            <td class="table-feedback">
                 <input type="button" value="Feedback" id="show-feedback-{{ block.id }}" />
                 <script>
                     // Show all session for this block in popup
@@ -201,6 +203,14 @@
                 </script>
             </td>
 
+            <td class="table-export">
+                <!-- Export results for this block as JSON -->
+                <form action="" method="post">
+                    {% csrf_token %}{% render_inline_action_fields %}
+                    <input type="hidden" name="export-block" maxlength="128" id="export-block" value="{{ block.id }}">
+                    <input type="submit" name="_export" value="Export JSON" />
+                </form>
+            </td>
         </tr>
         {% endfor %}
     </tbody>
