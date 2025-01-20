@@ -266,7 +266,7 @@ class BlockInline(NestedStackedInline):
     model = Block
     inlines = [BlockTranslatedContentInline, QuestionSeriesInline]
     form = BlockForm
-    classes = ["collapse", "wide"]
+    classes = ["wide"]
 
     def get_extra(self, request, obj=None, **kwargs):
         if obj:
@@ -278,7 +278,6 @@ class PhaseInline(NestedTabularInline):
     model = Phase
     sortable_field_name = "index"
     inlines = [BlockInline]
-    classes = ["collapse"]
 
     def get_extra(self, request, obj=None, **kwargs):
         if obj:
