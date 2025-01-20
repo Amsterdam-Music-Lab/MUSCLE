@@ -17,6 +17,7 @@ document.addEventListener("DOMContentLoaded", function () {
             defaultQuestionsButton.addEventListener('click', addDefaultQuestions);
         }
     });
+    floatingSubmitRow();
 });
 
 async function addDefaultQuestions(event) {
