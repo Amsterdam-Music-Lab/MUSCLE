@@ -322,7 +322,6 @@ class BlockForm(ModelForm):
 
     class Media:
         css = {"all": ["block_admin.css"]}
-        js = ["block_admin.js"]
 
 
 class ExportForm(Form):

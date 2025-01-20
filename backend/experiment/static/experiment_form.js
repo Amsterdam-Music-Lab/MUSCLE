@@ -10,7 +10,26 @@ document.addEventListener("DOMContentLoaded", function () {
     activeField.remove();
     fieldsetWrapper.append(activeField);
     formElement.insertBefore(fieldsetWrapper, submitRow);
+    const questionSeriesFieldsets = document.querySelectorAll('fieldset[aria-labelledby*="questionseries_set-heading"]');
+    questionSeriesFieldsets.forEach(el => {
+        const defaultQuestionsButton = el.querySelector('#default-questions');
+        if (defaultQuestionsButton) {
+            defaultQuestionsButton.addEventListener('click', addDefaultQuestions);
+        }
+    });
 });
+
+async function addDefaultQuestions(event) {
+    const slug = event.currentTarget.name;
+
+    const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+    let response = await fetch(`/experiment/block/${slug}/default_question_series/`,
+        { method: "POST", mode: 'same-origin', headers: { 'X-CSRFToken': csrftoken } })
+
+    if (response.ok) {
+        location.reload();
+    }
+}
 
 function initCollapsibleInlineForms() {
 
