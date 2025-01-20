@@ -1,0 +1,38 @@
+# This CITATION.cff file was generated with cffinit.
+# Visit https://bit.ly/cffinit to generate yours today!
+
+cff-version: 1.2.0
+title: MUSCLE
+message: >-
+  If you use this software, please cite it using the
+  metadata from this file.
+type: software
+authors:
+  - name: Amsterdam Music Lab
+    city: Amsterdam
+    country: NL
+identifiers:
+  - type: doi
+    value: 10.5281/zenodo.8227598
+repository-code: 'https://github.com/Amsterdam-Music-Lab/MUSCLE'
+url: 'https://app.amsterdammusiclab.nl/'
+abstract: >-
+  MUSCLE (MUSic-related Citizen Science Listening
+  Experiments) is an infrastructure for reusable online
+  music experiments. It can be used by researchers from
+  musicology, music cognition, and other audio related
+  fields to implement experiments through a graphical user
+  interface and Python. MUSCLE presents questions, along
+  with text, audio or visual stimuli, to participants. The
+  participants' response is saved to a database and can be
+  exported to json for analysis in R or other software.
+keywords:
+  - music
+  - experiment-design
+  - cognition
+  - perception
+  - speech
+  - audio
+license: MIT
+version: 3.2.0
+date-released: '2025-01-21'
