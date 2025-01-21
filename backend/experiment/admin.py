@@ -266,6 +266,7 @@ class BlockInline(NestedStackedInline):
     model = Block
     inlines = [BlockTranslatedContentInline, QuestionSeriesInline]
     form = BlockForm
+    autocomplete_fields = ["playlists"]
     classes = ["wide"]
 
     def get_extra(self, request, obj=None, **kwargs):

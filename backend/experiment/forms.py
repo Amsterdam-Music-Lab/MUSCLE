@@ -8,8 +8,6 @@ from django.forms import (
     Select,
     TextInput,
 )
-from django_select2.forms import Select2MultipleWidget
-
 from experiment.models import (
     Experiment,
     ExperimentTranslatedContent,
@@ -227,7 +225,6 @@ class ExperimentTranslatedContentForm(TranslatedContentInline, ModelForm):
         model = ExperimentTranslatedContent
         fields = "__all__"
 
-
 class BlockTranslatedContentForm(ModelForm):
 
     def __init__(self, *args, **kwargs):
@@ -311,9 +308,6 @@ class BlockForm(ModelForm):
             "image",
             "theme_config",
         ]
-        widgets = {
-            "playlists": Select2MultipleWidget,  # Use Select2 for the playlists field
-        }
         help_texts = {
             "image": "An image that will be displayed on the experiment page and as a meta image in search engines.",
             "slug": "The slug is used to identify the block in the URL so you can access it on the web as follows: app.amsterdammusiclab.nl/{slug} <br>\
