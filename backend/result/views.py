@@ -1,4 +1,5 @@
 import json
+import logging
 from typing import Union
 
 from django.views.decorators.http import require_POST
@@ -16,6 +17,7 @@ from session.models import Session
 from result.models import Result
 from result.utils import handle_results
 
+logger = logging.getLogger(__name__)
 
 @require_POST
 def score(
@@ -45,7 +47,8 @@ def score(
         # Create a result from the data
         handle_results(result_data, session)
     except Exception as e:
-        return HttpResponseServerError(f"Invalid data: {e}")
+        logging.error(e)
+        return HttpResponseServerError("Invalid data")
     return JsonResponse({'success': True})
 
 
