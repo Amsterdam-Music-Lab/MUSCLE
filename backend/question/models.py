@@ -107,7 +107,7 @@ class QuestionInSeries(models.Model):
 
     question_series = models.ForeignKey(QuestionSeries, on_delete=models.CASCADE)
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
-    index = models.PositiveIntegerField()
+    index = models.PositiveIntegerField(default=0)
 
     class Meta:
         unique_together = ("question_series", "question")
