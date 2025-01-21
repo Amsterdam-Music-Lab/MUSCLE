@@ -1,12 +1,26 @@
 import logging
 import math
-
-from django.db.models import Q
+from typing import Optional, TypedDict, Union
 
 logger = logging.getLogger(__name__)
 
+from .models import Result
 
-def check_expected_response(result):
+
+class ScoringData(TypedDict):
+    value: Union[int, str]
+
+
+class LikertData(ScoringData):
+    scale_steps: int
+
+
+class ChoiceData(ScoringData):
+    choices: dict
+
+
+def check_expected_response(result: Result) -> Optional[str]:
+    """Get `expected_response` from Result object, if available"""
     try:
         return result.expected_response
     except Exception as e:
@@ -14,7 +28,8 @@ def check_expected_response(result):
         return None
 
 
-def correctness_score(result, data):
+def correctness_score(result: Result, data: ScoringData) -> int:
+    """Binary score: return 1 if the participant's response is equal to the expected response, 0 otherwise"""
     expected_response = check_expected_response(result)
     if expected_response and expected_response == result.given_response:
         return 1
@@ -22,27 +37,35 @@ def correctness_score(result, data):
         return 0
 
 
-def boolean_score(result, data):
+def boolean_score(result: Result, data: ScoringData) -> int:
+    """Binary score: return 1 if participant answered `yes`, 0 otherwise"""
     if result.given_response == 'yes':
         return 1
     else:
         return 0
 
 
-def likert_score(result, data):
+def likert_score(result: Result, data: LikertData) -> int:
+    """Translate the `n`th category of a Likert scale into `n`"""
     return int(data['value'])
 
 
-def reverse_likert_score(result, data):
+def reverse_likert_score(result: Result, data: LikertData) -> int:
+    """Translate the `n`th category of a Likert scale into `n_steps - n`"""
     return int(data['scale_steps']) + 1 - int(data['value'])
 
 
-def categories_likert_score(result, data):
+def categories_likert_score(result: Result, data: ChoiceData) -> int:
+    """Translate the `n`th category of a dictionary of choices into `n`"""
     choices = list(data['choices'].keys())
     return choices.index(data['value']) + 1
 
 
-def reaction_time_score(result, data):
+def reaction_time_score(result: Result, data: ScoringData) -> float:
+    """Return the difference between the configured maximal `response_time`
+    and the participant's reaction time (`decision_time`)
+    If the answer of the participant is incorrect, return the negative reaction time
+    """
     expected_response = check_expected_response(result)
     json_data = result.json_data
     if expected_response and json_data:
@@ -54,7 +77,11 @@ def reaction_time_score(result, data):
             return math.floor(-time)
 
 
-def song_sync_recognition_score(result, data):
+def song_sync_recognition_score(result: Result, data: ScoringData) -> float:
+    """First step of SongSync scoring (used in experiment.rules.hooked and derivatives):
+    if the participant gives no (timeout) or a negative response to 'Do you know this song?', return 0
+    otherwise, return the decision time
+    """
     if result.given_response == 'TIMEOUT' or result.given_response == 'no':
         return 0
     json_data = result.json_data
@@ -64,8 +91,11 @@ def song_sync_recognition_score(result, data):
         return math.ceil(timeout - time)
 
 
-def song_sync_continuation_score(result, data):
-    ''' modify previous result and return None'''
+def song_sync_continuation_score(result: Result, data: dict):
+    """Second step of the SongSync scoring, only happens if recognition score was nonzero.
+    After continuation of audio, participants need to decide whether it was continued in the correct place.
+    If answered incorrectly, this function modifies the reaction time score of the previous step.
+    """
     previous_result = result.session.last_result(["recognize"])
     if check_expected_response(result) != result.given_response:
         previous_result.score *= -1

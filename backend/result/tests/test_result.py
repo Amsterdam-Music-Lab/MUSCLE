@@ -29,7 +29,6 @@ class ResultTest(TestCase):
         )
 
     def test_json_data(self):
-
         self.result.save_json_data({'test': 'tested'})
         self.assertEqual(self.result.json_data, {"test": "tested"})
         self.result.save_json_data({'test_len': 'tested_len'})
