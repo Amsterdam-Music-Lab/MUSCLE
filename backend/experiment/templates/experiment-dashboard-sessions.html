@@ -98,7 +98,7 @@
                         <h3>
                             Session: <a href="{% url 'admin:session_session_change' session.id %}" target="_blank">{{ session.id }}</a><br>
                             Participant: <a href="{% url 'admin:participant_participant_change' session.participant.id %}" target="_blank">{{ session.participant.participant_id_url }}</a><br>
-                            Block: <a href="{% url 'admin:experiment_block_change' session.block.id %}" target="_blank" title="Block URL id">{{ session.block }}</a>
+                            Block: {{ session.block }}
                         </h3>
 
                         <pre>
