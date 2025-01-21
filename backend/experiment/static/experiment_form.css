@@ -39,6 +39,14 @@ div.inline-group {
 
 }
 
+div.markdown-preview-text-input div.help {
+    margin-left: 0px;
+}
+
+div.inline-group div.help{
+    margin-left: 130px;
+}
+
 @media (min-width: 768px) {
     .submit-row.floating {
         /* Make the bar float over the form part of the screen */
