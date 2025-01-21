@@ -47,7 +47,7 @@ def score(
         # Create a result from the data
         handle_results(result_data, session)
     except Exception as e:
-        logging.error(e)
+        logger.error(e)
         return HttpResponseServerError("Invalid data")
     return JsonResponse({'success': True})
 
