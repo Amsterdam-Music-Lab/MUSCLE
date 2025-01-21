@@ -68,7 +68,8 @@ class BlockInline(NestedStackedInline):
     model = Block
     inlines = [BlockTranslatedContentInline, QuestionSeriesInline]
     form = BlockForm
-    classes = ["collapse", "wide"]
+    autocomplete_fields = ["playlists"]
+    classes = ["wide"]
 
     def get_extra(self, request, obj=None, **kwargs):
         if obj:
@@ -80,7 +81,6 @@ class PhaseInline(NestedTabularInline):
     model = Phase
     sortable_field_name = "index"
     inlines = [BlockInline]
-    classes = ["collapse"]
 
     def get_extra(self, request, obj=None, **kwargs):
         if obj:
@@ -117,7 +117,6 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, NestedModelAdmin):
         PhaseInline,
         SocialMediaConfigInline,
     ]
-    save_on_top = True
 
     class Media:
         css = {"all": ("experiment_admin.css",)}

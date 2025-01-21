@@ -1,4 +1,14 @@
 document.addEventListener("DOMContentLoaded", function () {
+    moveFields();
+    enableDefaultQuestionButtons();
+    initCollapsibleInlineForms();
+    floatingSubmitRow();
+});
+
+/**
+ * move theme_config and active field to bottom of form
+ */
+function moveFields() {
     const formElement = document.querySelector('#experiment_form');
     const submitRow = document.querySelectorAll('.submit-row')[1]
     const activeField = document.querySelector('.form-row.field-active');
@@ -10,7 +20,29 @@ document.addEventListener("DOMContentLoaded", function () {
     activeField.remove();
     fieldsetWrapper.append(activeField);
     formElement.insertBefore(fieldsetWrapper, submitRow);
-});
+}
+
+function enableDefaultQuestionButtons() {
+    const questionSeriesFieldsets = document.querySelectorAll('fieldset[aria-labelledby$="questionseries_set-heading"]');
+    questionSeriesFieldsets.forEach(el => {
+        const defaultQuestionsButton = el.querySelector('#default-questions');
+        if (defaultQuestionsButton) {
+            defaultQuestionsButton.addEventListener('click', addDefaultQuestions);
+        }
+    });
+}
+
+async function addDefaultQuestions(event) {
+    const slug = event.currentTarget.name;
+
+    const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+    let response = await fetch(`/experiment/block/${slug}/default_question_series/`,
+        { method: "POST", mode: 'same-origin', headers: { 'X-CSRFToken': csrftoken } })
+
+    if (response.ok) {
+        location.reload();
+    }
+}
 
 function initCollapsibleInlineForms() {
 
