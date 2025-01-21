@@ -1,6 +1,7 @@
 import json
+import logging
 
-from django.test import Client, RequestFactory, TestCase
+from django.test import Client, TestCase
 
 from experiment.models import Block
 from participant.models import Participant
@@ -27,6 +28,7 @@ class ResultTest(TestCase):
         session = self.client.session
         session['participant_id'] = self.participant.id
         session.save()
+        logging.disable(logging.CRITICAL)
 
     def test_get(self):
         response = self.client.get('/result/speed_swallow/')
@@ -84,7 +86,7 @@ class ResultTest(TestCase):
         request.update({"json_data": json.dumps({"irrelevant": "data"})})
         response = self.client.post('/result/score/', request)
         self.assertEqual(response.status_code, 500)
-        self.assertIn('No `form` found', str(response.content))
+        self.assertEqual(response.content.decode(), 'Invalid data')
 
     def test_intermediate_score(self):
         request = {"session_id": 424242}
