@@ -4,7 +4,7 @@ from typing import TypedDict, Union
 
 logger = logging.getLogger(__name__)
 
-from .models import Result
+from result.models import Result
 
 
 class ScoringData(TypedDict):
