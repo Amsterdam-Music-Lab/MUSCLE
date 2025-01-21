@@ -1,6 +1,6 @@
 import logging
 import math
-from typing import Optional, TypedDict, Union
+from typing import TypedDict, Union
 
 logger = logging.getLogger(__name__)
 
@@ -18,20 +18,11 @@ class LikertData(ScoringData):
 class ChoiceData(ScoringData):
     choices: dict
 
-
-def check_expected_response(result: Result) -> Optional[str]:
-    """Get `expected_response` from Result object, if available"""
-    try:
-        return result.expected_response
-    except Exception as e:
-        logger.log(e)
-        return None
-
-
 def correctness_score(result: Result, data: ScoringData) -> int:
     """Binary score: return 1 if the participant's response is equal to the expected response, 0 otherwise"""
-    expected_response = check_expected_response(result)
-    if expected_response and expected_response == result.given_response:
+    if (
+        result.expected_response == result.given_response
+    ):  # TODO: raise exception if expected_response or given_response are `None`
         return 1
     else:
         return 0
@@ -66,11 +57,17 @@ def reaction_time_score(result: Result, data: ScoringData) -> float:
     and the participant's reaction time (`decision_time`)
     If the answer of the participant is incorrect, return the negative reaction time
     """
-    expected_response = check_expected_response(result)
-    json_data = result.json_data
+    expected_response = result.expected_response
+    json_data = (
+        result.json_data
+    )  # TODO: raise exception if either expected_response or json_data is `None`
     if expected_response and json_data:
-        time = json_data.get('decision_time')
-        timeout = json_data.get('config').get('response_time')
+        time = json_data.get(
+            'decision_time'
+        )  # TODO: raise exception if json_data does not contain decision_time
+        timeout = json_data.get('config').get(
+            'response_time'
+        )  # TODO: raise exception if json_data does not contain config with response_time
         if expected_response == data['value']:
             return math.ceil(timeout - time)
         else:
@@ -86,7 +83,9 @@ def song_sync_recognition_score(result: Result, data: ScoringData) -> float:
         return 0
     json_data = result.json_data
     if json_data:
-        time = json_data.get('decision_time')
+        time = json_data.get(
+            'decision_time'
+        )  # TODO: raise exception if time or timeout are `None`
         timeout = json_data.get('config').get('response_time')
         return math.ceil(timeout - time)
 
@@ -97,8 +96,10 @@ def song_sync_continuation_score(result: Result, data: dict):
     If answered incorrectly, this function modifies the reaction time score of the previous step.
     """
     previous_result = result.session.last_result(["recognize"])
-    if check_expected_response(result) != result.given_response:
-        previous_result.score *= -1
+    if result.expected_response != result.given_response:
+        previous_result.score *= (
+            -1
+        )  # will raise exception if `previous_result.score = None`
         previous_result.save()
     return None
 

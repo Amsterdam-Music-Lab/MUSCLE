@@ -42,17 +42,21 @@ def handle_results(data: dict, session: Session) -> bool:
         data: the data passed from the frontend
         session: the session for which results should be defined
 
-    Returns:
-        `True` if scoring of all results was successful. Otherwise, underlying functions will raise errors
+    Raises:
+        KeyError: if the request data does not contain a `form`
     """
-    form = data.pop("form")
+    try:
+        form = data.pop("form")
+    except KeyError:
+        raise KeyError('No `form` found in request data')
     for form_element in form:
         result = get_result(session, form_element)
         # save relevant data such as config and decision time (except for the popped form)
         result.save_json_data(data)
         result.save()
-        result = score_result(form_element, session)
-    return True
+        result = score_result(
+            form_element, session
+        )  # TODO: raise Exceptions from underlying score functions
 
 
 def prepare_profile_result(
@@ -75,6 +79,7 @@ def prepare_profile_result(
     result, created = Result.objects.get_or_create(
         question_key=question_key,
         participant=participant,
+        scoring_rule=scoring_rule,
         **kwargs,
     )
     return result

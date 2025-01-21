@@ -8,6 +8,7 @@ from django.http import (
     HttpResponseServerError,
     JsonResponse,
     HttpResponseBadRequest,
+    HttpResponseNotFound,
 )
 
 from participant.utils import get_participant
@@ -31,6 +32,8 @@ def score(
         a HttpResponseServerError: if no result can be retrieved or created based on the session / participant / request data
     """
     session = verify_session(request)
+    if isinstance(session, HttpResponse):
+        return session
 
     # Create result based on POST data
     json_data = request.POST.get("json_data")
@@ -40,13 +43,9 @@ def score(
     try:
         result_data = json.loads(json_data)
         # Create a result from the data
-        has_handled_results = handle_results(result_data, session)
-        if not has_handled_results:
-            return HttpResponseServerError(
-                "Could not create or score results based on the json_data"
-            )
-    except ValueError:
-        return HttpResponseServerError("Invalid data")
+        handle_results(result_data, session)
+    except Exception as e:
+        return HttpResponseServerError(f"Invalid data: {e}")
     return JsonResponse({'success': True})
 
 
@@ -62,6 +61,8 @@ def intermediate_score(
         a JsonResponse with the score, or a HttpResponseBadRequest if the request.POST data does not contain `json_data`
     """
     session = verify_session(request)
+    if isinstance(session, HttpResponse):
+        return session
     result = request.POST.get("json_data")
     if not result:
         return HttpResponseBadRequest("json_data not defined")
@@ -100,7 +101,6 @@ def current_profile(request: HttpRequest) -> JsonResponse:
         JsonResponse with serialized result objects
     """
     participant = get_participant(request)
-
     return JsonResponse(participant.profile_object(), json_dumps_params={'indent': 4})
 
 
@@ -147,7 +147,7 @@ def verify_session(
         session = Session.objects.get(
             pk=session_id, participant__id=participant.id)
     except Session.DoesNotExist:
-        return HttpResponseServerError("No session found")
+        return HttpResponseNotFound("No session found")
 
     # Prevent creating results when session is finished
     if session._is_finished():
