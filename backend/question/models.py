@@ -63,7 +63,7 @@ class Choice(models.Model):
 
     key = models.SlugField(max_length=128)
     text = models.CharField()
-    index = models.PositiveIntegerField()
+    index = models.PositiveIntegerField(default=0)
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
 
     class Meta:
