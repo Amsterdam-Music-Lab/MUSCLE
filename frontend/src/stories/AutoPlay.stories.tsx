@@ -1,7 +1,7 @@
 import AutoPlay from '../components/Playback/Autoplay';
 
 export default {
-    title: 'Components/AutoPlay',
+    title: 'Playback/AutoPlay',
     component: AutoPlay,
     argTypes: {
         instruction: { control: 'text' },

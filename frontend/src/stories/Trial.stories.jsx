@@ -1,7 +1,7 @@
 import Trial from "../components/Trial/Trial";
 
 export default {
-    title: "Trial",
+    title: "Trial/Trial",
     component: Trial,
     parameters: {
         layout: "fullscreen",
