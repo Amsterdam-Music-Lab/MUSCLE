@@ -11,6 +11,7 @@ import ParticipantLink from "../ParticipantLink/ParticipantLink";
 import UserFeedback from "../UserFeedback/UserFeedback";
 import FinalButton from "./FinalButton";
 import { Final as FinalAction } from "@/types/Action";
+import classNames from "@/util/classNames";
 
 export interface FinalProps extends FinalAction {
     onNext: () => void;
@@ -35,7 +36,8 @@ const Final = ({
     feedback_info,
     points,
     rank,
-    logo
+    logo,
+    percentile,
 }: FinalProps) => {
 
     const session = useBoundStore((state) => state.session);
@@ -49,10 +51,15 @@ const Final = ({
         <div className="aha__final d-flex flex-column justify-content-center">
             {rank && (
                 <div className="text-center">
-                    <Rank cup={{ className: rank.class, text: rank.text }} score={{ score, label: points }} />
+                    <Rank cup={{ className: rank?.class, text: rank.text }} score={{ score, label: points }} />
                 </div>
             )}
-            <div className="text-center">
+            {percentile !== undefined && (
+                <div className={classNames("aha__final-rank-bar-section", rank?.class)}>
+                    <div data-testid="final-rank-bar-cursor" className="aha__final-rank-bar-cursor" style={{ left: `${percentile}%` }}></div>
+                </div>
+            )}
+            <div className="aha__final-text">
                 <div dangerouslySetInnerHTML={{ __html: final_text }} />
             </div>
             {button && (
