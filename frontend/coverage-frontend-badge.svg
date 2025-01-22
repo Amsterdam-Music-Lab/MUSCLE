@@ -1,20 +1,20 @@
-<svg width="201.5" height="20" viewBox="0 0 2015 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Frontend Code Coverage: 84.38%">
-  <title>Frontend Code Coverage: 84.38%</title>
-  <linearGradient id="uGrhM" x2="0" y2="100%">
+<svg width="201.5" height="20" viewBox="0 0 2015 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Frontend Code Coverage: 84.47%">
+  <title>Frontend Code Coverage: 84.47%</title>
+  <linearGradient id="GWKjh" x2="0" y2="100%">
     <stop offset="0" stop-opacity=".1" stop-color="#EEE"/>
     <stop offset="1" stop-opacity=".1"/>
   </linearGradient>
-  <mask id="XeEDT"><rect width="2015" height="200" rx="30" fill="#FFF"/></mask>
-  <g mask="url(#XeEDT)">
+  <mask id="GRyNP"><rect width="2015" height="200" rx="30" fill="#FFF"/></mask>
+  <g mask="url(#GRyNP)">
     <rect width="1475" height="200" fill="#555"/>
     <rect width="540" height="200" fill="#a0a127" x="1475"/>
-    <rect width="2015" height="200" fill="url(#uGrhM)"/>
+    <rect width="2015" height="200" fill="url(#GWKjh)"/>
   </g>
   <g aria-hidden="true" fill="#fff" text-anchor="start" font-family="Verdana,DejaVu Sans,sans-serif" font-size="110">
     <text x="60" y="148" textLength="1375" fill="#000" opacity="0.25">Frontend Code Coverage</text>
     <text x="50" y="138" textLength="1375">Frontend Code Coverage</text>
-    <text x="1530" y="148" textLength="440" fill="#000" opacity="0.25">84.38%</text>
-    <text x="1520" y="138" textLength="440">84.38%</text>
+    <text x="1530" y="148" textLength="440" fill="#000" opacity="0.25">84.47%</text>
+    <text x="1520" y="138" textLength="440">84.47%</text>
   </g>
   
 </svg>
