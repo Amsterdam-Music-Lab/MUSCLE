@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Tabs } from './Tabs';
 import { FiPlus, FiTrash } from 'react-icons/fi';
 import { BlockTranslatedContent } from '../types/types';
@@ -19,13 +19,6 @@ const defaultContent: BlockTranslatedContent = {
 
 export const BlockTranslatedContentForms: React.FC<BlockTranslatedContentFormsProps> = ({ contents, onChange }) => {
   const [activeTabIndex, setActiveTabIndex] = React.useState(0);
-
-  useEffect(() => {
-    // If we have no contents, create a default one
-    if (contents.length === 0) {
-      handleAdd();
-    }
-  }, []);
 
   const handleAdd = () => {
     const newContent = {
