@@ -16,6 +16,8 @@ from section.models import Playlist
 
 
 class ExperimentTranslatedContentSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(required=False)
+
     class Meta:
         model = ExperimentTranslatedContent
         fields = ["id", "index", "language", "name", "description", "about_content", "social_media_message"]
@@ -146,6 +148,7 @@ class ExperimentSerializer(serializers.ModelSerializer):
             # Update or create translated content
             for content_data in translated_content_data:
                 content_id = content_data.get("id")
+
                 if content_id:
                     content, _ = ExperimentTranslatedContent.objects.update_or_create(
                         id=content_id, experiment=instance, defaults=content_data
