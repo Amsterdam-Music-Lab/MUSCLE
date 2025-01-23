@@ -1,14 +1,21 @@
-import random
 import uuid
 
 from django.contrib.humanize.templatetags.humanize import naturalday
 from django.db import models
-
+from django.db.models.query import QuerySet
 from question.models import QuestionGroup
 from django.db.models import Sum
+from result.models import Result
 
 class Participant(models.Model):
-    """Main participant, base for profile and sessions"""
+    """Main participant, base for profile and sessions
+
+    Attributes:
+        unique_hash (str): Unique identifier string
+        country_code (str): Country code of the participant
+        access_info (str): HTTP_USER_AGENT info
+        participant_id_url (str): URL code to link an experiment to a participant
+    """
 
     unique_hash = models.CharField(
         max_length=64, unique=True, default=uuid.uuid4)
@@ -19,14 +26,22 @@ class Participant(models.Model):
     def __str__(self):
         return "Participant {}".format(self.id)
 
-    def session_count(self):
-        """Get number of sessions"""
+    def session_count(self) -> int:
+        """Get number of sessions
+
+        Returns:
+            Number of started sessions by a Participant
+        """
         return self.session_set.count()
 
     session_count.short_description = 'Sessions'
 
-    def result_count(self):
-        """Get total number of results"""
+    def result_count(self) -> int:
+        """Get total number of results
+
+        Returns:
+            Total number of results from all sessions by a Participant
+        """
         c = 0
         for session in self.session_set.all():
             c += session.result_set.count()
@@ -34,8 +49,12 @@ class Participant(models.Model):
 
     result_count.short_description = 'Results'
 
-    def _export_admin(self):
-        """Export data to admin"""
+    def _export_admin(self)  -> dict:
+        """Export data to admin
+
+        Returns:
+            Participant data for admin
+        """
         return {
             "id": self.id,
             "unique_hash": self.unique_hash,
@@ -45,16 +64,29 @@ class Participant(models.Model):
             "profile": self.profile_object()
         }
 
-    def export_profiles(self):
-        # export participant profile result objects
+    def export_profiles(self) -> QuerySet[Result]:
+        """Export participant profile result objects
+
+        Returns:
+            All profile results from a participant
+        """
+
         return self.result_set.all()
 
-    def profile(self):
-        """Get all answered results of this participant"""
+    def profile(self) -> QuerySet[Result]:
+        """Get all answered results of this participant
+
+        Returns:
+            All answered profile results from a participant
+        """
         return self.result_set.all().filter(given_response__isnull=False)
 
-    def profile_object(self):
-        """Get full profile data"""
+    def profile_object(self) -> dict:
+        """Get full profile data
+
+        Returns:
+            All profile data from a Participant
+        """
         profile_object = {}
         for profile in self.profile():
             profile_object[profile.question_key] = profile.given_response
@@ -63,12 +95,21 @@ class Participant(models.Model):
                     profile.question_key)] = profile.score
         return profile_object
 
-    def is_dutch(self):
-        """Return if participant is tagged with Netherlands (nl) country code"""
+    def is_dutch(self) -> bool:
+        """Return if participant is tagged with Netherlands (nl) country code
+
+        Returns:
+            If a participant is located in the Netherlands, or not.
+        """
         return self.country_code == "nl"
 
-    def scores_per_experiment(self):
-        """Scores per finished experiment session"""
+    def scores_per_experiment(self) -> dict:
+        """Scores per finished experiment session
+
+        Returns:
+            All finished sessions and best scores from a Participant
+
+        """
         scores = []
 
         # Get all finished sessions
@@ -96,8 +137,12 @@ class Participant(models.Model):
 
         return scores
 
-    def score_sum(self, question_group_key):
-        """ Sums scores of all profile results with questions in a question group"""
+    def score_sum(self, question_group_key) -> float:
+        """ Sums scores of all profile results with questions in a question group
+
+        Returns:
+            Total score of all profile results from a Participant
+        """
 
         question_keys = QuestionGroup.objects.get(key=question_group_key).questions.values_list("key", flat=True)
 
