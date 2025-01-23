@@ -39,7 +39,6 @@ class SponsorImage(models.Model):
 class FooterConfig(models.Model):
     theme = models.OneToOneField(
         'ThemeConfig', on_delete=models.CASCADE, related_name='footer')
-    disclaimer = models.TextField(blank=True, default='')
     logos = models.ManyToManyField(
         to='image.Image',
         through='SponsorImage',
@@ -47,7 +46,6 @@ class FooterConfig(models.Model):
         blank=True,
         help_text='Add references to Image objects; make sure these have sufficient contrast with the background (image).'
     )
-    privacy = models.TextField(blank=True, default='')
 
     def __str__(self):
         return f"Footer for {self.theme.name}"

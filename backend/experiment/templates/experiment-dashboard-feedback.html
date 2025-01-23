@@ -12,7 +12,7 @@
 
             <div class="feedback-row hide block-{{ item.block.id }}">
                     <h3>
-                        Block: <a href="{% url 'admin:experiment_block_change' item.block.id %}" target="_blank" title="Block URL id">{{ item.block }}</a>
+                        Block: {{ item.block }}
                     </h3>
                 </a>
                 <p>{{ item.text }}</p>

@@ -64,6 +64,7 @@ export interface Final {
   block: Block;
   participant: Participant;
   score: number;
+  percentile?: number;
   final_text: string | TrustedHTML;
   action_texts: {
     all_experiments: string;

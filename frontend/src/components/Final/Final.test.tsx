@@ -184,4 +184,51 @@ describe('Final Component', () => {
             expect(onNextMock).toHaveBeenCalled();
         });
     });
+
+    it('Sets the rank cursor position correctly based on percentile', () => {
+        render(
+            <BrowserRouter>
+                <Final
+                    rank={{ class: 'rank-class', text: 'Rank Text' }}
+                    score={100}
+                    final_text="<p>Final Text</p>"
+                    percentile={50}
+                />
+            </BrowserRouter>
+        );
+
+        const cursor = screen.getByTestId('final-rank-bar-cursor');
+        expect(cursor.style.left).toBe('50%');
+    });
+
+    it('does not render percentile/rank part when percentile is not defined', () => {
+        render(
+            <BrowserRouter>
+                <Final
+                    block={{ slug: 'test-block' }}
+                    participant="participant-id"
+                    score={100}
+                    final_text="<p>Final Text</p>"
+                />
+            </BrowserRouter>
+        );
+
+        expect(document.body.contains(screen.queryByTestId('final-rank-bar-cursor'))).toBe(false);
+    });
+
+    it('renders percentile/rank part when percentile is defined', () => {
+        render(
+            <BrowserRouter>
+                <Final
+                    block={{ slug: 'test-block' }}
+                    participant="participant-id"
+                    score={100}
+                    final_text="<p>Final Text</p>"
+                    percentile={75}
+                />
+            </BrowserRouter>
+        );
+
+        expect(document.body.contains(screen.queryByTestId('final-rank-bar-cursor'))).toBe(true);
+    });
 });

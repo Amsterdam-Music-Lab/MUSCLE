@@ -54,7 +54,6 @@ INSTALLED_APPS = [
     "django.contrib.humanize",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "django_select2",
     "nested_admin",
     "inline_actions",
     "django_markup",
@@ -134,7 +133,7 @@ USE_L10N = True
 
 USE_TZ = True
 
-MODELTRANSLATION_LANGUAGES = ("en", "nl", "pt")
+MODELTRANSLATION_LANGUAGES = ('en', 'nl', 'pt','zh-hans')
 
 # Increase django limits for large data sets
 # A request timeout should be set in the webserver

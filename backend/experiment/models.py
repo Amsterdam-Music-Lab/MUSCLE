@@ -1,23 +1,20 @@
 import copy
 from os.path import join
+from typing import Any, List, Optional
 
 from django.db import models
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _, get_language
 from django.contrib.postgres.fields import ArrayField
 from django.db.models.query import QuerySet
-from typing import List, Any
 from experiment.standards.iso_languages import ISO_LANGUAGES
 from theme.models import ThemeConfig
 from image.models import Image
 from session.models import Session
-from typing import Optional
 
 from .validators import markdown_html_validator, block_slug_validator, experiment_slug_validator
 
 language_choices = [(key, ISO_LANGUAGES[key]) for key in ISO_LANGUAGES.keys()]
-language_choices[0] = ("", "Unset")
-
 
 class Experiment(models.Model):
     """A model to allow nesting multiple phases with blocks into a 'parent' experiment
@@ -199,8 +196,6 @@ class Block(models.Model):
         phase (Phase): The phase this block belongs to
         index (int): Index of this phase
         playlists (list(section.models.Playlist)): The playlist(s) used in this block
-        name (str): Name of this block
-        description (str): Description of this block
         image (image.models.Image): Image that will be showed on the dashboard
         slug (str): Slug for this block
         active (bool): Is this block active?
@@ -222,8 +217,6 @@ class Block(models.Model):
     bonus_points = models.PositiveIntegerField(default=0)
     rules = models.CharField(default="", max_length=64)
 
-    translated_contents = models.QuerySet["BlockTranslatedContent"]
-
     theme_config = models.ForeignKey(ThemeConfig, on_delete=models.SET_NULL, blank=True, null=True)
 
     def __str__(self):
@@ -238,6 +231,7 @@ class Block(models.Model):
 
     @property
     def name(self):
+        """Name of the block, which will be used for dashboards"""
         content = self.get_fallback_content()
         return content.name if content and content.name else ""
 
@@ -455,10 +449,6 @@ class Block(models.Model):
         Returns:
             Fallback content
         """
-
-        if not self.phase or self.phase.experiment:
-            return self.translated_contents.first()
-
         experiment = self.phase.experiment
         fallback_language = experiment.get_fallback_content().language
         fallback_content = self.translated_contents.filter(language=fallback_language).first()
@@ -498,7 +488,16 @@ class Block(models.Model):
         return self.get_translated_content(language, fallback)
 
 
-class ExperimentTranslatedContent(models.Model):
+class TranslatedContent(models.Model):
+    language = models.CharField(
+        default="en", blank=True, choices=language_choices, max_length=2
+    )
+
+    class Meta:
+        abstract = True
+
+
+class ExperimentTranslatedContent(TranslatedContent):
     """Translated content for an Experiment
 
     Attributes:
@@ -509,11 +508,14 @@ class ExperimentTranslatedContent(models.Model):
         consent (FileField): Consent text markdown or html
         about_content (str): About text
         social_media_message (str): Message to post with on social media. Can contain {points} and {experiment_name} placeholders
+        disclaimer (str): Disclaimer text
+        privacy (str): Privacy statement text
     """
 
-    experiment = models.ForeignKey(Experiment, on_delete=models.CASCADE, related_name="translated_content")
+    experiment = models.ForeignKey(
+        Experiment, on_delete=models.CASCADE, related_name="translated_content"
+    )
     index = models.IntegerField(default=0)
-    language = models.CharField(default="", blank=True, choices=language_choices, max_length=2)
     name = models.CharField(max_length=64, default="")
     description = models.TextField(blank=True, default="")
     consent = models.FileField(
@@ -525,9 +527,15 @@ class ExperimentTranslatedContent(models.Model):
         help_text=_("Content for social media sharing. Use {points} and {experiment_name} as placeholders."),
         default="I scored {points} points in {experiment_name}!",
     )
+    disclaimer = models.TextField(blank=True, default='')
+    privacy = models.TextField(blank=True, default='')
+
+    class Meta:
+        unique_together = ["experiment", "language"]
+        ordering = ["index"]
 
 
-class BlockTranslatedContent(models.Model):
+class BlockTranslatedContent(TranslatedContent):
     """Translated content for a Block
 
     Attributes:
@@ -538,13 +546,14 @@ class BlockTranslatedContent(models.Model):
 
     """
 
-    block = models.ForeignKey(Block, on_delete=models.CASCADE, related_name="translated_contents")
-    language = models.CharField(default="", blank=True, choices=language_choices, max_length=2)
+    block = models.ForeignKey(
+        Block, on_delete=models.CASCADE, related_name="translated_contents"
+    )
     name = models.CharField(max_length=64, default="")
     description = models.TextField(blank=True, default="")
 
     def __str__(self):
-        return f"{self.name} ({self.language})"
+        return f"Block text: {ISO_LANGUAGES.get(self.language)}"
 
     class Meta:
         # Assures that there is only one translation per language

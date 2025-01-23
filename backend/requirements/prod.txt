@@ -31,7 +31,7 @@ coverage==7.3.2
     # via -r requirements.in/base.txt
 defusedxml==0.7.1
     # via genbadge
-django==4.2.17
+django==4.2.18
     # via
     #   -r requirements.in/base.txt
     #   django-appconf

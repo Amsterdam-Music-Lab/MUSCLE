@@ -20,12 +20,20 @@ router.register(r"experiments", ExperimentViewSet, basename="experiment")
 urlpatterns = [
     # Experiment API
     path("api/", include(router.urls)),
-    path("add_default_question_series/<int:id>/", add_default_question_series, name="add_default_question_series"),
     # Experiment
     path("render_markdown/", render_markdown, name="render_markdown"),
-    path("validate_playlist/<str:rules_id>", validate_block_playlist, name="validate_block_playlist"),
+    path(
+        "validate_playlist/<str:rules_id>",
+        validate_block_playlist,
+        name="validate_block_playlist",
+    ),
     path("block/<slug:slug>/", get_block, name="block"),
     path("block/<slug:slug>/feedback/", post_feedback, name="feedback"),
+    path(
+        "block/<slug:slug>/default_question_series/",
+        add_default_question_series,
+        name="default_question_series",
+    ),
     path("<slug:slug>/", get_experiment, name="experiment"),
     # Robots.txt
     path(
