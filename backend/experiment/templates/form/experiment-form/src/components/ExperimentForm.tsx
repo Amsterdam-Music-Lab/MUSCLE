@@ -246,6 +246,8 @@ const ExperimentForm: React.FC<ExperimentFormProps> = () => {
           </Routes>
         </div>
 
+        <hr className="my-4 border-t border-gray-300" />
+
         <Button
           type="submit"
           disabled={saveLoading}
