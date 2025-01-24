@@ -8,6 +8,7 @@ import { FiTrash2 } from 'react-icons/fi';
 import { Button } from './Button';
 import { BlockTranslatedContentForms } from './BlockTranslatedContentForms';
 import { useBlockPlaylists } from '../hooks/useBlockPlaylists';
+import { QuestionSeriesForms } from './QuestionSeriesForms';
 
 interface BlockFormProps {
   block: Block;
@@ -120,8 +121,13 @@ export const BlockForm: React.FC<BlockFormProps> = ({ block, onChange, onDelete 
       </div>
 
       <BlockTranslatedContentForms
-        contents={block.translated_contents || []}  // Changed from translated_content
-        onChange={(contents) => handleChange('translated_contents', contents)}  // Changed from translated_content
+        contents={block.translated_contents || []}
+        onChange={(contents) => handleChange('translated_contents', contents)}
+      />
+
+      <QuestionSeriesForms
+        series={block.questionseries_set || []}
+        onChange={(series) => handleChange('questionseries_set', series)}
       />
     </div>
   );
