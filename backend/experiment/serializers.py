@@ -8,11 +8,11 @@ from rest_framework import serializers
 from experiment.actions.consent import Consent
 from image.serializers import serialize_image
 from participant.models import Participant
-from result.models import Result
 from session.models import Session
 from theme.serializers import serialize_theme
 from .models import Block, Experiment, Phase, SocialMediaConfig, ExperimentTranslatedContent, BlockTranslatedContent
 from section.models import Playlist
+from question.models import QuestionSeries, QuestionGroup, Question
 
 
 class ExperimentTranslatedContentSerializer(serializers.ModelSerializer):
@@ -37,10 +37,34 @@ class PlaylistSerializer(serializers.ModelSerializer):
         fields = ["id", "name"]
 
 
+class QuestionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Question
+        fields = ["key", "question", "is_skippable"]
+
+
+class QuestionGroupSerializer(serializers.ModelSerializer):
+    questions = serializers.PrimaryKeyRelatedField(
+        many=True,
+        read_only=True,
+    )
+
+    class Meta:
+        model = QuestionGroup
+        fields = ["key", "questions", "editable"]
+
+
+class QuestionSeriesSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = QuestionSeries
+        fields = ["id", "name", "index", "randomize", "questions"]
+
+
 class BlockSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(required=False)
     translated_contents = BlockTranslatedContentSerializer(many=True, required=False, read_only=False)
     playlists = PlaylistSerializer(many=True, required=False)
+    questionseries_set = QuestionSeriesSerializer(many=True, read_only=True)
 
     class Meta:
         model = Block
@@ -52,7 +76,8 @@ class BlockSerializer(serializers.ModelSerializer):
             "bonus_points",
             "rules",
             "translated_contents",
-            "playlists",  # many to many field
+            "playlists",
+            "questionseries_set",
         ]
         extra_kwargs = {
             "slug": {"validators": []},
