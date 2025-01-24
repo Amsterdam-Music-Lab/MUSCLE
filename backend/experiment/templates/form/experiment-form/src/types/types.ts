@@ -20,6 +20,15 @@ export interface BlockPlaylist {
   name: string;
 }
 
+export type BlockQuestionSeries = {
+  id?: number;
+  name: string;
+  index: number;
+  randomize: boolean;
+  questions: string[];
+}
+
+
 export interface Block {
   id?: number;
   index: number;
@@ -30,6 +39,7 @@ export interface Block {
   phase?: number;  // Make phase optional
   translated_contents: BlockTranslatedContent[];
   playlists: BlockPlaylist[];
+  questionseries_set: BlockQuestionSeries[];
 }
 
 export interface Phase {

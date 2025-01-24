@@ -1,15 +1,15 @@
 import React from 'react';
 import { Tabs } from './Tabs';
 import { FiPlus, FiTrash } from 'react-icons/fi';
-import { QuestionSeries } from '../types/types';
+import { BlockQuestionSeries } from '../types/types';
 import { QuestionSeriesForm } from './QuestionSeriesForm';
 
 interface QuestionSeriesFormsProps {
-  series: QuestionSeries[];
-  onChange: (series: QuestionSeries[]) => void;
+  series: BlockQuestionSeries[];
+  onChange: (series: BlockQuestionSeries[]) => void;
 }
 
-const defaultQuestionSeries: QuestionSeries = {
+const defaultQuestionSeries: BlockQuestionSeries = {
   id: undefined,
   name: '',
   index: 0,
@@ -40,7 +40,7 @@ export const QuestionSeriesForms: React.FC<QuestionSeriesFormsProps> = ({ series
     }
   };
 
-  const handleChange = (index: number, newSeries: QuestionSeries) => {
+  const handleChange = (index: number, newSeries: BlockQuestionSeries) => {
     const updatedSeries = series.map((s, i) => {
       if (i === index) {
         return { ...s, ...newSeries };

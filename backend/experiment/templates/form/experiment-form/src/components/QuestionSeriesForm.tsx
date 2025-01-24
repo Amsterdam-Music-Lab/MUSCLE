@@ -1,12 +1,12 @@
 import React from 'react';
-import { QuestionSeries } from '../types/types';
+import { BlockQuestionSeries } from '../types/types';
 import { FormField } from './form/FormField';
 import { Input } from './form/Input';
 import { Select } from './form/Select';
 
 interface QuestionSeriesFormProps {
-  series: QuestionSeries;
-  onChange: (series: QuestionSeries) => void;
+  series: BlockQuestionSeries;
+  onChange: (series: BlockQuestionSeries) => void;
 }
 
 export function QuestionSeriesForm({ series, onChange }: QuestionSeriesFormProps) {
