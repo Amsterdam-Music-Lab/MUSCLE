@@ -12,7 +12,7 @@ from session.models import Session
 from theme.serializers import serialize_theme
 from .models import Block, Experiment, Phase, SocialMediaConfig, ExperimentTranslatedContent, BlockTranslatedContent
 from section.models import Playlist
-from question.models import QuestionSeries, QuestionGroup, Question
+from question.models import QuestionSeries, QuestionInSeries, Question
 
 
 class ExperimentTranslatedContentSerializer(serializers.ModelSerializer):
@@ -40,31 +40,71 @@ class PlaylistSerializer(serializers.ModelSerializer):
 class QuestionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Question
-        fields = ["key", "question", "is_skippable"]
+        fields = [
+            "key",
+            "question",
+            "type",
+            "is_skippable",
+            "explainer",
+            "scale_steps",
+            "profile_scoring_rule",
+            "min_value",
+            "max_value",
+            "max_length",
+            "min_values",
+            "view",
+        ]
 
 
-class QuestionGroupSerializer(serializers.ModelSerializer):
-    questions = serializers.PrimaryKeyRelatedField(
-        many=True,
-        read_only=True,
+class QuestionInSeriesSerializer(serializers.ModelSerializer):
+    question = QuestionSerializer(read_only=True)
+    question_id = serializers.PrimaryKeyRelatedField(
+        source="question", queryset=Question.objects.all(), write_only=True
     )
 
     class Meta:
-        model = QuestionGroup
-        fields = ["key", "questions", "editable"]
+        model = QuestionInSeries
+        fields = ["id", "question", "question_id", "index"]
 
 
 class QuestionSeriesSerializer(serializers.ModelSerializer):
+    questions = QuestionInSeriesSerializer(source="questioninseries_set", many=True, required=False)
+
     class Meta:
         model = QuestionSeries
         fields = ["id", "name", "index", "randomize", "questions"]
+
+    def create(self, validated_data):
+        questions_data = validated_data.pop("questioninseries_set", [])
+        question_series = QuestionSeries.objects.create(**validated_data)
+        self._handle_questions(question_series, questions_data)
+        return question_series
+
+    def update(self, instance, validated_data):
+        questions_data = validated_data.pop("questioninseries_set", [])
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+        instance.save()
+
+        # Clear existing questions and create new ones
+        instance.questioninseries_set.all().delete()
+        self._handle_questions(instance, questions_data)
+        return instance
+
+    def _handle_questions(self, question_series, questions_data):
+        for idx, question_data in enumerate(questions_data):
+            QuestionInSeries.objects.create(
+                question_series=question_series,
+                question=question_data["question"],
+                index=question_data.get("index", idx),
+            )
 
 
 class BlockSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(required=False)
     translated_contents = BlockTranslatedContentSerializer(many=True, required=False, read_only=False)
     playlists = PlaylistSerializer(many=True, required=False)
-    questionseries_set = QuestionSeriesSerializer(many=True, read_only=True)
+    questionseries_set = QuestionSeriesSerializer(many=True, read_only=False)
 
     class Meta:
         model = Block
@@ -100,6 +140,7 @@ class BlockSerializer(serializers.ModelSerializer):
     def update(self, instance, validated_data):
         translated_contents_data = validated_data.pop("translated_contents", [])
         playlists_data = validated_data.pop("playlists", [])
+        question_series_data = validated_data.pop("questionseries_set", [])
 
         for attr, value in validated_data.items():
             setattr(instance, attr, value)
@@ -118,6 +159,25 @@ class BlockSerializer(serializers.ModelSerializer):
 
         # Delete removed playlists
         instance.playlists.exclude(id__in=existing_playlist_ids).delete()
+
+        # Handle question series
+        if question_series_data is not None:
+            existing_series_ids = set()
+
+            for series_data in question_series_data:
+                series_id = series_data.get("id")
+                if series_id:
+                    series = QuestionSeries.objects.get(id=series_id)
+                    series_serializer = QuestionSeriesSerializer(series, data=series_data)
+                else:
+                    series_serializer = QuestionSeriesSerializer(data=series_data)
+
+                if series_serializer.is_valid(raise_exception=True):
+                    series = series_serializer.save(block=instance)
+                    existing_series_ids.add(series.id)
+
+            # Delete removed series
+            instance.questionseries_set.exclude(id__in=existing_series_ids).delete()
 
         instance.save()
 

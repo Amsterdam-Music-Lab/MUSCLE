@@ -55,7 +55,7 @@ export function QuestionSeriesForm({ series, onChange }: QuestionSeriesFormProps
             multiple
             value={series.questions}
             onChange={handleQuestionSelect}
-            required
+            // required
             className="min-h-[200px]"
           >
             {/* You'll need to fetch the available questions from your API */}
