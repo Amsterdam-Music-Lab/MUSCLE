@@ -48,6 +48,10 @@ const getExperimentName = (translations: TranslatedContent[]): string => {
   return firstTranslation.name || '-';
 };
 
+const truncateText = (text: string, maxLength: number = 20): string => {
+  return text.length > maxLength ? `${text.substring(0, maxLength)}...` : text;
+};
+
 const ExperimentsOverview = () => {
   const jwt = useBoundStore(state => state.jwt);
   const [experiments, error, loading, fetchData] = useFetch<Experiment[]>(url);
@@ -124,9 +128,15 @@ const ExperimentsOverview = () => {
                     </Link>
                   </td>
                   <td className="px-6 py-4 text-left whitespace-nowrap">
-                    {getExperimentName(experiment.translated_content)}
+                    <span title={getExperimentName(experiment.translated_content)}>
+                      {truncateText(getExperimentName(experiment.translated_content))}
+                    </span>
                   </td>
-                  <td className="px-6 py-4 text-left whitespace-nowrap">{experiment.slug}</td>
+                  <td className="px-6 py-4 text-left whitespace-nowrap">
+                    <span title={experiment.slug}>
+                      {truncateText(experiment.slug)}
+                    </span>
+                  </td>
                   <td className="px-6 py-4 text-left whitespace-nowrap">
                     <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${experiment.active ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
                       }`}>
