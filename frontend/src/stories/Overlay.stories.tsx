@@ -4,7 +4,7 @@ import { useState } from 'react';
 import Button from '@/components/Button/Button';
 
 const meta: Meta<typeof Overlay> = {
-    title: 'Components/Overlay',
+    title: 'Overlay/Overlay',
     component: Overlay,
     parameters: {
     },

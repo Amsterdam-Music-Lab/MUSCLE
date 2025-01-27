@@ -3,7 +3,7 @@ import { BrowserRouter as Router } from "react-router-dom";
 import Final from "../components/Final/Final";
 
 export default {
-    title: "Final",
+    title: "Final/Final",
     component: Final,
     parameters: {
         layout: "fullscreen",

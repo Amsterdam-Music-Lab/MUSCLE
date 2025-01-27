@@ -4,7 +4,7 @@ import catImage from "./assets/images/cat-01.webp";
 console.log(catImage);
 
 export default {
-    title: "PlayCard",
+    title: "Playback/PlayCard",
     component: PlayCard,
     parameters: {
         layout: "fullscreen",
