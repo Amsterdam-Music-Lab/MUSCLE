@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { BlockQuestionSeries, Question, QuestionGroup, QuestionInSeries } from '../types/types';
+import { BlockQuestionSeries, Question, QuestionGroup } from '../types/types';
 import { FormField } from './form/FormField';
 import { Input } from './form/Input';
 import { Select } from './form/Select';
 import { API_BASE_URL } from '../config';
-
+import { SelectedQuestionsTable } from './question-series/SelectedQuestionsTable';
+import { AvailableQuestionsTable } from './question-series/AvailableQuestionsTable';
 
 interface QuestionSeriesFormProps {
   series: BlockQuestionSeries;
@@ -17,10 +18,8 @@ export function QuestionSeriesForm({ series, onChange }: QuestionSeriesFormProps
   const [selectedGroup, setSelectedGroup] = useState<string>('');
   const [searchQuery, setSearchQuery] = useState('');
   const [highlightedQuestionKey, setHighlightedQuestionKey] = useState<string | null>(null);
-  const [draggedQuestionKey, setDraggedQuestionKey] = useState<string | null>(null);
 
   useEffect(() => {
-    // Fetch available questions and groups
     fetch(API_BASE_URL + '/experiment/api/questions/')
       .then(res => res.json())
       .then(data => {
@@ -103,51 +102,6 @@ export function QuestionSeriesForm({ series, onChange }: QuestionSeriesFormProps
     }
   };
 
-  const handleDragStart = (e: React.DragEvent<HTMLTableRowElement>, questionKey: string) => {
-    setDraggedQuestionKey(questionKey);
-    e.currentTarget.classList.add('opacity-50');
-    // Set ghost drag image to be the entire row
-    if (e.dataTransfer) {
-      e.dataTransfer.effectAllowed = 'move';
-    }
-  };
-
-  const handleDragEnd = (e: React.DragEvent<HTMLTableRowElement>) => {
-    e.currentTarget.classList.remove('opacity-50');
-    setDraggedQuestionKey(null);
-  };
-
-  const handleDragOver = (e: React.DragEvent<HTMLTableRowElement>) => {
-    e.preventDefault();
-    e.currentTarget.classList.add('border-t-2', 'border-blue-500');
-  };
-
-  const handleDragLeave = (e: React.DragEvent<HTMLTableRowElement>) => {
-    e.currentTarget.classList.remove('border-t-2', 'border-blue-500');
-  };
-
-  const handleDrop = (e: React.DragEvent<HTMLTableRowElement>, targetQuestionKey: string) => {
-    e.preventDefault();
-    e.currentTarget.classList.remove('border-t-2', 'border-blue-500');
-
-    if (!draggedQuestionKey || draggedQuestionKey === targetQuestionKey) return;
-
-    const updatedQuestions = [...series.questions];
-    const draggedIndex = updatedQuestions.findIndex(q => q.key === draggedQuestionKey);
-    const targetIndex = updatedQuestions.findIndex(q => q.key === targetQuestionKey);
-
-    const [draggedQuestion] = updatedQuestions.splice(draggedIndex, 1);
-    updatedQuestions.splice(targetIndex, 0, draggedQuestion);
-
-    // Update indices to match new order
-    const reindexedQuestions = updatedQuestions.map((q, idx) => ({
-      ...q,
-      index: idx
-    }));
-
-    onChange({ ...series, questions: reindexedQuestions });
-  };
-
   return (
     <div className='p-5 bg-gray-50 mt-4'>
       <div className="p-5 bg-white border rounded-md space-y-5">
@@ -199,128 +153,21 @@ export function QuestionSeriesForm({ series, onChange }: QuestionSeriesFormProps
         </FormField>
 
         <div className="space-y-6">
-          {/* Selected Questions Table */}
-          {series.questions.length > 0 && (
-            <FormField label="Selected Questions">
-              <div className="mt-2 border rounded">
-                <table className="w-full">
-                  <thead>
-                    <tr className="bg-gray-50">
-                      <th className="px-4 py-2 text-left"></th>
-                      <th className="px-4 py-2 text-left">Question</th>
-                      <th className="px-4 py-2 text-left">Index</th>
-                      <th className="px-4 py-2 text-center">Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {series.questions.map((q) => {
-                      const question = availableQuestions.find(aq => aq.key === q.key);
-                      return (
-                        <tr
-                          key={q.key}
-                          draggable
-                          onDragStart={(e) => handleDragStart(e, q.key)}
-                          onDragEnd={handleDragEnd}
-                          onDragOver={(e) => handleDragOver(e)}
-                          onDragLeave={(e) => handleDragLeave(e)}
-                          onDrop={(e) => handleDrop(e, q.key)}
-                          className="border-t group"
-                        >
-                          <td className="px-4 py-2 text-center cursor-move select-none transition-colors text-gray-500 group-hover:text-black">
-                            <div className="w-full h-full">⠿</div>
-                          </td>
-                          <td className="px-4 py-2">{question?.question}</td>
-                          <td className="px-4 py-2">
-                            <input
-                              type="number"
-                              min="0"
-                              value={q.index}
-                              onChange={(e) => {
-                                const newIndex = parseInt(e.target.value);
-                                const updatedQuestions = series.questions.map(question =>
-                                  question.key === q.key
-                                    ? { ...question, index: newIndex }
-                                    : question
-                                );
-                                onChange({ ...series, questions: updatedQuestions });
-                              }}
-                              className="w-20 px-2 py-1 border rounded"
-                            />
-                          </td>
-                          <td className="px-4 py-2 text-center">
-                            <button
-                              type="button"
-                              onClick={() => handleRemoveQuestion(q.key)}
-                              className="text-red-600 hover:text-red-800 p-1 whitespace-nowrap"
-                              title="Remove question"
-                            >
-                              Remove -
-                            </button>
-                          </td>
-                        </tr>
-                      );
-                    })}
-                  </tbody>
-                </table>
-              </div>
-            </FormField>
-          )}
+          <SelectedQuestionsTable
+            questions={series.questions}
+            availableQuestions={availableQuestions}
+            onQuestionsChange={(questions) => onChange({ ...series, questions })}
+            onRemoveQuestion={handleRemoveQuestion}
+          />
 
-          {/* Available Questions Table */}
-          <FormField label="Available Questions">
-            <div className="space-y-2">
-              <input
-                type="text"
-                value={searchQuery}
-                onChange={handleSearch}
-                onKeyDown={handleSearchKeyDown}
-                placeholder="Search questions..."
-                className="w-full px-4 py-2 border rounded focus:ring-2 focus:ring-blue-200 focus:border-blue-400"
-              />
-              <div className="border rounded max-h-[400px] overflow-y-auto">
-                <table className="w-full">
-                  <thead className="sticky top-0 bg-gray-50">
-                    <tr>
-                      <th className="px-4 py-2 text-left">Question</th>
-                      <th className="px-4 py-2 text-left">Type</th>
-                      <th className="px-4 py-2 text-center">Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {filteredQuestions.map((question) => (
-                      <tr
-                        key={question.key}
-                        className={`border-t ${question.key === highlightedQuestionKey
-                          ? 'bg-blue-50'
-                          : 'hover:bg-gray-50'
-                          }`}
-                      >
-                        <td className="px-4 py-2">{question.question}</td>
-                        <td className="px-4 py-2">{question.type}</td>
-                        <td className="px-4 py-2 text-center">
-                          <button
-                            type="button"
-                            onClick={() => handleAddQuestion(question.key)}
-                            className="text-green-600 hover:text-green-800 p-1 whitespace-nowrap"
-                            title="Add question"
-                          >
-                            Add +
-                          </button>
-                        </td>
-                      </tr>
-                    ))}
-                    {filteredQuestions.length === 0 && (
-                      <tr>
-                        <td colSpan={3} className="px-4 py-2 text-center text-gray-500">
-                          No questions found
-                        </td>
-                      </tr>
-                    )}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </FormField>
+          <AvailableQuestionsTable
+            questions={filteredQuestions}
+            searchQuery={searchQuery}
+            highlightedQuestionKey={highlightedQuestionKey}
+            onSearch={handleSearch}
+            onSearchKeyDown={handleSearchKeyDown}
+            onAddQuestion={handleAddQuestion}
+          />
         </div>
       </div>
     </div>
