@@ -15,6 +15,8 @@ export function QuestionSeriesForm({ series, onChange }: QuestionSeriesFormProps
   const [availableQuestions, setAvailableQuestions] = useState<Question[]>([]);
   const [questionGroups, setQuestionGroups] = useState<QuestionGroup[]>([]);
   const [selectedGroup, setSelectedGroup] = useState<string>('');
+  const [searchQuery, setSearchQuery] = useState('');
+  const [highlightedQuestionKey, setHighlightedQuestionKey] = useState<string | null>(null);
 
   useEffect(() => {
     // Fetch available questions and groups
@@ -73,6 +75,43 @@ export function QuestionSeriesForm({ series, onChange }: QuestionSeriesFormProps
       .map((q, idx) => ({ ...q, index: idx })); // Reindex remaining questions
 
     onChange({ ...series, questions: updatedQuestions });
+  };
+
+  const filteredQuestions = availableQuestions
+    .filter(q => !series.questions.some(sq => sq.key === q.key))
+    .filter(q =>
+      q.question.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      q.key.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      q.type.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+
+  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchQuery(e.target.value);
+    if (filteredQuestions.length > 0) {
+      setHighlightedQuestionKey(filteredQuestions[0].key);
+    } else {
+      setHighlightedQuestionKey(null);
+    }
+  };
+
+  const handleSearchKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter' && highlightedQuestionKey) {
+      e.preventDefault();
+      handleAddQuestion(highlightedQuestionKey);
+      setSearchQuery('');
+    } else if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+      e.preventDefault();
+      const currentIndex = filteredQuestions.findIndex(q => q.key === highlightedQuestionKey);
+      let newIndex;
+
+      if (e.key === 'ArrowDown') {
+        newIndex = currentIndex < filteredQuestions.length - 1 ? currentIndex + 1 : 0;
+      } else {
+        newIndex = currentIndex > 0 ? currentIndex - 1 : filteredQuestions.length - 1;
+      }
+
+      setHighlightedQuestionKey(filteredQuestions[newIndex]?.key || null);
+    }
   };
 
   return (
@@ -182,20 +221,33 @@ export function QuestionSeriesForm({ series, onChange }: QuestionSeriesFormProps
 
           {/* Available Questions Table */}
           <FormField label="Available Questions">
-            <div className="mt-2 border rounded max-h-[400px] overflow-y-auto">
-              <table className="w-full">
-                <thead className="sticky top-0 bg-gray-50">
-                  <tr>
-                    <th className="px-4 py-2 text-left">Question</th>
-                    <th className="px-4 py-2 text-left">Type</th>
-                    <th className="px-4 py-2 text-center">Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {availableQuestions
-                    .filter(q => !series.questions.some(sq => sq.key === q.key))
-                    .map((question) => (
-                      <tr key={question.key} className="border-t">
+            <div className="space-y-2">
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={handleSearch}
+                onKeyDown={handleSearchKeyDown}
+                placeholder="Search questions..."
+                className="w-full px-4 py-2 border rounded focus:ring-2 focus:ring-blue-200 focus:border-blue-400"
+              />
+              <div className="border rounded max-h-[400px] overflow-y-auto">
+                <table className="w-full">
+                  <thead className="sticky top-0 bg-gray-50">
+                    <tr>
+                      <th className="px-4 py-2 text-left">Question</th>
+                      <th className="px-4 py-2 text-left">Type</th>
+                      <th className="px-4 py-2 text-center">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {filteredQuestions.map((question) => (
+                      <tr
+                        key={question.key}
+                        className={`border-t ${question.key === highlightedQuestionKey
+                            ? 'bg-blue-50'
+                            : 'hover:bg-gray-50'
+                          }`}
+                      >
                         <td className="px-4 py-2">{question.question}</td>
                         <td className="px-4 py-2">{question.type}</td>
                         <td className="px-4 py-2 text-center">
@@ -210,8 +262,16 @@ export function QuestionSeriesForm({ series, onChange }: QuestionSeriesFormProps
                         </td>
                       </tr>
                     ))}
-                </tbody>
-              </table>
+                    {filteredQuestions.length === 0 && (
+                      <tr>
+                        <td colSpan={3} className="px-4 py-2 text-center text-gray-500">
+                          No questions found
+                        </td>
+                      </tr>
+                    )}
+                  </tbody>
+                </table>
+              </div>
             </div>
           </FormField>
         </div>
