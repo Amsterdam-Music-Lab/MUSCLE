@@ -70,7 +70,7 @@ export interface Final {
     all_experiments: string;
     profile: string;
     play_again: string;
-  }
+  };
   button: {
     text: string;
     link: string;
@@ -78,14 +78,13 @@ export interface Final {
   show_participant_link: boolean;
   participant_id_only: boolean;
   show_profile_link: boolean;
-  show_percentile: boolean;
   social: Social;
   feedback_info?: FeedbackInfo;
   points: string;
   rank: {
     class: string;
     text: string;
-  }
+  };
   logo: {
     image: string;
     link: string;
