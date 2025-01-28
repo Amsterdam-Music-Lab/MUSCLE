@@ -193,6 +193,7 @@ describe('Final Component', () => {
                     score={100}
                     final_text="<p>Final Text</p>"
                     percentile={50}
+                    show_percentile={true}
                 />
             </BrowserRouter>
         );
@@ -216,7 +217,7 @@ describe('Final Component', () => {
         expect(document.body.contains(screen.queryByTestId('final-rank-bar-cursor'))).toBe(false);
     });
 
-    it('renders percentile/rank part when percentile is defined', () => {
+    it('does not percentile/rank part when only percentile is defined', () => {
         render(
             <BrowserRouter>
                 <Final
@@ -229,6 +230,56 @@ describe('Final Component', () => {
             </BrowserRouter>
         );
 
+        expect(document.body.contains(screen.queryByTestId('final-rank-bar-cursor'))).toBe(false);
+    });
+
+    it('does not render percentile/rank part when show_percentile is false', () => {
+        render(
+            <BrowserRouter>
+                <Final
+                    block={{ slug: 'test-block' }}
+                    participant="participant-id"
+                    score={100}
+                    final_text="<p>Final Text</p>"
+                    percentile={75}
+                    show_percentile={false}
+                />
+            </BrowserRouter>
+        );
+
+        expect(document.body.contains(screen.queryByTestId('final-rank-bar-cursor'))).toBe(false);
+    });
+
+    it('renders percentile/rank part when show_percentile is true', () => {
+        render(
+            <BrowserRouter>
+                <Final
+                    block={{ slug: 'test-block' }}
+                    participant="participant-id"
+                    score={100}
+                    final_text="<p>Final Text</p>"
+                    percentile={75}
+                    show_percentile={true}
+                />
+            </BrowserRouter>
+        );
+
         expect(document.body.contains(screen.queryByTestId('final-rank-bar-cursor'))).toBe(true);
+    });
+
+    it('defaults to not showing percentile when show_percentile is not specified', () => {
+        render(
+            <BrowserRouter>
+                <Final
+                    block={{ slug: 'test-block' }}
+                    participant="participant-id"
+                    score={100}
+                    final_text="<p>Final Text</p>"
+                    percentile={75}
+                />
+            </BrowserRouter>
+        );
+
+        expect(document.body.contains(screen.queryByTestId('final-rank-bar-cursor'))).toBe(false);
     });
 });
