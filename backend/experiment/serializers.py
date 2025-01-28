@@ -100,7 +100,6 @@ class QuestionSeriesSerializer(serializers.ModelSerializer):
         instance.save()
 
         # Clear existing questions and create new ones
-        instance.questioninseries_set.all().delete()
         self._handle_questions(instance, questions_data)
         return instance
 
@@ -110,18 +109,29 @@ class QuestionSeriesSerializer(serializers.ModelSerializer):
         return representation
 
     def _handle_questions(self, question_series, questions_data):
+        # Get existing questions
+        existing_questions = {qs.question.key: qs for qs in question_series.questioninseries_set.all()}
+
+        # Create set of new question keys
+        new_question_keys = set()
+
         for idx, question_data in enumerate(questions_data):
-            if isinstance(question_data, str):
-                # Handle the case where only a question key is provided
-                question = Question.objects.get(key=question_data)
+            question_key = question_data if isinstance(question_data, str) else question_data["question"].key
+            new_question_keys.add(question_key)
+
+            if question_key not in existing_questions:
+                # Only create new questions that don't exist
+                question = Question.objects.get(key=question_key)
                 QuestionInSeries.objects.create(question_series=question_series, question=question, index=idx)
             else:
-                # Handle the case where full question data is provided
-                QuestionInSeries.objects.create(
-                    question_series=question_series,
-                    question=question_data["question"],
-                    index=question_data.get("index", idx),
-                )
+                # Update index of existing question
+                existing_questions[question_key].index = idx
+                existing_questions[question_key].save()
+
+        # Remove questions that are not in the new set
+        question_series.questioninseries_set.filter(
+            question__key__in=set(existing_questions.keys()) - new_question_keys
+        ).delete()
 
 
 class BlockSerializer(serializers.ModelSerializer):
