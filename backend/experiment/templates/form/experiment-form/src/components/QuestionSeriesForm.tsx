@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { BlockQuestionSeries, Question, QuestionGroup } from '../types/types';
+import { BlockQuestionSeries, Question, QuestionGroup, QuestionInSeries } from '../types/types';
 import { FormField } from './form/FormField';
 import { Input } from './form/Input';
 import { Select } from './form/Select';
@@ -17,6 +17,7 @@ export function QuestionSeriesForm({ series, onChange }: QuestionSeriesFormProps
   const [selectedGroup, setSelectedGroup] = useState<string>('');
   const [searchQuery, setSearchQuery] = useState('');
   const [highlightedQuestionKey, setHighlightedQuestionKey] = useState<string | null>(null);
+  const [draggedQuestionKey, setDraggedQuestionKey] = useState<string | null>(null);
 
   useEffect(() => {
     // Fetch available questions and groups
@@ -27,18 +28,6 @@ export function QuestionSeriesForm({ series, onChange }: QuestionSeriesFormProps
         setQuestionGroups(data.questionGroups);
       });
   }, []);
-
-  const handleQuestionSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const selectedQuestionKeys = Array.from(e.target.selectedOptions, option => option.value);
-    const existingQuestions = series.questions.reduce((acc, q) => ({ ...acc, [q.key]: q }), {} as Record<string, QuestionInSeries>);
-
-    const updatedQuestions = selectedQuestionKeys.map((key, idx) => ({
-      key,
-      index: existingQuestions[key]?.index ?? idx
-    }));
-
-    onChange({ ...series, questions: updatedQuestions });
-  };
 
   const handleGroupSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const groupKey = e.target.value;
@@ -114,6 +103,51 @@ export function QuestionSeriesForm({ series, onChange }: QuestionSeriesFormProps
     }
   };
 
+  const handleDragStart = (e: React.DragEvent<HTMLTableRowElement>, questionKey: string) => {
+    setDraggedQuestionKey(questionKey);
+    e.currentTarget.classList.add('opacity-50');
+    // Set ghost drag image to be the entire row
+    if (e.dataTransfer) {
+      e.dataTransfer.effectAllowed = 'move';
+    }
+  };
+
+  const handleDragEnd = (e: React.DragEvent<HTMLTableRowElement>) => {
+    e.currentTarget.classList.remove('opacity-50');
+    setDraggedQuestionKey(null);
+  };
+
+  const handleDragOver = (e: React.DragEvent<HTMLTableRowElement>) => {
+    e.preventDefault();
+    e.currentTarget.classList.add('border-t-2', 'border-blue-500');
+  };
+
+  const handleDragLeave = (e: React.DragEvent<HTMLTableRowElement>) => {
+    e.currentTarget.classList.remove('border-t-2', 'border-blue-500');
+  };
+
+  const handleDrop = (e: React.DragEvent<HTMLTableRowElement>, targetQuestionKey: string) => {
+    e.preventDefault();
+    e.currentTarget.classList.remove('border-t-2', 'border-blue-500');
+
+    if (!draggedQuestionKey || draggedQuestionKey === targetQuestionKey) return;
+
+    const updatedQuestions = [...series.questions];
+    const draggedIndex = updatedQuestions.findIndex(q => q.key === draggedQuestionKey);
+    const targetIndex = updatedQuestions.findIndex(q => q.key === targetQuestionKey);
+
+    const [draggedQuestion] = updatedQuestions.splice(draggedIndex, 1);
+    updatedQuestions.splice(targetIndex, 0, draggedQuestion);
+
+    // Update indices to match new order
+    const reindexedQuestions = updatedQuestions.map((q, idx) => ({
+      ...q,
+      index: idx
+    }));
+
+    onChange({ ...series, questions: reindexedQuestions });
+  };
+
   return (
     <div className='p-5 bg-gray-50 mt-4'>
       <div className="p-5 bg-white border rounded-md space-y-5">
@@ -172,6 +206,7 @@ export function QuestionSeriesForm({ series, onChange }: QuestionSeriesFormProps
                 <table className="w-full">
                   <thead>
                     <tr className="bg-gray-50">
+                      <th className="px-4 py-2 text-left"></th>
                       <th className="px-4 py-2 text-left">Question</th>
                       <th className="px-4 py-2 text-left">Index</th>
                       <th className="px-4 py-2 text-center">Actions</th>
@@ -181,7 +216,19 @@ export function QuestionSeriesForm({ series, onChange }: QuestionSeriesFormProps
                     {series.questions.map((q) => {
                       const question = availableQuestions.find(aq => aq.key === q.key);
                       return (
-                        <tr key={q.key} className="border-t">
+                        <tr
+                          key={q.key}
+                          draggable
+                          onDragStart={(e) => handleDragStart(e, q.key)}
+                          onDragEnd={handleDragEnd}
+                          onDragOver={(e) => handleDragOver(e)}
+                          onDragLeave={(e) => handleDragLeave(e)}
+                          onDrop={(e) => handleDrop(e, q.key)}
+                          className="border-t group"
+                        >
+                          <td className="px-4 py-2 text-center cursor-move select-none transition-colors text-gray-500 group-hover:text-black">
+                            <div className="w-full h-full">⠿</div>
+                          </td>
                           <td className="px-4 py-2">{question?.question}</td>
                           <td className="px-4 py-2">
                             <input
@@ -244,8 +291,8 @@ export function QuestionSeriesForm({ series, onChange }: QuestionSeriesFormProps
                       <tr
                         key={question.key}
                         className={`border-t ${question.key === highlightedQuestionKey
-                            ? 'bg-blue-50'
-                            : 'hover:bg-gray-50'
+                          ? 'bg-blue-50'
+                          : 'hover:bg-gray-50'
                           }`}
                       >
                         <td className="px-4 py-2">{question.question}</td>
