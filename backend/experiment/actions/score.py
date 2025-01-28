@@ -40,7 +40,7 @@ class Score(BaseAction):
         Relates to the Score.tsx component in the frontend
     """
 
-    ID = "SCORE"
+    view = "SCORE"
 
     def __init__(
         self,
@@ -78,7 +78,7 @@ class Score(BaseAction):
         """
         # Create action
         action = {
-            "view": self.ID,
+            "view": self.view,
             "title": self.title,
             "score": self.score,
             "score_message": self.score_message,

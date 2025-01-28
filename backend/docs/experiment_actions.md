@@ -18,10 +18,6 @@
 
 ::: experiment.actions.form
 
-## experiment.actions.frontend_style
-
-::: experiment.actions.frontend_style
-
 ## experiment.actions.html
 
 ::: experiment.actions.html

@@ -65,7 +65,7 @@ describe('MultiPlayer Component', () => {
     });
 
     test('applies custom styles when provided', () => {
-        const customStyle = { root: 'custom-root-class' };
+        const customStyle = {'custom-root-class': true };
         const { container } = render(<MultiPlayer {...defaultProps} style={customStyle} />);
         expect(container.firstChild.classList.contains('custom-root-class')).toBe(true);
     });

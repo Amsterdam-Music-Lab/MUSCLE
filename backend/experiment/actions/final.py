@@ -88,7 +88,7 @@ class Final(BaseAction):  # pylint: disable=too-few-public-methods
         to render the final screen.
     """
 
-    ID = "FINAL"
+    view = "FINAL"
 
     RANKS = {
         "PLASTIC": {"text": _("plastic"), "class": "plastic"},
@@ -138,7 +138,7 @@ class Final(BaseAction):  # pylint: disable=too-few-public-methods
 
     def action(self) -> FinalActionResponse:
         response: FinalActionResponse = {
-            "view": self.ID,
+            "view": self.view,
             "score": self.total_score,
             "percentile": self.percentile,
             "rank": self.rank,

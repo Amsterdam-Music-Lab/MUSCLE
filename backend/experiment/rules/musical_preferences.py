@@ -6,7 +6,7 @@ from django.template.loader import render_to_string
 from experiment.actions import Explainer, Final, HTML, Redirect, Step, Trial
 from experiment.actions.form import BooleanQuestion, ChoiceQuestion, Form, LikertQuestionIcon
 from experiment.actions.playback import Autoplay
-from experiment.actions.styles import STYLE_BOOLEAN, STYLE_BOOLEAN_NEGATIVE_FIRST
+from experiment.actions.styles import ColorScheme
 
 from result.utils import prepare_result
 from result.models import Result
@@ -104,9 +104,11 @@ class MusicalPreferences(BaseRules):
                                 BooleanQuestion(
                                     key="audio_check2",
                                     choices={"no": _("Quit"), "yes": _("Next")},
-                                    result_id=prepare_result("audio_check2", session, scoring_rule="BOOLEAN"),
+                                    result_id=prepare_result(
+                                        "audio_check2", session, scoring_rule="BOOLEAN"
+                                    ),
                                     submits=True,
-                                    style=STYLE_BOOLEAN_NEGATIVE_FIRST,
+                                    style=[ColorScheme.BOOLEAN_NEGATIVE_FIRST],
                                 )
                             ]
                         )
@@ -130,9 +132,11 @@ class MusicalPreferences(BaseRules):
                         BooleanQuestion(
                             key="audio_check1",
                             choices={"no": _("No"), "yes": _("Yes")},
-                            result_id=prepare_result("audio_check1", session, scoring_rule="BOOLEAN"),
+                            result_id=prepare_result(
+                                "audio_check1", session, scoring_rule="BOOLEAN"
+                            ),
                             submits=True,
-                            style=STYLE_BOOLEAN_NEGATIVE_FIRST,
+                            style=[ColorScheme.BOOLEAN_NEGATIVE_FIRST],
                         )
                     ]
                 )
@@ -215,7 +219,7 @@ class MusicalPreferences(BaseRules):
             view="BUTTON_ARRAY",
             choices={"yes": "fa-check", "unsure": "fa-question", "no": "fa-xmark"},
             result_id=prepare_result(know_key, session, section=section),
-            style=STYLE_BOOLEAN,
+            style=[ColorScheme.BOOLEAN],
         )
         playback = Autoplay([section], show_animation=True)
         form = Form([know, likert])

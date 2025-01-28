@@ -32,9 +32,9 @@ Setup block data in the admin panel
 """
 
 from .base import BaseRules
-from experiment.actions import Consent, Explainer, Trial, Final
+from experiment.actions import Explainer, Trial, Final
 from experiment.actions.playback import PlayButton
-from question.utils import question_by_key
+from experiment.actions.styles import ButtonStyle, ColorScheme, TextStyle
 from django.db.models import Avg
 from experiment.actions.form import Form, ChoiceQuestion
 from result.utils import prepare_result
@@ -108,8 +108,12 @@ class TwoAlternativeForced(BaseRules):
         playback = PlayButton([section])
 
         key = 'choice'
-        button_style = {'neutral': True, 'invisible-text': True,
-                        'buttons-large-gap': True, 'buttons-large-text': True}
+        button_style = [
+            ColorScheme.NEUTRAL,
+            TextStyle.INVISIBLE,
+            ButtonStyle.LARGE_GAP,
+            ButtonStyle.LARGE_TEXT,
+        ]
         question = ChoiceQuestion(
             key=key,
             result_id=prepare_result(

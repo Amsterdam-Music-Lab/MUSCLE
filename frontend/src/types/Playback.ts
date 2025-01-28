@@ -12,8 +12,7 @@ export type PlaybackView = typeof AUTOPLAY | typeof BUTTON | typeof MULTIPLAYER 
 type PlaybackMethod = "EXTERNAL" | "HTML" | "BUFFER" | "NOAUDIO";
 
 interface FrontendStyle {
-    root: string | FrontendStyle;
-    [key: string]: string | FrontendStyle;
+    [key: string]: boolean;
 }
 
 export type ScoreFeedbackDisplay = "large-top" | "small-bottom-right" | "hidden";
