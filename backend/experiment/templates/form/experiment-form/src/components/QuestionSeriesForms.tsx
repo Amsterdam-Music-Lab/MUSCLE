@@ -63,7 +63,7 @@ export const QuestionSeriesForms: React.FC<QuestionSeriesFormsProps> = ({ series
       <h3 className="text-lg font-medium">Question Series*</h3>
       <small className="text-gray-500 mt-1">* Read only for now</small>
 
-      <div class="mt-4">
+      <div className="mt-4">
         <Tabs
           tabs={[
             ...series.map((s, index) => ({

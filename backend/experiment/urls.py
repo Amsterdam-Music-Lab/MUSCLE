@@ -10,6 +10,7 @@ from .views import (
     add_default_question_series,
     validate_block_playlist,
     block_rules,
+    get_available_questions,
 )
 
 app_name = "experiment"
@@ -41,4 +42,5 @@ urlpatterns = [
         TemplateView.as_view(template_name="robots.txt", content_type="text/plain"),
     ),
     path("api/block-rules/", block_rules, name="block-rules"),
+    path("api/questions/", get_available_questions, name="get_available_questions"),
 ]

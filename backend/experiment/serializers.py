@@ -57,31 +57,44 @@ class QuestionSerializer(serializers.ModelSerializer):
 
 
 class QuestionInSeriesSerializer(serializers.ModelSerializer):
-    question = QuestionSerializer(read_only=True)
-    question_id = serializers.PrimaryKeyRelatedField(
-        source="question", queryset=Question.objects.all(), write_only=True
+    question = QuestionSerializer(read_only=False)
+    question_key = serializers.SlugRelatedField(
+        source="question", queryset=Question.objects.all(), write_only=True, slug_field="key"
     )
 
     class Meta:
         model = QuestionInSeries
-        fields = ["id", "question", "question_id", "index"]
+        fields = ["id", "question", "question_key", "index"]
+
+    def to_internal_value(self, data):
+        if isinstance(data, str):
+            # Handle the case where only a question key is provided
+            return {"question_key": data}
+        return super().to_internal_value(data)
 
 
 class QuestionSeriesSerializer(serializers.ModelSerializer):
-    questions = QuestionInSeriesSerializer(source="questioninseries_set", many=True, required=False)
+    id = serializers.IntegerField(required=False)
+    questions = serializers.ListField(child=serializers.CharField(), write_only=True, required=False)
 
     class Meta:
         model = QuestionSeries
-        fields = ["id", "name", "index", "randomize", "questions"]
+        fields = [
+            "id",
+            "name",
+            "index",
+            "randomize",
+            "questions",
+        ]
 
     def create(self, validated_data):
-        questions_data = validated_data.pop("questioninseries_set", [])
+        questions_data = validated_data.pop("questions", [])
         question_series = QuestionSeries.objects.create(**validated_data)
         self._handle_questions(question_series, questions_data)
         return question_series
 
     def update(self, instance, validated_data):
-        questions_data = validated_data.pop("questioninseries_set", [])
+        questions_data = validated_data.pop("questions", [])
         for attr, value in validated_data.items():
             setattr(instance, attr, value)
         instance.save()
@@ -91,13 +104,24 @@ class QuestionSeriesSerializer(serializers.ModelSerializer):
         self._handle_questions(instance, questions_data)
         return instance
 
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        representation["questions"] = [q.question.key for q in instance.questioninseries_set.all()]
+        return representation
+
     def _handle_questions(self, question_series, questions_data):
         for idx, question_data in enumerate(questions_data):
-            QuestionInSeries.objects.create(
-                question_series=question_series,
-                question=question_data["question"],
-                index=question_data.get("index", idx),
-            )
+            if isinstance(question_data, str):
+                # Handle the case where only a question key is provided
+                question = Question.objects.get(key=question_data)
+                QuestionInSeries.objects.create(question_series=question_series, question=question, index=idx)
+            else:
+                # Handle the case where full question data is provided
+                QuestionInSeries.objects.create(
+                    question_series=question_series,
+                    question=question_data["question"],
+                    index=question_data.get("index", idx),
+                )
 
 
 class BlockSerializer(serializers.ModelSerializer):

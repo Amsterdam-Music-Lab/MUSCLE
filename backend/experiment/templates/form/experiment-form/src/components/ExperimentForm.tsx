@@ -100,7 +100,7 @@ const ExperimentForm: React.FC<ExperimentFormProps> = () => {
     setSuccess(false);
 
     try {
-      const savedExperiment = await saveExperiment(experiment);
+      const savedExperiment = await saveExperiment(experiment!);
       setSuccess(true);
       setExperiment(savedExperiment);
       addToast({

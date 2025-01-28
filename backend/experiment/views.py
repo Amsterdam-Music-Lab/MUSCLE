@@ -22,6 +22,7 @@ from experiment.serializers import ExperimentSerializer
 from participant.models import Participant
 from participant.utils import get_participant
 from theme.serializers import serialize_theme
+from question.models import Question, QuestionGroup
 
 logger = logging.getLogger(__name__)
 
@@ -223,3 +224,18 @@ def block_rules(request):
     """Return a list of available block rules"""
     rules = [{"id": rule_id, "name": rule_class.__name__} for rule_id, rule_class in BLOCK_RULES.items()]
     return Response(rules)
+
+
+@api_view(["GET"])
+def get_available_questions(request):
+    questions = Question.objects.all()
+    question_groups = QuestionGroup.objects.all()
+
+    return Response(
+        {
+            "questions": [{"key": q.key, "question": q.question, "type": q.type} for q in questions],
+            "questionGroups": [
+                {"key": g.key, "questions": [q.key for q in g.questions.all()]} for g in question_groups
+            ],
+        }
+    )

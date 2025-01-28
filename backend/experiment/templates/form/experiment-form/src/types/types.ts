@@ -20,14 +20,26 @@ export interface BlockPlaylist {
   name: string;
 }
 
-export type BlockQuestionSeries = {
+export interface Question {
+  key: string;
+  question: string;
+  type: string;
+}
+
+export interface QuestionGroup {
+  key: string;
+  questions: string[];
+}
+
+export type QuestionInSeries = string;
+
+export interface BlockQuestionSeries {
   id?: number;
   name: string;
   index: number;
   randomize: boolean;
-  questions: string[];
+  questions: QuestionInSeries[];
 }
-
 
 export interface Block {
   id?: number;
