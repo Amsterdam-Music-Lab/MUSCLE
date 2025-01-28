@@ -4,7 +4,9 @@
 
 Using the admin interface you can export all relevant result data from the sessions of a specific block of an experiment.
 
-To do so, navigate to [localhost:8000/admin/experiment/block](http://localhost:8000/admin/experiment/block) and click the `Export JSON` button next to the block that you want to export.
+To do so, navigate to [localhost:8000/admin/experiment/](http://localhost:8000/admin/experiment/) and click the `Experimenter Dashboard` button next to the experiment for which you want to export data.
+
+Then, click "Export JSON" in the "Export Results" column.
 
 After downloading and extracting the zip file you will have 7 JSON files containing the raw data as it is stored in the database by Django :
 
