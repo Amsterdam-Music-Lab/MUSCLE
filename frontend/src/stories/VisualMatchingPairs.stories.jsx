@@ -5,7 +5,7 @@ import Cat02 from "./assets/images/cat-02.webp";
 import Cat03 from "./assets/images/cat-03.webp";
 
 export default {
-    title: "VisualMatchingPairs",
+    title: "MatchingPairs/VisualMatchingPairs",
     component: VisualMatchingPairs,
     parameters: {
         layout: "fullscreen",

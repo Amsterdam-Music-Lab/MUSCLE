@@ -1,7 +1,7 @@
 import UserFeedback from "../components/UserFeedback/UserFeedback";
 
 export default {
-    title: "UserFeedback",
+    title: "UserFeedback/UserFeedback",
     component: UserFeedback,
     parameters: {
         layout: "fullscreen",

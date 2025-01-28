@@ -1,7 +1,7 @@
 import Button from "../components/Button/Button";
 
 export default {
-    title: "Button",
+    title: "Button/Button",
     component: Button,
     parameters: {
         layout: "fullscreen",

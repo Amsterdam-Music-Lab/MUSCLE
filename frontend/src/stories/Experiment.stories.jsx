@@ -2,7 +2,7 @@ import Block from "../components/Block/Block";
 import { MemoryRouter, Route } from "react-router-dom";
 
 export default {
-    title: "Block",
+    title: "Experiment/Experiment",
     component: Block,
     parameters: {
         layout: "fullscreen",

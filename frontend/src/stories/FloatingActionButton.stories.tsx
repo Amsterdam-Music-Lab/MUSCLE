@@ -2,7 +2,7 @@ import UserFeedback from "@/components/UserFeedback/UserFeedback";
 import FloatingActionButton from "@/components/FloatingActionButton/FloatingActionButton";
 
 export default {
-    title: "FloatingActionButton",
+    title: "FloatingActionButton/FloatingActionButton",
     component: FloatingActionButton,
     parameters: {
         layout: "fullscreen",
