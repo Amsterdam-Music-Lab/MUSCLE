@@ -75,7 +75,9 @@ class QuestionInSeriesSerializer(serializers.ModelSerializer):
 
 class QuestionSeriesSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(required=False)
-    questions = serializers.ListField(child=serializers.CharField(), write_only=True, required=False)
+    questions = serializers.ListField(
+        child=serializers.DictField(child=serializers.CharField(), allow_empty=False), write_only=True, required=False
+    )
 
     class Meta:
         model = QuestionSeries
@@ -105,7 +107,9 @@ class QuestionSeriesSerializer(serializers.ModelSerializer):
 
     def to_representation(self, instance):
         representation = super().to_representation(instance)
-        representation["questions"] = [q.question.key for q in instance.questioninseries_set.all()]
+        representation["questions"] = [
+            {"key": q.question.key, "index": q.index} for q in instance.questioninseries_set.all()
+        ]
         return representation
 
     def _handle_questions(self, question_series, questions_data):
@@ -115,17 +119,20 @@ class QuestionSeriesSerializer(serializers.ModelSerializer):
         # Create set of new question keys
         new_question_keys = set()
 
-        for idx, question_data in enumerate(questions_data):
-            question_key = question_data if isinstance(question_data, str) else question_data["question"].key
+        for question_data in questions_data:
+            question_key = question_data["key"]
+            question_index = question_data.get("index", 0)
             new_question_keys.add(question_key)
 
             if question_key not in existing_questions:
                 # Only create new questions that don't exist
                 question = Question.objects.get(key=question_key)
-                QuestionInSeries.objects.create(question_series=question_series, question=question, index=idx)
+                QuestionInSeries.objects.create(
+                    question_series=question_series, question=question, index=question_index
+                )
             else:
                 # Update index of existing question
-                existing_questions[question_key].index = idx
+                existing_questions[question_key].index = question_index
                 existing_questions[question_key].save()
 
         # Remove questions that are not in the new set

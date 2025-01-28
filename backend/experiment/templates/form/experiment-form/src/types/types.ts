@@ -31,7 +31,10 @@ export interface QuestionGroup {
   questions: string[];
 }
 
-export type QuestionInSeries = string;
+export interface QuestionInSeries {
+  key: string;
+  index: number;
+}
 
 export interface BlockQuestionSeries {
   id?: number;
