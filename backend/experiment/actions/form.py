@@ -130,11 +130,10 @@ class BooleanQuestion(Question):
         super().__init__(**kwargs)
         self.choices = choices or {"no": _("No"), "yes": _("Yes")}
         self.view = "BUTTON_ARRAY"
-        style = kwargs.get('style')
-            or [
-                ColorScheme.BOOLEAN_NEGATIVE_FIRST,
-                ButtonStyle.LARGE_GAP,
-            ]
+        style = kwargs.get('style') or [
+            ColorScheme.BOOLEAN_NEGATIVE_FIRST,
+            ButtonStyle.LARGE_GAP,
+        ]
         self.style = self._apply_style(style)
 
 
