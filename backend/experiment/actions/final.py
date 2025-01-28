@@ -47,6 +47,7 @@ class FinalActionResponse(TypedDict):
     social: Optional[SocialMediaConfigConfiguration]
     show_profile_link: bool
     show_participant_link: bool
+    show_percentile: bool
     feedback_info: Optional[Dict[str, str]]
     participant_id_only: bool
     logo: Optional[LogoConfiguration]
@@ -77,6 +78,7 @@ class Final(BaseAction):  # pylint: disable=too-few-public-methods
         show_profile_link (bool): If True, display a link to the participant's profile.
         show_participant_link (bool): If True, display a participant-related link or information.
         show_participant_id_only (bool): If True, only the participant ID is shown, without a link.
+        show_percentile (bool): If True, display the participant's percentile rank.
         feedback_info (Optional[Dict[str, str]]): Optional dictionary containing feedback-related data. For example:
                                                   {"header": "Feedback", "prompt": "Tell us what you think", "button_text": "Submit"}.
         total_score (Optional[float]): Explicit final score. If None, this is derived from the session.
@@ -113,6 +115,7 @@ class Final(BaseAction):  # pylint: disable=too-few-public-methods
         feedback_info: FeedbackInfo | None = None,
         total_score: Optional[float] = None,
         logo: Optional[LogoConfiguration] = None,
+        show_percentile: bool = False,
     ):
         self.session = session
         self.title = title
@@ -122,6 +125,7 @@ class Final(BaseAction):  # pylint: disable=too-few-public-methods
         self.show_profile_link = show_profile_link
         self.show_participant_link = show_participant_link
         self.show_participant_id_only = show_participant_id_only
+        self.show_percentile = show_percentile
         self.feedback_info = feedback_info
         self.logo = logo
         self.percentile = session.percentile_rank(exclude_unfinished=False)
@@ -154,13 +158,13 @@ class Final(BaseAction):  # pylint: disable=too-few-public-methods
             "social": self.get_social_media_config(self.session),
             "show_profile_link": self.show_profile_link,
             "show_participant_link": self.show_participant_link,
+            "show_percentile": self.show_percentile,
             "feedback_info": self.feedback_info,
             "participant_id_only": self.show_participant_id_only,
             "logo": self.logo,
         }
 
         if self.percentile is None:
-            response.pop("percentile")
             response.pop("rank")
 
         return response

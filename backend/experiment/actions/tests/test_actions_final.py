@@ -70,12 +70,32 @@ class FinalTest(TestCase):
         social_info = serialized.get("social")
         self.assertEqual(social_info.get("content"), "I scored 42.0 points in Final Countdown!")
 
-    def test_final_action_without_percentile(self):
+    def test_final_action_with_percentile_disabled(self):
         final = Final(self.session)
-        final.percentile = None
+        final.percentile = 85.0
+        final.show_percentile = False
         serialized = final.action()
-        self.assertNotIn("percentile", serialized)
-        self.assertNotIn("rank", serialized)
+        self.assertEqual(serialized.get("percentile"), 85.0)
+
+    def test_final_action_with_percentile_ranges(self):
+        test_cases = [
+            95.0,
+            85.0,
+            65.0,
+            45.0,
+            25.0,
+            5.0,
+        ]
+
+        for percentile in test_cases:
+            with self.subTest(percentile=percentile):
+                final = Final(self.session)
+                final.percentile = percentile
+                final.show_percentile = True
+                serialized = final.action()
+
+                self.assertIn("percentile", serialized)
+                self.assertEqual(serialized["percentile"], percentile)
 
     def test_final_action_with_percentile(self):
         final = Final(self.session)
