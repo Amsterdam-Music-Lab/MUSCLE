@@ -45,6 +45,7 @@ export function SelectedQuestionsTable({
                 <tr
                   key={q.key}
                   draggable
+                  title="Drag to reorder"
                   onDragStart={(e) => handleDragStart(e, q.key)}
                   onDragEnd={handleDragEnd}
                   onDragOver={handleDragOver}
