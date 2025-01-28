@@ -12,6 +12,8 @@ from session.models import Session
 from theme.serializers import serialize_theme
 from .models import Block, Experiment, Phase, SocialMediaConfig
 
+from django.utils.translation import gettext_lazy as _
+
 
 def serialize_actions(actions):
     """Serialize an array of actions"""
@@ -61,6 +63,7 @@ def serialize_experiment(experiment: Experiment) -> dict:
 
     if translated_content.about_content:
         serialized["aboutContent"] = formatter(translated_content.about_content, filter_name="markdown")
+        serialized["backButtonText"] = _("Back")
 
     if translated_content.disclaimer:
         serialized["disclaimer"] = formatter(translated_content.disclaimer, filter_name="markdown")

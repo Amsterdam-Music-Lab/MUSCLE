@@ -24,7 +24,7 @@ describe('ExperimentAbout', () => {
         const content = '## Hello World!\n\n**Lorem ipsum**';
 
         render(
-            <ExperimentAbout content={content} slug="some_slug" />,
+            <ExperimentAbout content={content} slug="some_slug" backButtonText="Terug" />,
             { wrapper: Router }
         )
 
