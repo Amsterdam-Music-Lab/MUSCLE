@@ -7,7 +7,7 @@ class Playlist(BaseAction):  # pylint: disable=too-few-public-methods
     """
     Provide data for playlist selection view
 
-    Relates to client component: Playlist.js
+    Relates to client component: Playlist.tsx
     The client component automatically continues if there is only one playlist available.
     """
 
