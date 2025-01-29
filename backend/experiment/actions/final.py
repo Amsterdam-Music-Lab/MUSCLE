@@ -113,6 +113,7 @@ class Final(BaseAction):  # pylint: disable=too-few-public-methods
         feedback_info: FeedbackInfo | None = None,
         total_score: Optional[float] = None,
         logo: Optional[LogoConfiguration] = None,
+        percentile: Optional[float] = None,  # new argument
     ):
         self.session = session
         self.title = title
@@ -124,7 +125,7 @@ class Final(BaseAction):  # pylint: disable=too-few-public-methods
         self.show_participant_id_only = show_participant_id_only
         self.feedback_info = feedback_info
         self.logo = logo
-        self.percentile = session.percentile_rank(exclude_unfinished=False)
+        self.percentile = percentile
 
         if total_score is None:
             self.total_score = self.session.total_score()
@@ -160,7 +161,6 @@ class Final(BaseAction):  # pylint: disable=too-few-public-methods
         }
 
         if self.percentile is None:
-            response.pop("percentile")
             response.pop("rank")
 
         return response
