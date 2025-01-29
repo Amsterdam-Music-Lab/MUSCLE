@@ -379,3 +379,12 @@ You will be presented with a screen that lets you choose the fields that you wan
 ## The database structure
 [![muscle_db_visualized](https://github.com/user-attachments/assets/f0d97029-ec49-4bcc-8c84-8ed35b0937c0)](https://github.com/user-attachments/assets/f0d97029-ec49-4bcc-8c84-8ed35b0937c0)
 [*click to open the image to enable zoom functionality*](https://github.com/user-attachments/assets/f0d97029-ec49-4bcc-8c84-8ed35b0937c0)
+
+## Note on Timestamps
+
+All timestamps in JSON exports are in UTC time. This ensures consistency across different systems and time zones. Please also note that the currently configured timezone of the server is 'Europe/Amsterdam'. You can change these settings in the `base_settings.py` file in the `backend/aml` directory. Look for:
+
+```python
+USE_TZ = True
+TIME_ZONE = 'Europe/Amsterdam'
+```
