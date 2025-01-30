@@ -50,7 +50,6 @@ INSTALLED_APPS = [
     "django.contrib.humanize",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "django_select2",
     "nested_admin",
     "inline_actions",
     "django_markup",

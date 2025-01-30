@@ -1,6 +1,7 @@
 from django.utils.translation import gettext_lazy as _
 from typing import Optional, Dict, TypedDict
 
+from experiment.actions.types import FeedbackInfo
 from experiment.serializers import serialize_social_media_config, SocialMediaConfigConfiguration
 from session.models import Session
 
@@ -36,6 +37,7 @@ class LogoConfiguration(TypedDict):
 class FinalActionResponse(TypedDict):
     view: str
     score: float
+    percentile: Optional[float]
     rank: Optional[str]
     final_text: Optional[str]
     button: Optional[ButtonConfiguration]
@@ -108,9 +110,10 @@ class Final(BaseAction):  # pylint: disable=too-few-public-methods
         show_profile_link: bool = False,
         show_participant_link: bool = False,
         show_participant_id_only: bool = False,
-        feedback_info: Optional[Dict[str, str]] = None,
+        feedback_info: FeedbackInfo | None = None,
         total_score: Optional[float] = None,
         logo: Optional[LogoConfiguration] = None,
+        percentile: Optional[float] = None,  # new argument
     ):
         self.session = session
         self.title = title
@@ -122,6 +125,7 @@ class Final(BaseAction):  # pylint: disable=too-few-public-methods
         self.show_participant_id_only = show_participant_id_only
         self.feedback_info = feedback_info
         self.logo = logo
+        self.percentile = percentile
 
         if total_score is None:
             self.total_score = self.session.total_score()
@@ -134,9 +138,10 @@ class Final(BaseAction):  # pylint: disable=too-few-public-methods
             self.points = points
 
     def action(self) -> FinalActionResponse:
-        return {
+        response: FinalActionResponse = {
             "view": self.ID,
             "score": self.total_score,
+            "percentile": self.percentile,
             "rank": self.rank,
             "final_text": self.final_text,
             "button": self.button,
@@ -154,6 +159,11 @@ class Final(BaseAction):  # pylint: disable=too-few-public-methods
             "participant_id_only": self.show_participant_id_only,
             "logo": self.logo,
         }
+
+        if self.percentile is None:
+            response.pop("rank")
+
+        return response
 
     def get_social_media_config(self, session: Session) -> Optional[SocialMediaConfigConfiguration]:
         experiment = session.block.phase.experiment

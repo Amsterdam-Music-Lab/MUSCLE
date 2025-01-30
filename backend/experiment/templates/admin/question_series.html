@@ -22,7 +22,7 @@
     {{ inline_admin_formset.formset.management_form }}
     {{ inline_admin_formset.formset.non_form_errors }}
     <div>
-        <input class="button" name="{{inline_admin_formset.formset|get_block_slug}}" id="default-questions" value="Add default questions"></input>
+        <input readonly class="button" name="{{inline_admin_formset.formset|get_block_slug}}" id="default-questions" value="Add default questions"></input>
       </div>
 
     <table class="djn-items inline-related djn-table">

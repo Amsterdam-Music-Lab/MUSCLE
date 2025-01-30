@@ -1,7 +1,7 @@
 import Info from "../components/Info/Info";
 
 export default {
-    title: "Info",
+    title: "Info/Info",
     component: Info,
     parameters: {
         layout: "fullscreen",

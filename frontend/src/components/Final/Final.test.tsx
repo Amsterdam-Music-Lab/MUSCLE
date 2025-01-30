@@ -184,4 +184,63 @@ describe('Final Component', () => {
             expect(onNextMock).toHaveBeenCalled();
         });
     });
+
+    it('Sets the rank cursor position correctly when percentile is valid', () => {
+        render(
+            <BrowserRouter>
+                <Final
+                    rank={{ class: 'rank-class', text: 'Rank Text' }}
+                    score={100}
+                    final_text="<p>Final Text</p>"
+                    percentile={50}
+                />
+            </BrowserRouter>
+        );
+        const cursor = screen.getByTestId('final-rank-bar-cursor');
+        expect(cursor.style.left).toBe('50%');
+    });
+
+    it('does not render percentile/rank part when percentile is not defined', () => {
+        render(
+            <BrowserRouter>
+                <Final
+                    block={{ slug: 'test-block' }}
+                    participant="participant-id"
+                    score={100}
+                    final_text="<p>Final Text</p>"
+                />
+            </BrowserRouter>
+        );
+        expect(document.body.contains(screen.queryByTestId('final-rank-bar-cursor'))).toBe(false);
+    });
+
+    it('does not render percentile/rank part when percentile is out of range', () => {
+        render(
+            <BrowserRouter>
+                <Final
+                    block={{ slug: 'test-block' }}
+                    participant="participant-id"
+                    score={100}
+                    final_text="<p>Final Text</p>"
+                    percentile={150}
+                />
+            </BrowserRouter>
+        );
+        expect(document.body.contains(screen.queryByTestId('final-rank-bar-cursor'))).toBe(false);
+    });
+
+    it('renders percentile/rank part when percentile is between 0 and 100', () => {
+        render(
+            <BrowserRouter>
+                <Final
+                    block={{ slug: 'test-block' }}
+                    participant="participant-id"
+                    score={100}
+                    final_text="<p>Final Text</p>"
+                    percentile={75}
+                />
+            </BrowserRouter>
+        );
+        expect(document.body.contains(screen.queryByTestId('final-rank-bar-cursor'))).toBe(true);
+    });
 });

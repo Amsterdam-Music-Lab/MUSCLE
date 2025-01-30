@@ -64,12 +64,13 @@ export interface Final {
   block: Block;
   participant: Participant;
   score: number;
+  percentile?: number;
   final_text: string | TrustedHTML;
   action_texts: {
     all_experiments: string;
     profile: string;
     play_again: string;
-  }
+  };
   button: {
     text: string;
     link: string;
@@ -83,7 +84,7 @@ export interface Final {
   rank: {
     class: string;
     text: string;
-  }
+  };
   logo: {
     image: string;
     link: string;
