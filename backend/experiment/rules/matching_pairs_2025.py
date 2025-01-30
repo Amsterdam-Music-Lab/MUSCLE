@@ -1,9 +1,12 @@
+import random
+
 from django.utils.translation import gettext_lazy as _
 from django.db import models
 
-from experiment.actions import Explainer, Final, Playlist
+from section.models import Playlist
 
-
+from experiment.actions import Explainer, Final, Playlist as PlaylistAction, Trial
+from experiment.actions.playback import MatchingPairs
 from .matching_pairs import MatchingPairsGame
 
 
@@ -34,7 +37,7 @@ class MatchingPairs2025(MatchingPairsGame):
     def next_round(self, session):
         if session.get_rounds_passed() < 1:
             intro_explainer = self.get_intro_explainer()
-            playlist = Playlist(session.block.playlists.all())
+            playlist = PlaylistAction(session.block.playlists.all())
             actions = [intro_explainer, playlist]
             questions = self.get_open_questions(session)
             if questions:
@@ -55,7 +58,7 @@ class MatchingPairs2025(MatchingPairsGame):
             score = Final(
                 session,
                 title="Score",
-                final_text=self.final_text(session),
+                final_text=self._final_text(session),
                 button={"text": "Play again", "link": self.get_play_again_url(session)},
                 rank=self.rank(session, exclude_unfinished=False),
                 feedback_info=feedback_info,
@@ -63,7 +66,48 @@ class MatchingPairs2025(MatchingPairsGame):
             )
             return [score]
 
-    def final_text(self, session):
+    def get_matching_pairs_trial(self, session):
+        playlist = self._get_least_played_playlist(session)
+        player_sections = playlist.section_set.all()
+        random.seed(self.random_seed)
+        random.shuffle(player_sections)
+
+        playback = MatchingPairs(
+            sections=player_sections,
+            stop_audio_after=5,
+            show_animation=self.show_animation,
+            score_feedback_display=self.score_feedback_display,
+            tutorial=self.tutorial,
+        )
+        trial = Trial(title="Tune twins", playback=playback, feedback_form=None, config={"show_continue_button": False})
+        return trial
+
+    def _get_least_played_playlist(self, session) -> Playlist:
+        """Return playlist with least plays by participant and overall"""
+
+        playlist_count = session.block.playlists.count()
+
+        # If no playlist is found, raise an error
+        if playlist_count == 0:
+            raise ValueError("No playlist found for block {}".format(session.block))
+
+        # If there's only one playlist, assume Original playlist
+        if playlist_count == 1:
+            playlist = session.block.playlists.first()
+            return playlist  # Early return
+
+        # If there's more than one playlist, pick the one least played by the participant and least played overall
+        playlists = session.block.playlists.all()
+
+        # As I don't have information about the number of plays, I'll pick a random playlist
+        # TODO: Implement a way to get the least played playlist
+        random_index = random.randint(0, playlist_count - 1)
+
+        playlist = playlists[random_index]
+
+        return playlist
+
+    def _final_text(self, session):
         total_sessions = session.participant.session_set.count()
         total_score = session.participant.session_set.aggregate(total_score=models.Sum("final_score"))["total_score"]
         average_score = total_score / total_sessions if total_sessions > 0 else 0
