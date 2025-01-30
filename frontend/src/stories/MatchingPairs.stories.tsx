@@ -24,7 +24,7 @@ const StoreDecorator = (Story) => {
 };
 
 export default {
-    title: "MatchingPairs",
+    title: "MatchingPairs/MatchingPairs",
     component: MatchingPairs,
     parameters: {
         layout: "fullscreen",

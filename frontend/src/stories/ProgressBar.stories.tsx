@@ -1,7 +1,7 @@
 import ProgressBar from "../components/ProgressBar/ProgressBar";
 
 export default {
-    title: "ProgressBar",
+    title: "Progress/ProgressBar",
     component: ProgressBar,
     parameters: {
         layout: "fullscreen",

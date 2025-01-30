@@ -70,7 +70,7 @@ export interface Final {
     all_experiments: string;
     profile: string;
     play_again: string;
-  }
+  };
   button: {
     text: string;
     link: string;
@@ -84,7 +84,7 @@ export interface Final {
   rank: {
     class: string;
     text: string;
-  }
+  };
   logo: {
     image: string;
     link: string;
