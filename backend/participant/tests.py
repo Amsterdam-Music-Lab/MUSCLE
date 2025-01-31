@@ -134,14 +134,15 @@ class ParticipantTest(TestCase):
         assert score_sum is None
 
     def test_session_count(self):
+        new_participant = Participant.objects.create(unique_hash=4242)
         Session.objects.bulk_create(
             [
-                Session(block=self.block, participant=self.participant),
-                Session(block=self.block, participant=self.participant),
-                Session(block=self.block, participant=self.participant),
+                Session(block=self.block, participant=new_participant),
+                Session(block=self.block, participant=new_participant),
+                Session(block=self.block, participant=new_participant),
             ]
         )
-        self.assertEqual(self.participant.session_count(), 4)
+        self.assertEqual(new_participant.session_count(), 3)
 
     def test_result_count(self):
         this_session = Session.objects.create(
