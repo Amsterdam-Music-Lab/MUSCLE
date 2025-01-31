@@ -81,6 +81,15 @@ nav:
       - Participant utils: 'participant_utils.md'
       - Question utils: 'question_utils.md'
       - Experiment actions: 'experiment_actions.md'
+  - Developer documentation:
+    - 1. Compile and watch scss files: '1_Compile_and_watch_scss_files.md'
+    - 2. Managing the database: '2_Managing_the_database.md'
+    - 3. Debugging: '3_Debugging.md'
+    - 4. Installing python packages: '4_Installing_python_packages.md'
+    - 5. Management commands: '5_Management_commands.md'
+    - 6. Running tests: '6_Running_tests.md'
+    - 7. Storybook: '7_Storybook.md'
+    - 8. Troubleshooting: '8_Troubleshooting.md'
   - Technical documentation:
     - Experiment app:      
       - Experiment admin: 'experiment_admin.md'      
