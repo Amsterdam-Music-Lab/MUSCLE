@@ -67,8 +67,7 @@ class MatchingPairs2025(MatchingPairsGame):
             return [score]
 
     def get_matching_pairs_trial(self, session):
-        playlist = self._get_least_played_playlist(session)
-        player_sections = playlist.section_set.all()
+        player_sections = self._select_sections(session)
         random.seed(self.random_seed)
         random.shuffle(player_sections)
 
@@ -80,24 +79,63 @@ class MatchingPairs2025(MatchingPairsGame):
             tutorial=self.tutorial,
         )
         trial = Trial(title="Tune twins", playback=playback, feedback_form=None, config={"show_continue_button": False})
+
         return trial
 
-    def _get_least_played_playlist(self, session) -> Playlist:
-        """Return playlist with least plays by participant and overall"""
+    def _select_sections(self, session):
+        condition_type = self._select_least_played_condition_type(session)
 
-        playlist_count = session.block.playlists.count()
+        raise NotImplementedError
 
-        # If no playlist is found, raise an error
-        if playlist_count == 0:
-            raise ValueError("No playlist found for block {}".format(session.block))
+    def _select_least_played_condition_type(self, session) -> str:
+        least_played_participant_condition_types = self._select_least_played_participant_condition_types(session)
 
-        # If there's only one playlist, assume Original playlist
-        if playlist_count == 1:
-            playlist = session.block.playlists.first()
-            return playlist  # Early return
+        if len(least_played_participant_condition_types) == 1:
+            return least_played_participant_condition_types[0]
 
-        # If there's more than one playlist, pick the one least played by the participant and least played overall
-        playlists = session.block.playlists.all()
+        # If there are multiple condition types with the same lowest average play count per condition in the playlist for the current participant, select the one that has the lowest play count overall per condition in the playlist
+        least_played_overall_condition_type = self._select_least_played_overall_condition_type(session)
+
+        if len(least_played_overall_condition_type) == 1:
+            return least_played_overall_condition_type[0]
+
+        # If there are still multiple condition types with the same lowest average play count overall per condition in the playlist, select one at random
+        random.seed(self.random_seed)
+
+        return random.choice(least_played_overall_condition_type)
+
+    def _select_least_played_participant_condition_types(self, session) -> list[str]:
+        """Select the condition type with the lowest average play count per condition in the playlist for the current participant"""
+
+        playlist = session.playlist
+        participant_results = session.participant.result_set.filter(section__playlist=playlist)
+
+        # Count the number of results per section and then group them by the section's tag
+        tag_play_counts = (
+            participant_results.values("section__tag")
+            .annotate(play_count=models.Count("section"))
+            .order_by("section__tag")
+        )
+
+        # Now, we need to get the average play count per condition type (tag) by dividing the tag play count by the number of conditions (group) in the playlist.
+        condition_type_avg_play_counts = {}
+        for tag_play_count in tag_play_counts:
+            tag = tag_play_count["section__tag"]
+            group_count = playlist.section_set.filter(tag=tag).values("group").distinct().count()
+            avg_play_count = tag_play_count["play_count"] / group_count
+            condition_type_avg_play_counts[tag] = avg_play_count
+
+        min_avg_play_count = min(condition_type_avg_play_counts.values())
+
+        # Get the condition types with the same lowest average play count
+        least_played_participant_condition_types = [
+            condition_type
+            for condition_type, avg_play_count in condition_type_avg_play_counts.items()
+            if avg_play_count == min_avg_play_count
+        ]
+
+        return least_played_participant_condition_types
+
 
         # As I don't have information about the number of plays, I'll pick a random playlist
         # TODO: Implement a way to get the least played playlist
