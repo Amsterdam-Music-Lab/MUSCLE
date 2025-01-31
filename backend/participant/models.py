@@ -132,7 +132,7 @@ class Participant(models.Model):
         return profile_object
 
     def is_dutch(self) -> bool:
-        """Return if a participant is tagged with Netherlands (nl) country code
+        """Return if a participant is tagged with the country code of the Netherlands (nl)
 
         Returns:
             Wether a participant is located in the Netherlands or not.
