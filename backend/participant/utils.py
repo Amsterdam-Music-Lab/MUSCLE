@@ -145,8 +145,7 @@ def get_participant(request: HttpRequest) -> Participant:
     participant_id = request.session.get(PARTICIPANT_KEY, -1)
 
     if not participant_id or participant_id == -1:
-        logging.error("No participant in session", exc_info=True)
-        raise Participant.DoesNotExist("An internal error has occurred.")
+        raise Participant.DoesNotExist("No participant in session")
 
     try:
         return Participant.objects.get(
