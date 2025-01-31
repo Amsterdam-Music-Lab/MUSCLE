@@ -1,7 +1,7 @@
 import PlayerSmall from "../components/PlayButton/PlayerSmall";
 
 export default {
-    title: "PlayerSmall",
+    title: "Playback/PlayerSmall",
     component: PlayerSmall,
     parameters: {
         layout: "fullscreen",

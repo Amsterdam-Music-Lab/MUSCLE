@@ -1,7 +1,7 @@
 import PlayButton from "../components/PlayButton/PlayButton";
 
 export default {
-    title: "PlayButton",
+    title: "Playback/PlayButton",
     component: PlayButton,
     parameters: {
         layout: "fullscreen",

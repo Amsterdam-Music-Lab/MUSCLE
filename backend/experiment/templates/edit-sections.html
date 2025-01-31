@@ -64,7 +64,7 @@
                     value="{{ section.song_name}}" placeholder="*">
             </td>
             <td>
-                <input type="number" name="{{section.id}}_start_time" maxlength="128" required=""
+                <input type="number" step="0.001" name="{{section.id}}_start_time" maxlength="128" required=""
                     id="{{section.id}}_start_time" value="{{ section.start_time}}">
             </td>
             <td>
@@ -72,7 +72,7 @@
                     id="{{section.id}}_duration" value="{{ section.duration}}">
             </td>
             <td>
-                <input type="text" step="0.001" name="{{section.id}}_tag" maxlength="128" id="{{section.id}}_tag"
+                <input type="text" name="{{section.id}}_tag" maxlength="128" id="{{section.id}}_tag"
                     value="{{ section.tag}}">
             </td>
             <td>

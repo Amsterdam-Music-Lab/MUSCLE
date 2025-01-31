@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-07 08:20+0100\n"
+"POT-Creation-Date: 2025-01-28 14:50+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,99 +20,99 @@ msgstr ""
 "X-Language: nl_NL\n"
 "X-Source-Language: C\n"
 
-#: experiment/actions/final.py:92
+#: experiment/actions/final.py:94
 msgid "plastic"
 msgstr "plastic"
 
-#: experiment/actions/final.py:93
+#: experiment/actions/final.py:95
 msgid "bronze"
 msgstr "brons"
 
-#: experiment/actions/final.py:94
+#: experiment/actions/final.py:96
 msgid "silver"
 msgstr "zilver"
 
-#: experiment/actions/final.py:95
+#: experiment/actions/final.py:97
 msgid "gold"
 msgstr "goud"
 
-#: experiment/actions/final.py:96
+#: experiment/actions/final.py:98
 msgid "platinum"
 msgstr ""
 
-#: experiment/actions/final.py:97
+#: experiment/actions/final.py:99
 msgid "diamond"
 msgstr ""
 
-#: experiment/actions/final.py:103
+#: experiment/actions/final.py:105
 msgid "Final score"
 msgstr "Eindscore"
 
-#: experiment/actions/final.py:132 participant/views.py:45
+#: experiment/actions/final.py:135 participant/views.py:45
 msgid "points"
 msgstr "punten"
 
-#: experiment/actions/final.py:145 experiment/rules/hooked.py:106
+#: experiment/actions/final.py:149 experiment/rules/hooked.py:106
 #: experiment/rules/thats_my_song.py:67
 msgid "Play again"
 msgstr "Opnieuw spelen"
 
-#: experiment/actions/final.py:146 participant/views.py:40
+#: experiment/actions/final.py:150 participant/views.py:40
 msgid "My profile"
 msgstr ""
 
-#: experiment/actions/final.py:147
+#: experiment/actions/final.py:151
 msgid "All experiments"
 msgstr "Alle experimenten"
 
-#: experiment/actions/form.py:71 experiment/rules/hooked.py:304
+#: experiment/actions/form.py:131 experiment/rules/hooked.py:304
 #: experiment/rules/huang_2022.py:81
 #: experiment/rules/musical_preferences.py:132 question/musicgens.py:30
 msgid "No"
 msgstr "Nee"
 
-#: experiment/actions/form.py:72 experiment/rules/hooked.py:305
+#: experiment/actions/form.py:131 experiment/rules/hooked.py:305
 #: experiment/rules/huang_2022.py:81
 #: experiment/rules/musical_preferences.py:132 question/musicgens.py:29
 msgid "Yes"
 msgstr "Ja"
 
-#: experiment/actions/form.py:122
+#: experiment/actions/form.py:331
 msgid "How much do you agree or disagree?"
 msgstr "In hoeverre ben je het hiermee eens of oneens?"
 
-#: experiment/actions/form.py:135
+#: experiment/actions/form.py:348
 msgid "Completely Disagree"
 msgstr "Helemaal mee oneens"
 
-#: experiment/actions/form.py:136 experiment/actions/form.py:145
+#: experiment/actions/form.py:349 experiment/actions/form.py:358
 msgid "Strongly Disagree"
 msgstr "Zeer mee oneens"
 
-#: experiment/actions/form.py:137 experiment/actions/form.py:146
+#: experiment/actions/form.py:350 experiment/actions/form.py:359
 #: question/musicgens.py:302
 msgid "Disagree"
 msgstr "Mee oneens"
 
-#: experiment/actions/form.py:138 experiment/actions/form.py:147
+#: experiment/actions/form.py:351 experiment/actions/form.py:360
 msgid "Neither Agree nor Disagree"
 msgstr "Niet mee eens of oneens"
 
-#: experiment/actions/form.py:139 experiment/actions/form.py:148
+#: experiment/actions/form.py:352 experiment/actions/form.py:361
 #: question/musicgens.py:304
 msgid "Agree"
 msgstr "Mee eens"
 
-#: experiment/actions/form.py:140 experiment/actions/form.py:149
+#: experiment/actions/form.py:353 experiment/actions/form.py:362
 msgid "Strongly Agree"
 msgstr "Zeer mee eens"
 
-#: experiment/actions/form.py:141
+#: experiment/actions/form.py:354
 msgid "Completely Agree"
 msgstr "Helemaal mee eens"
 
-#: experiment/actions/form.py:178 experiment/actions/trial.py:57
-#: experiment/actions/utils.py:25 experiment/rules/hooked.py:164
+#: experiment/actions/form.py:429 experiment/actions/trial.py:93
+#: experiment/actions/utils.py:43 experiment/rules/hooked.py:164
 #: experiment/rules/huang_2022.py:137 experiment/rules/practice.py:192
 #: experiment/rules/rhythm_battery_intro.py:141
 #: experiment/rules/speech2song.py:100 experiment/rules/speech2song.py:110
@@ -120,7 +120,7 @@ msgstr "Helemaal mee eens"
 msgid "Continue"
 msgstr "Verder"
 
-#: experiment/actions/form.py:178
+#: experiment/actions/form.py:430
 msgid "Skip"
 msgstr ""
 
@@ -157,24 +157,24 @@ msgstr "Onjuist"
 msgid "Correct"
 msgstr "Correct"
 
-#: experiment/actions/utils.py:25 experiment/rules/congosamediff.py:181
+#: experiment/actions/utils.py:43 experiment/rules/congosamediff.py:181
 #: experiment/rules/musical_preferences.py:243
 msgid "End"
 msgstr "Einde"
 
-#: experiment/actions/wrappers.py:64 experiment/rules/hooked.py:296
+#: experiment/actions/wrappers.py:112 experiment/rules/hooked.py:296
 msgid "Get ready!"
 msgstr ""
 
-#: experiment/actions/wrappers.py:65
+#: experiment/actions/wrappers.py:113
 msgid "Do you recognize the song?"
 msgstr ""
 
-#: experiment/actions/wrappers.py:75
+#: experiment/actions/wrappers.py:120
 msgid "Keep imagining the music"
 msgstr ""
 
-#: experiment/actions/wrappers.py:106
+#: experiment/actions/wrappers.py:150
 msgid "Did the track come back in the right place?"
 msgstr ""
 
@@ -203,51 +203,51 @@ msgstr ""
 msgid "Test block"
 msgstr ""
 
-#: experiment/models.py:532
+#: experiment/models.py:527
 #, python-brace-format
 msgid ""
 "Content for social media sharing. Use {points} and {experiment_name} as "
 "placeholders."
 msgstr ""
 
-#: experiment/models.py:586
+#: experiment/models.py:588
 msgid "List of tags for social media sharing"
 msgstr ""
 
-#: experiment/models.py:590
+#: experiment/models.py:592
 msgid ""
 "URL to be shared on social media. If empty, the experiment URL will be used."
 msgstr ""
 
-#: experiment/models.py:594
+#: experiment/models.py:596
 msgid "Facebook"
 msgstr ""
 
-#: experiment/models.py:595
+#: experiment/models.py:597
 msgid "WhatsApp"
 msgstr ""
 
-#: experiment/models.py:596
+#: experiment/models.py:598
 msgid "Twitter"
 msgstr ""
 
-#: experiment/models.py:597
+#: experiment/models.py:599
 msgid "Weibo"
 msgstr ""
 
-#: experiment/models.py:598
+#: experiment/models.py:600
 msgid "Share"
 msgstr ""
 
-#: experiment/models.py:599
+#: experiment/models.py:601
 msgid "Clipboard"
 msgstr ""
 
-#: experiment/models.py:605
+#: experiment/models.py:607
 msgid "Selected social media channels for sharing"
 msgstr ""
 
-#: experiment/models.py:643
+#: experiment/models.py:641
 #, python-format
 msgid "I scored %(score)d points in %(experiment_name)s"
 msgstr ""
@@ -342,23 +342,23 @@ msgstr ""
 "...veel dingen in de natuur regelmaat hebben zoals een metronoom? Onze "
 "hersenen gebruiken dit om ritme nog beter te verwerken!"
 
-#: experiment/rules/base.py:31
+#: experiment/rules/base.py:32
 msgid "Do you have any remarks or questions?"
 msgstr "Heb je een stabiele internetverbinding?"
 
-#: experiment/rules/base.py:33
+#: experiment/rules/base.py:34
 msgid "Submit"
 msgstr ""
 
-#: experiment/rules/base.py:37
+#: experiment/rules/base.py:38
 msgid "We appreciate your feedback!"
 msgstr ""
 
-#: experiment/rules/base.py:129 experiment/rules/musical_preferences.py:71
+#: experiment/rules/base.py:130 experiment/rules/musical_preferences.py:71
 msgid "Questionnaire"
 msgstr ""
 
-#: experiment/rules/base.py:151
+#: experiment/rules/base.py:152
 #, python-format
 msgid "Questionnaire %(index)i / %(total)i"
 msgstr "Vraag %(index)d van %(total)d"
@@ -923,32 +923,50 @@ msgstr ""
 msgid "Listen carefully to avoid mistakes and earn more points."
 msgstr ""
 
-#: experiment/rules/matching_pairs.py:69
+#: experiment/rules/matching_pairs.py:69 experiment/rules/matching_pairs.py:169
+#: experiment/rules/matching_pairs_2025.py:43
 #, python-format
 msgid ""
 "Before starting the game, we would like to ask you %i demographic questions."
 msgstr ""
 
-#: experiment/rules/matching_pairs_2025.py:19
+#: experiment/rules/matching_pairs_2025.py:23
 msgid ""
 "This was not a match, so you get 0 points. Please try again to see if you "
 "can find a matching pair."
 msgstr ""
 
-#: experiment/rules/matching_pairs_2025.py:22
+#: experiment/rules/matching_pairs_2025.py:26
 msgid ""
 "You got a matching pair, but you didn't hear both cards before. This is "
 "considered a lucky match. You get 10 points."
 msgstr ""
 
-#: experiment/rules/matching_pairs_2025.py:24
+#: experiment/rules/matching_pairs_2025.py:28
 msgid "You got a matching pair. You get 20 points."
 msgstr ""
 
-#: experiment/rules/matching_pairs_2025.py:26
+#: experiment/rules/matching_pairs_2025.py:30
 msgid ""
 "You thought you found a matching pair, but you didn't. This is considered a "
 "misremembered pair. You lose 10 points."
+msgstr ""
+
+#: experiment/rules/matching_pairs_2025.py:84
+#, python-format
+msgid "You outperformed {}% of the players!"
+msgstr ""
+
+#: experiment/rules/matching_pairs_2025.py:85
+msgid "This game"
+msgstr ""
+
+#: experiment/rules/matching_pairs_2025.py:87
+msgid "Personal Best"
+msgstr ""
+
+#: experiment/rules/matching_pairs_2025.py:89
+msgid "Average score"
 msgstr ""
 
 #: experiment/rules/musical_preferences.py:55
@@ -1265,6 +1283,7 @@ msgid "Rhythm discrimination: %(title)s"
 msgstr "Ritmeverschillen: %(title)s"
 
 #: experiment/rules/rhythm_discrimination.py:165
+#, python-format
 msgid "practice %(index)d of %(total)d"
 msgstr "oefentrial %(index)d van %(total)d"
 
@@ -1472,6 +1491,10 @@ msgstr ""
 msgid "Playlist selection"
 msgstr ""
 
+#: experiment/serializers.py:66
+msgid "Back"
+msgstr "Terug"
+
 #: experiment/standards/isced_education.py:4
 msgid "Primary school"
 msgstr ""
@@ -1503,6 +1526,27 @@ msgstr "HBO of WO masteropleiding (of gelijkwaardig)"
 #: experiment/standards/isced_education.py:11
 msgid "Doctoral degree or equivalent"
 msgstr "Doctoraal/PhD (of gelijkwaardig)"
+
+#: experiment/templates/admin/question_series.html:39
+msgid "Delete?"
+msgstr ""
+
+#: experiment/templates/admin/question_series.html:65
+msgid "Change"
+msgstr ""
+
+#: experiment/templates/admin/question_series.html:65
+msgid "View"
+msgstr ""
+
+#: experiment/templates/admin/question_series.html:67
+msgid "View on site"
+msgstr ""
+
+#: experiment/templates/admin/question_series.html:128
+#, python-format
+msgid "Add another %(verbose_name)s"
+msgstr ""
 
 #: experiment/templates/consent/consent_MRI.html:2
 msgid ""
@@ -3914,19 +3958,19 @@ msgstr ""
 msgid "Cannot upload {}: {}"
 msgstr ""
 
-#: theme/serializers.py:27
+#: theme/serializers.py:23
 msgid "Next experiment"
 msgstr "Volgende experiment"
 
-#: theme/serializers.py:28
+#: theme/serializers.py:24
 msgid "About us"
 msgstr "Over ons"
 
-#: theme/serializers.py:31
+#: theme/serializers.py:27
 msgid "Points"
 msgstr "punten"
 
-#: theme/serializers.py:32
+#: theme/serializers.py:28
 msgid "No points yet!"
 msgstr "Nog geen punten!"
 

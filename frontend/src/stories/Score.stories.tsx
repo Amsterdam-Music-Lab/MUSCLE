@@ -3,7 +3,7 @@ import { BrowserRouter as Router } from "react-router-dom";
 import Score from "../components/Score/Score";
 
 export default {
-  title: "Score",
+  title: "Score/Score",
   component: Score,
   parameters: {
     layout: "fullscreen",
