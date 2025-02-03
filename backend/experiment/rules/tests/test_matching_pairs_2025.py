@@ -223,7 +223,7 @@ class MatchingPairs2025Test(TestCase):
         """The methods to select a condition type and a condition are made so that the participant
         will never play the same condition type condition combination before playing all other condition type condition combinations.
         E.g., assuming we have the following combos: [O1, T1, T2, T3, T4, T5, F1, F2, F3, F4, F5],
-        the participant will play all of them (in random order) before playing any of them again.
+        the participant will play all of them (in least played overall / random order) before playing any of them again.
         We thus want to test if there are no repetitions in the selected sections if a participant plays 11 blocks.
         """
 
