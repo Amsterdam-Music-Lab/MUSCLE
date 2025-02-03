@@ -3,7 +3,7 @@ from django.test import TestCase
 from experiment.models import Block
 from participant.models import Participant
 from result.models import Result
-from section.models import Playlist
+from section.models import Playlist, Section
 from session.models import Session
 from question.questions import create_default_questions
 
@@ -28,9 +28,9 @@ class MatchingPairs2025Test(TestCase):
             {"name": "CH", "condition_stimuli_amount": 8},
         ]
         conditions_types = {
-            "O": {"name": "original", "conditions": [1]},
-            "T": {"name": "temporal", "conditions": [1, 2, 3, 4, 5]},
-            "F": {"name": "frequency", "conditions": [1, 2, 3, 4, 5]},
+            "O": {"name": "original", "conditions": ["1"]},
+            "T": {"name": "temporal", "conditions": ["1", "2", "3", "4", "5"]},
+            "F": {"name": "frequency", "conditions": ["1", "2", "3", "4", "5"]},
         }
 
         section_csv = ""
@@ -90,3 +90,94 @@ class MatchingPairs2025Test(TestCase):
         least_types = self.rules._select_least_played_session_condition_types(self.session, participant_specific=False)
 
         self.assertEqual(least_types, ["frequency"])
+
+    def test_select_least_played_session_conditions_participant_specific(self):
+        # Create a custom playlist with controlled sections
+        custom_playlist = Playlist.objects.create(name="TestConditionsParticipantSpecific")
+        # Manually create two sections for tag "temporal" with two different groups
+        Section.objects.create(playlist=custom_playlist, tag="temporal", group="1")
+        Section.objects.create(playlist=custom_playlist, tag="temporal", group="2")
+
+        # Create two sessions for the same participant using the custom playlist
+        session_custom = Session.objects.create(
+            block=self.block, participant=self.participant, playlist=custom_playlist
+        )
+        session_custom.json_data = {"conditions": [["temporal", "1"]]}
+        session_custom.save(update_fields=["json_data"])
+
+        session_custom2 = Session.objects.create(
+            block=self.block, participant=self.participant, playlist=custom_playlist
+        )
+        session_custom2.json_data = {"conditions": [["temporal", "1"], ["temporal", "2"]]}
+        session_custom2.save(update_fields=["json_data"])
+
+        # For participant_specific=True, only sessions from self.participant are considered.
+        # Count for group "1": 1 (from session_custom) + 1 (from session_custom2) = 2,
+        # Count for group "2": 0 (in session_custom) + 1 (from session_custom2) = 1.
+        # So the least played condition group is "2".
+        least = self.rules._select_least_played_session_conditions(
+            session_custom, "temporal", participant_specific=True
+        )
+        self.assertEqual(least, ["2"])
+
+    def test_select_least_played_session_conditions_participant_specific_multiple(self):
+        # Create a custom playlist with controlled sections
+        custom_playlist = Playlist.objects.create(name="TestConditionsParticipantSpecificMultiple")
+        # Manually create sections for tag "temporal" with two different groups
+        Section.objects.create(playlist=custom_playlist, tag="temporal", group="1")
+        Section.objects.create(playlist=custom_playlist, tag="temporal", group="2")
+        Section.objects.create(playlist=custom_playlist, tag="temporal", group="3")
+        Section.objects.create(playlist=custom_playlist, tag="temporal", group="4")
+        Section.objects.create(playlist=custom_playlist, tag="temporal", group="5")
+
+        # Create two sessions for the same participant using the custom playlist
+        session_custom = Session.objects.create(
+            block=self.block, participant=self.participant, playlist=custom_playlist
+        )
+        session_custom.json_data = {"conditions": [["original", "1"], ["frequency", "2"], ["temporal", "3"]]}
+        session_custom.save(update_fields=["json_data"])
+
+        session_custom2 = Session.objects.create(
+            block=self.block, participant=self.participant, playlist=custom_playlist
+        )
+        session_custom2.json_data = {"conditions": [["frequency", "1"], ["temporal", "2"]]}
+        session_custom2.save(update_fields=["json_data"])
+
+        # For participant_specific=True, only sessions from self.participant are considered.
+        # Count for group "1": 1 (from session_custom) + 1 (from session_custom2) = 2,
+        # Count for group "2": 0 (in session_custom) + 1 (from session_custom2) = 1.
+        # So the least played condition group is "2".
+        least = self.rules._select_least_played_session_conditions(
+            session_custom, "temporal", participant_specific=True
+        )
+        self.assertEqual(least, ["1", "4", "5"])
+
+    def test_select_least_played_session_conditions_overall(self):
+        # Create a custom playlist with controlled sections
+        custom_playlist = Playlist.objects.create(name="TestConditionsOverall")
+        # Manually create two sections for tag "temporal"
+        Section.objects.create(playlist=custom_playlist, tag="temporal", group="1")
+        Section.objects.create(playlist=custom_playlist, tag="temporal", group="2")
+
+        # Create a session for self.participant with json_data playing both groups once
+        session_primary = Session.objects.create(
+            block=self.block, participant=self.participant, playlist=custom_playlist
+        )
+        session_primary.json_data = {"conditions": [["temporal", "1"], ["temporal", "2"]]}
+        session_primary.save(update_fields=["json_data"])
+
+        # Create a session for a different participant
+        participant_b = Participant.objects.create()
+        session_b = Session.objects.create(block=self.block, participant=participant_b, playlist=custom_playlist)
+        # This session only plays group "2"
+        session_b.json_data = {"conditions": [["temporal", "2"]]}
+        session_b.save(update_fields=["json_data"])
+
+        # Overall, playlist.session_set.all() includes both sessions.
+        # Count for group "1": 1 (from session_primary).
+        # Count for group "2": 1 (from session_primary) + 1 (from session_b) = 2.
+        # So the least played condition group overall is "1".
+        least = self.rules._select_least_played_session_conditions(
+            session_primary, "temporal", participant_specific=False
+        )
+        self.assertEqual(least, ["1"])
