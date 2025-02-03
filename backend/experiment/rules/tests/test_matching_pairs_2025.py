@@ -218,3 +218,57 @@ class MatchingPairs2025Test(TestCase):
             session_primary, "temporal", participant_specific=False
         )
         self.assertEqual(least, ["3", "4"])
+
+    def test_select_least_played_condition_type_condition_pair(self):
+        """The methods to select a condition type and a condition are made so that the participant
+        will never play the same condition type condition combination before playing all other condition type condition combinations.
+        E.g., assuming we have the following combos: [O1, T1, T2, T3, T4, T5, F1, F2, F3, F4, F5],
+        the participant will play all of them (in random order) before playing any of them again.
+        We thus want to test if there are no repetitions in the selected sections if a participant plays 11 blocks.
+        """
+
+        # Use the playlist from the setup
+        playlist = self.playlist
+
+        # Create a session for the participant
+        session = Session.objects.create(block=self.block, participant=self.participant, playlist=playlist)
+
+        # Create a list to store the selected sections
+        selected_condition_type_condition_pairs = []
+
+        condition_pairs_amount = playlist.section_set.values("tag", "group").distinct().count()
+
+        # Let's simulate the participant playing all conditions 5 times
+        for i in range(condition_pairs_amount * 5):
+            # Select sections for the session
+            condition_type, condition = self.rules._select_least_played_condition_type_condition_pair(session)
+
+            # Add the selected section to the list
+            selected_condition_type_condition_pairs.append(f"{condition_type}{condition}")
+
+            # Append the selected section to the session's json_data
+            if "conditions" not in session.json_data:
+                session.json_data["conditions"] = []
+
+            session.json_data["conditions"].append([condition_type, condition])
+
+            # Save the session
+            session.save(update_fields=["json_data"])
+
+            # If this was the 3rd block in the session, create a new session
+            if (i + 1) % 3 == 0:
+                session = Session.objects.create(block=self.block, participant=self.participant, playlist=playlist)
+
+        # The first three blocks should always have different condition_types
+        first_three_blocks = selected_condition_type_condition_pairs[:3]
+
+        # Compare the first character of each condition_type
+        self.assertEqual(len(set([x[0] for x in first_three_blocks])), 3)
+
+        # Check if there are no repetitions in the selected sections
+        first_repetition_set = selected_condition_type_condition_pairs[:condition_pairs_amount]
+        self.assertEqual(len(first_repetition_set), len(set(first_repetition_set)))
+
+        # Check if every pair is represented 5 times in selected_condition_type_condition_pairs
+        for pair in selected_condition_type_condition_pairs:
+            self.assertEqual(selected_condition_type_condition_pairs.count(pair), 5)

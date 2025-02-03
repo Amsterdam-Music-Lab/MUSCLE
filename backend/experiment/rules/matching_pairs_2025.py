@@ -84,11 +84,16 @@ class MatchingPairs2025(MatchingPairsGame):
         return trial
 
     def _select_sections(self, session):
-        condition_type = self._select_least_played_condition_type(session)
-        condition = self._select_least_played_condition(session, condition_type)
+        condition_type, condition = self._select_least_played_condition_type_condition_pair(session)
         sections = self._select_least_played_sections(session, condition_type, condition)
 
-        raise NotImplementedError
+        return sections
+
+    def _select_least_played_condition_type_condition_pair(self, session) -> tuple[str, str]:
+        condition_type = self._select_least_played_condition_type(session)
+        condition = self._select_least_played_condition(session, condition_type)
+
+        return (condition_type, condition)
 
     def _select_least_played_condition_type(self, session) -> str:
         least_played_participant_condition_types = self._select_least_played_session_condition_types(
