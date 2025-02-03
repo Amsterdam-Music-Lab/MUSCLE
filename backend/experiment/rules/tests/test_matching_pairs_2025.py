@@ -265,10 +265,10 @@ class MatchingPairs2025Test(TestCase):
         # Compare the first character of each condition_type
         self.assertEqual(len(set([x[0] for x in first_three_blocks])), 3)
 
-        # Check if there are no repetitions in the selected sections
+        # Check if there are no repetitions in the first 11 blocks
         first_repetition_set = selected_condition_type_condition_pairs[:condition_pairs_amount]
         self.assertEqual(len(first_repetition_set), len(set(first_repetition_set)))
 
-        # Check if every pair is represented 5 times in selected_condition_type_condition_pairs
+        # Check if every pair is represented 5 times in selected_condition_type_condition_pairs (the participant played 5 times * 11 blocks)
         for pair in selected_condition_type_condition_pairs:
             self.assertEqual(selected_condition_type_condition_pairs.count(pair), 5)
