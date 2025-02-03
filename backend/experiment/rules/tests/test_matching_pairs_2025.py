@@ -95,4 +95,55 @@ class MatchingPairs2025Test(TestCase):
         self.assertEqual(condition_type, ["original"])
 
     def test_select_least_played_overall_condition_types(self):
-        pass
+        # We play multiple sections of all condition types (tag) and make sure that "frequency" and "original" are the least played condition types per condition (group)
+        for section in self.session.playlist.section_set.filter(tag="temporal", group=4):
+            for _ in range(25):
+                participant = Participant.objects.create()
+                Result.objects.create(
+                    participant=participant,
+                    section=section,
+                    session=self.session,
+                    score=10,
+                    given_response="match",
+                )
+
+        for section in self.session.playlist.section_set.filter(tag="original", group=1):
+            for _ in range(4):
+                participant = Participant.objects.create()
+                Result.objects.create(
+                    participant=participant,
+                    section=section,
+                    session=self.session,
+                    score=10,
+                    given_response="match",
+                )
+
+        for section in self.session.playlist.section_set.filter(tag="frequency", group=4):
+            for _ in range(20):
+                participant = Participant.objects.create()
+                Result.objects.create(
+                    participant=participant,
+                    section=section,
+                    session=self.session,
+                    score=10,
+                    given_response="match",
+                )
+
+        condition_type = self.rules._select_least_played_overall_condition_types(self.session)
+        self.assertNotEqual(condition_type, "temporal")
+        self.assertEqual(condition_type, ["frequency", "original"])
+
+        # We play a bit more of the "frequency" condition type to make "original" the least played condition type
+        for section in self.session.playlist.section_set.filter(tag="frequency", group=1):
+            for _ in range(1):
+                participant = Participant.objects.create()
+                Result.objects.create(
+                    participant=participant,
+                    section=section,
+                    session=self.session,
+                    score=10,
+                    given_response="match",
+                )
+
+        condition_type = self.rules._select_least_played_overall_condition_types(self.session)
+        self.assertEqual(condition_type, ["original"])
