@@ -181,3 +181,40 @@ class MatchingPairs2025Test(TestCase):
             session_primary, "temporal", participant_specific=False
         )
         self.assertEqual(least, ["1"])
+
+    def test_select_least_played_session_conditions_overall_multiple(self):
+        # Create a custom playlist with controlled sections
+        custom_playlist = Playlist.objects.create(name="TestConditionsOverallMultiple")
+        # Manually create sections for tag "temporal" with two different groups
+        Section.objects.create(playlist=custom_playlist, tag="temporal", group="1")
+        Section.objects.create(playlist=custom_playlist, tag="temporal", group="2")
+        Section.objects.create(playlist=custom_playlist, tag="temporal", group="3")
+        Section.objects.create(playlist=custom_playlist, tag="temporal", group="4")
+        Section.objects.create(playlist=custom_playlist, tag="temporal", group="5")
+
+        # Create a session for self.participant with json_data playing all groups once
+        session_primary = Session.objects.create(
+            block=self.block, participant=self.participant, playlist=custom_playlist
+        )
+        session_primary.json_data = {
+            "conditions": [
+                ["temporal", "1"],
+                ["temporal", "2"],
+                ["temporal", "5"],
+            ]
+        }
+        session_primary.save(update_fields=["json_data"])
+
+        # Create a session for a different participant
+        participant_b = Participant.objects.create()
+        session_b = Session.objects.create(block=self.block, participant=participant_b, playlist=custom_playlist)
+        # This session only plays group "2"
+        session_b.json_data = {"conditions": [["temporal", "2"], ["temporal", "5"]]}
+        # Overall, playlist.session_set.all() includes both sessions.
+        # Count for group "1": 1 (from session_primary).
+        # Count for group "2": 1 (from session_primary) + 1 (from session_b) = 2.
+        # So the least played condition group overall is "1".
+        least = self.rules._select_least_played_session_conditions(
+            session_primary, "temporal", participant_specific=False
+        )
+        self.assertEqual(least, ["3", "4"])
