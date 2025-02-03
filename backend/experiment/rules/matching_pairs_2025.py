@@ -4,6 +4,7 @@ from django.utils.translation import gettext_lazy as _
 from django.db import models
 
 from section.models import Playlist, Section
+from session.models import Session
 
 from experiment.actions import Explainer, Final, Playlist as PlaylistAction, Trial
 from experiment.actions.playback import MatchingPairs
@@ -90,13 +91,17 @@ class MatchingPairs2025(MatchingPairsGame):
         raise NotImplementedError
 
     def _select_least_played_condition_type(self, session) -> str:
-        least_played_participant_condition_types = self._select_least_played_participant_condition_types(session)
+        least_played_participant_condition_types = self._select_least_played_session_condition_types(
+            session, participant_specific=True
+        )
 
         if len(least_played_participant_condition_types) == 1:
             return least_played_participant_condition_types[0]
 
         # If there are multiple condition types with the same lowest average play count per condition in the playlist for the current participant, select the one that has the lowest play count overall per condition in the playlist
-        least_played_overall_condition_types = self._select_least_played_overall_condition_types(session)
+        least_played_overall_condition_types = self._select_least_played_session_condition_types(
+            session, participant_specific=False
+        )
 
         if len(least_played_overall_condition_types) == 1:
             return least_played_overall_condition_types[0]
@@ -106,76 +111,53 @@ class MatchingPairs2025(MatchingPairsGame):
 
         return random.choice(least_played_overall_condition_types)
 
-    def _select_least_played_participant_condition_types(self, session) -> list[str]:
+    def _select_least_played_session_condition_types(self, session, participant_specific=False) -> list[str]:
         """Select the condition type with the lowest average play count per condition in the playlist for the current participant"""
 
         playlist = session.playlist
-        participant_results = session.participant.result_set.filter(section__playlist=playlist)
-
-        # Count the number of results per section and then group them by the section's tag
-        tag_play_counts = (
-            participant_results.values("section__tag")
-            .annotate(play_count=models.Count("section"))
-            .order_by("section__tag")
+        participant_sessions = (
+            participant_specific and session.participant.session_set.all() or playlist.session_set.all()
         )
 
-        # Now, we need to get the average play count per condition type (tag) by dividing the tag play count by the number of conditions (group) in the playlist.
-        condition_type_avg_play_counts = {}
-        for tag_play_count in tag_play_counts:
-            tag = tag_play_count["section__tag"]
-            group_count = playlist.section_set.filter(tag=tag).values("group").distinct().count()
-            avg_play_count = tag_play_count["play_count"] / group_count
-            condition_type_avg_play_counts[tag] = avg_play_count
+        # Get the distinct condition types (tags) in the playlist
+        condition_types = playlist.section_set.values("tag").distinct()
+        conditions = playlist.section_set.values("tag", "group").distinct()
 
-        min_avg_play_count = min(condition_type_avg_play_counts.values())
+        # Count the number of condition types play from the participant's sessions, which can be found in 'condition_types' property of the session's json_data as a list of strings (['original', 'temporal', 'frequency'])
+        condition_type_counts = {condition_type["tag"]: 0.0 for condition_type in condition_types}
+
+        for participant_session in participant_sessions:
+            condition_types_played = participant_session.json_data.get("conditions", [])
+            for condition_type, _condition in condition_types_played:
+                # normalized increment is 1 divided by the number of conditions for the current condition type
+                # this is to ensure that every condition type will be played the same number of times
+                normalized_increment = 1.0 / len(
+                    [condition for condition in conditions if condition["tag"] == condition_type]
+                )
+                condition_type_counts[condition_type] += normalized_increment
+
+        min_avg_play_count = min(condition_type_counts.values())
 
         # Get the condition types with the same lowest average play count
         least_played_participant_condition_types = [
             condition_type
-            for condition_type, avg_play_count in condition_type_avg_play_counts.items()
+            for condition_type, avg_play_count in condition_type_counts.items()
             if avg_play_count == min_avg_play_count
         ]
 
         return least_played_participant_condition_types
 
-    def _select_least_played_overall_condition_types(self, session) -> list[str]:
-        # If there are multiple condition types with the same lowest average play count, select the one that has the lowest play count overall per condition in the playlist (regardless of the participant)
-        playlist = session.playlist
-
-        print("playlist:", playlist)
-
-        # Get the play count per condition type (tag) using section__play_count and group by section__group
-        tag_play_counts = (
-            playlist.values("section__tag").annotate(play_count=models.Count("section")).order_by("section__tag")
+    def _select_least_played_condition(self, session, condition_type) -> str:
+        least_played_participant_conditions = self._select_least_played_session_conditions(
+            session, condition_type, participant_specific=True
         )
-
-        # Now, we need to get the average play count per condition type (tag) by dividing the tag play count by the number of conditions (group) in the playlist. E.g. we have the 'temporal' tag with 5 conditions in the playlist, so we divide the play count by 5.
-
-        condition_type_avg_play_counts = {}
-        for tag_play_count in tag_play_counts:
-            tag = tag_play_count["section__tag"]
-            group_count = playlist.section_set.filter(tag=tag).values("group").distinct().count()
-            avg_play_count = tag_play_count["play_count"] / group_count
-            condition_type_avg_play_counts[tag] = avg_play_count
-
-        min_avg_play_count = min(condition_type_avg_play_counts.values())
-
-        # Get the condition types with the same lowest average play count
-        least_played_overall_condition_types = [
-            condition_type
-            for condition_type, avg_play_count in condition_type_avg_play_counts.items()
-            if avg_play_count == min_avg_play_count
-        ]
-
-        return least_played_overall_condition_types
-
-    def _select_least_played_condition(self, session, condition_type) -> int:
-        least_played_participant_conditions = self._select_least_played_participant_conditions(session, condition_type)
 
         if len(least_played_participant_conditions) == 1:
             return least_played_participant_conditions[0]
 
-        least_played_overall_conditions = self._select_least_played_overall_conditions(session, condition_type)
+        least_played_overall_conditions = self._select_least_played_session_conditions(
+            session, condition_type, participant_specific=False
+        )
 
         if len(least_played_overall_conditions) == 1:
             return least_played_overall_conditions[0]
@@ -184,11 +166,34 @@ class MatchingPairs2025(MatchingPairsGame):
 
         return random.choice(least_played_overall_conditions)
 
-    def _select_least_played_participant_conditions(self, session, condition_type) -> list[int]:
-        raise NotImplementedError
+    def _select_least_played_session_conditions(self, session, condition_type, participant_specific=False) -> list[str]:
+        playlist = session.playlist
+        participant_sessions = (
+            participant_specific and session.participant.session_set.all() or playlist.session_set.all()
+        )
 
-    def _select_least_played_overall_conditions(self, session, condition_type) -> list[int]:
-        raise NotImplementedError
+        # Get the distinct conditions (groups) in the playlist for the current condition type
+        conditions = playlist.section_set.filter(tag=condition_type).values("group").distinct()
+
+        # Count the number of conditions played from the participant's sessions
+        condition_counts = {str(condition["group"]): 0 for condition in conditions}
+
+        for participant_session in participant_sessions:
+            conditions_played = participant_session.json_data.get("conditions", [])
+
+            for played_condition_type, severity in conditions_played:
+                if played_condition_type != condition_type:
+                    continue
+
+                condition_counts[severity] += 1
+
+        min_play_count = min(condition_counts.values())
+
+        least_played_participant_conditions = [
+            condition for condition, play_count in condition_counts.items() if play_count == min_play_count
+        ]
+
+        return least_played_participant_conditions
 
     def _select_least_played_sections(self, session, condition_type, condition) -> list[Section]:
         raise NotImplementedError

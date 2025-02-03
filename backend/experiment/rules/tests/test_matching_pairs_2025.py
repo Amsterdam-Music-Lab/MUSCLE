@@ -44,106 +44,49 @@ class MatchingPairs2025Test(TestCase):
 
         return section_csv
 
-    def test_select_least_played_participant_condition_types(self):
-        # We play multiple sections of all condition types (tag) and make sure that "frequency" and "original" are the least played condition types per condition (group)
-        for section in self.session.playlist.section_set.filter(tag="temporal", group=4):
-            for _ in range(25):
-                Result.objects.create(
-                    participant=self.participant,
-                    section=section,
-                    session=self.session,
-                    score=10,
-                    given_response="match",
-                )
+    def test_select_least_played_session_condition_types_participant_specific(self):
+        # Clear existing json_data for the base session
+        self.session.json_data = {"conditions": [["original", "1"]]}
+        self.session.save(update_fields=["json_data"])
 
-        for section in self.session.playlist.section_set.filter(tag="original", group=1):
-            for _ in range(4):
-                Result.objects.create(
-                    participant=self.participant,
-                    section=section,
-                    session=self.session,
-                    score=10,
-                    given_response="match",
-                )
+        # Create two additional sessions for the same participant
+        session2 = Session.objects.create(block=self.block, participant=self.participant, playlist=self.playlist)
+        session2.json_data = {"conditions": [["temporal", "2"], ["frequency", "3"]]}
+        session2.save(update_fields=["json_data"])
 
-        for section in self.session.playlist.section_set.filter(tag="frequency", group=4):
-            for _ in range(20):
-                Result.objects.create(
-                    participant=self.participant,
-                    section=section,
-                    session=self.session,
-                    score=10,
-                    given_response="match",
-                )
+        session3 = Session.objects.create(block=self.block, participant=self.participant, playlist=self.playlist)
+        session3.json_data = {"conditions": [["original", "1"], ["temporal", "4"]]}
+        session3.save(update_fields=["json_data"])
 
-        condition_type = self.rules._select_least_played_participant_condition_types(self.session)
-        self.assertNotEqual(condition_type, "temporal")
-        self.assertEqual(condition_type, ["frequency", "original"])
+        # For participant_specific=True, only sessions from self.participant are considered.
+        # Counts: "original": 1 (self.session) + 1 (session3) = 2,
+        #         "temporal": 1 (session2) + 1 (session3) = 2,
+        #         "frequency": 1 (session2) = 1.
+        least_types = self.rules._select_least_played_session_condition_types(self.session, participant_specific=True)
+        # Expect the condition type with lowest count ("frequency")
+        self.assertEqual(least_types, ["frequency"])
 
-        # We play a bit more of the "frequency" condition type to make "original" the least played condition type
-        for section in self.session.playlist.section_set.filter(tag="frequency", group=1):
-            for _ in range(1):
-                Result.objects.create(
-                    participant=self.participant,
-                    section=section,
-                    session=self.session,
-                    score=10,
-                    given_response="match",
-                )
+    def test_select_least_played_session_condition_types_overall(self):
+        # Set base session's json_data
+        self.session.json_data = {"conditions": [["temporal", "2"]]}
+        self.session.save(update_fields=["json_data"])
 
-        condition_type = self.rules._select_least_played_participant_condition_types(self.session)
-        self.assertEqual(condition_type, ["original"])
+        # Create sessions for different participants, they will be included overall.
+        participant_b = Participant.objects.create()
+        session_b = Session.objects.create(block=self.block, participant=participant_b, playlist=self.playlist)
+        session_b.json_data = {"conditions": [["original", "1"], ["temporal", "3"]]}
+        session_b.save(update_fields=["json_data"])
 
-    def test_select_least_played_overall_condition_types(self):
-        # We play multiple sections of all condition types (tag) and make sure that "frequency" and "original" are the least played condition types per condition (group)
-        for section in self.session.playlist.section_set.filter(tag="temporal", group=4):
-            for _ in range(25):
-                participant = Participant.objects.create()
-                Result.objects.create(
-                    participant=participant,
-                    section=section,
-                    session=self.session,
-                    score=10,
-                    given_response="match",
-                )
+        participant_c = Participant.objects.create()
+        session_c = Session.objects.create(block=self.block, participant=participant_c, playlist=self.playlist)
+        session_c.json_data = {"conditions": [["original", "1"], ["frequency", "4"]]}
+        session_c.save(update_fields=["json_data"])
 
-        for section in self.session.playlist.section_set.filter(tag="original", group=1):
-            for _ in range(4):
-                participant = Participant.objects.create()
-                Result.objects.create(
-                    participant=participant,
-                    section=section,
-                    session=self.session,
-                    score=10,
-                    given_response="match",
-                )
+        # Overall counts (all sessions in the playlist):
+        # From self.session: "temporal": 1.
+        # From session_b: "original": 1, "temporal": 1.
+        # From session_c: "original": 1, "frequency": 1.
+        # Totals: "original": 2, "temporal": 2, "frequency": 1.
+        least_types = self.rules._select_least_played_session_condition_types(self.session, participant_specific=False)
 
-        for section in self.session.playlist.section_set.filter(tag="frequency", group=4):
-            for _ in range(20):
-                participant = Participant.objects.create()
-                Result.objects.create(
-                    participant=participant,
-                    section=section,
-                    session=self.session,
-                    score=10,
-                    given_response="match",
-                )
-
-        condition_type = self.rules._select_least_played_overall_condition_types(self.session)
-        self.assertNotEqual(condition_type, "temporal")
-        self.assertEqual(condition_type, ["frequency", "original"])
-
-        # We play a bit more of the "frequency" condition type to make "original" the least played condition type
-        for section in self.session.playlist.section_set.filter(tag="frequency", group=1):
-            for _ in range(1):
-                participant = Participant.objects.create()
-                Result.objects.create(
-                    participant=participant,
-                    section=section,
-                    session=self.session,
-                    score=10,
-                    given_response="match",
-                )
-
-        condition_type = self.rules._select_least_played_overall_condition_types(self.session)
-        self.assertEqual(condition_type, ["original"])
+        self.assertEqual(least_types, ["frequency"])
