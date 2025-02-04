@@ -7,8 +7,9 @@ from django.core.exceptions import ValidationError
 class Result(models.Model):
     """A model to register participant responses to the database.
 
-    Note that a Result can be either tied to a Session, which is the common way to log responses to tasks during an experiment,
-    or to a Participant, which can be a consent form or a demographic question.
+    Note:
+        a Result can be either tied to a Session, which is the common way to log responses to tasks during an experiment,
+        or to a Participant, which can be a consent form or a demographic question.
 
     Attributes:
         session (Optional[Session]): session for which this result will be registered

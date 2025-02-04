@@ -19,6 +19,9 @@ def get_result(
         session: the `Session` object for which to retrieve the result
         data: a dictionary with `result_id`, `value` and optional other keys
 
+    Returns:
+        a `Result` object
+
     Raises:
         Result.DoesNotExist: if there is no `result_id` in the data, or a result with that id does not exist
     """
@@ -34,7 +37,7 @@ def get_result(
     return result
 
 
-def handle_results(data: dict, session: Session) -> bool:
+def handle_results(data: dict, session: Session):
     """
     Given the data from the frontend, go through the `form` array and retrieve and score results
 
