@@ -188,11 +188,11 @@ class Participant(models.Model):
 
         return scores
 
-    def score_sum(self, question_group_key) -> float:
+    def score_sum(self, question_group_key:str) -> float:
         """ Sums scores of all profile results with questions in a question group
 
-        attributes:
-            question_group_key (str): from: `question.models.QuestionGroup.key`
+        Args:
+            question_group_key: from `question.models.QuestionGroup.key`
 
         Returns:
             Total score of all profile results from a Participant
