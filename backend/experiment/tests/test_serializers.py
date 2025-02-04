@@ -16,7 +16,7 @@ class SerializerTest(TestCase):
     @classmethod
     def setUpTestData(cls):
         cls.participant = Participant.objects.create()
-        cls.experiment = Experiment.objects.get(slug="RhythmTestSeries")
+        cls.experiment = Experiment.objects.get(slug="rhythm_battery")
         cls.phase1 = Phase.objects.create(experiment=cls.experiment)
         block = Block.objects.get(slug="rhythm_intro")
         block.phase = cls.phase1

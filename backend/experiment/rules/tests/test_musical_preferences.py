@@ -26,21 +26,13 @@ class MusicalPreferencesTest(TestCase):
         )
         cls.playlist.csv = csv
         cls.playlist._update_sections()
+        audiocheck_playlist = Playlist.objects.get(name="AudioSetup")
+        audiocheck_playlist._update_sections()
 
-        cls.experiment = Experiment.objects.create(slug="music-lab")
-        ExperimentTranslatedContent.objects.create(
-            experiment=cls.experiment, language="en", name="Musical Preferences", description="Test musical preferences"
-        )
-        cls.social_media_config = SocialMediaConfig.objects.create(
-            experiment=cls.experiment, url="https://app.amsterdammusiclab.nl/mpref"
-        )
-        cls.phase = Phase.objects.create(experiment=cls.experiment)
-        cls.block = Block.objects.create(slug="mpref", phase=cls.phase, rules="MUSICAL_PREFERENCES", rounds=5)
-        cls.session = Session.objects.create(block=cls.block, participant=cls.participant, playlist=cls.playlist)
-        audiocheck_playlist = Playlist.objects.create(name="test_audiocheck")
-        song = Song.objects.create(name="audiocheck")
-        Section.objects.create(
-            playlist=audiocheck_playlist, song=song, filename=SimpleUploadedFile("some_audio.wav", b"")
+        cls.block = Block.objects.get(slug="mpref")
+        cls.block.playlists.add(cls.playlist)
+        cls.session = Session.objects.create(
+            block=cls.block, participant=cls.participant, playlist=cls.playlist
         )
 
     def test_first_rounds(self):
