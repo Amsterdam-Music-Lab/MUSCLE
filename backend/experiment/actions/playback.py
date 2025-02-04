@@ -1,6 +1,5 @@
 from typing import List, Dict, Optional, Any, Literal, TypedDict
 
-from .frontend_style import FrontendStyle
 from .base_action import BaseAction
 from section.validators import audio_extensions
 
@@ -43,7 +42,7 @@ class Playback(BaseAction):
         timeout_after_playback (Optional[float]): Seconds to wait after playback before proceeding. Defaults to None.
         stop_audio_after (Optional[float]): Seconds after which to stop playback. Defaults to None.
         resume_play (bool): Whether to resume from previous position. Defaults to False.
-        style (FrontendStyle): Frontend styling options. Defaults to FrontendStyle().
+        style (Optional[list[str]]): CSS class name(s) set in the frontend for styling
         tutorial (Optional[Dict[str, Any]]): Tutorial configuration dictionary. Defaults to None.
     """
 
@@ -60,7 +59,7 @@ class Playback(BaseAction):
         timeout_after_playback: Optional[float] = None,
         stop_audio_after: Optional[float] = None,
         resume_play: bool = False,
-        style: FrontendStyle = FrontendStyle(),
+        style: Optional[list[str]] = None,
         tutorial: Optional[Dict[str, Any]] = None,
     ) -> None:
         self.sections = [{"id": s.id, "url": s.absolute_url(), "group": s.group} for s in sections]
@@ -73,7 +72,7 @@ class Playback(BaseAction):
         self.timeout_after_playback = timeout_after_playback
         self.stop_audio_after = stop_audio_after
         self.resume_play = resume_play
-        self.style = style
+        self.style = self._apply_style(style)
         self.tutorial = tutorial
 
 
@@ -98,7 +97,7 @@ class Autoplay(Playback):
 
     def __init__(self, sections: List[Section], **kwargs: Any) -> None:
         super().__init__(sections, **kwargs)
-        self.ID = TYPE_AUTOPLAY
+        self.view = TYPE_AUTOPLAY
 
 
 class PlayButton(Playback):
@@ -120,7 +119,7 @@ class PlayButton(Playback):
 
     def __init__(self, sections: List[Section], play_once: bool = False, **kwargs: Any) -> None:
         super().__init__(sections, **kwargs)
-        self.ID = TYPE_BUTTON
+        self.view = TYPE_BUTTON
         self.play_once = play_once
 
 
@@ -131,7 +130,7 @@ class Multiplayer(PlayButton):
         sections (List[Section]): List of audio sections to play.
         stop_audio_after (float): Seconds after which to stop audio. Defaults to 5.
         labels (List[str]): Custom labels for players. Defaults to empty list.
-        style (FrontendStyle): Frontend styling options. Defaults to FrontendStyle().
+        style (FrontendStyle): Frontend styling options.
         **kwargs: Additional arguments passed to PlayButton.
 
     Example:
@@ -152,13 +151,13 @@ class Multiplayer(PlayButton):
         sections: List[Section],
         stop_audio_after: float = 5,
         labels: List[str] = [],
-        style: FrontendStyle = FrontendStyle(),
+        style: Optional[list[str]] = None,
         **kwargs: Any,
     ) -> None:
         super().__init__(sections, **kwargs)
-        self.ID = TYPE_MULTIPLAYER
+        self.view = TYPE_MULTIPLAYER
         self.stop_audio_after = stop_audio_after
-        self.style = style
+        self.style = self._apply_style(style)
         if labels:
             if len(labels) != len(self.sections):
                 raise UserWarning("Number of labels and sections for the play buttons do not match")
@@ -195,7 +194,7 @@ class ImagePlayer(Multiplayer):
         **kwargs: Any,
     ) -> None:
         super().__init__(sections, **kwargs)
-        self.ID = TYPE_IMAGE
+        self.view = TYPE_IMAGE
         if len(images) != len(self.sections):
             raise UserWarning("Number of images and sections for the ImagePlayer do not match")
         self.images = images
@@ -247,7 +246,7 @@ class MatchingPairs(Multiplayer):
         **kwargs: Any,
     ) -> None:
         super().__init__(sections, **kwargs)
-        self.ID = TYPE_MATCHINGPAIRS
+        self.view = TYPE_MATCHINGPAIRS
         self.score_feedback_display = score_feedback_display
         self.tutorial = tutorial
 

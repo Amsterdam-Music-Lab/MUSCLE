@@ -4,6 +4,7 @@ from typing import Optional
 from django.utils.translation import gettext as _
 
 from .form import BooleanQuestion, ChoiceQuestion, Form
+from .styles import ButtonStyle, TextStyle
 from .playback import Autoplay, PlayButton
 from .trial import Trial
 
@@ -17,10 +18,10 @@ def two_alternative_forced(
     session: Session,
     section: Section,
     choices: dict,
-    expected_response=None,
-    style: dict = {},
+    expected_response: str = None,
+    style: list[str] = None,
     comment: str = "",
-    scoring_rule=None,
+    scoring_rule: str = None,
     title: str = "",
     config: Optional[dict] = None,
 ):
@@ -48,8 +49,8 @@ def two_alternative_forced(
     """
     playback = PlayButton([section], {"listen_once": True})
     key = "choice"
-    button_style = {"invisible-text": True, "buttons-large-gap": True, "buttons-large-text": True}
-    button_style.update(style)
+    button_style = [TextStyle.INVISIBLE, ButtonStyle.LARGE_GAP, ButtonStyle.LARGE_TEXT]
+    button_style.extend(style)
     question = ChoiceQuestion(
         key=key,
         result_id=prepare_result(

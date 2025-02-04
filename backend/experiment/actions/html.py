@@ -14,7 +14,7 @@ class HTML(BaseAction):
         >>> html_action = HTML('<h1>Hello, world!</h1><p>This is a simple HTML snippet.</p>')
     """
 
-    ID = "HTML"
+    view = "HTML"
 
     def __init__(self, body: str):
         self.body = body

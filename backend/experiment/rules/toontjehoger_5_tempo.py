@@ -6,9 +6,8 @@ from django.template.loader import render_to_string
 from .toontjehoger_1_mozart import toontjehoger_ranks
 from experiment.actions import Trial, Explainer, Step, Score, Final, Info
 from experiment.actions.form import ButtonArrayQuestion, Form
-from experiment.actions.frontend_style import FrontendStyle, EFrontendStyle
 from experiment.actions.playback import Multiplayer
-from experiment.actions.styles import STYLE_NEUTRAL_INVERTED
+from experiment.actions.styles import ColorScheme
 from experiment.actions.utils import get_current_experiment_url
 from section.models import Playlist
 from session.models import Session
@@ -131,7 +130,7 @@ class ToontjeHoger5Tempo(BaseRules):
         playback = Multiplayer(
             sections,
             labels=create_player_labels(len(sections), "alphabetic"),
-            style=FrontendStyle(EFrontendStyle.NEUTRAL_INVERTED),
+            style=[ColorScheme.NEUTRAL_INVERTED],
         )
 
         # Question
@@ -150,7 +149,7 @@ class ToontjeHoger5Tempo(BaseRules):
                 section=section_original,
                 expected_response="A" if sections[0].id == section_original.id else "B",
             ),
-            style=STYLE_NEUTRAL_INVERTED,
+            style=[ColorScheme.NEUTRAL_INVERTED],
         )
         form = Form([question])
 
