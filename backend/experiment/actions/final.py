@@ -160,9 +160,6 @@ class Final(BaseAction):  # pylint: disable=too-few-public-methods
             "logo": self.logo,
         }
 
-        if self.percentile is None:
-            response.pop("rank")
-
         return response
 
     def get_social_media_config(self, session: Session) -> Optional[SocialMediaConfigConfiguration]:
