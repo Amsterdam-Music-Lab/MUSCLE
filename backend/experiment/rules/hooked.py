@@ -7,7 +7,7 @@ from .base import BaseRules
 from experiment.actions import Explainer, Final, Playlist, Score, Step, Trial
 from experiment.actions.form import BooleanQuestion, Form
 from experiment.actions.playback import Autoplay
-from experiment.actions.styles import STYLE_BOOLEAN_NEGATIVE_FIRST
+from experiment.actions.styles import ColorScheme, ButtonStyle
 from experiment.actions.wrappers import song_sync
 from question.questions import QUESTION_GROUPS
 from result.utils import prepare_result
@@ -313,7 +313,7 @@ class Hooked(BaseRules):
                         scoring_rule="REACTION_TIME",
                     ),
                     submits=True,
-                    style={STYLE_BOOLEAN_NEGATIVE_FIRST: True, "buttons-large-gap": True},
+                    style=[ColorScheme.BOOLEAN_NEGATIVE_FIRST, ButtonStyle.LARGE_GAP],
                 )
             ]
         )

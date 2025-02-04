@@ -4,7 +4,7 @@ from .base import BaseRules
 from experiment.actions import Explainer, Step, Trial
 from experiment.actions.form import ChoiceQuestion, Form
 from experiment.actions.playback import Autoplay
-from experiment.actions.styles import STYLE_BOOLEAN
+from experiment.actions.styles import ColorScheme
 from experiment.actions.utils import final_action_with_optional_button
 from result.utils import prepare_result
 
@@ -34,73 +34,77 @@ class RhythmBatteryIntro(BaseRules):
             actions.append(explainer)
             key = 'quiet_room'
             result_pk = prepare_result(key, session, expected_response=key)
-            feedback_form = Form([
-                ChoiceQuestion(
-                    key=key,
-                    question=_(
-                        "Are you in a quiet room?"),
-                    choices={
-                        'YES': _('YES'),
-                        'MODERATELY': _('MODERATELY'),
-                        'NO': _('NO')
-                    },
-                    result_id=result_pk,
-                    view='BUTTON_ARRAY',
-                    submits=True,
-                    style=STYLE_BOOLEAN
-                )])
+            feedback_form = Form(
+                [
+                    ChoiceQuestion(
+                        key=key,
+                        question=_("Are you in a quiet room?"),
+                        choices={
+                            'YES': _('YES'),
+                            'MODERATELY': _('MODERATELY'),
+                            'NO': _('NO'),
+                        },
+                        result_id=result_pk,
+                        view='BUTTON_ARRAY',
+                        submits=True,
+                        style=[ColorScheme.BOOLEAN],
+                    )
+                ]
+            )
         elif round_number == 1:
             key = 'internet_connection'
             result_pk = prepare_result(key, session, expected_response=key)
-            feedback_form = Form([ChoiceQuestion(
-                key='internet_connection',
-                question=_(
-                    "Do you have a stable internet connection?"),
-                choices={
-                    'YES': _('YES'),
-                    'MODERATELY': _('MODERATELY'),
-                    'NO': _('NO')
-                },
-                view='BUTTON_ARRAY',
-                result_id=result_pk,
-                submits=True,
-                style=STYLE_BOOLEAN)])
+            feedback_form = Form(
+                [
+                    ChoiceQuestion(
+                        key='internet_connection',
+                        question=_("Do you have a stable internet connection?"),
+                        choices={
+                            'YES': _('YES'),
+                            'MODERATELY': _('MODERATELY'),
+                            'NO': _('NO'),
+                        },
+                        view='BUTTON_ARRAY',
+                        result_id=result_pk,
+                        submits=True,
+                        style=[ColorScheme.BOOLEAN],
+                    )
+                ]
+            )
         elif round_number == 2:
             key = 'headphones'
             result_pk = prepare_result(key, session, expected_response=key)
-            feedback_form = Form([
-                ChoiceQuestion(
-                    key=key,
-                    question=_(
-                        "Are you wearing headphones?"),
-                    choices={
-                        'YES': _('YES'),
-                        'NO': _('NO')
-                    },
-                    view='BUTTON_ARRAY',
-                    result_id=result_pk,
-                    submits=True,
-                    style=STYLE_BOOLEAN
-                )
-            ])
+            feedback_form = Form(
+                [
+                    ChoiceQuestion(
+                        key=key,
+                        question=_("Are you wearing headphones?"),
+                        choices={'YES': _('YES'), 'NO': _('NO')},
+                        view='BUTTON_ARRAY',
+                        result_id=result_pk,
+                        submits=True,
+                        style=[ColorScheme.BOOLEAN],
+                    )
+                ]
+            )
         elif round_number == 3:
             key = 'notifications_off'
             result_pk = prepare_result(key, session, expected_response=key)
-            feedback_form = Form([
-                ChoiceQuestion(
-                    key=key,
-                    question=_(
-                        "Do you have sound notifications from other devices turned off?"),
-                    choices={
-                        'YES': _('YES'),
-                        'NO': _('NO')
-                    },
-                    view='BUTTON_ARRAY',
-                    result_id=result_pk,
-                    submits=True,
-                    style=STYLE_BOOLEAN
-                ),
-            ])
+            feedback_form = Form(
+                [
+                    ChoiceQuestion(
+                        key=key,
+                        question=_(
+                            "Do you have sound notifications from other devices turned off?"
+                        ),
+                        choices={'YES': _('YES'), 'NO': _('NO')},
+                        view='BUTTON_ARRAY',
+                        result_id=result_pk,
+                        submits=True,
+                        style=[ColorScheme.BOOLEAN],
+                    ),
+                ]
+            )
         elif round_number == 4:
             section = session.playlist.section_set.first()
             instruction = _("You can now set the sound to a comfortable level. \

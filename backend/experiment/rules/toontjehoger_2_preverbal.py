@@ -7,8 +7,7 @@ from .toontjehoger_1_mozart import toontjehoger_ranks
 from experiment.actions import Trial, Explainer, Step, Score, Final, Playlist, Info, HTML
 from experiment.actions.form import ButtonArrayQuestion, ChoiceQuestion, Form
 from experiment.actions.playback import ImagePlayer
-from experiment.actions.styles import STYLE_NEUTRAL_INVERTED
-from experiment.actions.frontend_style import FrontendStyle, EFrontendStyle
+from experiment.actions.styles import ColorScheme
 from experiment.actions.utils import get_current_experiment_url
 from experiment.utils import create_player_labels
 from .base import BaseRules
@@ -154,10 +153,8 @@ class ToontjeHoger2Preverbal(BaseRules):
             },
             view='BUTTON_ARRAY',
             submits=True,
-            result_id=prepare_result(
-                key, session, expected_response="C"
-            ),
-            style=STYLE_NEUTRAL_INVERTED
+            result_id=prepare_result(key, session, expected_response="C"),
+            style=[ColorScheme.NEUTRAL_INVERTED],
         )
         form = Form([question])
 
@@ -204,9 +201,13 @@ class ToontjeHoger2Preverbal(BaseRules):
         playback = ImagePlayer(
             sections,
             labels=create_player_labels(len(sections), 'alphabetic'),
-            images=["/images/experiments/toontjehoger/spectrogram-trumpet.webp", "/images/experiments/toontjehoger/spectrogram-whale.webp", "/images/experiments/toontjehoger/spectrogram-human.webp"],
+            images=[
+                "/images/experiments/toontjehoger/spectrogram-trumpet.webp",
+                "/images/experiments/toontjehoger/spectrogram-whale.webp",
+                "/images/experiments/toontjehoger/spectrogram-human.webp",
+            ],
             image_labels=['Trompet', 'Walvis', 'Mens'],
-            style=FrontendStyle(EFrontendStyle.NEUTRAL_INVERTED)
+            style=[ColorScheme.NEUTRAL_INVERTED],
         )
 
         trial = Trial(
@@ -237,8 +238,11 @@ class ToontjeHoger2Preverbal(BaseRules):
         playback = ImagePlayer(
             sections,
             labels=create_player_labels(len(sections), 'alphabetic'),
-            images=["/images/experiments/toontjehoger/spectrogram-baby-french.webp", "/images/experiments/toontjehoger/spectrogram-baby-german.webp"],
-            style=FrontendStyle(EFrontendStyle.NEUTRAL_INVERTED)
+            images=[
+                "/images/experiments/toontjehoger/spectrogram-baby-french.webp",
+                "/images/experiments/toontjehoger/spectrogram-baby-german.webp",
+            ],
+            style=[ColorScheme.NEUTRAL_INVERTED],
         )
 
         # Question
@@ -253,7 +257,7 @@ class ToontjeHoger2Preverbal(BaseRules):
             view='BUTTON_ARRAY',
             submits=True,
             result_id=prepare_result(key, session, expected_response="A"),
-            style=STYLE_NEUTRAL_INVERTED
+            style=[ColorScheme.NEUTRAL_INVERTED],
         )
         form = Form([question])
 

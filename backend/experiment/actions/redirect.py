@@ -16,7 +16,7 @@ class Redirect(BaseAction):
         ```
     """
 
-    ID = "REDIRECT"
+    view = "REDIRECT"
 
     def __init__(self, url):
         self.url = url

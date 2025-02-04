@@ -2,7 +2,13 @@ from django.conf import settings
 from django.test import TestCase
 from django.utils import timezone
 
-from experiment.models import Block, BlockTranslatedContent, Experiment, Phase
+from experiment.models import (
+    Block,
+    BlockTranslatedContent,
+    Experiment,
+    ExperimentTranslatedContent,
+    Phase,
+)
 from experiment.serializers import get_upcoming_block, serialize_block, serialize_phase
 from experiment.tests.test_views import create_theme_config
 from image.models import Image
@@ -78,10 +84,6 @@ class SerializerTest(TestCase):
         self.assertIsNotNone(block)
 
     def test_serialize_block(self):
-        # Create the experiment & phase for the block
-        experiment = Experiment.objects.create(slug="test-experiment")
-        phase = Phase.objects.create(experiment=experiment)
-
         # Create a block
         block = Block.objects.create(
             slug="test-block",
@@ -95,7 +97,7 @@ class SerializerTest(TestCase):
                 target="_self",
             ),
             theme_config=create_theme_config(),
-            phase=phase,
+            phase=self.phase1,
         )
         BlockTranslatedContent.objects.create(
             block=block,

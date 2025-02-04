@@ -34,9 +34,7 @@ class FinalTest(TestCase):
         )
         phase = Phase.objects.create(experiment=cls.experiment)
         block = Block.objects.create(phase=phase, rules="HOOKED", rounds=6)
-        BlockTranslatedContent.objects.create(
-            block=block, name="Test block", language="en"
-        )
+        BlockTranslatedContent.objects.create(block=block, name="Test block", language="en")
         participant = Participant.objects.create()
         cls.session = Session.objects.create(block=block, participant=participant)
         Result.objects.create(session=cls.session, score=28)
@@ -70,6 +68,27 @@ class FinalTest(TestCase):
         final = Final(self.session)
         serialized = final.action()
         social_info = serialized.get("social")
-        self.assertEqual(
-            social_info.get("content"), "I scored 42.0 points in Final Countdown!"
-        )
+        self.assertEqual(social_info.get("content"), "I scored 42.0 points in Final Countdown!")
+
+    def test_final_action_with_percentile_disabled(self):
+        final = Final(self.session)
+        final.percentile = 85.0
+        serialized = final.action()
+        self.assertEqual(serialized.get("percentile"), 85.0)
+
+    def test_final_action_with_percentile_ranges(self):
+        test_cases = [95.0, 85.0, 65.0, 45.0, 25.0, 5.0]
+        for percentile in test_cases:
+            with self.subTest(percentile=percentile):
+                final = Final(self.session)
+                final.percentile = percentile
+                serialized = final.action()
+                self.assertIn("percentile", serialized)
+                self.assertEqual(serialized["percentile"], percentile)
+
+    def test_final_action_with_percentile(self):
+        final = Final(self.session)
+        final.percentile = 85.0
+        serialized = final.action()
+        self.assertIn("percentile", serialized)
+        self.assertIn("rank", serialized)

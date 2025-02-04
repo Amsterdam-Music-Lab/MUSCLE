@@ -269,7 +269,7 @@ class HookedTest(TestCase):
             heard_before_offset = session.json_data.get("heard_before_offset")
             if i == block.rounds + 1:
                 assert len(actions) == 2
-                assert actions[1].ID == "FINAL"
+                assert actions[1].view == "FINAL"
             elif i == 0:
                 self.assertEqual(len(actions), 4)
                 self.assertEqual(actions[1].feedback_form.form[0].key, "dgf_generation")
@@ -291,7 +291,7 @@ class HookedTest(TestCase):
                 assert actions[0].feedback_form.form[0].key == "recognize"
                 assert actions[2].feedback_form.form[0].key == "correct_place"
             else:
-                assert actions[0].ID == "SCORE"
+                assert actions[0].view == "SCORE"
                 if i < rules.question_offset + 1:
                     assert len(actions) == 4
                     assert actions[1].feedback_form.form[0].key == "recognize"
@@ -300,7 +300,7 @@ class HookedTest(TestCase):
                     assert actions[1].feedback_form.form[0].key in musicgen_keys
                 elif i == heard_before_offset + 1:
                     assert len(actions) == 3
-                    assert actions[1].ID == "EXPLAINER"
+                    assert actions[1].view == "EXPLAINER"
                     assert actions[2].feedback_form.form[0].key == "heard_before"
                 else:
                     assert len(actions) == 3

@@ -117,7 +117,7 @@ class Session(models.Model):
             question_keys: array of Result.question_key strings to specify whish results should be taken into account; if empty, return last result, irrespective of its question_key
 
         Returns:
-            last relevant [Result](result_models.md#Result) object added to the database for this session
+            last relevant [Result](result_models/#result.models.Result) object added to the database for this session
         """
         results = self._filter_results(question_keys)
         return results.first()
@@ -140,7 +140,7 @@ class Session(models.Model):
     def last_section(self, question_keys: list[str] = []) -> Union[Section, None]:
         """
         Utility function to retrieve the last section played in the session, optinally filtering by result question keys.
-        Uses [last_result](session_models.md#Session.last_result) underneath.
+        Uses [last_result](/session_models/#session.models.Session.last_result) underneath.
 
         Attributes:
             question_keys: array of the Result.question_key strings whish should be taken into account; if empty, return last section, irrespective of question_key
@@ -156,7 +156,7 @@ class Session(models.Model):
     def last_score(self, question_keys: list[str] = []) -> float:
         """
         Utility function to retrieve last score logged to the session, optionally filtering by result question keys.
-        Uses `last_result` underneath.
+        Uses [last_result](/session_models/#session.models.Session.last_result) underneath.
 
         Attributes:
             question_keys: array of the Result.question_key strings whish should be taken into account; if empty, return last score, irrespective of question_key

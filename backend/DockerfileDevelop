@@ -1,6 +1,6 @@
 # This base Docker image is used to build a development image
 # which is used in local development and CI/CD pipelines
-FROM docker.io/python:3.11 AS base
+FROM docker.io/python:3.12 AS base
 ENV PYTHONUNBUFFERED=1
 RUN apt-get -y update && apt-get install -y ffmpeg gettext
 
@@ -13,7 +13,7 @@ RUN pip install -r dev.txt
 FROM base AS graphviz
 RUN apt-get -y update && apt-get install -y graphviz graphviz-dev
 
-# For generating database ER diagrams
+# For generating database diagrams
 RUN pip install pygraphviz django-extensions
 
 # Generate graphviz image

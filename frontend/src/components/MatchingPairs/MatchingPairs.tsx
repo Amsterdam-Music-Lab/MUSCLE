@@ -172,28 +172,31 @@ const MatchingPairs = ({
         const currentCard = sections[index];
         const turnedCards = sections.filter(s => s.turned);
 
+        let updatedCurrentCard;
+
         if (turnedCards.length < 2) {
             if (turnedCards.length === 1) {
                 setSections(prev => prev.map((section, i) => {
                     if (i === index) {
-                        return {
+                        updatedCurrentCard = {
                             ...section,
                             turned: true,
                             noevents: true,
                             boardposition: index + 1,
                             timestamp: performance.now()
                         };
+                        return updatedCurrentCard;
                     }
                     return { ...section, noevents: true };
                 }));
 
-                setSecondCard(currentCard);
+                setSecondCard(updatedCurrentCard);
 
                 try {
                     const scoreResponse = await scoreIntermediateResult({
                         session,
                         participant,
-                        result: { "start_of_turn": startOfTurn, first_card: firstCard, second_card: currentCard, overlay_was_shown: overlayWasShown, },
+                        result: { "start_of_turn": startOfTurn, first_card: firstCard, second_card: updatedCurrentCard, overlay_was_shown: overlayWasShown, },
                     });
                     if (!scoreResponse) {
                         throw new Error('We cannot currently proceed with the game. Try again later');
@@ -207,16 +210,18 @@ const MatchingPairs = ({
                     return;
                 }
             } else {
-                setFirstCard(currentCard);
+                const section = sections[index];
+                updatedCurrentCard = {
+                    ...section,
+                    turned: true,
+                    noevents: true,
+                    boardposition: index + 1,
+                    timestamp: performance.now()
+                };
+                setFirstCard(updatedCurrentCard);
                 setSections(prev => prev.map((section, i) => {
                     if (i === index) {
-                        return {
-                            ...section,
-                            turned: true,
-                            noevents: true,
-                            boardposition: index + 1,
-                            timestamp: performance.now()
-                        };
+                        return updatedCurrentCard;
                     }
                     return section;
                 }));

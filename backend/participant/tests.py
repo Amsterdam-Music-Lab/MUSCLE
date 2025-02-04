@@ -1,4 +1,5 @@
 import json
+from django.utils import timezone
 
 from django.test import Client, TestCase
 from .models import Participant
@@ -131,3 +132,103 @@ class ParticipantTest(TestCase):
         assert score_sum == 8
         score_sum = self.participant.score_sum("MSI_F2_PERCEPTUAL_ABILITIES")
         assert score_sum is None
+
+    def test_session_count(self):
+        new_participant = Participant.objects.create(unique_hash=4242)
+        Session.objects.bulk_create(
+            [
+                Session(block=self.block, participant=new_participant),
+                Session(block=self.block, participant=new_participant),
+                Session(block=self.block, participant=new_participant),
+            ]
+        )
+        self.assertEqual(new_participant.session_count(), 3)
+
+    def test_result_count(self):
+        this_session = Session.objects.create(
+            block=self.block, participant=self.participant
+        )
+        that_session = Session.objects.create(
+            block=self.block, participant=self.participant
+        )
+        Result.objects.bulk_create(
+            [
+                Result(session=this_session),
+                Result(session=this_session),
+                Result(session=this_session),
+            ]
+        )
+        self.assertEqual(self.participant.result_count(), 3)
+        Result.objects.bulk_create(
+            [
+                Result(session=that_session),
+                Result(session=that_session),
+                Result(session=that_session),
+            ]
+        )
+        self.assertEqual(self.participant.result_count(), 6)
+
+    def test_export_admin(self):
+        new_participant = Participant.objects.create(unique_hash="84",
+                                                     country_code="nl",
+                                                     access_info="Mozilla/5.0 (X11; Linux x86_64)",
+                                                     participant_id_url = "this_participant",
+                                                     )
+        Result.objects.bulk_create(
+            [
+                Result(participant=new_participant,
+                       question_key='msi_01_music_activities',
+                       given_response="response"),
+                Result(participant=new_participant,
+                       question_key='msi_24_music_addiction',
+                       given_response="response"),
+                Result(participant=new_participant,
+                       question_key='msi_08_intrigued_styles',
+                       given_response="response"),
+            ]
+        )
+        this_admin = new_participant._export_admin()
+        self.assertEqual(this_admin['id'], new_participant.id)
+        self.assertEqual(this_admin['unique_hash'], "84")
+        self.assertEqual(this_admin['access_info'], "Mozilla/5.0 (X11; Linux x86_64)")
+        self.assertEqual(this_admin['participant_id_url'], "this_participant")
+        self.assertEqual(len(this_admin['profile']), 3)
+
+    def test_profile(self):
+        Result.objects.bulk_create(
+            [
+                Result(participant=self.participant,
+                       question_key='msi_01_music_activities',
+                       given_response="response"),
+                Result(participant=self.participant,
+                       question_key='msi_24_music_addiction',
+                       given_response="response"),
+                Result(participant=self.participant,
+                       question_key='msi_08_intrigued_styles',
+                       given_response="response"),
+            ]
+        )
+        this_profile = self.participant.profile()
+        self.assertEqual(this_profile.count(), 4)
+
+    def test_is_dutch(self):
+        new_participant = Participant.objects.create(unique_hash="84",
+                                                     country_code="nl",
+                                                     access_info="Mozilla/5.0 (X11; Linux x86_64)",
+                                                     participant_id_url = "this_participant",
+                                                     )
+        self.assertEqual(new_participant.is_dutch(), True)
+
+    def test_scores_per_experiment(self):
+        Session.objects.create(
+            block=self.block,
+            participant=self.participant,
+            finished_at=timezone.now(),
+            final_score=30.0,
+        )
+        these_scores = self.participant.scores_per_experiment()
+        self.assertEqual(len(these_scores), 1)
+        self.assertEqual(these_scores[0]['block_slug'], "test")
+        self.assertEqual(these_scores[0]['rank'], {'text': 'silver', 'class': 'silver'})
+        self.assertEqual(these_scores[0]['score'], 30.0)
+        self.assertEqual(these_scores[0]['date'], "today")

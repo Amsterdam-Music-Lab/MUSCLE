@@ -78,9 +78,9 @@ def block_or_404(slug):
         raise Http404("Block does not exist")
 
 
-def add_default_question_series(request, id):
+def add_default_question_series(request, slug):
     if request.method == "POST":
-        Block.objects.get(pk=id).add_default_question_series()
+        Block.objects.get(slug=slug).add_default_question_series()
     return JsonResponse({})
 
 

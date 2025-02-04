@@ -1,7 +1,7 @@
 import Listen from "../components/Listen/Listen";
 
 export default {
-    title: "Listen",
+    title: "Listen/Listen",
     component: Listen,
     parameters: {
         layout: "fullscreen",

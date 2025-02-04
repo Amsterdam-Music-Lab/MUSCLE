@@ -5,8 +5,7 @@ from os.path import join
 from experiment.actions import Trial, Explainer, Step, Score, Final, Info
 from experiment.actions.form import ChoiceQuestion, Form
 from experiment.actions.playback import Multiplayer
-from experiment.actions.frontend_style import FrontendStyle, EFrontendStyle
-from experiment.actions.styles import STYLE_BOOLEAN
+from experiment.actions.styles import ColorScheme
 from experiment.actions.utils import get_current_experiment_url
 from section.models import Playlist
 from session.models import Session
@@ -125,11 +124,10 @@ class ToontjeHoger6Relative(BaseRules):
             },
             view='BUTTON_ARRAY',
             submits=True,
-            style=STYLE_BOOLEAN,
+            style=[ColorScheme.BOOLEAN],
             result_id=prepare_result(
-                key, session, section=section1,
-                expected_response=expected_response
-            )
+                key, session, section=section1, expected_response=expected_response
+            ),
         )
         form = Form([question])
 
@@ -138,7 +136,6 @@ class ToontjeHoger6Relative(BaseRules):
             [section1, section2],
             play_once=True,
             labels=['A', 'B' if round == 0 else 'C'],
-            style=FrontendStyle(EFrontendStyle.INFO)
         )
 
         trial = Trial(
