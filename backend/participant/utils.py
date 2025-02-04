@@ -14,8 +14,8 @@ logger = logging.getLogger(__name__)
 def located_in_nl(request: HttpRequest) -> bool:
     """Return True if the requesting IP-address is located in NL
 
-    Attributes:
-        request (HttpRequest): Http request object
+    Args:
+        request: Http request object
 
     Returns:
         Whether a participant is located in the Netherlands or not.
@@ -33,8 +33,8 @@ def located_in_nl(request: HttpRequest) -> bool:
 def country(request: HttpRequest) -> str:
     """Get the country code of the current participant
 
-    Attributes:
-        request (HttpRequest): Http request object
+    Args:
+        request: Http request object
 
     Returns:
         Country code from: `experiment.standards.iso_countries.ISO_COUNTRIES`
@@ -69,10 +69,10 @@ def country(request: HttpRequest) -> str:
     return country_code
 
 
-def get_country_code(ip_address) -> str:
+def get_country_code(ip_address: str) -> str:
     """Get the country code from a given ip address
 
-    Attributes:
+    Args:
         ip_address (str): The ip address of the participant
 
     Returns:
@@ -104,8 +104,8 @@ def get_country_code(ip_address) -> str:
 def visitor_ip_address(request: HttpRequest) -> str:
     """Get the visitor's ip address from the request
 
-    Attributes:
-        request (HttpRequest): Http request object
+    Args:
+        request: Http request object
 
     Returns:
         ip address of the participant
@@ -129,8 +129,8 @@ def visitor_ip_address(request: HttpRequest) -> str:
 def get_participant(request: HttpRequest) -> Participant:
     """Get participant object from the session
 
-    Attributes:
-        request (HttpRequest): Http request object
+    Args:
+        request: Http request object
 
     Returns:
         Participant object linked to the session
@@ -154,11 +154,11 @@ def get_participant(request: HttpRequest) -> Participant:
         raise
 
 
-def get_or_create_participant(request) -> Participant:
+def get_or_create_participant(request:HttpRequest) -> Participant:
     """Get a participant from URL, the session, or create/add a new one
 
-    Attributes:
-        request (HttpRequest): Http request object
+    Args:
+        request: Http request object
 
     Returns:
         Participant object from the `participant_url_id`, the active session, \
@@ -194,12 +194,12 @@ def get_or_create_participant(request) -> Participant:
     return participant
 
 
-def set_participant(request, participant):
+def set_participant(request: HttpRequest, participant: Participant):
     """Set a participant to the current session
 
-    Attributes:
-        request (HttpRequest): Http request object
-        participant (Participant):
+    Args:
+        request: Http request object
+        participant: Participant instance
 
     Example:
         Set a participant to the current session
