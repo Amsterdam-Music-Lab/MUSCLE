@@ -1,4 +1,5 @@
 from django.test import Client, TestCase
+from django.core.exceptions import ValidationError
 
 from experiment.models import Block
 from participant.models import Participant
@@ -29,7 +30,6 @@ class ResultTest(TestCase):
         )
 
     def test_json_data(self):
-
         self.result.save_json_data({'test': 'tested'})
         self.assertEqual(self.result.json_data, {"test": "tested"})
         self.result.save_json_data({'test_len': 'tested_len'})
@@ -45,3 +45,11 @@ class ResultTest(TestCase):
         self.result.json_data.pop('test_direct_len')
         self.assertEqual(len(self.result.json_data), 1)
         self.assertEqual(self.result.json_data.get('test_direct_len', 'temp_value'), 'temp_value')
+
+    def test_clean(self):
+        with self.assertRaises(ValidationError):
+            result = Result.objects.create(question_key="will_fail")
+            result.clean()
+
+    def test_export_admin(self):
+        self.assertIsInstance(self.result._export_admin(), dict)
