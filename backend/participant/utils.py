@@ -11,13 +11,40 @@ PARTICIPANT_KEY = 'participant_id'
 logger = logging.getLogger(__name__)
 
 
-def located_in_nl(request):
-    """Return True if the requesting IP-address is located in NL"""
+def located_in_nl(request: HttpRequest) -> bool:
+    """Return True if the requesting IP-address is located in NL
+
+    Args:
+        request: Http request object
+
+    Returns:
+        Whether a participant is located in the Netherlands or not.
+
+    Example:
+        Check if the participant is located in the Netherlands
+        ```python
+        if located_in_nl(request):
+            # block of code to be executed if the condition is true
+        ```
+    """
     return country(request) == 'nl'
 
 
-def country(request):
-    """Get country code of requesting ip"""
+def country(request: HttpRequest) -> str:
+    """Get the country code of the current participant
+
+    Args:
+        request: Http request object
+
+    Returns:
+        Country code from: `experiment.standards.iso_countries.ISO_COUNTRIES`
+
+    Example:
+        Get country code from the request
+        ```python
+        country_code = country(request)
+        ```
+    """
 
     country_code = ""
     key = 'country_code'
@@ -42,8 +69,21 @@ def country(request):
     return country_code
 
 
-def get_country_code(ip_address):
-    """Get country code from given ip address"""
+def get_country_code(ip_address: str) -> str:
+    """Get the country code from a given ip address
+
+    Args:
+        ip_address (str): The ip address of the participant
+
+    Returns:
+        Country code from: `experiment.standards.iso_countries.ISO_COUNTRIES`
+
+    Example:
+        Get the country code from an ip address
+        ```python
+        country_code = get_country_code("192.168.2.1")
+        ```
+    """
 
     # Check if location provided is configured
     if not settings.LOCATION_PROVIDER:
@@ -61,8 +101,21 @@ def get_country_code(ip_address):
             return None
 
 
-def visitor_ip_address(request):
-    """Get visitor ip address from request"""
+def visitor_ip_address(request: HttpRequest) -> str:
+    """Get the visitor's ip address from the request
+
+    Args:
+        request: Http request object
+
+    Returns:
+        ip address of the participant
+
+    Example:
+        Get ip address from the request
+        ```python
+        ip_address = visitor_ip_address(request)
+        ```
+    """
 
     # You may want to change the header based on your production settings
     x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
@@ -74,6 +127,20 @@ def visitor_ip_address(request):
 
 
 def get_participant(request: HttpRequest) -> Participant:
+    """Get participant object from the session
+
+    Args:
+        request: Http request object
+
+    Returns:
+        Participant object linked to the session
+
+    Example:
+        Get current participant from the request
+        ```python
+        participant = get_participant(request)
+        ```
+    """
     # get participant from session
     participant_id = request.session.get(PARTICIPANT_KEY, -1)
 
@@ -87,8 +154,22 @@ def get_participant(request: HttpRequest) -> Participant:
         raise
 
 
-def get_or_create_participant(request) -> Participant:
-    """Get a participant from URL, the session, or create/add a new one"""
+def get_or_create_participant(request:HttpRequest) -> Participant:
+    """Get a participant from URL, the session, or create/add a new one
+
+    Args:
+        request: Http request object
+
+    Returns:
+        Participant object from the `participant_url_id`, the active session, \
+        or from a newly created object if none of the previous methods were successful
+
+    Example:
+        Get or create participant from the request
+        ```python
+        participant = get_or_create_participant(request)
+        ```
+    """
     # check if query string contains  participant
     participant_id_url = request.GET.get("participant_id")  # can be None
     try:
@@ -113,8 +194,19 @@ def get_or_create_participant(request) -> Participant:
     return participant
 
 
-def set_participant(request, participant):
-    """Set a participant to the session"""
+def set_participant(request: HttpRequest, participant: Participant):
+    """Set a participant to the current session
+
+    Args:
+        request: Http request object
+        participant: Participant instance
+
+    Example:
+        Set a participant to the current session
+        ```python
+        set_participant(request, participant)
+        ```
+    """
     if participant:
         request.session[PARTICIPANT_KEY] = participant.id
     else:
