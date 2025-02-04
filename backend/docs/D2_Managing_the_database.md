@@ -1,3 +1,5 @@
+# Managing the database
+
 The Docker infrastructure runs a PostgreSQL container. We can create backups of the database within this container, as well as restore the database.
 
 ### Backup the PostgreSQL database

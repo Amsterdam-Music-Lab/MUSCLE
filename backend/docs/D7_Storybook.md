@@ -1,3 +1,5 @@
+# Storybook
+
 We have added a Storybook configuration for the React frontend of this website that allows researchers and stakeholders to look and play around with the components that are used in the experiments.
 
 ## What is Storybook?

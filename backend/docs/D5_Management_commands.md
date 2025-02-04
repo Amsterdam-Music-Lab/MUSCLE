@@ -1,3 +1,5 @@
+# Management commands
+
 ### Compiling a playlist and other management commands
 You can run management commands, such as dump the database or compile the playlist, by using the management script located in `scripts/manage`.
 

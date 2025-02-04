@@ -1,6 +1,11 @@
+# Installing python packages
+
 If you want to install new packages, you can do so by adding the dependencies to:
+
 * `requirements.in/base.txt` for packages that are needed in both *development* **and** *production*
+
 * `requirements.in/dev.txt` for packages that are only needed in *development*
+
 * `requirements.in/prod.txt` for packages that are only needed in *production*
 
 Then, run the following `pip-compile` commands to generate the `requirements.txt` files:

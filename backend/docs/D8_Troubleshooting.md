@@ -1,3 +1,5 @@
+# Troubleshooting
+
 Are you using the MUSCLE web application and are you running into problems? Here we list things you can try and/or check in order to fix your problem.
 
 ## Audio related problems

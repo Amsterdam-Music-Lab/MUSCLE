@@ -1,3 +1,5 @@
+# Debugging
+
 If all containers are running via docker-compose, it is not possible to interact with the debug shell. Therefore, you need to do the following:
 
 1. `docker ps` to list all running containers
