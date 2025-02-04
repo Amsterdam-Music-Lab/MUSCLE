@@ -25,7 +25,7 @@ class Info(BaseAction):
         Relates to the `Info.tsx` component in the frontend.
     """
 
-    ID = "INFO"
+    view = "INFO"
 
     def __init__(self, body, heading="", button_label=None, button_link=None):
         self.body = body

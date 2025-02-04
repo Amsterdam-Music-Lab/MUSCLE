@@ -8,9 +8,8 @@ from experiment.utils import non_breaking_spaces
 from .toontjehoger_1_mozart import toontjehoger_ranks
 from experiment.actions import Trial, Explainer, Step, Score, Final, Info
 from experiment.actions.form import ButtonArrayQuestion, Form
-from experiment.actions.frontend_style import FrontendStyle, EFrontendStyle
 from experiment.actions.playback import Multiplayer
-from experiment.actions.styles import STYLE_NEUTRAL_INVERTED
+from experiment.actions.styles import ColorScheme
 from experiment.actions.utils import get_current_experiment_url
 from experiment.utils import create_player_labels
 from .base import BaseRules
@@ -93,7 +92,7 @@ class ToontjeHoger4Absolute(BaseRules):
         playback = Multiplayer(
             sections,
             labels=create_player_labels(len(sections), 'alphabetic'),
-            style=FrontendStyle(EFrontendStyle.NEUTRAL_INVERTED)
+            style=[ColorScheme.NEUTRAL_INVERTED],
         )
 
         # Question
@@ -107,10 +106,12 @@ class ToontjeHoger4Absolute(BaseRules):
             },
             submits=True,
             result_id=prepare_result(
-                key, session, section=section1,
-                expected_response="A" if sections[0].id == section1.id else "B"
+                key,
+                session,
+                section=section1,
+                expected_response="A" if sections[0].id == section1.id else "B",
             ),
-            style=STYLE_NEUTRAL_INVERTED
+            style=[ColorScheme.NEUTRAL_INVERTED],
         )
         form = Form([question])
 

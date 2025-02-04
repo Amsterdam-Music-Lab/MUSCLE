@@ -83,7 +83,7 @@ class Consent(BaseAction):  # pylint: disable=too-few-public-methods
     """
 
     # default consent text, that can be used for multiple blocks
-    ID = "CONSENT"
+    view = "CONSENT"
 
     default_text = "Lorem ipsum dolor sit amet, nec te atqui scribentur. Diam \
                 molestie posidonium te sit, ea sea expetenda suscipiantur \

@@ -7,7 +7,8 @@ dev_addr: '127.0.0.1:8080'
 
 markdown_extensions:
   - smarty
-  - toc
+  - toc:
+      permalink: '#'
   - pymdownx.highlight:
       anchor_linenums: true
       line_spans: __span
@@ -47,6 +48,8 @@ plugins:
           heading_level: 3
           docstring_style: google
           show_if_no_docstring: false
+          show_docstring_raises: true
+          show_docstring_returns: true
 
 extra_css:
     - assets/css/style.css
@@ -67,11 +70,11 @@ nav:
   - Preview frontend components:
       - 'Storybook': 'https://amsterdam-music-lab.github.io/MUSCLE/storybook'
   - Ruleset documentation:
-    - Data models:      
-      - Experiment: 'experiment_models.md'      
+    - Data models:
+      - Experiment: 'experiment_models.md'
       - Image: 'image_models.md'
-      - Participant: 'participant_models.md'      
-      - Question: 'question_models.md'      
+      - Participant: 'participant_models.md'
+      - Question: 'question_models.md'
       - Result: 'result_models.md'
       - Section: 'section_models.md'
       - Session: 'session_models.md'
@@ -91,37 +94,37 @@ nav:
     - 7. Storybook: '7_Storybook.md'
     - 8. Troubleshooting: '8_Troubleshooting.md'
   - Technical documentation:
-    - Experiment app:      
-      - Experiment admin: 'experiment_admin.md'      
+    - Experiment app:
+      - Experiment admin: 'experiment_admin.md'
       - Experiment serializers: 'experiment_serializers.md'
       - Experiment utils: 'experiment_utils.md'
       - Experiment views: 'experiment_views.md'
     - Image app:
-      - Image admin: 'image_admin.md'      
+      - Image admin: 'image_admin.md'
       - Image serializers: 'image_serializers.md'
       - Image validators: 'image_validators.md'
     - Participant app:
       - Participant admin: 'participant_admin.md'
       - Participant views: 'participant_views.md'
     - Question app:
-      - Question admin: 'question_admin.md'      
+      - Question admin: 'question_admin.md'
       - Question utils: 'question_utils.md'
       - Question views: 'question_views.md'
     - Result app:
-      - Result admin: 'result_admin.md'      
+      - Result admin: 'result_admin.md'
       - Result score: 'result_score.md'
       - Result utils: 'result_utils.md'
       - Result views: 'result_views.md'
     - Section app:
-      - Section admin: 'section_admin.md'      
+      - Section admin: 'section_admin.md'
       - Section views: 'section_views.md'
       - Section utils: 'section_utils.md'
       - Section validators: 'section_validators.md'
       - Section views: 'section_views.md'
     - Session app:
-      - Session admin: 'session_admin.md'      
+      - Session admin: 'session_admin.md'
       - Session views: 'session_views.md'
     - Theme app:
-      - Theme admin: 'theme_admin.md'      
+      - Theme admin: 'theme_admin.md'
       - Theme views: 'theme_views.md'
     - About this document: 'this_doc.md'

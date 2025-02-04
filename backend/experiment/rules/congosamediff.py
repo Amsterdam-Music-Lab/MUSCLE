@@ -144,7 +144,9 @@ class CongoSameDiff(BaseRules):
 
         question = ChoiceQuestion(
             explainer=f'{practice_label} ({trial_index}/{trials_count}) | {section_name} | {section_tag} | {section_group}',
-            question=_('Is the third sound the SAME or DIFFERENT as the first two sounds?'),
+            question=_(
+                'Is the third sound the SAME or DIFFERENT as the first two sounds?'
+            ),
             view='BUTTON_ARRAY',
             choices={
                 'DEFINITELY_SAME': _('DEFINITELY SAME'),
@@ -153,10 +155,11 @@ class CongoSameDiff(BaseRules):
                 'DEFINITELY_DIFFERENT': _('DEFINITELY DIFFERENT'),
                 'I_DONT_KNOW': _('I DON’T KNOW'),
             },
-            style={},
             key=key,
-            result_id=prepare_result(key, session, section=section, expected_response=expected_response),
-            submits=True
+            result_id=prepare_result(
+                key, session, section=section, expected_response=expected_response
+            ),
+            submits=True,
         )
         form = Form([question])
         playback = PlayButton([section], play_once=False)

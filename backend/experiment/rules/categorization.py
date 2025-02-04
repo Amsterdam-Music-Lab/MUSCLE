@@ -1,11 +1,11 @@
 import random
 
-from django.conf import settings
 from django.utils import timezone
 from django.template.loader import render_to_string
 from django.db.models import Avg
 
 from experiment.actions.form import Form, ChoiceQuestion
+from experiment.actions.styles import ButtonStyle, ColorScheme
 from experiment.actions import Explainer, Score, Trial, Final
 from experiment.actions.wrappers import two_alternative_forced
 from session.models import Session
@@ -244,9 +244,6 @@ class Categorization(BaseRules):
             session.block.session_set.filter(json_data__contains="C2").count(),
         ]
 
-        # Get sessions for current participant
-        current_sessions = session.block.session_set.filter(participant=session.participant)
-
         # Check wether a group falls behind in the count
         if max(used_groups) - min(used_groups) > 1:
             # assign the group that falls behind
@@ -265,12 +262,16 @@ class Categorization(BaseRules):
         # Assign a random correct response color for 1A, 2A
         stimuli_a = random.choice(["BLUE", "ORANGE"])
         # Determine which button is orange and which is blue
-        button_order = random.choice(["neutral", "neutral-inverted"])
+        button_order = random.choice(
+            [ColorScheme.NEUTRAL.value, ColorScheme.NEUTRAL_INVERTED.value]
+        )
         # Set expected resonse accordingly
         ph = "___"  # placeholder
         if button_order == "neutral" and stimuli_a == "BLUE":
             choices = {"A": ph, "B": ph}
-        elif button_order == "neutral-inverted" and stimuli_a == "ORANGE":
+        elif (
+            button_order == ColorScheme.NEUTRAL_INVERTED.value and stimuli_a == "ORANGE"
+        ):
             choices = {"A": ph, "B": ph}
         else:
             choices = {"B": ph, "A": ph}
@@ -282,7 +283,7 @@ class Categorization(BaseRules):
             assigned_group = "Crossed direction, Pair 1"
         else:
             assigned_group = "Crossed direction, Pair 2"
-        if button_order == "neutral":
+        if button_order == ColorScheme.NEUTRAL.value:
             button_colors = "Blue left, Orange right"
         else:
             button_colors = "Orange left, Blue right"
@@ -445,7 +446,7 @@ class Categorization(BaseRules):
 
         choices = json_data["choices"]
         config = {"listen_first": True, "auto_advance": True, "auto_advance_timer": 2500, "time_pass_break": False}
-        style = {json_data["button_order"]: True}
+        style = [json_data["button_order"]]
         trial = two_alternative_forced(
             session,
             section,
@@ -472,5 +473,5 @@ repeat_training_or_quit = ChoiceQuestion(
     choices={"continued": "OK", "aborted": "Exit"},
     submits=True,
     is_skippable=False,
-    style={"buttons-large-gap": True, "buttons-large-text": True, "boolean": True},
+    style=[ButtonStyle.LARGE_GAP, ButtonStyle.LARGE_TEXT, ColorScheme.BOOLEAN],
 )

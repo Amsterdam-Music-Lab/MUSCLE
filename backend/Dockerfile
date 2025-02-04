@@ -1,4 +1,4 @@
-FROM docker.io/python:3.11
+FROM docker.io/python:3.12
 ENV PYTHONUNBUFFERED 1
 RUN apt-get -y update && apt-get install -y ffmpeg gettext
 
