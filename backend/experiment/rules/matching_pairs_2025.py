@@ -84,19 +84,16 @@ class MatchingPairs2025(MatchingPairsGame):
 
         return trial
 
-    def _select_sections(self, session):
+    def _select_sections(self, session) -> list[Section]:
         condition_type, condition = self._select_least_played_condition_type_condition_pair(session)
 
         sections = self._select_least_played_sections(session, condition_type, condition)
 
         # if condition type not 'original', select the equivalent original sections
-        if condition_type != "original":
-            originals_sections = session.playlist.section_set.filter(tag="original")
-            # the equivalents share a common pattern in the filename with the already selected sections
-            # TODO: Eventually we will use the group field to match the equivalents, ie the original and the equivalent will have the same group
-            equivalents = originals_sections.filter(
-                filename__in=[section.filename for section in sections]
-            ).values_list("filename", flat=True)
+        if condition_type != "O":
+            originals_sections = session.playlist.section_set.filter(tag__startswith="O")
+            # Select equivalents by group number, e.g. a T2 with a group number of 1 will have an equivalent O2 with a group number of 1
+            equivalents = originals_sections.filter(group__in=[section.group for section in sections])
             sections += equivalents
         else:
             sections += sections

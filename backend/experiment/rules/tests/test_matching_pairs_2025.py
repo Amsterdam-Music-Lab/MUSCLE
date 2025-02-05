@@ -278,3 +278,67 @@ class MatchingPairs2025Test(TestCase):
         # Check if every pair is represented 5 times in selected_condition_type_condition_pairs (the participant played 5 times * 11 blocks)
         for pair in selected_condition_type_condition_pairs:
             self.assertEqual(selected_condition_type_condition_pairs.count(pair), 5)
+
+    def test_select_sections_original_condition(self):
+        """Test that _select_sections returns correct number of sections for original condition"""
+        session = Session.objects.create(block=self.block, participant=self.participant, playlist=self.playlist)
+
+        # Mock the condition selection to force "original" condition
+        self.rules._select_least_played_condition_type_condition_pair = lambda x: ("O", "1")
+
+        sections = self.rules._select_sections(session)
+
+        # Should return num_pairs * 2 sections (pairs are duplicated for original condition)
+        self.assertEqual(len(sections), self.rules.num_pairs * 2)
+        # All sections should have tag "O1"
+        self.assertTrue(all(section.tag == "O1" for section in sections))
+
+    def test_select_sections_temporal_condition(self):
+        """Test that _select_sections returns correct sections for temporal condition with original pairs"""
+        session = Session.objects.create(block=self.block, participant=self.participant, playlist=self.playlist)
+
+        # Mock the condition selection to force "temporal" condition
+        self.rules._select_least_played_condition_type_condition_pair = lambda x: ("T", "1")
+
+        sections = self.rules._select_sections(session)
+
+        # Should return num_pairs * 2 sections (temporal + matching original sections)
+        self.assertEqual(len(sections), self.rules.num_pairs * 2)
+
+        # Half should be temporal sections
+        temporal_sections = [s for s in sections if s.tag == "T1"]
+        self.assertEqual(len(temporal_sections), self.rules.num_pairs)
+
+        # Half should be original sections
+        original_sections = [s for s in sections if s.tag == "O1"]
+        self.assertEqual(len(original_sections), self.rules.num_pairs)
+
+        # Temporal and original sections should have matching group numbers
+        temporal_groups = {s.group for s in temporal_sections}
+        original_groups = {s.group for s in original_sections}
+        self.assertEqual(temporal_groups, original_groups)
+
+    def test_select_sections_frequency_condition(self):
+        """Test that _select_sections returns correct sections for frequency condition with original pairs"""
+        session = Session.objects.create(block=self.block, participant=self.participant, playlist=self.playlist)
+
+        # Mock the condition selection to force "frequency" condition
+        self.rules._select_least_played_condition_type_condition_pair = lambda x: ("F", "1")
+
+        sections = self.rules._select_sections(session)
+
+        # Should return num_pairs * 2 sections (frequency + matching original sections)
+        self.assertEqual(len(sections), self.rules.num_pairs * 2)
+
+        # Half should be frequency sections
+        frequency_sections = [s for s in sections if s.tag == "F1"]
+        self.assertEqual(len(frequency_sections), self.rules.num_pairs)
+
+        # Half should be original sections
+        original_sections = [s for s in sections if s.tag == "O1"]
+        self.assertEqual(len(original_sections), self.rules.num_pairs)
+
+        # Frequency and original sections should have matching group numbers
+        frequency_groups = {s.group for s in frequency_sections}
+        original_groups = {s.group for s in original_sections}
+        self.assertEqual(frequency_groups, original_groups)
