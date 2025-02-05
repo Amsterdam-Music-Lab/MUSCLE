@@ -22,6 +22,7 @@ class MatchingPairs2025(MatchingPairsGame):
     """
 
     ID = "MATCHING_PAIRS_2025"
+    num_pairs = 8
     tutorial = {
         "no_match": _(
             "This was not a match, so you get 0 points. Please try again to see if you can find a matching pair."
@@ -85,7 +86,23 @@ class MatchingPairs2025(MatchingPairsGame):
 
     def _select_sections(self, session):
         condition_type, condition = self._select_least_played_condition_type_condition_pair(session)
+
         sections = self._select_least_played_sections(session, condition_type, condition)
+
+        # if condition type not 'original', select the equivalent original sections
+        if condition_type != "original":
+            originals_sections = session.playlist.section_set.filter(tag="original")
+            # the equivalents share a common pattern in the filename with the already selected sections
+            # TODO: Eventually we will use the group field to match the equivalents, ie the original and the equivalent will have the same group
+            equivalents = originals_sections.filter(
+                filename__in=[section.filename for section in sections]
+            ).values_list("filename", flat=True)
+            sections += equivalents
+        else:
+            sections += sections
+
+        random.seed(self.random_seed)
+        random.shuffle(sections)
 
         return sections
 
@@ -201,7 +218,25 @@ class MatchingPairs2025(MatchingPairsGame):
         return least_played_participant_conditions
 
     def _select_least_played_sections(self, session, condition_type, condition) -> list[Section]:
-        raise NotImplementedError
+        participant_result_sections = session.participant.result_set.filter(
+            session__playlist=session.playlist
+        ).values_list("section", flat=True)
+
+        # Get the sections that belong to the selected condition type and condition
+        sections = session.playlist.section_set.filter(tag=condition_type, group=condition)
+
+        # Count the number of times each section has been played by the participant
+        section_play_counts = {section: 0 for section in sections}
+
+        for participant_result_section in participant_result_sections:
+            section_play_counts[participant_result_section] += 1
+
+        # Return the num_pairs amount of sections that have been played the least amount of times
+        least_played_sections = sorted(section_play_counts.keys(), key=lambda section: section_play_counts[section])[
+            : self.num_pairs
+        ]
+
+        return least_played_sections
 
     def _final_text(self, session):
         total_sessions = session.participant.session_set.count()
