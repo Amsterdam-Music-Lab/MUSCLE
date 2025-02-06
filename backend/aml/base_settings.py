@@ -119,9 +119,8 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/3.0/topics/i18n/
 
-TIME_ZONE = os.getenv(
-    "AML_TIME_ZONE", "Europe/Amsterdam"
-)  # configurable via AML_TIME_ZONE env variable, defaults to Europe/Amsterdam
+DEFAULT_TIME_ZONE = "Europe/Amsterdam"
+TIME_ZONE = os.getenv("AML_TIME_ZONE", DEFAULT_TIME_ZONE) or DEFAULT_TIME_ZONE  # Default to Europe/Amsterdam
 
 USE_TZ = True
 
