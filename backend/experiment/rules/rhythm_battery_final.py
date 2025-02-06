@@ -4,10 +4,10 @@ from django.template.loader import render_to_string
 from question.questions import QUESTION_GROUPS
 from experiment.actions import Explainer, Final, Step
 
-from .base import Base
+from .base import BaseRules
 
 
-class RhythmBatteryFinal(Base):
+class RhythmBatteryFinal(BaseRules):
     """ an experiment view that implements the GoldMSI questionnaire """
     ID = 'RHYTHM_BATTERY_FINAL'
     debrief_form = 'final/debrief_rhythm_unpaid.html'

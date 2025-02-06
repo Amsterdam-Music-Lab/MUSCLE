@@ -4,10 +4,10 @@ from django.utils.translation import gettext_lazy as _
 from django.template.loader import render_to_string
 from django.conf import settings
 
-from experiment.actions import HTML, Final, Explainer, Step, Consent, Redirect, Playlist, Trial
+from experiment.actions import HTML, Final, Explainer, Step, Redirect, Playlist, Trial
 from experiment.actions.form import BooleanQuestion, Form
 from experiment.actions.playback import Autoplay
-from experiment.actions.styles import STYLE_BOOLEAN_NEGATIVE_FIRST
+from experiment.actions.styles import ColorScheme
 from question.questions import QUESTION_GROUPS
 from result.utils import prepare_result
 from session.models import Session
@@ -76,13 +76,19 @@ class Huang2022(Hooked):
             if not last_result:
                 playback = get_test_playback()
                 html = HTML(body='<h4>{}</h4>'.format(_('Do you hear the music?')))
-                form = Form(form=[BooleanQuestion(
-                    key='audio_check1',
-                    choices={'no': _('No'), 'yes': _('Yes')},
-                    result_id=prepare_result('audio_check1', session,
-                        scoring_rule='BOOLEAN'),
-                    submits=True,
-                    style=STYLE_BOOLEAN_NEGATIVE_FIRST)])
+                form = Form(
+                    form=[
+                        BooleanQuestion(
+                            key='audio_check1',
+                            choices={'no': _('No'), 'yes': _('Yes')},
+                            result_id=prepare_result(
+                                'audio_check1', session, scoring_rule='BOOLEAN'
+                            ),
+                            submits=True,
+                            style=[ColorScheme.BOOLEAN_NEGATIVE_FIRST],
+                        )
+                    ]
+                )
                 return [Trial(playback=playback, feedback_form=form, html=html,
                              config={'response_time': 15},
                              title=_("Audio check"))]
@@ -92,13 +98,19 @@ class Huang2022(Hooked):
                     if last_result.question_key == 'audio_check1':
                         playback = get_test_playback()
                         html = HTML(body=render_to_string('html/huang_2022/audio_check.html'))
-                        form = Form(form=[BooleanQuestion(
-                            key='audio_check2',
-                            choices={'no': _('Quit'), 'yes': _('Try')},
-                            result_id=prepare_result('audio_check2', session, scoring_rule='BOOLEAN'),
-                            submits=True,
-                            style=STYLE_BOOLEAN_NEGATIVE_FIRST
-                        )])
+                        form = Form(
+                            form=[
+                                BooleanQuestion(
+                                    key='audio_check2',
+                                    choices={'no': _('Quit'), 'yes': _('Try')},
+                                    result_id=prepare_result(
+                                        'audio_check2', session, scoring_rule='BOOLEAN'
+                                    ),
+                                    submits=True,
+                                    style=[ColorScheme.BOOLEAN_NEGATIVE_FIRST],
+                                )
+                            ]
+                        )
                         return [Trial(playback=playback, html=html, feedback_form=form,
                                      config={'response_time': 15},
                                      title=_("Ready to experiment"))]

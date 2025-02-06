@@ -6,6 +6,7 @@ from django.utils.translation import gettext_lazy as _
 from django.conf import settings
 from django.core.exceptions import ValidationError
 
+from experiment.actions.types import FeedbackInfo
 from experiment.actions import Final, Form, Trial
 from question.utils import unanswered_questions
 from question.questions import get_questions_from_series
@@ -15,7 +16,7 @@ from session.models import Session
 logger = logging.getLogger(__name__)
 
 
-class Base(object):
+class BaseRules(object):
     """Base class for other rules classes"""
 
     contact_email = settings.CONTACT_MAIL
@@ -24,7 +25,7 @@ class Base(object):
     def __init__(self):
         self.question_series = []
 
-    def feedback_info(self):
+    def feedback_info(self) -> FeedbackInfo:
         feedback_body = render_to_string("feedback/user_feedback.html", {"email": self.contact_email})
         return {
             # Header above the feedback form

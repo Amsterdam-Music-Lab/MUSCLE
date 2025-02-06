@@ -59,7 +59,6 @@
     }
 
     // Rankings:
-
     &.diamond {
         background-color: #1c79ef;
         box-shadow: 13px 0 64px #1c79ef;
@@ -71,8 +70,8 @@
     }
 
     &.gold {
-        background-color: $yellow;
-        box-shadow: 13px 0 64px $yellow;
+        background-color: $gold;
+        box-shadow: 13px 0 64px $gold;
     }
 
     &.silver {

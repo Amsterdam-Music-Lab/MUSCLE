@@ -3,24 +3,24 @@
 The actions that can be used by experiments are formalized in `backend/experiment/actions`
 
 ## 1. Explainers
-An Explainer presents some information to participants of an experiment. They can include a number of Steps, which may or may not be numbered. 
+An Explainer presents some information to participants of an experiment. They can include a number of Steps, which may or may not be numbered.
 [Preview](https://amsterdam-music-lab.github.io/MUSCLE/?path=/story/explainer--default)
 
 ## 2. Playlist
 If there are multiple playlist tied to an experiment, the Playlist widget lets participants select one of them for use in the experiment.
 
 ## 3. Consent
-This action is used to present a consent form to the user, and a button to agree, or quit the experiment.  
+This action is used to present a consent form to the user, and a button to agree, or quit the experiment.
 The content of the consent agreement can be loaded from the rules file or uploaded from the admin interface.
 
-A consent form uploaded from the admin interface will override the one loaded from the rules file, so that each instance of an experiment can have its own consent file.  
+A consent form uploaded from the admin interface will override the one loaded from the rules file, so that each instance of an experiment can have its own consent file.
 Click on your experiment in the admin interface to upload your custom consent file at ```localhost:8000/admin/experiment```
 
-Files loaded from the rules file must be placed in ```admin/experiment/templates/consent```  
+Files loaded from the rules file must be placed in ```admin/experiment/templates/consent```
 Files uploaded from the admin interface are placed in ```backend/upload/consent```
 
 Allowed file formats:
-- HTML (.html)  
+- HTML (.html)
     - May contain django template tags
 - MARKDOWN (.md)
 

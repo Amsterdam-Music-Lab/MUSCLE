@@ -3,7 +3,7 @@ import { BrowserRouter as Router } from "react-router-dom";
 import Final from "../components/Final/Final";
 
 export default {
-    title: "Final",
+    title: "Final/Final",
     component: Final,
     parameters: {
         layout: "fullscreen",
@@ -13,11 +13,20 @@ export default {
 function getFinalData(overrides = {}) {
     return {
         score: 100,
+        percentile: 66,
         rank: {
             text: "Rank",
             class: "rank",
         },
-        final_text: "<p>Final text</p>",
+        final_text: `
+            <p>You outperformed 66% of the players</p>
+            
+            <table>
+                <tr><td>This game</td><td>100</td></tr>
+                <tr><td>Personal best</td><td>120</td></tr>
+                <tr><td>Average score</td><td>80</td></tr>
+            </table>
+        `,
         points: "points",
         button: {
             text: "Button",
@@ -99,6 +108,61 @@ export const NoButtonLink = {
         button: {
             text: "Button",
             link: "",
+        },
+    }),
+    decorators: [getDecorator],
+};
+
+// gold cup
+export const GoldCup = {
+    args: getFinalData({
+        rank: {
+            text: "Gold",
+            class: "gold",
+        },
+    }),
+    decorators: [getDecorator],
+};
+
+// silver cup
+export const SilverCup = {
+    args: getFinalData({
+        rank: {
+            text: "Silver",
+            class: "silver",
+        },
+    }),
+    decorators: [getDecorator],
+};
+
+// bronze cup
+export const BronzeCup = {
+    args: getFinalData({
+        rank: {
+            text: "Bronze",
+            class: "bronze",
+        },
+    }),
+    decorators: [getDecorator],
+};
+
+// plastic cup
+export const PlasticCup = {
+    args: getFinalData({
+        rank: {
+            text: "Plastic",
+            class: "plastic",
+        },
+    }),
+    decorators: [getDecorator],
+};
+
+// diamond cup
+export const DiamondCup = {
+    args: getFinalData({
+        rank: {
+            text: "Diamond",
+            class: "diamond",
         },
     }),
     decorators: [getDecorator],

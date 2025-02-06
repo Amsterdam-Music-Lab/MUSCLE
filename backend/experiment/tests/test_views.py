@@ -66,7 +66,6 @@ class TestExperimentViews(TestCase):
         self.assertEqual(response_json.get("dashboard"), [])
         self.assertEqual(response_json.get("theme").get("name"), "test_theme")
         self.assertEqual(len(response_json["theme"]["header"]["score"]), 3)
-        self.assertEqual(response_json.get("theme").get("footer").get("disclaimer"), "<p>Test Disclaimer</p>")
         self.assertEqual(response_json.get("socialMedia").get("url"), "https://www.example.com")
         self.assertEqual(response_json.get("socialMedia").get("content"), "Please play this Test experiment!")
         self.assertEqual(response_json.get("socialMedia").get("tags"), ["aml", "toontjehoger"])
@@ -276,7 +275,6 @@ class TestExperimentViews(TestCase):
         self.assertEqual(response.json()["name"], "Test Block")
         self.assertEqual(response.json()["theme"]["name"], "new-theme")
         self.assertEqual(len(response.json()["theme"]["header"]["score"]), 3)
-        self.assertEqual(response.json()["theme"]["footer"]["disclaimer"], "<p>Test Disclaimer</p>")
         self.assertEqual(response.json()["rounds"], 3)
         self.assertEqual(response.json()["bonus_points"], 42)
 
@@ -293,8 +291,6 @@ def create_theme_config(name="test_theme") -> ThemeConfig:
     HeaderConfig.objects.create(theme=theme_config, show_score=True)
     footer_config = FooterConfig.objects.create(
         theme=theme_config,
-        disclaimer="Test Disclaimer",
-        privacy="Test Privacy",
     )
     footer_config.logos.add(Image.objects.create(file="test-logo-b.jpg"), through_defaults={"index": 1})
     footer_config.logos.add(Image.objects.create(file="test-logo-a.jpg"), through_defaults={"index": 0})

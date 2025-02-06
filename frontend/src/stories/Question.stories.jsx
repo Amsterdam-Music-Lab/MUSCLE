@@ -1,7 +1,7 @@
 import Question from "../components/Question/Question";
 
 export default {
-    title: "Question",
+    title: "Question/Question",
     component: Question,
     parameters: {
         layout: "fullscreen",

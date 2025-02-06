@@ -6,13 +6,12 @@ from django.template.loader import render_to_string
 from .toontjehoger_1_mozart import toontjehoger_ranks
 from experiment.actions import Trial, Explainer, Step, Score, Final, Info
 from experiment.actions.form import ButtonArrayQuestion, Form
-from experiment.actions.frontend_style import FrontendStyle, EFrontendStyle
 from experiment.actions.playback import Multiplayer
-from experiment.actions.styles import STYLE_NEUTRAL_INVERTED
+from experiment.actions.styles import ColorScheme
 from experiment.actions.utils import get_current_experiment_url
 from section.models import Playlist
 from session.models import Session
-from .base import Base
+from .base import BaseRules
 from experiment.utils import create_player_labels, non_breaking_spaces
 
 from result.utils import prepare_result
@@ -20,7 +19,7 @@ from result.utils import prepare_result
 logger = logging.getLogger(__name__)
 
 
-class ToontjeHoger5Tempo(Base):
+class ToontjeHoger5Tempo(BaseRules):
     ID = "TOONTJE_HOGER_5_TEMPO"
     TITLE = ""
     SCORE_CORRECT = 20
@@ -131,7 +130,7 @@ class ToontjeHoger5Tempo(Base):
         playback = Multiplayer(
             sections,
             labels=create_player_labels(len(sections), "alphabetic"),
-            style=FrontendStyle(EFrontendStyle.NEUTRAL_INVERTED),
+            style=[ColorScheme.NEUTRAL_INVERTED],
         )
 
         # Question
@@ -150,7 +149,7 @@ class ToontjeHoger5Tempo(Base):
                 section=section_original,
                 expected_response="A" if sections[0].id == section_original.id else "B",
             ),
-            style=STYLE_NEUTRAL_INVERTED,
+            style=[ColorScheme.NEUTRAL_INVERTED],
         )
         form = Form([question])
 

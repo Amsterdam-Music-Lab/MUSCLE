@@ -1,7 +1,7 @@
 import Explainer from "../components/Explainer/Explainer";
 
 export default {
-    title: "Explainer",
+    title: "Explainer/Explainer",
     component: Explainer,
     parameters: {
         layout: "fullscreen",

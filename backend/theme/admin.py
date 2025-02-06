@@ -5,7 +5,7 @@ from django.contrib import admin
 from nested_admin import NestedModelAdmin, NestedStackedInline, NestedTabularInline
 from django.utils.html import format_html
 from .models import FooterConfig, HeaderConfig, ThemeConfig, SponsorImage
-from .forms import ThemeConfigForm, FooterConfigForm
+from .forms import ThemeConfigForm
 
 
 class SponsorImageInline(NestedTabularInline):
@@ -17,9 +17,7 @@ class SponsorImageInline(NestedTabularInline):
 
 class FooterConfigInline(NestedStackedInline):
     model = FooterConfig
-    form = FooterConfigForm
     inlines = [SponsorImageInline]
-    fields = ["disclaimer", "privacy"]
 
 
 class HeaderConfigInline(NestedStackedInline):

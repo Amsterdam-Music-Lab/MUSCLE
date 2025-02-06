@@ -11,10 +11,12 @@ class Redirect(BaseAction):
         url (str): The URL to redirect to.
 
     Example:
+        ```python
         redirect_action = Redirect('https://example.com')
+        ```
     """
 
-    ID = "REDIRECT"
+    view = "REDIRECT"
 
     def __init__(self, url):
         self.url = url

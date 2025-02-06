@@ -3,7 +3,7 @@ import Social from '@/components/Social/Social';
 import ISocial from '@/types/Social';
 
 const meta: Meta<typeof Social> = {
-    title: 'Components/Social',
+    title: 'Social/Social',
     component: Social,
     parameters: {
         layout: 'centered',

@@ -79,7 +79,7 @@ const Experiment = () => {
             <Routes>
                 <Route
                     path={'/about'}
-                    element={<ExperimentAbout content={experiment?.aboutContent} slug={experiment.slug} />}
+                    element={<ExperimentAbout content={experiment?.aboutContent} slug={experiment.slug} backButtonText={experiment.backButtonText} />}
                 />
                 <Route
                     path={'*'}
@@ -88,9 +88,9 @@ const Experiment = () => {
             </Routes>
             {experiment.theme?.footer && (
                 <Footer
-                    disclaimer={experiment.theme.footer.disclaimer}
+                    disclaimer={experiment.disclaimer}
                     logos={experiment.theme.footer.logos}
-                    privacy={experiment.theme.footer.privacy}
+                    privacy={experiment.privacy}
                 />
             )}
         </div>

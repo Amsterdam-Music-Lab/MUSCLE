@@ -5,12 +5,11 @@ from os.path import join
 from experiment.actions import Trial, Explainer, Step, Score, Final, Info
 from experiment.actions.form import ChoiceQuestion, Form
 from experiment.actions.playback import Multiplayer
-from experiment.actions.frontend_style import FrontendStyle, EFrontendStyle
-from experiment.actions.styles import STYLE_BOOLEAN
+from experiment.actions.styles import ColorScheme
 from experiment.actions.utils import get_current_experiment_url
 from section.models import Playlist
 from session.models import Session
-from .base import Base
+from .base import BaseRules
 from .toontjehoger_1_mozart import toontjehoger_ranks
 
 from result.utils import prepare_result
@@ -18,7 +17,7 @@ from result.utils import prepare_result
 logger = logging.getLogger(__name__)
 
 
-class ToontjeHoger6Relative(Base):
+class ToontjeHoger6Relative(BaseRules):
     ID = 'TOONTJE_HOGER_6_RELATIVE'
     TITLE = ""
     SCORE_CORRECT = 50
@@ -125,11 +124,10 @@ class ToontjeHoger6Relative(Base):
             },
             view='BUTTON_ARRAY',
             submits=True,
-            style=STYLE_BOOLEAN,
+            style=[ColorScheme.BOOLEAN],
             result_id=prepare_result(
-                key, session, section=section1,
-                expected_response=expected_response
-            )
+                key, session, section=section1, expected_response=expected_response
+            ),
         )
         form = Form([question])
 
@@ -138,7 +136,6 @@ class ToontjeHoger6Relative(Base):
             [section1, section2],
             play_once=True,
             labels=['A', 'B' if round == 0 else 'C'],
-            style=FrontendStyle(EFrontendStyle.INFO)
         )
 
         trial = Trial(

@@ -3,7 +3,7 @@ import json
 
 from django.utils.translation import gettext_lazy as _
 
-from .base import Base
+from .base import BaseRules
 from experiment.actions import Explainer, Final, Playlist, Step, Trial
 from experiment.actions.playback import MatchingPairs
 from result.utils import prepare_result
@@ -11,7 +11,7 @@ from result.utils import prepare_result
 from section.models import Section
 
 
-class MatchingPairsGame(Base):
+class MatchingPairsGame(BaseRules):
     ID = "MATCHING_PAIRS"
     default_consent_file = "consent/consent_matching_pairs.html"
     num_pairs = 8
@@ -156,3 +156,34 @@ class MatchingPairsGame(Base):
                 given_response = "no match"
         prepare_result("move", session, json_data=result_data, score=score, given_response=given_response)
         return score
+
+    def next_round(self, session):
+        if session.get_rounds_passed() < 1:
+            intro_explainer = self.get_intro_explainer()
+            playlist = Playlist(session.block.playlists.all())
+            actions = [intro_explainer, playlist]
+            questions = self.get_open_questions(session)
+            if questions:
+                intro_questions = Explainer(
+                    instruction=_(
+                        "Before starting the game, we would like to ask you %i demographic questions."
+                        % (len(questions))
+                    ),
+                    steps=[],
+                )
+                actions.append(intro_questions)
+                actions.extend(questions)
+            trial = self.get_matching_pairs_trial(session)
+            actions.append(trial)
+            return actions
+        else:
+            feedback_info = self.feedback_info()
+            score = Final(
+                session,
+                title="Score",
+                final_text="Can you score higher than your friends and family? Share and let them try!",
+                button={"text": "Play again", "link": self.get_play_again_url(session)},
+                rank=self.rank(session, exclude_unfinished=False),
+                feedback_info=feedback_info,
+            )
+            return [score]

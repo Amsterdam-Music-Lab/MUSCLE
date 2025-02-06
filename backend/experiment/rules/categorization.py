@@ -1,21 +1,21 @@
 import random
 
-from django.conf import settings
 from django.utils import timezone
 from django.template.loader import render_to_string
 from django.db.models import Avg
 
 from experiment.actions.form import Form, ChoiceQuestion
+from experiment.actions.styles import ButtonStyle, ColorScheme
 from experiment.actions import Explainer, Score, Trial, Final
 from experiment.actions.wrappers import two_alternative_forced
 from session.models import Session
 
-from .base import Base
+from .base import BaseRules
 
 SCORE_AVG_MIN_TRAINING = 0.8
 
 
-class Categorization(Base):
+class Categorization(BaseRules):
     ID = "CATEGORIZATION"
     default_consent_file = "consent/consent_categorization.html"
 
@@ -45,27 +45,6 @@ class Categorization(Base):
                 actions.extend(questions)
             json_data = self.plan_experiment(session)
             return actions
-
-        # Check if this participant already has a session
-        if json_data == "REPEAT":
-            json_data = {"phase": "REPEAT"}
-            session.save_json_data(json_data)
-            final = Final(
-                session=session,
-                final_text="You already have participated in this experiment.",
-            )
-            return final
-
-        # Total participants reached - Abort with message
-        if json_data == "FULL":
-            json_data = {"phase": "FULL"}
-            session.save_json_data(json_data)
-            session.save()
-            final = Final(
-                session=session,
-                final_text="The maximimum number of participants has been reached.",
-            )
-            return final
 
         # Calculate round number from passed training rounds
         rounds_passed = session.get_rounds_passed() - int(json_data["training_rounds"])
@@ -247,8 +226,6 @@ class Categorization(Base):
             .filter(started_at__lte=timezone.now() - timezone.timedelta(hours=24))
             .exclude(json_data__contains="ABORTED")
             .exclude(json_data__contains="FAILED_TRAINING")
-            .exclude(json_data__contains="REPEAT")
-            .exclude(json_data__contains="FULL")
             .exclude(json_data__contains="CLOSED_BROWSER")
         )
         for closed_session in all_sessions:
@@ -267,69 +244,66 @@ class Categorization(Base):
             session.block.session_set.filter(json_data__contains="C2").count(),
         ]
 
-        # Get sessions for current participant
-        current_sessions = session.block.session_set.filter(participant=session.participant)
-
-        # Check if this participant already has a previous session
-        if current_sessions.count() > 1 and not settings.TESTING:
-            json_data = "REPEAT"
+        # Check wether a group falls behind in the count
+        if max(used_groups) - min(used_groups) > 1:
+            # assign the group that falls behind
+            group_index = used_groups.index(min(used_groups))
+            if group_index == 0:
+                group = "S1"
+            elif group_index == 1:
+                group = "S2"
+            elif group_index == 2:
+                group = "C1"
+            elif group_index == 3:
+                group = "C2"
         else:
-            # Check wether a group falls behind in the count
-            if max(used_groups) - min(used_groups) > 1:
-                # assign the group that falls behind
-                group_index = used_groups.index(min(used_groups))
-                if group_index == 0:
-                    group = "S1"
-                elif group_index == 1:
-                    group = "S2"
-                elif group_index == 2:
-                    group = "C1"
-                elif group_index == 3:
-                    group = "C2"
-            else:
-                # Assign a random group
-                group = random.choice(["S1", "S2", "C1", "C2"])
-            # Assign a random correct response color for 1A, 2A
-            stimuli_a = random.choice(["BLUE", "ORANGE"])
-            # Determine which button is orange and which is blue
-            button_order = random.choice(["neutral", "neutral-inverted"])
-            # Set expected resonse accordingly
-            ph = "___"  # placeholder
-            if button_order == "neutral" and stimuli_a == "BLUE":
-                choices = {"A": ph, "B": ph}
-            elif button_order == "neutral-inverted" and stimuli_a == "ORANGE":
-                choices = {"A": ph, "B": ph}
-            else:
-                choices = {"B": ph, "A": ph}
-            if group == "S1":
-                assigned_group = "Same direction, Pair 1"
-            elif group == "S2":
-                assigned_group = "Same direction, Pair 2"
-            elif group == "C1":
-                assigned_group = "Crossed direction, Pair 1"
-            else:
-                assigned_group = "Crossed direction, Pair 2"
-            if button_order == "neutral":
-                button_colors = "Blue left, Orange right"
-            else:
-                button_colors = "Orange left, Blue right"
-            if stimuli_a == "BLUE":
-                pair_colors = "A = Blue, B = Orange"
-            else:
-                pair_colors = "A = Orange, B = Blue"
-            json_data = {
-                "phase": "training",
-                "training_rounds": "0",
-                "assigned_group": assigned_group,
-                "button_colors": button_colors,
-                "pair_colors": pair_colors,
-                "group": group,
-                "stimuli_a": stimuli_a,
-                "button_order": button_order,
-                "choices": choices,
-            }
-            session.save_json_data(json_data)
-            session.save()
+            # Assign a random group
+            group = random.choice(["S1", "S2", "C1", "C2"])
+        # Assign a random correct response color for 1A, 2A
+        stimuli_a = random.choice(["BLUE", "ORANGE"])
+        # Determine which button is orange and which is blue
+        button_order = random.choice(
+            [ColorScheme.NEUTRAL.value, ColorScheme.NEUTRAL_INVERTED.value]
+        )
+        # Set expected resonse accordingly
+        ph = "___"  # placeholder
+        if button_order == "neutral" and stimuli_a == "BLUE":
+            choices = {"A": ph, "B": ph}
+        elif (
+            button_order == ColorScheme.NEUTRAL_INVERTED.value and stimuli_a == "ORANGE"
+        ):
+            choices = {"A": ph, "B": ph}
+        else:
+            choices = {"B": ph, "A": ph}
+        if group == "S1":
+            assigned_group = "Same direction, Pair 1"
+        elif group == "S2":
+            assigned_group = "Same direction, Pair 2"
+        elif group == "C1":
+            assigned_group = "Crossed direction, Pair 1"
+        else:
+            assigned_group = "Crossed direction, Pair 2"
+        if button_order == ColorScheme.NEUTRAL.value:
+            button_colors = "Blue left, Orange right"
+        else:
+            button_colors = "Orange left, Blue right"
+        if stimuli_a == "BLUE":
+            pair_colors = "A = Blue, B = Orange"
+        else:
+            pair_colors = "A = Orange, B = Blue"
+        json_data = {
+            "phase": "training",
+            "training_rounds": "0",
+            "assigned_group": assigned_group,
+            "button_colors": button_colors,
+            "pair_colors": pair_colors,
+            "group": group,
+            "stimuli_a": stimuli_a,
+            "button_order": button_order,
+            "choices": choices,
+        }
+        session.save_json_data(json_data)
+        session.save()
 
         return json_data
 
@@ -445,7 +419,7 @@ class Categorization(Base):
         else:
             pass  # throw error
 
-        return Score(session, icon=icon, timer=1, title=self.get_title(session))
+        return Score(session, icon=icon, timer=1, title=" ")
 
     def get_trial_with_feedback(self, session):
         score = self.get_feedback(session)
@@ -472,7 +446,7 @@ class Categorization(Base):
 
         choices = json_data["choices"]
         config = {"listen_first": True, "auto_advance": True, "auto_advance_timer": 2500, "time_pass_break": False}
-        style = {json_data["button_order"]: True}
+        style = [json_data["button_order"]]
         trial = two_alternative_forced(
             session,
             section,
@@ -499,5 +473,5 @@ repeat_training_or_quit = ChoiceQuestion(
     choices={"continued": "OK", "aborted": "Exit"},
     submits=True,
     is_skippable=False,
-    style={"buttons-large-gap": True, "buttons-large-text": True, "boolean": True},
+    style=[ButtonStyle.LARGE_GAP, ButtonStyle.LARGE_TEXT, ColorScheme.BOOLEAN],
 )

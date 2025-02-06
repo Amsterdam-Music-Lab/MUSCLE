@@ -1,9 +1,7 @@
 from django.test import TestCase
 
-from experiment.models import Block
-from experiment.rules.rhythm_discrimination import next_trial_actions, plan_stimuli
+from experiment.models import Block, ExperimentTranslatedContent
 from participant.models import Participant
-from result.models import Result
 from section.models import Playlist
 from session.models import Session
 
@@ -17,13 +15,16 @@ class RhythmDiscriminationTest(TestCase):
         cls.playlist = Playlist.objects.get(name="RhythmDiscrimination")
         cls.playlist._update_sections()
         cls.block = Block.objects.get(slug="rhdis")
+        ExperimentTranslatedContent.objects.create(
+            experiment=cls.block.phase.experiment, language="en", name="Rhythm Tests"
+        )
         cls.session = Session.objects.create(block=cls.block, participant=cls.participant, playlist=cls.playlist)
 
-    def test_next_trial_actions(self):
-        plan_stimuli(self.session)
-        self.session.final_score = 1
-        self.session.save()
-        trial = next_trial_actions(self.session, 6)
+    def test_get_next_trial(self):
+        rules = self.block.get_rules()
+        rules.plan_stimuli(self.session)
+        self.session.save_json_data({"practice_done": True})
+        trial = rules.get_next_trial(self.session)
         assert trial
 
     def test_block_flow(self):
@@ -37,18 +38,13 @@ class RhythmDiscriminationTest(TestCase):
         self._validate_practice_round(session_id, 2, participant)
         self._validate_practice_round(session_id, 3, participant)
         self._validate_practice_round(session_id, 4, participant)
+        self._validate_practice_round(
+            session_id, 5, participant, actions=["EXPLAINER", "EXPLAINER"]
+        )
 
         # Test real rounds (should be 36 rounds)
-        for i in range(0, 36):
+        for i in range(36):
             real_round_number = i + 5  # Real rounds start from 5th round
-
-            # The first real round has ["EXPLAINER", "EXPLAINER", "TRIAL_VIEW"] views
-            if i == 0:
-                self._validate_real_round(
-                    session_id, real_round_number, participant, actions=["EXPLAINER", "EXPLAINER", "TRIAL_VIEW"]
-                )
-                continue
-
             self._validate_real_round(session_id, real_round_number, participant)
 
         # Debriefing (one single 'FINAL' view)
@@ -78,8 +74,12 @@ class RhythmDiscriminationTest(TestCase):
             self.assertEqual(next_round[i]["view"], action, f"Round {round_number} action {i} is not {action}")
 
         # Trial view index
-        trial_view_index = actions.index("TRIAL_VIEW")
-        trial_view = next_round[trial_view_index]
+        try:
+            trial_view_index = actions.index("TRIAL_VIEW")
+            trial_view = next_round[trial_view_index]
+        except:
+            # no trial view, return
+            return next_round
 
         # Check title requirements for practice round - should contain "practice" or "oefenen"
         trial_title = trial_view["title"].lower()

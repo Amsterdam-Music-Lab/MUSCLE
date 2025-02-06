@@ -29,7 +29,7 @@ const MultiPlayer = ({
             className={classNames(
                 "aha__multiplayer d-flex justify-content-around",
                 "player-count-" + sections.length,
-                style?.root
+                style
             )}
         >
             {sections.map((_section, index) => (

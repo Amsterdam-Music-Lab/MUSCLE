@@ -49,7 +49,7 @@ class Explainer(BaseAction):
         step_numbers (Optional[bool]): Show step numbers
     """
 
-    ID = "EXPLAINER"
+    view = "EXPLAINER"
 
     def __init__(
         self,
@@ -71,7 +71,7 @@ class Explainer(BaseAction):
         else:
             serialized_steps = [step.action() for step in self.steps]
         return {
-            "view": self.ID,
+            "view": self.view,
             "instruction": self.instruction,
             "button_label": self.button_label,
             "steps": serialized_steps,
