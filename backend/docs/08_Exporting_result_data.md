@@ -382,7 +382,7 @@ You will be presented with a screen that lets you choose the fields that you wan
 
 ## Note on Timestamps
 
-All timestamps in JSON exports are in UTC time. This ensures consistency across different systems and time zones. Please also note that the currently configured timezone of the server is 'Europe/Amsterdam'. You can change these settings in the `base_settings.py` file in the `backend/aml` directory. Look for:
+All timestamps in JSON exports are in UTC time. This ensures consistency across different systems and time zones. Please also note that the currently configured timezone for this application is 'Europe/Amsterdam'. If you would like to fork and spin your own instance with another timezone setting, you can change the `base_settings.py` file in the `backend/aml` directory. Look for:
 
 ```python
 USE_TZ = True
