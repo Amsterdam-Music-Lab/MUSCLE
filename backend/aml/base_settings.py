@@ -119,17 +119,17 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/3.0/topics/i18n/
 
-# LANGUAGE_CODE = 'en-us'
+TIME_ZONE = os.getenv(
+    "AML_TIME_ZONE", "Europe/Amsterdam"
+)  # configurable via AML_TIME_ZONE env variable, defaults to Europe/Amsterdam
 
-TIME_ZONE = "Europe/Amsterdam"
+USE_TZ = True
 
 USE_I18N = True
 
 USE_L10N = True
 
-USE_TZ = True
-
-MODELTRANSLATION_LANGUAGES = ('en', 'nl', 'pt','zh-hans')
+MODELTRANSLATION_LANGUAGES = ("en", "nl", "pt", "zh-hans")
 
 # Increase django limits for large data sets
 # A request timeout should be set in the webserver
