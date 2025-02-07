@@ -89,6 +89,11 @@ class MatchingPairs2025(MatchingPairsGame):
 
         sections = self._select_least_played_sections(session, condition_type, condition)
 
+        if not sections:
+            raise ValueError(
+                "No sections found for condition type {} and condition {}".format(condition_type, condition)
+            )
+
         # if condition type not 'original', select the equivalent original sections
         if condition_type != "O":
             originals_sections = session.playlist.section_set.filter(tag__startswith="O")
