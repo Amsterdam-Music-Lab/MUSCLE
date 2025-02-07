@@ -61,7 +61,7 @@ class MatchingPairs2025(MatchingPairsGame):
                 session,
                 title="Score",
                 final_text=self._final_text(session),
-                button={"text": "Play again", "link": self.get_play_again_url(session)},
+                button={"text": "Next game", "link": self.get_experiment_url(session)},
                 rank=self.rank(session, exclude_unfinished=False),
                 feedback_info=feedback_info,
                 percentile=session.percentile_rank(exclude_unfinished=False),
