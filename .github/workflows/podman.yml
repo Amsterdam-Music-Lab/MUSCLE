@@ -8,6 +8,11 @@ on:
     tags:
       - '*'
   workflow_dispatch:
+    inputs:
+      branch:
+        description: 'Branch to deploy'
+        required: false
+        default: 'develop'
   release:
     types: [created]
 
@@ -21,7 +26,7 @@ jobs:
     # this job runs only on commits to the develop branch or when manually triggered for a branch other than main
     if: github.ref == 'refs/heads/develop' || (github.event_name == 'workflow_dispatch' && github.ref != 'refs/heads/main')
     concurrency:
-      group: ${{ github.workflow }}-${{ github.ref }}
+      group: ${{ github.workflow }}-${{ github.event.inputs.branch || github.ref }}
     env:
 
       # Variables
@@ -63,8 +68,11 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.inputs.branch }}
       - name: Create .env file
         run: |
+          Deploying ${{ github.event.inputs.branch || github.ref }} branch to test environment
           touch .env
           echo "VITE_API_ROOT=$FRONTEND_API_ROOT" >> .env
           echo "VITE_EXPERIMENT_SLUG=$FRONTEND_EXPERIMENT_SLUG" >> .env
