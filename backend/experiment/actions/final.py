@@ -145,7 +145,7 @@ class Final(BaseAction):  # pylint: disable=too-few-public-methods
             "score": self.total_score,
             "percentile": self.percentile,
             "rank": self.rank,
-            "final_text": self.wrap_plain_final_text(self.final_text),
+            "final_text": self.wrap_plain_final_text(),
             "button": self.button,
             "points": self.points,
             "action_texts": {
@@ -177,3 +177,4 @@ class Final(BaseAction):  # pylint: disable=too-few-public-methods
         tag_pattern = re.compile('<[a-z]*>')
         if not re.match(tag_pattern, self.final_text):
             return f'<center>{self.final_text}</center>'
+        return self.final_text
