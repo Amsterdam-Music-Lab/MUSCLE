@@ -20,7 +20,7 @@ function getFinalData(overrides = {}) {
         },
         final_text: `
             <p>You outperformed 66% of the players</p>
-            
+
             <table>
                 <tr><td>This game</td><td>100</td></tr>
                 <tr><td>Personal best</td><td>120</td></tr>
@@ -205,3 +205,12 @@ export const FinalTextHtml = {
     }),
     decorators: [getDecorator],
 };
+
+// no percentile, text centered
+export const PlainText = {
+    args: getFinalData({
+        percentile: undefined,
+        final_text: '<center>Well done!</center>'
+    }),
+    decorators: [getDecorator]
+}
