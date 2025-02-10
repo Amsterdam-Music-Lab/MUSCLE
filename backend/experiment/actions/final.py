@@ -175,6 +175,6 @@ class Final(BaseAction):  # pylint: disable=too-few-public-methods
         If not, wrap it in a `<center>` element for better alignment
         '''
         tag_pattern = re.compile('<[a-z]*>')
-        if not re.match(tag_pattern, self.final_text):
+        if self.final_text and not re.match(tag_pattern, self.final_text):
             return f'<center>{self.final_text}</center>'
         return self.final_text
