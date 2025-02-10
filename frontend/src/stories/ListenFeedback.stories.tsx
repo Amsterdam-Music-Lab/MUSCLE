@@ -1,7 +1,7 @@
 import ListenFeedback from "../components/Listen/ListenFeedback";
 
 export default {
-    title: "ListenFeedback",
+    title: "Listen/ListenFeedback",
     component: ListenFeedback,
     parameters: {
         layout: "fullscreen",

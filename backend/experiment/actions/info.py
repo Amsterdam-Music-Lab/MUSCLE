@@ -1,24 +1,33 @@
 from .base_action import BaseAction
 
 
-class Info(BaseAction):  # pylint: disable=too-few-public-methods
+class Info(BaseAction):
     """
-    Provide data for a view that shows information (HTML)
+    Provide data for a view that presents information using HTML to the participant, along with a customizable (link) button.
 
-    Relates to client component: Info.js    
+    Args:
+        body (str): HTML body
+        heading (str): title/heading on top
+        button_label (str): label of button on bottom
+        button_link (str): (optional) button link. If no link is set, clicking the button will redirect the participant to the next action.
+
+    Example:
+        ```python
+        Info(
+            body="<p>Here is some information</p>",
+            heading="This is the heading",
+            button_label="Next",
+            button_link="https://example.com",
+        )
+        ```
+
+    Note:
+        Relates to the `Info.tsx` component in the frontend.
     """
 
-    ID = "INFO"
+    view = "INFO"
 
     def __init__(self, body, heading="", button_label=None, button_link=None):
-        """
-        Info shows an formatted information page with an HTML body
-        body: html body
-        heading: title/heading on top
-        button_label: label of button on bottom
-        button_link: (optional) button link. If no link is set, 'onNext' is called
-        """
-        
         self.body = body
         self.heading = heading
         self.button_label = button_label

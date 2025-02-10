@@ -1,7 +1,11 @@
+import { http, HttpResponse } from 'msw'
 import useBoundStore from "@/util/stores";
 import MatchingPairs, { SCORE_FEEDBACK_DISPLAY } from "../components/MatchingPairs/MatchingPairs";
 
+
 import audio from "./assets/audio.wav";
+import { API_BASE_URL } from '@/config';
+import { URLS } from '@/API';
 
 const StoreDecorator = (Story) => {
     const setSession = useBoundStore((state) => state.setSession);
@@ -20,7 +24,7 @@ const StoreDecorator = (Story) => {
 };
 
 export default {
-    title: "MatchingPairs",
+    title: "MatchingPairs/MatchingPairs",
     component: MatchingPairs,
     parameters: {
         layout: "fullscreen",
@@ -34,7 +38,7 @@ export default {
 };
 
 const getDefaultArgs = (overrides = {}) => ({
-    playSection: () => {},
+    playSection: () => { },
     sections: [
         {
             id: 1,
@@ -94,9 +98,20 @@ const getDefaultArgs = (overrides = {}) => ({
         },
     ],
     playerIndex: 0,
-    stopAudio: () => {},
-    submitResult: () => {},
-    finishedPlaying: () => {},
+    stopAudio: () => { },
+    submitResult: () => { },
+    finishedPlaying: () => { },
+    ...overrides,
+});
+
+const getDefaultParams = (overrides = {}) => ({
+    msw: {
+        handlers: [
+            http.post(API_BASE_URL + URLS.result.intermediateScore, () => {
+                return HttpResponse.json({ score: 10 });
+            })
+        ],
+    },
     ...overrides,
 });
 
@@ -105,13 +120,13 @@ export const Default = {
         ...getDefaultArgs(),
     },
     decorators: [StoreDecorator],
-    parameters: {
+    parameters: getDefaultParams({
         docs: {
             description: {
                 component: "This story shows the component with the default props.",
             },
         },
-    },
+    }),
 };
 
 export const WithThreeColumns = {
@@ -162,14 +177,14 @@ export const WithThreeColumns = {
         ],
     }),
     decorators: [StoreDecorator],
-    parameters: {
+    parameters: getDefaultParams({
         docs: {
             description: {
                 component:
                     "This story shows the component with three columns. The component automatically adjusts the number of columns based on the number of sections. Six or less sections will result in three columns, more than six sections will result in four columns.",
             },
         },
-    },
+    }),
 };
 
 export const WithSmallBottomRightScoreFeedback = {
@@ -178,13 +193,13 @@ export const WithSmallBottomRightScoreFeedback = {
         scoreFeedbackDisplay: SCORE_FEEDBACK_DISPLAY.SMALL_BOTTOM_RIGHT,
     },
     decorators: [StoreDecorator],
-    parameters: {
+    parameters: getDefaultParams({
         docs: {
             description: {
                 component: "This story shows the component with the default props.",
             },
         },
-    },
+    }),
 };
 
 export const WithShowAnimation = {
@@ -193,11 +208,11 @@ export const WithShowAnimation = {
         showAnimation: true,
     },
     decorators: [StoreDecorator],
-    parameters: {
+    parameters: getDefaultParams({
         docs: {
             description: {
                 component: "This story shows the component with the default props.",
             },
         },
-    },
+    }),
 };

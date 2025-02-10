@@ -7,11 +7,11 @@ from section.models import Playlist, Section
 from session.models import Session
 from experiment.actions import ChoiceQuestion, Explainer, Form, Trial
 from experiment.actions.playback import PlayButton
-from .base import Base
+from .base import BaseRules
 from result.utils import prepare_result
 
 
-class CongoSameDiff(Base):
+class CongoSameDiff(BaseRules):
     """ A micro-PROMS inspired experiment block that tests the participant's ability to distinguish between different sounds. """
     ID = 'CONGOSAMEDIFF'
     contact_email = 'aml.tunetwins@gmail.com'
@@ -144,7 +144,9 @@ class CongoSameDiff(Base):
 
         question = ChoiceQuestion(
             explainer=f'{practice_label} ({trial_index}/{trials_count}) | {section_name} | {section_tag} | {section_group}',
-            question=_('Is the third sound the SAME or DIFFERENT as the first two sounds?'),
+            question=_(
+                'Is the third sound the SAME or DIFFERENT as the first two sounds?'
+            ),
             view='BUTTON_ARRAY',
             choices={
                 'DEFINITELY_SAME': _('DEFINITELY SAME'),
@@ -153,10 +155,11 @@ class CongoSameDiff(Base):
                 'DEFINITELY_DIFFERENT': _('DEFINITELY DIFFERENT'),
                 'I_DONT_KNOW': _('I DON’T KNOW'),
             },
-            style={},
             key=key,
-            result_id=prepare_result(key, session, section=section, expected_response=expected_response),
-            submits=True
+            result_id=prepare_result(
+                key, session, section=section, expected_response=expected_response
+            ),
+            submits=True,
         )
         form = Form([question])
         playback = PlayButton([section], play_once=False)

@@ -12,9 +12,10 @@ export type PlaybackView = typeof AUTOPLAY | typeof BUTTON | typeof MULTIPLAYER 
 type PlaybackMethod = "EXTERNAL" | "HTML" | "BUFFER" | "NOAUDIO";
 
 interface FrontendStyle {
-    root: string | FrontendStyle;
-    [key: string]: string | FrontendStyle;
+    [key: string]: boolean;
 }
+
+export type ScoreFeedbackDisplay = "large-top" | "small-bottom-right" | "hidden";
 
 export interface PlaybackArgs {
     view: PlaybackView;
@@ -34,5 +35,6 @@ export interface PlaybackArgs {
     resume_play?: boolean;
     stop_audio_after?: number;
     timeout_after_playback?: number;
-    score_feedback_display?: string;
+    score_feedback_display?: ScoreFeedbackDisplay;
+    tutorial?: { [key: string]: string };
 }

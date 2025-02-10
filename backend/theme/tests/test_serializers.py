@@ -42,8 +42,6 @@ class ThemeConfigSerializerTest(TestCase):
         )
         cls.footer = FooterConfig.objects.create(
             theme=cls.theme,
-            disclaimer='Some [information](https://example.com/our-team)',
-            privacy='Some privacy message'
         )
         # The order of the logos should be determined by the
         # index field in the through model and not by the order in
@@ -58,7 +56,6 @@ class ThemeConfigSerializerTest(TestCase):
 
     def test_footer_serializer(self):
         expected_json = {
-            'disclaimer': '<p>Some <a href="https://example.com/our-team">information</a></p>',
             'logos': [
                 {
                     'file': f'{settings.BASE_URL}{settings.MEDIA_URL}anotherimage.png',
@@ -91,7 +88,6 @@ class ThemeConfigSerializerTest(TestCase):
                     'target': '',
                 }
             ],
-            'privacy': '<p>Some privacy message</p>'
         }
         self.assertEqual(serialize_footer(self.footer), expected_json)
 

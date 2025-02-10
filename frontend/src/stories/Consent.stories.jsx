@@ -16,7 +16,7 @@ const defaultArgs = {
 const getArgs = (args = {}) => ({ ...defaultArgs, ...args });
 
 export default {
-    title: "Consent",
+    title: "Consent/Consent",
     component: Consent,
     parameters: {
         layout: "fullscreen",

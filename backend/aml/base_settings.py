@@ -50,7 +50,6 @@ INSTALLED_APPS = [
     "django.contrib.humanize",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "django_select2",
     "nested_admin",
     "inline_actions",
     "django_markup",
@@ -120,17 +119,16 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/3.0/topics/i18n/
 
-# LANGUAGE_CODE = 'en-us'
+DEFAULT_TIME_ZONE = "Europe/Amsterdam"
+TIME_ZONE = os.getenv("AML_TIME_ZONE", DEFAULT_TIME_ZONE) or DEFAULT_TIME_ZONE  # Default to Europe/Amsterdam
 
-TIME_ZONE = "Europe/Amsterdam"
+USE_TZ = True
 
 USE_I18N = True
 
 USE_L10N = True
 
-USE_TZ = True
-
-MODELTRANSLATION_LANGUAGES = ("en", "nl", "pt")
+MODELTRANSLATION_LANGUAGES = ("en", "nl", "pt", "zh-hans")
 
 # Increase django limits for large data sets
 # A request timeout should be set in the webserver
@@ -181,6 +179,9 @@ CSRF_TRUSTED_ORIGINS = [os.getenv("CSRF_TRUSTED_ORIGINS")]
 SESSION_SAVE_EVERY_REQUEST = False  # Do not set to True, because it will break session-based participant_id
 
 CSRF_USE_SESSIONS = False
+
+# Set session cookie age to 3 months
+SESSION_COOKIE_AGE = 60 * 60 * 24 * 30 * 3
 
 LOCALE_PATHS = [os.path.join(BASE_DIR, "locale")]
 

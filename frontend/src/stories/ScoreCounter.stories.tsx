@@ -3,7 +3,7 @@ import { BrowserRouter as Router } from "react-router-dom";
 import ScoreCounter from "../components/ScoreCounter/ScoreCounter";
 
 export default {
-  title: "ScoreCounter",
+  title: "Score/ScoreCounter",
   component: ScoreCounter,
   parameters: {
     layout: "fullscreen",

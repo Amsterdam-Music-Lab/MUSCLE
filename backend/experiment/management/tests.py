@@ -1,10 +1,13 @@
-from django.core.management import call_command
-from django.test import TestCase
 import csv
-from django.conf import settings
 from os.path import join
 from os import remove
- 
+
+from django.core.management import call_command
+from django.test import TestCase
+from django.conf import settings
+
+from experiment.models import Block, Experiment, Phase
+from section.models import Playlist
 
 class CompilePlaylistTest(TestCase):
 
@@ -23,8 +26,15 @@ class CompilePlaylistTest(TestCase):
                         self.assertEqual(row['duration'], '20.025850340136053')
                         self.assertEqual(row['tag'], '0')
                         self.assertEqual(row['group'], '0')
-        finally:        
+        finally:
             remove(filename)  # Make sure csv file is deleted even if tests fail
 
 
+class BootrapTest(TestCase):
 
+    def test_bootstrap(self):
+        call_command("bootstrap")
+        self.assertEqual(Experiment.objects.count(), 1)
+        self.assertEqual(Phase.objects.count(), 1)
+        self.assertEqual(Block.objects.count(), 1)
+        self.assertEqual(Playlist.objects.count(), 1)

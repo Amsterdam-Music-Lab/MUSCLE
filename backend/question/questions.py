@@ -57,45 +57,51 @@ def get_questions_from_series(questionseries_set):
     return [create_question_db(key) for key in keys_all]
 
 
-def create_default_questions(overwrite = False):
+def create_default_questions(question_model=Question, choice_model=Choice, question_group_model=QuestionGroup):
     """Creates default questions and question groups in the database"""
 
-    sys.stdout.write("Creating default questions...")
     for group_key, questions in QUESTION_GROUPS_DEFAULT.items():
 
-        if not QuestionGroup.objects.filter(key = group_key).exists():
-            group = QuestionGroup.objects.create(key = group_key, editable = False)
+        if not question_group_model.objects.filter(key = group_key).exists():
+            group = question_group_model.objects.create(key = group_key, editable = False)
         else:
-            group = QuestionGroup.objects.get(key = group_key)
+            group = question_group_model.objects.get(key = group_key)
 
         for question in questions:
 
-            if overwrite:
-                Question.objects.filter(key = question.key).delete()
-
-            if not Question.objects.filter(key = question.key).exists():
-                q = Question.objects.create(key = question.key, question = question.question, editable = False)
+            if not question_model.objects.filter(key = question.key).exists():
+                q = question_model.objects.create(key = question.key, question = question.question, editable = False)
 
                 # Create translatable fields
-                cur_lang = translation.get_language()
                 for lang in settings.MODELTRANSLATION_LANGUAGES:
+                    lang_field = lang.replace("-","_")
                     translation.activate(lang)
-                    q.question = str(question.question)
-                    q.explainer = str(question.explainer)
+
+                    # This should work, but doesn't
+                    #q.question = str(question.question)
+                    #q.explainer = str(question.explainer)
+
+                    if hasattr(q, "question_"+lang_field):
+                        setattr(q, "question_"+lang_field, str(question.question))
+                        setattr(q, "explainer_"+lang_field, str(question.explainer))
+
                 q.save()
-                translation.activate(cur_lang)
 
                 if hasattr(question,'choices'):
                     keys = question.choices.keys() if hasattr(question.choices,'keys') else range(0, len(question.choices))
                     index = 0
                     for key in keys:
-                        choice = Choice(key=key, text=str(question.choices[key]), index=index, question=q)
+                        choice = choice_model(key=key, text=str(question.choices[key]), index=index, question=q)
                         for lang in settings.MODELTRANSLATION_LANGUAGES:
+                            lang_field = lang.replace("-","_")
                             translation.activate(lang)
-                            choice.text = str(question.choices[key])
-                        translation.activate(cur_lang)
+                            #choice.text = str(question.choices[key])
+                            if hasattr(choice, "text_"+lang_field):
+                                setattr(choice,"text_"+lang_field, str(question.choices[key]))
                         choice.save()
                         index += 1
+
+                translation.activate("en")
 
                 # Create non-translatable fields
                 q.type = question.__class__.__name__
@@ -121,9 +127,40 @@ def create_default_questions(overwrite = False):
                 q.save()
 
             else:
-                q = Question.objects.get(key = question.key)
+                q = question_model.objects.get(key = question.key)
             group.questions.add(q)
-    print("Done")
+
+
+def populate_translation_fields(lang, question_model=Question):
+
+    lang_field = lang.replace("-","_")
+
+    translation.activate(lang)
+
+    for group_key, questions in QUESTION_GROUPS_DEFAULT.items():
+        for question in questions:
+
+            q = question_model.objects.get(key = question.key)
+
+            # This should work, but doesn't
+            #q.question = str(question.question)
+            #q.explainer = str(question.explainer)
+
+            setattr(q, "question_"+lang_field, str(question.question))
+            setattr(q, "explainer_"+lang_field, str(question.explainer))
+
+            q.save()
+
+            if hasattr(question,'choices'):
+                keys = question.choices.keys() if hasattr(question.choices,'keys') else range(0, len(question.choices))
+                for key in keys:
+                    choice = q.choice_set.all().get(key=key)
+                    # choice.text = str(question.choices[key])
+                    setattr(choice,"text_"+lang_field, str(question.choices[key]))
+                    choice.save()
+
+    translation.activate('en')
+
 
 def create_question_db(key):
     """ Creates form.question object from a Question in the database with key"""

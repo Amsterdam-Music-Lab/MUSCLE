@@ -3,7 +3,7 @@ import { BrowserRouter as Router } from "react-router-dom";
 import Rank from "../components/Rank/Rank";
 
 export default {
-    title: "Rank",
+    title: "Rank/Rank",
     component: Rank,
     parameters: {
         layout: "fullscreen",

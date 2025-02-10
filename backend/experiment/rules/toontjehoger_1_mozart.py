@@ -5,9 +5,9 @@ from section.models import Playlist
 from experiment.actions import Trial, Explainer, Step, Score, Final, Info, HTML
 from experiment.actions.form import ButtonArrayQuestion, Form
 from experiment.actions.playback import Autoplay
-from experiment.actions.styles import STYLE_TOONTJEHOGER
+from experiment.actions.styles import ColorScheme
 from experiment.models import Session
-from .base import Base
+from .base import BaseRules
 from experiment.utils import non_breaking_spaces
 from experiment.actions.utils import get_current_experiment_url
 
@@ -28,7 +28,7 @@ def toontjehoger_ranks(session):
         return "GOLD"
 
 
-class ToontjeHoger1Mozart(Base):
+class ToontjeHoger1Mozart(BaseRules):
     ID = "TOONTJE_HOGER_1_MOZART"
     TITLE = ""
     SCORE_CORRECT = 50
@@ -164,9 +164,11 @@ class ToontjeHoger1Mozart(Base):
                 "E": "E",
             },
             view="BUTTON_ARRAY",
-            result_id=prepare_result(key, session, section=section, expected_response=expected_response),
+            result_id=prepare_result(
+                key, session, section=section, expected_response=expected_response
+            ),
             submits=True,
-            style=STYLE_TOONTJEHOGER,
+            style=[ColorScheme.TOONTJEHOGER],
         )
         form = Form([question])
 

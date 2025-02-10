@@ -7,6 +7,7 @@ from experiment.models import (
     BlockTranslatedContent,
     Experiment,
     ExperimentTranslatedContent,
+    Phase,
 )
 from participant.models import Participant
 from session.models import Session
@@ -26,7 +27,13 @@ class BlockModelTest(TestCase):
             logo_image=logo_image,
             background_image=background_image,
         )
+        experiment = Experiment.objects.create(slug="test-experiment")
+        ExperimentTranslatedContent.objects.create(
+            experiment=experiment, language="en", name="Experiment name"
+        )
+        cls.phase = Phase.objects.create(experiment=experiment)
         block = Block.objects.create(
+            phase=cls.phase,
             slug="test-block",
             rounds=5,
             bonus_points=10,
@@ -44,6 +51,24 @@ class BlockModelTest(TestCase):
         block = Block.objects.get(slug="test-block")
         self.assertEqual(str(block), "Test Block")
 
+    def test_block_str_without_content(self):
+        block_no_content = Block.objects.create(
+            phase=self.phase, slug="test-block-no-content"
+        )
+        self.assertEqual(str(block_no_content), "test-block-no-content")
+
+    def test_block_str_without_pk(self):
+        block_no_pk = Block.objects.create(phase=self.phase)
+        BlockTranslatedContent.objects.create(
+            block=block_no_pk,
+            language="en",
+            name="Not yet deleted test block",
+            description="Deleted test block description",
+        )
+        self.assertEqual(str(block_no_pk), "Not yet deleted test block")
+        block_no_pk.delete()
+        self.assertEqual(str(block_no_pk), "Deleted/Unsaved Block")
+
     def test_block_session_count(self):
         block = Block.objects.get(slug="test-block")
         self.assertEqual(block.session_count(), 0)
@@ -57,7 +82,7 @@ class BlockModelTest(TestCase):
         participants = block.current_participants()
         self.assertEqual(len(participants), 0)
 
-    def test_block__export_admin(self):
+    def test_block_export_admin(self):
         block = Block.objects.get(slug="test-block")
         exported_data = block._export_admin()
         self.assertEqual(exported_data["block"]["name"], "Test Block")

@@ -8,7 +8,7 @@ from result.utils import prepare_result
 from session.models import Session
 
 
-class NewBlockRuleset(Base):
+class NewBlockRuleset(BaseRules):
     ''' A block type that could be used to test musical preferences '''
     ID = 'NEW_BLOCK_RULESET'
     contact_email = 'info@example.com'
@@ -41,7 +41,7 @@ class NewBlockRuleset(Base):
             step_numbers=True
         )
 
-    def next_round(self, session: Session):
+    def next_round(self, session: Session) -> list:
         # ask any questions defined in the admin interface
         if session.get_rounds_passed() == 0:
             actions = [self.get_intro_explainer()]
@@ -63,9 +63,9 @@ class NewBlockRuleset(Base):
                 )
             ]
         else:
-            return self.get_trial(session)
+            return self.get_next_trial(session)
 
-    def get_trial(self, session):
+    def get_next_trial(self, session) -> Trial:
         # define a key, by which responses to this trial can be found in the database
         key = 'test_trial'
         # get a random section

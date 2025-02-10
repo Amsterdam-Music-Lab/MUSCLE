@@ -7,7 +7,7 @@ import useBoundStore from "@/util/stores";
 import { StoryFn } from "@storybook/react";
 
 export default {
-    title: "Playback",
+    title: "Playback/Playback",
     component: Playback,
     parameters: {
         layout: "fullscreen",
