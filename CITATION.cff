@@ -25,16 +25,19 @@ authors:
     family-names: Roor
     email: drikusroor@gmail.com
     affiliation: University of Amsterdam
-  - given-names: John Ashley
-    family-names: Burgoyne
-    email: j.a.burgoyne@uva.nl
-    affiliation: University of Amsterdam
-    orcid: 'https://orcid.org/0000-0001-6854-5646'
+  - given-names: Werner
+    family-names: Helmich
+    affiliation: SUDOX
   - given-names: Henkjan
     family-names: Honing
     email: h.j.honing@uva.nl
     affiliation: University of Amsterdam
     orcid: 'https://orcid.org/0000-0001-7046-7923'
+  - given-names: John Ashley
+    family-names: Burgoyne
+    email: j.a.burgoyne@uva.nl
+    affiliation: University of Amsterdam
+    orcid: 'https://orcid.org/0000-0001-6854-5646'
 identifiers:
   - type: doi
     value: 10.5281/zenodo.8227598
@@ -59,4 +62,4 @@ keywords:
   - audio
 license: MIT
 version: 3.2.0
-date-released: '2025-02-04'
+date-released: '2025-02-10'
