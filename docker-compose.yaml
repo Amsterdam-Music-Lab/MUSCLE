@@ -103,6 +103,7 @@ services:
       - VITE_STRICT=${FRONTEND_STRICT}
     ports:
       - 3000:3000
+      - 6006:6006
     command: yarn start
 volumes:
   db_data:
