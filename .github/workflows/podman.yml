@@ -72,7 +72,7 @@ jobs:
           ref: ${{ github.event.inputs.branch }}
       - name: Create .env file
         run: |
-          Deploying ${{ github.event.inputs.branch }} branch to test environment
+          echo Deploying ${{ github.event.inputs.branch }} branch to test environment
           touch .env
           echo "VITE_API_ROOT=$FRONTEND_API_ROOT" >> .env
           echo "VITE_EXPERIMENT_SLUG=$FRONTEND_EXPERIMENT_SLUG" >> .env
