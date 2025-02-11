@@ -1,6 +1,6 @@
 from django.test import TestCase
 
-from experiment.models import Block
+from experiment.models import Block, Experiment, Phase
 from participant.models import Participant
 from result.models import Result
 from section.models import Playlist, Section
@@ -18,7 +18,9 @@ class MatchingPairs2025Test(TestCase):
         cls.playlist._update_sections()
         cls.playlist.save()
         cls.participant = Participant.objects.create()
-        cls.block = Block.objects.create(rules="MATCHING_PAIRS_2025", slug="mpairs-2025", rounds=42)
+        cls.exp = Experiment.objects.create(slug="matching_pairs_2025")
+        cls.phase = Phase.objects.create(experiment=cls.exp)
+        cls.block = Block.objects.create(rules="MATCHING_PAIRS_2025", slug="mpairs-2025", rounds=42, phase=cls.phase)
         cls.session = Session.objects.create(block=cls.block, participant=cls.participant, playlist=cls.playlist)
         cls.rules = cls.session.block_rules()
 
@@ -342,3 +344,26 @@ class MatchingPairs2025Test(TestCase):
         frequency_groups = {s.group for s in frequency_sections}
         original_groups = {s.group for s in original_sections}
         self.assertEqual(frequency_groups, original_groups)
+
+    def test_has_played_before_returns_false(self):
+        """Test that _has_played_before returns False when there are no previous results."""
+        experiment = Experiment.objects.create(slug="dummy_experiment")
+        phase = Phase.objects.create(experiment=experiment)
+
+        session = Session.objects.create(block=self.block, participant=self.participant, playlist=self.playlist)
+        session.block.phase = phase
+        session.save()
+
+        self.assertFalse(self.rules._has_played_before(session))
+
+    def test_has_played_before_returns_true(self):
+        """Test that _has_played_before returns True when a previous session has a result."""
+
+        previous_session = Session.objects.create(
+            block=self.block, participant=self.participant, playlist=self.playlist
+        )
+        Result.objects.create(session=previous_session)
+
+        session = Session.objects.create(block=self.block, participant=self.participant, playlist=self.playlist)
+
+        self.assertTrue(self.rules._has_played_before(session))

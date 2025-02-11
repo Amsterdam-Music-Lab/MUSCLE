@@ -3,7 +3,8 @@ import random
 from django.utils.translation import gettext_lazy as _
 from django.db import models
 
-from section.models import Playlist, Section
+from result.models import Result
+from section.models import Section
 from session.models import Session
 
 from experiment.actions import Explainer, Final, Playlist as PlaylistAction, Trial
@@ -73,16 +74,29 @@ class MatchingPairs2025(MatchingPairsGame):
         random.seed(self.random_seed)
         random.shuffle(player_sections)
 
+        # Only show tutorial if participant has never played this game before
+        has_played_before = self._has_played_before(session)
+        tutorial = self.tutorial if not has_played_before else None
+
         playback = MatchingPairs(
             sections=player_sections,
             stop_audio_after=5,
             show_animation=self.show_animation,
             score_feedback_display=self.score_feedback_display,
-            tutorial=self.tutorial,
+            tutorial=tutorial,
         )
         trial = Trial(title="Tune twins", playback=playback, feedback_form=None, config={"show_continue_button": False})
 
         return trial
+
+    def _has_played_before(self, session) -> bool:
+        experiment = session.block.phase.experiment
+        previous_games = Session.objects.filter(
+            block__phase__experiment=experiment, participant=session.participant, block__rules=self.ID
+        )
+        previous_games_results = Result.objects.filter(session__in=previous_games)
+
+        return previous_games_results.exists()
 
     def _select_sections(self, session) -> list[Section]:
         condition_type, condition = self._select_least_played_condition_type_condition_pair(session)
