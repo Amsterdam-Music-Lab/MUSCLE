@@ -16,6 +16,7 @@ from .validators import markdown_html_validator, block_slug_validator, experimen
 
 language_choices = [(key, ISO_LANGUAGES[key]) for key in ISO_LANGUAGES.keys()]
 
+
 class Experiment(models.Model):
     """A model to allow nesting multiple phases with blocks into a 'parent' experiment
 
@@ -450,7 +451,11 @@ class Block(models.Model):
             Fallback content
         """
         experiment = self.phase.experiment
-        fallback_language = experiment.get_fallback_content().language
+        experiment_fallback_content = experiment.get_fallback_content().language
+
+        if not experiment_fallback_content:
+            return None
+
         fallback_content = self.translated_contents.filter(language=fallback_language).first()
 
         return fallback_content
@@ -489,9 +494,7 @@ class Block(models.Model):
 
 
 class TranslatedContent(models.Model):
-    language = models.CharField(
-        default="en", blank=True, choices=language_choices, max_length=2
-    )
+    language = models.CharField(default="en", blank=True, choices=language_choices, max_length=2)
 
     class Meta:
         abstract = True
@@ -512,9 +515,7 @@ class ExperimentTranslatedContent(TranslatedContent):
         privacy (str): Privacy statement text
     """
 
-    experiment = models.ForeignKey(
-        Experiment, on_delete=models.CASCADE, related_name="translated_content"
-    )
+    experiment = models.ForeignKey(Experiment, on_delete=models.CASCADE, related_name="translated_content")
     index = models.IntegerField(default=0)
     name = models.CharField(max_length=64, default="")
     description = models.TextField(blank=True, default="")
@@ -527,8 +528,8 @@ class ExperimentTranslatedContent(TranslatedContent):
         help_text=_("Content for social media sharing. Use {points} and {experiment_name} as placeholders."),
         default="I scored {points} points in {experiment_name}!",
     )
-    disclaimer = models.TextField(blank=True, default='')
-    privacy = models.TextField(blank=True, default='')
+    disclaimer = models.TextField(blank=True, default="")
+    privacy = models.TextField(blank=True, default="")
 
     class Meta:
         unique_together = ["experiment", "language"]
@@ -546,9 +547,7 @@ class BlockTranslatedContent(TranslatedContent):
 
     """
 
-    block = models.ForeignKey(
-        Block, on_delete=models.CASCADE, related_name="translated_contents"
-    )
+    block = models.ForeignKey(Block, on_delete=models.CASCADE, related_name="translated_contents")
     name = models.CharField(max_length=64, default="")
     description = models.TextField(blank=True, default="")
 
