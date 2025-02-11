@@ -46,6 +46,6 @@ Now you can run your commands directly in the terminal of the container.
 - Search for `Dev Containers: Attach to Running Container`
 - Click the container you want to attach to VScode
 
-Now you can use VScode's terminal to tun commands directly in the container.
+Now you can use VScode's terminal to run commands directly in the container.
 
 [Click here for more info](https://code.visualstudio.com/docs/devcontainers/attach-container)
